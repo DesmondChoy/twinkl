@@ -69,7 +69,7 @@ This mini-assessment directly anchors the capstone submodules: the latent dimens
 
 * **Weekly alignment coach:** Batch entries, run the reasoning engine, ship a 1-page digest (Pattern Recognition + Reasoning).
 * **Conversational introspection agent:** Live mirroring via agent loop (Perception → Cognition → Action) to highlight contradictions mid-conversation.
-* **[Adaptive Acoustic Sensor (A3D)](A3D.md):** A privacy-first, unsupervised anomaly detection system that learns the user's unique prosodic baseline to flag physiological stress and cognitive dissonance (Intelligent Sensing + Pattern Recognition).
+* **[Adaptive Acoustic Sensor (A3D)](docs/Ideas/A3D.md):** A privacy-first, unsupervised anomaly detection system that learns the user's unique prosodic baseline to flag physiological stress and cognitive dissonance (Intelligent Sensing + Pattern Recognition).
 * **“Map of Me”:** Embed each entry, visualise trajectories, overlay alignment scores (Pattern Recognition + Intelligent Sensing).
 * **Journaling anomaly radar:** After 2–3 weeks of entries establish cadence baselines, a lightweight time-series/anomaly detector tracks check-in gaps, flags “silent weeks,” cites evidence windows, and triggers empathetic nudges (Pattern Recognition + Architecting).
 * **Goal-aligned inspiration feed:** When the profile shows intent (e.g., “pick up Japanese”) but no supporting activities, call a real-time search API (SerpAPI/Tavily) constrained by what the user enjoys (e.g., highly rated anime) and reason over the results before surfacing next-step suggestions (Intelligent Reasoning + Intelligent Sensing). Each curated option is presented as an explicit choice; the user’s accept/decline actions feed back into the values/identity graph so future nudges learn which media or effort types actually motivate them.
@@ -80,7 +80,7 @@ This mini-assessment directly anchors the capstone submodules: the latent dimens
 2. Define the MVP loop: mini-assessment (3–5 screen quiz)
 3. **Scoping Strategy:** Adopt a **Hybrid Approach** (Simple journaling loop + weekly digest + lightweight trajectory viz). Build small slices of each feature to demonstrate breadth without over-building.
 4. Specify the profile schema:
-   * **Value dimensions** (K dimensions, e.g., Health, Relationships, Growth, Contribution) with definitions, rubrics, and examples.
+   * **Value dimensions** anchored in [Schwartz's theory of basic human values](https://en.wikipedia.org/wiki/Theory_of_basic_human_values) (e.g., Self-Direction, Benevolence, Achievement, Security) with definitions, rubrics, and examples.
    * **User value profile:** vector of value weights `w_u ∈ ℝ^K` (normalized, sum to 1), plus narrative descriptions and constraints.
    * **State representation:** sliding window of N recent entry embeddings + time deltas + history stats (EMA of per-dimension alignment, rolling std dev, entry counts).
 5. Implement **Reward Modeling (LLM-as-Judge):** For each entry, LLM outputs per-dimension alignment scores (Likert scale normalized to [-1,1]) with rationales and optional confidence scores. Use synthetic personas for initial training/validation.
@@ -111,7 +111,7 @@ This mini-assessment directly anchors the capstone submodules: the latent dimens
 | Goal | Why it matters |
 | :--- | :--- |
 | **Neuro-symbolic reasoning** | Add a tiny knowledge graph + rule layer on top of LLM outputs to show which logical checks fired (great for XRAI storytelling). |
-| **Multimodal fusion** | Blend text + [prosodic audio cues](A3D.md) to prove Intelligent Sensing value beyond transcripts. |
+| **Multimodal fusion** | Blend text + [prosodic audio cues](docs/Ideas/A3D.md) to prove Intelligent Sensing value beyond transcripts. |
 | **Personalised quote recommender** | Build embeddings of quotes + user resonance to deliver “micro-anchors” tuned to each identity conflict. |
 | **Distilled Reward Model** | Train a smaller supervised model to mimic LLM-as-Judge, reducing latency and cost while enabling offline VIF training. |
 | **Advanced uncertainty modeling** | Extend MC Dropout with ensembles or density models; add explicit OOD detectors on the text embedding space. |
@@ -123,31 +123,33 @@ This mini-assessment directly anchors the capstone submodules: the latent dimens
 | :-------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Intelligent Reasoning Systems** | Formal value/goal knowledge base + decay rules cover knowledge representation; a hybrid reasoning layer mixes LLM inference with symbolic “if value X high but mentions drop Y weeks → flag misalignment” rules, and the inspiration feed performs decision-theoretic ranking (with uncertainty-aware scoring) of real-time search hits plus logged user accept/reject choices. |
 | **Pattern Recognition Systems**   | Transformer tagging for sentiment/topics, sequential models for cadence baselines, clustering/trajectory viz (“Map of Me”) to detect seasons, and anomaly detection that spots journal absences while continuously re-learning from the recommendation-choice dataset. |
-| **Intelligent Sensing Systems**   | [Voice features (pitch, tempo, MFCC)](A3D.md) fused with text cover multimodal signal processing; the real-time search layer acts as an external “sensor” that ingests up-to-date cultural/learning stimuli, and choice telemetry becomes another sensed signal that is fused with identity/value embeddings. |
+| **Intelligent Sensing Systems**   | [Voice features (pitch, tempo, MFCC)](docs/Ideas/A3D.md) fused with text cover multimodal signal processing; the real-time search layer acts as an external “sensor” that ingests up-to-date cultural/learning stimuli, and choice telemetry becomes another sensed signal that is fused with identity/value embeddings. |
 | **Architecting AI Systems**       | Agentic loop (Perception → Memory → Reasoning → Action), explainable feedback via XRAI, privacy-first storage of sensitive logs, and orchestration of background workers that run anomaly checks, call external APIs, and write preference updates while following MLSecOps guardrails. |
+
+
 
 # Evaluation Strategy
 
-To ensure Twinkl delivers on its promise of "alignment" rather than just "summary," we evaluate each subsystem against ground-truth benchmarks and proxy datasets.
+**Purpose:** Validate that Twinkl's alignment engine produces outputs that are (1) technically correct and (2) subjectively useful to users—without over-investing in elaborate benchmarks that won't change design decisions for a time-boxed POC.
 
-| # | Component | Evaluation Goal | Datasets & Method | Metrics & Justification |
+| # | Component | Purpose | Method | Example |
 | :--- | :--- | :--- | :--- | :--- |
-| 1 | **Emotion & theme extraction** | Map journal text → emotions, topics | **Datasets:** GoEmotions (58k comments, 27 emotions) or Lemotif-style datasets.<br>**Method:** Pretrain/fine-tune multi-label classifiers or use constrained LLM prompts to tag entry → emotion/topic. | **Macro/micro F1 & per-class F1** (multi-label classification), plus confusion matrices. Standard for imbalanced emotion datasets to compare architectures. |
-| 2 | **Value & identity modeling** | Map text history → value vector (Schwartz values) | **Method:** Anchor the "inner compass" in Schwartz’s theory of basic human values (Self-Direction, Benevolence, Achievement, etc.). Use synthetic personas to generate history and ground-truth value profiles.<br>**Reasoning:** Schwartz values are cross-cultural and validated, providing a stable ontology for "drift." | **Correlation (Pearson/Spearman)** between predicted and ground-truth value importance. Captures how well the model recovers the *shape* and ranking of a user's value profile. |
-| 3 | **Alignment & drift detection (VIF)** | Detect when behavior diverges from values; estimate per-dimension alignment trajectories | **Method:** Build synthetic user timelines with known value vectors and inject "misaligned weeks" (e.g., family-first persona describes 80h work week). Train VIF critic (MLP regressor) on LLM-as-Judge labels. Evaluate crash/rut detection on held-out trajectories.<br>**Uncertainty calibration:** Verify that MC Dropout variance correlates with prediction error on OOD inputs. | **Per-dimension MSE & correlation** between VIF predictions and LLM-as-Judge scores.<br>**Crash/rut detection:** AUC, Precision, Recall for dual-trigger rule.<br>**Ranking consistency:** Does VIF correctly order weeks by misalignment severity? |
-| 4 | **Explanation quality** | Generate "why you are aligned/misaligned" narratives | **Method:** Create "gold rationales" for synthetic weeks. Use LLM-as-a-judge to score Twinkl's explanations on correctness, specificity, and usefulness.<br>**Human-in-the-loop:** Small-N human ratings using health chatbot rubrics. | **LLM-as-a-judge scores (0–5)**.<br>**Human Likert ratings** + **Inter-rater κ**. Verifies that explanations are not just plausible but psychologically valid. |
-| 5 | **Recommender / Nudge** | Choose the next reflection question | **Method:** Create synthetic user states (current profile + recent behavior) and rank a catalog of reflection questions.<br>**Ground Truth:** Label questions as "highly relevant / okay / irrelevant" for each state. | **Ranking metrics:** Hit Rate@k, NDCG@k, Precision/Recall@k. Standard for evaluating if the system puts the most useful reflection at the top. |
+| 1 | **Value-mention tagging** | Verify LLM correctly identifies which Schwartz values an entry touches | Hand-label 50 journal entries with Schwartz value dimensions. Measure **Cohen's κ** between LLM and human labels. | Entry: *"Dropped everything to help my sister move."* Human tags: `Benevolence`. LLM tags: `Benevolence`. → Agreement ✓ |
+| 2 | **Value profile modeling** | Check if predicted Schwartz value rankings match ground truth | Create 3–5 synthetic personas with known value orderings. Feed their simulated entries and compare predicted vs. true rankings using **Spearman correlation**. | Persona "Mia" values Benevolence > Achievement > Self-Direction. After 10 entries, model predicts same ordering. ρ = 1.0 ✓ |
+| 3 | **Drift detection** | Confirm system flags obvious misalignment | Generate 10 synthetic "crisis weeks" (e.g., Benevolence-first persona neglects family for work). Measure **hit rate**: did the system flag it? | Ground truth: Week 3 is a crisis. System flags Week 3? Yes → Hit. Target: ≥8/10 hits. |
+| 4 | **Explanation quality** | Ensure explanations feel accurate and actionable | Show 5–10 users their weekly digest and ask "Did this feel accurate?" on a **5-point Likert scale**. | User sees: *"Your Benevolence score dropped—you mentioned helping others twice but cancelled on a friend."* Rates it 4/5 for accuracy. |
+| 5 | **Nudge relevance** | Verify the top prompt is contextually appropriate | A/B test: random prompt vs. model-selected prompt. Measure **engagement rate** (did user respond?). | Model picks *"What held you back from helping?"* after detecting Benevolence drift. User responds → engagement ✓ |
 
 ## Operational & User Success Metrics
 
 | Category | Metrics |
 | :--- | :--- |
-| **User impact** | Likert ratings on “helps me act in line with values,” % of suggested weekly experiments attempted, retention over a 1–2 week pilot. |
-| **System & safety** | Latency from recording → feedback, STT/LLM failure rates, privacy posture (encryption, export/delete), and qualitative review of guardrails for “it’s not therapy” messaging. |
+| **User impact** | Likert ratings on "helps me act in line with values," % of suggested weekly experiments attempted, retention over a 1–2 week pilot. |
+| **System & safety** | Latency from recording → feedback, STT/LLM failure rates, privacy posture (encryption, export/delete), and qualitative review of guardrails for "it's not therapy" messaging. |
 
-Mini user study (5–10 people over 1–2 weeks) + inter-rater agreement between humans and the model validates both the knowledge base stability and perceived usefulness.
+**Validation approach:** Mini user study (5–10 people over 1–2 weeks) focusing on "felt accuracy" plus synthetic stress tests for technical correctness.
 
 # ISS-Practice-Module: The Adaptive Acoustic Anomaly Detector (A3D)
 
-> See [A3D.md](A3D.md) for full documentation of this Semester 3 module.
+> See [A3D.md](docs/Ideas/A3D.md) for full documentation of this Semester 3 module.
 
