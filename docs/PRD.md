@@ -69,7 +69,7 @@ This mini-assessment directly anchors the capstone submodules: the latent dimens
 
 * **Weekly alignment coach:** Batch entries, run the reasoning engine, ship a 1-page digest (Pattern Recognition + Reasoning).
 * **Conversational introspection agent:** Live mirroring via agent loop (Perception → Cognition → Action) to highlight contradictions mid-conversation.
-* **[Adaptive Acoustic Sensor (A3D)](docs/Ideas/A3D.md):** A privacy-first, unsupervised anomaly detection system that learns the user's unique prosodic baseline to flag physiological stress and cognitive dissonance (Intelligent Sensing + Pattern Recognition).
+* **[Adaptive Acoustic Sensor (A3D)](Ideas/A3D.md):** A privacy-first, unsupervised anomaly detection system that learns the user's unique prosodic baseline to flag physiological stress and cognitive dissonance (Intelligent Sensing + Pattern Recognition).
 * **“Map of Me”:** Embed each entry, visualise trajectories, overlay alignment scores (Pattern Recognition + Intelligent Sensing).
 * **Journaling anomaly radar:** After 2–3 weeks of entries establish cadence baselines, a lightweight time-series/anomaly detector tracks check-in gaps, flags “silent weeks,” cites evidence windows, and triggers empathetic nudges (Pattern Recognition + Architecting).
 * **Goal-aligned inspiration feed:** When the profile shows intent (e.g., “pick up Japanese”) but no supporting activities, call a real-time search API (SerpAPI/Tavily) constrained by what the user enjoys (e.g., highly rated anime) and reason over the results before surfacing next-step suggestions (Intelligent Reasoning + Intelligent Sensing). Each curated option is presented as an explicit choice; the user’s accept/decline actions feed back into the values/identity graph so future nudges learn which media or effort types actually motivate them.
@@ -111,7 +111,7 @@ This mini-assessment directly anchors the capstone submodules: the latent dimens
 | Goal | Why it matters |
 | :--- | :--- |
 | **Neuro-symbolic reasoning** | Add a tiny knowledge graph + rule layer on top of LLM outputs to show which logical checks fired (great for XRAI storytelling). |
-| **Multimodal fusion** | Blend text + [prosodic audio cues](docs/Ideas/A3D.md) to prove Intelligent Sensing value beyond transcripts. |
+| **Multimodal fusion** | Blend text + [prosodic audio cues](Ideas/A3D.md) to prove Intelligent Sensing value beyond transcripts. |
 | **Personalised quote recommender** | Build embeddings of quotes + user resonance to deliver “micro-anchors” tuned to each identity conflict. |
 | **Distilled Reward Model** | Train a smaller supervised model to mimic LLM-as-Judge, reducing latency and cost while enabling offline VIF training. |
 | **Advanced uncertainty modeling** | Extend MC Dropout with ensembles or density models; add explicit OOD detectors on the text embedding space. |
@@ -123,7 +123,7 @@ This mini-assessment directly anchors the capstone submodules: the latent dimens
 | :-------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Intelligent Reasoning Systems** | Formal value/goal knowledge base + decay rules cover knowledge representation; a hybrid reasoning layer mixes LLM inference with symbolic “if value X high but mentions drop Y weeks → flag misalignment” rules, and the inspiration feed performs decision-theoretic ranking (with uncertainty-aware scoring) of real-time search hits plus logged user accept/reject choices. |
 | **Pattern Recognition Systems**   | Transformer tagging for sentiment/topics, sequential models for cadence baselines, clustering/trajectory viz (“Map of Me”) to detect seasons, and anomaly detection that spots journal absences while continuously re-learning from the recommendation-choice dataset. |
-| **Intelligent Sensing Systems**   | [Voice features (pitch, tempo, MFCC)](docs/Ideas/A3D.md) fused with text cover multimodal signal processing; the real-time search layer acts as an external “sensor” that ingests up-to-date cultural/learning stimuli, and choice telemetry becomes another sensed signal that is fused with identity/value embeddings. |
+| **Intelligent Sensing Systems**   | [Voice features (pitch, tempo, MFCC)](Ideas/A3D.md) fused with text cover multimodal signal processing; the real-time search layer acts as an external “sensor” that ingests up-to-date cultural/learning stimuli, and choice telemetry becomes another sensed signal that is fused with identity/value embeddings. |
 | **Architecting AI Systems**       | Agentic loop (Perception → Memory → Reasoning → Action), explainable feedback via XRAI, privacy-first storage of sensitive logs, and orchestration of background workers that run anomaly checks, call external APIs, and write preference updates while following MLSecOps guardrails. |
 
 
@@ -151,5 +151,5 @@ This mini-assessment directly anchors the capstone submodules: the latent dimens
 
 # ISS-Practice-Module: The Adaptive Acoustic Anomaly Detector (A3D)
 
-> See [A3D.md](docs/Ideas/A3D.md) for full documentation of this Semester 3 module.
+> See [A3D.md](Ideas/A3D.md) for full documentation of this Semester 3 module.
 
