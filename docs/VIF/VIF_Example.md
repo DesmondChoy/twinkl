@@ -98,12 +98,12 @@ Sarah has been journaling for a month. Here's this week's entry:
 
 | Value | Score | Uncertainty (σ) | Interpretation |
 |-------|-------|-----------------|----------------|
-| Benevolence | +1.8 | 0.2 (low) | Strong alignment — prioritized Emma, fully present |
-| Self-Direction | +1.1 | 0.3 (low) | Alignment — creative work with energy and ownership |
+| Benevolence | +0.9 | 0.2 (low) | Aligned — prioritized Emma, fully present |
+| Self-Direction | +0.6 | 0.3 (low) | Aligned — creative work with energy and ownership |
 
 **Trajectory Check (4-week rolling averages):**
-- Benevolence: +1.5 → stable
-- Self-Direction: +1.2 → stable
+- Benevolence: +0.8 → stable
+- Self-Direction: +0.7 → stable
 - No crash (no sudden drop)
 - No rut (not below threshold)
 
@@ -148,13 +148,13 @@ Sarah's situation changes. A major client pitch consumes her.
 
 | Value | Score | Uncertainty (σ) | Interpretation |
 |-------|-------|-----------------|----------------|
-| Benevolence | -1.7 | 0.25 (low) | Strong misalignment — missed key moment, acknowledged pattern |
-| Self-Direction | +0.3 | 0.4 (low) | Neutral — work is obligation-driven, not creative expression |
+| Benevolence | -0.9 | 0.25 (low) | Misaligned — missed key moment, acknowledged pattern |
+| Self-Direction | +0.2 | 0.4 (low) | Neutral — work is obligation-driven, not creative expression |
 
 **Crash Detection (comparing to rolling average):**
-- Benevolence previous average (weeks 5-6): +1.3
-- Benevolence current: -1.7
-- **Drop: 3.0 points** → exceeds crash threshold (δ = 1.5)
+- Benevolence previous average (weeks 5-6): +0.7
+- Benevolence current: -0.9
+- **Drop: 1.6 points** → exceeds crash threshold (δ = 1.0)
 - Uncertainty: Low → confident enough to act
 
 **System Decision:** Trigger Coach.
@@ -198,13 +198,13 @@ The pitch succeeded, but Sarah doesn't bounce back. Her entries become flat:
 
 | Week | Benevolence | Self-Direction |
 |------|-------------|----------------|
-| 9 | 0.0 | -0.8 |
-| 10 | +0.2 | -1.2 |
-| 11 | -0.3 | -1.5 |
-| 12 | +0.1 | -1.4 |
+| 9 | 0.0 | -0.4 |
+| 10 | +0.2 | -0.6 |
+| 11 | -0.2 | -0.8 |
+| 12 | +0.1 | -0.7 |
 
 **Rut Detection (Self-Direction):**
-- Threshold for "low": τ = -0.5
+- Threshold for "low": τ = -0.3
 - Weeks below threshold: 4 consecutive
 - Minimum for rut: 3 weeks
 - Uncertainty: Low across all weeks
@@ -214,7 +214,7 @@ The pitch succeeded, but Sarah doesn't bounce back. Her entries become flat:
 
 | Parameter | Who Sets It | Rationale |
 |-----------|-------------|-----------|
-| **τ (low threshold)** | Developer default, potentially user-adjustable | Set per value dimension. Default τ = -0.5 means "mildly misaligned." Users with high self-compassion might prefer τ = -0.8 (only flag severe dips); stricter users might want τ = -0.3. |
+| **τ (low threshold)** | Developer default, potentially user-adjustable | Set per value dimension. Default τ = -0.3 means "mildly misaligned." Users with high self-compassion might prefer τ = -0.5 (only flag severe dips); stricter users might want τ = -0.2. |
 | **C_min (minimum weeks)** | Developer default | System-wide. 3 weeks balances sensitivity (catching real ruts) vs. specificity (ignoring normal fluctuations). Shorter risks false alarms; longer delays intervention. |
 | **Uncertainty threshold (ε)** | Algorithm (calibrated) | Derived from model calibration on held-out data. Not user-facing — ensures the system only speaks when confident. |
 
@@ -255,8 +255,8 @@ Something happens outside the Critic's training distribution.
 
 | Value | Score | Uncertainty (σ) | Interpretation |
 |-------|-------|-----------------|----------------|
-| Benevolence | ??? | 1.4 (HIGH) | Predictions scatter from -1 to +2 |
-| Self-Direction | ??? | 1.1 (HIGH) | Predictions scatter from -2 to +1 |
+| Benevolence | ??? | 0.7 (HIGH) | Predictions scatter from -0.5 to +1.0 |
+| Self-Direction | ??? | 0.6 (HIGH) | Predictions scatter from -1.0 to +0.3 |
 
 **Why High Uncertainty?**
 - The Critic is trained on synthetic data from the Generator (see [Model Training](VIF_03_Model_Training.md))

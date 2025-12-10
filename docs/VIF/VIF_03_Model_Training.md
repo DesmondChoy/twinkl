@@ -29,14 +29,11 @@ We use an LLM to generate a diverse dataset of synthetic journal entries.
 #### 1.2.2 Phase 2: Labeling (The Judge / Teacher)
 We feed the generated text into a second LLM pass (The Judge) to assign ground-truth scores.
 *   **Why this is needed:** A user entry often impacts multiple values simultaneously (Side Effects). The Generator prompt might target "Work," but the resulting text might inadvertently reveal neglect of "Family."
-*   **Mechanism (Likert Protocol):** To avoid subjective noise (e.g., arbitrary "4.5" vs "4.2"), the Judge classifies behavior using a strict 5-point rubric:
-    *   **Strong Misalignment (-2):** User actively acted against the value.
-    *   **Misalignment (-1):** User neglected the value or made excuses.
-    *   **Neutral (0):** No relevant information or maintenance mode.
-    *   **Alignment (+1):** User took small positive steps or expressed clear intent.
-    *   **Strong Alignment (+2):** User made a significant sacrifice or effort for this value.
-*   **Output:** These classifications are mapped to a precise integer vector, e.g., `[Health: -2, Career: +2, Family: -1]`, which serves as the regression target for the Student.
-
+    *   **Mechanism (Categorical Protocol):** To avoid subjective noise (e.g., arbitrary "4.5" vs "4.2"), the Judge classifies behavior using a strict 3-point rubric:
+    *   **Misaligned (-1):** The entry actively conflicts with the value.
+    *   **Neutral (0):** The entry is irrelevant to the value or maintains status quo.
+    *   **Aligned (+1):** The entry actively supports the value.
+    *   **Output:** These classifications are mapped to a precise integer vector, e.g., `[Health: -1, Career: +1, Family: 0]`, which serves as the regression target for the Student.
 #### 1.2.3 Phase 3: Distillation (The Critic / Student)
 We train the **MLP Critic** (the VIF) on this labeled dataset.
 *   **Input:** Text Embedding (SBERT) + User Profile Embedding.

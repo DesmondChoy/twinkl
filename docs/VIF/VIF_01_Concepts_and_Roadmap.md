@@ -68,7 +68,7 @@ We define a set of $K$ value dimensions:
 * Each value dimension has:
   * A **definition** in natural language.
   * Positive and negative **examples**.
-  * A **rating rubric** (e.g. from “strongly misaligned” to “strongly aligned”).
+  * A **rating rubric** (e.g. from “misaligned” to “aligned”).
 
 These dimensions form an ontology for both the reward model and the critic.
 

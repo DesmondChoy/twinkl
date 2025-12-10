@@ -42,9 +42,9 @@ AI journaling apps (Reflection, Mindsera, Insight Journal, Day One, Pixel Journa
 
 1. **Perception:** Speech-to-text (or typed input) flows through an LLM that tags values, identity claims, sentiment, intent, and direction-of-travel.
 2. **Memory:** Tags incrementally update a decay-aware user profile/knowledge base (value weights, goals, tensions, evidence snippets) instead of resetting each week.
-3. **Reasoning + action:** A two-stage evaluative layer powered by the **[Value Identity Function (VIF)](Ideas/VIF_01_Concepts_and_Roadmap.md)**:
-   * **Critic (VIF):** A numeric, uncertainty-aware engine that computes per-value-dimension alignment scores from a sliding window of recent entries. Uses [LLM-as-Judge for reward modeling](Ideas/VIF_03_Model_Training.md) and [MC Dropout for epistemic uncertainty](Ideas/VIF_04_Uncertainty_Logic.md). Triggers critiques only when confident and detecting significant patterns (sudden crashes or chronic ruts).
-   * **Coach:** Activated when the Critic identifies significant patterns — whether problematic (crashes, ruts) or positive (sustained alignment). Uses retrieval-augmented generation (RAG) over the user's full journal history to surface thematic evidence, explain *why* misalignment occurred, and offer reflective prompts or "micro-anchors." For positive patterns, provides occasional evidence-based acknowledgment without gamification. (See [System Architecture](Ideas/VIF_02_System_Architecture.md)).
+3. **Reasoning + action:** A two-stage evaluative layer powered by the **[Value Identity Function (VIF)](VIF/VIF_01_Concepts_and_Roadmap.md)**:
+   * **Critic (VIF):** A numeric, uncertainty-aware engine that computes per-value-dimension alignment scores from a sliding window of recent entries. Uses [LLM-as-Judge for reward modeling](VIF/VIF_03_Model_Training.md) and [MC Dropout for epistemic uncertainty](VIF/VIF_04_Uncertainty_Logic.md). Triggers critiques only when confident and detecting significant patterns (sudden crashes or chronic ruts).
+   * **Coach:** Activated when the Critic identifies significant patterns — whether problematic (crashes, ruts) or positive (sustained alignment). Uses retrieval-augmented generation (RAG) over the user's full journal history to surface thematic evidence, explain *why* misalignment occurred, and offer reflective prompts or "micro-anchors." For positive patterns, provides occasional evidence-based acknowledgment without gamification. (See [System Architecture](VIF/VIF_02_System_Architecture.md)). For a concrete scenario, see [Worked Example: Sarah's Journey](VIF/VIF_Example.md).
 
 ## **Product principles**
 
@@ -84,7 +84,7 @@ This mini-assessment directly anchors the capstone submodules: the latent dimens
    * **Value dimensions** anchored in [Schwartz's theory of basic human values](https://en.wikipedia.org/wiki/Theory_of_basic_human_values) (e.g., Self-Direction, Benevolence, Achievement, Security) with definitions, rubrics, and examples.
    * **User value profile:** vector of value weights `w_u ∈ ℝ^K` (normalized, sum to 1), plus narrative descriptions and constraints.
    * **State representation:** sliding window of N recent entry embeddings + time deltas + history stats (EMA of per-dimension alignment, rolling std dev, entry counts).
-5. Implement **[Reward Modeling (LLM-as-Judge)](Ideas/VIF_03_Model_Training.md):** For each entry, LLM outputs per-dimension alignment scores (Likert scale normalized to [-1,1]) with rationales and optional confidence scores. Use synthetic personas for initial training/validation.
+5. Implement **[Reward Modeling (LLM-as-Judge)](VIF/VIF_03_Model_Training.md):** For each entry, LLM outputs per-dimension alignment scores (Likert scale normalized to [-1,1]) with rationales and optional confidence scores. Use synthetic personas for initial training/validation.
 6. Tooling: start with API LLM for tagging + reflection, add lightweight classifiers later if needed; keep reasoning layer explainable for XRAI.
 7. Evaluation plan: combine Likert feedback on "felt accurate?" with inter-rater agreement on value tags and stability metrics for the profile.
 8. Instrument the inspiration feed so each recommendation decision (accept/reject/ignore) is stored as structured evidence linked to values, identities, and interest embeddings, enabling closed-loop personalization.
@@ -114,15 +114,15 @@ This mini-assessment directly anchors the capstone submodules: the latent dimens
 | **Neuro-symbolic reasoning** | Add a tiny knowledge graph + rule layer on top of LLM outputs to show which logical checks fired (great for XRAI storytelling). |
 | **Multimodal fusion** | Blend text + [prosodic audio cues](Ideas/A3D.md) to prove Intelligent Sensing value beyond transcripts. |
 | **Personalised quote recommender** | Build embeddings of quotes + user resonance to deliver “micro-anchors” tuned to each identity conflict. |
-| **Distilled Reward Model** | Train a smaller supervised model to mimic LLM-as-Judge, reducing latency and cost while enabling offline VIF training. (See [Model Training](Ideas/VIF_03_Model_Training.md)) |
-| **Advanced uncertainty modeling** | Extend MC Dropout with ensembles or density models; add explicit OOD detectors on the text embedding space. (See [Uncertainty Logic](Ideas/VIF_04_Uncertainty_Logic.md)) |
-| **Tiered VIF implementation** | Progress from Tier 1 (immediate alignment) → Tier 2 (short-horizon forecast) → Tier 3 (time-aware discounted returns). See [VIF design](Ideas/VIF_01_Concepts_and_Roadmap.md). |
+| **Distilled Reward Model** | Train a smaller supervised model to mimic LLM-as-Judge, reducing latency and cost while enabling offline VIF training. (See [Model Training](VIF/VIF_03_Model_Training.md)) |
+| **Advanced uncertainty modeling** | Extend MC Dropout with ensembles or density models; add explicit OOD detectors on the text embedding space. (See [Uncertainty Logic](VIF/VIF_04_Uncertainty_Logic.md)) |
+| **Tiered VIF implementation** | Progress from Tier 1 (immediate alignment) → Tier 2 (short-horizon forecast) → Tier 3 (time-aware discounted returns). See [VIF design](VIF/VIF_01_Concepts_and_Roadmap.md). |
 
 # Features that tie back to Masters' submodules
 
 | Submodule                         | Features in Twinkl                                                                                                                                                                                                                  |
 | :-------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Intelligent Reasoning Systems** | Formal value/goal knowledge base + decay rules cover knowledge representation; a hybrid reasoning layer mixes LLM inference with symbolic “if value X high but mentions drop Y weeks → flag misalignment” rules, and the inspiration feed performs decision-theoretic ranking (with [uncertainty-aware scoring](Ideas/VIF_04_Uncertainty_Logic.md)) of real-time search hits plus logged user accept/reject choices. |
+| **Intelligent Reasoning Systems** | Formal value/goal knowledge base + decay rules cover knowledge representation; a hybrid reasoning layer mixes LLM inference with symbolic “if value X high but mentions drop Y weeks → flag misalignment” rules, and the inspiration feed performs decision-theoretic ranking (with [uncertainty-aware scoring](VIF/VIF_04_Uncertainty_Logic.md)) of real-time search hits plus logged user accept/reject choices. |
 | **Pattern Recognition Systems**   | Transformer tagging for sentiment/topics, sequential models for cadence baselines, clustering/trajectory viz (“Map of Me”) to detect seasons, and anomaly detection that spots journal absences while continuously re-learning from the recommendation-choice dataset. |
 | **Intelligent Sensing Systems**   | [Voice features (pitch, tempo, MFCC)](Ideas/A3D.md) fused with text cover multimodal signal processing; the real-time search layer acts as an external “sensor” that ingests up-to-date cultural/learning stimuli, and choice telemetry becomes another sensed signal that is fused with identity/value embeddings. |
 | **Architecting AI Systems**       | Agentic loop (Perception → Memory → Reasoning → Action), explainable feedback via XRAI, privacy-first storage of sensitive logs, and orchestration of background workers that run anomaly checks, call external APIs, and write preference updates while following MLSecOps guardrails. |
@@ -153,4 +153,3 @@ This mini-assessment directly anchors the capstone submodules: the latent dimens
 # ISS-Practice-Module: The Adaptive Acoustic Anomaly Detector (A3D)
 
 > See [A3D.md](Ideas/A3D.md) for full documentation of this Semester 3 module.
-
