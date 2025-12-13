@@ -10,7 +10,19 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "ipykernel==7.1.0",
+    "jinja2==3.1.6",
+    "openai==2.11.0",
+    "pydantic==2.12.5",
+    "python-dotenv==1.2.1",
+    "pyyaml==6.0.3",
+    "polars==1.36.1",
 ]
+
+[tool.setuptools]
+# This project currently has no installable Python packages.
+# Explicitly disable auto-discovery so top-level folders like
+# `config/` and `notebooks/` don't get treated as packages.
+packages = []
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
