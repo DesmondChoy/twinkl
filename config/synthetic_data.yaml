@@ -32,18 +32,13 @@ personas:
     - "Universalism"
 
 journal_entries:
-  time_of_day:
-    - "Early Morning"
-    - "Lunch break"
-    - "Evening"
-    - "Late night"
   tones:
-    - "Conversational"
     - "Self-reflective"
     - "Brief and factual"
     - "Emotional/Venting"
-    - "Analytical"
     - "Stream of consciousness"
+    - "Exhausted"
+    - "Defensive"
   verbosity:
     - "Short (1-3 sentences)"
     - "Medium (1-2 paragraphs)"
