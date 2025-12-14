@@ -1,0 +1,925 @@
+# Schwartz Values Elaboration for Persona Generation
+# Based on Schwartz's Theory of Basic Human Values (1992, 2012)
+#
+# This file provides detailed operationalizations of each value to guide
+# LLM-based persona generation. Each entry includes academic grounding,
+# behavioral manifestations, and narrative guidance.
+#
+# Reference: Schwartz, S. H. (2012). An Overview of the Schwartz Theory of Basic Values.
+# Online Readings in Psychology and Culture, 2(1). https://doi.org/10.9707/2307-0919.1116
+#
+# Additional references:
+# - Schwartz, S. H. (2006). Basic Human Values: An Overview.
+# - Schwartz, S. H., et al. (2012). Refining the theory of basic individual values. JPSP.
+
+# Higher-Order Value Dimensions (Bipolar Axes)
+# The 10 values organize into two bipolar dimensions that capture fundamental value conflicts:
+#
+# DIMENSION 1: Openness to Change vs. Conservation
+#   - Openness to Change: Self-Direction, Stimulation (+ Hedonism bridges to Self-Enhancement)
+#   - Conservation: Security, Conformity, Tradition
+#   - Conflict: Independence and readiness for change vs. self-restriction, order, resistance to change
+#
+# DIMENSION 2: Self-Enhancement vs. Self-Transcendence
+#   - Self-Enhancement: Power, Achievement (+ Hedonism bridges to Openness)
+#   - Self-Transcendence: Universalism, Benevolence
+#   - Conflict: Pursuing own interests vs. transcending self for others' welfare
+#
+# Note: Hedonism shares elements of both Openness to Change and Self-Enhancement
+
+values:
+  Self-Direction:
+    higher_order_dimension: Openness to Change
+
+    definition: >
+      Independent thought and action — choosing, creating, exploring.
+      Derives from organismic needs for control and mastery (e.g., Bandura,
+      1977; Deci, 1975) and interactional requirements of autonomy and
+      independence (e.g., Kluckhohn, 1951; Kohn & Schooler, 1983).
+
+    core_motivation: >
+      The fundamental drive to think for oneself, make one's own choices,
+      and resist external control. Self-Direction-oriented individuals feel
+      most alive when they are authoring their own path, even if that path
+      is harder or less conventional.
+
+    behavioral_manifestations:
+      - Resists being told what to do; bristles at micromanagement or rigid hierarchies
+      - Seeks out problems that require novel solutions rather than following established procedures
+      - Makes career or life choices that prioritize autonomy over stability or prestige
+      - Questions received wisdom; asks "why?" even when it creates friction
+      - Pursues hobbies or side projects purely for personal curiosity
+      - May leave secure situations (jobs, relationships) that feel constraining
+      - Values having options and dislikes feeling "locked in"
+
+    life_domain_expressions:
+      work: >
+        Gravitates toward roles with creative freedom, flat hierarchies, or entrepreneurship.
+        May struggle in bureaucratic environments. Prefers to set own deadlines and methods.
+        Often drawn to research, art, startups, freelancing, or technical roles with autonomy.
+      relationships: >
+        Needs partners who respect their independence and don't try to control them.
+        May struggle with traditional relationship scripts. Values honest communication
+        over harmony. Friendships often form around shared intellectual interests.
+      leisure: >
+        Pursues self-directed learning, creative hobbies, or exploration.
+        Dislikes highly structured group activities. May tinker, read widely,
+        or pursue unconventional interests others find obscure.
+      conflict_style: >
+        Stands ground on matters of principle. Willing to argue or debate.
+        Dislikes being pressured to conform. May be seen as stubborn or contrarian.
+
+    typical_stressors:
+      - Being in environments with excessive rules, surveillance, or micromanagement
+      - Having decisions made for them without consultation
+      - Feeling trapped in commitments that limit future choices
+      - Social pressure to follow conventional paths (career, family, lifestyle)
+      - Dependency on others for things they could do themselves
+
+    typical_goals:
+      - Create something original (business, art, research, ideas)
+      - Achieve expertise in a self-chosen domain
+      - Build a life that reflects personal choices, not external expectations
+      - Maintain freedom to change direction when interests evolve
+
+    internal_conflicts: >
+      May struggle between desire for independence and practical need for stability.
+      Can feel guilty about prioritizing autonomy over responsibilities to others.
+      Sometimes questions whether their "independence" is actually avoidance of commitment.
+
+    adjacent_compatible_values:
+      - Stimulation (both emphasize openness to change and new experiences)
+      - Universalism (both involve openness of thought and tolerance)
+
+    opposing_tension_values:
+      - Conformity (external rules vs. self-determination)
+      - Tradition (following established ways vs. forging own path)
+      - Security (stability vs. freedom to change)
+
+    cultural_notes: >
+      Expression varies significantly by culture. In collectivist cultures, self-direction
+      may manifest as seeking autonomy within group contexts rather than individualistic
+      independence. In hierarchical cultures, may show as quiet resistance or finding
+      niches of freedom rather than open defiance.
+
+    persona_narrative_guidance: >
+      When building a Self-Direction persona, focus on concrete situations where they
+      chose the harder independent path over the easier conventional one. Show the
+      trade-offs they've accepted (financial instability, social disapproval, relationship
+      strain) for the sake of autonomy. Their stressors should involve feeling controlled
+      or constrained. Their satisfactions should come from moments of creative ownership
+      or intellectual freedom, not external validation.
+
+  Stimulation:
+    higher_order_dimension: Openness to Change
+
+    definition: >
+      Excitement, novelty, and challenge in life. Derives from the organismic
+      need for variety and stimulation in order to maintain an optimal,
+      positive, rather than threatening, level of activation. This need
+      probably relates to the needs underlying Self-Direction values.
+
+    core_motivation: >
+      The fundamental drive to avoid boredom, routine, and stagnation.
+      Stimulation-oriented individuals feel most alive when encountering
+      the new, the challenging, or the unexpected. Comfort feels like death.
+
+    behavioral_manifestations:
+      - Actively seeks new experiences, places, people, and ideas
+      - Gets restless in routine jobs or stable but predictable situations
+      - Takes calculated risks for the thrill of uncertainty
+      - Changes careers, locations, or life circumstances more frequently than peers
+      - Gravitates toward intense experiences (adventure sports, travel, high-stakes work)
+      - May start many projects but struggle to finish when novelty wears off
+      - Feels energized by crisis or challenge; bored by maintenance work
+
+    life_domain_expressions:
+      work: >
+        Thrives in dynamic, fast-paced environments with variety. Drawn to roles
+        involving travel, crisis response, startups, or project-based work.
+        Struggles with repetitive tasks or long-term maintenance roles.
+        May job-hop or seek lateral moves to stay engaged.
+      relationships: >
+        Seeks partners who are spontaneous and open to adventure. May struggle
+        with the routine aspects of long-term relationships. Needs novelty
+        injected into partnerships to stay engaged. Friendships often form
+        through shared adventures or intense experiences.
+      leisure: >
+        Pursues varied hobbies, often cycling through them. Drawn to travel,
+        adventure sports, festivals, or any activity promising new sensations.
+        May have difficulty relaxing; sees "doing nothing" as wasted time.
+      conflict_style: >
+        May enjoy heated debates for the stimulation. Can be impatient with
+        slow, methodical conflict resolution. Might create drama unconsciously
+        to escape boredom.
+
+    typical_stressors:
+      - Being stuck in monotonous routines or repetitive work
+      - Feeling trapped in predictable, unchanging circumstances
+      - Long periods without new challenges or experiences
+      - Environments that punish risk-taking or experimentation
+      - Commitments that limit spontaneity (mortgages, long contracts)
+
+    typical_goals:
+      - Accumulate diverse, intense experiences
+      - Avoid getting "stuck" in any one life configuration
+      - Find work that provides continuous novelty and challenge
+      - Build a life story worth telling
+
+    internal_conflicts: >
+      May struggle between craving excitement and recognizing the value of stability.
+      Can feel shame about inability to commit or follow through. Sometimes wonders
+      if constant novelty-seeking is running away from something rather than toward it.
+      May envy others' contentment while being unable to share it.
+
+    adjacent_compatible_values:
+      - Self-Direction (both emphasize openness to change)
+      - Hedonism (both involve seeking positive experiences)
+
+    opposing_tension_values:
+      - Security (stability vs. excitement)
+      - Tradition (established routines vs. novelty)
+      - Conformity (predictable behavior vs. spontaneity)
+
+    cultural_notes: >
+      In cultures emphasizing stability and continuity, stimulation-seeking may
+      be channeled into socially acceptable outlets (festivals, pilgrimages,
+      competitive sports) rather than individual adventure. In risk-averse cultures,
+      may manifest as intellectual novelty-seeking rather than physical risk-taking.
+
+    persona_narrative_guidance: >
+      When building a Stimulation persona, show their restlessness through concrete
+      life patterns: job changes, moves, abandoned projects, varied social circles.
+      Their stressors should involve feeling trapped or bored. Their satisfactions
+      should come from new experiences, not achievements or recognition. Show the
+      costs they've paid for novelty (unfinished degrees, strained relationships,
+      financial instability) without making them seem irresponsible — frame it as
+      a genuine need, not a character flaw.
+
+  Hedonism:
+    higher_order_dimension: Openness to Change / Self-Enhancement (bridges both)
+
+    definition: >
+      Pleasure or sensuous gratification for oneself. Derives from
+      organismic needs and the pleasure associated with satisfying them.
+
+    core_motivation: >
+      The fundamental drive to experience pleasure and avoid pain in the present.
+      Hedonism-oriented individuals believe that enjoying life is not just acceptable
+      but important — that sensory and emotional pleasure is a legitimate goal,
+      not something to be deferred or apologized for.
+
+    behavioral_manifestations:
+      - Prioritizes enjoyment in decision-making, even when it conflicts with productivity
+      - Invests time and resources in pleasurable experiences (food, entertainment, comfort)
+      - Resists self-denial for its own sake; questions "delayed gratification" narratives
+      - Chooses jobs or living situations partly based on lifestyle quality
+      - Takes breaks, vacations, and leisure seriously rather than treating them as rewards
+      - May struggle with long-term sacrifices that promise only distant rewards
+      - Attentive to physical comfort and sensory environment
+
+    life_domain_expressions:
+      work: >
+        Seeks work that is intrinsically enjoyable or at least not painful.
+        Values work-life balance and resists cultures glorifying overwork.
+        May choose lower-paying roles that offer better quality of life.
+        Notices and cares about workplace environment (lighting, comfort, food).
+      relationships: >
+        Values partners who know how to enjoy life and aren't constantly
+        sacrificing present happiness for future goals. Physical affection
+        and shared pleasurable experiences important. May struggle with
+        partners who are always working or deferring enjoyment.
+      leisure: >
+        Takes leisure seriously as a legitimate life domain, not just
+        recovery from work. Invests in quality experiences. Knowledgeable
+        about things that give pleasure (food, music, travel, hobbies).
+      conflict_style: >
+        Avoids conflict that feels unpleasant; may prioritize keeping
+        things pleasant over resolving issues. Can be conflict-avoidant
+        if confrontation seems too costly to wellbeing.
+
+    typical_stressors:
+      - Environments demanding constant sacrifice and delayed gratification
+      - Being unable to enjoy life due to financial pressure, health issues, or overwork
+      - Guilt from others (or internalized) about prioritizing pleasure
+      - Being in relationships or jobs that feel joyless
+      - Ascetic cultural or religious expectations
+
+    typical_goals:
+      - Build a life that is genuinely enjoyable day-to-day, not just "successful"
+      - Have resources (time, money, health) to experience pleasure
+      - Find work that doesn't require sacrificing quality of life
+      - Surround oneself with people who appreciate enjoying life
+
+    internal_conflicts: >
+      May struggle with guilt about prioritizing pleasure, especially in
+      achievement-oriented or ascetic cultural contexts. Can worry about
+      being seen as lazy or unserious. Sometimes questions whether their
+      pleasure-orientation is avoidance of harder but more meaningful pursuits.
+      May feel tension between present enjoyment and future security.
+
+    adjacent_compatible_values:
+      - Stimulation (both involve seeking positive experiences)
+      - Achievement (Hedonism bridges openness and self-enhancement)
+
+    opposing_tension_values:
+      - Conformity (social restraint vs. self-indulgence)
+      - Tradition (self-denial vs. pleasure)
+
+    cultural_notes: >
+      Hedonism is often stigmatized in cultures emphasizing hard work, self-denial,
+      or collective sacrifice. In such contexts, may manifest more privately or be
+      framed in socially acceptable terms (hospitality, celebration, self-care).
+      In cultures with strong food, music, or festival traditions, may be more
+      openly expressed and socially integrated.
+
+    persona_narrative_guidance: >
+      When building a Hedonism persona, show their pleasure-orientation through
+      concrete lifestyle choices: the apartment they chose for natural light,
+      the job they turned down because it would mean no weekends, the money they
+      spend on good food or experiences. Avoid making them seem shallow — show
+      that they've thought about what actually makes them happy and deliberately
+      chosen it over conventional success metrics. Their stressors should involve
+      joylessness or forced sacrifice; their satisfactions should be sensory
+      and immediate, not abstract.
+
+  Achievement:
+    higher_order_dimension: Self-Enhancement
+
+    definition: >
+      Personal success through demonstrating competence according to social
+      standards. Derives from the necessity of competent performance that
+      generates resources needed for individuals to survive and for social
+      interaction and institutional functioning to succeed.
+
+    core_motivation: >
+      The fundamental drive to excel, to be competent, and to have that competence
+      recognized. Achievement-oriented individuals feel most alive when they are
+      performing well and being recognized for it. Success is not just about
+      feeling capable — it's about demonstrating capability to others.
+
+    behavioral_manifestations:
+      - Sets measurable goals and tracks progress toward them
+      - Compares self to peers and external benchmarks
+      - Works hard, sometimes to the point of overwork, to meet standards of excellence
+      - Seeks feedback, recognition, and credentials that validate competence
+      - Feels frustrated when effort doesn't translate to recognized results
+      - May sacrifice leisure, relationships, or health for achievement
+      - Chooses challenging paths that offer recognition over easier, anonymous ones
+
+    life_domain_expressions:
+      work: >
+        Career-focused; measures self-worth partly through professional accomplishments.
+        Seeks roles with clear advancement paths, measurable outcomes, and recognition.
+        May be drawn to prestigious organizations, competitive fields, or visible roles.
+        Works long hours; may struggle to disconnect. Keeps track of metrics, reviews, rankings.
+      relationships: >
+        May struggle to be present in relationships due to work focus. Partners
+        may feel secondary to career. Can be attracted to high-achieving partners.
+        Friendships often form through professional networks. May measure relationship
+        "success" inappropriately.
+      leisure: >
+        Even leisure may be achievement-oriented (competitive sports, mastering hobbies,
+        measurable fitness goals). May feel guilty about "unproductive" leisure.
+        Vacations might involve accomplishing something rather than pure relaxation.
+      conflict_style: >
+        Competitive; may frame conflicts as win/lose. Sensitive to criticism of
+        competence. Can be defensive about failures or setbacks. May use
+        achievements as ammunition in arguments.
+
+    typical_stressors:
+      - Failure to meet goals or standards, especially publicly visible ones
+      - Being in environments without clear metrics or recognition systems
+      - Working hard without acknowledgment or advancement
+      - Comparing unfavorably to high-achieving peers
+      - Health, family, or circumstances interfering with performance
+      - Imposter syndrome despite external success
+
+    typical_goals:
+      - Reach measurable milestones (promotions, publications, awards, credentials)
+      - Be recognized as excellent in their field
+      - Outperform relevant comparison groups
+      - Build a track record that demonstrates competence
+
+    internal_conflicts: >
+      May struggle with the gap between external success and internal satisfaction.
+      Can feel empty after achieving goals, immediately needing the next one.
+      May recognize they're sacrificing relationships or health but feel unable to stop.
+      Sometimes questions whether they're achieving for themselves or for validation.
+      Imposter syndrome common despite evidence of competence.
+
+    adjacent_compatible_values:
+      - Power (both involve self-enhancement and social standing)
+      - Hedonism (Achievement bridges self-enhancement and openness)
+
+    opposing_tension_values:
+      - Benevolence (self-advancement vs. caring for close others)
+      - Universalism (personal success vs. concern for all)
+
+    cultural_notes: >
+      In collectivist cultures, achievement may be framed in terms of family honor
+      or group success rather than individual recognition. In cultures with strong
+      hierarchies, achievement may involve respecting the hierarchy while excelling
+      within it. In egalitarian cultures, visible achievement-orientation may be
+      socially penalized, requiring more subtle expression.
+
+    persona_narrative_guidance: >
+      When building an Achievement persona, show their drive through concrete behaviors:
+      the spreadsheet tracking their goals, the early mornings and late nights, the
+      comparison to peers, the credentials on the wall. Show the costs they've paid
+      (strained relationships, missed experiences, health issues) and the rewards
+      they've gained. Their stressors should involve threats to performance or
+      recognition; their satisfactions should come from measurable accomplishments
+      and external validation. Avoid making them one-dimensional — show moments of
+      doubt about whether the achievements are worth the costs.
+
+  Power:
+    higher_order_dimension: Self-Enhancement
+
+    definition: >
+      Social status and prestige, control or dominance over people and resources.
+      Derives from the apparent requirement for some degree of status differentiation
+      in social institutions (Parsons, 1951) and from the dominance/submission
+      dimension that emerges in empirical analyses of interpersonal relations
+      across cultures.
+
+    core_motivation: >
+      The fundamental drive to have influence, status, and control. Power-oriented
+      individuals feel most secure and satisfied when they have authority over
+      their circumstances and others defer to them. Powerlessness is experienced
+      as deeply threatening.
+
+    behavioral_manifestations:
+      - Seeks leadership roles and positions of authority
+      - Attentive to status markers (titles, possessions, social position)
+      - Makes decisions for others; may struggle to delegate or share control
+      - Accumulates resources (money, property, connections) as security and status
+      - Sensitive to disrespect or challenges to authority
+      - May dominate conversations, meetings, or social situations
+      - Builds networks strategically for influence
+
+    life_domain_expressions:
+      work: >
+        Seeks management, leadership, or ownership roles. Measures success partly
+        by scope of authority and control over resources. May struggle as individual
+        contributor without advancement path. Attentive to organizational politics.
+        Collects visible status markers (corner office, title, direct reports).
+      relationships: >
+        May unconsciously seek control in relationships. Can be generous but
+        expects deference or gratitude. Attracted to partners who enhance status
+        or allow them to be in charge. Friendships may be strategic; maintains
+        relationships that offer influence or access.
+      leisure: >
+        Leisure choices may signal status (exclusive memberships, luxury experiences).
+        May compete for leadership even in recreational contexts. Collects status
+        symbols. Social events are partly networking opportunities.
+      conflict_style: >
+        Assertive; expects to win conflicts. May use status or resources as leverage.
+        Takes challenges personally. Can escalate conflicts to demonstrate dominance.
+        Struggles to back down even when wrong.
+
+    typical_stressors:
+      - Being in powerless or subordinate positions
+      - Having authority challenged or undermined
+      - Losing status markers (job loss, financial setback, social demotion)
+      - Being dependent on others' decisions
+      - Disrespect, especially public disrespect
+      - Being outcompeted by peers
+
+    typical_goals:
+      - Achieve positions of authority and influence
+      - Accumulate resources that provide security and status
+      - Build networks of influence and obligation
+      - Be respected and deferred to
+
+    internal_conflicts: >
+      May struggle with the loneliness of leadership or distrust of others' motives.
+      Can question whether relationships are genuine or strategic. Sometimes
+      recognizes their controlling behavior damages relationships but feels unable
+      to stop. May fear vulnerability that comes with relinquishing control.
+      Success can feel hollow if it comes with isolation.
+
+    adjacent_compatible_values:
+      - Achievement (both involve self-enhancement)
+      - Security (both involve conservation and control)
+
+    opposing_tension_values:
+      - Universalism (self-interest vs. concern for all)
+      - Benevolence (dominance vs. caring relationships)
+
+    cultural_notes: >
+      In egalitarian cultures, overt power-seeking is stigmatized, requiring
+      indirect expression (expertise, moral authority, behind-scenes influence).
+      In hierarchical cultures, may be more openly expressed and socially accepted.
+      In collectivist cultures, power may be exercised on behalf of the group
+      rather than purely for individual status.
+
+    persona_narrative_guidance: >
+      When building a Power persona, show their drive through concrete behaviors:
+      the titles they've accumulated, the way they position themselves in meetings,
+      their sensitivity to status and respect. Avoid cartoon villainy — most
+      power-oriented people see themselves as responsible leaders, not dominators.
+      Show the insecurity underneath the control-seeking. Their stressors should
+      involve powerlessness or disrespect; their satisfactions should come from
+      influence and deference. Show the costs (isolation, distrust, relationship
+      strain) as well as the rewards.
+
+  Security:
+    higher_order_dimension: Conservation
+
+    definition: >
+      Safety, harmony, and stability of society, of relationships, and of self.
+      Derives from basic individual and group requirements for survival and
+      welfare (cf. Kluckhohn, 1951; Maslow, 1965). Some security values serve
+      primarily individual interests (e.g., health), others wider group
+      interests (e.g., national security).
+
+    core_motivation: >
+      The fundamental drive to feel safe, stable, and protected from threat.
+      Security-oriented individuals feel most at peace when their circumstances
+      are predictable, their relationships stable, and their future assured.
+      Uncertainty and instability are experienced as deeply threatening.
+
+    behavioral_manifestations:
+      - Makes decisions prioritizing stability over opportunity
+      - Avoids unnecessary risks; weighs downside carefully
+      - Saves money, buys insurance, maintains emergency reserves
+      - Prefers known situations and people over unknown ones
+      - Plans ahead; dislikes surprises or last-minute changes
+      - Loyal to institutions, employers, and relationships that provide stability
+      - May stay in suboptimal situations because change feels risky
+
+    life_domain_expressions:
+      work: >
+        Seeks stable employment with job security, benefits, and predictable income.
+        May prefer established organizations over startups. Values clear expectations
+        and procedures. Loyal to employers who provide security. May sacrifice
+        advancement for stability. Anxious during organizational change or uncertainty.
+      relationships: >
+        Seeks committed, stable relationships. Loyal and reliable partner.
+        May struggle with ambiguity in relationship status. Values family
+        stability; may prioritize family security over personal desires.
+        Friendships tend to be long-term and reliable rather than exciting.
+      leisure: >
+        Prefers familiar activities and places. May return to same vacation spots,
+        restaurants, routines. Finds comfort in predictability. Hobbies may
+        provide sense of control and mastery in manageable domains.
+      conflict_style: >
+        Avoids conflict that threatens relationship stability. May accommodate
+        to preserve harmony. Anxious during interpersonal conflict. Seeks
+        resolution and return to stability quickly.
+
+    typical_stressors:
+      - Job instability, financial insecurity, health threats
+      - Relationship instability or ambiguity
+      - Unpredictable circumstances or environments
+      - Being forced to take risks or make changes
+      - Threats to family or community stability
+      - Living in unstable social or political environments
+
+    typical_goals:
+      - Build financial security (savings, property, stable income)
+      - Maintain stable, committed relationships
+      - Create predictable routines and environments
+      - Protect family and loved ones from harm
+      - Avoid unnecessary risks to current stability
+
+    internal_conflicts: >
+      May struggle between desire for security and recognition that growth
+      requires risk. Can feel trapped in stable but unfulfilling situations.
+      Sometimes recognizes their risk-aversion holds them back but feels unable
+      to act. May envy others' adventures while being unable to tolerate the
+      uncertainty. Can be overly controlling in attempt to manage anxiety.
+
+    adjacent_compatible_values:
+      - Conformity (both involve conservation and social harmony)
+      - Power (both involve control, though different types)
+      - Tradition (both involve preservation and stability)
+
+    opposing_tension_values:
+      - Self-Direction (stability vs. freedom to change)
+      - Stimulation (predictability vs. novelty)
+
+    cultural_notes: >
+      In cultures with recent instability (war, economic crisis, displacement),
+      security orientation may be particularly strong and socially validated.
+      In stable, affluent contexts, may be seen as overly cautious or unambitious.
+      In collectivist cultures, security may emphasize group welfare over
+      individual safety.
+
+    persona_narrative_guidance: >
+      When building a Security persona, show their orientation through concrete
+      behaviors: the emergency fund they maintain, their loyalty to a stable
+      employer, their resistance to risky opportunities. Show the trade-offs
+      they've accepted (missed opportunities, unfulfilling stability) for safety.
+      Their stressors should involve threats to stability; their satisfactions
+      should come from predictability and protection. Avoid making them seem
+      cowardly — frame security-seeking as a legitimate need, especially if
+      their background includes instability.
+
+  Conformity:
+    higher_order_dimension: Conservation
+
+    definition: >
+      Restraint of actions, inclinations, and impulses likely to upset or
+      harm others and violate social expectations or norms. Derives from
+      the requirement that individuals inhibit inclinations that might
+      disrupt and undermine smooth interaction and group functioning
+      (cf. Freud, 1930; Kohn & Schooler, 1983; Parsons, 1951).
+
+    core_motivation: >
+      The fundamental drive to maintain social harmony by restraining impulses
+      that might upset others or violate norms. Conformity-oriented individuals
+      feel most comfortable when they are meeting expectations and maintaining
+      smooth relationships. Social disapproval is experienced as deeply threatening.
+
+    behavioral_manifestations:
+      - Self-monitors behavior to avoid offending or upsetting others
+      - Follows rules, norms, and expectations even when inconvenient
+      - Avoids drawing negative attention or standing out inappropriately
+      - Restrains opinions that might cause conflict
+      - Polite, courteous, and attentive to social etiquette
+      - May suppress authentic self-expression to maintain harmony
+      - Feels uncomfortable when others break norms, even if not directly affected
+
+    life_domain_expressions:
+      work: >
+        Reliable, follows procedures, meets expectations. Good organizational
+        citizen. May struggle to voice disagreement or push back on authority.
+        Uncomfortable with rule-breaking, even when rules are inefficient.
+        Prefers clear expectations; anxious when norms are ambiguous.
+      relationships: >
+        Reliable, considerate partner. May suppress needs to avoid conflict.
+        Can struggle with honest communication if it risks upsetting partner.
+        Values harmony highly; may accommodate excessively. Extended family
+        expectations carry significant weight.
+      leisure: >
+        Choices may be influenced by what's socially appropriate or expected.
+        May participate in activities to meet social obligations rather than
+        pure enjoyment. Uncomfortable being the only one doing something different.
+      conflict_style: >
+        Strongly avoids conflict. May suppress grievances to maintain harmony.
+        When conflict occurs, prioritizes restoring relationship over being right.
+        Can be passive-aggressive if direct expression feels too risky.
+
+    typical_stressors:
+      - Being pressured to violate norms or expectations
+      - Social disapproval or criticism
+      - Situations requiring them to upset or confront others
+      - Being caught between conflicting social expectations
+      - Others behaving inappropriately, creating awkwardness
+      - Having to assert themselves against authority or majority
+
+    typical_goals:
+      - Maintain smooth relationships and social harmony
+      - Meet expectations of important others (family, employers, community)
+      - Avoid social disapproval or embarrassment
+      - Be seen as reliable, polite, and appropriate
+
+    internal_conflicts: >
+      May struggle with resentment from chronic self-suppression. Can feel
+      inauthentic or invisible. Sometimes recognizes they've lost touch with
+      their own desires in pursuit of others' approval. May have sudden
+      rebellious impulses that shame them. Can feel trapped between conflicting
+      expectations from different groups.
+
+    adjacent_compatible_values:
+      - Tradition (both involve conservation and meeting expectations)
+      - Security (both involve maintaining stability)
+      - Benevolence (both involve concern for others, though differently)
+
+    opposing_tension_values:
+      - Self-Direction (social restraint vs. autonomy)
+      - Stimulation (predictability vs. novelty)
+
+    cultural_notes: >
+      In collectivist and high-context cultures, conformity may be more openly
+      valued and expressed. In individualist cultures, may be stigmatized,
+      requiring people to frame their conformity as personal choice. In
+      hierarchical cultures, conformity includes deference to authority.
+
+    persona_narrative_guidance: >
+      When building a Conformity persona, show their orientation through concrete
+      behaviors: the opinions they don't voice, the boundaries they don't set,
+      their attention to what's appropriate. Show the costs (suppressed authenticity,
+      accumulated resentment, lost opportunities) as well as the benefits (smooth
+      relationships, social acceptance). Their stressors should involve pressure
+      to violate norms or face disapproval; their satisfactions should come from
+      harmony and acceptance. Avoid making them seem weak — frame conformity as
+      a social skill and genuine care for others' comfort.
+
+  Tradition:
+    higher_order_dimension: Conservation
+
+    definition: >
+      Respect, commitment, and acceptance of the customs and ideas that
+      one's culture or religion provides. Derives from the need for group
+      solidarity: groups develop practices, symbols, ideas, and beliefs that
+      represent their shared experience and fate, which become sanctioned as
+      valued customs and traditions that symbolize the group's solidarity,
+      express its unique worth, and contribute to its survival.
+
+    core_motivation: >
+      The fundamental drive to maintain continuity with the past and honor
+      established ways. Tradition-oriented individuals feel most grounded
+      when connected to their cultural, religious, or familial heritage.
+      Abandoning tradition feels like betrayal of something important.
+
+    behavioral_manifestations:
+      - Maintains practices, rituals, and customs from family, culture, or religion
+      - Respects elders, ancestors, and traditional authorities
+      - Makes decisions considering what family or community would think
+      - Preserves connections to cultural heritage (language, food, celebrations)
+      - May resist changes that disrupt established ways
+      - Finds meaning and comfort in ritual and continuity
+      - Values institutions that preserve tradition (religious organizations, cultural groups)
+
+    life_domain_expressions:
+      work: >
+        May feel obligation to family business or traditional profession.
+        Respects seniority and established ways of doing things. May struggle
+        with rapid organizational change. Values mentorship and passing down
+        knowledge. Loyalty to long-standing employers or institutions.
+      relationships: >
+        Family expectations heavily influence relationship choices. May follow
+        traditional relationship scripts (courtship, marriage, gender roles).
+        Extended family relationships important. Traditions around holidays,
+        celebrations, family rituals maintained carefully.
+      leisure: >
+        Participates in cultural or religious observances. May maintain traditional
+        hobbies or crafts. Visits culturally significant places. Leisure may
+        involve intergenerational activities and family gatherings.
+      conflict_style: >
+        Respects traditional conflict resolution methods (elders, mediation,
+        established processes). May defer to traditional authorities. Avoids
+        conflicts that threaten family or cultural unity.
+
+    typical_stressors:
+      - Pressure to abandon traditions for modernity or convenience
+      - Conflict between traditional expectations and personal desires
+      - Loss of traditional institutions, practices, or communities
+      - Being in environments that don't respect their cultural heritage
+      - Family members who reject tradition
+      - Modernization that makes traditional practices difficult
+
+    typical_goals:
+      - Honor and maintain family and cultural traditions
+      - Pass traditions to next generation
+      - Live in accordance with traditional values and expectations
+      - Stay connected to cultural or religious community
+
+    internal_conflicts: >
+      May struggle between traditional expectations and personal authenticity,
+      especially around gender roles, career, relationships, or lifestyle.
+      Can feel guilty about any deviation from tradition. May question which
+      traditions are meaningful and which are just habits. Sometimes feels
+      caught between different cultural worlds (heritage culture vs. mainstream).
+
+    adjacent_compatible_values:
+      - Conformity (both involve subordination to social expectations)
+      - Security (both involve preserving existing social arrangements)
+      - Benevolence (both involve devotion to one's in-group)
+
+    opposing_tension_values:
+      - Self-Direction (established ways vs. choosing own path)
+      - Stimulation (continuity vs. novelty)
+      - Hedonism (self-denial in traditional practices vs. pleasure)
+
+    cultural_notes: >
+      Expression varies dramatically by specific cultural/religious tradition.
+      In immigrant communities, may involve maintaining heritage culture while
+      navigating mainstream culture. In rapidly modernizing societies, may
+      involve conscious cultural preservation efforts. In stable traditional
+      communities, may be assumed rather than deliberately chosen.
+
+    persona_narrative_guidance: >
+      When building a Tradition persona, show their orientation through concrete
+      practices: the holidays they observe, the family obligations they honor,
+      the cultural connections they maintain. Show the tension between tradition
+      and modernity they navigate. Their stressors should involve threats to
+      tradition or pressure to abandon it; their satisfactions should come from
+      continuity and connection to heritage. Be specific about which traditions
+      (not generic "tradition") and show the meaning they hold.
+
+  Benevolence:
+    higher_order_dimension: Self-Transcendence
+
+    definition: >
+      Preserving and enhancing the welfare of those with whom one is in
+      frequent personal contact (the "in-group"). Derives from the basic
+      requirement for smooth group functioning (cf. Kluckhohn, 1951;
+      Williams, 1968) and from the organismic need for affiliation
+      (cf. Korman, 1974; Maslow, 1965).
+
+    core_motivation: >
+      The fundamental drive to care for and support the people closest to them.
+      Benevolence-oriented individuals feel most fulfilled when they are helping,
+      nurturing, or supporting family, friends, and close community. The wellbeing
+      of their "people" is experienced as their own wellbeing.
+
+    behavioral_manifestations:
+      - Prioritizes needs of close others, sometimes over own needs
+      - Invests significant time and energy in helping family and friends
+      - Remembers and responds to others' needs, preferences, and struggles
+      - Forgives transgressions from close others; values relationship preservation
+      - May sacrifice personal goals for family or friend welfare
+      - Takes on caregiving roles readily
+      - Feels others' pain and joy as their own
+
+    life_domain_expressions:
+      work: >
+        May choose caring professions (healthcare, teaching, social work) or
+        roles that help teammates. Good collaborator and mentor. May struggle
+        with competitive environments. Can sacrifice career advancement for
+        family needs. Values workplace relationships highly.
+      relationships: >
+        Deeply invested in relationships. May over-give or have porous boundaries.
+        Strong loyalty and forgiveness. Extended family and close friends are
+        priority. May neglect own needs while caring for others. Partner and
+        family welfare central to life decisions.
+      leisure: >
+        Leisure often involves helping or being with loved ones. May feel
+        guilty about solo pursuits. Volunteerism or community involvement
+        common. Social activities preferred over solo ones.
+      conflict_style: >
+        Prioritizes relationship preservation over winning. May suppress own
+        needs to avoid conflict with close others. Forgives readily. Can be
+        taken advantage of due to accommodating nature.
+
+    typical_stressors:
+      - Close others in distress or danger
+      - Conflict within family or close friendships
+      - Being unable to help when loved ones need support
+      - Having to choose between competing obligations to different close others
+      - Feeling taken for granted or unappreciated by those they help
+      - Boundaries being pushed by others' needs
+
+    typical_goals:
+      - Ensure wellbeing and happiness of family and close friends
+      - Be there for loved ones when needed
+      - Maintain close, harmonious relationships
+      - Create safe, supportive environment for their people
+
+    internal_conflicts: >
+      May struggle with own needs being neglected. Can feel resentful but guilty
+      about the resentment. Sometimes recognizes over-giving is unsustainable but
+      feels unable to set boundaries. May lose sense of self in caregiving roles.
+      Can feel trapped by obligations to close others.
+
+    adjacent_compatible_values:
+      - Universalism (both involve concern for others, but different scope)
+      - Conformity (both involve responsiveness to others)
+      - Tradition (both can involve family obligations)
+
+    opposing_tension_values:
+      - Power (caring vs. dominance)
+      - Achievement (others' welfare vs. personal success)
+
+    cultural_notes: >
+      In collectivist cultures, benevolence may be the expected norm rather than
+      a distinctive orientation. In individualist cultures, may be gendered
+      (expected more from women). In cultures with strong extended family systems,
+      the "in-group" may be larger. In nuclear family cultures, may focus more
+      narrowly on immediate family and close friends.
+
+    persona_narrative_guidance: >
+      When building a Benevolence persona, show their orientation through concrete
+      caregiving behaviors: the calls they make to check in, the help they offer,
+      the sacrifices they make for family. Show the costs (depleted energy, neglected
+      self, deferred dreams) as well as the fulfillment. Their stressors should
+      involve loved ones' suffering or relationship conflict; their satisfactions
+      should come from helping and connection. Distinguish from Universalism — this
+      is about close others, not humanity in general.
+
+  Universalism:
+    higher_order_dimension: Self-Transcendence
+
+    definition: >
+      Understanding, appreciation, tolerance, and protection for the welfare
+      of all people and for nature. Derives from survival needs that become
+      apparent when people recognize that failure to accept those who are
+      different and treat them justly will lead to strife, and when people
+      become aware of the scarcity of natural resources.
+
+    core_motivation: >
+      The fundamental drive to care for the broader world — people beyond one's
+      immediate circle and the natural environment. Universalism-oriented individuals
+      feel responsible for humanity and nature; injustice, suffering, or environmental
+      destruction anywhere is experienced as a personal concern.
+
+    behavioral_manifestations:
+      - Concerned with social justice, inequality, and broader human welfare
+      - Environmentally conscious in personal choices and advocacy
+      - Open to people different from themselves; values diversity
+      - May prioritize causes over personal advancement
+      - Engages with news, issues, and problems beyond immediate life
+      - Donates time or money to causes serving broader humanity or environment
+      - May struggle with the scale of problems they care about
+
+    life_domain_expressions:
+      work: >
+        May choose mission-driven work (nonprofits, environmental organizations,
+        social enterprises, policy, journalism). Evaluates employers by ethical
+        practices, not just personal benefit. May sacrifice income for meaningful
+        work. Brings ethical concerns into workplace discussions.
+      relationships: >
+        Open to relationships across difference. May spend significant time on
+        causes, affecting time for personal relationships. Can struggle with
+        partners who don't share their concern for the world. Friendships often
+        involve shared values and activism.
+      leisure: >
+        Leisure may involve activism, volunteering, or environmentally conscious
+        activities. Consumption choices influenced by ethics (fair trade, sustainable,
+        local). Stays informed about world issues. May feel guilty about purely
+        self-focused leisure.
+      conflict_style: >
+        Willing to advocate for principles and causes. May engage in conflict
+        on behalf of others or the environment. Can be seen as preachy or
+        self-righteous. Struggles to tolerate perceived injustice quietly.
+
+    typical_stressors:
+      - Awareness of suffering, injustice, or environmental destruction
+      - Feeling powerless against large-scale problems
+      - Being in environments that are unethical or harmful
+      - Conflict between personal needs and broader responsibilities
+      - Others' indifference to issues they care about
+      - The gap between their ideals and the world's reality
+
+    typical_goals:
+      - Contribute to making the world more just, sustainable, and humane
+      - Live in accordance with ethical principles
+      - Raise awareness about important issues
+      - Reduce personal contribution to harm
+
+    internal_conflicts: >
+      May struggle with guilt about not doing enough. Can experience burnout
+      from caring about unsolvable problems. Sometimes questions whether their
+      actions make any difference. May feel tension between enjoying personal
+      life and responding to world's suffering. Can be judgmental of others
+      who don't share their concerns, then feel guilty about the judgment.
+
+    adjacent_compatible_values:
+      - Benevolence (both involve concern for others, but different scope)
+      - Self-Direction (both involve openness and tolerance)
+
+    opposing_tension_values:
+      - Power (concern for all vs. self-interest)
+      - Achievement (personal success vs. broader welfare)
+
+    cultural_notes: >
+      In some cultures, universalism may be expressed through religious frameworks
+      (all are children of God, karma, interconnection). In others, through secular
+      humanism or political ideology. In cultures facing internal conflict, may
+      be more difficult to extend concern to out-groups. Environmental emphasis
+      varies by exposure to environmental issues and cultural attitudes toward nature.
+
+    persona_narrative_guidance: >
+      When building a Universalism persona, show their orientation through concrete
+      concerns and choices: the causes they support, the ethical constraints on
+      their consumption, their engagement with world issues. Show the burden of
+      caring about problems they can't solve. Their stressors should involve
+      injustice or environmental harm; their satisfactions should come from
+      living ethically and contributing to causes. Distinguish from Benevolence —
+      this is about humanity and nature broadly, not just close others. Show the
+      tension between idealism and pragmatism.
+
