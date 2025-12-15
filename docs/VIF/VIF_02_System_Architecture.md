@@ -45,12 +45,12 @@ For a window size $N$ (e.g. $N = 3$ for the POC):
 
 $$
  s_{u,t} = \text{Concat}\Big[
- \\phi_{\text{text}}(T_{u,t}),
- \\phi_{\text{text}}(T_{u,t-1}),\ \dots,\
- \\phi_{\text{text}}(T_{u,t-N+1}),
- $\Delta t_{u,t},\dots,\Delta t_{u,t-N+2}$,
- history stats,
- $z_u$
+ \phi_{\text{text}}(T_{u,t}),
+ \phi_{\text{text}}(T_{u,t-1}),\ \dots,\
+ \phi_{\text{text}}(T_{u,t-N+1}),
+ \Delta t_{u,t},\dots,\Delta t_{u,t-N+2},
+ \text{history stats},
+ z_u
 \Big]
 $$
 
