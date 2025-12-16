@@ -40,7 +40,7 @@ As part of the pipeline from `VIF_05_State_and_Data_Pipeline.md`:
      \mathbf{e}_{u,t} = \phi_{\text{text}}(T_{u,t})
      $$
    - Store these embeddings in an intermediate structure (e.g. an `EntryEmbedding` table).
-2. During state construction, we only read \(\mathbf{e}_{u,t}\) from storage; we do **not** call the encoder again.
+2. During state construction, we only read $\mathbf{e}_{u,t}$ from storage; we do **not** call the encoder again.
 
 This keeps the Critic training loop simple and makes experiments reproducible (fixed encoder, fixed embeddings).
 
@@ -260,7 +260,7 @@ This keeps the POC within a **supervised learning + rules** regime, avoiding add
 For future work (not required for the capstone), you could explore:
 
 - A small supervised **drift classifier**:
-  - Input features: aggregated statistics (e.g. weekly means and EMAs of \(\hat{\vec{a}}_{u,t}\), \(V^{\text{scalar}}_{u,t}\), \(\text{cos\_sim}_u\), and \(w_u\)).
+  - Input features: aggregated statistics (e.g. weekly means and EMAs of $\hat{\vec{a}}_{u,t}$, $V^{\text{scalar}}_{u,t}$, $\text{cos\_sim}_u$, and $w_u$).
   - Model: logistic regression or a 1–2 layer MLP.
   - Target: synthetic labels such as “in drift episode / not in drift episode”.
 - **Personalisation layers**:
