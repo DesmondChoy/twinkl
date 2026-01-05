@@ -138,7 +138,7 @@ The nudging system transforms one-way journaling into a two-way conversational e
 
 ## Nudge Categories
 
-Five categories of nudges, each with a distinct purpose:
+Four categories of nudges, each with a distinct purpose:
 
 | Category | Purpose | Trigger Example | Nudge Example |
 |----------|---------|-----------------|---------------|
@@ -146,7 +146,8 @@ Five categories of nudges, each with a distinct purpose:
 | **Elaboration** | Invite depth on surface-level entries | "Stayed late again" | "And how did that land?" |
 | **Tension-surfacing** | Probe potential value conflicts | "It was fine. Well, sort of." | "What's the 'sort of' part?" |
 | **Grounding** | Anchor brief positive moments | "Good day today" | "What made it good?" |
-| **Continuity** | Connect to previous entries | Third mention of sleep issues | "You've mentioned sleep a few times..." |
+
+> **Note**: The original design included a fifth "Continuity" category for connecting to previous entries. This was removed during implementation because the word-overlap heuristics were fragile and added complexity without clear POC benefit. See [Lesson Learned: Metadata Leakage](#lesson-learned-metadata-leakage-in-synthetic-data-generation) for details.
 
 ### Category Details
 
@@ -169,11 +170,6 @@ Five categories of nudges, each with a distinct purpose:
 - Triggered when: Entry is positive but brief (good day without specifics)
 - Signal extracted: Positive alignment evidence, values-in-action patterns
 - Examples: "What made it good?", "What worked?", "What made it nice?"
-
-**Continuity Nudges**
-- Triggered when: Entry relates to unresolved threads from previous entries, or recurring themes
-- Signal extracted: Pattern awareness, follow-through, recovery/coping patterns
-- Examples: "You've mentioned sleep a few times lately...", "How did it go with your sister?", "Something shifted since last time?"
 
 ## Nudge Design Principles
 
@@ -228,6 +224,10 @@ These phrases are explicitly banned from nudge generation. The rationale is that
 Entry Received
      │
      ▼
+[Session cap: 2+ nudges in last 3 entries?] ──YES──► Skip (anti-annoyance)
+     │
+    NO
+     ▼
 [Too vague to score?] ──YES──► Clarification Nudge
      │
     NO
@@ -244,16 +244,14 @@ Entry Received
      │
     NO
      ▼
-[Unresolved thread from previous?] ──YES──► Continuity Nudge
-     │
-    NO
-     ▼
-[Random gate: 30-40%] ──PASS──► Elaboration Nudge
+[Random gate: 40%] ──PASS──► Elaboration Nudge
      │
    FAIL
      ▼
 Skip nudge (stay silent)
 ```
+
+> **Note**: The original design included a "Continuity" step checking for unresolved threads from previous entries. This was removed - see implementation notes.
 
 ### Specific Trigger Conditions
 
@@ -262,15 +260,14 @@ Skip nudge (stay silent)
 | Too vague to score | Word count < 15 AND no concrete nouns/verbs | Clarification nudge |
 | Potential value tension | Hedging language ("sort of", "I guess", "maybe") + reflection_mode == Unsettled | Tension-surfacing nudge |
 | Grounded but brief | reflection_mode == Grounded AND word count < 50 | Grounding nudge |
-| Recurring theme | Semantic similarity to previous 2 entries > 0.7 | Continuity nudge |
 
 ### Anti-Annoyance Rules
 
 1. **Frequency cap**: Maximum 1 nudge per entry (never chain nudges)
 2. **Session cap**: If 2 nudges in last 3 entries, skip
-3. **No-response respect**: If user previously ignored a nudge, reduce probability for that nudge type
-4. **Mood sensitivity**: If tone is "Exhausted" or "Emotional/Venting", prefer silence or very soft nudges
-5. **Randomization**: Even when conditions are met, apply a 30-40% sampling gate to avoid predictability
+3. **Randomization**: Even when conditions are met, apply a 40% sampling gate to avoid predictability
+
+> **Note**: The original design included "Mood sensitivity" (skip nudging for exhausted/emotional entries based on `tone`). This was removed because `tone` is synthetic generation metadata unavailable in production. See [Lesson Learned: Metadata Leakage](#lesson-learned-metadata-leakage-in-synthetic-data-generation).
 
 ## Implementation: Hybrid Approach
 
@@ -344,8 +341,7 @@ class NudgeResult(BaseModel):
         "clarification",
         "elaboration",
         "tension_surfacing",
-        "grounding",
-        "continuity"
+        "grounding"
     ]
     trigger_reason: str  # Why this nudge was generated
     was_responded_to: bool = False
@@ -478,29 +474,24 @@ nudge:
   # Nudge category probabilities (when nudging is triggered)
   category_weights:
     clarification: 0.25
-    elaboration: 0.30
-    tension_surfacing: 0.20
+    elaboration: 0.35
+    tension_surfacing: 0.25
     grounding: 0.15
-    continuity: 0.10
 
-  # Response modes (for variety and realism)
+  # Response modes (simplified from original 5 to 3)
   response_modes:
     - mode: "Answering directly"
-      weight: 0.40
+      weight: 0.50
       description: "Clear, helpful response to the question"
-    - mode: "Elaborating with context"
-      weight: 0.25
-      description: "Adds background story or additional context"
     - mode: "Deflecting/redirecting"
-      weight: 0.20
+      weight: 0.30
       description: "Brief acknowledgment or topic change ('Yeah, just the usual')"
     - mode: "Revealing deeper thought"
-      weight: 0.10
+      weight: 0.20
       description: "Unexpected honesty or vulnerability"
-    - mode: "Brief acknowledgment"
-      weight: 0.05
-      description: "Minimal response ('I guess so', 'Maybe')"
 ```
+
+> **Note**: The original design had 5 response modes including "Elaborating with context" (25%) and "Brief acknowledgment" (5%). These were removed to reduce complexity - the 5% mode was almost never triggered, and "Elaborating with context" overlapped with "Answering directly".
 
 ## Judge Scoring Updates
 
@@ -577,21 +568,21 @@ This allows the Critic to learn:
 
 ## Implementation Status
 
-**Current**: Notebook-first development in `notebooks/journal_gen.ipynb`
+**Current**: Notebook-first development in `notebooks/journal_nudge.ipynb`
 
-**Phase 1 (Foundation)**:
-- [ ] Set up output logging system (directory structure, utility functions)
-- [ ] Add `logs/synthetic_data/` to `.gitignore`
-- [ ] Add nudge config to `config/synthetic_data.yaml`
-- [ ] Implement nudge decision logic (rule-based triggers)
-- [ ] Add `NudgeResult`, `ConversationalEntry` data models
+**Phase 1 (Foundation)**: ✅ Complete
+- [x] Set up output logging system (directory structure, utility functions)
+- [x] Add `logs/synthetic_data/` to `.gitignore`
+- [x] Add nudge config to `config/synthetic_data.yaml`
+- [x] Implement nudge decision logic (rule-based triggers)
+- [x] Add `NudgeResult`, `ConversationalEntry` data models
 
-**Phase 2 (Generation)**:
-- [ ] Implement LLM nudge generation with validation
-- [ ] Implement nudge-response generation for personas
-- [ ] Update `generate_persona_pipeline()` to use conversational flow
+**Phase 2 (Generation)**: ✅ Complete
+- [x] Implement LLM nudge generation with validation
+- [x] Implement nudge-response generation for personas
+- [x] Update `generate_persona_pipeline()` to use conversational flow
 
-**Phase 3 (Validation)**:
+**Phase 3 (Validation)**: 🔄 In Progress
 - [ ] Generate 10-20 personas with conversational entries
 - [ ] Review nudge quality, response variety, signal improvement
 - [ ] Iterate on prompts and parameters
@@ -605,6 +596,94 @@ This allows the Critic to learn:
 - [ ] Once notebook output is satisfactory, extract to Python scripts
 - [ ] Add unit tests
 - [ ] Formalize data models in `src/` directory
+
+---
+
+## Lesson Learned: Metadata Leakage in Synthetic Data Generation
+
+### The Problem
+
+During initial implementation, the nudge decision logic used **synthetic generation metadata** that would not be available in a production system. This is a form of "overfitting" to the synthetic data generation process.
+
+### What Was Initially Implemented (Incorrect)
+
+```python
+def decide_nudge(
+    entry: JournalEntry,
+    reflection_mode: str,
+    tone: str,  # ← PROBLEM: Synthetic metadata
+    previous_entries: list[ConversationalEntry] | None,
+    config: dict,
+) -> tuple[bool, NudgeCategory | None, str | None]:
+
+    # Guard 1: Mood sensitivity based on TONE
+    if tone in ["Exhausted", "Emotional/Venting"]:
+        if random.random() > 0.2:  # 80% skip
+            return False, None, None  # ← Using unavailable data
+
+    # ... rest of logic
+```
+
+The `tone` parameter was randomly assigned *before* entry generation as an instruction to the LLM ("write in an exhausted tone"). The nudge decision then checked this label to decide whether to skip nudging.
+
+**Why this is wrong**: In production:
+1. A user writes a journal entry
+2. We have the entry **content** only
+3. We do NOT have a pre-labeled "tone" - we'd need to **detect** it from content
+4. Using the synthetic label is tantamount to cheating
+
+### The Distinction: Generation Metadata vs Observable Data
+
+| Data Type | Example | Available in Production? | Use in Nudge Decision? |
+|-----------|---------|-------------------------|------------------------|
+| Entry content | "Had a rough day..." | ✅ Yes | ✅ OK |
+| Previous entries | History of entries | ✅ Yes | ✅ OK |
+| Nudge history | Which entries got nudges | ✅ Yes | ✅ OK |
+| **Tone** (generation instruction) | "Exhausted" | ❌ No | ❌ Wrong |
+| **Verbosity** (generation instruction) | "Short" | ❌ No | ❌ Wrong |
+
+### What Was Corrected
+
+1. **Removed tone-based guard**: The 80% skip for exhausted/emotional entries was removed entirely. This guard used data we wouldn't have in production.
+
+2. **Removed continuity nudge category**: The continuity detection used fragile word-overlap heuristics that added complexity without clear benefit for POC scope.
+
+3. **Simplified response modes**: Reduced from 5 to 3 modes, removing near-zero probability options.
+
+4. **Added explicit comment**: The code now documents why tone is NOT passed to `decide_nudge`:
+
+```python
+# Step 2: Decide whether to nudge
+# Note: tone is NOT passed to decide_nudge - it's synthetic metadata unavailable in production
+should_nudge, nudge_category, trigger_reason = decide_nudge(
+    entry=entry,
+    reflection_mode=reflection_mode,  # Still used - see Known Limitation below
+    previous_entries=previous_entries,
+    config=config,
+)
+```
+
+### Known Limitation: reflection_mode Usage
+
+The `reflection_mode` parameter is still used in nudge decisions:
+- `is_neutral_routine()` checks `reflection_mode == "Neutral"`
+- Tension-surfacing checks `reflection_mode == "Unsettled"` AND hedging language
+- `is_grounded_but_brief()` checks `reflection_mode == "Grounded"` AND word count
+
+**Why this is acceptable for POC**:
+1. `reflection_mode` describes **what kind of situation** the entry describes (unsettled/grounded/neutral), which correlates with observable content patterns
+2. The checks combine `reflection_mode` with content-based signals (hedging language, word count) - it's not pure metadata usage
+3. In production, we could potentially infer reflection_mode from content patterns
+
+**Future improvement**: Replace `reflection_mode` checks with pure content-based detection (e.g., sentiment analysis, hedging pattern density).
+
+### General Principle
+
+When building synthetic data pipelines, be vigilant about the distinction between:
+- **Generation instructions** (what we tell the LLM to produce)
+- **Observable outputs** (what we'd actually have in production)
+
+Never use generation instructions as inputs to downstream decision logic - this creates a form of data leakage that makes the synthetic pipeline unrealistic.
 
 ---
 
