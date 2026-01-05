@@ -36,6 +36,19 @@ The mean $\mu_{u,t}^{(j)}$ serves as the value estimate; the variance $\sigma_{u
 
 We can monitor calibration by checking, on held-out data, whether higher $\sigma_{u,t}^{2(j)}$ correlates with larger prediction errors.
 
+### 1.2.1 Handling Ambiguity (Bimodality) via Variance
+
+A common critique of regression models is that they fail in **ambiguous, bimodal scenarios**.
+*   **The Scenario:** A user entry is highly polarized, effectively implying both "Aligned (+1)" and "Misaligned (-1)" simultaneously (e.g., "I worked 100 hours this week," which implies high Career alignment but high Health misalignment, but the prompt only asks for a single "Well-being" score).
+*   **The Regression Trap:** A standard deterministic regressor would average these conflicting signals $((+1) + (-1)) / 2 = 0$, predicting "Neutral." This is factually incorrect; the entry is intense, not neutral.
+*   **The MC Dropout Rescue:** In such ambiguous cases, the different dropout sub-networks will likely latch onto different features (some seeing the "Career" signal, others the "Health" signal).
+    *   Pass 1: +0.8
+    *   Pass 2: -0.7
+    *   Pass 3: +0.9
+    *   ...
+    *   **Result:** The Mean might still be near 0, but the **Variance will be extremely high**.
+*   **Conclusion:** High Variance serves the same function as **High Entropy** in classification tasks. It flags that the model is "confused" or "conflicted," triggering the **Uncertainty Constraint** (Section 1.3) effectively preventing the system from treating the entry as "Neutral."
+
 ### 1.3 Dual-Trigger Critique Rule (Crashes and Ruts)
 
 We define two types of problematic patterns for each value dimension $j$:

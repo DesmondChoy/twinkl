@@ -29,6 +29,7 @@ Before drawing the decision tree, establish what the product should be. Voice fi
 - If so, how can the app help? Break down into sub goals?
 
 Identifying misalignment is one step. Then we provide feedback - but can we go one step further and not just present the feedback but also recommend how the course can be corrected? And if we can, how do we evaluate that recommendation? 
+
 # Values Framework
 
 TBD

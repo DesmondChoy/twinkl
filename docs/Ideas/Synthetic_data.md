@@ -120,6 +120,654 @@ These states are already captured implicitly through:
 
 This leaner approach lets journal content emerge organically from persona context rather than forcing artificial categories.
 
+---
+
+# Two-Way Conversational Journaling (Nudging System)
+
+## Motivation
+
+The current one-way pipeline (persona generates entries independently) has limitations:
+
+1. **Unrealistic**: Real journaling apps have back-and-forth interaction
+2. **Signal-poor short entries**: Brief or vague entries lack sufficient signal for VIF alignment scoring
+3. **User friction**: People often need gentle prompts to articulate thoughts clearly
+
+The nudging system transforms one-way journaling into a two-way conversational exchange. When an entry is vague or potentially rich with unexplored tension, the system responds with a brief nudge that invites elaboration.
+
+**Design goal**: Nudges should feel like natural curiosity from a thoughtful companion, not interrogation or therapy.
+
+## Nudge Categories
+
+Five categories of nudges, each with a distinct purpose:
+
+| Category | Purpose | Trigger Example | Nudge Example |
+|----------|---------|-----------------|---------------|
+| **Clarification** | Surface specifics from vague entries | "Feeling off today" | "What happened right before that?" |
+| **Elaboration** | Invite depth on surface-level entries | "Stayed late again" | "And how did that land?" |
+| **Tension-surfacing** | Probe potential value conflicts | "It was fine. Well, sort of." | "What's the 'sort of' part?" |
+| **Grounding** | Anchor brief positive moments | "Good day today" | "What made it good?" |
+| **Continuity** | Connect to previous entries | Third mention of sleep issues | "You've mentioned sleep a few times..." |
+
+### Category Details
+
+**Clarification Nudges**
+- Triggered when: Entry is too vague to score (abstract emotion, vague pronouns, missing temporal anchors)
+- Signal extracted: Behavioral grounding, disambiguation for value-dimension mapping
+- Examples: "The meeting?", "Since when, roughly?", "What happened right before that?"
+
+**Elaboration Nudges**
+- Triggered when: Entry is substantive but surface-level (action without reflection, outcome without process)
+- Signal extracted: Affective signal, agency/values expression, response patterns
+- Examples: "And how did that land?", "What got you over the line?", "What did you end up doing?"
+
+**Tension-Surfacing Nudges**
+- Triggered when: Entry contains hedging, contradictions, or justification language
+- Signal extracted: Unresolved tension, alignment/misalignment confirmation
+- Examples: "What's the 'sort of' part?", "Does that sit okay with you?", "What stopped you?"
+
+**Grounding Nudges**
+- Triggered when: Entry is positive but brief (good day without specifics)
+- Signal extracted: Positive alignment evidence, values-in-action patterns
+- Examples: "What made it good?", "What worked?", "What made it nice?"
+
+**Continuity Nudges**
+- Triggered when: Entry relates to unresolved threads from previous entries, or recurring themes
+- Signal extracted: Pattern awareness, follow-through, recovery/coping patterns
+- Examples: "You've mentioned sleep a few times lately...", "How did it go with your sister?", "Something shifted since last time?"
+
+## Nudge Design Principles
+
+### The "Thoughtful Companion" Test
+Would a close friend who genuinely cares (but isn't a therapist) say this?
+
+**Do:**
+- Use simple curiosity: "What happened next?"
+- Keep it brief: 2-12 words
+- Reference something specific from the entry
+- Match the user's register (casual entry = casual nudge)
+
+**Don't:**
+- Therapy speak: "I'm sensing...", "It sounds like..."
+- Coaching framing: "Have you considered..."
+- Value-labeling: "That conflicts with your health goals"
+- Lead the witness: "That must have been frustrating"
+
+### Banned Phrases
+
+These phrases are explicitly banned from nudge generation. The rationale is that they all share a common problem: they make the app feel like it's *performing a role* (therapist, coach, generic chatbot) rather than *being genuinely curious*.
+
+**Therapy/Counselor Language**
+- "I'm sensing...", "It sounds like...", "I notice..."
+- **Why avoid**: These are active listening techniques from professional counseling. When a journaling app uses them, it feels like the app is "playing therapist," creates an uneven power dynamic (app as expert, user as patient), and can feel patronizing. A friend wouldn't say "I'm sensing some frustration" — they'd say "That sounds rough" or just "What happened?"
+
+**Coaching/Advisory Language**
+- "Have you considered...", "What would it look like if..."
+- **Why avoid**: These phrases imply the app has *advice to give* or *knows better*. They shift from curious companion to prescriptive coach, preempting the user's own reflection. This violates the design principle of *mirroring*, not *directing*.
+
+**Generic Filler**
+- "Tell me more about...", "I'm curious..."
+- **Why avoid**: These are default LLM responses when the model doesn't know what else to say. They're vague, feel robotic/formulaic, and don't demonstrate that the system actually "read" the entry. Good nudges are specific: "The meeting?" beats "Tell me more" because it shows the system identified a concrete referent.
+
+**Other constraints**
+- Any phrase over 15 words (nudges should be brief)
+- Therapy terminology or coaching jargon in general
+
+### Nudge Length Guidelines
+
+| Entry Verbosity | Nudge Length |
+|-----------------|--------------|
+| Short (1-3 sentences) | 2-6 words |
+| Medium (1-2 paragraphs) | 5-12 words |
+| Long (detailed reflection) | Rarely nudge; if so, 5-15 words |
+
+## Trigger Logic
+
+### Decision Tree
+
+```
+Entry Received
+     │
+     ▼
+[Too vague to score?] ──YES──► Clarification Nudge
+     │
+    NO
+     ▼
+[Neutral/routine entry?] ──YES──► Skip (respect the mundane)
+     │
+    NO
+     ▼
+[Potential tension detected?] ──YES──► Tension-Surfacing Nudge
+     │
+    NO
+     ▼
+[Grounded but brief?] ──YES──► Grounding Nudge
+     │
+    NO
+     ▼
+[Unresolved thread from previous?] ──YES──► Continuity Nudge
+     │
+    NO
+     ▼
+[Random gate: 30-40%] ──PASS──► Elaboration Nudge
+     │
+   FAIL
+     ▼
+Skip nudge (stay silent)
+```
+
+### Specific Trigger Conditions
+
+| Condition | Detection Method | Action |
+|-----------|------------------|--------|
+| Too vague to score | Word count < 15 AND no concrete nouns/verbs | Clarification nudge |
+| Potential value tension | Hedging language ("sort of", "I guess", "maybe") + reflection_mode == Unsettled | Tension-surfacing nudge |
+| Grounded but brief | reflection_mode == Grounded AND word count < 50 | Grounding nudge |
+| Recurring theme | Semantic similarity to previous 2 entries > 0.7 | Continuity nudge |
+
+### Anti-Annoyance Rules
+
+1. **Frequency cap**: Maximum 1 nudge per entry (never chain nudges)
+2. **Session cap**: If 2 nudges in last 3 entries, skip
+3. **No-response respect**: If user previously ignored a nudge, reduce probability for that nudge type
+4. **Mood sensitivity**: If tone is "Exhausted" or "Emotional/Venting", prefer silence or very soft nudges
+5. **Randomization**: Even when conditions are met, apply a 30-40% sampling gate to avoid predictability
+
+## Implementation: Hybrid Approach
+
+**Rules** decide *whether* to nudge and *which category*.
+**LLM** generates the *natural language* nudge.
+**Rules** validate the output (length, banned phrases, tone match).
+
+### LLM Nudge Generation Prompt (Template)
+
+```jinja2
+You are generating a brief follow-up for a journaling app.
+
+## Context
+User's entry: {{ entry.content }}
+Entry date: {{ entry.date }}
+Nudge category: {{ nudge_category }}
+{% if previous_entries %}
+Recent entries (for context):
+{% for prev in previous_entries %}
+- {{ prev.date }}: {{ prev.content[:100] }}...
+{% endfor %}
+{% endif %}
+
+## Your Task
+Generate a SHORT follow-up question (2-12 words) that:
+- Matches the category: {{ nudge_category }}
+- Sounds like natural curiosity, not therapy
+- References something specific from the entry
+- Uses simple, casual language
+
+## Examples by Category
+{% if nudge_category == 'clarification' %}
+- "What happened right before that?"
+- "The meeting?"
+- "Since when?"
+{% elif nudge_category == 'elaboration' %}
+- "And how did that land?"
+- "What did you end up doing?"
+{% elif nudge_category == 'tension_surfacing' %}
+- "What's the 'sort of' part?"
+- "Does that sit okay?"
+{% elif nudge_category == 'grounding' %}
+- "What made it good?"
+- "What worked?"
+{% elif nudge_category == 'continuity' %}
+- "How did it go with {{ reference }}?"
+- "Something shifted since last time?"
+{% endif %}
+
+## Banned Phrases
+- "I'm sensing..."
+- "It sounds like..."
+- "Tell me more about..."
+- "I notice..."
+- "Have you considered..."
+- Any phrase over 15 words
+
+## Output
+Return ONLY the nudge text (no quotes, no explanation):
+```
+
+## Data Model Changes
+
+### New Models for Conversational Pipeline
+
+```python
+class NudgeResult(BaseModel):
+    """Generated nudge with metadata."""
+    nudge_text: str
+    nudge_category: Literal[
+        "clarification",
+        "elaboration",
+        "tension_surfacing",
+        "grounding",
+        "continuity"
+    ]
+    trigger_reason: str  # Why this nudge was generated
+    was_responded_to: bool = False
+
+
+class JournalTurn(BaseModel):
+    """A single turn in the conversation (entry or response)."""
+    date: str
+    content: str
+    turn_type: Literal["initial_entry", "nudge_response"]
+    responding_to_nudge: str | None = None  # The nudge text if this is a response
+
+
+class ConversationalEntry(BaseModel):
+    """Complete conversational exchange for one journaling session."""
+    initial_entry: JournalEntry
+    nudge: NudgeResult | None
+    response: JournalTurn | None  # User's response to the nudge
+    # Metadata
+    tone: str
+    verbosity: str
+    reflection_mode: str
+```
+
+### Updated PersonaPipelineResult
+
+```python
+class PersonaPipelineResult(BaseModel):
+    """Updated to support conversational entries."""
+    persona_id: int
+    persona: Persona | None
+    entries: list[ConversationalEntry]  # Changed from list[JournalEntryResult]
+    persona_prompt: str | None
+    entry_prompts: list[str]
+    error: str | None
+```
+
+## Pipeline Flow Changes
+
+### Before (One-Way)
+
+```
+Persona → Entry_1 → Entry_2 → Entry_3 → [Judge scores each]
+```
+
+### After (Conversational)
+
+```
+Persona → Entry_1 → [Nudge Decision] → Nudge_1? → Response_1? → Entry_2 → ...
+                          │                 │            │
+                          ▼                 ▼            ▼
+                    [stored]          [stored]    [Judge scores session]
+```
+
+### Updated Generation Function
+
+```python
+async def generate_conversational_entry(
+    persona: Persona,
+    config: dict,
+    date_str: str,
+    previous_entries: list[ConversationalEntry] | None = None,
+) -> ConversationalEntry:
+    """Generate entry, decide on nudge, optionally generate response."""
+
+    # Step 1: Generate initial entry (existing logic)
+    entry_result, prompt = await generate_journal_entry(
+        persona, config, date_str,
+        previous_entries=[e.initial_entry for e in (previous_entries or [])]
+    )
+
+    # Step 2: Decide whether to nudge
+    should_nudge, nudge_category, trigger_reason = decide_nudge(
+        entry=entry_result.entry,
+        previous_entries=previous_entries,
+        reflection_mode=entry_result.reflection_mode,
+        config=config
+    )
+
+    nudge_result = None
+    response = None
+
+    if should_nudge:
+        # Step 3: Generate nudge
+        nudge_text = await generate_nudge(
+            entry=entry_result.entry,
+            category=nudge_category,
+            previous_entries=previous_entries,
+            persona=persona
+        )
+
+        nudge_result = NudgeResult(
+            nudge_text=nudge_text,
+            nudge_category=nudge_category,
+            trigger_reason=trigger_reason
+        )
+
+        # Step 4: Decide if persona responds (probabilistic)
+        if random.random() < config["nudge"]["response_probability"]:
+            response = await generate_nudge_response(
+                persona=persona,
+                original_entry=entry_result.entry,
+                nudge=nudge_result,
+                config=config
+            )
+            nudge_result.was_responded_to = True
+
+    return ConversationalEntry(
+        initial_entry=entry_result.entry,
+        nudge=nudge_result,
+        response=response,
+        tone=entry_result.tone,
+        verbosity=entry_result.verbosity,
+        reflection_mode=entry_result.reflection_mode
+    )
+```
+
+## Configuration Additions
+
+Add to `config/synthetic_data.yaml`:
+
+```yaml
+nudge:
+  # Probability of generating a nudge when conditions are met
+  base_probability: 0.4
+
+  # Probability that the persona responds to a nudge
+  response_probability: 0.7
+
+  # Nudge category probabilities (when nudging is triggered)
+  category_weights:
+    clarification: 0.25
+    elaboration: 0.30
+    tension_surfacing: 0.20
+    grounding: 0.15
+    continuity: 0.10
+
+  # Response modes (for variety and realism)
+  response_modes:
+    - mode: "Answering directly"
+      weight: 0.40
+      description: "Clear, helpful response to the question"
+    - mode: "Elaborating with context"
+      weight: 0.25
+      description: "Adds background story or additional context"
+    - mode: "Deflecting/redirecting"
+      weight: 0.20
+      description: "Brief acknowledgment or topic change ('Yeah, just the usual')"
+    - mode: "Revealing deeper thought"
+      weight: 0.10
+      description: "Unexpected honesty or vulnerability"
+    - mode: "Brief acknowledgment"
+      weight: 0.05
+      description: "Minimal response ('I guess so', 'Maybe')"
+```
+
+## Judge Scoring Updates
+
+### Combined Signal Approach
+
+The Judge scores the entire conversational session as a single unit, not the initial entry and response separately. This uses a **max-signal** approach: if the initial entry was vague but the response revealed misalignment, the combined score reflects the revealed misalignment.
+
+```python
+class JudgeLabelConversational(BaseModel):
+    """Judge scores the entire session as a unit."""
+    combined_alignment_vector: list[int]  # 10-dim, {-1, 0, +1} per value
+    # Max-signal logic: if initial was neutral but response revealed misalignment,
+    # the combined score reflects the revealed misalignment
+
+    nudge_effectiveness: Literal["none", "low", "medium", "high"]
+    # "none" = no nudge given
+    # "low" = nudge was deflected or minimally answered
+    # "medium" = nudge extracted some additional signal
+    # "high" = nudge revealed major alignment/misalignment
+
+    primary_signal_source: Literal["initial", "response", "both"]
+    # Where did the alignment signal primarily come from?
+```
+
+### Judge Prompt Addition
+
+```
+Score this journaling session as a whole. The user's response to the nudge
+may reveal alignment signals not present in the initial entry. Use the
+strongest signal available (if initial was vague but response clarified,
+score based on the clarified content).
+
+Rate nudge_effectiveness as:
+- "none": No nudge was given
+- "low": User deflected or gave minimal response
+- "medium": Response added useful context
+- "high": Response revealed significant alignment/misalignment not in original
+```
+
+## VIF State Vector Updates
+
+For entries with nudge-responses, extend the state vector:
+
+```python
+s_u_t = Concat[
+    phi_text(initial_entry),
+    phi_text(response),           # NEW: response embedding (zero vector if no response)
+    has_nudge_response,           # NEW: binary flag
+    nudge_category_onehot,        # NEW: 5-dim (or zero if no nudge)
+    # ... existing features (time gaps, history stats, user profile)
+]
+```
+
+This allows the Critic to learn:
+- Whether nudge-augmented entries have different alignment patterns
+- Which nudge categories are most effective for extracting signal
+- How to weight initial vs response content
+
+## Expected Outcomes
+
+| Metric | Before (One-Way) | After (Conversational) | Improvement |
+|--------|------------------|------------------------|-------------|
+| Average words per session | 80-120 | 120-200 | +50-67% |
+| Entries with clear value signal | ~60% | ~80% | +33% |
+| Entries with multiple value signals | ~30% | ~50% | +67% |
+| Entries scoreable with low uncertainty | ~70% | ~85% | +21% |
+
+### Key VIF Training Benefits
+
+1. **Better calibration for short entries**: Even brief initial entries can be augmented with nudge-responses
+2. **Explicit tension detection training**: Tension-surfacing nudges create labeled examples of tensions being confirmed or denied
+3. **Trajectory continuity**: Continuity nudges create explicit links between entries for sequence learning
+4. **"When to ask" calibration**: High-uncertainty entries that become clear after nudge provide ground truth for active learning
+
+## Implementation Status
+
+**Current**: Notebook-first development in `notebooks/journal_gen.ipynb`
+
+**Phase 1 (Foundation)**:
+- [ ] Set up output logging system (directory structure, utility functions)
+- [ ] Add `logs/synthetic_data/` to `.gitignore`
+- [ ] Add nudge config to `config/synthetic_data.yaml`
+- [ ] Implement nudge decision logic (rule-based triggers)
+- [ ] Add `NudgeResult`, `ConversationalEntry` data models
+
+**Phase 2 (Generation)**:
+- [ ] Implement LLM nudge generation with validation
+- [ ] Implement nudge-response generation for personas
+- [ ] Update `generate_persona_pipeline()` to use conversational flow
+
+**Phase 3 (Validation)**:
+- [ ] Generate 10-20 personas with conversational entries
+- [ ] Review nudge quality, response variety, signal improvement
+- [ ] Iterate on prompts and parameters
+
+**Phase 4 (Integration)**:
+- [ ] Update Judge prompt for multi-turn scoring
+- [ ] Test end-to-end pipeline
+- [ ] Tune probabilities and banned phrases
+
+**Phase 5 (Future - Productionize)**:
+- [ ] Once notebook output is satisfactory, extract to Python scripts
+- [ ] Add unit tests
+- [ ] Formalize data models in `src/` directory
+
+---
+
+## Output Logging System
+
+### Purpose
+
+Enable iterative development by logging all synthetic data output for inspection and quality review. This supports both human developers tinkering with the notebook and Claude-assisted iteration.
+
+### Iterative Development Loop
+
+```
+1. Implement changes in notebook
+         │
+         ▼
+2. Run notebook → output stored in timestamped log folder
+         │
+         ▼
+3. Inspect logs to verify quality (Claude or human)
+         │
+         ▼
+4. Quality acceptable? ──YES──► Done
+         │
+        NO
+         │
+         ▼
+5. Make changes → go to step 2
+```
+
+### Log Configuration
+
+| Aspect | Decision | Rationale |
+|--------|----------|-----------|
+| **Format** | Markdown | Human-readable, easy to review in IDE/GitHub |
+| **Contents** | Output + prompts + config | Full reproducibility for debugging |
+| **Organization** | Timestamped folders | Each run is isolated, history preserved |
+| **Summary** | No separate file | Review persona files directly |
+
+### Log Directory Structure
+
+```
+logs/synthetic_data/
+├── 2024-01-15_14-30-00/
+│   ├── config.md           # Config/parameters used for this run
+│   ├── persona_001.md      # Persona + all entries + nudges + responses
+│   ├── persona_002.md
+│   ├── persona_003.md
+│   └── prompts.md          # All prompts sent to LLM (for debugging)
+├── 2024-01-15_16-45-22/
+│   └── ...
+└── 2024-01-16_09-12-05/
+    └── ...
+```
+
+### Per-Persona Log Format
+
+Each persona gets its own markdown file with complete output:
+
+```markdown
+# Persona 001: [Name]
+
+## Profile
+- Age: 32
+- Profession: Software Engineer
+- Culture: East Asian
+- Core Values: Self-Direction, Achievement
+- Bio: [generated bio]
+
+---
+
+## Entry 1 - 2024-01-15
+
+### Initial Entry
+**Tone**: Self-reflective | **Verbosity**: Medium | **Reflection Mode**: Unsettled
+
+[entry content here]
+
+### Nudge (Elaboration)
+**Trigger**: Action without reflection detected
+
+"And how did that land?"
+
+### Response
+**Mode**: Answering directly
+
+[response content here]
+
+---
+
+## Entry 2 - 2024-01-18
+
+### Initial Entry
+**Tone**: Brief and factual | **Verbosity**: Short | **Reflection Mode**: Neutral
+
+[entry content here]
+
+*(No nudge for this entry)*
+
+---
+
+## Entry 3 - 2024-01-22
+...
+```
+
+### Config Log Format
+
+The `config.md` file captures all parameters used:
+
+```markdown
+# Run Configuration
+
+**Timestamp**: 2024-01-15 14:30:00
+**Notebook**: journal_gen.ipynb
+
+## Persona Generation
+- Num personas: 5
+- Entries per persona: 3
+
+## Nudge Settings
+- Base probability: 0.4
+- Response probability: 0.7
+- Category weights: clarification=0.25, elaboration=0.30, ...
+
+## Model Settings
+- Model: gpt-4o-mini
+- Reasoning effort: medium
+```
+
+### Prompts Log Format
+
+The `prompts.md` file captures all LLM prompts for debugging:
+
+```markdown
+# Prompts Log
+
+## Persona 001
+
+### Persona Generation Prompt
+[full prompt text]
+
+### Entry 1 - Initial Entry Prompt
+[full prompt text]
+
+### Entry 1 - Nudge Generation Prompt
+[full prompt text]
+
+### Entry 1 - Response Generation Prompt
+[full prompt text]
+
+...
+```
+
+### Implementation Notes
+
+- **Additive, not replacement**: Notebook retains interactive display for human users. Logging is in addition to notebook output.
+- **Write-only**: New runs create new timestamped folders. Never overwrite previous logs.
+- **Timestamp format**: `datetime.now().strftime("%Y-%m-%d_%H-%M-%S")`
+- **Gitignore**: Add `logs/synthetic_data/` to `.gitignore` to avoid bloating the repo.
+
+*Implementation tasks are tracked in the [Implementation Status](#implementation-status) section above.*
+
+---
+
 ## Technical Notes
 
 - **Model**: gpt-5-mini via OpenAI Responses API
