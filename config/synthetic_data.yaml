@@ -75,16 +75,6 @@ nudge:
       weight: 0.20
       description: "Unexpected honesty or vulnerability"
 
-  # Banned phrases for nudge generation
-  banned_phrases:
-    - "I'm sensing"
-    - "It sounds like"
-    - "I notice"
-    - "Have you considered"
-    - "What would it look like if"
-    - "Tell me more about"
-    - "I'm curious"
-
   # Length constraints
   min_words: 2
   max_words: 12

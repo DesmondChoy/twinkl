@@ -12,9 +12,9 @@ Instructions for Claude Code to generate synthetic conversational journal data u
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `NUM_PERSONAS` | 5 | Number of personas to generate |
-| `NUM_ENTRIES_PER_PERSONA` | 5 | Journal entries per persona |
-| `START_DATE` | 2025-10-25 | First entry date (YYYY-MM-DD) |
+| `NUM_PERSONAS` | 3 | Number of personas to generate |
+| `NUM_ENTRIES_PER_PERSONA` | 3 | Journal entries per persona |
+| `START_DATE` | 2025-12-25 | First entry date (YYYY-MM-DD) |
 | `MIN_DAYS_BETWEEN_ENTRIES` | 2 | Minimum days between entries |
 | `MAX_DAYS_BETWEEN_ENTRIES` | 10 | Maximum days between entries |
 
@@ -46,58 +46,61 @@ All prompts, decision logic, and configuration come from these files:
 
 ## Execution Architecture
 
-### Parallel Personas, Sequential Entries
+### Per-Persona Subagents (Parallel)
+
+Each persona is handled by a single subagent that runs its entire pipeline internally, **including writing its own log file**. All persona subagents run in parallel.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │  MAIN ORCHESTRATOR (you)                                            │
 │                                                                     │
-│  1. Launch all Entry 1 tasks with run_in_background=true            │
-│     ┌──────────┐ ┌──────────┐ ┌──────────┐                         │
-│     │Persona 1 │ │Persona 2 │ │Persona 3 │  ... (all start at once)│
-│     │ Entry 1  │ │ Entry 1  │ │ Entry 1  │                         │
-│     └────┬─────┘ └────┬─────┘ └────┬─────┘                         │
-│          │            │            │                                │
-│  2. Poll with TaskOutput until each completes                       │
-│          │            │            │                                │
-│          ▼            ▼            ▼                                │
-│     ┌──────────┐ ┌──────────┐ ┌──────────┐                         │
-│     │ Nudge 1  │ │ Nudge 1  │ │ Nudge 1  │  (sequential per track) │
-│     └────┬─────┘ └────┬─────┘ └────┬─────┘                         │
-│          │            │            │                                │
-│          ▼            ▼            ▼                                │
-│     ┌──────────┐ ┌──────────┐ ┌──────────┐                         │
-│     │ Entry 2  │ │ Entry 2  │ │ Entry 2  │                         │
-│     └────┬─────┘ └────┬─────┘ └────┬─────┘                         │
-│          │            │            │                                │
-│         ...          ...          ...                               │
-│          │            │            │                                │
-│          ▼            ▼            ▼                                │
-│     [Collate]    [Collate]    [Collate]                            │
+│  0. Create log directory: logs/synthetic_data/YYYY-MM-DD_HH-MM-SS/  │
 │                                                                     │
-│  3. Write log files                                                 │
+│  1. Launch all persona subagents with run_in_background=true        │
+│     ┌────────────────┐ ┌────────────────┐ ┌────────────────┐       │
+│     │ Persona 1      │ │ Persona 2      │ │ Persona 3      │       │
+│     │ Entry1→Nudge1  │ │ Entry1→Nudge1  │ │ Entry1→Nudge1  │       │
+│     │ Entry2→Nudge2  │ │ Entry2→Nudge2  │ │ Entry2→Nudge2  │       │
+│     │ Entry3→Nudge3  │ │ Entry3→Nudge3  │ │ Entry3→Nudge3  │       │
+│     │ ...→Write Log  │ │ ...→Write Log  │ │ ...→Write Log  │       │
+│     └───────┬────────┘ └───────┬────────┘ └───────┬────────┘       │
+│             │                  │                  │                 │
+│  2. Wait for all to complete with TaskOutput                        │
+│             │                  │                  │                 │
+│             ▼                  ▼                  ▼                 │
+│  3. Write config.md, collect summaries, report results              │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
-**Key insight**: Use `run_in_background=true` to launch tasks without blocking, then use `TaskOutput` to poll for results.
+**Key insight**: Each subagent handles one persona's full pipeline (all entries + nudges + responses) **and writes its own `persona_XXX.md` log file**. The orchestrator creates the log directory upfront, launches N subagents, then only writes `config.md` at the end.
 
 ---
 
 ## Claude Code Tools Used
 
+### Orchestrator Tools
+
 | Tool | Purpose |
 |------|---------|
-| `Task` | Spawn subagents for entry generation and nudge decisions |
+| `Task` | Spawn one subagent per persona (handles full pipeline + logging) |
 | `TaskOutput` | Retrieve results from background tasks |
-| `Write` | Create log files |
+| `Write` | Create config.md log file |
 | `Read` | Read source config files |
+| `Bash` | Create log directory, generate random persona configs |
+
+### Subagent Tools
+
+| Tool | Purpose |
+|------|---------|
+| `Bash` | Random decisions (tone, verbosity, nudge gates, response probability) |
+| `Write` | Write persona_XXX.md log file (parallel with other subagents) |
 
 ### Task Tool Parameters
 
 ```
 Task tool call:
-- description: "Persona N: Generate entry M"
-- prompt: [the full prompt text]
+- description: "Persona N: Full pipeline"
+- prompt: [persona config + all parameters + rules]
 - subagent_type: "general-purpose"
 - run_in_background: true  ← launches without blocking
 ```
@@ -108,7 +111,7 @@ Task tool call:
 TaskOutput tool call:
 - task_id: [ID returned from Task]
 - block: true   ← waits for completion
-- timeout: 60000  ← milliseconds
+- timeout: 300000  ← 5 minutes (full pipeline takes longer)
 ```
 
 ---
@@ -122,7 +125,16 @@ Read and internalize:
 - The prompt templates from the notebook
 - The `decide_nudge()` function logic
 
-### 2. Prepare Persona Configurations
+### 2. Create Log Directory
+
+Create the timestamped log directory **before** launching subagents:
+```bash
+mkdir -p logs/synthetic_data/$(date +%Y-%m-%d_%H-%M-%S)
+```
+
+Store the directory path (e.g., `logs/synthetic_data/2026-01-06_23-02-23/`) to pass to each subagent.
+
+### 3. Prepare Persona Configurations
 
 For each of `{{NUM_PERSONAS}}` personas, randomly select:
 - Age, profession, culture from `config/synthetic_data.yaml`
@@ -130,165 +142,114 @@ For each of `{{NUM_PERSONAS}}` personas, randomly select:
 - Look up value elaborations from `config/schwartz_values.yaml`
 - Generate `{{NUM_ENTRIES_PER_PERSONA}}` dates starting from `{{START_DATE}}`
 
-### 3. Launch All Entry 1 Tasks in Background
+### 4. Launch All Persona Subagents
 
 Send **one message** with `{{NUM_PERSONAS}}` Task tool calls, all with `run_in_background=true`:
 
 ```
 Tool: Task
-- description: "Persona 1: Generate entry 1"
+- description: "Persona 1: Full pipeline"
 - subagent_type: "general-purpose"
 - run_in_background: true
-- prompt: [Persona creation + Entry 1 prompt]
+- prompt: [Full persona prompt - see below]
 
 Tool: Task
-- description: "Persona 2: Generate entry 1"
+- description: "Persona 2: Full pipeline"
 - subagent_type: "general-purpose"
 - run_in_background: true
-- prompt: [Persona creation + Entry 1 prompt]
+- prompt: [Full persona prompt - see below]
 
 ... (all {{NUM_PERSONAS}} in one message)
 ```
 
-Each Task returns immediately with a `task_id`.
+Each Task returns immediately with a `task_id`. The subagent handles the full pipeline internally.
 
-### 4. Poll and Process Sequential Steps
+### 5. Wait for All Subagents
 
-For each persona track:
+Use TaskOutput to wait for each persona to complete:
 
 ```
-Loop for entry_num = 1 to {{NUM_ENTRIES_PER_PERSONA}}:
+Tool: TaskOutput
+- task_id: [persona 1 task ID]
+- block: true
+- timeout: 300000
 
-    A. Get entry result (if not already received):
-       Tool: TaskOutput
-       - task_id: [entry task ID]
-       - block: true
+Tool: TaskOutput
+- task_id: [persona 2 task ID]
+- block: true
+- timeout: 300000
 
-    B. Launch nudge decision task:
-       Tool: Task
-       - description: "Persona N: Nudge for entry M"
-       - prompt: [Entry + nudge decision rules]
-
-    C. If more entries needed, launch next entry task:
-       Tool: Task
-       - description: "Persona N: Generate entry M+1"
-       - prompt: [Accumulated context + entry prompt]
+... (can poll multiple in parallel)
 ```
 
-**Optimization**: While waiting for one persona's nudge decision, you can process other personas that are ready.
+### 6. Persona Pipeline Subagent Prompt
 
-### 5. Subagent Prompt Specifications
+Each subagent receives everything needed to generate a complete persona with all entries **and write its own log file**.
 
-#### Entry Subagent Prompt (first entry)
+**Input to subagent:**
 
-Include:
-- Persona constraints (age, profession, culture, values)
-- Value elaborations from `config/schwartz_values.yaml`
-- Entry instructions from `journal_entry_prompt` template
-- Banned terms from `SCHWARTZ_BANNED_TERMS`
-- Date for this entry
-- Randomly assigned tone/verbosity/reflection_mode
+1. **Persona constraints** (randomly selected by orchestrator):
+   - Age, profession, culture from `config/synthetic_data.yaml`
+   - 1-2 Schwartz values
+   - Value elaborations from `config/schwartz_values.yaml`
 
-**Output format:**
-```json
-{
-  "persona": {
-    "name": "...",
-    "age": "...",
-    "profession": "...",
-    "culture": "...",
-    "core_values": ["..."],
-    "bio": "..."
-  },
-  "entry": {
-    "date": "YYYY-MM-DD",
-    "tone": "...",
-    "verbosity": "...",
-    "reflection_mode": "...",
-    "content": "..."
-  }
-}
+2. **Entry dates**: All `{{NUM_ENTRIES_PER_PERSONA}}` dates (pre-generated)
+
+3. **Generation parameters**:
+   - Tone, verbosity, reflection_mode options from config
+   - Banned terms from `SCHWARTZ_BANNED_TERMS`
+   - Prompt templates from notebook
+
+4. **Nudge rules**:
+   - `decide_nudge()` logic from notebook
+   - Nudge generation instructions from `nudge_generation_prompt`
+
+5. **Response parameters**:
+   - `response_probability` from config
+   - `response_modes` with weights from config
+   - Response generation instructions from `nudge_response_prompt`
+
+6. **Logging parameters** (NEW):
+   - Log directory path (e.g., `logs/synthetic_data/2026-01-06_23-02-23/`)
+   - Persona ID (for filename: `persona_001.md`, `persona_002.md`, etc.)
+   - Log file format template
+
+**Subagent internal loop:**
+
+```
+1. Generate persona (name, bio based on constraints)
+
+For each entry date:
+  2. Randomly select tone/verbosity/reflection_mode
+  3. Generate entry content (with accumulated context from prior entries)
+  4. Apply decide_nudge() rules to determine if nudge needed
+  5. If nudge: generate nudge text
+  6. If nudge: use Bash for random response decision:
+     python3 -c "import random; print(random.random() < [response_probability])"
+  7. If Bash returns True: generate response using weighted response_mode
+  8. Store entry result, continue to next date
+
+9. Write persona_XXX.md log file using Write tool
+10. Return summary JSON with persona name + stats (for orchestrator report)
 ```
 
-#### Entry Subagent Prompt (subsequent entries)
+**Bash-Based Randomness:**
+LLMs cannot generate true randomness. The subagent MUST use the Bash tool for probabilistic decisions:
+```bash
+python3 -c "import random; print(random.random() < 0.7)"
+```
+If output is `True`: Generate response. If `False`: Set `response: null`.
 
-Include:
-- Persona (from first entry output)
-- All prior entries with their nudges/responses as context
-- Entry instructions from `journal_entry_prompt` template
-- Banned terms
-- Date for this entry
-- Randomly assigned tone/verbosity/reflection_mode
+**Subagent writes log file using Write tool:**
 
-**Output format:**
-```json
-{
-  "entry": {
-    "date": "YYYY-MM-DD",
-    "tone": "...",
-    "verbosity": "...",
-    "reflection_mode": "...",
-    "content": "..."
-  }
-}
+The subagent uses the Write tool to create `persona_XXX.md` in the log directory:
+```
+Write tool call:
+- file_path: [log_directory]/persona_001.md
+- content: [formatted markdown - see format below]
 ```
 
-#### Nudge Decision Subagent Prompt
-
-Include:
-- The entry just generated
-- All prior entries (for session cap check)
-- Nudge decision rules from `decide_nudge()` function
-- Nudge generation instructions from `nudge_generation_prompt`
-- Response generation instructions from `nudge_response_prompt`
-- Banned nudge phrases from config
-
-**Output format:**
-```json
-{
-  "should_nudge": true,
-  "nudge": {
-    "category": "tension_surfacing",
-    "trigger_reason": "Hedging language detected in unsettled entry",
-    "nudge_text": "Does that sit okay?"
-  },
-  "response": "Not really. I keep thinking about it."
-}
-```
-
-Or if no nudge:
-```json
-{
-  "should_nudge": false,
-  "nudge": null,
-  "response": null
-}
-```
-
-### 6. Collate Results
-
-After all entries complete for a persona, combine:
-- Persona info (from first entry subagent)
-- All entries with their nudges/responses
-
-### 7. Create Log Files
-
-Create directory: `logs/synthetic_data/YYYY-MM-DD_HH-MM-SS/`
-
-**config.md**:
-```markdown
-# Run Configuration
-**Timestamp**: ...
-**Method**: Claude Code subagents (parallel with run_in_background)
-
-## Parameters
-- Personas: {{NUM_PERSONAS}}
-- Entries per persona: {{NUM_ENTRIES_PER_PERSONA}}
-- Nudge probability: [from config]
-- Response probability: [from config]
-```
-
-**persona_XXX.md** (one per persona):
+**persona_XXX.md format** (written by subagent):
 ```markdown
 # Persona XXX: [Name]
 
@@ -313,10 +274,45 @@ Create directory: `logs/synthetic_data/YYYY-MM-DD_HH-MM-SS/`
 "[nudge_text]"
 
 ### Response
-[response or *(No response)*]
+**Mode**: [response_mode]
+[response content]
+
+*(Or if persona didn't respond:)*
+*(No response - persona did not reply to nudge)*
 ```
 
-**prompts.md**: Document all prompts sent to subagents
+**Output format (summary JSON from subagent for orchestrator):**
+
+After writing the log file, subagent returns a lightweight summary:
+```json
+{
+  "persona_id": 1,
+  "persona_name": "...",
+  "log_file": "persona_001.md",
+  "stats": {
+    "entries": 3,
+    "nudges": 2,
+    "responses": 1
+  }
+}
+```
+
+### 7. Collect Results & Write Config
+
+The orchestrator collects summary JSONs from each subagent (the full data is already written to log files).
+
+**Write config.md** (orchestrator only):
+```markdown
+# Run Configuration
+**Timestamp**: ...
+**Method**: Claude Code subagents (parallel with run_in_background)
+
+## Parameters
+- Personas: {{NUM_PERSONAS}}
+- Entries per persona: {{NUM_ENTRIES_PER_PERSONA}}
+- Nudge probability: [from config]
+- Response probability: [from config]
+```
 
 ### 8. Report Summary
 
@@ -324,72 +320,76 @@ Print:
 - Personas generated: X/{{NUM_PERSONAS}}
 - Total entries: X
 - Total nudges: X
-- Total responses: X
-- Response rate: X%
+- Total responses: X (expect response_probability × nudges)
+- Response rate: X% (should approximate response_probability from config)
 
 ---
 
 ## Quick Reference: Nudge Decision Tree
 
-From `decide_nudge()` in notebook:
+From `decide_nudge()` in notebook (uses **content-only signals**, no metadata):
 
 ```
 1. Session cap hit? (2+ nudges in last 3 entries) → No nudge
 2. Entry too vague? (<15 words, no concrete details) → "clarification"
-3. Hedging language detected? → "tension_surfacing"
-4. Random gate (40% chance) → "elaboration"
+3. Hedging language detected? ("sort of", "I guess", "maybe") → "tension_surfacing"
+4. Random gate (base_probability from config, ~40%) → "elaboration"
 5. Otherwise → No nudge
 ```
 
-**Content-only signals**: The decision logic uses ONLY data available at inference time:
-- Entry word count and content patterns
-- Hedging language detection
-- Previous nudge history
+> **Note**: Grounding nudges were removed—they relied on `reflection_mode` metadata unavailable in production. See `pipeline_specs.md` for details.
 
-No synthetic metadata (tone, verbosity, reflection_mode) is used.
+**Response Decision (after nudge is generated):**
+```
+Nudge generated?
+   │
+   └─YES─→ Run Bash: python3 -c "import random; print(random.random() < [response_probability])"
+              │
+              ├─Output "True"─→ Generate response using weighted response_mode from config
+              │
+              └─Output "False"─→ No response (response: null)
+```
+Note: Subagent reads `response_probability` from `config/synthetic_data.yaml` before running Bash command.
 
 ---
 
-## Optional: Define Custom Subagents
+## Optional: Define Custom Subagent
 
-For cleaner organization, you can define specialized subagents in `.claude/agents/`:
+For cleaner organization, you can define a specialized persona pipeline subagent in `.claude/agents/`:
 
-**`.claude/agents/entry-generator.md`**:
+**`.claude/agents/persona-pipeline.md`**:
 ```markdown
 ---
-name: entry-generator
-description: Generates authentic journal entries for synthetic personas
+name: persona-pipeline
+description: Generates complete persona with all journal entries, nudges, responses, and writes log file
 tools:
-  - Read
+  - Bash
+  - Write
 ---
 
-You are a journal entry generator. Given a persona and context, write an authentic
-first-person journal entry following the style rules provided.
+You are a persona pipeline generator. Given persona constraints and parameters,
+generate a complete persona with all journal entries and write the log file.
 
-[Include full journal_entry_prompt template here]
+For each entry:
+1. Generate entry content following style rules
+2. Apply nudge decision logic
+3. If nudging: generate nudge, then use Bash for random response decision
+4. Accumulate context for next entry
+
+After all entries:
+5. Write persona_XXX.md log file using Write tool
+6. Return summary JSON with stats
+
+[Include full prompt templates and decide_nudge() logic here]
 ```
 
-**`.claude/agents/nudge-evaluator.md`**:
-```markdown
----
-name: nudge-evaluator
-description: Evaluates journal entries and decides whether to generate nudges
-tools:
-  - Read
----
+Then invoke with `subagent_type: "persona-pipeline"` instead of `"general-purpose"`.
 
-You are a nudge decision system. Analyze journal entries and apply the nudge
-decision rules to determine if a follow-up question is warranted.
-
-[Include decide_nudge() logic and nudge_generation_prompt here]
-```
-
-Then invoke with `subagent_type: "entry-generator"` instead of `"general-purpose"`.
-
-**Benefits of custom subagents:**
+**Benefits of custom subagent:**
 - Reusable across runs
 - Cleaner prompts (instructions live in agent definition)
-- Tool restrictions (read-only for safety)
+- Tool restrictions (only Bash for randomness + Write for logging)
+- Parallel logging built into each subagent
 
 ---
 
@@ -397,26 +397,24 @@ Then invoke with `subagent_type: "entry-generator"` instead of `"general-purpose
 
 - [ ] Read source files (configs + notebook)
 - [ ] Set configuration variables above
-- [ ] Prepare `{{NUM_PERSONAS}}` persona configurations
-- [ ] Launch all Entry 1 subagents with `run_in_background=true` in ONE message
-- [ ] For each persona, loop sequentially:
-  - [ ] Use `TaskOutput` to get entry result
-  - [ ] Launch nudge decision subagent
-  - [ ] Get nudge result
-  - [ ] Launch next entry subagent (with accumulated context)
-  - [ ] Repeat until `{{NUM_ENTRIES_PER_PERSONA}}` entries complete
-- [ ] Collate all results per persona
-- [ ] Write log files
+- [ ] **Create log directory** (before launching subagents)
+- [ ] Prepare `{{NUM_PERSONAS}}` persona configurations (random selections)
+- [ ] Launch all persona subagents with `run_in_background=true` in ONE message
+  - Each subagent receives log directory path + persona ID
+- [ ] Wait for all subagents to complete with `TaskOutput`
+  - Subagents write their own `persona_XXX.md` files (parallel logging)
+- [ ] Collect summary stats from each subagent
+- [ ] Write `config.md` (orchestrator only)
 - [ ] Report summary
 
-**Subagent count per persona:** `{{NUM_ENTRIES_PER_PERSONA}}` entry + `{{NUM_ENTRIES_PER_PERSONA}}` nudge = `2 × {{NUM_ENTRIES_PER_PERSONA}}`
+**Subagent count:** `{{NUM_PERSONAS}}` total (one per persona)
 
-**Example:** 5 personas × 5 entries = 50 subagent calls (parallelized across personas)
+**Example:** 5 personas = 5 subagent calls (all run in parallel, each writes its own log file)
 
 ---
 
 ## Limitations
 
-- **Max 10 parallel tasks**: Claude Code caps parallelism; additional tasks queue automatically
-- **No nested subagents**: Subagents cannot spawn their own subagents
-- **Context isolation**: Each subagent has separate 200k context; pass needed info explicitly
+- **Max 10 parallel personas**: Claude Code caps parallelism at 10; additional tasks queue automatically
+- **Context isolation**: Each subagent has separate 200k context; pass all needed info in the prompt
+- **Subagent timeout**: Set adequate timeout (5+ minutes) for full pipeline generation
