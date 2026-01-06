@@ -228,11 +228,7 @@ Entry Received
      │
     NO
      ▼
-[Neutral/routine entry?] ──YES──► Skip (respect the mundane)
-     │
-    NO
-     ▼
-[Potential tension detected?] ──YES──► Tension-Surfacing Nudge
+[Hedging language detected?] ──YES──► Tension-Surfacing Nudge
      │
     NO
      ▼
@@ -243,16 +239,16 @@ Entry Received
 Skip nudge (stay silent)
 ```
 
-> **Note**: The original design included additional steps that were removed:
-> - "Continuity" step for unresolved threads - fragile word-overlap heuristics
-> - "Grounded but brief" step - relied on `reflection_mode` metadata (see Lesson Learned section)
+> **Note**: The decision tree uses **content-only signals**. All synthetic metadata dependencies (tone, verbosity, reflection_mode) have been removed to ensure the logic works identically at inference time. See [Lesson Learned: Metadata Leakage](#lesson-learned-metadata-leakage-in-synthetic-data-generation).
 
 ### Specific Trigger Conditions
 
 | Condition | Detection Method | Action |
 |-----------|------------------|--------|
 | Too vague to score | Word count < 15 AND no concrete nouns/verbs | Clarification nudge |
-| Potential value tension | Hedging language ("sort of", "I guess", "maybe") + reflection_mode == Unsettled | Tension-surfacing nudge |
+| Potential value tension | Hedging language ("sort of", "I guess", "maybe") | Tension-surfacing nudge |
+
+All trigger conditions use **content-only signals** available at inference time. No synthetic metadata (tone, verbosity, reflection_mode) is used.
 
 ### Anti-Annoyance Rules
 
@@ -400,11 +396,10 @@ async def generate_conversational_entry(
         previous_entries=[e.initial_entry for e in (previous_entries or [])]
     )
 
-    # Step 2: Decide whether to nudge
+    # Step 2: Decide whether to nudge (content-only signals)
     should_nudge, nudge_category, trigger_reason = decide_nudge(
         entry=entry_result.entry,
         previous_entries=previous_entries,
-        reflection_mode=entry_result.reflection_mode,
         config=config
     )
 
@@ -637,33 +632,35 @@ The `tone` parameter was randomly assigned *before* entry generation as an instr
 
 3. **Simplified response modes**: Reduced from 5 to 3 modes, removing near-zero probability options.
 
-4. **Added explicit comment**: The code now documents why tone is NOT passed to `decide_nudge`:
+4. **Removed all synthetic metadata**: The `decide_nudge()` function signature was simplified to only accept content-based inputs:
 
 ```python
-# Step 2: Decide whether to nudge
-# Note: tone is NOT passed to decide_nudge - it's synthetic metadata unavailable in production
+# Step 2: Decide whether to nudge (content-only signals)
 should_nudge, nudge_category, trigger_reason = decide_nudge(
     entry=entry,
-    reflection_mode=reflection_mode,  # Still used - see Known Limitation below
     previous_entries=previous_entries,
     config=config,
 )
 ```
 
-### Known Limitation: reflection_mode Usage
+### Metadata Leakage: Fully Resolved
 
-The `reflection_mode` parameter is still used in nudge decisions:
-- `is_neutral_routine()` checks `reflection_mode == "Neutral"` combined with word count and hedging
-- Tension-surfacing checks `reflection_mode == "Unsettled"` AND hedging language
+All synthetic metadata dependencies have been removed from the nudge decision logic:
 
-**What was removed**: The `is_grounded_but_brief()` check was removed because it relied purely on `reflection_mode == "Grounded"` with only word count as a secondary signal. Unlike tension-surfacing (which uses hedging language detection) or neutral-routine (which uses absence of hedging), grounding had no meaningful content-based component—it was essentially pure metadata usage.
+| Removed Check | Why Removed |
+|---------------|-------------|
+| `tone` guard (Exhausted/Emotional skip) | Synthetic generation instruction, not observable |
+| `reflection_mode == "Neutral"` check | Synthetic generation instruction, not observable |
+| `reflection_mode == "Unsettled"` requirement | Synthetic generation instruction, not observable |
+| `reflection_mode == "Grounded"` check | Synthetic generation instruction, not observable |
 
-**Why remaining uses are acceptable for POC**:
-1. `reflection_mode` describes **what kind of situation** the entry describes (unsettled/grounded/neutral), which correlates with observable content patterns
-2. The remaining checks combine `reflection_mode` with content-based signals (hedging language presence/absence) - it's not pure metadata usage
-3. In production, we could potentially infer reflection_mode from content patterns
+**Current implementation**: The `decide_nudge()` function now uses **only** content-based signals:
+- Entry word count
+- Presence of concrete details (nouns/verbs)
+- Hedging language patterns
+- Previous nudge history
 
-**Future improvement**: Replace `reflection_mode` checks with pure content-based detection (e.g., sentiment analysis, hedging pattern density).
+This ensures the decision logic works identically during synthetic data generation and production inference.
 
 ### General Principle
 
