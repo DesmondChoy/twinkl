@@ -56,11 +56,12 @@ nudge:
   response_probability: 0.7
 
   # Nudge category probabilities (when nudging is triggered)
+  # Note: "grounding" was removed - it relied on reflection_mode metadata
+  # which is synthetic generation data not available in production
   category_weights:
-    clarification: 0.25
-    elaboration: 0.35
-    tension_surfacing: 0.25
-    grounding: 0.15
+    clarification: 0.30
+    elaboration: 0.40
+    tension_surfacing: 0.30
 
   # Response modes (for variety and realism)
   response_modes:
