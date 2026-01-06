@@ -138,16 +138,17 @@ The nudging system transforms one-way journaling into a two-way conversational e
 
 ## Nudge Categories
 
-Four categories of nudges, each with a distinct purpose:
+Three categories of nudges, each with a distinct purpose:
 
 | Category | Purpose | Trigger Example | Nudge Example |
 |----------|---------|-----------------|---------------|
 | **Clarification** | Surface specifics from vague entries | "Feeling off today" | "What happened right before that?" |
 | **Elaboration** | Invite depth on surface-level entries | "Stayed late again" | "And how did that land?" |
 | **Tension-surfacing** | Probe potential value conflicts | "It was fine. Well, sort of." | "What's the 'sort of' part?" |
-| **Grounding** | Anchor brief positive moments | "Good day today" | "What made it good?" |
 
-> **Note**: The original design included a fifth "Continuity" category for connecting to previous entries. This was removed during implementation because the word-overlap heuristics were fragile and added complexity without clear POC benefit. See [Lesson Learned: Metadata Leakage](#lesson-learned-metadata-leakage-in-synthetic-data-generation) for details.
+> **Note**: The original design included additional categories that were removed:
+> - **Continuity**: Removed because word-overlap heuristics were fragile and added complexity without clear POC benefit.
+> - **Grounding**: Removed because it relied purely on `reflection_mode == "Grounded"`, which is synthetic generation metadata not available in production (metadata leakage). See [Lesson Learned: Metadata Leakage](#lesson-learned-metadata-leakage-in-synthetic-data-generation) for details.
 
 ### Category Details
 
@@ -165,11 +166,6 @@ Four categories of nudges, each with a distinct purpose:
 - Triggered when: Entry contains hedging, contradictions, or justification language
 - Signal extracted: Unresolved tension, alignment/misalignment confirmation
 - Examples: "What's the 'sort of' part?", "Does that sit okay with you?", "What stopped you?"
-
-**Grounding Nudges**
-- Triggered when: Entry is positive but brief (good day without specifics)
-- Signal extracted: Positive alignment evidence, values-in-action patterns
-- Examples: "What made it good?", "What worked?", "What made it nice?"
 
 ## Nudge Design Principles
 
@@ -240,10 +236,6 @@ Entry Received
      │
     NO
      ▼
-[Grounded but brief?] ──YES──► Grounding Nudge
-     │
-    NO
-     ▼
 [Random gate: 40%] ──PASS──► Elaboration Nudge
      │
    FAIL
@@ -251,7 +243,9 @@ Entry Received
 Skip nudge (stay silent)
 ```
 
-> **Note**: The original design included a "Continuity" step checking for unresolved threads from previous entries. This was removed - see implementation notes.
+> **Note**: The original design included additional steps that were removed:
+> - "Continuity" step for unresolved threads - fragile word-overlap heuristics
+> - "Grounded but brief" step - relied on `reflection_mode` metadata (see Lesson Learned section)
 
 ### Specific Trigger Conditions
 
@@ -259,7 +253,6 @@ Skip nudge (stay silent)
 |-----------|------------------|--------|
 | Too vague to score | Word count < 15 AND no concrete nouns/verbs | Clarification nudge |
 | Potential value tension | Hedging language ("sort of", "I guess", "maybe") + reflection_mode == Unsettled | Tension-surfacing nudge |
-| Grounded but brief | reflection_mode == Grounded AND word count < 50 | Grounding nudge |
 
 ### Anti-Annoyance Rules
 
@@ -309,12 +302,6 @@ Generate a SHORT follow-up question (2-12 words) that:
 {% elif nudge_category == 'tension_surfacing' %}
 - "What's the 'sort of' part?"
 - "Does that sit okay?"
-{% elif nudge_category == 'grounding' %}
-- "What made it good?"
-- "What worked?"
-{% elif nudge_category == 'continuity' %}
-- "How did it go with {{ reference }}?"
-- "Something shifted since last time?"
 {% endif %}
 
 ## Banned Phrases
@@ -337,11 +324,11 @@ Return ONLY the nudge text (no quotes, no explanation):
 class NudgeResult(BaseModel):
     """Generated nudge with metadata."""
     nudge_text: str
+    # Note: "grounding" was removed - relied on reflection_mode metadata (not available in production)
     nudge_category: Literal[
         "clarification",
         "elaboration",
-        "tension_surfacing",
-        "grounding"
+        "tension_surfacing"
     ]
     trigger_reason: str  # Why this nudge was generated
     was_responded_to: bool = False
@@ -472,11 +459,11 @@ nudge:
   response_probability: 0.7
 
   # Nudge category probabilities (when nudging is triggered)
+  # Note: "grounding" was removed - relied on reflection_mode metadata
   category_weights:
-    clarification: 0.25
-    elaboration: 0.35
-    tension_surfacing: 0.25
-    grounding: 0.15
+    clarification: 0.30
+    elaboration: 0.40
+    tension_surfacing: 0.30
 
   # Response modes (simplified from original 5 to 3)
   response_modes:
@@ -666,13 +653,14 @@ should_nudge, nudge_category, trigger_reason = decide_nudge(
 ### Known Limitation: reflection_mode Usage
 
 The `reflection_mode` parameter is still used in nudge decisions:
-- `is_neutral_routine()` checks `reflection_mode == "Neutral"`
+- `is_neutral_routine()` checks `reflection_mode == "Neutral"` combined with word count and hedging
 - Tension-surfacing checks `reflection_mode == "Unsettled"` AND hedging language
-- `is_grounded_but_brief()` checks `reflection_mode == "Grounded"` AND word count
 
-**Why this is acceptable for POC**:
+**What was removed**: The `is_grounded_but_brief()` check was removed because it relied purely on `reflection_mode == "Grounded"` with only word count as a secondary signal. Unlike tension-surfacing (which uses hedging language detection) or neutral-routine (which uses absence of hedging), grounding had no meaningful content-based component—it was essentially pure metadata usage.
+
+**Why remaining uses are acceptable for POC**:
 1. `reflection_mode` describes **what kind of situation** the entry describes (unsettled/grounded/neutral), which correlates with observable content patterns
-2. The checks combine `reflection_mode` with content-based signals (hedging language, word count) - it's not pure metadata usage
+2. The remaining checks combine `reflection_mode` with content-based signals (hedging language presence/absence) - it's not pure metadata usage
 3. In production, we could potentially infer reflection_mode from content patterns
 
 **Future improvement**: Replace `reflection_mode` checks with pure content-based detection (e.g., sentiment analysis, hedging pattern density).
