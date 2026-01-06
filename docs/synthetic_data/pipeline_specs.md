@@ -138,16 +138,17 @@ The nudging system transforms one-way journaling into a two-way conversational e
 
 ## Nudge Categories
 
-Four categories of nudges, each with a distinct purpose:
+Three categories of nudges, each with a distinct purpose:
 
 | Category | Purpose | Trigger Example | Nudge Example |
 |----------|---------|-----------------|---------------|
 | **Clarification** | Surface specifics from vague entries | "Feeling off today" | "What happened right before that?" |
 | **Elaboration** | Invite depth on surface-level entries | "Stayed late again" | "And how did that land?" |
 | **Tension-surfacing** | Probe potential value conflicts | "It was fine. Well, sort of." | "What's the 'sort of' part?" |
-| **Grounding** | Anchor brief positive moments | "Good day today" | "What made it good?" |
 
-> **Note**: The original design included a fifth "Continuity" category for connecting to previous entries. This was removed during implementation because the word-overlap heuristics were fragile and added complexity without clear POC benefit. See [Lesson Learned: Metadata Leakage](#lesson-learned-metadata-leakage-in-synthetic-data-generation) for details.
+> **Note**: The original design included additional categories that were removed:
+> - **Continuity**: Removed because word-overlap heuristics were fragile and added complexity without clear POC benefit.
+> - **Grounding**: Removed because it relied purely on `reflection_mode == "Grounded"`, which is synthetic generation metadata not available in production (metadata leakage). See [Lesson Learned: Metadata Leakage](#lesson-learned-metadata-leakage-in-synthetic-data-generation) for details.
 
 ### Category Details
 
@@ -165,11 +166,6 @@ Four categories of nudges, each with a distinct purpose:
 - Triggered when: Entry contains hedging, contradictions, or justification language
 - Signal extracted: Unresolved tension, alignment/misalignment confirmation
 - Examples: "What's the 'sort of' part?", "Does that sit okay with you?", "What stopped you?"
-
-**Grounding Nudges**
-- Triggered when: Entry is positive but brief (good day without specifics)
-- Signal extracted: Positive alignment evidence, values-in-action patterns
-- Examples: "What made it good?", "What worked?", "What made it nice?"
 
 ## Nudge Design Principles
 
@@ -232,15 +228,7 @@ Entry Received
      │
     NO
      ▼
-[Neutral/routine entry?] ──YES──► Skip (respect the mundane)
-     │
-    NO
-     ▼
-[Potential tension detected?] ──YES──► Tension-Surfacing Nudge
-     │
-    NO
-     ▼
-[Grounded but brief?] ──YES──► Grounding Nudge
+[Hedging language detected?] ──YES──► Tension-Surfacing Nudge
      │
     NO
      ▼
@@ -251,15 +239,16 @@ Entry Received
 Skip nudge (stay silent)
 ```
 
-> **Note**: The original design included a "Continuity" step checking for unresolved threads from previous entries. This was removed - see implementation notes.
+> **Note**: The decision tree uses **content-only signals**. All synthetic metadata dependencies (tone, verbosity, reflection_mode) have been removed to ensure the logic works identically at inference time. See [Lesson Learned: Metadata Leakage](#lesson-learned-metadata-leakage-in-synthetic-data-generation).
 
 ### Specific Trigger Conditions
 
 | Condition | Detection Method | Action |
 |-----------|------------------|--------|
 | Too vague to score | Word count < 15 AND no concrete nouns/verbs | Clarification nudge |
-| Potential value tension | Hedging language ("sort of", "I guess", "maybe") + reflection_mode == Unsettled | Tension-surfacing nudge |
-| Grounded but brief | reflection_mode == Grounded AND word count < 50 | Grounding nudge |
+| Potential value tension | Hedging language ("sort of", "I guess", "maybe") | Tension-surfacing nudge |
+
+All trigger conditions use **content-only signals** available at inference time. No synthetic metadata (tone, verbosity, reflection_mode) is used.
 
 ### Anti-Annoyance Rules
 
@@ -309,12 +298,6 @@ Generate a SHORT follow-up question (2-12 words) that:
 {% elif nudge_category == 'tension_surfacing' %}
 - "What's the 'sort of' part?"
 - "Does that sit okay?"
-{% elif nudge_category == 'grounding' %}
-- "What made it good?"
-- "What worked?"
-{% elif nudge_category == 'continuity' %}
-- "How did it go with {{ reference }}?"
-- "Something shifted since last time?"
 {% endif %}
 
 ## Banned Phrases
@@ -337,11 +320,11 @@ Return ONLY the nudge text (no quotes, no explanation):
 class NudgeResult(BaseModel):
     """Generated nudge with metadata."""
     nudge_text: str
+    # Note: "grounding" was removed - relied on reflection_mode metadata (not available in production)
     nudge_category: Literal[
         "clarification",
         "elaboration",
-        "tension_surfacing",
-        "grounding"
+        "tension_surfacing"
     ]
     trigger_reason: str  # Why this nudge was generated
     was_responded_to: bool = False
@@ -413,11 +396,10 @@ async def generate_conversational_entry(
         previous_entries=[e.initial_entry for e in (previous_entries or [])]
     )
 
-    # Step 2: Decide whether to nudge
+    # Step 2: Decide whether to nudge (content-only signals)
     should_nudge, nudge_category, trigger_reason = decide_nudge(
         entry=entry_result.entry,
         previous_entries=previous_entries,
-        reflection_mode=entry_result.reflection_mode,
         config=config
     )
 
@@ -472,11 +454,11 @@ nudge:
   response_probability: 0.7
 
   # Nudge category probabilities (when nudging is triggered)
+  # Note: "grounding" was removed - relied on reflection_mode metadata
   category_weights:
-    clarification: 0.25
-    elaboration: 0.35
-    tension_surfacing: 0.25
-    grounding: 0.15
+    clarification: 0.30
+    elaboration: 0.40
+    tension_surfacing: 0.30
 
   # Response modes (simplified from original 5 to 3)
   response_modes:
@@ -650,32 +632,35 @@ The `tone` parameter was randomly assigned *before* entry generation as an instr
 
 3. **Simplified response modes**: Reduced from 5 to 3 modes, removing near-zero probability options.
 
-4. **Added explicit comment**: The code now documents why tone is NOT passed to `decide_nudge`:
+4. **Removed all synthetic metadata**: The `decide_nudge()` function signature was simplified to only accept content-based inputs:
 
 ```python
-# Step 2: Decide whether to nudge
-# Note: tone is NOT passed to decide_nudge - it's synthetic metadata unavailable in production
+# Step 2: Decide whether to nudge (content-only signals)
 should_nudge, nudge_category, trigger_reason = decide_nudge(
     entry=entry,
-    reflection_mode=reflection_mode,  # Still used - see Known Limitation below
     previous_entries=previous_entries,
     config=config,
 )
 ```
 
-### Known Limitation: reflection_mode Usage
+### Metadata Leakage: Fully Resolved
 
-The `reflection_mode` parameter is still used in nudge decisions:
-- `is_neutral_routine()` checks `reflection_mode == "Neutral"`
-- Tension-surfacing checks `reflection_mode == "Unsettled"` AND hedging language
-- `is_grounded_but_brief()` checks `reflection_mode == "Grounded"` AND word count
+All synthetic metadata dependencies have been removed from the nudge decision logic:
 
-**Why this is acceptable for POC**:
-1. `reflection_mode` describes **what kind of situation** the entry describes (unsettled/grounded/neutral), which correlates with observable content patterns
-2. The checks combine `reflection_mode` with content-based signals (hedging language, word count) - it's not pure metadata usage
-3. In production, we could potentially infer reflection_mode from content patterns
+| Removed Check | Why Removed |
+|---------------|-------------|
+| `tone` guard (Exhausted/Emotional skip) | Synthetic generation instruction, not observable |
+| `reflection_mode == "Neutral"` check | Synthetic generation instruction, not observable |
+| `reflection_mode == "Unsettled"` requirement | Synthetic generation instruction, not observable |
+| `reflection_mode == "Grounded"` check | Synthetic generation instruction, not observable |
 
-**Future improvement**: Replace `reflection_mode` checks with pure content-based detection (e.g., sentiment analysis, hedging pattern density).
+**Current implementation**: The `decide_nudge()` function now uses **only** content-based signals:
+- Entry word count
+- Presence of concrete details (nouns/verbs)
+- Hedging language patterns
+- Previous nudge history
+
+This ensures the decision logic works identically during synthetic data generation and production inference.
 
 ### General Principle
 

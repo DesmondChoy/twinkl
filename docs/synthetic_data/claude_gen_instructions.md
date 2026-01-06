@@ -336,11 +336,17 @@ From `decide_nudge()` in notebook:
 ```
 1. Session cap hit? (2+ nudges in last 3 entries) → No nudge
 2. Entry too vague? (<15 words, no concrete details) → "clarification"
-3. Hedging language + Unsettled mode? → "tension_surfacing"
-4. Grounded mode + brief? (<50 words) → "grounding"
-5. Random gate (40% chance) → "elaboration"
-6. Otherwise → No nudge
+3. Hedging language detected? → "tension_surfacing"
+4. Random gate (40% chance) → "elaboration"
+5. Otherwise → No nudge
 ```
+
+**Content-only signals**: The decision logic uses ONLY data available at inference time:
+- Entry word count and content patterns
+- Hedging language detection
+- Previous nudge history
+
+No synthetic metadata (tone, verbosity, reflection_mode) is used.
 
 ---
 
