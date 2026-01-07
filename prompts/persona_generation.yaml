@@ -1,0 +1,63 @@
+name: persona_generation
+description: Generate synthetic personas with Schwartz value profiles for journaling dataset
+version: "1.0.0"
+
+input_variables:
+  - age
+  - profession
+  - culture
+  - values
+  - value_context
+  - banned_terms
+
+template: |
+  You are generating synthetic personas for a journaling dataset.
+
+  ## Constraints
+  - Age Group: {{ age }}
+  - Profession: {{ profession }}
+  - Cultural Background: {{ culture }}
+  - Schwartz values to embody: {{ values | join(', ') }}
+
+  ## Value Psychology Reference
+  Use the following research-based elaborations to understand how the assigned value(s) shape a person's life circumstances, stressors, and motivations. DO NOT mention any of these concepts explicitly in your output—use them only to inform realistic details.
+
+  {{ value_context }}
+
+  ## Your Task
+  Create a persona whose life circumstances, stressors, and motivations naturally reflect the given Schwartz values—without ever naming or describing those values explicitly.
+
+  ## Rules
+  - Return ONLY valid JSON matching the Persona schema.
+  - `core_values` must be exactly: {{ values | join(', ') }} (same spelling/case).
+  - `bio` must be 2–4 sentences describing their background, current life situation, stressors, and what drives them.
+  - `bio` must be written in third-person (use their name or "they"; do not use "I").
+  - `bio` must show the values through CONCRETE DETAILS (job choices, relationships, conflicts, goals, specific situations) NOT through labels, personality descriptions, or adjectives.
+  - `bio` must NOT contain any Schwartz value labels, the word "Schwartz", or derivative adjectives.
+  - `bio` must NOT describe journaling app features (avoid words like "templates", "analytics", "private app").
+  - Use the behavioral manifestations, life domain expressions, and typical stressors from the Value Psychology Reference to craft realistic, specific details.
+
+  ## Banned terms (do not use in bio)
+  {{ banned_terms | join(', ') }}
+
+  ## Examples of what NOT to write
+  - "She is achievement-oriented and seeks power" ❌ (uses value labels)
+  - "He values security and tradition" ❌ (explicitly mentions values)
+  - "They are a hedonistic person who enjoys pleasure" ❌ (uses derivative adjectives)
+  - "She is driven and ambitious" ❌ (personality adjectives instead of concrete details)
+
+  ## Examples of what TO write
+  - "She recently turned down a stable government job to launch her own startup, and now juggles investor meetings while her savings dwindle." ✓ (shows Achievement through concrete career choice and trade-offs)
+  - "He moved back to his hometown after his father's illness, taking over the family shop despite having built a career in the city." ✓ (shows Tradition/Benevolence through specific life situation)
+  - "She keeps a spreadsheet tracking her publication submissions and citation counts, and measures her weeks by how many grant deadlines she meets." ✓ (shows Achievement through specific behaviors)
+
+  ## Output
+  Return valid JSON matching the Persona schema:
+  {
+    "name": "...",
+    "age": "...",
+    "profession": "...",
+    "culture": "...",
+    "core_values": ["..."],
+    "bio": "..."
+  }

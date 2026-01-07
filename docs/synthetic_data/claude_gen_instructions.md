@@ -28,16 +28,24 @@ All prompts, decision logic, and configuration come from these files:
 |------|----------|
 | `config/synthetic_data.yaml` | Persona attributes, journal entry options, nudge settings |
 | `config/schwartz_values.yaml` | Value elaborations for persona generation |
-| `notebooks/journal_nudge.ipynb` | Prompt templates, nudge decision logic, banned terms |
+| `prompts/` | YAML prompt templates with Jinja2 |
+| `notebooks/journal_nudge.ipynb` | Nudge decision logic, banned terms |
 
-### Key Notebook References
+### Prompt Templates
 
-| Cell Variable | Purpose |
-|---------------|---------|
-| `persona_generation_prompt` | Template for creating personas |
-| `journal_entry_prompt` | Template for journal entries |
-| `nudge_generation_prompt` | Template for generating nudges |
-| `nudge_response_prompt` | Template for persona responses |
+Prompts are stored in `prompts/` as YAML files with embedded Jinja2 templates:
+
+| File | Purpose |
+|------|---------|
+| `prompts/persona_generation.yaml` | Template for creating personas |
+| `prompts/journal_entry.yaml` | Template for journal entries |
+| `prompts/nudge_generation.yaml` | Template for generating nudges |
+| `prompts/nudge_response.yaml` | Template for persona responses |
+
+### Notebook References
+
+| Variable | Purpose |
+|----------|---------|
 | `SCHWARTZ_BANNED_TERMS` | Terms that must not appear in output |
 | `HEDGING_PATTERNS` | Regex for detecting tension |
 | `decide_nudge()` | Rule-based nudge decision logic |
@@ -122,8 +130,8 @@ TaskOutput tool call:
 
 Read and internalize:
 - Both config YAML files
-- The prompt templates from the notebook
-- The `decide_nudge()` function logic
+- The prompt templates from `prompts/` folder
+- The `decide_nudge()` function logic from `notebooks/journal_nudge.ipynb`
 
 ### 2. Create Log Directory
 
@@ -197,17 +205,17 @@ Each subagent receives everything needed to generate a complete persona with all
 
 3. **Generation parameters**:
    - Tone, verbosity, reflection_mode options from config
-   - Banned terms from `SCHWARTZ_BANNED_TERMS`
-   - Prompt templates from notebook
+   - Banned terms from `SCHWARTZ_BANNED_TERMS` (in notebook)
+   - Prompt templates from `prompts/` folder
 
 4. **Nudge rules**:
    - `decide_nudge()` logic from notebook
-   - Nudge generation instructions from `nudge_generation_prompt`
+   - Nudge generation instructions from `prompts/nudge_generation.yaml`
 
 5. **Response parameters**:
    - `response_probability` from config
    - `response_modes` with weights from config
-   - Response generation instructions from `nudge_response_prompt`
+   - Response generation instructions from `prompts/nudge_response.yaml`
 
 6. **Logging parameters** (NEW):
    - Log directory path (e.g., `logs/synthetic_data/2026-01-06_23-02-23/`)
@@ -395,7 +403,7 @@ Then invoke with `subagent_type: "persona-pipeline"` instead of `"general-purpos
 
 ## Checklist
 
-- [ ] Read source files (configs + notebook)
+- [ ] Read source files (configs + prompts/ + notebook)
 - [ ] Set configuration variables above
 - [ ] **Create log directory** (before launching subagents)
 - [ ] Prepare `{{NUM_PERSONAS}}` persona configurations (random selections)

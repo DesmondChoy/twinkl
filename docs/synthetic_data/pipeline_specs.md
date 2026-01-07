@@ -184,25 +184,22 @@ Would a close friend who genuinely cares (but isn't a therapist) say this?
 - Value-labeling: "That conflicts with your health goals"
 - Lead the witness: "That must have been frustrating"
 
-### Banned Phrases
+### Voice Guidance (Prompt-Based)
 
-These phrases are explicitly banned from nudge generation. The rationale is that they all share a common problem: they make the app feel like it's *performing a role* (therapist, coach, generic chatbot) rather than *being genuinely curious*.
+Rather than using a post-hoc blacklist to reject bad nudges, we bake voice guidance directly into the prompt. This is more effective because the LLM understands *why* certain phrases feel wrong, not just *which* phrases to avoid.
 
-**Therapy/Counselor Language**
-- "I'm sensing...", "It sounds like...", "I notice..."
-- **Why avoid**: These are active listening techniques from professional counseling. When a journaling app uses them, it feels like the app is "playing therapist," creates an uneven power dynamic (app as expert, user as patient), and can feel patronizing. A friend wouldn't say "I'm sensing some frustration" — they'd say "That sounds rough" or just "What happened?"
+**The "Close Friend" Test**: Would this feel weird if a friend texted it to you? If yes, don't write it.
 
-**Coaching/Advisory Language**
-- "Have you considered...", "What would it look like if..."
-- **Why avoid**: These phrases imply the app has *advice to give* or *knows better*. They shift from curious companion to prescriptive coach, preempting the user's own reflection. This violates the design principle of *mirroring*, not *directing*.
+**Anti-patterns explained in the prompt**:
 
-**Generic Filler**
-- "Tell me more about...", "I'm curious..."
-- **Why avoid**: These are default LLM responses when the model doesn't know what else to say. They're vague, feel robotic/formulaic, and don't demonstrate that the system actually "read" the entry. Good nudges are specific: "The meeting?" beats "Tell me more" because it shows the system identified a concrete referent.
+| Anti-pattern | Examples | Why it fails |
+|--------------|----------|--------------|
+| Starting with "I" | "I notice...", "I'm sensing...", "I'm curious..." | Performative listening — makes the app feel like it's playing therapist |
+| Reflective statements as questions | "It sounds like you're feeling..." | Creates uneven power dynamic (app as expert, user as patient) |
+| Coaching language | "Have you considered...", "What would it look like if..." | Implies the app *knows better* — shifts from curious companion to prescriptive coach |
+| Generic filler | "Tell me more about..." | Default LLM response that doesn't demonstrate the system actually "read" the entry |
 
-**Other constraints**
-- Any phrase over 15 words (nudges should be brief)
-- Therapy terminology or coaching jargon in general
+**Why prompt guidance beats blacklists**: A blacklist catches specific strings but misses variants ("I'm noticing..." vs "I notice..."). Prompt guidance teaches the model the *principle*, so it avoids the entire category of performative language.
 
 ### Nudge Length Guidelines
 
@@ -261,8 +258,8 @@ All trigger conditions use **content-only signals** available at inference time.
 ## Implementation: Hybrid Approach
 
 **Rules** decide *whether* to nudge and *which category*.
-**LLM** generates the *natural language* nudge.
-**Rules** validate the output (length, banned phrases, tone match).
+**LLM** generates the *natural language* nudge (with voice guidance baked into the prompt).
+**Rules** validate the output (length only—voice quality is handled by prompt guidance).
 
 ### LLM Nudge Generation Prompt (Template)
 
@@ -270,22 +267,34 @@ All trigger conditions use **content-only signals** available at inference time.
 You are generating a brief follow-up for a journaling app.
 
 ## Context
-User's entry: {{ entry.content }}
-Entry date: {{ entry.date }}
+User's entry: {{ entry_content }}
+Entry date: {{ entry_date }}
 Nudge category: {{ nudge_category }}
 {% if previous_entries %}
 Recent entries (for context):
 {% for prev in previous_entries %}
-- {{ prev.date }}: {{ prev.content[:100] }}...
+- {{ prev.date }}: {{ prev.content[:150] }}{% if prev.content|length > 150 %}...{% endif %}
 {% endfor %}
 {% endif %}
 
 ## Your Task
-Generate a SHORT follow-up question (2-12 words) that:
-- Matches the category: {{ nudge_category }}
-- Sounds like natural curiosity, not therapy
-- References something specific from the entry
-- Uses simple, casual language
+Generate a SHORT follow-up question ({{ min_words }}-{{ max_words }} words).
+
+**Voice**: You're a close friend who just read their text and is firing back a quick question. Not a therapist, not a coach, not an app trying to sound empathetic.
+
+**The test**: Would this feel weird if a friend texted it to you? If yes, don't write it.
+
+**Anti-patterns to avoid**:
+- Starting with "I" (e.g., "I notice...", "I'm sensing...", "I'm curious...") — this is performative listening
+- Reflective statements disguised as questions ("It sounds like you're feeling...")
+- Coaching language ("Have you considered...", "What would it look like if...")
+- Invitations that feel like work ("Tell me more about...")
+
+**Good questions are**:
+- Direct, even blunt
+- Reference a specific detail from the entry (a person, event, phrase they used)
+- Short enough to type in 2 seconds
+- The kind of thing you'd say without thinking
 
 ## Examples by Category
 {% if nudge_category == 'clarification' %}
@@ -295,21 +304,16 @@ Generate a SHORT follow-up question (2-12 words) that:
 {% elif nudge_category == 'elaboration' %}
 - "And how did that land?"
 - "What did you end up doing?"
+- "What got you over the line?"
 {% elif nudge_category == 'tension_surfacing' %}
 - "What's the 'sort of' part?"
 - "Does that sit okay?"
+- "What stopped you?"
 {% endif %}
 
-## Banned Phrases
-- "I'm sensing..."
-- "It sounds like..."
-- "Tell me more about..."
-- "I notice..."
-- "Have you considered..."
-- Any phrase over 15 words
-
 ## Output
-Return ONLY the nudge text (no quotes, no explanation):
+Return ONLY valid JSON:
+{"nudge_text": "your question here"}
 ```
 
 ## Data Model Changes
@@ -572,7 +576,7 @@ This allows the Critic to learn:
 **Phase 4 (Integration)**:
 - [ ] Update Judge prompt for multi-turn scoring
 - [ ] Test end-to-end pipeline
-- [ ] Tune probabilities and banned phrases
+- [ ] Tune probabilities and voice guidance prompts
 
 **Phase 5 (Future - Productionize)**:
 - [ ] Once notebook output is satisfactory, extract to Python scripts

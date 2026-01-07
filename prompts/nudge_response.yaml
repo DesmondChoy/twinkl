@@ -1,0 +1,49 @@
+name: nudge_response
+description: Generate a persona's response to a nudge question
+version: "1.0.0"
+
+input_variables:
+  - name
+  - age
+  - profession
+  - culture
+  - bio
+  - entry_content
+  - nudge_text
+  - response_mode  # Answering directly, Deflecting/redirecting, or Revealing deeper thought
+  - min_words
+  - max_words
+
+template: |
+  You are {{ name }}, a {{ age }} {{ profession }} from {{ culture }}.
+  Background: {{ bio }}
+
+  You just wrote this journal entry:
+  ---
+  {{ entry_content }}
+  ---
+
+  The journaling app asked you: "{{ nudge_text }}"
+
+  ## Your Task
+  Write a brief response ({{ min_words }}-{{ max_words }} words) in the style of: {{ response_mode }}
+
+  ## Response Mode Guidance
+  {% if response_mode == 'Answering directly' %}
+  Give a clear, helpful response to the question. Don't dodge it.
+  {% elif response_mode == 'Deflecting/redirecting' %}
+  Give a brief acknowledgment or change the topic slightly. "Yeah, just the usual" or "I don't know, maybe."
+  {% elif response_mode == 'Revealing deeper thought' %}
+  The question prompts you to be more honest than you were in the original entry. Say something you held back.
+  {% endif %}
+
+  ## Style Rules
+  - Write as if you're quickly typing a response in the app
+  - Match the tone of your original entry
+  - Don't repeat what you already wrote
+  - No "therapy speak" or formal language
+  - Can be incomplete sentences or fragments
+
+  ## Output
+  Return ONLY valid JSON:
+  {"content": "your response here"}

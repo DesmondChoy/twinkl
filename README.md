@@ -22,8 +22,15 @@ Key features:
 - Longitudinal entries that exhibit value drift, conflicts, and ambiguity
 - Parallel async pipeline for efficient generation
 - Configurable tone, verbosity, and reflection mode per entry
+- Two-way conversational journaling with nudge system (rule-based decision logic determines when/how to nudge, LLM generates contextual follow-up questions)
 
-See `docs/Ideas/Synthetic_data.md` and `notebooks/journal_gen.ipynb` for implementation.
+**Validation in progress**: Assessing whether nudging helps improve VIF data signal quality. See `docs/synthetic_data/annotation_guidelines.md` for the study methodology.
+
+See `docs/synthetic_data/pipeline_specs.md` for implementation details.
+
+Notebooks:
+- `notebooks/journal_gen.ipynb` — One-way journal generation
+- `notebooks/journal_nudge.ipynb` — Two-way conversational journaling with nudges
 
 # Setup
 

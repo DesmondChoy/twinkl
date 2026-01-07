@@ -42,12 +42,47 @@ The project is currently focused on generating synthetic training data for the V
 2. **`notebooks/journal_nudge.ipynb`** — Two-way conversational journaling
    - Extends journal_gen with a nudging system
    - Rule-based decision logic determines when/how to nudge
-   - LLM generates natural language nudges; rules validate output
+   - LLM generates natural language nudges with voice guidance baked into prompts
 
 ### Configuration Files
 
 - **`config/synthetic_data.yaml`** — Persona attributes (age, culture, profession), journal entry parameters (tone, verbosity, reflection_mode), and nudge settings
 - **`config/schwartz_values.yaml`** — Rich psychological elaborations for each of the 10 Schwartz values (core motivation, behavioral manifestations, life domain expressions, typical stressors/goals)
+
+### Prompt Templates
+
+LLM prompts are stored in `prompts/` as YAML files with embedded Jinja2 templates:
+
+```
+prompts/
+├── __init__.py              # Loader utility + exports
+├── persona_generation.yaml  # Generate synthetic personas
+├── journal_entry.yaml       # Generate journal entries
+├── nudge_generation.yaml    # Generate follow-up nudges
+└── nudge_response.yaml      # Generate responses to nudges
+```
+
+**Usage in notebooks:**
+```python
+from prompts import persona_generation_prompt, journal_entry_prompt
+
+# Render a template
+prompt_text = persona_generation_prompt.render(age="25-34", profession="Engineer", ...)
+```
+
+**YAML format:**
+```yaml
+name: prompt_name
+description: Brief description
+version: "1.0.0"
+input_variables:
+  - var1
+  - var2
+template: |
+  Your Jinja2 template with {{ var1 }} placeholders...
+```
+
+**Adding new prompts:** Create a new YAML file in `prompts/`, then add it to `prompts/__init__.py` exports.
 
 ### Output Logging
 

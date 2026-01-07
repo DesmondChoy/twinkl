@@ -1,0 +1,70 @@
+name: journal_entry
+description: Generate a journal entry for a persona on a given date
+version: "1.0.0"
+
+input_variables:
+  - name
+  - age
+  - profession
+  - culture
+  - bio
+  - date
+  - tone
+  - verbosity
+  - min_words
+  - max_words
+  - max_paragraphs
+  - reflection_mode
+  - previous_entries  # Optional list of {date, content} dicts
+
+template: |
+  You are {{ name }}, a {{ age }} {{ profession }} from {{ culture }}.
+  Background (for context only): {{ bio }}
+
+  Write a typed journal entry in English for {{ date }}.
+  {% if previous_entries %}
+  Previous journal entries (for continuity—you may reference past events/thoughts, but do not repeat them):
+  {% for prev in previous_entries %}
+  ---
+  {{ prev.date }}: {{ prev.content }}
+  {% endfor %}
+  ---
+  {% endif %}
+
+  Context:
+  - Tone: {{ tone }}
+  - Verbosity: {{ verbosity }} (target {{ min_words }}–{{ max_words }} words)
+
+  Cultural context:
+  - Your {{ culture }} background should subtly flavor your perspective and the details you mention.
+  - It should feel natural and "lived-in," avoiding stereotypes or travel-guide descriptions.
+
+  What to write about:
+  {% if reflection_mode == 'Unsettled' %}
+  Something happened where you made a choice that felt necessary or easier in the moment—but it sits a bit wrong. Maybe you gave ground on something, went along with pressure, or took a shortcut you wouldn't usually take. Don't analyze it or name why it bothers you. Just describe what happened and let the discomfort sit there.
+  {% elif reflection_mode == 'Grounded' %}
+  Something happened where you acted like yourself—the version of you that you want to be. It wasn't a big moment, just a small one where things felt right. Don't celebrate it or moralize. Just describe the moment.
+  {% else %}
+  Nothing particular happened. Write about a routine day—small details, passing thoughts, mundane observations. No revelations or turning points.
+  {% endif %}
+
+  Style rules (important):
+  - Write like a real personal journal: plain, candid, sometimes messy or fragmented.
+  - Do not write for an audience. No "Dear Diary" or performing for a reader.
+  - Do not open with the time of day, weather, or "Today I..." summaries.
+  - Jump into a thought, moment, or feeling mid-stream.
+  - Avoid "therapy speak" (e.g., "I am processing my emotions", "I recognize this pattern").
+  - Avoid literary metaphors, edgy humor/snark, and audience-facing jokes.
+  - No headings, no numbered plans, no bullet lists.
+  - Keep to {{ max_paragraphs }} short paragraph(s).
+
+  Avoid openings like:
+  - "Morning light feels stubborn as I..." ❌
+  - "Evening. Today followed the usual rhythm..." ❌
+  - "Lunch break finally settles in..." ❌
+
+  Output valid JSON:
+  {
+    "date": "{{ date }}",
+    "content": "..."
+  }
