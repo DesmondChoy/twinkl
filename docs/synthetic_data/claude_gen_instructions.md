@@ -12,9 +12,9 @@ Instructions for Claude Code to generate synthetic conversational journal data u
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `NUM_PERSONAS` | 3 | Number of personas to generate |
-| `NUM_ENTRIES_PER_PERSONA` | 3 | Journal entries per persona |
-| `START_DATE` | 2025-12-25 | First entry date (YYYY-MM-DD) |
+| `NUM_PERSONAS` | 5 | Number of personas to generate |
+| `NUM_ENTRIES_PER_PERSONA` | 5 | Journal entries per persona |
+| `START_DATE` | 2025-12-01 | First entry date (YYYY-MM-DD) |
 | `MIN_DAYS_BETWEEN_ENTRIES` | 2 | Minimum days between entries |
 | `MAX_DAYS_BETWEEN_ENTRIES` | 10 | Maximum days between entries |
 
@@ -39,6 +39,7 @@ Prompts are stored in `prompts/` as YAML files with embedded Jinja2 templates:
 |------|---------|
 | `prompts/persona_generation.yaml` | Template for creating personas |
 | `prompts/journal_entry.yaml` | Template for journal entries |
+| `prompts/nudge_decision.yaml` | Template for LLM-based nudge classification |
 | `prompts/nudge_generation.yaml` | Template for generating nudges |
 | `prompts/nudge_response.yaml` | Template for persona responses |
 
@@ -47,8 +48,7 @@ Prompts are stored in `prompts/` as YAML files with embedded Jinja2 templates:
 | Variable | Purpose |
 |----------|---------|
 | `SCHWARTZ_BANNED_TERMS` | Terms that must not appear in output |
-| `HEDGING_PATTERNS` | Regex for detecting tension |
-| `decide_nudge()` | Rule-based nudge decision logic |
+| `decide_nudge_llm()` | LLM-based nudge decision logic |
 
 ---
 
@@ -130,8 +130,8 @@ TaskOutput tool call:
 
 Read and internalize:
 - Both config YAML files
-- The prompt templates from `prompts/` folder
-- The `decide_nudge()` function logic from `notebooks/journal_nudge.ipynb`
+- The prompt templates from `prompts/` folder (including `nudge_decision.yaml` for LLM-based nudge classification)
+- The `decide_nudge_llm()` function logic from `notebooks/journal_nudge.ipynb`
 
 ### 2. Create Log Directory
 
@@ -209,7 +209,8 @@ Each subagent receives everything needed to generate a complete persona with all
    - Prompt templates from `prompts/` folder
 
 4. **Nudge rules**:
-   - `decide_nudge()` logic from notebook
+   - `decide_nudge_llm()` logic from notebook (LLM-based classification)
+   - `prompts/nudge_decision.yaml` for semantic entry classification
    - Nudge generation instructions from `prompts/nudge_generation.yaml`
 
 5. **Response parameters**:
@@ -230,15 +231,16 @@ Each subagent receives everything needed to generate a complete persona with all
 For each entry date:
   2. Randomly select tone/verbosity/reflection_mode
   3. Generate entry content (with accumulated context from prior entries)
-  4. Apply decide_nudge() rules to determine if nudge needed
-  5. If nudge: generate nudge text
-  6. If nudge: use Bash for random response decision:
+  4. Check session cap (2+ nudges in last 3 entries → no nudge)
+  5. If not capped: call LLM with nudge_decision_prompt to classify entry
+  6. If nudge category returned: generate nudge text
+  7. If nudge generated: use Bash for random response decision:
      python3 -c "import random; print(random.random() < [response_probability])"
-  7. If Bash returns True: generate response using weighted response_mode
-  8. Store entry result, continue to next date
+  8. If Bash returns True: generate response using weighted response_mode
+  9. Store entry result, continue to next date
 
-9. Write persona_XXX.md log file using Write tool
-10. Return summary JSON with persona name + stats (for orchestrator report)
+10. Write persona_XXX.md log file using Write tool
+11. Return summary JSON with persona name + stats (for orchestrator report)
 ```
 
 **Bash-Based Randomness:**
@@ -335,15 +337,18 @@ Print:
 
 ## Quick Reference: Nudge Decision Tree
 
-From `decide_nudge()` in notebook (uses **content-only signals**, no metadata):
+From `decide_nudge_llm()` in notebook — uses LLM classification instead of regex patterns:
 
 ```
-1. Session cap hit? (2+ nudges in last 3 entries) → No nudge
-2. Entry too vague? (<15 words, no concrete details) → "clarification"
-3. Hedging language detected? ("sort of", "I guess", "maybe") → "tension_surfacing"
-4. Random gate (base_probability from config, ~40%) → "elaboration"
-5. Otherwise → No nudge
+1. Session cap hit? (2+ nudges in last 3 entries) → No nudge (code-based policy)
+2. LLM classifies entry into one of:
+   - "no_nudge" — Entry is complete and grounded
+   - "clarification" — Entry too vague to understand
+   - "elaboration" — Solid entry with unexplored depth
+   - "tension_surfacing" — Hints at unresolved conflict
 ```
+
+The LLM prompt (`prompts/nudge_decision.yaml`) provides semantic criteria for each category, enabling detection of nuanced vagueness, hedging language, and tension that regex patterns would miss.
 
 > **Note**: Grounding nudges were removed—they relied on `reflection_mode` metadata unavailable in production. See `pipeline_specs.md` for details.
 
@@ -388,7 +393,7 @@ After all entries:
 5. Write persona_XXX.md log file using Write tool
 6. Return summary JSON with stats
 
-[Include full prompt templates and decide_nudge() logic here]
+[Include full prompt templates and decide_nudge_llm() logic here]
 ```
 
 Then invoke with `subagent_type: "persona-pipeline"` instead of `"general-purpose"`.

@@ -1,0 +1,51 @@
+name: nudge_decision
+description: Classify journal entry to decide if/how to nudge
+version: "1.0.0"
+
+input_variables:
+  - entry_content
+  - entry_date
+  - previous_entries  # Optional list of {date, content} dicts
+
+template: |
+  You are analyzing a journal entry to decide if a follow-up question would be helpful.
+
+  ## Entry
+  Date: {{ entry_date }}
+  Content: {{ entry_content }}
+  {% if previous_entries %}
+  Recent entries:
+  {% for prev in previous_entries %}
+  - {{ prev.date }}: {{ prev.content[:100] }}{% if prev.content|length > 100 %}...{% endif %}
+  {% endfor %}
+  {% endif %}
+
+  ## Decision Criteria
+  Classify this entry into ONE of four categories:
+
+  1. **no_nudge** — Entry is complete and grounded. It has:
+     - Specific people, places, events, or actions
+     - Clear emotional context
+     - Nothing left unsaid
+
+  2. **clarification** — Entry is too vague to understand. Signs:
+     - Very short with no concrete details
+     - Abstract or generic statements
+     - "Had a day" / "Things happened" / "Feeling stuff"
+
+  3. **elaboration** — Entry is solid but has unexplored depth. Signs:
+     - Mentions something interesting in passing
+     - Ends abruptly after a meaningful moment
+     - Has a "dangling thread" worth pulling
+
+  4. **tension_surfacing** — Entry hints at unresolved conflict. Signs:
+     - Hedging language ("sort of", "I guess", "fine", "whatever")
+     - Contradictions or qualifications
+     - Emotional words followed by dismissal
+
+  ## Output
+  Return ONLY valid JSON:
+  {
+    "decision": "no_nudge|clarification|elaboration|tension_surfacing",
+    "reason": "Brief explanation (10-20 words)"
+  }

@@ -62,6 +62,7 @@ def get_prompt_metadata(name: str) -> dict:
 # Pre-load commonly used prompts for convenient imports
 persona_generation_prompt = load_prompt("persona_generation")
 journal_entry_prompt = load_prompt("journal_entry")
+nudge_decision_prompt = load_prompt("nudge_decision")
 nudge_generation_prompt = load_prompt("nudge_generation")
 nudge_response_prompt = load_prompt("nudge_response")
 
@@ -70,6 +71,7 @@ __all__ = [
     "get_prompt_metadata",
     "persona_generation_prompt",
     "journal_entry_prompt",
+    "nudge_decision_prompt",
     "nudge_generation_prompt",
     "nudge_response_prompt",
 ]
