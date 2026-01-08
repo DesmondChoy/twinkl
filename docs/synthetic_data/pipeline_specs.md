@@ -122,6 +122,40 @@ These states are already captured implicitly through:
 
 This leaner approach lets journal content emerge organically from persona context rather than forcing artificial categories.
 
+## Entry Count Distribution: Training Data Diversity
+
+### Why Variable Entry Counts Matter
+
+If all synthetic personas have the same number of entries (e.g., all 5), the VIF may:
+- **Overfit to medium-depth histories** — assumes it always has 3+ prior entries
+- **Fail at cold start** — doesn't learn to handle uncertainty with sparse data
+- **Underutilize long histories** — never sees patterns that emerge over 10+ entries
+
+### Production Reality
+
+| User Type | Typical Entry Count | Prevalence |
+|-----------|---------------------|------------|
+| New users (cold start) | 1-3 entries | High |
+| Active users | 5-10 entries | Medium |
+| Power users | 15-30+ entries | Low |
+| Churned users | 2-5 entries | High |
+
+### Minimum Entry Requirements
+
+| VIF Capability | Minimum Entries | Rationale |
+|----------------|-----------------|-----------|
+| Crash detection | 2+ | Needs V_{t-1} vs V_t comparison |
+| State vector window | 3+ | Uses sliding window of N=3 |
+| Session cap (nudges) | 4+ | "2 nudges in last 3 entries" needs depth |
+| Rut detection | ~8-10 | Requires 3+ consecutive weeks |
+
+### Recommended Approach
+
+Use `MIN_ENTRIES=3` and `MAX_ENTRIES=10` with uniform random selection per persona. This ensures:
+- Minimum of 3 entries for session cap to be meaningful
+- Maximum of 10 covers rut detection window
+- Variable counts train the VIF to handle uncertainty gracefully with sparse data
+
 ---
 
 # Two-Way Conversational Journaling (Nudging System)
