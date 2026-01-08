@@ -14,7 +14,9 @@ Journals should be:
 
 # Implementation
 
-See `notebooks/journal_gen.ipynb` for the working implementation.
+**Primary generation**: Use `docs/synthetic_data/claude_gen_instructions.md` with Claude Code for parallel subagent generation.
+
+**Experimentation**: Use `notebooks/journal_gen.ipynb` or `notebooks/journal_nudge.ipynb` for prompt iteration and testing.
 
 ## Configuration Files
 
@@ -211,55 +213,57 @@ Rather than using a post-hoc blacklist to reject bad nudges, we bake voice guida
 
 ## Trigger Logic
 
-### Decision Tree
+### Decision Tree (LLM-Based Classification)
 
 ```
 Entry Received
      │
      ▼
-[Session cap: 2+ nudges in last 3 entries?] ──YES──► Skip (anti-annoyance)
+[Session cap: 2+ nudges in last 3 entries?] ──YES──► Skip (anti-annoyance, code-based)
      │
     NO
      ▼
-[Too vague to score?] ──YES──► Clarification Nudge
+[LLM classifies entry using nudge_decision.yaml prompt]
      │
-    NO
-     ▼
-[Hedging language detected?] ──YES──► Tension-Surfacing Nudge
+     ├──► "no_nudge" — Entry is complete and grounded → Skip
      │
-    NO
-     ▼
-[Random gate: 40%] ──PASS──► Elaboration Nudge
+     ├──► "clarification" — Entry too vague to understand → Clarification Nudge
      │
-   FAIL
-     ▼
-Skip nudge (stay silent)
+     ├──► "elaboration" — Solid entry with unexplored depth → Elaboration Nudge
+     │
+     └──► "tension_surfacing" — Hints at unresolved conflict → Tension-Surfacing Nudge
 ```
 
-> **Note**: The decision tree uses **content-only signals**. All synthetic metadata dependencies (tone, verbosity, reflection_mode) have been removed to ensure the logic works identically at inference time. See [Lesson Learned: Metadata Leakage](#lesson-learned-metadata-leakage-in-synthetic-data-generation).
+> **Note**: The decision tree uses **content-only signals**. The session cap is enforced in code, then LLM classification handles semantic analysis. All synthetic metadata dependencies (tone, verbosity, reflection_mode) have been removed. See [Lesson Learned: Metadata Leakage](#lesson-learned-metadata-leakage-in-synthetic-data-generation).
 
-### Specific Trigger Conditions
+> **Design change**: The original rule-based approach (word count thresholds, hedging regex, random gates) was replaced with LLM-based classification for better semantic understanding. The `prompts/nudge_decision.yaml` template provides criteria for each category.
 
-| Condition | Detection Method | Action |
-|-----------|------------------|--------|
-| Too vague to score | Word count < 15 AND no concrete nouns/verbs | Clarification nudge |
-| Potential value tension | Hedging language ("sort of", "I guess", "maybe") | Tension-surfacing nudge |
+### Classification Criteria (LLM-Based)
 
-All trigger conditions use **content-only signals** available at inference time. No synthetic metadata (tone, verbosity, reflection_mode) is used.
+The LLM evaluates entries against semantic criteria defined in `prompts/nudge_decision.yaml`:
+
+| Category | Semantic Criteria |
+|----------|-------------------|
+| `no_nudge` | Entry is complete, grounded, and provides sufficient signal |
+| `clarification` | Entry too vague—abstract emotions, vague pronouns, missing temporal anchors |
+| `elaboration` | Substantive but surface-level—action without reflection, outcome without process |
+| `tension_surfacing` | Contains hedging, contradictions, justification language, or unresolved conflict |
+
+All classification uses **content-only signals** available at inference time. No synthetic metadata (tone, verbosity, reflection_mode) is used.
 
 ### Anti-Annoyance Rules
 
 1. **Frequency cap**: Maximum 1 nudge per entry (never chain nudges)
-2. **Session cap**: If 2 nudges in last 3 entries, skip
-3. **Randomization**: Even when conditions are met, apply a 40% sampling gate to avoid predictability
+2. **Session cap**: If 2 nudges in last 3 entries, skip (code-based policy applied before LLM classification)
 
-> **Note**: The original design included "Mood sensitivity" (skip nudging for exhausted/emotional entries based on `tone`). This was removed because `tone` is synthetic generation metadata unavailable in production. See [Lesson Learned: Metadata Leakage](#lesson-learned-metadata-leakage-in-synthetic-data-generation).
+> **Note**: The original design included "Mood sensitivity" (skip nudging for exhausted/emotional entries based on `tone`) and a 40% random gate. These were removed—`tone` is synthetic metadata unavailable in production, and LLM classification provides more nuanced selection than random sampling. See [Lesson Learned: Metadata Leakage](#lesson-learned-metadata-leakage-in-synthetic-data-generation).
 
-## Implementation: Hybrid Approach
+## Implementation: LLM-Based Approach
 
-**Rules** decide *whether* to nudge and *which category*.
-**LLM** generates the *natural language* nudge (with voice guidance baked into the prompt).
-**Rules** validate the output (length only—voice quality is handled by prompt guidance).
+**Code** enforces session cap (2+ nudges in last 3 entries → skip).
+**LLM** classifies entry into `no_nudge`, `clarification`, `elaboration`, or `tension_surfacing` using `prompts/nudge_decision.yaml`.
+**LLM** generates the *natural language* nudge (with voice guidance baked into `prompts/nudge_generation.yaml`).
+**Code** validates output length (voice quality is handled by prompt guidance).
 
 ### LLM Nudge Generation Prompt (Template)
 
@@ -401,7 +405,7 @@ async def generate_conversational_entry(
     )
 
     # Step 2: Decide whether to nudge (content-only signals)
-    should_nudge, nudge_category, trigger_reason = decide_nudge(
+    should_nudge, nudge_category, trigger_reason = decide_nudge_llm(
         entry=entry_result.entry,
         previous_entries=previous_entries,
         config=config
@@ -451,18 +455,13 @@ Add to `config/synthetic_data.yaml`:
 
 ```yaml
 nudge:
-  # Probability of generating a nudge when conditions are met
-  base_probability: 0.4
-
   # Probability that the persona responds to a nudge
   response_probability: 0.7
 
-  # Nudge category probabilities (when nudging is triggered)
-  # Note: "grounding" was removed - relied on reflection_mode metadata
-  category_weights:
-    clarification: 0.30
-    elaboration: 0.40
-    tension_surfacing: 0.30
+  # Note: category_weights were removed - LLM classification now determines
+  # nudge category semantically using prompts/nudge_decision.yaml
+  # Note: base_probability (40% random gate) was removed - LLM classification
+  # provides more nuanced selection than random sampling
 
   # Response modes (simplified from original 5 to 3)
   response_modes:
@@ -478,6 +477,8 @@ nudge:
 ```
 
 > **Note**: The original design had 5 response modes including "Elaborating with context" (25%) and "Brief acknowledgment" (5%). These were removed to reduce complexity - the 5% mode was almost never triggered, and "Elaborating with context" overlapped with "Answering directly".
+
+> **Design change**: The original `category_weights` and `base_probability` were removed. LLM-based classification now determines nudge category semantically, providing better signal detection than probabilistic selection.
 
 ## Judge Scoring Updates
 
@@ -560,7 +561,7 @@ This allows the Critic to learn:
 - [x] Set up output logging system (directory structure, utility functions)
 - [x] Add `logs/synthetic_data/` to `.gitignore`
 - [x] Add nudge config to `config/synthetic_data.yaml`
-- [x] Implement nudge decision logic (rule-based triggers)
+- [x] Implement nudge decision logic (LLM-based classification)
 - [x] Add `NudgeResult`, `ConversationalEntry` data models
 
 **Phase 2 (Generation)**: ✅ Complete
@@ -594,7 +595,7 @@ During initial implementation, the nudge decision logic used **synthetic generat
 ### What Was Initially Implemented (Incorrect)
 
 ```python
-def decide_nudge(
+def decide_nudge_llm(
     entry: JournalEntry,
     reflection_mode: str,
     tone: str,  # ← PROBLEM: Synthetic metadata
@@ -636,11 +637,11 @@ The `tone` parameter was randomly assigned *before* entry generation as an instr
 
 3. **Simplified response modes**: Reduced from 5 to 3 modes, removing near-zero probability options.
 
-4. **Removed all synthetic metadata**: The `decide_nudge()` function signature was simplified to only accept content-based inputs:
+4. **Removed all synthetic metadata**: The `decide_nudge_llm()` function signature was simplified to only accept content-based inputs:
 
 ```python
 # Step 2: Decide whether to nudge (content-only signals)
-should_nudge, nudge_category, trigger_reason = decide_nudge(
+should_nudge, nudge_category, trigger_reason = decide_nudge_llm(
     entry=entry,
     previous_entries=previous_entries,
     config=config,
@@ -658,7 +659,7 @@ All synthetic metadata dependencies have been removed from the nudge decision lo
 | `reflection_mode == "Unsettled"` requirement | Synthetic generation instruction, not observable |
 | `reflection_mode == "Grounded"` check | Synthetic generation instruction, not observable |
 
-**Current implementation**: The `decide_nudge()` function now uses **only** content-based signals:
+**Current implementation**: The `decide_nudge_llm()` function now uses **only** content-based signals:
 - Entry word count
 - Presence of concrete details (nouns/verbs)
 - Hedging language patterns

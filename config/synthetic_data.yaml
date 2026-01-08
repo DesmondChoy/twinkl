@@ -49,19 +49,13 @@ journal_entries:
     - "Neutral"
 
 nudge:
-  # Probability of generating a nudge when conditions are met
-  base_probability: 0.4
-
   # Probability that the persona responds to a nudge
   response_probability: 0.7
 
-  # Nudge category probabilities (when nudging is triggered)
-  # Note: "grounding" was removed - it relied on reflection_mode metadata
-  # which is synthetic generation data not available in production
-  category_weights:
-    clarification: 0.30
-    elaboration: 0.40
-    tension_surfacing: 0.30
+  # Note: base_probability (40% random gate) was removed - LLM classification
+  # now determines nudge category semantically using prompts/nudge_decision.yaml
+  # Note: category_weights were removed - LLM classification provides more
+  # nuanced selection than probabilistic category assignment
 
   # Response modes (for variety and realism)
   response_modes:

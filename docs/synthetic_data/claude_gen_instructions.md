@@ -4,6 +4,8 @@ Instructions for Claude Code to generate synthetic conversational journal data u
 
 **No API keys required** - this uses Claude Code's native Task tool, not the external Claude Agent SDK.
 
+**This is the primary method for generating synthetic data at scale.** The Jupyter notebooks (`notebooks/journal_gen.ipynb`, `notebooks/journal_nudge.ipynb`) are for experimentation and prompt iteration only.
+
 ---
 
 ## Configuration Variables
@@ -12,7 +14,7 @@ Instructions for Claude Code to generate synthetic conversational journal data u
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `NUM_PERSONAS` | 5 | Number of personas to generate |
+| `NUM_PERSONAS` | 20 | Number of personas to generate |
 | `NUM_ENTRIES_PER_PERSONA` | 5 | Journal entries per persona |
 | `START_DATE` | 2025-12-01 | First entry date (YYYY-MM-DD) |
 | `MIN_DAYS_BETWEEN_ENTRIES` | 2 | Minimum days between entries |
@@ -132,6 +134,7 @@ Read and internalize:
 - Both config YAML files
 - The prompt templates from `prompts/` folder (including `nudge_decision.yaml` for LLM-based nudge classification)
 - The `decide_nudge_llm()` function logic from `notebooks/journal_nudge.ipynb`
+- **Extract `SCHWARTZ_BANNED_TERMS` list from notebook to embed in subagent prompts**
 
 ### 2. Create Log Directory
 
@@ -149,6 +152,31 @@ For each of `{{NUM_PERSONAS}}` personas, randomly select:
 - 1-2 Schwartz values
 - Look up value elaborations from `config/schwartz_values.yaml`
 - Generate `{{NUM_ENTRIES_PER_PERSONA}}` dates starting from `{{START_DATE}}`
+
+**Random Selection via Bash** (for true randomness):
+```bash
+# Select random age bracket
+python3 -c "import random; print(random.choice(['18-24', '25-34', '35-44', '45-54', '55+']))"
+
+# Select random profession (read actual list from config)
+python3 -c "import random; print(random.choice(['Teacher', 'Engineer', 'Nurse', 'Artist', ...]))"
+
+# Select 1-2 Schwartz values
+python3 -c "import random; vals=['Self-Direction','Stimulation','Hedonism','Achievement','Power','Security','Conformity','Tradition','Benevolence','Universalism']; k=random.randint(1,2); print(random.sample(vals,k))"
+```
+
+**Date Generation via Bash**:
+```bash
+# Generate random gap between entries (repeat for each gap)
+python3 -c "import random; print(random.randint({{MIN_DAYS_BETWEEN_ENTRIES}}, {{MAX_DAYS_BETWEEN_ENTRIES}}))"
+```
+
+Example for 3 entries starting 2025-12-01:
+- Entry 1: 2025-12-01 (START_DATE)
+- Gap 1: `random.randint(2, 10)` → e.g., 5 days
+- Entry 2: 2025-12-06
+- Gap 2: `random.randint(2, 10)` → e.g., 3 days
+- Entry 3: 2025-12-09
 
 ### 4. Launch All Persona Subagents
 
@@ -205,7 +233,7 @@ Each subagent receives everything needed to generate a complete persona with all
 
 3. **Generation parameters**:
    - Tone, verbosity, reflection_mode options from config
-   - Banned terms from `SCHWARTZ_BANNED_TERMS` (in notebook)
+   - Banned terms extracted from notebook and embedded in this prompt
    - Prompt templates from `prompts/` folder
 
 4. **Nudge rules**:
@@ -232,7 +260,7 @@ For each entry date:
   2. Randomly select tone/verbosity/reflection_mode
   3. Generate entry content (with accumulated context from prior entries)
   4. Check session cap (2+ nudges in last 3 entries → no nudge)
-  5. If not capped: call LLM with nudge_decision_prompt to classify entry
+  5. If not capped: classify entry internally using nudge_decision_prompt criteria
   6. If nudge category returned: generate nudge text
   7. If nudge generated: use Bash for random response decision:
      python3 -c "import random; print(random.random() < [response_probability])"
@@ -242,6 +270,8 @@ For each entry date:
 10. Write persona_XXX.md log file using Write tool
 11. Return summary JSON with persona name + stats (for orchestrator report)
 ```
+
+**Note on LLM Classification**: The subagent itself (Claude) performs the nudge classification internally using the `nudge_decision.yaml` template as guidance. No external API call is needed—the subagent evaluates the entry against the classification criteria and returns the appropriate category.
 
 **Bash-Based Randomness:**
 LLMs cannot generate true randomness. The subagent MUST use the Bash tool for probabilistic decisions:
@@ -289,6 +319,17 @@ Write tool call:
 
 *(Or if persona didn't respond:)*
 *(No response - persona did not reply to nudge)*
+
+---
+
+## Summary Statistics
+| Metric | Value |
+|--------|-------|
+| Total Entries | [count] |
+| Nudges Generated | [count] |
+| Responses Given | [count] |
+| Nudge Categories | clarification ([n]), elaboration ([n]), tension_surfacing ([n]) |
+| Response Modes | Answering directly ([n]), Deflecting ([n]), Revealing deeper ([n]) |
 ```
 
 **Output format (summary JSON from subagent for orchestrator):**
@@ -362,7 +403,7 @@ Nudge generated?
               │
               └─Output "False"─→ No response (response: null)
 ```
-Note: Subagent reads `response_probability` from `config/synthetic_data.yaml` before running Bash command.
+Note: The orchestrator extracts `response_probability` from `config/synthetic_data.yaml` and embeds it in the subagent prompt.
 
 ---
 

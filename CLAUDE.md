@@ -32,17 +32,15 @@ Notebooks are in `notebooks/` and should be run from the project root after acti
 
 ### Current Implementation: Synthetic Data Generation
 
-The project is currently focused on generating synthetic training data for the VIF. Two Jupyter notebooks drive this:
+The project generates synthetic training data for the VIF using two approaches:
 
-1. **`notebooks/journal_gen.ipynb`** — One-way journal generation
-   - Generates synthetic personas with Schwartz value profiles
-   - Creates longitudinal journal entries that exhibit value drift/conflicts
-   - Parallel async pipeline using `AsyncOpenAI`
+**Primary: Claude Code Subagents**
+- `docs/synthetic_data/claude_gen_instructions.md` — Instructions for Claude Code to generate synthetic data at scale using parallel subagents
+- Outputs to `logs/synthetic_data/<timestamp>/`
 
-2. **`notebooks/journal_nudge.ipynb`** — Two-way conversational journaling
-   - Extends journal_gen with a nudging system
-   - Rule-based decision logic determines when/how to nudge
-   - LLM generates natural language nudges with voice guidance baked into prompts
+**Experimentation: Jupyter Notebooks** (for prompt iteration and testing)
+- `notebooks/journal_gen.ipynb` — One-way journal generation
+- `notebooks/journal_nudge.ipynb` — Two-way conversational journaling with nudges
 
 ### Configuration Files
 
