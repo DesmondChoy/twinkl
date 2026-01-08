@@ -1,201 +1,251 @@
-# VIF System Architecture Diagrams
+## Overall ML Pipeline
 
-This document provides visual system architecture diagrams that complement the existing VIF documentation:
 
-- `VIF_01_Concepts_and_Roadmap.md`
-- `VIF_02_System_Architecture.md`
-- `VIF_03_Model_Training.md`
-- `VIF_04_Uncertainty_Logic.md`
-- `VIF_Example.md`
+### 🔄 VIF Pipeline: Models & Outputs at Each Step
 
-The diagrams are descriptive, not prescriptive code; they are meant to help readers quickly understand how the offline training pipeline, online inference loop, and Critic–Coach interaction fit together.
+```mermaid
+flowchart TB
+    subgraph offline["OFFLINE (Training Data Generation)"]
+        generator[Generator<br/>LLM]
+        encoder1[Text Encoder<br/>SBERT<br/>Frozen]
+        judge[Judge<br/>LLM-as-Judge]
+        stateBuilder[State Construction<br/>Sliding Window + History]
+        dataset[StateTargetSample<br/>state, target pairs]
+    end
+
+    subgraph training["TRAINING (Supervised Learning)"]
+        criticTrain[Critic MLP<br/>2-3 Layer MLP<br/>MC Dropout]
+        trainedModel[Trained Critic Model]
+    end
+
+    subgraph online["ONLINE (User Inference)"]
+        userEntry[User Entry<br/>Text]
+        encoder2[Text Encoder<br/>SBERT<br/>Frozen]
+        critic[Critic Inference<br/>MLP + MC Dropout]
+        driftDetector[Drift Detector<br/>Rule-based Logic]
+        coach[Coach<br/>LLM + RAG]
+    end
+
+    generator -->|"Personas + Entries"| encoder1
+    generator -->|"Entry Text"| judge
+    encoder1 -->|"Embeddings (384-dim)"| stateBuilder
+    judge -->|"Alignment Labels (-1,0,+1)"| stateBuilder
+    stateBuilder -->|"State Vectors"| dataset
+    dataset -->|"Training Data"| criticTrain
+    criticTrain -->|"Trained Weights"| trainedModel
+
+    userEntry -->|"Text"| encoder2
+    encoder2 -->|"Embedding"| critic
+    trainedModel -.->|"Model Weights"| critic
+    critic -->|"Mean + Variance (10-dim)"| driftDetector
+    driftDetector -->|"crash/rut/drift flags"| coach
+    coach -->|"Reflections"| userOut[User Feedback]
+```
+
 
 ---
 
-## 1. High-Level VIF Ecosystem
+## 📋 Detailed Model Breakdown
 
-This diagram shows the main components and how they relate over offline training and online usage.
+### **Step 1: Text Encoder (Frozen)**
+| Attribute | Value |
+|-----------|-------|
+| **Model** | Sentence-BERT (e.g., `all-MiniLM-L6-v2`) |
+| **Type** | Pretrained transformer, **frozen** (no fine-tuning) |
+| **Input** | Raw journal text $T_{u,t}$ |
+| **Output** | Fixed-length embedding $\mathbf{e}_{u,t} \in \mathbb{R}^{d_e}$ (e.g., 384-dim) |
+| **When Used** | Offline preprocessing of all entries |
+| **Purpose** | Convert text to dense vectors for the Critic |
 
-```mermaid
-flowchart LR
-  subgraph offline[Offline_Training]
-    generator[Generator]
-    judge[Judge_LLM]
-    criticTrain[Critic_Training]
-  end
-
-  subgraph online[Online_Inference]
-    userApp[Twinkl_App]
-    critic[VIF_Critic]
-    coach[Coach_Agent]
-    historyStore[User_History_Store]
-  end
-
-  generator -->|synthetic_journals| judge
-  judge -->|"labeled_alignment_vectors"| criticTrain
-  criticTrain -->|trained_model| critic
-
-  userApp -->|journals,voice| critic
-  critic -->|alignment_scores+uncertainty| historyStore
-  historyStore --> coach
-  critic -->|"triggers(crash/rut/uncertainty)"| coach
-  coach -->|digests,reflections| userApp
 ```
-
-**Key idea:**
-- The **Generator–Judge–Critic** loop runs offline to produce a trained Critic.
-- The **Critic–Coach–UserApp** loop runs online for real users.
+"Skipped gym again, feeling guilty about work deadlines..."
+                    ↓
+              [0.23, -0.41, 0.87, ..., 0.12]  (384 floats)
+```
 
 ---
 
-## 2. Offline Training: Generator–Judge–Critic
+### **Step 2: Generator (LLM)**
+| Attribute | Value |
+|-----------|-------|
+| **Model** | GPT-5-mini (or similar LLM) |
+| **Type** | Large language model, API-based |
+| **Input** | Persona config (age, profession, culture, Schwartz values) + prompts |
+| **Output** | Synthetic `Persona` + `JournalEntry` objects |
+| **When Used** | Dataset creation (training data synthesis) |
+| **Purpose** | Generate diverse, realistic training data |
 
-This diagram expands the offline pipeline described in `VIF_03_Model_Training.md` and `docs/Ideas/Synthetic_data.md`.
+```python
+# Output: Persona
+{
+  "name": "Yuna Park",
+  "age": "31",
+  "profession": "Parent (Stay-at-home)",
+  "culture": "East Asian",
+  "core_values": ["Benevolence", "Universalism"],
+  "bio": "Yuna left her preschool job after her daughter was born..."
+}
 
-```mermaid
-flowchart TD
-  config["Config_Files (schwartz_values,synthetic_data)"]
-  personaGen[Persona_Generator]
-  journalGen[Journal_Generator]
-  judgeLLM[Judge_LLM]
-  dataset[Training_Dataset]
-  criticModel[Critic_MLP]
-
-  config --> personaGen
-  personaGen --> journalGen
-  journalGen -->|synthetic_journals| judgeLLM
-  judgeLLM -->|"alignment_labels(-1,0,1)^K"| dataset
-  dataset --> criticModel
-  criticModel -->|trained_critic| criticModel
+# Output: JournalEntry
+{
+  "date": "2023-10-27",
+  "content": "The food pantry shift ran late again..."
+}
 ```
-
-**Notes:**
-- `Config_Files` includes `config/schwartz_values.yaml` and `config/synthetic_data.yaml`.
-- The Judge turns rich LLM reasoning into discrete alignment vectors; the Critic distills this into a fast numeric model.
 
 ---
 
-## 3. Online Inference: State Construction & Critic Flow
+### **Step 3: Judge (LLM-as-Judge) — THE TEACHER**
+| Attribute | Value |
+|-----------|-------|
+| **Model** | LLM (GPT-4 / GPT-5) |
+| **Type** | Large language model with structured output |
+| **Input** | Journal entry text + Persona profile + Value rubrics |
+| **Output** | **Alignment vector** $\hat{\vec{a}}_{u,t} \in \{-1, 0, +1\}^{10}$ |
+| **When Used** | Offline labeling of all synthetic entries |
+| **Purpose** | Create ground-truth training labels for the Critic |
 
-This diagram summarises Section 2 of `VIF_02_System_Architecture.md`.
+```python
+# Input: Entry text + persona context
+# Output: Per-dimension alignment scores
 
-```mermaid
-flowchart TD
-  userInput[User_Entry]
-  textEnc[Text_Encoder]
-  audioEnc[Audio_Encoder]
-  physioEnc[Physio_Encoder]
-  profile[z_u_Profile]
-  historyStats[History_Stats]
-  stateBuilder[State_Builder]
-  critic[VIF_Critic]
-  weeklyAgg[Weekly_Aggregator]
-  triggerLogic[Trigger_Logic]
-
-  userInput --> textEnc
-  userInput --> audioEnc
-  userInput --> physioEnc
-
-  textEnc --> stateBuilder
-  audioEnc --> stateBuilder
-  physioEnc --> stateBuilder
-  profile --> stateBuilder
-  historyStats --> stateBuilder
-
-  stateBuilder --> critic
-  critic -->|alignment_means+variances| weeklyAgg
-  weeklyAgg --> triggerLogic
+{
+  "Self-Direction": 0,    # Neutral
+  "Stimulation": 0,       # Neutral
+  "Hedonism": -1,         # Misaligned (neglecting pleasure/rest)
+  "Achievement": +1,      # Aligned (work focus)
+  "Power": 0,             # Neutral
+  "Security": -1,         # Misaligned (financial stress mentioned)
+  "Conformity": 0,        # Neutral
+  "Tradition": 0,         # Neutral
+  "Benevolence": +1,      # Aligned (helping family)
+  "Universalism": 0       # Neutral
+}
 ```
 
-**Notes:**
-- `State_Builder` implements the sliding window design (current + recent entries, time gaps, history statistics, profile).
-- `Trigger_Logic` is where crash/rut and uncertainty thresholds are applied.
+**Rubric (3-point categorical):**
+- **-1 (Misaligned):** Entry actively conflicts with this value
+- **0 (Neutral):** Entry is irrelevant or maintains status quo
+- **+1 (Aligned):** Entry actively supports this value
 
 ---
 
-## 4. Critic vs Coach Separation
+### **Step 4: Critic (MLP with MC Dropout) — THE STUDENT**
+| Attribute | Value |
+|-----------|-------|
+| **Model** | Multi-layer Perceptron (2-3 hidden layers) |
+| **Type** | Supervised regressor, **trained from scratch** |
+| **Input** | State vector $s_{u,t}$ (see below) |
+| **Output** | Predicted alignment $\hat{\vec{a}}_{u,t} \in [-1, 1]^{10}$ + uncertainty $\vec{\sigma}_{u,t}$ |
+| **When Used** | Real-time inference on user entries |
+| **Purpose** | Fast, uncertainty-aware alignment estimation |
 
-This diagram emphasizes the separation of numeric evaluation (Critic) and explanation (Coach), as described in `VIF_02_System_Architecture.md` and `VIF_Example.md`.
-
-```mermaid
-flowchart LR
-  subgraph criticSide[Critic_Path]
-    state[s_u_t]
-    critic[VIF_Critic]
-    weeklyAgg[Weekly_Aggregator]
-    triggers[Crash_Rut_Triggers]
-  end
-
-  subgraph coachSide[Coach_Path]
-    retriever[Journal_Retriever]
-    explainer[Coach_LLM]
-  end
-
-  state --> critic --> weeklyAgg --> triggers
-  triggers -->|dimension,pattern,confidence| retriever
-  retriever -->|evidence_snippets| explainer
-  explainer -->|message| userOut[User_View]
+**State Vector Input** ($\approx$1,174 dimensions for POC):
+```
+s_{u,t} = Concat[
+    e_{t},      # Current entry embedding (384)
+    e_{t-1},    # Previous entry embedding (384)  
+    e_{t-2},    # Entry before that (384)
+    Δt_{t},     # Days since last entry (1)
+    Δt_{t-1},   # Days between t-1 and t-2 (1)
+    EMA[10],    # Per-dimension alignment EMA (10)
+    w_u[10]     # User value weights (10)
+]
 ```
 
-**Key properties:**
-- The **Critic** only uses recent sequential state and outputs numeric signals.
-- The **Coach** pulls from the full history using retrieval and turns signals into human‑friendly reflections.
+**Output (with MC Dropout):**
+```python
+# Run N=50 forward passes with dropout active
+predictions = [model(s_ut) for _ in range(50)]
+
+# Per-dimension results
+{
+  "mean": [0.72, -0.41, 0.15, ...],      # μ for each dimension
+  "std":  [0.08, 0.31, 0.12, ...],       # σ (uncertainty) for each dimension
+}
+```
+
+**Architecture:**
+```
+Input (1174) → Dense(512) + ReLU + Dropout(0.2)
+            → Dense(256) + ReLU + Dropout(0.2)
+            → Dense(10) Linear output
+```
 
 ---
 
-## 5. Uncertainty & Dual-Trigger Logic
+### **Step 5: Drift Detection (Deterministic Rules)**
+| Attribute | Value |
+|-----------|-------|
+| **Model** | **None** — pure rule-based logic |
+| **Type** | Threshold-based triggers |
+| **Input** | Critic outputs + user profile $w_u$ |
+| **Output** | Boolean flags: `crash`, `rut`, `identity_drift` |
+| **When Used** | After Critic inference, before Coach |
+| **Purpose** | Decide whether to trigger feedback |
 
-This diagram captures the logic from `VIF_04_Uncertainty_Logic.md`.
+**Example Rules:**
+```python
+# Crash Detection (sudden drop)
+if (V_prev[j] - V_curr[j] > δ_crash) and (σ_curr[j] < ε):
+    trigger_crash(dimension=j)
 
-```mermaid
-flowchart TD
-  critic["VIF_Critic (MC_Dropout)"]
-  mcSamples[MC_Samples]
-  stats[Mean_And_Variance]
-  weeklyAgg[Weekly_Aggregator]
-  crashCheck[Crash_Check]
-  rutCheck[Rut_Check]
-  uncertaintyGate[Uncertainty_Gate]
-  decision[Decision]
+# Rut Detection (chronic low)
+if (V_curr[j] < τ_low) and (consecutive_weeks >= 3) and (σ_curr[j] < ε):
+    trigger_rut(dimension=j)
 
-  critic --> mcSamples
-  mcSamples --> stats
-  stats --> weeklyAgg
-
-  weeklyAgg --> crashCheck
-  weeklyAgg --> rutCheck
-
-  crashCheck --> uncertaintyGate
-  rutCheck --> uncertaintyGate
-  stats --> uncertaintyGate
-
-  uncertaintyGate --> decision
+# Profile-weighted drift
+drift_score = w_u · max(0, -â_ut)  # Weighted misalignment
 ```
-
-**Outcomes at `Decision`:**
-- **Critique**: crash or rut is detected and uncertainty is below threshold.
-- **Clarifying_Question**: patterns are unclear and uncertainty is high.
-- **No_Action**: no significant pattern or user has been contacted recently.
 
 ---
 
-## 6. Sarah’s Journey View (Lifecycle Overview)
-
-Finally, this diagram ties the stages from `VIF_Example.md` together.
-
-```mermaid
-flowchart LR
-  offline[Offline_Training]
-  onboard[Onboarding]
-  stable[Stable_Alignment]
-  crash[Crash_Week]
-  rut[Rut_Weeks]
-  grief[High_Uncertainty_Grief]
-
-  offline --> onboard --> stable --> crash --> rut --> grief
+### **Step 6: Coach (LLM + RAG)**
+| Attribute | Value |
+|-----------|-------|
+| **Model** | LLM (GPT-4 / GPT-5) + Vector retrieval |
+| **Type** | Retrieval-Augmented Generation |
+| **Input** | Critic flags + retrieved past entries + user profile |
+| **Output** | Natural language reflection/prompt for the user |
+| **When Used** | Only when Critic triggers a crash/rut/drift event |
+| **Purpose** | Generate evidence-based, gentle accountability feedback |
 
 ```
+Critic flags: "Benevolence rut detected (3 weeks)"
+                    ↓
+RAG retrieves: Past entries mentioning family, helping others
+                    ↓
+Coach output: "You've mentioned wanting to be there for your 
+              sister three times this month, but your entries 
+              suggest work has been pulling you away. Is this 
+              a trade-off you're okay with right now?"
+```
 
-**Interpretation:**
-- The **components** (Generator, Judge, Critic, Coach) stay the same; what changes by stage is **which ones are active** and how the triggers fire.
-- This mirrors the table at the end of `VIF_Example.md` and can be used in slides to explain the system lifecycle.
+---
+
+## 📊 Summary Table
+
+| Step | Model | Training | Input | Output |
+|------|-------|----------|-------|--------|
+| **1. Encode** | SBERT | Pretrained (frozen) | Text | Embedding ∈ ℝ³⁸⁴ |
+| **2. Generate** | GPT-5-mini | N/A (inference) | Config | Personas + Entries |
+| **3. Judge** | GPT-4/5 | N/A (inference) | Text + Profile | {-1,0,+1}¹⁰ labels |
+| **4. Critic** | MLP | **Trained** (supervised) | State vector | μ, σ ∈ ℝ¹⁰ |
+| **5. Detect** | Rules | N/A | Critic output | crash/rut flags |
+| **6. Coach** | GPT + RAG | N/A (inference) | Flags + history | Reflection text |
+
+---
+
+## 🎯 Current Status
+
+| Model | Status |
+|-------|--------|
+| Text Encoder (SBERT) | 🟡 Chosen, not yet integrated |
+| Generator (LLM) | ✅ **Working** in `journal_gen.ipynb` |
+| Judge (LLM) | 🔲 Not implemented |
+| Critic (MLP) | 🔲 Not implemented |
+| Drift Rules | 🔲 Not implemented |
+| Coach (RAG) | 🔲 Not implemented |
+
+
+---
