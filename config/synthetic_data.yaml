@@ -4,6 +4,7 @@ personas:
     - "25-34"
     - "35-44"
     - "45-54"
+    - "55+"
   cultures:
     - "North American"
     - "Western European"
@@ -19,6 +20,8 @@ personas:
     - "Gig Worker"
     - "Parent (Stay-at-home)"
     - "Entrepreneur"
+    - "Teacher"
+    - "Nurse"
   schwartz_values:
     - "Self-Direction"
     - "Stimulation"

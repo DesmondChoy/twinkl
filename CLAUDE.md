@@ -112,6 +112,17 @@ Synthetic data runs are logged to `logs/synthetic_data/<timestamp>/` with:
 - **Naming**: snake_case for variables/functions, PascalCase for classes
 - **Models**: Pydantic `BaseModel` for data structures; explicit JSON schemas for OpenAI structured output
 
+## Planning Mode Behavior
+
+When in planning mode, be proactive and curious by using the `AskUserQuestion` tool to:
+
+1. **Gather requirements upfront** — Before designing a solution, ask structured questions to understand the user's needs, constraints, and preferences
+2. **Clarify ambiguities** — When requirements are unclear or could be interpreted multiple ways, ask rather than assume
+3. **Surface better alternatives** — If you identify a potentially better implementation approach, present options to the user with trade-offs explained
+4. **Validate key decisions** — At architectural decision points (library choice, data structures, API design), confirm direction before proceeding
+
+The goal is collaborative planning — treat the user as a partner in design decisions, not just a recipient of your plan.
+
 ## One-Word Commands
 
 - `$craft`: Generate high-quality conventional commit messages for this session’s changes (do not commit; user reviews first).

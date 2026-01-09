@@ -46,6 +46,17 @@ AI journaling apps (Reflection, Mindsera, Insight Journal, Day One, Pixel Journa
    * **Critic (VIF):** A numeric, uncertainty-aware engine that computes per-value-dimension alignment scores from a sliding window of recent entries. Uses [LLM-as-Judge for reward modeling](VIF/VIF_03_Model_Training.md) and [MC Dropout for epistemic uncertainty](VIF/VIF_04_Uncertainty_Logic.md). Triggers critiques only when confident and detecting significant patterns (sudden crashes or chronic ruts).
    * **Coach:** Activated when the Critic identifies significant patterns — whether problematic (crashes, ruts) or positive (sustained alignment). Uses retrieval-augmented generation (RAG) over the user's full journal history to surface thematic evidence, explain *why* misalignment occurred, and offer reflective prompts or "micro-anchors." For positive patterns, provides occasional evidence-based acknowledgment without gamification. (See [System Architecture](VIF/VIF_02_System_Architecture.md)). For a concrete scenario, see [Worked Example: Sarah's Journey](VIF/VIF_Example.md).
 
+### Prompt Templates
+
+LLM prompts are stored as YAML files with Jinja2 templating in `prompts/`:
+- `persona_generation.yaml` — Generate synthetic personas with value context
+- `journal_entry.yaml` — Generate entries from persona perspective
+- `nudge_decision.yaml` — Classify entries for nudge appropriateness
+- `nudge_generation.yaml` — Generate contextual follow-up nudges
+- `nudge_response.yaml` — Generate persona responses to nudges
+
+Value context is injected from `config/schwartz_values.yaml`, which contains rich psychological elaborations (core motivation, behavioral manifestations, life domain expressions) for each Schwartz dimension.
+
 ## **Product principles**
 
 * Identity-first mini-assessment ("build your inner compass" via 3–5 quick screens of big, tappable cards and tradeoffs) before daily journaling.
@@ -69,7 +80,12 @@ This mini-assessment directly anchors the capstone submodules: the latent dimens
 ## **Core Feature Modules**
 
 * **Weekly alignment coach:** Batch entries, run the reasoning engine, ship a 1-page digest (Pattern Recognition + Reasoning).
-* **Conversational introspection agent:** Live mirroring via agent loop (Perception → Cognition → Action) to highlight contradictions mid-conversation.
+* **Conversational introspection agent:** Live mirroring via agent loop (Perception → Cognition → Action) to highlight contradictions mid-conversation. The system uses a three-category **nudge taxonomy**:
+  - **Clarification** — for vague entries lacking concrete details
+  - **Elaboration** — for surface-level entries with unexplored depth
+  - **Tension-surfacing** — for hedging language or conflicted statements
+
+  Nudge decisions use **LLM-based semantic classification** (not regex/heuristics) to detect when deeper reflection would yield VIF signal. Anti-annoyance logic caps nudges at 2 per 3-entry window. See [pipeline_specs.md](synthetic_data/pipeline_specs.md) for implementation details.
 * **[Adaptive Acoustic Sensor (A3D)](Ideas/A3D.md):** A privacy-first, unsupervised anomaly detection system that learns the user's unique prosodic baseline to flag physiological stress and cognitive dissonance (Intelligent Sensing + Pattern Recognition).
 * **“Map of Me”:** Embed each entry, visualise trajectories, overlay alignment scores (Pattern Recognition + Intelligent Sensing).
 * **Journaling anomaly radar:** After 2–3 weeks of entries establish cadence baselines, a lightweight time-series/anomaly detector tracks check-in gaps, flags “silent weeks,” cites evidence windows, and triggers empathetic nudges (Pattern Recognition + Architecting).
@@ -85,6 +101,9 @@ This mini-assessment directly anchors the capstone submodules: the latent dimens
    * **User value profile:** vector of value weights `w_u ∈ ℝ^K` (normalized, sum to 1), plus narrative descriptions and constraints.
    * **State representation:** sliding window of N recent entry embeddings + time deltas + history stats (EMA of per-dimension alignment, rolling std dev, entry counts).
 5. Implement **[Reward Modeling (LLM-as-Judge)](VIF/VIF_03_Model_Training.md):** For each entry, LLM outputs per-dimension alignment scores (Likert scale normalized to [-1,1]) with rationales and optional confidence scores. Use synthetic personas for initial training/validation.
+
+   > **Status:** Steps 1-5 complete. Synthetic data pipeline operational with Judge labeling producing Parquet training data. Step 6 (lightweight classifiers) deferred pending Critic training results.
+
 6. Tooling: start with API LLM for tagging + reflection, add lightweight classifiers later if needed; keep reasoning layer explainable for XRAI.
 7. Evaluation plan: combine Likert feedback on "felt accurate?" with inter-rater agreement on value tags and stability metrics for the profile.
 8. Instrument the inspiration feed so each recommendation decision (accept/reject/ignore) is stored as structured evidence linked to values, identities, and interest embeddings, enabling closed-loop personalization.
@@ -103,9 +122,47 @@ This mini-assessment directly anchors the capstone submodules: the latent dimens
 * **Explainable accountability:** Every nudge shows why (phrases, time windows, rules), plus contextual quotes/interventions tuned to the conflict at hand.
 * **Capstone-ready architecture:** Multimodal inputs + LLM tagging + time-series smoothing + symbolic rules = rich ground across Intelligent Sensing, Pattern Recognition, Reasoning, and Architecting AI Systems.
 
+## Implementation Status
 
+| Feature | Status | Details |
+|---------|--------|---------|
+| **Synthetic Data Pipeline** | ✅ Complete | Claude Code subagents for parallel generation; YAML prompt templates |
+| **Conversational Nudging** | 🧪 Experimental | 3-category LLM-based classification; pending validation that nudging improves VIF signal quality |
+| **Judge Labeling (VIF)** | 🧪 Experimental | 10-dimension Schwartz alignment scoring; iterating on rubrics and output format |
+| **Weekly Alignment Coach** | ⚠️ Partial | Entry processing ready; digest generation not implemented |
+| **Mini-Assessment Quiz** | ❌ Not Started | Cold-start onboarding flow |
+| **"Map of Me" Visualization** | ❌ Not Started | Embedding trajectories |
+| **Journaling Anomaly Radar** | ❌ Not Started | Cadence/gap detection |
+| **Goal-aligned Inspiration Feed** | ❌ Not Started | External API integration |
+| **A3D Prosodic Analysis** | ❌ Not Started | Audio feature extraction |
 
+> For detailed specifications, see:
+> - [Synthetic Data Pipeline](synthetic_data/pipeline_specs.md)
+> - [Claude Code Generation Instructions](synthetic_data/claude_gen_instructions.md)
+> - [CLAUDE.md](../CLAUDE.md) — Project architecture overview
 
+## Design Lessons Learned
+
+### Metadata Leakage in Synthetic Data
+
+A critical anti-pattern discovered during development: using synthetic generation instructions (e.g., `tone: Exhausted`, `reflection_mode: Neutral`) in decision logic creates train/serve skew. These labels exist only during data generation — they won't be available in production.
+
+**Resolution:** All nudge decision logic now uses only **observable content signals**:
+- Entry word count
+- Presence of concrete details (nouns/verbs)
+- Hedging language patterns ("sort of", "I guess", "maybe")
+- Previous nudge history
+
+Generation instructions remain useful for creating diverse training data, but must never influence runtime decisions.
+
+### LLM vs. Rule-Based Classification
+
+Early nudge logic used regex patterns for hedging detection. This was replaced with LLM-based semantic classification for:
+- Better handling of context-dependent language
+- Reduced false positives on quoted speech or hypotheticals
+- Simpler maintenance (prompt updates vs. regex engineering)
+
+The tradeoff is latency (additional LLM call), acceptable for conversational journaling but may need distillation for real-time use cases.
 
 # Potential Stretch goals
 
@@ -140,6 +197,7 @@ This mini-assessment directly anchors the capstone submodules: the latent dimens
 | 3 | **Drift detection** | Confirm system flags obvious misalignment | Generate 10 synthetic "crisis weeks" (e.g., Benevolence-first persona neglects family for work). Measure **hit rate**: did the system flag it? | Ground truth: Week 3 is a crisis. System flags Week 3? Yes → Hit. Target: ≥8/10 hits. |
 | 4 | **Explanation quality** | Ensure explanations feel accurate and actionable | Show 5–10 users their weekly digest and ask "Did this feel accurate?" on a **5-point Likert scale**. | User sees: *"Your Benevolence score dropped—you mentioned helping others twice but cancelled on a friend."* Rates it 4/5 for accuracy. |
 | 5 | **Nudge relevance** | Verify the top prompt is contextually appropriate | A/B test: random prompt vs. model-selected prompt. Measure **engagement rate** (did user respond?). | Model picks *"What held you back from helping?"* after detecting Benevolence drift. User responds → engagement ✓ |
+| 6 | **Nudge signal quality** | Validate that nudging improves VIF training data | Compare Judge alignment scores for nudged vs. non-nudged entries from same personas. Measure **mean alignment confidence** and **value dimension coverage**. | Hypothesis: Nudged entries yield higher-confidence scores and more explicit value signals due to increased expressiveness. |
 
 ## Operational & User Success Metrics
 
@@ -153,3 +211,16 @@ This mini-assessment directly anchors the capstone submodules: the latent dimens
 # ISS-Practice-Module: The Adaptive Acoustic Anomaly Detector (A3D)
 
 > See [A3D.md](Ideas/A3D.md) for full documentation of this Semester 3 module.
+
+---
+
+# Related Documentation
+
+| Document | Purpose |
+|----------|---------|
+| [CLAUDE.md](../CLAUDE.md) | Project architecture, commands, code style |
+| [pipeline_specs.md](synthetic_data/pipeline_specs.md) | Synthetic data pipeline design and rationale |
+| [claude_gen_instructions.md](synthetic_data/claude_gen_instructions.md) | Parallel subagent generation workflow |
+| [annotation_guidelines.md](synthetic_data/annotation_guidelines.md) | Human annotation for nudge effectiveness study |
+| [VIF_01_Concepts_and_Roadmap.md](VIF/VIF_01_Concepts_and_Roadmap.md) | Value Identity Function theory |
+| [VIF_03_Model_Training.md](VIF/VIF_03_Model_Training.md) | LLM-as-Judge and Critic training |
