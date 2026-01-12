@@ -54,6 +54,7 @@ LLM prompts are stored as YAML files with Jinja2 templating in `prompts/`:
 - `nudge_decision.yaml` — Classify entries for nudge appropriateness
 - `nudge_generation.yaml` — Generate contextual follow-up nudges
 - `nudge_response.yaml` — Generate persona responses to nudges
+- `judge_alignment.yaml` — Score entries against Schwartz value dimensions
 
 Value context is injected from `config/schwartz_values.yaml`, which contains rich psychological elaborations (core motivation, behavioral manifestations, life domain expressions) for each Schwartz dimension.
 
@@ -128,7 +129,7 @@ This mini-assessment directly anchors the capstone submodules: the latent dimens
 |---------|--------|---------|
 | **Synthetic Data Pipeline** | ✅ Complete | Claude Code subagents for parallel generation; YAML prompt templates |
 | **Conversational Nudging** | 🧪 Experimental | 3-category LLM-based classification; pending validation that nudging improves VIF signal quality |
-| **Judge Labeling (VIF)** | 🧪 Experimental | 10-dimension Schwartz alignment scoring; iterating on rubrics and output format |
+| **Judge Labeling (VIF)** | 🧪 Experimental | Two-phase pipeline implemented: Python wrangling (`src/wrangling/`) + Claude Code parallel subagents; testing in progress |
 | **Weekly Alignment Coach** | ⚠️ Partial | Entry processing ready; digest generation not implemented |
 | **Mini-Assessment Quiz** | ❌ Not Started | Cold-start onboarding flow |
 | **"Map of Me" Visualization** | ❌ Not Started | Embedding trajectories |
@@ -139,6 +140,7 @@ This mini-assessment directly anchors the capstone submodules: the latent dimens
 > For detailed specifications, see:
 > - [Synthetic Data Pipeline](synthetic_data/pipeline_specs.md)
 > - [Claude Code Generation Instructions](synthetic_data/claude_gen_instructions.md)
+> - [Claude Judge Labeling Instructions](synthetic_data/claude_judge_instructions.md)
 > - [CLAUDE.md](../CLAUDE.md) — Project architecture overview
 
 ## Design Lessons Learned
@@ -221,6 +223,7 @@ The tradeoff is latency (additional LLM call), acceptable for conversational jou
 | [CLAUDE.md](../CLAUDE.md) | Project architecture, commands, code style |
 | [pipeline_specs.md](synthetic_data/pipeline_specs.md) | Synthetic data pipeline design and rationale |
 | [claude_gen_instructions.md](synthetic_data/claude_gen_instructions.md) | Parallel subagent generation workflow |
+| [claude_judge_instructions.md](synthetic_data/claude_judge_instructions.md) | Judge labeling workflow (wrangling + scoring) |
 | [annotation_guidelines.md](synthetic_data/annotation_guidelines.md) | Human annotation for nudge effectiveness study |
 | [VIF_01_Concepts_and_Roadmap.md](VIF/VIF_01_Concepts_and_Roadmap.md) | Value Identity Function theory |
 | [VIF_03_Model_Training.md](VIF/VIF_03_Model_Training.md) | LLM-as-Judge and Critic training |

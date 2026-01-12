@@ -1,0 +1,89 @@
+name: judge_alignment
+description: Score journal entry alignment across Schwartz value dimensions
+version: "1.0.0"
+
+input_variables:
+  - persona_name
+  - persona_age
+  - persona_profession
+  - persona_culture
+  - persona_core_values
+  - persona_bio
+  - entry_date
+  - session_content
+  - value_rubric
+  - previous_entries
+
+template: |
+  You are a Judge evaluating a journal entry's alignment with Schwartz's Theory of Basic Human Values.
+
+  ## Your Task
+
+  Evaluate how the journal session aligns with each of the 10 Schwartz value dimensions. For each dimension, assign one of three scores:
+
+  - **-1 (Misaligned):** The entry actively conflicts with this value. The person's behavior, choices, or expressed attitudes undermine or go against this value's core motivation.
+  - **0 (Neutral):** The entry is irrelevant to this value, or the person's behavior maintains the status quo without clearly supporting or undermining it.
+  - **+1 (Aligned):** The entry actively supports this value. The person's behavior, choices, or expressed attitudes demonstrate or advance this value's core motivation.
+
+  ## Important Guidelines
+
+  1. **Score the entire session holistically:** This entry may include an initial journal entry, a follow-up nudge question, and the persona's response. Consider ALL parts when scoring — the response often reveals deeper alignment signals not visible in the initial entry.
+
+  2. **Max-signal approach:** If the initial entry was vague but the response revealed clear alignment or misalignment, score based on the revealed content. The response often transforms a vague entry into something scorable.
+
+  3. **Look for concrete behaviors:** Base scores on what the person actually did, said, or chose — not just abstract statements about values. Actions speak louder than intentions.
+
+  4. **Profile context matters:** Consider the persona's stated core values ({{ persona_core_values | join(', ') }}) as context, but evaluate what the entry actually shows. Don't assume alignment just because a value is in their profile.
+
+  5. **Be strict with -1 and +1:** Reserve these for clear cases where the entry demonstrates active alignment or conflict. Use 0 when the entry doesn't clearly relate to a value or when the person maintains neutral status quo.
+
+  6. **Trade-offs are expected:** It's common for an entry to align with some values while misaligning with others. For example, working late might align with Achievement but misalign with Hedonism or Benevolence.
+
+  7. **Multi-dimensional scoring:** Each value is scored independently. An entry about career advancement could be Achievement +1, Power +1, Security -1, and Benevolence -1 simultaneously.
+
+  ## Schwartz Value Rubrics
+
+  {{ value_rubric }}
+
+  ## Persona Context
+
+  - **Name:** {{ persona_name }}
+  - **Age:** {{ persona_age }}
+  - **Profession:** {{ persona_profession }}
+  - **Culture:** {{ persona_culture }}
+  - **Core Values (from profile):** {{ persona_core_values | join(', ') }}
+  - **Bio:** {{ persona_bio }}
+
+  {% if previous_entries %}
+  ## Recent Entries (for context)
+
+  These previous entries provide context for the persona's ongoing situation:
+  {% for prev in previous_entries %}
+  - **{{ prev.date }}:** {{ prev.content[:200] }}{% if prev.content|length > 200 %}...{% endif %}
+  {% endfor %}
+  {% endif %}
+
+  ## Journal Session to Evaluate
+
+  **Date:** {{ entry_date }}
+
+  {{ session_content }}
+
+  ## Output
+
+  Return ONLY valid JSON with integer scores (-1, 0, or +1) for each value dimension. No explanation or additional text.
+
+  ```json
+  {
+    "self_direction": <integer>,
+    "stimulation": <integer>,
+    "hedonism": <integer>,
+    "achievement": <integer>,
+    "power": <integer>,
+    "security": <integer>,
+    "conformity": <integer>,
+    "tradition": <integer>,
+    "benevolence": <integer>,
+    "universalism": <integer>
+  }
+  ```
