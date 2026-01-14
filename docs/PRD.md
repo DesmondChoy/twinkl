@@ -166,6 +166,19 @@ Early nudge logic used regex patterns for hedging detection. This was replaced w
 
 The tradeoff is latency (additional LLM call), acceptable for conversational journaling but may need distillation for real-time use cases.
 
+### Judge vs Critic Context Windows
+
+A key architectural decision: the Judge (LLM-as-Judge for labeling) and Critic (VIF model) use different context windows.
+
+| Component | Context | Rationale |
+|-----------|---------|-----------|
+| **Judge** | All previous entries | Better labeling: trajectory context helps disambiguate vague entries like "feeling better" |
+| **Critic** | Sliding window (N=3) | Inference efficiency: fixed window enables fast MLP inference + MC Dropout |
+
+**Why decouple?** The Judge runs offline during training data creation — cost/latency is acceptable for better labels. The Critic runs at inference time — fixed window keeps the model efficient and the input dimension bounded.
+
+This avoids the trap of matching windows "for consistency" when the constraints are fundamentally different.
+
 # Potential Stretch goals
 
 | Goal | Why it matters |

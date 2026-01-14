@@ -94,8 +94,8 @@ The Judge takes a journal entry and outputs a **vector of alignment scores** —
     "core_values": ["Achievement", "Health"],
     "bio": "Recently promoted to senior PM at a startup. Tracks quarterly OKRs religiously..."
   },
-  "recent_entries": [
-    // Optional: last 2-3 entries for context
+  "previous_entries": [
+    // All previous entries for this persona (trajectory context)
   ]
 }
 ```

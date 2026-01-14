@@ -8,15 +8,9 @@ Instructions for Claude Code to label synthetic journal data with Schwartz value
 
 ---
 
-## Configuration Variables
+## Input
 
-**Change these values to customize the labeling run:**
-
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `WRANGLED_DATA_PATH` | (required) | Path to wrangled persona markdown files from Phase 1 |
-| `INCLUDE_PREVIOUS_ENTRIES` | true | Pass last N entries as context to Judge |
-| `NUM_PREVIOUS_ENTRIES` | 2 | How many previous entries to include |
+**Required:** Path to wrangled persona markdown files from Phase 1 (e.g., `logs/wrangled/2026-01-09_09-37-09/`)
 
 ---
 
@@ -197,6 +191,8 @@ For each entry, evaluate alignment with each of the 10 Schwartz value dimensions
 - **0 (Neutral)**: Entry is irrelevant to this value
 - **+1 (Aligned)**: Entry actively supports this value
 
+**Trajectory context:** All entries are shown in chronological order. Use earlier entries to inform your understanding of later ones — a vague entry like "feeling better" gains meaning from preceding context. Score each entry based on its content, but let trajectory context resolve ambiguity.
+
 Consider the entire session (initial entry + nudge + response) as a single unit.
 Use the max-signal approach: if the response reveals alignment, score based on that.
 
@@ -286,7 +282,6 @@ After all subagents complete:
 ## Parameters
 - Personas: [N]
 - Total entries: [N]
-- Previous entries context: [true/false]
 ```
 
 **validation_report.md:**
