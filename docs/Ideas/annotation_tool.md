@@ -55,7 +55,7 @@ The Judge validation process relies on manual markdown review:
 
 A single-page Shiny for Python app that:
 
-1. Loads entries with full persona context from `wrangled_entries.parquet`
+1. Loads entries with full persona context using `parse_synthetic_data_run()`
 2. Supports multiple annotators with separate annotation files
 3. Presents a 10-value scoring grid with clear +1/0/-1 options
 4. **Hides Judge scores until after annotation** (critical for avoiding bias)
@@ -115,7 +115,7 @@ Per [Hamel Husain's recommendation](https://hamel.dev/notes/llm/finetuning/data_
 
 ### 4.2 Data Model
 
-**Input (existing):** `logs/synthetic_data/<timestamp>/wrangled_entries.parquet`
+**Input (existing):** Use `parse_synthetic_data_run()` from `src.wrangling` to load entries as DataFrame
 
 ```python
 {
@@ -228,7 +228,7 @@ Per [Hamel Husain's recommendation](https://hamel.dev/notes/llm/finetuning/data_
 
 | Feature | Priority | Notes |
 |---------|----------|-------|
-| Load wrangled_entries.parquet | P0 | Use existing Polars patterns |
+| Load entries via `parse_synthetic_data_run()` | P0 | Use existing Polars patterns |
 | Annotator selection/creation | P0 | Simple dropdown + text input |
 | Entry display with persona context | P0 | Collapsible bio section |
 | 10-value scoring grid (radio buttons) | P0 | Default to 0 (Neutral) |

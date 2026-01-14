@@ -1,13 +1,15 @@
-"""Parse synthetic persona markdown files into clean Polars DataFrame.
+"""Parse synthetic persona markdown files into clean format for Judge labeling.
 
 This module extracts structured data from persona_*.md files, stripping
-generation metadata (tone, verbosity, etc.) and keeping only the content
-needed for Judge labeling.
+generation metadata (tone, verbosity, etc.) and outputting clean markdown
+optimized for LLM consumption in the Judge labeling pipeline.
 
-Usage:
+Usage (CLI - outputs markdown):
     python -m src.wrangling.parse_synthetic_data logs/synthetic_data/2026-01-09_09-37-09
 
-    Or as a library:
+    Output: logs/wrangled/<timestamp>/persona_*.md (one file per persona)
+
+Usage (library - returns DataFrame):
     from src.wrangling.parse_synthetic_data import parse_synthetic_data_run
     df = parse_synthetic_data_run("logs/synthetic_data/2026-01-09_09-37-09")
 """
@@ -157,6 +159,117 @@ def parse_single_entry(date: str, content: str) -> dict:
     return entry
 
 
+# --- Markdown Formatting Functions ---
+
+
+def format_entry_markdown(entry: dict) -> str:
+    """Format a single entry as clean markdown for Judge consumption.
+
+    Minimal format: only include content that exists. Absence of nudge/response
+    sections is self-evident — no markers needed.
+
+    Args:
+        entry: Dict with t_index, date, initial_entry, nudge_text, response_text,
+               has_nudge, has_response
+
+    Returns:
+        Formatted entry markdown (without trailing separators)
+    """
+    lines = []
+
+    # Entry header with t_index for consistent referencing
+    lines.append(f"## Entry {entry['t_index']} - {entry['date']}")
+    lines.append("")
+
+    # Entry content (no label needed — it's obvious this is the entry)
+    lines.append(entry["initial_entry"] or "")
+
+    # Only add nudge/response sections if they exist
+    if entry["has_nudge"]:
+        lines.append("")
+        lines.append(f'**Nudge:** "{entry["nudge_text"]}"')
+
+        if entry["has_response"]:
+            lines.append("")
+            lines.append(f"**Response:** {entry['response_text']}")
+
+    # No markers for absence — silence is the signal
+
+    return "\n".join(lines)
+
+
+def format_persona_markdown(profile: dict, entries: list[dict]) -> str:
+    """Format a persona's data as clean markdown for Judge consumption.
+
+    Strips generation metadata (tone, verbosity, etc.) and keeps only
+    the content needed for Judge labeling.
+
+    Args:
+        profile: Dict with persona_id, name, age, profession, culture, core_values, bio
+        entries: List of entry dicts from parse_entries()
+
+    Returns:
+        Formatted markdown string for the entire persona
+    """
+    lines = []
+
+    # Header
+    lines.append(f"# Persona {profile['persona_id']:03d}: {profile['name']}")
+    lines.append("")
+
+    # Profile section
+    lines.append("## Profile")
+    lines.append(f"- **Name:** {profile['name']}")
+    lines.append(f"- **Age:** {profile['age']}")
+    lines.append(f"- **Profession:** {profile['profession']}")
+    lines.append(f"- **Culture:** {profile['culture']}")
+    lines.append(f"- **Core Values:** {', '.join(profile['core_values'])}")
+    lines.append(f"- **Bio:** {profile['bio']}")
+    lines.append("")
+    lines.append("---")
+    lines.append("")
+
+    # Entries
+    for entry in entries:
+        lines.append(format_entry_markdown(entry))
+        lines.append("")
+        lines.append("---")
+        lines.append("")
+
+    return "\n".join(lines)
+
+
+def write_wrangled_markdown(run_dir: str | Path, output_dir: str | Path) -> list[Path]:
+    """Write wrangled persona files as clean markdown.
+
+    Args:
+        run_dir: Path to logs/synthetic_data/<timestamp>/ directory
+        output_dir: Path to output directory (e.g., logs/wrangled/<timestamp>/)
+
+    Returns:
+        List of paths to written markdown files
+    """
+    run_path = Path(run_dir)
+    output_path = Path(output_dir)
+    output_path.mkdir(parents=True, exist_ok=True)
+
+    persona_files = sorted(run_path.glob("persona_*.md"))
+
+    if not persona_files:
+        raise FileNotFoundError(f"No persona_*.md files found in {run_dir}")
+
+    written_files = []
+    for filepath in persona_files:
+        profile, entries = parse_persona_file(filepath)
+        markdown = format_persona_markdown(profile, entries)
+
+        output_file = output_path / filepath.name
+        output_file.write_text(markdown)
+        written_files.append(output_file)
+
+    return written_files
+
+
 def parse_persona_file(filepath: Path) -> tuple[dict, list[dict]]:
     """Parse a single persona markdown file.
 
@@ -233,18 +346,25 @@ def main():
         print("Example: python -m src.wrangling.parse_synthetic_data logs/synthetic_data/2026-01-09_09-37-09")
         sys.exit(1)
 
-    run_dir = sys.argv[1]
-    output_path = Path(run_dir) / "wrangled_entries.parquet"
+    run_dir = Path(sys.argv[1])
+
+    # Extract timestamp folder name and build output path in logs/wrangled/
+    # e.g., logs/synthetic_data/2026-01-09_09-37-09 → logs/wrangled/2026-01-09_09-37-09
+    timestamp_folder = run_dir.name
+    output_dir = Path("logs/wrangled") / timestamp_folder
 
     print(f"Parsing synthetic data from: {run_dir}")
+
+    # Write clean markdown files (one per persona)
+    written_files = write_wrangled_markdown(run_dir, output_dir)
+
+    # Also generate DataFrame for summary stats
     df = parse_synthetic_data_run(run_dir)
 
-    print(f"\nParsed {len(df)} entries from {df['persona_id'].n_unique()} personas")
-    print(f"\nSchema:\n{df.schema}")
-    print(f"\nSample rows:\n{df.head(3)}")
-
-    df.write_parquet(output_path)
-    print(f"\nSaved to: {output_path}")
+    print(f"\nWrangled {len(written_files)} personas with {len(df)} total entries")
+    print(f"\nOutput files:")
+    for f in written_files:
+        print(f"  {f}")
 
 
 if __name__ == "__main__":

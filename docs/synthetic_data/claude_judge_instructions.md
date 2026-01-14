@@ -14,7 +14,7 @@ Instructions for Claude Code to label synthetic journal data with Schwartz value
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `WRANGLED_DATA_PATH` | (required) | Path to wrangled_entries.parquet from Phase 1 |
+| `WRANGLED_DATA_PATH` | (required) | Path to wrangled persona markdown files from Phase 1 |
 | `INCLUDE_PREVIOUS_ENTRIES` | true | Pass last N entries as context to Judge |
 | `NUM_PREVIOUS_ENTRIES` | 2 | How many previous entries to include |
 
@@ -29,7 +29,7 @@ source .venv/bin/activate
 python -m src.wrangling.parse_synthetic_data logs/synthetic_data/<timestamp>
 ```
 
-This creates `wrangled_entries.parquet` in the synthetic data directory with clean, structured data ready for judging.
+This creates clean `persona_*.md` files in `logs/wrangled/<timestamp>/` (one per persona) with generation metadata stripped, ready for judging.
 
 ---
 
@@ -39,7 +39,7 @@ This creates `wrangled_entries.parquet` in the synthetic data directory with cle
 |------|----------|
 | `config/schwartz_values.yaml` | Value elaborations for rubric context |
 | `prompts/judge_alignment.yaml` | Judge prompt template |
-| `logs/synthetic_data/<timestamp>/wrangled_entries.parquet` | Input: clean entry data |
+| `logs/wrangled/<timestamp>/persona_*.md` | Input: clean entry data (one file per persona) |
 
 ---
 
@@ -53,7 +53,7 @@ Each persona is handled by a single subagent that scores all entries for that pe
 ┌─────────────────────────────────────────────────────────────────────┐
 │  MAIN ORCHESTRATOR (you)                                            │
 │                                                                     │
-│  0. Read wrangled_entries.parquet                                   │
+│  0. Read wrangled persona_*.md files                                │
 │  1. Create output directory: logs/judge_labels/YYYY-MM-DD_HH-MM-SS/ │
 │  2. Build value rubric context from schwartz_values.yaml            │
 │                                                                     │
@@ -81,7 +81,7 @@ Each persona is handled by a single subagent that scores all entries for that pe
 Read and internalize:
 - `config/schwartz_values.yaml` for building value rubrics
 - `prompts/judge_alignment.yaml` for the prompt template
-- The wrangled Parquet file specified by user
+- The wrangled markdown files from `logs/wrangled/<timestamp>/`
 
 ### 2. Create Output Directory
 
@@ -114,39 +114,31 @@ Format as markdown for inclusion in the prompt:
 
 ### 4. Group Entries by Persona
 
-From the Parquet file, group entries by `persona_id`. Each persona will be handled by one subagent.
+Each wrangled `persona_*.md` file contains all entries for one persona. Each persona will be handled by one subagent.
 
 ### 5. Build Session Content
 
-For each entry, combine the components into a single scorable unit:
+The wrangled markdown files use a minimal format — absence of sections is self-evident:
 
 **Entry with nudge + response:**
 ```
-**Initial Entry:**
-[initial_entry content]
+[initial entry content]
 
-**Nudge:**
-"[nudge_text]"
+**Nudge:** "[nudge_text]"
 
-**Response:**
-[response_text content]
+**Response:** [response_text]
 ```
 
 **Entry with nudge, no response:**
 ```
-**Initial Entry:**
-[initial_entry content]
+[initial entry content]
 
-**Nudge:**
-"[nudge_text]"
-
-*(Persona did not respond)*
+**Nudge:** "[nudge_text]"
 ```
 
 **Entry without nudge:**
 ```
-**Initial Entry:**
-[initial_entry content]
+[initial entry content]
 ```
 
 ### 6. Launch All Persona Subagents
@@ -363,7 +355,7 @@ Print:
 ## Checklist
 
 - [ ] Run Phase 1 wrangling: `python -m src.wrangling.parse_synthetic_data <path>`
-- [ ] Read wrangled_entries.parquet
+- [ ] Read wrangled persona_*.md files from logs/wrangled/<timestamp>/
 - [ ] Read schwartz_values.yaml
 - [ ] Create output directory
 - [ ] Build value rubric context
@@ -385,9 +377,9 @@ Run judge labeling on logs/synthetic_data/2026-01-09_09-37-09
 ```
 
 Claude Code:
-1. Checks for `wrangled_entries.parquet` in that directory
+1. Checks for wrangled `persona_*.md` files in `logs/wrangled/<timestamp>/`
 2. If not found, runs wrangling first
-3. Reads Parquet, builds rubric, launches subagents
+3. Reads markdown files, builds rubric, launches subagents
 4. Consolidates results to `logs/judge_labels/<timestamp>/judge_labels.parquet`
 
 ---
