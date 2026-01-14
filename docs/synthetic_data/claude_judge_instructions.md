@@ -33,6 +33,8 @@ This creates clean `persona_*.md` files in `logs/wrangled/<timestamp>/` (one per
 |------|----------|
 | `config/schwartz_values.yaml` | Value elaborations for rubric context |
 | `prompts/judge_alignment.yaml` | Judge prompt template |
+| `src/models/judge.py` | Pydantic models for output validation |
+| `src/judge/consolidate.py` | Consolidation script (JSON → Parquet) |
 | `logs/wrangled/<timestamp>/persona_*.md` | Input: clean entry data (one file per persona) |
 
 ---
@@ -211,12 +213,12 @@ Use the max-signal approach: if the response reveals alignment, score based on t
 
 ...
 
-## Output
+## Output & Validation
 
-For each entry, return scores as JSON. Then write results to:
-[output_path]/persona_[id]_labels.json
+After scoring all entries, follow this phased workflow:
 
-Format:
+### Step 1: Build JSON Output
+Build the output dictionary with this exact schema:
 {
   "persona_id": [id],
   "labels": [
@@ -224,24 +226,61 @@ Format:
       "t_index": 0,
       "date": "[date]",
       "scores": {
-        "self_direction": [int],
-        "stimulation": [int],
-        "hedonism": [int],
-        "achievement": [int],
-        "power": [int],
-        "security": [int],
-        "conformity": [int],
-        "tradition": [int],
-        "benevolence": [int],
-        "universalism": [int]
+        "self_direction": [int: -1, 0, or 1],
+        "stimulation": [int: -1, 0, or 1],
+        "hedonism": [int: -1, 0, or 1],
+        "achievement": [int: -1, 0, or 1],
+        "power": [int: -1, 0, or 1],
+        "security": [int: -1, 0, or 1],
+        "conformity": [int: -1, 0, or 1],
+        "tradition": [int: -1, 0, or 1],
+        "benevolence": [int: -1, 0, or 1],
+        "universalism": [int: -1, 0, or 1]
       }
     },
     ...
   ]
 }
 
-After writing the file, return a summary:
-"Scored [N] entries for [persona_name]. File: persona_[id]_labels.json"
+### Step 2: Validate Before Writing
+Run Python validation using the Pydantic models:
+
+```bash
+python3 -c "
+import json
+from src.models.judge import PersonaLabels
+
+data = '''<paste your JSON here>'''
+PersonaLabels.model_validate(json.loads(data))
+print('Validation passed')
+"
+```
+
+### Step 3: Handle Validation Errors
+If validation fails:
+- Read the error message to identify the issue (common: out-of-range scores like 2 or -2, missing fields)
+- Fix the JSON structure
+- Re-run validation
+- Maximum 2 retry attempts
+
+### Step 4: Write File
+Only after validation passes, write to:
+[output_path]/persona_[id]_labels.json
+
+### Step 5: Verify File
+Confirm the file was written correctly:
+
+```bash
+python3 -c "
+from src.models.judge import PersonaLabels
+import json
+with open('[output_path]/persona_[id]_labels.json') as f:
+    PersonaLabels.model_validate(json.load(f))
+print('File verified')
+"
+```
+
+Return: "Scored [N] entries for [persona_name]. Validated and saved to persona_[id]_labels.json"
 ```
 
 ### 8. Wait for All Subagents
@@ -264,48 +303,22 @@ Tool: TaskOutput
 
 ### 9. Consolidate Results
 
-After all subagents complete, consolidate JSON files to Parquet **inline via Bash** (do NOT write a separate Python script to the output directory):
+After all subagents complete, run the consolidation module to validate and merge JSON files:
 
 ```bash
-python3 -c "
-import json
-from pathlib import Path
-import polars as pl
-
-output_dir = Path('logs/judge_labels/<timestamp>')
-json_files = sorted(output_dir.glob('persona_*_labels.json'))
-
-all_rows = []
-for jf in json_files:
-    data = json.loads(jf.read_text())
-    for label in data['labels']:
-        s = label['scores']
-        all_rows.append({
-            'persona_id': data['persona_id'],
-            't_index': label['t_index'],
-            'date': label['date'],
-            'alignment_vector': [s['self_direction'], s['stimulation'], s['hedonism'], s['achievement'], s['power'], s['security'], s['conformity'], s['tradition'], s['benevolence'], s['universalism']],
-            'alignment_self_direction': s['self_direction'],
-            'alignment_stimulation': s['stimulation'],
-            'alignment_hedonism': s['hedonism'],
-            'alignment_achievement': s['achievement'],
-            'alignment_power': s['power'],
-            'alignment_security': s['security'],
-            'alignment_conformity': s['conformity'],
-            'alignment_tradition': s['tradition'],
-            'alignment_benevolence': s['benevolence'],
-            'alignment_universalism': s['universalism'],
-        })
-
-pl.DataFrame(all_rows).write_parquet(output_dir / 'judge_labels.parquet')
-print(f'Wrote {len(all_rows)} entries to judge_labels.parquet')
-"
+python -m src.judge.consolidate logs/judge_labels/<timestamp>
 ```
 
-**Do NOT** write helper scripts (`.py` files) to the output directory. Only these files should exist:
+This module:
+1. Reads all `persona_*_labels.json` files
+2. Validates each file against Pydantic models (safety net in case subagent validation missed something)
+3. Reports any validation errors with clear file + error messages
+4. Merges valid data into `judge_labels.parquet`
+
+**Output files** in `logs/judge_labels/<timestamp>/`:
 - `persona_*_labels.json` (from subagents)
 - `judge_labels.parquet` (consolidated)
-- `config.md` and `validation_report.md` (metadata)
+- `config.md` and `validation_report.md` (metadata - written in Step 10)
 
 ### 10. Write Config and Report
 
