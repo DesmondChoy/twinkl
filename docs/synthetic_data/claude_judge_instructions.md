@@ -48,7 +48,7 @@ Each persona is handled by a single subagent that scores all entries for that pe
 │  MAIN ORCHESTRATOR (you)                                            │
 │                                                                     │
 │  0. Read wrangled persona_*.md files                                │
-│  1. Create output directory: logs/judge_labels/YYYY-MM-DD_HH-MM-SS/ │
+│  1. Create output directory: logs/judge_labels/<input-timestamp>/    │
 │  2. Build value rubric context from schwartz_values.yaml            │
 │                                                                     │
 │  3. Launch all persona subagents with run_in_background=true        │
@@ -79,9 +79,14 @@ Read and internalize:
 
 ### 2. Create Output Directory
 
+Extract the timestamp from the input wrangled folder path and use it for the output:
+
 ```bash
-mkdir -p logs/judge_labels/$(date +%Y-%m-%d_%H-%M-%S)
+# If input is logs/wrangled/2026-01-09_09-37-09/, extract "2026-01-09_09-37-09"
+mkdir -p logs/judge_labels/<input-timestamp>
 ```
+
+This ensures traceability: `logs/wrangled/2026-01-09_09-37-09/` → `logs/judge_labels/2026-01-09_09-37-09/`
 
 Store the directory path to pass to each subagent.
 
@@ -259,15 +264,48 @@ Tool: TaskOutput
 
 ### 9. Consolidate Results
 
-After all subagents complete:
+After all subagents complete, consolidate JSON files to Parquet **inline via Bash** (do NOT write a separate Python script to the output directory):
 
-1. Read all `persona_*_labels.json` files from output directory
-2. Merge into single Polars DataFrame
-3. Add derived columns:
-   - `alignment_vector`: List of 10 scores
-   - Individual `alignment_*` columns for each value
-   - `has_nudge`, `has_response` from original data
-4. Write `judge_labels.parquet`
+```bash
+python3 -c "
+import json
+from pathlib import Path
+import polars as pl
+
+output_dir = Path('logs/judge_labels/<timestamp>')
+json_files = sorted(output_dir.glob('persona_*_labels.json'))
+
+all_rows = []
+for jf in json_files:
+    data = json.loads(jf.read_text())
+    for label in data['labels']:
+        s = label['scores']
+        all_rows.append({
+            'persona_id': data['persona_id'],
+            't_index': label['t_index'],
+            'date': label['date'],
+            'alignment_vector': [s['self_direction'], s['stimulation'], s['hedonism'], s['achievement'], s['power'], s['security'], s['conformity'], s['tradition'], s['benevolence'], s['universalism']],
+            'alignment_self_direction': s['self_direction'],
+            'alignment_stimulation': s['stimulation'],
+            'alignment_hedonism': s['hedonism'],
+            'alignment_achievement': s['achievement'],
+            'alignment_power': s['power'],
+            'alignment_security': s['security'],
+            'alignment_conformity': s['conformity'],
+            'alignment_tradition': s['tradition'],
+            'alignment_benevolence': s['benevolence'],
+            'alignment_universalism': s['universalism'],
+        })
+
+pl.DataFrame(all_rows).write_parquet(output_dir / 'judge_labels.parquet')
+print(f'Wrote {len(all_rows)} entries to judge_labels.parquet')
+"
+```
+
+**Do NOT** write helper scripts (`.py` files) to the output directory. Only these files should exist:
+- `persona_*_labels.json` (from subagents)
+- `judge_labels.parquet` (consolidated)
+- `config.md` and `validation_report.md` (metadata)
 
 ### 10. Write Config and Report
 
@@ -352,15 +390,20 @@ Print:
 - [ ] Run Phase 1 wrangling: `python -m src.wrangling.parse_synthetic_data <path>`
 - [ ] Read wrangled persona_*.md files from logs/wrangled/<timestamp>/
 - [ ] Read schwartz_values.yaml
-- [ ] Create output directory
+- [ ] Create output directory using input folder's timestamp
 - [ ] Build value rubric context
 - [ ] Group entries by persona
 - [ ] Build session content for each entry
 - [ ] Launch all persona subagents with `run_in_background=true` in ONE message
+  - Each subagent receives output directory path + persona data
 - [ ] Wait for all subagents with TaskOutput
 - [ ] Consolidate JSON → Parquet
 - [ ] Write config.md and validation_report.md
 - [ ] Report summary
+
+**Subagent count:** N total (one per persona in wrangled directory)
+
+**Example:** 5 persona files = 5 subagent calls (all launched in parallel in ONE message, each writes its own JSON)
 
 ---
 
@@ -381,6 +424,6 @@ Claude Code:
 
 ## Limitations
 
-- **Max 10 parallel personas**: Claude Code caps parallelism; additional tasks queue
+- **Max 10 parallel personas**: Claude Code caps parallelism at 10; additional tasks queue automatically
 - **Context per subagent**: Each subagent has separate context; pass all needed info
 - **Timeout**: Set adequate timeout (5+ minutes) for personas with many entries
