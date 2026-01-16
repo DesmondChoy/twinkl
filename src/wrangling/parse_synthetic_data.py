@@ -4,14 +4,22 @@ This module extracts structured data from persona_*.md files, stripping
 generation metadata (tone, verbosity, etc.) and outputting clean markdown
 optimized for LLM consumption in the Judge labeling pipeline.
 
-Usage (CLI - outputs markdown):
-    python -m src.wrangling.parse_synthetic_data logs/synthetic_data/2026-01-09_09-37-09
+Supports two filename formats:
+- UUID-based (new): persona_a3f8b2c1.md (8-char hex UUID)
+- Numeric (legacy): persona_001.md (3-digit number)
 
-    Output: logs/wrangled/<timestamp>/persona_*.md (one file per persona)
+Usage (CLI - outputs markdown):
+    # Process all synthetic data files (flat directory)
+    python -m src.wrangling.parse_synthetic_data
+
+    # Process specific file(s)
+    python -m src.wrangling.parse_synthetic_data logs/synthetic_data/persona_a3f8b2c1.md
+
+    Output: logs/wrangled/persona_*.md (flat directory, same filename)
 
 Usage (library - returns DataFrame):
-    from src.wrangling.parse_synthetic_data import parse_synthetic_data_run
-    df = parse_synthetic_data_run("logs/synthetic_data/2026-01-09_09-37-09")
+    from src.wrangling.parse_synthetic_data import parse_synthetic_data_dir
+    df = parse_synthetic_data_dir("logs/synthetic_data")
 """
 
 import re
@@ -23,6 +31,10 @@ import polars as pl
 def parse_persona_profile(content: str) -> dict:
     """Extract persona profile from markdown content.
 
+    Supports two header formats:
+    - UUID-based (new): "# Persona a3f8b2c1: [Name]"
+    - Numeric (legacy): "# Persona 001: [Name]"
+
     Args:
         content: Full markdown file content
 
@@ -31,8 +43,10 @@ def parse_persona_profile(content: str) -> dict:
     """
     profile = {}
 
-    # Extract name from title: "# Persona XXX: [Name]"
-    name_match = re.search(r"^# Persona \d+: (.+)$", content, re.MULTILINE)
+    # Extract name from title - supports both UUID and numeric formats
+    # UUID format: "# Persona a3f8b2c1: [Name]"
+    # Numeric format: "# Persona 001: [Name]"
+    name_match = re.search(r"^# Persona [a-f0-9]+: (.+)$", content, re.MULTILINE)
     profile["name"] = name_match.group(1).strip() if name_match else None
 
     # Extract profile fields
@@ -48,15 +62,21 @@ def parse_persona_profile(content: str) -> dict:
         profile["core_values"] = []
 
     # Bio is multi-line, extract everything after "- Bio: " until next section
-    bio_match = re.search(r"- Bio: (.+?)(?=\n---|\n## |\Z)", content, re.DOTALL)
+    # Handles optional bold formatting: - Bio: or - **Bio:**
+    bio_match = re.search(r"- (?:\*\*)?Bio:(?:\*\*)?\s*(.+?)(?=\n---|\n## |\Z)", content, re.DOTALL)
     profile["bio"] = bio_match.group(1).strip() if bio_match else None
 
     return profile
 
 
 def _extract_field(content: str, field_name: str) -> str | None:
-    """Extract a simple field value from markdown."""
-    pattern = rf"- {field_name}: (.+?)(?:\n|$)"
+    """Extract a simple field value from markdown.
+
+    Handles optional bold formatting around field name:
+    - Age: 25-34           (no bold)
+    - **Age:** 45-54       (bold with colon inside)
+    """
+    pattern = rf"- (?:\*\*)?{field_name}:(?:\*\*)?\s*(.+?)(?:\n|$)"
     match = re.search(pattern, content)
     return match.group(1).strip() if match else None
 
@@ -115,9 +135,10 @@ def parse_single_entry(date: str, content: str) -> dict:
 
     # --- Extract Initial Entry ---
     # Pattern: After "### Initial Entry" and metadata line, before "### Nudge" or markers
+    # Handles colon inside OR outside bold: **Tone**: or **Tone:**
     initial_match = re.search(
         r"### Initial Entry\s*\n"
-        r"\*\*Tone\*\*:.*?\n\n"  # Skip the metadata line
+        r"\*\*Tone(?:\*\*:|:\*\*).*?\n\n"  # Skip metadata line (colon inside or outside)
         r"(.+?)"  # Capture the content
         r"(?=\n### Nudge|\n\*\(No nudge|\n---|\Z)",  # Stop before nudge section or markers
         content,
@@ -130,9 +151,10 @@ def parse_single_entry(date: str, content: str) -> dict:
     if not has_no_nudge_marker:
         # Look for quoted text after "### Nudge" section
         # Pattern: ### Nudge (category)\n**Trigger**: ...\n"quoted text"
+        # Handles colon inside OR outside bold: **Trigger**: or **Trigger:**
         nudge_match = re.search(
             r'### Nudge.*?\n'
-            r'\*\*Trigger\*\*:.*?\n'
+            r'\*\*Trigger(?:\*\*:|:\*\*).*?\n'
             r'"([^"]+)"',  # Capture the quoted nudge text
             content,
             re.DOTALL,
@@ -144,9 +166,10 @@ def parse_single_entry(date: str, content: str) -> dict:
     # --- Extract Response Text ---
     if entry["has_nudge"] and not has_no_response_marker:
         # Look for content after "### Response" and mode line
+        # Handles colon inside OR outside bold: **Mode**: or **Mode:**
         response_match = re.search(
             r"### Response\s*\n"
-            r"\*\*Mode\*\*:.*?\n"  # Skip the mode line
+            r"\*\*Mode(?:\*\*:|:\*\*).*?\n"  # Skip mode line (colon inside or outside)
             r"(.+?)"  # Capture the response content
             r"(?=\n---|\n## |\Z)",  # Stop before section break or next entry
             content,
@@ -205,7 +228,8 @@ def format_persona_markdown(profile: dict, entries: list[dict]) -> str:
     the content needed for Judge labeling.
 
     Args:
-        profile: Dict with persona_id, name, age, profession, culture, core_values, bio
+        profile: Dict with persona_id (str UUID or int), name, age, profession,
+                 culture, core_values, bio
         entries: List of entry dicts from parse_entries()
 
     Returns:
@@ -213,12 +237,19 @@ def format_persona_markdown(profile: dict, entries: list[dict]) -> str:
     """
     lines = []
 
-    # Header
-    lines.append(f"# Persona {profile['persona_id']:03d}: {profile['name']}")
+    # Header - handle both string UUID and numeric persona_id
+    persona_id = profile["persona_id"]
+    if isinstance(persona_id, int):
+        # Legacy numeric format
+        lines.append(f"# Persona {persona_id:03d}: {profile['name']}")
+    else:
+        # UUID format
+        lines.append(f"# Persona {persona_id}: {profile['name']}")
     lines.append("")
 
     # Profile section
     lines.append("## Profile")
+    lines.append(f"- **Persona ID:** {persona_id}")
     lines.append(f"- **Name:** {profile['name']}")
     lines.append(f"- **Age:** {profile['age']}")
     lines.append(f"- **Profession:** {profile['profession']}")
@@ -239,24 +270,29 @@ def format_persona_markdown(profile: dict, entries: list[dict]) -> str:
     return "\n".join(lines)
 
 
-def write_wrangled_markdown(run_dir: str | Path, output_dir: str | Path) -> list[Path]:
+def write_wrangled_markdown(
+    input_dir: str | Path,
+    output_dir: str | Path,
+    update_registry: bool = True,
+) -> list[Path]:
     """Write wrangled persona files as clean markdown.
 
     Args:
-        run_dir: Path to logs/synthetic_data/<timestamp>/ directory
-        output_dir: Path to output directory (e.g., logs/wrangled/<timestamp>/)
+        input_dir: Path to logs/synthetic_data/ directory (flat)
+        output_dir: Path to output directory (e.g., logs/wrangled/)
+        update_registry: If True, mark personas as wrangled in registry
 
     Returns:
         List of paths to written markdown files
     """
-    run_path = Path(run_dir)
+    input_path = Path(input_dir)
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
 
-    persona_files = sorted(run_path.glob("persona_*.md"))
+    persona_files = sorted(input_path.glob("persona_*.md"))
 
     if not persona_files:
-        raise FileNotFoundError(f"No persona_*.md files found in {run_dir}")
+        raise FileNotFoundError(f"No persona_*.md files found in {input_dir}")
 
     written_files = []
     for filepath in persona_files:
@@ -267,11 +303,53 @@ def write_wrangled_markdown(run_dir: str | Path, output_dir: str | Path) -> list
         output_file.write_text(markdown)
         written_files.append(output_file)
 
+        # Update registry to mark as wrangled
+        if update_registry:
+            try:
+                from src.registry import update_stage
+
+                update_stage(profile["persona_id"], "wrangled")
+            except (ImportError, ValueError) as e:
+                # Registry not available or persona not registered
+                # (could be legacy data without registry)
+                print(f"  Note: Could not update registry for {profile['persona_id']}: {e}")
+
     return written_files
+
+
+def extract_persona_id(filename: str) -> str:
+    """Extract persona ID from filename.
+
+    Supports two formats:
+    - UUID-based (new): persona_a3f8b2c1.md → "a3f8b2c1"
+    - Numeric (legacy): persona_001.md → "001"
+
+    Args:
+        filename: Just the filename (not full path)
+
+    Returns:
+        Persona ID as string (UUID or zero-padded number)
+
+    Raises:
+        ValueError: If filename doesn't match expected pattern
+    """
+    # Try UUID format first (8 hex chars)
+    uuid_match = re.search(r"persona_([a-f0-9]{8})\.md", filename)
+    if uuid_match:
+        return uuid_match.group(1)
+
+    # Fall back to numeric format
+    num_match = re.search(r"persona_(\d+)\.md", filename)
+    if num_match:
+        return num_match.group(1)
+
+    raise ValueError(f"Cannot extract persona ID from filename: {filename}")
 
 
 def parse_persona_file(filepath: Path) -> tuple[dict, list[dict]]:
     """Parse a single persona markdown file.
+
+    Supports both UUID-based and numeric filename formats.
 
     Args:
         filepath: Path to persona_*.md file
@@ -281,9 +359,8 @@ def parse_persona_file(filepath: Path) -> tuple[dict, list[dict]]:
     """
     content = filepath.read_text()
 
-    # Extract persona ID from filename: persona_001.md -> 1
-    id_match = re.search(r"persona_(\d+)\.md", filepath.name)
-    persona_id = int(id_match.group(1)) if id_match else 0
+    # Extract persona ID from filename (supports both formats)
+    persona_id = extract_persona_id(filepath.name)
 
     profile = parse_persona_profile(content)
     profile["persona_id"] = persona_id
@@ -337,34 +414,107 @@ def parse_synthetic_data_run(run_dir: str | Path) -> pl.DataFrame:
     return df
 
 
+def parse_synthetic_data_dir(data_dir: str | Path) -> pl.DataFrame:
+    """Parse all persona files in a synthetic data directory (flat structure).
+
+    Args:
+        data_dir: Path to logs/synthetic_data/ directory (flat, no timestamp subfolder)
+
+    Returns:
+        Polars DataFrame with one row per entry, columns for persona and entry fields
+    """
+    data_path = Path(data_dir)
+    persona_files = sorted(data_path.glob("persona_*.md"))
+
+    if not persona_files:
+        raise FileNotFoundError(f"No persona_*.md files found in {data_dir}")
+
+    rows = []
+    for filepath in persona_files:
+        profile, entries = parse_persona_file(filepath)
+
+        for entry in entries:
+            row = {
+                # Persona fields
+                "persona_id": profile["persona_id"],
+                "persona_name": profile["name"],
+                "persona_age": profile["age"],
+                "persona_profession": profile["profession"],
+                "persona_culture": profile["culture"],
+                "persona_core_values": profile["core_values"],
+                "persona_bio": profile["bio"],
+                # Entry fields
+                "t_index": entry["t_index"],
+                "date": entry["date"],
+                "initial_entry": entry["initial_entry"],
+                "nudge_text": entry["nudge_text"],
+                "response_text": entry["response_text"],
+                "has_nudge": entry["has_nudge"],
+                "has_response": entry["has_response"],
+            }
+            rows.append(row)
+
+    df = pl.DataFrame(rows)
+    return df
+
+
 def main():
-    """CLI entry point."""
+    """CLI entry point.
+
+    Usage:
+        # Process all files in logs/synthetic_data/ (flat directory)
+        python -m src.wrangling.parse_synthetic_data
+
+        # Process specific directory
+        python -m src.wrangling.parse_synthetic_data logs/synthetic_data
+
+        # Process specific file(s) - pass full paths
+        python -m src.wrangling.parse_synthetic_data logs/synthetic_data/persona_a3f8b2c1.md
+    """
     import sys
 
-    if len(sys.argv) < 2:
-        print("Usage: python -m src.wrangling.parse_synthetic_data <run_directory>")
-        print("Example: python -m src.wrangling.parse_synthetic_data logs/synthetic_data/2026-01-09_09-37-09")
-        sys.exit(1)
+    # Default directories (flat structure)
+    input_dir = Path("logs/synthetic_data")
+    output_dir = Path("logs/wrangled")
 
-    run_dir = Path(sys.argv[1])
+    if len(sys.argv) >= 2:
+        arg = Path(sys.argv[1])
+        if arg.is_file():
+            # Single file mode - process just this file
+            input_dir = arg.parent
+            # For single file, we'll filter to just that file later
+            single_file = arg
+        else:
+            input_dir = arg
+            single_file = None
+    else:
+        single_file = None
 
-    # Extract timestamp folder name and build output path in logs/wrangled/
-    # e.g., logs/synthetic_data/2026-01-09_09-37-09 → logs/wrangled/2026-01-09_09-37-09
-    timestamp_folder = run_dir.name
-    output_dir = Path("logs/wrangled") / timestamp_folder
+    print(f"Parsing synthetic data from: {input_dir}")
+    print(f"Output directory: {output_dir}")
 
-    print(f"Parsing synthetic data from: {run_dir}")
+    # Write clean markdown files
+    written_files = write_wrangled_markdown(input_dir, output_dir)
 
-    # Write clean markdown files (one per persona)
-    written_files = write_wrangled_markdown(run_dir, output_dir)
-
-    # Also generate DataFrame for summary stats
-    df = parse_synthetic_data_run(run_dir)
+    # Generate DataFrame for summary stats
+    df = parse_synthetic_data_dir(input_dir)
 
     print(f"\nWrangled {len(written_files)} personas with {len(df)} total entries")
     print(f"\nOutput files:")
     for f in written_files:
         print(f"  {f}")
+
+    # Show registry status if available
+    try:
+        from src.registry import get_status
+
+        status = get_status()
+        print(f"\nRegistry status:")
+        print(f"  Total personas: {status['total']}")
+        print(f"  Wrangled: {status['wrangled']}")
+        print(f"  Pending labeling: {status['pending_labeling']}")
+    except (ImportError, FileNotFoundError):
+        pass
 
 
 if __name__ == "__main__":

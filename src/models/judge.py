@@ -7,7 +7,7 @@ Usage (validation):
     from src.models.judge import PersonaLabels
     import json
 
-    with open("persona_1_labels.json") as f:
+    with open("persona_a3f8b2c1_labels.json") as f:
         data = json.load(f)
     validated = PersonaLabels.model_validate(data)
 
@@ -20,7 +20,7 @@ Usage (construct programmatically):
         conformity=0, tradition=0, benevolence=1, universalism=0
     )
     entry = EntryLabel(t_index=0, date="2024-01-15", scores=scores)
-    persona = PersonaLabels(persona_id=1, labels=[entry])
+    persona = PersonaLabels(persona_id="a3f8b2c1", labels=[entry])
 """
 
 from pydantic import BaseModel, Field
@@ -92,5 +92,8 @@ class PersonaLabels(BaseModel):
     from a judge subagent for a single persona.
     """
 
-    persona_id: int = Field(ge=0, description="Unique persona identifier")
+    persona_id: str = Field(
+        pattern=r"^[a-f0-9]+$",
+        description="Unique persona identifier (8-char UUID hex or numeric string)",
+    )
     labels: list[EntryLabel] = Field(description="List of entry labels in order")

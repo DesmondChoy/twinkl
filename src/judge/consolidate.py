@@ -1,17 +1,22 @@
 """Consolidate judge label JSON files into a single parquet file.
 
 This module validates and merges the JSON output files from judge subagents
-into a single parquet file for downstream processing.
+into a single parquet file for downstream processing. Also updates the
+central registry to mark personas as labeled.
 
 Usage (CLI):
-    python -m src.judge.consolidate logs/judge_labels/2026-01-15_10-30-00
+    # Process all files in logs/judge_labels/ (default)
+    python -m src.judge.consolidate
+
+    # Process specific directory
+    python -m src.judge.consolidate logs/judge_labels
 
 Usage (library):
     from src.judge.consolidate import consolidate_judge_labels
 
     df, errors = consolidate_judge_labels(
-        labels_dir="logs/judge_labels/2026-01-15_10-30-00",
-        output_path="logs/judge_labels/2026-01-15_10-30-00/judge_labels.parquet"
+        labels_dir="logs/judge_labels",
+        output_path="logs/judge_labels/judge_labels.parquet"
     )
 """
 
@@ -27,6 +32,7 @@ from src.models.judge import SCHWARTZ_VALUE_ORDER, PersonaLabels
 def consolidate_judge_labels(
     labels_dir: str | Path,
     output_path: str | Path | None = None,
+    update_registry: bool = True,
 ) -> tuple[pl.DataFrame, list[str]]:
     """Consolidate persona JSON files into a single parquet file.
 
@@ -34,6 +40,7 @@ def consolidate_judge_labels(
         labels_dir: Directory containing persona_*_labels.json files
         output_path: Path to write parquet file. If None, writes to
                      labels_dir/judge_labels.parquet
+        update_registry: If True, mark personas as labeled in registry
 
     Returns:
         Tuple of (DataFrame with all labels, list of validation error messages)
@@ -53,6 +60,7 @@ def consolidate_judge_labels(
 
     rows: list[dict] = []
     errors: list[str] = []
+    validated_persona_ids: list[str] = []
 
     for json_file in json_files:
         try:
@@ -61,6 +69,9 @@ def consolidate_judge_labels(
 
             # Validate with Pydantic
             validated = PersonaLabels.model_validate(data)
+
+            # Track validated persona for registry update
+            validated_persona_ids.append(validated.persona_id)
 
             # Extract rows
             for entry_label in validated.labels:
@@ -93,21 +104,40 @@ def consolidate_judge_labels(
     # Write parquet
     df.write_parquet(output_path)
 
+    # Update registry for validated personas
+    if update_registry:
+        try:
+            from src.registry import update_stage
+
+            for persona_id in validated_persona_ids:
+                try:
+                    update_stage(persona_id, "labeled")
+                except ValueError as e:
+                    # Persona not in registry (could be legacy data)
+                    errors.append(f"Registry: {persona_id} - {e}")
+        except ImportError:
+            errors.append("Registry module not available")
+
     return df, errors
 
 
 def main():
-    """CLI entry point."""
+    """CLI entry point.
+
+    Usage:
+        # Process all files in logs/judge_labels/ (default)
+        python -m src.judge.consolidate
+
+        # Process specific directory
+        python -m src.judge.consolidate logs/judge_labels
+    """
     import sys
 
-    if len(sys.argv) < 2:
-        print("Usage: python -m src.judge.consolidate <labels_directory>")
-        print(
-            "Example: python -m src.judge.consolidate logs/judge_labels/2026-01-15_10-30-00"
-        )
-        sys.exit(1)
+    # Default to logs/judge_labels/ (flat structure)
+    labels_dir = Path("logs/judge_labels")
 
-    labels_dir = Path(sys.argv[1])
+    if len(sys.argv) >= 2:
+        labels_dir = Path(sys.argv[1])
 
     print(f"Consolidating labels from: {labels_dir}")
 
@@ -118,12 +148,24 @@ def main():
         print(f"Output: {labels_dir / 'judge_labels.parquet'}")
 
         if errors:
-            print(f"\nWarnings ({len(errors)} files had issues):")
+            print(f"\nWarnings ({len(errors)} issues):")
             for error in errors:
                 print(f"  - {error}")
 
         print("\nSchema:")
         print(df.schema)
+
+        # Show registry status if available
+        try:
+            from src.registry import get_status
+
+            status = get_status()
+            print(f"\nRegistry status:")
+            print(f"  Total personas: {status['total']}")
+            print(f"  Labeled: {status['labeled']}")
+            print(f"  Pending labeling: {status['pending_labeling']}")
+        except (ImportError, FileNotFoundError):
+            pass
 
     except FileNotFoundError as e:
         print(f"Error: {e}")

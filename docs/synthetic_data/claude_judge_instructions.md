@@ -10,7 +10,7 @@ Instructions for Claude Code to label synthetic journal data with Schwartz value
 
 ## Input
 
-**Required:** Path to wrangled persona markdown files from Phase 1 (e.g., `logs/wrangled/2026-01-09_09-37-09/`)
+**Required:** Wrangled persona markdown files in `logs/wrangled/` (flat directory with UUID-based filenames)
 
 ---
 
@@ -20,10 +20,32 @@ Before running Judge labeling, you must wrangle the synthetic data:
 
 ```bash
 source .venv/bin/activate
-python -m src.wrangling.parse_synthetic_data logs/synthetic_data/<timestamp>
+python -m src.wrangling.parse_synthetic_data
 ```
 
-This creates clean `persona_*.md` files in `logs/wrangled/<timestamp>/` (one per persona) with generation metadata stripped, ready for judging.
+This creates clean `persona_*.md` files in `logs/wrangled/` (flat directory) with generation metadata stripped, ready for judging.
+
+---
+
+## Output Structure
+
+**Flat directory with UUID-based filenames** (matches input structure):
+
+```
+logs/
+├── registry/
+│   └── personas.parquet              # Central tracking (stage_labeled updated here)
+│
+├── wrangled/
+│   ├── persona_a3f8b2c1.md           # Input: clean persona data
+│   ├── persona_e7d4f9a2.md
+│   └── ...
+│
+└── judge_labels/
+    ├── persona_a3f8b2c1_labels.json  # Output: one JSON per persona
+    ├── persona_e7d4f9a2_labels.json
+    └── judge_labels.parquet          # Consolidated labels
+```
 
 ---
 
@@ -34,8 +56,8 @@ This creates clean `persona_*.md` files in `logs/wrangled/<timestamp>/` (one per
 | `config/schwartz_values.yaml` | Value elaborations for rubric context |
 | `prompts/judge_alignment.yaml` | Judge prompt template |
 | `src/models/judge.py` | Pydantic models for output validation |
-| `src/judge/consolidate.py` | Consolidation script (JSON → Parquet) |
-| `logs/wrangled/<timestamp>/persona_*.md` | Input: clean entry data (one file per persona) |
+| `src/judge/consolidate.py` | Consolidation script (JSON → Parquet + registry update) |
+| `logs/wrangled/persona_*.md` | Input: clean entry data (one file per persona) |
 
 ---
 
@@ -43,28 +65,33 @@ This creates clean `persona_*.md` files in `logs/wrangled/<timestamp>/` (one per
 
 ### Per-Persona Subagents (Parallel)
 
-Each persona is handled by a single subagent that scores all entries for that persona, then writes its results. All persona subagents run in parallel.
+Each persona is handled by a single subagent that:
+1. Extracts the UUID from the wrangled filename
+2. Scores all entries for that persona
+3. Writes results with UUID in filename
+
+All persona subagents run in parallel.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │  MAIN ORCHESTRATOR (you)                                            │
 │                                                                     │
-│  0. Read wrangled persona_*.md files                                │
-│  1. Create output directory: logs/judge_labels/<input-timestamp>/    │
+│  0. Read wrangled persona_*.md files from logs/wrangled/            │
+│  1. Ensure output directory exists: logs/judge_labels/              │
 │  2. Build value rubric context from schwartz_values.yaml            │
 │                                                                     │
 │  3. Launch all persona subagents with run_in_background=true        │
 │     ┌────────────────┐ ┌────────────────┐ ┌────────────────┐       │
-│     │ Judge Persona1 │ │ Judge Persona2 │ │ Judge Persona3 │       │
+│     │ Judge a3f8b2c1 │ │ Judge e7d4f9a2 │ │ Judge c1b5e8d3 │       │
+│     │ Score Entry 0  │ │ Score Entry 0  │ │ Score Entry 0  │       │
 │     │ Score Entry 1  │ │ Score Entry 1  │ │ Score Entry 1  │       │
-│     │ Score Entry 2  │ │ Score Entry 2  │ │ Score Entry 2  │       │
 │     │ ...→Write JSON │ │ ...→Write JSON │ │ ...→Write JSON │       │
 │     └───────┬────────┘ └───────┬────────┘ └───────┬────────┘       │
 │             │                  │                  │                 │
 │  4. Wait for all to complete with TaskOutput                        │
 │             │                  │                  │                 │
 │             ▼                  ▼                  ▼                 │
-│  5. Consolidate JSON → Parquet, write config.md, report summary     │
+│  5. Consolidate JSON → Parquet, update registry, report summary     │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -77,20 +104,17 @@ Each persona is handled by a single subagent that scores all entries for that pe
 Read and internalize:
 - `config/schwartz_values.yaml` for building value rubrics
 - `prompts/judge_alignment.yaml` for the prompt template
-- The wrangled markdown files from `logs/wrangled/<timestamp>/`
+- The wrangled markdown files from `logs/wrangled/`
 
-### 2. Create Output Directory
+### 2. Ensure Output Directory Exists
 
-Extract the timestamp from the input wrangled folder path and use it for the output:
+Create the output directory if it doesn't exist:
 
 ```bash
-# If input is logs/wrangled/2026-01-09_09-37-09/, extract "2026-01-09_09-37-09"
-mkdir -p logs/judge_labels/<input-timestamp>
+mkdir -p logs/judge_labels
 ```
 
-This ensures traceability: `logs/wrangled/2026-01-09_09-37-09/` → `logs/judge_labels/2026-01-09_09-37-09/`
-
-Store the directory path to pass to each subagent.
+**Note:** No timestamp subfolders — all label files go in `logs/judge_labels/` with UUID-based filenames.
 
 ### 3. Build Value Rubric Context
 
@@ -148,13 +172,13 @@ Send **one message** with N Task tool calls, all with `run_in_background=true`:
 
 ```
 Tool: Task
-- description: "Judge Persona 1: Score entries"
+- description: "Judge a3f8b2c1: Score entries"
 - subagent_type: "general-purpose"
 - run_in_background: true
 - prompt: [Full persona judging prompt - see below]
 
 Tool: Task
-- description: "Judge Persona 2: Score entries"
+- description: "Judge e7d4f9a2: Score entries"
 - subagent_type: "general-purpose"
 - run_in_background: true
 - prompt: [Full persona judging prompt - see below]
@@ -218,9 +242,9 @@ Use the max-signal approach: if the response reveals alignment, score based on t
 After scoring all entries, follow this phased workflow:
 
 ### Step 1: Build JSON Output
-Build the output dictionary with this exact schema:
+Build the output dictionary with this exact schema (note: persona_id is a STRING, not an integer):
 {
-  "persona_id": [id],
+  "persona_id": "a3f8b2c1",
   "labels": [
     {
       "t_index": 0,
@@ -258,14 +282,14 @@ print('Validation passed')
 
 ### Step 3: Handle Validation Errors
 If validation fails:
-- Read the error message to identify the issue (common: out-of-range scores like 2 or -2, missing fields)
+- Read the error message to identify the issue (common: out-of-range scores like 2 or -2, missing fields, persona_id not a string)
 - Fix the JSON structure
 - Re-run validation
 - Maximum 2 retry attempts
 
 ### Step 4: Write File
 Only after validation passes, write to:
-[output_path]/persona_[id]_labels.json
+logs/judge_labels/persona_[uuid]_labels.json
 
 ### Step 5: Verify File
 Confirm the file was written correctly:
@@ -274,13 +298,13 @@ Confirm the file was written correctly:
 python3 -c "
 from src.models.judge import PersonaLabels
 import json
-with open('[output_path]/persona_[id]_labels.json') as f:
+with open('logs/judge_labels/persona_a3f8b2c1_labels.json') as f:
     PersonaLabels.model_validate(json.load(f))
 print('File verified')
 "
 ```
 
-Return: "Scored [N] entries for [persona_name]. Validated and saved to persona_[id]_labels.json"
+Return: "Scored [N] entries for [persona_name]. Validated and saved to persona_[uuid]_labels.json"
 ```
 
 ### 8. Wait for All Subagents
@@ -306,19 +330,19 @@ Tool: TaskOutput
 After all subagents complete, run the consolidation module to validate and merge JSON files:
 
 ```bash
-python -m src.judge.consolidate logs/judge_labels/<timestamp>
+python -m src.judge.consolidate
 ```
 
 This module:
-1. Reads all `persona_*_labels.json` files
+1. Reads all `persona_*_labels.json` files from `logs/judge_labels/`
 2. Validates each file against Pydantic models (safety net in case subagent validation missed something)
 3. Reports any validation errors with clear file + error messages
 4. Merges valid data into `judge_labels.parquet`
+5. **Updates registry**: marks each validated persona as `stage_labeled=true`
 
-**Output files** in `logs/judge_labels/<timestamp>/`:
+**Output files** in `logs/judge_labels/`:
 - `persona_*_labels.json` (from subagents)
 - `judge_labels.parquet` (consolidated)
-- `config.md` and `validation_report.md` (metadata - written in Step 10)
 
 ### 10. Write Config and Report
 
@@ -373,7 +397,7 @@ Print:
 
 ```python
 {
-    "persona_id": int,
+    "persona_id": str,  # 8-char UUID hex (e.g., "a3f8b2c1")
     "t_index": int,
     "date": str,
     "alignment_vector": list[int],  # [10 integers: {-1, 0, +1}]
@@ -389,10 +413,6 @@ Print:
     "alignment_tradition": int,
     "alignment_benevolence": int,
     "alignment_universalism": int,
-
-    # Session metadata
-    "has_nudge": bool,
-    "has_response": bool,
 }
 ```
 
@@ -400,23 +420,28 @@ Print:
 
 ## Checklist
 
-- [ ] Run Phase 1 wrangling: `python -m src.wrangling.parse_synthetic_data <path>`
-- [ ] Read wrangled persona_*.md files from logs/wrangled/<timestamp>/
+- [ ] Run Phase 1 wrangling: `python -m src.wrangling.parse_synthetic_data`
+- [ ] Read wrangled persona_*.md files from `logs/wrangled/`
 - [ ] Read schwartz_values.yaml
-- [ ] Create output directory using input folder's timestamp
+- [ ] Ensure output directory exists: `logs/judge_labels/`
 - [ ] Build value rubric context
-- [ ] Group entries by persona
+- [ ] Group entries by persona (extract UUID from filename)
 - [ ] Build session content for each entry
 - [ ] Launch all persona subagents with `run_in_background=true` in ONE message
-  - Each subagent receives output directory path + persona data
+  - Each subagent receives persona data with UUID
+  - Each subagent writes `logs/judge_labels/persona_{uuid}_labels.json`
 - [ ] Wait for all subagents with TaskOutput
-- [ ] Consolidate JSON → Parquet
-- [ ] Write config.md and validation_report.md
+- [ ] Consolidate JSON → Parquet (also updates registry)
 - [ ] Report summary
 
 **Subagent count:** N total (one per persona in wrangled directory)
 
-**Example:** 5 persona files = 5 subagent calls (all launched in parallel in ONE message, each writes its own JSON)
+**Example:** 5 persona files = 5 subagent calls (all launched in parallel, each with unique UUID)
+
+**Check pipeline status:**
+```bash
+python3 -c "from src.registry import get_status; print(get_status())"
+```
 
 ---
 
@@ -424,14 +449,15 @@ Print:
 
 User:
 ```
-Run judge labeling on logs/synthetic_data/2026-01-09_09-37-09
+Run judge labeling
 ```
 
 Claude Code:
-1. Checks for wrangled `persona_*.md` files in `logs/wrangled/<timestamp>/`
-2. If not found, runs wrangling first
+1. Checks for wrangled `persona_*.md` files in `logs/wrangled/`
+2. If not found, runs wrangling first: `python -m src.wrangling.parse_synthetic_data`
 3. Reads markdown files, builds rubric, launches subagents
-4. Consolidates results to `logs/judge_labels/<timestamp>/judge_labels.parquet`
+4. Consolidates results to `logs/judge_labels/judge_labels.parquet`
+5. Updates registry with `stage_labeled=true` for each validated persona
 
 ---
 
