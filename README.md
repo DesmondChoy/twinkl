@@ -28,6 +28,30 @@ Key features:
 
 See `docs/synthetic_data/pipeline_specs.md` for implementation details.
 
+## Judge Labeling Pipeline
+
+Scores synthetic journal entries against the 10 Schwartz value dimensions to create training labels for the VIF. The pipeline uses Claude Code subagents for parallel, consistent scoring.
+
+**Workflow:**
+```
+Registry Check → Auto-Wrangle → Parallel Labeling (subagents) → Validation → Consolidation
+```
+
+**Usage:** Run `/judge` in Claude Code to execute the full pipeline. The skill:
+1. Checks the registry for pending work (`logs/registry/personas.parquet`)
+2. Auto-wrangles raw synthetic data if needed (`logs/synthetic_data/` → `logs/wrangled/`)
+3. Spawns parallel subagents — one per persona — each scoring all entries
+4. Validates JSON output against Pydantic models
+5. Consolidates labels to `logs/judge_labels/judge_labels.parquet`
+
+**Scoring:** Each entry receives a 10-dimensional vector with values `{-1, 0, +1}` indicating misalignment, neutrality, or alignment with each Schwartz value. Most entries have 1-3 non-zero scores.
+
+**Key files:**
+- `.claude/commands/judge.md` — Skill entry point
+- `.claude/skills/judge/orchestration.md` — Detailed workflow
+- `.claude/skills/judge/annotation_guide.md` — Scorability heuristics and calibration examples
+- `.claude/skills/judge/rubric.md` — Schwartz value reference for scoring
+
 **Primary Generation Method:**
 - `docs/synthetic_data/claude_gen_instructions.md` — Instructions for Claude Code to generate synthetic data using parallel subagents
 

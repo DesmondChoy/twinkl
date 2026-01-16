@@ -620,6 +620,74 @@ This allows the Critic to learn:
 
 ---
 
+## Judge Labeling Pipeline (`/judge` Skill)
+
+Once synthetic data is generated, the `/judge` skill orchestrates scoring journal entries against Schwartz value dimensions.
+
+### Pipeline Overview
+
+```
+Synthetic Data → Wrangling → Judge Labeling → Consolidation → Training Data
+     ↓               ↓              ↓               ↓
+logs/synthetic_data/ → logs/wrangled/ → logs/judge_labels/*.json → judge_labels.parquet
+```
+
+### Running the Pipeline
+
+Execute `/judge` in Claude Code. The skill:
+
+1. **Registry Check**: Queries `src.registry.get_status()` to find pending work
+2. **Auto-Wrangle**: If `pending_wrangling > 0`, runs `python -m src.wrangling.parse_synthetic_data`
+3. **Parallel Labeling**: Spawns one Task subagent per pending persona
+4. **Validation**: Pydantic models (`src/models/judge.py`) validate JSON output
+5. **Consolidation**: Merges all labels into `logs/judge_labels/judge_labels.parquet`
+
+### Subagent Context
+
+Each labeling subagent receives:
+- **Persona file**: `logs/wrangled/persona_{id}.md` — the entries to score
+- **Annotation guide**: `.claude/skills/judge/annotation_guide.md` — scorability heuristics
+- **Value rubric**: `.claude/skills/judge/rubric.md` — Schwartz value definitions
+
+### Output Format
+
+Each subagent writes JSON to `logs/judge_labels/persona_{id}_labels.json`:
+
+```json
+{
+  "persona_id": "8-char-hex",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "YYYY-MM-DD",
+      "scores": {
+        "self_direction": 0, "stimulation": 0, "hedonism": 0,
+        "achievement": 1, "power": 0, "security": 0,
+        "conformity": 0, "tradition": 0, "benevolence": -1,
+        "universalism": 0
+      }
+    }
+  ]
+}
+```
+
+### Idempotency
+
+The pipeline is idempotent — re-running `/judge` only processes pending work. The registry (`logs/registry/personas.parquet`) tracks which personas have been wrangled and labeled.
+
+### Key Files
+
+| File | Purpose |
+|------|---------|
+| `.claude/commands/judge.md` | Skill entry point |
+| `.claude/skills/judge/orchestration.md` | Detailed workflow with subagent prompt template |
+| `.claude/skills/judge/annotation_guide.md` | Scorability checklist and calibration examples |
+| `.claude/skills/judge/rubric.md` | 10 Schwartz values with aligned/misaligned behaviors |
+| `src/models/judge.py` | Pydantic validation models |
+| `src/judge/consolidate.py` | Merges JSON to parquet, updates registry |
+
+---
+
 ## Lesson Learned: Metadata Leakage in Synthetic Data Generation
 
 ### The Problem

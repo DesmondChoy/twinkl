@@ -36,7 +36,8 @@ The project generates synthetic training data for the VIF using two approaches:
 
 **Primary: Claude Code Subagents**
 - `docs/synthetic_data/claude_gen_instructions.md` — Instructions for Claude Code to generate synthetic data at scale using parallel subagents
-- Outputs to `logs/synthetic_data/<timestamp>/`
+- Outputs to `logs/synthetic_data/persona_<uuid>.md` (one file per persona)
+- Registry tracks pipeline progress at `logs/registry/personas.parquet`
 
 **Experimentation: Jupyter Notebooks** (for prompt iteration and testing)
 - `notebooks/journal_gen.ipynb` — One-way journal generation
@@ -82,12 +83,29 @@ template: |
 
 **Adding new prompts:** Create a new YAML file in `prompts/`, then add it to `prompts/__init__.py` exports.
 
-### Output Logging
+### Output Structure
 
-Synthetic data runs are logged to `logs/synthetic_data/<timestamp>/` with:
-- `config.md` — Run parameters
-- `persona_XXX.md` — Each persona's entries/nudges/responses
-- `prompts.md` — All LLM prompts for debugging
+Pipeline outputs are organized by persona UUID across multiple directories:
+
+- `logs/synthetic_data/persona_<uuid>.md` — Raw synthetic journal entries per persona
+- `logs/wrangled/persona_<uuid>.md` — Cleaned/parsed version for judge labeling
+- `logs/judge_labels/persona_<uuid>_labels.json` — Labels per persona from judge pipeline
+- `logs/judge_labels/judge_labels.parquet` — Consolidated training data (all personas)
+- `logs/registry/personas.parquet` — Central tracking of pipeline stages
+
+### Registry System
+
+The central persona registry (`logs/registry/personas.parquet`) tracks each persona's progress through the data pipeline:
+
+**Pipeline Stages:**
+- `stage_synthetic` — Synthetic journal generation complete
+- `stage_wrangled` — Data cleaning/parsing complete
+- `stage_labeled` — Judge labeling complete
+
+**Key Features:**
+- File locking for safe concurrent writes from parallel subagents
+- Enables incremental runs (only process personas at needed stage)
+- Implementation: `src/registry/personas.py`
 
 ### Key Design Patterns
 
