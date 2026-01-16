@@ -122,33 +122,3 @@ When in planning mode, be proactive and curious by using the `AskUserQuestion` t
 4. **Validate key decisions** — At architectural decision points (library choice, data structures, API design), confirm direction before proceeding
 
 The goal is collaborative planning — treat the user as a partner in design decisions, not just a recipient of your plan.
-
-## One-Word Commands
-
-- `$craft`: Generate high-quality conventional commit messages for this session’s changes (do not commit; user reviews first).
-  - Behavior:
-    - Inspect staged/unstaged changes and summarize what changed and why.
-    - Always propose a single commit message combining all changes.
-  - Output format (no extra prose; emit only commit message text in code fences):
-    - Single commit:
-      ```
-      <type>(<scope>): <summary>
-      
-      <body>
-      
-      - <bullet describing change>
-      - <bullet describing change>
-      
-      Affected: <file1>, <file2>, ...
-      Test Plan:
-      - <how you verified>
-      Revert plan:
-      - <how to undo safely>
-      ```
-
-  - Allowed types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert.
-  - Conventions:
-    - Subject ≤ 50 chars, imperative mood; wrap body at ~72 chars.
-    - Use BREAKING CHANGE: in body when applicable.
-    - Add Refs:/Closes: lines for issues/PRs when available.
-  - If context is missing, ask one concise question; otherwise proceed with best assumption and note it in the body.
