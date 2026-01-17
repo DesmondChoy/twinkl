@@ -17,6 +17,7 @@ Registry Schema:
     stage_synthetic: bool   - True after generation
     stage_wrangled: bool    - True after wrangling
     stage_labeled: bool     - True after judge labeling
+    nudge_enabled: bool     - Whether nudges were enabled during generation
 """
 
 import fcntl
@@ -41,6 +42,7 @@ REGISTRY_SCHEMA = {
     "stage_synthetic": pl.Boolean,
     "stage_wrangled": pl.Boolean,
     "stage_labeled": pl.Boolean,
+    "nudge_enabled": pl.Boolean,
 }
 
 
@@ -92,6 +94,7 @@ def register_persona(
     culture: str,
     core_values: list[str],
     entry_count: int,
+    nudge_enabled: bool = True,
 ) -> None:
     """Register a newly generated persona in the registry.
 
@@ -106,6 +109,7 @@ def register_persona(
         culture: Cultural background
         core_values: List of Schwartz values
         entry_count: Number of journal entries generated
+        nudge_enabled: Whether nudges were enabled during generation
 
     Raises:
         ValueError: If persona_id already exists in registry
@@ -139,6 +143,7 @@ def register_persona(
                     "stage_synthetic": [True],
                     "stage_wrangled": [False],
                     "stage_labeled": [False],
+                    "nudge_enabled": [nudge_enabled],
                 },
                 schema=REGISTRY_SCHEMA,
             )

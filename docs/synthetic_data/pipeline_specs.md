@@ -65,7 +65,7 @@ The pipeline uses **async/await** for efficient I/O and supports **parallel pers
 
 **Per-persona pipeline** (sequential within each persona):
 1. **Persona creation**: Random sampling from config + LLM generation with value context injection
-2. **Date sequence**: Random intervals (2-10 days) between entries
+2. **Date sequence**: Random intervals (0-7 days) between entries, with 15% same-day probability and random start date in 2025
 3. **Longitudinal entries**: Each entry receives previous entries for continuity
 4. **Validation**: Banned terms check to prevent Schwartz label leakage
 
@@ -151,9 +151,22 @@ If all synthetic personas have the same number of entries (e.g., all 5), the VIF
 
 ### Recommended Approach
 
-Use `MIN_ENTRIES=3` and `MAX_ENTRIES=10` with uniform random selection per persona. This ensures:
-- Minimum of 3 entries for session cap to be meaningful
-- Maximum of 10 covers rut detection window
+Use `MIN_ENTRIES=2` and `MAX_ENTRIES=12` with the following configuration:
+
+| Parameter | Value | Rationale |
+|-----------|-------|-----------|
+| `MIN_ENTRIES` | 2 | Include cold-start scenarios; VIF must learn uncertainty with sparse data |
+| `MAX_ENTRIES` | 12 | Better rut detection coverage (3+ consecutive weeks even with longer gaps) |
+| `MIN_DAYS_BETWEEN_ENTRIES` | 0 | Allow same-day entries (realistic for venting, follow-up thoughts) |
+| `MAX_DAYS_BETWEEN_ENTRIES` | 7 | Ensures at least ~1 entry per week for meaningful aggregation |
+| `SAME_DAY_PROBABILITY` | 0.15 | 15% chance of same-day follow-up entry |
+| `START_DATE` | Random in 2025 | Avoids seasonal bias; any date from 2025-01-01 to 2025-12-31 |
+
+This ensures:
+- Minimum of 2 entries for cold-start training
+- Maximum of 12 covers extended rut detection windows
+- Same-day entries expose VIF to rapid Δt=0 sequences (realistic ~15% of sessions)
+- Random start dates prevent December bias in training data
 - Variable counts train the VIF to handle uncertainty gracefully with sparse data
 
 ---

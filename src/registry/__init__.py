@@ -21,6 +21,7 @@ Usage:
         culture="Latin American",
         core_values=["Self-Direction"],
         entry_count=5,
+        nudge_enabled=True,  # Whether nudges were enabled during generation
     )
 
     # Mark persona as wrangled
