@@ -1,4 +1,4 @@
-# Annotation Tool for Judge Validation
+# Vision: Annotation Tool for Judge Validation
 
 ## 1. Executive Summary
 
