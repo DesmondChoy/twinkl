@@ -76,7 +76,7 @@ New parquet files at `logs/annotations/<annotator_id>.parquet`:
 
 ## Implementation Phases
 
-### Phase 1: Core Loop (2-3 hours)
+### Phase 1: Core Loop
 - [ ] Add dependencies to `pyproject.toml`
 - [ ] Create `data_loader.py` - load entries and judge labels
 - [ ] Create `annotation_store.py` - save annotations with file locking
@@ -94,7 +94,7 @@ New parquet files at `logs/annotations/<annotator_id>.parquet`:
 - [ ] Test prev/next navigation and progress bar updates
 - [ ] Close and reopen app — verify progress persists
 
-### Phase 2: Analysis (1-2 hours)
+### Phase 2: Analysis
 - [ ] Implement `agreement_metrics.py` - kappa calculations
 - [ ] Implement `components/analysis_view.py` - metrics display
 - [ ] Add blind mode toggle (judge scores hidden until annotation complete)
@@ -107,7 +107,7 @@ New parquet files at `logs/annotations/<annotator_id>.parquet`:
 - [ ] Export markdown report — verify format matches `vision.md` example
 - [ ] Test with 2 annotators — verify Fleiss' κ computes on shared entries
 
-### Phase 3: Polish (1 hour)
+### Phase 3: Polish
 - [ ] Add tooltips from `schwartz_values.yaml`
 - [ ] Implement collapsible persona bio
 - [ ] Add confirmation dialog for unsaved navigation
