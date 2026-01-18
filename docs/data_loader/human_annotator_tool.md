@@ -12,7 +12,7 @@ The `annotation_tool.md` proposal aligns well with `data_schema.md`:
 
 | Aspect | annotation_tool.md | data_schema.md | Status |
 |--------|-------------------|----------------|--------|
-| Entry loader | `parse_synthetic_data_run()` | N/A (synthetic data) | ✓ Exists in `src/wrangling/` |
+| Entry loader | Wrangled files (`logs/wrangled/`) | N/A (synthetic data) | ✓ Custom parser in `src/annotation_tool/data_loader.py` |
 | Judge labels | `logs/judge_labels/judge_labels.parquet` | Same path | ✓ Matches |
 | Composite key | `(persona_id, t_index)` | Same | ✓ Matches |
 | Value columns | `alignment_self_direction`, etc. | Same names | ✓ Matches |
@@ -66,33 +66,41 @@ New parquet files at `logs/annotations/<annotator_id>.parquet`:
 
 ## Key Reusable Components
 
-| Existing Code | Location | Reuse For |
-|--------------|----------|-----------|
-| `SCHWARTZ_VALUE_ORDER` | `src/models/judge.py:30-41` | Canonical value ordering |
-| `AlignmentScores` | `src/models/judge.py:44-77` | Score validation model |
-| `_write_registry_locked()` | `src/registry/personas.py:67-86` | File-locking pattern |
-| `parse_synthetic_data_dir()` | `src/wrangling/parse_synthetic_data.py` | Load entries with persona context |
-| `schwartz_values.yaml` | `config/schwartz_values.yaml` | Tooltip definitions |
+| Existing Code | Location | Reuse For | Used? |
+|--------------|----------|-----------|-------|
+| `SCHWARTZ_VALUE_ORDER` | `src/models/judge.py:30-41` | Canonical value ordering | ✅ Yes |
+| `AlignmentScores` | `src/models/judge.py:44-77` | Score validation model | ❌ Not yet |
+| `_write_registry_locked()` | `src/registry/personas.py:67-86` | File-locking pattern | ✅ Yes (pattern adapted) |
+| `parse_synthetic_data_dir()` | `src/wrangling/parse_synthetic_data.py` | Load entries with persona context | ❌ No (custom wrangled parser) |
+| `schwartz_values.yaml` | `config/schwartz_values.yaml` | Tooltip definitions | ❌ Not yet (Phase 3) |
 
 ## Implementation Phases
 
-### Phase 1: Core Loop
-- [ ] Add dependencies to `pyproject.toml`
-- [ ] Create `data_loader.py` - load entries and judge labels
-- [ ] Create `annotation_store.py` - save annotations with file locking
-- [ ] Create basic `app.py` with Shiny structure
-- [ ] Implement `components/header.py` - annotator selector + progress
-- [ ] Implement `components/entry_display.py` - persona + entry rendering
-- [ ] Implement `components/scoring_grid.py` - 10-value radio buttons
-- [ ] Wire up navigation (prev/next) and save logic
+### Phase 1: Core Loop ✅ COMPLETE
+- [x] Add dependencies to `pyproject.toml`
+- [x] Create `data_loader.py` - load entries from wrangled files
+- [x] Create `annotation_store.py` - save annotations with file locking
+- [x] Create basic `app.py` with Shiny structure
+- [x] Implement header component - annotator input + progress bar
+- [x] Implement entry display - persona context + entry rendering
+- [x] Implement scoring grid - 10-value radio buttons
+- [x] Wire up navigation (prev/next) and save logic
 
-**Phase 1 Testing:**
-- [ ] Run app: `shiny run src/annotation_tool/app.py`
-- [ ] Verify entries load with persona context displayed
-- [ ] Create new annotator and annotate 3 entries with various scores
-- [ ] Verify `logs/annotations/<annotator>.parquet` created with correct schema
-- [ ] Test prev/next navigation and progress bar updates
-- [ ] Close and reopen app — verify progress persists
+**Phase 1 Testing:** ✅ ALL PASSED
+- [x] Run app: `shiny run src/annotation_tool/app.py`
+- [x] Verify entries load with persona context displayed
+- [x] Create new annotator and annotate 3 entries with various scores
+- [x] Verify `logs/annotations/<annotator>.parquet` created with correct schema
+- [x] Test prev/next navigation and progress bar updates
+- [x] Close and reopen app — verify progress persists
+
+**Phase 1 Implementation Notes:**
+- Components were consolidated into `app.py` rather than separate module files (simpler Shiny pattern)
+- `data_loader.py` uses custom wrangled-format parser (not `parse_synthetic_data_dir()` which expects synthetic format)
+- Entry ordering is sequential by persona (grouped), not shuffled (shuffling deferred to Phase 2)
+- Annotator input is free-form text, not dropdown selector
+- All-neutral warning modal implemented
+- Collapsible persona bio implemented (originally planned for Phase 3)
 
 ### Phase 2: Analysis
 - [ ] Implement `agreement_metrics.py` - kappa calculations
@@ -109,13 +117,13 @@ New parquet files at `logs/annotations/<annotator_id>.parquet`:
 
 ### Phase 3: Polish
 - [ ] Add tooltips from `schwartz_values.yaml`
-- [ ] Implement collapsible persona bio
+- [x] Implement collapsible persona bio *(completed in Phase 1)*
 - [ ] Add confirmation dialog for unsaved navigation
 - [ ] Error handling and loading states
 
 **Phase 3 Testing:**
 - [ ] Hover over value names — verify tooltips appear with definitions
-- [ ] Click persona bio toggle — verify expand/collapse works
+- [x] Click persona bio toggle — verify expand/collapse works *(completed in Phase 1)*
 - [ ] Make changes, click prev/next without saving — verify confirmation dialog appears
 - [ ] Test with missing/malformed data — verify graceful error handling
 

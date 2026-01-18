@@ -61,11 +61,40 @@ Registry Check → Auto-Wrangle → Parallel Labeling (subagents) → Validation
 - `notebooks/journal_gen.ipynb` — One-way journal generation
 - `notebooks/journal_nudge.ipynb` — Two-way conversational journaling with nudges
 
+## Human Annotation Tool
+
+Validates LLM Judge labels via blind human annotation across 10 Schwartz value dimensions. Annotators provide independent scores without seeing Judge labels first; the system then computes agreement metrics (Cohen's κ, Fleiss' κ).
+
+**Run the tool:**
+```sh
+shiny run src/annotation_tool/app.py
+```
+
+Open `http://127.0.0.1:8000` in your browser.
+
+**Features:**
+- Displays persona context (name, age, profession, culture, core values, collapsible bio)
+- Shows journal entries with nudge/response threading
+- 10-value scoring grid with -1 (misaligned) / 0 (neutral) / +1 (aligned)
+- Progress tracking per annotator
+- Annotations persisted to `logs/annotations/<annotator>.parquet`
+
+**Key files:**
+- `src/annotation_tool/app.py` — Main Shiny application
+- `src/annotation_tool/data_loader.py` — Loads entries from wrangled files
+- `src/annotation_tool/annotation_store.py` — Persists annotations with file locking
+- `docs/data_loader/human_annotator_tool.md` — Full implementation plan
+
 # Setup
 
 This repo uses `uv` and `pyproject.toml` for dependency management.
 
-1. Install `uv` (see https://docs.astral.sh/uv/).
+1. Install `uv`:
+   ```sh
+   curl -LsSf https://astral.sh/uv/install.sh | sh
+   ```
+   (Or see https://docs.astral.sh/uv/getting-started/installation/ for other methods)
+
 2. Create the virtual environment:
    ```sh
    uv venv
