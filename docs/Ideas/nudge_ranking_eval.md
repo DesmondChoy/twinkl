@@ -1,5 +1,18 @@
 # Nudge Selection: Ranking-Based Evaluation
 
+> ⚠️ **STATUS: NOT IMPLEMENTING**
+>
+> This evaluation plan has been **archived as future work**. The nudging feature is justified through ecological validity (industry alignment) rather than quantitative ablation.
+>
+> **Reasons:**
+> 1. **Nudging is industry-standard** — 5 of 7 leading AI journaling apps (Rosebud, Reflection, Entries, Life Note, Mindsera) use conversational follow-ups. No validation needed to justify a standard practice.
+> 2. **Academic focus is on VIF training** — The core contribution is the Value Identity Function, not nudge selection quality.
+> 3. **Current system is single-shot** — Building a candidate ranking system requires new infrastructure that's out of scope for this capstone.
+>
+> See: [Nudging Feature: Design Rationale & Industry Alignment](../synthetic_data/nudge_validation_plan.md)
+
+---
+
 ## Goal
 
 Add academically rigorous evaluation for the nudge/question selection system using standard recommender metrics (NDCG@k, Hit@k) while keeping implementation minimal for a time-boxed capstone.
