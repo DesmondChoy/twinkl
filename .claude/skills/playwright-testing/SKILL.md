@@ -224,3 +224,64 @@ For rapid testing, verify these critical paths:
 4. [ ] Core user flows complete successfully
 5. [ ] No console errors throughout
 6. [ ] Responsive layout works on mobile viewport
+
+---
+
+## App-Specific Checklists
+
+### Annotation Tool (`shiny run src/annotation_tool/app.py`)
+
+**Navigation:** http://localhost:8000
+
+#### Phase 1: Initial Load
+- [ ] App loads showing persona list in left sidebar
+- [ ] First entry content displays in center column
+- [ ] Scoring grid (10 Schwartz values) visible in right column
+- [ ] Annotator name input visible in header
+- [ ] Progress bar shows 0% initially
+
+#### Phase 2: Core Annotation Flow
+- [ ] Enter annotator name and verify it persists
+- [ ] Scoring buttons (−/+) increment/decrement values correctly
+- [ ] Score values cycle through -1 → 0 → +1 → -1
+- [ ] All 10 Schwartz values can be scored independently
+- [ ] Persona bio toggle (Show Bio/Hide Bio) works
+
+#### Phase 3: Post-Save Reveal Feature
+- [ ] Click "Save & Next →" button
+- [ ] **Comparison modal appears** with:
+  - [ ] Table showing all 10 Schwartz values
+  - [ ] "You" column with human annotator scores
+  - [ ] "Judge" column with LLM Judge scores
+  - [ ] Match indicator column (✓/~/✗)
+  - [ ] Color coding: green (match), yellow (adjacent), red (disagree)
+  - [ ] Summary line (e.g., "7/10 exact matches")
+- [ ] Modal has "Continue →" button
+- [ ] Modal cannot be dismissed by clicking outside (easy_close=False)
+- [ ] Clicking "Continue →" closes modal and advances to next entry
+- [ ] Progress bar updates after save
+
+#### Phase 4: Missing Labels Handling
+- [ ] For entries without Judge labels, modal shows:
+  - [ ] "No Judge labels available for this entry" message
+  - [ ] Confirmation that annotation was saved
+  - [ ] "Continue →" button still works
+
+#### Phase 5: All-Neutral Warning
+- [ ] Set all 10 scores to 0 (neutral)
+- [ ] Click "Save & Next →"
+- [ ] Warning modal appears asking to confirm all-neutral scores
+- [ ] Can cancel and adjust scores
+- [ ] Can confirm and proceed (then comparison modal appears)
+
+#### Phase 6: Re-edit Behavior
+- [ ] Navigate to a previously annotated entry
+- [ ] Existing scores load into scoring grid
+- [ ] Modify one or more scores
+- [ ] Save → comparison modal still appears (always shows on save)
+
+#### Phase 7: Persistence
+- [ ] Close browser/refresh page
+- [ ] Verify progress persists (annotations saved to parquet)
+- [ ] Verify annotated entries show checkmark (✓) in entry list
+- [ ] Verify can resume from last position
