@@ -1,29 +1,55 @@
-"""Header component for annotator input, progress bar, and navigation.
+"""Header component for the annotation tool.
 
-Displays the annotator name input, progress indicator, and prev/next buttons.
+This module provides the app header containing:
+- App title and help button
+- Annotator name input
+- Progress bar
+- Persona navigation buttons
 
-Elements:
-    - input_text("annotator_name") - Free-form annotator name
-    - Progress bar: 47/100 entries (47%)
-    - [◀ Prev] and [Next ▶] buttons
+Usage:
+    from components import header
+
+    # In UI definition
+    header.header_ui("header")
+
+    # In server function
+    header.header_server(
+        "header",
+        state=state,
+        total_entries=total_entries,
+        total_personas=total_personas,
+        current_persona_entries=current_persona_entries,
+        on_prev=handle_prev,
+        on_next=handle_next,
+    )
 """
 
-from shiny import module, reactive, ui
+from shiny import module, reactive, render, ui
+
+from src.annotation_tool.state import AppState
 
 
 @module.ui
 def header_ui():
-    """Generate the header UI component."""
+    """Generate the header UI component.
+
+    Returns:
+        UI div containing the complete header
+    """
     return ui.div(
-        # Top row: Title and annotator input
+        # Top row: Title, help button, and annotator input
         ui.div(
-            ui.h2("Schwartz Value Annotation Tool", class_="app-title"),
+            ui.div(
+                ui.h2("Schwartz Value Annotation Tool", class_="app-title"),
+                ui.input_action_button("help_btn", "? Help", class_="help-btn"),
+                class_="header-left",
+            ),
             ui.div(
                 ui.input_text(
                     id="annotator_name",
-                    label="Annotator Name",
+                    label=None,
                     placeholder="Enter your name...",
-                    width="200px",
+                    width="180px",
                 ),
                 class_="annotator-input",
             ),
@@ -31,23 +57,13 @@ def header_ui():
         ),
         # Progress and navigation row
         ui.div(
-            # Progress section
             ui.div(
                 ui.output_ui("progress_display"),
                 class_="progress-section",
             ),
-            # Navigation buttons
             ui.div(
-                ui.input_action_button(
-                    id="prev_btn",
-                    label="◀ Prev",
-                    class_="btn-secondary nav-button",
-                ),
-                ui.input_action_button(
-                    id="next_btn",
-                    label="Next ▶",
-                    class_="btn-secondary nav-button",
-                ),
+                ui.input_action_button("prev_btn", "◀ Prev Persona", class_="btn-secondary"),
+                ui.input_action_button("next_btn", "Next Persona ▶", class_="btn-secondary"),
                 class_="nav-buttons",
             ),
             class_="header-nav-row",
@@ -61,9 +77,10 @@ def header_server(
     input,
     output,
     session,
+    state: AppState,
     total_entries: int,
-    current_index: reactive.Value,
-    annotated_count: reactive.Value,
+    total_personas: int,
+    current_persona_entries: reactive.calc,
     on_prev: callable,
     on_next: callable,
 ):
@@ -71,36 +88,39 @@ def header_server(
 
     Args:
         input, output, session: Shiny module parameters
-        total_entries: Total number of entries to annotate
-        current_index: Reactive value with current entry index (0-based)
-        annotated_count: Reactive value with count of annotated entries
-        on_prev: Callback for previous button click
-        on_next: Callback for next button click
+        state: Centralized app state
+        total_entries: Total number of entries across all personas
+        total_personas: Total number of personas
+        current_persona_entries: Reactive calc returning entries for current persona
+        on_prev: Callback for previous persona button click
+        on_next: Callback for next persona button click
+
+    Returns:
+        Reactive calc for the annotator name
     """
 
-    @output
-    @ui.render_ui
+    @render.ui
     def progress_display():
-        count = annotated_count()
-        total = total_entries
-        percentage = (count / total * 100) if total > 0 else 0
-        idx = current_index()
+        """Render the progress bar and entry/persona indicators."""
+        count = state.annotated_count()
+        percentage = (count / total_entries * 100) if total_entries > 0 else 0
+        persona_idx = state.persona_index()
+        entries = current_persona_entries()
+        entry_idx = state.entry_index()
 
         return ui.div(
             ui.div(
-                f"Entry {idx + 1} of {total}",
-                class_="current-position",
+                f"Persona {persona_idx + 1} of {total_personas} • "
+                f"Entry {entry_idx + 1} of {len(entries)}",
+                style="margin-bottom: 8px; color: #6b7280;",
             ),
             ui.div(
                 ui.div(
-                    ui.div(
-                        style=f"width: {percentage:.0f}%",
-                        class_="progress-fill",
-                    ),
+                    ui.div(style=f"width: {percentage:.0f}%", class_="progress-fill"),
                     class_="progress-bar-container",
                 ),
                 ui.span(
-                    f"{count}/{total} annotated ({percentage:.0f}%)",
+                    f"{count}/{total_entries} annotated ({percentage:.0f}%)",
                     class_="progress-text",
                 ),
                 class_="progress-wrapper",
@@ -123,101 +143,3 @@ def header_server(
         return input.annotator_name()
 
     return annotator_name
-
-
-def get_header_css() -> str:
-    """Return CSS styles for the header component."""
-    return """
-    .header-component {
-        background: #212529;
-        color: white;
-        padding: 16px 24px;
-        margin-bottom: 24px;
-    }
-
-    .header-top-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 16px;
-    }
-
-    .app-title {
-        margin: 0;
-        font-size: 20px;
-        font-weight: 600;
-    }
-
-    .annotator-input label {
-        color: #adb5bd;
-        font-size: 12px;
-        margin-bottom: 4px;
-    }
-
-    .annotator-input input {
-        background: #343a40;
-        border: 1px solid #495057;
-        color: white;
-        border-radius: 4px;
-        padding: 6px 12px;
-    }
-
-    .annotator-input input::placeholder {
-        color: #6c757d;
-    }
-
-    .header-nav-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .progress-section {
-        flex: 1;
-        margin-right: 24px;
-    }
-
-    .current-position {
-        font-size: 14px;
-        color: #adb5bd;
-        margin-bottom: 8px;
-    }
-
-    .progress-wrapper {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-
-    .progress-bar-container {
-        flex: 1;
-        height: 8px;
-        background: #495057;
-        border-radius: 4px;
-        overflow: hidden;
-        max-width: 300px;
-    }
-
-    .progress-fill {
-        height: 100%;
-        background: #0d6efd;
-        border-radius: 4px;
-        transition: width 0.3s ease;
-    }
-
-    .progress-text {
-        font-size: 13px;
-        color: #adb5bd;
-        white-space: nowrap;
-    }
-
-    .nav-buttons {
-        display: flex;
-        gap: 8px;
-    }
-
-    .nav-button {
-        padding: 8px 16px;
-        font-size: 14px;
-    }
-    """

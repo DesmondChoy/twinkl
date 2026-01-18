@@ -1,23 +1,28 @@
-"""Scoring grid component for rating entries across 10 Schwartz values.
+"""Scoring grid component for the right column.
 
-Displays a vertical table with radio buttons for each value dimension,
-plus notes and confidence inputs, and a Save & Next button.
+This module provides the scoring grid containing:
+- Value group headers with colored indicators
+- Counter button rows for each Schwartz value (-/0/+)
+- Notes text area
+- Save & Next button
 
-Layout:
-    | Value           |  −  |  ○  |  +  |
-    |-----------------|-----|-----|-----|
-    | Self-Direction  |  ○  |  ●  |  ○  |
-    | Stimulation     |  ○  |  ●  |  ○  |
-    | ...             |     |     |     |
-    | Universalism    |  ○  |  ●  |  ○  |
+Usage:
+    from components import scoring_grid
 
-    Notes: [________________________]
-    Confidence: [1] [2] [3] [4] [5]
-    [Save & Next →]
+    # In UI definition
+    scoring_grid.scoring_grid_ui("scoring")
+
+    # In server function
+    scoring_grid.scoring_grid_server(
+        "scoring",
+        state=state,
+        on_save=handle_save,
+    )
 """
 
-from shiny import module, reactive, ui
+from shiny import module, reactive, render, ui
 
+from src.annotation_tool.state import AppState
 from src.models.judge import SCHWARTZ_VALUE_ORDER
 
 # Human-readable labels for Schwartz values
@@ -34,73 +39,133 @@ VALUE_LABELS = {
     "universalism": "Universalism",
 }
 
+# Schwartz value groupings for organized display
+VALUE_GROUPS = {
+    "OPENNESS TO CHANGE": ["self_direction", "stimulation", "hedonism"],
+    "SELF-ENHANCEMENT": ["achievement", "power"],
+    "CONSERVATION": ["security", "conformity", "tradition"],
+    "SELF-TRANSCENDENCE": ["benevolence", "universalism"],
+}
+
+# Map group names to CSS classes
+GROUP_CSS_CLASSES = {
+    "OPENNESS TO CHANGE": "openness",
+    "SELF-ENHANCEMENT": "enhancement",
+    "CONSERVATION": "conservation",
+    "SELF-TRANSCENDENCE": "transcendence",
+}
+
+
+def _create_scoring_row(value: str, row_index: int) -> ui.TagChild:
+    """Create a scoring row for a single Schwartz value with counter buttons.
+
+    Args:
+        value: The Schwartz value key (e.g., 'self_direction')
+        row_index: The row index for keyboard navigation (0-9)
+
+    Returns:
+        UI div for the scoring row
+    """
+    label = VALUE_LABELS[value]
+    return ui.div(
+        ui.div(label, class_="value-label"),
+        ui.div(
+            ui.input_action_button(
+                f"dec_{value}", "−", class_="score-btn dec"
+            ),
+            ui.output_ui(f"score_display_{value}"),
+            ui.input_action_button(
+                f"inc_{value}", "+", class_="score-btn inc"
+            ),
+            class_="score-btn-group",
+        ),
+        class_="scoring-row",
+        id=f"row_{value}",
+        **{"data-row-index": str(row_index), "data-value": value},
+    )
+
+
+def _create_value_group(group_name: str, values: list, start_index: int) -> ui.TagChild:
+    """Create a value group with header and rows.
+
+    Args:
+        group_name: Display name for the group (e.g., 'OPENNESS TO CHANGE')
+        values: List of value keys in this group
+        start_index: Starting row index for keyboard navigation
+
+    Returns:
+        UI div for the value group
+    """
+    css_class = GROUP_CSS_CLASSES.get(group_name, "")
+
+    rows = []
+    for i, value in enumerate(values):
+        rows.append(_create_scoring_row(value, start_index + i))
+
+    return ui.div(
+        ui.div(group_name, class_=f"value-group-header {css_class}"),
+        *rows,
+        class_="value-group",
+    )
+
+
+def _create_grouped_scoring_grid() -> list:
+    """Create all value groups for the scoring grid.
+
+    Returns:
+        List of UI divs for all value groups
+    """
+    groups = []
+    current_index = 0
+
+    for group_name, values in VALUE_GROUPS.items():
+        groups.append(_create_value_group(group_name, values, current_index))
+        current_index += len(values)
+
+    return groups
+
 
 @module.ui
 def scoring_grid_ui():
-    """Generate the scoring grid UI component."""
-    # Build radio buttons for each value
-    value_rows = []
-    for value in SCHWARTZ_VALUE_ORDER:
-        label = VALUE_LABELS[value]
-        value_rows.append(
-            ui.div(
-                ui.div(label, class_="value-label"),
-                ui.input_radio_buttons(
-                    id=f"score_{value}",
-                    label=None,
-                    choices={"-1": "−", "0": "○", "1": "+"},
-                    selected="0",
-                    inline=True,
-                ),
-                class_="scoring-row",
-            )
-        )
+    """Generate the scoring grid UI component.
 
+    Returns:
+        UI div containing the complete scoring grid
+    """
     return ui.div(
-        # Scoring header
         ui.div(
-            ui.div("Value", class_="header-label"),
             ui.div(
-                ui.span("−", title="Misaligned"),
-                ui.span("○", title="Neutral"),
-                ui.span("+", title="Aligned"),
-                class_="header-scores",
+                ui.div("Value(s)", class_="scoring-header-label"),
+                ui.div(
+                    ui.span("Score", title="−1 = Misaligned, 0 = Neutral, +1 = Aligned"),
+                    class_="scoring-header-scores",
+                ),
+                class_="scoring-header",
             ),
-            class_="scoring-header",
-        ),
-        # Value rows
-        *value_rows,
-        # Notes field
-        ui.div(
-            ui.input_text_area(
-                id="notes",
-                label="Notes (optional)",
-                placeholder="Any observations about this entry...",
-                rows=2,
+            # Grouped value rows
+            *_create_grouped_scoring_grid(),
+            # Notes section
+            ui.div(
+                ui.input_text_area(
+                    id="notes",
+                    label="Notes (optional)",
+                    placeholder="Any observations about this entry...",
+                    rows=2,
+                ),
+                class_="notes-section",
             ),
-            class_="notes-section",
-        ),
-        # Confidence rating
-        ui.div(
-            ui.input_radio_buttons(
-                id="confidence",
-                label="Confidence (optional)",
-                choices={"": "—", "1": "1", "2": "2", "3": "3", "4": "4", "5": "5"},
-                selected="",
-                inline=True,
+            # Save button
+            ui.div(
+                ui.input_action_button(
+                    id="save_btn",
+                    label="Save & Next →",
+                    class_="btn-primary",
+                ),
+                class_="save-section",
             ),
-            class_="confidence-section",
+            class_="scoring-grid",
         ),
-        # Save button
-        ui.div(
-            ui.input_action_button(
-                id="save_btn",
-                label="Save & Next →",
-                class_="btn-primary save-button",
-            ),
-            class_="save-section",
-        ),
-        class_="scoring-grid",
+        class_="right-column",
     )
 
 
@@ -109,172 +174,141 @@ def scoring_grid_server(
     input,
     output,
     session,
+    state: AppState,
     on_save: callable,
-    load_scores: reactive.Value,
+    on_modal_cancel: callable = None,
+    on_modal_confirm: callable = None,
+    on_comparison_continue: callable = None,
 ):
     """Server logic for the scoring grid.
 
     Args:
         input, output, session: Shiny module parameters
-        on_save: Callback function to call with scores when save is clicked.
-                 Receives (scores: dict, notes: str|None, confidence: int|None)
-        load_scores: Reactive value that triggers score loading.
-                     When changed, should contain dict with scores to load,
-                     or None to reset to neutral.
+        state: Centralized app state with scores
+        on_save: Callback function for save button. Receives (scores: dict, notes: str|None)
     """
 
-    # Track when scores are loaded externally vs changed by user
-    @reactive.effect
-    @reactive.event(load_scores)
-    def _load_scores():
-        """Load scores from external source (e.g., existing annotation)."""
-        data = load_scores()
-        if data is None:
-            # Reset to neutral
-            for value in SCHWARTZ_VALUE_ORDER:
-                ui.update_radio_buttons(f"score_{value}", selected="0")
-            ui.update_text_area("notes", value="")
-            ui.update_radio_buttons("confidence", selected="")
+    # Create score display renderers for each Schwartz value
+    # We need to create these explicitly to match the output_ui IDs
+    def _render_score(value: str):
+        score = state.scores[value]()
+        if score == -1:
+            display = "−1"
+            css_class = "score-display negative"
+        elif score == 1:
+            display = "+1"
+            css_class = "score-display positive"
         else:
-            # Load existing scores
-            for value in SCHWARTZ_VALUE_ORDER:
-                score_key = f"alignment_{value}"
-                if score_key in data:
-                    ui.update_radio_buttons(
-                        f"score_{value}",
-                        selected=str(data[score_key])
-                    )
-            # Load notes and confidence
-            if "notes" in data and data["notes"]:
-                ui.update_text_area("notes", value=data["notes"])
-            else:
-                ui.update_text_area("notes", value="")
+            display = "0"
+            css_class = "score-display neutral"
+        return ui.span(display, class_=css_class)
 
-            if "confidence" in data and data["confidence"]:
-                ui.update_radio_buttons("confidence", selected=str(data["confidence"]))
-            else:
-                ui.update_radio_buttons("confidence", selected="")
+    @render.ui
+    def score_display_self_direction():
+        return _render_score("self_direction")
 
+    @render.ui
+    def score_display_stimulation():
+        return _render_score("stimulation")
+
+    @render.ui
+    def score_display_hedonism():
+        return _render_score("hedonism")
+
+    @render.ui
+    def score_display_achievement():
+        return _render_score("achievement")
+
+    @render.ui
+    def score_display_power():
+        return _render_score("power")
+
+    @render.ui
+    def score_display_security():
+        return _render_score("security")
+
+    @render.ui
+    def score_display_conformity():
+        return _render_score("conformity")
+
+    @render.ui
+    def score_display_tradition():
+        return _render_score("tradition")
+
+    @render.ui
+    def score_display_benevolence():
+        return _render_score("benevolence")
+
+    @render.ui
+    def score_display_universalism():
+        return _render_score("universalism")
+
+    # Create decrement button handlers for each Schwartz value
+    def make_dec_handler(value: str):
+        @reactive.effect
+        @reactive.event(input[f"dec_{value}"])
+        def _():
+            current = state.scores[value]()
+            if current > -1:
+                state.scores[value].set(current - 1)
+        return _
+
+    # Create increment button handlers for each Schwartz value
+    def make_inc_handler(value: str):
+        @reactive.effect
+        @reactive.event(input[f"inc_{value}"])
+        def _():
+            current = state.scores[value]()
+            if current < 1:
+                state.scores[value].set(current + 1)
+        return _
+
+    # Register button handlers for all values
+    for value in SCHWARTZ_VALUE_ORDER:
+        make_dec_handler(value)
+        make_inc_handler(value)
+
+    # Save button handler
     @reactive.effect
     @reactive.event(input.save_btn)
     def _on_save():
-        """Handle save button click."""
-        # Collect scores
-        scores = {}
-        for value in SCHWARTZ_VALUE_ORDER:
-            score_str = input[f"score_{value}"]()
-            scores[value] = int(score_str)
+        # Collect scores from state
+        scores = state.get_scores_dict()
 
         # Get notes (empty string becomes None)
         notes = input.notes()
         if notes == "":
             notes = None
 
-        # Get confidence (empty string becomes None)
-        confidence_str = input.confidence()
-        confidence = int(confidence_str) if confidence_str else None
-
         # Call the callback
-        on_save(scores, notes, confidence)
+        on_save(scores, notes)
 
+    def get_notes():
+        """Get the current notes value."""
+        return input.notes()
 
-def get_scoring_grid_css() -> str:
-    """Return CSS styles for the scoring grid component."""
-    return """
-    .scoring-grid {
-        background: #f8f9fa;
-        border-radius: 8px;
-        padding: 16px;
-        margin-top: 16px;
-    }
+    def set_notes(value: str):
+        """Set the notes text area value."""
+        ui.update_text_area("notes", value=value)
 
-    .scoring-header {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        align-items: center;
-        padding-bottom: 8px;
-        border-bottom: 2px solid #dee2e6;
-        margin-bottom: 8px;
-    }
+    # Modal button handlers (buttons in modals inherit this module's namespace)
+    @reactive.effect
+    @reactive.event(input.modal_cancel)
+    def _handle_modal_cancel():
+        if on_modal_cancel:
+            on_modal_cancel()
 
-    .header-label {
-        font-weight: bold;
-        color: #495057;
-    }
+    @reactive.effect
+    @reactive.event(input.modal_confirm)
+    def _handle_modal_confirm():
+        if on_modal_confirm:
+            on_modal_confirm()
 
-    .header-scores {
-        display: flex;
-        gap: 24px;
-        padding-right: 8px;
-    }
+    @reactive.effect
+    @reactive.event(input.comparison_continue)
+    def _handle_comparison_continue():
+        if on_comparison_continue:
+            on_comparison_continue()
 
-    .header-scores span {
-        font-size: 14px;
-        color: #6c757d;
-        width: 32px;
-        text-align: center;
-    }
-
-    .scoring-row {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        align-items: center;
-        padding: 8px 0;
-        border-bottom: 1px solid #e9ecef;
-    }
-
-    .scoring-row:last-of-type {
-        border-bottom: none;
-    }
-
-    .value-label {
-        font-size: 14px;
-        color: #212529;
-    }
-
-    .scoring-row .shiny-input-radiogroup {
-        display: flex;
-        gap: 8px;
-    }
-
-    .scoring-row .shiny-input-radiogroup .radio-inline {
-        margin: 0;
-        padding: 0;
-    }
-
-    .scoring-row .shiny-input-radiogroup input[type="radio"] {
-        margin: 0 4px;
-    }
-
-    .notes-section {
-        margin-top: 16px;
-        padding-top: 16px;
-        border-top: 2px solid #dee2e6;
-    }
-
-    .notes-section textarea {
-        width: 100%;
-        resize: vertical;
-    }
-
-    .confidence-section {
-        margin-top: 12px;
-    }
-
-    .confidence-section .shiny-input-radiogroup {
-        display: flex;
-        gap: 8px;
-        align-items: center;
-    }
-
-    .save-section {
-        margin-top: 16px;
-        display: flex;
-        justify-content: flex-end;
-    }
-
-    .save-button {
-        padding: 10px 24px;
-        font-size: 16px;
-    }
-    """
+    # Return accessor functions for notes
+    return {"get_notes": get_notes, "set_notes": set_notes}
