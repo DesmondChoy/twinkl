@@ -71,19 +71,49 @@ template: |
 
   ## Output
 
-  Return ONLY valid JSON with integer scores (-1, 0, or +1) for each value dimension. No explanation or additional text.
+  Return ONLY valid JSON with:
+  1. Integer scores (-1, 0, or +1) for each value dimension
+  2. Rationales for **non-zero scores only** — explain WHY this score was assigned
+
+  **Rationale guidelines:**
+  - Quote or reference specific content from the entry (use quotation marks)
+  - Explain the connection between behavior and value dimension
+  - Be concise (1-2 sentences)
+  - Do NOT include the value name in the rationale (avoid circular reasoning)
 
   ```json
   {
-    "self_direction": <integer>,
-    "stimulation": <integer>,
-    "hedonism": <integer>,
-    "achievement": <integer>,
-    "power": <integer>,
-    "security": <integer>,
-    "conformity": <integer>,
-    "tradition": <integer>,
-    "benevolence": <integer>,
-    "universalism": <integer>
+    "scores": {
+      "self_direction": <integer>,
+      "stimulation": <integer>,
+      "hedonism": <integer>,
+      "achievement": <integer>,
+      "power": <integer>,
+      "security": <integer>,
+      "conformity": <integer>,
+      "tradition": <integer>,
+      "benevolence": <integer>,
+      "universalism": <integer>
+    },
+    "rationales": {
+      "<value_name>": "<explanation for non-zero score>",
+      ...
+    }
+  }
+  ```
+
+  Example output:
+  ```json
+  {
+    "scores": {
+      "self_direction": 1, "stimulation": 0, "hedonism": -1,
+      "achievement": 0, "power": 0, "security": 0,
+      "conformity": 0, "tradition": 0, "benevolence": 1, "universalism": 0
+    },
+    "rationales": {
+      "self_direction": "Deliberately chose personal project over assigned work, stating 'I need to follow my own path'.",
+      "hedonism": "Skipped planned leisure activity ('cancelled dinner with friends') to meet deadline.",
+      "benevolence": "Spent two hours helping colleague debug issue despite time pressure."
+    }
   }
   ```

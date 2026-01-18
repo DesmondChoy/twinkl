@@ -88,6 +88,13 @@ def consolidate_judge_labels(
                         entry_label.scores, value_name
                     )
 
+                # Add rationales as JSON string (None if no rationales)
+                row["rationales_json"] = (
+                    json.dumps(entry_label.rationales)
+                    if entry_label.rationales
+                    else None
+                )
+
                 rows.append(row)
 
         except json.JSONDecodeError as e:

@@ -21,7 +21,7 @@ Instructions for Claude Code to generate synthetic conversational journal data u
 | `MIN_DAYS_BETWEEN_ENTRIES` | 0 | Minimum days between entries (0 = same-day allowed) |
 | `MAX_DAYS_BETWEEN_ENTRIES` | 7 | Maximum days between entries (ensures ~1 entry/week) |
 | `SAME_DAY_PROBABILITY` | 0.15 | Probability of same-day follow-up entry (15%) |
-| `NUDGE_ENABLED` | false | Set to false to disable all nudge generation |
+| `NUDGE_ENABLED` | true | Set to false to disable all nudge generation |
 
 ---
 

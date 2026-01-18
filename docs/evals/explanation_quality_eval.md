@@ -72,14 +72,62 @@ For deeper analysis, rate explanations on three dimensions:
 
 ## Evaluation Protocol
 
-### For Synthetic Data (Automated)
+### For Synthetic Data (Automated) — Tiered Evaluation
 
-1. Generate Judge rationales for 50-100 entries
-2. Have LLM-as-meta-judge rate each rationale on correctness/specificity
-3. Flag rationales that are:
-   - Too generic ("This shows value alignment")
-   - Factually wrong (misquotes entry content)
-   - Circular ("Achievement score is +1 because of achievement behavior")
+#### Tier 1: Automated Code Checks (No LLM)
+
+Fast, objective checks that don't require LLM calls:
+
+| Check | Description | Target |
+|-------|-------------|--------|
+| **Groundedness** | % of rationales with verifiable quotes (substring match in entry) | > 70% |
+| **Non-circularity** | % that don't contain the value name itself | > 95% |
+| **Length** | Flag too-short (<10 words) or too-long (>50 words) | 90% in range |
+
+**Implementation:**
+```python
+def check_groundedness(rationale: str, entry_text: str) -> bool:
+    """Check if rationale contains verifiable content from entry."""
+    # Extract quoted phrases from rationale
+    quotes = re.findall(r'"([^"]+)"', rationale)
+    if not quotes:
+        return False  # No quotes = not grounded
+    return any(quote.lower() in entry_text.lower() for quote in quotes)
+
+def check_non_circularity(rationale: str, value_name: str) -> bool:
+    """Check if rationale avoids using the value name."""
+    # Normalize: "self_direction" -> ["self", "direction"]
+    terms = value_name.replace("_", " ").split()
+    return not any(term.lower() in rationale.lower() for term in terms)
+```
+
+#### Tier 2: Meta-Judge Evaluation (LLM-Based)
+
+For rationales that pass Tier 1, evaluate with LLM:
+
+| Criterion | Question | Scale |
+|-----------|----------|-------|
+| **Correctness** | Does the rationale accurately reflect what happened in the entry? | 1-5 |
+| **Specificity** | Does it reference concrete actions/statements, not vague generalities? | 1-5 |
+
+**Meta-judge prompt structure:**
+- Input: Entry text + Judge's rationale + score
+- Task: Rate correctness and specificity on 1-5 scale
+- Output: Scores + brief justification
+
+**Flag for human review if:**
+- Meta-judge correctness < 3
+- Meta-judge specificity < 3
+- Meta-judge expresses uncertainty
+
+#### Tier 3: Human Calibration (Small Sample)
+
+Validate meta-judge accuracy against human judgment:
+
+1. Randomly sample 20-30 rationales
+2. Human rates same criteria (correctness, specificity)
+3. Calculate agreement with meta-judge (Cohen's κ)
+4. Target: κ > 0.6 (substantial agreement)
 
 ### For User Study (Manual)
 
@@ -102,14 +150,64 @@ Day 14:      Second digest + rating
 
 ---
 
+## Evaluation Pipeline
+
+```
+Judge produces rationales for N entries
+              ↓
+┌─────────────────────────────────────┐
+│  Tier 1: Automated Code Checks      │
+│  - Groundedness (verifiable quotes) │
+│  - Non-circularity (no value name)  │
+│  - Length (10-50 words)             │
+│  Output: Pass/Fail + metrics        │
+└─────────────────────────────────────┘
+              ↓
+       (Passed Tier 1)
+              ↓
+┌─────────────────────────────────────┐
+│  Tier 2: Meta-Judge Evaluation      │
+│  - Correctness (1-5)                │
+│  - Specificity (1-5)                │
+│  Output: Scores + flags for review  │
+└─────────────────────────────────────┘
+              ↓
+       (Flagged or sampled)
+              ↓
+┌─────────────────────────────────────┐
+│  Tier 3: Human Calibration          │
+│  - 20-30 rationales human-rated     │
+│  - Compare to meta-judge            │
+│  Output: Cohen's κ agreement        │
+└─────────────────────────────────────┘
+```
+
+---
+
+## Failure Modes to Detect
+
+| Failure Mode | Example | Detection Method |
+|--------------|---------|------------------|
+| **Hallucinated quotes** | "Entry mentioned 'staying late'" when it didn't | Tier 1: Groundedness check |
+| **Generic explanation** | "Shows alignment with this value" | Tier 1: Length check + Tier 2: Specificity |
+| **Circular reasoning** | "Achievement +1 because of achievement behavior" | Tier 1: Non-circularity check |
+| **Wrong attribution** | Confuses which value a behavior supports | Tier 2: Meta-judge correctness |
+| **Over-inference** | Reads too much into vague entry | Tier 2: Meta-judge correctness |
+
+---
+
 ## Success Criteria
 
-| Metric | Target | Rationale |
-|--------|--------|-----------|
-| Mean Likert rating | ≥ 3.5/5 | Above neutral = generally useful |
-| % ratings ≥ 4 | > 50% | Majority find it "mostly accurate" or better |
-| Correctness (meta-judge) | > 80% | Rationales don't misquote or contradict entry |
-| Specificity (meta-judge) | > 70% | Rationales reference concrete details |
+| Metric | Target | Tier | Rationale |
+|--------|--------|------|-----------|
+| Groundedness (code) | > 70% | 1 | Rationales should quote or reference entry content |
+| Non-circularity (code) | > 95% | 1 | Rationales shouldn't just restate value name |
+| Length compliance | > 90% | 1 | Most rationales should be 10-50 words |
+| Correctness (meta-judge) | Mean > 3.5/5 | 2 | Rationales should be factually accurate |
+| Specificity (meta-judge) | Mean > 3.5/5 | 2 | Rationales should cite concrete details |
+| Human-meta agreement | κ > 0.6 | 3 | Meta-judge should align with human judgment |
+| Mean Likert rating (users) | ≥ 3.5/5 | User study | Above neutral = generally useful |
+| % ratings ≥ 4 (users) | > 50% | User study | Majority find it "mostly accurate" or better |
 
 ---
 

@@ -19,11 +19,17 @@ Usage (construct programmatically):
         achievement=0, power=0, security=1,
         conformity=0, tradition=0, benevolence=1, universalism=0
     )
-    entry = EntryLabel(t_index=0, date="2024-01-15", scores=scores)
+    rationales = {
+        "self_direction": "Chose to pursue personal project over assigned work.",
+        "hedonism": "Skipped enjoyable dinner plans for work deadline.",
+        "security": "Saved emergency fund milestone reached.",
+        "benevolence": "Spent evening helping neighbor move.",
+    }
+    entry = EntryLabel(t_index=0, date="2024-01-15", scores=scores, rationales=rationales)
     persona = PersonaLabels(persona_id="a3f8b2c1", labels=[entry])
 """
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 # Canonical order of Schwartz values (must match across all components)
@@ -83,6 +89,24 @@ class EntryLabel(BaseModel):
     t_index: int = Field(ge=0, description="0-based entry index within persona")
     date: str = Field(description="Entry date in YYYY-MM-DD format")
     scores: AlignmentScores
+    rationales: dict[str, str] | None = Field(
+        default=None,
+        description="Sparse dict of rationales for non-zero scores only. Keys must be valid Schwartz value names.",
+    )
+
+    @field_validator("rationales")
+    @classmethod
+    def validate_rationale_keys(cls, v: dict[str, str] | None) -> dict[str, str] | None:
+        """Ensure rationale keys are valid Schwartz value names."""
+        if v is None:
+            return v
+        invalid_keys = set(v.keys()) - set(SCHWARTZ_VALUE_ORDER)
+        if invalid_keys:
+            raise ValueError(
+                f"Invalid rationale keys: {invalid_keys}. "
+                f"Must be one of: {SCHWARTZ_VALUE_ORDER}"
+            )
+        return v
 
 
 class PersonaLabels(BaseModel):

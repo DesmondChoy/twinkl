@@ -260,11 +260,40 @@ Build the output dictionary with this exact schema (note: persona_id is a STRING
         "tradition": [int: -1, 0, or 1],
         "benevolence": [int: -1, 0, or 1],
         "universalism": [int: -1, 0, or 1]
+      },
+      "rationales": {
+        "<value_name>": "<explanation>",
+        ...only for non-zero scores...
       }
     },
     ...
   ]
 }
+
+**Rationale requirements:**
+- Include rationales ONLY for non-zero scores (-1 or +1)
+- Quote or reference specific content from the entry (use quotation marks)
+- Explain the connection between behavior and value dimension
+- Be concise (1-2 sentences)
+- Do NOT include the value name in the rationale (avoid circular reasoning like "shows achievement behavior")
+
+**Example entry label:**
+```json
+{
+  "t_index": 0,
+  "date": "2025-12-01",
+  "scores": {
+    "self_direction": 1, "stimulation": 0, "hedonism": 1,
+    "achievement": -1, "power": 0, "security": 0,
+    "conformity": 0, "tradition": 0, "benevolence": 0, "universalism": 0
+  },
+  "rationales": {
+    "self_direction": "Deliberately turned down department position to preserve autonomy.",
+    "hedonism": "Explicitly values sensory pleasures (mint tea, sunset colors) as 'the whole point'.",
+    "achievement": "Actively rejects competitive orientation, stating 'not looking for excitement from my job'."
+  }
+}
+```
 
 ### Step 2: Validate Before Writing
 Run Python validation using the Pydantic models:
@@ -413,6 +442,9 @@ Print:
     "alignment_tradition": int,
     "alignment_benevolence": int,
     "alignment_universalism": int,
+
+    # Rationales (JSON string or null)
+    "rationales_json": str | None,  # Sparse dict: {"value_name": "explanation", ...}
 }
 ```
 

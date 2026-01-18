@@ -15,7 +15,8 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
-      }
+      },
+      "rationales": {}
     },
     {
       "t_index": 1,
@@ -26,11 +27,15 @@
         "hedonism": 0,
         "achievement": 0,
         "power": 0,
-        "security": -1,
+        "security": 1,
         "conformity": 0,
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "security": "Immediately checks account balance after agreeing to help, showing concern for financial stability: 'where is this money supposed to come from?'",
+        "benevolence": "Prioritizes mother's needs over own financial concerns, saying 'Of course I said yes' to covering prescription copay despite uncertainty about funds."
       }
     },
     {
@@ -47,6 +52,12 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "Has not taken more than a day off in six months. Response reveals even if he could rest, he'd 'spend the whole time calculating how much money I'm losing' - actively denies self-pleasure.",
+        "achievement": "Working twelve-hour days to maximize holiday surge earnings, tracking performance: 'Holiday surge is good for earnings.'",
+        "security": "Endures physical discomfort (back pain) to build financial cushion during high-earning period.",
+        "benevolence": "Dropped off pharmacy money to Mom between work zones; refused when 'She tried to give me back half of it,' insisting she keep it 'in case something else comes up.'"
       }
     },
     {
@@ -60,9 +71,15 @@
         "power": 0,
         "security": 1,
         "conformity": 0,
-        "tradition": -1,
-        "benevolence": -1,
+        "tradition": 1,
+        "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "Actively weighing working Christmas over family gathering for earnings; predicts he'll 'work until the last possible minute and then rush over stressed' - continued pattern of self-denial.",
+        "security": "Explicitly calculates trade-off: 'one good day of driving could cover half my car insurance payment.'",
+        "tradition": "Values Christmas dinner with family, especially given father's health: 'who knows how many of these we get, you know?'",
+        "benevolence": "Wants to 'be there for the whole dinner' and worries about being 'half-present' with family."
       }
     }
   ]
