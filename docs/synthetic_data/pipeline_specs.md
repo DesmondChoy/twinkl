@@ -77,7 +77,7 @@ The pipeline uses **async/await** for efficient I/O and supports **parallel pers
 
 ## Prompt Design
 
-Note: For now, synthetic journals read like typed text input (not voice-note transcripts). A voice-note transcript variant can be added later.
+Note: Synthetic journals read like typed text input, matching the text-only input modality of the production system.
 
 ### Persona Generation Prompt
 - Receives: age, profession, culture, values, value_context (from schwartz_values.yaml)
@@ -991,4 +991,3 @@ By systematically varying persona profiles and prompts, we obtain a synthetic da
 # Stretch Goals
 
 - **Style verifier pass:** After generation, run a second pass that checks if the entry reads like a real journal (not an essay, not performative), and rewrites it into a more natural journaling voice while preserving the underlying event + emotions.
-- **Voice-note transcript variant**: Generate entries that read like transcribed speech rather than typed text.

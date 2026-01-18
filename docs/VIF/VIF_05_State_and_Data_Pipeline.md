@@ -19,7 +19,7 @@ It complements:
 For the capstone POC, we commit to the following **concrete scope**:
 
 - **Modalities**: **Text only**.
-  - No audio/physio in the Critic state yet; prosodic signals (A3D) remain a separate sensing module for now.
+  - Audio/prosodic signals (A3D) are out of scope for capstone; multimodal extensions deferred to future work.
 
 - **Target option**: **Option A – Immediate alignment** (from `VIF_03_Model_Training.md`).
   - The Critic learns to emulate the Judge's per‑dimension alignment vector $\hat{\vec{a}}_{u,t}$.

@@ -104,10 +104,11 @@ To make this design capstone-friendly, we summarise a recommended tiered approac
   * Critic: MLP with tuned hyperparameters and calibrated uncertainty.
   * Critique rule: weekly crash/rut logic with user-specific thresholds.
 
-* **Tier 3 (Advanced / Future Work)**
+* **Tier 3 (Out of Scope for Capstone)**
   * State: multimodal, sliding-window state with audio/physio.
   * Target: time-aware discounted returns (Option C).
   * Additional: offline RL for suggestion policies, more advanced uncertainty and personalization.
+  * *Note: Audio/prosodic modalities deferred to future work.*
 
 ---
 
@@ -121,7 +122,7 @@ Potential extensions beyond the POC:
   * After VIF is stable and safety mechanisms are validated, explore offline RL to learn and evaluate **action suggestions** (micro-experiments, habits). This remains out of scope for the core capstone POC.
 * **Richer Uncertainty Modeling**:
   * Incorporate ensembles, density models, or explicit OOD detectors on the text embedding space.
-* **More Modalities**:
+* **More Modalities** *(Out of scope for capstone)*:
   * Incorporate prosodic and physiological features robustly, especially for early warning signals of stress or overload.
 * **Personalisation Layers**:
   * Explore global VIF plus lightweight per-user adapters for users whose trajectories systematically diverge from the population.

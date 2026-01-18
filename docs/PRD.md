@@ -6,17 +6,17 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 
 # Elevator Pitch
 
-* **Working name:** Twinkl — a long-horizon, voice-first “inner compass.”
-* **What:** Voice notes and typed reflections feed a living user model (values, identity themes, north star) that mirrors back where behaviour diverges from intent; it is not another “feel-better” journal.
+* **Working name:** Twinkl — a long-horizon "inner compass."
+* **What:** Journal reflections feed a living user model (values, identity themes, north star) that mirrors back where behaviour diverges from intent; it is not another "feel-better" journal.
 * **Promise:** Honest, explainable alignment check-ins that combine deep introspection with accountability so users stop drifting from their declared priorities.
-* **Capstone hook:** Multimodal sensing + pattern recognition + hybrid reasoning + explainable UX → direct throughline to all submodules.
+* **Capstone hook:** Pattern recognition + hybrid reasoning + explainable UX → direct throughline to all submodules.
 * **Key properties:** Dynamic self-model that updates gradually, identity treated as slowly evolving, value-alignment questions over dopamine loops.
 
 # Pain Point(s) it solves & Target Users
 
 * **Pain points**
     * Ambitious people articulate values (health, family, creativity) yet their weeks quietly fill with conflicting work, doomscrolling, or obligation; very few tools hold up a mirror to that drift.
-    * Typing-heavy journaling dies off; voice notes and light prompts match how people naturally reflect, but current apps stay at mood-tracking or streak mechanics.
+    * Traditional journaling is high-friction and dies off; light prompts and low-barrier entry match how people naturally reflect, but current apps stay at mood-tracking or streak mechanics.
     * Users crave kind accountability—context-aware reflections that cite evidence—while commercial products optimise for dopamine loops, not truth.
 * **Target users / addressable market**
     * Knowledge workers in transition (grad students, new managers, founders) and high-agency professionals managing career-family-growth trade-offs—large cohorts already paying for journaling + coaching, yet underserved by static apps.
@@ -24,7 +24,7 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 
 # Difference vs commercial peers
 
-AI journaling apps (Reflection, Mindsera, Insight Journal, Day One, Pixel Journal) summarise moods and trends yet treat every entry as an isolated blob; voice-first tools (Lid, REDI, Rosebud) transcribe speech but still optimise for wellness insights, not value alignment. None maintain a dynamic, explainable self-model that challenges users when their actions contradict their stated direction—leaving a white space for people already paying for coaching or multiple journaling subscriptions.
+AI journaling apps (Reflection, Mindsera, Insight Journal, Day One, Pixel Journal, Rosebud) summarise moods and trends yet treat every entry as an isolated blob; none maintain a dynamic, explainable self-model that challenges users when their actions contradict their stated direction—leaving a white space for people already paying for coaching or multiple journaling subscriptions.
 
 | Feature                | Scenario A: Current AI Journals (The "Summarizer")                                                                                                                                                                | Scenario B: Twinkl (The "Alignment Engine")                                                                                                                                                                       |
 | :--------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -34,13 +34,13 @@ AI journaling apps (Reflection, Mindsera, Insight Journal, Day One, Pixel Journa
 
 * **Alignment engine:** Weekly reasoning compares lived behaviour vs. declared priorities, surfaces tensions, and cites evidence snippets—turning “you said X but did Y” into actionable prompts.
 * **Explainable accountability:** Every nudge shows why (phrases, time windows, rules), plus contextual quotes/interventions tuned to the conflict at hand.
-* **Capstone-ready architecture:** Multimodal inputs + LLM tagging + time-series smoothing + symbolic rules = rich ground across Intelligent Sensing, Pattern Recognition, Reasoning, and Architecting AI Systems.
+* **Capstone-ready architecture:** LLM tagging + time-series smoothing + symbolic rules = rich ground across Intelligent Sensing, Pattern Recognition, Reasoning, and Architecting AI Systems.
 
 # How it works
 
 ## **System loop**
 
-1. **Perception:** Speech-to-text (or typed input) flows through an LLM that tags values, identity claims, sentiment, intent, and direction-of-travel.
+1. **Perception:** Typed journal entries flow through an LLM that tags values, identity claims, sentiment, intent, and direction-of-travel.
 2. **Memory:** Tags incrementally update a decay-aware user profile/knowledge base (value weights, goals, tensions, evidence snippets) instead of resetting each week.
 3. **Reasoning + action:** A two-stage evaluative layer powered by the **[Value Identity Function (VIF)](VIF/VIF_01_Concepts_and_Roadmap.md)**:
    * **Critic (VIF):** A numeric, uncertainty-aware engine that computes per-value-dimension alignment scores from a sliding window of recent entries. Uses [LLM-as-Judge for reward modeling](VIF/VIF_03_Model_Training.md) and [MC Dropout for epistemic uncertainty](VIF/VIF_04_Uncertainty_Logic.md). Triggers critiques only when confident and detecting significant patterns (sudden crashes or chronic ruts).
@@ -63,7 +63,7 @@ Value context is injected from `config/schwartz_values.yaml`, which contains ric
 * Identity-first mini-assessment ("build your inner compass" via 3–5 quick screens of big, tappable cards and tradeoffs) before daily journaling.
 * Longitudinal honesty engine that gently says "you keep claiming X but living Y."
 * Quotes/prompts are precision interventions tied to observed conflicts.
-* Voice-first UI because people are most candid speaking alone; text stays for search/digests.
+* Low-friction journaling: prompts reduce blank-page paralysis and encourage regular reflection.
 * Evidence-based reinforcement, not gamification: when users sustain alignment with their values, the system acknowledges it by citing specific behaviors and connecting them to the user's own words — never through streaks, points, leaderboards, or generic praise. Positive feedback is infrequent (only when patterns emerge) and grounded in what the user actually wrote.
 
 ## **Onboarding mini-assessment (cold start)**
@@ -73,10 +73,9 @@ Value context is injected from `config/schwartz_values.yaml`, which contains ric
 * Use forced trade-offs and simple rankings (e.g., protect sleep vs ship the project) to sharpen value weights instead of “select all that apply.”
 * Map each answer to latent dimensions (life stage, primary domain of concern, self-compassion vs self-criticism, comfort with challenge, time horizon) rather than a brittle tree of screens.
 * Show tiny mirrors mid-flow (“you sound like a mission-driven overcommitter who cares a lot about family—does this feel roughly right?”) so users can quickly correct the model.
-* End with an optional 30–60s voice note (If you have 30–60 seconds, tell me about a week you were proud or ashamed of) for rich colour when users are willing, without forcing interviews.
 * Use the mini-assessment output to choose initial prompt tone, starter tensions to watch, and example scenarios in the first digest, and instrument responses so future iterations can merge/split branches and swap underperforming cards.
 
-This mini-assessment directly anchors the capstone submodules: the latent dimensions form named slots in the knowledge base and rule layer (**Intelligent Reasoning Systems**), the mapping from taps/voice to those dimensions plus later corrections is a compact supervised modelling task (**Pattern Recognition Systems**), the voice note acts as a multimodal sensor beyond the UI taps (**Intelligent Sensing Systems**), and treating the quiz as just one input stream into a shared user-state vector `z` illustrates end-to-end orchestration and state management across Perception → Memory → Reasoning → Action (**Architecting AI Systems**).
+This mini-assessment directly anchors the capstone submodules: the latent dimensions form named slots in the knowledge base and rule layer (**Intelligent Reasoning Systems**), the mapping from user responses to those dimensions plus later corrections is a compact supervised modelling task (**Pattern Recognition Systems**), entry content analysis and temporal patterns feed the sensing layer (**Intelligent Sensing Systems**), and treating the quiz as just one input stream into a shared user-state vector `z` illustrates end-to-end orchestration and state management across Perception → Memory → Reasoning → Action (**Architecting AI Systems**).
 
 ## **Core Feature Modules**
 
@@ -87,7 +86,6 @@ This mini-assessment directly anchors the capstone submodules: the latent dimens
   - **Tension-surfacing** — for hedging language or conflicted statements
 
   Nudge decisions use **LLM-based semantic classification** (not regex/heuristics) to detect when deeper reflection would yield VIF signal. Anti-annoyance logic caps nudges at 2 per 3-entry window. See [pipeline_specs.md](synthetic_data/pipeline_specs.md) for implementation details.
-* **[Adaptive Acoustic Sensor (A3D)](Ideas/A3D.md):** A privacy-first, unsupervised anomaly detection system that learns the user's unique prosodic baseline to flag physiological stress and cognitive dissonance (Intelligent Sensing + Pattern Recognition).
 * **“Map of Me”:** Embed each entry, visualise trajectories, overlay alignment scores (Pattern Recognition + Intelligent Sensing).
 * **Journaling anomaly radar:** After 2–3 weeks of entries establish cadence baselines, a lightweight time-series/anomaly detector tracks check-in gaps, flags “silent weeks,” cites evidence windows, and triggers empathetic nudges (Pattern Recognition + Architecting).
 * **Goal-aligned inspiration feed:** When the profile shows intent (e.g., “pick up Japanese”) but no supporting activities, call a real-time search API (SerpAPI/Tavily) constrained by what the user enjoys (e.g., highly rated anime) and reason over the results before surfacing next-step suggestions (Intelligent Reasoning + Intelligent Sensing). Each curated option is presented as an explicit choice; the user’s accept/decline actions feed back into the values/identity graph so future nudges learn which media or effort types actually motivate them.
@@ -118,10 +116,10 @@ This mini-assessment directly anchors the capstone submodules: the latent dimens
 
 **Twinkl’s edge**
 
-* **Structured self-model:** Onboarding + ongoing speech build a knowledge base of values, goals, tensions, and identity themes that evolves with decay-aware updates.
+* **Structured self-model:** Onboarding + ongoing journaling build a knowledge base of values, goals, tensions, and identity themes that evolves with decay-aware updates.
 * **Alignment engine:** Weekly reasoning compares lived behaviour vs. declared priorities, surfaces tensions, and cites evidence snippets—turning “you said X but did Y” into actionable prompts.
 * **Explainable accountability:** Every nudge shows why (phrases, time windows, rules), plus contextual quotes/interventions tuned to the conflict at hand.
-* **Capstone-ready architecture:** Multimodal inputs + LLM tagging + time-series smoothing + symbolic rules = rich ground across Intelligent Sensing, Pattern Recognition, Reasoning, and Architecting AI Systems.
+* **Capstone-ready architecture:** LLM tagging + time-series smoothing + symbolic rules = rich ground across Intelligent Sensing, Pattern Recognition, Reasoning, and Architecting AI Systems.
 
 ## Implementation Status
 
@@ -135,7 +133,6 @@ This mini-assessment directly anchors the capstone submodules: the latent dimens
 | **"Map of Me" Visualization** | ❌ Not Started | Embedding trajectories |
 | **Journaling Anomaly Radar** | ❌ Not Started | Cadence/gap detection |
 | **Goal-aligned Inspiration Feed** | ❌ Not Started | External API integration |
-| **A3D Prosodic Analysis** | ❌ Not Started | Audio feature extraction |
 
 > For detailed specifications, see:
 > - [Synthetic Data Pipeline](synthetic_data/pipeline_specs.md)
@@ -184,7 +181,7 @@ This avoids the trap of matching windows "for consistency" when the constraints 
 | Goal | Why it matters |
 | :--- | :--- |
 | **Neuro-symbolic reasoning** | Add a tiny knowledge graph + rule layer on top of LLM outputs to show which logical checks fired (great for XRAI storytelling). |
-| **Multimodal fusion** | Blend text + [prosodic audio cues](Ideas/A3D.md) to prove Intelligent Sensing value beyond transcripts. |
+| **Multimodal fusion** | *Future work (out of scope for capstone):* Blend text + prosodic audio cues to extend Intelligent Sensing value beyond text-only analysis. |
 | **Personalised quote recommender** | Build embeddings of quotes + user resonance to deliver “micro-anchors” tuned to each identity conflict. |
 | **Distilled Reward Model** | Train a smaller supervised model to mimic LLM-as-Judge, reducing latency and cost while enabling offline VIF training. (See [Model Training](VIF/VIF_03_Model_Training.md)) |
 | **Advanced uncertainty modeling** | Extend MC Dropout with ensembles or density models; add explicit OOD detectors on the text embedding space. (See [Uncertainty Logic](VIF/VIF_04_Uncertainty_Logic.md)) |
@@ -196,7 +193,7 @@ This avoids the trap of matching windows "for consistency" when the constraints 
 | :-------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Intelligent Reasoning Systems** | Formal value/goal knowledge base + decay rules cover knowledge representation; a hybrid reasoning layer mixes LLM inference with symbolic “if value X high but mentions drop Y weeks → flag misalignment” rules, and the inspiration feed performs decision-theoretic ranking (with [uncertainty-aware scoring](VIF/VIF_04_Uncertainty_Logic.md)) of real-time search hits plus logged user accept/reject choices. |
 | **Pattern Recognition Systems**   | Transformer tagging for sentiment/topics, sequential models for cadence baselines, clustering/trajectory viz (“Map of Me”) to detect seasons, and anomaly detection that spots journal absences while continuously re-learning from the recommendation-choice dataset. |
-| **Intelligent Sensing Systems**   | [Voice features (pitch, tempo, MFCC)](Ideas/A3D.md) fused with text cover multimodal signal processing; the real-time search layer acts as an external “sensor” that ingests up-to-date cultural/learning stimuli, and choice telemetry becomes another sensed signal that is fused with identity/value embeddings. |
+| **Intelligent Sensing Systems**   | Text-based sensing: entry content analysis (value mentions, sentiment, hedging), temporal patterns (entry cadence, time-of-day), and journal gap detection. The real-time search layer acts as an external "sensor" that ingests up-to-date cultural/learning stimuli, and choice telemetry becomes another sensed signal that is fused with identity/value embeddings. *(Multimodal audio sensing deferred to future work.)* |
 | **Architecting AI Systems**       | Agentic loop (Perception → Memory → Reasoning → Action), explainable feedback via XRAI, privacy-first storage of sensitive logs, and orchestration of background workers that run anomaly checks, call external APIs, and write preference updates while following MLSecOps guardrails. |
 
 
@@ -219,15 +216,9 @@ This avoids the trap of matching windows "for consistency" when the constraints 
 | Category | Metrics |
 | :--- | :--- |
 | **User impact** | Likert ratings on "helps me act in line with values," % of suggested weekly experiments attempted, retention over a 1–2 week pilot. |
-| **System & safety** | Latency from recording → feedback, STT/LLM failure rates, privacy posture (encryption, export/delete), and qualitative review of guardrails for "it's not therapy" messaging. |
+| **System & safety** | Latency from entry → feedback, LLM failure rates, privacy posture (encryption, export/delete), and qualitative review of guardrails for "it's not therapy" messaging. |
 
 **Validation approach:** Mini user study (5–10 people over 1–2 weeks) focusing on "felt accuracy" plus synthetic stress tests for technical correctness.
-
-# ISS-Practice-Module: The Adaptive Acoustic Anomaly Detector (A3D)
-
-> See [A3D.md](Ideas/A3D.md) for full documentation of this Semester 3 module.
-
----
 
 # Related Documentation
 

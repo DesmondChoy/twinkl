@@ -10,9 +10,9 @@ This document details the inputs, state representation, and inference flow for t
 
 For each user $u$ at time step $t$, we assume:
 
-* Text journal or transcript: $T_{u,t}$.
-* Optional audio: $A_{u,t}$ (voice recordings, prosody).
-* Optional physiological signals: $H_{u,t}$ (e.g. heart rate, HRV).
+* Text journal entry: $T_{u,t}$.
+* *(Out of scope for capstone)* Audio: $A_{u,t}$ (voice recordings, prosody).
+* *(Out of scope for capstone)* Physiological signals: $H_{u,t}$ (e.g. heart rate, HRV).
 * Time features:
   * $\Delta t_{u,t} = t_{u,t} - t_{u,t-1}$: time since previous entry.
 * User profile:
@@ -24,9 +24,9 @@ We define embedding functions:
 
 * Text encoder (e.g. SBERT or similar):
   $\\phi_{\text{text}}(T_{u,t}) \in \mathbb{R}^{d_e}$
-* Optional audio/prosodic encoder:
+* *(Out of scope for capstone)* Audio/prosodic encoder:
   $\\phi_{\text{audio}}(A_{u,t}) \in \mathbb{R}^{d_p}$
-* Optional physiological encoder (e.g. via time-series feature extraction):
+* *(Out of scope for capstone)* Physiological encoder (e.g. via time-series feature extraction):
   $\\phi_{\text{physio}}(H_{u,t}) \in \mathbb{R}^{d_h}$
 * User profile embedding:
   $z_u \in \mathbb{R}^{d_z}$
@@ -75,9 +75,9 @@ $$
 
 with the sliding window and history stats added in a later iteration.
 
-#### 1.3.4 Multimodal Extension (Future Option)
+#### 1.3.4 Multimodal Extension (Out of Scope for Capstone)
 
-Audio and physiological channels can be appended once available:
+Audio and physiological channels could be appended in future work:
 
 $$
  s_{u,t} = \text{Concat}\Big[\text{(text window)},\ \\phi_{\text{audio}}(A_{u,t}),\ \\phi_{\text{physio}}(H_{u,t}),\ z_u,\ \text{history stats}\Big]
@@ -92,7 +92,7 @@ $$
 For a real user session:
 
 1. **Collect input**:
-   * User submits a new journal entry (and optional voice/physio signals).
+   * User submits a new journal entry.
 2. **Build sequential state**:
    * Construct sliding window state $s_{u,t}$ from the current and $N-1$ previous entries, plus profile and history stats.
 3. **Reward Model (optional at inference)**:
