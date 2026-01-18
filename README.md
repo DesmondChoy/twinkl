@@ -46,6 +46,8 @@ Registry Check → Auto-Wrangle → Parallel Labeling (subagents) → Validation
 
 **Scoring:** Each entry receives a 10-dimensional vector with values `{-1, 0, +1}` indicating misalignment, neutrality, or alignment with each Schwartz value. Most entries have 1-3 non-zero scores.
 
+**Data outputs:** See [`docs/data_schema.md`](docs/data_schema.md) for parquet file schemas, example Polars queries, and analytics guidance.
+
 **Key files:**
 - `.claude/commands/judge.md` — Skill entry point
 - `.claude/skills/judge/orchestration.md` — Detailed workflow
