@@ -367,7 +367,16 @@ def server(input, output, session):
     @reactive.event(input.selected_entry_index)
     def _on_entry_select():
         """Handle entry selection from sidebar clicks."""
-        selected_idx = input.selected_entry_index()
+        input_value = input.selected_entry_index()
+        if input_value is None:
+            return
+
+        # Extract index from object (JS sends {index: int, nonce: timestamp})
+        if isinstance(input_value, dict):
+            selected_idx = input_value.get("index")
+        else:
+            selected_idx = input_value
+
         if selected_idx is None:
             return
 

@@ -52,7 +52,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const value = valueOrder[focusedRowIndex];
         // direction: -1 = decrement, 1 = increment
-        const btnId = direction < 0 ? 'dec_' + value : 'inc_' + value;
+        // Note: Button IDs are namespaced by Shiny module system with 'scoring-' prefix
+        const btnId = 'scoring-' + (direction < 0 ? 'dec_' : 'inc_') + value;
         const btn = document.getElementById(btnId);
         if (btn) btn.click();
     }
@@ -89,12 +90,15 @@ document.addEventListener('DOMContentLoaded', function() {
     function closeHelp() {
         const modal = document.getElementById('keyboard-help-modal');
         const backdrop = document.getElementById('keyboard-help-backdrop');
-        if (modal && backdrop && helpVisible) {
+        if (modal && backdrop) {
             modal.style.display = 'none';
             backdrop.style.display = 'none';
             helpVisible = false;
         }
     }
+
+    // Expose closeHelp globally for inline handlers and external calls
+    window.closeHelp = closeHelp;
 
     /**
      * Clear row focus and visual indicators.
@@ -142,7 +146,8 @@ document.addEventListener('DOMContentLoaded', function() {
             case 'Enter':
                 e.preventDefault();
                 // Try save button first (scoring mode), then continue button (comparison mode)
-                const saveBtn = document.getElementById('save_btn');
+                // Note: save_btn is namespaced (scoring-save_btn), but continue_btn is not
+                const saveBtn = document.getElementById('scoring-save_btn');
                 const continueBtn = document.getElementById('continue_btn');
                 if (saveBtn) saveBtn.click();
                 else if (continueBtn) continueBtn.click();
@@ -150,7 +155,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
             case 'Backspace':
                 e.preventDefault();
-                const prevBtn = document.getElementById('prev_btn');
+                // Note: Button ID is namespaced by Shiny module system (header-prev_btn)
+                const prevBtn = document.getElementById('header-prev_btn');
                 if (prevBtn) prevBtn.click();
                 break;
 
@@ -181,7 +187,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Help button click handler
-    const helpBtn = document.getElementById('help_btn');
+    // Note: ID is namespaced by Shiny module system (header-help_btn)
+    const helpBtn = document.getElementById('header-help_btn');
     if (helpBtn) {
         helpBtn.addEventListener('click', function(e) {
             e.preventDefault();
@@ -190,13 +197,18 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Entry click handler - using event delegation for sidebar and entry cards
+    // Uses nonce to ensure Shiny reactive event fires even if same entry is clicked
     document.addEventListener('click', function(e) {
         // Check for sidebar entry items first
         const sidebarItem = e.target.closest('.sidebar-entry-item');
         if (sidebarItem && !sidebarItem.classList.contains('locked')) {
             const entryIndex = sidebarItem.getAttribute('data-entry-index');
             if (entryIndex !== null) {
-                Shiny.setInputValue('selected_entry_index', parseInt(entryIndex), {priority: 'event'});
+                // Include nonce to force reactive event even if index unchanged
+                Shiny.setInputValue('selected_entry_index', {
+                    index: parseInt(entryIndex),
+                    nonce: Date.now()
+                }, {priority: 'event'});
             }
             return;
         }
@@ -206,7 +218,11 @@ document.addEventListener('DOMContentLoaded', function() {
         if (entryCard && !entryCard.classList.contains('locked')) {
             const entryIndex = entryCard.getAttribute('data-entry-index');
             if (entryIndex !== null) {
-                Shiny.setInputValue('selected_entry_index', parseInt(entryIndex), {priority: 'event'});
+                // Include nonce to force reactive event even if index unchanged
+                Shiny.setInputValue('selected_entry_index', {
+                    index: parseInt(entryIndex),
+                    nonce: Date.now()
+                }, {priority: 'event'});
             }
         }
     });

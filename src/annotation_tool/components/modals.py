@@ -442,7 +442,7 @@ def get_keyboard_help_html() -> str:
     background:white; border-radius:12px; padding:24px; box-shadow:0 20px 25px -5px rgba(0,0,0,0.1); z-index:1000; max-width:400px;">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
         <h3 style="margin:0; font-size:16px; font-weight:600;">Keyboard Shortcuts</h3>
-        <button onclick="document.getElementById('keyboard-help-modal').style.display='none'; document.getElementById('keyboard-help-backdrop').style.display='none';"
+        <button onclick="closeHelp()"
             style="background:none; border:none; font-size:20px; cursor:pointer; color:#9ca3af;">×</button>
     </div>
     <div class="shortcut-grid">
@@ -455,6 +455,6 @@ def get_keyboard_help_html() -> str:
         <span class="shortcut-key">Esc</span><span class="shortcut-desc">Clear focus</span>
     </div>
 </div>
-<div id="keyboard-help-backdrop" onclick="document.getElementById('keyboard-help-modal').style.display='none'; document.getElementById('keyboard-help-backdrop').style.display='none';"
+<div id="keyboard-help-backdrop" onclick="closeHelp()"
     style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.3); z-index:999;"></div>
 """

@@ -205,6 +205,64 @@ When documenting bugs, include:
 
 ---
 
+## Button & Interactive Element Testing
+
+**IMPORTANT**: Always verify that buttons and interactive elements actually work, not just that they display correctly.
+
+### Testing Buttons
+
+1. **Click and verify state change**: After clicking a button, take a snapshot or screenshot to confirm the expected action occurred
+2. **Check for modals/dialogs**: If a button should open a modal, verify the modal appears in the snapshot
+3. **Test all close methods**: For modals, test ALL dismissal methods:
+   - × close button
+   - Backdrop/overlay click (click in corners to avoid the modal itself)
+   - Escape key
+   - Any toggle functionality (e.g., pressing the same key again)
+
+### Common Button Testing Issues
+
+1. **Shiny Module ID Namespacing**: When using Shiny modules, element IDs are prefixed with the module namespace (e.g., `help_btn` becomes `header-help_btn`). JavaScript selectors must use the full namespaced ID.
+
+2. **State Synchronization**: Buttons that toggle UI state (like modals) may have JavaScript state variables. Verify that:
+   - All close methods update the state variable
+   - The toggle works correctly after closing via any method
+
+3. **Elements not in accessibility tree**: Some elements (like dynamically-shown divs) may not appear in `browser_snapshot`. Use `browser_run_code` to verify:
+   ```javascript
+   async (page) => {
+     const element = await page.$('#modal-id');
+     const isVisible = element && await element.evaluate(el => el.style.display !== 'none');
+     return isVisible ? 'visible' : 'hidden';
+   }
+   ```
+
+### Automated Button Test Pattern
+
+Use `browser_run_code` for comprehensive button testing:
+```javascript
+async (page) => {
+  const results = [];
+
+  // Click button
+  await page.click('#button-id');
+  await page.waitForTimeout(200);
+
+  // Verify expected outcome
+  const modalVisible = await page.$eval('#modal', el => el.style.display === 'block');
+  results.push(`Open modal: ${modalVisible ? 'PASS' : 'FAIL'}`);
+
+  // Test close method
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(200);
+  const modalClosed = await page.$eval('#modal', el => el.style.display === 'none');
+  results.push(`Close with Escape: ${modalClosed ? 'PASS' : 'FAIL'}`);
+
+  return results.join('\n');
+}
+```
+
+---
+
 ## Notes
 
 - Playwright's mouse simulation may not perfectly replicate human interaction for text selection
@@ -243,9 +301,12 @@ For rapid testing, verify these critical paths:
 #### Phase 2: Core Annotation Flow
 - [ ] Enter annotator name and verify it persists
 - [ ] Scoring buttons (−/+) increment/decrement values correctly
-- [ ] Score values cycle through -1 → 0 → +1 → -1
+- [ ] Score values clamp at boundaries (−1 ↔ 0 ↔ +1, stops at min/max)
 - [ ] All 10 Schwartz values can be scored independently
 - [ ] Persona bio toggle (Show Bio/Hide Bio) works
+- [ ] **Help button (? Help) opens keyboard shortcuts modal**
+- [ ] Help modal closes via × button, backdrop click, Escape key, and ? toggle
+- [ ] Prev/Next Persona buttons navigate correctly
 
 #### Phase 3: Post-Save Reveal Feature
 - [ ] Click "Save & Next →" button
