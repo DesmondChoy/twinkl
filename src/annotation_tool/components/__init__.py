@@ -8,6 +8,7 @@ This package provides modular Shiny components for the annotation interface:
 - scoring_grid: Right column with value scoring and save button
 - modals: Modal dialogs for warnings and comparisons
 - comparison_view: Inline comparison view for post-save display
+- analysis_view: Collapsible accordion with agreement metrics and export
 
 Usage:
     from src.annotation_tool.components import (
@@ -17,10 +18,12 @@ Usage:
         scoring_grid,
         modals,
         comparison_view,
+        analysis_view,
     )
 """
 
 from src.annotation_tool.components import (
+    analysis_view,
     comparison_view,
     entry_display,
     header,
@@ -36,4 +39,5 @@ __all__ = [
     "scoring_grid",
     "modals",
     "comparison_view",
+    "analysis_view",
 ]

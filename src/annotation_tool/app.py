@@ -35,6 +35,7 @@ from src.annotation_tool.annotation_store import (
     save_annotation,
 )
 from src.annotation_tool.components import (
+    analysis_view,
     comparison_view,
     entry_display,
     header,
@@ -114,6 +115,8 @@ app_ui = ui.page_fluid(
             ui.output_ui("right_column_content"),
             class_="three-column-layout",
         ),
+        # Analysis view (collapsible accordion at bottom)
+        analysis_view.analysis_view_ui("analysis"),
         class_="main-container",
     ),
 )
@@ -295,6 +298,16 @@ def server(input, output, session):
         on_modal_cancel=handle_modal_cancel,
         on_modal_confirm=handle_modal_confirm,
         on_comparison_continue=handle_comparison_continue,
+    )
+
+    # ==========================================================================
+    # Analysis View Component
+    # ==========================================================================
+
+    analysis_view.analysis_view_server(
+        "analysis",
+        state=state,
+        annotator_name=annotator_name,
     )
 
     # ==========================================================================

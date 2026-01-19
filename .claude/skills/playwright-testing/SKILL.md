@@ -357,3 +357,43 @@ For rapid testing, verify these critical paths:
 - [ ] Verify progress persists (annotations saved to parquet)
 - [ ] Verify annotated entries show checkmark (✓) in entry list
 - [ ] Verify can resume from last position
+
+#### Phase 8: Analysis & Metrics Accordion
+- [ ] "📊 Analysis & Metrics" accordion visible at bottom of main container
+- [ ] Accordion is collapsed by default
+- [ ] Click accordion to expand
+
+##### Annotator Progress Section
+- [ ] Shows chips for each annotator with annotation count (e.g., "alice (47)")
+- [ ] Updates after saving new annotations
+
+##### Cohen's κ Section (Annotator vs Judge)
+- [ ] Shows "Cohen's κ: You vs Judge" header
+- [ ] If no annotator name entered: shows empty or message
+- [ ] If no overlapping entries with judge: shows "No overlapping entries with judge labels"
+- [ ] If overlapping entries exist:
+  - [ ] Aggregate κ value with color-coded badge (green ≥0.61, yellow ≥0.41, red <0.41)
+  - [ ] Table with all 10 Schwartz values
+  - [ ] Each row shows: Value name, κ value, Interpretation, Match Rate
+  - [ ] Low agreement values (κ < 0.61) flagged with ⚠️ warning
+
+##### Fleiss' κ Section (Inter-Annotator)
+- [ ] Shows "Fleiss' κ: Inter-Annotator" header
+- [ ] If < 2 annotators: shows "Requires 2+ annotators" message
+- [ ] If no shared entries: shows "No shared entries between annotators"
+- [ ] If shared entries exist:
+  - [ ] Shows count of shared entries and annotator count
+  - [ ] Aggregate κ value with color-coded badge
+
+##### Export Section
+- [ ] Shows "Export" header
+- [ ] Three export buttons: CSV, Parquet, Markdown Report
+- [ ] Click "CSV" button → notification shows file path (logs/exports/...)
+- [ ] Click "Parquet" button → notification shows file path
+- [ ] Click "Markdown Report" button → notification shows file path
+- [ ] Verify files created in `logs/exports/` directory
+
+##### Accordion Behavior
+- [ ] Metrics update after saving new annotation (expand accordion to verify)
+- [ ] Click accordion header again to collapse
+- [ ] Accordion state does not persist across page refresh (collapses on reload)
