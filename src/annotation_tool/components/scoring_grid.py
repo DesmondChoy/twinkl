@@ -39,6 +39,20 @@ VALUE_LABELS = {
     "universalism": "Universalism",
 }
 
+# One-liner tooltips for annotator reference (from Schwartz Value Quick Reference)
+VALUE_TOOLTIPS = {
+    "self_direction": "Making own choices, resisting control, autonomy",
+    "stimulation": "Seeking novelty, avoiding routine, excitement",
+    "hedonism": "Prioritizing pleasure, enjoyment, comfort",
+    "achievement": "Goals, performance, recognition, hard work",
+    "power": "Control, status, influence, being in charge",
+    "security": "Stability, safety, avoiding risk",
+    "conformity": "Following rules, meeting expectations, fitting in",
+    "tradition": "Honoring customs, family obligations, heritage",
+    "benevolence": "Helping close others (family, friends, team)",
+    "universalism": "Broader social concern, fairness, environment",
+}
+
 # Schwartz value groupings for organized display
 VALUE_GROUPS = {
     "OPENNESS TO CHANGE": ["self_direction", "stimulation", "hedonism"],
@@ -67,8 +81,9 @@ def _create_scoring_row(value: str, row_index: int) -> ui.TagChild:
         UI div for the scoring row
     """
     label = VALUE_LABELS[value]
+    tooltip = VALUE_TOOLTIPS[value]
     return ui.div(
-        ui.div(label, class_="value-label"),
+        ui.div(label, class_="value-label", **{"data-tooltip": tooltip}),
         ui.div(
             ui.input_action_button(
                 f"dec_{value}", "−", class_="score-btn dec"

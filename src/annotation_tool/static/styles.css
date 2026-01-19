@@ -517,6 +517,35 @@ body {
     font-size: 14px;
     color: var(--color-text);
     font-weight: 500;
+    cursor: help;
+    position: relative;
+}
+
+/* CSS Tooltip - more reliable than native title attribute */
+.value-label[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 0;
+    top: 100%;
+    margin-top: 4px;
+    padding: 6px 10px;
+    background: var(--color-text);
+    color: white;
+    font-size: 12px;
+    font-weight: 400;
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.15s ease-in-out, visibility 0.15s ease-in-out;
+    pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.value-label[data-tooltip]:hover::after {
+    opacity: 1;
+    visibility: visible;
 }
 
 /* Counter button scoring UI */
