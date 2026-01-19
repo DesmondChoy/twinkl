@@ -1,0 +1,87 @@
+{
+  "persona_id": "3ec38c16",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-12-01",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "Chose her own research approach over supervisor's quantitative methods: 'Dr. Khalil wants regression models... What I have is Abu Mahmoud saying we wrote letters until we ran out of paper.'",
+        "power": "Explicitly left a position of authority in engineering because she was 'working for someone else's priorities' - surrendered status to pursue values.",
+        "universalism": "Entire entry demonstrates concern for displaced farmers and social justice: 'This is what I came here for. Not the degree, not the credentials.'"
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-12-07",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "Refuses to follow supervisor's methodology despite pressure: 'every time I sit down to write the chapter his way, my hands just stop. Something in me refuses.'",
+        "conformity": "Deliberately not conforming like younger students: 'The younger students in my cohort, they nod along, they revise when told to revise. Maybe that is smarter.'",
+        "universalism": "Insists on treating farmers with dignity rather than as data: 'Reducing it to a variable in a regression feels like betraying that trust.'"
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-12-11",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Building intellectual foundation for her own approach: 'If Dr. Khalil will not accept my approach, maybe I can build enough of a foundation that he cannot dismiss it as naive.'",
+        "achievement": "Demonstrates persistence and hard work toward goal - studying in her car by phone light until late despite obstacles with roommates."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-12-17",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Successfully defended her autonomous methodology: 'Walked out of that room feeling like I had earned something that was mine.'",
+        "achievement": "Demonstrated competence to committee, earned recognition and approval for her unconventional framework."
+      }
+    }
+  ]
+}

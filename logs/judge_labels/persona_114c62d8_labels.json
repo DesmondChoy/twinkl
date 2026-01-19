@@ -1,0 +1,66 @@
+{
+  "persona_id": "114c62d8",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-12-01",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": -1,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "Fired co-founder Fadi because 'every time he questioned me publicly, I could feel the team's respect slipping away, feel my grip loosening' - prioritizing authority and control over the team.",
+        "tradition": "Acknowledges grandmother's teaching about loyalty ('a man is nothing without the people who stood by him') but acts against it by firing Fadi who 'believed in me before anyone else did.'",
+        "benevolence": "Prioritized maintaining control over a close relationship - Fadi was a 3-year partner who 'stood by me' and 'believed in me before anyone else did,' yet was dismissed for threatening Tariq's authority."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-12-11",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": -1,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "Experienced significant status loss - investor 'smiled like I had said something charming' when Tariq asserted he was CEO, left 'feeling smaller than I have in months.'",
+        "achievement": "Despite excellent numbers, his competence was questioned ('whether we had brought on a more experienced CEO') and he was treated 'like a kid playing at something serious.'"
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-12-13",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Consciously chose his leadership approach: 'control over myself. Over the kind of leader I am choosing to be' - authoring his own path rather than defaulting to defensive posturing.",
+        "benevolence": "Had genuine, non-defensive conversation with Rami: 'I actually listened. Some of them were good. Told him so. His whole face changed, like he had been waiting for permission to think out loud.'"
+      }
+    }
+  ]
+}

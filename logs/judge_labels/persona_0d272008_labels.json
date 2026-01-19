@@ -1,0 +1,166 @@
+{
+  "persona_id": "0d272008",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-12-01",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Negotiated deal entirely on his own terms: 'No compromises on timeline... kept the IP ownership clean... I just waited. Didn't budge.' Celebrates 8 years of building on 'my own terms' with 'nobody telling me which clients to take.'",
+        "achievement": "Successfully closed a significant business deal: 'Closed the Morrison deal today and the whole thing went exactly how I wanted it to.' Reflects pride in accomplishment."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-12-07",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Rejects brother-in-law's conventional business advice: 'I just don't want someone else's version of success stapled to my forehead.' Defends his autonomous path against family pressure.",
+        "conformity": "Explicitly refuses to conform to family expectations and social norms of success: 'He doesn't get it. He'll never get it.' Prioritizes authenticity over harmony with family."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-12-09",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Terminated stable client relationship to preserve autonomy: 'I started this company so I'd never have to sit in another meeting where ten people discuss whether we need a meeting. Not going back to that.'",
+        "security": "Deliberately gave up steady income for freedom: 'The money was steady, but every time I had to sit through one of their alignment meetings I could feel my brain cells dying.' Chose instability over financial security."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-12-14",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Turned down a client who undermined his expertise ('kept interrupting me to explain my own expertise back to me') and accepted one offering 'full creative control over the architecture.' Decision driven entirely by autonomy: 'This is the kind of work I got into business for.'"
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-12-16",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Chose to learn independently rather than ask for help: 'figuring things out myself even when it's slower.' Acknowledges this as a pattern ('Old habit') that prioritizes self-reliance over efficiency."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-12-19",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Celebrates autonomous work rhythm: 'I control the timeline. I decide when to push hard and when to step back.' Finds deep meaning in self-built life: 'this is my life, that I built it, that nobody handed it to me or approved it for me.'",
+        "hedonism": "Worked late 'because I wanted to, not because anyone was expecting it. That distinction matters.' Prioritized enjoyment and personal satisfaction, took pleasure in evening walk and ordered food for comfort."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-12-22",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Refuses to ask for help despite exhaustion: 'if I ask for more time, or ask for help, or admit I can't do it alone... Something shifts.' Identity tied to figuring things out alone.",
+        "hedonism": "Sacrificed sleep, rest, and well-being for work: 'Haven't slept more than four hours in three days.' Denied himself pleasure and comfort during holidays.",
+        "achievement": "Driven to meet self-imposed deadline despite cost: 'I quoted the timeline. I own it. Even if it means working through the holidays.' Prioritizes demonstrating competence.",
+        "benevolence": "Missed Christmas with family: 'Rachel called to ask if I'm coming for Christmas dinner. Told her I'd try. We both knew I was lying.' Neglected close relationship for work."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-12-30",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Completed prototype alone as planned, still values independence: 'When I solve the hard problem myself... there's this feeling—like I'm proving I can still do it.' Though also questioning the cost of extreme self-reliance.",
+        "achievement": "Successfully delivered prototype: 'they loved it. Called it exactly what they envisioned which, honestly, made the last two weeks worth it.' Recognized for competence.",
+        "benevolence": "Called sister to apologize for missing Christmas: 'I called Rachel yesterday. Apologized for Christmas... Told her I'm going to try to make January different.' Taking concrete steps to repair close relationship."
+      }
+    }
+  ]
+}

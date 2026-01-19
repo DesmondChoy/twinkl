@@ -1,0 +1,192 @@
+{
+  "persona_id": "ae2912e8",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-12-01",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Working toward promotion for two years, immediately calculates 'how long until I'm considered for the director track' - demonstrates goal-tracking and striving for advancement.",
+        "security": "Describes this as 'exactly what I've been working toward' - the promotion represents stable career trajectory he's been pursuing.",
+        "tradition": "Calls Baba to share news, respects his father's understated pride ('Alhamdulillah, keep your head down') - honoring family connection and elder's wisdom."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-12-08",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Covered for two sick team members, 'hit all deadlines anyway' despite no sleep, and notes 'Director noticed' - demonstrates performance focus and seeking recognition."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-12-11",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": -1,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Intense focus on promotion competition with Ahmad, comparing credentials and experience, 'couldn't focus on anything else today' - shows deep investment in advancement.",
+        "security": "Competition threatens his stability - 'My stomach has been in knots since morning' - unexpected rival destabilizes his sense of predictable career path.",
+        "conformity": "Realizes 'Maybe that's the game. Maybe I've been playing it wrong' and decides to adapt to organizational expectations about visibility rather than resisting."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-12-20",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Working until 9pm every day, prioritizing end-of-year work over sister's engagement party to prove himself for promotion.",
+        "security": "'Leaving feels like a risk I can't take' - staying in Dubai while Ahmad might 'make moves' shows prioritizing career stability over family event.",
+        "benevolence": "Missing sister Layla's engagement party, Mama 'was quiet for a long time... disappointed' - neglecting close family for work, response 'I'll make it up to her later' shows awareness of harm."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-12-29",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": -1,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "Justifies absence with visa reality: 'If I lose this job, I have 30 days to find another or leave' - security concerns drive his choices.",
+        "tradition": "Cousin Tariq says 'Dubai changed you' - he acknowledges disconnection from family and culture, wonders if he's 'using that reality as an excuse.'",
+        "benevolence": "Video call was 'awkward,' 'Layla smiled when she saw me but I could tell she'd wanted me there in person. Mama barely looked at the camera' - his absence hurt close family."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2026-01-02",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "At New Year's celebration 'I stood there alone and felt... nothing? Not sad, not happy. Just watching' - unable to experience enjoyment, disconnected from pleasure.",
+        "security": "Response to nudge reveals core motivation: 'The uncertainty. The feeling that nothing is really mine' - security-seeking drives his 'survival mode.'"
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2026-01-05",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Makes autonomous choice to adapt his approach despite cultural discomfort with self-promotion: 'I signed up for the presentation slot. It felt uncomfortable... But I did it.'",
+        "achievement": "Acting on director's feedback about 'strategic visibility,' taking concrete steps to improve promotion chances.",
+        "tradition": "Acknowledges cultural values around humility ('Where I come from, you don't brag... Boasting is seen as shallow') while adapting to new context.",
+        "benevolence": "'Booked a flight home for Mama's birthday... Non-refundable. I need to stop letting work consume everything' - prioritizing family connection, response shows realization: 'I was building a life I wouldn't want to live.'"
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2026-01-12",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Presentation 'went well. Several people came up after to compliment the insights' - successfully executed visibility strategy, received recognition.",
+        "conformity": "Playing by organizational rules now; 'Strange to think of him as just a colleague now, not a threat. The competition hasn't changed. But my relationship to it has' - adapted to expectations."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2026-01-20",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "'I got the promotion... Two years of work. All those late nights, the stress, the sacrifices. It paid off.' - culmination of goal pursuit.",
+        "hedonism": "'Tonight, I'm going to let myself feel this' - consciously allowing himself to enjoy the moment rather than immediately moving to next goal.",
+        "tradition": "Called Baba first, then Mama who 'cried, which made me tear up too' - sharing success with family, honoring family bonds.",
+        "benevolence": "'I told her February, for her birthday, and she made me promise three times' - commitment to family visit, prioritizing close relationships."
+      }
+    }
+  ]
+}

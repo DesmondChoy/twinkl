@@ -1,0 +1,189 @@
+{
+  "persona_id": "7664d969",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-12-01",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "tradition": "Lit candle at altar, said prayers for Diego and his family, called Mami - 'I need the quiet. I need the ritual. It centers me.' Maintains religious/cultural practices as coping mechanism.",
+        "benevolence": "Stayed extra hour holding grieving mother's hand - 'that's what my own mother would have done. That's what we do in my family. You don't leave people alone with grief.'"
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-12-03",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "Planning to share apartment with cousin to 'cut costs' - practical decision prioritizing financial stability.",
+        "benevolence": "Choosing to live with family member - 'she's family, so I trust her. It's nice to have someone nearby who understands why I do things the way I do.'"
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-12-13",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "tradition": "Organized Posadas celebration, made luminarias, sang traditional songs, brought tamales from tia - 'It's about belonging to something bigger than myself. Something that connects me to my grandmother, my great-grandmother, and all the way back.'",
+        "benevolence": "Organized celebration for hospitalized children, brought cultural experience to patients - 'I can't imagine not having that thread connecting me to where I come from' and felt sad for colleague without such connections."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-12-21",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": -1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Suppressed curiosity about new experience - 'part of me wonders what it would be like to just go somewhere new... But that's selfish.' Surrendered autonomous desire to family expectations.",
+        "stimulation": "Explicitly rejected opportunity for novelty and adventure - 'I'm supposed to be building something stable, not chasing adventures.'",
+        "security": "Declined travel nursing because 'no consistent schedule, no knowing where I'll be month to month' - prioritized stability over higher pay.",
+        "conformity": "Meeting family expectations over personal desire - 'Abuela wasn't thrilled when I left Guatemala; leaving again feels like I'd be proving something wrong.'",
+        "benevolence": "Prioritizing cousin's apartment plans and family support system - 'My cousin is counting on me' and 'I can't just leave Miami when my whole support system is here.'"
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-12-31",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "Making plans for stability - 'get the condo, help Marisol settle in' and 'I'm building something solid, something that will last.'",
+        "tradition": "Attended midnight mass, participated in Nochebuena, sang 'Noche de Paz', maintained altar with santos - 'The incense smelled the same. Some things carry across distance.'",
+        "benevolence": "Spent holidays with cousins and family, planning to 'call home more often' - 'That's the thing about being far from home—you recreate what you can.'"
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2026-01-05",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "Set up automatic savings transfers - 'seeing that number grow a little each month makes me feel like I'm actually getting somewhere. Small steps.' Concrete financial planning action."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2026-01-07",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": -1,
+        "tradition": 1,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "Confronted coworker rather than maintaining harmony - 'I told her that in my family, we actually talk to each other... Maybe I was too harsh but I don't regret it.'",
+        "tradition": "Defended family communication practices and cultural values - 'My mother has lived through things Rachel can't imagine... Her opinion matters to me because she's earned it.'",
+        "benevolence": "Deep connection to mother and family - 'I'm not asking for permission when I call Mami. I'm asking for connection.' Response reveals commitment to family ways: 'we've been this way for generations.'"
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2026-01-10",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "Distress over disrupted stability plans - 'That was the building where our other cousins live. That was the whole point... I had a whole picture in my head.'",
+        "benevolence": "Goal was family proximity - 'walking distance from Lucia and her kids, Sunday dinners that don't require an hour of driving.'"
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2026-01-12",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "tradition": "Deep conversation with Abuela, receiving intergenerational wisdom - 'whatever I build, it will have roots. It will have her in it, and Mami, and everyone who came before.' Response: 'keeping our ways alive.'",
+        "benevolence": "Meaningful connection with grandmother through vulnerable conversation - 'Really talked—not just the usual check-in.' Response shows growth toward trusting family bonds can 'stretch without breaking.'"
+      }
+    }
+  ]
+}

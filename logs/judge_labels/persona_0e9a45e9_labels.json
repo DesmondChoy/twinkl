@@ -1,0 +1,191 @@
+{
+  "persona_id": "0e9a45e9",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-12-01",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Explicitly prioritizes autonomy over capital, describing how 'someone else dictating my calendar' made him leave corporate. The chest tightening is his 'compass' signaling when he's 'about to betray something important about how I want to live.'",
+        "security": "Rejects the larger, more stable investment option in favor of maintaining independence and control."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-12-10",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Followed through on choosing the hands-off investor despite it being the smaller check, prioritizing autonomy.",
+        "hedonism": "Celebrated the decision with Layla at 'that new Persian restaurant near the Marina' - investing in pleasurable experiences."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-12-16",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": -1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Defends his right to live life on his own terms against mother's expectations: 'The one where I'm present. Where I'm actually living my days instead of deferring them.'",
+        "hedonism": "Explicitly values 'Weekends in Oman. Good wine. A nice apartment' and refuses to sacrifice enjoyment for distant rewards. States 'I refuse that' regarding sacrificing entire lives for future rewards.",
+        "tradition": "Rejects mother's traditional expectations about settling down, marriage, and sacrificing for family. Explicitly challenges her worldview where 'you sacrifice everything for family, for the future.'"
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-12-23",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "Layla notes he 'used to be more fun. More spontaneous' and he acknowledges becoming 'the person I swore I wouldn't become. The one who's always busy' - sacrificing enjoyment for work.",
+        "achievement": "Grinding harder than usual, 'trying to prove to myself that taking the smaller check was the right call. Trying to show I can grow this thing.'",
+        "benevolence": "Neglecting relationship with Layla - she thinks he works too much and he's become less present in the relationship."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-12-28",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Realizes he built his business 'Not for the money, not for the status. For moments like this, whenever I want them. The ability to disappear for three days without asking permission.'",
+        "hedonism": "Prioritized leisure - left laptop at home, hiked, floated in natural pool. States 'The business should serve the life, not the other way around.'",
+        "benevolence": "Honored Layla's condition (no laptop), was present with her for three days, repairing the relationship tension from Entry 3."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2026-01-07",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "Despite just having 'a beautiful reset,' immediately overcommits. Describes 'familiar dread' and 'no room to breathe' for next two months - sacrificing quality of life.",
+        "achievement": "Said yes to all three client requests because he's 'still in growth mode' despite already regretting it - prioritizing business growth over enjoyment."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2026-01-17",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Said no to corporate VP role, maintains independence: 'I left that world for a reason. I don't owe anyone an explanation.'",
+        "achievement": "Defensively lists 'my clients, my revenue, my growth numbers' to prove competence when Faisal implies his business is 'a phase.'",
+        "power": "Concerned with status validation - felt need to prove he wasn't 'some hobbyist' and worries about the voice saying 'real men build empires, not lifestyles.'"
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-01-25",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Reframes flexibility as 'having the freedom to say no' rather than saying yes to everything. Questions whether he needs to accept every opportunity.",
+        "hedonism": "Immediate reaction to protect pleasurable routines - 'Thursday dinners at that Lebanese place,' 'morning runs along the creek' - routines that 'make my life here feel like mine.'",
+        "security": "Protecting established routines and stability: 'maybe routines are sacred. Maybe I've earned the right to build a life I don't want to escape from.'"
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2026-01-31",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Negotiated on his own terms - 'could consult remotely but wouldn't relocate' - and they accepted. Layla says 'You're finally acting like someone who knows what he wants.'",
+        "hedonism": "Explicitly states 'The reward for good work isn't more work—it's more life.' Planning another trip for March.",
+        "benevolence": "Layla was relieved by his decision; planning trip together shows investment in the relationship. Shift toward being present for loved ones."
+      }
+    }
+  ]
+}

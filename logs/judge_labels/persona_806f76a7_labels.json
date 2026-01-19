@@ -1,0 +1,68 @@
+{
+  "persona_id": "806f76a7",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-12-01",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": -1,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Maya values the 'space I've made for myself out here' and resists returning home because it makes her feel like she's 'shrinking' - showing she prioritizes autonomy and independence.",
+        "tradition": "She lets grandmother's call go to voicemail, avoids committing to Christmas visit, and carries 'guilt she carries for leaving' the reservation - her inaction conflicts with honoring family customs.",
+        "benevolence": "She avoided her grandmother's call and hasn't committed to being there for family at Christmas despite knowing it would 'mean a lot' - neglecting close family relationship."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-12-10",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": -1,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "Maya prioritizes keeping her delivery shifts to avoid 'tanking my rating' and worries about gas money and car maintenance - choosing financial stability over family obligations.",
+        "tradition": "Despite knowing 'That's what you do. When someone's sick, when there's a ceremony, you show up' she makes excuses not to attend Uncle Ray's ceremony - explicitly violating her cultural values.",
+        "benevolence": "She's 'making excuses' not to be there for sick Uncle Ray and the family ceremony, explicitly stating 'I hate who I'm becoming out here' for prioritizing work over family."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-12-15",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "Maya cancelled Saturday shifts causing her 'Instacart rating dropped to 4.7' but says 'I don't care' - sacrificing job stability for family.",
+        "tradition": "She attended Uncle Ray's ceremony ('I forgot how it feels to be in that space. Everyone singing together, the smell of sage'), made grandmother's cedar tea correctly, hung sweetgrass 'so it smells like home,' and plans to continue beadwork and learn fry bread recipe.",
+        "benevolence": "She showed up for Uncle Ray when he was sick, grandmother 'held my hand the whole time,' and she made grandmother cedar tea Sunday morning - actively caring for close family."
+      }
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "persona_id": "056f46ad",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-12-01",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 1,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "Actively fits into expected family role by rearranging dining room twice to meet mother's vision and not wanting to be 'the source of that look' of disappointment.",
+        "tradition": "Participates wholeheartedly in parents' 40th wedding anniversary celebration, respecting family customs including the formal seating arrangements and elder toasts.",
+        "benevolence": "Spent afternoon helping coordinate family event, was thanked by father for 'being the reliable one' - prioritizing family welfare.",
+        "hedonism": "Already made reservation for the seafood restaurant with Nadia for next weekend, acknowledging the need to 'carve out space for the things that make life sweet.'"
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-12-09",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": -1,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Surrendered the opportunity to claim credit for his own idea - 'I just sat there. Smiled. Nodded along' instead of speaking up.",
+        "achievement": "Allowed Hamza to take full credit for the supply chain optimization idea they developed together, showing indifference to recognition.",
+        "conformity": "Chose not to embarrass colleague publicly because 'That's not how things are done. You don't embarrass a colleague publicly... It would look petty. Undignified.'",
+        "tradition": "Referenced his father's approach to workplace conflicts - 'with patience, with letting things play out, with trusting that people eventually see the truth.'",
+        "hedonism": "Ate 'an entire box of those pistachio sweets from that place in Sharjah, and I don't regret it one bit' as comfort after a bad day."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-12-18",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 1,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Beginning to explore and question what he truly wants - 'I don't even know if I want children anymore... I've been thinking about what our life looks like without them' - examining his own values independently.",
+        "conformity": "Didn't burden mother with fertility struggles, made 'appropriate congratulatory noises' and maintained the 'pleasant fiction that everything is fine.'",
+        "tradition": "Upholds role as eldest son who 'has everything figured out' and doesn't disrupt family expectations or 'make her worry.'",
+        "benevolence": "Protecting Nadia from additional worry - 'I don't want to give her another thing to worry about' - and protecting mother from burden of knowing about their struggles."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-12-28",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "Had a meaningful, difficult conversation with Nadia about fertility where she 'cried but also seemed sort of relieved' - prioritizing the relationship and her emotional wellbeing.",
+        "achievement": "Response focuses on work goals: 'I want to make sure the Oman route data is properly credited this time' - seeking proper recognition for contributions.",
+        "security": "Decision to 'take a break from the treatments for a few months' represents choosing stability and reducing the stress of uncertainty."
+      }
+    }
+  ]
+}

@@ -1,0 +1,158 @@
+{
+  "persona_id": "fd97883e",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-12-01",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 1,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Mei-Lin internalizes achievement pressure through her daughter's test score ('only 18?'), showing concern for performance standards even while outwardly praising her daughter.",
+        "conformity": "She avoided conflict by changing the subject to 'the soup being too salty' rather than confronting her mother-in-law's criticism, prioritizing harmony over defending her daughter.",
+        "tradition": "She defers to her mother-in-law's authority and cultural norms around comparison ('I know she means well. I know comparison is how she shows she cares'), accepting the elder's behavior.",
+        "benevolence": "Despite her internal conflict, she protected her daughter by putting the test 'on the fridge with a magnet' and telling her she was proud, prioritizing her child's wellbeing."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-12-03",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Registered daughter for enrichment center ('an investment, not an expense'), actively pursuing educational advancement for her child.",
+        "security": "Despite making the investment, she 'keep[s] opening the banking app to look at the balance,' showing anxiety about financial stability and security.",
+        "benevolence": "The $800/month expense for enrichment is a sacrifice for her daughter's benefit, demonstrating investment in close family welfare."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-12-09",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She surrenders her own needs entirely: 'I'm running on four hours of sleep' while managing all responsibilities, not asserting her need for help from her husband.",
+        "hedonism": "Sacrificing personal comfort and wellbeing (sleep, self-care) for family duties: 'I haven't even brushed my teeth yet.'",
+        "achievement": "Continues to pursue phonics practice because daughter is 'a bit behind the others,' maintaining focus on performance benchmarks despite exhaustion.",
+        "conformity": "She doesn't wake her husband because 'he has that big presentation tomorrow,' prioritizing his work expectations and social role over her own needs.",
+        "benevolence": "Up at 2am 'holding him while he cries,' she prioritizes comforting her son during nightmares despite personal exhaustion."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-12-16",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 1,
+        "conformity": 1,
+        "tradition": 1,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She lied about 'exploring options' for tuition rather than expressing her authentic budget-conscious approach, surrendering autonomy to social pressure.",
+        "achievement": "Extensive focus on tracking progress ('my notebook, the one I keep for tracking both kids' progress'), ordering 'three new comprehension workbooks' with express delivery.",
+        "security": "Detailed financial anxiety despite objective stability: 'eight months becomes four,' quoting her mother's wisdom about saving 'for nine winters.'",
+        "conformity": "Lied to another mother about tuition to avoid social judgment, 'didn't want to admit we only do the one enrichment class.'",
+        "tradition": "Invokes her mother's traditional wisdom ('save for nine winters') as guiding principle, finding meaning in inherited cultural values about financial prudence.",
+        "benevolence": "Diligently attended parent-teacher conference, took notes, and ordered resources to support daughter's reading comprehension needs."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-12-26",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "Participated in the family gathering's comparison culture ('All the cousins comparing which schools their kids got into') rather than pushing back or withdrawing.",
+        "benevolence": "Self-critical recognition that she failed her daughter: 'I should have pulled her into the conversation. I should have let her be a child,' showing she neglected her daughter's emotional needs."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-12-28",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Defended the third workbook despite husband's concern that daughter 'looked tired,' prioritizing achievement goals over comfort.",
+        "power": "Asserted control over parenting decisions: 'I'm the one here every day, I see what she needs,' claiming authority and shutting down husband's input.",
+        "benevolence": "Snapped at her husband and dismissed his concern for their daughter's wellbeing, prioritizing her agenda over family harmony and her daughter's tiredness."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2026-01-03",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": -1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Made an autonomous choice to break from her usual patterns when daughter asked 'if we could just play today. No workbooks, no practice. Just play. And I said yes.'",
+        "hedonism": "Prioritized enjoyment and present pleasure: 'We built a blanket fort and read picture books inside it... She laughed so hard at the silly voices.'",
+        "achievement": "Deliberately stepped away from achievement tracking: 'For two hours I forgot about enrichment schedules and comprehension scores,' questioning if she's 'measuring the right things.'",
+        "benevolence": "Responded to her daughter's emotional needs, resulting in 'Mama, today was the best day,' prioritizing connection and her child's happiness over productivity."
+      }
+    }
+  ]
+}

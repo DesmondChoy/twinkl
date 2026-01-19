@@ -1,0 +1,171 @@
+{
+  "persona_id": "daee11de",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-12-01",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 1
+      },
+      "rationales": {
+        "security": "Relief about financial stability from grant: \"It's not wealth, but it's enough to stop checking my account every morning.\" Mother's relief about rent also noted.",
+        "benevolence": "Called mother to share good news, caring about her peace of mind: \"She sounded relieved. So am I.\"",
+        "universalism": "Installation about global displacement and environmental crisis: \"the families in Bangladesh, the villages disappearing.\""
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-12-08",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "Nudge response reveals choosing autonomy over security: \"Maybe the tension is the point... the discomfort keeps me honest.\" Continues art despite pressure to \"get a real job.\"",
+        "security": "Explicit concerns about financial stability: \"I also want to pay my electricity bill and not have a panic attack every time my card gets declined.\" Values residency stability.",
+        "universalism": "Deep concern for displaced millions: \"millions displaced, coastlines eroding.\" Wants to \"make something true. Something that matters.\""
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-12-17",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Physical effort toward project goals: \"Cut seventeen panels for the base structure. Hands are sore.\" Continuing work despite physical strain."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-12-19",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "Persists in her artistic vision despite doubt: \"Tomorrow I'll keep cutting. That's all I know how to do.\"",
+        "benevolence": "Protects mother from emotional burden: \"I told her I was fine. I'm not fine, but what can she do? She's eighty-three.\" Also sought support from Ingrid.",
+        "universalism": "Deep grief over Mediterranean boat tragedy: \"Another boat capsized... Forty-seven people. They had names.\" Nudge response recalls Fatima: \"She said no one had ever asked her to tell her story before.\""
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-12-23",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "Self-care awareness: \"Need to stretch more. Need to take care of this body that insists on getting older.\"",
+        "benevolence": "Thoughtful gift selection for mother: \"A scarf, some chocolate, a book about Danish gardens. Small things. Safe things. She doesn't want much anymore.\""
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-12-30",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 1,
+        "universalism": 1
+      },
+      "rationales": {
+        "tradition": "Maintaining Christmas ritual with mother: \"We ate roast duck and watched old films.\" Finding meaning in continuity.",
+        "benevolence": "Deep care for aging mother: \"I just sat there, watching her breathe. Thinking about how many more of these we might have.\"",
+        "universalism": "Continued commitment to global concerns: \"the displaced families, the way I want viewers to feel implicated.\" Nudge response: \"When I'm deep in research about displacement, I feel displaced.\""
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2026-01-06",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "Internal resistance to compromising artistic vision: \"Maybe stubbornness is all I have left. The work will be what it is.\"",
+        "conformity": "Outward compliance despite disagreement: \"I smiled and said I'd think about it\" when she actually wanted to push back.",
+        "universalism": "Refuses to soften truth about displacement for audience comfort: \"hope is a luxury. Hope is what you get to feel when you're not the one drowning.\""
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2026-01-14",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "Made autonomous choice about incorporating hope on her own terms: \"Not a happy ending, but a thread.\" Reconsidered feedback but reached her own conclusion.",
+        "achievement": "Completed major project milestone: \"All thirty-four panels, cut and sanded and ready for paint.\"",
+        "security": "Gratitude for residency stability: \"Two more years of being able to worry about the work instead of worrying about money.\"",
+        "universalism": "Adding displaced people's voices: \"A wall of handwritten messages from people who've rebuilt their lives after displacement. Their words, their handwriting. Small acts of continuation.\""
+      }
+    }
+  ]
+}

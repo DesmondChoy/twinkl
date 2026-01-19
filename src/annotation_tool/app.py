@@ -34,7 +34,14 @@ from src.annotation_tool.annotation_store import (
     get_annotation_count,
     save_annotation,
 )
-from src.annotation_tool.components import entry_display, header, modals, scoring_grid, sidebar
+from src.annotation_tool.components import (
+    comparison_view,
+    entry_display,
+    header,
+    modals,
+    scoring_grid,
+    sidebar,
+)
 from src.annotation_tool.data_loader import get_ordered_entries, load_entries
 from src.annotation_tool.state import create_app_state
 from src.models.judge import SCHWARTZ_VALUE_ORDER
@@ -103,8 +110,8 @@ app_ui = ui.page_fluid(
             sidebar.sidebar_ui("sidebar"),
             # Center column
             entry_display.entry_display_ui("entry"),
-            # Right column
-            scoring_grid.scoring_grid_ui("scoring"),
+            # Right column (dynamic: scoring grid or comparison view)
+            ui.output_ui("right_column_content"),
             class_="three-column-layout",
         ),
         class_="main-container",
@@ -173,6 +180,7 @@ def server(input, output, session):
         """Handle previous persona navigation."""
         new_idx = state.persona_index() - 1
         if new_idx >= 0:
+            state.set_scoring_mode()  # Reset to scoring grid if in comparison mode
             state.persona_index.set(new_idx)
             state.entry_index.set(0)
             _load_existing_annotation()
@@ -181,6 +189,7 @@ def server(input, output, session):
         """Handle next persona navigation."""
         new_idx = state.persona_index() + 1
         if new_idx < _total_personas:
+            state.set_scoring_mode()  # Reset to scoring grid if in comparison mode
             state.persona_index.set(new_idx)
             state.entry_index.set(0)
             _load_existing_annotation()
@@ -261,12 +270,13 @@ def server(input, output, session):
         state.pending_save.set(None)
 
     def handle_comparison_continue():
-        """Handle continue button in comparison modal - advance to next entry."""
-        ui.modal_remove()
-
+        """Handle continue button in comparison view - advance to next entry."""
         entries = current_persona_entries()
         current_entry_idx = state.entry_index()
         new_entry_idx = current_entry_idx + 1
+
+        # Reset to scoring mode first
+        state.set_scoring_mode()
 
         if new_entry_idx < len(entries):
             state.entry_index.set(new_entry_idx)
@@ -335,8 +345,8 @@ def server(input, output, session):
         # Get judge scores for comparison
         judge_data = get_judge_scores(entry["persona_id"], entry["t_index"])
 
-        # Show comparison modal
-        ui.modal_show(modals.build_comparison_modal(scores, judge_data))
+        # Switch to inline comparison view (replaces modal)
+        state.set_comparison_mode(scores, judge_data, entry)
 
     # ==========================================================================
     # Event Handlers
@@ -363,6 +373,7 @@ def server(input, output, session):
 
         unlocked = unlocked_entry_count()
         if selected_idx < unlocked:
+            state.set_scoring_mode()  # Reset to scoring grid if in comparison mode
             state.entry_index.set(selected_idx)
             _load_existing_annotation()
 
@@ -380,6 +391,24 @@ def server(input, output, session):
                 class_="no-annotator-warning",
             )
         return None
+
+    @render.ui
+    def right_column_content():
+        """Render the right column: scoring grid or comparison view."""
+        if state.ui_mode() == "comparison":
+            data = state.comparison_data()
+            if data:
+                return comparison_view.build_comparison_view(
+                    data["human_scores"], data["judge_data"], data["entry_data"]
+                )
+        # Default: show scoring grid
+        return scoring_grid.scoring_grid_ui("scoring")
+
+    @reactive.effect
+    @reactive.event(input.continue_btn)
+    def _on_continue_btn():
+        """Handle continue button click from inline comparison view."""
+        handle_comparison_continue()
 
 
 # =============================================================================

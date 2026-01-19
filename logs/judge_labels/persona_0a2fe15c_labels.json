@@ -1,0 +1,67 @@
+{
+  "persona_id": "0a2fe15c",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-12-01",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "Stayed past her shift to help a frightened mother - 'I stayed past my shift to explain everything to her in Arabic, to help her fill out forms, to just sit with her while her son slept.'",
+        "hedonism": "Sacrificed her own basic needs for others - 'My own dinner went cold' and 'I am tired in my bones... from carrying everyone's worry.'",
+        "security": "Expresses fear about destabilizing her marriage through her choices - 'I am also afraid that one day I will look up and find that Khalid has stopped waiting.'"
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-12-07",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "Prepared traditional meal for extended family gathering and models caregiving values for children - 'I want Layla to see that a woman can have both purpose and family... I want Nadia to understand that our home will always be open, always warm.'",
+        "tradition": "Made mansaf (traditional Jordanian dish), upholds family gathering customs, reflects on mother's wisdom about women's roles - 'My mother used to say: A woman's heart is like a well.'",
+        "hedonism": "Unable to receive self-care or rest - 'sitting still makes me anxious. I feel most myself when my hands are busy, when someone needs me... Maybe I do not know how to receive.'"
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-12-09",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "Came in on her day off when the grieving mother asked for her - 'I was not even on shift but the day nurse called me because his mother was asking for me. I held her while she screamed.'",
+        "hedonism": "Acknowledges the unbearable emotional cost of her caregiving choices - 'I chose to love other people's children as my own. But tonight the cost feels unbearable.'"
+      }
+    }
+  ]
+}

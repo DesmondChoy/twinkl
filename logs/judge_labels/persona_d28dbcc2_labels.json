@@ -1,0 +1,185 @@
+{
+  "persona_id": "d28dbcc2",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-12-01",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "stimulation": "Expresses preference for 'motion' and 'unpredictability of the roads' over desk work: 'it beats sitting in an air-conditioned office watching my soul leak out through Excel spreadsheets.'",
+        "universalism": "Sees himself as part of a larger system serving humanity: 'The city needs its circulatory system.' Shows concern for people across deliveries - the sleepless developer, the elderly woman in Bedok."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-12-08",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Defends his autonomous life choice against family criticism, asserting his right to define his own path: 'not everyone needs a business card to feel important.'",
+        "power": "Explicitly rejects status markers and conventional measures of importance, showing indifference to social prestige."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-12-14",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 1
+      },
+      "rationales": {
+        "benevolence": "Teaches English to Ramesh on Saturdays and feels 'stupidly proud' when he succeeds - investing time in helping someone he's formed a relationship with.",
+        "universalism": "Volunteers at migrant worker shelter, shows concern for heritage preservation ('The old shophouses are getting demolished... someone should notice what we're losing'), and tries not to judge others ('Everyone is fighting something')."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-12-18",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "Acknowledges the real costs of his lifestyle choice - 'soaked through three times,' lost surge pricing bonuses - recognizing that his 'freedom from the cubicle' comes with genuine instability."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-12-20",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Hit his weekly target after a twelve-hour shift, demonstrating commitment to meeting goals.",
+        "benevolence": "Prioritized time with Priya - 'dinner together for the first time in two weeks' - and notes it 'felt like us again,' showing investment in the marriage."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-12-29",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": -1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "Has 'a flash of missing my old job' - specifically the bonuses, company dinners, 'illusion of security.' Admits he's 'actually considering' a conventional job offer, suggesting his preference for novelty is weakening."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2026-01-01",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Questions whether his autonomous lifestyle is actually authentic: 'I used to think planning was a trap. Now I'm wondering if having no plan is its own kind of trap.'",
+        "security": "Recognizes the value of stability and planning, worrying about 'waking up at fifty still figuring things out' - shifting toward valuing predictability."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2026-01-06",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Defends his right to define success on his own terms: 'Ambition isn't one-size-fits-all - some of us just refuse to let corporations define what success looks like.'",
+        "power": "Explicitly rejects corporate definitions of success and status, refusing to accept conventional measures of ambition."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2026-01-08",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "Deep self-questioning about authenticity: 'am I just afraid of commitment dressed up as philosophy?' Acknowledges the difference between choosing instability and having no choice.",
+        "security": "Listens to Priya's fears without arguing, recognizes 'showing up, day after day, even when it's boring' as 'its own kind of courage' - a shift toward valuing stability.",
+        "benevolence": "Truly hears Priya's fear ('not angry, not disappointed - scared'), doesn't dismiss it, and takes time to process her concerns seriously.",
+        "universalism": "Maintains empathy for migrant workers ('They don't have the luxury of choosing instability'), recognizing his privilege and the broader human condition."
+      }
+    }
+  ]
+}

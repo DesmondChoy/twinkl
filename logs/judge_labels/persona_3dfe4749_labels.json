@@ -1,0 +1,129 @@
+{
+  "persona_id": "3dfe4749",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-12-01",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "conformity": "Followed hospital protocol despite wanting to help Mr. Hernandez directly: 'But I didn't. Followed protocol. Gave him the paperwork.'",
+        "tradition": "Invokes abuela's example of doing things 'the right way': 'My abuela used to say you earn respect by doing things the right way, even when the right way is hard.'",
+        "universalism": "Shows deep concern for broader welfare and systemic injustice: 'He's 68, worked construction his whole life, and now he can't afford pills that cost the hospital pennies. I went into nursing because I wanted to help people.'"
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-12-08",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": -1,
+        "tradition": -1,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "Deliberately avoiding family expectations rather than meeting them: 'I come back feeling like I'm failing at being who they expect me to be.'",
+        "tradition": "Avoiding church and traditional family gatherings: 'asking when I'm getting married, why I'm not going to church anymore.'",
+        "benevolence": "Chose to avoid family rather than maintain close relationships: 'part of me wanted an excuse' to skip Christmas with family."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-12-16",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 1,
+        "universalism": 1
+      },
+      "rationales": {
+        "tradition": "Connected through cultural and religious practice, praying in Spanish with patient: 'She grabbed my hand during the IV and prayed. I prayed with her, quietly, in Spanish. Felt right.'",
+        "benevolence": "Went beyond nursing duties to comfort a frightened patient: 'I know enough from my own abuela to say the important things: you're safe, we're going to help you.'",
+        "universalism": "Provided dignity to someone from a marginalized community: 'Said they'd never been treated with such dignity at a hospital before.'"
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-12-19",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": -1,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "tradition": "Missing Christmas for three consecutive years, breaking from family tradition: 'Three years of sending gifts instead of being there. Three years of video calls while everyone eats together.'",
+        "benevolence": "Becoming a stranger to close family, especially young cousin: 'My little cousin is seven now and she barely knows who I am. Last year she asked my mom if I was the one who sends the presents.'"
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-12-25",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 1
+      },
+      "rationales": {
+        "benevolence": "Provided comfort to dying stranger in his final moments: 'I held his hand at the end because no one should die alone.'",
+        "universalism": "Applied universal principle of human dignity: 'no one should die alone' - extended care beyond personal connection or duty."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-12-31",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": -1,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Chose to forge her own path despite cultural expectations: 'I don't know if I'm brave for building something new or just selfish for leaving everything behind.'",
+        "tradition": "Explicitly rejected expected life path of marriage, family proximity, and religious practice: 'Married by now, probably. Living close to home, seeing my family every Sunday, raising kids who speak Spanish... That's what my mom did, what her mom did.'",
+        "benevolence": "Acknowledges leaving family behind and being alone: 'I'm alone in an apartment eating someone else's cooking' while family traditions continue without her."
+      }
+    }
+  ]
+}

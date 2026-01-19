@@ -1,0 +1,105 @@
+{
+  "persona_id": "b963f9bc",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-12-01",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "Mei-Lin carefully navigated parent-teacher conferences by 'praising where possible, suggesting improvements without offending, never saying anything that might prompt a complaint.' She finds satisfaction in 'nobody left upset' and prefers being 'tired than cause that kind of mess.'"
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-12-08",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "She 'followed protocol exactly: documented the incident, submitted the report to the academic integrity office, informed her homeroom teacher. Everything by the book' despite the personal cost of losing Jia-Hui's trust.",
+        "self_direction": "In the nudge response, she admits 'being the person everyone expects me to be means giving up other things I want to be' - surrendering personal desires to meet institutional and social expectations."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-12-10",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "tradition": "Mei-Lin maintains the Sunday dinner ritual with parents and accepts her mother's matchmaking suggestions with 'I'll think about it, same as last time' - continuing the expected family dynamic without resistance."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-12-13",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "She won't take the ceramics class because of anticipated parental disappointment: 'my mother's face would do that thing it does when she's disappointed.' She self-monitors to avoid upsetting others even at the cost of personal fulfillment.",
+        "tradition": "She frames Sunday dinners as sacred family obligation: 'That's not how my family works. We show up for each other. That's the deal.'",
+        "self_direction": "In the nudge response she explicitly states 'most things I do are because someone is expecting me to do them, and if I'm honest, I've started to forget what I want when no one's watching' - a clear loss of personal autonomy."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-12-18",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "She picked up the ceramics form but hasn't told her mother, anticipating it would 'make it into a whole conversation.' She continues suppressing her desires to avoid family friction.",
+        "security": "She rationalizes maintaining status quo: 'There's nothing wrong with my life the way it is. Lots of people would be grateful to have what I have — stable job, parents who care, a routine that works.'",
+        "self_direction": "Despite having the registration form, she still can't act on her personal desire for ceramics, contemplating 'Maybe I won't sign up' and questioning why she 'keeps picking at it.'"
+      }
+    }
+  ]
+}

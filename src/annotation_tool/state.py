@@ -47,6 +47,12 @@ class AppState:
     # Pending save data (for modal confirmation)
     pending_save: reactive.value = field(default_factory=lambda: reactive.value(None))
 
+    # UI mode for right column: "scoring" or "comparison"
+    ui_mode: reactive.value = field(default_factory=lambda: reactive.value("scoring"))
+
+    # Comparison data stored after save (human_scores, judge_data, entry_data)
+    comparison_data: reactive.value = field(default_factory=lambda: reactive.value(None))
+
     def __post_init__(self):
         """Initialize score reactive values for each Schwartz value."""
         if not self.scores:
@@ -85,6 +91,28 @@ class AppState:
             True if all scores are 0
         """
         return all(self.scores[value]() == 0 for value in SCHWARTZ_VALUE_ORDER)
+
+    def set_comparison_mode(
+        self, human_scores: dict, judge_data: dict | None, entry_data: dict | None
+    ):
+        """Switch to comparison view mode with the given data.
+
+        Args:
+            human_scores: Dict mapping value names to human annotator scores
+            judge_data: Full judge label row dict, or None if not available
+            entry_data: Current entry dict for context
+        """
+        self.comparison_data.set({
+            "human_scores": human_scores,
+            "judge_data": judge_data,
+            "entry_data": entry_data,
+        })
+        self.ui_mode.set("comparison")
+
+    def set_scoring_mode(self):
+        """Switch back to scoring grid mode, clearing comparison data."""
+        self.ui_mode.set("scoring")
+        self.comparison_data.set(None)
 
 
 def create_app_state() -> AppState:

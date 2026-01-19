@@ -141,8 +141,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
             case 'Enter':
                 e.preventDefault();
+                // Try save button first (scoring mode), then continue button (comparison mode)
                 const saveBtn = document.getElementById('save_btn');
+                const continueBtn = document.getElementById('continue_btn');
                 if (saveBtn) saveBtn.click();
+                else if (continueBtn) continueBtn.click();
                 break;
 
             case 'Backspace':

@@ -13,6 +13,8 @@ Usage:
     )
 """
 
+import json
+
 from shiny import ui
 
 from src.models.judge import SCHWARTZ_VALUE_ORDER
@@ -136,14 +138,121 @@ def build_all_neutral_modal() -> ui.Tag:
     )
 
 
+def _build_entry_preview(entry_data: dict | None) -> ui.TagChild:
+    """Build the collapsible entry preview section.
+
+    Args:
+        entry_data: Current entry dict with text, nudge, response fields
+
+    Returns:
+        UI element for entry preview, or None if no entry data
+    """
+    if entry_data is None:
+        return None
+
+    # Build the full entry text (initial + nudge + response)
+    # Field names match wrangled data format: initial_entry, nudge_text, response_text
+    entry_text = entry_data.get("initial_entry", "")
+    nudge = entry_data.get("nudge_text")
+    response = entry_data.get("response_text")
+
+    # Truncate for collapsed preview (show ~150 chars)
+    preview_text = entry_text[:150] + "..." if len(entry_text) > 150 else entry_text
+
+    # Build the full thread content
+    full_content_parts = [
+        ui.div(entry_text, class_="entry-preview-initial"),
+    ]
+
+    if nudge:
+        full_content_parts.append(
+            ui.div(
+                ui.span("💬 Nudge: ", class_="entry-preview-label"),
+                nudge,
+                class_="entry-preview-nudge",
+            )
+        )
+
+    if response:
+        full_content_parts.append(
+            ui.div(
+                ui.span("↳ Response: ", class_="entry-preview-label"),
+                response,
+                class_="entry-preview-response",
+            )
+        )
+
+    return ui.div(
+        ui.div(
+            ui.span("📄 Entry Preview", class_="entry-preview-title"),
+            ui.span("▼", class_="entry-preview-toggle-icon"),
+            class_="entry-preview-header",
+            onclick="toggleEntryPreview()",
+        ),
+        ui.div(
+            preview_text,
+            class_="entry-preview-collapsed",
+            id="entry-preview-collapsed",
+        ),
+        ui.div(
+            *full_content_parts,
+            class_="entry-preview-expanded",
+            id="entry-preview-expanded",
+            style="display: none;",
+        ),
+        class_="entry-preview-container",
+    )
+
+
+def _get_comparison_modal_script() -> str:
+    """Return the inline JavaScript for modal interactivity."""
+    return """
+<script>
+(function() {
+    // Toggle entry preview
+    window.toggleEntryPreview = function() {
+        var collapsed = document.getElementById('entry-preview-collapsed');
+        var expanded = document.getElementById('entry-preview-expanded');
+        var icon = document.querySelector('.entry-preview-toggle-icon');
+
+        if (collapsed.style.display === 'none') {
+            collapsed.style.display = 'block';
+            expanded.style.display = 'none';
+            icon.textContent = '▼';
+        } else {
+            collapsed.style.display = 'none';
+            expanded.style.display = 'block';
+            icon.textContent = '▲';
+        }
+    };
+
+    // Toggle rationale rows
+    window.toggleRationale = function(valueKey) {
+        var rationaleRow = document.getElementById('rationale-row-' + valueKey);
+        if (rationaleRow) {
+            if (rationaleRow.style.display === 'none' || rationaleRow.style.display === '') {
+                rationaleRow.style.display = 'table-row';
+            } else {
+                rationaleRow.style.display = 'none';
+            }
+        }
+    };
+})();
+</script>
+"""
+
+
 def build_comparison_modal_content(
-    human_scores: dict[str, int], judge_data: dict | None
+    human_scores: dict[str, int],
+    judge_data: dict | None,
+    entry_data: dict | None = None,
 ) -> ui.TagChild:
     """Build the comparison modal content showing human vs judge scores.
 
     Args:
         human_scores: Dict mapping value names to human annotator scores
         judge_data: Full judge label row dict, or None if not available
+        entry_data: Current entry dict for preview, or None
 
     Returns:
         UI element for the modal body
@@ -166,6 +275,14 @@ def build_comparison_modal_content(
             class_="comparison-no-labels",
         )
 
+    # Parse rationales from judge_data
+    rationales = {}
+    if judge_data.get("rationales_json"):
+        try:
+            rationales = json.loads(judge_data["rationales_json"])
+        except (json.JSONDecodeError, TypeError):
+            pass
+
     # Build comparison table rows
     rows = []
     exact_matches = 0
@@ -185,6 +302,18 @@ def build_comparison_modal_content(
         if row_class == "match-exact":
             exact_matches += 1
 
+        # Check if this value has a rationale
+        has_rationale = value in rationales
+        rationale_indicator = ""
+        row_extra_class = ""
+        row_onclick = ""
+
+        if has_rationale:
+            rationale_indicator = "💬"
+            row_extra_class = " has-rationale"
+            row_onclick = f"toggleRationale('{value}')"
+
+        # Build the main row
         rows.append(
             ui.tags.tr(
                 ui.tags.td(VALUE_LABELS[value], class_="comparison-value-name"),
@@ -197,11 +326,44 @@ def build_comparison_modal_content(
                 ui.tags.td(
                     ui.span(match_symbol, class_=f"comparison-match {match_class}")
                 ),
-                class_=f"comparison-row {row_class}",
+                ui.tags.td(
+                    ui.span(rationale_indicator, class_="rationale-indicator"),
+                    class_="comparison-rationale-col",
+                ),
+                class_=f"comparison-row {row_class}{row_extra_class}",
+                onclick=row_onclick if has_rationale else None,
             )
         )
 
-    return ui.div(
+        # Add rationale row (hidden by default) if rationale exists
+        if has_rationale:
+            rows.append(
+                ui.tags.tr(
+                    ui.tags.td(
+                        ui.div(
+                            rationales[value],
+                            class_="comparison-rationale-content",
+                        ),
+                        colspan="5",
+                        class_="comparison-rationale-cell",
+                    ),
+                    class_="comparison-rationale-row",
+                    id=f"rationale-row-{value}",
+                    style="display: none;",
+                )
+            )
+
+    # Build entry preview section
+    entry_preview = _build_entry_preview(entry_data)
+
+    content_parts = []
+
+    # Add entry preview at the top if available
+    if entry_preview:
+        content_parts.append(entry_preview)
+
+    # Add the comparison table
+    content_parts.append(
         ui.tags.table(
             ui.tags.thead(
                 ui.tags.tr(
@@ -209,36 +371,57 @@ def build_comparison_modal_content(
                     ui.tags.th("You"),
                     ui.tags.th("Judge"),
                     ui.tags.th("Match"),
+                    ui.tags.th("", class_="comparison-rationale-header"),
                 )
             ),
             ui.tags.tbody(*rows),
             class_="comparison-table",
-        ),
+        )
+    )
+
+    # Add summary
+    content_parts.append(
         ui.div(
             ui.span(f"{exact_matches}/10", class_="comparison-summary-count"),
             " exact matches",
             class_="comparison-summary",
-        ),
+        )
+    )
+
+    # Add continue button
+    content_parts.append(
         ui.input_action_button(
             "comparison_continue",
             "Continue →",
             class_="comparison-continue-btn",
-        ),
+        )
+    )
+
+    # Add inline script for interactivity
+    content_parts.append(ui.HTML(_get_comparison_modal_script()))
+
+    return ui.div(
+        *content_parts,
         class_="comparison-modal-content",
     )
 
 
-def build_comparison_modal(human_scores: dict[str, int], judge_data: dict | None) -> ui.Tag:
+def build_comparison_modal(
+    human_scores: dict[str, int],
+    judge_data: dict | None,
+    entry_data: dict | None = None,
+) -> ui.Tag:
     """Build the full comparison modal.
 
     Args:
         human_scores: Dict mapping value names to human annotator scores
         judge_data: Full judge label row dict, or None if not available
+        entry_data: Current entry dict for preview, or None
 
     Returns:
         UI modal element ready to be shown with ui.modal_show()
     """
-    modal_content = build_comparison_modal_content(human_scores, judge_data)
+    modal_content = build_comparison_modal_content(human_scores, judge_data, entry_data)
 
     return ui.modal(
         modal_content,

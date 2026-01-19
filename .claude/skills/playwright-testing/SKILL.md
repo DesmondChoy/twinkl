@@ -249,20 +249,31 @@ For rapid testing, verify these critical paths:
 
 #### Phase 3: Post-Save Reveal Feature
 - [ ] Click "Save & Next →" button
-- [ ] **Comparison modal appears** with:
+- [ ] **Inline comparison view replaces scoring grid** with:
+  - [ ] "Score Comparison" title at top
   - [ ] Table showing all 10 Schwartz values
   - [ ] "You" column with human annotator scores
   - [ ] "Judge" column with LLM Judge scores
-  - [ ] Match indicator column (✓/~/✗)
-  - [ ] Color coding: green (match), yellow (adjacent), red (disagree)
+  - [ ] Match indicator column (✓/✗ only - no adjacent)
+  - [ ] Color coding: green (exact match), red (disagree) - no yellow
+  - [ ] Rationale rows visible below non-zero judge scores
   - [ ] Summary line (e.g., "7/10 exact matches")
-- [ ] Modal has "Continue →" button
-- [ ] Modal cannot be dismissed by clicking outside (easy_close=False)
-- [ ] Clicking "Continue →" closes modal and advances to next entry
+- [ ] Inline view has "Continue →" button
+- [ ] Clicking "Continue →" returns to scoring grid and advances to next entry
+- [ ] Keyboard: Enter key triggers "Continue →" in comparison mode
 - [ ] Progress bar updates after save
 
+##### Rationale Display
+- [ ] For non-zero judge scores, rationale row is always visible below the value row
+- [ ] Rationale has distinct styling (italic, yellow-tinted background, left border)
+
+##### Mode Switching
+- [ ] Navigating to different entry resets to scoring mode
+- [ ] Previous/Next persona buttons reset to scoring mode
+- [ ] Clicking a different entry in sidebar resets to scoring mode
+
 #### Phase 4: Missing Labels Handling
-- [ ] For entries without Judge labels, modal shows:
+- [ ] For entries without Judge labels, inline view shows:
   - [ ] "No Judge labels available for this entry" message
   - [ ] Confirmation that annotation was saved
   - [ ] "Continue →" button still works
@@ -272,13 +283,13 @@ For rapid testing, verify these critical paths:
 - [ ] Click "Save & Next →"
 - [ ] Warning modal appears asking to confirm all-neutral scores
 - [ ] Can cancel and adjust scores
-- [ ] Can confirm and proceed (then comparison modal appears)
+- [ ] Can confirm and proceed (then inline comparison view appears)
 
 #### Phase 6: Re-edit Behavior
 - [ ] Navigate to a previously annotated entry
 - [ ] Existing scores load into scoring grid
 - [ ] Modify one or more scores
-- [ ] Save → comparison modal still appears (always shows on save)
+- [ ] Save → inline comparison view replaces scoring grid (always shows on save)
 
 #### Phase 7: Persistence
 - [ ] Close browser/refresh page

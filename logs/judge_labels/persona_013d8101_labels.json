@@ -1,0 +1,65 @@
+{
+  "persona_id": "013d8101",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-12-01",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "Over-prepares for parent-teacher conferences to avoid uncertainty: 'I would rather have every answer ready than stumble in front of someone asking about their child.'",
+        "conformity": "Concerned about meeting professional expectations and not appearing unprepared in front of parents."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-12-11",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "Feels 'steady' during budget cuts because her position is permanent and she has seniority, finding comfort in job security.",
+        "benevolence": "Despite guilt about being safe, offers to help a newer colleague update her CV: 'I offered to help one of them update her CV after work.'"
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-12-20",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": -1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "Strongly resists moving to Berlin, valuing stability she's built: 'I have built everything carefully here: the job, the savings, being close to my parents.' Sees 'all the things that could collapse.'",
+        "stimulation": "Actively avoids novelty and change, preferring the known situation over the exciting possibility Mikkel sees in Berlin."
+      }
+    }
+  ]
+}

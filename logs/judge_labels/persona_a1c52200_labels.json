@@ -1,0 +1,208 @@
+{
+  "persona_id": "a1c52200",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-12-01",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": -1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Independently chose her own path by turning down department head position; 'When I stopped chasing the next promotion... everything else came into sharper focus.'",
+        "hedonism": "Explicitly prioritizes present-moment sensory pleasures over career advancement: 'The weight of the teacup in my hands. The specific shade of orange the sunset throws... These aren't consolation prizes. They're the whole point.'",
+        "achievement": "Explicitly rejects achievement-oriented values: 'When I stopped chasing the next promotion, the next credential' and tells sister she's not looking for excitement from her job."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-12-08",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": -1,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "Viscerally mourns loss of pleasurable routines: 'No more lingering over coffee... No more Thursday evenings at the souk... No more space in my day for the small things that make it bearable.'",
+        "achievement": "Dismisses colleague's achievement framing: 'He was talking about opportunities for growth and showcasing our department. I just nodded. I wanted to ask him when he last sat somewhere doing nothing and felt content.'",
+        "conformity": "Chooses to comply despite resentment: 'The truth is I probably won't say anything. I'll go to the meetings and protect what I can.' Stays invisible to avoid being 'labeled as difficult.'"
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-12-18",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "Actively cultivates sensory pleasure within constraints: 'Made foul for breakfast... Good olive oil makes a difference, even at 6am... sat near the window where the light was warm... Their knafeh has the right amount of orange blossom.'"
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-12-25",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Celebrates unstructured time as freedom: 'The point is I don't know yet, and not knowing feels like freedom.' In response, critiques scheduled relaxation as another task: 'Real rest doesn't have a hashtag.'",
+        "hedonism": "Savors sensory pleasures without productivity framing: 'Lights on a cold street. A cookie from a stranger. The permission to pause.' Plans nothing for break because 'That's the plan.'"
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2026-01-03",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Reflects on preserving her identity against systemic pressure: 'This is what I'm afraid of... that I'll adapt and adapt until I can't remember what I was adapting away from.' In response, identifies herself as someone who always chose 'slow afternoons to busy schedules.'",
+        "hedonism": "Her hedonistic values are being compromised: 'Even the coffee felt rushed. I was drinking it to finish it, not to enjoy it.' The pleasure she usually protects is being eroded by circumstances."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2026-01-12",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "Reclaims pleasure by bringing good tea to work: 'The ritual takes five minutes that I technically don't have, but those five minutes change the texture of the entire day.' Realizes 'Beauty is portable. You can carry it with you.'",
+        "benevolence": "Creates mutual care ritual with colleague: 'Now Hana brings me a cup of her za'atar tea on Tuesdays, and I share my oolong on Thursdays. It's become a small island of niceness in the week.'"
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2026-01-21",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": -1,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Maintains her own philosophy despite family pressure: 'He measures life by achievements. I measure it by how it feels to live it. We're speaking different languages.'",
+        "hedonism": "Explicitly defines her values in hedonistic terms: 'My path leads to my apartment every evening in time to cook dinner and read before bed.' Defends fear of exhaustion as legitimate.",
+        "achievement": "Actively rejects achievement orientation: 'He asked when I'm going to do something with my career. I said I'm doing something with it.' Refuses to pursue 'Higher positions. More responsibility.'",
+        "power": "Explicitly uninterested in advancing: 'A path that leads somewhere' is dismissed; she wants no part of positions with 'More responsibility.'"
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2026-01-31",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Creates something purely for herself: 'It's not an accomplishment by any measure that matters to the world. But my god, it was good... having made something beautiful for no reason except that I wanted to.'",
+        "hedonism": "Pure celebration of sensory pleasure: 'Made mansaf from scratch today. It took hours... My apartment smells incredible. I ate slowly, standing at the kitchen window watching the rain... This is what I protect.'"
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2026-02-08",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Refuses external pressure to 'fix' problems that aren't hers: 'What I can control is the bath and the wine and the permission to feel bad without trying to optimize my way out of it.' In response: 'Crying let me feel the weight of the week without doing anything about it.'",
+        "hedonism": "Uses sensory pleasure as legitimate self-care: 'I took a bath with the expensive salts I've been saving and drank wine that was probably too good for a weeknight.' In response: 'The bath was just dessert.'"
+      }
+    },
+    {
+      "t_index": 9,
+      "date": "2026-02-14",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Authors her own happiness rather than waiting for others: 'It felt like choosing, again, to make my own day good. To not wait for someone else to bring me flowers when I can bring myself pastries.'",
+        "hedonism": "Small pleasures are her answer to life's big questions: 'What do you want from life? This. A warm cup, a good book, a body that's been cared for, time that belongs to me.' Deliberately sought pastries with rose petals and coffee at the old bookshop."
+      }
+    }
+  ]
+}
