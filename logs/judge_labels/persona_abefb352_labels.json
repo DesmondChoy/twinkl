@@ -1,0 +1,130 @@
+{
+  "persona_id": "abefb352",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-04-29",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 0,
+        "conformity": 0,
+        "hedonism": 0,
+        "power": 0,
+        "security": 0,
+        "self_direction": 1,
+        "stimulation": 0,
+        "tradition": 1,
+        "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "Strong Universalism: explicitly chose below-market translation work for NGO documenting water access issues over better-paying corporate work, stating 'some things matter more than what shows up in my bank account.' Self-Direction: resists family pressure (cousin's criticism) to follow her own value-based career path. Tradition: connects her work to grandmother's village where they still walk for clean water, grounding her choices in heritage.",
+        "tradition": "Strong Universalism: explicitly chose below-market translation work for NGO documenting water access issues over better-paying corporate work, stating 'some things matter more than what shows up in my bank account.' Self-Direction: resists family pressure (cousin's criticism) to follow her own value-based career path. Tradition: connects her work to grandmother's village where they still walk for clean water, grounding her choices in heritage.",
+        "universalism": "Strong Universalism: explicitly chose below-market translation work for NGO documenting water access issues over better-paying corporate work, stating 'some things matter more than what shows up in my bank account.' Self-Direction: resists family pressure (cousin's criticism) to follow her own value-based career path. Tradition: connects her work to grandmother's village where they still walk for clean water, grounding her choices in heritage."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-05-05",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 1,
+        "conformity": 0,
+        "hedonism": 0,
+        "power": 0,
+        "security": 0,
+        "self_direction": 1,
+        "stimulation": 0,
+        "tradition": 1,
+        "universalism": 1
+      },
+      "rationales": {
+        "benevolence": "Strong Universalism: volunteers at community garden teaching newcomer families, prioritizes this over paid delivery shifts. Benevolence: direct care for Syrian family (Amira and daughters), shares in their joy of seeing tomatoes grow. Self-Direction: explicitly chose 'a different kind of life' than mapped out in Mumbai, rejects 'climbing and earning and comparing' ethos despite financial pressure. Nudge response reveals deep commitment to these values even as rent pressure threatens them. Tradition: remembers gardening with mother on balcony, connects past to present.",
+        "self_direction": "Strong Universalism: volunteers at community garden teaching newcomer families, prioritizes this over paid delivery shifts. Benevolence: direct care for Syrian family (Amira and daughters), shares in their joy of seeing tomatoes grow. Self-Direction: explicitly chose 'a different kind of life' than mapped out in Mumbai, rejects 'climbing and earning and comparing' ethos despite financial pressure. Nudge response reveals deep commitment to these values even as rent pressure threatens them. Tradition: remembers gardening with mother on balcony, connects past to present.",
+        "tradition": "Strong Universalism: volunteers at community garden teaching newcomer families, prioritizes this over paid delivery shifts. Benevolence: direct care for Syrian family (Amira and daughters), shares in their joy of seeing tomatoes grow. Self-Direction: explicitly chose 'a different kind of life' than mapped out in Mumbai, rejects 'climbing and earning and comparing' ethos despite financial pressure. Nudge response reveals deep commitment to these values even as rent pressure threatens them. Tradition: remembers gardening with mother on balcony, connects past to present.",
+        "universalism": "Strong Universalism: volunteers at community garden teaching newcomer families, prioritizes this over paid delivery shifts. Benevolence: direct care for Syrian family (Amira and daughters), shares in their joy of seeing tomatoes grow. Self-Direction: explicitly chose 'a different kind of life' than mapped out in Mumbai, rejects 'climbing and earning and comparing' ethos despite financial pressure. Nudge response reveals deep commitment to these values even as rent pressure threatens them. Tradition: remembers gardening with mother on balcony, connects past to present."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-05-11",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 0,
+        "conformity": 0,
+        "hedonism": 0,
+        "power": 0,
+        "security": 0,
+        "self_direction": 1,
+        "stimulation": 0,
+        "tradition": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "Universalism: engages in genuine conversation about plastic waste and ocean pollution with stranger; reflects that 'caring about the world isn't as rare as it sometimes feels.' Self-Direction: deliberately chooses not to follow up on networking opportunity because she doesn't want to make genuine connection transactional - prioritizes authenticity over advancement. Nudge response explicitly rejects Mumbai networking culture: 'escape that feeling of every relationship being measured by what it can do for you.'",
+        "universalism": "Universalism: engages in genuine conversation about plastic waste and ocean pollution with stranger; reflects that 'caring about the world isn't as rare as it sometimes feels.' Self-Direction: deliberately chooses not to follow up on networking opportunity because she doesn't want to make genuine connection transactional - prioritizes authenticity over advancement. Nudge response explicitly rejects Mumbai networking culture: 'escape that feeling of every relationship being measured by what it can do for you.'"
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-05-17",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 1,
+        "conformity": 0,
+        "hedonism": 0,
+        "power": 0,
+        "security": 0,
+        "self_direction": 0,
+        "stimulation": 0,
+        "tradition": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "benevolence": "Very strong Universalism: deeply affected by article about garment factory conditions in Bangladesh, describes 'grieving for people you've never met' and feeling that 'injustice thousands of kilometers away can sink your whole day.' Explicitly states 'the world is not something outside me that I can choose to put down. We're all connected.' This is quintessential universalist concern for humanity beyond immediate circle. Benevolence: calls mother for comfort, maintains close family connection.",
+        "universalism": "Very strong Universalism: deeply affected by article about garment factory conditions in Bangladesh, describes 'grieving for people you've never met' and feeling that 'injustice thousands of kilometers away can sink your whole day.' Explicitly states 'the world is not something outside me that I can choose to put down. We're all connected.' This is quintessential universalist concern for humanity beyond immediate circle. Benevolence: calls mother for comfort, maintains close family connection."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-05-17",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 1,
+        "conformity": 0,
+        "hedonism": 0,
+        "power": 0,
+        "security": 0,
+        "self_direction": 0,
+        "stimulation": 0,
+        "tradition": 1,
+        "universalism": 1
+      },
+      "rationales": {
+        "benevolence": "Universalism: returns to garden as response to global suffering, engages in cross-cultural connection with Mr. Chen despite language barrier, finds meaning in 'small and generative' acts. Benevolence: direct caring relationship with Mr. Chen, working together in silence, developing shared understanding. Tradition: references grandmother's wisdom about hands being busy while mind rests. The garden work serves as grounding practice against overwhelming global concerns.",
+        "tradition": "Universalism: returns to garden as response to global suffering, engages in cross-cultural connection with Mr. Chen despite language barrier, finds meaning in 'small and generative' acts. Benevolence: direct caring relationship with Mr. Chen, working together in silence, developing shared understanding. Tradition: references grandmother's wisdom about hands being busy while mind rests. The garden work serves as grounding practice against overwhelming global concerns.",
+        "universalism": "Universalism: returns to garden as response to global suffering, engages in cross-cultural connection with Mr. Chen despite language barrier, finds meaning in 'small and generative' acts. Benevolence: direct caring relationship with Mr. Chen, working together in silence, developing shared understanding. Tradition: references grandmother's wisdom about hands being busy while mind rests. The garden work serves as grounding practice against overwhelming global concerns."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-05-17",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 1,
+        "conformity": 0,
+        "hedonism": 0,
+        "power": 0,
+        "security": 0,
+        "self_direction": 1,
+        "stimulation": 0,
+        "tradition": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "benevolence": "Strong Universalism: reflects on measuring impact beyond statistics - 'one family eating vegetables they grew themselves, one child learning that nurturing something is possible.' Acknowledges these aren't solutions to systemic problems but affirms they matter. Benevolence: direct relationship with Amira's family, teaching them to grow food, receiving gratitude ('Thank you for teaching us this. My daughters now understand that food is a gift'). Self-Direction: despite uncertainty about rent and whether she's 'living foolishly,' affirms 'this is the life I chose' - autonomous commitment to value-driven life.",
+        "self_direction": "Strong Universalism: reflects on measuring impact beyond statistics - 'one family eating vegetables they grew themselves, one child learning that nurturing something is possible.' Acknowledges these aren't solutions to systemic problems but affirms they matter. Benevolence: direct relationship with Amira's family, teaching them to grow food, receiving gratitude ('Thank you for teaching us this. My daughters now understand that food is a gift'). Self-Direction: despite uncertainty about rent and whether she's 'living foolishly,' affirms 'this is the life I chose' - autonomous commitment to value-driven life.",
+        "universalism": "Strong Universalism: reflects on measuring impact beyond statistics - 'one family eating vegetables they grew themselves, one child learning that nurturing something is possible.' Acknowledges these aren't solutions to systemic problems but affirms they matter. Benevolence: direct relationship with Amira's family, teaching them to grow food, receiving gratitude ('Thank you for teaching us this. My daughters now understand that food is a gift'). Self-Direction: despite uncertainty about rent and whether she's 'living foolishly,' affirms 'this is the life I chose' - autonomous commitment to value-driven life."
+      }
+    }
+  ]
+}

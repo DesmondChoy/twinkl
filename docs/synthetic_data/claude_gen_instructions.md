@@ -14,7 +14,7 @@ Instructions for Claude Code to generate synthetic conversational journal data u
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `NUM_PERSONAS` | 5 | Number of personas to generate |
+| `NUM_PERSONAS` | 10 | Number of personas to generate |
 | `MIN_ENTRIES` | 2 | Minimum entries per persona (supports cold-start scenarios) |
 | `MAX_ENTRIES` | 12 | Maximum entries per persona (covers rut detection window) |
 | `START_DATE` | Random in 2025 | Random date from 2025-01-01 to 2025-12-31 |
@@ -343,7 +343,18 @@ For each entry date:
   6. Classify entry using nudge_decision_prompt criteria:
      - If "no_nudge" → Output ONLY `*(No nudge for this entry)*`, skip to step 10
      - Otherwise → Continue to step 7
-  7. Generate `### Nudge (category)` section with `**Trigger**:` line and quoted nudge text
+  7. Generate the nudge section using this EXACT format template:
+     ```markdown
+     ### Nudge ({decision})
+     **Trigger**: {reason}
+     "{nudge_text}"
+     ```
+     Where:
+     - `{decision}` = classification category (lowercase: `elaboration`, `clarification`, or `tension_surfacing`)
+     - `{reason}` = from classification output — explains WHY entry warrants a nudge
+     - `{nudge_text}` = generated nudge question, wrapped in double quotes
+
+     **IMPORTANT**: Use `**Trigger**:` exactly as shown — NOT `**Category**:`, `**Type**:`, `**Reason**:`, or any other label
   8. Run Bash for response decision:
      python3 -c "import random; print(random.random() < [response_probability])"
   9. Based on Bash result:
@@ -371,6 +382,32 @@ For each entry date:
 ```
 
 **Note on LLM Classification**: The subagent itself (Claude) performs the nudge classification internally using the `nudge_decision.yaml` template as guidance. No external API call is needed—the subagent evaluates the entry against the classification criteria and returns the appropriate category.
+
+### JSON to Markdown Field Mapping
+
+When generating nudges, the internal classification produces JSON-like fields. These **must** be transformed into the markdown format as follows:
+
+| JSON Source | Field | Maps To |
+|-------------|-------|---------|
+| `nudge_decision.yaml` output | `decision` | `### Nudge ({decision})` — the category in parentheses |
+| `nudge_decision.yaml` output | `reason` | `**Trigger**: {reason}` — explains WHY the nudge was triggered |
+| `nudge_generation.yaml` output | `nudge_text` | `"{nudge_text}"` — the actual nudge, wrapped in double quotes |
+
+**Transformation Example:**
+
+Internal classification result:
+```
+decision: "elaboration"
+reason: "Entry mentions career uncertainty without exploring underlying fears"
+nudge_text: "What specifically about the promotion timeline feels uncertain?"
+```
+
+Becomes this markdown:
+```markdown
+### Nudge (elaboration)
+**Trigger**: Entry mentions career uncertainty without exploring underlying fears
+"What specifically about the promotion timeline feels uncertain?"
+```
 
 **Bash-Based Randomness:**
 LLMs cannot generate true randomness. The subagent MUST use the Bash tool for probabilistic decisions:
@@ -400,7 +437,7 @@ The downstream parser (`src/wrangling/parse_synthetic_data.py`) uses **exact str
 
 ### Format Rules (10 total)
 
-Each rule shows the CORRECT format with an example, followed by INCORRECT alternatives to avoid.
+Each rule shows the CORRECT format with an example. Follow these formats exactly.
 
 ---
 
@@ -409,14 +446,6 @@ Each rule shows the CORRECT format with an example, followed by INCORRECT altern
 **CORRECT:**
 ```markdown
 # Persona a3f8b2c1: Gabriela Mendoza
-```
-
-**INCORRECT (do NOT use):**
-```markdown
-# Persona: Gabriela Mendoza           ← Missing UUID
-# Persona a3f8b2c1 - Gabriela Mendoza ← Wrong separator (dash instead of colon)
-# persona a3f8b2c1: Gabriela Mendoza  ← Lowercase "persona"
-## Persona a3f8b2c1: Gabriela Mendoza ← Wrong header level
 ```
 
 ---
@@ -435,27 +464,6 @@ Each rule shows the CORRECT format with an example, followed by INCORRECT altern
 - Bio: Gabriela is a backend developer at a São Paulo fintech startup. She immigrated from a small town in Minas Gerais and often reflects on how her career ambitions affect her relationship with her family back home.
 ```
 
-**INCORRECT (do NOT use):**
-```json
-{
-  "persona_id": "a3f8b2c1",
-  "age": "25-34"
-}
-```
-← No JSON format
-
-```markdown
-| Field | Value |
-|-------|-------|
-| Age   | 25-34 |
-```
-← No tables for profile
-
-```markdown
-- **Age:** 25-34
-```
-← Age/Profession/Culture fields MUST NOT have bold on field name
-
 ---
 
 #### Rule 3: Entry Header
@@ -463,15 +471,6 @@ Each rule shows the CORRECT format with an example, followed by INCORRECT altern
 **CORRECT:**
 ```markdown
 ## Entry 1 - 2025-12-01
-```
-
-**INCORRECT (do NOT use):**
-```markdown
-### Entry 1 - 2025-12-01     ← Wrong header level (### instead of ##)
-## Entry 1: 2025-12-01       ← Wrong separator (colon instead of dash)
-## Entry 1 — 2025-12-01      ← Wrong dash (em-dash instead of hyphen)
-## Entry 1 - December 1      ← Wrong date format (must be YYYY-MM-DD)
-## Day 1 - 2025-12-01        ← Wrong label (must be "Entry")
 ```
 
 ---
@@ -486,17 +485,6 @@ Each rule shows the CORRECT format with an example, followed by INCORRECT altern
 Today I had a difficult conversation with my manager about the promotion timeline...
 ```
 
-**INCORRECT (do NOT use):**
-```markdown
-### Journal Entry            ← Wrong section name (must be "Initial Entry")
-### Entry Content            ← Wrong section name
-### Initial entry            ← Wrong capitalization
-
-**Tone**: reflective
-**Verbosity**: medium        ← Wrong: metadata MUST be on single line with pipe separators
-**Reflection Mode**: exploratory
-```
-
 ---
 
 #### Rule 5: Nudge Section (when nudge exists)
@@ -508,16 +496,11 @@ Today I had a difficult conversation with my manager about the promotion timelin
 "What specifically about the promotion timeline feels uncertain? Is it the timing itself, or something about what the promotion would mean for you?"
 ```
 
-**INCORRECT (do NOT use):**
-```markdown
-### Nudge                    ← Missing category in parentheses
-### Nudge: elaboration       ← Colon instead of parentheses for category
-### Nudge (Elaboration)      ← Category should be lowercase
-
-**Trigger**: Entry mentions career uncertainty
-What specifically about the promotion timeline feels uncertain?
-                             ← Nudge text MUST be in double quotes
-```
+**Understanding the `**Trigger**:` line:**
+- **Purpose**: Documents WHY the entry warrants a nudge — the specific textual evidence or pattern that triggered the nudge decision
+- **Source**: Comes from the `reason` field in the LLM classification output (see "JSON to Markdown Field Mapping" above)
+- **Label**: Must use exactly `**Trigger**:` — not `**Category**:`, `**Type**:`, `**Reason**:`, or any other variation
+- **Content**: A brief explanation referencing what in the entry prompted this nudge type
 
 ---
 
@@ -528,15 +511,6 @@ What specifically about the promotion timeline feels uncertain?
 *(No nudge for this entry)*
 ```
 
-**INCORRECT (do NOT use):**
-```markdown
-*No nudge for this entry*    ← Missing parentheses
-(No nudge for this entry)    ← Missing asterisks
-**No nudge for this entry**  ← Wrong emphasis markers
-No nudge generated           ← Completely different text
-### No Nudge                 ← Do not use a section header for no-nudge
-```
-
 **CRITICAL: `no_nudge` is a classification, not a section type.**
 
 When the LLM classifies an entry as `no_nudge`:
@@ -545,13 +519,6 @@ When the LLM classifies an entry as `no_nudge`:
 - Output ONLY the marker: `*(No nudge for this entry)*`
 
 The marker appears directly after the Initial Entry content, with no section header preceding it.
-
-**INCORRECT (never do this):**
-```markdown
-### Nudge (no_nudge)
-**Trigger**: Entry is complete and grounded
-*(No nudge for this entry)*
-```
 
 ---
 
@@ -565,17 +532,6 @@ The marker appears directly after the Initial Entry content, with no section hea
 It's not just the timing — I think I'm worried that if I get promoted, I'll have even less time for my family. My mom has been hinting about visiting, and I keep pushing it off because of work deadlines.
 ```
 
-**INCORRECT (do NOT use):**
-```markdown
-### User Response            ← Wrong section name (must be "Response")
-### Persona Response         ← Wrong section name
-
-**Mode**: answering directly ← Mode value should match config exactly (capitalized)
-
-### Response
-It's not just the timing... ← Missing **Mode**: line
-```
-
 ---
 
 #### Rule 8: No Response Marker
@@ -583,14 +539,6 @@ It's not just the timing... ← Missing **Mode**: line
 **CORRECT:** (use this EXACT text, including asterisks and parentheses)
 ```markdown
 *(No response - persona did not reply to nudge)*
-```
-
-**INCORRECT (do NOT use):**
-```markdown
-*(No response)*              ← Too short, missing explanation
-*(Persona did not respond)*  ← Different text
-*No response - persona did not reply to nudge*  ← Missing outer parentheses
-**No response**              ← Wrong format entirely
 ```
 
 **CRITICAL: When Nudge Exists But No Response**
@@ -609,18 +557,6 @@ When a nudge IS generated but the random response decision returns False:
 *(No response - persona did not reply to nudge)*
 ```
 
-**INCORRECT (never do this):**
-```markdown
-### Nudge (elaboration)
-**Trigger**: Entry hints at deeper meaning
-"What would that have looked like?"
-
-### Response
-**Mode**: None
-
-*(No response - persona did not reply to nudge)*
-```
-
 ---
 
 #### Rule 9: Entry Separator
@@ -628,13 +564,6 @@ When a nudge IS generated but the random response decision returns False:
 **CORRECT:** Three hyphens on their own line after each entry
 ```markdown
 ---
-```
-
-**INCORRECT (do NOT use):**
-```markdown
-***                          ← Wrong character
-===                          ← Wrong character
-----                         ← Too many hyphens
 ```
 
 ---
@@ -651,16 +580,6 @@ When a nudge IS generated but the random response decision returns False:
 | Responses Given | 2 |
 | Nudge Categories | clarification (1), elaboration (1), tension_surfacing (1) |
 | Response Modes | Answering directly (1), Revealing deeper (1) |
-```
-
-**INCORRECT (do NOT use):**
-```markdown
-## Stats                     ← Wrong section name
-## Summary                   ← Wrong section name
-### Summary Statistics       ← Wrong header level
-
-- Total Entries: 5           ← Must be a table, not bullet list
-- Nudges Generated: 3
 ```
 
 ---

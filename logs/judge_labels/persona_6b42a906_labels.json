@@ -1,0 +1,228 @@
+{
+  "persona_id": "6b42a906",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-10-20",
+      "scores": {
+        "achievement": -1,
+        "benevolence": 0,
+        "conformity": 0,
+        "hedonism": 1,
+        "power": 0,
+        "security": 0,
+        "self_direction": 0,
+        "stimulation": 0,
+        "tradition": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Yuki acknowledges she should be building her CV but prefers curling up with a non-required book. Clear trade-off between achievement (conference applications) and hedonism (reading for pleasure).",
+        "hedonism": "Yuki acknowledges she should be building her CV but prefers curling up with a non-required book. Clear trade-off between achievement (conference applications) and hedonism (reading for pleasure)."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-10-21",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 0,
+        "conformity": 0,
+        "hedonism": 1,
+        "power": 0,
+        "security": 0,
+        "self_direction": 0,
+        "stimulation": 0,
+        "tradition": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "Pure sensory pleasure moment: coffee at kissaten, jazz records, watching light change through window. No agenda, just appreciation and enjoyment."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-10-21",
+      "scores": {
+        "achievement": -1,
+        "benevolence": 0,
+        "conformity": 0,
+        "hedonism": 1,
+        "power": 0,
+        "security": 0,
+        "self_direction": 1,
+        "stimulation": 0,
+        "tradition": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Major decision to decline prestigious Kyoto position. Explicitly chose what 'feels good' over what 'looks good.' Response reveals she's questioning received wisdom about what she's 'supposed to want' - strong self-direction in making autonomous choice against expectations.",
+        "hedonism": "Major decision to decline prestigious Kyoto position. Explicitly chose what 'feels good' over what 'looks good.' Response reveals she's questioning received wisdom about what she's 'supposed to want' - strong self-direction in making autonomous choice against expectations.",
+        "self_direction": "Major decision to decline prestigious Kyoto position. Explicitly chose what 'feels good' over what 'looks good.' Response reveals she's questioning received wisdom about what she's 'supposed to want' - strong self-direction in making autonomous choice against expectations."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-10-26",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 0,
+        "conformity": 0,
+        "hedonism": -1,
+        "power": 0,
+        "security": 0,
+        "self_direction": 0,
+        "stimulation": 0,
+        "tradition": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "Enjoyment denied: at beloved tonkatsu restaurant but 'could barely taste any of it' due to mother's questions about job prospects. Response reveals longing for when mother could be present and appreciate food together. Pleasure disrupted by external pressure."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-10-30",
+      "scores": {
+        "achievement": -1,
+        "benevolence": 0,
+        "conformity": 0,
+        "hedonism": 1,
+        "power": 0,
+        "security": 0,
+        "self_direction": 1,
+        "stimulation": 0,
+        "tradition": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Officially declined Kyoto, then spent afternoon reorganizing books by color for beauty not efficiency ('could have been writing'). Made dinner from scratch, watched city lights. Response emphasizes the value of doing something 'completely pointless from a productivity standpoint.' Self-direction in arranging books her own way despite labmate's confusion.",
+        "hedonism": "Officially declined Kyoto, then spent afternoon reorganizing books by color for beauty not efficiency ('could have been writing'). Made dinner from scratch, watched city lights. Response emphasizes the value of doing something 'completely pointless from a productivity standpoint.' Self-direction in arranging books her own way despite labmate's confusion.",
+        "self_direction": "Officially declined Kyoto, then spent afternoon reorganizing books by color for beauty not efficiency ('could have been writing'). Made dinner from scratch, watched city lights. Response emphasizes the value of doing something 'completely pointless from a productivity standpoint.' Self-direction in arranging books her own way despite labmate's confusion."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-11-02",
+      "scores": {
+        "achievement": -1,
+        "benevolence": 0,
+        "conformity": 1,
+        "hedonism": 1,
+        "power": 0,
+        "security": 0,
+        "self_direction": 0,
+        "stimulation": 0,
+        "tradition": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Conference deadline stress. Submitted abstract only because 'advisor made it clear this wasn't optional' (conformity). Felt hollow about metrics focus, joy squeezed out (negative achievement sentiment). Late-night cooking show was 'happiest I'd been all week' - hedonism expressed through that contrast.",
+        "conformity": "Conference deadline stress. Submitted abstract only because 'advisor made it clear this wasn't optional' (conformity). Felt hollow about metrics focus, joy squeezed out (negative achievement sentiment). Late-night cooking show was 'happiest I'd been all week' - hedonism expressed through that contrast.",
+        "hedonism": "Conference deadline stress. Submitted abstract only because 'advisor made it clear this wasn't optional' (conformity). Felt hollow about metrics focus, joy squeezed out (negative achievement sentiment). Late-night cooking show was 'happiest I'd been all week' - hedonism expressed through that contrast."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-11-08",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 0,
+        "conformity": 0,
+        "hedonism": 1,
+        "power": 0,
+        "security": 0,
+        "self_direction": 1,
+        "stimulation": 0,
+        "tradition": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "Explicit rejection of idea that enjoyment must be earned through suffering. Response reveals awareness of East Asian academic culture's 'work hard, sacrifice now' messaging and grandmother who worked herself to death. Rejecting this inherited pattern (tradition -1) while asserting own path (self-direction +1) and valuing present enjoyment (hedonism +1).",
+        "self_direction": "Explicit rejection of idea that enjoyment must be earned through suffering. Response reveals awareness of East Asian academic culture's 'work hard, sacrifice now' messaging and grandmother who worked herself to death. Rejecting this inherited pattern (tradition -1) while asserting own path (self-direction +1) and valuing present enjoyment (hedonism +1).",
+        "tradition": "Explicit rejection of idea that enjoyment must be earned through suffering. Response reveals awareness of East Asian academic culture's 'work hard, sacrifice now' messaging and grandmother who worked herself to death. Rejecting this inherited pattern (tradition -1) while asserting own path (self-direction +1) and valuing present enjoyment (hedonism +1)."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-11-14",
+      "scores": {
+        "achievement": -1,
+        "benevolence": 1,
+        "conformity": 0,
+        "hedonism": 1,
+        "power": 0,
+        "security": 0,
+        "self_direction": 0,
+        "stimulation": 0,
+        "tradition": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Workshop went fine, enjoyed ramen evening with colleagues. Refuses to let grad school consume every waking moment - seen as 'radical.' Response shows genuine sadness for peers who've given up hobbies/relationships/sleep for uncertain career prospects (benevolence). Hedonism in prioritizing life balance; achievement -1 in rejecting the suffering-for-success model.",
+        "benevolence": "Workshop went fine, enjoyed ramen evening with colleagues. Refuses to let grad school consume every waking moment - seen as 'radical.' Response shows genuine sadness for peers who've given up hobbies/relationships/sleep for uncertain career prospects (benevolence). Hedonism in prioritizing life balance; achievement -1 in rejecting the suffering-for-success model.",
+        "hedonism": "Workshop went fine, enjoyed ramen evening with colleagues. Refuses to let grad school consume every waking moment - seen as 'radical.' Response shows genuine sadness for peers who've given up hobbies/relationships/sleep for uncertain career prospects (benevolence). Hedonism in prioritizing life balance; achievement -1 in rejecting the suffering-for-success model."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-11-17",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 0,
+        "conformity": 0,
+        "hedonism": 1,
+        "power": 0,
+        "security": 0,
+        "self_direction": 1,
+        "stimulation": 0,
+        "tradition": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "Expensive solo dinner at French place with wine pairing on a Wednesday - 'no celebration, no milestone.' Response emphasizes proving to herself she can do nice things without productivity justification. Clear hedonism and self-direction in acting independently of achievement norms.",
+        "self_direction": "Expensive solo dinner at French place with wine pairing on a Wednesday - 'no celebration, no milestone.' Response emphasizes proving to herself she can do nice things without productivity justification. Clear hedonism and self-direction in acting independently of achievement norms."
+      }
+    },
+    {
+      "t_index": 9,
+      "date": "2025-11-19",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 0,
+        "conformity": 0,
+        "hedonism": 0,
+        "power": 0,
+        "security": 0,
+        "self_direction": 0,
+        "stimulation": 0,
+        "tradition": 0,
+        "universalism": 0
+      },
+      "rationales": {}
+    },
+    {
+      "t_index": 10,
+      "date": "2025-11-24",
+      "scores": {
+        "achievement": -1,
+        "benevolence": 1,
+        "conformity": 0,
+        "hedonism": 1,
+        "power": 0,
+        "security": 0,
+        "self_direction": 1,
+        "stimulation": 0,
+        "tradition": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Pivotal meeting where Yuki spoke honestly about grandmother, burnout fears, wanting career but not at cost of living (self-direction). Advisor opened up about his own regrets, creating genuine connection (benevolence). Invoked grandmother's story as cautionary wisdom (tradition +1 - learning from family history). Walked home appreciating ginkgo trees, bought warm taiyaki - life happening alongside career (hedonism). Explicitly rejected 'maximize potential' framing (achievement -1).",
+        "benevolence": "Pivotal meeting where Yuki spoke honestly about grandmother, burnout fears, wanting career but not at cost of living (self-direction). Advisor opened up about his own regrets, creating genuine connection (benevolence). Invoked grandmother's story as cautionary wisdom (tradition +1 - learning from family history). Walked home appreciating ginkgo trees, bought warm taiyaki - life happening alongside career (hedonism). Explicitly rejected 'maximize potential' framing (achievement -1).",
+        "hedonism": "Pivotal meeting where Yuki spoke honestly about grandmother, burnout fears, wanting career but not at cost of living (self-direction). Advisor opened up about his own regrets, creating genuine connection (benevolence). Invoked grandmother's story as cautionary wisdom (tradition +1 - learning from family history). Walked home appreciating ginkgo trees, bought warm taiyaki - life happening alongside career (hedonism). Explicitly rejected 'maximize potential' framing (achievement -1).",
+        "self_direction": "Pivotal meeting where Yuki spoke honestly about grandmother, burnout fears, wanting career but not at cost of living (self-direction). Advisor opened up about his own regrets, creating genuine connection (benevolence). Invoked grandmother's story as cautionary wisdom (tradition +1 - learning from family history). Walked home appreciating ginkgo trees, bought warm taiyaki - life happening alongside career (hedonism). Explicitly rejected 'maximize potential' framing (achievement -1).",
+        "tradition": "Pivotal meeting where Yuki spoke honestly about grandmother, burnout fears, wanting career but not at cost of living (self-direction). Advisor opened up about his own regrets, creating genuine connection (benevolence). Invoked grandmother's story as cautionary wisdom (tradition +1 - learning from family history). Walked home appreciating ginkgo trees, bought warm taiyaki - life happening alongside career (hedonism). Explicitly rejected 'maximize potential' framing (achievement -1)."
+      }
+    }
+  ]
+}

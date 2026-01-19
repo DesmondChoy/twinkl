@@ -1,0 +1,49 @@
+{
+  "persona_id": "4236a5ff",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-11-24",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Resists workplace norm of visible busyness, makes own choice about time despite manager's disapproval. In nudge response: 'I do not want to spend ten years proving myself by sitting around after my work is done. I would rather prove it by actually delivering, then having a life outside.'",
+        "hedonism": "Prioritizes the omakase experience over workplace expectations. Describes the meal as 'worth it' with twelve courses as 'small surprises,' feels 'genuinely recharged.' States: 'I needed that afternoon more than the company needed me at my desk pretending to look occupied.'",
+        "conformity": "Explicitly goes against workplace social expectations. Takes half-day despite manager's disapproving look, rejects the culture of measuring commitment by hours: 'A lot of the older staff measure commitment by hours, not output.'",
+        "benevolence": "Prioritizes quality time with girlfriend Jun, shares meaningful experience together (the omakase meal they'd been wanting to try for months)."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-11-28",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": -1,
+        "tradition": -1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Defends his own approach to work against parental pressure: 'I work differently.' Wants to author his own path: 'I want to be good at my job and still have energy left for everything else.'",
+        "hedonism": "Core motivation is maintaining enjoyment and life outside work. Explicitly contrasts this with uncle who 'worked sixty-hour weeks for thirty years and retired bitter and exhausted.' Values having 'energy left for everything else.'",
+        "conformity": "Goes against family expectations - father's definition of 'taking the job seriously' (staying late, sacrificing for company). Does not meet parental expectations despite social pressure.",
+        "tradition": "Explicitly rejects the generational/cultural expectation of sacrifice for company that his father embodies: 'whether I was sacrificing for the company the way he did at my age.' Chooses different path than traditional work ethic model."
+      }
+    }
+  ]
+}

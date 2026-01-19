@@ -1,0 +1,219 @@
+{
+  "persona_id": "dd3e3d44",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-05-28",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Initiated protocol revision on her own without being asked: 'Most of it I did on my own time because nobody asked me to.'",
+        "achievement": "Worked three months on protocol to prove she 'could contribute beyond bedside care' and isn't 'just someone who checks vitals.' The recognition from Dr. Weiss matters deeply: 'something I made mattered.'"
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-06-01",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Picked up two extra shifts, stayed late to help with new grad's first code. Explicitly links effort to career advancement: 'Being reliable matters when you're trying to move up.' Note: While mentoring occurred, her stated motivation is career advancement, not care for the mentee."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-06-07",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "Covered morning handoffs all five days without comment: 'That's the job.' Deflects from emotional processing about being passed over, changes subject to avoid uncomfortable conversation."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-06-10",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Obsessively checking intranet for promotion posting: 'Refreshed it three times during break like that would change anything.' The pursuit of the position consumes her attention even during breaks."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-06-15",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Nudge response reveals core driver: 'I can't just be average.' Checks work emails at 9pm because 'falling behind means being invisible' - visibility and recognition are paramount.",
+        "benevolence": "Partner Thomas complains about her always being on phone; she acknowledges he 'wasn't wrong' but prioritizes staying visible at work over being present with him."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-06-20",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "Double shift from 6am to midnight, 'couldn't remember the last time I ate an actual meal during a shift. Or the last time I left on time.' Active denial of basic physical needs.",
+        "achievement": "Despite exhaustion and Dr. Weiss expressing concern, pushes through for upcoming performance review. Nudge response reveals goal: 'The title. The recognition... proof that it mattered.'"
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-06-26",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Agrees to training despite resentment because 'It's exposure. It's a chance to show the department head what I can do.' Frames opportunity purely in terms of visibility and advancement.",
+        "conformity": "Says yes despite feeling annoyed that Frau Hartmann is delegating: 'What else am I going to say?' Restrains authentic reaction to maintain workplace harmony.",
+        "benevolence": "Explicitly acknowledges partner will 'eat dinner alone again' but proceeds anyway. Pattern of prioritizing career exposure over relationship."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-06-26",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "Won't commit to partner's cousin's wedding despite knowing she 'could probably make it work.' Thomas goes to bed without responding. Avoidance of commitment to close relationship event."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-07-03",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Positive feedback from all four new hires on training. Frames success in terms of recognition: 'Small win.' Continuing to accumulate evidence of competence."
+      }
+    },
+    {
+      "t_index": 9,
+      "date": "2025-07-03",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "Forgot anniversary, dismissed phone reminder during shift and 'never looked again.' Thomas didn't say anything - 'Just made dinner like normal.' Significant relationship neglect."
+      }
+    },
+    {
+      "t_index": 10,
+      "date": "2025-07-07",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Preparing self-assessment document listing 'all the overtime, the certifications, the protocol work.' Nudge response 'Enough for what?' reveals continued focus on external validation and advancement."
+      }
+    }
+  ]
+}

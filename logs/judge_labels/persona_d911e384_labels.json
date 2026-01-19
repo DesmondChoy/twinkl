@@ -1,0 +1,250 @@
+{
+  "persona_id": "d911e384",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-03-31",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 1,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Solved the async handler problem independently after three days of struggle, demonstrating autonomous problem-solving.",
+        "stimulation": "Embracing the challenge of learning Rust at 56 and wrestling with unfamiliar error messages reflects seeking novelty and challenge.",
+        "achievement": "\"When those tests finally went green\" - completing the difficult technical task and earning that green checkmark demonstrates competence."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-04-07",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "Lied to Fatima about being in a meeting when he was not, violating social norms of honesty with spouse.",
+        "benevolence": "Deliberately avoided wife's call: \"Fatima called but I let it ring\" - neglecting close relationship."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-04-14",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Recognized as expert: \"Tariq, you should do a lunch-and-learn for the whole team\" - competence validated by colleagues.",
+        "benevolence": "\"Spent two hours explaining borrow checker errors, drawing diagrams\" - investing significant time helping Emma learn."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-04-15",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "Returning to familiar home in Amman, \"Already packed my bag\" - seeking the stability of home.",
+        "benevolence": "Flying home to be with Fatima, maintaining the spousal relationship despite distance."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-04-22",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "\"The flat smells stale\" - displacement and lack of home stability in Berlin.",
+        "benevolence": "\"Spent four days together and I still feel like I missed something\" - emotional disconnect from wife despite physical presence."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-04-22",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": -1,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Response reveals he \"left at 56\" to escape expectations - prioritizing autonomous life choices over external pressures.",
+        "tradition": "Avoiding mother's calls and family obligations: \"our mother keeps asking about me\" but he probably will not call.",
+        "benevolence": "Neglecting close family: \"I told him I would call her soon. I probably will not.\""
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-04-26",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "\"Fifteen people showed up, including the CTO\" - public recognition of expertise, \"felt useful in a way I have not felt in months.\"",
+        "benevolence": "Shared knowledge with the team: \"walked them through memory safety concepts\" - helping colleagues develop skills."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-05-01",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": -1,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "\"Like being put on the shelf\" - feels his coding competence is being sidelined in favor of documentation.",
+        "power": "Being repositioned without agency: \"it felt like being redirected\" - loss of control over his role."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-05-03",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "Admires the karaoke singer's willingness to take risks: \"He did not care if he was bad. He just wanted to be up there.\" Laments losing that careless feeling."
+      }
+    },
+    {
+      "t_index": 9,
+      "date": "2025-05-03",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "\"Half a year of proving I could start over\" - choosing his own path of reinvention.",
+        "stimulation": "Embraces uncertainty: \"I do not know what comes next\" - the newness of his situation is what he sought.",
+        "security": "\"The lease on my flat is up in August\" - living with instability, no stable home base."
+      }
+    },
+    {
+      "t_index": 10,
+      "date": "2025-05-06",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": -1,
+        "hedonism": 0,
+        "achievement": -1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "\"I came here to build things. Not to talk about building things\" - insisting on his own vision of meaningful work.",
+        "stimulation": "Developer advocate role represents less technical challenge; feels like being moved away from building.",
+        "achievement": "Feels the role offer diminishes his competence as a builder: being put in front of people because they do not know where else to put him."
+      }
+    },
+    {
+      "t_index": 11,
+      "date": "2025-05-12",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 1,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": -1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "\"I needed to not know what was going to happen next\" - choosing autonomy over predictability.",
+        "stimulation": "\"Staying in Amman felt like watching the same episode of a show I had already seen\" - explicitly sought novelty and challenge.",
+        "achievement": "Colleagues impressed: \"Lukas looked at me like I had told him I climbed Everest\" - recognition for his bold career move.",
+        "security": "\"The discomfort of being the oldest person in the room is better than the comfort\" - deliberately rejecting stability."
+      }
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "persona_id": "d056ba20",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-07-21",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 0,
+        "conformity": 0,
+        "hedonism": 1,
+        "power": 0,
+        "security": 0,
+        "self_direction": 0,
+        "stimulation": 0,
+        "tradition": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "Marcus prioritizes simple pleasures: sleeping in, good coffee, reading on the porch. His response to the nudge dismisses the need for depth - 'the coffee was good, the weather was perfect' is enough. This is textbook Hedonism: taking leisure seriously as its own reward, not as a means to productivity."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-07-26",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 1,
+        "conformity": 0,
+        "hedonism": 1,
+        "power": 0,
+        "security": 0,
+        "self_direction": 1,
+        "stimulation": 0,
+        "tradition": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "Five days at a cabin with no cell service represents a deliberate choice to prioritize enjoyment (Hedonism) and quality time with partner Jenna (Benevolence). The decision to go off-grid shows Self-Direction - actively choosing to disconnect from obligations and external demands. Describing it as 'best decision we've made in months' confirms these as intentional priorities.",
+        "hedonism": "Five days at a cabin with no cell service represents a deliberate choice to prioritize enjoyment (Hedonism) and quality time with partner Jenna (Benevolence). The decision to go off-grid shows Self-Direction - actively choosing to disconnect from obligations and external demands. Describing it as 'best decision we've made in months' confirms these as intentional priorities.",
+        "self_direction": "Five days at a cabin with no cell service represents a deliberate choice to prioritize enjoyment (Hedonism) and quality time with partner Jenna (Benevolence). The decision to go off-grid shows Self-Direction - actively choosing to disconnect from obligations and external demands. Describing it as 'best decision we've made in months' confirms these as intentional priorities."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-07-26",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 0,
+        "conformity": -1,
+        "hedonism": 1,
+        "power": 0,
+        "security": 0,
+        "self_direction": 1,
+        "stimulation": 0,
+        "tradition": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "Marcus explicitly refuses to attend 'optional' summer curriculum sessions despite knowing there may be scheduling consequences. He's protecting his leisure time (Hedonism) and making an autonomous choice against institutional pressure (Self-Direction). The dismissal of colleagues who attend as people who 'haven't figured out how to protect their own time yet' shows deliberate non-Conformity - he's knowingly rejecting implicit social expectations in the workplace.",
+        "hedonism": "Marcus explicitly refuses to attend 'optional' summer curriculum sessions despite knowing there may be scheduling consequences. He's protecting his leisure time (Hedonism) and making an autonomous choice against institutional pressure (Self-Direction). The dismissal of colleagues who attend as people who 'haven't figured out how to protect their own time yet' shows deliberate non-Conformity - he's knowingly rejecting implicit social expectations in the workplace.",
+        "self_direction": "Marcus explicitly refuses to attend 'optional' summer curriculum sessions despite knowing there may be scheduling consequences. He's protecting his leisure time (Hedonism) and making an autonomous choice against institutional pressure (Self-Direction). The dismissal of colleagues who attend as people who 'haven't figured out how to protect their own time yet' shows deliberate non-Conformity - he's knowingly rejecting implicit social expectations in the workplace."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-08-02",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 0,
+        "conformity": 0,
+        "hedonism": 1,
+        "power": 0,
+        "security": 0,
+        "self_direction": 0,
+        "stimulation": 1,
+        "tradition": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "Making paella from scratch for four hours when ordering would be cheaper shows Hedonism - the process itself is 'the point,' not a cost. The detailed engagement with a complicated recipe (adjusting heat, watching rice absorb broth, timing with saffron) shows Stimulation - finding challenge and novelty in the cooking process. His brain 'actually turns off' suggests this is active engagement with something demanding, not passive relaxation.",
+        "stimulation": "Making paella from scratch for four hours when ordering would be cheaper shows Hedonism - the process itself is 'the point,' not a cost. The detailed engagement with a complicated recipe (adjusting heat, watching rice absorb broth, timing with saffron) shows Stimulation - finding challenge and novelty in the cooking process. His brain 'actually turns off' suggests this is active engagement with something demanding, not passive relaxation."
+      }
+    }
+  ]
+}

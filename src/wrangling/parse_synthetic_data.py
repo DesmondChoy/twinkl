@@ -148,20 +148,74 @@ def parse_single_entry(date: str, content: str) -> dict:
         entry["initial_entry"] = initial_match.group(1).strip()
 
     # --- Extract Nudge Text ---
-    if not has_no_nudge_marker:
-        # Look for quoted text after "### Nudge" section
-        # Pattern: ### Nudge (category)\n**Trigger**: ...\n"quoted text"
-        # Handles colon inside OR outside bold: **Trigger**: or **Trigger:**
-        nudge_match = re.search(
-            r'### Nudge.*?\n'
-            r'\*\*Trigger(?:\*\*:|:\*\*).*?\n'
-            r'"([^"]+)"',  # Capture the quoted nudge text
-            content,
-            re.DOTALL,
-        )
-        if nudge_match:
-            entry["nudge_text"] = nudge_match.group(1).strip()
-            entry["has_nudge"] = True
+    has_nudge_section = "### Nudge" in content
+    if not has_no_nudge_marker and has_nudge_section:
+        # Support multiple nudge formats from different generation runs:
+        # Format 1 (new): **Trigger**: ...\n"quoted text"
+        # Format 2 (old): **Category**: ...\n\nunquoted text
+        # Format 3 (legacy): **Type**: ...\n> blockquote text
+        has_trigger_line = "**Trigger**:" in content or "**Trigger:**" in content
+        has_category_line = "**Category**:" in content or "**Category:**" in content
+        has_type_line = "**Type**:" in content or "**Type:**" in content
+
+        if has_trigger_line:
+            # Format 1: look for quoted text after **Trigger**: line
+            nudge_match = re.search(
+                r'### Nudge.*?\n'
+                r'\*\*Trigger(?:\*\*:|:\*\*).*?\n'
+                r'"([^"]+)"',  # Capture the quoted nudge text
+                content,
+                re.DOTALL,
+            )
+            if nudge_match:
+                entry["nudge_text"] = nudge_match.group(1).strip()
+                entry["has_nudge"] = True
+            else:
+                raise ValueError(
+                    f"Entry {date}: Found '### Nudge' section with '**Trigger**:' but missing "
+                    f"quoted nudge text. Nudge text must be wrapped in double quotes."
+                )
+        elif has_category_line:
+            # Format 2: look for unquoted text after **Category**: line
+            nudge_match = re.search(
+                r'### Nudge.*?\n'
+                r'\*\*Category(?:\*\*:|:\*\*).*?\n\n'
+                r'(.+?)'  # Capture the unquoted nudge text
+                r'(?=\n\n### Response|\n---|\Z)',
+                content,
+                re.DOTALL,
+            )
+            if nudge_match:
+                entry["nudge_text"] = nudge_match.group(1).strip()
+                entry["has_nudge"] = True
+            else:
+                raise ValueError(
+                    f"Entry {date}: Found '### Nudge' section with '**Category**:' but missing "
+                    f"nudge text after it."
+                )
+        elif has_type_line:
+            # Format 3: look for blockquote text after **Type**: line
+            nudge_match = re.search(
+                r'### Nudge.*?\n'
+                r'\*\*Type(?:\*\*:|:\*\*).*?\n'
+                r'> (.+?)'  # Capture text after blockquote marker
+                r'(?=\n\n### Response|\n---|\Z)',
+                content,
+                re.DOTALL,
+            )
+            if nudge_match:
+                entry["nudge_text"] = nudge_match.group(1).strip()
+                entry["has_nudge"] = True
+            else:
+                raise ValueError(
+                    f"Entry {date}: Found '### Nudge' section with '**Type**:' but missing "
+                    f"blockquote nudge text (> text)."
+                )
+        else:
+            raise ValueError(
+                f"Entry {date}: Found '### Nudge' section but missing '**Trigger**:', "
+                f"'**Category**:', or '**Type**:' line."
+            )
 
     # --- Extract Response Text ---
     if entry["has_nudge"] and not has_no_response_marker:
@@ -295,11 +349,15 @@ def write_wrangled_markdown(
         raise FileNotFoundError(f"No persona_*.md files found in {input_dir}")
 
     written_files = []
+    skipped_count = 0
     for filepath in persona_files:
+        output_file = output_path / filepath.name
+        if output_file.exists():
+            skipped_count += 1
+            continue
+
         profile, entries = parse_persona_file(filepath)
         markdown = format_persona_markdown(profile, entries)
-
-        output_file = output_path / filepath.name
         output_file.write_text(markdown)
         written_files.append(output_file)
 
@@ -313,6 +371,9 @@ def write_wrangled_markdown(
                 # Registry not available or persona not registered
                 # (could be legacy data without registry)
                 print(f"  Note: Could not update registry for {profile['persona_id']}: {e}")
+
+    if skipped_count > 0:
+        print(f"  Skipped {skipped_count} already-wrangled files")
 
     return written_files
 

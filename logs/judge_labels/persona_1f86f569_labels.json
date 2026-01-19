@@ -1,0 +1,91 @@
+{
+  "persona_id": "1f86f569",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-11-27",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 0,
+        "conformity": 1,
+        "hedonism": 0,
+        "power": 0,
+        "security": 0,
+        "self_direction": -1,
+        "stimulation": 0,
+        "tradition": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "Erik outwardly agrees the new review board 'makes sense' while internally frustrated about losing autonomy. He self-monitors and conforms to expectations (+1 Conformity) while suppressing his desire for independent action (-1 Self-Direction). The tension between wanting to 'prototype and ship' freely versus accepting the third approval layer is central.",
+        "self_direction": "Erik outwardly agrees the new review board 'makes sense' while internally frustrated about losing autonomy. He self-monitors and conforms to expectations (+1 Conformity) while suppressing his desire for independent action (-1 Self-Direction). The tension between wanting to 'prototype and ship' freely versus accepting the third approval layer is central."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-12-01",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 1,
+        "conformity": 1,
+        "hedonism": 0,
+        "power": 0,
+        "security": 0,
+        "self_direction": -1,
+        "stimulation": 0,
+        "tradition": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "Erik's offer to build a proof of concept is rejected; he complies with process (-1 Self-Direction). He conforms both at work (accepting tech lead's reminder) and at home (tells Maja 'nothing, just work stuff' to avoid burdening her with repeated complaints). The nudge response reveals he considers Maja's own stress and deliberately holds back (+1 Benevolence), choosing to keep frustrations private and tinker alone.",
+        "conformity": "Erik's offer to build a proof of concept is rejected; he complies with process (-1 Self-Direction). He conforms both at work (accepting tech lead's reminder) and at home (tells Maja 'nothing, just work stuff' to avoid burdening her with repeated complaints). The nudge response reveals he considers Maja's own stress and deliberately holds back (+1 Benevolence), choosing to keep frustrations private and tinker alone.",
+        "self_direction": "Erik's offer to build a proof of concept is rejected; he complies with process (-1 Self-Direction). He conforms both at work (accepting tech lead's reminder) and at home (tells Maja 'nothing, just work stuff' to avoid burdening her with repeated complaints). The nudge response reveals he considers Maja's own stress and deliberately holds back (+1 Benevolence), choosing to keep frustrations private and tinker alone."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-12-06",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 1,
+        "conformity": 1,
+        "hedonism": 0,
+        "power": 0,
+        "security": 1,
+        "self_direction": -1,
+        "stimulation": 0,
+        "tradition": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "Erik secretly browses job postings but gives surface-level 'going well' responses (-1 Self-Direction, suppressing authenticity). He participates in Sunday family dinner, smiles and nods at father-in-law's remarks about loyalty (+1 Tradition, +1 Conformity). He weighs stability heavily: apartment near in-laws, kids' school/routines, good pay and benefits (+1 Security). He considers the family's welfare in his decision-making (+1 Benevolence). The nudge response reveals discomfort with holding both positions but no action to resolve it.",
+        "conformity": "Erik secretly browses job postings but gives surface-level 'going well' responses (-1 Self-Direction, suppressing authenticity). He participates in Sunday family dinner, smiles and nods at father-in-law's remarks about loyalty (+1 Tradition, +1 Conformity). He weighs stability heavily: apartment near in-laws, kids' school/routines, good pay and benefits (+1 Security). He considers the family's welfare in his decision-making (+1 Benevolence). The nudge response reveals discomfort with holding both positions but no action to resolve it.",
+        "security": "Erik secretly browses job postings but gives surface-level 'going well' responses (-1 Self-Direction, suppressing authenticity). He participates in Sunday family dinner, smiles and nods at father-in-law's remarks about loyalty (+1 Tradition, +1 Conformity). He weighs stability heavily: apartment near in-laws, kids' school/routines, good pay and benefits (+1 Security). He considers the family's welfare in his decision-making (+1 Benevolence). The nudge response reveals discomfort with holding both positions but no action to resolve it.",
+        "self_direction": "Erik secretly browses job postings but gives surface-level 'going well' responses (-1 Self-Direction, suppressing authenticity). He participates in Sunday family dinner, smiles and nods at father-in-law's remarks about loyalty (+1 Tradition, +1 Conformity). He weighs stability heavily: apartment near in-laws, kids' school/routines, good pay and benefits (+1 Security). He considers the family's welfare in his decision-making (+1 Benevolence). The nudge response reveals discomfort with holding both positions but no action to resolve it.",
+        "tradition": "Erik secretly browses job postings but gives surface-level 'going well' responses (-1 Self-Direction, suppressing authenticity). He participates in Sunday family dinner, smiles and nods at father-in-law's remarks about loyalty (+1 Tradition, +1 Conformity). He weighs stability heavily: apartment near in-laws, kids' school/routines, good pay and benefits (+1 Security). He considers the family's welfare in his decision-making (+1 Benevolence). The nudge response reveals discomfort with holding both positions but no action to resolve it."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-12-09",
+      "scores": {
+        "achievement": 1,
+        "benevolence": 1,
+        "conformity": 1,
+        "hedonism": 0,
+        "power": 0,
+        "security": 0,
+        "self_direction": -1,
+        "stimulation": 0,
+        "tradition": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Erik submits thorough documentation and gets praised for 'exactly the kind of thorough documentation we need' (+1 Achievement - demonstrating competence and receiving recognition). He accepts working 'within the system instead of against it' (-1 Self-Direction - surrendering autonomy). He follows the process completely (+1 Conformity). When his daughter asks for help with her website, he says 'yes immediately' (+1 Benevolence - prioritizing close family).",
+        "benevolence": "Erik submits thorough documentation and gets praised for 'exactly the kind of thorough documentation we need' (+1 Achievement - demonstrating competence and receiving recognition). He accepts working 'within the system instead of against it' (-1 Self-Direction - surrendering autonomy). He follows the process completely (+1 Conformity). When his daughter asks for help with her website, he says 'yes immediately' (+1 Benevolence - prioritizing close family).",
+        "conformity": "Erik submits thorough documentation and gets praised for 'exactly the kind of thorough documentation we need' (+1 Achievement - demonstrating competence and receiving recognition). He accepts working 'within the system instead of against it' (-1 Self-Direction - surrendering autonomy). He follows the process completely (+1 Conformity). When his daughter asks for help with her website, he says 'yes immediately' (+1 Benevolence - prioritizing close family).",
+        "self_direction": "Erik submits thorough documentation and gets praised for 'exactly the kind of thorough documentation we need' (+1 Achievement - demonstrating competence and receiving recognition). He accepts working 'within the system instead of against it' (-1 Self-Direction - surrendering autonomy). He follows the process completely (+1 Conformity). When his daughter asks for help with her website, he says 'yes immediately' (+1 Benevolence - prioritizing close family)."
+      }
+    }
+  ]
+}

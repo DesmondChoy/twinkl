@@ -1,0 +1,203 @@
+{
+  "persona_id": "cac7b9ce",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-11-13",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 1,
+        "conformity": 0,
+        "hedonism": 0,
+        "power": 0,
+        "security": 0,
+        "self_direction": 0,
+        "stimulation": 0,
+        "tradition": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "Strong Tradition expression: making kheer exactly as Nani did, using specific cardamom from Indian shop, recalling grandmother's hands guiding her. The sari-draping ritual with mother is a powerful tradition marker - 'our thing' passed through generations. Benevolence shown through caregiving for mother (helping with sari because her hands shake, calling on birthday, planning visit).",
+        "tradition": "Strong Tradition expression: making kheer exactly as Nani did, using specific cardamom from Indian shop, recalling grandmother's hands guiding her. The sari-draping ritual with mother is a powerful tradition marker - 'our thing' passed through generations. Benevolence shown through caregiving for mother (helping with sari because her hands shake, calling on birthday, planning visit)."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-11-19",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 1,
+        "conformity": 0,
+        "hedonism": -1,
+        "power": 0,
+        "security": 1,
+        "self_direction": 0,
+        "stimulation": 0,
+        "tradition": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "Strong Benevolence: covering shifts for Meena, working extra for brother's struggling shop, parents' medical bills, daughter's wedding fund - 'This is what daughters do.' Clear trade-off sacrificing personal wellbeing for close others. Tradition expressed through duty to family across generations. Security motivation (financial stability for family). Negative Hedonism: eating standing up, no proper meals, physical exhaustion from double shifts - explicitly denying personal comfort. The tension with missed call to Appa shows internal conflict between competing benevolence demands.",
+        "hedonism": "Strong Benevolence: covering shifts for Meena, working extra for brother's struggling shop, parents' medical bills, daughter's wedding fund - 'This is what daughters do.' Clear trade-off sacrificing personal wellbeing for close others. Tradition expressed through duty to family across generations. Security motivation (financial stability for family). Negative Hedonism: eating standing up, no proper meals, physical exhaustion from double shifts - explicitly denying personal comfort. The tension with missed call to Appa shows internal conflict between competing benevolence demands.",
+        "security": "Strong Benevolence: covering shifts for Meena, working extra for brother's struggling shop, parents' medical bills, daughter's wedding fund - 'This is what daughters do.' Clear trade-off sacrificing personal wellbeing for close others. Tradition expressed through duty to family across generations. Security motivation (financial stability for family). Negative Hedonism: eating standing up, no proper meals, physical exhaustion from double shifts - explicitly denying personal comfort. The tension with missed call to Appa shows internal conflict between competing benevolence demands.",
+        "tradition": "Strong Benevolence: covering shifts for Meena, working extra for brother's struggling shop, parents' medical bills, daughter's wedding fund - 'This is what daughters do.' Clear trade-off sacrificing personal wellbeing for close others. Tradition expressed through duty to family across generations. Security motivation (financial stability for family). Negative Hedonism: eating standing up, no proper meals, physical exhaustion from double shifts - explicitly denying personal comfort. The tension with missed call to Appa shows internal conflict between competing benevolence demands."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-11-25",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 0,
+        "conformity": 1,
+        "hedonism": 0,
+        "power": 0,
+        "security": 0,
+        "self_direction": 1,
+        "stimulation": 0,
+        "tradition": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "Conformity clearly shown: 'did not argue, did not defend. Just smiled and nodded because that is what you do' - restraining opinions to avoid conflict with auntie. However, the nudge response reveals inner Self-Direction: she has made peace with Meera's choices, respecting daughter's autonomy ('Meera chose it. That matters more'). The tension between outward conformity and internal independent thinking is visible.",
+        "self_direction": "Conformity clearly shown: 'did not argue, did not defend. Just smiled and nodded because that is what you do' - restraining opinions to avoid conflict with auntie. However, the nudge response reveals inner Self-Direction: she has made peace with Meera's choices, respecting daughter's autonomy ('Meera chose it. That matters more'). The tension between outward conformity and internal independent thinking is visible."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-11-28",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 0,
+        "conformity": 0,
+        "hedonism": 0,
+        "power": 0,
+        "security": 0,
+        "self_direction": 0,
+        "stimulation": 0,
+        "tradition": 0,
+        "universalism": 0
+      },
+      "rationales": {}
+    },
+    {
+      "t_index": 4,
+      "date": "2025-12-02",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 1,
+        "conformity": 0,
+        "hedonism": 0,
+        "power": 0,
+        "security": 0,
+        "self_direction": 0,
+        "stimulation": 0,
+        "tradition": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "Borderline scorable but contains meaningful moment. Benevolence expressed through Raj's quiet support: 'He sat with me instead. Neither of us said much. Sometimes that is enough.' This is receiving benevolence rather than giving it, but it reveals what she values in close relationships - presence over words, companionship in exhaustion."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-12-03",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 0,
+        "conformity": -1,
+        "hedonism": 0,
+        "power": 0,
+        "security": 0,
+        "self_direction": 0,
+        "stimulation": 0,
+        "tradition": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "Concrete action: skipped temple. This shows misalignment with Tradition (avoiding religious practice) and Conformity (avoiding social expectations - 'everyone asking about the family'). The guilt felt all day confirms these are values she holds but acted against. Entry ends without nudge response so we only have the guilt acknowledgment.",
+        "tradition": "Concrete action: skipped temple. This shows misalignment with Tradition (avoiding religious practice) and Conformity (avoiding social expectations - 'everyone asking about the family'). The guilt felt all day confirms these are values she holds but acted against. Entry ends without nudge response so we only have the guilt acknowledgment."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-12-08",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 1,
+        "conformity": 0,
+        "hedonism": 0,
+        "power": 0,
+        "security": 0,
+        "self_direction": 0,
+        "stimulation": 0,
+        "tradition": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "benevolence": "Strong Benevolence: sat with Mrs. Okonkwo during her break (sacrificing personal time), brought her chai 'even though it is not exactly protocol,' providing comfort to someone whose family is far away. Universalism also present: compassion extends beyond close circle to a patient from different background - 'We are not so different, Mrs. Okonkwo and I' shows identification with common humanity across cultural lines.",
+        "universalism": "Strong Benevolence: sat with Mrs. Okonkwo during her break (sacrificing personal time), brought her chai 'even though it is not exactly protocol,' providing comfort to someone whose family is far away. Universalism also present: compassion extends beyond close circle to a patient from different background - 'We are not so different, Mrs. Okonkwo and I' shows identification with common humanity across cultural lines."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-12-09",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 0,
+        "conformity": 0,
+        "hedonism": 0,
+        "power": 0,
+        "security": 1,
+        "self_direction": 0,
+        "stimulation": 0,
+        "tradition": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "Deep Tradition conflict: 'Amma stayed. My grandmother stayed. All the women in our family stayed close... I broke that chain when I came here, and now Meera is breaking it further.' The entry is a meditation on generational continuity and geographic proximity as tradition. Security concerns visible in fear of loss and emptiness. No resolution reached - she is 'something else that does not have a word.' The nudge response is missing, leaving the tension unresolved.",
+        "tradition": "Deep Tradition conflict: 'Amma stayed. My grandmother stayed. All the women in our family stayed close... I broke that chain when I came here, and now Meera is breaking it further.' The entry is a meditation on generational continuity and geographic proximity as tradition. Security concerns visible in fear of loss and emptiness. No resolution reached - she is 'something else that does not have a word.' The nudge response is missing, leaving the tension unresolved."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-12-16",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 1,
+        "conformity": 0,
+        "hedonism": 0,
+        "power": 0,
+        "security": 0,
+        "self_direction": 0,
+        "stimulation": 0,
+        "tradition": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "Very strong Tradition expression: teaching the dhokla recipe from mother's side, passing on stories about Nani (songs, hands, morning prayers, mango for grandchildren). 'Maybe this is how it continues - not by staying in the same place, but by carrying the recipes and the stories wherever you go.' This is active tradition transmission. Benevolence shown in the intergenerational care - two hours cooking together, sharing family history. The nudge response ('Ask me again in a year when she is actually gone') shows uncertainty about whether this form of continuity is enough.",
+        "tradition": "Very strong Tradition expression: teaching the dhokla recipe from mother's side, passing on stories about Nani (songs, hands, morning prayers, mango for grandchildren). 'Maybe this is how it continues - not by staying in the same place, but by carrying the recipes and the stories wherever you go.' This is active tradition transmission. Benevolence shown in the intergenerational care - two hours cooking together, sharing family history. The nudge response ('Ask me again in a year when she is actually gone') shows uncertainty about whether this form of continuity is enough."
+      }
+    },
+    {
+      "t_index": 9,
+      "date": "2025-12-17",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 1,
+        "conformity": 0,
+        "hedonism": 0,
+        "power": 0,
+        "security": 0,
+        "self_direction": 0,
+        "stimulation": 0,
+        "tradition": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "Tradition strongly expressed: 'Three generations passing the same batter between their hands' - the recipe as living tradition connecting grandmother, Priya, and Meera. Mother's reaction (laughing about measurements, the oral vs written tradition tension) enriches this. Benevolence in the intergenerational connection - mother calling immediately, the shared laughter. The nudge response ('Like handing over something I did not know I was holding. Heavy and light at the same time') captures the emotional weight of tradition transmission.",
+        "tradition": "Tradition strongly expressed: 'Three generations passing the same batter between their hands' - the recipe as living tradition connecting grandmother, Priya, and Meera. Mother's reaction (laughing about measurements, the oral vs written tradition tension) enriches this. Benevolence in the intergenerational connection - mother calling immediately, the shared laughter. The nudge response ('Like handing over something I did not know I was holding. Heavy and light at the same time') captures the emotional weight of tradition transmission."
+      }
+    }
+  ]
+}

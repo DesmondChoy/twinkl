@@ -1,0 +1,244 @@
+{
+  "persona_id": "755c4960",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-03-13",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "tradition": "Maintains ritual practice of lighting incense before work, noting 'my grandmother would approve' - connects daily actions to cultural/family customs."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-03-14",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "Deliberately avoids argument with friends about career choice: 'I didn't argue this time... changed the subject.' Restrains opinions to maintain social harmony despite internal frustration."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-03-15",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "tradition": "Weekly Sunday dinner at grandmother's, appreciating multigenerational cooking traditions (clay pot from great-grandmother), receptive to family history about great-great-grandfather's migration.",
+        "benevolence": "Deep connection with grandmother who 'doesn't make me feel like I'm choosing between two lives.' Nudge response shows appreciation for her perspective shaped by hardship."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-03-15",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Grapples with choosing his own path: 'I'm leaving because I want something else' - asserts right to author own life despite family expectations. Nudge response reveals ongoing internal conflict about this autonomy.",
+        "tradition": "Deep engagement with family legacy - researches ancestral village, traces generational continuity of building businesses. Wrestling with tradition rather than dismissing it."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-03-20",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Closes business deal: 'Three-month engagement, decent budget. Should keep the lights on through Q2.' Tracks progress and seeks recognition by calling mother.",
+        "tradition": "Immediately commits to Qing Ming observance: 'I said yes, I'll be there' - prioritizes ancestral ritual."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-03-26",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "Uncle criticizes his career choice at grandfather's grave; Kevin restrains himself: 'I just smiled and said business is good. Didn't want to cause a scene.'",
+        "tradition": "Full participation in Qing Ming rituals: '6am before it got too crowded... helped my father carry the offerings, burned the paper money, did the three bows. Same as every year.'"
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-03-28",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Directly confronts father about right to choose own path: 'maybe I'm not wrong, maybe he just can't see it because he never had to question what he was supposed to do.'",
+        "conformity": "Breaks from usual pattern of avoiding conflict - has 'Real one, not the passive aggressive stuff.' Father leaves without finishing tea. Causes family disruption by asserting position."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-04-04",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "tradition": "Joins grandmother at temple, learns proper ritual technique, reflects on value of 'participating. Being part of something older than yourself.'",
+        "benevolence": "Offers to accompany grandmother to temple: 'she seemed pleased when I offered' - prioritizes relationship with elder."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-04-10",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "Rejects 'six months of runway' from gambling client despite financial uncertainty. Prioritizes values over stability.",
+        "tradition": "Decision explicitly tied to honoring grandfather's name on business registration and family history: 'his own father lost everything that way.' Makes choice based on ancestral values even acknowledging 'Probably stupid from a business standpoint.'"
+      }
+    },
+    {
+      "t_index": 9,
+      "date": "2025-04-15",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "tradition": "Mother's birthday at 'the one we've been going to since I was a kid. Same lazy Susan, same chili crab, same argument about who's paying the bill.' Maintains family ritual.",
+        "benevolence": "Gives mother meaningful gift (jade bracelet 'the kind she likes'), present for family celebration despite ongoing tension with father."
+      }
+    },
+    {
+      "t_index": 10,
+      "date": "2025-04-16",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": -1,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Prioritizes client emergency over family: stayed to fix website during promotion, worked until 9pm.",
+        "tradition": "Breaks two-year streak of Sunday dinners at grandmother's for work. Recognizes he's becoming 'the kind of person who chooses the client over the grandmother.'",
+        "benevolence": "Neglects grandmother for work despite knowing the cost: 'I could hear something in her voice... Like she's been waiting for me to become the kind of person who misses family dinners for work.'"
+      }
+    },
+    {
+      "t_index": 11,
+      "date": "2025-04-19",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "tradition": "Picks up leftover food grandmother saved all week, watches her fold paper offerings for Vesak Day, hears family story about grandfather also leaving dinners early for work. Finds validation in generational pattern.",
+        "benevolence": "Makes amends visit to grandmother, sits with her in living room. Relationship repair after missing dinner. Grandmother's story is act of connection and understanding."
+      }
+    }
+  ]
+}

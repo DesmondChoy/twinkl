@@ -1,0 +1,147 @@
+{
+  "persona_id": "5e3e1706",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-10-26",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 1,
+        "conformity": -1,
+        "hedonism": 0,
+        "power": 0,
+        "security": 0,
+        "self_direction": 0,
+        "stimulation": 0,
+        "tradition": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "Marcus lets Jenna leave early to help her roommate, then covers her work plus his own. Clear benevolence toward a close team member. Takes the hit from district manager's disapproval without concern, showing disregard for conforming to corporate expectations.",
+        "conformity": "Marcus lets Jenna leave early to help her roommate, then covers her work plus his own. Clear benevolence toward a close team member. Takes the hit from district manager's disapproval without concern, showing disregard for conforming to corporate expectations."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-10-29",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 1,
+        "conformity": 0,
+        "hedonism": -1,
+        "power": 0,
+        "security": 0,
+        "self_direction": 0,
+        "stimulation": 0,
+        "tradition": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "Marcus sends Tommy home after learning his grandfather died, covers the shift himself. Strong benevolence - acting on empathy for a grieving team member. Sacrifices his own time and comfort (hedonism -1) to do so. The nudge response ('Fine. Busy but fine. Not really the point.') reinforces that he prioritizes Tommy's wellbeing over his own burden.",
+        "hedonism": "Marcus sends Tommy home after learning his grandfather died, covers the shift himself. Strong benevolence - acting on empathy for a grieving team member. Sacrifices his own time and comfort (hedonism -1) to do so. The nudge response ('Fine. Busy but fine. Not really the point.') reinforces that he prioritizes Tommy's wellbeing over his own burden."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-11-04",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 1,
+        "conformity": 1,
+        "hedonism": 0,
+        "power": -1,
+        "security": 0,
+        "self_direction": 0,
+        "stimulation": 0,
+        "tradition": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "Marcus fought hard for Priya's promotion (three emails, 45-minute call) but chose not to tell her, absorbing her disappointment instead. Strong benevolence in advocacy. Conformity shown in restraining himself from sharing his efforts to avoid seeming like making excuses. Power -1 as he accepts the subordinate position of being unable to change corporate's decision and lets her think poorly of him rather than assert his efforts.",
+        "conformity": "Marcus fought hard for Priya's promotion (three emails, 45-minute call) but chose not to tell her, absorbing her disappointment instead. Strong benevolence in advocacy. Conformity shown in restraining himself from sharing his efforts to avoid seeming like making excuses. Power -1 as he accepts the subordinate position of being unable to change corporate's decision and lets her think poorly of him rather than assert his efforts.",
+        "power": "Marcus fought hard for Priya's promotion (three emails, 45-minute call) but chose not to tell her, absorbing her disappointment instead. Strong benevolence in advocacy. Conformity shown in restraining himself from sharing his efforts to avoid seeming like making excuses. Power -1 as he accepts the subordinate position of being unable to change corporate's decision and lets her think poorly of him rather than assert his efforts."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-11-06",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 1,
+        "conformity": -1,
+        "hedonism": 0,
+        "power": 0,
+        "security": 0,
+        "self_direction": 0,
+        "stimulation": 0,
+        "tradition": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "Marcus defends approving shift swaps to district manager, stating his team has lives outside work. Clear benevolence in prioritizing team members' needs. Conformity -1 as he pushes back against corporate expectations rather than simply complying.",
+        "conformity": "Marcus defends approving shift swaps to district manager, stating his team has lives outside work. Clear benevolence in prioritizing team members' needs. Conformity -1 as he pushes back against corporate expectations rather than simply complying."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-11-12",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 1,
+        "conformity": 0,
+        "hedonism": 0,
+        "power": 0,
+        "security": 0,
+        "self_direction": 0,
+        "stimulation": 0,
+        "tradition": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "Jenna brings Marcus coffee as thanks - she remembered his preference from months ago. This entry shows the reciprocal care Marcus has built. His reflection that 'the job isn't just about spreadsheets... it's about people noticing each other' reveals his core benevolence orientation. The nudge response deflects from the inventory stress, keeping focus on relational meaning."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-11-13",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 1,
+        "conformity": 0,
+        "hedonism": -1,
+        "power": 0,
+        "security": -1,
+        "self_direction": 0,
+        "stimulation": 0,
+        "tradition": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "Marcus stays 2 hours late with Maria so she doesn't walk home alone in the dark, learns about her mother's chemo. Strong benevolence. The nudge response reveals significant self-sacrifice: missed sister's birthday dinner, skips meals, loses sleep. This shows hedonism -1 (ignoring personal comfort), security -1 (neglecting his own stability and health), and tradition -1 (missing family obligations like sister's birthday).",
+        "hedonism": "Marcus stays 2 hours late with Maria so she doesn't walk home alone in the dark, learns about her mother's chemo. Strong benevolence. The nudge response reveals significant self-sacrifice: missed sister's birthday dinner, skips meals, loses sleep. This shows hedonism -1 (ignoring personal comfort), security -1 (neglecting his own stability and health), and tradition -1 (missing family obligations like sister's birthday).",
+        "security": "Marcus stays 2 hours late with Maria so she doesn't walk home alone in the dark, learns about her mother's chemo. Strong benevolence. The nudge response reveals significant self-sacrifice: missed sister's birthday dinner, skips meals, loses sleep. This shows hedonism -1 (ignoring personal comfort), security -1 (neglecting his own stability and health), and tradition -1 (missing family obligations like sister's birthday).",
+        "tradition": "Marcus stays 2 hours late with Maria so she doesn't walk home alone in the dark, learns about her mother's chemo. Strong benevolence. The nudge response reveals significant self-sacrifice: missed sister's birthday dinner, skips meals, loses sleep. This shows hedonism -1 (ignoring personal comfort), security -1 (neglecting his own stability and health), and tradition -1 (missing family obligations like sister's birthday)."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-11-19",
+      "scores": {
+        "achievement": 0,
+        "benevolence": 1,
+        "conformity": 0,
+        "hedonism": -1,
+        "power": 0,
+        "security": 0,
+        "self_direction": 0,
+        "stimulation": 0,
+        "tradition": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "Priya thanks Marcus and reveals she's staying despite a better offer because of how people are treated. This validates Marcus's benevolence-driven leadership. His emotional reaction (almost crying in the walk-in) and acknowledgment of exhaustion shows hedonism -1 - he continues sacrificing personal comfort. The nudge response ('Can't think about that right now') shows he's avoiding the question of whether his self-sacrifice is sustainable.",
+        "hedonism": "Priya thanks Marcus and reveals she's staying despite a better offer because of how people are treated. This validates Marcus's benevolence-driven leadership. His emotional reaction (almost crying in the walk-in) and acknowledgment of exhaustion shows hedonism -1 - he continues sacrificing personal comfort. The nudge response ('Can't think about that right now') shows he's avoiding the question of whether his self-sacrifice is sustainable."
+      }
+    }
+  ]
+}
