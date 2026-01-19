@@ -139,23 +139,31 @@ New parquet files at `logs/annotations/<annotator_id>.parquet`:
 - Export creates timestamped files in `logs/exports/` directory
 - CSS tooltips added for Schwartz value definitions (originally Phase 3)
 
-### Phase 3: Polish
+### Phase 3: Polish ✅ COMPLETE
 - [x] Add tooltips from `schwartz_values.yaml` *(completed - CSS tooltips on value labels)*
 - [x] Implement collapsible persona bio *(completed in Phase 1)*
 - [x] Add confirmation dialog for unsaved navigation *(completed - baseline tracking + 3-button modal)*
-- [ ] Error handling and loading states
+- [x] Error handling and loading states *(completed - deferred loading, error view, save error handling)*
 
-**Phase 3 Testing:**
+**Phase 3 Testing:** ✅ ALL PASSED
 - [x] Hover over value names — verify tooltips appear with definitions *(CSS tooltips implemented)*
 - [x] Click persona bio toggle — verify expand/collapse works *(completed in Phase 1)*
 - [x] Make changes, click prev/next without saving — verify confirmation dialog appears *(Keep Editing / Discard / Save & Continue)*
-- [ ] Test with missing/malformed data — verify graceful error handling
+- [x] Test with missing/malformed data — verify graceful error handling *(error view with retry button)*
 
 **Phase 3 Implementation Notes:**
 - Unsaved changes detection uses baseline snapshot comparison (`baseline_scores != current_scores`)
 - Modal buttons namespace to their parent module — handlers in `header.py` since modal shown from navigation callbacks
 - Three actions: "Keep Editing" (stay), "Discard Changes" (navigate without save), "Save & Continue" (save then navigate)
 - Deferred navigation pattern: store intended destination in `pending_navigation` state, execute after user confirms
+- **Error handling architecture:**
+  - `DataLoadResult` dataclass encapsulates success/error state, loaded data, warnings, and traceback
+  - Data loading deferred from module import time to runtime via `_get_data_result()` function
+  - Error view displays user-friendly message, suggested fix, expected path, and collapsible technical details
+  - "Retry Loading" button reloads data without app restart
+  - Non-critical failures (missing judge labels) produce warnings instead of errors, allowing degraded operation
+  - Save errors caught with `try-except`, showing appropriate notifications without losing user's work
+  - Navigation functions include defensive bounds checking for edge cases (empty personas, invalid indices)
 
 ## Annotation Methodology
 

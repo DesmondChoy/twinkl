@@ -24,6 +24,8 @@ Usage:
     )
 """
 
+from typing import Callable, Union
+
 from shiny import module, reactive, render, ui
 
 from src.annotation_tool.state import AppState
@@ -78,22 +80,22 @@ def header_server(
     output,
     session,
     state: AppState,
-    total_entries: int,
-    total_personas: int,
+    total_entries: Union[int, Callable[[], int]],
+    total_personas: Union[int, Callable[[], int]],
     current_persona_entries: reactive.calc,
-    on_prev: callable,
-    on_next: callable,
-    on_unsaved_cancel: callable = None,
-    on_unsaved_discard: callable = None,
-    on_unsaved_save: callable = None,
+    on_prev: Callable,
+    on_next: Callable,
+    on_unsaved_cancel: Callable = None,
+    on_unsaved_discard: Callable = None,
+    on_unsaved_save: Callable = None,
 ):
     """Server logic for the header component.
 
     Args:
         input, output, session: Shiny module parameters
         state: Centralized app state
-        total_entries: Total number of entries across all personas
-        total_personas: Total number of personas
+        total_entries: Total number of entries (int or callable returning int)
+        total_personas: Total number of personas (int or callable returning int)
         current_persona_entries: Reactive calc returning entries for current persona
         on_prev: Callback for previous persona button click
         on_next: Callback for next persona button click
@@ -105,18 +107,27 @@ def header_server(
         Reactive calc for the annotator name
     """
 
+    def _get_total_entries() -> int:
+        """Get total entries, handling both static int and callable."""
+        return total_entries() if callable(total_entries) else total_entries
+
+    def _get_total_personas() -> int:
+        """Get total personas, handling both static int and callable."""
+        return total_personas() if callable(total_personas) else total_personas
+
     @render.ui
     def progress_display():
         """Render the progress bar and entry/persona indicators."""
         count = state.annotated_count()
-        percentage = (count / total_entries * 100) if total_entries > 0 else 0
+        total = _get_total_entries()
+        percentage = (count / total * 100) if total > 0 else 0
         persona_idx = state.persona_index()
         entries = current_persona_entries()
         entry_idx = state.entry_index()
 
         return ui.div(
             ui.div(
-                f"Persona {persona_idx + 1} of {total_personas} • "
+                f"Persona {persona_idx + 1} of {_get_total_personas()} • "
                 f"Entry {entry_idx + 1} of {len(entries)}",
                 style="margin-bottom: 8px; color: #6b7280;",
             ),
@@ -126,7 +137,7 @@ def header_server(
                     class_="progress-bar-container",
                 ),
                 ui.span(
-                    f"{count}/{total_entries} annotated ({percentage:.0f}%)",
+                    f"{count}/{total} annotated ({percentage:.0f}%)",
                     class_="progress-text",
                 ),
                 class_="progress-wrapper",

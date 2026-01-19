@@ -15,9 +15,34 @@ Usage:
 """
 
 import re
+from dataclasses import dataclass, field
 from pathlib import Path
 
 import polars as pl
+
+
+@dataclass
+class ParseWarning:
+    """Warning about a parsing issue that was handled gracefully."""
+
+    file: str
+    entry_index: int | None
+    message: str
+
+
+@dataclass
+class LoadResult:
+    """Result of loading entries with any warnings.
+
+    Attributes:
+        df: Polars DataFrame with loaded entries
+        warnings: List of non-fatal warnings encountered during parsing
+        skipped_count: Total number of entries that were skipped
+    """
+
+    df: pl.DataFrame
+    warnings: list[ParseWarning] = field(default_factory=list)
+    skipped_count: int = 0
 
 
 def parse_wrangled_persona_profile(content: str) -> dict:
@@ -59,8 +84,10 @@ def parse_wrangled_persona_profile(content: str) -> dict:
     return profile
 
 
-def parse_wrangled_entries(content: str) -> list[dict]:
-    """Extract all journal entries from wrangled markdown content.
+def parse_wrangled_entries(
+    content: str, filename: str = "unknown"
+) -> tuple[list[dict], list[ParseWarning]]:
+    """Extract all journal entries from wrangled markdown content with validation.
 
     Wrangled format:
         ## Entry N - YYYY-MM-DD
@@ -73,11 +100,13 @@ def parse_wrangled_entries(content: str) -> list[dict]:
 
     Args:
         content: Full markdown file content
+        filename: Name of the file being parsed (for warnings)
 
     Returns:
-        List of entry dicts with date, initial_entry, nudge_text, response_text
+        Tuple of (list of entry dicts, list of warnings for skipped/problematic entries)
     """
     entries = []
+    warnings = []
 
     # Split by entry headers: "## Entry N - YYYY-MM-DD"
     entry_pattern = r"## Entry (\d+) - (\d{4}-\d{2}-\d{2})"
@@ -125,19 +154,42 @@ def parse_wrangled_entries(content: str) -> list[dict]:
             # No nudge - entry text is everything until end
             entry["initial_entry"] = entry_content.strip().rstrip("-").strip()
 
+        # Validation: check for required fields
+        if not entry["date"]:
+            warnings.append(
+                ParseWarning(
+                    file=filename,
+                    entry_index=t_index,
+                    message=f"Entry {t_index} missing date",
+                )
+            )
+            continue  # Skip this entry
+
+        if not entry["initial_entry"] or len(entry["initial_entry"]) < 10:
+            warnings.append(
+                ParseWarning(
+                    file=filename,
+                    entry_index=t_index,
+                    message=f"Entry {t_index} has empty or too short initial_entry",
+                )
+            )
+            continue  # Skip this entry
+
         entries.append(entry)
 
-    return entries
+    return entries, warnings
 
 
-def parse_wrangled_file(filepath: Path) -> tuple[dict, list[dict]]:
-    """Parse a single wrangled persona markdown file.
+def parse_wrangled_file(
+    filepath: Path,
+) -> tuple[dict, list[dict], list[ParseWarning]]:
+    """Parse a single wrangled persona markdown file with validation.
 
     Args:
         filepath: Path to persona_*.md file
 
     Returns:
-        Tuple of (profile_dict, list_of_entry_dicts)
+        Tuple of (profile_dict, list_of_entry_dicts, list_of_warnings)
     """
     content = filepath.read_text()
 
@@ -148,9 +200,9 @@ def parse_wrangled_file(filepath: Path) -> tuple[dict, list[dict]]:
     profile = parse_wrangled_persona_profile(content)
     profile["persona_id"] = persona_id
 
-    entries = parse_wrangled_entries(content)
+    entries, warnings = parse_wrangled_entries(content, filepath.name)
 
-    return profile, entries
+    return profile, entries, warnings
 
 
 def load_entries(wrangled_dir: str | Path = "logs/wrangled") -> pl.DataFrame:
@@ -161,6 +213,28 @@ def load_entries(wrangled_dir: str | Path = "logs/wrangled") -> pl.DataFrame:
 
     Returns:
         Polars DataFrame with one row per entry, columns for persona and entry fields.
+
+    Raises:
+        FileNotFoundError: If no persona files are found in the directory.
+
+    Note:
+        Use load_entries_with_warnings() if you need access to parsing warnings.
+    """
+    result = load_entries_with_warnings(wrangled_dir)
+    return result.df
+
+
+def load_entries_with_warnings(wrangled_dir: str | Path = "logs/wrangled") -> LoadResult:
+    """Load all entries from wrangled persona files with warning collection.
+
+    Args:
+        wrangled_dir: Path to the wrangled files directory
+
+    Returns:
+        LoadResult containing the DataFrame and any parsing warnings.
+
+    Raises:
+        FileNotFoundError: If no persona files are found in the directory.
     """
     wrangled_path = Path(wrangled_dir)
     persona_files = sorted(wrangled_path.glob("persona_*.md"))
@@ -169,31 +243,56 @@ def load_entries(wrangled_dir: str | Path = "logs/wrangled") -> pl.DataFrame:
         raise FileNotFoundError(f"No persona_*.md files found in {wrangled_dir}")
 
     rows = []
+    all_warnings = []
+    skipped_count = 0
+
     for filepath in persona_files:
-        profile, entries = parse_wrangled_file(filepath)
+        try:
+            profile, entries, warnings = parse_wrangled_file(filepath)
+            all_warnings.extend(warnings)
+            skipped_count += len(warnings)  # Each warning represents a skipped entry
 
-        for entry in entries:
-            row = {
-                # Persona fields
-                "persona_id": profile["persona_id"],
-                "persona_name": profile["name"],
-                "persona_age": profile["age"],
-                "persona_profession": profile["profession"],
-                "persona_culture": profile["culture"],
-                "persona_core_values": profile["core_values"],
-                "persona_bio": profile["bio"],
-                # Entry fields
-                "t_index": entry["t_index"],
-                "date": entry["date"],
-                "initial_entry": entry["initial_entry"],
-                "nudge_text": entry["nudge_text"],
-                "response_text": entry["response_text"],
-                "has_nudge": entry["has_nudge"],
-                "has_response": entry["has_response"],
-            }
-            rows.append(row)
+            for entry in entries:
+                row = {
+                    # Persona fields
+                    "persona_id": profile["persona_id"],
+                    "persona_name": profile["name"],
+                    "persona_age": profile["age"],
+                    "persona_profession": profile["profession"],
+                    "persona_culture": profile["culture"],
+                    "persona_core_values": profile["core_values"],
+                    "persona_bio": profile["bio"],
+                    # Entry fields
+                    "t_index": entry["t_index"],
+                    "date": entry["date"],
+                    "initial_entry": entry["initial_entry"],
+                    "nudge_text": entry["nudge_text"],
+                    "response_text": entry["response_text"],
+                    "has_nudge": entry["has_nudge"],
+                    "has_response": entry["has_response"],
+                }
+                rows.append(row)
+        except Exception as e:
+            # File-level error - add warning and continue
+            all_warnings.append(
+                ParseWarning(
+                    file=filepath.name,
+                    entry_index=None,
+                    message=f"Failed to parse file: {type(e).__name__}: {e}",
+                )
+            )
 
-    return pl.DataFrame(rows)
+    if not rows:
+        raise FileNotFoundError(
+            f"No valid entries found in {wrangled_dir}. "
+            f"{len(all_warnings)} files had parsing errors."
+        )
+
+    return LoadResult(
+        df=pl.DataFrame(rows),
+        warnings=all_warnings,
+        skipped_count=skipped_count,
+    )
 
 
 def get_ordered_entries(df: pl.DataFrame) -> list[dict]:

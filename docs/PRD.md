@@ -4,6 +4,41 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 
 ---
 
+## Implementation Status
+
+*Last updated: 2025-01-19*
+
+| Feature | Status | Details |
+|---------|--------|---------|
+| **Synthetic Data Pipeline** | ✅ Complete | 31 personas generated via Claude Code parallel subagents; YAML prompt templates with Jinja2 |
+| **Judge Labeling (VIF)** | ✅ Complete | 213 entries labeled across 31 personas; two-phase pipeline (Python wrangling + parallel subagents); consolidated to `judge_labels.parquet` with rationales |
+| **Human Annotation Tool** | ✅ Complete | ~4,200 LOC Shiny app; 56 annotations across 3 annotators; Cohen's κ / Fleiss' κ metrics; modular components with analysis view |
+| **Conversational Nudging** | 🧪 Experimental | 3-category LLM classification (clarification/elaboration/tension-surfacing); pending validation that nudging improves VIF signal quality |
+| **Weekly Alignment Coach** | ⚠️ Partial | Entry processing ready; digest generation not implemented |
+| **Mini-Assessment Quiz** | ❌ Not Started | Cold-start onboarding flow |
+| **"Map of Me" Visualization** | ❌ Not Started | Embedding trajectories |
+| **Journaling Anomaly Radar** | ❌ Not Started | Cadence/gap detection |
+| **Goal-aligned Inspiration Feed** | ❌ Not Started | External API integration |
+
+**Data Pipeline Progress:**
+```
+logs/
+├── synthetic_data/     # 31 persona markdown files
+├── wrangled/           # 31 cleaned files (generation metadata stripped)
+├── judge_labels/       # 31 JSON label files + consolidated parquet
+├── annotations/        # 3 annotator parquet files (56 entries)
+└── registry/           # personas.parquet (tracks pipeline stages)
+```
+
+> **References:**
+> - [Synthetic Data Pipeline](synthetic_data/pipeline_specs.md)
+> - [Claude Code Generation Instructions](synthetic_data/claude_gen_instructions.md)
+> - [Claude Judge Labeling Instructions](synthetic_data/claude_judge_instructions.md)
+> - [Human Annotation Tool](data_loader/human_annotator_tool.md)
+> - [CLAUDE.md](../CLAUDE.md) — Project architecture overview
+
+---
+
 # Elevator Pitch
 
 * **Working name:** Twinkl — a long-horizon "inner compass."
@@ -101,7 +136,7 @@ This mini-assessment directly anchors the capstone submodules: the latent dimens
    * **State representation:** sliding window of N recent entry embeddings + time deltas + history stats (EMA of per-dimension alignment, rolling std dev, entry counts).
 5. Implement **[Reward Modeling (LLM-as-Judge)](VIF/VIF_03_Model_Training.md):** For each entry, LLM outputs per-dimension alignment scores (Likert scale normalized to [-1,1]) with rationales and optional confidence scores. Use synthetic personas for initial training/validation.
 
-   > **Status:** Steps 1-5 complete. Synthetic data pipeline operational with Judge labeling producing Parquet training data. Step 6 (lightweight classifiers) deferred pending Critic training results.
+   > **Status:** Steps 1-5 complete (31 personas, 213 labeled entries). Human annotation tool operational with 56 annotations for inter-rater agreement. See [Implementation Status](#implementation-status) for current progress. Step 6 (lightweight classifiers) deferred pending Critic training results.
 
 6. Tooling: start with API LLM for tagging + reflection, add lightweight classifiers later if needed; keep reasoning layer explainable for XRAI.
 7. Evaluation plan: combine Likert feedback on "felt accurate?" with inter-rater agreement on value tags and stability metrics for the profile.
@@ -120,25 +155,6 @@ This mini-assessment directly anchors the capstone submodules: the latent dimens
 * **Alignment engine:** Weekly reasoning compares lived behaviour vs. declared priorities, surfaces tensions, and cites evidence snippets—turning “you said X but did Y” into actionable prompts.
 * **Explainable accountability:** Every nudge shows why (phrases, time windows, rules), plus contextual quotes/interventions tuned to the conflict at hand.
 * **Capstone-ready architecture:** LLM tagging + time-series smoothing + symbolic rules = rich ground across Intelligent Sensing, Pattern Recognition, Reasoning, and Architecting AI Systems.
-
-## Implementation Status
-
-| Feature | Status | Details |
-|---------|--------|---------|
-| **Synthetic Data Pipeline** | ✅ Complete | Claude Code subagents for parallel generation; YAML prompt templates |
-| **Conversational Nudging** | 🧪 Experimental | 3-category LLM-based classification; pending validation that nudging improves VIF signal quality |
-| **Judge Labeling (VIF)** | 🧪 Experimental | Two-phase pipeline implemented: Python wrangling (`src/wrangling/`) + Claude Code parallel subagents; testing in progress |
-| **Weekly Alignment Coach** | ⚠️ Partial | Entry processing ready; digest generation not implemented |
-| **Mini-Assessment Quiz** | ❌ Not Started | Cold-start onboarding flow |
-| **"Map of Me" Visualization** | ❌ Not Started | Embedding trajectories |
-| **Journaling Anomaly Radar** | ❌ Not Started | Cadence/gap detection |
-| **Goal-aligned Inspiration Feed** | ❌ Not Started | External API integration |
-
-> For detailed specifications, see:
-> - [Synthetic Data Pipeline](synthetic_data/pipeline_specs.md)
-> - [Claude Code Generation Instructions](synthetic_data/claude_gen_instructions.md)
-> - [Claude Judge Labeling Instructions](synthetic_data/claude_judge_instructions.md)
-> - [CLAUDE.md](../CLAUDE.md) — Project architecture overview
 
 ## Design Lessons Learned
 
@@ -229,5 +245,6 @@ This avoids the trap of matching windows "for consistency" when the constraints 
 | [claude_gen_instructions.md](synthetic_data/claude_gen_instructions.md) | Parallel subagent generation workflow |
 | [claude_judge_instructions.md](synthetic_data/claude_judge_instructions.md) | Judge labeling workflow (wrangling + scoring) |
 | [annotation_guidelines.md](synthetic_data/annotation_guidelines.md) | Human annotation for nudge effectiveness study |
+| [human_annotator_tool.md](data_loader/human_annotator_tool.md) | Shiny annotation tool implementation plan |
 | [VIF_01_Concepts_and_Roadmap.md](VIF/VIF_01_Concepts_and_Roadmap.md) | Value Identity Function theory |
 | [VIF_03_Model_Training.md](VIF/VIF_03_Model_Training.md) | LLM-as-Judge and Critic training |
