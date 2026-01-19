@@ -83,6 +83,9 @@ def header_server(
     current_persona_entries: reactive.calc,
     on_prev: callable,
     on_next: callable,
+    on_unsaved_cancel: callable = None,
+    on_unsaved_discard: callable = None,
+    on_unsaved_save: callable = None,
 ):
     """Server logic for the header component.
 
@@ -94,6 +97,9 @@ def header_server(
         current_persona_entries: Reactive calc returning entries for current persona
         on_prev: Callback for previous persona button click
         on_next: Callback for next persona button click
+        on_unsaved_cancel: Callback for unsaved changes modal - keep editing
+        on_unsaved_discard: Callback for unsaved changes modal - discard changes
+        on_unsaved_save: Callback for unsaved changes modal - save & continue
 
     Returns:
         Reactive calc for the annotator name
@@ -136,6 +142,26 @@ def header_server(
     @reactive.event(input.next_btn)
     def _on_next():
         on_next()
+
+    # Unsaved changes modal button handlers
+    # (modal is shown from on_prev/on_next, so buttons are namespaced here)
+    @reactive.effect
+    @reactive.event(input.unsaved_cancel)
+    def _handle_unsaved_cancel():
+        if on_unsaved_cancel:
+            on_unsaved_cancel()
+
+    @reactive.effect
+    @reactive.event(input.unsaved_discard)
+    def _handle_unsaved_discard():
+        if on_unsaved_discard:
+            on_unsaved_discard()
+
+    @reactive.effect
+    @reactive.event(input.unsaved_save)
+    def _handle_unsaved_save():
+        if on_unsaved_save:
+            on_unsaved_save()
 
     # Return the annotator name as a reactive for the parent to use
     @reactive.calc

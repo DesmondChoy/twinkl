@@ -182,20 +182,52 @@ def server(input, output, session):
     def handle_prev():
         """Handle previous persona navigation."""
         new_idx = state.persona_index() - 1
-        if new_idx >= 0:
-            state.set_scoring_mode()  # Reset to scoring grid if in comparison mode
-            state.persona_index.set(new_idx)
-            state.entry_index.set(0)
-            _load_existing_annotation()
+        if new_idx < 0:
+            return
+
+        # Check for unsaved changes
+        current_notes = scoring_accessors["get_notes"]()
+        if state.has_unsaved_changes(current_notes):
+            state.pending_navigation.set({"direction": "prev"})
+            ui.modal_show(modals.build_unsaved_changes_modal())
+        else:
+            _do_navigate_prev()
 
     def handle_next():
         """Handle next persona navigation."""
         new_idx = state.persona_index() + 1
-        if new_idx < _total_personas:
-            state.set_scoring_mode()  # Reset to scoring grid if in comparison mode
-            state.persona_index.set(new_idx)
-            state.entry_index.set(0)
-            _load_existing_annotation()
+        if new_idx >= _total_personas:
+            return
+
+        # Check for unsaved changes
+        current_notes = scoring_accessors["get_notes"]()
+        if state.has_unsaved_changes(current_notes):
+            state.pending_navigation.set({"direction": "next"})
+            ui.modal_show(modals.build_unsaved_changes_modal())
+        else:
+            _do_navigate_next()
+
+    def handle_unsaved_cancel():
+        """Keep editing - close modal, stay on current entry."""
+        ui.modal_remove()
+        state.pending_navigation.set(None)
+
+    def handle_unsaved_discard():
+        """Discard changes and navigate."""
+        ui.modal_remove()
+        nav = state.pending_navigation()
+        state.pending_navigation.set(None)
+        _execute_navigation(nav)
+
+    def handle_unsaved_save():
+        """Save current work then navigate."""
+        ui.modal_remove()
+        scores = state.get_scores_dict()
+        notes = scoring_accessors["get_notes"]()
+        _do_save(scores, notes)
+        nav = state.pending_navigation()
+        state.pending_navigation.set(None)
+        _execute_navigation(nav)
 
     annotator_name = header.header_server(
         "header",
@@ -205,6 +237,9 @@ def server(input, output, session):
         current_persona_entries=current_persona_entries,
         on_prev=handle_prev,
         on_next=handle_next,
+        on_unsaved_cancel=handle_unsaved_cancel,
+        on_unsaved_discard=handle_unsaved_discard,
+        on_unsaved_save=handle_unsaved_save,
     )
 
     # ==========================================================================
@@ -322,18 +357,22 @@ def server(input, output, session):
         if not name or not entry:
             state.reset_scores()
             scoring_accessors["set_notes"]("")
+            # Capture baseline for new/empty entry
+            state.capture_baseline(state.get_scores_dict(), "")
             return
 
         existing = get_annotation(name, entry["persona_id"], entry["t_index"])
         if existing:
             state.load_scores(existing)
-            if existing.get("notes"):
-                scoring_accessors["set_notes"](existing["notes"])
-            else:
-                scoring_accessors["set_notes"]("")
+            notes_value = existing.get("notes") or ""
+            scoring_accessors["set_notes"](notes_value)
+            # Capture baseline after loading existing annotation
+            state.capture_baseline(state.get_scores_dict(), notes_value)
         else:
             state.reset_scores()
             scoring_accessors["set_notes"]("")
+            # Capture baseline for new entry (all zeros, empty notes)
+            state.capture_baseline(state.get_scores_dict(), "")
 
     def _do_save(scores: dict, notes: str | None):
         """Execute the actual save operation."""
@@ -355,11 +394,61 @@ def server(input, output, session):
         # Update annotated count
         state.annotated_count.set(get_annotation_count(name))
 
+        # Capture baseline after save (resets dirty state)
+        state.capture_baseline(scores, notes or "")
+
         # Get judge scores for comparison
         judge_data = get_judge_scores(entry["persona_id"], entry["t_index"])
 
         # Switch to inline comparison view (replaces modal)
         state.set_comparison_mode(scores, judge_data, entry)
+
+    def _execute_navigation(nav: dict):
+        """Execute a pending navigation action.
+
+        Args:
+            nav: Dict with 'direction' key ("prev", "next", or "entry")
+                 and optional 'target_index' for entry navigation
+        """
+        if not nav:
+            return
+
+        direction = nav.get("direction")
+
+        if direction == "prev":
+            _do_navigate_prev()
+        elif direction == "next":
+            _do_navigate_next()
+        elif direction == "entry":
+            target_idx = nav.get("target_index")
+            if target_idx is not None:
+                _do_navigate_entry(target_idx)
+
+    def _do_navigate_prev():
+        """Execute previous persona navigation."""
+        new_idx = state.persona_index() - 1
+        if new_idx >= 0:
+            state.set_scoring_mode()
+            state.persona_index.set(new_idx)
+            state.entry_index.set(0)
+            _load_existing_annotation()
+
+    def _do_navigate_next():
+        """Execute next persona navigation."""
+        new_idx = state.persona_index() + 1
+        if new_idx < _total_personas:
+            state.set_scoring_mode()
+            state.persona_index.set(new_idx)
+            state.entry_index.set(0)
+            _load_existing_annotation()
+
+    def _do_navigate_entry(target_idx: int):
+        """Execute entry selection navigation."""
+        unlocked = unlocked_entry_count()
+        if target_idx < unlocked:
+            state.set_scoring_mode()
+            state.entry_index.set(target_idx)
+            _load_existing_annotation()
 
     # ==========================================================================
     # Event Handlers
@@ -393,11 +482,22 @@ def server(input, output, session):
         if selected_idx is None:
             return
 
+        # Don't navigate to the same entry
+        if selected_idx == state.entry_index():
+            return
+
         unlocked = unlocked_entry_count()
         if selected_idx < unlocked:
-            state.set_scoring_mode()  # Reset to scoring grid if in comparison mode
-            state.entry_index.set(selected_idx)
-            _load_existing_annotation()
+            # Check for unsaved changes
+            current_notes = scoring_accessors["get_notes"]()
+            if state.has_unsaved_changes(current_notes):
+                state.pending_navigation.set({
+                    "direction": "entry",
+                    "target_index": selected_idx,
+                })
+                ui.modal_show(modals.build_unsaved_changes_modal())
+            else:
+                _do_navigate_entry(selected_idx)
 
     # ==========================================================================
     # Output Renderers

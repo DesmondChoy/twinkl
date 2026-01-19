@@ -201,6 +201,9 @@ def scoring_grid_server(
         input, output, session: Shiny module parameters
         state: Centralized app state with scores
         on_save: Callback function for save button. Receives (scores: dict, notes: str|None)
+        on_modal_cancel: Callback for all-neutral modal cancel
+        on_modal_confirm: Callback for all-neutral modal confirm
+        on_comparison_continue: Callback for comparison view continue
     """
 
     # Create score display renderers for each Schwartz value

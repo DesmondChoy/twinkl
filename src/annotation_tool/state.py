@@ -47,6 +47,16 @@ class AppState:
     # Pending save data (for modal confirmation)
     pending_save: reactive.value = field(default_factory=lambda: reactive.value(None))
 
+    # Baseline state for detecting unsaved changes (plain dicts, not reactive)
+    baseline_scores: dict = field(default_factory=dict)
+    baseline_notes: str = ""
+
+    # Pending navigation for unsaved changes modal
+    pending_navigation: reactive.value = field(
+        default_factory=lambda: reactive.value(None)
+    )
+    # Value will be: {"direction": "prev"|"next"|"entry", "target_index": int|None}
+
     # UI mode for right column: "scoring" or "comparison"
     ui_mode: reactive.value = field(default_factory=lambda: reactive.value("scoring"))
 
@@ -91,6 +101,31 @@ class AppState:
             True if all scores are 0
         """
         return all(self.scores[value]() == 0 for value in SCHWARTZ_VALUE_ORDER)
+
+    def capture_baseline(self, scores: dict, notes: str):
+        """Snapshot current state as baseline for change detection.
+
+        Args:
+            scores: Dict mapping value names to scores
+            notes: Current notes value
+        """
+        self.baseline_scores = scores.copy()
+        self.baseline_notes = notes or ""
+
+    def has_unsaved_changes(self, current_notes: str) -> bool:
+        """Check if current scores/notes differ from baseline.
+
+        Args:
+            current_notes: Current notes value from input
+
+        Returns:
+            True if there are unsaved changes
+        """
+        current_scores = self.get_scores_dict()
+        return (
+            current_scores != self.baseline_scores
+            or (current_notes or "") != self.baseline_notes
+        )
 
     def set_comparison_mode(
         self, human_scores: dict, judge_data: dict | None, entry_data: dict | None

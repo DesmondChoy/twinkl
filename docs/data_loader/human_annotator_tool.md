@@ -142,14 +142,20 @@ New parquet files at `logs/annotations/<annotator_id>.parquet`:
 ### Phase 3: Polish
 - [x] Add tooltips from `schwartz_values.yaml` *(completed - CSS tooltips on value labels)*
 - [x] Implement collapsible persona bio *(completed in Phase 1)*
-- [ ] Add confirmation dialog for unsaved navigation
+- [x] Add confirmation dialog for unsaved navigation *(completed - baseline tracking + 3-button modal)*
 - [ ] Error handling and loading states
 
 **Phase 3 Testing:**
 - [x] Hover over value names — verify tooltips appear with definitions *(CSS tooltips implemented)*
 - [x] Click persona bio toggle — verify expand/collapse works *(completed in Phase 1)*
-- [ ] Make changes, click prev/next without saving — verify confirmation dialog appears
+- [x] Make changes, click prev/next without saving — verify confirmation dialog appears *(Keep Editing / Discard / Save & Continue)*
 - [ ] Test with missing/malformed data — verify graceful error handling
+
+**Phase 3 Implementation Notes:**
+- Unsaved changes detection uses baseline snapshot comparison (`baseline_scores != current_scores`)
+- Modal buttons namespace to their parent module — handlers in `header.py` since modal shown from navigation callbacks
+- Three actions: "Keep Editing" (stay), "Discard Changes" (navigate without save), "Save & Continue" (save then navigate)
+- Deferred navigation pattern: store intended destination in `pending_navigation` state, execute after user confirms
 
 ## Annotation Methodology
 

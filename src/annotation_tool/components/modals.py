@@ -2,13 +2,15 @@
 
 This module provides modal dialogs for:
 - All-neutral warning confirmation
+- Unsaved changes confirmation
 - Human vs Judge score comparison
 - Keyboard shortcuts help
 
 Usage:
     from components.modals import (
-        show_all_neutral_modal,
-        show_comparison_modal,
+        build_all_neutral_modal,
+        build_unsaved_changes_modal,
+        build_comparison_modal,
         get_keyboard_help_html,
     )
 """
@@ -130,6 +132,53 @@ def build_all_neutral_modal() -> ui.Tag:
                 "Save All Neutral",
                 class_="btn-warning",
                 style="background: #f59e0b; border: none; color: #fff; padding: 10px 20px; border-radius: 6px;",
+            ),
+            style="display: flex; gap: 12px; justify-content: flex-end; padding-top: 16px; border-top: 1px solid #e5e5e5;",
+        ),
+        title=None,
+        easy_close=True,
+    )
+
+
+def build_unsaved_changes_modal() -> ui.Tag:
+    """Build confirmation modal for unsaved changes.
+
+    Returns:
+        UI modal element ready to be shown with ui.modal_show()
+    """
+    return ui.modal(
+        ui.div(
+            ui.div(
+                ui.h4(
+                    "⚠️ Unsaved Changes",
+                    style="margin: 0 0 8px 0; color: #92400e; font-size: 16px;",
+                ),
+                ui.p(
+                    "You have unsaved changes on this entry. What would you like to do?",
+                    style="margin: 0 0 12px 0; color: #92400e; font-size: 14px; line-height: 1.6;",
+                ),
+                class_="warning-modal-content",
+            ),
+            style="padding: 0;",
+        ),
+        ui.div(
+            ui.input_action_button(
+                "unsaved_cancel",
+                "← Keep Editing",
+                class_="btn-secondary",
+                style="background: #fff; border: 1px solid #e5e5e5; color: #374151; padding: 10px 20px; border-radius: 6px;",
+            ),
+            ui.input_action_button(
+                "unsaved_discard",
+                "Discard Changes",
+                class_="btn-secondary",
+                style="background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; padding: 10px 20px; border-radius: 6px;",
+            ),
+            ui.input_action_button(
+                "unsaved_save",
+                "Save & Continue →",
+                class_="btn-primary",
+                style="background: #2563eb; border: none; color: #fff; padding: 10px 20px; border-radius: 6px;",
             ),
             style="display: flex; gap: 12px; justify-content: flex-end; padding-top: 16px; border-top: 1px solid #e5e5e5;",
         ),

@@ -28,6 +28,36 @@ Key features:
 
 See `docs/synthetic_data/pipeline_specs.md` for implementation details.
 
+### Current Dataset
+
+| Metric | Value |
+|--------|-------|
+| Personas | 31 |
+| Journal entries | 213 |
+| Avg entries/persona | 6.9 |
+| Entries with nudges | 62.0% |
+| Labels coverage | 100% |
+
+**Demographics:** 6 cultures, 9 professions, 5 age brackets.
+
+**Schwartz Value Distribution** (personas can have 1-2 values):
+| Value | Personas | % |
+|-------|----------|---|
+| Hedonism | 7 | 16% |
+| Security | 6 | 14% |
+| Universalism | 6 | 14% |
+| Tradition | 5 | 11% |
+| Self-Direction | 5 | 11% |
+| Achievement | 4 | 9% |
+| Benevolence | 4 | 9% |
+| Conformity | 4 | 9% |
+| Stimulation | 2 | 5% |
+| Power | 1 | 2% |
+
+**Nudge types:** Elaboration (44%), Tension Surfacing (41%), Clarification (14%)
+
+See [`docs/data_schema.md`](docs/data_schema.md) for parquet schemas and query examples.
+
 ## Judge Labeling Pipeline
 
 Scores synthetic journal entries against the 10 Schwartz value dimensions to create training labels for the VIF. The pipeline uses Claude Code subagents for parallel, consistent scoring.
