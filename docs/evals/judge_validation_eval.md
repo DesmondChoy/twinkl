@@ -8,25 +8,24 @@ The Judge (LLM-as-Judge) produces training labels for the VIF. This evaluation v
 
 ## Implementation Status
 
-**Status:** 🟡 Partial
+**Status:** 🟢 Operational
 
 ### What's Implemented
 - Judge labeling pipeline operational ([`src/judge/consolidate.py`](../../src/judge/consolidate.py))
 - Rationale storage in parquet ([`logs/judge_labels/judge_labels.parquet`](../../logs/judge_labels/judge_labels.parquet))
 - Data models with rationale support ([`src/models/judge.py`](../../src/models/judge.py))
+- Human annotation tool ([`src/annotation_tool/app.py`](../../src/annotation_tool/app.py))
+- Cohen's κ and Fleiss' κ calculation ([`src/annotation_tool/agreement_metrics.py`](../../src/annotation_tool/agreement_metrics.py))
+- Agreement report export with interpretation guide
 
 ### What's Missing
-- Cohen's κ calculation (no inter-rater agreement code)
 - Automated quality checks (all-zero rate, sparsity, distribution)
 - Consistency checks (re-running same entry multiple times)
 
-### Blocking Dependencies
-Needs human annotations for κ comparison — currently only have Judge labels, no human ground truth to compare against.
-
 ### Next Steps
-1. Complete human annotation of 20-30 entries using the annotation tool
-2. Implement κ calculation function in `src/judge/`
-3. Add automated quality checks as post-labeling validation
+1. Review low-agreement values (Universalism, Power, Benevolence) and refine rubrics
+2. Add automated quality checks as post-labeling validation
+3. Re-annotate subset after rubric improvements to measure κ improvement
 
 ---
 
@@ -49,20 +48,67 @@ The Judge uses a strict categorical protocol to reduce subjective noise:
 
 ## Validation Approaches
 
-### 1. Inter-Rater Agreement (Cohen's κ)
+### 1. Agreement Metrics (Cohen's κ and Fleiss' κ)
 
-Compare Judge labels against human annotations on a sample of entries.
+We use two complementary kappa metrics to validate Judge labels:
+
+#### Understanding the Two Metrics
+
+```
+                    Fleiss' κ
+        (Do humans agree with EACH OTHER?)
+           ┌──────────┼──────────┐
+           │          │          │
+      Annotator 1  Annotator 2  Annotator 3
+           │          │          │
+           └────┬─────┴─────┬────┘
+                │           │
+             Cohen's κ   Cohen's κ
+      (Does THIS human agree with Judge?)
+                │           │
+                └─────┬─────┘
+                      │
+                   Judge
+```
+
+| Metric | What It Measures | Question It Answers |
+|--------|------------------|---------------------|
+| **Cohen's κ** | Agreement between ONE human and the Judge | "Does this annotator agree with the Judge's labels?" |
+| **Fleiss' κ** | Agreement among ALL humans (independent of Judge) | "Do humans agree with each other on what's correct?" |
+
+#### Why Both Metrics Matter
+
+| Scenario | Fleiss' κ | Cohen's κ | Interpretation |
+|----------|-----------|-----------|----------------|
+| Humans agree with each other AND with Judge | High | High | ✅ Judge is well-calibrated |
+| Humans agree with each other BUT NOT with Judge | High | Low | ⚠️ Judge has systematic bias — fix Judge prompt |
+| Humans DON'T agree with each other | Low | Varies | ⚠️ Rubric is ambiguous — fix definitions first |
+
+**Critical insight:** If Fleiss' κ is low, humans can't agree on what "correct" means. In this case, low Cohen's κ may reflect rubric ambiguity rather than Judge error. **Always check Fleiss' κ first** — if humans disagree, clarify the rubric before blaming the Judge.
+
+#### Interpretation Scale (Landis & Koch, 1977)
 
 **Target: κ > 0.60** (substantial agreement)
 
 ```
 κ interpretation:
-  < 0.20: Poor
+  < 0.00: Poor (worse than chance)
+  0.00-0.20: Slight
   0.21-0.40: Fair
   0.41-0.60: Moderate
   0.61-0.80: Substantial  ← Target
   0.81-1.00: Almost perfect
 ```
+
+#### Running Agreement Analysis
+
+```bash
+# Generate agreement report
+shiny run src/annotation_tool/app.py
+# → Navigate to Analysis section → Export Agreement Report
+```
+
+Reports are saved to `logs/exports/agreement_report_<timestamp>.md`.
 
 ### 2. Internal Consistency
 
@@ -131,19 +177,38 @@ For each entry, the human reviewer asks:
 
 If validation reveals quality issues:
 
+### Step 0: Diagnose the Root Cause
+
+**Check Fleiss' κ first** to determine whether the problem is rubric ambiguity or Judge error:
+
+| Fleiss' κ | Cohen's κ | Diagnosis | Action |
+|-----------|-----------|-----------|--------|
+| Low | Low | Rubric is unclear | → Go to Step 1 (fix rubric) |
+| High | Low | Judge has systematic bias | → Go to Step 2 (fix Judge prompt) |
+| High | High | No issues | ✅ Done |
+
+### Step 1: Refine Rubrics (if Fleiss' κ is low)
+
+Humans can't agree — the definitions need clarification:
+
+1. **Identify problem values**: Look at per-value Fleiss' κ breakdown
+2. **Update `config/schwartz_values.yaml`** with:
+   - Clearer distinguishing criteria
+   - Concrete examples of edge cases
+   - Anti-patterns to avoid
+3. **Re-annotate subset**: Have humans re-label 10-20 entries
+4. **Check Fleiss' κ improvement**: Repeat until κ > 0.60
+
+### Step 2: Fix Judge (if Cohen's κ is low but Fleiss' κ is high)
+
+Humans agree, but Judge diverges — the Judge prompt needs adjustment:
+
 1. **Identify pattern**: What type of entries does Judge struggle with?
    - Value conflation (Achievement ↔ Power)
    - Tone sensitivity (sarcasm, hedging)
    - Cultural context
-
-2. **Refine rubrics**: Update `config/schwartz_values.yaml` with:
-   - Clearer distinguishing criteria
-   - More examples of edge cases
-   - Anti-patterns to avoid
-
-3. **Update prompt**: Add constraints or clarifications to Judge prompt
-
-4. **Re-run on flagged entries**: Verify improvement before full re-labeling
+2. **Update Judge prompt**: Add constraints or clarifications
+3. **Re-run on flagged entries**: Verify improvement before full re-labeling
 
 ---
 
@@ -182,10 +247,13 @@ def validate_judge_output(labels_df):
 
 | Metric | Target | Rationale |
 |--------|--------|-----------|
-| Cohen's κ (human vs Judge) | > 0.60 | Substantial agreement |
+| Fleiss' κ (human vs human) | > 0.60 | Humans must agree before evaluating Judge |
+| Cohen's κ (human vs Judge) | > 0.60 | Substantial agreement with human intuition |
 | Internal consistency | 100% | Same entry → same scores |
 | All-zero rate | < 30% | Most entries have signal |
 | Per-persona sparsity | < 20% with >80% zeros | Personas should show patterns |
+
+**Evaluation order:** Check Fleiss' κ first. If humans don't agree (κ < 0.60), improve the rubric before evaluating Cohen's κ.
 
 ---
 
@@ -223,5 +291,7 @@ def validate_judge_output(labels_df):
 ## References
 
 - `docs/VIF/judge_implementation_spec.md` — Judge implementation details
-- `docs/synthetic_data/annotation_guidelines.md` — Human annotation protocol
+- `docs/data_loader/human_annotator_tool.md` — Annotation tool implementation plan
+- `src/annotation_tool/agreement_metrics.py` — κ calculation implementation
 - `config/schwartz_values.yaml` — Value rubrics and elaborations
+- `logs/exports/agreement_report_*.md` — Generated agreement reports

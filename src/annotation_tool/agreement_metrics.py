@@ -62,6 +62,34 @@ def interpret_kappa(kappa: float) -> str:
         return "Almost Perfect"
 
 
+def interpret_kappa_with_range(kappa: float) -> str:
+    """Interpret kappa value with numeric range for quick reference.
+
+    Rounds to 2 decimal places before interpreting to match displayed values.
+
+    Args:
+        kappa: Kappa coefficient value
+
+    Returns:
+        String with interpretation and its numeric range, e.g. "Fair [0.21–0.40]"
+    """
+    # Round to match displayed precision, so 0.405 → 0.41 → Moderate
+    kappa = round(kappa, 2)
+
+    if kappa < 0.00:
+        return "Poor [<0]"
+    elif kappa < 0.21:
+        return "Slight [0–0.20]"
+    elif kappa < 0.41:
+        return "Fair [0.21–0.40]"
+    elif kappa < 0.61:
+        return "Moderate [0.41–0.60]"
+    elif kappa < 0.81:
+        return "Substantial [0.61–0.80]"
+    else:
+        return "Almost Perfect [>0.80]"
+
+
 def load_all_annotator_dfs() -> dict[str, pl.DataFrame]:
     """Load all annotator parquet files.
 
@@ -562,6 +590,27 @@ def generate_agreement_report(
     else:
         lines.append("- Insufficient data for recommendations")
 
+    lines.append("")
+
+    # Legend at the bottom
+    lines.append("---")
+    lines.append("")
+    lines.append("## Interpretation Guide")
+    lines.append("")
+    lines.append("**Kappa (κ) measures agreement beyond chance** (Landis & Koch, 1977):")
+    lines.append("")
+    lines.append("| κ Range | Interpretation | Meaning |")
+    lines.append("|---------|----------------|---------|")
+    lines.append("| < 0.00 | Poor | Agreement worse than random chance |")
+    lines.append("| 0.00–0.20 | Slight | Minimal agreement |")
+    lines.append("| 0.21–0.40 | Fair | Some agreement, but inconsistent |")
+    lines.append("| 0.41–0.60 | Moderate | Reasonable agreement |")
+    lines.append("| 0.61–0.80 | Substantial | Strong agreement ← **Target** |")
+    lines.append("| 0.81–1.00 | Almost Perfect | Near-complete agreement |")
+    lines.append("")
+    lines.append("**Cohen's κ**: Measures agreement between ONE human annotator and the Judge.")
+    lines.append("")
+    lines.append("**Fleiss' κ**: Measures agreement among ALL human annotators (do humans agree with each other?).")
     lines.append("")
 
     # Write report
