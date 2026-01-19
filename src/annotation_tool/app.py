@@ -179,33 +179,27 @@ def server(input, output, session):
     # Header Component
     # ==========================================================================
 
+    def _try_navigate(direction: str, is_valid: bool, navigate_fn: callable):
+        """Check for unsaved changes before navigation, showing modal if needed."""
+        if not is_valid:
+            return
+
+        current_notes = scoring_accessors["get_notes"]()
+        if state.has_unsaved_changes(current_notes):
+            state.pending_navigation.set({"direction": direction})
+            ui.modal_show(modals.build_unsaved_changes_modal())
+        else:
+            navigate_fn()
+
     def handle_prev():
         """Handle previous persona navigation."""
         new_idx = state.persona_index() - 1
-        if new_idx < 0:
-            return
-
-        # Check for unsaved changes
-        current_notes = scoring_accessors["get_notes"]()
-        if state.has_unsaved_changes(current_notes):
-            state.pending_navigation.set({"direction": "prev"})
-            ui.modal_show(modals.build_unsaved_changes_modal())
-        else:
-            _do_navigate_prev()
+        _try_navigate("prev", new_idx >= 0, lambda: _navigate_to_persona(new_idx))
 
     def handle_next():
         """Handle next persona navigation."""
         new_idx = state.persona_index() + 1
-        if new_idx >= _total_personas:
-            return
-
-        # Check for unsaved changes
-        current_notes = scoring_accessors["get_notes"]()
-        if state.has_unsaved_changes(current_notes):
-            state.pending_navigation.set({"direction": "next"})
-            ui.modal_show(modals.build_unsaved_changes_modal())
-        else:
-            _do_navigate_next()
+        _try_navigate("next", new_idx < _total_personas, lambda: _navigate_to_persona(new_idx))
 
     def handle_unsaved_cancel():
         """Keep editing - close modal, stay on current entry."""
@@ -414,38 +408,26 @@ def server(input, output, session):
             return
 
         direction = nav.get("direction")
-
         if direction == "prev":
-            _do_navigate_prev()
+            _navigate_to_persona(state.persona_index() - 1)
         elif direction == "next":
-            _do_navigate_next()
+            _navigate_to_persona(state.persona_index() + 1)
         elif direction == "entry":
             target_idx = nav.get("target_index")
             if target_idx is not None:
-                _do_navigate_entry(target_idx)
+                _navigate_to_entry(target_idx)
 
-    def _do_navigate_prev():
-        """Execute previous persona navigation."""
-        new_idx = state.persona_index() - 1
-        if new_idx >= 0:
+    def _navigate_to_persona(new_idx: int):
+        """Navigate to a specific persona index."""
+        if 0 <= new_idx < _total_personas:
             state.set_scoring_mode()
             state.persona_index.set(new_idx)
             state.entry_index.set(0)
             _load_existing_annotation()
 
-    def _do_navigate_next():
-        """Execute next persona navigation."""
-        new_idx = state.persona_index() + 1
-        if new_idx < _total_personas:
-            state.set_scoring_mode()
-            state.persona_index.set(new_idx)
-            state.entry_index.set(0)
-            _load_existing_annotation()
-
-    def _do_navigate_entry(target_idx: int):
-        """Execute entry selection navigation."""
-        unlocked = unlocked_entry_count()
-        if target_idx < unlocked:
+    def _navigate_to_entry(target_idx: int):
+        """Navigate to a specific entry index within current persona."""
+        if target_idx < unlocked_entry_count():
             state.set_scoring_mode()
             state.entry_index.set(target_idx)
             _load_existing_annotation()
@@ -486,8 +468,7 @@ def server(input, output, session):
         if selected_idx == state.entry_index():
             return
 
-        unlocked = unlocked_entry_count()
-        if selected_idx < unlocked:
+        if selected_idx < unlocked_entry_count():
             # Check for unsaved changes
             current_notes = scoring_accessors["get_notes"]()
             if state.has_unsaved_changes(current_notes):
@@ -497,7 +478,7 @@ def server(input, output, session):
                 })
                 ui.modal_show(modals.build_unsaved_changes_modal())
             else:
-                _do_navigate_entry(selected_idx)
+                _navigate_to_entry(selected_idx)
 
     # ==========================================================================
     # Output Renderers

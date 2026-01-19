@@ -9,6 +9,7 @@ This package provides modular Shiny components for the annotation interface:
 - modals: Modal dialogs for warnings and comparisons
 - comparison_view: Inline comparison view for post-save display
 - analysis_view: Collapsible accordion with agreement metrics and export
+- constants: Shared constants and helper functions
 
 Usage:
     from src.annotation_tool.components import (
@@ -25,6 +26,7 @@ Usage:
 from src.annotation_tool.components import (
     analysis_view,
     comparison_view,
+    constants,
     entry_display,
     header,
     modals,
@@ -33,11 +35,12 @@ from src.annotation_tool.components import (
 )
 
 __all__ = [
-    "header",
-    "sidebar",
-    "entry_display",
-    "scoring_grid",
-    "modals",
-    "comparison_view",
     "analysis_view",
+    "comparison_view",
+    "constants",
+    "entry_display",
+    "header",
+    "modals",
+    "scoring_grid",
+    "sidebar",
 ]

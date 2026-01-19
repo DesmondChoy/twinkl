@@ -32,7 +32,6 @@ from src.annotation_tool.agreement_metrics import (
     calculate_fleiss_kappa,
     export_annotations_csv,
     export_annotations_parquet,
-    export_combined_annotations,
     generate_agreement_report,
     get_per_value_agreement,
     interpret_kappa,
@@ -41,6 +40,24 @@ from src.annotation_tool.agreement_metrics import (
 )
 from src.annotation_tool.state import AppState
 from src.models.judge import SCHWARTZ_VALUE_ORDER
+
+
+def _format_kappa(kappa: float) -> tuple[str, str]:
+    """Format a kappa value for display with appropriate CSS class.
+
+    Args:
+        kappa: Kappa statistic value (can be NaN)
+
+    Returns:
+        Tuple of (display_text, css_class)
+    """
+    if math.isnan(kappa):
+        return "N/A", "kappa-na"
+    if kappa >= 0.61:
+        return f"{kappa:.2f}", "kappa-good"
+    if kappa >= 0.41:
+        return f"{kappa:.2f}", "kappa-moderate"
+    return f"{kappa:.2f}", "kappa-poor"
 
 
 @module.ui
@@ -194,26 +211,7 @@ def analysis_view_server(
         for row in per_value_df.to_dicts():
             value_name = row["value"].replace("_", " ").title()
             kappa = row["kappa"]
-            interp = row["interpretation"]
-            match_count = row["match_count"]
-            total_count = row["total_count"]
-            match_rate = row["match_rate"]
-
-            # Determine color class
-            if math.isnan(kappa):
-                kappa_class = "kappa-na"
-                kappa_display = "N/A"
-            elif kappa >= 0.61:
-                kappa_class = "kappa-good"
-                kappa_display = f"{kappa:.2f}"
-            elif kappa >= 0.41:
-                kappa_class = "kappa-moderate"
-                kappa_display = f"{kappa:.2f}"
-            else:
-                kappa_class = "kappa-poor"
-                kappa_display = f"{kappa:.2f}"
-
-            # Add warning for low agreement
+            kappa_display, kappa_class = _format_kappa(kappa)
             warning = " ⚠️" if kappa < 0.61 and not math.isnan(kappa) else ""
 
             table_rows.append(
@@ -223,9 +221,9 @@ def analysis_view_server(
                         ui.span(kappa_display, class_=f"kappa-badge {kappa_class}"),
                         class_="kappa-cell",
                     ),
-                    ui.tags.td(f"{interp}{warning}", class_="interp-cell"),
+                    ui.tags.td(f"{row['interpretation']}{warning}", class_="interp-cell"),
                     ui.tags.td(
-                        f"{match_rate:.0f}% ({match_count}/{total_count})",
+                        f"{row['match_rate']:.0f}% ({row['match_count']}/{row['total_count']})",
                         class_="match-cell",
                     ),
                 )
@@ -234,20 +232,8 @@ def analysis_view_server(
         # Calculate aggregate
         kappa_scores = calculate_cohen_kappa(human_df, judge_df)
         agg_kappa = kappa_scores.get("aggregate", float("nan"))
+        agg_display, agg_class = _format_kappa(agg_kappa)
         agg_interp = interpret_kappa(agg_kappa) if not math.isnan(agg_kappa) else "N/A"
-
-        if math.isnan(agg_kappa):
-            agg_class = "kappa-na"
-            agg_display = "N/A"
-        elif agg_kappa >= 0.61:
-            agg_class = "kappa-good"
-            agg_display = f"{agg_kappa:.2f}"
-        elif agg_kappa >= 0.41:
-            agg_class = "kappa-moderate"
-            agg_display = f"{agg_kappa:.2f}"
-        else:
-            agg_class = "kappa-poor"
-            agg_display = f"{agg_kappa:.2f}"
 
         return ui.div(
             ui.div("Cohen's κ: You vs Judge", class_="analysis-section-header"),
@@ -301,20 +287,8 @@ def analysis_view_server(
             )
 
         agg_kappa = fleiss_scores.get("aggregate", float("nan"))
+        agg_display, agg_class = _format_kappa(agg_kappa)
         agg_interp = interpret_kappa(agg_kappa) if not math.isnan(agg_kappa) else "N/A"
-
-        if math.isnan(agg_kappa):
-            agg_class = "kappa-na"
-            agg_display = "N/A"
-        elif agg_kappa >= 0.61:
-            agg_class = "kappa-good"
-            agg_display = f"{agg_kappa:.2f}"
-        elif agg_kappa >= 0.41:
-            agg_class = "kappa-moderate"
-            agg_display = f"{agg_kappa:.2f}"
-        else:
-            agg_class = "kappa-poor"
-            agg_display = f"{agg_kappa:.2f}"
 
         return ui.div(
             ui.div("Fleiss' κ: Inter-Annotator", class_="analysis-section-header"),

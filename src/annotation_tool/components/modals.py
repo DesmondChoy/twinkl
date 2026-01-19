@@ -19,42 +19,14 @@ import json
 
 from shiny import ui
 
+from src.annotation_tool.components.constants import VALUE_LABELS, format_score
 from src.models.judge import SCHWARTZ_VALUE_ORDER
-
-# Human-readable labels for Schwartz values
-VALUE_LABELS = {
-    "self_direction": "Self-Direction",
-    "stimulation": "Stimulation",
-    "hedonism": "Hedonism",
-    "achievement": "Achievement",
-    "power": "Power",
-    "security": "Security",
-    "conformity": "Conformity",
-    "tradition": "Tradition",
-    "benevolence": "Benevolence",
-    "universalism": "Universalism",
-}
-
-
-def _format_score(score: int) -> tuple[str, str]:
-    """Format a score value for display.
-
-    Args:
-        score: Integer score (-1, 0, or 1)
-
-    Returns:
-        Tuple of (display_text, css_class)
-    """
-    if score == 1:
-        return "+1", "positive"
-    elif score == -1:
-        return "−1", "negative"
-    else:
-        return "0", "neutral"
 
 
 def _get_match_type(human_score: int, judge_score: int) -> tuple[str, str, str]:
     """Determine the match type between human and judge scores.
+
+    For modal display, also considers adjacent scores as partial matches.
 
     Args:
         human_score: Human annotator's score
@@ -66,10 +38,9 @@ def _get_match_type(human_score: int, judge_score: int) -> tuple[str, str, str]:
     diff = abs(human_score - judge_score)
     if diff == 0:
         return "match-exact", "✓", "exact"
-    elif diff == 1:
+    if diff == 1:
         return "match-adjacent", "~", "adjacent"
-    else:
-        return "match-disagree", "✗", "disagree"
+    return "match-disagree", "✗", "disagree"
 
 
 def build_all_neutral_modal() -> ui.Tag:
@@ -342,8 +313,8 @@ def build_comparison_modal_content(
         judge_score = judge_data.get(f"alignment_{value}", 0)
 
         # Format scores for display
-        human_display, human_class = _format_score(human_score)
-        judge_display, judge_class = _format_score(judge_score)
+        human_display, human_class = format_score(human_score)
+        judge_display, judge_class = format_score(judge_score)
 
         # Determine match type
         row_class, match_symbol, match_class = _get_match_type(human_score, judge_score)

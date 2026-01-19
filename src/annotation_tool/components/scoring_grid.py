@@ -22,22 +22,9 @@ Usage:
 
 from shiny import module, reactive, render, ui
 
+from src.annotation_tool.components.constants import VALUE_LABELS
 from src.annotation_tool.state import AppState
 from src.models.judge import SCHWARTZ_VALUE_ORDER
-
-# Human-readable labels for Schwartz values
-VALUE_LABELS = {
-    "self_direction": "Self-Direction",
-    "stimulation": "Stimulation",
-    "hedonism": "Hedonism",
-    "achievement": "Achievement",
-    "power": "Power",
-    "security": "Security",
-    "conformity": "Conformity",
-    "tradition": "Tradition",
-    "benevolence": "Benevolence",
-    "universalism": "Universalism",
-}
 
 # One-liner tooltips for annotator reference (from Schwartz Value Quick Reference)
 VALUE_TOOLTIPS = {
