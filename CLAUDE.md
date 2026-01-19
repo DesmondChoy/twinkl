@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Twinkl is a voice-first "inner compass" that helps users align daily behavior with long-term values. Unlike traditional journaling apps that summarize moods, Twinkl maintains a dynamic self-model of the user's declared priorities and surfaces tensions when behavior drifts from intent.
+Twinkl is an "inner compass" that helps users align daily behavior with long-term values. Unlike traditional journaling apps that summarize moods, Twinkl maintains a dynamic self-model of the user's declared priorities and surfaces tensions when behavior drifts from intent.
 
 The core component is the **Value Identity Function (VIF)** — an evaluative engine that compares what users *do* (journal entries) against what they *value* (declared priorities) across Schwartz value dimensions. Key properties: vector-valued (tracks multiple life dimensions), uncertainty-aware (holds back when data is sparse), and trajectory-aware (detects patterns over time).
 

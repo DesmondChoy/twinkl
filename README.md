@@ -1,6 +1,6 @@
 # Twinkl
 
-Twinkl is a voice-first "inner compass" that helps users align their daily behavior with their long-term values. Unlike traditional journaling apps that summarize moods and topics, Twinkl maintains a dynamic self-model of the user's declared priorities and surfaces tensions when behavior drifts from intent. It answers the question: *"Am I living in line with what I said I value?"*
+Twinkl is an "inner compass" that helps users align their daily behavior with their long-term values. Unlike traditional journaling apps that summarize moods and topics, Twinkl maintains a dynamic self-model of the user's declared priorities and surfaces tensions when behavior drifts from intent. It answers the question: *"Am I living in line with what I said I value?"*
 
 ## Value Identity Function (VIF)
 
@@ -44,7 +44,7 @@ Registry Check → Auto-Wrangle → Parallel Labeling (subagents) → Validation
 4. Validates JSON output against Pydantic models
 5. Consolidates labels to `logs/judge_labels/judge_labels.parquet`
 
-**Scoring:** Each entry receives a 10-dimensional vector with values `{-1, 0, +1}` indicating misalignment, neutrality, or alignment with each Schwartz value. Most entries have 1-3 non-zero scores.
+**Scoring:** Each entry receives a 10-dimensional vector with values `{-1, 0, +1}` indicating misalignment, neutrality, or alignment with each Schwartz value. **Rationales** explain each non-zero score. Most entries have 1-3 non-zero scores.
 
 **Data outputs:** See [`docs/data_schema.md`](docs/data_schema.md) for parquet file schemas, example Polars queries, and analytics guidance.
 
@@ -75,15 +75,31 @@ Open `http://127.0.0.1:8000` in your browser.
 **Features:**
 - Displays persona context (name, age, profession, culture, core values, collapsible bio)
 - Shows journal entries with nudge/response threading
-- 10-value scoring grid with -1 (misaligned) / 0 (neutral) / +1 (aligned)
+- 10-value scoring grid with -1 (misaligned) / 0 (neutral) / +1 (aligned) with CSS tooltips for Schwartz value definitions
 - Progress tracking per annotator
 - Annotations persisted to `logs/annotations/<annotator>.parquet`
+- **Analysis & Metrics panel** — Computes inter-annotator agreement (Cohen's κ, Fleiss' κ)
+- **Export functionality** — CSV, Parquet, and Markdown report formats
+- **Comparison view** — Inline display of human vs judge labels for review
 
 **Key files:**
 - `src/annotation_tool/app.py` — Main Shiny application
 - `src/annotation_tool/data_loader.py` — Loads entries from wrangled files
 - `src/annotation_tool/annotation_store.py` — Persists annotations with file locking
+- `src/annotation_tool/agreement_metrics.py` — Kappa calculations and export
+- `src/annotation_tool/components/` — Modular UI components (scoring grid, comparison view, analysis)
+- `src/annotation_tool/state.py` — Centralized state management
 - `docs/data_loader/human_annotator_tool.md` — Full implementation plan
+
+## Evaluation Pipeline
+
+Sequential validation pipeline for the VIF with four stages:
+1. **Judge Validation** — Training data quality (Cohen's κ > 0.60)
+2. **Value Modeling** — Critic learns value hierarchies correctly
+3. **Drift Detection** — Triggers fire accurately on misalignment
+4. **Explanation Quality** — Explanations are grounded and useful
+
+See [`docs/evals/README.md`](docs/evals/README.md) for the full pipeline overview and current status.
 
 # Setup
 
