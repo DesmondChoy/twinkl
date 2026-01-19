@@ -6,6 +6,33 @@ The VIF detects when a user's behavior drifts from their declared values. This e
 
 ---
 
+## Implementation Status
+
+**Status:** 🔴 Blocked
+
+### What's Implemented
+- Evaluation specification complete (this document)
+- Conceptual design documented in [`docs/VIF/VIF_04_Uncertainty_Logic.md`](../VIF/VIF_04_Uncertainty_Logic.md)
+- Trigger formulas defined (Crash: V_{t-1} - V_t > δ, Rut: sustained low)
+
+### What's Missing
+- All drift detection code (crash/rut trigger implementation)
+- MC Dropout for uncertainty estimation
+- Crisis injection test data generation
+- Hit rate / precision / recall metric calculation
+
+### Blocking Dependencies
+Requires trained Critic with MC Dropout uncertainty — both the base model and uncertainty mechanism are prerequisites that don't exist yet.
+
+### Next Steps
+1. Complete Value Modeling Eval first (train Critic)
+2. Add MC Dropout to Critic architecture
+3. Implement dual-trigger detection in `src/vif/`
+4. Generate synthetic crisis injection test data
+5. Run evaluation on injected timelines
+
+---
+
 ## Drift Detection System Overview
 
 ### Two Trigger Types

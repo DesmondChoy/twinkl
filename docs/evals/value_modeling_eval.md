@@ -6,6 +6,32 @@ The VIF (Value Identity Function) maps journal entries to a 10-dimensional Schwa
 
 ---
 
+## Implementation Status
+
+**Status:** 🔴 Blocked
+
+### What's Implemented
+- Evaluation specification complete (this document)
+- Judge training data ready (134 labeled entries in [`logs/judge_labels/judge_labels.parquet`](../../logs/judge_labels/judge_labels.parquet))
+- Ground truth value orderings embedded in persona bios
+
+### What's Missing
+- Critic/MLP training code
+- Spearman correlation calculation
+- Top-K accuracy metrics
+- VIF inference pipeline
+
+### Blocking Dependencies
+Requires Critic model implementation — the neural network that maps text embeddings to value scores is not yet built.
+
+### Next Steps
+1. Implement Critic architecture in `src/vif/`
+2. Train Critic on Judge-labeled data
+3. Implement evaluation metrics (Spearman ρ, Top-K accuracy)
+4. Run evaluation on held-out synthetic personas
+
+---
+
 ## Ground Truth
 
 **Synthetic personas with known value profiles:**

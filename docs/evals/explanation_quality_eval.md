@@ -10,6 +10,32 @@ This evaluation validates that explanations feel accurate and actionable to user
 
 ---
 
+## Implementation Status
+
+**Status:** 🟡 Partial
+
+### What's Implemented
+- Rationale generation working (133/134 entries have rationales in parquet)
+- Rationale storage in [`logs/judge_labels/judge_labels.parquet`](../../logs/judge_labels/judge_labels.parquet)
+- Rationale display UI in annotation tool ([`src/annotation_tool/components/modals.py`](../../src/annotation_tool/components/modals.py))
+- Judge comparison view ([`src/annotation_tool/components/comparison_view.py`](../../src/annotation_tool/components/comparison_view.py))
+
+### What's Missing
+- **Tier 1:** Groundedness checker, non-circularity check, length validation (code checks)
+- **Tier 2:** Meta-judge LLM evaluation pipeline
+- **Tier 3:** Human calibration protocol and κ calculation
+
+### Blocking Dependencies
+None — Tier 1 automated checks can be implemented immediately using existing rationale data.
+
+### Next Steps
+1. Implement Tier 1 checks in `src/judge/` (groundedness, circularity, length)
+2. Run Tier 1 on existing 134 rationales, report pass rates
+3. Design meta-judge prompt for Tier 2 evaluation
+4. Sample 20-30 rationales for Tier 3 human calibration
+
+---
+
 ## Explanation Sources
 
 ### Judge Rationales

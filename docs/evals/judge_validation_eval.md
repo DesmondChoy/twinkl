@@ -6,6 +6,30 @@ The Judge (LLM-as-Judge) produces training labels for the VIF. This evaluation v
 
 ---
 
+## Implementation Status
+
+**Status:** 🟡 Partial
+
+### What's Implemented
+- Judge labeling pipeline operational ([`src/judge/consolidate.py`](../../src/judge/consolidate.py))
+- Rationale storage in parquet ([`logs/judge_labels/judge_labels.parquet`](../../logs/judge_labels/judge_labels.parquet))
+- Data models with rationale support ([`src/models/judge.py`](../../src/models/judge.py))
+
+### What's Missing
+- Cohen's κ calculation (no inter-rater agreement code)
+- Automated quality checks (all-zero rate, sparsity, distribution)
+- Consistency checks (re-running same entry multiple times)
+
+### Blocking Dependencies
+Needs human annotations for κ comparison — currently only have Judge labels, no human ground truth to compare against.
+
+### Next Steps
+1. Complete human annotation of 20-30 entries using the annotation tool
+2. Implement κ calculation function in `src/judge/`
+3. Add automated quality checks as post-labeling validation
+
+---
+
 ## The 3-Point Categorical Rubric
 
 The Judge uses a strict categorical protocol to reduce subjective noise:
