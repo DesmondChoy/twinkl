@@ -263,3 +263,51 @@ By pinning down \(s_{u,t}\) and the data pipeline in this document, we make the 
 - **Auditable**: reviewers can trace exactly which features feed the Critic.
 - **Reproducible**: synthetic generation → Judge labels → Critic training is a fixed, documented pipeline.
 - **Extensible**: future work (e.g. audio, more complex temporal models, per‑user adapters) can layer on top of this baseline without changing the conceptual spine.
+
+---
+
+## 6. Implementation Reference
+
+The state construction and data pipeline are implemented in `src/vif/`. Key modules:
+
+| Module | Implements |
+|--------|------------|
+| `src/vif/state_encoder.py` | `StateEncoder` class — Sections 2 & 4 (state vector construction) |
+| `src/vif/dataset.py` | `VIFDataset`, `load_all_data()`, `split_by_persona()` — Sections 3 & 4.5 |
+| `src/vif/encoders.py` | `SBERTEncoder` — Section 4.1 (text embeddings) |
+
+### 6.1 Verification of Spec Compliance
+
+The implementation matches this spec exactly:
+
+| Spec Item | Spec Value | Implementation |
+|-----------|------------|----------------|
+| Window size | N = 3 | `StateEncoder(window_size=3)` ✓ |
+| State dimension | 3×d_e + 22 = 1,174 | `state_encoder.state_dim` returns 1,174 ✓ |
+| EMA α | 0.3 | `StateEncoder(ema_alpha=0.3)` ✓ |
+| Text encoder | SBERT, d_e = 384 | `SBERTEncoder("all-MiniLM-L6-v2")` ✓ |
+| Train/Val/Test split | 70/15/15 by persona | `split_by_persona()` ✓ |
+| Zero-padding for early entries | Yes | Handled in `build_state_vector()` ✓ |
+
+### 6.2 Data Flow
+
+```
+logs/wrangled/persona_*.md     →  load_entries()
+logs/judge_labels/judge_labels.parquet  →  load_labels()
+                                    ↓
+                            merge_labels_and_entries()
+                                    ↓
+                            split_by_persona() (70/15/15)
+                                    ↓
+                            VIFDataset (caches embeddings)
+                                    ↓
+                            StateEncoder.build_state_vector()
+                                    ↓
+                            (state_vector, target_vector) pairs
+```
+
+### 6.3 Key Implementation Details
+
+- **Entry text**: Concatenates `initial_entry + nudge_text + response_text` for richer signal
+- **Core Values → Profile weights**: Maps persona's declared values to 10-dim normalized vector via `parse_core_values_to_weights()`
+- **Embedding caching**: `VIFDataset` pre-computes all text embeddings at initialization to avoid redundant encoding during training

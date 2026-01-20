@@ -1,0 +1,85 @@
+# VIF Critic Training Configuration
+# =================================
+# Configuration for training the Value Identity Function critic model.
+# Supports ablation studies by swapping encoder and hyperparameters.
+
+# Text Encoder Configuration
+# --------------------------
+# The encoder converts journal entry text to dense embeddings.
+# Swap model_name for ablation studies comparing encoder quality.
+encoder:
+  type: sbert
+  model_name: all-MiniLM-L6-v2  # 384 dim, fast, good quality (default)
+  # Alternatives for ablation:
+  # model_name: all-mpnet-base-v2     # 768 dim, higher quality, slower
+  # model_name: paraphrase-MiniLM-L3-v2  # 384 dim, fastest, lower quality
+
+# State Encoder Configuration
+# ---------------------------
+state_encoder:
+  window_size: 3       # Number of entries in text window (current + 2 previous)
+  ema_alpha: 0.3       # Smoothing factor for history EMA (higher = more recent bias)
+
+# Model Architecture
+# ------------------
+model:
+  hidden_dim: 256      # Hidden layer dimension
+  dropout: 0.2         # Dropout probability (also used for MC Dropout)
+  output_dim: 10       # Number of Schwartz dimensions (fixed)
+
+# Training Configuration
+# ----------------------
+training:
+  epochs: 100
+  batch_size: 16
+  learning_rate: 0.001
+  weight_decay: 0.01      # L2 regularization
+
+  # Learning rate scheduler
+  scheduler:
+    type: reduce_on_plateau
+    factor: 0.5           # Reduce LR by this factor
+    patience: 10          # Wait this many epochs before reducing
+    min_lr: 0.00001
+
+  # Early stopping
+  early_stopping:
+    patience: 20          # Stop if no improvement for this many epochs
+    min_delta: 0.001      # Minimum change to count as improvement
+
+# Data Configuration
+# ------------------
+data:
+  labels_path: logs/judge_labels/judge_labels.parquet
+  wrangled_dir: logs/wrangled
+  train_ratio: 0.70
+  val_ratio: 0.15
+  seed: 42
+
+# MC Dropout Configuration
+# ------------------------
+mc_dropout:
+  n_samples: 50           # Number of forward passes for uncertainty estimation
+
+# Output Configuration
+# --------------------
+output:
+  checkpoint_dir: models/vif
+  log_dir: logs/vif_training
+
+# Ablation Study Presets
+# ----------------------
+# To run ablation studies, override specific sections:
+#
+# High-quality encoder ablation:
+#   encoder:
+#     model_name: all-mpnet-base-v2
+#
+# Smaller model ablation:
+#   model:
+#     hidden_dim: 128
+#
+# Deeper history ablation:
+#   state_encoder:
+#     window_size: 5
+#     ema_alpha: 0.2

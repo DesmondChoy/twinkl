@@ -107,6 +107,37 @@ The central persona registry (`logs/registry/personas.parquet`) tracks each pers
 - Enables incremental runs (only process personas at needed stage)
 - Implementation: `src/registry/personas.py`
 
+### VIF Critic Training Module
+
+The `src/vif/` module implements the VIF Critic — an MLP that predicts per-dimension alignment scores from journal entries with MC Dropout uncertainty estimation.
+
+```
+src/vif/
+├── __init__.py          # Module exports
+├── encoders.py          # TextEncoder protocol + SBERTEncoder
+├── state_encoder.py     # StateEncoder (builds state vectors)
+├── critic.py            # CriticMLP with MC Dropout
+├── dataset.py           # VIFDataset + data loading
+├── eval.py              # Evaluation metrics (MSE, Spearman, calibration)
+└── train.py             # CLI training script
+```
+
+**Usage:**
+```python
+from src.vif import CriticMLP, StateEncoder, SBERTEncoder
+
+# Create encoder pipeline
+encoder = SBERTEncoder("all-MiniLM-L6-v2")  # 384-dim embeddings
+state_encoder = StateEncoder(encoder)        # 1,174-dim state vectors
+
+# Train via CLI
+# python -m src.vif.train --epochs 100
+```
+
+**Configuration:** `config/vif.yaml` (encoder model, hyperparameters, ablation presets)
+**Checkpoints:** `models/vif/` (gitignored)
+**Notebook:** `notebooks/critic_training.ipynb`
+
 ### Key Design Patterns
 
 **Async Generation Pipeline**: Personas run in parallel via `asyncio.gather()`, but entries within each persona are sequential (for continuity). Results return in order regardless of completion time.
