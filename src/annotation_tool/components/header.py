@@ -44,6 +44,12 @@ def header_ui():
             ui.div(
                 ui.h2("Schwartz Value Annotation Tool", class_="app-title"),
                 ui.input_action_button("help_btn", "? Help", class_="help-btn"),
+                ui.input_action_button(
+                    "theme_toggle",
+                    ui.HTML('<span class="theme-icon">🌙</span>'),
+                    class_="theme-toggle",
+                    title="Toggle dark mode",
+                ),
                 class_="header-left",
             ),
             ui.div(
@@ -129,7 +135,7 @@ def header_server(
             ui.div(
                 f"Persona {persona_idx + 1} of {_get_total_personas()} • "
                 f"Entry {entry_idx + 1} of {len(entries)}",
-                style="margin-bottom: 8px; color: #6b7280;",
+                class_="entry-indicator",
             ),
             ui.div(
                 ui.div(
