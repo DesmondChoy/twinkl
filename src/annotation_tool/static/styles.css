@@ -33,6 +33,10 @@
     --color-text-muted: #6b7280;
     --color-text-placeholder: #9ca3af;
 
+    /* Tooltip colors */
+    --color-tooltip-bg: #1a1a1a;
+    --color-tooltip-text: #ffffff;
+
     /* Colors - Value Groups */
     --color-openness: #6366f1;
     --color-enhancement: #f59e0b;
@@ -83,6 +87,10 @@
     --color-text-secondary: #b3b3b3;
     --color-text-muted: #808080;
     --color-text-placeholder: #666666;
+
+    /* Tooltip colors - inverted for dark mode */
+    --color-tooltip-bg: #f5f5f5;
+    --color-tooltip-text: #1a1a1a;
 
     /* Semantic colors - darker backgrounds */
     --color-success-bg: #052e16;
@@ -584,8 +592,8 @@ body {
     top: 100%;
     margin-top: 4px;
     padding: 6px 10px;
-    background: var(--color-text);
-    color: white;
+    background: var(--color-tooltip-bg);
+    color: var(--color-tooltip-text);
     font-size: 12px;
     font-weight: 400;
     border-radius: var(--radius-sm);
