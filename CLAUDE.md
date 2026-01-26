@@ -130,6 +130,23 @@ The central persona registry (`logs/registry/personas.parquet`) tracks each pers
 - **Naming**: snake_case for variables/functions, PascalCase for classes
 - **Models**: Pydantic `BaseModel` for data structures; explicit JSON schemas for OpenAI structured output
 
+## Quality Review
+
+**Before every `git commit`**, run the `/quality` skill to review changes with "fresh eyes". This catches bugs that accumulate during implementation when focus is on making things work.
+
+The quality review process:
+1. Identifies all changed files via `git status` and `git diff`
+2. Reads **entire files** (not just diffs) to understand full context
+3. Checks for logic errors, missing error handling, type mismatches, dead code
+4. **Fixes issues immediately** rather than just flagging them
+5. Produces a summary of files reviewed and issues fixed
+
+This is mandatory before committing to catch issues like:
+- Logic errors that compile but behave incorrectly
+- Missing edge case handling
+- Integration issues between components
+- Debug statements left in code
+
 ## Planning Mode Behavior
 
 When in planning mode, be proactive and curious by using the `AskUserQuestion` tool to:
