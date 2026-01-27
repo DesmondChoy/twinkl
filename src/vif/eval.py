@@ -76,7 +76,8 @@ def compute_spearman_per_dimension(
         target_dim = targets[:, i]
 
         # Check for constant values (correlation undefined)
-        if np.std(target_dim) == 0 or np.std(pred_dim) == 0:
+        # Use small threshold instead of exact 0 for floating point robustness
+        if np.std(target_dim) < 1e-8 or np.std(pred_dim) < 1e-8:
             spearman_per_dim[dim_name] = float("nan")
             continue
 
