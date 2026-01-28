@@ -190,3 +190,44 @@ The text encoder (e.g. SBERT) is:
    * Train $\vec{V}_\theta$ via supervised regression on the chosen targets.
 6. **Evaluation**:
    * Use held-out trajectories/personas to evaluate prediction quality (e.g. MSE, correlation) and ranking consistency (e.g. ordering weeks by misalignment).
+
+---
+
+## 4. Implementation Reference
+
+The VIF Critic training pipeline is implemented in `src/vif/`. Key modules:
+
+| Module | Description |
+|--------|-------------|
+| `src/vif/encoders.py` | `TextEncoder` protocol + `SBERTEncoder` (supports ablation studies) |
+| `src/vif/state_encoder.py` | `StateEncoder` class (builds state vectors per Section 2 above) |
+| `src/vif/critic.py` | `CriticMLP` with MC Dropout for uncertainty estimation |
+| `src/vif/dataset.py` | `VIFDataset` + data loading with persona-level splits |
+| `src/vif/eval.py` | Evaluation metrics (MSE, Spearman, accuracy, calibration) |
+| `src/vif/train.py` | CLI training script with config overrides |
+
+### 4.1 Implemented Architecture
+
+The POC implements **Option A (Immediate Alignment)** with these concrete choices:
+
+- **Text encoder**: SBERT `all-MiniLM-L6-v2` (384-dim embeddings, swappable via config)
+- **State dimension**: 1,174 (3×384 + 2 time gaps + 10 history EMA + 10 profile weights)
+- **Critic architecture**: 2-layer MLP with LayerNorm + GELU + Dropout (370K parameters)
+- **MC Dropout**: 50 forward passes for uncertainty estimation
+- **Loss**: MSE on 10-dim alignment vector
+
+### 4.2 Usage
+
+```bash
+# Full training with default config
+python -m src.vif.train
+
+# Quick test run
+python -m src.vif.train --epochs 5 --batch-size 8
+
+# Ablation with different encoder
+python -m src.vif.train --encoder-model all-mpnet-base-v2
+```
+
+Configuration: `config/vif.yaml`
+Interactive notebook: `notebooks/critic_training.ipynb`

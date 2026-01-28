@@ -107,6 +107,37 @@ The central persona registry (`logs/registry/personas.parquet`) tracks each pers
 - Enables incremental runs (only process personas at needed stage)
 - Implementation: `src/registry/personas.py`
 
+### VIF Critic Training Module
+
+The `src/vif/` module implements the VIF Critic — an MLP that predicts per-dimension alignment scores from journal entries with MC Dropout uncertainty estimation.
+
+```
+src/vif/
+├── __init__.py          # Module exports
+├── encoders.py          # TextEncoder protocol + SBERTEncoder
+├── state_encoder.py     # StateEncoder (builds state vectors)
+├── critic.py            # CriticMLP with MC Dropout
+├── dataset.py           # VIFDataset + data loading
+├── eval.py              # Evaluation metrics (MSE, Spearman, calibration)
+└── train.py             # CLI training script
+```
+
+**Usage:**
+```python
+from src.vif import CriticMLP, StateEncoder, SBERTEncoder
+
+# Create encoder pipeline
+encoder = SBERTEncoder("all-MiniLM-L6-v2")  # 384-dim embeddings
+state_encoder = StateEncoder(encoder)        # 1,174-dim state vectors
+
+# Train via CLI
+# python -m src.vif.train --epochs 100
+```
+
+**Configuration:** `config/vif.yaml` (encoder model, hyperparameters, ablation presets)
+**Checkpoints:** `models/vif/` (gitignored)
+**Notebook:** `notebooks/critic_training.ipynb`
+
 ### Key Design Patterns
 
 **Async Generation Pipeline**: Personas run in parallel via `asyncio.gather()`, but entries within each persona are sequential (for continuity). Results return in order regardless of completion time.
@@ -129,6 +160,23 @@ The central persona registry (`logs/registry/personas.parquet`) tracks each pers
 - **Imports**: Standard library first, then third-party
 - **Naming**: snake_case for variables/functions, PascalCase for classes
 - **Models**: Pydantic `BaseModel` for data structures; explicit JSON schemas for OpenAI structured output
+
+## Quality Review
+
+**Before every `git commit`**, run the `/quality` skill to review changes with "fresh eyes". This catches bugs that accumulate during implementation when focus is on making things work.
+
+The quality review process:
+1. Identifies all changed files via `git status` and `git diff`
+2. Reads **entire files** (not just diffs) to understand full context
+3. Checks for logic errors, missing error handling, type mismatches, dead code
+4. **Fixes issues immediately** rather than just flagging them
+5. Produces a summary of files reviewed and issues fixed
+
+This is mandatory before committing to catch issues like:
+- Logic errors that compile but behave incorrectly
+- Missing edge case handling
+- Integration issues between components
+- Debug statements left in code
 
 ## Planning Mode Behavior
 

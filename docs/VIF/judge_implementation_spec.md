@@ -4,6 +4,28 @@ This document specifies the **Reward Model (LLM-as-Judge)** component that produ
 
 ---
 
+## Executive Summary: How the Judge Labels
+
+> **Key points for anyone validating or comparing against Judge labels.**
+
+| Aspect | Judge Behavior |
+|--------|----------------|
+| **Scoring scale** | Categorical: -1 (misaligned), 0 (neutral), +1 (aligned) |
+| **Dimensions** | All 10 Schwartz values scored independently per entry |
+| **Context window** | Entry + **all previous entries** for trajectory context |
+| **Nudge sessions** | Entire session (entry + nudge + response) scored as one unit |
+| **Signal source** | Max-signal approach — if response reveals more than entry, score reflects response |
+
+### ⚠️ Critical for Human Validation
+
+**The Judge considers previous entries when labeling.** An entry like "Took the smaller investment. Felt right." may receive Self-Direction +1 because the Judge saw a previous entry discussing the autonomy trade-off between investors.
+
+When validating Judge labels, human annotators **must read entries in chronological order** and consider the cumulative context. Labeling entries in isolation will produce systematic disagreements.
+
+See also: [`annotation_guidelines.md`](../synthetic_data/annotation_guidelines.md) for human annotation methodology.
+
+---
+
 ## Table of Contents
 
 1. [Why the Judge is Required](#why-the-judge-is-required)

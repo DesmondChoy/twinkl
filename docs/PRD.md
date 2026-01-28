@@ -12,6 +12,7 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 |---------|--------|---------|
 | **Synthetic Data Pipeline** | ✅ Complete | 31 personas generated via Claude Code parallel subagents; YAML prompt templates with Jinja2 |
 | **Judge Labeling (VIF)** | ✅ Complete | 213 entries labeled across 31 personas; two-phase pipeline (Python wrangling + parallel subagents); consolidated to `judge_labels.parquet` with rationales |
+| **VIF Critic Training** | ✅ Complete | MLP critic (370K params) with MC Dropout; SBERT text encoder (384-dim); persona-level train/val/test splits; `src/vif/` module with CLI training script |
 | **Human Annotation Tool** | ✅ Complete | ~4,200 LOC Shiny app; 56 annotations across 3 annotators; Cohen's κ / Fleiss' κ metrics; modular components with analysis view |
 | **Conversational Nudging** | 🧪 Experimental | 3-category LLM classification (clarification/elaboration/tension-surfacing); pending validation that nudging improves VIF signal quality |
 | **Weekly Alignment Coach** | ⚠️ Partial | Entry processing ready; digest generation not implemented |
@@ -28,6 +29,9 @@ logs/
 ├── judge_labels/       # 31 JSON label files + consolidated parquet
 ├── annotations/        # 3 annotator parquet files (56 entries)
 └── registry/           # personas.parquet (tracks pipeline stages)
+
+models/
+└── vif/                # Trained critic checkpoints (gitignored)
 ```
 
 > **References:**
@@ -35,6 +39,7 @@ logs/
 > - [Claude Code Generation Instructions](synthetic_data/claude_gen_instructions.md)
 > - [Claude Judge Labeling Instructions](synthetic_data/claude_judge_instructions.md)
 > - [Human Annotation Tool](data_loader/human_annotator_tool.md)
+> - [VIF Critic Training](VIF/VIF_03_Model_Training.md) — Training strategy and implementation
 > - [CLAUDE.md](../CLAUDE.md) — Project architecture overview
 
 ---

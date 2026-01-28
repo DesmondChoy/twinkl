@@ -210,3 +210,9 @@ marimo/_lsp/
 __marimo__/
 
 .playwright-mcp/
+
+# Model checkpoints
+models/vif/*.pt
+models/vif/*.json
+!models/vif/.gitkeep
+logs/vif_training/

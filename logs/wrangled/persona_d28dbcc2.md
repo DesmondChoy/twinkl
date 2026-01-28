@@ -19,11 +19,19 @@ Delivered to a condo in Newton. The guy who took the order was maybe mid-twentie
 
 The thing about this work is you see everyone's lives in fragments. A birthday cake for a kid in Clementi. Medicine from a pharmacy to an elderly woman in Bedok who asked me to wait while she found exact change. Each delivery is a tiny window into something bigger. I don't know if I'm helping or just moving products around. Both, maybe. The city needs its circulatory system.
 
+**Nudge:** "What do you mean by "opted out of the grind"?"
+
+**Response:** Opted out is probably too clean a phrase for what happened. I didn't make some grand declaration. After the restructuring, I took a few weeks off, started driving for Grab "temporarily," and then the temporary turned permanent. The truth is I was scared to go back. Scared I'd slip back into caring about quarterly targets and performance reviews. Scared I'd become someone who measures his worth in promotions again. So I kept riding. Five years now. Priya says I'm running from something. Maybe she's right. But at least on the road, I'm running toward something too—even if I don't know what it is yet.
+
 ---
 
 ## Entry 1 - 2025-12-08
 
 Brother-in-law made a comment at family dinner about "still doing delivery." I told him not everyone needs a business card to feel important. He didn't say anything after that, but Priya gave me that look.
+
+**Nudge:** "What was that look about?"
+
+**Response:** The look that says I embarrassed her in front of her family again. That I could have just let it go instead of making things awkward. She's right, probably. But something in me couldn't let him sit there feeling superior. He sells insurance—half his job is convincing people to be afraid of the future. At least when I hand someone their food, they're genuinely happy to see me.
 
 ---
 
@@ -47,6 +55,10 @@ Rain all day. Soaked through three times. App crashed twice during peak hours so
 
 Twelve-hour shift but hit my weekly target. Priya and I had dinner together for the first time in two weeks—she made fish curry, the Kerala style her mother taught her. Felt like us again.
 
+**Nudge:** "What do you mean by "felt like us again"?"
+
+**Response:** I mean we weren't performing. No tension underneath the conversation about money or my "career choices." Just two people who've been together fifteen years, eating fish curry, talking about nothing important. Her laugh came easy. Mine too. I forget sometimes that this is what I'm working for—not the money itself, but these moments. The ability to sit across from her without apology. To be present without calculating what I should be doing instead.
+
 ---
 
 ## Entry 5 - 2025-12-29
@@ -62,6 +74,10 @@ The weird thing is, I had this flash of missing my old job. Not the job itself, 
 New year. Priya wanted to watch the fireworks at Marina Bay but I couldn't face the crowds. We watched from the rooftop of our HDB instead, the view half-blocked by the neighboring tower. She fell asleep before midnight. I stayed up, counting the distant pops of light.
 
 Made the usual resolutions in my head—save more, drink less, be more patient. But underneath all that, a different question kept surfacing: is this the life I want for another year? Not the delivery work specifically, but the uncertainty, the lack of a plan. I used to think planning was a trap. Now I'm wondering if having no plan is its own kind of trap. The kind where you wake up at fifty still "figuring things out."
+
+**Nudge:** "What would having a plan even look like for you?"
+
+**Response:** Honestly, I don't know. That's the problem, isn't it? Every time I try to picture a "plan," it looks like going backward—back to the office, back to the hierarchy, back to measuring life in KPIs. Maybe I just need to find a different kind of plan. One that doesn't feel like surrender.
 
 ---
 

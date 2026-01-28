@@ -186,15 +186,13 @@ document.addEventListener('DOMContentLoaded', function() {
         focusedRowIndex = 0;
     }
 
-    // Help button click handler
-    // Note: ID is namespaced by Shiny module system (header-help_btn)
-    const helpBtn = document.getElementById('header-help_btn');
-    if (helpBtn) {
-        helpBtn.addEventListener('click', function(e) {
+    // Help button click handler - using event delegation since Shiny renders after DOMContentLoaded
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('#header-help_btn')) {
             e.preventDefault();
             toggleHelp();
-        });
-    }
+        }
+    });
 
     // Entry click handler - using event delegation for sidebar and entry cards
     // Uses nonce to ensure Shiny reactive event fires even if same entry is clicked
@@ -224,6 +222,57 @@ document.addEventListener('DOMContentLoaded', function() {
                     nonce: Date.now()
                 }, {priority: 'event'});
             }
+        }
+    });
+
+    // ============================================
+    // DARK MODE TOGGLE
+    // ============================================
+
+    /**
+     * Initialize theme from localStorage on page load.
+     */
+    function initTheme() {
+        const saved = localStorage.getItem('theme');
+        if (saved === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            updateThemeIcon(true);
+        }
+    }
+
+    /**
+     * Toggle between light and dark themes.
+     */
+    function toggleTheme() {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        if (isDark) {
+            document.documentElement.removeAttribute('data-theme');
+            localStorage.setItem('theme', 'light');
+        } else {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+        }
+        updateThemeIcon(!isDark);
+    }
+
+    /**
+     * Update the theme toggle icon based on current theme.
+     * @param {boolean} isDark - Whether dark mode is active
+     */
+    function updateThemeIcon(isDark) {
+        const icon = document.querySelector('.theme-icon');
+        if (icon) {
+            icon.textContent = isDark ? '☀️' : '🌙';
+        }
+    }
+
+    // Initialize theme on load
+    initTheme();
+
+    // Listen for theme toggle button clicks
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.theme-toggle')) {
+            toggleTheme();
         }
     });
 });

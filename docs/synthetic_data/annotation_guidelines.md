@@ -1,5 +1,35 @@
 # Annotation Guidelines: Nudge Effectiveness Study
 
+---
+
+## ⚠️ Critical: Context-Aware Labeling
+
+> **Read this first if you're validating Judge labels or doing value alignment scoring.**
+
+When labeling which Schwartz values are expressed in an entry, **you must consider previous entries as context** — just like the LLM Judge does.
+
+### Why This Matters
+
+An entry like:
+> "Took the smaller investment. Signed papers yesterday. Celebrated with Layla at that new Persian restaurant near the Marina. Felt right."
+
+...in isolation shows **Hedonism** (celebrating at a nice restaurant) but no clear Self-Direction signal.
+
+However, if a previous entry discussed choosing between a larger investor who wanted control vs. a smaller hands-off investor, then "Took the smaller investment" is a **Self-Direction +1** — following through on prioritizing autonomy.
+
+### Labeling Protocol
+
+1. **Read entries chronologically** within each persona
+2. **Accumulate context** — each entry builds on what came before
+3. **Score based on full context**, not the entry in isolation
+4. **Match Judge methodology** — the LLM Judge receives previous entries as context; human annotators should too
+
+This ensures human-Judge comparisons are methodologically valid. Systematic disagreements should reflect genuine interpretation differences, not information asymmetry.
+
+See also: [`judge_implementation_spec.md`](../VIF/judge_implementation_spec.md) for how the LLM Judge works.
+
+---
+
 ## Why This Matters
 
 The VIF (Value Identity Function) is the core engine of Twinkl — it learns to detect when users' actions align or conflict with their stated values. But the VIF can only learn from training data where **human values are actually visible** in the text.

@@ -19,6 +19,11 @@ dependencies = [
     "shiny>=1.2.0",
     "scikit-learn>=1.3.0",
     "statsmodels>=0.14.0",
+    # VIF Critic training dependencies
+    "torch>=2.0.0",
+    "sentence-transformers>=2.2.0",
+    "scipy>=1.10.0",
+    "matplotlib>=3.7.0",
 ]
 
 [tool.setuptools]

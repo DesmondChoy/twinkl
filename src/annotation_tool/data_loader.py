@@ -137,8 +137,9 @@ def parse_wrangled_entries(
         if nudge_marker != -1:
             entry["initial_entry"] = entry_content[:nudge_marker].strip()
 
-            # Extract nudge text (quoted)
-            nudge_match = re.search(r'\*\*Nudge:\*\* "([^"]+)"', entry_content)
+            # Extract nudge text (quoted) - use greedy match for nested quotes
+            # e.g., "What's the "something else" you're hinting at?"
+            nudge_match = re.search(r'\*\*Nudge:\*\* "(.+)"', entry_content)
             if nudge_match:
                 entry["nudge_text"] = nudge_match.group(1).strip()
                 entry["has_nudge"] = True

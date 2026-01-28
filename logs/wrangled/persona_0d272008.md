@@ -25,6 +25,10 @@ Had dinner with my sister and her husband. Derek spent half the meal explaining 
 
 What really got under my skin was when Rachel nodded along with everything he said. She used to understand why I left corporate. Now she just sees the gray in my hair and the fact that I'm still single and makes assumptions. I'm not broken. I'm not running from anything. I just don't want someone else's version of success stapled to my forehead.
 
+**Nudge:** "What would your version of success actually look like right now?"
+
+**Response:** I mean, I already have it mostly. The Morrison deal, the freedom. Just gets old having to defend it every family dinner. Whatever.
+
 ---
 
 ## Entry 2 - 2025-12-09
@@ -41,11 +45,19 @@ Met with two potential clients this week. Turned down the first one—fintech st
 
 Second meeting went well. Small biotech company, three founders who actually listen. They want custom lab management software and gave me full creative control over the architecture. Already sketching out the data models in my head. This is the kind of work I got into business for. Clean problem, smart people, no corporate layers. Said yes on the spot.
 
+**Nudge:** "What made saying yes on the spot feel right?"
+
+**Response:** They treated me like an expert, not a vendor. Asked my opinion and actually wrote it down. No committee approvals, no "we'll circle back." Just three people who knew what they needed and trusted me to build it. That's rare.
+
 ---
 
 ## Entry 4 - 2025-12-16
 
 Spent most of the day reading about database architecture I could've just asked someone about. Old habit—figuring things out myself even when it's slower. Not sure if that's stubbornness or something else.
+
+**Nudge:** "What's the "something else" you're hinting at?"
+
+**Response:** Pride, probably. The satisfaction of solving it on my own. When I ask someone else, even if it's faster, it feels borrowed. Like I didn't really earn the solution.
 
 ---
 
@@ -71,6 +83,10 @@ Caught myself snapping at the barista this morning over nothing. That's not who 
 
 Rachel called to ask if I'm coming for Christmas dinner. Told her I'd try. We both knew I was lying. I could hear the disappointment but also something else. Resignation, maybe. Like she's stopped expecting anything different.
 
+**Nudge:** "What would it cost you to ask for help right now?
+
+*(No response - persona did not reply to nudge)*"
+
 ---
 
 ## Entry 7 - 2025-12-30
@@ -84,5 +100,9 @@ I called Rachel yesterday. Apologized for Christmas. She said she gets it, which
 The thing is, I know why I do it this way. When I solve the hard problem myself, when I stay up three nights to hit an impossible deadline, there's this feeling—like I'm proving I can still do it. That nobody else is required. That the kid who walked out of that corporate meeting made the right call. But maybe proving it over and over is its own kind of trap. Maybe at 41 I could occasionally let myself be helped without it meaning I failed.
 
 Anyway. Project's done. Taking the rest of the week off. Might actually answer the phone when Rachel calls.
+
+**Nudge:** "What would "being helped" look like if it didn't mean failure?"
+
+**Response:** I think it would look like having someone else in the room. Not an employee, not a contractor—someone who actually shares the weight. A partner, maybe. I've always said I don't want a co-founder because I don't want to compromise, but maybe what I'm really afraid of is depending on someone. Trusting someone enough to let them in. The business is the easy part. The loneliness is harder to admit.
 
 ---
