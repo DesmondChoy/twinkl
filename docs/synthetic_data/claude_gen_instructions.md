@@ -32,7 +32,7 @@ Instructions for Claude Code to generate synthetic conversational journal data u
 To address value imbalance in your dataset, you can force specific Schwartz values.
 
 ### When to Use
-- After analyzing distribution: some values underrepresented (e.g., Stimulation=5, Hedonism=19)
+- After analyzing distribution: some values underrepresented (e.g., if Self-Direction=8, Hedonism=17)
 - Need specific value combinations for testing
 - Building targeted training data for particular dimensions
 
@@ -46,7 +46,7 @@ To address value imbalance in your dataset, you can force specific Schwartz valu
 
 ### Examples
 
-**Example 1: Fill gap in Stimulation (currently only 5 personas)**
+**Example 1: Fill gap in an underrepresented value**
 ```
 TARGET_VALUES = ["Stimulation"]
 ADD_RANDOM_VALUE = true

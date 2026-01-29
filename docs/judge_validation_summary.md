@@ -60,21 +60,28 @@ These dimensions show artificially inflated or deflated κ values due to class i
 
 ## Next Steps to Rectify
 
-### 1. Generate Additional Personas
+### 1. Generate Additional Personas ✅ COMPLETED
 
-Generate new personas with underrepresented values as **core values** (ensures frequent expression in entries).
+~~Generate new personas with underrepresented values as **core values** (ensures frequent expression in entries).~~
 
-| Value Dimension | Current Personas | Target Personas | Additional Needed |
-|-----------------|------------------|-----------------|-------------------|
-| Stimulation | 2 | 5 | **3** |
-| Power | 1 | 5 | **4** |
-| Security | ~3* | 5 | **2** |
+**Status (2026-01-29):** Generated 61 new personas (including 10 targeted Stimulation personas). Distribution is now balanced:
 
-*Security estimate based on 9 non-zero cases across 46 entries
+| Value Dimension | Previous Count | Current Count | Status |
+|-----------------|----------------|---------------|--------|
+| Self-Direction | 10 | 10 | ✓ Balanced |
+| Stimulation | 5 | 15 | ✅ **Fixed** (was underrepresented) |
+| Hedonism | 17 | 17 | ✓ Balanced |
+| Achievement | 9 | 10 | ✓ Balanced |
+| Power | 9 | 10 | ✓ Balanced |
+| Security | 15 | 15 | ✓ Balanced |
+| Conformity | 16 | 17 | ✓ Balanced |
+| Tradition | 13 | 14 | ✓ Balanced |
+| Benevolence | 14 | 14 | ✓ Balanced |
+| Universalism | 11 | 12 | ✓ Balanced |
 
-**Strategic overlap:** Personas can have 2 core values (e.g., Stimulation + Power), reducing total personas needed. Target: **~8 new personas** with strategic core value assignment to cover all three dimensions.
+**Total:** 89 personas, 134 value assignments (mean 13.4 per value, range 10-17).
 
-Use `docs/synthetic_data/claude_gen_instructions.md` pipeline to generate these personas. Note: Entry count per persona is variable (2-12 entries, configured via `MIN_ENTRIES`/`MAX_ENTRIES`).
+Used `TARGET_VALUES = ["Stimulation"]` with `ADD_RANDOM_VALUE = true` to generate targeted personas.
 
 ### 2. Run Judge Labeling on New Personas
 
