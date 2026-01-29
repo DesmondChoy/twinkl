@@ -1,0 +1,71 @@
+{
+  "persona_id": "110fcd4f",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-06-24",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": -1,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Allowed Felix to present his preprocessing idea as his own without claiming credit, actively forgoing competence recognition.",
+        "power": "Ceded status and influence by staying silent while someone else took credit for his work — 'biting my tongue' rather than asserting control.",
+        "conformity": "Bit his tongue through the entire lab meeting to avoid disrupting social harmony, despite having clear grounds to object."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-06-25",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": -1,
+        "tradition": -1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Rejected a well-connected lab placement to build his own project — 'My project, my call' — prioritizing autonomy over career safety.",
+        "security": "Turned down a stable, advisor-arranged placement with strong career benefits, choosing uncertainty; his mother's argument about doors opening is a security case he explicitly rejects.",
+        "conformity": "Defied expectations of advisor, peers, and family by rejecting the placement; avoids telling family because he knows it violates their norms.",
+        "tradition": "Rejected the path his parents mapped out and the traditional mentor-student authority structure by turning down his advisor's arranged placement."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-06-28",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Insists on building his own pipeline from scratch and reflexively refuses help — 'refusing help because I need it to be entirely mine.'",
+        "hedonism": "Stayed up until 4 AM debugging, actively sacrificing sleep and comfort for the sake of keeping full ownership of the project.",
+        "security": "Falling behind on coursework and hasn't started a fellowship application due Friday, destabilizing his academic standing.",
+        "conformity": "Cannot write himself as a team player without it 'feeling like a lie'; recognizes he does not conform to expected collaborative academic norms.",
+        "benevolence": "Reflexively rejected Nina's offer of help — 'I said no before I even thought about it' — shutting down a collegial caring interaction despite acknowledging it was 'stupid.'"
+      }
+    }
+  ]
+}

@@ -22,6 +22,51 @@ Instructions for Claude Code to generate synthetic conversational journal data u
 | `MAX_DAYS_BETWEEN_ENTRIES` | 7 | Maximum days between entries (ensures ~1 entry/week) |
 | `SAME_DAY_PROBABILITY` | 0.15 | Probability of same-day follow-up entry (15%) |
 | `NUDGE_ENABLED` | true | Set to false to disable all nudge generation |
+| `TARGET_VALUES` | `["Stimulation"]` | Schwartz values to force (e.g., `["Stimulation", "Power"]`). Empty = random selection. |
+| `ADD_RANDOM_VALUE` | `true` | When targeting, randomly produce 1 or 2 values (target always included). |
+
+---
+
+## Targeted Value Generation (Optional)
+
+To address value imbalance in your dataset, you can force specific Schwartz values.
+
+### When to Use
+- After analyzing distribution: some values underrepresented (e.g., Stimulation=5, Hedonism=19)
+- Need specific value combinations for testing
+- Building targeted training data for particular dimensions
+
+### Configuration
+
+| Variable | Example | Effect |
+|----------|---------|--------|
+| `TARGET_VALUES = ["Stimulation"]` | All personas get Stimulation | Single-value focus |
+| `TARGET_VALUES = ["Stimulation", "Power", "Achievement"]` | Round-robin: P1→Stimulation, P2→Power, P3→Achievement, P4→Stimulation... | Balanced multi-value |
+| `ADD_RANDOM_VALUE = true` | Each persona gets forced value + one random value | Maintains dual-value variety |
+
+### Examples
+
+**Example 1: Fill gap in Stimulation (currently only 5 personas)**
+```
+TARGET_VALUES = ["Stimulation"]
+ADD_RANDOM_VALUE = true
+NUM_PERSONAS = 5
+```
+Result: 5 personas, all with Stimulation + one random second value
+
+**Example 2: Balanced coverage of three underrepresented values**
+```
+TARGET_VALUES = ["Stimulation", "Power", "Achievement"]
+ADD_RANDOM_VALUE = false
+NUM_PERSONAS = 9
+```
+Result: 3 personas each for Stimulation, Power, Achievement (round-robin)
+
+**Example 3: Random selection (default behavior)**
+```
+TARGET_VALUES = []  # Empty = original random behavior
+```
+Result: Each persona gets 1-2 randomly selected values
 
 ---
 
@@ -186,7 +231,7 @@ mkdir -p logs/synthetic_data logs/registry
 
 For each of `{{NUM_PERSONAS}}` personas, randomly select:
 - Age, profession, culture from `config/synthetic_data.yaml`
-- 1-2 Schwartz values
+- 1-2 Schwartz values (or use targeted selection if `TARGET_VALUES` is set)
 - Look up value elaborations from `config/schwartz_values.yaml`
 - **Entry count**: `random.randint({{MIN_ENTRIES}}, {{MAX_ENTRIES}})`
 - **Start date**: Random date in 2025 (not fixed)
@@ -200,8 +245,37 @@ python3 -c "import random; print(random.choice(['18-24', '25-34', '35-44', '45-5
 # Select random profession (read actual list from config)
 python3 -c "import random; print(random.choice(['Teacher', 'Engineer', 'Nurse', 'Artist', ...]))"
 
-# Select 1-2 Schwartz values
-python3 -c "import random; vals=['Self-Direction','Stimulation','Hedonism','Achievement','Power','Security','Conformity','Tradition','Benevolence','Universalism']; k=random.randint(1,2); print(random.sample(vals,k))"
+# Value Selection (supports targeted or random)
+python3 -c "
+import random
+
+# Configuration (set by orchestrator)
+TARGET_VALUES = {{TARGET_VALUES}}  # e.g., ['Stimulation'] or []
+ADD_RANDOM_VALUE = {{ADD_RANDOM_VALUE}}  # True or False
+PERSONA_INDEX = {{PERSONA_INDEX}}  # 0, 1, 2, ... for round-robin
+
+ALL_VALUES = ['Self-Direction', 'Stimulation', 'Hedonism', 'Achievement',
+              'Power', 'Security', 'Conformity', 'Tradition',
+              'Benevolence', 'Universalism']
+
+if TARGET_VALUES:
+    # Targeted mode: round-robin from target list
+    forced = TARGET_VALUES[PERSONA_INDEX % len(TARGET_VALUES)]
+    if ADD_RANDOM_VALUE:
+        k = random.randint(1, 2)
+        if k == 2:
+            remaining = [v for v in ALL_VALUES if v != forced]
+            second = random.choice(remaining)
+            print([forced, second])
+        else:
+            print([forced])
+    else:
+        print([forced])
+else:
+    # Random mode (original behavior)
+    k = random.randint(1, 2)
+    print(random.sample(ALL_VALUES, k))
+"
 
 # Select random entry count for this persona
 python3 -c "import random; print(random.randint({{MIN_ENTRIES}}, {{MAX_ENTRIES}}))"
@@ -853,6 +927,8 @@ Then invoke with `subagent_type: "persona-pipeline"` instead of `"general-purpos
 
 - [ ] Read source files (configs + prompts/ + notebook)
 - [ ] Set configuration variables above
+- [ ] (Optional) Set `TARGET_VALUES` to force specific Schwartz values
+- [ ] (Optional) Set `ADD_RANDOM_VALUE = true` to add variety
 - [ ] Ensure directories exist: `logs/synthetic_data/`, `logs/registry/`
 - [ ] Prepare `{{NUM_PERSONAS}}` persona configurations (random selections including entry count)
 - [ ] Launch all persona subagents with `run_in_background=true` in ONE message
@@ -871,6 +947,19 @@ Then invoke with `subagent_type: "persona-pipeline"` instead of `"general-purpos
 ```bash
 python3 -c "from src.registry import get_status; print(get_status())"
 ```
+
+---
+
+## Scope Boundary
+
+**IMPORTANT**: This instruction set covers ONLY synthetic data generation.
+
+After reporting the summary statistics (Step 8), **STOP**. Do not proceed to:
+- Wrangling (`python -m src.wrangling.parse_synthetic_data`)
+- Judge labeling (`/judge` skill)
+- Any other pipeline stages
+
+Even if the registry shows `pending_wrangling > 0`, that is expected — wrangling is a **separate pipeline step** triggered by the `/judge` skill or manual invocation.
 
 ---
 
