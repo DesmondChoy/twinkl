@@ -32,27 +32,26 @@ See `docs/synthetic_data/pipeline_specs.md` for implementation details.
 
 | Metric | Value |
 |--------|-------|
-| Personas | 31 |
-| Journal entries | 213 |
-| Avg entries/persona | 6.9 |
-| Entries with nudges | 62.0% |
-| Labels coverage | 100% |
+| Personas | 89 |
+| Journal entries | 671 |
+| Avg entries/persona | 7.5 |
+| Entries with nudges | 62.4% |
 
 **Demographics:** 6 cultures, 9 professions, 5 age brackets.
 
 **Schwartz Value Distribution** (personas can have 1-2 values):
 | Value | Personas | % |
 |-------|----------|---|
-| Hedonism | 7 | 16% |
-| Security | 6 | 14% |
-| Universalism | 6 | 14% |
-| Tradition | 5 | 11% |
-| Self-Direction | 5 | 11% |
-| Achievement | 4 | 9% |
-| Benevolence | 4 | 9% |
-| Conformity | 4 | 9% |
-| Stimulation | 2 | 5% |
-| Power | 1 | 2% |
+| Conformity | 17 | 19% |
+| Hedonism | 17 | 19% |
+| Security | 15 | 17% |
+| Stimulation | 15 | 17% |
+| Benevolence | 14 | 16% |
+| Tradition | 14 | 16% |
+| Universalism | 12 | 13% |
+| Self-Direction | 10 | 11% |
+| Power | 10 | 11% |
+| Achievement | 10 | 11% |
 
 **Nudge types:** Elaboration (44%), Tension Surfacing (41%), Clarification (14%)
 
