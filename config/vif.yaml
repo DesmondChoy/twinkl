@@ -56,10 +56,16 @@ data:
   val_ratio: 0.15
   seed: 42
 
-# MC Dropout Configuration
-# ------------------------
+# MC Dropout / BNN Configuration
+# ------------------------------
 mc_dropout:
   n_samples: 50           # Number of forward passes for uncertainty estimation
+
+# BNN prior parameters (for CriticBNN, train_bnn.py)
+bnn:
+  prior_mean: 0.0
+  prior_variance: 1.0
+  posterior_rho_init: -3.0
 
 # Output Configuration
 # --------------------

@@ -23,6 +23,7 @@ Example:
 from src.vif.encoders import SBERTEncoder, TextEncoder, create_encoder
 from src.vif.state_encoder import StateEncoder
 from src.vif.critic import CriticMLP
+from src.vif.critic_bnn import CriticBNN, get_kl_loss
 
 __all__ = [
     "TextEncoder",
@@ -30,4 +31,6 @@ __all__ = [
     "create_encoder",
     "StateEncoder",
     "CriticMLP",
+    "CriticBNN",
+    "get_kl_loss",
 ]
