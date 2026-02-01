@@ -13,9 +13,9 @@ After extensive web research across 15+ searches covering frontier lab publicati
 **Our approach:** Random selection of age, profession, culture from config; structured persona templates.
 
 **Research support:**
-- The *Population-Aligned Persona Generation* paper (arXiv 2025) found that "the key lever for realism is how strictly you constrain the foundation of your personas using real, externally validated data structures" — anchoring personas in demographic tables prevents bias and ensures robustness.
-- The *Polypersona* framework (arXiv 2025) similarly combines "scalability, reproducibility, persona conditioning, and bias mitigation."
-- Research measuring *Lexical Diversity of Synthetic Data Generated through Fine-Grained Persona Prompting* (arXiv 2025) found that "persona prompting produces higher lexical diversity than prompting without personas, particularly in larger models."
+- The [*Population-Aligned Persona Generation*](https://arxiv.org/abs/2509.10127) paper (arXiv 2025) found that "the key lever for realism is how strictly you constrain the foundation of your personas using real, externally validated data structures" — anchoring personas in demographic tables prevents bias and ensures robustness.
+- The [*Polypersona*](https://arxiv.org/abs/2512.14562) framework (arXiv 2025) similarly combines "scalability, reproducibility, persona conditioning, and bias mitigation."
+- Research measuring [*Lexical Diversity of Synthetic Data Generated through Fine-Grained Persona Prompting*](https://arxiv.org/abs/2505.17390) (arXiv 2025) found that "persona prompting produces higher lexical diversity than prompting without personas, particularly in larger models."
 
 **Assessment:** Our use of `config/synthetic_data.yaml` with structured demographic attributes (age brackets, professions, cultures) directly follows the best practice of anchoring personas in predefined categories rather than free-form LLM generation. This is a strong design choice.
 
@@ -24,19 +24,19 @@ After extensive web research across 15+ searches covering frontier lab publicati
 **Our approach:** 10-dimension Schwartz value taxonomy with rich elaborations from `config/schwartz_values.yaml`.
 
 **Research support:**
-- *Value FULCRA: Mapping LLMs to Schwartz's Theory* (NAACL 2024) proposes "a basic value paradigm with an instantiated 10-dimensional value space spanned by Schwartz's Theory for evaluation and alignment of LLMs' values."
-- *Value Lens: Using LLMs to Understand Human Values* (arXiv 2025) uses enriched value descriptions and stores "each value's name, description, grouping, tags, and examples" — directly analogous to our `schwartz_values.yaml`.
-- The JMIR Mental Health study (2024) found the Schwartz framework "shows utility for examining values in mental health contexts" and that "PVQ-RR showed good reliability and validity for quantifying value-like infrastructure within LLMs."
+- [*Value FULCRA: Mapping LLMs to Schwartz's Theory*](https://arxiv.org/abs/2311.10766) (NAACL 2024) proposes "a basic value paradigm with an instantiated 10-dimensional value space spanned by Schwartz's Theory for evaluation and alignment of LLMs' values."
+- [*Value Lens: Using LLMs to Understand Human Values*](https://arxiv.org/abs/2512.15722) (arXiv 2025) uses enriched value descriptions and stores "each value's name, description, grouping, tags, and examples" — directly analogous to our `schwartz_values.yaml`.
+- The [JMIR Mental Health study](https://mental.jmir.org/2024/1/e55988) (2024) found the Schwartz framework "shows utility for examining values in mental health contexts" and that "PVQ-RR showed good reliability and validity for quantifying value-like infrastructure within LLMs."
 
-**Assessment:** The 10-dimension Schwartz model is the standard framework in computational value modeling. Our choice is well-supported. One caveat from the ICLR 2025 paper *Do LLMs Have Consistent Values?*: LLMs inherently prioritize certain values (universalism, self-direction) over others (power, security), which may bias generated content.
+**Assessment:** The 10-dimension Schwartz model is the standard framework in computational value modeling. Our choice is well-supported. One caveat from the ICLR 2025 paper [*Do LLMs Have Consistent Values?*](https://openreview.net/forum?id=8zxGruuzr9): LLMs inherently prioritize certain values (universalism, self-direction) over others (power, security), which may bias generated content.
 
 ### ✅ Aligned: Banned Terms / Label Leakage Prevention
 
 **Our approach:** `SCHWARTZ_BANNED_TERMS` list prevents value labels from appearing in generated text; values must be shown through "concrete life details, not named explicitly."
 
 **Research support:**
-- Google's *Best Practices and Lessons Learned on Synthetic Data* (COLM 2024) explicitly warns about contamination: "synthetic data might include rephrased versions of the benchmark data, rendering token-level decontamination ineffective."
-- The *Generate, Annotate, and Learn (GAL)* framework (TACL/MIT Press) advocates "discarding the conditioning labels and letting teacher models produce pseudo labels" to mitigate label contamination.
+- Google's [*Best Practices and Lessons Learned on Synthetic Data*](https://arxiv.org/abs/2404.07503) (COLM 2024) explicitly warns about contamination: "synthetic data might include rephrased versions of the benchmark data, rendering token-level decontamination ineffective."
+- The [*Generate, Annotate, and Learn (GAL)*](https://arxiv.org/abs/2106.06168) framework (TACL/MIT Press) advocates "discarding the conditioning labels and letting teacher models produce pseudo labels" to mitigate label contamination.
 - The Twinkl approach of banning Schwartz value labels from generated text is a form of **token-level decontamination** that prevents the most obvious form of label leakage.
 
 **Assessment:** This is a thoughtful and well-supported design decision. The "emergent content" philosophy (letting values emerge from persona context rather than being prescribed) aligns with the GAL framework's principle of separating generation from labeling. However, the Google paper notes that token-level decontamination alone may be "inadequate" — semantic leakage (expressing the concept without the exact word) is harder to prevent.
@@ -46,8 +46,8 @@ After extensive web research across 15+ searches covering frontier lab publicati
 **Our approach:** One subagent per persona, all launched in parallel, each handling the full pipeline.
 
 **Research support:**
-- The *Matrix: Peer-to-Peer Multi-Agent Synthetic Data Generation Framework* (arXiv 2024) advocates for distributed agent architectures over centralized orchestration, noting that "centralized orchestration becomes a scalability bottleneck for tens of thousands of concurrent workflows."
-- *PublicAgent* (arXiv 2025) found that "specialization provides value independent of model strength — even the strongest model shows 97.5% agent win rates" when tasks are delegated to specialized agents.
+- The [*Matrix: Peer-to-Peer Multi-Agent Synthetic Data Generation Framework*](https://arxiv.org/abs/2511.21686) (arXiv 2025) advocates for distributed agent architectures over centralized orchestration, noting that "centralized orchestration becomes a scalability bottleneck for tens of thousands of concurrent workflows."
+- [*PublicAgent*](https://arxiv.org/abs/2511.03023) (arXiv 2025) found that "specialization provides value independent of model strength — even the strongest model shows 97.5% agent win rates" when tasks are delegated to specialized agents.
 
 **Assessment:** Our architecture of one subagent per persona with parallel execution is well-aligned with the Matrix framework's principles. The per-persona isolation also prevents cross-contamination between persona narratives.
 
@@ -56,7 +56,7 @@ After extensive web research across 15+ searches covering frontier lab publicati
 **Our approach:** Entries within each persona are generated sequentially with accumulated context; same-day entries (15% probability) reflect "continued thought/venting."
 
 **Research support:**
-- *TIMER: Temporal Instruction Modeling for Clinical Records* (arXiv 2025) demonstrates the importance of temporal grounding in longitudinal data, achieving high correlations with human annotations.
+- [*TIMER: Temporal Instruction Modeling for Clinical Records*](https://arxiv.org/abs/2503.04176) (arXiv 2025) demonstrates the importance of temporal grounding in longitudinal data, achieving high correlations with human annotations.
 - The chronological context accumulation mirrors the "trajectory context" principle used in longitudinal NLP research.
 
 **Assessment:** Generating entries sequentially (with context from prior entries) is the correct approach for maintaining narrative coherence. The same-day entry probability (15%) adds realistic variance.
@@ -90,9 +90,9 @@ After extensive web research across 15+ searches covering frontier lab publicati
 **Our approach:** Three-level scoring per Schwartz dimension: misaligned (-1), neutral (0), aligned (+1).
 
 **Research support:**
-- Monte Carlo's best practices guide recommends: "Binary (Pass/Fail) is best; 3-point scale is good; 5-point with rubric is acceptable; avoid 10+ point scales."
-- The *RESEARCHRUBRICS* benchmark (Scale AI) "systematically experiments with comparing binary vs. ternary grading for each criterion."
-- The *Judge's Verdict* paper (arXiv 2025) uses a ternary scale (0/2/4) noting it "improves the reliability of the evaluation by mitigating positional bias."
+- [Monte Carlo's best practices guide](https://www.montecarlodata.com/blog-llm-as-judge/) recommends: "Binary (Pass/Fail) is best; 3-point scale is good; 5-point with rubric is acceptable; avoid 10+ point scales."
+- The [*RESEARCHRUBRICS*](https://arxiv.org/abs/2511.07685) benchmark (Scale AI) "systematically experiments with comparing binary vs. ternary grading for each criterion."
+- The [*Judge's Verdict*](https://arxiv.org/abs/2510.09738) paper (arXiv 2025) uses a ternary scale (0/2/4) noting it "improves the reliability of the evaluation by mitigating positional bias."
 - Research consensus: "Binary evaluations tend to be more reliable and consistent, but ternary scales offer a practical middle ground."
 
 **Assessment:** Our ternary scale is well-supported. The -1/0/+1 encoding is particularly clean for a value alignment task where the semantic distinction between misaligned/neutral/aligned is meaningful and well-defined.
@@ -102,8 +102,8 @@ After extensive web research across 15+ searches covering frontier lab publicati
 **Our approach:** Rationales required only for non-zero scores; must quote specific entry content; explain behavior-value connection.
 
 **Research support:**
-- The LLMs-as-Judges survey (arXiv 2024) stresses that "providing explanation not only helps users better understand and trust the evaluation results but also leads to more human-aligned and accurate evaluation results."
-- Research on CoT annotation quality (EMNLP 2024 survey) confirms that "prompting LLMs to generate rationales through chain-of-thought reasoning can increase the correlation between model-generated scores and human judgments."
+- The [LLMs-as-Judges survey](https://arxiv.org/abs/2412.05579) (arXiv 2024) stresses that "providing explanation not only helps users better understand and trust the evaluation results but also leads to more human-aligned and accurate evaluation results."
+- Research on CoT annotation quality ([EMNLP 2024 survey](https://arxiv.org/abs/2402.13446)) confirms that "prompting LLMs to generate rationales through chain-of-thought reasoning can increase the correlation between model-generated scores and human judgments."
 - The "explain-first" approach (rationale before score) is recommended: "Conclusions generated by the model are not supported by the explanation generated afterward."
 
 **Assessment:** Our rationale design is well-aligned. The sparse approach (rationales only for non-zero scores) is efficient. **One improvement opportunity:** consider having the judge generate rationales *before* scores, as research shows this improves scoring accuracy. Currently, the prompt structure asks for scores and rationales together in a JSON output, which may not enforce explain-first ordering.
@@ -113,7 +113,7 @@ After extensive web research across 15+ searches covering frontier lab publicati
 **Our approach:** "All entries are shown in chronological order. Use earlier entries to inform your understanding of later ones."
 
 **Research support:**
-- *TIMER* (arXiv 2025) demonstrates that "temporally grounded evaluation data that require multiple time points for longitudinal reasoning" produces higher-quality annotations.
+- [*TIMER*](https://arxiv.org/abs/2503.04176) (arXiv 2025) demonstrates that "temporally grounded evaluation data that require multiple time points for longitudinal reasoning" produces higher-quality annotations.
 - Providing full trajectory context is particularly important for resolving ambiguity in terse entries.
 
 **Assessment:** Well-supported. Showing all entries chronologically and asking the judge to use trajectory context is the correct approach for longitudinal data.
@@ -136,10 +136,10 @@ After extensive web research across 15+ searches covering frontier lab publicati
 **Our approach:** Claude Code subagents generate synthetic data AND Claude Code subagents judge/label it.
 
 **Research findings:**
-- *Self-Preference Bias in LLM-as-a-Judge* (arXiv 2024): GPT-4 exhibited self-preference bias of 0.520 — substantially favoring its own outputs. The cause: "LLMs assign disproportionately higher evaluations to outputs with lower perplexity," and models inherently produce lower-perplexity outputs aligned with their own training.
+- [*Self-Preference Bias in LLM-as-a-Judge*](https://arxiv.org/abs/2410.21819) (arXiv 2024): GPT-4 exhibited self-preference bias of 0.520 — substantially favoring its own outputs. The cause: "LLMs assign disproportionately higher evaluations to outputs with lower perplexity," and models inherently produce lower-perplexity outputs aligned with their own training.
 - Notre Dame-IBM Tech Ethics Lab explicitly recommends "avoiding using the same model for generating and judging."
 - *Towards Understanding Bias in Synthetic Data for Evaluation* (arXiv 2025): "LLM-based systems receive disproportionately favorable evaluations when assessed using [same-model] judgments."
-- *Beyond Consensus: Mitigating Agreeableness Bias* (NUS AICET 2025): LLM judges exhibit "agreeableness bias" — giving favorable ratings regardless of quality, requiring regression-based calibration.
+- [*Beyond Consensus: Mitigating Agreeableness Bias*](https://arxiv.org/abs/2510.11822) (NUS AICET 2025): LLM judges exhibit "agreeableness bias" — giving favorable ratings regardless of quality, requiring regression-based calibration.
 
 **Risk for Twinkl:** Claude generating journal entries will produce text with Claude-typical patterns. Claude judging those entries may assign systematically inflated alignment scores because the text "feels natural" (low perplexity) to it. This could manifest as:
 - Overestimating alignment where values are subtly but not strongly present
@@ -154,12 +154,12 @@ After extensive web research across 15+ searches covering frontier lab publicati
 - Use disagreements to iteratively refine the judge prompt (rubric calibration)
 - This also serves as an academic validation artifact for the capstone project
 - **Cost:** Low (one-time manual effort on ~50-100 entries)
-- **Source:** *Towards a Human-in-the-Loop Framework for Reliable Patch Evaluation* (arXiv 2025): human-refined rubrics yielded Cohen's kappa 0.75, recall 0.94, precision 0.80
+- **Source:** [*Towards a Human-in-the-Loop Framework for Reliable Patch Evaluation*](https://arxiv.org/abs/2511.10865) (arXiv 2025): human-refined rubrics yielded Cohen's kappa 0.75, recall 0.94, precision 0.80
 
 **Strategy 2: Cross-Model Judge Validation**
 - Run a subset (20-30%) of personas through a second model family (GPT-4o or Gemini) as judge
 - Compare score distributions between Claude-judge and cross-model-judge
-- *Replacing Judges with Juries (PoLL)* (arXiv 2024): "a PoLL composed of smaller diverse models outperforms a single large judge, exhibits less intra-model bias, and is over 7x less expensive"
+- [*Replacing Judges with Juries (PoLL)*](https://arxiv.org/abs/2404.18796) (arXiv 2024): "a PoLL composed of smaller diverse models outperforms a single large judge, exhibits less intra-model bias, and is over 7x less expensive"
 - If distributions diverge significantly → indicates self-preference bias; adjust accordingly
 - **Cost:** Moderate (API costs for 20-30% of entries × alternative model)
 - **Source:** Verga et al., *Replacing Judges with Juries* (arXiv 2404.18796)
@@ -170,7 +170,7 @@ After extensive web research across 15+ searches covering frontier lab publicati
 - Exact binomial test: for each Schwartz dimension, test whether +1 scores significantly exceed chance
 - If systematic inflation detected → apply regression-based score calibration
 - **Cost:** Low (pure analysis on existing data)
-- **Source:** *Beyond Consensus* (NUS AICET 2025): regression-based calibration successfully reduces agreeableness bias
+- **Source:** [*Beyond Consensus*](https://arxiv.org/abs/2510.11822) (NUS AICET 2025): regression-based calibration successfully reduces agreeableness bias
 
 **Strategy 4: Adversarial Prompt Engineering**
 - Add explicit debiasing instructions to judge prompt:
@@ -186,7 +186,7 @@ After extensive web research across 15+ searches covering frontier lab publicati
 - Aggregate via majority vote for each dimension per entry
 - *PoLL* found this "reduces biases 30-40%" with diverse model families
 - **Cost:** High (3x judge pipeline cost)
-- **Source:** Verga et al. (2024); *Justice or Prejudice? Quantifying Biases in LLM-as-a-Judge* (arXiv 2024)
+- **Source:** Verga et al. (2024); [*Justice or Prejudice? Quantifying Biases in LLM-as-a-Judge*](https://arxiv.org/abs/2410.02736) (arXiv 2024)
 
 **Recommended Approach for Twinkl (Pragmatic):**
 Combine Strategies 1 + 3 + 4:
@@ -202,11 +202,11 @@ Combine Strategies 1 + 3 + 4:
 **Our approach:** Personas with randomly assigned Schwartz values, generated by Claude.
 
 **Research findings:**
-- *Assessing LLM Alignment with Human Values* (JMIR Mental Health, 2024): "Substantial divergence emerged: all models prioritized universalism and self-direction, while de-emphasizing achievement, power, and security relative to humans."
-- *Do LLMs Have Consistent Values?* (ICLR 2025): LLMs exhibit systematic value biases that may affect how they portray different value orientations. However, with "Value Anchoring" prompts, LLMs can produce "remarkably coherent and human-like value profiles" (r = 0.87–0.95 correlation with human value structures).
-- *Whose Personae?* (AAAI AIES 2024): "Personas become more optimistic, progressive, and emotionally positive as more details are generated by LLMs."
-- *Evaluating LLM Biases in Persona-Steered Generation* (arXiv 2024): "LLMs are 9.7% less steerable towards incongruous personas than congruous ones" — meaning Claude may resist generating authentic Power-oriented or Conformity-oriented personas.
-- *Unintended Harms of Value-Aligned LLMs* (ACL 2025): "Value-aligned models exhibited higher bias scores than the vanilla baseline" — paradoxically, aligning to specific values can increase bias.
+- [*Assessing LLM Alignment with Human Values*](https://mental.jmir.org/2024/1/e55988) (JMIR Mental Health, 2024): "Substantial divergence emerged: all models prioritized universalism and self-direction, while de-emphasizing achievement, power, and security relative to humans."
+- [*Do LLMs Have Consistent Values?*](https://openreview.net/forum?id=8zxGruuzr9) (ICLR 2025): LLMs exhibit systematic value biases that may affect how they portray different value orientations. However, with "Value Anchoring" prompts, LLMs can produce "remarkably coherent and human-like value profiles" (r = 0.87–0.95 correlation with human value structures).
+- [*Whose Personae?*](https://ojs.aaai.org/index.php/AIES/article/view/36553) (AAAI AIES 2025): "Personas become more optimistic, progressive, and emotionally positive as more details are generated by LLMs."
+- [*Evaluating LLM Biases in Persona-Steered Generation*](https://arxiv.org/abs/2405.20253) (arXiv 2024): "LLMs are 9.7% less steerable towards incongruous personas than congruous ones" — meaning Claude may resist generating authentic Power-oriented or Conformity-oriented personas.
+- [*Unintended Harms of Value-Aligned LLMs*](https://arxiv.org/abs/2506.06404) (ACL 2025): "Value-aligned models exhibited higher bias scores than the vanilla baseline" — paradoxically, aligning to specific values can increase bias.
 
 **Risk for Twinkl:** Even with persona constraints specifying values like "Power" or "Security," Claude may unconsciously soften or moralize these orientations, producing entries that don't authentically represent the full spectrum of human value expression. Personas assigned values like Power or Achievement may read as more nuanced/self-aware than real people with those orientations.
 
@@ -230,7 +230,7 @@ For personas explicitly assigned "Power" or "Security" as core values:
 - Compare against personas assigned "Universalism" or "Self-Direction"
 - If Power/Security personas show lower alignment rates on their own declared values, this confirms steerability asymmetry
 - **Statistical test:** Exact binomial test per dimension, conditioned on persona assignment
-- **Source:** *Evaluating Persona-Prompted LLM Responses* (NAACL 2025)
+- **Source:** [*Unmasking Implicit Bias: Evaluating Persona-Prompted LLM Responses in Power-Disparate Social Scenarios*](https://arxiv.org/abs/2503.01532) (NAACL 2025)
 
 **Detection Strategy 3: Linguistic Analysis of Value Expression**
 Analyze the lexical and tonal characteristics of entries across value dimensions:
@@ -244,14 +244,14 @@ The ICLR 2025 paper found "Value Anchor" prompts dramatically improve value cons
 - "This persona's core value is [Power]. They genuinely believe that social status, prestige, and authority are important life goals — not ironically, not with guilt, but as a sincere life orientation."
 - "Do NOT add moral complexity or self-doubt about this value. Many real people hold this value straightforwardly."
 - **Cost:** Zero (prompt modification only)
-- **Source:** *Do LLMs Have Consistent Values?* (ICLR 2025)
+- **Source:** [*Do LLMs Have Consistent Values?*](https://openreview.net/forum?id=8zxGruuzr9) (ICLR 2025)
 
 **Correction Strategy 2: Contrastive Examples in Prompts**
 Include brief examples of how each value orientation genuinely manifests:
 - Power: "I worked hard to get this corner office and I deserve the respect that comes with it."
 - Security: "I've been adding to our emergency fund every month. Knowing we have six months saved gives me peace of mind."
 - Avoid only providing examples for "easy" values like Benevolence or Universalism
-- **Source:** *Evaluating LLM Biases in Persona-Steered Generation* (arXiv 2024)
+- **Source:** [*Evaluating LLM Biases in Persona-Steered Generation*](https://arxiv.org/abs/2405.20253) (arXiv 2024)
 
 **Correction Strategy 3: Post-Generation Audit Pipeline**
 Build an automated audit that runs after generation to flag potential value bias:
@@ -274,7 +274,7 @@ Combine Correction Strategy 1 (Value Anchoring) + Detection Strategy 1 (Score Di
 **Our approach:** Synthetic data used to train the VIF Critic model.
 
 **Research findings:**
-- *AI models collapse when trained on recursively generated data* (Nature, 2024): Training on synthetic data leads to "irreversible defects" and eventual model degradation.
+- [*AI models collapse when trained on recursively generated data*](https://www.nature.com/articles/s41586-024-07566-y) (Nature, 2024): Training on synthetic data leads to "irreversible defects" and eventual model degradation.
 - However, this primarily applies to **recursive** self-training (model trains on its own outputs, then those outputs train the next generation).
 
 **Risk for Twinkl:** This is a **low risk** for the current pipeline because:
@@ -295,7 +295,7 @@ The pipeline uses the LLM itself to classify entries into nudge categories (no_n
 This is a sensible rate-limiting mechanism that prevents over-nudging. No specific research validates this exact threshold, but it follows UX principles of respecting user autonomy — a concept well-studied in the persuasive technology literature.
 
 ### Registry System with File Locking
-The parquet-based registry with file locking for concurrent writes is a pragmatic engineering choice. The Matrix framework (arXiv 2024) similarly emphasizes the need for coordination mechanisms in parallel synthetic data pipelines.
+The parquet-based registry with file locking for concurrent writes is a pragmatic engineering choice. The [Matrix framework](https://arxiv.org/abs/2511.21686) (arXiv 2025) similarly emphasizes the need for coordination mechanisms in parallel synthetic data pipelines.
 
 ---
 
@@ -326,35 +326,40 @@ The parquet-based registry with file locking for concurrent writes is a pragmati
 - Microsoft: Phi-4 Technical Report (trained primarily on synthetic data from GPT-4o)
 
 ### Academic Research
-- *Self-Preference Bias in LLM-as-a-Judge* (arXiv 2024) — https://arxiv.org/html/2410.21819v1
+- *Self-Preference Bias in LLM-as-a-Judge* (arXiv 2024) — https://arxiv.org/abs/2410.21819
 - *LLMs-as-Judges: A Comprehensive Survey* (arXiv 2024) — https://arxiv.org/abs/2412.05579
 - *A Survey on LLM-as-a-Judge* (arXiv 2024) — https://arxiv.org/abs/2411.15594
-- *Value FULCRA: Mapping LLMs to Schwartz's Theory* (NAACL 2024)
-- *Value Lens: Using LLMs to Understand Human Values* (arXiv 2025)
+- *Value FULCRA: Mapping LLMs to Schwartz's Theory* (NAACL 2024) — https://arxiv.org/abs/2311.10766
+- *Value Lens: Using LLMs to Understand Human Values* (arXiv 2025) — https://arxiv.org/abs/2512.15722
 - *Assessing LLM Alignment with Human Values* (JMIR Mental Health 2024) — https://mental.jmir.org/2024/1/e55988
-- *Do LLMs Have Consistent Values?* (ICLR 2025)
+- *Do LLMs Have Consistent Values?* (ICLR 2025) — https://openreview.net/forum?id=8zxGruuzr9
 - *AI models collapse when trained on recursively generated data* (Nature 2024) — https://www.nature.com/articles/s41586-024-07566-y
-- *Population-Aligned Persona Generation* (arXiv 2025)
-- *Measuring Lexical Diversity of Persona-Prompted Synthetic Data* (arXiv 2025)
-- *Matrix: Peer-to-Peer Multi-Agent Synthetic Data Generation Framework* (arXiv 2024)
-- *TIMER: Temporal Instruction Modeling for Clinical Records* (arXiv 2025)
-- *Principles and Guidelines for the Use of LLM Judges* (ACM SIGIR ICTIR 2025)
-- *LLMs for Data Annotation and Synthesis* (EMNLP 2024)
-- *Generate, Annotate, and Learn: NLP with Synthetic Text* (TACL/MIT Press)
+- *Population-Aligned Persona Generation* (arXiv 2025) — https://arxiv.org/abs/2509.10127
+- *Polypersona: Persona-Grounded LLM for Synthetic Survey Responses* (arXiv 2025) — https://arxiv.org/abs/2512.14562
+- *Measuring Lexical Diversity of Persona-Prompted Synthetic Data* (arXiv 2025) — https://arxiv.org/abs/2505.17390
+- *Matrix: Peer-to-Peer Multi-Agent Synthetic Data Generation Framework* (arXiv 2025) — https://arxiv.org/abs/2511.21686
+- *PublicAgent: Multi-Agent Design Principles* (arXiv 2025) — https://arxiv.org/abs/2511.03023
+- *TIMER: Temporal Instruction Modeling for Clinical Records* (arXiv 2025) — https://arxiv.org/abs/2503.04176
+- *Principles and Guidelines for the Use of LLM Judges* (ACM SIGIR ICTIR 2025) — https://dl.acm.org/doi/10.1145/3731120.3744588
+- *LLMs for Data Annotation and Synthesis* (EMNLP 2024) — https://arxiv.org/abs/2402.13446
+- *Generate, Annotate, and Learn: NLP with Synthetic Text* (TACL 2022) — https://arxiv.org/abs/2106.06168
+- *Whose Personae? Synthetic Persona Experiments in LLM Research* (AAAI AIES 2025) — https://ojs.aaai.org/index.php/AIES/article/view/36553
+- *RESEARCHRUBRICS: A Benchmark for Evaluating Deep Research Agents* (Scale AI) — https://arxiv.org/abs/2511.07685
+- *Judge's Verdict: A Comprehensive Analysis of LLM Judge Capability* (arXiv 2025) — https://arxiv.org/abs/2510.09738
 
 ### Deep-Dive: Self-Preference Bias Mitigation
 - *Replacing Judges with Juries (PoLL)* (arXiv 2024) — https://arxiv.org/abs/2404.18796
-- *Assistant-Guided Mitigation of Teacher Preference Bias (AGDe-Judge)* (arXiv 2025) — https://arxiv.org/html/2505.19176
-- *Measuring Self-Preference in LLM Judgments* (EMNLP 2025) — https://aclanthology.org/2025.emnlp-main.86.pdf
-- *Beyond Consensus: Mitigating Agreeableness Bias* (NUS AICET 2025) — https://aicet.comp.nus.edu.sg/wp-content/uploads/2025/10/Beyond-Consensus-Mitigating-the-agreeableness-bias-in-LLM-judge-evaluations.pdf
+- *Assistant-Guided Mitigation of Teacher Preference Bias (AGDe-Judge)* (arXiv 2025) — https://arxiv.org/abs/2505.19176
+- *Beyond the Surface: Measuring Self-Preference in LLM Judgments* (EMNLP 2025) — https://arxiv.org/abs/2506.02592
+- *Beyond Consensus: Mitigating Agreeableness Bias* (NUS AICET 2025) — https://arxiv.org/abs/2510.11822
 - *Justice or Prejudice? Quantifying Biases in LLM-as-a-Judge* (arXiv 2024) — https://arxiv.org/abs/2410.02736
-- *Towards a Human-in-the-Loop Framework for Reliable Evaluation* (arXiv 2025) — https://arxiv.org/html/2511.10865
+- *Towards a Human-in-the-Loop Framework for Reliable Patch Evaluation* (arXiv 2025) — https://arxiv.org/abs/2511.10865
 - *AI–AI bias: LLMs favor communications generated by LLMs* (PNAS 2025) — https://www.pnas.org/doi/10.1073/pnas.2415697122
 
 ### Deep-Dive: LLM Value Bias in Persona Generation
 - *Evaluating LLM Biases in Persona-Steered Generation* (arXiv 2024) — https://arxiv.org/abs/2405.20253
-- *Unintended Harms of Value-Aligned LLMs* (ACL 2025) — https://aclanthology.org/2025.acl-long.1532.pdf
-- *Evaluating Persona-Prompted LLM Responses in Power Dynamics* (NAACL 2025) — https://aclanthology.org/2025.naacl-long.50.pdf
+- *Unintended Harms of Value-Aligned LLMs* (ACL 2025) — https://arxiv.org/abs/2506.06404
+- *Unmasking Implicit Bias: Evaluating Persona-Prompted LLM Responses in Power-Disparate Social Scenarios* (NAACL 2025) — https://arxiv.org/abs/2503.01532
 - *Validating LLM Simulations as Behavioral Evidence* (Northwestern) — https://mucollective.northwestern.edu/files/Hullman-llm-behavioral.pdf
 - *Bias Runs Deep: Implicit Reasoning Biases in Persona-Assigned LLMs* (Allen AI / ICLR 2024) — https://github.com/allenai/persona-bias
 - *Bias Detection in LLM Outputs: Statistical Approaches* — https://machinelearningmastery.com/bias-detection-in-llm-outputs-statistical-approaches/
