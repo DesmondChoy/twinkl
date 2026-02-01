@@ -1,0 +1,92 @@
+{
+  "persona_id": "5d145c6f",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-09-13",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 1,
+        "hedonism": -1,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "confidence": {
+        "self_direction": "medium",
+        "stimulation": "medium",
+        "hedonism": "medium",
+        "achievement": "high",
+        "power": "high",
+        "security": "low",
+        "conformity": "low",
+        "tradition": "low",
+        "benevolence": "high",
+        "universalism": "low"
+      },
+      "rationale": "Rich entry showing strong Power alignment through strategic positioning, status markers (corner office, Range Rover), overriding team decisions, and strategic networking with ministry officials. Strong Achievement through 12-hour workdays and emphasis on growth metrics (85 employees, three offices). Mild Benevolence misalignment through neglecting mother's call and substituting material gifts for presence. Mild Stimulation alignment through pursuing market expansion. Mild Hedonism misalignment as exhaustion is ignored for networking obligations. Self-Direction shown through overriding team recommendations."
+    },
+    {
+      "t_index": 1,
+      "date": "2025-09-14",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "confidence": {
+        "self_direction": "low",
+        "stimulation": "low",
+        "hedonism": "medium",
+        "achievement": "medium",
+        "power": "low",
+        "security": "low",
+        "conformity": "low",
+        "tradition": "low",
+        "benevolence": "low",
+        "universalism": "low"
+      },
+      "rationale": "Brief entry with limited signal. Dismissing the need for relationships to 'recharge' as a 'luxury mindset' shows Hedonism misalignment - rejecting the value of pleasure/rest. The implication that obligations don't need to recharge you reflects Achievement orientation - work/duty comes first regardless of personal cost."
+    },
+    {
+      "t_index": 2,
+      "date": "2025-09-19",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "confidence": {
+        "self_direction": "medium",
+        "stimulation": "low",
+        "hedonism": "low",
+        "achievement": "high",
+        "power": "high",
+        "security": "low",
+        "conformity": "medium",
+        "tradition": "low",
+        "benevolence": "high",
+        "universalism": "low"
+      },
+      "rationale": "Strong Power alignment through maintaining decision-making authority despite co-founder pushback, prioritizing external hire who 'commands a room'. Strong Achievement through focus on 'becoming a regional leader' over sentiment. Benevolence misalignment through overlooking loyalty to Hana despite acknowledging she 'built this with me'. Conformity alignment through finding compromise solution and caring about perception ('do not like being seen as someone who does not value the people'). Self-Direction through making independent judgment despite pushback."
+    }
+  ]
+}

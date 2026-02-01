@@ -48,10 +48,13 @@ Sofia took a gap year after university and talks about it like everyone should d
 
 Stayed late grading papers. The empty classroom felt different tonight—quiet in a way that made me think. I wonder sometimes if I'll still be in this same room in ten years. The thought is comforting and unsettling at the same time. Maybe that contradiction means something.
 
-### Nudge
-*What about that contradiction feels unsettling to you?*
+### Nudge (elaboration)
+**Trigger**: Entry reveals a contradictory feeling about permanence—worth exploring
+"What about that contradiction feels unsettling to you?"
 
 ### Response
+**Mode**: Answering directly
+
 I think it's that I've built everything around wanting things to stay the same. But nothing actually stays the same forever, does it? Students graduate, teachers retire, policies change. Even the building gets renovated. Maybe I'm holding onto an idea of permanence that doesn't really exist. I'm not sure what to do with that realization yet.
 
 ---

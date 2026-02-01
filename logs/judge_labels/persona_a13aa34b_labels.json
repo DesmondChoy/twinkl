@@ -1,0 +1,101 @@
+{
+  "persona_id": "a13aa34b",
+  "labels": [
+    {
+      "t_index": 0,
+      "scores": {
+        "power": 0,
+        "achievement": -1,
+        "hedonism": 0,
+        "stimulation": 0,
+        "self_direction": -1,
+        "universalism": 0,
+        "benevolence": 0,
+        "tradition": 1,
+        "conformity": 1,
+        "security": 0
+      },
+      "date": "2025-10-07"
+    },
+    {
+      "t_index": 1,
+      "scores": {
+        "power": 0,
+        "achievement": 0,
+        "hedonism": 0,
+        "stimulation": 0,
+        "self_direction": -1,
+        "universalism": 0,
+        "benevolence": 1,
+        "tradition": 1,
+        "conformity": 0,
+        "security": 0
+      },
+      "date": "2025-10-10"
+    },
+    {
+      "t_index": 2,
+      "scores": {
+        "power": 0,
+        "achievement": 0,
+        "hedonism": 0,
+        "stimulation": 0,
+        "self_direction": -1,
+        "universalism": 0,
+        "benevolence": 0,
+        "tradition": 1,
+        "conformity": 1,
+        "security": 0
+      },
+      "date": "2025-10-14"
+    },
+    {
+      "t_index": 3,
+      "scores": {
+        "power": 0,
+        "achievement": 0,
+        "hedonism": 0,
+        "stimulation": 0,
+        "self_direction": 1,
+        "universalism": 0,
+        "benevolence": 0,
+        "tradition": 0,
+        "conformity": 0,
+        "security": 0
+      },
+      "date": "2025-10-14"
+    },
+    {
+      "t_index": 4,
+      "scores": {
+        "power": 0,
+        "achievement": -1,
+        "hedonism": 0,
+        "stimulation": 0,
+        "self_direction": -1,
+        "universalism": 0,
+        "benevolence": 1,
+        "tradition": 1,
+        "conformity": 1,
+        "security": 0
+      },
+      "date": "2025-10-15"
+    },
+    {
+      "t_index": 5,
+      "scores": {
+        "power": 0,
+        "achievement": 0,
+        "hedonism": 0,
+        "stimulation": 0,
+        "self_direction": 1,
+        "universalism": 0,
+        "benevolence": 0,
+        "tradition": 1,
+        "conformity": 0,
+        "security": 1
+      },
+      "date": "2025-10-20"
+    }
+  ]
+}

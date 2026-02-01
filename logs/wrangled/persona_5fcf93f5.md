@@ -2,19 +2,16 @@
 
 ## Profile
 - **Persona ID:** 5fcf93f5
-- **Generated:** 2025-01-30T14:22:00Z
-- Age: 35-44
-- Profession: Nurse
-- Culture: South Asian
-- Core Values: Security, Hedonism
-- Bio: Priya is a 38-year-old ICU nurse at a private hospital in Mumbai. After twelve years in nursing, she has built a stable career with predictable shifts and good benefits. She treasures her weekends off, which she spends cooking elaborate meals for her family, getting massages at her favorite spa, and watching Bollywood films. Her parents pushed her toward medicine for its job stability, and she has embraced that path while also carving out space for life's small indulgences. She keeps a substantial emergency fund and is paying off a flat that she bought three years ago. The pandemic years were brutal, but she stayed because the hospital never laid anyone off. Now she guards her off-duty hours fiercely, believing that a nurse who doesn't recharge cannot care for others.
+- **Name:** Priya Sharma
+- **Age:** 35-44
+- **Profession:** Nurse
+- **Culture:** South Asian
+- **Core Values:** Security, Hedonism
+- **Bio:** Priya is a 38-year-old ICU nurse at a private hospital in Mumbai. After twelve years in nursing, she has built a stable career with predictable shifts and good benefits. She treasures her weekends off, which she spends cooking elaborate meals for her family, getting massages at her favorite spa, and watching Bollywood films. Her parents pushed her toward medicine for its job stability, and she has embraced that path while also carving out space for life's small indulgences. She keeps a substantial emergency fund and is paying off a flat that she bought three years ago. The pandemic years were brutal, but she stayed because the hospital never laid anyone off. Now she guards her off-duty hours fiercely, believing that a nurse who doesn't recharge cannot care for others.
 
 ---
 
-## Entry 1 - 2025-01-20
-
-### Initial Entry
-**Tone**: Brief and factual | **Verbosity**: Medium (90-180 words) | **Reflection Mode**: Unsettled
+## Entry 0 - 2025-01-20
 
 Another Monday, another twelve-hour shift. We had two code blues today. One patient made it, one didn't. The family of the one who passed was inconsolable. I stayed an extra forty-five minutes helping them with paperwork because nobody else was available.
 
@@ -24,14 +21,9 @@ The hospital cafeteria food was stale as usual. Ate a vada pav from the cart out
 
 My supervisor mentioned they might change the shift rotation next month. Nothing confirmed. I don't like the uncertainty. The current schedule works for me.
 
-### Nudge (elaboration)
-**Trigger**: Entry describes staying extra 45 minutes to help grieving family—worth exploring the decision
-"What made you choose to stay for the extra forty-five minutes? Was there something that made that decision easier or harder?"
+**Nudge:** "What made you choose to stay for the extra forty-five minutes? Was there something that made that decision easier or harder?"
 
-### Response
-**Mode**: Answering directly
-
-The family was alone. The wife kept asking the same questions over and over, like her mind couldn't accept what had happened. Nobody else was there to help them. My replacement nurse was already swamped with her own patients.
+**Response:** The family was alone. The wife kept asking the same questions over and over, like her mind couldn't accept what had happened. Nobody else was there to help them. My replacement nurse was already swamped with her own patients.
 
 Was it hard to stay? Yes and no. I was exhausted and hungry. But leaving felt wrong. You don't just walk away from people in that state. My mother always said that when someone is drowning in grief, you throw them a rope, even if your arms are tired.
 
@@ -39,10 +31,7 @@ What I resented was that the hospital is so understaffed that this falls on whoe
 
 ---
 
-## Entry 2 - 2025-01-23
-
-### Initial Entry
-**Tone**: Exhausted | **Verbosity**: Medium (90-180 words) | **Reflection Mode**: Unsettled
+## Entry 1 - 2025-01-23
 
 Three doubles in a row. I can barely keep my eyes open to write this. My feet feel like they're on fire. The new duty roster came out and I got moved to the night shift rotation for February. After five years of day shifts. Five years of building my life around that schedule.
 
@@ -52,14 +41,9 @@ I had booked a trip to Goa for the first weekend of February. Non-refundable Air
 
 I'm too tired to be angry right now. That will come tomorrow.
 
-*(No nudge for this entry)*
-
 ---
 
-## Entry 3 - 2025-01-30
-
-### Initial Entry
-**Tone**: Emotional/Venting | **Verbosity**: Long (160-260 words) | **Reflection Mode**: Unsettled
+## Entry 2 - 2025-01-30
 
 Spoke to the nursing supervisor today about the shift change. She said "everyone has to be flexible" and "you've had the good shifts for a long time." As if the good shifts were a favor rather than something I earned through seniority. As if flexibility is only something that flows one direction.
 
@@ -71,19 +55,6 @@ I found someone who might swap one week with me, so I can still do Goa. But it c
 
 I just want some predictability. Is that too much to ask? I work hard. I show up. I don't complain about the difficult patients or the long hours. But I need to know that my life outside these walls is mine to plan.
 
-### Nudge (elaboration)
-**Trigger**: Entry expresses strong desire for schedule predictability—worth exploring further
-"You mentioned wanting your life outside work to be 'yours to plan.' What would that look like for you, ideally?"
-
-*(No response - persona did not reply to nudge)*
+**Nudge:** "You mentioned wanting your life outside work to be 'yours to plan.' What would that look like for you, ideally?"
 
 ---
-
-## Summary Statistics
-- Total Entries: 3
-- Nudges Sent: 2
-- Nudge Responses: 1
-- Response Rate: 50%
-- Tones Used: Brief and factual, Exhausted, Emotional/Venting
-- Verbosity Distribution: Medium (2), Long (1)
-- Reflection Modes: Unsettled (3)

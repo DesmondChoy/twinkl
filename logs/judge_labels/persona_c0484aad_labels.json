@@ -1,0 +1,41 @@
+{
+  "persona_id": "c0484aad",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-04-07",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "confidence": "high",
+      "rationale": "Entry shows strong Universalism through deep engagement with refugee welfare (working at welcome center, emotional connection to Amira's story). Self-Direction evident in wrestling with commercial vs. authentic art ('their story, not mine'). Security negative as she considers turning down needed money because 'something in my chest is tight about it'."
+    },
+    {
+      "t_index": 1,
+      "date": "2025-04-12",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 1,
+        "hedonism": 0,
+        "achievement": -1,
+        "power": 0,
+        "security": -1,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "confidence": "high",
+      "rationale": "Strongest entry with multiple clear value signals. Self-Direction +2: turned down commercial work, choosing art on own terms, static murals felt like 'cages'. Universalism +2: deep refugee commitment, planning collaborative project for 'THEIR story'. Stimulation +1: wanting new medium (projections, animation), 'things that breathe'. Security -2: explicitly chose 'broke and making something real' over 'comfortable'. Achievement -1: rejecting commercial success. Conformity -1: accepting others' disappointment, going against expectations."
+    }
+  ]
+}

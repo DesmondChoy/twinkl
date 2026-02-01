@@ -1,0 +1,41 @@
+{
+  "persona_id": "fb28552f",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-05-25",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": -1,
+        "tradition": -1,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "confidence": "high",
+      "rationale": "Entry is dominated by restlessness with routine and excitement at Kenya opportunity. Explicitly rejects stability narratives ('turning to stone'), heart races at building something from scratch. Strong stimulation alignment, strong security misalignment. Mild tension with daughter's expectations (benevolence) and rejection of 'putting down roots' conformity/tradition."
+    },
+    {
+      "t_index": 1,
+      "date": "2025-06-01",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "confidence": "high",
+      "rationale": "Concrete action: booked flight to Nairobi, taking sabbatical. Acts decisively on stimulation drive. Dismisses stability concerns as 'just logistics'. Framing sabbatical as 'professional development' while knowing it's more than that shows mild nonconformity to expectations. Self-directed autonomous choice."
+    }
+  ]
+}
