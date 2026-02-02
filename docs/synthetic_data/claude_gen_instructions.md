@@ -14,7 +14,7 @@ Instructions for Claude Code to generate synthetic conversational journal data u
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `NUM_PERSONAS` | 10 | Number of personas to generate |
+| `NUM_PERSONAS` | 5 | Number of personas to generate |
 | `MIN_ENTRIES` | 2 | Minimum entries per persona (supports cold-start scenarios) |
 | `MAX_ENTRIES` | 12 | Maximum entries per persona (covers rut detection window) |
 | `START_DATE` | Random in 2025 | Random date from 2025-01-01 to 2025-12-31 |
@@ -22,7 +22,7 @@ Instructions for Claude Code to generate synthetic conversational journal data u
 | `MAX_DAYS_BETWEEN_ENTRIES` | 7 | Maximum days between entries (ensures ~1 entry/week) |
 | `SAME_DAY_PROBABILITY` | 0.15 | Probability of same-day follow-up entry (15%) |
 | `NUDGE_ENABLED` | true | Set to false to disable all nudge generation |
-| `TARGET_VALUES` | `["Stimulation"]` | Schwartz values to force (e.g., `["Stimulation", "Power"]`). Empty = random selection. |
+| `TARGET_VALUES` | `["Self-Direction", "Power", "Achievement"]` | Schwartz values to force (e.g., `["Stimulation", "Power"]`). Empty = random selection. |
 | `ADD_RANDOM_VALUE` | `true` | When targeting, randomly produce 1 or 2 values (target always included). |
 
 ---

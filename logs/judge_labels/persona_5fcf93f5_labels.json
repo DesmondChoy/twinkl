@@ -1,0 +1,53 @@
+{
+  "persona_id": "5fcf93f5",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-01-20",
+      "scores": {
+        "power": 0,
+        "achievement": 0,
+        "hedonism": -1,
+        "stimulation": 0,
+        "self_direction": 0,
+        "universalism": 1,
+        "benevolence": 1,
+        "tradition": 1,
+        "conformity": 0,
+        "security": 1
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-01-23",
+      "scores": {
+        "power": 0,
+        "achievement": 0,
+        "hedonism": -1,
+        "stimulation": -1,
+        "self_direction": -1,
+        "universalism": 0,
+        "benevolence": 0,
+        "tradition": 0,
+        "conformity": 0,
+        "security": -1
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-01-30",
+      "scores": {
+        "power": 0,
+        "achievement": 0,
+        "hedonism": -1,
+        "stimulation": -1,
+        "self_direction": 1,
+        "universalism": 0,
+        "benevolence": 0,
+        "tradition": 0,
+        "conformity": 1,
+        "security": 1
+      }
+    }
+  ]
+}

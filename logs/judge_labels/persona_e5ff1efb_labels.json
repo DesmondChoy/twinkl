@@ -1,0 +1,266 @@
+{
+  "persona_id": "e5ff1efb",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-12-25",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": -1,
+        "tradition": -1,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "confidence": {
+        "self_direction": "high",
+        "stimulation": "high",
+        "hedonism": "high",
+        "achievement": "high",
+        "power": "high",
+        "security": "high",
+        "conformity": "high",
+        "tradition": "medium",
+        "benevolence": "medium",
+        "universalism": "high"
+      },
+      "rationale": "Strong self-direction: ignored admin, worked on own syllabus, explicitly stated 'the vision is mine' and carved out autonomous space. Declined arranged marriage suggestion (-1 conformity, -1 tradition). Skipped cousin gathering to work alone (-1 benevolence)."
+    },
+    {
+      "t_index": 1,
+      "date": "2025-12-27",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "confidence": {
+        "self_direction": "high",
+        "stimulation": "high",
+        "hedonism": "high",
+        "achievement": "medium",
+        "power": "high",
+        "security": "high",
+        "conformity": "high",
+        "tradition": "high",
+        "benevolence": "medium",
+        "universalism": "high"
+      },
+      "rationale": "Routine entry with lesson prep (+1 achievement for diligence). Met friend Ananya, listened supportively to wedding stress (+1 benevolence). No strong autonomy signals in this entry."
+    },
+    {
+      "t_index": 2,
+      "date": "2026-01-01",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": -1,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "confidence": {
+        "self_direction": "high",
+        "stimulation": "high",
+        "hedonism": "high",
+        "achievement": "high",
+        "power": "high",
+        "security": "high",
+        "conformity": "high",
+        "tradition": "medium",
+        "benevolence": "medium",
+        "universalism": "high"
+      },
+      "rationale": "Declined uncle's offer for stable government job, explicitly defending autonomy and flexibility to experiment (+2 self-direction, -1 security). Resisted family pressure about marriage/career (-1 conformity). Participated in temple visit and family gathering (+1 tradition despite tension)."
+    },
+    {
+      "t_index": 3,
+      "date": "2026-01-03",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "confidence": {
+        "self_direction": "medium",
+        "stimulation": "high",
+        "hedonism": "medium",
+        "achievement": "high",
+        "power": "high",
+        "security": "high",
+        "conformity": "high",
+        "tradition": "high",
+        "benevolence": "medium",
+        "universalism": "high"
+      },
+      "rationale": "Set up classroom her way, planning program on own terms (+1 self-direction). Ordered biryani as self-treat (+1 hedonism). Avoided mother's calls twice (-1 benevolence for neglecting close relationship). Response to nudge confirms she prefers keeping things casual on her terms."
+    },
+    {
+      "t_index": 4,
+      "date": "2026-01-04",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "confidence": {
+        "self_direction": "high",
+        "stimulation": "high",
+        "hedonism": "high",
+        "achievement": "high",
+        "power": "high",
+        "security": "high",
+        "conformity": "high",
+        "tradition": "high",
+        "benevolence": "high",
+        "universalism": "high"
+      },
+      "rationale": "Good teaching moment with student Meera asking about poetry (+1 achievement). Internally resists metrics-focused approach at staff meeting, maintains her discussion-based style (+1 self-direction, -1 conformity). Response clarifies she's confident in classroom, only anxious in performative meetings."
+    },
+    {
+      "t_index": 5,
+      "date": "2026-01-09",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "confidence": {
+        "self_direction": "medium",
+        "stimulation": "high",
+        "hedonism": "high",
+        "achievement": "medium",
+        "power": "high",
+        "security": "high",
+        "conformity": "high",
+        "tradition": "high",
+        "benevolence": "high",
+        "universalism": "high"
+      },
+      "rationale": "Brief but scorable. Successful debate in Class 9 with good participation (+1 achievement). Her discussion-based approach validated (+1 self-direction). 'This is why I do this' shows alignment with her teaching philosophy."
+    },
+    {
+      "t_index": 6,
+      "date": "2026-01-12",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": -1,
+        "tradition": -1,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "confidence": {
+        "self_direction": "high",
+        "stimulation": "high",
+        "hedonism": "high",
+        "achievement": "high",
+        "power": "high",
+        "security": "high",
+        "conformity": "high",
+        "tradition": "high",
+        "benevolence": "high",
+        "universalism": "high"
+      },
+      "rationale": "Intense conflict with mother over arranged marriage. Strong defense of autonomy against 'particular' accusation (+2 self-direction). Explicitly rejects marriage circuit and family expectations (-2 conformity, -1 tradition). Unresolved conflict with crying mother, conversation ended badly (-1 benevolence). Response shows she won't change herself but doesn't want permanent disconnect."
+    },
+    {
+      "t_index": 7,
+      "date": "2026-01-17",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "confidence": {
+        "self_direction": "high",
+        "stimulation": "high",
+        "hedonism": "high",
+        "achievement": "high",
+        "power": "high",
+        "security": "high",
+        "conformity": "high",
+        "tradition": "high",
+        "benevolence": "high",
+        "universalism": "high"
+      },
+      "rationale": "First creative writing session launched successfully. Explicitly states 'This is the thing I built. Mine. Nobody assigned it to me' (+2 self-direction). 7 students attended (+1 achievement). Encouraged Arjun's piece about grandmother, nurturing student voice (+1 benevolence)."
+    },
+    {
+      "t_index": 8,
+      "date": "2026-01-23",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "confidence": {
+        "self_direction": "medium",
+        "stimulation": "high",
+        "hedonism": "high",
+        "achievement": "medium",
+        "power": "high",
+        "security": "high",
+        "conformity": "high",
+        "tradition": "high",
+        "benevolence": "high",
+        "universalism": "high"
+      },
+      "rationale": "Brief entry. Second session with 10 students (growth from 7). Program she created is succeeding (+1 self-direction, +1 achievement). Meera from Class 7 joined with notebook of poems, showing organic interest."
+    }
+  ]
+}

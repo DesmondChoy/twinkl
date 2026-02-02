@@ -1,0 +1,77 @@
+{
+  "persona_id": "cd0d027f",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-07-04",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "confidence": "high",
+      "rationale": "Strong stimulation signal - persona is 'crawling out of skin' from routine, wants to book flight 'anywhere' just for change. Negative security signal - actively seeking to disrupt stability and predictability. No nudge response adds context."
+    },
+    {
+      "t_index": 1,
+      "date": "2025-07-11",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "confidence": "high",
+      "rationale": "Said yes before principal finished - autonomous decision-making (self-direction). 'Nothing to run, nothing to decide' and 'rotting at home' signals stimulation need. Wants 'something with my name on it' and to 'lead' - clear power motivation seeking authority and control."
+    },
+    {
+      "t_index": 2,
+      "date": "2025-07-13",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": -1,
+        "tradition": -1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "confidence": "high",
+      "rationale": "Defends leadership authority when challenged - power. Values competence over seniority ('being good at something would be enough') - achievement. Explicitly rejects seniority norms ('I left banking so I wouldn't have to wait in line') - negative conformity and tradition. Frustrated by institutional hierarchy based on tenure rather than merit."
+    },
+    {
+      "t_index": 3,
+      "date": "2025-07-13",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "confidence": "high",
+      "rationale": "Reflects on Ms. Liu's perspective and reaches out for boba to repair relationship - benevolence. Recognizes need for collaboration and making others 'feel heard' - positive conformity shift. Still maintains 'outdoor assembly IS a better idea' - self-direction. 'Slow feels unbearable' and taking photos at harbor - stimulation. Growth shown through maintaining autonomy while adapting social approach."
+    }
+  ]
+}

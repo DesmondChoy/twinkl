@@ -1,0 +1,124 @@
+{
+  "persona_id": "e7f5aa8b",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-05-06",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationale": "Roberto tracks Q1 numbers at 12% above target and sends to director. The nudge response reveals his core motivation: proving he's 'still relevant' at 57 and that 'experience has value' compared to younger managers. Strong Achievement alignment (tracking metrics, exceeding targets, seeking validation through performance). Moderate Power signal in comparing himself to younger managers and wanting to demonstrate superiority."
+    },
+    {
+      "t_index": 1,
+      "date": "2025-05-09",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationale": "Roberto is upset about Carlos (8 years) being invited to leadership summit over him (34 years). His nudge response emphasizes 'respect for a track record' - Power concern about status and deference. Achievement signal in wanting recognition for tenure. The caveat 'maybe I'm just tired... context I don't know about' shows some Conformity - restraining his reaction, accepting organizational decisions."
+    },
+    {
+      "t_index": 2,
+      "date": "2025-05-11",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationale": "Roberto reflects independently on the Carlos situation, acknowledging Carlos is 'genuinely stronger' in digital transformation. This self-aware analysis shows Self-Direction (independent thought, questioning his initial reaction). He articulates that his contributions feel 'invisible' and 'goalposts moved' - continued Achievement and Power concerns about recognition and status, but processed through genuine reflection rather than raw emotion."
+    },
+    {
+      "t_index": 3,
+      "date": "2025-05-18",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationale": "Roberto directly asks his director about VP track - strong Achievement behavior (pursuing concrete career goal) and Power (seeking promotion to authority position). His frustration that informal mentorship 'doesn't count unless it's in some formal program with tracking metrics' shows mild Conformity resistance - he's chafing at organizational norms that don't recognize his contributions the way he thinks they should. The nudge about 'quantifying mentorship' is left unanswered, suggesting internal tension."
+    },
+    {
+      "t_index": 4,
+      "date": "2025-05-19",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationale": "Short but revealing entry. Lucia tells him he's been distant; he admits thinking about work at dinner. He acknowledges needing balance but won't 'lose momentum on the VP push.' Benevolence misalignment - he's neglecting close relationship (wife) for personal goals. Achievement alignment - prioritizing career advancement. Hedonism misalignment - sacrificing present enjoyment and connection for distant achievement goals."
+    },
+    {
+      "t_index": 5,
+      "date": "2025-05-25",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": -1,
+        "power": -1,
+        "security": -1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationale": "Crisis entry. Three VPs promoted, none of them Roberto. Daniel (his 2018 mentee) is now VP. Roberto questions 'what was it for?' and whether his notebook entries 'always mattered less than I thought.' Achievement crisis - his metric-based success model is crumbling. Power loss - passed over for status he sought. Security shaken - questioning whether he's 'already arrived - and this is it.' Self-Direction emerging through deep reflection and questioning assumptions. Benevolence received from Lucia (made coffee, sat with him) though he struggles to reciprocate emotionally. The shame at feeling jealous of his mentee shows self-awareness."
+    },
+    {
+      "t_index": 6,
+      "date": "2025-05-28",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationale": "Transformative reflection. Roberto reconceptualizes success: 'there's another scoreboard I've been ignoring' - the people he trained who kept climbing, the plants running well because of his mentees. Daniel calling to 'pick his brain' is meaningful. Strong Self-Direction - he's questioning received definitions of success and creating his own meaning framework. Benevolence emerging - he's starting to value his legacy through others' welfare rather than just personal titles. Achievement and Power are neutralizing - not abandoned, but no longer the sole metrics. He ends with 'still thinking' - genuine intellectual autonomy."
+    }
+  ]
+}

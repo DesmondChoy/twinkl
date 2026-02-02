@@ -24,10 +24,13 @@ The hospital cafeteria food was stale as usual. Ate a vada pav from the cart out
 
 My supervisor mentioned they might change the shift rotation next month. Nothing confirmed. I don't like the uncertainty. The current schedule works for me.
 
-### Nudge
-*What made you choose to stay for the extra forty-five minutes? Was there something that made that decision easier or harder?*
+### Nudge (elaboration)
+**Trigger**: Entry describes staying extra 45 minutes to help grieving family—worth exploring the decision
+"What made you choose to stay for the extra forty-five minutes? Was there something that made that decision easier or harder?"
 
-### Response to Nudge
+### Response
+**Mode**: Answering directly
+
 The family was alone. The wife kept asking the same questions over and over, like her mind couldn't accept what had happened. Nobody else was there to help them. My replacement nurse was already swamped with her own patients.
 
 Was it hard to stay? Yes and no. I was exhausted and hungry. But leaving felt wrong. You don't just walk away from people in that state. My mother always said that when someone is drowning in grief, you throw them a rope, even if your arms are tired.
@@ -68,10 +71,11 @@ I found someone who might swap one week with me, so I can still do Goa. But it c
 
 I just want some predictability. Is that too much to ask? I work hard. I show up. I don't complain about the difficult patients or the long hours. But I need to know that my life outside these walls is mine to plan.
 
-### Nudge
-*You mentioned wanting your life outside work to be "yours to plan." What would that look like for you, ideally?*
+### Nudge (elaboration)
+**Trigger**: Entry expresses strong desire for schedule predictability—worth exploring further
+"You mentioned wanting your life outside work to be 'yours to plan.' What would that look like for you, ideally?"
 
-*(No response recorded)*
+*(No response - persona did not reply to nudge)*
 
 ---
 

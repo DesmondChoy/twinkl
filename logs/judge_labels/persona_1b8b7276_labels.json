@@ -1,0 +1,149 @@
+{
+  "persona_id": "1b8b7276",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-07-05",
+      "scores": {
+        "power": 0,
+        "achievement": 0,
+        "hedonism": 0,
+        "stimulation": -1,
+        "self_direction": -1,
+        "universalism": 0,
+        "benevolence": 0,
+        "tradition": 0,
+        "conformity": 1,
+        "security": 1
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-07-09",
+      "scores": {
+        "power": -1,
+        "achievement": 0,
+        "hedonism": 0,
+        "stimulation": 0,
+        "self_direction": -1,
+        "universalism": 0,
+        "benevolence": 0,
+        "tradition": 0,
+        "conformity": 1,
+        "security": 1
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-07-15",
+      "scores": {
+        "power": 0,
+        "achievement": 1,
+        "hedonism": 0,
+        "stimulation": 0,
+        "self_direction": 0,
+        "universalism": 0,
+        "benevolence": 1,
+        "tradition": 1,
+        "conformity": 1,
+        "security": 0
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-07-19",
+      "scores": {
+        "power": -1,
+        "achievement": 0,
+        "hedonism": 0,
+        "stimulation": 0,
+        "self_direction": -1,
+        "universalism": 0,
+        "benevolence": 0,
+        "tradition": 1,
+        "conformity": 1,
+        "security": 1
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-07-24",
+      "scores": {
+        "power": 0,
+        "achievement": 0,
+        "hedonism": 0,
+        "stimulation": -1,
+        "self_direction": -1,
+        "universalism": 0,
+        "benevolence": 0,
+        "tradition": 0,
+        "conformity": 0,
+        "security": 1
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-07-31",
+      "scores": {
+        "power": 0,
+        "achievement": 1,
+        "hedonism": 1,
+        "stimulation": 0,
+        "self_direction": 0,
+        "universalism": 0,
+        "benevolence": 1,
+        "tradition": 0,
+        "conformity": 0,
+        "security": 1
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-08-07",
+      "scores": {
+        "power": -1,
+        "achievement": 1,
+        "hedonism": 0,
+        "stimulation": -1,
+        "self_direction": -1,
+        "universalism": 0,
+        "benevolence": 0,
+        "tradition": 0,
+        "conformity": 1,
+        "security": 1
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-08-13",
+      "scores": {
+        "power": 0,
+        "achievement": 1,
+        "hedonism": 0,
+        "stimulation": -1,
+        "self_direction": 0,
+        "universalism": 0,
+        "benevolence": 0,
+        "tradition": 0,
+        "conformity": 1,
+        "security": 1
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-08-19",
+      "scores": {
+        "power": 0,
+        "achievement": 0,
+        "hedonism": 1,
+        "stimulation": 0,
+        "self_direction": 0,
+        "universalism": 0,
+        "benevolence": 1,
+        "tradition": 1,
+        "conformity": 0,
+        "security": 0
+      }
+    }
+  ]
+}

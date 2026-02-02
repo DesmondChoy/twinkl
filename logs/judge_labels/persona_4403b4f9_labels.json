@@ -1,0 +1,41 @@
+{
+  "persona_id": "4403b4f9",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-01-27",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 1,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "confidence": "high",
+      "rationale": "Strong achievement signals: tracking children against benchmarks, wanting to list accomplishments, running 'faster than ever' but wanting score-keeping. Self-direction in teaching himself upholstery independently. Stimulation in learning new skills, redesigning apartment. Power concern evident in defensiveness about status and desire for recognition."
+    },
+    {
+      "t_index": 1,
+      "date": "2025-01-30",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 1,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "confidence": "high",
+      "rationale": "Very strong achievement: tracking hours precisely (forty hours), detailed mastery pursuit (five hours research on 1920s veneer, three tries), knowing work was good before client saw it, wanting bigger challenges. Strong stimulation: workshop expansion explicitly to attempt harder challenges, seeking novelty in restoration complexity. Self-direction in independent learning and self-assessment. Benevolence in involving twins, teaching Emma to help measure."
+    }
+  ]
+}
