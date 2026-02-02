@@ -1,0 +1,37 @@
+{
+  "persona_id": "e74a0721",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-10-26",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": -1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 1,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-10-28",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": -1,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 1,
+        "conformity": 1,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      }
+    }
+  ]
+}
