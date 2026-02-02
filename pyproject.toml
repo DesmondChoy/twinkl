@@ -25,6 +25,7 @@ dependencies = [
     "sentence-transformers>=2.2.0",
     "scipy>=1.10.0",
     "matplotlib>=3.7.0",
+    "pytorch-tcn>=1.2.3",
 ]
 
 [tool.setuptools]
