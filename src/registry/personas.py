@@ -18,6 +18,7 @@ Registry Schema:
     stage_wrangled: bool    - True after wrangling
     stage_labeled: bool     - True after judge labeling
     nudge_enabled: bool     - Whether nudges were enabled during generation
+    annotation_order: int   - Display order in annotation tool (1-indexed, nullable)
 """
 
 import fcntl
@@ -43,6 +44,7 @@ REGISTRY_SCHEMA = {
     "stage_wrangled": pl.Boolean,
     "stage_labeled": pl.Boolean,
     "nudge_enabled": pl.Boolean,
+    "annotation_order": pl.Int64,  # Display order in annotation tool (1-indexed)
 }
 
 

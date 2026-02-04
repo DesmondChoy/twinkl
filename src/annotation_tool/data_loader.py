@@ -225,14 +225,20 @@ def load_entries(wrangled_dir: str | Path = "logs/wrangled") -> pl.DataFrame:
     return result.df
 
 
-def load_entries_with_warnings(wrangled_dir: str | Path = "logs/wrangled") -> LoadResult:
+def load_entries_with_warnings(
+    wrangled_dir: str | Path = "logs/wrangled",
+    registry_path: str | Path = "logs/registry/personas.parquet",
+) -> LoadResult:
     """Load all entries from wrangled persona files with warning collection.
 
     Args:
         wrangled_dir: Path to the wrangled files directory
+        registry_path: Path to the persona registry (for annotation_order)
 
     Returns:
         LoadResult containing the DataFrame and any parsing warnings.
+        The DataFrame includes an 'annotation_order' column if available
+        in the registry.
 
     Raises:
         FileNotFoundError: If no persona files are found in the directory.
@@ -289,24 +295,59 @@ def load_entries_with_warnings(wrangled_dir: str | Path = "logs/wrangled") -> Lo
             f"{len(all_warnings)} files had parsing errors."
         )
 
+    df = pl.DataFrame(rows)
+
+    # Try to merge annotation_order from registry
+    registry_path = Path(registry_path)
+    if registry_path.exists():
+        try:
+            registry_df = pl.read_parquet(registry_path)
+            if "annotation_order" in registry_df.columns:
+                # Join annotation_order by persona_id
+                df = df.join(
+                    registry_df.select(["persona_id", "annotation_order"]),
+                    on="persona_id",
+                    how="left",
+                )
+        except Exception:
+            # Registry read failed, proceed without annotation_order
+            pass
+
     return LoadResult(
-        df=pl.DataFrame(rows),
+        df=df,
         warnings=all_warnings,
         skipped_count=skipped_count,
     )
 
 
 def get_ordered_entries(df: pl.DataFrame) -> list[dict]:
-    """Get entries sorted by persona_id then t_index.
+    """Get entries sorted by annotation_order (if available) then t_index.
+
+    If annotation_order is not present or is null, falls back to persona_id sorting.
+    This allows the annotation tool to display personas in a custom order set in
+    the registry, enabling prioritization of specific personas (e.g., those with
+    underrepresented values like Stimulation, Power, Security).
 
     Args:
         df: DataFrame from load_entries()
 
     Returns:
         List of entry dicts, each containing both persona context and entry content.
-        Ordered by persona_id, then by t_index within each persona.
+        Ordered by annotation_order (or persona_id as fallback), then by t_index.
     """
-    sorted_df = df.sort(["persona_id", "t_index"])
+    # Check if annotation_order column exists and has non-null values
+    if "annotation_order" in df.columns:
+        # Use annotation_order as primary sort, falling back to persona_id for nulls
+        sorted_df = df.sort(
+            [
+                pl.col("annotation_order").fill_null(999999),  # Nulls sort last
+                "persona_id",  # Secondary sort for same annotation_order or nulls
+                "t_index",
+            ]
+        )
+    else:
+        # Fallback to original behavior
+        sorted_df = df.sort(["persona_id", "t_index"])
     return sorted_df.to_dicts()
 
 

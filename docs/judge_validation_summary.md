@@ -1,5 +1,7 @@
 # Judge Validation Summary
 
+**Last Updated:** 2026-02-04
+
 **Purpose:** This document summarizes inter-rater reliability findings to support the academic claim that LLM Judge labeling is at least as reliable as human annotation, justifying automated labeling at scale for VIF training data.
 
 **Analysis Source:** `src/annotation_tool/agreement_metrics.py`
@@ -44,63 +46,126 @@ In practical terms: replacing human annotation with Judge labeling at scale does
 
 ---
 
-## Dimensions Lacking Signal
+## Validation Gap: Core Persona Value Coverage
 
-Three dimensions were excluded from the primary analysis due to sparse data (N < 10 non-zero cases in the annotated sample):
+### Why Core Persona Values Drive Reliable Signal
 
-| Dimension | Issue | Details |
-|-----------|-------|---------|
-| **Stimulation** | Only 2/31 personas have this as a core value | Insufficient positive cases for reliable κ calculation |
-| **Power** | Only 1/31 personas has this as a core value | Near-zero variance makes agreement metrics unstable |
-| **Security** | Only 9 non-zero cases in annotated sample | Below threshold for reliable inter-rater statistics |
+For inter-rater validation, we measure coverage by **Core Persona Values**—the count of personas whose profile includes a dimension as a core value. This is the best predictor of reliable κ calculation because personas consistently express their core values across multiple journal entries.
 
-These dimensions show artificially inflated or deflated κ values due to class imbalance (most entries labeled as 0 = neutral), making the metrics unreliable indicators of actual agreement.
+An alternative metric, entry-level signal (count of entries with non-zero labels), can be misleading:
+
+| Dimension | Core Personas | Non-Zero Entries | Interpretation |
+|-----------|---------------|------------------|----------------|
+| Self-Direction | 3 | 32 | High personas → High signal ✓ |
+| Achievement | 0 | 21 | Zero personas, signal from "crossover" expressions |
+| Benevolence | 1 | 23 | Low personas, high crossover signal |
+| Stimulation | 1 | 8 | Low personas → Low signal |
+| Power | 1 | 7 | Low personas → Low signal |
+
+**Key insight:** Dimensions like Achievement and Benevolence show entry-level signal through incidental "crossover" expressions—sporadic mentions in personas with *other* core values. This crossover signal is:
+- Less consistent (annotators see one-off mentions, not behavioral patterns)
+- Harder to validate (no ground truth from persona design)
+- Less reliable for κ calculation (small, noisy sample)
+
+**For robust inter-rater validation, we need personas where annotators observe consistent, core-value-driven behavior—not incidental mentions.**
+
+### Current Annotated Sample (10 Personas)
+
+| Value Dimension | Personas in Sample | Status |
+|-----------------|-------------------|--------|
+| Self-Direction | 3 | ✓ Adequate |
+| Hedonism | 2 | → Marginal |
+| Conformity | 2 | → Marginal |
+| **Achievement** | **0** | ⚠ **None** |
+| **Stimulation** | **1** | ⚠ Insufficient |
+| **Power** | **1** | ⚠ Insufficient |
+| **Security** | **1** | ⚠ Insufficient |
+| **Tradition** | **1** | ⚠ Insufficient |
+| **Benevolence** | **1** | ⚠ Insufficient |
+| **Universalism** | **1** | ⚠ Insufficient |
+
+**Target:** Minimum 3 personas per dimension for reliable κ calculation.
 
 ---
 
 ## Next Steps to Rectify
 
-### 1. Generate Additional Personas ✅ COMPLETED
+### 1. Generate Additional Synthetic Data ✅ NOT NEEDED
 
-~~Generate new personas with underrepresented values as **core values** (ensures frequent expression in entries).~~
+The registry already contains sufficient personas for all dimensions:
 
-**Status (2026-01-29):** Generated 61 new personas (including 10 targeted Stimulation personas). Distribution is now balanced:
+| Value Dimension | In Registry | In Annotated Sample | Available |
+|-----------------|-------------|---------------------|-----------|
+| Self-Direction | 14 | 3 | 11 |
+| Stimulation | 17 | 1 | 16 |
+| Hedonism | 19 | 2 | 17 |
+| Achievement | 13 | 0 | 13 |
+| Power | 14 | 1 | 13 |
+| Security | 16 | 1 | 15 |
+| Conformity | 18 | 2 | 16 |
+| Tradition | 15 | 1 | 14 |
+| Benevolence | 14 | 1 | 13 |
+| Universalism | 15 | 1 | 14 |
 
-| Value Dimension | Previous Count | Current Count | Status |
-|-----------------|----------------|---------------|--------|
-| Self-Direction | 10 | 10 | ✓ Balanced |
-| Stimulation | 5 | 15 | ✅ **Fixed** (was underrepresented) |
-| Hedonism | 17 | 17 | ✓ Balanced |
-| Achievement | 9 | 10 | ✓ Balanced |
-| Power | 9 | 10 | ✓ Balanced |
-| Security | 15 | 15 | ✓ Balanced |
-| Conformity | 16 | 17 | ✓ Balanced |
-| Tradition | 13 | 14 | ✓ Balanced |
-| Benevolence | 14 | 14 | ✓ Balanced |
-| Universalism | 11 | 12 | ✓ Balanced |
+**Total:** 102 personas in registry, 155 value assignments (mean 15.5 per value).
 
-**Total:** 89 personas, 134 value assignments (mean 13.4 per value, range 10-17).
+No additional synthetic data generation required.
 
-Used `TARGET_VALUES = ["Stimulation"]` with `ADD_RANDOM_VALUE = true` to generate targeted personas.
+### 2. Run Judge Labeling ✅ COMPLETED
 
-### 2. Run Judge Labeling on New Personas
+All 102 personas have been labeled by the Judge.
 
-Pipeline: `logs/registry/personas.parquet` → judge labeling stage
+### 3. Conduct Additional Human Annotation Round 🔲 IN PROGRESS
 
-### 3. Conduct Additional Human Annotation Round
+**Requirement:** Annotate **9 additional personas** to reach ≥3 personas per dimension.
 
-**Annotation workload estimate:**
-- ~8 new personas × ~7 entries average = **~56 new entries** per annotator
-- (Entry count varies 2-12 per persona; 7 is the midpoint)
-- Each of the 3 annotators reviews all entries from the new personas
+**Optimal persona selection** (maximizes coverage with minimum annotations):
+
+| # | Persona | Core Values | Fills Gap For |
+|---|---------|-------------|---------------|
+| 1 | Chen Wei-Lin | Security, Power | Security, Power |
+| 2 | Layla Mansour | Stimulation, Security | Stimulation |
+| 3 | Maya Chen | Achievement, Stimulation | Achievement, Stimulation |
+| 4 | Harold Delacroix | Conformity, Power | Power |
+| 5 | Tariq Al-Mansouri | Benevolence, Universalism | Benevolence, Universalism |
+| 6 | Valentina Reyes | Tradition, Universalism | Tradition, Universalism |
+| 7 | Priya Sharma | Hedonism, Achievement | Achievement |
+| 8 | Tariq Haddad | Benevolence, Achievement | Benevolence |
+| 9 | Park Jiyeon | Tradition, Security | Tradition |
+
+**Projected distribution after annotation:**
+
+| Value Dimension | Current | + Add | = Total | Status |
+|-----------------|---------|-------|---------|--------|
+| Self-Direction | 3 | +0 | 3 | ✓ |
+| Stimulation | 1 | +2 | 3 | ✓ |
+| Hedonism | 2 | +1 | 3 | ✓ |
+| Achievement | 0 | +3 | 3 | ✓ |
+| Power | 1 | +2 | 3 | ✓ |
+| Security | 1 | +3 | 4 | ✓ |
+| Conformity | 2 | +1 | 3 | ✓ |
+| Tradition | 1 | +2 | 3 | ✓ |
+| Benevolence | 1 | +2 | 3 | ✓ |
+| Universalism | 1 | +2 | 3 | ✓ |
+
+**Workload estimate:**
+- 9 personas × ~7 entries average = **~63 entries** per annotator
+- Each of the 3 annotators reviews all entries
 - Use existing annotation tool: `src/annotation_tool/`
-
-**Context:** Current round reviewed ~10 personas (46 entries) and achieved adequate signal for 7/10 dimensions. This targeted addition focuses specifically on the 3 underrepresented dimensions.
+- Personas have been reordered in registry (`annotation_order` field) so annotators can continue from position 11
 
 ### 4. Re-calculate Agreement Metrics
 
-- Run `generate_agreement_report()` from `src/annotation_tool/agreement_metrics.py`
-- Verify all 10 dimensions now have adequate signal (N ≥ 10 non-zero cases)
+After annotation round completes:
+
+```python
+from src.annotation_tool.agreement_metrics import generate_agreement_report
+generate_agreement_report()
+```
+
+**Success criteria:**
+- All 10 dimensions have ≥3 personas with that core value in the annotated sample
+- Judge-Human κ ≥ Fleiss' κ (human-human) for all dimensions
 - Update this document with complete findings
 
 ---
@@ -126,5 +191,6 @@ Pipeline: `logs/registry/personas.parquet` → judge labeling stage
 ### Sample Size
 
 - **Human Annotators:** 3 (des, jl, km)
-- **Entries per Annotator:** 46
-- **Total Personas in Registry:** 31
+- **Entries Annotated (Current):** 46 (from 10 personas)
+- **Entries to Annotate (Next Round):** ~63 (from 9 personas)
+- **Total Personas in Registry:** 102
