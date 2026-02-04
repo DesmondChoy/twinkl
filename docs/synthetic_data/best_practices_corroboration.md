@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-After extensive web research across 15+ searches covering frontier lab publications, academic papers, and industry best practices, this document provides a detailed assessment of how the Twinkl pipeline aligns with (or diverges from) established best practices. The verdict is **largely well-aligned with significant strengths**, but with **3 notable concerns** that warrant attention.
+After extensive web research across 15+ searches covering frontier lab publications, academic papers, and industry best practices, this document provides a detailed assessment of how the Twinkl pipeline aligns with (or diverges from) established best practices. The verdict is **largely well-aligned with significant strengths**, but with **2 notable concerns** that warrant attention.
 
 ---
 
@@ -269,21 +269,6 @@ Combine Correction Strategy 1 (Value Anchoring) + Detection Strategy 1 (Score Di
 4. Document findings as part of capstone evaluation
 5. If significant skew detected, consider targeted regeneration with stronger anchoring for underrepresented values
 
-### ⚠️ CONCERN 3: Potential for Model Collapse (Long-term Risk)
-
-**Our approach:** Synthetic data used to train the VIF Critic model.
-
-**Research findings:**
-- [*AI models collapse when trained on recursively generated data*](https://www.nature.com/articles/s41586-024-07566-y) (Nature, 2024): Training on synthetic data leads to "irreversible defects" and eventual model degradation.
-- However, this primarily applies to **recursive** self-training (model trains on its own outputs, then those outputs train the next generation).
-
-**Risk for Twinkl:** This is a **low risk** for the current pipeline because:
-- The VIF Critic is an MLP, not a generative model being trained on its own outputs
-- The synthetic data is used once for training, not recursively
-- The training target (alignment scores) is not fed back into generation
-
-**Mitigation:** This is mostly a future concern if the pipeline ever becomes recursive. Current design is sound.
-
 ---
 
 ## 4. ADDITIONAL OBSERVATIONS
@@ -314,7 +299,6 @@ The parquet-based registry with file locking for concurrent writes is a pragmati
 | Trajectory context | ✅ Strong | Correct for longitudinal data |
 | Same-model gen+judge | ⚠️ Concern | Self-preference bias risk |
 | LLM value biases in generation | ⚠️ Concern | Systematic value orientation skew |
-| Model collapse risk | ⚠️ Low risk | Non-recursive pipeline; mostly future concern |
 
 ---
 
