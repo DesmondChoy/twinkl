@@ -107,13 +107,13 @@ The registry already contains sufficient personas for all dimensions:
 | Benevolence | 14 | 1 | 13 |
 | Universalism | 15 | 1 | 14 |
 
-**Total:** 102 personas in registry, 155 value assignments (mean 15.5 per value).
+**Total:** 100 personas in registry, 153 value assignments (mean 15.3 per value).
 
 No additional synthetic data generation required.
 
 ### 2. Run Judge Labeling ✅ COMPLETED
 
-All 102 personas have been labeled by the Judge.
+All 100 personas have been labeled by the Judge.
 
 ### 3. Conduct Additional Human Annotation Round 🔲 IN PROGRESS
 
@@ -128,7 +128,7 @@ All 102 personas have been labeled by the Judge.
 | 3 | Maya Chen | Achievement, Stimulation | Achievement, Stimulation |
 | 4 | Harold Delacroix | Conformity, Power | Power |
 | 5 | Tariq Al-Mansouri | Benevolence, Universalism | Benevolence, Universalism |
-| 6 | Valentina Reyes | Tradition, Universalism | Tradition, Universalism |
+| 6 | Marcus Chen (e809d252) | Universalism, Tradition | Tradition, Universalism |
 | 7 | Priya Sharma | Hedonism, Achievement | Achievement |
 | 8 | Tariq Haddad | Benevolence, Achievement | Benevolence |
 | 9 | Park Jiyeon | Tradition, Security | Tradition |
@@ -193,4 +193,4 @@ generate_agreement_report()
 - **Human Annotators:** 3 (des, jl, km)
 - **Entries Annotated (Current):** 46 (from 10 personas)
 - **Entries to Annotate (Next Round):** ~63 (from 9 personas)
-- **Total Personas in Registry:** 102
+- **Total Personas in Registry:** 100

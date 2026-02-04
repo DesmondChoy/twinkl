@@ -32,7 +32,7 @@ See `docs/synthetic_data/pipeline_specs.md` for implementation details.
 
 | Metric | Value |
 |--------|-------|
-| Personas | 102 |
+| Personas | 100 |
 | Journal entries | 729 |
 | Avg entries/persona | 7.1 |
 | Entries with nudges | 65.8% |
