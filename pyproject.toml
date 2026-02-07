@@ -26,6 +26,7 @@ dependencies = [
     "scipy>=1.10.0",
     "matplotlib>=3.7.0",
     "pytorch-tcn>=1.2.3",
+    "coral-pytorch>=1.4.0",
 ]
 
 [tool.setuptools]

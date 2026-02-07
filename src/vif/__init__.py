@@ -24,6 +24,7 @@ from src.vif.encoders import SBERTEncoder, TextEncoder, create_encoder
 from src.vif.state_encoder import StateEncoder
 from src.vif.critic import CriticMLP
 from src.vif.critic_bnn import CriticBNN, get_kl_loss
+from src.vif.critic_corn import CriticMLPCORN, corn_loss_multi
 
 __all__ = [
     "TextEncoder",
@@ -33,4 +34,6 @@ __all__ = [
     "CriticMLP",
     "CriticBNN",
     "get_kl_loss",
+    "CriticMLPCORN",
+    "corn_loss_multi",
 ]
