@@ -28,24 +28,40 @@ Before any user signs up, the system must be trained.
 
 ---
 
-## Stage 1: Onboarding — Sarah Picks Her Values
+## Stage 1: Onboarding — BWS Values Assessment
 
-Sarah downloads Twinkl and completes the values screening.
+> For the full onboarding specification, see [Onboarding Spec](../onboarding/onboarding_spec.md).
+
+Sarah downloads Twinkl and completes the BWS-based values assessment. Rather than simply picking her top 2 values, she works through 6 forced-choice screens that reveal her value priorities through trade-offs.
 
 ### What Sarah Sees
 
-> **Welcome to Twinkl.**
+**BWS Sets (showing 2 of 6):**
+
+> **Set 1:** Security · Self-Direction · Achievement · Benevolence
 >
-> We'd like to understand what matters most to you. Below are descriptions of different values. Pick the **two** that feel most central to who you want to be.
+> Sarah taps **"Being there for the people closest to me"** as Most like me (Benevolence) and **"Feeling calm and secure in my life"** as Least like me (Security). She cares about safety, but it's not what *drives* her.
 
-Sarah reads through the options (derived from Schwartz's Values) and selects:
+> **Set 3:** Hedonism · Tradition · Self-Direction · Power
+>
+> Sarah taps **"Having the freedom to choose my own path"** as Most like me (Self-Direction) and **"Having influence over how things go"** as Least like me (Power). Creative freedom over control.
 
-| Value | Why Sarah Chose It |
-|-------|-------------------|
-| **Benevolence** | "Being present for my daughter Emma is everything. I don't want to be the parent who's always distracted." |
-| **Self-Direction** | "I need creative freedom in my work. When I can't create, I feel like I'm dying inside." |
+**Mid-flow mirror (after Set 3):**
 
-She skips Achievement, Security, Power, etc. — not because they don't matter, but because they're not *core* to her identity right now.
+> "It sounds like you care a lot about **being there for the people closest to you** and **having the freedom to choose your own path**, and less about **having influence over how things go**. Does this feel roughly right?"
+
+Sarah taps **"Yes, that's me"** — the system is reading her well so far.
+
+**Goal selection:**
+
+Sarah picks **"I'm stretched too thin between work and everything else"** — the tension that brought her to Twinkl.
+
+**End summary:**
+
+> Your top values: **Benevolence**, **Self-Direction**
+> Your focus: "I'm stretched too thin between work and everything else"
+
+Sarah confirms. The system now has a graded value profile — not just her top 2, but a full 10-dimensional weight vector showing *how much* each value matters relative to others.
 
 ### Component Involvement
 
@@ -54,21 +70,40 @@ She skips Achievement, Security, Power, etc. — not because they don't matter, 
 | Generator | N/A | Only used during offline training |
 | Judge | N/A | No journal entry to score yet |
 | Critic | N/A | No journal entry to score yet |
-| Coach | **ACTIVE** | Guides Sarah through value selection; stores her profile |
+| Coach | **ACTIVE** | Guides Sarah through BWS assessment; stores her profile |
 
 **Output:** Sarah's value profile is saved:
 
 ```json
 {
-  "user": "sarah",
-  "values": ["Benevolence", "Self-Direction"],
-  "weights": [0.5, 0.5],
-  "descriptions": {
-    "Benevolence": "Being present for Emma",
-    "Self-Direction": "Creative freedom in work"
+  "user_id": "sarah",
+  "onboarding_version": "1.0.0",
+  "value_scores": {
+    "weights": {
+      "Self-Direction": 0.167,
+      "Stimulation": 0.067,
+      "Hedonism": 0.100,
+      "Achievement": 0.100,
+      "Power": 0.033,
+      "Security": 0.067,
+      "Conformity": 0.100,
+      "Tradition": 0.067,
+      "Benevolence": 0.167,
+      "Universalism": 0.132
+    }
+  },
+  "top_values": ["Benevolence", "Self-Direction"],
+  "goal_category": "work_life_balance",
+  "user_confirmed": true,
+  "confidence": {
+    "consistent": true,
+    "spread": 1.35,
+    "refinements": 0
   }
 }
 ```
+
+Note the difference from a simple "pick 2" approach: Sarah's profile now captures that Achievement and Universalism have moderate weight, Hedonism and Conformity are middling, and Power is her lowest priority. The Critic uses the full weight vector, not just the top 2.
 
 ---
 

@@ -16,7 +16,7 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 | **Human Annotation Tool** | ✅ Complete | ~4,200 LOC Shiny app; 56 annotations across 3 annotators; Cohen's κ / Fleiss' κ metrics; modular components with analysis view |
 | **Conversational Nudging** | 🧪 Experimental | 3-category LLM classification (clarification/elaboration/tension-surfacing); pending validation that nudging improves VIF signal quality |
 | **Weekly Alignment Coach** | ⚠️ Partial | Entry processing ready; digest generation not implemented |
-| **Mini-Assessment Quiz** | ❌ Not Started | Cold-start onboarding flow |
+| **Onboarding (BWS Values Assessment)** | 📋 Specified | [Spec](onboarding/onboarding_spec.md) |
 | **"Map of Me" Visualization** | ❌ Not Started | Embedding trajectories |
 | **Journaling Anomaly Radar** | ❌ Not Started | Cadence/gap detection |
 | **Goal-aligned Inspiration Feed** | ❌ Not Started | External API integration |
@@ -106,16 +106,13 @@ Value context is injected from `config/schwartz_values.yaml`, which contains ric
 * Low-friction journaling: prompts reduce blank-page paralysis and encourage regular reflection.
 * Evidence-based reinforcement, not gamification: when users sustain alignment with their values, the system acknowledges it by citing specific behaviors and connecting them to the user's own words — never through streaks, points, leaderboards, or generic praise. Positive feedback is infrequent (only when patterns emerge) and grounded in what the user actually wrote.
 
-## **Onboarding mini-assessment (cold start)**
+## **Onboarding (BWS Values Assessment)**
 
-* 3–5 screen “build your inner compass” quiz with large, tappable cards and a clear progress indicator.
-* First split on persona (e.g., student/young adult/mid-career), then on the live tension (overwork vs health, family guilt, creative stagnation).
-* Use forced trade-offs and simple rankings (e.g., protect sleep vs ship the project) to sharpen value weights instead of “select all that apply.”
-* Map each answer to latent dimensions (life stage, primary domain of concern, self-compassion vs self-criticism, comfort with challenge, time horizon) rather than a brittle tree of screens.
-* Show tiny mirrors mid-flow (“you sound like a mission-driven overcommitter who cares a lot about family—does this feel roughly right?”) so users can quickly correct the model.
-* Use the mini-assessment output to choose initial prompt tone, starter tensions to watch, and example scenarios in the first digest, and instrument responses so future iterations can merge/split branches and swap underperforming cards.
+The onboarding flow uses **Best-Worst Scaling (BWS)** — a forced-choice psychometric technique — to elicit value priorities across 10 Schwartz dimensions while minimizing social desirability bias. Users complete 6 quick screens (4 items each, tap "most like me" / "least like me"), see mid-flow and end-of-flow reflective mirrors for correction, and select a structured goal category. The output is a graded 10-dimensional value weight vector plus initial Coach monitoring focus.
 
-This mini-assessment directly anchors the capstone submodules: the latent dimensions form named slots in the knowledge base and rule layer (**Intelligent Reasoning Systems**), the mapping from user responses to those dimensions plus later corrections is a compact supervised modelling task (**Pattern Recognition Systems**), entry content analysis and temporal patterns feed the sensing layer (**Intelligent Sensing Systems**), and treating the quiz as just one input stream into a shared user-state vector `z` illustrates end-to-end orchestration and state management across Perception → Memory → Reasoning → Action (**Architecting AI Systems**).
+For the full specification including BWS item design, scoring logic, user flow, and data output schema, see **[Onboarding Spec](onboarding/onboarding_spec.md)**.
+
+This onboarding directly anchors the capstone submodules: the latent dimensions form named slots in the knowledge base and rule layer (**Intelligent Reasoning Systems**), the mapping from user responses to those dimensions plus later corrections is a compact supervised modelling task (**Pattern Recognition Systems**), entry content analysis and temporal patterns feed the sensing layer (**Intelligent Sensing Systems**), and treating the quiz as just one input stream into a shared user-state vector `z` illustrates end-to-end orchestration and state management across Perception → Memory → Reasoning → Action (**Architecting AI Systems**).
 
 ## **Core Feature Modules**
 
@@ -133,7 +130,7 @@ This mini-assessment directly anchors the capstone submodules: the latent dimens
 **Implementation path**
 
 1. Frame the research question (“How do we sustain a dynamic model of values/identity and reflect alignment?”) and map subsystems to submodules.
-2. Define the MVP loop: mini-assessment (3–5 screen quiz)
+2. Define the MVP loop: onboarding (BWS-based values assessment — see [spec](onboarding/onboarding_spec.md))
 3. **Scoping Strategy:** Adopt a **Hybrid Approach** (Simple journaling loop + weekly digest + lightweight trajectory viz). Build small slices of each feature to demonstrate breadth without over-building.
 4. Specify the profile schema:
    * **Value dimensions** anchored in [Schwartz's theory of basic human values](https://en.wikipedia.org/wiki/Theory_of_basic_human_values) (e.g., Self-Direction, Benevolence, Achievement, Security) with definitions, rubrics, and examples.
@@ -251,5 +248,6 @@ This avoids the trap of matching windows "for consistency" when the constraints 
 | [claude_judge_instructions.md](synthetic_data/claude_judge_instructions.md) | Judge labeling workflow (wrangling + scoring) |
 | [annotation_guidelines.md](synthetic_data/annotation_guidelines.md) | Human annotation for nudge effectiveness study |
 | [human_annotator_tool.md](data_loader/human_annotator_tool.md) | Shiny annotation tool implementation plan |
+| [onboarding_spec.md](onboarding/onboarding_spec.md) | BWS-based onboarding flow, item design, and data output schema |
 | [VIF_01_Concepts_and_Roadmap.md](VIF/VIF_01_Concepts_and_Roadmap.md) | Value Identity Function theory |
 | [VIF_03_Model_Training.md](VIF/VIF_03_Model_Training.md) | LLM-as-Judge and Critic training |

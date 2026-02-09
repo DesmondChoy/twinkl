@@ -151,6 +151,7 @@ state_encoder = StateEncoder(encoder)        # 1,174-dim state vectors
 ## Documentation Hierarchy
 
 - **`docs/PRD.md`** — Definitive specification (source of truth)
+- **`docs/onboarding/`** — Onboarding flow specification and BWS values assessment
 - **`docs/VIF/`** — VIF architecture, training, uncertainty logic
 - **`docs/synthetic_data/pipeline_specs.md`** — Synthetic data pipeline design
 - **`docs/ideas/`** — Brainstorming (not authoritative)
