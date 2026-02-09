@@ -9,7 +9,7 @@
 > 2. **Academic focus is on VIF training** — The core contribution is the Value Identity Function, not nudge selection quality.
 > 3. **Current system is single-shot** — Building a candidate ranking system requires new infrastructure that's out of scope for this capstone.
 >
-> See: [Nudging Feature: Design Rationale & Industry Alignment](../synthetic_data/nudge_validation_plan.md)
+> See: [Nudging Feature: Design Rationale & Industry Alignment](../pipeline/nudge_design_rationale.md)
 
 ---
 
