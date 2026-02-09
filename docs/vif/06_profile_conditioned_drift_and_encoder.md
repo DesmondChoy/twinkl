@@ -2,9 +2,9 @@
 
 This document extends:
 
-- `VIF_02_System_Architecture.md` (state & inference)
-- `VIF_03_Model_Training.md` (critics & targets)
-- `VIF_05_State_and_Data_Pipeline.md` (state construction)
+- `02_system_architecture.md` (state & inference)
+- `03_model_training.md` (critics & targets)
+- `05_state_and_data_pipeline.md` (state construction)
 
 It pins down:
 
@@ -32,7 +32,7 @@ For each entry text $T_{u,t}$:
 
 ### 1.2 Offline Embedding Pipeline
 
-As part of the pipeline from `VIF_05_State_and_Data_Pipeline.md`:
+As part of the pipeline from `05_state_and_data_pipeline.md`:
 
 1. For each `Entry` row `(persona_id, t_index)`:
    - Compute:
@@ -58,7 +58,7 @@ Future work (beyond the capstone) may optionally explore **light fine‑tuning**
 
 ### 2.1 POC State Definition (Recap)
 
-From `VIF_05_State_and_Data_Pipeline.md`, for window size $N=3$, the state is:
+From `05_state_and_data_pipeline.md`, for window size $N=3$, the state is:
 
 $$
  s_{u,t} = \text{Concat}\Big[
@@ -72,7 +72,7 @@ $$
 Where:
 
 - `text_window` are frozen embeddings $\mathbf{e}_{u,t-k}$.
-- `history_stats_{u,t}` is the vector of EMAs per value dimension (defined in `VIF_05`).
+- `history_stats_{u,t}` is the vector of EMAs per value dimension (defined in `05_state_and_data_pipeline.md`).
 - $w_u \in \mathbb{R}^K$ is the **value weight vector** for the user/persona, with $w_{u,j} \ge 0$ and $\sum_j w_{u,j} = 1$.
 
 ### 2.2 How the Profile Affects the Critic
@@ -141,7 +141,7 @@ with $\text{ema\_drift}^{(j)}_{u,0} = 0$.
 
 ### 3.3 Profile‑Weighted Scalar Alignment
 
-`VIF_03_Model_Training.md` defines an optional scalar aggregation:
+`03_model_training.md` defines an optional scalar aggregation:
 
 $$
 V^{\text{scalar}}_{u,t} = w_u^\top \hat{\vec{a}}_{u,t}
@@ -192,9 +192,9 @@ These scalar metrics are used for **summaries and triggers**, not as training ta
 For drift detection, we assume access to:
 
 - $\hat{\vec{a}}_{u,t}$: Critic mean predictions per dimension.
-- $\hat{\vec{\sigma}}_{u,t}$: Critic uncertainty estimates per dimension (from MC Dropout, see `VIF_04_Uncertainty_Logic.md`).
+- $\hat{\vec{\sigma}}_{u,t}$: Critic uncertainty estimates per dimension (from MC Dropout, see `04_uncertainty_logic.md`).
 - $w_u$: user value weight vector.
-- History statistics (`history_stats_{u,t}`) including EMAs of alignment, as defined in `VIF_05`.
+- History statistics (`history_stats_{u,t}`) including EMAs of alignment, as defined in `05_state_and_data_pipeline.md`.
 
 ### 4.2 Example Rule Templates
 

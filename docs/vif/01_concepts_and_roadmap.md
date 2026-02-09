@@ -3,9 +3,9 @@
 This document outlines the high-level objectives, core concepts, and implementation roadmap for Twinkl’s **Value Identity Function (VIF)**. The VIF is the core evaluative engine that estimates alignment between a user's behavior and their long-term values.
 
 For technical details, see:
-*   [System Architecture & Inference](VIF_02_System_Architecture.md)
-*   [Reward Modeling & Training](VIF_03_Model_Training.md)
-*   [Uncertainty & Critique Logic](VIF_04_Uncertainty_Logic.md)
+*   [System Architecture & Inference](02_system_architecture.md)
+*   [Reward Modeling & Training](03_model_training.md)
+*   [Uncertainty & Critique Logic](04_uncertainty_logic.md)
 
 ---
 

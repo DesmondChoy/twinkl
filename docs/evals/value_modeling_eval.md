@@ -132,6 +132,6 @@ From PRD (Evaluation Strategy, Row 2):
 
 ## References
 
-- `docs/VIF/VIF_03_Model_Training.md` — Training approach and loss function
-- `docs/PRD.md` — Evaluation Strategy table (Row 2)
+- `docs/vif/03_model_training.md` — Training approach and loss function
+- `docs/prd.md` — Evaluation Strategy table (Row 2)
 - `config/schwartz_values.yaml` — Value dimension definitions

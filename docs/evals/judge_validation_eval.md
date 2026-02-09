@@ -290,8 +290,8 @@ def validate_judge_output(labels_df):
 
 ## References
 
-- `docs/VIF/judge_implementation_spec.md` — Judge implementation details
-- `docs/data_loader/human_annotator_tool.md` — Annotation tool implementation plan
+- `docs/pipeline/judge_implementation_spec.md` — Judge implementation details
+- `docs/pipeline/annotation_tool_plan.md` — Annotation tool implementation plan
 - `src/annotation_tool/agreement_metrics.py` — κ calculation implementation
 - `config/schwartz_values.yaml` — Value rubrics and elaborations
 - `logs/exports/agreement_report_*.md` — Generated agreement reports

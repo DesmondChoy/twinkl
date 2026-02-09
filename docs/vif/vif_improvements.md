@@ -24,7 +24,7 @@ The goal is not to change the core philosophy of VIF, but to sharpen its **perso
 
 ### 2.1 What VIF Does Today
 
-Based on `docs/VIF/VIF_01_Concepts_and_Roadmap.md`, `VIF_02_System_Architecture.md`, `VIF_03_Model_Training.md`, `VIF_04_Uncertainty_Logic.md`, `VIF_Example.md`, and `docs/PRD.md`:
+Based on `docs/vif/01_concepts_and_roadmap.md`, `02_system_architecture.md`, `03_model_training.md`, `04_uncertainty_logic.md`, `example.md`, and `docs/prd.md`:
 
 - **Conceptual role**
   - VIF acts as a **temporal critic**: it tracks alignment between what a user says/does (journals, voice notes) and what they previously claimed to value.
@@ -40,7 +40,7 @@ Based on `docs/VIF/VIF_01_Concepts_and_Roadmap.md`, `VIF_02_System_Architecture.
     - User profile embedding \(z_u\).
 
 - **Reward modeling pipeline**
-  - **Generator**: synthetic personas/journals created using Schwartz‑grounded value elaborations from `config/schwartz_values.yaml` and structured prompts (`docs/Ideas/Synthetic_data.md`, `notebooks/journal_gen.ipynb`).
+  - **Generator**: synthetic personas/journals created using Schwartz‑grounded value elaborations from `config/schwartz_values.yaml` and structured prompts (`docs/pipeline/pipeline_specs.md`, `notebooks/journal_gen.ipynb`).
   - **Judge (LLM‑as‑Judge)**:
     - Scores entries per value dimension using a **categorical rubric**: Misaligned (−1), Neutral (0), Aligned (+1).
     - Produces a vector like `[Health: -1, Career: +1, Family: 0]` as ground truth for the student.
@@ -115,7 +115,7 @@ This section groups improvement ideas into categories and, where relevant, disti
 **Current foundation**
 
 - Rich Schwartz value elaborations (`config/schwartz_values.yaml`).
-- Synthetic persona and journal generation pipeline with configurable personas, tones, verbosity, and reflection modes (`docs/Ideas/Synthetic_data.md`).
+- Synthetic persona and journal generation pipeline with configurable personas, tones, verbosity, and reflection modes (`docs/pipeline/pipeline_specs.md`).
 
 **Proposals**
 
@@ -204,7 +204,7 @@ This section groups improvement ideas into categories and, where relevant, disti
 
 **Current foundation**
 
-- High‑quality example dialogues in `VIF_Example.md` and `PRD.md`.
+- High‑quality example dialogues in `example.md` and `docs/prd.md`.
 - Strong constraints against gamification, generic praise, or harsh judgement.
 
 **Proposals**
@@ -306,7 +306,7 @@ A few questions to decide as you refine and implement the VIF:
    - How far do we want to go beyond \(z_u\) as a static embedding during the capstone? Is user‑baseline normalisation enough, or do we want to prototype a tiny per‑user adapter layer?
 
 2. **Time horizon for alignment**
-   - For this POC, should the Critic focus on **immediate alignment** (Option A in `VIF_03_Model_Training.md`) with smoothing, or is there capacity to experiment with **short‑horizon forecasts** (Option B)?
+   - For this POC, should the Critic focus on **immediate alignment** (Option A in `03_model_training.md`) with smoothing, or is there capacity to experiment with **short‑horizon forecasts** (Option B)?
 
 3. **Role of real user data**
    - How much real, opt‑in user data (if any) will be available to validate synthetic assumptions? Are we comfortable keeping all training synthetic for the capstone and using real data only for evals?

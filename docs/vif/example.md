@@ -253,7 +253,7 @@ The pitch succeeded, but Sarah doesn't bounce back. Her entries become flat:
 | **C_min (minimum weeks)** | Developer default | System-wide. 3 weeks balances sensitivity (catching real ruts) vs. specificity (ignoring normal fluctuations). Shorter risks false alarms; longer delays intervention. |
 | **Uncertainty threshold (ε)** | Algorithm (calibrated) | Derived from model calibration on held-out data. Not user-facing — ensures the system only speaks when confident. |
 
-For the full mathematical formulation of crash/rut detection and uncertainty gating, see [Uncertainty & Critique Logic](VIF_04_Uncertainty_Logic.md).
+For the full mathematical formulation of crash/rut detection and uncertainty gating, see [Uncertainty & Critique Logic](04_uncertainty_logic.md).
 
 **System Decision:** Trigger Coach.
 
@@ -294,7 +294,7 @@ Something happens outside the Critic's training distribution.
 | Self-Direction | ??? | 0.6 (HIGH) | Predictions scatter from -1.0 to +0.3 |
 
 **Why High Uncertainty?**
-- The Critic is trained on synthetic data from the Generator (see [Model Training](VIF_03_Model_Training.md))
+- The Critic is trained on synthetic data from the Generator (see [Model Training](03_model_training.md))
 - The Generator produces diverse value tensions, but likely doesn't cover acute grief or trauma scenarios — these are difficult to synthesize authentically and ethically fraught to "score"
 - Parental terminal illness is therefore out-of-distribution
 - MC Dropout reveals the model doesn't know how to score this — predictions scatter widely across forward passes

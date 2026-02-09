@@ -26,7 +26,7 @@ However, if a previous entry discussed choosing between a larger investor who wa
 
 This ensures human-Judge comparisons are methodologically valid. Systematic disagreements should reflect genuine interpretation differences, not information asymmetry.
 
-See also: [`judge_implementation_spec.md`](../VIF/judge_implementation_spec.md) for how the LLM Judge works.
+See also: [`judge_implementation_spec.md`](judge_implementation_spec.md) for how the LLM Judge works.
 
 ---
 

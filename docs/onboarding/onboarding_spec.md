@@ -20,10 +20,10 @@ The onboarding uses **Best-Worst Scaling (BWS)** — a forced-choice psychometri
 
 ### Cross-References
 
-- [PRD](../PRD.md) — Product requirements and implementation status
-- [VIF Concepts & Roadmap](../VIF/VIF_01_Concepts_and_Roadmap.md) — Value Identity Function theory
-- [VIF System Architecture](../VIF/VIF_02_System_Architecture.md) — State representation and inference flow
-- [VIF Worked Example](../VIF/VIF_Example.md) — Sarah's journey through the system (includes BWS onboarding walkthrough)
+- [PRD](../prd.md) — Product requirements and implementation status
+- [VIF Concepts & Roadmap](../vif/01_concepts_and_roadmap.md) — Value Identity Function theory
+- [VIF System Architecture](../vif/02_system_architecture.md) — State representation and inference flow
+- [VIF Worked Example](../vif/example.md) — Sarah's journey through the system (includes BWS onboarding walkthrough)
 
 ---
 
@@ -551,7 +551,7 @@ The `weights` vector replaces a simple "pick 2 values" approach (which would pro
 
 ### VIF Integration Points
 
-- **StateEncoder initialization**: BWS `weights` should feed into the user profile vector `z_u` that the StateEncoder uses (see [VIF System Architecture](../VIF/VIF_02_System_Architecture.md) §1.1). The exact mechanism (direct concatenation, learned mapping, or simple lookup) is TBD.
+- **StateEncoder initialization**: BWS `weights` should feed into the user profile vector `z_u` that the StateEncoder uses (see [VIF System Architecture](../vif/02_system_architecture.md) §1.1). The exact mechanism (direct concatenation, learned mapping, or simple lookup) is TBD.
 - **Critic cold-start**: Until enough journal entries exist for the Critic to produce reliable scores, the BWS weights serve as the *only* value signal. The Coach should acknowledge this explicitly ("Based on what you told me during setup...").
 
 ### Explicit vs. Behavioral Weighting (60–70% Strategy)
@@ -594,9 +594,9 @@ The system should prompt re-assessment when:
 
 ### Internal Documentation
 
-- [PRD](../PRD.md) — Product requirements document
+- [PRD](../prd.md) — Product requirements document
 - [Schwartz Values Configuration](../../config/schwartz_values.yaml) — Value elaborations used in synthetic data generation
-- [VIF Concepts & Roadmap](../VIF/VIF_01_Concepts_and_Roadmap.md) — Value Identity Function theory
-- [VIF System Architecture](../VIF/VIF_02_System_Architecture.md) — State representation
-- [VIF Model Training](../VIF/VIF_03_Model_Training.md) — Critic training pipeline
-- [VIF Worked Example](../VIF/VIF_Example.md) — End-to-end scenario walkthrough
+- [VIF Concepts & Roadmap](../vif/01_concepts_and_roadmap.md) — Value Identity Function theory
+- [VIF System Architecture](../vif/02_system_architecture.md) — State representation
+- [VIF Model Training](../vif/03_model_training.md) — Critic training pipeline
+- [VIF Worked Example](../vif/example.md) — End-to-end scenario walkthrough

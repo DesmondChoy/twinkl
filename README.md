@@ -11,7 +11,7 @@ Key properties:
 - **Uncertainty-aware**: Holds back judgment when the situation is complex or data is sparse
 - **Trajectory-aware**: Detects patterns over time rather than reacting to single entries
 
-When the VIF detects significant misalignment with high confidence, it triggers the Coach layer to surface evidence-based feedback. See `docs/VIF/` for architecture details.
+When the VIF detects significant misalignment with high confidence, it triggers the Coach layer to surface evidence-based feedback. See `docs/vif/` for architecture details.
 
 ## Synthetic Data Generation
 
@@ -24,9 +24,9 @@ Key features:
 - Configurable tone, verbosity, and reflection mode per entry
 - Two-way conversational journaling with nudge system (LLM-based classification determines when/how to nudge, LLM generates contextual follow-up questions)
 
-**Validation in progress**: Assessing whether nudging helps improve VIF data signal quality. See `docs/synthetic_data/annotation_guidelines.md` for the study methodology.
+**Validation in progress**: Assessing whether nudging helps improve VIF data signal quality. See `docs/pipeline/annotation_guidelines.md` for the study methodology.
 
-See `docs/synthetic_data/pipeline_specs.md` for implementation details.
+See `docs/pipeline/pipeline_specs.md` for implementation details.
 
 ### Current Dataset
 
@@ -55,7 +55,7 @@ See `docs/synthetic_data/pipeline_specs.md` for implementation details.
 
 **Nudge types:** Elaboration (44%), Tension Surfacing (41%), Clarification (14%)
 
-See [`docs/data_schema.md`](docs/data_schema.md) for parquet schemas and query examples.
+See [`docs/pipeline/data_schema.md`](docs/pipeline/data_schema.md) for parquet schemas and query examples.
 
 ## Judge Labeling Pipeline
 
@@ -75,7 +75,7 @@ Registry Check → Auto-Wrangle → Parallel Labeling (subagents) → Validation
 
 **Scoring:** Each entry receives a 10-dimensional vector with values `{-1, 0, +1}` indicating misalignment, neutrality, or alignment with each Schwartz value. **Rationales** explain each non-zero score. Most entries have 1-3 non-zero scores.
 
-**Data outputs:** See [`docs/data_schema.md`](docs/data_schema.md) for parquet file schemas, example Polars queries, and analytics guidance.
+**Data outputs:** See [`docs/pipeline/data_schema.md`](docs/pipeline/data_schema.md) for parquet file schemas, example Polars queries, and analytics guidance.
 
 **Key files:**
 - `.claude/commands/judge.md` — Skill entry point
@@ -84,7 +84,7 @@ Registry Check → Auto-Wrangle → Parallel Labeling (subagents) → Validation
 - `.claude/skills/judge/rubric.md` — Schwartz value reference for scoring
 
 **Primary Generation Method:**
-- `docs/synthetic_data/claude_gen_instructions.md` — Instructions for Claude Code to generate synthetic data using parallel subagents
+- `docs/pipeline/claude_gen_instructions.md` — Instructions for Claude Code to generate synthetic data using parallel subagents
 
 **Experimentation Notebooks** (for prompt iteration and testing):
 - `notebooks/journal_gen.ipynb` — One-way journal generation
@@ -118,7 +118,7 @@ Open `http://127.0.0.1:8000` in your browser.
 - `src/annotation_tool/agreement_metrics.py` — Kappa calculations and export
 - `src/annotation_tool/components/` — Modular UI components (scoring grid, comparison view, analysis)
 - `src/annotation_tool/state.py` — Centralized state management
-- `docs/data_loader/human_annotator_tool.md` — Full implementation plan
+- `docs/pipeline/annotation_tool_plan.md` — Full implementation plan
 
 ## Evaluation Pipeline
 
@@ -128,7 +128,7 @@ Sequential validation pipeline for the VIF with four stages:
 3. **Drift Detection** — Triggers fire accurately on misalignment
 4. **Explanation Quality** — Explanations are grounded and useful
 
-See [`docs/evals/README.md`](docs/evals/README.md) for the full pipeline overview and current status.
+See [`docs/evals/overview.md`](docs/evals/overview.md) for the full pipeline overview and current status.
 
 # Setup
 

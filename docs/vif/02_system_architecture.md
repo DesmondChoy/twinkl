@@ -99,7 +99,7 @@ For a real user session:
    * Option A: call LLM-as-Judge online for immediate alignment scores and explanations.
    * Option B: use an offline-trained distilled reward model to approximate judge scores.
 4. **Critic evaluation with uncertainty**:
-   * Run VIF with MC Dropout to get $\\mu_{u,t}^{(j)}$ and $\\sigma_{u,t}^{(j)}$ per dimension. (See [Uncertainty Logic](VIF_04_Uncertainty_Logic.md))
+   * Run VIF with MC Dropout to get $\\mu_{u,t}^{(j)}$ and $\\sigma_{u,t}^{(j)}$ per dimension. (See [Uncertainty Logic](04_uncertainty_logic.md))
 5. **Aggregate over time**:
    * Compute updated weekly aggregates (e.g. weekly means of $\\mu_{u,t}^{(j)}$).
 6. **Apply trigger rules**:
