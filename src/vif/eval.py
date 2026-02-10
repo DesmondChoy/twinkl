@@ -24,6 +24,7 @@ Usage:
 import numpy as np
 import torch
 from scipy import stats
+from sklearn.metrics import cohen_kappa_score
 
 from src.models.judge import SCHWARTZ_VALUE_ORDER
 
@@ -85,6 +86,68 @@ def compute_spearman_per_dimension(
         spearman_per_dim[dim_name] = float(corr)
 
     return spearman_per_dim
+
+
+def compute_mae_per_dimension(
+    predictions: np.ndarray,
+    targets: np.ndarray,
+) -> dict[str, float]:
+    """Compute MAE for each Schwartz value dimension.
+
+    For ordinal outputs {-1, 0, 1}, MAE directly measures average ordinal
+    distance: off-by-1 = 1, off-by-2 = 2.
+
+    Args:
+        predictions: (n_samples, 10) array of predicted alignment scores
+        targets: (n_samples, 10) array of true alignment scores
+
+    Returns:
+        Dict mapping dimension name to MAE value
+    """
+    mae_per_dim = {}
+
+    for i, dim_name in enumerate(SCHWARTZ_VALUE_ORDER):
+        pred_dim = predictions[:, i]
+        target_dim = targets[:, i]
+        mae = np.mean(np.abs(pred_dim - target_dim))
+        mae_per_dim[dim_name] = float(mae)
+
+    return mae_per_dim
+
+
+def compute_qwk_per_dimension(
+    predictions: np.ndarray,
+    targets: np.ndarray,
+) -> dict[str, float]:
+    """Compute Quadratic Weighted Kappa for each Schwartz value dimension.
+
+    QWK is the standard metric for ordinal classification. It measures
+    agreement between predicted and true classes, adjusted for chance,
+    with quadratic penalty for larger ordinal distances.
+
+    Args:
+        predictions: (n_samples, 10) array of predicted alignment scores
+        targets: (n_samples, 10) array of true alignment scores
+
+    Returns:
+        Dict mapping dimension name to QWK value.
+        Returns NaN for dimensions with constant predictions or targets.
+    """
+    qwk_per_dim = {}
+
+    for i, dim_name in enumerate(SCHWARTZ_VALUE_ORDER):
+        pred_dim = np.round(predictions[:, i]).clip(-1, 1).astype(int)
+        target_dim = targets[:, i].astype(int)
+
+        # QWK undefined if either rater is constant
+        if len(np.unique(pred_dim)) < 2 or len(np.unique(target_dim)) < 2:
+            qwk_per_dim[dim_name] = float("nan")
+            continue
+
+        qwk = cohen_kappa_score(target_dim, pred_dim, weights="quadratic", labels=[-1, 0, 1])
+        qwk_per_dim[dim_name] = float(qwk)
+
+    return qwk_per_dim
 
 
 def compute_accuracy_per_dimension(
@@ -247,32 +310,53 @@ def evaluate_model(
 def format_results_table(results: dict) -> str:
     """Format evaluation results as a readable table.
 
+    Automatically detects which error metric is present (MAE or MSE)
+    and whether QWK is included.
+
     Args:
         results: Dict from evaluate_model or evaluate_with_uncertainty
 
     Returns:
         Formatted string table
     """
+    has_mae = "mae_per_dim" in results
+    has_qwk = "qwk_per_dim" in results
+    err_key = "mae_per_dim" if has_mae else "mse_per_dim"
+    err_label = "MAE" if has_mae else "MSE"
+    err_mean_key = "mae_mean" if has_mae else "mse_mean"
+
+    header = f"{'Dimension':<20} {err_label:>10} {'Spearman':>10} {'Accuracy':>10}"
+    if has_qwk:
+        header += f" {'QWK':>10}"
+
     lines = []
-    lines.append("=" * 70)
-    lines.append(f"{'Dimension':<20} {'MSE':>10} {'Spearman':>10} {'Accuracy':>10}")
-    lines.append("-" * 70)
+    lines.append("=" * len(header))
+    lines.append(header)
+    lines.append("-" * len(header))
 
     for dim_name in SCHWARTZ_VALUE_ORDER:
-        mse = results["mse_per_dim"][dim_name]
+        err = results[err_key][dim_name]
         spearman = results["spearman_per_dim"][dim_name]
         accuracy = results["accuracy_per_dim"][dim_name]
 
         spearman_str = f"{spearman:.3f}" if not np.isnan(spearman) else "N/A"
 
-        lines.append(f"{dim_name:<20} {mse:>10.4f} {spearman_str:>10} {accuracy:>10.2%}")
+        row = f"{dim_name:<20} {err:>10.4f} {spearman_str:>10} {accuracy:>10.2%}"
+        if has_qwk:
+            qwk = results["qwk_per_dim"][dim_name]
+            qwk_str = f"{qwk:.3f}" if not np.isnan(qwk) else "N/A"
+            row += f" {qwk_str:>10}"
+        lines.append(row)
 
-    lines.append("-" * 70)
-    lines.append(
-        f"{'MEAN':<20} {results['mse_mean']:>10.4f} "
+    lines.append("-" * len(header))
+    mean_row = (
+        f"{'MEAN':<20} {results[err_mean_key]:>10.4f} "
         f"{results['spearman_mean']:>10.3f} {results['accuracy_mean']:>10.2%}"
     )
-    lines.append("=" * 70)
+    if has_qwk:
+        mean_row += f" {results['qwk_mean']:>10.3f}"
+    lines.append(mean_row)
+    lines.append("=" * len(header))
 
     if "calibration" in results:
         lines.append("\nCalibration:")

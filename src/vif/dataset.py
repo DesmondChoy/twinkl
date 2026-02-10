@@ -151,7 +151,7 @@ def split_by_persona(
         containing both labels and entries.
     """
     # Get unique persona IDs
-    persona_ids = labels_df.select("persona_id").unique().to_series().to_list()
+    persona_ids = sorted(labels_df.select("persona_id").unique().to_series().to_list())
     n_personas = len(persona_ids)
 
     # Shuffle persona IDs
