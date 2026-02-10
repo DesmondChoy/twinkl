@@ -189,26 +189,24 @@ def evaluate_with_uncertainty(
     dataloader: torch.utils.data.DataLoader,
     n_mc_samples: int = 50,
     device: str = "cpu",
+    include_ordinal_metrics: bool = False,
 ) -> dict:
     """Evaluate model with MC Dropout uncertainty estimation.
 
     Runs the model with MC Dropout to get both predictions and uncertainty
-    estimates, then computes metrics and checks calibration.
+    estimates, then computes metrics and checks calibration. Works with
+    both CriticMLP and ordinal critic models (all now have
+    predict_with_uncertainty via OrdinalCriticBase).
 
     Args:
-        model: CriticMLP model
+        model: CriticMLP or ordinal critic model
         dataloader: DataLoader with test/validation data
         n_mc_samples: Number of MC Dropout samples
         device: Device to run evaluation on
+        include_ordinal_metrics: If True, also compute MAE and QWK
 
     Returns:
-        Dict with keys:
-        - predictions: (n_samples, 10) mean predictions
-        - uncertainties: (n_samples, 10) std estimates
-        - targets: (n_samples, 10) true values
-        - mse_per_dim: Per-dimension MSE
-        - spearman_per_dim: Per-dimension Spearman correlation
-        - calibration: Calibration statistics
+        Dict with predictions, uncertainties, targets, metrics, and calibration.
     """
     model.to(device)
     model.eval()
@@ -231,7 +229,6 @@ def evaluate_with_uncertainty(
     targets = np.concatenate(all_targets, axis=0)
 
     # Compute metrics
-    mse_per_dim = compute_mse_per_dimension(predictions, targets)
     spearman_per_dim = compute_spearman_per_dimension(predictions, targets)
     accuracy_per_dim = compute_accuracy_per_dimension(predictions, targets)
 
@@ -242,12 +239,10 @@ def evaluate_with_uncertainty(
         errors.flatten(),
     )[0]
 
-    return {
+    results = {
         "predictions": predictions,
         "uncertainties": uncertainties,
         "targets": targets,
-        "mse_per_dim": mse_per_dim,
-        "mse_mean": float(np.mean(list(mse_per_dim.values()))),
         "spearman_per_dim": spearman_per_dim,
         "spearman_mean": float(np.nanmean(list(spearman_per_dim.values()))),
         "accuracy_per_dim": accuracy_per_dim,
@@ -258,24 +253,49 @@ def evaluate_with_uncertainty(
         },
     }
 
+    if include_ordinal_metrics:
+        mae_per_dim = compute_mae_per_dimension(predictions, targets)
+        qwk_per_dim = compute_qwk_per_dimension(predictions, targets)
+        results["mae_per_dim"] = mae_per_dim
+        results["mae_mean"] = float(np.mean(list(mae_per_dim.values())))
+        results["qwk_per_dim"] = qwk_per_dim
+        results["qwk_mean"] = float(np.nanmean(list(qwk_per_dim.values())))
+    else:
+        mse_per_dim = compute_mse_per_dimension(predictions, targets)
+        results["mse_per_dim"] = mse_per_dim
+        results["mse_mean"] = float(np.mean(list(mse_per_dim.values())))
+
+    return results
+
 
 def evaluate_model(
     model,
     dataloader: torch.utils.data.DataLoader,
     device: str = "cpu",
+    include_ordinal_metrics: bool = False,
 ) -> dict:
     """Evaluate model without uncertainty estimation (faster).
 
+    Automatically detects ordinal models (those with a predict() method)
+    and uses predict() to get class labels instead of forward() which
+    returns raw logits for ordinal variants.
+
     Args:
-        model: CriticMLP model
+        model: CriticMLP or ordinal critic model
         dataloader: DataLoader with test/validation data
         device: Device to run evaluation on
+        include_ordinal_metrics: If True, also compute MAE and QWK
+            (replaces MSE with MAE in results)
 
     Returns:
-        Dict with MSE, Spearman, and accuracy metrics
+        Dict with error metrics, Spearman, and accuracy metrics.
+        When include_ordinal_metrics=True, uses MAE/QWK instead of MSE.
     """
     model.to(device)
     model.eval()
+
+    # Use predict() for ordinal models, forward() for CriticMLP
+    use_predict = hasattr(model, "predict") and hasattr(model, "_variant_name")
 
     all_predictions = []
     all_targets = []
@@ -283,7 +303,7 @@ def evaluate_model(
     with torch.no_grad():
         for batch_x, batch_y in dataloader:
             batch_x = batch_x.to(device)
-            pred = model(batch_x)
+            pred = model.predict(batch_x) if use_predict else model(batch_x)
 
             all_predictions.append(pred.cpu().numpy())
             all_targets.append(batch_y.numpy())
@@ -291,20 +311,31 @@ def evaluate_model(
     predictions = np.concatenate(all_predictions, axis=0)
     targets = np.concatenate(all_targets, axis=0)
 
-    mse_per_dim = compute_mse_per_dimension(predictions, targets)
     spearman_per_dim = compute_spearman_per_dimension(predictions, targets)
     accuracy_per_dim = compute_accuracy_per_dimension(predictions, targets)
 
-    return {
+    results = {
         "predictions": predictions,
         "targets": targets,
-        "mse_per_dim": mse_per_dim,
-        "mse_mean": float(np.mean(list(mse_per_dim.values()))),
         "spearman_per_dim": spearman_per_dim,
         "spearman_mean": float(np.nanmean(list(spearman_per_dim.values()))),
         "accuracy_per_dim": accuracy_per_dim,
         "accuracy_mean": float(np.mean(list(accuracy_per_dim.values()))),
     }
+
+    if include_ordinal_metrics:
+        mae_per_dim = compute_mae_per_dimension(predictions, targets)
+        qwk_per_dim = compute_qwk_per_dimension(predictions, targets)
+        results["mae_per_dim"] = mae_per_dim
+        results["mae_mean"] = float(np.mean(list(mae_per_dim.values())))
+        results["qwk_per_dim"] = qwk_per_dim
+        results["qwk_mean"] = float(np.nanmean(list(qwk_per_dim.values())))
+    else:
+        mse_per_dim = compute_mse_per_dimension(predictions, targets)
+        results["mse_per_dim"] = mse_per_dim
+        results["mse_mean"] = float(np.mean(list(mse_per_dim.values())))
+
+    return results
 
 
 def format_results_table(results: dict) -> str:

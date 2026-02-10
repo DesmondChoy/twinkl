@@ -28,7 +28,7 @@ import torch
 from torch.utils.data import Dataset
 
 from src.vif.state_encoder import StateEncoder
-from src.wrangling.parse_synthetic_data import parse_persona_file
+from src.wrangling.parse_wrangled_data import parse_wrangled_file
 
 
 def load_labels(
@@ -51,7 +51,8 @@ def load_entries(
 ) -> pl.DataFrame:
     """Load all wrangled entries from markdown files.
 
-    Reuses parsing logic from src.wrangling.parse_synthetic_data.
+    Uses the wrangled-format parser which expects entry text directly after
+    date headers and **Nudge:**/**Response:** inline markers.
 
     Args:
         wrangled_dir: Path to directory containing persona_*.md files
@@ -59,6 +60,10 @@ def load_entries(
     Returns:
         DataFrame with columns: persona_id, t_index, date, initial_entry,
         nudge_text, response_text, core_values, and other persona fields.
+
+    Raises:
+        FileNotFoundError: If no persona files found.
+        ValueError: If all initial_entry values are null (parser mismatch).
     """
     wrangled_path = Path(wrangled_dir)
     persona_files = sorted(wrangled_path.glob("persona_*.md"))
@@ -68,7 +73,7 @@ def load_entries(
 
     rows = []
     for filepath in persona_files:
-        profile, entries = parse_persona_file(filepath)
+        profile, entries, _warnings = parse_wrangled_file(filepath)
 
         for entry in entries:
             row = {
@@ -83,7 +88,17 @@ def load_entries(
             }
             rows.append(row)
 
-    return pl.DataFrame(rows)
+    df = pl.DataFrame(rows)
+
+    # Validate: if all initial_entry values are null, the parser didn't match the format
+    if len(df) > 0 and df["initial_entry"].is_null().all():
+        raise ValueError(
+            f"All initial_entry values are null across {len(df)} entries from "
+            f"{len(persona_files)} files in {wrangled_dir}. This likely indicates a "
+            f"parser mismatch — ensure files are in wrangled format, not raw synthetic format."
+        )
+
+    return df
 
 
 def load_all_data(

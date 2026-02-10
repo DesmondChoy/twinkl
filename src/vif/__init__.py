@@ -24,10 +24,17 @@ from src.vif.encoders import SBERTEncoder, TextEncoder, create_encoder
 from src.vif.state_encoder import StateEncoder
 from src.vif.critic import CriticMLP
 from src.vif.critic_bnn import CriticBNN, get_kl_loss
-from src.vif.critic_corn import CriticMLPCORN, corn_loss_multi
-from src.vif.critic_coral import CriticMLPCORAL, coral_loss_multi
-from src.vif.critic_soft_ordinal import CriticMLPSoftOrdinal, soft_ordinal_loss_multi
-from src.vif.critic_emd import CriticMLPEMD, emd_loss_multi
+from src.vif.critic_ordinal import (
+    OrdinalCriticBase,
+    CriticMLPCORAL,
+    coral_loss_multi,
+    CriticMLPCORN,
+    corn_loss_multi,
+    CriticMLPEMD,
+    emd_loss_multi,
+    CriticMLPSoftOrdinal,
+    soft_ordinal_loss_multi,
+)
 
 __all__ = [
     "TextEncoder",
@@ -36,6 +43,7 @@ __all__ = [
     "StateEncoder",
     "CriticMLP",
     "CriticBNN",
+    "OrdinalCriticBase",
     "get_kl_loss",
     "CriticMLPCORN",
     "corn_loss_multi",
