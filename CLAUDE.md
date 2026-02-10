@@ -117,6 +117,7 @@ src/vif/
 ├── encoders.py          # TextEncoder protocol + SBERTEncoder
 ├── state_encoder.py     # StateEncoder (builds state vectors)
 ├── critic.py            # CriticMLP with MC Dropout
+├── critic_ordinal.py    # OrdinalCriticBase + CORAL/CORN/EMD/SoftOrdinal variants
 ├── dataset.py           # VIFDataset + data loading
 ├── eval.py              # Evaluation metrics (MSE, Spearman, calibration)
 └── train.py             # CLI training script
