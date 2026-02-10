@@ -80,6 +80,6 @@ See each eval file's **Implementation Status** section for detailed breakdowns.
 
 ## References
 
-- [`docs/VIF/`](../VIF/) — VIF architecture documentation
-- [`docs/PRD.md`](../PRD.md) — Product requirements (Evaluation Strategy section)
-- [`docs/synthetic_data/pipeline_specs.md`](../synthetic_data/pipeline_specs.md) — Data generation pipeline
+- [`docs/vif/`](../vif/) — VIF architecture documentation
+- [`docs/prd.md`](../prd.md) — Product requirements (Evaluation Strategy section)
+- [`docs/pipeline/pipeline_specs.md`](../pipeline/pipeline_specs.md) — Data generation pipeline

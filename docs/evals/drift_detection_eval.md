@@ -12,7 +12,7 @@ The VIF detects when a user's behavior drifts from their declared values. This e
 
 ### What's Implemented
 - Evaluation specification complete (this document)
-- Conceptual design documented in [`docs/VIF/VIF_04_Uncertainty_Logic.md`](../VIF/VIF_04_Uncertainty_Logic.md)
+- Conceptual design documented in [`docs/vif/04_uncertainty_logic.md`](../vif/04_uncertainty_logic.md)
 - Trigger formulas defined (Crash: V_{t-1} - V_t > δ, Rut: sustained low)
 
 ### What's Missing
@@ -205,6 +205,6 @@ Verify that MC Dropout uncertainty correlates with prediction errors.
 
 ## References
 
-- `docs/VIF/VIF_04_Uncertainty_Logic.md` — Dual-trigger rules and MC Dropout
-- `docs/VIF/VIF_06_Profile_Conditioned_Drift_and_Encoder.md` — Drift formulas
-- `docs/PRD.md` — Evaluation Strategy (Row 3: Drift detection)
+- `docs/vif/04_uncertainty_logic.md` — Dual-trigger rules and MC Dropout
+- `docs/vif/06_profile_conditioned_drift_and_encoder.md` — Drift formulas
+- `docs/prd.md` — Evaluation Strategy (Row 3: Drift detection)

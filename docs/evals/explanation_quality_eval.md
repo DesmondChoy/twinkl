@@ -270,5 +270,5 @@ After 10 users complete the study:
 
 ## References
 
-- `docs/VIF/judge_implementation_spec.md` — Judge rationale format
-- `docs/PRD.md` — Evaluation Strategy (Row 4: Explanation quality)
+- `docs/pipeline/judge_implementation_spec.md` — Judge rationale format
+- `docs/prd.md` — Evaluation Strategy (Row 4: Explanation quality)

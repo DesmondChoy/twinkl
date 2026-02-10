@@ -383,7 +383,7 @@ If quality is poor:
 
 ## Next Steps (Phase 3: VIF Training)
 
-Once you have `data/judge_labels.parquet`, see `VIF_03_Model_Training.md` for the training pipeline.
+Once you have `data/judge_labels.parquet`, see `docs/vif/03_model_training.md` for the training pipeline.
 
 ---
 
@@ -397,6 +397,6 @@ Once you have `data/judge_labels.parquet`, see `VIF_03_Model_Training.md` for th
 ## References
 
 - Option A implementation: `notebooks/judge_labeling.ipynb`
-- Option B pattern: `docs/synthetic_data/claude_gen_instructions.md`
+- Option B pattern: `docs/pipeline/claude_gen_instructions.md`
 - Schwartz value rubrics: `config/schwartz_values.yaml`
-- VIF training pipeline: `VIF_03_Model_Training.md`
+- VIF training pipeline: `docs/vif/03_model_training.md`

@@ -1,22 +1,22 @@
 # About This Project
 
-Twinkl is an academic capstone project for the **NUS Master of Technology in Intelligent Systems (AI Systems)** program, with an expected duration of 6–9 months. The project spans multiple submodules including Intelligent Reasoning Systems, Pattern Recognition Systems, Intelligent Sensing Systems, and Architecting AI Systems. For additional context and presentation materials, see [IS_Capstone_Slides.pdf](IS_Capstone_Slides.pdf).
+Twinkl is an academic capstone project for the **NUS Master of Technology in Intelligent Systems (AI Systems)** program, with an expected duration of 6–9 months. The project spans multiple submodules including Intelligent Reasoning Systems, Pattern Recognition Systems, Intelligent Sensing Systems, and Architecting AI Systems. For additional context and presentation materials, see [is_capstone_slides.pdf](is_capstone_slides.pdf).
 
 ---
 
 ## Implementation Status
 
-*Last updated: 2025-01-19*
+*Last updated: 2025-02-09*
 
 | Feature | Status | Details |
 |---------|--------|---------|
-| **Synthetic Data Pipeline** | ✅ Complete | 31 personas generated via Claude Code parallel subagents; YAML prompt templates with Jinja2 |
-| **Judge Labeling (VIF)** | ✅ Complete | 213 entries labeled across 31 personas; two-phase pipeline (Python wrangling + parallel subagents); consolidated to `judge_labels.parquet` with rationales |
-| **VIF Critic Training** | ✅ Complete | MLP critic (370K params) with MC Dropout; SBERT text encoder (384-dim); persona-level train/val/test splits; `src/vif/` module with CLI training script |
-| **Human Annotation Tool** | ✅ Complete | ~4,200 LOC Shiny app; 56 annotations across 3 annotators; Cohen's κ / Fleiss' κ metrics; modular components with analysis view |
+| **Synthetic Data Pipeline** | ✅ Complete | 100 personas (729 entries) generated via Claude Code parallel subagents; YAML prompt templates with Jinja2; targeted value generation for balanced Schwartz dimension coverage |
+| **Judge Labeling (VIF)** | ✅ Complete | 729 entries labeled across 100 personas; two-phase pipeline (Python wrangling + parallel subagents); consolidated to `judge_labels.parquet` with rationales |
+| **VIF Critic Training** | ✅ Complete | Multiple architectures explored: MLP with MC Dropout, BNN (Bayesian Neural Network), TCN (Temporal Convolutional Network); SBERT text encoder (384-dim); persona-level train/val/test splits; `src/vif/` module with CLI training scripts |
+| **Human Annotation Tool** | ✅ Complete | ~4,200 LOC Shiny app; 56 annotations across 3 annotators; Cohen's κ / Fleiss' κ metrics; modular components with analysis view; annotation ordering for persona prioritization |
 | **Conversational Nudging** | 🧪 Experimental | 3-category LLM classification (clarification/elaboration/tension-surfacing); pending validation that nudging improves VIF signal quality |
 | **Weekly Alignment Coach** | ⚠️ Partial | Entry processing ready; digest generation not implemented |
-| **Mini-Assessment Quiz** | ❌ Not Started | Cold-start onboarding flow |
+| **Onboarding (BWS Values Assessment)** | 📋 Specified | 6-set BWS flow over 10 Schwartz dimensions; PVQ21-adapted card phrases; mid-flow + end-of-flow reflective mirrors; 6 structured goal categories mapping to Coach monitoring priorities; scoring with confidence estimation and user refinement support; [full spec](onboarding/onboarding_spec.md) |
 | **"Map of Me" Visualization** | ❌ Not Started | Embedding trajectories |
 | **Journaling Anomaly Radar** | ❌ Not Started | Cadence/gap detection |
 | **Goal-aligned Inspiration Feed** | ❌ Not Started | External API integration |
@@ -24,9 +24,9 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 **Data Pipeline Progress:**
 ```
 logs/
-├── synthetic_data/     # 31 persona markdown files
-├── wrangled/           # 31 cleaned files (generation metadata stripped)
-├── judge_labels/       # 31 JSON label files + consolidated parquet
+├── synthetic_data/     # 100 persona markdown files
+├── wrangled/           # 100 cleaned files (generation metadata stripped)
+├── judge_labels/       # 100 JSON label files + consolidated parquet
 ├── annotations/        # 3 annotator parquet files (56 entries)
 └── registry/           # personas.parquet (tracks pipeline stages)
 
@@ -35,11 +35,11 @@ models/
 ```
 
 > **References:**
-> - [Synthetic Data Pipeline](synthetic_data/pipeline_specs.md)
-> - [Claude Code Generation Instructions](synthetic_data/claude_gen_instructions.md)
-> - [Claude Judge Labeling Instructions](synthetic_data/claude_judge_instructions.md)
-> - [Human Annotation Tool](data_loader/human_annotator_tool.md)
-> - [VIF Critic Training](VIF/VIF_03_Model_Training.md) — Training strategy and implementation
+> - [Synthetic Data Pipeline](pipeline/pipeline_specs.md)
+> - [Claude Code Generation Instructions](pipeline/claude_gen_instructions.md)
+> - [Claude Judge Labeling Instructions](pipeline/claude_judge_instructions.md)
+> - [Human Annotation Tool](pipeline/annotation_tool_plan.md)
+> - [VIF Critic Training](vif/03_model_training.md) — Training strategy and implementation
 > - [CLAUDE.md](../CLAUDE.md) — Project architecture overview
 
 ---
@@ -82,9 +82,9 @@ AI journaling apps (Reflection, Mindsera, Insight Journal, Day One, Pixel Journa
 
 1. **Perception:** Typed journal entries flow through an LLM that tags values, identity claims, sentiment, intent, and direction-of-travel.
 2. **Memory:** Tags incrementally update a decay-aware user profile/knowledge base (value weights, goals, tensions, evidence snippets) instead of resetting each week.
-3. **Reasoning + action:** A two-stage evaluative layer powered by the **[Value Identity Function (VIF)](VIF/VIF_01_Concepts_and_Roadmap.md)**:
-   * **Critic (VIF):** A numeric, uncertainty-aware engine that computes per-value-dimension alignment scores from a sliding window of recent entries. Uses [LLM-as-Judge for reward modeling](VIF/VIF_03_Model_Training.md) and [MC Dropout for epistemic uncertainty](VIF/VIF_04_Uncertainty_Logic.md). Triggers critiques only when confident and detecting significant patterns (sudden crashes or chronic ruts).
-   * **Coach:** Activated when the Critic identifies significant patterns — whether problematic (crashes, ruts) or positive (sustained alignment). Uses retrieval-augmented generation (RAG) over the user's full journal history to surface thematic evidence, explain *why* misalignment occurred, and offer reflective prompts or "micro-anchors." For positive patterns, provides occasional evidence-based acknowledgment without gamification. (See [System Architecture](VIF/VIF_02_System_Architecture.md)). For a concrete scenario, see [Worked Example: Sarah's Journey](VIF/VIF_Example.md).
+3. **Reasoning + action:** A two-stage evaluative layer powered by the **[Value Identity Function (VIF)](vif/01_concepts_and_roadmap.md)**:
+   * **Critic (VIF):** A numeric, uncertainty-aware engine that computes per-value-dimension alignment scores from a sliding window of recent entries. Uses [LLM-as-Judge for reward modeling](vif/03_model_training.md) and [MC Dropout for epistemic uncertainty](vif/04_uncertainty_logic.md). Triggers critiques only when confident and detecting significant patterns (sudden crashes or chronic ruts).
+   * **Coach:** Activated when the Critic identifies significant patterns — whether problematic (crashes, ruts) or positive (sustained alignment). Uses retrieval-augmented generation (RAG) over the user's full journal history to surface thematic evidence, explain *why* misalignment occurred, and offer reflective prompts or "micro-anchors." For positive patterns, provides occasional evidence-based acknowledgment without gamification. (See [System Architecture](vif/02_system_architecture.md)). For a concrete scenario, see [Worked Example: Sarah's Journey](vif/example.md).
 
 ### Prompt Templates
 
@@ -106,16 +106,13 @@ Value context is injected from `config/schwartz_values.yaml`, which contains ric
 * Low-friction journaling: prompts reduce blank-page paralysis and encourage regular reflection.
 * Evidence-based reinforcement, not gamification: when users sustain alignment with their values, the system acknowledges it by citing specific behaviors and connecting them to the user's own words — never through streaks, points, leaderboards, or generic praise. Positive feedback is infrequent (only when patterns emerge) and grounded in what the user actually wrote.
 
-## **Onboarding mini-assessment (cold start)**
+## **Onboarding (BWS Values Assessment)**
 
-* 3–5 screen “build your inner compass” quiz with large, tappable cards and a clear progress indicator.
-* First split on persona (e.g., student/young adult/mid-career), then on the live tension (overwork vs health, family guilt, creative stagnation).
-* Use forced trade-offs and simple rankings (e.g., protect sleep vs ship the project) to sharpen value weights instead of “select all that apply.”
-* Map each answer to latent dimensions (life stage, primary domain of concern, self-compassion vs self-criticism, comfort with challenge, time horizon) rather than a brittle tree of screens.
-* Show tiny mirrors mid-flow (“you sound like a mission-driven overcommitter who cares a lot about family—does this feel roughly right?”) so users can quickly correct the model.
-* Use the mini-assessment output to choose initial prompt tone, starter tensions to watch, and example scenarios in the first digest, and instrument responses so future iterations can merge/split branches and swap underperforming cards.
+The onboarding flow uses **Best-Worst Scaling (BWS)** — a forced-choice psychometric technique — to elicit value priorities across 10 Schwartz dimensions while minimizing social desirability bias. Users complete 6 quick screens (4 items each, tap "most like me" / "least like me"), see mid-flow and end-of-flow reflective mirrors for correction, and select a structured goal category. The output is a graded 10-dimensional value weight vector plus initial Coach monitoring focus.
 
-This mini-assessment directly anchors the capstone submodules: the latent dimensions form named slots in the knowledge base and rule layer (**Intelligent Reasoning Systems**), the mapping from user responses to those dimensions plus later corrections is a compact supervised modelling task (**Pattern Recognition Systems**), entry content analysis and temporal patterns feed the sensing layer (**Intelligent Sensing Systems**), and treating the quiz as just one input stream into a shared user-state vector `z` illustrates end-to-end orchestration and state management across Perception → Memory → Reasoning → Action (**Architecting AI Systems**).
+For the full specification including BWS item design, scoring logic, user flow, and data output schema, see **[Onboarding Spec](onboarding/onboarding_spec.md)**.
+
+This onboarding directly anchors the capstone submodules: the latent dimensions form named slots in the knowledge base and rule layer (**Intelligent Reasoning Systems**), the mapping from user responses to those dimensions plus later corrections is a compact supervised modelling task (**Pattern Recognition Systems**), entry content analysis and temporal patterns feed the sensing layer (**Intelligent Sensing Systems**), and treating the quiz as just one input stream into a shared user-state vector `z` illustrates end-to-end orchestration and state management across Perception → Memory → Reasoning → Action (**Architecting AI Systems**).
 
 ## **Core Feature Modules**
 
@@ -125,7 +122,7 @@ This mini-assessment directly anchors the capstone submodules: the latent dimens
   - **Elaboration** — for surface-level entries with unexplored depth
   - **Tension-surfacing** — for hedging language or conflicted statements
 
-  Nudge decisions use **LLM-based semantic classification** (not regex/heuristics) to detect when deeper reflection would yield VIF signal. Anti-annoyance logic caps nudges at 2 per 3-entry window. See [pipeline_specs.md](synthetic_data/pipeline_specs.md) for implementation details.
+  Nudge decisions use **LLM-based semantic classification** (not regex/heuristics) to detect when deeper reflection would yield VIF signal. Anti-annoyance logic caps nudges at 2 per 3-entry window. See [pipeline_specs.md](pipeline/pipeline_specs.md) for implementation details.
 * **“Map of Me”:** Embed each entry, visualise trajectories, overlay alignment scores (Pattern Recognition + Intelligent Sensing).
 * **Journaling anomaly radar:** After 2–3 weeks of entries establish cadence baselines, a lightweight time-series/anomaly detector tracks check-in gaps, flags “silent weeks,” cites evidence windows, and triggers empathetic nudges (Pattern Recognition + Architecting).
 * **Goal-aligned inspiration feed:** When the profile shows intent (e.g., “pick up Japanese”) but no supporting activities, call a real-time search API (SerpAPI/Tavily) constrained by what the user enjoys (e.g., highly rated anime) and reason over the results before surfacing next-step suggestions (Intelligent Reasoning + Intelligent Sensing). Each curated option is presented as an explicit choice; the user’s accept/decline actions feed back into the values/identity graph so future nudges learn which media or effort types actually motivate them.
@@ -133,15 +130,15 @@ This mini-assessment directly anchors the capstone submodules: the latent dimens
 **Implementation path**
 
 1. Frame the research question (“How do we sustain a dynamic model of values/identity and reflect alignment?”) and map subsystems to submodules.
-2. Define the MVP loop: mini-assessment (3–5 screen quiz)
+2. Define the MVP loop: onboarding (BWS-based values assessment — see [spec](onboarding/onboarding_spec.md))
 3. **Scoping Strategy:** Adopt a **Hybrid Approach** (Simple journaling loop + weekly digest + lightweight trajectory viz). Build small slices of each feature to demonstrate breadth without over-building.
 4. Specify the profile schema:
    * **Value dimensions** anchored in [Schwartz's theory of basic human values](https://en.wikipedia.org/wiki/Theory_of_basic_human_values) (e.g., Self-Direction, Benevolence, Achievement, Security) with definitions, rubrics, and examples.
    * **User value profile:** vector of value weights `w_u ∈ ℝ^K` (normalized, sum to 1), plus narrative descriptions and constraints.
    * **State representation:** sliding window of N recent entry embeddings + time deltas + history stats (EMA of per-dimension alignment, rolling std dev, entry counts).
-5. Implement **[Reward Modeling (LLM-as-Judge)](VIF/VIF_03_Model_Training.md):** For each entry, LLM outputs per-dimension alignment scores (Likert scale normalized to [-1,1]) with rationales and optional confidence scores. Use synthetic personas for initial training/validation.
+5. Implement **[Reward Modeling (LLM-as-Judge)](vif/03_model_training.md):** For each entry, LLM outputs per-dimension alignment scores (Likert scale normalized to [-1,1]) with rationales and optional confidence scores. Use synthetic personas for initial training/validation.
 
-   > **Status:** Steps 1-5 complete (31 personas, 213 labeled entries). Human annotation tool operational with 56 annotations for inter-rater agreement. See [Implementation Status](#implementation-status) for current progress. Step 6 (lightweight classifiers) deferred pending Critic training results.
+   > **Status:** Steps 1-5 complete (100 personas, 729 labeled entries). Human annotation tool operational with 56 annotations for inter-rater agreement. Multiple Critic architectures evaluated (MLP, BNN, TCN). See [Implementation Status](#implementation-status) for current progress. Step 6 (lightweight classifiers) deferred pending Critic training results.
 
 6. Tooling: start with API LLM for tagging + reflection, add lightweight classifiers later if needed; keep reasoning layer explainable for XRAI.
 7. Evaluation plan: combine Likert feedback on "felt accurate?" with inter-rater agreement on value tags and stability metrics for the profile.
@@ -204,15 +201,16 @@ This avoids the trap of matching windows "for consistency" when the constraints 
 | **Neuro-symbolic reasoning** | Add a tiny knowledge graph + rule layer on top of LLM outputs to show which logical checks fired (great for XRAI storytelling). |
 | **Multimodal fusion** | *Future work (out of scope for capstone):* Blend text + prosodic audio cues to extend Intelligent Sensing value beyond text-only analysis. |
 | **Personalised quote recommender** | Build embeddings of quotes + user resonance to deliver “micro-anchors” tuned to each identity conflict. |
-| **Distilled Reward Model** | Train a smaller supervised model to mimic LLM-as-Judge, reducing latency and cost while enabling offline VIF training. (See [Model Training](VIF/VIF_03_Model_Training.md)) |
-| **Advanced uncertainty modeling** | Extend MC Dropout with ensembles or density models; add explicit OOD detectors on the text embedding space. (See [Uncertainty Logic](VIF/VIF_04_Uncertainty_Logic.md)) |
-| **Tiered VIF implementation** | Progress from Tier 1 (immediate alignment) → Tier 2 (short-horizon forecast) → Tier 3 (time-aware discounted returns). See [VIF design](VIF/VIF_01_Concepts_and_Roadmap.md). |
+| **Distilled Reward Model** | Train a smaller supervised model to mimic LLM-as-Judge, reducing latency and cost while enabling offline VIF training. (See [Model Training](vif/03_model_training.md)) |
+| **Ordinal regression models** | Treat alignment as ordinal classification {-1, 0, +1} instead of regression; architectures under investigation include CORAL, CORN, EMD, and soft ordinal ranking losses. |
+| **Advanced uncertainty modeling** | Extend MC Dropout with ensembles or density models; add explicit OOD detectors on the text embedding space. (See [Uncertainty Logic](vif/04_uncertainty_logic.md)) |
+| **Tiered VIF implementation** | Progress from Tier 1 (immediate alignment) → Tier 2 (short-horizon forecast) → Tier 3 (time-aware discounted returns). See [VIF design](vif/01_concepts_and_roadmap.md). |
 
 # Features that tie back to Masters' submodules
 
 | Submodule                         | Features in Twinkl                                                                                                                                                                                                                  |
 | :-------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Intelligent Reasoning Systems** | Formal value/goal knowledge base + decay rules cover knowledge representation; a hybrid reasoning layer mixes LLM inference with symbolic “if value X high but mentions drop Y weeks → flag misalignment” rules, and the inspiration feed performs decision-theoretic ranking (with [uncertainty-aware scoring](VIF/VIF_04_Uncertainty_Logic.md)) of real-time search hits plus logged user accept/reject choices. |
+| **Intelligent Reasoning Systems** | Formal value/goal knowledge base + decay rules cover knowledge representation; a hybrid reasoning layer mixes LLM inference with symbolic “if value X high but mentions drop Y weeks → flag misalignment” rules, and the inspiration feed performs decision-theoretic ranking (with [uncertainty-aware scoring](vif/04_uncertainty_logic.md)) of real-time search hits plus logged user accept/reject choices. |
 | **Pattern Recognition Systems**   | Transformer tagging for sentiment/topics, sequential models for cadence baselines, clustering/trajectory viz (“Map of Me”) to detect seasons, and anomaly detection that spots journal absences while continuously re-learning from the recommendation-choice dataset. |
 | **Intelligent Sensing Systems**   | Text-based sensing: entry content analysis (value mentions, sentiment, hedging), temporal patterns (entry cadence, time-of-day), and journal gap detection. The real-time search layer acts as an external "sensor" that ingests up-to-date cultural/learning stimuli, and choice telemetry becomes another sensed signal that is fused with identity/value embeddings. *(Multimodal audio sensing deferred to future work.)* |
 | **Architecting AI Systems**       | Agentic loop (Perception → Memory → Reasoning → Action), explainable feedback via XRAI, privacy-first storage of sensitive logs, and orchestration of background workers that run anomaly checks, call external APIs, and write preference updates while following MLSecOps guardrails. |
@@ -246,10 +244,21 @@ This avoids the trap of matching windows "for consistency" when the constraints 
 | Document | Purpose |
 |----------|---------|
 | [CLAUDE.md](../CLAUDE.md) | Project architecture, commands, code style |
-| [pipeline_specs.md](synthetic_data/pipeline_specs.md) | Synthetic data pipeline design and rationale |
-| [claude_gen_instructions.md](synthetic_data/claude_gen_instructions.md) | Parallel subagent generation workflow |
-| [claude_judge_instructions.md](synthetic_data/claude_judge_instructions.md) | Judge labeling workflow (wrangling + scoring) |
-| [annotation_guidelines.md](synthetic_data/annotation_guidelines.md) | Human annotation for nudge effectiveness study |
-| [human_annotator_tool.md](data_loader/human_annotator_tool.md) | Shiny annotation tool implementation plan |
-| [VIF_01_Concepts_and_Roadmap.md](VIF/VIF_01_Concepts_and_Roadmap.md) | Value Identity Function theory |
-| [VIF_03_Model_Training.md](VIF/VIF_03_Model_Training.md) | LLM-as-Judge and Critic training |
+| **Pipeline** | |
+| [pipeline_specs.md](pipeline/pipeline_specs.md) | Synthetic data pipeline design and rationale |
+| [claude_gen_instructions.md](pipeline/claude_gen_instructions.md) | Parallel subagent generation workflow |
+| [claude_judge_instructions.md](pipeline/claude_judge_instructions.md) | Judge labeling workflow (wrangling + scoring) |
+| [annotation_guidelines.md](pipeline/annotation_guidelines.md) | Human annotation for nudge effectiveness study |
+| [annotation_tool_plan.md](pipeline/annotation_tool_plan.md) | Shiny annotation tool implementation plan |
+| [nudge_design_rationale.md](pipeline/nudge_design_rationale.md) | Nudge validation plan and design rationale |
+| **VIF** | |
+| [01_concepts_and_roadmap.md](vif/01_concepts_and_roadmap.md) | Value Identity Function theory |
+| [03_model_training.md](vif/03_model_training.md) | LLM-as-Judge and Critic training |
+| [05_state_and_data_pipeline.md](vif/05_state_and_data_pipeline.md) | State encoding and data pipeline |
+| [06_profile_conditioned_drift_and_encoder.md](vif/06_profile_conditioned_drift_and_encoder.md) | Profile-conditioned drift detection |
+| **Evals** | |
+| [evals/overview.md](evals/overview.md) | Evaluation pipeline overview |
+| [evals/judge_validation_summary.md](evals/judge_validation_summary.md) | Judge validation results |
+| **Other** | |
+| [onboarding_spec.md](onboarding/onboarding_spec.md) | BWS-based onboarding flow, item design, and data output schema |
+| [capstone_report/](capstone_report/) | Capstone report materials |

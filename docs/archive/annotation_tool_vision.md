@@ -459,7 +459,7 @@ Include as tooltips in the UI (from `config/schwartz_values.yaml`):
 
 ## 12. References
 
-- **Judge implementation:** `docs/VIF/judge_implementation_spec.md`
+- **Judge implementation:** `docs/pipeline/judge_implementation_spec.md`
 - **Value rubrics:** `config/schwartz_values.yaml`
 - **Existing validation protocol:** `docs/evals/judge_validation_eval.md`
 - **Hamel Husain's Evals FAQ:** https://hamel.dev/blog/posts/evals-faq/

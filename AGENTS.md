@@ -35,7 +35,7 @@ Quick shortcuts for common tasks:
 - **Package Installation**: Use `uv pip install <package>` (not regular `pip install`) 
 
 ## Documentation
-- **Source of Truth**: `docs/PRD.md` is the definitive specification
+- **Source of Truth**: `docs/prd.md` is the definitive specification
 - **Other docs/**: Brainstorming ideas and features under consideration (not authoritative)
 
 ## Code Style

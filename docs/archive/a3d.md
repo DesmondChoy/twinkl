@@ -1,6 +1,6 @@
 # ISS-Practice-Module: The Adaptive Acoustic Anomaly Detector (A3D)
 
-> **Note:** This module is a **Semester 3 Project** (ISS-Practice-Module) within the same NUS Master of Technology in Intelligent Systems program. Once successfully implemented and validated, it will be fed back into the main Capstone project as the core "Intelligent Sensing" component. For program structure and module relationships, see [IS_Capstone_Slides.pdf](IS_Capstone_Slides.pdf). For the main project overview, see [PRD.md](PRD.md).
+> **Note:** This module is a **Semester 3 Project** (ISS-Practice-Module) within the same NUS Master of Technology in Intelligent Systems program. Once successfully implemented and validated, it will be fed back into the main Capstone project as the core "Intelligent Sensing" component. For program structure and module relationships, see [is_capstone_slides.pdf](../is_capstone_slides.pdf). For the main project overview, see [prd.md](../prd.md).
 
 ## 1. Component Overview & Pain Point
 *   **Component:** A privacy-first, unsupervised anomaly detection system that learns a user's unique prosodic baseline (pitch, rhythm, jitter) to flag physiological deviations (stress, lethargy) without relying on "Universal Emotion" models that fail on Singlish accents.

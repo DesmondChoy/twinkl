@@ -14,7 +14,7 @@ Journals should be:
 
 # Implementation
 
-**Primary generation**: Use `docs/synthetic_data/claude_gen_instructions.md` with Claude Code for parallel subagent generation.
+**Primary generation**: Use `docs/pipeline/claude_gen_instructions.md` with Claude Code for parallel subagent generation.
 
 **Experimentation**: Use `notebooks/journal_gen.ipynb` or `notebooks/journal_nudge.ipynb` for prompt iteration and testing.
 

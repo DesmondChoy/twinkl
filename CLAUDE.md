@@ -35,7 +35,7 @@ Notebooks are in `notebooks/` and should be run from the project root after acti
 The project generates synthetic training data for the VIF using two approaches:
 
 **Primary: Claude Code Subagents**
-- `docs/synthetic_data/claude_gen_instructions.md` — Instructions for Claude Code to generate synthetic data at scale using parallel subagents
+- `docs/pipeline/claude_gen_instructions.md` — Instructions for Claude Code to generate synthetic data at scale using parallel subagents
 - Outputs to `logs/synthetic_data/persona_<uuid>.md` (one file per persona)
 - Registry tracks pipeline progress at `logs/registry/personas.parquet`
 
@@ -150,10 +150,12 @@ state_encoder = StateEncoder(encoder)        # 1,174-dim state vectors
 
 ## Documentation Hierarchy
 
-- **`docs/PRD.md`** — Definitive specification (source of truth)
-- **`docs/VIF/`** — VIF architecture, training, uncertainty logic
-- **`docs/synthetic_data/pipeline_specs.md`** — Synthetic data pipeline design
-- **`docs/ideas/`** — Brainstorming (not authoritative)
+- **`docs/prd.md`** — Definitive specification (source of truth)
+- **`docs/onboarding/`** — Onboarding flow specification and BWS values assessment
+- **`docs/vif/`** — VIF architecture, training, uncertainty logic
+- **`docs/pipeline/pipeline_specs.md`** — Synthetic data pipeline design
+- **`docs/archive/`** — Rejected/archived ideas (not authoritative)
+- **`docs/future_work/`** — Parked post-capstone features
 
 ## Code Style
 

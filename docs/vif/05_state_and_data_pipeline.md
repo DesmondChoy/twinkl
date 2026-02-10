@@ -8,9 +8,9 @@ This document makes the **concrete choices** for the capstone POC about:
 
 It complements:
 
-- `VIF_01_Concepts_and_Roadmap.md` (high‑level design & tiers)
-- `VIF_02_System_Architecture.md` (generic state options)
-- `VIF_03_Model_Training.md` (reward modeling options)
+- `01_concepts_and_roadmap.md` (high‑level design & tiers)
+- `02_system_architecture.md` (generic state options)
+- `03_model_training.md` (reward modeling options)
 
 ---
 
@@ -21,7 +21,7 @@ For the capstone POC, we commit to the following **concrete scope**:
 - **Modalities**: **Text only**.
   - Audio/prosodic signals (A3D) are out of scope for capstone; multimodal extensions deferred to future work.
 
-- **Target option**: **Option A – Immediate alignment** (from `VIF_03_Model_Training.md`).
+- **Target option**: **Option A – Immediate alignment** (from `03_model_training.md`).
   - The Critic learns to emulate the Judge's per‑dimension alignment vector $\hat{\vec{a}}_{u,t}$.
   - Longer‑term trends (weekly averages, crash/rut) are derived via **deterministic smoothing and rules**, not via discounted returns.
 
@@ -147,7 +147,7 @@ One row per entry with Judge scores.
 - `alignment_vector`: length‑10 vector, each component in $\{-1, 0, +1\}$, e.g.:  
   `[Health: -1, Achievement: +1, Benevolence: 0, ...]`.
 
-This table is produced by running the **Judge (LLM‑as‑Judge)** over each `Entry.text` (with access to persona profile where needed) as specified in `VIF_03_Model_Training.md`.
+This table is produced by running the **Judge (LLM‑as‑Judge)** over each `Entry.text` (with access to persona profile where needed) as specified in `03_model_training.md`.
 
 ### 3.4 StateTargetSample (Training Rows)
 
@@ -250,11 +250,11 @@ All `(persona_id, t_index)` rows for a given persona belong to the same split.
 
 ## 5. Link Back to Model Training and Inference
 
-- **Training** (`VIF_03_Model_Training.md`):
+- **Training** (`03_model_training.md`):
   - The Critic MLP is trained on `StateTargetSample` with a multi‑output regression loss (e.g. MSE) to predict \(\hat{\vec{a}}_{u,t}\).
   - MC Dropout is applied during both training and inference to enable epistemic uncertainty estimation.
 
-- **Inference** (`VIF_02_System_Architecture.md`):
+- **Inference** (`02_system_architecture.md`):
   - At runtime, the system builds \(s_{u,t}\) **incrementally** from recent entries and the user’s profile, using the same feature definition as above.
   - The Critic’s mean and variance outputs feed into weekly aggregation, crash/rut detection, and the Coach triggers.
 
