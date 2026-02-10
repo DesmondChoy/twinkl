@@ -84,6 +84,10 @@ def _extract_field(content: str, field_name: str) -> str | None:
 def parse_entries(content: str) -> list[dict]:
     """Extract all journal entries from markdown content.
 
+    Auto-detects format:
+    - Raw synthetic data: has "### Initial Entry" sub-headers with metadata
+    - Wrangled: clean format with inline **Nudge:**/**Response:** markers
+
     Args:
         content: Full markdown file content
 
@@ -91,6 +95,9 @@ def parse_entries(content: str) -> list[dict]:
         List of entry dicts with date, initial_entry, nudge_text, response_text, flags
     """
     entries = []
+
+    # Detect format: raw synthetic data has "### Initial Entry" sub-headers
+    is_raw_format = "### Initial Entry" in content
 
     # Split by entry headers: "## Entry N - [Date]"
     entry_pattern = r"## Entry \d+ - (\d{4}-\d{2}-\d{2})"
@@ -101,15 +108,76 @@ def parse_entries(content: str) -> list[dict]:
         date = entry_splits[i]
         entry_content = entry_splits[i + 1] if i + 1 < len(entry_splits) else ""
 
-        entry = parse_single_entry(date, entry_content)
+        if is_raw_format:
+            entry = _parse_raw_entry(date, entry_content)
+        else:
+            entry = _parse_wrangled_entry(date, entry_content)
         entry["t_index"] = len(entries)  # 0-based index
         entries.append(entry)
 
     return entries
 
 
-def parse_single_entry(date: str, content: str) -> dict:
-    """Parse a single entry's content.
+def _parse_wrangled_entry(date: str, content: str) -> dict:
+    """Parse a single entry in wrangled format.
+
+    Wrangled format has no sub-headers or metadata — just clean text
+    with optional inline **Nudge:** and **Response:** markers.
+
+    Args:
+        date: Entry date string (YYYY-MM-DD)
+        content: Entry markdown content (everything after date header)
+
+    Returns:
+        Dict with date, initial_entry, nudge_text, response_text, has_nudge, has_response
+    """
+    entry = {
+        "date": date,
+        "initial_entry": None,
+        "nudge_text": None,
+        "response_text": None,
+        "has_nudge": False,
+        "has_response": False,
+    }
+
+    # Extract initial entry: everything before **Nudge:** or end of section
+    initial_match = re.search(
+        r"(.+?)"
+        r"(?=\n\*\*Nudge:\*\*|\n---|\Z)",
+        content,
+        re.DOTALL,
+    )
+    if initial_match:
+        entry["initial_entry"] = initial_match.group(1).strip()
+
+    # Extract nudge: **Nudge:** "quoted text"
+    nudge_match = re.search(
+        r'\*\*Nudge:\*\*\s*"([^"]+)"',
+        content,
+    )
+    if nudge_match:
+        entry["nudge_text"] = nudge_match.group(1).strip()
+        entry["has_nudge"] = True
+
+    # Extract response: **Response:** text (until end of section)
+    response_match = re.search(
+        r"\*\*Response:\*\*\s*(.+?)"
+        r"(?=\n---|\n## |\Z)",
+        content,
+        re.DOTALL,
+    )
+    if response_match:
+        entry["response_text"] = response_match.group(1).strip()
+        entry["has_response"] = True
+
+    return entry
+
+
+def _parse_raw_entry(date: str, content: str) -> dict:
+    """Parse a single entry in raw synthetic data format.
+
+    Raw format has ### sub-headers (Initial Entry, Nudge, Response)
+    with metadata lines (Tone, Trigger, Mode, etc.).
 
     Args:
         date: Entry date string (YYYY-MM-DD)

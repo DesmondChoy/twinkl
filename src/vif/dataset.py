@@ -173,6 +173,8 @@ def split_by_persona(
     train_df = merged_df.filter(pl.col("persona_id").is_in(train_personas))
     val_df = merged_df.filter(pl.col("persona_id").is_in(val_personas))
     test_df = merged_df.filter(pl.col("persona_id").is_in(test_personas))
+    
+    print
 
     return train_df, val_df, test_df
 
