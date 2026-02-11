@@ -74,6 +74,42 @@ def _make_dataloader(
 # ── Metric tests ──────────────────────────────────────────────────────────────
 
 
+class TestDiscretize:
+    """Tests for discretize_predictions."""
+
+    def test_clear_classes(self):
+        """Values clearly in each class should map correctly."""
+        from src.vif.eval import discretize_predictions
+
+        values = np.array([-0.9, -0.6, 0.0, 0.3, 0.6, 0.9])
+        result = discretize_predictions(values)
+        np.testing.assert_array_equal(result, [-1, -1, 0, 0, 1, 1])
+
+    def test_boundary_stays_neutral(self):
+        """Exactly ±0.5 should be classified as neutral (0)."""
+        from src.vif.eval import discretize_predictions
+
+        values = np.array([-0.5, 0.5])
+        result = discretize_predictions(values)
+        np.testing.assert_array_equal(result, [0, 0])
+
+    def test_just_past_boundary(self):
+        """Values just past ±0.5 should be classified as -1/+1."""
+        from src.vif.eval import discretize_predictions
+
+        values = np.array([-0.500001, 0.500001])
+        result = discretize_predictions(values)
+        np.testing.assert_array_equal(result, [-1, 1])
+
+    def test_2d_array(self):
+        """Should work on 2D arrays (n_samples, n_dims)."""
+        from src.vif.eval import discretize_predictions
+
+        values = np.array([[0.0, 0.8], [-0.7, 0.3]])
+        result = discretize_predictions(values)
+        np.testing.assert_array_equal(result, [[0, 1], [-1, 0]])
+
+
 class TestMAE:
     """Tests for compute_mae_per_dimension."""
 
@@ -240,14 +276,14 @@ class TestAccuracy:
         for v in acc.values():
             assert v == pytest.approx(1.0)
 
-    def test_rounding_behavior(self):
-        """Predictions within 0.5 of a target class should round correctly.
+    def test_threshold_behavior(self):
+        """Predictions within [-0.5, 0.5] should discretize to 0.
 
-        0.4 rounds to 0 (correct when target=0), 0.6 rounds to 1 (correct when target=1).
+        0.4 → 0 (correct when target=0), 0.6 → 1 (correct when target=1).
         """
         from src.vif.eval import compute_accuracy_per_dimension
 
-        # All targets are 0; predictions are 0.4 → round to 0 → correct
+        # All targets are 0; predictions are 0.4 → class 0 → correct
         targets = np.zeros((4, 10))
         predictions = np.full((4, 10), 0.4)
 
@@ -255,15 +291,39 @@ class TestAccuracy:
         for v in acc.values():
             assert v == pytest.approx(1.0)
 
-    def test_clipping_to_valid_range(self):
-        """Predictions outside [-1, 1] should be clipped after rounding.
+    def test_boundary_at_half(self):
+        """Exactly 0.5 stays neutral; >0.5 goes to +1.
 
-        1.6 → round → 2.0 → clip → 1.0 (matches target 1).
+        This documents the intentional threshold behavior: values at exactly
+        ±0.5 are classified as neutral, avoiding numpy's bankers rounding.
+        """
+        from src.vif.eval import compute_accuracy_per_dimension
+
+        # 0.5 → class 0 (neutral), target is 0 → correct
+        targets = np.zeros((4, 10))
+        predictions = np.full((4, 10), 0.5)
+
+        acc = compute_accuracy_per_dimension(predictions, targets)
+        for v in acc.values():
+            assert v == pytest.approx(1.0)
+
+        # 0.51 → class +1, target is 1 → correct
+        targets_pos = np.ones((4, 10))
+        predictions_pos = np.full((4, 10), 0.51)
+
+        acc_pos = compute_accuracy_per_dimension(predictions_pos, targets_pos)
+        for v in acc_pos.values():
+            assert v == pytest.approx(1.0)
+
+    def test_extreme_predictions_clamp_to_valid_range(self):
+        """Predictions far outside [-1, 1] should still map to -1 or +1.
+
+        1.6 > 0.5 → class +1 (matches target 1).
         """
         from src.vif.eval import compute_accuracy_per_dimension
 
         targets = np.ones((4, 10))
-        predictions = np.full((4, 10), 1.6)  # round→2, clip→1
+        predictions = np.full((4, 10), 1.6)
 
         acc = compute_accuracy_per_dimension(predictions, targets)
         for v in acc.values():
@@ -274,7 +334,7 @@ class TestAccuracy:
         from src.vif.eval import compute_accuracy_per_dimension
 
         targets = np.ones((10, 10))  # all 1
-        predictions = np.full((10, 10), -0.6)  # round → -1, clip → -1
+        predictions = np.full((10, 10), -0.6)  # < -0.5 → class -1
 
         acc = compute_accuracy_per_dimension(predictions, targets)
         for v in acc.values():

@@ -29,6 +29,24 @@ from sklearn.metrics import cohen_kappa_score
 from src.models.judge import SCHWARTZ_VALUE_ORDER
 
 
+def discretize_predictions(values: np.ndarray) -> np.ndarray:
+    """Convert continuous predictions to discrete classes {-1, 0, +1}.
+
+    Uses explicit thresholds to avoid numpy's bankers rounding
+    (round-half-to-even), which biases ±0.5 toward 0.
+
+    Args:
+        values: Array of continuous predictions
+
+    Returns:
+        Integer array with values in {-1, 0, +1}
+    """
+    classes = np.zeros_like(values, dtype=int)
+    classes[values < -0.5] = -1
+    classes[values > 0.5] = 1
+    return classes
+
+
 def compute_mse_per_dimension(
     predictions: np.ndarray,
     targets: np.ndarray,
@@ -136,7 +154,7 @@ def compute_qwk_per_dimension(
     qwk_per_dim = {}
 
     for i, dim_name in enumerate(SCHWARTZ_VALUE_ORDER):
-        pred_dim = np.round(predictions[:, i]).clip(-1, 1).astype(int)
+        pred_dim = discretize_predictions(predictions[:, i])
         target_dim = targets[:, i].astype(int)
 
         # QWK undefined if either rater is constant
@@ -174,8 +192,8 @@ def compute_accuracy_per_dimension(
         pred_dim = predictions[:, i]
         target_dim = targets[:, i]
 
-        # Round predictions to nearest class
-        pred_classes = np.round(pred_dim).clip(-1, 1)
+        # Discretize predictions to nearest class
+        pred_classes = discretize_predictions(pred_dim)
 
         # Compute accuracy
         correct = (pred_classes == target_dim).mean()
