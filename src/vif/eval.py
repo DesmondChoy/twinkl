@@ -222,6 +222,7 @@ def evaluate_with_uncertainty(
         n_mc_samples: Number of MC Dropout samples
         device: Device to run evaluation on
         include_ordinal_metrics: If True, also compute MAE and QWK
+            in addition to always-computed MSE
 
     Returns:
         Dict with predictions, uncertainties, targets, metrics, and calibration.
@@ -249,6 +250,7 @@ def evaluate_with_uncertainty(
     # Compute metrics
     spearman_per_dim = compute_spearman_per_dimension(predictions, targets)
     accuracy_per_dim = compute_accuracy_per_dimension(predictions, targets)
+    mse_per_dim = compute_mse_per_dimension(predictions, targets)
 
     # Calibration check: higher uncertainty should correlate with higher error
     errors = np.abs(predictions - targets)
@@ -265,6 +267,8 @@ def evaluate_with_uncertainty(
         "spearman_mean": float(np.nanmean(list(spearman_per_dim.values()))),
         "accuracy_per_dim": accuracy_per_dim,
         "accuracy_mean": float(np.mean(list(accuracy_per_dim.values()))),
+        "mse_per_dim": mse_per_dim,
+        "mse_mean": float(np.mean(list(mse_per_dim.values()))),
         "calibration": {
             "error_uncertainty_correlation": float(error_uncertainty_corr),
             "mean_uncertainty": float(uncertainties.mean()),
@@ -278,10 +282,6 @@ def evaluate_with_uncertainty(
         results["mae_mean"] = float(np.mean(list(mae_per_dim.values())))
         results["qwk_per_dim"] = qwk_per_dim
         results["qwk_mean"] = float(np.nanmean(list(qwk_per_dim.values())))
-    else:
-        mse_per_dim = compute_mse_per_dimension(predictions, targets)
-        results["mse_per_dim"] = mse_per_dim
-        results["mse_mean"] = float(np.mean(list(mse_per_dim.values())))
 
     return results
 
@@ -303,11 +303,12 @@ def evaluate_model(
         dataloader: DataLoader with test/validation data
         device: Device to run evaluation on
         include_ordinal_metrics: If True, also compute MAE and QWK
-            (replaces MSE with MAE in results)
+            in addition to always-computed MSE
 
     Returns:
         Dict with error metrics, Spearman, and accuracy metrics.
-        When include_ordinal_metrics=True, uses MAE/QWK instead of MSE.
+        MSE is always included. MAE/QWK are included when
+        include_ordinal_metrics=True.
     """
     model.to(device)
     model.eval()
@@ -331,6 +332,7 @@ def evaluate_model(
 
     spearman_per_dim = compute_spearman_per_dimension(predictions, targets)
     accuracy_per_dim = compute_accuracy_per_dimension(predictions, targets)
+    mse_per_dim = compute_mse_per_dimension(predictions, targets)
 
     results = {
         "predictions": predictions,
@@ -339,6 +341,8 @@ def evaluate_model(
         "spearman_mean": float(np.nanmean(list(spearman_per_dim.values()))),
         "accuracy_per_dim": accuracy_per_dim,
         "accuracy_mean": float(np.mean(list(accuracy_per_dim.values()))),
+        "mse_per_dim": mse_per_dim,
+        "mse_mean": float(np.mean(list(mse_per_dim.values()))),
     }
 
     if include_ordinal_metrics:
@@ -348,10 +352,6 @@ def evaluate_model(
         results["mae_mean"] = float(np.mean(list(mae_per_dim.values())))
         results["qwk_per_dim"] = qwk_per_dim
         results["qwk_mean"] = float(np.nanmean(list(qwk_per_dim.values())))
-    else:
-        mse_per_dim = compute_mse_per_dimension(predictions, targets)
-        results["mse_per_dim"] = mse_per_dim
-        results["mse_mean"] = float(np.mean(list(mse_per_dim.values())))
 
     return results
 

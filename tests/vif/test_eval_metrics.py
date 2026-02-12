@@ -364,7 +364,7 @@ class TestEvaluateModel:
         assert "qwk_per_dim" not in results
 
     def test_ordinal_returns_mae_qwk_keys(self):
-        """Ordinal model with include_ordinal_metrics should produce MAE/QWK keys."""
+        """Ordinal model with include_ordinal_metrics should produce MAE/QWK plus MSE."""
         from src.vif.eval import evaluate_model
 
         fixed = torch.zeros(10)
@@ -378,7 +378,8 @@ class TestEvaluateModel:
         assert "mae_mean" in results
         assert "qwk_per_dim" in results
         assert "qwk_mean" in results
-        assert "mse_per_dim" not in results
+        assert "mse_per_dim" in results
+        assert "mse_mean" in results
 
     def test_perfect_non_ordinal_predictions(self):
         """MSE should be 0 when model outputs exactly match targets."""
@@ -445,7 +446,7 @@ class TestEvaluateWithUncertainty:
         assert "mae_per_dim" not in results
 
     def test_ordinal_computes_mae_qwk(self):
-        """With include_ordinal_metrics=True, should compute MAE/QWK instead of MSE."""
+        """With include_ordinal_metrics=True, should compute MAE/QWK plus MSE."""
         from src.vif.eval import evaluate_with_uncertainty
 
         fixed = torch.zeros(10)
@@ -459,7 +460,7 @@ class TestEvaluateWithUncertainty:
 
         assert "mae_per_dim" in results
         assert "qwk_per_dim" in results
-        assert "mse_per_dim" not in results
+        assert "mse_per_dim" in results
 
     def test_mean_uncertainty_positive(self):
         """Mean uncertainty from mocks (fixed std=0.1) should be positive."""
