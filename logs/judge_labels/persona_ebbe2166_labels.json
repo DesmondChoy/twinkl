@@ -1,0 +1,188 @@
+{
+  "persona_id": "ebbe2166",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-01-30",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": -1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "achievement": "He frames taking the promotion as less important and potentially deferrable despite career upside.",
+        "universalism": "He prioritizes direct social impact through refugee teaching over increased pay and title."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-01-30",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": -1,
+        "power": 0,
+        "security": -1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He resists an advancement opportunity rather than straightforwardly pursuing it.",
+        "security": "He does not endorse the promotion despite its stated financial benefit for long-term savings."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-02-04",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "achievement": "He leaves the march to fix a production bug, emphasizing performance and responsibility at work.",
+        "universalism": "He actively participates in a climate march and continues engagement with immigrant legal-aid translation work."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-02-07",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": -1
+      },
+      "rationales": {
+        "universalism": "He skips the refugee coding class again, reducing direct contribution to a broader humanitarian commitment."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-02-12",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": -1
+      },
+      "rationales": {
+        "security": "He emphasizes saving for a future home and adjusting commitments around work strain and financial planning.",
+        "benevolence": "He recognizes being too busy for family, including his mother's disappointment about his absence.",
+        "universalism": "He is preparing to step back from consistent nonprofit teaching despite valuing that service."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-02-18",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": -1
+      },
+      "rationales": {
+        "achievement": "He accepts the promotion and transition to a higher-responsibility role.",
+        "power": "He highlights the better title and leadership shift associated with the promotion.",
+        "universalism": "He formally steps back from refugee instruction, reducing direct involvement in a social-impact commitment."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-02-18",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "hedonism": "He validates rest and simple enjoyment with his partner rather than constant self-denial.",
+        "security": "He explicitly chooses a sustainable pace to avoid burnout and keep life manageable.",
+        "universalism": "He continues legal-aid translation and frames increased income as continued support for social causes."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-02-18",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He values unstructured, enjoyable time and rejects relentless optimization of every decision.",
+        "benevolence": "He re-centers care for his close relationship with Ana by prioritizing shared presence."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-02-23",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 1
+      },
+      "rationales": {
+        "hedonism": "He enjoys everyday life at home without guilt-driven multitasking.",
+        "benevolence": "He is present with Ana and invests time in their relationship.",
+        "universalism": "He sustains weekly legal-aid translation work to support immigrants beyond his immediate circle."
+      }
+    }
+  ]
+}

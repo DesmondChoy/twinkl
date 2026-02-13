@@ -146,6 +146,7 @@ def register_persona(
                     "stage_wrangled": [False],
                     "stage_labeled": [False],
                     "nudge_enabled": [nudge_enabled],
+                    "annotation_order": [None],
                 },
                 schema=REGISTRY_SCHEMA,
             )
