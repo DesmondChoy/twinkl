@@ -130,3 +130,4 @@ Before creating a commit:
 If there is ambiguity and no blocking risk, proceed with explicit
 assumptions and note them. If ambiguity affects correctness or design
 direction, ask one concise clarifying question.
+Use 'bd' for task tracking

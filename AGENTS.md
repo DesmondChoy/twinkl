@@ -56,3 +56,5 @@ Quick shortcuts for common tasks:
 - Review complete changed files before commit, not only patch hunks
 - Run targeted tests/lint checks for touched modules before proposing commit text
 - Remove debug artifacts and obvious dead code before handoff
+
+Use 'bd' for task tracking
