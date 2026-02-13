@@ -87,8 +87,8 @@ Registry Check → Auto-Wrangle → Parallel Labeling (subagents) → Validation
 - `docs/pipeline/claude_gen_instructions.md` — Instructions for Claude Code to generate synthetic data using parallel subagents
 
 **Experimentation Notebooks** (for prompt iteration and testing):
-- `notebooks/journal_gen.ipynb` — One-way journal generation
-- `notebooks/journal_nudge.ipynb` — Two-way conversational journaling with nudges
+- `notebooks/journalling/journal_gen.ipynb` — One-way journal generation
+- `notebooks/journalling/journal_nudge.ipynb` — Two-way conversational journaling with nudges
 
 ## Human Annotation Tool
 

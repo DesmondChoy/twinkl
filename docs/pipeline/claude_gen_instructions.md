@@ -4,7 +4,7 @@ Instructions for Claude Code to generate synthetic conversational journal data u
 
 **No API keys required** - this uses Claude Code's native Task tool, not the external Claude Agent SDK.
 
-**This is the primary method for generating synthetic data at scale.** The Jupyter notebooks (`notebooks/journal_gen.ipynb`, `notebooks/journal_nudge.ipynb`) are for experimentation and prompt iteration only.
+**This is the primary method for generating synthetic data at scale.** The Jupyter notebooks (`notebooks/journalling/journal_gen.ipynb`, `notebooks/journalling/journal_nudge.ipynb`) are for experimentation and prompt iteration only.
 
 ---
 
@@ -14,16 +14,16 @@ Instructions for Claude Code to generate synthetic conversational journal data u
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `NUM_PERSONAS` | 5 | Number of personas to generate |
-| `MIN_ENTRIES` | 2 | Minimum entries per persona (supports cold-start scenarios) |
+| `NUM_PERSONAS` | 10 | Number of personas to generate |
+| `MIN_ENTRIES` | 6 | Minimum entries per persona (supports cold-start scenarios) |
 | `MAX_ENTRIES` | 12 | Maximum entries per persona (covers rut detection window) |
 | `START_DATE` | Random in 2025 | Random date from 2025-01-01 to 2025-12-31 |
 | `MIN_DAYS_BETWEEN_ENTRIES` | 0 | Minimum days between entries (0 = same-day allowed) |
 | `MAX_DAYS_BETWEEN_ENTRIES` | 7 | Maximum days between entries (ensures ~1 entry/week) |
 | `SAME_DAY_PROBABILITY` | 0.15 | Probability of same-day follow-up entry (15%) |
 | `NUDGE_ENABLED` | true | Set to false to disable all nudge generation |
-| `TARGET_VALUES` | `["Self-Direction", "Power", "Achievement"]` | Schwartz values to force (e.g., `["Stimulation", "Power"]`). Empty = random selection. |
-| `ADD_RANDOM_VALUE` | `true` | When targeting, randomly produce 1 or 2 values (target always included). |
+| `TARGET_VALUES` | `["Universalism"]` | Schwartz values to force (e.g., `["Stimulation", "Power"]`). Empty = random selection. |
+| `ADD_RANDOM_VALUE` | `false` | When targeting, randomly produce 1 or 2 values (target always included). |
 
 ---
 
@@ -106,7 +106,7 @@ All prompts, decision logic, and configuration come from these files:
 | `config/synthetic_data.yaml` | Persona attributes, journal entry options, nudge settings |
 | `config/schwartz_values.yaml` | Value elaborations for persona generation |
 | `prompts/` | YAML prompt templates with Jinja2 |
-| `notebooks/journal_nudge.ipynb` | Nudge decision logic, banned terms |
+| `notebooks/journalling/journal_nudge.ipynb` | Nudge decision logic, banned terms |
 
 ### Prompt Templates
 
@@ -215,7 +215,7 @@ TaskOutput tool call:
 Read and internalize:
 - Both config YAML files
 - The prompt templates from `prompts/` folder (including `nudge_decision.yaml` for LLM-based nudge classification)
-- The `decide_nudge_llm()` function logic from `notebooks/journal_nudge.ipynb`
+- The `decide_nudge_llm()` function logic from `notebooks/journalling/journal_nudge.ipynb`
 - **Extract `SCHWARTZ_BANNED_TERMS` list from notebook to embed in subagent prompts**
 
 ### 2. Ensure Directories Exist
@@ -885,7 +885,7 @@ Note: The orchestrator extracts `response_probability` from `config/synthetic_da
 
 ## Optional: Define Custom Subagent
 
-For cleaner organization, you can define a specialized persona pipeline subagent in `.claude/agents/`:
+For cleaner organization, you can define a specialized persona pipeline subagent in `.claude/agents/` (create the directory if it doesn't exist):
 
 **`.claude/agents/persona-pipeline.md`**:
 ```markdown
@@ -925,7 +925,7 @@ Then invoke with `subagent_type: "persona-pipeline"` instead of `"general-purpos
 
 ## Checklist
 
-- [ ] Read source files (configs + prompts/ + notebook)
+- [ ] Read source files (configs + prompts/ + `notebooks/journalling/journal_nudge.ipynb`)
 - [ ] Set configuration variables above
 - [ ] (Optional) Set `TARGET_VALUES` to force specific Schwartz values
 - [ ] (Optional) Set `ADD_RANDOM_VALUE = true` to add variety

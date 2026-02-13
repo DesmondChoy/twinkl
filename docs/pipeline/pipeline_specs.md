@@ -16,7 +16,7 @@ Journals should be:
 
 **Primary generation**: Use `docs/pipeline/claude_gen_instructions.md` with Claude Code for parallel subagent generation.
 
-**Experimentation**: Use `notebooks/journal_gen.ipynb` or `notebooks/journal_nudge.ipynb` for prompt iteration and testing.
+**Experimentation**: Use `notebooks/journalling/journal_gen.ipynb` or `notebooks/journalling/journal_nudge.ipynb` for prompt iteration and testing.
 
 ## Configuration Files
 
@@ -602,7 +602,7 @@ This allows the Critic to learn:
 
 ## Implementation Status
 
-**Current**: Notebook-first development in `notebooks/journal_nudge.ipynb`
+**Current**: Notebook-first development in `notebooks/journalling/journal_nudge.ipynb`
 
 **Phase 1 (Foundation)**: ✅ Complete
 - [x] Set up output logging system (directory structure, utility functions)
