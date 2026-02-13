@@ -74,11 +74,9 @@
         "conformity": 0,
         "tradition": 0,
         "benevolence": 0,
-        "universalism": -1
+        "universalism": 0
       },
-      "rationales": {
-        "universalism": "He skips the refugee coding class again, reducing direct contribution to a broader humanitarian commitment."
-      }
+      "rationales": null
     },
     {
       "t_index": 4,
@@ -93,12 +91,11 @@
         "conformity": 0,
         "tradition": 0,
         "benevolence": -1,
-        "universalism": -1
+        "universalism": 0
       },
       "rationales": {
         "security": "He emphasizes saving for a future home and adjusting commitments around work strain and financial planning.",
-        "benevolence": "He recognizes being too busy for family, including his mother's disappointment about his absence.",
-        "universalism": "He is preparing to step back from consistent nonprofit teaching despite valuing that service."
+        "benevolence": "He recognizes being too busy for family, including his mother's disappointment about his absence."
       }
     },
     {
@@ -114,12 +111,11 @@
         "conformity": 0,
         "tradition": 0,
         "benevolence": 0,
-        "universalism": -1
+        "universalism": 0
       },
       "rationales": {
         "achievement": "He accepts the promotion and transition to a higher-responsibility role.",
-        "power": "He highlights the better title and leadership shift associated with the promotion.",
-        "universalism": "He formally steps back from refugee instruction, reducing direct involvement in a social-impact commitment."
+        "power": "He highlights the better title and leadership shift associated with the promotion."
       }
     },
     {

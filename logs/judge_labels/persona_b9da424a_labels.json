@@ -170,11 +170,9 @@
         "conformity": 0,
         "tradition": 0,
         "benevolence": 0,
-        "universalism": 1
+        "universalism": 0
       },
-      "rationales": {
-        "universalism": "She accepts a fairness critique about management pay, signaling concern for equitable treatment of staff."
-      }
+      "rationales": null
     },
     {
       "t_index": 9,

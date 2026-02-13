@@ -34,11 +34,9 @@
         "conformity": 0,
         "tradition": 0,
         "benevolence": 0,
-        "universalism": -1
+        "universalism": 0
       },
-      "rationales": {
-        "universalism": "She skips a refugee-support commitment, reducing direct follow-through on broader humanitarian concern."
-      }
+      "rationales": null
     },
     {
       "t_index": 2,
@@ -53,10 +51,10 @@
         "conformity": 0,
         "tradition": 0,
         "benevolence": 0,
-        "universalism": -1
+        "universalism": 1
       },
       "rationales": {
-        "universalism": "She avoids tutoring despite the need, acknowledging she has been disengaged in a service role aimed at displaced people."
+        "universalism": "She expresses strong concern for climate injustice, displacement, and systemic harm to vulnerable communities, indicating broad-welfare orientation despite local disengagement."
       }
     },
     {
