@@ -6,15 +6,21 @@ enables easy swapping of encoders for ablation studies.
 
 Supported encoders:
 - SBERTEncoder: Sentence-BERT models via sentence-transformers library
-  - "all-MiniLM-L6-v2" (384 dim, fast, good quality) - default
+  - "nomic-ai/nomic-embed-text-v1.5" (768 native, Matryoshka-truncatable,
+    8192 token context, MTEB 61.04 @ 256d) - recommended
+  - "all-MiniLM-L6-v2" (384 dim, fast, good quality)
   - "all-mpnet-base-v2" (768 dim, higher quality, slower)
-  - "paraphrase-MiniLM-L3-v2" (384 dim, fastest, lower quality)
 
 Usage:
     from src.vif.encoders import SBERTEncoder, create_encoder
 
-    # Direct instantiation
-    encoder = SBERTEncoder("all-MiniLM-L6-v2")
+    # Direct instantiation with Matryoshka truncation
+    encoder = SBERTEncoder(
+        "nomic-ai/nomic-embed-text-v1.5",
+        trust_remote_code=True,
+        truncate_dim=256,
+        text_prefix="classification: ",
+    )
     embeddings = encoder.encode(["Hello world", "Another text"])
 
     # From config
@@ -75,40 +81,96 @@ class SBERTEncoder:
     """Sentence-BERT encoder using the sentence-transformers library.
 
     This encoder wraps sentence-transformers models for encoding journal
-    entries into dense semantic embeddings.
+    entries into dense semantic embeddings. Supports Matryoshka truncation
+    for models trained with Matryoshka Representation Learning (e.g.
+    nomic-embed-text-v1.5).
 
     Common models and their properties:
-    - all-MiniLM-L6-v2: 384 dim, fast, good quality (recommended default)
+    - nomic-ai/nomic-embed-text-v1.5: 768 dim native, Matryoshka to 256/128/64,
+      8192 token context (recommended)
+    - all-MiniLM-L6-v2: 384 dim, fast, good quality
     - all-mpnet-base-v2: 768 dim, higher quality, slower
-    - paraphrase-MiniLM-L3-v2: 384 dim, fastest, lower quality
 
     Example:
-        encoder = SBERTEncoder("all-MiniLM-L6-v2")
+        encoder = SBERTEncoder(
+            "nomic-ai/nomic-embed-text-v1.5",
+            trust_remote_code=True,
+            truncate_dim=256,
+            text_prefix="classification: ",
+        )
         embeddings = encoder.encode(["Journal entry text here"])
-        print(embeddings.shape)  # (1, 384)
+        print(embeddings.shape)  # (1, 256)
     """
 
-    def __init__(self, model_name: str = "all-MiniLM-L6-v2"):
+    def __init__(
+        self,
+        model_name: str = "all-MiniLM-L6-v2",
+        trust_remote_code: bool = False,
+        truncate_dim: int | None = None,
+        text_prefix: str = "",
+    ):
         """Initialize the SBERT encoder.
 
         Args:
             model_name: Name of the sentence-transformers model to load
+            trust_remote_code: Allow loading custom model code from HuggingFace
+                (required for nomic-embed-text-v1.5)
+            truncate_dim: If set, apply Matryoshka truncation to this
+                dimensionality. The model must have been trained with
+                Matryoshka Representation Learning for this to be valid.
+            text_prefix: Prefix prepended to all input texts before encoding.
+                Nomic models require task-specific prefixes (e.g.
+                "classification: " for downstream classification tasks).
         """
         from sentence_transformers import SentenceTransformer
 
         self._model_name = model_name
-        self._model = SentenceTransformer(model_name)
-        self._embedding_dim = self._model.get_sentence_embedding_dimension()
+        self._model = SentenceTransformer(
+            model_name, trust_remote_code=trust_remote_code
+        )
+        self._native_dim = self._model.get_sentence_embedding_dimension()
+        self._truncate_dim = truncate_dim
+        self._text_prefix = text_prefix
+
+        if truncate_dim is not None and truncate_dim > self._native_dim:
+            raise ValueError(
+                f"truncate_dim ({truncate_dim}) exceeds native embedding "
+                f"dimension ({self._native_dim})"
+            )
 
     @property
     def embedding_dim(self) -> int:
-        """Dimensionality of the output embeddings."""
-        return self._embedding_dim
+        """Dimensionality of the output embeddings (after truncation if set)."""
+        if self._truncate_dim is not None:
+            return self._truncate_dim
+        return self._native_dim
 
     @property
     def model_name(self) -> str:
         """Name of the underlying model."""
         return self._model_name
+
+    def _apply_prefix(self, texts: list[str]) -> list[str]:
+        """Prepend task prefix to each text if configured."""
+        if self._text_prefix:
+            return [self._text_prefix + t for t in texts]
+        return texts
+
+    def _matryoshka_truncate(self, embeddings: np.ndarray) -> np.ndarray:
+        """Apply Matryoshka truncation: LayerNorm → slice → L2 normalize."""
+        if self._truncate_dim is None:
+            return embeddings
+        # LayerNorm across embedding dimension (per-vector)
+        mean = embeddings.mean(axis=-1, keepdims=True)
+        var = embeddings.var(axis=-1, keepdims=True)
+        embeddings = (embeddings - mean) / np.sqrt(var + 1e-5)
+        # Truncate to target dimension
+        embeddings = embeddings[:, : self._truncate_dim]
+        # L2 normalize
+        norms = np.linalg.norm(embeddings, axis=-1, keepdims=True)
+        norms = np.maximum(norms, 1e-8)
+        embeddings = embeddings / norms
+        return embeddings
 
     def encode(self, texts: list[str]) -> np.ndarray:
         """Encode a list of texts into dense vectors.
@@ -119,9 +181,10 @@ class SBERTEncoder:
         Returns:
             np.ndarray of shape (len(texts), embedding_dim)
         """
-        # sentence-transformers returns numpy array directly
-        embeddings = self._model.encode(texts, convert_to_numpy=True)
-        return embeddings.astype(np.float32)
+        prefixed = self._apply_prefix(texts)
+        embeddings = self._model.encode(prefixed, convert_to_numpy=True)
+        embeddings = embeddings.astype(np.float32)
+        return self._matryoshka_truncate(embeddings)
 
     def encode_batch(self, texts: list[str], batch_size: int = 32) -> np.ndarray:
         """Encode texts in batches for memory efficiency.
@@ -133,13 +196,15 @@ class SBERTEncoder:
         Returns:
             np.ndarray of shape (len(texts), embedding_dim)
         """
+        prefixed = self._apply_prefix(texts)
         embeddings = self._model.encode(
-            texts,
+            prefixed,
             batch_size=batch_size,
             convert_to_numpy=True,
             show_progress_bar=len(texts) > 100,
         )
-        return embeddings.astype(np.float32)
+        embeddings = embeddings.astype(np.float32)
+        return self._matryoshka_truncate(embeddings)
 
 
 def create_encoder(config: dict) -> TextEncoder:
@@ -167,6 +232,11 @@ def create_encoder(config: dict) -> TextEncoder:
 
     if encoder_type == "sbert":
         model_name = config.get("model_name", "all-MiniLM-L6-v2")
-        return SBERTEncoder(model_name)
+        return SBERTEncoder(
+            model_name,
+            trust_remote_code=config.get("trust_remote_code", False),
+            truncate_dim=config.get("truncate_dim"),
+            text_prefix=config.get("text_prefix", ""),
+        )
     else:
         raise ValueError(f"Unknown encoder type: {encoder_type}")
