@@ -24,6 +24,8 @@ Instructions for Claude Code to generate synthetic conversational journal data u
 | `NUDGE_ENABLED` | true | Set to false to disable all nudge generation |
 | `TARGET_VALUES` | `["Universalism"]` | Schwartz values to force (e.g., `["Stimulation", "Power"]`). Empty = random selection. |
 | `ADD_RANDOM_VALUE` | `false` | When targeting, randomly produce 1 or 2 values (target always included). |
+| `TARGET_TENSIONS` | `[]` | Values to apply tension scenarios (e.g., `["Universalism"]`). Empty = no tension targeting. |
+| `UNSETTLED_BOOST` | `0.6` | Probability of Unsettled mode when TARGET_TENSIONS is active (vs default ~0.33) |
 
 ---
 
@@ -67,6 +69,37 @@ Result: 3 personas each for Stimulation, Power, Achievement (round-robin)
 TARGET_VALUES = []  # Empty = original random behavior
 ```
 Result: Each persona gets 1-2 randomly selected values
+
+---
+
+## Tension-Targeted Generation (Optional)
+
+To address label imbalance for specific values (e.g., Universalism -1),
+use `TARGET_TENSIONS` alongside `TARGET_VALUES`.
+
+### Typical usage
+```
+TARGET_VALUES = ["Universalism"]
+TARGET_TENSIONS = ["Universalism"]
+ADD_RANDOM_VALUE = false
+NUM_PERSONAS = 10
+```
+
+### How it works
+- When `TARGET_TENSIONS` is non-empty, the orchestrator reads
+  `.claude/skills/tension-selection/SKILL.md` and embeds the scenario
+  bank in each subagent's prompt
+- ALL Unsettled entries for personas with a targeted core value use
+  the scenario bank instead of the generic Unsettled prompt
+- `UNSETTLED_BOOST` increases the proportion of Unsettled entries (60%
+  vs default 33%)
+- Regular batches (`TARGET_TENSIONS = []`) are completely unaffected
+
+### When to use
+- After analyzing judge labels: a specific value has very low -1 rate
+- The generic Unsettled prompt produces personal dilemmas instead of
+  value-specific tensions (e.g., Universalism needs broader-good failures)
+- You want targeted data augmentation without changing the core pipeline
 
 ---
 
@@ -383,6 +416,12 @@ Each subagent receives everything needed to generate a complete persona with all
    - Banned terms extracted from notebook and embedded in this prompt
    - Prompt templates from `prompts/` folder
 
+3a. **Tension scenarios** (when `TARGET_TENSIONS` is non-empty):
+    - Scenario bank from `.claude/skills/tension-selection/SKILL.md`
+      (read by orchestrator and embedded in subagent prompt)
+    - Application rule: use scenario bank for ALL Unsettled entries
+      when persona has a targeted core value
+
 4. **Nudge rules**:
    - `NUDGE_ENABLED` variable (if false, skip all nudge logic)
    - `decide_nudge_llm()` logic from notebook (LLM-based classification)
@@ -409,6 +448,17 @@ Each subagent receives everything needed to generate a complete persona with all
 
 For each entry date:
   2. Randomly select tone/verbosity/reflection_mode
+     - If TARGET_TENSIONS is active: use Bash to select reflection_mode
+       with UNSETTLED_BOOST probability (e.g., 60% Unsettled, 20%
+       Grounded, 20% Neutral)
+     - Otherwise: equal probability (default)
+  2a. If reflection_mode is Unsettled AND TARGET_TENSIONS applies to
+      this persona's core values:
+      → Use the next scenario from the tension-selection scenario bank
+        (cycle through) as the "What to write about" section, replacing
+        the generic Unsettled text from journal_entry.yaml
+      → All other template sections (persona context, tone, verbosity,
+        style rules) remain unchanged
   3. Generate entry content (with accumulated context from prior entries)
      - Note: Same-day entries (Δt=0) should reflect continued thought/venting, not restart
   4. Check NUDGE_ENABLED:
