@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Twinkl Prompt Catalog</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+  :root, [data-theme="dark"] {
+    --bg: #0c0c0f;
+    --surface: #141419;
+    --surface-raised: #1a1a22;
+    --border: #2a2a35;
+    --border-subtle: #1f1f2a;
+    --text: #e8e6e3;
+    --text-muted: #8a8895;
+    --text-dim: #5a5868;
+    --accent: #d4a574;
+    --accent-dim: #a07a50;
+    --accent-glow: #d4a57420;
+    --green: #7ec9a0;
+    --red: #d47474;
+    --blue: #74a8d4;
+    --purple: #a487c4;
+    --code-bg: #111116;
+    --code-border: #222230;
+  }
+
+  [data-theme="light"] {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --surface-raised: #f0eeea;
+    --border: #d8d5ce;
+    --border-subtle: #e8e5de;
+    --text: #1a1917;
+    --text-muted: #44423d;
+    --text-dim: #6e6b64;
+    --accent: #7a4a15;
+    --accent-dim: #5e3810;
+    --accent-glow: #7a4a1512;
+    --green: #1d6940;
+    --red: #a83030;
+    --blue: #2c5f8a;
+    --purple: #5c3f8a;
+    --code-bg: #f4f3f0;
+    --code-border: #ddd9d2;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) var(--bg);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Layout ── */
+  .page {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    min-height: 100vh;
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    border-right: 1px solid var(--border-subtle);
+    padding: 32px 0;
+    overflow-y: auto;
+    background: var(--bg);
+    z-index: 10;
+  }
+
+  .sidebar-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 20px;
+    color: var(--accent);
+    padding: 0 24px;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+  }
+
+  .sidebar-subtitle {
+    font-size: 11px;
+    color: var(--text-dim);
+    padding: 0 24px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* ── Theme Toggle ── */
+  .theme-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 24px 24px;
+    padding: 6px 4px;
+    background: var(--surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .theme-toggle:hover {
+    border-color: var(--border);
+  }
+
+  .theme-toggle-track {
+    position: relative;
+    width: 36px;
+    height: 20px;
+    background: var(--border);
+    border-radius: 10px;
+    flex-shrink: 0;
+    transition: background 0.2s ease;
+  }
+
+  .theme-toggle-thumb {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background: var(--text);
+    border-radius: 50%;
+    transition: transform 0.2s ease;
+  }
+
+  [data-theme="light"] .theme-toggle-thumb {
+    transform: translateX(16px);
+  }
+
+  .theme-toggle-label {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    user-select: none;
+  }
+
+  .theme-icon {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+
+  .icon-moon, .icon-sun { display: none; }
+  [data-theme="dark"] .icon-moon,
+  :root:not([data-theme]) .icon-moon { display: block; }
+  [data-theme="light"] .icon-sun { display: block; }
+
+  .nav-section {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    padding: 16px 24px 8px;
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 24px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 13px;
+    transition: all 0.15s ease;
+    border-left: 2px solid transparent;
+  }
+
+  .nav-link {
+    cursor: pointer;
+  }
+
+  .nav-link:hover {
+    color: var(--text);
+    background: var(--surface);
+    border-left-color: var(--border);
+  }
+
+  .nav-link.active {
+    color: var(--accent);
+    background: var(--accent-glow);
+    border-left-color: var(--accent);
+  }
+
+  .nav-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    width: 18px;
+    flex-shrink: 0;
+  }
+
+  /* ── Main Content ── */
+  .main {
+    padding: 48px 64px 120px;
+    max-width: 900px;
+  }
+
+  /* ── Header ── */
+  .page-header {
+    margin-bottom: 56px;
+  }
+
+  .page-header h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 42px;
+    font-weight: 400;
+    color: var(--text);
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+
+  .page-header h1 em {
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  .page-header p {
+    color: var(--text-muted);
+    font-size: 15px;
+    max-width: 540px;
+  }
+
+  /* ── Pipeline Diagram ── */
+  .pipeline-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 56px;
+    overflow-x: auto;
+  }
+
+  .pipeline-diagram h2 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+
+  .pipeline-diagram pre {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--accent);
+    white-space: pre;
+  }
+
+  /* ── Prompt Sections ── */
+  .prompt-section {
+    margin-bottom: 64px;
+    scroll-margin-top: 32px;
+  }
+
+  .prompt-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .prompt-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--accent-dim);
+    background: var(--accent-glow);
+    border: 1px solid var(--accent-dim);
+    border-radius: 6px;
+    padding: 2px 10px;
+    flex-shrink: 0;
+  }
+
+  .prompt-header h2 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+
+  .prompt-version {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-left: auto;
+  }
+
+  /* ── Meta Table ── */
+  .meta-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 28px;
+    font-size: 13px;
+  }
+
+  .meta-table tr {
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .meta-table td {
+    padding: 9px 0;
+    vertical-align: top;
+  }
+
+  .meta-table td:first-child {
+    color: var(--text-dim);
+    width: 140px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding-top: 11px;
+  }
+
+  .meta-table td:last-child {
+    color: var(--text-muted);
+  }
+
+  .meta-table code {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    background: var(--code-bg);
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid var(--code-border);
+  }
+
+  /* ── Template Block ── */
+  .template-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+
+  .template-block {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 24px;
+    overflow-x: auto;
+    position: relative;
+  }
+
+  .template-block pre {
+    font-family: 'DM Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  /* Syntax highlights inside template */
+  .t-jinja { color: var(--accent); }
+  .t-heading { color: var(--text); font-weight: 500; }
+  .t-rule { color: var(--green); }
+  .t-bad { color: var(--red); }
+  .t-good { color: var(--green); }
+  .t-key { color: var(--blue); }
+  .t-comment { color: var(--text-dim); font-style: italic; }
+
+  /* ── Design Notes ── */
+  .design-notes {
+    background: var(--surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    padding: 24px;
+    margin-top: 20px;
+  }
+
+  .design-notes h4 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent-dim);
+    margin-bottom: 14px;
+  }
+
+  .design-notes table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .design-notes th {
+    text-align: left;
+    color: var(--text-dim);
+    font-weight: 400;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 6px 12px 6px 0;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .design-notes td {
+    padding: 8px 12px 8px 0;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .design-notes td:first-child {
+    color: var(--text);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .design-notes td em {
+    font-style: italic;
+    color: var(--text-dim);
+  }
+
+  /* ── Cross-Prompt Section ── */
+  .cross-prompt {
+    margin-top: 72px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+    scroll-margin-top: 32px;
+  }
+
+  .cross-prompt h2 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 28px;
+  }
+
+  .cross-prompt h3 {
+    font-size: 14px;
+    color: var(--accent);
+    margin-bottom: 12px;
+    margin-top: 28px;
+  }
+
+  .cross-prompt p, .cross-prompt li {
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .cross-prompt ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .cross-prompt li {
+    padding: 4px 0 4px 18px;
+    position: relative;
+  }
+
+  .cross-prompt li::before {
+    content: '·';
+    position: absolute;
+    left: 4px;
+    color: var(--text-dim);
+    font-weight: 700;
+  }
+
+  .cross-prompt strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .page { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .main { padding: 32px 24px 80px; }
+  }
+
+  @media print {
+    .sidebar { display: none; }
+    .page { grid-template-columns: 1fr; }
+    .main { padding: 24px; max-width: 100%; }
+    .template-block { break-inside: avoid; }
+    * { color: #000 !important; background: #fff !important; border-color: #ccc !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+<!-- ── Sidebar Navigation ── -->
+<nav class="sidebar">
+  <div class="sidebar-title">Twinkl</div>
+  <div class="sidebar-subtitle">Prompt Catalog</div>
+
+  <div class="theme-toggle" id="themeToggle" title="Toggle light/dark theme">
+    <div class="theme-toggle-track">
+      <div class="theme-toggle-thumb"></div>
+    </div>
+    <svg class="theme-icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" style="color:var(--text-dim)"/></svg>
+    <svg class="theme-icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-dim)"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    <span class="theme-toggle-label">Theme</span>
+  </div>
+
+  <div class="nav-section">Pipeline</div>
+  <a data-target="pipeline" class="nav-link"><span class="nav-num"></span>Flow Diagram</a>
+
+  <div class="nav-section">Prompts</div>
+  <a data-target="persona-generation" class="nav-link"><span class="nav-num">01</span>Persona Generation</a>
+  <a data-target="journal-entry" class="nav-link"><span class="nav-num">02</span>Journal Entry</a>
+  <a data-target="nudge-decision" class="nav-link"><span class="nav-num">03</span>Nudge Decision</a>
+  <a data-target="nudge-generation" class="nav-link"><span class="nav-num">04</span>Nudge Generation</a>
+  <a data-target="nudge-response" class="nav-link"><span class="nav-num">05</span>Nudge Response</a>
+  <a data-target="judge-alignment" class="nav-link"><span class="nav-num">06</span>Judge Alignment</a>
+
+  <div class="nav-section">Analysis</div>
+  <a data-target="cross-prompt" class="nav-link"><span class="nav-num"></span>Cross-Prompt Patterns</a>
+</nav>
+
+<!-- ── Main Content ── -->
+<main class="main">
+
+<header class="page-header">
+  <h1>Twinkl <em>Prompt Catalog</em></h1>
+  <p>All 6 prompts used in the synthetic data pipeline, presented in execution order. Each template uses Jinja2 and outputs strict JSON.</p>
+</header>
+
+<!-- ── Pipeline Flow ── -->
+<section id="pipeline" class="pipeline-diagram">
+  <h2>Pipeline Flow</h2>
+  <pre>
+[1] Persona Generation
+         |
+         v
+[2] Journal Entry  ──(loop: multiple entries per persona)──┐
+         |                                                   |
+         v                                                   |
+[3] Nudge Decision                                          |
+         |                                                   |
+    ┌────┴─────────────────┐                                |
+    |                      |                                |
+  no_nudge          nudge needed                            |
+    |                      |                                |
+    |                      v                                |
+    |              [4] Nudge Generation                     |
+    |                      |                                |
+    |                      v                                |
+    |              [5] Nudge Response                       |
+    |                      |                                |
+    └──────────┬───────────┘                                |
+               |                                            |
+               v                                            |
+       [6] Judge Alignment                                  |
+               |                                            |
+               └──────────> next entry ─────────────────────┘</pre>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- PROMPT 1: Persona Generation                                    -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section id="persona-generation" class="prompt-section">
+  <div class="prompt-header">
+    <span class="prompt-number">01</span>
+    <h2>Persona Generation</h2>
+    <span class="prompt-version">v1.0.0</span>
+  </div>
+
+  <table class="meta-table">
+    <tr><td>Purpose</td><td>Generate synthetic personas with Schwartz value profiles</td></tr>
+    <tr><td>Inputs</td><td><code>age</code> <code>profession</code> <code>culture</code> <code>values</code> <code>value_context</code> <code>banned_terms</code></td></tr>
+    <tr><td>Output</td><td>JSON: <code>name</code> <code>age</code> <code>profession</code> <code>culture</code> <code>core_values</code> <code>bio</code></td></tr>
+  </table>
+
+  <div class="template-label">Template</div>
+  <div class="template-block"><pre>You are generating synthetic personas for a journaling dataset.
+
+<span class="t-heading">## Constraints</span>
+- Age Group: <span class="t-jinja">{{ age }}</span>
+- Profession: <span class="t-jinja">{{ profession }}</span>
+- Cultural Background: <span class="t-jinja">{{ culture }}</span>
+- Schwartz values to embody: <span class="t-jinja">{{ values | join(', ') }}</span>
+
+<span class="t-heading">## Value Psychology Reference</span>
+Use the following research-based elaborations to understand how the assigned
+value(s) shape a person's life circumstances, stressors, and motivations.
+DO NOT mention any of these concepts explicitly in your output—use them only
+to inform realistic details.
+
+<span class="t-jinja">{{ value_context }}</span>
+
+<span class="t-heading">## Your Task</span>
+Create a persona whose life circumstances, stressors, and motivations
+naturally reflect the given Schwartz values—without ever naming or describing
+those values explicitly.
+
+<span class="t-heading">## Rules</span>
+<span class="t-rule">- Return ONLY valid JSON matching the Persona schema.</span>
+<span class="t-rule">- `core_values` must be exactly: <span class="t-jinja">{{ values | join(', ') }}</span> (same spelling/case).</span>
+<span class="t-rule">- `bio` must be 2–4 sentences describing their background, current life
+  situation, stressors, and what drives them.</span>
+<span class="t-rule">- `bio` must be written in third-person (use their name or "they"; do not
+  use "I").</span>
+<span class="t-rule">- `bio` must show the values through CONCRETE DETAILS (job choices,
+  relationships, conflicts, goals, specific situations) NOT through labels,
+  personality descriptions, or adjectives.</span>
+<span class="t-rule">- `bio` must NOT contain any Schwartz value labels, the word "Schwartz", or
+  derivative adjectives.</span>
+<span class="t-rule">- `bio` must NOT describe journaling app features (avoid words like
+  "templates", "analytics", "private app").</span>
+<span class="t-rule">- Use the behavioral manifestations, life domain expressions, and typical
+  stressors from the Value Psychology Reference to craft realistic, specific
+  details.</span>
+
+<span class="t-heading">## Banned terms (do not use in bio)</span>
+<span class="t-jinja">{{ banned_terms | join(', ') }}</span>
+
+<span class="t-heading">## Examples of what NOT to write</span>
+<span class="t-bad">- "She is achievement-oriented and seeks power" (uses value labels)</span>
+<span class="t-bad">- "He values security and tradition" (explicitly mentions values)</span>
+<span class="t-bad">- "They are a hedonistic person who enjoys pleasure" (uses derivative adjectives)</span>
+<span class="t-bad">- "She is driven and ambitious" (personality adjectives instead of concrete details)</span>
+
+<span class="t-heading">## Examples of what TO write</span>
+<span class="t-good">- "She recently turned down a stable government job to launch her own startup,
+  and now juggles investor meetings while her savings dwindle."
+  (shows Achievement through concrete career choice and trade-offs)</span>
+<span class="t-good">- "He moved back to his hometown after his father's illness, taking over the
+  family shop despite having built a career in the city."
+  (shows Tradition/Benevolence through specific life situation)</span>
+<span class="t-good">- "She keeps a spreadsheet tracking her publication submissions and citation
+  counts, and measures her weeks by how many grant deadlines she meets."
+  (shows Achievement through specific behaviors)</span>
+
+<span class="t-heading">## Output</span>
+Return valid JSON matching the Persona schema:
+{
+  <span class="t-key">"name"</span>: "...",
+  <span class="t-key">"age"</span>: "...",
+  <span class="t-key">"profession"</span>: "...",
+  <span class="t-key">"culture"</span>: "...",
+  <span class="t-key">"core_values"</span>: ["..."],
+  <span class="t-key">"bio"</span>: "..."
+}</pre></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- PROMPT 2: Journal Entry                                         -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section id="journal-entry" class="prompt-section">
+  <div class="prompt-header">
+    <span class="prompt-number">02</span>
+    <h2>Journal Entry</h2>
+    <span class="prompt-version">v1.0.0</span>
+  </div>
+
+  <table class="meta-table">
+    <tr><td>Purpose</td><td>Generate a journal entry for a persona on a given date</td></tr>
+    <tr><td>Inputs</td><td><code>name</code> <code>age</code> <code>profession</code> <code>culture</code> <code>bio</code> <code>date</code> <code>tone</code> <code>verbosity</code> <code>min_words</code> <code>max_words</code> <code>max_paragraphs</code> <code>reflection_mode</code> <code>previous_entries</code><span style="color:var(--text-dim);font-size:11px"> (opt)</span></td></tr>
+    <tr><td>Output</td><td>JSON: <code>date</code> <code>content</code></td></tr>
+  </table>
+
+  <div class="template-label">Template</div>
+  <div class="template-block"><pre>You are <span class="t-jinja">{{ name }}</span>, a <span class="t-jinja">{{ age }}</span> <span class="t-jinja">{{ profession }}</span> from <span class="t-jinja">{{ culture }}</span>.
+Background (for context only): <span class="t-jinja">{{ bio }}</span>
+
+Write a typed journal entry in English for <span class="t-jinja">{{ date }}</span>.
+<span class="t-jinja">{% if previous_entries %}</span>
+Previous journal entries (for continuity—you may reference past
+events/thoughts, but do not repeat them):
+<span class="t-jinja">{% for prev in previous_entries %}</span>
+---
+<span class="t-jinja">{{ prev.date }}</span>: <span class="t-jinja">{{ prev.content }}</span>
+<span class="t-jinja">{% endfor %}</span>
+---
+<span class="t-jinja">{% endif %}</span>
+
+Context:
+- Tone: <span class="t-jinja">{{ tone }}</span>
+- Verbosity: <span class="t-jinja">{{ verbosity }}</span> (target <span class="t-jinja">{{ min_words }}</span>–<span class="t-jinja">{{ max_words }}</span> words)
+
+Cultural context:
+- Your <span class="t-jinja">{{ culture }}</span> background should subtly flavor your perspective and the
+  details you mention.
+- It should feel natural and "lived-in," avoiding stereotypes or travel-guide
+  descriptions.
+
+What to write about:
+<span class="t-jinja">{% if reflection_mode == 'Unsettled' %}</span>
+Something happened where you made a choice that felt necessary or easier in
+the moment—but it sits a bit wrong. Maybe you gave ground on something, went
+along with pressure, or took a shortcut you wouldn't usually take. Don't
+analyze it or name why it bothers you. Just describe what happened and let
+the discomfort sit there.
+<span class="t-jinja">{% elif reflection_mode == 'Grounded' %}</span>
+Something happened where you acted like yourself—the version of you that you
+want to be. It wasn't a big moment, just a small one where things felt right.
+Don't celebrate it or moralize. Just describe the moment.
+<span class="t-jinja">{% else %}</span>
+Nothing particular happened. Write about a routine day—small details, passing
+thoughts, mundane observations. No revelations or turning points.
+<span class="t-jinja">{% endif %}</span>
+
+<span class="t-heading">Style rules (important):</span>
+<span class="t-rule">- Write like a real personal journal: plain, candid, sometimes messy or
+  fragmented.</span>
+<span class="t-rule">- Do not write for an audience. No "Dear Diary" or performing for a reader.</span>
+<span class="t-rule">- Do not open with the time of day, weather, or "Today I..." summaries.</span>
+<span class="t-rule">- Jump into a thought, moment, or feeling mid-stream.</span>
+<span class="t-rule">- Avoid "therapy speak" (e.g., "I am processing my emotions", "I recognize
+  this pattern").</span>
+<span class="t-rule">- Avoid literary metaphors, edgy humor/snark, and audience-facing jokes.</span>
+<span class="t-rule">- No headings, no numbered plans, no bullet lists.</span>
+<span class="t-rule">- Keep to <span class="t-jinja">{{ max_paragraphs }}</span> short paragraph(s).</span>
+
+Avoid openings like:
+<span class="t-bad">- "Morning light feels stubborn as I..."</span>
+<span class="t-bad">- "Evening. Today followed the usual rhythm..."</span>
+<span class="t-bad">- "Lunch break finally settles in..."</span>
+
+Output valid JSON:
+{
+  <span class="t-key">"date"</span>: "<span class="t-jinja">{{ date }}</span>",
+  <span class="t-key">"content"</span>: "..."
+}</pre></div>
+
+  <div class="design-notes">
+    <h4>Key Design Notes</h4>
+    <p style="color:var(--text-muted);font-size:13px;margin-bottom:12px;">The <code style="font-family:'DM Mono',monospace;font-size:12px;color:var(--accent);background:var(--code-bg);padding:1px 6px;border-radius:3px;border:1px solid var(--code-border);">reflection_mode</code> parameter is the value-alignment lever:</p>
+    <table>
+      <tr><th>Mode</th><th>What it produces</th><th>VIF signal</th></tr>
+      <tr><td>Unsettled</td><td>Persona acts <em>against</em> their values</td><td>Misalignment (-1)</td></tr>
+      <tr><td>Grounded</td><td>Persona acts <em>in line with</em> their values</td><td>Alignment (+1)</td></tr>
+      <tr><td>Routine</td><td>Neutral day, no strong value signal</td><td>Mostly 0</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- PROMPT 3: Nudge Decision                                        -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section id="nudge-decision" class="prompt-section">
+  <div class="prompt-header">
+    <span class="prompt-number">03</span>
+    <h2>Nudge Decision</h2>
+    <span class="prompt-version">v1.0.0</span>
+  </div>
+
+  <table class="meta-table">
+    <tr><td>Purpose</td><td>Classify journal entry to decide if/how to nudge</td></tr>
+    <tr><td>Inputs</td><td><code>entry_content</code> <code>entry_date</code> <code>previous_entries</code><span style="color:var(--text-dim);font-size:11px"> (opt)</span></td></tr>
+    <tr><td>Output</td><td>JSON: <code>decision</code> <code>reason</code></td></tr>
+  </table>
+
+  <div class="template-label">Template</div>
+  <div class="template-block"><pre>You are analyzing a journal entry to decide if a follow-up question would
+be helpful.
+
+<span class="t-heading">## Entry</span>
+Date: <span class="t-jinja">{{ entry_date }}</span>
+Content: <span class="t-jinja">{{ entry_content }}</span>
+<span class="t-jinja">{% if previous_entries %}</span>
+Recent entries:
+<span class="t-jinja">{% for prev in previous_entries %}</span>
+- <span class="t-jinja">{{ prev.date }}</span>: <span class="t-jinja">{{ prev.content[:100] }}{% if prev.content|length > 100 %}...{% endif %}</span>
+<span class="t-jinja">{% endfor %}</span>
+<span class="t-jinja">{% endif %}</span>
+
+<span class="t-heading">## Decision Criteria</span>
+Classify this entry into ONE of four categories:
+
+1. <span class="t-good">no_nudge</span> — Entry is complete and grounded. It has:
+   - Specific people, places, events, or actions
+   - Clear emotional context
+   - Nothing left unsaid
+
+2. <span class="t-key">clarification</span> — Entry is too vague to understand. Signs:
+   - Very short with no concrete details
+   - Abstract or generic statements
+   - "Had a day" / "Things happened" / "Feeling stuff"
+
+3. <span class="t-key">elaboration</span> — Entry is solid but has unexplored depth. Signs:
+   - Mentions something interesting in passing
+   - Ends abruptly after a meaningful moment
+   - Has a "dangling thread" worth pulling
+
+4. <span class="t-key">tension_surfacing</span> — Entry hints at unresolved conflict. Signs:
+   - Hedging language ("sort of", "I guess", "fine", "whatever")
+   - Contradictions or qualifications
+   - Emotional words followed by dismissal
+
+<span class="t-heading">## Output</span>
+Return ONLY valid JSON:
+{
+  <span class="t-key">"decision"</span>: "no_nudge|clarification|elaboration|tension_surfacing",
+  <span class="t-key">"reason"</span>: "Brief explanation (10-20 words)"
+}</pre></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- PROMPT 4: Nudge Generation                                      -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section id="nudge-generation" class="prompt-section">
+  <div class="prompt-header">
+    <span class="prompt-number">04</span>
+    <h2>Nudge Generation</h2>
+    <span class="prompt-version">v1.0.0</span>
+  </div>
+
+  <table class="meta-table">
+    <tr><td>Purpose</td><td>Generate a brief follow-up nudge question</td></tr>
+    <tr><td>Inputs</td><td><code>entry_content</code> <code>entry_date</code> <code>nudge_category</code> <code>previous_entries</code><span style="color:var(--text-dim);font-size:11px"> (opt)</span> <code>min_words</code> <code>max_words</code></td></tr>
+    <tr><td>Output</td><td>JSON: <code>nudge_text</code></td></tr>
+  </table>
+
+  <div class="template-label">Template</div>
+  <div class="template-block"><pre>You are generating a brief follow-up for a journaling app.
+
+<span class="t-heading">## Context</span>
+User's entry: <span class="t-jinja">{{ entry_content }}</span>
+Entry date: <span class="t-jinja">{{ entry_date }}</span>
+Nudge category: <span class="t-jinja">{{ nudge_category }}</span>
+<span class="t-jinja">{% if previous_entries %}</span>
+Recent entries (for context):
+<span class="t-jinja">{% for prev in previous_entries %}</span>
+- <span class="t-jinja">{{ prev.date }}</span>: <span class="t-jinja">{{ prev.content[:150] }}{% if prev.content|length > 150 %}...{% endif %}</span>
+<span class="t-jinja">{% endfor %}</span>
+<span class="t-jinja">{% endif %}</span>
+
+<span class="t-heading">## Your Task</span>
+Generate a SHORT follow-up question (<span class="t-jinja">{{ min_words }}</span>-<span class="t-jinja">{{ max_words }}</span> words).
+
+<strong style="color:var(--text)">Voice</strong>: You're a close friend who just read their text and is firing back
+a quick question. Not a therapist, not a coach, not an app trying to sound
+empathetic.
+
+<strong style="color:var(--text)">The test</strong>: Would this feel weird if a friend texted it to you? If yes,
+don't write it.
+
+<strong style="color:var(--text)">Anti-patterns to avoid</strong>:
+<span class="t-bad">- Starting with "I" (e.g., "I notice...", "I'm sensing...", "I'm curious...")
+  — this is performative listening</span>
+<span class="t-bad">- Reflective statements disguised as questions
+  ("It sounds like you're feeling...")</span>
+<span class="t-bad">- Coaching language ("Have you considered...", "What would it look like if...")</span>
+<span class="t-bad">- Invitations that feel like work ("Tell me more about...")</span>
+
+<strong style="color:var(--text)">Good questions are</strong>:
+<span class="t-good">- Direct, even blunt</span>
+<span class="t-good">- Reference a specific detail from the entry (a person, event, phrase they used)</span>
+<span class="t-good">- Short enough to type in 2 seconds</span>
+<span class="t-good">- The kind of thing you'd say without thinking</span>
+
+<span class="t-heading">## Examples by Category</span>
+<span class="t-jinja">{% if nudge_category == 'clarification' %}</span>
+<span class="t-good">- "What happened right before that?"
+- "The meeting?"
+- "Since when?"</span>
+<span class="t-jinja">{% elif nudge_category == 'elaboration' %}</span>
+<span class="t-good">- "And how did that land?"
+- "What did you end up doing?"
+- "What got you over the line?"</span>
+<span class="t-jinja">{% elif nudge_category == 'tension_surfacing' %}</span>
+<span class="t-good">- "What's the 'sort of' part?"
+- "Does that sit okay?"
+- "What stopped you?"</span>
+<span class="t-jinja">{% endif %}</span>
+
+<span class="t-heading">## Output</span>
+Return ONLY valid JSON:
+{<span class="t-key">"nudge_text"</span>: "your question here"}</pre></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- PROMPT 5: Nudge Response                                        -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section id="nudge-response" class="prompt-section">
+  <div class="prompt-header">
+    <span class="prompt-number">05</span>
+    <h2>Nudge Response</h2>
+    <span class="prompt-version">v1.0.0</span>
+  </div>
+
+  <table class="meta-table">
+    <tr><td>Purpose</td><td>Generate a persona's response to a nudge question</td></tr>
+    <tr><td>Inputs</td><td><code>name</code> <code>age</code> <code>profession</code> <code>culture</code> <code>bio</code> <code>entry_content</code> <code>nudge_text</code> <code>response_mode</code> <code>min_words</code> <code>max_words</code></td></tr>
+    <tr><td>Output</td><td>JSON: <code>content</code></td></tr>
+  </table>
+
+  <div class="template-label">Template</div>
+  <div class="template-block"><pre>You are <span class="t-jinja">{{ name }}</span>, a <span class="t-jinja">{{ age }}</span> <span class="t-jinja">{{ profession }}</span> from <span class="t-jinja">{{ culture }}</span>.
+Background: <span class="t-jinja">{{ bio }}</span>
+
+You just wrote this journal entry:
+---
+<span class="t-jinja">{{ entry_content }}</span>
+---
+
+The journaling app asked you: "<span class="t-jinja">{{ nudge_text }}</span>"
+
+<span class="t-heading">## Your Task</span>
+Write a brief response (<span class="t-jinja">{{ min_words }}</span>-<span class="t-jinja">{{ max_words }}</span> words) in the style
+of: <span class="t-jinja">{{ response_mode }}</span>
+
+<span class="t-heading">## Response Mode Guidance</span>
+<span class="t-jinja">{% if response_mode == 'Answering directly' %}</span>
+Give a clear, helpful response to the question. Don't dodge it.
+<span class="t-jinja">{% elif response_mode == 'Deflecting/redirecting' %}</span>
+Give a brief acknowledgment or change the topic slightly. "Yeah, just the
+usual" or "I don't know, maybe."
+<span class="t-jinja">{% elif response_mode == 'Revealing deeper thought' %}</span>
+The question prompts you to be more honest than you were in the original
+entry. Say something you held back.
+<span class="t-jinja">{% endif %}</span>
+
+<span class="t-heading">## Style Rules</span>
+<span class="t-rule">- Write as if you're quickly typing a response in the app</span>
+<span class="t-rule">- Match the tone of your original entry</span>
+<span class="t-rule">- Don't repeat what you already wrote</span>
+<span class="t-rule">- No "therapy speak" or formal language</span>
+<span class="t-rule">- Can be incomplete sentences or fragments</span>
+
+<span class="t-heading">## Output</span>
+Return ONLY valid JSON:
+{<span class="t-key">"content"</span>: "your response here"}</pre></div>
+
+  <div class="design-notes">
+    <h4>Key Design Notes</h4>
+    <p style="color:var(--text-muted);font-size:13px;margin-bottom:12px;">The <code style="font-family:'DM Mono',monospace;font-size:12px;color:var(--accent);background:var(--code-bg);padding:1px 6px;border-radius:3px;border:1px solid var(--code-border);">response_mode</code> controls alignment signal density:</p>
+    <table>
+      <tr><th>Mode</th><th>Effect on VIF labels</th></tr>
+      <tr><td>Answering directly</td><td>Provides concrete detail for scoring</td></tr>
+      <tr><td>Deflecting/redirecting</td><td>Low signal, realistic avoidance behavior</td></tr>
+      <tr><td>Revealing deeper thought</td><td>Often the richest alignment signal in the whole session</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- PROMPT 6: Judge Alignment                                       -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section id="judge-alignment" class="prompt-section">
+  <div class="prompt-header">
+    <span class="prompt-number">06</span>
+    <h2>Judge Alignment</h2>
+    <span class="prompt-version">v1.0.0</span>
+  </div>
+
+  <table class="meta-table">
+    <tr><td>Purpose</td><td>Score journal session alignment across 10 Schwartz value dimensions</td></tr>
+    <tr><td>Inputs</td><td><code>persona_name</code> <code>persona_age</code> <code>persona_profession</code> <code>persona_culture</code> <code>persona_core_values</code> <code>persona_bio</code> <code>entry_date</code> <code>session_content</code> <code>value_rubric</code> <code>previous_entries</code></td></tr>
+    <tr><td>Output</td><td>JSON: <code>scores</code> (10 integers) + <code>rationales</code> (for non-zero scores)</td></tr>
+  </table>
+
+  <div class="template-label">Template</div>
+  <div class="template-block"><pre>You are a Judge evaluating a journal entry's alignment with Schwartz's Theory
+of Basic Human Values.
+
+<span class="t-heading">## Your Task</span>
+
+Evaluate how the journal session aligns with each of the 10 Schwartz value
+dimensions. For each dimension, assign one of three scores:
+
+- <span class="t-bad">-1 (Misaligned):</span> The entry actively conflicts with this value. The
+  person's behavior, choices, or expressed attitudes undermine or go against
+  this value's core motivation.
+- <span class="t-comment">0 (Neutral):</span> The entry is irrelevant to this value, or the person's
+  behavior maintains the status quo without clearly supporting or undermining it.
+- <span class="t-good">+1 (Aligned):</span> The entry actively supports this value. The person's
+  behavior, choices, or expressed attitudes demonstrate or advance this value's
+  core motivation.
+
+<span class="t-heading">## Important Guidelines</span>
+
+<span class="t-rule">1. Score the entire session holistically: This entry may include an initial
+   journal entry, a follow-up nudge question, and the persona's response.
+   Consider ALL parts when scoring — the response often reveals deeper
+   alignment signals not visible in the initial entry.</span>
+
+<span class="t-rule">2. Max-signal approach: If the initial entry was vague but the response
+   revealed clear alignment or misalignment, score based on the revealed
+   content. The response often transforms a vague entry into something scorable.</span>
+
+<span class="t-rule">3. Look for concrete behaviors: Base scores on what the person actually
+   did, said, or chose — not just abstract statements about values. Actions
+   speak louder than intentions.</span>
+
+<span class="t-rule">4. Profile context matters: Consider the persona's stated core values
+   (<span class="t-jinja">{{ persona_core_values | join(', ') }}</span>) as context, but evaluate what the
+   entry actually shows. Don't assume alignment just because a value is in
+   their profile.</span>
+
+<span class="t-rule">5. Be strict with -1 and +1: Reserve these for clear cases where the entry
+   demonstrates active alignment or conflict. Use 0 when the entry doesn't
+   clearly relate to a value or when the person maintains neutral status quo.</span>
+
+<span class="t-rule">6. Trade-offs are expected: It's common for an entry to align with some
+   values while misaligning with others. For example, working late might align
+   with Achievement but misalign with Hedonism or Benevolence.</span>
+
+<span class="t-rule">7. Multi-dimensional scoring: Each value is scored independently. An entry
+   about career advancement could be Achievement +1, Power +1, Security -1,
+   and Benevolence -1 simultaneously.</span>
+
+<span class="t-heading">## Schwartz Value Rubrics</span>
+
+<span class="t-jinja">{{ value_rubric }}</span>
+
+<span class="t-heading">## Persona Context</span>
+
+- Name: <span class="t-jinja">{{ persona_name }}</span>
+- Age: <span class="t-jinja">{{ persona_age }}</span>
+- Profession: <span class="t-jinja">{{ persona_profession }}</span>
+- Culture: <span class="t-jinja">{{ persona_culture }}</span>
+- Core Values (from profile): <span class="t-jinja">{{ persona_core_values | join(', ') }}</span>
+- Bio: <span class="t-jinja">{{ persona_bio }}</span>
+
+<span class="t-jinja">{% if previous_entries %}</span>
+<span class="t-heading">## Recent Entries (for context)</span>
+
+These previous entries provide context for the persona's ongoing situation:
+<span class="t-jinja">{% for prev in previous_entries %}</span>
+- <span class="t-jinja">{{ prev.date }}</span>: <span class="t-jinja">{{ prev.content[:200] }}{% if prev.content|length > 200 %}...{% endif %}</span>
+<span class="t-jinja">{% endfor %}</span>
+<span class="t-jinja">{% endif %}</span>
+
+<span class="t-heading">## Journal Session to Evaluate</span>
+
+Date: <span class="t-jinja">{{ entry_date }}</span>
+
+<span class="t-jinja">{{ session_content }}</span>
+
+<span class="t-heading">## Output</span>
+
+Return ONLY valid JSON with:
+1. Integer scores (-1, 0, or +1) for each value dimension
+2. Rationales for non-zero scores only — explain WHY this score was assigned
+
+Rationale guidelines:
+<span class="t-rule">- Quote or reference specific content from the entry (use quotation marks)</span>
+<span class="t-rule">- Explain the connection between behavior and value dimension</span>
+<span class="t-rule">- Be concise (1-2 sentences)</span>
+<span class="t-rule">- Do NOT include the value name in the rationale (avoid circular reasoning)</span>
+
+{
+  <span class="t-key">"scores"</span>: {
+    <span class="t-key">"self_direction"</span>: &lt;integer&gt;,
+    <span class="t-key">"stimulation"</span>: &lt;integer&gt;,
+    <span class="t-key">"hedonism"</span>: &lt;integer&gt;,
+    <span class="t-key">"achievement"</span>: &lt;integer&gt;,
+    <span class="t-key">"power"</span>: &lt;integer&gt;,
+    <span class="t-key">"security"</span>: &lt;integer&gt;,
+    <span class="t-key">"conformity"</span>: &lt;integer&gt;,
+    <span class="t-key">"tradition"</span>: &lt;integer&gt;,
+    <span class="t-key">"benevolence"</span>: &lt;integer&gt;,
+    <span class="t-key">"universalism"</span>: &lt;integer&gt;
+  },
+  <span class="t-key">"rationales"</span>: {
+    <span class="t-key">"&lt;value_name&gt;"</span>: "&lt;explanation for non-zero score&gt;",
+    ...
+  }
+}</pre></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- Cross-Prompt Design Patterns                                    -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<section id="cross-prompt" class="cross-prompt">
+  <h2>Cross-Prompt Design Patterns</h2>
+
+  <h3>Consistent across all prompts</h3>
+  <ul>
+    <li><strong>Output format:</strong> Always JSON-only, no prose wrapping</li>
+    <li><strong>Jinja2 templating:</strong> All use <code style="font-family:'DM Mono',monospace;font-size:12px;color:var(--accent);">{{ variable }}</code> and <code style="font-family:'DM Mono',monospace;font-size:12px;color:var(--accent);">{% if/for %}</code> blocks</li>
+    <li><strong>Previous entries:</strong> Passed for continuity, truncated at different lengths per prompt (100 / 150 / 200 chars)</li>
+  </ul>
+
+  <h3>Anti-leakage measures</h3>
+  <ul>
+    <li>Persona generation has <strong>banned terms</strong> to prevent Schwartz value labels from appearing in bios</li>
+    <li>Journal entry avoids "therapy speak" that would make entries artificially self-aware</li>
+    <li>Judge prompt says "don't assume alignment just because a value is in their profile"</li>
+  </ul>
+
+  <h3>Signal flow</h3>
+  <ul>
+    <li><code style="font-family:'DM Mono',monospace;font-size:12px;color:var(--accent);">reflection_mode</code> (Unsettled / Grounded / Routine) is the primary lever for generating alignment variety</li>
+    <li><code style="font-family:'DM Mono',monospace;font-size:12px;color:var(--accent);">response_mode</code> (Direct / Deflecting / Revealing) is the secondary lever</li>
+    <li>Judge uses a "max-signal" approach: if the nudge response reveals more than the entry, score from the response</li>
+  </ul>
+</section>
+
+</main>
+</div>
+
+<!-- ── Sidebar navigation + active state on scroll ── -->
+<script>
+  // Theme toggle
+  const toggle = document.getElementById('themeToggle');
+  const html = document.documentElement;
+
+  toggle.addEventListener('click', () => {
+    const current = html.getAttribute('data-theme') || 'dark';
+    html.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+  });
+
+  // JS-based scrolling to avoid anchor links being intercepted
+  document.querySelectorAll('.nav-link[data-target]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = link.getAttribute('data-target');
+      const target = document.getElementById(targetId);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // Active state tracking on scroll
+  const sections = document.querySelectorAll('.prompt-section, .pipeline-diagram, .cross-prompt');
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => link.classList.remove('active'));
+        const id = entry.target.id;
+        const activeLink = document.querySelector(`.nav-link[data-target="${id}"]`);
+        if (activeLink) activeLink.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(section => observer.observe(section));
+</script>
+
+</body>
+</html>
