@@ -1,60 +1,164 @@
-# One-Word Commands
-Quick shortcuts for common tasks:
+# AGENTS.md
 
-- `$craft`: Generate high-quality conventional commit messages for this session’s changes (do not commit; user reviews first).
-  - Behavior:
-    - Inspect staged/unstaged changes and summarize what changed and why.
-    - Always propose a single commit message combining all changes.
-  - Output format (no extra prose; emit only commit message text in code fences):
-    - Single commit:
-      ```
-      <type>(<scope>): <summary>
-      
-      <body>
-      
-      - <bullet describing change>
-      - <bullet describing change>
-      
-      Affected: <file1>, <file2>, ...
-      Test Plan:
-      - <how you verified>
-      Revert plan:
-      - <how to undo safely>
-      ```
+This file mirrors `CLAUDE.md` for Codex and other agent-based tools.
 
-  - Allowed types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert.
-  - Conventions:
-    - Subject ≤ 50 chars, imperative mood; wrap body at ~72 chars.
-    - Use BREAKING CHANGE: in body when applicable.
-    - Add Refs:/Closes: lines for issues/PRs when available.
-  - If context is missing, ask one concise question; otherwise proceed with best assumption and note it in the body.
-- `$parallel-x`: Run x sub-agents in parallel (not sequentially) where x is the number specified.
+## Project Overview
 
-## Commands
-- **Virtual Environment**: ALWAYS activate `source .venv/bin/activate.fish` before running Python commands
-- **Dependency Workflow**: Use `uv` (`uv sync`, `uv add`, `uv pip install`) instead of plain `pip`
+Twinkl is an "inner compass" that helps users align daily behavior with
+long-term values. Unlike traditional journaling apps that summarize
+moods, Twinkl maintains a dynamic self-model of the user's declared
+priorities and surfaces tensions when behavior drifts from intent.
 
-## Documentation
-- **Source of Truth**: `docs/prd.md` is the definitive specification
-- **Other docs/**: Brainstorming ideas and features under consideration (not authoritative)
-- **Architecture Guide**: `CLAUDE.md` is the detailed project execution playbook and should stay aligned with this file
+The core component is the **Value Identity Function (VIF)**: an
+evaluative engine that compares what users *do* (journal entries)
+against what they *value* (declared priorities) across Schwartz value
+dimensions. The intended behavior is vector-valued, uncertainty-aware,
+and trajectory-aware.
+
+This is an academic capstone project for the NUS Master of Technology
+in Intelligent Systems program, so favor clear, practical
+implementations over heavy architecture.
+
+## Operational Defaults
+
+1. Read `docs/prd.md` first for product intent. It is the source of truth.
+2. Treat other `docs/` files as supporting context unless they contradict
+   `docs/prd.md`.
+3. Keep solutions scoped to a time-boxed POC. Avoid over-engineering.
+4. Prefer small, testable increments over broad rewrites.
+5. Preserve existing project conventions unless there is a concrete reason
+   to change them.
+
+## Environment and Commands
+
+Do NOT use git worktrees. Work only in the main working directory.
+
+Activate the virtual environment before Python commands:
+
+```sh
+source .venv/bin/activate.fish   # Preferred in this repo
+source .venv/bin/activate        # Bash/Zsh fallback
+```
+
+Use `uv` for package/dependency actions:
+
+```sh
+uv sync
+uv add <package>
+uv pip install <package>
+```
+
+Notebooks live in `notebooks/` and should be run from the project root
+after activation.
+
+## Architecture Snapshot
+
+### Source Code (`src/`)
+
+- `src/vif/` — VIF critic models (MLP ordinal, BNN), text/state encoders, dataset loading, training loops, evaluation metrics, and experiment logging
+- `src/registry/` — Persona registry with pipeline stages (`stage_synthetic`, `stage_wrangled`, `stage_labeled`)
+- `src/judge/` — Judge labeling consolidation
+- `src/wrangling/` — Parsers for synthetic and wrangled persona data
+- `src/models/` — Pydantic models (judge label schema)
+- `src/annotation_tool/` — Streamlit app for human annotation with inter-rater agreement metrics
+
+### Configuration and Prompts
+
+- `config/` — `synthetic_data.yaml`, `schwartz_values.yaml`, `vif.yaml`
+- `prompts/` — Prompt templates (`*.yaml`) exposed via `prompts/__init__.py`
+
+### Data and Artifacts (`logs/`)
+
+- `logs/registry/` — `personas.parquet` (central persona registry)
+- `logs/synthetic_data/` — Raw LLM-generated persona markdown files
+- `logs/wrangled/` — Parsed/cleaned persona markdown files
+- `logs/judge_labels/` — Per-persona JSON labels + consolidated `judge_labels.parquet`
+- `logs/annotations/` — Human annotator parquet files (per-annotator)
+- `logs/experiments/` — VIF training run logs (`runs/*.yaml`) and `index.md`
+- `logs/exports/` — Agreement reports and other exports
+
+### Notebooks (`notebooks/`)
+
+- `notebooks/critic_training/v1/` — First-generation critic experiments (MLP, ordinal, BNN, TCN, embedding ablation)
+- `notebooks/critic_training/v2/` — Second-generation critic experiments (encoder comparison)
+- `notebooks/journalling/` — Journal generation, nudge, and judge labeling notebooks
+
+### Tests (`tests/`)
+
+- `tests/vif/` — Eval metrics, loss functions, ordinal base tests
+- `tests/wrangling/` — Wrangled data parser tests
+
+### Documentation (`docs/`)
+
+- `docs/prd.md` — Product requirements (authoritative)
+- `docs/vif/` — VIF concepts, architecture, training, uncertainty, state pipeline
+- `docs/pipeline/` — Pipeline specs, annotation guidelines, judge instructions, data schema
+- `docs/evals/` — Evaluation specs (drift detection, explanation quality, judge validation, value modeling)
+- `docs/onboarding/` — Onboarding flow spec
+- `docs/capstone_report/` — Report sections
+- `docs/archive/` — Historical only
+- `docs/future_work/` — Non-committed ideas
+
+## Implementation Principles
+
+- Async persona generation is parallel per persona and sequential within a
+  persona for continuity.
+- Journal content should stay emergent from persona context, not rigid value
+  labels.
+- Keep banned-term/value leakage protections intact when touching prompts or
+  generation logic.
+- Avoid metadata leakage in any logic intended to mirror production behavior.
 
 ## Code Style
-- **Imports**: Standard library first, then third-party (streamlit, cv2, numpy, etc.)
-- **Naming**: snake_case for variables/functions, PascalCase for classes (VideoTransformer)
-- **Style**: Clean, readable code with good spacing and comments
-- **Implementation Notes**: After every code change, report in chat whether the solution feels over-engineered for the academic, time-boxed POC scope. Also comment if there are any simpler alternatives or noted gaps. Keep this as a conversational summary rather than an inline code comment.
 
-## Operating Principles
-- Keep solutions scoped to the academic, time-boxed POC; avoid heavy abstractions unless justified
-- Prefer small, testable iterations over broad rewrites
-- Preserve registry pipeline stage semantics (`stage_synthetic`, `stage_wrangled`, `stage_labeled`) when touching pipeline code
-- Maintain value-leakage safeguards in synthetic data generation and prompt logic
+- Imports: standard library first, then third-party, then local.
+- Naming: `snake_case` for functions/variables, `PascalCase` for classes.
+- Keep comments concise and only where they reduce cognitive load.
 
-## Quality Expectations
-- Before running `git commit`, run `.claude/skills/quality/SKILL.md`
-- Review complete changed files before commit, not only patch hunks
-- Run targeted tests/lint checks for touched modules before proposing commit text
-- Remove debug artifacts and obvious dead code before handoff
+## Quality Gate Before Commit
 
-Use 'bd' for task tracking
+Before creating a commit:
+
+1. Run `/quality` before committing to review changes with fresh eyes.
+2. Review complete changed files, not only diffs.
+2. Run targeted tests/linting for touched modules.
+3. Remove obvious dead code and debug remnants.
+4. Confirm no behavior regressions in critical paths.
+
+If there is ambiguity and no blocking risk, proceed with explicit
+assumptions and note them. If ambiguity affects correctness or design
+direction, ask one concise clarifying question.
+
+## Issue Tracking with Beads (`bd`)
+
+Use `bd` (beads) for all issue tracking. This is mandatory, not optional.
+
+### Before starting work
+- Run `bd list` to see open issues and find relevant ones.
+- If the work maps to an existing issue, note its ID (e.g., `twinkl-abc`).
+- If no issue exists, create one before starting:
+  ```sh
+  bd create "Short descriptive title" -d "Description of what needs to be done"
+  ```
+
+### During implementation
+- Reference the issue ID in commit messages when relevant.
+
+### After completing work
+- Close the issue with a reason:
+  ```sh
+  bd close <issue-id> -r "Implemented in <commit or PR ref>"
+  ```
+- Use `--suggest-next` to see newly unblocked issues:
+  ```sh
+  bd close <issue-id> -r "Done" --suggest-next
+  ```
+
+### Key commands
+| Action | Command |
+|---|---|
+| List open issues | `bd list` |
+| Show issue details | `bd show <id>` |
+| Create issue | `bd create "title" -d "description"` |
+| Close issue | `bd close <id> -r "reason"` |
+| Search issues | `bd search "query"` |

@@ -32,6 +32,8 @@ implementations over heavy architecture.
 
 ## Environment and Commands
 
+Do NOT use git worktrees. Work only in the main working directory.
+
 Activate the virtual environment before Python commands:
 
 ```sh
@@ -52,45 +54,51 @@ after activation.
 
 ## Architecture Snapshot
 
-### Synthetic Data Pipeline
+### Source Code (`src/`)
 
-The project generates synthetic VIF training data through:
+- `src/vif/` — VIF critic models (MLP ordinal, BNN), text/state encoders, dataset loading, training loops, evaluation metrics, and experiment logging
+- `src/registry/` — Persona registry with pipeline stages (`stage_synthetic`, `stage_wrangled`, `stage_labeled`)
+- `src/judge/` — Judge labeling consolidation
+- `src/wrangling/` — Parsers for synthetic and wrangled persona data
+- `src/models/` — Pydantic models (judge label schema)
+- `src/annotation_tool/` — Streamlit app for human annotation with inter-rater agreement metrics
 
-- Pipeline instructions: `docs/pipeline/claude_gen_instructions.md`
-- Persona registry: `logs/registry/personas.parquet`
-- Raw outputs: `logs/synthetic_data/persona_<uuid>.md`
-- Wrangled outputs: `logs/wrangled/persona_<uuid>.md`
-- Judge labels: `logs/judge_labels/persona_<uuid>_labels.json`
-- Consolidated labels: `logs/judge_labels/judge_labels.parquet`
+### Configuration and Prompts
 
-Registry stages in `src/registry/personas.py`:
+- `config/` — `synthetic_data.yaml`, `schwartz_values.yaml`, `vif.yaml`
+- `prompts/` — Prompt templates (`*.yaml`) exposed via `prompts/__init__.py`
 
-- `stage_synthetic`
-- `stage_wrangled`
-- `stage_labeled`
+### Data and Artifacts (`logs/`)
 
-### Configuration
+- `logs/registry/` — `personas.parquet` (central persona registry)
+- `logs/synthetic_data/` — Raw LLM-generated persona markdown files
+- `logs/wrangled/` — Parsed/cleaned persona markdown files
+- `logs/judge_labels/` — Per-persona JSON labels + consolidated `judge_labels.parquet`
+- `logs/annotations/` — Human annotator parquet files (per-annotator)
+- `logs/experiments/` — VIF training run logs (`runs/*.yaml`) and `index.md`
+- `logs/exports/` — Agreement reports and other exports
 
-- `config/synthetic_data.yaml`
-- `config/schwartz_values.yaml`
-- `config/vif.yaml`
+### Notebooks (`notebooks/`)
 
-### Prompt Templates
+- `notebooks/critic_training/v1/` — First-generation critic experiments (MLP, ordinal, BNN, TCN, embedding ablation)
+- `notebooks/critic_training/v2/` — Second-generation critic experiments (encoder comparison)
+- `notebooks/journalling/` — Journal generation, nudge, and judge labeling notebooks
 
-Prompt templates live in `prompts/*.yaml` and are exposed through
-`prompts/__init__.py`.
+### Tests (`tests/`)
 
-### VIF Module
+- `tests/vif/` — Eval metrics, loss functions, ordinal base tests
+- `tests/wrangling/` — Wrangled data parser tests
 
-Core training/eval code lives in `src/vif/`:
+### Documentation (`docs/`)
 
-- `encoders.py`
-- `state_encoder.py`
-- `critic.py`
-- `critic_ordinal.py`
-- `dataset.py`
-- `eval.py`
-- `train.py`
+- `docs/prd.md` — Product requirements (authoritative)
+- `docs/vif/` — VIF concepts, architecture, training, uncertainty, state pipeline
+- `docs/pipeline/` — Pipeline specs, annotation guidelines, judge instructions, data schema
+- `docs/evals/` — Evaluation specs (drift detection, explanation quality, judge validation, value modeling)
+- `docs/onboarding/` — Onboarding flow spec
+- `docs/capstone_report/` — Report sections
+- `docs/archive/` — Historical only
+- `docs/future_work/` — Non-committed ideas
 
 ## Implementation Principles
 
@@ -102,15 +110,6 @@ Core training/eval code lives in `src/vif/`:
   generation logic.
 - Avoid metadata leakage in any logic intended to mirror production behavior.
 
-## Documentation Hierarchy
-
-- `docs/prd.md` (authoritative)
-- `docs/onboarding/`
-- `docs/vif/`
-- `docs/pipeline/pipeline_specs.md`
-- `docs/archive/` (historical only)
-- `docs/future_work/` (non-committed ideas)
-
 ## Code Style
 
 - Imports: standard library first, then third-party, then local.
@@ -121,7 +120,7 @@ Core training/eval code lives in `src/vif/`:
 
 Before creating a commit:
 
-1. Before running `git commit`, run `.claude/skills/quality/SKILL.md`.
+1. Run `/quality` before committing to review changes with fresh eyes.
 2. Inspect full changed files, not only diffs.
 3. Run targeted tests/linting for touched modules.
 4. Remove obvious dead code and debug remnants.
@@ -130,4 +129,36 @@ Before creating a commit:
 If there is ambiguity and no blocking risk, proceed with explicit
 assumptions and note them. If ambiguity affects correctness or design
 direction, ask one concise clarifying question.
-Use 'bd' for task tracking
+## Issue Tracking with Beads (`bd`)
+
+Use `bd` (beads) for all issue tracking. This is mandatory, not optional.
+
+### Before starting work
+- Run `bd list` to see open issues and find relevant ones.
+- If the work maps to an existing issue, note its ID (e.g., `twinkl-abc`).
+- If no issue exists, create one before starting:
+  ```sh
+  bd create "Short descriptive title" -d "Description of what needs to be done"
+  ```
+
+### During implementation
+- Reference the issue ID in commit messages when relevant.
+
+### After completing work
+- Close the issue with a reason:
+  ```sh
+  bd close <issue-id> -r "Implemented in <commit or PR ref>"
+  ```
+- Use `--suggest-next` to see newly unblocked issues:
+  ```sh
+  bd close <issue-id> -r "Done" --suggest-next
+  ```
+
+### Key commands
+| Action | Command |
+|---|---|
+| List open issues | `bd list` |
+| Show issue details | `bd show <id>` |
+| Create issue | `bd create "title" -d "description"` |
+| Close issue | `bd close <id> -r "reason"` |
+| Search issues | `bd search "query"` |
