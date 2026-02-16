@@ -1,0 +1,133 @@
+# VIF Experiment: run_002_EMD
+# Generated: 2026-02-15T21:10:06
+# Git: e1e08c4(dirty)
+metadata:
+  experiment_id: run_002_EMD
+  run_id: run_002
+  model_name: EMD
+  timestamp: '2026-02-15T21:10:06'
+  git_commit: e1e08c4(dirty)
+  config_hash: a16a102440ab
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+    ema_alpha: 0.3
+  model:
+    hidden_dim: 32
+    dropout: 0.3
+  training:
+    loss_fn: emd
+    learning_rate: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+data:
+  n_train: 637
+  n_val: 124
+  n_test: 143
+  split_seed: 2025
+  pct_truncated: 0.0
+  state_dim: 276
+capacity:
+  n_parameters: 11038
+  param_sample_ratio: 17.3281
+training_dynamics:
+  best_epoch: 27
+  total_epochs: 47
+  train_loss_at_best: 0.1484
+  val_loss_at_best: 0.1843
+  gap_at_best: 0.0359
+  final_lr: 0.0005
+evaluation:
+  mae_mean: 0.2703
+  accuracy_mean: 0.7643
+  qwk_mean: 0.3653
+  spearman_mean: 0.3647
+  calibration_global: 0.772
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.189
+  minority_recall_mean: 0.3092
+  recall_minus1: 0.1012
+  recall_plus1: 0.5173
+  hedging_mean: 0.772
+per_dimension:
+  self_direction:
+    mae: 0.4646
+    accuracy: 0.6014
+    qwk: 0.2839
+    spearman: 0.3683
+    calibration: 0.559
+    hedging: 0.4895
+  stimulation:
+    mae: 0.1571
+    accuracy: 0.8671
+    qwk: 0.5688
+    spearman: 0.3512
+    calibration: 0.9304
+    hedging: 0.8322
+  hedonism:
+    mae: 0.2194
+    accuracy: 0.8112
+    qwk: 0.4187
+    spearman: 0.4737
+    calibration: 0.6245
+    hedging: 0.8881
+  achievement:
+    mae: 0.3036
+    accuracy: 0.7343
+    qwk: 0.2361
+    spearman: 0.214
+    calibration: 0.7083
+    hedging: 0.7832
+  power:
+    mae: 0.153
+    accuracy: 0.8811
+    qwk: 0.3218
+    spearman: 0.239
+    calibration: 0.8237
+    hedging: 0.8881
+  security:
+    mae: 0.3403
+    accuracy: 0.6923
+    qwk: 0.254
+    spearman: 0.1633
+    calibration: 0.5771
+    hedging: 0.8252
+  conformity:
+    mae: 0.2986
+    accuracy: 0.7413
+    qwk: 0.2599
+    spearman: 0.3029
+    calibration: 0.7864
+    hedging: 0.7483
+  tradition:
+    mae: 0.2109
+    accuracy: 0.8252
+    qwk: 0.4218
+    spearman: 0.4302
+    calibration: 0.8362
+    hedging: 0.8531
+  benevolence:
+    mae: 0.3764
+    accuracy: 0.6573
+    qwk: 0.4137
+    spearman: 0.4869
+    calibration: 0.6802
+    hedging: 0.6503
+  universalism:
+    mae: 0.1786
+    accuracy: 0.8322
+    qwk: 0.4743
+    spearman: 0.6175
+    calibration: 0.9615
+    hedging: 0.7622
+observations: <fill in rationale + key findings before running>
