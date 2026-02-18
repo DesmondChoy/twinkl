@@ -172,6 +172,30 @@ class TestDecideNudge:
         assert reason is None
 
     @pytest.mark.asyncio
+    async def test_malformed_json_returns_no_nudge(self):
+        mock_llm = AsyncMock(return_value="not-json")
+
+        should, category, reason = await decide_nudge(
+            "Entry with odd output.", "2024-01-15", None, mock_llm
+        )
+
+        assert should is False
+        assert category is None
+        assert reason is None
+
+    @pytest.mark.asyncio
+    async def test_non_object_json_returns_no_nudge(self):
+        mock_llm = AsyncMock(return_value='["no_nudge"]')
+
+        should, category, reason = await decide_nudge(
+            "Entry with list payload.", "2024-01-15", None, mock_llm
+        )
+
+        assert should is False
+        assert category is None
+        assert reason is None
+
+    @pytest.mark.asyncio
     async def test_metadata_not_leaked_into_prompt(self):
         """Verify the LLM prompt does not contain synthetic metadata fields."""
         captured_prompt = None

@@ -6,7 +6,7 @@ to keep this module testable without mocking external clients.
 """
 
 import json
-from typing import Callable, Awaitable
+from typing import Awaitable, Callable
 
 from prompts import nudge_decision_prompt
 from src.models.nudge import NUDGE_CATEGORIES, NudgeCategory
@@ -77,6 +77,15 @@ def _normalize_category(raw_decision: str) -> NudgeCategory | None:
     return None
 
 
+def _safe_load_json_object(raw_json: str) -> dict | None:
+    """Parse a JSON object safely, returning None on malformed payloads."""
+    try:
+        data = json.loads(raw_json)
+    except (TypeError, json.JSONDecodeError):
+        return None
+    return data if isinstance(data, dict) else None
+
+
 async def decide_nudge(
     entry_content: str,
     entry_date: str,
@@ -107,7 +116,10 @@ async def decide_nudge(
     if not raw_json:
         return False, None, None
 
-    data = json.loads(raw_json)
+    data = _safe_load_json_object(raw_json)
+    if data is None:
+        return False, None, None
+
     decision = data.get("decision", "no_nudge")
     reason = data.get("reason", "")
 

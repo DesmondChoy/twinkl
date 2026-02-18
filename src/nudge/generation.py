@@ -7,7 +7,7 @@ decision logic.
 
 import json
 import random
-from typing import Callable, Awaitable
+from typing import Awaitable, Callable
 
 from prompts import nudge_generation_prompt, nudge_response_prompt
 from src.models.nudge import JournalTurn, NudgeCategory
@@ -23,18 +23,55 @@ def count_words(text: str) -> int:
 
 def weighted_choice(weights: dict[str, float]) -> str:
     """Make a weighted random choice from a dict of {option: weight}."""
+    if not weights:
+        raise ValueError("weights must contain at least one option")
+
     options = list(weights.keys())
-    probs = list(weights.values())
+    try:
+        probs = [float(weight) for weight in weights.values()]
+    except (TypeError, ValueError) as exc:
+        raise ValueError("weights must be numeric") from exc
+
+    if any(weight < 0 for weight in probs):
+        raise ValueError("weights must be non-negative")
+
     total = sum(probs)
+    if total <= 0:
+        raise ValueError("weights must sum to a positive value")
+
     probs = [p / total for p in probs]
     return random.choices(options, weights=probs, k=1)[0]
 
 
 def select_response_mode(config: dict) -> str:
     """Select a response mode based on configured weights."""
-    modes = config["nudge"]["response_modes"]
-    weights = {m["mode"]: m["weight"] for m in modes}
-    return weighted_choice(weights)
+    modes = config.get("nudge", {}).get("response_modes", [])
+    if not modes:
+        return "Answering directly"
+
+    weights = {
+        mode_cfg["mode"]: mode_cfg.get("weight", 0.0)
+        for mode_cfg in modes
+        if "mode" in mode_cfg
+    }
+    if not weights:
+        return "Answering directly"
+
+    try:
+        return weighted_choice(weights)
+    except ValueError:
+        if "Answering directly" in weights:
+            return "Answering directly"
+        return next(iter(weights))
+
+
+def _safe_load_json_object(raw_json: str) -> dict | None:
+    """Parse a JSON object safely, returning None on malformed payloads."""
+    try:
+        data = json.loads(raw_json)
+    except (TypeError, json.JSONDecodeError):
+        return None
+    return data if isinstance(data, dict) else None
 
 
 async def generate_nudge_text(
@@ -76,7 +113,10 @@ async def generate_nudge_text(
         if not raw_json:
             continue
 
-        data = json.loads(raw_json)
+        data = _safe_load_json_object(raw_json)
+        if data is None:
+            continue
+
         nudge_text = data.get("nudge_text", "").strip()
 
         word_count = count_words(nudge_text)
@@ -149,7 +189,10 @@ async def generate_nudge_response(
         if not raw_json:
             continue
 
-        data = json.loads(raw_json)
+        data = _safe_load_json_object(raw_json)
+        if data is None:
+            continue
+
         content = data.get("content", "").strip()
 
         if content:
