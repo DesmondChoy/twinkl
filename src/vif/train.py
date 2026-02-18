@@ -55,7 +55,7 @@ def load_config(config_path: str | Path | None) -> dict:
             "truncate_dim": 256,
             "text_prefix": "classification: ",
         },
-        "state_encoder": {"window_size": 1, "ema_alpha": 0.3},
+        "state_encoder": {"window_size": 1},
         "model": {"hidden_dim": 32, "dropout": 0.3, "output_dim": 10},
         "training": {
             "epochs": 100,
@@ -263,7 +263,6 @@ def train(config: dict, verbose: bool = True) -> dict:
     state_encoder = StateEncoder(
         text_encoder,
         window_size=config["state_encoder"]["window_size"],
-        ema_alpha=config["state_encoder"]["ema_alpha"],
     )
 
     if verbose:

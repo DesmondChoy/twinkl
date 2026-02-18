@@ -68,7 +68,6 @@ $$
  s_{u,t} = \text{Concat}\Big[
    \underbrace{\phi_{\text{text}}(T_{u,t}), \ldots, \phi_{\text{text}}(T_{u,t-N+1})}_{\text{text window}},
    \underbrace{\Delta t_{u,t}, \ldots, \Delta t_{u,t-N+2}}_{\text{time gaps}},
-   \underbrace{\text{history\_stats}_{u,t}}_{\text{per-dimension EMA of past alignment}},
    \underbrace{w_u}_{\text{user value profile}}
  \Big]
 $$
@@ -76,7 +75,6 @@ $$
 Where:
 
 - `text_window` are frozen embeddings $\mathbf{e}_{u,t-k}$.
-- `history_stats_{u,t}` is the vector of EMAs per value dimension (defined in `05_state_and_data_pipeline.md`).
 - $w_u \in \mathbb{R}^K$ is the **value weight vector** for the user/persona, with $w_{u,j} \ge 0$ and $\sum_j w_{u,j} = 1$.
 
 ### 2.2 How the Profile Affects the Critic
@@ -90,7 +88,7 @@ The Critic is a multi‑layer perceptron:
 
 Because the Critic sees both:
 
-- The **recent behaviour** (text window + history stats), and
+- The **recent behaviour** (text window + time gaps), and
 - The **value profile** $w_u$,
 
 it can learn **profile‑conditioned mappings**, e.g. the *same* text trajectory can be treated differently depending on which dimensions the user cares most about.
@@ -198,7 +196,7 @@ For drift detection, we assume access to:
 - $\hat{\vec{a}}_{u,t}$: Critic mean predictions per dimension.
 - $\hat{\vec{\sigma}}_{u,t}$: Critic uncertainty estimates per dimension (from MC Dropout, see `04_uncertainty_logic.md`).
 - $w_u$: user value weight vector.
-- History statistics (`history_stats_{u,t}`) including EMAs of alignment, as defined in `05_state_and_data_pipeline.md`.
+- Temporal trends derived from past Critic predictions (e.g. weekly means/EMAs), computed downstream from outputs rather than included in the input state vector.
 
 ### 4.2 Example Rule Templates
 
@@ -250,7 +248,7 @@ As with crash/rut logic in `VIF_02` and `VIF_04`:
   - Pretrained sentence encoder (e.g. SBERT‑style).
   - Used as \(\phi_{\text{text}}(T_{u,t})\); no fine‑tuning in the POC.
 - **Critic (VIF)**
-  - Input: full state $s_{u,t}$ including text window, time gaps, history stats, and $w_u$.
+  - Input: full state $s_{u,t}$ including text window, time gaps, and $w_u$.
   - Architecture: 2–3 layer MLP with ReLU or GELU, dropout on hidden layers.
   - Output: $\hat{\vec{a}}_{u,t} \in [-1,1]^K$ (Option A: immediate alignment).
   - Uncertainty: MC Dropout at inference time.
@@ -277,8 +275,6 @@ These are explicitly **out of scope** for the academic, time‑boxed POC but are
 ## 6. Summary
 
 - The **frozen text encoder** provides stable, reusable embeddings for each entry; it is not trained in the POC.
-- The **state vector** combines text window, time gaps, history EMAs, and the user profile $w_u$ so that the Critic can learn profile‑conditioned alignment estimates.
+- The **state vector** combines text window, time gaps, and the user profile $w_u$ so that the Critic can learn profile‑conditioned alignment estimates.
 - **Drift** is defined as sustained, profile‑weighted misalignment over time and is implemented via **transparent metrics and rules** (per‑dimension drift, scalar alignment, cosine similarity) built on top of the Critic outputs.
 - No new model family is required for drift in the POC; the existing Critic plus deterministic logic suffices, keeping the implementation feasible while remaining faithful to the VIF design goals.
-
-

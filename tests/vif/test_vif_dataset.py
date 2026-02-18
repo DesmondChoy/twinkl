@@ -2,6 +2,7 @@
 
 import numpy as np
 import polars as pl
+import pytest
 import torch
 
 from src.vif.dataset import VIFDataset
@@ -115,8 +116,8 @@ class TestGetItem:
         assert state.dtype == torch.float32
         assert target.dtype == torch.float32
 
-    def test_first_entry_zero_history(self):
-        """t_index=0 → empty alignment history → history EMA is zeros."""
+    def test_first_entry_profile_weights(self):
+        """t_index=0 → profile weights are present in state vector."""
         enc = _make_encoder(window_size=1)
         df = _make_merged_df(n_personas=1, entries_per_persona=3)
         ds = VIFDataset(df, enc, cache_embeddings=False)
@@ -124,26 +125,12 @@ class TestGetItem:
         # First entry: t_index=0
         state, _ = ds[0]
         d_e = 8  # MockTextEncoder.embedding_dim
-        # With window_size=1: state = [text(8)] + [gaps(0)] + [ema(10)] + [profile(10)]
-        ema_start = d_e  # no gaps for window_size=1
-        ema_part = state[ema_start : ema_start + 10].numpy()
-        np.testing.assert_allclose(ema_part, np.zeros(10), atol=1e-6)
-
-    def test_later_entry_has_history(self):
-        """t_index=2 → alignment history from t=0,1 → non-zero EMA."""
-        enc = _make_encoder(window_size=1)
-        df = _make_merged_df(n_personas=1, entries_per_persona=4)
-        ds = VIFDataset(df, enc, cache_embeddings=False)
-
-        # Third entry: t_index=2 (entries at t=0,1 contribute to history)
-        state, _ = ds[2]
-        d_e = 8
-        ema_start = d_e
-        ema_part = state[ema_start : ema_start + 10].numpy()
-        # alignment vectors are [0.0]*10 at t=0 and [0.1]*10 at t=1
-        # EMA after t=0: 0.3 * 0.0 = 0.0
-        # EMA after t=1: 0.3 * 0.1 + 0.7 * 0.0 = 0.03
-        np.testing.assert_allclose(ema_part, np.full(10, 0.03), atol=1e-6)
+        # With window_size=1: state = [text(8)] + [gaps(0)] + [profile(10)]
+        profile_start = d_e  # no gaps for window_size=1
+        profile_part = state[profile_start : profile_start + 10].numpy()
+        # core_values="achievement,benevolence" → indices 3 and 8 each get 0.5
+        assert profile_part[3] == pytest.approx(0.5, abs=1e-6)
+        assert profile_part[8] == pytest.approx(0.5, abs=1e-6)
 
     def test_target_matches_alignment_vector(self):
         """Target tensor matches the entry's alignment_vector."""
@@ -165,8 +152,8 @@ class TestSlidingWindow:
         df = _make_merged_df(n_personas=1, entries_per_persona=3)
         ds = VIFDataset(df, enc, cache_embeddings=False)
         state, _ = ds[1]
-        # state_dim for W=1: 1*8 + 0 + 10 + 10 = 28
-        assert state.shape == (28,)
+        # state_dim for W=1: 1*8 + 0 + 10 = 18
+        assert state.shape == (18,)
 
     def test_window_size_3_at_t0_padded(self):
         """window_size=3 at t_index=0: 2 entries zero-padded."""

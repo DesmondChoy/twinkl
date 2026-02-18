@@ -1,4 +1,4 @@
-"""Tests for StateEncoder: state dimension, value parsing, EMA, time gaps, and assembly."""
+"""Tests for StateEncoder: state dimension, value parsing, time gaps, and assembly."""
 
 import numpy as np
 import pytest
@@ -12,22 +12,22 @@ from .conftest import MockTextEncoder
 
 
 class TestStateDim:
-    """state_dim property follows the formula: W*d_e + (W-1) + 10 + 10."""
+    """state_dim property follows the formula: W*d_e + (W-1) + 10."""
 
     def test_window_size_1(self, mock_text_encoder):
         enc = StateEncoder(mock_text_encoder, window_size=1)
-        # 1*8 + 0 + 10 + 10 = 28
-        assert enc.state_dim == 28
+        # 1*8 + 0 + 10 = 18
+        assert enc.state_dim == 18
 
     def test_window_size_3(self, mock_text_encoder):
         enc = StateEncoder(mock_text_encoder, window_size=3)
-        # 3*8 + 2 + 10 + 10 = 46
-        assert enc.state_dim == 46
+        # 3*8 + 2 + 10 = 36
+        assert enc.state_dim == 36
 
     def test_window_size_5(self, mock_text_encoder):
         enc = StateEncoder(mock_text_encoder, window_size=5)
-        # 5*8 + 4 + 10 + 10 = 64
-        assert enc.state_dim == 64
+        # 5*8 + 4 + 10 = 54
+        assert enc.state_dim == 54
 
 
 # ── TestParseCoreValuesToWeights ─────────────────────────────────────────────
@@ -103,45 +103,6 @@ class TestParseCoreValuesToWeights:
         assert weights[7] == pytest.approx(1.0)
 
 
-# ── TestComputeEmaHistory ────────────────────────────────────────────────────
-
-
-class TestComputeEmaHistory:
-    """EMA alignment history computation."""
-
-    def test_empty_returns_zeros(self, mock_text_encoder):
-        enc = StateEncoder(mock_text_encoder, ema_alpha=0.3)
-        result = enc.compute_ema_history([])
-        np.testing.assert_array_equal(result, np.zeros(10))
-        assert result.shape == (10,)
-
-    def test_single_score(self, mock_text_encoder):
-        """Single score → alpha * score."""
-        alpha = 0.3
-        enc = StateEncoder(mock_text_encoder, ema_alpha=alpha)
-        score = np.array([1.0, 0.0, -1.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], dtype=np.float32)
-        result = enc.compute_ema_history([score])
-        expected = alpha * score
-        np.testing.assert_allclose(result, expected, atol=1e-6)
-
-    def test_two_scores(self, mock_text_encoder):
-        """Two scores: alpha * s2 + (1-alpha) * (alpha * s1)."""
-        alpha = 0.3
-        enc = StateEncoder(mock_text_encoder, ema_alpha=alpha)
-        s1 = np.ones(10, dtype=np.float32)
-        s2 = np.full(10, 0.5, dtype=np.float32)
-        result = enc.compute_ema_history([s1, s2])  # s1 is oldest
-        expected = alpha * s2 + (1 - alpha) * (alpha * s1)
-        np.testing.assert_allclose(result, expected, atol=1e-6)
-
-    def test_shape_always_10(self, mock_text_encoder):
-        enc = StateEncoder(mock_text_encoder)
-        for n in [0, 1, 5, 20]:
-            scores = [np.random.randn(10).astype(np.float32) for _ in range(n)]
-            result = enc.compute_ema_history(scores)
-            assert result.shape == (10,)
-
-
 # ── TestComputeTimeGaps ──────────────────────────────────────────────────────
 
 
@@ -209,7 +170,6 @@ class TestBuildStateVector:
         state = enc.build_state_vector(
             texts=["Hello"],
             dates=["2025-01-01"],
-            alignment_history=[],
             core_values=["Security"],
         )
         assert state.shape == (enc.state_dim,)
@@ -220,18 +180,16 @@ class TestBuildStateVector:
         state = enc.build_state_vector(
             texts=["Entry 3", "Entry 2", "Entry 1"],
             dates=["2025-01-03", "2025-01-02", "2025-01-01"],
-            alignment_history=[np.zeros(10)],
             core_values=["Achievement", "Benevolence"],
         )
         assert state.shape == (enc.state_dim,)
 
     def test_concatenation_order(self, mock_text_encoder):
-        """Verify: text_window | time_gaps | history_ema | profile_weights."""
-        enc = StateEncoder(mock_text_encoder, window_size=2, ema_alpha=0.3)
+        """Verify: text_window | time_gaps | profile_weights."""
+        enc = StateEncoder(mock_text_encoder, window_size=2)
         state = enc.build_state_vector(
             texts=["Current", "Previous"],
             dates=["2025-01-02", "2025-01-01"],
-            alignment_history=[],
             core_values=["Security"],
         )
         d_e = mock_text_encoder.embedding_dim  # 8
@@ -244,12 +202,8 @@ class TestBuildStateVector:
         gap_part = state[2 * d_e : 2 * d_e + 1]
         assert gap_part[0] == pytest.approx(1.0 / 30.0)
 
-        # history_ema: zeros (empty history)
-        ema_part = state[2 * d_e + 1 : 2 * d_e + 1 + 10]
-        np.testing.assert_allclose(ema_part, np.zeros(10), atol=1e-6)
-
         # profile_weights: Security at index 5 → 1.0
-        profile_part = state[2 * d_e + 1 + 10:]
+        profile_part = state[2 * d_e + 1:]
         assert len(profile_part) == 10
         assert profile_part[5] == pytest.approx(1.0)
 
@@ -258,19 +212,18 @@ class TestBuildStateVector:
         enc = StateEncoder(mock_text_encoder, window_size=2)
         texts = ["Current entry", "Previous entry"]
         dates = ["2025-01-02", "2025-01-01"]
-        history = [np.ones(10, dtype=np.float32) * 0.5]
         core_values = ["Achievement"]
 
         state_from_text = enc.build_state_vector(
             texts=texts, dates=dates,
-            alignment_history=history, core_values=core_values,
+            core_values=core_values,
         )
 
         # Pre-compute embeddings the same way build_state_vector does
         embeddings = [enc.text_encoder.encode_batch([t])[0] for t in texts]
         state_from_emb = enc.build_state_vector_from_embeddings(
             embeddings=embeddings, dates=dates,
-            alignment_history=history, core_values=core_values,
+            core_values=core_values,
         )
 
         np.testing.assert_array_equal(state_from_text, state_from_emb)

@@ -6,10 +6,9 @@ combining text embeddings with temporal features and persona context.
 State Vector Components (per VIF_05 spec):
 - text_window: N × d_e (current + N-1 previous entry embeddings)
 - time_gaps: N-1 (days since previous entries)
-- history_stats: 10 (EMA of alignment scores per dimension)
 - user_profile: 10 (normalized weights from Core Values)
 
-Total dimension: N × d_e + (N-1) + 10 + 10  (see config/vif.yaml)
+Total dimension: N × d_e + (N-1) + 10  (see config/vif.yaml)
 
 Usage:
     from src.vif import StateEncoder, create_encoder
@@ -21,7 +20,6 @@ Usage:
     state = state_encoder.build_state_vector(
         texts=["Today I helped a colleague...", "Yesterday I worked late..."],
         dates=["2024-01-15", "2024-01-14"],
-        alignment_history=[prior_alignment_array],
         core_values=["Benevolence", "Security"],
     )
 """
@@ -57,8 +55,7 @@ class StateEncoder:
     The state vector combines:
     1. Text embeddings from a sliding window of entries
     2. Temporal features (time gaps between entries)
-    3. History statistics (EMA of past alignment scores)
-    4. User profile (normalized value weights from Core Values)
+    3. User profile (normalized value weights from Core Values)
 
     This encoder supports pluggable text encoders for ablation studies.
 
@@ -74,18 +71,27 @@ class StateEncoder:
         self,
         text_encoder: TextEncoder,
         window_size: int = 3,
-        ema_alpha: float = 0.3,
+        **kwargs: object,
     ):
         """Initialize the state encoder.
 
         Args:
             text_encoder: TextEncoder instance for converting text to embeddings
             window_size: Number of entries in the text window (default: 3)
-            ema_alpha: Smoothing factor for EMA history stats (default: 0.3)
+            **kwargs: Deprecated compatibility args. ``ema_alpha`` is accepted
+                and ignored for v1 notebook compatibility; all other kwargs
+                raise ``TypeError``.
         """
+        kwargs.pop("ema_alpha", None)
+        if kwargs:
+            unknown = ", ".join(sorted(kwargs))
+            raise TypeError(
+                "Unexpected StateEncoder kwargs: "
+                f"{unknown}. Only deprecated 'ema_alpha' is accepted."
+            )
+
         self.text_encoder = text_encoder
         self.window_size = window_size
-        self.ema_alpha = ema_alpha
         self.num_values = len(SCHWARTZ_VALUE_ORDER)  # 10
 
     @property
@@ -95,13 +101,11 @@ class StateEncoder:
         Components:
         - text_window: window_size × embedding_dim
         - time_gaps: window_size - 1
-        - history_stats: num_values (10)
         - user_profile: num_values (10)
         """
         return (
             self.window_size * self.text_encoder.embedding_dim
             + (self.window_size - 1)  # time gaps
-            + self.num_values  # history EMA
             + self.num_values  # profile weights
         )
 
@@ -158,38 +162,6 @@ class StateEncoder:
 
         return weights
 
-    def compute_ema_history(
-        self,
-        alignment_scores: list[np.ndarray],
-    ) -> np.ndarray:
-        """Compute exponential moving average of alignment history.
-
-        EMA gives more weight to recent entries while retaining memory
-        of past patterns. This captures trajectory trends in the user's
-        value alignment over time.
-
-        Args:
-            alignment_scores: List of (10,) arrays, chronologically ordered.
-                            Earlier entries first. Can be empty.
-
-        Returns:
-            np.ndarray of shape (10,) representing the EMA of alignment.
-            Returns zeros if no history.
-
-        Note:
-            EMA formula: EMA_t = alpha * score_t + (1 - alpha) * EMA_{t-1}
-        """
-        if not alignment_scores:
-            return np.zeros(self.num_values, dtype=np.float32)
-
-        ema = np.zeros(self.num_values, dtype=np.float32)
-
-        for scores in alignment_scores:
-            scores_array = np.asarray(scores, dtype=np.float32)
-            ema = self.ema_alpha * scores_array + (1 - self.ema_alpha) * ema
-
-        return ema
-
     def compute_time_gaps(
         self,
         dates: list[str],
@@ -242,20 +214,17 @@ class StateEncoder:
         self,
         texts: list[str],
         dates: list[str],
-        alignment_history: list[np.ndarray],
         core_values: list[str],
     ) -> np.ndarray:
         """Build the complete state vector for a single entry.
 
-        Combines text embeddings, temporal features, history statistics,
-        and user profile into a single vector for the VIF model.
+        Combines text embeddings, temporal features, and user profile
+        into a single vector for the VIF model.
 
         Args:
             texts: List of entry texts, current entry first, then previous entries.
                   Length <= window_size. Zero-padded if fewer entries available.
             dates: List of dates corresponding to texts (YYYY-MM-DD format).
-            alignment_history: List of past alignment vectors (before current entry).
-                             Chronologically ordered (oldest first).
             core_values: List of Schwartz value names from persona profile.
 
         Returns:
@@ -272,14 +241,13 @@ class StateEncoder:
             text_embeddings.append(emb)
 
         return self._build_state_from_components(
-            text_embeddings, dates, alignment_history, core_values
+            text_embeddings, dates, core_values
         )
 
     def build_state_vector_from_embeddings(
         self,
         embeddings: list[np.ndarray],
         dates: list[str],
-        alignment_history: list[np.ndarray],
         core_values: list[str],
     ) -> np.ndarray:
         """Build state vector from pre-computed embeddings.
@@ -290,21 +258,19 @@ class StateEncoder:
             embeddings: List of pre-computed embeddings, current entry first.
                        Length should be window_size.
             dates: List of dates corresponding to embeddings (YYYY-MM-DD format).
-            alignment_history: List of past alignment vectors (before current entry).
             core_values: List of Schwartz value names from persona profile.
 
         Returns:
             np.ndarray of shape (state_dim,) containing the full state vector.
         """
         return self._build_state_from_components(
-            embeddings, dates, alignment_history, core_values
+            embeddings, dates, core_values
         )
 
     def _build_state_from_components(
         self,
         text_embeddings: list[np.ndarray],
         dates: list[str],
-        alignment_history: list[np.ndarray],
         core_values: list[str],
     ) -> np.ndarray:
         """Internal method to assemble state vector from components."""
@@ -314,17 +280,13 @@ class StateEncoder:
         padded_dates = dates + [None] * (self.window_size - len(dates))
         time_gaps = self.compute_time_gaps(padded_dates[:self.window_size])
 
-        # 3. History EMA
-        history_ema = self.compute_ema_history(alignment_history)
-
-        # 4. Profile weights
+        # 3. Profile weights
         profile_weights = self.parse_core_values_to_weights(core_values)
 
         # Concatenate all components
         state_vector = np.concatenate([
             text_vector,
             time_gaps,
-            history_ema,
             profile_weights,
         ])
 

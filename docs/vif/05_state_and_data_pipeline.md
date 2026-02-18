@@ -50,7 +50,6 @@ $$
  s_{u,t} = \text{Concat}\Big[
    \underbrace{\phi_{\text{text}}(T_{u,t}), \ldots, \phi_{\text{text}}(T_{u,t-N+1})}_{\text{text window}},
    \underbrace{\Delta t_{u,t}, \ldots, \Delta t_{u,t-N+2}}_{\text{time gaps}},
-   \underbrace{\text{history\_stats}_{u,t}}_{\text{per-dimension history}},
    \underbrace{z_u}_{\text{user profile}}
  \Big]
 $$
@@ -65,23 +64,16 @@ Where:
   - $\Delta t_{u,t} = t_{u,t} - t_{u,t-1}$ in days (or hours), for the last $N-1$ transitions.
   - If $t - 1 < 0$, we use 0 and mask.
 
-- **History stats** (`history_stats`)
-  - Derived from past Judge labels (or optionally from past Critic predictions), **up to but not including** $t$.
-  - For the POC minimal version:
-    - **EMA per value dimension** over a fixed horizon $H$ (e.g. last 7 entries):
-
-      $$
-      \text{ema}^{(j)}_{u,t} = \alpha \hat{a}^{(j)}_{u,t-1} + (1 - \alpha) \, \text{ema}^{(j)}_{u,t-1}
-      $$
-
-      with $\text{ema}^{(j)}_{u,0} = 0$ and $\alpha$ chosen (e.g. 0.3).
-
-    - Optionally (stretch): **rolling std dev** and **entry counts** in recent windows.
-
 - **User profile** $z_u$
   - For the POC, $z_u$ is a simple concatenation of:
     - Value weight vector $w_u \in \mathbb{R}^K$, normalised so $w_{u,k} \ge 0$ and $\sum_k w_{u,k} = 1$.
     - (Optional stretch) A small embedding of persona metadata (age range, culture, profession) if desired.
+
+> **Note (history_stats removed):** The original spec included a 10-dim EMA of
+> past alignment scores (`history_stats`). This was removed to eliminate
+> train/serve skew — the EMA relied on ground-truth Judge labels that are
+> unavailable at inference time. With `window_size >= 3`, the text window
+> already provides legitimate temporal context without distribution shift.
 
 ### 2.1 Minimal Feature Set for V1
 
@@ -89,13 +81,12 @@ To keep the first implementation focused, we can start with this **minimal featu
 
 - **Text window**: $N$ embeddings (current + last $N{-}1$).
 - **Time gaps**: $N{-}1$ scalars (time gaps between consecutive entries).
-- **History stats**: 1 EMA per value dimension (10 scalars total).
 - **User profile**: 10‑dim value weight vector \(w_u\).
 
 This yields a state dimension of:
 
 $$
- \text{dim}(s_{u,t}) = N \times d_e + (N{-}1) + 10 + 10
+ \text{dim}(s_{u,t}) = N \times d_e + (N{-}1) + 10
 $$
 
 where $N$ and $d_e$ are configured in `config/vif.yaml`.
@@ -105,7 +96,6 @@ where $N$ and $d_e$ are configured in `config/vif.yaml`.
 - For early entries where there is **no full window** (e.g. $t = 0$ or $t = 1$):
   - Use **zero embeddings** for missing past entries.
   - Use **0** for missing time gaps.
-  - Compute EMA with the usual recurrence (starting at 0), so early EMAs remain near 0.
 - Optionally, we can append binary flags such as:
   - `has_full_window` (1 if at least $N$ entries exist, else 0).
   - `num_prev_entries` (scalar count of previous entries).
@@ -195,26 +185,7 @@ Within each `persona_id` group:
 
 Store these time deltas as part of an intermediate structure.
 
-### 4.3 Compute History Statistics (EMA)
-
-Within each `persona_id` group, for each value dimension \(j\):
-
-1. Initialize $\text{ema}^{(j)}_{u,0} = 0$.
-2. For $t = 1, 2, \dots$:
-
-   $$
-   \text{ema}^{(j)}_{u,t} = \alpha \hat{a}^{(j)}_{u,t-1} + (1 - \alpha) \, \text{ema}^{(j)}_{u,t-1}
-   $$
-
-3. Optionally, keep separate EMAs for different horizons (e.g. short vs medium term) as multiple features.
-
-At time $t$, the history stats vector `history_stats_{u,t}` is:
-
-$$
-\text{history\_stats}_{u,t} = \big(\text{ema}^{(1)}_{u,t}, \dots, \text{ema}^{(K)}_{u,t}\big)
-$$
-
-### 4.4 Assemble the State Vector
+### 4.3 Assemble the State Vector
 
 For each `(persona_id, t_index)` where a Judge label exists:
 
@@ -224,21 +195,19 @@ For each `(persona_id, t_index)` where a Judge label exists:
      - Else: use zero vector.
 2. **Gather time gaps**:
    - Use $\Delta t_{u,t}, \ldots, \Delta t_{u,t-N+2}$ ($N{-}1$ gaps; use 0 where history is missing).
-3. **Fetch history stats** at $t$:
-   - Use $\text{history\_stats}_{u,t}$ computed in 4.3.
-4. **Build user profile vector** $z_u$:
+3. **Build user profile vector** $z_u$:
    - Map persona's `core_values` and `value_weights` (from `profile_json`) to a fixed 10‑dim vector aligned with the Schwartz ordering.
-5. **Concatenate in a fixed order**:
-   - `[e_t, ..., e_{t-N+1}, delta_t, ..., delta_{t-N+2}, history_stats, w_u]`.
+4. **Concatenate in a fixed order**:
+   - `[e_t, ..., e_{t-N+1}, delta_t, ..., delta_{t-N+2}, w_u]`.
 
 The result is a fixed‑length `state_vector` for this row.
 
-6. **Set the target**:
+5. **Set the target**:
    - `target_vector = alignment_vector` from `JudgeLabel` (cast to floats, preserving −1/0/+1 ordinal semantics).
 
-7. Append `(persona_id, t_index, state_vector, target_vector, meta)` to `StateTargetSample`.
+6. Append `(persona_id, t_index, state_vector, target_vector, meta)` to `StateTargetSample`.
 
-### 4.5 Train / Validation / Test Splits
+### 4.4 Train / Validation / Test Splits
 
 To avoid leakage and make evaluation realistic:
 
@@ -287,8 +256,7 @@ The implementation matches this spec exactly:
 | Spec Item | Spec Value | Implementation |
 |-----------|------------|----------------|
 | Window size | $N$ per config | `StateEncoder(window_size=N)` ✓ |
-| State dimension | $N \times d_e + (N{-}1) + 20$ | `state_encoder.state_dim` ✓ |
-| EMA α | per config | `StateEncoder(ema_alpha=...)` ✓ |
+| State dimension | $N \times d_e + (N{-}1) + 10$ | `state_encoder.state_dim` ✓ |
 | Text encoder | SBERT, $d_e$ per config | `create_encoder(config["encoder"])` ✓ |
 | Train/Val/Test split | 70/15/15 by persona | `split_by_persona()` ✓ |
 | Zero-padding for early entries | Yes | Handled in `build_state_vector()` ✓ |

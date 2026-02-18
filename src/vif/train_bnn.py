@@ -110,7 +110,6 @@ def train(config: dict, verbose: bool = True) -> dict:
     state_encoder = StateEncoder(
         text_encoder,
         window_size=config["state_encoder"]["window_size"],
-        ema_alpha=config["state_encoder"]["ema_alpha"],
     )
 
     if verbose:

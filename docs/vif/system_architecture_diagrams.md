@@ -144,12 +144,11 @@ flowchart TB
 | **When Used** | Real-time inference on user entries |
 | **Purpose** | Fast, uncertainty-aware alignment estimation |
 
-**State Vector Input** ($N \times d_e + (N{-}1) + 20$ dimensions):
+**State Vector Input** ($N \times d_e + (N{-}1) + 10$ dimensions):
 ```
 s_{u,t} = Concat[
     e_{t}, ..., e_{t-N+1},   # N entry embeddings (d_e each)
     Δt_{t}, ..., Δt_{t-N+2}, # N-1 time gap scalars
-    EMA[10],                  # Per-dimension alignment EMA (10)
     w_u[10]                   # User value weights (10)
 ]
 ```

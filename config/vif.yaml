@@ -21,8 +21,7 @@ encoder:
 # ---------------------------
 state_encoder:
   window_size: 1       # Current entry only (param budget too tight for window)
-  ema_alpha: 0.3       # Smoothing factor for history EMA (higher = more recent bias)
-  # Previous: window_size: 3 (state_dim=790, ratio=432x — severe overfitting)
+  # Previous: window_size: 3 (state_dim=780, ratio=432x — severe overfitting)
 
 # Model Architecture
 # ------------------
@@ -92,4 +91,3 @@ output:
 # Deeper history ablation:
 #   state_encoder:
 #     window_size: 5
-#     ema_alpha: 0.2

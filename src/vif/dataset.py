@@ -404,15 +404,6 @@ class VIFDataset(Dataset):
                 )
                 dates.append(None)
 
-        # Get alignment history (entries before current)
-        alignment_history = []
-        for hist_t in range(t_index):
-            hist_key = (persona_id, hist_t)
-            if hist_key in self.entry_lookup:
-                alignment_history.append(
-                    np.array(self.entry_lookup[hist_key]["alignment_vector"])
-                )
-
         # Get core values
         core_values = current_row["core_values"]
         if isinstance(core_values, str):
@@ -422,7 +413,6 @@ class VIFDataset(Dataset):
         state = self.state_encoder.build_state_vector_from_embeddings(
             embeddings=embeddings,
             dates=dates,
-            alignment_history=alignment_history,
             core_values=core_values,
         )
 

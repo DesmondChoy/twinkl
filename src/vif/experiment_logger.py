@@ -248,7 +248,6 @@ def _build_experiment_dict(
             },
             "state_encoder": {
                 "window_size": config.get("window_size", 1),
-                "ema_alpha": config.get("ema_alpha", 0.3),
             },
             "model": {
                 "hidden_dim": config.get("hidden_dim", 256),

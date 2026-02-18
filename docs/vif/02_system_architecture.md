@@ -53,16 +53,12 @@ $$
  \phi_{\text{text}}(T_{u,t-1}),\ \dots,\
  \phi_{\text{text}}(T_{u,t-N+1}),
  \Delta t_{u,t},\dots,\Delta t_{u,t-N+2},
- \text{history stats},
  z_u
 \Big]
 $$
 
-Where **history stats** may include simple per-dimension statistics derived from past Reward Model outputs (for a chosen lookback horizon):
-
-* Exponential moving averages (EMA) of per-dimension alignment.
-* Rolling standard deviations.
-* Counts of entries over recent time windows (e.g. last 7 days, last 30 days).
+This state intentionally excludes label-derived history statistics to avoid
+train/serve skew. Temporal context comes from the text window and time gaps.
 
 For early time steps, where fewer than $N$ entries exist, we can:
 
@@ -77,14 +73,14 @@ $$
  s_{u,t} = \text{Concat}\big[\\phi_{\text{text}}(T_{u,t}),\ z_u\big]
 $$
 
-with the sliding window and history stats added in a later iteration.
+with the sliding window and time-gap features added in a later iteration.
 
 #### 1.3.4 Multimodal Extension (Out of Scope for Capstone)
 
 Audio and physiological channels could be appended in future work:
 
 $$
- s_{u,t} = \text{Concat}\Big[\text{(text window)},\ \\phi_{\text{audio}}(A_{u,t}),\ \\phi_{\text{physio}}(H_{u,t}),\ z_u,\ \text{history stats}\Big]
+ s_{u,t} = \text{Concat}\Big[\text{(text window)},\ \Delta t,\ \\phi_{\text{audio}}(A_{u,t}),\ \\phi_{\text{physio}}(H_{u,t}),\ z_u\Big]
 $$
 
 ---
@@ -98,7 +94,7 @@ For a real user session:
 1. **Collect input**:
    * User submits a new journal entry.
 2. **Build sequential state**:
-   * Construct sliding window state $s_{u,t}$ from the current and $N-1$ previous entries, plus profile and history stats.
+   * Construct sliding window state $s_{u,t}$ from the current and $N-1$ previous entries, plus time gaps and profile vector.
 3. **Reward Model (optional at inference)**:
    * Option A: call LLM-as-Judge online for immediate alignment scores and explanations.
    * Option B: use an offline-trained distilled reward model to approximate judge scores.
