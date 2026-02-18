@@ -30,6 +30,7 @@ model:
   hidden_dim: 32       # Reduced from 256 to control overfitting (~10k params)
   dropout: 0.3         # Increased from 0.2 for stronger regularization
   output_dim: 10       # Number of Schwartz dimensions (fixed)
+  heteroscedastic: false  # When true, adds variance head for learned aleatoric uncertainty
 
 # Training Configuration
 # ----------------------

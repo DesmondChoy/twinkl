@@ -16,11 +16,15 @@ It pins down:
 
 ## 1. Frozen Text Encoder – Role and Usage
 
+> **Note:** Specific model names, embedding dimensions, window sizes, and
+> hyperparameters referenced below are illustrative. See `config/vif.yaml`
+> for current runtime values.
+
 ### 1.1 Encoder Definition
 
 For each entry text $T_{u,t}$:
 
-- We use a **pretrained sentence encoder** (e.g. SBERT, such as `all-MiniLM-L6-v2`) as
+- We use a **pretrained sentence encoder** (SBERT, configured in `config/vif.yaml`) as
 
   $$
   \phi_{\text{text}}(T_{u,t}) \in \mathbb{R}^{d_e}
@@ -58,12 +62,12 @@ Future work (beyond the capstone) may optionally explore **light fine‑tuning**
 
 ### 2.1 POC State Definition (Recap)
 
-From `05_state_and_data_pipeline.md`, for window size $N=3$, the state is:
+From `05_state_and_data_pipeline.md`, for window size $N$, the state is:
 
 $$
  s_{u,t} = \text{Concat}\Big[
-   \underbrace{\phi_{\text{text}}(T_{u,t}), \phi_{\text{text}}(T_{u,t-1}), \phi_{\text{text}}(T_{u,t-2})}_{\text{text window}},
-   \underbrace{\Delta t_{u,t}, \Delta t_{u,t-1}}_{\text{time gaps}},
+   \underbrace{\phi_{\text{text}}(T_{u,t}), \ldots, \phi_{\text{text}}(T_{u,t-N+1})}_{\text{text window}},
+   \underbrace{\Delta t_{u,t}, \ldots, \Delta t_{u,t-N+2}}_{\text{time gaps}},
    \underbrace{\text{history\_stats}_{u,t}}_{\text{per-dimension EMA of past alignment}},
    \underbrace{w_u}_{\text{user value profile}}
  \Big]

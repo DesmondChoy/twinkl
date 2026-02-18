@@ -48,9 +48,15 @@ def load_config(config_path: str | Path | None) -> dict:
         Configuration dict
     """
     default_config = {
-        "encoder": {"type": "sbert", "model_name": "all-MiniLM-L6-v2"},
-        "state_encoder": {"window_size": 3, "ema_alpha": 0.3},
-        "model": {"hidden_dim": 256, "dropout": 0.2, "output_dim": 10},
+        "encoder": {
+            "type": "sbert",
+            "model_name": "nomic-ai/nomic-embed-text-v1.5",
+            "trust_remote_code": True,
+            "truncate_dim": 256,
+            "text_prefix": "classification: ",
+        },
+        "state_encoder": {"window_size": 1, "ema_alpha": 0.3},
+        "model": {"hidden_dim": 32, "dropout": 0.3, "output_dim": 10},
         "training": {
             "epochs": 100,
             "batch_size": 16,

@@ -268,6 +268,19 @@ def evaluate_with_uncertainty(
     else:
         error_uncertainty_corr = stats.spearmanr(flat_unc, flat_err)[0]
 
+    # Classify calibration quality for downstream gating decisions
+    cal_corr = float(error_uncertainty_corr)
+    if np.isnan(cal_corr):
+        cal_quality = "unknown"
+    elif cal_corr >= 0.3:
+        cal_quality = "good"
+    elif cal_corr >= 0.1:
+        cal_quality = "marginal"
+    elif cal_corr >= 0.0:
+        cal_quality = "poor"
+    else:
+        cal_quality = "negative"
+
     results = {
         "predictions": predictions,
         "uncertainties": uncertainties,
@@ -279,8 +292,9 @@ def evaluate_with_uncertainty(
         "mse_per_dim": mse_per_dim,
         "mse_mean": float(np.mean(list(mse_per_dim.values()))),
         "calibration": {
-            "error_uncertainty_correlation": float(error_uncertainty_corr),
+            "error_uncertainty_correlation": cal_corr,
             "mean_uncertainty": float(uncertainties.mean()),
+            "quality": cal_quality,
         },
     }
 
@@ -426,5 +440,14 @@ def format_results_table(results: dict) -> str:
         lines.append("\nCalibration:")
         lines.append(f"  Error-uncertainty correlation: {cal_corr_str}")
         lines.append(f"  Mean uncertainty: {results['calibration']['mean_uncertainty']:.4f}")
+        if "quality" in results["calibration"]:
+            quality = results["calibration"]["quality"]
+            if cal_corr < 0 if not np.isnan(cal_corr) else False:
+                lines.append(
+                    "  WARNING: Negative calibration -- uncertainty "
+                    "ANTI-correlates with error"
+                )
+            else:
+                lines.append(f"  Quality: {quality}")
 
     return "\n".join(lines)

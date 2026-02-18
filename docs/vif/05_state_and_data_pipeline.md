@@ -25,16 +25,20 @@ For the capstone POC, we commit to the following **concrete scope**:
   - The Critic learns to emulate the Judge's per‑dimension alignment vector $\hat{\vec{a}}_{u,t}$.
   - Longer‑term trends (weekly averages, crash/rut) are derived via **deterministic smoothing and rules**, not via discounted returns.
 
-- **Window size**: $N = 3$ recent entries per user.
-  - At each time step $t$, the state includes the current entry and up to the last **two** previous entries.
+- **Window size**: $N$ recent entries per user (see `config/vif.yaml` for current value).
+  - At each time step $t$, the state includes the current entry and up to the last $N{-}1$ previous entries.
 
 - **Values**: $K = 10$ Schwartz dimensions.
   - Each Judge alignment component $\hat{a}^{(j)}_{u,t} \in \{-1, 0, +1\}$, for $j = 1, \dots, 10$.
 
 - **Text encoder**: frozen sentence encoder (e.g. SBERT).
-  - $\phi_{\text{text}}(T_{u,t}) \in \mathbb{R}^{d_e}$, where $d_e$ is the embedding dimension (e.g. 384 or 768 depending on the chosen model).
+  - $\phi_{\text{text}}(T_{u,t}) \in \mathbb{R}^{d_e}$, where $d_e$ is the effective embedding dimension after any truncation (see `config/vif.yaml`).
 
 These choices keep the POC **implementable within a semester** while still honouring the trajectory‑aware, vector‑valued and uncertainty‑aware design.
+
+> **Note:** Specific model names, embedding dimensions, window sizes, and
+> hyperparameters referenced below are illustrative. See `config/vif.yaml`
+> for current runtime values.
 
 ---
 
@@ -83,18 +87,18 @@ Where:
 
 To keep the first implementation focused, we can start with this **minimal feature set**:
 
-- **Text window**: 3 embeddings (current + last 2).
-- **Time gaps**: 2 scalars (time since last entry, time between previous two entries).
+- **Text window**: $N$ embeddings (current + last $N{-}1$).
+- **Time gaps**: $N{-}1$ scalars (time gaps between consecutive entries).
 - **History stats**: 1 EMA per value dimension (10 scalars total).
 - **User profile**: 10‑dim value weight vector \(w_u\).
 
-This yields a state dimension of approximately:
+This yields a state dimension of:
 
 $$
- \text{dim}(s_{u,t}) \approx 3 d_e + 2 + 10 + 10 = 3 d_e + 22
+ \text{dim}(s_{u,t}) = N \times d_e + (N{-}1) + 10 + 10
 $$
 
-For example, with $d_e = 384$, $\text{dim}(s_{u,t}) \approx 3 \times 384 + 22 = 1{,}174$.
+where $N$ and $d_e$ are configured in `config/vif.yaml`.
 
 ### 2.2 Handling Early Timesteps and Missing History
 
@@ -103,7 +107,7 @@ For example, with $d_e = 384$, $\text{dim}(s_{u,t}) \approx 3 \times 384 + 22 = 
   - Use **0** for missing time gaps.
   - Compute EMA with the usual recurrence (starting at 0), so early EMAs remain near 0.
 - Optionally, we can append binary flags such as:
-  - `has_full_window` (1 if at least 3 entries exist, else 0).
+  - `has_full_window` (1 if at least $N$ entries exist, else 0).
   - `num_prev_entries` (scalar count of previous entries).
 
 The Critic can learn to treat early states as lower‑confidence or less informative, and the downstream uncertainty mechanism (MC Dropout + OOD logic) further protects against overconfident early predictions.
@@ -215,17 +219,17 @@ $$
 For each `(persona_id, t_index)` where a Judge label exists:
 
 1. **Gather text embeddings** for the window:
-   - For $k = 0, 1, 2$:
+   - For $k = 0, 1, \ldots, N{-}1$:
      - If $t - k \ge 0$: use $\mathbf{e}_{u,t-k}$.
      - Else: use zero vector.
 2. **Gather time gaps**:
-   - Use $\Delta t_{u,t}$ and $\Delta t_{u,t-1}$ (if $t-1 < 0$, use 0).
+   - Use $\Delta t_{u,t}, \ldots, \Delta t_{u,t-N+2}$ ($N{-}1$ gaps; use 0 where history is missing).
 3. **Fetch history stats** at $t$:
    - Use $\text{history\_stats}_{u,t}$ computed in 4.3.
 4. **Build user profile vector** $z_u$:
-   - Map persona’s `core_values` and `value_weights` (from `profile_json`) to a fixed 10‑dim vector aligned with the Schwartz ordering.
+   - Map persona's `core_values` and `value_weights` (from `profile_json`) to a fixed 10‑dim vector aligned with the Schwartz ordering.
 5. **Concatenate in a fixed order**:
-   - `[e_t, e_{t-1}, e_{t-2}, delta_t, delta_t_minus_1, history_stats, w_u]`.
+   - `[e_t, ..., e_{t-N+1}, delta_t, ..., delta_{t-N+2}, history_stats, w_u]`.
 
 The result is a fixed‑length `state_vector` for this row.
 
@@ -282,10 +286,10 @@ The implementation matches this spec exactly:
 
 | Spec Item | Spec Value | Implementation |
 |-----------|------------|----------------|
-| Window size | N = 3 | `StateEncoder(window_size=3)` ✓ |
-| State dimension | 3×d_e + 22 = 1,174 | `state_encoder.state_dim` returns 1,174 ✓ |
-| EMA α | 0.3 | `StateEncoder(ema_alpha=0.3)` ✓ |
-| Text encoder | SBERT, d_e = 384 | `SBERTEncoder("all-MiniLM-L6-v2")` ✓ |
+| Window size | $N$ per config | `StateEncoder(window_size=N)` ✓ |
+| State dimension | $N \times d_e + (N{-}1) + 20$ | `state_encoder.state_dim` ✓ |
+| EMA α | per config | `StateEncoder(ema_alpha=...)` ✓ |
+| Text encoder | SBERT, $d_e$ per config | `create_encoder(config["encoder"])` ✓ |
 | Train/Val/Test split | 70/15/15 by persona | `split_by_persona()` ✓ |
 | Zero-padding for early entries | Yes | Handled in `build_state_vector()` ✓ |
 

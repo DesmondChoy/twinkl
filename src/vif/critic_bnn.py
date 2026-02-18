@@ -24,7 +24,7 @@ Training requires adding KL divergence to the loss:
 Usage:
     from src.vif.critic_bnn import CriticBNN, get_kl_loss
 
-    model = CriticBNN(input_dim=1174, hidden_dim=256)
+    model = CriticBNN(input_dim=state_encoder.state_dim)
 
     # Training (include KL in loss)
     pred = model(batch_x)
@@ -77,7 +77,7 @@ class CriticBNN(nn.Module):
     Prior: N(0, 1) on weights. Posterior: learned mean and log-scale (reparameterized).
 
     Example:
-        model = CriticBNN(input_dim=1174)
+        model = CriticBNN(input_dim=state_encoder.state_dim)
 
         # Training
         pred = model(batch)

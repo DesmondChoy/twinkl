@@ -177,6 +177,8 @@ def _loss_shorthand(model_name: str, config: dict) -> str:
         if loss_fn == "weighted_mse":
             scale = config.get("weighted_mse_scale", 5.0)
             return f"weighted_mse_s{scale}"
+        if loss_fn == "heteroscedastic_mse":
+            return "hetero_mse"
         return "mse"
     return mapping.get(model_name, model_name.lower())
 

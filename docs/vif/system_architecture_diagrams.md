@@ -28,7 +28,7 @@ flowchart TB
 
     generator -->|"Personas + Entries"| encoder1
     generator -->|"Entry Text"| judge
-    encoder1 -->|"Embeddings (384-dim)"| stateBuilder
+    encoder1 -->|"Embeddings (d_e-dim)"| stateBuilder
     judge -->|"Alignment Labels (-1,0,+1)"| stateBuilder
     stateBuilder -->|"State Vectors"| dataset
     dataset -->|"Training Data"| criticTrain
@@ -45,22 +45,26 @@ flowchart TB
 
 ---
 
+> **Note:** Specific model names, embedding dimensions, window sizes, and
+> hyperparameters referenced below are illustrative. See `config/vif.yaml`
+> for current runtime values.
+
 ## 📋 Detailed Model Breakdown
 
 ### **Step 1: Text Encoder (Frozen)**
 | Attribute | Value |
 |-----------|-------|
-| **Model** | Sentence-BERT (e.g., `all-MiniLM-L6-v2`) |
+| **Model** | Frozen SBERT (see `config/vif.yaml`) |
 | **Type** | Pretrained transformer, **frozen** (no fine-tuning) |
 | **Input** | Raw journal text $T_{u,t}$ |
-| **Output** | Fixed-length embedding $\mathbf{e}_{u,t} \in \mathbb{R}^{d_e}$ (e.g., 384-dim) |
+| **Output** | Fixed-length embedding $\mathbf{e}_{u,t} \in \mathbb{R}^{d_e}$ ($d_e$-dim, per config) |
 | **When Used** | Offline preprocessing of all entries |
 | **Purpose** | Convert text to dense vectors for the Critic |
 
 ```
 "Skipped gym again, feeling guilty about work deadlines..."
                     ↓
-              [0.23, -0.41, 0.87, ..., 0.12]  (384 floats)
+              [0.23, -0.41, 0.87, ..., 0.12]  (d_e floats)
 ```
 
 ---
@@ -140,16 +144,13 @@ flowchart TB
 | **When Used** | Real-time inference on user entries |
 | **Purpose** | Fast, uncertainty-aware alignment estimation |
 
-**State Vector Input** ($\approx$1,174 dimensions for POC):
+**State Vector Input** ($N \times d_e + (N{-}1) + 20$ dimensions):
 ```
 s_{u,t} = Concat[
-    e_{t},      # Current entry embedding (384)
-    e_{t-1},    # Previous entry embedding (384)  
-    e_{t-2},    # Entry before that (384)
-    Δt_{t},     # Days since last entry (1)
-    Δt_{t-1},   # Days between t-1 and t-2 (1)
-    EMA[10],    # Per-dimension alignment EMA (10)
-    w_u[10]     # User value weights (10)
+    e_{t}, ..., e_{t-N+1},   # N entry embeddings (d_e each)
+    Δt_{t}, ..., Δt_{t-N+2}, # N-1 time gap scalars
+    EMA[10],                  # Per-dimension alignment EMA (10)
+    w_u[10]                   # User value weights (10)
 ]
 ```
 
@@ -167,10 +168,11 @@ predictions = [model(s_ut) for _ in range(50)]
 
 **Architecture:**
 ```
-Input (1174) → Dense(512) + ReLU + Dropout(0.2)
-            → Dense(256) + ReLU + Dropout(0.2)
-            → Dense(10) Linear output
+Input(state_dim) → Dense(H) + GELU + LayerNorm + Dropout(p)
+                 → Dense(H) + GELU + LayerNorm + Dropout(p)
+                 → Dense(10) + Tanh
 ```
+Where `state_dim`, `H` (hidden_dim), and `p` (dropout) are set in `config/vif.yaml`.
 
 ---
 
@@ -227,7 +229,7 @@ Coach output: "You've mentioned wanting to be there for your
 
 | Step | Model | Training | Input | Output |
 |------|-------|----------|-------|--------|
-| **1. Encode** | SBERT | Pretrained (frozen) | Text | Embedding ∈ ℝ³⁸⁴ |
+| **1. Encode** | SBERT | Pretrained (frozen) | Text | Embedding ∈ ℝᵈᵉ |
 | **2. Generate** | GPT-5-mini | N/A (inference) | Config | Personas + Entries |
 | **3. Judge** | GPT-4/5 | N/A (inference) | Text + Profile | {-1,0,+1}¹⁰ labels |
 | **4. Critic** | MLP | **Trained** (supervised) | State vector | μ, σ ∈ ℝ¹⁰ |

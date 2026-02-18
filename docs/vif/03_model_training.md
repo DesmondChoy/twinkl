@@ -206,13 +206,17 @@ The VIF Critic training pipeline is implemented in `src/vif/`. Key modules:
 | `src/vif/eval.py` | Evaluation metrics (MSE, Spearman, accuracy, calibration) |
 | `src/vif/train.py` | CLI training script with config overrides |
 
+> **Note:** Specific model names, embedding dimensions, window sizes, and
+> hyperparameters referenced below are illustrative. See `config/vif.yaml`
+> for current runtime values.
+
 ### 4.1 Implemented Architecture
 
 The POC implements **Option A (Immediate Alignment)** with these concrete choices:
 
-- **Text encoder**: SBERT `all-MiniLM-L6-v2` (384-dim embeddings, swappable via config)
-- **State dimension**: 1,174 (3×384 + 2 time gaps + 10 history EMA + 10 profile weights)
-- **Critic architecture**: 2-layer MLP with LayerNorm + GELU + Dropout (370K parameters)
+- **Text encoder**: Frozen SBERT encoder (model and $d_e$ configured in `config/vif.yaml`)
+- **State dimension**: $N \times d_e + (N{-}1) + 10 + 10$ (see config for current $N$ and $d_e$)
+- **Critic architecture**: 2-layer MLP with LayerNorm + GELU + Dropout (param count depends on `hidden_dim`)
 - **MC Dropout**: 50 forward passes for uncertainty estimation
 - **Loss**: MSE on 10-dim alignment vector
 

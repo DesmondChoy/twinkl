@@ -39,9 +39,13 @@ A design that uses only the current entry $T_{u,t}$ and static profile $z_u$ imp
 
 To capture trajectories without complex recurrent architectures in the critic, we adopt a **sliding window** of recent entries.
 
+> **Note:** Specific model names, embedding dimensions, window sizes, and
+> hyperparameters referenced below are illustrative. See `config/vif.yaml`
+> for current runtime values.
+
 #### 1.3.2 Sliding Window State Definition (Core POC Option)
 
-For a window size $N$ (e.g. $N = 3$ for the POC):
+For a window size $N$ (configured in `config/vif.yaml`):
 
 $$
  s_{u,t} = \text{Concat}\Big[

@@ -4,26 +4,25 @@ This module constructs the full state vector from journal entries,
 combining text embeddings with temporal features and persona context.
 
 State Vector Components (per VIF_05 spec):
-- text_window: 3 × d_e (current + 2 previous entry embeddings)
-- time_gaps: 2 (days since previous entries)
+- text_window: N × d_e (current + N-1 previous entry embeddings)
+- time_gaps: N-1 (days since previous entries)
 - history_stats: 10 (EMA of alignment scores per dimension)
 - user_profile: 10 (normalized weights from Core Values)
 
-Total dimension: 3 × d_e + 2 + 10 + 10
+Total dimension: N × d_e + (N-1) + 10 + 10  (see config/vif.yaml)
 
 Usage:
-    from src.vif import StateEncoder, SBERTEncoder
+    from src.vif import StateEncoder, create_encoder
 
-    encoder = SBERTEncoder("all-MiniLM-L6-v2")
-    state_encoder = StateEncoder(encoder)
+    encoder = create_encoder(config["encoder"])
+    state_encoder = StateEncoder(encoder, **config["state_encoder"])
 
     # Build state for a single entry
     state = state_encoder.build_state_vector(
-        current_text="Today I helped a colleague...",
-        previous_texts=["Yesterday I worked late...", "Two days ago..."],
-        time_gaps=[1.0, 2.0],
-        alignment_history=alignment_scores_array,
-        core_values=["Benevolence", "Security"]
+        texts=["Today I helped a colleague...", "Yesterday I worked late..."],
+        dates=["2024-01-15", "2024-01-14"],
+        alignment_history=[prior_alignment_array],
+        core_values=["Benevolence", "Security"],
     )
 """
 
@@ -64,11 +63,11 @@ class StateEncoder:
     This encoder supports pluggable text encoders for ablation studies.
 
     Example:
-        encoder = SBERTEncoder("all-MiniLM-L6-v2")
-        state_encoder = StateEncoder(encoder, window_size=3, ema_alpha=0.3)
+        encoder = create_encoder(config["encoder"])
+        state_encoder = StateEncoder(encoder, **config["state_encoder"])
 
         # Get state dimension (for MLP input size)
-        print(f"State dim: {state_encoder.state_dim}")  # 1174 for MiniLM
+        print(f"State dim: {state_encoder.state_dim}")  # depends on encoder and window_size
     """
 
     def __init__(

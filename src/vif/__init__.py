@@ -10,8 +10,8 @@ Usage:
 
 Example:
     # Create components
-    encoder = SBERTEncoder("all-MiniLM-L6-v2")
-    state_encoder = StateEncoder(encoder)
+    encoder = create_encoder(config["encoder"])
+    state_encoder = StateEncoder(encoder, **config["state_encoder"])
 
     # Load data
     dataset = VIFDataset(state_encoder, split="train")

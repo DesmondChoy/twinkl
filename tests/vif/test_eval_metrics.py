@@ -700,3 +700,100 @@ class TestEvaluateModelEdgeCases(_ConstantInputMixin):
             results = evaluate_model(model, dl, include_ordinal_metrics=True)
 
         assert np.isnan(results["qwk_mean"])
+
+
+# ── Calibration guard tests ──────────────────────────────────────────────────
+
+
+class TestCalibrationGuard:
+    """Tests for calibration quality field and warning text."""
+
+    def _base_results_with_calibration(self, cal_corr: float) -> dict:
+        """Build a minimal results dict with specified calibration correlation."""
+        zero_dims = {d: 0.0 for d in SCHWARTZ_VALUE_ORDER}
+        nan_spearman = {d: float("nan") for d in SCHWARTZ_VALUE_ORDER}
+
+        # Determine quality label
+        if np.isnan(cal_corr):
+            quality = "unknown"
+        elif cal_corr >= 0.3:
+            quality = "good"
+        elif cal_corr >= 0.1:
+            quality = "marginal"
+        elif cal_corr >= 0.0:
+            quality = "poor"
+        else:
+            quality = "negative"
+
+        return {
+            "mse_per_dim": zero_dims,
+            "mse_mean": 0.0,
+            "spearman_per_dim": nan_spearman,
+            "spearman_mean": float("nan"),
+            "accuracy_per_dim": {d: 1.0 for d in SCHWARTZ_VALUE_ORDER},
+            "accuracy_mean": 1.0,
+            "calibration": {
+                "error_uncertainty_correlation": cal_corr,
+                "mean_uncertainty": 0.1,
+                "quality": quality,
+            },
+        }
+
+    def test_negative_calibration_shows_warning(self):
+        """format_results_table with cal < 0 should contain WARNING."""
+        from src.vif.eval import format_results_table
+
+        results = self._base_results_with_calibration(-0.2)
+        table = format_results_table(results)
+        assert "WARNING" in table
+        assert "ANTI-correlates" in table
+
+    def test_calibration_quality_good(self):
+        """Calibration >= 0.3 should show 'good' quality label."""
+        from src.vif.eval import format_results_table
+
+        results = self._base_results_with_calibration(0.3)
+        table = format_results_table(results)
+        assert "Quality: good" in table
+        assert "WARNING" not in table
+
+    def test_calibration_quality_marginal(self):
+        """Calibration >= 0.1 but < 0.3 should show 'marginal' quality label."""
+        from src.vif.eval import format_results_table
+
+        results = self._base_results_with_calibration(0.1)
+        table = format_results_table(results)
+        assert "Quality: marginal" in table
+
+    def test_calibration_quality_poor(self):
+        """Calibration >= 0.0 but < 0.1 should show 'poor' quality label."""
+        from src.vif.eval import format_results_table
+
+        results = self._base_results_with_calibration(0.0)
+        table = format_results_table(results)
+        assert "Quality: poor" in table
+
+    def test_calibration_quality_negative(self):
+        """Calibration < 0 should show WARNING, not quality label."""
+        from src.vif.eval import format_results_table
+
+        results = self._base_results_with_calibration(-0.1)
+        table = format_results_table(results)
+        assert "WARNING" in table
+
+    def test_evaluate_with_uncertainty_includes_quality(self):
+        """evaluate_with_uncertainty should include calibration.quality field."""
+        from src.vif.eval import evaluate_with_uncertainty
+
+        fixed = torch.zeros(10)
+        model = MockCriticMLP(fixed)
+        targets = np.zeros((8, 10))
+        dl = _make_dataloader(
+            np.random.default_rng(0).standard_normal((8, 20)), targets
+        )
+
+        results = evaluate_with_uncertainty(model, dl)
+        assert "quality" in results["calibration"]
+        assert results["calibration"]["quality"] in [
+            "good", "marginal", "poor", "negative", "unknown",
+        ]
