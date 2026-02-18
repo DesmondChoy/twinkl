@@ -275,6 +275,8 @@ def _build_experiment_dict(
             "n_train": n_train,
             "n_val": n_val,
             "n_test": n_test,
+            "train_ratio": config.get("train_ratio", 0.70),
+            "val_ratio": config.get("val_ratio", 0.15),
             "split_seed": config.get("seed", 42),
             "pct_truncated": _round_val(pct_truncated),
             "state_dim": state_dim,

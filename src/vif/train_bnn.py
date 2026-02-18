@@ -124,9 +124,16 @@ def train(config: dict, verbose: bool = True) -> dict:
         seed=config["data"]["seed"],
         labels_path=config["data"]["labels_path"],
         wrangled_dir=config["data"]["wrangled_dir"],
+        train_ratio=config["data"]["train_ratio"],
+        val_ratio=config["data"]["val_ratio"],
     )
 
     if verbose:
+        print(
+            f"Split ratios: train={config['data']['train_ratio']:.0%}, "
+            f"val={config['data']['val_ratio']:.0%}, "
+            f"test={1 - config['data']['train_ratio'] - config['data']['val_ratio']:.0%}"
+        )
         print(f"Train: {len(train_loader.dataset)} samples")
         print(f"Val: {len(val_loader.dataset)} samples")
         print(f"Test: {len(test_loader.dataset)} samples")

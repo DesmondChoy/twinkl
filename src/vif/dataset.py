@@ -379,6 +379,8 @@ def create_dataloaders(
     seed: int = 42,
     labels_path: str | Path = "logs/judge_labels/judge_labels.parquet",
     wrangled_dir: str | Path = "logs/wrangled",
+    train_ratio: float = 0.70,
+    val_ratio: float = 0.15,
 ) -> tuple[torch.utils.data.DataLoader, torch.utils.data.DataLoader, torch.utils.data.DataLoader]:
     """Create train/val/test DataLoaders in one call.
 
@@ -391,6 +393,8 @@ def create_dataloaders(
         seed: Random seed for splitting
         labels_path: Path to labels parquet
         wrangled_dir: Path to wrangled markdown files
+        train_ratio: Fraction of personas for training (default 0.70)
+        val_ratio: Fraction of personas for validation (default 0.15)
 
     Returns:
         Tuple of (train_loader, val_loader, test_loader)
@@ -400,7 +404,7 @@ def create_dataloaders(
 
     # Split by persona
     train_df, val_df, test_df = split_by_persona(
-        labels_df, entries_df, seed=seed
+        labels_df, entries_df, train_ratio=train_ratio, val_ratio=val_ratio, seed=seed
     )
 
     # Create datasets
