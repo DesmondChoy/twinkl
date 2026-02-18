@@ -12,7 +12,7 @@ The VIF (Value Identity Function) maps journal entries to a 10-dimensional Schwa
 
 ### What's Implemented
 - Evaluation specification complete (this document)
-- Judge training data ready (134 labeled entries in [`logs/judge_labels/judge_labels.parquet`](../../logs/judge_labels/judge_labels.parquet))
+- Judge training data ready (904 labeled entries in [`logs/judge_labels/judge_labels.parquet`](../../logs/judge_labels/judge_labels.parquet))
 - Ground truth value orderings embedded in persona bios
 
 ### What's Missing

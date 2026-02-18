@@ -32,28 +32,28 @@ See `docs/pipeline/pipeline_specs.md` for implementation details.
 
 | Metric | Value |
 |--------|-------|
-| Personas | 100 |
-| Journal entries | 729 |
-| Avg entries/persona | 7.1 |
-| Entries with nudges | 65.8% |
+| Personas | 120 |
+| Journal entries | 904 |
+| Avg entries/persona | 7.5 |
+| Entries with nudges | 66.7% |
 
 **Demographics:** 6 cultures, 9 professions, 5 age brackets.
 
 **Schwartz Value Distribution** (personas can have 1-2 values):
 | Value | Personas | % |
 |-------|----------|---|
-| Hedonism | 19 | 19% |
-| Conformity | 18 | 18% |
-| Stimulation | 17 | 17% |
-| Security | 16 | 16% |
-| Tradition | 15 | 15% |
-| Universalism | 15 | 15% |
-| Benevolence | 14 | 14% |
-| Self-Direction | 14 | 14% |
-| Power | 14 | 14% |
-| Achievement | 13 | 13% |
+| Universalism | 34 | 28% |
+| Hedonism | 19 | 16% |
+| Conformity | 17 | 14% |
+| Stimulation | 17 | 14% |
+| Security | 15 | 12% |
+| Tradition | 15 | 12% |
+| Benevolence | 14 | 12% |
+| Self-Direction | 14 | 12% |
+| Power | 14 | 12% |
+| Achievement | 13 | 11% |
 
-**Nudge types:** Elaboration (44%), Tension Surfacing (41%), Clarification (14%)
+**Nudge types:** Elaboration (43%), Tension Surfacing (41%), Clarification (15%)
 
 See [`docs/pipeline/data_schema.md`](docs/pipeline/data_schema.md) for parquet schemas and query examples.
 

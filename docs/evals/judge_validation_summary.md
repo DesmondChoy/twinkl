@@ -107,13 +107,13 @@ The registry already contains sufficient personas for all dimensions:
 | Benevolence | 14 | 1 | 13 |
 | Universalism | 15 | 1 | 14 |
 
-**Total:** 100 personas in registry, 153 value assignments (mean 15.3 per value).
+**Total:** 120 personas in registry, 172 value assignments (mean 17.2 per value).
 
 No additional synthetic data generation required.
 
 ### 2. Run Judge Labeling ✅ COMPLETED
 
-All 100 personas have been labeled by the Judge.
+All 120 personas have been labeled by the Judge.
 
 ### 3. Conduct Additional Human Annotation Round 🔲 IN PROGRESS
 
@@ -193,4 +193,4 @@ generate_agreement_report()
 - **Human Annotators:** 3 (des, jl, km)
 - **Entries Annotated (Current):** 46 (from 10 personas)
 - **Entries to Annotate (Next Round):** ~63 (from 9 personas)
-- **Total Personas in Registry:** 100
+- **Total Personas in Registry:** 120

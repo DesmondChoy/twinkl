@@ -6,14 +6,14 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 
 ## Implementation Status
 
-*Last updated: 2025-02-09*
+*Last updated: 2026-02-18*
 
 | Feature | Status | Details |
 |---------|--------|---------|
-| **Synthetic Data Pipeline** | ✅ Complete | 100 personas (729 entries) generated via Claude Code parallel subagents; YAML prompt templates with Jinja2; targeted value generation for balanced Schwartz dimension coverage |
-| **Judge Labeling (VIF)** | ✅ Complete | 729 entries labeled across 100 personas; two-phase pipeline (Python wrangling + parallel subagents); consolidated to `judge_labels.parquet` with rationales |
+| **Synthetic Data Pipeline** | ✅ Complete | 120 personas (904 entries) generated via Claude Code parallel subagents; YAML prompt templates with Jinja2; targeted value generation for balanced Schwartz dimension coverage |
+| **Judge Labeling (VIF)** | ✅ Complete | 904 entries labeled across 120 personas; two-phase pipeline (Python wrangling + parallel subagents); consolidated to `judge_labels.parquet` with rationales |
 | **VIF Critic Training** | ✅ Complete | Multiple architectures explored: MLP with MC Dropout, BNN (Bayesian Neural Network), TCN (Temporal Convolutional Network); SBERT text encoder (384-dim); persona-level train/val/test splits; `src/vif/` module with CLI training scripts |
-| **Human Annotation Tool** | ✅ Complete | ~4,200 LOC Shiny app; 56 annotations across 3 annotators; Cohen's κ / Fleiss' κ metrics; modular components with analysis view; annotation ordering for persona prioritization |
+| **Human Annotation Tool** | ✅ Complete | ~4,200 LOC Shiny app; 46 annotations across 3 annotators; Cohen's κ / Fleiss' κ metrics; modular components with analysis view; annotation ordering for persona prioritization |
 | **Conversational Nudging** | 🧪 Experimental | 3-category LLM classification (clarification/elaboration/tension-surfacing); pending validation that nudging improves VIF signal quality |
 | **Weekly Alignment Coach** | ⚠️ Partial | Entry processing ready; digest generation not implemented |
 | **Onboarding (BWS Values Assessment)** | 📋 Specified | 6-set BWS flow over 10 Schwartz dimensions; PVQ21-adapted card phrases; mid-flow + end-of-flow reflective mirrors; 6 structured goal categories mapping to Coach monitoring priorities; scoring with confidence estimation and user refinement support; [full spec](onboarding/onboarding_spec.md) |
@@ -24,10 +24,10 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 **Data Pipeline Progress:**
 ```
 logs/
-├── synthetic_data/     # 100 persona markdown files
-├── wrangled/           # 100 cleaned files (generation metadata stripped)
-├── judge_labels/       # 100 JSON label files + consolidated parquet
-├── annotations/        # 3 annotator parquet files (56 entries)
+├── synthetic_data/     # 120 persona markdown files
+├── wrangled/           # 120 cleaned files (generation metadata stripped)
+├── judge_labels/       # 120 JSON label files + consolidated parquet
+├── annotations/        # 3 annotator parquet files (46 entries each)
 └── registry/           # personas.parquet (tracks pipeline stages)
 
 models/
@@ -138,7 +138,7 @@ This onboarding directly anchors the capstone submodules: the latent dimensions 
    * **State representation:** sliding window of N recent entry embeddings + time deltas + history stats (EMA of per-dimension alignment, rolling std dev, entry counts).
 5. Implement **[Reward Modeling (LLM-as-Judge)](vif/03_model_training.md):** For each entry, LLM outputs per-dimension alignment scores (Likert scale normalized to [-1,1]) with rationales and optional confidence scores. Use synthetic personas for initial training/validation.
 
-   > **Status:** Steps 1-5 complete (100 personas, 729 labeled entries). Human annotation tool operational with 56 annotations for inter-rater agreement. Multiple Critic architectures evaluated (MLP, BNN, TCN). See [Implementation Status](#implementation-status) for current progress. Step 6 (lightweight classifiers) deferred pending Critic training results.
+   > **Status:** Steps 1-5 complete (120 personas, 904 labeled entries). Human annotation tool operational with 46 annotations for inter-rater agreement. Multiple Critic architectures evaluated (MLP, BNN, TCN). See [Implementation Status](#implementation-status) for current progress. Step 6 (lightweight classifiers) deferred pending Critic training results.
 
 6. Tooling: start with API LLM for tagging + reflection, add lightweight classifiers later if needed; keep reasoning layer explainable for XRAI.
 7. Evaluation plan: combine Likert feedback on "felt accurate?" with inter-rater agreement on value tags and stability metrics for the profile.
