@@ -204,6 +204,28 @@ class TestGenerateNudgeTextIntegration:
         assert mock_llm.call_count == 2
 
     @pytest.mark.asyncio
+    async def test_non_string_nudge_text_retries_until_success(self, nudge_config):
+        mock_llm = AsyncMock(
+            side_effect=[
+                json.dumps({"nudge_text": 123}),
+                json.dumps({"nudge_text": "What felt hardest today?"}),
+            ]
+        )
+
+        text, _ = await generate_nudge_text(
+            "Entry.",
+            "2024-01-15",
+            "clarification",
+            None,
+            nudge_config,
+            mock_llm,
+            max_attempts=2,
+        )
+
+        assert text == "What felt hardest today?"
+        assert mock_llm.call_count == 2
+
+    @pytest.mark.asyncio
     async def test_previous_entries_passed_to_prompt(self, nudge_config):
         """Previous entries should appear in the rendered prompt."""
         captured_prompt = None
@@ -258,5 +280,37 @@ class TestGenerateNudgeResponseIntegration:
 
         assert response is not None
         assert response.content == "That actually makes sense."
+        assert response_mode == "Answering directly"
+        assert mock_llm.call_count == 2
+
+    @pytest.mark.asyncio
+    async def test_non_string_content_retries_until_success(self):
+        config = {
+            "nudge": {
+                "response_modes": [
+                    {"mode": "Answering directly", "weight": 1.0},
+                ]
+            }
+        }
+        mock_llm = AsyncMock(
+            side_effect=[json.dumps({"content": 42}), json.dumps({"content": "I can share more."})]
+        )
+
+        response, _, response_mode = await generate_nudge_response(
+            persona_name="Alex",
+            persona_age="28-35",
+            persona_profession="Designer",
+            persona_culture="Singaporean",
+            persona_bio="Thoughtful and often reflective.",
+            entry_content="I had a rough day.",
+            entry_date="2024-01-15",
+            nudge_text="What part felt roughest?",
+            config=config,
+            llm_complete=mock_llm,
+            max_attempts=2,
+        )
+
+        assert response is not None
+        assert response.content == "I can share more."
         assert response_mode == "Answering directly"
         assert mock_llm.call_count == 2

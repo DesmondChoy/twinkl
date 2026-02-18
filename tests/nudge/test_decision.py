@@ -122,6 +122,7 @@ class TestNormalizeCategory:
         assert _normalize_category("invalid") is None
         assert _normalize_category("") is None
         assert _normalize_category("grounding") is None
+        assert _normalize_category(None) is None
 
 
 # ---------------------------------------------------------------------------
@@ -193,6 +194,33 @@ class TestDecideNudge:
 
         assert should is False
         assert category is None
+        assert reason is None
+
+    @pytest.mark.asyncio
+    async def test_non_string_decision_returns_no_nudge(self):
+        mock_llm = AsyncMock(return_value=json.dumps({"decision": None, "reason": "x"}))
+
+        should, category, reason = await decide_nudge(
+            "Entry with invalid decision type.", "2024-01-15", None, mock_llm
+        )
+
+        assert should is False
+        assert category is None
+        assert reason is None
+
+    @pytest.mark.asyncio
+    async def test_non_string_reason_is_normalized_to_none(self):
+        mock_llm = AsyncMock(return_value=json.dumps({
+            "decision": "clarification",
+            "reason": 123,
+        }))
+
+        should, category, reason = await decide_nudge(
+            "Brief entry.", "2024-01-15", None, mock_llm
+        )
+
+        assert should is True
+        assert category == "clarification"
         assert reason is None
 
     @pytest.mark.asyncio

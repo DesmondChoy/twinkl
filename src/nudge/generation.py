@@ -117,7 +117,11 @@ async def generate_nudge_text(
         if data is None:
             continue
 
-        nudge_text = data.get("nudge_text", "").strip()
+        nudge_text_raw = data.get("nudge_text", "")
+        if not isinstance(nudge_text_raw, str):
+            continue
+
+        nudge_text = nudge_text_raw.strip()
 
         word_count = count_words(nudge_text)
         if (
@@ -193,7 +197,11 @@ async def generate_nudge_response(
         if data is None:
             continue
 
-        content = data.get("content", "").strip()
+        content_raw = data.get("content", "")
+        if not isinstance(content_raw, str):
+            continue
+
+        content = content_raw.strip()
 
         if content:
             turn = JournalTurn(

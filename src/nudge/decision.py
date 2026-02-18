@@ -63,12 +63,15 @@ def format_previous_entries(
     return sanitized if sanitized else None
 
 
-def _normalize_category(raw_decision: str) -> NudgeCategory | None:
+def _normalize_category(raw_decision: object) -> NudgeCategory | None:
     """Normalize LLM output to a valid NudgeCategory.
 
     Handles case insensitivity, whitespace, and invalid values.
     Returns None for "no_nudge" or unrecognized values.
     """
+    if not isinstance(raw_decision, str):
+        return None
+
     cleaned = raw_decision.strip().lower().replace(" ", "_")
     if cleaned == "no_nudge":
         return None
@@ -121,7 +124,8 @@ async def decide_nudge(
         return False, None, None
 
     decision = data.get("decision", "no_nudge")
-    reason = data.get("reason", "")
+    reason_raw = data.get("reason", "")
+    reason = reason_raw if isinstance(reason_raw, str) else None
 
     category = _normalize_category(decision)
     if category is None:
