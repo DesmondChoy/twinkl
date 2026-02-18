@@ -20,6 +20,7 @@ Usage:
     dataset = VIFDataset(train_df, state_encoder)
 """
 
+import logging
 from pathlib import Path
 
 import numpy as np
@@ -29,6 +30,8 @@ from torch.utils.data import Dataset
 
 from src.vif.state_encoder import StateEncoder
 from src.wrangling.parse_wrangled_data import parse_wrangled_file
+
+logger = logging.getLogger(__name__)
 
 
 def load_labels(
@@ -125,21 +128,77 @@ def load_all_data(
 def merge_labels_and_entries(
     labels_df: pl.DataFrame,
     entries_df: pl.DataFrame,
+    *,
+    strict: bool = True,
 ) -> pl.DataFrame:
-    """Join labels and entries on (persona_id, t_index).
+    """Join labels and entries on (persona_id, t_index) with integrity checks.
+
+    Performs an inner join and validates that no rows were silently dropped.
+    When labels and entries diverge (missing personas, mismatched t_indices),
+    this either raises immediately or warns, depending on ``strict``.
 
     Args:
         labels_df: DataFrame with alignment labels
         entries_df: DataFrame with entry text
+        strict: If True (default), raise ValueError on any dropped rows.
+            If False, log a warning and return the partial merge.
 
     Returns:
         Merged DataFrame with both labels and text content
+
+    Raises:
+        ValueError: When strict=True and the inner join drops rows.
     """
-    return labels_df.join(
-        entries_df,
-        on=["persona_id", "t_index"],
-        how="inner",
+    join_keys = ["persona_id", "t_index"]
+
+    merged_df = labels_df.join(entries_df, on=join_keys, how="inner")
+
+    n_labels = len(labels_df)
+    n_entries = len(entries_df)
+    n_merged = len(merged_df)
+
+    # Fast path: no drops on either side
+    if n_merged == n_labels and n_merged == n_entries:
+        return merged_df
+
+    # Compute anti-joins to identify orphan rows
+    labels_keys = labels_df.select(join_keys)
+    entries_keys = entries_df.select(join_keys)
+
+    labels_without_entries = labels_keys.join(
+        entries_keys, on=join_keys, how="anti"
     )
+    entries_without_labels = entries_keys.join(
+        labels_keys, on=join_keys, how="anti"
+    )
+
+    parts = [
+        f"Merge dropped rows: {n_labels} labels + {n_entries} entries → {n_merged} merged."
+    ]
+    if len(labels_without_entries) > 0:
+        orphan_ids = (
+            labels_without_entries.select("persona_id").unique().to_series().to_list()
+        )
+        parts.append(
+            f"  Labels without matching entries: {len(labels_without_entries)} rows "
+            f"({len(orphan_ids)} persona(s): {orphan_ids[:5]}{'...' if len(orphan_ids) > 5 else ''})"
+        )
+    if len(entries_without_labels) > 0:
+        orphan_ids = (
+            entries_without_labels.select("persona_id").unique().to_series().to_list()
+        )
+        parts.append(
+            f"  Entries without matching labels: {len(entries_without_labels)} rows "
+            f"({len(orphan_ids)} persona(s): {orphan_ids[:5]}{'...' if len(orphan_ids) > 5 else ''})"
+        )
+
+    message = "\n".join(parts)
+
+    if strict:
+        raise ValueError(message)
+
+    logger.warning(message)
+    return merged_df
 
 
 def split_by_persona(
