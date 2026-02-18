@@ -162,7 +162,7 @@ One row per `(persona_id, t_index)` where a Judge label exists.
 - `persona_id`
 - `t_index`
 - `state_vector`: flattened float vector representing $s_{u,t}$ as defined above.
-- `target_vector`: length‑10 float vector equal to `alignment_vector` (possibly normalised to \([-1, 1]\), but still preserving −1/0/+1 semantics).
+- `target_vector`: length‑10 float vector equal to `alignment_vector` (cast to floats, preserving −1/0/+1 ordinal semantics).
 - Optional metadata:
   - `num_prev_entries`
   - `has_full_window`
@@ -234,7 +234,7 @@ For each `(persona_id, t_index)` where a Judge label exists:
 The result is a fixed‑length `state_vector` for this row.
 
 6. **Set the target**:
-   - `target_vector = alignment_vector` from `JudgeLabel` (cast to floats if using MSE loss).
+   - `target_vector = alignment_vector` from `JudgeLabel` (cast to floats, preserving −1/0/+1 ordinal semantics).
 
 7. Append `(persona_id, t_index, state_vector, target_vector, meta)` to `StateTargetSample`.
 
@@ -255,7 +255,7 @@ All `(persona_id, t_index)` rows for a given persona belong to the same split.
 ## 5. Link Back to Model Training and Inference
 
 - **Training** (`03_model_training.md`):
-  - The Critic MLP is trained on `StateTargetSample` with a multi‑output regression loss (e.g. MSE) to predict \(\hat{\vec{a}}_{u,t}\).
+  - The Critic MLP is trained on `StateTargetSample` with ordinal classification losses to predict \(\hat{\vec{a}}_{u,t}\).
   - MC Dropout is applied during both training and inference to enable epistemic uncertainty estimation.
 
 - **Inference** (`02_system_architecture.md`):

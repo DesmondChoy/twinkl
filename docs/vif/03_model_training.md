@@ -218,7 +218,7 @@ The POC implements **Option A (Immediate Alignment)** with these concrete choice
 - **State dimension**: $N \times d_e + (N{-}1) + 10 + 10$ (see config for current $N$ and $d_e$)
 - **Critic architecture**: 2-layer MLP with LayerNorm + GELU + Dropout (param count depends on `hidden_dim`)
 - **MC Dropout**: 50 forward passes for uncertainty estimation
-- **Loss**: MSE on 10-dim alignment vector
+- **Loss**: Ordinal classification losses (CORAL, CORN, EMD, SoftOrdinal)
 
 ### 4.2 Usage
 
