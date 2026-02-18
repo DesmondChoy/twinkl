@@ -8,6 +8,17 @@ metadata:
   timestamp: '2026-02-15T21:10:06'
   git_commit: e1e08c4(dirty)
   config_hash: dbd2da433b71
+provenance:
+  prev_run_id: null
+  prev_git_commit: null
+  git_log: []
+  config_delta:
+    added: {}
+    removed: {}
+    changed: {}
+  rationale: Baseline run establishing initial metrics for nomic-embed-256d encoder
+    with small hidden_dim (32). Tests whether a compact model with Matryoshka-truncated
+    embeddings (0% truncation) can compete with the larger MiniLM configuration.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -130,4 +141,9 @@ per_dimension:
     spearman: 0.4692
     calibration: 0.939
     hedging: 0.7762
-observations: <fill in rationale + key findings before running>
+observations: CORN achieves the highest stimulation QWK (0.599) of any run_002 loss,
+  but produces NaN QWK for hedonism — indicating degenerate predictions where all
+  samples collapse to a single class. Hedging is the highest in run_002 (83.3%) with
+  the lowest minority recall (0.204). Training gap is minimal (0.012), the smallest
+  across all runs, but power QWK (0.075) is near-zero, suggesting CORN's conditional
+  probability chain struggles with sparse labels in the small model.

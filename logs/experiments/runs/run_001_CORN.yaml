@@ -8,6 +8,17 @@ metadata:
   timestamp: '2026-02-15T21:08:42'
   git_commit: e1e08c4(dirty)
   config_hash: fdef71a17d14
+provenance:
+  prev_run_id: null
+  prev_git_commit: null
+  git_log: []
+  config_delta:
+    added: {}
+    removed: {}
+    changed: {}
+  rationale: Baseline run establishing initial metrics for MiniLM-384d encoder with
+    large hidden_dim (256). First experiment round to compare all five loss functions
+    under the same encoder/capacity configuration.
 config:
   encoder:
     model_name: all-MiniLM-L6-v2
@@ -127,4 +138,7 @@ per_dimension:
     spearman: 0.6223
     calibration: 0.8654
     hedging: 0.7483
-observations: <fill in rationale + key findings before running>
+observations: CORN performs comparably to CORAL on MAE (0.236) and accuracy (0.782)
+  but with slightly lower QWK (0.384). Hedging is the most excessive of run_001 losses
+  at 82.7%. Conformity is particularly poor (QWK 0.071). Training gap is small (0.048)
+  despite the severe param/sample ratio, and stimulation is the best dimension (QWK 0.518).

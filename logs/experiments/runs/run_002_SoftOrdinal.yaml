@@ -8,6 +8,17 @@ metadata:
   timestamp: '2026-02-15T21:10:06'
   git_commit: e1e08c4(dirty)
   config_hash: 4390d4553e84
+provenance:
+  prev_run_id: null
+  prev_git_commit: null
+  git_log: []
+  config_delta:
+    added: {}
+    removed: {}
+    changed: {}
+  rationale: Baseline run establishing initial metrics for nomic-embed-256d encoder
+    with small hidden_dim (32). Tests whether a compact model with Matryoshka-truncated
+    embeddings (0% truncation) can compete with the larger MiniLM configuration.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -130,4 +141,9 @@ per_dimension:
     spearman: 0.5632
     calibration: 0.9779
     hedging: 0.7762
-observations: <fill in rationale + key findings before running>
+observations: SoftOrdinal is the best ordinal loss in run_002 — highest QWK (0.385),
+  best calibration (0.774), and best accuracy (0.780). Hedging (0.776) and minority
+  recall (0.310) show a reasonable balance. Tradition (QWK 0.454, calibration 0.876)
+  and stimulation (QWK 0.510, calibration 0.915) are strong. Achievement Spearman
+  (0.100) is anomalously low despite moderate QWK (0.340), suggesting rank-order
+  issues. Universalism calibration (0.978) is near-perfect.

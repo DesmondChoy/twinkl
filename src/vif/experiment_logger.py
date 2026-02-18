@@ -34,6 +34,7 @@ import json
 import math
 import re
 import subprocess
+from copy import deepcopy
 from datetime import datetime
 from pathlib import Path
 
@@ -138,6 +139,180 @@ def _get_git_commit() -> str:
         return "unknown"
 
 
+def _strip_dirty(commit: str) -> str:
+    """Remove (dirty) suffix from commit hash for use in git log ranges."""
+    return commit.replace("(dirty)", "")
+
+
+def _encoder_family(model_name: str) -> str:
+    """Map encoder model name to a family key for run matching.
+
+    Examples:
+        all-MiniLM-L6-v2 → "MiniLM"
+        nomic-ai/nomic-embed-text-v1.5 → "nomic"
+        sentence-transformers/all-mpnet-base-v2 → "mpnet"
+    """
+    lower = model_name.lower()
+    if "minilm" in lower:
+        return "MiniLM"
+    if "nomic" in lower:
+        return "nomic"
+    if "mpnet" in lower:
+        return "mpnet"
+    return model_name.split("/")[-1]
+
+
+def _flatten_dict(d: dict, parent_key: str = "", sep: str = ".") -> dict:
+    """Flatten nested dict to dot-notation keys for config diffing.
+
+    Example: {"a": {"b": 1}} → {"a.b": 1}
+    """
+    items: dict = {}
+    for k, v in d.items():
+        new_key = f"{parent_key}{sep}{k}" if parent_key else k
+        if isinstance(v, dict):
+            items.update(_flatten_dict(v, new_key, sep))
+        else:
+            items[new_key] = v
+    return items
+
+
+def _compute_config_delta(current: dict, prev: dict) -> dict:
+    """Deep-diff two config dicts → {added, removed, changed}.
+
+    Both dicts are flattened to dot-notation before comparison so nested
+    changes (e.g. state_encoder.ema_alpha) appear as single keys.
+    """
+    curr_flat = _flatten_dict(current)
+    prev_flat = _flatten_dict(prev)
+
+    added = {k: v for k, v in curr_flat.items() if k not in prev_flat}
+    removed = {k: v for k, v in prev_flat.items() if k not in curr_flat}
+    changed = {
+        k: {"from": prev_flat[k], "to": curr_flat[k]}
+        for k in curr_flat
+        if k in prev_flat and curr_flat[k] != prev_flat[k]
+    }
+
+    return {"added": added, "removed": removed, "changed": changed}
+
+
+def _canonicalize_run_config(config: dict) -> dict:
+    """Normalize config to run-level fields for provenance diffing.
+
+    Provenance should explain run-to-run changes, not differences between
+    model heads within the same run. Exclude head-specific keys here.
+    """
+    canonical = deepcopy(config)
+    training = canonical.get("training")
+    if isinstance(training, dict):
+        training.pop("loss_fn", None)
+        training.pop("weighted_mse_scale", None)
+    return canonical
+
+
+def _get_git_log_between(prev_commit: str, current_commit: str) -> list[str]:
+    """Return ``git log --oneline prev..current`` as a list of strings.
+
+    Handles (dirty) suffixes, same-commit case, and git errors gracefully.
+    """
+    prev_clean = _strip_dirty(prev_commit)
+    curr_clean = _strip_dirty(current_commit)
+
+    if prev_clean == curr_clean:
+        return []
+
+    try:
+        output = subprocess.check_output(
+            ["git", "log", "--oneline", f"{prev_clean}..{curr_clean}"],
+            stderr=subprocess.DEVNULL,
+            text=True,
+        ).strip()
+        if not output:
+            return []
+        return output.splitlines()
+    except Exception:
+        return []
+
+
+def _find_previous_run(run_id: str, family: str) -> dict | None:
+    """Find the most recent predecessor run with the same encoder family.
+
+    Scans all YAML run files with a lower run number and matching encoder
+    family. Returns the parsed data dict of the first matching model found
+    in the most recent predecessor run, or None if no predecessor exists.
+    """
+    RUNS_DIR.mkdir(parents=True, exist_ok=True)
+
+    match = re.match(r"run_(\d{3})", run_id)
+    if not match:
+        return None
+    current_num = int(match.group(1))
+
+    candidates: list[tuple[int, dict]] = []
+    for f in sorted(RUNS_DIR.glob("run_*_*.yaml")):
+        m = re.match(r"run_(\d{3})_", f.name)
+        if not m:
+            continue
+        num = int(m.group(1))
+        if num >= current_num:
+            continue
+        try:
+            data = yaml.safe_load(f.read_text(encoding="utf-8"))
+            if not data or "config" not in data:
+                continue
+            encoder_name = data["config"]["encoder"]["model_name"]
+            if _encoder_family(encoder_name) == family:
+                candidates.append((num, data))
+        except Exception:
+            continue
+
+    if not candidates:
+        return None
+
+    # Most recent predecessor (highest run number)
+    candidates.sort(key=lambda x: x[0], reverse=True)
+    return candidates[0][1]
+
+
+def _build_provenance(run_id: str, config: dict, git_commit: str) -> dict:
+    """Build the provenance section for a run.
+
+    Finds the most recent predecessor with the same encoder family, then
+    computes the git log and config delta between them.
+    """
+    encoder_name = config.get("encoder", {}).get("model_name", "unknown")
+    family = _encoder_family(encoder_name)
+
+    prev_data = _find_previous_run(run_id, family)
+
+    if prev_data is None:
+        return {
+            "prev_run_id": None,
+            "prev_git_commit": None,
+            "git_log": [],
+            "config_delta": {"added": {}, "removed": {}, "changed": {}},
+            "rationale": "",
+        }
+
+    prev_run_id = prev_data["metadata"]["run_id"]
+    prev_git_commit = prev_data["metadata"]["git_commit"]
+
+    git_log = _get_git_log_between(prev_git_commit, git_commit)
+    config_delta = _compute_config_delta(
+        _canonicalize_run_config(config),
+        _canonicalize_run_config(prev_data["config"]),
+    )
+
+    return {
+        "prev_run_id": prev_run_id,
+        "prev_git_commit": prev_git_commit,
+        "git_log": git_log,
+        "config_delta": _to_python(config_delta),
+        "rationale": "",
+    }
+
+
 def _encoder_shorthand(config: dict) -> str:
     """Map encoder config to compact label for index table.
 
@@ -196,6 +371,7 @@ def _build_experiment_dict(
     pct_truncated: float,
     state_dim: int,
     observations: str,
+    provenance: dict | None = None,
 ) -> dict:
     """Assemble the full experiment dict matching the YAML schema."""
     model = trained_result["model"]
@@ -319,6 +495,15 @@ def _build_experiment_dict(
 
     # Compute config fingerprint and store in metadata
     experiment["metadata"]["config_hash"] = _config_fingerprint(experiment["config"])
+
+    # Insert provenance between metadata and config (preserves YAML key order)
+    if provenance is not None:
+        ordered: dict = {}
+        for key, value in experiment.items():
+            ordered[key] = value
+            if key == "metadata":
+                ordered["provenance"] = provenance
+        experiment = ordered
 
     return _to_python(experiment)
 
@@ -447,6 +632,7 @@ def log_experiment_run(
         List of dicts with keys: path, model, status ("created"|"updated"), run_id.
     """
     new_run_id = None  # Lazily allocated if any model needs a new file
+    provenance_cache: dict[str, dict] = {}  # run_id → provenance (computed once)
     results = []
 
     for model_name in trained_models:
@@ -460,7 +646,7 @@ def log_experiment_run(
         if model_name not in all_recall_data:
             continue
 
-        # Build with placeholder run_id to compute config_hash
+        # Build with placeholder run_id to compute config_hash (no provenance yet)
         experiment = _build_experiment_dict(
             run_id="__pending__",
             model_name=model_name,
@@ -487,25 +673,47 @@ def log_experiment_run(
                 existing_path.read_text(encoding="utf-8")
             )
             original_run_id = existing_data["metadata"]["run_id"]
+            actual_run_id = original_run_id
             experiment["metadata"]["run_id"] = original_run_id
             experiment["metadata"]["experiment_id"] = (
                 f"{original_run_id}_{model_name}"
             )
+        else:
+            # New config — allocate run_id once, shared by all new models
+            if new_run_id is None:
+                new_run_id = _next_run_id()
+            actual_run_id = new_run_id
+            experiment["metadata"]["run_id"] = new_run_id
+            experiment["metadata"]["experiment_id"] = (
+                f"{new_run_id}_{model_name}"
+            )
+
+        # Compute provenance once per run_id, then insert into experiment dict
+        if actual_run_id not in provenance_cache:
+            provenance_cache[actual_run_id] = _build_provenance(
+                actual_run_id,
+                experiment["config"],
+                experiment["metadata"]["git_commit"],
+            )
+        provenance = provenance_cache[actual_run_id]
+
+        # Insert provenance between metadata and config
+        ordered: dict = {}
+        for key, value in experiment.items():
+            ordered[key] = value
+            if key == "metadata":
+                ordered["provenance"] = provenance
+        experiment = ordered
+
+        if existing_path is not None:
             _write_yaml(experiment, existing_path)
             results.append({
                 "path": existing_path,
                 "model": model_name,
                 "status": "updated",
-                "run_id": original_run_id,
+                "run_id": actual_run_id,
             })
         else:
-            # New config — allocate run_id once, shared by all new models
-            if new_run_id is None:
-                new_run_id = _next_run_id()
-            experiment["metadata"]["run_id"] = new_run_id
-            experiment["metadata"]["experiment_id"] = (
-                f"{new_run_id}_{model_name}"
-            )
             yaml_path = RUNS_DIR / f"{new_run_id}_{model_name}.yaml"
             _write_yaml(experiment, yaml_path)
             results.append({
@@ -517,3 +725,43 @@ def log_experiment_run(
 
     _rebuild_index()
     return results
+
+
+def backfill_provenance() -> list[str]:
+    """Add provenance section to existing YAML run files that lack it.
+
+    Scans all run files, computes provenance for each, and writes back.
+    Files that already have a ``provenance`` key are skipped.
+
+    Returns:
+        List of file paths that were updated.
+    """
+    RUNS_DIR.mkdir(parents=True, exist_ok=True)
+    updated: list[str] = []
+
+    for f in sorted(RUNS_DIR.glob("run_*_*.yaml")):
+        try:
+            data = yaml.safe_load(f.read_text(encoding="utf-8"))
+            if not data or "provenance" in data:
+                continue
+
+            run_id = data["metadata"]["run_id"]
+            git_commit = data["metadata"]["git_commit"]
+            config = data["config"]
+
+            provenance = _build_provenance(run_id, config, git_commit)
+
+            # Insert provenance after metadata, preserving key order
+            ordered: dict = {}
+            for key, value in data.items():
+                ordered[key] = value
+                if key == "metadata":
+                    ordered["provenance"] = provenance
+
+            _write_yaml(ordered, f)
+            updated.append(str(f))
+        except Exception as e:
+            print(f"Warning: could not backfill {f.name}: {e}")
+            continue
+
+    return updated

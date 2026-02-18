@@ -3,7 +3,7 @@ name: experiment-review
 description: Cross-run comparison of VIF experiment logs with qualitative assessment and recommendations. Use when LLM needs to synthesize results across runs in logs/experiments and produce a structured report with metric trade-offs, per-dimension behavior, calibration risks, capacity/overfitting analysis, and next-step experiments.
 ---
 
-Analyze all VIF experiment logs and produce a structured cross-run comparison report. This skill is read-only — it interprets existing data and outputs findings to the conversation.
+Analyze all VIF experiment logs and produce a structured cross-run comparison report. After the report, optionally backfill empty `provenance.rationale` and `observations` fields in run YAML files.
 
 ## Data Collection
 
@@ -15,6 +15,7 @@ Read `logs/experiments/index.md` for the high-level summary table.
 
 Use Glob to find `logs/experiments/runs/*.yaml`, then read every file. Extract:
 - `metadata` (run_id, model_name)
+- `provenance` (prev_run_id, git_log, config_delta, rationale)
 - `config` (encoder, state_encoder, model, training)
 - `data` (n_train, pct_truncated, state_dim)
 - `capacity` (n_parameters, param_sample_ratio)
@@ -121,3 +122,22 @@ Examples of good recommendations:
 - Context: this is a capstone POC with ~637 training samples — focus on relative comparisons, not absolute benchmarks
 - Do not editorialize about the project or its goals — stick to the data
 - If a metric is missing or an observations field says `<fill in>`, note it but don't speculate
+
+## Provenance Backfill
+
+After producing the 8-section report, check all run YAML files for empty provenance and observations fields. For each file:
+
+1. **Empty `provenance.rationale`**: Generate 1–3 sentences explaining *why* this run was created, based on:
+   - `provenance.git_log` (what code changes preceded this run)
+   - `provenance.config_delta` (what config changed vs the previous run)
+   - If both are empty (first run), write a brief note like "Baseline run establishing initial metrics for [encoder family]."
+
+2. **Empty or placeholder `observations`**: Generate 2–4 sentences summarizing *what was learned*, based on:
+   - `evaluation` metrics (MAE, QWK, calibration, hedging)
+   - `per_dimension` results (which dimensions improved/degraded)
+   - Comparison with the previous run (if `provenance.prev_run_id` exists)
+   - A placeholder is any value containing `<fill in` or that is empty.
+
+3. **Write back**: Use the Edit tool to update only the empty/placeholder fields in the YAML files. **Never overwrite** fields that already contain meaningful content.
+
+4. **Scope**: Only backfill files in `logs/experiments/runs/`. Process all files, not just the latest run.

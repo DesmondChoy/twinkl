@@ -1,0 +1,167 @@
+# VIF Experiment: run_003_CORN
+# Generated: 2026-02-18T17:32:28
+# Git: a3f493f(dirty)
+metadata:
+  experiment_id: run_003_CORN
+  run_id: run_003
+  model_name: CORN
+  timestamp: '2026-02-18T17:32:28'
+  git_commit: a3f493f(dirty)
+  config_hash: 4fd5e906ac03
+provenance:
+  prev_run_id: run_001
+  prev_git_commit: e1e08c4(dirty)
+  git_log:
+  - 'a3f493f test: add test suites for judge, registry, and wrangling modules'
+  - 2d3f8fd twinkl-g2p remove label-history EMA from VIF state pipeline
+  - 'e5f04e7 test(vif): add StateEncoder and VIFDataset parity test suite (twinkl-dks)'
+  - 'c605de1 refactor(vif): drop MSE model, focus exclusively on ordinal models (twinkl-hu9.4)'
+  - 'e369ddd fix(vif): fail fast on label-entry join losses in merge_labels_and_entries
+    (twinkl-hu9.3)'
+  - 'a3f0024 docs: add round 2 experiment comparison images for issue #12'
+  - '017e833 docs: refresh stale dataset counts across PRD, README, and eval docs
+    (twinkl-hu9.6)'
+  - '4a47795 fix(nudge): handle non-string JSON fields safely (twinkl-9hk)'
+  - '19b6a85 docs(vif): genericize hardcoded architecture values, point to config/vif.yaml'
+  - 'e4530a5 fix(nudge): harden parsing and dedupe notebook helpers (twinkl-44r)'
+  - 'f296381 feat(nudge): extract nudge decision logic from notebook into src/nudge/'
+  - '17504a3 fix(vif): guard eval metrics against NaN/constant-input warnings'
+  - '7c612ac fix(vif): wire train_ratio/val_ratio from config through to split_by_persona'
+  - '3153d53 docs: standardize agent instruction files'
+  - 'f36c87a feat(vif): add experiment logger and run logs for rounds 1-2'
+  - '5da7694 refactor(notebooks): reorganize critic training notebooks into v1/v2
+    structure'
+  config_delta:
+    added: {}
+    removed:
+      state_encoder.ema_alpha: 0.3
+    changed: {}
+  rationale: Re-run of MiniLM-384d configuration after removing label-history EMA
+    from the state pipeline (commit 2d3f8fd) and dropping MSE loss (commit c605de1).
+    Config delta shows ema_alpha removed. Tests whether EMA removal and code fixes
+    affect MiniLM performance.
+config:
+  encoder:
+    model_name: all-MiniLM-L6-v2
+  state_encoder:
+    window_size: 3
+  model:
+    hidden_dim: 256
+    dropout: 0.2
+  training:
+    loss_fn: corn
+    learning_rate: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+data:
+  n_train: 637
+  n_val: 124
+  n_test: 143
+  train_ratio: 0.7
+  val_ratio: 0.15
+  split_seed: 2025
+  pct_truncated: 33.2965
+  state_dim: 1164
+capacity:
+  n_parameters: 370196
+  param_sample_ratio: 581.1554
+training_dynamics:
+  best_epoch: 3
+  total_epochs: 23
+  train_loss_at_best: 0.2535
+  val_loss_at_best: 0.314
+  gap_at_best: 0.0605
+  final_lr: 0.0005
+evaluation:
+  mae_mean: 0.249
+  accuracy_mean: 0.7636
+  qwk_mean: 0.3264
+  spearman_mean: 0.3946
+  calibration_global: 0.6482
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.0783
+  minority_recall_mean: 0.26
+  recall_minus1: 0.0454
+  recall_plus1: 0.4747
+  hedging_mean: 0.8399
+per_dimension:
+  self_direction:
+    mae: 0.3894
+    accuracy: 0.6154
+    qwk: 0.2535
+    spearman: 0.3497
+    calibration: 0.5763
+    hedging: 0.7902
+  stimulation:
+    mae: 0.1323
+    accuracy: 0.8881
+    qwk: 0.4908
+    spearman: 0.4625
+    calibration: 0.6875
+    hedging: 0.8601
+  hedonism:
+    mae: 0.2099
+    accuracy: 0.8112
+    qwk: 0.4193
+    spearman: 0.4258
+    calibration: 0.5484
+    hedging: 0.8881
+  achievement:
+    mae: 0.3201
+    accuracy: 0.7203
+    qwk: 0.2595
+    spearman: 0.1022
+    calibration: 0.738
+    hedging: 0.7552
+  power:
+    mae: 0.141
+    accuracy: 0.8741
+    qwk: 0.4043
+    spearman: 0.4567
+    calibration: 0.6461
+    hedging: 0.9301
+  security:
+    mae: 0.3231
+    accuracy: 0.6713
+    qwk: 0.1071
+    spearman: 0.3097
+    calibration: 0.4427
+    hedging: 0.9091
+  conformity:
+    mae: 0.2883
+    accuracy: 0.7133
+    qwk: 0.1277
+    spearman: 0.184
+    calibration: 0.5116
+    hedging: 0.9371
+  tradition:
+    mae: 0.1757
+    accuracy: 0.8182
+    qwk: 0.301
+    spearman: 0.5597
+    calibration: 0.7881
+    hedging: 0.8881
+  benevolence:
+    mae: 0.3576
+    accuracy: 0.6573
+    qwk: 0.3914
+    spearman: 0.5369
+    calibration: 0.4361
+    hedging: 0.6993
+  universalism:
+    mae: 0.1522
+    accuracy: 0.8671
+    qwk: 0.5092
+    spearman: 0.5586
+    calibration: 0.8642
+    hedging: 0.7413
+observations: CORN shows the largest QWK degradation from EMA removal — 0.384 (run_001)
+  to 0.326 (run_003). Security (QWK 0.107) and conformity (QWK 0.128) are particularly
+  weak. Hedging remains excessive (84.0%). Benevolence improved (Spearman 0.537 vs
+  0.447) but most dimensions regressed. CORN appears most sensitive to state feature
+  changes among the ordinal losses.

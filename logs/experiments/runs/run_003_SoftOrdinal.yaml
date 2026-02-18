@@ -1,0 +1,168 @@
+# VIF Experiment: run_003_SoftOrdinal
+# Generated: 2026-02-18T17:32:28
+# Git: a3f493f(dirty)
+metadata:
+  experiment_id: run_003_SoftOrdinal
+  run_id: run_003
+  model_name: SoftOrdinal
+  timestamp: '2026-02-18T17:32:28'
+  git_commit: a3f493f(dirty)
+  config_hash: 9d39a18f3ace
+provenance:
+  prev_run_id: run_001
+  prev_git_commit: e1e08c4(dirty)
+  git_log:
+  - 'a3f493f test: add test suites for judge, registry, and wrangling modules'
+  - 2d3f8fd twinkl-g2p remove label-history EMA from VIF state pipeline
+  - 'e5f04e7 test(vif): add StateEncoder and VIFDataset parity test suite (twinkl-dks)'
+  - 'c605de1 refactor(vif): drop MSE model, focus exclusively on ordinal models (twinkl-hu9.4)'
+  - 'e369ddd fix(vif): fail fast on label-entry join losses in merge_labels_and_entries
+    (twinkl-hu9.3)'
+  - 'a3f0024 docs: add round 2 experiment comparison images for issue #12'
+  - '017e833 docs: refresh stale dataset counts across PRD, README, and eval docs
+    (twinkl-hu9.6)'
+  - '4a47795 fix(nudge): handle non-string JSON fields safely (twinkl-9hk)'
+  - '19b6a85 docs(vif): genericize hardcoded architecture values, point to config/vif.yaml'
+  - 'e4530a5 fix(nudge): harden parsing and dedupe notebook helpers (twinkl-44r)'
+  - 'f296381 feat(nudge): extract nudge decision logic from notebook into src/nudge/'
+  - '17504a3 fix(vif): guard eval metrics against NaN/constant-input warnings'
+  - '7c612ac fix(vif): wire train_ratio/val_ratio from config through to split_by_persona'
+  - '3153d53 docs: standardize agent instruction files'
+  - 'f36c87a feat(vif): add experiment logger and run logs for rounds 1-2'
+  - '5da7694 refactor(notebooks): reorganize critic training notebooks into v1/v2
+    structure'
+  config_delta:
+    added: {}
+    removed:
+      state_encoder.ema_alpha: 0.3
+    changed: {}
+  rationale: Re-run of MiniLM-384d configuration after removing label-history EMA
+    from the state pipeline (commit 2d3f8fd) and dropping MSE loss (commit c605de1).
+    Config delta shows ema_alpha removed. Tests whether EMA removal and code fixes
+    affect MiniLM performance.
+config:
+  encoder:
+    model_name: all-MiniLM-L6-v2
+  state_encoder:
+    window_size: 3
+  model:
+    hidden_dim: 256
+    dropout: 0.2
+  training:
+    loss_fn: soft_ordinal
+    learning_rate: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+data:
+  n_train: 637
+  n_val: 124
+  n_test: 143
+  train_ratio: 0.7
+  val_ratio: 0.15
+  split_seed: 2025
+  pct_truncated: 33.2965
+  state_dim: 1164
+capacity:
+  n_parameters: 372766
+  param_sample_ratio: 585.19
+training_dynamics:
+  best_epoch: 3
+  total_epochs: 23
+  train_loss_at_best: 1.6735
+  val_loss_at_best: 2.6076
+  gap_at_best: 0.9341
+  final_lr: 0.0005
+evaluation:
+  mae_mean: 0.2534
+  accuracy_mean: 0.772
+  qwk_mean: 0.383
+  spearman_mean: 0.3964
+  calibration_global: 0.7432
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.1227
+  minority_recall_mean: 0.3333
+  recall_minus1: 0.0858
+  recall_plus1: 0.5809
+  hedging_mean: 0.7671
+per_dimension:
+  self_direction:
+    mae: 0.3989
+    accuracy: 0.6434
+    qwk: 0.3279
+    spearman: 0.4313
+    calibration: 0.6078
+    hedging: 0.5524
+  stimulation:
+    mae: 0.132
+    accuracy: 0.8671
+    qwk: 0.5688
+    spearman: 0.4989
+    calibration: 0.7391
+    hedging: 0.8392
+  hedonism:
+    mae: 0.1887
+    accuracy: 0.8322
+    qwk: 0.5233
+    spearman: 0.5644
+    calibration: 0.601
+    hedging: 0.8531
+  achievement:
+    mae: 0.3396
+    accuracy: 0.7133
+    qwk: 0.2898
+    spearman: 0.1517
+    calibration: 0.7241
+    hedging: 0.7273
+  power:
+    mae: 0.1429
+    accuracy: 0.8881
+    qwk: 0.2516
+    spearman: 0.2253
+    calibration: 0.7752
+    hedging: 0.8881
+  security:
+    mae: 0.3269
+    accuracy: 0.6993
+    qwk: 0.3784
+    spearman: 0.3677
+    calibration: 0.6692
+    hedging: 0.7203
+  conformity:
+    mae: 0.2972
+    accuracy: 0.7343
+    qwk: 0.2207
+    spearman: 0.3179
+    calibration: 0.7101
+    hedging: 0.8462
+  tradition:
+    mae: 0.1897
+    accuracy: 0.8112
+    qwk: 0.2918
+    spearman: 0.3644
+    calibration: 0.814
+    hedging: 0.8601
+  benevolence:
+    mae: 0.3717
+    accuracy: 0.6573
+    qwk: 0.3983
+    spearman: 0.4483
+    calibration: 0.5151
+    hedging: 0.6294
+  universalism:
+    mae: 0.1464
+    accuracy: 0.8741
+    qwk: 0.5793
+    spearman: 0.5942
+    calibration: 0.9372
+    hedging: 0.7552
+observations: SoftOrdinal QWK decreased from 0.417 (run_001) to 0.383 (run_003) after
+  EMA removal, though calibration improved (0.743 vs 0.724). Stimulation strengthened
+  (QWK 0.569 vs 0.510). Tradition and power regressed notably. Training gap increased
+  to 0.934 — the largest of any run — indicating SoftOrdinal's soft-label formulation
+  amplifies overfitting sensitivity. Self_direction hedging improved (0.552 vs 0.483),
+  showing more decisive predictions there.

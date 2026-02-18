@@ -8,6 +8,17 @@ metadata:
   timestamp: '2026-02-15T21:10:06'
   git_commit: e1e08c4(dirty)
   config_hash: a16a102440ab
+provenance:
+  prev_run_id: null
+  prev_git_commit: null
+  git_log: []
+  config_delta:
+    added: {}
+    removed: {}
+    changed: {}
+  rationale: Baseline run establishing initial metrics for nomic-embed-256d encoder
+    with small hidden_dim (32). Tests whether a compact model with Matryoshka-truncated
+    embeddings (0% truncation) can compete with the larger MiniLM configuration.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -130,4 +141,8 @@ per_dimension:
     spearman: 0.6175
     calibration: 0.9615
     hedging: 0.7622
-observations: <fill in rationale + key findings before running>
+observations: EMD with nomic achieves QWK 0.365 and the best calibration (0.772) among
+  non-SoftOrdinal run_002 losses. Minority recall (0.309) and hedging (0.772) show
+  a decent balance. Stimulation is strong (QWK 0.569, calibration 0.930). Universalism
+  calibration reaches 0.962 — the highest single-dimension calibration across all run_002
+  losses. Security is the weakest dimension (QWK 0.254, Spearman 0.163).

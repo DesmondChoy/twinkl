@@ -1,0 +1,171 @@
+# VIF Experiment: run_004_CORN
+# Generated: 2026-02-18T17:35:20
+# Git: a3f493f(dirty)
+metadata:
+  experiment_id: run_004_CORN
+  run_id: run_004
+  model_name: CORN
+  timestamp: '2026-02-18T17:35:20'
+  git_commit: a3f493f(dirty)
+  config_hash: ece2dcce9c66
+provenance:
+  prev_run_id: run_002
+  prev_git_commit: e1e08c4(dirty)
+  git_log:
+  - 'a3f493f test: add test suites for judge, registry, and wrangling modules'
+  - 2d3f8fd twinkl-g2p remove label-history EMA from VIF state pipeline
+  - 'e5f04e7 test(vif): add StateEncoder and VIFDataset parity test suite (twinkl-dks)'
+  - 'c605de1 refactor(vif): drop MSE model, focus exclusively on ordinal models (twinkl-hu9.4)'
+  - 'e369ddd fix(vif): fail fast on label-entry join losses in merge_labels_and_entries
+    (twinkl-hu9.3)'
+  - 'a3f0024 docs: add round 2 experiment comparison images for issue #12'
+  - '017e833 docs: refresh stale dataset counts across PRD, README, and eval docs
+    (twinkl-hu9.6)'
+  - '4a47795 fix(nudge): handle non-string JSON fields safely (twinkl-9hk)'
+  - '19b6a85 docs(vif): genericize hardcoded architecture values, point to config/vif.yaml'
+  - 'e4530a5 fix(nudge): harden parsing and dedupe notebook helpers (twinkl-44r)'
+  - 'f296381 feat(nudge): extract nudge decision logic from notebook into src/nudge/'
+  - '17504a3 fix(vif): guard eval metrics against NaN/constant-input warnings'
+  - '7c612ac fix(vif): wire train_ratio/val_ratio from config through to split_by_persona'
+  - '3153d53 docs: standardize agent instruction files'
+  - 'f36c87a feat(vif): add experiment logger and run logs for rounds 1-2'
+  - '5da7694 refactor(notebooks): reorganize critic training notebooks into v1/v2
+    structure'
+  config_delta:
+    added: {}
+    removed:
+      state_encoder.ema_alpha: 0.3
+    changed: {}
+  rationale: Re-run of nomic-embed-256d configuration after removing label-history
+    EMA from the state pipeline (commit 2d3f8fd) and dropping MSE loss (commit c605de1).
+    Config delta shows ema_alpha removed. Tests whether EMA removal and code fixes
+    affect nomic/small-model performance.
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+  model:
+    hidden_dim: 32
+    dropout: 0.3
+  training:
+    loss_fn: corn
+    learning_rate: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+data:
+  n_train: 637
+  n_val: 124
+  n_test: 143
+  train_ratio: 0.7
+  val_ratio: 0.15
+  split_seed: 2025
+  pct_truncated: 0.0
+  state_dim: 266
+capacity:
+  n_parameters: 10388
+  param_sample_ratio: 16.3077
+training_dynamics:
+  best_epoch: 21
+  total_epochs: 41
+  train_loss_at_best: 0.2927
+  val_loss_at_best: 0.3183
+  gap_at_best: 0.0256
+  final_lr: 0.0005
+evaluation:
+  mae_mean: 0.2742
+  accuracy_mean: 0.7601
+  qwk_mean: 0.2907
+  spearman_mean: 0.2928
+  calibration_global: 0.7335
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.1587
+  minority_recall_mean: 0.2173
+  recall_minus1: 0.0706
+  recall_plus1: 0.364
+  hedging_mean: 0.8189
+per_dimension:
+  self_direction:
+    mae: 0.4312
+    accuracy: 0.6364
+    qwk: 0.3466
+    spearman: 0.326
+    calibration: 0.5372
+    hedging: 0.5664
+  stimulation:
+    mae: 0.1469
+    accuracy: 0.8881
+    qwk: 0.4908
+    spearman: 0.3334
+    calibration: 0.8923
+    hedging: 0.8392
+  hedonism:
+    mae: 0.2618
+    accuracy: 0.7343
+    qwk: .nan
+    spearman: 0.1675
+    calibration: 0.5464
+    hedging: 1.0
+  achievement:
+    mae: 0.3078
+    accuracy: 0.7273
+    qwk: 0.2324
+    spearman: 0.2037
+    calibration: 0.7167
+    hedging: 0.8112
+  power:
+    mae: 0.1664
+    accuracy: 0.8462
+    qwk: 0.1296
+    spearman: 0.2137
+    calibration: 0.8305
+    hedging: 0.9021
+  security:
+    mae: 0.345
+    accuracy: 0.6853
+    qwk: 0.2154
+    spearman: 0.1009
+    calibration: 0.5105
+    hedging: 0.8531
+  conformity:
+    mae: 0.2985
+    accuracy: 0.7762
+    qwk: 0.2331
+    spearman: 0.2065
+    calibration: 0.6992
+    hedging: 0.7972
+  tradition:
+    mae: 0.206
+    accuracy: 0.7902
+    qwk: 0.1972
+    spearman: 0.4557
+    calibration: 0.8571
+    hedging: 0.9021
+  benevolence:
+    mae: 0.3897
+    accuracy: 0.6573
+    qwk: 0.3955
+    spearman: 0.4562
+    calibration: 0.4719
+    hedging: 0.7343
+  universalism:
+    mae: 0.1888
+    accuracy: 0.8601
+    qwk: 0.3761
+    spearman: 0.4645
+    calibration: 0.9588
+    hedging: 0.7832
+observations: CORN shows the worst QWK of any ordinal run (0.291) and lowest Spearman
+  (0.293). Hedonism QWK is NaN again (same issue as run_002 CORN), confirming this
+  is a systematic CORN + nomic failure mode. Power QWK dropped to 0.130. Security
+  Spearman (0.101) is near-zero. CORN is the weakest loss on the nomic encoder and
+  appears to degrade further without EMA features. Recommend deprioritizing CORN for
+  the nomic configuration.

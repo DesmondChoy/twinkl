@@ -1,0 +1,167 @@
+# VIF Experiment: run_003_EMD
+# Generated: 2026-02-18T17:32:28
+# Git: a3f493f(dirty)
+metadata:
+  experiment_id: run_003_EMD
+  run_id: run_003
+  model_name: EMD
+  timestamp: '2026-02-18T17:32:28'
+  git_commit: a3f493f(dirty)
+  config_hash: ae539d94b61e
+provenance:
+  prev_run_id: run_001
+  prev_git_commit: e1e08c4(dirty)
+  git_log:
+  - 'a3f493f test: add test suites for judge, registry, and wrangling modules'
+  - 2d3f8fd twinkl-g2p remove label-history EMA from VIF state pipeline
+  - 'e5f04e7 test(vif): add StateEncoder and VIFDataset parity test suite (twinkl-dks)'
+  - 'c605de1 refactor(vif): drop MSE model, focus exclusively on ordinal models (twinkl-hu9.4)'
+  - 'e369ddd fix(vif): fail fast on label-entry join losses in merge_labels_and_entries
+    (twinkl-hu9.3)'
+  - 'a3f0024 docs: add round 2 experiment comparison images for issue #12'
+  - '017e833 docs: refresh stale dataset counts across PRD, README, and eval docs
+    (twinkl-hu9.6)'
+  - '4a47795 fix(nudge): handle non-string JSON fields safely (twinkl-9hk)'
+  - '19b6a85 docs(vif): genericize hardcoded architecture values, point to config/vif.yaml'
+  - 'e4530a5 fix(nudge): harden parsing and dedupe notebook helpers (twinkl-44r)'
+  - 'f296381 feat(nudge): extract nudge decision logic from notebook into src/nudge/'
+  - '17504a3 fix(vif): guard eval metrics against NaN/constant-input warnings'
+  - '7c612ac fix(vif): wire train_ratio/val_ratio from config through to split_by_persona'
+  - '3153d53 docs: standardize agent instruction files'
+  - 'f36c87a feat(vif): add experiment logger and run logs for rounds 1-2'
+  - '5da7694 refactor(notebooks): reorganize critic training notebooks into v1/v2
+    structure'
+  config_delta:
+    added: {}
+    removed:
+      state_encoder.ema_alpha: 0.3
+    changed: {}
+  rationale: Re-run of MiniLM-384d configuration after removing label-history EMA
+    from the state pipeline (commit 2d3f8fd) and dropping MSE loss (commit c605de1).
+    Config delta shows ema_alpha removed. Tests whether EMA removal and code fixes
+    affect MiniLM performance.
+config:
+  encoder:
+    model_name: all-MiniLM-L6-v2
+  state_encoder:
+    window_size: 3
+  model:
+    hidden_dim: 256
+    dropout: 0.2
+  training:
+    loss_fn: emd
+    learning_rate: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+data:
+  n_train: 637
+  n_val: 124
+  n_test: 143
+  train_ratio: 0.7
+  val_ratio: 0.15
+  split_seed: 2025
+  pct_truncated: 33.2965
+  state_dim: 1164
+capacity:
+  n_parameters: 372766
+  param_sample_ratio: 585.19
+training_dynamics:
+  best_epoch: 3
+  total_epochs: 23
+  train_loss_at_best: 0.1312
+  val_loss_at_best: 0.1831
+  gap_at_best: 0.0519
+  final_lr: 0.0005
+evaluation:
+  mae_mean: 0.2401
+  accuracy_mean: 0.7825
+  qwk_mean: 0.4104
+  spearman_mean: 0.416
+  calibration_global: 0.6965
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.099
+  minority_recall_mean: 0.332
+  recall_minus1: 0.1103
+  recall_plus1: 0.5536
+  hedging_mean: 0.8007
+per_dimension:
+  self_direction:
+    mae: 0.4008
+    accuracy: 0.6503
+    qwk: 0.3262
+    spearman: 0.3861
+    calibration: 0.5671
+    hedging: 0.6154
+  stimulation:
+    mae: 0.1271
+    accuracy: 0.8741
+    qwk: 0.5473
+    spearman: 0.5792
+    calibration: 0.7158
+    hedging: 0.8462
+  hedonism:
+    mae: 0.1874
+    accuracy: 0.8392
+    qwk: 0.5487
+    spearman: 0.4828
+    calibration: 0.6326
+    hedging: 0.8462
+  achievement:
+    mae: 0.2779
+    accuracy: 0.7413
+    qwk: 0.2828
+    spearman: 0.2149
+    calibration: 0.6244
+    hedging: 0.8392
+  power:
+    mae: 0.1396
+    accuracy: 0.8951
+    qwk: 0.4058
+    spearman: 0.2207
+    calibration: 0.7537
+    hedging: 0.8951
+  security:
+    mae: 0.299
+    accuracy: 0.7273
+    qwk: 0.3636
+    spearman: 0.3657
+    calibration: 0.6773
+    hedging: 0.7972
+  conformity:
+    mae: 0.2853
+    accuracy: 0.7483
+    qwk: 0.3141
+    spearman: 0.3094
+    calibration: 0.6236
+    hedging: 0.7972
+  tradition:
+    mae: 0.1997
+    accuracy: 0.7972
+    qwk: 0.1593
+    spearman: 0.4463
+    calibration: 0.6974
+    hedging: 0.951
+  benevolence:
+    mae: 0.3639
+    accuracy: 0.6643
+    qwk: 0.4248
+    spearman: 0.5009
+    calibration: 0.52
+    hedging: 0.6713
+  universalism:
+    mae: 0.1199
+    accuracy: 0.8881
+    qwk: 0.7316
+    spearman: 0.6538
+    calibration: 0.8403
+    hedging: 0.7483
+observations: EMD is the top performer in run_003 with QWK 0.410 — comparable to
+  run_001 SoftOrdinal (0.417) and improved over run_001 EMD (0.395). Universalism
+  reaches the highest QWK of any single dimension in any run (0.732). Hedonism improved
+  to QWK 0.549 (from 0.467). Calibration improved to 0.697 (from 0.648). EMD appears
+  robust to EMA removal, making it the most stable loss across code changes.

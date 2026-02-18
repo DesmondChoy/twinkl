@@ -8,6 +8,17 @@ metadata:
   timestamp: '2026-02-15T21:08:42'
   git_commit: e1e08c4(dirty)
   config_hash: 7566e048d30e
+provenance:
+  prev_run_id: null
+  prev_git_commit: null
+  git_log: []
+  config_delta:
+    added: {}
+    removed: {}
+    changed: {}
+  rationale: Baseline run establishing initial metrics for MiniLM-384d encoder with
+    large hidden_dim (256). First experiment round to compare all five loss functions
+    under the same encoder/capacity configuration.
 config:
   encoder:
     model_name: all-MiniLM-L6-v2
@@ -127,4 +138,9 @@ per_dimension:
     spearman: 0.6858
     calibration: 0.9147
     hedging: 0.7273
-observations: <fill in rationale + key findings before running>
+observations: SoftOrdinal achieves the best QWK (0.417) and calibration (0.724) of
+  all run_001 losses, and the best hedging/minority-recall balance (0.761/0.372). This
+  makes it the top performer for run_001. Universalism is exceptional (QWK 0.706,
+  calibration 0.915). Achievement is the weakest dimension (QWK 0.204). Training gap
+  is the largest at 0.777, suggesting SoftOrdinal's soft-label formulation is harder
+  to fit and may benefit from additional regularization.

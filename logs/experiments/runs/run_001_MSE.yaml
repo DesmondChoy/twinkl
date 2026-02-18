@@ -8,6 +8,17 @@ metadata:
   timestamp: '2026-02-15T21:08:42'
   git_commit: e1e08c4(dirty)
   config_hash: 38c53fb9eb2f
+provenance:
+  prev_run_id: null
+  prev_git_commit: null
+  git_log: []
+  config_delta:
+    added: {}
+    removed: {}
+    changed: {}
+  rationale: Baseline run establishing initial metrics for MiniLM-384d encoder with
+    large hidden_dim (256). First experiment round to compare all five loss functions
+    under the same encoder/capacity configuration.
 config:
   encoder:
     model_name: all-MiniLM-L6-v2
@@ -128,4 +139,9 @@ per_dimension:
     spearman: 0.5505
     calibration: -0.328
     hedging: 0.3427
-observations: <fill in rationale + key findings before running>
+observations: MSE produces the most decisive predictions (hedging 37.3%) with best
+  minority recall (0.428) but at severe cost — MAE 0.450 is nearly double the ordinal
+  losses, and calibration is catastrophically negative (-0.218) with only 1/10 positive
+  dimensions. Four dimensions have calibration below -0.4 (stimulation, achievement,
+  power, tradition), making predictions dangerously over-confident. Training gap (0.405)
+  also indicates substantial overfitting. MSE was dropped in subsequent runs.
