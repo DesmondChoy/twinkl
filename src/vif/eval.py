@@ -47,6 +47,13 @@ def discretize_predictions(values: np.ndarray) -> np.ndarray:
     return classes
 
 
+def _nanmean_or_nan(values: list[float]) -> float:
+    """Return NaN immediately if all values are NaN, avoiding numpy warning."""
+    if all(np.isnan(v) for v in values):
+        return float("nan")
+    return float(np.nanmean(values))
+
+
 def compute_mse_per_dimension(
     predictions: np.ndarray,
     targets: np.ndarray,
@@ -254,17 +261,19 @@ def evaluate_with_uncertainty(
 
     # Calibration check: higher uncertainty should correlate with higher error
     errors = np.abs(predictions - targets)
-    error_uncertainty_corr = stats.spearmanr(
-        uncertainties.flatten(),
-        errors.flatten(),
-    )[0]
+    flat_unc = uncertainties.flatten()
+    flat_err = errors.flatten()
+    if np.std(flat_unc) < 1e-8 or np.std(flat_err) < 1e-8:
+        error_uncertainty_corr = float("nan")
+    else:
+        error_uncertainty_corr = stats.spearmanr(flat_unc, flat_err)[0]
 
     results = {
         "predictions": predictions,
         "uncertainties": uncertainties,
         "targets": targets,
         "spearman_per_dim": spearman_per_dim,
-        "spearman_mean": float(np.nanmean(list(spearman_per_dim.values()))),
+        "spearman_mean": _nanmean_or_nan(list(spearman_per_dim.values())),
         "accuracy_per_dim": accuracy_per_dim,
         "accuracy_mean": float(np.mean(list(accuracy_per_dim.values()))),
         "mse_per_dim": mse_per_dim,
@@ -281,7 +290,7 @@ def evaluate_with_uncertainty(
         results["mae_per_dim"] = mae_per_dim
         results["mae_mean"] = float(np.mean(list(mae_per_dim.values())))
         results["qwk_per_dim"] = qwk_per_dim
-        results["qwk_mean"] = float(np.nanmean(list(qwk_per_dim.values())))
+        results["qwk_mean"] = _nanmean_or_nan(list(qwk_per_dim.values()))
 
     return results
 
@@ -338,7 +347,7 @@ def evaluate_model(
         "predictions": predictions,
         "targets": targets,
         "spearman_per_dim": spearman_per_dim,
-        "spearman_mean": float(np.nanmean(list(spearman_per_dim.values()))),
+        "spearman_mean": _nanmean_or_nan(list(spearman_per_dim.values())),
         "accuracy_per_dim": accuracy_per_dim,
         "accuracy_mean": float(np.mean(list(accuracy_per_dim.values()))),
         "mse_per_dim": mse_per_dim,
@@ -351,7 +360,7 @@ def evaluate_model(
         results["mae_per_dim"] = mae_per_dim
         results["mae_mean"] = float(np.mean(list(mae_per_dim.values())))
         results["qwk_per_dim"] = qwk_per_dim
-        results["qwk_mean"] = float(np.nanmean(list(qwk_per_dim.values())))
+        results["qwk_mean"] = _nanmean_or_nan(list(qwk_per_dim.values()))
 
     return results
 
@@ -398,18 +407,24 @@ def format_results_table(results: dict) -> str:
         lines.append(row)
 
     lines.append("-" * len(header))
+    spearman_mean = results["spearman_mean"]
+    spearman_mean_str = f"{spearman_mean:.3f}" if not np.isnan(spearman_mean) else "N/A"
     mean_row = (
         f"{'MEAN':<20} {results[err_mean_key]:>10.4f} "
-        f"{results['spearman_mean']:>10.3f} {results['accuracy_mean']:>10.2%}"
+        f"{spearman_mean_str:>10} {results['accuracy_mean']:>10.2%}"
     )
     if has_qwk:
-        mean_row += f" {results['qwk_mean']:>10.3f}"
+        qwk_mean = results["qwk_mean"]
+        qwk_mean_str = f"{qwk_mean:.3f}" if not np.isnan(qwk_mean) else "N/A"
+        mean_row += f" {qwk_mean_str:>10}"
     lines.append(mean_row)
     lines.append("=" * len(header))
 
     if "calibration" in results:
+        cal_corr = results["calibration"]["error_uncertainty_correlation"]
+        cal_corr_str = f"{cal_corr:.3f}" if not np.isnan(cal_corr) else "N/A"
         lines.append("\nCalibration:")
-        lines.append(f"  Error-uncertainty correlation: {results['calibration']['error_uncertainty_correlation']:.3f}")
+        lines.append(f"  Error-uncertainty correlation: {cal_corr_str}")
         lines.append(f"  Mean uncertainty: {results['calibration']['mean_uncertainty']:.4f}")
 
     return "\n".join(lines)

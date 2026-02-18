@@ -1,5 +1,7 @@
 """Tests for VIF evaluation metrics."""
 
+import warnings
+
 import numpy as np
 import pytest
 import torch
@@ -547,3 +549,154 @@ class TestFormatResultsTable:
             dim_line = [line for line in table.split("\n") if dim in line]
             assert len(dim_line) == 1
             assert "N/A" in dim_line[0]
+
+    def test_nan_spearman_mean_shows_na(self):
+        """MEAN row should show 'N/A' for Spearman when all dims are NaN."""
+        from src.vif.eval import format_results_table
+
+        table = format_results_table(self._base_results())
+        mean_line = [line for line in table.split("\n") if "MEAN" in line]
+        assert len(mean_line) == 1
+        assert "N/A" in mean_line[0]
+
+    def test_nan_qwk_mean_shows_na(self):
+        """QWK MEAN should show 'N/A' when all dims are NaN."""
+        from src.vif.eval import format_results_table
+
+        results = self._base_results(use_mae=True)
+        results["qwk_per_dim"] = {d: float("nan") for d in SCHWARTZ_VALUE_ORDER}
+        results["qwk_mean"] = float("nan")
+
+        table = format_results_table(results)
+        mean_line = [line for line in table.split("\n") if "MEAN" in line]
+        assert len(mean_line) == 1
+        # Both Spearman and QWK means should be N/A
+        assert mean_line[0].count("N/A") == 2
+
+
+# ── _nanmean_or_nan tests ────────────────────────────────────────────────────
+
+
+class TestNanmeanOrNan:
+    """Tests for the _nanmean_or_nan helper."""
+
+    def test_normal_values(self):
+        from src.vif.eval import _nanmean_or_nan
+
+        assert _nanmean_or_nan([1.0, 2.0, 3.0]) == pytest.approx(2.0)
+
+    def test_mixed_nan_values(self):
+        from src.vif.eval import _nanmean_or_nan
+
+        result = _nanmean_or_nan([1.0, float("nan"), 3.0])
+        assert result == pytest.approx(2.0)
+
+    def test_all_nan_no_warning(self):
+        from src.vif.eval import _nanmean_or_nan
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("error")
+            result = _nanmean_or_nan([float("nan"), float("nan"), float("nan")])
+        assert np.isnan(result)
+
+    def test_single_value(self):
+        from src.vif.eval import _nanmean_or_nan
+
+        assert _nanmean_or_nan([5.0]) == pytest.approx(5.0)
+
+    def test_single_nan(self):
+        from src.vif.eval import _nanmean_or_nan
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("error")
+            result = _nanmean_or_nan([float("nan")])
+        assert np.isnan(result)
+
+
+# ── Edge-case integration tests (warning suppression) ────────────────────────
+
+
+class _ConstantInputMixin:
+    """Shared fixtures for constant-input edge-case tests."""
+
+    @staticmethod
+    def _constant_dataloader(n_samples: int = 8, input_dim: int = 20):
+        """DataLoader where all targets are zero (constant per dimension)."""
+        inputs = np.random.default_rng(42).standard_normal((n_samples, input_dim))
+        targets = np.zeros((n_samples, 10))
+        return _make_dataloader(inputs, targets)
+
+
+class TestEvaluateWithUncertaintyEdgeCases(_ConstantInputMixin):
+    """Edge-case tests for evaluate_with_uncertainty."""
+
+    def test_constant_inputs_calibration_nan(self):
+        """Constant uncertainty/errors should produce NaN calibration, no warning."""
+        from src.vif.eval import evaluate_with_uncertainty
+
+        model = MockCriticMLP(torch.zeros(10))
+        dl = self._constant_dataloader()
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("error")
+            results = evaluate_with_uncertainty(model, dl)
+
+        assert np.isnan(results["calibration"]["error_uncertainty_correlation"])
+
+    def test_all_constant_spearman_mean_nan(self):
+        """All-constant dims should produce NaN spearman_mean, no warning."""
+        from src.vif.eval import evaluate_with_uncertainty
+
+        model = MockCriticMLP(torch.zeros(10))
+        dl = self._constant_dataloader()
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("error")
+            results = evaluate_with_uncertainty(model, dl)
+
+        assert np.isnan(results["spearman_mean"])
+
+    def test_all_constant_qwk_mean_nan(self):
+        """All-constant dims should produce NaN qwk_mean, no warning."""
+        from src.vif.eval import evaluate_with_uncertainty
+
+        model = MockCriticMLP(torch.zeros(10))
+        dl = self._constant_dataloader()
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("error")
+            results = evaluate_with_uncertainty(
+                model, dl, include_ordinal_metrics=True
+            )
+
+        assert np.isnan(results["qwk_mean"])
+
+
+class TestEvaluateModelEdgeCases(_ConstantInputMixin):
+    """Edge-case tests for evaluate_model."""
+
+    def test_all_constant_spearman_mean_nan(self):
+        """All-constant dims should produce NaN spearman_mean, no warning."""
+        from src.vif.eval import evaluate_model
+
+        model = MockCriticMLP(torch.zeros(10))
+        dl = self._constant_dataloader()
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("error")
+            results = evaluate_model(model, dl)
+
+        assert np.isnan(results["spearman_mean"])
+
+    def test_all_constant_qwk_mean_nan(self):
+        """All-constant dims should produce NaN qwk_mean, no warning."""
+        from src.vif.eval import evaluate_model
+
+        model = MockCriticMLP(torch.zeros(10))
+        dl = self._constant_dataloader()
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("error")
+            results = evaluate_model(model, dl, include_ordinal_metrics=True)
+
+        assert np.isnan(results["qwk_mean"])
