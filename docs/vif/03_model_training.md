@@ -234,4 +234,4 @@ python -m src.vif.train --encoder-model all-mpnet-base-v2
 ```
 
 Configuration: `config/vif.yaml`
-Interactive notebook: `notebooks/critic_training.ipynb`
+Scripts: `src/vif/train.py` and `src/vif/train_bnn.py`

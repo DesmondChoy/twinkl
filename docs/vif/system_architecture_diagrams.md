@@ -242,7 +242,7 @@ Coach output: "You've mentioned wanting to be there for your
 | Model | Status |
 |-------|--------|
 | Text Encoder (SBERT) | 🟡 Chosen, not yet integrated |
-| Generator (LLM) | ✅ **Working** in `journal_gen.ipynb` |
+| Generator (LLM) | ✅ **Working** in `src/synthetic/generation.py` + Claude orchestration docs |
 | Judge (LLM) | 🔲 Not implemented |
 | Critic (MLP) | 🔲 Not implemented |
 | Drift Rules | 🔲 Not implemented |

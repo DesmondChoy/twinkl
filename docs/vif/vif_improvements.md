@@ -40,7 +40,7 @@ Based on `docs/vif/01_concepts_and_roadmap.md`, `02_system_architecture.md`, `03
     - User profile embedding \(z_u\).
 
 - **Reward modeling pipeline**
-  - **Generator**: synthetic personas/journals created using Schwartz‑grounded value elaborations from `config/schwartz_values.yaml` and structured prompts (`docs/pipeline/pipeline_specs.md`, `notebooks/journalling/journal_gen.ipynb`).
+  - **Generator**: synthetic personas/journals created using Schwartz‑grounded value elaborations from `config/schwartz_values.yaml` and structured prompts (`docs/pipeline/pipeline_specs.md`, `src/synthetic/generation.py`).
   - **Judge (LLM‑as‑Judge)**:
     - Scores entries per value dimension using a **categorical rubric**: Misaligned (−1), Neutral (0), Aligned (+1).
     - Produces a vector like `[Health: -1, Career: +1, Family: 0]` as ground truth for the student.

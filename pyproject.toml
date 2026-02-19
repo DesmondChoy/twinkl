@@ -34,7 +34,7 @@ dependencies = [
 [tool.setuptools]
 # This project currently has no installable Python packages.
 # Explicitly disable auto-discovery so top-level folders like
-# `config/` and `notebooks/` don't get treated as packages.
+# `config/` and `logs/` don't get treated as packages.
 packages = []
 
 [tool.pytest.ini_options]

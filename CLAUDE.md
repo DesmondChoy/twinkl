@@ -49,8 +49,8 @@ uv add <package>
 uv pip install <package>
 ```
 
-Notebooks live in `notebooks/` and should be run from the project root
-after activation.
+Script-based generation/judging helpers live in `src/synthetic/`,
+`src/judge/`, and `scripts/journalling/`.
 
 ## Architecture Snapshot
 
@@ -78,11 +78,12 @@ after activation.
 - `logs/experiments/` — VIF training run logs (`runs/*.yaml`) and `index.md`
 - `logs/exports/` — Agreement reports and other exports
 
-### Notebooks (`notebooks/`)
+### Scripted Workflows
 
-- `notebooks/critic_training/v1/` — First-generation critic experiments (MLP, ordinal, BNN, TCN, embedding ablation)
-- `notebooks/critic_training/v2/` — Second-generation critic experiments (encoder comparison)
-- `notebooks/journalling/` — Journal generation, nudge, and judge labeling notebooks
+- `src/vif/train.py` and `src/vif/train_bnn.py` — Critic training CLIs
+- `src/synthetic/generation.py` — Synthetic generation primitives and safeguards
+- `src/judge/labeling.py` — Judge rubric + scoring helpers
+- `scripts/journalling/` — Lightweight sanity-check scripts for generation/judge flows
 
 ### Tests (`tests/`)
 

@@ -4,7 +4,11 @@ Instructions for Claude Code to generate synthetic conversational journal data u
 
 **No API keys required** - this uses Claude Code's native Task tool, not the external Claude Agent SDK.
 
-**This is the primary method for generating synthetic data at scale.** The Jupyter notebooks (`notebooks/journalling/journal_gen.ipynb`, `notebooks/journalling/journal_nudge.ipynb`) are for experimentation and prompt iteration only.
+**This is the primary method for generating synthetic data at scale.** Script-level helpers for prompt iteration and generation primitives now live in:
+- `src/synthetic/generation.py`
+- `src/nudge/decision.py`
+- `src/nudge/generation.py`
+- `scripts/journalling/generation_sanity_check.py`
 
 ---
 
@@ -20,11 +24,11 @@ Instructions for Claude Code to generate synthetic conversational journal data u
 | `MIN_DAYS_BETWEEN_ENTRIES` | `0` | Minimum days between entries (0 = same-day allowed via `SAME_DAY_PROBABILITY`) |
 | `MAX_DAYS_BETWEEN_ENTRIES` | `7` | Maximum days between entries (ensures ~1 entry/week) |
 | `SAME_DAY_PROBABILITY` | `0.15` | Probability of same-day follow-up entry (only active when `MIN_DAYS_BETWEEN_ENTRIES = 0`) |
-| `NUDGE_ENABLED` | `true` | Set to false to disable all nudge generation |
+| `NUDGE_ENABLED` | `true` | Set to `false` to disable all nudge generation (`True`/`False` when used in Python snippets) |
 | `TARGET_VALUES` | `[]` | Schwartz values to force (e.g., `["Stimulation", "Power"]`). Empty = random selection. |
-| `ADD_RANDOM_VALUE` | `true` | When targeting, randomly produce 1 or 2 values (target always included). |
+| `ADD_RANDOM_VALUE` | `true` | When targeting, sample either 1 value (`[forced]`) or 2 values (`[forced, random_other]`). |
 | `TARGET_TENSIONS` | `[]` | Values to apply tension scenarios (e.g., `["Universalism"]`). Empty = no tension targeting. |
-| `UNSETTLED_BOOST` | `0.6` | Probability of Unsettled mode when TARGET_TENSIONS is active (vs default ~0.33) |
+| `UNSETTLED_BOOST` | `0.6` | Probability of Unsettled mode when `TARGET_TENSIONS` is active. Remaining probability is split equally between Grounded and Neutral. |
 
 ---
 
@@ -43,7 +47,7 @@ To address value imbalance in your dataset, you can force specific Schwartz valu
 |----------|---------|--------|
 | `TARGET_VALUES = ["Stimulation"]` | All personas get Stimulation | Single-value focus |
 | `TARGET_VALUES = ["Stimulation", "Power", "Achievement"]` | Round-robin: P1→Stimulation, P2→Power, P3→Achievement, P4→Stimulation... | Balanced multi-value |
-| `ADD_RANDOM_VALUE = true` | Each persona gets forced value + one random value | Maintains dual-value variety |
+| `ADD_RANDOM_VALUE = true` | Each persona gets either `[forced]` or `[forced + one random value]` | Maintains variety while preserving the target |
 
 ### Examples
 
@@ -53,7 +57,7 @@ TARGET_VALUES = ["Stimulation"]
 ADD_RANDOM_VALUE = true
 NUM_PERSONAS = 5
 ```
-Result: 5 personas, all with Stimulation + one random second value
+Result: 5 personas, all include Stimulation; each has either 1 or 2 total core values
 
 **Example 2: Balanced coverage of three underrepresented values**
 ```
@@ -135,9 +139,16 @@ Read and internalize all of the following before generating:
 | `prompts/nudge_decision.yaml` | Template for LLM-based nudge classification |
 | `prompts/nudge_generation.yaml` | Template for generating nudges |
 | `prompts/nudge_response.yaml` | Template for persona responses |
-| `notebooks/journalling/journal_nudge.ipynb` | `decide_nudge_llm()` logic + `SCHWARTZ_BANNED_TERMS` list |
+| `src/nudge/decision.py` | `decide_nudge()` semantic classification + anti-annoyance helpers |
+| `src/synthetic/generation.py` | `SCHWARTZ_BANNED_TERMS`, date/gap sampling, value-context helpers |
 
-**Extract `SCHWARTZ_BANNED_TERMS` from the notebook to embed in subagent prompts.**
+Import banned terms directly from Python:
+
+```python
+from src.synthetic.generation import SCHWARTZ_BANNED_TERMS, build_banned_pattern
+
+BANNED_PATTERN = build_banned_pattern(SCHWARTZ_BANNED_TERMS)
+```
 
 ### 2. Ensure Directories Exist
 
@@ -161,7 +172,11 @@ For each of `{{NUM_PERSONAS}}` personas, randomly select:
 python3 -c "import random; print(random.choice(['18-24', '25-34', '35-44', '45-54', '55+']))"
 
 # Select random profession (read actual list from config)
-python3 -c "import random; print(random.choice(['Teacher', 'Engineer', 'Nurse', 'Artist', ...]))"
+python3 -c "
+import random, yaml
+cfg = yaml.safe_load(open('config/synthetic_data.yaml'))
+print(random.choice(cfg['personas']['professions']))
+"
 
 # Value Selection (supports targeted or random)
 python3 -c "
@@ -169,8 +184,8 @@ import random
 
 # Configuration (set by orchestrator)
 TARGET_VALUES = {{TARGET_VALUES}}  # e.g., ['Stimulation'] or []
-ADD_RANDOM_VALUE = {{ADD_RANDOM_VALUE}}  # True or False
-PERSONA_INDEX = {{PERSONA_INDEX}}  # 0, 1, 2, ... for round-robin
+ADD_RANDOM_VALUE = {{ADD_RANDOM_VALUE}}  # True or False (Python bool)
+PERSONA_INDEX = {{PERSONA_INDEX}}  # 0-based persona index from orchestrator
 
 ALL_VALUES = ['Self-Direction', 'Stimulation', 'Hedonism', 'Achievement',
               'Power', 'Security', 'Conformity', 'Tradition',
@@ -257,7 +272,7 @@ Each subagent receives everything needed to generate a complete persona, **write
 
 3. **Generation parameters**:
    - Tone, verbosity, reflection_mode options from config
-   - Banned terms extracted from notebook and embedded in this prompt
+   - Banned terms imported from `src/synthetic/generation.py` and embedded in this prompt
    - Prompt templates from `prompts/` folder
 
 3a. **Tension scenarios** (when `TARGET_TENSIONS` is non-empty):
@@ -268,7 +283,7 @@ Each subagent receives everything needed to generate a complete persona, **write
 
 4. **Nudge rules**:
    - `NUDGE_ENABLED` variable (if false, skip all nudge logic)
-   - `decide_nudge_llm()` logic from notebook (LLM-based classification)
+   - `decide_nudge()` logic from `src/nudge/decision.py` (LLM-based classification)
    - `prompts/nudge_decision.yaml` for semantic entry classification
    - Nudge generation instructions from `prompts/nudge_generation.yaml`
 
@@ -293,9 +308,9 @@ Each subagent receives everything needed to generate a complete persona, **write
 For each entry date:
   2. Randomly select tone/verbosity/reflection_mode via Bash
      - If TARGET_TENSIONS active: boost Unsettled to UNSETTLED_BOOST probability
-       (e.g., 60% Unsettled, 20% Grounded, 20% Neutral)
+       (remaining probability split equally across Grounded and Neutral)
      - Otherwise: equal probability (default)
-  2a. If reflection_mode is Unsettled AND persona's core value is in TARGET_TENSIONS:
+  2a. If reflection_mode is Unsettled AND ANY persona core value is in TARGET_TENSIONS:
       → Use the next scenario from the tension-selection scenario bank
         (cycle sequentially, wrap after exhaustion)
       → Replaces the generic Unsettled text from journal_entry.yaml
@@ -319,7 +334,7 @@ For each entry date:
      - `{nudge_text}` = the nudge question, wrapped in double quotes
      - IMPORTANT: Use `**Trigger**:` exactly — NOT `**Category**:`, `**Type**:`, or `**Reason**:`
   8. Response decision via Bash:
-     python3 -c "import random; print(random.random() < [response_probability])"
+     python3 -c "import random; RESPONSE_PROBABILITY={{RESPONSE_PROBABILITY}}; print(random.random() < RESPONSE_PROBABILITY)"
   9. If "True" → Generate `### Response` section with `**Mode**:` line and response text
      If "False" → Output ONLY `*(No response - persona did not reply to nudge)*` (NO Response section)
   10. Store entry result, continue to next date
@@ -334,9 +349,9 @@ For each entry date:
         age='[age]',
         profession='[profession]',
         culture='[culture]',
-        core_values=[core_values],
-        entry_count=[entry_count],
-        nudge_enabled=[NUDGE_ENABLED],
+        core_values=[list_of_values],      # e.g. ['Achievement', 'Power']
+        entry_count=entry_count_int,       # e.g. 8
+        nudge_enabled=NUDGE_ENABLED_BOOL,  # True/False
     )
     print('Registered persona [uuid]')
     "
@@ -392,7 +407,7 @@ The complete example below is the **single source of truth** for format. It cove
 ## Entry 1 - 2025-12-01
 
 ### Initial Entry
-**Tone**: reflective | **Verbosity**: medium | **Reflection Mode**: exploratory
+**Tone**: Self-reflective | **Verbosity**: Medium (1-2 paragraphs) | **Reflection Mode**: Unsettled
 
 Today I had a difficult conversation with my manager about the promotion timeline. He said I'm "on track" but couldn't give me a specific date. I left the meeting feeling unsettled — not sure if I should push harder or just keep my head down and wait.
 
@@ -410,7 +425,7 @@ It's not just the timing — I think I'm worried that if I get promoted, I'll ha
 ## Entry 2 - 2025-12-06
 
 ### Initial Entry
-**Tone**: frustrated | **Verbosity**: short | **Reflection Mode**: venting
+**Tone**: Emotional/Venting | **Verbosity**: Short (1-3 sentences) | **Reflection Mode**: Unsettled
 
 Bad day. The deploy failed at 3 AM and I had to roll back manually. Spent most of today debugging instead of working on my actual project.
 
@@ -421,7 +436,7 @@ Bad day. The deploy failed at 3 AM and I had to roll back manually. Spent most o
 ## Entry 3 - 2025-12-09
 
 ### Initial Entry
-**Tone**: hopeful | **Verbosity**: long | **Reflection Mode**: planning
+**Tone**: Self-reflective | **Verbosity**: Long (Detailed reflection) | **Reflection Mode**: Grounded
 
 I've been thinking a lot about what I said about my mom visiting. I looked at my calendar and realized I've been treating "busy" as my default excuse for everything. What if I actually blocked off two weeks in February and told work in advance? The worst they can say is no, and at least then I'd know where I stand.
 
@@ -438,7 +453,7 @@ I also started wondering if my reluctance to take time off is really about work,
 ## Entry 4 - 2025-12-14
 
 ### Initial Entry
-**Tone**: neutral | **Verbosity**: medium | **Reflection Mode**: reporting
+**Tone**: Brief and factual | **Verbosity**: Medium (1-2 paragraphs) | **Reflection Mode**: Neutral
 
 Weekly update: finished the API refactor, started documentation. Team lunch on Friday was nice — we tried that new ramen place downtown. Looking forward to the holiday break coming up.
 
@@ -449,7 +464,7 @@ Weekly update: finished the API refactor, started documentation. Team lunch on F
 ## Entry 5 - 2025-12-20
 
 ### Initial Entry
-**Tone**: reflective | **Verbosity**: medium | **Reflection Mode**: exploratory
+**Tone**: Self-reflective | **Verbosity**: Medium (1-2 paragraphs) | **Reflection Mode**: Grounded
 
 I finally texted my mom about February. She called me immediately — I could hear how happy she was. We talked for almost an hour, the longest conversation we've had in months. She didn't mention anything about me leaving or being too busy. She just wanted to know what my apartment looks like and if I'm eating well.
 
@@ -543,7 +558,7 @@ Before writing the log file, verify ALL of the following:
 
 ## Checklist
 
-- [ ] Read source files (configs + prompts/ + notebook)
+- [ ] Read source files (configs + prompts/ + Python modules)
 - [ ] Set configuration variables above
 - [ ] (Optional) Set `TARGET_VALUES` to force specific Schwartz values
 - [ ] (Optional) Set `ADD_RANDOM_VALUE = true` to add variety

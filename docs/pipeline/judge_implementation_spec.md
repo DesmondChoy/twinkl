@@ -31,8 +31,8 @@ See also: [`annotation_guidelines.md`](../synthetic_data/annotation_guidelines.m
 1. [Why the Judge is Required](#why-the-judge-is-required)
 2. [What the Judge Does](#what-the-judge-does)
 3. [Implementation](#implementation)
-   - [Data Wrangling (TODO)](#data-wrangling-todo)
-   - [Option A: Python Notebook](#option-a-python-notebook)
+   - [Data Wrangling](#data-wrangling)
+   - [Option A: Python Scripts](#option-a-python-scripts)
    - [Option B: Claude Code Subagents](#option-b-claude-code-subagents)
 4. [Validation & Quality Control](#validation--quality-control)
 
@@ -42,7 +42,7 @@ See also: [`annotation_guidelines.md`](../synthetic_data/annotation_guidelines.m
 
 ### The Training Data Gap
 
-The synthetic data generation pipeline (`journal_gen.ipynb`, `journal_nudge.ipynb`) produces:
+The synthetic data generation pipeline (`src/synthetic/generation.py`, `src/nudge/`) produces:
 - ✅ Synthetic personas with Schwartz value profiles
 - ✅ Longitudinal journal entries showing value drift/conflicts
 - ✅ Conversational nudges and responses
@@ -211,26 +211,26 @@ Two implementation options are available. Choose based on your needs:
 
 | Option | Model | Pros | Cons |
 |--------|-------|------|------|
-| **A: Python Notebook** | OpenAI (gpt-4o-mini) | Fast iteration, lower cost, code in repo | Smaller model |
+| **A: Python Scripts** | OpenAI (gpt-4o-mini) | Fast iteration, lower cost, code in repo | Smaller model |
 | **B: Claude Code** | Claude (Opus/Sonnet) | Larger model, may be more accurate | Manual orchestration |
 
 ---
 
-### Data Wrangling (TODO)
+### Data Wrangling
 
-> ⚠️ **Not yet implemented**: Both options require a data loader to parse synthetic data.
+Data wrangling is implemented in `src/wrangling/parse_synthetic_data.py`.
 
-The `load_personas_and_entries()` function in the notebook is currently a stub. It needs to:
-
-1. **Parse `persona_*.md` files** from `logs/synthetic_data/<run>/`
-2. **Extract persona metadata**: name, age, profession, culture, core_values, bio
-3. **Extract journal entries**: date, content, tone, verbosity, reflection_mode
-4. **Handle conversational entries**: initial_entry + nudge + response (when present)
+It currently:
+1. **Parses `persona_*.md` files** from flat `logs/synthetic_data/`
+2. **Extracts persona metadata**: name, age, profession, culture, core_values, bio
+3. **Extracts conversational entries**: initial_entry + optional nudge + optional response
+4. **Writes clean Judge-ready markdown** to `logs/wrangled/persona_*.md`
+5. **Updates registry stage** to mark personas as wrangled
 
 **Expected data structure per persona:**
 ```json
 {
-  "persona_id": 1,
+  "persona_id": "a3f8b2c1",
   "persona": {
     "name": "Alex Chen",
     "age": "28",
@@ -252,9 +252,14 @@ The `load_personas_and_entries()` function in the notebook is currently a stub. 
 
 ---
 
-### Option A: Python Notebook
+### Option A: Python Scripts
 
-The Judge is implemented in **`notebooks/judge_labeling.ipynb`**. This notebook provides:
+The Judge implementation is script-based via:
+- `src/judge/labeling.py`
+- `scripts/journalling/judge_sanity_check.py`
+- `src/judge/consolidate.py`
+
+These modules provide:
 
 - Pydantic models for structured output (`AlignmentLabel`)
 - Async batch processing with `asyncio.gather()`
@@ -269,7 +274,12 @@ The Judge is implemented in **`notebooks/judge_labeling.ipynb`**. This notebook 
 
 **Data flow:**
 ```
-logs/synthetic_data/<run>/persona_*.md  →  notebooks/judge_labeling.ipynb  →  data/judge_labels.parquet
+logs/synthetic_data/persona_*.md
+  → src/wrangling/parse_synthetic_data.py
+  → logs/wrangled/persona_*.md
+  → src/judge/labeling.py (per-persona JSON)
+  → src/judge/consolidate.py
+  → logs/judge_labels/judge_labels.parquet
 ```
 
 ---
@@ -284,7 +294,7 @@ Use Claude Code's parallel Task tool to run one Judge subagent per persona.
 ┌─────────────────────────────────────────────────────────────────────┐
 │  MAIN ORCHESTRATOR                                                  │
 │                                                                     │
-│  1. Read all persona log files from synthetic data run             │
+│  1. Read all persona log files from logs/synthetic_data/           │
 │                                                                     │
 │  2. Launch parallel judge subagents (one per persona)               │
 │     ┌────────────────┐ ┌────────────────┐ ┌────────────────┐       │
@@ -292,13 +302,13 @@ Use Claude Code's parallel Task tool to run one Judge subagent per persona.
 │     │ Score Entry 1  │ │ Score Entry 1  │ │ Score Entry 1  │       │
 │     │ Score Entry 2  │ │ Score Entry 2  │ │ Score Entry 2  │       │
 │     │ Score Entry 3  │ │ Score Entry 3  │ │ Score Entry 3  │       │
-│     │ ...→Write CSV  │ │ ...→Write CSV  │ │ ...→Write CSV  │       │
+│     │ ...→Write JSON │ │ ...→Write JSON │ │ ...→Write JSON │       │
 │     └───────┬────────┘ └───────┬────────┘ └───────┬────────┘       │
 │             │                  │                  │                 │
 │  3. Wait for all to complete with TaskOutput                        │
 │             │                  │                  │                 │
 │             ▼                  ▼                  ▼                 │
-│  4. Consolidate CSVs, validate, report stats                        │
+│  4. Consolidate JSON labels, validate, report stats                 │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -309,8 +319,9 @@ Use Claude Code's parallel Task tool to run one Judge subagent per persona.
 
 **Configuration:**
 ```yaml
-SYNTHETIC_DATA_RUN: "logs/synthetic_data/2026-01-06_23-02-23"
-JUDGE_OUTPUT_DIR: "logs/judge_labels/2026-01-07_10-15-00"
+SYNTHETIC_DATA_DIR: "logs/synthetic_data"
+WRANGLED_DIR: "logs/wrangled"
+JUDGE_OUTPUT_DIR: "logs/judge_labels"
 MAX_CONCURRENT_JUDGES: 10
 ```
 
@@ -318,7 +329,7 @@ MAX_CONCURRENT_JUDGES: 10
 
 1. **Read synthetic data**: Parse `persona_*.md` files (see Data Wrangling above)
 
-2. **Create output directory**: `mkdir -p logs/judge_labels/$(date +%Y-%m-%d_%H-%M-%S)`
+2. **Create output directory**: `mkdir -p logs/judge_labels`
 
 3. **Launch subagents**: Send ONE message with multiple Task calls (all with `run_in_background=true`)
    ```
@@ -331,12 +342,31 @@ MAX_CONCURRENT_JUDGES: 10
 
 4. **Wait for completion**: Use `TaskOutput` with `block=true` for each task
 
-5. **Consolidate results**: Merge `persona_XXX_labels.csv` into `judge_labels_all.csv`
+5. **Consolidate results**: Merge `persona_*_labels.json` via `python -m src.judge.consolidate`
 
-**Output format** (CSV):
-```csv
-persona_id,date,entry_id,Self-Direction,Stimulation,Hedonism,Achievement,Power,Security,Conformity,Tradition,Benevolence,Universalism
-1,2023-11-05,1,0,0,-1,1,0,0,0,0,0,0
+**Output format** (JSON per persona):
+```json
+{
+  "persona_id": "a3f8b2c1",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2023-11-05",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      }
+    }
+  ]
+}
 ```
 
 ---
@@ -370,20 +400,20 @@ If quality is poor:
 ## Checklist
 
 **Data Wrangling (required for both options):**
-- [ ] Implement `load_personas_and_entries()` to parse `persona_*.md` files
-- [ ] Handle both one-way entries and conversational (nudge+response) entries
+- [ ] Run `python -m src.wrangling.parse_synthetic_data`
+- [ ] Confirm `logs/wrangled/persona_*.md` files were produced
 
-**Option A (Notebook) or Option B (Claude Code):**
+**Option A (Scripts) or Option B (Claude Code):**
 - [ ] Run Judge on 3-5 personas as pilot
 - [ ] Manually review pilot results
 - [ ] If quality acceptable, run on full dataset
-- [ ] Save labels (Parquet for Option A, CSV for Option B)
+- [ ] Save labels (`persona_*_labels.json`) and consolidate to parquet
 
 ---
 
 ## Next Steps (Phase 3: VIF Training)
 
-Once you have `data/judge_labels.parquet`, see `docs/vif/03_model_training.md` for the training pipeline.
+Once you have `logs/judge_labels/judge_labels.parquet`, see `docs/vif/03_model_training.md` for the training pipeline.
 
 ---
 
@@ -396,7 +426,7 @@ Once you have `data/judge_labels.parquet`, see `docs/vif/03_model_training.md` f
 
 ## References
 
-- Option A implementation: `notebooks/judge_labeling.ipynb`
+- Option A implementation: `src/judge/labeling.py`
 - Option B pattern: `docs/pipeline/claude_gen_instructions.md`
 - Schwartz value rubrics: `config/schwartz_values.yaml`
 - VIF training pipeline: `docs/vif/03_model_training.md`

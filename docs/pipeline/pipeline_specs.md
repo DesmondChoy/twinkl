@@ -16,7 +16,10 @@ Journals should be:
 
 **Primary generation**: Use `docs/pipeline/claude_gen_instructions.md` with Claude Code for parallel subagent generation.
 
-**Experimentation**: Use `notebooks/journalling/journal_gen.ipynb` or `notebooks/journalling/journal_nudge.ipynb` for prompt iteration and testing.
+**Experimentation**: Use script modules and sanity scripts:
+- `src/synthetic/generation.py` (value context, date sampling, banned-term guards)
+- `src/nudge/decision.py` and `src/nudge/generation.py` (nudge logic)
+- `scripts/journalling/generation_sanity_check.py` (quick local validation)
 
 ## Configuration Files
 
@@ -452,7 +455,7 @@ async def generate_conversational_entry(
     )
 
     # Step 2: Decide whether to nudge (content-only signals)
-    should_nudge, nudge_category, trigger_reason = decide_nudge_llm(
+    should_nudge, nudge_category, trigger_reason = decide_nudge(
         entry=entry_result.entry,
         previous_entries=previous_entries,
         config=config
@@ -602,7 +605,7 @@ This allows the Critic to learn:
 
 ## Implementation Status
 
-**Current**: Notebook-first development in `notebooks/journalling/journal_nudge.ipynb`
+**Current**: Script-first development in `src/synthetic/generation.py` and `src/nudge/`
 
 **Phase 1 (Foundation)**: ✅ Complete
 - [x] Set up output logging system (directory structure, utility functions)
@@ -626,10 +629,10 @@ This allows the Critic to learn:
 - [ ] Test end-to-end pipeline
 - [ ] Tune probabilities and voice guidance prompts
 
-**Phase 5 (Future - Productionize)**:
-- [ ] Once notebook output is satisfactory, extract to Python scripts
-- [ ] Add unit tests
-- [ ] Formalize data models in `src/` directory
+**Phase 5 (Productionize)**: ✅ Complete
+- [x] Refactor notebook helper logic into Python modules (`src/synthetic/generation.py`, `src/judge/labeling.py`)
+- [x] Add script-level sanity checks (`scripts/journalling/generation_sanity_check.py`, `scripts/journalling/judge_sanity_check.py`)
+- [x] Update documentation references from notebooks to scripts/modules
 
 ---
 
@@ -710,7 +713,7 @@ During initial implementation, the nudge decision logic used **synthetic generat
 ### What Was Initially Implemented (Incorrect)
 
 ```python
-def decide_nudge_llm(
+def decide_nudge(
     entry: JournalEntry,
     reflection_mode: str,
     tone: str,  # ← PROBLEM: Synthetic metadata
@@ -752,11 +755,11 @@ The `tone` parameter was randomly assigned *before* entry generation as an instr
 
 3. **Simplified response modes**: Reduced from 5 to 3 modes, removing near-zero probability options.
 
-4. **Removed all synthetic metadata**: The `decide_nudge_llm()` function signature was simplified to only accept content-based inputs:
+4. **Removed all synthetic metadata**: The `decide_nudge()` function signature was simplified to only accept content-based inputs:
 
 ```python
 # Step 2: Decide whether to nudge (content-only signals)
-should_nudge, nudge_category, trigger_reason = decide_nudge_llm(
+should_nudge, nudge_category, trigger_reason = decide_nudge(
     entry=entry,
     previous_entries=previous_entries,
     config=config,
@@ -774,7 +777,7 @@ All synthetic metadata dependencies have been removed from the nudge decision lo
 | `reflection_mode == "Unsettled"` requirement | Synthetic generation instruction, not observable |
 | `reflection_mode == "Grounded"` check | Synthetic generation instruction, not observable |
 
-**Current implementation**: The `decide_nudge_llm()` function now uses **only** content-based signals:
+**Current implementation**: The `decide_nudge()` function now uses **only** content-based signals:
 - Entry word count
 - Presence of concrete details (nouns/verbs)
 - Hedging language patterns
@@ -796,15 +799,15 @@ Never use generation instructions as inputs to downstream decision logic - this 
 
 ### Purpose
 
-Enable iterative development by logging all synthetic data output for inspection and quality review. This supports both human developers tinkering with the notebook and Claude-assisted iteration.
+Enable iterative development by logging all synthetic data output for inspection and quality review. This supports both human developers iterating in scripts/modules and Claude-assisted iteration.
 
 ### Iterative Development Loop
 
 ```
-1. Implement changes in notebook
+1. Implement changes in script/module
          │
          ▼
-2. Run notebook → output stored in timestamped log folder
+2. Run script/orchestrator → output written to flat persona logs + registry
          │
          ▼
 3. Inspect logs to verify quality (Claude or human)
@@ -824,23 +827,19 @@ Enable iterative development by logging all synthetic data output for inspection
 |--------|----------|-----------|
 | **Format** | Markdown | Human-readable, easy to review in IDE/GitHub |
 | **Contents** | Output + prompts + config | Full reproducibility for debugging |
-| **Organization** | Timestamped folders | Each run is isolated, history preserved |
+| **Organization** | Flat persona files + registry | Matches parser/registry pipeline expectations |
 | **Summary** | No separate file | Review persona files directly |
 
 ### Log Directory Structure
 
 ```
 logs/synthetic_data/
-├── 2024-01-15_14-30-00/
-│   ├── config.md           # Config/parameters used for this run
-│   ├── persona_001.md      # Persona + all entries + nudges + responses
-│   ├── persona_002.md
-│   ├── persona_003.md
-│   └── prompts.md          # All prompts sent to LLM (for debugging)
-├── 2024-01-15_16-45-22/
-│   └── ...
-└── 2024-01-16_09-12-05/
-    └── ...
+├── persona_a3f8b2c1.md     # Persona + all entries + nudges + responses
+├── persona_e7d4f9a2.md
+└── ...
+
+logs/registry/
+└── personas.parquet        # Source-of-truth stage tracking
 ```
 
 ### Per-Persona Log Format
@@ -848,7 +847,7 @@ logs/synthetic_data/
 Each persona gets its own markdown file with complete output:
 
 ```markdown
-# Persona 001: [Name]
+# Persona a3f8b2c1: [Name]
 
 ## Profile
 - Age: 32
@@ -866,7 +865,7 @@ Each persona gets its own markdown file with complete output:
 
 [entry content here]
 
-### Nudge (Elaboration)
+### Nudge (elaboration)
 **Trigger**: Action without reflection detected
 
 "And how did that land?"
@@ -893,59 +892,18 @@ Each persona gets its own markdown file with complete output:
 ...
 ```
 
-### Config Log Format
+### Run-Level Metadata
 
-The `config.md` file captures all parameters used:
-
-```markdown
-# Run Configuration
-
-**Timestamp**: 2024-01-15 14:30:00
-**Notebook**: journal_gen.ipynb
-
-## Persona Generation
-- Num personas: 5
-- Entries per persona: 3
-
-## Nudge Settings
-- Base probability: 0.4
-- Response probability: 0.7
-- Category weights: clarification=0.25, elaboration=0.30, ...
-
-## Model Settings
-- Model: gpt-4o-mini
-- Reasoning effort: medium
-```
-
-### Prompts Log Format
-
-The `prompts.md` file captures all LLM prompts for debugging:
-
-```markdown
-# Prompts Log
-
-## Persona 001
-
-### Persona Generation Prompt
-[full prompt text]
-
-### Entry 1 - Initial Entry Prompt
-[full prompt text]
-
-### Entry 1 - Nudge Generation Prompt
-[full prompt text]
-
-### Entry 1 - Response Generation Prompt
-[full prompt text]
-
-...
-```
+The generation run records metadata through:
+- per-persona markdown profile fields (`Persona ID`, generated timestamp, profile traits),
+- registry state in `logs/registry/personas.parquet`,
+- orchestrator summary output (entry counts, nudge/response counts, registry status).
 
 ### Implementation Notes
 
-- **Additive, not replacement**: Notebook retains interactive display for human users. Logging is in addition to notebook output.
-- **Write-only**: New runs create new timestamped folders. Never overwrite previous logs.
-- **Timestamp format**: `datetime.now().strftime("%Y-%m-%d_%H-%M-%S")`
+- **Additive, not replacement**: Script-level sanity checks and module-level helpers are additive to orchestrated generation output.
+- **Write-only**: New personas append as `persona_{uuid}.md`; existing files are never overwritten.
+- **Uniqueness**: Use 8-char UUID persona IDs to avoid filename collisions.
 - **Gitignore**: Add `logs/synthetic_data/` to `.gitignore` to avoid bloating the repo.
 
 *Implementation tasks are tracked in the [Implementation Status](#implementation-status) section above.*
@@ -963,7 +921,7 @@ The `prompts.md` file captures all LLM prompts for debugging:
 ### Usage
 
 ```python
-# Single persona (await directly in Jupyter)
+# Single persona (await directly in async Python)
 result = await generate_persona_pipeline(
     persona_id=1,
     config=config,

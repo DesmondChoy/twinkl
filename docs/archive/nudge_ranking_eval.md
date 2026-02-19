@@ -63,7 +63,7 @@ template: |
   Return as JSON array.
 ```
 
-#### 2.2 Schema Addition (in notebook)
+#### 2.2 Schema Addition (in script)
 
 ```python
 class NudgeCandidate(BaseModel):
@@ -163,7 +163,7 @@ for persona in personas:
 ### Phase 1: Infrastructure (Day 1)
 
 - [ ] Create `prompts/nudge_candidates.yaml`
-- [ ] Add `NudgeCandidate` schema to notebook
+- [ ] Add `NudgeCandidate` schema to `src/evals/nudge_ranking_eval.py`
 - [ ] Implement `generate_nudge_candidates()` function
 - [ ] Test on 2-3 entries to verify JSON output
 
@@ -182,7 +182,7 @@ for persona in personas:
 ### Phase 4: Metrics & Reporting (Day 2-3)
 
 - [ ] Implement `hit_at_k()` and `ndcg_at_k()`
-- [ ] Create evaluation notebook: `notebooks/nudge_ranking_eval.ipynb`
+- [ ] Create evaluation script: `src/evals/nudge_ranking_eval.py`
 - [ ] Generate results table comparing all methods
 - [ ] Add statistical significance tests (paired t-test or bootstrap)
 
@@ -215,7 +215,7 @@ This demonstrates the system's value-conditioning provides meaningful lift over 
 | `prompts/nudge_candidates.yaml` | Create | ~25 |
 | `prompts/nudge_relevance_judge.yaml` | Create | ~30 |
 | `prompts/__init__.py` | Modify | +2 |
-| `notebooks/nudge_ranking_eval.ipynb` | Create | ~200 |
+| `src/evals/nudge_ranking_eval.py` | Create | ~200 |
 | `config/synthetic_data.yaml` | Modify | +5 |
 
 **Total new code: ~260 lines** (achievable in 2-3 focused days)

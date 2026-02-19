@@ -86,9 +86,10 @@ Registry Check → Auto-Wrangle → Parallel Labeling (subagents) → Validation
 **Primary Generation Method:**
 - `docs/pipeline/claude_gen_instructions.md` — Instructions for Claude Code to generate synthetic data using parallel subagents
 
-**Experimentation Notebooks** (for prompt iteration and testing):
-- `notebooks/journalling/journal_gen.ipynb` — One-way journal generation
-- `notebooks/journalling/journal_nudge.ipynb` — Two-way conversational journaling with nudges
+**Experimentation Scripts/Modules** (for prompt iteration and testing):
+- `src/synthetic/generation.py` — One-way generation primitives (context, date sampling, banned-term guards)
+- `src/nudge/decision.py` + `src/nudge/generation.py` — Two-way conversational nudging logic
+- `scripts/journalling/generation_sanity_check.py` — Quick local sanity checks
 
 ## Human Annotation Tool
 
