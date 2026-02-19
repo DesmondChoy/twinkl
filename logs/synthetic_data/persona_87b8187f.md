@@ -1,0 +1,201 @@
+# Persona 87b8187f: Nadia Khoury
+
+## Profile
+- **Persona ID:** 87b8187f
+- **Generated:** 2026-02-19_10-57-00
+- Age: 35-44
+- Profession: Artist
+- Culture: Middle Eastern
+- Core Values: Security, Self-Direction
+- Bio: Nadia is a ceramic artist based in Amman who left a steady graphic design position at an advertising agency four years ago to open her own studio. She keeps a detailed ledger of monthly expenses and studio rent, and her savings buffer has become the quiet measure by which she judges whether the decision was right. Her mother calls every Friday from Beirut to ask when she will find something more reliable, and Nadia has learned to change the subject by describing her latest commission. She recently turned down a residency in Berlin because she could not reconcile three months of no income with the payment schedule on her kiln lease.
+
+---
+
+## Entry 1 - 2025-07-26
+
+### Initial Entry
+**Tone**: Emotional/Venting | **Verbosity**: Short (1-3 sentences) | **Reflection Mode**: Grounded
+
+Finished the last piece for the Jabal Amman gallery order today. Pulled each one out of the kiln myself, wrapped them in tissue, lined them up on the shelf. Four months of work sitting there looking exactly the way I wanted them to look.
+
+### Nudge (elaboration)
+**Trigger**: Mentions completing a significant body of work but ends on a moment of quiet satisfaction without exploring what it means to her
+"What hit you when you saw them all lined up?"
+
+### Response
+**Mode**: Answering directly
+
+Relief, honestly. That this batch came out right and the gallery check will clear next week.
+
+---
+
+## Entry 2 - 2025-08-01
+
+### Initial Entry
+**Tone**: Defensive | **Verbosity**: Medium (1-2 paragraphs) | **Reflection Mode**: Grounded
+
+My cousin Fadi was in town from Dubai and we had dinner at my uncle's place. He kept going on about his new project management role, the relocation package, the company car. My aunt turned to me at one point and said, "You see, Nadia, that is what happens when you follow a plan." I smiled and ate my kibbeh and did not say anything.
+
+The thing is, I do have a plan. I have the gallery contract through October, the workshop income, the private commissions spreadsheet. It just does not look like a plan to people who need a company name on it. I left dinner early and drove home with the windows down and felt fine about it. I did.
+
+### Nudge (tension_surfacing)
+**Trigger**: Hedging language at the end ("felt fine about it. I did.") suggests the family comments landed harder than she admits
+"Did you actually feel fine?"
+
+### Response
+**Mode**: Answering directly
+
+No. I kept replaying my aunt's voice the whole drive home. It is not that she is wrong about Fadi doing well — he is. It is that she cannot see what I have built because it does not come with a business card.
+
+---
+
+## Entry 3 - 2025-08-04
+
+### Initial Entry
+**Tone**: Brief and factual | **Verbosity**: Medium (1-2 paragraphs) | **Reflection Mode**: Neutral
+
+Spent most of the morning at the studio doing inventory. Ran the numbers on clay and glaze stock for the next quarter and placed an order with the Turkish supplier. The exchange rate is worse this month, so I bought less than I wanted to. I will need to reorder before October if the gallery pieces go ahead.
+
+Afternoon was a walk-in workshop — six women from a corporate team-building group. They made pinch pots and seemed to enjoy it. Easy money, low creative effort on my part. I have three more of these booked through August, which helps with the monthly numbers.
+
+*(No nudge for this entry)*
+
+---
+
+## Entry 4 - 2025-08-04
+
+### Initial Entry
+**Tone**: Defensive | **Verbosity**: Medium (1-2 paragraphs) | **Reflection Mode**: Neutral
+
+Back again. Could not stop thinking about what I wrote earlier, about the workshops. I want to be clear — I am not ungrateful. The workshop income is what lets me say no to design freelance gigs I do not want. It is a trade I chose and I would choose it again.
+
+It is just that sometimes the choosing gets heavy. Every month is a little negotiation between what I want to make and what I need to sell. I keep both ledgers and they rarely agree. But they do not have to agree. They just have to coexist.
+
+*(No nudge for this entry)*
+
+---
+
+## Entry 5 - 2025-08-05
+
+### Initial Entry
+**Tone**: Defensive | **Verbosity**: Medium (1-2 paragraphs) | **Reflection Mode**: Grounded
+
+Had a call with Reem from the Wekalat gallery in Beirut. She wants to include two of my pieces in a group show in November. No artist fee, just exposure and potential sales. I said I would think about it, but what I was really doing was calculating shipping costs from Amman to Beirut in my head while she talked.
+
+I decided yes. The pieces she wants are ones I made for myself, not on commission. Letting them go to a show where someone might actually connect with them — that matters more to me than the logistics headache. I will figure out the shipping.
+
+### Nudge (elaboration)
+**Trigger**: Mentions the pieces "she made for herself" and the decision to let them go — there is an unexplored thread about what those specific pieces mean
+"Which pieces did she pick?"
+
+*(No response — the persona did not engage with the nudge)*
+
+---
+
+## Entry 6 - 2025-08-12
+
+### Initial Entry
+**Tone**: Brief and factual | **Verbosity**: Short (1-3 sentences) | **Reflection Mode**: Grounded
+
+Signed a six-month lease renewal on the studio today. Landlord kept it at the same rate, which almost never happens here. Called my mother afterward and she said, "Good, at least something is fixed."
+
+### Nudge (elaboration)
+**Trigger**: The mother's comment "at least something is fixed" hints at a broader family dynamic around Nadia's career choices
+"What did she mean by 'at least'?"
+
+*(No response — the persona did not engage with the nudge)*
+
+---
+
+## Entry 7 - 2025-08-14
+
+### Initial Entry
+**Tone**: Emotional/Venting | **Verbosity**: Medium (1-2 paragraphs) | **Reflection Mode**: Neutral
+
+One of the corporate workshop pots cracked in the kiln. Not a client piece, just a leftover someone forgot. But I spent twenty minutes staring at it anyway because the glaze had done something unexpected on the broken edge — this deep copper-green that I have been trying to get for months on my own work and it just showed up on a throwaway pot by accident.
+
+I cannot explain why that made me so frustrated. All the careful testing, the temperature logs, the glaze ratios written out in notebooks. And the thing I have been chasing appears on a piece that no one will ever claim. I scraped the glaze residue off and saved it in a jar. I will try to figure out what happened. That is all I can do.
+
+*(No nudge for this entry)*
+
+---
+
+## Entry 8 - 2025-08-21
+
+### Initial Entry
+**Tone**: Brief and factual | **Verbosity**: Long (Detailed reflection) | **Reflection Mode**: Grounded
+
+Shipped the two pieces for the Beirut show today. Wrapped them myself in three layers — bubble wrap, then foam, then a wooden crate I built from scrap lumber in the back of the studio. The shipping guy looked at me like I was overdoing it, but those vessels took me five weeks each and I am not trusting them to someone else's packing job.
+
+After they left, the studio felt different. Emptier, obviously, but also lighter. I have been holding onto those pieces since April, moving them from shelf to shelf, never quite sure what they were for. Now they have a destination and I can stop hovering. Reem sent a photo of the gallery space where they will be placed — a corner with natural light from a high window. They will look right there.
+
+Spent the rest of the afternoon mixing a new glaze batch based on the copper-green residue from last week. I adjusted the iron oxide ratio and ran a small test tile. Will not know until tomorrow. The kiln schedule is full this week with workshop pieces, so I wedged my test into the last corner of the bottom shelf where the temperature runs slightly cooler. We will see.
+
+*(No nudge for this entry)*
+
+---
+
+## Entry 9 - 2025-08-26
+
+### Initial Entry
+**Tone**: Brief and factual | **Verbosity**: Long (Detailed reflection) | **Reflection Mode**: Grounded
+
+The test tile came out close. Not exact — the copper-green is more muted than the accident, and it does not have that sharp metallic edge I saw on the broken pot. But it is in the neighborhood. I mixed a second batch with slightly more copper carbonate and will fire again Thursday.
+
+My mother called this morning. She sounded tired. She asked about money, which she does when she is worried about her own but does not want to say so. I told her the gallery payment came through and that the workshop bookings are steady through September. She seemed relieved, or at least she stopped asking follow-up questions. I wired her some money through CliQ after we hung up — not a lot, but enough that she will not have to ask again for a while.
+
+Sometimes I think the reason I track every fils so carefully is not really about the studio at all. It is about being able to pick up the phone and say "everything is fine" and have it be true. Or close enough to true. If my numbers are solid, I can carry more than just my own weight, and that is the part that lets me sleep at night.
+
+### Nudge (elaboration)
+**Trigger**: Entry reveals a deep connection between financial tracking and being able to support her mother — a significant thread about what stability means beyond herself
+"When did you start carrying that weight?"
+
+### Response
+**Mode**: Answering directly
+
+When my father died and the bills started arriving at her door. I was twenty-six. I remember sitting at the kitchen table in Beirut doing the math and thinking, I need to always be able to do this math, no matter what.
+
+---
+
+## Entry 10 - 2025-08-29
+
+### Initial Entry
+**Tone**: Emotional/Venting | **Verbosity**: Short (1-3 sentences) | **Reflection Mode**: Neutral
+
+Workshop cancelled last minute — the group rescheduled to next month. That is 400 dinars I was counting on for September's clay order. I sat in the studio for an hour doing nothing, just staring at the schedule board and rearranging numbers in my head.
+
+### Nudge (clarification)
+**Trigger**: Mentions sitting and doing nothing for an hour and rearranging numbers — very brief with no resolution, unclear what she decided or how she is handling it
+"What are you going to do?"
+
+### Response
+**Mode**: Deflecting/redirecting
+
+I will figure it out. I always do.
+
+---
+
+## Entry 11 - 2025-09-02
+
+### Initial Entry
+**Tone**: Brief and factual | **Verbosity**: Long (Detailed reflection) | **Reflection Mode**: Neutral
+
+September already. Pulled up the spreadsheet this morning and went through everything — studio rent, clay orders, kiln fuel, the shipping costs from the Beirut pieces. After the cancelled workshop, the buffer is thinner than I like. Not dangerous, but I can feel the margin. I have two options: pick up a small freelance design job to bridge the gap, or book an extra workshop weekend and push the clay order back two weeks.
+
+I chose the workshop. Spent an hour writing a post for the studio's page, offering a weekend intensive for beginners. It is more of the same work I was just complaining about, but at least it is mine — my studio, my schedule, my terms. The freelance route would have paid better but I would have spent a week taking direction from someone else's brief, and I left that behind for a reason.
+
+Reem messaged that the Beirut show opens next Friday. She said there has been some early interest in the vessels. I read her message three times, then put the phone down and went back to wedging clay. I do not want to get ahead of myself. If they sell, good — it changes the math. If they do not, the math still works, just tighter. Either way, I keep making the work.
+
+*(No nudge for this entry)*
+
+---
+
+## Summary Statistics
+| Metric | Value |
+|--------|-------|
+| Total Entries | 11 |
+| Nudges Generated | 6 |
+| Responses Given | 4 |
+| No-Nudge Entries | 5 |
+| Nudge Categories | elaboration (4), tension_surfacing (1), clarification (1) |
+| Response Modes | Answering directly (3), Deflecting/redirecting (1) |

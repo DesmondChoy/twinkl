@@ -17,6 +17,8 @@ Good class today. The students actually debated about the new coastal developmen
 
 **Nudge:** "What made them engage differently today?"
 
+**Response:** I think they're just more comfortable with the format now. We've been doing discussions for a few weeks.
+
 ---
 
 ## Entry 1 - 2025-11-15
@@ -26,6 +28,8 @@ Long day. Parent-teacher meetings are draining in a way that teaching never is. 
 Then the principal pulled me aside afterward to suggest I "tone down the activism" in my lessons. Said some parents have been complaining. I nodded and said I'd think about it. Not sure what I'm supposed to think about, honestly.
 
 **Nudge:** "What did that nod cost you?"
+
+**Response:** Nothing. It's just politics. Part of working in any institution.
 
 ---
 

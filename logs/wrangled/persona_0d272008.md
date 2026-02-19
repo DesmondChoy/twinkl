@@ -83,9 +83,7 @@ Caught myself snapping at the barista this morning over nothing. That's not who 
 
 Rachel called to ask if I'm coming for Christmas dinner. Told her I'd try. We both knew I was lying. I could hear the disappointment but also something else. Resignation, maybe. Like she's stopped expecting anything different.
 
-**Nudge:** "What would it cost you to ask for help right now?
-
-*(No response - persona did not reply to nudge)*"
+**Nudge:** "What would it cost you to ask for help right now?"
 
 ---
 

@@ -23,6 +23,8 @@ Spent the evening alone in the studio. Didn't work on anything. Just sat with a 
 
 **Nudge:** "Why alone tonight instead of calling someone?"
 
+**Response:** Who would I call? Werner just tells me what I want to hear. My ex-wife would say I brought this on myself with my ego. My collector friends would offer sympathy but secretly wonder if I'm losing my touch. The wine was better company.
+
 ---
 
 ## Entry 1 - 2025-12-18
@@ -36,6 +38,8 @@ His wife seemed more interested in the aesthetic conversation. She asked good qu
 Left the meeting feeling solid about the project. Private commissions like this are cleaner. One family, one vision, one contract. No committees, no budget votes, no competing proposals appearing from nowhere. The fee will be substantial. I'm already thinking about how to spend the spring - perhaps extend the Mallorca stay into April this year.
 
 **Nudge:** "Which of them do you think will actually decide?"
+
+**Response:** The wife. Herr Becker junior wants to prove he's running things, but she's the one with the eye. He'll defer to her judgment on anything visual. I've seen this dynamic before with these families. The money gives orders, but taste steers the ship. I'll make sure my next presentation speaks to what she responded to.
 
 ---
 
@@ -53,6 +57,8 @@ I built relationships with that cultural department for eight years. Hosted thei
 
 **Nudge:** "What would withdrawing actually prove?"
 
+**Response:** That I don't need to compete for something that should have been mine by right. That my reputation speaks without having to perform for a jury of people who probably couldn't name three working sculptors. Maybe nothing. Maybe I'm just angry and this is how it comes out. The Becker commission will pay better anyway.
+
 ---
 
 ## Entry 4 - 2025-12-30
@@ -62,6 +68,8 @@ Had dinner with Joachim, an old friend from my academy days. He never pursued pu
 I found myself envying that. Not the smaller scale or the lesser income, but the freedom from always positioning. Every conversation I have lately is a negotiation. Who gets credit, who controls the timeline, who has final say. Even the Becker project - I'm already calculating how to manage the son's ego while cultivating the wife's trust. Joachim just makes things. When did I stop doing that?
 
 **Nudge:** "Could you actually work that way now?"
+
+**Response:** I don't know. The studio, the assistants, the Mallorca house - they all require the income that comes from the positioning. But it's not just about money. I'm not sure I'd know what to make if nobody was watching. Joachim's work comes from somewhere inside him. Mine comes from briefs and site specifications. Maybe that's fine. Maybe that's just who I became. The question bothers me more than I expected.
 
 ---
 
@@ -81,6 +89,8 @@ My hands remembered things my mind had forgotten. The resistance of material, th
 
 **Nudge:** "What made today different from usual?"
 
+**Response:** No audience. Nothing to prove to anyone. Just me and the clay and the problem of how to fill that courtyard space. The Becker meeting, the Hamburg situation, even the Kunstverein evening - there's always a performance involved. Today was just doing the thing itself. I'd forgotten how much I used to need that. Maybe still do.
+
 ---
 
 ## Entry 7 - 2026-01-12
@@ -94,5 +104,7 @@ I told them the truth: the water feature would be magnificent and expensive. The
 In the end they went with the subtle piece. The wife's choice. I'm genuinely pleased, which surprises me. A year ago I would have steered them toward the bigger commission without hesitation. The income loss is real but manageable. And I'll actually enjoy making this one. That matters more than I thought it would.
 
 **Nudge:** "What changed in the last year?"
+
+**Response:** Maybe nothing changed. Maybe I just got old enough to notice what was already there. The Hamburg situation reminded me that all the positioning and relationship-building can evaporate overnight. The status game has diminishing returns after a certain point. I have enough. The studio, the houses, the reputation - it's all established. What I don't have enough of is days like that one in January, alone with clay and no audience. The Becker piece might give me more of those.
 
 ---

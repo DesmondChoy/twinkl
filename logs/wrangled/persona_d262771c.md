@@ -19,6 +19,8 @@ Gabriela brought tamales for the office. I stayed late to finish signing off on 
 
 **Nudge:** "What makes doing things your way worth the extra hours?"
 
+**Response:** Worth it? Because when Arturo follows the manual, we get three calls from logistics asking why the codes do not match. Because I have seen what happens when people just follow what they are told without thinking. Twenty-five years and the company still uses my system because theirs does not work. That is what makes it worth it.
+
 ---
 
 ## Entry 1 - 2025-12-30
@@ -28,6 +30,8 @@ End of the year, everyone talking about resolutions. Mine is the same as always,
 Spent the morning reorganizing my office. Moved the filing cabinets to create more space for the whiteboard where I sketch out logistics problems. Nobody else uses whiteboards anymore, everything is supposed to be in the cloud, but I think better when I can see the whole picture drawn out in front of me. Marta teased me about being old-fashioned. Maybe. But old-fashioned works.
 
 **Nudge:** "How do you usually navigate those alignment initiatives?"
+
+**Response:** I listen carefully in the meetings. Take notes. Ask enough questions so they know I was paying attention. Then I look at what they want and figure out which parts actually apply to us and which parts were designed for an office in a different city with different problems. Usually about thirty percent is useful. I keep that thirty percent and let the rest fade. Nobody has complained because the numbers stay good.
 
 ---
 
@@ -46,6 +50,8 @@ After work, I walked the floor with the night shift supervisor. He mentioned tha
 Meeting did not go well. They want standardization regardless of the data. Something about "brand consistency across regions."
 
 **Nudge:** "What bothers you most about this decision?"
+
+**Response:** I put together the numbers. Sergio and I stayed late preparing the presentation. They listened, nodded, then said it was not about efficiency, it was about uniformity. My numbers did not matter. Twenty-five years building something that works and they want to replace it with something that looks good in a corporate report. I am tired of fighting the same fight.
 
 ---
 
