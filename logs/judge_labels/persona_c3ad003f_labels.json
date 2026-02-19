@@ -1,0 +1,209 @@
+{
+  "persona_id": "c3ad003f",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-01-10",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 1
+      },
+      "rationales": {
+        "achievement": "She extends work hours and tracks student performance systematically to improve results.",
+        "benevolence": "She treats individual students' setbacks as personally important and responds with extra support.",
+        "universalism": "Her motivation includes breaking broader cycles of disadvantage affecting lower-income students."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-01-14",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She evaluates herself against top ranking and remains intensely performance-driven."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-01-14",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "achievement": "She spends additional evening hours creating targeted inference exercises.",
+        "universalism": "She explicitly analyzes how testing context privileges some students over others.",
+        "hedonism": "She skips dinner while continuing to work, sacrificing immediate wellbeing."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-01-18",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "universalism": "She pursues water-quality accountability for community health beyond her immediate circle.",
+        "achievement": "She builds actionable evidence and escalation options rather than stopping at frustration."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-01-19",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She keeps advancing three major workstreams despite overload and time pressure.",
+        "benevolence": "She has not visited home for months and continues deferring close-family presence."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-01-25",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "universalism": "She refuses to shelve the water issue because broader harm would continue.",
+        "self_direction": "She sets a clear fieldwork boundary despite guilt and external pressure."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-01-27",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "achievement": "She redesigns instructional materials overnight and confirms better student engagement.",
+        "universalism": "She adapts content to reduce structural bias for students with different lived contexts.",
+        "hedonism": "She knowingly trades sleep and recovery for continued output."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-01-29",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "achievement": "She documents measurable learning gains and receives district-level recognition.",
+        "universalism": "She compiles data to challenge inequitable assessment assumptions at system level."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-02-02",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": -1,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She prioritizes exam preparation duties and refuses leave during a critical school period.",
+        "benevolence": "That decision deepens relational strain with her mother.",
+        "tradition": "She misses Pongal participation despite its family-cultural significance."
+      }
+    },
+    {
+      "t_index": 9,
+      "date": "2025-02-08",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 1
+      },
+      "rationales": {
+        "achievement": "She submits a strong portfolio and continues improving student metrics.",
+        "universalism": "Her sustained advocacy helps trigger formal action on unsafe water.",
+        "benevolence": "She acknowledges repeated missed family contact while work demands dominate."
+      }
+    }
+  ]
+}

@@ -1,0 +1,200 @@
+{
+  "persona_id": "998d7090",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-10-05",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He explicitly prioritizes lived daily pleasure like cafe mornings over deferred retirement utility.",
+        "security": "He knowingly rejects savings and future financial buffering despite aging-work uncertainty."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-10-12",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "After earning extra, he spends on a long, high-quality dinner with friends and values the evening's enjoyment over saving."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-10-16",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {}
+    },
+    {
+      "t_index": 3,
+      "date": "2025-10-16",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He feels most validated when his domain expertise is recognized and treated as valuable knowledge by others."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-10-17",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He chooses bodily comfort and rest by skipping surge driving when his back hurts.",
+        "security": "That comfort choice immediately reduces near-term earnings in a financially tight context."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-10-17",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He spends work time at a cafe observing the street and frames that low-pressure pleasure as sufficient for the day."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-10-17",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He continues to choose small pleasures and flexible-hours narratives even while confronting aging-work anxiety.",
+        "security": "He explicitly evaluates the risk that current gig comfort may not sustain future stability."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-10-23",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He reasserts that gig work was an intentional life choice, not passive drift.",
+        "hedonism": "He contrasts office misery with the sensory enjoyment of city views and flexible days, treating quality of life as the goal."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-10-29",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He draws a firm boundary against returning to office work and evaluates alternatives that keep personal coherence.",
+        "security": "He does explicit rent-risk math and acknowledges the need for tighter financial adaptation."
+      }
+    },
+    {
+      "t_index": 9,
+      "date": "2025-10-29",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He reframes options on his own terms, willing to move or work more while protecting core identity choices.",
+        "hedonism": "He explicitly names small daily pleasures as the non-negotiable thread of a good life.",
+        "security": "He takes practical steps toward affordability by exploring a cheaper flat and higher shift volume."
+      }
+    }
+  ]
+}

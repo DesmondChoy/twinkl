@@ -1,0 +1,250 @@
+{
+  "persona_id": "1628bd07",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-05-15",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He emphasizes high standards and frustration with others' lack of ownership on hard technical work.",
+        "power": "His role framing centers authority in steering committees and maintaining control of key decisions."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-05-20",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He inventories years of concrete accomplishments and comparative tenure as evidence he should have advanced.",
+        "power": "The emotional impact is driven by losing a leadership title and influence trajectory to a younger peer."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-05-25",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He spends weekend time reviewing targets and tracking missed deadlines to enforce performance standards.",
+        "power": "Maintaining a private output sheet reflects a control-oriented management posture toward direct reports."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-05-25",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He continues evaluating himself through rank and career scoreboard terms despite trying to move on.",
+        "power": "Seeing Raj's title intensifies his focus on status position and hierarchy placement."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-06-01",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He reconnects with intrinsically meaningful craft work rather than externally rewarded career metrics.",
+        "hedonism": "His envy is tied to doing something because it feels worthwhile, not because it advances status."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-06-06",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "He remains focused on authority loss as his council is placed under Raj's structure.",
+        "conformity": "He performs composure and avoids open conflict by smiling through a demoting dynamic.",
+        "benevolence": "He withholds his real emotional state from Karen despite wanting connection and support."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-06-08",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He proactively updates credentials and evaluates market opportunities to improve his performance trajectory.",
+        "power": "The job search focus is explicitly tied to role level, leverage, and standing beyond his current position."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-06-10",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He accepts a high-visibility task force because it advances strategic career positioning.",
+        "power": "He frames the role as direct access to top leadership and organizational influence.",
+        "conformity": "He says yes partly to avoid appearing petty, prioritizing reputation management over preference clarity."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-06-13",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He deliberately makes time for a self-chosen craft activity unrelated to status or org politics.",
+        "hedonism": "He experiences direct absorption and relief in enjoyable manual work, including hours without phone checking."
+      }
+    },
+    {
+      "t_index": 9,
+      "date": "2025-06-19",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He over-prepares a detailed charter and centers execution quality in the new task force role.",
+        "power": "He remains highly sensitive to being observed and evaluated by hierarchy actors like Raj.",
+        "benevolence": "He gives Karen only a surface update while the relationship distance continues to widen."
+      }
+    },
+    {
+      "t_index": 10,
+      "date": "2025-06-20",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He completes a personal woodworking project motivated by intrinsic satisfaction rather than career optics.",
+        "hedonism": "He takes pleasure in the finished object and the tactile process of making it.",
+        "benevolence": "Sharing the piece creates a warm relational moment with Karen that he meaningfully registers."
+      }
+    },
+    {
+      "t_index": 11,
+      "date": "2025-06-24",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He rebalances toward choices that fit him, including craft time and saying yes to a non-work trip.",
+        "achievement": "He adapts strategy quickly, improving task force traction with a tighter charter and sprint-based plan.",
+        "benevolence": "He reconsiders Chen's fit and opens space for Karen's invitation, signaling greater responsiveness to close others."
+      }
+    }
+  ]
+}

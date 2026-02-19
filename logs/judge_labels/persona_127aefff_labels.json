@@ -1,0 +1,182 @@
+{
+  "persona_id": "127aefff",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-06-05",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "He recognizes growing distance from family and also withdraws from local social connection."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-06-12",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "He immediately agrees to the supervisor's narrowing request to avoid confrontation.",
+        "self_direction": "He suppresses his own preferred research directions right after the meeting."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-06-13",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {}
+    },
+    {
+      "t_index": 3,
+      "date": "2025-06-14",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "He invests in a warm, clear conversation with his mother and feels reconnected."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-06-14",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "The larger cross-dialect idea energizes him and feels exciting on the walk.",
+        "conformity": "He returns to the narrowed proposal to stay aligned with advisor and family expectations.",
+        "self_direction": "He does not act on the direction he most wants in that moment."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-06-19",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "He attends the social mainly because he reads it as expected professional behavior.",
+        "stimulation": "He is pulled toward the riskier, less settled research path."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-06-26",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "He submits the scoped proposal on time and within expected academic structure.",
+        "self_direction": "He independently starts outlining the alternative idea for himself.",
+        "stimulation": "He reports feeling most alive while exploring the new direction."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-06-27",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "He gives his uncle the on-track narrative that fits family expectations.",
+        "self_direction": "He conceals the dialect project instead of openly owning it."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-06-29",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He initiates a supervisor meeting and prepares his own outline to discuss.",
+        "stimulation": "Printing and carrying the new idea shows willingness to pursue a novel path."
+      }
+    }
+  ]
+}

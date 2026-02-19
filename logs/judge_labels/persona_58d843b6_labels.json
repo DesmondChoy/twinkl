@@ -1,0 +1,245 @@
+{
+  "persona_id": "58d843b6",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-05-25",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "He positions himself as the decision authority over Nadia's London plans and delays a direct answer on his terms.",
+        "tradition": "He ties the decision to preserving the family business as a unifying inherited structure."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-05-31",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He measures success through long-horizon performance and succession outcomes for the company.",
+        "power": "His concern centers on who will take over leadership and control after him.",
+        "tradition": "He treats intergenerational handoff as an obligation, mirroring how he 'showed up' for inherited duty."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-06-06",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He resists market pressure and insists on his own judgment about what the company should remain.",
+        "tradition": "He defends the original crest and methods as non-negotiable links to his father's founding identity."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-06-07",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "He is unsettled by uncertainty in changing market conditions and weighs downside of adaptation.",
+        "tradition": "Reading Baba's notebooks and invoking betrayal language shows strong commitment to inherited business continuity."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-06-10",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "He frames himself as the family's 'anchor' and expects to hold the center as others drift.",
+        "tradition": "Friday table continuity and expected future role in the family company are treated as inherited obligations.",
+        "benevolence": "He interprets his burden as keeping family together, indicating strong focus on close-others welfare."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-06-14",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "He spends significant effort handling family obligations, including driving to Irbid to fix his mother's water heater."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-06-14",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "tradition": "He reads comfort in mansaf prepared with his mother's recipe, emphasizing continuity without coercion."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-06-19",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "He concedes control by allowing Nadia's documentary shadowing without the usual pushback.",
+        "security": "He chooses diversification because flat growth and pipeline fragility make risk management urgent.",
+        "tradition": "Even while adapting, he protects the original label line to preserve inherited identity."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-06-20",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "tradition": "He reinforces inherited religious and family practices through Friday prayers and stories about duty from the prior generation."
+      }
+    },
+    {
+      "t_index": 9,
+      "date": "2025-06-26",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "He listens to Nadia's excitement with pride, showing care for her development even amid his own unresolved worry."
+      }
+    },
+    {
+      "t_index": 10,
+      "date": "2025-06-27",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "He fixates on long-term survivability of the company and uncertainty around succession.",
+        "tradition": "He treats modifications as legitimate only if they remain faithful to what his father built."
+      }
+    },
+    {
+      "t_index": 11,
+      "date": "2025-07-02",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He stops waiting for certainty and makes a deliberate decision despite discomfort.",
+        "power": "Allowing Nadia to apply reduces parental control over her trajectory.",
+        "benevolence": "He chooses his daughter's opportunity while openly sharing emotion and support with the family."
+      }
+    }
+  ]
+}

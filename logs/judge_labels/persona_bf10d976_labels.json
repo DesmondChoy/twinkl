@@ -1,0 +1,180 @@
+{
+  "persona_id": "bf10d976",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-02-16",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "universalism": "He foregrounds failure risk for camp families rather than accepting the cheapest unit."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-02-16",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "universalism": "He stays with impact-focused work despite seeing a lucrative alternative.",
+        "security": "Keeping a high-salary exit option in view reflects ongoing strain against financial stability."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-02-23",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "universalism": "He centers health benefits for displaced families when reflecting on production work."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-02-27",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "He withholds new ideas until numbers are complete to avoid repeating past board friction."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-03-02",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "universalism": "His focus is on broad household harm from suspended water projects, not personal inconvenience."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-03-06",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "universalism": "He accepts the sponsor because it still delivers clean water to many families.",
+        "conformity": "He agrees to corporate branding and tour demands even though he dislikes the optics."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-03-10",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "universalism": "He explains to his daughter that the family prioritizes work improving camp health outcomes.",
+        "security": "He acknowledges the choice reduces household comfort compared with peers."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-03-12",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "universalism": "He treats getting the Zarqa units out on time as mission-critical impact delivery."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-03-18",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "universalism": "He reasserts social impact evidence when family status comparisons surface.",
+        "power": "He explicitly devalues titles and prestige as his metric of success."
+      }
+    }
+  ]
+}

@@ -1,0 +1,177 @@
+{
+  "persona_id": "01b6f22a",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-03-20",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "He exerts managerial authority by demanding an incident report and directing branch accountability.",
+        "benevolence": "He invests personal time supporting Layla's anxiety and recognizing Dina's effort.",
+        "achievement": "He focuses on Q1 performance outcomes and formal recognition for strong results."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-03-20",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "He deliberately affirms Fadi's work so junior people feel seen rather than overlooked."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-03-20",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {}
+    },
+    {
+      "t_index": 3,
+      "date": "2025-03-26",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "He uses the onboarding process to shape how the new VP understands the division.",
+        "conformity": "He performs expected professionalism despite personal disappointment about losing the role."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-03-30",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {}
+    },
+    {
+      "t_index": 5,
+      "date": "2025-04-04",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "He reacts strongly to signals that his authority over the division may be reduced.",
+        "security": "He scans external options to avoid being unprepared if restructuring happens."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-04-05",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "He confronts Khalil directly to defend operational decision rights for his team.",
+        "benevolence": "He feels responsible for Fadi and steps in to protect him after the meeting."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-04-07",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "He recognizes that bringing work tension home is unfair to his family."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-04-13",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "He celebrates with family and gives late-night help to his cousin outside work obligations."
+      }
+    }
+  ]
+}

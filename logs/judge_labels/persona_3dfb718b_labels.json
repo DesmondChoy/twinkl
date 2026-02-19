@@ -1,0 +1,222 @@
+{
+  "persona_id": "3dfb718b",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-12-29",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She is strongly outcome-focused, citing data and route performance she worked months to produce.",
+        "self_direction": "In the meeting she backs down and accepts cosmetic edits instead of defending her judgment."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-12-29",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She stays late analyzing service failures because she feels responsible for results.",
+        "benevolence": "She lets family calls and New Year's plans drop to keep working."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2026-01-02",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She designs a pilot she can run herself instead of waiting for permission.",
+        "achievement": "The pilot is built to produce measurable cost reductions and operational proof."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2026-01-08",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She independently executes and broadcasts the pilot results.",
+        "conformity": "She bypasses expected reporting hierarchy by sending data to the full ops chat.",
+        "achievement": "She tracks and publicizes concrete delivery-time gains to drive adoption."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2026-01-14",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She quickly supplies full data and seeks validation that the work counts at higher levels."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2026-01-18",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She treats the regional presentation as a performance challenge and prepares intensely."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2026-01-19",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "She copies Diego's format to fit perceived leadership expectations.",
+        "self_direction": "She feels misaligned because she is suppressing her own style for approval."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2026-01-20",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Her dilemma is about whether to temper ambition despite strong results and effort."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2026-01-26",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She finalizes a tightly sourced presentation and rehearses timing for high-quality delivery."
+      }
+    },
+    {
+      "t_index": 9,
+      "date": "2026-01-27",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She chooses to defend authorship of her work rather than concede credit.",
+        "conformity": "She rejects the norm of keeping peace by quietly adding Diego's name."
+      }
+    },
+    {
+      "t_index": 10,
+      "date": "2026-02-03",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "The successful presentation validates sustained high-performance execution.",
+        "power": "She is given authority to lead a multi-country optimization group."
+      }
+    }
+  ]
+}

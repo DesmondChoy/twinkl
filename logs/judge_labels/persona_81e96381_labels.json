@@ -1,0 +1,165 @@
+{
+  "persona_id": "81e96381",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-03-08",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He emphasizes that the chapter framing is his own and reconnects with a personally chosen intellectual path.",
+        "achievement": "He targets standalone publication and credential-based advancement through high-quality original work."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-03-12",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He suppresses his own methodological judgment in group settings because prior pushback was punished.",
+        "conformity": "He chooses silence in the lab meeting to avoid repeating public social penalties."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-03-18",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He accepts outside co-authorship based on his own judgment and professional competence.",
+        "conformity": "He proceeds without clearing it through the advisor despite informal lab expectations to do so."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-03-18",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He reaffirms that he chose this path for intellectual integrity rather than external comparison.",
+        "achievement": "He frames the PhD as a deliberate long-term route to higher-level impact beyond prior career ceilings."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-03-21",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He explicitly refuses to surrender authorship and defends autonomy over his chapter.",
+        "power": "The conflict is about control over credit, portfolio ownership, and who gets institutional prestige from the work."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-03-22",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He continues independent policy writing where output is self-directed and unconstrained by advisor gatekeeping.",
+        "power": "He recognizes the advisor's structural leverage to delay funding and feedback, exposing his weaker institutional position."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-03-24",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "He observes narrative control tactics ('collaboration style') used by higher-status actors to weaken his bargaining position."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-03-24",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He weighs submitting independently to preserve authorship integrity rather than waiting for imposed terms.",
+        "achievement": "He treats the Peru chapter as his strongest output and central to publication trajectory.",
+        "power": "His core decision is whether to concede or retain control over attribution in an unequal institutional relationship."
+      }
+    }
+  ]
+}

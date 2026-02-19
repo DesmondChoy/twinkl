@@ -1,0 +1,244 @@
+{
+  "persona_id": "02fb94f3",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-04-15",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "She suppresses disagreement and smiles while others impose parenting decisions to avoid household conflict.",
+        "self_direction": "Her preferred routine and authority as Sami's mother are overridden without her asserting her choice."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-04-20",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "She stays vigilant through her son's fever and emphasizes knowing his care needs in detail.",
+        "self_direction": "She experiences help as disempowering because caregiving decisions happen without her consent."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-04-21",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She carves out private space to continue design work despite crowded household constraints.",
+        "achievement": "She completes a substantive logo draft and advances client work under difficult conditions."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-04-27",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "Her exhaustion is directly tied to sustained nighttime caregiving during Sami's teething period."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-05-02",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": -1,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "tradition": "She participates fully in Eid household preparations and family obligations.",
+        "self_direction": "She chooses and commits to wearing the dress she likes despite criticism.",
+        "conformity": "She resists pressure to present herself according to her mother-in-law's expected image of a young mother."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-05-02",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Wearing the dress and feeling steady reflects an intentional reclaiming of personal identity."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-05-05",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": -1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She keeps a private financial buffer to preserve personal agency inside a shared household.",
+        "achievement": "She earns and saves income from freelance design work as proof of independent capability.",
+        "tradition": "She explicitly rejects the inherited model where husbands control wives' money."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-05-06",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "tradition": "She joins in family cooking and receives intergenerational instruction in customary food preparation.",
+        "benevolence": "She remains patient and relationally engaged with both Sami and her mother-in-law throughout the day."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-05-10",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "tradition": "She participates in extended-family village customs and gendered social rituals during the visit.",
+        "self_direction": "She quietly uses the setting to sketch design ideas for her own creative work."
+      }
+    },
+    {
+      "t_index": 9,
+      "date": "2025-05-15",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She persists in building a parallel identity as a paid designer despite household role pressure.",
+        "achievement": "She accepts a higher-value client project and commits to delivering it under tight constraints."
+      }
+    },
+    {
+      "t_index": 10,
+      "date": "2025-05-22",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She discloses her freelance work but still insists on handling that domain in her own way.",
+        "conformity": "She declines the expected path of letting her husband mediate with his mother on her behalf."
+      }
+    },
+    {
+      "t_index": 11,
+      "date": "2025-05-22",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "She presents a united 'everything is fine' response at dinner to prevent further household tension."
+      }
+    }
+  ]
+}

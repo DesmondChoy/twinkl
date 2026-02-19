@@ -1,0 +1,123 @@
+{
+  "persona_id": "e34fb79e",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-05-21",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He chooses to work on his own terms and values the quiet autonomy after everyone leaves over administrative demands.",
+        "achievement": "Staying late to finish grading instead of deferring it shows performance-focused follow-through despite fatigue."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-05-21",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He resists the scripted district package and defends the elective he built himself, emphasizing independent judgment.",
+        "conformity": "He openly objects in a room where others comply, signaling willingness to disrupt group alignment norms."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-05-23",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He explicitly champions giving students room to pursue meaningful topics rather than following rigid scripts.",
+        "benevolence": "He invests in Daniela's growth by affirming her work and writing an unsolicited recommendation letter."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-05-26",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {}
+    },
+    {
+      "t_index": 4,
+      "date": "2025-05-27",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He frames the decision around staying true to the teaching model he authored rather than institutional strategy.",
+        "power": "He views the liaison title as a compromise and resists taking status or influence at the cost of his principles."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-06-01",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He definitively declines the liaison role to preserve autonomy over how he works.",
+        "hedonism": "He intentionally spends the weekend in restorative, enjoyable activities like woodworking and the farmers market.",
+        "benevolence": "He makes a handmade gift for a neighbor and supports a student with full marks and a recommendation letter."
+      }
+    }
+  ]
+}

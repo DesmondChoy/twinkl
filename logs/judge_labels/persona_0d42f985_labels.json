@@ -1,0 +1,180 @@
+{
+  "persona_id": "0d42f985",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-08-13",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He prioritizes simulation work and lab output despite personal cost.",
+        "benevolence": "He misses his daughter's first swimming lesson after promising to try to attend."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-08-18",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He keeps tight focus on advisor deadlines, TA prep, and lab calibration demands.",
+        "benevolence": "He acknowledges relying on Dina to absorb family responsibilities, creating relational imbalance."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-08-18",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "He is emotionally present with his children and proactively protects time for Dina's Saturday class."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-08-25",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He pushes through two all-nighters to submit the chapter revision on time.",
+        "benevolence": "Stress spills onto Dina as he snaps at her despite recognizing her care.",
+        "hedonism": "He sacrifices sleep and wellbeing in a sustained crunch pattern."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-08-26",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "He repairs the rupture with a direct apology and invests in warm family time that morning."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-09-01",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He advances dissertation milestones with approved revisions and methodology planning.",
+        "benevolence": "He actively supports Dina's class and builds reliable weekend presence with the kids."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-09-05",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He evaluates progress through conference output and CV competitiveness, showing strong performance orientation."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-09-08",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {}
+    },
+    {
+      "t_index": 8,
+      "date": "2025-09-15",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "He responds to his father's health issue with urgency and considers travel despite heavy demands.",
+        "achievement": "Even amid family stress, he immediately negotiates with his advisor around continuing dissertation work."
+      }
+    }
+  ]
+}

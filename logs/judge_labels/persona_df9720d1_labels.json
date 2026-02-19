@@ -1,0 +1,124 @@
+{
+  "persona_id": "df9720d1",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-02-26",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 1,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He emphasizes closing a profitable bulk deal quickly and treats execution quality as proof of competence.",
+        "stimulation": "He describes the fast-moving deal as energizing and identity-affirming."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-03-01",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "He actively seeks new markets and suppliers because routine resale options feel saturated and limiting."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-03-06",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "He deliberately gives polite non-answers and redirects dinner conversation to avoid family conflict.",
+        "self_direction": "He withholds his real position to keep the peace instead of asserting his own path openly."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-03-09",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "He says he'll consider the stable family option largely to relieve his father's anxiety.",
+        "self_direction": "He suppresses key business momentum (the Seoul partnership) rather than advocating for his own judgment."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-03-09",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "He seriously considers taking the uncle's job to reduce family tension and preserve approval.",
+        "self_direction": "He frames saying no as socially costly even though his own analysis supports staying on his venture."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-03-09",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "He defers again by promising to talk tomorrow, prioritizing household harmony in the moment.",
+        "self_direction": "He explicitly rejects being guilted into hedging and insists on deciding his future on his own terms."
+      }
+    }
+  ]
+}

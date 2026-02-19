@@ -1,0 +1,142 @@
+{
+  "persona_id": "88f2ee2c",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-10-11",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "He reorganizes his day around Lotte's flare, handles the kids, and supports her home tasks.",
+        "hedonism": "He skips his own basic needs and notes physical strain while continuing to care for others."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-10-12",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "He gives up his Sunday morning plans to fix Lotte's tap and stay present through her emotional crash."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-10-12",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "He re-enters, reconnects, and spends steady time with Lotte and the children despite internal strain."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-10-13",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "He remains preoccupied with showing up for others, from a lonely customer to a close friend."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-10-15",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "He commits to ongoing support for his sister despite knowing the burden will grow over years.",
+        "self_direction": "He describes stepping back as not a real option, showing constrained personal choice."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-10-18",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He allows himself social enjoyment at Jeroen's birthday and feels noticeably lighter afterward.",
+        "benevolence": "Attending honors reciprocity with a friend who consistently shows up for him."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-10-19",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "He reaffirms caring for Lotte and her kids as central to who he is.",
+        "hedonism": "He describes chronic depletion and mornings where even standing up takes effort."
+      }
+    }
+  ]
+}

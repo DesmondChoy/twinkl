@@ -1,0 +1,126 @@
+{
+  "persona_id": "db2b7c93",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-09-06",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "He plans to add exhausting late-night hours despite worsening back pain, reflecting unstable sustainability.",
+        "benevolence": "He immediately commits to covering Priya's increased fees even at personal physical cost."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-09-10",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He proactively pursues higher-skill renovation work and demonstrates competence in a new opportunity.",
+        "security": "The role offers steadier and better hourly income, reducing dependence on damaging late-night rides.",
+        "benevolence": "His planning is explicitly tied to funding family needs while protecting his capacity to keep supporting them."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-09-10",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He uses extra time for simple social enjoyment rather than immediately monetizing every free hour.",
+        "benevolence": "He spends his surplus on a thoughtful gesture for the chess uncles who regularly welcome him."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-09-15",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "He stays on the phone late to emotionally support Priya during a crisis despite his own early shift pressure."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-09-16",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He performs effectively at the site visit and secures recurring paid work from demonstrated skill.",
+        "security": "The higher-rate, structured two-day schedule improves financial predictability and recovery time."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-09-19",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He repeatedly sacrifices rest and bodily comfort, working through pain and swelling.",
+        "security": "Keeping Priya's money for a real clinic visit reflects a concrete step toward maintaining his ability to keep working.",
+        "benevolence": "He covers shifts for Suresh out of reciprocity and accepts Priya's gift to honor her effort rather than rejecting it."
+      }
+    }
+  ]
+}

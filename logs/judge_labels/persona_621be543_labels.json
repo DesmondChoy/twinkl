@@ -1,0 +1,202 @@
+{
+  "persona_id": "621be543",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-09-25",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": -1,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "She spends significant effort mediating disputes so the collective can function smoothly.",
+        "achievement": "Collective coordination displaces her own art progress, which she notes has stalled since July."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-09-26",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She protects morning studio time and advances both painting and required administration.",
+        "power": "She occupies a central management role where others rely on her decisions and coordination."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-09-27",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": -1,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "She gives time to improve Oriane's application materials.",
+        "achievement": "She still has not started her own submission despite wanting to apply.",
+        "conformity": "She says yes to helping because it feels socially expected in the moment."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-09-27",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She audits her portfolio, identifies concrete requirements, and sets an execution plan before deadline."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-09-27",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Despite anxiety spirals, she creates a concrete early-morning work plan for the statement."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-09-28",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": -1,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "She immediately accepts Sunday lunch because refusing feels normatively unacceptable.",
+        "achievement": "That compliance directly costs time needed for her application tasks."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-09-29",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": -1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "She recognizes that coordination work gives her status and control through others' deference.",
+        "achievement": "She uses administrative authority as a buffer against direct evaluation of her art."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-09-29",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "She keeps compensating as the responsible one to remain legible within family expectations."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-10-04",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She finishes the statement, photographs all pieces, and gets the application ready to submit."
+      }
+    },
+    {
+      "t_index": 9,
+      "date": "2025-10-10",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She has submitted the Prix Dauphine application and accepted the uncertainty window.",
+        "power": "She throws herself back into collective operations where she controls outcomes and social position."
+      }
+    }
+  ]
+}

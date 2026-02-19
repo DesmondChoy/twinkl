@@ -1,0 +1,222 @@
+{
+  "persona_id": "0ad04582",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-12-03",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "She interrupts studio flow to feed and sit with her mother until she eats.",
+        "achievement": "After caregiving, she still completes a painting she had been circling for weeks."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-12-06",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "In the moment, she cannot offer her daughter the emotional reassurance her daughter sought.",
+        "security": "Her immediate focus is practical safeguards like salary, housing, and insurance."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-12-06",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "She follows through with a supportive callback and maintains close-family connection.",
+        "self_direction": "She begins an unplanned experimental painting for her own creative exploration."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-12-12",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "She invests patient, hands-on care in teaching children and showing up for their growth."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-12-13",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": -1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "She prioritizes reliable caregiving presence for Ma over travel commitments.",
+        "achievement": "She postpones a career-advancing gallery opportunity again."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-12-19",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "She devotes the day to direct care after her mother's fall, including comfort and monitoring."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-12-19",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "She reassures Xiaoli and commits to a shared caregiving solution despite uncertainty."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-12-22",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "Hiring a part-time caregiver creates a more stable and predictable care arrangement.",
+        "benevolence": "She ensures Ma is treated with dignity and reduces strain on Xiaoli.",
+        "achievement": "The new support structure enables a sustained four-hour focused painting block."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-12-28",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "She prioritizes quality time painting with Yuwen before the upcoming separation."
+      }
+    },
+    {
+      "t_index": 9,
+      "date": "2025-12-31",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "She intentionally holds everyone emotionally at one table before her daughter leaves.",
+        "tradition": "She treats the New Year's shared family meal as a meaningful ritual to preserve."
+      }
+    },
+    {
+      "t_index": 10,
+      "date": "2026-01-01",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She re-engages creative work and commits concretely to participating in Mr. Tsai's March show.",
+        "security": "She coordinates shared caregiving coverage across caregiver, sister, and daughter."
+      }
+    }
+  ]
+}

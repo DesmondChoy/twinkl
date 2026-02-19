@@ -1,0 +1,238 @@
+{
+  "persona_id": "5a522de7",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-06-05",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "universalism": "He volunteers to refurbish laptops for refugee families and directly supports broader social inclusion beyond his close circle."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-06-08",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "universalism": "He mentors Ahmad and remains engaged with environmental injustice, explicitly framing his effort as still worth doing despite scale limits."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-06-10",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "universalism": "His emotional response is tied to helping a migrant teenager learn and seeing that opportunity matter across contexts."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-06-13",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "conformity": "He suppresses his climate framing in the meeting to avoid social friction after prior eye-rolling.",
+        "universalism": "He still tracks emissions impact and interprets the feature through broader environmental welfare."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-06-17",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 1
+      },
+      "rationales": {
+        "benevolence": "He affirms pride and supportive care toward Elsa while managing his discomfort.",
+        "universalism": "His unease is driven by systemic fast-fashion harm and global supply-chain impact, not personal inconvenience."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-06-18",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "achievement": "He delivers a major feature to staging and quantifies concrete performance gains.",
+        "universalism": "He explicitly values the emissions reduction outcome and calculates its environmental benefit."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-06-21",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "conformity": "He withholds criticism at the table to avoid creating a scene and preserve others' evening.",
+        "universalism": "His withheld comment is about pollution and collective environmental responsibility."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-06-21",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "conformity": "He again prioritizes social smoothness over confrontation, describing fear of being the 'difficult one.'",
+        "universalism": "His rumination focuses on climate and ecological harms that scale beyond personal circles."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-06-21",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "universalism": "He writes a reference for Ahmad despite low expected impact because he sees moral duty to support a vulnerable person in an unjust system."
+      }
+    },
+    {
+      "t_index": 9,
+      "date": "2025-06-25",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "universalism": "He invests significant effort in a factual support letter and explicitly ranks that civic help above routine work outcomes."
+      }
+    },
+    {
+      "t_index": 10,
+      "date": "2025-06-28",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "universalism": "He links local comfort to distant human suffering and still commits to practical support through the laptop group."
+      }
+    },
+    {
+      "t_index": 11,
+      "date": "2025-06-28",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "universalism": "He frames personal inconsistency as secondary to systemic harm and chooses concrete help for Ahmad as the most honest pro-social action available."
+      }
+    }
+  ]
+}

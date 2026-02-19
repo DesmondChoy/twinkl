@@ -1,0 +1,127 @@
+{
+  "persona_id": "7253e69f",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-09-12",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 1,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He rejects promotion to protect enjoyable personal time and quality of life.",
+        "stimulation": "He prefers a less constrained life over a predictable executive track.",
+        "power": "He declines a higher-status director role despite external pressure."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-09-12",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 1,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "He describes sameness as suffocating and needing novelty to feel alive.",
+        "hedonism": "He frames enjoyment as a core life goal rather than a reward after status gains."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-09-18",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 1,
+        "hedonism": 1,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "He is energized by high-pressure operational chaos and improvisation.",
+        "hedonism": "He intentionally closes the day with music, grilling, and sensory enjoyment.",
+        "achievement": "He solves the shipment failure within the day and restores client confidence."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-09-19",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 1,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "He spontaneously books a new experience instead of sticking to routine.",
+        "hedonism": "The mezcal trip is chosen primarily for pleasure and fun."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-09-21",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": -1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "He restrains his complaint and performs expected son-in-law behavior to avoid conflict.",
+        "stimulation": "He endures repetitive routine he finds draining instead of seeking novelty."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-09-28",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 1,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "He chooses surf travel and open-ended experiences over fixed corporate rhythm.",
+        "hedonism": "The entry emphasizes joy, food, and leisure as deliberate priorities."
+      }
+    }
+  ]
+}

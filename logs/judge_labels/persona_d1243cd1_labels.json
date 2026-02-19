@@ -1,0 +1,163 @@
+{
+  "persona_id": "d1243cd1",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-01-25",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "conformity": "She raises a dissenting curriculum point in a meeting that is otherwise complying with testing priorities.",
+        "universalism": "Her proposal centers inclusion for children from migrant families and broader fairness in representation."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-01-27",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "universalism": "She is preoccupied with systemic public-health harm and responsibility toward vulnerable children beyond her immediate circle."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-02-03",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 1
+      },
+      "rationales": {
+        "benevolence": "She gives direct, attentive support to Amira's learning and celebrates the child's confidence.",
+        "universalism": "Her volunteer work serves refugee children and reflects concern for equitable opportunity."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-02-05",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 1
+      },
+      "rationales": {
+        "conformity": "She stays quiet at dinner to avoid conflict and preserve social harmony with family.",
+        "benevolence": "Her silence is partly a protective move to avoid hurting her father's feelings and relationship stability.",
+        "universalism": "She continues to hold concern for pollution impacts on communities and ecosystems despite not voicing it."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-02-09",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "universalism": "She persistently orients daily choices around environmental impact and rejects disengaging from societal concerns."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-02-15",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "universalism": "She spends time in direct aid work and frames helping as immediate care for people beyond her inner circle."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-02-20",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "She stops waiting for institutional approval and implements the classroom practice she believes in.",
+        "universalism": "The discussions she facilitates focus on social and ethical concern for others, including housing insecurity and animal welfare."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-02-26",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "conformity": "She directly challenges a colleague at lunch instead of smoothing over disagreement.",
+        "universalism": "Her stance is explicitly grounded in climate reality and responsibility to broader collective welfare."
+      }
+    }
+  ]
+}

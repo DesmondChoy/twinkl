@@ -1,0 +1,165 @@
+{
+  "persona_id": "11a31f12",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-07-28",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She refuses to abandon her reading-circle method despite coordinator pressure, prioritizing her own instructional judgment.",
+        "conformity": "She plans not to switch to the mandated workbook model, explicitly resisting institutional expectations."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-07-31",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She tells the coordinator she will document progress but will not gut the program, asserting classroom autonomy.",
+        "conformity": "Even with pressure from school and family to comply, she continues to challenge the standard approach.",
+        "benevolence": "Her stance is grounded in students' growth, like Sofia finding her voice in class discussions."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-08-04",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "She spends significant time tutoring Camilo and helping her abuela at home, prioritizing close family care.",
+        "tradition": "Shared food, novela time, and attention to family mourning rhythms reflect continuity with family customs."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-08-06",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She stays after long parent meetings to reorganize the classroom library because it still needs to be done.",
+        "benevolence": "She postpones helping Camilo when he is stuck, so a close family need goes unmet in the moment."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-08-13",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She decides to keep teaching from her own plans instead of district templates.",
+        "conformity": "Submitting template plans as a formality while teaching differently is deliberate noncompliance.",
+        "benevolence": "She frames this choice around what her students in Ciudad Bolivar actually need."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-08-13",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "She gives Diego forty minutes of one-on-one help writing to his father after school.",
+        "hedonism": "She recognizes she is already depleted but continues to sacrifice rest and personal recovery time."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-08-14",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "She supports Camilo's exam prep and spends intentional caregiving time with her abuela.",
+        "tradition": "Making arepas and listening to family migration stories reinforces cultural and intergenerational continuity.",
+        "self_direction": "She turns Diego's letter moment into a custom unit plan based on what her students need."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-08-14",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {}
+    }
+  ]
+}

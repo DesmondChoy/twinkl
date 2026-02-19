@@ -1,0 +1,180 @@
+{
+  "persona_id": "20730018",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-06-02",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "His attention is dominated by income volatility and protecting household financial stability."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-06-09",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "universalism": "He participates in meal distribution and responds to migrant workers' requests with care."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-06-15",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "He calculates the school-fee shortfall and evaluates risky shift options in practical terms."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-06-20",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "He supports people around him directly, from helping Mrs. Kulkarni to guiding Ananya's homework."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-06-26",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "universalism": "He pushes to keep displaced workers visible and supports civic action despite low institutional trust."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-07-03",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "security": "He seriously considers a steady salaried role with benefits to reduce household risk.",
+        "universalism": "He worries about abandoning weekly support work for displaced laborers."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-07-04",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "universalism": "He explicitly resists the idea that family survival should require ignoring others' suffering."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-07-06",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "security": "He agrees to a trial week in Chakan as a financial compromise.",
+        "universalism": "He still commits to continuing distributions when possible, preserving social responsibility."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-07-13",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": -1
+      },
+      "rationales": {
+        "security": "He acknowledges the salary and PF as meaningful protection against future emergencies.",
+        "benevolence": "The night shift reduces meaningful time with Ananya, which he experiences as a personal loss.",
+        "universalism": "He misses distribution work while displacement worsens, conflicting with his broader-care commitments."
+      }
+    }
+  ]
+}

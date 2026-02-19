@@ -1,0 +1,221 @@
+{
+  "persona_id": "2da4f100",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-01-23",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He spends hours fixing warehouse mistakes, writes a detailed process document, and covers ops work to keep the business running.",
+        "hedonism": "He skips lunch and pushes through physical strain, deprioritizing basic comfort for work output."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-01-29",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He frames accelerator selection (22 of 400) as external proof of competence and progress."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-02-04",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He tracks cohort metrics competitively and focuses on outperforming peers rather than just participating.",
+        "power": "He treats founder-mentor interactions and cohort standing as leverage for influence and future investor access."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-02-09",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He runs a structured dashboard review and centers success on revenue growth and CAC improvement."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-02-09",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He prioritizes accelerator prep over leisure and sees each milestone as a necessary step in company growth.",
+        "benevolence": "He repeatedly deprioritizes Laura's plans and even checks email during their late lunch, straining a close relationship."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-02-15",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He is intensely focused on being the standout founder, not just remaining in a strong position.",
+        "power": "He explicitly links status in the accelerator to reputation leverage with investors and better negotiating position."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-02-19",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": -1,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He treats the pitch competition as a non-negotiable career priority.",
+        "tradition": "He misses a cousin's wedding, stepping away from a major family ritual and obligation.",
+        "benevolence": "He chooses work over being present for close family despite knowing his mother and aunt are disappointed."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-02-19",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He centers the result ('second out of sixty') as a meaningful performance milestone."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-02-25",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He sustains all-day effort to deliver investor materials and convert opportunities from the pitch competition.",
+        "power": "He explicitly seeks the status shift from 'interesting startup' to 'company' and the influence that comes with funding."
+      }
+    },
+    {
+      "t_index": 9,
+      "date": "2025-03-02",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "His reaction to rejection is framed through performance standards ('I did everything right'), showing strong success orientation."
+      }
+    },
+    {
+      "t_index": 10,
+      "date": "2025-03-08",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Even after signing, he keeps attention on execution and scenario planning rather than celebration."
+      }
+    }
+  ]
+}

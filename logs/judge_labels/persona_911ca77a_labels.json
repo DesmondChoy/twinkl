@@ -1,0 +1,205 @@
+{
+  "persona_id": "911ca77a",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-06-15",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "He is preoccupied with personal credit and influence after his performance gains are attributed to someone else.",
+        "conformity": "He suppresses confrontation in the call due organizational politics and hierarchy constraints."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-06-15",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He cannot enjoy a celebratory bottle because status concerns dominate the evening.",
+        "achievement": "He ties his identity to demonstrable performance and advancement readiness.",
+        "power": "He explicitly frames name recognition as currency for moving into higher authority roles."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-06-17",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He gives up a planned dinner experience because operational demands consume the day.",
+        "achievement": "He personally steps onto the floor for hours to keep output moving when leads are absent."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-06-19",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "Even during sailing time he remains mentally at work, undermining enjoyment he chose.",
+        "power": "He seeks documentation and strategic positioning to protect influence after being sidelined.",
+        "conformity": "He smiles through condescension and keeps the interaction socially smooth despite resentment."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-06-25",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He treats staffing decisions as execution leverage for hub performance outcomes.",
+        "power": "He explicitly values having budget authority and unilateral selection control."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-06-30",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He deliberately centers sensory enjoyment and social pleasure in the dinner experience.",
+        "power": "He simultaneously uses the event to cultivate high-value industry relationships for influence."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-07-05",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He cancels a planned Bruges weekend and spends it working instead of resting with Lotte.",
+        "achievement": "He prioritizes schedule recovery and execution pressure over personal time to protect Q3 outcomes.",
+        "benevolence": "His choice sidelines his partner's plans and shared time despite knowing the emotional cost."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-07-08",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {}
+    },
+    {
+      "t_index": 8,
+      "date": "2025-07-15",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He intentionally disconnects and enjoys sailing, food, and stillness as ends in themselves.",
+        "power": "He overrides the site manager's layout to impose his own operational control."
+      }
+    },
+    {
+      "t_index": 9,
+      "date": "2025-07-18",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "His attention stays on career escalation even as he anticipates major losses in leisure and lifestyle quality.",
+        "power": "He remains strongly oriented toward executive scope, prestige, and decision authority."
+      }
+    }
+  ]
+}

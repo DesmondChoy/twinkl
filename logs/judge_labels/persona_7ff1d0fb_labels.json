@@ -1,0 +1,144 @@
+{
+  "persona_id": "7ff1d0fb",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-11-26",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She continues choosing studio practice over the civil-service path her aunt pushes.",
+        "conformity": "She keeps the exchange polite and avoids confrontation, managing family pressure without open conflict."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-11-30",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "tradition": "She evaluates a lucrative collaboration against her grandmother's craft ethic and inherited standards."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-12-07",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She invested heavily in the Arita residency application because of what the credential could validate.",
+        "conformity": "She performs enthusiastic support in messages despite disappointment to maintain social harmony."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-12-07",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She returns to precise production work on show pieces despite emotional setback.",
+        "tradition": "Her quality standard is explicitly grounded in techniques taught by her grandmother."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-12-07",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She independently rejects a profitable collaboration despite peer pressure to be more practical.",
+        "tradition": "She prioritizes a lineage-based model of craft integrity over trend-driven branding opportunities."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-12-07",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "She continues transferring money to her mother even when her own payment is lower than expected.",
+        "security": "She closely tracks her shrinking emergency cushion and financial runway entering winter."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-12-14",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "tradition": "She sustains family rituals by making lunar new year gifts with her grandmother's glaze method.",
+        "security": "She finds steadiness in controlled, repeatable studio routines and a calm, low-urgency environment."
+      }
+    }
+  ]
+}

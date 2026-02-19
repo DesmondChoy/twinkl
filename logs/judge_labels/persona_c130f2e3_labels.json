@@ -1,0 +1,204 @@
+{
+  "persona_id": "c130f2e3",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-08-11",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He suppresses the series he considers his most honest work and defers it indefinitely.",
+        "conformity": "He accepts a safe commission and edits his choices around anticipated family and social approval."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-08-18",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He conceals his relationship and personal choices rather than expressing them openly.",
+        "conformity": "He gives socially acceptable scripted answers at family lunch to preserve expectations and avoid conflict."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-08-24",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": -1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He declines submitting the work he believes in and keeps defaulting to avoidance.",
+        "stimulation": "He avoids a boundary-pushing group show and chooses the safer, predictable path.",
+        "conformity": "His stated reason centers avoiding disappointment and uncomfortable social attention."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-08-26",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "He nods through requested revisions and commits to the expected social script for the family event."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-08-31",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "He derives relief from being seen as the 'good boy' who reliably behaves and helps as expected."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-09-04",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He again suppresses authentic artistic goals even while acknowledging he could make time for them.",
+        "conformity": "He explicitly prioritizes keeping things smooth and predictable within family expectations."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-09-05",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He is on the verge of sharing real work, then reverses and hides it again.",
+        "conformity": "He chooses social fit and approval maintenance over self-expression because of anticipated family reactions."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-09-07",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He momentarily adds his true visual language, then paints it over before anyone can see.",
+        "conformity": "Even with family curiosity, he keeps presenting only the acceptable version of his work."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-09-13",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Delivering work that is exactly what the client envisioned reinforces his ongoing self-suppression.",
+        "conformity": "He successfully meets external expectations while feeling emotionally flattened by that fit."
+      }
+    },
+    {
+      "t_index": 9,
+      "date": "2025-09-15",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He takes a concrete step toward authenticity by showing his hidden series and leaving it uncovered for a while.",
+        "conformity": "He breaks his usual approval-preserving pattern by exposing work he typically keeps hidden from family."
+      }
+    }
+  ]
+}

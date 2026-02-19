@@ -1,0 +1,219 @@
+{
+  "persona_id": "87b8187f",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-07-26",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She completes a long commission batch to exact quality standards.",
+        "security": "Her relief is tied to predictable payment and short-term financial stability."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-08-01",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She reaffirms her independent studio path despite family pressure for conventional careers."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-08-04",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "She adjusts supply purchases and workload to manage exchange-rate and cash-flow risk."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-08-04",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She frames workshop work as a chosen trade that preserves her autonomy from unwanted freelancing.",
+        "security": "Maintaining parallel income and art ledgers is used to keep her month-to-month footing."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-08-05",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She chooses to send personally meaningful pieces to Beirut despite logistics burden.",
+        "security": "Accepting a no-fee show introduces short-term financial downside."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-08-12",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "She locks in a six-month lease at fixed rent to stabilize studio costs."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-08-14",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She pursues her own glaze question and saves residue for further exploration.",
+        "achievement": "She translates the accident into iterative testing aimed at reproducible results."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-08-21",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She executes meticulous shipping and continues disciplined glaze experimentation.",
+        "security": "Her overbuilt packing reflects strong loss-prevention for high-value work."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-08-26",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "She tracks every expense to keep obligations manageable despite a thin margin.",
+        "benevolence": "She sends money to support her mother when she senses financial worry."
+      }
+    },
+    {
+      "t_index": 9,
+      "date": "2025-08-29",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {}
+    },
+    {
+      "t_index": 10,
+      "date": "2025-09-02",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "She rebalances workshops and expenses to protect a shrinking buffer.",
+        "self_direction": "She chooses the lower-pay workshop route to keep control of her work terms."
+      }
+    }
+  ]
+}

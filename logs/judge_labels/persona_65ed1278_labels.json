@@ -1,0 +1,220 @@
+{
+  "persona_id": "65ed1278",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-02-25",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He tracks and values top department review performance as a meaningful success signal.",
+        "benevolence": "He stays late to help Katja through a difficult parent-complaint situation."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-03-04",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He revisits outcome metrics to verify continued professional excellence.",
+        "power": "The nomination issue is experienced as lost status and recognition within his institution."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-03-09",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "He reflexively says yes to multiple colleagues' needs and mentorship requests.",
+        "self_direction": "He describes being unable to enforce his own priorities and boundaries around time."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-03-13",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "Work obligations crowd out close-family responsiveness, including forgetting his sister's birthday call."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-03-16",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": -1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "He invests in both relational repair with Brigitte and continued support for mentees.",
+        "achievement": "He delays his own conference paper again despite deadline pressure."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-03-19",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {}
+    },
+    {
+      "t_index": 6,
+      "date": "2025-03-20",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": -1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "He spends the evening helping Leon with rubric design.",
+        "achievement": "He explicitly substitutes others' work for his own conference writing yet again."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-03-21",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He secures conference attendance approval, re-engaging his own professional development.",
+        "benevolence": "He makes a present, agenda-free call with Hilde and listens attentively."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-03-21",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He produces strong paper pages and advances his core argument substantially."
+      }
+    },
+    {
+      "t_index": 9,
+      "date": "2025-03-23",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He sets a direct temporary boundary with mentees despite anticipated guilt.",
+        "achievement": "That boundary immediately creates momentum on his own paper draft."
+      }
+    },
+    {
+      "t_index": 10,
+      "date": "2025-03-25",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "He recognizes his wife's adaptation to chronic absence, evidencing relational neglect.",
+        "achievement": "He identifies a repeated pattern of choosing measurable professional outputs over presence."
+      }
+    }
+  ]
+}

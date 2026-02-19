@@ -1,0 +1,162 @@
+{
+  "persona_id": "54fbe6b5",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-08-02",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "achievement": "He perseveres through delays to ship a technically difficult feature that now works reliably.",
+        "universalism": "He is motivated by educational access impact for rural students rather than internal sprint recognition."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-08-07",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "He explicitly reads Priya's offer as reducing family financial pressure.",
+        "benevolence": "His attention is on family wellbeing and shared relief rather than personal status comparison."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-08-07",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "He evaluates salary realities and medical costs with a practical focus on household stability.",
+        "benevolence": "His internal conflict is anchored in concern for Amma's treatment and shared family obligations."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-08-09",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 1
+      },
+      "rationales": {
+        "benevolence": "He weighs earning more to support his mother and family quality of life.",
+        "universalism": "He also prioritizes work that serves underserved students, creating a clear self-transcendence trade-off."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-08-09",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 1
+      },
+      "rationales": {
+        "security": "He analyzes compensation and timing implications carefully because household finances remain consequential.",
+        "benevolence": "He is explicitly concerned about responsibilities to family and teammates during a fragile transition.",
+        "universalism": "He treats continuity of offline access for children as a real ethical cost in deciding whether to leave."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-08-12",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "He filters what he shares to avoid burdening Amma, showing protective care for a close family member."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-08-12",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 1
+      },
+      "rationales": {
+        "benevolence": "He resonates with Farah's project because it helps her grandmother directly, mirroring close-care motivations.",
+        "universalism": "The bootcamp context and his reaction reinforce commitment to using tech for broad community benefit."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-08-12",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {}
+    }
+  ]
+}

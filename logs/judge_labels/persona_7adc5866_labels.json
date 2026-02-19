@@ -1,0 +1,179 @@
+{
+  "persona_id": "7adc5866",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-05-21",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She continues grading a heavy exam stack late into the evening despite exhaustion.",
+        "benevolence": "She notes that family members got empty promises and less presence while work consumed her attention."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-05-27",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {}
+    },
+    {
+      "t_index": 2,
+      "date": "2025-05-27",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "She experiences a small caregiving gesture as deeply meaningful because someone close noticed her needs."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-05-28",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "The entry centers on closeness with her grandson and tender shared family moments.",
+        "tradition": "Intergenerational roles and family bonding around elder relationships are central to the moment."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-05-31",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "She helps Sunita draft a transfer request to support Sunita's aging parents, despite losing a strong colleague."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-06-06",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "She withholds criticism in the meeting to avoid adding conflict once leadership has decided.",
+        "self_direction": "She suppresses her own view even though she agrees with the complaints."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-06-08",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "She anticipates Kamla-ji's knee pain, hosts the reading circle, and keeps caring for others throughout."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-06-14",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "She delays signing the workload letter to preserve smooth relations with the principal.",
+        "self_direction": "She acknowledges the letter is right but still defaults to the comfortable path."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-06-18",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "She continues to avoid taking a public stand and frames it as staying out of conflict.",
+        "self_direction": "She suppresses her own judgment that the policy is unreasonable."
+      }
+    }
+  ]
+}

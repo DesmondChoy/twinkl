@@ -1,0 +1,225 @@
+{
+  "persona_id": "3a3b15e4",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-05-29",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "tradition": "He anchors his research and identity in inherited hospitality practices and family memory.",
+        "self_direction": "He keeps his chosen research direction despite advisor pressure to pivot.",
+        "hedonism": "He spends hours preparing and savoring a deeply pleasurable traditional meal."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-06-03",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He commits to a long, effortful library session on his literature review despite fatigue."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-06-10",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "He suppresses confrontation at family lunch to avoid upsetting group dynamics.",
+        "tradition": "He protects the longstanding Friday communal gathering as more important than winning the argument."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-06-10",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He seeks immediate sensory comfort through a saved bottle of wine after stress.",
+        "conformity": "He knowingly violates his mother's disapproval norm around alcohol in the home."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-06-12",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": -1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "tradition": "He acknowledges drifting away from formal prayer routines central to family tradition.",
+        "self_direction": "He chooses an unscripted personal path to meaning rather than inherited structure."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-06-15",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He openly values pleasure, good food, and atmosphere as legitimate parts of living.",
+        "self_direction": "He affirms pursuing study at forty-nine because he wants it, despite age-norm pressure."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-06-17",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "tradition": "He centers inherited culinary practice as the core phenomenon worth preserving and understanding.",
+        "achievement": "He continues difficult dissertation labor through interview transcription and conceptual framing."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-06-18",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "tradition": "He treats his mother's cooking method as sacred intergenerational knowledge.",
+        "hedonism": "He leans into the immediate sensory pleasure of the knafeh moment."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-06-19",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": -1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He chooses an expensive day of floating, eating, and rest for present-moment enjoyment.",
+        "achievement": "He skips overdue chapter work by canceling planned library writing time."
+      }
+    },
+    {
+      "t_index": 9,
+      "date": "2025-06-19",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": -1,
+        "power": 0,
+        "security": 0,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "He lies to his mother about going to campus, violating expected honesty and role behavior.",
+        "achievement": "He produces little usable writing and remains stalled on dissertation progress."
+      }
+    },
+    {
+      "t_index": 10,
+      "date": "2025-06-22",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "tradition": "He defends the legitimacy of studying his own cultural domestic practices against outsider framing.",
+        "achievement": "He responds professionally with a reflexive positionality argument to keep the chapter moving."
+      }
+    }
+  ]
+}

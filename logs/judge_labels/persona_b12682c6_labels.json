@@ -1,0 +1,184 @@
+{
+  "persona_id": "b12682c6",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-04-17",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": -1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "tradition": "He plans to miss Sunday family time with his mother because paid bookings take precedence.",
+        "security": "His decision is driven by income preservation in a precarious gig-work context."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-04-22",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "tradition": "He explicitly values lived, inherited forms of warmth and community over curated simulations of them."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-04-22",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": -1,
+        "tradition": 1,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "He stops to share coffee and companionship with an isolated older customer despite platform penalties.",
+        "tradition": "He interprets that choice through family-taught norms of neighborly duty and relational presence.",
+        "conformity": "He knowingly violates app timing expectations and accepts a warning."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-04-28",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": -1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "tradition": "He misses Koningsdag family rituals for extra bookings and then regrets the absence.",
+        "security": "He explicitly takes the workday because he needs the money."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-05-03",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "tradition": "Time at his mother's home reconnects him to long-standing family routines and memories.",
+        "security": "He experiences that familiar setting as stabilizing and physically restorative."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-05-07",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "tradition": "He actively reflects on shared family/church rhythms and what it would take for his own rituals to carry communal meaning."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-05-08",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "tradition": "He preserves a faith practice (saying grace) in a mixed family setting because it matters across generations.",
+        "benevolence": "He honors his son's request and emotional connection to family memory."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-05-12",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": -1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "He highlights having no bargaining leverage as platforms unilaterally change terms.",
+        "security": "Lower base rates and unstable algorithmic pay make his livelihood less predictable."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-05-13",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "tradition": "He intentionally reconnects with church, family pew, and inherited language as enduring identity anchors.",
+        "security": "He uses those enduring anchors to regain a sense of steadiness amid volatile work conditions."
+      }
+    }
+  ]
+}

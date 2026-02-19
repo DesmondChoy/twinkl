@@ -1,0 +1,148 @@
+{
+  "persona_id": "3f984932",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-04-05",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He independently replaces the requested architecture with his own design based on technical judgment.",
+        "achievement": "He delivers ahead of schedule and prepares benchmark evidence to defend performance outcomes.",
+        "conformity": "He knowingly departs from the client's specified approach instead of complying with expected process."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-04-12",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He affirms his independent path and defines success by autonomy rather than conventional titles.",
+        "conformity": "He rejects family norms about what a real career should look like, even when the comparison stings."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-04-15",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He identifies schedule control as non-negotiable and resists imposed work structures.",
+        "conformity": "He pushes back against standard in-office expectations instead of adapting to them."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-04-16",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He negotiates for remote autonomy and starts planning an exit when control is threatened.",
+        "security": "He is willing to accept tighter income in the short term rather than preserve a more stable arrangement.",
+        "conformity": "He resists management's in-person mandate and declines to normalize corporate visibility requirements."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-04-18",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He actively seeks a fully remote alternative aligned with his preferred way of working.",
+        "security": "He plans around a 15% income reduction, prioritizing autonomy over financial predictability."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-04-18",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He explicitly states he cannot choose a path where others dictate his days.",
+        "security": "He acknowledges real household financial pressure yet still leans toward the less secure option."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-04-21",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He turns down the on-site contract to preserve control over how he operates.",
+        "security": "He accepts a lower guaranteed rate and uncertain near-term finances as the trade-off for that autonomy.",
+        "benevolence": "He has a direct, empathetic conversation with Nadia about the trade-offs instead of minimizing her concerns."
+      }
+    }
+  ]
+}

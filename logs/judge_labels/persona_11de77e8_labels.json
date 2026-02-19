@@ -1,0 +1,248 @@
+{
+  "persona_id": "11de77e8",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-08-23",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "He accepts the lead track partly because team and partner expectations make refusal feel socially costly.",
+        "self_direction": "He recognizes the role may not fit his preferred way of working but commits anyway.",
+        "achievement": "Taking the promotion path reflects pursuit of recognized professional success."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-08-30",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "He gives most of his week to onboarding a new hire so she can ramp faster."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-09-05",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "He withholds a redesign idea in front of senior architects to avoid appearing disruptive.",
+        "self_direction": "He suppresses his own technical judgment even though he has a concrete alternative."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-09-10",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He is strongly drawn to building an unsanctioned tool because it matches how he wants to work.",
+        "conformity": "He hesitates because he is being evaluated for lead and worries about permission and optics."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-09-12",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He decides to help Pieter and starts building the API on his own initiative after hours.",
+        "stimulation": "He feels more energized by this novel side build than by routine sprint work."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-09-19",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "He gives the expected promotion-track narrative and withholds how much the side project matters.",
+        "self_direction": "He avoids openly naming the path that actually lights him up.",
+        "achievement": "He values being on a trajectory that signals success to people close to him."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-09-26",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He commits to putting his best foot forward after being officially shortlisted for tech lead.",
+        "conformity": "He keeps doubts private and maintains the expected professional posture."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-10-02",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He explicitly values the lead role's better pay and visibility.",
+        "conformity": "He keeps presenting the promotion path as straightforward in social settings.",
+        "self_direction": "He continues investing attention in Pieter's repo because it aligns with his intrinsic interests."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-10-07",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He immediately says yes to bringing the deployment tool into the official roadmap.",
+        "achievement": "He takes a high-visibility opportunity by presenting upward and formalizing the project."
+      }
+    },
+    {
+      "t_index": 9,
+      "date": "2025-10-11",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "He defaults to a smooth, non-confrontational response with Martijn to avoid looking difficult.",
+        "self_direction": "He does not assert his autonomy even though he knows he is delivering on commitments."
+      }
+    },
+    {
+      "t_index": 10,
+      "date": "2025-10-14",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He accepts the tech lead offer immediately, advancing to a higher-status role.",
+        "conformity": "He frames acceptance as automatic because that is what people expect him to do.",
+        "self_direction": "He bypasses reflection on fit and personal preference in the decision moment."
+      }
+    },
+    {
+      "t_index": 11,
+      "date": "2025-10-14",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "He treats broad external approval as confirmation that his decision was correct.",
+        "self_direction": "His dominant feeling is relief from meeting expectations rather than ownership of his own choice."
+      }
+    }
+  ]
+}

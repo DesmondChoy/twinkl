@@ -1,0 +1,226 @@
+{
+  "persona_id": "87e92805",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-03-13",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He chooses to keep weekly parrilla time for enjoyment and connection even when money is tight.",
+        "security": "He explicitly budgets income, preserves a savings note, and plans around insurance and fixed expenses."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-03-17",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He asserts personal control over work style and rejects returning to a boss-controlled warehouse job.",
+        "security": "He dismisses a more stable employment path despite ongoing income volatility.",
+        "conformity": "He resists family pressure to adopt the conventional job trajectory his sister prefers."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-03-23",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He doubles down on maintaining independence rather than returning to structured employment.",
+        "security": "The entry centers unstable rates, canceled jobs, and lack of income predictability with no safety buffer."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-03-24",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "Securing a larger two-day handyman job immediately relieves acute financial pressure and restores short-term stability."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-03-31",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "He authorizes an expensive repair because maintaining transport is essential for income continuity and rent coverage."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-03-31",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 1,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He sacrifices sleep and comfort to chase minimal late-night earnings.",
+        "achievement": "Taking extra runs at 1am shows strong task persistence under pressure.",
+        "security": "The behavior is explicitly driven by immediate cash needs for fuel and next-day operations."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-04-01",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He frames parrilla time as the key source of relief and identity beyond constant work calculations.",
+        "security": "He contemplates spending scarce funds on leisure while financially and physically strained."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-04-03",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He uses part of the win to buy a celebratory treat for himself and Negrita.",
+        "security": "A referred, well-paid job with upfront payment strengthens short-term financial footing."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-04-10",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He defends self-chosen hours and independence against his sister's pressure to conform.",
+        "security": "His own reflection highlights chronic instability and neglected home maintenance as consequences of his current setup."
+      }
+    },
+    {
+      "t_index": 9,
+      "date": "2025-04-11",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He continues prioritizing asado and wine because those moments provide meaningful enjoyment.",
+        "security": "He explicitly notes he should save the money but cannot sustain that restraint despite ongoing precarity."
+      }
+    },
+    {
+      "t_index": 10,
+      "date": "2025-04-18",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 1,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He chooses a small quality-of-life splurge with good Malbec and social time despite uncertainty.",
+        "achievement": "He proactively repairs neglected household issues and follows through to completion in one session.",
+        "security": "Fixing the chair and wall reflects practical maintenance behavior that supports day-to-day stability."
+      }
+    }
+  ]
+}

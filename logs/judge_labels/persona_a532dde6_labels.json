@@ -1,0 +1,249 @@
+{
+  "persona_id": "a532dde6",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-05-05",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "She stays silent in the syllabus meeting and follows senior teachers' cues.",
+        "self_direction": "She suppresses a dissenting professional view and later feels she betrayed her own voice."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-05-12",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "She adapts to the imposed syllabus change without protest and is praised for not making a fuss."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-05-16",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "She prioritizes calm de-escalation and polite restraint with the angry parent.",
+        "self_direction": "She withholds what she actually thinks to keep the interaction smooth."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-05-20",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "tradition": "She automatically commits to a major family festival plan as non-negotiable duty.",
+        "conformity": "She declines the teaching workshop immediately to align with family expectations.",
+        "self_direction": "She does not let herself evaluate her own preference before deciding."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-05-22",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "She publicly aligns with senior teachers despite privately disagreeing.",
+        "self_direction": "She stops herself from voicing her own assessment of what Arjun needs.",
+        "benevolence": "By agreeing to a punitive note, she fails to advocate for a vulnerable student she understands."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-05-22",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "Fear of probation-review consequences keeps her tied to expected hierarchy.",
+        "self_direction": "She describes being afraid of the gap between her judgment and instructions.",
+        "benevolence": "She still prioritizes Arjun's wellbeing and considers a supportive parent conversation."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-05-27",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She acts on her own professional judgment by talking directly with Arjun's mother.",
+        "benevolence": "Her intervention centers care and context for the child instead of punishment."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-05-30",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She recognizes she can deviate from default obedience and still do what she believes is right.",
+        "conformity": "She deliberately uses a low-conflict path that preserves social harmony while adjusting behavior."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-06-01",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "She remains silent during family criticism rather than expressing her contrary view.",
+        "self_direction": "She withholds her belief that Meera's move is courageous."
+      }
+    },
+    {
+      "t_index": 9,
+      "date": "2025-06-02",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "She gives the answer that reassures her mother and fits family expectations.",
+        "self_direction": "She experiences that answer as a door closing on her own agency."
+      }
+    },
+    {
+      "t_index": 10,
+      "date": "2025-06-07",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "She chooses the least disruptive option to avoid additional friction at home.",
+        "benevolence": "She continues helping her unwell sister-in-law and household duties despite fatigue.",
+        "hedonism": "She repeatedly sacrifices personal rest and social recovery, leaving almost no time for herself."
+      }
+    },
+    {
+      "t_index": 11,
+      "date": "2025-06-14",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": -1
+      },
+      "rationales": {
+        "conformity": "She plans to adjust an accurate grade to keep administrators and influential parents comfortable.",
+        "self_direction": "She expects to override her own judgment because she feels she needs permission to stand firm.",
+        "universalism": "She recognizes the decision privileges status over fairness, then proceeds anyway."
+      }
+    }
+  ]
+}

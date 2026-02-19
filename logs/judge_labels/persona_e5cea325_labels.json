@@ -1,0 +1,164 @@
+{
+  "persona_id": "e5cea325",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-06-11",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "She gives attentive emotional care to Milo and then spends meaningful time caring for her recovering mother at home.",
+        "hedonism": "She treats simple comfort (couch dinner, TV, shared laughter) as genuinely good rather than something to dismiss."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-06-15",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": -1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "She keeps her current role partly to stay available for her mother's evening needs.",
+        "hedonism": "She explicitly protects restorative Saturdays and rejects the idea that rest is a flaw.",
+        "achievement": "She declines a promotion despite being capable because advancement is less important than her current life balance."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-06-18",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "She stays up caring for her mother through the night and feels immediate remorse for a sharp tone.",
+        "hedonism": "She sacrifices sleep and personal comfort to continue caregiving before an early shift."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-06-20",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "She devotes the day to supporting her mother and maintaining family ties without resentment."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-06-24",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "She picks up an extra shift for a coworker and keeps handling her mother's follow-up logistics.",
+        "hedonism": "She gives up her planned recovery day despite being exhausted, reinforcing self-denial."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-06-25",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She makes an independent boundary decision to reschedule the appointment and keep Saturday.",
+        "hedonism": "She deliberately protects time for rest and enjoyment despite guilt."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-06-27",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "She fully commits to pleasurable recovery (bath, sushi, film) and experiences it as restorative rather than indulgent."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-06-29",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "She continues actively supporting her mother's rehab by attending the follow-up and tracking progress.",
+        "hedonism": "She allows herself to imagine personally fulfilling activities in reclaimed evening time."
+      }
+    }
+  ]
+}

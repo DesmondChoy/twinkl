@@ -1,0 +1,166 @@
+{
+  "persona_id": "1d529c71",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-03-24",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "He does the dishes himself to end the conflict with Sven rather than escalate it.",
+        "self_direction": "He drops his own complaint and chooses compliance for peace."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-03-31",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "He tells his mother what she wants to hear to avoid immediate conflict at dinner.",
+        "tradition": "His choice is driven by family expectations around education and not repeating his brother's path.",
+        "self_direction": "He withholds his real uncertainty about returning to school even when he wants to say it."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-04-03",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "He emphasizes being polite and doing dispatch instructions without complaint.",
+        "security": "He prefers the predictable routine of doing the job correctly over risking conflict."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-04-05",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "He avoids joining the collective complaint so he is not seen as difficult.",
+        "security": "He prioritizes keeping ratings and continued access to work over challenging the platform."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-04-09",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "He apologizes and turns down the music himself to preserve harmony in the building.",
+        "self_direction": "He keeps his own frustrations unspoken because raising them feels like too much hassle."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-04-16",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "On the call he stays silent instead of confronting his mother or brother.",
+        "tradition": "The pressure centers on meeting family expectations about re-enrollment."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-04-16",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "He copes by riding and working rather than voicing the conflict after the call.",
+        "self_direction": "He admits he hid his academic shame instead of expressing it earlier."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-04-21",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "He lets Sven move the discussion on instead of raising deeper concerns.",
+        "self_direction": "He censors what he wanted to say about whether they should keep living together."
+      }
+    }
+  ]
+}

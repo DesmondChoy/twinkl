@@ -1,0 +1,208 @@
+{
+  "persona_id": "019235dc",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-01-15",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She asserts clinical competence and protocol mastery in a high-stakes unit context.",
+        "power": "The strongest emotional trigger is being publicly undermined in front of a resident."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-01-15",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She frames ICU transfer as a concrete career target and works deliberately toward it.",
+        "benevolence": "She prioritizes emotional support for a distressed family member during care."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-01-22",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Even after exhausting shifts, she continues CCRN preparation.",
+        "benevolence": "She lets her mother's call go unanswered while depleted."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-01-29",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She captures attending praise as evidence for ICU advancement.",
+        "benevolence": "She stays late to give Mrs. Patel needed reassurance and attention."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-02-01",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She acknowledges taking unit council partly for resume value tied to ICU goals.",
+        "conformity": "She repeatedly says yes to shift, teaching, and committee expectations.",
+        "benevolence": "Overextension causes her to miss her mother's medical appointment."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-02-01",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "She actively repairs support for her mother and brother after the lapse.",
+        "security": "She installs recurring reminders and practical logistics to reduce future care risk."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-02-02",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She studies to defined performance targets and documents transfer-relevant clinical work.",
+        "benevolence": "She adds an unscheduled family visit to support Tyler through stress."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-02-07",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "conformity": "She feels compelled to remain continuously available as others depend on her.",
+        "self_direction": "She cannot identify workable boundaries that protect her own capacity.",
+        "benevolence": "Her conflict is driven by concern for patient safety and family obligations."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-02-09",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She continues progressing toward CCRN with improved practice scores.",
+        "benevolence": "She invests in family care by hosting and cooking for Tyler."
+      }
+    },
+    {
+      "t_index": 9,
+      "date": "2025-02-09",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "She encourages Tyler's nursing aspiration and offers practical help with programs.",
+        "hedonism": "She explicitly recognizes patterns of self-neglect and depletion.",
+        "achievement": "Her role-model identity is built around high discipline and professional competence."
+      }
+    }
+  ]
+}

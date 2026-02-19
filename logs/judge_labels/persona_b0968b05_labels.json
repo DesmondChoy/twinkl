@@ -1,0 +1,124 @@
+{
+  "persona_id": "b0968b05",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-08-17",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "He is energized by improvisational, high-variance teaching and drawn to an adventurous wilderness role.",
+        "self_direction": "He pushes independent curriculum design rather than passively accepting standardized scripts.",
+        "conformity": "He openly resists district pacing and rubric expectations, describing strong friction with institutional norms."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-08-21",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {}
+    },
+    {
+      "t_index": 2,
+      "date": "2025-08-21",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": -1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "He describes feeling dulled by a predictable routine he chose over uncertainty.",
+        "security": "His reflection explicitly frames the tradeoff as moving from unknown conditions to a stable, repeatable structure."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-08-28",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "He creates a dynamic, high-engagement debate format and experiences it as the most alive version of the job.",
+        "self_direction": "He abandons the planned lesson in real time based on his own pedagogical judgment.",
+        "conformity": "He knowingly breaks the expected binder-and-observation pattern to pursue a different classroom approach."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-09-02",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "He remains attracted to the six-month wilderness contract and open-ended life direction.",
+        "security": "He experiences long-term planning and settled milestones as constricting rather than reassuring."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-09-05",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "He is pulled toward the project-based innovation class because it offers novelty and student-driven challenge.",
+        "self_direction": "His decision frame centers whether the career container allows him to teach in a way that fits his own principles."
+      }
+    }
+  ]
+}
