@@ -6,7 +6,11 @@ from unittest.mock import patch
 import polars as pl
 import pytest
 
-from src.judge.consolidate import consolidate_judge_labels
+from src.judge.consolidate import (
+    consolidate_judge_labels,
+    migrate_legacy_judge_rationales,
+    normalize_legacy_persona_schema,
+)
 from src.models.judge import SCHWARTZ_VALUE_ORDER
 
 
@@ -45,6 +49,14 @@ def _write_label_file(directory, persona_id, data_dict):
     path = directory / f"persona_{persona_id}_labels.json"
     path.write_text(json.dumps(data_dict))
     return path
+
+
+def _make_legacy_label_dict(persona_id="a1b2c3d4", n_entries=2):
+    data = _make_label_dict(persona_id=persona_id, n_entries=n_entries)
+    for label in data["labels"]:
+        label.pop("rationales", None)
+        label["rationale"] = "Legacy single rationale string"
+    return data
 
 
 # --- Tests ---
@@ -123,6 +135,22 @@ class TestConsolidateHappyPath:
         assert output_path.exists()
         reloaded = pl.read_parquet(output_path)
         assert len(reloaded) == 2
+
+    def test_legacy_rationale_migrates_to_rationales_json(self, tmp_path):
+        _write_label_file(tmp_path, "a1b2c3d4", _make_legacy_label_dict())
+
+        df, errors = consolidate_judge_labels(tmp_path, update_registry=False)
+
+        assert len(df) == 2
+        # Migration warning is expected for legacy files.
+        assert any("Migrated" in error for error in errors)
+
+        rationale_str = df.filter(pl.col("t_index") == 0)["rationales_json"][0]
+        assert rationale_str is not None
+        parsed = json.loads(rationale_str)
+        # All non-zero scores should receive the broadcast legacy rationale.
+        assert set(parsed.keys()) == {"self_direction", "hedonism", "security", "benevolence"}
+        assert all(value == "Legacy single rationale string" for value in parsed.values())
 
 
 class TestConsolidateErrorHandling:
@@ -240,3 +268,33 @@ class TestJudgeSchemaContract:
             if c.startswith("alignment_") and c != "alignment_vector"
         ]
         assert alignment_cols == SCHWARTZ_VALUE_ORDER
+
+
+class TestLegacyMigrationHelpers:
+
+    def test_normalize_legacy_persona_schema(self):
+        original = _make_legacy_label_dict(n_entries=1)
+        normalized, migrated_entries = normalize_legacy_persona_schema(original)
+
+        assert migrated_entries == 1
+        label = normalized["labels"][0]
+        assert "rationale" not in label
+        assert set(label["rationales"].keys()) == {
+            "self_direction",
+            "hedonism",
+            "security",
+            "benevolence",
+        }
+
+    def test_migrate_legacy_judge_rationales_writes_files(self, tmp_path):
+        _write_label_file(tmp_path, "aaa11111", _make_legacy_label_dict(persona_id="aaa11111", n_entries=1))
+        _write_label_file(tmp_path, "bbb22222", _make_label_dict(persona_id="bbb22222", n_entries=1))
+
+        files_migrated, entries_migrated = migrate_legacy_judge_rationales(tmp_path)
+
+        assert files_migrated == 1
+        assert entries_migrated == 1
+
+        migrated_data = json.loads((tmp_path / "persona_aaa11111_labels.json").read_text())
+        assert "rationale" not in migrated_data["labels"][0]
+        assert migrated_data["labels"][0]["rationales"] is not None

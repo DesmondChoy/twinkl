@@ -118,6 +118,134 @@ Long day. Just want to rest.
 ---
 """
 
+# Raw trigger-format nudge with no response section and no explicit marker.
+TRIGGER_NO_RESPONSE_NO_MARKER_ENTRY = """\
+## Entry 4 - 2025-02-01
+
+### Initial Entry
+**Tone:** reflective
+
+I keep circling around the same unresolved decision.
+
+### Nudge
+**Trigger:** unresolved tension
+
+"What happens if you decide now?"
+
+---
+"""
+
+# Raw category-format nudge with no response marker (regression case).
+CATEGORY_NO_RESPONSE_ENTRY = """\
+## Entry 4 - 2025-02-02
+
+### Initial Entry
+**Tone:** uneasy
+
+I keep postponing the call because I don't know what to say.
+
+### Nudge
+**Category:** tension_surfacing
+
+What would it cost you to ask for help right now?
+
+*(No response - persona did not reply to nudge)*
+
+---
+"""
+
+# Raw entry with non-canonical no-response marker.
+NO_RESPONSE_RECORDED_ENTRY = """\
+## Entry 5 - 2025-02-03
+
+### Initial Entry
+**Tone:** unsettled
+
+I am avoiding this conversation again.
+
+### Nudge
+**Trigger:** avoidance
+
+"What are you protecting by waiting?"
+
+*(No response recorded)*
+
+---
+"""
+
+# Raw entry with response header variant and no mode line.
+RESPONSE_HEADER_VARIANT_ENTRY = """\
+## Entry 6 - 2025-02-04
+
+### Initial Entry
+**Tone:** neutral
+
+I noticed I was more irritable than usual.
+
+### Nudge
+**Trigger:** reflection
+
+"What was different today?"
+
+### Response (Deflecting/redirecting)
+Nothing. Just a long day.
+
+---
+"""
+
+# Raw entry with "Response Mode" metadata key.
+RESPONSE_MODE_VARIANT_ENTRY = """\
+## Entry 7 - 2025-02-05
+
+### Initial Entry
+**Tone:** tense
+
+I snapped at my colleague in the meeting.
+
+### Nudge
+**Trigger:** accountability
+
+"What did you want him to hear?"
+
+### Response
+**Response Mode**: Emotional/Venting
+
+That I am carrying too much and pretending I am fine.
+
+---
+"""
+
+# Raw entry where nudge is explicitly suppressed.
+NO_NUDGE_SUPPRESSED_ENTRY = """\
+## Entry 8 - 2025-02-06
+
+### Initial Entry
+**Tone:** defensive
+
+I was still thinking about yesterday and did not want another prompt.
+
+### Nudge
+**Category:** Silence
+
+`[No nudge generated - Same-day follow-up, allowing space for continued reflection]`
+
+### Response
+`[N/A - No nudge provided]`
+
+---
+"""
+
+# Wrangled-format entry with nested quotes inside the nudge text.
+WRANGLED_NESTED_QUOTE_ENTRY = """\
+## Entry 0 - 2025-03-10
+
+I am trying to make sense of what happened in that meeting.
+
+**Nudge:** "What does \"keeping score\" mean to you right now?"
+
+---
+"""
+
 # Full persona with trigger format and multiple entries
 FULL_TRIGGER_PERSONA = PERSONA_HEADER + TRIGGER_ENTRY + NO_NUDGE_ENTRY + NO_RESPONSE_ENTRY
 
@@ -209,6 +337,57 @@ class TestNudgeFormats:
         assert entry["nudge_text"] is not None
         assert entry["has_response"] is False
         assert entry["response_text"] is None
+
+    def test_noncanonical_no_response_marker(self):
+        entries = parse_entries(PERSONA_HEADER + NO_RESPONSE_RECORDED_ENTRY)
+        entry = entries[0]
+        assert entry["has_nudge"] is True
+        assert entry["has_response"] is False
+        assert entry["response_text"] is None
+
+    def test_category_nudge_excludes_no_response_marker(self):
+        entries = parse_entries(PERSONA_HEADER + CATEGORY_NO_RESPONSE_ENTRY)
+        entry = entries[0]
+        assert entry["has_nudge"] is True
+        assert entry["nudge_text"] == "What would it cost you to ask for help right now?"
+        assert entry["has_response"] is False
+        assert entry["response_text"] is None
+
+    def test_trigger_nudge_without_response_marker_still_parses(self):
+        entries = parse_entries(PERSONA_HEADER + TRIGGER_NO_RESPONSE_NO_MARKER_ENTRY)
+        entry = entries[0]
+        assert entry["has_nudge"] is True
+        assert entry["nudge_text"] == "What happens if you decide now?"
+        assert entry["has_response"] is False
+
+    def test_response_header_parenthetical_parses_without_mode_line(self):
+        entries = parse_entries(PERSONA_HEADER + RESPONSE_HEADER_VARIANT_ENTRY)
+        entry = entries[0]
+        assert entry["has_nudge"] is True
+        assert entry["has_response"] is True
+        assert entry["response_text"] == "Nothing. Just a long day."
+
+    def test_response_mode_metadata_key_variant(self):
+        entries = parse_entries(PERSONA_HEADER + RESPONSE_MODE_VARIANT_ENTRY)
+        entry = entries[0]
+        assert entry["has_nudge"] is True
+        assert entry["has_response"] is True
+        assert "Response Mode" not in entry["response_text"]
+        assert entry["response_text"] == "That I am carrying too much and pretending I am fine."
+
+    def test_no_nudge_suppressed_placeholder(self):
+        entries = parse_entries(PERSONA_HEADER + NO_NUDGE_SUPPRESSED_ENTRY)
+        entry = entries[0]
+        assert entry["has_nudge"] is False
+        assert entry["nudge_text"] is None
+        assert entry["has_response"] is False
+        assert entry["response_text"] is None
+
+    def test_wrangled_nudge_preserves_nested_quotes(self):
+        entries = parse_entries(PERSONA_HEADER + WRANGLED_NESTED_QUOTE_ENTRY)
+        entry = entries[0]
+        assert entry["has_nudge"] is True
+        assert entry["nudge_text"] == 'What does "keeping score" mean to you right now?'
 
     def test_nudge_section_without_format_raises(self):
         malformed = PERSONA_HEADER + """\

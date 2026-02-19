@@ -27,6 +27,38 @@ from pathlib import Path
 
 import polars as pl
 
+NO_NUDGE_MARKER_PATTERN = re.compile(r"\*\(No nudge[^\n]*\)\*", re.IGNORECASE)
+NO_RESPONSE_MARKER_PATTERN = re.compile(r"\*\(No response[^\n]*\)\*", re.IGNORECASE)
+SUPPRESSED_NUDGE_PATTERN = re.compile(
+    r"\[\s*No nudge generated[^\]]*\]",
+    re.IGNORECASE,
+)
+RESPONSE_PLACEHOLDER_PATTERNS = (
+    re.compile(r"\[N/?A\s*-\s*No nudge provided\]", re.IGNORECASE),
+    re.compile(r"\[No response recorded\]", re.IGNORECASE),
+    re.compile(r"\*\*\[No Response\]\*\*", re.IGNORECASE),
+    re.compile(r"\*No response recorded\*", re.IGNORECASE),
+    re.compile(r"\*\(No response[^\n]*\)\*", re.IGNORECASE),
+)
+
+
+def _is_placeholder_response(response_text: str) -> bool:
+    """Detect synthetic placeholders that are not true user responses."""
+    normalized = response_text.strip()
+    if normalized.startswith("`") and normalized.endswith("`"):
+        normalized = normalized[1:-1].strip()
+
+    return any(pattern.fullmatch(normalized) for pattern in RESPONSE_PLACEHOLDER_PATTERNS)
+
+
+def _is_suppressed_nudge_text(nudge_text: str) -> bool:
+    """Detect synthetic placeholders that indicate nudge suppression."""
+    normalized = nudge_text.strip()
+    if normalized.startswith("`") and normalized.endswith("`"):
+        normalized = normalized[1:-1].strip()
+
+    return bool(SUPPRESSED_NUDGE_PATTERN.fullmatch(normalized))
+
 
 def parse_persona_profile(content: str) -> dict:
     """Extract persona profile from markdown content.
@@ -150,14 +182,18 @@ def _parse_wrangled_entry(date: str, content: str) -> dict:
     if initial_match:
         entry["initial_entry"] = initial_match.group(1).strip()
 
-    # Extract nudge: **Nudge:** "quoted text"
+    # Extract nudge from a single line and allow nested quotes inside nudge text.
+    # Example: **Nudge:** "What does "keeping score" mean to you?"
     nudge_match = re.search(
-        r'\*\*Nudge:\*\*\s*"([^"]+)"',
+        r'^\*\*Nudge:\*\*\s*"(.*)"\s*$',
         content,
+        re.MULTILINE,
     )
     if nudge_match:
-        entry["nudge_text"] = nudge_match.group(1).strip()
-        entry["has_nudge"] = True
+        nudge_text = nudge_match.group(1).strip()
+        if not _is_suppressed_nudge_text(nudge_text):
+            entry["nudge_text"] = nudge_text
+            entry["has_nudge"] = True
 
     # Extract response: **Response:** text (until end of section)
     response_match = re.search(
@@ -167,8 +203,10 @@ def _parse_wrangled_entry(date: str, content: str) -> dict:
         re.DOTALL,
     )
     if response_match:
-        entry["response_text"] = response_match.group(1).strip()
-        entry["has_response"] = True
+        response_text = response_match.group(1).strip()
+        if not _is_placeholder_response(response_text):
+            entry["response_text"] = response_text
+            entry["has_response"] = True
 
     return entry
 
@@ -195,11 +233,13 @@ def _parse_raw_entry(date: str, content: str) -> dict:
         "has_response": False,
     }
 
-    # Check for no-nudge marker
-    has_no_nudge_marker = "*(No nudge for this entry)*" in content
+    # Check for explicit/implicit no-nudge markers
+    has_no_nudge_marker = bool(NO_NUDGE_MARKER_PATTERN.search(content))
+    has_suppressed_nudge = bool(SUPPRESSED_NUDGE_PATTERN.search(content))
+    has_no_nudge = has_no_nudge_marker or has_suppressed_nudge
 
-    # Check for no-response marker
-    has_no_response_marker = "*(No response - persona did not reply to nudge)*" in content
+    # Check for no-response marker (supports historical phrasing variants)
+    has_no_response_marker = bool(NO_RESPONSE_MARKER_PATTERN.search(content))
 
     # --- Extract Initial Entry ---
     # Pattern: After "### Initial Entry" and metadata line, before "### Nudge" or markers
@@ -217,7 +257,7 @@ def _parse_raw_entry(date: str, content: str) -> dict:
 
     # --- Extract Nudge Text ---
     has_nudge_section = "### Nudge" in content
-    if not has_no_nudge_marker and has_nudge_section:
+    if not has_no_nudge and has_nudge_section:
         # Support multiple nudge formats from different generation runs:
         # Format 1 (new): **Trigger**: ...\n"quoted text"
         # Format 2 (old): **Category**: ...\n\nunquoted text
@@ -231,7 +271,9 @@ def _parse_raw_entry(date: str, content: str) -> dict:
             nudge_match = re.search(
                 r'### Nudge.*?\n'
                 r'\*\*Trigger(?:\*\*:|:\*\*).*?\n'
-                r'"([^"]+)"',  # Capture the quoted nudge text
+                r'(?:\n)?'
+                r'"(.+?)"'
+                r'(?=\n+### Response(?:\s*\([^)]+\))?|\n+\*\(No response[^\n]*\)\*|\n+---|\Z)',
                 content,
                 re.DOTALL,
             )
@@ -249,7 +291,7 @@ def _parse_raw_entry(date: str, content: str) -> dict:
                 r'### Nudge.*?\n'
                 r'\*\*Category(?:\*\*:|:\*\*).*?\n\n'
                 r'(.+?)'  # Capture the unquoted nudge text
-                r'(?=\n\n### Response|\n---|\Z)',
+                r'(?=\n+### Response(?:\s*\([^)]+\))?|\n+\*\(No response[^\n]*\)\*|\n+---|\Z)',
                 content,
                 re.DOTALL,
             )
@@ -267,7 +309,7 @@ def _parse_raw_entry(date: str, content: str) -> dict:
                 r'### Nudge.*?\n'
                 r'\*\*Type(?:\*\*:|:\*\*).*?\n'
                 r'> (.+?)'  # Capture text after blockquote marker
-                r'(?=\n\n### Response|\n---|\Z)',
+                r'(?=\n+### Response(?:\s*\([^)]+\))?|\n+---|\Z)',
                 content,
                 re.DOTALL,
             )
@@ -287,19 +329,24 @@ def _parse_raw_entry(date: str, content: str) -> dict:
 
     # --- Extract Response Text ---
     if entry["has_nudge"] and not has_no_response_marker:
-        # Look for content after "### Response" and mode line
-        # Handles colon inside OR outside bold: **Mode**: or **Mode:**
+        # Support response headers with optional parenthetical, with/without mode line:
+        # - ### Response
+        # - ### Response (Answering directly)
+        # - **Mode:** ...
+        # - **Response Mode:** ...
         response_match = re.search(
-            r"### Response\s*\n"
-            r"\*\*Mode(?:\*\*:|:\*\*).*?\n"  # Skip mode line (colon inside or outside)
-            r"(.+?)"  # Capture the response content
-            r"(?=\n---|\n## |\Z)",  # Stop before section break or next entry
+            r"### Response(?:\s*\([^)]+\))?\s*\n"
+            r"(?:\*\*(?:Response\s+)?Mode(?:\*\*:|:\*\*)\s*.*?\n)?"
+            r"(.+?)"
+            r"(?=\n+---|\n## |\Z)",
             content,
             re.DOTALL,
         )
         if response_match:
-            entry["response_text"] = response_match.group(1).strip()
-            entry["has_response"] = True
+            response_text = response_match.group(1).strip()
+            if not _is_placeholder_response(response_text):
+                entry["response_text"] = response_text
+                entry["has_response"] = True
 
     return entry
 

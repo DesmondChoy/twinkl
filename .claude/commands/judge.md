@@ -46,6 +46,7 @@ For each pending persona, launch a Task subagent with:
 - Read the annotation guide from `.claude/skills/judge/annotation_guide.md`
 - Read the value rubric from `.claude/skills/judge/rubric.md`
 - Score all entries using the guidelines
+- Include `rationales` for every non-zero score (`-1` or `+1`)
 - Write output to `logs/judge_labels/persona_{id}_labels.json`
 
 Use parallel subagents for efficiency. Ensure `logs/judge_labels/` directory exists first.

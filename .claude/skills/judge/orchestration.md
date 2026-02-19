@@ -101,15 +101,26 @@ Write a JSON file to `logs/judge_labels/persona_{id}_labels.json`:
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "<value_name>": "<1-2 sentence evidence-grounded rationale>",
+        "...": "Only include keys for non-zero scores"
       }
     }
   ]
 }
 ```
 
+**Rationale requirements:**
+- Include rationales ONLY for non-zero scores (`-1` or `+1`)
+- Every non-zero score must have a matching rationale key
+- Rationales must cite specific evidence from the entry (quote or paraphrase)
+- Keep rationales concise (1-2 sentences)
+
 ## Important
 - Score ONLY based on entry content, not persona metadata
 - Consider nudge responses as part of the entry when present
+- Never drop `rationales` when non-zero scores are present
 - Write the JSON file directly, no intermediate output
 ```
 

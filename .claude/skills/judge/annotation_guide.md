@@ -170,6 +170,10 @@ Your output must be valid JSON matching this schema:
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "<value_name>": "<1-2 sentence evidence-grounded rationale>",
+        "...": "Only include keys for non-zero scores"
       }
     }
   ]
@@ -181,3 +185,5 @@ Your output must be valid JSON matching this schema:
 - `t_index`: 0-based entry index (Entry 0, Entry 1, etc.)
 - `date`: Must match the entry's date header (YYYY-MM-DD format)
 - All scores: Must be exactly `-1`, `0`, or `1`
+- Include `rationales` ONLY for non-zero scores
+- Every non-zero score must have a matching rationale key

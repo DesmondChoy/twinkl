@@ -21,12 +21,112 @@ Usage (library):
 """
 
 import json
+from copy import deepcopy
 from pathlib import Path
 
 import polars as pl
 from pydantic import ValidationError
 
 from src.models.judge import SCHWARTZ_VALUE_ORDER, PersonaLabels
+
+
+def _normalize_legacy_entry_schema(entry: dict) -> tuple[dict, bool]:
+    """Normalize legacy entry shape to current schema.
+
+    Legacy judge outputs may use:
+    - "rationale": str (single explanation for all non-zero scores)
+
+    Current schema expects:
+    - "rationales": dict[str, str]
+
+    Returns:
+        Tuple of (normalized_entry, changed_flag)
+    """
+    normalized = deepcopy(entry)
+
+    # Already in current schema, nothing to do.
+    if normalized.get("rationales"):
+        normalized.pop("rationale", None)
+        return normalized, False
+
+    rationale_text = normalized.get("rationale")
+    if not isinstance(rationale_text, str) or not rationale_text.strip():
+        normalized.pop("rationale", None)
+        return normalized, False
+
+    scores = normalized.get("scores", {})
+    if not isinstance(scores, dict):
+        normalized.pop("rationale", None)
+        return normalized, False
+
+    # Broadcast the legacy single rationale string to each non-zero dimension.
+    rationales = {
+        key: rationale_text.strip()
+        for key in SCHWARTZ_VALUE_ORDER
+        if key in scores and scores[key] != 0
+    }
+
+    normalized["rationales"] = rationales if rationales else None
+    normalized.pop("rationale", None)
+    return normalized, True
+
+
+def normalize_legacy_persona_schema(data: dict) -> tuple[dict, int]:
+    """Normalize one persona label payload to current schema."""
+    normalized = deepcopy(data)
+    labels = normalized.get("labels", [])
+
+    migrated_entries = 0
+    if isinstance(labels, list):
+        normalized_labels = []
+        for label in labels:
+            if isinstance(label, dict):
+                migrated_label, changed = _normalize_legacy_entry_schema(label)
+                migrated_entries += int(changed)
+                normalized_labels.append(migrated_label)
+            else:
+                normalized_labels.append(label)
+        normalized["labels"] = normalized_labels
+
+    return normalized, migrated_entries
+
+
+def migrate_legacy_judge_rationales(
+    labels_dir: str | Path,
+    write_changes: bool = True,
+) -> tuple[int, int]:
+    """Normalize legacy `rationale` fields in judge JSON files.
+
+    Args:
+        labels_dir: Directory containing persona_*_labels.json files
+        write_changes: If True, persist normalized JSON files in place
+
+    Returns:
+        Tuple of (files_migrated, entries_migrated)
+    """
+    labels_path = Path(labels_dir)
+    json_files = sorted(labels_path.glob("persona_*_labels.json"))
+
+    files_migrated = 0
+    entries_migrated = 0
+
+    for json_file in json_files:
+        with open(json_file) as f:
+            data = json.load(f)
+
+        normalized, migrated_entries = normalize_legacy_persona_schema(data)
+        if migrated_entries <= 0:
+            continue
+
+        files_migrated += 1
+        entries_migrated += migrated_entries
+
+        if write_changes:
+            with open(json_file, "w") as f:
+                json.dump(normalized, f, indent=2)
+                f.write("\n")
+
+    return files_migrated, entries_migrated
 
 
 def consolidate_judge_labels(
@@ -66,6 +166,13 @@ def consolidate_judge_labels(
         try:
             with open(json_file) as f:
                 data = json.load(f)
+
+            data, migrated_entries = normalize_legacy_persona_schema(data)
+            if migrated_entries > 0:
+                errors.append(
+                    f"{json_file.name}: Migrated {migrated_entries} legacy rationale entr"
+                    f"{'y' if migrated_entries == 1 else 'ies'} to `rationales` schema in-memory"
+                )
 
             # Validate with Pydantic
             validated = PersonaLabels.model_validate(data)

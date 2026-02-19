@@ -2,6 +2,10 @@
 
 Instructions for Claude Code to label synthetic journal data with Schwartz value alignment scores using parallel subagents.
 
+> **Status:** Reference/spec document (historical workflow context).
+> **Canonical execution path:** Run `/judge` using `.claude/commands/judge.md` and `.claude/skills/judge/orchestration.md`.
+> If this document conflicts with the `.claude` judge command/skill files, treat the `.claude` files as authoritative.
+
 **No API keys required** - this uses Claude Code's native Task tool, not external APIs.
 
 **Prerequisites:** Run the Python wrangling script first to produce clean data from synthetic persona markdown files.
