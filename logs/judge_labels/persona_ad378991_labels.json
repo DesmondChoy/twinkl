@@ -15,6 +15,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "security": "He chose not to back the labour rights motion because two of the factories cited are long-standing clients, and supporting the statement would put decades-old business relationships and revenue at risk.",
+        "conformity": "He stayed silent when the board pushed back on the Cambodian advocate's proposal, going along with the group rather than breaking rank, even though he recognized the evidence was valid.",
+        "universalism": "He failed to support a motion to protect informal workers sorting e-waste without protective gear, despite seeing recent photos and valid data, because it would threaten his personal business relationships."
       }
     },
     {
@@ -31,6 +36,11 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 1
+      },
+      "rationales": {
+        "security": "He transferred money to the foundation account before the planned timeline despite his wife's concern about cash flow, making an impulsive financial decision that reduced his business's short-term stability.",
+        "benevolence": "Inspired by his son's call about the mangrove project, he immediately transferred money to cover the delayed clean-water pump installation, acting to support both his son's mission and the foundation.",
+        "universalism": "He funded a clean-water pump installation in Siem Reap because 'some things shouldn't wait,' prioritizing access to clean water for a rural Cambodian community over quarterly cash flow."
       }
     },
     {
@@ -47,6 +57,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "conformity": "He did not ask the plant manager about the suspicious cheap chemical solvent despite having forty minutes and enough expertise, choosing not to disrupt the completed deal or create friction.",
+        "universalism": "He knowingly ignored a potential workplace safety hazard with an improperly rated chemical solvent at the Penang factory because raising it would have meant delaying the partnership review."
       }
     },
     {
@@ -63,6 +77,10 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 1
+      },
+      "rationales": {
+        "benevolence": "He explains that the business funds his children's projects and scholarships, maintaining the company specifically so he can continue supporting his family and their work.",
+        "universalism": "He frames his continued business involvement as necessary to maintain the foundation's ability to fund clean-water projects and address the problems he sees in the world."
       }
     },
     {
@@ -79,6 +97,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 1
+      },
+      "rationales": {
+        "conformity": "He considers bringing up the broader community impact issue at the next trade association meeting but suspects he'll 'just sit there again,' self-monitoring about not wanting to be the one spouting philosophy in a packed agenda.",
+        "universalism": "He connects the hawker uncle's struggles with rising rents to the same systemic pattern of 'small people squeezed by systems that don't see them,' extending his concern beyond e-waste to broader community welfare."
       }
     },
     {
@@ -95,6 +117,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "conformity": "He changed the subject rather than challenging David's dismissive comment about migrant worker housing conditions, keeping the social peace at a dinner with old university friends.",
+        "universalism": "He let David's minimization of the migrant worker housing crisis pass without pushback, despite privately donating to migrant worker charities and knowing the issue is real."
       }
     },
     {
@@ -111,6 +137,9 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "universalism": "He chose a cheaper freight company he knows cuts corners on packaging for rural deliveries to ship pump equipment to Cambodia, risking a damaged pump at the other end to save cost and time."
       }
     }
   ]

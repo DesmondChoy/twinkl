@@ -15,6 +15,11 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She said yes to Marcus's mom's custom homework request before even finishing the email, and she deflected her own mother's concern rather than acknowledging her own needs.",
+        "conformity": "She agreed to a fourth family's custom homework request without pushback, meeting every parent's expectation regardless of the burden on herself.",
+        "benevolence": "She spent Sunday lesson planning and creating extra worksheets for struggling students, and reassured her mom not to worry about her."
       }
     },
     {
@@ -31,6 +36,10 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She made an intentional pedagogical choice to respond to Aiden's wrong answer with a follow-up question that let him get partway there, creating a safe space on her own terms.",
+        "benevolence": "She recognized Aiden's withdrawal since his parents' split and celebrated his first hand-raise, seeing it as evidence he trusted the room enough to risk being wrong."
       }
     },
     {
@@ -47,6 +56,12 @@
         "tradition": 0,
         "benevolence": -1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She wanted to tell Mrs. Patterson her daughter is at grade level but didn't, suppressing her professional judgment and spending her evening creating an unnecessary enrichment packet.",
+        "power": "She's scared Mrs. Patterson will go to Principal Davis, so she capitulates to the loudest parent rather than asserting her professional authority.",
+        "conformity": "She nodded through twenty minutes of demands and agreed to differentiated assignments she doesn't think are needed, avoiding any conflict.",
+        "benevolence": "She acknowledges eight kids reading below benchmark need her attention more, but she's prioritizing the loud parent's request over the students who actually need help."
       }
     },
     {
@@ -63,6 +78,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She didn't voice her frustration about the new reading assessment mandate that costs two instruction days, choosing silence along with everyone else.",
+        "achievement": "Losing two instruction days to an assessment mandate undermines her classroom goals, yet she accepts it passively with Lisa noting 'there's no point fighting it.'",
+        "conformity": "She nodded along with the mandate like everyone else at the staff meeting, going along with the institutional decision without protest."
       }
     },
     {
@@ -79,6 +99,12 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She heard herself saying 'sure' to the parent workshop without choosing to, unable to say no when everyone looked at her expectantly.",
+        "power": "Principal Davis publicly assigned her a task by singling her out, and she had no ability to resist the social pressure of the room.",
+        "security": "She's overextended with bus duty, book club, and now the parent workshop, and her mother's advice about empty cups signals her wellbeing is under threat.",
+        "conformity": "She took on coordinating the parent workshop because the principal pointed to her and everyone smiled, conforming to the expectation that she's the one who always says yes."
       }
     },
     {
@@ -95,6 +121,10 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "Jaylen's crayon drawing of her, him, and the classroom hamster brought her genuine joy -- 'Some days that's enough. Today it was.'",
+        "benevolence": "She keeps all the students' drawings in her desk drawer, treasuring the relationship with a child who calls her his favorite teacher ever."
       }
     },
     {
@@ -111,6 +141,10 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "security": "She reassures herself with routine -- 'This is fine. This is just September. It always gets easier by October' -- seeking comfort in the predictable cycle of the school year.",
+        "benevolence": "She's planning how to carefully tell the Millers about their son's potential evaluation need, spending mental energy to protect their feelings while advocating for the child."
       }
     },
     {
@@ -127,6 +161,13 @@
         "tradition": 0,
         "benevolence": -1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She 'backpedaled so fast' when Eli's dad looked hurt, abandoning her professional assessment and telling him his son is 'doing great actually' when she knows otherwise.",
+        "achievement": "She told every parent their kid was making progress even when she had concerns, giving up on her pedagogical goals to avoid difficult conversations.",
+        "power": "She couldn't hold her ground with Eli's dad, immediately retreating from her position when he pushed back, showing helplessness in asserting her expertise.",
+        "conformity": "She smiled through four hours of back-to-back conferences and told every parent what they wanted to hear, maintaining harmony at the expense of honesty.",
+        "benevolence": "She acknowledges Eli needs help but staying quiet means he won't get support until someone else raises it -- her conflict avoidance directly harms a student she's responsible for."
       }
     },
     {
@@ -143,6 +184,12 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "She made her first social plan in three weeks that isn't work-related, breaking out of her all-consuming routine by saying yes to brunch with Lisa.",
+        "hedonism": "A Saturday that 'felt like a Saturday for once' -- she caught up on tasks, went for a walk, and made a plan for enjoyment without work pressure.",
+        "security": "The calm, structured Saturday of catching up on emails, planning lessons, and walking the neighborhood provided a sense of normalcy and rest.",
+        "benevolence": "She said yes to brunch with Lisa, investing in a friendship she's been neglecting amid the demands of school."
       }
     },
     {
@@ -159,6 +206,12 @@
         "tradition": 1,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "When Lisa told her she doesn't have to be everything for everyone, she changed the subject, unable to confront whether she wants to change her pattern of self-sacrifice.",
+        "conformity": "She gave Lisa 'the usual answer -- busy, tired, fine' and defines herself through meeting others' expectations, saying 'the kids need someone who shows up, the parents need someone who listens.'",
+        "tradition": "She frames her self-sacrificing role as 'maybe that's just what teaching is, maybe that's just what I am,' accepting it as an identity she inherited rather than chose.",
+        "benevolence": "Despite everything, she cared about having a real friend conversation with Lisa and valued the brunch as 'normal friend things' -- showing and receiving care."
       }
     }
   ]

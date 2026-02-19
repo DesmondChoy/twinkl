@@ -15,6 +15,12 @@
         "tradition": 1,
         "conformity": -1,
         "security": -1
+      },
+      "rationales": {
+        "stimulation": "Layla describes 'something like hunger' when thinking about Amir's nonprofit opportunity in Morocco, craving the novelty and challenge of an unfamiliar experience abroad.",
+        "tradition": "She references her mother's disapproval of Malaysia as 'irresponsible' and acknowledges the family gathering around Rania's engagement, showing awareness of the traditional life milestones her culture expects.",
+        "conformity": "Layla questions at what point she should stop letting 'responsibility' dictate her decisions, pushing against the family and cultural expectation that she remain settled and follow the conventional path.",
+        "security": "She is seriously contemplating leaving her permanent teaching position and apartment for a six-month stint in Morocco, considering abandoning the stability she has carefully built."
       }
     },
     {
@@ -31,6 +37,10 @@
         "tradition": 0,
         "conformity": 0,
         "security": 0
+      },
+      "rationales": {
+        "stimulation": "Layla realizes her eight months of savings, which used to make her feel safe, now feels like 'just a number,' signaling her growing restlessness and desire for something beyond comfortable routine.",
+        "self_direction": "She reframes her savings as potentially an excuse not to take risks, recognizing her own agency in the choice: 'But the net is built. So now what?' — questioning whether she has been using financial planning to avoid autonomous action."
       }
     },
     {
@@ -47,6 +57,11 @@
         "tradition": 0,
         "conformity": 0,
         "security": 1
+      },
+      "rationales": {
+        "stimulation": "Layla emailed Amir back asking for details about the Morocco opportunity, taking a concrete step toward the novel experience she craves despite the risk.",
+        "self_direction": "She independently took action by emailing Amir, exploring the opportunity on her own terms while looking for 'a version of this where I don't have to choose between feeling alive and feeling safe.'",
+        "security": "Her response reveals she is seeking information specifically to find a safe path forward — wanting to know if she can do this 'without burning everything down' — trying to preserve stability while exploring change."
       }
     }
   ]

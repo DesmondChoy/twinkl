@@ -15,6 +15,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She told the curator she had fitting pieces in development when she doesn't, suppressing her own artistic direction in favor of what was requested.",
+        "achievement": "She views the Kunsthal feeder gallery as a strategic career step, noting it means 'better representation, better sales, a step closer to the kind of career I've been working toward for eight years.'",
+        "conformity": "She nodded along to the curator's vision of clean lines and muted palettes and promised to deliver matching work, conforming to the gallery's expectations rather than presenting her own aesthetic."
       }
     },
     {
@@ -31,6 +36,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She started three new sketches with muted greens and geometric forms that feel nothing like her own work, executing someone else's aesthetic vision.",
+        "conformity": "She is producing work that 'fits' the curator's described vision rather than creating what feels authentically hers, following the institutional expectations."
       }
     },
     {
@@ -47,6 +56,12 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She admits the compromise 'doesn't feel right' and that she's 'building a portfolio that looks like success while my actual work stays hidden,' but continues to suppress her artistic vision for career advancement.",
+        "achievement": "She justifies the compromise by tracking the tangible career outcomes — gallery support, catering at openings, being collected — viewing success through measurable professional metrics.",
+        "security": "She defends her choices by emphasizing financial necessity, noting that unlike Sanne whose 'parents own three properties in Utrecht,' she needs her art to function as a career.",
+        "conformity": "She participates in the gallery system's expectations, having learned that 'the art world runs on relationships, and relationships run on making people comfortable.'"
       }
     },
     {
@@ -63,6 +78,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "After twelve hours of work, the Rotterdam pieces are merely 'competent' — the worst word she could use — revealing the cost of abandoning her own creative direction.",
+        "conformity": "She spent twelve hours producing work that meets the curator's specifications rather than her own artistic impulses, dutifully conforming to expectations."
       }
     },
     {
@@ -79,6 +98,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She tracks sales figures with her gallerist and has sold more this year than last, demonstrating goal-oriented progress through measurable metrics of professional success.",
+        "conformity": "She thanked Pieter for his guidance and asked about the fair calendar rather than sharing her secret night sessions, performing the role of the strategic professional artist."
       }
     },
     {
@@ -95,6 +118,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She sat silently while Anke and Willem judged her for playing by the rules, not voicing her frustration about needing art to 'function as a career' without trust funds or stable partners.",
+        "achievement": "She frames her choices through career pragmatism, noting that 'some of us need our art to actually function as a career' while tracking which peers have support systems she lacks.",
+        "conformity": "She let Anke and Willem judge her 'silently over their flat whites,' saying she was excited about Rotterdam rather than defending her actual position or creating conflict."
       }
     },
     {
@@ -111,6 +139,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She listed her accomplishments to her mother 'like a CV' and said yes to being happy 'immediately without thinking about it,' performing success rather than expressing her authentic internal experience.",
+        "achievement": "She measures her career against the goals she set ten years ago — gallery representation before 30, consistent sales, press coverage, a studio — and has met every metric.",
+        "conformity": "She gave her mother a curated version of her life and reflexively said she was happy, maintaining the expected narrative rather than sharing the conflict she feels about her night sessions."
       }
     },
     {
@@ -127,6 +160,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "The curator's response that the pieces were 'exactly what we discussed' confirms she executed someone else's vision, not her own creative direction.",
+        "achievement": "She completed and delivered the Rotterdam pieces on schedule, receiving the curator's approval within an hour and submitting documentation to her gallerist — professional execution at its most efficient.",
+        "conformity": "She delivered exactly what was requested, earned the curator's immediate approval, and moved through the institutional process — 'submitted everything to Pieter for documentation. Moving on.'"
       }
     },
     {
@@ -143,6 +181,9 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "She experienced a visceral energy at the project space where artists showed authentic work and people argued about art, standing for ten minutes before chaotic canvases that 'broke every rule about composition,' feeling something she hasn't felt at her own openings in years."
       }
     },
     {
@@ -159,6 +200,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She stared at the artist statement for two hours because every phrase sounded like 'someone else wrote it,' recognizing that her professional practice has become disconnected from her authentic creative self.",
+        "achievement": "She called her mother to share the Rotterdam news and made her cry with pride, fulfilling the career milestone that validates years of professional effort.",
+        "conformity": "Despite her internal crisis, she responds to the nudge about showing hidden work with 'one step at a time. Rotterdam first' — still prioritizing the institutional path over authentic expression."
       }
     }
   ]

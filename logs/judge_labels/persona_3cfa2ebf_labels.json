@@ -16,7 +16,12 @@
         "benevolence": 0,
         "universalism": 1
       },
-      "rationale": "Resists gallery pressure to change color palette for commercial appeal. Defends artistic vision about North Sea plastic waste, stating 'the discomfort is the point.' Strong self-direction (refusing to compromise creative autonomy) and universalism (environmental art with purpose). Negative conformity (refusing to meet commercial expectations)."
+      "rationales": {
+        "self_direction": "Resists gallery pressure to change color palette for commercial appeal. Defends artistic vision about North Sea plastic waste, stating 'the discomfort is the point.' Strong self-direction (refusing to compromise creative autonomy) and universalism (environmental art with purpose). Negative conformity (refusing to meet commercial expectations).",
+        "security": "Resists gallery pressure to change color palette for commercial appeal. Defends artistic vision about North Sea plastic waste, stating 'the discomfort is the point.' Strong self-direction (refusing to compromise creative autonomy) and universalism (environmental art with purpose). Negative conformity (refusing to meet commercial expectations).",
+        "conformity": "Resists gallery pressure to change color palette for commercial appeal. Defends artistic vision about North Sea plastic waste, stating 'the discomfort is the point.' Strong self-direction (refusing to compromise creative autonomy) and universalism (environmental art with purpose). Negative conformity (refusing to meet commercial expectations).",
+        "universalism": "Resists gallery pressure to change color palette for commercial appeal. Defends artistic vision about North Sea plastic waste, stating 'the discomfort is the point.' Strong self-direction (refusing to compromise creative autonomy) and universalism (environmental art with purpose). Negative conformity (refusing to meet commercial expectations)."
+      }
     },
     {
       "t_index": 1,
@@ -33,7 +38,11 @@
         "benevolence": 1,
         "universalism": 1
       },
-      "rationale": "Extended workshop with refugees ran two hours over, deep personal connection with Fatima over botanical drawings. Let Fatima correct her shading technique - becoming student. Sat in car reflecting on meaning of the work. Commission deadline deprioritized. Strong benevolence (personal investment in Fatima), strong universalism (refugee work, environmental reflection). Slight negative achievement (deprioritizing commission)."
+      "rationales": {
+        "achievement": "Extended workshop with refugees ran two hours over, deep personal connection with Fatima over botanical drawings. Let Fatima correct her shading technique - becoming student. Sat in car reflecting on meaning of the work. Commission deadline deprioritized. Strong benevolence (personal investment in Fatima), strong universalism (refugee work, environmental reflection). Slight negative achievement (deprioritizing commission).",
+        "benevolence": "Extended workshop with refugees ran two hours over, deep personal connection with Fatima over botanical drawings. Let Fatima correct her shading technique - becoming student. Sat in car reflecting on meaning of the work. Commission deadline deprioritized. Strong benevolence (personal investment in Fatima), strong universalism (refugee work, environmental reflection). Slight negative achievement (deprioritizing commission).",
+        "universalism": "Extended workshop with refugees ran two hours over, deep personal connection with Fatima over botanical drawings. Let Fatima correct her shading technique - becoming student. Sat in car reflecting on meaning of the work. Commission deadline deprioritized. Strong benevolence (personal investment in Fatima), strong universalism (refugee work, environmental reflection). Slight negative achievement (deprioritizing commission)."
+      }
     },
     {
       "t_index": 2,
@@ -50,7 +59,11 @@
         "benevolence": 0,
         "universalism": 0
       },
-      "rationale": "Defends unconventional life choices against sister's criticism about retirement planning. 'Different doesn't mean wrong.' Strong self-direction (defending autonomous life path despite family pressure). Negative security (explicit rejection of pension/financial stability concerns). Negative conformity (refusing to accept conventional life expectations)."
+      "rationales": {
+        "self_direction": "Defends unconventional life choices against sister's criticism about retirement planning. 'Different doesn't mean wrong.' Strong self-direction (defending autonomous life path despite family pressure). Negative security (explicit rejection of pension/financial stability concerns). Negative conformity (refusing to accept conventional life expectations).",
+        "security": "Defends unconventional life choices against sister's criticism about retirement planning. 'Different doesn't mean wrong.' Strong self-direction (defending autonomous life path despite family pressure). Negative security (explicit rejection of pension/financial stability concerns). Negative conformity (refusing to accept conventional life expectations).",
+        "conformity": "Defends unconventional life choices against sister's criticism about retirement planning. 'Different doesn't mean wrong.' Strong self-direction (defending autonomous life path despite family pressure). Negative security (explicit rejection of pension/financial stability concerns). Negative conformity (refusing to accept conventional life expectations)."
+      }
     },
     {
       "t_index": 3,
@@ -67,7 +80,9 @@
         "benevolence": 0,
         "universalism": 0
       },
-      "rationale": "Admits sister's call bothered her more than she let on. Acknowledges thinking about money and wanting 'enough to not panic when a commission falls through.' Response reveals internal shift toward acknowledging security needs. Mild positive security (admitting financial concerns matter, even if previously denied)."
+      "rationales": {
+        "security": "Admits sister's call bothered her more than she let on. Acknowledges thinking about money and wanting 'enough to not panic when a commission falls through.' Response reveals internal shift toward acknowledging security needs. Mild positive security (admitting financial concerns matter, even if previously denied)."
+      }
     },
     {
       "t_index": 4,
@@ -84,7 +99,12 @@
         "benevolence": 0,
         "universalism": 1
       },
-      "rationale": "Gallery accepted her color choices after three-page explanation - small victory for artistic autonomy. Board meeting about funding crisis ran three hours. Expresses exhaustion and nostalgia for simpler times. Self-direction (defended artistic vision successfully), achievement (won the negotiation), universalism (continued nonprofit board work despite conflict). Negative hedonism (exhausted, no enjoyment)."
+      "rationales": {
+        "self_direction": "Gallery accepted her color choices after three-page explanation - small victory for artistic autonomy. Board meeting about funding crisis ran three hours. Expresses exhaustion and nostalgia for simpler times. Self-direction (defended artistic vision successfully), achievement (won the negotiation), universalism (continued nonprofit board work despite conflict). Negative hedonism (exhausted, no enjoyment).",
+        "hedonism": "Gallery accepted her color choices after three-page explanation - small victory for artistic autonomy. Board meeting about funding crisis ran three hours. Expresses exhaustion and nostalgia for simpler times. Self-direction (defended artistic vision successfully), achievement (won the negotiation), universalism (continued nonprofit board work despite conflict). Negative hedonism (exhausted, no enjoyment).",
+        "achievement": "Gallery accepted her color choices after three-page explanation - small victory for artistic autonomy. Board meeting about funding crisis ran three hours. Expresses exhaustion and nostalgia for simpler times. Self-direction (defended artistic vision successfully), achievement (won the negotiation), universalism (continued nonprofit board work despite conflict). Negative hedonism (exhausted, no enjoyment).",
+        "universalism": "Gallery accepted her color choices after three-page explanation - small victory for artistic autonomy. Board meeting about funding crisis ran three hours. Expresses exhaustion and nostalgia for simpler times. Self-direction (defended artistic vision successfully), achievement (won the negotiation), universalism (continued nonprofit board work despite conflict). Negative hedonism (exhausted, no enjoyment)."
+      }
     },
     {
       "t_index": 5,
@@ -101,7 +121,7 @@
         "benevolence": 0,
         "universalism": 0
       },
-      "rationale": "Very brief entry acknowledging studio time is being squeezed but deflecting with 'maybe that's fine for now.' Borderline scorable - mentions trade-off but too vague to assign clear value signals. Response doesn't add substantial information."
+      "rationales": null
     },
     {
       "t_index": 6,
@@ -118,7 +138,11 @@
         "benevolence": 0,
         "universalism": 0
       },
-      "rationale": "Good studio day, lost track of time - creative flow state. Installation taking shape as imagined. Self-direction (creative autonomy realized), hedonism (enjoyment of the work), achievement (progress on installation). Brief but clearly positive about autonomous creative work."
+      "rationales": {
+        "self_direction": "Good studio day, lost track of time - creative flow state. Installation taking shape as imagined. Self-direction (creative autonomy realized), hedonism (enjoyment of the work), achievement (progress on installation). Brief but clearly positive about autonomous creative work.",
+        "hedonism": "Good studio day, lost track of time - creative flow state. Installation taking shape as imagined. Self-direction (creative autonomy realized), hedonism (enjoyment of the work), achievement (progress on installation). Brief but clearly positive about autonomous creative work.",
+        "achievement": "Good studio day, lost track of time - creative flow state. Installation taking shape as imagined. Self-direction (creative autonomy realized), hedonism (enjoyment of the work), achievement (progress on installation). Brief but clearly positive about autonomous creative work."
+      }
     },
     {
       "t_index": 7,
@@ -135,7 +159,12 @@
         "benevolence": -1,
         "universalism": -1
       },
-      "rationale": "Skipped workshop to meet installation deadline. Fatima asked after her and seemed disappointed. Working at midnight with resin fumes and sore hands. Response reveals recognized pattern: 'I keep choosing work... teaching job, my marriage, now this.' Strong negative benevolence (broke commitment to Fatima, acknowledged pattern of choosing work over people). Negative hedonism (sacrificing wellbeing). Achievement (prioritizing career deadline). Negative universalism (abandoned refugee work for career)."
+      "rationales": {
+        "hedonism": "Skipped workshop to meet installation deadline. Fatima asked after her and seemed disappointed. Working at midnight with resin fumes and sore hands. Response reveals recognized pattern: 'I keep choosing work... teaching job, my marriage, now this.' Strong negative benevolence (broke commitment to Fatima, acknowledged pattern of choosing work over people). Negative hedonism (sacrificing wellbeing). Achievement (prioritizing career deadline). Negative universalism (abandoned refugee work for career).",
+        "achievement": "Skipped workshop to meet installation deadline. Fatima asked after her and seemed disappointed. Working at midnight with resin fumes and sore hands. Response reveals recognized pattern: 'I keep choosing work... teaching job, my marriage, now this.' Strong negative benevolence (broke commitment to Fatima, acknowledged pattern of choosing work over people). Negative hedonism (sacrificing wellbeing). Achievement (prioritizing career deadline). Negative universalism (abandoned refugee work for career).",
+        "benevolence": "Skipped workshop to meet installation deadline. Fatima asked after her and seemed disappointed. Working at midnight with resin fumes and sore hands. Response reveals recognized pattern: 'I keep choosing work... teaching job, my marriage, now this.' Strong negative benevolence (broke commitment to Fatima, acknowledged pattern of choosing work over people). Negative hedonism (sacrificing wellbeing). Achievement (prioritizing career deadline). Negative universalism (abandoned refugee work for career).",
+        "universalism": "Skipped workshop to meet installation deadline. Fatima asked after her and seemed disappointed. Working at midnight with resin fumes and sore hands. Response reveals recognized pattern: 'I keep choosing work... teaching job, my marriage, now this.' Strong negative benevolence (broke commitment to Fatima, acknowledged pattern of choosing work over people). Negative hedonism (sacrificing wellbeing). Achievement (prioritizing career deadline). Negative universalism (abandoned refugee work for career)."
+      }
     },
     {
       "t_index": 8,
@@ -152,7 +181,9 @@
         "benevolence": 0,
         "universalism": 0
       },
-      "rationale": "Brief factual entry about opening night success. Pieces sold, journalist interest. Achievement (successful opening, recognition). Limited other signals in this short entry."
+      "rationales": {
+        "achievement": "Brief factual entry about opening night success. Pieces sold, journalist interest. Achievement (successful opening, recognition). Limited other signals in this short entry."
+      }
     },
     {
       "t_index": 9,
@@ -169,7 +200,12 @@
         "benevolence": 0,
         "universalism": 0
       },
-      "rationale": "Complex reflection after opening. Collector wanted 'more hopeful' piece for holiday home - she said she'd think about it instead of declining. 'Performed the version of myself that makes sales.' Felt relief it was working. Response reveals insight: stubbornness may be 'just fear of doing it wrong in a different way.' Negative self-direction (compromised artistic integrity, performed rather than being authentic). Positive achievement (sales success). Positive security (acknowledging need for money). Positive conformity (performing expected social role)."
+      "rationales": {
+        "self_direction": "Complex reflection after opening. Collector wanted 'more hopeful' piece for holiday home - she said she'd think about it instead of declining. 'Performed the version of myself that makes sales.' Felt relief it was working. Response reveals insight: stubbornness may be 'just fear of doing it wrong in a different way.' Negative self-direction (compromised artistic integrity, performed rather than being authentic). Positive achievement (sales success). Positive security (acknowledging need for money). Positive conformity (performing expected social role).",
+        "achievement": "Complex reflection after opening. Collector wanted 'more hopeful' piece for holiday home - she said she'd think about it instead of declining. 'Performed the version of myself that makes sales.' Felt relief it was working. Response reveals insight: stubbornness may be 'just fear of doing it wrong in a different way.' Negative self-direction (compromised artistic integrity, performed rather than being authentic). Positive achievement (sales success). Positive security (acknowledging need for money). Positive conformity (performing expected social role).",
+        "security": "Complex reflection after opening. Collector wanted 'more hopeful' piece for holiday home - she said she'd think about it instead of declining. 'Performed the version of myself that makes sales.' Felt relief it was working. Response reveals insight: stubbornness may be 'just fear of doing it wrong in a different way.' Negative self-direction (compromised artistic integrity, performed rather than being authentic). Positive achievement (sales success). Positive security (acknowledging need for money). Positive conformity (performing expected social role).",
+        "conformity": "Complex reflection after opening. Collector wanted 'more hopeful' piece for holiday home - she said she'd think about it instead of declining. 'Performed the version of myself that makes sales.' Felt relief it was working. Response reveals insight: stubbornness may be 'just fear of doing it wrong in a different way.' Negative self-direction (compromised artistic integrity, performed rather than being authentic). Positive achievement (sales success). Positive security (acknowledging need for money). Positive conformity (performing expected social role)."
+      }
     },
     {
       "t_index": 10,
@@ -186,7 +222,13 @@
         "benevolence": 1,
         "universalism": 1
       },
-      "rationale": "Returned to workshop, reconnected with Fatima who showed completed botanical drawing. Emailed collector saying couldn't promise 'hopeful' - only 'honest.' 'Tired in a good way.' Strong self-direction (reasserted artistic integrity by refusing to promise hopeful work). Strong benevolence (returned to Fatima, repairing relationship). Universalism (back to refugee work). Positive hedonism (good tiredness from meaningful activity). Negative security (potentially losing commission by being honest)."
+      "rationales": {
+        "self_direction": "Returned to workshop, reconnected with Fatima who showed completed botanical drawing. Emailed collector saying couldn't promise 'hopeful' - only 'honest.' 'Tired in a good way.' Strong self-direction (reasserted artistic integrity by refusing to promise hopeful work). Strong benevolence (returned to Fatima, repairing relationship). Universalism (back to refugee work). Positive hedonism (good tiredness from meaningful activity). Negative security (potentially losing commission by being honest).",
+        "hedonism": "Returned to workshop, reconnected with Fatima who showed completed botanical drawing. Emailed collector saying couldn't promise 'hopeful' - only 'honest.' 'Tired in a good way.' Strong self-direction (reasserted artistic integrity by refusing to promise hopeful work). Strong benevolence (returned to Fatima, repairing relationship). Universalism (back to refugee work). Positive hedonism (good tiredness from meaningful activity). Negative security (potentially losing commission by being honest).",
+        "security": "Returned to workshop, reconnected with Fatima who showed completed botanical drawing. Emailed collector saying couldn't promise 'hopeful' - only 'honest.' 'Tired in a good way.' Strong self-direction (reasserted artistic integrity by refusing to promise hopeful work). Strong benevolence (returned to Fatima, repairing relationship). Universalism (back to refugee work). Positive hedonism (good tiredness from meaningful activity). Negative security (potentially losing commission by being honest).",
+        "benevolence": "Returned to workshop, reconnected with Fatima who showed completed botanical drawing. Emailed collector saying couldn't promise 'hopeful' - only 'honest.' 'Tired in a good way.' Strong self-direction (reasserted artistic integrity by refusing to promise hopeful work). Strong benevolence (returned to Fatima, repairing relationship). Universalism (back to refugee work). Positive hedonism (good tiredness from meaningful activity). Negative security (potentially losing commission by being honest).",
+        "universalism": "Returned to workshop, reconnected with Fatima who showed completed botanical drawing. Emailed collector saying couldn't promise 'hopeful' - only 'honest.' 'Tired in a good way.' Strong self-direction (reasserted artistic integrity by refusing to promise hopeful work). Strong benevolence (returned to Fatima, repairing relationship). Universalism (back to refugee work). Positive hedonism (good tiredness from meaningful activity). Negative security (potentially losing commission by being honest)."
+      }
     }
   ]
 }

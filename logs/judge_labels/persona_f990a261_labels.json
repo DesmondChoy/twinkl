@@ -15,6 +15,11 @@
         "tradition": 0,
         "conformity": 0,
         "security": 0
+      },
+      "rationales": {
+        "hedonism": "She fills the absence of excitement with pantry organization and sourdough starters, denying herself the pleasure and surprise she craves.",
+        "stimulation": "She yearns for 'a few more surprise elements' and 'a plot twist every now and then,' but her days are predictable routines of cereal bowls, banana bread, and rock painting.",
+        "benevolence": "She spent the day making banana bread with Olive and painting rocks in the backyard, actively caring for and engaging with her daughter."
       }
     },
     {
@@ -31,6 +36,11 @@
         "tradition": 0,
         "conformity": 0,
         "security": 0
+      },
+      "rationales": {
+        "hedonism": "She stood holding juice boxes 'like a human vending machine' at the pumpkin patch and went to bed at 8:30 without any personal enjoyment.",
+        "stimulation": "Three hours watching kids run in circles at a pumpkin patch with no variation or novelty; her deflection ('that's the point, right?') reveals resignation to monotony.",
+        "benevolence": "She spent the day at the pumpkin patch ensuring her kids had fun, fulfilling her parental role even while emotionally flat."
       }
     },
     {
@@ -47,6 +57,11 @@
         "tradition": 0,
         "conformity": 0,
         "security": 0
+      },
+      "rationales": {
+        "hedonism": "She's already looking forward to getting her hands dirty with 'something that isn't Play-Doh,' anticipating the pleasure of a creative activity for herself.",
+        "stimulation": "She signed up for a ceramics class -- a new experience breaking her weekly routine, seeking novelty outside her domestic role.",
+        "self_direction": "She took the initiative to enroll in the class on her own, making an autonomous choice about how to spend her Thursday evenings."
       }
     },
     {
@@ -63,6 +78,12 @@
         "tradition": 0,
         "conformity": 0,
         "security": -1
+      },
+      "rationales": {
+        "hedonism": "She drove home with windows down in forty-degree weather, played music loud, and ate leftover pasta standing up -- pure sensory enjoyment without guilt.",
+        "stimulation": "She spent two hours at the ceramics studio without checking her phone, experiencing something completely new and feeling like 'someone I used to be.'",
+        "self_direction": "She threw cylinders on the wheel, didn't care about her ruined nails or clay in her hair, fully engaged in creative autonomy outside her domestic role.",
+        "security": "Driving home at night with windows down in cold weather and feeling like 'briefly someone else' signals a departure from the safe, predictable domestic routine."
       }
     },
     {
@@ -79,6 +100,11 @@
         "tradition": 0,
         "conformity": 0,
         "security": 0
+      },
+      "rationales": {
+        "hedonism": "She scrolls through 2017 photos of herself at a music festival with body paint and a flower crown, mourning the loss of that joyful, pleasure-seeking person she no longer recognizes.",
+        "stimulation": "She fantasizes about a day with no schedule where she could 'just follow whatever sounds interesting' but acknowledges she even planned an itinerary for spontaneity.",
+        "self_direction": "She looked at flights to Mexico but won't go, yearning for autonomy while trapped in a cycle of grocery runs, Target trips, and sneaker replacements."
       }
     },
     {
@@ -95,6 +121,12 @@
         "tradition": 0,
         "conformity": 1,
         "security": 0
+      },
+      "rationales": {
+        "hedonism": "She describes herself as 'a logistics coordinator for four other humans' whose own needs are 'on page twelve of a to-do list that only goes to page three.'",
+        "self_direction": "Nobody asks her what she needs; she's the one who asks everyone else about lunches, teeth-brushing, and backpacks, with no space for her own choices.",
+        "benevolence": "Despite her frustration, she describes herself as the person who shows up for everyone -- managing four people's daily needs out of genuine care, not just duty.",
+        "conformity": "She feels guilty for having restless feelings in a 'nice house in Littleton, Colorado with a functioning dishwasher,' conforming to the expectation that she should be grateful and content."
       }
     },
     {
@@ -127,6 +159,12 @@
         "tradition": 0,
         "conformity": 0,
         "security": 0
+      },
+      "rationales": {
+        "achievement": "She made a bowl that actually looks like a bowl and Greta praised her improving centering -- tangible progress in developing a new skill.",
+        "hedonism": "Her hands are 'good sore,' the kind of tired that means you did something -- she's experiencing physical pleasure from creative work.",
+        "stimulation": "Second ceramics class and she's engaged in the challenge of centering clay and shaping a real bowl, continuing to seek novelty.",
+        "self_direction": "She's developing her own creative practice independent of her family role, with progress that belongs entirely to her."
       }
     },
     {
@@ -143,6 +181,11 @@
         "tradition": 0,
         "conformity": 0,
         "security": 0
+      },
+      "rationales": {
+        "hedonism": "Kyle gets a Tahoe retreat just for him while she can't anticipate anything without coordinating childcare first -- the asymmetry in access to enjoyment settles heavy in her stomach.",
+        "stimulation": "She feels jealousy not about the destination but about 'having something on the calendar that's just for you,' highlighting her own lack of novel personal experiences.",
+        "self_direction": "Kyle's retreat was something 'nobody scheduled for you, that you get to anticipate' -- a freedom she doesn't have because every choice requires coordinating around others."
       }
     },
     {
@@ -175,6 +218,12 @@
         "tradition": 0,
         "conformity": 0,
         "security": 0
+      },
+      "rationales": {
+        "hedonism": "She missed ceramics because Olive got sick, scrolling through the group chat watching others' glazed pieces while she rubbed her daughter's back -- her one source of personal pleasure taken away.",
+        "stimulation": "Every time she carves out something new and her own, 'a fever or a school closure or a dentist appointment swallows it back up,' pulling her back into predictable caregiving.",
+        "self_direction": "She describes feeling like the universe is reminding her 'I don't actually get to have my own thing' -- her autonomy is constantly reclaimed by family demands.",
+        "benevolence": "She sat in Olive's room rubbing her back while she slept, being tender and present for her sick daughter despite feeling trapped."
       }
     },
     {
@@ -191,6 +240,13 @@
         "tradition": 0,
         "conformity": 1,
         "security": 0
+      },
+      "rationales": {
+        "hedonism": "She realizes she's become 'the kind of person who needs permission to enjoy things' and doesn't know how to undo it, unable to access pleasure without guilt.",
+        "stimulation": "She watches Dana describe motorbike rides through rice paddies and a Hanoi tattoo, longing for the surprise and novelty she used to have but saying 'maybe' instead of acting.",
+        "self_direction": "She says 'maybe is how you say no without having to defend it,' acknowledging she can't make autonomous choices for herself anymore.",
+        "benevolence": "She let Dana's kids paint her toenails and was a generous, present host, and what she misses isn't the logistics of event planning but making good times happen for others.",
+        "conformity": "She gives Dana the socially expected answer about missing working, says 'maybe' to freelancing, and keeps making lunches -- conforming to the role everyone sees her in."
       }
     }
   ]

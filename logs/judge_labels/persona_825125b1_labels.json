@@ -15,7 +15,11 @@
         "conformity": 1,
         "security": 0
       },
-      "date": "2025-10-11"
+      "date": "2025-10-11",
+      "rationales": {
+        "self_direction": "She wanted to say something sharp to her sister-in-law but suppressed it entirely, standing at the counter gripping it rather than expressing her own opinion.",
+        "conformity": "She smiled and said 'it's not for everyone' to avoid making dinner awkward, restraining her reaction because Dan's mom was right there."
+      }
     },
     {
       "t_index": 1,
@@ -31,7 +35,13 @@
         "conformity": 0,
         "security": 1
       },
-      "date": "2025-10-12"
+      "date": "2025-10-12",
+      "rationales": {
+        "achievement": "She struggles with never hearing 'good job' or 'thank you' for her work, and wants to 'believe it myself' that staying home 'counts' — revealing a sense of unrecognized competence.",
+        "self_direction": "She told her mom 'I'm fine' rather than engaging with the question about part-time work, and wishes people would 'stop treating my life like a problem to solve' while still not asserting her own framing of her choice.",
+        "benevolence": "She chose to stay home to be with her children during their early years, managing two kids, the house, Dan's travel schedule, appointments, and groceries to support her family.",
+        "security": "She made the stay-at-home decision based on practical math — daycare costs versus her salary — choosing household stability and financial rationality over career continuation."
+      }
     },
     {
       "t_index": 2,
@@ -47,7 +57,11 @@
         "conformity": 1,
         "security": 0
       },
-      "date": "2025-10-13"
+      "date": "2025-10-13",
+      "rationales": {
+        "self_direction": "She automatically agreed with another mom's opinion about park hours even though she noticed herself doing it, unable to voice even a minor disagreement.",
+        "conformity": "She agreed with whatever the other mom said about park hours to avoid being 'the difficult one,' even on a topic that wasn't worth disagreeing about."
+      }
     },
     {
       "t_index": 3,
@@ -63,7 +77,14 @@
         "conformity": 1,
         "security": 0
       },
-      "date": "2025-10-16"
+      "date": "2025-10-16",
+      "rationales": {
+        "hedonism": "She gave up the chance for a quiet family day — the aquarium or pizza at home — to attend the Sunday dinner, sacrificing her own enjoyment.",
+        "self_direction": "She committed the family to Sunday dinner before even considering what she wanted, noting 'my mouth answered before my brain caught up.'",
+        "benevolence": "She agrees to bring salad and rolls and attend the dinner so the family can meet the new baby, putting extended family togetherness above her own preference.",
+        "tradition": "She maintains the regular Sunday dinner tradition at her mother-in-law's, bringing the same dishes 'same as always,' upholding the established family ritual.",
+        "conformity": "She said yes immediately because backing out 'would be a thing' — his mom would call Dan, Dan would ask questions — and she wanted to avoid any disruption to social harmony."
+      }
     },
     {
       "t_index": 4,
@@ -79,7 +100,12 @@
         "conformity": 1,
         "security": 0
       },
-      "date": "2025-10-16"
+      "date": "2025-10-16",
+      "rationales": {
+        "hedonism": "She deflated when Dan said he hoped they'd go, realizing she'd lost the chance for the quiet day she wanted without ever having voiced the desire.",
+        "self_direction": "She never told Dan she wanted something different because 'I never say it,' recognizing her pattern of surrendering her own preferences before they're even expressed.",
+        "conformity": "She could have said 'let me check with Dan first' — a normal thing to say — but didn't because even that small delay 'would've felt like making waves.'"
+      }
     }
   ]
 }

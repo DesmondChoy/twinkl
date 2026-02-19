@@ -15,6 +15,10 @@
         "tradition": 1,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "tradition": "Sofia participates in the nine-night novena for her aunt's anniversary, teaches her students to fold paper flowers for the school altar, and passes on her grandmother's wisdom about keeping the dead alive through ritual.",
+        "benevolence": "She teaches her third graders the meaning behind the altar tradition and gives them a thoughtful explanation rooted in her grandmother's words, nurturing their understanding."
       }
     },
     {
@@ -31,6 +35,12 @@
         "tradition": 1,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Sofia wants space to figure out her feelings about Carlos but cannot find it, constrained by family expectations she cannot navigate around on her own terms.",
+        "security": "She avoids introducing Carlos to her family because the potential disruption threatens the stable equilibrium of her family relationships.",
+        "conformity": "She lies to both Carlos and her mother to avoid conflict — telling him it's a busy week, telling her mother she's too focused on work to date.",
+        "tradition": "She cannot bring herself to introduce a divorced man into a family that still whispers about her cousin's civil ceremony, bound by Catholic family expectations."
       }
     },
     {
@@ -47,6 +57,10 @@
         "tradition": 1,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "tradition": "Sofia spends the evening at her grandmother's preparing food for the final night of the novena and will arrive early to set up chairs as she has done every year since she was fourteen.",
+        "benevolence": "She participates in the communal food preparation alongside family, including welcoming her cousin's new baby, contributing to the family gathering."
       }
     },
     {
@@ -63,6 +77,11 @@
         "tradition": 1,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Sofia had strong opinions about the curriculum modernization but stayed quiet in the meeting, typing her real thoughts into her phone at 11pm instead of voicing them.",
+        "conformity": "When Roberto asked what she thought, she said it sounded fine rather than expressing her real concerns, avoiding being the young teacher defending old ways.",
+        "tradition": "She values Sister Magdalena's chalkboard methods, physical textbooks, and the ritual of learning with a pencil in hand, resisting the push to replace them with tablets."
       }
     },
     {
@@ -79,6 +98,11 @@
         "tradition": 1,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Sofia asserts that she is not running from anything by staying in Guadalajara, declaring 'the roots here are mine' in response to her friend's criticism.",
+        "tradition": "She grounds her identity in her hometown, her grandmother, her students, and the roots she has cultivated, rejecting the idea that leaving represents progress.",
+        "benevolence": "She frames her decision to stay partly around being needed — her 83-year-old grandmother and her students who know her."
       }
     },
     {
@@ -95,6 +119,12 @@
         "tradition": 1,
         "benevolence": -1,
         "universalism": 0
+      },
+      "rationales": {
+        "security": "Sofia lay awake trying to figure out which betrayal she could live with, desperate to find a path that preserves the stability of her family relationships.",
+        "conformity": "She couldn't answer Carlos fast enough when he asked if she was ashamed of him, paralyzed by the gap between her feelings and the social script she is expected to follow.",
+        "tradition": "She measures her relationship against her parents' 32-year marriage that began at church with her grandfather's blessing, unable to write a different script and still feel like herself.",
+        "benevolence": "Her inability to commit to Carlos or be honest with him is causing direct harm to their relationship — she acknowledges he deserves better than being her secret."
       }
     },
     {
@@ -111,6 +141,10 @@
         "tradition": 1,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Sofia took the initiative to go to confession and spoke openly about feeling stuck, seeking her own way forward rather than accepting the impasse.",
+        "tradition": "She went to confession at her childhood church, spoke with Father Miguel who has known her since first communion, and sat in her grandmother's pew, drawing comfort from religious ritual."
       }
     },
     {
@@ -127,6 +161,9 @@
         "tradition": 1,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "tradition": "Sofia put up the same San Francisco de Asis poster her mother gave her on her first year of teaching and decided to keep it despite its worn corners, honoring continuity."
       }
     },
     {
@@ -143,6 +180,12 @@
         "tradition": 1,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She almost told her mother the truth about Carlos's divorce but let the moment pass when her grandmother walked in, still arranging her life around safe moments rather than asserting her own choices.",
+        "security": "She felt relief when the interruption prevented her from revealing the truth, preferring to preserve the current stable family dynamic.",
+        "conformity": "She panicked when her mother sensed her hesitation and used the grandmother's interruption as an escape, avoiding the discomfort of breaking expectations.",
+        "tradition": "She describes herself as a grown woman hiding in the kitchen of her childhood home, still operating within the family's traditional framework despite knowing she needs to break free."
       }
     },
     {
@@ -159,6 +202,13 @@
         "tradition": 1,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Sofia made the autonomous decision to bring Carlos to Sunday lunch, acting on her own conviction despite shaking hands and family uncertainty.",
+        "security": "She disrupted the stable family equilibrium by introducing a divorced partner, accepting pointed questions from her father and uncertain silences.",
+        "conformity": "She broke the expected family script by bringing a divorced man to the family table, knowingly causing discomfort and awkward silences.",
+        "tradition": "Her grandmother held Carlos's hand when he spoke about his daughter, and her mother said 'I can see he's good to you' — Sofia brought her life to the tradition honestly, as Father Miguel advised.",
+        "benevolence": "She stopped hiding Carlos as her secret, honoring both his dignity and her family's right to know, connecting the people she cares about."
       }
     }
   ]

@@ -15,6 +15,10 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He was short with his mother during a supplier meeting, then lost productive work time driving to two pharmacies and sitting in the car, unable to perform at his professional standard.",
+        "benevolence": "Despite his frustration, he drove to two pharmacies after the meeting to find his mother's specific blood pressure pills and left them outside her door when she wouldn't come out."
       }
     },
     {
@@ -31,6 +35,11 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He spent four hours creating a color-coded medication schedule when quarterly reports were due, his own work priorities surrendered to caregiving demands.",
+        "achievement": "Lifen pointed out he spent four hours on the pill organizer when quarterly reports were due, and he acknowledges the math doesn't work -- everyone needs a piece of him and nothing is left.",
+        "benevolence": "He built a detailed color-coded medication schedule with large-font labels for his mother, persisting despite her insistence she could remember on her own."
       }
     },
     {
@@ -47,6 +56,12 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He defended his career to friends by citing business expansion into Southeast Asian markets, asserting he's growing and succeeding despite looking tired.",
+        "security": "He enumerates the financial obligations -- tutoring fees, specialist appointments, Hong Kong rent -- as justification for maintaining his current work intensity, choosing stability for his family.",
+        "conformity": "He chose each obligation deliberately -- taking in his mother, sending Yuxin to Hong Kong -- and frames them as what he 'should be doing,' meeting family expectations without complaint.",
+        "benevolence": "He took his mother in without hesitation when his father died and insisted Yuxin go to Hong Kong for her career despite the cost, putting family needs above his own comfort."
       }
     },
     {
@@ -63,6 +78,9 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "He sat at the dining table for an hour quizzing Haojie on chemistry while his mother peeled fruit for them -- a quiet family moment where he was simply present for his son."
       }
     },
     {
@@ -79,6 +97,12 @@
         "tradition": 0,
         "benevolence": -1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He recognized he 'chose convenient over present' by texting 'OK' instead of calling when his mother had a dizzy spell, unable to break away from the client obligation.",
+        "achievement": "He stayed at KTV with Mr. Tanaka until 1am because the deal would cover Yuxin's next semester -- prioritizing the business outcome over being home.",
+        "conformity": "He went along with Tanaka's KTV invitation because it's 'good business practice to build the relationship,' following the expected social protocol of client entertainment.",
+        "benevolence": "His mother had a dizzy spell and Lifen handled it alone while he replied with a two-word text between karaoke songs, choosing career advancement over being present for his family."
       }
     },
     {
@@ -95,6 +119,10 @@
         "tradition": 0,
         "benevolence": -1,
         "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Tanaka confirmed the contract, validating his decision to stay out -- 'at least the evening wasn't wasted' frames the outcome in terms of professional success.",
+        "benevolence": "Lifen has been quieter than usual and he suspects she's keeping a tally of the nights he chooses work over home, recognizing the cost to his closest relationship."
       }
     },
     {
@@ -111,6 +139,10 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He told Yuxin she should talk to her teammates and set expectations rather than absorb everything, then recognized he heard himself in her -- a moment of independent self-reflection.",
+        "benevolence": "He had a forty-minute call with Yuxin, gave her advice he struggles to follow himself, and reflected on how the family bonds -- his daughter calling, his wife's shoulder squeeze -- are what he'd 'burn everything down to keep.'"
       }
     },
     {
@@ -127,6 +159,10 @@
         "tradition": 0,
         "benevolence": -1,
         "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He skipped Haojie's parent-teacher meeting because a shipment got held at customs, prioritizing business operations over his promise to attend.",
+        "benevolence": "He broke his promise to Haojie to attend the meeting, and his son's silent withdrawal -- not asking to be quizzed tonight -- signals the cost to their relationship."
       }
     },
     {
@@ -143,6 +179,9 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "He took Haojie for beef noodles after school as a quiet gesture of repair, showing up for his son the day after missing the meeting."
       }
     },
     {
@@ -159,6 +198,10 @@
         "tradition": 1,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "tradition": "The entire family independently mobilized for Ma's birthday -- Yuxin flying in, ordering the specific bakery cake, Lifen getting fish from the wet market at 6am -- honoring the matriarch as a family ritual.",
+        "benevolence": "Each family member moved toward the same thing separately without coordination because they all know it matters; Weimin reflects this is what he's been building -- a family that shows up for each other."
       }
     },
     {
@@ -175,6 +218,10 @@
         "tradition": 1,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "tradition": "He'll drive Ma to visit Auntie Fang on Saturday because Ma will worry about her lonely friend all week otherwise -- maintaining the web of family and community obligation.",
+        "benevolence": "He chooses to drive his mother to visit Auntie Fang not out of obligation but because his mother's worry about her friend would become his worry -- an interconnected chain of care."
       }
     }
   ]

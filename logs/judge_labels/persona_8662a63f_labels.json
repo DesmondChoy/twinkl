@@ -15,6 +15,10 @@
         "tradition": -1,
         "conformity": 0,
         "security": 0
+      },
+      "rationales": {
+        "benevolence": "She skipped the Sunday visit to her parents using a half-true excuse about the baby's fever, letting her father put away the plates he had set on Saturday night.",
+        "tradition": "She broke the longstanding Sunday family meal ritual, hearing her father putting the plates away in the background, and fears that one missed week makes the next one easier to miss."
       }
     },
     {
@@ -31,6 +35,12 @@
         "tradition": 1,
         "conformity": 0,
         "security": 0
+      },
+      "rationales": {
+        "hedonism": "She pulls Hugo out of Sunday football and drives an hour each way despite exhaustion and her husband's thinning patience, sacrificing family comfort to maintain the visits.",
+        "self_direction": "She insists on the weekly drive even when it conflicts with Hugo's activities and her husband's preferences, but this insistence serves tradition rather than autonomous choice — she feels compelled rather than free.",
+        "benevolence": "She continues the weekly visits so her parents won't eat alone, especially since her sister moved to Bordeaux and barely calls — she refuses to let 'that table shrink to two.'",
+        "tradition": "She defends the Sunday visits against Clemence's dismissal, insisting it's 'just what we do' and refusing to be the one who lets the family tradition die."
       }
     },
     {
@@ -47,6 +57,10 @@
         "tradition": 1,
         "conformity": 0,
         "security": 0
+      },
+      "rationales": {
+        "benevolence": "She called her mother to share Lea's comment about the potatoes, and had Lea help stir the bechamel — actively nurturing the bond between generations through cooking together.",
+        "tradition": "She was moved to tears by Lea connecting the gratin to four generations of women, and deliberately taught her daughter the recipe by having her hold the wooden spoon, preserving her grandmother's culinary legacy."
       }
     },
     {
@@ -63,6 +77,11 @@
         "tradition": 1,
         "conformity": 0,
         "security": 1
+      },
+      "rationales": {
+        "benevolence": "She brought the whole family for the Sunday meal, noted Hugo eating two bowls of Papa's cassoulet, and felt good about maintaining the family gathering that keeps everyone connected.",
+        "tradition": "She drove home in the dark feeling settled after Papa told the story about his father's vineyard and the frost of '56, seeing Hugo lean in to listen — 'these are the details that disappear if nobody passes them on.'",
+        "security": "Hugo asked if they could come again next week and she said 'of course, that's what we do,' finding reassurance in the restored predictability of the family routine after earlier doubts."
       }
     },
     {
@@ -79,6 +98,16 @@
         "tradition": 1,
         "conformity": 1,
         "security": 1
+      },
+      "rationales": {
+        "achievement": "She deflects Nathalie's question about returning to work despite thinking about it 'constantly,' and admits she was good at her prefecture job — but has shelved that competence for domestic life.",
+        "hedonism": "She has started counting hours until bedtime and notices that she's sacrificing her own enjoyment, but continues to prioritize being present for her children over personal fulfillment.",
+        "stimulation": "She rejects the possibility of change — 'my mother didn't, her mother didn't' — choosing the known path of staying home over the novelty of returning to work.",
+        "self_direction": "She wonders whether her conviction about staying home is genuine or 'just fear of doing something different from what I know,' revealing she may be following inherited patterns rather than making an autonomous choice.",
+        "benevolence": "She prioritizes being there when her children come home, knowing their teachers' names, and volunteering at school — wanting for them what her mother provided for her.",
+        "tradition": "She hears the voice of her mother and grandmother saying 'this is the work that matters,' and measures herself against generations of women who stayed home and held families together.",
+        "conformity": "She compares herself to Clemence's kids 'eating canteen food five days a week' and concludes 'that's not what I want,' aligning with the family norm of full-time mothering.",
+        "security": "She values the stability of being home when her children arrive, maintaining the household routine, and providing the same consistent presence her mother gave her."
       }
     },
     {
@@ -95,6 +124,12 @@
         "tradition": 1,
         "conformity": 0,
         "security": 0
+      },
+      "rationales": {
+        "hedonism": "She volunteers to organize next year's procession knowing the time will come 'from sleep, probably, or from the one evening a week I watch something for myself,' sacrificing her last personal leisure.",
+        "universalism": "She signed up to help organize the Mardi Gras procession for the broader parish community, taking responsibility for a communal tradition that benefits everyone beyond her immediate family.",
+        "benevolence": "She acts to preserve the procession so Hugo won't lose the experience he still talks about — the paper lanterns — prioritizing her son's future joy.",
+        "tradition": "She refused to let the parish Mardi Gras procession die, signing up to organize it because her parents marched in it as children and Hugo already has memories of the lanterns."
       }
     }
   ]

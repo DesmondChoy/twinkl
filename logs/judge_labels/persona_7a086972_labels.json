@@ -15,7 +15,14 @@
         "conformity": -1,
         "security": 1
       },
-      "date": "2025-07-26"
+      "date": "2025-07-26",
+      "rationales": {
+        "hedonism": "She chose to come home to enjoy the balcony, the golden light, and the smell of bread from the bakery downstairs over going to drinks with colleagues, prioritizing sensory pleasure and relaxation.",
+        "stimulation": "She deliberately avoided the social outing with trainees, choosing the quiet predictability of her balcony over the novelty of a night out.",
+        "self_direction": "She made an autonomous choice to skip drinks and come home because she 'wanted this more,' trusting her own judgment about what she needed over social pressure.",
+        "conformity": "She broke the implicit social expectation to join colleagues for drinks, choosing her own preference over going along with the group.",
+        "security": "She chose the familiar comfort of her flat and balcony routine over an unpredictable evening out, finding peace in the known setting."
+      }
     },
     {
       "t_index": 1,
@@ -31,7 +38,15 @@
         "conformity": 1,
         "security": 1
       },
-      "date": "2025-08-02"
+      "date": "2025-08-02",
+      "rationales": {
+        "power": "She accepted her mentor's authority without pushback, noting she 'just folded' and agreed to implement discipline strategies she disagrees with because the mentor signs off on her certification.",
+        "hedonism": "She walked out of the meeting feeling like she'd 'agreed to be someone I'm not,' sacrificing her personal comfort and teaching enjoyment to meet the mentor's demands.",
+        "self_direction": "She surrendered her own teaching philosophy about letting six-year-olds talk during transitions, nodding and saying she'd work on it rather than voicing her actual opinion.",
+        "benevolence": "Her instinct to let the children talk during transitions comes from genuine care for their wellbeing and developmental needs, prioritizing their comfort over procedural compliance.",
+        "conformity": "She chose to conform to institutional expectations, noting 'everyone else in the programme just does what they're told' and questioning why she can't do the same.",
+        "security": "She prioritized the safety of her certification path by not challenging her mentor, recognizing that 'she's the one signing off on my certification.'"
+      }
     },
     {
       "t_index": 2,
@@ -47,7 +62,14 @@
         "conformity": 1,
         "security": 0
       },
-      "date": "2025-08-05"
+      "date": "2025-08-05",
+      "rationales": {
+        "power": "She implemented the firmer boundaries despite her mentor not even watching, accepting an authority-imposed approach that felt wrong to her.",
+        "hedonism": "She ate leftover pasta standing up and went to bed at nine, denying herself any pleasure after a day that left her feeling 'flat.'",
+        "self_direction": "She enforced silence during transitions even though it contradicted her own teaching instincts, noting 'I don't know who I did it for.'",
+        "benevolence": "She made a child wait in silence and saw him look at her 'like I'd taken something away from him,' recognizing she had harmed a child's experience to follow her mentor's directive.",
+        "conformity": "She kept a straight face and implemented the discipline strategy as instructed, conforming to her mentor's expectations despite her discomfort."
+      }
     },
     {
       "t_index": 3,
@@ -63,7 +85,14 @@
         "conformity": 1,
         "security": 1
       },
-      "date": "2025-08-06"
+      "date": "2025-08-06",
+      "rationales": {
+        "self_direction": "She carefully edited what she shared with her mother, calibrating every detail to avoid triggering her mother's worry, surrendering her authentic self-expression for managed communication.",
+        "benevolence": "She protected her mother from worry by keeping the conversation light and pleasant, prioritizing her mother's peace of mind over her own need to be honest.",
+        "tradition": "She maintained the established family dynamic of keeping things light and positive, noting 'it's how we've always been' with her mother.",
+        "conformity": "She performed her expected role in the phone call, discussing the garden and her aunt's birthday, self-monitoring to avoid causing concern or disrupting the family equilibrium.",
+        "security": "She maintained the stable, predictable pattern of pleasant family calls rather than introducing uncertainty by sharing her struggles at the placement."
+      }
     },
     {
       "t_index": 4,
@@ -79,7 +108,16 @@
         "conformity": 1,
         "security": 1
       },
-      "date": "2025-08-07"
+      "date": "2025-08-07",
+      "rationales": {
+        "power": "She sat silently through the staff meeting while permanent teachers argued about the timetable, accepting her subordinate status as a trainee who doesn't have 'standing to weigh in.'",
+        "achievement": "She experienced genuine professional pride when Nour read a full page without stopping, recognizing her competence as a teacher in that breakthrough moment.",
+        "hedonism": "She enjoyed macarons on the balcony with Camille after a hard day, savoring the pistachio ones and allowing herself a moment of simple pleasure.",
+        "self_direction": "She kept quiet at the meeting even though she had an opinion about the Wednesday slot, deferring to others rather than exercising her own voice.",
+        "benevolence": "She invested time and patience in Nour's reading development, giving her space to succeed without pressure, and was deeply moved by the child's breakthrough.",
+        "conformity": "She deliberately stayed silent in the meeting because 'it's smarter to just listen for now and figure out how things work before opening my mouth,' following the social hierarchy.",
+        "security": "She chose the safe path of listening and learning the politics before speaking, preferring to understand the system before taking any risk."
+      }
     },
     {
       "t_index": 5,
@@ -95,7 +133,14 @@
         "conformity": 1,
         "security": 1
       },
-      "date": "2025-08-08"
+      "date": "2025-08-08",
+      "rationales": {
+        "hedonism": "She's enjoying leftover macarons and a renovation show on the sofa, genuinely preferring this sensory comfort over the party — 'the mouth-shut version of me has fewer macarons.'",
+        "stimulation": "She chose to stay home on the sofa rather than attend a social event, avoiding novelty and preferring the predictable comfort of her routine.",
+        "self_direction": "She's staying home not out of genuine preference alone but because of social anxiety about a comment she made three weeks ago, letting others' potential judgment dictate her behavior.",
+        "conformity": "She regrets making an honest comment about her supervisor at the last party because it 'felt like I'd broken some rule I didn't know existed,' and her avoidance stems from fear of social transgression.",
+        "security": "She retreated to the safety of her apartment to avoid the social risk of facing colleagues after her previous honest remark."
+      }
     },
     {
       "t_index": 6,
@@ -111,7 +156,16 @@
         "conformity": 1,
         "security": 1
       },
-      "date": "2025-08-14"
+      "date": "2025-08-14",
+      "rationales": {
+        "power": "She received 'meets expectations' and accepted it without pushback, thanking her mentor for feedback rather than advocating for herself or challenging the assessment.",
+        "achievement": "She's frustrated that her genuine skills — making a scared kid feel safe enough to read — aren't measured by the rubric, revealing dissatisfaction with a 'meets expectations' rating she believes should be higher.",
+        "hedonism": "She had dinner with Camille, split a bottle of wine, and enjoyed good food and company, deliberately choosing pleasure to close out a difficult week.",
+        "self_direction": "She didn't voice her belief that she's better than 'meets expectations,' instead thanking her mentor and saying she'd keep working on the prescribed areas rather than asserting her own teaching philosophy.",
+        "benevolence": "She values making children feel safe enough to learn, noting there's no evaluation box for making 'a scared kid feel safe enough to read out loud.'",
+        "conformity": "She thanked the mentor for feedback and said she'd keep working on it, telling Thomas her review 'went well too' rather than expressing her real frustration.",
+        "security": "She chose not to 'argue with the rubric,' accepting the institutional evaluation system to protect her position in the programme."
+      }
     }
   ]
 }

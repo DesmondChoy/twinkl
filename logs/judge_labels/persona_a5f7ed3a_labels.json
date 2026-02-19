@@ -15,7 +15,12 @@
         "conformity": -1,
         "security": 0
       },
-      "date": "2025-08-29"
+      "date": "2025-08-29",
+      "rationales": {
+        "achievement": "His cousin Luc just closed on a house and got promoted, while Marcus is doing courier gigs, and Luc's silence suggests Marcus has given up on conventional markers of success like finishing school.",
+        "self_direction": "He told Luc things are going well with the courier gigs, standing by his unconventional choice to leave the business program and work independently despite his family's disapproval.",
+        "conformity": "He persists in his gig work lifestyle despite his cousin's pointed silence and the implicit expectation from family that he should finish school and settle into a conventional career."
+      }
     },
     {
       "t_index": 1,
@@ -31,7 +36,13 @@
         "conformity": 0,
         "security": -1
       },
-      "date": "2025-09-05"
+      "date": "2025-09-05",
+      "rationales": {
+        "hedonism": "He worked a fourteen-hour double shift between rides and deliveries, eating a shawarma in the car between pickups, sacrificing any personal comfort or leisure to cover rent.",
+        "self_direction": "He independently managed his own gruelling schedule, choosing when to start and stop based on his phone dying rather than anyone else's rules, maintaining full control over his work day.",
+        "tradition": "Despite his tight finances and busy schedule, he plans to attend Tante Diane's seventieth birthday in Sudbury because she taught him to skate and family gatherings matter to him.",
+        "security": "His phone died at 9pm forcing him to stop working, and he barely made enough to cover rent, showing the financial precariousness of his gig-based livelihood."
+      }
     },
     {
       "t_index": 2,
@@ -47,7 +58,13 @@
         "conformity": 0,
         "security": 0
       },
-      "date": "2025-09-11"
+      "date": "2025-09-11",
+      "rationales": {
+        "achievement": "He optimized his Tuesday route to stage near the McGill Roddick Gates between 11:30 and 1 to grab more lunch deliveries, demonstrating competence through a deliberate strategy to increase his earnings.",
+        "self_direction": "He independently devised a new route optimization by switching to the McGill area and figuring out the best staging location, making his own choices about how to work more effectively.",
+        "benevolence": "He called his grandmother after his shift and listened patiently to her repeated story about her father delivering ice blocks, maintaining a caring connection with a close family member.",
+        "tradition": "He called Grand-mere and warmly received the same story she tells every time about her father's horse cart deliveries on Sherbrooke Street, valuing the family oral tradition and intergenerational connection."
+      }
     },
     {
       "t_index": 3,
@@ -63,7 +80,12 @@
         "conformity": -1,
         "security": -1
       },
-      "date": "2025-09-18"
+      "date": "2025-09-18",
+      "rationales": {
+        "self_direction": "He explicitly values never having to ask permission to take a day off or switch a route, and contrasts his freedom with the business program where every hour was controlled by someone else's schedule.",
+        "conformity": "He rejected the structured path of the business program because he 'couldn't breathe in that,' and continues to live outside conventional career expectations despite the financial instability.",
+        "security": "He acknowledges that some weeks the money is tight and dismisses it as something he figures out, accepting financial instability as a trade-off for his autonomous lifestyle."
+      }
     },
     {
       "t_index": 4,
@@ -79,7 +101,14 @@
         "conformity": -1,
         "security": -1
       },
-      "date": "2025-09-25"
+      "date": "2025-09-25",
+      "rationales": {
+        "self_direction": "He refused to take a week and a half off the app to help Uncle Rene move, asserting his own work needs and decision-making authority over his mother's request.",
+        "benevolence": "He got sharp with his mother on the phone and refused to help Uncle Rene move despite knowing his uncle's knees are bad and he genuinely needs the assistance, prioritizing his gig income over family caregiving.",
+        "tradition": "He declined to come home for Thanksgiving and the extended stay to help family, breaking with the family expectation that you show up when relatives need you, which he himself acknowledges is valid.",
+        "conformity": "He pushed back forcefully against his mother's expectations, telling her she doesn't understand how his work operates and refusing the family obligation, causing her to go quiet.",
+        "security": "He has no paid leave, no financial cushion, and can't afford ten days off the app without real financial consequences, highlighting the instability his lifestyle creates for meeting family obligations."
+      }
     }
   ]
 }

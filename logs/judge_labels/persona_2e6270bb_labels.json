@@ -15,6 +15,9 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "power": "Wei-Lin asserts his former managerial competence and resents being treated as if he knows nothing, revealing deep concern with status and recognition of his authority."
       }
     },
     {
@@ -31,6 +34,14 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Wei-Lin has strategically mapped out restaurant pickup times and optimized his routes, demonstrating independent problem-solving and initiative in his work.",
+        "hedonism": "He takes the undesirable late-night shifts ending at 2 AM and forces himself to maintain a constant smile for the Diamond Driver rating, sacrificing personal comfort for income.",
+        "achievement": "He tracks his rating at 4.92 and pursues the Diamond Driver program, setting concrete performance goals to gain priority order access.",
+        "security": "He monitors the family savings carefully, calculating they have three to four months of reserves, and takes extra shifts preemptively against his wife's potential hour cuts.",
+        "conformity": "He maintains high customer-facing performance (keeping the smile on) and follows the app's rating system requirements despite the personal cost.",
+        "benevolence": "Wei-Lin takes the worst shifts nobody wants to ensure financial stability for his family, acting to protect his wife and son's welfare."
       }
     },
     {
@@ -47,6 +58,13 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Wei-Lin reframes his situation as adaptation rather than failure, asserting his own narrative against his brother's condescension and his son's suggestions to explore other options.",
+        "power": "He acutely feels the loss of status, aware that his brother looks down on his gig work and his son may respect him less since the career change.",
+        "security": "He insists on doing what needs to be done to keep the family running, prioritizing household stability despite the career upheaval.",
+        "conformity": "Wei-Lin pushes back against his brother's implicit judgment, refusing to accept the social expectation that his current job represents failure.",
+        "benevolence": "He frames his entire effort as keeping the family afloat, refusing to apologize for doing whatever is necessary for his wife and son."
       }
     },
     {
@@ -79,6 +97,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Three weeks of perfect service ratings were erased by one unfair review, undermining his concrete progress toward the Diamond Driver goal.",
+        "power": "A customer dismissed his explanation with 'whatever' and shut the door, leaving him powerless to defend himself against an unjust rating.",
+        "security": "His rating dropped to 4.88, jeopardizing the Diamond Driver threshold he needs for consistent income and financial stability."
       }
     },
     {
@@ -95,6 +118,13 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Wei-Lin distinguishes himself from Mr. Huang, who pretended not to recognize him, asserting that at least he is not the one hiding from reality.",
+        "hedonism": "He worked from 11 AM to midnight with a hurting back, delaying the scooter seat replacement to save money, sacrificing personal comfort entirely.",
+        "achievement": "He logged a full thirteen-hour workday and earned NT$2,800, demonstrating persistence in pursuing income targets despite physical pain.",
+        "power": "Wei-Lin contrasts himself favorably with his former colleague Mr. Huang who hid from him, reclaiming a sense of dignity by refusing to be ashamed of his work.",
+        "security": "He avoids spending NT$1,500 on the scooter seat despite his back pain, prioritizing financial reserves over immediate comfort."
       }
     },
     {
@@ -111,6 +141,14 @@
         "tradition": -1,
         "benevolence": -1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He chose to work on Christmas because of surge pricing, making an independent strategic decision about how to spend the holiday based on his own calculus.",
+        "hedonism": "Wei-Lin sits outside in the cold rather than inside where it's warm, waiting for deliveries on Christmas instead of enjoying the holiday dinner his wife prepared.",
+        "achievement": "He capitalizes on Christmas surge pricing while most drivers take the day off, demonstrating competitive drive and work ethic.",
+        "security": "He works the holiday specifically because the surge pricing and reduced competition mean more reliable and higher income.",
+        "tradition": "He works through Christmas instead of spending it with his wife, breaking from the holiday tradition of family togetherness.",
+        "benevolence": "His wife made dinner and set one place setting, texting to ask when he would come home, but he chose to keep working, neglecting the relationship."
       }
     },
     {
@@ -127,6 +165,9 @@
         "tradition": 0,
         "benevolence": -1,
         "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "He arrived home late to find his wife had already gone to bed silently after putting everything in the fridge, revealing the cost of his absence on their relationship."
       }
     },
     {
@@ -143,6 +184,11 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "power": "Being called 'Uncle' and tipped NT$100 by a young man in an expensive apartment underscored Wei-Lin's loss of status, reducing him to someone who receives charity from those half his age.",
+        "conformity": "When the young customer offered the tip and the well-meaning but patronizing comment, Wei-Lin said thank you and accepted it graciously rather than expressing his discomfort.",
+        "benevolence": "Upon hearing his son got a research assistant job, Wei-Lin told him to focus on his studies and not worry about money, prioritizing his son's wellbeing despite their financial strain."
       }
     },
     {
@@ -159,6 +205,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Wei-Lin achieved Diamond Driver status by maintaining a 4.91 rating for two months, reaching a concrete performance milestone he had been working toward.",
+        "power": "Earning Diamond status and priority orders represents a form of rank and recognition within the gig platform hierarchy.",
+        "security": "Diamond Driver status means more consistent orders, and his wife's hours were not cut after all, both stabilizing the family's financial situation."
       }
     }
   ]

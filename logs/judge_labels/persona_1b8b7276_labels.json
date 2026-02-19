@@ -15,6 +15,12 @@
         "tradition": 0,
         "conformity": 1,
         "security": 1
+      },
+      "rationales": {
+        "stimulation": "Nabil stayed at the office during the holiday weekend for a deployment window instead of taking time off, choosing the predictable and controlled over any novelty or change of pace.",
+        "self_direction": "His nudge response reveals he stays not out of autonomous choice but because he feels others' perception — that seventeen years in one place means he had no other options — defines him, surrendering self-definition to external judgment.",
+        "conformity": "He stayed for the deployment because 'someone needed to be there,' fulfilling the dutiful role expected of the senior engineer rather than delegating to the junior as Rima suggested.",
+        "security": "Nabil takes comfort in knowing 'every hallway, every server room, every shortcut in the build system,' valuing the deep familiarity and stability of seventeen years at the same company."
       }
     },
     {
@@ -31,6 +37,12 @@
         "tradition": 0,
         "conformity": 1,
         "security": 1
+      },
+      "rationales": {
+        "power": "Nabil sat through the restructuring meeting asking no questions, accepting a subordinate position where management decides his fate while he calculates survival months in the parking lot.",
+        "self_direction": "He chose to ask nothing in the meeting, deferring entirely to management's framing, and his nudge response confirms this was strategic avoidance: 'you don't ask those things in front of everyone.'",
+        "conformity": "He sat nodding and taking notes during the restructuring meeting, deliberately suppressing his questions to avoid making himself 'a target,' following the unspoken rule of not challenging leadership publicly.",
+        "security": "After the meeting he immediately checked the bank app and savings, doing the mental math on how many months his family could survive, revealing his core concern for financial safety."
       }
     },
     {
@@ -47,6 +59,12 @@
         "tradition": 1,
         "conformity": 1,
         "security": 0
+      },
+      "rationales": {
+        "achievement": "Nabil finished the API migration ahead of schedule, demonstrating professional competence and exceeding the expected standard.",
+        "benevolence": "He had lunch with his colleague Marwan and found reassurance in the connection, maintaining a close workplace relationship during a stressful period.",
+        "tradition": "Nabil started cleaning the guest room for Rima's mother's visit and told his daughters they need to be 'presentable,' upholding family customs and expectations around hosting elders.",
+        "conformity": "He instructed his daughters to be presentable for their grandmother's visit, enforcing social etiquette and family expectations even when they complained."
       }
     },
     {
@@ -63,6 +81,13 @@
         "tradition": 1,
         "conformity": 1,
         "security": 1
+      },
+      "rationales": {
+        "power": "Nabil smiled and poured more coffee when his mother-in-law compared him unfavorably to Fadi, absorbing the status slight without defending himself or asserting his own worth.",
+        "self_direction": "He suppressed his honest reaction to his mother-in-law's criticism, internally fuming about keeping her daughter's life stable but saying nothing, letting others define his narrative.",
+        "tradition": "Despite his frustration, Nabil served his mother-in-law coffee and maintained the expected deference to an elder family member, honoring the hosting tradition.",
+        "conformity": "He smiled and changed the subject rather than responding to his mother-in-law's provocative comment, restraining himself to preserve family harmony during the visit.",
+        "security": "His internal defense — 'I'm keeping her daughter's life stable' — reveals that his identity and self-worth are built around providing financial and domestic stability for his family."
       }
     },
     {
@@ -79,6 +104,11 @@
         "tradition": 0,
         "conformity": 0,
         "security": 1
+      },
+      "rationales": {
+        "stimulation": "Nabil looked at the Dubai startup opportunity for fifteen minutes then closed the tab, choosing to stay with the familiar rather than pursue the novel, higher-paying role.",
+        "self_direction": "He closed the tab on the recruiter's offer without engaging, unable to make an autonomous choice to even explore the opportunity, paralyzed between his father's advice and Rima's likely encouragement.",
+        "security": "He rejected the Dubai fintech startup specifically because it was a two-year contract 'with no guarantees after that,' fixating on what happens 'if I jump and there's nothing underneath.'"
       }
     },
     {
@@ -95,6 +125,12 @@
         "tradition": 0,
         "conformity": 0,
         "security": 1
+      },
+      "rationales": {
+        "achievement": "Nabil shipped the authentication module and received client approval, demonstrating professional competence recognized by an external party.",
+        "hedonism": "He took his daughters out for ice cream after work, enjoying a spontaneous moment of family pleasure to celebrate the relief.",
+        "benevolence": "He treated his daughters to ice cream as a way of sharing his good news, turning his personal relief into a family moment of connection.",
+        "security": "The restructuring email confirmed his department is safe, and his description of relief as 'unclenching' after weeks of tight-jawed anxiety shows how much the threat to stability consumed him."
       }
     },
     {
@@ -111,6 +147,14 @@
         "tradition": 0,
         "conformity": 1,
         "security": 1
+      },
+      "rationales": {
+        "power": "Nabil's manager told him 'that's why I need you in the room,' which he interpreted as being valued only as 'the brakes on everyone else's engine,' a subordinate role that dampens rather than leads.",
+        "achievement": "He identified fifteen ways Sara's platform rewrite would break existing integrations and later gave his manager a realistic eighteen-month timeline, demonstrating deep technical expertise.",
+        "stimulation": "He sat through a presentation about 'innovation culture' and 'embracing disruption' and internally resisted it, choosing to protect existing systems rather than engage with the new framework proposal.",
+        "self_direction": "Nabil kept his mouth shut during the breakout session rather than voicing his expert assessment, letting the room's enthusiasm override his professional judgment.",
+        "conformity": "He clapped when everyone else clapped during the VP's presentation and avoided being 'the old guy who kills momentum,' restraining his critical assessment to maintain group harmony.",
+        "security": "His core concern was protecting existing client integrations and system stability, warning his manager about losing two major clients during a transition — prioritizing the known over the disruptive."
       }
     },
     {
@@ -127,6 +171,12 @@
         "tradition": 0,
         "conformity": 1,
         "security": 1
+      },
+      "rationales": {
+        "achievement": "Nabil received 'exceeds expectations' across the board and was called 'the backbone of the engineering team,' confirming his professional competence through formal recognition.",
+        "stimulation": "His nudge response reveals he might want to be seen as someone who 'pushed for something risky,' but immediately qualifies 'that's not me,' actively choosing the predictable identity over novelty.",
+        "conformity": "He was praised as 'a stabilizing presence during periods of change,' and while ambivalent about this label, he accepts it as his defined role within the organization.",
+        "security": "The annual review confirms his position as the reliable, stable anchor of the team, and Rima's unsurprised 'of course' reinforces that his identity is built around dependable consistency."
       }
     },
     {
@@ -143,6 +193,11 @@
         "tradition": 1,
         "conformity": 0,
         "security": 0
+      },
+      "rationales": {
+        "hedonism": "Nabil chose the scenic coast road instead of the highway on the drive home, savoring the pleasant experience while Rima slept beside him — a small but deliberate choice of enjoyment.",
+        "benevolence": "He took the girls to visit their grandmother on Saturday, investing family time in maintaining the close intergenerational relationship.",
+        "tradition": "The visit to Rima's mother and the family drive together reflect maintenance of family customs and regular connection with elders."
       }
     }
   ]

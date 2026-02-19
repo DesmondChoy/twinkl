@@ -15,6 +15,11 @@
         "tradition": 0,
         "benevolence": -1,
         "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He spends the afternoon comparing his literature review to top journal papers, tracking his progress against external standards and striving for excellence.",
+        "security": "He hides the setback from Ingrid because admitting he's behind threatens the narrative that leaving their stable Stockholm life was justified.",
+        "benevolence": "He told Ingrid the meeting went 'fine' instead of being honest about his struggles, withholding from her while she picks up extra client work to cover their gap."
       }
     },
     {
@@ -47,6 +52,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He keeps thinking about his 'old desk in Stockholm, the ergonomic chair, the predictable paychecks,' suggesting regret about leaving the structured path for independent pursuit.",
+        "security": "The grant rejection threatens their financial stability, and he watches Ingrid skip organic vegetables because of their budget while calculating their monthly burn rate."
       }
     },
     {
@@ -63,6 +72,12 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He discovers an unexpected satisfaction in teaching that he chose for himself, recognizing a personal strength outside the metrics-driven PhD track.",
+        "hedonism": "He walked home the long way along the canal enjoying the evening light, and 'for once wasn't calculating anything,' savoring a moment of present contentment.",
+        "security": "He felt 'okay about being here' for the first time, finding emotional grounding in the teaching experience that eased his anxiety about the PhD gamble.",
+        "benevolence": "He spent forty minutes walking Willem through the regression model one-on-one, helping a confused first-year student who was afraid to ask in front of everyone."
       }
     },
     {
@@ -79,6 +94,14 @@
         "tradition": 1,
         "benevolence": -1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He is secretly browsing finance job postings, considering surrendering his independent academic path and returning to the structured corporate world.",
+        "achievement": "He frames the potential return to finance as 'a specific kind of defeat,' feeling like he's failed at the PhD challenge and may not be able to handle uncertainty.",
+        "power": "He describes possibly needing 'someone else's structure to function,' acknowledging a loss of autonomy and control over his professional trajectory.",
+        "security": "He runs the savings numbers and determines they face 'difficult choices' without funding by September, prioritizing financial stability calculations.",
+        "tradition": "He reflects on his father's thirty-four years at the same job, shifting from seeing it as limiting to wondering if his father 'understood something I didn't' about the value of steady commitment.",
+        "benevolence": "He hides the job browsing from Ingrid, keeping her in the dark about his growing doubts while she continues to support their joint sacrifice."
       }
     },
     {
@@ -95,6 +118,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "power": "He perceives a double standard where younger students get encouragement for sloppy work while he gets twenty minutes of pointed questions, feeling his status and authority are diminished.",
+        "conformity": "Despite his frustration with the unequal treatment, he stays silent and does not challenge the professors' flexible standards, absorbing the perceived unfairness."
       }
     },
     {
@@ -111,6 +138,11 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He chose to tell Ingrid everything about his struggles, making an autonomous decision to be vulnerable rather than continuing to hide behind the 'fine' facade.",
+        "security": "Ingrid's reframing that the worst case has been 'acknowledged and we're still sitting here' gives him a sense of emotional stability despite the uncertainty.",
+        "benevolence": "Ingrid's response to finding the job postings is compassion rather than anger, and the mutual openness strengthens their partnership as they figure things out together."
       }
     }
   ]

@@ -15,6 +15,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "conformity": "She stayed silent when the younger consultant proposed deprioritizing patients without family advocates, not wanting to be 'that older nurse who's always making everything political.'",
+        "universalism": "She failed to defend homeless patients and migrants who would lose palliative care access under the proposed triage changes, despite knowing they are the ones 'nobody's advocating for.'"
       }
     },
     {
@@ -31,6 +35,10 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 1
+      },
+      "rationales": {
+        "benevolence": "She personally secured a proper physiotherapy referral for the Syrian woman with chronic back pain that had been ignored for months, ensuring she got the care she needed.",
+        "universalism": "She spent the afternoon at the refugee clinic catching patients 'the system fails constantly,' filling the gap in healthcare access for displaced people."
       }
     },
     {
@@ -47,6 +55,9 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 1
+      },
+      "rationales": {
+        "universalism": "She bought the organic tomatoes despite the cost, cycles instead of driving, and sorts recycling obsessively, maintaining environmental consciousness even when it feels 'small against the scale of it.'"
       }
     },
     {
@@ -63,6 +74,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "conformity": "She rushed the elderly man's comfort care review in ten minutes rather than disrupting the ward schedule, choosing efficiency and smooth operations over thorough patient care.",
+        "universalism": "She acknowledges 'the corners you cut are always on the patients who won't complain' and admits she would not have rushed if he had family watching, failing the most vulnerable."
       }
     },
     {
@@ -79,6 +94,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "conformity": "She didn't laugh at the colleague's joke about refugee patients 'costing us all money,' but she also didn't challenge it, saying 'I'm not their teacher.'",
+        "universalism": "She let a dehumanizing comment about refugee patients pass without pushback, despite working at the refugee clinic on weekends."
       }
     },
     {
@@ -95,6 +114,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "conformity": "She signed off on the cheaper glove supplier because the ward manager was pushing hard and she 'didn't want to hold up the order for something nobody else seemed to care about.'",
+        "universalism": "She approved a purchase order from a company with exploitative labour conditions in Southeast Asia, despite knowing the reports and spending weekends with refugees who fled such conditions."
       }
     },
     {
@@ -111,6 +134,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "conformity": "She abstained from the ethics panel vote on end-of-life care for undocumented patients rather than being the only dissenting voice on record.",
+        "universalism": "She let a motion reducing healthcare access for undocumented patients pass without casting a dissenting vote, calling it 'cowardice dressed up as strategy.'"
       }
     },
     {
@@ -143,6 +170,9 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "universalism": "She drove to work in a diesel car, used a disposable cup, and ordered from Amazon despite her environmental convictions, acknowledging 'the convenience keeps winning' over her values."
       }
     },
     {
@@ -159,6 +189,11 @@
         "tradition": 0,
         "benevolence": -1,
         "universalism": -1
+      },
+      "rationales": {
+        "conformity": "She stayed silent during the meeting rather than backing Fatima's question, not wanting to be seen challenging the new director in his first week.",
+        "benevolence": "Fatima came to her in the hallway asking for support and Margot gave excuses about timing, failing the junior nurse who needed one senior person to back her up.",
+        "universalism": "The question Fatima raised was about whether throughput targets would reduce time for non-Dutch-speaking patients who need interpreters, and Margot let it go unanswered."
       }
     },
     {
@@ -175,6 +210,10 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 1
+      },
+      "rationales": {
+        "benevolence": "She brought Fatima a coffee and committed to raising her question at the next ethics panel, following through on supporting a junior colleague she had previously let down.",
+        "universalism": "She plans to advocate at the ethics panel for the non-Dutch-speaking patients' access to adequate interpreter time, turning Fatima's unanswered question into institutional action."
       }
     }
   ]

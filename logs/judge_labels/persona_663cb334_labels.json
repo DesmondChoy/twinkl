@@ -15,6 +15,13 @@
         "tradition": 1,
         "conformity": 1,
         "security": 0
+      },
+      "rationales": {
+        "achievement": "She went to the TA's office hours after class and identified her mistake, demonstrating diligence in pursuing mastery of the material.",
+        "self_direction": "She spent two hours silently agonizing instead of raising her hand, suppressing her own voice and deferring to the group consensus.",
+        "benevolence": "She called Patricia about Sunday dinner and adapted warmly when told it might be just the two of them, maintaining close family connection.",
+        "tradition": "She made her mother's lentil soup with cumin and lime, preserving a family recipe and cultural food practice.",
+        "conformity": "She chose not to ask about her different regression answer to avoid slowing the class or drawing attention as the oldest person in the room."
       }
     },
     {
@@ -31,6 +38,11 @@
         "tradition": 0,
         "conformity": 1,
         "security": 1
+      },
+      "rationales": {
+        "self_direction": "She smiled and said 'sure, sounds great' despite disagreeing with the restructuring, suppressing her own opinion to avoid being the one who 'drags things backward.'",
+        "conformity": "She went along with Kayla's last-minute restructuring to avoid tension, redoing three pages overnight rather than voicing her disagreement in the group.",
+        "security": "She had already written her sections according to the agreed plan and is now redoing them, showing her preference for sticking with established commitments."
       }
     },
     {
@@ -47,6 +59,11 @@
         "tradition": 1,
         "conformity": 1,
         "security": 0
+      },
+      "rationales": {
+        "self_direction": "She reflects that her lifelong skill of 'reading the room' and letting things go means she consistently subordinates her own voice to group harmony.",
+        "tradition": "She explicitly contrasts her Colombian upbringing and clinic experience with American assertiveness norms, valuing the conflict-avoidant relational skills she 'spent a lifetime building.'",
+        "conformity": "She describes biting the inside of her cheek rather than voicing disagreement, recognizing that her instinct is always to avoid creating tension in the group."
       }
     },
     {
@@ -63,6 +80,13 @@
         "tradition": 1,
         "conformity": 0,
         "security": 1
+      },
+      "rationales": {
+        "achievement": "She worked methodically through three chapters on study design, making margin notes and maintaining a disciplined reading rhythm through the textbook.",
+        "hedonism": "She bought a pan dulce from the bakery and ate it on the bench in the golden campus light, savoring a simple moment of pleasure.",
+        "benevolence": "Patricia's text that the kids want 'abuela's arroz con pollo' for Sunday 'settled something in me I didn't know was unsettled,' showing how family connection anchors her.",
+        "tradition": "She ran into Miguel from the parish and they shared the experience of navigating a new system, connecting through their shared immigrant and cultural background.",
+        "security": "The routine of steady textbook progress and the certainty of Sunday dinner with family provided her a sense of stability and groundedness."
       }
     },
     {
@@ -79,6 +103,12 @@
         "tradition": 1,
         "conformity": 0,
         "security": 1
+      },
+      "rationales": {
+        "hedonism": "The Sunday dinner was 'loud and full' with tres leches and children running around, and she savored the warmth and sensory pleasure of the gathering.",
+        "benevolence": "She hosted and cooked arroz con pollo for Patricia, the kids, Miguel, and Estela, nurturing her close community through food and gathering.",
+        "tradition": "She finds meaning in the familiar rhythms of scooping rice onto plates while Estela tells stories, recognizing that 'the rhythms I already know are enough.'",
+        "security": "She reflects that knowing her place and rhythms at the clinic gave her stability, and she's finding that same grounding through the Sunday dinner routine."
       }
     }
   ]

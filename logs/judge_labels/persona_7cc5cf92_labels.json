@@ -15,7 +15,14 @@
         "security": 0,
         "universalism": 0
       },
-      "date": "2025-06-27"
+      "date": "2025-06-27",
+      "rationales": {
+        "power": "He tracks where he stands relative to Vikram and strategizes about visibility, attending product roadmap meetings even when not required to position himself for the platform team lead role.",
+        "achievement": "He responds to Vikram's promotion by planning to lead cross-functional initiatives and increase his visibility, driven by the belief that 'you have to make your time come.'",
+        "tradition": "He calls his father, sends extra money for the temple renovation fund, and affirms that 'you take care of your family, you do what's expected — that's not a burden, that's just how it should be.'",
+        "benevolence": "He sent extra money home for the temple renovation fund without being asked, fulfilling his responsibility to support his family.",
+        "conformity": "He told his father everything was 'progressing well' rather than burdening him with workplace frustrations, managing the conversation to meet family expectations."
+      }
     },
     {
       "t_index": 1,
@@ -31,7 +38,13 @@
         "security": 1,
         "universalism": 0
       },
-      "date": "2025-07-02"
+      "date": "2025-07-02",
+      "rationales": {
+        "power": "He stalls on introducing Priya to his parents because he wants to achieve financial milestones first — buying a flat outright — maintaining control over the relationship timeline.",
+        "tradition": "He delays the expected family milestone of introducing his partner and moving toward marriage, going against the traditional timeline his family anticipates.",
+        "benevolence": "He is stalling on Priya's request to meet his parents, prioritizing his own timeline over her emotional needs in the relationship.",
+        "security": "He wants to be financially settled — flat, savings, stable position — before taking the marriage step, prioritizing material stability."
+      }
     },
     {
       "t_index": 2,
@@ -47,7 +60,12 @@
         "security": 0,
         "universalism": 0
       },
-      "date": "2025-07-08"
+      "date": "2025-07-08",
+      "rationales": {
+        "power": "He prefers being 'indispensable' rather than merely needed, wanting others to depend on him because 'nobody promotes the guy who's easily replaced.'",
+        "achievement": "He handles three nights of on-call rotations and junior dev escalations, sacrificing sleep to demonstrate competence and maintain his position as the go-to engineer.",
+        "hedonism": "He sacrifices sleep and personal comfort over three nights of on-call rotations, choosing work demands over his own physical wellbeing."
+      }
     },
     {
       "t_index": 3,
@@ -63,7 +81,14 @@
         "security": 0,
         "universalism": 0
       },
-      "date": "2025-07-10"
+      "date": "2025-07-10",
+      "rationales": {
+        "power": "He's frustrated that the rules for advancement changed from meritocratic to political and is determined to master 'executive presence' to break through the ceiling his father hit.",
+        "achievement": "He spent the evening reading articles on executive communication and downloaded a book on stakeholder management, committing to learn the new skills required for promotion.",
+        "tradition": "He references his father's teaching that 'results matter, not showmanship' and reflects on whether his father's career ceiling was the result of this traditional approach.",
+        "conformity": "He accepts the feedback about 'executive presence' and immediately begins adapting to the corporate culture's expectations, deciding 'if this is what they want, I'll figure it out.'",
+        "self_direction": "He resents having to 'play this game' of corporate communication, feeling forced to adopt behaviors that contradict his belief that excellent work should speak for itself."
+      }
     },
     {
       "t_index": 4,
@@ -79,7 +104,12 @@
         "security": 0,
         "universalism": 0
       },
-      "date": "2025-07-17"
+      "date": "2025-07-17",
+      "rationales": {
+        "power": "He presented directly to the leadership team with seven slides, seeking visibility and positioning himself for advancement by getting the VP's attention.",
+        "achievement": "He kept the presentation to seven slides using business metrics instead of technical specs, strategically adapting his communication for maximum impact — 'VP nodded twice. Small win.'",
+        "conformity": "He adopted the communication style his manager recommended — concise, business-focused — rather than his natural technical approach, conforming to organizational expectations."
+      }
     },
     {
       "t_index": 5,
@@ -95,7 +125,14 @@
         "security": 1,
         "universalism": 0
       },
-      "date": "2025-07-21"
+      "date": "2025-07-21",
+      "rationales": {
+        "power": "He maintains control over the relationship timeline by stalling on the proposal, framing it as building a 'foundation' that positions him as the provider.",
+        "tradition": "He follows his mother's advice about not repeating her brother's mistake of rushing into marriage without financial foundation, adhering to family-transmitted expectations about the proper order of life milestones.",
+        "benevolence": "He watches Priya react to other engagements and deflects with 'the bride looked happy,' prioritizing his own timeline over Priya's emotional needs in the relationship.",
+        "conformity": "He frames his delay in proposing as following the proper order of things — 'there's an order to these things' — meeting family expectations about financial readiness before marriage.",
+        "security": "He insists on having a flat, savings, and a stable position before proposing, prioritizing material stability as a prerequisite for the next life step."
+      }
     },
     {
       "t_index": 6,
@@ -111,7 +148,13 @@
         "security": 0,
         "universalism": 0
       },
-      "date": "2025-07-22"
+      "date": "2025-07-22",
+      "rationales": {
+        "power": "He measures himself against Karthik by listing his superior accomplishments — IIT, Bangalore, building something — framing the comparison through status and professional achievement.",
+        "achievement": "He explicitly tracks his achievements against his cousin's — 'I'm the one who got into IIT, who moved to Bangalore for better opportunities, who's actually building something.'",
+        "tradition": "Despite his frustration, he continues sending money home and participating in family obligations, recognizing that the 'family scoreboard' of marriage, children, and temple visits represents a value system he can't ignore.",
+        "benevolence": "He resents that his professional contributions to the family — sending money home, career building — are overshadowed by Karthik checking 'the marriage box,' revealing he prioritizes recognition over relational closeness."
+      }
     },
     {
       "t_index": 7,
@@ -127,7 +170,14 @@
         "security": 0,
         "universalism": 0
       },
-      "date": "2025-07-29"
+      "date": "2025-07-29",
+      "rationales": {
+        "power": "He's preparing for a five-panelist interview including the CTO, strategically positioning himself for the platform team lead role by documenting contributions and practicing his framing.",
+        "achievement": "He reviews contributions, documents initiatives, and practices framing his scope expansion for the interview, treating the promotion as a measurable goal requiring systematic preparation.",
+        "tradition": "He invokes his father's philosophy that 'the early years are for investment, the later years for enjoying the returns,' grounding his sacrifices in inherited family wisdom.",
+        "benevolence": "When Priya asks if the new role means more late nights and he confirms it will, she reminds him he said the same about the last promotion — he's consistently prioritizing career over relationship.",
+        "hedonism": "He tells Priya he'll need more late nights and dismisses her concern, framing current sacrifice as necessary investment, denying both their comfort and leisure."
+      }
     },
     {
       "t_index": 8,
@@ -143,7 +193,12 @@
         "security": 0,
         "universalism": 0
       },
-      "date": "2025-07-31"
+      "date": "2025-07-31",
+      "rationales": {
+        "power": "His answer about handling an underperforming direct report — 'a direct conversation about expectations and consequences' — demonstrates leadership thinking that the CTO responded to.",
+        "achievement": "He assessed his interview performance realistically, noting the CTO 'seemed to like' his answer, and maintained composure about the outcome — 'I did my part. Now I wait.'",
+        "self_direction": "He answered the interview question based on his own leadership philosophy rather than trying to guess what the CTO wanted, trusting his own judgment on management approach."
+      }
     },
     {
       "t_index": 9,
@@ -159,7 +214,12 @@
         "security": 0,
         "universalism": 0
       },
-      "date": "2025-08-03"
+      "date": "2025-08-03",
+      "rationales": {
+        "power": "He frames the promotion in competitive terms — 'Vikram sent me a congratulatory message that was probably through gritted teeth. Doesn't matter. I'm ahead now.'",
+        "achievement": "He achieved the Platform Team Lead role, noting the CTO specifically mentioned his clarity about accountability, and takes satisfaction in reaching the goal he set.",
+        "benevolence": "His focus is entirely on competitive positioning ('I'm ahead now') with no mention of Priya or how the achievement affects their relationship, continuing the pattern of career over close others."
+      }
     },
     {
       "t_index": 10,
@@ -175,7 +235,14 @@
         "security": 0,
         "universalism": 0
       },
-      "date": "2025-08-03"
+      "date": "2025-08-03",
+      "rationales": {
+        "power": "He described the role in terms of headcount, budget ownership, and technical direction — markers of authority and control over resources.",
+        "achievement": "He achieved exactly what he set out to achieve — 'Platform Team Lead before 32. Higher salary, direct reports, visibility to the C-suite.'",
+        "tradition": "He commits to coming for Pongal and considers bringing Priya to Karthik's wedding, responding to family expectations despite his demanding professional schedule.",
+        "benevolence": "He recognizes the need to bridge both worlds and considers bringing Priya to the family wedding, acknowledging the importance of his close relationships alongside career.",
+        "self_direction": "He feels pulled between his professional identity and family expectations, unable to integrate both — 'running two races on parallel tracks' — and admits keeping them separate may be easier than asserting his authentic self."
+      }
     }
   ]
 }

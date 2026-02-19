@@ -15,7 +15,14 @@
         "conformity": 0,
         "security": 0
       },
-      "date": "2025-12-11"
+      "date": "2025-12-11",
+      "rationales": {
+        "achievement": "Sandra sat for a stats exam and is pushing through her degree despite exhaustion, demonstrating commitment to academic goals.",
+        "hedonism": "She sat in the parking garage for twenty minutes too drained to move, staring at reading after an exam and a family crisis, with no space for personal enjoyment.",
+        "self_direction": "She questions whether she should have moved back to Duluth instead of pursuing her degree, doubting her own autonomous choice and calling it a 'selfish detour.'",
+        "benevolence": "She immediately committed to driving up to Duluth this weekend to give her sister a break from caring for their mother.",
+        "tradition": "Sandra's sense of family obligation runs deep — she feels guilty that Lisa is handling their mother's care alone while she is away studying."
+      }
     },
     {
       "t_index": 1,
@@ -31,7 +38,12 @@
         "conformity": 0,
         "security": 0
       },
-      "date": "2025-12-17"
+      "date": "2025-12-17",
+      "rationales": {
+        "hedonism": "Sandra spent her weekend doing laundry, cooking soup, and sitting with her mother rather than resting, with no mention of personal pleasure or leisure.",
+        "benevolence": "She drove to Duluth, did her mother's laundry, sat with her while Lisa got a haircut, and made a week's worth of soup for her sister's freezer.",
+        "tradition": "Looking through old photos with her mother and cherishing the moments when Mom remembered her name and the family cabin reflects deep connection to family heritage."
+      }
     },
     {
       "t_index": 2,
@@ -47,7 +59,14 @@
         "conformity": -1,
         "security": 0
       },
-      "date": "2025-12-17"
+      "date": "2025-12-17",
+      "rationales": {
+        "achievement": "She missed a group meeting for her cohort, letting academic obligations slide in favor of caregiving.",
+        "self_direction": "Sandra asserts that 'some things are more important than a Zoom call' and refuses to apologize for prioritizing her mother over a group meeting.",
+        "benevolence": "She was in Duluth taking care of her mother, choosing direct caregiving over her academic schedule.",
+        "tradition": "Her choice to be with her mother during a difficult time reflects deeply held family duty and intergenerational care obligations.",
+        "conformity": "She explicitly refuses to apologize for missing the meeting, pushing back against the expectation that academic schedules should always take priority."
+      }
     },
     {
       "t_index": 3,
@@ -63,7 +82,10 @@
         "conformity": 0,
         "security": 0
       },
-      "date": "2025-12-24"
+      "date": "2025-12-24",
+      "rationales": {
+        "benevolence": "Sandra wraps presents for Tyler and restrains her impulse to fix his college anxiety, reflecting on the hardest part of caring — knowing when to step back while still worrying on his behalf."
+      }
     },
     {
       "t_index": 4,
@@ -79,7 +101,14 @@
         "conformity": 0,
         "security": 0
       },
-      "date": "2025-12-28"
+      "date": "2025-12-28",
+      "rationales": {
+        "hedonism": "She cried at the kitchen table while reading about attachment theory, confronting an uncomfortable truth about herself instead of seeking any personal comfort.",
+        "self_direction": "Sandra engages in deep self-examination about whether she chose social work from genuine desire or compulsive caretaking, demonstrating independent critical thinking about her own motivations.",
+        "universalism": "She recognizes the broader pattern of caregiving burnout — watching her mother run herself ragged for everyone — and connects personal insight to a wider human concern.",
+        "benevolence": "She called Lisa to process the realization, and Lisa reminded her she'd been making lunches for both of them since fourth grade, showing a lifelong pattern of caring for close others.",
+        "tradition": "The conversation with Lisa about childhood caregiving patterns and their mother's history reflects deep family bonds and intergenerational continuity."
+      }
     },
     {
       "t_index": 5,
@@ -95,7 +124,13 @@
         "conformity": 0,
         "security": 1
       },
-      "date": "2025-12-28"
+      "date": "2025-12-28",
+      "rationales": {
+        "achievement": "After the emotional breakdown, she finished the chapter, completed discussion questions, emailed her practicum site, and contacted the memory care coordinator — productive work across multiple fronts.",
+        "hedonism": "Her entire list is devoted to other people's needs (Tyler's FAFSA, Lisa's gift, Mom's insurance), with no mention of anything for her own enjoyment.",
+        "benevolence": "She made a list handling Tyler's FAFSA, groceries, Lisa's Christmas gift, and her mother's insurance — every item serves someone else's welfare.",
+        "security": "She contacted the memory care coordinator about the transition plan and investigated the assisted living spot opening in February, planning ahead for her mother's future care needs."
+      }
     },
     {
       "t_index": 6,
@@ -111,7 +146,13 @@
         "conformity": 0,
         "security": 0
       },
-      "date": "2026-01-02"
+      "date": "2026-01-02",
+      "rationales": {
+        "achievement": "Sandra feels her degree 'doesn't pay anyone's bills yet' and believes she should be the one handling her mother's care instead of finishing school.",
+        "self_direction": "She expresses being 'stuck here' finishing a degree, framing her own educational choice as a constraint rather than an autonomous decision.",
+        "benevolence": "She feels she should be the one doing the caregiving instead of Lisa, who is considering taking leave from her job to handle their mother full-time.",
+        "tradition": "The entry reflects deep family obligation — Sandra believes the caregiving burden should fall on her as a daughter, not just on Lisa alone."
+      }
     },
     {
       "t_index": 7,
@@ -127,7 +168,13 @@
         "conformity": 0,
         "security": 1
       },
-      "date": "2026-01-07"
+      "date": "2026-01-07",
+      "rationales": {
+        "self_direction": "Sandra accepts Lisa's affirmation — 'You're doing what you need to do. Stop acting like you're abandoning us' — and posts it as a reminder, reclaiming confidence in her own path.",
+        "benevolence": "She and Lisa had a genuine two-hour conversation, made a collaborative care plan, and Tyler offered to come to Duluth, strengthening family bonds.",
+        "tradition": "The sisters agreed to look into assisted living together and Sandra committed to biweekly visits, maintaining intergenerational family caregiving responsibilities.",
+        "security": "They made a concrete plan — Sandra visiting every other weekend, touring the assisted living option, consulting Mom's doctor — creating structure and predictability for the family's future."
+      }
     },
     {
       "t_index": 8,
@@ -143,7 +190,13 @@
         "conformity": 1,
         "security": 0
       },
-      "date": "2026-01-09"
+      "date": "2026-01-09",
+      "rationales": {
+        "self_direction": "Sandra internally pushes back against the classmate's reductive comment, asserting that lived experience is valid fuel for a career choice, not a weakness.",
+        "universalism": "She extends empathy even to the classmate who offended her, acknowledging 'that's not fair, I don't know her story' and recognizing that many professionals in helping fields are motivated by personal experience.",
+        "benevolence": "She draws on her own caregiving history as the foundation for her social work career, framing her motivation as genuine desire to help others.",
+        "conformity": "Despite wanting to push back on the classmate's comment, she just sat there and stayed quiet, restraining her reaction in the group setting."
+      }
     },
     {
       "t_index": 9,
@@ -159,7 +212,12 @@
         "conformity": 0,
         "security": 1
       },
-      "date": "2026-01-12"
+      "date": "2026-01-12",
+      "rationales": {
+        "benevolence": "Tyler sat with his grandmother for an hour while Sandra and Lisa toured the facility, and Sandra squeezed his hand when he said 'she remembered my name today.'",
+        "tradition": "The family came together across generations — Sandra, Lisa, and Tyler — to visit the mother and plan her care, honoring intergenerational family duty.",
+        "security": "Sandra and Lisa toured the assisted living wing and agreed to bring it up with Mom's doctor, taking concrete steps to plan a stable long-term care arrangement."
+      }
     },
     {
       "t_index": 10,
@@ -175,7 +233,13 @@
         "conformity": 0,
         "security": 1
       },
-      "date": "2026-01-17"
+      "date": "2026-01-17",
+      "rationales": {
+        "achievement": "Sandra feels ready for the new semester, describing herself as present and prepared rather than overwhelmed, showing renewed commitment to her academic goals.",
+        "self_direction": "She describes herself as 'not fixed, not finished figuring anything out. Just present,' reflecting self-acceptance and ownership of her ongoing journey.",
+        "benevolence": "Lisa texted good luck with a heart emoji and Sandra saved it, showing the deep reciprocal care in their relationship.",
+        "security": "Starting the spring semester feeling ready signals restored stability after the tumultuous period of balancing school, caregiving, and family planning."
+      }
     }
   ]
 }

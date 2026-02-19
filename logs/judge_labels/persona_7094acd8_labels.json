@@ -15,6 +15,12 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "She reorganized her lesson plan binder for the rest of the semester after the review, choosing predictable structure over novelty and mapping everything through December.",
+        "achievement": "She focused on the principal confirming she is on track for contract renewal, treating the performance review as validation of her professional competence.",
+        "security": "The contract renewal confirmation and updating the apartment savings spreadsheet with Miguel both demonstrate her drive toward financial and professional stability.",
+        "benevolence": "She and Miguel updated their shared savings spreadsheet together, working toward their joint apartment goal as a couple."
       }
     },
     {
@@ -31,6 +37,12 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She firmly defends her own choices against Sofia's pressure, arguing that her decisions 'make sense for my life' and refusing to follow someone else's path.",
+        "stimulation": "She explicitly rejects the international fellowship in Spain because it involves uncertainty, a foreign country with no support system, and no guarantee of renewal.",
+        "security": "She values seniority building, pension contributions accumulating, and her mother's proximity as safety nets, choosing stability over a higher-paying but riskier opportunity.",
+        "conformity": "She pushes back against Sofia's social pressure to take the fellowship, rejecting the expectation that everyone should pursue prestigious international opportunities."
       }
     },
     {
@@ -47,6 +59,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Her nudge response shows independent reflection, recognizing that she's 'built everything around wanting things to stay the same' and questioning whether that assumption of permanence is valid.",
+        "security": "She finds the thought of being in the same classroom in ten years 'comforting,' revealing how deeply she values stability, even as she also notices it feels unsettling."
       }
     }
   ]

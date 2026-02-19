@@ -17,7 +17,12 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Marcus reflects on the contrast between his exciting firefighting past and current delivery work. He defends his freedom and autonomy (self-direction +1), acknowledges the current work lacks the thrill he craves (stimulation -1), tracks his drone business momentum at $800 in sales (achievement +1), and actively chooses uncertainty over the stable job/benefits Rachel wants (security -1)."
+      "rationales": {
+        "self_direction": "Marcus reflects on the contrast between his exciting firefighting past and current delivery work. He defends his freedom and autonomy (self-direction +1), acknowledges the current work lacks the thrill he craves (stimulation -1), tracks his drone business momentum at $800 in sales (achievement +1), and actively chooses uncertainty over the stable job/benefits Rachel wants (security -1).",
+        "stimulation": "Marcus reflects on the contrast between his exciting firefighting past and current delivery work. He defends his freedom and autonomy (self-direction +1), acknowledges the current work lacks the thrill he craves (stimulation -1), tracks his drone business momentum at $800 in sales (achievement +1), and actively chooses uncertainty over the stable job/benefits Rachel wants (security -1).",
+        "achievement": "Marcus reflects on the contrast between his exciting firefighting past and current delivery work. He defends his freedom and autonomy (self-direction +1), acknowledges the current work lacks the thrill he craves (stimulation -1), tracks his drone business momentum at $800 in sales (achievement +1), and actively chooses uncertainty over the stable job/benefits Rachel wants (security -1).",
+        "security": "Marcus reflects on the contrast between his exciting firefighting past and current delivery work. He defends his freedom and autonomy (self-direction +1), acknowledges the current work lacks the thrill he craves (stimulation -1), tracks his drone business momentum at $800 in sales (achievement +1), and actively chooses uncertainty over the stable job/benefits Rachel wants (security -1)."
+      }
     },
     {
       "t_index": 1,
@@ -35,7 +40,12 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Marcus is defensive after Kevin's intervention but articulates clear goals. He refuses to conform to Kevin's expectations of a 'real job' (self-direction +1, conformity -1), sets concrete targets of $2000/month by December (achievement +1), and explicitly rejects the stable path with 401k and benefits (security -1)."
+      "rationales": {
+        "self_direction": "Marcus is defensive after Kevin's intervention but articulates clear goals. He refuses to conform to Kevin's expectations of a 'real job' (self-direction +1, conformity -1), sets concrete targets of $2000/month by December (achievement +1), and explicitly rejects the stable path with 401k and benefits (security -1).",
+        "achievement": "Marcus is defensive after Kevin's intervention but articulates clear goals. He refuses to conform to Kevin's expectations of a 'real job' (self-direction +1, conformity -1), sets concrete targets of $2000/month by December (achievement +1), and explicitly rejects the stable path with 401k and benefits (security -1).",
+        "security": "Marcus is defensive after Kevin's intervention but articulates clear goals. He refuses to conform to Kevin's expectations of a 'real job' (self-direction +1, conformity -1), sets concrete targets of $2000/month by December (achievement +1), and explicitly rejects the stable path with 401k and benefits (security -1).",
+        "conformity": "Marcus is defensive after Kevin's intervention but articulates clear goals. He refuses to conform to Kevin's expectations of a 'real job' (self-direction +1, conformity -1), sets concrete targets of $2000/month by December (achievement +1), and explicitly rejects the stable path with 401k and benefits (security -1)."
+      }
     },
     {
       "t_index": 2,
@@ -53,7 +63,11 @@
         "universalism": 0
       },
       "confidence": "medium",
-      "rationale": "Marcus processes the intervention and seeks validation from Dario. He embraces the advice to stop explaining himself to people who have already decided he's wrong (self-direction +1, conformity -1). Tension with Rachel is acknowledged but not addressed, with the painful awareness that 'one of those people sleeps next to you' (benevolence -1)."
+      "rationales": {
+        "self_direction": "Marcus processes the intervention and seeks validation from Dario. He embraces the advice to stop explaining himself to people who have already decided he's wrong (self-direction +1, conformity -1). Tension with Rachel is acknowledged but not addressed, with the painful awareness that 'one of those people sleeps next to you' (benevolence -1).",
+        "conformity": "Marcus processes the intervention and seeks validation from Dario. He embraces the advice to stop explaining himself to people who have already decided he's wrong (self-direction +1, conformity -1). Tension with Rachel is acknowledged but not addressed, with the painful awareness that 'one of those people sleeps next to you' (benevolence -1).",
+        "benevolence": "Marcus processes the intervention and seeks validation from Dario. He embraces the advice to stop explaining himself to people who have already decided he's wrong (self-direction +1, conformity -1). Tension with Rachel is acknowledged but not addressed, with the painful awareness that 'one of those people sleeps next to you' (benevolence -1)."
+      }
     },
     {
       "t_index": 3,
@@ -71,7 +85,7 @@
         "universalism": 0
       },
       "confidence": "low",
-      "rationale": "Very brief entry with no nudge response. Reports working 11 hours, knee pain, and the apartment feeling 'weird' but no concrete actions or decisions beyond describing a state. Not scorable - all neutral."
+      "rationales": null
     },
     {
       "t_index": 4,
@@ -89,7 +103,12 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Rachel confronts Marcus about their future. He admits he never thought about where she fits in his plan - focused only on proving his way works (achievement +1, benevolence -1). He refuses to become someone else despite pressure (self-direction +1). He explicitly rejects his parents' 'stable but miserable' path (security -1)."
+      "rationales": {
+        "self_direction": "Rachel confronts Marcus about their future. He admits he never thought about where she fits in his plan - focused only on proving his way works (achievement +1, benevolence -1). He refuses to become someone else despite pressure (self-direction +1). He explicitly rejects his parents' 'stable but miserable' path (security -1).",
+        "achievement": "Rachel confronts Marcus about their future. He admits he never thought about where she fits in his plan - focused only on proving his way works (achievement +1, benevolence -1). He refuses to become someone else despite pressure (self-direction +1). He explicitly rejects his parents' 'stable but miserable' path (security -1).",
+        "security": "Rachel confronts Marcus about their future. He admits he never thought about where she fits in his plan - focused only on proving his way works (achievement +1, benevolence -1). He refuses to become someone else despite pressure (self-direction +1). He explicitly rejects his parents' 'stable but miserable' path (security -1).",
+        "benevolence": "Rachel confronts Marcus about their future. He admits he never thought about where she fits in his plan - focused only on proving his way works (achievement +1, benevolence -1). He refuses to become someone else despite pressure (self-direction +1). He explicitly rejects his parents' 'stable but miserable' path (security -1)."
+      }
     },
     {
       "t_index": 5,
@@ -107,7 +126,10 @@
         "universalism": 0
       },
       "confidence": "medium",
-      "rationale": "Marcus reflects on old firefighting photos where he 'felt like I mattered' and was 'exactly where I was supposed to be.' Current work doesn't 'hit the same' and driving is 'just time traded for money' (stimulation -1). He questions whether his bridge leads anywhere, showing doubt about his achievement path (achievement -1)."
+      "rationales": {
+        "stimulation": "Marcus reflects on old firefighting photos where he 'felt like I mattered' and was 'exactly where I was supposed to be.' Current work doesn't 'hit the same' and driving is 'just time traded for money' (stimulation -1). He questions whether his bridge leads anywhere, showing doubt about his achievement path (achievement -1).",
+        "achievement": "Marcus reflects on old firefighting photos where he 'felt like I mattered' and was 'exactly where I was supposed to be.' Current work doesn't 'hit the same' and driving is 'just time traded for money' (stimulation -1). He questions whether his bridge leads anywhere, showing doubt about his achievement path (achievement -1)."
+      }
     },
     {
       "t_index": 6,
@@ -125,7 +147,10 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Rachel returns and they agree to couples counseling. Marcus accepts her fair point that she deserves to be part of the plan (benevolence +1). He agrees to counseling despite initial resistance, choosing relationship harmony over stubbornness (conformity +1). His response about 'calling for backup early' shows growth in prioritizing the relationship."
+      "rationales": {
+        "conformity": "Rachel returns and they agree to couples counseling. Marcus accepts her fair point that she deserves to be part of the plan (benevolence +1). He agrees to counseling despite initial resistance, choosing relationship harmony over stubbornness (conformity +1). His response about 'calling for backup early' shows growth in prioritizing the relationship.",
+        "benevolence": "Rachel returns and they agree to couples counseling. Marcus accepts her fair point that she deserves to be part of the plan (benevolence +1). He agrees to counseling despite initial resistance, choosing relationship harmony over stubbornness (conformity +1). His response about 'calling for backup early' shows growth in prioritizing the relationship."
+      }
     },
     {
       "t_index": 7,
@@ -143,7 +168,12 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Deep reflection after first counseling session. Marcus acknowledges his identity is tied to goals and proving competence (achievement +1). He accepts he's 'wired to move' and seeks the right kind of motion (stimulation +1). He expresses concern about losing someone he loves and wants to find motion that includes Rachel (benevolence +1). His fear of his father's retirement stillness shows continued rejection of pure security (security -1)."
+      "rationales": {
+        "stimulation": "Deep reflection after first counseling session. Marcus acknowledges his identity is tied to goals and proving competence (achievement +1). He accepts he's 'wired to move' and seeks the right kind of motion (stimulation +1). He expresses concern about losing someone he loves and wants to find motion that includes Rachel (benevolence +1). His fear of his father's retirement stillness shows continued rejection of pure security (security -1).",
+        "achievement": "Deep reflection after first counseling session. Marcus acknowledges his identity is tied to goals and proving competence (achievement +1). He accepts he's 'wired to move' and seeks the right kind of motion (stimulation +1). He expresses concern about losing someone he loves and wants to find motion that includes Rachel (benevolence +1). His fear of his father's retirement stillness shows continued rejection of pure security (security -1).",
+        "security": "Deep reflection after first counseling session. Marcus acknowledges his identity is tied to goals and proving competence (achievement +1). He accepts he's 'wired to move' and seeks the right kind of motion (stimulation +1). He expresses concern about losing someone he loves and wants to find motion that includes Rachel (benevolence +1). His fear of his father's retirement stillness shows continued rejection of pure security (security -1).",
+        "benevolence": "Deep reflection after first counseling session. Marcus acknowledges his identity is tied to goals and proving competence (achievement +1). He accepts he's 'wired to move' and seeks the right kind of motion (stimulation +1). He expresses concern about losing someone he loves and wants to find motion that includes Rachel (benevolence +1). His fear of his father's retirement stillness shows continued rejection of pure security (security -1)."
+      }
     }
   ]
 }

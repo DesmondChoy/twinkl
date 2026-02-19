@@ -15,6 +15,13 @@
         "tradition": 1,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "Mariana ate cold rice standing at the counter at midnight because she forgot about the plate she made earlier, completely neglecting her own physical comfort.",
+        "achievement": "She stayed late organizing twenty copies across thirty-two desks and called the district office again to fight for materials, demonstrating persistent effort toward her professional responsibilities.",
+        "conformity": "She picked up Sofia's call and listened for two hours even though she knew Sofia has other support, fulfilling the expected role of the supportive older sister without pushback.",
+        "tradition": "She helped her mother with physical therapy exercises after getting home, honoring the family caregiving role she has taken on.",
+        "benevolence": "She spent two hours listening to her sister Sofia cry about Marco and stayed late to prepare her classroom for students who need materials, prioritizing others' needs over her own rest."
       }
     },
     {
@@ -31,6 +38,11 @@
         "tradition": 1,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "security": "Hearing her mother's goodnight through the door loosened something in her chest — the reassurance that her mother is here and okay provided emotional stability.",
+        "tradition": "Her mother calling 'buenas noches, mija' through the door is a small family ritual that grounds Mariana and reconnects her to what matters.",
+        "benevolence": "The entry centers on the comfort of being together with her mother, appreciating their closeness despite the chaos of the day."
       }
     },
     {
@@ -63,6 +75,15 @@
         "tradition": 1,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Mariana defines success on her own terms — watching a kid find his voice — and asserts 'there are worse things to settle for' against Lucia's criticism that she's settling.",
+        "hedonism": "Her mother made empanadas to celebrate the first day of school despite barely being able to stand, and Mariana received this gesture of warmth and care with joy.",
+        "achievement": "She takes pride in Andres's transformation from a silent corner-sitter to a boy who spoke for five minutes during circle time, seeing this as a concrete professional accomplishment.",
+        "power": "She explicitly rejects the department head role — 'not running meetings about assessment metrics' — choosing to stay in a position without institutional authority.",
+        "security": "The classroom provides a known, stable environment where she can see the impact of her work directly, unlike the unpredictable politics of an administrative role.",
+        "tradition": "Her mother remembered it was the first day of school and made empanadas despite her physical limitations, maintaining a family celebration ritual.",
+        "benevolence": "She cherishes the moment when Andres showed a photo of a goat on his mom's phone and the other kids crowded around, seeing her patient investment in a struggling student pay off."
       }
     },
     {
@@ -79,6 +100,10 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "She smiled at her phone like an idiot for a good minute upon receiving Sofia's text, allowing herself a moment of pure uncomplicated happiness.",
+        "benevolence": "Sofia texted to say she's doing better and didn't ask for anything, and Mariana feels genuine joy at her sister's progress."
       }
     }
   ]

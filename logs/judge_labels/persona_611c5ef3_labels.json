@@ -15,6 +15,11 @@
         "tradition": 0,
         "benevolence": -1,
         "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He is actively pursuing the regional director track and takes pride in exceeding every metric, treating the quarterly review as validation of his competence.",
+        "power": "He deliberately withheld credit from Ahmed for the routing optimization idea, refusing to 'split credit' in front of leadership to protect his authority as manager.",
+        "benevolence": "He took credit for Ahmed's original idea without acknowledgment, dismissing his team member's contribution with 'Ahmed's got job security either way.'"
       }
     },
     {
@@ -31,6 +36,9 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He spent the weekend at Atlantis with friends enjoying the pool, Nobu dinner, and recovery brunch, prioritizing pleasure and leisure as a deliberate reset."
       }
     },
     {
@@ -47,6 +55,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He adopts his father's leadership philosophy wholesale without having 'ever really separated the two,' surrendering independent thought to inherited authority norms.",
+        "power": "He pulled Rami aside to shut down public questioning of his decisions, insisting that a leader who explains himself 'has already lost his authority.'",
+        "conformity": "He restrained himself from snapping at Rami during the standup, keeping his voice level in front of the team to maintain professional composure."
       }
     },
     {
@@ -63,6 +76,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He chose an expensive Lebanese restaurant on JBR specifically for the food and the visibility, and considers putting the boat party on his credit card because 'you only live once.'",
+        "power": "He picked up the 3,000-dirham tab to demonstrate status, enjoying Khalid's reaction and declaring 'real leaders invest in their people.'",
+        "security": "He spent money he couldn't afford, leaving his account tight until the 25th with a car payment due, and considers putting more expenses on the credit card rather than saving."
       }
     },
     {
@@ -79,6 +97,11 @@
         "tradition": -1,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "power": "He justifies his spending to his mother as 'building relationships that will pay off later' and insists 'you can't network from a studio in Sharjah,' framing status maintenance as strategic.",
+        "security": "His mother directly confronts his financial recklessness, asking him to save for a proper apartment instead of 'spending like there's no tomorrow,' which he dismisses.",
+        "tradition": "He dismisses his mother's concerns about his spending habits, rejecting her guidance and saying 'she doesn't understand how things work here.'"
       }
     },
     {
@@ -95,6 +118,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He stayed at the office until 10pm eating salmon rolls alone at his desk under fluorescent lights instead of enjoying the Thursday night out he had planned.",
+        "achievement": "He personally fixed Rami's error on the Al-Futtaim proposal and called in a favor with procurement to keep the deal alive, demonstrating competence under pressure."
       }
     },
     {
@@ -111,6 +138,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He took himself to brunch alone for the first time in months, beginning to question his need for an audience and contemplating that 'maybe the experience is enough.'",
+        "power": "He reflects on his discomfort with 'unwitnessed time' and questions whether he needs external proof and visibility, recognizing his dependence on others seeing his status."
       }
     },
     {
@@ -127,6 +158,9 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He received regional recognition for Q2 results with a plaque at the all-hands and a photo with the CEO, and is already thinking about what's next."
       }
     },
     {
@@ -143,6 +177,10 @@
         "tradition": 0,
         "benevolence": -1,
         "universalism": 0
+      },
+      "rationales": {
+        "power": "He admits part of why he keeps Sara around is that 'she makes me look good' and 'we look good together' in Dubai, treating the relationship as a status asset.",
+        "benevolence": "He cancelled on Sara for the third time this month and avoids the conversation she needs to have, prioritizing his comfort over her emotional needs."
       }
     },
     {
@@ -159,6 +197,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He lies awake questioning whether the ladder he's been climbing since 19 is actually what he wants, and feels unexpected envy for Hassan's self-directed life running a dive shop.",
+        "power": "Seeing Hassan's small, status-free life in Fujairah triggers envy rather than pity, and he admits Hassan's lack of visibility and status 'bothers me' because it seems like enough for him."
       }
     }
   ]

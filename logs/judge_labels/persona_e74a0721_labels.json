@@ -15,6 +15,13 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Santiago has spent years learning to give clients exactly what they ask for rather than pursuing his own artistic vision, admitting he doesn't know how to make bold work anymore.",
+        "stimulation": "He followed brand guidelines perfectly and is confused by the demand for something 'bolder,' revealing his settled approach of delivering predictable, safe work.",
+        "power": "He lost the Grupo Modelo commission to Fernanda despite six prior projects, a clear loss of standing and influence with a key client.",
+        "security": "His proposal 'fit their brand guidelines perfectly' -- he prioritized safety and predictability in his approach to the commission.",
+        "conformity": "He built his career producing exactly what clients request, conforming to briefs and expectations rather than challenging them."
       }
     },
     {
@@ -31,6 +38,15 @@
         "tradition": 1,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He has a blank canvas stretched for three months with an idea he never pursued because commissions consume all his time -- his personal creative vision is abandoned.",
+        "stimulation": "He hasn't had time for anything beyond already-sold commissions, staying in a predictable cycle of client work with no room for creative exploration.",
+        "achievement": "He listed his credentials to his mother unprompted -- the board position, studio space, and clients -- treating them as evidence of professional success.",
+        "power": "He defended his status by citing his board position at the collective and the prestige of his clients, actively maintaining his social standing in the family comparison.",
+        "security": "His studio is 'paid for by reliable commissions from architects and interior designers,' and he's built a stable, predictable career path.",
+        "conformity": "He found himself defending his career to his mother even without being attacked, performing the role of successful provider his father would have expected.",
+        "tradition": "His father's voice about respectability and providing for family drives his choices; he carries his father's expectations even though he chose art over business."
       }
     }
   ]

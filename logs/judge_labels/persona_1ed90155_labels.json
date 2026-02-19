@@ -17,7 +17,12 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Maya explicitly calls signature style 'a cage' and resists gallery expectations (self-direction +1, conformity -1). She gets bored and pivots to new mediums mid-series (stimulation +1). She measures success by rejections and acceptances (achievement +1)."
+      "rationales": {
+        "self_direction": "Maya explicitly calls signature style 'a cage' and resists gallery expectations (self-direction +1, conformity -1). She gets bored and pivots to new mediums mid-series (stimulation +1). She measures success by rejections and acceptances (achievement +1).",
+        "stimulation": "Maya explicitly calls signature style 'a cage' and resists gallery expectations (self-direction +1, conformity -1). She gets bored and pivots to new mediums mid-series (stimulation +1). She measures success by rejections and acceptances (achievement +1).",
+        "achievement": "Maya explicitly calls signature style 'a cage' and resists gallery expectations (self-direction +1, conformity -1). She gets bored and pivots to new mediums mid-series (stimulation +1). She measures success by rejections and acceptances (achievement +1).",
+        "conformity": "Maya explicitly calls signature style 'a cage' and resists gallery expectations (self-direction +1, conformity -1). She gets bored and pivots to new mediums mid-series (stimulation +1). She measures success by rejections and acceptances (achievement +1)."
+      }
     },
     {
       "t_index": 1,
@@ -35,7 +40,11 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Maya reflects nostalgically on drawing for herself without commercial consideration (self-direction +1). She questions whether she needs the 'burn' vs sustainability (stimulation +1). Her shift to thinking about what art could become professionally shows achievement orientation (+1)."
+      "rationales": {
+        "self_direction": "Maya reflects nostalgically on drawing for herself without commercial consideration (self-direction +1). She questions whether she needs the 'burn' vs sustainability (stimulation +1). Her shift to thinking about what art could become professionally shows achievement orientation (+1).",
+        "stimulation": "Maya reflects nostalgically on drawing for herself without commercial consideration (self-direction +1). She questions whether she needs the 'burn' vs sustainability (stimulation +1). Her shift to thinking about what art could become professionally shows achievement orientation (+1).",
+        "achievement": "Maya reflects nostalgically on drawing for herself without commercial consideration (self-direction +1). She questions whether she needs the 'burn' vs sustainability (stimulation +1). Her shift to thinking about what art could become professionally shows achievement orientation (+1)."
+      }
     },
     {
       "t_index": 2,
@@ -53,7 +62,11 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Maya explicitly says she's bored and wants unfamiliar surroundings, works better when things are new (stimulation +1). She meticulously tracks application metrics and says 'okay isn't what I'm aiming for' (achievement +1). Willing to leave for 3 months in desert shows comfort with instability (security -1)."
+      "rationales": {
+        "stimulation": "Maya explicitly says she's bored and wants unfamiliar surroundings, works better when things are new (stimulation +1). She meticulously tracks application metrics and says 'okay isn't what I'm aiming for' (achievement +1). Willing to leave for 3 months in desert shows comfort with instability (security -1).",
+        "achievement": "Maya explicitly says she's bored and wants unfamiliar surroundings, works better when things are new (stimulation +1). She meticulously tracks application metrics and says 'okay isn't what I'm aiming for' (achievement +1). Willing to leave for 3 months in desert shows comfort with instability (security -1).",
+        "security": "Maya explicitly says she's bored and wants unfamiliar surroundings, works better when things are new (stimulation +1). She meticulously tracks application metrics and says 'okay isn't what I'm aiming for' (achievement +1). Willing to leave for 3 months in desert shows comfort with instability (security -1)."
+      }
     },
     {
       "t_index": 3,
@@ -71,7 +84,10 @@
         "universalism": 0
       },
       "confidence": "medium",
-      "rationale": "Maya completed commission to client specs that she hates - surrendered creative autonomy for payment (self-direction -1). She got paid and completed the work (achievement +1). Entry is brief but signals are clear."
+      "rationales": {
+        "self_direction": "Maya completed commission to client specs that she hates - surrendered creative autonomy for payment (self-direction -1). She got paid and completed the work (achievement +1). Entry is brief but signals are clear.",
+        "achievement": "Maya completed commission to client specs that she hates - surrendered creative autonomy for payment (self-direction -1). She got paid and completed the work (achievement +1). Entry is brief but signals are clear."
+      }
     },
     {
       "t_index": 4,
@@ -89,7 +105,11 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Maya worked 10 hours in flow state, creating something new (stimulation +1, achievement +1). She forgot to eat and her back hurts but considers it worth it - sacrificed bodily comfort for work (hedonism -1)."
+      "rationales": {
+        "stimulation": "Maya worked 10 hours in flow state, creating something new (stimulation +1, achievement +1). She forgot to eat and her back hurts but considers it worth it - sacrificed bodily comfort for work (hedonism -1).",
+        "hedonism": "Maya worked 10 hours in flow state, creating something new (stimulation +1, achievement +1). She forgot to eat and her back hurts but considers it worth it - sacrificed bodily comfort for work (hedonism -1).",
+        "achievement": "Maya worked 10 hours in flow state, creating something new (stimulation +1, achievement +1). She forgot to eat and her back hurts but considers it worth it - sacrificed bodily comfort for work (hedonism -1)."
+      }
     },
     {
       "t_index": 5,
@@ -107,7 +127,12 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Maya reframes signature style as 'constraints I choose for myself' - reclaiming autonomy (self-direction +1). She's excited about desert and limited materials (stimulation +1). She tracks her improved success rate and celebrates the acceptance (achievement +1). She called her mom to share news and maintains that relationship despite mild friction (benevolence +1)."
+      "rationales": {
+        "self_direction": "Maya reframes signature style as 'constraints I choose for myself' - reclaiming autonomy (self-direction +1). She's excited about desert and limited materials (stimulation +1). She tracks her improved success rate and celebrates the acceptance (achievement +1). She called her mom to share news and maintains that relationship despite mild friction (benevolence +1).",
+        "stimulation": "Maya reframes signature style as 'constraints I choose for myself' - reclaiming autonomy (self-direction +1). She's excited about desert and limited materials (stimulation +1). She tracks her improved success rate and celebrates the acceptance (achievement +1). She called her mom to share news and maintains that relationship despite mild friction (benevolence +1).",
+        "achievement": "Maya reframes signature style as 'constraints I choose for myself' - reclaiming autonomy (self-direction +1). She's excited about desert and limited materials (stimulation +1). She tracks her improved success rate and celebrates the acceptance (achievement +1). She called her mom to share news and maintains that relationship despite mild friction (benevolence +1).",
+        "benevolence": "Maya reframes signature style as 'constraints I choose for myself' - reclaiming autonomy (self-direction +1). She's excited about desert and limited materials (stimulation +1). She tracks her improved success rate and celebrates the acceptance (achievement +1). She called her mom to share news and maintains that relationship despite mild friction (benevolence +1)."
+      }
     }
   ]
 }

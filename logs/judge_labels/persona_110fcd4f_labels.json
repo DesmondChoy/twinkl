@@ -15,7 +15,12 @@
         "stimulation": 0,
         "hedonism": 0
       },
-      "date": "2025-06-24"
+      "date": "2025-06-24",
+      "rationales": {
+        "power": "Lukas sat silently while Felix presented his preprocessing idea as his own, accepting the loss of credit and status without asserting himself.",
+        "achievement": "He let a colleague claim his work publicly, forfeiting recognition for his competence despite knowing the idea was his.",
+        "conformity": "Lukas bit his tongue through the entire lab meeting rather than cause a confrontation, restraining himself to maintain social harmony."
+      }
     },
     {
       "t_index": 1,
@@ -31,7 +36,15 @@
         "stimulation": 0,
         "hedonism": 0
       },
-      "date": "2025-06-25"
+      "date": "2025-06-25",
+      "rationales": {
+        "power": "Lukas dismisses others' expectations for justification, yet strategically avoids telling his family until he has results, indicating he lacks the authority to simply assert his choice.",
+        "conformity": "He explicitly rejects the expectation to explain himself and refuses to follow the safer path his advisor arranged, breaking with what others expect of him.",
+        "self_direction": "Lukas insists on building something from scratch rather than accepting the well-connected lab placement, asserting 'My project, my call' as a matter of personal autonomy.",
+        "tradition": "He rejected the placement his advisor arranged and is deliberately hiding this from his family, disregarding the family expectation that he should leverage established academic connections.",
+        "benevolence": "Lukas is deliberately withholding the placement decision from his parents to avoid their input, prioritizing his own path over the relationship and the worry it will cause them.",
+        "security": "He turned down a safe, well-connected lab placement in favor of an uncertain solo path, choosing risk over stability."
+      }
     },
     {
       "t_index": 2,
@@ -47,7 +60,15 @@
         "stimulation": 0,
         "hedonism": -1
       },
-      "date": "2025-06-28"
+      "date": "2025-06-28",
+      "rationales": {
+        "achievement": "Lukas is driving himself hard on his own pipeline, staying up until 4 AM debugging and pushing to meet the fellowship deadline, pursuing personal excellence.",
+        "conformity": "He reflexively refused Nina's help and struggles to present himself as a 'team player' for the fellowship application, resisting social expectations about collaboration.",
+        "self_direction": "He chose to build his own pipeline from scratch rather than use the lab's existing toolkit, insisting the work be entirely his even at the cost of falling behind.",
+        "benevolence": "Lukas automatically turned down Nina's genuine offer of help before even thinking, pushing away a colleague who was trying to support him.",
+        "security": "He is falling behind on coursework and has a fellowship deadline looming because he chose the riskier path of building everything himself, destabilizing his academic standing.",
+        "hedonism": "Lukas stayed up until 4 AM debugging and is drowning in work, sacrificing sleep and personal comfort for his project with no regard for his own wellbeing."
+      }
     }
   ]
 }

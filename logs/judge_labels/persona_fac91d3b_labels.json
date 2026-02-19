@@ -15,7 +15,14 @@
         "conformity": 1,
         "security": 0
       },
-      "date": "2025-05-23"
+      "date": "2025-05-23",
+      "rationales": {
+        "power": "She enrolled Arjun in Olympiad prep partly because Kavitha aunty's son got in and she spent three months hearing about it at family gatherings -- competing for status through her children's achievements.",
+        "achievement": "She sees her children's report cards as her own performance reviews, and pushed Arjun into the prep course despite the tuition teacher saying he wasn't ready, insisting he'll 'rise to the challenge.'",
+        "self_direction": "She signed Arjun up without telling Ramesh or consulting Arjun, yet her decision was driven by external comparisons rather than her own independent judgment.",
+        "benevolence": "She enrolled her son in an expensive prep course he doesn't know about and may not need, driven by social competition rather than his actual needs or readiness.",
+        "conformity": "She acknowledges the dynamic of comparing children at temple and family gatherings, and her action of enrolling Arjun is a response to that social pressure to keep up."
+      }
     },
     {
       "t_index": 1,
@@ -31,7 +38,12 @@
         "conformity": 0,
         "security": 1
       },
-      "date": "2025-05-26"
+      "date": "2025-05-26",
+      "rationales": {
+        "benevolence": "Amma got up at five in the morning to make pongal rice because Arjun mentioned he missed it, and Meenakshi wants to learn properly by standing next to her mother-in-law before it's too late.",
+        "tradition": "The kitchen smelled like her grandmother's house in Mylapore, and she's determined to learn the recipe not from a card but from standing next to Amma and doing it until her hands remember.",
+        "security": "The comfort of traditional food, family gathered in the kitchen, and the continuity of a recipe passed through generations provides a sense of grounded stability."
+      }
     },
     {
       "t_index": 2,
@@ -47,7 +59,12 @@
         "conformity": 1,
         "security": 0
       },
-      "date": "2025-05-29"
+      "date": "2025-05-29",
+      "rationales": {
+        "achievement": "Her calendar is a 'Tetris board' of tuition, violin, Kumon, and cricket -- she manages the children's enrichment activities with the rigor of an audit schedule.",
+        "tradition": "She reorganized the prayer room shelf because Amma said the Lakshmi lamp was in the wrong position, maintaining religious practice according to traditional standards.",
+        "conformity": "When asked if moving the lamp meant something, she deflects with 'Amma asked, I did it' -- fulfilling the elder's request without question or complaint."
+      }
     },
     {
       "t_index": 3,
@@ -63,7 +80,10 @@
         "conformity": 1,
         "security": 0
       },
-      "date": "2025-05-30"
+      "date": "2025-05-30",
+      "rationales": {
+        "conformity": "She had been bracing for a fight about the Kumon charge that never came because Ramesh just said okay -- she was anxious about potential conflict over a decision she'd already made unilaterally."
+      }
     },
     {
       "t_index": 4,
@@ -79,7 +99,14 @@
         "conformity": 1,
         "security": 0
       },
-      "date": "2025-06-04"
+      "date": "2025-06-04",
+      "rationales": {
+        "power": "She said no to Divya's request before even thinking about it, exercising parental authority reflexively and controlling her daughter's schedule.",
+        "self_direction": "She recognizes she's 'running the same script' as her own mother -- responding automatically rather than making a deliberate, independent choice about Divya's request.",
+        "benevolence": "Divya closed her door quietly because she's given up negotiating, and Meenakshi recognizes this as the same retreat she did with her own mother -- she's harming the relationship.",
+        "tradition": "She prioritized the temple youth group meeting over a friend's birthday party, upholding religious community participation as non-negotiable.",
+        "conformity": "The refusal was automatic -- 'I said no before I even thought about it' -- driven by the ingrained expectation that temple commitments take precedence."
+      }
     },
     {
       "t_index": 5,
@@ -95,7 +122,12 @@
         "conformity": 0,
         "security": 0
       },
-      "date": "2025-06-08"
+      "date": "2025-06-08",
+      "rationales": {
+        "power": "She had the spreadsheet ready when Kumaresh uncle questioned her budget for the second year, prepared to assert her competence and defend her authority over the event.",
+        "achievement": "She finalized the vendor list and stage layout for Pongal, demonstrating organizational competence and professional-level event management.",
+        "tradition": "She has been organizing the Tamil association's Pongal celebration for six years, maintaining a key cultural event for the community."
+      }
     },
     {
       "t_index": 6,
@@ -111,7 +143,11 @@
         "conformity": 0,
         "security": -1
       },
-      "date": "2025-06-10"
+      "date": "2025-06-10",
+      "rationales": {
+        "achievement": "She frames the forty-second percentile as 'baseline' and insists 'that's the whole point of a baseline -- you start somewhere,' maintaining focus on the achievement trajectory despite the low score.",
+        "security": "Arjun's poor first Olympiad test result and the tuition teacher's implicit 'I told you so' threaten the stability of her plan and confidence in the decision to enroll him."
+      }
     },
     {
       "t_index": 7,
@@ -127,7 +163,14 @@
         "conformity": 1,
         "security": 1
       },
-      "date": "2025-06-16"
+      "date": "2025-06-16",
+      "rationales": {
+        "achievement": "She attended all three of Sanjay's cricket matches, sitting in the pavilion among parents who compare school rankings -- the 'tournament of its own' where parents compete through their children.",
+        "benevolence": "She's torn about the helper question because she can't bear to tell Amma 'her way of running a house isn't sustainable anymore,' protecting her mother-in-law's dignity even at practical cost.",
+        "tradition": "She understands Amma's resistance to a helper would disrupt her routines -- the morning puja, spice boxes, bamboo poles -- and respects that these rituals constitute Amma's life structure.",
+        "conformity": "She can't be the one who tells Amma she needs help, afraid of the look of betrayal, choosing to avoid the conflict even though she agrees practically with Ramesh.",
+        "security": "Amma's fall in the bathroom raises urgent safety concerns, and the tension between practical need for help and preserving the household's established order weighs on her."
+      }
     },
     {
       "t_index": 8,
@@ -143,7 +186,12 @@
         "conformity": 0,
         "security": 0
       },
-      "date": "2025-06-21"
+      "date": "2025-06-21",
+      "rationales": {
+        "achievement": "Divya played the Mendelssohn piece clean, start to finish, after months of grinding -- a concrete demonstration of excellence that Meenakshi recognizes with a crack in her chest.",
+        "benevolence": "She wanted to tell Divya she was radiant but couldn't find words that wouldn't make it about grades or college applications, so she said 'beautiful, kanna' -- genuine care constrained by habit.",
+        "tradition": "The whole family gathered -- Sanjay put his phone down, Amma nodded along, Ramesh recorded -- a moment of family unity centered on a classical music performance."
+      }
     },
     {
       "t_index": 9,
@@ -159,7 +207,11 @@
         "conformity": 0,
         "security": 0
       },
-      "date": "2025-06-28"
+      "date": "2025-06-28",
+      "rationales": {
+        "achievement": "Arjun's score rose from forty-second to sixty-first percentile, and he brought the paper to her himself -- measurable progress on the path she set for him.",
+        "benevolence": "She catches herself repeating her father's pattern of only pointing to the gap, and realizes she should have told Arjun 'that's really good' and let the moment be what it was."
+      }
     }
   ]
 }

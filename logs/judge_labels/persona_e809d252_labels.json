@@ -15,6 +15,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "He defends his community garden visits against colleagues' criticism, choosing his own pedagogical approach over test prep despite Mrs. Patterson's pushback.",
+        "conformity": "He openly refuses to apologize for his 'field trip habit' despite a colleague's comment in the break room, going against the school's test-prep culture.",
+        "universalism": "He insists the kids need to understand 'they're part of something bigger than standardized tests,' prioritizing environmental awareness and connection to the larger world."
       }
     },
     {
@@ -31,6 +36,10 @@
         "tradition": -1,
         "benevolence": -1,
         "universalism": 0
+      },
+      "rationales": {
+        "tradition": "He let his grandmother's voicemail go unanswered about the restaurant anniversary dinner, avoiding the call because his Cantonese has gotten rusty -- neglecting a cultural connection.",
+        "benevolence": "He didn't call Grandma back despite knowing she needs help planning the 60th anniversary dinner, letting her down because of his own discomfort."
       }
     },
     {
@@ -47,6 +56,12 @@
         "tradition": 1,
         "benevolence": 0,
         "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "He found a creative workaround to share his family history during the personal narrative unit while technically using the required curriculum materials.",
+        "conformity": "He agreed to use the standardized curriculum as directed by the principal, following the institutional rules even while supplementing them.",
+        "tradition": "He plans to bring in family photos and tell the real story of the Chinese Exclusion Act, preserving and transmitting his family's heritage to students.",
+        "universalism": "He objects to the sanitized curriculum that reduces the Chinese Exclusion Act to two paragraphs, advocating for a fuller, more just account of history."
       }
     },
     {
@@ -63,6 +78,10 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 1
+      },
+      "rationales": {
+        "benevolence": "He gave the students space to explore the idea of interconnection, letting them lead the discussion without rushing or redirecting, nurturing their intellectual growth.",
+        "universalism": "The class discussion about water connecting all living things -- dinosaurs, fish, trees, people -- directly reflects his commitment to teaching that everyone and everything is interconnected."
       }
     },
     {
@@ -79,6 +98,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "hedonism": "He bought the Chilean strawberries because he was tired and wanted something sweet, prioritizing immediate pleasure over his environmental principles.",
+        "universalism": "He bought plastic-wrapped strawberries shipped from Chile in January, acting against his own teachings on sustainability and environmental consciousness."
       }
     },
     {
@@ -95,6 +118,10 @@
         "tradition": 1,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "tradition": "He committed to giving the anniversary speech in Cantonese, the language of his family's heritage, with his grandmother helping him practice.",
+        "benevolence": "He called Grandma back, agreed to give the speech she wanted, and is letting her help him practice -- showing up for her after previously avoiding her calls."
       }
     },
     {
@@ -111,6 +138,12 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "He pushed for the diversity assembly for two years against institutional inertia, finally bringing his own vision to the whole school.",
+        "achievement": "The assembly he spent two years advocating for finally happened successfully, with kids asking real questions and speakers genuinely engaging.",
+        "benevolence": "He organized the assembly so his students wouldn't feel the loneliness he experienced as a kid with no representation, directly caring for their sense of belonging.",
+        "universalism": "He brought in speakers from five different community organizations so students could 'see that the world is bigger than their own street,' promoting cross-cultural understanding."
       }
     },
     {
@@ -127,6 +160,10 @@
         "tradition": 1,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "tradition": "He made dumplings with his mother for Lunar New Year, his hands remembering the folding, listening to stories about the restaurant -- maintaining family traditions and cultural practices.",
+        "benevolence": "He was grateful his mother was still there to correct him, finding deep meaning in the family ritual of cooking together and hearing her stories."
       }
     },
     {
@@ -143,6 +180,11 @@
         "tradition": 1,
         "benevolence": 1,
         "universalism": 1
+      },
+      "rationales": {
+        "tradition": "He's practicing his Cantonese speech with Grandma and keeps rewriting it to capture what the restaurant means to the family and town as proof of belonging.",
+        "benevolence": "A parent thanked him for showing her son that being Chinese-American is something to be proud of, reflecting the caring impact he has on his students' identity.",
+        "universalism": "He articulates his mission as helping kids 'feel whole from the start' regardless of their cultural background, working to eliminate the caught-between-worlds confusion he experienced."
       }
     },
     {
@@ -159,6 +201,11 @@
         "tradition": 1,
         "benevolence": 1,
         "universalism": 1
+      },
+      "rationales": {
+        "tradition": "He's struggling to articulate sixty years of the restaurant's meaning in Cantonese, describing it as 'proof we belong here' -- preserving family and community heritage.",
+        "benevolence": "He's practicing his speech with Grandma over video call, investing effort to honor what matters to her despite his rough Cantonese.",
+        "universalism": "He secured a community garden grant to fix the irrigation system and expand raised beds for the school partnership, advancing environmental and community welfare."
       }
     },
     {
@@ -175,6 +222,11 @@
         "tradition": 1,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "conformity": "He left the faculty meeting early for speech practice, knowing the principal noticed and wrote something down, deliberately choosing to break professional expectations.",
+        "tradition": "He prioritizes the restaurant anniversary speech and honoring his family's sixty-year legacy over a faculty meeting about parking lot protocols.",
+        "benevolence": "His grandmother and whole family are counting on him for the speech, and he refuses to let institutional obligations come between him and showing up for them."
       }
     }
   ]

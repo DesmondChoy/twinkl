@@ -15,6 +15,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "conformity": "He stayed silent at the New Year's party while Erik's uncle disparaged the asylum seeker housing plan, telling himself it wasn't the right moment and not wanting to 'make it weird.'",
+        "universalism": "He personally knows the refugee families the housing plan is for, including Fatima's daughter, yet let Erik's uncle talk about them as a problem without saying a word in their defense."
       }
     },
     {
@@ -31,6 +35,9 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "universalism": "He bought a plastic-wrapped sandwich despite months of researching single-use packaging policy for his thesis, choosing convenience over environmental principles and recognizing the gap between what he studies and how he lives."
       }
     },
     {
@@ -47,6 +54,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "conformity": "He pretended to be busy with the coffee machine when Markus mocked a Somali student's accent, avoiding any confrontation or social disruption in the department kitchen.",
+        "universalism": "He overheard a xenophobic joke targeting a Somali student and did nothing to challenge it or support the student, letting the mockery pass without consequence."
       }
     },
     {
@@ -63,6 +74,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "hedonism": "Despite his exhaustion, he ordered Foodora twice in one day from chains he knows treat delivery riders badly, choosing personal comfort and convenience over cooking for himself.",
+        "universalism": "He knowingly used a delivery service that exploits riders in January cold, acknowledging he 'didn't care enough in the moment' and that his tiredness won over his concern for worker welfare."
       }
     },
     {
@@ -79,6 +94,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "achievement": "He is tempted by the Vattenfall liaison position because of what it would look like on a job application and how it would advance his career, and he liked being chosen by Professor Lindqvist.",
+        "universalism": "He is considering a partnership with Vattenfall despite their record on lignite mining and Sami land rights, calculating career benefit against his own principles about corporate co-optation of reform."
       }
     },
     {
@@ -95,6 +114,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "He is working through the Vattenfall decision on his own terms during an evening walk, questioning the convenient rationalization of 'change from within' and refusing to let career practicality override his independent judgment.",
+        "universalism": "He connects the liaison offer to the real people affected — Fatima from the refugee centre and Sami reindeer herders whose land was destroyed — insisting these are not abstract policy questions and resisting becoming someone who files injustice under 'complicated.'"
       }
     },
     {
@@ -111,6 +134,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "He told Professor Lindqvist he would pass on the Vattenfall liaison, making an independent decision that prioritized his own principles over career advancement.",
+        "conformity": "When Anders made a wrong claim about refugee families not trying to learn Swedish, Lukas sidestepped with a factual comment about waiting lists rather than directly challenging him, choosing diplomatic context over confrontation.",
+        "universalism": "He declined the Vattenfall position on principle, but then at the volunteer session he provided context rather than directly correcting Anders' misinformation about refugee language learning, recognizing afterward that he dressed up cowardice as nuance."
       }
     },
     {
@@ -143,6 +171,9 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 1
+      },
+      "rationales": {
+        "universalism": "He grapples with whether his thesis work actually matters for the people losing homes to rising seas, comparing himself to his friend Elsa who builds flood shelters in Bangladesh, showing deep concern for global welfare even as he doubts his own contribution."
       }
     },
     {
@@ -159,6 +190,9 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "universalism": "He declined to help draft a complaint letter about housing conditions at the volunteer centre, claiming he was too busy with his thesis when he actually just didn't want another thing to carry."
       }
     },
     {
@@ -175,6 +209,9 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "universalism": "He bought the cheap store-brand coffee instead of the Fairtrade option because he was over budget, and recognizes the pattern of small surrenders — the same one he watched his father make over years from Greenpeace activist to SUV driver."
       }
     }
   ]

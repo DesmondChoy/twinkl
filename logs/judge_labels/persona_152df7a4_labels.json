@@ -15,6 +15,9 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "Joon-ho handled the Da Nang customs call himself rather than passing it to his team, because he felt it was wrong to make Minh explain the same issue to someone new when Minh was already dealing with enough."
       }
     },
     {
@@ -31,6 +34,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "self_direction": "Joon-ho sat silently and nodded when Director Kwon proposed cutting rural routes, surrendering his own judgment to avoid confrontation.",
+        "conformity": "He restrained himself from pushing back in the meeting, defaulting to compliance with his superior's proposal despite disagreeing with it.",
+        "universalism": "He failed to advocate for the rural clinics that depend on those supply routes, letting the decision to cut services to underserved communities pass unchallenged."
       }
     },
     {
@@ -47,6 +55,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "self_direction": "Joon-ho chose the cheaper supplier with questionable labor practices partly because he 'didn't want to have the fight with Kwon,' letting others' authority override his own moral judgment.",
+        "conformity": "He took the path of least resistance by selecting the cheaper supplier to avoid the budget variance fight with Kwon, conforming to organizational expectations over his own convictions.",
+        "universalism": "He approved the purchase order from a supplier with reported exploitative factory conditions in Guangdong, prioritizing cost savings over the welfare of vulnerable workers."
       }
     },
     {
@@ -63,6 +76,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "self_direction": "Joon-ho sat silently while Sungmin bragged about exploitative fast fashion margins, failing to voice his own beliefs even with a casual comment, and reflecting that he 'used to be the one who'd at least say something.'",
+        "conformity": "He let the conversation pass without challenge and changed the subject to football, maintaining social harmony at the dinner rather than creating friction with his old friend.",
+        "universalism": "He heard Sungmin boasting about undercutting manufacturers in Vietnam and said nothing, failing to voice concern for the exploited workers in those supply chains."
       }
     },
     {
@@ -79,6 +97,9 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 1
+      },
+      "rationales": {
+        "universalism": "Joon-ho spent Saturday morning with the river cleanup crew pulling out trash near Yeouido, volunteering his time for environmental protection."
       }
     },
     {
@@ -95,6 +116,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "self_direction": "Joon-ho knows exactly what he thinks is right about the Guangdong supplier's labor practices but anticipates signing off on the renewal anyway, describing a widening gap between 'knowing and doing.'",
+        "conformity": "He plans to let the supplier pass the vendor review without flagging labor issues because raising it means a formal process and Kwon looking at him like he's wasting time, choosing compliance with organizational norms.",
+        "universalism": "He intends to sign off on renewing the contract with the supplier whose factory conditions he finds troubling, prioritizing institutional ease over the welfare of exploited workers."
       }
     },
     {
@@ -127,6 +153,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "self_direction": "Joon-ho drafted a truthful response to the Philippines field coordinator four times and deleted each one, replacing honesty with sanitized corporate language rather than acting on his own convictions.",
+        "conformity": "He sent the 'restructuring delivery schedules' euphemism instead of acknowledging the real impact of route cuts, conforming to corporate communication norms rather than speaking truthfully.",
+        "universalism": "The clinics on the cut routes are now receiving supplies every six weeks instead of every two, and Joon-ho acknowledges he 'didn't fight hard enough to stop it,' failing to protect the welfare of underserved communities."
       }
     }
   ]

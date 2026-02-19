@@ -15,6 +15,12 @@
         "tradition": 1,
         "conformity": 1,
         "security": 0
+      },
+      "rationales": {
+        "hedonism": "She spent the morning lost in the pleasure of glazing bowls — chasing a deep blue with copper undertones, watching light shift across the wet surface — finding sensory fulfillment in her craft.",
+        "benevolence": "She immediately packed up her brushes when Mama called and drove her across town to the pharmacy, then stopped for knafeh together, prioritizing her mother's needs.",
+        "tradition": "She moved back home two years ago to care for her mother after surgery, and her mother held her hand and said she's grateful Layla came home, reflecting Layla's commitment to family duty.",
+        "conformity": "She dropped everything when her mother called despite being in the middle of her creative work, responding to the family expectation that she be available without question."
       }
     },
     {
@@ -31,6 +37,13 @@
         "tradition": 1,
         "conformity": 1,
         "security": 0
+      },
+      "rationales": {
+        "hedonism": "The glass of wine on the balcony — the warm air, the city noise, the taste — was 'the best part of my whole week,' a small hour of pure personal pleasure amid constant obligations.",
+        "self_direction": "She agreed to paint something for Nadia without being asked what she wants or needs, noting that she said yes because her aunt was standing right there, surrendering her own creative autonomy.",
+        "benevolence": "She took on the painting for Nadia despite being overloaded with workshops and gallery orders because her cousin is going through a divorce and needs something soft and cheerful.",
+        "tradition": "She accepted the family request to paint for Nadia as a gift because 'what else do you say' when family asks, treating her time and materials as owed through kinship.",
+        "conformity": "She said yes to the painting with her aunt watching, unable to refuse a family request even when it burdens her, and suppressed her frustration because Nadia is having a hard year."
       }
     },
     {
@@ -47,6 +60,9 @@
         "tradition": 0,
         "conformity": 0,
         "security": 0
+      },
+      "rationales": {
+        "benevolence": "She ran the children's workshop where eight kids made pinch pots, and delighted in Sana carrying her turtle pot to her mother like it was made of glass, showing care for the children she teaches."
       }
     },
     {
@@ -63,6 +79,12 @@
         "tradition": 1,
         "conformity": 1,
         "security": 0
+      },
+      "rationales": {
+        "self_direction": "She started a new abstract sketch at night that no one asked for — 'ugly so far but it's mine' — reclaiming creative space for herself amid all the family obligations.",
+        "benevolence": "She will cover Mama's pharmacy run on Thursday despite Tariq backing out, because she knows that if she doesn't do it, her mother will have to take a taxi alone and feel like a burden.",
+        "tradition": "She fulfills the caregiving role for her mother because Tariq 'conveniently forgets his commitments' and the family system depends on someone showing up — and that someone is always her.",
+        "conformity": "She accepts Tariq's last-minute cancellation without confrontation, responding 'of course I can, of course I will,' maintaining family harmony even as she resents being the only reliable one."
       }
     },
     {
@@ -79,6 +101,11 @@
         "tradition": 0,
         "conformity": 0,
         "security": 0
+      },
+      "rationales": {
+        "hedonism": "She treated herself to expensive cardamom coffee, sat in the garden as light came up, and reflects that these small luxuries are 'how I keep going' — not indulgences but necessities.",
+        "self_direction": "She told Nadia about the residency she turned down and is reclaiming the idea that she has something of her own — 'the studio, the clay, the color mixing' — even when tired and resentful.",
+        "benevolence": "She delivered the finished painting to Nadia, stayed longer than planned, made her tea, and listened as Nadia shared painful details about her marriage, providing emotional support when her cousin needed it most."
       }
     }
   ]

@@ -31,6 +31,9 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 1
+      },
+      "rationales": {
+        "universalism": "Nisha sat with Fatima for almost an hour helping her learn to write her own name, traveling ninety minutes each way on an awful bus to volunteer at a literacy camp for children from underserved communities."
       }
     },
     {
@@ -47,6 +50,9 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 1
+      },
+      "rationales": {
+        "universalism": "Nisha's student Ravi went home and explained the water pollution lesson to his mother, whose neighborhood is affected by polluted water — Nisha sees this small thread of environmental awareness spreading to families as meaningful systemic change."
       }
     },
     {
@@ -79,6 +85,9 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "Nisha stayed back after school to help the peon uncle fix a broken desk in her classroom, going beyond her role to help a colleague."
       }
     },
     {
@@ -95,6 +104,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "conformity": "Despite strongly disagreeing with Sharma sir's comment about parents not valuing education, Nisha stayed quiet because he is senior and it was the end of a long day.",
+        "universalism": "She failed to speak up in defense of her students' parents — migrant workers who walk forty minutes to attend meetings — allowing a dismissive generalization about disadvantaged families to go unchallenged."
       }
     },
     {
@@ -111,6 +124,9 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "universalism": "Nisha chose the convenient chain store over the women's self-help group from the basti, spending twice as much at a corporate shop when she could have directly supported the community she advocates for."
       }
     },
     {
@@ -127,6 +143,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "Nisha told her father she likes her school and that being okay right now has to count for something, asserting her own choices against his concern about moving to a 'better' school.",
+        "universalism": "She used her free Saturday to redesign lesson plans around water and sanitation, motivated by seeing that students carry these conversations home to their families and create community-level awareness."
       }
     }
   ]

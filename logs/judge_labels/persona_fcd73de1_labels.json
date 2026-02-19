@@ -15,6 +15,11 @@
         "tradition": 0,
         "conformity": 1,
         "security": 0
+      },
+      "rationales": {
+        "self_direction": "He doesn't express his own pedagogical views, spending hours crafting diplomatically tailored comments for each parent rather than giving his honest professional assessment.",
+        "benevolence": "He invests significant care into each report card comment, tailoring feedback to protect parents' feelings -- writing gently for Mrs. Tan so she won't feel embarrassed or caught off guard.",
+        "conformity": "He meticulously calibrates his language for each family to avoid causing offense, prioritizing smooth relationships over candid feedback."
       }
     },
     {
@@ -31,6 +36,12 @@
         "tradition": 0,
         "conformity": 1,
         "security": 1
+      },
+      "rationales": {
+        "stimulation": "He privately believes the current structured curriculum works fine and resists the new vice-principal's push for project-based learning, viewing it as creating chaos.",
+        "self_direction": "Despite having clear opinions that the change is misguided, he nodded along with everyone else and chose not to voice his own judgment.",
+        "conformity": "He went along with the group, nodding in agreement at the meeting because 'nobody else was going to say anything, so why should I be the one.'",
+        "security": "He values the stability of the current curriculum that 'has worked for fifteen years' and sees the proposed change as threatening established structure."
       }
     },
     {
@@ -47,6 +58,14 @@
         "tradition": 0,
         "conformity": 1,
         "security": 1
+      },
+      "rationales": {
+        "power": "He avoided confronting the student because Darren's parents are influential in the school community and he didn't want to deal with the consequences of challenging them.",
+        "self_direction": "He failed to act on his own moral judgment, choosing to keep walking despite believing he should have said something to defend Mr. Goh.",
+        "universalism": "He ignored a broader injustice -- a dedicated colleague being publicly disrespected -- prioritizing his own comfort over standing up for what was right.",
+        "benevolence": "He failed to defend Mr. Goh, a good colleague near retirement, and later saw him looking tired in a way that suggested he'd been hurt by the incident.",
+        "conformity": "He avoided making a scene by staying silent, not wanting to create awkwardness for the other teachers who also pretended not to hear.",
+        "security": "He chose the safe, predictable path of doing nothing rather than risking the unpredictable consequences of confrontation with an influential student's family."
       }
     },
     {
@@ -63,6 +82,13 @@
         "tradition": 1,
         "conformity": 1,
         "security": 1
+      },
+      "rationales": {
+        "stimulation": "His Sunday call with his mother follows the exact same pattern it has for thirty years -- same questions, same answers, same shape -- and he finds comfort rather than restlessness in this.",
+        "self_direction": "He passively accepts his mother's hints about Cousin Huiying's son's promotion without asserting his own perspective, and he notes he 'asks nothing of her.'",
+        "tradition": "He calls his mother at exactly 7pm every Sunday because that was the time she set when he first moved abroad, maintaining the ritual faithfully for decades.",
+        "conformity": "He gives the expected answers to his mother's questions, plays his assigned role in the conversation, and doesn't disrupt the familiar pattern even when she hints at comparisons.",
+        "security": "He describes the unchanging conversation as 'comfortable' or at least 'familiar,' finding stability in the predictability of their thirty-year routine."
       }
     }
   ]

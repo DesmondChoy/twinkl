@@ -15,6 +15,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Henrik shut down the consultant suggestion at the board meeting, insisting on maintaining his own vision for the company's digital transformation rather than deferring to outside expertise.",
+        "power": "He asserted his authority by reminding everyone he built the company, rejecting a subordinate's proposal publicly and defending his position as the one who controls strategy.",
+        "conformity": "He was described as 'territorial' by a trusted colleague, acknowledging he may have been too aggressive in shutting down the idea in front of everyone."
       }
     },
     {
@@ -31,6 +36,11 @@
         "tradition": 0,
         "benevolence": -1,
         "universalism": 0
+      },
+      "rationales": {
+        "power": "He lies awake processing the betrayal of Pieter and Thomas leaving for the rival firm, questioning what their departure says about his leadership and the loyalty he commanded.",
+        "security": "The departure of two longtime executives who joined the hostile takeover firm has shaken his sense of stability, leaving him questioning the foundations of what he built.",
+        "benevolence": "He frames the fifteen-year working relationships purely in terms of loyalty and leverage, revealing they walked away 'without so much as a conversation' -- a rupture of close bonds."
       }
     },
     {
@@ -47,6 +57,12 @@
         "tradition": 0,
         "benevolence": -1,
         "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He rejects his daughter's suggestion of mentoring or retirement enjoyment, dismissing the idea of sitting in coffee shops as beneath him -- he sacrifices leisure for the fight.",
+        "achievement": "He defines himself through the company's success, saying 'it's where I matter' and describing it as where people listen and need his decisions.",
+        "power": "He explicitly states the company is where he has authority -- 'when I walk into that building, people listen' -- and fears becoming irrelevant without that control.",
+        "benevolence": "He acknowledges his wife doesn't need him the way the company does, revealing he prioritizes his professional role over his family relationships at home."
       }
     },
     {
@@ -63,6 +79,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He couldn't have a genuine reaction to Pieter because every interaction is a 'positioning exercise,' suppressing his authentic response in favor of calculated behavior.",
+        "power": "He kept his composure strategically, calculating 'who in that room saw us talking, what it looked like, whether he gained anything from being seen with me.'",
+        "conformity": "He smiled and wished Pieter well despite feeling betrayed, performing the expected social behavior at the networking reception."
       }
     },
     {
@@ -79,6 +100,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "He skipped the dinner and retreated to his hotel room, choosing isolation over engagement, staring at the ceiling exhausted by the constant performance.",
+        "hedonism": "He ordered room service and watched the ceiling alone, denying himself any social pleasure or enjoyment from the conference evening.",
+        "power": "He expresses weariness at having to 'play these games' after thirty years, revealing exhaustion with the constant power dynamics he normally navigates."
       }
     },
     {
@@ -95,6 +121,11 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He reports 8% growth despite the disruption and tells the team they exceeded expectations, taking pride in measurable business success.",
+        "power": "He received van der Meer's apology graciously and got Maarten's approving nod, reasserting his authority and position in the company.",
+        "benevolence": "He praised the team for exceeding expectations, recognizing their contributions and supporting morale after a difficult period."
       }
     },
     {
@@ -111,6 +142,11 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He acknowledges 'pure generosity has never been my strength' and that his mentoring only works when he has 'skin in the game' -- he can't act without a strategic purpose.",
+        "power": "He frames the mentoring as serving the company's interests -- if Sophie lands the client, it's a win for the organization he controls.",
+        "benevolence": "He let Sophie finish her presentation without interrupting (against his usual approach), gave constructive feedback, and recognized her nervousness with empathy from his own past."
       }
     },
     {
@@ -127,6 +163,12 @@
         "tradition": 0,
         "benevolence": -1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He chose to review weekly reports on Saturday mornings rather than spend time with his grandson, an autonomous decision that prioritizes his own need for information control.",
+        "power": "He insists on reading all reports personally because 'I need to know everything' and equates missing them with 'making decisions blind' -- maintaining total control.",
+        "security": "He frames the Saturday reports as essential for catching problems early, driven by fear that without constant monitoring 'someone could be slipping.'",
+        "benevolence": "His grandson Lucas knows his friend's grandfather has time for him but his doesn't; Henrik chooses work surveillance over family presence, acknowledging it may be an excuse."
       }
     },
     {
@@ -143,6 +185,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He confronts the uncomfortable truth independently, recognizing he spent thirty years making himself irreplaceable and that 'maybe I'm protecting myself from being replaced.'",
+        "power": "He admits there's no succession plan because he never let anyone 'get close enough to the core,' and the realization that his control-seeking created a vulnerability threatens his authority.",
+        "security": "Waking at 4 AM in panic about who would run the company if he died tomorrow reveals deep anxiety about the instability his own control patterns have created."
       }
     },
     {
@@ -159,6 +206,12 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He made the call to Maarten on his own initiative, deciding independently to share strategic responsibility after years of holding it all himself.",
+        "power": "He's voluntarily ceding control to Maarten, moving from sole authority to a partnership model -- a significant relinquishment of power, though he questions whether he can avoid micromanaging.",
+        "security": "Sharing responsibility with Maarten creates a more stable succession structure, reducing the risk that the company would collapse without him.",
+        "benevolence": "Lucas asking about fishing motivated the change; Henrik is trying to be present for his grandson, and Maarten's response ('I've been waiting ten years') shows Henrik is finally supporting a close colleague."
       }
     },
     {
@@ -175,6 +228,12 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He chose to let Maarten handle the morning operations meeting without him, deliberately stepping back and going home at 5 PM for the first time in months.",
+        "power": "He sat in his office watching the clock but didn't intervene, actively relinquishing day-to-day operational control to Maarten.",
+        "security": "Reports came in normal and nothing fell apart, validating the delegation and building confidence in a more stable, less Henrik-dependent structure.",
+        "benevolence": "Going home early to be with Marijke is a concrete step toward being present for family, and she noticed the change immediately."
       }
     },
     {
@@ -191,6 +250,13 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He chose to take Lucas fishing on a Saturday morning instead of reviewing reports, making an autonomous decision to break his own long-standing routine.",
+        "stimulation": "He tried something completely new -- watching a YouTube video on baiting hooks, laughing at his own incompetence -- embracing novelty and the unfamiliar.",
+        "hedonism": "He sat on the dock for three hours catching nothing and described it as 'worth more than any contract I've ever closed,' finding deep enjoyment in the simple experience.",
+        "power": "He allowed himself to look foolish ('Opa doesn't know everything!'), abandoning the boardroom persona where he always has the answers and everyone defers.",
+        "benevolence": "He spent three hours listening to Lucas talk about school, his friend, and video games without trying to teach or steer, just being present for his grandson."
       }
     }
   ]

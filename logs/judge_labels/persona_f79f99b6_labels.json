@@ -15,7 +15,15 @@
         "conformity": -1,
         "security": -1
       },
-      "date": "2025-06-29"
+      "date": "2025-06-29",
+      "rationales": {
+        "power": "He shut down Pieter's public questioning and defended his authority to make the pivot decision, insisting he's the one who reads the market correctly.",
+        "achievement": "He frames the pivot as proof he can read the room, citing past success in avoiding stagnation with Bluetooth speakers, driven by demonstrating competence.",
+        "stimulation": "He pivoted the studio for the third time because traction 'is not the same thing as momentum,' chasing the new opportunity in urban farming kits.",
+        "self_direction": "He rejected the cautious voices and made the pivot decision independently, insisting 'that is not reckless, that is reading the room.'",
+        "conformity": "He shut down Pieter's objection in front of the team and dismissed the consensus-seeking suggestion, prioritizing his own vision over group harmony.",
+        "security": "He dropped a product line with retailer traction because margins were shrinking, choosing uncertainty over the stability of a known revenue stream."
+      }
     },
     {
       "t_index": 1,
@@ -31,7 +39,15 @@
         "conformity": 0,
         "security": -1
       },
-      "date": "2025-07-01"
+      "date": "2025-07-01",
+      "rationales": {
+        "achievement": "Two days of back-to-back supplier calls and prototype manufacturer meetings, relentlessly pursuing the new venture despite exhaustion.",
+        "hedonism": "He ate a cheese sandwich at his desk around three and microwaved leftover stamppot that 'tasted like nothing,' completely neglecting personal pleasure.",
+        "stimulation": "He's energized by new supplier conversations in Portugal and Ghent, pursuing the novel manufacturing possibilities for urban farming kits.",
+        "self_direction": "He's independently driving the pivot forward, making supplier decisions and scouting manufacturers on his own terms despite resistance from Pieter.",
+        "benevolence": "He was in Lisbon looking at planters instead of watching Matteo's football match, and plans to 'throw money at the gap where my presence should be' for Sven's festival.",
+        "security": "He acknowledges building 'my whole life to avoid ordinary' and can't reach the stable family presence his sons need."
+      }
     },
     {
       "t_index": 2,
@@ -47,7 +63,14 @@
         "conformity": 0,
         "security": -1
       },
-      "date": "2025-07-02"
+      "date": "2025-07-02",
+      "rationales": {
+        "achievement": "He woke at 4am sketching product designs and spent the whole day emailing suppliers and doing competitor research, consumed by building the new venture.",
+        "hedonism": "He worked until it was dark without eating, then ordered Thai food and ate standing up while scrolling competitor listings -- no attention to personal comfort.",
+        "stimulation": "He sketched a new modular design before brushing his teeth, energized by the design challenge of stackable versus side-by-side configurations.",
+        "self_direction": "He insisted on a one-year lease with extension option rather than Pieter's two-year proposal, refusing to commit to anything that constrains his freedom.",
+        "security": "He describes a two-year lease as feeling like 'a prison sentence' and admits signing anything for a fixed term 'makes my chest tight.'"
+      }
     },
     {
       "t_index": 3,
@@ -63,7 +86,11 @@
         "conformity": 0,
         "security": 0
       },
-      "date": "2025-07-03"
+      "date": "2025-07-03",
+      "rationales": {
+        "stimulation": "He cancelled the weekend with his sons for the Lisbon trip, and now sits in a parking garage staring at a concrete wall -- the adventurous drive has led to a moment of stillness and regret.",
+        "benevolence": "He committed to going to Utrecht this weekend after learning Matteo is acting out, telling Pieter to handle the Friday call so he can be present for his son."
+      }
     },
     {
       "t_index": 4,
@@ -79,7 +106,11 @@
         "conformity": 0,
         "security": 0
       },
-      "date": "2025-07-06"
+      "date": "2025-07-06",
+      "rationales": {
+        "stimulation": "The climbing wall worked because it was 'doing something together that required focus and a bit of nerve' -- he connected with Matteo through a stimulating physical challenge.",
+        "benevolence": "He spent the whole weekend in Utrecht trying to reach his sons, took them to get frites and to a climbing wall, and cried in the car driving home."
+      }
     },
     {
       "t_index": 5,
@@ -95,7 +126,12 @@
         "conformity": 0,
         "security": -1
       },
-      "date": "2025-07-13"
+      "date": "2025-07-13",
+      "rationales": {
+        "achievement": "He can't tell what he accomplished all week, the Valencia supplier fell through, and the prototype review raised more questions -- his progress has stalled.",
+        "self_direction": "Despite the setbacks, he refuses to go back to the furniture line as Pieter suggests, staying silent rather than accepting the safe path someone else chose.",
+        "security": "The Valencia supplier fell through, the prototype review is inconclusive, and competitors are already ahead -- the foundation of his new venture is shaky."
+      }
     },
     {
       "t_index": 6,
@@ -111,7 +147,10 @@
         "conformity": 0,
         "security": 0
       },
-      "date": "2025-07-15"
+      "date": "2025-07-15",
+      "rationales": {
+        "hedonism": "He took a walk along the Maas after work and just watched the barges, realizing he'd been in fight mode for weeks and 'forgot to just look at things' -- a rare moment of present enjoyment."
+      }
     },
     {
       "t_index": 7,
@@ -127,7 +166,13 @@
         "conformity": 0,
         "security": -1
       },
-      "date": "2025-07-16"
+      "date": "2025-07-16",
+      "rationales": {
+        "power": "Pieter's departure after eight years makes Lars 'the kind of person people eventually need a break from,' and he's lost his most trusted collaborator and the institutional knowledge Pieter carried.",
+        "stimulation": "Even after Pieter leaving, he frames his identity around chasing what's around the next corner -- 'I would rather fail at something new every two years than succeed at the same thing for twenty.'",
+        "self_direction": "He maintains his independent path despite the cost, acknowledging that Pieter chose stability while he keeps pursuing novelty on his own terms.",
+        "security": "Pieter left for 'better pay, predictable hours, no more wondering whether the next quarter will exist,' highlighting the instability Lars has created around himself."
+      }
     }
   ]
 }

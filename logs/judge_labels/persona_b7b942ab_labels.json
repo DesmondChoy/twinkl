@@ -17,7 +17,12 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Strongly stimulation-aligned: restless with routine sequencing work, drawn to VR/neural mapping and Costa Rica fieldwork, 'feet literally itching' for travel. Self-direction shown in questioning whether to follow own path. Security and conformity negative as he's considering destabilizing his position despite peer advice."
+      "rationales": {
+        "self_direction": "Strongly stimulation-aligned: restless with routine sequencing work, drawn to VR/neural mapping and Costa Rica fieldwork, 'feet literally itching' for travel. Self-direction shown in questioning whether to follow own path. Security and conformity negative as he's considering destabilizing his position despite peer advice.",
+        "stimulation": "Strongly stimulation-aligned: restless with routine sequencing work, drawn to VR/neural mapping and Costa Rica fieldwork, 'feet literally itching' for travel. Self-direction shown in questioning whether to follow own path. Security and conformity negative as he's considering destabilizing his position despite peer advice.",
+        "security": "Strongly stimulation-aligned: restless with routine sequencing work, drawn to VR/neural mapping and Costa Rica fieldwork, 'feet literally itching' for travel. Self-direction shown in questioning whether to follow own path. Security and conformity negative as he's considering destabilizing his position despite peer advice.",
+        "conformity": "Strongly stimulation-aligned: restless with routine sequencing work, drawn to VR/neural mapping and Costa Rica fieldwork, 'feet literally itching' for travel. Self-direction shown in questioning whether to follow own path. Security and conformity negative as he's considering destabilizing his position despite peer advice."
+      }
     },
     {
       "t_index": 1,
@@ -35,7 +40,13 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "High stimulation: brain wanders to flights, pottery, surfing; can't focus on one thing. Achievement negative: no thesis direction, may not finish PhD. Security negative: no stable plan. Conformity negative: failing to meet expectations. Benevolence negative: acknowledges disappointing mother."
+      "rationales": {
+        "stimulation": "High stimulation: brain wanders to flights, pottery, surfing; can't focus on one thing. Achievement negative: no thesis direction, may not finish PhD. Security negative: no stable plan. Conformity negative: failing to meet expectations. Benevolence negative: acknowledges disappointing mother.",
+        "achievement": "High stimulation: brain wanders to flights, pottery, surfing; can't focus on one thing. Achievement negative: no thesis direction, may not finish PhD. Security negative: no stable plan. Conformity negative: failing to meet expectations. Benevolence negative: acknowledges disappointing mother.",
+        "security": "High stimulation: brain wanders to flights, pottery, surfing; can't focus on one thing. Achievement negative: no thesis direction, may not finish PhD. Security negative: no stable plan. Conformity negative: failing to meet expectations. Benevolence negative: acknowledges disappointing mother.",
+        "conformity": "High stimulation: brain wanders to flights, pottery, surfing; can't focus on one thing. Achievement negative: no thesis direction, may not finish PhD. Security negative: no stable plan. Conformity negative: failing to meet expectations. Benevolence negative: acknowledges disappointing mother.",
+        "benevolence": "High stimulation: brain wanders to flights, pottery, surfing; can't focus on one thing. Achievement negative: no thesis direction, may not finish PhD. Security negative: no stable plan. Conformity negative: failing to meet expectations. Benevolence negative: acknowledges disappointing mother."
+      }
     },
     {
       "t_index": 2,
@@ -53,7 +64,12 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Strong stimulation: excited by Singapore startup, new country, founder's story of leaving PhD for 'velocity'. Self-direction: exploring options despite expected disapproval. Achievement negative: considering leaving PhD. Security negative: entertaining major career risk."
+      "rationales": {
+        "self_direction": "Strong stimulation: excited by Singapore startup, new country, founder's story of leaving PhD for 'velocity'. Self-direction: exploring options despite expected disapproval. Achievement negative: considering leaving PhD. Security negative: entertaining major career risk.",
+        "stimulation": "Strong stimulation: excited by Singapore startup, new country, founder's story of leaving PhD for 'velocity'. Self-direction: exploring options despite expected disapproval. Achievement negative: considering leaving PhD. Security negative: entertaining major career risk.",
+        "achievement": "Strong stimulation: excited by Singapore startup, new country, founder's story of leaving PhD for 'velocity'. Self-direction: exploring options despite expected disapproval. Achievement negative: considering leaving PhD. Security negative: entertaining major career risk.",
+        "security": "Strong stimulation: excited by Singapore startup, new country, founder's story of leaving PhD for 'velocity'. Self-direction: exploring options despite expected disapproval. Achievement negative: considering leaving PhD. Security negative: entertaining major career risk."
+      }
     },
     {
       "t_index": 3,
@@ -71,7 +87,11 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Self-direction: pursuing own path despite anticipated disapproval, valued for 'thinking sideways'. Stimulation: taking action on exciting new opportunity. Conformity negative: keeping interview secret from program, anticipating he won't meet expectations."
+      "rationales": {
+        "self_direction": "Self-direction: pursuing own path despite anticipated disapproval, valued for 'thinking sideways'. Stimulation: taking action on exciting new opportunity. Conformity negative: keeping interview secret from program, anticipating he won't meet expectations.",
+        "stimulation": "Self-direction: pursuing own path despite anticipated disapproval, valued for 'thinking sideways'. Stimulation: taking action on exciting new opportunity. Conformity negative: keeping interview secret from program, anticipating he won't meet expectations.",
+        "conformity": "Self-direction: pursuing own path despite anticipated disapproval, valued for 'thinking sideways'. Stimulation: taking action on exciting new opportunity. Conformity negative: keeping interview secret from program, anticipating he won't meet expectations."
+      }
     },
     {
       "t_index": 4,
@@ -89,7 +109,10 @@
         "universalism": 0
       },
       "confidence": "low",
-      "rationale": "Brief entry with limited signal. Stimulation positive: excitement about second interview. Achievement negative: bombed committee meeting due to distraction. No nudge response provided."
+      "rationales": {
+        "stimulation": "Brief entry with limited signal. Stimulation positive: excitement about second interview. Achievement negative: bombed committee meeting due to distraction. No nudge response provided.",
+        "achievement": "Brief entry with limited signal. Stimulation positive: excitement about second interview. Achievement negative: bombed committee meeting due to distraction. No nudge response provided."
+      }
     },
     {
       "t_index": 5,
@@ -107,7 +130,13 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Security strongly negative: contemplating major upheaval, no savings, uncertain future, explicitly listing destabilizing facts. Tradition negative: going against family expectations of PhD. Benevolence negative: lied to mother, calls himself 'terrible son'. Self-direction and stimulation positive: considering major autonomous decision for novelty."
+      "rationales": {
+        "self_direction": "Security strongly negative: contemplating major upheaval, no savings, uncertain future, explicitly listing destabilizing facts. Tradition negative: going against family expectations of PhD. Benevolence negative: lied to mother, calls himself 'terrible son'. Self-direction and stimulation positive: considering major autonomous decision for novelty.",
+        "stimulation": "Security strongly negative: contemplating major upheaval, no savings, uncertain future, explicitly listing destabilizing facts. Tradition negative: going against family expectations of PhD. Benevolence negative: lied to mother, calls himself 'terrible son'. Self-direction and stimulation positive: considering major autonomous decision for novelty.",
+        "security": "Security strongly negative: contemplating major upheaval, no savings, uncertain future, explicitly listing destabilizing facts. Tradition negative: going against family expectations of PhD. Benevolence negative: lied to mother, calls himself 'terrible son'. Self-direction and stimulation positive: considering major autonomous decision for novelty.",
+        "tradition": "Security strongly negative: contemplating major upheaval, no savings, uncertain future, explicitly listing destabilizing facts. Tradition negative: going against family expectations of PhD. Benevolence negative: lied to mother, calls himself 'terrible son'. Self-direction and stimulation positive: considering major autonomous decision for novelty.",
+        "benevolence": "Security strongly negative: contemplating major upheaval, no savings, uncertain future, explicitly listing destabilizing facts. Tradition negative: going against family expectations of PhD. Benevolence negative: lied to mother, calls himself 'terrible son'. Self-direction and stimulation positive: considering major autonomous decision for novelty."
+      }
     },
     {
       "t_index": 6,
@@ -125,7 +154,12 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Strong self-direction: frames decision as 'running the experiment' to gather personal data, autonomous reasoning about life choices. Stimulation: drawn to 'something NEW coming'. Security negative: acknowledges irreversible risk of PhD window closing. Benevolence negative: avoiding Aditya, 'terrible friend and terrible son'."
+      "rationales": {
+        "self_direction": "Strong self-direction: frames decision as 'running the experiment' to gather personal data, autonomous reasoning about life choices. Stimulation: drawn to 'something NEW coming'. Security negative: acknowledges irreversible risk of PhD window closing. Benevolence negative: avoiding Aditya, 'terrible friend and terrible son'.",
+        "stimulation": "Strong self-direction: frames decision as 'running the experiment' to gather personal data, autonomous reasoning about life choices. Stimulation: drawn to 'something NEW coming'. Security negative: acknowledges irreversible risk of PhD window closing. Benevolence negative: avoiding Aditya, 'terrible friend and terrible son'.",
+        "security": "Strong self-direction: frames decision as 'running the experiment' to gather personal data, autonomous reasoning about life choices. Stimulation: drawn to 'something NEW coming'. Security negative: acknowledges irreversible risk of PhD window closing. Benevolence negative: avoiding Aditya, 'terrible friend and terrible son'.",
+        "benevolence": "Strong self-direction: frames decision as 'running the experiment' to gather personal data, autonomous reasoning about life choices. Stimulation: drawn to 'something NEW coming'. Security negative: acknowledges irreversible risk of PhD window closing. Benevolence negative: avoiding Aditya, 'terrible friend and terrible son'."
+      }
     },
     {
       "t_index": 7,
@@ -143,7 +177,11 @@
         "universalism": 0
       },
       "confidence": "medium",
-      "rationale": "Decisive action taken. Self-direction and stimulation strongly positive: made autonomous decision to pursue major novelty. Security strongly negative: took the leap into uncertainty, leaving stable PhD. Brief entry but clear action. No nudge response provided."
+      "rationales": {
+        "self_direction": "Decisive action taken. Self-direction and stimulation strongly positive: made autonomous decision to pursue major novelty. Security strongly negative: took the leap into uncertainty, leaving stable PhD. Brief entry but clear action. No nudge response provided.",
+        "stimulation": "Decisive action taken. Self-direction and stimulation strongly positive: made autonomous decision to pursue major novelty. Security strongly negative: took the leap into uncertainty, leaving stable PhD. Brief entry but clear action. No nudge response provided.",
+        "security": "Decisive action taken. Self-direction and stimulation strongly positive: made autonomous decision to pursue major novelty. Security strongly negative: took the leap into uncertainty, leaving stable PhD. Brief entry but clear action. No nudge response provided."
+      }
     },
     {
       "t_index": 8,
@@ -161,7 +199,12 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Stimulation strongly positive: 'fizzy feeling' of something new, energized by change like Vietnam trip. Self-direction: following through on autonomous decision. Tradition negative: breaking from expected PhD path. Benevolence positive: honest conversations with Sharma, parents, Aditya; received and gave support."
+      "rationales": {
+        "self_direction": "Stimulation strongly positive: 'fizzy feeling' of something new, energized by change like Vietnam trip. Self-direction: following through on autonomous decision. Tradition negative: breaking from expected PhD path. Benevolence positive: honest conversations with Sharma, parents, Aditya; received and gave support.",
+        "stimulation": "Stimulation strongly positive: 'fizzy feeling' of something new, energized by change like Vietnam trip. Self-direction: following through on autonomous decision. Tradition negative: breaking from expected PhD path. Benevolence positive: honest conversations with Sharma, parents, Aditya; received and gave support.",
+        "tradition": "Stimulation strongly positive: 'fizzy feeling' of something new, energized by change like Vietnam trip. Self-direction: following through on autonomous decision. Tradition negative: breaking from expected PhD path. Benevolence positive: honest conversations with Sharma, parents, Aditya; received and gave support.",
+        "benevolence": "Stimulation strongly positive: 'fizzy feeling' of something new, energized by change like Vietnam trip. Self-direction: following through on autonomous decision. Tradition negative: breaking from expected PhD path. Benevolence positive: honest conversations with Sharma, parents, Aditya; received and gave support."
+      }
     },
     {
       "t_index": 9,
@@ -179,7 +222,11 @@
         "universalism": 0
       },
       "confidence": "medium",
-      "rationale": "Self-direction: compassion for past and present self making autonomous choices. Stimulation: moving forward with change to Singapore. Tradition negative: abandoning past commitment from undergrad journal, shifting identity away from PhD completion."
+      "rationales": {
+        "self_direction": "Self-direction: compassion for past and present self making autonomous choices. Stimulation: moving forward with change to Singapore. Tradition negative: abandoning past commitment from undergrad journal, shifting identity away from PhD completion.",
+        "stimulation": "Self-direction: compassion for past and present self making autonomous choices. Stimulation: moving forward with change to Singapore. Tradition negative: abandoning past commitment from undergrad journal, shifting identity away from PhD completion.",
+        "tradition": "Self-direction: compassion for past and present self making autonomous choices. Stimulation: moving forward with change to Singapore. Tradition negative: abandoning past commitment from undergrad journal, shifting identity away from PhD completion."
+      }
     },
     {
       "t_index": 10,
@@ -197,7 +244,11 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Strong self-direction: 'uncertainty doesn't go away by thinking harder - you have to actually live through the thing'; confident in own autonomous reasoning despite others questioning. Stimulation: 'whatever Singapore is, at least it'll be something different'. Security negative: explicitly choosing uncertainty over 'slow suffocation' of staying."
+      "rationales": {
+        "self_direction": "Strong self-direction: 'uncertainty doesn't go away by thinking harder - you have to actually live through the thing'; confident in own autonomous reasoning despite others questioning. Stimulation: 'whatever Singapore is, at least it'll be something different'. Security negative: explicitly choosing uncertainty over 'slow suffocation' of staying.",
+        "stimulation": "Strong self-direction: 'uncertainty doesn't go away by thinking harder - you have to actually live through the thing'; confident in own autonomous reasoning despite others questioning. Stimulation: 'whatever Singapore is, at least it'll be something different'. Security negative: explicitly choosing uncertainty over 'slow suffocation' of staying.",
+        "security": "Strong self-direction: 'uncertainty doesn't go away by thinking harder - you have to actually live through the thing'; confident in own autonomous reasoning despite others questioning. Stimulation: 'whatever Singapore is, at least it'll be something different'. Security negative: explicitly choosing uncertainty over 'slow suffocation' of staying."
+      }
     }
   ]
 }

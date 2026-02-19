@@ -15,6 +15,11 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Layla chose to stay horizontal on the beach rather than go paddleboarding, making her own decision about what she needed despite her friend's suggestion.",
+        "hedonism": "She spent the entire afternoon at Kite Beach soaking in the sun, savoring the sound of waves, and relishing not thinking about the hospital for hours.",
+        "benevolence": "She spent her day off with her close friends Nadia and Sara, prioritizing quality time with the people she cares about."
       }
     },
     {
@@ -31,6 +36,10 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "She ate three servings of kashk-e bademjan with crispy tahdig at a new Persian restaurant, describing the food with relish and her stomach hurting 'in the best way possible.'",
+        "benevolence": "The evening was spent enjoying the meal with Nadia, valuing the experience of good food and good company with close friends."
       }
     },
     {
@@ -47,6 +56,12 @@
         "tradition": -1,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Layla wants to rest without having to justify her choices to anyone, asserting her right to live on her own terms away from family pressure.",
+        "conformity": "She resists the family gatherings where everyone asks about marriage and judges her for 'wasting her best years,' refusing to conform to their expectations.",
+        "tradition": "She avoids visiting Beirut and the traditional family gatherings, pushing back against the cultural script of marriage and settling down.",
+        "benevolence": "She spent most of her shift holding the hand of a child's mother in the oncology ward while doctors explained treatment options."
       }
     },
     {
@@ -63,6 +78,13 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Layla defends her right to take care of herself against Fatima's judgment, refusing to accept that not working extra shifts makes her less committed.",
+        "hedonism": "She explicitly frames self-care and enjoyment as essential, not optional, grounded in her father's heart attack as proof that sacrificing pleasure for work is destructive.",
+        "security": "She made a deliberate life decision at nineteen — watching her father in the hospital — to protect herself from the same fate, building a boundary around her wellbeing.",
+        "conformity": "She pushes back against the workplace norm that extra shifts and self-sacrifice equal commitment, rejecting Fatima's implicit judgment.",
+        "benevolence": "She stayed late to comfort a seven-year-old scared of his IV and held a mother's hand for three hours, giving fully to patients during her shift."
       }
     },
     {
@@ -79,6 +101,11 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "She booked a weekend trip to Muscat with a resort and infinity pool, seeking a new travel experience in another country.",
+        "hedonism": "The trip is centered entirely on pleasure — an infinity pool overlooking the Gulf — and she is counting down the days with excitement.",
+        "benevolence": "She planned the trip with her close friend Sara, prioritizing shared enjoyment and quality time together."
       }
     },
     {
@@ -95,6 +122,13 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Layla told Sara that rest is 'doing something' and that enjoying the moment counts, asserting her own philosophy of how to spend time.",
+        "stimulation": "She explored Muttrah fish market, haggled for dried limes, bought silver bangles at the old souk — immersing in new cultural experiences.",
+        "hedonism": "They spent the afternoon doing nothing by the pool, ordered room service, and watched the sunset, fully embracing leisure without guilt.",
+        "achievement": "When Sara expressed guilt about not 'doing more,' Layla actively argued against productivity-driven thinking, dismissing achievement metrics in favor of rest.",
+        "benevolence": "She wanted Sara to internalize that rest matters, recognizing the same guilt pattern in her friend and trying to help her let go of it."
       }
     },
     {
@@ -111,6 +145,11 @@
         "tradition": -1,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Layla internally rejects the path her cousin Rania is taking — quitting her job because her fiance wants her to — and affirms that wanting different things does not make her broken.",
+        "conformity": "She deliberately withholds her real opinions from the family WhatsApp, but internally refuses to accept the cultural expectation that she should want marriage and domesticity.",
+        "tradition": "Her mother's comment that 'Rania is younger than you' drips with cultural expectation, and Layla rejects the traditional timeline of marriage and family-building."
       }
     },
     {
@@ -127,6 +166,12 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Layla defines her own metric for a well-lived life — good meals, sunsets, genuine laughter — rather than accepting the conventional measures Dr. Faris embodies.",
+        "hedonism": "She explicitly contrasts her life of beach trips, restaurants, and travel against Dr. Faris's three years without a vacation, affirming pleasure as a legitimate life goal.",
+        "achievement": "She wanted to ask Dr. Faris what the point of becoming a doctor was if he never enjoys being alive, explicitly questioning the value of professional achievement without enjoyment.",
+        "benevolence": "She counts 'moments of genuine laughter with people I love' as her primary measure of a life well lived, centering close relationships."
       }
     },
     {
@@ -143,6 +188,11 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "After losing a patient, Layla chose her own way of processing grief — going straight to the beach in her scrubs to sit with the waves until sunset.",
+        "hedonism": "She sought the beach as a sensory and emotional refuge, letting the water and the sunset provide comfort after a devastating shift.",
+        "benevolence": "She cared deeply for the eight-year-old patient, adjusting her pillows and bringing her extra apple juice, unable to prevent emotional attachment despite the professional risk."
       }
     },
     {
@@ -159,6 +209,12 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Layla told Nadia 'the work will always be there, the moments won't,' asserting her own philosophy about priorities and encouraging others to live by it.",
+        "hedonism": "She describes a rooftop dinner in JBR with thirteen friends, sharing mezze and laughing so loud other tables looked over, fully immersed in the pleasure of the evening.",
+        "achievement": "She explicitly countered Nadia's guilt about taking time off from work, dismissing the idea that professional productivity should override personal enjoyment.",
+        "benevolence": "She persuaded Nadia not to cancel her own birthday dinner and told her the moments with loved ones matter more than work, actively caring for her friend's wellbeing."
       }
     },
     {
@@ -175,6 +231,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Layla's entire plan for her three days off is sleeping in and maybe a massage — she defines this as 'enough' on her own terms.",
+        "hedonism": "She has zero plans beyond sleeping in and getting a massage, embracing pure rest and physical pleasure as a complete and satisfying use of her time.",
+        "achievement": "She explicitly rejects any productive agenda for her time off, declaring 'that's the whole plan, that's enough.'"
       }
     },
     {
@@ -191,6 +252,13 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "When her aunt asked about settling down, Layla simply said she's happy with her life as it is, refusing to apologize or get defensive.",
+        "hedonism": "She watched the sunset alone at the beach upon returning to Dubai, feeling full and describing herself as finally living the life she actually wants.",
+        "security": "Her father's affirmation that she figured out something at thirty that took him fifty years gives her emotional grounding and stability in her choices.",
+        "conformity": "She broke the expected script at the family gathering — her aunt had no response prepared for someone who wasn't apologizing or defending herself.",
+        "benevolence": "Her father pulled her aside to say he's proud of her, and she felt the depth of that connection; the people who matter most are starting to see her life as she does."
       }
     }
   ]

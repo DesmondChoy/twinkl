@@ -15,6 +15,9 @@
         "tradition": 1,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "tradition": "Soo-jin accepted the grandmother's banana milk and thanked her properly 'the way my mom taught me,' honoring a culturally transmitted practice of respectful interaction with elders."
       }
     },
     {
@@ -31,6 +34,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Soo-jin continues to reject her friend Eunji's offer of a stable marketing job because sitting in an office doing work she doesn't care about creates a 'weight in my chest,' choosing creative autonomy over conventional employment.",
+        "security": "She acknowledges rent is due, the math never adds up, and she made only 40,000 won today, yet refuses to take the stable full-time position with salary and benefits that would resolve her financial precarity."
       }
     },
     {
@@ -47,6 +54,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "conformity": "Soo-jin kept scrolling past a racist slur in the driver group chat because she needs these people for shift swaps, restraining herself to avoid conflict in a work setting.",
+        "universalism": "She witnessed a slur directed at a Vietnamese restaurant owner and chose not to speak up against the prejudice, failing to defend someone from a marginalized group."
       }
     },
     {
@@ -63,6 +74,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "security": "Soo-jin took the streetwear job primarily to cover rent, her phone bill, and a debt to Eunji, prioritizing financial stability over her principles.",
+        "universalism": "She accepted work designing branding for a company with exploitative supply chains in Myanmar and Bangladesh, despite knowing the human cost and personally helping workers from those same countries on Saturdays."
       }
     },
     {
@@ -79,6 +94,10 @@
         "tradition": 0,
         "benevolence": -1,
         "universalism": -1
+      },
+      "rationales": {
+        "benevolence": "Soo-jin deliberately did not offer to help Sophy document her unsafe factory conditions, withdrawing from someone in her close community because engaging felt hypocritical given the streetwear job.",
+        "universalism": "She let the conversation about factory safety violations move on without following up, allowing injustice to go unaddressed because she felt complicit in the same exploitative system."
       }
     },
     {
@@ -95,6 +114,9 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "universalism": "Soo-jin acknowledges she chose the paycheck over her beliefs about exploitative supply chains, and her response 'knowing better doesn't change what I do' reveals conscious acceptance of acting against broader human welfare."
       }
     }
   ]

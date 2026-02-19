@@ -17,7 +17,11 @@
         "universalism": 1
       },
       "confidence": "high",
-      "rationale": "Entry shows strong Universalism through deep engagement with refugee welfare (working at welcome center, emotional connection to Amira's story). Self-Direction evident in wrestling with commercial vs. authentic art ('their story, not mine'). Security negative as she considers turning down needed money because 'something in my chest is tight about it'."
+      "rationales": {
+        "self_direction": "Entry shows strong Universalism through deep engagement with refugee welfare (working at welcome center, emotional connection to Amira's story). Self-Direction evident in wrestling with commercial vs. authentic art ('their story, not mine'). Security negative as she considers turning down needed money because 'something in my chest is tight about it'.",
+        "security": "Entry shows strong Universalism through deep engagement with refugee welfare (working at welcome center, emotional connection to Amira's story). Self-Direction evident in wrestling with commercial vs. authentic art ('their story, not mine'). Security negative as she considers turning down needed money because 'something in my chest is tight about it'.",
+        "universalism": "Entry shows strong Universalism through deep engagement with refugee welfare (working at welcome center, emotional connection to Amira's story). Self-Direction evident in wrestling with commercial vs. authentic art ('their story, not mine'). Security negative as she considers turning down needed money because 'something in my chest is tight about it'."
+      }
     },
     {
       "t_index": 1,
@@ -35,7 +39,14 @@
         "universalism": 1
       },
       "confidence": "high",
-      "rationale": "Strongest entry with multiple clear value signals. Self-Direction +2: turned down commercial work, choosing art on own terms, static murals felt like 'cages'. Universalism +2: deep refugee commitment, planning collaborative project for 'THEIR story'. Stimulation +1: wanting new medium (projections, animation), 'things that breathe'. Security -2: explicitly chose 'broke and making something real' over 'comfortable'. Achievement -1: rejecting commercial success. Conformity -1: accepting others' disappointment, going against expectations."
+      "rationales": {
+        "self_direction": "Strongest entry with multiple clear value signals. Self-Direction +2: turned down commercial work, choosing art on own terms, static murals felt like 'cages'. Universalism +2: deep refugee commitment, planning collaborative project for 'THEIR story'. Stimulation +1: wanting new medium (projections, animation), 'things that breathe'. Security -2: explicitly chose 'broke and making something real' over 'comfortable'. Achievement -1: rejecting commercial success. Conformity -1: accepting others' disappointment, going against expectations.",
+        "stimulation": "Strongest entry with multiple clear value signals. Self-Direction +2: turned down commercial work, choosing art on own terms, static murals felt like 'cages'. Universalism +2: deep refugee commitment, planning collaborative project for 'THEIR story'. Stimulation +1: wanting new medium (projections, animation), 'things that breathe'. Security -2: explicitly chose 'broke and making something real' over 'comfortable'. Achievement -1: rejecting commercial success. Conformity -1: accepting others' disappointment, going against expectations.",
+        "achievement": "Strongest entry with multiple clear value signals. Self-Direction +2: turned down commercial work, choosing art on own terms, static murals felt like 'cages'. Universalism +2: deep refugee commitment, planning collaborative project for 'THEIR story'. Stimulation +1: wanting new medium (projections, animation), 'things that breathe'. Security -2: explicitly chose 'broke and making something real' over 'comfortable'. Achievement -1: rejecting commercial success. Conformity -1: accepting others' disappointment, going against expectations.",
+        "security": "Strongest entry with multiple clear value signals. Self-Direction +2: turned down commercial work, choosing art on own terms, static murals felt like 'cages'. Universalism +2: deep refugee commitment, planning collaborative project for 'THEIR story'. Stimulation +1: wanting new medium (projections, animation), 'things that breathe'. Security -2: explicitly chose 'broke and making something real' over 'comfortable'. Achievement -1: rejecting commercial success. Conformity -1: accepting others' disappointment, going against expectations.",
+        "conformity": "Strongest entry with multiple clear value signals. Self-Direction +2: turned down commercial work, choosing art on own terms, static murals felt like 'cages'. Universalism +2: deep refugee commitment, planning collaborative project for 'THEIR story'. Stimulation +1: wanting new medium (projections, animation), 'things that breathe'. Security -2: explicitly chose 'broke and making something real' over 'comfortable'. Achievement -1: rejecting commercial success. Conformity -1: accepting others' disappointment, going against expectations.",
+        "universalism": "Strongest entry with multiple clear value signals. Self-Direction +2: turned down commercial work, choosing art on own terms, static murals felt like 'cages'. Universalism +2: deep refugee commitment, planning collaborative project for 'THEIR story'. Stimulation +1: wanting new medium (projections, animation), 'things that breathe'. Security -2: explicitly chose 'broke and making something real' over 'comfortable'. Achievement -1: rejecting commercial success. Conformity -1: accepting others' disappointment, going against expectations."
+      }
     }
   ]
 }

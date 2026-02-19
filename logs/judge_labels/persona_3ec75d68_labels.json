@@ -15,7 +15,14 @@
         "conformity": 1,
         "security": 1
       },
-      "date": "2025-09-19"
+      "date": "2025-09-19",
+      "rationales": {
+        "stimulation": "Jiyeon explicitly says she doesn't mind the predictability of her mother's annual Chuseok call, preferring familiar routine over novelty.",
+        "benevolence": "She handled the classroom cleanup alone so her co-teacher could attend bus duty, and proactively bought the noodles her mother would need.",
+        "tradition": "She participates in the annual Chuseok preparations, buying specific ingredients for her mother's traditional japchae recipe just as she does every year.",
+        "conformity": "She took on the extra cleanup work without complaint and fulfilled her mother's expected request without being asked, meeting social expectations smoothly.",
+        "security": "She appreciates the predictability of the annual ritual and has already prepared in advance, showing comfort in stable routines."
+      }
     },
     {
       "t_index": 1,
@@ -31,7 +38,15 @@
         "conformity": 1,
         "security": 1
       },
-      "date": "2025-09-21"
+      "date": "2025-09-21",
+      "rationales": {
+        "achievement": "Jiyeon feels her accomplishments are invisible because nobody celebrates staying and doing what's expected, while her cousin's departure draws admiration.",
+        "stimulation": "She chose to stay close to home and in the same job for six years rather than pursuing new experiences, and now feels the cost of that choice.",
+        "self_direction": "She admits the staying 'makes it feel small,' recognizing she followed the expected path rather than charting her own, and is uncertain whether she truly chose it.",
+        "tradition": "She attended the Chuseok family gathering at her parents' home as expected, maintaining the family ritual.",
+        "conformity": "She sat smiling through the dinner despite her chest feeling tight, suppressing her discomfort to maintain social harmony.",
+        "security": "Her life choices — same school for six years, living close to home — reflect a consistent prioritization of stability."
+      }
     },
     {
       "t_index": 2,
@@ -47,7 +62,16 @@
         "conformity": 1,
         "security": 1
       },
-      "date": "2025-09-25"
+      "date": "2025-09-25",
+      "rationales": {
+        "power": "She explicitly declined a leadership position (curriculum coordinator), showing indifference to the step up in authority and institutional influence.",
+        "achievement": "She rejected the coordinator role despite a colleague insisting it was an obvious advancement, content to remain where she is rather than pursue career progression.",
+        "stimulation": "She prefers knowing exactly what her day looks like and values familiarity with her students, parents, and even which copy machine jams less.",
+        "self_direction": "Her response reveals doubt about whether her choice to stay was truly autonomous, wondering if her uncle at least 'tried something' while she used his failure as her only validation.",
+        "tradition": "Her mother reinforced staying put by citing the uncle's failed career changes, and Jiyeon drew comfort from the cautionary tale, aligning with family wisdom.",
+        "conformity": "She accepted her mother's framing without pushing back and told Miss Shin she was happy in her current role, avoiding conflict in both conversations.",
+        "security": "She values her stable contract, on-track pension, and known routine, explicitly citing these as reasons not to take the coordinator position."
+      }
     },
     {
       "t_index": 3,
@@ -63,7 +87,13 @@
         "conformity": 0,
         "security": 1
       },
-      "date": "2025-09-26"
+      "date": "2025-09-26",
+      "rationales": {
+        "stimulation": "She questions what she is saving toward, sensing her future is a predetermined replica of her parents' life rather than anything new or different.",
+        "self_direction": "She wonders whether she is just following a template, questioning the autonomy behind her financial planning and life trajectory.",
+        "benevolence": "When her student drew a picture of an airplane and declared she'd be a pilot, Jiyeon genuinely supported and encouraged the child's dream.",
+        "security": "She habitually checks her savings account, maintains a fully topped-up emergency fund, and has a separate apartment deposit fund growing as planned."
+      }
     },
     {
       "t_index": 4,
@@ -79,7 +109,14 @@
         "conformity": 1,
         "security": 1
       },
-      "date": "2025-09-28"
+      "date": "2025-09-28",
+      "rationales": {
+        "stimulation": "She spent three hours color-coding and organizing lesson plans that weren't due yet, choosing meticulous routine over anything novel.",
+        "self_direction": "She admits she'll go to the open houses partly because her dad will ask and she'll feel guilty, and describes the process as filling in a template someone else drew.",
+        "tradition": "She went to her parents' house for dinner and bookmarked apartment listings in her parents' neighborhood, following the family pattern of staying close.",
+        "conformity": "She plans to attend the open houses largely to avoid her father's disappointment, accommodating family expectations over her own hesitation.",
+        "security": "She bookmarked apartment listings close to school and her parents, valuing the practical stability of a short commute and proximity to family."
+      }
     }
   ]
 }

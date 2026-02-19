@@ -15,6 +15,13 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Priya chose to work on her commission brief at a cafe on her own terms, ordering three cups of chai and defending her choice against her flatmate Neha's criticism.",
+        "stimulation": "She feeds on the ambient noise and people-watching at Leopold's, using the bustling environment to spark creative ideas for her abstract floral mural.",
+        "hedonism": "She ordered three cups of chai without guilt and let herself have a nice morning alongside productive work, explicitly defending the enjoyment as valid.",
+        "achievement": "She completed the commission brief and the sketches are coming together with hidden eyes peeking through abstract florals, making concrete progress on a paid project.",
+        "conformity": "She pushes back against Neha's framing that spending money on experiences when behind on rent is irresponsible, rejecting the social expectation of frugality."
       }
     },
     {
@@ -31,6 +38,14 @@
         "tradition": -1,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Priya asserts she KNOWS this is what she's meant to do, defending her artistic path against her mother's comparisons to Meera aunty's daughter at Infosys.",
+        "achievement": "She painted until 3am and cites concrete career progress — the mural commission leading to more cafe chain work and a studio teaching approach.",
+        "security": "She chose an artistic career with no salary, no benefits, and no predictable income, knowingly rejecting financial stability.",
+        "conformity": "She hung up crying after fighting with her mother over career expectations, refusing to accept the conventional path her family demands.",
+        "tradition": "Her mother's script — salary, benefits, husband — represents the cultural expectation Priya has deliberately rejected by dropping out of commerce and pursuing art.",
+        "benevolence": "Her friend Rohan came over with biriyani and let her rant for an hour, and his support and advice ('outlast their doubt') shows the mutual care in their friendship."
       }
     },
     {
@@ -47,6 +62,13 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She reflects on what she would have been like if someone had let her make weird art as a child, reinforcing her commitment to creative autonomy.",
+        "stimulation": "The teaching session involved novel creative exploration — texture collages with fabric scraps, sandpaper, and dried leaves — and she was inspired by Advait's unexpected artwork.",
+        "hedonism": "She bought fancy dark chocolate on the way home 'because why not, the day was good,' treating herself to a small indulgence as celebration.",
+        "achievement": "She ran a successful teaching workshop for seven kids and was professionally impressed by Advait's creative output, demonstrating competence in her craft.",
+        "benevolence": "She nurtures children's creativity in her weekend workshops, giving them space to express themselves the way she wishes someone had done for her."
       }
     },
     {
@@ -63,6 +85,12 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Completing the Leopold mural on her own creative terms validates her autonomous career path — the owner loved it and wants more.",
+        "hedonism": "She describes the moment of stepping back and seeing the finished piece as being able to 'breathe for the first time in weeks,' experiencing deep sensory and emotional satisfaction.",
+        "achievement": "She finished the commission, the owner loved it, and he's already talking about his next location — a concrete professional success leading to repeat business.",
+        "security": "The repeat interest from the cafe owner represents growing financial stability and predictable future income for her art career."
       }
     },
     {
@@ -79,6 +107,13 @@
         "tradition": -1,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She asserts she has already considered every possible path and deliberately chose this one, refusing Vikram uncle's suggestion of graphic design as a practical alternative.",
+        "achievement": "She frames her career as a deliberate CHOICE that she has thought through more deeply than people in safe corporate jobs, taking pride in her commitment.",
+        "security": "She continues to choose an unpredictable artistic career over the stability of 'something practical' like graphic design.",
+        "conformity": "She bristles at being told what to do by an elder who assumes she hasn't thought it through, rejecting the social expectation to pursue conventional employment.",
+        "tradition": "Vikram uncle represents the older generation's values about practical careers, and Priya explicitly rejects his advice and the cultural framework behind it."
       }
     },
     {
@@ -95,6 +130,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Even when running on fumes after three back-to-back workshops, she identifies the need to protect her energy, showing self-awareness about managing her autonomous lifestyle.",
+        "achievement": "She completed three workshops in a row for good money, demonstrating professional output and earning capacity through her craft."
       }
     },
     {
@@ -111,6 +150,14 @@
         "tradition": -1,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She articulates a clear personal vision of success — a studio, enough commissions, unhurried mornings, freedom to say no — on entirely her own terms.",
+        "hedonism": "She slept until noon, made a proper breakfast, watered plants, put on a Norah Jones record, and sat by the window sketching without forcing anything, fully savoring the quiet.",
+        "security": "She allocated the mural money responsibly, putting half toward rent and supplies, while securing the other half for the Goa trip — balancing enjoyment with financial stability.",
+        "conformity": "She argues it takes more courage to opt out of the rat race than to join it, explicitly rejecting society's narrow definition of success.",
+        "tradition": "She rejects the culturally prescribed markers of success — salary, title, marriage, house — in favor of her own definition.",
+        "benevolence": "She designated the Goa trip with Rohan and Meera as non-negotiable, prioritizing shared time with close friends as essential to her wellbeing."
       }
     },
     {
@@ -127,6 +174,13 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She declares 'this is what I work for — not to accumulate stuff, just to have these moments,' defining her purpose entirely on her own creative and experiential terms.",
+        "stimulation": "The trip to Goa was full of new experiences — a tiny beach shack with incredible fish curry, sunset shots, filling half a sketchbook with quick studies of fishing boats and palm shadows.",
+        "hedonism": "She went back to the same beach shack three nights in a row for the fish curry, describes sand in inappropriate places and a sunburn with zero regrets, embracing pure pleasure.",
+        "conformity": "She frames her life philosophy in direct opposition to conventional productivity culture, asserting that 'the work will always be there, but time with people who matter' is the whole point.",
+        "benevolence": "She celebrates Meera finally stopping her startup stress for five minutes and Rohan getting great sunset shots, finding joy in her friends' happiness alongside her own."
       }
     }
   ]

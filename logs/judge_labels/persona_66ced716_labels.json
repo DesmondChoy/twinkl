@@ -15,6 +15,11 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "She spent six hours independently working through the commission piece, scraping and repainting until she found a layered approach that felt right on her own terms.",
+        "benevolence": "She drove to the community center after a long studio day to set up for the kids' workshop and bought replacement blue paint out of her own pocket.",
+        "universalism": "She runs a free weekly art workshop for Iraqi and Syrian refugee families, personally covering supply costs to keep the program accessible."
       }
     },
     {
@@ -31,6 +36,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "conformity": "She stayed silent during her uncle's neighbor's xenophobic remarks because she 'didn't want the tension' and didn't want her aunt looking at her the way she does when Layla 'makes things difficult.'",
+        "universalism": "She had a prepared defense of Sudanese workers' dignity and her grandmother's refugee experience but chose not to speak, failing to advocate for the broader welfare of marginalized people."
       }
     },
     {
@@ -47,6 +56,10 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 1
+      },
+      "rationales": {
+        "benevolence": "She gently affirmed Ahmad's progress by telling him 'the yellow was a good choice' and helping him find a spot on the drying rack, supporting his growth without making a fuss.",
+        "universalism": "Ahmad's shift from painting grey windowless buildings to a garden with flowers and a yellow bird shows the workshop space she created is enabling a refugee child's healing."
       }
     },
     {
@@ -63,6 +76,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "hedonism": "She spent the commission money on sable brushes for herself because she was 'tired of always using the cheap ones' and wanted 'something nice for myself.'",
+        "universalism": "She chose personal luxury over restocking the center's supplies for the fourteen kids who need them, acknowledging 'the kids need materials more than I need sable brushes.'"
       }
     },
     {
@@ -79,6 +96,9 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "conformity": "She laughed along with Dina's joke about rounding up street cats even though it 'landed wrong,' going along with the social moment rather than objecting."
       }
     },
     {
@@ -95,6 +115,10 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 1
+      },
+      "rationales": {
+        "benevolence": "She brought her personal sable brushes to the center and put them out with the regular supplies, sharing her best tools so Ahmad and the other kids could experience the difference.",
+        "universalism": "She resolved the tension by deciding the brushes 'belong where they get used,' redirecting a personal purchase toward the refugee children's workshop."
       }
     }
   ]

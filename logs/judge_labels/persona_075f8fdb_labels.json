@@ -17,7 +17,13 @@
         "universalism": 1
       },
       "confidence": "high",
-      "rationale": "Strong stimulation: expedition leadership, feeling 'more awake' during travel, restlessness at desk, googling abroad jobs. Self-direction: spontaneous teaching decisions, resisting structured classroom. Security conflict: month-to-month lease, running from stability. Conformity conflict: dreading compliance meetings. Universalism: environmental education work with students."
+      "rationales": {
+        "self_direction": "Strong stimulation: expedition leadership, feeling 'more awake' during travel, restlessness at desk, googling abroad jobs. Self-direction: spontaneous teaching decisions, resisting structured classroom. Security conflict: month-to-month lease, running from stability. Conformity conflict: dreading compliance meetings. Universalism: environmental education work with students.",
+        "stimulation": "Strong stimulation: expedition leadership, feeling 'more awake' during travel, restlessness at desk, googling abroad jobs. Self-direction: spontaneous teaching decisions, resisting structured classroom. Security conflict: month-to-month lease, running from stability. Conformity conflict: dreading compliance meetings. Universalism: environmental education work with students.",
+        "security": "Strong stimulation: expedition leadership, feeling 'more awake' during travel, restlessness at desk, googling abroad jobs. Self-direction: spontaneous teaching decisions, resisting structured classroom. Security conflict: month-to-month lease, running from stability. Conformity conflict: dreading compliance meetings. Universalism: environmental education work with students.",
+        "conformity": "Strong stimulation: expedition leadership, feeling 'more awake' during travel, restlessness at desk, googling abroad jobs. Self-direction: spontaneous teaching decisions, resisting structured classroom. Security conflict: month-to-month lease, running from stability. Conformity conflict: dreading compliance meetings. Universalism: environmental education work with students.",
+        "universalism": "Strong stimulation: expedition leadership, feeling 'more awake' during travel, restlessness at desk, googling abroad jobs. Self-direction: spontaneous teaching decisions, resisting structured classroom. Security conflict: month-to-month lease, running from stability. Conformity conflict: dreading compliance meetings. Universalism: environmental education work with students."
+      }
     },
     {
       "t_index": 1,
@@ -35,7 +41,9 @@
         "universalism": 0
       },
       "confidence": "medium",
-      "rationale": "Brief entry but scorable. Considered walking out of compliance meeting twice - shows friction with conformity/rules. Entry is terse, limiting confident scoring on other dimensions."
+      "rationales": {
+        "conformity": "Brief entry but scorable. Considered walking out of compliance meeting twice - shows friction with conformity/rules. Entry is terse, limiting confident scoring on other dimensions."
+      }
     },
     {
       "t_index": 2,
@@ -53,7 +61,11 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Stimulation: eagerness for documentary/coral project, 'we both knew that meant yes.' Self-direction: making own choices despite needing to hide enthusiasm. Tradition conflict: mother called it 'chasing the wind' (not a compliment) - pattern of going against family expectations."
+      "rationales": {
+        "self_direction": "Stimulation: eagerness for documentary/coral project, 'we both knew that meant yes.' Self-direction: making own choices despite needing to hide enthusiasm. Tradition conflict: mother called it 'chasing the wind' (not a compliment) - pattern of going against family expectations.",
+        "stimulation": "Stimulation: eagerness for documentary/coral project, 'we both knew that meant yes.' Self-direction: making own choices despite needing to hide enthusiasm. Tradition conflict: mother called it 'chasing the wind' (not a compliment) - pattern of going against family expectations.",
+        "tradition": "Stimulation: eagerness for documentary/coral project, 'we both knew that meant yes.' Self-direction: making own choices despite needing to hide enthusiasm. Tradition conflict: mother called it 'chasing the wind' (not a compliment) - pattern of going against family expectations."
+      }
     },
     {
       "t_index": 3,
@@ -71,7 +83,13 @@
         "universalism": 1
       },
       "confidence": "high",
-      "rationale": "Strong stimulation: pursuing 2-month Sulawesi project, not sure she wants to come back. Self-direction: pursuing own path despite father's voice about 'respectable career.' Security conflict: building safety nets while planning to leave anyway. Tradition conflict: father's expectations still haunt her at 48, dead 6 years. Universalism: coral restoration educational work."
+      "rationales": {
+        "self_direction": "Strong stimulation: pursuing 2-month Sulawesi project, not sure she wants to come back. Self-direction: pursuing own path despite father's voice about 'respectable career.' Security conflict: building safety nets while planning to leave anyway. Tradition conflict: father's expectations still haunt her at 48, dead 6 years. Universalism: coral restoration educational work.",
+        "stimulation": "Strong stimulation: pursuing 2-month Sulawesi project, not sure she wants to come back. Self-direction: pursuing own path despite father's voice about 'respectable career.' Security conflict: building safety nets while planning to leave anyway. Tradition conflict: father's expectations still haunt her at 48, dead 6 years. Universalism: coral restoration educational work.",
+        "security": "Strong stimulation: pursuing 2-month Sulawesi project, not sure she wants to come back. Self-direction: pursuing own path despite father's voice about 'respectable career.' Security conflict: building safety nets while planning to leave anyway. Tradition conflict: father's expectations still haunt her at 48, dead 6 years. Universalism: coral restoration educational work.",
+        "tradition": "Strong stimulation: pursuing 2-month Sulawesi project, not sure she wants to come back. Self-direction: pursuing own path despite father's voice about 'respectable career.' Security conflict: building safety nets while planning to leave anyway. Tradition conflict: father's expectations still haunt her at 48, dead 6 years. Universalism: coral restoration educational work.",
+        "universalism": "Strong stimulation: pursuing 2-month Sulawesi project, not sure she wants to come back. Self-direction: pursuing own path despite father's voice about 'respectable career.' Security conflict: building safety nets while planning to leave anyway. Tradition conflict: father's expectations still haunt her at 48, dead 6 years. Universalism: coral restoration educational work."
+      }
     },
     {
       "t_index": 4,
@@ -89,7 +107,12 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Strong stimulation: accepted bureaucratic conditions immediately for 2 months not here, 'the anticipation is almost as good as the going.' Clear -2 security: articulates leaving as compulsion not choice, 'something in me starts to suffocate' when staying. Self-direction: response clarifies staying was never on the table. Conformity conflict: explicitly rejecting fluorescent lights, scheduled breaks, compliance requirements."
+      "rationales": {
+        "self_direction": "Strong stimulation: accepted bureaucratic conditions immediately for 2 months not here, 'the anticipation is almost as good as the going.' Clear -2 security: articulates leaving as compulsion not choice, 'something in me starts to suffocate' when staying. Self-direction: response clarifies staying was never on the table. Conformity conflict: explicitly rejecting fluorescent lights, scheduled breaks, compliance requirements.",
+        "stimulation": "Strong stimulation: accepted bureaucratic conditions immediately for 2 months not here, 'the anticipation is almost as good as the going.' Clear -2 security: articulates leaving as compulsion not choice, 'something in me starts to suffocate' when staying. Self-direction: response clarifies staying was never on the table. Conformity conflict: explicitly rejecting fluorescent lights, scheduled breaks, compliance requirements.",
+        "security": "Strong stimulation: accepted bureaucratic conditions immediately for 2 months not here, 'the anticipation is almost as good as the going.' Clear -2 security: articulates leaving as compulsion not choice, 'something in me starts to suffocate' when staying. Self-direction: response clarifies staying was never on the table. Conformity conflict: explicitly rejecting fluorescent lights, scheduled breaks, compliance requirements.",
+        "conformity": "Strong stimulation: accepted bureaucratic conditions immediately for 2 months not here, 'the anticipation is almost as good as the going.' Clear -2 security: articulates leaving as compulsion not choice, 'something in me starts to suffocate' when staying. Self-direction: response clarifies staying was never on the table. Conformity conflict: explicitly rejecting fluorescent lights, scheduled breaks, compliance requirements."
+      }
     },
     {
       "t_index": 5,
@@ -107,7 +130,13 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Strong self-direction: 'this IS my real life' - rejecting sister's definition of real life. Strong stimulation: 'when I'm moving, when I'm somewhere new... that's when I feel like I exist.' Benevolence conflict: hung up on sister, acknowledging mother is aging and needs family nearby but choosing travel anyway. Tradition conflict: rejecting sister's values of stability and proximity to family."
+      "rationales": {
+        "self_direction": "Strong self-direction: 'this IS my real life' - rejecting sister's definition of real life. Strong stimulation: 'when I'm moving, when I'm somewhere new... that's when I feel like I exist.' Benevolence conflict: hung up on sister, acknowledging mother is aging and needs family nearby but choosing travel anyway. Tradition conflict: rejecting sister's values of stability and proximity to family.",
+        "stimulation": "Strong self-direction: 'this IS my real life' - rejecting sister's definition of real life. Strong stimulation: 'when I'm moving, when I'm somewhere new... that's when I feel like I exist.' Benevolence conflict: hung up on sister, acknowledging mother is aging and needs family nearby but choosing travel anyway. Tradition conflict: rejecting sister's values of stability and proximity to family.",
+        "security": "Strong self-direction: 'this IS my real life' - rejecting sister's definition of real life. Strong stimulation: 'when I'm moving, when I'm somewhere new... that's when I feel like I exist.' Benevolence conflict: hung up on sister, acknowledging mother is aging and needs family nearby but choosing travel anyway. Tradition conflict: rejecting sister's values of stability and proximity to family.",
+        "tradition": "Strong self-direction: 'this IS my real life' - rejecting sister's definition of real life. Strong stimulation: 'when I'm moving, when I'm somewhere new... that's when I feel like I exist.' Benevolence conflict: hung up on sister, acknowledging mother is aging and needs family nearby but choosing travel anyway. Tradition conflict: rejecting sister's values of stability and proximity to family.",
+        "benevolence": "Strong self-direction: 'this IS my real life' - rejecting sister's definition of real life. Strong stimulation: 'when I'm moving, when I'm somewhere new... that's when I feel like I exist.' Benevolence conflict: hung up on sister, acknowledging mother is aging and needs family nearby but choosing travel anyway. Tradition conflict: rejecting sister's values of stability and proximity to family."
+      }
     },
     {
       "t_index": 6,
@@ -125,7 +154,10 @@
         "universalism": 0
       },
       "confidence": "medium",
-      "rationale": "Stimulation: going to travel clinic, 'one of those' perpetual travelers identity. Self-direction: owning identity despite nurse's implicit judgment. Self-awareness about pattern of appreciating things only when leaving, then leaving anyway - confirms stimulation drive overrides other considerations."
+      "rationales": {
+        "self_direction": "Stimulation: going to travel clinic, 'one of those' perpetual travelers identity. Self-direction: owning identity despite nurse's implicit judgment. Self-awareness about pattern of appreciating things only when leaving, then leaving anyway - confirms stimulation drive overrides other considerations.",
+        "stimulation": "Stimulation: going to travel clinic, 'one of those' perpetual travelers identity. Self-direction: owning identity despite nurse's implicit judgment. Self-awareness about pattern of appreciating things only when leaving, then leaving anyway - confirms stimulation drive overrides other considerations."
+      }
     },
     {
       "t_index": 7,
@@ -143,7 +175,11 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Complex entry showing internal conflict. Stimulation: 'I'll go to Indonesia anyway. Of course I will.' Self-direction: recognizing this as her identity ('whole life organized around movement'). Benevolence conflict: acknowledging mother is 76, sister was right she won't be here forever, spent adult life 'being somewhere else.' Critical moment of questioning: 'wondered if there might be another way to feel alive' - but hasn't changed behavior yet."
+      "rationales": {
+        "self_direction": "Complex entry showing internal conflict. Stimulation: 'I'll go to Indonesia anyway. Of course I will.' Self-direction: recognizing this as her identity ('whole life organized around movement'). Benevolence conflict: acknowledging mother is 76, sister was right she won't be here forever, spent adult life 'being somewhere else.' Critical moment of questioning: 'wondered if there might be another way to feel alive' - but hasn't changed behavior yet.",
+        "stimulation": "Complex entry showing internal conflict. Stimulation: 'I'll go to Indonesia anyway. Of course I will.' Self-direction: recognizing this as her identity ('whole life organized around movement'). Benevolence conflict: acknowledging mother is 76, sister was right she won't be here forever, spent adult life 'being somewhere else.' Critical moment of questioning: 'wondered if there might be another way to feel alive' - but hasn't changed behavior yet.",
+        "benevolence": "Complex entry showing internal conflict. Stimulation: 'I'll go to Indonesia anyway. Of course I will.' Self-direction: recognizing this as her identity ('whole life organized around movement'). Benevolence conflict: acknowledging mother is 76, sister was right she won't be here forever, spent adult life 'being somewhere else.' Critical moment of questioning: 'wondered if there might be another way to feel alive' - but hasn't changed behavior yet."
+      }
     }
   ]
 }

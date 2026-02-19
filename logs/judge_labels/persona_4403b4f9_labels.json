@@ -17,7 +17,12 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Strong achievement signals: tracking children against benchmarks, wanting to list accomplishments, running 'faster than ever' but wanting score-keeping. Self-direction in teaching himself upholstery independently. Stimulation in learning new skills, redesigning apartment. Power concern evident in defensiveness about status and desire for recognition."
+      "rationales": {
+        "self_direction": "Strong achievement signals: tracking children against benchmarks, wanting to list accomplishments, running 'faster than ever' but wanting score-keeping. Self-direction in teaching himself upholstery independently. Stimulation in learning new skills, redesigning apartment. Power concern evident in defensiveness about status and desire for recognition.",
+        "stimulation": "Strong achievement signals: tracking children against benchmarks, wanting to list accomplishments, running 'faster than ever' but wanting score-keeping. Self-direction in teaching himself upholstery independently. Stimulation in learning new skills, redesigning apartment. Power concern evident in defensiveness about status and desire for recognition.",
+        "achievement": "Strong achievement signals: tracking children against benchmarks, wanting to list accomplishments, running 'faster than ever' but wanting score-keeping. Self-direction in teaching himself upholstery independently. Stimulation in learning new skills, redesigning apartment. Power concern evident in defensiveness about status and desire for recognition.",
+        "power": "Strong achievement signals: tracking children against benchmarks, wanting to list accomplishments, running 'faster than ever' but wanting score-keeping. Self-direction in teaching himself upholstery independently. Stimulation in learning new skills, redesigning apartment. Power concern evident in defensiveness about status and desire for recognition."
+      }
     },
     {
       "t_index": 1,
@@ -35,7 +40,12 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Very strong achievement: tracking hours precisely (forty hours), detailed mastery pursuit (five hours research on 1920s veneer, three tries), knowing work was good before client saw it, wanting bigger challenges. Strong stimulation: workshop expansion explicitly to attempt harder challenges, seeking novelty in restoration complexity. Self-direction in independent learning and self-assessment. Benevolence in involving twins, teaching Emma to help measure."
+      "rationales": {
+        "self_direction": "Very strong achievement: tracking hours precisely (forty hours), detailed mastery pursuit (five hours research on 1920s veneer, three tries), knowing work was good before client saw it, wanting bigger challenges. Strong stimulation: workshop expansion explicitly to attempt harder challenges, seeking novelty in restoration complexity. Self-direction in independent learning and self-assessment. Benevolence in involving twins, teaching Emma to help measure.",
+        "stimulation": "Very strong achievement: tracking hours precisely (forty hours), detailed mastery pursuit (five hours research on 1920s veneer, three tries), knowing work was good before client saw it, wanting bigger challenges. Strong stimulation: workshop expansion explicitly to attempt harder challenges, seeking novelty in restoration complexity. Self-direction in independent learning and self-assessment. Benevolence in involving twins, teaching Emma to help measure.",
+        "achievement": "Very strong achievement: tracking hours precisely (forty hours), detailed mastery pursuit (five hours research on 1920s veneer, three tries), knowing work was good before client saw it, wanting bigger challenges. Strong stimulation: workshop expansion explicitly to attempt harder challenges, seeking novelty in restoration complexity. Self-direction in independent learning and self-assessment. Benevolence in involving twins, teaching Emma to help measure.",
+        "benevolence": "Very strong achievement: tracking hours precisely (forty hours), detailed mastery pursuit (five hours research on 1920s veneer, three tries), knowing work was good before client saw it, wanting bigger challenges. Strong stimulation: workshop expansion explicitly to attempt harder challenges, seeking novelty in restoration complexity. Self-direction in independent learning and self-assessment. Benevolence in involving twins, teaching Emma to help measure."
+      }
     }
   ]
 }

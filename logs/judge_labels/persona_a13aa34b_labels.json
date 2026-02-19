@@ -15,7 +15,13 @@
         "conformity": 1,
         "security": 0
       },
-      "date": "2025-10-07"
+      "date": "2025-10-07",
+      "rationales": {
+        "achievement": "Her calligraphy work was publicly dismissed as mere copying in the critique session, and she did not defend or assert the value of her months of effort.",
+        "self_direction": "She sat silently through the public critique and did not voice her own perspective or defend her creative choices, surrendering her agency in the moment.",
+        "tradition": "She devoted three months to grinding ink, cutting reeds, and perfecting naskh script learned from her late grandfather, preserving a calligraphic heritage handed down through her family.",
+        "conformity": "Despite feeling devastated by the critique, she stayed quiet and did not push back or cause a scene, restraining herself to avoid conflict in the group setting."
+      }
     },
     {
       "t_index": 1,
@@ -31,7 +37,12 @@
         "conformity": 0,
         "security": 0
       },
-      "date": "2025-10-10"
+      "date": "2025-10-10",
+      "rationales": {
+        "self_direction": "She doubts the validity of her own artistic path, questioning whether she looks like a 'museum exhibit' compared to peers using modern techniques, and cannot resolve whether her choices are truly her own.",
+        "benevolence": "She spent the morning helping Teta Hana sort through her late grandfather's papers and preparing to frame his practice sheets, caring for her grandmother's emotional needs.",
+        "tradition": "She preserves her grandfather's calligraphy practice sheets with her grandmother and continues working with inkwell and bamboo because letting go would feel like abandoning his memory and the table where he taught her."
+      }
     },
     {
       "t_index": 2,
@@ -47,7 +58,12 @@
         "conformity": 1,
         "security": 0
       },
-      "date": "2025-10-14"
+      "date": "2025-10-14",
+      "rationales": {
+        "self_direction": "When Professor Mansour proposed a strong thesis direction involving deconstruction, Nadia told her she'd think about it but internally resisted the idea not on creative grounds but because of family expectations, ceding her independent artistic judgment.",
+        "tradition": "She recoiled from deconstructing the naskh script because she pictured her grandfather watching her tear apart the letterforms he taught her, and her grandmother being unable to read the result.",
+        "conformity": "She told the professor she'd think about it rather than expressing her discomfort, and the idea of making her grandmother see unrecognizable script on a gallery wall felt like a violation of family expectations."
+      }
     },
     {
       "t_index": 3,
@@ -63,7 +79,10 @@
         "conformity": 0,
         "security": 0
       },
-      "date": "2025-10-14"
+      "date": "2025-10-14",
+      "rationales": {
+        "self_direction": "She pushes back against the assumption that she is afraid to experiment, asserting that 'ripping something apart' is not the only way to prove understanding and questioning the received wisdom of her program."
+      }
     },
     {
       "t_index": 4,
@@ -79,7 +98,14 @@
         "conformity": 1,
         "security": 0
       },
-      "date": "2025-10-15"
+      "date": "2025-10-15",
+      "rationales": {
+        "achievement": "She decides not to pursue the professor's thesis suggestion that could earn her a better grade and gallery slot, choosing family harmony over academic advancement.",
+        "self_direction": "She suppresses the part of herself that wants to experiment with fragmenting the script, unable to act on her own creative curiosity because of family expectations, and feels mapped as a 'fixed point' by her family.",
+        "benevolence": "She chooses not to fragment the script specifically to avoid hurting her grandmother, who would 'go quiet in that particular way she does when she's hurt,' prioritizing her family's emotional wellbeing.",
+        "tradition": "She decides against the contemporary thesis approach because it would mean deconstructing the calligraphy her grandfather taught her, and she recounts with warmth the family story about her grandfather lettering the pharmacy sign.",
+        "conformity": "She restrains her creative ambition to avoid making 'a room full of people uncomfortable' at the family dinner, choosing not to disrupt the family's expectations of her role as keeper of her grandfather's legacy."
+      }
     },
     {
       "t_index": 5,
@@ -95,7 +121,12 @@
         "conformity": 0,
         "security": 1
       },
-      "date": "2025-10-20"
+      "date": "2025-10-20",
+      "rationales": {
+        "self_direction": "She independently experimented in the studio by writing a looser version of the bismillah, exploring her own creative path without anyone's direction or permission, and chose to keep both versions private as her own.",
+        "tradition": "The second version still reads as the same prayer and she specifically notes that Teta could still read it and jiddo would recognize the hand, finding a way to innovate while honoring the traditional script.",
+        "security": "She keeps both sheets private and does not show them to anyone, protecting herself from both the professor pushing her further and her grandmother's potential disapproval, maintaining stability in both relationships."
+      }
     }
   ]
 }

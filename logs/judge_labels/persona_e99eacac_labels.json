@@ -16,7 +16,12 @@
         "benevolence": 0,
         "universalism": 0
       },
-      "confidence": "high"
+      "rationales": {
+        "self_direction": "He took on the Choco expedition against everyone's advice, insisting this is his call and refusing to apologize for wanting to grow beyond just coasting.",
+        "stimulation": "He's drawn to the opportunity precisely because it's new and won't come twice, pursuing the excitement of a government-backed sustainable tourism project in an unexplored corridor.",
+        "achievement": "He cites building the company from three to twenty-two employees and surviving the pandemic as proof of competence, driven to demonstrate he knows what he's doing.",
+        "security": "He's stretching an already thin company by taking on a major new expedition, dismissing his mother's worry that he's 'doing too much again.'"
+      }
     },
     {
       "t_index": 1,
@@ -33,7 +38,9 @@
         "benevolence": 0,
         "universalism": 0
       },
-      "confidence": "medium"
+      "rationales": {
+        "stimulation": "He's energized by the scouting day in Nuqui, already picturing the first tourist group, saying 'this is the part I love -- standing somewhere new, seeing what could be.'"
+      }
     },
     {
       "t_index": 2,
@@ -50,7 +57,11 @@
         "benevolence": 1,
         "universalism": 0
       },
-      "confidence": "high"
+      "rationales": {
+        "hedonism": "He sometimes thinks about how much easier it would be to skip the Sunday meal and have his Sundays free, but he sacrifices that personal time for family tradition.",
+        "tradition": "He made sancocho because that's what Abuela always made in October, used her cracked wooden spoon, and maintained the family ritual of fourteen people around the table.",
+        "benevolence": "He retells the Leticia story for his nephew Tomas for the fiftieth time because the boy loves it, prioritizing family presence over the expedition proposal due Friday."
+      }
     },
     {
       "t_index": 3,
@@ -67,7 +78,12 @@
         "benevolence": 0,
         "universalism": 1
       },
-      "confidence": "high"
+      "rationales": {
+        "self_direction": "He asked for twice the funding needed and insisted on bringing in local Choco community guides from day one, making bold choices his father would have called impractical.",
+        "achievement": "He sent off a 'clean, professional, ambitious' proposal, pursuing a major business milestone with confidence in his own competence.",
+        "tradition": "He reflects on his father's influence, recognizing he uses everything his father taught him about running a business -- 'you take the tools and build something your parents wouldn't recognize.'",
+        "universalism": "He insisted on including local Choco communities as guides from day one rather than as an afterthought, prioritizing equitable partnership over cost efficiency."
+      }
     },
     {
       "t_index": 4,
@@ -84,7 +100,11 @@
         "benevolence": 1,
         "universalism": 0
       },
-      "confidence": "high"
+      "rationales": {
+        "stimulation": "He describes the running and the current as part of who he is -- 'the version of me that sits still too long starts to decay and the version that moves is more real.'",
+        "tradition": "He drove to Soacha to pick up his seventy-three-year-old mother, let her criticize his cooking and rearrange his spices, and listened to the same story about Uncle Jorge from 1987.",
+        "benevolence": "He picks up his mother himself, lets her do things her way in his kitchen, and reflects on what happens when she can't make the drive anymore -- the Sunday table is his anchor."
+      }
     },
     {
       "t_index": 5,
@@ -101,7 +121,11 @@
         "benevolence": 0,
         "universalism": 0
       },
-      "confidence": "high"
+      "rationales": {
+        "stimulation": "He spent two hours staring at topographic maps 'like a kid planning a treasure hunt,' energized by the new expedition possibilities ahead.",
+        "achievement": "The regional government approved full funding for his proposal, a concrete validation of his professional ambition that moved him to tears.",
+        "tradition": "His tears were partly grief that his father isn't here to see the achievement, and he texted his sister and called his mother first -- honoring family connections in the moment of success."
+      }
     },
     {
       "t_index": 6,
@@ -118,7 +142,10 @@
         "benevolence": 0,
         "universalism": 0
       },
-      "confidence": "medium"
+      "rationales": {
+        "achievement": "His key employee Camilo quit a month before their biggest project, directly threatening the success of the Choco expedition he's been building toward.",
+        "security": "Losing a five-year employee right before the biggest project creates instability, and he feels betrayed, scared, and angry about the disruption."
+      }
     },
     {
       "t_index": 7,
@@ -135,7 +162,12 @@
         "benevolence": 1,
         "universalism": 0
       },
-      "confidence": "high"
+      "rationales": {
+        "self_direction": "He promoted Maria after only eight months, trusting his own judgment about her abilities and recognizing that the company is 'bigger than any one person, including me.'",
+        "achievement": "He redistributed Camilo's responsibilities quickly, identified Maria's talent, and kept the company on track for the Choco project despite the setback.",
+        "tradition": "He set up the Day of the Dead ofrenda with photos, marigolds, and his father's favorite rum, telling Tomas 'the doing is what matters' even without certainty about its spiritual meaning.",
+        "benevolence": "He had dinner with cousin Esperanza, recognized Maria's potential and told her she has a future, and helped Tomas light candles for the ofrenda -- showing care for those around him."
+      }
     },
     {
       "t_index": 8,
@@ -152,7 +184,11 @@
         "benevolence": 0,
         "universalism": 1
       },
-      "confidence": "medium"
+      "rationales": {
+        "stimulation": "He describes the gap between dreaming and doing as 'where I live' and says 'sometimes it feels like flying, sometimes like falling' -- drawn to the uncertainty of the new venture.",
+        "security": "He's anxious that the reality won't match the vision and worries he's oversold the project to everyone including himself, feeling the risk of the commitment.",
+        "universalism": "His vision for the project centers on community members seeing themselves in it, routes that feel 'discovered rather than manufactured,' and guests 'leaving changed' -- broader human impact beyond profit."
+      }
     },
     {
       "t_index": 9,
@@ -169,7 +205,11 @@
         "benevolence": 1,
         "universalism": 0
       },
-      "confidence": "medium"
+      "rationales": {
+        "stimulation": "His anxiety settled into anticipation for the trip, and his mother acknowledged 'also have fun' -- validating the adventure-seeking part of his nature he's been defensive about.",
+        "tradition": "He called his mother to tell her about the trip, maintaining their close connection, and her blessing ('cuidate, mijo') landed because she finally acknowledged who he is.",
+        "benevolence": "His mother's simple words of care -- 'take care, but also have fun' -- reflect the reciprocal bond, and he recognizes he's stopped being defensive about needing her understanding."
+      }
     },
     {
       "t_index": 10,
@@ -186,7 +226,13 @@
         "benevolence": 1,
         "universalism": 1
       },
-      "confidence": "high"
+      "rationales": {
+        "self_direction": "He stopped fighting himself and accepted 'this is who I am -- someone who needs both the roots and the river,' integrating his identity on his own terms.",
+        "stimulation": "Four days in the Choco humidity and mosquitoes left his body wrecked but his mind 'alive in a way it hasn't been in months,' mapping routes and meeting community contacts.",
+        "tradition": "He's moving with the family rhythm -- Sunday is at his sister's this week -- and recognizes he can 'honor where you came from and still keep moving.'",
+        "benevolence": "He told Maria she has a future with the company after she impressed him, and he seamlessly fits back into family life despite seventeen emails and a broken water heater.",
+        "universalism": "He insists they must 'earn the right to be there, again and again' with the Choco communities, respecting their generational way of life rather than bringing tourists in like they own the place."
+      }
     }
   ]
 }

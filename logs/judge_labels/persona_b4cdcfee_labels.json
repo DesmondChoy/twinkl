@@ -16,6 +16,10 @@
         "benevolence": 0,
         "universalism": 0
       },
+      "rationales": {
+        "stimulation": "He is energized by the new Monterrey distribution hub assignment, describing the office routine as feeling like 'wearing a shirt that's too tight' and welcoming the change to his calendar.",
+        "security": "He admits the same commute, same faces, same intersections were making him restless, and he embraces the disruption of bimonthly travel to a new city rather than maintaining his stable routine."
+      },
       "confidence": "high"
     },
     {
@@ -32,6 +36,11 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "He walked the empty warehouse space and compared the echo of the concrete and dust to 'the first page of a notebook,' finding possibility and excitement in a brand-new environment.",
+        "hedonism": "He savored the carnitas dinner that reminded him of a Michoacan trip twenty years ago and enjoyed calling Lucia from the hotel balcony, relishing the sensory pleasures of the trip.",
+        "benevolence": "He was glad that Lucia expressed interest in joining his next trip, and sharing the experience of the mountains and the new site with her made the whole day feel complete."
       },
       "confidence": "high"
     },
@@ -50,6 +59,10 @@
         "benevolence": 0,
         "universalism": 0
       },
+      "rationales": {
+        "stimulation": "Back in the office, he is already counting days until the next Monterrey trip, unable to tolerate the sameness of the desk view after just one day back.",
+        "security": "He finds the predictable office environment so intolerable that he fixates on escaping it, showing discomfort with stability and routine."
+      },
       "confidence": "medium"
     },
     {
@@ -66,6 +79,11 @@
         "tradition": -1,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "He felt incomprehension at his nephew's ten-year plan for suburban stability, recalling that at 28 he was on his third city and had just quit a job because his boss wanted him to specialize.",
+        "security": "He describes feeling churning discomfort at Tomas's desire for a predictable life with a house and a cabin, and after the conversation the city felt gray even though the sun was out.",
+        "tradition": "He cannot connect with his nephew's desire to follow the conventional family pattern of settling down, visiting the same resort his parents went to, and building a stable suburban life."
       },
       "confidence": "high"
     },
@@ -84,6 +102,10 @@
         "benevolence": 0,
         "universalism": 0
       },
+      "rationales": {
+        "stimulation": "He admits he always thinks about what's next, viewing the question about his commitment to staying as an accusation, while insisting his need for novelty and his ability to finish projects coexist.",
+        "achievement": "He pushes back against the board's doubt about his commitment by pointing to his track record of never leaving a project half-finished, asserting his demonstrated competence."
+      },
       "confidence": "medium"
     },
     {
@@ -100,6 +122,11 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "He took Lucia to a new salsa club in Condesa, seeking out a novel experience and recognizing that 'variety doesn't always require a boarding pass.'",
+        "hedonism": "He stayed out dancing until 1am, prioritizing the enjoyment and pleasure of a spontaneous night out with his wife.",
+        "benevolence": "He shared the evening with Lucia at the salsa club, investing in their relationship through a shared experience of fun and connection."
       },
       "confidence": "high"
     },
@@ -118,6 +145,10 @@
         "benevolence": 0,
         "universalism": 0
       },
+      "rationales": {
+        "security": "He feels no attachment to his father's old house in Guadalajara after it sold, treating places as 'way stations' rather than anchors and showing indifference to the loss of a stable family landmark.",
+        "tradition": "He does not share his family's emotional attachment to the ancestral home, wondering if he is 'missing something they feel,' and his brother's expectation of sadness highlights his break from the family's traditional relationship with place."
+      },
       "confidence": "high"
     },
     {
@@ -134,6 +165,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "He admits that the construction phase is always his favorite part of any project, and that once it runs smoothly he starts getting restless again, drawn to novelty over steady-state operation.",
+        "security": "He acknowledges that his restlessness when things stabilize is a recurring pattern, preferring the uncertainty and change of a project under construction to a smoothly running operation."
       },
       "confidence": "high"
     },
@@ -152,6 +187,12 @@
         "benevolence": 1,
         "universalism": 0
       },
+      "rationales": {
+        "stimulation": "He was deflated by the risk-mitigation meeting where nobody asked about new opportunities or experiments, craving novelty and forward motion instead of endless contingency planning.",
+        "hedonism": "He is holding onto the upcoming canyon trip with Lucia as an antidote to the draining meeting, treating the adventure and sensory experience as essential balance for his wellbeing.",
+        "security": "He felt suffocated by a three-hour meeting focused entirely on backup plans, contingencies, and worst-case scenarios, finding the risk-averse energy 'soul-crushing.'",
+        "benevolence": "Lucia is meeting him for the weekend and he describes her as 'balance,' a counterweight without which he'd quit every job within six months, valuing their shared connection."
+      },
       "confidence": "high"
     },
     {
@@ -169,6 +210,11 @@
         "benevolence": 1,
         "universalism": 0
       },
+      "rationales": {
+        "stimulation": "He envisions retirement as exploratory travel \u2014 learning languages, living somewhere for months, moving on \u2014 and has been drawn to this nomadic vision for thirty years.",
+        "hedonism": "He savored the canyon drive, the picnic with tortas and marzipan candies, and an hour watching shadows move across canyon walls, investing fully in sensory pleasure and enjoyment.",
+        "benevolence": "Lucia offered to travel with him in retirement and he describes it as something meaningful \u2014 'that felt like something' \u2014 valuing her companionship and the deepening of their partnership."
+      },
       "confidence": "high"
     },
     {
@@ -185,6 +231,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He told Daniela that what keeps him going is that each project feels genuinely different, and he questions but ultimately embraces his own unconventional approach despite others finding it scattered.",
+        "stimulation": "He describes his career as 'a series of sprints toward interesting things' across five industries, and feels a kind of panic at the thought of doing one thing for twenty-five years.",
+        "security": "He experiences the idea of long-term stability \u2014 his brother's twenty-five years at one company \u2014 as 'suffocation,' actively rejecting predictability as something that threatens his sense of self."
       },
       "confidence": "high"
     }

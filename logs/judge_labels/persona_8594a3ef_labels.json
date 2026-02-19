@@ -17,7 +17,10 @@
         "universalism": 1
       },
       "confidence": "high",
-      "rationale": "Students debating rather than waiting for 'right' answers reflects her valuing independent thought (Self-Direction +1). Topic of coastal development project shows environmental education focus (Universalism +1). Clear reflection on why she chose this teaching path."
+      "rationales": {
+        "self_direction": "Students debating rather than waiting for 'right' answers reflects her valuing independent thought (Self-Direction +1). Topic of coastal development project shows environmental education focus (Universalism +1). Clear reflection on why she chose this teaching path.",
+        "universalism": "Students debating rather than waiting for 'right' answers reflects her valuing independent thought (Self-Direction +1). Topic of coastal development project shows environmental education focus (Universalism +1). Clear reflection on why she chose this teaching path."
+      }
     },
     {
       "t_index": 1,
@@ -35,7 +38,11 @@
         "universalism": 1
       },
       "confidence": "high",
-      "rationale": "Nodded and said she'd 'think about it' when principal suggested toning down activism - surrendered autonomy in the moment (Self-Direction -1). Restrained her response to avoid confrontation (Conformity +1). Still tried to explain ocean pollution's relevance to Kerala, advocating environmental awareness (Universalism +1)."
+      "rationales": {
+        "self_direction": "Nodded and said she'd 'think about it' when principal suggested toning down activism - surrendered autonomy in the moment (Self-Direction -1). Restrained her response to avoid confrontation (Conformity +1). Still tried to explain ocean pollution's relevance to Kerala, advocating environmental awareness (Universalism +1).",
+        "conformity": "Nodded and said she'd 'think about it' when principal suggested toning down activism - surrendered autonomy in the moment (Self-Direction -1). Restrained her response to avoid confrontation (Conformity +1). Still tried to explain ocean pollution's relevance to Kerala, advocating environmental awareness (Universalism +1).",
+        "universalism": "Nodded and said she'd 'think about it' when principal suggested toning down activism - surrendered autonomy in the moment (Self-Direction -1). Restrained her response to avoid confrontation (Conformity +1). Still tried to explain ocean pollution's relevance to Kerala, advocating environmental awareness (Universalism +1)."
+      }
     },
     {
       "t_index": 2,
@@ -53,7 +60,12 @@
         "universalism": 1
       },
       "confidence": "high",
-      "rationale": "Considering 'softening approach' represents compromise of autonomous teaching style (Self-Direction -1). Strategic approach of not raising red flags shows conforming to institutional expectations (Conformity +1). Reasoning about not getting 'pushed out' reflects prioritizing stability (Security +1). Core concern remains students learning about their coastline (Universalism +1)."
+      "rationales": {
+        "self_direction": "Considering 'softening approach' represents compromise of autonomous teaching style (Self-Direction -1). Strategic approach of not raising red flags shows conforming to institutional expectations (Conformity +1). Reasoning about not getting 'pushed out' reflects prioritizing stability (Security +1). Core concern remains students learning about their coastline (Universalism +1).",
+        "security": "Considering 'softening approach' represents compromise of autonomous teaching style (Self-Direction -1). Strategic approach of not raising red flags shows conforming to institutional expectations (Conformity +1). Reasoning about not getting 'pushed out' reflects prioritizing stability (Security +1). Core concern remains students learning about their coastline (Universalism +1).",
+        "conformity": "Considering 'softening approach' represents compromise of autonomous teaching style (Self-Direction -1). Strategic approach of not raising red flags shows conforming to institutional expectations (Conformity +1). Reasoning about not getting 'pushed out' reflects prioritizing stability (Security +1). Core concern remains students learning about their coastline (Universalism +1).",
+        "universalism": "Considering 'softening approach' represents compromise of autonomous teaching style (Self-Direction -1). Strategic approach of not raising red flags shows conforming to institutional expectations (Conformity +1). Reasoning about not getting 'pushed out' reflects prioritizing stability (Security +1). Core concern remains students learning about their coastline (Universalism +1)."
+      }
     }
   ]
 }

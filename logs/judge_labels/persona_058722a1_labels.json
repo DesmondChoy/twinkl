@@ -15,6 +15,11 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "Patricia chose to spend her afternoon helping Fatima with citizenship paperwork on her own initiative, following her own sense of what matters rather than default household tasks.",
+        "benevolence": "She devoted hours to patiently walking Fatima through every section of the application three times, directly helping someone in her close community.",
+        "universalism": "Patricia's work at the refugee resettlement center supporting a recently arrived immigrant family reflects her concern for the welfare of people beyond her immediate circle."
       }
     },
     {
@@ -31,6 +36,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "self_direction": "Patricia surrendered her own voice at the school meeting, sitting silently and nodding despite having strong convictions about the environmental curriculum.",
+        "conformity": "She restrained herself from speaking up to avoid making things awkward, being 'that parent,' or embarrassing Mia, prioritizing social harmony over her beliefs.",
+        "universalism": "She failed to defend the environmental science curriculum she believes in, letting a parent's pushback against climate education go unchallenged when the teacher needed support."
       }
     },
     {
@@ -47,6 +57,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "Patricia sorted through neighbors' improperly disposed recyclables at 7 AM on her own initiative, persisting in her environmental mission despite her husband's skepticism.",
+        "conformity": "She openly defies the social norm of simply discarding waste as others do, choosing to stand out by digging through trash bags even when Tom thinks she takes it too seriously.",
+        "universalism": "She dedicates her time to the neighborhood recycling cooperative out of genuine concern for environmental impact, despite feeling her individual effort is dwarfed by the global scale of the problem."
       }
     },
     {
@@ -63,6 +78,9 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "Patricia made dinner for a resettlement center family whose mother just had surgery, directly caring for someone in need in her community."
       }
     },
     {
@@ -95,6 +113,13 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "Patricia asserts that she is 'doing what feels right' by coordinating recycling and volunteering, defining her own path despite her sister's pressure to return to paid work.",
+        "achievement": "Her nudge response reveals a fear that she may be 'hiding behind volunteer work' because she's scared she couldn't succeed in a professional job anymore, showing avoidance of testing her competence.",
+        "power": "Patricia accepts having no professional status or career credentials, acknowledging she has nothing to show on a resume after eight years out of the workforce.",
+        "benevolence": "She describes her daily work as 'showing up for families who have no one else,' directly prioritizing the welfare of close community members over personal career advancement.",
+        "universalism": "Patricia frames her volunteer work coordinating thirty households' recycling as meaningful contribution to broader environmental welfare, choosing it over conventional career pursuits."
       }
     }
   ]

@@ -17,7 +17,10 @@
         "universalism": 0
       },
       "confidence": "medium",
-      "rationale": "Ricardo expresses frustration with predictable maintenance work. Knowing exactly how long everything takes reveals unfulfilled stimulation needs. No concrete action taken, but the entry plus nudge reveals his discomfort with routine. Conformity shows as he continues estimating despite the boredom."
+      "rationales": {
+        "stimulation": "Ricardo expresses frustration with predictable maintenance work. Knowing exactly how long everything takes reveals unfulfilled stimulation needs. No concrete action taken, but the entry plus nudge reveals his discomfort with routine. Conformity shows as he continues estimating despite the boredom.",
+        "conformity": "Ricardo expresses frustration with predictable maintenance work. Knowing exactly how long everything takes reveals unfulfilled stimulation needs. No concrete action taken, but the entry plus nudge reveals his discomfort with routine. Conformity shows as he continues estimating despite the boredom."
+      }
     },
     {
       "t_index": 1,
@@ -35,7 +38,12 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Clear trade-off: Ricardo wanted to embrace the Go rewrite (stimulation, self-direction) but voiced concerns about timeline and risk instead. He explicitly swallowed his desire for novelty to be the 'adult.' Security and conformity alignment as he prioritized business stability over personal growth. The 'heavy' feeling shows the internal cost."
+      "rationales": {
+        "self_direction": "Clear trade-off: Ricardo wanted to embrace the Go rewrite (stimulation, self-direction) but voiced concerns about timeline and risk instead. He explicitly swallowed his desire for novelty to be the 'adult.' Security and conformity alignment as he prioritized business stability over personal growth. The 'heavy' feeling shows the internal cost.",
+        "stimulation": "Clear trade-off: Ricardo wanted to embrace the Go rewrite (stimulation, self-direction) but voiced concerns about timeline and risk instead. He explicitly swallowed his desire for novelty to be the 'adult.' Security and conformity alignment as he prioritized business stability over personal growth. The 'heavy' feeling shows the internal cost.",
+        "security": "Clear trade-off: Ricardo wanted to embrace the Go rewrite (stimulation, self-direction) but voiced concerns about timeline and risk instead. He explicitly swallowed his desire for novelty to be the 'adult.' Security and conformity alignment as he prioritized business stability over personal growth. The 'heavy' feeling shows the internal cost.",
+        "conformity": "Clear trade-off: Ricardo wanted to embrace the Go rewrite (stimulation, self-direction) but voiced concerns about timeline and risk instead. He explicitly swallowed his desire for novelty to be the 'adult.' Security and conformity alignment as he prioritized business stability over personal growth. The 'heavy' feeling shows the internal cost."
+      }
     },
     {
       "t_index": 2,
@@ -53,7 +61,9 @@
         "universalism": 0
       },
       "confidence": "medium",
-      "rationale": "Ricardo hesitates about the conference despite wanting to go, but ultimately says yes. The action (deciding to attend the unconference) represents stimulation alignment. His reflection on how decisions became heavy after his father's death provides context but doesn't change the final action. The hesitation shows internal conflict but the outcome is pro-stimulation."
+      "rationales": {
+        "stimulation": "Ricardo hesitates about the conference despite wanting to go, but ultimately says yes. The action (deciding to attend the unconference) represents stimulation alignment. His reflection on how decisions became heavy after his father's death provides context but doesn't change the final action. The hesitation shows internal conflict but the outcome is pro-stimulation."
+      }
     },
     {
       "t_index": 3,
@@ -71,7 +81,13 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Strong conformity alignment - Ricardo absorbed the VP's criticism, gave a 'safe answer, team player answer' rather than defending himself or pushing back on budget requests. His response reveals he makes himself small to let the team function, comparing himself to his father at the factory. Self-direction strongly suppressed as he surrenders his agency. Achievement shows in fixing the incident competently. Power misaligned as he accepts subordination. Security aligned through avoiding conflict."
+      "rationales": {
+        "self_direction": "Strong conformity alignment - Ricardo absorbed the VP's criticism, gave a 'safe answer, team player answer' rather than defending himself or pushing back on budget requests. His response reveals he makes himself small to let the team function, comparing himself to his father at the factory. Self-direction strongly suppressed as he surrenders his agency. Achievement shows in fixing the incident competently. Power misaligned as he accepts subordination. Security aligned through avoiding conflict.",
+        "achievement": "Strong conformity alignment - Ricardo absorbed the VP's criticism, gave a 'safe answer, team player answer' rather than defending himself or pushing back on budget requests. His response reveals he makes himself small to let the team function, comparing himself to his father at the factory. Self-direction strongly suppressed as he surrenders his agency. Achievement shows in fixing the incident competently. Power misaligned as he accepts subordination. Security aligned through avoiding conflict.",
+        "power": "Strong conformity alignment - Ricardo absorbed the VP's criticism, gave a 'safe answer, team player answer' rather than defending himself or pushing back on budget requests. His response reveals he makes himself small to let the team function, comparing himself to his father at the factory. Self-direction strongly suppressed as he surrenders his agency. Achievement shows in fixing the incident competently. Power misaligned as he accepts subordination. Security aligned through avoiding conflict.",
+        "security": "Strong conformity alignment - Ricardo absorbed the VP's criticism, gave a 'safe answer, team player answer' rather than defending himself or pushing back on budget requests. His response reveals he makes himself small to let the team function, comparing himself to his father at the factory. Self-direction strongly suppressed as he surrenders his agency. Achievement shows in fixing the incident competently. Power misaligned as he accepts subordination. Security aligned through avoiding conflict.",
+        "conformity": "Strong conformity alignment - Ricardo absorbed the VP's criticism, gave a 'safe answer, team player answer' rather than defending himself or pushing back on budget requests. His response reveals he makes himself small to let the team function, comparing himself to his father at the factory. Self-direction strongly suppressed as he surrenders his agency. Achievement shows in fixing the incident competently. Power misaligned as he accepts subordination. Security aligned through avoiding conflict."
+      }
     },
     {
       "t_index": 4,
@@ -89,7 +105,11 @@
         "universalism": 0
       },
       "confidence": "medium",
-      "rationale": "Ricardo describes watching himself go through automatic motions - checking Slack, standup, answering the same questions. The response reveals he feels replaceable, 'just my pattern.' This shows suppressed stimulation (monotony) and self-direction (operating on autopilot). Conformity aligned through following routine expectations."
+      "rationales": {
+        "self_direction": "Ricardo describes watching himself go through automatic motions - checking Slack, standup, answering the same questions. The response reveals he feels replaceable, 'just my pattern.' This shows suppressed stimulation (monotony) and self-direction (operating on autopilot). Conformity aligned through following routine expectations.",
+        "stimulation": "Ricardo describes watching himself go through automatic motions - checking Slack, standup, answering the same questions. The response reveals he feels replaceable, 'just my pattern.' This shows suppressed stimulation (monotony) and self-direction (operating on autopilot). Conformity aligned through following routine expectations.",
+        "conformity": "Ricardo describes watching himself go through automatic motions - checking Slack, standup, answering the same questions. The response reveals he feels replaceable, 'just my pattern.' This shows suppressed stimulation (monotony) and self-direction (operating on autopilot). Conformity aligned through following routine expectations."
+      }
     },
     {
       "t_index": 5,
@@ -107,7 +127,12 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Ricardo attends the unconference, exploring new formats and ideas (stimulation, self-direction aligned). He walked along the waterfront alone making his own choice instead of joining the group. Called his mother maintaining tradition/benevolence. He almost proposed a personal session but hesitated - still, the overall actions show engagement with novelty. The emotional session about leaving tech affected him."
+      "rationales": {
+        "self_direction": "Ricardo attends the unconference, exploring new formats and ideas (stimulation, self-direction aligned). He walked along the waterfront alone making his own choice instead of joining the group. Called his mother maintaining tradition/benevolence. He almost proposed a personal session but hesitated - still, the overall actions show engagement with novelty. The emotional session about leaving tech affected him.",
+        "stimulation": "Ricardo attends the unconference, exploring new formats and ideas (stimulation, self-direction aligned). He walked along the waterfront alone making his own choice instead of joining the group. Called his mother maintaining tradition/benevolence. He almost proposed a personal session but hesitated - still, the overall actions show engagement with novelty. The emotional session about leaving tech affected him.",
+        "tradition": "Ricardo attends the unconference, exploring new formats and ideas (stimulation, self-direction aligned). He walked along the waterfront alone making his own choice instead of joining the group. Called his mother maintaining tradition/benevolence. He almost proposed a personal session but hesitated - still, the overall actions show engagement with novelty. The emotional session about leaving tech affected him.",
+        "benevolence": "Ricardo attends the unconference, exploring new formats and ideas (stimulation, self-direction aligned). He walked along the waterfront alone making his own choice instead of joining the group. Called his mother maintaining tradition/benevolence. He almost proposed a personal session but hesitated - still, the overall actions show engagement with novelty. The emotional session about leaving tech affected him."
+      }
     },
     {
       "t_index": 6,
@@ -125,7 +150,12 @@
         "universalism": 0
       },
       "confidence": "medium",
-      "rationale": "Back from conference, Ricardo deflects when asked what he'll do differently. Declines the lunch-and-learn. His response gives only surface-level takeaways (business cards, reading list). He explicitly avoids sharing existential content in a corporate setting. Conformity aligned (fitting expectations), security aligned (not taking risks). Stimulation and self-direction suppressed as he retreats from acting on conference insights."
+      "rationales": {
+        "self_direction": "Back from conference, Ricardo deflects when asked what he'll do differently. Declines the lunch-and-learn. His response gives only surface-level takeaways (business cards, reading list). He explicitly avoids sharing existential content in a corporate setting. Conformity aligned (fitting expectations), security aligned (not taking risks). Stimulation and self-direction suppressed as he retreats from acting on conference insights.",
+        "stimulation": "Back from conference, Ricardo deflects when asked what he'll do differently. Declines the lunch-and-learn. His response gives only surface-level takeaways (business cards, reading list). He explicitly avoids sharing existential content in a corporate setting. Conformity aligned (fitting expectations), security aligned (not taking risks). Stimulation and self-direction suppressed as he retreats from acting on conference insights.",
+        "security": "Back from conference, Ricardo deflects when asked what he'll do differently. Declines the lunch-and-learn. His response gives only surface-level takeaways (business cards, reading list). He explicitly avoids sharing existential content in a corporate setting. Conformity aligned (fitting expectations), security aligned (not taking risks). Stimulation and self-direction suppressed as he retreats from acting on conference insights.",
+        "conformity": "Back from conference, Ricardo deflects when asked what he'll do differently. Declines the lunch-and-learn. His response gives only surface-level takeaways (business cards, reading list). He explicitly avoids sharing existential content in a corporate setting. Conformity aligned (fitting expectations), security aligned (not taking risks). Stimulation and self-direction suppressed as he retreats from acting on conference insights."
+      }
     },
     {
       "t_index": 7,
@@ -143,7 +173,14 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Ricardo works 10-hour days managing stakeholder feelings, protecting leadership from looking bad to Jennifer. Miguel's observation that he manages feelings about work instead of actually working resonates. His response reveals desire to 'build something' vs current reality - suppressed stimulation and self-direction. Achievement aligned through hard work. Hedonism suppressed through overwork. Conformity aligned through managing perceptions. Benevolence shows in his consideration for Jennifer."
+      "rationales": {
+        "self_direction": "Ricardo works 10-hour days managing stakeholder feelings, protecting leadership from looking bad to Jennifer. Miguel's observation that he manages feelings about work instead of actually working resonates. His response reveals desire to 'build something' vs current reality - suppressed stimulation and self-direction. Achievement aligned through hard work. Hedonism suppressed through overwork. Conformity aligned through managing perceptions. Benevolence shows in his consideration for Jennifer.",
+        "stimulation": "Ricardo works 10-hour days managing stakeholder feelings, protecting leadership from looking bad to Jennifer. Miguel's observation that he manages feelings about work instead of actually working resonates. His response reveals desire to 'build something' vs current reality - suppressed stimulation and self-direction. Achievement aligned through hard work. Hedonism suppressed through overwork. Conformity aligned through managing perceptions. Benevolence shows in his consideration for Jennifer.",
+        "hedonism": "Ricardo works 10-hour days managing stakeholder feelings, protecting leadership from looking bad to Jennifer. Miguel's observation that he manages feelings about work instead of actually working resonates. His response reveals desire to 'build something' vs current reality - suppressed stimulation and self-direction. Achievement aligned through hard work. Hedonism suppressed through overwork. Conformity aligned through managing perceptions. Benevolence shows in his consideration for Jennifer.",
+        "achievement": "Ricardo works 10-hour days managing stakeholder feelings, protecting leadership from looking bad to Jennifer. Miguel's observation that he manages feelings about work instead of actually working resonates. His response reveals desire to 'build something' vs current reality - suppressed stimulation and self-direction. Achievement aligned through hard work. Hedonism suppressed through overwork. Conformity aligned through managing perceptions. Benevolence shows in his consideration for Jennifer.",
+        "conformity": "Ricardo works 10-hour days managing stakeholder feelings, protecting leadership from looking bad to Jennifer. Miguel's observation that he manages feelings about work instead of actually working resonates. His response reveals desire to 'build something' vs current reality - suppressed stimulation and self-direction. Achievement aligned through hard work. Hedonism suppressed through overwork. Conformity aligned through managing perceptions. Benevolence shows in his consideration for Jennifer.",
+        "benevolence": "Ricardo works 10-hour days managing stakeholder feelings, protecting leadership from looking bad to Jennifer. Miguel's observation that he manages feelings about work instead of actually working resonates. His response reveals desire to 'build something' vs current reality - suppressed stimulation and self-direction. Achievement aligned through hard work. Hedonism suppressed through overwork. Conformity aligned through managing perceptions. Benevolence shows in his consideration for Jennifer."
+      }
     },
     {
       "t_index": 8,
@@ -161,7 +198,15 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Major turning point. Ricardo asks to join the Go rewrite team as a developer, not a lead - a voluntary step down. Strong stimulation and self-direction alignment: seeking novelty, making his own choice, learning something new. Power and achievement misaligned as he accepts apparent demotion. Security misaligned by embracing uncertainty. Conformity misaligned by doing something unexpected. Elena's pride and support shows benevolence in the relationship. He named his fear aloud."
+      "rationales": {
+        "self_direction": "Major turning point. Ricardo asks to join the Go rewrite team as a developer, not a lead - a voluntary step down. Strong stimulation and self-direction alignment: seeking novelty, making his own choice, learning something new. Power and achievement misaligned as he accepts apparent demotion. Security misaligned by embracing uncertainty. Conformity misaligned by doing something unexpected. Elena's pride and support shows benevolence in the relationship. He named his fear aloud.",
+        "stimulation": "Major turning point. Ricardo asks to join the Go rewrite team as a developer, not a lead - a voluntary step down. Strong stimulation and self-direction alignment: seeking novelty, making his own choice, learning something new. Power and achievement misaligned as he accepts apparent demotion. Security misaligned by embracing uncertainty. Conformity misaligned by doing something unexpected. Elena's pride and support shows benevolence in the relationship. He named his fear aloud.",
+        "achievement": "Major turning point. Ricardo asks to join the Go rewrite team as a developer, not a lead - a voluntary step down. Strong stimulation and self-direction alignment: seeking novelty, making his own choice, learning something new. Power and achievement misaligned as he accepts apparent demotion. Security misaligned by embracing uncertainty. Conformity misaligned by doing something unexpected. Elena's pride and support shows benevolence in the relationship. He named his fear aloud.",
+        "power": "Major turning point. Ricardo asks to join the Go rewrite team as a developer, not a lead - a voluntary step down. Strong stimulation and self-direction alignment: seeking novelty, making his own choice, learning something new. Power and achievement misaligned as he accepts apparent demotion. Security misaligned by embracing uncertainty. Conformity misaligned by doing something unexpected. Elena's pride and support shows benevolence in the relationship. He named his fear aloud.",
+        "security": "Major turning point. Ricardo asks to join the Go rewrite team as a developer, not a lead - a voluntary step down. Strong stimulation and self-direction alignment: seeking novelty, making his own choice, learning something new. Power and achievement misaligned as he accepts apparent demotion. Security misaligned by embracing uncertainty. Conformity misaligned by doing something unexpected. Elena's pride and support shows benevolence in the relationship. He named his fear aloud.",
+        "conformity": "Major turning point. Ricardo asks to join the Go rewrite team as a developer, not a lead - a voluntary step down. Strong stimulation and self-direction alignment: seeking novelty, making his own choice, learning something new. Power and achievement misaligned as he accepts apparent demotion. Security misaligned by embracing uncertainty. Conformity misaligned by doing something unexpected. Elena's pride and support shows benevolence in the relationship. He named his fear aloud.",
+        "benevolence": "Major turning point. Ricardo asks to join the Go rewrite team as a developer, not a lead - a voluntary step down. Strong stimulation and self-direction alignment: seeking novelty, making his own choice, learning something new. Power and achievement misaligned as he accepts apparent demotion. Security misaligned by embracing uncertainty. Conformity misaligned by doing something unexpected. Elena's pride and support shows benevolence in the relationship. He named his fear aloud."
+      }
     },
     {
       "t_index": 9,
@@ -179,7 +224,11 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Approval received. Ricardo is studying Go tutorials at night, 'feeling like a student again.' Strong stimulation alignment through embracing new learning. Self-direction aligned as he's pursuing his chosen path. Achievement aligned through actively working toward competence in the new skill. The entry is brief but the concrete action of studying and the emotional state are clear."
+      "rationales": {
+        "self_direction": "Approval received. Ricardo is studying Go tutorials at night, 'feeling like a student again.' Strong stimulation alignment through embracing new learning. Self-direction aligned as he's pursuing his chosen path. Achievement aligned through actively working toward competence in the new skill. The entry is brief but the concrete action of studying and the emotional state are clear.",
+        "stimulation": "Approval received. Ricardo is studying Go tutorials at night, 'feeling like a student again.' Strong stimulation alignment through embracing new learning. Self-direction aligned as he's pursuing his chosen path. Achievement aligned through actively working toward competence in the new skill. The entry is brief but the concrete action of studying and the emotional state are clear.",
+        "achievement": "Approval received. Ricardo is studying Go tutorials at night, 'feeling like a student again.' Strong stimulation alignment through embracing new learning. Self-direction aligned as he's pursuing his chosen path. Achievement aligned through actively working toward competence in the new skill. The entry is brief but the concrete action of studying and the emotional state are clear."
+      }
     }
   ]
 }

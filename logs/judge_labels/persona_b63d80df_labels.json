@@ -15,6 +15,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "power": "Despite running the committee for six years without a single failed event, she absorbed Meena aunty's public jab about her being too controlling, losing face in front of the group without defending her authority.",
+        "conformity": "She stayed quiet rather than defending herself because responding would have looked exactly like the controlling behavior she was being accused of, choosing to maintain social harmony over self-advocacy."
       }
     },
     {
@@ -31,6 +35,9 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "She prepared and delivered three containers of biryani to the Sharma family whose son just had surgery, showing up at their door because she believes in being the person who comes when people need you."
       }
     },
     {
@@ -47,6 +54,9 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "She spent an hour consoling her thirteen-year-old daughter Priya after she was excluded from a birthday party, prioritizing her child's emotional needs despite being exhausted herself."
       }
     },
     {
@@ -63,6 +73,11 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She said yes to hosting her in-laws for six weeks instead of two before even thinking about it, admitting she wanted to say 'let me check with Ravi first' but instead absorbed the request automatically.",
+        "conformity": "She agreed to the extended hosting because Lakshmi framed her as the only solution and family expectations made refusal unthinkable, noting that 'wanting and doing are different things.'",
+        "benevolence": "She is already reorganizing her household to accommodate her in-laws — clearing Priya's room, planning separate low-sodium meals for Appa, adjusting the bathroom schedule — to care for extended family."
       }
     },
     {
@@ -79,6 +94,10 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She catalogues her competence in detail — coordinating five schedules, managing three school systems, finding Ravi's passport in twenty minutes, sewing a costume until midnight, proofreading seven essays — defending the scale of her accomplishments.",
+        "benevolence": "Every example she cites is an act of service for her family — finding the passport, sewing the costume, proofreading essays — demonstrating deep investment in the welfare of her close others."
       }
     },
     {
@@ -95,6 +114,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She volunteered to step back from leading the Navratri planning, making a deliberate choice to let go of a role she has held for years rather than continuing on autopilot.",
+        "power": "She relinquished control over the vendor contracts and volunteer schedules she had been managing, voluntarily giving up her position of authority in the committee."
       }
     },
     {
@@ -111,6 +134,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She made chai and sat on the balcony for fifteen minutes doing nothing, choosing an unstructured moment for herself that she cannot remember having in a long time.",
+        "hedonism": "She enjoyed the simple pleasure of chai on the balcony with only the crows for company, taking a break purely for her own enjoyment rather than serving others."
       }
     },
     {
@@ -127,6 +154,9 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "She takes pride in Vikram's kindness — his food drive for struggling international students, his unprompted call just to talk — reflecting the caregiving values she modeled through actions like the Sharma biryani deliveries."
       }
     },
     {
@@ -143,6 +173,9 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "conformity": "When her in-laws arrived four days early due to Lakshmi's rescheduled flight, she absorbed the disruption without complaint, noting that Amma noticed the unaired mattress sheets but she was 'too tired to care.'"
       }
     },
     {
@@ -159,6 +192,11 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She did not push back when Amma reorganized her spice cabinet, and Ravi just shrugged, leaving her feeling that even in her own home she has no say over her own domain.",
+        "conformity": "She accepted Amma's rearrangement of her kitchen without protest because her mother-in-law is seventy-two and a guest, and made everyone's favorite dinner anyway rather than causing friction.",
+        "benevolence": "Despite her frustration, she cooked everyone's favorite dinner, continuing to care for the whole household's needs even when she feels her own boundaries are being crossed."
       }
     },
     {
@@ -175,6 +213,10 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "power": "She reminded Priya three times about homework and insists that 'someone has to keep track of things,' maintaining her role as the household's central authority and rejecting the idea of letting go of control.",
+        "benevolence": "She pushes Priya about homework and manages every detail because she genuinely fears her daughter will coast without support, and she carries the burden of being the parent who is held accountable."
       }
     },
     {
@@ -191,6 +233,11 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She finally told Amma that this is her house and her family and she has been managing fine for twenty years, asserting her own authority and boundaries for the first time during the visit.",
+        "conformity": "She broke from the expected daughter-in-law deference by directly confronting her mother-in-law about the constant corrections and suggestions, which Ravi said was 'too harsh.'",
+        "benevolence": "In her response to the nudge, she articulates that the core of everything she does is wanting her children to remember she showed up and fed people not for control but because 'you cannot love someone properly if you let them go hungry.'"
       }
     }
   ]

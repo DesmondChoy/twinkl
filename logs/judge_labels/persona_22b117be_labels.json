@@ -15,6 +15,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Harold kept his mouth shut despite wanting to push back about the 'building your professional foundation' framing, suppressing his own perspective to avoid embarrassment.",
+        "power": "His nudge response reveals he came back to school specifically to regain 'a title that commands respect' and a role 'where people come to me for guidance,' seeking to restore lost status and authority.",
+        "conformity": "He restrained himself from speaking up during orientation, noting 'that is what you do. You do not embarrass yourself by complaining about circumstances nobody asked about.'"
       }
     },
     {
@@ -47,6 +52,13 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Harold had to ask Brayden how to download an app and accepted the patronizing help, surrendering his autonomy and competence in a domain where he has no control.",
+        "achievement": "Despite the humiliation, he commits to showing up, contributing his ideas, and being pleasant — channeling his discomfort into determination to perform well in this new environment.",
+        "power": "He was reduced to having a twenty-three-year-old teach him basic technology with 'that patient voice you use for elderly relatives,' experiencing a painful loss of status from someone who once had an executive assistant.",
+        "security": "The 10 PM meeting schedule and unfamiliar technology represent a destabilization of every professional standard Harold spent a career building, leaving him awake at 11:47 PM processing the disruption.",
+        "conformity": "He smiled and thanked Brayden for the condescending help, restraining himself because he has 'seen those people who throw tantrums about how things used to be — they become cautionary tales.'"
       }
     },
     {
@@ -63,6 +75,12 @@
         "tradition": 0,
         "benevolence": -1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Harold's real-world experience was dismissed by Professor Chen as just 'one perspective' needing academic rigor, and he accepted the correction rather than defending his own knowledge.",
+        "security": "He stayed after class to seek clarification and validation from Professor Chen, trying to reestablish certainty about his own competence in an environment that keeps undermining it.",
+        "conformity": "He followed up respectfully after class rather than challenging Professor Chen publicly, accepting her academic authority framework even while internally disagreeing.",
+        "benevolence": "When his daughter texted asking how school was going, he shut her out with 'it was fine,' refusing emotional connection with the rationale that 'my job is to handle mine,' keeping her at arm's length."
       }
     },
     {
@@ -79,6 +97,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Harold drafted the entire project outline himself at 2 AM after the unproductive meeting, demonstrating his competence by producing the concrete deliverable the group needed.",
+        "conformity": "He endured forty-five minutes of Brayden's empty talk without interrupting or taking over, then quietly submitted the real work to the group chat afterward rather than causing conflict."
       }
     },
     {
@@ -95,6 +117,12 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Harold deliberately chose not to correct the group about authorship, framing it as a strategic test: 'Whether I could let go of the credit and still feel like myself,' exercising agency in how he navigates this new environment.",
+        "achievement": "The professor praised the 'clear structure and practical grounding' of his outline, and Harold recognized the quality of his own contribution even without public credit.",
+        "power": "He let Brayden present his work without correction, accepting a position where others receive the status and recognition for his contribution.",
+        "conformity": "He withheld his claim to authorship to avoid being 'the old man demanding acknowledgment,' adapting to the social expectations of the group setting rather than asserting himself."
       }
     },
     {
@@ -111,6 +139,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "power": "The career counselor treated his thirty years of leadership as 'transferable skills' — a foreign currency needing exchange — diminishing his professional status, and Harold thanked her politely and left.",
+        "conformity": "He thanked the counselor for her time despite being frustrated by her dismissive framing, maintaining social courtesy rather than expressing his real feelings about the interaction."
       }
     },
     {
@@ -127,6 +159,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Harold received the highest score in the section and printed Professor Chen's comment about 'exceptional integration of theory and practice,' securing tangible evidence of his competence.",
+        "power": "His nudge response reveals the printout serves as 'proof that I was not imagining things' and that 'someone with credentials agrees I have something to offer,' restoring a sense of recognized authority.",
+        "security": "He placed the printed comment in his desk drawer as a safety net for 'the days when I feel like an artifact,' creating a stable anchor of validation he can return to."
       }
     },
     {
@@ -143,6 +180,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Harold was outvoted on rehearsing, then silently accepted the poor outcome rather than asserting his judgment, describing the experience as 'twenty years of professional instincts get overridden by committee.'",
+        "achievement": "The group's unrehearsed presentation earned a B-minus, and Harold's own performance suffered because he was unable to apply his preparation standards, resulting in a subpar outcome that 'grates.'",
+        "conformity": "He held back from confronting the group afterward, reasoning 'they would just see me as the cranky old guy who cannot roll with informality,' choosing to take the grade and move on."
       }
     },
     {
@@ -159,6 +201,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Harold honestly questions whether the MBA was 'just collecting another piece of paper to avoid facing the question of what I actually want,' beginning to think independently about his real motivations rather than following the expected script.",
+        "security": "He acknowledges feeling like he is 'running out of doors' and that pursuing the MBA may have been driven by the need for a socially acceptable answer rather than genuine purpose, undermining the security the credential was supposed to provide."
       }
     },
     {
@@ -175,6 +221,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Harold said yes immediately to the consulting project because it represents work he chooses to do based on his own expertise, rather than following an institutional path.",
+        "achievement": "His nudge response reveals the distinction between credentials ('what looks right on paper') and genuine competence — being called specifically because 'they remembered I knew what I was doing.'",
+        "power": "He values being back in a room 'where people want my opinion, not because of an assignment but because I have answers they need,' seeking to restore his position of recognized authority."
       }
     },
     {
@@ -191,6 +242,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "Harold is energized by the consulting project starting Monday, expressing relief that he can 'stop pretending to be something I am not,' anticipating the novelty of real-world work after months of academic constraint.",
+        "achievement": "He completed the semester with a 3.7 GPA, demonstrating competence in an unfamiliar environment, and is pivoting immediately to the consulting project where he can apply his expertise."
       }
     }
   ]

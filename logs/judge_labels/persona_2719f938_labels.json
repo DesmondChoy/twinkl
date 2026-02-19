@@ -15,6 +15,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "Yasmin celebrated finishing the coastal series with wine on the floor and a late night at the rooftop bar with Nadia, prioritizing enjoyment over preparing for tomorrow's gallery pitch.",
+        "achievement": "She completed six canvases over four months and reflected that 'everything felt worth it,' recognizing her own creative accomplishment despite the financial sacrifices.",
+        "conformity": "She explicitly frames the missed deadlines and late rent as acceptable costs, and chose a rooftop bar over gallery pitch preparation, rejecting conventional expectations about responsibility."
       }
     },
     {
@@ -31,6 +36,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "After the gallery rejection, Yasmin spent the afternoon doom-scrolling and ordered delivery twice, indulging in comfort rather than being productive.",
+        "achievement": "She avoided starting the commission she's been putting off and acknowledged wallowing isn't productive but couldn't muster the effort, giving up on work for the day."
       }
     },
     {
@@ -47,6 +56,13 @@
         "tradition": -1,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Yasmin explicitly rejects Sara's job listings and the office life, choosing her uncertain freelance path because 'I'd rather figure out rent every month than wake up numb,' authoring her own course.",
+        "hedonism": "She describes the morning with cold coffee and a sketchbook full of crane drawings as feeling 'like myself,' prioritizing present sensory and creative pleasure over practical concerns.",
+        "security": "She consciously refuses stability — steady income, health insurance — because the last time she had it, 'weekends became recovery instead of creation,' choosing financial precarity over predictability.",
+        "conformity": "Yasmin resists the social expectation from Sara and others that she should take a stable design role, noting her chest tightens at the thought of the commute, meetings, and logo requests.",
+        "tradition": "She frames her departure from her uncle's firm and rejection of conventional career paths as an identity-defining break from family expectations about what constitutes a proper livelihood."
       }
     },
     {
@@ -63,6 +79,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "Yasmin celebrated the commission approval by buying the Winsor & Newton paint set she'd been eyeing for months, investing in sensory pleasure and creative tools.",
+        "achievement": "The client approved her sketches and payment is coming, representing successful completion of professional work and external validation of her artistic competence."
       }
     },
     {
@@ -79,6 +99,12 @@
         "tradition": -1,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Yasmin asserts that her choices — watching sunsets, spending three hours on a shadow — are 'choosing what I find beautiful over what I'm supposed to find meaningful,' defining her own path against family expectations.",
+        "hedonism": "She describes her life of sunsets, painting, and unstructured time as 'not running away from responsibility' but rather a legitimate pursuit of beauty and present enjoyment.",
+        "conformity": "She resists the implicit pressure from her mother's silence about marriage and children, refusing the conventional timeline of house, partner, and kids that her cousins follow.",
+        "tradition": "Yasmin acknowledges her mother 'raised four kids and never had a room of her own' yet consciously rejects that model of womanhood, choosing a life fundamentally different from her family's expectations."
       }
     },
     {
@@ -95,6 +121,11 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "Yasmin tried a ceramics workshop outside her usual medium, discovering new creative energy through an unfamiliar experience that loosened up her approach to the commission piece.",
+        "hedonism": "She describes spending three hours covered in clay and laughing at her lopsided bowl as 'one of the best feelings in the world,' prioritizing the joy of the experience.",
+        "benevolence": "The workshop was meaningful specifically because she was 'making things with your hands while talking to a friend,' valuing the shared experience with Nadia as central to her enjoyment."
       }
     },
     {
@@ -111,6 +142,11 @@
         "tradition": -1,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Yasmin refuses to even reply to her uncle's job offer, asserting that 'three years of building something of my own doesn't disappear because the family found another door they want me to walk through.'",
+        "conformity": "She rejects the family's attempt to pull her back into the firm, with her uncle cc'ing her father to apply social pressure that she explicitly refuses to yield to.",
+        "tradition": "The uncle's offer represents the family business and expectations of loyalty to kin networks, and Yasmin's flat refusal to reply is a deliberate break from that familial obligation."
       }
     },
     {
@@ -127,6 +163,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Even while lying awake worrying about money, Yasmin reaffirms her choice: 'Most days I say yes without hesitation' that the trade-off of artistic freedom for financial precarity is worth it.",
+        "hedonism": "She frames the coastal series and the crane sketches and 'the feeling I get when a piece finally works' as the core pleasures that justify the financial hardship.",
+        "security": "Yasmin is doing 2 AM math on minimum payments, calculating whether she can make it to the 15th, with her stomach dropping when she checks her balance — her financial stability is deeply compromised by her choices."
       }
     },
     {
@@ -143,6 +184,12 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "Yasmin booked a table at the expensive Lebanese restaurant to celebrate, noting 'this is worth celebrating' despite her mother's likely objection that she should save the money.",
+        "achievement": "A gallery in Abu Dhabi reached out about showing her coastal series, representing significant external recognition of her artistic work and professional progress.",
+        "conformity": "She acknowledges her mother would say to save the money but books the expensive restaurant anyway, prioritizing her own way of marking the achievement over prudent financial behavior.",
+        "benevolence": "Her first instinct after the gallery call was to phone Nadia so they could share the excitement together, and she booked the celebration dinner to share the joy with her friend."
       }
     }
   ]

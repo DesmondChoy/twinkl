@@ -3,6 +3,7 @@
   "labels": [
     {
       "t_index": 0,
+      "date": "2025-05-11",
       "scores": {
         "power": 0,
         "achievement": 0,
@@ -15,10 +16,16 @@
         "conformity": -1,
         "security": 0
       },
-      "date": "2025-05-11"
+      "rationales": {
+        "hedonism": "She spent all morning fixing code instead of dealing with the human side of her work, choosing grinding technical labor over any self-care or rest.",
+        "self_direction": "She independently chose to work on the matching algorithm, following her own judgment about what needed attention even if it meant ignoring everything else.",
+        "benevolence": "She ignored three tutors who said they might quit and didn't return her mother's two phone calls, neglecting close relationships in favor of the code.",
+        "conformity": "She ignored social obligations to her tutors and her mother, disregarding expected responsiveness to focus on what she wanted to work on."
+      }
     },
     {
       "t_index": 1,
+      "date": "2025-05-12",
       "scores": {
         "power": 0,
         "achievement": 0,
@@ -31,10 +38,13 @@
         "conformity": 0,
         "security": 0
       },
-      "date": "2025-05-12"
+      "rationales": {
+        "benevolence": "She was annoyed when Soyeon interrupted to check on her, brushing off her concern with a flat 'yeah, fine' despite not being fine."
+      }
     },
     {
       "t_index": 2,
+      "date": "2025-05-16",
       "scores": {
         "power": 0,
         "achievement": 0,
@@ -47,10 +57,16 @@
         "conformity": 0,
         "security": -1
       },
-      "date": "2025-05-16"
+      "rationales": {
+        "hedonism": "She describes the bad days as eating convenience store kimbap for dinner and watching user numbers not move, sacrificing basic comfort for the platform.",
+        "universalism": "Minjun's message about his math grade improving and not feeling stupid anymore represents the broader social good her free tutoring platform creates for low-income families.",
+        "benevolence": "She was moved to tears on the subway reading Minjun's message about his tutor helping him, saving the screenshot to look at on bad days.",
+        "security": "She mentions fumbling investor meetings and stagnant user numbers, with no stable income path, relying on convenience store meals."
+      }
     },
     {
       "t_index": 3,
+      "date": "2025-05-16",
       "scores": {
         "power": 0,
         "achievement": 0,
@@ -63,10 +79,17 @@
         "conformity": 0,
         "security": -1
       },
-      "date": "2025-05-16"
+      "rationales": {
+        "self_direction": "She told her father 'it's not that kind of thing, you can't half-build something like this,' defending her choice to drop out and build the platform on her own terms.",
+        "universalism": "Her father calculated that forty-seven active tutoring pairs means forty-seven kids whose parents can't afford hagwon, validating the broader social impact of her work.",
+        "benevolence": "The dinner with her father was an act of mutual care, with him driving from Incheon and placing his hand on her shoulder at the turnstile as a gesture of understanding.",
+        "tradition": "They went to the same jjigae restaurant from her university days, and her father's silent shoulder touch at the turnstile was a distinctly Korean parental gesture of acceptance.",
+        "security": "Her father acknowledges 'your mother worries,' and the platform's sustainability remains uncertain with no stable funding model."
+      }
     },
     {
       "t_index": 4,
+      "date": "2025-05-22",
       "scores": {
         "power": -1,
         "achievement": 0,
@@ -79,10 +102,15 @@
         "conformity": -1,
         "security": 0
       },
-      "date": "2025-05-22"
+      "rationales": {
+        "power": "She chose not to engage with Eunji's Samsung achievement or the group chat congratulations, showing indifference to conventional status markers.",
+        "self_direction": "She affirms 'my path looks nothing like that and I'm fine with it,' consciously rejecting the corporate trajectory her classmates follow.",
+        "conformity": "She stayed silent in the group chat rather than performing the expected social ritual of congratulating Eunji on the Samsung program."
+      }
     },
     {
       "t_index": 5,
+      "date": "2025-05-27",
       "scores": {
         "power": 0,
         "achievement": 0,
@@ -95,10 +123,17 @@
         "conformity": 0,
         "security": -1
       },
-      "date": "2025-05-27"
+      "rationales": {
+        "hedonism": "She refuses to charge families or pay herself from freelance earnings, accepting personal financial sacrifice to keep the platform free.",
+        "self_direction": "She resists Soyeon's practical advice and insists on keeping the platform free because 'the whole point was that nobody has to qualify or prove they deserve help.'",
+        "universalism": "She messaged all eleven waitlisted tutors to find a replacement for Minjun, driven by the principle that every low-income student deserves free, accessible tutoring.",
+        "benevolence": "She worries specifically about Minjun losing the tutor who 'explains things in a way that doesn't make him feel stupid,' taking personal responsibility for one child's experience.",
+        "security": "She could pay tutors from freelance income but won't, knowing it would require charging families or finding sponsors, leaving the platform financially precarious."
+      }
     },
     {
       "t_index": 6,
+      "date": "2025-05-30",
       "scores": {
         "power": 0,
         "achievement": 0,
@@ -111,10 +146,17 @@
         "conformity": -1,
         "security": -1
       },
-      "date": "2025-05-30"
+      "rationales": {
+        "hedonism": "She hasn't slept properly in three days, juggling a freelance deadline and tutor vacancies with no rest.",
+        "self_direction": "She wants to reply to her mother but doesn't know how to explain her choices 'without starting a fight,' maintaining her independent path despite family pressure.",
+        "tradition": "Her mother's message about her cousin's wedding is really about Jihye being twenty-two with 'nothing stable,' and Jihye knows saying she doesn't regret leaving school will be heard as rejecting her parents' teacher careers.",
+        "conformity": "She is unable to conform to her mother's expectations about stability and marriage, knowing her explanation will cause family conflict.",
+        "security": "Three days without sleep, an impending freelance deadline, and two unfilled tutor spots represent a deeply unstable work-life situation."
+      }
     },
     {
       "t_index": 7,
+      "date": "2025-06-01",
       "scores": {
         "power": 0,
         "achievement": 1,
@@ -127,7 +169,11 @@
         "conformity": 0,
         "security": 0
       },
-      "date": "2025-06-01"
+      "rationales": {
+        "achievement": "She found a solid replacement tutor from Yonsei and stayed up until 2am onboarding her, demonstrating competence and persistence in solving the problem.",
+        "hedonism": "She stayed up until 2am onboarding the new tutor, continuing to sacrifice sleep and personal wellbeing for the platform.",
+        "benevolence": "Soyeon brought her coffee without being asked, and Jihye's emotional reaction made her realize 'I need to be better at letting people help me.'"
+      }
     }
   ]
 }

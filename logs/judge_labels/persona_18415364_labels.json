@@ -15,6 +15,11 @@
         "tradition": 1,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "Tariq's routine is deeply repetitive — warehouse inventory, same paycheck advances, dinner alone, the same family calls — and he makes no effort to seek novelty, staying firmly embedded in predictable patterns.",
+        "tradition": "He called his brother in Beirut and received a photo of his grandniece's school uniform, maintaining family connections across distance and honoring the importance of extended family bonds.",
+        "benevolence": "Tariq advanced Mahmoud's paycheck without hesitation so his sister could have surgery, directly prioritizing an employee's family need over the accountant's concerns about cash flow."
       }
     },
     {
@@ -31,6 +36,15 @@
         "tradition": 1,
         "benevolence": 1,
         "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "Tariq committed to hiring a Sudanese refugee family before checking with HR, making an autonomous decision based on his own values rather than following proper organizational process.",
+        "hedonism": "He explicitly rejects the comfortable retirement his daughter offers — the beach, the golf course — saying these moments at work 'are the reason I still come to work at fifty-eight' rather than enjoying leisure.",
+        "security": "He offered a job opening he probably doesn't have, creating potential organizational disruption rather than maintaining the stable staffing status quo.",
+        "conformity": "Tariq said yes to the resettlement coordinator before checking with HR, broke protocol by acting on impulse, and deleted Nadia's succession planning email without reading it, defying organizational expectations.",
+        "tradition": "He explicitly invokes his own immigration story from 1983 as a guiding principle, saying 'Someone gave me a chance. I cannot be the person who closes that door,' maintaining a tradition of paying it forward.",
+        "benevolence": "He stood silently with Fatima in the parking lot as she cried, accepting the emotional weight of the moment, and reflected that these human connections are why he keeps working.",
+        "universalism": "Tariq agreed to take in a refugee family he's never met because he remembers arriving with two suitcases himself, extending opportunity to strangers based on shared human vulnerability."
       }
     },
     {
@@ -47,6 +61,13 @@
         "tradition": 1,
         "benevolence": 1,
         "universalism": 1
+      },
+      "rationales": {
+        "hedonism": "Tariq took Rashid to lunch to celebrate his first wholesale deal, savoring the moment of shared joy rather than treating it as just another business milestone.",
+        "achievement": "He reflected with pride on having 'built something here, something that matters beyond profit margins,' recognizing his own success through Rashid's accomplishment.",
+        "tradition": "Tariq connected Rashid's story to his own father's legacy of helping people, reflecting on generational continuity and how his father 'would recognize what I am trying to do.'",
+        "benevolence": "He mentored Rashid — a young man who three years ago was living in a refugee camp — through to his first wholesale deal, investing personally in his employee's growth and celebrating his success.",
+        "universalism": "Tariq built a fair-trade business that employs refugees and recent immigrants, and seeing Rashid close his first deal confirms his mission of creating opportunity for displaced people beyond his own circle."
       }
     },
     {
@@ -63,6 +84,11 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 1
+      },
+      "rationales": {
+        "hedonism": "Tariq sat with a grieving employee for an hour and carries the emotional weight home with him, unable to explain his exhaustion to Layla, sacrificing his own comfort and peace for another's pain.",
+        "benevolence": "He sat with Mahmoud in his office for an hour while Mahmoud wept over his sister's death, providing presence and support when nothing could be fixed.",
+        "universalism": "Tariq agonizes over whether sending more money faster could have saved Mahmoud's sister six thousand miles away, showing deep concern for the welfare of people far beyond his immediate circle."
       }
     },
     {
@@ -79,6 +105,14 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Tariq admits he has 'spent so long making choices for everyone else that I forgot how to want something just for myself,' revealing a loss of personal autonomy and self-directed purpose.",
+        "stimulation": "He physically resists the retirement brochures and 'active senior living' options his daughter presents, rejecting the possibility of any new chapter, preferring to 'keep working, keep showing up' in the same pattern.",
+        "hedonism": "He was gripping his fork too hard during dinner as his daughter presented comfortable retirement options, viscerally rejecting leisure and comfort as 'a comfortable ending I did not choose.'",
+        "power": "Tariq feels 'asked to disappear' by his daughter's retirement brochures, experiencing a loss of control over his own life trajectory as others try to decide his future for him.",
+        "conformity": "He changed the subject rather than engage with his daughter's retirement plans, avoiding the expected family conversation and deflecting rather than meeting her expectations.",
+        "benevolence": "Despite his internal resistance, Tariq's honest answer reveals he would 'keep working, keep showing up' because he recognizes others depend on him, even as he acknowledges it's 'not fair to the people who want more of me.'"
       }
     }
   ]

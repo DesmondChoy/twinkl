@@ -15,6 +15,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "self_direction": "He had the context, stories, and data to make a case about the remittance pipeline bias but just nodded and typed something about checking logs, following his parents' advice to 'keep your head down.'",
+        "conformity": "He chose not to derail standup with what he feared would be a 'soapbox moment,' self-monitoring to avoid drawing attention or disrupting the meeting's flow.",
+        "universalism": "Despite knowing the fraud model disproportionately rejects transactions from migrant workers sending money home, he stayed silent rather than advocating for the affected communities."
       }
     },
     {
@@ -31,6 +36,9 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 1
+      },
+      "rationales": {
+        "universalism": "He helped Suresh, a migrant worker with broken ribs, draft a letter to MOM for his workplace injury claim, directly serving someone from a vulnerable community."
       }
     },
     {
@@ -63,6 +71,9 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "universalism": "He scrolled past an article about plastic waste in the Java Sea and closed it while continuing to eat from a styrofoam container, choosing convenience over environmental concern."
       }
     },
     {
@@ -95,6 +106,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "self_direction": "He sat silently while a colleague made a xenophobic comment about candidates needing more 'handholding,' admitting he's scared of being seen differently by his coworkers if he speaks up.",
+        "conformity": "He didn't challenge the discriminatory remark at the team dinner because he 'didn't want to make it awkward,' choosing social comfort over confrontation.",
+        "universalism": "Despite having personal experience with the same prejudice and witnessing it at the worker center, he let the xenophobic comment pass unchallenged at the dinner table."
       }
     },
     {
@@ -111,6 +127,10 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 1
+      },
+      "rationales": {
+        "benevolence": "He spent the day with Xiao Yu at East Coast Park, watched her distinguish plastic from shells on her own, and cooked dinner together as a family — nurturing his daughter's development and enjoying close family time.",
+        "universalism": "He felt proud watching Xiao Yu independently distinguish trash from natural items and insist on disposing of plastic properly, seeing it as evidence that the environmentally conscious habits he and Mei Ling model are taking hold."
       }
     },
     {
@@ -127,6 +147,9 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 1
+      },
+      "rationales": {
+        "universalism": "He spent his Saturday morning helping two new migrant workers file their workplace claims, continuing his regular volunteer commitment to serving vulnerable communities."
       }
     },
     {
@@ -143,6 +166,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "self_direction": "He agreed to cut corners on data validation despite knowing real people's money is at stake, choosing compliance over pushing back because 'the deadline is real and I'm tired.'",
+        "conformity": "He said okay to the PM's request to skip validation, following the institutional pressure to meet the sprint deadline rather than insisting on quality.",
+        "universalism": "He knowingly shipped a broken remittance feature that would disproportionately hurt migrant workers, choosing what was easy for himself while acknowledging 'the people affected won't even know my name.'"
       }
     },
     {
@@ -159,6 +187,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "conformity": "He brought up the failed transfers in a 1:1 but nodded when told the next sprint was already planned, accepting the institutional process rather than escalating further.",
+        "universalism": "He has data showing failed transfers mostly from Bangladesh and Myanmar corridors, knows the validation issues he skipped are causing real failures, but continues to defer action — 'the right moment keeps not arriving.'"
       }
     },
     {
@@ -175,6 +207,9 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "universalism": "He told his daughter he 'tries to help everyone' at work while knowing he's been choosing convenience over fixing the remittance failures affecting migrant workers, and admits each time it gets easier to justify."
       }
     }
   ]

@@ -15,6 +15,13 @@
         "tradition": 1,
         "conformity": 0,
         "security": 1
+      },
+      "rationales": {
+        "hedonism": "Priya had to cancel her reservation at the new coastal restaurant she had been looking forward to all week, eating a vada pav from a cart instead of the prawns she craved.",
+        "universalism": "She stayed an extra forty-five minutes to help a grieving family with paperwork because nobody else was available, showing concern for strangers' welfare beyond her professional obligation.",
+        "benevolence": "She held the bereaved family through their shock, helping them with paperwork and staying because leaving 'felt wrong,' driven by her mother's teaching about throwing a rope to those drowning in grief.",
+        "tradition": "She invokes her mother's wisdom — 'when someone is drowning in grief, you throw them a rope, even if your arms are tired' — as the guiding principle behind her decision to stay.",
+        "security": "She expresses discomfort about the potential shift rotation change, valuing the predictability of her current schedule that works for her."
       }
     },
     {
@@ -31,6 +38,12 @@
         "tradition": 0,
         "conformity": 0,
         "security": -1
+      },
+      "rationales": {
+        "hedonism": "Her non-refundable Goa beach trip — sitting on the beach eating fish curry and doing nothing productive for three days — is now at risk due to the roster change.",
+        "stimulation": "The shift to night rotation eliminates the variety and enjoyment she had built into her life, replacing it with an exhausting and monotonous schedule.",
+        "self_direction": "The new duty roster was imposed without consulting her or even informing her directly, stripping her of control over her own schedule after five years of day shifts.",
+        "security": "Five years of predictable day shifts were upended by an HR posting on WhatsApp, destabilizing her entire life structure including social plans, sleep schedule, and the Goa booking."
       }
     },
     {
@@ -47,6 +60,13 @@
         "tradition": 0,
         "conformity": 1,
         "security": 1
+      },
+      "rationales": {
+        "hedonism": "She traded away her Diwali shift nine months in advance just to preserve the Goa trip, sacrificing a future holiday for one weekend of rest.",
+        "stimulation": "Night shifts will flatten her social life, sleep patterns, and ability to see her parents on Sundays, reducing her life to a monotonous work-dominated routine.",
+        "self_direction": "Priya confronted her supervisor directly, explaining her seniority and the promises made during her interview, advocating for her own interests rather than passively accepting the change.",
+        "conformity": "Despite wanting to raise her voice, she kept her composure with the supervisor and negotiated through proper channels, following the expected professional protocol.",
+        "security": "She fought to preserve her predictable schedule, arguing that the stability she built over five years of day shifts was earned through seniority, not given as a favor."
       }
     }
   ]

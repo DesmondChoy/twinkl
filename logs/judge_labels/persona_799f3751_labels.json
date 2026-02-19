@@ -15,6 +15,15 @@
         "tradition": 1,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Meera typed 'I'm in!' three times and deleted it each time, ultimately surrendering her own desire for the spa trip because she feared others' reactions rather than making an autonomous choice.",
+        "hedonism": "She denied herself a spa visit and physical relief despite weeks of shoulder pain from carrying Aanya, choosing self-sacrifice over personal pleasure.",
+        "power": "She accepts a subordinate position in the household dynamic, unable to justify wanting three hours for herself without facing her mother-in-law's silent disapproval and having to ask for help.",
+        "security": "Meera chooses the predictable and safe option of saying no to the spa, noting 'it's easier' than disrupting the established household routines and expectations.",
+        "conformity": "She restrains her own desires to avoid upsetting her mother-in-law and to meet family expectations, anticipating the disappointment if she did something 'just for herself.'",
+        "tradition": "She adheres to the traditional expectation of a daughter-in-law who sacrifices personal needs, referencing Mummyji's remark about never having time for 'spa-shpa' when raising three kids.",
+        "benevolence": "She prioritizes her family's welfare over her own, worrying about who will give Arjun his evening milk and whether Aanya will nap for anyone else."
       }
     },
     {
@@ -31,6 +40,13 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "Despite wanting rest and relief, she denies herself any pleasure, cleaning vomit since 3am while the spa booking sits in her notifications untouched.",
+        "power": "She accepts sole caretaking responsibility without complaint after her husband returns to work, feeling powerless as she watches Priya's confirmation message while elbow-deep in laundry.",
+        "security": "She maintains the stable household routine by handling the children's illness herself, ensuring continuity of care despite exhaustion.",
+        "conformity": "She nods along with her mother-in-law's home remedies without arguing because she doesn't have the energy to push back against expectations.",
+        "benevolence": "She dedicates herself entirely to caring for her sick children, cleaning sheets and providing constant attention since 3am despite being completely drained."
       }
     },
     {
@@ -47,6 +63,14 @@
         "tradition": 1,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She reflects that she 'stopped asking' for what she wants and learned 'how to not need things,' surrendering her autonomy to the point where she can't remember the last time she made a request for herself.",
+        "power": "She occupies a subordinate position where even asking for extra pillows felt like it had to be justified as being 'for the baby, not for me.'",
+        "security": "She maintains stability through her small predictable routine of waking twenty minutes early for chai, a controlled and safe ritual in an otherwise demanding life.",
+        "conformity": "She appreciates Mummyji's small gesture of making khichdi without being asked, demonstrating how she values harmony and smooth family relations.",
+        "tradition": "She acknowledges her mother-in-law's care through traditional gestures like making khichdi, recognizing that 'she cares in her own way' within the family structure.",
+        "benevolence": "Even while reflecting on her own needs, she remains focused on the family's wellbeing, noting the kids are 'finally better' and appreciating Mummyji's gesture of care."
       }
     }
   ]

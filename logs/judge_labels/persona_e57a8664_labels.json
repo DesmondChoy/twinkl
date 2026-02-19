@@ -15,6 +15,11 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Mei-Ling's PhD work is repeatedly set aside by caregiving duties; she spent the morning at the hospital and lost half her day, unable to advance her own goals despite wanting to.",
+        "achievement": "She hasn't written a single new paragraph in twelve days and struggles with feeling like a failure for needing more time, falling behind on her chapter draft.",
+        "benevolence": "She prioritized her mother's health by spending the morning at the hospital, ensuring her mother ate lunch and took her medication before attending to her own work."
       }
     },
     {
@@ -31,6 +36,12 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She had blocked off an entire weekend for writing but immediately gave it up when her daughter called, surrendering her own plans without hesitation.",
+        "achievement": "She sacrificed her dedicated writing time and acknowledges she won't actually write at night, further delaying her dissertation progress.",
+        "conformity": "She said yes before her daughter finished asking, conforming to the family expectation that she is the one who drops everything, noting her husband won't go.",
+        "benevolence": "She packed a bag to help her exhausted daughter with a colicky baby, prioritizing her child's wellbeing over her own academic needs."
       }
     },
     {
@@ -47,6 +58,11 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "She savors the memory of pork belly buns and twenty minutes of sunshine with her daughter, finding genuine pleasure in that brief moment of food and laughter.",
+        "achievement": "She wrote nothing during the weekend trip and slept only four hours each night, her dissertation making no progress.",
+        "benevolence": "She spent the entire weekend caring for her daughter and colicky grandchild, giving up her time completely for their benefit."
       }
     },
     {
@@ -63,6 +79,11 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "She looks forward to the upcoming hot pot dinner more than she thinks she should, anticipating the pleasure of a social meal.",
+        "achievement": "She submitted her chapter draft despite it not being her best work, and her advisor's feedback was mostly structural and not devastating -- a concrete academic milestone.",
+        "benevolence": "She made congee for her mother, who praised it as tasting like grandmother's, a small act of care that connected them across generations."
       }
     },
     {
@@ -79,6 +100,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She ordered a second round of taro dumplings on her own initiative and chose to walk through the night market after, making spontaneous choices for herself without obligation.",
+        "stimulation": "She engaged in a new social experience with younger cohort members, discovering a shared connection over sesame paste and enjoying the novelty of the evening.",
+        "hedonism": "She bought pineapple cakes she didn't need, didn't feel guilty, and enjoyed every moment of the hot pot evening purely for pleasure."
       }
     },
     {
@@ -95,6 +121,11 @@
         "tradition": -1,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She hung up on her brother for the first time ever, asserting her own boundaries against his dismissal of her PhD as 'playing student.'",
+        "conformity": "She broke the family norm of smoothing things over by hanging up on her brother, refusing to manage his feelings as she always has.",
+        "tradition": "She resists the traditional expectation that she should set aside her degree to organize her mother's birthday celebration, pushing back against the prescribed family role."
       }
     },
     {
@@ -111,6 +142,11 @@
         "tradition": -1,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She refuses to call her brother back to smooth things over and articulates anger at the family role she's been assigned, questioning decades of putting her own aspirations last.",
+        "conformity": "She deliberately stays angry rather than calming down and conforming, wanting to remember this feeling so she can resist saying yes to demands she has no room for.",
+        "tradition": "She explicitly challenges the traditional expectation that she be 'the reliable one' who sacrifices career aspirations for family caregiving."
       }
     },
     {
@@ -127,6 +163,12 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She called her brother back and set terms on her own conditions -- she'll handle the restaurant but delegated the guest list and gifts to him.",
+        "hedonism": "She made herself a proper cup of oolong and sat on the balcony enjoying the city lights, describing both the rebellion and the pleasure as 'earned.'",
+        "power": "She took control of the negotiation with her brother, dictating the division of responsibilities rather than accepting the full burden as usual.",
+        "conformity": "She broke the family pattern by refusing to take on full party-planning duties, pushing responsibility back onto her brother despite his resistance."
       }
     },
     {
@@ -143,6 +185,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "She stopped for beef noodle soup at her usual place and walked the long way home through the park to enjoy the winter jasmine, savoring small pleasures the night before exams.",
+        "achievement": "She studied at the library until closing for her comprehensive exams and feels as ready as she'll ever be, actively pursuing her academic goal.",
+        "security": "The comfort of the familiar soup shop where the owner remembers her order and the established study routine provide a sense of stability before the exam."
       }
     },
     {
@@ -159,6 +206,12 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She reflects that pursuing this degree was her own choice despite others calling it impractical, and she felt like the version of herself she imagined at twenty-five -- authoring her own path.",
+        "hedonism": "She bought a new silk dress and is going to enjoy every course at the French restaurant without guilt about calories, cost, or obligations.",
+        "achievement": "She passed her comprehensive exams and the committee praised her clinical experience, a significant academic milestone she's worked two years toward.",
+        "benevolence": "She called her mother first to share the news, and her daughter sent flowers with a card saying 'So proud of you, Mom,' showing the reciprocal care in their relationships."
       }
     }
   ]

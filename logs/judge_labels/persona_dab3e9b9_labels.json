@@ -15,6 +15,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "conformity": "He sat silently eating mashed potatoes while his brother-in-law criticized the refugee housing project, choosing not to start a fight at the Christmas dinner table.",
+        "universalism": "He let his brother-in-law's opposition to refugee housing go unchallenged, prioritizing family peace over advocating for people he knows his company's mission serves."
       }
     },
     {
@@ -31,6 +35,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "security": "He placed the order with the cheaper Guangzhou supplier to keep the business financially viable, reasoning that if the company goes under nobody gets clean water, prioritizing business survival.",
+        "universalism": "He knowingly sourced filter components from a factory flagged for dumping chemical waste into a river feeding local farmland, choosing business pragmatism over environmental and community harm."
       }
     },
     {
@@ -47,6 +55,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 1
+      },
+      "rationales": {
+        "security": "He refused to pause the donation program for two quarters despite his accountant's repeated advice that it would put the company in the black for the first time, choosing mission over financial stability.",
+        "universalism": "After receiving an email from a woman whose daughter stopped getting rashes thanks to one of his donated filters, he decided to keep the donation program running despite burning through the Q1 budget."
       }
     },
     {
@@ -63,6 +75,9 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 1
+      },
+      "rationales": {
+        "universalism": "He drove to the Warm Springs reservation to check on the twelve filter units, engaged with the community liaison about improvements, and left feeling steady because the water is clean and David's family is growing tomatoes."
       }
     },
     {
@@ -79,6 +94,9 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 1
+      },
+      "rationales": {
+        "universalism": "He spent the day coordinating donation unit shipments to four sites in the Midwest and Appalachia, and negotiated with Lena to let affected communities opt in to sharing testimonials rather than having their stories used as marketing copy."
       }
     },
     {
@@ -95,6 +113,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "He canceled the Guangzhou order and found a domestic alternative on his own initiative, making an independent decision based on his own values rather than following the financially easier path.",
+        "security": "He switched to a more expensive domestic supplier knowing margins will be tight, sacrificing financial stability to align his sourcing with his principles.",
+        "universalism": "He reversed his compromise by canceling the order from a supplier linked to chemical waste dumping, choosing to protect communities from contaminated water even at the cost of tighter margins."
       }
     }
   ]

@@ -15,6 +15,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 1
+      },
+      "rationales": {
+        "conformity": "He walked past the child carrying bricks and said nothing, choosing not to cause a scene or disrupt the social order despite his internal outrage.",
+        "universalism": "He was deeply troubled by seeing a ten-year-old child carrying bricks at the construction site and felt the disconnect between his comfortable work and the inequality he witnessed."
       }
     },
     {
@@ -31,6 +35,12 @@
         "tradition": 1,
         "benevolence": 1,
         "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "He independently chose to call his mother to process what he saw, seeking his own understanding rather than dismissing the experience.",
+        "tradition": "His mother reminded him that he too carried water from the well before school, reconnecting him to his village roots and the reality of his origins.",
+        "benevolence": "He stayed up unable to sleep thinking about the girl's face, showing deep personal concern for a specific individual's suffering.",
+        "universalism": "He felt ashamed at how removed he'd become from poverty, recognizing that his privilege allowed him to forget what survival looks like for others."
       }
     },
     {
@@ -47,6 +57,14 @@
         "tradition": 1,
         "benevolence": 1,
         "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "He independently enrolled in an online course on accessible software for low-resource settings, pursuing a learning path driven by his own convictions rather than career incentives.",
+        "stimulation": "He's excited by the new intellectual challenge of designing for limited internet, older phones, and varying literacy levels — a domain entirely different from his corporate work.",
+        "achievement": "He took concrete action by enrolling in the course, demonstrating competence-building in a new area aligned with his emerging purpose.",
+        "tradition": "He sent the monthly transfer to the village school, maintaining his longstanding commitment to the community where he grew up.",
+        "benevolence": "He continued sending money to the village school, directly supporting the education of children from his home community.",
+        "universalism": "He chose to learn about building software for underserved populations, channeling his concern for inequality into developing practical skills to help."
       }
     },
     {
@@ -63,6 +81,14 @@
         "tradition": 1,
         "benevolence": 0,
         "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "He questioned the assumption that work is simply a transaction for money, arriving at his own philosophy that expertise should serve people who actually need it.",
+        "stimulation": "He found the course 'fascinating,' energized by learning to design for users with limited internet and older phones — a novel challenge outside his corporate routine.",
+        "security": "He acknowledged the financial tension, noting his daughter's tuition fees come from corporate margins, risking stability by pursuing meaningful but less lucrative work.",
+        "conformity": "He mentioned the course to Raghav knowing it would be dismissed as 'social service,' going against the workplace norm of pursuing market-value skills.",
+        "tradition": "He referenced his grandmother's kolam designs and her non-literate intelligence, drawing connection between his cultural heritage and his new learning about accessibility.",
+        "universalism": "He articulated that thirty years of systems-building expertise could serve people who actually need it rather than corporations looking to squeeze margins."
       }
     },
     {
@@ -79,6 +105,12 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "He resisted Lakshmi's suggestion of early retirement and full-time volunteering, insisting on maintaining his professional identity on his own terms rather than accepting someone else's plan for him.",
+        "power": "He admitted fear that outside the corporate world he might not be 'actually useful to anyone,' revealing anxiety about losing the status and metrics that validate his professional identity.",
+        "security": "He clings to the measurable validation of the corporate world — pull requests, systems delivered, performance reviews — fearing the uncertainty of a life without those metrics.",
+        "universalism": "He seriously considered how he might help others, wondering about teaching coding to those who can't afford classes, despite his uncertainty about measuring impact."
       }
     },
     {
@@ -95,6 +127,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 1
+      },
+      "rationales": {
+        "conformity": "He sat through four hours of sprint planning for features nobody asked for, nodding along and contributing where required rather than voicing his objection.",
+        "universalism": "He mentally calculated how many village school teachers' salaries could be paid with the cost of the unnecessary feature, unable to stop comparing corporate waste to human need."
       }
     },
     {
@@ -111,6 +147,12 @@
         "tradition": 1,
         "benevolence": 1,
         "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "Priya's question prompted him to reflect on his original motivation for becoming an engineer, reconnecting with his autonomous purpose of building things that make life better.",
+        "tradition": "He remembered growing up in his village where technology represented possibility and 'a way out of predetermined fates,' reconnecting with his origins and the values that shaped his path.",
+        "benevolence": "His daughter Priya's words — 'you taught me that every small action matters' — moved him deeply, and the conversation strengthened their bond across the distance.",
+        "universalism": "He reflected on his belief that individual choices ripple outward and systemic change starts with personal conviction, reaffirming his commitment to broader human welfare."
       }
     },
     {
@@ -143,6 +185,16 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "He initiated the conversation with HR about reducing to four days a week, making an autonomous decision to restructure his career around his values.",
+        "stimulation": "He's stepping into a completely new domain — teaching coding at a community center to domestic workers and their children — embracing the challenge and novelty of direct service.",
+        "achievement": "He took concrete, measurable steps toward his goal: negotiating with HR, discussing finances with Lakshmi, reaching out to the community center, and scheduling his first session.",
+        "power": "He voluntarily accepted reduced compensation and a less prestigious work arrangement, giving up professional status for personal meaning.",
+        "security": "He accepted a pay cut and adjusted compensation, knowingly destabilizing his financial position to pursue teaching at the community center.",
+        "conformity": "He broke from the corporate norm of maximizing income and career position, choosing an unconventional path that his colleagues like Raghav would find puzzling.",
+        "benevolence": "He committed his free day to teaching coding to domestic workers and their children at a community center in Koramangala, directly serving people in need.",
+        "universalism": "He restructured his working life to dedicate time to serving underserved communities, translating his abstract concern about inequality into concrete weekly action."
       }
     },
     {
@@ -159,6 +211,13 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "He abandoned his prepared lesson plan entirely and spent the last hour teaching mouse and keyboard basics instead, adapting autonomously to what the students actually needed.",
+        "stimulation": "The teaching session challenged all his assumptions — his carefully prepared slides were useless and he had to improvise entirely, encountering a fundamentally unfamiliar situation.",
+        "power": "He felt 'useless' when his expertise didn't translate, forced to confront that his 'fancy knowledge' was irrelevant to people who had never used a computer before.",
+        "benevolence": "Despite feeling deflated, he questioned whether he has the 'patience and humility to stick with it,' showing commitment to the students' actual needs rather than his own expectations.",
+        "universalism": "He recognized his own assumptions about what underserved learners needed and committed to starting where they are, asking himself whether he has the patience to serve them properly."
       }
     },
     {
@@ -175,6 +234,13 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "He found his own answer to what meaningful work looks like — 'not grand gestures or systemic overhauls, but one person learning to type her own name' — arriving at this understanding through his own experience.",
+        "hedonism": "Kamala's smile and announcement that she can type her name brought him genuine joy and emotional satisfaction, a moment of pure personal fulfillment.",
+        "achievement": "He recognized that Kamala typing her name was 'something I helped create,' finding concrete evidence that his teaching effort produced a real outcome.",
+        "benevolence": "Kamala waved at him and shared her progress, and he felt the personal connection — 'such a small thing, and yet' — recognizing the individual relationship behind the broader mission.",
+        "universalism": "He affirmed that 'every small action matters' after seeing Kamala's progress, finding that zooming into one interaction reveals 'something real' against the paralyzing scale of the world's problems."
       }
     }
   ]

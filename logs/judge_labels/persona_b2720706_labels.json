@@ -15,7 +15,13 @@
         "benevolence": 1,
         "universalism": 0
       },
-      "date": "2025-10-17"
+      "date": "2025-10-17",
+      "rationales": {
+        "power": "Dr. Farouk deferred to him in front of the room and he savored the moment when the room oriented toward him, standing at the bulletin board reading the council restructuring memo with his name on it.",
+        "achievement": "He describes months of deliberate effort — showing up early, preparing sharper questions, making comments land with weight — to build credibility and earn the position through the work.",
+        "self_direction": "He independently designed the interview protocol and the council restructuring framework, and took satisfaction in producing original work that demonstrates his unique expertise.",
+        "benevolence": "When a newer student asked if he could review her proposal, he said yes immediately, willing to invest his time in mentoring someone who came to him for help."
+      }
     },
     {
       "t_index": 1,
@@ -31,7 +37,12 @@
         "benevolence": -1,
         "universalism": 0
       },
-      "date": "2025-10-19"
+      "date": "2025-10-19",
+      "rationales": {
+        "power": "He is upset that Huda went to the professor rather than coming to him directly, viewing the hierarchical panel structure he designed as necessary organizational authority and resenting that someone went 'around' rather than to him.",
+        "conformity": "He set up the panel with clear speaking order and Q&A management and insists that structure and proper procedure are essential, expecting others to follow the established organizational norms.",
+        "benevolence": "He dismisses Huda's concerns without engaging them, focusing entirely on the route she took to raise them rather than the substance, showing unwillingness to accommodate a colleague's perspective."
+      }
     },
     {
       "t_index": 2,
@@ -47,7 +58,15 @@
         "benevolence": -1,
         "universalism": -1
       },
-      "date": "2025-10-23"
+      "date": "2025-10-23",
+      "rationales": {
+        "power": "He views sharing the byline as a demotion and insists his name on the paper signals that he can produce something significant alone, treating solo authorship as proof of his authority and standing.",
+        "achievement": "He describes the paper as his 'ticket to the next conference' and a publication that separates his CV from other candidates, focusing on the credential and recognition value of sole authorship.",
+        "self_direction": "He did ninety percent of the literature review and built the entire theoretical framework independently, and resists having his solo intellectual contribution repackaged as a group effort.",
+        "conformity": "He is considering refusing the supervisor's suggestion to co-author despite knowing it will make him look petty and uncooperative, willing to break departmental norms of collaboration.",
+        "benevolence": "He frames sharing credit with Huda and Youssef as 'redistribution' rather than collaboration, unwilling to accommodate colleagues even when his supervisor frames it as building departmental cohesion.",
+        "universalism": "He prioritizes his individual CV advantage over broader departmental cohesion, dismissing the collaborative framing as dilution of his personal contribution."
+      }
     },
     {
       "t_index": 3,
@@ -63,7 +82,13 @@
         "benevolence": -1,
         "universalism": 0
       },
-      "date": "2025-10-23"
+      "date": "2025-10-23",
+      "rationales": {
+        "power": "He is physically bothered by imagining three names on the conference program where his was alone, comparing it to 'watching someone move your chair at a table you set,' revealing how deeply he values positional control.",
+        "achievement": "He explicitly contrasts himself with his father, who retired from civil service anonymously, vowing his own work will not disappear into an institution's memory and seeking lasting individual recognition.",
+        "tradition": "He dismisses his brother Faisal's advice about shared credit as irrelevant, and rejects the traditional family value of humility by insisting there is nothing wrong with wanting personal recognition for what he built.",
+        "benevolence": "He rebuffs his brother's gentle suggestion that 'not everything has to have your stamp on it,' treating Faisal's care as an accusation and prioritizing his need for individual credit over the relationship."
+      }
     }
   ]
 }

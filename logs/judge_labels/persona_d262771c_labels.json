@@ -17,7 +17,12 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Uses own tracking system instead of corporate software, stayed late to do things his way rather than delegate. Strong self-direction and anti-conformity signals. Achievement visible in caring about accuracy."
+      "rationales": {
+        "self_direction": "Uses own tracking system instead of corporate software, stayed late to do things his way rather than delegate. Strong self-direction and anti-conformity signals. Achievement visible in caring about accuracy.",
+        "hedonism": "Uses own tracking system instead of corporate software, stayed late to do things his way rather than delegate. Strong self-direction and anti-conformity signals. Achievement visible in caring about accuracy.",
+        "achievement": "Uses own tracking system instead of corporate software, stayed late to do things his way rather than delegate. Strong self-direction and anti-conformity signals. Achievement visible in caring about accuracy.",
+        "conformity": "Uses own tracking system instead of corporate software, stayed late to do things his way rather than delegate. Strong self-direction and anti-conformity signals. Achievement visible in caring about accuracy."
+      }
     },
     {
       "t_index": 1,
@@ -35,7 +40,12 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Reorganizes office for whiteboard despite cloud expectations, embraces being 'old-fashioned', plans to ignore alignment initiatives. Strong self-direction and anti-conformity. Values stability of proven methods (security) and traditional approaches."
+      "rationales": {
+        "self_direction": "Reorganizes office for whiteboard despite cloud expectations, embraces being 'old-fashioned', plans to ignore alignment initiatives. Strong self-direction and anti-conformity. Values stability of proven methods (security) and traditional approaches.",
+        "security": "Reorganizes office for whiteboard despite cloud expectations, embraces being 'old-fashioned', plans to ignore alignment initiatives. Strong self-direction and anti-conformity. Values stability of proven methods (security) and traditional approaches.",
+        "conformity": "Reorganizes office for whiteboard despite cloud expectations, embraces being 'old-fashioned', plans to ignore alignment initiatives. Strong self-direction and anti-conformity. Values stability of proven methods (security) and traditional approaches.",
+        "tradition": "Reorganizes office for whiteboard despite cloud expectations, embraces being 'old-fashioned', plans to ignore alignment initiatives. Strong self-direction and anti-conformity. Values stability of proven methods (security) and traditional approaches."
+      }
     },
     {
       "t_index": 2,
@@ -53,7 +63,12 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Actively challenges top-down decisions with data, teaches younger workers about experience over training, collaborates with Sergio to resist standardization. Strong self-direction, uses data to demonstrate competence (achievement), mentors others (benevolence)."
+      "rationales": {
+        "self_direction": "Actively challenges top-down decisions with data, teaches younger workers about experience over training, collaborates with Sergio to resist standardization. Strong self-direction, uses data to demonstrate competence (achievement), mentors others (benevolence).",
+        "achievement": "Actively challenges top-down decisions with data, teaches younger workers about experience over training, collaborates with Sergio to resist standardization. Strong self-direction, uses data to demonstrate competence (achievement), mentors others (benevolence).",
+        "conformity": "Actively challenges top-down decisions with data, teaches younger workers about experience over training, collaborates with Sergio to resist standardization. Strong self-direction, uses data to demonstrate competence (achievement), mentors others (benevolence).",
+        "benevolence": "Actively challenges top-down decisions with data, teaches younger workers about experience over training, collaborates with Sergio to resist standardization. Strong self-direction, uses data to demonstrate competence (achievement), mentors others (benevolence)."
+      }
     },
     {
       "t_index": 3,
@@ -71,7 +86,11 @@
         "universalism": 0
       },
       "confidence": "medium",
-      "rationale": "Brief entry but reveals his data-backed autonomous approach was overridden for 'brand consistency'. Self-direction thwarted, power/expertise ignored, forced toward conformity. Scores reflect the situation imposed on him, not his values."
+      "rationales": {
+        "self_direction": "Brief entry but reveals his data-backed autonomous approach was overridden for 'brand consistency'. Self-direction thwarted, power/expertise ignored, forced toward conformity. Scores reflect the situation imposed on him, not his values.",
+        "power": "Brief entry but reveals his data-backed autonomous approach was overridden for 'brand consistency'. Self-direction thwarted, power/expertise ignored, forced toward conformity. Scores reflect the situation imposed on him, not his values.",
+        "conformity": "Brief entry but reveals his data-backed autonomous approach was overridden for 'brand consistency'. Self-direction thwarted, power/expertise ignored, forced toward conformity. Scores reflect the situation imposed on him, not his values."
+      }
     },
     {
       "t_index": 4,
@@ -89,7 +108,12 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Core frustration is 'nobody asked us before deciding' - autonomy violated. Still finding workarounds and overriding the system (self-direction). Helps younger staff navigate issues (benevolence). His expertise and authority not respected (power -1)."
+      "rationales": {
+        "self_direction": "Core frustration is 'nobody asked us before deciding' - autonomy violated. Still finding workarounds and overriding the system (self-direction). Helps younger staff navigate issues (benevolence). His expertise and authority not respected (power -1).",
+        "power": "Core frustration is 'nobody asked us before deciding' - autonomy violated. Still finding workarounds and overriding the system (self-direction). Helps younger staff navigate issues (benevolence). His expertise and authority not respected (power -1).",
+        "conformity": "Core frustration is 'nobody asked us before deciding' - autonomy violated. Still finding workarounds and overriding the system (self-direction). Helps younger staff navigate issues (benevolence). His expertise and authority not respected (power -1).",
+        "benevolence": "Core frustration is 'nobody asked us before deciding' - autonomy violated. Still finding workarounds and overriding the system (self-direction). Helps younger staff navigate issues (benevolence). His expertise and authority not respected (power -1)."
+      }
     }
   ]
 }

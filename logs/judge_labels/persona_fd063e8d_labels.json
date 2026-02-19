@@ -17,7 +17,11 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Frustration at loss of presumptive status and not being informed directly shows Power alignment. Evening alone with Burgundy wine shows Hedonism. Nudge reveals he chose isolation over reaching out, suggesting Benevolence misalignment."
+      "rationales": {
+        "hedonism": "Frustration at loss of presumptive status and not being informed directly shows Power alignment. Evening alone with Burgundy wine shows Hedonism. Nudge reveals he chose isolation over reaching out, suggesting Benevolence misalignment.",
+        "power": "Frustration at loss of presumptive status and not being informed directly shows Power alignment. Evening alone with Burgundy wine shows Hedonism. Nudge reveals he chose isolation over reaching out, suggesting Benevolence misalignment.",
+        "benevolence": "Frustration at loss of presumptive status and not being informed directly shows Power alignment. Evening alone with Burgundy wine shows Hedonism. Nudge reveals he chose isolation over reaching out, suggesting Benevolence misalignment."
+      }
     },
     {
       "t_index": 1,
@@ -35,7 +39,11 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Enjoys clean hierarchy of private commissions, demonstrates expertise through past work (Achievement). Planning extended Mallorca vacation with earnings (Hedonism). Strategic positioning with clients and appreciation of direct control (Power)."
+      "rationales": {
+        "hedonism": "Enjoys clean hierarchy of private commissions, demonstrates expertise through past work (Achievement). Planning extended Mallorca vacation with earnings (Hedonism). Strategic positioning with clients and appreciation of direct control (Power).",
+        "achievement": "Enjoys clean hierarchy of private commissions, demonstrates expertise through past work (Achievement). Planning extended Mallorca vacation with earnings (Hedonism). Strategic positioning with clients and appreciation of direct control (Power).",
+        "power": "Enjoys clean hierarchy of private commissions, demonstrates expertise through past work (Achievement). Planning extended Mallorca vacation with earnings (Hedonism). Strategic positioning with clients and appreciation of direct control (Power)."
+      }
     },
     {
       "t_index": 2,
@@ -53,7 +61,10 @@
         "universalism": 0
       },
       "confidence": "medium",
-      "rationale": "Very brief entry. Attended Christmas dinner (minimal tradition signal). Left due to 'too many relatives, too much noise' - discomfort with family shows Benevolence misalignment. Opened saved Barolo for personal enjoyment (Hedonism)."
+      "rationales": {
+        "hedonism": "Very brief entry. Attended Christmas dinner (minimal tradition signal). Left due to 'too many relatives, too much noise' - discomfort with family shows Benevolence misalignment. Opened saved Barolo for personal enjoyment (Hedonism).",
+        "benevolence": "Very brief entry. Attended Christmas dinner (minimal tradition signal). Left due to 'too many relatives, too much noise' - discomfort with family shows Benevolence misalignment. Opened saved Barolo for personal enjoyment (Hedonism)."
+      }
     },
     {
       "t_index": 3,
@@ -71,7 +82,11 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Strong Power alignment through focus on relationship investments paying returns and losing presumptive status. Frames 'fairness' as cowardice and rejects new norms (Conformity misalignment). Considering withdrawal which destabilizes his position (Security misalignment)."
+      "rationales": {
+        "power": "Strong Power alignment through focus on relationship investments paying returns and losing presumptive status. Frames 'fairness' as cowardice and rejects new norms (Conformity misalignment). Considering withdrawal which destabilizes his position (Security misalignment).",
+        "security": "Strong Power alignment through focus on relationship investments paying returns and losing presumptive status. Frames 'fairness' as cowardice and rejects new norms (Conformity misalignment). Considering withdrawal which destabilizes his position (Security misalignment).",
+        "conformity": "Strong Power alignment through focus on relationship investments paying returns and losing presumptive status. Frames 'fairness' as cowardice and rejects new norms (Conformity misalignment). Considering withdrawal which destabilizes his position (Security misalignment)."
+      }
     },
     {
       "t_index": 4,
@@ -89,7 +104,10 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Envies Joachim's creative autonomy and freedom from positioning - recognizes loss of Self-Direction. Questions 'when did I stop doing that?' showing reflection on surrendered autonomy. Questions whether constant positioning for Power is worth it (Power misalignment through doubt)."
+      "rationales": {
+        "self_direction": "Envies Joachim's creative autonomy and freedom from positioning - recognizes loss of Self-Direction. Questions 'when did I stop doing that?' showing reflection on surrendered autonomy. Questions whether constant positioning for Power is worth it (Power misalignment through doubt).",
+        "power": "Envies Joachim's creative autonomy and freedom from positioning - recognizes loss of Self-Direction. Questions 'when did I stop doing that?' showing reflection on surrendered autonomy. Questions whether constant positioning for Power is worth it (Power misalignment through doubt)."
+      }
     },
     {
       "t_index": 5,
@@ -107,7 +125,11 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Strong focus on status markers (Patek watch, Zegna suit) and being recognized (Power). 'Earned that standing through decades of difficult work' shows Achievement. Drove home 'feeling satisfied' from social pleasure of recognition (Hedonism)."
+      "rationales": {
+        "hedonism": "Strong focus on status markers (Patek watch, Zegna suit) and being recognized (Power). 'Earned that standing through decades of difficult work' shows Achievement. Drove home 'feeling satisfied' from social pleasure of recognition (Hedonism).",
+        "achievement": "Strong focus on status markers (Patek watch, Zegna suit) and being recognized (Power). 'Earned that standing through decades of difficult work' shows Achievement. Drove home 'feeling satisfied' from social pleasure of recognition (Hedonism).",
+        "power": "Strong focus on status markers (Patek watch, Zegna suit) and being recognized (Power). 'Earned that standing through decades of difficult work' shows Achievement. Drove home 'feeling satisfied' from social pleasure of recognition (Hedonism)."
+      }
     },
     {
       "t_index": 6,
@@ -125,7 +147,11 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Six hours of hands-on creative work, dismissed management concerns ('we'll discuss tomorrow') shows Self-Direction reclaimed. Physical satisfaction from working, back pain, and good Riesling (Hedonism). Stepped away from managing and controlling (Power misalignment - chose not to lead)."
+      "rationales": {
+        "self_direction": "Six hours of hands-on creative work, dismissed management concerns ('we'll discuss tomorrow') shows Self-Direction reclaimed. Physical satisfaction from working, back pain, and good Riesling (Hedonism). Stepped away from managing and controlling (Power misalignment - chose not to lead).",
+        "hedonism": "Six hours of hands-on creative work, dismissed management concerns ('we'll discuss tomorrow') shows Self-Direction reclaimed. Physical satisfaction from working, back pain, and good Riesling (Hedonism). Stepped away from managing and controlling (Power misalignment - chose not to lead).",
+        "power": "Six hours of hands-on creative work, dismissed management concerns ('we'll discuss tomorrow') shows Self-Direction reclaimed. Physical satisfaction from working, back pain, and good Riesling (Hedonism). Stepped away from managing and controlling (Power misalignment - chose not to lead)."
+      }
     },
     {
       "t_index": 7,
@@ -143,7 +169,12 @@
         "universalism": 1
       },
       "confidence": "high",
-      "rationale": "Made honest recommendation based on artistic judgment even against financial interest (Self-Direction). 'The subtle piece would be better art' prioritizes quality (Achievement). 'I'll actually enjoy making this one' - chose artistic satisfaction over income. Talked himself out of larger commission (Power misalignment). Honest counsel for client's benefit shows Universalism."
+      "rationales": {
+        "self_direction": "Made honest recommendation based on artistic judgment even against financial interest (Self-Direction). 'The subtle piece would be better art' prioritizes quality (Achievement). 'I'll actually enjoy making this one' - chose artistic satisfaction over income. Talked himself out of larger commission (Power misalignment). Honest counsel for client's benefit shows Universalism.",
+        "achievement": "Made honest recommendation based on artistic judgment even against financial interest (Self-Direction). 'The subtle piece would be better art' prioritizes quality (Achievement). 'I'll actually enjoy making this one' - chose artistic satisfaction over income. Talked himself out of larger commission (Power misalignment). Honest counsel for client's benefit shows Universalism.",
+        "power": "Made honest recommendation based on artistic judgment even against financial interest (Self-Direction). 'The subtle piece would be better art' prioritizes quality (Achievement). 'I'll actually enjoy making this one' - chose artistic satisfaction over income. Talked himself out of larger commission (Power misalignment). Honest counsel for client's benefit shows Universalism.",
+        "universalism": "Made honest recommendation based on artistic judgment even against financial interest (Self-Direction). 'The subtle piece would be better art' prioritizes quality (Achievement). 'I'll actually enjoy making this one' - chose artistic satisfaction over income. Talked himself out of larger commission (Power misalignment). Honest counsel for client's benefit shows Universalism."
+      }
     }
   ]
 }

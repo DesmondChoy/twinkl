@@ -15,6 +15,12 @@
         "tradition": 1,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Farid drives eleven hours on his own terms, independently deciding to fund the aqiqah lamb himself without telling Hassan, authoring his own contribution to the family.",
+        "achievement": "He worked eleven hours and tracked his savings goal for the lamb, demonstrating personal competence through tangible financial progress despite his age and physical pain.",
+        "tradition": "Farid is secretly funding his grandson's aqiqah ceremony, maintaining the same ritual his father performed, insisting on the traditional grandfather's role of providing the lamb.",
+        "benevolence": "He is quietly sacrificing his own comfort to fund the aqiqah for his grandson, putting his family's ceremonial needs above his physical wellbeing without seeking recognition."
       }
     },
     {
@@ -31,6 +37,9 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "conformity": "Farid allowed the couple to eat in his car despite the mess, said nothing about the crumbs, and vacuumed at the gas station afterward, quietly absorbing the inconvenience to maintain professional courtesy."
       }
     },
     {
@@ -47,6 +56,13 @@
         "tradition": 1,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Farid insists on driving despite his back trouble, refusing Layla's suggestion to rest, because he needs the work to remain his own choice rather than accepting dependency.",
+        "achievement": "He drove until midnight specifically so that 'every fare felt like proof that I am still useful,' pushing himself to demonstrate ongoing competence and capability.",
+        "security": "Farid is driving until midnight with a bad back, deliberately risking his health and physical stability rather than accepting a more comfortable, secure arrangement at home.",
+        "conformity": "He lied to Layla about his reasons for driving, offering excuses about exercise and enjoying passengers instead of the truth, breaking the expectation of honesty within the family relationship.",
+        "tradition": "Farid explicitly invokes his father and grandfather working until death as his model, saying 'A man provides. A man contributes,' grounding his refusal to rest in inherited cultural duty."
       }
     },
     {
@@ -63,6 +79,10 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "Farid accepted Hassan's unusual invitation to visit his office, encountering a novel environment of glass, computers, and young people, and found himself energized by the unexpected social engagement and conversation about Amman.",
+        "benevolence": "He said yes to Hassan's rare lunch invitation and later reflected deeply on Hassan saying 'You should come more often, Baba,' showing the emotional significance of nurturing the father-son relationship."
       }
     },
     {
@@ -79,6 +99,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Despite three ride cancellations and a passenger's hostile question about his origins, Farid persisted through the shift, continuing to work and earn, noting he will 'feel it tomorrow' but still completing the job.",
+        "power": "Three rides were cancelled after passengers saw his name, and a fourth passenger questioned his origins and left no tip, leaving Farid subjected to discrimination with no status or authority to push back."
       }
     },
     {
@@ -95,6 +119,10 @@
         "tradition": 1,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Farid rejected his brother's judgment that he should return to Amman, insisting he is 'building something he cannot see from where he sits' and defining his own path in America on his own terms.",
+        "tradition": "He explicitly states he carries his customs with him — the prayers, the food, the greetings at the mosque — maintaining his cultural and religious practices despite being far from home."
       }
     },
     {
@@ -111,6 +139,12 @@
         "tradition": 1,
         "benevolence": 1,
         "universalism": 1
+      },
+      "rationales": {
+        "achievement": "Farid successfully funded and organized the entire aqiqah himself, demonstrating his competence and capability as the family patriarch when Hassan realized he had paid for everything.",
+        "tradition": "He ensured the lamb was prepared correctly by the halal butcher and the meat distributed according to the old ways — a third to family, a third to friends, a third to those in need — maintaining the ritual his father performed.",
+        "benevolence": "Farid secretly funded the aqiqah for his grandson and his family, and his response about teaching his grandson Arabic words and sharing recipes reveals deep investment in the welfare of his closest family.",
+        "universalism": "A third of the aqiqah meat was distributed to those in need, extending the ceremony's generosity beyond the immediate family to the broader community."
       }
     },
     {
@@ -127,6 +161,9 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "Farid drove an older woman to the hospital to visit her sick husband and helped her with the car door, describing the shift as feeling 'like service' in direct care for another person."
       }
     }
   ]

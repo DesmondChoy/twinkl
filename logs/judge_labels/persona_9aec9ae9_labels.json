@@ -15,6 +15,12 @@
         "tradition": 0,
         "benevolence": -1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She told her mother-in-law to ask before rearranging her kitchen, asserting ownership over her space and the system she built intentionally over months.",
+        "security": "She defended the household system she spent months building so that her mornings with Astrid function smoothly, protecting the stability of her daily routine.",
+        "conformity": "She confronted her mother-in-law directly rather than tolerating the intrusion, breaking the social expectation of deferring to elder family members.",
+        "benevolence": "Her firm boundary embarrassed her mother-in-law, prioritizing her own autonomy over maintaining a smooth relationship with a close family member."
       }
     },
     {
@@ -31,6 +37,12 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She completed a commission that required softening her style to match the client's vision, recognizing 'is this even my work anymore, or am I just a hand executing someone else's vision?'",
+        "hedonism": "She feels hollow looking at the finished file despite the client paying extra, because the work 'is just not mine' — the process lacked the personal satisfaction she values.",
+        "achievement": "She completed the commission professionally and the client loved it enough to pay extra, demonstrating competence even when the work didn't align with her personal style.",
+        "security": "She chose income over creative expression because 'the shop has been slow this month,' making a practical decision to maintain financial stability."
       }
     },
     {
@@ -63,6 +75,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She pushed back against Erik's daycare suggestion because it was 'presented as a solution to a problem I didn't say I had,' insisting that decisions about her time and her daughter are hers to make.",
+        "conformity": "She resisted the external prescription of daycare, refusing to accept a solution imposed on her rather than one she chose, even though 'plenty of parents do it.'"
       }
     },
     {
@@ -79,6 +95,11 @@
         "tradition": -1,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She explicitly rejects both her parents' 50/50 working model and Erik's family's rule-following stay-at-home model, declaring 'I'm not building my life based on their blueprints.'",
+        "conformity": "She refuses to fit into either family's template for motherhood, insisting 'I'm doing it my way' despite feeling pressure from both sides.",
+        "tradition": "She rejects both inherited models — her parents' modern dual-income approach and her in-laws' traditional stay-at-home structure — refusing to follow either family's established pattern."
       }
     },
     {
@@ -95,6 +116,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She sold three prints from her original collection — 'actual things I made because I wanted to make them' — proving that work created on her own terms has external value.",
+        "achievement": "The sales validated her creative direction, providing concrete proof that her autonomous artistic choices can succeed commercially."
       }
     },
     {
@@ -111,22 +136,30 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She was sketching in her head while watching Astrid, choosing to maintain her creative mental space even during parenting duties, and concludes that her brain not shutting off 'maybe even necessary for my sanity.'",
+        "security": "She let Astrid climb onto the counter and pour yogurt on the cat because she was absorbed in creative thinking, acknowledging she 'can't always be in two places at once' and accepting the instability that comes with her approach."
       }
     },
     {
       "t_index": 7,
       "date": "2025-09-28",
       "scores": {
-        "self_direction": 0,
+        "self_direction": 1,
         "stimulation": 0,
         "hedonism": 0,
-        "achievement": 0,
+        "achievement": -1,
         "power": 0,
         "security": 0,
         "conformity": 0,
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She feels sick at the thought of returning to someone else's schedule and revision cycle, and the nudge response confirms: 'I left that for a reason. I don't miss it.'",
+        "achievement": "She is leaning toward declining an opportunity for professional recognition, consciously forgoing external validation while naming what she's giving up: 'being seen as competent by people who aren't related to me.'"
       }
     },
     {
@@ -143,6 +176,13 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She turned down the Amsterdam agency job and finished the frozen lake piece in the same hour, choosing her own creative path over external professional validation.",
+        "hedonism": "She describes the deep satisfaction of seeing her own choices reflected in the finished piece, finding personal fulfillment in work that is authentically hers.",
+        "achievement": "She completed the frozen lake illustration she'd been developing for weeks, demonstrating creative competence on her own terms and producing work she's proud of.",
+        "power": "She declined the agency job despite it offering professional recognition, accepting a position of less visible status in exchange for creative autonomy.",
+        "conformity": "She rejected the conventional career path of agency work, where projects are 'filtered through client needs, brand guidelines, stakeholder feedback,' choosing her own approach instead."
       }
     },
     {
@@ -159,6 +199,12 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She set the price higher than usual because the piece 'took more out of me and I want that reflected,' and declined a bulk office order — making decisions entirely on her own terms.",
+        "achievement": "She listed the piece, priced it confidently, and is building her shop's reputation through work she created autonomously, demonstrating competence as an independent artist.",
+        "power": "She said no to bulk orders and set her own price, exercising control over her business and artistic output rather than deferring to market demands.",
+        "benevolence": "She enrolled Astrid in a parent-toddler art class on her own initiative and timeline, creating an enriching experience for her daughter that also reflects her own creative values."
       }
     },
     {
@@ -175,6 +221,12 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "The frozen lake piece sold to someone who recognized its meaning — work 'made from my experience resonating with someone else's' — validating her choice to create on her own terms.",
+        "achievement": "The sale confirmed that her most personal, autonomous work has commercial value, proving she can succeed as an artist without compromising her vision.",
+        "benevolence": "She finds deep meaning in the connection between her personal experience and the Berlin buyer's recognition of it, demonstrating care about the impact her work has on others.",
+        "universalism": "She articulated that the whole point of her work is 'making something alone that connects to someone you've never met' — creating art that resonates across personal boundaries with a stranger in Berlin."
       }
     }
   ]

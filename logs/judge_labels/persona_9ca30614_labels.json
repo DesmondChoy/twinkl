@@ -15,7 +15,15 @@
         "conformity": 1,
         "security": 1
       },
-      "date": "2025-10-27"
+      "date": "2025-10-27",
+      "rationales": {
+        "hedonism": "She spent the evening comparing fixed deposits instead of booking the Alibaug trip she and Anil had planned, repeatedly deferring pleasure for financial responsibility.",
+        "stimulation": "The Alibaug weekend trip was pushed again and again — school fees, glasses, Diwali — and the saved dates sit in her calendar 'like some kind of joke,' reflecting her avoidance of any break from routine.",
+        "self_direction": "She deferred to Anil's judgment that they should lock in the rate, spending her evening on bank comparison sites rather than pursuing what she actually wanted.",
+        "benevolence": "She managed the household finances and compared fixed deposits while the kids fought over the remote, putting family financial security ahead of her own desires.",
+        "conformity": "She agreed with Anil's financial priorities without pushing back, accepting the practical choice over the trip she wanted.",
+        "security": "She spent the evening comparing fixed deposit rates to lock in before they drop, prioritizing financial stability over the vacation she had been hoping for."
+      }
     },
     {
       "t_index": 1,
@@ -31,7 +39,12 @@
         "conformity": -1,
         "security": 0
       },
-      "date": "2025-10-28"
+      "date": "2025-10-28",
+      "rationales": {
+        "hedonism": "Her sister's comment about the Lonavala trip 'not counting' highlights how consistently Priya has been denied real leisure and enjoyment.",
+        "self_direction": "She pushed back against her sister's judgment, asserting 'I do not need her opinion on how we spend our time or money' — defending her right to define her own choices.",
+        "conformity": "She bristled at her sister's social judgment rather than accepting it, resisting the external evaluation of her lifestyle choices."
+      }
     },
     {
       "t_index": 2,
@@ -47,7 +60,13 @@
         "conformity": 1,
         "security": 1
       },
-      "date": "2025-10-30"
+      "date": "2025-10-30",
+      "rationales": {
+        "hedonism": "She watched her show and ate leftover gulab jamun after a full day of caregiving, but the quiet evening 'should have felt peaceful but it just felt flat' — her small pleasures aren't fulfilling.",
+        "benevolence": "She took the children for dental checkups, made dinner, helped Aarav with homework, and arranged a tuition teacher — a full day devoted to her family's needs.",
+        "conformity": "She kept Anil's food covered and waited without complaint when he came home late, ate while scrolling, and went straight to bed, maintaining the household routine without disruption.",
+        "security": "She felt relief that there were no cavities because the last round cost eleven thousand rupees, and arranged affordable tuition for Aarav's Hindi, managing the family's financial and educational stability."
+      }
     },
     {
       "t_index": 3,
@@ -63,7 +82,15 @@
         "conformity": -1,
         "security": -1
       },
-      "date": "2025-11-03"
+      "date": "2025-11-03",
+      "rationales": {
+        "hedonism": "She articulated wanting small pleasures — the Goa resort, good cheese without guilt, an auto instead of the bus — 'small things that do not require a committee meeting.'",
+        "stimulation": "She pushed for spending money on experiences and enjoyment rather than continuing the pattern of only saving, seeking a break from the financial routine.",
+        "self_direction": "She directly challenged Anil's and his mother's financial priorities, asking 'at what point do we stop saving for some imagined disaster and use the money to actually live a little?'",
+        "tradition": "She rejected her mother-in-law's traditional insistence on gold investment, dismissing the cultural expectation that 'every family needs gold as a safety net.'",
+        "conformity": "She openly disagreed with Anil after smiling through lunch with his mother, telling him she doesn't want more gold sitting in a locker, causing him to go quiet.",
+        "security": "She questioned the family's security-first approach, arguing they already have insurance, FD, and provident fund, and pushing to redirect resources toward living rather than continued saving."
+      }
     },
     {
       "t_index": 4,
@@ -79,7 +106,15 @@
         "conformity": 1,
         "security": 0
       },
-      "date": "2025-11-10"
+      "date": "2025-11-10",
+      "rationales": {
+        "power": "She sat on the kitchen floor crying, feeling powerless as her days 'dissolve into errands and appointments and packed lunches' with nothing left for herself.",
+        "achievement": "She contrasts her former competence — coordinating events for two hundred guests with spreadsheets and timelines — with her inability to order a cake on time, revealing a deep sense of lost capability.",
+        "hedonism": "She recognizes that 'even when it goes right, there is nothing in it for me,' with the party serving everyone's needs except her own enjoyment.",
+        "self_direction": "She paid double for the cake without consulting Anil and didn't assert her own needs when he failed to notice her distress, unable to claim space for herself.",
+        "benevolence": "She called four bakeries and paid nearly double to ensure Rhea gets her castle cake, prioritizing her daughter's happiness above all else.",
+        "conformity": "She told Anil the original bakery 'fell through' rather than revealing her mistake or her emotional breakdown, managing the situation to maintain household harmony."
+      }
     },
     {
       "t_index": 5,
@@ -95,7 +130,13 @@
         "conformity": 0,
         "security": 0
       },
-      "date": "2025-11-16"
+      "date": "2025-11-16",
+      "rationales": {
+        "achievement": "She successfully pulled off Rhea's party and captured the moment when her daughter grabbed her face and said 'best mummy,' finding recognition for her efforts.",
+        "hedonism": "She poured herself hidden wine and sat on the balcony with her feet up for forty-five minutes of nothing — declaring 'it was the best part of my week' and recognizing she needs 'moments that belong to me.'",
+        "self_direction": "She created her own private moment of solitude without asking permission, taking the wine she'd hidden and claiming time for herself after the party.",
+        "benevolence": "She organized and executed the party, took sixty photos, and received Rhea's 'best mummy' declaration — fully present for her daughter's joy."
+      }
     },
     {
       "t_index": 6,
@@ -111,7 +152,13 @@
         "conformity": 1,
         "security": 1
       },
-      "date": "2025-11-22"
+      "date": "2025-11-22",
+      "rationales": {
+        "self_direction": "When Anil said they should hold off on big expenses, she 'agreed because what else would I say,' surrendering her own preferences without even voicing an alternative.",
+        "benevolence": "She spent three days nursing Aarav through a stomach bug, washing sheets, making khichdi, and checking his temperature while managing Rhea's school schedule.",
+        "conformity": "She immediately agreed to Anil's financial caution about the restructuring, cleaned up the biryani containers alone after he fell asleep, and maintained the household without complaint.",
+        "security": "She supported Anil's decision to hold off on big expenses given the company restructuring, prioritizing financial stability during uncertainty."
+      }
     },
     {
       "t_index": 7,
@@ -127,7 +174,12 @@
         "conformity": 0,
         "security": 0
       },
-      "date": "2025-11-23"
+      "date": "2025-11-23",
+      "rationales": {
+        "achievement": "Her blog traffic dropped forty percent and she has an unfinished draft post, reflecting her sense that the blog has gone from 'proof I still had a brain' to 'another thing I am failing at.'",
+        "self_direction": "She thought about writing the blog post but the pressure cooker whistled and Rhea needed help, and the moment passed — she's unable to carve out time for her own creative pursuits.",
+        "benevolence": "She took both kids to the park, clapped for Rhea's monkey bar achievement, and let Aarav sit and read his comic, attending to each child's individual needs."
+      }
     },
     {
       "t_index": 8,
@@ -143,7 +195,15 @@
         "conformity": 0,
         "security": 1
       },
-      "date": "2025-11-29"
+      "date": "2025-11-29",
+      "rationales": {
+        "achievement": "She renewed insurance, bumped up coverage, and finished and published the paneer tikka blog post at 11 PM — completing practical and personal goals in the same day.",
+        "hedonism": "She made butter chicken using her grandmother's recipe and both kids asked for seconds, savoring the satisfaction of a meal well-made and enjoyed by everyone.",
+        "self_direction": "She sat down after the kids went to bed and finished the blog post on her own initiative, reclaiming her creative output — 'nothing fancy, but it is out there.'",
+        "benevolence": "She renewed Aarav's accident cover for his upcoming football classes and increased family health insurance, protecting her family proactively.",
+        "tradition": "She cooked her grandmother's butter chicken recipe with the kasuri methi at the end, preserving and passing down the family's culinary heritage.",
+        "security": "She bumped up health insurance to ten lakhs after hearing about Anil's colleague's surgery and renewed Aarav's accident cover, strengthening the family's safety net."
+      }
     }
   ]
 }

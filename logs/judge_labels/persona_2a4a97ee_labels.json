@@ -15,6 +15,11 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Carmen chose to stay focused on her students rather than applying for the department head position, asserting her own priorities over her principal's suggestion.",
+        "achievement": "She explicitly declined to pursue the department head role that would advance her career, prioritizing direct student work over professional advancement.",
+        "benevolence": "Carmen is dedicating herself to her students' welfare, choosing hands-on teaching over an administrative promotion."
       }
     },
     {
@@ -31,6 +36,12 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "Carmen independently decided how to allocate her energy, reflecting on whether she is spending it in the right places rather than deferring to parental pressure.",
+        "conformity": "When Sofia's mother pushed back on the grade, Carmen restrained herself from arguing and politely promised to look at the essay draft again, maintaining smooth relations.",
+        "benevolence": "She spent two hours at the parent meeting explaining rubrics and offering individual student support, and she agonizes over Diego's lack of parental support.",
+        "universalism": "Carmen explicitly identifies systemic inequity: the parent meeting system favors families who already have resources, while students like Diego are structurally disadvantaged."
       }
     },
     {
@@ -47,6 +58,13 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "Carmen is making her own choice about what matters, weighing the department head position against her after-school program based on her own values rather than career expectations.",
+        "achievement": "She actively considers forgoing a higher-paying role with better resume credentials in favor of direct student support, deprioritizing career advancement.",
+        "power": "Carmen acknowledges that the department head role would give her institutional influence to redesign the system, but she is choosing to remain in a position with less authority.",
+        "benevolence": "She called Diego's mother at 9pm to tell her he's improving, going well beyond professional requirements to support a struggling student and his family.",
+        "universalism": "Carmen reflects on how she could redesign the curriculum so students like Diego don't fall behind, showing concern for systemic fairness beyond her immediate circle."
       }
     },
     {
@@ -63,6 +81,9 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "Carmen notes Diego's first grade above a C on a written assignment and recognizes his quiet pride, showing her ongoing investment in a struggling student's welfare."
       }
     },
     {
@@ -79,6 +100,12 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "Carmen is reasoning through the decision on her own terms, rejecting the framing that the choice is simple and insisting on weighing a certain present impact against a possible future one.",
+        "security": "She values the trust she has built with families over three years and worries it cannot be transferred, prioritizing the stability of existing relationships.",
+        "benevolence": "Carmen emphasizes that the students who come every Tuesday and Thursday have nowhere else to go, centering her decision on their concrete, immediate needs.",
+        "universalism": "She considers how the department head role could push for curriculum changes addressing indigenous perspectives and assessment bias that would help hundreds of students, showing broad systemic concern."
       }
     }
   ]

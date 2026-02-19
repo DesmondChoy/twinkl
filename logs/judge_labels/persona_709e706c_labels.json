@@ -3,6 +3,7 @@
   "labels": [
     {
       "t_index": 0,
+      "date": "2025-05-27",
       "scores": {
         "power": 0,
         "achievement": 1,
@@ -15,10 +16,15 @@
         "conformity": 0,
         "security": 0
       },
-      "date": "2025-05-27"
+      "rationales": {
+        "achievement": "He worked on the literature review draft that his supervisor called solid, actively pursuing his doctoral publication targets.",
+        "benevolence": "He calls his mother every Tuesday and redirects the conversation to ask about Noor's day at the shop, maintaining close family connection despite the distance.",
+        "tradition": "The ritualized Tuesday call with his mother follows a scripted pattern of family obligation that he maintains without fail."
+      }
     },
     {
       "t_index": 1,
+      "date": "2025-06-02",
       "scores": {
         "power": 0,
         "achievement": 1,
@@ -31,10 +37,17 @@
         "conformity": 0,
         "security": -1
       },
-      "date": "2025-06-02"
+      "rationales": {
+        "achievement": "He agonizes over the late conference paper, measuring himself against his younger cohort-mate Ahmed who already has two journal submissions this year.",
+        "hedonism": "He has been eating rice and lentils for two weeks straight to keep rent covered, denying himself basic comfort to sustain his studies.",
+        "benevolence": "When Noor calls about the broken printer, he immediately promises to figure it out despite his own financial strain, shielding her from his struggles.",
+        "tradition": "He maintains the nightly phone calls with family and the monthly remittances, fulfilling his role as the eldest son supporting the family from abroad.",
+        "security": "The printer repair costs more than his usual monthly remittance and he cannot cover it without sacrificing his own basic needs, threatening his financial stability."
+      }
     },
     {
       "t_index": 2,
+      "date": "2025-06-05",
       "scores": {
         "power": 0,
         "achievement": 1,
@@ -47,10 +60,17 @@
         "conformity": 0,
         "security": 1
       },
-      "date": "2025-06-05"
+      "rationales": {
+        "achievement": "The supervisor meeting went well, with productive feedback on narrowing scope to make the paper submittable by July.",
+        "hedonism": "He sat on a bench in the park by the pond after the meeting, enjoying the moment and calling his mother from a peaceful spot.",
+        "benevolence": "He called his mother from the park to share the good news, and felt relief when Noor texted that she found a cheaper repair solution.",
+        "tradition": "He tells his mother about the meeting and she responds with 'habibi, you always worry too much,' maintaining their close familial bond.",
+        "security": "Noor finding a cheaper repair guy and the supervisor's positive meeting both ease his financial and academic anxiety, restoring a sense of stability."
+      }
     },
     {
       "t_index": 3,
+      "date": "2025-06-10",
       "scores": {
         "power": -1,
         "achievement": 1,
@@ -63,10 +83,19 @@
         "conformity": 1,
         "security": -1
       },
-      "date": "2025-06-10"
+      "rationales": {
+        "power": "He fumbled during Q&A in front of twelve faces, his mind locked, hands shaking, and he felt diminished compared to the younger students who are 'sharper on their feet.'",
+        "achievement": "Despite the fumble, he had rehearsed four times, prepared clean slides, and organized data meticulously, demonstrating intense commitment to performing well.",
+        "hedonism": "He came home and couldn't eat dinner, instead opening his progress spreadsheet where every line has a yellow or red flag, denying himself rest or comfort.",
+        "benevolence": "His nudge response reveals the degree was ultimately about his mother watching from the front row and proving the sacrifice wasn't reckless, driven by love for family.",
+        "tradition": "He pictured his father watching from the front row before the stroke, seeking the family's recognition and validation of his sacrifices as a dutiful son.",
+        "conformity": "He managed to stay composed during the Q&A fumble, sitting down without anyone noticing his shaking hands, maintaining outward professional composure.",
+        "security": "Every line on his tracking spreadsheet has yellow or red flags, and he reflects that he 'traded one kind of pressure for another, except this one pays nothing.'"
+      }
     },
     {
       "t_index": 4,
+      "date": "2025-06-16",
       "scores": {
         "power": 0,
         "achievement": 1,
@@ -79,10 +108,17 @@
         "conformity": 0,
         "security": 1
       },
-      "date": "2025-06-16"
+      "rationales": {
+        "achievement": "He submitted the revised paper draft and is polishing the teaching assistantship application, steadily checking off milestones on his progress plan.",
+        "stimulation": "He notices he eats dinner alone most nights and keeps finding reasons not to attend the departmental social, preferring familiar routine over new social situations.",
+        "benevolence": "The phone call home was 'normal' for once, with Mama talking about neighbors and Noor complaining about a supplier, and it felt 'lighter' because nobody asked when he was coming back.",
+        "tradition": "He maintains the daily family calls and fulfills his role as the distant but dutiful eldest son, finding comfort in the familiar family rhythms.",
+        "security": "The supervisor's positive feedback and the uneventful family call create a sense of stability he hasn't had, making the week feel 'quiet for once.'"
+      }
     },
     {
       "t_index": 5,
+      "date": "2025-06-22",
       "scores": {
         "power": 0,
         "achievement": 1,
@@ -95,10 +131,16 @@
         "conformity": -1,
         "security": -1
       },
-      "date": "2025-06-22"
+      "rationales": {
+        "achievement": "He told Ahmed 'I didn't leave a perfectly good job to do a watered-down version of what I already know,' insisting on pursuing the harder theoretical track.",
+        "self_direction": "He explicitly defends his choice to pursue deep theoretical understanding rather than taking the easier applied track, framing it as 'a deliberate choice, not a consolation prize.'",
+        "conformity": "He was sharper than expected with Ahmed, pushing back against the assumption that an older industry professional should take the easier route.",
+        "security": "He admits the comprehensive exam reading list makes him read the same page four times and that he's keeping pace 'barely,' revealing the precariousness of his position."
+      }
     },
     {
       "t_index": 6,
+      "date": "2025-06-25",
       "scores": {
         "power": 0,
         "achievement": 1,
@@ -111,10 +153,19 @@
         "conformity": 0,
         "security": 1
       },
-      "date": "2025-06-25"
+      "rationales": {
+        "achievement": "He worked through three finite element analysis practice problems and got two out of three right, with the third being only a sign error, marking genuine academic progress.",
+        "hedonism": "He walked home to the smell of rain and the evening felt genuinely good, savoring the day's satisfaction in a way he hasn't allowed himself before.",
+        "stimulation": "He attended the departmental social for the first time and had an engaging hour-long conversation with Priya about soil liquefaction and his Zarqa overpass project.",
+        "self_direction": "Something clicked in the modeling chapter he'd been struggling with for weeks, representing an independent intellectual breakthrough on his own terms.",
+        "benevolence": "He called his mother and told her about the social, and she said 'finally, you're making friends' in her worried tone; he also saved Noor's photo of the new shop sign.",
+        "tradition": "Noor's photo of the family printing shop with a new sign she designed herself, the family name in green, connects him to the family business and heritage he supports from afar.",
+        "security": "The academic breakthrough and successful social interaction together provide a sense that he belongs and can do this, establishing firmer ground after months of uncertainty."
+      }
     },
     {
       "t_index": 7,
+      "date": "2025-06-27",
       "scores": {
         "power": 0,
         "achievement": 1,
@@ -127,10 +178,18 @@
         "conformity": 0,
         "security": 1
       },
-      "date": "2025-06-27"
+      "rationales": {
+        "achievement": "Getting the teaching assistantship after three semesters of color-coded tracking and relentless effort is concrete evidence that 'someone looked at your file and said yes.'",
+        "hedonism": "He sat with the news for a while, allowing himself to feel the satisfaction of a concrete accomplishment rather than immediately moving to the next target.",
+        "self_direction": "The TA position validates his deliberate choice to leave industry and pursue the harder academic path, proving the decision was sound.",
+        "benevolence": "The extra stipend means he can send Noor more money without skipping meals himself, and that 'matters more to me than the line on my CV.'",
+        "tradition": "The achievement fulfills the family-oriented purpose of his PhD, bringing him closer to the moment his father might recognize the sacrifice was worthwhile.",
+        "security": "The TA stipend provides financial relief and 'something solid to stand on,' easing the precariousness of his situation."
+      }
     },
     {
       "t_index": 8,
+      "date": "2025-06-27",
       "scores": {
         "power": 0,
         "achievement": 1,
@@ -143,7 +202,11 @@
         "conformity": 0,
         "security": 0
       },
-      "date": "2025-06-27"
+      "rationales": {
+        "achievement": "His nudge response reveals the PhD is ultimately about proving 'the years away and the money spent turned into something he can recognize,' seeking family validation for his accomplishment.",
+        "benevolence": "He called his mother to share the TA news and she cried, then told him his father smiled, deepening their emotional bond across the distance.",
+        "tradition": "His deepest motivation is his father knowing he's 'not wasting this,' seeking the approval of his parents and honoring the family sacrifice that enabled his studies."
+      }
     }
   ]
 }

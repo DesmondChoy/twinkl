@@ -15,6 +15,12 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He defends his gig work model as his own deliberate system, rejecting his sister's job listings and asserting 'my choices make sense for my life' and 'nobody can cut my hours without me knowing.'",
+        "hedonism": "He hasn't taken a vacation in four years and meticulously logs every mile and expense, sacrificing leisure and comfort to maintain financial control.",
+        "security": "He set aside $200 for the car fund at the first sign of a transmission whine, maintains an emergency fund, and describes the Honda Accord as 'everything.'",
+        "conformity": "He pushes back against his sister's conventional advice about warehouse jobs with benefits, rejecting the standard employment path others expect him to follow."
       }
     },
     {
@@ -31,6 +37,9 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "security": "He got the oil changed, the mechanic confirmed the car is fine, but he still keeps the car fund at its current level because 'you never know.'"
       }
     },
     {
@@ -47,6 +56,13 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He immediately adjusts his availability to pick up early morning grocery runs on other platforms, problem-solving independently rather than seeking help or taking a traditional job.",
+        "hedonism": "He takes on heavy grocery delivery runs he hates for less pay, sacrificing comfort and physical wellbeing because he has no choice.",
+        "achievement": "He spent three hours reviewing old emails and immediately shifted platforms to compensate, demonstrating resourcefulness and determination to maintain his income.",
+        "power": "DoorDash deactivated his account without explanation despite his 4.91 rating, leaving him powerless against an opaque corporate process with no recourse.",
+        "security": "He had to move $300 from his untouchable car repair fund to cover health insurance, describing it as 'breaking a promise to myself' and destabilizing his safety net."
       }
     },
     {
@@ -63,6 +79,12 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He told his sister he'd 'think about it' to end the warehouse conversation, maintaining his commitment to running his own work life on his own terms.",
+        "hedonism": "He did twelve hours of physical delivery work and his back is killing him from the grocery hauls, pushing through discomfort for income.",
+        "achievement": "He made $186 in a single day across two platforms despite losing DoorDash, demonstrating competence and work ethic under adverse conditions.",
+        "security": "He explains that taking a warehouse job now means starting at the bottom of the seniority list and being 'first to get cut,' reasoning through stability risks carefully."
       }
     },
     {
@@ -79,6 +101,12 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He sets up daily DoorDash rating checks and plans six-day work weeks, creating his own monitoring system to take control of an opaque platform.",
+        "hedonism": "He commits to six-day weeks to rebuild the car fund, choosing grueling work over any leisure or recovery time.",
+        "achievement": "He logged in immediately upon reinstatement and did deliveries to confirm it was real, then planned an aggressive recovery schedule to rebuild what he lost.",
+        "security": "He is focused on rebuilding the $300 car fund deficit and added a daily rating check as a proactive monitoring system against future deactivation threats."
       }
     }
   ]

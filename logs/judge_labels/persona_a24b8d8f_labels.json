@@ -15,6 +15,11 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 1
+      },
+      "rationales": {
+        "hedonism": "He spent his Tuesday evening debugging a nonprofit intake form instead of relaxing at home, and explicitly contrasts it with 'watching Netflix again,' sacrificing leisure for volunteer work.",
+        "benevolence": "He helped Amira, a close collaborator at the nonprofit, debug an issue she had been stuck on for two days, investing personal time in supporting someone he works with directly.",
+        "universalism": "He chose to spend his evening writing intake software for a refugee integration nonprofit, contributing to the welfare of people outside his immediate circle."
       }
     },
     {
@@ -31,6 +36,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "conformity": "He stayed silent in a twelve-person meeting when Felix mentioned exploitative labour practices, choosing not to speak up because nobody else flinched and he did not want to stand out.",
+        "universalism": "He knowingly let pass a comment about gig workers with zero protections, failing to advocate for vulnerable workers despite recognizing the injustice immediately."
       }
     },
     {
@@ -47,6 +56,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "hedonism": "He booked a budget airline flight to Lisbon for a holiday, choosing personal convenience and enjoyment over the environmentally costly but less comfortable train option.",
+        "security": "He chose the sixty-euro flight over the train that would have eaten half his weekend travel budget, prioritizing financial safety and cost management.",
+        "universalism": "He knowingly booked a flight on an airline flagged for its emissions record, choosing personal convenience over environmental responsibility despite understanding the cumulative impact."
       }
     },
     {
@@ -63,6 +77,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "power": "He deferred to Sandra because she is senior to him and leads the Q3 roadmap review, accepting his subordinate position and calculating that challenging her would be risky.",
+        "conformity": "He changed the subject to the sprint deadline rather than confronting Sandra's thinly veiled comment about neighbourhood diversity, avoiding conflict to maintain smooth social relations at the lunch table.",
+        "universalism": "He let Sandra's implicit anti-diversity comment pass unchallenged, failing to speak up for the people affected by the attitude she expressed."
       }
     },
     {
@@ -79,6 +98,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "self_direction": "He abandoned his independent push for a carbon audit after Stefan shut it down, admitting he felt relieved to have an excuse to stop and acknowledging he chose the easier path despite his own judgment that the reporting tolerances were inadequate.",
+        "conformity": "He accepted the compliance officer's response without escalating, even though he believed the fifteen-percent tolerance band was laughable, choosing institutional harmony over making waves at eighteen months in.",
+        "universalism": "He dropped his pursuit of accurate carbon reporting despite knowing the numbers were significantly underreported, choosing personal comfort over environmental accountability and admitting he wants 'someone else to fight this one.'"
       }
     },
     {
@@ -95,6 +119,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "conformity": "He stayed silent when a colleague made a stereotyping joke about Eastern European work ethic during Tomasz's onboarding, avoiding confrontation and going back to his Jira tickets instead.",
+        "universalism": "He noticed Tomasz's discomfort at the joke about his nationality but chose not to speak up or check in with him afterward, failing to act on behalf of someone being marginalized."
       }
     },
     {
@@ -111,6 +139,10 @@
         "tradition": 0,
         "benevolence": 1,
         "universalism": 1
+      },
+      "rationales": {
+        "benevolence": "He attended the nonprofit summer meetup and connected personally with the Haddad family he had helped with paperwork, and Marwan's wife said 'you are part of the story now,' reflecting his sustained personal involvement.",
+        "universalism": "He showed up consistently for a refugee family through the nonprofit, and the moment with Marwan celebrating his daughter's school success illustrates Lukas contributing to broader welfare beyond his own circle."
       }
     },
     {
@@ -127,6 +159,11 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": 1
+      },
+      "rationales": {
+        "self_direction": "He chose to speak up in his one-on-one with Katharina about the onboarding comment, acting on his own judgment despite knowing it might be dismissed, and recognizes this as a departure from his previous pattern of choosing silence.",
+        "conformity": "He deliberately raised an uncomfortable issue with his manager about workplace culture, breaking his pattern of staying quiet and risking being seen as 'sensitive' rather than easygoing.",
+        "universalism": "He advocated for Tomasz and broader workplace inclusivity by reporting the onboarding comment to his manager, acting to protect someone outside his immediate circle from a hostile environment."
       }
     },
     {
@@ -143,6 +180,10 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "security": "He bought the cheaper store-brand coffee because he had only forty euros left until payday, prioritizing his financial safety over the fair trade option.",
+        "universalism": "He knowingly chose store-brand coffee over the fair trade option despite understanding the exploitative supply chain implications, continuing a pattern of prioritizing personal convenience over broader welfare."
       }
     },
     {
@@ -159,6 +200,9 @@
         "tradition": 0,
         "benevolence": 0,
         "universalism": -1
+      },
+      "rationales": {
+        "universalism": "He reflects on how easily he lets things go at work and feels like a fraud when Tomasz nods at him in the hallway, recognizing his continued failure to advocate for others in the workplace."
       }
     }
   ]

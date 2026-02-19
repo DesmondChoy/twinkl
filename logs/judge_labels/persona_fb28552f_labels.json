@@ -17,7 +17,14 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Entry is dominated by restlessness with routine and excitement at Kenya opportunity. Explicitly rejects stability narratives ('turning to stone'), heart races at building something from scratch. Strong stimulation alignment, strong security misalignment. Mild tension with daughter's expectations (benevolence) and rejection of 'putting down roots' conformity/tradition."
+      "rationales": {
+        "self_direction": "Entry is dominated by restlessness with routine and excitement at Kenya opportunity. Explicitly rejects stability narratives ('turning to stone'), heart races at building something from scratch. Strong stimulation alignment, strong security misalignment. Mild tension with daughter's expectations (benevolence) and rejection of 'putting down roots' conformity/tradition.",
+        "stimulation": "Entry is dominated by restlessness with routine and excitement at Kenya opportunity. Explicitly rejects stability narratives ('turning to stone'), heart races at building something from scratch. Strong stimulation alignment, strong security misalignment. Mild tension with daughter's expectations (benevolence) and rejection of 'putting down roots' conformity/tradition.",
+        "security": "Entry is dominated by restlessness with routine and excitement at Kenya opportunity. Explicitly rejects stability narratives ('turning to stone'), heart races at building something from scratch. Strong stimulation alignment, strong security misalignment. Mild tension with daughter's expectations (benevolence) and rejection of 'putting down roots' conformity/tradition.",
+        "conformity": "Entry is dominated by restlessness with routine and excitement at Kenya opportunity. Explicitly rejects stability narratives ('turning to stone'), heart races at building something from scratch. Strong stimulation alignment, strong security misalignment. Mild tension with daughter's expectations (benevolence) and rejection of 'putting down roots' conformity/tradition.",
+        "tradition": "Entry is dominated by restlessness with routine and excitement at Kenya opportunity. Explicitly rejects stability narratives ('turning to stone'), heart races at building something from scratch. Strong stimulation alignment, strong security misalignment. Mild tension with daughter's expectations (benevolence) and rejection of 'putting down roots' conformity/tradition.",
+        "benevolence": "Entry is dominated by restlessness with routine and excitement at Kenya opportunity. Explicitly rejects stability narratives ('turning to stone'), heart races at building something from scratch. Strong stimulation alignment, strong security misalignment. Mild tension with daughter's expectations (benevolence) and rejection of 'putting down roots' conformity/tradition."
+      }
     },
     {
       "t_index": 1,
@@ -35,7 +42,12 @@
         "universalism": 0
       },
       "confidence": "high",
-      "rationale": "Concrete action: booked flight to Nairobi, taking sabbatical. Acts decisively on stimulation drive. Dismisses stability concerns as 'just logistics'. Framing sabbatical as 'professional development' while knowing it's more than that shows mild nonconformity to expectations. Self-directed autonomous choice."
+      "rationales": {
+        "self_direction": "Concrete action: booked flight to Nairobi, taking sabbatical. Acts decisively on stimulation drive. Dismisses stability concerns as 'just logistics'. Framing sabbatical as 'professional development' while knowing it's more than that shows mild nonconformity to expectations. Self-directed autonomous choice.",
+        "stimulation": "Concrete action: booked flight to Nairobi, taking sabbatical. Acts decisively on stimulation drive. Dismisses stability concerns as 'just logistics'. Framing sabbatical as 'professional development' while knowing it's more than that shows mild nonconformity to expectations. Self-directed autonomous choice.",
+        "security": "Concrete action: booked flight to Nairobi, taking sabbatical. Acts decisively on stimulation drive. Dismisses stability concerns as 'just logistics'. Framing sabbatical as 'professional development' while knowing it's more than that shows mild nonconformity to expectations. Self-directed autonomous choice.",
+        "conformity": "Concrete action: booked flight to Nairobi, taking sabbatical. Acts decisively on stimulation drive. Dismisses stability concerns as 'just logistics'. Framing sabbatical as 'professional development' while knowing it's more than that shows mild nonconformity to expectations. Self-directed autonomous choice."
+      }
     }
   ]
 }
