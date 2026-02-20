@@ -425,6 +425,16 @@ def _build_experiment_dict(
             "state_encoder": {
                 "window_size": config.get("window_size", 1),
             },
+            "data": {
+                "n_train": n_train,
+                "n_val": n_val,
+                "n_test": n_test,
+                "train_ratio": config.get("train_ratio", 0.70),
+                "val_ratio": config.get("val_ratio", 0.15),
+                "split_seed": config.get("seed", 42),
+                "pct_truncated": _round_val(pct_truncated),
+                "state_dim": state_dim,
+            },
             "model": {
                 "hidden_dim": config.get("hidden_dim", 256),
                 "dropout": config.get("dropout", 0.2),
@@ -445,16 +455,6 @@ def _build_experiment_dict(
                     else None
                 ),
             },
-        },
-        "data": {
-            "n_train": n_train,
-            "n_val": n_val,
-            "n_test": n_test,
-            "train_ratio": config.get("train_ratio", 0.70),
-            "val_ratio": config.get("val_ratio", 0.15),
-            "split_seed": config.get("seed", 42),
-            "pct_truncated": _round_val(pct_truncated),
-            "state_dim": state_dim,
         },
         "capacity": {
             "n_parameters": n_parameters,
