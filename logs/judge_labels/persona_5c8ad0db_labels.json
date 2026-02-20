@@ -1,0 +1,126 @@
+{
+  "persona_id": "5c8ad0db",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-05-13",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {}
+    },
+    {
+      "t_index": 1,
+      "date": "2025-05-19",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Explicitly reflects that he left a comfortable role because he \"didn't want to execute someone else's vision forever\" and wanted to author his own direction.",
+        "achievement": "Successfully delivered the Q3 roadmap, handled all questions without pushback, and received unsolicited validation from Arjun on the enterprise pivot he had been championing for two months.",
+        "power": "Describes satisfaction at the team going quiet when he spoke and \"knowing that I'm the one making the call\" — actively seeking and enjoying authority and deference from others."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-05-19",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "Vikram cut him off mid-pitch and the investor shifted attention to Vikram for the rest of the call — Rohan lost control of the room and accepted the subordination without pushing back.",
+        "conformity": "Despite being undermined in front of an investor, he restrained himself and \"didn't say anything,\" choosing social smoothness over asserting his authority."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-05-26",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": -1,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Feels he \"looks like he can't close\" to the board because the pilot hasn't started — experiencing failure to demonstrate competence despite his CEO role.",
+        "power": "Despite being CEO, he cannot move his own roadmap forward and is dependent on a mid-level procurement officer's approval — \"I'm the CEO of this company and I can't move my own roadmap forward.\""
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-06-01",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Conceded to Vikram's pricing approach despite believing his own analysis was correct, surrendering his independent judgment to avoid appearing ego-driven.",
+        "power": "Watched the team he recruited choose Vikram's direction over his, experiencing a direct loss of authority — \"watching them choose someone else's direction over mine.\"",
+        "conformity": "Agreed to Vikram's approach rather than continue fighting, because pushing further \"would have made me look like I was digging in out of ego\" — self-restrained to maintain social harmony.",
+        "tradition": "References his father's unquestioned authority in his garment business as a model he finds meaningful, revealing respect for traditional patriarchal authority structures."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-06-07",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": -1,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "A younger founder's dismissal — \"oh, still early then\" — made him feel his three years of work aren't enough, revealing a sense of inadequate accomplishment.",
+        "power": "A stranger treated his Series A as insignificant and turned away, diminishing his status; he sat in his car unable to shake the feeling that he hasn't achieved sufficient standing.",
+        "benevolence": "Lied to Meera about why he was late — \"I said traffic\" — choosing to protect his self-image over being vulnerable and honest with his partner."
+      }
+    }
+  ]
+}

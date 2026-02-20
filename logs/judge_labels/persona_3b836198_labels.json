@@ -1,0 +1,145 @@
+{
+  "persona_id": "3b836198",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-07-19",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "Marcus let Jake restate his points and cut him off mid-sentence without pushing back, losing control of his own narrative in front of the board. He explicitly regrets his passivity: 'I should've shut it down. I didn't. I hate that I didn't.'",
+        "conformity": "Rather than causing a confrontation on the investor call, Marcus restrained himself — he 'paused, let him finish, and kept going like it didn't happen,' maintaining social smoothness at the cost of his authority."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-07-21",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "Marcus held firm in the negotiation, refused the VP's last-minute push to lower the margin, and waited him out: 'Just said that's not going to work for us and waited.' He secured terms that reflect his company's dominant position.",
+        "achievement": "Successfully closing a six-month partnership deal on his terms and reading the situation correctly gave him 'quiet satisfaction of knowing I read the situation correctly and didn't blink' — demonstrating competence in a high-stakes negotiation."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-07-27",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "Marcus personally reviews ad spend, approves the marketing contractor's suggestions, and handles the lease renewal himself. He notes 'nothing moves forward unless I push it,' maintaining centralized control over all decisions.",
+        "hedonism": "Working in the office on a Sunday, eating a sandwich at his desk while reviewing lease documents — he sacrifices leisure and personal comfort for work without any indication of enjoyment."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-08-02",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Marcus has a visceral reaction to the idea of someone else determining his work: 'The thought of someone else deciding what I work on each week makes my chest tight.' He explicitly rejects structured, externally-directed work in favor of authoring his own path.",
+        "power": "He redefines alignment as top-down direction: 'alignment means everyone gets on board with the direction I've set, not a group exercise where we vote on priorities,' revealing his expectation that others follow his lead."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-08-02",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "Marcus explicitly prefers sole authority over collaboration: 'I'd rather be the one making the calls alone than share the wheel with someone who doesn't see what I see.' His nudge response confirms he views shared decision-making as an unacceptable negotiation.",
+        "benevolence": "Marcus categorizes all his relationships as functional hierarchies — 'people I manage or people who manage expectations of me' — dismissing the possibility of peer-level closeness and framing Lauren's concern about loneliness as simply 'the shape of the job.'"
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-08-04",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "Marcus called the planning office, requested reassignment, and pushed to accelerate the process — all attempts to exert control over an external timeline. His frustration stems entirely from being unable to impose his will: 'I can handle problems. I can't handle sitting still.'"
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-08-08",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "Marcus successfully defended his warehouse expansion against a board member's challenge, walking him through the numbers until 'he backed off.' He reflects on 'the board falling in line' as proof his way of running things works.",
+        "achievement": "Marcus calculated the cost savings before the board asked, demonstrated competence by having the per-unit comparison ready, and reflects on building 'something real' that is 'growing on my terms' — a clear marker of personal success through demonstrated capability.",
+        "self_direction": "Marcus explicitly refused to outsource fulfillment to a third-party logistics provider he 'can't control,' choosing operational independence over a potentially easier option the board suggested."
+      }
+    }
+  ]
+}

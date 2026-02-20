@@ -1,0 +1,188 @@
+{
+  "persona_id": "8e3b4017",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-04-30",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "Ricardo controlled the meeting rhythm and redirected Camila before she could finish her suggestion, asserting his authority over the agenda and the department.",
+        "benevolence": "He dismissed a new colleague's contribution without hearing her out, and his nudge response ('Not the point') shows no concern for her experience or wellbeing."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-04-30",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "He explicitly frames himself as the person who 'holds the line' and has done so for fifteen years, reinforcing his role as the authority figure the department depends on.",
+        "benevolence": "He notices Camila 'looked a little deflated' but dismisses her feelings entirely, declaring 'She is new. She will learn how things work here' rather than showing concern."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-05-01",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "His prepared presentation was cut short, his data was co-opted by Rios without credit, and he accepted the subordination rather than reclaiming his work — a clear loss of authority and status.",
+        "conformity": "Despite feeling furious (jaw clenching), he restrained himself, smiled, nodded, and chose not to push back because it 'would have looked petty,' conforming to the social expectation set by the coordinadora."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-05-02",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He acted on his own initiative without being asked — 'You do not wait for permission, you present the solution' — demonstrating independent action and autonomous decision-making.",
+        "power": "He sent corrections 'marked in red' and cc'd relevant people, asserting authority over the exam schedule and positioning himself as the person who fixes administrative problems."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-05-07",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He chose to spend his lunch break grading quizzes at his desk instead of socializing, prioritizing productive work output over rest.",
+        "hedonism": "He skipped the social break and lunch with colleagues to work through the period, sacrificing leisure and comfort for task completion."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-05-07",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 1,
+        "power": 1,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "He explicitly values controlling the calendar as controlling the operation, echoing his father's philosophy, and describes systematically monitoring all schedules to 'know what is happening before most people know it is happening.'",
+        "achievement": "The vice-rector's public recognition of his exam schedule corrections validates his competence, and he notes 'That is how it should work — you do good work, someone notices.'",
+        "security": "He reviews the departmental calendar, exam schedule, and committee dates weekly to prevent things from 'falling apart,' driven by fear of the chaos he has seen befall other department heads.",
+        "hedonism": "He explicitly rejects relaxation — 'when I relax, things slip' — framing leisure as a threat rather than a legitimate need.",
+        "benevolence": "His wife Patricia tells him he brings school energy home and he acknowledges she 'has a point' but immediately dismisses her concern, prioritizing his need for control over her expressed needs."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-05-07",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "He defines his identity as 'a man who takes charge of things' across all domains — school, junta, and home — and cannot conceive of being anything less.",
+        "benevolence": "Despite acknowledging Patricia's valid concern for a third time that day, he frames the issue as his inability to change rather than willingness to accommodate her, prioritizing his controlling identity over the relationship."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-05-08",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "His frustration at the coordinadora's silence centers on respect for his status as a department head — he tracks that she responded to another email the same day, interpreting the non-response as a status slight rather than an administrative delay."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-05-08",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "His proposal is being forced into a 'co-development' with Rios, diluting his control and expertise into a committee process — he describes his fifteen years of expertise being 'diluted into consensus.'",
+        "self_direction": "He wanted to push back on the co-development framing but surrendered autonomy over his own idea because the coordinadora framed it as collaboration and 'you cannot argue against that.'",
+        "conformity": "He suppressed his objection and said 'sounds good' despite strongly disagreeing, conforming to the social expectation of collaboration to avoid looking 'difficult.'"
+      }
+    }
+  ]
+}

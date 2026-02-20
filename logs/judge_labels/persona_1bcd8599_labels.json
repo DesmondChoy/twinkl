@@ -1,0 +1,202 @@
+{
+  "persona_id": "1bcd8599",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-02-11",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "Dr. Salwa talked over his patient update and the resident pivoted to her, directly undermining his authority during handoff. He accepted the subordination by not interrupting and waiting silently.",
+        "conformity": "Despite feeling diminished, he restrained himself from interrupting, avoided conflict, and resumed his report as if nothing happened — maintaining social smoothness over asserting his position."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-02-11",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "His autonomy is constrained by institutional bureaucracy — he followed every correct step but has no control over the outcome, dependent on a clerk he has never met to approve his clinical judgment.",
+        "power": "He explicitly experiences loss of status: 'Like I am back to being a junior nurse asking permission to change a dressing.' Despite 28 years of experience, he has no more procurement authority than a fresh graduate."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-02-15",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He proactively caught a missing signature on discharge paperwork that would have bounced back from records, demonstrating diligent competence and maintaining high standards on his floor."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-02-22",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He surrendered his own clinical judgment — he wrote the current protocol and knows it works, but gave in to avoid being labeled 'the old guard resisting change' rather than standing by his assessment.",
+        "power": "His expertise was overruled by a newer doctor and management without consulting any bedside nurse; 'the committee that rewrote it did not consult a single bedside nurse' and the unit manager sided with Dr. Fares over him.",
+        "conformity": "He explicitly chose to fall in line: 'I said fine' and accepted the new policy to avoid social friction and the stigma of being labeled resistant to change."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-02-22",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "He perceives the mentoring request as 'containment' — a check on whether he will fall in line. His authority and judgment have been overridden, and now he is being asked to carry someone else's decision to the team.",
+        "conformity": "Despite resenting it, he will comply fully: 'I will teach Hana and the others exactly how the new protocol works, and I will do it well, because that is what I do.' He restrains his dissent and conforms to institutional expectations."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-02-28",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {}
+    },
+    {
+      "t_index": 6,
+      "date": "2025-03-06",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "As chair of the council, Abu Fadi talked over him three times during his budget presentation and everyone just sat there — his authority in a leadership role he holds was directly undermined.",
+        "conformity": "He restrained himself from shutting Abu Fadi down to avoid rallying opposition among older residents: 'I let him talk and then I steer the vote.' He prioritized social harmony over asserting his authority."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-03-10",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "His seniority-based status is not recognized by the new scheduling system; a nurse with two years of experience has the same standing as him. His request for his daughter's orientation is treated as negotiable despite 30 years of service.",
+        "benevolence": "The underlying action is driven by care for his daughter — he is fighting to attend her university orientation, prioritizing her important life milestone."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-03-11",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "tradition": "The morning reflects cultural traditions: the mother insisting on paying ('a mother's duty does not expire'), stopping at Abu Mahmoud's bakery for knafeh, and the warm familial customs around the visit.",
+        "benevolence": "He took his mother to her cardiology appointment before his shift, spent quality time with her eating knafeh in the car, and attended to her wellbeing — clear prioritization of close family care."
+      }
+    },
+    {
+      "t_index": 9,
+      "date": "2025-03-12",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He resisted the committee's proposal by voicing his independent assessment that continuity matters, and strategically bought time by offering written feedback rather than simply accepting the decision — 'my way of not surrendering while buying time.'",
+        "power": "The 'shared leadership' proposal would strip his permanent charge nurse role; he recognizes it as a move to flatten the hierarchy so 'no one person has enough standing to push back on administrative decisions.' His leadership position is being systematically dismantled."
+      }
+    }
+  ]
+}

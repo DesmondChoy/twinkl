@@ -1,0 +1,213 @@
+{
+  "persona_id": "e448979e",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-03-15",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Nadia insists on deciding the dinner menu herself ('I told him fine but I'm deciding the menu, not his mother') and independently devised Zara's diet plan, asserting her autonomous judgment.",
+        "achievement": "She tracks Instagram engagement metrics ('forty-seven likes, twelve comments') and finds satisfaction in others asking her opinion on products, demonstrating competence-seeking behavior.",
+        "power": "She asserts authority over her daughter's care (validated by the doctor against Ammi's criticism) and claims control over the dinner menu, actively positioning herself as the decision-maker."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-03-22",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Nadia surrendered her decision-making authority over Zara's wardrobe, saying 'okay, thank you' instead of asserting her own organizational choices in her daughter's room.",
+        "power": "Ammi rearranged Zara's wardrobe without asking, overriding Nadia's domain, and Nadia accepted the subordination because pushing back triggers a chain of family consequences ('She tells Farhan. Farhan tells me to keep the peace').",
+        "conformity": "She restrained herself from speaking her mind to maintain family harmony, acknowledging the 'pecking order' of joint family life and choosing compliance over confrontation."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-03-29",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Nadia cannot independently handle her daughter's medical appointment finances because the account is linked to Farhan's card, leaving her unable to act on her own initiative.",
+        "power": "She is entirely dependent on Farhan to 'press a button on their phone' for something that matters to her, forced to 'sit and hope they get around to it' — a clear experience of powerlessness over resources."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-04-03",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She independently researched specs, prepared comparison notes, and accepted the collab on her own terms — 'Nobody needs to hand me a script' — exercising full creative autonomy.",
+        "achievement": "Nadia thoroughly prepared talking points and research for the collaboration, demonstrating competence, and takes pride that Farhan acknowledged her page is 'doing well.'",
+        "power": "She emphasizes ownership and control over her platform: 'I built that page from nothing — every photo, every caption, every reply to every comment. That's mine.' The collab extends her influence."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-04-04",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Despite planning the entire dinner menu for hours, Ammi overrode her by adding dishes without asking, and Nadia's autonomous plan was subsumed into a 'collective effort' that erased her individual choices.",
+        "power": "Ammi walked into the kitchen and started cooking without permission, the cousin's wife complimented Ammi's dish specifically, and Farhan framed dinner as collective — Nadia's authority over her own planned event was completely undermined.",
+        "conformity": "Nadia served Ammi's additions alongside her own dishes, smiled through the dinner, and cleared the table without confrontation, conforming to family expectations of deference to the elder woman's judgment."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-04-06",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Nadia's independent research on nursery schools was rendered irrelevant when Abba redirected the conversation to Farhan mid-sentence, and her initiative was treated as if it didn't count.",
+        "power": "Abba dismissed her by speaking to Farhan as if Nadia 'simply didn't register as someone whose input counted,' and the decision about her daughter's schooling was channeled between the men, excluding her from authority.",
+        "conformity": "Rather than confronting either Abba or Farhan, Nadia withdrew to the bedroom, choosing to absorb the slight silently rather than disrupt family harmony."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-04-12",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She autonomously decides what becomes content ('some things don't need to be content') and contrasts her online freedom with household constraints: 'Online I recommend a product and people actually listen.'",
+        "achievement": "First free product from a brand that sought her out, 200 views in the first hour, and she screenshots the analytics — actively tracking and celebrating measurable success metrics.",
+        "power": "Strangers treat her opinion as authoritative, a brand sent a free product recognizing her influence, and she finds satisfaction when Zara reaches for her over Ammi — all markers of status and control."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-04-12",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She emphasizes that every aspect was her own choice: 'What to review, what to say, how to frame it, when to post' — 'Nobody's mother-in-law set it up. Nobody's husband transferred money so I could do it.'",
+        "achievement": "A parenting micro-influencer with 8,000 followers validated her work ('great breakdown, following'), representing recognition of competence from an established peer.",
+        "power": "She describes feeling like she's 'steering something' for the first time — 'Not asking permission. Not waiting for someone to agree' — the Instagram platform is a domain where she holds authority and influence."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-04-15",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "A mother at the park recognized her from her page, and a DM follower bought a product based on her recommendation — real-world evidence of demonstrated competence being acknowledged.",
+        "power": "Her nudge response crystallizes it: 'If you put in the work to learn something properly, people should listen.' She is becoming the person 'other people check with before spending their money' — a position of authority and influence."
+      }
+    },
+    {
+      "t_index": 9,
+      "date": "2025-04-21",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Nadia's independent school research is being processed through Farhan and Ammi without her involvement — she found out about her own daughter's schooling discussion secondhand at dinner.",
+        "power": "Farhan told his mother about the nursery decision before telling Nadia, bypassing her entirely in the information and decision chain about her own child's education — a stark exclusion from authority.",
+        "conformity": "Despite her hands shaking under the table, Nadia 'just kept eating' and didn't confront anyone, maintaining outward composure and family harmony even while being sidelined."
+      }
+    }
+  ]
+}

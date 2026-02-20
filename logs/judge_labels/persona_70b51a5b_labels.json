@@ -1,0 +1,184 @@
+{
+  "persona_id": "70b51a5b",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-09-22",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "Priya booked Arjun's birthday venue without consulting Meena, and Meena accepted this subordination by choosing not to speak up, letting herself be 'informed rather than consulted.'",
+        "conformity": "Meena restrained herself from confronting Priya because she 'didn't want to be the difficult one again,' self-monitoring to avoid conflict despite her frustration."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-09-29",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "Meena was forced to rearrange her entire afternoon around the plumber's and secretary's schedule, losing control over her own time. She was so frustrated by her powerlessness that she 'couldn't even explain the problem properly' and just walked away."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-10-04",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "The fish vendor defers to Meena's standards ('he knows I won't accept anything less than the morning catch'), and she takes satisfaction that 'at least one part of this house stays exactly as I organize it.'",
+        "security": "Meena finds comfort in routine and order — the predictable weekly vendor visit, methodically sorting the cupboard, and the satisfaction of maintaining things 'exactly as I organize it.'"
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-10-08",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "Arjun's sincere declaration that 'Paati knows everything' validated Meena's authority and expertise, which she contrasts with how 'everyone else in this house measures their words around me.'",
+        "benevolence": "Meena spent the evening actively helping her grandson with his geography project, investing time and knowledge in a close family member's welfare."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-10-08",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "Vikram and Priya had already applied to the new school before consulting Meena — 'the conversation wasn't a discussion, it was a notification dressed up as one.' Her authority in family decisions was completely bypassed.",
+        "conformity": "Despite deep frustration, Meena said 'fine' and walked away to the kitchen rather than escalating the conflict, restraining her authentic reaction to maintain household peace."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-10-13",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "Meena actively defended her authority by telling Kavitha to stop rearranging the pooja room and personally put everything back, asserting that 'I've maintained that space for thirty-five years and every item is where it is for a reason.'",
+        "tradition": "Meena protected sacred items with deep cultural and family significance — the brass Ganesha from her mother, the forty-year-old kumkum box — defending a ritual space she has maintained for thirty-five years."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-10-20",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "Meena learned about her son's potential move through a WhatsApp group rather than being consulted directly. Vikram dismissed her concern as overreacting, and Rajan told her to calm down — her authority in major family decisions continues to erode.",
+        "conformity": "Meena deleted two WhatsApp messages (about being 'the last to know' and about 'respect') because she 'knew Priya would read them too and it would become a whole thing,' restraining her expression to avoid family conflict.",
+        "benevolence": "Meena's core concern is about proximity to her grandson — 'my grandson might not be ten minutes away anymore' — reflecting deep investment in maintaining close family bonds."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-10-25",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "Household staff coordination was routed through Priya instead of Meena, and Priya dismissed Meena's role by calling her concerns 'complaining.' Meena feels she is 'being eased out of my own role without anyone saying it out loud.'",
+        "tradition": "Meena's morning prayers were disrupted by the maid's scheduling — she 'had to rush through everything because a stranger was standing in my hallway,' showing the importance of maintaining her daily ritual."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-10-28",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "Meena asserted control by refusing the auto driver's inflated fare — 'I told him I've been taking this route for ten years, I know the rate' — and he conceded to her authority."
+      }
+    }
+  ]
+}

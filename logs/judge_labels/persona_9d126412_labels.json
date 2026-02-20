@@ -1,0 +1,167 @@
+{
+  "persona_id": "9d126412",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-09-22",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Kenneth spent two weekends preparing contractor quotes and cost breakdowns, demonstrating competence through thorough preparation that no one else would have done, and felt validated when Mrs. Lim nodded along.",
+        "power": "He controlled the information, set the direction, and steered the vote to 7-2 in his favor, describing his approach as 'you control the information, you set the direction' and feeling like 'the version of me that knows how to move a room.'"
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-09-29",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Kenneth restructured the KPI template to make the data 'speak for itself' and received recognition from the GM who called it 'clean work,' demonstrating competence through measurable improvement.",
+        "power": "His nudge response reveals the praise meant the GM 'still sees the difference between someone who knows how to run operations and someone who hides behind frameworks' — affirming his status and authority relative to others."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-10-02",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Kenneth chose not to speak up when Daniel presented his idea without credit, surrendering his voice and agency because he feared how it would 'look' rather than acting on his own judgment.",
+        "power": "He passively accepted the loss of credit and status as Daniel presented his regional consolidation idea — his own idea — to an approving room, describing himself as sitting there with his 'mouth half open.'",
+        "conformity": "He restrained himself from claiming credit to avoid looking 'petty' or like 'the older guy clinging to credit,' prioritizing social appearance and smooth interaction over asserting himself."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-10-09",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": -1,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Kenneth is blocked from demonstrating competence as his team burns hours on manual reconciliation, and he will bear the blame on the status report despite the bottleneck not being his — his performance is being undermined by forces outside his control.",
+        "power": "He is forced into a subordinate, dependent position, waiting on 'a thirty-year-old IT coordinator to decide when my department gets to function properly' despite twenty-three years of seniority, experiencing a clear loss of control over his department's operations."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-10-16",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 1,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Kenneth surrendered his operational judgment — eight years of proven success with the staffing model — to go along with the GM's decision to pilot a system he believes will fail, telling Michelle 'it is what the GM wants, so we execute.'",
+        "power": "His authority over warehouse staffing was overridden without meaningful counter-argument from the GM, who simply said 'let's try it,' dismissing Kenneth's data and operational expertise in favor of Priscilla's slide deck.",
+        "security": "Kenneth explicitly argued for stability and structure: 'People need structure. You need to know who is where and when, and someone needs to own that decision,' defending the predictable system he has maintained for eight years.",
+        "conformity": "Despite believing the decision is wrong, he said 'fine,' shook Priscilla's hand, and told his supervisor 'it is what the GM wants, so we execute. That is the job' — restraining his objections to maintain organizational harmony."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-10-20",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Kenneth repeatedly suppresses his own expert judgment, nodding along to a facilitator teaching stakeholder mapping 'as if half the room had not been managing stakeholders since before she graduated,' and admits 'Every year I sit in the chair and nod.'",
+        "power": "He experienced a loss of status being lectured by a facilitator 'could not have been older than thirty-five' and having his Suzhou warehouse example reframed as 'vulnerability' rather than the strategic competence it represented.",
+        "conformity": "He restrained his objections, gave a 'polished answer,' and nodded along rather than challenging the facilitator, noting in his nudge response 'It is just a workshop. Not worth making a scene over. You pick your battles.'"
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-10-26",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {}
+    },
+    {
+      "t_index": 7,
+      "date": "2025-11-01",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": -1,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Kenneth watches Daniel receive applause at the town hall for the consolidation project that 'started in my head, over my coffee, in my office,' reflecting that his competence is no longer recognized — 'it is starting to feel like a frame around an empty picture.'",
+        "power": "His status has eroded to the point where he sits 'clapping politely' while someone else gets credit for his idea, and he reflects that 'this used to be the place where I mattered, where my decisions moved things' — a profound loss of authority and influence.",
+        "benevolence": "He nearly snapped at his wife when she offered genuine advice, internally dismissing her perspective with 'She runs a catering business out of our kitchen. This is a forty-five person operation across three countries' — prioritizing his wounded ego over his relationship with her."
+      }
+    }
+  ]
+}

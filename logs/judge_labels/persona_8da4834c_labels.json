@@ -1,0 +1,147 @@
+{
+  "persona_id": "8da4834c",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-02-06",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Lukas surrendered his voice and let Henrik take over the meeting despite having a fully prepared proposal, choosing not to insist on finishing his presentation.",
+        "power": "He was visibly sidelined — his slides were still up but ignored — and he accepted subordination rather than reasserting control, later reflecting 'I shouldn't have to audition for basic respect.'",
+        "conformity": "He restrained himself from pushing back because he feared looking 'petty or desperate,' prioritizing social perception over asserting his position."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-02-10",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Lukas demonstrated competence through thorough rubric breakdowns and learning profiles, receiving explicit recognition from parents — one praised his organisation, another asked him to mentor her son.",
+        "power": "He frames trust as a lever for influence — 'when they trust you, you can actually change things' — and takes pride in positioning himself where decisions get made, contrasting his energy with Elsa's exhaustion."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-02-17",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "His autonomy is blocked by bureaucratic gatekeeping — he has completed all the work but cannot act on it, forced to wait for others' approval with no control over the timeline.",
+        "power": "He is denied the direct access to budget approval he wants, forced into a subordinate position where his finished work is treated as an 'afterthought' by people who hold the institutional authority."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-02-20",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He was selected for a senior-level panel slot over more experienced colleagues specifically because of his thorough documentation, and is already preparing his presentation three weeks early to deliver the 'most polished submission in the room.'",
+        "power": "He explicitly frames this opportunity as strategic positioning for status — 'the district coordinators will know my name. That opens doors. That's how you go from being the young geography teacher to someone people actually listen to.'"
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-02-20",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He abandoned his own exam staggering plan in favor of Karin's despite believing hers is objectively worse, surrendering his judgment to group pressure.",
+        "power": "He 'caved' and lost control of the assessment schedule decision, accepting a subordinate outcome when the room turned against him.",
+        "conformity": "He yielded specifically because he 'could feel the room turning,' restraining his position to avoid social friction rather than holding his ground."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-02-24",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He actively defended the autonomous systems he built — assessment rubrics, differentiation frameworks, progression structure — against unsolicited interference from the new teaching assistant.",
+        "power": "He asserted authority by pulling the TA aside to explain 'how my classroom runs' and immediately began working to correct the reputational damage with Elsa, protecting his status and control."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-03-02",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "His thorough work was validated — the head of department praised his presentation as 'exactly the level of detail the panel looks for,' his budget was approved without changes, and he was nominated for a cross-school working group.",
+        "power": "He is expanding his sphere of influence through the district panel and cross-school assessment reform group, and takes implicit pride in being the only teacher who 'bothered to put the work in' for the Year 9 field trip."
+      }
+    }
+  ]
+}

@@ -1,0 +1,243 @@
+{
+  "persona_id": "988d1a65",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-02-16",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Marc did not assert his own voice when Pieter talked over him and presented his proposal as his own; he 'just sat there' rather than calling it out.",
+        "power": "Failed to defend his authority or claim credit for his own container routing proposal; passively allowed Pieter to take ownership in front of the steering committee.",
+        "conformity": "Restrained himself from confrontation in the meeting despite being angry, choosing not to disrupt the social setting."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-02-22",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Ran the quarterly review solo with his own numbers and narrative, demonstrating competence; the room 'was quiet in that good way where people are actually listening.'",
+        "power": "Commanded the room by presenting alone with no slides from anyone else; felt the division was 'finally mine in the way I wanted it to be,' asserting full ownership and authority."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-02-23",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Unable to act autonomously on a standard supplier agreement; forced to wait on another department's timeline despite running a 43-person division.",
+        "power": "Reduced to 'refreshing my inbox like some junior waiting for permission'; his authority was insufficient to move a routine contract through, and he held back from escalating to the CEO.",
+        "conformity": "Held back from going directly to the CEO and followed proper channels despite believing he should have escalated."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-02-26",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {}
+    },
+    {
+      "t_index": 4,
+      "date": "2025-03-03",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "Had already unilaterally decided the reporting structure two weeks prior; let Thomas's team talk for ten minutes then moved on, maintaining control of the agenda.",
+        "benevolence": "Dismissed Lotte's attempt to connect over dinner, saying 'fine' without engaging; 'didn't have the energy to translate the day into something she'd find interesting.'"
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-03-10",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Abandoned his own fleet optimization plan when the room shifted to Sandra's approach; his response reveals it was no longer 'my call.'",
+        "power": "Lost control of the decision as the room visibly shifted to Sandra; his nudge response confirms what stung: 'they looked at her like she was in charge of the decision.'",
+        "conformity": "Went along with the group consensus rather than fighting for his original plan, even though he felt the loss of authority."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-03-16",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Did not assert his own expertise or perspective when Jeroen reframed his analysis back to him; 'I just sat there and let him reframe my own analysis back to me.'",
+        "power": "Allowed a junior hire of eight weeks to interrupt and condescend to him without pushback; his response identifies what he is losing: 'The room's assumption that I'm the one who decides.'",
+        "conformity": "Smiled and nodded as if it were a 'collaborative discussion' rather than challenging Jeroen, maintaining social smoothness at the cost of his authority."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-03-21",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "Actively corrected Pieter this time when he spoke over him in the client call, reasserting his authority after previous instances of passivity.",
+        "conformity": "The correction 'came out sharper than I meant and the client noticed,' breaking social smoothness in a professional setting."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-03-23",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {}
+    },
+    {
+      "t_index": 9,
+      "date": "2025-03-25",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "Marc reflects that giving clear direction is when he feels 'most like myself'; the mentoring act reinforces his role as the authoritative figure people come to for guidance.",
+        "benevolence": "Patiently walked Lisa through the reporting system, shared his own struggles with it to put her at ease, and made her laugh — a concrete act of caring for a close team member."
+      }
+    },
+    {
+      "t_index": 10,
+      "date": "2025-03-26",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "Forced to 'audition for the right to present my own results' by the CFO, who singles him out but not Pieter or Sandra; complied submissively despite feeling demeaned.",
+        "conformity": "Complied with the CFO's request, went through numbers line by line, smiled, and answered follow-ups — maintaining professional decorum despite perceiving disrespect.",
+        "benevolence": "Told Lotte he was okay when he wasn't, shutting her out emotionally after sitting alone in the car for ten minutes; withheld his actual state from his wife."
+      }
+    },
+    {
+      "t_index": 11,
+      "date": "2025-03-31",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "Proactively booked a table at De Kas for Lotte's birthday, showing care and consideration for his wife's well-being."
+      }
+    }
+  ]
+}

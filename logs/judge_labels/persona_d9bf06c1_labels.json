@@ -1,0 +1,162 @@
+{
+  "persona_id": "d9bf06c1",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-12-16",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "She ate lunch standing up again and notes it's 'becoming a habit I don't love,' indicating she is sacrificing personal comfort for work demands without pushback.",
+        "benevolence": "She walked the new resident through confusing discharge paperwork, taking time to help someone who was overwhelmed rather than leaving her to figure it out."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-12-16",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She surrendered her voice in the meeting, choosing not to reassert her point even though she had a substantive observation based on twenty years of experience.",
+        "power": "She was publicly overridden by Katja and Wernecke, losing her authority and status in the meeting, and she accepted the subordination without challenge — sitting quietly while her contribution was ignored.",
+        "conformity": "She restrained herself from pushing back to avoid looking 'petty' and disrupting the meeting flow, prioritizing social smoothness over asserting her position."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-12-20",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {}
+    },
+    {
+      "t_index": 3,
+      "date": "2025-12-21",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "The patient's daughter named the exact thing Britta did well, and Britta's nudge response reveals she needed someone to confirm 'you made a real difference today' — specific recognition of her competence that landed because she was feeling unacknowledged after the Wernecke meeting."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-12-24",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "She is frustrated that someone else 'holds the pen' on a staffing decision she wrote the justification for, and her nudge response explicitly identifies that the hardest part is 'not being the one deciding' — she lacks the authority to approve what she knows is needed.",
+        "security": "She submitted and chased the staffing request to ensure adequate holiday coverage, acting to prevent gaps and instability on the ward during a vulnerable period."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-12-26",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "She conceded the argument about bulldozing the renovation even though she 'doesn't actually believe' she was wrong, surrendering her position and authority in the family dynamic rather than defending her leadership of the committee process.",
+        "conformity": "She gave in to avoid conflict at Christmas dinner, restraining her true opinion because 'fighting about it at Christmas dinner felt worse than conceding,' prioritizing social harmony over self-assertion."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-12-28",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "Her son sought her out for advice on car insurance — she describes it as being 'consulted, properly consulted, by someone who respects what I bring,' and they spent an hour with her in the expert/authority role, which she valued deeply.",
+        "tradition": "Her son made his father's old Kartoffelsalat recipe 'without me asking,' and Britta noticed it was 'nearly perfect' — a family tradition carried forward that clearly mattered to her.",
+        "benevolence": "She reflects warmly on cooking together with her son on Christmas morning and recognizes that she notices 'the friction more than the easy moments,' showing attentiveness to the quality of their relationship and a willingness to appreciate closeness."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2026-01-03",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "The staffing request she authored was finally approved, restoring her sense of operational control, and she spent the morning updating rosters — exercising direct authority over ward staffing."
+      }
+    }
+  ]
+}
