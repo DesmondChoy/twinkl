@@ -46,6 +46,13 @@ uv add <package>
 uv pip install <package>
 ```
 
+Run tests and linting with `uv` before commits:
+
+```sh
+uv run pytest
+uv run ruff check .
+```
+
 Script-based generation/judging helpers live in `src/synthetic/`,
 `src/judge/`, and `scripts/journalling/`.
 
@@ -54,6 +61,9 @@ Script-based generation/judging helpers live in `src/synthetic/`,
 ### Source Code (`src/`)
 
 - `src/vif/` — VIF critic models (MLP ordinal, BNN), text/state encoders, dataset loading, training loops, evaluation metrics, and experiment logging
+- `src/nudge/` — Nudge decision logic, generation and schemas
+- `src/evals/` — Standalone evaluation scripts (e.g., nudge ranking)
+- `src/synthetic/` — Synthetic generation primitives
 - `src/registry/` — Persona registry with pipeline stages (`stage_synthetic`, `stage_wrangled`, `stage_labeled`)
 - `src/judge/` — Judge labeling consolidation
 - `src/wrangling/` — Parsers for synthetic and wrangled persona data
@@ -75,6 +85,15 @@ Script-based generation/judging helpers live in `src/synthetic/`,
 - `logs/experiments/` — VIF training run logs (`runs/*.yaml`) and `index.md`
 - `logs/exports/` — Agreement reports and other exports
 
+### Synthetic Data Pipeline
+
+The project utilizes a highly flexible, parallelized LLM-based synthetic data generation pipeline (documented in `docs/pipeline/claude_gen_instructions.md` and `docs/pipeline/pipeline_specs.md`). 
+
+A critical feature of this pipeline is its native capability to resolve **class imbalances** in the training dataset:
+- **Targeted Value Generation**: Use `TARGET_VALUES` to force the generation of personas with specific, underrepresented Schwartz values.
+- **Tension-Targeted Generation**: Use `TARGET_TENSIONS` to oversample "Unsettled" journal entries tied to specific values by leveraging a scenario bank (via the `tension-selection` Claude skill). This specifically repairs label imbalances (e.g., establishing clear `-1` ground truth labels for underrepresented misalignments).
+- **Emergent vs Prescriptive Logging**: Data is generated longitudinally over random gaps and variables, creating a robust, cold-start-ready dataset for the VIF.
+
 ### Scripted Workflows
 
 - `src/vif/train.py` and `src/vif/train_bnn.py` — Critic training CLIs
@@ -86,6 +105,11 @@ Script-based generation/judging helpers live in `src/synthetic/`,
 
 - `tests/vif/` — Eval metrics, loss functions, ordinal base tests
 - `tests/wrangling/` — Wrangled data parser tests
+- `tests/judge/` — Judge labeling and consolidation tests
+- `tests/nudge/` — Nudge functionality and routing tests
+- `tests/registry/` — Persona registry parsing tests
+- `tests/synthetic/` — Synthetic generation test suites
+- `tests/evals/` — Standalone evaluations tests
 
 ### Documentation (`docs/`)
 
@@ -106,7 +130,7 @@ Script-based generation/judging helpers live in `src/synthetic/`,
   labels.
 - Keep banned-term/value leakage protections intact when touching prompts or
   generation logic.
-- Avoid metadata leakage in any logic intended to mirror production behavior.
+- Avoid data leakage in any logic intended to mirror inference behavior (e.g. VIF training or prompt generation). Do not include ground-truth features that will not be available in a production inference context.
 
 ## Code Style
 
@@ -118,11 +142,11 @@ Script-based generation/judging helpers live in `src/synthetic/`,
 
 Before creating a commit:
 
-1. Run `/quality` before committing to review changes with fresh eyes.
+1. Run the Claude quality skill (or equivalent thorough review) before committing to review changes with "fresh eyes."
 2. Review complete changed files, not only diffs.
-2. Run targeted tests/linting for touched modules.
-3. Remove obvious dead code and debug remnants.
-4. Confirm no behavior regressions in critical paths.
+3. Run targeted tests/linting (`uv run pytest` / `uv run ruff`) for touched modules.
+4. Remove obvious dead code and debug remnants.
+5. Confirm no behavior regressions in critical paths.
 
 If there is ambiguity and no blocking risk, proceed with explicit
 assumptions and note them. If ambiguity affects correctness or design
