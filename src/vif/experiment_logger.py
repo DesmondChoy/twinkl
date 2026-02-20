@@ -426,9 +426,6 @@ def _build_experiment_dict(
                 "window_size": config.get("window_size", 1),
             },
             "data": {
-                "n_train": n_train,
-                "n_val": n_val,
-                "n_test": n_test,
                 "train_ratio": config.get("train_ratio", 0.70),
                 "val_ratio": config.get("val_ratio", 0.15),
                 "split_seed": config.get("seed", 42),
@@ -455,6 +452,17 @@ def _build_experiment_dict(
                     else None
                 ),
             },
+            "uncertainty": {
+                "mc_dropout_samples": config.get("mc_dropout_samples"),
+                "bnn_prior_mean": config.get("bnn_prior_mean"),
+                "bnn_prior_variance": config.get("bnn_prior_variance"),
+                "bnn_posterior_rho_init": config.get("bnn_posterior_rho_init")
+            }
+        },
+        "data": {
+            "n_train": n_train,
+            "n_val": n_val,
+            "n_test": n_test,
         },
         "capacity": {
             "n_parameters": n_parameters,
@@ -485,12 +493,15 @@ def _build_experiment_dict(
         "observations": observations if observations else "",
     }
 
-    # Remove None values from encoder and training config
+    # Remove None values from encoder, training, and uncertainty config
     experiment["config"]["encoder"] = {
         k: v for k, v in experiment["config"]["encoder"].items() if v is not None
     }
     experiment["config"]["training"] = {
         k: v for k, v in experiment["config"]["training"].items() if v is not None
+    }
+    experiment["config"]["uncertainty"] = {
+        k: v for k, v in experiment["config"]["uncertainty"].items() if v is not None
     }
 
     # Compute config fingerprint and store in metadata
