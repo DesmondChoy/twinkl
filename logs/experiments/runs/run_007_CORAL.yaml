@@ -1,0 +1,155 @@
+# VIF Experiment: run_007_CORAL
+# Generated: 2026-02-20T10:42:24
+# Git: 4c48773(dirty)
+metadata:
+  experiment_id: run_007_CORAL
+  run_id: run_007
+  model_name: CORAL
+  timestamp: '2026-02-20T10:42:24'
+  git_commit: 4c48773(dirty)
+  config_hash: 369eb2a70a22
+provenance:
+  prev_run_id: run_006
+  prev_git_commit: 4c48773(dirty)
+  git_log: []
+  config_delta:
+    added: {}
+    removed: {}
+    changed:
+      model.hidden_dim:
+        from: 32
+        to: 64
+  rationale: Capacity exploration on nomic-embed-256d encoder, increasing hidden_dim
+    from 32 to 64 while keeping all other config identical to run_006. Tests whether
+    doubling MLP capacity improves QWK and minority recall on the expanded dataset.
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 266
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: coral
+    learning_rate: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 958
+  n_val: 214
+  n_test: 202
+capacity:
+  n_parameters: 22804
+  param_sample_ratio: 23.8038
+training_dynamics:
+  best_epoch: 10
+  total_epochs: 30
+  train_loss_at_best: 0.5069
+  val_loss_at_best: 0.6023
+  gap_at_best: 0.0954
+  final_lr: 0.0005
+evaluation:
+  mae_mean: 0.2178
+  accuracy_mean: 0.8089
+  qwk_mean: 0.3488
+  spearman_mean: 0.3732
+  calibration_global: 0.7675
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.1277
+  minority_recall_mean: 0.2095
+  recall_minus1: 0.0265
+  recall_plus1: 0.3925
+  hedging_mean: 0.849
+per_dimension:
+  self_direction:
+    mae: 0.354
+    accuracy: 0.6782
+    qwk: 0.2357
+    spearman: 0.3312
+    calibration: 0.5937
+    hedging: 0.7673
+  stimulation:
+    mae: 0.1296
+    accuracy: 0.8861
+    qwk: 0.3974
+    spearman: 0.5913
+    calibration: 0.8208
+    hedging: 0.9208
+  hedonism:
+    mae: 0.1173
+    accuracy: 0.901
+    qwk: 0.4428
+    spearman: 0.426
+    calibration: 0.8509
+    hedging: 0.8861
+  achievement:
+    mae: 0.2681
+    accuracy: 0.7673
+    qwk: 0.4373
+    spearman: 0.5765
+    calibration: 0.6711
+    hedging: 0.7475
+  power:
+    mae: 0.1467
+    accuracy: 0.8663
+    qwk: 0.1586
+    spearman: -0.0034
+    calibration: 0.6261
+    hedging: 0.9653
+  security:
+    mae: 0.2175
+    accuracy: 0.8119
+    qwk: 0.3867
+    spearman: 0.2974
+    calibration: 0.7038
+    hedging: 0.896
+  conformity:
+    mae: 0.2701
+    accuracy: 0.7723
+    qwk: 0.2511
+    spearman: 0.2923
+    calibration: 0.7098
+    hedging: 0.8713
+  tradition:
+    mae: 0.1781
+    accuracy: 0.8515
+    qwk: 0.4122
+    spearman: 0.2687
+    calibration: 0.7683
+    hedging: 0.9158
+  benevolence:
+    mae: 0.3369
+    accuracy: 0.703
+    qwk: 0.3134
+    spearman: 0.3255
+    calibration: 0.6264
+    hedging: 0.6782
+  universalism:
+    mae: 0.1591
+    accuracy: 0.8515
+    qwk: 0.4524
+    spearman: 0.6263
+    calibration: 0.8838
+    hedging: 0.8416
+observations: CORAL QWK improved from 0.278 (run_006 hd=32) to 0.349 with hd=64,
+  and MAE improved to 0.218 (from 0.233). Calibration held steady at 0.768. Achievement
+  was a standout (QWK 0.437, Spearman 0.577). Power remained near-zero (QWK 0.159)
+  and tradition recovered to 0.412 (from 0.224). Best epoch dropped from 26 to 10,
+  indicating faster convergence with the larger model but still healthy training.

@@ -1,0 +1,158 @@
+# VIF Experiment: run_008_SoftOrdinal
+# Generated: 2026-02-20T10:47:41
+# Git: 6118a22(dirty)
+metadata:
+  experiment_id: run_008_SoftOrdinal
+  run_id: run_008
+  model_name: SoftOrdinal
+  timestamp: '2026-02-20T10:47:41'
+  git_commit: 6118a22(dirty)
+  config_hash: d832905b0dc9
+provenance:
+  prev_run_id: run_007
+  prev_git_commit: 4c48773(dirty)
+  git_log:
+  - '6118a22 chore(vif): add experiment runs 005-006 and update training notebooks'
+  config_delta:
+    added: {}
+    removed: {}
+    changed:
+      model.hidden_dim:
+        from: 64
+        to: 128
+  rationale: Continued capacity exploration on nomic-embed-256d encoder, increasing
+    hidden_dim from 64 to 128. Tests whether further capacity gains improve metrics
+    or trigger overfitting at param/sample ratio ~56.
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 266
+  model:
+    hidden_dim: 128
+    dropout: 0.3
+  training:
+    loss_fn: soft_ordinal
+    learning_rate: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 958
+  n_val: 214
+  n_test: 202
+capacity:
+  n_parameters: 55070
+  param_sample_ratio: 57.4843
+training_dynamics:
+  best_epoch: 6
+  total_epochs: 26
+  train_loss_at_best: 1.849
+  val_loss_at_best: 2.2367
+  gap_at_best: 0.3877
+  final_lr: 0.0005
+evaluation:
+  mae_mean: 0.2083
+  accuracy_mean: 0.8153
+  qwk_mean: 0.3327
+  spearman_mean: 0.3818
+  calibration_global: 0.7696
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.116
+  minority_recall_mean: 0.2488
+  recall_minus1: 0.0645
+  recall_plus1: 0.433
+  hedging_mean: 0.8248
+per_dimension:
+  self_direction:
+    mae: 0.3494
+    accuracy: 0.7178
+    qwk: 0.2958
+    spearman: 0.3236
+    calibration: 0.609
+    hedging: 0.6139
+  stimulation:
+    mae: 0.1327
+    accuracy: 0.8614
+    qwk: 0.3273
+    spearman: 0.5254
+    calibration: 0.7408
+    hedging: 0.9356
+  hedonism:
+    mae: 0.1022
+    accuracy: 0.9158
+    qwk: 0.5875
+    spearman: 0.5974
+    calibration: 0.7336
+    hedging: 0.896
+  achievement:
+    mae: 0.2404
+    accuracy: 0.797
+    qwk: 0.5353
+    spearman: 0.5876
+    calibration: 0.7596
+    hedging: 0.5941
+  power:
+    mae: 0.1476
+    accuracy: 0.8762
+    qwk: 0.082
+    spearman: 0.0494
+    calibration: 0.5927
+    hedging: 0.9455
+  security:
+    mae: 0.2033
+    accuracy: 0.8069
+    qwk: 0.401
+    spearman: 0.392
+    calibration: 0.72
+    hedging: 0.8663
+  conformity:
+    mae: 0.2773
+    accuracy: 0.7624
+    qwk: 0.2034
+    spearman: 0.1942
+    calibration: 0.829
+    hedging: 0.8218
+  tradition:
+    mae: 0.1855
+    accuracy: 0.8119
+    qwk: 0.1529
+    spearman: 0.3215
+    calibration: 0.6913
+    hedging: 0.9455
+  benevolence:
+    mae: 0.2816
+    accuracy: 0.7376
+    qwk: 0.3445
+    spearman: 0.4045
+    calibration: 0.6289
+    hedging: 0.8119
+  universalism:
+    mae: 0.1629
+    accuracy: 0.8663
+    qwk: 0.3971
+    spearman: 0.4219
+    calibration: 0.8741
+    hedging: 0.8168
+observations: SoftOrdinal QWK comparable at 0.333 (vs 0.329 at hd=64) — additional
+  capacity does not help. Calibration improved to 0.770 (from 0.761), the best
+  among run_008 losses. Hedonism was exceptional (QWK 0.588, Spearman 0.597).
+  Achievement strong at 0.535. Conformity calibration reached 0.829, the highest
+  for that dimension across all runs. Training gap increased to 0.388 (from 0.133),
+  confirming SoftOrdinal's soft-label formulation amplifies overfitting at higher
+  capacity. Power remained near-zero (0.082).

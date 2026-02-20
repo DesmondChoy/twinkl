@@ -1,0 +1,157 @@
+# VIF Experiment: run_008_CORN
+# Generated: 2026-02-20T10:47:41
+# Git: 6118a22(dirty)
+metadata:
+  experiment_id: run_008_CORN
+  run_id: run_008
+  model_name: CORN
+  timestamp: '2026-02-20T10:47:41'
+  git_commit: 6118a22(dirty)
+  config_hash: 4879bb38a8c8
+provenance:
+  prev_run_id: run_007
+  prev_git_commit: 4c48773(dirty)
+  git_log:
+  - '6118a22 chore(vif): add experiment runs 005-006 and update training notebooks'
+  config_delta:
+    added: {}
+    removed: {}
+    changed:
+      model.hidden_dim:
+        from: 64
+        to: 128
+  rationale: Continued capacity exploration on nomic-embed-256d encoder, increasing
+    hidden_dim from 64 to 128. Tests whether further capacity gains improve metrics
+    or trigger overfitting at param/sample ratio ~56.
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 266
+  model:
+    hidden_dim: 128
+    dropout: 0.3
+  training:
+    loss_fn: corn
+    learning_rate: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 958
+  n_val: 214
+  n_test: 202
+capacity:
+  n_parameters: 53780
+  param_sample_ratio: 56.1378
+training_dynamics:
+  best_epoch: 6
+  total_epochs: 26
+  train_loss_at_best: 0.238
+  val_loss_at_best: 0.2846
+  gap_at_best: 0.0466
+  final_lr: 0.0005
+evaluation:
+  mae_mean: 0.2049
+  accuracy_mean: 0.8104
+  qwk_mean: 0.3266
+  spearman_mean: 0.4213
+  calibration_global: 0.7579
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.107
+  minority_recall_mean: 0.224
+  recall_minus1: 0.0174
+  recall_plus1: 0.4305
+  hedging_mean: 0.8351
+per_dimension:
+  self_direction:
+    mae: 0.3465
+    accuracy: 0.6782
+    qwk: 0.1963
+    spearman: 0.3424
+    calibration: 0.6285
+    hedging: 0.6782
+  stimulation:
+    mae: 0.1242
+    accuracy: 0.8812
+    qwk: 0.4431
+    spearman: 0.5927
+    calibration: 0.8158
+    hedging: 0.8713
+  hedonism:
+    mae: 0.1067
+    accuracy: 0.9109
+    qwk: 0.5396
+    spearman: 0.4469
+    calibration: 0.8469
+    hedging: 0.8762
+  achievement:
+    mae: 0.2421
+    accuracy: 0.7624
+    qwk: 0.4709
+    spearman: 0.5671
+    calibration: 0.747
+    hedging: 0.6782
+  power:
+    mae: 0.156
+    accuracy: 0.8663
+    qwk: -0.0144
+    spearman: -0.0474
+    calibration: 0.634
+    hedging: 0.9554
+  security:
+    mae: 0.204
+    accuracy: 0.802
+    qwk: 0.3387
+    spearman: 0.383
+    calibration: 0.7037
+    hedging: 0.8911
+  conformity:
+    mae: 0.2322
+    accuracy: 0.7673
+    qwk: 0.2257
+    spearman: 0.4422
+    calibration: 0.6477
+    hedging: 0.9158
+  tradition:
+    mae: 0.1801
+    accuracy: 0.8168
+    qwk: 0.2157
+    spearman: 0.4823
+    calibration: 0.6621
+    hedging: 0.9406
+  benevolence:
+    mae: 0.3133
+    accuracy: 0.7376
+    qwk: 0.3478
+    spearman: 0.3944
+    calibration: 0.6899
+    hedging: 0.703
+  universalism:
+    mae: 0.1436
+    accuracy: 0.8812
+    qwk: 0.5023
+    spearman: 0.6095
+    calibration: 0.8112
+    hedging: 0.8416
+observations: CORN QWK improved to 0.327 (from 0.290 at hd=64), its best nomic
+  result. Universalism reached 0.502, the best for any CORN run. Stimulation strong
+  at 0.443 (Spearman 0.593). Power QWK remained negative (-0.014, Spearman -0.047).
+  Achievement (0.471) continued the upward trend. MAE reached 0.205 (tied best with
+  CORAL). CORN benefits from increased capacity more than other losses but still
+  underperforms EMD and SoftOrdinal at every capacity level.

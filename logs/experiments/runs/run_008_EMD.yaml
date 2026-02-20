@@ -1,0 +1,157 @@
+# VIF Experiment: run_008_EMD
+# Generated: 2026-02-20T10:47:41
+# Git: 6118a22(dirty)
+metadata:
+  experiment_id: run_008_EMD
+  run_id: run_008
+  model_name: EMD
+  timestamp: '2026-02-20T10:47:41'
+  git_commit: 6118a22(dirty)
+  config_hash: bae14f9dd760
+provenance:
+  prev_run_id: run_007
+  prev_git_commit: 4c48773(dirty)
+  git_log:
+  - '6118a22 chore(vif): add experiment runs 005-006 and update training notebooks'
+  config_delta:
+    added: {}
+    removed: {}
+    changed:
+      model.hidden_dim:
+        from: 64
+        to: 128
+  rationale: Continued capacity exploration on nomic-embed-256d encoder, increasing
+    hidden_dim from 64 to 128. Tests whether further capacity gains improve metrics
+    or trigger overfitting at param/sample ratio ~56.
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 266
+  model:
+    hidden_dim: 128
+    dropout: 0.3
+  training:
+    loss_fn: emd
+    learning_rate: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 958
+  n_val: 214
+  n_test: 202
+capacity:
+  n_parameters: 55070
+  param_sample_ratio: 57.4843
+training_dynamics:
+  best_epoch: 10
+  total_epochs: 30
+  train_loss_at_best: 0.1184
+  val_loss_at_best: 0.1739
+  gap_at_best: 0.0556
+  final_lr: 0.0005
+evaluation:
+  mae_mean: 0.2129
+  accuracy_mean: 0.8094
+  qwk_mean: 0.3537
+  spearman_mean: 0.3998
+  calibration_global: 0.7493
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.1142
+  minority_recall_mean: 0.2653
+  recall_minus1: 0.0897
+  recall_plus1: 0.4408
+  hedging_mean: 0.8307
+per_dimension:
+  self_direction:
+    mae: 0.3438
+    accuracy: 0.6931
+    qwk: 0.3598
+    spearman: 0.3954
+    calibration: 0.6603
+    hedging: 0.698
+  stimulation:
+    mae: 0.141
+    accuracy: 0.8614
+    qwk: 0.3017
+    spearman: 0.5
+    calibration: 0.7196
+    hedging: 0.9505
+  hedonism:
+    mae: 0.1047
+    accuracy: 0.9059
+    qwk: 0.6068
+    spearman: 0.4259
+    calibration: 0.8378
+    hedging: 0.8663
+  achievement:
+    mae: 0.2241
+    accuracy: 0.797
+    qwk: 0.5339
+    spearman: 0.5789
+    calibration: 0.6896
+    hedging: 0.703
+  power:
+    mae: 0.1455
+    accuracy: 0.8614
+    qwk: 0.1072
+    spearman: 0.2816
+    calibration: 0.755
+    hedging: 0.9703
+  security:
+    mae: 0.205
+    accuracy: 0.802
+    qwk: 0.3763
+    spearman: 0.442
+    calibration: 0.6788
+    hedging: 0.8564
+  conformity:
+    mae: 0.3184
+    accuracy: 0.7426
+    qwk: 0.238
+    spearman: 0.2377
+    calibration: 0.7311
+    hedging: 0.7129
+  tradition:
+    mae: 0.1732
+    accuracy: 0.8366
+    qwk: 0.3227
+    spearman: 0.3757
+    calibration: 0.661
+    hedging: 0.9356
+  benevolence:
+    mae: 0.2887
+    accuracy: 0.7228
+    qwk: 0.3277
+    spearman: 0.4354
+    calibration: 0.5305
+    hedging: 0.8317
+  universalism:
+    mae: 0.1844
+    accuracy: 0.8713
+    qwk: 0.3627
+    spearman: 0.3258
+    calibration: 0.9096
+    hedging: 0.7822
+observations: EMD QWK slightly decreased to 0.354 (from 0.364 at hd=64),
+  suggesting hd=64 is EMD's capacity sweet spot. MAE worsened slightly (0.213 vs
+  0.202). Hedonism was the standout (QWK 0.607, best for any single EMD dimension
+  in any run). Achievement remained strong (0.534). Self_direction improved to 0.360.
+  Training gap increased to 0.056 (from 0.018 at hd=64), indicating the onset of
+  overfitting. Minority recall improved to 0.265, the best among run_008 losses.
