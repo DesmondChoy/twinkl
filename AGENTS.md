@@ -1,7 +1,5 @@
 # AGENTS.md
 
-This file mirrors `CLAUDE.md` for Codex and other agent-based tools.
-
 ## Project Overview
 
 Twinkl is an "inner compass" that helps users align daily behavior with
