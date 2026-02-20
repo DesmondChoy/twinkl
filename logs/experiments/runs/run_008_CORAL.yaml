@@ -1,18 +1,17 @@
 # VIF Experiment: run_008_CORAL
-# Generated: 2026-02-20T10:47:40
-# Git: 6118a22(dirty)
+# Generated: 2026-02-20T14:47:13
+# Git: d0b93da(dirty)
 metadata:
   experiment_id: run_008_CORAL
   run_id: run_008
   model_name: CORAL
-  timestamp: '2026-02-20T10:47:40'
-  git_commit: 6118a22(dirty)
+  timestamp: '2026-02-20T14:47:13'
+  git_commit: d0b93da(dirty)
   config_hash: 67897a9de61a
 provenance:
   prev_run_id: run_007
-  prev_git_commit: 4c48773(dirty)
-  git_log:
-  - '6118a22 chore(vif): add experiment runs 005-006 and update training notebooks'
+  prev_git_commit: d0b93da(dirty)
+  git_log: []
   config_delta:
     added: {}
     removed: {}
@@ -20,9 +19,10 @@ provenance:
       model.hidden_dim:
         from: 64
         to: 128
-  rationale: Continued capacity exploration on nomic-embed-256d encoder, increasing
-    hidden_dim from 64 to 128. Tests whether further capacity gains improve metrics
-    or trigger overfitting at param/sample ratio ~56.
+  rationale: Doubled hidden_dim from 64 to 128 on nomic-embed-256d to continue the capacity
+    sweep. Tests whether QWK improvements from hd=64 (run_007) continue to scale with
+    more parameters, or whether diminishing returns or overfitting emerge at the 53:1
+    param/sample ratio.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -53,105 +53,105 @@ config:
   uncertainty:
     mc_dropout_samples: 50
 data:
-  n_train: 958
-  n_val: 214
-  n_test: 202
+  n_train: 1020
+  n_val: 230
+  n_test: 210
 capacity:
   n_parameters: 53780
-  param_sample_ratio: 56.1378
+  param_sample_ratio: 52.7255
 training_dynamics:
-  best_epoch: 6
-  total_epochs: 26
-  train_loss_at_best: 0.4866
-  val_loss_at_best: 0.5854
-  gap_at_best: 0.0988
+  best_epoch: 8
+  total_epochs: 28
+  train_loss_at_best: 0.461
+  val_loss_at_best: 0.4654
+  gap_at_best: 0.0044
   final_lr: 0.0005
 evaluation:
-  mae_mean: 0.2045
-  accuracy_mean: 0.8129
-  qwk_mean: 0.3565
-  spearman_mean: 0.4027
-  calibration_global: 0.762
+  mae_mean: 0.204
+  accuracy_mean: 0.8238
+  qwk_mean: 0.3409
+  spearman_mean: 0.3972
+  calibration_global: 0.8051
   calibration_positive_dims: 10
-  mean_uncertainty: 0.1064
-  minority_recall_mean: 0.2353
-  recall_minus1: 0.0265
-  recall_plus1: 0.4441
-  hedging_mean: 0.8322
+  mean_uncertainty: 0.1119
+  minority_recall_mean: 0.2728
+  recall_minus1: 0.0492
+  recall_plus1: 0.4964
+  hedging_mean: 0.8248
 per_dimension:
   self_direction:
-    mae: 0.3356
-    accuracy: 0.7079
-    qwk: 0.2867
-    spearman: 0.3466
-    calibration: 0.5922
-    hedging: 0.7178
+    mae: 0.401
+    accuracy: 0.6429
+    qwk: 0.3896
+    spearman: 0.4346
+    calibration: 0.5579
+    hedging: 0.6286
   stimulation:
-    mae: 0.1254
-    accuracy: 0.8762
-    qwk: 0.4314
-    spearman: 0.5473
-    calibration: 0.782
-    hedging: 0.8614
+    mae: 0.0908
+    accuracy: 0.9143
+    qwk: 0.4289
+    spearman: 0.5259
+    calibration: 0.9126
+    hedging: 0.9333
   hedonism:
-    mae: 0.1118
-    accuracy: 0.9109
-    qwk: 0.5551
-    spearman: 0.421
-    calibration: 0.852
-    hedging: 0.8713
+    mae: 0.1316
+    accuracy: 0.8714
+    qwk: 0.2786
+    spearman: 0.4815
+    calibration: 0.7086
+    hedging: 0.919
   achievement:
-    mae: 0.2415
-    accuracy: 0.7772
-    qwk: 0.4916
-    spearman: 0.5543
-    calibration: 0.7464
-    hedging: 0.6782
+    mae: 0.1785
+    accuracy: 0.8714
+    qwk: 0.4693
+    spearman: 0.3507
+    calibration: 0.7824
+    hedging: 0.8238
   power:
-    mae: 0.1465
-    accuracy: 0.8713
-    qwk: 0.147
-    spearman: 0.1336
-    calibration: 0.6926
-    hedging: 0.9505
+    mae: 0.0648
+    accuracy: 0.9476
+    qwk: 0.0154
+    spearman: -0.0591
+    calibration: 0.8934
+    hedging: 0.9762
   security:
-    mae: 0.2024
-    accuracy: 0.802
-    qwk: 0.3936
-    spearman: 0.3064
-    calibration: 0.7697
-    hedging: 0.8861
+    mae: 0.3317
+    accuracy: 0.7286
+    qwk: 0.0905
+    spearman: 0.1945
+    calibration: 0.6685
+    hedging: 0.781
   conformity:
-    mae: 0.2438
-    accuracy: 0.7723
-    qwk: 0.2769
-    spearman: 0.3112
-    calibration: 0.6886
-    hedging: 0.8911
+    mae: 0.2735
+    accuracy: 0.7333
+    qwk: 0.4515
+    spearman: 0.5604
+    calibration: 0.624
+    hedging: 0.7714
   tradition:
-    mae: 0.179
-    accuracy: 0.8218
-    qwk: 0.2242
-    spearman: 0.4485
-    calibration: 0.6316
-    hedging: 0.9406
+    mae: 0.1403
+    accuracy: 0.8667
+    qwk: 0.4946
+    spearman: 0.591
+    calibration: 0.8167
+    hedging: 0.8667
   benevolence:
-    mae: 0.3101
-    accuracy: 0.7277
-    qwk: 0.3487
-    spearman: 0.4061
-    calibration: 0.6679
-    hedging: 0.6683
+    mae: 0.2063
+    accuracy: 0.8238
+    qwk: 0.5542
+    spearman: 0.5865
+    calibration: 0.796
+    hedging: 0.7667
   universalism:
-    mae: 0.1484
-    accuracy: 0.8614
-    qwk: 0.4097
-    spearman: 0.5523
-    calibration: 0.832
-    hedging: 0.8564
-observations: CORAL QWK improved slightly to 0.357 (from 0.349 at hd=64), with
-  the best CORAL MAE overall (0.205). Achievement continued strong (QWK 0.492).
-  Hedonism reached 0.555, the best for any CORAL run. Calibration held at 0.762.
-  Best epoch dropped to 6 (from 10 at hd=64), indicating faster convergence. Power
-  remained weak (0.147). CORAL shows monotonic improvement with capacity on nomic
-  but with diminishing returns between hd=64 and hd=128.
+    mae: 0.2215
+    accuracy: 0.8381
+    qwk: 0.2365
+    spearman: 0.3058
+    calibration: 0.9117
+    hedging: 0.781
+observations: CORAL at hd=128 shows diminishing returns — QWK 0.341 regressed from 0.367
+  (run_007). MAE improved to 0.204 (best CORAL ever) but at cost of calibration declining
+  from 0.830 to 0.805. Benevolence excels (QWK 0.554, Spearman 0.587 — both best-ever
+  for CORAL). Tradition strong (0.495). Power near-zero (0.015, Spearman -0.059). Security
+  weakest (0.091). Convergence at best_epoch=8 (vs 22 at hd=64) with minimal gap (0.004)
+  suggests the larger model converges faster but doesn't learn more discriminative features.

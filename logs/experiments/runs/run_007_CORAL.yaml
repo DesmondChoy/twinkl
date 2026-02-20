@@ -1,17 +1,22 @@
 # VIF Experiment: run_007_CORAL
-# Generated: 2026-02-20T10:42:24
-# Git: 4c48773(dirty)
+# Generated: 2026-02-20T14:40:56
+# Git: d0b93da(dirty)
 metadata:
   experiment_id: run_007_CORAL
   run_id: run_007
   model_name: CORAL
-  timestamp: '2026-02-20T10:42:24'
-  git_commit: 4c48773(dirty)
+  timestamp: '2026-02-20T14:40:56'
+  git_commit: d0b93da(dirty)
   config_hash: 369eb2a70a22
 provenance:
   prev_run_id: run_006
   prev_git_commit: 4c48773(dirty)
-  git_log: []
+  git_log:
+  - 'd0b93da chore(judge): wrangle and label 10 Power personas (180/180 complete)'
+  - '46004f9 docs: update GEMINI.md architecture snapshot and clarify ambiguities'
+  - '0468ddf feat(synth): add Power tension scenarios to tension-selection skill'
+  - '1831807 chore(vif): add experiment runs 007-008 and update training notebook'
+  - '6118a22 chore(vif): add experiment runs 005-006 and update training notebooks'
   config_delta:
     added: {}
     removed: {}
@@ -19,9 +24,10 @@ provenance:
       model.hidden_dim:
         from: 32
         to: 64
-  rationale: Capacity exploration on nomic-embed-256d encoder, increasing hidden_dim
-    from 32 to 64 while keeping all other config identical to run_006. Tests whether
-    doubling MLP capacity improves QWK and minority recall on the expanded dataset.
+  rationale: Doubled hidden_dim from 32 to 64 on nomic-embed-256d to test whether additional
+    capacity improves QWK and minority recall. Dataset expanded to 1020 train with 10
+    new Power tension personas (180/180 complete). Tests the capacity sweet spot between
+    the compact hd=32 and the over-parameterized MiniLM hd=256.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -52,104 +58,105 @@ config:
   uncertainty:
     mc_dropout_samples: 50
 data:
-  n_train: 958
-  n_val: 214
-  n_test: 202
+  n_train: 1020
+  n_val: 230
+  n_test: 210
 capacity:
   n_parameters: 22804
-  param_sample_ratio: 23.8038
+  param_sample_ratio: 22.3569
 training_dynamics:
-  best_epoch: 10
-  total_epochs: 30
-  train_loss_at_best: 0.5069
-  val_loss_at_best: 0.6023
-  gap_at_best: 0.0954
+  best_epoch: 22
+  total_epochs: 42
+  train_loss_at_best: 0.4148
+  val_loss_at_best: 0.4734
+  gap_at_best: 0.0586
   final_lr: 0.0005
 evaluation:
-  mae_mean: 0.2178
-  accuracy_mean: 0.8089
-  qwk_mean: 0.3488
-  spearman_mean: 0.3732
-  calibration_global: 0.7675
+  mae_mean: 0.2076
+  accuracy_mean: 0.8186
+  qwk_mean: 0.3672
+  spearman_mean: 0.398
+  calibration_global: 0.8296
   calibration_positive_dims: 10
-  mean_uncertainty: 0.1277
-  minority_recall_mean: 0.2095
-  recall_minus1: 0.0265
-  recall_plus1: 0.3925
-  hedging_mean: 0.849
+  mean_uncertainty: 0.1475
+  minority_recall_mean: 0.2473
+  recall_minus1: 0.0694
+  recall_plus1: 0.4252
+  hedging_mean: 0.8424
 per_dimension:
   self_direction:
-    mae: 0.354
-    accuracy: 0.6782
-    qwk: 0.2357
-    spearman: 0.3312
-    calibration: 0.5937
-    hedging: 0.7673
+    mae: 0.3871
+    accuracy: 0.6524
+    qwk: 0.439
+    spearman: 0.4501
+    calibration: 0.5549
+    hedging: 0.6429
   stimulation:
-    mae: 0.1296
-    accuracy: 0.8861
-    qwk: 0.3974
-    spearman: 0.5913
-    calibration: 0.8208
-    hedging: 0.9208
+    mae: 0.0942
+    accuracy: 0.919
+    qwk: 0.4436
+    spearman: 0.3204
+    calibration: 0.8768
+    hedging: 0.9286
   hedonism:
-    mae: 0.1173
-    accuracy: 0.901
-    qwk: 0.4428
-    spearman: 0.426
-    calibration: 0.8509
-    hedging: 0.8861
+    mae: 0.1437
+    accuracy: 0.8571
+    qwk: 0.2441
+    spearman: 0.3464
+    calibration: 0.7823
+    hedging: 0.9333
   achievement:
-    mae: 0.2681
-    accuracy: 0.7673
-    qwk: 0.4373
-    spearman: 0.5765
-    calibration: 0.6711
-    hedging: 0.7475
+    mae: 0.1779
+    accuracy: 0.8571
+    qwk: 0.3909
+    spearman: 0.3456
+    calibration: 0.7677
+    hedging: 0.8571
   power:
-    mae: 0.1467
-    accuracy: 0.8663
-    qwk: 0.1586
-    spearman: -0.0034
-    calibration: 0.6261
-    hedging: 0.9653
+    mae: 0.057
+    accuracy: 0.9476
+    qwk: 0.2731
+    spearman: 0.2731
+    calibration: 0.9391
+    hedging: 0.9714
   security:
-    mae: 0.2175
-    accuracy: 0.8119
-    qwk: 0.3867
-    spearman: 0.2974
-    calibration: 0.7038
-    hedging: 0.896
+    mae: 0.3226
+    accuracy: 0.719
+    qwk: 0.1559
+    spearman: 0.2905
+    calibration: 0.7293
+    hedging: 0.8048
   conformity:
-    mae: 0.2701
-    accuracy: 0.7723
-    qwk: 0.2511
-    spearman: 0.2923
-    calibration: 0.7098
-    hedging: 0.8713
+    mae: 0.2787
+    accuracy: 0.7476
+    qwk: 0.476
+    spearman: 0.5357
+    calibration: 0.749
+    hedging: 0.7476
   tradition:
-    mae: 0.1781
-    accuracy: 0.8515
-    qwk: 0.4122
-    spearman: 0.2687
-    calibration: 0.7683
-    hedging: 0.9158
+    mae: 0.1697
+    accuracy: 0.8524
+    qwk: 0.4035
+    spearman: 0.4691
+    calibration: 0.8722
+    hedging: 0.881
   benevolence:
-    mae: 0.3369
-    accuracy: 0.703
-    qwk: 0.3134
-    spearman: 0.3255
-    calibration: 0.6264
-    hedging: 0.6782
+    mae: 0.2329
+    accuracy: 0.8238
+    qwk: 0.532
+    spearman: 0.5177
+    calibration: 0.7792
+    hedging: 0.8
   universalism:
-    mae: 0.1591
-    accuracy: 0.8515
-    qwk: 0.4524
-    spearman: 0.6263
-    calibration: 0.8838
-    hedging: 0.8416
-observations: CORAL QWK improved from 0.278 (run_006 hd=32) to 0.349 with hd=64,
-  and MAE improved to 0.218 (from 0.233). Calibration held steady at 0.768. Achievement
-  was a standout (QWK 0.437, Spearman 0.577). Power remained near-zero (QWK 0.159)
-  and tradition recovered to 0.412 (from 0.224). Best epoch dropped from 26 to 10,
-  indicating faster convergence with the larger model but still healthy training.
+    mae: 0.2123
+    accuracy: 0.8095
+    qwk: 0.3137
+    spearman: 0.4312
+    calibration: 0.9059
+    hedging: 0.8571
+observations: CORAL at hd=64 achieves QWK 0.367 — the best CORAL result on nomic and
+  comparable to MiniLM's best (0.398, run_001). Calibration 0.830 (good) is the best
+  CORAL has achieved across all runs. Benevolence excels (QWK 0.532) and conformity
+  shows dramatic improvement (0.476 vs near-zero in earlier runs). Security remains weak
+  (0.156). Power near-zero (0.273 with 97.1% hedging). MAE 0.208 is the best for any
+  CORAL run on the expanded dataset.

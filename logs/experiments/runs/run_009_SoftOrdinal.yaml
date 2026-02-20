@@ -1,0 +1,162 @@
+# VIF Experiment: run_009_SoftOrdinal
+# Generated: 2026-02-20T14:55:52
+# Git: d0b93da(dirty)
+metadata:
+  experiment_id: run_009_SoftOrdinal
+  run_id: run_009
+  model_name: SoftOrdinal
+  timestamp: '2026-02-20T14:55:52'
+  git_commit: d0b93da(dirty)
+  config_hash: 00a2c6c712a9
+provenance:
+  prev_run_id: run_005
+  prev_git_commit: 4c48773
+  git_log:
+  - 'd0b93da chore(judge): wrangle and label 10 Power personas (180/180 complete)'
+  - '46004f9 docs: update GEMINI.md architecture snapshot and clarify ambiguities'
+  - '0468ddf feat(synth): add Power tension scenarios to tension-selection skill'
+  - '1831807 chore(vif): add experiment runs 007-008 and update training notebook'
+  - '6118a22 chore(vif): add experiment runs 005-006 and update training notebooks'
+  config_delta:
+    added: {}
+    removed: {}
+    changed:
+      data.pct_truncated:
+        from: 31.441
+        to: 31.0959
+      model.hidden_dim:
+        from: 256
+        to: 64
+  rationale: Reduced MiniLM hidden_dim from 256 to 64 on the expanded dataset (1020
+    train with 10 new Power personas). Tests whether the over-parameterization problem
+    seen in run_005 (hd=256, param/sample ~386) can be mitigated by capacity reduction
+    while retaining MiniLM's 384d embeddings and window_size=3 state encoder.
+config:
+  encoder:
+    model_name: all-MiniLM-L6-v2
+  state_encoder:
+    window_size: 3
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 31.0959
+    state_dim: 1164
+  model:
+    hidden_dim: 64
+    dropout: 0.2
+  training:
+    loss_fn: soft_ordinal
+    learning_rate: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1020
+  n_val: 230
+  n_test: 210
+capacity:
+  n_parameters: 80926
+  param_sample_ratio: 79.3392
+training_dynamics:
+  best_epoch: 5
+  total_epochs: 25
+  train_loss_at_best: 1.7746
+  val_loss_at_best: 2.0413
+  gap_at_best: 0.2667
+  final_lr: 0.0005
+evaluation:
+  mae_mean: 0.239
+  accuracy_mean: 0.7867
+  qwk_mean: 0.2357
+  spearman_mean: 0.3002
+  calibration_global: 0.7753
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.139
+  minority_recall_mean: 0.2338
+  recall_minus1: 0.0515
+  recall_plus1: 0.4161
+  hedging_mean: 0.8038
+per_dimension:
+  self_direction:
+    mae: 0.4288
+    accuracy: 0.6
+    qwk: 0.3343
+    spearman: 0.3731
+    calibration: 0.4642
+    hedging: 0.6571
+  stimulation:
+    mae: 0.1028
+    accuracy: 0.9143
+    qwk: 0.402
+    spearman: 0.4008
+    calibration: 0.8536
+    hedging: 0.9333
+  hedonism:
+    mae: 0.1513
+    accuracy: 0.8667
+    qwk: 0.2947
+    spearman: 0.2024
+    calibration: 0.8327
+    hedging: 0.9333
+  achievement:
+    mae: 0.2033
+    accuracy: 0.8143
+    qwk: 0.1378
+    spearman: 0.2063
+    calibration: 0.7242
+    hedging: 0.8857
+  power:
+    mae: 0.0775
+    accuracy: 0.9381
+    qwk: -0.082
+    spearman: 0.0349
+    calibration: 0.9019
+    hedging: 0.9476
+  security:
+    mae: 0.3151
+    accuracy: 0.7095
+    qwk: 0.0519
+    spearman: 0.2486
+    calibration: 0.6667
+    hedging: 0.8619
+  conformity:
+    mae: 0.3006
+    accuracy: 0.719
+    qwk: 0.4264
+    spearman: 0.5358
+    calibration: 0.5864
+    hedging: 0.719
+  tradition:
+    mae: 0.1654
+    accuracy: 0.8619
+    qwk: 0.4563
+    spearman: 0.421
+    calibration: 0.7828
+    hedging: 0.8667
+  benevolence:
+    mae: 0.4032
+    accuracy: 0.6286
+    qwk: 0.2201
+    spearman: 0.3721
+    calibration: 0.5966
+    hedging: 0.419
+  universalism:
+    mae: 0.2423
+    accuracy: 0.8143
+    qwk: 0.1157
+    spearman: 0.2072
+    calibration: 0.8884
+    hedging: 0.8143
+observations: SoftOrdinal with MiniLM at hd=64 shows QWK 0.236 (poor). Conformity
+  (0.426) and tradition (0.456) are the strongest dimensions. Power negative (-0.082).
+  Security near-zero (0.052). Benevolence hedging at 41.9% is the most decisive
+  prediction in run_009, but with low QWK (0.220). MiniLM at hd=64 underperforms
+  nomic at hd=64 (run_007) across all loss functions, confirming that the MiniLM +
+  window_size=3 state pipeline is fundamentally over-parameterized for this dataset.

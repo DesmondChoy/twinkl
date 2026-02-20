@@ -3,7 +3,9 @@ name: experiment-review
 description: Cross-run comparison of VIF experiment logs with qualitative assessment and recommendations. Use when LLM needs to synthesize results across runs in logs/experiments and produce a structured report with metric trade-offs, per-dimension behavior, calibration risks, capacity/overfitting analysis, and next-step experiments.
 ---
 
-Analyze all VIF experiment logs and produce a structured cross-run comparison report. After the report, optionally backfill empty `provenance.rationale` and `observations` fields in run YAML files.
+Analyze all VIF experiment logs, backfill any empty provenance/observations, and then produce a structured cross-run comparison report that synthesizes findings across runs.
+
+**Role & Mindset**: Act as a Senior AI/Data Scientist. Do not just mechanically report numbers. Look for interacting variables (e.g., does increasing capacity only help when using a specific state encoder?), synthesize what the metrics imply about the model's fundamental understanding of the task, and formulate hypotheses about *why* certain interventions succeeded or failed.
 
 ## Data Collection
 
@@ -33,6 +35,25 @@ Group runs by what changed between them:
 
 Anything identical across all runs is a **constant** — mention once, don't repeat.
 
+## Step 4: Provenance & Observation Backfill
+
+Before generating your analytical report, check all run YAML files for empty `provenance.rationale` and `observations` fields. Writing these out explicitly will help solidify your understanding of the run trajectory. For each file in `logs/experiments/runs/`:
+
+1. **Empty `provenance.rationale`**: Generate 1–3 sentences explaining *why* this run was created, based on:
+   - `provenance.git_log` (what code changes preceded this run)
+   - `provenance.config_delta` (what config changed vs the previous run)
+   - If both are empty (first run), write a brief note like "Baseline run establishing initial metrics for [encoder family]."
+
+2. **Empty or placeholder `observations`**: Generate 2–4 sentences summarizing *what was learned*, based on:
+   - `evaluation` metrics (MAE, QWK, calibration, hedging)
+   - `per_dimension` results (which dimensions improved/degraded)
+   - Comparison with the previous run (if `provenance.prev_run_id` exists)
+   - A placeholder is any value containing `<fill in` or that is empty.
+
+3. **Write back**: Use the Edit tool to update only the empty/placeholder fields in the YAML files. **Never overwrite** fields that already contain meaningful content.
+
+Once all historical context and observations are properly recorded, proceed to generate the cross-run comparison report.
+
 ## Metric Interpretation Thresholds
 
 Use these thresholds when characterizing results. Always cite the actual number alongside the qualitative label.
@@ -50,7 +71,7 @@ Use these thresholds when characterizing results. Always cite the actual number 
 
 ## Report Structure
 
-Produce the report in exactly these 8 sections. Cap the report at ~800 words excluding tables. Cite specific numbers and use run IDs (e.g., run_001, run_002). When two runs differ by < 5% on a metric, say "comparable" rather than declaring a winner.
+After completing data collection and backfilling, produce the report in exactly these 9 sections. Cap the report at ~1000 words excluding tables. Cite specific numbers and use run IDs (e.g., run_001, run_002). When two runs differ by < 5% on a metric, say "comparable" rather than declaring a winner.
 
 ### 1. Experiment Overview
 
@@ -78,6 +99,9 @@ Identify:
 
 Present as a compact table sorted by mean QWK across all runs.
 
+**Automated Error Analysis:**
+For the 2 hardest dimensions, check if validation prediction logs or evaluation artifacts are available (either in the run directory or by script generation). If feasible, write a read-only script to extract 2–3 journal entries that resulted in the highest Absolute Error. Display the original excerpt, the ground truth label, and the model's prediction to provide qualitative context on *why* the model is struggling.
+
 ### 4. Calibration Deep-Dive
 
 - How many dimensions have positive calibration per run?
@@ -98,18 +122,32 @@ Present as a compact table sorted by mean QWK across all runs.
 - Note best_epoch vs total_epochs (did early stopping trigger appropriately?)
 - Flag if a larger model overfits more than a smaller one
 
-### 7. Actionable Recommendations
+### 7. Systemic Insights & Hypotheses
+
+Take a step back from the individual metrics and read between the lines. Synthesize what the experiments reveal about the model's fundamental understanding of the task:
+- What is the overarching story these experiments are telling us? 
+- Are there hidden interactions? (e.g., "The model isn't just failing on Power; it's failing on any dimension that relies heavily on historical state rather than immediate journal text.")
+- What assumptions did we make in the previous runs that this data proves wrong?
+- Formulate 1-2 strong hypotheses about *why* the model is behaving the way it is.
+
+### 8. Actionable Recommendations
 
 Provide 3–5 concrete, motivated, testable next steps. Each should:
 - Reference the specific evidence from the analysis
 - Be scoped to a single experiment or change
 - Include what metric improvement to watch for
 
+**Automated Investigations:**
+Do not ask the user to manually investigate data distributions or anomalies. If a recommendation involves investigating data (e.g., checking label distributions for a dimension where QWK is near-zero, auditing dataset changes), **you must automatically perform this analysis**. Write and execute the necessary read-only Python scripts (e.g., using `pandas` on `logs/judge_labels/judge_labels.parquet` or `logs/registry/personas.parquet`) to find the answer immediately. Include the specific findings directly in your report. Do not make any code changes to the repository; only use temporary scripts to gather the information needed to validate your hypotheses.
+
+**Corroborate with Web Research:**
+Before finalizing your recommendations, spawn parallel sub-agents or use tools like `search_web` to research current state-of-the-art approaches relevant to your findings. Use this research to ensure your recommendations (e.g., loss functions, model capacities, or data sampling techniques) are based on up-to-date best practices and not outdated knowledge. Mention in the report what research was conducted and how it corroborated or modified your recommendations.
+
 Examples of good recommendations:
 - "Try nomic-embed with hidden_dim=128 (between 32 and 256) to find the capacity sweet spot — watch param/sample ratio and training gap"
-- "Investigate why power dimension has near-zero QWK across all runs — check label distribution"
+- "Power dimension has near-zero QWK across all runs. *[Automatically checked `logs/judge_labels/judge_labels.parquet`: found 92% 0-labels.]* Recommendation: implement binary collapsing for Power or use dimension-specific focal loss."
 
-### 8. Summary Verdict
+### 9. Summary Verdict
 
 - **Best config**: which run_id + loss combination looks most promising and why
 - **Key weakness**: the single biggest limitation across all experiments
@@ -120,24 +158,9 @@ Examples of good recommendations:
 - Use the threshold table above for all qualitative characterizations
 - Always cite the actual number: "QWK 0.42 (moderate)" not just "moderate QWK"
 - Context: this is a capstone POC with ~637 training samples — focus on relative comparisons, not absolute benchmarks
-- Do not editorialize about the project or its goals — stick to the data
-- If a metric is missing or an observations field says `<fill in>`, note it but don't speculate
+## Leaderboard Updates
 
-## Provenance Backfill
-
-After producing the 8-section report, check all run YAML files for empty provenance and observations fields. For each file:
-
-1. **Empty `provenance.rationale`**: Generate 1–3 sentences explaining *why* this run was created, based on:
-   - `provenance.git_log` (what code changes preceded this run)
-   - `provenance.config_delta` (what config changed vs the previous run)
-   - If both are empty (first run), write a brief note like "Baseline run establishing initial metrics for [encoder family]."
-
-2. **Empty or placeholder `observations`**: Generate 2–4 sentences summarizing *what was learned*, based on:
-   - `evaluation` metrics (MAE, QWK, calibration, hedging)
-   - `per_dimension` results (which dimensions improved/degraded)
-   - Comparison with the previous run (if `provenance.prev_run_id` exists)
-   - A placeholder is any value containing `<fill in` or that is empty.
-
-3. **Write back**: Use the Edit tool to update only the empty/placeholder fields in the YAML files. **Never overwrite** fields that already contain meaningful content.
-
-4. **Scope**: Only backfill files in `logs/experiments/runs/`. Process all files, not just the latest run.
+After generating the report, check `logs/experiments/index.md` for a "Current State of the Art" or "Leaderboard" section. 
+1. If it doesn't exist, create it at the top of the file under the main title.
+2. If the best run from your current analysis outperforms the current leader (based on QWK and calibration tradeoffs), update the leaderboard to feature the new best run, noting its key metrics and a brief rationale for why it is now the state of the art.
+3. Maintain the leaderboard to highlight the top 1-3 best overall runs to ensure it remains a quick, living snapshot of project progress.

@@ -1,0 +1,162 @@
+# VIF Experiment: run_009_CORAL
+# Generated: 2026-02-20T14:55:52
+# Git: d0b93da(dirty)
+metadata:
+  experiment_id: run_009_CORAL
+  run_id: run_009
+  model_name: CORAL
+  timestamp: '2026-02-20T14:55:52'
+  git_commit: d0b93da(dirty)
+  config_hash: 22e771471a19
+provenance:
+  prev_run_id: run_005
+  prev_git_commit: 4c48773
+  git_log:
+  - 'd0b93da chore(judge): wrangle and label 10 Power personas (180/180 complete)'
+  - '46004f9 docs: update GEMINI.md architecture snapshot and clarify ambiguities'
+  - '0468ddf feat(synth): add Power tension scenarios to tension-selection skill'
+  - '1831807 chore(vif): add experiment runs 007-008 and update training notebook'
+  - '6118a22 chore(vif): add experiment runs 005-006 and update training notebooks'
+  config_delta:
+    added: {}
+    removed: {}
+    changed:
+      data.pct_truncated:
+        from: 31.441
+        to: 31.0959
+      model.hidden_dim:
+        from: 256
+        to: 64
+  rationale: Reduced MiniLM hidden_dim from 256 to 64 on the expanded dataset (1020
+    train with 10 new Power personas). Tests whether the over-parameterization problem
+    seen in run_005 (hd=256, param/sample ~386) can be mitigated by capacity reduction
+    while retaining MiniLM's 384d embeddings and window_size=3 state encoder.
+config:
+  encoder:
+    model_name: all-MiniLM-L6-v2
+  state_encoder:
+    window_size: 3
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 31.0959
+    state_dim: 1164
+  model:
+    hidden_dim: 64
+    dropout: 0.2
+  training:
+    loss_fn: coral
+    learning_rate: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1020
+  n_val: 230
+  n_test: 210
+capacity:
+  n_parameters: 80276
+  param_sample_ratio: 78.702
+training_dynamics:
+  best_epoch: 5
+  total_epochs: 25
+  train_loss_at_best: 0.5389
+  val_loss_at_best: 0.5402
+  gap_at_best: 0.0013
+  final_lr: 0.0005
+evaluation:
+  mae_mean: 0.2275
+  accuracy_mean: 0.7852
+  qwk_mean: 0.1758
+  spearman_mean: 0.2845
+  calibration_global: 0.695
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.0881
+  minority_recall_mean: 0.1371
+  recall_minus1: 0.011
+  recall_plus1: 0.2632
+  hedging_mean: 0.8938
+per_dimension:
+  self_direction:
+    mae: 0.4302
+    accuracy: 0.5905
+    qwk: 0.2074
+    spearman: 0.3961
+    calibration: 0.3867
+    hedging: 0.7905
+  stimulation:
+    mae: 0.105
+    accuracy: 0.8952
+    qwk: 0.2495
+    spearman: 0.5848
+    calibration: 0.7879
+    hedging: 0.9524
+  hedonism:
+    mae: 0.1389
+    accuracy: 0.8667
+    qwk: 0.3497
+    spearman: 0.1959
+    calibration: 0.7072
+    hedging: 0.9524
+  achievement:
+    mae: 0.2016
+    accuracy: 0.8238
+    qwk: 0.1126
+    spearman: 0.2959
+    calibration: 0.8225
+    hedging: 0.8857
+  power:
+    mae: 0.0726
+    accuracy: 0.9429
+    qwk: -0.2162
+    spearman: -0.234
+    calibration: 0.857
+    hedging: 0.9762
+  security:
+    mae: 0.3232
+    accuracy: 0.6952
+    qwk: -0.0399
+    spearman: 0.1013
+    calibration: 0.5836
+    hedging: 0.9333
+  conformity:
+    mae: 0.3075
+    accuracy: 0.6952
+    qwk: 0.3841
+    spearman: 0.5416
+    calibration: 0.4074
+    hedging: 0.8286
+  tradition:
+    mae: 0.1583
+    accuracy: 0.8429
+    qwk: 0.3104
+    spearman: 0.4621
+    calibration: 0.6998
+    hedging: 0.9476
+  benevolence:
+    mae: 0.2802
+    accuracy: 0.7524
+    qwk: 0.4064
+    spearman: 0.4061
+    calibration: 0.6953
+    hedging: 0.7333
+  universalism:
+    mae: 0.2573
+    accuracy: 0.7476
+    qwk: -0.0062
+    spearman: 0.0955
+    calibration: 0.6836
+    hedging: 0.9381
+observations: CORAL with MiniLM at hd=64 produces the worst QWK of any CORAL run
+  (0.176, poor). Power QWK is negative (-0.216), security negative (-0.040), and
+  universalism near-zero (-0.006). Hedging extreme at 89.4% with minority recall at
+  just 13.7%. Even at 4x reduced capacity (79:1 param/sample), MiniLM's 1164-dim state
+  vector overwhelms the model. The MiniLM encoder appears fundamentally incompatible
+  with the expanded dataset at any capacity tested.

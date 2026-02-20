@@ -1,0 +1,162 @@
+# VIF Experiment: run_009_CORN
+# Generated: 2026-02-20T14:55:52
+# Git: d0b93da(dirty)
+metadata:
+  experiment_id: run_009_CORN
+  run_id: run_009
+  model_name: CORN
+  timestamp: '2026-02-20T14:55:52'
+  git_commit: d0b93da(dirty)
+  config_hash: 88c98a9ab761
+provenance:
+  prev_run_id: run_005
+  prev_git_commit: 4c48773
+  git_log:
+  - 'd0b93da chore(judge): wrangle and label 10 Power personas (180/180 complete)'
+  - '46004f9 docs: update GEMINI.md architecture snapshot and clarify ambiguities'
+  - '0468ddf feat(synth): add Power tension scenarios to tension-selection skill'
+  - '1831807 chore(vif): add experiment runs 007-008 and update training notebook'
+  - '6118a22 chore(vif): add experiment runs 005-006 and update training notebooks'
+  config_delta:
+    added: {}
+    removed: {}
+    changed:
+      data.pct_truncated:
+        from: 31.441
+        to: 31.0959
+      model.hidden_dim:
+        from: 256
+        to: 64
+  rationale: Reduced MiniLM hidden_dim from 256 to 64 on the expanded dataset (1020
+    train with 10 new Power personas). Tests whether the over-parameterization problem
+    seen in run_005 (hd=256, param/sample ~386) can be mitigated by capacity reduction
+    while retaining MiniLM's 384d embeddings and window_size=3 state encoder.
+config:
+  encoder:
+    model_name: all-MiniLM-L6-v2
+  state_encoder:
+    window_size: 3
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 31.0959
+    state_dim: 1164
+  model:
+    hidden_dim: 64
+    dropout: 0.2
+  training:
+    loss_fn: corn
+    learning_rate: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1020
+  n_val: 230
+  n_test: 210
+capacity:
+  n_parameters: 80276
+  param_sample_ratio: 78.702
+training_dynamics:
+  best_epoch: 5
+  total_epochs: 25
+  train_loss_at_best: 0.2645
+  val_loss_at_best: 0.269
+  gap_at_best: 0.0045
+  final_lr: 0.0005
+evaluation:
+  mae_mean: 0.227
+  accuracy_mean: 0.7924
+  qwk_mean: 0.2266
+  spearman_mean: 0.3225
+  calibration_global: 0.7105
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.0929
+  minority_recall_mean: 0.1656
+  recall_minus1: 0.0063
+  recall_plus1: 0.3249
+  hedging_mean: 0.8862
+per_dimension:
+  self_direction:
+    mae: 0.4315
+    accuracy: 0.6
+    qwk: 0.1839
+    spearman: 0.38
+    calibration: 0.3445
+    hedging: 0.7952
+  stimulation:
+    mae: 0.0982
+    accuracy: 0.9143
+    qwk: 0.4483
+    spearman: 0.5616
+    calibration: 0.7995
+    hedging: 0.9476
+  hedonism:
+    mae: 0.138
+    accuracy: 0.8714
+    qwk: 0.3857
+    spearman: 0.2909
+    calibration: 0.7414
+    hedging: 0.9476
+  achievement:
+    mae: 0.2024
+    accuracy: 0.8095
+    qwk: 0.0557
+    spearman: 0.2636
+    calibration: 0.82
+    hedging: 0.9
+  power:
+    mae: 0.0678
+    accuracy: 0.9476
+    qwk: 0.0154
+    spearman: -0.0659
+    calibration: 0.8673
+    hedging: 0.9714
+  security:
+    mae: 0.3148
+    accuracy: 0.7048
+    qwk: 0.0397
+    spearman: 0.2692
+    calibration: 0.5625
+    hedging: 0.9286
+  conformity:
+    mae: 0.3165
+    accuracy: 0.7
+    qwk: 0.3723
+    spearman: 0.5552
+    calibration: 0.4409
+    hedging: 0.8429
+  tradition:
+    mae: 0.1691
+    accuracy: 0.8429
+    qwk: 0.3297
+    spearman: 0.4271
+    calibration: 0.7357
+    hedging: 0.9095
+  benevolence:
+    mae: 0.2737
+    accuracy: 0.7667
+    qwk: 0.4278
+    spearman: 0.4563
+    calibration: 0.7361
+    hedging: 0.7143
+  universalism:
+    mae: 0.2581
+    accuracy: 0.7667
+    qwk: 0.0074
+    spearman: 0.0867
+    calibration: 0.7742
+    hedging: 0.9048
+observations: CORN with MiniLM at hd=64 shows QWK 0.227 (poor). Universalism near-zero
+  (0.007). Achievement collapsed (0.056). Power near-zero (0.015, Spearman -0.066).
+  Only stimulation (QWK 0.448) and benevolence (0.428) produce meaningful agreement.
+  Hedging at 88.6% is the second-worst across all runs. MiniLM at hd=64 (79:1 ratio)
+  is still over-parameterized and uncompetitive with nomic at hd=64 (run_007 CORN
+  QWK 0.413).

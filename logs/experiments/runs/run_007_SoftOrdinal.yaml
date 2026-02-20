@@ -1,17 +1,22 @@
 # VIF Experiment: run_007_SoftOrdinal
-# Generated: 2026-02-20T10:42:25
-# Git: 4c48773(dirty)
+# Generated: 2026-02-20T14:40:56
+# Git: d0b93da(dirty)
 metadata:
   experiment_id: run_007_SoftOrdinal
   run_id: run_007
   model_name: SoftOrdinal
-  timestamp: '2026-02-20T10:42:25'
-  git_commit: 4c48773(dirty)
+  timestamp: '2026-02-20T14:40:56'
+  git_commit: d0b93da(dirty)
   config_hash: f53684eed126
 provenance:
   prev_run_id: run_006
   prev_git_commit: 4c48773(dirty)
-  git_log: []
+  git_log:
+  - 'd0b93da chore(judge): wrangle and label 10 Power personas (180/180 complete)'
+  - '46004f9 docs: update GEMINI.md architecture snapshot and clarify ambiguities'
+  - '0468ddf feat(synth): add Power tension scenarios to tension-selection skill'
+  - '1831807 chore(vif): add experiment runs 007-008 and update training notebook'
+  - '6118a22 chore(vif): add experiment runs 005-006 and update training notebooks'
   config_delta:
     added: {}
     removed: {}
@@ -19,9 +24,10 @@ provenance:
       model.hidden_dim:
         from: 32
         to: 64
-  rationale: Capacity exploration on nomic-embed-256d encoder, increasing hidden_dim
-    from 32 to 64 while keeping all other config identical to run_006. Tests whether
-    doubling MLP capacity improves QWK and minority recall on the expanded dataset.
+  rationale: Doubled hidden_dim from 32 to 64 on nomic-embed-256d to test whether additional
+    capacity improves QWK and minority recall. Dataset expanded to 1020 train with 10
+    new Power tension personas (180/180 complete). Tests the capacity sweet spot between
+    the compact hd=32 and the over-parameterized MiniLM hd=256.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -52,105 +58,106 @@ config:
   uncertainty:
     mc_dropout_samples: 50
 data:
-  n_train: 958
-  n_val: 214
-  n_test: 202
+  n_train: 1020
+  n_val: 230
+  n_test: 210
 capacity:
   n_parameters: 23454
-  param_sample_ratio: 24.4823
+  param_sample_ratio: 22.9941
 training_dynamics:
-  best_epoch: 5
-  total_epochs: 25
-  train_loss_at_best: 2.1348
-  val_loss_at_best: 2.2682
-  gap_at_best: 0.1334
+  best_epoch: 8
+  total_epochs: 28
+  train_loss_at_best: 2.0639
+  val_loss_at_best: 1.7994
+  gap_at_best: -0.2645
   final_lr: 0.0005
 evaluation:
-  mae_mean: 0.211
-  accuracy_mean: 0.8168
-  qwk_mean: 0.3285
-  spearman_mean: 0.3847
-  calibration_global: 0.7609
+  mae_mean: 0.212
+  accuracy_mean: 0.821
+  qwk_mean: 0.3144
+  spearman_mean: 0.3425
+  calibration_global: 0.8517
   calibration_positive_dims: 10
-  mean_uncertainty: 0.1354
-  minority_recall_mean: 0.218
-  recall_minus1: 0.0308
-  recall_plus1: 0.4051
-  hedging_mean: 0.8342
+  mean_uncertainty: 0.155
+  minority_recall_mean: 0.2908
+  recall_minus1: 0.0674
+  recall_plus1: 0.5142
+  hedging_mean: 0.8067
 per_dimension:
   self_direction:
-    mae: 0.3191
-    accuracy: 0.7426
-    qwk: 0.4308
-    spearman: 0.3655
-    calibration: 0.5358
-    hedging: 0.7376
+    mae: 0.4048
+    accuracy: 0.6333
+    qwk: 0.4057
+    spearman: 0.4245
+    calibration: 0.576
+    hedging: 0.5571
   stimulation:
-    mae: 0.1345
-    accuracy: 0.8663
-    qwk: 0.2793
-    spearman: 0.5151
-    calibration: 0.8153
-    hedging: 0.9109
+    mae: 0.0839
+    accuracy: 0.919
+    qwk: 0.4681
+    spearman: 0.5316
+    calibration: 0.925
+    hedging: 0.9238
   hedonism:
-    mae: 0.1139
-    accuracy: 0.901
-    qwk: 0.4428
-    spearman: 0.4531
-    calibration: 0.8179
-    hedging: 0.8911
+    mae: 0.1419
+    accuracy: 0.881
+    qwk: 0.3463
+    spearman: 0.277
+    calibration: 0.8653
+    hedging: 0.8762
   achievement:
-    mae: 0.2692
-    accuracy: 0.7921
-    qwk: 0.5484
-    spearman: 0.5703
-    calibration: 0.773
-    hedging: 0.5297
+    mae: 0.1981
+    accuracy: 0.8476
+    qwk: 0.3458
+    spearman: 0.2909
+    calibration: 0.7351
+    hedging: 0.8286
   power:
-    mae: 0.1503
-    accuracy: 0.8713
-    qwk: -0.0172
-    spearman: 0.0865
-    calibration: 0.8289
-    hedging: 0.9505
+    mae: 0.077
+    accuracy: 0.9476
+    qwk: -0.3467
+    spearman: -0.198
+    calibration: 0.9112
+    hedging: 0.9619
   security:
-    mae: 0.2158
-    accuracy: 0.797
-    qwk: 0.3285
-    spearman: 0.3743
-    calibration: 0.6783
-    hedging: 0.9109
+    mae: 0.3424
+    accuracy: 0.7143
+    qwk: 0.164
+    spearman: 0.2234
+    calibration: 0.7246
+    hedging: 0.7762
   conformity:
-    mae: 0.2526
-    accuracy: 0.7921
-    qwk: 0.3777
-    spearman: 0.303
-    calibration: 0.709
-    hedging: 0.8614
+    mae: 0.2537
+    accuracy: 0.7571
+    qwk: 0.5271
+    spearman: 0.5702
+    calibration: 0.7472
+    hedging: 0.7048
   tradition:
-    mae: 0.1932
-    accuracy: 0.802
-    qwk: 0.0424
-    spearman: 0.2363
-    calibration: 0.6409
-    hedging: 0.9653
+    mae: 0.1481
+    accuracy: 0.8762
+    qwk: 0.5062
+    spearman: 0.5062
+    calibration: 0.8775
+    hedging: 0.8952
   benevolence:
-    mae: 0.3205
-    accuracy: 0.7228
-    qwk: 0.2798
-    spearman: 0.2946
-    calibration: 0.5744
-    hedging: 0.7525
+    mae: 0.233
+    accuracy: 0.819
+    qwk: 0.5528
+    spearman: 0.5695
+    calibration: 0.8328
+    hedging: 0.7429
   universalism:
-    mae: 0.1412
-    accuracy: 0.8812
-    qwk: 0.5721
-    spearman: 0.648
-    calibration: 0.8522
-    hedging: 0.8317
-observations: SoftOrdinal QWK slightly decreased from 0.358 (run_006 hd=32) to
-  0.329 with hd=64 — unlike CORAL/EMD, SoftOrdinal does not benefit from increased
-  capacity here. Achievement was exceptional (QWK 0.548, best for any SoftOrdinal
-  run). Self_direction improved to 0.431 (best across all runs for that dimension).
-  Tradition collapsed to 0.042 and power turned negative (-0.017). Universalism
-  remained strong at 0.572. The training gap (0.133) is moderate.
+    mae: 0.2369
+    accuracy: 0.8143
+    qwk: 0.1751
+    spearman: 0.2293
+    calibration: 0.9442
+    hedging: 0.8
+observations: SoftOrdinal at hd=64 achieves the highest global calibration of any
+  configuration (0.852, good) but the lowest QWK in run_007 (0.314). Power is
+  pathologically negative (QWK -0.347, Spearman -0.198) — the worst Power result
+  across all runs. Benevolence is the strongest dimension (QWK 0.553, Spearman 0.570).
+  Conformity strong (0.527). Universalism collapsed to 0.175 (from 0.573 in run_006).
+  Best_epoch=8 with negative gap (-0.265) suggests the soft-label formulation
+  generalizes well at this capacity but underfits on the harder dimensions.

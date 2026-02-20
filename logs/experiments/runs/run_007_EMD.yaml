@@ -1,17 +1,22 @@
 # VIF Experiment: run_007_EMD
-# Generated: 2026-02-20T10:42:25
-# Git: 4c48773(dirty)
+# Generated: 2026-02-20T14:40:56
+# Git: d0b93da(dirty)
 metadata:
   experiment_id: run_007_EMD
   run_id: run_007
   model_name: EMD
-  timestamp: '2026-02-20T10:42:25'
-  git_commit: 4c48773(dirty)
+  timestamp: '2026-02-20T14:40:56'
+  git_commit: d0b93da(dirty)
   config_hash: d8fff8658e1c
 provenance:
   prev_run_id: run_006
   prev_git_commit: 4c48773(dirty)
-  git_log: []
+  git_log:
+  - 'd0b93da chore(judge): wrangle and label 10 Power personas (180/180 complete)'
+  - '46004f9 docs: update GEMINI.md architecture snapshot and clarify ambiguities'
+  - '0468ddf feat(synth): add Power tension scenarios to tension-selection skill'
+  - '1831807 chore(vif): add experiment runs 007-008 and update training notebook'
+  - '6118a22 chore(vif): add experiment runs 005-006 and update training notebooks'
   config_delta:
     added: {}
     removed: {}
@@ -19,9 +24,10 @@ provenance:
       model.hidden_dim:
         from: 32
         to: 64
-  rationale: Capacity exploration on nomic-embed-256d encoder, increasing hidden_dim
-    from 32 to 64 while keeping all other config identical to run_006. Tests whether
-    doubling MLP capacity improves QWK and minority recall on the expanded dataset.
+  rationale: Doubled hidden_dim from 32 to 64 on nomic-embed-256d to test whether additional
+    capacity improves QWK and minority recall. Dataset expanded to 1020 train with 10
+    new Power tension personas (180/180 complete). Tests the capacity sweet spot between
+    the compact hd=32 and the over-parameterized MiniLM hd=256.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -52,105 +58,105 @@ config:
   uncertainty:
     mc_dropout_samples: 50
 data:
-  n_train: 958
-  n_val: 214
-  n_test: 202
+  n_train: 1020
+  n_val: 230
+  n_test: 210
 capacity:
   n_parameters: 23454
-  param_sample_ratio: 24.4823
+  param_sample_ratio: 22.9941
 training_dynamics:
-  best_epoch: 6
-  total_epochs: 26
-  train_loss_at_best: 0.154
-  val_loss_at_best: 0.1723
-  gap_at_best: 0.0183
+  best_epoch: 8
+  total_epochs: 28
+  train_loss_at_best: 0.1492
+  val_loss_at_best: 0.1357
+  gap_at_best: -0.0135
   final_lr: 0.0005
 evaluation:
-  mae_mean: 0.2023
-  accuracy_mean: 0.8203
-  qwk_mean: 0.3639
-  spearman_mean: 0.3797
-  calibration_global: 0.7496
+  mae_mean: 0.2108
+  accuracy_mean: 0.8167
+  qwk_mean: 0.3575
+  spearman_mean: 0.3633
+  calibration_global: 0.8485
   calibration_positive_dims: 10
-  mean_uncertainty: 0.117
-  minority_recall_mean: 0.2171
-  recall_minus1: 0.013
-  recall_plus1: 0.4212
-  hedging_mean: 0.85
+  mean_uncertainty: 0.1503
+  minority_recall_mean: 0.2879
+  recall_minus1: 0.0674
+  recall_plus1: 0.5083
+  hedging_mean: 0.8043
 per_dimension:
   self_direction:
-    mae: 0.3107
-    accuracy: 0.7178
-    qwk: 0.3205
-    spearman: 0.3088
-    calibration: 0.5292
-    hedging: 0.7921
+    mae: 0.4154
+    accuracy: 0.6286
+    qwk: 0.4034
+    spearman: 0.4283
+    calibration: 0.6003
+    hedging: 0.5238
   stimulation:
-    mae: 0.1372
-    accuracy: 0.8713
-    qwk: 0.3516
-    spearman: 0.555
-    calibration: 0.8257
-    hedging: 0.9208
+    mae: 0.0854
+    accuracy: 0.919
+    qwk: 0.5377
+    spearman: 0.4364
+    calibration: 0.9429
+    hedging: 0.9238
   hedonism:
-    mae: 0.1184
-    accuracy: 0.9109
-    qwk: 0.505
-    spearman: 0.2986
-    calibration: 0.9063
-    hedging: 0.8911
+    mae: 0.1457
+    accuracy: 0.8762
+    qwk: 0.3384
+    spearman: 0.2881
+    calibration: 0.8536
+    hedging: 0.8857
   achievement:
-    mae: 0.2485
-    accuracy: 0.797
-    qwk: 0.5491
-    spearman: 0.5745
-    calibration: 0.7686
-    hedging: 0.6089
+    mae: 0.1683
+    accuracy: 0.8667
+    qwk: 0.4278
+    spearman: 0.3628
+    calibration: 0.7338
+    hedging: 0.8667
   power:
-    mae: 0.1466
-    accuracy: 0.8713
-    qwk: 0.0896
-    spearman: 0.2303
-    calibration: 0.8031
-    hedging: 0.9604
+    mae: 0.0617
+    accuracy: 0.9476
+    qwk: 0.0154
+    spearman: -0.0529
+    calibration: 0.9122
+    hedging: 0.981
   security:
-    mae: 0.2093
-    accuracy: 0.802
-    qwk: 0.3329
-    spearman: 0.2778
-    calibration: 0.6488
-    hedging: 0.9307
+    mae: 0.3346
+    accuracy: 0.7095
+    qwk: 0.1376
+    spearman: 0.2699
+    calibration: 0.752
+    hedging: 0.7905
   conformity:
-    mae: 0.2434
-    accuracy: 0.7723
-    qwk: 0.204
-    spearman: 0.2739
-    calibration: 0.6193
-    hedging: 0.9406
+    mae: 0.243
+    accuracy: 0.7714
+    qwk: 0.5594
+    spearman: 0.6284
+    calibration: 0.7176
+    hedging: 0.7143
   tradition:
-    mae: 0.17
-    accuracy: 0.8416
-    qwk: 0.4088
-    spearman: 0.3193
-    calibration: 0.6666
-    hedging: 0.9109
+    mae: 0.146
+    accuracy: 0.8714
+    qwk: 0.5186
+    spearman: 0.4931
+    calibration: 0.8617
+    hedging: 0.8714
   benevolence:
-    mae: 0.3055
-    accuracy: 0.7327
-    qwk: 0.3616
-    spearman: 0.3902
-    calibration: 0.597
-    hedging: 0.7079
+    mae: 0.2657
+    accuracy: 0.7952
+    qwk: 0.5115
+    spearman: 0.5022
+    calibration: 0.8185
+    hedging: 0.6476
   universalism:
-    mae: 0.1331
-    accuracy: 0.8861
-    qwk: 0.516
-    spearman: 0.5689
-    calibration: 0.9072
-    hedging: 0.8366
-observations: EMD achieves the best MAE of any run (0.202) and best accuracy (0.820)
-  with hd=64. QWK improved to 0.364 (from 0.324 in run_006 hd=32). Achievement was
-  the strongest dimension (QWK 0.549, Spearman 0.575). Universalism recovered to
-  0.516 (from 0.449 in run_006). Power remains near-zero (0.090). Training gap is
-  minimal (0.018) with best_epoch=6, suggesting efficient learning. This is the best
-  overall EMD configuration on the expanded dataset.
+    mae: 0.242
+    accuracy: 0.781
+    qwk: 0.1254
+    spearman: 0.277
+    calibration: 0.9275
+    hedging: 0.8381
+observations: EMD at hd=64 achieves QWK 0.358 and the highest calibration of any EMD
+  run (0.849, good). Conformity is the standout dimension (QWK 0.559, Spearman 0.628 —
+  both the best for any single dimension in run_007). Tradition strong (0.519). Benevolence
+  0.512. Power collapsed to near-zero (0.015, Spearman -0.053). Universalism dropped
+  sharply to 0.125 (from 0.449 in run_006). Training gap slightly negative (-0.014),
+  indicating healthy generalization at this capacity level.

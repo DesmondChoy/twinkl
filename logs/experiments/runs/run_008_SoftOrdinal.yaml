@@ -1,18 +1,17 @@
 # VIF Experiment: run_008_SoftOrdinal
-# Generated: 2026-02-20T10:47:41
-# Git: 6118a22(dirty)
+# Generated: 2026-02-20T14:47:14
+# Git: d0b93da(dirty)
 metadata:
   experiment_id: run_008_SoftOrdinal
   run_id: run_008
   model_name: SoftOrdinal
-  timestamp: '2026-02-20T10:47:41'
-  git_commit: 6118a22(dirty)
+  timestamp: '2026-02-20T14:47:14'
+  git_commit: d0b93da(dirty)
   config_hash: d832905b0dc9
 provenance:
   prev_run_id: run_007
-  prev_git_commit: 4c48773(dirty)
-  git_log:
-  - '6118a22 chore(vif): add experiment runs 005-006 and update training notebooks'
+  prev_git_commit: d0b93da(dirty)
+  git_log: []
   config_delta:
     added: {}
     removed: {}
@@ -20,9 +19,10 @@ provenance:
       model.hidden_dim:
         from: 64
         to: 128
-  rationale: Continued capacity exploration on nomic-embed-256d encoder, increasing
-    hidden_dim from 64 to 128. Tests whether further capacity gains improve metrics
-    or trigger overfitting at param/sample ratio ~56.
+  rationale: Doubled hidden_dim from 64 to 128 on nomic-embed-256d to continue the capacity
+    sweep. Tests whether QWK improvements from hd=64 (run_007) continue to scale with
+    more parameters, or whether diminishing returns or overfitting emerge at the 54:1
+    param/sample ratio.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -53,106 +53,106 @@ config:
   uncertainty:
     mc_dropout_samples: 50
 data:
-  n_train: 958
-  n_val: 214
-  n_test: 202
+  n_train: 1020
+  n_val: 230
+  n_test: 210
 capacity:
   n_parameters: 55070
-  param_sample_ratio: 57.4843
+  param_sample_ratio: 53.9902
 training_dynamics:
   best_epoch: 6
   total_epochs: 26
-  train_loss_at_best: 1.849
-  val_loss_at_best: 2.2367
-  gap_at_best: 0.3877
+  train_loss_at_best: 1.9267
+  val_loss_at_best: 1.7682
+  gap_at_best: -0.1585
   final_lr: 0.0005
 evaluation:
-  mae_mean: 0.2083
-  accuracy_mean: 0.8153
-  qwk_mean: 0.3327
-  spearman_mean: 0.3818
-  calibration_global: 0.7696
+  mae_mean: 0.2008
+  accuracy_mean: 0.8262
+  qwk_mean: 0.3537
+  spearman_mean: 0.387
+  calibration_global: 0.8107
   calibration_positive_dims: 10
-  mean_uncertainty: 0.116
-  minority_recall_mean: 0.2488
-  recall_minus1: 0.0645
-  recall_plus1: 0.433
-  hedging_mean: 0.8248
+  mean_uncertainty: 0.118
+  minority_recall_mean: 0.2913
+  recall_minus1: 0.0673
+  recall_plus1: 0.5153
+  hedging_mean: 0.8319
 per_dimension:
   self_direction:
-    mae: 0.3494
-    accuracy: 0.7178
-    qwk: 0.2958
-    spearman: 0.3236
-    calibration: 0.609
-    hedging: 0.6139
+    mae: 0.3817
+    accuracy: 0.6714
+    qwk: 0.4235
+    spearman: 0.4212
+    calibration: 0.5706
+    hedging: 0.6381
   stimulation:
-    mae: 0.1327
-    accuracy: 0.8614
-    qwk: 0.3273
-    spearman: 0.5254
-    calibration: 0.7408
-    hedging: 0.9356
+    mae: 0.0855
+    accuracy: 0.9238
+    qwk: 0.5056
+    spearman: 0.5887
+    calibration: 0.93
+    hedging: 0.919
   hedonism:
-    mae: 0.1022
-    accuracy: 0.9158
-    qwk: 0.5875
-    spearman: 0.5974
-    calibration: 0.7336
-    hedging: 0.896
+    mae: 0.1354
+    accuracy: 0.8857
+    qwk: 0.4255
+    spearman: 0.3464
+    calibration: 0.8439
+    hedging: 0.9
   achievement:
-    mae: 0.2404
-    accuracy: 0.797
-    qwk: 0.5353
-    spearman: 0.5876
-    calibration: 0.7596
-    hedging: 0.5941
+    mae: 0.1647
+    accuracy: 0.8714
+    qwk: 0.4542
+    spearman: 0.3875
+    calibration: 0.7834
+    hedging: 0.8667
   power:
-    mae: 0.1476
-    accuracy: 0.8762
-    qwk: 0.082
-    spearman: 0.0494
-    calibration: 0.5927
-    hedging: 0.9455
+    mae: 0.0692
+    accuracy: 0.9476
+    qwk: 0.0154
+    spearman: -0.0558
+    calibration: 0.9033
+    hedging: 0.9762
   security:
-    mae: 0.2033
-    accuracy: 0.8069
-    qwk: 0.401
-    spearman: 0.392
-    calibration: 0.72
-    hedging: 0.8663
+    mae: 0.3294
+    accuracy: 0.7238
+    qwk: 0.1336
+    spearman: 0.2059
+    calibration: 0.6372
+    hedging: 0.8095
   conformity:
-    mae: 0.2773
-    accuracy: 0.7624
-    qwk: 0.2034
-    spearman: 0.1942
-    calibration: 0.829
-    hedging: 0.8218
+    mae: 0.256
+    accuracy: 0.7619
+    qwk: 0.525
+    spearman: 0.5899
+    calibration: 0.7395
+    hedging: 0.7571
   tradition:
-    mae: 0.1855
-    accuracy: 0.8119
-    qwk: 0.1529
-    spearman: 0.3215
-    calibration: 0.6913
-    hedging: 0.9455
+    mae: 0.1397
+    accuracy: 0.8619
+    qwk: 0.4269
+    spearman: 0.5058
+    calibration: 0.7187
+    hedging: 0.9238
   benevolence:
-    mae: 0.2816
-    accuracy: 0.7376
-    qwk: 0.3445
-    spearman: 0.4045
-    calibration: 0.6289
-    hedging: 0.8119
+    mae: 0.2139
+    accuracy: 0.8
+    qwk: 0.5119
+    spearman: 0.5948
+    calibration: 0.8285
+    hedging: 0.7048
   universalism:
-    mae: 0.1629
-    accuracy: 0.8663
-    qwk: 0.3971
-    spearman: 0.4219
-    calibration: 0.8741
-    hedging: 0.8168
-observations: SoftOrdinal QWK comparable at 0.333 (vs 0.329 at hd=64) — additional
-  capacity does not help. Calibration improved to 0.770 (from 0.761), the best
-  among run_008 losses. Hedonism was exceptional (QWK 0.588, Spearman 0.597).
-  Achievement strong at 0.535. Conformity calibration reached 0.829, the highest
-  for that dimension across all runs. Training gap increased to 0.388 (from 0.133),
-  confirming SoftOrdinal's soft-label formulation amplifies overfitting at higher
-  capacity. Power remained near-zero (0.082).
+    mae: 0.2329
+    accuracy: 0.8143
+    qwk: 0.1157
+    spearman: 0.286
+    calibration: 0.903
+    hedging: 0.8238
+observations: SoftOrdinal at hd=128 recovers QWK to 0.354 (from 0.314 at hd=64),
+  the only loss to improve from hd=64 to hd=128. Calibration 0.811 (good), slight
+  decline from 0.852. Stimulation strong (QWK 0.506, Spearman 0.589). Conformity
+  0.525. Achievement improved to 0.454 (best SoftOrdinal on nomic). Benevolence 0.512.
+  Power near-zero (0.015, Spearman -0.056). Universalism collapsed further to 0.116 —
+  the lowest single-dimension QWK across all SoftOrdinal runs. SoftOrdinal shows the
+  opposite capacity trend from CORN: benefits from more params at this scale.

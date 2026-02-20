@@ -1,5 +1,15 @@
 # VIF Experiment Index
 
+## Current State of the Art
+
+| Rank | Run + Loss | Encoder | hd | n_train | QWK | Cal | MAE | Acc | MinR | Rationale |
+|------|-----------|---------|---:|--------:|----:|----:|----:|----:|-----:|-----------|
+| 1 | run_007 CORN | nomic-256d | 64 | 1020 | **0.413** | **0.838** | 0.205 | 0.821 | 0.285 | Best QWK on expanded data with good calibration. Conformity breakthrough (0.535). |
+| 2 | run_007 CORAL | nomic-256d | 64 | 1020 | 0.367 | 0.830 | 0.208 | 0.819 | 0.247 | Strong calibration, benevolence QWK 0.532. Stable across capacity changes. |
+| 3 | run_008 EMD | nomic-256d | 128 | 1020 | 0.365 | 0.802 | **0.200** | 0.821 | 0.300 | Best MAE ever. Stimulation QWK 0.667. Most capacity-robust loss function. |
+
+> **Key insight**: nomic-embed at hd=64 is the sweet spot. All top-3 are nomic-based on the 1020-sample dataset. MiniLM is no longer competitive on the expanded data.
+
 | run | model | encoder | ws | hd | do | loss | params | ratio | MAE | Acc | QWK | Spear | Cal | MinR | file |
 |-----|-------|---------|---:|---:|---:|------|-------:|------:|----:|----:|----:|------:|----:|-----:|------|
 | 001 | CORAL | MiniLM-384d | 3 | 256 | 0.2 | coral | 372756 | 585.2 | 0.232 | 0.782 | 0.398 | 0.459 | 0.644 | 0.298 | runs/run_001_CORAL.yaml |
@@ -28,11 +38,15 @@
 | 006 | CORN | nomic-256d | 1 | 32 | 0.3 | corn | 10388 | 10.8 | 0.236 | 0.791 | 0.280 | 0.350 | 0.777 | 0.183 | runs/run_006_CORN.yaml |
 | 006 | EMD | nomic-256d | 1 | 32 | 0.3 | emd | 10718 | 11.2 | 0.227 | 0.803 | 0.324 | 0.334 | 0.764 | 0.225 | runs/run_006_EMD.yaml |
 | 006 | SoftOrdinal | nomic-256d | 1 | 32 | 0.3 | soft_ordinal | 10718 | 11.2 | 0.223 | 0.811 | 0.358 | 0.354 | 0.775 | 0.235 | runs/run_006_SoftOrdinal.yaml |
-| 007 | CORAL | nomic-256d | 1 | 64 | 0.3 | coral | 22804 | 23.8 | 0.218 | 0.809 | 0.349 | 0.373 | 0.767 | 0.209 | runs/run_007_CORAL.yaml |
-| 007 | CORN | nomic-256d | 1 | 64 | 0.3 | corn | 22804 | 23.8 | 0.224 | 0.797 | 0.290 | 0.349 | 0.777 | 0.199 | runs/run_007_CORN.yaml |
-| 007 | EMD | nomic-256d | 1 | 64 | 0.3 | emd | 23454 | 24.5 | 0.202 | 0.820 | 0.364 | 0.380 | 0.750 | 0.217 | runs/run_007_EMD.yaml |
-| 007 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 24.5 | 0.211 | 0.817 | 0.329 | 0.385 | 0.761 | 0.218 | runs/run_007_SoftOrdinal.yaml |
-| 008 | CORAL | nomic-256d | 1 | 128 | 0.3 | coral | 53780 | 56.1 | 0.204 | 0.813 | 0.356 | 0.403 | 0.762 | 0.235 | runs/run_008_CORAL.yaml |
-| 008 | CORN | nomic-256d | 1 | 128 | 0.3 | corn | 53780 | 56.1 | 0.205 | 0.810 | 0.327 | 0.421 | 0.758 | 0.224 | runs/run_008_CORN.yaml |
-| 008 | EMD | nomic-256d | 1 | 128 | 0.3 | emd | 55070 | 57.5 | 0.213 | 0.809 | 0.354 | 0.400 | 0.749 | 0.265 | runs/run_008_EMD.yaml |
-| 008 | SoftOrdinal | nomic-256d | 1 | 128 | 0.3 | soft_ordinal | 55070 | 57.5 | 0.208 | 0.815 | 0.333 | 0.382 | 0.770 | 0.249 | runs/run_008_SoftOrdinal.yaml |
+| 007 | CORAL | nomic-256d | 1 | 64 | 0.3 | coral | 22804 | 22.4 | 0.208 | 0.819 | 0.367 | 0.398 | 0.830 | 0.247 | runs/run_007_CORAL.yaml |
+| 007 | CORN | nomic-256d | 1 | 64 | 0.3 | corn | 22804 | 22.4 | 0.205 | 0.821 | 0.413 | 0.402 | 0.838 | 0.285 | runs/run_007_CORN.yaml |
+| 007 | EMD | nomic-256d | 1 | 64 | 0.3 | emd | 23454 | 23.0 | 0.211 | 0.817 | 0.357 | 0.363 | 0.849 | 0.288 | runs/run_007_EMD.yaml |
+| 007 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 23.0 | 0.212 | 0.821 | 0.314 | 0.343 | 0.852 | 0.291 | runs/run_007_SoftOrdinal.yaml |
+| 008 | CORAL | nomic-256d | 1 | 128 | 0.3 | coral | 53780 | 52.7 | 0.204 | 0.824 | 0.341 | 0.397 | 0.805 | 0.273 | runs/run_008_CORAL.yaml |
+| 008 | CORN | nomic-256d | 1 | 128 | 0.3 | corn | 53780 | 52.7 | 0.203 | 0.828 | 0.344 | 0.359 | 0.785 | 0.276 | runs/run_008_CORN.yaml |
+| 008 | EMD | nomic-256d | 1 | 128 | 0.3 | emd | 55070 | 54.0 | 0.200 | 0.821 | 0.365 | 0.390 | 0.802 | 0.300 | runs/run_008_EMD.yaml |
+| 008 | SoftOrdinal | nomic-256d | 1 | 128 | 0.3 | soft_ordinal | 55070 | 54.0 | 0.201 | 0.826 | 0.354 | 0.387 | 0.811 | 0.291 | runs/run_008_SoftOrdinal.yaml |
+| 009 | CORAL | MiniLM-384d | 3 | 64 | 0.2 | coral | 80276 | 78.7 | 0.228 | 0.785 | 0.176 | 0.284 | 0.695 | 0.137 | runs/run_009_CORAL.yaml |
+| 009 | CORN | MiniLM-384d | 3 | 64 | 0.2 | corn | 80276 | 78.7 | 0.227 | 0.792 | 0.227 | 0.323 | 0.711 | 0.166 | runs/run_009_CORN.yaml |
+| 009 | EMD | MiniLM-384d | 3 | 64 | 0.2 | emd | 80926 | 79.3 | 0.225 | 0.799 | 0.259 | 0.303 | 0.776 | 0.223 | runs/run_009_EMD.yaml |
+| 009 | SoftOrdinal | MiniLM-384d | 3 | 64 | 0.2 | soft_ordinal | 80926 | 79.3 | 0.239 | 0.787 | 0.236 | 0.300 | 0.775 | 0.234 | runs/run_009_SoftOrdinal.yaml |
