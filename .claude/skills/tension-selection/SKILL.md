@@ -19,7 +19,7 @@ in each subagent's prompt when `TARGET_TENSIONS` is non-empty.
 
 ## When It Applies
 
-- **Active**: `TARGET_TENSIONS` is non-empty (e.g., `["Universalism"]`)
+- **Active**: `TARGET_TENSIONS` is non-empty (e.g., `["Universalism"]`, `["Power"]`)
 - **Inactive**: `TARGET_TENSIONS` is empty (`[]`) — pipeline is completely
   unchanged, this file is never read
 
@@ -37,6 +37,20 @@ universalism_tension_scenarios:
   - "You made a choice today that was convenient but doesn't sit right with your sense of what's right for the world. Describe the moment."
   - "Someone around you did or said something that goes against what you believe in, and you let it pass. Describe the situation."
   - "You chose the easier, less ethical option today — the one that benefits you but maybe not others. What happened?"
+```
+
+### Power
+
+Scenarios that surface moments where the persona's sense of agency,
+voice, or standing was diminished — without naming the value directly.
+These produce entries the judge can score as Power -1.
+
+```yaml
+power_tension_scenarios:
+  - "Someone spoke over you today in a way that made you feel smaller — maybe they cut you off, presented your idea as theirs, or made a decision that should have been yours. You didn't push back. Just describe what happened."
+  - "You needed something today — an answer, a resource, a green light — and the only way to get it was to wait for someone else to decide. You asked, and then you just had to sit there. Describe how that played out."
+  - "You had a clear view on how something should go — and someone pushed back, hard. You ended up going along with their way instead. Maybe it was easier, maybe the fight wasn't worth it. Describe the moment you gave in."
+  - "Someone treated you today like your experience or track record didn't count for much — maybe they overlooked you for something, explained something you already knew, or assumed you needed to prove yourself all over again. What happened?"
 ```
 
 ## Application Rule
