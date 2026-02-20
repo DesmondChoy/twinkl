@@ -1,0 +1,170 @@
+# VIF Experiment: run_005_CORN
+# Generated: 2026-02-20T09:25:59
+# Git: 4c48773(dirty)
+metadata:
+  experiment_id: run_005_CORN
+  run_id: run_005
+  model_name: CORN
+  timestamp: '2026-02-20T09:25:59'
+  git_commit: 4c48773(dirty)
+  config_hash: 853fbe32eba3
+provenance:
+  prev_run_id: run_003
+  prev_git_commit: a3f493f
+  git_log:
+  - '4c48773 docs: remove redundant introductory sentences from AGENTS.md and GEMINI.md'
+  - '31918e6 fix(vif): include dataset splits in experiment logger deduplication hash'
+  - 'e5cb197 fix(vif): include dataset splits in experiment logger deduplication hash'
+  - 'b84d1ca fix(judge): backfill rationales for 61 personas and fix under-labeled
+    entry'
+  - 'c0435e1 chore(data): add batch 2 judge labels for 60 new personas'
+  - 'cd59d19 chore(data): add batch 2 synthetic and wrangled persona data (60 personas)'
+  - '986e408 feat(judge): add consolidation module, harden wrangling parser, and update
+    judge pipeline docs'
+  - 'a036004 chore(data): remove batch 1A pre-tension Universalism personas (10)'
+  - de4a5e1 Refactor notebook references to scripts and harden synthetic helpers (twinkl-ayp)
+  - '62cbe11 docs(gen): fix config variables — remove dead START_DATE, wire MIN_DAYS_BETWEEN_ENTRIES'
+  - '9e3e22a feat(vif): add runs 003/004 experiment logs with provenance backfill'
+  config_delta:
+    added:
+      data.train_ratio: 0.7
+      data.val_ratio: 0.15
+      data.split_seed: 2025
+      data.pct_truncated: 31.441
+      data.state_dim: 1164
+      uncertainty.mc_dropout_samples: 50
+    removed: {}
+    changed: {}
+  rationale: Re-run of MiniLM-384d configuration with expanded dataset (958 train
+    vs 637). Added 60 new personas from batch 2, removed 10 pre-tension Universalism
+    personas, and added MC dropout uncertainty (50 samples). Tests whether 50% more
+    data improves MiniLM performance.
+config:
+  encoder:
+    model_name: all-MiniLM-L6-v2
+  state_encoder:
+    window_size: 3
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 31.441
+    state_dim: 1164
+  model:
+    hidden_dim: 256
+    dropout: 0.2
+  training:
+    loss_fn: corn
+    learning_rate: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 958
+  n_val: 214
+  n_test: 202
+capacity:
+  n_parameters: 370196
+  param_sample_ratio: 386.4259
+training_dynamics:
+  best_epoch: 2
+  total_epochs: 22
+  train_loss_at_best: 0.2724
+  val_loss_at_best: 0.2956
+  gap_at_best: 0.0232
+  final_lr: 0.0005
+evaluation:
+  mae_mean: 0.2162
+  accuracy_mean: 0.797
+  qwk_mean: 0.2537
+  spearman_mean: 0.3654
+  calibration_global: 0.6399
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.0703
+  minority_recall_mean: 0.1806
+  recall_minus1: 0.013
+  recall_plus1: 0.3481
+  hedging_mean: 0.8678
+per_dimension:
+  self_direction:
+    mae: 0.3452
+    accuracy: 0.6881
+    qwk: 0.2142
+    spearman: 0.265
+    calibration: 0.606
+    hedging: 0.6832
+  stimulation:
+    mae: 0.1408
+    accuracy: 0.8564
+    qwk: 0.2628
+    spearman: 0.4834
+    calibration: 0.5152
+    hedging: 0.9554
+  hedonism:
+    mae: 0.0997
+    accuracy: 0.9109
+    qwk: 0.5396
+    spearman: 0.5965
+    calibration: 0.706
+    hedging: 0.8911
+  achievement:
+    mae: 0.2696
+    accuracy: 0.7624
+    qwk: 0.4451
+    spearman: 0.4963
+    calibration: 0.6767
+    hedging: 0.6089
+  power:
+    mae: 0.153
+    accuracy: 0.8614
+    qwk: 0.0376
+    spearman: 0.0683
+    calibration: 0.6634
+    hedging: 0.9604
+  security:
+    mae: 0.2225
+    accuracy: 0.7822
+    qwk: 0.2293
+    spearman: 0.3757
+    calibration: 0.5529
+    hedging: 0.9158
+  conformity:
+    mae: 0.2431
+    accuracy: 0.7723
+    qwk: 0.2178
+    spearman: 0.3616
+    calibration: 0.5909
+    hedging: 0.9158
+  tradition:
+    mae: 0.1995
+    accuracy: 0.802
+    qwk: 0.0424
+    spearman: 0.1362
+    calibration: 0.3525
+    hedging: 0.9901
+  benevolence:
+    mae: 0.3117
+    accuracy: 0.6931
+    qwk: 0.1938
+    spearman: 0.3165
+    calibration: 0.4714
+    hedging: 0.8812
+  universalism:
+    mae: 0.1767
+    accuracy: 0.8416
+    qwk: 0.3545
+    spearman: 0.5542
+    calibration: 0.762
+    hedging: 0.8762
+observations: CORN with the expanded dataset shows the worst QWK of any MiniLM
+  run (0.254), down from 0.326 (run_003). Hedging reached 86.8% with minority recall
+  at just 18.1%. Tradition QWK collapsed to 0.042 with 99.0% hedging. Power QWK
+  near-zero (0.038). Achievement was a surprising bright spot (QWK 0.445, best for
+  CORN). The larger dataset exacerbates CORN's tendency toward degenerate predictions
+  on sparse dimensions.

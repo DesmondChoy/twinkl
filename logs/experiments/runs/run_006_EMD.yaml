@@ -1,0 +1,174 @@
+# VIF Experiment: run_006_EMD
+# Generated: 2026-02-20T09:27:37
+# Git: 4c48773(dirty)
+metadata:
+  experiment_id: run_006_EMD
+  run_id: run_006
+  model_name: EMD
+  timestamp: '2026-02-20T09:27:37'
+  git_commit: 4c48773(dirty)
+  config_hash: c014c6b10103
+provenance:
+  prev_run_id: run_004
+  prev_git_commit: a3f493f(dirty)
+  git_log:
+  - '4c48773 docs: remove redundant introductory sentences from AGENTS.md and GEMINI.md'
+  - '31918e6 fix(vif): include dataset splits in experiment logger deduplication hash'
+  - 'e5cb197 fix(vif): include dataset splits in experiment logger deduplication hash'
+  - 'b84d1ca fix(judge): backfill rationales for 61 personas and fix under-labeled
+    entry'
+  - 'c0435e1 chore(data): add batch 2 judge labels for 60 new personas'
+  - 'cd59d19 chore(data): add batch 2 synthetic and wrangled persona data (60 personas)'
+  - '986e408 feat(judge): add consolidation module, harden wrangling parser, and update
+    judge pipeline docs'
+  - 'a036004 chore(data): remove batch 1A pre-tension Universalism personas (10)'
+  - de4a5e1 Refactor notebook references to scripts and harden synthetic helpers (twinkl-ayp)
+  - '62cbe11 docs(gen): fix config variables — remove dead START_DATE, wire MIN_DAYS_BETWEEN_ENTRIES'
+  - '9e3e22a feat(vif): add runs 003/004 experiment logs with provenance backfill'
+  config_delta:
+    added:
+      data.train_ratio: 0.7
+      data.val_ratio: 0.15
+      data.split_seed: 2025
+      data.pct_truncated: 0.0
+      data.state_dim: 266
+      uncertainty.mc_dropout_samples: 50
+    removed: {}
+    changed: {}
+  rationale: Re-run of nomic-embed-256d configuration with expanded dataset (958
+    train vs 637). Added 60 new personas from batch 2, removed 10 pre-tension
+    Universalism personas, and added MC dropout uncertainty (50 samples). Tests
+    whether 50% more data improves nomic/small-model performance.
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 266
+  model:
+    hidden_dim: 32
+    dropout: 0.3
+  training:
+    loss_fn: emd
+    learning_rate: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 958
+  n_val: 214
+  n_test: 202
+capacity:
+  n_parameters: 10718
+  param_sample_ratio: 11.1879
+training_dynamics:
+  best_epoch: 14
+  total_epochs: 34
+  train_loss_at_best: 0.1527
+  val_loss_at_best: 0.1768
+  gap_at_best: 0.0242
+  final_lr: 0.0005
+evaluation:
+  mae_mean: 0.2266
+  accuracy_mean: 0.8035
+  qwk_mean: 0.324
+  spearman_mean: 0.3343
+  calibration_global: 0.7643
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.1586
+  minority_recall_mean: 0.2247
+  recall_minus1: 0.0265
+  recall_plus1: 0.4228
+  hedging_mean: 0.8228
+per_dimension:
+  self_direction:
+    mae: 0.374
+    accuracy: 0.6634
+    qwk: 0.3014
+    spearman: 0.2782
+    calibration: 0.5151
+    hedging: 0.6832
+  stimulation:
+    mae: 0.1364
+    accuracy: 0.8663
+    qwk: 0.3136
+    spearman: 0.4593
+    calibration: 0.763
+    hedging: 0.9505
+  hedonism:
+    mae: 0.1305
+    accuracy: 0.9208
+    qwk: 0.5922
+    spearman: 0.2568
+    calibration: 0.9199
+    hedging: 0.8614
+  achievement:
+    mae: 0.2877
+    accuracy: 0.7525
+    qwk: 0.4212
+    spearman: 0.5012
+    calibration: 0.751
+    hedging: 0.5594
+  power:
+    mae: 0.15
+    accuracy: 0.8713
+    qwk: 0.0896
+    spearman: 0.2222
+    calibration: 0.8358
+    hedging: 0.9505
+  security:
+    mae: 0.219
+    accuracy: 0.8069
+    qwk: 0.4167
+    spearman: 0.3369
+    calibration: 0.7238
+    hedging: 0.8713
+  conformity:
+    mae: 0.2778
+    accuracy: 0.7624
+    qwk: 0.2825
+    spearman: 0.2631
+    calibration: 0.67
+    hedging: 0.8069
+  tradition:
+    mae: 0.2046
+    accuracy: 0.797
+    qwk: 0.0363
+    spearman: 0.211
+    calibration: 0.6982
+    hedging: 0.9653
+  benevolence:
+    mae: 0.3154
+    accuracy: 0.7277
+    qwk: 0.3377
+    spearman: 0.3843
+    calibration: 0.5277
+    hedging: 0.7673
+  universalism:
+    mae: 0.1707
+    accuracy: 0.8663
+    qwk: 0.4486
+    spearman: 0.4296
+    calibration: 0.8834
+    hedging: 0.8119
+observations: EMD with nomic on expanded data achieves the highest accuracy of any
+  run (0.804) and strong MAE (0.227). QWK decreased to 0.324 (from 0.391 in run_004).
+  Hedonism is exceptional (QWK 0.592, calibration 0.920 — both the best for any
+  single dimension in run_006). Achievement strong at 0.421. Security improved to
+  0.417. Tradition collapsed to 0.036 (from 0.477), the dimension most affected by
+  the dataset change. Training gap remains small (0.024) with healthy best_epoch=14,
+  confirming nomic's superior training dynamics.

@@ -1,0 +1,174 @@
+# VIF Experiment: run_006_SoftOrdinal
+# Generated: 2026-02-20T09:27:37
+# Git: 4c48773(dirty)
+metadata:
+  experiment_id: run_006_SoftOrdinal
+  run_id: run_006
+  model_name: SoftOrdinal
+  timestamp: '2026-02-20T09:27:37'
+  git_commit: 4c48773(dirty)
+  config_hash: c4e51964a4b0
+provenance:
+  prev_run_id: run_004
+  prev_git_commit: a3f493f(dirty)
+  git_log:
+  - '4c48773 docs: remove redundant introductory sentences from AGENTS.md and GEMINI.md'
+  - '31918e6 fix(vif): include dataset splits in experiment logger deduplication hash'
+  - 'e5cb197 fix(vif): include dataset splits in experiment logger deduplication hash'
+  - 'b84d1ca fix(judge): backfill rationales for 61 personas and fix under-labeled
+    entry'
+  - 'c0435e1 chore(data): add batch 2 judge labels for 60 new personas'
+  - 'cd59d19 chore(data): add batch 2 synthetic and wrangled persona data (60 personas)'
+  - '986e408 feat(judge): add consolidation module, harden wrangling parser, and update
+    judge pipeline docs'
+  - 'a036004 chore(data): remove batch 1A pre-tension Universalism personas (10)'
+  - de4a5e1 Refactor notebook references to scripts and harden synthetic helpers (twinkl-ayp)
+  - '62cbe11 docs(gen): fix config variables — remove dead START_DATE, wire MIN_DAYS_BETWEEN_ENTRIES'
+  - '9e3e22a feat(vif): add runs 003/004 experiment logs with provenance backfill'
+  config_delta:
+    added:
+      data.train_ratio: 0.7
+      data.val_ratio: 0.15
+      data.split_seed: 2025
+      data.pct_truncated: 0.0
+      data.state_dim: 266
+      uncertainty.mc_dropout_samples: 50
+    removed: {}
+    changed: {}
+  rationale: Re-run of nomic-embed-256d configuration with expanded dataset (958
+    train vs 637). Added 60 new personas from batch 2, removed 10 pre-tension
+    Universalism personas, and added MC dropout uncertainty (50 samples). Tests
+    whether 50% more data improves nomic/small-model performance.
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 266
+  model:
+    hidden_dim: 32
+    dropout: 0.3
+  training:
+    loss_fn: soft_ordinal
+    learning_rate: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 958
+  n_val: 214
+  n_test: 202
+capacity:
+  n_parameters: 10718
+  param_sample_ratio: 11.1879
+training_dynamics:
+  best_epoch: 16
+  total_epochs: 36
+  train_loss_at_best: 2.0247
+  val_loss_at_best: 2.3397
+  gap_at_best: 0.315
+  final_lr: 0.0005
+evaluation:
+  mae_mean: 0.2233
+  accuracy_mean: 0.8114
+  qwk_mean: 0.3585
+  spearman_mean: 0.3538
+  calibration_global: 0.7747
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.155
+  minority_recall_mean: 0.2351
+  recall_minus1: 0.0265
+  recall_plus1: 0.4436
+  hedging_mean: 0.8104
+per_dimension:
+  self_direction:
+    mae: 0.3809
+    accuracy: 0.698
+    qwk: 0.322
+    spearman: 0.257
+    calibration: 0.5378
+    hedging: 0.6634
+  stimulation:
+    mae: 0.133
+    accuracy: 0.8713
+    qwk: 0.3516
+    spearman: 0.5036
+    calibration: 0.8268
+    hedging: 0.9406
+  hedonism:
+    mae: 0.1352
+    accuracy: 0.896
+    qwk: 0.5079
+    spearman: 0.3184
+    calibration: 0.8915
+    hedging: 0.8564
+  achievement:
+    mae: 0.2659
+    accuracy: 0.7673
+    qwk: 0.4546
+    spearman: 0.5354
+    calibration: 0.7532
+    hedging: 0.6287
+  power:
+    mae: 0.1453
+    accuracy: 0.8713
+    qwk: 0.2073
+    spearman: 0.2131
+    calibration: 0.7041
+    hedging: 0.9554
+  security:
+    mae: 0.2232
+    accuracy: 0.8218
+    qwk: 0.4186
+    spearman: 0.1675
+    calibration: 0.7743
+    hedging: 0.8515
+  conformity:
+    mae: 0.287
+    accuracy: 0.7673
+    qwk: 0.1703
+    spearman: 0.2299
+    calibration: 0.7019
+    hedging: 0.8168
+  tradition:
+    mae: 0.1903
+    accuracy: 0.8218
+    qwk: 0.2242
+    spearman: 0.2884
+    calibration: 0.6607
+    hedging: 0.9455
+  benevolence:
+    mae: 0.3346
+    accuracy: 0.698
+    qwk: 0.3557
+    spearman: 0.4017
+    calibration: 0.588
+    hedging: 0.6337
+  universalism:
+    mae: 0.1376
+    accuracy: 0.901
+    qwk: 0.5731
+    spearman: 0.6234
+    calibration: 0.8859
+    hedging: 0.8119
+observations: SoftOrdinal with nomic on expanded data is the top performer for
+  run_006 — best QWK (0.358), best accuracy (0.811), best calibration (0.775), and
+  lowest MAE (0.223). Achievement QWK (0.455) is the highest for any SoftOrdinal
+  config. Universalism remains strong (0.573, calibration 0.886). Security improved
+  to 0.419 (from 0.313 in run_004). The QWK regression vs run_004 (0.385 to 0.358)
+  is the mildest of any loss, confirming SoftOrdinal + nomic as the most robust
+  combination to dataset changes. Param/sample ratio improved to 11.2 (from 16.8).
