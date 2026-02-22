@@ -100,7 +100,7 @@ Value context is injected from `config/schwartz_values.yaml`, which contains ric
 
 ## **Product principles**
 
-* Identity-first mini-assessment ("build your inner compass" via 3–5 quick screens of big, tappable cards and tradeoffs) before daily journaling.
+* Identity-first mini-assessment ("build your inner compass" via quick BWS screens of big, tappable cards and tradeoffs) before daily journaling. See the [Onboarding Spec](onboarding/onboarding_spec.md) for the canonical flow definition.
 * Longitudinal honesty engine that gently says "you keep claiming X but living Y."
 * Quotes/prompts are precision interventions tied to observed conflicts.
 * Low-friction journaling: prompts reduce blank-page paralysis and encourage regular reflection.
@@ -108,9 +108,9 @@ Value context is injected from `config/schwartz_values.yaml`, which contains ric
 
 ## **Onboarding (BWS Values Assessment)**
 
-The onboarding flow uses **Best-Worst Scaling (BWS)** — a forced-choice psychometric technique — to elicit value priorities across 10 Schwartz dimensions while minimizing social desirability bias. Users complete 6 quick screens (4 items each, tap "most like me" / "least like me"), see mid-flow and end-of-flow reflective mirrors for correction, and select a structured goal category. The output is a graded 10-dimensional value weight vector plus initial Coach monitoring focus.
+The onboarding flow uses **Best-Worst Scaling (BWS)** — a forced-choice psychometric technique — to elicit value priorities across 10 Schwartz dimensions while minimizing social desirability bias. The **[Onboarding Spec](onboarding/onboarding_spec.md)** is the source of truth for the canonical flow (number of screens, interaction model, scoring logic, and data output schema). That spec is still subject to change as the design evolves, but this PRD defers to it for onboarding details rather than duplicating them here.
 
-For the full specification including BWS item design, scoring logic, user flow, and data output schema, see **[Onboarding Spec](onboarding/onboarding_spec.md)**.
+In summary: users complete BWS forced-choice screens, see reflective mirrors for correction, and select a structured goal category. The output is a graded 10-dimensional value weight vector plus initial Coach monitoring focus.
 
 This onboarding directly anchors the capstone submodules: the latent dimensions form named slots in the knowledge base and rule layer (**Intelligent Reasoning Systems**), the mapping from user responses to those dimensions plus later corrections is a compact supervised modelling task (**Pattern Recognition Systems**), entry content analysis and temporal patterns feed the sensing layer (**Intelligent Sensing Systems**), and treating the quiz as just one input stream into a shared user-state vector `z` illustrates end-to-end orchestration and state management across Perception → Memory → Reasoning → Action (**Architecting AI Systems**).
 
