@@ -73,3 +73,23 @@ Universalism QWK dropped from 0.732 (run_003 EMD, 637 train) to 0.042 (run_009 E
 | run_009 EMD | MiniLM | 64 | 1020 | 0.042 | 82.4% | 1164 |
 
 **Conclusion**: Universalism performance is recovered by the encoder switch to nomic (run_007). No additional Universalism persona generation or dimension-specific loss weighting is warranted.
+
+### 2026-02-22 — Resolved: MiniLM retired from future experiments
+
+MiniLM (all-MiniLM-L6-v2) is **no longer a candidate encoder** for future VIF runs. All future experiments, analysis, and recommendations should focus exclusively on nomic-embed-text-v1.5.
+
+**1. MiniLM's state pipeline is fundamentally over-parameterized for this dataset.** The window_size=3 state encoder produces a 1164-dim state vector. Even at hd=64, this yields an 80K-parameter model with a 79:1 param/sample ratio — still firmly in the "high" regime. The model consistently early-stops at epoch 2-5, never learning beyond majority-class hedging.
+
+**2. MiniLM degraded on every metric when the dataset expanded.** From 637 → 1020 train samples, MiniLM QWK dropped across all losses (e.g., EMD: 0.410 → 0.259; SoftOrdinal: 0.383 → 0.236). More data amplified the class-imbalance signal rather than improving generalization.
+
+**3. nomic dominates on the expanded dataset at every capacity level tested.** On the same 1020-train data, nomic at hd=64 (22:1 ratio) achieves QWK 0.413 vs MiniLM at hd=64 (79:1 ratio) achieving QWK 0.227. The gap is too large to close with hyperparameter tuning.
+
+| Metric (avg across losses) | MiniLM hd=256 (run_005) | MiniLM hd=64 (run_009) | nomic hd=64 (run_007) |
+|-----------------------------|------------------------:|------------------------:|----------------------:|
+| QWK | 0.278 | 0.224 | **0.363** |
+| Calibration | 0.643 | 0.739 | **0.839** |
+| Minority Recall | 0.187 | 0.190 | **0.278** |
+| Hedging | 86.6% | 85.4% | **81.7%** |
+| Param/sample ratio | 388 (severe) | 79 (high) | **22 (high)** |
+
+**Conclusion**: MiniLM runs (001, 003, 005, 009) are retained as historical baselines. Future `/experiment-review` reports should treat MiniLM as a closed investigation and focus all insights, comparisons, and recommendations on nomic-embed configurations only.
