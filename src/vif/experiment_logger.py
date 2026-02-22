@@ -106,22 +106,10 @@ def _next_run_id() -> str:
 
 
 def _config_fingerprint(config_section: dict) -> str:
-    """Deterministic hash of the config section for dedup. Returns 12-char hex."""
+    """Deterministic hash of the config section for metadata. Returns 12-char hex."""
     canonical = json.dumps(config_section, sort_keys=True, default=str)
     return hashlib.sha256(canonical.encode()).hexdigest()[:12]
 
-
-def _find_existing_run(model_name: str, config_hash: str) -> Path | None:
-    """Find an existing YAML run file with matching model and config hash."""
-    RUNS_DIR.mkdir(parents=True, exist_ok=True)
-    for f in sorted(RUNS_DIR.glob(f"run_*_{model_name}.yaml")):
-        try:
-            data = yaml.safe_load(f.read_text(encoding="utf-8"))
-            if data and data.get("metadata", {}).get("config_hash") == config_hash:
-                return f
-        except Exception:
-            continue
-    return None
 
 
 def _get_git_commit() -> str:
@@ -659,12 +647,10 @@ def log_experiment_run(
     state_dim: int,
     observations: str = "",
 ) -> list[dict]:
-    """Log all models from one notebook run with config-based deduplication.
+    """Log all models from one notebook run. Always creates new files.
 
-    If the config section hasn't changed since the last run for a given model,
-    the existing YAML file is updated in place (preserving its run_id) instead
-    of creating a new one. A new run_id is only allocated when at least one
-    model has a config change.
+    Every call allocates a fresh run_id and writes new YAML files. Existing
+    runs are never overwritten.
 
     Args:
         config: Notebook CONFIG dict (flat keys like encoder_model, hidden_dim).
@@ -681,10 +667,10 @@ def log_experiment_run(
         observations: Free-text notes about this experiment run.
 
     Returns:
-        List of dicts with keys: path, model, status ("created"|"updated"), run_id.
+        List of dicts with keys: path, model, status ("created"), run_id.
     """
-    new_run_id = None  # Lazily allocated if any model needs a new file
-    provenance_cache: dict[str, dict] = {}  # run_id → provenance (computed once)
+    run_id = _next_run_id()
+    provenance_cache: dict[str, dict] = {}
     results = []
 
     for model_name in trained_models:
@@ -698,9 +684,8 @@ def log_experiment_run(
         if model_name not in all_recall_data:
             continue
 
-        # Build with placeholder run_id to compute config_hash (no provenance yet)
         experiment = _build_experiment_dict(
-            run_id="__pending__",
+            run_id=run_id,
             model_name=model_name,
             config=config,
             trained_result=trained_models[model_name],
@@ -716,38 +701,17 @@ def log_experiment_run(
             observations=observations,
         )
 
-        config_hash = experiment["metadata"]["config_hash"]
-        existing_path = _find_existing_run(model_name, config_hash)
-
-        if existing_path is not None:
-            # Config unchanged — update in place, preserving original run_id
-            existing_data = yaml.safe_load(
-                existing_path.read_text(encoding="utf-8")
-            )
-            original_run_id = existing_data["metadata"]["run_id"]
-            actual_run_id = original_run_id
-            experiment["metadata"]["run_id"] = original_run_id
-            experiment["metadata"]["experiment_id"] = (
-                f"{original_run_id}_{model_name}"
-            )
-        else:
-            # New config — allocate run_id once, shared by all new models
-            if new_run_id is None:
-                new_run_id = _next_run_id()
-            actual_run_id = new_run_id
-            experiment["metadata"]["run_id"] = new_run_id
-            experiment["metadata"]["experiment_id"] = (
-                f"{new_run_id}_{model_name}"
-            )
+        experiment["metadata"]["run_id"] = run_id
+        experiment["metadata"]["experiment_id"] = f"{run_id}_{model_name}"
 
         # Compute provenance once per run_id, then insert into experiment dict
-        if actual_run_id not in provenance_cache:
-            provenance_cache[actual_run_id] = _build_provenance(
-                actual_run_id,
+        if run_id not in provenance_cache:
+            provenance_cache[run_id] = _build_provenance(
+                run_id,
                 experiment["config"],
                 experiment["metadata"]["git_commit"],
             )
-        provenance = provenance_cache[actual_run_id]
+        provenance = provenance_cache[run_id]
 
         # Insert provenance between metadata and config
         ordered: dict = {}
@@ -757,23 +721,14 @@ def log_experiment_run(
                 ordered["provenance"] = provenance
         experiment = ordered
 
-        if existing_path is not None:
-            _write_yaml(experiment, existing_path)
-            results.append({
-                "path": existing_path,
-                "model": model_name,
-                "status": "updated",
-                "run_id": actual_run_id,
-            })
-        else:
-            yaml_path = RUNS_DIR / f"{new_run_id}_{model_name}.yaml"
-            _write_yaml(experiment, yaml_path)
-            results.append({
-                "path": yaml_path,
-                "model": model_name,
-                "status": "created",
-                "run_id": new_run_id,
-            })
+        yaml_path = RUNS_DIR / f"{run_id}_{model_name}.yaml"
+        _write_yaml(experiment, yaml_path)
+        results.append({
+            "path": yaml_path,
+            "model": model_name,
+            "status": "created",
+            "run_id": run_id,
+        })
 
     _rebuild_index()
     return results

@@ -1,0 +1,175 @@
+# VIF Experiment: run_010_CORAL_IW
+# Generated: 2026-02-22T23:03:30
+# Git: f532024(dirty)
+metadata:
+  experiment_id: run_010_CORAL_IW
+  run_id: run_010
+  model_name: CORAL_IW
+  timestamp: '2026-02-22T23:03:30'
+  git_commit: f532024(dirty)
+  config_hash: cb8a32e12fb6
+provenance:
+  prev_run_id: run_008
+  prev_git_commit: d0b93da(dirty)
+  git_log:
+  - 'f532024 fix(vif): preserve manual sections in experiment index.md'
+  - '9d0fe47 Merge pull request #19 from DesmondChoy/km-annotations-1'
+  - '7faf46a feat: finish  km annotations 11-19'
+  - 'dce8204 docs: clarify /quality alias and remove unused command (twinkl-4s3)'
+  - '7538d36 twinkl-ig4: add CORAL importance weights and train-split wiring'
+  - '13f2cbf docs(evals): establish QWK and minority recall as primary entry-level
+    metrics'
+  - '099abf3 docs(experiments): retire MiniLM encoder from future experiment scope'
+  - 'cabfba6 docs(experiments): add Findings section with Universalism QWK analysis'
+  - '433b16e fix(wrangling): update registry for skipped files on re-runs (twinkl-qx1)'
+  - '6a1178a fix(vif): restore dropout state after MC sampling in predict_with_uncertainty'
+  - '78db05b refactor(vif): remove unused threshold param from compute_accuracy_per_dimension
+    (twinkl-vlk)'
+  - '026812a docs: qualify README status claims and add legend (twinkl-ivd)'
+  - 'c1dd1f9 docs: add status boundary markers to README, PRD, and worked example
+    (twinkl-ivd)'
+  - '6432e4c docs: defer PRD onboarding details to onboarding spec (twinkl-8yg)'
+  - '79c7121 docs: clarify experiment-review skill ambiguities (twinkl-9a1)'
+  - '3fed082 chore(vif): note config values are preliminary and under ablation'
+  - '1cb4e65 docs: fix Streamlit→Shiny framework mismatch in architecture snapshots
+    (twinkl-hu9.8)'
+  - 'e2ec30e docs(vif): fix Critic scoring-scope contradiction in worked example'
+  - '4718875 docs(evals): sync status to current run reality (twinkl-hu9.7)'
+  - 'a4fbf07 docs: align data_schema.md with actual parquet columns'
+  - '8a02296 feat: added some annotations for km'
+  - '1e958de chore(vif): add experiment run 009 and update experiment review skill'
+  config_delta:
+    added: {}
+    removed: {}
+    changed:
+      model.hidden_dim:
+        from: 128
+        to: 64
+  rationale: ''
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 266
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: coral_iw
+    learning_rate: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1020
+  n_val: 230
+  n_test: 210
+capacity:
+  n_parameters: 22804
+  param_sample_ratio: 22.3569
+training_dynamics:
+  best_epoch: 20
+  total_epochs: 40
+  train_loss_at_best: 0.3979
+  val_loss_at_best: 0.4178
+  gap_at_best: 0.0199
+  final_lr: 0.0005
+evaluation:
+  mae_mean: 0.2212
+  accuracy_mean: 0.8086
+  qwk_mean: 0.3015
+  spearman_mean: 0.3507
+  calibration_global: 0.8409
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.1592
+  minority_recall_mean: 0.2341
+  recall_minus1: 0.0994
+  recall_plus1: 0.3688
+  hedging_mean: 0.8348
+per_dimension:
+  self_direction:
+    mae: 0.4071
+    accuracy: 0.6762
+    qwk: 0.4291
+    spearman: 0.3794
+    calibration: 0.5985
+    hedging: 0.5952
+  stimulation:
+    mae: 0.1108
+    accuracy: 0.9238
+    qwk: 0.4202
+    spearman: 0.2003
+    calibration: 0.9387
+    hedging: 0.9143
+  hedonism:
+    mae: 0.1437
+    accuracy: 0.8667
+    qwk: 0.4471
+    spearman: 0.384
+    calibration: 0.8838
+    hedging: 0.8857
+  achievement:
+    mae: 0.1884
+    accuracy: 0.8381
+    qwk: 0.2281
+    spearman: 0.3337
+    calibration: 0.7679
+    hedging: 0.8952
+  power:
+    mae: 0.063
+    accuracy: 0.9524
+    qwk: 0.2412
+    spearman: 0.1508
+    calibration: 0.946
+    hedging: 0.9667
+  security:
+    mae: 0.3271
+    accuracy: 0.7048
+    qwk: 0.102
+    spearman: 0.1806
+    calibration: 0.7159
+    hedging: 0.8238
+  conformity:
+    mae: 0.2819
+    accuracy: 0.7476
+    qwk: 0.4881
+    spearman: 0.5798
+    calibration: 0.8073
+    hedging: 0.6762
+  tradition:
+    mae: 0.1921
+    accuracy: 0.8238
+    qwk: 0.111
+    spearman: 0.3686
+    calibration: 0.8548
+    hedging: 0.9238
+  benevolence:
+    mae: 0.2697
+    accuracy: 0.7762
+    qwk: 0.3743
+    spearman: 0.5126
+    calibration: 0.7588
+    hedging: 0.7857
+  universalism:
+    mae: 0.2286
+    accuracy: 0.7762
+    qwk: 0.1737
+    spearman: 0.4177
+    calibration: 0.8884
+    hedging: 0.881
+observations: ''
