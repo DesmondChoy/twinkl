@@ -142,7 +142,7 @@ A critical feature of this pipeline is its native capability to resolve **class 
 
 Before creating a commit:
 
-1. Run the Claude quality skill (or equivalent thorough review) before committing to review changes with "fresh eyes."
+1. Run `/quality` (repo alias for `.claude/skills/quality/SKILL.md`) before committing to review changes with "fresh eyes."
 2. Review complete changed files, not only diffs.
 3. Run targeted tests/linting (`uv run pytest` / `uv run ruff`) for touched modules.
 4. Remove obvious dead code and debug remnants.

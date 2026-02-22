@@ -118,11 +118,11 @@ Script-based generation/judging helpers live in `src/synthetic/`,
 
 Before creating a commit:
 
-1. Run `/quality` before committing to review changes with fresh eyes.
+1. Run `/quality` (repo alias for `.claude/skills/quality/SKILL.md`) before committing to review changes with fresh eyes.
 2. Review complete changed files, not only diffs.
-2. Run targeted tests/linting for touched modules.
-3. Remove obvious dead code and debug remnants.
-4. Confirm no behavior regressions in critical paths.
+3. Run targeted tests/linting for touched modules.
+4. Remove obvious dead code and debug remnants.
+5. Confirm no behavior regressions in critical paths.
 
 If there is ambiguity and no blocking risk, proceed with explicit
 assumptions and note them. If ambiguity affects correctness or design
