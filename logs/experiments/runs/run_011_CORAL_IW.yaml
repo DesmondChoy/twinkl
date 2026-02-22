@@ -1,0 +1,163 @@
+# VIF Experiment: run_011_CORAL_IW
+# Generated: 2026-02-22T23:06:45
+# Git: 262f820(dirty)
+metadata:
+  experiment_id: run_011_CORAL_IW
+  run_id: run_011
+  model_name: CORAL_IW
+  timestamp: '2026-02-22T23:06:45'
+  git_commit: 262f820(dirty)
+  config_hash: 8a78a4a5402e
+provenance:
+  prev_run_id: run_010
+  prev_git_commit: f532024(dirty)
+  git_log:
+  - '262f820 fix(vif): switch experiment logger to never-overwrite semantics'
+  config_delta:
+    added: {}
+    removed: {}
+    changed:
+      state_encoder.window_size:
+        from: 1
+        to: 2
+      data.state_dim:
+        from: 266
+        to: 523
+  rationale: >-
+    Follow-up to run_010 to evaluate state_encoder.window_size 1 to 2, data.state_dim 266 to 523
+    while introducing the CORAL importance-weighted loss for minority-class sensitivity. This run
+    keeps the nomic encoder and split seed fixed so any movement in QWK/minority recall can be
+    attributed to weighting behavior rather than data drift.
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 2
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 523
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: coral_iw
+    learning_rate: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1020
+  n_val: 230
+  n_test: 210
+capacity:
+  n_parameters: 39252
+  param_sample_ratio: 38.4824
+training_dynamics:
+  best_epoch: 11
+  total_epochs: 31
+  train_loss_at_best: 0.4403
+  val_loss_at_best: 0.4356
+  gap_at_best: -0.0047
+  final_lr: 0.0005
+evaluation:
+  mae_mean: 0.2228
+  accuracy_mean: 0.7981
+  qwk_mean: 0.2694
+  spearman_mean: 0.3125
+  calibration_global: 0.7905
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.1343
+  minority_recall_mean: 0.1752
+  recall_minus1: 0.0515
+  recall_plus1: 0.2988
+  hedging_mean: 0.869
+per_dimension:
+  self_direction:
+    mae: 0.391
+    accuracy: 0.6571
+    qwk: 0.4365
+    spearman: 0.4926
+    calibration: 0.5135
+    hedging: 0.6905
+  stimulation:
+    mae: 0.1064
+    accuracy: 0.9095
+    qwk: 0.4321
+    spearman: 0.3264
+    calibration: 0.8727
+    hedging: 0.9524
+  hedonism:
+    mae: 0.151
+    accuracy: 0.8714
+    qwk: 0.3596
+    spearman: 0.3489
+    calibration: 0.8693
+    hedging: 0.919
+  achievement:
+    mae: 0.1904
+    accuracy: 0.8286
+    qwk: 0.085
+    spearman: 0.2617
+    calibration: 0.7705
+    hedging: 0.9476
+  power:
+    mae: 0.0639
+    accuracy: 0.9476
+    qwk: 0.2731
+    spearman: -0.1618
+    calibration: 0.9288
+    hedging: 0.9857
+  security:
+    mae: 0.3285
+    accuracy: 0.6857
+    qwk: 0.0733
+    spearman: 0.2306
+    calibration: 0.692
+    hedging: 0.881
+  conformity:
+    mae: 0.2782
+    accuracy: 0.7524
+    qwk: 0.498
+    spearman: 0.6041
+    calibration: 0.6003
+    hedging: 0.7476
+  tradition:
+    mae: 0.1894
+    accuracy: 0.8095
+    qwk: 0.0404
+    spearman: 0.3567
+    calibration: 0.7536
+    hedging: 0.9571
+  benevolence:
+    mae: 0.278
+    accuracy: 0.7619
+    qwk: 0.4377
+    spearman: 0.5299
+    calibration: 0.7689
+    hedging: 0.6667
+  universalism:
+    mae: 0.251
+    accuracy: 0.7571
+    qwk: 0.0578
+    spearman: 0.1356
+    calibration: 0.7857
+    hedging: 0.9429
+observations: >-
+  run_011 CORAL_IW records QWK 0.269 (fair), calibration 0.790 (good), MAE 0.223, accuracy 0.798,
+  minority recall 0.175, and hedging 86.9% (excessive). Compared with run_010 CORAL_IW, QWK is
+  -0.032, calibration -0.050, minority recall -0.059, and hedging +3.4%. Largest QWK gains are
+  benevolence 0.438 (+0.063), power 0.273 (+0.032); largest regressions are achievement 0.085
+  (-0.143), universalism 0.058 (-0.116). The hardest dimension in this run is tradition at QWK
+  0.040.

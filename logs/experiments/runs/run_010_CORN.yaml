@@ -45,7 +45,10 @@ provenance:
       model.hidden_dim:
         from: 128
         to: 64
-  rationale: ''
+  rationale: >-
+    Follow-up to run_008 to evaluate model.hidden_dim 128 to 64 while keeping the nomic encoder and
+    split seed fixed on the 1020-sample dataset. The intent is to isolate whether this ablation
+    improves QWK/minority recall without sacrificing calibration.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -172,4 +175,9 @@ per_dimension:
     spearman: 0.5056
     calibration: 0.8991
     hedging: 0.8095
-observations: ''
+observations: >-
+  run_010 CORN records QWK 0.434 (moderate), calibration 0.835 (good), MAE 0.206, accuracy 0.821,
+  minority recall 0.285, and hedging 82.0% (excessive). Compared with run_008 CORN, QWK is +0.090,
+  calibration +0.050, minority recall +0.009, and hedging -0.9%. Largest QWK gains are power 0.378
+  (+0.362), universalism 0.444 (+0.188); largest regressions are benevolence 0.455 (-0.110). The
+  hardest dimension in this run is security at QWK 0.185.

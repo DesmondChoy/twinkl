@@ -1,0 +1,161 @@
+# VIF Experiment: run_011_EMD
+# Generated: 2026-02-22T23:06:45
+# Git: 262f820(dirty)
+metadata:
+  experiment_id: run_011_EMD
+  run_id: run_011
+  model_name: EMD
+  timestamp: '2026-02-22T23:06:45'
+  git_commit: 262f820(dirty)
+  config_hash: 35a74d1b27ff
+provenance:
+  prev_run_id: run_010
+  prev_git_commit: f532024(dirty)
+  git_log:
+  - '262f820 fix(vif): switch experiment logger to never-overwrite semantics'
+  config_delta:
+    added: {}
+    removed: {}
+    changed:
+      state_encoder.window_size:
+        from: 1
+        to: 2
+      data.state_dim:
+        from: 266
+        to: 523
+  rationale: >-
+    Follow-up to run_010 to evaluate state_encoder.window_size 1 to 2, data.state_dim 266 to 523
+    while keeping the nomic encoder and split seed fixed on the 1020-sample dataset. The intent is
+    to isolate whether this ablation improves QWK/minority recall without sacrificing calibration.
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 2
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 523
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: emd
+    learning_rate: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1020
+  n_val: 230
+  n_test: 210
+capacity:
+  n_parameters: 39902
+  param_sample_ratio: 39.1196
+training_dynamics:
+  best_epoch: 7
+  total_epochs: 27
+  train_loss_at_best: 0.1505
+  val_loss_at_best: 0.1375
+  gap_at_best: -0.0131
+  final_lr: 0.0005
+evaluation:
+  mae_mean: 0.2138
+  accuracy_mean: 0.8205
+  qwk_mean: 0.3818
+  spearman_mean: 0.3589
+  calibration_global: 0.8458
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.1543
+  minority_recall_mean: 0.3081
+  recall_minus1: 0.0532
+  recall_plus1: 0.5629
+  hedging_mean: 0.7862
+per_dimension:
+  self_direction:
+    mae: 0.4154
+    accuracy: 0.6333
+    qwk: 0.4144
+    spearman: 0.4449
+    calibration: 0.5878
+    hedging: 0.5667
+  stimulation:
+    mae: 0.0843
+    accuracy: 0.9286
+    qwk: 0.5415
+    spearman: 0.4745
+    calibration: 0.9218
+    hedging: 0.9
+  hedonism:
+    mae: 0.1455
+    accuracy: 0.8762
+    qwk: 0.4698
+    spearman: 0.3321
+    calibration: 0.9053
+    hedging: 0.8714
+  achievement:
+    mae: 0.1747
+    accuracy: 0.8524
+    qwk: 0.4109
+    spearman: 0.2555
+    calibration: 0.7655
+    hedging: 0.8667
+  power:
+    mae: 0.0684
+    accuracy: 0.9476
+    qwk: 0.0154
+    spearman: -0.0822
+    calibration: 0.9098
+    hedging: 0.9714
+  security:
+    mae: 0.3307
+    accuracy: 0.7143
+    qwk: 0.1437
+    spearman: 0.26
+    calibration: 0.6818
+    hedging: 0.8095
+  conformity:
+    mae: 0.2672
+    accuracy: 0.7619
+    qwk: 0.521
+    spearman: 0.6074
+    calibration: 0.7348
+    hedging: 0.7143
+  tradition:
+    mae: 0.1508
+    accuracy: 0.8667
+    qwk: 0.5068
+    spearman: 0.4956
+    calibration: 0.838
+    hedging: 0.8429
+  benevolence:
+    mae: 0.2543
+    accuracy: 0.7905
+    qwk: 0.5455
+    spearman: 0.5228
+    calibration: 0.8196
+    hedging: 0.6238
+  universalism:
+    mae: 0.2467
+    accuracy: 0.8333
+    qwk: 0.2495
+    spearman: 0.2787
+    calibration: 0.9217
+    hedging: 0.6952
+observations: >-
+  run_011 EMD records QWK 0.382 (fair), calibration 0.846 (good), MAE 0.214, accuracy 0.821,
+  minority recall 0.308, and hedging 78.6% (moderate). Compared with run_010 EMD, QWK is +0.020,
+  calibration -0.005, minority recall +0.014, and hedging -1.1%. Largest QWK gains are
+  universalism 0.249 (+0.194), hedonism 0.470 (+0.085); largest regressions are conformity 0.521
+  (-0.034), stimulation 0.541 (-0.033). The hardest dimension in this run is power at QWK 0.015.

@@ -45,7 +45,10 @@ provenance:
       model.hidden_dim:
         from: 128
         to: 64
-  rationale: ''
+  rationale: >-
+    Follow-up to run_008 to evaluate model.hidden_dim 128 to 64 while keeping the nomic encoder and
+    split seed fixed on the 1020-sample dataset. The intent is to isolate whether this ablation
+    improves QWK/minority recall without sacrificing calibration.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -172,4 +175,9 @@ per_dimension:
     spearman: 0.2365
     calibration: 0.9078
     hedging: 0.8095
-observations: ''
+observations: >-
+  run_010 EMD records QWK 0.362 (fair), calibration 0.851 (good), MAE 0.212, accuracy 0.819,
+  minority recall 0.294, and hedging 79.8% (moderate). Compared with run_008 EMD, QWK is -0.003,
+  calibration +0.049, minority recall -0.006, and hedging -1.5%. Largest QWK gains are power 0.015
+  (+0.201), tradition 0.531 (+0.104); largest regressions are universalism 0.056 (-0.247),
+  stimulation 0.575 (-0.093). The hardest dimension in this run is power at QWK 0.015.

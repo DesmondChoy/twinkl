@@ -45,7 +45,10 @@ provenance:
       model.hidden_dim:
         from: 128
         to: 64
-  rationale: ''
+  rationale: >-
+    Follow-up to run_008 to evaluate model.hidden_dim 128 to 64 while keeping the nomic encoder and
+    split seed fixed on the 1020-sample dataset. The intent is to isolate whether this ablation
+    improves QWK/minority recall without sacrificing calibration.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -172,4 +175,9 @@ per_dimension:
     spearman: 0.4176
     calibration: 0.9176
     hedging: 0.8286
-observations: ''
+observations: >-
+  run_010 CORAL records QWK 0.364 (fair), calibration 0.823 (good), MAE 0.209, accuracy 0.819,
+  minority recall 0.244, and hedging 83.5% (excessive). Compared with run_008 CORAL, QWK is
+  +0.023, calibration +0.017, minority recall -0.029, and hedging +1.0%. Largest QWK gains are
+  power 0.273 (+0.258), security 0.197 (+0.107); largest regressions are tradition 0.376 (-0.119),
+  achievement 0.391 (-0.078). The hardest dimension in this run is security at QWK 0.197.

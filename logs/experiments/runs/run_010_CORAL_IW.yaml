@@ -45,7 +45,11 @@ provenance:
       model.hidden_dim:
         from: 128
         to: 64
-  rationale: ''
+  rationale: >-
+    Follow-up to run_008 to evaluate model.hidden_dim 128 to 64 while introducing the CORAL
+    importance-weighted loss for minority-class sensitivity. This run keeps the nomic encoder and
+    split seed fixed so any movement in QWK/minority recall can be attributed to weighting behavior
+    rather than data drift.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -172,4 +176,9 @@ per_dimension:
     spearman: 0.4177
     calibration: 0.8884
     hedging: 0.881
-observations: ''
+observations: >-
+  run_010 CORAL_IW records QWK 0.301 (fair), calibration 0.841 (good), MAE 0.221, accuracy 0.809,
+  minority recall 0.234, and hedging 83.5% (excessive). Compared with run_010 CORAL, QWK is
+  -0.062, calibration +0.018, minority recall -0.010, and hedging -0.0%. Largest QWK gains are
+  hedonism 0.447 (+0.207); largest regressions are tradition 0.111 (-0.265), achievement 0.228
+  (-0.163). The hardest dimension in this run is security at QWK 0.102.

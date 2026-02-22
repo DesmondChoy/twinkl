@@ -1,0 +1,161 @@
+# VIF Experiment: run_011_CORAL
+# Generated: 2026-02-22T23:06:45
+# Git: 262f820(dirty)
+metadata:
+  experiment_id: run_011_CORAL
+  run_id: run_011
+  model_name: CORAL
+  timestamp: '2026-02-22T23:06:45'
+  git_commit: 262f820(dirty)
+  config_hash: 4b6f7e60baf5
+provenance:
+  prev_run_id: run_010
+  prev_git_commit: f532024(dirty)
+  git_log:
+  - '262f820 fix(vif): switch experiment logger to never-overwrite semantics'
+  config_delta:
+    added: {}
+    removed: {}
+    changed:
+      state_encoder.window_size:
+        from: 1
+        to: 2
+      data.state_dim:
+        from: 266
+        to: 523
+  rationale: >-
+    Follow-up to run_010 to evaluate state_encoder.window_size 1 to 2, data.state_dim 266 to 523
+    while keeping the nomic encoder and split seed fixed on the 1020-sample dataset. The intent is
+    to isolate whether this ablation improves QWK/minority recall without sacrificing calibration.
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 2
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 523
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: coral
+    learning_rate: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1020
+  n_val: 230
+  n_test: 210
+capacity:
+  n_parameters: 39252
+  param_sample_ratio: 38.4824
+training_dynamics:
+  best_epoch: 12
+  total_epochs: 32
+  train_loss_at_best: 0.4737
+  val_loss_at_best: 0.4868
+  gap_at_best: 0.0132
+  final_lr: 0.0005
+evaluation:
+  mae_mean: 0.2185
+  accuracy_mean: 0.8067
+  qwk_mean: 0.3391
+  spearman_mean: 0.3685
+  calibration_global: 0.8154
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.1492
+  minority_recall_mean: 0.245
+  recall_minus1: 0.0422
+  recall_plus1: 0.4478
+  hedging_mean: 0.8214
+per_dimension:
+  self_direction:
+    mae: 0.4105
+    accuracy: 0.6238
+    qwk: 0.3495
+    spearman: 0.4255
+    calibration: 0.5165
+    hedging: 0.719
+  stimulation:
+    mae: 0.0986
+    accuracy: 0.9143
+    qwk: 0.475
+    spearman: 0.3845
+    calibration: 0.8897
+    hedging: 0.9286
+  hedonism:
+    mae: 0.1448
+    accuracy: 0.881
+    qwk: 0.4218
+    spearman: 0.3689
+    calibration: 0.8763
+    hedging: 0.9095
+  achievement:
+    mae: 0.1895
+    accuracy: 0.8476
+    qwk: 0.4339
+    spearman: 0.3486
+    calibration: 0.845
+    hedging: 0.8286
+  power:
+    mae: 0.064
+    accuracy: 0.9476
+    qwk: 0.1358
+    spearman: -0.0511
+    calibration: 0.9145
+    hedging: 0.9762
+  security:
+    mae: 0.3289
+    accuracy: 0.6952
+    qwk: 0.0293
+    spearman: 0.2377
+    calibration: 0.7012
+    hedging: 0.8286
+  conformity:
+    mae: 0.2785
+    accuracy: 0.7095
+    qwk: 0.3984
+    spearman: 0.6102
+    calibration: 0.5786
+    hedging: 0.7905
+  tradition:
+    mae: 0.1571
+    accuracy: 0.8476
+    qwk: 0.298
+    spearman: 0.5216
+    calibration: 0.8281
+    hedging: 0.9
+  benevolence:
+    mae: 0.283
+    accuracy: 0.781
+    qwk: 0.529
+    spearman: 0.5477
+    calibration: 0.7327
+    hedging: 0.5476
+  universalism:
+    mae: 0.2299
+    accuracy: 0.819
+    qwk: 0.3208
+    spearman: 0.2914
+    calibration: 0.9254
+    hedging: 0.7857
+observations: >-
+  run_011 CORAL records QWK 0.339 (fair), calibration 0.815 (good), MAE 0.218, accuracy 0.807,
+  minority recall 0.245, and hedging 82.1% (excessive). Compared with run_010 CORAL, QWK is
+  -0.024, calibration -0.007, minority recall +0.001, and hedging -1.4%. Largest QWK gains are
+  hedonism 0.422 (+0.182), universalism 0.321 (+0.070); largest regressions are security 0.029
+  (-0.168), power 0.136 (-0.137). The hardest dimension in this run is security at QWK 0.029.

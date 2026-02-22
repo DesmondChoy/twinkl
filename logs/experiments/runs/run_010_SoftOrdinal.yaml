@@ -45,7 +45,10 @@ provenance:
       model.hidden_dim:
         from: 128
         to: 64
-  rationale: ''
+  rationale: >-
+    Follow-up to run_008 to evaluate model.hidden_dim 128 to 64 while keeping the nomic encoder and
+    split seed fixed on the 1020-sample dataset. The intent is to isolate whether this ablation
+    improves QWK/minority recall without sacrificing calibration.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -172,4 +175,9 @@ per_dimension:
     spearman: 0.225
     calibration: 0.9498
     hedging: 0.7952
-observations: ''
+observations: >-
+  run_010 SoftOrdinal records QWK 0.308 (fair), calibration 0.860 (good), MAE 0.211, accuracy
+  0.818, minority recall 0.284, and hedging 80.0% (moderate). Compared with run_008 SoftOrdinal,
+  QWK is -0.045, calibration +0.050, minority recall -0.007, and hedging -3.2%. Largest QWK gains
+  are universalism 0.175 (+0.059), tradition 0.442 (+0.015); largest regressions are power -0.270
+  (-0.286), achievement 0.363 (-0.091). The hardest dimension in this run is power at QWK -0.270.

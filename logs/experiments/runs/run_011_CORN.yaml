@@ -1,0 +1,161 @@
+# VIF Experiment: run_011_CORN
+# Generated: 2026-02-22T23:06:45
+# Git: 262f820(dirty)
+metadata:
+  experiment_id: run_011_CORN
+  run_id: run_011
+  model_name: CORN
+  timestamp: '2026-02-22T23:06:45'
+  git_commit: 262f820(dirty)
+  config_hash: 3ebde37ae009
+provenance:
+  prev_run_id: run_010
+  prev_git_commit: f532024(dirty)
+  git_log:
+  - '262f820 fix(vif): switch experiment logger to never-overwrite semantics'
+  config_delta:
+    added: {}
+    removed: {}
+    changed:
+      state_encoder.window_size:
+        from: 1
+        to: 2
+      data.state_dim:
+        from: 266
+        to: 523
+  rationale: >-
+    Follow-up to run_010 to evaluate state_encoder.window_size 1 to 2, data.state_dim 266 to 523
+    while keeping the nomic encoder and split seed fixed on the 1020-sample dataset. The intent is
+    to isolate whether this ablation improves QWK/minority recall without sacrificing calibration.
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 2
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 523
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: corn
+    learning_rate: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1020
+  n_val: 230
+  n_test: 210
+capacity:
+  n_parameters: 39252
+  param_sample_ratio: 38.4824
+training_dynamics:
+  best_epoch: 10
+  total_epochs: 30
+  train_loss_at_best: 0.2466
+  val_loss_at_best: 0.2399
+  gap_at_best: -0.0067
+  final_lr: 0.0005
+evaluation:
+  mae_mean: 0.2093
+  accuracy_mean: 0.8143
+  qwk_mean: 0.3346
+  spearman_mean: 0.3877
+  calibration_global: 0.8113
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.132
+  minority_recall_mean: 0.232
+  recall_minus1: 0.0563
+  recall_plus1: 0.4077
+  hedging_mean: 0.84
+per_dimension:
+  self_direction:
+    mae: 0.4008
+    accuracy: 0.6381
+    qwk: 0.3883
+    spearman: 0.4111
+    calibration: 0.5127
+    hedging: 0.719
+  stimulation:
+    mae: 0.1008
+    accuracy: 0.9048
+    qwk: 0.387
+    spearman: 0.4417
+    calibration: 0.8259
+    hedging: 0.9381
+  hedonism:
+    mae: 0.144
+    accuracy: 0.8571
+    qwk: 0.24
+    spearman: 0.3292
+    calibration: 0.7822
+    hedging: 0.9619
+  achievement:
+    mae: 0.1698
+    accuracy: 0.8381
+    qwk: 0.2278
+    spearman: 0.4151
+    calibration: 0.7808
+    hedging: 0.9048
+  power:
+    mae: 0.0716
+    accuracy: 0.9476
+    qwk: 0.1358
+    spearman: -0.0121
+    calibration: 0.9394
+    hedging: 0.9667
+  security:
+    mae: 0.321
+    accuracy: 0.7
+    qwk: 0.045
+    spearman: 0.2122
+    calibration: 0.6738
+    hedging: 0.8952
+  conformity:
+    mae: 0.271
+    accuracy: 0.7619
+    qwk: 0.5163
+    spearman: 0.584
+    calibration: 0.6744
+    hedging: 0.7524
+  tradition:
+    mae: 0.1369
+    accuracy: 0.8762
+    qwk: 0.5062
+    spearman: 0.5283
+    calibration: 0.8091
+    hedging: 0.8857
+  benevolence:
+    mae: 0.267
+    accuracy: 0.7905
+    qwk: 0.5111
+    spearman: 0.5312
+    calibration: 0.8235
+    hedging: 0.6333
+  universalism:
+    mae: 0.2102
+    accuracy: 0.8286
+    qwk: 0.3881
+    spearman: 0.4367
+    calibration: 0.9541
+    hedging: 0.7429
+observations: >-
+  run_011 CORN records QWK 0.335 (fair), calibration 0.811 (good), MAE 0.209, accuracy 0.814,
+  minority recall 0.232, and hedging 84.0% (excessive). Compared with run_010 CORN, QWK is -0.099,
+  calibration -0.023, minority recall -0.053, and hedging +2.0%. Largest QWK gains are benevolence
+  0.511 (+0.056); largest regressions are power 0.136 (-0.242), hedonism 0.240 (-0.223). The
+  hardest dimension in this run is security at QWK 0.045.

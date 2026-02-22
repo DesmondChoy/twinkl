@@ -1,0 +1,162 @@
+# VIF Experiment: run_011_SoftOrdinal
+# Generated: 2026-02-22T23:06:45
+# Git: 262f820(dirty)
+metadata:
+  experiment_id: run_011_SoftOrdinal
+  run_id: run_011
+  model_name: SoftOrdinal
+  timestamp: '2026-02-22T23:06:45'
+  git_commit: 262f820(dirty)
+  config_hash: 13c8d9b319b3
+provenance:
+  prev_run_id: run_010
+  prev_git_commit: f532024(dirty)
+  git_log:
+  - '262f820 fix(vif): switch experiment logger to never-overwrite semantics'
+  config_delta:
+    added: {}
+    removed: {}
+    changed:
+      state_encoder.window_size:
+        from: 1
+        to: 2
+      data.state_dim:
+        from: 266
+        to: 523
+  rationale: >-
+    Follow-up to run_010 to evaluate state_encoder.window_size 1 to 2, data.state_dim 266 to 523
+    while keeping the nomic encoder and split seed fixed on the 1020-sample dataset. The intent is
+    to isolate whether this ablation improves QWK/minority recall without sacrificing calibration.
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 2
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 523
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: soft_ordinal
+    learning_rate: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1020
+  n_val: 230
+  n_test: 210
+capacity:
+  n_parameters: 39902
+  param_sample_ratio: 39.1196
+training_dynamics:
+  best_epoch: 7
+  total_epochs: 27
+  train_loss_at_best: 0.2025
+  val_loss_at_best: 0.1819
+  gap_at_best: -0.0206
+  final_lr: 0.0005
+evaluation:
+  mae_mean: 0.222
+  accuracy_mean: 0.8195
+  qwk_mean: 0.3326
+  spearman_mean: 0.3495
+  calibration_global: 0.8618
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.1689
+  minority_recall_mean: 0.3117
+  recall_minus1: 0.0691
+  recall_plus1: 0.5544
+  hedging_mean: 0.7781
+per_dimension:
+  self_direction:
+    mae: 0.4216
+    accuracy: 0.6571
+    qwk: 0.4024
+    spearman: 0.4186
+    calibration: 0.5729
+    hedging: 0.5143
+  stimulation:
+    mae: 0.0851
+    accuracy: 0.9238
+    qwk: 0.5448
+    spearman: 0.5736
+    calibration: 0.9195
+    hedging: 0.8905
+  hedonism:
+    mae: 0.1364
+    accuracy: 0.881
+    qwk: 0.4741
+    spearman: 0.364
+    calibration: 0.8993
+    hedging: 0.9
+  achievement:
+    mae: 0.1811
+    accuracy: 0.8667
+    qwk: 0.3985
+    spearman: 0.3544
+    calibration: 0.7953
+    hedging: 0.8571
+  power:
+    mae: 0.0795
+    accuracy: 0.9429
+    qwk: -0.2539
+    spearman: -0.2046
+    calibration: 0.9621
+    hedging: 0.9524
+  security:
+    mae: 0.3389
+    accuracy: 0.7238
+    qwk: 0.1333
+    spearman: 0.2093
+    calibration: 0.7773
+    hedging: 0.7952
+  conformity:
+    mae: 0.2757
+    accuracy: 0.7524
+    qwk: 0.5073
+    spearman: 0.5999
+    calibration: 0.7244
+    hedging: 0.7286
+  tradition:
+    mae: 0.1844
+    accuracy: 0.8571
+    qwk: 0.5181
+    spearman: 0.4543
+    calibration: 0.867
+    hedging: 0.7714
+  benevolence:
+    mae: 0.2612
+    accuracy: 0.7667
+    qwk: 0.476
+    spearman: 0.5043
+    calibration: 0.7738
+    hedging: 0.6381
+  universalism:
+    mae: 0.2565
+    accuracy: 0.8238
+    qwk: 0.1255
+    spearman: 0.2215
+    calibration: 0.9338
+    hedging: 0.7333
+observations: >-
+  run_011 SoftOrdinal records QWK 0.333 (fair), calibration 0.862 (good), MAE 0.222, accuracy
+  0.820, minority recall 0.312, and hedging 77.8% (moderate). Compared with run_010 SoftOrdinal,
+  QWK is +0.024, calibration +0.002, minority recall +0.028, and hedging -2.1%. Largest QWK gains
+  are hedonism 0.474 (+0.120), stimulation 0.545 (+0.077); largest regressions are universalism
+  0.126 (-0.050), benevolence 0.476 (-0.044). The hardest dimension in this run is power at QWK
+  -0.254.
