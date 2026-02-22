@@ -9,7 +9,7 @@ Usage:
     from src.vif.eval import compute_mse_per_dimension, compute_spearman_per_dimension
 
 Example:
-    # Create components
+    # Create components (hyperparameters are preliminary; see config/vif.yaml)
     encoder = create_encoder(config["encoder"])
     state_encoder = StateEncoder(encoder, **config["state_encoder"])
 

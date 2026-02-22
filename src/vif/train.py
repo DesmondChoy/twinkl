@@ -47,6 +47,8 @@ def load_config(config_path: str | Path | None) -> dict:
     Returns:
         Configuration dict
     """
+    # Fallback defaults mirror config/vif.yaml. Both are preliminary and
+    # subject to revision through ongoing model ablation studies.
     default_config = {
         "encoder": {
             "type": "sbert",

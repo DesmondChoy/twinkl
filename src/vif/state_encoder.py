@@ -10,6 +10,9 @@ State Vector Components (per VIF_05 spec):
 
 Total dimension: N × d_e + (N-1) + 10  (see config/vif.yaml)
 
+Note: Encoder choice, window size, and other hyperparameters in config/vif.yaml
+are preliminary and subject to revision through ongoing model ablation studies.
+
 Usage:
     from src.vif import StateEncoder, create_encoder
 
