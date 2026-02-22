@@ -467,25 +467,26 @@ def write_wrangled_markdown(
     skipped_count = 0
     for filepath in persona_files:
         output_file = output_path / filepath.name
+
         if output_file.exists():
             skipped_count += 1
-            continue
+        else:
+            profile, entries = parse_persona_file(filepath)
+            markdown = format_persona_markdown(profile, entries)
+            output_file.write_text(markdown)
+            written_files.append(output_file)
 
-        profile, entries = parse_persona_file(filepath)
-        markdown = format_persona_markdown(profile, entries)
-        output_file.write_text(markdown)
-        written_files.append(output_file)
-
-        # Update registry to mark as wrangled
+        # Always update registry (idempotent) — covers both new and skipped files
         if update_registry:
             try:
                 from src.registry import update_stage
 
-                update_stage(profile["persona_id"], "wrangled")
+                persona_id = extract_persona_id(filepath.name)
+                update_stage(persona_id, "wrangled")
             except (ImportError, ValueError) as e:
-                # Registry not available or persona not registered
-                # (could be legacy data without registry)
-                print(f"  Note: Could not update registry for {profile['persona_id']}: {e}")
+                print(
+                    f"  Note: Could not update registry for {filepath.name}: {e}"
+                )
 
     if skipped_count > 0:
         print(f"  Skipped {skipped_count} already-wrangled files")

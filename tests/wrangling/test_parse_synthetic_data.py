@@ -492,6 +492,74 @@ class TestWriteWrangledMarkdown:
         assert "**Type:**" not in output_content
         assert "**Type**:" not in output_content
 
+    def test_rerun_updates_registry_for_skipped_files(self, tmp_path, monkeypatch):
+        """Re-running wrangling on already-wrangled files still updates the registry."""
+        input_dir = tmp_path / "synthetic"
+        output_dir = tmp_path / "wrangled"
+        input_dir.mkdir()
+        output_dir.mkdir()
+
+        (input_dir / "persona_a3f8b2c1.md").write_text(FULL_TRIGGER_PERSONA)
+        (output_dir / "persona_a3f8b2c1.md").write_text("already exists")
+
+        calls = []
+        # Patch at the source so the lazy `from src.registry import update_stage` picks it up
+        monkeypatch.setattr(
+            "src.registry.update_stage",
+            lambda pid, stage: calls.append((pid, stage)),
+        )
+
+        written = write_wrangled_markdown(input_dir, output_dir, update_registry=True)
+
+        assert len(written) == 0  # file was skipped
+        assert ("a3f8b2c1", "wrangled") in calls
+
+    def test_mixed_state_updates_registry_for_all(self, tmp_path, monkeypatch):
+        """Both new and already-wrangled personas get registry updates."""
+        input_dir = tmp_path / "synthetic"
+        output_dir = tmp_path / "wrangled"
+        input_dir.mkdir()
+        output_dir.mkdir()
+
+        (input_dir / "persona_a3f8b2c1.md").write_text(FULL_TRIGGER_PERSONA)
+        (output_dir / "persona_a3f8b2c1.md").write_text("already exists")
+
+        second_persona = FULL_TRIGGER_PERSONA.replace("a3f8b2c1", "b4e9c3d2").replace(
+            "Test Person", "Second Person"
+        )
+        (input_dir / "persona_b4e9c3d2.md").write_text(second_persona)
+
+        calls = []
+        monkeypatch.setattr(
+            "src.registry.update_stage",
+            lambda pid, stage: calls.append((pid, stage)),
+        )
+
+        written = write_wrangled_markdown(input_dir, output_dir, update_registry=True)
+
+        assert len(written) == 1  # only the new file
+        persona_ids = [c[0] for c in calls]
+        assert "a3f8b2c1" in persona_ids
+        assert "b4e9c3d2" in persona_ids
+
+    def test_legacy_persona_not_in_registry_handled_gracefully(self, tmp_path, monkeypatch):
+        """ValueError from update_stage does not crash the pipeline."""
+        input_dir = tmp_path / "synthetic"
+        output_dir = tmp_path / "wrangled"
+        input_dir.mkdir()
+
+        (input_dir / "persona_a3f8b2c1.md").write_text(FULL_TRIGGER_PERSONA)
+
+        def raise_value_error(pid, stage):
+            raise ValueError(f"Persona {pid} not found in registry")
+
+        monkeypatch.setattr("src.registry.update_stage", raise_value_error)
+
+        written = write_wrangled_markdown(input_dir, output_dir, update_registry=True)
+
+        assert len(written) == 1
+        assert (output_dir / "persona_a3f8b2c1.md").exists()
+
 
 class TestExtractPersonaId:
 
