@@ -30,10 +30,10 @@ This folder contains evaluation specifications for the **Value Identity Function
 
 ## Quick Reference
 
-| Order | Eval File | Pipeline Stage | What It Validates | Key Metric |
-|:-----:|-----------|----------------|-------------------|------------|
+| Order | Eval File | Pipeline Stage | What It Validates | Key Metrics |
+|:-----:|-----------|----------------|-------------------|-------------|
 | 1 | [`judge_validation_eval.md`](./judge_validation_eval.md) | Data Preparation | Judge labels are consistent & agree with humans | Cohen's κ > 0.60 |
-| 2 | [`value_modeling_eval.md`](./value_modeling_eval.md) | Model Training | VIF learns value hierarchies correctly | Spearman ρ > 0.7 |
+| 2 | [`value_modeling_eval.md`](./value_modeling_eval.md) | Model Training | VIF learns value hierarchies correctly | Entry-level: QWK > 0.4, Minority Recall (-1) > 20%; Persona-level: Spearman ρ > 0.7 |
 | 3 | [`drift_detection_eval.md`](./drift_detection_eval.md) | Inference | Drift triggers fire accurately on misalignment | Hit Rate ≥ 80% |
 | 4 | [`explanation_quality_eval.md`](./explanation_quality_eval.md) | User Output | Explanations are grounded and useful | Likert ≥ 3.5/5 |
 
@@ -70,7 +70,7 @@ judge_validation_eval  ─┐
 | Eval | Status | Evidence | Remaining Work |
 |------|--------|----------|----------------|
 | Judge Validation | 🟢 Operational | 1 460 labels across 180 personas; 3 annotators × 46 entries; aggregate Cohen's κ 0.57–0.76 ([report](../../logs/exports/agreement_report_20260128_133444.md)) | Automated quality checks (all-zero rate, sparsity) |
-| Value Modeling | 🟡 In Progress | 9 runs × 4+ losses; best QWK **0.413** / Spearman 0.402 (run_007 CORN) — below target; experimentation ongoing ([experiment index](../../logs/experiments/index.md)) | Boost QWK; persona-level aggregation for Top-K accuracy |
+| Value Modeling | 🟡 In Progress | 9 runs × 4+ losses; best QWK **0.413** (run_007 CORN) — fair but below moderate target; -1 recall **10.3%** — model nearly blind to misalignment; hedging >80% ([experiment index](../../logs/experiments/index.md)) | Boost minority recall via class-imbalance interventions; boost QWK; persona-level aggregation for Top-K accuracy |
 | Drift Detection | 🟡 Partial | Critic trained + MC Dropout implemented ([`src/vif/critic.py`](../../src/vif/critic.py)) | Critic QWK too low for reliable triggers; crash/rut trigger code; crisis-injection test data |
 | Explanation Quality | 🟡 Partial | 133/134 rationales stored in parquet; display UI operational | Tier 1 automated checks (groundedness, circularity, length) |
 

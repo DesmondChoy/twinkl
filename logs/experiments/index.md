@@ -9,6 +9,8 @@
 | 3 | run_008 EMD | nomic-256d | 128 | 1020 | 0.365 | 0.802 | **0.200** | 0.821 | 0.300 | Best MAE ever. Stimulation QWK 0.667. Most capacity-robust loss function. |
 
 > **Key insight**: nomic-embed at hd=64 is the sweet spot. All top-3 are nomic-based on the 1020-sample dataset. MiniLM is no longer competitive on the expanded data.
+>
+> **Primary bottleneck**: QWK (0.413) is fair but below the moderate threshold (>0.4). More critically, -1 recall is just 10.3% — the model almost completely fails to detect value misalignment, which is the signal Twinkl exists to surface. Hedging exceeds 80% across all runs. Next experiments should target class-imbalance interventions (loss reweighting, focal loss, oversampling) to boost minority recall alongside QWK. See [`docs/evals/value_modeling_eval.md`](../../docs/evals/value_modeling_eval.md) for metric definitions and targets.
 
 ## Run Log
 
