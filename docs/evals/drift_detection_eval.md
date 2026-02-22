@@ -8,27 +8,29 @@ The VIF detects when a user's behavior drifts from their declared values. This e
 
 ## Implementation Status
 
-**Status:** 🔴 Blocked
+**Status:** 🟡 Partial
 
 ### What's Implemented
 - Evaluation specification complete (this document)
 - Conceptual design documented in [`docs/vif/04_uncertainty_logic.md`](../vif/04_uncertainty_logic.md)
 - Trigger formulas defined (Crash: V_{t-1} - V_t > δ, Rut: sustained low)
+- Trained Critic models: 9 runs across 4+ loss functions ([`logs/experiments/index.md`](../../logs/experiments/index.md))
+- MC Dropout uncertainty estimation: [`src/vif/critic.py:predict_with_uncertainty()`](../../src/vif/critic.py) and [`src/vif/eval.py:evaluate_with_uncertainty()`](../../src/vif/eval.py)
+- Calibration metric implemented and tracked per run (best: 0.852, run_007 SoftOrdinal)
 
 ### What's Missing
-- All drift detection code (crash/rut trigger implementation)
-- MC Dropout for uncertainty estimation
+- Crash/rut trigger implementation (the dual-trigger detection code itself)
 - Crisis injection test data generation
 - Hit rate / precision / recall metric calculation
 
 ### Blocking Dependencies
-Requires trained Critic with MC Dropout uncertainty — both the base model and uncertainty mechanism are prerequisites that don't exist yet.
+Critic QWK remains unsatisfactory (best **0.413**, run_007 CORN; target well above this for reliable per-value triggers). Experimentation is ongoing as of 2026-02-22 to boost this metric — see [`logs/experiments/index.md`](../../logs/experiments/index.md). Until per-value Critic accuracy improves, drift triggers will inherit noisy alignment scores and produce unreliable crash/rut detections.
 
 ### Next Steps
-1. Complete Value Modeling Eval first (train Critic)
-2. Add MC Dropout to Critic architecture
-3. Implement dual-trigger detection in `src/vif/`
-4. Generate synthetic crisis injection test data
+1. Improve Critic QWK through ongoing experimentation (data expansion, architecture, loss tuning)
+2. Implement dual-trigger detection (crash + rut) in `src/vif/`
+3. Generate synthetic crisis injection test data
+4. Implement hit rate / precision / recall metrics
 5. Run evaluation on injected timelines
 
 ---

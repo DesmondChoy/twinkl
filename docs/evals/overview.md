@@ -67,12 +67,12 @@ judge_validation_eval  ─┐
 
 ## Current Status Summary
 
-| Eval | Status | Blockers |
-|------|--------|----------|
-| Judge Validation | 🟡 Partial | Needs human annotations for κ comparison |
-| Value Modeling | 🔴 Blocked | Requires Critic model implementation |
-| Drift Detection | 🔴 Blocked | Requires trained Critic + MC Dropout |
-| Explanation Quality | 🟡 Partial | None — Tier 1 checks can start now |
+| Eval | Status | Evidence | Remaining Work |
+|------|--------|----------|----------------|
+| Judge Validation | 🟢 Operational | 1 460 labels across 180 personas; 3 annotators × 46 entries; aggregate Cohen's κ 0.57–0.76 ([report](../../logs/exports/agreement_report_20260128_133444.md)) | Automated quality checks (all-zero rate, sparsity) |
+| Value Modeling | 🟡 In Progress | 9 runs × 4+ losses; best QWK **0.413** / Spearman 0.402 (run_007 CORN) — below target; experimentation ongoing ([experiment index](../../logs/experiments/index.md)) | Boost QWK; persona-level aggregation for Top-K accuracy |
+| Drift Detection | 🟡 Partial | Critic trained + MC Dropout implemented ([`src/vif/critic.py`](../../src/vif/critic.py)) | Critic QWK too low for reliable triggers; crash/rut trigger code; crisis-injection test data |
+| Explanation Quality | 🟡 Partial | 133/134 rationales stored in parquet; display UI operational | Tier 1 automated checks (groundedness, circularity, length) |
 
 See each eval file's **Implementation Status** section for detailed breakdowns.
 

@@ -8,27 +8,29 @@ The VIF (Value Identity Function) maps journal entries to a 10-dimensional Schwa
 
 ## Implementation Status
 
-**Status:** 🔴 Blocked
+**Status:** 🟡 In Progress (as of 2026-02-22)
 
 ### What's Implemented
 - Evaluation specification complete (this document)
-- Judge training data ready (904 labeled entries in [`logs/judge_labels/judge_labels.parquet`](../../logs/judge_labels/judge_labels.parquet))
+- Judge training data: 1 460 labeled entries across 180 personas in [`logs/judge_labels/judge_labels.parquet`](../../logs/judge_labels/judge_labels.parquet)
 - Ground truth value orderings embedded in persona bios
+- Critic architecture: MLP ordinal ([`src/vif/critic_ordinal.py`](../../src/vif/critic_ordinal.py)) and BNN ([`src/vif/critic_bnn.py`](../../src/vif/critic_bnn.py))
+- Training pipeline with 5 loss functions: CORAL, CORN, EMD, SoftOrdinal, weighted MSE ([`src/vif/train.py`](../../src/vif/train.py))
+- Text and state encoders: nomic-embed-text-v1.5, MiniLM ([`src/vif/encoders.py`](../../src/vif/encoders.py))
+- Evaluation metrics: QWK, Spearman ρ, MAE, calibration, per-dimension breakdowns ([`src/vif/eval.py`](../../src/vif/eval.py))
+- 9 experiment runs (37 configurations) logged in [`logs/experiments/index.md`](../../logs/experiments/index.md)
+- Best result: run_007 CORN — QWK **0.413**, Cal 0.838, MAE 0.205
 
 ### What's Missing
-- Critic/MLP training code
-- Spearman correlation calculation
-- Top-K accuracy metrics
-- VIF inference pipeline
-
-### Blocking Dependencies
-Requires Critic model implementation — the neural network that maps text embeddings to value scores is not yet built.
+- **QWK below target**: Best QWK is 0.413 (run_007 CORN); further experimentation is in progress as of 2026-02-22 to improve per-value discrimination
+- Persona-level aggregation protocol (aggregate per-entry scores into persona-level value profile for Top-K accuracy)
+- Formal held-out evaluation against declared value orderings (Spearman ρ > 0.7 target, current best 0.402)
 
 ### Next Steps
-1. Implement Critic architecture in `src/vif/`
-2. Train Critic on Judge-labeled data
-3. Implement evaluation metrics (Spearman ρ, Top-K accuracy)
-4. Run evaluation on held-out synthetic personas
+1. Boost Critic QWK through ongoing experiments (data expansion, architecture tuning, loss function exploration)
+2. Implement persona-level score aggregation across entries
+3. Compute Spearman ρ between aggregated profiles and declared orderings
+4. Report Top-K accuracy on synthetic personas
 
 ---
 
