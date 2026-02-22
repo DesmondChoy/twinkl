@@ -33,6 +33,7 @@ Tracks each synthetic persona and their progress through the data pipeline.
 | `stage_wrangled` | `bool` | `true` after data cleaning/parsing |
 | `stage_labeled` | `bool` | `true` after judge labeling |
 | `nudge_enabled` | `bool` | Whether nudges were enabled during generation |
+| `annotation_order` | `i64 \| null` | Display order in annotation tool (1-indexed); null until set by annotation workflow |
 
 ### Randomized Attributes
 
@@ -76,6 +77,7 @@ Training labels for the VIF. Each row represents one journal entry with its alig
 | `alignment_tradition` | `i64` | Score: `-1`, `0`, or `+1` |
 | `alignment_benevolence` | `i64` | Score: `-1`, `0`, or `+1` |
 | `alignment_universalism` | `i64` | Score: `-1`, `0`, or `+1` |
+| `rationales_json` | `str \| null` | JSON object mapping Schwartz value names to free-text rationale strings; null if no rationales provided |
 
 ### Score Meanings
 
