@@ -34,6 +34,7 @@ import json
 import math
 import re
 import subprocess
+import warnings
 from copy import deepcopy
 from datetime import datetime
 from pathlib import Path
@@ -49,8 +50,12 @@ EXPERIMENTS_DIR = Path("logs/experiments")
 RUNS_DIR = EXPERIMENTS_DIR / "runs"
 INDEX_PATH = EXPERIMENTS_DIR / "index.md"
 
-INDEX_HEADER = (
-    "# VIF Experiment Index\n\n"
+INDEX_FRESH_HEADER = "# VIF Experiment Index\n\n"
+
+AUTO_TABLE_START = "<!-- AUTO-TABLE:START -->\n"
+AUTO_TABLE_END = "<!-- AUTO-TABLE:END -->\n"
+
+TABLE_HEADER = (
     "| run | model | encoder | ws | hd | do | loss | params | ratio | "
     "MAE | Acc | QWK | Spear | Cal | MinR | file |\n"
     "|-----|-------|---------|---:|---:|---:|------|-------:|------:|"
@@ -574,32 +579,67 @@ def _format_index_row(data: dict) -> str:
 
 
 def _rebuild_index() -> None:
-    """Rebuild index.md from all YAML files in runs/.
+    """Rebuild the auto-generated table in index.md, preserving manual sections.
 
-    Globs all run files, reads each, sorts by (run_id, model_name), and writes
-    the complete index. Guarantees correctness after overwrites or deletions.
+    The table is expected to live between ``<!-- AUTO-TABLE:START -->`` and
+    ``<!-- AUTO-TABLE:END -->`` HTML comment markers. Everything outside the
+    markers is left untouched.
+
+    Fallback behaviour:
+    * If index.md exists but markers are missing or in wrong order → warn and
+      append a marker-wrapped table at the end (non-destructive).
+    * If index.md doesn't exist → create a fresh file with markers.
     """
     INDEX_PATH.parent.mkdir(parents=True, exist_ok=True)
     RUNS_DIR.mkdir(parents=True, exist_ok=True)
 
+    # ── Parse all YAML run files, warning on errors ──────────────────────
     entries = []
-    for f in RUNS_DIR.glob("run_*_*.yaml"):
+    for f in sorted(RUNS_DIR.glob("run_*_*.yaml")):
         try:
             data = yaml.safe_load(f.read_text(encoding="utf-8"))
             if data and "metadata" in data:
                 entries.append(data)
-        except Exception:
-            continue
+        except Exception as exc:
+            warnings.warn(
+                f"Skipping {f.name}: YAML parse error: {exc}",
+                stacklevel=2,
+            )
 
     entries.sort(
         key=lambda d: (d["metadata"]["run_id"], d["metadata"]["model_name"])
     )
 
-    content = INDEX_HEADER
+    # ── Build the new table block ────────────────────────────────────────
+    table_block = AUTO_TABLE_START + TABLE_HEADER
     for data in entries:
-        content += _format_index_row(data)
+        table_block += _format_index_row(data)
+    table_block += AUTO_TABLE_END
 
-    INDEX_PATH.write_text(content, encoding="utf-8")
+    # ── Splice into existing file or create fresh ────────────────────────
+    if INDEX_PATH.exists():
+        existing = INDEX_PATH.read_text(encoding="utf-8")
+        start_idx = existing.find(AUTO_TABLE_START)
+        end_idx = existing.find(AUTO_TABLE_END)
+
+        if start_idx != -1 and end_idx != -1 and start_idx < end_idx:
+            # Happy path: splice between markers
+            before = existing[:start_idx]
+            after = existing[end_idx + len(AUTO_TABLE_END):]
+            INDEX_PATH.write_text(before + table_block + after, encoding="utf-8")
+        else:
+            # Markers missing or malformed — append table, don't destroy content
+            warnings.warn(
+                "index.md is missing AUTO-TABLE markers; appending table at end. "
+                "Add <!-- AUTO-TABLE:START --> and <!-- AUTO-TABLE:END --> markers "
+                "to control table placement.",
+                stacklevel=2,
+            )
+            if not existing.endswith("\n"):
+                existing += "\n"
+            INDEX_PATH.write_text(existing + "\n" + table_block, encoding="utf-8")
+    else:
+        INDEX_PATH.write_text(INDEX_FRESH_HEADER + table_block, encoding="utf-8")
 
 
 # ─── Public API ───────────────────────────────────────────────────────────────

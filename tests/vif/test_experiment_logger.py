@@ -1,5 +1,6 @@
 """Tests for experiment provenance helpers in src.vif.experiment_logger."""
 
+import warnings
 from pathlib import Path
 from unittest.mock import patch
 
@@ -13,7 +14,11 @@ from src.vif.experiment_logger import (
     _encoder_family,
     _flatten_dict,
     _get_git_log_between,
+    _rebuild_index,
     _strip_dirty,
+    AUTO_TABLE_END,
+    AUTO_TABLE_START,
+    TABLE_HEADER,
 )
 
 
@@ -245,3 +250,145 @@ class TestBuildProvenance:
         assert provenance["config_delta"]["removed"] == {"state_encoder.ema_alpha": 0.3}
         # loss_fn is per-head and should not appear in canonical run-level delta
         assert provenance["config_delta"]["changed"] == {}
+
+
+# ─── _rebuild_index ─────────────────────────────────────────────────────────
+
+
+def _make_run_yaml(run_id: str, model_name: str) -> dict:
+    """Build a minimal valid experiment dict for _rebuild_index tests."""
+    return {
+        "metadata": {
+            "experiment_id": f"{run_id}_{model_name}",
+            "run_id": run_id,
+            "model_name": model_name,
+        },
+        "config": {
+            "encoder": {"model_name": "nomic-ai/nomic-embed-text-v1.5", "truncate_dim": 256},
+            "state_encoder": {"window_size": 1},
+            "model": {"hidden_dim": 64, "dropout": 0.3},
+            "training": {"loss_fn": "coral"},
+        },
+        "capacity": {"n_parameters": 22804, "param_sample_ratio": 22.4},
+        "evaluation": {
+            "mae_mean": 0.209,
+            "accuracy_mean": 0.819,
+            "qwk_mean": 0.364,
+            "spearman_mean": 0.391,
+            "calibration_global": 0.823,
+            "minority_recall_mean": 0.244,
+        },
+    }
+
+
+class TestRebuildIndex:
+    """Tests for marker-preserving _rebuild_index behaviour."""
+
+    def _setup_dirs(self, tmp_path, monkeypatch):
+        """Wire RUNS_DIR and INDEX_PATH to tmp_path."""
+        runs_dir = tmp_path / "runs"
+        runs_dir.mkdir(parents=True)
+        index_path = tmp_path / "index.md"
+        monkeypatch.setattr(experiment_logger, "RUNS_DIR", runs_dir)
+        monkeypatch.setattr(experiment_logger, "INDEX_PATH", index_path)
+        return runs_dir, index_path
+
+    def _write_run(self, runs_dir: Path, run_id: str, model_name: str) -> None:
+        data = _make_run_yaml(run_id, model_name)
+        path = runs_dir / f"{run_id}_{model_name}.yaml"
+        path.write_text(yaml.dump(data, sort_keys=False), encoding="utf-8")
+
+    def test_fresh_file_created_with_markers(self, tmp_path, monkeypatch):
+        """No existing index.md → creates file with markers and table."""
+        runs_dir, index_path = self._setup_dirs(tmp_path, monkeypatch)
+        self._write_run(runs_dir, "run_001", "CORAL")
+
+        _rebuild_index()
+
+        content = index_path.read_text(encoding="utf-8")
+        assert AUTO_TABLE_START in content
+        assert AUTO_TABLE_END in content
+        assert "run_001" in content
+        assert content.startswith("# VIF Experiment Index")
+
+    def test_manual_sections_preserved(self, tmp_path, monkeypatch):
+        """Content before START and after END survives rebuild."""
+        runs_dir, index_path = self._setup_dirs(tmp_path, monkeypatch)
+        self._write_run(runs_dir, "run_001", "CORAL")
+
+        manual_before = "# My Index\n\n## Leaderboard\nBest: run_001\n\n"
+        manual_after = "\n## Findings\nImportant analysis here.\n"
+        old_table = AUTO_TABLE_START + TABLE_HEADER + "| old row |\n" + AUTO_TABLE_END
+        index_path.write_text(manual_before + old_table + manual_after, encoding="utf-8")
+
+        _rebuild_index()
+
+        content = index_path.read_text(encoding="utf-8")
+        assert "## Leaderboard" in content
+        assert "Best: run_001" in content
+        assert "## Findings" in content
+        assert "Important analysis here." in content
+        # Old row replaced with actual data
+        assert "| old row |" not in content
+        assert "run_001" in content
+
+    def test_corrupt_yaml_emits_warning(self, tmp_path, monkeypatch):
+        """Bad YAML emits warning, doesn't crash, skips the file."""
+        runs_dir, index_path = self._setup_dirs(tmp_path, monkeypatch)
+        self._write_run(runs_dir, "run_001", "CORAL")
+        # Write invalid YAML
+        bad_file = runs_dir / "run_002_BAD.yaml"
+        bad_file.write_text("invalid: yaml: content: {broken", encoding="utf-8")
+
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            _rebuild_index()
+
+        content = index_path.read_text(encoding="utf-8")
+        assert "run_001" in content
+        # Warning was emitted for the bad file
+        yaml_warnings = [x for x in w if "run_002_BAD.yaml" in str(x.message)]
+        assert len(yaml_warnings) == 1
+
+    def test_legacy_file_without_markers_warns(self, tmp_path, monkeypatch):
+        """No markers in existing file → appends table, emits warning."""
+        runs_dir, index_path = self._setup_dirs(tmp_path, monkeypatch)
+        self._write_run(runs_dir, "run_001", "CORAL")
+
+        legacy_content = "# Old Index\n\nSome manual content.\n"
+        index_path.write_text(legacy_content, encoding="utf-8")
+
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            _rebuild_index()
+
+        content = index_path.read_text(encoding="utf-8")
+        # Original content preserved
+        assert "# Old Index" in content
+        assert "Some manual content." in content
+        # Table appended with markers
+        assert AUTO_TABLE_START in content
+        assert AUTO_TABLE_END in content
+        # Warning emitted
+        marker_warnings = [x for x in w if "AUTO-TABLE" in str(x.message)]
+        assert len(marker_warnings) == 1
+
+    def test_markers_wrong_order_warns(self, tmp_path, monkeypatch):
+        """END before START treated as missing markers (appends table)."""
+        runs_dir, index_path = self._setup_dirs(tmp_path, monkeypatch)
+        self._write_run(runs_dir, "run_001", "CORAL")
+
+        wrong_order = "# Index\n" + AUTO_TABLE_END + "middle\n" + AUTO_TABLE_START
+        index_path.write_text(wrong_order, encoding="utf-8")
+
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            _rebuild_index()
+
+        content = index_path.read_text(encoding="utf-8")
+        # Original content preserved (not destroyed)
+        assert "# Index" in content
+        assert "middle" in content
+        # Warning emitted about missing markers
+        marker_warnings = [x for x in w if "AUTO-TABLE" in str(x.message)]
+        assert len(marker_warnings) == 1

@@ -149,7 +149,8 @@ per_dimension:
     spearman: 0.286
     calibration: 0.903
     hedging: 0.8238
-observations: SoftOrdinal at hd=128 recovers QWK to 0.354 (from 0.314 at hd=64),
+observations: >-
+  SoftOrdinal at hd=128 recovers QWK to 0.354 (from 0.314 at hd=64),
   the only loss to improve from hd=64 to hd=128. Calibration 0.811 (good), slight
   decline from 0.852. Stimulation strong (QWK 0.506, Spearman 0.589). Conformity
   0.525. Achievement improved to 0.454 (best SoftOrdinal on nomic). Benevolence 0.512.

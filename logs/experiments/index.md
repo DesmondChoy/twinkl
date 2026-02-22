@@ -14,6 +14,7 @@
 
 ## Run Log
 
+<!-- AUTO-TABLE:START -->
 | run | model | encoder | ws | hd | do | loss | params | ratio | MAE | Acc | QWK | Spear | Cal | MinR | file |
 |-----|-------|---------|---:|---:|---:|------|-------:|------:|----:|----:|----:|------:|----:|-----:|------|
 | 001 | CORAL | MiniLM-384d | 3 | 256 | 0.2 | coral | 372756 | 585.2 | 0.232 | 0.782 | 0.398 | 0.459 | 0.644 | 0.298 | runs/run_001_CORAL.yaml |
@@ -54,6 +55,7 @@
 | 009 | CORN | MiniLM-384d | 3 | 64 | 0.2 | corn | 80276 | 78.7 | 0.227 | 0.792 | 0.227 | 0.323 | 0.711 | 0.166 | runs/run_009_CORN.yaml |
 | 009 | EMD | MiniLM-384d | 3 | 64 | 0.2 | emd | 80926 | 79.3 | 0.225 | 0.799 | 0.259 | 0.303 | 0.776 | 0.223 | runs/run_009_EMD.yaml |
 | 009 | SoftOrdinal | MiniLM-384d | 3 | 64 | 0.2 | soft_ordinal | 80926 | 79.3 | 0.239 | 0.787 | 0.236 | 0.300 | 0.775 | 0.234 | runs/run_009_SoftOrdinal.yaml |
+<!-- AUTO-TABLE:END -->
 
 ## Findings
 
