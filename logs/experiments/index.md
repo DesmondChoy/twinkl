@@ -10,6 +10,8 @@
 
 > **Key insight**: nomic-embed at hd=64 is the sweet spot. All top-3 are nomic-based on the 1020-sample dataset. MiniLM is no longer competitive on the expanded data.
 
+## Run Log
+
 | run | model | encoder | ws | hd | do | loss | params | ratio | MAE | Acc | QWK | Spear | Cal | MinR | file |
 |-----|-------|---------|---:|---:|---:|------|-------:|------:|----:|----:|----:|------:|----:|-----:|------|
 | 001 | CORAL | MiniLM-384d | 3 | 256 | 0.2 | coral | 372756 | 585.2 | 0.232 | 0.782 | 0.398 | 0.459 | 0.644 | 0.298 | runs/run_001_CORAL.yaml |
@@ -50,3 +52,24 @@
 | 009 | CORN | MiniLM-384d | 3 | 64 | 0.2 | corn | 80276 | 78.7 | 0.227 | 0.792 | 0.227 | 0.323 | 0.711 | 0.166 | runs/run_009_CORN.yaml |
 | 009 | EMD | MiniLM-384d | 3 | 64 | 0.2 | emd | 80926 | 79.3 | 0.225 | 0.799 | 0.259 | 0.303 | 0.776 | 0.223 | runs/run_009_EMD.yaml |
 | 009 | SoftOrdinal | MiniLM-384d | 3 | 64 | 0.2 | soft_ordinal | 80926 | 79.3 | 0.239 | 0.787 | 0.236 | 0.300 | 0.775 | 0.234 | runs/run_009_SoftOrdinal.yaml |
+
+## Findings
+
+### 2026-02-22 — Resolved: Universalism QWK collapse (run_003 → run_009)
+
+Universalism QWK dropped from 0.732 (run_003 EMD, 637 train) to 0.042 (run_009 EMD, 1020 train). This looks alarming but is explained by three compounding factors — **no further data intervention is needed**.
+
+**1. The 0.732 was inflated by a skewed test distribution.** run_003 included 10 pre-tension Universalism personas whose labels were 87% +1, 13% 0, and **0% −1** (98 entries total). The model achieved high QWK by predicting +1 for the dominant class without ever needing to detect misalignment.
+
+**2. Removing those personas (commit a036004) was correct.** Batch 1B replacement personas (generated with tension-selection) have 54.8% −1 labels, giving the critic a balanced signal. The drop to QWK 0.290 in run_005 reflects honest evaluation against a harder, more realistic distribution — not a regression.
+
+**3. MiniLM's collapse to 0.042 (run_009) is an encoder bottleneck, not a data problem.** MiniLM at window_size=3 produces a 1164-dim state vector; at hd=64, this is an 18:1 compression bottleneck. On the **same 1020-sample dataset**, nomic CORN at hd=64 (266-dim state, 4:1 compression) achieves Universalism QWK **0.466**.
+
+| Run | Encoder | hd | n_train | Uni QWK | Uni Hedge | State dim |
+|-----|---------|---:|--------:|--------:|----------:|----------:|
+| run_003 EMD | MiniLM | 256 | 637 | 0.732 | 74.8% | 1164 |
+| run_005 EMD | MiniLM | 256 | 958 | 0.290 | 84.7% | 1164 |
+| run_007 CORN | nomic | 64 | 1020 | 0.466 | 81.9% | 266 |
+| run_009 EMD | MiniLM | 64 | 1020 | 0.042 | 82.4% | 1164 |
+
+**Conclusion**: Universalism performance is recovered by the encoder switch to nomic (run_007). No additional Universalism persona generation or dimension-specific loss weighting is warranted.
