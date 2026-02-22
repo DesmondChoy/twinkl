@@ -22,6 +22,7 @@ Usage:
 
 from abc import ABC, abstractmethod
 
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -223,6 +224,48 @@ def alignment_to_levels(y: torch.Tensor) -> torch.Tensor:
     return levels  # (batch, 10, 2)
 
 
+def compute_coral_importance_weights(
+    class_counts: np.ndarray,
+    method: str = "inverse_freq",
+) -> torch.Tensor:
+    """Compute per-dimension importance weights for CORAL's binary thresholds.
+
+    CORAL's K-1=2 binary thresholds each split ordinal classes into two groups.
+    When the minority side of a split is rare, the model learns to ignore it.
+    Importance weights scale binary CE at each threshold inversely to the
+    minority side's frequency, forcing the model to attend to rare boundaries.
+
+    Args:
+        class_counts: (n_dims, 3) array — columns are counts for [-1, 0, +1].
+        method: "inverse_freq" (1/count) or "inverse_sqrt" (1/sqrt(count)).
+
+    Returns:
+        (n_dims, 2) tensor — importance weights, normalized so mean=1 per dim.
+    """
+    counts = np.asarray(class_counts, dtype=np.float64)
+    n_dims = counts.shape[0]
+    weights = np.zeros((n_dims, 2), dtype=np.float64)
+
+    for d in range(n_dims):
+        # Threshold 0: separates class -1 from {0, +1} → minority is n(-1)
+        # Threshold 1: separates {-1, 0} from +1 → minority is n(+1)
+        minority = np.array([counts[d, 0], counts[d, 2]])
+        minority = np.clip(minority, 1.0, None)  # avoid division by zero
+
+        if method == "inverse_freq":
+            raw = 1.0 / minority
+        elif method == "inverse_sqrt":
+            raw = 1.0 / np.sqrt(minority)
+        else:
+            raise ValueError(f"Unknown method: {method!r}. Use 'inverse_freq' or 'inverse_sqrt'.")
+
+        # Normalize so mean(w[d,:]) = 1.0
+        raw *= 2.0 / raw.sum()
+        weights[d] = raw
+
+    return torch.tensor(weights, dtype=torch.float32)
+
+
 def coral_loss_multi(
     logits: torch.Tensor,
     y: torch.Tensor,
@@ -239,6 +282,56 @@ def coral_loss_multi(
     levels = alignment_to_levels(y)  # (batch, 10, 2)
     levels_flat = levels.view(batch * NUM_DIMS, LOGITS_PER_DIM)  # (B*10, 2)
     return _coral_loss(logits_flat, levels_flat)
+
+
+def coral_loss_multi_weighted(
+    logits: torch.Tensor,
+    y: torch.Tensor,
+    importance_weights: torch.Tensor,
+) -> torch.Tensor:
+    """Weighted CORAL loss with per-dimension importance weights.
+
+    Unlike coral_loss_multi which flattens all dimensions into one call,
+    this loops over dimensions so each gets its own importance_weights pair.
+    This is necessary because class distributions vary dramatically across
+    dimensions (e.g., stimulation 3.5% class -1 vs self_direction 14%).
+
+    Args:
+        logits: (batch, 20) raw logits from CriticMLPCORAL.
+        y: (batch, 10) with values in {-1, 0, 1}.
+        importance_weights: (10, 2) per-dimension threshold weights from
+            compute_coral_importance_weights().
+
+    Returns:
+        Scalar loss, mean over dimensions (each already batch-reduced).
+
+    Raises:
+        ValueError: If importance_weights shape is not (NUM_DIMS, LOGITS_PER_DIM).
+    """
+    if importance_weights.shape != (NUM_DIMS, LOGITS_PER_DIM):
+        raise ValueError(
+            f"importance_weights shape must be ({NUM_DIMS}, {LOGITS_PER_DIM}), "
+            f"got {tuple(importance_weights.shape)}"
+        )
+
+    batch = logits.size(0)
+    logits_3d = logits.view(batch, NUM_DIMS, LOGITS_PER_DIM)  # (B, 10, 2)
+    levels = alignment_to_levels(y)  # (B, 10, 2)
+
+    # Move weights to same device as logits if needed
+    if importance_weights.device != logits.device:
+        importance_weights = importance_weights.to(logits.device)
+
+    dim_losses = []
+    for d in range(NUM_DIMS):
+        loss_d = _coral_loss(
+            logits_3d[:, d, :],
+            levels[:, d, :],
+            importance_weights=importance_weights[d],
+        )
+        dim_losses.append(loss_d)
+
+    return torch.stack(dim_losses).mean()
 
 
 class CriticMLPCORAL(OrdinalCriticBase):
@@ -512,9 +605,13 @@ def soft_ordinal_loss_multi(
 
     # KL divergence: sum over classes, mean over batch and dimensions
     log_probs = F.log_softmax(logits_3d, dim=-1)
+    # batchmean reduction sums over classes and averages over batch, but sums over
+    # other dimensions (here, the 10 value dimensions). We divide by NUM_DIMS
+    # to get the mean over both batch and dimensions, matching the scale of
+    # other losses like EMD and CORAL.
     kl = F.kl_div(log_probs, soft_targets, reduction="batchmean")
 
-    return kl
+    return kl / NUM_DIMS
 
 
 class CriticMLPSoftOrdinal(OrdinalCriticBase):

@@ -343,6 +343,7 @@ def _loss_shorthand(model_name: str, config: dict) -> str:
     """
     mapping = {
         "CORAL": "coral",
+        "CORAL_IW": "coral_iw",
         "CORN": "corn",
         "EMD": "emd",
         "SoftOrdinal": "soft_ordinal",

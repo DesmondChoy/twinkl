@@ -1,5 +1,6 @@
 """Tests for ordinal loss functions."""
 
+import numpy as np
 import torch
 import pytest
 
@@ -202,3 +203,128 @@ class TestSoftOrdinalLoss:
 
         assert logits.grad is not None
         assert not torch.all(logits.grad == 0)
+
+
+class TestCoralLossWeighted:
+    """Tests for weighted CORAL loss and importance weight computation."""
+
+    def test_uniform_weights_match_unweighted(self):
+        """Uniform weights (all 1.0) should produce the same loss as coral_loss_multi.
+
+        This is the critical correctness test: validates that the per-dimension
+        loop restructuring in coral_loss_multi_weighted is equivalent to the
+        flattened approach in coral_loss_multi when no reweighting is applied.
+        """
+        from src.vif.critic_ordinal import coral_loss_multi, coral_loss_multi_weighted
+
+        torch.manual_seed(42)
+        logits = torch.randn(8, 20)
+        y = torch.randint(-1, 2, (8, 10)).float()
+        uniform_weights = torch.ones(10, 2)
+
+        loss_unweighted = coral_loss_multi(logits, y)
+        loss_weighted = coral_loss_multi_weighted(logits, y, uniform_weights)
+
+        assert torch.allclose(loss_unweighted, loss_weighted, atol=1e-5), (
+            f"Uniform-weighted loss {loss_weighted.item():.6f} != "
+            f"unweighted loss {loss_unweighted.item():.6f}"
+        )
+
+    def test_weighted_loss_scalar_output(self):
+        """Weighted loss should return a positive scalar tensor."""
+        from src.vif.critic_ordinal import coral_loss_multi_weighted
+
+        logits = torch.randn(4, 20)
+        y = torch.randint(-1, 2, (4, 10)).float()
+        weights = torch.rand(10, 2) + 0.1  # positive weights
+
+        loss = coral_loss_multi_weighted(logits, y, weights)
+
+        assert loss.dim() == 0
+        assert loss.item() > 0
+
+    def test_weighted_loss_gradient_flow(self):
+        """Gradients should propagate through weighted loss."""
+        from src.vif.critic_ordinal import coral_loss_multi_weighted
+
+        logits = torch.randn(4, 20, requires_grad=True)
+        y = torch.randint(-1, 2, (4, 10)).float()
+        weights = torch.ones(10, 2)
+
+        loss = coral_loss_multi_weighted(logits, y, weights)
+        loss.backward()
+
+        assert logits.grad is not None
+        assert logits.grad.shape == (4, 20)
+        assert not torch.all(logits.grad == 0)
+
+    def test_nonuniform_weights_change_loss(self):
+        """Non-uniform weights should produce a different loss than uniform."""
+        from src.vif.critic_ordinal import coral_loss_multi_weighted
+
+        torch.manual_seed(42)
+        logits = torch.randn(8, 20)
+        y = torch.randint(-1, 2, (8, 10)).float()
+
+        uniform = torch.ones(10, 2)
+        nonuniform = torch.ones(10, 2)
+        nonuniform[0, 0] = 5.0  # heavily weight threshold 0 of first dim
+
+        loss_uniform = coral_loss_multi_weighted(logits, y, uniform)
+        loss_nonuniform = coral_loss_multi_weighted(logits, y, nonuniform)
+
+        assert not torch.allclose(loss_uniform, loss_nonuniform, atol=1e-6)
+
+    def test_compute_importance_weights_shape(self):
+        """compute_coral_importance_weights should return (n_dims, 2) tensor."""
+        from src.vif.critic_ordinal import compute_coral_importance_weights
+
+        counts = np.array([[50, 800, 150]] * 10)  # 10 dims
+        weights = compute_coral_importance_weights(counts)
+
+        assert weights.shape == (10, 2)
+        assert weights.dtype == torch.float32
+
+    def test_compute_importance_weights_normalized(self):
+        """Per-dimension weights should have mean=1.0."""
+        from src.vif.critic_ordinal import compute_coral_importance_weights
+
+        counts = np.array([
+            [51, 1282, 127],   # stimulation-like
+            [204, 859, 397],   # self_direction-like
+            [56, 1246, 158],   # universalism-like
+        ])
+        weights = compute_coral_importance_weights(counts)
+
+        for d in range(3):
+            dim_mean = weights[d].mean().item()
+            assert abs(dim_mean - 1.0) < 1e-5, (
+                f"Dim {d} mean weight {dim_mean:.6f} != 1.0"
+            )
+
+    def test_compute_importance_weights_methods(self):
+        """Both 'inverse_freq' and 'inverse_sqrt' should return valid results."""
+        from src.vif.critic_ordinal import compute_coral_importance_weights
+
+        counts = np.array([[50, 800, 150]] * 5)
+
+        for method in ["inverse_freq", "inverse_sqrt"]:
+            weights = compute_coral_importance_weights(counts, method=method)
+            assert weights.shape == (5, 2)
+            assert torch.all(weights > 0)
+            # Each dim's mean should be 1.0
+            for d in range(5):
+                assert abs(weights[d].mean().item() - 1.0) < 1e-5
+
+    def test_weighted_loss_rejects_wrong_shape(self):
+        """Wrong importance_weights shape should raise ValueError."""
+        from src.vif.critic_ordinal import coral_loss_multi_weighted
+
+        logits = torch.randn(4, 20)
+        y = torch.randint(-1, 2, (4, 10)).float()
+
+        with pytest.raises(ValueError, match="importance_weights shape"):
+            coral_loss_multi_weighted(logits, y, torch.ones(5, 2))
+
+        with pytest.raises(ValueError, match="importance_weights shape"):
+            coral_loss_multi_weighted(logits, y, torch.ones(10, 3))
