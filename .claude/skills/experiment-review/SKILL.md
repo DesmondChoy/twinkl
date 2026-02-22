@@ -50,7 +50,7 @@ Before generating your analytical report, check all run YAML files for empty `pr
    - Comparison with the previous run (if `provenance.prev_run_id` exists)
    - A placeholder is any value containing `<fill in` or that is empty.
 
-3. **Write back**: Use the Edit tool to update only the empty/placeholder fields in the YAML files. **Never overwrite** fields that already contain meaningful content.
+3. **Write back**: Use the Edit tool to update only fields that are empty or contain a placeholder (any value matching `<fill in`). **Never overwrite** fields that already have substantive content — i.e., anything that is neither empty nor a placeholder.
 
 Once all historical context and observations are properly recorded, proceed to generate the cross-run comparison report.
 
@@ -99,8 +99,16 @@ Identify:
 
 Present as a compact table sorted by mean QWK across all runs.
 
-**Automated Error Analysis:**
-For the 2 hardest dimensions, check if validation prediction logs or evaluation artifacts are available (either in the run directory or by script generation). If feasible, write a read-only script to extract 2–3 journal entries that resulted in the highest Absolute Error. Display the original excerpt, the ground truth label, and the model's prediction to provide qualitative context on *why* the model is struggling.
+**Error Analysis (Hardest Dimensions):**
+For the 2 hardest dimensions (lowest mean QWK), write and execute a temporary read-only Python script that:
+1. Loads the best checkpoint for the top-performing run from its output directory
+2. Runs inference on the validation split
+3. Extracts 2–3 samples with the highest absolute error on each hard dimension
+4. Displays the journal excerpt (truncated to ~100 words), ground-truth label, and model prediction
+
+This provides qualitative context on *why* the model struggles. Do not save artifacts or modify any repository files.
+
+If no checkpoint is available (e.g., it was cleaned up), skip this analysis and note it in the report.
 
 ### 4. Calibration Deep-Dive
 
@@ -111,8 +119,12 @@ For the 2 hardest dimensions, check if validation prediction logs or evaluation 
 
 ### 5. Hedging vs Minority Recall Trade-off
 
-- For each loss function, plot the hedging % against minority recall
-- Identify which losses achieve low hedging AND reasonable minority recall
+- For each run × loss combination, present a comparison table with hedging % and minority recall side by side. Example format:
+
+| Run + Loss | Hedging % | Minority Recall | Verdict |
+|------------|-----------|-----------------|---------|
+
+- Mark configurations that achieve both hedging < 60% **and** minority recall > 30% as **decisive + balanced**
 - Flag any loss where hedging > 60% (over-predicting the majority class)
 
 ### 6. Capacity & Overfitting
