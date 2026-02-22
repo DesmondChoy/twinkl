@@ -53,6 +53,10 @@ uv run pytest
 uv run ruff check .
 ```
 
+The `command_status` tool may lag behind actual command completion.
+Use a maximum 3 s wait (`WaitDurationSeconds: 3`); if the command
+still shows as running, proceed rather than polling repeatedly.
+
 Script-based generation/judging helpers live in `src/synthetic/`,
 `src/judge/`, and `scripts/journalling/`.
 
