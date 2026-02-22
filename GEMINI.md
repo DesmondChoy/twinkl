@@ -68,7 +68,7 @@ Script-based generation/judging helpers live in `src/synthetic/`,
 - `src/judge/` — Judge labeling consolidation
 - `src/wrangling/` — Parsers for synthetic and wrangled persona data
 - `src/models/` — Pydantic models (judge label schema)
-- `src/annotation_tool/` — Streamlit app for human annotation with inter-rater agreement metrics
+- `src/annotation_tool/` — Shiny for Python app for human annotation with inter-rater agreement metrics
 
 ### Configuration and Prompts
 
