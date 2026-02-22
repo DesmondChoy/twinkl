@@ -178,7 +178,6 @@ def compute_qwk_per_dimension(
 def compute_accuracy_per_dimension(
     predictions: np.ndarray,
     targets: np.ndarray,
-    threshold: float = 0.5,
 ) -> dict[str, float]:
     """Compute classification accuracy per dimension.
 
@@ -188,7 +187,6 @@ def compute_accuracy_per_dimension(
     Args:
         predictions: (n_samples, 10) array of predicted alignment scores
         targets: (n_samples, 10) array of true alignment scores (discrete)
-        threshold: Distance from target to count as correct (default: 0.5)
 
     Returns:
         Dict mapping dimension name to accuracy (fraction correct)

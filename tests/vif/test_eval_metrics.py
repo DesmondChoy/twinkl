@@ -278,7 +278,7 @@ class TestAccuracy:
         for v in acc.values():
             assert v == pytest.approx(1.0)
 
-    def test_threshold_behavior(self):
+    def test_discretization_behavior(self):
         """Predictions within [-0.5, 0.5] should discretize to 0.
 
         0.4 → 0 (correct when target=0), 0.6 → 1 (correct when target=1).
