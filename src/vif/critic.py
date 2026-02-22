@@ -150,21 +150,29 @@ class CriticMLP(nn.Module):
             - mean: (batch_size, output_dim) mean predictions
             - std: (batch_size, output_dim) epistemic uncertainty
         """
+        # Save original dropout training state so we can restore it after MC sampling
+        dropout_states = {
+            m: m.training for m in self.modules() if isinstance(m, nn.Dropout)
+        }
         self.enable_dropout()
 
-        samples = []
-        with torch.no_grad():
-            for _ in range(n_samples):
-                pred = self.forward(x)
-                samples.append(pred)
+        try:
+            samples = []
+            with torch.no_grad():
+                for _ in range(n_samples):
+                    pred = self.forward(x)
+                    samples.append(pred)
 
-        # Stack: (n_samples, batch_size, output_dim)
-        stacked = torch.stack(samples, dim=0)
+            # Stack: (n_samples, batch_size, output_dim)
+            stacked = torch.stack(samples, dim=0)
 
-        mean = stacked.mean(dim=0)
-        std = stacked.std(dim=0)
+            mean = stacked.mean(dim=0)
+            std = stacked.std(dim=0)
 
-        return mean, std
+            return mean, std
+        finally:
+            for m, was_training in dropout_states.items():
+                m.training = was_training
 
     def get_config(self) -> dict:
         """Get model configuration for serialization."""

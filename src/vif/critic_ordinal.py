@@ -126,19 +126,27 @@ class OrdinalCriticBase(ABC, nn.Module):
         Returns:
             Tuple of (mean, std) each shaped (batch_size, 10)
         """
+        # Save original dropout training state so we can restore it after MC sampling
+        dropout_states = {
+            m: m.training for m in self.modules() if isinstance(m, nn.Dropout)
+        }
         self.enable_dropout()
 
-        samples = []
-        with torch.no_grad():
-            for _ in range(n_samples):
-                pred = self.predict(x)
-                samples.append(pred)
+        try:
+            samples = []
+            with torch.no_grad():
+                for _ in range(n_samples):
+                    pred = self.predict(x)
+                    samples.append(pred)
 
-        samples = torch.stack(samples, dim=0)  # (n_samples, batch, 10)
-        mean = samples.mean(dim=0)
-        std = samples.std(dim=0)
+            samples = torch.stack(samples, dim=0)  # (n_samples, batch, 10)
+            mean = samples.mean(dim=0)
+            std = samples.std(dim=0)
 
-        return mean, std
+            return mean, std
+        finally:
+            for m, was_training in dropout_states.items():
+                m.training = was_training
 
     def get_config(self) -> dict:
         """Serialize model configuration."""
