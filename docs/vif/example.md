@@ -1,5 +1,16 @@
 # Worked Example: Sarah's Journey Through Twinkl
 
+> **This is a design specification** illustrating Twinkl's target behavior across stages. Not all stages are fully implemented yet:
+>
+> | Stage | Status |
+> |---|---|
+> | Stage 0 (Offline Training) | 🧪 Experimental — pipeline functional; QWK optimization in progress |
+> | Stage 1 (Onboarding) | 📋 Specified |
+> | Stages 2–4 (Journaling + Coach) | ⚠️ Partial — Critic experimental (QWK optimization in progress); Coach digest not implemented |
+> | Stage 5 (High-uncertainty) | ⚠️ Partial — MC Dropout implemented; trigger thresholds under tuning |
+>
+> See the [Implementation Status](../prd.md#implementation-status) table in prd.md for the full breakdown.
+
 This example follows a single user through onboarding and four scenarios, showing which system components are active at each stage.
 
 ## System Components Reference

@@ -12,7 +12,7 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 |---------|--------|---------|
 | **Synthetic Data Pipeline** | ✅ Complete | 120 personas (904 entries) generated via Claude Code parallel subagents; YAML prompt templates with Jinja2; targeted value generation for balanced Schwartz dimension coverage |
 | **Judge Labeling (VIF)** | ✅ Complete | 904 entries labeled across 120 personas; two-phase pipeline (Python wrangling + parallel subagents); consolidated to `judge_labels.parquet` with rationales |
-| **VIF Critic Training** | ✅ Complete | Multiple architectures explored: MLP with MC Dropout, BNN (Bayesian Neural Network), TCN (Temporal Convolutional Network); SBERT text encoder (384-dim); persona-level train/val/test splits; `src/vif/` module with CLI training scripts |
+| **VIF Critic Training** | 🧪 Experimental | Training infrastructure complete; multiple architectures explored (MLP with MC Dropout, BNN, TCN); SBERT text encoder (384-dim); persona-level train/val/test splits; `src/vif/` module with CLI training scripts; QWK metric optimization in progress |
 | **Human Annotation Tool** | ✅ Complete | ~4,200 LOC Shiny app; 46 annotations across 3 annotators; Cohen's κ / Fleiss' κ metrics; modular components with analysis view; annotation ordering for persona prioritization |
 | **Conversational Nudging** | 🧪 Experimental | 3-category LLM classification (clarification/elaboration/tension-surfacing); pending validation that nudging improves VIF signal quality |
 | **Weekly Alignment Coach** | ⚠️ Partial | Entry processing ready; digest generation not implemented |
@@ -84,7 +84,7 @@ AI journaling apps (Reflection, Mindsera, Insight Journal, Day One, Pixel Journa
 2. **Memory:** Tags incrementally update a decay-aware user profile/knowledge base (value weights, goals, tensions, evidence snippets) instead of resetting each week.
 3. **Reasoning + action:** A two-stage evaluative layer powered by the **[Value Identity Function (VIF)](vif/01_concepts_and_roadmap.md)**:
    * **Critic (VIF):** A numeric, uncertainty-aware engine that computes per-value-dimension alignment scores from a sliding window of recent entries. Uses [LLM-as-Judge for reward modeling](vif/03_model_training.md) and [MC Dropout for epistemic uncertainty](vif/04_uncertainty_logic.md). Triggers critiques only when confident and detecting significant patterns (sudden crashes or chronic ruts).
-   * **Coach:** Activated when the Critic identifies significant patterns — whether problematic (crashes, ruts) or positive (sustained alignment). Uses retrieval-augmented generation (RAG) over the user's full journal history to surface thematic evidence, explain *why* misalignment occurred, and offer reflective prompts or "micro-anchors." For positive patterns, provides occasional evidence-based acknowledgment without gamification. (See [System Architecture](vif/02_system_architecture.md)). For a concrete scenario, see [Worked Example: Sarah's Journey](vif/example.md).
+   * **Coach:** Activated when the Critic identifies significant patterns — whether problematic (crashes, ruts) or positive (sustained alignment). Uses retrieval-augmented generation (RAG) over the user's full journal history to surface thematic evidence, explain *why* misalignment occurred, and offer reflective prompts or "micro-anchors." For positive patterns, provides occasional evidence-based acknowledgment without gamification. (See [System Architecture](vif/02_system_architecture.md)). For a concrete scenario, see [Worked Example: Sarah's Journey](vif/example.md). *(Entry processing ready; digest generation not yet implemented — see [Implementation Status](#implementation-status).)*
 
 ### Prompt Templates
 
@@ -106,7 +106,7 @@ Value context is injected from `config/schwartz_values.yaml`, which contains ric
 * Low-friction journaling: prompts reduce blank-page paralysis and encourage regular reflection.
 * Evidence-based reinforcement, not gamification: when users sustain alignment with their values, the system acknowledges it by citing specific behaviors and connecting them to the user's own words — never through streaks, points, leaderboards, or generic praise. Positive feedback is infrequent (only when patterns emerge) and grounded in what the user actually wrote.
 
-## **Onboarding (BWS Values Assessment)**
+## **Onboarding (BWS Values Assessment)** 📋
 
 The onboarding flow uses **Best-Worst Scaling (BWS)** — a forced-choice psychometric technique — to elicit value priorities across 10 Schwartz dimensions while minimizing social desirability bias. The **[Onboarding Spec](onboarding/onboarding_spec.md)** is the source of truth for the canonical flow (number of screens, interaction model, scoring logic, and data output schema). That spec is still subject to change as the design evolves, but this PRD defers to it for onboarding details rather than duplicating them here.
 
@@ -116,16 +116,16 @@ This onboarding directly anchors the capstone submodules: the latent dimensions 
 
 ## **Core Feature Modules**
 
-* **Weekly alignment coach:** Batch entries, run the reasoning engine, ship a 1-page digest (Pattern Recognition + Reasoning).
-* **Conversational introspection agent:** Live mirroring via agent loop (Perception → Cognition → Action) to highlight contradictions mid-conversation. The system uses a three-category **nudge taxonomy**:
+* **Weekly alignment coach** ⚠️: Batch entries, run the reasoning engine, ship a 1-page digest (Pattern Recognition + Reasoning).
+* **Conversational introspection agent** 🧪: Live mirroring via agent loop (Perception → Cognition → Action) to highlight contradictions mid-conversation. The system uses a three-category **nudge taxonomy**:
   - **Clarification** — for vague entries lacking concrete details
   - **Elaboration** — for surface-level entries with unexplored depth
   - **Tension-surfacing** — for hedging language or conflicted statements
 
   Nudge decisions use **LLM-based semantic classification** (not regex/heuristics) to detect when deeper reflection would yield VIF signal. Anti-annoyance logic caps nudges at 2 per 3-entry window. See [pipeline_specs.md](pipeline/pipeline_specs.md) for implementation details.
-* **“Map of Me”:** Embed each entry, visualise trajectories, overlay alignment scores (Pattern Recognition + Intelligent Sensing).
-* **Journaling anomaly radar:** After 2–3 weeks of entries establish cadence baselines, a lightweight time-series/anomaly detector tracks check-in gaps, flags “silent weeks,” cites evidence windows, and triggers empathetic nudges (Pattern Recognition + Architecting).
-* **Goal-aligned inspiration feed:** When the profile shows intent (e.g., “pick up Japanese”) but no supporting activities, call a real-time search API (SerpAPI/Tavily) constrained by what the user enjoys (e.g., highly rated anime) and reason over the results before surfacing next-step suggestions (Intelligent Reasoning + Intelligent Sensing). Each curated option is presented as an explicit choice; the user’s accept/decline actions feed back into the values/identity graph so future nudges learn which media or effort types actually motivate them.
+* **”Map of Me”** ❌: Embed each entry, visualise trajectories, overlay alignment scores (Pattern Recognition + Intelligent Sensing).
+* **Journaling anomaly radar** ❌: After 2–3 weeks of entries establish cadence baselines, a lightweight time-series/anomaly detector tracks check-in gaps, flags “silent weeks,” cites evidence windows, and triggers empathetic nudges (Pattern Recognition + Architecting).
+* **Goal-aligned inspiration feed** ❌: When the profile shows intent (e.g., “pick up Japanese”) but no supporting activities, call a real-time search API (SerpAPI/Tavily) constrained by what the user enjoys (e.g., highly rated anime) and reason over the results before surfacing next-step suggestions (Intelligent Reasoning + Intelligent Sensing). Each curated option is presented as an explicit choice; the user’s accept/decline actions feed back into the values/identity graph so future nudges learn which media or effort types actually motivate them.
 
 **Implementation path**
 

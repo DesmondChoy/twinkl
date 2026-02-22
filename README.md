@@ -2,7 +2,7 @@
 
 Twinkl is an "inner compass" that helps users align their daily behavior with their long-term values. Unlike traditional journaling apps that summarize moods and topics, Twinkl maintains a dynamic self-model of the user's declared priorities and surfaces tensions when behavior drifts from intent. It answers the question: *"Am I living in line with what I said I value?"*
 
-## Value Identity Function (VIF)
+## Value Identity Function (VIF) — 🧪 Critic Training In Progress
 
 The VIF is Twinkl's core evaluative engine. It compares what users *do* (daily journal entries) against what they *value* (their declared priorities) across multiple dimensions like Health, Relationships, and Growth.
 
@@ -11,9 +11,9 @@ Key properties:
 - **Uncertainty-aware**: Holds back judgment when the situation is complex or data is sparse
 - **Trajectory-aware**: Detects patterns over time rather than reacting to single entries
 
-When the VIF detects significant misalignment with high confidence, it triggers the Coach layer to surface evidence-based feedback. See `docs/vif/` for architecture details.
+When the VIF detects significant misalignment with high confidence, it triggers the Coach layer to surface evidence-based feedback (Coach: ⚠️ Partial — entry processing ready; digest generation not implemented). See `docs/vif/` for architecture details.
 
-## Synthetic Data Generation
+## Synthetic Data Generation — ✅ Complete
 
 Bootstraps training data for value tagging and reward modeling. Generates realistic, longitudinal journal entries from synthetic personas with known Schwartz value profiles.
 
@@ -22,9 +22,9 @@ Key features:
 - Longitudinal entries that exhibit value drift, conflicts, and ambiguity
 - Parallel async pipeline for efficient generation
 - Configurable tone, verbosity, and reflection mode per entry
-- Two-way conversational journaling with nudge system (LLM-based classification determines when/how to nudge, LLM generates contextual follow-up questions)
+- 🧪 Two-way conversational journaling with nudge system (LLM-based classification determines when/how to nudge, LLM generates contextual follow-up questions)
 
-**Validation in progress**: Assessing whether nudging helps improve VIF data signal quality. See `docs/pipeline/annotation_guidelines.md` for the study methodology.
+**🧪 Experimental**: Assessing whether nudging helps improve VIF data signal quality. See `docs/pipeline/annotation_guidelines.md` for the study methodology.
 
 See `docs/pipeline/pipeline_specs.md` for implementation details.
 
@@ -57,7 +57,7 @@ See `docs/pipeline/pipeline_specs.md` for implementation details.
 
 See [`docs/pipeline/data_schema.md`](docs/pipeline/data_schema.md) for parquet schemas and query examples.
 
-## Judge Labeling Pipeline
+## Judge Labeling Pipeline — ✅ Complete
 
 Scores synthetic journal entries against the 10 Schwartz value dimensions to create training labels for the VIF. The pipeline uses Claude Code subagents for parallel, consistent scoring.
 
@@ -91,7 +91,7 @@ Registry Check → Auto-Wrangle → Parallel Labeling (subagents) → Validation
 - `src/nudge/decision.py` + `src/nudge/generation.py` — Two-way conversational nudging logic
 - `scripts/journalling/generation_sanity_check.py` — Quick local sanity checks
 
-## Human Annotation Tool
+## Human Annotation Tool — ✅ Complete
 
 Validates LLM Judge labels via blind human annotation across 10 Schwartz value dimensions. Annotators provide independent scores without seeing Judge labels first; the system then computes agreement metrics (Cohen's κ, Fleiss' κ).
 
@@ -121,7 +121,7 @@ Open `http://127.0.0.1:8000` in your browser.
 - `src/annotation_tool/state.py` — Centralized state management
 - `docs/pipeline/annotation_tool_plan.md` — Full implementation plan
 
-## Evaluation Pipeline
+## Evaluation Pipeline — ⚠️ Partial
 
 Sequential validation pipeline for the VIF with four stages:
 1. **Judge Validation** — Training data quality (Cohen's κ > 0.60)
@@ -130,6 +130,19 @@ Sequential validation pipeline for the VIF with four stages:
 4. **Explanation Quality** — Explanations are grounded and useful
 
 See [`docs/evals/overview.md`](docs/evals/overview.md) for the full pipeline overview and current status.
+
+## Known Gaps
+
+| Capability | Status | Note |
+|---|---|---|
+| Onboarding (BWS Values Assessment) | 📋 Specified | Flow designed; not yet implemented |
+| Coach digest generation | ⚠️ Partial | Entry processing ready; weekly digest not built |
+| Nudge signal quality validation | 🧪 Experimental | Annotation study in progress |
+| "Map of Me" visualization | ❌ Not Started | Embedding trajectories |
+| Journaling anomaly radar | ❌ Not Started | Cadence/gap detection |
+| Goal-aligned inspiration feed | ❌ Not Started | External API integration |
+
+For the full breakdown, see the [Implementation Status](docs/prd.md#implementation-status) table in prd.md.
 
 # Setup
 
