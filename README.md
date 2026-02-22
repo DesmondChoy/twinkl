@@ -2,7 +2,12 @@
 
 Twinkl is an "inner compass" that helps users align their daily behavior with their long-term values. Unlike traditional journaling apps that summarize moods and topics, Twinkl maintains a dynamic self-model of the user's declared priorities and surfaces tensions when behavior drifts from intent. It answers the question: *"Am I living in line with what I said I value?"*
 
-## Value Identity Function (VIF) — 🧪 Critic Training In Progress
+> **Project status:** Twinkl is under active development as an academic capstone. Status markers in each section indicate capability maturity:
+> ✅ Complete · 🧪 Experimental · ⚠️ Partial · 📋 Specified · ❌ Not Started
+>
+> See [Known Gaps](#known-gaps) for the summary and [Implementation Status](docs/prd.md#implementation-status) for the full breakdown.
+
+## Value Identity Function (VIF) — 🧪 Experimental
 
 The VIF is Twinkl's core evaluative engine. It compares what users *do* (daily journal entries) against what they *value* (their declared priorities) across multiple dimensions like Health, Relationships, and Growth.
 
@@ -11,7 +16,9 @@ Key properties:
 - **Uncertainty-aware**: Holds back judgment when the situation is complex or data is sparse
 - **Trajectory-aware**: Detects patterns over time rather than reacting to single entries
 
-When the VIF detects significant misalignment with high confidence, it triggers the Coach layer to surface evidence-based feedback (Coach: ⚠️ Partial — entry processing ready; digest generation not implemented). See `docs/vif/` for architecture details.
+These are target design properties. The Critic model infrastructure is functional (MLP + MC Dropout, SBERT encoder, CLI training scripts) but **QWK metric optimization is in progress** — see the [Implementation Status](docs/prd.md#implementation-status) for details.
+
+**Target behavior:** When the VIF detects significant misalignment with high confidence, it triggers the Coach layer to surface evidence-based feedback. Currently the Coach is ⚠️ Partial — entry processing is ready but digest generation is not yet implemented. See `docs/vif/` for architecture details.
 
 ## Synthetic Data Generation — ✅ Complete
 
