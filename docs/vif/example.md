@@ -121,13 +121,13 @@ Sarah has been journaling for a month. Here's this week's entry:
 |-----------|--------|----------|
 | Generator | N/A | Only used during offline training |
 | Judge | N/A | Critic is confident; no need to escalate |
-| Critic | **ACTIVE** | Scores entry against Sarah's two values |
+| Critic | **ACTIVE** | Scores entry across all 10 value dimensions |
 | Coach | **ACTIVE** (occasional) | Offers evidence-based acknowledgment |
 
 ### Critic's Processing
 
 **Input:** SBERT embedding of journal entry + Sarah's profile
-**Output:** Scores only for Sarah's declared values
+**Output:** Alignment scores across all 10 Schwartz dimensions (showing Sarah's declared values below)
 
 **This Week's Scores:**
 
@@ -135,6 +135,8 @@ Sarah has been journaling for a month. Here's this week's entry:
 |-------|-------|-----------------|----------------|
 | Benevolence | +0.9 | 0.2 (low) | Aligned — prioritized Emma, fully present |
 | Self-Direction | +0.6 | 0.3 (low) | Aligned — creative work with energy and ownership |
+
+> _The Critic always outputs all 10 Schwartz dimension scores. Tables in this walkthrough show only Benevolence and Self-Direction — Sarah's declared values — because those drive crash/rut detection for her profile. The remaining 8 dimensions are scored but not surfaced to the Coach unless they cross thresholds._
 
 **Trajectory Check (4-week rolling averages):**
 - Benevolence: +0.8 → stable
