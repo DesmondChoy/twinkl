@@ -4,13 +4,13 @@
 
 | Rank | Run + Loss | Encoder | hd | n_train | QWK | Cal | MAE | Acc | MinR | Rationale |
 |------|-----------|---------|---:|--------:|----:|----:|----:|----:|-----:|-----------|
-| 1 | run_007 CORN | nomic-256d | 64 | 1020 | **0.413** | **0.838** | 0.205 | 0.821 | 0.285 | Best QWK on expanded data with good calibration. Conformity breakthrough (0.535). |
-| 2 | run_007 CORAL | nomic-256d | 64 | 1020 | 0.367 | 0.830 | 0.208 | 0.819 | 0.247 | Strong calibration, benevolence QWK 0.532. Stable across capacity changes. |
-| 3 | run_008 EMD | nomic-256d | 128 | 1020 | 0.365 | 0.802 | **0.200** | 0.821 | 0.300 | Best MAE ever. Stimulation QWK 0.667. Most capacity-robust loss function. |
+| 1 | run_010 CORN | nomic-256d | 64 | 1020 | **0.434** | 0.835 | **0.206** | 0.821 | 0.285 | New SOTA QWK (moderate) after reverting hd=128→64. Strong recovery on power (+0.362 vs run_008 CORN). |
+| 2 | run_007 CORN | nomic-256d | 64 | 1020 | 0.413 | 0.838 | 0.205 | 0.821 | 0.285 | Previous leader; remains highly competitive with comparable MAE/Acc and slightly higher calibration. |
+| 3 | run_011 EMD | nomic-256d | 64 | 1020 | 0.382 | **0.846** | 0.214 | 0.821 | **0.308** | Best minority recall among recent nomic runs and lower hedging (78.6%), though QWK trails CORN. |
 
-> **Key insight**: nomic-embed at hd=64 is the sweet spot. All top-3 are nomic-based on the 1020-sample dataset. MiniLM is no longer competitive on the expanded data.
+> **Key insight**: nomic-embed at hd=64 remains the sweet spot for QWK. `run_010 CORN` is now the state of the art, while `run_011 EMD` is the strongest trade-off when minority recall is prioritized. ws=2 (run_011) hurt across all metrics vs ws=1 (run_010); extra history adds noise without useful temporal signal.
 >
-> **Primary bottleneck**: QWK (0.413) is fair but below the moderate threshold (>0.4). More critically, -1 recall is just 10.3% — the model almost completely fails to detect value misalignment, which is the signal Twinkl exists to surface. Hedging exceeds 80% across all runs. Next experiments should target class-imbalance interventions (loss reweighting, focal loss, oversampling) to boost minority recall alongside QWK. See [`docs/evals/value_modeling_eval.md`](../../docs/evals/value_modeling_eval.md) for metric definitions and targets.
+> **Primary bottleneck**: even with QWK 0.434 (moderate), `run_010 CORN` still has `recall_minus1 = 8.9%` and hedging at 82.0%, so the critic under-detects misalignment. Automated investigation found Power's validation set has only 23 non-zero examples (90% neutral), making model selection random for this dimension. Next experiments should: (1) apply post-hoc logit adjustment to a **softmax** head first (e.g., `run_011 SoftOrdinal`), using `logit_adj_k = logit_k - tau * log(pi_k)` from training priors; (2) implement CDW-CE loss ([Polat et al. 2025](https://arxiv.org/abs/2412.01246)) with per-dimension class weights for distance-weighted ordinal penalties; (3) fix per-dimension stratified validation splits. CORAL_IW should be dropped (consistently degraded QWK and minority recall). See [`docs/evals/value_modeling_eval.md`](../../docs/evals/value_modeling_eval.md) for metric definitions and targets.
 
 ## Run Log
 
@@ -60,6 +60,11 @@
 | 010 | CORN | nomic-256d | 1 | 64 | 0.3 | corn | 22804 | 22.4 | 0.206 | 0.821 | 0.434 | 0.407 | 0.835 | 0.285 | runs/run_010_CORN.yaml |
 | 010 | EMD | nomic-256d | 1 | 64 | 0.3 | emd | 23454 | 23.0 | 0.212 | 0.819 | 0.362 | 0.357 | 0.851 | 0.294 | runs/run_010_EMD.yaml |
 | 010 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 23.0 | 0.211 | 0.818 | 0.308 | 0.352 | 0.860 | 0.284 | runs/run_010_SoftOrdinal.yaml |
+| 011 | CORAL | nomic-256d | 2 | 64 | 0.3 | coral | 39252 | 38.5 | 0.218 | 0.807 | 0.339 | 0.368 | 0.815 | 0.245 | runs/run_011_CORAL.yaml |
+| 011 | CORAL_IW | nomic-256d | 2 | 64 | 0.3 | coral_iw | 39252 | 38.5 | 0.223 | 0.798 | 0.269 | 0.312 | 0.790 | 0.175 | runs/run_011_CORAL_IW.yaml |
+| 011 | CORN | nomic-256d | 2 | 64 | 0.3 | corn | 39252 | 38.5 | 0.209 | 0.814 | 0.335 | 0.388 | 0.811 | 0.232 | runs/run_011_CORN.yaml |
+| 011 | EMD | nomic-256d | 2 | 64 | 0.3 | emd | 39902 | 39.1 | 0.214 | 0.821 | 0.382 | 0.359 | 0.846 | 0.308 | runs/run_011_EMD.yaml |
+| 011 | SoftOrdinal | nomic-256d | 2 | 64 | 0.3 | soft_ordinal | 39902 | 39.1 | 0.222 | 0.820 | 0.333 | 0.349 | 0.862 | 0.312 | runs/run_011_SoftOrdinal.yaml |
 <!-- AUTO-TABLE:END -->
 
 ## Findings
