@@ -1,4 +1,4 @@
-# Experiment Review — 2026-02-22
+# Experiment Review — 2026-02-22 (Updated 2026-02-24)
 
 ## 1. Experiment Overview
 
@@ -98,6 +98,8 @@ Computed across all 30 nomic run files (runs 002, 004, 006–011).
 - **Global calibration range** (nomic only): 0.734 (run_004 CORN) to 0.862 (run_011 SoftOrdinal).
 - **Best calibrated loss**: SoftOrdinal (mean 0.833 across nomic runs), followed by EMD (0.828).
 - **Worst calibrated loss**: CORAL_IW (mean 0.816 in run_010/011), despite being designed to improve minority handling.
+- **Historical Note**: `weighted_mse_s5.0` (run_002) heavily damaged calibration (-0.073), prompting its removal from latest runs.
+- **Dimension Specifics**: **Self-Direction** displays the weakest dimension-level calibration (~0.538). This suggests the model is frequently over-confident and incorrect when predicting Self-Direction alignment.
 
 | Loss | Mean Cal (nomic runs) | Min Cal | Max Cal |
 |---|---:|---:|---:|
@@ -147,7 +149,11 @@ These 11 runs tell a consistent story: **the critic has learned the ordinal stru
 
 ### Hidden Interactions
 
-**1. Label skew × split instability on Power**: Automated investigation of `judge_labels.parquet` (seed 2025, n=1460) reveals a severe split artifact:
+**1. Label skew × split instability on Power**: Automated investigation of `judge_labels.parquet` (seed 2025, n=1460) reveals severe underlying target sparsities that trigger the hedging limits:
+- **Power (Overall)**: 81.3% (Label 0), 10.4% (+1), 8.3% (-1)
+- **Security (Overall)**: 75.3% (Label 0), 15.3% (+1), 9.3% (-1)
+
+This massive class imbalance is compounded by a severe split artifact:
 - **Power validation set**: only 23 non-zero examples (12 neg, 11 pos) across just 10 personas — **90% neutral**
 - **Power test set**: 65 non-zero examples (27 neg, 38 pos) — **28.3% non-zero**, 3x richer than val
 
