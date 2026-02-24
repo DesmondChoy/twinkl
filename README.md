@@ -16,9 +16,23 @@ Key properties:
 - **Uncertainty-aware**: Holds back judgment when the situation is complex or data is sparse
 - **Trajectory-aware**: Detects patterns over time rather than reacting to single entries
 
-These are target design properties. The Critic model infrastructure is functional (MLP + MC Dropout, SBERT encoder, CLI training scripts) but **QWK metric optimization is in progress** — see the [Implementation Status](docs/prd.md#implementation-status) for details.
+These are target design properties. The Critic model infrastructure is functional (MLP ordinal base + MC Dropout, nomic-embed-text-v1.5 encoder, CLI training scripts) but **QWK metric optimization is in progress** — see the [Implementation Status](docs/prd.md#implementation-status) for details.
 
 **Target behavior:** When the VIF detects significant misalignment with high confidence, it triggers the Coach layer to surface evidence-based feedback. Currently the Coach is ⚠️ Partial — entry processing is ready but digest generation is not yet implemented. See `docs/vif/` for architecture details.
+
+### Automated Experiment Logging & Review
+
+An automated logging system tracks VIF training experiments. Each time the critic v2 notebooks are run, metadata, configurations, model capacity, and evaluation metrics are written to `logs/experiments/runs/`.
+
+An AI **experiment-review skill** acts as an autonomous data science partner to process these runs. Rather than mechanically tuning hyperparameters, it synthesizes results to provide research-backed insights and hypotheses.
+
+**To trigger it:** Point any capable LLM at `/.claude/skills/experiment-review/SKILL.md` and ask it to read the skill and run it via the instructions.
+
+**What it does:** 
+- **Intelligent Backfilling**: Reads `git` logs and configuration diffs to reconstruct the rationale for past runs, automatically backfilling missing provenance and observations.
+- **Data Science Partner**: Synthesizes interacting variables (e.g., encoder choice vs model capacity) to form hypotheses about the model's fundamental understanding of the task.
+- **Research Colleague**: Actively browses the web for state-of-the-art literature to validate its recommendations for next-step experiments.
+- **Reporting**: Produces a structured analysis of metric trade-offs (e.g., hedging vs minority recall) and maintains a leaderboard of the best models.
 
 ## Synthetic Data Generation — ✅ Complete
 
@@ -39,28 +53,28 @@ See `docs/pipeline/pipeline_specs.md` for implementation details.
 
 | Metric | Value |
 |--------|-------|
-| Personas | 120 |
-| Journal entries | 904 |
-| Avg entries/persona | 7.5 |
-| Entries with nudges | 66.7% |
+| Personas | 180 |
+| Journal entries | 1460 |
+| Avg entries/persona | 8.1 |
+| Entries with nudges | 48.4% |
 
 **Demographics:** 6 cultures, 9 professions, 5 age brackets.
 
 **Schwartz Value Distribution** (personas can have 1-2 values):
 | Value | Personas | % |
 |-------|----------|---|
-| Universalism | 34 | 28% |
-| Hedonism | 19 | 16% |
-| Conformity | 17 | 14% |
-| Stimulation | 17 | 14% |
-| Security | 15 | 12% |
-| Tradition | 15 | 12% |
-| Benevolence | 14 | 12% |
-| Self-Direction | 14 | 12% |
-| Power | 14 | 12% |
-| Achievement | 13 | 11% |
+| Universalism | 32 | 18% |
+| Power | 31 | 17% |
+| Tradition | 28 | 16% |
+| Conformity | 28 | 16% |
+| Hedonism | 27 | 15% |
+| Benevolence | 25 | 14% |
+| Achievement | 25 | 14% |
+| Self-Direction | 24 | 13% |
+| Security | 24 | 13% |
+| Stimulation | 24 | 13% |
 
-**Nudge types:** Elaboration (43%), Tension Surfacing (41%), Clarification (15%)
+**Nudge types:** Tension Surfacing (42%), Elaboration (42%), Clarification (16%)
 
 See [`docs/pipeline/data_schema.md`](docs/pipeline/data_schema.md) for parquet schemas and query examples.
 
