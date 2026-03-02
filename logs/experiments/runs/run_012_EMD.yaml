@@ -1,0 +1,153 @@
+# VIF Experiment: run_012_EMD
+# Generated: 2026-03-02T17:50:23
+# Git: 1af9f36(dirty)
+metadata:
+  experiment_id: run_012_EMD
+  run_id: run_012
+  model_name: EMD
+  timestamp: '2026-03-02T17:50:23'
+  git_commit: 1af9f36(dirty)
+  config_hash: 35a74d1b27ff
+provenance:
+  prev_run_id: run_011
+  prev_git_commit: 262f820(dirty)
+  git_log:
+  - '1af9f36 fix: Cleaned up notebook'
+  - 'afa7301 feat: init rough sketch for critic training v3'
+  - 404b2f7 Add bws onboarding notebook
+  - '00aa284 docs: update README with current datasets and VIF details (twinkl-652)'
+  - 'b1b4b42 docs: add command_status tool lag guidance to GEMINI.md'
+  - 'ca0c39f chore(vif): add experiment runs 010-011 with ws and CORAL_IW ablations'
+  - '2687cf4 docs(experiments): align logit-adjustment recommendations (twinkl-651)'
+  config_delta:
+    added: {}
+    removed: {}
+    changed: {}
+  rationale: ''
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 2
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 523
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: emd
+    learning_rate: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1020
+  n_val: 230
+  n_test: 210
+capacity:
+  n_parameters: 39902
+  param_sample_ratio: 39.1196
+training_dynamics:
+  best_epoch: 7
+  total_epochs: 27
+  train_loss_at_best: 0.1505
+  val_loss_at_best: 0.1375
+  gap_at_best: -0.0131
+  final_lr: 0.0005
+evaluation:
+  mae_mean: 0.2129
+  accuracy_mean: 0.8076
+  qwk_mean: 0.3689
+  spearman_mean: 0.3575
+  calibration_global: 0.8567
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.1541
+  minority_recall_mean: 0.3643
+  recall_minus1: 0.0651
+  recall_plus1: 0.6634
+  hedging_mean: 0.7924
+per_dimension:
+  self_direction:
+    mae: 0.4381
+    accuracy: 0.6048
+    qwk: 0.3897
+    spearman: 0.4355
+    calibration: 0.6179
+    hedging: 0.5762
+  stimulation:
+    mae: 0.0762
+    accuracy: 0.9286
+    qwk: 0.593
+    spearman: 0.5154
+    calibration: 0.9275
+    hedging: 0.9048
+  hedonism:
+    mae: 0.1429
+    accuracy: 0.8667
+    qwk: 0.4254
+    spearman: 0.3353
+    calibration: 0.9124
+    hedging: 0.881
+  achievement:
+    mae: 0.1571
+    accuracy: 0.8524
+    qwk: 0.3877
+    spearman: 0.3026
+    calibration: 0.7676
+    hedging: 0.8667
+  power:
+    mae: 0.0714
+    accuracy: 0.9429
+    qwk: -0.0825
+    spearman: -0.0872
+    calibration: 0.9247
+    hedging: 0.9714
+  security:
+    mae: 0.3476
+    accuracy: 0.6952
+    qwk: 0.1582
+    spearman: 0.1696
+    calibration: 0.7215
+    hedging: 0.8048
+  conformity:
+    mae: 0.2286
+    accuracy: 0.7762
+    qwk: 0.5774
+    spearman: 0.6161
+    calibration: 0.7318
+    hedging: 0.7286
+  tradition:
+    mae: 0.1333
+    accuracy: 0.8667
+    qwk: 0.5599
+    spearman: 0.4679
+    calibration: 0.8398
+    hedging: 0.8476
+  benevolence:
+    mae: 0.2667
+    accuracy: 0.7333
+    qwk: 0.5025
+    spearman: 0.5269
+    calibration: 0.7795
+    hedging: 0.6429
+  universalism:
+    mae: 0.2667
+    accuracy: 0.8095
+    qwk: 0.1778
+    spearman: 0.2927
+    calibration: 0.9462
+    hedging: 0.7
+observations: ''

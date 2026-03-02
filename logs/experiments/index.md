@@ -65,6 +65,11 @@
 | 011 | CORN | nomic-256d | 2 | 64 | 0.3 | corn | 39252 | 38.5 | 0.209 | 0.814 | 0.335 | 0.388 | 0.811 | 0.232 | runs/run_011_CORN.yaml |
 | 011 | EMD | nomic-256d | 2 | 64 | 0.3 | emd | 39902 | 39.1 | 0.214 | 0.821 | 0.382 | 0.359 | 0.846 | 0.308 | runs/run_011_EMD.yaml |
 | 011 | SoftOrdinal | nomic-256d | 2 | 64 | 0.3 | soft_ordinal | 39902 | 39.1 | 0.222 | 0.820 | 0.333 | 0.349 | 0.862 | 0.312 | runs/run_011_SoftOrdinal.yaml |
+| 012 | CORAL | nomic-256d | 2 | 64 | 0.3 | coral | 39252 | 38.5 | 0.209 | 0.806 | 0.359 | 0.381 | 0.812 | 0.342 | runs/run_012_CORAL.yaml |
+| 012 | CORAL_IW | nomic-256d | 2 | 64 | 0.3 | coral_iw | 39252 | 38.5 | 0.214 | 0.801 | 0.271 | 0.304 | 0.802 | 0.265 | runs/run_012_CORAL_IW.yaml |
+| 012 | CORN | nomic-256d | 2 | 64 | 0.3 | corn | 39252 | 38.5 | 0.193 | 0.820 | 0.346 | 0.396 | 0.804 | 0.296 | runs/run_012_CORN.yaml |
+| 012 | EMD | nomic-256d | 2 | 64 | 0.3 | emd | 39902 | 39.1 | 0.213 | 0.808 | 0.369 | 0.357 | 0.857 | 0.364 | runs/run_012_EMD.yaml |
+| 012 | SoftOrdinal | nomic-256d | 2 | 64 | 0.3 | soft_ordinal | 39902 | 39.1 | 0.224 | 0.801 | 0.334 | 0.356 | 0.850 | 0.391 | runs/run_012_SoftOrdinal.yaml |
 <!-- AUTO-TABLE:END -->
 
 ## Findings
