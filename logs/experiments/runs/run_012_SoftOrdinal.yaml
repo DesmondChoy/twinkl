@@ -23,7 +23,10 @@ provenance:
     added: {}
     removed: {}
     changed: {}
-  rationale: ''
+  rationale: >-
+    Re-ran the run_011 ws=2 nomic baseline under critic_training_v3 code changes (logger/notebook
+    cleanup, no config deltas) to check run-to-run stability on the fixed 1020-sample split and
+    quantify stochastic variance before introducing new architecture changes.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -150,4 +153,10 @@ per_dimension:
     spearman: 0.2053
     calibration: 0.9139
     hedging: 0.7381
-observations: ''
+observations: >-
+  run_012 SoftOrdinal records QWK 0.334 (fair), calibration 0.850 (good), MAE 0.224, accuracy
+  0.801, minority recall 0.391, and hedging 77.9% (moderate). Compared with run_011 SoftOrdinal,
+  QWK is +0.001, calibration -0.012, minority recall +0.079, and hedging +0.1%. Largest QWK gains
+  are stimulation 0.636 (+0.091), universalism 0.141 (+0.015); largest regressions are power
+  -0.225 (-0.029), tradition 0.449 (-0.069). The hardest dimension in this run is power at QWK
+  -0.225.

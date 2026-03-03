@@ -23,7 +23,10 @@ provenance:
     added: {}
     removed: {}
     changed: {}
-  rationale: ''
+  rationale: >-
+    Re-ran the run_011 ws=2 nomic baseline under critic_training_v3 code changes (logger/notebook
+    cleanup, no config deltas) to check run-to-run stability on the fixed 1020-sample split and
+    quantify stochastic variance before introducing new architecture changes.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -150,4 +153,10 @@ per_dimension:
     spearman: 0.2215
     calibration: 0.8023
     hedging: 0.9429
-observations: ''
+observations: >-
+  run_012 CORAL_IW records QWK 0.271 (fair), calibration 0.802 (good), MAE 0.214, accuracy 0.801,
+  minority recall 0.265, and hedging 87.0% (excessive). Compared with run_011 CORAL_IW, QWK is
+  +0.002, calibration +0.012, minority recall +0.090, and hedging +0.0%. Largest QWK gains are
+  universalism 0.030 (+0.027), tradition 0.114 (+0.074); largest regressions are self_direction
+  0.395 (-0.041), stimulation 0.402 (-0.030). The hardest dimension in this run is power at QWK
+  0.015.

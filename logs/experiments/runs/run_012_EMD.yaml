@@ -23,7 +23,10 @@ provenance:
     added: {}
     removed: {}
     changed: {}
-  rationale: ''
+  rationale: >-
+    Re-ran the run_011 ws=2 nomic baseline under critic_training_v3 code changes (logger/notebook
+    cleanup, no config deltas) to check run-to-run stability on the fixed 1020-sample split and
+    quantify stochastic variance before introducing new architecture changes.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -150,4 +153,9 @@ per_dimension:
     spearman: 0.2927
     calibration: 0.9462
     hedging: 0.7
-observations: ''
+observations: >-
+  run_012 EMD records QWK 0.369 (fair), calibration 0.857 (good), MAE 0.213, accuracy 0.808,
+  minority recall 0.364, and hedging 79.2% (moderate). Compared with run_011 EMD, QWK is -0.013,
+  calibration +0.011, minority recall +0.056, and hedging +0.6%. Largest QWK gains are
+  stimulation 0.593 (+0.051), tradition 0.560 (+0.053); largest regressions are power -0.083
+  (-0.098), universalism 0.178 (-0.072). The hardest dimension in this run is power at QWK -0.083.

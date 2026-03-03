@@ -23,7 +23,10 @@ provenance:
     added: {}
     removed: {}
     changed: {}
-  rationale: ''
+  rationale: >-
+    Re-ran the run_011 ws=2 nomic baseline under critic_training_v3 code changes (logger/notebook
+    cleanup, no config deltas) to check run-to-run stability on the fixed 1020-sample split and
+    quantify stochastic variance before introducing new architecture changes.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -150,4 +153,9 @@ per_dimension:
     spearman: 0.4172
     calibration: 0.9238
     hedging: 0.7619
-observations: ''
+observations: >-
+  run_012 CORN records QWK 0.346 (fair), calibration 0.804 (good), MAE 0.193, accuracy 0.820,
+  minority recall 0.296, and hedging 84.1% (excessive). Compared with run_011 CORN, QWK is +0.011,
+  calibration -0.007, minority recall +0.064, and hedging +0.1%. Largest QWK gains are
+  universalism 0.422 (+0.034), security 0.170 (+0.125); largest regressions are power -0.186
+  (-0.321), hedonism 0.350 (-0.110). The hardest dimension in this run is power at QWK -0.186.
