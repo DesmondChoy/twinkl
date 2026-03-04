@@ -24,7 +24,11 @@ provenance:
     added: {}
     removed: {}
     changed: {}
-  rationale: ''
+  rationale: >-
+    Third rerun of the ws=2 nomic hd=64 baseline (same config as run_011/012), but
+    produced under critic_training_v4 which runs an LR finder before training. The
+    LR finder suggested lr_steep=0.00477 for CORAL (4.8× the configured 0.001);
+    training used this higher LR. No explicit config changes vs run_012.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -151,4 +155,10 @@ per_dimension:
     spearman: 0.3047
     calibration: 0.9135
     hedging: 0.8
-observations: ''
+observations: >-
+  run_013 CORAL records QWK 0.384 (fair), calibration 0.820 (good), MAE 0.215, accuracy 0.814,
+  minority recall 0.259, and hedging 81.2% (excessive). Compared with run_012 CORAL, QWK is +0.025,
+  calibration +0.008, minority recall -0.083, and hedging -0.3%. Strongest dimensions: stimulation
+  QWK 0.609 (good), benevolence 0.569, tradition 0.536. Weakest: power 0.147 (poor), universalism
+  0.179. The higher LR from the LR finder produced a modest QWK uplift vs run_012 but did not reach
+  run_010 CORN (0.434).

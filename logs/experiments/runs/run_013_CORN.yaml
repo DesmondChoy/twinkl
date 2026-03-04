@@ -24,7 +24,11 @@ provenance:
     added: {}
     removed: {}
     changed: {}
-  rationale: ''
+  rationale: >-
+    Third rerun of the ws=2 nomic hd=64 baseline (same config as run_011/012), but
+    produced under critic_training_v4 which runs an LR finder before training. The
+    LR finder suggested lr_steep=0.00477 for CORN (4.8× the configured 0.001);
+    training used this higher LR. No explicit config changes vs run_012.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -151,4 +155,10 @@ per_dimension:
     spearman: 0.3003
     calibration: 0.924
     hedging: 0.7857
-observations: ''
+observations: >-
+  run_013 CORN records QWK 0.382 (fair), calibration 0.828 (good), MAE 0.208, accuracy 0.821,
+  minority recall 0.269, and hedging 82.3% (excessive). Compared with run_012 CORN, QWK is +0.036,
+  calibration +0.024, minority recall -0.027, and hedging -1.8%. Best ws=2 CORN result to date.
+  Strongest dimensions: conformity 0.526, benevolence 0.504. Weakest: power 0.136 (poor), security
+  0.233. The LR finder's 4.8× higher starting LR likely helped escape the plateau seen in run_011/012
+  CORN, but still trails run_010 CORN ws=1 (0.434) by 0.052.

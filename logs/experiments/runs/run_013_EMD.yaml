@@ -24,7 +24,11 @@ provenance:
     added: {}
     removed: {}
     changed: {}
-  rationale: ''
+  rationale: >-
+    Third rerun of the ws=2 nomic hd=64 baseline (same config as run_011/012), but
+    produced under critic_training_v4 which runs an LR finder before training. The
+    LR finder suggested lr_steep=0.00166 for EMD (1.7× the configured 0.001);
+    training used this modestly higher LR. No explicit config changes vs run_012.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -151,4 +155,10 @@ per_dimension:
     spearman: 0.3119
     calibration: 0.9007
     hedging: 0.7333
-observations: ''
+observations: >-
+  run_013 EMD records QWK 0.391 (fair), calibration 0.840 (good), MAE 0.209, accuracy 0.823,
+  minority recall 0.294, and hedging 80.4% (excessive). Compared with run_012 EMD, QWK is +0.022,
+  calibration -0.017, minority recall -0.070, and hedging +0.8%. Best ws=2 EMD QWK to date.
+  Strongest dimensions: benevolence 0.563, conformity 0.521, tradition 0.518. Weakest: power 0.136
+  (poor), security 0.134 (poor). The LR finder's modest 1.7× adjustment produced small improvements
+  in agreement but still below run_010 CORN ws=1 (0.434).

@@ -24,7 +24,11 @@ provenance:
     added: {}
     removed: {}
     changed: {}
-  rationale: ''
+  rationale: >-
+    Third rerun of the ws=2 nomic hd=64 baseline (same config as run_011/012), but
+    produced under critic_training_v4 which runs an LR finder before training. The
+    LR finder suggested lr_steep=0.000944 for SoftOrdinal (comparable to the configured
+    0.001); training used this near-identical LR. No explicit config changes vs run_012.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -151,4 +155,10 @@ per_dimension:
     spearman: 0.1777
     calibration: 0.9008
     hedging: 0.7286
-observations: ''
+observations: >-
+  run_013 SoftOrdinal records QWK 0.334 (fair), calibration 0.830 (good), MAE 0.212, accuracy 0.820,
+  minority recall 0.269, and hedging 82.2% (excessive). Comparable to run_012 SoftOrdinal (QWK 0.334,
+  cal 0.850). Minority recall dropped from 0.391 (run_012) to 0.269 (-0.122), highlighting stochastic
+  variance in sensitivity to rare labels. Strongest: benevolence 0.563, stimulation 0.506. Weakest:
+  power -0.091 (negative agreement), security 0.034. The LR finder suggested ~0.001, almost unchanged
+  from the configured value, confirming SoftOrdinal's optimal LR is near the original setting.

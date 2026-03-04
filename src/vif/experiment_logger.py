@@ -201,6 +201,7 @@ def _canonicalize_run_config(config: dict) -> dict:
     if isinstance(training, dict):
         training.pop("loss_fn", None)
         training.pop("weighted_mse_scale", None)
+        training.pop("learning_rate_configured", None)
     return canonical
 
 
@@ -432,7 +433,8 @@ def _build_experiment_dict(
             },
             "training": {
                 "loss_fn": _loss_shorthand(model_name, config),
-                "learning_rate": config.get("learning_rate"),
+                "learning_rate": trained_result.get("learning_rate_applied") or config.get("learning_rate"),
+                "learning_rate_configured": config.get("learning_rate"),
                 "weight_decay": config.get("weight_decay", 0.01),
                 "batch_size": config.get("batch_size", 16),
                 "epochs": config.get("epochs", 100),

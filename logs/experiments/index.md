@@ -8,9 +8,9 @@
 | 2 | run_007 CORN | nomic-256d | 64 | 1020 | 0.413 | 0.838 | 0.205 | 0.821 | 0.285 | Previous leader; remains highly competitive with comparable MAE/Acc and slightly higher calibration. |
 | 3 | run_012 EMD | nomic-256d | 64 | 1020 | 0.369 | **0.857** | 0.213 | 0.808 | **0.364** | Best calibration/minority-recall trade-off among ws=2 runs; QWK is comparable to run_011 EMD with materially higher minority recall. |
 
-> **Key insight**: `critic_training_v3` reruns (`run_012`) do not exceed the QWK leader (`run_010 CORN`, QWK 0.434), so ws=1 remains the best path for peak agreement. However, run_012 consistently increases minority recall versus run_011 (e.g., EMD 0.364 vs 0.308; SoftOrdinal 0.391 vs 0.312), indicating stochastic variance can shift sensitivity to rare labels without lifting headline QWK.
+> **Key insight**: `run_013` (critic_training_v4 with LR-finder-selected starting LRs) improved ws=2 QWK — best ws=2 CORN is now 0.382 (up from 0.335–0.346) — but still does not exceed the ws=1 leader (`run_010 CORN`, QWK 0.434). The LR finder's higher starting LRs (~4.8× for CORAL/CORN) lifted agreement but **reduced minority recall** vs run_012 (e.g., SoftOrdinal MinR: 0.391→0.269). Stochastic variance across three ws=2 reruns is substantial (CORN QWK range: 0.335–0.382).
 >
-> **Primary bottleneck**: even with QWK 0.434 (moderate), `run_010 CORN` still has `recall_minus1 = 8.9%` and hedging at 82.0%, so the critic under-detects misalignment. `run_012` confirms this is unresolved: Power remains unstable/near-random (QWK from -0.225 to 0.021 across losses) despite good global calibration. Next experiments should: (1) apply post-hoc logit adjustment to a **softmax** head first (best candidate: `run_012 SoftOrdinal` with MinR 0.391), using `logit_adj_k = logit_k - tau * log(pi_k)` from training priors; (2) implement CDW-CE loss ([Polat et al. 2025](https://arxiv.org/abs/2412.01246)) with per-dimension class weights for distance-weighted ordinal penalties; (3) enforce per-dimension stratified validation splits to reduce variance between reruns. CORAL_IW should be dropped (still low-QWK with excessive hedging). See [`docs/evals/value_modeling_eval.md`](../../docs/evals/value_modeling_eval.md) for metric definitions and targets.
+> **Primary bottleneck**: even with QWK 0.434 (moderate), `run_010 CORN` still has `recall_minus1 = 8.9%` and hedging at 82.0%, so the critic under-detects misalignment. Power remains the systemic failure: mean QWK 0.084 across all nomic runs (std=0.201), with only 9 val personas contributing non-zero labels — model selection is effectively random for this dimension. Next experiments should: (1) implement **CDW-CE loss** ([Polat et al. 2025](https://arxiv.org/abs/2412.01246)) with distance-weighted ordinal penalties targeting hedging reduction; (2) apply post-hoc logit adjustment at inference using known class priors; (3) enforce per-dimension stratified validation splits; (4) rerun ws=1 baseline with LR-finder. See full analysis in [`logs/experiments/reports/experiment_review_2026-03-04_v2.md`](reports/experiment_review_2026-03-04_v2.md).
 
 ## Run Log
 
@@ -79,6 +79,22 @@
 > **Contributor note:** Keep this section in **newest-first** chronological order (most recent date at top).
 
 ## Findings
+
+### 2026-03-04 — LR-finder impact on ws=2 baseline (run_013, critic_training_v4)
+
+`run_013` is the third rerun of the ws=2 nomic hd=64 baseline, but produced under `critic_training_v4` which runs an LR finder before training and uses its suggestion as the starting LR. The explicit config is identical to run_011/012, but the applied LRs differ: CORAL/CORN started at ~0.00477 (4.8× configured), EMD at ~0.00166, SoftOrdinal at ~0.00094.
+
+**1. Modest QWK uplift, still below ws=1 leader.** Best run_013 QWK is EMD 0.391 (fair) and CORAL 0.384 — improvements over run_011/012 but still below `run_010 CORN` at 0.434 (moderate). The higher starting LR appears to help escape early plateaus.
+
+**2. Minority recall regressed vs run_012.** SoftOrdinal MinR dropped from 0.391 (run_012) to 0.269; EMD from 0.364 to 0.293; CORAL from 0.342 to 0.259. The higher LR likely finds wider optima that generalize on the majority class but are less sensitive to rare-label gradients.
+
+**3. Stochastic variance confirmed as substantial.** Across run_011/012/013 (three identical-config CORN runs), QWK ranges 0.335–0.382 (0.047 spread) and MinR ranges 0.232–0.296 (0.064 spread). Any single rerun can appear meaningfully different from another.
+
+**4. Power still broken.** Power QWK in run_013: CORAL 0.147, CORN 0.136, EMD 0.136, SoftOrdinal -0.091. Automated data analysis confirms only 9 val personas contribute non-zero Power labels (12 misalignment labels total) — model selection is random.
+
+**5. Experiment logger provenance gap identified.** The YAML files record `learning_rate: 0.001` (configured) despite actual training LRs up to 0.00477. This should be fixed by logging both `learning_rate_configured` and `learning_rate_applied`.
+
+**Conclusion**: The LR finder improves QWK modestly (+0.02–0.05 vs run_011/012) but does not change the frontier. The MinR regression suggests loss-function-level interventions (CDW-CE, logit adjustment) are more promising than LR tuning for addressing the hedging bottleneck. See full analysis: [`reports/experiment_review_2026-03-04_v2.md`](reports/experiment_review_2026-03-04_v2.md).
 
 ### 2026-03-03 — critic_training_v3 rerun review (run_012, ws=2, nomic hd=64)
 
