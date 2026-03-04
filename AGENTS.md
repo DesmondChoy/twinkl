@@ -128,6 +128,15 @@ If there is ambiguity and no blocking risk, proceed with explicit
 assumptions and note them. If ambiguity affects correctness or design
 direction, ask one concise clarifying question.
 
+## Asking the User
+
+When you need clarification, preferences, or decisions from the user,
+**always prefer the `ask_user_question` tool** over guessing or making
+assumptions. It presents structured, multiple-choice questions that
+resolve ambiguity quickly and keep the workflow moving.
+
+Note: this tool is unavailable in non-interactive mode (`codex exec`).
+
 ## Issue Tracking with Beads (`bd`)
 
 Use `bd` (beads) for all issue tracking. This is mandatory, not optional.

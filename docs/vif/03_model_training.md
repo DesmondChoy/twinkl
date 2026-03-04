@@ -233,5 +233,19 @@ python -m src.vif.train --epochs 5 --batch-size 8
 python -m src.vif.train --encoder-model all-mpnet-base-v2
 ```
 
+> **Default LR finder behavior (`src/vif/train.py`)**:
+> The training script now runs an LR range test before training by default,
+> logs `lr_steep`/`lr_valley`, and applies `lr_valley` as the optimizer LR.
+> If the valley signal is edge/monotonic, it falls back to a safer
+> `lr_steep` selection. Optional clipping via `max_selected_lr` is available
+> when explicitly configured.
+> Artifacts are saved to the checkpoint directory as `lr_find_loss_vs_lr.png`
+> and `lr_find_history.json` (or an override path via `--lr-find-output-path`).
+>
+> **Notebook entrypoint**:
+> For separate LR-finder runs across the active ordinal heads
+> (**CORAL/CORN/EMD/SoftOrdinal**), use
+> `notebooks/critic_training/v4/critic_training_v4.ipynb`.
+
 Configuration: `config/vif.yaml`
 Scripts: `src/vif/train.py` and `src/vif/train_bnn.py`

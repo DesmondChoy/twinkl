@@ -1,0 +1,154 @@
+# VIF Experiment: run_013_SoftOrdinal
+# Generated: 2026-03-04T21:40:40
+# Git: 4c18b98(dirty)
+metadata:
+  experiment_id: run_013_SoftOrdinal
+  run_id: run_013
+  model_name: SoftOrdinal
+  timestamp: '2026-03-04T21:40:40'
+  git_commit: 4c18b98(dirty)
+  config_hash: 13c8d9b319b3
+provenance:
+  prev_run_id: run_012
+  prev_git_commit: 1af9f36(dirty)
+  git_log:
+  - '4c18b98 docs(experiments): add cross-run review report and soften index conclusions'
+  - '5be2aae Merge pull request #29 from DesmondChoy/claude/fastai-debugging-research-5XUAz'
+  - 'f52534a docs(vif): research fastai debugging features for critic ablations'
+  - 'fde79ad chore: update des annotation data'
+  - '3a1df65 docs(experiments): integrate run_010-011 evaluation findings'
+  - '24c5285 Merge pull request #25 from DesmondChoy/km-threshold-tuning'
+  - '1e68c89 fix: updated experiment logs'
+  - 'ccf7cdb feat: add annotations with best thresholds'
+  config_delta:
+    added: {}
+    removed: {}
+    changed: {}
+  rationale: ''
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 2
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 523
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: soft_ordinal
+    learning_rate: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1020
+  n_val: 230
+  n_test: 210
+capacity:
+  n_parameters: 39902
+  param_sample_ratio: 39.1196
+training_dynamics:
+  best_epoch: 7
+  total_epochs: 27
+  train_loss_at_best: 0.2076
+  val_loss_at_best: 0.1846
+  gap_at_best: -0.0231
+  final_lr: 0.000472
+evaluation:
+  mae_mean: 0.2117
+  accuracy_mean: 0.82
+  qwk_mean: 0.3344
+  spearman_mean: 0.3668
+  calibration_global: 0.8301
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.1401
+  minority_recall_mean: 0.2689
+  recall_minus1: 0.0589
+  recall_plus1: 0.479
+  hedging_mean: 0.8224
+per_dimension:
+  self_direction:
+    mae: 0.3846
+    accuracy: 0.6571
+    qwk: 0.4165
+    spearman: 0.4572
+    calibration: 0.5613
+    hedging: 0.681
+  stimulation:
+    mae: 0.0877
+    accuracy: 0.9238
+    qwk: 0.5056
+    spearman: 0.6728
+    calibration: 0.9079
+    hedging: 0.9095
+  hedonism:
+    mae: 0.1398
+    accuracy: 0.881
+    qwk: 0.4535
+    spearman: 0.3086
+    calibration: 0.816
+    hedging: 0.9095
+  achievement:
+    mae: 0.1705
+    accuracy: 0.8667
+    qwk: 0.4431
+    spearman: 0.3558
+    calibration: 0.7849
+    hedging: 0.8714
+  power:
+    mae: 0.0711
+    accuracy: 0.9476
+    qwk: -0.0909
+    spearman: -0.142
+    calibration: 0.9219
+    hedging: 0.9571
+  security:
+    mae: 0.339
+    accuracy: 0.6952
+    qwk: 0.0343
+    spearman: 0.1622
+    calibration: 0.6699
+    hedging: 0.8429
+  conformity:
+    mae: 0.2751
+    accuracy: 0.7238
+    qwk: 0.4383
+    spearman: 0.575
+    calibration: 0.7266
+    hedging: 0.7429
+  tradition:
+    mae: 0.1466
+    accuracy: 0.8667
+    qwk: 0.4683
+    spearman: 0.5305
+    calibration: 0.8546
+    hedging: 0.8952
+  benevolence:
+    mae: 0.2404
+    accuracy: 0.8095
+    qwk: 0.563
+    spearman: 0.5701
+    calibration: 0.8105
+    hedging: 0.6857
+  universalism:
+    mae: 0.2621
+    accuracy: 0.8286
+    qwk: 0.1127
+    spearman: 0.1777
+    calibration: 0.9008
+    hedging: 0.7286
+observations: ''

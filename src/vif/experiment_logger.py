@@ -432,7 +432,7 @@ def _build_experiment_dict(
             },
             "training": {
                 "loss_fn": _loss_shorthand(model_name, config),
-                "learning_rate": config.get("learning_rate", 0.001),
+                "learning_rate": config.get("learning_rate"),
                 "weight_decay": config.get("weight_decay", 0.01),
                 "batch_size": config.get("batch_size", 16),
                 "epochs": config.get("epochs", 100),

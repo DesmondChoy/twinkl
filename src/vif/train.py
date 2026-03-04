@@ -19,6 +19,7 @@ Usage:
 """
 
 import argparse
+import copy
 import json
 import time
 from datetime import datetime
@@ -34,7 +35,8 @@ from torch.optim.lr_scheduler import ReduceLROnPlateau
 from src.vif.critic import CriticMLP
 from src.vif.dataset import create_dataloaders
 from src.vif.encoders import create_encoder
-from src.vif.eval import evaluate_model, evaluate_with_uncertainty, format_results_table
+from src.vif.eval import evaluate_with_uncertainty, format_results_table
+from src.vif.lr_finder import run_lr_finder
 from src.vif.state_encoder import StateEncoder
 
 
@@ -62,10 +64,16 @@ def load_config(config_path: str | Path | None) -> dict:
         "training": {
             "epochs": 100,
             "batch_size": 16,
-            "learning_rate": 0.001,
+            "learning_rate": None,
             "weight_decay": 0.01,
-            "scheduler": {"type": "reduce_on_plateau", "factor": 0.5, "patience": 10, "min_lr": 1e-5},
+            "scheduler": {"type": "reduce_on_plateau", "factor": 0.5, "patience": 10, "min_lr": None},
             "early_stopping": {"patience": 20, "min_delta": 0.001},
+            "lr_finder": {
+                "start_lr": None,
+                "end_lr": None,
+                "num_iter": None,
+                "output_path": None,
+            },
         },
         "data": {
             "labels_path": "logs/judge_labels/judge_labels.parquet",
@@ -308,9 +316,72 @@ def train(config: dict, verbose: bool = True) -> dict:
 
     # Setup training
     criterion = nn.MSELoss()
+    output_dir = Path(config["output"]["checkpoint_dir"])
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    configured_learning_rate = config["training"]["learning_rate"]
+    lr_finder_config = config["training"].get("lr_finder", {})
+    start_lr = lr_finder_config.get("start_lr")
+    end_lr = lr_finder_config.get("end_lr")
+    num_iter = lr_finder_config.get("num_iter")
+    scheduler_min_lr = config["training"]["scheduler"].get("min_lr")
+
+    missing = []
+    if configured_learning_rate is None:
+        missing.append("training.learning_rate")
+    if start_lr is None:
+        missing.append("training.lr_finder.start_lr")
+    if end_lr is None:
+        missing.append("training.lr_finder.end_lr")
+    if num_iter is None:
+        missing.append("training.lr_finder.num_iter")
+    if scheduler_min_lr is None:
+        missing.append("training.scheduler.min_lr")
+    if missing:
+        missing_str = ", ".join(missing)
+        raise ValueError(
+            f"Missing required LR configuration keys: {missing_str}. "
+            "Set them in config/vif.yaml or via CLI overrides."
+        )
+
+    if verbose:
+        print("\nRunning default LR finder pass...")
+
+    lr_finder_result = run_lr_finder(
+        model=model,
+        train_loader=train_loader,
+        criterion=criterion,
+        configured_learning_rate=configured_learning_rate,
+        weight_decay=config["training"]["weight_decay"],
+        device=device,
+        output_dir=output_dir,
+        output_plot_path=lr_finder_config.get("output_path"),
+        start_lr=start_lr,
+        end_lr=end_lr,
+        num_iter=int(num_iter),
+        max_selected_lr=lr_finder_config.get("max_selected_lr"),
+    )
+    selected_learning_rate = lr_finder_result["lr_selected"]
+
+    if verbose:
+        steep = lr_finder_result["suggestions"]["lr_steep"]
+        valley = lr_finder_result["suggestions"]["lr_valley"]
+        print(
+            "LR finder suggestions: "
+            f"lr_steep={steep if steep is not None else 'N/A'}, "
+            f"lr_valley={valley if valley is not None else 'N/A'}"
+        )
+        print(
+            f"LR selection source: {lr_finder_result.get('lr_selected_source', 'unknown')}"
+        )
+        if lr_finder_result.get("fallback_reason"):
+            print(f"LR selection note: {lr_finder_result['fallback_reason']}")
+        print(f"Using training learning rate: {selected_learning_rate:.6f}")
+        print(f"LR finder plot: {lr_finder_result['artifacts']['plot_path']}")
+
     optimizer = AdamW(
         model.parameters(),
-        lr=config["training"]["learning_rate"],
+        lr=selected_learning_rate,
         weight_decay=config["training"]["weight_decay"],
     )
     scheduler = ReduceLROnPlateau(
@@ -318,7 +389,7 @@ def train(config: dict, verbose: bool = True) -> dict:
         mode="min",
         factor=config["training"]["scheduler"]["factor"],
         patience=config["training"]["scheduler"]["patience"],
-        min_lr=config["training"]["scheduler"]["min_lr"],
+        min_lr=float(scheduler_min_lr),
     )
 
     # Training history
@@ -333,8 +404,9 @@ def train(config: dict, verbose: bool = True) -> dict:
     early_stop_patience = config["training"]["early_stopping"]["patience"]
     early_stop_delta = config["training"]["early_stopping"]["min_delta"]
 
-    output_dir = Path(config["output"]["checkpoint_dir"])
-    output_dir.mkdir(parents=True, exist_ok=True)
+    run_config = copy.deepcopy(config)
+    run_config["training"]["learning_rate_configured"] = configured_learning_rate
+    run_config["training"]["learning_rate"] = selected_learning_rate
 
     # Training loop
     if verbose:
@@ -361,7 +433,7 @@ def train(config: dict, verbose: bool = True) -> dict:
         if val_loss < best_val_loss - early_stop_delta:
             best_val_loss = val_loss
             epochs_without_improvement = 0
-            save_checkpoint(model, optimizer, epoch, val_loss, config, output_dir)
+            save_checkpoint(model, optimizer, epoch, val_loss, run_config, output_dir)
             if verbose:
                 print(
                     f"Epoch {epoch+1:3d}: train={train_loss:.4f}, val={val_loss:.4f}, "
@@ -418,7 +490,8 @@ def train(config: dict, verbose: bool = True) -> dict:
             "spearman_per_dim": test_results["spearman_per_dim"],
             "accuracy_per_dim": test_results["accuracy_per_dim"],
         },
-        "config": config,
+        "lr_finder": lr_finder_result,
+        "config": run_config,
     }
     with open(log_path, "w") as f:
         json.dump(log_data, f, indent=2)
@@ -432,6 +505,10 @@ def train(config: dict, verbose: bool = True) -> dict:
         "test_results": test_results,
         "best_val_loss": best_val_loss,
         "training_time": training_time,
+        "lr_finder": lr_finder_result,
+        "learning_rate_configured": configured_learning_rate,
+        "learning_rate_applied": selected_learning_rate,
+        "log_path": str(log_path),
     }
 
 
@@ -490,6 +567,11 @@ Examples:
         action="store_true",
         help="Suppress verbose output",
     )
+    parser.add_argument(
+        "--lr-find-output-path",
+        type=str,
+        help="Optional path to save LR finder plot (history JSON shares same stem)",
+    )
 
     args = parser.parse_args()
 
@@ -509,6 +591,9 @@ Examples:
         config["model"]["hidden_dim"] = args.hidden_dim
     if args.seed is not None:
         config["data"]["seed"] = args.seed
+    if args.lr_find_output_path is not None:
+        config["training"].setdefault("lr_finder", {})
+        config["training"]["lr_finder"]["output_path"] = args.lr_find_output_path
 
     # Set random seeds
     np.random.seed(config["data"]["seed"])
@@ -516,6 +601,11 @@ Examples:
 
     # Train
     results = train(config, verbose=not args.quiet)
+
+    if not args.quiet:
+        print(f"Configured LR: {results['learning_rate_configured']:.6f}")
+        print(f"Applied LR:    {results['learning_rate_applied']:.6f}")
+        print(f"LR plot:       {results['lr_finder']['artifacts']['plot_path']}")
 
     print(f"\nFinal test MSE: {results['test_results']['mse_mean']:.4f}")
     print(f"Final test Spearman: {results['test_results']['spearman_mean']:.4f}")

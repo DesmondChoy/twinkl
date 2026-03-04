@@ -2435,6 +2435,22 @@ wheels = [
 ]
 
 [[package]]
+name = "torch-lr-finder"
+version = "0.2.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "matplotlib" },
+    { name = "numpy" },
+    { name = "packaging" },
+    { name = "torch" },
+    { name = "tqdm" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/40/05/2113d8d9ce2ac2d6a308d309f1b46816a1defec28a382f388af8df7bc8d6/torch_lr_finder-0.2.2.tar.gz", hash = "sha256:d659725028e1ab860deeabe01f445e07f758285c524c8720bd9cc3f39343c778", size = 17970, upload-time = "2024-09-21T20:56:07.464Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/a6/e4/e1cceb992f874aef6dd66d641ac9214ad071a7d2760978bb22066c0b6ffe/torch_lr_finder-0.2.2-py3-none-any.whl", hash = "sha256:926f451a213a6f593902c6ed2a1fa1603fb2fbdd8fb2a427d2eac8f46086ad3b", size = 12442, upload-time = "2024-09-21T20:56:06.06Z" },
+]
+
+[[package]]
 name = "torchvision"
 version = "0.24.1"
 source = { registry = "https://pypi.org/simple" }
@@ -2563,6 +2579,7 @@ dependencies = [
     { name = "shiny" },
     { name = "statsmodels" },
     { name = "torch" },
+    { name = "torch-lr-finder" },
 ]
 
 [package.dev-dependencies]
@@ -2592,6 +2609,7 @@ requires-dist = [
     { name = "shiny", specifier = ">=1.2.0" },
     { name = "statsmodels", specifier = ">=0.14.0" },
     { name = "torch", specifier = ">=2.0.0" },
+    { name = "torch-lr-finder", specifier = ">=0.2.2" },
 ]
 
 [package.metadata.requires-dev]

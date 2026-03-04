@@ -29,6 +29,7 @@ dependencies = [
     "coral-pytorch>=1.4.0",
     "ipywidgets>=8.1.8",
     "einops>=0.8.2",
+    "torch-lr-finder>=0.2.2",
 ]
 
 [tool.setuptools]

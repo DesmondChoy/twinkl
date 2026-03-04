@@ -50,6 +50,13 @@ training:
     patience: 20          # Stop if no improvement for this many epochs
     min_delta: 0.001      # Minimum change to count as improvement
 
+  # LR finder (runs before training by default in src/vif/train.py)
+  lr_finder:
+    start_lr: 0.0000001
+    end_lr: 1.0
+    num_iter: 200
+    output_path: null     # Optional override path for loss-vs-LR plot artifact
+
 # Data Configuration
 # ------------------
 data:
