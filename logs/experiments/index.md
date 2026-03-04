@@ -72,6 +72,8 @@
 | 012 | SoftOrdinal | nomic-256d | 2 | 64 | 0.3 | soft_ordinal | 39902 | 39.1 | 0.224 | 0.801 | 0.334 | 0.356 | 0.850 | 0.391 | runs/run_012_SoftOrdinal.yaml |
 <!-- AUTO-TABLE:END -->
 
+> **Contributor note:** Keep this section in **newest-first** chronological order (most recent date at top).
+
 ## Findings
 
 ### 2026-03-03 — critic_training_v3 rerun review (run_012, ws=2, nomic hd=64)
@@ -91,9 +93,9 @@
 
 **Conclusion**: `run_012` is a useful reproducibility checkpoint, not a frontier shift. Keep `run_010 CORN` as QWK leader; use `run_012 EMD`/`run_012 SoftOrdinal` as minority-sensitive baselines for logit-adjustment and class-imbalance interventions.
 
-### 2026-02-22 — Resolved: Universalism QWK collapse (run_003 → run_009)
+### 2026-02-22 — Universalism QWK collapse (run_003 → run_009)
 
-Universalism QWK dropped from 0.732 (run_003 EMD, 637 train) to 0.042 (run_009 EMD, 1020 train). This looks alarming but is explained by three compounding factors — **no further data intervention is needed**.
+Universalism QWK dropped from 0.732 (run_003 EMD, 637 train) to 0.042 (run_009 EMD, 1020 train). This looks alarming but is largely explained by three compounding factors; follow-up monitoring is still warranted before declaring this fully closed.
 
 **1. The 0.732 was inflated by a skewed test distribution.** run_003 included 10 pre-tension Universalism personas whose labels were 87% +1, 13% 0, and **0% −1** (98 entries total). The model achieved high QWK by predicting +1 for the dominant class without ever needing to detect misalignment.
 
@@ -108,11 +110,11 @@ Universalism QWK dropped from 0.732 (run_003 EMD, 637 train) to 0.042 (run_009 E
 | run_007 CORN | nomic | 64 | 1020 | 0.466 | 81.9% | 266 |
 | run_009 EMD | MiniLM | 64 | 1020 | 0.042 | 82.4% | 1164 |
 
-**Conclusion**: Universalism performance is recovered by the encoder switch to nomic (run_007). No additional Universalism persona generation or dimension-specific loss weighting is warranted.
+**Conclusion**: Universalism performance improved materially after the encoder switch to nomic (run_007), but remains variance-sensitive across runs. Keep this dimension under active monitoring; defer additional Universalism data generation or dimension-specific weighting unless instability persists.
 
-### 2026-02-22 — Resolved: MiniLM retired from future experiments
+### 2026-02-22 — MiniLM retired from frontier experiments
 
-MiniLM (all-MiniLM-L6-v2) is **no longer a candidate encoder** for future VIF runs. All future experiments, analysis, and recommendations should focus exclusively on nomic-embed-text-v1.5.
+MiniLM (all-MiniLM-L6-v2) is **no longer a primary frontier candidate** for future VIF runs. Frontier experiments, analysis, and recommendations should prioritize nomic-embed-text-v1.5, while keeping MiniLM as an occasional sentinel baseline for regression checks.
 
 **1. MiniLM's state pipeline is fundamentally over-parameterized for this dataset.** The window_size=3 state encoder produces a 1164-dim state vector. Even at hd=64, this yields an 80K-parameter model with a 79:1 param/sample ratio — still firmly in the "high" regime. The model consistently early-stops at epoch 2-5, never learning beyond majority-class hedging.
 
@@ -128,4 +130,4 @@ MiniLM (all-MiniLM-L6-v2) is **no longer a candidate encoder** for future VIF ru
 | Hedging | 86.6% | 85.4% | **81.7%** |
 | Param/sample ratio | 388 (severe) | 79 (high) | **22 (high)** |
 
-**Conclusion**: MiniLM runs (001, 003, 005, 009) are retained as historical baselines. Future `/experiment-review` reports should treat MiniLM as a closed investigation and focus all insights, comparisons, and recommendations on nomic-embed configurations only.
+**Conclusion**: MiniLM runs (001, 003, 005, 009) are retained as historical baselines. Future `/experiment-review` reports should focus frontier insights and recommendations on nomic-embed configurations, with infrequent MiniLM sentinel reruns only for regression detection.
