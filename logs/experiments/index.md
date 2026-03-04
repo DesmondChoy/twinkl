@@ -6,11 +6,11 @@
 |------|-----------|---------|---:|--------:|----:|----:|----:|----:|-----:|-----------|
 | 1 | run_010 CORN | nomic-256d | 64 | 1020 | **0.434** | 0.835 | **0.206** | 0.821 | 0.285 | New SOTA QWK (moderate) after reverting hd=128→64. Strong recovery on power (+0.362 vs run_008 CORN). |
 | 2 | run_007 CORN | nomic-256d | 64 | 1020 | 0.413 | 0.838 | 0.205 | 0.821 | 0.285 | Previous leader; remains highly competitive with comparable MAE/Acc and slightly higher calibration. |
-| 3 | run_011 EMD | nomic-256d | 64 | 1020 | 0.382 | **0.846** | 0.214 | 0.821 | **0.308** | Best minority recall among recent nomic runs and lower hedging (78.6%), though QWK trails CORN. |
+| 3 | run_012 EMD | nomic-256d | 64 | 1020 | 0.369 | **0.857** | 0.213 | 0.808 | **0.364** | Best calibration/minority-recall trade-off among ws=2 runs; QWK is comparable to run_011 EMD with materially higher minority recall. |
 
-> **Key insight**: nomic-embed at hd=64 remains the sweet spot for QWK. `run_010 CORN` is now the state of the art, while `run_011 EMD` is the strongest trade-off when minority recall is prioritized. ws=2 (run_011) hurt across all metrics vs ws=1 (run_010); extra history adds noise without useful temporal signal.
+> **Key insight**: `critic_training_v3` reruns (`run_012`) do not exceed the QWK leader (`run_010 CORN`, QWK 0.434), so ws=1 remains the best path for peak agreement. However, run_012 consistently increases minority recall versus run_011 (e.g., EMD 0.364 vs 0.308; SoftOrdinal 0.391 vs 0.312), indicating stochastic variance can shift sensitivity to rare labels without lifting headline QWK.
 >
-> **Primary bottleneck**: even with QWK 0.434 (moderate), `run_010 CORN` still has `recall_minus1 = 8.9%` and hedging at 82.0%, so the critic under-detects misalignment. Automated investigation found Power's validation set has only 23 non-zero examples (90% neutral), making model selection random for this dimension. Next experiments should: (1) apply post-hoc logit adjustment to a **softmax** head first (e.g., `run_011 SoftOrdinal`), using `logit_adj_k = logit_k - tau * log(pi_k)` from training priors; (2) implement CDW-CE loss ([Polat et al. 2025](https://arxiv.org/abs/2412.01246)) with per-dimension class weights for distance-weighted ordinal penalties; (3) fix per-dimension stratified validation splits. CORAL_IW should be dropped (consistently degraded QWK and minority recall). See [`docs/evals/value_modeling_eval.md`](../../docs/evals/value_modeling_eval.md) for metric definitions and targets.
+> **Primary bottleneck**: even with QWK 0.434 (moderate), `run_010 CORN` still has `recall_minus1 = 8.9%` and hedging at 82.0%, so the critic under-detects misalignment. `run_012` confirms this is unresolved: Power remains unstable/near-random (QWK from -0.225 to 0.021 across losses) despite good global calibration. Next experiments should: (1) apply post-hoc logit adjustment to a **softmax** head first (best candidate: `run_012 SoftOrdinal` with MinR 0.391), using `logit_adj_k = logit_k - tau * log(pi_k)` from training priors; (2) implement CDW-CE loss ([Polat et al. 2025](https://arxiv.org/abs/2412.01246)) with per-dimension class weights for distance-weighted ordinal penalties; (3) enforce per-dimension stratified validation splits to reduce variance between reruns. CORAL_IW should be dropped (still low-QWK with excessive hedging). See [`docs/evals/value_modeling_eval.md`](../../docs/evals/value_modeling_eval.md) for metric definitions and targets.
 
 ## Run Log
 
@@ -65,9 +65,31 @@
 | 011 | CORN | nomic-256d | 2 | 64 | 0.3 | corn | 39252 | 38.5 | 0.209 | 0.814 | 0.335 | 0.388 | 0.811 | 0.232 | runs/run_011_CORN.yaml |
 | 011 | EMD | nomic-256d | 2 | 64 | 0.3 | emd | 39902 | 39.1 | 0.214 | 0.821 | 0.382 | 0.359 | 0.846 | 0.308 | runs/run_011_EMD.yaml |
 | 011 | SoftOrdinal | nomic-256d | 2 | 64 | 0.3 | soft_ordinal | 39902 | 39.1 | 0.222 | 0.820 | 0.333 | 0.349 | 0.862 | 0.312 | runs/run_011_SoftOrdinal.yaml |
+| 012 | CORAL | nomic-256d | 2 | 64 | 0.3 | coral | 39252 | 38.5 | 0.209 | 0.806 | 0.359 | 0.381 | 0.812 | 0.342 | runs/run_012_CORAL.yaml |
+| 012 | CORAL_IW | nomic-256d | 2 | 64 | 0.3 | coral_iw | 39252 | 38.5 | 0.214 | 0.801 | 0.271 | 0.304 | 0.802 | 0.265 | runs/run_012_CORAL_IW.yaml |
+| 012 | CORN | nomic-256d | 2 | 64 | 0.3 | corn | 39252 | 38.5 | 0.193 | 0.820 | 0.346 | 0.396 | 0.804 | 0.296 | runs/run_012_CORN.yaml |
+| 012 | EMD | nomic-256d | 2 | 64 | 0.3 | emd | 39902 | 39.1 | 0.213 | 0.808 | 0.369 | 0.357 | 0.857 | 0.364 | runs/run_012_EMD.yaml |
+| 012 | SoftOrdinal | nomic-256d | 2 | 64 | 0.3 | soft_ordinal | 39902 | 39.1 | 0.224 | 0.801 | 0.334 | 0.356 | 0.850 | 0.391 | runs/run_012_SoftOrdinal.yaml |
 <!-- AUTO-TABLE:END -->
 
 ## Findings
+
+### 2026-03-03 — critic_training_v3 rerun review (run_012, ws=2, nomic hd=64)
+
+`run_012` is a like-for-like rerun of `run_011` (same encoder, window size, hidden dim, split seed, and losses) after `critic_training_v3` code changes. This isolates stochastic training variance and confirms there is no architectural uplift from the code cleanup itself.
+
+**1. No new QWK state of the art.** Best `run_012` QWK is EMD 0.369 (fair), below `run_010 CORN` at 0.434 (moderate) and slightly below `run_011 EMD` at 0.382 (comparable by <5% rule).
+
+**2. Minority recall improved across all losses, but hedging stayed high.**  
+- CORAL: MinR 0.342 (+0.097 vs run_011), hedging 82.7% (excessive)  
+- CORN: MinR 0.296 (+0.064), hedging 84.1% (excessive)  
+- EMD: MinR 0.364 (+0.056), hedging 79.2% (moderate)  
+- SoftOrdinal: MinR 0.391 (+0.079), hedging 77.9% (moderate)  
+- CORAL_IW: MinR 0.265 (+0.090), hedging 87.0% (excessive)
+
+**3. Power remains the systemic failure mode.** In `run_012`, Power QWK is 0.021 (CORAL), 0.015 (CORAL_IW), -0.186 (CORN), -0.083 (EMD), -0.225 (SoftOrdinal), indicating persistent instability despite global calibration >0.80.
+
+**Conclusion**: `run_012` is a useful reproducibility checkpoint, not a frontier shift. Keep `run_010 CORN` as QWK leader; use `run_012 EMD`/`run_012 SoftOrdinal` as minority-sensitive baselines for logit-adjustment and class-imbalance interventions.
 
 ### 2026-02-22 — Resolved: Universalism QWK collapse (run_003 → run_009)
 

@@ -1,0 +1,162 @@
+# VIF Experiment: run_012_SoftOrdinal
+# Generated: 2026-03-02T17:50:23
+# Git: 1af9f36(dirty)
+metadata:
+  experiment_id: run_012_SoftOrdinal
+  run_id: run_012
+  model_name: SoftOrdinal
+  timestamp: '2026-03-02T17:50:23'
+  git_commit: 1af9f36(dirty)
+  config_hash: 13c8d9b319b3
+provenance:
+  prev_run_id: run_011
+  prev_git_commit: 262f820(dirty)
+  git_log:
+  - '1af9f36 fix: Cleaned up notebook'
+  - 'afa7301 feat: init rough sketch for critic training v3'
+  - 404b2f7 Add bws onboarding notebook
+  - '00aa284 docs: update README with current datasets and VIF details (twinkl-652)'
+  - 'b1b4b42 docs: add command_status tool lag guidance to GEMINI.md'
+  - 'ca0c39f chore(vif): add experiment runs 010-011 with ws and CORAL_IW ablations'
+  - '2687cf4 docs(experiments): align logit-adjustment recommendations (twinkl-651)'
+  config_delta:
+    added: {}
+    removed: {}
+    changed: {}
+  rationale: >-
+    Re-ran the run_011 ws=2 nomic baseline under critic_training_v3 code changes (logger/notebook
+    cleanup, no config deltas) to check run-to-run stability on the fixed 1020-sample split and
+    quantify stochastic variance before introducing new architecture changes.
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 2
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 523
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: soft_ordinal
+    learning_rate: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1020
+  n_val: 230
+  n_test: 210
+capacity:
+  n_parameters: 39902
+  param_sample_ratio: 39.1196
+training_dynamics:
+  best_epoch: 7
+  total_epochs: 27
+  train_loss_at_best: 0.2025
+  val_loss_at_best: 0.1819
+  gap_at_best: -0.0206
+  final_lr: 0.0005
+evaluation:
+  mae_mean: 0.2238
+  accuracy_mean: 0.8014
+  qwk_mean: 0.3339
+  spearman_mean: 0.3563
+  calibration_global: 0.8495
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.1695
+  minority_recall_mean: 0.391
+  recall_minus1: 0.0833
+  recall_plus1: 0.6987
+  hedging_mean: 0.779
+per_dimension:
+  self_direction:
+    mae: 0.4619
+    accuracy: 0.5952
+    qwk: 0.3846
+    spearman: 0.436
+    calibration: 0.4946
+    hedging: 0.5
+  stimulation:
+    mae: 0.0714
+    accuracy: 0.9333
+    qwk: 0.6361
+    spearman: 0.5757
+    calibration: 0.9054
+    hedging: 0.8952
+  hedonism:
+    mae: 0.1286
+    accuracy: 0.881
+    qwk: 0.4332
+    spearman: 0.3266
+    calibration: 0.9233
+    hedging: 0.8952
+  achievement:
+    mae: 0.1714
+    accuracy: 0.8381
+    qwk: 0.3628
+    spearman: 0.3691
+    calibration: 0.7549
+    hedging: 0.8571
+  power:
+    mae: 0.081
+    accuracy: 0.9476
+    qwk: -0.2254
+    spearman: -0.1878
+    calibration: 0.9621
+    hedging: 0.9571
+  security:
+    mae: 0.3667
+    accuracy: 0.681
+    qwk: 0.1263
+    spearman: 0.2024
+    calibration: 0.7616
+    hedging: 0.7952
+  conformity:
+    mae: 0.2381
+    accuracy: 0.7714
+    qwk: 0.5471
+    spearman: 0.611
+    calibration: 0.7214
+    hedging: 0.7333
+  tradition:
+    mae: 0.2048
+    accuracy: 0.7952
+    qwk: 0.4489
+    spearman: 0.5048
+    calibration: 0.8712
+    hedging: 0.7667
+  benevolence:
+    mae: 0.2619
+    accuracy: 0.7429
+    qwk: 0.4846
+    spearman: 0.5202
+    calibration: 0.7965
+    hedging: 0.6524
+  universalism:
+    mae: 0.2524
+    accuracy: 0.8286
+    qwk: 0.1406
+    spearman: 0.2053
+    calibration: 0.9139
+    hedging: 0.7381
+observations: >-
+  run_012 SoftOrdinal records QWK 0.334 (fair), calibration 0.850 (good), MAE 0.224, accuracy
+  0.801, minority recall 0.391, and hedging 77.9% (moderate). Compared with run_011 SoftOrdinal,
+  QWK is +0.001, calibration -0.012, minority recall +0.079, and hedging +0.1%. Largest QWK gains
+  are stimulation 0.636 (+0.091), universalism 0.141 (+0.015); largest regressions are power
+  -0.225 (-0.029), tradition 0.449 (-0.069). The hardest dimension in this run is power at QWK
+  -0.225.

@@ -1,0 +1,162 @@
+# VIF Experiment: run_012_CORAL_IW
+# Generated: 2026-03-02T17:50:23
+# Git: 1af9f36(dirty)
+metadata:
+  experiment_id: run_012_CORAL_IW
+  run_id: run_012
+  model_name: CORAL_IW
+  timestamp: '2026-03-02T17:50:23'
+  git_commit: 1af9f36(dirty)
+  config_hash: 8a78a4a5402e
+provenance:
+  prev_run_id: run_011
+  prev_git_commit: 262f820(dirty)
+  git_log:
+  - '1af9f36 fix: Cleaned up notebook'
+  - 'afa7301 feat: init rough sketch for critic training v3'
+  - 404b2f7 Add bws onboarding notebook
+  - '00aa284 docs: update README with current datasets and VIF details (twinkl-652)'
+  - 'b1b4b42 docs: add command_status tool lag guidance to GEMINI.md'
+  - 'ca0c39f chore(vif): add experiment runs 010-011 with ws and CORAL_IW ablations'
+  - '2687cf4 docs(experiments): align logit-adjustment recommendations (twinkl-651)'
+  config_delta:
+    added: {}
+    removed: {}
+    changed: {}
+  rationale: >-
+    Re-ran the run_011 ws=2 nomic baseline under critic_training_v3 code changes (logger/notebook
+    cleanup, no config deltas) to check run-to-run stability on the fixed 1020-sample split and
+    quantify stochastic variance before introducing new architecture changes.
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 2
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 523
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: coral_iw
+    learning_rate: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1020
+  n_val: 230
+  n_test: 210
+capacity:
+  n_parameters: 39252
+  param_sample_ratio: 38.4824
+training_dynamics:
+  best_epoch: 11
+  total_epochs: 31
+  train_loss_at_best: 0.4403
+  val_loss_at_best: 0.4356
+  gap_at_best: -0.0047
+  final_lr: 0.0005
+evaluation:
+  mae_mean: 0.2138
+  accuracy_mean: 0.801
+  qwk_mean: 0.271
+  spearman_mean: 0.304
+  calibration_global: 0.8024
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.1348
+  minority_recall_mean: 0.2651
+  recall_minus1: 0.0998
+  recall_plus1: 0.4303
+  hedging_mean: 0.8695
+per_dimension:
+  self_direction:
+    mae: 0.4095
+    accuracy: 0.6238
+    qwk: 0.395
+    spearman: 0.4387
+    calibration: 0.5414
+    hedging: 0.6952
+  stimulation:
+    mae: 0.0905
+    accuracy: 0.9143
+    qwk: 0.402
+    spearman: 0.3299
+    calibration: 0.8714
+    hedging: 0.9476
+  hedonism:
+    mae: 0.1286
+    accuracy: 0.881
+    qwk: 0.3935
+    spearman: 0.3198
+    calibration: 0.8993
+    hedging: 0.9286
+  achievement:
+    mae: 0.1667
+    accuracy: 0.8333
+    qwk: 0.2929
+    spearman: 0.2488
+    calibration: 0.7876
+    hedging: 0.9429
+  power:
+    mae: 0.0619
+    accuracy: 0.9476
+    qwk: 0.0154
+    spearman: -0.1663
+    calibration: 0.9089
+    hedging: 0.9857
+  security:
+    mae: 0.3238
+    accuracy: 0.7095
+    qwk: 0.1236
+    spearman: 0.2142
+    calibration: 0.6898
+    hedging: 0.8619
+  conformity:
+    mae: 0.2286
+    accuracy: 0.7762
+    qwk: 0.5661
+    spearman: 0.5405
+    calibration: 0.6397
+    hedging: 0.7524
+  tradition:
+    mae: 0.181
+    accuracy: 0.8333
+    qwk: 0.1144
+    spearman: 0.3663
+    calibration: 0.7267
+    hedging: 0.9667
+  benevolence:
+    mae: 0.3
+    accuracy: 0.7143
+    qwk: 0.3765
+    spearman: 0.5272
+    calibration: 0.7861
+    hedging: 0.6714
+  universalism:
+    mae: 0.2476
+    accuracy: 0.7762
+    qwk: 0.0304
+    spearman: 0.2215
+    calibration: 0.8023
+    hedging: 0.9429
+observations: >-
+  run_012 CORAL_IW records QWK 0.271 (fair), calibration 0.802 (good), MAE 0.214, accuracy 0.801,
+  minority recall 0.265, and hedging 87.0% (excessive). Compared with run_011 CORAL_IW, QWK is
+  +0.002, calibration +0.012, minority recall +0.090, and hedging +0.0%. Largest QWK gains are
+  universalism 0.030 (+0.027), tradition 0.114 (+0.074); largest regressions are self_direction
+  0.395 (-0.041), stimulation 0.402 (-0.030). The hardest dimension in this run is power at QWK
+  0.015.
