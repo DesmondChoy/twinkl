@@ -1,0 +1,165 @@
+# VIF Experiment: run_014_SoftOrdinal
+# Generated: 2026-03-04T22:04:33
+# Git: 61fda7b(dirty)
+metadata:
+  experiment_id: run_014_SoftOrdinal
+  run_id: run_014
+  model_name: SoftOrdinal
+  timestamp: '2026-03-04T22:04:33'
+  git_commit: 61fda7b(dirty)
+  config_hash: 3f7ff3a0adc1
+provenance:
+  prev_run_id: run_013
+  prev_git_commit: 4c18b98(dirty)
+  git_log:
+  - '61fda7b docs(experiments): run_013 review and fix LR provenance in experiment
+    logger'
+  - '9c97a1a feat(vif): default LR-finder workflow and v4 notebook hardening (twinkl-666,
+    twinkl-672)'
+  config_delta:
+    added: {}
+    removed: {}
+    changed:
+      state_encoder.window_size:
+        from: 2
+        to: 1
+      data.state_dim:
+        from: 523
+        to: 266
+      training.learning_rate:
+        from: 0.001
+        to: 0.019791668678535573
+  rationale: Test ws=1 + LR finder valley recommendation. Previous LR finder work (run_013) used lr_steep with ws=2; this run reverts to ws=1 (matching run_010 SOTA) and applies the LR finder valley LR (~20x configured 0.001) to test whether automated LR selection improves upon the manually configured ws=1 baseline.
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 266
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: soft_ordinal
+    learning_rate: 0.019791668678535573
+    learning_rate_configured: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1020
+  n_val: 230
+  n_test: 210
+capacity:
+  n_parameters: 23454
+  param_sample_ratio: 22.9941
+training_dynamics:
+  best_epoch: 16
+  total_epochs: 36
+  train_loss_at_best: 0.1838
+  val_loss_at_best: 0.184
+  gap_at_best: 0.0002
+  final_lr: 0.009896
+evaluation:
+  mae_mean: 0.204
+  accuracy_mean: 0.8248
+  qwk_mean: 0.3882
+  spearman_mean: 0.3941
+  calibration_global: 0.8012
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.1326
+  minority_recall_mean: 0.2884
+  recall_minus1: 0.0748
+  recall_plus1: 0.5019
+  hedging_mean: 0.82
+per_dimension:
+  self_direction:
+    mae: 0.398
+    accuracy: 0.6762
+    qwk: 0.4978
+    spearman: 0.48
+    calibration: 0.549
+    hedging: 0.5333
+  stimulation:
+    mae: 0.0853
+    accuracy: 0.9238
+    qwk: 0.5548
+    spearman: 0.5831
+    calibration: 0.7938
+    hedging: 0.9286
+  hedonism:
+    mae: 0.1406
+    accuracy: 0.8714
+    qwk: 0.4124
+    spearman: 0.3308
+    calibration: 0.7788
+    hedging: 0.9238
+  achievement:
+    mae: 0.1746
+    accuracy: 0.8667
+    qwk: 0.4734
+    spearman: 0.3462
+    calibration: 0.7988
+    hedging: 0.8381
+  power:
+    mae: 0.0683
+    accuracy: 0.9476
+    qwk: -0.0909
+    spearman: -0.0536
+    calibration: 0.9102
+    hedging: 0.9667
+  security:
+    mae: 0.3211
+    accuracy: 0.7048
+    qwk: 0.2138
+    spearman: 0.293
+    calibration: 0.6642
+    hedging: 0.781
+  conformity:
+    mae: 0.2845
+    accuracy: 0.7333
+    qwk: 0.4462
+    spearman: 0.54
+    calibration: 0.6738
+    hedging: 0.7619
+  tradition:
+    mae: 0.1457
+    accuracy: 0.8714
+    qwk: 0.4805
+    spearman: 0.5179
+    calibration: 0.7778
+    hedging: 0.9048
+  benevolence:
+    mae: 0.2117
+    accuracy: 0.8286
+    qwk: 0.5828
+    spearman: 0.5759
+    calibration: 0.7977
+    hedging: 0.7476
+  universalism:
+    mae: 0.2103
+    accuracy: 0.8238
+    qwk: 0.3116
+    spearman: 0.3274
+    calibration: 0.8754
+    hedging: 0.8143
+observations: QWK 0.388 is the best-ever SoftOrdinal result (+0.080 vs run_010 SoftOrdinal at 0.308).
+  The LR finder valley LR (0.0198, ~20x configured) uniquely benefited SoftOrdinal, suggesting its
+  smooth probability-based loss tolerates larger learning rates better than threshold-based losses.
+  Training gap near-zero (0.0002) indicates excellent generalization. Calibration degraded from 0.860 to
+  0.801 but remains moderate. Self_direction QWK 0.498 and benevolence QWK 0.583 are strong. Still does
+  not surpass run_010 CORN (0.434) as overall SOTA.

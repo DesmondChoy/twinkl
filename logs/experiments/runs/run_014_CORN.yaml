@@ -1,0 +1,164 @@
+# VIF Experiment: run_014_CORN
+# Generated: 2026-03-04T22:04:33
+# Git: 61fda7b(dirty)
+metadata:
+  experiment_id: run_014_CORN
+  run_id: run_014
+  model_name: CORN
+  timestamp: '2026-03-04T22:04:33'
+  git_commit: 61fda7b(dirty)
+  config_hash: 4e229fc8441e
+provenance:
+  prev_run_id: run_013
+  prev_git_commit: 4c18b98(dirty)
+  git_log:
+  - '61fda7b docs(experiments): run_013 review and fix LR provenance in experiment
+    logger'
+  - '9c97a1a feat(vif): default LR-finder workflow and v4 notebook hardening (twinkl-666,
+    twinkl-672)'
+  config_delta:
+    added: {}
+    removed: {}
+    changed:
+      state_encoder.window_size:
+        from: 2
+        to: 1
+      data.state_dim:
+        from: 523
+        to: 266
+      training.learning_rate:
+        from: 0.001
+        to: 0.019791668678535573
+  rationale: Test ws=1 + LR finder valley recommendation. Previous LR finder work (run_013) used lr_steep with ws=2; this run reverts to ws=1 (matching run_010 SOTA) and applies the LR finder valley LR (~17x configured 0.001) to test whether automated LR selection improves upon the manually configured ws=1 baseline.
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 266
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: corn
+    learning_rate: 0.01683180353330956
+    learning_rate_configured: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1020
+  n_val: 230
+  n_test: 210
+capacity:
+  n_parameters: 22804
+  param_sample_ratio: 22.3569
+training_dynamics:
+  best_epoch: 7
+  total_epochs: 27
+  train_loss_at_best: 0.2668
+  val_loss_at_best: 0.2437
+  gap_at_best: -0.0231
+  final_lr: 0.008416
+evaluation:
+  mae_mean: 0.2072
+  accuracy_mean: 0.8186
+  qwk_mean: 0.3136
+  spearman_mean: 0.3675
+  calibration_global: 0.7532
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.103
+  minority_recall_mean: 0.2458
+  recall_minus1: 0.0604
+  recall_plus1: 0.4311
+  hedging_mean: 0.8476
+per_dimension:
+  self_direction:
+    mae: 0.3862
+    accuracy: 0.6714
+    qwk: 0.3802
+    spearman: 0.4454
+    calibration: 0.6061
+    hedging: 0.6476
+  stimulation:
+    mae: 0.095
+    accuracy: 0.9143
+    qwk: 0.475
+    spearman: 0.5607
+    calibration: 0.7341
+    hedging: 0.9381
+  hedonism:
+    mae: 0.1403
+    accuracy: 0.881
+    qwk: 0.3223
+    spearman: 0.3054
+    calibration: 0.8334
+    hedging: 0.9286
+  achievement:
+    mae: 0.1672
+    accuracy: 0.8619
+    qwk: 0.354
+    spearman: 0.3665
+    calibration: 0.8373
+    hedging: 0.881
+  power:
+    mae: 0.073
+    accuracy: 0.9476
+    qwk: 0.0154
+    spearman: -0.0988
+    calibration: 0.8797
+    hedging: 0.9571
+  security:
+    mae: 0.3141
+    accuracy: 0.6905
+    qwk: 0.1489
+    spearman: 0.1817
+    calibration: 0.3345
+    hedging: 0.9429
+  conformity:
+    mae: 0.2631
+    accuracy: 0.7571
+    qwk: 0.5048
+    spearman: 0.5682
+    calibration: 0.6372
+    hedging: 0.7571
+  tradition:
+    mae: 0.1457
+    accuracy: 0.8524
+    qwk: 0.3703
+    spearman: 0.6076
+    calibration: 0.7459
+    hedging: 0.9048
+  benevolence:
+    mae: 0.2352
+    accuracy: 0.8
+    qwk: 0.4899
+    spearman: 0.5442
+    calibration: 0.7223
+    hedging: 0.7476
+  universalism:
+    mae: 0.2524
+    accuracy: 0.8095
+    qwk: 0.0751
+    spearman: 0.1942
+    calibration: 0.9205
+    hedging: 0.7714
+observations: QWK 0.314 severely regressed vs run_010 CORN (0.434, SOTA) -- the largest single-loss
+  regression in run_014. The LR finder valley LR (0.0168, ~17x configured) was catastrophic for CORN.
+  Calibration 0.753 is worst across all runs 010-014. Security per-dim calibration 0.335 is a deployment
+  risk. Best_epoch=7 (vs run_010 best_epoch=16) indicates rapid convergence to a poor minimum. The LR
+  finder valley heuristic is clearly too aggressive for threshold-based ordinal losses at ws=1.

@@ -8,9 +8,9 @@
 | 2 | run_007 CORN | nomic-256d | 64 | 1020 | 0.413 | 0.838 | 0.205 | 0.821 | 0.285 | Previous leader; remains highly competitive with comparable MAE/Acc and slightly higher calibration. |
 | 3 | run_012 EMD | nomic-256d | 64 | 1020 | 0.369 | **0.857** | 0.213 | 0.808 | **0.364** | Best calibration/minority-recall trade-off among ws=2 runs; QWK is comparable to run_011 EMD with materially higher minority recall. |
 
-> **Key insight**: `run_013` (critic_training_v4 with LR-finder-selected starting LRs) improved ws=2 QWK — best ws=2 CORN is now 0.382 (up from 0.335–0.346) — but still does not exceed the ws=1 leader (`run_010 CORN`, QWK 0.434). The LR finder's higher starting LRs (~4.8× for CORAL/CORN) lifted agreement but **reduced minority recall** vs run_012 (e.g., SoftOrdinal MinR: 0.391→0.269). Stochastic variance across three ws=2 reruns is substantial (CORN QWK range: 0.335–0.382).
+> **Key insight**: `run_014` (ws=1 + LR finder valley) tested automated LR selection on the ws=1 frontier. The LR finder valley LRs (17–20× configured) are **loss-function-dependent**: CORN regressed catastrophically (QWK 0.434→0.314, -0.120) while SoftOrdinal achieved its best-ever QWK (0.388, +0.080 vs run_010). This reveals threshold-based losses (CORAL/CORN) have sharper optima than distribution-based losses (EMD/SoftOrdinal). Calibration degraded across all losses (CORN to 0.753, worst in runs 010–014). **run_010 CORN remains SOTA** — the manually configured LR of 0.001 is superior for threshold-based losses.
 >
-> **Primary bottleneck**: even with QWK 0.434 (moderate), `run_010 CORN` still has `recall_minus1 = 8.9%` and hedging at 82.0%, so the critic under-detects misalignment. Power remains the systemic failure: mean QWK 0.084 across all nomic runs (std=0.201), with only 9 val personas contributing non-zero labels — model selection is effectively random for this dimension. Next experiments should: (1) implement **CDW-CE loss** ([Polat et al. 2025](https://arxiv.org/abs/2412.01246)) with distance-weighted ordinal penalties targeting hedging reduction; (2) apply post-hoc logit adjustment at inference using known class priors; (3) enforce per-dimension stratified validation splits; (4) rerun ws=1 baseline with LR-finder. See full analysis in [`logs/experiments/reports/experiment_review_2026-03-04_v2.md`](reports/experiment_review_2026-03-04_v2.md).
+> **Primary bottleneck**: `recall_minus1 = 5–9%` across ALL 14 runs and ALL losses. The model detects alignment (+1) at 43–70% but is nearly blind to misalignment (-1). No architectural, capacity, or LR intervention has moved this metric. Next experiments should: (1) implement **CDW-CE loss** ([Polat et al. 2025](https://arxiv.org/abs/2412.01246), alpha=2–5) targeting the hedging/misalignment-detection bottleneck; (2) apply **post-hoc logit adjustment** (tau=0.3–1.0) on existing models for free minority-recall gains; (3) try **loss-specific LR** (CORN@0.001, SoftOrdinal@0.020) to combine best of both worlds; (4) add **soft ordinal labels (SORD)** to recover calibration. See full analysis in [`logs/experiments/reports/experiment_review_2026-03-04_v3.md`](reports/experiment_review_2026-03-04_v3.md).
 
 ## Run Log
 
@@ -74,11 +74,31 @@
 | 013 | CORN | nomic-256d | 2 | 64 | 0.3 | corn | 39252 | 38.5 | 0.208 | 0.821 | 0.382 | 0.388 | 0.828 | 0.269 | runs/run_013_CORN.yaml |
 | 013 | EMD | nomic-256d | 2 | 64 | 0.3 | emd | 39902 | 39.1 | 0.209 | 0.823 | 0.391 | 0.371 | 0.840 | 0.293 | runs/run_013_EMD.yaml |
 | 013 | SoftOrdinal | nomic-256d | 2 | 64 | 0.3 | soft_ordinal | 39902 | 39.1 | 0.212 | 0.820 | 0.334 | 0.367 | 0.830 | 0.269 | runs/run_013_SoftOrdinal.yaml |
+| 014 | CORAL | nomic-256d | 1 | 64 | 0.3 | coral | 22804 | 22.4 | 0.206 | 0.821 | 0.329 | 0.391 | 0.813 | 0.237 | runs/run_014_CORAL.yaml |
+| 014 | CORN | nomic-256d | 1 | 64 | 0.3 | corn | 22804 | 22.4 | 0.207 | 0.819 | 0.314 | 0.367 | 0.753 | 0.246 | runs/run_014_CORN.yaml |
+| 014 | EMD | nomic-256d | 1 | 64 | 0.3 | emd | 23454 | 23.0 | 0.203 | 0.818 | 0.373 | 0.406 | 0.785 | 0.274 | runs/run_014_EMD.yaml |
+| 014 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 23.0 | 0.204 | 0.825 | 0.388 | 0.394 | 0.801 | 0.288 | runs/run_014_SoftOrdinal.yaml |
 <!-- AUTO-TABLE:END -->
 
 > **Contributor note:** Keep this section in **newest-first** chronological order (most recent date at top).
 
 ## Findings
+
+### 2026-03-04 — LR-finder valley on ws=1 baseline (run_014, loss-specific LR sensitivity)
+
+`run_014` applies the LR finder's **valley** LR recommendation to the ws=1 frontier (matching run_010's architecture). The valley LRs are much more aggressive than run_013's lr_steep: CORAL/EMD/SoftOrdinal at ~0.0198 (20× configured), CORN at ~0.0168 (17×). The ws=1 architecture produced true valleys rather than the fallback lr_steep used for ws=2.
+
+**1. CORN regressed catastrophically.** QWK dropped from 0.434 (run_010, SOTA) to 0.314 (-0.120). Calibration fell to 0.753 — worst across all runs 010–014. Security per-dim calibration collapsed to 0.335 (deployment risk). The 17× LR overshoots CORN's sharp optimum at ws=1.
+
+**2. SoftOrdinal achieved best-ever QWK.** QWK 0.388 (+0.080 vs run_010's 0.308) — the largest single-loss improvement in the project. The 20× LR uniquely benefits SoftOrdinal's smooth probability-based loss landscape. Training gap near-zero (0.0002), best_epoch=16 (healthy).
+
+**3. Loss functions have different LR regimes.** This is the key mechanistic finding: threshold-based losses (CORAL/CORN) have sharp optima sensitive to LR magnitude, while distribution-based losses (EMD/SoftOrdinal) have smoother landscapes that tolerate or benefit from higher LR. A single LR finder pass cannot serve all losses.
+
+**4. recall_minus1 still stuck at 5–9%.** The aggressive LR did not improve misalignment detection. CORN recall_-1 fell from 0.089 to 0.060. This confirms the hedging problem is structural, not LR-dependent.
+
+**5. LR finder bug suspected.** `lr_find_history.json` is identical to `lr_find_SoftOrdinal.json`. Config delta for CORN shows generic 0.01979 instead of actual 0.01683. Needs code audit.
+
+**Conclusion**: run_014 is a **negative result for automated LR selection** on threshold-based losses but a **positive result for SoftOrdinal**. The manually configured LR of 0.001 remains superior for CORN at ws=1. Next steps should focus on loss-function-level interventions (CDW-CE, logit adjustment) rather than further LR tuning. See full analysis: [`reports/experiment_review_2026-03-04_v3.md`](reports/experiment_review_2026-03-04_v3.md).
 
 ### 2026-03-04 — LR-finder impact on ws=2 baseline (run_013, critic_training_v4)
 

@@ -1,0 +1,164 @@
+# VIF Experiment: run_014_EMD
+# Generated: 2026-03-04T22:04:33
+# Git: 61fda7b(dirty)
+metadata:
+  experiment_id: run_014_EMD
+  run_id: run_014
+  model_name: EMD
+  timestamp: '2026-03-04T22:04:33'
+  git_commit: 61fda7b(dirty)
+  config_hash: d4abe43d2673
+provenance:
+  prev_run_id: run_013
+  prev_git_commit: 4c18b98(dirty)
+  git_log:
+  - '61fda7b docs(experiments): run_013 review and fix LR provenance in experiment
+    logger'
+  - '9c97a1a feat(vif): default LR-finder workflow and v4 notebook hardening (twinkl-666,
+    twinkl-672)'
+  config_delta:
+    added: {}
+    removed: {}
+    changed:
+      state_encoder.window_size:
+        from: 2
+        to: 1
+      data.state_dim:
+        from: 523
+        to: 266
+      training.learning_rate:
+        from: 0.001
+        to: 0.019791668678535573
+  rationale: Test ws=1 + LR finder valley recommendation. Previous LR finder work (run_013) used lr_steep with ws=2; this run reverts to ws=1 (matching run_010 SOTA) and applies the LR finder valley LR (~20x configured 0.001) to test whether automated LR selection improves upon the manually configured ws=1 baseline.
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 266
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: emd
+    learning_rate: 0.019791668678535573
+    learning_rate_configured: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1020
+  n_val: 230
+  n_test: 210
+capacity:
+  n_parameters: 23454
+  param_sample_ratio: 22.9941
+training_dynamics:
+  best_epoch: 6
+  total_epochs: 26
+  train_loss_at_best: 0.1612
+  val_loss_at_best: 0.1401
+  gap_at_best: -0.0211
+  final_lr: 0.009896
+evaluation:
+  mae_mean: 0.2034
+  accuracy_mean: 0.8181
+  qwk_mean: 0.3726
+  spearman_mean: 0.4062
+  calibration_global: 0.7846
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.1137
+  minority_recall_mean: 0.2736
+  recall_minus1: 0.0575
+  recall_plus1: 0.4896
+  hedging_mean: 0.8338
+per_dimension:
+  self_direction:
+    mae: 0.3789
+    accuracy: 0.6571
+    qwk: 0.4427
+    spearman: 0.4786
+    calibration: 0.4782
+    hedging: 0.681
+  stimulation:
+    mae: 0.0847
+    accuracy: 0.9238
+    qwk: 0.5745
+    spearman: 0.7263
+    calibration: 0.9019
+    hedging: 0.9095
+  hedonism:
+    mae: 0.1379
+    accuracy: 0.8952
+    qwk: 0.3884
+    spearman: 0.3318
+    calibration: 0.8385
+    hedging: 0.8667
+  achievement:
+    mae: 0.1586
+    accuracy: 0.8619
+    qwk: 0.4007
+    spearman: 0.3005
+    calibration: 0.7821
+    hedging: 0.8762
+  power:
+    mae: 0.0553
+    accuracy: 0.9524
+    qwk: 0.2412
+    spearman: 0.0719
+    calibration: 0.8506
+    hedging: 0.981
+  security:
+    mae: 0.3245
+    accuracy: 0.6905
+    qwk: 0.0595
+    spearman: 0.1278
+    calibration: 0.6511
+    hedging: 0.9048
+  conformity:
+    mae: 0.2658
+    accuracy: 0.7429
+    qwk: 0.4598
+    spearman: 0.6497
+    calibration: 0.538
+    hedging: 0.7952
+  tradition:
+    mae: 0.1419
+    accuracy: 0.8571
+    qwk: 0.399
+    spearman: 0.5226
+    calibration: 0.7382
+    hedging: 0.9143
+  benevolence:
+    mae: 0.259
+    accuracy: 0.7714
+    qwk: 0.5041
+    spearman: 0.5193
+    calibration: 0.8003
+    hedging: 0.6619
+  universalism:
+    mae: 0.2276
+    accuracy: 0.8286
+    qwk: 0.2558
+    spearman: 0.333
+    calibration: 0.9481
+    hedging: 0.7476
+observations: QWK 0.373 is roughly comparable to run_010 EMD (0.362, +0.011) -- the only loss where the
+  LR finder valley LR did not hurt QWK. Best MAE across all run_014 losses (0.203). However calibration
+  degraded substantially from 0.851 to 0.785 (-0.066). Security QWK collapsed to 0.060 (from 0.132 in
+  run_010). The 20x LR was less destructive for EMD than CORAL/CORN, possibly because EMD's earth-mover
+  distance operates on the full probability simplex rather than binary thresholds.

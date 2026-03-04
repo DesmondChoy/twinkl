@@ -1,0 +1,164 @@
+# VIF Experiment: run_014_CORAL
+# Generated: 2026-03-04T22:04:33
+# Git: 61fda7b(dirty)
+metadata:
+  experiment_id: run_014_CORAL
+  run_id: run_014
+  model_name: CORAL
+  timestamp: '2026-03-04T22:04:33'
+  git_commit: 61fda7b(dirty)
+  config_hash: d061c23d3efe
+provenance:
+  prev_run_id: run_013
+  prev_git_commit: 4c18b98(dirty)
+  git_log:
+  - '61fda7b docs(experiments): run_013 review and fix LR provenance in experiment
+    logger'
+  - '9c97a1a feat(vif): default LR-finder workflow and v4 notebook hardening (twinkl-666,
+    twinkl-672)'
+  config_delta:
+    added: {}
+    removed: {}
+    changed:
+      state_encoder.window_size:
+        from: 2
+        to: 1
+      data.state_dim:
+        from: 523
+        to: 266
+      training.learning_rate:
+        from: 0.001
+        to: 0.019791668678535573
+  rationale: Test ws=1 + LR finder valley recommendation. Previous LR finder work (run_013) used lr_steep with ws=2; this run reverts to ws=1 (matching run_010 SOTA) and applies the LR finder valley LR (~20x configured 0.001) to test whether automated LR selection improves upon the manually configured ws=1 baseline.
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 266
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: coral
+    learning_rate: 0.019791668678535573
+    learning_rate_configured: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1020
+  n_val: 230
+  n_test: 210
+capacity:
+  n_parameters: 22804
+  param_sample_ratio: 22.3569
+training_dynamics:
+  best_epoch: 16
+  total_epochs: 36
+  train_loss_at_best: 0.4599
+  val_loss_at_best: 0.4779
+  gap_at_best: 0.018
+  final_lr: 0.009896
+evaluation:
+  mae_mean: 0.206
+  accuracy_mean: 0.8214
+  qwk_mean: 0.3294
+  spearman_mean: 0.3908
+  calibration_global: 0.8129
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.1295
+  minority_recall_mean: 0.2371
+  recall_minus1: 0.0541
+  recall_plus1: 0.4201
+  hedging_mean: 0.8457
+per_dimension:
+  self_direction:
+    mae: 0.394
+    accuracy: 0.6762
+    qwk: 0.3916
+    spearman: 0.4389
+    calibration: 0.5722
+    hedging: 0.6524
+  stimulation:
+    mae: 0.0911
+    accuracy: 0.919
+    qwk: 0.5377
+    spearman: 0.3415
+    calibration: 0.9134
+    hedging: 0.9286
+  hedonism:
+    mae: 0.133
+    accuracy: 0.881
+    qwk: 0.4218
+    spearman: 0.4348
+    calibration: 0.8376
+    hedging: 0.9238
+  achievement:
+    mae: 0.1958
+    accuracy: 0.8333
+    qwk: 0.3629
+    spearman: 0.3003
+    calibration: 0.8369
+    hedging: 0.8238
+  power:
+    mae: 0.0885
+    accuracy: 0.9429
+    qwk: -0.2162
+    spearman: 0.016
+    calibration: 0.9612
+    hedging: 0.9476
+  security:
+    mae: 0.3062
+    accuracy: 0.7524
+    qwk: 0.1516
+    spearman: 0.2202
+    calibration: 0.6756
+    hedging: 0.8
+  conformity:
+    mae: 0.2652
+    accuracy: 0.7524
+    qwk: 0.5186
+    spearman: 0.5661
+    calibration: 0.6681
+    hedging: 0.7667
+  tradition:
+    mae: 0.1567
+    accuracy: 0.8429
+    qwk: 0.3104
+    spearman: 0.5427
+    calibration: 0.8026
+    hedging: 0.9333
+  benevolence:
+    mae: 0.2286
+    accuracy: 0.7952
+    qwk: 0.4173
+    spearman: 0.5341
+    calibration: 0.7283
+    hedging: 0.819
+  universalism:
+    mae: 0.2012
+    accuracy: 0.819
+    qwk: 0.3978
+    spearman: 0.5134
+    calibration: 0.9109
+    hedging: 0.8619
+observations: QWK 0.329 regressed vs run_010 CORAL (0.364) despite identical ws=1/hd=64 config.
+  The LR finder valley LR (0.0198, ~20x configured) was too aggressive for CORAL's binary threshold
+  formulation. Calibration held reasonably (0.813 vs 0.823). Power QWK collapsed to -0.216, continuing
+  the systemic failure on this dimension. Best_epoch=16 suggests the model trained for a reasonable
+  duration but converged to a worse minimum than run_010 (best_epoch=22 at LR 0.001).
