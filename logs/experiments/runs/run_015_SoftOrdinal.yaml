@@ -1,0 +1,157 @@
+# VIF Experiment: run_015_SoftOrdinal
+# Generated: 2026-03-04T22:44:54
+# Git: 456d098(dirty)
+metadata:
+  experiment_id: run_015_SoftOrdinal
+  run_id: run_015
+  model_name: SoftOrdinal
+  timestamp: '2026-03-04T22:44:54'
+  git_commit: 456d098(dirty)
+  config_hash: 92c35b3d9005
+provenance:
+  prev_run_id: run_014
+  prev_git_commit: 61fda7b(dirty)
+  git_log:
+  - '456d098 docs(experiments): run_014 review — LR finder valley on ws=1, loss-specific
+    LR sensitivity'
+  config_delta:
+    added: {}
+    removed: {}
+    changed: {}
+  rationale: First CDW-CE loss evaluation (alpha=2,3,5 sweep) on ws=1 frontier, motivated
+    by run_014 review identifying loss-function-level interventions as highest-priority
+    next step for the recall_minus1 bottleneck. Standard losses retrained with LR finder
+    as concurrent baselines.
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 266
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: soft_ordinal
+    learning_rate: 0.001109752496412071
+    learning_rate_configured: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1020
+  n_val: 230
+  n_test: 210
+capacity:
+  n_parameters: 23454
+  param_sample_ratio: 22.9941
+training_dynamics:
+  best_epoch: 8
+  total_epochs: 28
+  train_loss_at_best: 0.2039
+  val_loss_at_best: 0.1803
+  gap_at_best: -0.0237
+  final_lr: 0.000555
+evaluation:
+  mae_mean: 0.2084
+  accuracy_mean: 0.8219
+  qwk_mean: 0.3351
+  spearman_mean: 0.3807
+  calibration_global: 0.8464
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.1427
+  minority_recall_mean: 0.2919
+  recall_minus1: 0.0642
+  recall_plus1: 0.5195
+  hedging_mean: 0.8029
+per_dimension:
+  self_direction:
+    mae: 0.4224
+    accuracy: 0.6333
+    qwk: 0.4204
+    spearman: 0.4482
+    calibration: 0.5677
+    hedging: 0.4952
+  stimulation:
+    mae: 0.0801
+    accuracy: 0.9238
+    qwk: 0.4833
+    spearman: 0.6724
+    calibration: 0.9328
+    hedging: 0.9238
+  hedonism:
+    mae: 0.141
+    accuracy: 0.8714
+    qwk: 0.2566
+    spearman: 0.381
+    calibration: 0.8584
+    hedging: 0.9238
+  achievement:
+    mae: 0.1764
+    accuracy: 0.8667
+    qwk: 0.4278
+    spearman: 0.3073
+    calibration: 0.8172
+    hedging: 0.8667
+  power:
+    mae: 0.0633
+    accuracy: 0.9476
+    qwk: 0.0154
+    spearman: -0.0611
+    calibration: 0.8788
+    hedging: 0.9762
+  security:
+    mae: 0.3257
+    accuracy: 0.7143
+    qwk: 0.0902
+    spearman: 0.1793
+    calibration: 0.7346
+    hedging: 0.8
+  conformity:
+    mae: 0.2541
+    accuracy: 0.7571
+    qwk: 0.5231
+    spearman: 0.6263
+    calibration: 0.7053
+    hedging: 0.7048
+  tradition:
+    mae: 0.1358
+    accuracy: 0.8762
+    qwk: 0.5188
+    spearman: 0.4876
+    calibration: 0.838
+    hedging: 0.8857
+  benevolence:
+    mae: 0.234
+    accuracy: 0.8095
+    qwk: 0.5336
+    spearman: 0.5524
+    calibration: 0.8394
+    hedging: 0.7048
+  universalism:
+    mae: 0.2512
+    accuracy: 0.819
+    qwk: 0.082
+    spearman: 0.2138
+    calibration: 0.8844
+    hedging: 0.7476
+observations: Best calibration in run_015 (0.846) and best minority recall (0.292).
+  Lowest hedging (80.3%) — most decisive predictor. QWK 0.335 is below run_014 SoftOrdinal
+  (0.388) despite the LR finder returning a conservative 0.00111 (1.1x) via lr_steep
+  fallback, versus run_014's valley LR of 0.0198. Best recall_-1 in run_015 (0.064).
+  The LR finder inconsistency between run_014 and run_015 for SoftOrdinal suggests
+  stochastic sensitivity in the loss landscape probing.

@@ -1,6 +1,6 @@
 """Tests for OrdinalCriticBase and all ordinal model variants.
 
-Parametrized over all 4 models to verify the shared interface contract.
+Parametrized over all 5 models to verify the shared interface contract.
 """
 
 import torch
@@ -9,6 +9,7 @@ import pytest
 from src.vif.critic_ordinal import (
     CriticMLPCORAL,
     CriticMLPCORN,
+    CriticMLPCDWCE,
     CriticMLPEMD,
     CriticMLPSoftOrdinal,
     OrdinalCriticBase,
@@ -18,7 +19,13 @@ INPUT_DIM = 100
 HIDDEN_DIM = 64
 BATCH_SIZE = 4
 
-ALL_MODELS = [CriticMLPCORAL, CriticMLPCORN, CriticMLPEMD, CriticMLPSoftOrdinal]
+ALL_MODELS = [
+    CriticMLPCORAL,
+    CriticMLPCORN,
+    CriticMLPEMD,
+    CriticMLPCDWCE,
+    CriticMLPSoftOrdinal,
+]
 
 
 @pytest.fixture(params=ALL_MODELS, ids=lambda c: c.__name__)
@@ -73,7 +80,7 @@ class TestConfigRoundTrip:
         """Config should include a variant key."""
         config = model.get_config()
         assert "variant" in config
-        assert config["variant"] in {"coral", "corn", "emd", "soft_ordinal"}
+        assert config["variant"] in {"coral", "corn", "emd", "cdw_ce", "soft_ordinal"}
 
     def test_config_round_trip(self, model, sample_input):
         """Model created from config should produce same-shape output."""

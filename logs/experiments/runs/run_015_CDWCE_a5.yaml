@@ -1,0 +1,157 @@
+# VIF Experiment: run_015_CDWCE_a5
+# Generated: 2026-03-04T22:44:55
+# Git: 456d098(dirty)
+metadata:
+  experiment_id: run_015_CDWCE_a5
+  run_id: run_015
+  model_name: CDWCE_a5
+  timestamp: '2026-03-04T22:44:55'
+  git_commit: 456d098(dirty)
+  config_hash: d413bd6ebbdf
+provenance:
+  prev_run_id: run_014
+  prev_git_commit: 61fda7b(dirty)
+  git_log:
+  - '456d098 docs(experiments): run_014 review — LR finder valley on ws=1, loss-specific
+    LR sensitivity'
+  config_delta:
+    added: {}
+    removed: {}
+    changed: {}
+  rationale: First CDW-CE loss evaluation (alpha=2,3,5 sweep) on ws=1 frontier, motivated
+    by run_014 review identifying loss-function-level interventions as highest-priority
+    next step for the recall_minus1 bottleneck. Standard losses retrained with LR finder
+    as concurrent baselines.
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 266
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: cdwce_a5
+    learning_rate: 0.0023004301197729195
+    learning_rate_configured: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1020
+  n_val: 230
+  n_test: 210
+capacity:
+  n_parameters: 23454
+  param_sample_ratio: 22.9941
+training_dynamics:
+  best_epoch: 30
+  total_epochs: 50
+  train_loss_at_best: 0.6258
+  val_loss_at_best: 0.6471
+  gap_at_best: 0.0214
+  final_lr: 0.00115
+evaluation:
+  mae_mean: 0.2173
+  accuracy_mean: 0.7952
+  qwk_mean: 0.2997
+  spearman_mean: 0.3713
+  calibration_global: 0.6394
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.0839
+  minority_recall_mean: 0.1738
+  recall_minus1: 0.012
+  recall_plus1: 0.3356
+  hedging_mean: 0.8986
+per_dimension:
+  self_direction:
+    mae: 0.4286
+    accuracy: 0.5952
+    qwk: 0.1878
+    spearman: 0.394
+    calibration: 0.2732
+    hedging: 0.8429
+  stimulation:
+    mae: 0.0913
+    accuracy: 0.919
+    qwk: 0.4919
+    spearman: 0.4899
+    calibration: 0.7377
+    hedging: 0.9476
+  hedonism:
+    mae: 0.1414
+    accuracy: 0.8667
+    qwk: 0.2947
+    spearman: 0.3973
+    calibration: 0.6502
+    hedging: 0.9333
+  achievement:
+    mae: 0.1457
+    accuracy: 0.8667
+    qwk: 0.4109
+    spearman: 0.4263
+    calibration: 0.6833
+    hedging: 0.8905
+  power:
+    mae: 0.0738
+    accuracy: 0.9476
+    qwk: 0.2731
+    spearman: -0.0131
+    calibration: 0.8094
+    hedging: 0.9619
+  security:
+    mae: 0.3189
+    accuracy: 0.6857
+    qwk: 0.1127
+    spearman: 0.1849
+    calibration: 0.5668
+    hedging: 0.9095
+  conformity:
+    mae: 0.3226
+    accuracy: 0.6952
+    qwk: 0.3656
+    spearman: 0.4905
+    calibration: 0.393
+    hedging: 0.8381
+  tradition:
+    mae: 0.1599
+    accuracy: 0.8476
+    qwk: 0.3408
+    spearman: 0.5192
+    calibration: 0.7657
+    hedging: 0.9286
+  benevolence:
+    mae: 0.2397
+    accuracy: 0.781
+    qwk: 0.3822
+    spearman: 0.504
+    calibration: 0.6176
+    hedging: 0.8238
+  universalism:
+    mae: 0.2508
+    accuracy: 0.7476
+    qwk: 0.1376
+    spearman: 0.3199
+    calibration: 0.5412
+    hedging: 0.9095
+observations: Worst QWK in run_015 at 0.300 (fair) with highest hedging (89.9%) and
+  lowest minority recall (0.174). Alpha=5 over-penalizes adjacent errors, causing extreme
+  hedging. recall_-1 = 0.012 is effectively zero. Calibration 0.639 is the lowest in
+  run_015 and near the moderate/weak boundary. Self_direction QWK collapsed to 0.188.
+  The high alpha collapses to near-constant neutral predictions — confirms the Polat et al.
+  finding that excessively large alpha harms performance.

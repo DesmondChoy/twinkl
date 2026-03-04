@@ -1,0 +1,157 @@
+# VIF Experiment: run_015_CDWCE_a2
+# Generated: 2026-03-04T22:44:54
+# Git: 456d098(dirty)
+metadata:
+  experiment_id: run_015_CDWCE_a2
+  run_id: run_015
+  model_name: CDWCE_a2
+  timestamp: '2026-03-04T22:44:54'
+  git_commit: 456d098(dirty)
+  config_hash: e024447460ae
+provenance:
+  prev_run_id: run_014
+  prev_git_commit: 61fda7b(dirty)
+  git_log:
+  - '456d098 docs(experiments): run_014 review — LR finder valley on ws=1, loss-specific
+    LR sensitivity'
+  config_delta:
+    added: {}
+    removed: {}
+    changed: {}
+  rationale: First CDW-CE loss evaluation (alpha=2,3,5 sweep) on ws=1 frontier, motivated
+    by run_014 review identifying loss-function-level interventions as highest-priority
+    next step for the recall_minus1 bottleneck. Standard losses retrained with LR finder
+    as concurrent baselines.
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 266
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: cdwce_a2
+    learning_rate: 0.0021214517849106303
+    learning_rate_configured: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1020
+  n_val: 230
+  n_test: 210
+capacity:
+  n_parameters: 23454
+  param_sample_ratio: 22.9941
+training_dynamics:
+  best_epoch: 13
+  total_epochs: 33
+  train_loss_at_best: 0.4617
+  val_loss_at_best: 0.4498
+  gap_at_best: -0.012
+  final_lr: 0.001061
+evaluation:
+  mae_mean: 0.207
+  accuracy_mean: 0.811
+  qwk_mean: 0.3224
+  spearman_mean: 0.3496
+  calibration_global: 0.7829
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.1141
+  minority_recall_mean: 0.2202
+  recall_minus1: 0.0376
+  recall_plus1: 0.4027
+  hedging_mean: 0.8614
+per_dimension:
+  self_direction:
+    mae: 0.3963
+    accuracy: 0.6286
+    qwk: 0.3024
+    spearman: 0.4408
+    calibration: 0.4571
+    hedging: 0.7381
+  stimulation:
+    mae: 0.0866
+    accuracy: 0.9238
+    qwk: 0.4881
+    spearman: 0.5018
+    calibration: 0.8976
+    hedging: 0.9238
+  hedonism:
+    mae: 0.1504
+    accuracy: 0.8476
+    qwk: 0.1509
+    spearman: 0.335
+    calibration: 0.6663
+    hedging: 0.9762
+  achievement:
+    mae: 0.1564
+    accuracy: 0.8714
+    qwk: 0.4213
+    spearman: 0.2648
+    calibration: 0.744
+    hedging: 0.8857
+  power:
+    mae: 0.0617
+    accuracy: 0.9476
+    qwk: 0.1358
+    spearman: -0.1027
+    calibration: 0.8808
+    hedging: 0.9857
+  security:
+    mae: 0.3258
+    accuracy: 0.7048
+    qwk: 0.0631
+    spearman: 0.1943
+    calibration: 0.7057
+    hedging: 0.8381
+  conformity:
+    mae: 0.2797
+    accuracy: 0.7286
+    qwk: 0.4396
+    spearman: 0.5926
+    calibration: 0.5743
+    hedging: 0.7667
+  tradition:
+    mae: 0.1388
+    accuracy: 0.881
+    qwk: 0.5543
+    spearman: 0.5391
+    calibration: 0.846
+    hedging: 0.8857
+  benevolence:
+    mae: 0.2321
+    accuracy: 0.7905
+    qwk: 0.4337
+    spearman: 0.5025
+    calibration: 0.8291
+    hedging: 0.7476
+  universalism:
+    mae: 0.2418
+    accuracy: 0.7857
+    qwk: 0.2348
+    spearman: 0.228
+    calibration: 0.8648
+    hedging: 0.8667
+observations: QWK 0.322 (fair) with lowest recall_-1 in run_015 at 0.038 — alpha=2
+  provides insufficient distance penalty for a 3-class ordinal problem. Hedonism QWK
+  collapsed to 0.151, and security QWK near-zero (0.063). Training gap slightly negative
+  (-0.012), suggesting mild underfitting at LR 0.00212 (2.1x). Not competitive with
+  CDWCE_a3 or established losses — alpha=2 is too weak to differentiate from standard
+  cross-entropy in the 3-class setting.

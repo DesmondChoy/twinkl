@@ -1,0 +1,156 @@
+# VIF Experiment: run_015_CORAL
+# Generated: 2026-03-04T22:44:54
+# Git: 456d098(dirty)
+metadata:
+  experiment_id: run_015_CORAL
+  run_id: run_015
+  model_name: CORAL
+  timestamp: '2026-03-04T22:44:54'
+  git_commit: 456d098(dirty)
+  config_hash: d061c23d3efe
+provenance:
+  prev_run_id: run_014
+  prev_git_commit: 61fda7b(dirty)
+  git_log:
+  - '456d098 docs(experiments): run_014 review — LR finder valley on ws=1, loss-specific
+    LR sensitivity'
+  config_delta:
+    added: {}
+    removed: {}
+    changed: {}
+  rationale: First CDW-CE loss evaluation (alpha=2,3,5 sweep) on ws=1 frontier, motivated
+    by run_014 review identifying loss-function-level interventions as highest-priority
+    next step for the recall_minus1 bottleneck. Standard losses retrained with LR finder
+    as concurrent baselines.
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 266
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: coral
+    learning_rate: 0.019791668678535573
+    learning_rate_configured: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1020
+  n_val: 230
+  n_test: 210
+capacity:
+  n_parameters: 22804
+  param_sample_ratio: 22.3569
+training_dynamics:
+  best_epoch: 16
+  total_epochs: 36
+  train_loss_at_best: 0.4599
+  val_loss_at_best: 0.4779
+  gap_at_best: 0.018
+  final_lr: 0.009896
+evaluation:
+  mae_mean: 0.2054
+  accuracy_mean: 0.8219
+  qwk_mean: 0.3492
+  spearman_mean: 0.3882
+  calibration_global: 0.8239
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.1319
+  minority_recall_mean: 0.241
+  recall_minus1: 0.0637
+  recall_plus1: 0.4183
+  hedging_mean: 0.8486
+per_dimension:
+  self_direction:
+    mae: 0.3957
+    accuracy: 0.6667
+    qwk: 0.4024
+    spearman: 0.4773
+    calibration: 0.6013
+    hedging: 0.6524
+  stimulation:
+    mae: 0.089
+    accuracy: 0.919
+    qwk: 0.5377
+    spearman: 0.3109
+    calibration: 0.9408
+    hedging: 0.9286
+  hedonism:
+    mae: 0.131
+    accuracy: 0.8714
+    qwk: 0.4097
+    spearman: 0.4413
+    calibration: 0.8733
+    hedging: 0.919
+  achievement:
+    mae: 0.1942
+    accuracy: 0.8524
+    qwk: 0.4147
+    spearman: 0.3161
+    calibration: 0.8325
+    hedging: 0.819
+  power:
+    mae: 0.0854
+    accuracy: 0.9429
+    qwk: -0.1111
+    spearman: -0.0152
+    calibration: 0.938
+    hedging: 0.9714
+  security:
+    mae: 0.3071
+    accuracy: 0.7667
+    qwk: 0.2296
+    spearman: 0.2179
+    calibration: 0.6894
+    hedging: 0.7857
+  conformity:
+    mae: 0.2699
+    accuracy: 0.7476
+    qwk: 0.507
+    spearman: 0.558
+    calibration: 0.7143
+    hedging: 0.7714
+  tradition:
+    mae: 0.1621
+    accuracy: 0.8381
+    qwk: 0.2792
+    spearman: 0.5461
+    calibration: 0.7855
+    hedging: 0.9381
+  benevolence:
+    mae: 0.2257
+    accuracy: 0.7857
+    qwk: 0.3792
+    spearman: 0.5415
+    calibration: 0.7087
+    hedging: 0.8381
+  universalism:
+    mae: 0.1943
+    accuracy: 0.8286
+    qwk: 0.4435
+    spearman: 0.4876
+    calibration: 0.8928
+    hedging: 0.8619
+observations: QWK 0.349 (fair), comparable to run_010 CORAL (0.364) and improved over
+  run_014 CORAL (0.329) despite identical applied LR (0.01979). Best security QWK in
+  run_015 at 0.230. Calibration 0.824 is strong. Hedonism QWK 0.410 and universalism
+  0.444 are strong. Power QWK collapsed to -0.111. Applied LR identical to run_014 CORAL,
+  confirming the LR finder landscape is deterministic for CORAL at this architecture.

@@ -1,8 +1,8 @@
 """Ordinal critic models for VIF alignment prediction.
 
-This module contains the shared base class and all four ordinal critic variants:
-CORAL, CORN, EMD, and SoftOrdinal. Each predicts per-dimension alignment as
-ordinal classes {-1, 0, +1} across 10 Schwartz value dimensions.
+This module contains the shared base class and all five ordinal critic variants:
+CORAL, CORN, EMD, SoftOrdinal, and CDW-CE. Each predicts per-dimension
+alignment as ordinal classes {-1, 0, +1} across 10 Schwartz value dimensions.
 
 Shared architecture (OrdinalCriticBase):
     Input → Linear → LayerNorm → GELU → Dropout
@@ -14,6 +14,7 @@ Variants differ only in output layer size, loss function, and prediction decodin
 - CORN:  K-1=2 logits/dim, conditional P(Y = k | Y >= k)
 - EMD:   K=3 logits/dim, squared Earth Mover Distance between CDFs
 - SoftOrdinal: K=3 logits/dim, KL divergence with smoothed ordinal targets
+- CDW-CE: K=3 logits/dim, class-distance weighted cross-entropy over non-target probs
 
 Usage:
     from src.vif.critic_ordinal import CriticMLPCORAL, coral_loss_multi
@@ -47,9 +48,9 @@ NUM_DIMS = 10
 class OrdinalCriticBase(ABC, nn.Module):
     """Abstract base for ordinal critic MLP variants.
 
-    Provides the identical 2-layer backbone used by CORAL, CORN, EMD, and
-    SoftOrdinal models. Subclasses only need to specify the output logit
-    count and implement predict().
+    Provides the identical 2-layer backbone used by CORAL, CORN, EMD,
+    SoftOrdinal, and CDW-CE models. Subclasses only need to specify the
+    output logit count and implement predict().
     """
 
     def __init__(
@@ -173,6 +174,7 @@ class OrdinalCriticBase(ABC, nn.Module):
                 "corn": CriticMLPCORN,
                 "emd": CriticMLPEMD,
                 "soft_ordinal": CriticMLPSoftOrdinal,
+                "cdw_ce": CriticMLPCDWCE,
             }
             variant = config["variant"]
             if variant not in registry:
@@ -533,6 +535,96 @@ class CriticMLPEMD(OrdinalCriticBase):
 
     def _variant_name(self) -> str:
         return "emd"
+
+
+# ─── CDW-CE ────────────────────────────────────────────────────────────────────
+#
+# Class Distance Weighted Cross Entropy (Polat et al. 2025).
+# K=3 logits per dimension, softmax probabilities weighted by |i-c|^alpha.
+
+_CDW_CE_OUTPUT_LOGITS = NUM_DIMS * NUM_CLASSES  # 30
+
+
+def cdw_ce_loss_multi(
+    logits: torch.Tensor,
+    y: torch.Tensor,
+    alpha: float = 2.0,
+    eps: float = 1e-7,
+) -> torch.Tensor:
+    """CDW-CE loss for multi-output ordinal classification.
+
+    Implements the non-margin CDW-CE objective:
+        L = -sum_i log(1 - p_i) * |i - c|^alpha
+    where p_i are softmax probabilities and c is the target class index.
+
+    logits: (batch, 30) raw logits
+    y: (batch, 10) with values in {-1, 0, 1}
+    """
+    if logits.dim() != 2:
+        raise ValueError(f"logits must be 2D (batch, {NUM_DIMS * NUM_CLASSES}), got {tuple(logits.shape)}")
+    if y.dim() != 2:
+        raise ValueError(f"y must be 2D (batch, {NUM_DIMS}), got {tuple(y.shape)}")
+    if logits.size(1) != NUM_DIMS * NUM_CLASSES:
+        raise ValueError(
+            f"logits second dimension must be {NUM_DIMS * NUM_CLASSES}, got {logits.size(1)}"
+        )
+    if y.size(1) != NUM_DIMS:
+        raise ValueError(f"y second dimension must be {NUM_DIMS}, got {y.size(1)}")
+    if logits.size(0) != y.size(0):
+        raise ValueError(
+            f"batch sizes must match between logits and y, got {logits.size(0)} and {y.size(0)}"
+        )
+
+    batch = logits.size(0)
+    logits_3d = logits.view(batch, NUM_DIMS, NUM_CLASSES)  # (batch, 10, 3)
+
+    # Compute probabilities in fp32 for numerical stability when logits are fp16/bf16.
+    probs = F.softmax(logits_3d.float(), dim=-1)  # (batch, 10, 3)
+    log_one_minus_p = torch.log1p(-probs.clamp(max=1.0 - eps))  # (batch, 10, 3)
+
+    # Map {-1, 0, 1} → {0, 1, 2}
+    classes = (y.long() + 1).clamp(0, NUM_CLASSES - 1)  # (batch, 10)
+    class_idx = torch.arange(NUM_CLASSES, device=logits.device, dtype=probs.dtype).view(1, 1, -1)
+    distance = (class_idx - classes.unsqueeze(-1).to(probs.dtype)).abs()  # (batch, 10, 3)
+    weights = distance.pow(alpha)  # (batch, 10, 3)
+
+    loss = -(weights * log_one_minus_p).sum(dim=-1)  # (batch, 10)
+    return loss.mean()
+
+
+class CriticMLPCDWCE(OrdinalCriticBase):
+    """MLP critic with CDW-CE output for ordinal alignment prediction.
+
+    Output layer has 30 neurons (10 dims × 3 classes).
+    """
+
+    def __init__(
+        self,
+        input_dim: int,
+        hidden_dim: int = 256,
+        output_dim: int = NUM_DIMS,
+        dropout: float = 0.2,
+    ):
+        super().__init__(
+            input_dim=input_dim,
+            hidden_dim=hidden_dim,
+            output_dim=output_dim,
+            dropout=dropout,
+            output_logits=_CDW_CE_OUTPUT_LOGITS,
+        )
+
+    def predict(self, x: torch.Tensor) -> torch.Tensor:
+        """Return predicted alignment scores (batch, 10) in {-1, 0, 1}."""
+        logits = self.forward(x)  # (batch, 30)
+        batch = logits.size(0)
+        logits_3d = logits.view(batch, NUM_DIMS, NUM_CLASSES)  # (batch, 10, 3)
+
+        # Argmax over 3 classes → {0, 1, 2}, then map to {-1, 0, 1}
+        classes = logits_3d.argmax(dim=-1)  # (batch, 10)
+        return classes.float() - 1.0
+
+    def _variant_name(self) -> str:
+        return "cdw_ce"
 
 
 # ─── SoftOrdinal ──────────────────────────────────────────────────────────────

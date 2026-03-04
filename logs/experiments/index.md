@@ -4,13 +4,13 @@
 
 | Rank | Run + Loss | Encoder | hd | n_train | QWK | Cal | MAE | Acc | MinR | Rationale |
 |------|-----------|---------|---:|--------:|----:|----:|----:|----:|-----:|-----------|
-| 1 | run_010 CORN | nomic-256d | 64 | 1020 | **0.434** | 0.835 | **0.206** | 0.821 | 0.285 | New SOTA QWK (moderate) after reverting hd=128→64. Strong recovery on power (+0.362 vs run_008 CORN). |
-| 2 | run_007 CORN | nomic-256d | 64 | 1020 | 0.413 | 0.838 | 0.205 | 0.821 | 0.285 | Previous leader; remains highly competitive with comparable MAE/Acc and slightly higher calibration. |
-| 3 | run_012 EMD | nomic-256d | 64 | 1020 | 0.369 | **0.857** | 0.213 | 0.808 | **0.364** | Best calibration/minority-recall trade-off among ws=2 runs; QWK is comparable to run_011 EMD with materially higher minority recall. |
+| 1 | run_010 CORN | nomic-256d | 64 | 1020 | **0.434** | 0.835 | **0.206** | 0.821 | 0.285 | SOTA since run_010. LR=0.001 (configured) is optimal for CORN; LR finder consistently overshoots. |
+| 2 | run_015 CDWCE_a3 | nomic-256d | 64 | 1020 | 0.402 | 0.755 | **0.203** | **0.822** | 0.259 | Best new loss from CDW-CE alpha sweep. Alpha=3 is the sweet spot; alpha=2 too weak, alpha=5 collapses. QWK approaches SOTA but trades calibration. |
+| 3 | run_007 CORN | nomic-256d | 64 | 1020 | 0.413 | 0.838 | 0.205 | 0.821 | 0.285 | Previous leader; identical config to run_010 CORN (stochastic variance explains QWK gap). |
 
-> **Key insight**: `run_014` (ws=1 + LR finder valley) tested automated LR selection on the ws=1 frontier. The LR finder valley LRs (17–20× configured) are **loss-function-dependent**: CORN regressed catastrophically (QWK 0.434→0.314, -0.120) while SoftOrdinal achieved its best-ever QWK (0.388, +0.080 vs run_010). This reveals threshold-based losses (CORAL/CORN) have sharper optima than distribution-based losses (EMD/SoftOrdinal). Calibration degraded across all losses (CORN to 0.753, worst in runs 010–014). **run_010 CORN remains SOTA** — the manually configured LR of 0.001 is superior for threshold-based losses.
+> **Key insight (run_015):** CDW-CE loss (Polat et al. 2025) was tested as an alpha sweep (2, 3, 5) — the #1 recommended intervention from run_014. **CDW-CE alpha=3 is competitive** (QWK 0.402, moderate) but **did not solve the recall_-1 bottleneck** (0.056 vs SOTA 0.089). The inverted-U alpha response confirms alpha=3 as the sweet spot: alpha=2 is too weak for 3-class ordinal (max |i−c|=2), alpha=5 over-penalizes causing extreme hedging (89.9%). **run_010 CORN remains SOTA.**
 >
-> **Primary bottleneck**: `recall_minus1 = 5–9%` across ALL 14 runs and ALL losses. The model detects alignment (+1) at 43–70% but is nearly blind to misalignment (-1). No architectural, capacity, or LR intervention has moved this metric. Next experiments should: (1) implement **CDW-CE loss** ([Polat et al. 2025](https://arxiv.org/abs/2412.01246), alpha=2–5) targeting the hedging/misalignment-detection bottleneck; (2) apply **post-hoc logit adjustment** (tau=0.3–1.0) on existing models for free minority-recall gains; (3) try **loss-specific LR** (CORN@0.001, SoftOrdinal@0.020) to combine best of both worlds; (4) add **soft ordinal labels (SORD)** to recover calibration. See full analysis in [`logs/experiments/reports/experiment_review_2026-03-04_v3.md`](reports/experiment_review_2026-03-04_v3.md).
+> **Primary bottleneck (confirmed structural):** `recall_minus1 = 1–9%` across ALL 15 runs, 7 loss functions, and 3 LR regimes. The -1 class is only 7.3% of all labels (~75 examples per dimension). This is now confirmed to be a **data scarcity problem**, not a loss function problem — no loss intervention (CDW-CE, CORAL_IW, weighted MSE) has moved this metric. Next experiments should: (1) apply **post-hoc logit adjustment** (Menon et al. 2021, tau=0.3–1.0) on run_010 CORN and run_015 CDWCE_a3 for zero-cost recall_-1 gains; (2) rerun **CDWCE_a3 at configured LR=0.001** (disable LR finder) to test if conservative LR improves both QWK and calibration; (3) try **CORN+SoftOrdinal ensemble** via probability averaging to combine QWK and calibration strengths; (4) fix **LR finder history bug**. See full analysis in [`logs/experiments/reports/experiment_review_2026-03-04_v4.md`](reports/experiment_review_2026-03-04_v4.md).
 
 ## Run Log
 
@@ -78,11 +78,34 @@
 | 014 | CORN | nomic-256d | 1 | 64 | 0.3 | corn | 22804 | 22.4 | 0.207 | 0.819 | 0.314 | 0.367 | 0.753 | 0.246 | runs/run_014_CORN.yaml |
 | 014 | EMD | nomic-256d | 1 | 64 | 0.3 | emd | 23454 | 23.0 | 0.203 | 0.818 | 0.373 | 0.406 | 0.785 | 0.274 | runs/run_014_EMD.yaml |
 | 014 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 23.0 | 0.204 | 0.825 | 0.388 | 0.394 | 0.801 | 0.288 | runs/run_014_SoftOrdinal.yaml |
+| 015 | CDWCE_a2 | nomic-256d | 1 | 64 | 0.3 | cdwce_a2 | 23454 | 23.0 | 0.207 | 0.811 | 0.322 | 0.350 | 0.783 | 0.220 | runs/run_015_CDWCE_a2.yaml |
+| 015 | CDWCE_a3 | nomic-256d | 1 | 64 | 0.3 | cdwce_a3 | 23454 | 23.0 | 0.203 | 0.822 | 0.402 | 0.384 | 0.755 | 0.259 | runs/run_015_CDWCE_a3.yaml |
+| 015 | CDWCE_a5 | nomic-256d | 1 | 64 | 0.3 | cdwce_a5 | 23454 | 23.0 | 0.217 | 0.795 | 0.300 | 0.371 | 0.639 | 0.174 | runs/run_015_CDWCE_a5.yaml |
+| 015 | CORAL | nomic-256d | 1 | 64 | 0.3 | coral | 22804 | 22.4 | 0.205 | 0.822 | 0.349 | 0.388 | 0.824 | 0.241 | runs/run_015_CORAL.yaml |
+| 015 | CORN | nomic-256d | 1 | 64 | 0.3 | corn | 22804 | 22.4 | 0.203 | 0.815 | 0.328 | 0.397 | 0.801 | 0.234 | runs/run_015_CORN.yaml |
+| 015 | EMD | nomic-256d | 1 | 64 | 0.3 | emd | 23454 | 23.0 | 0.204 | 0.821 | 0.372 | 0.405 | 0.781 | 0.280 | runs/run_015_EMD.yaml |
+| 015 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 23.0 | 0.208 | 0.822 | 0.335 | 0.381 | 0.846 | 0.292 | runs/run_015_SoftOrdinal.yaml |
 <!-- AUTO-TABLE:END -->
 
 > **Contributor note:** Keep this section in **newest-first** chronological order (most recent date at top).
 
 ## Findings
+
+### 2026-03-04 — CDW-CE alpha sweep and loss-function intervention (run_015)
+
+`run_015` is the first evaluation of **CDW-CE loss** (Class Distance Weighted Cross-Entropy, Polat et al. 2025) with an alpha sweep (2, 3, 5), alongside standard loss reruns (CORAL, CORN, EMD, SoftOrdinal) on the ws=1 frontier. All 7 models used LR finder with valley/steep fallback.
+
+**1. CDWCE alpha=3 is the best new loss.** QWK 0.402 (moderate), approaching run_010 CORN SOTA (0.434, -0.032). The LR finder found a true valley at 0.01552 (15.5x). Strong on benevolence (0.545), conformity (0.484), achievement (0.449). Calibration 0.755 — below SOTA but all 10 dims positive.
+
+**2. CDW-CE shows an inverted-U alpha response.** Alpha=2 (QWK 0.322) is too weak — with only 3 ordinal classes, max |i−c|=2, so 2^2=4 vs 1^2=1 provides minimal differentiation from standard CE. Alpha=3 hits the sweet spot (0.402). Alpha=5 over-penalizes (QWK 0.300, hedging 89.9%, calibration collapsed to 0.639). This matches Polat et al.'s finding that excessive alpha harms performance.
+
+**3. CDW-CE did NOT solve recall_-1.** recall_-1 ranges from 0.012 (CDWCE_a5) to 0.064 (SoftOrdinal) — no improvement over the SOTA reference of 0.089 (run_010 CORN). The ordinal distance penalty causes models to hedge *more* (predicting neutral avoids any penalty), not less. This confirms the bottleneck is **data scarcity** (7.3% of labels are -1, ~75 examples per dimension), not loss function design.
+
+**4. LR finder patterns confirmed.** CORAL and EMD received identical applied LR (0.01979) — deterministic and matching run_014. CORN at 0.00955 (9.5x) again underperformed vs configured 0.001. SoftOrdinal fell back to lr_steep at 0.00111 (1.1x), unlike run_014's valley at 0.0198, producing QWK 0.335 vs 0.388. LR finder inconsistency between runs adds noise.
+
+**5. LR finder history bug confirmed.** `lr_find_history.json` is identical to `lr_find_CDWCE_a5.json` (the last model processed). Previously matched SoftOrdinal in run_014. This is a logging bug, not a training bug.
+
+**Conclusion**: CDW-CE alpha=3 is a viable alternative to CORN but does not advance the frontier on the primary bottleneck (recall_-1). The recall_-1 problem is now confirmed as structural — 15 runs, 7 loss functions, 3 LR regimes have all failed to move it. **Post-hoc logit adjustment** (zero training cost, directly shifts decision boundary) is the highest-leverage next step. See full analysis: [`reports/experiment_review_2026-03-04_v4.md`](reports/experiment_review_2026-03-04_v4.md).
 
 ### 2026-03-04 — LR-finder valley on ws=1 baseline (run_014, loss-specific LR sensitivity)
 

@@ -154,6 +154,100 @@ class TestEmdLoss:
         assert loss_off2 > loss_off1
 
 
+class TestCDWCELoss:
+    """Tests for CDW-CE loss."""
+
+    def test_cdw_ce_loss_scalar_output(self):
+        """Loss should be a non-negative scalar tensor."""
+        from src.vif.critic_ordinal import cdw_ce_loss_multi
+
+        logits = torch.randn(4, 30)
+        y = torch.randint(-1, 2, (4, 10)).float()
+        loss = cdw_ce_loss_multi(logits, y, alpha=2)
+
+        assert loss.dim() == 0
+        assert loss.item() >= 0
+
+    def test_cdw_ce_loss_perfect_prediction(self):
+        """CDW-CE should be near zero for near-perfect one-hot predictions."""
+        from src.vif.critic_ordinal import cdw_ce_loss_multi
+
+        batch = 4
+        logits = torch.zeros(batch, 30)
+        for d in range(10):
+            logits[:, d * 3 + 1] = 100.0  # true class is 0 => class index 1
+        y = torch.zeros(batch, 10)
+
+        loss = cdw_ce_loss_multi(logits, y, alpha=2)
+        assert loss.item() < 1e-4
+
+    def test_cdw_ce_loss_gradient_flow(self):
+        """Loss should allow gradient backpropagation."""
+        from src.vif.critic_ordinal import cdw_ce_loss_multi
+
+        logits = torch.randn(4, 30, requires_grad=True)
+        y = torch.randint(-1, 2, (4, 10)).float()
+        loss = cdw_ce_loss_multi(logits, y, alpha=2)
+        loss.backward()
+
+        assert logits.grad is not None
+        assert not torch.all(logits.grad == 0)
+
+    def test_cdw_ce_loss_ordinal_sensitivity(self):
+        """Off-by-2 error should produce larger loss than off-by-1."""
+        from src.vif.critic_ordinal import cdw_ce_loss_multi
+
+        batch = 8
+        y = -torch.ones(batch, 10)  # true class: -1 (class index 0)
+
+        # Predict class 1 (off-by-1): strong logits for middle class
+        logits_off1 = torch.zeros(batch, 30)
+        for d in range(10):
+            logits_off1[:, d * 3 + 1] = 100.0
+
+        # Predict class 2 (off-by-2): strong logits for last class
+        logits_off2 = torch.zeros(batch, 30)
+        for d in range(10):
+            logits_off2[:, d * 3 + 2] = 100.0
+
+        loss_off1 = cdw_ce_loss_multi(logits_off1, y, alpha=2).item()
+        loss_off2 = cdw_ce_loss_multi(logits_off2, y, alpha=2).item()
+
+        assert loss_off2 > loss_off1
+
+    def test_cdw_ce_alpha_penalizes_far_errors_more(self):
+        """Higher alpha should increase penalty for distant misclassification."""
+        from src.vif.critic_ordinal import cdw_ce_loss_multi
+
+        batch = 8
+        y = -torch.ones(batch, 10)  # true class: -1 (class index 0)
+        logits = torch.zeros(batch, 30)
+        for d in range(10):
+            logits[:, d * 3 + 2] = 100.0  # off-by-2 prediction
+
+        loss_a2 = cdw_ce_loss_multi(logits, y, alpha=2).item()
+        loss_a5 = cdw_ce_loss_multi(logits, y, alpha=5).item()
+
+        assert loss_a5 > loss_a2
+
+    def test_cdw_ce_rejects_wrong_shapes(self):
+        """Shape mismatches should raise ValueError with actionable messages."""
+        from src.vif.critic_ordinal import cdw_ce_loss_multi
+
+        y = torch.randint(-1, 2, (4, 10)).float()
+        with pytest.raises(ValueError, match="logits must be 2D"):
+            cdw_ce_loss_multi(torch.randn(4, 10, 3), y)
+
+        with pytest.raises(ValueError, match="logits second dimension must be 30"):
+            cdw_ce_loss_multi(torch.randn(4, 29), y)
+
+        with pytest.raises(ValueError, match="y second dimension must be 10"):
+            cdw_ce_loss_multi(torch.randn(4, 30), torch.randint(-1, 2, (4, 9)).float())
+
+        with pytest.raises(ValueError, match="batch sizes must match"):
+            cdw_ce_loss_multi(torch.randn(4, 30), torch.randint(-1, 2, (5, 10)).float())
+
+
 class TestSoftOrdinalLoss:
     """Tests for Soft Ordinal loss."""
 

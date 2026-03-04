@@ -1,0 +1,157 @@
+# VIF Experiment: run_015_CORN
+# Generated: 2026-03-04T22:44:54
+# Git: 456d098(dirty)
+metadata:
+  experiment_id: run_015_CORN
+  run_id: run_015
+  model_name: CORN
+  timestamp: '2026-03-04T22:44:54'
+  git_commit: 456d098(dirty)
+  config_hash: 553652a9c2b6
+provenance:
+  prev_run_id: run_014
+  prev_git_commit: 61fda7b(dirty)
+  git_log:
+  - '456d098 docs(experiments): run_014 review — LR finder valley on ws=1, loss-specific
+    LR sensitivity'
+  config_delta:
+    added: {}
+    removed: {}
+    changed: {}
+  rationale: First CDW-CE loss evaluation (alpha=2,3,5 sweep) on ws=1 frontier, motivated
+    by run_014 review identifying loss-function-level interventions as highest-priority
+    next step for the recall_minus1 bottleneck. Standard losses retrained with LR finder
+    as concurrent baselines.
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 266
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: corn
+    learning_rate: 0.009547716114208063
+    learning_rate_configured: 0.001
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 2025
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1020
+  n_val: 230
+  n_test: 210
+capacity:
+  n_parameters: 22804
+  param_sample_ratio: 22.3569
+training_dynamics:
+  best_epoch: 7
+  total_epochs: 27
+  train_loss_at_best: 0.2587
+  val_loss_at_best: 0.2369
+  gap_at_best: -0.0218
+  final_lr: 0.004774
+evaluation:
+  mae_mean: 0.2034
+  accuracy_mean: 0.8148
+  qwk_mean: 0.3284
+  spearman_mean: 0.3967
+  calibration_global: 0.8011
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.1106
+  minority_recall_mean: 0.2343
+  recall_minus1: 0.0604
+  recall_plus1: 0.4082
+  hedging_mean: 0.8581
+per_dimension:
+  self_direction:
+    mae: 0.3969
+    accuracy: 0.6286
+    qwk: 0.3482
+    spearman: 0.4775
+    calibration: 0.5556
+    hedging: 0.6
+  stimulation:
+    mae: 0.09
+    accuracy: 0.919
+    qwk: 0.5159
+    spearman: 0.5923
+    calibration: 0.8602
+    hedging: 0.9429
+  hedonism:
+    mae: 0.1311
+    accuracy: 0.881
+    qwk: 0.4312
+    spearman: 0.4258
+    calibration: 0.8509
+    hedging: 0.9143
+  achievement:
+    mae: 0.1715
+    accuracy: 0.8667
+    qwk: 0.4439
+    spearman: 0.3081
+    calibration: 0.8119
+    hedging: 0.8476
+  power:
+    mae: 0.0821
+    accuracy: 0.9476
+    qwk: -0.0909
+    spearman: -0.1606
+    calibration: 0.9365
+    hedging: 0.9619
+  security:
+    mae: 0.3114
+    accuracy: 0.7048
+    qwk: 0.1724
+    spearman: 0.2161
+    calibration: 0.6588
+    hedging: 0.9095
+  conformity:
+    mae: 0.2516
+    accuracy: 0.7619
+    qwk: 0.5295
+    spearman: 0.6071
+    calibration: 0.7211
+    hedging: 0.7286
+  tradition:
+    mae: 0.1524
+    accuracy: 0.8524
+    qwk: 0.3522
+    spearman: 0.5606
+    calibration: 0.6531
+    hedging: 0.9524
+  benevolence:
+    mae: 0.2245
+    accuracy: 0.7762
+    qwk: 0.3516
+    spearman: 0.5927
+    calibration: 0.7672
+    hedging: 0.8714
+  universalism:
+    mae: 0.2227
+    accuracy: 0.8095
+    qwk: 0.2297
+    spearman: 0.3473
+    calibration: 0.8979
+    hedging: 0.8524
+observations: QWK 0.328 (fair), down from run_010 CORN SOTA (0.434, delta -0.106).
+  LR finder applied 0.00955 (9.5x configured) — lower than run_014's 0.0168 but still
+  too high for CORN's sharp optimum. Power QWK -0.091. Best conformity QWK in run_015
+  (0.530) and best hedonism (0.431). Confirms that threshold-based losses require
+  conservative LR (~0.001) for optimal performance; the LR finder consistently overshoots
+  for CORN.
