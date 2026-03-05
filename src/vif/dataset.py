@@ -28,6 +28,7 @@ import polars as pl
 import torch
 from torch.utils.data import Dataset
 
+from src.models.judge import SCHWARTZ_VALUE_ORDER
 from src.vif.state_encoder import StateEncoder
 from src.wrangling.parse_wrangled_data import parse_wrangled_file
 
@@ -212,6 +213,8 @@ def split_by_persona(
 
     Entries from the same persona are kept together in the same split,
     since consecutive entries are temporally correlated and share context.
+    Validation and test personas are selected using a deterministic
+    multi-label stratification objective over per-dimension +/-1 signals.
 
     Args:
         labels_df: DataFrame with alignment labels
@@ -224,24 +227,29 @@ def split_by_persona(
         Tuple of (train_df, val_df, test_df) where each is a merged DataFrame
         containing both labels and entries.
     """
-    # Get unique persona IDs
-    persona_ids = sorted(labels_df.select("persona_id").unique().to_series().to_list())
-    n_personas = len(persona_ids)
+    # Merge labels and entries first (also enforces join integrity checks).
+    merged_df = merge_labels_and_entries(labels_df, entries_df)
 
-    # Shuffle persona IDs
-    rng = np.random.default_rng(seed)
-    rng.shuffle(persona_ids)
+    # Build persona-level binary features for stratification:
+    # [dim0_pos, dim0_neg, dim1_pos, dim1_neg, ...].
+    persona_ids, feature_matrix = _build_persona_sign_features(merged_df)
+    n_personas = len(persona_ids)
 
     # Calculate split indices
     train_end = int(n_personas * train_ratio)
     val_end = int(n_personas * (train_ratio + val_ratio))
+    val_size = val_end - train_end
 
-    train_personas = set(persona_ids[:train_end])
-    val_personas = set(persona_ids[train_end:val_end])
-    test_personas = set(persona_ids[val_end:])
+    train_idx, val_idx, test_idx = _find_best_stratified_split(
+        feature_matrix=feature_matrix,
+        n_train=train_end,
+        n_val=val_size,
+        seed=seed,
+    )
 
-    # Merge labels and entries
-    merged_df = merge_labels_and_entries(labels_df, entries_df)
+    train_personas = {persona_ids[i] for i in train_idx}
+    val_personas = {persona_ids[i] for i in val_idx}
+    test_personas = {persona_ids[i] for i in test_idx}
 
     # Filter by persona sets
     train_df = merged_df.filter(pl.col("persona_id").is_in(train_personas))
@@ -249,6 +257,113 @@ def split_by_persona(
     test_df = merged_df.filter(pl.col("persona_id").is_in(test_personas))
 
     return train_df, val_df, test_df
+
+
+def _build_persona_sign_features(merged_df: pl.DataFrame) -> tuple[list[str], np.ndarray]:
+    """Build per-persona binary sign features from alignment vectors."""
+    persona_ids = sorted(merged_df.select("persona_id").unique().to_series().to_list())
+    persona_to_idx = {persona_id: idx for idx, persona_id in enumerate(persona_ids)}
+
+    n_dims = len(SCHWARTZ_VALUE_ORDER)
+    feature_matrix = np.zeros((len(persona_ids), n_dims * 2), dtype=np.int8)
+
+    for row in merged_df.select(["persona_id", "alignment_vector"]).iter_rows(named=True):
+        p_idx = persona_to_idx[row["persona_id"]]
+        alignment_vector = row["alignment_vector"] or []
+
+        for dim_idx, score in enumerate(alignment_vector[:n_dims]):
+            if score > 0:
+                feature_matrix[p_idx, 2 * dim_idx] = 1
+            elif score < 0:
+                feature_matrix[p_idx, 2 * dim_idx + 1] = 1
+
+    return persona_ids, feature_matrix
+
+
+def _score_stratified_candidate(
+    *,
+    feature_matrix: np.ndarray,
+    split_indices: tuple[np.ndarray, np.ndarray],
+    full_prevalence: np.ndarray,
+    support_counts: np.ndarray,
+) -> float:
+    """Score val/test split quality against global persona-level prevalence."""
+    n_personas = feature_matrix.shape[0]
+    if n_personas == 0:
+        return float("inf")
+
+    max_gap = 0.0
+    mean_gaps = []
+    missing_penalty = 0
+
+    for indices in split_indices:
+        if len(indices) == 0:
+            continue
+
+        subset = feature_matrix[indices]
+        prevalence = subset.mean(axis=0)
+        gaps = np.abs(prevalence - full_prevalence)
+
+        max_gap = max(max_gap, float(gaps.max()))
+        mean_gaps.append(float(gaps.mean()))
+
+        expected_counts = support_counts * (len(indices) / n_personas)
+        required_mask = (support_counts > 0) & (expected_counts >= 1.0)
+        missing_mask = (subset.sum(axis=0) == 0) & required_mask
+        missing_penalty += int(missing_mask.sum())
+
+    mean_gap = float(np.mean(mean_gaps)) if mean_gaps else 0.0
+
+    # Strongly penalize dropping expected minority signals in val/test.
+    return max_gap + (0.5 * mean_gap) + (10.0 * missing_penalty)
+
+
+def _find_best_stratified_split(
+    *,
+    feature_matrix: np.ndarray,
+    n_train: int,
+    n_val: int,
+    seed: int,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Search deterministic candidate partitions and return the best-scoring split."""
+    n_personas = feature_matrix.shape[0]
+    rng = np.random.default_rng(seed)
+
+    full_prevalence = (
+        feature_matrix.mean(axis=0)
+        if n_personas > 0
+        else np.zeros(feature_matrix.shape[1], dtype=np.float64)
+    )
+    support_counts = feature_matrix.sum(axis=0).astype(np.float64)
+
+    n_candidates = min(4096, max(256, n_personas * 32))
+
+    best_score = float("inf")
+    best_perm = np.arange(n_personas, dtype=np.int64)
+
+    for _ in range(n_candidates):
+        perm = rng.permutation(n_personas)
+        val_start = n_train
+        test_start = n_train + n_val
+
+        candidate_score = _score_stratified_candidate(
+            feature_matrix=feature_matrix,
+            split_indices=(perm[val_start:test_start], perm[test_start:]),
+            full_prevalence=full_prevalence,
+            support_counts=support_counts,
+        )
+
+        if candidate_score < best_score:
+            best_score = candidate_score
+            best_perm = perm
+
+    val_start = n_train
+    test_start = n_train + n_val
+    return (
+        best_perm[:val_start],
+        best_perm[val_start:test_start],
+        best_perm[test_start:],
+    )
 
 
 class VIFDataset(Dataset):
