@@ -174,6 +174,8 @@ def update_stage(persona_id: str, stage: str) -> None:
 
     column_name = f"stage_{stage}"
 
+    _ensure_registry_exists()
+
     lock_path = REGISTRY_PATH.with_suffix(".lock")
     lock_path.touch(exist_ok=True)
 

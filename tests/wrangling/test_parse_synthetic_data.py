@@ -3,6 +3,7 @@
 import pytest
 
 from src.wrangling.parse_synthetic_data import (
+    _resolve_input_persona_files,
     extract_persona_id,
     parse_entries,
     parse_persona_profile,
@@ -559,6 +560,77 @@ class TestWriteWrangledMarkdown:
 
         assert len(written) == 1
         assert (output_dir / "persona_a3f8b2c1.md").exists()
+
+    def test_processes_only_selected_persona_files(self, tmp_path):
+        """Explicit persona_files should restrict processing scope."""
+        input_dir = tmp_path / "synthetic"
+        output_dir = tmp_path / "wrangled"
+        input_dir.mkdir()
+
+        file_a = input_dir / "persona_a3f8b2c1.md"
+        file_b = input_dir / "persona_b4e9c3d2.md"
+        file_a.write_text(FULL_TRIGGER_PERSONA)
+        file_b.write_text(FULL_CATEGORY_PERSONA.replace("a3f8b2c1", "b4e9c3d2"))
+
+        written = write_wrangled_markdown(
+            input_dir=input_dir,
+            output_dir=output_dir,
+            update_registry=False,
+            persona_files=[file_a],
+        )
+
+        assert len(written) == 1
+        assert (output_dir / "persona_a3f8b2c1.md").exists()
+        assert not (output_dir / "persona_b4e9c3d2.md").exists()
+
+    def test_selected_missing_persona_file_raises(self, tmp_path):
+        """Missing explicit file should raise a clear FileNotFoundError."""
+        input_dir = tmp_path / "synthetic"
+        output_dir = tmp_path / "wrangled"
+        input_dir.mkdir()
+
+        missing_file = input_dir / "persona_missing.md"
+        with pytest.raises(FileNotFoundError, match="Persona file\\(s\\) not found"):
+            write_wrangled_markdown(
+                input_dir=input_dir,
+                output_dir=output_dir,
+                update_registry=False,
+                persona_files=[missing_file],
+            )
+
+
+class TestResolveInputPersonaFiles:
+
+    def test_single_and_multi_file_inputs(self, tmp_path):
+        default_dir = tmp_path / "synthetic"
+        default_dir.mkdir()
+
+        file_a = default_dir / "persona_a3f8b2c1.md"
+        file_b = default_dir / "persona_b4e9c3d2.md"
+        file_a.write_text(FULL_TRIGGER_PERSONA)
+        file_b.write_text(FULL_CATEGORY_PERSONA.replace("a3f8b2c1", "b4e9c3d2"))
+
+        files, source = _resolve_input_persona_files([str(file_a), str(file_b)], default_dir)
+
+        assert files == [file_a, file_b]
+        assert str(file_a) in source
+        assert str(file_b) in source
+
+    def test_mixed_file_and_directory_inputs(self, tmp_path):
+        default_dir = tmp_path / "default"
+        default_dir.mkdir()
+        extra_dir = tmp_path / "extra"
+        extra_dir.mkdir()
+
+        file_a = default_dir / "persona_a3f8b2c1.md"
+        file_b = extra_dir / "persona_b4e9c3d2.md"
+        file_a.write_text(FULL_TRIGGER_PERSONA)
+        file_b.write_text(FULL_CATEGORY_PERSONA.replace("a3f8b2c1", "b4e9c3d2"))
+
+        files, _ = _resolve_input_persona_files([str(file_a), str(extra_dir)], default_dir)
+
+        assert file_a in files
+        assert file_b in files
 
 
 class TestExtractPersonaId:

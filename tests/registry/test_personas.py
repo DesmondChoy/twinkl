@@ -138,6 +138,14 @@ class TestUpdateStage:
         other = df.filter(pl.col("persona_id") == "aaaa0002").row(0, named=True)
         assert other["stage_wrangled"] is False
 
+    def test_missing_registry_parent_raises_domain_error(self, monkeypatch, tmp_path):
+        """update_stage should bootstrap storage path before lock-file creation."""
+        nested_registry = tmp_path / "missing" / "nested" / "personas.parquet"
+        monkeypatch.setattr("src.registry.personas.REGISTRY_PATH", nested_registry)
+
+        with pytest.raises(ValueError, match="not found"):
+            update_stage("nonexistent", "wrangled")
+
 
 class TestGetPending:
     """Stage-aware filtering."""

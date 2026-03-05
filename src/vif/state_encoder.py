@@ -154,6 +154,10 @@ class StateEncoder:
                 idx = SCHWARTZ_VALUE_ORDER.index(canonical_key)
                 matched_indices.append(idx)
 
+        # Deduplicate while preserving first-seen order so repeated values
+        # don't accidentally reduce total profile mass.
+        matched_indices = list(dict.fromkeys(matched_indices))
+
         # Assign equal weight to matched values
         if matched_indices:
             weight_per_value = 1.0 / len(matched_indices)

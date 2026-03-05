@@ -16,7 +16,6 @@ from pathlib import Path
 import numpy as np
 import torch
 import torch.nn as nn
-import yaml
 from torch.optim import AdamW
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 
@@ -25,7 +24,7 @@ from src.vif.dataset import create_dataloaders
 from src.vif.encoders import create_encoder
 from src.vif.eval import evaluate_with_uncertainty, format_results_table
 from src.vif.state_encoder import StateEncoder
-from src.vif.train import load_config, _deep_update, save_checkpoint
+from src.vif.train import load_config, save_checkpoint
 
 
 def train_epoch_bnn(
@@ -56,6 +55,12 @@ def train_epoch_bnn(
         total_loss += loss.item()
         n_batches += 1
 
+    if n_batches == 0:
+        raise ValueError(
+            "Training dataloader produced zero batches. "
+            "Check split ratios and dataset size."
+        )
+
     return total_loss / n_batches
 
 
@@ -80,6 +85,12 @@ def validate(
 
             total_loss += loss.item()
             n_batches += 1
+
+    if n_batches == 0:
+        raise ValueError(
+            "Validation dataloader produced zero batches. "
+            "Check split ratios and dataset size."
+        )
 
     return total_loss / n_batches
 
@@ -126,6 +137,19 @@ def train(config: dict, verbose: bool = True) -> dict:
         train_ratio=config["data"]["train_ratio"],
         val_ratio=config["data"]["val_ratio"],
     )
+
+    split_sizes = {
+        "train": len(train_loader.dataset),
+        "val": len(val_loader.dataset),
+        "test": len(test_loader.dataset),
+    }
+    empty_splits = [name for name, size in split_sizes.items() if size == 0]
+    if empty_splits:
+        joined = ", ".join(empty_splits)
+        raise ValueError(
+            f"Empty dataset split(s): {joined}. "
+            "Adjust train/val ratios or provide more persona data."
+        )
 
     if verbose:
         print(

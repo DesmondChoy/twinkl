@@ -102,6 +102,13 @@ class TestParseCoreValuesToWeights:
         weights = enc.parse_core_values_to_weights(["Tradition"])
         assert weights[7] == pytest.approx(1.0)
 
+    def test_duplicate_values_are_deduplicated(self, mock_text_encoder):
+        """Duplicate values should not reduce normalization mass."""
+        enc = StateEncoder(mock_text_encoder)
+        weights = enc.parse_core_values_to_weights(["Security", "Security"])
+        assert weights[5] == pytest.approx(1.0)
+        assert weights.sum() == pytest.approx(1.0)
+
 
 # ── TestComputeTimeGaps ──────────────────────────────────────────────────────
 

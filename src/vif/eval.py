@@ -248,6 +248,12 @@ def evaluate_with_uncertainty(
         all_stds.append(std.cpu().numpy())
         all_targets.append(batch_y.numpy())
 
+    if not all_means:
+        raise ValueError(
+            "Evaluation dataloader produced zero batches. "
+            "Check split ratios and dataset size."
+        )
+
     predictions = np.concatenate(all_means, axis=0)
     uncertainties = np.concatenate(all_stds, axis=0)
     targets = np.concatenate(all_targets, axis=0)
@@ -347,6 +353,12 @@ def evaluate_model(
 
             all_predictions.append(pred.cpu().numpy())
             all_targets.append(batch_y.numpy())
+
+    if not all_predictions:
+        raise ValueError(
+            "Evaluation dataloader produced zero batches. "
+            "Check split ratios and dataset size."
+        )
 
     predictions = np.concatenate(all_predictions, axis=0)
     targets = np.concatenate(all_targets, axis=0)

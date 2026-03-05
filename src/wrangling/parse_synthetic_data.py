@@ -12,8 +12,14 @@ Usage (CLI - outputs markdown):
     # Process all synthetic data files (flat directory)
     python -m src.wrangling.parse_synthetic_data
 
-    # Process specific file(s)
+    # Process one or more specific file(s)
     python -m src.wrangling.parse_synthetic_data logs/synthetic_data/persona_a3f8b2c1.md
+    python -m src.wrangling.parse_synthetic_data \
+        logs/synthetic_data/persona_a3f8b2c1.md \
+        logs/synthetic_data/persona_b4e9c3d2.md
+
+    # Process one or more directories
+    python -m src.wrangling.parse_synthetic_data logs/synthetic_data
 
     Output: logs/wrangled/persona_*.md (flat directory, same filename)
 
@@ -22,6 +28,7 @@ Usage (library - returns DataFrame):
     df = parse_synthetic_data_dir("logs/synthetic_data")
 """
 
+import argparse
 import re
 from pathlib import Path
 
@@ -443,6 +450,7 @@ def write_wrangled_markdown(
     input_dir: str | Path,
     output_dir: str | Path,
     update_registry: bool = True,
+    persona_files: list[Path] | None = None,
 ) -> list[Path]:
     """Write wrangled persona files as clean markdown.
 
@@ -450,18 +458,29 @@ def write_wrangled_markdown(
         input_dir: Path to logs/synthetic_data/ directory (flat)
         output_dir: Path to output directory (e.g., logs/wrangled/)
         update_registry: If True, mark personas as wrangled in registry
+        persona_files: Optional explicit list of persona markdown files to process.
+            When None, all persona_*.md files under input_dir are processed.
 
     Returns:
         List of paths to written markdown files
     """
-    input_path = Path(input_dir)
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
 
-    persona_files = sorted(input_path.glob("persona_*.md"))
-
-    if not persona_files:
-        raise FileNotFoundError(f"No persona_*.md files found in {input_dir}")
+    if persona_files is None:
+        input_path = Path(input_dir)
+        persona_files = sorted(input_path.glob("persona_*.md"))
+        if not persona_files:
+            raise FileNotFoundError(f"No persona_*.md files found in {input_dir}")
+    else:
+        persona_files = [Path(p) for p in persona_files]
+        missing = [str(p) for p in persona_files if not p.exists()]
+        if missing:
+            raise FileNotFoundError(
+                f"Persona file(s) not found: {', '.join(missing)}"
+            )
+        if not persona_files:
+            raise FileNotFoundError("No persona files were provided for wrangling.")
 
     written_files = []
     skipped_count = 0
@@ -547,21 +566,8 @@ def parse_persona_file(filepath: Path) -> tuple[dict, list[dict]]:
     return profile, entries
 
 
-def parse_synthetic_data_run(run_dir: str | Path) -> pl.DataFrame:
-    """Parse all persona files in a synthetic data run directory.
-
-    Args:
-        run_dir: Path to logs/synthetic_data/<timestamp>/ directory
-
-    Returns:
-        Polars DataFrame with one row per entry, columns for persona and entry fields
-    """
-    run_path = Path(run_dir)
-    persona_files = sorted(run_path.glob("persona_*.md"))
-
-    if not persona_files:
-        raise FileNotFoundError(f"No persona_*.md files found in {run_dir}")
-
+def _rows_from_persona_files(persona_files: list[Path]) -> list[dict]:
+    """Build tabular rows from parsed persona files."""
     rows = []
     for filepath in persona_files:
         profile, entries = parse_persona_file(filepath)
@@ -586,9 +592,68 @@ def parse_synthetic_data_run(run_dir: str | Path) -> pl.DataFrame:
                 "has_response": entry["has_response"],
             }
             rows.append(row)
+    return rows
 
-    df = pl.DataFrame(rows)
-    return df
+
+def _resolve_input_persona_files(
+    input_paths: list[str] | None,
+    default_input_dir: Path,
+) -> tuple[list[Path], str]:
+    """Resolve CLI inputs to concrete persona markdown files."""
+    if not input_paths:
+        persona_files = sorted(default_input_dir.glob("persona_*.md"))
+        if not persona_files:
+            raise FileNotFoundError(f"No persona_*.md files found in {default_input_dir}")
+        return persona_files, str(default_input_dir)
+
+    persona_files: list[Path] = []
+    for raw_path in input_paths:
+        path = Path(raw_path)
+
+        if path.is_file():
+            persona_files.append(path)
+            continue
+
+        if path.is_dir():
+            matched = sorted(path.glob("persona_*.md"))
+            if not matched:
+                raise FileNotFoundError(f"No persona_*.md files found in {path}")
+            persona_files.extend(matched)
+            continue
+
+        raise FileNotFoundError(f"Input path does not exist: {path}")
+
+    deduped_files: list[Path] = []
+    seen: set[Path] = set()
+    for filepath in persona_files:
+        resolved = filepath.resolve()
+        if resolved in seen:
+            continue
+        seen.add(resolved)
+        deduped_files.append(filepath)
+
+    if not deduped_files:
+        raise FileNotFoundError("No persona files were resolved from the provided input paths.")
+
+    return deduped_files, ", ".join(input_paths)
+
+
+def parse_synthetic_data_run(run_dir: str | Path) -> pl.DataFrame:
+    """Parse all persona files in a synthetic data run directory.
+
+    Args:
+        run_dir: Path to logs/synthetic_data/<timestamp>/ directory
+
+    Returns:
+        Polars DataFrame with one row per entry, columns for persona and entry fields
+    """
+    run_path = Path(run_dir)
+    persona_files = sorted(run_path.glob("persona_*.md"))
+
+    if not persona_files:
+        raise FileNotFoundError(f"No persona_*.md files found in {run_dir}")
+
+    return pl.DataFrame(_rows_from_persona_files(persona_files))
 
 
 def parse_synthetic_data_dir(data_dir: str | Path) -> pl.DataFrame:
@@ -606,33 +671,7 @@ def parse_synthetic_data_dir(data_dir: str | Path) -> pl.DataFrame:
     if not persona_files:
         raise FileNotFoundError(f"No persona_*.md files found in {data_dir}")
 
-    rows = []
-    for filepath in persona_files:
-        profile, entries = parse_persona_file(filepath)
-
-        for entry in entries:
-            row = {
-                # Persona fields
-                "persona_id": profile["persona_id"],
-                "persona_name": profile["name"],
-                "persona_age": profile["age"],
-                "persona_profession": profile["profession"],
-                "persona_culture": profile["culture"],
-                "persona_core_values": profile["core_values"],
-                "persona_bio": profile["bio"],
-                # Entry fields
-                "t_index": entry["t_index"],
-                "date": entry["date"],
-                "initial_entry": entry["initial_entry"],
-                "nudge_text": entry["nudge_text"],
-                "response_text": entry["response_text"],
-                "has_nudge": entry["has_nudge"],
-                "has_response": entry["has_response"],
-            }
-            rows.append(row)
-
-    df = pl.DataFrame(rows)
-    return df
+    return pl.DataFrame(_rows_from_persona_files(persona_files))
 
 
 def main():
@@ -648,33 +687,47 @@ def main():
         # Process specific file(s) - pass full paths
         python -m src.wrangling.parse_synthetic_data logs/synthetic_data/persona_a3f8b2c1.md
     """
-    import sys
+    parser = argparse.ArgumentParser(
+        description=(
+            "Parse synthetic persona markdown files into wrangled markdown format."
+        )
+    )
+    parser.add_argument(
+        "inputs",
+        nargs="*",
+        help=(
+            "Optional input file(s) and/or directory path(s). "
+            "If omitted, defaults to logs/synthetic_data."
+        ),
+    )
+    parser.add_argument(
+        "--output-dir",
+        default="logs/wrangled",
+        help="Directory where wrangled persona files are written.",
+    )
+    args = parser.parse_args()
 
-    # Default directories (flat structure)
-    input_dir = Path("logs/synthetic_data")
-    output_dir = Path("logs/wrangled")
+    default_input_dir = Path("logs/synthetic_data")
+    output_dir = Path(args.output_dir)
 
-    if len(sys.argv) >= 2:
-        arg = Path(sys.argv[1])
-        if arg.is_file():
-            # Single file mode - process just this file
-            input_dir = arg.parent
-            # For single file, we'll filter to just that file later
-            single_file = arg
-        else:
-            input_dir = arg
-            single_file = None
-    else:
-        single_file = None
+    persona_files, source_label = _resolve_input_persona_files(
+        args.inputs,
+        default_input_dir=default_input_dir,
+    )
 
-    print(f"Parsing synthetic data from: {input_dir}")
+    print(f"Parsing synthetic data from: {source_label}")
     print(f"Output directory: {output_dir}")
+    print(f"Persona files resolved: {len(persona_files)}")
 
     # Write clean markdown files
-    written_files = write_wrangled_markdown(input_dir, output_dir)
+    written_files = write_wrangled_markdown(
+        input_dir=default_input_dir,
+        output_dir=output_dir,
+        persona_files=persona_files,
+    )
 
-    # Generate DataFrame for summary stats
-    df = parse_synthetic_data_dir(input_dir)
+    # Generate DataFrame for summary stats based on selected files
+    df = pl.DataFrame(_rows_from_persona_files(persona_files))
 
     print(f"\nWrangled {len(written_files)} personas with {len(df)} total entries")
     print(f"\nOutput files:")

@@ -702,6 +702,34 @@ class TestEvaluateModelEdgeCases(_ConstantInputMixin):
         assert np.isnan(results["qwk_mean"])
 
 
+class TestEmptyDataloaderGuards:
+    """Explicit empty-loader guardrails for evaluation entry points."""
+
+    def test_evaluate_model_empty_loader_raises(self):
+        from src.vif.eval import evaluate_model
+
+        model = MockCriticMLP(torch.zeros(10))
+        dl = _make_dataloader(
+            np.empty((0, 20), dtype=float),
+            np.empty((0, 10), dtype=float),
+        )
+
+        with pytest.raises(ValueError, match="produced zero batches"):
+            evaluate_model(model, dl)
+
+    def test_evaluate_with_uncertainty_empty_loader_raises(self):
+        from src.vif.eval import evaluate_with_uncertainty
+
+        model = MockCriticMLP(torch.zeros(10))
+        dl = _make_dataloader(
+            np.empty((0, 20), dtype=float),
+            np.empty((0, 10), dtype=float),
+        )
+
+        with pytest.raises(ValueError, match="produced zero batches"):
+            evaluate_with_uncertainty(model, dl)
+
+
 # ── Calibration guard tests ──────────────────────────────────────────────────
 
 
