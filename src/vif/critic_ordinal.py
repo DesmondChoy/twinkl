@@ -28,7 +28,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from coral_pytorch.dataset import corn_label_from_logits
 from coral_pytorch.losses import coral_loss as _coral_loss
 from coral_pytorch.losses import corn_loss as _corn_loss
 
@@ -50,7 +49,8 @@ class OrdinalCriticBase(ABC, nn.Module):
 
     Provides the identical 2-layer backbone used by CORAL, CORN, EMD,
     SoftOrdinal, and CDW-CE models. Subclasses only need to specify the
-    output logit count and implement predict().
+    output logit count and how to reconstruct 3-class probabilities from
+    their raw logits.
     """
 
     def __init__(
@@ -99,13 +99,34 @@ class OrdinalCriticBase(ABC, nn.Module):
         return self.fc_out(x)
 
     @abstractmethod
-    def predict(self, x: torch.Tensor) -> torch.Tensor:
-        """Convert raw logits to alignment scores (batch, 10) in {-1, 0, 1}.
-
-        Each subclass implements its own decoding logic (sigmoid thresholds
-        for CORAL, conditional probabilities for CORN, argmax for EMD/SoftOrdinal).
-        """
+    def logits_per_dim(self, x: torch.Tensor) -> torch.Tensor:
+        """Return raw logits shaped as (batch, 10, k)."""
         ...
+
+    @abstractmethod
+    def probabilities_from_logits(self, logits_per_dim: torch.Tensor) -> torch.Tensor:
+        """Return normalized class probabilities shaped as (batch, 10, 3)."""
+        ...
+
+    def predict_probabilities(self, x: torch.Tensor) -> torch.Tensor:
+        """Return normalized 3-class probabilities for each value dimension."""
+        logits_per_dim = self.logits_per_dim(x)
+        return self.probabilities_from_logits(logits_per_dim)
+
+    def predict_logits_and_probabilities(
+        self,
+        x: torch.Tensor,
+    ) -> tuple[torch.Tensor, torch.Tensor]:
+        """Return model-native logits and normalized class probabilities."""
+        logits_per_dim = self.logits_per_dim(x)
+        probabilities = self.probabilities_from_logits(logits_per_dim)
+        return logits_per_dim, probabilities
+
+    def predict(self, x: torch.Tensor) -> torch.Tensor:
+        """Convert raw logits to alignment scores (batch, 10) in {-1, 0, 1}."""
+        probabilities = self.predict_probabilities(x)
+        classes = probabilities.argmax(dim=-1)
+        return classes.float() - 1.0
 
     @abstractmethod
     def _variant_name(self) -> str:
@@ -358,25 +379,29 @@ class CriticMLPCORAL(OrdinalCriticBase):
             output_logits=_CORAL_OUTPUT_LOGITS,
         )
 
-    def predict(self, x: torch.Tensor) -> torch.Tensor:
-        """Return predicted alignment scores (batch, 10) in {-1, 0, 1}.
-
-        Applies sigmoid to get cumulative probabilities, then converts to
-        class labels by counting how many thresholds are exceeded.
-        """
+    def logits_per_dim(self, x: torch.Tensor) -> torch.Tensor:
+        """Return raw CORAL logits as (batch, 10, 2)."""
         logits = self.forward(x)  # (batch, 20)
         batch = logits.size(0)
-        logits_per_dim = logits.view(batch, NUM_DIMS, LOGITS_PER_DIM)  # (batch, 10, 2)
+        return logits.view(batch, NUM_DIMS, LOGITS_PER_DIM)  # (batch, 10, 2)
 
-        # sigmoid → cumulative probs P(Y > k)
-        cum_probs = torch.sigmoid(logits_per_dim)  # (batch, 10, 2)
+    def probabilities_from_logits(self, logits_per_dim: torch.Tensor) -> torch.Tensor:
+        """Reconstruct class probabilities from CORAL cumulative thresholds."""
+        cum_probs = torch.sigmoid(logits_per_dim.float())
+        # Enforce rank consistency when the independent sigmoid heads disagree.
+        lower_threshold = cum_probs[:, :, 0]
+        upper_threshold = torch.minimum(lower_threshold, cum_probs[:, :, 1])
 
-        # Class = number of thresholds exceeded (round at 0.5)
-        # class 0 if both < 0.5, class 1 if first >= 0.5 but second < 0.5, etc.
-        classes = (cum_probs > 0.5).sum(dim=-1)  # (batch, 10) in {0, 1, 2}
+        prob_minus1 = 1.0 - lower_threshold
+        prob_zero = lower_threshold - upper_threshold
+        prob_plus1 = upper_threshold
 
-        # Map {0, 1, 2} → {-1, 0, 1}
-        return classes.float() - 1.0
+        probabilities = torch.stack(
+            [prob_minus1, prob_zero, prob_plus1],
+            dim=-1,
+        ).clamp(min=0.0)
+        denom = probabilities.sum(dim=-1, keepdim=True).clamp_min(1e-12)
+        return probabilities / denom
 
     def _variant_name(self) -> str:
         return "coral"
@@ -394,11 +419,6 @@ def alignment_to_corn_labels(y: torch.Tensor) -> torch.Tensor:
     """Map alignment labels {-1, 0, 1} to CORN class indices {0, 1, 2}."""
     # y: (batch, 10)
     return (y.long() + 1).clamp(0, NUM_CLASSES - 1)
-
-
-def corn_labels_to_alignment(labels: torch.Tensor) -> torch.Tensor:
-    """Map CORN class indices {0, 1, 2} back to alignment {-1, 0, 1}."""
-    return (labels.float() - 1).clamp(-1.0, 1.0)
 
 
 def corn_loss_multi(
@@ -442,17 +462,28 @@ class CriticMLPCORN(OrdinalCriticBase):
             output_logits=_CORN_OUTPUT_LOGITS,
         )
 
-    def predict(self, x: torch.Tensor) -> torch.Tensor:
-        """Return predicted alignment scores (batch, 10) in {-1, 0, 1}."""
+    def logits_per_dim(self, x: torch.Tensor) -> torch.Tensor:
+        """Return raw CORN logits as (batch, 10, 2)."""
         logits = self.forward(x)  # (batch, 20)
         batch = logits.size(0)
-        logits_per_dim = logits.view(batch, NUM_DIMS, LOGITS_PER_DIM)
+        return logits.view(batch, NUM_DIMS, LOGITS_PER_DIM)
 
-        preds = []
-        for d in range(NUM_DIMS):
-            ld = corn_label_from_logits(logits_per_dim[:, d, :])  # (batch,)
-            preds.append(corn_labels_to_alignment(ld))
-        return torch.stack(preds, dim=1)
+    def probabilities_from_logits(self, logits_per_dim: torch.Tensor) -> torch.Tensor:
+        """Reconstruct class probabilities from CORN conditional thresholds."""
+        conditional_probs = torch.sigmoid(logits_per_dim.float())
+        first_threshold = conditional_probs[:, :, 0]
+        second_threshold = conditional_probs[:, :, 1]
+
+        prob_minus1 = 1.0 - first_threshold
+        prob_zero = first_threshold * (1.0 - second_threshold)
+        prob_plus1 = first_threshold * second_threshold
+
+        probabilities = torch.stack(
+            [prob_minus1, prob_zero, prob_plus1],
+            dim=-1,
+        )
+        denom = probabilities.sum(dim=-1, keepdim=True).clamp_min(1e-12)
+        return probabilities / denom
 
     def _variant_name(self) -> str:
         return "corn"
@@ -523,15 +554,14 @@ class CriticMLPEMD(OrdinalCriticBase):
             output_logits=_EMD_OUTPUT_LOGITS,
         )
 
-    def predict(self, x: torch.Tensor) -> torch.Tensor:
-        """Return predicted alignment scores (batch, 10) in {-1, 0, 1}."""
+    def logits_per_dim(self, x: torch.Tensor) -> torch.Tensor:
+        """Return raw EMD logits as (batch, 10, 3)."""
         logits = self.forward(x)  # (batch, 30)
         batch = logits.size(0)
-        logits_3d = logits.view(batch, NUM_DIMS, NUM_CLASSES)  # (batch, 10, 3)
+        return logits.view(batch, NUM_DIMS, NUM_CLASSES)
 
-        # Argmax over 3 classes → {0, 1, 2}, then map to {-1, 0, 1}
-        classes = logits_3d.argmax(dim=-1)  # (batch, 10)
-        return classes.float() - 1.0
+    def probabilities_from_logits(self, logits_per_dim: torch.Tensor) -> torch.Tensor:
+        return F.softmax(logits_per_dim.float(), dim=-1)
 
     def _variant_name(self) -> str:
         return "emd"
@@ -613,15 +643,14 @@ class CriticMLPCDWCE(OrdinalCriticBase):
             output_logits=_CDW_CE_OUTPUT_LOGITS,
         )
 
-    def predict(self, x: torch.Tensor) -> torch.Tensor:
-        """Return predicted alignment scores (batch, 10) in {-1, 0, 1}."""
+    def logits_per_dim(self, x: torch.Tensor) -> torch.Tensor:
+        """Return raw CDW-CE logits as (batch, 10, 3)."""
         logits = self.forward(x)  # (batch, 30)
         batch = logits.size(0)
-        logits_3d = logits.view(batch, NUM_DIMS, NUM_CLASSES)  # (batch, 10, 3)
+        return logits.view(batch, NUM_DIMS, NUM_CLASSES)
 
-        # Argmax over 3 classes → {0, 1, 2}, then map to {-1, 0, 1}
-        classes = logits_3d.argmax(dim=-1)  # (batch, 10)
-        return classes.float() - 1.0
+    def probabilities_from_logits(self, logits_per_dim: torch.Tensor) -> torch.Tensor:
+        return F.softmax(logits_per_dim.float(), dim=-1)
 
     def _variant_name(self) -> str:
         return "cdw_ce"
@@ -727,15 +756,14 @@ class CriticMLPSoftOrdinal(OrdinalCriticBase):
             output_logits=_SOFT_ORDINAL_OUTPUT_LOGITS,
         )
 
-    def predict(self, x: torch.Tensor) -> torch.Tensor:
-        """Return predicted alignment scores (batch, 10) in {-1, 0, 1}."""
+    def logits_per_dim(self, x: torch.Tensor) -> torch.Tensor:
+        """Return raw SoftOrdinal logits as (batch, 10, 3)."""
         logits = self.forward(x)  # (batch, 30)
         batch = logits.size(0)
-        logits_3d = logits.view(batch, NUM_DIMS, NUM_CLASSES)  # (batch, 10, 3)
+        return logits.view(batch, NUM_DIMS, NUM_CLASSES)
 
-        # Argmax over 3 classes → {0, 1, 2}, then map to {-1, 0, 1}
-        classes = logits_3d.argmax(dim=-1)  # (batch, 10)
-        return classes.float() - 1.0
+    def probabilities_from_logits(self, logits_per_dim: torch.Tensor) -> torch.Tensor:
+        return F.softmax(logits_per_dim.float(), dim=-1)
 
     def _variant_name(self) -> str:
         return "soft_ordinal"

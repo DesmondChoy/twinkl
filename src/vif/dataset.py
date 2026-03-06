@@ -481,6 +481,20 @@ class VIFDataset(Dataset):
     def __len__(self) -> int:
         return len(self.index_map)
 
+    def get_sample_metadata(self, idx: int) -> dict:
+        """Return sample identity metadata for artifact export."""
+        persona_id, t_index = self.index_map[idx]
+        row = self.entry_lookup[(persona_id, t_index)]
+        return {
+            "persona_id": persona_id,
+            "t_index": int(t_index),
+            "date": row["date"],
+        }
+
+    def get_all_metadata(self) -> list[dict]:
+        """Return metadata rows aligned with the DataLoader sample order."""
+        return [self.get_sample_metadata(idx) for idx in range(len(self))]
+
     def __getitem__(self, idx: int) -> tuple[torch.Tensor, torch.Tensor]:
         """Get a single training sample.
 

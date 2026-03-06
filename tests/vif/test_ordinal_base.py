@@ -73,6 +73,31 @@ class TestPredict:
         assert unique_vals.issubset(valid_values)
 
 
+class TestOrdinalOutputs:
+    """Tests for standardized logits/probability export helpers."""
+
+    def test_logits_per_dim_shape(self, model, sample_input):
+        logits = model.logits_per_dim(sample_input)
+        assert logits.shape[0] == BATCH_SIZE
+        assert logits.shape[1] == 10
+        assert logits.shape[2] in {2, 3}
+
+    def test_predict_probabilities_shape(self, model, sample_input):
+        probabilities = model.predict_probabilities(sample_input)
+        assert probabilities.shape == (BATCH_SIZE, 10, 3)
+
+    def test_predict_probabilities_sum_to_one(self, model, sample_input):
+        probabilities = model.predict_probabilities(sample_input)
+        probs_sum = probabilities.sum(dim=-1)
+        assert torch.allclose(probs_sum, torch.ones_like(probs_sum), atol=1e-5)
+
+    def test_predict_logits_and_probabilities(self, model, sample_input):
+        logits, probabilities = model.predict_logits_and_probabilities(sample_input)
+        assert logits.shape[0] == BATCH_SIZE
+        assert logits.shape[1] == 10
+        assert probabilities.shape == (BATCH_SIZE, 10, 3)
+
+
 class TestConfigRoundTrip:
     """Tests for get_config()/from_config() serialization."""
 

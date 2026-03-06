@@ -373,6 +373,10 @@ def _build_experiment_dict(
     n_parameters = sum(p.numel() for p in model.parameters())
     history = trained_result["history"]
     best_epoch = trained_result["best_epoch"]
+    selected_candidate = trained_result.get("selected_candidate", {})
+    selection_policy = trained_result.get("selection_policy")
+    selection_source = trained_result.get("selection_source")
+    artifact_paths = trained_result.get("artifact_paths", {})
 
     # Training dynamics
     total_epochs = len(history["train_loss"])
@@ -471,17 +475,29 @@ def _build_experiment_dict(
             "val_loss_at_best": _round_val(val_loss_at_best),
             "gap_at_best": _round_val(gap_at_best),
             "final_lr": _round_val(final_lr, dp=6),
+            "selection_source": selection_source,
+            "selection_metrics": {
+                "qwk_mean": _round_val(selected_candidate.get("qwk_mean")),
+                "recall_minus1": _round_val(selected_candidate.get("recall_minus1")),
+                "calibration_global": _round_val(selected_candidate.get("calibration_global")),
+                "hedging_mean": _round_val(selected_candidate.get("hedging_mean")),
+                "qwk_nan_dims_count": selected_candidate.get("qwk_nan_dims_count"),
+                "eligible": selected_candidate.get("eligible"),
+                "ineligible_reasons": selected_candidate.get("ineligible_reasons"),
+            },
         },
         "evaluation": {
             "mae_mean": _round_val(eval_result["mae_mean"]),
             "accuracy_mean": _round_val(eval_result["accuracy_mean"]),
             "qwk_mean": _round_val(eval_result["qwk_mean"]),
+            "qwk_nan_dims_count": eval_result.get("qwk_nan_dims_count"),
             "spearman_mean": _round_val(eval_result["spearman_mean"]),
             "calibration_global": _round_val(calibration["global"]),
             "calibration_positive_dims": calibration["positive_count"],
             "mean_uncertainty": _round_val(calibration["mean_uncertainty"]),
             "minority_recall_mean": _round_val(recall_data["mean_minority"]),
             "recall_minus1": _round_val(recall_data["recall_minus1"]),
+            "recall_zero": _round_val(recall_data.get("recall_zero")),
             "recall_plus1": _round_val(recall_data["recall_plus1"]),
             "hedging_mean": _round_val(float(hedging.mean())),
         },
@@ -499,6 +515,11 @@ def _build_experiment_dict(
     experiment["config"]["uncertainty"] = {
         k: v for k, v in experiment["config"]["uncertainty"].items() if v is not None
     }
+
+    if selection_policy is not None:
+        experiment["selection_policy"] = _to_python(selection_policy)
+    if artifact_paths:
+        experiment["artifacts"] = _to_python(artifact_paths)
 
     # Compute config fingerprint and store in metadata
     experiment["metadata"]["config_hash"] = _config_fingerprint(experiment["config"])

@@ -3,11 +3,13 @@
 import warnings
 
 import numpy as np
+import polars as pl
 import pytest
 import torch
 from torch.utils.data import DataLoader, TensorDataset
 
 from src.models.judge import SCHWARTZ_VALUE_ORDER
+from src.vif.critic_ordinal import CriticMLPEMD
 
 
 # ── Mock models ───────────────────────────────────────────────────────────────
@@ -53,6 +55,21 @@ class MockOrdinalCritic:
         batch = x.size(0)
         return self._fixed.unsqueeze(0).expand(batch, -1)
 
+    def predict_probabilities(self, x: torch.Tensor) -> torch.Tensor:
+        batch = x.size(0)
+        probs = torch.zeros((batch, 10, 3), dtype=torch.float32)
+        classes = (self.predict(x).long() + 1).clamp(0, 2)
+        probs.scatter_(2, classes.unsqueeze(-1), 1.0)
+        return probs
+
+    def predict_logits_and_probabilities(
+        self,
+        x: torch.Tensor,
+    ) -> tuple[torch.Tensor, torch.Tensor]:
+        probs = self.predict_probabilities(x)
+        logits = torch.log(probs.clamp_min(1e-6))
+        return logits, probs
+
     def _variant_name(self) -> str:
         return "mock_ordinal"
 
@@ -71,6 +88,24 @@ def _make_dataloader(
     x = torch.tensor(inputs, dtype=torch.float32)
     y = torch.tensor(targets, dtype=torch.float32)
     return DataLoader(TensorDataset(x, y), batch_size=batch_size)
+
+
+class _MetadataDataset(TensorDataset):
+    """TensorDataset variant that also exposes export metadata."""
+
+    def __init__(self, x: torch.Tensor, y: torch.Tensor):
+        super().__init__(x, y)
+        self._metadata = [
+            {
+                "persona_id": f"persona_{idx}",
+                "t_index": idx,
+                "date": f"2025-01-{idx + 1:02d}",
+            }
+            for idx in range(len(x))
+        ]
+
+    def get_all_metadata(self) -> list[dict]:
+        return list(self._metadata)
 
 
 # ── Metric tests ──────────────────────────────────────────────────────────────
@@ -464,6 +499,80 @@ class TestEvaluateWithUncertainty:
         assert "qwk_per_dim" in results
         assert "mse_per_dim" in results
 
+    def test_ordinal_includes_selection_metrics(self):
+        """Ordinal eval bundle should include recall, hedging, and QWK NaN counts."""
+        from src.vif.eval import evaluate_with_uncertainty
+
+        fixed = torch.zeros(10)
+        model = MockOrdinalCritic(fixed)
+        targets = np.zeros((8, 10))
+        dl = _make_dataloader(np.random.default_rng(0).standard_normal((8, 20)), targets)
+
+        results = evaluate_with_uncertainty(
+            model,
+            dl,
+            include_ordinal_metrics=True,
+        )
+
+        assert "recall_per_class" in results
+        assert "recall_minus1" in results
+        assert "recall_zero" in results
+        assert "recall_plus1" in results
+        assert "hedging_per_dim" in results
+        assert "hedging_mean" in results
+        assert "qwk_nan_dims_count" in results
+        assert "positive_count" in results["calibration"]
+
+    def test_include_raw_outputs_for_ordinal_model(self):
+        """Ordinal eval can capture deterministic logits/probabilities for export."""
+        from src.vif.eval import evaluate_with_uncertainty
+
+        fixed = torch.zeros(10)
+        model = MockOrdinalCritic(fixed)
+        targets = np.zeros((4, 10))
+        dl = _make_dataloader(np.random.default_rng(0).standard_normal((4, 20)), targets)
+
+        results = evaluate_with_uncertainty(
+            model,
+            dl,
+            include_ordinal_metrics=True,
+            include_raw_outputs=True,
+        )
+
+        assert results["raw_logits"].shape == (4, 10, 3)
+        assert results["probabilities"].shape == (4, 10, 3)
+
+    def test_include_raw_outputs_with_real_ordinal_model(self):
+        """Raw export should work for real ordinal models, not just mocks."""
+        from src.vif.eval import evaluate_with_uncertainty
+
+        model = CriticMLPEMD(input_dim=20, hidden_dim=16)
+        targets = np.zeros((4, 10))
+        dl = _make_dataloader(np.random.default_rng(1).standard_normal((4, 20)), targets)
+
+        results = evaluate_with_uncertainty(
+            model,
+            dl,
+            n_mc_samples=2,
+            include_ordinal_metrics=True,
+            include_raw_outputs=True,
+        )
+
+        assert results["raw_logits"].shape == (4, 10, 3)
+        assert results["probabilities"].shape == (4, 10, 3)
+
+    def test_include_raw_outputs_requires_supported_model(self):
+        """Raw export should fail fast for models without ordinal output helpers."""
+        from src.vif.eval import evaluate_with_uncertainty
+
+        fixed = torch.zeros(10)
+        model = MockCriticMLP(fixed)
+        targets = np.zeros((4, 10))
+        dl = _make_dataloader(np.random.default_rng(0).standard_normal((4, 20)), targets)
+
+        with pytest.raises(ValueError, match="include_raw_outputs=True"):
+            evaluate_with_uncertainty(model, dl, include_raw_outputs=True)
+
     def test_mean_uncertainty_positive(self):
         """Mean uncertainty from mocks (fixed std=0.1) should be positive."""
         from src.vif.eval import evaluate_with_uncertainty
@@ -529,12 +638,34 @@ class TestFormatResultsTable:
         results["calibration"] = {
             "error_uncertainty_correlation": 0.42,
             "mean_uncertainty": 0.1234,
+            "positive_count": 9,
         }
 
         table = format_results_table(results)
 
         assert "Calibration" in table
         assert "0.42" in table
+        assert "Positive dims" in table
+
+    def test_recall_and_hedging_sections_included(self):
+        """Ordinal summary fields should be rendered when present."""
+        from src.vif.eval import format_results_table
+
+        results = self._base_results(use_mae=True)
+        results["qwk_per_dim"] = {d: 0.5 for d in SCHWARTZ_VALUE_ORDER}
+        results["qwk_mean"] = 0.5
+        results["recall_per_class"] = {
+            "mean": {"minus1": 0.1, "zero": 0.8, "plus1": 0.3},
+            "per_dim": {},
+        }
+        results["hedging_mean"] = 0.75
+        results["qwk_nan_dims_count"] = 2
+
+        table = format_results_table(results)
+
+        assert "Recall per class" in table
+        assert "Hedging mean" in table
+        assert "QWK NaN dims" in table
 
     def test_nan_spearman_shows_na(self):
         """NaN Spearman values should render as 'N/A' in the table."""
@@ -825,3 +956,150 @@ class TestCalibrationGuard:
         assert results["calibration"]["quality"] in [
             "good", "marginal", "poor", "negative", "unknown",
         ]
+
+
+class TestOrdinalSelectionHelpers:
+    """Tests for metric-aligned ordinal checkpoint selection."""
+
+    def test_higher_qwk_beats_lower_val_loss(self):
+        from src.vif.eval import build_ordinal_selection_candidate, is_better_ordinal_candidate
+
+        lower_qwk = build_ordinal_selection_candidate(
+            epoch=0,
+            val_loss=0.10,
+            eval_result={
+                "qwk_mean": 0.30,
+                "recall_minus1": 0.20,
+                "hedging_mean": 0.80,
+                "qwk_nan_dims_count": 0,
+                "calibration": {"error_uncertainty_correlation": 0.4},
+            },
+        )
+        higher_qwk = build_ordinal_selection_candidate(
+            epoch=1,
+            val_loss=0.40,
+            eval_result={
+                "qwk_mean": 0.35,
+                "recall_minus1": 0.10,
+                "hedging_mean": 0.90,
+                "qwk_nan_dims_count": 0,
+                "calibration": {"error_uncertainty_correlation": 0.2},
+            },
+        )
+
+        assert is_better_ordinal_candidate(higher_qwk, lower_qwk)
+
+    def test_recall_breaks_qwk_tie(self):
+        from src.vif.eval import build_ordinal_selection_candidate, is_better_ordinal_candidate
+
+        weaker_recall = build_ordinal_selection_candidate(
+            epoch=0,
+            val_loss=0.20,
+            eval_result={
+                "qwk_mean": 0.35,
+                "recall_minus1": 0.05,
+                "hedging_mean": 0.80,
+                "qwk_nan_dims_count": 0,
+                "calibration": {"error_uncertainty_correlation": 0.2},
+            },
+        )
+        stronger_recall = build_ordinal_selection_candidate(
+            epoch=1,
+            val_loss=0.30,
+            eval_result={
+                "qwk_mean": 0.35,
+                "recall_minus1": 0.07,
+                "hedging_mean": 0.85,
+                "qwk_nan_dims_count": 0,
+                "calibration": {"error_uncertainty_correlation": 0.1},
+            },
+        )
+
+        assert is_better_ordinal_candidate(stronger_recall, weaker_recall)
+
+    def test_negative_calibration_is_ineligible(self):
+        from src.vif.eval import build_ordinal_selection_candidate
+
+        candidate = build_ordinal_selection_candidate(
+            epoch=0,
+            val_loss=0.2,
+            eval_result={
+                "qwk_mean": 0.35,
+                "recall_minus1": 0.07,
+                "hedging_mean": 0.8,
+                "qwk_nan_dims_count": 0,
+                "calibration": {"error_uncertainty_correlation": -0.1},
+            },
+        )
+
+        assert candidate["eligible"] is False
+        assert "negative_calibration" in candidate["ineligible_reasons"]
+
+    def test_qwk_nan_dims_are_ineligible(self):
+        from src.vif.eval import build_ordinal_selection_candidate
+
+        candidate = build_ordinal_selection_candidate(
+            epoch=0,
+            val_loss=0.2,
+            eval_result={
+                "qwk_mean": 0.35,
+                "recall_minus1": 0.07,
+                "hedging_mean": 0.8,
+                "qwk_nan_dims_count": 2,
+                "calibration": {"error_uncertainty_correlation": 0.1},
+            },
+        )
+
+        assert candidate["eligible"] is False
+        assert "qwk_nan_dims_present" in candidate["ineligible_reasons"]
+
+
+class TestOrdinalArtifactExport:
+    """Tests for validation/test ordinal artifact export."""
+
+    def test_export_ordinal_output_artifact_writes_parquet(self, tmp_path):
+        from src.vif.eval import evaluate_with_uncertainty, export_ordinal_output_artifact
+
+        fixed = torch.zeros(10)
+        model = MockOrdinalCritic(fixed)
+        x = torch.tensor(
+            np.random.default_rng(0).standard_normal((3, 20)),
+            dtype=torch.float32,
+        )
+        y = torch.zeros((3, 10), dtype=torch.float32)
+        dl = DataLoader(_MetadataDataset(x, y), batch_size=2)
+
+        results = evaluate_with_uncertainty(
+            model,
+            dl,
+            include_ordinal_metrics=True,
+            include_raw_outputs=True,
+        )
+        output_path = tmp_path / "ordinal_outputs.parquet"
+
+        written_path = export_ordinal_output_artifact(
+            results,
+            dl,
+            output_path,
+            split="val",
+            model_name="MockOrdinal",
+        )
+
+        df = pl.read_parquet(written_path)
+        assert len(df) == 30  # 3 samples x 10 dimensions
+        assert set(
+            [
+                "persona_id",
+                "t_index",
+                "date",
+                "split",
+                "model_name",
+                "dimension",
+                "target",
+                "predicted_class",
+                "mean_prediction",
+                "uncertainty",
+                "raw_logits",
+                "class_probabilities",
+            ]
+        ).issubset(set(df.columns))
