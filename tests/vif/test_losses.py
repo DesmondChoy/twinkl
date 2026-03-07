@@ -248,6 +248,159 @@ class TestCDWCELoss:
             cdw_ce_loss_multi(torch.randn(4, 30), torch.randint(-1, 2, (5, 10)).float())
 
 
+class TestBalancedSoftmaxLoss:
+    """Tests for Balanced Softmax loss."""
+
+    def test_balanced_softmax_loss_scalar_output(self):
+        """Loss should be a non-negative scalar tensor."""
+        from src.vif.critic_ordinal import balanced_softmax_loss_multi
+
+        logits = torch.randn(4, 30)
+        y = torch.randint(-1, 2, (4, 10)).float()
+        class_priors = torch.tensor([[0.1, 0.8, 0.1]] * 10, dtype=torch.float32)
+
+        loss = balanced_softmax_loss_multi(logits, y, class_priors=class_priors)
+
+        assert loss.dim() == 0
+        assert loss.item() >= 0
+
+    def test_balanced_softmax_loss_gradient_flow(self):
+        """Loss should allow gradient backpropagation."""
+        from src.vif.critic_ordinal import balanced_softmax_loss_multi
+
+        logits = torch.randn(4, 30, requires_grad=True)
+        y = torch.randint(-1, 2, (4, 10)).float()
+        class_priors = torch.tensor([[0.1, 0.8, 0.1]] * 10, dtype=torch.float32)
+
+        loss = balanced_softmax_loss_multi(logits, y, class_priors=class_priors)
+        loss.backward()
+
+        assert logits.grad is not None
+        assert logits.grad.shape == (4, 30)
+        assert not torch.all(logits.grad == 0)
+
+    def test_balanced_softmax_rare_class_increases_penalty(self):
+        """Rare-class targets should incur a larger penalty than uniform priors."""
+        from src.vif.critic_ordinal import balanced_softmax_loss_multi
+
+        logits = torch.zeros(1, 30)
+        y = -torch.ones(1, 10)
+        uniform_priors = torch.full((10, 3), 1.0 / 3.0, dtype=torch.float32)
+        imbalanced_priors = torch.tensor([[0.05, 0.90, 0.05]] * 10, dtype=torch.float32)
+
+        loss_uniform = balanced_softmax_loss_multi(logits, y, class_priors=uniform_priors)
+        loss_imbalanced = balanced_softmax_loss_multi(logits, y, class_priors=imbalanced_priors)
+
+        assert loss_imbalanced.item() > loss_uniform.item()
+
+    def test_balanced_softmax_rejects_wrong_shapes(self):
+        """Shape mismatches should raise ValueError."""
+        from src.vif.critic_ordinal import balanced_softmax_loss_multi
+
+        y = torch.randint(-1, 2, (4, 10)).float()
+        class_priors = torch.tensor([[0.1, 0.8, 0.1]] * 10, dtype=torch.float32)
+
+        with pytest.raises(ValueError):
+            balanced_softmax_loss_multi(torch.randn(4, 10, 3), y, class_priors=class_priors)
+
+        with pytest.raises(ValueError):
+            balanced_softmax_loss_multi(torch.randn(4, 30), torch.randint(-1, 2, (4, 9)).float(), class_priors=class_priors)
+
+        with pytest.raises(ValueError):
+            balanced_softmax_loss_multi(torch.randn(4, 30), y, class_priors=torch.ones(9, 3))
+
+
+class TestLDAMDRWLoss:
+    """Tests for LDAM-DRW loss."""
+
+    @staticmethod
+    def _class_counts() -> torch.Tensor:
+        return torch.tensor(
+            [
+                [8.0, 96.0, 12.0],
+            ] * 10,
+            dtype=torch.float32,
+        )
+
+    def test_ldam_drw_loss_scalar_output(self):
+        """Loss should be a non-negative scalar tensor."""
+        from src.vif.critic_ordinal import ldam_drw_loss_multi
+
+        logits = torch.randn(4, 30)
+        y = torch.randint(-1, 2, (4, 10)).float()
+
+        loss = ldam_drw_loss_multi(logits, y, class_counts=self._class_counts(), epoch=0)
+
+        assert loss.dim() == 0
+        assert loss.item() >= 0
+
+    def test_ldam_drw_loss_gradient_flow(self):
+        """Loss should allow gradient backpropagation."""
+        from src.vif.critic_ordinal import ldam_drw_loss_multi
+
+        logits = torch.randn(4, 30, requires_grad=True)
+        y = torch.randint(-1, 2, (4, 10)).float()
+
+        loss = ldam_drw_loss_multi(logits, y, class_counts=self._class_counts(), epoch=0)
+        loss.backward()
+
+        assert logits.grad is not None
+        assert logits.grad.shape == (4, 30)
+        assert not torch.all(logits.grad == 0)
+
+    def test_ldam_drw_margin_increases_rare_class_penalty(self):
+        """Minority-class targets should be penalized more than majority targets."""
+        from src.vif.critic_ordinal import ldam_drw_loss_multi
+
+        logits = torch.zeros(1, 30)
+        rare_target = -torch.ones(1, 10)
+        majority_target = torch.zeros(1, 10)
+
+        loss_rare = ldam_drw_loss_multi(logits, rare_target, class_counts=self._class_counts(), epoch=0)
+        loss_majority = ldam_drw_loss_multi(logits, majority_target, class_counts=self._class_counts(), epoch=0)
+
+        assert loss_rare.item() > loss_majority.item()
+
+    def test_ldam_drw_deferred_reweighting_changes_loss_after_threshold(self):
+        """DRW should change the loss once the deferred-weighting epoch is reached."""
+        from src.vif.critic_ordinal import ldam_drw_loss_multi
+
+        logits = torch.zeros(1, 30)
+        y = -torch.ones(1, 10)
+
+        loss_before_drw = ldam_drw_loss_multi(
+            logits,
+            y,
+            class_counts=self._class_counts(),
+            epoch=10,
+            drw_start_epoch=50,
+        )
+        loss_after_drw = ldam_drw_loss_multi(
+            logits,
+            y,
+            class_counts=self._class_counts(),
+            epoch=75,
+            drw_start_epoch=50,
+        )
+
+        assert loss_after_drw.item() != pytest.approx(loss_before_drw.item())
+
+    def test_ldam_drw_rejects_wrong_shapes(self):
+        """Shape mismatches should raise ValueError."""
+        from src.vif.critic_ordinal import ldam_drw_loss_multi
+
+        y = torch.randint(-1, 2, (4, 10)).float()
+
+        with pytest.raises(ValueError):
+            ldam_drw_loss_multi(torch.randn(4, 10, 3), y, class_counts=self._class_counts(), epoch=0)
+
+        with pytest.raises(ValueError):
+            ldam_drw_loss_multi(torch.randn(4, 30), torch.randint(-1, 2, (4, 9)).float(), class_counts=self._class_counts(), epoch=0)
+
+        with pytest.raises(ValueError):
+            ldam_drw_loss_multi(torch.randn(4, 30), y, class_counts=torch.ones(9, 3), epoch=0)
+
+
 class TestSoftOrdinalLoss:
     """Tests for Soft Ordinal loss."""
 

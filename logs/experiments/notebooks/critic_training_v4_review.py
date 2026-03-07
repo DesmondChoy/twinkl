@@ -81,6 +81,11 @@ CONFIG = {
     "val_ratio": 0.15,
     "split_seed": 2025,
     "model_seed": 2025,
+    "class_balance_source": "train_split_per_dimension",
+    "ldam_max_m": 0.5,
+    "ldam_scale": 30.0,
+    "ldam_drw_start_epoch": 50,
+    "ldam_beta": 0.9999,
     # LR finder config
     "use_lr_finder": True,
     "lr_finder": lr_finder_cfg,
@@ -137,6 +142,7 @@ for key in [
     "val_ratio",
     "split_seed",
     "model_seed",
+    "class_balance_source",
     "use_lr_finder",
     "experiment_group",
     "skip_experiment_logging",
@@ -172,6 +178,19 @@ import torch.nn as nn
 from torch.optim import AdamW
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torch.utils.data import DataLoader
+try:
+    _ipython = get_ipython()
+except NameError:
+    _ipython = None
+
+if _ipython is None:
+    os.environ.setdefault("MPLBACKEND", "Agg")
+
+import matplotlib
+
+if _ipython is None:
+    matplotlib.use(os.environ["MPLBACKEND"])
+
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
@@ -198,6 +217,10 @@ from src.vif.critic_ordinal import (
     emd_loss_multi,
     CriticMLPCDWCE,
     cdw_ce_loss_multi,
+    CriticMLPBalancedSoftmax,
+    balanced_softmax_loss_multi,
+    CriticMLPLDAMDRW,
+    ldam_drw_loss_multi,
     CriticMLPSoftOrdinal,
     soft_ordinal_loss_multi,
 )
@@ -211,6 +234,7 @@ from src.vif.eval import (
     ordinal_selection_policy_summary,
 )
 from src.vif.lr_finder import run_lr_finder
+from src.vif.class_balance import compute_long_tail_statistics_from_dataframe
 from src.models.judge import SCHWARTZ_VALUE_ORDER
 
 # Reproducibility
@@ -478,6 +502,37 @@ MODEL_CONFIGS = {
         "loss_fn": partial(cdw_ce_loss_multi, alpha=5),
         "is_ordinal": True,
     },
+    "BalancedSoftmax": {
+        "class": CriticMLPBalancedSoftmax,
+        "loss_fn": balanced_softmax_loss_multi,
+        "loss_fn_factory": (
+            lambda *, _config, class_stats: (
+                lambda _epoch: partial(
+                    balanced_softmax_loss_multi,
+                    class_priors=class_stats["class_priors"],
+                )
+            )
+        ),
+        "is_ordinal": True,
+    },
+    "LDAM_DRW": {
+        "class": CriticMLPLDAMDRW,
+        "loss_fn": ldam_drw_loss_multi,
+        "loss_fn_factory": (
+            lambda *, _config, class_stats: (
+                lambda epoch: partial(
+                    ldam_drw_loss_multi,
+                    class_counts=class_stats["class_counts"],
+                    epoch=epoch,
+                    drw_start_epoch=int(_config.get("ldam_drw_start_epoch", 50)),
+                    max_m=float(_config.get("ldam_max_m", 0.5)),
+                    scale=float(_config.get("ldam_scale", 30.0)),
+                    beta=float(_config.get("ldam_beta", 0.9999)),
+                )
+            )
+        ),
+        "is_ordinal": True,
+    },
 }
 
 
@@ -525,6 +580,8 @@ print(
 print(
     f"  Test:  {n_test} samples ({test_df.select('persona_id').n_unique()} personas) -> {len(test_loader)} batches"
 )
+
+class_balance_stats = compute_long_tail_statistics_from_dataframe(train_df)
 
 # ==== CELL 29 ====
 # Active model validation (v4 frontier set)
@@ -616,6 +673,14 @@ def _resolve_model_run_config(base_config, model_name):
     return resolved
 
 
+def _build_epoch_loss_fn(model_cfg, config, class_stats):
+    factory = model_cfg.get("loss_fn_factory")
+    if factory is None:
+        static_loss = model_cfg["loss_fn"]
+        return lambda _epoch: static_loss
+    return factory(_config=config, class_stats=class_stats)
+
+
 def _save_selected_checkpoint(
     model,
     selected_candidate,
@@ -638,7 +703,7 @@ def _save_selected_checkpoint(
     return checkpoint_path
 
 
-def train_model(name, model_cfg, train_loader, val_loader, config, device):
+def train_model(name, model_cfg, train_loader, val_loader, config, device, class_stats):
     """Train a single model and return its selected state + history."""
     # Per-model seed for reproducibility on a fixed split.
     torch.manual_seed(config["model_seed"])
@@ -653,7 +718,7 @@ def train_model(name, model_cfg, train_loader, val_loader, config, device):
     )
     model.to(device)
 
-    loss_fn = model_cfg["loss_fn"]
+    epoch_loss_fn = _build_epoch_loss_fn(model_cfg, config, class_stats)
     configured_lr = config["learning_rate"]
     learning_rate_policy = config.get("learning_rate_policy")
 
@@ -669,7 +734,7 @@ def train_model(name, model_cfg, train_loader, val_loader, config, device):
         lr_finder_result = run_lr_finder(
             model=model,
             train_loader=train_loader,
-            criterion=loss_fn,
+            criterion=epoch_loss_fn(0),
             configured_learning_rate=configured_lr,
             weight_decay=config["weight_decay"],
             device=device,
@@ -776,6 +841,7 @@ def train_model(name, model_cfg, train_loader, val_loader, config, device):
     patience_counter = 0
 
     for epoch in range(config["epochs"]):
+        loss_fn = epoch_loss_fn(epoch)
         # Train
         model.train()
         train_loss = 0.0
@@ -954,7 +1020,15 @@ for name, cfg in active_models.items():
         print(
             f"  LR policy: {model_run_config['learning_rate_policy']}"
         )
-    result = train_model(name, cfg, train_loader, val_loader, model_run_config, device)
+    result = train_model(
+        name,
+        cfg,
+        train_loader,
+        val_loader,
+        model_run_config,
+        device,
+        class_balance_stats,
+    )
     n_epochs = len(result["history"]["train_loss"])
     selected_candidate = result.get("selected_candidate") or {}
     if n_epochs == 0:

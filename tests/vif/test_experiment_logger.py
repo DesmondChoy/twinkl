@@ -4,16 +4,22 @@ import warnings
 from pathlib import Path
 from unittest.mock import patch
 
+import numpy as np
+import pytest
+import torch
 import yaml
 
 import src.vif.experiment_logger as experiment_logger
+from src.models.judge import SCHWARTZ_VALUE_ORDER
 from src.vif.experiment_logger import (
     _build_provenance,
+    _build_experiment_dict,
     _canonicalize_run_config,
     _compute_config_delta,
     _encoder_family,
     _flatten_dict,
     _get_git_log_between,
+    _loss_shorthand,
     _rebuild_index,
     _strip_dirty,
     AUTO_TABLE_END,
@@ -57,6 +63,114 @@ class TestEncoderFamily:
 
     def test_slashed_path(self):
         assert _encoder_family("my-org/my-minilm-variant") == "MiniLM"
+
+
+# ─── _loss_shorthand ──────────────────────────────────────────────────────────
+
+
+class TestLossShorthand:
+    def test_balanced_softmax(self):
+        assert _loss_shorthand("BalancedSoftmax", {}) == "balanced_softmax"
+
+    def test_ldam_drw(self):
+        assert _loss_shorthand("LDAM_DRW", {}) == "ldam_drw"
+
+    def test_weighted_mse_includes_scale(self):
+        config = {"loss_fn": "weighted_mse", "weighted_mse_scale": 7.5}
+        assert _loss_shorthand("MSE", config) == "weighted_mse_s7.5"
+
+
+def _per_dimension_metrics(value: float) -> dict[str, float]:
+    return {dimension: value for dimension in SCHWARTZ_VALUE_ORDER}
+
+
+def _minimal_training_inputs() -> tuple[dict, dict, dict, dict, np.ndarray, dict]:
+    config = {
+        "encoder_model": "nomic-ai/nomic-embed-text-v1.5",
+        "truncate_dim": 256,
+        "window_size": 1,
+        "hidden_dim": 64,
+        "dropout": 0.3,
+        "learning_rate": 0.015522253574270487,
+        "weight_decay": 0.01,
+        "batch_size": 16,
+        "epochs": 100,
+        "model_seed": 11,
+        "class_balance_source": "train_split_per_dimension",
+        "ldam_max_m": 0.5,
+        "ldam_scale": 30.0,
+        "ldam_drw_start_epoch": 50,
+        "ldam_beta": 0.9999,
+    }
+    trained_result = {
+        "model": torch.nn.Linear(4, 30),
+        "history": {
+            "train_loss": [1.20, 0.95],
+            "val_loss": [1.10, 0.90],
+            "learning_rate": [0.015522253574270487, 0.007761126787135243],
+        },
+        "best_epoch": 1,
+    }
+    eval_result = {
+        "mae_per_dim": _per_dimension_metrics(0.22),
+        "accuracy_per_dim": _per_dimension_metrics(0.81),
+        "qwk_per_dim": _per_dimension_metrics(0.34),
+        "spearman_per_dim": _per_dimension_metrics(0.29),
+        "mae_mean": 0.22,
+        "accuracy_mean": 0.81,
+        "qwk_mean": 0.34,
+        "spearman_mean": 0.29,
+    }
+    calibration = {
+        "per_dim": _per_dimension_metrics(0.11),
+        "global": 0.11,
+        "positive_count": len(SCHWARTZ_VALUE_ORDER),
+        "mean_uncertainty": 0.18,
+    }
+    hedging = np.full(len(SCHWARTZ_VALUE_ORDER), 0.05, dtype=np.float64)
+    recall_data = {
+        "mean_minority": 0.24,
+        "recall_minus1": 0.27,
+        "recall_zero": 0.62,
+        "recall_plus1": 0.21,
+    }
+    return config, trained_result, eval_result, calibration, hedging, recall_data
+
+
+@pytest.mark.parametrize(
+    ("model_name", "expected_loss"),
+    [
+        ("BalancedSoftmax", "balanced_softmax"),
+        ("LDAM_DRW", "ldam_drw"),
+    ],
+)
+def test_build_experiment_dict_records_long_tail_loss_shorthands(model_name, expected_loss):
+    config, trained_result, eval_result, calibration, hedging, recall_data = _minimal_training_inputs()
+
+    with patch("src.vif.experiment_logger._get_git_commit", return_value="abc123"):
+        experiment = _build_experiment_dict(
+            run_id="run_999",
+            model_name=model_name,
+            config=config,
+            trained_result=trained_result,
+            eval_result=eval_result,
+            calibration=calibration,
+            hedging=hedging,
+            recall_data=recall_data,
+            n_train=100,
+            n_val=20,
+            n_test=20,
+            pct_truncated=0.0,
+            state_dim=256,
+            observations="",
+        )
+
+    assert experiment["config"]["training"]["loss_fn"] == expected_loss
+    assert experiment["config"]["training"]["class_balance_source"] == "train_split_per_dimension"
+
+    if model_name == "LDAM_DRW":
+        assert experiment["config"]["training"]["ldam_drw_start_epoch"] == 50
+        assert experiment["config"]["training"]["ldam_beta"] == 0.9999
 
 
 # ─── _flatten_dict ───────────────────────────────────────────────────────────
@@ -242,7 +356,7 @@ class TestBuildProvenance:
             "src.vif.experiment_logger._get_git_log_between",
             return_value=["abc123 change"],
         ):
-            provenance = _build_provenance("run_003", current_config, "a3f493f")
+            provenance = _build_provenance("run_003", "CORN", current_config, "a3f493f")
 
         assert provenance["prev_run_id"] == "run_001"
         assert provenance["prev_git_commit"] == "e1e08c4(dirty)"

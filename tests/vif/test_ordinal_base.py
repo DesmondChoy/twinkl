@@ -7,10 +7,12 @@ import torch
 import pytest
 
 from src.vif.critic_ordinal import (
+    CriticMLPBalancedSoftmax,
     CriticMLPCORAL,
     CriticMLPCORN,
     CriticMLPCDWCE,
     CriticMLPEMD,
+    CriticMLPLDAMDRW,
     CriticMLPSoftOrdinal,
     OrdinalCriticBase,
 )
@@ -24,6 +26,8 @@ ALL_MODELS = [
     CriticMLPCORN,
     CriticMLPEMD,
     CriticMLPCDWCE,
+    CriticMLPBalancedSoftmax,
+    CriticMLPLDAMDRW,
     CriticMLPSoftOrdinal,
 ]
 
@@ -105,7 +109,15 @@ class TestConfigRoundTrip:
         """Config should include a variant key."""
         config = model.get_config()
         assert "variant" in config
-        assert config["variant"] in {"coral", "corn", "emd", "cdw_ce", "soft_ordinal"}
+        assert config["variant"] in {
+            "coral",
+            "corn",
+            "emd",
+            "cdw_ce",
+            "balanced_softmax",
+            "ldam_drw",
+            "soft_ordinal",
+        }
 
     def test_config_round_trip(self, model, sample_input):
         """Model created from config should produce same-shape output."""

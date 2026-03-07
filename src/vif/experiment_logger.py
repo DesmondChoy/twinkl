@@ -358,6 +358,8 @@ def _loss_shorthand(model_name: str, config: dict) -> str:
         "CORN": "corn",
         "EMD": "emd",
         "SoftOrdinal": "soft_ordinal",
+        "BalancedSoftmax": "balanced_softmax",
+        "LDAM_DRW": "ldam_drw",
     }
     if model_name == "MSE":
         loss_fn = config.get("loss_fn", "mse")
@@ -476,6 +478,11 @@ def _build_experiment_dict(
                 "scheduler_factor": config.get("scheduler_factor", 0.5),
                 "scheduler_patience": config.get("scheduler_patience", 10),
                 "seed": config.get("model_seed", config.get("seed", 42)),
+                "class_balance_source": config.get("class_balance_source"),
+                "ldam_max_m": config.get("ldam_max_m"),
+                "ldam_scale": config.get("ldam_scale"),
+                "ldam_drw_start_epoch": config.get("ldam_drw_start_epoch"),
+                "ldam_beta": config.get("ldam_beta"),
                 "weighted_mse_scale": (
                     config.get("weighted_mse_scale")
                     if model_name == "MSE" and config.get("loss_fn") == "weighted_mse"

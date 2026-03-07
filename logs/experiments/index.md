@@ -114,6 +114,10 @@
 | 018 | CDWCE_a3 | nomic-256d | 1 | 64 | 0.3 | cdwce_a3 | 23454 | 22.9 | 0.229 | 0.796 | 0.338 | 0.365 | 0.762 | 0.276 | runs/run_018_CDWCE_a3.yaml |
 | 018 | CORN | nomic-256d | 1 | 64 | 0.3 | corn | 22804 | 22.3 | 0.218 | 0.811 | 0.355 | 0.382 | 0.815 | 0.273 | runs/run_018_CORN.yaml |
 | 018 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 22.9 | 0.220 | 0.811 | 0.346 | 0.353 | 0.798 | 0.283 | runs/run_018_SoftOrdinal.yaml |
+| 019 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 22.9 | 0.299 | 0.753 | 0.362 | 0.365 | 0.727 | 0.399 | runs/run_019_BalancedSoftmax.yaml |
+| 019 | LDAM_DRW | nomic-256d | 1 | 64 | 0.3 | ldam_drw | 23454 | 22.9 | 0.229 | 0.803 | 0.329 | 0.336 | 0.753 | 0.274 | runs/run_019_LDAM_DRW.yaml |
+| 020 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 22.9 | 0.304 | 0.755 | 0.378 | 0.359 | 0.713 | 0.449 | runs/run_020_BalancedSoftmax.yaml |
+| 020 | LDAM_DRW | nomic-256d | 1 | 64 | 0.3 | ldam_drw | 23454 | 22.9 | 0.216 | 0.812 | 0.358 | 0.348 | 0.762 | 0.296 | runs/run_020_LDAM_DRW.yaml |
 <!-- AUTO-TABLE:END -->
 
 > **Contributor note:** Keep this section in **newest-first** chronological order (most recent date at top).

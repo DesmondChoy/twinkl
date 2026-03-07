@@ -33,6 +33,7 @@ from src.vif.eval import (
     compute_recall_per_class,
     compute_spearman_per_dimension,
 )
+from src.vif.class_balance import class_counts_to_priors, compute_ordinal_class_counts
 
 NUM_DIMS = len(SCHWARTZ_VALUE_ORDER)
 NUM_CLASSES = 3
@@ -47,7 +48,11 @@ DEFAULT_CONFIG = {
     "run_ids": ["run_016", "run_017", "run_018"],
     "models": ["CDWCE_a3", "SoftOrdinal", "CORN"],
     "artifact_root": "logs/experiments/artifacts",
+    "artifact_run_prefix": "posthoc_twinkl_681_3",
     "report_path": "logs/experiments/reports/experiment_review_2026-03-07_twinkl_681_3.md",
+    "report_title": None,
+    "recommended_model_label": "Recommended softmax base for `twinkl-681.4`",
+    "summary_model_order": None,
     "selection_policy": {
         "name": "recall_minus1_then_qwk_guarded",
         "max_qwk_drop": 0.03,
@@ -536,19 +541,9 @@ def _candidate_frame_row(
 
 def compute_class_priors(train_df: pl.DataFrame) -> np.ndarray:
     """Compute per-dimension class priors ordered as [-1, 0, +1]."""
-    priors = np.zeros((NUM_DIMS, NUM_CLASSES), dtype=np.float64)
-    for row in train_df.select(["alignment_vector"]).iter_rows(named=True):
-        alignment_vector = row["alignment_vector"] or []
-        for dim_idx, score in enumerate(alignment_vector[:NUM_DIMS]):
-            class_idx = int(score) + 1
-            priors[dim_idx, class_idx] += 1.0
-
-    row_sums = priors.sum(axis=1, keepdims=True)
-    if np.any(row_sums <= 0):
-        raise ValueError("Encountered an empty dimension while computing class priors.")
-
-    priors = priors / row_sums
-    return np.clip(priors, 1e-9, 1.0)
+    targets = np.asarray(train_df.get_column("alignment_vector").to_list(), dtype=np.int64)
+    counts = compute_ordinal_class_counts(targets)
+    return class_counts_to_priors(counts, eps=1e-9)
 
 
 @lru_cache(maxsize=8)
@@ -1002,8 +997,12 @@ def _family_delta_summary(records: list[dict]) -> dict[str, dict[str, float]]:
     }
 
 
-def _best_softmax_family(summary_by_model: dict[str, dict[str, float]]) -> str | None:
-    softmax_models = [name for name in summary_by_model if name in {"CDWCE_a3", "SoftOrdinal"}]
+def _best_softmax_family(
+    summary_by_model: dict[str, dict[str, float]],
+    config: dict,
+) -> str | None:
+    softmax_targets = set(config["softmax_logit_adjustment"].get("target_models", []))
+    softmax_models = [name for name in summary_by_model if name in softmax_targets]
     if not softmax_models:
         return None
     return max(
@@ -1017,17 +1016,26 @@ def _best_softmax_family(summary_by_model: dict[str, dict[str, float]]) -> str |
     )
 
 
-def _render_report(summary: dict) -> str:
+def _render_report(summary: dict, config: dict) -> str:
     tuned_records = summary["tuned_runs"]
     summary_by_model = summary["summary_by_model"]
     family_summary = summary["family_delta_summary"]
     best_softmax_family = summary["recommended_softmax_base"]
+    best_softmax_family_str = best_softmax_family or "N/A"
     generated_date = str(summary["generated_at"])[:10]
     run_ids = sorted({record["run_id"] for record in tuned_records})
     run_scope = f"{run_ids[0]}-{run_ids[-1]}" if run_ids else "configured frontier"
+    report_title = config.get("report_title") or (
+        f"Experiment Review — {generated_date} — twinkl-681.3 post-hoc boundary optimization"
+    )
+    model_order = config.get("summary_model_order") or config["models"]
+    recommended_model_label = config.get(
+        "recommended_model_label",
+        "Recommended softmax base for `twinkl-681.4`",
+    )
 
     lines = [
-        f"# Experiment Review — {generated_date} — twinkl-681.3 post-hoc boundary optimization",
+        f"# {report_title}",
         "",
         "## Scope",
         "",
@@ -1059,7 +1067,7 @@ def _render_report(summary: dict) -> str:
         ]
     )
 
-    for model_name in ["CDWCE_a3", "SoftOrdinal", "CORN"]:
+    for model_name in model_order:
         if model_name not in summary_by_model:
             continue
         stats = summary_by_model[model_name]
@@ -1080,12 +1088,16 @@ def _render_report(summary: dict) -> str:
             f"QWK {family_summary.get('softmax_logit_adjustment', {}).get('median_qwk_mean_delta', float('nan')):.3f}.",
             f"- CORN threshold tuning median delta: recall_-1 {family_summary.get('corn_margin_threshold', {}).get('median_recall_minus1_delta', float('nan')):.3f}, "
             f"QWK {family_summary.get('corn_margin_threshold', {}).get('median_qwk_mean_delta', float('nan')):.3f}.",
-            f"- Recommended softmax base for `twinkl-681.4`: `{best_softmax_family}`.",
+            f"- {recommended_model_label}: `{best_softmax_family_str}`.",
             "",
             "## Conclusion",
             "",
-            f"`{best_softmax_family}` is the strongest softmax-family handoff from `681.3` under the recall-first guarded selector. "
-            "The comparison above also shows whether softmax logit adjustment or CORN boundary tuning extracted more validation-disciplined recall gains from the corrected-split frontier.",
+            (
+                f"`{best_softmax_family_str}` is the strongest softmax-family model under the configured recall-first guarded selector. "
+                "The comparison above also shows whether softmax logit adjustment or CORN boundary tuning extracted more validation-disciplined recall gains from the configured frontier."
+                if best_softmax_family is not None
+                else "No softmax-family model qualified for recommendation under the configured selector."
+            ),
             "",
         ]
     )
@@ -1101,7 +1113,8 @@ def run_posthoc(config: dict, *, repo_root: Path | None = None) -> dict:
     run_specs = load_run_specs(config, repo_root)
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    output_root = _resolve_path(repo_root, config["artifact_root"]) / f"posthoc_twinkl_681_3_{timestamp}"
+    artifact_run_prefix = config.get("artifact_run_prefix", "posthoc_twinkl_681_3")
+    output_root = _resolve_path(repo_root, config["artifact_root"]) / f"{artifact_run_prefix}_{timestamp}"
     output_root.mkdir(parents=True, exist_ok=True)
 
     tuned_runs: list[dict] = []
@@ -1333,7 +1346,7 @@ def run_posthoc(config: dict, *, repo_root: Path | None = None) -> dict:
 
     summary_by_model = _summary_metrics(tuned_runs)
     family_delta_summary = _family_delta_summary(tuned_runs)
-    recommended_softmax_base = _best_softmax_family(summary_by_model)
+    recommended_softmax_base = _best_softmax_family(summary_by_model, config)
     summary = {
         "generated_at": datetime.now().isoformat(),
         "output_root": str(output_root),
@@ -1347,7 +1360,7 @@ def run_posthoc(config: dict, *, repo_root: Path | None = None) -> dict:
     summary_path = output_root / "summary.yaml"
     _write_yaml(summary_path, summary)
 
-    report_body = _render_report(summary)
+    report_body = _render_report(summary, config)
     report_output_path = _resolve_path(repo_root, config["report_path"])
     report_output_path.parent.mkdir(parents=True, exist_ok=True)
     report_output_path.write_text(report_body, encoding="utf-8")
@@ -1363,13 +1376,13 @@ def _print_summary(summary: dict) -> None:
     print(f"Report:       {summary['report_path']}")
     print()
     print(
-        f"{'Run':<10s} {'Model':<12s} {'Selected policy':<30s} "
+        f"{'Run':<10s} {'Model':<18s} {'Selected policy':<30s} "
         f"{'Test QWK':>10s} {'Test R-1':>10s} {'Test MinR':>12s}"
     )
-    print("-" * 92)
+    print("-" * 98)
     for record in summary["tuned_runs"]:
         print(
-            f"{record['run_id']:<10s} {record['model_name']:<12s} "
+            f"{record['run_id']:<10s} {record['model_name']:<18s} "
             f"{record['selected_policy']['policy_name']:<30s} "
             f"{record['test_metrics']['qwk_mean']:>10.3f} "
             f"{record['test_metrics']['recall_minus1']:>10.3f} "

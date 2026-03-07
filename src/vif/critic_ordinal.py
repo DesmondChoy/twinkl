@@ -1,7 +1,7 @@
 """Ordinal critic models for VIF alignment prediction.
 
-This module contains the shared base class and all five ordinal critic variants:
-CORAL, CORN, EMD, SoftOrdinal, and CDW-CE. Each predicts per-dimension
+This module contains the shared base class and all seven ordinal critic variants:
+CORAL, CORN, EMD, SoftOrdinal, CDW-CE, Balanced Softmax, and LDAM-DRW. Each predicts per-dimension
 alignment as ordinal classes {-1, 0, +1} across 10 Schwartz value dimensions.
 
 Shared architecture (OrdinalCriticBase):
@@ -15,6 +15,8 @@ Variants differ only in output layer size, loss function, and prediction decodin
 - EMD:   K=3 logits/dim, squared Earth Mover Distance between CDFs
 - SoftOrdinal: K=3 logits/dim, KL divergence with smoothed ordinal targets
 - CDW-CE: K=3 logits/dim, class-distance weighted cross-entropy over non-target probs
+- Balanced Softmax: K=3 logits/dim, cross-entropy with train-prior logit correction
+- LDAM-DRW: K=3 logits/dim, label-distribution-aware margins with deferred re-weighting
 
 Usage:
     from src.vif.critic_ordinal import CriticMLPCORAL, coral_loss_multi
@@ -30,6 +32,7 @@ import torch.nn.functional as F
 
 from coral_pytorch.losses import coral_loss as _coral_loss
 from coral_pytorch.losses import corn_loss as _corn_loss
+from src.vif.class_balance import compute_effective_number_weights, compute_ldam_margins
 
 # ─── Shared constants ─────────────────────────────────────────────────────────
 
@@ -48,7 +51,7 @@ class OrdinalCriticBase(ABC, nn.Module):
     """Abstract base for ordinal critic MLP variants.
 
     Provides the identical 2-layer backbone used by CORAL, CORN, EMD,
-    SoftOrdinal, and CDW-CE models. Subclasses only need to specify the
+    SoftOrdinal, CDW-CE, Balanced Softmax, and LDAM-DRW models. Subclasses only need to specify the
     output logit count and how to reconstruct 3-class probabilities from
     their raw logits.
     """
@@ -196,6 +199,8 @@ class OrdinalCriticBase(ABC, nn.Module):
                 "emd": CriticMLPEMD,
                 "soft_ordinal": CriticMLPSoftOrdinal,
                 "cdw_ce": CriticMLPCDWCE,
+                "balanced_softmax": CriticMLPBalancedSoftmax,
+                "ldam_drw": CriticMLPLDAMDRW,
             }
             variant = config["variant"]
             if variant not in registry:
@@ -421,6 +426,11 @@ def alignment_to_corn_labels(y: torch.Tensor) -> torch.Tensor:
     return (y.long() + 1).clamp(0, NUM_CLASSES - 1)
 
 
+def corn_labels_to_alignment(labels: torch.Tensor) -> torch.Tensor:
+    """Map CORN class indices {0, 1, 2} back to alignment labels {-1, 0, 1}."""
+    return labels.to(dtype=torch.float32) - 1.0
+
+
 def corn_loss_multi(
     logits: torch.Tensor,
     y: torch.Tensor,
@@ -497,6 +507,50 @@ class CriticMLPCORN(OrdinalCriticBase):
 _EMD_OUTPUT_LOGITS = NUM_DIMS * NUM_CLASSES  # 30
 
 
+def _validate_softmax_loss_inputs(
+    logits: torch.Tensor,
+    y: torch.Tensor,
+) -> tuple[torch.Tensor, torch.Tensor]:
+    """Validate shared (batch, 30) softmax-head loss inputs."""
+    if logits.dim() != 2:
+        raise ValueError(
+            f"logits must be 2D (batch, {NUM_DIMS * NUM_CLASSES}), got {tuple(logits.shape)}"
+        )
+    if y.dim() != 2:
+        raise ValueError(f"y must be 2D (batch, {NUM_DIMS}), got {tuple(y.shape)}")
+    if logits.size(1) != NUM_DIMS * NUM_CLASSES:
+        raise ValueError(
+            f"logits second dimension must be {NUM_DIMS * NUM_CLASSES}, got {logits.size(1)}"
+        )
+    if y.size(1) != NUM_DIMS:
+        raise ValueError(f"y second dimension must be {NUM_DIMS}, got {y.size(1)}")
+    if logits.size(0) != y.size(0):
+        raise ValueError(
+            f"batch sizes must match between logits and y, got {logits.size(0)} and {y.size(0)}"
+        )
+
+    return logits, y
+
+
+def _prepare_class_stat_tensor(
+    class_stat: torch.Tensor | np.ndarray,
+    *,
+    name: str,
+    logits: torch.Tensor,
+    eps: float = 1e-12,
+) -> torch.Tensor:
+    """Move per-dimension class statistics onto the logits device/dtype."""
+    if isinstance(class_stat, torch.Tensor):
+        stat = class_stat.detach().to(device=logits.device, dtype=torch.float32)
+    else:
+        stat = torch.as_tensor(class_stat, device=logits.device, dtype=torch.float32)
+    if stat.shape != (NUM_DIMS, NUM_CLASSES):
+        raise ValueError(
+            f"{name} must have shape ({NUM_DIMS}, {NUM_CLASSES}), got {tuple(stat.shape)}"
+        )
+    return stat.clamp_min(float(eps))
+
+
 def emd_loss_multi(
     logits: torch.Tensor,
     y: torch.Tensor,
@@ -512,6 +566,7 @@ def emd_loss_multi(
     logits: (batch, 30) raw logits
     y: (batch, 10) with values in {-1, 0, 1}
     """
+    logits, y = _validate_softmax_loss_inputs(logits, y)
     batch = logits.size(0)
     logits_3d = logits.view(batch, NUM_DIMS, NUM_CLASSES)  # (batch, 10, 3)
 
@@ -590,21 +645,7 @@ def cdw_ce_loss_multi(
     logits: (batch, 30) raw logits
     y: (batch, 10) with values in {-1, 0, 1}
     """
-    if logits.dim() != 2:
-        raise ValueError(f"logits must be 2D (batch, {NUM_DIMS * NUM_CLASSES}), got {tuple(logits.shape)}")
-    if y.dim() != 2:
-        raise ValueError(f"y must be 2D (batch, {NUM_DIMS}), got {tuple(y.shape)}")
-    if logits.size(1) != NUM_DIMS * NUM_CLASSES:
-        raise ValueError(
-            f"logits second dimension must be {NUM_DIMS * NUM_CLASSES}, got {logits.size(1)}"
-        )
-    if y.size(1) != NUM_DIMS:
-        raise ValueError(f"y second dimension must be {NUM_DIMS}, got {y.size(1)}")
-    if logits.size(0) != y.size(0):
-        raise ValueError(
-            f"batch sizes must match between logits and y, got {logits.size(0)} and {y.size(0)}"
-        )
-
+    logits, y = _validate_softmax_loss_inputs(logits, y)
     batch = logits.size(0)
     logits_3d = logits.view(batch, NUM_DIMS, NUM_CLASSES)  # (batch, 10, 3)
 
@@ -654,6 +695,160 @@ class CriticMLPCDWCE(OrdinalCriticBase):
 
     def _variant_name(self) -> str:
         return "cdw_ce"
+
+
+# ─── Balanced Softmax ─────────────────────────────────────────────────────────
+#
+# Cross-entropy with train-prior correction in the softmax denominator.
+
+
+def balanced_softmax_loss_multi(
+    logits: torch.Tensor,
+    y: torch.Tensor,
+    *,
+    class_priors: torch.Tensor | np.ndarray,
+    eps: float = 1e-12,
+) -> torch.Tensor:
+    """Balanced Softmax loss for multi-output ordinal classification."""
+    logits, y = _validate_softmax_loss_inputs(logits, y)
+    priors = _prepare_class_stat_tensor(
+        class_priors,
+        name="class_priors",
+        logits=logits,
+        eps=eps,
+    )
+
+    batch = logits.size(0)
+    logits_3d = logits.view(batch, NUM_DIMS, NUM_CLASSES).float()
+    adjusted_logits = logits_3d + torch.log(priors).view(1, NUM_DIMS, NUM_CLASSES)
+    classes = (y.long() + 1).clamp(0, NUM_CLASSES - 1)
+    return F.cross_entropy(
+        adjusted_logits.view(batch * NUM_DIMS, NUM_CLASSES),
+        classes.view(batch * NUM_DIMS),
+    )
+
+
+class CriticMLPBalancedSoftmax(OrdinalCriticBase):
+    """MLP critic with a 3-class softmax head for Balanced Softmax training."""
+
+    def __init__(
+        self,
+        input_dim: int,
+        hidden_dim: int = 256,
+        output_dim: int = NUM_DIMS,
+        dropout: float = 0.2,
+    ):
+        super().__init__(
+            input_dim=input_dim,
+            hidden_dim=hidden_dim,
+            output_dim=output_dim,
+            dropout=dropout,
+            output_logits=_EMD_OUTPUT_LOGITS,
+        )
+
+    def logits_per_dim(self, x: torch.Tensor) -> torch.Tensor:
+        logits = self.forward(x)
+        batch = logits.size(0)
+        return logits.view(batch, NUM_DIMS, NUM_CLASSES)
+
+    def probabilities_from_logits(self, logits_per_dim: torch.Tensor) -> torch.Tensor:
+        return F.softmax(logits_per_dim.float(), dim=-1)
+
+    def _variant_name(self) -> str:
+        return "balanced_softmax"
+
+
+# ─── LDAM-DRW ────────────────────────────────────────────────────────────────
+#
+# Label-distribution-aware margins with deferred re-weighting.
+
+
+def ldam_drw_loss_multi(
+    logits: torch.Tensor,
+    y: torch.Tensor,
+    *,
+    class_counts: torch.Tensor | np.ndarray,
+    epoch: int,
+    drw_start_epoch: int = 50,
+    max_m: float = 0.5,
+    scale: float = 30.0,
+    beta: float = 0.9999,
+    eps: float = 1e-12,
+) -> torch.Tensor:
+    """LDAM loss with deferred re-weighting for multi-output ordinal classification."""
+    logits, y = _validate_softmax_loss_inputs(logits, y)
+    counts = _prepare_class_stat_tensor(
+        class_counts,
+        name="class_counts",
+        logits=logits,
+        eps=eps,
+    )
+
+    margins = torch.as_tensor(
+        compute_ldam_margins(counts.detach().cpu().numpy(), max_m=max_m),
+        device=logits.device,
+        dtype=torch.float32,
+    )
+    weights = torch.as_tensor(
+        compute_effective_number_weights(counts.detach().cpu().numpy(), beta=beta),
+        device=logits.device,
+        dtype=torch.float32,
+    )
+
+    batch = logits.size(0)
+    logits_3d = logits.view(batch, NUM_DIMS, NUM_CLASSES).float()
+    classes = (y.long() + 1).clamp(0, NUM_CLASSES - 1)
+
+    target_margins = margins.gather(dim=1, index=classes.transpose(0, 1)).transpose(0, 1)
+    adjusted_logits = logits_3d.clone()
+    adjusted_logits.scatter_add_(
+        dim=2,
+        index=classes.unsqueeze(-1),
+        src=-target_margins.unsqueeze(-1),
+    )
+    adjusted_logits = adjusted_logits * float(scale)
+
+    class_weight = None
+    if int(epoch) >= int(drw_start_epoch):
+        class_weight = weights.gather(dim=1, index=classes.transpose(0, 1)).transpose(0, 1)
+        class_weight = class_weight.reshape(batch * NUM_DIMS)
+
+    return F.cross_entropy(
+        adjusted_logits.view(batch * NUM_DIMS, NUM_CLASSES),
+        classes.view(batch * NUM_DIMS),
+        weight=None,
+        reduction="none",
+    ).mul(class_weight if class_weight is not None else 1.0).mean()
+
+
+class CriticMLPLDAMDRW(OrdinalCriticBase):
+    """MLP critic with a 3-class softmax head for LDAM-DRW training."""
+
+    def __init__(
+        self,
+        input_dim: int,
+        hidden_dim: int = 256,
+        output_dim: int = NUM_DIMS,
+        dropout: float = 0.2,
+    ):
+        super().__init__(
+            input_dim=input_dim,
+            hidden_dim=hidden_dim,
+            output_dim=output_dim,
+            dropout=dropout,
+            output_logits=_EMD_OUTPUT_LOGITS,
+        )
+
+    def logits_per_dim(self, x: torch.Tensor) -> torch.Tensor:
+        logits = self.forward(x)
+        batch = logits.size(0)
+        return logits.view(batch, NUM_DIMS, NUM_CLASSES)
+
+    def probabilities_from_logits(self, logits_per_dim: torch.Tensor) -> torch.Tensor:
+        return F.softmax(logits_per_dim.float(), dim=-1)
+
+    def _variant_name(self) -> str:
+        return "ldam_drw"
 
 
 # ─── SoftOrdinal ──────────────────────────────────────────────────────────────

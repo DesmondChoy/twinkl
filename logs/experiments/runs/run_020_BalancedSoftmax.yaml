@@ -1,0 +1,186 @@
+# VIF Experiment: run_020_BalancedSoftmax
+# Generated: 2026-03-07T15:20:28
+# Git: 5908850(dirty)
+metadata:
+  experiment_id: run_020_BalancedSoftmax
+  run_id: run_020
+  model_name: BalancedSoftmax
+  timestamp: '2026-03-07T15:20:28'
+  git_commit: 5908850(dirty)
+  config_hash: e28eb1be001c
+provenance:
+  prev_run_id: run_019
+  prev_git_commit: 5908850(dirty)
+  git_log: []
+  config_delta:
+    added: {}
+    removed: {}
+    changed:
+      training.seed:
+        from: 11
+        to: 22
+  rationale: ''
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 266
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: balanced_softmax
+    learning_rate: 0.015522253574270487
+    learning_rate_configured: 0.015522253574270487
+    learning_rate_source: explicit_model_override
+    lr_finder_enabled: false
+    learning_rate_policy: run_015_cdwce_a3_valley
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 22
+    class_balance_source: train_split_per_dimension
+    ldam_max_m: 0.5
+    ldam_scale: 30.0
+    ldam_drw_start_epoch: 50
+    ldam_beta: 0.9999
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1022
+  n_val: 217
+  n_test: 221
+capacity:
+  n_parameters: 23454
+  param_sample_ratio: 22.9491
+training_dynamics:
+  best_epoch: 19
+  total_epochs: 28
+  train_loss_at_best: 0.3861
+  val_loss_at_best: 0.5092
+  gap_at_best: 0.1231
+  final_lr: 0.007761
+  selection_source: eligible_policy
+  selection_metrics:
+    qwk_mean: 0.4084
+    recall_minus1: 0.4527
+    calibration_global: 0.6863
+    hedging_mean: 0.5908
+    qwk_nan_dims_count: 0
+    eligible: true
+    ineligible_reasons: []
+evaluation:
+  mae_mean: 0.3042
+  accuracy_mean: 0.7552
+  qwk_mean: 0.3777
+  qwk_nan_dims_count: 0
+  spearman_mean: 0.3586
+  calibration_global: 0.7134
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.3229
+  minority_recall_mean: 0.4492
+  recall_minus1: 0.3416
+  recall_zero: 0.8269
+  recall_plus1: 0.5567
+  hedging_mean: 0.6213
+per_dimension:
+  self_direction:
+    mae: 0.3818
+    accuracy: 0.6742
+    qwk: 0.5407
+    spearman: 0.5565
+    calibration: 0.6701
+    hedging: 0.5113
+  stimulation:
+    mae: 0.2116
+    accuracy: 0.8597
+    qwk: 0.3026
+    spearman: 0.1282
+    calibration: 0.8171
+    hedging: 0.7828
+  hedonism:
+    mae: 0.268
+    accuracy: 0.8054
+    qwk: 0.2616
+    spearman: 0.2155
+    calibration: 0.8556
+    hedging: 0.6968
+  achievement:
+    mae: 0.4115
+    accuracy: 0.6561
+    qwk: 0.3343
+    spearman: 0.3449
+    calibration: 0.5809
+    hedging: 0.543
+  power:
+    mae: 0.2411
+    accuracy: 0.8009
+    qwk: 0.3421
+    spearman: 0.2898
+    calibration: 0.7592
+    hedging: 0.7285
+  security:
+    mae: 0.3557
+    accuracy: 0.6833
+    qwk: 0.2132
+    spearman: 0.2169
+    calibration: 0.452
+    hedging: 0.7059
+  conformity:
+    mae: 0.3127
+    accuracy: 0.7511
+    qwk: 0.5766
+    spearman: 0.5971
+    calibration: 0.5924
+    hedging: 0.5023
+  tradition:
+    mae: 0.2755
+    accuracy: 0.7602
+    qwk: 0.4834
+    spearman: 0.5744
+    calibration: 0.7713
+    hedging: 0.5023
+  benevolence:
+    mae: 0.409
+    accuracy: 0.6652
+    qwk: 0.3673
+    spearman: 0.4203
+    calibration: 0.551
+    hedging: 0.4525
+  universalism:
+    mae: 0.1754
+    accuracy: 0.8959
+    qwk: 0.3553
+    spearman: 0.2422
+    calibration: 0.9102
+    hedging: 0.7873
+observations: ''
+selection_policy:
+  name: qwk_then_recall_guarded
+  rank_order:
+  - qwk_mean
+  - recall_minus1
+  - calibration_global
+  - hedging_mean
+  - val_loss
+  guardrails:
+    qwk_mean_must_be_finite: true
+    qwk_nan_dims_count_must_equal_zero: true
+    calibration_global_must_be_non_negative: true
+  fallback: best_finite_qwk
+artifacts:
+  checkpoint: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260307_152002/BalancedSoftmax/selected_checkpoint.pt
+  validation_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260307_152002/BalancedSoftmax/selected_validation_outputs.parquet
+  test_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260307_152002/BalancedSoftmax/selected_test_outputs.parquet
