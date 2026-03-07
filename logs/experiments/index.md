@@ -4,11 +4,14 @@
 
 | Rank | Candidate | Runs | Split Seed | Model Seeds | Median QWK | Median recall_-1 | Median MinR | Median Hedging | Median Cal | Positioning |
 |------|-----------|------|-----------:|------------|-----------:|-----------------:|------------:|---------------:|-----------:|-------------|
-| 1 | CDWCE_a3 | run_016-run_018 | 2025 | 11, 22, 33 | **0.353** | **0.104** | 0.276 | 0.804 | 0.762 | Active corrected-split SOTA. Best median `qwk_mean` and `recall_minus1`, with the tightest Power-dimension variance of the current candidates. |
-| 2 | SoftOrdinal | run_016-run_018 | 2025 | 11, 22, 33 | 0.346 | 0.077 | **0.283** | **0.796** | 0.781 | Best minority-sensitive option. Highest median minority recall and lowest hedging, but meaningfully more seed variance than CDWCE_a3. |
-| 3 | CORN | run_016-run_018 | 2025 | 11, 22, 33 | 0.315 | 0.089 | 0.273 | 0.801 | **0.818** | Best-calibrated corrected-split baseline. Still useful as a calibration anchor, but no longer the QWK leader after the split fix. |
+| 1 | BalancedSoftmax (provisional) | run_019-run_020 | 2025 | 11, 22 | **0.370** | **0.309** | **0.424** | **0.631** | 0.720 | Provisional two-seed leader. Strongest corrected-split tail recovery so far, but the family is incomplete and trades away MAE/accuracy versus the completed baselines. |
+| 2 | CDWCE_a3 | run_016-run_018 | 2025 | 11, 22, 33 | 0.353 | 0.104 | 0.276 | 0.804 | 0.762 | Best completed 3-seed family. Still the safest immediate carry-forward base until BalancedSoftmax gets a third seed. |
+| 3 | SoftOrdinal | run_016-run_018 | 2025 | 11, 22, 33 | 0.346 | 0.077 | 0.283 | 0.796 | 0.781 | Best low-gap completed comparator. Competitive on QWK, but more seed-sensitive than CDWCE_a3 and no longer the minority leader. |
+| 4 | CORN | run_016-run_018 | 2025 | 11, 22, 33 | 0.315 | 0.089 | 0.273 | 0.801 | **0.818** | Best-calibrated corrected-split baseline. Keep it as the calibration anchor and sanity check for lower-confidence follow-ups. |
 
-> **Active recommendation (2026-03-07):** `twinkl-681.3` confirms that validation-only post-hoc tuning extracts more guarded `recall_-1` lift from softmax logit adjustment than from `CORN` boundary tuning on the corrected-split frontier. Carry `CDWCE_a3` forward as the default `twinkl-681.4` base with the selected `tau=0.70` policy, keep `SoftOrdinal` as the minority-sensitivity comparator, and retain `CORN` as the calibration anchor.
+> **Active recommendation (2026-03-07):** `run_019`-`run_020` provisionally move BalancedSoftmax to the top of the corrected-split board on median `qwk_mean`, `recall_-1`, `minority_recall_mean`, and hedging. Keep `CDWCE_a3` as the default fully seeded base until a seed-33 BalancedSoftmax rerun confirms the shift, use `SoftOrdinal` as the low-gap comparator, and retain `CORN` as the calibration anchor.
+>
+> **Latest full review:** [`reports/experiment_review_2026-03-07_v5.md`](reports/experiment_review_2026-03-07_v5.md)
 >
 > **Post-hoc reporting:** these `681.3` results are documented in [`reports/experiment_review_2026-03-07_twinkl_681_3.md`](reports/experiment_review_2026-03-07_twinkl_681_3.md) with persisted artifacts under [`artifacts/posthoc_twinkl_681_3_20260307_142717/`](artifacts/posthoc_twinkl_681_3_20260307_142717/). They are not added as new rows in the auto-generated run log because no retraining was performed.
 >
@@ -123,6 +126,20 @@
 > **Contributor note:** Keep this section in **newest-first** chronological order (most recent date at top).
 
 ## Findings
+
+### 2026-03-07 — BalancedSoftmax provisionally leads the corrected-split frontier (run_019-run_020, `twinkl-687`)
+
+`run_019`-`run_020` introduced two training-time long-tail losses on the corrected persona-stratified split while holding the active ws=1 / hd=64 / nomic-256d frontier fixed. The new signal is dominated by `BalancedSoftmax`; `LDAM_DRW` did not produce a comparable payoff.
+
+**1. BalancedSoftmax is the new provisional leader.** Across seeds 11 and 22, the family median is QWK 0.370 (fair), `recall_-1` 0.309, minority recall 0.424, hedging 63.1%, and calibration 0.720 (good). That surpasses the completed `CDWCE_a3`, `SoftOrdinal`, and `CORN` families on every tail-recovery metric while also improving aggregate QWK.
+
+**2. `CDWCE_a3` remains the strongest completed 3-seed family.** The existing corrected-split 3-seed summary is still median QWK 0.353 and `recall_-1` 0.104 with better MAE and accuracy than BalancedSoftmax. Until BalancedSoftmax gets its missing seed-33 rerun, `CDWCE_a3` remains the safest default base for subsequent controlled comparisons.
+
+**3. `LDAM_DRW` overfit instead of fixing the tail.** Its two seeds posted train/val gaps of 0.530 and 1.101, far above the rest of the corrected-split board, while median `recall_-1` stayed at 0.069 and median QWK at 0.344. That makes it a weak near-term candidate despite acceptable calibration.
+
+**4. The hard dimensions did not move enough to call the problem solved.** Corrected-split mean QWK is still worst on `hedonism` (-0.010) and `security` (0.234), with `power` remaining the most volatile dimension. Validation/test support is still thin for those axes: Hedonism has only 14 / 13 non-zero personas, while Power has only 11 / 9.
+
+**Conclusion**: the corrected-split board has moved, but only provisionally. The next experiment should complete the BalancedSoftmax family with seed 33, then test whether a calibration-only follow-up can keep its tail gains without sacrificing too much aggregate stability. Full details: [`reports/experiment_review_2026-03-07_v5.md`](reports/experiment_review_2026-03-07_v5.md).
 
 ### 2026-03-07 — Validation-only post-hoc tuning favors softmax logit adjustment (`twinkl-681.3`)
 

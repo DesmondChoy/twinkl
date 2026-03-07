@@ -27,7 +27,11 @@ provenance:
       training.seed:
         from: 33
         to: 11
-  rationale: ''
+  rationale: >-
+    Companion corrected-split long-tail ablation to `run_019_BalancedSoftmax`,
+    swapping in LDAM-DRW while keeping the rest of the ws=1 / hd=64 setup fixed.
+    This tests whether margin-based minority emphasis plus deferred reweighting
+    outperforms prior-corrected softmax on the same frontier.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -174,7 +178,13 @@ per_dimension:
     spearman: 0.3602
     calibration: 0.9791
     hedging: 0.8552
-observations: ''
+observations: >-
+  LDAM-DRW stayed close to the older corrected-split baselines on MAE 0.229 and
+  calibration 0.753, but QWK 0.329 and recall_-1 0.059 left it behind both
+  BalancedSoftmax and CDWCE_a3 on the main objective. The train/val gap of 0.530
+  was already in the overfitting regime, so the margin schedule appears to be
+  more selection-optimistic than genuinely better at tail recovery here. This run
+  kept LDAM-DRW interesting as a comparison point, not a frontier leader.
 selection_policy:
   name: qwk_then_recall_guarded
   rank_order:

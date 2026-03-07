@@ -29,7 +29,12 @@ provenance:
       training.seed:
         from: 2025
         to: 11
-  rationale: ''
+  rationale: >-
+    First corrected-split SoftOrdinal rerun of the ws=1 / hd=64 frontier after
+    `d937094`, carrying forward the aggressive valley LR that previously helped
+    SoftOrdinal in `run_014`. The intent was to see whether SoftOrdinal's
+    softer class probabilities would remain minority-sensitive once the holdout
+    split became persona-stratified by label sign.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -171,7 +176,14 @@ per_dimension:
     spearman: 0.3308
     calibration: 0.9806
     hedging: 0.8824
-observations: ''
+observations: >-
+  SoftOrdinal produced the strongest single-seed corrected-split QWK here at
+  0.388 (fair) with minority recall 0.292 (poor) and calibration 0.781
+  (moderate), while hedging stayed high at 79.6%. The gain was not uniform
+  across dimensions: Hedonism collapsed below zero QWK and Security stayed weak,
+  so the aggregate improvement came from a subset of dimensions rather than a
+  full-task breakthrough. This run kept SoftOrdinal in the active frontier but
+  foreshadowed the seed sensitivity confirmed by later reruns.
 selection_policy:
   name: qwk_then_recall_guarded
   rank_order:

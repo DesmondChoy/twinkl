@@ -19,7 +19,11 @@ provenance:
       training.seed:
         from: 11
         to: 22
-  rationale: ''
+  rationale: >-
+    Second corrected-split seed for the CDWCE_a3 frontier family. This run
+    holds architecture, split, and LR policy constant and changes only the
+    model seed so the corrected-split board can be summarized by family medians
+    instead of a single favorable rerun.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -161,7 +165,14 @@ per_dimension:
     spearman: 0.2324
     calibration: 0.9666
     hedging: 0.8959
-observations: ''
+observations: >-
+  QWK stayed essentially unchanged at 0.353 (fair), while recall_-1 improved to
+  0.128 and minority recall to 0.294, confirming that CDWCE_a3's tail recovery
+  signal survives a seed change. The trade-off was a larger train/val gap of
+  0.255 and still-excessive hedging at 80.3%, so the family remained useful but
+  not especially well-calibrated around the decision boundary. This seed helped
+  establish CDWCE_a3 as the best corrected-split 3-seed compromise on QWK plus
+  `-1` recall.
 selection_policy:
   name: qwk_then_recall_guarded
   rank_order:

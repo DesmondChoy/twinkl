@@ -26,7 +26,11 @@ provenance:
       training.seed:
         from: 2025
         to: 11
-  rationale: ''
+  rationale: >-
+    First corrected-split rerun of the ws=1 / hd=64 frontier after `d937094`
+    and the metric-aligned checkpoint-selection changes from `twinkl-681.1`.
+    This carries forward the strongest pre-split CDWCE setting (`alpha=3`)
+    while fixing the split regime and pinning the loss-specific LR policy.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -168,7 +172,14 @@ per_dimension:
     spearman: 0.3068
     calibration: 0.931
     hedging: 0.8824
-observations: ''
+observations: >-
+  On the corrected split, CDWCE_a3 reached QWK 0.355 (fair), calibration 0.760
+  (good), and recall_-1 0.086 (poor), keeping all 10 dimensions positively
+  calibrated but still hedging heavily at 80.6%. Relative to the pre-split
+  `run_015` CDWCE result, QWK dropped on the harder evaluation regime while
+  recall_-1 improved, suggesting the split fix reset the frontier more than the
+  loss itself regressed. The run remained competitive enough to keep CDWCE_a3
+  in the corrected-split carry-forward set.
 selection_policy:
   name: qwk_then_recall_guarded
   rank_order:

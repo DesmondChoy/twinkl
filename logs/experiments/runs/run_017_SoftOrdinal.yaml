@@ -19,7 +19,10 @@ provenance:
       training.seed:
         from: 11
         to: 22
-  rationale: ''
+  rationale: >-
+    Second corrected-split seed for the SoftOrdinal family. This run exists to
+    test whether the strong seed-11 result was repeatable under the same split,
+    architecture, and LR policy.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -161,7 +164,14 @@ per_dimension:
     spearman: 0.398
     calibration: 0.9642
     hedging: 0.8959
-observations: ''
+observations: >-
+  SoftOrdinal fell back to QWK 0.330 (fair), calibration 0.746 (moderate), and
+  minority recall 0.229 (poor), while hedging rose to 84.3% (excessive). The
+  best epoch arrived at 10 with an almost zero train/val gap, so this was not a
+  classic overfitting failure; it was a seed-sensitive optimization outcome that
+  never found the more decisive boundary from `run_016`. This run is the clearest
+  evidence that SoftOrdinal needs family-level summaries rather than best-seed
+  storytelling.
 selection_policy:
   name: qwk_then_recall_guarded
   rank_order:

@@ -27,7 +27,12 @@ provenance:
       training.seed:
         from: 33
         to: 11
-  rationale: ''
+  rationale: >-
+    First corrected-split training-time class-imbalance ablation after the
+    `twinkl-681.3` post-hoc sweep, using Balanced Softmax with per-dimension
+    train-split class priors on the same ws=1 / hd=64 frontier. The purpose was
+    to test whether moving class-prior correction into training could recover the
+    `-1` class more aggressively than post-hoc tuning alone.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -174,7 +179,14 @@ per_dimension:
     spearman: 0.2698
     calibration: 0.9575
     hedging: 0.8281
-observations: ''
+observations: >-
+  BalancedSoftmax immediately changed the frontier shape: QWK reached 0.362
+  (fair), recall_-1 jumped to 0.277, minority recall to 0.399, and hedging fell
+  to 64.2%, all while keeping every dimension positively calibrated. The cost was
+  a much worse MAE of 0.299 and lower accuracy of 0.753, so the gain came from
+  far less neutral bias rather than uniformly sharper ranking. This made
+  BalancedSoftmax the strongest provisional tail-recovery candidate, but not yet
+  a fully vetted replacement for the existing 3-seed families.
 selection_policy:
   name: qwk_then_recall_guarded
   rank_order:

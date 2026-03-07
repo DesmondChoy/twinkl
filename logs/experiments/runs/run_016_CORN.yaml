@@ -29,7 +29,12 @@ provenance:
       training.seed:
         from: 2025
         to: 11
-  rationale: ''
+  rationale: >-
+    First corrected-split CORN anchor run for the ws=1 / hd=64 frontier after
+    `d937094`, using the manually configured `run_010` learning-rate policy
+    instead of the LR-finder setting that previously hurt CORN. The goal was to
+    re-establish a calibration-oriented baseline on the corrected split before
+    comparing newer loss functions.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -171,7 +176,13 @@ per_dimension:
     spearman: 0.3175
     calibration: 0.9731
     hedging: 0.8869
-observations: ''
+observations: >-
+  CORN landed at QWK 0.315 (fair), calibration 0.821 (good), and recall_-1
+  0.089 (poor), which preserved the family's calibration advantage but left it
+  behind the corrected-split QWK leader. The train/val gap was only 0.090, much
+  smaller than CDWCE_a3 on the same split, so this seed looked stable rather
+  than capacity-limited. This run established CORN as the corrected-split
+  calibration anchor, not the main recovery path for the `-1` class.
 selection_policy:
   name: qwk_then_recall_guarded
   rank_order:

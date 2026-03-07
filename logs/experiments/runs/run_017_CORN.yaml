@@ -19,7 +19,10 @@ provenance:
       training.seed:
         from: 11
         to: 22
-  rationale: ''
+  rationale: >-
+    Second corrected-split seed for the CORN baseline family. The purpose was to
+    measure how much of CORN's corrected-split behavior comes from stochastic
+    training variance versus the split change itself.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -161,7 +164,14 @@ per_dimension:
     spearman: 0.387
     calibration: 0.9814
     hedging: 0.8914
-observations: ''
+observations: >-
+  CORN repeated almost the same aggregate profile as `run_016`: QWK 0.315
+  (fair), calibration 0.818 (good), minority recall 0.266 (poor), and hedging
+  81.3% (excessive). The very small train/val gap of 0.039 and early best epoch
+  at 18 suggest this seed converged cleanly but still preferred neutral-heavy
+  decisions. This reinforced the view that CORN is stable and well-calibrated on
+  the corrected split, but not the most effective option for rare misalignment
+  recovery.
 selection_policy:
   name: qwk_then_recall_guarded
   rank_order:

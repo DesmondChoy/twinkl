@@ -19,7 +19,10 @@ provenance:
       training.seed:
         from: 22
         to: 33
-  rationale: ''
+  rationale: >-
+    Third corrected-split seed for the CDWCE_a3 family, completing the initial
+    three-seed matrix on the new split. This provides the final seed needed for
+    median/IQR ranking against CORN and SoftOrdinal.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -161,7 +164,13 @@ per_dimension:
     spearman: 0.284
     calibration: 0.9559
     hedging: 0.8416
-observations: ''
+observations: >-
+  This seed posted QWK 0.338 (fair), calibration 0.762 (moderate), and
+  recall_-1 0.104 (poor), staying close to the family median on the tail metrics
+  but ending as the weakest CDWCE_a3 seed on QWK. Best epoch hit 35/35 with a
+  0.285 train/val gap, which points to mild overfitting pressure even though the
+  aggregate metrics remained usable. The full 3-seed family still came out ahead
+  of CORN and SoftOrdinal on median QWK plus `-1` recall.
 selection_policy:
   name: qwk_then_recall_guarded
   rank_order:

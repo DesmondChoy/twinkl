@@ -19,7 +19,10 @@ provenance:
       training.seed:
         from: 22
         to: 33
-  rationale: ''
+  rationale: >-
+    Third corrected-split seed for SoftOrdinal, completing its first three-seed
+    family summary under the persona-stratified split. The goal was to separate
+    repeatable minority sensitivity from one-off seed luck.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -161,7 +164,14 @@ per_dimension:
     spearman: 0.3483
     calibration: 0.9799
     hedging: 0.8869
-observations: ''
+observations: >-
+  SoftOrdinal recovered from the weaker seed-22 run to QWK 0.346 (fair),
+  calibration 0.798 (moderate), and minority recall 0.283 (poor), with hedging
+  back down to 79.5%. That rebound kept the family competitive on aggregate, but
+  the spread between `run_016` and `run_017` still left SoftOrdinal as the most
+  seed-volatile of the corrected-split leaders. The completed 3-seed picture
+  therefore supports SoftOrdinal as a comparator, not the default carry-forward
+  base.
 selection_policy:
   name: qwk_then_recall_guarded
   rank_order:

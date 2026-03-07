@@ -19,7 +19,10 @@ provenance:
       training.seed:
         from: 11
         to: 22
-  rationale: ''
+  rationale: >-
+    Second seed for the provisional BalancedSoftmax family on the corrected
+    split. This run checks whether the large `-1`-recall lift from `run_019` is
+    reproducible enough to justify a broader handoff.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -166,7 +169,14 @@ per_dimension:
     spearman: 0.2422
     calibration: 0.9102
     hedging: 0.7873
-observations: ''
+observations: >-
+  The second BalancedSoftmax seed strengthened the case rather than weakening it:
+  QWK rose to 0.378 (fair), recall_-1 to 0.342, minority recall to 0.449, and
+  hedging dropped to 62.1%. Calibration slipped modestly to 0.713 and the
+  MAE/accuracy trade-off remained real, but repeating the same tail-heavy pattern
+  across two seeds makes the result unlikely to be a fluke. This run promotes
+  BalancedSoftmax from a curiosity to a provisional corrected-split leader that
+  now needs a seed-33 completion run.
 selection_policy:
   name: qwk_then_recall_guarded
   rank_order:

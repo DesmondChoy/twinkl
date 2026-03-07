@@ -19,7 +19,11 @@ provenance:
       training.seed:
         from: 22
         to: 33
-  rationale: ''
+  rationale: >-
+    Third corrected-split CORN seed, completing the three-seed baseline family
+    on the persona-stratified split. This closes the loop on whether CORN's
+    corrected-split drop versus the historical board was structural or mostly
+    seed noise.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -161,7 +165,13 @@ per_dimension:
     spearman: 0.3655
     calibration: 0.9761
     hedging: 0.9005
-observations: ''
+observations: >-
+  `run_018` became the strongest CORN seed on the corrected split with QWK 0.355
+  (fair), calibration 0.815 (good), and recall_-1 0.102 (poor), materially
+  better than the first two CORN seeds on QWK without sacrificing calibration.
+  Even so, hedging remained high at 80.1% and the family median still trailed
+  CDWCE_a3 on the main frontier metrics. This run showed CORN could narrow the
+  gap, but not reclaim the corrected-split lead.
 selection_policy:
   name: qwk_then_recall_guarded
   rank_order:

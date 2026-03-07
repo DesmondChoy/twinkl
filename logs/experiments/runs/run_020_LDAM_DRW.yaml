@@ -19,7 +19,10 @@ provenance:
       training.seed:
         from: 11
         to: 22
-  rationale: ''
+  rationale: >-
+    Second corrected-split seed for the LDAM-DRW ablation. The goal was to see
+    whether the weaker first seed was mostly stochastic or whether the family
+    itself is struggling on this dataset.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -166,7 +169,14 @@ per_dimension:
     spearman: 0.3363
     calibration: 0.9857
     hedging: 0.8326
-observations: ''
+observations: >-
+  QWK improved to 0.358 (fair) with calibration 0.762 (moderate), but
+  recall_-1 only reached 0.080 and hedging stayed high at 79.6%, so the family
+  still failed to convert margin reweighting into meaningful tail recovery. The
+  train/val gap exploded to 1.101, which is severe overfitting by this project's
+  own thresholds and much worse than every other corrected-split candidate. This
+  seed confirms that LDAM-DRW is not the clean next-step winner for the current
+  POC.
 selection_policy:
   name: qwk_then_recall_guarded
   rank_order:
