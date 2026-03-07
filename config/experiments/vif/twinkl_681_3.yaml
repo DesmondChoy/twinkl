@@ -1,0 +1,46 @@
+runs_dir: logs/experiments/runs
+labels_path: logs/judge_labels/judge_labels.parquet
+wrangled_dir: logs/wrangled
+run_ids:
+  - run_016
+  - run_017
+  - run_018
+models:
+  - CDWCE_a3
+  - SoftOrdinal
+  - CORN
+artifact_root: logs/experiments/artifacts
+report_path: logs/experiments/reports/experiment_review_2026-03-07_twinkl_681_3.md
+selection_policy:
+  name: recall_minus1_then_qwk_guarded
+  max_qwk_drop: 0.03
+  require_non_negative_calibration: true
+  rank_order:
+    - recall_minus1
+    - qwk_mean
+    - calibration_global
+    - decision_neutral_rate
+softmax_logit_adjustment:
+  enabled: true
+  prior_source: train_split
+  target_models:
+    - CDWCE_a3
+    - SoftOrdinal
+  tau_grid:
+    - 0.0
+    - 0.3
+    - 0.5
+    - 0.7
+    - 1.0
+corn_threshold_policy:
+  enabled: true
+  target_models:
+    - CORN
+  margin_grid:
+    - 0.0
+    - 0.05
+    - 0.10
+    - 0.15
+    - 0.20
+  search_shared_policy_first: true
+  allow_per_dimension_override: true

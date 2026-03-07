@@ -8,7 +8,9 @@
 | 2 | SoftOrdinal | run_016-run_018 | 2025 | 11, 22, 33 | 0.346 | 0.077 | **0.283** | **0.796** | 0.781 | Best minority-sensitive option. Highest median minority recall and lowest hedging, but meaningfully more seed variance than CDWCE_a3. |
 | 3 | CORN | run_016-run_018 | 2025 | 11, 22, 33 | 0.315 | 0.089 | 0.273 | 0.801 | **0.818** | Best-calibrated corrected-split baseline. Still useful as a calibration anchor, but no longer the QWK leader after the split fix. |
 
-> **Active recommendation (2026-03-06):** treat `run_016`-`run_018` as the only frontier checkpoints for `twinkl-681.3`. Carry `CDWCE_a3` forward as the default balanced model, keep `SoftOrdinal` as the minority-sensitivity comparator, and retain `CORN` as the calibration anchor.
+> **Active recommendation (2026-03-07):** `twinkl-681.3` confirms that validation-only post-hoc tuning extracts more guarded `recall_-1` lift from softmax logit adjustment than from `CORN` boundary tuning on the corrected-split frontier. Carry `CDWCE_a3` forward as the default `twinkl-681.4` base with the selected `tau=0.70` policy, keep `SoftOrdinal` as the minority-sensitivity comparator, and retain `CORN` as the calibration anchor.
+>
+> **Post-hoc reporting:** these `681.3` results are documented in [`reports/experiment_review_2026-03-07_twinkl_681_3.md`](reports/experiment_review_2026-03-07_twinkl_681_3.md) with persisted artifacts under [`artifacts/posthoc_twinkl_681_3_20260307_142717/`](artifacts/posthoc_twinkl_681_3_20260307_142717/). They are not added as new rows in the auto-generated run log because no retraining was performed.
 >
 > **Evaluation hygiene:** the board above is based on the corrected persona-stratified split introduced after commit `d937094`. Compare runs within this regime first. Use the historical board below for context only, not for direct SOTA claims.
 
@@ -117,6 +119,20 @@
 > **Contributor note:** Keep this section in **newest-first** chronological order (most recent date at top).
 
 ## Findings
+
+### 2026-03-07 — Validation-only post-hoc tuning favors softmax logit adjustment (`twinkl-681.3`)
+
+`twinkl-681.3` ran a validation-only policy sweep on the corrected-split frontier `run_016`-`run_018` using the existing selected-checkpoint artifacts only. Softmax families (`CDWCE_a3`, `SoftOrdinal`) were evaluated with train-prior logit adjustment over `tau in {0.0, 0.3, 0.5, 0.7, 1.0}`; `CORN` was evaluated with guarded probability-margin threshold policies. Selection was recall-first on validation with a hard `qwk_mean` drop guard of `0.03`, followed by one untouched final test evaluation per tuned model.
+
+**1. Softmax logit adjustment delivered the larger guarded recall lift.** Across the tuned frontier, softmax adjustment produced a median test delta of `+0.095 recall_-1` with `+0.006 qwk_mean`, compared with `CORN` threshold tuning at `+0.009 recall_-1` and `+0.009 qwk_mean`. This makes post-hoc boundary movement a stronger short-term lever for the softmax families than for `CORN`.
+
+**2. `CDWCE_a3` is the clearest `twinkl-681.4` handoff.** The selected `tau=0.70` policy was chosen for all three corrected-split `CDWCE_a3` seeds and lifts test `recall_-1` to 0.276 / 0.244 / 0.288 while keeping test `qwk_mean` at 0.361 / 0.334 / 0.369. Its median tuned profile is now QWK 0.361, `recall_-1` 0.276, minority recall 0.433, and neutral rate 0.736.
+
+**3. `SoftOrdinal` remained a useful comparator, but gains were smaller and less consistent.** One seed kept the reversible baseline (`tau=0.00`) and two selected `tau=0.30`. The family median improved to `recall_-1 = 0.164`, but it still trails tuned `CDWCE_a3` on both recall recovery and balanced test performance.
+
+**4. `CORN` stayed valuable as a calibration anchor, not as the best recovery path.** Per-dimension guarded margin policies produced small recall gains while preserving strong calibration (`median calibration_global = 0.818`), but the family median `recall_-1` only reached 0.161. That makes `CORN` a useful comparator for calibration-sensitive follow-up, not the main optimization base.
+
+**Conclusion**: `twinkl-681.3` should be treated as complete once its report and artifacts are linked from the index. For the next training step, carry tuned `CDWCE_a3` forward as the primary softmax base, keep `SoftOrdinal` as the minority-sensitive comparator, and use `CORN` mainly as a calibration reference. Full details: [`reports/experiment_review_2026-03-07_twinkl_681_3.md`](reports/experiment_review_2026-03-07_twinkl_681_3.md).
 
 ### 2026-03-06 — Corrected-split rebaseline resets the active frontier (run_016-run_018)
 

@@ -1,0 +1,26 @@
+run_id: run_018
+model_name: CDWCE_a3
+baseline_validation_metrics:
+  qwk_mean: 0.4360657108836025
+  recall_minus1: 0.1913616073259352
+  minority_recall_mean: 0.3708414663161292
+  decision_neutral_rate: 0.8294930875576036
+  calibration_global: 0.6699870374173672
+selected_validation_metrics:
+  qwk_mean: 0.4185687893386323
+  recall_minus1: 0.3542948612659619
+  minority_recall_mean: 0.4891656563235586
+  decision_neutral_rate: 0.7304147465437788
+  calibration_global: 0.5486512008995471
+baseline_test_metrics:
+  qwk_mean: 0.3279239307133758
+  recall_minus1: 0.10634920634920635
+  minority_recall_mean: 0.28768579274621897
+  decision_neutral_rate: 0.8384615384615385
+  calibration_global: 0.6403090315244567
+selected_test_metrics:
+  qwk_mean: 0.3694281056683399
+  recall_minus1: 0.2881996204278813
+  minority_recall_mean: 0.43991883406607374
+  decision_neutral_rate: 0.7402714932126697
+  calibration_global: 0.5445038104322234
