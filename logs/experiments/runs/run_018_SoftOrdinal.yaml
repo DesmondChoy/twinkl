@@ -1,0 +1,181 @@
+# VIF Experiment: run_018_SoftOrdinal
+# Generated: 2026-03-06T22:41:35
+# Git: 09a4bd2(dirty)
+metadata:
+  experiment_id: run_018_SoftOrdinal
+  run_id: run_018
+  model_name: SoftOrdinal
+  timestamp: '2026-03-06T22:41:35'
+  git_commit: 09a4bd2(dirty)
+  config_hash: a9499daed367
+provenance:
+  prev_run_id: run_017
+  prev_git_commit: 09a4bd2(dirty)
+  git_log: []
+  config_delta:
+    added: {}
+    removed: {}
+    changed:
+      training.seed:
+        from: 22
+        to: 33
+  rationale: ''
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 266
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: soft_ordinal
+    learning_rate: 0.019791668678535573
+    learning_rate_configured: 0.019791668678535573
+    learning_rate_source: explicit_model_override
+    lr_finder_enabled: false
+    learning_rate_policy: run_014_softordinal_valley
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 33
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1022
+  n_val: 217
+  n_test: 221
+capacity:
+  n_parameters: 23454
+  param_sample_ratio: 22.9491
+training_dynamics:
+  best_epoch: 17
+  total_epochs: 27
+  train_loss_at_best: 0.1753
+  val_loss_at_best: 0.2022
+  gap_at_best: 0.0269
+  final_lr: 0.009896
+  selection_source: eligible_policy
+  selection_metrics:
+    qwk_mean: 0.4338
+    recall_minus1: 0.1273
+    calibration_global: 0.82
+    hedging_mean: 0.7687
+    qwk_nan_dims_count: 0
+    eligible: true
+    ineligible_reasons: []
+evaluation:
+  mae_mean: 0.2201
+  accuracy_mean: 0.8113
+  qwk_mean: 0.3458
+  qwk_nan_dims_count: 0
+  spearman_mean: 0.3535
+  calibration_global: 0.7981
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.1465
+  minority_recall_mean: 0.2833
+  recall_minus1: 0.077
+  recall_zero: 0.9453
+  recall_plus1: 0.4897
+  hedging_mean: 0.7946
+per_dimension:
+  self_direction:
+    mae: 0.3564
+    accuracy: 0.7104
+    qwk: 0.5624
+    spearman: 0.5331
+    calibration: 0.6167
+    hedging: 0.5747
+  stimulation:
+    mae: 0.1001
+    accuracy: 0.905
+    qwk: 0.3206
+    spearman: 0.2327
+    calibration: 0.7752
+    hedging: 0.9729
+  hedonism:
+    mae: 0.2009
+    accuracy: 0.8371
+    qwk: -0.1447
+    spearman: 0.0078
+    calibration: 0.8665
+    hedging: 0.914
+  achievement:
+    mae: 0.2392
+    accuracy: 0.7964
+    qwk: 0.4452
+    spearman: 0.4363
+    calibration: 0.7258
+    hedging: 0.6923
+  power:
+    mae: 0.1424
+    accuracy: 0.8688
+    qwk: 0.2522
+    spearman: 0.2552
+    calibration: 0.7821
+    hedging: 0.9276
+  security:
+    mae: 0.263
+    accuracy: 0.7602
+    qwk: 0.277
+    spearman: 0.2111
+    calibration: 0.6312
+    hedging: 0.8462
+  conformity:
+    mae: 0.2348
+    accuracy: 0.7828
+    qwk: 0.5492
+    spearman: 0.6555
+    calibration: 0.8122
+    hedging: 0.7104
+  tradition:
+    mae: 0.2169
+    accuracy: 0.8235
+    qwk: 0.476
+    spearman: 0.4322
+    calibration: 0.7747
+    hedging: 0.7014
+  benevolence:
+    mae: 0.3606
+    accuracy: 0.6787
+    qwk: 0.2965
+    spearman: 0.4231
+    calibration: 0.6374
+    hedging: 0.7195
+  universalism:
+    mae: 0.0867
+    accuracy: 0.9502
+    qwk: 0.4236
+    spearman: 0.3483
+    calibration: 0.9799
+    hedging: 0.8869
+observations: ''
+selection_policy:
+  name: qwk_then_recall_guarded
+  rank_order:
+  - qwk_mean
+  - recall_minus1
+  - calibration_global
+  - hedging_mean
+  - val_loss
+  guardrails:
+    qwk_mean_must_be_finite: true
+    qwk_nan_dims_count_must_equal_zero: true
+    calibration_global_must_be_non_negative: true
+  fallback: best_finite_qwk
+artifacts:
+  checkpoint: logs/experiments/artifacts/ordinal_v4_s2025_m33_20260306_224041/SoftOrdinal/selected_checkpoint.pt
+  validation_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m33_20260306_224041/SoftOrdinal/selected_validation_outputs.parquet
+  test_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m33_20260306_224041/SoftOrdinal/selected_test_outputs.parquet

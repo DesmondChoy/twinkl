@@ -1,16 +1,34 @@
 # VIF Experiment Index
 
-## Current State of the Art
+## Current Frontier (Post-d937094 Split)
+
+| Rank | Candidate | Runs | Split Seed | Model Seeds | Median QWK | Median recall_-1 | Median MinR | Median Hedging | Median Cal | Positioning |
+|------|-----------|------|-----------:|------------|-----------:|-----------------:|------------:|---------------:|-----------:|-------------|
+| 1 | CDWCE_a3 | run_016-run_018 | 2025 | 11, 22, 33 | **0.353** | **0.104** | 0.276 | 0.804 | 0.762 | Active corrected-split SOTA. Best median `qwk_mean` and `recall_minus1`, with the tightest Power-dimension variance of the current candidates. |
+| 2 | SoftOrdinal | run_016-run_018 | 2025 | 11, 22, 33 | 0.346 | 0.077 | **0.283** | **0.796** | 0.781 | Best minority-sensitive option. Highest median minority recall and lowest hedging, but meaningfully more seed variance than CDWCE_a3. |
+| 3 | CORN | run_016-run_018 | 2025 | 11, 22, 33 | 0.315 | 0.089 | 0.273 | 0.801 | **0.818** | Best-calibrated corrected-split baseline. Still useful as a calibration anchor, but no longer the QWK leader after the split fix. |
+
+> **Active recommendation (2026-03-06):** treat `run_016`-`run_018` as the only frontier checkpoints for `twinkl-681.3`. Carry `CDWCE_a3` forward as the default balanced model, keep `SoftOrdinal` as the minority-sensitivity comparator, and retain `CORN` as the calibration anchor.
+>
+> **Evaluation hygiene:** the board above is based on the corrected persona-stratified split introduced after commit `d937094`. Compare runs within this regime first. Use the historical board below for context only, not for direct SOTA claims.
+
+## Historical Frontier (Pre-d937094 Split)
 
 | Rank | Run + Loss | Encoder | hd | n_train | QWK | Cal | MAE | Acc | MinR | Rationale |
 |------|-----------|---------|---:|--------:|----:|----:|----:|----:|-----:|-----------|
-| 1 | run_010 CORN | nomic-256d | 64 | 1020 | **0.434** | 0.835 | **0.206** | 0.821 | 0.285 | SOTA since run_010. LR=0.001 (configured) is optimal for CORN; LR finder consistently overshoots. |
+| 1 | run_010 CORN | nomic-256d | 64 | 1020 | **0.434** | 0.835 | **0.206** | 0.821 | 0.285 | Pre-split SOTA since run_010. LR=0.001 (configured) is optimal for CORN; LR finder consistently overshoots. |
 | 2 | run_015 CDWCE_a3 | nomic-256d | 64 | 1020 | 0.402 | 0.755 | **0.203** | **0.822** | 0.259 | Best new loss from CDW-CE alpha sweep. Alpha=3 is the sweet spot; alpha=2 too weak, alpha=5 collapses. QWK approaches SOTA but trades calibration. |
 | 3 | run_007 CORN | nomic-256d | 64 | 1020 | 0.413 | 0.838 | 0.205 | 0.821 | 0.285 | Previous leader; identical config to run_010 CORN (stochastic variance explains QWK gap). |
 
-> **Key insight (run_015):** CDW-CE loss (Polat et al. 2025) was tested as an alpha sweep (2, 3, 5) — the #1 recommended intervention from run_014. **CDW-CE alpha=3 is competitive** (QWK 0.402, moderate) but **did not solve the recall_-1 bottleneck** (0.056 vs SOTA 0.089). The inverted-U alpha response confirms alpha=3 as the sweet spot: alpha=2 is too weak for 3-class ordinal (max |i−c|=2), alpha=5 over-penalizes causing extreme hedging (89.9%). **run_010 CORN remains SOTA.**
+> **Why this frontier is deprecated:** `run_001`-`run_015` were evaluated before commit `d937094` (`twinkl-675: stratify persona val/test splits`). They are retained as an archival record of the pre-fix search path, but they should not be used for active SOTA claims or direct comparison against `run_016+`.
 >
-> **Primary bottleneck (confirmed structural):** `recall_minus1 = 1–9%` across ALL 15 runs, 7 loss functions, and 3 LR regimes. The -1 class is only 7.3% of all labels (~75 examples per dimension). This is now confirmed to be a **data scarcity problem**, not a loss function problem — no loss intervention (CDW-CE, CORAL_IW, weighted MSE) has moved this metric. Next experiments should: (1) apply **post-hoc logit adjustment** (Menon et al. 2021, tau=0.3–1.0) on run_010 CORN and run_015 CDWCE_a3 for zero-cost recall_-1 gains; (2) rerun **CDWCE_a3 at configured LR=0.001** (disable LR finder) to test if conservative LR improves both QWK and calibration; (3) try **CORN+SoftOrdinal ensemble** via probability averaging to combine QWK and calibration strengths; (4) fix **LR finder history bug**. See full analysis in [`logs/experiments/reports/experiment_review_2026-03-04_v4.md`](reports/experiment_review_2026-03-04_v4.md).
+> **What `d937094` fixed:** before the fix, `split_by_persona()` kept entries from the same persona together, but it still formed validation/test by randomly shuffling persona IDs and slicing them. That preserved persona isolation, but it did **not** preserve the distribution of per-dimension `+1` and `-1` signals across val/test. Commit `d937094` changed the split logic to build persona-level sign features for every Schwartz dimension, search deterministic candidate partitions, and score them against global prevalence while strongly penalizing val/test splits that drop expected minority signals.
+>
+> **Why pre- and post-fix runs are not comparable:** the split seed stayed the same (`2025`), but the partitioning algorithm changed, so the actual personas and label marginals in validation/test changed. That means pre-`d937094` runs were optimized and measured on a different evaluation regime. In practice, historical results could look better or worse simply because rare misalignment signals were under- or over-represented in the holdout sets, especially on volatile dimensions like `Power` and `Security`. The corrected-split frontier is therefore the only fair basis for current model ranking and future recommendations.
+
+> **Key insight (run_015):** CDW-CE loss (Polat et al. 2025) was tested as an alpha sweep (2, 3, 5) — the #1 recommended intervention from run_014. **CDW-CE alpha=3 is competitive** (QWK 0.402, moderate) but **did not solve the recall_-1 bottleneck** (0.056 vs SOTA 0.089). The inverted-U alpha response confirms alpha=3 as the sweet spot: alpha=2 is too weak for 3-class ordinal (max |i−c|=2), alpha=5 over-penalizes causing extreme hedging (89.9%). **run_010 CORN remained the pre-split SOTA.**
+>
+> **Primary bottleneck in the pre-split regime (confirmed structural at the time):** `recall_minus1 = 1–9%` across the first 15 runs, 7 loss functions, and 3 LR regimes. The -1 class is only 7.3% of all labels (~75 examples per dimension). This supported the hypothesis that the bottleneck was largely **data scarcity**, not just loss function choice. At the time, the next recommendations were: (1) apply **post-hoc logit adjustment** (Menon et al. 2021, tau=0.3–1.0) on run_010 CORN and run_015 CDWCE_a3 for zero-cost recall_-1 gains; (2) rerun **CDWCE_a3 at configured LR=0.001** (disable LR finder); (3) try **CORN+SoftOrdinal ensemble** via probability averaging; (4) fix the **LR finder history bug**. The corrected-split frontier above supersedes these as the active baseline for future work. See full analysis in [`logs/experiments/reports/experiment_review_2026-03-04_v4.md`](reports/experiment_review_2026-03-04_v4.md).
 
 ## Run Log
 
@@ -85,11 +103,34 @@
 | 015 | CORN | nomic-256d | 1 | 64 | 0.3 | corn | 22804 | 22.4 | 0.203 | 0.815 | 0.328 | 0.397 | 0.801 | 0.234 | runs/run_015_CORN.yaml |
 | 015 | EMD | nomic-256d | 1 | 64 | 0.3 | emd | 23454 | 23.0 | 0.204 | 0.821 | 0.372 | 0.405 | 0.781 | 0.280 | runs/run_015_EMD.yaml |
 | 015 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 23.0 | 0.208 | 0.822 | 0.335 | 0.381 | 0.846 | 0.292 | runs/run_015_SoftOrdinal.yaml |
+| 016 | CDWCE_a3 | nomic-256d | 1 | 64 | 0.3 | cdwce_a3 | 23454 | 22.9 | 0.224 | 0.802 | 0.355 | 0.373 | 0.760 | 0.266 | runs/run_016_CDWCE_a3.yaml |
+| 016 | CORN | nomic-256d | 1 | 64 | 0.3 | corn | 22804 | 22.3 | 0.230 | 0.810 | 0.315 | 0.338 | 0.821 | 0.274 | runs/run_016_CORN.yaml |
+| 016 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 22.9 | 0.221 | 0.805 | 0.388 | 0.363 | 0.781 | 0.292 | runs/run_016_SoftOrdinal.yaml |
+| 017 | CDWCE_a3 | nomic-256d | 1 | 64 | 0.3 | cdwce_a3 | 23454 | 22.9 | 0.231 | 0.799 | 0.353 | 0.334 | 0.779 | 0.294 | runs/run_017_CDWCE_a3.yaml |
+| 017 | CORN | nomic-256d | 1 | 64 | 0.3 | corn | 22804 | 22.3 | 0.218 | 0.815 | 0.315 | 0.356 | 0.818 | 0.266 | runs/run_017_CORN.yaml |
+| 017 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 22.9 | 0.219 | 0.807 | 0.330 | 0.352 | 0.746 | 0.229 | runs/run_017_SoftOrdinal.yaml |
+| 018 | CDWCE_a3 | nomic-256d | 1 | 64 | 0.3 | cdwce_a3 | 23454 | 22.9 | 0.229 | 0.796 | 0.338 | 0.365 | 0.762 | 0.276 | runs/run_018_CDWCE_a3.yaml |
+| 018 | CORN | nomic-256d | 1 | 64 | 0.3 | corn | 22804 | 22.3 | 0.218 | 0.811 | 0.355 | 0.382 | 0.815 | 0.273 | runs/run_018_CORN.yaml |
+| 018 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 22.9 | 0.220 | 0.811 | 0.346 | 0.353 | 0.798 | 0.283 | runs/run_018_SoftOrdinal.yaml |
 <!-- AUTO-TABLE:END -->
 
 > **Contributor note:** Keep this section in **newest-first** chronological order (most recent date at top).
 
 ## Findings
+
+### 2026-03-06 — Corrected-split rebaseline resets the active frontier (run_016-run_018)
+
+`run_016`-`run_018` reran the ws=1 nomic hd=64 frontier on the corrected post-`d937094` persona-stratified split using a fixed `split_seed=2025` and model seeds `11/22/33`. These results should be read as a 3-seed family comparison, not as isolated single-run winners.
+
+**1. CDWCE_a3 is the active corrected-split SOTA.** Its median `qwk_mean` is 0.353 (fair) and median `recall_minus1` is 0.104 (poor, but best of the three). It is also the most stable candidate on the hardest `Power` dimension, with seed QWKs 0.291 / 0.406 / 0.330 rather than the near-collapse seen in SoftOrdinal seed 22.
+
+**2. SoftOrdinal remains the best minority-sensitive option.** It has the highest median `minority_recall_mean` at 0.283 and the lowest median hedging at 79.6%, but its seed spread is much wider than CDWCE_a3 (`qwk_mean` 0.388 / 0.330 / 0.346). This makes it a strong comparator for boundary tuning, not the default carry-forward checkpoint family.
+
+**3. CORN is now a calibration anchor, not the leader.** It still has the best median `calibration_global` at 0.818, but its median `qwk_mean` falls to 0.315 on the corrected split. The split fix therefore changed the frontier rather than merely adding noise to the previous ordering.
+
+**4. The split fix narrowed some dimension noise without eliminating the hard cases.** `Security` is materially tighter across seeds than the pre-split picture suggested, while `Power` remains the most volatile dimension. This makes future recommendations more trustworthy if they are based on corrected-split multi-seed summaries instead of single-run pre-split wins.
+
+**Conclusion**: `run_016`-`run_018` are now the active frontier inputs for `twinkl-681.3`. Future experiment reviews should update the post-split board first, keep the pre-split board as historical only, and anchor recommendations on corrected-split evidence.
 
 ### 2026-03-04 — CDW-CE alpha sweep and loss-function intervention (run_015)
 

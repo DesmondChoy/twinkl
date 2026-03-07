@@ -1,0 +1,181 @@
+# VIF Experiment: run_017_CDWCE_a3
+# Generated: 2026-03-06T22:40:04
+# Git: 09a4bd2(dirty)
+metadata:
+  experiment_id: run_017_CDWCE_a3
+  run_id: run_017
+  model_name: CDWCE_a3
+  timestamp: '2026-03-06T22:40:04'
+  git_commit: 09a4bd2(dirty)
+  config_hash: d5a62ed8afd1
+provenance:
+  prev_run_id: run_016
+  prev_git_commit: 09a4bd2(dirty)
+  git_log: []
+  config_delta:
+    added: {}
+    removed: {}
+    changed:
+      training.seed:
+        from: 11
+        to: 22
+  rationale: ''
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 266
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: cdwce_a3
+    learning_rate: 0.015522253574270487
+    learning_rate_configured: 0.015522253574270487
+    learning_rate_source: explicit_model_override
+    lr_finder_enabled: false
+    learning_rate_policy: run_015_cdwce_a3_valley
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 22
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1022
+  n_val: 217
+  n_test: 221
+capacity:
+  n_parameters: 23454
+  param_sample_ratio: 22.9491
+training_dynamics:
+  best_epoch: 32
+  total_epochs: 34
+  train_loss_at_best: 0.3765
+  val_loss_at_best: 0.6314
+  gap_at_best: 0.2549
+  final_lr: 0.007761
+  selection_source: eligible_policy
+  selection_metrics:
+    qwk_mean: 0.4361
+    recall_minus1: 0.1514
+    calibration_global: 0.7678
+    hedging_mean: 0.794
+    qwk_nan_dims_count: 0
+    eligible: true
+    ineligible_reasons: []
+evaluation:
+  mae_mean: 0.2313
+  accuracy_mean: 0.7995
+  qwk_mean: 0.3534
+  qwk_nan_dims_count: 0
+  spearman_mean: 0.3344
+  calibration_global: 0.7794
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.1491
+  minority_recall_mean: 0.294
+  recall_minus1: 0.1279
+  recall_zero: 0.9428
+  recall_plus1: 0.4602
+  hedging_mean: 0.8027
+per_dimension:
+  self_direction:
+    mae: 0.3928
+    accuracy: 0.6652
+    qwk: 0.4511
+    spearman: 0.4509
+    calibration: 0.5893
+    hedging: 0.6471
+  stimulation:
+    mae: 0.1102
+    accuracy: 0.905
+    qwk: 0.3371
+    spearman: 0.1705
+    calibration: 0.9073
+    hedging: 0.905
+  hedonism:
+    mae: 0.1768
+    accuracy: 0.8371
+    qwk: 0.0983
+    spearman: 0.0997
+    calibration: 0.8039
+    hedging: 0.9412
+  achievement:
+    mae: 0.2502
+    accuracy: 0.7692
+    qwk: 0.3527
+    spearman: 0.4535
+    calibration: 0.6991
+    hedging: 0.8145
+  power:
+    mae: 0.1662
+    accuracy: 0.8688
+    qwk: 0.4057
+    spearman: 0.3014
+    calibration: 0.8521
+    hedging: 0.9095
+  security:
+    mae: 0.2586
+    accuracy: 0.7602
+    qwk: 0.2372
+    spearman: 0.1989
+    calibration: 0.6
+    hedging: 0.8869
+  conformity:
+    mae: 0.2804
+    accuracy: 0.7602
+    qwk: 0.4895
+    spearman: 0.5408
+    calibration: 0.7158
+    hedging: 0.6154
+  tradition:
+    mae: 0.2093
+    accuracy: 0.8326
+    qwk: 0.4696
+    spearman: 0.5187
+    calibration: 0.771
+    hedging: 0.7376
+  benevolence:
+    mae: 0.3677
+    accuracy: 0.6742
+    qwk: 0.291
+    spearman: 0.3769
+    calibration: 0.5878
+    hedging: 0.6742
+  universalism:
+    mae: 0.1011
+    accuracy: 0.9231
+    qwk: 0.4018
+    spearman: 0.2324
+    calibration: 0.9666
+    hedging: 0.8959
+observations: ''
+selection_policy:
+  name: qwk_then_recall_guarded
+  rank_order:
+  - qwk_mean
+  - recall_minus1
+  - calibration_global
+  - hedging_mean
+  - val_loss
+  guardrails:
+    qwk_mean_must_be_finite: true
+    qwk_nan_dims_count_must_equal_zero: true
+    calibration_global_must_be_non_negative: true
+  fallback: best_finite_qwk
+artifacts:
+  checkpoint: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260306_223910/CDWCE_a3/selected_checkpoint.pt
+  validation_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260306_223910/CDWCE_a3/selected_validation_outputs.parquet
+  test_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260306_223910/CDWCE_a3/selected_test_outputs.parquet
