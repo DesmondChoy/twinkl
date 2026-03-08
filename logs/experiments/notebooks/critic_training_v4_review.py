@@ -81,6 +81,7 @@ CONFIG = {
     "val_ratio": 0.15,
     "split_seed": 2025,
     "model_seed": 2025,
+    "fixed_holdout_manifest_path": None,
     "class_balance_source": "train_split_per_dimension",
     "ldam_max_m": 0.5,
     "ldam_scale": 30.0,
@@ -142,6 +143,7 @@ for key in [
     "val_ratio",
     "split_seed",
     "model_seed",
+    "fixed_holdout_manifest_path",
     "class_balance_source",
     "use_lr_finder",
     "experiment_group",
@@ -207,6 +209,7 @@ from src.vif.dataset import (
     VIFDataset,
 )
 from src.vif.encoders import SBERTEncoder
+from src.vif.holdout import load_fixed_holdout_ids
 from src.vif.state_encoder import StateEncoder
 from src.vif.critic_ordinal import (
     CriticMLPCORAL,
@@ -549,12 +552,21 @@ print(f"Active models: {list(active_models.keys())}")
 
 # ==== CELL 28 ====
 print("Creating datasets (caching embeddings)...")
+fixed_val_persona_ids = None
+fixed_test_persona_ids = None
+if CONFIG.get("fixed_holdout_manifest_path"):
+    fixed_val_persona_ids, fixed_test_persona_ids = load_fixed_holdout_ids(
+        CONFIG["fixed_holdout_manifest_path"]
+    )
+
 train_df, val_df, test_df = split_by_persona(
     labels_df,
     entries_df,
     train_ratio=CONFIG["train_ratio"],
     val_ratio=CONFIG["val_ratio"],
     seed=CONFIG["split_seed"],
+    fixed_val_persona_ids=fixed_val_persona_ids,
+    fixed_test_persona_ids=fixed_test_persona_ids,
 )
 
 train_dataset = VIFDataset(train_df, state_encoder, cache_embeddings=True)

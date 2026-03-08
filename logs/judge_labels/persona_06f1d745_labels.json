@@ -1,0 +1,122 @@
+{
+  "persona_id": "06f1d745",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-12-04",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "He immediately inspects the heater, calls the trusted plumber, and fixates on the unplanned replacement cost because the month's money is already spoken for."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-12-04",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "He runs through the aguinaldo, car insurance, emergency fund, and tutoring options, framing constant planning as how he stops problems from exploding.",
+        "benevolence": "He worries about losing the only Saturday time he has with his daughters and says he will not put his family through the instability he saw growing up."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-12-05",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "The cheap repair and teacher discount on Valentina's shoes make the day feel like everything fits into place, showing how much relief he takes from costs staying manageable."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-12-08",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "His first reactions are seniority, savings, and Valentina's graduation, and he frames any job disruption as something he cannot afford right now.",
+        "conformity": "At the meeting he keeps those fears to himself, just nods, and asks when more details will come instead of challenging the announcement."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-12-10",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": -1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "He explicitly rejects starting over at fifty-one and says he would rather know what is coming than gamble on something that only looks better from the outside.",
+        "security": "He chooses the union-protected public-school job and familiar routine over higher pay because the private-campus option feels too unstable right now."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-12-17",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "Even after learning his position is safe, he only entertains the Tec option on the condition that it be revisited in the summer when things are quieter."
+      }
+    }
+  ]
+}

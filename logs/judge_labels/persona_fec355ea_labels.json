@@ -1,0 +1,127 @@
+{
+  "persona_id": "fec355ea",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-02-25",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He had the slide and the data ready but 'barely sa[id] anything' after Marcus cut in, giving up his own voice in the room.",
+        "power": "Being talked over and then staying silent leaves him publicly weaker and invisible, a clear loss of status and control.",
+        "conformity": "His response shows he held back because he did not want to be the one 'making a scene,' prioritizing social appearance over asserting himself."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-03-04",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": -1,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "The stalled approval keeps his team stacking pallets in overflow and 'burning hours on workarounds,' blocking the operational results he has already modeled.",
+        "power": "He is openly frustrated that none of his analysis matters because 'it's Dave's signature on the line,' leaving him dependent on someone else's authority."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-03-09",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He had 'solid margins data' but folded and accepted the existing contract instead of defending his own judgment.",
+        "power": "Karen shut him down in front of the whole ops meeting and he yielded, giving up control over the vendor decision.",
+        "conformity": "Once he saw nobody would back him up, he just said 'fine,' choosing smooth compliance over open conflict."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-03-15",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He keeps coming back to the fact that the company is paying 'twelve percent more than we need to' and plans to keep pushing for the savings case.",
+        "power": "Rather than letting the proposal die, he decides to change the framing so he can regain influence over how the decision is made."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-03-22",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He takes obvious pride in second-highest throughput and immediately accepts the summit presentation so leadership can see what his team built.",
+        "power": "The invitation matters because it gives him visibility in front of leadership, and his response centers having a team, numbers, and 'receipts' now."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-03-26",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "Derek explaining Ryan's own system back to him and routing questions through Tanya undermines the hierarchy Ryan expects and weakens his authority.",
+        "conformity": "He lets Derek finish because he does not want to embarrass him in front of everyone, restraining correction to keep the interaction socially smooth."
+      }
+    }
+  ]
+}

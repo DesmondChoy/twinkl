@@ -1,0 +1,202 @@
+{
+  "persona_id": "b604addd",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-10-14",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "Khalid claims credit for the protocol work and Tariq 'just sat there,' losing status and control in front of Dr. Fatima."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-10-20",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "He is forced to wait while Hassan 'holds the cards,' and the loss of control over a ward need is what makes him feel stuck.",
+        "benevolence": "That frustration spills onto Faisal when he snaps over homework even though he knows 'it had nothing to do with him.'"
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-10-25",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He solves the staffing problem competently enough that the ward gets through the day and Nour calls it the 'calmest crisis' she had been through.",
+        "power": "He takes charge of the shortage by pulling everyone together, laying out the situation, and coordinating coverage without losing command of the room."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-10-29",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "He gives Amira full responsibility for the audit and admits there may be more he does not need to hold onto 'so tightly,' loosening personal control.",
+        "benevolence": "He publicly tells Amira her report was 'solid work,' giving a colleague trust and recognition."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-11-05",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He brings his own data-based discharge protocol and openly pushes back against the regional template instead of simply accepting it.",
+        "power": "Even after making the case, the decision stays with higher-ups and he ends up implementing a protocol he does not believe in."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-11-10",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "He corrects the coordinator in front of the group to reassert his title and status as the charge nurse and ward lead."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-11-16",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "Being talked over mid-sentence and then going silent leaves him without influence in the meeting where he was supposed to make the case.",
+        "conformity": "He says doctors interrupting nurses is 'just how it is' and avoids pushing back because he fears being seen as 'the angry nurse.'"
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-11-19",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He treats the leadership conference seriously enough to submit the request, arrange his own coverage, and keep tracking the deadline.",
+        "power": "Even after doing that work, attendance still depends on his department head's sign-off, so he is left waiting on someone else's priority."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-11-22",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He spends two evenings building a documented staffing case with patient numbers, acuity trends, and incident reports.",
+        "power": "He concludes the real decision turns on access and relationships he does not have, leaving him outside the influential conversation."
+      }
+    },
+    {
+      "t_index": 9,
+      "date": "2025-11-22",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Even after being disregarded, he says building the case well is 'who I am,' showing continued commitment to competence and preparation."
+      }
+    }
+  ]
+}

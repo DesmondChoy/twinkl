@@ -4,6 +4,7 @@ from unittest.mock import patch
 
 import numpy as np
 import polars as pl
+import pytest
 
 from src.vif.dataset import split_by_persona, create_dataloaders
 
@@ -216,6 +217,69 @@ class TestSplitByPersona:
         ids_b = set(train_b.select("persona_id").unique().to_series().to_list())
         assert ids_a != ids_b
 
+    def test_fixed_holdouts_are_respected(self):
+        """Explicit val/test persona IDs should bypass reshuffling."""
+        labels_df, entries_df = _make_fake_data(n_personas=12, entries_per_persona=2)
+
+        train_df, val_df, test_df = split_by_persona(
+            labels_df,
+            entries_df,
+            fixed_val_persona_ids={"persona_001", "persona_003"},
+            fixed_test_persona_ids={"persona_005", "persona_007"},
+        )
+
+        train_ids = set(train_df.select("persona_id").unique().to_series().to_list())
+        val_ids = set(val_df.select("persona_id").unique().to_series().to_list())
+        test_ids = set(test_df.select("persona_id").unique().to_series().to_list())
+
+        assert val_ids == {"persona_001", "persona_003"}
+        assert test_ids == {"persona_005", "persona_007"}
+        assert train_ids == {
+            "persona_000",
+            "persona_002",
+            "persona_004",
+            "persona_006",
+            "persona_008",
+            "persona_009",
+            "persona_010",
+            "persona_011",
+        }
+
+    def test_fixed_holdouts_require_both_sets(self):
+        """Providing only one fixed holdout set should fail fast."""
+        labels_df, entries_df = _make_fake_data(n_personas=8, entries_per_persona=2)
+
+        with pytest.raises(ValueError, match="must either both be provided"):
+            split_by_persona(
+                labels_df,
+                entries_df,
+                fixed_val_persona_ids={"persona_001"},
+            )
+
+    def test_fixed_holdouts_reject_overlap(self):
+        """Validation/test holdouts must be disjoint."""
+        labels_df, entries_df = _make_fake_data(n_personas=8, entries_per_persona=2)
+
+        with pytest.raises(ValueError, match="overlap"):
+            split_by_persona(
+                labels_df,
+                entries_df,
+                fixed_val_persona_ids={"persona_001"},
+                fixed_test_persona_ids={"persona_001"},
+            )
+
+    def test_fixed_holdouts_reject_missing_personas(self):
+        """Unknown persona IDs in the manifest should raise."""
+        labels_df, entries_df = _make_fake_data(n_personas=8, entries_per_persona=2)
+
+        with pytest.raises(ValueError, match="not present"):
+            split_by_persona(
+                labels_df,
+                entries_df,
+                fixed_val_persona_ids={"persona_001"},
+                fixed_test_persona_ids={"persona_999"},
+            )
+
     def test_sparse_signals_present_in_val_and_test_when_feasible(self):
         """Sparse sign features should appear in val and test when expected counts allow it."""
         labels_df, entries_df = _make_skewed_data(n_personas=60, entries_per_persona=2)
@@ -334,5 +398,67 @@ class TestCreateDataloadersPassthrough:
         # Verify split_by_persona was called with the right ratios
         mock_split.assert_called_once_with(
             fake_labels, fake_entries,
-            train_ratio=0.60, val_ratio=0.20, seed=99,
+            train_ratio=0.60,
+            val_ratio=0.20,
+            seed=99,
+            fixed_val_persona_ids=None,
+            fixed_test_persona_ids=None,
         )
+
+    @patch("src.vif.dataset.split_by_persona")
+    @patch("src.vif.dataset.load_fixed_holdout_ids")
+    @patch("src.vif.dataset.load_all_data")
+    def test_manifest_holdouts_loaded_and_forwarded(self, mock_load, mock_load_holdout_ids, mock_split):
+        """Manifest-backed holdouts should be resolved before splitting."""
+        fake_labels = pl.DataFrame({"persona_id": ["p1"], "t_index": [0]})
+        fake_entries = pl.DataFrame({"persona_id": ["p1"], "t_index": [0]})
+        mock_load.return_value = (fake_labels, fake_entries)
+        mock_load_holdout_ids.return_value = ({"persona_val"}, {"persona_test"})
+
+        empty_df = pl.DataFrame({
+            "persona_id": pl.Series([], dtype=pl.Utf8),
+            "t_index": pl.Series([], dtype=pl.Int64),
+        })
+        mock_split.return_value = (empty_df, empty_df, empty_df)
+
+        class FakeEncoder:
+            pass
+
+        try:
+            create_dataloaders(
+                state_encoder=FakeEncoder(),
+                fixed_holdout_manifest_path="config/experiments/vif/twinkl_681_5_holdout.yaml",
+            )
+        except Exception:
+            pass
+
+        mock_load_holdout_ids.assert_called_once_with(
+            "config/experiments/vif/twinkl_681_5_holdout.yaml"
+        )
+        mock_split.assert_called_once_with(
+            fake_labels,
+            fake_entries,
+            train_ratio=0.70,
+            val_ratio=0.15,
+            seed=42,
+            fixed_val_persona_ids={"persona_val"},
+            fixed_test_persona_ids={"persona_test"},
+        )
+
+    @patch("src.vif.dataset.load_all_data")
+    def test_manifest_and_explicit_holdouts_conflict(self, mock_load):
+        """Explicit holdout IDs and manifest path should be mutually exclusive."""
+        fake_labels = pl.DataFrame({"persona_id": ["p1"], "t_index": [0]})
+        fake_entries = pl.DataFrame({"persona_id": ["p1"], "t_index": [0]})
+        mock_load.return_value = (fake_labels, fake_entries)
+
+        class FakeEncoder:
+            pass
+
+        with pytest.raises(ValueError, match="either fixed_holdout_manifest_path or explicit"):
+            create_dataloaders(
+                state_encoder=FakeEncoder(),
+                fixed_val_persona_ids={"persona_val"},
+                fixed_test_persona_ids={"persona_test"},
+                fixed_holdout_manifest_path="config/experiments/vif/twinkl_681_5_holdout.yaml",
+            )

@@ -1,0 +1,200 @@
+{
+  "persona_id": "e6838e16",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-02-15",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "He calms himself by checking the bank balance, SIP, rent auto-debit, and FD interest, describing relief when the numbers line up and \"things are holding together.\"",
+        "benevolence": "He stays on the phone with Amma for almost forty minutes, helps her cross-check the plumber's rates, and sends links to protect her from being overcharged."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-02-22",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He takes pride in Priya's onboarding tracker working because it is built on the template he created and is now being adopted successfully across the team.",
+        "security": "He renews the apartment lease on the same terms, uses saved market comparables to hold the rent steady, and appreciates being known in the neighborhood."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-02-28",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "He immediately fixes the insurance payment problem and says the real solution is building a bigger buffer, showing a stability-first response to uncertainty."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-03-02",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "He breaks the transport budget he had just tightened and fixates on having broken the plan on day two, treating the lapse as a threat to his larger sense of order."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-03-04",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "He leaves a possible vendor compliance issue unread for another day and settles for \"it's probably nothing,\" even though unresolved risk is exactly what he says he dislikes."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-03-08",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "Four days later he is still skipping the highlighted vendor contract, letting a known compliance risk sit because other fires feel easier to handle.",
+        "benevolence": "He hides the contract issue and insurance bounce from Appa because he does not want to make his father worry and then have to manage that worry too."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-03-10",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "After recognizing a leak could become expensive, he commits to messaging the landlord that night and insisting on a proper plumber to prevent bigger damage."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-03-13",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "He describes evenings where everything is \"exactly where it should be\" as enough, and his response centers on repeatedly checking locks, emails, and payments until certainty is restored."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-03-19",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": -1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "He hears the pitch for a seed-stage startup with a better title and equity, but says he already knows his answer, signaling a move away from novelty and risk.",
+        "security": "Even before thinking it through publicly, he treats the startup offer as something he will decline, consistent with favoring the safety of his existing path."
+      }
+    },
+    {
+      "t_index": 9,
+      "date": "2025-03-25",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": -1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "He contrasts Vikram's startup life with his own and still lands on not taking the build-from-scratch path, preferring the known over the more adventurous option.",
+        "security": "His defense of staying put is built from stability markers like the FD, insurance, and being the dependable person his team can count on every day."
+      }
+    }
+  ]
+}

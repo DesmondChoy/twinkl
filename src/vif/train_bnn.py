@@ -136,6 +136,7 @@ def train(config: dict, verbose: bool = True) -> dict:
         wrangled_dir=config["data"]["wrangled_dir"],
         train_ratio=config["data"]["train_ratio"],
         val_ratio=config["data"]["val_ratio"],
+        fixed_holdout_manifest_path=config["data"].get("fixed_holdout_manifest_path"),
     )
 
     split_sizes = {

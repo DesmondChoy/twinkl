@@ -1,0 +1,165 @@
+{
+  "persona_id": "bcfa309d",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-09-16",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": -1,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He lets the postdoc present his framework as if it were the postdoc's own, failing to defend credit for work he developed.",
+        "power": "He stays silent while someone else claims his seminar framework, giving up status and control over his own contribution in a public room."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-09-18",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "He calls the coffee with Astrid the best part of the week because nobody is 'positioning themselves' or measuring publications and funding, valuing a break from status competition."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-09-25",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He thinks his original framing is stronger but restructures chapter three around Bjorn's preferred lens because the target journal audience matters more than his own judgment.",
+        "hedonism": "The chapter work leaves him with burning eyes, a messy flat, and meals reduced to bread and cheese, showing repeated sacrifice of comfort for the project.",
+        "achievement": "He reorganizes the chapter for the journal they are targeting and keeps pushing through the evening, clearly prioritizing publication success."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-09-25",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He is willing to reshape citations and framing for better odds at the European Journal of Political Economy, explicitly optimizing for review outcomes.",
+        "power": "He treats both his supervisor's name and selective committee information as leverage, using them strategically to protect his position against rivals."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-09-29",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 1
+      },
+      "rationales": {
+        "power": "He arrives with a prepared proposal and says he will keep pushing because he cannot accept just waiting for permission, showing a strong drive to influence how the department works.",
+        "universalism": "His proposal is aimed at giving doctoral candidates more presenting time, advocating for broader opportunities beyond his own immediate advantage."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-10-01",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "When the committee delay blocks the Sciences Po application, he immediately thinks in terms of alternate routes instead of passively accepting the bottleneck.",
+        "achievement": "He applies for the visiting researcher slot with polished materials and keeps looking for a way to preserve the opportunity."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-10-02",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "He defends taking charge of the doctoral council, emphasizing that he reads everything, sets the agenda, and knows how to organize people.",
+        "conformity": "He rejects the expectation that a doctoral student should stay smaller or less forceful, insisting he will keep taking up space even if others dislike it."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-10-07",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He believes his case selection is stronger but goes along with Lena's preferred set after only limited pushback.",
+        "power": "Lena's firm push and Bjorn's silence leave him without real control over the deliverables he will still have to answer for."
+      }
+    }
+  ]
+}

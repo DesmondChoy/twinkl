@@ -9,9 +9,11 @@
 | 3 | SoftOrdinal | run_016-run_018 | 2025 | 11, 22, 33 | 0.346 | 0.077 | 0.283 | 0.796 | 0.781 | Best low-gap completed comparator. Competitive on QWK, but more seed-sensitive than CDWCE_a3 and no longer the minority leader. |
 | 4 | CORN | run_016-run_018 | 2025 | 11, 22, 33 | 0.315 | 0.089 | 0.273 | 0.801 | **0.818** | Best-calibrated corrected-split baseline. Keep it as the calibration anchor and sanity check for lower-confidence follow-ups. |
 
-> **Active recommendation (2026-03-07):** `run_019`-`run_021` confirm `BalancedSoftmax` as the corrected-split leader on median `qwk_mean`, `recall_-1`, `minority_recall_mean`, and hedging. Carry it forward as the primary softmax base for `twinkl-681.5`, keep `CDWCE_a3` as the conservative fallback when calibration/accuracy trade-offs dominate, use `SoftOrdinal` as the low-gap comparator, and retain `CORN` as the calibration anchor.
+> **Active recommendation (2026-03-08):** `run_019`-`run_021` remain the default corrected-split frontier family. The frozen-holdout follow-up `run_022`-`run_024` (`twinkl-681.5`) improved median `recall_-1` from `0.313` to `0.342` and lifted `power recall_-1` from `0.125` to `0.313`, but median `qwk_mean` fell from `0.362` to `0.349` and median calibration fell from `0.713` to `0.687`. Treat the augmented family as targeted evidence, not as a new default baseline.
 >
-> **Latest full review:** [`reports/experiment_review_2026-03-07_v5.md`](reports/experiment_review_2026-03-07_v5.md)
+> **Latest targeted data-lift review:** [`reports/experiment_review_2026-03-08_twinkl_681_5.md`](reports/experiment_review_2026-03-08_twinkl_681_5.md)
+>
+> **Latest full frontier review:** [`reports/experiment_review_2026-03-07_v5.md`](reports/experiment_review_2026-03-07_v5.md)
 >
 > **Post-hoc reporting:** these `681.3` results are documented in [`reports/experiment_review_2026-03-07_twinkl_681_3.md`](reports/experiment_review_2026-03-07_twinkl_681_3.md) with persisted artifacts under [`artifacts/posthoc_twinkl_681_3_20260307_142717/`](artifacts/posthoc_twinkl_681_3_20260307_142717/). They are not added as new rows in the auto-generated run log because no retraining was performed.
 >
@@ -122,11 +124,28 @@
 | 020 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 22.9 | 0.304 | 0.755 | 0.378 | 0.359 | 0.713 | 0.449 | runs/run_020_BalancedSoftmax.yaml |
 | 020 | LDAM_DRW | nomic-256d | 1 | 64 | 0.3 | ldam_drw | 23454 | 22.9 | 0.216 | 0.812 | 0.358 | 0.348 | 0.762 | 0.296 | runs/run_020_LDAM_DRW.yaml |
 | 021 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 22.9 | 0.324 | 0.734 | 0.358 | 0.371 | 0.654 | 0.448 | runs/run_021_BalancedSoftmax.yaml |
+| 022 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 21.0 | 0.306 | 0.750 | 0.349 | 0.354 | 0.728 | 0.434 | runs/run_022_BalancedSoftmax.yaml |
+| 023 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 21.0 | 0.312 | 0.748 | 0.372 | 0.344 | 0.685 | 0.450 | runs/run_023_BalancedSoftmax.yaml |
+| 024 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 21.0 | 0.314 | 0.748 | 0.339 | 0.340 | 0.687 | 0.433 | runs/run_024_BalancedSoftmax.yaml |
 <!-- AUTO-TABLE:END -->
 
 > **Contributor note:** Keep this section in **newest-first** chronological order (most recent date at top).
 
 ## Findings
+
+### 2026-03-08 — Targeted `Power`/`Security` batch produced a narrow `Power` win, not a new frontier (`twinkl-681.5`)
+
+`twinkl-681.5` froze the corrected `2025` holdout, added 12 leakage-safe targeted synthetic personas (95 new entries), verified the batch against the baseline snapshot, passed a small label QA gate (`7 keep`, `1 ambiguous`, `0 bad label`), and retrained the existing `BalancedSoftmax` family on seeds `11/22/33`.
+
+**1. `Power` improved in the intended direction.** Median `power recall_-1` rose from `0.1250` in `run_019`-`run_021` to `0.3125` in `run_022`-`run_024`, while median `power qwk` also improved from `0.3337` to `0.3452`. This is the clearest positive signal from the targeted batch.
+
+**2. `Security` was mostly flat on the hard-negative metric.** Median `security recall_-1` stayed at `0.5714`, with only a negligible `security qwk` change (`0.2973 -> 0.2995`). The targeted batch therefore did not shift both issue-scoped dimensions equally.
+
+**3. The family-level trade-off is still unfavorable for a frontier change.** Median `recall_-1` improved from `0.3132` to `0.3420`, but median `qwk_mean` fell from `0.3619` to `0.3488`, calibration fell from `0.7134` to `0.6866`, accuracy dipped from `0.7534` to `0.7484`, and MAE worsened from `0.3042` to `0.3125`.
+
+**4. The result looks targeted rather than broadly general.** `hedonism` regressed despite not being part of the augmentation batch, which argues against claiming broad hard-dimension transfer from this data lift alone.
+
+**Conclusion**: keep `run_019`-`run_021` as the default frontier, and treat `run_022`-`run_024` as evidence that mild-misalignment augmentation can help `Power` without yet establishing a family-wide win. Full details: [`reports/experiment_review_2026-03-08_twinkl_681_5.md`](reports/experiment_review_2026-03-08_twinkl_681_5.md).
 
 ### 2026-03-07 — BalancedSoftmax confirms the corrected-split frontier shift (run_019-run_021, `twinkl-681.4`)
 

@@ -11,7 +11,8 @@ This skill addresses label imbalance for specific Schwartz value dimensions
 (e.g., Universalism -1 at 0.6% vs 5.4%+ for all other values). The root
 cause: the generic Unsettled prompt in `journal_entry.yaml` produces
 personal dilemmas that the judge scores as neutral (0) rather than
-misaligned (-1) for broader-good values like Universalism.
+misaligned (-1) for broader-good values like Universalism or for
+stability/agency values where mild conflict can read as merely situational.
 
 This file is read by the orchestrator (following the pattern in
 `.claude/skills/judge/orchestration.md` lines 49-73) and embedded inline
@@ -51,6 +52,20 @@ power_tension_scenarios:
   - "You needed something today — an answer, a resource, a green light — and the only way to get it was to wait for someone else to decide. You asked, and then you just had to sit there. Describe how that played out."
   - "You had a clear view on how something should go — and someone pushed back, hard. You ended up going along with their way instead. Maybe it was easier, maybe the fight wasn't worth it. Describe the moment you gave in."
   - "Someone treated you today like your experience or track record didn't count for much — maybe they overlooked you for something, explained something you already knew, or assumed you needed to prove yourself all over again. What happened?"
+```
+
+### Security
+
+Scenarios that surface small but meaningful threats to stability,
+preparedness, or peace of mind — not catastrophic danger. These produce
+entries the judge can score as Security -1 on the hard `0/-1` boundary.
+
+```yaml
+security_tension_scenarios:
+  - "Something that usually helps you feel stable slipped a little today — maybe with money, work, home, or a relationship — and you told yourself it was probably fine. Just describe what happened."
+  - "You made a small choice today that traded a bit of steadiness for convenience or momentum. It wasn't dramatic, but it left you less settled than you'd like. Describe the moment."
+  - "A practical concern came up today that you would normally deal with right away, but you pushed it off because you were tired, busy, or hoping it would sort itself out. What happened?"
+  - "You noticed a risk today and let it ride anyway because fixing it felt annoying, expensive, or easier to postpone. Describe what you decided."
 ```
 
 ## Application Rule
@@ -94,6 +109,9 @@ text comes from the scenario bank above.
 - The scenario bank text follows the same style as the existing Unsettled
   prompt: second-person, present-tense, no value labels, no Schwartz
   terminology
+- Scenario banks for hard-negative lift should prefer **mild misalignment**
+  over obviously extreme failures so the batch helps the `0/-1` boundary
+  rather than only adding easy negatives
 
 ## Adding New Value Scenarios
 

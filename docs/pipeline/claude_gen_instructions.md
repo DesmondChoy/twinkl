@@ -18,16 +18,16 @@ Instructions for Claude Code to generate synthetic conversational journal data u
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `NUM_PERSONAS` | `10` | Number of personas to generate |
+| `NUM_PERSONAS` | `12` | Number of personas to generate |
 | `MIN_ENTRIES` | `6` | Minimum entries per persona (supports cold-start scenarios) |
-| `MAX_ENTRIES` | `12` | Maximum entries per persona (covers rut detection window) |
+| `MAX_ENTRIES` | `10` | Maximum entries per persona (covers rut detection window) |
 | `MIN_DAYS_BETWEEN_ENTRIES` | `0` | Minimum days between entries (0 = same-day allowed via `SAME_DAY_PROBABILITY`) |
 | `MAX_DAYS_BETWEEN_ENTRIES` | `7` | Maximum days between entries (ensures ~1 entry/week) |
 | `SAME_DAY_PROBABILITY` | `0.15` | Probability of same-day follow-up entry (only active when `MIN_DAYS_BETWEEN_ENTRIES = 0`) |
 | `NUDGE_ENABLED` | `true` | Set to `false` to disable all nudge generation (`True`/`False` when used in Python snippets) |
-| `TARGET_VALUES` | `["Power"]` | Schwartz values to force (e.g., `["Stimulation", "Power"]`). Empty = random selection. |
+| `TARGET_VALUES` | `["Power", "Security"]` | Schwartz values to force (e.g., `["Stimulation", "Power"]`). Empty = random selection. |
 | `ADD_RANDOM_VALUE` | `false` | When targeting, sample either 1 value (`[forced]`) or 2 values (`[forced, random_other]`). |
-| `TARGET_TENSIONS` | `["Power"]` | Values to apply tension scenarios (e.g., `["Universalism"]`). Empty = no tension targeting. |
+| `TARGET_TENSIONS` | `["Power", "Security"]` | Values to apply tension scenarios (e.g., `["Universalism"]`). Empty = no tension targeting. |
 | `UNSETTLED_BOOST` | `0.6` | Probability of Unsettled mode when `TARGET_TENSIONS` is active. Remaining probability is split equally between Grounded and Neutral. |
 
 ---
@@ -87,6 +87,10 @@ TARGET_TENSIONS = ["Universalism"]
 ADD_RANDOM_VALUE = false
 NUM_PERSONAS = 10
 ```
+
+For leakage-safe targeted augmentation on `twinkl-681.5`, the repo now also
+supports `TARGET_TENSIONS = ["Power", "Security"]` via
+`.claude/skills/tension-selection/SKILL.md`.
 
 ### How it works
 - When `TARGET_TENSIONS` is non-empty, the orchestrator reads `.claude/skills/tension-selection/SKILL.md` and embeds the scenario bank in each subagent's prompt
