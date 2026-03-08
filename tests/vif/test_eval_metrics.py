@@ -1,11 +1,14 @@
 """Tests for VIF evaluation metrics."""
 
+import re
 import warnings
+from pathlib import Path
 
 import numpy as np
 import polars as pl
 import pytest
 import torch
+import yaml
 from torch.utils.data import DataLoader, TensorDataset
 
 from src.models.judge import SCHWARTZ_VALUE_ORDER
@@ -145,6 +148,124 @@ class TestDiscretize:
         values = np.array([[0.0, 0.8], [-0.7, 0.3]])
         result = discretize_predictions(values)
         np.testing.assert_array_equal(result, [[0, 1], [-1, 0]])
+
+
+class TestCircumplexDiagnostics:
+    """Tests for compact circumplex diagnostics."""
+
+    @staticmethod
+    def _config_pairs(key: str) -> set[tuple[str, str]]:
+        payload = yaml.safe_load(
+            Path("config/schwartz_values.yaml").read_text(encoding="utf-8")
+        )["values"]
+
+        def normalize(name: str) -> str:
+            stripped = re.sub(r"\s*\([^)]*\)$", "", name)
+            return stripped.lower().replace("-", "_").replace(" ", "_")
+
+        pairs = set()
+        for name, meta in payload.items():
+            left = normalize(name)
+            for other in meta.get(key, []):
+                pair = tuple(sorted((left, normalize(other))))
+                if pair[0] != pair[1]:
+                    pairs.add(pair)
+        return pairs
+
+    def test_pair_sets_match_current_config(self):
+        from src.vif.eval import CIRCUMPLEX_ADJACENT_PAIRS, CIRCUMPLEX_OPPOSITE_PAIRS
+
+        assert set(CIRCUMPLEX_ADJACENT_PAIRS) == self._config_pairs(
+            "adjacent_compatible_values"
+        )
+        assert set(CIRCUMPLEX_OPPOSITE_PAIRS) == self._config_pairs(
+            "opposing_tension_values"
+        )
+
+    def test_pair_sets_do_not_overlap(self):
+        from src.vif.eval import CIRCUMPLEX_ADJACENT_PAIRS, CIRCUMPLEX_OPPOSITE_PAIRS
+
+        assert set(CIRCUMPLEX_ADJACENT_PAIRS).isdisjoint(CIRCUMPLEX_OPPOSITE_PAIRS)
+
+    def test_probability_path_uses_class_probabilities(self):
+        from src.vif.eval import compute_circumplex_diagnostics
+
+        expected_scores = np.zeros((1, len(SCHWARTZ_VALUE_ORDER)), dtype=np.float64)
+        probabilities = np.zeros((1, len(SCHWARTZ_VALUE_ORDER), 3), dtype=np.float64)
+        probabilities[:, :, 1] = 1.0  # neutral by default
+
+        self_direction_idx = SCHWARTZ_VALUE_ORDER.index("self_direction")
+        stimulation_idx = SCHWARTZ_VALUE_ORDER.index("stimulation")
+        security_idx = SCHWARTZ_VALUE_ORDER.index("security")
+
+        probabilities[0, self_direction_idx] = [0.0, 0.0, 1.0]
+        probabilities[0, stimulation_idx] = [0.0, 0.0, 1.0]
+        probabilities[0, security_idx] = [0.0, 0.0, 1.0]
+
+        diagnostics = compute_circumplex_diagnostics(expected_scores, probabilities)
+        opposite_row = next(
+            row
+            for row in diagnostics["opposite_pairs"]
+            if row["pair_id"] == "security__self_direction"
+        )
+        adjacent_row = next(
+            row
+            for row in diagnostics["adjacent_pairs"]
+            if row["pair_id"] == "self_direction__stimulation"
+        )
+
+        assert diagnostics["source"] == "probabilities"
+        assert diagnostics["summary"]["opposite_violation_mean"] > 0.0
+        assert diagnostics["summary"]["adjacent_support_mean"] > 0.0
+        assert opposite_row["score"] == pytest.approx(1.0)
+        assert adjacent_row["score"] == pytest.approx(1.0)
+
+    def test_expected_score_fallback_uses_positive_same_direction_mass(self):
+        from src.vif.eval import compute_circumplex_diagnostics
+
+        expected_scores = np.zeros((1, len(SCHWARTZ_VALUE_ORDER)), dtype=np.float64)
+        expected_scores[0, SCHWARTZ_VALUE_ORDER.index("self_direction")] = 0.8
+        expected_scores[0, SCHWARTZ_VALUE_ORDER.index("stimulation")] = 0.5
+        expected_scores[0, SCHWARTZ_VALUE_ORDER.index("security")] = 0.7
+
+        diagnostics = compute_circumplex_diagnostics(expected_scores)
+        opposite_row = next(
+            row
+            for row in diagnostics["opposite_pairs"]
+            if row["pair_id"] == "security__self_direction"
+        )
+        adjacent_row = next(
+            row
+            for row in diagnostics["adjacent_pairs"]
+            if row["pair_id"] == "self_direction__stimulation"
+        )
+
+        assert diagnostics["source"] == "expected_scores"
+        assert opposite_row["score"] == pytest.approx(0.56)
+        assert adjacent_row["score"] == pytest.approx(0.40)
+
+    def test_adjacent_support_does_not_count_shared_negative_mass(self):
+        from src.vif.eval import compute_circumplex_diagnostics
+
+        expected_scores = np.zeros((1, len(SCHWARTZ_VALUE_ORDER)), dtype=np.float64)
+        expected_scores[0, SCHWARTZ_VALUE_ORDER.index("self_direction")] = -0.8
+        expected_scores[0, SCHWARTZ_VALUE_ORDER.index("stimulation")] = -0.5
+        expected_scores[0, SCHWARTZ_VALUE_ORDER.index("security")] = -0.7
+
+        diagnostics = compute_circumplex_diagnostics(expected_scores)
+        opposite_row = next(
+            row
+            for row in diagnostics["opposite_pairs"]
+            if row["pair_id"] == "security__self_direction"
+        )
+        adjacent_row = next(
+            row
+            for row in diagnostics["adjacent_pairs"]
+            if row["pair_id"] == "self_direction__stimulation"
+        )
+
+        assert opposite_row["score"] == pytest.approx(0.56)
+        assert adjacent_row["score"] == pytest.approx(0.0)
 
 
 class TestMAE:
@@ -522,6 +643,8 @@ class TestEvaluateWithUncertainty:
         assert "hedging_mean" in results
         assert "qwk_nan_dims_count" in results
         assert "positive_count" in results["calibration"]
+        assert "circumplex" in results
+        assert results["circumplex"]["source"] == "expected_scores"
 
     def test_include_raw_outputs_for_ordinal_model(self):
         """Ordinal eval can capture deterministic logits/probabilities for export."""
@@ -541,6 +664,7 @@ class TestEvaluateWithUncertainty:
 
         assert results["raw_logits"].shape == (4, 10, 3)
         assert results["probabilities"].shape == (4, 10, 3)
+        assert results["circumplex"]["source"] == "probabilities"
 
     def test_include_raw_outputs_with_real_ordinal_model(self):
         """Raw export should work for real ordinal models, not just mocks."""

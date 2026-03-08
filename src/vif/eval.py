@@ -31,6 +31,38 @@ from sklearn.metrics import cohen_kappa_score, confusion_matrix
 
 from src.models.judge import SCHWARTZ_VALUE_ORDER
 
+CIRCUMPLEX_ADJACENT_PAIRS = (
+    ("achievement", "hedonism"),
+    ("achievement", "power"),
+    ("benevolence", "conformity"),
+    ("benevolence", "tradition"),
+    ("benevolence", "universalism"),
+    ("conformity", "security"),
+    ("conformity", "tradition"),
+    ("hedonism", "stimulation"),
+    ("power", "security"),
+    ("security", "tradition"),
+    ("self_direction", "stimulation"),
+    ("self_direction", "universalism"),
+)
+
+CIRCUMPLEX_OPPOSITE_PAIRS = (
+    ("achievement", "benevolence"),
+    ("achievement", "universalism"),
+    ("benevolence", "power"),
+    ("conformity", "hedonism"),
+    ("conformity", "self_direction"),
+    ("conformity", "stimulation"),
+    ("hedonism", "tradition"),
+    ("power", "universalism"),
+    ("security", "self_direction"),
+    ("security", "stimulation"),
+    ("self_direction", "tradition"),
+    ("stimulation", "tradition"),
+)
+
+_DIMENSION_INDEX = {name: idx for idx, name in enumerate(SCHWARTZ_VALUE_ORDER)}
+
 
 def discretize_predictions(values: np.ndarray) -> np.ndarray:
     """Convert continuous predictions to discrete classes {-1, 0, +1}.
@@ -75,6 +107,107 @@ def _metric_sort_value(value: float, *, higher_is_better: bool) -> float:
     if not np.isfinite(value):
         return float("-inf")
     return value if higher_is_better else -value
+
+
+def _pair_id(left: str, right: str) -> str:
+    return f"{left}__{right}"
+
+
+def _compute_pair_score(
+    expected_scores: np.ndarray,
+    left_idx: int,
+    right_idx: int,
+    *,
+    relation: str,
+    probabilities: np.ndarray | None = None,
+) -> float:
+    if probabilities is not None:
+        plus_plus = probabilities[:, left_idx, 2] * probabilities[:, right_idx, 2]
+        if relation == "adjacent":
+            return float(np.mean(plus_plus))
+        if relation == "opposite":
+            minus_minus = probabilities[:, left_idx, 0] * probabilities[:, right_idx, 0]
+            return float(np.mean(plus_plus + minus_minus))
+        raise ValueError(f"Unsupported circumplex relation: {relation}")
+
+    if relation == "adjacent":
+        return float(
+            np.mean(
+                np.maximum(expected_scores[:, left_idx], 0.0)
+                * np.maximum(expected_scores[:, right_idx], 0.0)
+            )
+        )
+    if relation == "opposite":
+        return float(
+            np.mean(
+                np.maximum(
+                    expected_scores[:, left_idx] * expected_scores[:, right_idx],
+                    0.0,
+                )
+            )
+        )
+    raise ValueError(f"Unsupported circumplex relation: {relation}")
+
+
+def compute_circumplex_diagnostics(
+    expected_scores: np.ndarray,
+    probabilities: np.ndarray | None = None,
+) -> dict:
+    """Compute compact circumplex diagnostics for the active ordinal eval path."""
+    if expected_scores.ndim != 2 or expected_scores.shape[1] != len(SCHWARTZ_VALUE_ORDER):
+        raise ValueError(
+            "expected_scores must have shape (n_samples, len(SCHWARTZ_VALUE_ORDER))."
+        )
+    if probabilities is not None and (
+        probabilities.ndim != 3
+        or probabilities.shape[0] != expected_scores.shape[0]
+        or probabilities.shape[1] != len(SCHWARTZ_VALUE_ORDER)
+        or probabilities.shape[2] != 3
+    ):
+        raise ValueError(
+            "probabilities must have shape (n_samples, len(SCHWARTZ_VALUE_ORDER), 3)."
+        )
+
+    def build_rows(
+        pairs: tuple[tuple[str, str], ...],
+        *,
+        relation: str,
+    ) -> list[dict]:
+        rows = []
+        for left, right in pairs:
+            score = _compute_pair_score(
+                expected_scores,
+                _DIMENSION_INDEX[left],
+                _DIMENSION_INDEX[right],
+                relation=relation,
+                probabilities=probabilities,
+            )
+            rows.append(
+                {
+                    "pair_id": _pair_id(left, right),
+                    "left": left,
+                    "right": right,
+                    "score": score,
+                }
+            )
+        return rows
+
+    opposite_pairs = build_rows(CIRCUMPLEX_OPPOSITE_PAIRS, relation="opposite")
+    adjacent_pairs = build_rows(CIRCUMPLEX_ADJACENT_PAIRS, relation="adjacent")
+
+    return {
+        "source": "probabilities" if probabilities is not None else "expected_scores",
+        "summary": {
+            "opposite_violation_mean": _nanmean_or_nan(
+                [row["score"] for row in opposite_pairs]
+            ),
+            "adjacent_support_mean": _nanmean_or_nan(
+                [row["score"] for row in adjacent_pairs]
+            ),
+        },
+        "opposite_pairs": opposite_pairs,
+        "adjacent_pairs": adjacent_pairs,
+    }
 
 
 def compute_mse_per_dimension(
@@ -606,6 +739,12 @@ def evaluate_with_uncertainty(
     if include_raw_outputs:
         results["raw_logits"] = np.concatenate(all_raw_logits, axis=0)
         results["probabilities"] = np.concatenate(all_probabilities, axis=0)
+
+    if include_ordinal_metrics:
+        results["circumplex"] = compute_circumplex_diagnostics(
+            predictions,
+            results.get("probabilities"),
+        )
 
     return results
 

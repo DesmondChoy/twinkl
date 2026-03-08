@@ -542,6 +542,11 @@ def _build_experiment_dict(
         "observations": observations if observations else "",
     }
 
+    circumplex_summary = eval_result.get("circumplex", {}).get("summary")
+    if circumplex_summary:
+        experiment["evaluation"]["circumplex_summary"] = _to_python(circumplex_summary)
+        experiment["circumplex"] = _to_python(eval_result["circumplex"])
+
     # Remove None values from encoder, training, and uncertainty config
     experiment["config"]["encoder"] = {
         k: v for k, v in experiment["config"]["encoder"].items() if v is not None

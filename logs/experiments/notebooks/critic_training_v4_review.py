@@ -1815,6 +1815,91 @@ if excluded_models:
 print(f"\n{'=' * 90}")
 
 
+# ==== CELL 46.5 ====
+# Cell 6.1b - Circumplex diagnostics
+
+print("\n" + "=" * 90)
+print("CIRCUMPLEX DIAGNOSTICS")
+print("=" * 90)
+
+circumplex_rows = []
+for name in all_results:
+    circumplex = all_results[name].get("circumplex")
+    if not circumplex:
+        continue
+    summary = circumplex.get("summary", {})
+    circumplex_rows.append(
+        {
+            "Model": name,
+            "OppViolation": round(
+                float(summary.get("opposite_violation_mean", float("nan"))),
+                4,
+            ),
+            "AdjSupport": round(
+                float(summary.get("adjacent_support_mean", float("nan"))),
+                4,
+            ),
+        }
+    )
+
+if circumplex_rows:
+    print(pl.DataFrame(circumplex_rows).sort("Model"))
+else:
+    print("No circumplex diagnostics available.")
+
+if rankable_results:
+    best_circumplex_model, _ = _best_finite(rankable_results, "qwk_mean", mode="max")
+else:
+    best_circumplex_model = None
+
+if best_circumplex_model and rankable_results[best_circumplex_model].get("circumplex"):
+    circumplex = rankable_results[best_circumplex_model]["circumplex"]
+    print()
+    print(f"Pair deep dive for best-QWK rankable model: {best_circumplex_model}")
+    print("  High opposite score = collapsing opposition structure.")
+    print("  Low adjacent score = missing compatible co-activation.")
+
+    opposite_rows = sorted(
+        circumplex.get("opposite_pairs", []),
+        key=lambda row: row["score"],
+        reverse=True,
+    )[:5]
+    adjacent_rows = sorted(
+        circumplex.get("adjacent_pairs", []),
+        key=lambda row: row["score"],
+    )[:5]
+
+    if opposite_rows:
+        print("\nTop 5 opposite pairs by score:")
+        print(
+            pl.DataFrame(
+                [
+                    {
+                        "Pair": f"{row['left']} <> {row['right']}",
+                        "Score": round(float(row["score"]), 4),
+                    }
+                    for row in opposite_rows
+                ]
+            )
+        )
+
+    if adjacent_rows:
+        print("\nBottom 5 adjacent pairs by score:")
+        print(
+            pl.DataFrame(
+                [
+                    {
+                        "Pair": f"{row['left']} <> {row['right']}",
+                        "Score": round(float(row["score"]), 4),
+                    }
+                    for row in adjacent_rows
+                ]
+            )
+        )
+
+print(f"\n{'=' * 90}")
+
+
 # ==== CELL 47 ====
 # Cell 6.2 - CDW-CE watch gates
 

@@ -120,6 +120,29 @@ def _minimal_training_inputs() -> tuple[dict, dict, dict, dict, np.ndarray, dict
         "accuracy_mean": 0.81,
         "qwk_mean": 0.34,
         "spearman_mean": 0.29,
+        "circumplex": {
+            "source": "probabilities",
+            "summary": {
+                "opposite_violation_mean": 0.12,
+                "adjacent_support_mean": 0.34,
+            },
+            "opposite_pairs": [
+                {
+                    "pair_id": "security__self_direction",
+                    "left": "security",
+                    "right": "self_direction",
+                    "score": 0.18,
+                }
+            ],
+            "adjacent_pairs": [
+                {
+                    "pair_id": "self_direction__stimulation",
+                    "left": "self_direction",
+                    "right": "stimulation",
+                    "score": 0.42,
+                }
+            ],
+        },
     }
     calibration = {
         "per_dim": _per_dimension_metrics(0.11),
@@ -171,6 +194,36 @@ def test_build_experiment_dict_records_long_tail_loss_shorthands(model_name, exp
     if model_name == "LDAM_DRW":
         assert experiment["config"]["training"]["ldam_drw_start_epoch"] == 50
         assert experiment["config"]["training"]["ldam_beta"] == 0.9999
+
+
+def test_build_experiment_dict_persists_circumplex_payload():
+    config, trained_result, eval_result, calibration, hedging, recall_data = _minimal_training_inputs()
+
+    with patch("src.vif.experiment_logger._get_git_commit", return_value="abc123"):
+        experiment = _build_experiment_dict(
+            run_id="run_999",
+            model_name="BalancedSoftmax",
+            config=config,
+            trained_result=trained_result,
+            eval_result=eval_result,
+            calibration=calibration,
+            hedging=hedging,
+            recall_data=recall_data,
+            n_train=100,
+            n_val=20,
+            n_test=20,
+            pct_truncated=0.0,
+            state_dim=256,
+            observations="",
+        )
+
+    assert experiment["evaluation"]["circumplex_summary"] == {
+        "opposite_violation_mean": 0.12,
+        "adjacent_support_mean": 0.34,
+    }
+    assert experiment["circumplex"]["source"] == "probabilities"
+    assert experiment["circumplex"]["opposite_pairs"][0]["pair_id"] == "security__self_direction"
+    assert experiment["circumplex"]["adjacent_pairs"][0]["pair_id"] == "self_direction__stimulation"
 
 
 # ─── _flatten_dict ───────────────────────────────────────────────────────────
