@@ -4,16 +4,17 @@
 
 | Rank | Candidate | Runs | Split Seed | Model Seeds | Median QWK | Median recall_-1 | Median MinR | Median Hedging | Median Cal | Positioning |
 |------|-----------|------|-----------:|------------|-----------:|-----------------:|------------:|---------------:|-----------:|-------------|
-| 1 | BalancedSoftmax | run_019-run_021 | 2025 | 11, 22, 33 | **0.362** | **0.313** | **0.448** | **0.621** | 0.713 | Confirmed 3-seed corrected-split leader. Strongest tail recovery so far, but it still trades away MAE/accuracy and some calibration versus the safer completed baselines. |
+| 1 | BalancedSoftmax | run_019-run_021 | 2025 | 11, 22, 33 | **0.362** | 0.313 | **0.448** | 0.621 | 0.713 | Confirmed 3-seed corrected-split leader. Strongest tail recovery so far, but it still trades away MAE/accuracy and some calibration versus the safer completed baselines. |
 | 2 | CDWCE_a3 | run_016-run_018 | 2025 | 11, 22, 33 | 0.353 | 0.104 | 0.276 | 0.804 | 0.762 | Best conservative 3-seed alternative when calibration, MAE, and accuracy matter more than maximum tail recovery. |
-| 3 | SoftOrdinal | run_016-run_018 | 2025 | 11, 22, 33 | 0.346 | 0.077 | 0.283 | 0.796 | 0.781 | Best low-gap completed comparator. Competitive on QWK, but more seed-sensitive than CDWCE_a3 and no longer the minority leader. |
-| 4 | CORN | run_016-run_018 | 2025 | 11, 22, 33 | 0.315 | 0.089 | 0.273 | 0.801 | **0.818** | Best-calibrated corrected-split baseline. Keep it as the calibration anchor and sanity check for lower-confidence follow-ups. |
+| 3 | BalancedSoftmax + targeted batch | run_022-run_024 | 2025 | 11, 22, 33 | 0.349 | **0.342** | 0.434 | **0.619** | 0.687 | Best targeted hard-dimension follow-up so far. The frozen-holdout batch improves `recall_-1` and keeps hedging slightly lower, but it gives back QWK and calibration, so it is a secondary branch rather than the new default. |
+| 4 | SoftOrdinal | run_016-run_018 | 2025 | 11, 22, 33 | 0.346 | 0.077 | 0.283 | 0.796 | 0.781 | Best low-gap completed comparator. Competitive on QWK, but more seed-sensitive than CDWCE_a3 and no longer the minority leader. |
+| 5 | CORN | run_016-run_018 | 2025 | 11, 22, 33 | 0.315 | 0.089 | 0.273 | 0.801 | **0.818** | Best-calibrated corrected-split baseline. Keep it as the calibration anchor and sanity check for lower-confidence follow-ups. |
 
-> **Active recommendation (2026-03-08):** `run_019`-`run_021` remain the default corrected-split frontier family. The frozen-holdout follow-up `run_022`-`run_024` (`twinkl-681.5`) improved median `recall_-1` from `0.313` to `0.342` and lifted `power recall_-1` from `0.125` to `0.313`, but median `qwk_mean` fell from `0.362` to `0.349` and median calibration fell from `0.713` to `0.687`. Treat the augmented family as targeted evidence, not as a new default baseline.
+> **Active recommendation (2026-03-08):** `run_019`-`run_021` remain the default corrected-split frontier family. The frozen-holdout follow-up `run_022`-`run_024` (`twinkl-681.5`) now merits its own secondary board row because median `recall_-1` improved from `0.313` to `0.342` and median hedging ticked down from `0.621` to `0.619`, but median `qwk_mean` still fell from `0.362` to `0.349` and median calibration fell from `0.713` to `0.687`. Treat the augmented family as the best targeted `Power`/tail-recovery branch, not as the new default baseline.
 >
 > **Latest targeted data-lift review:** [`reports/experiment_review_2026-03-08_twinkl_681_5.md`](reports/experiment_review_2026-03-08_twinkl_681_5.md)
 >
-> **Latest full frontier review:** [`reports/experiment_review_2026-03-07_v5.md`](reports/experiment_review_2026-03-07_v5.md)
+> **Latest full frontier review:** [`reports/experiment_review_2026-03-08_v6.md`](reports/experiment_review_2026-03-08_v6.md)
 >
 > **Post-hoc reporting:** these `681.3` results are documented in [`reports/experiment_review_2026-03-07_twinkl_681_3.md`](reports/experiment_review_2026-03-07_twinkl_681_3.md) with persisted artifacts under [`artifacts/posthoc_twinkl_681_3_20260307_142717/`](artifacts/posthoc_twinkl_681_3_20260307_142717/). They are not added as new rows in the auto-generated run log because no retraining was performed.
 >
@@ -132,6 +133,16 @@
 > **Contributor note:** Keep this section in **newest-first** chronological order (most recent date at top).
 
 ## Findings
+
+### 2026-03-08 — Full frontier refresh keeps original BalancedSoftmax as the default and promotes the targeted batch to a secondary board row
+
+The refreshed full review across `run_001`-`run_024` keeps the split-aware recommendation unchanged: `run_019`-`run_021` remain the default corrected-split family because they still have the best median `qwk_mean` at `0.362` while maintaining strong minority recovery. The frozen-holdout targeted branch `run_022`-`run_024` is now promoted onto the current board as a **secondary** candidate because its median `recall_-1` rises further to `0.342` and median hedging edges down to `0.619`, but its median `qwk_mean` (`0.349`) and calibration (`0.687`) stay worse than the original BalancedSoftmax family.
+
+**1. The hard-dimension story is now sharper.** Across corrected-split runs, `hedonism` remains the hardest dimension with mean QWK `0.021`, followed by `security` at `0.249`; `power` remains the most operationally volatile dimension even after the targeted batch. Checkpoint-level replay on the reproducible frozen-holdout `run_023` shows the model still misreads quiet pleasure/relief signals as duty or sacrifice, and it still flips `security` when entries mix explicit safety language with broader ambivalence or fear.
+
+**2. The targeted batch helped the tail, but mostly where the signal is explicit.** The added training data improved `power recall_-1` and the family-level `recall_-1` median, which is real progress for the immediate bottleneck. It did **not** produce the same kind of lift on `hedonism` or `security`, which argues that the next data-centric step should target those semantics directly rather than assuming more generic hard negatives will transfer.
+
+**3. The next highest-leverage follow-up is still data + calibration, not another global loss sweep.** The corrected-split families all operate in the same high param/sample regime, and the main differences keep coming from boundary behavior and label support rather than backbone size. That makes the most promising next package: (a) a frozen-holdout `hedonism`/`security` targeted batch, (b) one `SoftOrdinal` rerun on the same batch as a low-gap comparator, and (c) a calibration-only follow-up on the winning BalancedSoftmax branch. Full details: [`reports/experiment_review_2026-03-08_v6.md`](reports/experiment_review_2026-03-08_v6.md).
 
 ### 2026-03-08 — Targeted `Power`/`Security` batch produced a narrow `Power` win, not a new frontier (`twinkl-681.5`)
 

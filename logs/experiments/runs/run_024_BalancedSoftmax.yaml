@@ -19,7 +19,12 @@ provenance:
       training.seed:
         from: 22
         to: 33
-  rationale: ''
+  rationale: >-
+    Third and final seed to complete the frozen-holdout targeted-data
+    BalancedSoftmax family for `twinkl-681.5`. This run holds architecture,
+    loss, and evaluation personas constant so the family summary can isolate
+    whether the augmentation produces a stable shift rather than a single-seed
+    anomaly.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -166,7 +171,14 @@ per_dimension:
     spearman: 0.252
     calibration: 0.9189
     hedging: 0.8009
-observations: ''
+observations: >-
+  The completed family confirmed a real recall-oriented lift: seed 33 still
+  reached `recall_-1` 0.342 with minority recall 0.433 and hedging 61.9%, so
+  the augmented data did not collapse back to the older conservative boundary.
+  At the same time, QWK slipped to 0.339, calibration stayed below the original
+  BalancedSoftmax family, and `gap_at_best` rose to 0.230, reinforcing that the
+  batch helps `power`-style tail recovery more than it improves overall
+  frontier quality.
 selection_policy:
   name: qwk_then_recall_guarded
   rank_order:

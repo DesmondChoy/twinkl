@@ -19,7 +19,12 @@ provenance:
       training.seed:
         from: 11
         to: 22
-  rationale: ''
+  rationale: >-
+    Second frozen-holdout rerun for `twinkl-681.5`, advancing the same
+    targeted-data BalancedSoftmax recipe from seed 11 to seed 22. The purpose
+    is to check whether the first augmented run's tail-recovery lift survives a
+    seed change on the unchanged holdout before treating the batch as a real
+    family-level effect.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -166,7 +171,13 @@ per_dimension:
     spearman: 0.2401
     calibration: 0.9242
     hedging: 0.8054
-observations: ''
+observations: >-
+  Seed 22 was the best aggregate member of the augmented family: QWK rebounded
+  to 0.372 while minority recall stayed high at 0.450 and hedging improved to
+  60.9%. The trade-off did not disappear, though: `recall_-1` fell back to
+  0.309 and calibration stayed lower than the original frontier family, while
+  hedonism and security remained the main under-modeled dimensions despite the
+  much stronger `power` QWK of 0.445.
 selection_policy:
   name: qwk_then_recall_guarded
   rank_order:

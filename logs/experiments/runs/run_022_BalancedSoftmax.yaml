@@ -20,7 +20,12 @@ provenance:
       training.seed:
         from: 33
         to: 11
-  rationale: ''
+  rationale: >-
+    First frozen-holdout follow-up for `twinkl-681.5`. This rerun keeps the
+    corrected-split BalancedSoftmax recipe fixed at ws=1 / hd=64 / nomic-256d
+    while swapping in the targeted hard-dimension training batch and the frozen
+    `twinkl_681_5` holdout manifest to measure whether the added data lifts
+    minority recovery without changing the evaluation personas.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -167,7 +172,14 @@ per_dimension:
     spearman: 0.2907
     calibration: 0.8706
     hedging: 0.8009
-observations: ''
+observations: >-
+  The targeted-data seed-11 run improved `recall_-1` to 0.366 and
+  minority recall to 0.434 while keeping calibration at 0.728, so the hard-
+  negative lift did move the tail-sensitive metrics in the intended direction.
+  Aggregate quality still softened versus the original BalancedSoftmax seed-11
+  baseline: QWK fell to 0.349 and achievement/security remained weak, which
+  makes this better evidence for targeted recovery than for a broad frontier
+  replacement.
 selection_policy:
   name: qwk_then_recall_guarded
   rank_order:
