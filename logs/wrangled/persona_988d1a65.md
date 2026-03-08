@@ -3,7 +3,7 @@
 ## Profile
 - **Persona ID:** 988d1a65
 - **Name:** Marc Vandenberghe
-- **Age:** 49
+- **Age:** 45-54
 - **Profession:** Manager
 - **Culture:** Western European
 - **Core Values:** Power

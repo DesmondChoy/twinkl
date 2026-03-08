@@ -1,11 +1,13 @@
 # Judge Validation Summary
 
-**Last Updated:** 2026-02-04
+**Last Updated:** 2026-03-08
 
 **Purpose:** This document summarizes inter-rater reliability findings to support the academic claim that LLM Judge labeling is at least as reliable as human annotation, justifying automated labeling at scale for VIF training data.
 
 **Analysis Source:** `src/annotation_tool/agreement_metrics.py`
 **Full Report:** `logs/exports/agreement_report_20260128_133444.md`
+
+Registry coverage counts below were refreshed after the latest synthetic-data batch. Agreement metrics are unchanged because the human-annotation sample has not changed.
 
 ---
 
@@ -96,24 +98,24 @@ The registry already contains sufficient personas for all dimensions:
 
 | Value Dimension | In Registry | In Annotated Sample | Available |
 |-----------------|-------------|---------------------|-----------|
-| Self-Direction | 14 | 3 | 11 |
-| Stimulation | 17 | 1 | 16 |
-| Hedonism | 19 | 2 | 17 |
-| Achievement | 13 | 0 | 13 |
-| Power | 14 | 1 | 13 |
-| Security | 16 | 1 | 15 |
-| Conformity | 18 | 2 | 16 |
-| Tradition | 15 | 1 | 14 |
-| Benevolence | 14 | 1 | 13 |
-| Universalism | 15 | 1 | 14 |
+| Self-Direction | 24 | 3 | 21 |
+| Stimulation | 24 | 1 | 23 |
+| Hedonism | 27 | 2 | 25 |
+| Achievement | 25 | 0 | 25 |
+| Power | 37 | 1 | 36 |
+| Security | 30 | 1 | 29 |
+| Conformity | 28 | 2 | 26 |
+| Tradition | 28 | 1 | 27 |
+| Benevolence | 25 | 1 | 24 |
+| Universalism | 32 | 1 | 31 |
 
-**Total:** 120 personas in registry, 172 value assignments (mean 17.2 per value).
+**Total:** 192 personas in registry, 280 value assignments (mean 28.0 per value).
 
 No additional synthetic data generation required.
 
 ### 2. Run Judge Labeling ✅ COMPLETED
 
-All 120 personas have been labeled by the Judge.
+All 192 personas have been labeled by the Judge.
 
 ### 3. Conduct Additional Human Annotation Round 🔲 IN PROGRESS
 
@@ -193,4 +195,4 @@ generate_agreement_report()
 - **Human Annotators:** 3 (des, jl, km)
 - **Entries Annotated (Current):** 46 (from 10 personas)
 - **Entries to Annotate (Next Round):** ~63 (from 9 personas)
-- **Total Personas in Registry:** 120
+- **Total Personas in Registry:** 192
