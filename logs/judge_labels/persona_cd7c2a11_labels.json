@@ -1,0 +1,206 @@
+{
+  "persona_id": "cd7c2a11",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-08-28",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She knows the slides and analysis are hers but freezes and says nothing, failing to act on her own judgment in the moment.",
+        "power": "Amna presents Roshni's work as her own and receives the credit while Roshni accepts the loss of status in the room.",
+        "conformity": "Her response says calling Amna out in front of the whole team would look petty, so she restrains herself to preserve meeting norms."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-09-04",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "She is trapped waiting on the director's silence and explicitly fixates on having no way to speed the proposal up, leaving her without control over a major project.",
+        "conformity": "She limits herself to one polite follow-up and avoids walking into his office because she does not want to look desperate or like she is hovering."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-09-05",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She backs away from the scheduling change she believed in and agrees to revisit it instead of standing by her own decision.",
+        "power": "Farah challenges her loudly on the floor and Roshni yields in public, undercutting her authority in front of the team.",
+        "conformity": "She chooses the reasonable, consultative response because fighting there would have made her look worse and disrupted the floor."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-09-08",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Even after Eid shopping, she comes home to finish weekly reports and review the next day's vendor brief before sleeping, pushing through obvious fatigue.",
+        "tradition": "Eid shopping with Ammi is a concrete act of participating in an important family and religious custom."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-09-11",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Her response makes autonomy explicit: what she wants to protect is the ability to \"move fast without asking permission\" and operate at her own pace.",
+        "power": "Bilal's new booking rule inserts a gatekeeper between her and the room she needs, and she experiences that as \"ground lost\" and diminished control."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-09-12",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She answers every operational question from the buyer without hesitation, and by the end the buyer is directing questions to her rather than the director.",
+        "power": "Her reaction centers on title and authority; she rejects being framed as \"one of our operations team\" and insists, \"I run that floor.\""
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-09-13",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She explicitly rejects the idea that patience is the lesson here, saying she has already earned the recognition and does not want her work treated as something still pending.",
+        "power": "What she wants from Abba and from work is acknowledgment of status already deserved, not advice to wait gratefully for others to confer it."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-09-19",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She secures better terms on the denim lot and treats Farah's acknowledgment that the new scheduling format is working as meaningful validation of competent performance."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-09-26",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She frames the proposal as a serious three-week operational redesign and still wants the director to recognize its full scope instead of reducing it to \"good effort.\"",
+        "power": "\"Loop in procurement\" matters because it strips her of sole ownership over the system she built, turning her precise design into something others will now control."
+      }
+    },
+    {
+      "t_index": 9,
+      "date": "2025-09-28",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "Her management role is minimized by the aunties' comments, and she leaves that status slight uncorrected in the room.",
+        "conformity": "She says directly that you cannot lecture your khala at a mehendi, so she smiles, eats biryani, and shifts to safer family conversation."
+      }
+    }
+  ]
+}

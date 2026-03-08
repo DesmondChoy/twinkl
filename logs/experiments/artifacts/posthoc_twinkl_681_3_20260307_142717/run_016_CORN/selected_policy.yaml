@@ -1,0 +1,103 @@
+run_id: run_016
+model_name: CORN
+selection_policy:
+  name: recall_minus1_then_qwk_guarded
+  max_qwk_drop: 0.03
+  require_non_negative_calibration: true
+  rank_order:
+  - recall_minus1
+  - qwk_mean
+  - calibration_global
+  - decision_neutral_rate
+selection_source: validation_only_recall_first_guarded
+selected_policy:
+  policy_name: corn_per_dimension_margin
+  policy_family: corn_margin_threshold
+  policy_payload:
+    type: corn_probability_margin
+    per_dimension_minus_margin:
+      self_direction: 0.1
+      stimulation: 0.0
+      hedonism: 0.0
+      achievement: 0.05
+      power: 0.05
+      security: 0.2
+      conformity: 0.0
+      tradition: 0.1
+      benevolence: 0.0
+      universalism: 0.0
+    per_dimension_plus_margin:
+      self_direction: 0.0
+      stimulation: 0.0
+      hedonism: 0.0
+      achievement: 0.0
+      power: 0.0
+      security: 0.15
+      conformity: 0.0
+      tradition: 0.0
+      benevolence: 0.0
+      universalism: 0.0
+selection_score:
+  rank_key:
+  - 0.23408037710835378
+  - 0.44142314511946523
+  - 0.8198862009052394
+  - -0.7866359447004608
+  baseline_qwk_mean: 0.4301588475498028
+  tuned_qwk_mean: 0.44142314511946523
+  qwk_delta: 0.011264297569662407
+baseline_validation_metrics:
+  qwk_mean: 0.4301588475498028
+  recall_minus1: 0.1940737186584976
+  minority_recall_mean: 0.40023587511435055
+  decision_neutral_rate: 0.7949308755760369
+  calibration_global: 0.8198862009052394
+selected_validation_metrics:
+  qwk_mean: 0.44142314511946523
+  recall_minus1: 0.23408037710835378
+  minority_recall_mean: 0.4234650107908915
+  decision_neutral_rate: 0.7866359447004608
+  calibration_global: 0.8198862009052394
+untouched_test_metrics:
+  baseline:
+    qwk_mean: 0.3087897776589965
+    recall_minus1: 0.13855417529330571
+    minority_recall_mean: 0.3264880415398865
+    decision_neutral_rate: 0.8149321266968326
+    calibration_global: 0.8210559417474537
+  selected:
+    qwk_mean: 0.311973077418627
+    recall_minus1: 0.14791925465838507
+    minority_recall_mean: 0.33117058122242615
+    decision_neutral_rate: 0.8126696832579186
+    calibration_global: 0.8210559417474537
+artifacts:
+  source_validation_outputs: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/ordinal_v4_s2025_m11_20260306_223738/CORN/selected_validation_outputs.parquet
+  source_test_outputs: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/ordinal_v4_s2025_m11_20260306_223738/CORN/selected_test_outputs.parquet
+  validation_sweep: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717/run_016_CORN/validation_sweep.parquet
+  tuned_validation_outputs: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717/run_016_CORN/tuned_validation_outputs.parquet
+  tuned_test_outputs: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717/run_016_CORN/tuned_test_outputs.parquet
+threshold_policy:
+  type: corn_probability_margin
+  per_dimension_minus_margin:
+    self_direction: 0.1
+    stimulation: 0.0
+    hedonism: 0.0
+    achievement: 0.05
+    power: 0.05
+    security: 0.2
+    conformity: 0.0
+    tradition: 0.1
+    benevolence: 0.0
+    universalism: 0.0
+  per_dimension_plus_margin:
+    self_direction: 0.0
+    stimulation: 0.0
+    hedonism: 0.0
+    achievement: 0.0
+    power: 0.0
+    security: 0.15
+    conformity: 0.0
+    tradition: 0.0
+    benevolence: 0.0
+    universalism: 0.0

@@ -1,0 +1,153 @@
+run_id: run_017
+model_name: SoftOrdinal
+selection_policy:
+  name: recall_minus1_then_qwk_guarded
+  max_qwk_drop: 0.03
+  require_non_negative_calibration: true
+  rank_order:
+  - recall_minus1
+  - qwk_mean
+  - calibration_global
+  - decision_neutral_rate
+selection_source: validation_only_recall_first_guarded
+selected_policy:
+  policy_name: logit_adjustment_tau_0.30
+  policy_family: softmax_logit_adjustment
+  policy_payload:
+    type: logit_adjustment
+    tau: 0.3
+    prior_source: train_split
+    class_order:
+    - -1
+    - 0
+    - 1
+    per_dimension_priors:
+      self_direction:
+      - 0.12524461839530332
+      - 0.5851272015655578
+      - 0.2896281800391389
+      stimulation:
+      - 0.030332681017612523
+      - 0.8855185909980431
+      - 0.08414872798434442
+      hedonism:
+      - 0.07827788649706457
+      - 0.8111545988258317
+      - 0.11056751467710371
+      achievement:
+      - 0.06164383561643835
+      - 0.6692759295499021
+      - 0.2690802348336595
+      power:
+      - 0.08512720156555773
+      - 0.8043052837573386
+      - 0.11056751467710371
+      security:
+      - 0.09686888454011741
+      - 0.7514677103718199
+      - 0.15166340508806261
+      conformity:
+      - 0.08708414872798434
+      - 0.7064579256360078
+      - 0.20645792563600782
+      tradition:
+      - 0.036203522504892366
+      - 0.8072407045009785
+      - 0.15655577299412915
+      benevolence:
+      - 0.07827788649706457
+      - 0.6193737769080235
+      - 0.30234833659491195
+      universalism:
+      - 0.04794520547945205
+      - 0.8444227005870841
+      - 0.10763209393346379
+selection_score:
+  rank_key:
+  - 0.2853459532581294
+  - 0.42284971709680763
+  - 0.5244358440811867
+  - -0.7755760368663595
+  baseline_qwk_mean: 0.42308855568933074
+  tuned_qwk_mean: 0.42284971709680763
+  qwk_delta: -0.00023883859252310513
+baseline_validation_metrics:
+  qwk_mean: 0.42308855568933074
+  recall_minus1: 0.14647420913199313
+  minority_recall_mean: 0.3067859234079917
+  decision_neutral_rate: 0.8571428571428571
+  calibration_global: 0.6206385231872129
+selected_validation_metrics:
+  qwk_mean: 0.42284971709680763
+  recall_minus1: 0.2853459532581294
+  minority_recall_mean: 0.43873890225133855
+  decision_neutral_rate: 0.7755760368663595
+  calibration_global: 0.5244358440811867
+untouched_test_metrics:
+  baseline:
+    qwk_mean: 0.32885804151042136
+    recall_minus1: 0.08148809523809523
+    minority_recall_mean: 0.246111250813768
+    decision_neutral_rate: 0.8723981900452489
+    calibration_global: 0.5892087698790188
+  selected:
+    qwk_mean: 0.35384274723703785
+    recall_minus1: 0.16440476190476191
+    minority_recall_mean: 0.3498394087399379
+    decision_neutral_rate: 0.8027149321266969
+    calibration_global: 0.5002134260652119
+artifacts:
+  source_validation_outputs: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/ordinal_v4_s2025_m22_20260306_223910/SoftOrdinal/selected_validation_outputs.parquet
+  source_test_outputs: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/ordinal_v4_s2025_m22_20260306_223910/SoftOrdinal/selected_test_outputs.parquet
+  validation_sweep: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717/run_017_SoftOrdinal/validation_sweep.parquet
+  tuned_validation_outputs: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717/run_017_SoftOrdinal/tuned_validation_outputs.parquet
+  tuned_test_outputs: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717/run_017_SoftOrdinal/tuned_test_outputs.parquet
+logit_policy:
+  type: logit_adjustment
+  tau: 0.3
+  prior_source: train_split
+  class_order:
+  - -1
+  - 0
+  - 1
+  per_dimension_priors:
+    self_direction:
+    - 0.12524461839530332
+    - 0.5851272015655578
+    - 0.2896281800391389
+    stimulation:
+    - 0.030332681017612523
+    - 0.8855185909980431
+    - 0.08414872798434442
+    hedonism:
+    - 0.07827788649706457
+    - 0.8111545988258317
+    - 0.11056751467710371
+    achievement:
+    - 0.06164383561643835
+    - 0.6692759295499021
+    - 0.2690802348336595
+    power:
+    - 0.08512720156555773
+    - 0.8043052837573386
+    - 0.11056751467710371
+    security:
+    - 0.09686888454011741
+    - 0.7514677103718199
+    - 0.15166340508806261
+    conformity:
+    - 0.08708414872798434
+    - 0.7064579256360078
+    - 0.20645792563600782
+    tradition:
+    - 0.036203522504892366
+    - 0.8072407045009785
+    - 0.15655577299412915
+    benevolence:
+    - 0.07827788649706457
+    - 0.6193737769080235
+    - 0.30234833659491195
+    universalism:
+    - 0.04794520547945205
+    - 0.8444227005870841
+    - 0.10763209393346379

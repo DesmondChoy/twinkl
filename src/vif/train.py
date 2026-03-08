@@ -81,6 +81,7 @@ def load_config(config_path: str | Path | None) -> dict:
             "train_ratio": 0.70,
             "val_ratio": 0.15,
             "seed": 42,
+            "fixed_holdout_manifest_path": None,
         },
         "mc_dropout": {"n_samples": 50},
         "output": {"checkpoint_dir": "models/vif", "log_dir": "logs/vif_training"},
@@ -301,6 +302,7 @@ def train(config: dict, verbose: bool = True) -> dict:
         wrangled_dir=config["data"]["wrangled_dir"],
         train_ratio=config["data"]["train_ratio"],
         val_ratio=config["data"]["val_ratio"],
+        fixed_holdout_manifest_path=config["data"].get("fixed_holdout_manifest_path"),
     )
 
     split_sizes = {

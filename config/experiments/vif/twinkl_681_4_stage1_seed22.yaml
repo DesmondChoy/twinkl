@@ -1,0 +1,31 @@
+models_to_train:
+  - BalancedSoftmax
+  - LDAM_DRW
+encoder_model: nomic-ai/nomic-embed-text-v1.5
+truncate_dim: 256
+window_size: 1
+hidden_dim: 64
+dropout: 0.3
+batch_size: 16
+epochs: 100
+weight_decay: 0.01
+split_seed: 2025
+model_seed: 22
+use_lr_finder: false
+experiment_group: twinkl-681.4_long_tail_stage1
+class_balance_source: train_split_per_dimension
+ldam_max_m: 0.5
+ldam_scale: 30.0
+ldam_drw_start_epoch: 50
+ldam_beta: 0.9999
+model_overrides:
+  BalancedSoftmax:
+    learning_rate: 0.015522253574270487
+    use_lr_finder: false
+    learning_rate_source: explicit_model_override
+    learning_rate_policy: run_015_cdwce_a3_valley
+  LDAM_DRW:
+    learning_rate: 0.015522253574270487
+    use_lr_finder: false
+    learning_rate_source: explicit_model_override
+    learning_rate_policy: run_015_cdwce_a3_valley

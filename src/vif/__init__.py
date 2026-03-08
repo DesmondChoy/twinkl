@@ -36,6 +36,10 @@ from src.vif.critic_ordinal import (
     emd_loss_multi,
     CriticMLPCDWCE,
     cdw_ce_loss_multi,
+    CriticMLPBalancedSoftmax,
+    balanced_softmax_loss_multi,
+    CriticMLPLDAMDRW,
+    ldam_drw_loss_multi,
     CriticMLPSoftOrdinal,
     soft_ordinal_loss_multi,
 )
@@ -61,4 +65,8 @@ __all__ = [
     "emd_loss_multi",
     "CriticMLPCDWCE",
     "cdw_ce_loss_multi",
+    "CriticMLPBalancedSoftmax",
+    "balanced_softmax_loss_multi",
+    "CriticMLPLDAMDRW",
+    "ldam_drw_loss_multi",
 ]

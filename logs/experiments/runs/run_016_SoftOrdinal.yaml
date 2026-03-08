@@ -1,0 +1,203 @@
+# VIF Experiment: run_016_SoftOrdinal
+# Generated: 2026-03-06T22:38:33
+# Git: 09a4bd2(dirty)
+metadata:
+  experiment_id: run_016_SoftOrdinal
+  run_id: run_016
+  model_name: SoftOrdinal
+  timestamp: '2026-03-06T22:38:33'
+  git_commit: 09a4bd2(dirty)
+  config_hash: 24d8b6e687ef
+provenance:
+  prev_run_id: run_015
+  prev_git_commit: 456d098(dirty)
+  git_log:
+  - '09a4bd2 feat: implement twinkl-681.1 metric-aligned ordinal selection'
+  - f0f172f Harden VIF/wrangling edge-case guards and regression tests (twinkl-677)
+  - 'd937094 twinkl-675: stratify persona val/test splits'
+  - '333cc37 feat(vif): CDW-CE loss implementation and run_015 experiment review'
+  config_delta:
+    added:
+      training.learning_rate_source: explicit_model_override
+      training.lr_finder_enabled: false
+      training.learning_rate_policy: run_014_softordinal_valley
+    removed: {}
+    changed:
+      training.learning_rate:
+        from: 0.001109752496412071
+        to: 0.019791668678535573
+      training.seed:
+        from: 2025
+        to: 11
+  rationale: >-
+    First corrected-split SoftOrdinal rerun of the ws=1 / hd=64 frontier after
+    `d937094`, carrying forward the aggressive valley LR that previously helped
+    SoftOrdinal in `run_014`. The intent was to see whether SoftOrdinal's
+    softer class probabilities would remain minority-sensitive once the holdout
+    split became persona-stratified by label sign.
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 266
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: soft_ordinal
+    learning_rate: 0.019791668678535573
+    learning_rate_configured: 0.019791668678535573
+    learning_rate_source: explicit_model_override
+    lr_finder_enabled: false
+    learning_rate_policy: run_014_softordinal_valley
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 11
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1022
+  n_val: 217
+  n_test: 221
+capacity:
+  n_parameters: 23454
+  param_sample_ratio: 22.9491
+training_dynamics:
+  best_epoch: 32
+  total_epochs: 34
+  train_loss_at_best: 0.1369
+  val_loss_at_best: 0.2074
+  gap_at_best: 0.0705
+  final_lr: 0.009896
+  selection_source: eligible_policy
+  selection_metrics:
+    qwk_mean: 0.4413
+    recall_minus1: 0.1402
+    calibration_global: 0.8259
+    hedging_mean: 0.7829
+    qwk_nan_dims_count: 0
+    eligible: true
+    ineligible_reasons: []
+evaluation:
+  mae_mean: 0.2206
+  accuracy_mean: 0.8054
+  qwk_mean: 0.3884
+  qwk_nan_dims_count: 0
+  spearman_mean: 0.3629
+  calibration_global: 0.7809
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.1478
+  minority_recall_mean: 0.2919
+  recall_minus1: 0.1006
+  recall_zero: 0.9371
+  recall_plus1: 0.4832
+  hedging_mean: 0.7959
+per_dimension:
+  self_direction:
+    mae: 0.3543
+    accuracy: 0.6833
+    qwk: 0.5383
+    spearman: 0.5696
+    calibration: 0.6963
+    hedging: 0.5928
+  stimulation:
+    mae: 0.1051
+    accuracy: 0.9095
+    qwk: 0.4416
+    spearman: 0.2121
+    calibration: 0.8282
+    hedging: 0.9367
+  hedonism:
+    mae: 0.1852
+    accuracy: 0.8281
+    qwk: -0.0404
+    spearman: 0.0293
+    calibration: 0.6947
+    hedging: 0.9638
+  achievement:
+    mae: 0.2506
+    accuracy: 0.7873
+    qwk: 0.4462
+    spearman: 0.4342
+    calibration: 0.6682
+    hedging: 0.7059
+  power:
+    mae: 0.1465
+    accuracy: 0.8778
+    qwk: 0.4215
+    spearman: 0.3149
+    calibration: 0.8391
+    hedging: 0.9005
+  security:
+    mae: 0.2549
+    accuracy: 0.7511
+    qwk: 0.171
+    spearman: 0.2767
+    calibration: 0.5655
+    hedging: 0.8914
+  conformity:
+    mae: 0.249
+    accuracy: 0.7919
+    qwk: 0.5983
+    spearman: 0.5996
+    calibration: 0.8072
+    hedging: 0.6335
+  tradition:
+    mae: 0.2058
+    accuracy: 0.8326
+    qwk: 0.4623
+    spearman: 0.4612
+    calibration: 0.7512
+    hedging: 0.7692
+  benevolence:
+    mae: 0.3644
+    accuracy: 0.6561
+    qwk: 0.3129
+    spearman: 0.401
+    calibration: 0.6532
+    hedging: 0.6833
+  universalism:
+    mae: 0.0898
+    accuracy: 0.9367
+    qwk: 0.5321
+    spearman: 0.3308
+    calibration: 0.9806
+    hedging: 0.8824
+observations: >-
+  SoftOrdinal produced the strongest single-seed corrected-split QWK here at
+  0.388 (fair) with minority recall 0.292 (poor) and calibration 0.781
+  (moderate), while hedging stayed high at 79.6%. The gain was not uniform
+  across dimensions: Hedonism collapsed below zero QWK and Security stayed weak,
+  so the aggregate improvement came from a subset of dimensions rather than a
+  full-task breakthrough. This run kept SoftOrdinal in the active frontier but
+  foreshadowed the seed sensitivity confirmed by later reruns.
+selection_policy:
+  name: qwk_then_recall_guarded
+  rank_order:
+  - qwk_mean
+  - recall_minus1
+  - calibration_global
+  - hedging_mean
+  - val_loss
+  guardrails:
+    qwk_mean_must_be_finite: true
+    qwk_nan_dims_count_must_equal_zero: true
+    calibration_global_must_be_non_negative: true
+  fallback: best_finite_qwk
+artifacts:
+  checkpoint: logs/experiments/artifacts/ordinal_v4_s2025_m11_20260306_223738/SoftOrdinal/selected_checkpoint.pt
+  validation_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m11_20260306_223738/SoftOrdinal/selected_validation_outputs.parquet
+  test_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m11_20260306_223738/SoftOrdinal/selected_test_outputs.parquet

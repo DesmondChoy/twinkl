@@ -256,6 +256,45 @@ FULL_CATEGORY_PERSONA = PERSONA_HEADER + CATEGORY_ENTRY
 # Full persona with type format
 FULL_TYPE_PERSONA = PERSONA_HEADER + TYPE_ENTRY
 
+PLAIN_PROFILE_PERSONA = """\
+# Persona 9510e81a: Lukas Verhoeven
+
+## Profile
+
+Persona ID: **9510e81a**
+Generated: **2026-03-08_13-47-31**
+Age: 30
+Profession: Manager
+Culture: Western European
+Core Values: Power
+
+Lukas Verhoeven runs a 12-person product operations team at a logistics firm in Rotterdam.
+
+---
+
+## Entry 1 - 2025-11-11
+
+### Initial Entry
+
+Tone: Exhausted
+Verbosity: Long (Detailed reflection)
+Mode: Unsettled
+
+Something about today left me flat and I can't quite shake it.
+
+### Nudge (tension_surfacing)
+
+**Trigger**: Persona repeatedly returns to imagining how others would have been treated differently, suggesting a deeper concern about standing.
+
+"What do you think made it so hard to push back?"
+
+### Response
+
+It wasn't about pushing back, really.
+
+---
+"""
+
 
 class TestParsePersonaProfile:
 
@@ -273,6 +312,16 @@ class TestParsePersonaProfile:
     def test_core_values_comma_separated(self):
         profile = parse_persona_profile(FULL_TRIGGER_PERSONA)
         assert profile["core_values"] == ["Power", "Achievement"]
+
+    def test_plain_profile_fields_without_bullets_are_supported(self):
+        profile = parse_persona_profile(PLAIN_PROFILE_PERSONA)
+        assert profile["age"] == "30"
+        assert profile["profession"] == "Manager"
+        assert profile["culture"] == "Western European"
+        assert profile["core_values"] == ["Power"]
+        assert profile["bio"] == (
+            "Lukas Verhoeven runs a 12-person product operations team at a logistics firm in Rotterdam."
+        )
 
 
 class TestMetadataStripping:
@@ -440,6 +489,13 @@ class TestParseEntries:
         assert len(entry["response_text"]) > 0
         assert entry["has_nudge"] is True
         assert entry["has_response"] is True
+
+    def test_plain_initial_metadata_lines_are_stripped(self):
+        entries = parse_entries(PLAIN_PROFILE_PERSONA)
+        entry = entries[0]
+        assert entry["initial_entry"] == "Something about today left me flat and I can't quite shake it."
+        assert entry["nudge_text"] == "What do you think made it so hard to push back?"
+        assert entry["response_text"] == "It wasn't about pushing back, really."
 
 
 class TestWriteWrangledMarkdown:

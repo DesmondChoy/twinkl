@@ -12,7 +12,7 @@ The VIF (Value Identity Function) maps journal entries to a 10-dimensional Schwa
 
 ### What's Implemented
 - Evaluation specification complete (this document)
-- Judge training data: 1 460 labeled entries across 180 personas in [`logs/judge_labels/judge_labels.parquet`](../../logs/judge_labels/judge_labels.parquet)
+- Judge training data: 1 555 labeled entries across 192 personas in [`logs/judge_labels/judge_labels.parquet`](../../logs/judge_labels/judge_labels.parquet)
 - Ground truth value orderings embedded in persona bios
 - Critic architecture: MLP ordinal ([`src/vif/critic_ordinal.py`](../../src/vif/critic_ordinal.py)) and BNN ([`src/vif/critic_bnn.py`](../../src/vif/critic_bnn.py))
 - Training pipeline with 5 loss functions: CORAL, CORN, EMD, SoftOrdinal, weighted MSE ([`src/vif/train.py`](../../src/vif/train.py))
@@ -23,7 +23,7 @@ The VIF (Value Identity Function) maps journal entries to a 10-dimensional Schwa
 
 ### What's Missing
 - **Minority recall critically low**: Best -1 recall is 10.3% (run_007 CORN) — model almost completely fails to detect value misalignment. This is the single biggest gap between the current model and a useful production system. Hedging rates exceed 80% across all runs.
-- **QWK below target**: Best QWK is 0.413 (run_007 CORN); fair but below the moderate threshold (0.4–0.6). Class imbalance (neutral 59–88% per dimension) is the primary bottleneck.
+- **QWK below target**: Best QWK is 0.413 (run_007 CORN); fair but below the moderate threshold (0.4–0.6). Class imbalance (neutral 60.5–88.3% per dimension) is the primary bottleneck.
 - Persona-level aggregation protocol (aggregate per-entry scores into persona-level value profile for Top-K accuracy)
 - Formal held-out evaluation against declared value orderings (Spearman ρ > 0.7 target, current best 0.402)
 
@@ -60,7 +60,7 @@ Evaluation operates at two levels: **entry-level** metrics assess whether the Cr
 
 QWK is the primary entry-level metric for ordinal classification. It measures agreement between predicted and true classes {-1, 0, +1}, adjusted for chance, with quadratic penalty for larger ordinal distances (predicting +1 when truth is -1 is penalised more than predicting 0).
 
-**Why QWK over accuracy:** With severe class imbalance (neutral class is 59–88% per dimension), a model that predicts 0 for everything achieves high accuracy but zero QWK. QWK exposes this pathology.
+**Why QWK over accuracy:** With severe class imbalance (neutral class is 60.5–88.3% per dimension), a model that predicts 0 for everything achieves high accuracy but zero QWK. QWK exposes this pathology.
 
 **Interpretation:**
 - QWK > 0.6: Good (substantial agreement beyond chance)
@@ -79,7 +79,7 @@ Minority Recall = mean of per-dimension recall for -1 and +1 classes
 Recall_class = TP / (TP + FN) for that class
 ```
 
-**Why this matters:** The -1 class ranges from 3.5% (Stimulation) to 14% (Self-direction) of labels. Models overwhelmingly hedge toward neutral (0), achieving >80% hedging rates. Minority recall directly measures whether the model can break through this tendency.
+**Why this matters:** The -1 class ranges from 3.5% (Stimulation) to 13.8% (Self-direction) of labels. Models overwhelmingly hedge toward neutral (0), achieving >80% hedging rates. Minority recall directly measures whether the model can break through this tendency.
 
 **Interpretation:**
 - Recall > 30%: Reasonable detection of non-neutral entries

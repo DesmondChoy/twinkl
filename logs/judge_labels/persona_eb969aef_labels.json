@@ -1,0 +1,161 @@
+{
+  "persona_id": "eb969aef",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-12-21",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": -1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "He takes pleasure in the 'same walk, same coat, same apartment' and says the automatic route means nothing is asking him to figure anything out, favoring routine over novelty.",
+        "security": "The comfort of the familiar walk and prepared soup is explicitly tied to predictability and not having to keep calculating."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-12-27",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "The possibility that his landlord might sell the building leaves him frozen and staring at the wall, showing how strongly his sense of safety depends on housing stability."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-12-28",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "He immediately researches tenant protections, runs rent scenarios, and recalls choosing this apartment because it felt 'locked in' and predictable."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2026-01-03",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "He knows the higher premium is 'eroding the margin' in his budget but still lets the policy auto-renew, weakening the financial buffer he has been trying to preserve."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2026-01-07",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He nods along with the conference idea and later wonders why he did not ask what 'part of it' means, deferring his own judgment instead of pressing for clarity.",
+        "security": "His hesitation centers on spending $800-$1,200 on a maybe-funded trip while his housing situation already feels unstable."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2026-01-14",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "He spends the evening searching listings and building a spreadsheet because the possible sale threatens the stable, affordable setup he organized around school.",
+        "benevolence": "He chooses not to tell his mom because she would worry and offer money 'she doesn't really have,' trying to protect a close family member from added stress."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2026-01-21",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Submitting the thesis chapter two months early after blocking out work every morning shows disciplined, measurable follow-through.",
+        "security": "What feels good to him is that 'the plan actually held,' underscoring how much he values order and predictability."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2026-01-28",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "He says yes to Priya's offer because he can budget around it, know where he will live in June, and finally sleep once the housing uncertainty has a shape."
+      }
+    }
+  ]
+}

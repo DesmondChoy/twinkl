@@ -1,0 +1,191 @@
+# VIF Experiment: run_018_CORN
+# Generated: 2026-03-06T22:41:34
+# Git: 09a4bd2(dirty)
+metadata:
+  experiment_id: run_018_CORN
+  run_id: run_018
+  model_name: CORN
+  timestamp: '2026-03-06T22:41:34'
+  git_commit: 09a4bd2(dirty)
+  config_hash: 187eb26296ad
+provenance:
+  prev_run_id: run_017
+  prev_git_commit: 09a4bd2(dirty)
+  git_log: []
+  config_delta:
+    added: {}
+    removed: {}
+    changed:
+      training.seed:
+        from: 22
+        to: 33
+  rationale: >-
+    Third corrected-split CORN seed, completing the three-seed baseline family
+    on the persona-stratified split. This closes the loop on whether CORN's
+    corrected-split drop versus the historical board was structural or mostly
+    seed noise.
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 266
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: corn
+    learning_rate: 0.001
+    learning_rate_configured: 0.001
+    learning_rate_source: explicit_model_override
+    lr_finder_enabled: false
+    learning_rate_policy: run_010_manual_ws1_anchor
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 33
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1022
+  n_val: 217
+  n_test: 221
+capacity:
+  n_parameters: 22804
+  param_sample_ratio: 22.3131
+training_dynamics:
+  best_epoch: 27
+  total_epochs: 37
+  train_loss_at_best: 0.187
+  val_loss_at_best: 0.257
+  gap_at_best: 0.07
+  final_lr: 0.0005
+  selection_source: eligible_policy
+  selection_metrics:
+    qwk_mean: 0.469
+    recall_minus1: 0.1522
+    calibration_global: 0.8375
+    hedging_mean: 0.7889
+    qwk_nan_dims_count: 0
+    eligible: true
+    ineligible_reasons: []
+evaluation:
+  mae_mean: 0.2184
+  accuracy_mean: 0.8113
+  qwk_mean: 0.3552
+  qwk_nan_dims_count: 0
+  spearman_mean: 0.3815
+  calibration_global: 0.8147
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.1688
+  minority_recall_mean: 0.2725
+  recall_minus1: 0.1023
+  recall_zero: 0.9533
+  recall_plus1: 0.4426
+  hedging_mean: 0.8014
+per_dimension:
+  self_direction:
+    mae: 0.3461
+    accuracy: 0.6923
+    qwk: 0.5778
+    spearman: 0.6
+    calibration: 0.7015
+    hedging: 0.5747
+  stimulation:
+    mae: 0.1043
+    accuracy: 0.9186
+    qwk: 0.33
+    spearman: 0.1382
+    calibration: 0.8721
+    hedging: 0.9412
+  hedonism:
+    mae: 0.1893
+    accuracy: 0.8326
+    qwk: 0.0083
+    spearman: 0.0886
+    calibration: 0.8599
+    hedging: 0.9502
+  achievement:
+    mae: 0.2511
+    accuracy: 0.7828
+    qwk: 0.41
+    spearman: 0.4701
+    calibration: 0.7239
+    hedging: 0.724
+  power:
+    mae: 0.1536
+    accuracy: 0.8643
+    qwk: 0.1805
+    spearman: 0.2868
+    calibration: 0.8552
+    hedging: 0.905
+  security:
+    mae: 0.2493
+    accuracy: 0.7692
+    qwk: 0.1988
+    spearman: 0.2491
+    calibration: 0.6265
+    hedging: 0.9005
+  conformity:
+    mae: 0.2619
+    accuracy: 0.7738
+    qwk: 0.5482
+    spearman: 0.6163
+    calibration: 0.7882
+    hedging: 0.629
+  tradition:
+    mae: 0.2015
+    accuracy: 0.8326
+    qwk: 0.4473
+    spearman: 0.5436
+    calibration: 0.7991
+    hedging: 0.7738
+  benevolence:
+    mae: 0.3396
+    accuracy: 0.7059
+    qwk: 0.3224
+    spearman: 0.4569
+    calibration: 0.6845
+    hedging: 0.7149
+  universalism:
+    mae: 0.0872
+    accuracy: 0.9412
+    qwk: 0.5284
+    spearman: 0.3655
+    calibration: 0.9761
+    hedging: 0.9005
+observations: >-
+  `run_018` became the strongest CORN seed on the corrected split with QWK 0.355
+  (fair), calibration 0.815 (good), and recall_-1 0.102 (poor), materially
+  better than the first two CORN seeds on QWK without sacrificing calibration.
+  Even so, hedging remained high at 80.1% and the family median still trailed
+  CDWCE_a3 on the main frontier metrics. This run showed CORN could narrow the
+  gap, but not reclaim the corrected-split lead.
+selection_policy:
+  name: qwk_then_recall_guarded
+  rank_order:
+  - qwk_mean
+  - recall_minus1
+  - calibration_global
+  - hedging_mean
+  - val_loss
+  guardrails:
+    qwk_mean_must_be_finite: true
+    qwk_nan_dims_count_must_equal_zero: true
+    calibration_global_must_be_non_negative: true
+  fallback: best_finite_qwk
+artifacts:
+  checkpoint: logs/experiments/artifacts/ordinal_v4_s2025_m33_20260306_224041/CORN/selected_checkpoint.pt
+  validation_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m33_20260306_224041/CORN/selected_validation_outputs.parquet
+  test_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m33_20260306_224041/CORN/selected_test_outputs.parquet

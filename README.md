@@ -53,28 +53,35 @@ See `docs/pipeline/pipeline_specs.md` for implementation details.
 
 | Metric | Value |
 |--------|-------|
-| Personas | 180 |
-| Journal entries | 1460 |
+| Personas | 192 |
+| Journal entries | 1,555 |
 | Avg entries/persona | 8.1 |
-| Entries with nudges | 48.4% |
+| Entries with generated nudges | 957 (61.5%) |
 
-**Demographics:** 6 cultures, 9 professions, 5 age brackets.
+**Demographics:** 6 cultures, 9 professions, and 5 standard age brackets.
 
 **Schwartz Value Distribution** (personas can have 1-2 values):
 | Value | Personas | % |
 |-------|----------|---|
-| Universalism | 32 | 18% |
-| Power | 31 | 17% |
-| Tradition | 28 | 16% |
-| Conformity | 28 | 16% |
-| Hedonism | 27 | 15% |
-| Benevolence | 25 | 14% |
-| Achievement | 25 | 14% |
+| Power | 37 | 19% |
+| Universalism | 32 | 17% |
+| Security | 30 | 16% |
+| Conformity | 28 | 15% |
+| Tradition | 28 | 15% |
+| Hedonism | 27 | 14% |
+| Achievement | 25 | 13% |
+| Benevolence | 25 | 13% |
 | Self-Direction | 24 | 13% |
-| Security | 24 | 13% |
 | Stimulation | 24 | 13% |
 
-**Nudge types:** Tension Surfacing (42%), Elaboration (42%), Clarification (16%)
+**Judge Label Distribution** (15,550 per-dimension labels across 1,555 entries):
+| Label | Count | % |
+|-------|-------|---|
+| -1 | 1,122 | 7.2% |
+| 0 | 11,720 | 75.4% |
+| +1 | 2,708 | 17.4% |
+
+**Standard nudge types** (953 taxonomy-tagged nudges): Tension-surfacing (42.2%), Elaboration (40.4%), Clarification (17.4%). Four older one-off nudge labels remain in legacy artifacts.
 
 See [`docs/pipeline/data_schema.md`](docs/pipeline/data_schema.md) for parquet schemas and query examples.
 

@@ -219,6 +219,37 @@ To avoid leakage and make evaluation realistic:
 
 All `(persona_id, t_index)` rows for a given persona belong to the same split.
 
+### 4.4.1 Split Strategy After `d937094`
+
+As of commit `d937094` (`twinkl-675: stratify persona val/test splits`), `split_by_persona()`
+does more than a simple random persona shuffle.
+
+- **What is preserved**
+  - Persona isolation still holds: one persona can appear in only one split.
+  - The default split remains 70/15/15 by persona.
+  - Validation and test personas are chosen using a **deterministic multi-label stratification objective** over persona-level alignment signs.
+
+- **What is stratified**
+  - For each persona, the splitter builds binary features of the form:
+    - `dimension has any +1 label`
+    - `dimension has any -1 label`
+  - Across 10 Schwartz dimensions, this yields 20 binary sign features:
+    - `[dim0_pos, dim0_neg, dim1_pos, dim1_neg, ...]`
+  - The splitter then searches candidate persona partitions and prefers the one whose validation/test prevalence is closest to the full-dataset prevalence, while strongly penalizing holdout splits that drop minority sign signals that should be present.
+
+- **What this does not guarantee**
+  - It is **not** exact per-entry class balancing.
+  - It does **not** explicitly stratify the `0` class.
+  - A persona with one `Power = -1` entry and a persona with many `Power = -1` entries count the same for stratification if both merely exhibit that sign.
+  - The optimization is aimed primarily at making **validation and test** representative; training is the remainder.
+
+- **Why this matters**
+  - Before `d937094`, the code shuffled persona IDs once and sliced them into train/val/test. That avoided leakage, but it could leave rare `+1` or `-1` signals under-represented in validation/test by chance.
+  - After `d937094`, sparse sign coverage in holdout sets is much more stable, especially for volatile dimensions such as Power and Security.
+  - Runs produced before and after this change should be treated as different evaluation regimes. A fixed `split_seed` does not make them directly comparable, because the partitioning algorithm itself changed.
+
+In short: the current implementation performs **best-effort persona-level sign stratification**, not exact `-1/0/+1` label-count matching.
+
 ---
 
 ## 5. Link Back to Model Training and Inference
@@ -258,7 +289,7 @@ The implementation matches this spec exactly:
 | Window size | $N$ per config | `StateEncoder(window_size=N)` ✓ |
 | State dimension | $N \times d_e + (N{-}1) + 10$ | `state_encoder.state_dim` ✓ |
 | Text encoder | SBERT, $d_e$ per config | `create_encoder(config["encoder"])` ✓ |
-| Train/Val/Test split | 70/15/15 by persona | `split_by_persona()` ✓ |
+| Train/Val/Test split | 70/15/15 by persona, with sign-stratified val/test after `d937094` | `split_by_persona()` ✓ |
 | Zero-padding for early entries | Yes | Handled in `build_state_vector()` ✓ |
 
 ### 6.2 Data Flow
@@ -269,7 +300,7 @@ logs/judge_labels/judge_labels.parquet  →  load_labels()
                                     ↓
                             merge_labels_and_entries()
                                     ↓
-                            split_by_persona() (70/15/15)
+                            split_by_persona() (70/15/15, persona-level sign stratified)
                                     ↓
                             VIFDataset (caches embeddings)
                                     ↓

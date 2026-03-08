@@ -1,0 +1,198 @@
+# VIF Experiment: run_021_BalancedSoftmax
+# Generated: 2026-03-07T20:56:10
+# Git: 6d909d8(dirty)
+metadata:
+  experiment_id: run_021_BalancedSoftmax
+  run_id: run_021
+  model_name: BalancedSoftmax
+  timestamp: '2026-03-07T20:56:10'
+  git_commit: 6d909d8(dirty)
+  config_hash: 707fd2fa42a9
+provenance:
+  prev_run_id: run_020
+  prev_git_commit: 5908850(dirty)
+  git_log:
+  - '6d909d8 twinkl-687: refresh experiment review frontier'
+  - '059603d twinkl-681.4: add long-tail softmax ablations and stage-1 runs'
+  config_delta:
+    added: {}
+    removed: {}
+    changed:
+      training.seed:
+        from: 22
+        to: 33
+  rationale: >-
+    Third seed to complete the provisional BalancedSoftmax family on the
+    corrected split. This rerun keeps the ws=1 / hd=64 / nomic-256d setup fixed
+    and checks whether the tail-recovery lift from `run_019`-`run_020` holds
+    when the family is promoted to the required third seed.
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 266
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: balanced_softmax
+    learning_rate: 0.015522253574270487
+    learning_rate_configured: 0.015522253574270487
+    learning_rate_source: explicit_model_override
+    lr_finder_enabled: false
+    learning_rate_policy: run_015_cdwce_a3_valley
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 33
+    class_balance_source: train_split_per_dimension
+    ldam_max_m: 0.5
+    ldam_scale: 30.0
+    ldam_drw_start_epoch: 50
+    ldam_beta: 0.9999
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1022
+  n_val: 217
+  n_test: 221
+capacity:
+  n_parameters: 23454
+  param_sample_ratio: 22.9491
+training_dynamics:
+  best_epoch: 14
+  total_epochs: 30
+  train_loss_at_best: 0.4112
+  val_loss_at_best: 0.5039
+  gap_at_best: 0.0927
+  final_lr: 0.007761
+  selection_source: eligible_policy
+  selection_metrics:
+    qwk_mean: 0.3815
+    recall_minus1: 0.4332
+    calibration_global: 0.6342
+    hedging_mean: 0.5539
+    qwk_nan_dims_count: 0
+    eligible: true
+    ineligible_reasons: []
+evaluation:
+  mae_mean: 0.3239
+  accuracy_mean: 0.7335
+  qwk_mean: 0.3582
+  qwk_nan_dims_count: 0
+  spearman_mean: 0.3709
+  calibration_global: 0.6545
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.3329
+  minority_recall_mean: 0.448
+  recall_minus1: 0.3132
+  recall_zero: 0.777
+  recall_plus1: 0.5828
+  hedging_mean: 0.5647
+per_dimension:
+  self_direction:
+    mae: 0.4595
+    accuracy: 0.6109
+    qwk: 0.4944
+    spearman: 0.5668
+    calibration: 0.3636
+    hedging: 0.362
+  stimulation:
+    mae: 0.3391
+    accuracy: 0.6923
+    qwk: 0.1196
+    spearman: 0.1462
+    calibration: 0.653
+    hedging: 0.5973
+  hedonism:
+    mae: 0.2761
+    accuracy: 0.7738
+    qwk: 0.0785
+    spearman: 0.1296
+    calibration: 0.8482
+    hedging: 0.7195
+  achievement:
+    mae: 0.3594
+    accuracy: 0.6787
+    qwk: 0.4004
+    spearman: 0.4455
+    calibration: 0.4296
+    hedging: 0.4661
+  power:
+    mae: 0.2443
+    accuracy: 0.8145
+    qwk: 0.3337
+    spearman: 0.2055
+    calibration: 0.7177
+    hedging: 0.7692
+  security:
+    mae: 0.3447
+    accuracy: 0.7149
+    qwk: 0.3377
+    spearman: 0.3197
+    calibration: 0.5887
+    hedging: 0.5973
+  conformity:
+    mae: 0.3248
+    accuracy: 0.7285
+    qwk: 0.5525
+    spearman: 0.6078
+    calibration: 0.6189
+    hedging: 0.4344
+  tradition:
+    mae: 0.2917
+    accuracy: 0.7738
+    qwk: 0.5165
+    spearman: 0.582
+    calibration: 0.7387
+    hedging: 0.4796
+  benevolence:
+    mae: 0.4046
+    accuracy: 0.6878
+    qwk: 0.3784
+    spearman: 0.3814
+    calibration: 0.5746
+    hedging: 0.4842
+  universalism:
+    mae: 0.1948
+    accuracy: 0.8597
+    qwk: 0.3699
+    spearman: 0.3248
+    calibration: 0.8618
+    hedging: 0.7376
+observations: >-
+  The seed-33 rerun completed the family and preserved the same boundary-shift
+  pattern: test QWK reached 0.358, `recall_-1` 0.313, minority recall 0.448,
+  and hedging dropped to 56.5%. Calibration fell to 0.654 and MAE/accuracy
+  worsened relative to the earlier seeds, so the confirmed family is best read
+  as a tail-recovery leader with a real aggregate-stability tax rather than a
+  clean all-metric replacement for the safer corrected-split baselines.
+selection_policy:
+  name: qwk_then_recall_guarded
+  rank_order:
+  - qwk_mean
+  - recall_minus1
+  - calibration_global
+  - hedging_mean
+  - val_loss
+  guardrails:
+    qwk_mean_must_be_finite: true
+    qwk_nan_dims_count_must_equal_zero: true
+    calibration_global_must_be_non_negative: true
+  fallback: best_finite_qwk
+artifacts:
+  checkpoint: logs/experiments/artifacts/ordinal_v4_s2025_m33_20260307_205557/BalancedSoftmax/selected_checkpoint.pt
+  validation_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m33_20260307_205557/BalancedSoftmax/selected_validation_outputs.parquet
+  test_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m33_20260307_205557/BalancedSoftmax/selected_test_outputs.parquet

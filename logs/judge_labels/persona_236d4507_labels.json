@@ -1,0 +1,121 @@
+{
+  "persona_id": "236d4507",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-02-14",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "Matthias takes Lukas's framing in public and Lukas lets the credit loss stand, leaving the seminar feeling small instead of defending his claim.",
+        "conformity": "He deliberately stays quiet because calling it out in front of the group might look petty or like sour grapes, prioritizing social optics over confrontation."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-02-15",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "He pursues the workshop partly so Berger sees him as the one who builds things in the department and thinks of him first when opportunities come up."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-02-22",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He believes the comparative chapter is better work but gives in and agrees to draft Hofer's preferred option anyway.",
+        "power": "He makes that concession because Hofer sits on hiring committees he cares about, explicitly letting career influence outweigh his own academic judgment."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-02-28",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": -1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "Being introduced as someone working on something adjacent lands as a loss of standing, and he experiences it as a preview of not mattering."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-03-01",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Instead of chasing an opaque funding decision, he redirects himself to the proposal deadline as the better use of time for moving his work forward."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-03-04",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "power": "He immediately starts planning the reading group's logistics and speaker invitations, gravitating toward the role that sets access and agenda."
+      }
+    }
+  ]
+}

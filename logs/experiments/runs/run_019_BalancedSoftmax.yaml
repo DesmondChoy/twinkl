@@ -1,0 +1,206 @@
+# VIF Experiment: run_019_BalancedSoftmax
+# Generated: 2026-03-07T15:19:13
+# Git: 5908850(dirty)
+metadata:
+  experiment_id: run_019_BalancedSoftmax
+  run_id: run_019
+  model_name: BalancedSoftmax
+  timestamp: '2026-03-07T15:19:13'
+  git_commit: 5908850(dirty)
+  config_hash: bc9c5cff3eed
+provenance:
+  prev_run_id: run_018
+  prev_git_commit: 09a4bd2(dirty)
+  git_log:
+  - '5908850 twinkl-681.3: implement validation-only post-hoc tuning'
+  - 'af500bc twinkl-681.2 twinkl-682 twinkl-683 twinkl-684 twinkl-685: finalize corrected-split
+    frontier'
+  config_delta:
+    added:
+      training.class_balance_source: train_split_per_dimension
+      training.ldam_max_m: 0.5
+      training.ldam_scale: 30.0
+      training.ldam_drw_start_epoch: 50
+      training.ldam_beta: 0.9999
+    removed: {}
+    changed:
+      training.seed:
+        from: 33
+        to: 11
+  rationale: >-
+    First corrected-split training-time class-imbalance ablation after the
+    `twinkl-681.3` post-hoc sweep, using Balanced Softmax with per-dimension
+    train-split class priors on the same ws=1 / hd=64 frontier. The purpose was
+    to test whether moving class-prior correction into training could recover the
+    `-1` class more aggressively than post-hoc tuning alone.
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 266
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: balanced_softmax
+    learning_rate: 0.015522253574270487
+    learning_rate_configured: 0.015522253574270487
+    learning_rate_source: explicit_model_override
+    lr_finder_enabled: false
+    learning_rate_policy: run_015_cdwce_a3_valley
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 11
+    class_balance_source: train_split_per_dimension
+    ldam_max_m: 0.5
+    ldam_scale: 30.0
+    ldam_drw_start_epoch: 50
+    ldam_beta: 0.9999
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1022
+  n_val: 217
+  n_test: 221
+capacity:
+  n_parameters: 23454
+  param_sample_ratio: 22.9491
+training_dynamics:
+  best_epoch: 22
+  total_epochs: 29
+  train_loss_at_best: 0.3385
+  val_loss_at_best: 0.5064
+  gap_at_best: 0.1679
+  final_lr: 0.007761
+  selection_source: eligible_policy
+  selection_metrics:
+    qwk_mean: 0.4123
+    recall_minus1: 0.4226
+    calibration_global: 0.7409
+    hedging_mean: 0.6249
+    qwk_nan_dims_count: 0
+    eligible: true
+    ineligible_reasons: []
+evaluation:
+  mae_mean: 0.2986
+  accuracy_mean: 0.7534
+  qwk_mean: 0.3619
+  qwk_nan_dims_count: 0
+  spearman_mean: 0.3646
+  calibration_global: 0.7272
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.3048
+  minority_recall_mean: 0.3986
+  recall_minus1: 0.2765
+  recall_zero: 0.8375
+  recall_plus1: 0.5206
+  hedging_mean: 0.6416
+per_dimension:
+  self_direction:
+    mae: 0.4184
+    accuracy: 0.6742
+    qwk: 0.4357
+    spearman: 0.4631
+    calibration: 0.6582
+    hedging: 0.552
+  stimulation:
+    mae: 0.3271
+    accuracy: 0.7421
+    qwk: 0.1612
+    spearman: 0.1379
+    calibration: 0.5639
+    hedging: 0.5928
+  hedonism:
+    mae: 0.2301
+    accuracy: 0.8145
+    qwk: 0.2471
+    spearman: 0.2859
+    calibration: 0.9148
+    hedging: 0.7828
+  achievement:
+    mae: 0.374
+    accuracy: 0.6697
+    qwk: 0.3705
+    spearman: 0.4106
+    calibration: 0.5395
+    hedging: 0.5611
+  power:
+    mae: 0.2056
+    accuracy: 0.8281
+    qwk: 0.2895
+    spearman: 0.2569
+    calibration: 0.8186
+    hedging: 0.8054
+  security:
+    mae: 0.3219
+    accuracy: 0.7285
+    qwk: 0.2973
+    spearman: 0.2605
+    calibration: 0.4959
+    hedging: 0.7376
+  conformity:
+    mae: 0.3078
+    accuracy: 0.7376
+    qwk: 0.5273
+    spearman: 0.5441
+    calibration: 0.7295
+    hedging: 0.5249
+  tradition:
+    mae: 0.2586
+    accuracy: 0.7738
+    qwk: 0.4852
+    spearman: 0.5543
+    calibration: 0.7205
+    hedging: 0.5566
+  benevolence:
+    mae: 0.4141
+    accuracy: 0.6471
+    qwk: 0.3819
+    spearman: 0.4629
+    calibration: 0.5095
+    hedging: 0.4751
+  universalism:
+    mae: 0.1281
+    accuracy: 0.9186
+    qwk: 0.4235
+    spearman: 0.2698
+    calibration: 0.9575
+    hedging: 0.8281
+observations: >-
+  BalancedSoftmax immediately changed the frontier shape: QWK reached 0.362
+  (fair), recall_-1 jumped to 0.277, minority recall to 0.399, and hedging fell
+  to 64.2%, all while keeping every dimension positively calibrated. The cost was
+  a much worse MAE of 0.299 and lower accuracy of 0.753, so the gain came from
+  far less neutral bias rather than uniformly sharper ranking. This made
+  BalancedSoftmax the strongest provisional tail-recovery candidate, but not yet
+  a fully vetted replacement for the existing 3-seed families.
+selection_policy:
+  name: qwk_then_recall_guarded
+  rank_order:
+  - qwk_mean
+  - recall_minus1
+  - calibration_global
+  - hedging_mean
+  - val_loss
+  guardrails:
+    qwk_mean_must_be_finite: true
+    qwk_nan_dims_count_must_equal_zero: true
+    calibration_global_must_be_non_negative: true
+  fallback: best_finite_qwk
+artifacts:
+  checkpoint: logs/experiments/artifacts/ordinal_v4_s2025_m11_20260307_151844/BalancedSoftmax/selected_checkpoint.pt
+  validation_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m11_20260307_151844/BalancedSoftmax/selected_validation_outputs.parquet
+  test_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m11_20260307_151844/BalancedSoftmax/selected_test_outputs.parquet

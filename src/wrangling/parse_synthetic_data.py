@@ -100,10 +100,17 @@ def parse_persona_profile(content: str) -> dict:
     else:
         profile["core_values"] = []
 
-    # Bio is multi-line, extract everything after "- Bio: " until next section
-    # Handles optional bold formatting: - Bio: or - **Bio:**
-    bio_match = re.search(r"- (?:\*\*)?Bio:(?:\*\*)?\s*(.+?)(?=\n---|\n## |\Z)", content, re.DOTALL)
-    profile["bio"] = bio_match.group(1).strip() if bio_match else None
+    # Bio is usually an explicit field, but some runs emit it as a freeform
+    # paragraph after the profile metadata instead.
+    bio_match = re.search(
+        r"(?:^|\n)(?:- )?(?:\*\*)?Bio:(?:\*\*)?\s*(.+?)(?=\n---|\n## |\Z)",
+        content,
+        re.DOTALL,
+    )
+    if bio_match:
+        profile["bio"] = bio_match.group(1).strip()
+    else:
+        profile["bio"] = _extract_profile_bio_fallback(content)
 
     return profile
 
@@ -115,9 +122,36 @@ def _extract_field(content: str, field_name: str) -> str | None:
     - Age: 25-34           (no bold)
     - **Age:** 45-54       (bold with colon inside)
     """
-    pattern = rf"- (?:\*\*)?{field_name}:(?:\*\*)?\s*(.+?)(?:\n|$)"
+    escaped_field_name = re.escape(field_name)
+    pattern = rf"(?:^|\n)(?:- )?(?:\*\*)?{escaped_field_name}:(?:\*\*)?\s*(.+?)(?:\n|$)"
     match = re.search(pattern, content)
     return match.group(1).strip() if match else None
+
+
+def _extract_profile_bio_fallback(content: str) -> str | None:
+    """Extract freeform profile bio text when it is not labeled as `Bio`."""
+    profile_match = re.search(
+        r"## Profile\s*(.+?)(?=\n---|\n## |\Z)",
+        content,
+        re.DOTALL,
+    )
+    if not profile_match:
+        return None
+
+    profile_section = profile_match.group(1)
+    candidate_lines: list[str] = []
+    for line in profile_section.splitlines():
+        stripped = line.strip()
+        if not stripped:
+            continue
+        if re.match(r"^(?:- )?(?:\*\*)?(Persona ID|Generated|Age|Profession|Culture|Core Values|Bio):", stripped):
+            continue
+        candidate_lines.append(stripped)
+
+    if not candidate_lines:
+        return None
+
+    return "\n".join(candidate_lines).strip()
 
 
 def parse_entries(content: str) -> list[dict]:
@@ -253,14 +287,31 @@ def _parse_raw_entry(date: str, content: str) -> dict:
     # Handles colon inside OR outside bold: **Tone**: or **Tone:**
     initial_match = re.search(
         r"### Initial Entry\s*\n"
-        r"\*\*Tone(?:\*\*:|:\*\*).*?\n\n"  # Skip metadata line (colon inside or outside)
-        r"(.+?)"  # Capture the content
-        r"(?=\n### Nudge|\n\*\(No nudge|\n---|\Z)",  # Stop before nudge section or markers
+        r"(.+?)"
+        r"(?=\n### Nudge|\n\*\(No nudge|\n---|\Z)",
         content,
         re.DOTALL,
     )
     if initial_match:
-        entry["initial_entry"] = initial_match.group(1).strip()
+        initial_block = initial_match.group(1)
+        metadata_patterns = (
+            r"^(?:\*\*)?Tone(?:\*\*:|:\*\*|:)\s*.*$",
+            r"^(?:\*\*)?Verbosity(?:\*\*:|:\*\*|:)\s*.*$",
+            r"^(?:\*\*)?(?:Reflection\s+Mode|Mode)(?:\*\*:|:\*\*|:)\s*.*$",
+        )
+        remaining_lines = initial_block.splitlines()
+
+        while remaining_lines:
+            stripped = remaining_lines[0].strip()
+            if not stripped:
+                remaining_lines.pop(0)
+                continue
+            if any(re.match(pattern, stripped) for pattern in metadata_patterns):
+                remaining_lines.pop(0)
+                continue
+            break
+
+        entry["initial_entry"] = "\n".join(remaining_lines).strip() or None
 
     # --- Extract Nudge Text ---
     has_nudge_section = "### Nudge" in content

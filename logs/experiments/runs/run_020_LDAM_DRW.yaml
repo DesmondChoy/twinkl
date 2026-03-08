@@ -1,0 +1,196 @@
+# VIF Experiment: run_020_LDAM_DRW
+# Generated: 2026-03-07T15:20:29
+# Git: 5908850(dirty)
+metadata:
+  experiment_id: run_020_LDAM_DRW
+  run_id: run_020
+  model_name: LDAM_DRW
+  timestamp: '2026-03-07T15:20:29'
+  git_commit: 5908850(dirty)
+  config_hash: a1f0c26bb500
+provenance:
+  prev_run_id: run_019
+  prev_git_commit: 5908850(dirty)
+  git_log: []
+  config_delta:
+    added: {}
+    removed: {}
+    changed:
+      training.seed:
+        from: 11
+        to: 22
+  rationale: >-
+    Second corrected-split seed for the LDAM-DRW ablation. The goal was to see
+    whether the weaker first seed was mostly stochastic or whether the family
+    itself is struggling on this dataset.
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 266
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: ldam_drw
+    learning_rate: 0.015522253574270487
+    learning_rate_configured: 0.015522253574270487
+    learning_rate_source: explicit_model_override
+    lr_finder_enabled: false
+    learning_rate_policy: run_015_cdwce_a3_valley
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 22
+    class_balance_source: train_split_per_dimension
+    ldam_max_m: 0.5
+    ldam_scale: 30.0
+    ldam_drw_start_epoch: 50
+    ldam_beta: 0.9999
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1022
+  n_val: 217
+  n_test: 221
+capacity:
+  n_parameters: 23454
+  param_sample_ratio: 22.9491
+training_dynamics:
+  best_epoch: 25
+  total_epochs: 33
+  train_loss_at_best: 3.7544
+  val_loss_at_best: 4.8556
+  gap_at_best: 1.1012
+  final_lr: 0.007761
+  selection_source: eligible_policy
+  selection_metrics:
+    qwk_mean: 0.4363
+    recall_minus1: 0.1284
+    calibration_global: 0.7916
+    hedging_mean: 0.7733
+    qwk_nan_dims_count: 0
+    eligible: true
+    ineligible_reasons: []
+evaluation:
+  mae_mean: 0.2165
+  accuracy_mean: 0.8118
+  qwk_mean: 0.3582
+  qwk_nan_dims_count: 0
+  spearman_mean: 0.3479
+  calibration_global: 0.7622
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.1291
+  minority_recall_mean: 0.296
+  recall_minus1: 0.0797
+  recall_zero: 0.9389
+  recall_plus1: 0.5123
+  hedging_mean: 0.7959
+per_dimension:
+  self_direction:
+    mae: 0.3309
+    accuracy: 0.7104
+    qwk: 0.579
+    spearman: 0.6347
+    calibration: 0.6762
+    hedging: 0.5928
+  stimulation:
+    mae: 0.1065
+    accuracy: 0.914
+    qwk: 0.3502
+    spearman: 0.0984
+    calibration: 0.8687
+    hedging: 0.9321
+  hedonism:
+    mae: 0.1983
+    accuracy: 0.8281
+    qwk: -0.1359
+    spearman: -0.0846
+    calibration: 0.7781
+    hedging: 0.9321
+  achievement:
+    mae: 0.2212
+    accuracy: 0.7919
+    qwk: 0.4357
+    spearman: 0.4836
+    calibration: 0.6909
+    hedging: 0.81
+  power:
+    mae: 0.134
+    accuracy: 0.8778
+    qwk: 0.3452
+    spearman: 0.3013
+    calibration: 0.698
+    hedging: 0.9367
+  security:
+    mae: 0.2445
+    accuracy: 0.7647
+    qwk: 0.2398
+    spearman: 0.2589
+    calibration: 0.6124
+    hedging: 0.8597
+  conformity:
+    mae: 0.2406
+    accuracy: 0.7873
+    qwk: 0.5391
+    spearman: 0.6166
+    calibration: 0.7457
+    hedging: 0.638
+  tradition:
+    mae: 0.2052
+    accuracy: 0.8281
+    qwk: 0.4623
+    spearman: 0.4748
+    calibration: 0.7599
+    hedging: 0.7602
+  benevolence:
+    mae: 0.362
+    accuracy: 0.6878
+    qwk: 0.2745
+    spearman: 0.3593
+    calibration: 0.581
+    hedging: 0.6652
+  universalism:
+    mae: 0.1214
+    accuracy: 0.9276
+    qwk: 0.4919
+    spearman: 0.3363
+    calibration: 0.9857
+    hedging: 0.8326
+observations: >-
+  QWK improved to 0.358 (fair) with calibration 0.762 (moderate), but
+  recall_-1 only reached 0.080 and hedging stayed high at 79.6%, so the family
+  still failed to convert margin reweighting into meaningful tail recovery. The
+  train/val gap exploded to 1.101, which is severe overfitting by this project's
+  own thresholds and much worse than every other corrected-split candidate. This
+  seed confirms that LDAM-DRW is not the clean next-step winner for the current
+  POC.
+selection_policy:
+  name: qwk_then_recall_guarded
+  rank_order:
+  - qwk_mean
+  - recall_minus1
+  - calibration_global
+  - hedging_mean
+  - val_loss
+  guardrails:
+    qwk_mean_must_be_finite: true
+    qwk_nan_dims_count_must_equal_zero: true
+    calibration_global_must_be_non_negative: true
+  fallback: best_finite_qwk
+artifacts:
+  checkpoint: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260307_152002/LDAM_DRW/selected_checkpoint.pt
+  validation_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260307_152002/LDAM_DRW/selected_validation_outputs.parquet
+  test_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260307_152002/LDAM_DRW/selected_test_outputs.parquet

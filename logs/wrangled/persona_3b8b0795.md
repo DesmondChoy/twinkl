@@ -1,0 +1,96 @@
+# Persona 3b8b0795: Ricardo Fuentes Molina
+
+## Profile
+- **Persona ID:** 3b8b0795
+- **Name:** Ricardo Fuentes Molina
+- **Age:** 45-54
+- **Profession:** Manager
+- **Culture:** Latin American
+- **Core Values:** Security
+- **Bio:** Ricardo manages the operations department at a mid-sized packaging company in Guadalajara, where he has worked for sixteen years. He and his wife Lucía own their house outright after years of aggressive mortgage payments, and he keeps a separate savings account that covers six months of household expenses. He drives the same route to and from work each day, eats lunch at the same fondita near the office, and reviews the family budget every Sunday evening at the kitchen table with Lucía.
+
+---
+
+## Entry 0 - 2025-04-09
+
+People at the plant keep asking why I don't apply for the regional director position now that Héctor is retiring. I know exactly why — the travel, the relocating, none of that sits right with me. My team runs well, my commute is twenty minutes, and I sleep fine at night.
+
+**Nudge:** "Is there any part of you that's curious about it?"
+
+**Response:** Not really. Maybe five years ago I would have thought about it differently, but I watched Héctor miss his daughter's quinceañera because he was in Monterrey for a plant inspection. That told me everything I needed to know.
+
+---
+
+## Entry 1 - 2025-04-15
+
+Lucía mentioned her sister's husband lost his job at the autoparts factory in León. Just like that — twenty-two years and they called a meeting on a Friday afternoon. I checked our savings account twice after dinner, which is not something I normally do on a weekday.
+
+**Nudge:** "What were you hoping to see when you checked?"
+
+---
+
+## Entry 2 - 2025-04-19
+
+Spent Saturday morning fixing the back fence with my compadre Tomás. Felt good to work with my hands for once instead of staring at spreadsheets. Lucía brought us agua de jamaica and we sat in the yard afterward just talking about nothing important.
+
+---
+
+## Entry 3 - 2025-04-21
+
+Corporate sent an email Friday about "restructuring opportunities" in the operations departments across all three plants. The language was carefully neutral, all about efficiency and modernization, but I have been doing this long enough to recognize what that kind of memo actually means. Somebody is going to lose headcount.
+
+I spent part of Sunday looking through my employment contract — the termination clauses, the severance calculations, the notice periods. Lucía noticed me reading it at the kitchen table instead of doing our usual budget review and asked if something was wrong. I told her I was just being thorough, which is true but also not the whole picture.
+
+The thing that bothers me is not the restructuring itself. Companies do this. What bothers me is that I had filed my contract in the closet three years ago and forgot exactly where. It took me twenty minutes to find it. That should not have happened. I need a better system for keeping important documents where I can reach them quickly.
+
+**Nudge:** "You spent a lot of time on the contract. What did you find?"
+
+**Response:** The severance is decent — four months for my tenure — but decent is not the same as comfortable. We could cover things for ten months total if I combined severance with savings, but that assumes nothing else breaks. The car is twelve years old, the roof needs work eventually. Ten months sounds like a lot until you start listing what eats into it.
+
+---
+
+## Entry 4 - 2025-04-26
+
+My direct report Andrés came in excited about some new automation software he wants to pilot on the production line. He showed me a demo and honestly it looked impressive — would probably cut processing time by fifteen percent. But the implementation would mean shutting down Line 2 for three weeks and retraining half the floor staff. Three weeks of lost output during our busiest quarter.
+
+I told him to write up a proposal and I would review it, but the truth is I already know I am going to push it to next fiscal year. Maybe the quarter after that. I could hear how flat my voice sounded when I said it and I think he noticed too.
+
+**Nudge:** "What made your voice go flat?"
+
+**Response:** Because I know I am probably being the bottleneck. Andrés is sharp, the software looked solid, and fifteen percent is not nothing. But shutting down a line for three weeks when corporate is already talking about restructuring — that is the kind of disruption that puts a target on your department. I would rather deliver predictable numbers and keep everyone employed than chase an improvement that could backfire at the worst possible time. I just wish I could explain that to Andrés without sounding like I have given up.
+
+---
+
+## Entry 5 - 2025-05-03
+
+Got the water bill and it was almost double the usual amount. Probably a leak somewhere. Called a plumber but the earliest appointment is next Thursday, so I have been turning the main valve off at night just in case.
+
+---
+
+## Entry 6 - 2025-05-08
+
+Plumber came, turned out it was just a faulty meter reading — no actual leak. Lucía laughed about me turning the water off every night for five days. I told her better cautious than flooded, and she kissed my forehead and said "sí, mi amor, así eres tú."
+
+The restructuring memo turned into a town hall meeting this week. They are consolidating some administrative roles at the Querétaro plant but operations at our site stays as-is for now. My boss Carlos pulled me aside afterward and said my numbers were part of the reason they kept Guadalajara intact. Sixteen years of consistent output apparently counts for something.
+
+I reorganized the filing cabinet this weekend. Employment contracts, insurance policies, property deed, car title — all in labeled folders now, easy to grab. Lucía thinks I am being excessive but she also put her own documents in the system without me asking, so I think she sees the point even if she would not say it directly.
+
+**Nudge:** "How did it feel hearing Carlos say that?"
+
+**Response:** Relieved, obviously, but also something I did not expect — vindicated, maybe. I have spent years being the manager who says no to flashy ideas, who keeps the same routines, who does not chase promotions. Sometimes I wonder if people think that means I lack ambition. But steady output is what saved those jobs. Not innovation, not bold moves. Just showing up and delivering the same thing every quarter. It is not exciting but it held.
+
+---
+
+## Entry 7 - 2025-05-13
+
+Lucía's mother called this morning to say she wants to sell the family house in Morelia and move into one of those assisted living places. Lucía was quiet for a long time after hanging up. Her mother has lived in that house for forty years — it is where Lucía grew up, where we had our wedding reception in the backyard.
+
+The practical side of it is complicated. Lucía's sister wants to buy the house but does not have enough for a down payment and asked if we could co-sign a loan. I have never co-signed anything in my life. My father told me when I was nineteen: never put your name on someone else's debt, no matter who they are. But this is Lucía's family, and the look on her face when her sister called tonight was not something I can just calculate my way around.
+
+I told them both I needed a few days to think. Lucía did not argue, which means she understands my hesitation even if she hopes I land somewhere different than where I am leaning.
+
+**Nudge:** "Where are you leaning?"
+
+**Response:** Toward no. I know how that sounds, and I know what it might cost with Lucía's family. But co-signing means if her sister cannot pay, we pay. And if we pay, that is the emergency fund, that is the roof repair, that is everything I have built to make sure we never end up like Lucía's cuñado in León. I would rather help them find another way — maybe lend a smaller amount directly, something we could absorb if it disappeared. But putting our name on a bank loan is a different thing entirely.
+
+---

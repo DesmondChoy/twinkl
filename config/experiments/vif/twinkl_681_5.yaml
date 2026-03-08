@@ -1,0 +1,72 @@
+baseline:
+  labels_path: logs/judge_labels/judge_labels.parquet
+  wrangled_dir: logs/wrangled
+  registry_path: logs/registry/personas.parquet
+  synthetic_dir: logs/synthetic_data
+  split_seed: 2025
+  train_ratio: 0.70
+  val_ratio: 0.15
+  holdout_manifest_path: config/experiments/vif/twinkl_681_5_holdout.yaml
+  snapshot_path: config/experiments/vif/twinkl_681_5_baseline_snapshot.yaml
+  baseline_run_ids:
+    - run_019
+    - run_020
+    - run_021
+
+generation:
+  num_personas: 12
+  target_values:
+    - Power
+    - Security
+  target_tensions:
+    - Power
+    - Security
+  add_random_value: true
+  unsettled_boost: 0.6
+  min_entries: 6
+  max_entries: 10
+  min_days_between_entries: 0
+  max_days_between_entries: 7
+  same_day_probability: 0.15
+  nudge_enabled: true
+  expected_min_personas_per_target: 6
+
+verification:
+  registry_path: logs/registry/personas.parquet
+  synthetic_dir: logs/synthetic_data
+  required_targets:
+    - Power
+    - Security
+  expected_new_persona_count: 12
+  expected_min_personas_per_target: 6
+  min_entries: 6
+  max_entries: 10
+  require_unsettled_entries: true
+  summary_output_path: logs/exports/twinkl_681_5_generation_check.yaml
+  spot_check_output_path: logs/exports/twinkl_681_5_generation_spot_check.md
+
+training:
+  fixed_holdout_manifest_path: config/experiments/vif/twinkl_681_5_holdout.yaml
+  experiment_group: twinkl-681.5_hard_negative_lift
+  split_seed: 2025
+  train_ratio: 0.70
+  val_ratio: 0.15
+  model_name: BalancedSoftmax
+  model_seeds:
+    - 11
+    - 22
+    - 33
+  run_override_configs:
+    - config/experiments/vif/twinkl_681_5_seed11.yaml
+    - config/experiments/vif/twinkl_681_5_seed22.yaml
+    - config/experiments/vif/twinkl_681_5_seed33.yaml
+  encoder_model: nomic-ai/nomic-embed-text-v1.5
+  truncate_dim: 256
+  window_size: 1
+  hidden_dim: 64
+  dropout: 0.3
+  batch_size: 16
+  epochs: 100
+  weight_decay: 0.01
+  learning_rate: 0.015522253574270487
+  class_balance_source: train_split_per_dimension

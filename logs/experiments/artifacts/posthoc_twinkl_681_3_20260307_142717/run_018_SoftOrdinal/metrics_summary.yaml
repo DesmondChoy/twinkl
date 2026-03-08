@@ -1,0 +1,26 @@
+run_id: run_018
+model_name: SoftOrdinal
+baseline_validation_metrics:
+  qwk_mean: 0.4003585320705838
+  recall_minus1: 0.14907667134174848
+  minority_recall_mean: 0.37225637152633023
+  decision_neutral_rate: 0.8032258064516129
+  calibration_global: 0.6553869366188293
+selected_validation_metrics:
+  qwk_mean: 0.38922933268602955
+  recall_minus1: 0.3035051929198235
+  minority_recall_mean: 0.49100128697973533
+  decision_neutral_rate: 0.7161290322580646
+  calibration_global: 0.5709794335259633
+baseline_test_metrics:
+  qwk_mean: 0.36250388185570837
+  recall_minus1: 0.09412698412698413
+  minority_recall_mean: 0.3129080780092651
+  decision_neutral_rate: 0.830316742081448
+  calibration_global: 0.6061713097906216
+selected_test_metrics:
+  qwk_mean: 0.3430779099574626
+  recall_minus1: 0.1786309523809524
+  minority_recall_mean: 0.40307895924314685
+  decision_neutral_rate: 0.7461538461538462
+  calibration_global: 0.51687727557283

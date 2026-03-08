@@ -1,0 +1,191 @@
+# VIF Experiment: run_017_SoftOrdinal
+# Generated: 2026-03-06T22:40:04
+# Git: 09a4bd2(dirty)
+metadata:
+  experiment_id: run_017_SoftOrdinal
+  run_id: run_017
+  model_name: SoftOrdinal
+  timestamp: '2026-03-06T22:40:04'
+  git_commit: 09a4bd2(dirty)
+  config_hash: 039b09ead66a
+provenance:
+  prev_run_id: run_016
+  prev_git_commit: 09a4bd2(dirty)
+  git_log: []
+  config_delta:
+    added: {}
+    removed: {}
+    changed:
+      training.seed:
+        from: 11
+        to: 22
+  rationale: >-
+    Second corrected-split seed for the SoftOrdinal family. This run exists to
+    test whether the strong seed-11 result was repeatable under the same split,
+    architecture, and LR policy.
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 266
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: soft_ordinal
+    learning_rate: 0.019791668678535573
+    learning_rate_configured: 0.019791668678535573
+    learning_rate_source: explicit_model_override
+    lr_finder_enabled: false
+    learning_rate_policy: run_014_softordinal_valley
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 22
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1022
+  n_val: 217
+  n_test: 221
+capacity:
+  n_parameters: 23454
+  param_sample_ratio: 22.9491
+training_dynamics:
+  best_epoch: 10
+  total_epochs: 33
+  train_loss_at_best: 0.1912
+  val_loss_at_best: 0.2015
+  gap_at_best: 0.0103
+  final_lr: 0.009896
+  selection_source: eligible_policy
+  selection_metrics:
+    qwk_mean: 0.4106
+    recall_minus1: 0.1039
+    calibration_global: 0.7879
+    hedging_mean: 0.8198
+    qwk_nan_dims_count: 0
+    eligible: true
+    ineligible_reasons: []
+evaluation:
+  mae_mean: 0.2192
+  accuracy_mean: 0.8068
+  qwk_mean: 0.3296
+  qwk_nan_dims_count: 0
+  spearman_mean: 0.3516
+  calibration_global: 0.7457
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.1139
+  minority_recall_mean: 0.2293
+  recall_minus1: 0.0686
+  recall_zero: 0.969
+  recall_plus1: 0.3901
+  hedging_mean: 0.8434
+per_dimension:
+  self_direction:
+    mae: 0.368
+    accuracy: 0.6787
+    qwk: 0.5018
+    spearman: 0.5159
+    calibration: 0.5111
+    hedging: 0.6878
+  stimulation:
+    mae: 0.0987
+    accuracy: 0.905
+    qwk: 0.3206
+    spearman: 0.3526
+    calibration: 0.5563
+    hedging: 0.9774
+  hedonism:
+    mae: 0.1731
+    accuracy: 0.8371
+    qwk: 0.0538
+    spearman: -0.0258
+    calibration: 0.7654
+    hedging: 0.9638
+  achievement:
+    mae: 0.2145
+    accuracy: 0.8009
+    qwk: 0.4376
+    spearman: 0.4907
+    calibration: 0.7207
+    hedging: 0.8235
+  power:
+    mae: 0.1527
+    accuracy: 0.8597
+    qwk: 0.0
+    spearman: 0.3027
+    calibration: 0.8017
+    hedging: 0.9548
+  security:
+    mae: 0.2483
+    accuracy: 0.7873
+    qwk: 0.2374
+    spearman: 0.0941
+    calibration: 0.6097
+    hedging: 0.8959
+  conformity:
+    mae: 0.2625
+    accuracy: 0.7738
+    qwk: 0.5025
+    spearman: 0.576
+    calibration: 0.7032
+    hedging: 0.7285
+  tradition:
+    mae: 0.2138
+    accuracy: 0.8145
+    qwk: 0.4156
+    spearman: 0.4787
+    calibration: 0.7032
+    hedging: 0.81
+  benevolence:
+    mae: 0.3832
+    accuracy: 0.6606
+    qwk: 0.1699
+    spearman: 0.3336
+    calibration: 0.5883
+    hedging: 0.6968
+  universalism:
+    mae: 0.0775
+    accuracy: 0.9502
+    qwk: 0.6564
+    spearman: 0.398
+    calibration: 0.9642
+    hedging: 0.8959
+observations: >-
+  SoftOrdinal fell back to QWK 0.330 (fair), calibration 0.746 (moderate), and
+  minority recall 0.229 (poor), while hedging rose to 84.3% (excessive). The
+  best epoch arrived at 10 with an almost zero train/val gap, so this was not a
+  classic overfitting failure; it was a seed-sensitive optimization outcome that
+  never found the more decisive boundary from `run_016`. This run is the clearest
+  evidence that SoftOrdinal needs family-level summaries rather than best-seed
+  storytelling.
+selection_policy:
+  name: qwk_then_recall_guarded
+  rank_order:
+  - qwk_mean
+  - recall_minus1
+  - calibration_global
+  - hedging_mean
+  - val_loss
+  guardrails:
+    qwk_mean_must_be_finite: true
+    qwk_nan_dims_count_must_equal_zero: true
+    calibration_global_must_be_non_negative: true
+  fallback: best_finite_qwk
+artifacts:
+  checkpoint: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260306_223910/SoftOrdinal/selected_checkpoint.pt
+  validation_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260306_223910/SoftOrdinal/selected_validation_outputs.parquet
+  test_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260306_223910/SoftOrdinal/selected_test_outputs.parquet

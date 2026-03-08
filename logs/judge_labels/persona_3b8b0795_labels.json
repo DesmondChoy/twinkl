@@ -1,0 +1,158 @@
+{
+  "persona_id": "3b8b0795",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-04-09",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": -1,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He declines the regional director role despite others urging him to apply, treating the promotion's travel and relocation demands as not worth pursuing.",
+        "security": "He prefers the current setup because his team is stable, the commute is short, and he 'sleep[s] fine at night,' choosing predictability over a disruptive move."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-04-15",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "After hearing Lucía's brother-in-law was laid off without warning, he checks the savings account twice for reassurance about the family's financial buffer."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-04-19",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {}
+    },
+    {
+      "t_index": 3,
+      "date": "2025-04-21",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "He responds to the restructuring memo by reviewing termination clauses, estimating how long severance and savings would last, and tightening how important documents are stored."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-04-26",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "He decides to delay the automation pilot because shutting down Line 2 during restructuring feels too risky; he wants 'predictable numbers' instead of disruption.",
+        "benevolence": "He frames the choice around protecting his people, saying he would rather keep everyone employed than chase an efficiency gain that could backfire."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-05-03",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "He treats the unusually high water bill as a potential household threat, calling a plumber and shutting off the main valve every night as a precaution."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-05-08",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Carlos tells him his numbers helped keep Guadalajara intact, and he feels vindicated that years of consistent output counted for something.",
+        "security": "His relief centers on stability: the site stays intact, he reorganizes the filing cabinet, and he argues that steady routines, not bold moves, are what 'held.'"
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-05-13",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "He leans toward refusing the co-sign because he sees the loan as a threat to the emergency fund, the future roof repair, and the safety net he has built."
+      }
+    }
+  ]
+}

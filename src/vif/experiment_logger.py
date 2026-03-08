@@ -229,12 +229,17 @@ def _get_git_log_between(prev_commit: str, current_commit: str) -> list[str]:
         return []
 
 
-def _find_previous_run(run_id: str, family: str) -> dict | None:
-    """Find the most recent predecessor run with the same encoder family.
+def _find_previous_run(
+    run_id: str,
+    family: str,
+    model_name: str | None = None,
+) -> dict | None:
+    """Find the most recent predecessor run for the same model/encoder family.
 
     Scans all YAML run files with a lower run number and matching encoder
-    family. Returns the parsed data dict of the first matching model found
-    in the most recent predecessor run, or None if no predecessor exists.
+    family. When ``model_name`` is provided, it prefers the same model head
+    (for example ``CORN`` → previous ``CORN`` run) and falls back to the
+    latest same-family run if no exact model match exists.
     """
     RUNS_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -243,7 +248,8 @@ def _find_previous_run(run_id: str, family: str) -> dict | None:
         return None
     current_num = int(match.group(1))
 
-    candidates: list[tuple[int, dict]] = []
+    exact_candidates: list[tuple[int, dict]] = []
+    family_candidates: list[tuple[int, dict]] = []
     for f in sorted(RUNS_DIR.glob("run_*_*.yaml")):
         m = re.match(r"run_(\d{3})_", f.name)
         if not m:
@@ -257,10 +263,16 @@ def _find_previous_run(run_id: str, family: str) -> dict | None:
                 continue
             encoder_name = data["config"]["encoder"]["model_name"]
             if _encoder_family(encoder_name) == family:
-                candidates.append((num, data))
+                family_candidates.append((num, data))
+                if (
+                    model_name is not None
+                    and data.get("metadata", {}).get("model_name") == model_name
+                ):
+                    exact_candidates.append((num, data))
         except Exception:
             continue
 
+    candidates = exact_candidates or family_candidates
     if not candidates:
         return None
 
@@ -269,7 +281,12 @@ def _find_previous_run(run_id: str, family: str) -> dict | None:
     return candidates[0][1]
 
 
-def _build_provenance(run_id: str, config: dict, git_commit: str) -> dict:
+def _build_provenance(
+    run_id: str,
+    model_name: str,
+    config: dict,
+    git_commit: str,
+) -> dict:
     """Build the provenance section for a run.
 
     Finds the most recent predecessor with the same encoder family, then
@@ -278,7 +295,7 @@ def _build_provenance(run_id: str, config: dict, git_commit: str) -> dict:
     encoder_name = config.get("encoder", {}).get("model_name", "unknown")
     family = _encoder_family(encoder_name)
 
-    prev_data = _find_previous_run(run_id, family)
+    prev_data = _find_previous_run(run_id, family, model_name=model_name)
 
     if prev_data is None:
         return {
@@ -341,6 +358,8 @@ def _loss_shorthand(model_name: str, config: dict) -> str:
         "CORN": "corn",
         "EMD": "emd",
         "SoftOrdinal": "soft_ordinal",
+        "BalancedSoftmax": "balanced_softmax",
+        "LDAM_DRW": "ldam_drw",
     }
     if model_name == "MSE":
         loss_fn = config.get("loss_fn", "mse")
@@ -373,6 +392,10 @@ def _build_experiment_dict(
     n_parameters = sum(p.numel() for p in model.parameters())
     history = trained_result["history"]
     best_epoch = trained_result["best_epoch"]
+    selected_candidate = trained_result.get("selected_candidate", {})
+    selection_policy = trained_result.get("selection_policy")
+    selection_source = trained_result.get("selection_source")
+    artifact_paths = trained_result.get("artifact_paths", {})
 
     # Training dynamics
     total_epochs = len(history["train_loss"])
@@ -423,7 +446,7 @@ def _build_experiment_dict(
             "data": {
                 "train_ratio": config.get("train_ratio", 0.70),
                 "val_ratio": config.get("val_ratio", 0.15),
-                "split_seed": config.get("seed", 42),
+                "split_seed": config.get("split_seed", config.get("seed", 42)),
                 "pct_truncated": _round_val(pct_truncated),
                 "state_dim": state_dim,
             },
@@ -434,14 +457,32 @@ def _build_experiment_dict(
             "training": {
                 "loss_fn": _loss_shorthand(model_name, config),
                 "learning_rate": trained_result.get("learning_rate_applied") or config.get("learning_rate"),
-                "learning_rate_configured": config.get("learning_rate"),
+                "learning_rate_configured": trained_result.get(
+                    "learning_rate_configured",
+                    config.get("learning_rate"),
+                ),
+                "learning_rate_source": (
+                    trained_result.get("learning_rate_source")
+                    or trained_result.get("lr_finder", {}).get("lr_selected_source")
+                    or "configured_learning_rate"
+                ),
+                "lr_finder_enabled": trained_result.get(
+                    "lr_finder_enabled",
+                    config.get("use_lr_finder"),
+                ),
+                "learning_rate_policy": trained_result.get("learning_rate_policy"),
                 "weight_decay": config.get("weight_decay", 0.01),
                 "batch_size": config.get("batch_size", 16),
                 "epochs": config.get("epochs", 100),
                 "early_stopping_patience": config.get("early_stopping_patience", 20),
                 "scheduler_factor": config.get("scheduler_factor", 0.5),
                 "scheduler_patience": config.get("scheduler_patience", 10),
-                "seed": config.get("seed", 42),
+                "seed": config.get("model_seed", config.get("seed", 42)),
+                "class_balance_source": config.get("class_balance_source"),
+                "ldam_max_m": config.get("ldam_max_m"),
+                "ldam_scale": config.get("ldam_scale"),
+                "ldam_drw_start_epoch": config.get("ldam_drw_start_epoch"),
+                "ldam_beta": config.get("ldam_beta"),
                 "weighted_mse_scale": (
                     config.get("weighted_mse_scale")
                     if model_name == "MSE" and config.get("loss_fn") == "weighted_mse"
@@ -471,17 +512,29 @@ def _build_experiment_dict(
             "val_loss_at_best": _round_val(val_loss_at_best),
             "gap_at_best": _round_val(gap_at_best),
             "final_lr": _round_val(final_lr, dp=6),
+            "selection_source": selection_source,
+            "selection_metrics": {
+                "qwk_mean": _round_val(selected_candidate.get("qwk_mean")),
+                "recall_minus1": _round_val(selected_candidate.get("recall_minus1")),
+                "calibration_global": _round_val(selected_candidate.get("calibration_global")),
+                "hedging_mean": _round_val(selected_candidate.get("hedging_mean")),
+                "qwk_nan_dims_count": selected_candidate.get("qwk_nan_dims_count"),
+                "eligible": selected_candidate.get("eligible"),
+                "ineligible_reasons": selected_candidate.get("ineligible_reasons"),
+            },
         },
         "evaluation": {
             "mae_mean": _round_val(eval_result["mae_mean"]),
             "accuracy_mean": _round_val(eval_result["accuracy_mean"]),
             "qwk_mean": _round_val(eval_result["qwk_mean"]),
+            "qwk_nan_dims_count": eval_result.get("qwk_nan_dims_count"),
             "spearman_mean": _round_val(eval_result["spearman_mean"]),
             "calibration_global": _round_val(calibration["global"]),
             "calibration_positive_dims": calibration["positive_count"],
             "mean_uncertainty": _round_val(calibration["mean_uncertainty"]),
             "minority_recall_mean": _round_val(recall_data["mean_minority"]),
             "recall_minus1": _round_val(recall_data["recall_minus1"]),
+            "recall_zero": _round_val(recall_data.get("recall_zero")),
             "recall_plus1": _round_val(recall_data["recall_plus1"]),
             "hedging_mean": _round_val(float(hedging.mean())),
         },
@@ -499,6 +552,11 @@ def _build_experiment_dict(
     experiment["config"]["uncertainty"] = {
         k: v for k, v in experiment["config"]["uncertainty"].items() if v is not None
     }
+
+    if selection_policy is not None:
+        experiment["selection_policy"] = _to_python(selection_policy)
+    if artifact_paths:
+        experiment["artifacts"] = _to_python(artifact_paths)
 
     # Compute config fingerprint and store in metadata
     experiment["metadata"]["config_hash"] = _config_fingerprint(experiment["config"])
@@ -672,7 +730,6 @@ def log_experiment_run(
         List of dicts with keys: path, model, status ("created"), run_id.
     """
     run_id = _next_run_id()
-    provenance_cache: dict[str, dict] = {}
     results = []
 
     for model_name in trained_models:
@@ -706,14 +763,12 @@ def log_experiment_run(
         experiment["metadata"]["run_id"] = run_id
         experiment["metadata"]["experiment_id"] = f"{run_id}_{model_name}"
 
-        # Compute provenance once per run_id, then insert into experiment dict
-        if run_id not in provenance_cache:
-            provenance_cache[run_id] = _build_provenance(
-                run_id,
-                experiment["config"],
-                experiment["metadata"]["git_commit"],
-            )
-        provenance = provenance_cache[run_id]
+        provenance = _build_provenance(
+            run_id,
+            experiment["metadata"]["model_name"],
+            experiment["config"],
+            experiment["metadata"]["git_commit"],
+        )
 
         # Insert provenance between metadata and config
         ordered: dict = {}
@@ -758,7 +813,12 @@ def backfill_provenance() -> list[str]:
             git_commit = data["metadata"]["git_commit"]
             config = data["config"]
 
-            provenance = _build_provenance(run_id, config, git_commit)
+            provenance = _build_provenance(
+                run_id,
+                data["metadata"]["model_name"],
+                config,
+                git_commit,
+            )
 
             # Insert provenance after metadata, preserving key order
             ordered: dict = {}

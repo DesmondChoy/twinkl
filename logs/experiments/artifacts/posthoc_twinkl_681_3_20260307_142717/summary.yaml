@@ -1,0 +1,789 @@
+generated_at: '2026-03-07T14:27:19.014131'
+output_root: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717
+selection_policy:
+  name: recall_minus1_then_qwk_guarded
+  max_qwk_drop: 0.03
+  require_non_negative_calibration: true
+  rank_order:
+  - recall_minus1
+  - qwk_mean
+  - calibration_global
+  - decision_neutral_rate
+tuned_runs:
+- run_id: run_016
+  model_name: CDWCE_a3
+  selected_policy:
+    policy_name: logit_adjustment_tau_0.70
+    policy_family: softmax_logit_adjustment
+    policy_payload:
+      type: logit_adjustment
+      tau: 0.7
+      prior_source: train_split
+      class_order:
+      - -1
+      - 0
+      - 1
+      per_dimension_priors:
+        self_direction:
+        - 0.12524461839530332
+        - 0.5851272015655578
+        - 0.2896281800391389
+        stimulation:
+        - 0.030332681017612523
+        - 0.8855185909980431
+        - 0.08414872798434442
+        hedonism:
+        - 0.07827788649706457
+        - 0.8111545988258317
+        - 0.11056751467710371
+        achievement:
+        - 0.06164383561643835
+        - 0.6692759295499021
+        - 0.2690802348336595
+        power:
+        - 0.08512720156555773
+        - 0.8043052837573386
+        - 0.11056751467710371
+        security:
+        - 0.09686888454011741
+        - 0.7514677103718199
+        - 0.15166340508806261
+        conformity:
+        - 0.08708414872798434
+        - 0.7064579256360078
+        - 0.20645792563600782
+        tradition:
+        - 0.036203522504892366
+        - 0.8072407045009785
+        - 0.15655577299412915
+        benevolence:
+        - 0.07827788649706457
+        - 0.6193737769080235
+        - 0.30234833659491195
+        universalism:
+        - 0.04794520547945205
+        - 0.8444227005870841
+        - 0.10763209393346379
+  selection_score:
+    rank_key:
+    - 0.4527540548532281
+    - 0.42565628267151984
+    - 0.5102245612571408
+    - -0.6986175115207374
+    baseline_qwk_mean: 0.44326122810416474
+    tuned_qwk_mean: 0.42565628267151984
+    qwk_delta: -0.017604945432644903
+  baseline_validation_metrics:
+    qwk_mean: 0.44326122810416474
+    recall_minus1: 0.20348432468182232
+    minority_recall_mean: 0.36134993885680755
+    decision_neutral_rate: 0.8299539170506912
+    calibration_global: 0.6580085544359887
+  validation_metrics:
+    qwk_mean: 0.42565628267151984
+    recall_minus1: 0.4527540548532281
+    minority_recall_mean: 0.5385962932877073
+    decision_neutral_rate: 0.6986175115207374
+    calibration_global: 0.5102245612571408
+  baseline_test_metrics:
+    qwk_mean: 0.34910436780283477
+    recall_minus1: 0.09801587301587301
+    minority_recall_mean: 0.282598052056004
+    decision_neutral_rate: 0.8407239819004525
+    calibration_global: 0.6244040827864852
+  test_metrics:
+    qwk_mean: 0.3608687580490977
+    recall_minus1: 0.2758091787439613
+    minority_recall_mean: 0.43339373334045816
+    decision_neutral_rate: 0.7312217194570135
+    calibration_global: 0.5087199410165352
+  artifact_dir: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717/run_016_CDWCE_a3
+  selected_policy_path: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717/run_016_CDWCE_a3/selected_policy.yaml
+  metrics_summary_path: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717/run_016_CDWCE_a3/metrics_summary.yaml
+- run_id: run_016
+  model_name: SoftOrdinal
+  selected_policy:
+    policy_name: logit_adjustment_tau_0.00
+    policy_family: softmax_logit_adjustment
+    policy_payload:
+      type: logit_adjustment
+      tau: 0.0
+      prior_source: train_split
+      class_order:
+      - -1
+      - 0
+      - 1
+      per_dimension_priors:
+        self_direction:
+        - 0.12524461839530332
+        - 0.5851272015655578
+        - 0.2896281800391389
+        stimulation:
+        - 0.030332681017612523
+        - 0.8855185909980431
+        - 0.08414872798434442
+        hedonism:
+        - 0.07827788649706457
+        - 0.8111545988258317
+        - 0.11056751467710371
+        achievement:
+        - 0.06164383561643835
+        - 0.6692759295499021
+        - 0.2690802348336595
+        power:
+        - 0.08512720156555773
+        - 0.8043052837573386
+        - 0.11056751467710371
+        security:
+        - 0.09686888454011741
+        - 0.7514677103718199
+        - 0.15166340508806261
+        conformity:
+        - 0.08708414872798434
+        - 0.7064579256360078
+        - 0.20645792563600782
+        tradition:
+        - 0.036203522504892366
+        - 0.8072407045009785
+        - 0.15655577299412915
+        benevolence:
+        - 0.07827788649706457
+        - 0.6193737769080235
+        - 0.30234833659491195
+        universalism:
+        - 0.04794520547945205
+        - 0.8444227005870841
+        - 0.10763209393346379
+  selection_score:
+    rank_key:
+    - 0.22051512898656175
+    - 0.41660893654681364
+    - 0.6518300460653046
+    - -0.8101382488479263
+    baseline_qwk_mean: 0.41660893654681364
+    tuned_qwk_mean: 0.41660893654681364
+    qwk_delta: 0.0
+  baseline_validation_metrics:
+    qwk_mean: 0.41660893654681364
+    recall_minus1: 0.22051512898656175
+    minority_recall_mean: 0.38449490477697457
+    decision_neutral_rate: 0.8101382488479263
+    calibration_global: 0.6518300460653046
+  validation_metrics:
+    qwk_mean: 0.41660893654681364
+    recall_minus1: 0.22051512898656175
+    minority_recall_mean: 0.38449490477697457
+    decision_neutral_rate: 0.8101382488479263
+    calibration_global: 0.6518300460653046
+  baseline_test_metrics:
+    qwk_mean: 0.37223015298142276
+    recall_minus1: 0.15115079365079365
+    minority_recall_mean: 0.33478903370815555
+    decision_neutral_rate: 0.823076923076923
+    calibration_global: 0.606532615500181
+  test_metrics:
+    qwk_mean: 0.37223015298142276
+    recall_minus1: 0.15115079365079365
+    minority_recall_mean: 0.33478903370815555
+    decision_neutral_rate: 0.823076923076923
+    calibration_global: 0.606532615500181
+  artifact_dir: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717/run_016_SoftOrdinal
+  selected_policy_path: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717/run_016_SoftOrdinal/selected_policy.yaml
+  metrics_summary_path: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717/run_016_SoftOrdinal/metrics_summary.yaml
+- run_id: run_016
+  model_name: CORN
+  selected_policy:
+    policy_name: corn_per_dimension_margin
+    policy_family: corn_margin_threshold
+    policy_payload:
+      type: corn_probability_margin
+      per_dimension_minus_margin:
+        self_direction: 0.1
+        stimulation: 0.0
+        hedonism: 0.0
+        achievement: 0.05
+        power: 0.05
+        security: 0.2
+        conformity: 0.0
+        tradition: 0.1
+        benevolence: 0.0
+        universalism: 0.0
+      per_dimension_plus_margin:
+        self_direction: 0.0
+        stimulation: 0.0
+        hedonism: 0.0
+        achievement: 0.0
+        power: 0.0
+        security: 0.15
+        conformity: 0.0
+        tradition: 0.0
+        benevolence: 0.0
+        universalism: 0.0
+  selection_score:
+    rank_key:
+    - 0.23408037710835378
+    - 0.44142314511946523
+    - 0.8198862009052394
+    - -0.7866359447004608
+    baseline_qwk_mean: 0.4301588475498028
+    tuned_qwk_mean: 0.44142314511946523
+    qwk_delta: 0.011264297569662407
+  baseline_validation_metrics:
+    qwk_mean: 0.4301588475498028
+    recall_minus1: 0.1940737186584976
+    minority_recall_mean: 0.40023587511435055
+    decision_neutral_rate: 0.7949308755760369
+    calibration_global: 0.8198862009052394
+  validation_metrics:
+    qwk_mean: 0.44142314511946523
+    recall_minus1: 0.23408037710835378
+    minority_recall_mean: 0.4234650107908915
+    decision_neutral_rate: 0.7866359447004608
+    calibration_global: 0.8198862009052394
+  baseline_test_metrics:
+    qwk_mean: 0.3087897776589965
+    recall_minus1: 0.13855417529330571
+    minority_recall_mean: 0.3264880415398865
+    decision_neutral_rate: 0.8149321266968326
+    calibration_global: 0.8210559417474537
+  test_metrics:
+    qwk_mean: 0.311973077418627
+    recall_minus1: 0.14791925465838507
+    minority_recall_mean: 0.33117058122242615
+    decision_neutral_rate: 0.8126696832579186
+    calibration_global: 0.8210559417474537
+  artifact_dir: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717/run_016_CORN
+  selected_policy_path: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717/run_016_CORN/selected_policy.yaml
+  metrics_summary_path: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717/run_016_CORN/metrics_summary.yaml
+- run_id: run_017
+  model_name: CDWCE_a3
+  selected_policy:
+    policy_name: logit_adjustment_tau_0.70
+    policy_family: softmax_logit_adjustment
+    policy_payload:
+      type: logit_adjustment
+      tau: 0.7
+      prior_source: train_split
+      class_order:
+      - -1
+      - 0
+      - 1
+      per_dimension_priors:
+        self_direction:
+        - 0.12524461839530332
+        - 0.5851272015655578
+        - 0.2896281800391389
+        stimulation:
+        - 0.030332681017612523
+        - 0.8855185909980431
+        - 0.08414872798434442
+        hedonism:
+        - 0.07827788649706457
+        - 0.8111545988258317
+        - 0.11056751467710371
+        achievement:
+        - 0.06164383561643835
+        - 0.6692759295499021
+        - 0.2690802348336595
+        power:
+        - 0.08512720156555773
+        - 0.8043052837573386
+        - 0.11056751467710371
+        security:
+        - 0.09686888454011741
+        - 0.7514677103718199
+        - 0.15166340508806261
+        conformity:
+        - 0.08708414872798434
+        - 0.7064579256360078
+        - 0.20645792563600782
+        tradition:
+        - 0.036203522504892366
+        - 0.8072407045009785
+        - 0.15655577299412915
+        benevolence:
+        - 0.07827788649706457
+        - 0.6193737769080235
+        - 0.30234833659491195
+        universalism:
+        - 0.04794520547945205
+        - 0.8444227005870841
+        - 0.10763209393346379
+  selection_score:
+    rank_key:
+    - 0.3786540340662102
+    - 0.4244018168174664
+    - 0.5361553714512122
+    - -0.7184331797235023
+    baseline_qwk_mean: 0.4385786998633825
+    tuned_qwk_mean: 0.4244018168174664
+    qwk_delta: -0.014176883045916078
+  baseline_validation_metrics:
+    qwk_mean: 0.4385786998633825
+    recall_minus1: 0.16316132928159577
+    minority_recall_mean: 0.34296070378856297
+    decision_neutral_rate: 0.8382488479262673
+    calibration_global: 0.6553923221765515
+  validation_metrics:
+    qwk_mean: 0.4244018168174664
+    recall_minus1: 0.3786540340662102
+    minority_recall_mean: 0.5027585513397144
+    decision_neutral_rate: 0.7184331797235023
+    calibration_global: 0.5361553714512122
+  baseline_test_metrics:
+    qwk_mean: 0.3481675244645067
+    recall_minus1: 0.13759920634920633
+    minority_recall_mean: 0.31175806538363743
+    decision_neutral_rate: 0.8393665158371041
+    calibration_global: 0.6577295628282591
+  test_metrics:
+    qwk_mean: 0.33367066487985303
+    recall_minus1: 0.24350500345065562
+    minority_recall_mean: 0.4167179030526428
+    decision_neutral_rate: 0.7357466063348417
+    calibration_global: 0.5545710675580744
+  artifact_dir: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717/run_017_CDWCE_a3
+  selected_policy_path: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717/run_017_CDWCE_a3/selected_policy.yaml
+  metrics_summary_path: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717/run_017_CDWCE_a3/metrics_summary.yaml
+- run_id: run_017
+  model_name: SoftOrdinal
+  selected_policy:
+    policy_name: logit_adjustment_tau_0.30
+    policy_family: softmax_logit_adjustment
+    policy_payload:
+      type: logit_adjustment
+      tau: 0.3
+      prior_source: train_split
+      class_order:
+      - -1
+      - 0
+      - 1
+      per_dimension_priors:
+        self_direction:
+        - 0.12524461839530332
+        - 0.5851272015655578
+        - 0.2896281800391389
+        stimulation:
+        - 0.030332681017612523
+        - 0.8855185909980431
+        - 0.08414872798434442
+        hedonism:
+        - 0.07827788649706457
+        - 0.8111545988258317
+        - 0.11056751467710371
+        achievement:
+        - 0.06164383561643835
+        - 0.6692759295499021
+        - 0.2690802348336595
+        power:
+        - 0.08512720156555773
+        - 0.8043052837573386
+        - 0.11056751467710371
+        security:
+        - 0.09686888454011741
+        - 0.7514677103718199
+        - 0.15166340508806261
+        conformity:
+        - 0.08708414872798434
+        - 0.7064579256360078
+        - 0.20645792563600782
+        tradition:
+        - 0.036203522504892366
+        - 0.8072407045009785
+        - 0.15655577299412915
+        benevolence:
+        - 0.07827788649706457
+        - 0.6193737769080235
+        - 0.30234833659491195
+        universalism:
+        - 0.04794520547945205
+        - 0.8444227005870841
+        - 0.10763209393346379
+  selection_score:
+    rank_key:
+    - 0.2853459532581294
+    - 0.42284971709680763
+    - 0.5244358440811867
+    - -0.7755760368663595
+    baseline_qwk_mean: 0.42308855568933074
+    tuned_qwk_mean: 0.42284971709680763
+    qwk_delta: -0.00023883859252310513
+  baseline_validation_metrics:
+    qwk_mean: 0.42308855568933074
+    recall_minus1: 0.14647420913199313
+    minority_recall_mean: 0.3067859234079917
+    decision_neutral_rate: 0.8571428571428571
+    calibration_global: 0.6206385231872129
+  validation_metrics:
+    qwk_mean: 0.42284971709680763
+    recall_minus1: 0.2853459532581294
+    minority_recall_mean: 0.43873890225133855
+    decision_neutral_rate: 0.7755760368663595
+    calibration_global: 0.5244358440811867
+  baseline_test_metrics:
+    qwk_mean: 0.32885804151042136
+    recall_minus1: 0.08148809523809523
+    minority_recall_mean: 0.246111250813768
+    decision_neutral_rate: 0.8723981900452489
+    calibration_global: 0.5892087698790188
+  test_metrics:
+    qwk_mean: 0.35384274723703785
+    recall_minus1: 0.16440476190476191
+    minority_recall_mean: 0.3498394087399379
+    decision_neutral_rate: 0.8027149321266969
+    calibration_global: 0.5002134260652119
+  artifact_dir: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717/run_017_SoftOrdinal
+  selected_policy_path: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717/run_017_SoftOrdinal/selected_policy.yaml
+  metrics_summary_path: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717/run_017_SoftOrdinal/metrics_summary.yaml
+- run_id: run_017
+  model_name: CORN
+  selected_policy:
+    policy_name: corn_per_dimension_margin
+    policy_family: corn_margin_threshold
+    policy_payload:
+      type: corn_probability_margin
+      per_dimension_minus_margin:
+        self_direction: 0.2
+        stimulation: 0.0
+        hedonism: 0.2
+        achievement: 0.0
+        power: 0.0
+        security: 0.15
+        conformity: 0.05
+        tradition: 0.0
+        benevolence: 0.0
+        universalism: 0.0
+      per_dimension_plus_margin:
+        self_direction: 0.0
+        stimulation: 0.0
+        hedonism: 0.0
+        achievement: 0.15
+        power: 0.0
+        security: 0.0
+        conformity: 0.15
+        tradition: 0.0
+        benevolence: 0.0
+        universalism: 0.0
+  selection_score:
+    rank_key:
+    - 0.22968854770591313
+    - 0.4473634106782941
+    - 0.820881338906909
+    - -0.8110599078341014
+    baseline_qwk_mean: 0.4415478265699167
+    tuned_qwk_mean: 0.4473634106782941
+    qwk_delta: 0.005815584108377403
+  baseline_validation_metrics:
+    qwk_mean: 0.4415478265699167
+    recall_minus1: 0.2025660429868926
+    minority_recall_mean: 0.3884006281219279
+    decision_neutral_rate: 0.823963133640553
+    calibration_global: 0.820881338906909
+  validation_metrics:
+    qwk_mean: 0.4473634106782941
+    recall_minus1: 0.22968854770591313
+    minority_recall_mean: 0.4119246750246378
+    decision_neutral_rate: 0.8110599078341014
+    calibration_global: 0.820881338906909
+  baseline_test_metrics:
+    qwk_mean: 0.32710752483131095
+    recall_minus1: 0.1545436507936508
+    minority_recall_mean: 0.32223334429999184
+    decision_neutral_rate: 0.8384615384615385
+    calibration_global: 0.8175056391951573
+  test_metrics:
+    qwk_mean: 0.33598889783603203
+    recall_minus1: 0.16121031746031744
+    minority_recall_mean: 0.33478395158744134
+    decision_neutral_rate: 0.8248868778280543
+    calibration_global: 0.8175056391951573
+  artifact_dir: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717/run_017_CORN
+  selected_policy_path: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717/run_017_CORN/selected_policy.yaml
+  metrics_summary_path: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717/run_017_CORN/metrics_summary.yaml
+- run_id: run_018
+  model_name: CDWCE_a3
+  selected_policy:
+    policy_name: logit_adjustment_tau_0.70
+    policy_family: softmax_logit_adjustment
+    policy_payload:
+      type: logit_adjustment
+      tau: 0.7
+      prior_source: train_split
+      class_order:
+      - -1
+      - 0
+      - 1
+      per_dimension_priors:
+        self_direction:
+        - 0.12524461839530332
+        - 0.5851272015655578
+        - 0.2896281800391389
+        stimulation:
+        - 0.030332681017612523
+        - 0.8855185909980431
+        - 0.08414872798434442
+        hedonism:
+        - 0.07827788649706457
+        - 0.8111545988258317
+        - 0.11056751467710371
+        achievement:
+        - 0.06164383561643835
+        - 0.6692759295499021
+        - 0.2690802348336595
+        power:
+        - 0.08512720156555773
+        - 0.8043052837573386
+        - 0.11056751467710371
+        security:
+        - 0.09686888454011741
+        - 0.7514677103718199
+        - 0.15166340508806261
+        conformity:
+        - 0.08708414872798434
+        - 0.7064579256360078
+        - 0.20645792563600782
+        tradition:
+        - 0.036203522504892366
+        - 0.8072407045009785
+        - 0.15655577299412915
+        benevolence:
+        - 0.07827788649706457
+        - 0.6193737769080235
+        - 0.30234833659491195
+        universalism:
+        - 0.04794520547945205
+        - 0.8444227005870841
+        - 0.10763209393346379
+  selection_score:
+    rank_key:
+    - 0.3542948612659619
+    - 0.4185687893386323
+    - 0.5486512008995471
+    - -0.7304147465437788
+    baseline_qwk_mean: 0.4360657108836025
+    tuned_qwk_mean: 0.4185687893386323
+    qwk_delta: -0.017496921544970234
+  baseline_validation_metrics:
+    qwk_mean: 0.4360657108836025
+    recall_minus1: 0.1913616073259352
+    minority_recall_mean: 0.3708414663161292
+    decision_neutral_rate: 0.8294930875576036
+    calibration_global: 0.6699870374173672
+  validation_metrics:
+    qwk_mean: 0.4185687893386323
+    recall_minus1: 0.3542948612659619
+    minority_recall_mean: 0.4891656563235586
+    decision_neutral_rate: 0.7304147465437788
+    calibration_global: 0.5486512008995471
+  baseline_test_metrics:
+    qwk_mean: 0.3279239307133758
+    recall_minus1: 0.10634920634920635
+    minority_recall_mean: 0.28768579274621897
+    decision_neutral_rate: 0.8384615384615385
+    calibration_global: 0.6403090315244567
+  test_metrics:
+    qwk_mean: 0.3694281056683399
+    recall_minus1: 0.2881996204278813
+    minority_recall_mean: 0.43991883406607374
+    decision_neutral_rate: 0.7402714932126697
+    calibration_global: 0.5445038104322234
+  artifact_dir: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717/run_018_CDWCE_a3
+  selected_policy_path: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717/run_018_CDWCE_a3/selected_policy.yaml
+  metrics_summary_path: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717/run_018_CDWCE_a3/metrics_summary.yaml
+- run_id: run_018
+  model_name: SoftOrdinal
+  selected_policy:
+    policy_name: logit_adjustment_tau_0.30
+    policy_family: softmax_logit_adjustment
+    policy_payload:
+      type: logit_adjustment
+      tau: 0.3
+      prior_source: train_split
+      class_order:
+      - -1
+      - 0
+      - 1
+      per_dimension_priors:
+        self_direction:
+        - 0.12524461839530332
+        - 0.5851272015655578
+        - 0.2896281800391389
+        stimulation:
+        - 0.030332681017612523
+        - 0.8855185909980431
+        - 0.08414872798434442
+        hedonism:
+        - 0.07827788649706457
+        - 0.8111545988258317
+        - 0.11056751467710371
+        achievement:
+        - 0.06164383561643835
+        - 0.6692759295499021
+        - 0.2690802348336595
+        power:
+        - 0.08512720156555773
+        - 0.8043052837573386
+        - 0.11056751467710371
+        security:
+        - 0.09686888454011741
+        - 0.7514677103718199
+        - 0.15166340508806261
+        conformity:
+        - 0.08708414872798434
+        - 0.7064579256360078
+        - 0.20645792563600782
+        tradition:
+        - 0.036203522504892366
+        - 0.8072407045009785
+        - 0.15655577299412915
+        benevolence:
+        - 0.07827788649706457
+        - 0.6193737769080235
+        - 0.30234833659491195
+        universalism:
+        - 0.04794520547945205
+        - 0.8444227005870841
+        - 0.10763209393346379
+  selection_score:
+    rank_key:
+    - 0.3035051929198235
+    - 0.38922933268602955
+    - 0.5709794335259633
+    - -0.7161290322580646
+    baseline_qwk_mean: 0.4003585320705838
+    tuned_qwk_mean: 0.38922933268602955
+    qwk_delta: -0.011129199384554256
+  baseline_validation_metrics:
+    qwk_mean: 0.4003585320705838
+    recall_minus1: 0.14907667134174848
+    minority_recall_mean: 0.37225637152633023
+    decision_neutral_rate: 0.8032258064516129
+    calibration_global: 0.6553869366188293
+  validation_metrics:
+    qwk_mean: 0.38922933268602955
+    recall_minus1: 0.3035051929198235
+    minority_recall_mean: 0.49100128697973533
+    decision_neutral_rate: 0.7161290322580646
+    calibration_global: 0.5709794335259633
+  baseline_test_metrics:
+    qwk_mean: 0.36250388185570837
+    recall_minus1: 0.09412698412698413
+    minority_recall_mean: 0.3129080780092651
+    decision_neutral_rate: 0.830316742081448
+    calibration_global: 0.6061713097906216
+  test_metrics:
+    qwk_mean: 0.3430779099574626
+    recall_minus1: 0.1786309523809524
+    minority_recall_mean: 0.40307895924314685
+    decision_neutral_rate: 0.7461538461538462
+    calibration_global: 0.51687727557283
+  artifact_dir: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717/run_018_SoftOrdinal
+  selected_policy_path: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717/run_018_SoftOrdinal/selected_policy.yaml
+  metrics_summary_path: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717/run_018_SoftOrdinal/metrics_summary.yaml
+- run_id: run_018
+  model_name: CORN
+  selected_policy:
+    policy_name: corn_per_dimension_margin
+    policy_family: corn_margin_threshold
+    policy_payload:
+      type: corn_probability_margin
+      per_dimension_minus_margin:
+        self_direction: 0.15
+        stimulation: 0.0
+        hedonism: 0.2
+        achievement: 0.0
+        power: 0.0
+        security: 0.15
+        conformity: 0.0
+        tradition: 0.0
+        benevolence: 0.0
+        universalism: 0.0
+      per_dimension_plus_margin:
+        self_direction: 0.2
+        stimulation: 0.15
+        hedonism: 0.0
+        achievement: 0.1
+        power: 0.0
+        security: 0.05
+        conformity: 0.0
+        tradition: 0.15
+        benevolence: 0.2
+        universalism: 0.0
+  selection_score:
+    rank_key:
+    - 0.26815093657152783
+    - 0.45900040282272253
+    - 0.8333729070456308
+    - -0.7903225806451613
+    baseline_qwk_mean: 0.44258695349958205
+    tuned_qwk_mean: 0.45900040282272253
+    qwk_delta: 0.016413449323140483
+  baseline_validation_metrics:
+    qwk_mean: 0.44258695349958205
+    recall_minus1: 0.24586081435153187
+    minority_recall_mean: 0.40832315186506074
+    decision_neutral_rate: 0.8110599078341014
+    calibration_global: 0.8333729070456308
+  validation_metrics:
+    qwk_mean: 0.45900040282272253
+    recall_minus1: 0.26815093657152783
+    minority_recall_mean: 0.43768088721361675
+    decision_neutral_rate: 0.7903225806451613
+    calibration_global: 0.8333729070456308
+  baseline_test_metrics:
+    qwk_mean: 0.34231375537697517
+    recall_minus1: 0.1727803657694962
+    minority_recall_mean: 0.33319704553328694
+    decision_neutral_rate: 0.8248868778280543
+    calibration_global: 0.8146786385082929
+  test_metrics:
+    qwk_mean: 0.3549302291661249
+    recall_minus1: 0.18214544513457556
+    minority_recall_mean: 0.3507249799526687
+    decision_neutral_rate: 0.8085972850678733
+    calibration_global: 0.8146786385082929
+  artifact_dir: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717/run_018_CORN
+  selected_policy_path: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717/run_018_CORN/selected_policy.yaml
+  metrics_summary_path: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_681_3_20260307_142717/run_018_CORN/metrics_summary.yaml
+summary_by_model:
+  CDWCE_a3:
+    qwk_mean_median: 0.3608687580490977
+    recall_minus1_median: 0.2758091787439613
+    minority_recall_mean_median: 0.43339373334045816
+    decision_neutral_rate_median: 0.7357466063348417
+    calibration_global_median: 0.5445038104322234
+    qwk_mean_iqr: 0.01787872039424343
+    recall_minus1_iqr: 0.02234730848861277
+    minority_recall_mean_iqr: 0.011600465506715452
+    decision_neutral_rate_iqr: 0.004524886877828038
+    calibration_global_iqr: 0.022925563270769556
+  SoftOrdinal:
+    qwk_mean_median: 0.35384274723703785
+    recall_minus1_median: 0.16440476190476191
+    minority_recall_mean_median: 0.3498394087399379
+    decision_neutral_rate_median: 0.8027149321266969
+    calibration_global_median: 0.51687727557283
+    qwk_mean_iqr: 0.014576121511980067
+    recall_minus1_iqr: 0.013740079365079372
+    minority_recall_mean_iqr: 0.034144962767495624
+    decision_neutral_rate_iqr: 0.038461538461538436
+    calibration_global_iqr: 0.05315959471748455
+  CORN:
+    qwk_mean_median: 0.33598889783603203
+    recall_minus1_median: 0.16121031746031744
+    minority_recall_mean_median: 0.33478395158744134
+    decision_neutral_rate_median: 0.8126696832579186
+    calibration_global_median: 0.8175056391951573
+    qwk_mean_iqr: 0.021478575873748906
+    recall_minus1_iqr: 0.017113095238095233
+    minority_recall_mean_iqr: 0.00977719936512128
+    decision_neutral_rate_iqr: 0.008144796380090469
+    calibration_global_iqr: 0.003188651619580485
+family_delta_summary:
+  softmax_logit_adjustment:
+    median_recall_minus1_delta: 0.09520488267770877
+    median_qwk_mean_delta: 0.005882195123131456
+  corn_margin_threshold:
+    median_recall_minus1_delta: 0.009365079365079354
+    median_qwk_mean_delta: 0.008881373004721083
+recommended_softmax_base: CDWCE_a3

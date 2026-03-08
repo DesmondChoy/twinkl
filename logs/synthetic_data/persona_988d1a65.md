@@ -3,7 +3,7 @@
 ## Profile
 - **Persona ID:** 988d1a65
 - **Generated:** 2026-02-20_00-00-00
-- Age: 49
+- Age: 45-54
 - Profession: Manager
 - Culture: Western European
 - Core Values: Power

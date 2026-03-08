@@ -69,7 +69,7 @@ judge_validation_eval  ─┐
 
 | Eval | Status | Evidence | Remaining Work |
 |------|--------|----------|----------------|
-| Judge Validation | 🟢 Operational | 1 460 labels across 180 personas; 3 annotators × 46 entries; aggregate Cohen's κ 0.57–0.76 ([report](../../logs/exports/agreement_report_20260128_133444.md)) | Automated quality checks (all-zero rate, sparsity) |
+| Judge Validation | 🟢 Operational | 1 555 labels across 192 personas; 3 annotators × 46 entries; aggregate Cohen's κ 0.57–0.76 ([report](../../logs/exports/agreement_report_20260128_133444.md)) | Automated quality checks (all-zero rate, sparsity) |
 | Value Modeling | 🟡 In Progress | 9 runs × 4+ losses; best QWK **0.413** (run_007 CORN) — fair but below moderate target; -1 recall **10.3%** — model nearly blind to misalignment; hedging >80% ([experiment index](../../logs/experiments/index.md)) | Boost minority recall via class-imbalance interventions; boost QWK; persona-level aggregation for Top-K accuracy |
 | Drift Detection | 🟡 Partial | Critic trained + MC Dropout implemented ([`src/vif/critic.py`](../../src/vif/critic.py)) | Critic QWK too low for reliable triggers; crash/rut trigger code; crisis-injection test data |
 | Explanation Quality | 🟡 Partial | 133/134 rationales stored in parquet; display UI operational | Tier 1 automated checks (groundedness, circularity, length) |

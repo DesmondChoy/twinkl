@@ -1,0 +1,26 @@
+run_id: run_016
+model_name: CORN
+baseline_validation_metrics:
+  qwk_mean: 0.4301588475498028
+  recall_minus1: 0.1940737186584976
+  minority_recall_mean: 0.40023587511435055
+  decision_neutral_rate: 0.7949308755760369
+  calibration_global: 0.8198862009052394
+selected_validation_metrics:
+  qwk_mean: 0.44142314511946523
+  recall_minus1: 0.23408037710835378
+  minority_recall_mean: 0.4234650107908915
+  decision_neutral_rate: 0.7866359447004608
+  calibration_global: 0.8198862009052394
+baseline_test_metrics:
+  qwk_mean: 0.3087897776589965
+  recall_minus1: 0.13855417529330571
+  minority_recall_mean: 0.3264880415398865
+  decision_neutral_rate: 0.8149321266968326
+  calibration_global: 0.8210559417474537
+selected_test_metrics:
+  qwk_mean: 0.311973077418627
+  recall_minus1: 0.14791925465838507
+  minority_recall_mean: 0.33117058122242615
+  decision_neutral_rate: 0.8126696832579186
+  calibration_global: 0.8210559417474537

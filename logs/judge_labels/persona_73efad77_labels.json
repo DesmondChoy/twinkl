@@ -1,0 +1,124 @@
+{
+  "persona_id": "73efad77",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-09-15",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "The deposit increase destabilizes the move-out plan she had already 'mapped out' in her notebook, and her distress centers on lost predictability."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-09-15",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "She reorganizes and labels the kitchen because 'when things are out of order I can't think straight,' using order to regain a sense of control."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-09-16",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She already knows she does not want the motorcycle but says, 'I'll think about it,' withholding her own judgment instead of stating it directly.",
+        "security": "Her reasoning centers on protecting the apartment savings, avoiding accident and insurance risk, and not delaying Sofia's own room by four more months.",
+        "conformity": "She suppresses her objections because she does not want to be 'the person who always says no' or start a fight with Ernesto."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-09-19",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "Packing the bag early and confirming the appointment gives her a moment where 'nothing can go wrong' beyond what she could have prevented.",
+        "benevolence": "She prepares so Sofia can feel 'like someone has it handled,' showing active caregiving aimed at her daughter's welfare."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-09-21",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Even though she thinks the heater should be checked, she says she has to 'wait for Ernesto to decide it matters enough' instead of acting on her own judgment.",
+        "security": "She hears the heater rattle while bathing Sofia and even boils water on the stove 'just in case,' showing strong concern with preventing harm and household instability.",
+        "conformity": "She restrains herself from calling someone because 'it's not my house,' treating the family ownership boundary as something she should not cross."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-09-25",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "Even exhausted, she falls back on laundry, lists, and checking that 'we have everything' twice to restore steadiness through routine."
+      }
+    }
+  ]
+}

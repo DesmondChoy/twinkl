@@ -1,0 +1,191 @@
+# VIF Experiment: run_017_CORN
+# Generated: 2026-03-06T22:40:04
+# Git: 09a4bd2(dirty)
+metadata:
+  experiment_id: run_017_CORN
+  run_id: run_017
+  model_name: CORN
+  timestamp: '2026-03-06T22:40:04'
+  git_commit: 09a4bd2(dirty)
+  config_hash: ba12b2b5c531
+provenance:
+  prev_run_id: run_016
+  prev_git_commit: 09a4bd2(dirty)
+  git_log: []
+  config_delta:
+    added: {}
+    removed: {}
+    changed:
+      training.seed:
+        from: 11
+        to: 22
+  rationale: >-
+    Second corrected-split seed for the CORN baseline family. The purpose was to
+    measure how much of CORN's corrected-split behavior comes from stochastic
+    training variance versus the split change itself.
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 266
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: corn
+    learning_rate: 0.001
+    learning_rate_configured: 0.001
+    learning_rate_source: explicit_model_override
+    lr_finder_enabled: false
+    learning_rate_policy: run_010_manual_ws1_anchor
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 22
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1022
+  n_val: 217
+  n_test: 221
+capacity:
+  n_parameters: 22804
+  param_sample_ratio: 22.3131
+training_dynamics:
+  best_epoch: 18
+  total_epochs: 34
+  train_loss_at_best: 0.2132
+  val_loss_at_best: 0.2519
+  gap_at_best: 0.0387
+  final_lr: 0.0005
+  selection_source: eligible_policy
+  selection_metrics:
+    qwk_mean: 0.4384
+    recall_minus1: 0.1252
+    calibration_global: 0.8245
+    hedging_mean: 0.7963
+    qwk_nan_dims_count: 0
+    eligible: true
+    ineligible_reasons: []
+evaluation:
+  mae_mean: 0.2185
+  accuracy_mean: 0.8149
+  qwk_mean: 0.315
+  qwk_nan_dims_count: 0
+  spearman_mean: 0.3557
+  calibration_global: 0.8175
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.1538
+  minority_recall_mean: 0.2661
+  recall_minus1: 0.0852
+  recall_zero: 0.9641
+  recall_plus1: 0.4469
+  hedging_mean: 0.8131
+per_dimension:
+  self_direction:
+    mae: 0.3488
+    accuracy: 0.7376
+    qwk: 0.4872
+    spearman: 0.4986
+    calibration: 0.686
+    hedging: 0.6335
+  stimulation:
+    mae: 0.1043
+    accuracy: 0.914
+    qwk: 0.2183
+    spearman: 0.1141
+    calibration: 0.8796
+    hedging: 0.9502
+  hedonism:
+    mae: 0.1946
+    accuracy: 0.8281
+    qwk: -0.1647
+    spearman: 0.0356
+    calibration: 0.8523
+    hedging: 0.9593
+  achievement:
+    mae: 0.2307
+    accuracy: 0.7919
+    qwk: 0.3866
+    spearman: 0.4745
+    calibration: 0.7653
+    hedging: 0.8009
+  power:
+    mae: 0.1537
+    accuracy: 0.8688
+    qwk: 0.2697
+    spearman: 0.2745
+    calibration: 0.7717
+    hedging: 0.8959
+  security:
+    mae: 0.2483
+    accuracy: 0.7783
+    qwk: 0.2876
+    spearman: 0.2032
+    calibration: 0.6315
+    hedging: 0.8959
+  conformity:
+    mae: 0.2523
+    accuracy: 0.7692
+    qwk: 0.5249
+    spearman: 0.6042
+    calibration: 0.8338
+    hedging: 0.6742
+  tradition:
+    mae: 0.2088
+    accuracy: 0.8281
+    qwk: 0.4476
+    spearman: 0.5553
+    calibration: 0.8241
+    hedging: 0.7376
+  benevolence:
+    mae: 0.3531
+    accuracy: 0.6968
+    qwk: 0.2738
+    spearman: 0.41
+    calibration: 0.6825
+    hedging: 0.6923
+  universalism:
+    mae: 0.0903
+    accuracy: 0.9367
+    qwk: 0.4189
+    spearman: 0.387
+    calibration: 0.9814
+    hedging: 0.8914
+observations: >-
+  CORN repeated almost the same aggregate profile as `run_016`: QWK 0.315
+  (fair), calibration 0.818 (good), minority recall 0.266 (poor), and hedging
+  81.3% (excessive). The very small train/val gap of 0.039 and early best epoch
+  at 18 suggest this seed converged cleanly but still preferred neutral-heavy
+  decisions. This reinforced the view that CORN is stable and well-calibrated on
+  the corrected split, but not the most effective option for rare misalignment
+  recovery.
+selection_policy:
+  name: qwk_then_recall_guarded
+  rank_order:
+  - qwk_mean
+  - recall_minus1
+  - calibration_global
+  - hedging_mean
+  - val_loss
+  guardrails:
+    qwk_mean_must_be_finite: true
+    qwk_nan_dims_count_must_equal_zero: true
+    calibration_global_must_be_non_negative: true
+  fallback: best_finite_qwk
+artifacts:
+  checkpoint: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260306_223910/CORN/selected_checkpoint.pt
+  validation_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260306_223910/CORN/selected_validation_outputs.parquet
+  test_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260306_223910/CORN/selected_test_outputs.parquet

@@ -29,6 +29,7 @@ import torch
 from torch.utils.data import Dataset
 
 from src.models.judge import SCHWARTZ_VALUE_ORDER
+from src.vif.holdout import load_fixed_holdout_ids
 from src.vif.state_encoder import StateEncoder
 from src.wrangling.parse_wrangled_data import parse_wrangled_file
 
@@ -208,6 +209,8 @@ def split_by_persona(
     train_ratio: float = 0.70,
     val_ratio: float = 0.15,
     seed: int = 42,
+    fixed_val_persona_ids: set[str] | list[str] | tuple[str, ...] | None = None,
+    fixed_test_persona_ids: set[str] | list[str] | tuple[str, ...] | None = None,
 ) -> tuple[pl.DataFrame, pl.DataFrame, pl.DataFrame]:
     """Split data by persona to avoid leakage from correlated entries.
 
@@ -222,6 +225,12 @@ def split_by_persona(
         train_ratio: Fraction for training (default 0.70)
         val_ratio: Fraction for validation (default 0.15)
         seed: Random seed for reproducibility
+        fixed_val_persona_ids: Optional explicit validation persona IDs. When
+            provided together with ``fixed_test_persona_ids``, the splitter
+            uses these holdouts directly and routes all remaining personas to
+            train without reshuffling.
+        fixed_test_persona_ids: Optional explicit test persona IDs. Must be
+            provided together with ``fixed_val_persona_ids``.
 
     Returns:
         Tuple of (train_df, val_df, test_df) where each is a merged DataFrame
@@ -230,26 +239,60 @@ def split_by_persona(
     # Merge labels and entries first (also enforces join integrity checks).
     merged_df = merge_labels_and_entries(labels_df, entries_df)
 
-    # Build persona-level binary features for stratification:
-    # [dim0_pos, dim0_neg, dim1_pos, dim1_neg, ...].
-    persona_ids, feature_matrix = _build_persona_sign_features(merged_df)
-    n_personas = len(persona_ids)
+    fixed_val_ids = _normalize_optional_persona_ids(fixed_val_persona_ids)
+    fixed_test_ids = _normalize_optional_persona_ids(fixed_test_persona_ids)
 
-    # Calculate split indices
-    train_end = int(n_personas * train_ratio)
-    val_end = int(n_personas * (train_ratio + val_ratio))
-    val_size = val_end - train_end
+    if (fixed_val_ids is None) != (fixed_test_ids is None):
+        raise ValueError(
+            "fixed_val_persona_ids and fixed_test_persona_ids must either both be "
+            "provided or both be omitted"
+        )
 
-    train_idx, val_idx, test_idx = _find_best_stratified_split(
-        feature_matrix=feature_matrix,
-        n_train=train_end,
-        n_val=val_size,
-        seed=seed,
-    )
+    if fixed_val_ids is not None and fixed_test_ids is not None:
+        available_personas = set(
+            merged_df.select("persona_id").unique().to_series().to_list()
+        )
+        overlap = fixed_val_ids & fixed_test_ids
+        if overlap:
+            raise ValueError(
+                "Validation/test holdouts overlap: "
+                f"{sorted(overlap)}"
+            )
 
-    train_personas = {persona_ids[i] for i in train_idx}
-    val_personas = {persona_ids[i] for i in val_idx}
-    test_personas = {persona_ids[i] for i in test_idx}
+        missing = (fixed_val_ids | fixed_test_ids) - available_personas
+        if missing:
+            raise ValueError(
+                "Validation/test holdouts contain personas not present in the merged "
+                f"dataset: {sorted(missing)}"
+            )
+
+        train_personas = available_personas - fixed_val_ids - fixed_test_ids
+        if not train_personas:
+            raise ValueError("Fixed holdouts leave no personas available for training")
+
+        val_personas = fixed_val_ids
+        test_personas = fixed_test_ids
+    else:
+        # Build persona-level binary features for stratification:
+        # [dim0_pos, dim0_neg, dim1_pos, dim1_neg, ...].
+        persona_ids, feature_matrix = _build_persona_sign_features(merged_df)
+        n_personas = len(persona_ids)
+
+        # Calculate split indices
+        train_end = int(n_personas * train_ratio)
+        val_end = int(n_personas * (train_ratio + val_ratio))
+        val_size = val_end - train_end
+
+        train_idx, val_idx, test_idx = _find_best_stratified_split(
+            feature_matrix=feature_matrix,
+            n_train=train_end,
+            n_val=val_size,
+            seed=seed,
+        )
+
+        train_personas = {persona_ids[i] for i in train_idx}
+        val_personas = {persona_ids[i] for i in val_idx}
+        test_personas = {persona_ids[i] for i in test_idx}
 
     # Filter by persona sets
     train_df = merged_df.filter(pl.col("persona_id").is_in(train_personas))
@@ -481,6 +524,20 @@ class VIFDataset(Dataset):
     def __len__(self) -> int:
         return len(self.index_map)
 
+    def get_sample_metadata(self, idx: int) -> dict:
+        """Return sample identity metadata for artifact export."""
+        persona_id, t_index = self.index_map[idx]
+        row = self.entry_lookup[(persona_id, t_index)]
+        return {
+            "persona_id": persona_id,
+            "t_index": int(t_index),
+            "date": row["date"],
+        }
+
+    def get_all_metadata(self) -> list[dict]:
+        """Return metadata rows aligned with the DataLoader sample order."""
+        return [self.get_sample_metadata(idx) for idx in range(len(self))]
+
     def __getitem__(self, idx: int) -> tuple[torch.Tensor, torch.Tensor]:
         """Get a single training sample.
 
@@ -545,6 +602,9 @@ def create_dataloaders(
     wrangled_dir: str | Path = "logs/wrangled",
     train_ratio: float = 0.70,
     val_ratio: float = 0.15,
+    fixed_val_persona_ids: set[str] | list[str] | tuple[str, ...] | None = None,
+    fixed_test_persona_ids: set[str] | list[str] | tuple[str, ...] | None = None,
+    fixed_holdout_manifest_path: str | Path | None = None,
 ) -> tuple[torch.utils.data.DataLoader, torch.utils.data.DataLoader, torch.utils.data.DataLoader]:
     """Create train/val/test DataLoaders in one call.
 
@@ -559,6 +619,10 @@ def create_dataloaders(
         wrangled_dir: Path to wrangled markdown files
         train_ratio: Fraction of personas for training (default 0.70)
         val_ratio: Fraction of personas for validation (default 0.15)
+        fixed_val_persona_ids: Optional explicit validation persona IDs.
+        fixed_test_persona_ids: Optional explicit test persona IDs.
+        fixed_holdout_manifest_path: Optional YAML manifest containing
+            ``val_persona_ids`` and ``test_persona_ids``.
 
     Returns:
         Tuple of (train_loader, val_loader, test_loader)
@@ -566,9 +630,25 @@ def create_dataloaders(
     # Load data
     labels_df, entries_df = load_all_data(labels_path, wrangled_dir)
 
+    if fixed_holdout_manifest_path is not None:
+        if fixed_val_persona_ids is not None or fixed_test_persona_ids is not None:
+            raise ValueError(
+                "Provide either fixed_holdout_manifest_path or explicit "
+                "fixed_val_persona_ids/fixed_test_persona_ids, not both"
+            )
+        fixed_val_persona_ids, fixed_test_persona_ids = load_fixed_holdout_ids(
+            fixed_holdout_manifest_path
+        )
+
     # Split by persona
     train_df, val_df, test_df = split_by_persona(
-        labels_df, entries_df, train_ratio=train_ratio, val_ratio=val_ratio, seed=seed
+        labels_df,
+        entries_df,
+        train_ratio=train_ratio,
+        val_ratio=val_ratio,
+        seed=seed,
+        fixed_val_persona_ids=fixed_val_persona_ids,
+        fixed_test_persona_ids=fixed_test_persona_ids,
     )
 
     # Create datasets
@@ -594,3 +674,22 @@ def create_dataloaders(
     )
 
     return train_loader, val_loader, test_loader
+
+
+def _normalize_optional_persona_ids(
+    persona_ids: set[str] | list[str] | tuple[str, ...] | None,
+) -> set[str] | None:
+    """Normalize optional persona-id collections to stripped string sets."""
+    if persona_ids is None:
+        return None
+
+    normalized: set[str] = set()
+    for persona_id in persona_ids:
+        if not isinstance(persona_id, str) or not persona_id.strip():
+            raise ValueError(f"Invalid persona ID in fixed holdout set: {persona_id!r}")
+        normalized.add(persona_id.strip())
+
+    if not normalized:
+        raise ValueError("Fixed holdout persona ID collections must not be empty")
+
+    return normalized

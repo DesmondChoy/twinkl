@@ -1,0 +1,23 @@
+models_to_train:
+  - CORN
+  - SoftOrdinal
+  - CDWCE_a3
+split_seed: 2025
+use_lr_finder: false
+experiment_group: twinkl-681.2_post_split_frontier_rebaseline
+model_overrides:
+  CORN:
+    learning_rate: 0.001
+    use_lr_finder: false
+    learning_rate_source: explicit_model_override
+    learning_rate_policy: run_010_manual_ws1_anchor
+  SoftOrdinal:
+    learning_rate: 0.019791668678535573
+    use_lr_finder: false
+    learning_rate_source: explicit_model_override
+    learning_rate_policy: run_014_softordinal_valley
+  CDWCE_a3:
+    learning_rate: 0.015522253574270487
+    use_lr_finder: false
+    learning_rate_source: explicit_model_override
+    learning_rate_policy: run_015_cdwce_a3_valley
