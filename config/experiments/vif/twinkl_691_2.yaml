@@ -29,9 +29,16 @@ generation:
   expected_min_personas_per_target: 6
   target_families:
     - quiet_restorative_hedonism_positive
-    - calm_buffer_building_security_positive
-    - self_direction_vs_security_tension
-    - stimulation_vs_security_tension
+    - security_positive_ambiguous
+    - security_negative_tradeoff
+    - self_direction_vs_security_conflict
+    - stimulation_vs_security_conflict
+  family_persona_targets:
+    quiet_restorative_hedonism_positive: 6
+    security_positive_ambiguous: 2
+    security_negative_tradeoff: 2
+    self_direction_vs_security_conflict: 1
+    stimulation_vs_security_conflict: 1
 
 verification:
   registry_path: logs/registry/personas.parquet
@@ -46,6 +53,10 @@ verification:
   require_unsettled_entries: true
   require_non_unsettled_entries: true
   required_core_value_pairs: {}
+  required_target_label_counts:
+    security:
+      min_negative: 4
+      min_positive: 4
   report_title: twinkl-691.2 Generation Spot Check
   summary_output_path: logs/exports/twinkl_691_2_generation_check.yaml
   spot_check_output_path: logs/exports/twinkl_691_2_generation_spot_check.md
@@ -54,9 +65,12 @@ label_qa:
   output_path: logs/exports/twinkl_691_2_label_qa.md
   sample_plan:
     quiet_hedonism_positive: 3
-    security_positive_or_ambiguous: 3
-    self_direction_security_tension: 2
-    stimulation_security_tension: 2
+    security_positive_ambiguous: 2
+    security_negative_tradeoff: 3
+    self_direction_security_conflict: 2
+    stimulation_security_conflict: 2
   gate:
     max_bad_label: 0
     max_ambiguous: 2
+    security_min_negative_labels: 4
+    security_min_positive_labels: 4
