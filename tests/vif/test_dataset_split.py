@@ -1,6 +1,6 @@
 """Tests for dataset splitting with configurable train/val ratios."""
 
-from unittest.mock import patch
+from unittest.mock import call, patch
 
 import numpy as np
 import polars as pl
@@ -365,9 +365,11 @@ class TestSplitByPersona:
 class TestCreateDataloadersPassthrough:
     """Verify create_dataloaders passes ratios through to split_by_persona."""
 
+    @patch("src.vif.dataset.torch.utils.data.DataLoader")
+    @patch("src.vif.dataset.VIFDataset")
     @patch("src.vif.dataset.split_by_persona")
     @patch("src.vif.dataset.load_all_data")
-    def test_ratios_forwarded(self, mock_load, mock_split):
+    def test_ratios_forwarded(self, mock_load, mock_split, mock_dataset, mock_loader):
         """train_ratio and val_ratio are forwarded to split_by_persona."""
         # Setup mocks so create_dataloaders doesn't need real data/encoder
         fake_labels = pl.DataFrame({"persona_id": ["p1"], "t_index": [0]})
@@ -380,20 +382,16 @@ class TestCreateDataloadersPassthrough:
             "t_index": pl.Series([], dtype=pl.Int64),
         })
         mock_split.return_value = (empty_df, empty_df, empty_df)
+        encoder = object()
+        mock_dataset.side_effect = ["train_dataset", "val_dataset", "test_dataset"]
+        mock_loader.side_effect = ["train_loader", "val_loader", "test_loader"]
 
-        # Mock state_encoder — VIFDataset needs it but we short-circuit earlier
-        class FakeEncoder:
-            pass
-
-        try:
-            create_dataloaders(
-                state_encoder=FakeEncoder(),
-                train_ratio=0.60,
-                val_ratio=0.20,
-                seed=99,
-            )
-        except Exception:
-            pass  # VIFDataset may fail on the empty mock — that's fine
+        train_loader, val_loader, test_loader = create_dataloaders(
+            state_encoder=encoder,
+            train_ratio=0.60,
+            val_ratio=0.20,
+            seed=99,
+        )
 
         # Verify split_by_persona was called with the right ratios
         mock_split.assert_called_once_with(
@@ -404,11 +402,35 @@ class TestCreateDataloadersPassthrough:
             fixed_val_persona_ids=None,
             fixed_test_persona_ids=None,
         )
+        assert mock_dataset.call_args_list == [
+            call(empty_df, encoder, cache_embeddings=True),
+            call(empty_df, encoder, cache_embeddings=True),
+            call(empty_df, encoder, cache_embeddings=True),
+        ]
+        assert mock_loader.call_args_list == [
+            call("train_dataset", batch_size=16, shuffle=True),
+            call("val_dataset", batch_size=16, shuffle=False),
+            call("test_dataset", batch_size=16, shuffle=False),
+        ]
+        assert (train_loader, val_loader, test_loader) == (
+            "train_loader",
+            "val_loader",
+            "test_loader",
+        )
 
+    @patch("src.vif.dataset.torch.utils.data.DataLoader")
+    @patch("src.vif.dataset.VIFDataset")
     @patch("src.vif.dataset.split_by_persona")
     @patch("src.vif.dataset.load_fixed_holdout_ids")
     @patch("src.vif.dataset.load_all_data")
-    def test_manifest_holdouts_loaded_and_forwarded(self, mock_load, mock_load_holdout_ids, mock_split):
+    def test_manifest_holdouts_loaded_and_forwarded(
+        self,
+        mock_load,
+        mock_load_holdout_ids,
+        mock_split,
+        mock_dataset,
+        mock_loader,
+    ):
         """Manifest-backed holdouts should be resolved before splitting."""
         fake_labels = pl.DataFrame({"persona_id": ["p1"], "t_index": [0]})
         fake_entries = pl.DataFrame({"persona_id": ["p1"], "t_index": [0]})
@@ -420,17 +442,14 @@ class TestCreateDataloadersPassthrough:
             "t_index": pl.Series([], dtype=pl.Int64),
         })
         mock_split.return_value = (empty_df, empty_df, empty_df)
+        encoder = object()
+        mock_dataset.side_effect = ["train_dataset", "val_dataset", "test_dataset"]
+        mock_loader.side_effect = ["train_loader", "val_loader", "test_loader"]
 
-        class FakeEncoder:
-            pass
-
-        try:
-            create_dataloaders(
-                state_encoder=FakeEncoder(),
-                fixed_holdout_manifest_path="config/experiments/vif/twinkl_681_5_holdout.yaml",
-            )
-        except Exception:
-            pass
+        train_loader, val_loader, test_loader = create_dataloaders(
+            state_encoder=encoder,
+            fixed_holdout_manifest_path="config/experiments/vif/twinkl_681_5_holdout.yaml",
+        )
 
         mock_load_holdout_ids.assert_called_once_with(
             "config/experiments/vif/twinkl_681_5_holdout.yaml"
@@ -443,6 +462,21 @@ class TestCreateDataloadersPassthrough:
             seed=42,
             fixed_val_persona_ids={"persona_val"},
             fixed_test_persona_ids={"persona_test"},
+        )
+        assert mock_dataset.call_args_list == [
+            call(empty_df, encoder, cache_embeddings=True),
+            call(empty_df, encoder, cache_embeddings=True),
+            call(empty_df, encoder, cache_embeddings=True),
+        ]
+        assert mock_loader.call_args_list == [
+            call("train_dataset", batch_size=16, shuffle=True),
+            call("val_dataset", batch_size=16, shuffle=False),
+            call("test_dataset", batch_size=16, shuffle=False),
+        ]
+        assert (train_loader, val_loader, test_loader) == (
+            "train_loader",
+            "val_loader",
+            "test_loader",
         )
 
     @patch("src.vif.dataset.load_all_data")

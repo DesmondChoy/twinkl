@@ -5,20 +5,25 @@ from __future__ import annotations
 import pytest
 
 from src.judge.labeling import (
+    SCHWARTZ_VALUE_DISPLAY,
     build_value_rubric_context,
     judge_session,
     load_schwartz_values,
 )
+from src.models.judge import SCHWARTZ_VALUE_ORDER
 
 
 def test_build_value_rubric_context_contains_expected_sections():
     schwartz_config = load_schwartz_values("config/schwartz_values.yaml")
     rubric = build_value_rubric_context(schwartz_config)
 
-    assert "### Self-Direction" in rubric
-    assert "### Universalism" in rubric
-    assert "Key Behaviors (Aligned)" in rubric
-    assert "Key Behaviors (Misaligned)" in rubric
+    for key in SCHWARTZ_VALUE_ORDER:
+        assert f"### {SCHWARTZ_VALUE_DISPLAY[key]}" in rubric
+
+    assert rubric.count("### ") == len(SCHWARTZ_VALUE_ORDER)
+    assert rubric.count("**Core Motivation:**") == len(SCHWARTZ_VALUE_ORDER)
+    assert rubric.count("**Key Behaviors (Aligned):**") == len(SCHWARTZ_VALUE_ORDER)
+    assert rubric.count("**Key Behaviors (Misaligned):**") == len(SCHWARTZ_VALUE_ORDER)
 
 
 @pytest.mark.asyncio

@@ -595,9 +595,10 @@ class TestWriteWrangledMarkdown:
         written = write_wrangled_markdown(input_dir, output_dir, update_registry=True)
 
         assert len(written) == 1  # only the new file
-        persona_ids = [c[0] for c in calls]
-        assert "a3f8b2c1" in persona_ids
-        assert "b4e9c3d2" in persona_ids
+        assert set(calls) == {
+            ("a3f8b2c1", "wrangled"),
+            ("b4e9c3d2", "wrangled"),
+        }
 
     def test_legacy_persona_not_in_registry_handled_gracefully(self, tmp_path, monkeypatch):
         """ValueError from update_stage does not crash the pipeline."""
@@ -607,14 +608,18 @@ class TestWriteWrangledMarkdown:
 
         (input_dir / "persona_a3f8b2c1.md").write_text(FULL_TRIGGER_PERSONA)
 
-        def raise_value_error(pid, stage):
+        calls = []
+
+        def record_and_raise(pid, stage):
+            calls.append((pid, stage))
             raise ValueError(f"Persona {pid} not found in registry")
 
-        monkeypatch.setattr("src.registry.update_stage", raise_value_error)
+        monkeypatch.setattr("src.registry.update_stage", record_and_raise)
 
         written = write_wrangled_markdown(input_dir, output_dir, update_registry=True)
 
         assert len(written) == 1
+        assert calls == [("a3f8b2c1", "wrangled")]
         assert (output_dir / "persona_a3f8b2c1.md").exists()
 
     def test_processes_only_selected_persona_files(self, tmp_path):

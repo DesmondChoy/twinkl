@@ -1,6 +1,6 @@
 """Tests for OrdinalCriticBase and all ordinal model variants.
 
-Parametrized over all 5 models to verify the shared interface contract.
+Parametrized over all 7 models to verify the shared interface contract.
 """
 
 import torch
@@ -30,6 +30,40 @@ ALL_MODELS = [
     CriticMLPLDAMDRW,
     CriticMLPSoftOrdinal,
 ]
+
+THRESHOLD_MODELS = [CriticMLPCORAL, CriticMLPCORN]
+SOFTMAX_MODELS = [
+    CriticMLPEMD,
+    CriticMLPCDWCE,
+    CriticMLPBalancedSoftmax,
+    CriticMLPLDAMDRW,
+    CriticMLPSoftOrdinal,
+]
+
+
+def _constant_forward(flat_logits: torch.Tensor):
+    def forward(x: torch.Tensor) -> torch.Tensor:
+        return flat_logits.unsqueeze(0).repeat(x.size(0), 1)
+
+    return forward
+
+
+def _threshold_family_fixture() -> tuple[torch.Tensor, torch.Tensor]:
+    per_dim_logits = torch.tensor(
+        [[-6.0, -6.0], [6.0, -6.0], [6.0, 6.0]] + [[-6.0, -6.0]] * 7,
+        dtype=torch.float32,
+    )
+    expected_classes = torch.tensor([0, 1, 2] + [0] * 7, dtype=torch.long)
+    return per_dim_logits.reshape(-1), expected_classes
+
+
+def _softmax_family_fixture() -> tuple[torch.Tensor, torch.Tensor]:
+    per_dim_logits = torch.tensor(
+        [[6.0, -2.0, -3.0], [-3.0, 6.0, -2.0], [-3.0, -2.0, 6.0]] + [[6.0, -2.0, -3.0]] * 7,
+        dtype=torch.float32,
+    )
+    expected_classes = torch.tensor([0, 1, 2] + [0] * 7, dtype=torch.long)
+    return per_dim_logits.reshape(-1), expected_classes
 
 
 @pytest.fixture(params=ALL_MODELS, ids=lambda c: c.__name__)
@@ -76,6 +110,30 @@ class TestPredict:
         unique_vals = set(pred.unique().tolist())
         assert unique_vals.issubset(valid_values)
 
+    @pytest.mark.parametrize("model_cls", THRESHOLD_MODELS, ids=lambda c: c.__name__)
+    def test_threshold_family_predict_decodes_known_logits(self, model_cls, sample_input):
+        """CORAL/CORN decoders should map known logits to all three classes."""
+        model = model_cls(input_dim=INPUT_DIM, hidden_dim=HIDDEN_DIM, dropout=0.0)
+        flat_logits, expected_classes = _threshold_family_fixture()
+        model.forward = _constant_forward(flat_logits)
+
+        pred = model.predict(sample_input)
+        expected = (expected_classes.float() - 1.0).unsqueeze(0).repeat(BATCH_SIZE, 1)
+
+        assert torch.equal(pred, expected)
+
+    @pytest.mark.parametrize("model_cls", SOFTMAX_MODELS, ids=lambda c: c.__name__)
+    def test_softmax_family_predict_decodes_known_logits(self, model_cls, sample_input):
+        """3-logit decoders should map known logits to all three classes."""
+        model = model_cls(input_dim=INPUT_DIM, hidden_dim=HIDDEN_DIM, dropout=0.0)
+        flat_logits, expected_classes = _softmax_family_fixture()
+        model.forward = _constant_forward(flat_logits)
+
+        pred = model.predict(sample_input)
+        expected = (expected_classes.float() - 1.0).unsqueeze(0).repeat(BATCH_SIZE, 1)
+
+        assert torch.equal(pred, expected)
+
 
 class TestOrdinalOutputs:
     """Tests for standardized logits/probability export helpers."""
@@ -100,6 +158,28 @@ class TestOrdinalOutputs:
         assert logits.shape[0] == BATCH_SIZE
         assert logits.shape[1] == 10
         assert probabilities.shape == (BATCH_SIZE, 10, 3)
+
+    @pytest.mark.parametrize("model_cls", THRESHOLD_MODELS, ids=lambda c: c.__name__)
+    def test_threshold_family_probabilities_match_known_classes(self, model_cls, sample_input):
+        model = model_cls(input_dim=INPUT_DIM, hidden_dim=HIDDEN_DIM, dropout=0.0)
+        flat_logits, expected_classes = _threshold_family_fixture()
+        model.forward = _constant_forward(flat_logits)
+
+        probabilities = model.predict_probabilities(sample_input)
+        expected = expected_classes.unsqueeze(0).repeat(BATCH_SIZE, 1)
+
+        assert torch.equal(probabilities.argmax(dim=-1), expected)
+
+    @pytest.mark.parametrize("model_cls", SOFTMAX_MODELS, ids=lambda c: c.__name__)
+    def test_softmax_family_probabilities_match_known_classes(self, model_cls, sample_input):
+        model = model_cls(input_dim=INPUT_DIM, hidden_dim=HIDDEN_DIM, dropout=0.0)
+        flat_logits, expected_classes = _softmax_family_fixture()
+        model.forward = _constant_forward(flat_logits)
+
+        probabilities = model.predict_probabilities(sample_input)
+        expected = expected_classes.unsqueeze(0).repeat(BATCH_SIZE, 1)
+
+        assert torch.equal(probabilities.argmax(dim=-1), expected)
 
 
 class TestConfigRoundTrip:

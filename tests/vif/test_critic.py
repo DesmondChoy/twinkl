@@ -39,6 +39,20 @@ class TestCriticMLP:
         _, std = model.predict_with_uncertainty(batch, n_samples=5)
         assert (std >= 0).all()
 
+    def test_forward_depends_on_input(self):
+        """Distinct inputs should not collapse to the same output."""
+        torch.manual_seed(0)
+        model = CriticMLP(input_dim=4, hidden_dim=8, output_dim=10, dropout=0.0)
+        model.eval()
+
+        baseline = torch.zeros(1, 4)
+        shifted = torch.tensor([[1.0, 0.0, 0.0, 0.0]])
+
+        out_baseline = model(baseline)
+        out_shifted = model(shifted)
+
+        assert not torch.allclose(out_baseline, out_shifted)
+
     def test_get_config_from_config_roundtrip(self, model):
         """Config serialization should preserve all parameters."""
         config = model.get_config()

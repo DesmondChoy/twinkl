@@ -40,18 +40,42 @@ class TestWeightedChoice:
     def test_single_option(self):
         assert weighted_choice({"only": 1.0}) == "only"
 
-    def test_returns_valid_option(self):
+    def test_normalizes_and_forwards_weights(self, monkeypatch):
         weights = {"a": 0.5, "b": 0.3, "c": 0.2}
-        for _ in range(50):
-            result = weighted_choice(weights)
-            assert result in weights
+        captured = {}
 
-    def test_zero_weight_never_chosen(self):
-        # With weight 0, "never" should (almost) never be chosen
-        # Using a non-zero epsilon to avoid division issues
+        def fake_choices(options, *, weights, k):
+            captured["options"] = options
+            captured["weights"] = weights
+            captured["k"] = k
+            return ["b"]
+
+        monkeypatch.setattr("src.nudge.generation.random.choices", fake_choices)
+
+        assert weighted_choice(weights) == "b"
+        assert captured["options"] == ["a", "b", "c"]
+        assert captured["weights"] == pytest.approx([0.5, 0.3, 0.2])
+        assert captured["k"] == 1
+
+    def test_zero_weight_remains_near_zero_after_normalization(self, monkeypatch):
         weights = {"always": 1.0, "never": 0.0001}
-        results = {weighted_choice(weights) for _ in range(100)}
-        assert "always" in results
+        captured = {}
+
+        def fake_choices(options, *, weights, k):
+            captured["options"] = options
+            captured["weights"] = weights
+            captured["k"] = k
+            return ["always"]
+
+        monkeypatch.setattr("src.nudge.generation.random.choices", fake_choices)
+
+        assert weighted_choice(weights) == "always"
+        assert captured["options"] == ["always", "never"]
+        assert captured["weights"] == pytest.approx(
+            [1.0 / 1.0001, 0.0001 / 1.0001]
+        )
+        assert captured["weights"][1] < 0.001
+        assert captured["k"] == 1
 
     def test_empty_weights_raises(self):
         with pytest.raises(ValueError, match="at least one option"):
@@ -67,7 +91,7 @@ class TestWeightedChoice:
 # ---------------------------------------------------------------------------
 
 class TestSelectResponseMode:
-    def test_returns_valid_mode(self):
+    def test_uses_configured_weights(self, monkeypatch):
         config = {
             "nudge": {
                 "response_modes": [
@@ -77,9 +101,20 @@ class TestSelectResponseMode:
                 ]
             }
         }
-        valid_modes = {"Answering directly", "Deflecting/redirecting", "Revealing deeper thought"}
-        for _ in range(50):
-            assert select_response_mode(config) in valid_modes
+        captured = {}
+
+        def fake_weighted_choice(weights):
+            captured["weights"] = weights
+            return "Revealing deeper thought"
+
+        monkeypatch.setattr("src.nudge.generation.weighted_choice", fake_weighted_choice)
+
+        assert select_response_mode(config) == "Revealing deeper thought"
+        assert captured["weights"] == {
+            "Answering directly": 0.5,
+            "Deflecting/redirecting": 0.3,
+            "Revealing deeper thought": 0.2,
+        }
 
     def test_falls_back_when_weights_invalid(self):
         config = {

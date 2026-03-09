@@ -191,19 +191,22 @@ class TestBuildStateVector:
         )
         assert state.shape == (enc.state_dim,)
 
-    def test_concatenation_order(self, mock_text_encoder):
+    def test_concatenation_order(self, content_aware_text_encoder):
         """Verify: text_window | time_gaps | profile_weights."""
-        enc = StateEncoder(mock_text_encoder, window_size=2)
+        enc = StateEncoder(content_aware_text_encoder, window_size=2)
         state = enc.build_state_vector(
             texts=["Current", "Previous"],
             dates=["2025-01-02", "2025-01-01"],
             core_values=["Security"],
         )
-        d_e = mock_text_encoder.embedding_dim  # 8
+        d_e = content_aware_text_encoder.embedding_dim
 
-        # text_window: 2 * 8 = 16 (all ones from MockTextEncoder)
-        text_part = state[:2 * d_e]
-        np.testing.assert_allclose(text_part, np.ones(2 * d_e), atol=1e-6)
+        expected_current = content_aware_text_encoder.encode_batch(["Current"])[0]
+        expected_previous = content_aware_text_encoder.encode_batch(["Previous"])[0]
+
+        np.testing.assert_allclose(state[:d_e], expected_current, atol=1e-6)
+        np.testing.assert_allclose(state[d_e : 2 * d_e], expected_previous, atol=1e-6)
+        assert not np.allclose(expected_current, expected_previous)
 
         # time_gaps: 1 gap (1 day → 1/30)
         gap_part = state[2 * d_e : 2 * d_e + 1]
@@ -213,6 +216,22 @@ class TestBuildStateVector:
         profile_part = state[2 * d_e + 1:]
         assert len(profile_part) == 10
         assert profile_part[5] == pytest.approx(1.0)
+
+    def test_text_order_changes_state_vector(self, content_aware_text_encoder):
+        """Swapping current/previous texts should change the text window slice."""
+        enc = StateEncoder(content_aware_text_encoder, window_size=2)
+        forward_state = enc.build_state_vector(
+            texts=["Current", "Previous"],
+            dates=["2025-01-02", "2025-01-01"],
+            core_values=["Security"],
+        )
+        swapped_state = enc.build_state_vector(
+            texts=["Previous", "Current"],
+            dates=["2025-01-02", "2025-01-01"],
+            core_values=["Security"],
+        )
+
+        assert not np.allclose(forward_state, swapped_state)
 
     def test_build_state_vector_matches_from_embeddings(self, mock_text_encoder):
         """build_state_vector and build_state_vector_from_embeddings produce identical output."""

@@ -165,50 +165,14 @@ class TestParseWrangledFile:
 
 
 class TestDatasetLoadEntries:
-    """Tests for src.vif.dataset.load_entries integration."""
+    """Tests for src.vif.dataset.load_entries."""
 
-    def test_raises_on_all_null_initial_entry(self, tmp_path):
-        """Validation guard catches parser mismatch (all-null initial_entry)."""
+    def test_raises_if_parser_returns_all_null_initial_entries(self, tmp_path):
+        """Guard rail: all-null parser output is rejected immediately."""
         from src.vif.dataset import load_entries
 
-        # Create a file that produces entries with null initial_entry
-        # by using raw synthetic format markers (which the wrangled parser won't match)
-        raw_format_content = """\
-# Persona abc12345: Test User
-
-## Profile
-- **Persona ID:** abc12345
-- **Name:** Test User
-- **Age:** 25-34
-- **Profession:** Engineer
-- **Culture:** Western European
-- **Core Values:** Security
-- **Bio:** Test bio.
-
----
-
-## Entry 0 - 2025-01-01
-
-### Initial Entry
-**Tone:** reflective
-
-This is a raw format entry that the wrangled parser cannot parse.
-
----
-"""
         filepath = tmp_path / "persona_abc12345.md"
-        filepath.write_text(raw_format_content)
-
-        # The wrangled parser will see "### Initial Entry" as part of entry text.
-        # It should still parse it (since the text is long enough), so it won't
-        # raise ValueError. The validation guard only fires when ALL entries are null.
-        # To trigger it, we need content that produces truly null entries.
-        # Actually, the wrangled parser will grab text between the entry header
-        # and the next entry/end — so "### Initial Entry\n**Tone:** reflective\n\n..."
-        # will be captured as initial_entry text. The validation guard protects
-        # against the scenario where parse_persona_file (raw parser) is accidentally
-        # used on wrangled files — which returns None for all three text fields.
-        # We test this by mocking the parser to return null entries.
+        filepath.write_text(SAMPLE_WRANGLED_CONTENT)
 
         with patch("src.vif.dataset.parse_wrangled_file") as mock_parse:
             mock_parse.return_value = (
@@ -234,6 +198,7 @@ This is a raw format entry that the wrangled parser cannot parse.
 
             with pytest.raises(ValueError, match="All initial_entry values are null"):
                 load_entries(tmp_path)
+            mock_parse.assert_called_once_with(filepath)
 
     def test_succeeds_with_valid_wrangled_files(self, tmp_path):
         """load_entries successfully parses valid wrangled-format files."""

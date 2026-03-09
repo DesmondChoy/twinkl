@@ -225,8 +225,11 @@ class TestConsolidateRegistryIntegration:
         consolidate_judge_labels(tmp_path, update_registry=True)
 
         assert mock_update.call_count == 2
-        called_ids = {call.args[0] for call in mock_update.call_args_list}
-        assert called_ids == {"aaa11111", "bbb22222"}
+        called_args = {call.args for call in mock_update.call_args_list}
+        assert called_args == {
+            ("aaa11111", "labeled"),
+            ("bbb22222", "labeled"),
+        }
 
     @patch("src.registry.update_stage")
     def test_update_registry_false_skips(self, mock_update, tmp_path):

@@ -8,7 +8,7 @@ import torch
 from src.vif.dataset import VIFDataset
 from src.vif.state_encoder import StateEncoder
 
-from .conftest import MockTextEncoder
+from .conftest import ContentAwareMockTextEncoder, MockTextEncoder
 
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
@@ -42,9 +42,13 @@ def _make_merged_df(
     return pl.DataFrame(rows)
 
 
-def _make_encoder(window_size: int = 3) -> StateEncoder:
+def _make_encoder(
+    window_size: int = 3,
+    *,
+    text_encoder: MockTextEncoder | ContentAwareMockTextEncoder | None = None,
+) -> StateEncoder:
     """Create a StateEncoder with MockTextEncoder."""
-    return StateEncoder(MockTextEncoder(), window_size=window_size)
+    return StateEncoder(text_encoder or MockTextEncoder(), window_size=window_size)
 
 
 # ── TestPersonaIndex ─────────────────────────────────────────────────────────
@@ -155,17 +159,19 @@ class TestSlidingWindow:
         # state_dim for W=1: 1*8 + 0 + 10 = 18
         assert state.shape == (18,)
 
-    def test_window_size_3_at_t0_padded(self):
+    def test_window_size_3_at_t0_padded(self, content_aware_text_encoder):
         """window_size=3 at t_index=0: 2 entries zero-padded."""
-        enc = _make_encoder(window_size=3)
+        enc = _make_encoder(window_size=3, text_encoder=content_aware_text_encoder)
         df = _make_merged_df(n_personas=1, entries_per_persona=4)
         ds = VIFDataset(df, enc, cache_embeddings=False)
         state, _ = ds[0]  # t_index=0
 
         d_e = 8
-        # First embedding (t=0): ones from MockTextEncoder
+        current_text = ds._get_entry_text(ds.entry_lookup[("persona_000", 0)])
+        expected_current = enc.text_encoder.encode_batch([current_text])[0]
+
         first_emb = state[:d_e].numpy()
-        np.testing.assert_allclose(first_emb, np.ones(d_e), atol=1e-6)
+        np.testing.assert_allclose(first_emb, expected_current, atol=1e-6)
 
         # Second and third embeddings (t=-1, t=-2): zero-padded
         second_emb = state[d_e : 2 * d_e].numpy()
@@ -173,18 +179,26 @@ class TestSlidingWindow:
         np.testing.assert_allclose(second_emb, np.zeros(d_e), atol=1e-6)
         np.testing.assert_allclose(third_emb, np.zeros(d_e), atol=1e-6)
 
-    def test_window_size_3_at_t2_full_window(self):
+    def test_window_size_3_at_t2_full_window(self, content_aware_text_encoder):
         """window_size=3 at t_index=2: full window, no padding."""
-        enc = _make_encoder(window_size=3)
+        enc = _make_encoder(window_size=3, text_encoder=content_aware_text_encoder)
         df = _make_merged_df(n_personas=1, entries_per_persona=4)
         ds = VIFDataset(df, enc, cache_embeddings=False)
         state, _ = ds[2]  # t_index=2
 
         d_e = 8
-        # All three embeddings should be ones (MockTextEncoder)
-        for i in range(3):
+        expected_texts = [
+            ds._get_entry_text(ds.entry_lookup[("persona_000", 2)]),
+            ds._get_entry_text(ds.entry_lookup[("persona_000", 1)]),
+            ds._get_entry_text(ds.entry_lookup[("persona_000", 0)]),
+        ]
+        expected_embeddings = enc.text_encoder.encode_batch(expected_texts)
+
+        for i, expected_emb in enumerate(expected_embeddings):
             emb = state[i * d_e : (i + 1) * d_e].numpy()
-            np.testing.assert_allclose(emb, np.ones(d_e), atol=1e-6)
+            np.testing.assert_allclose(emb, expected_emb, atol=1e-6)
+
+        assert not np.allclose(expected_embeddings[0], expected_embeddings[1])
 
     def test_state_dim_consistent(self):
         """State tensor dimension matches encoder.state_dim regardless of t_index."""
