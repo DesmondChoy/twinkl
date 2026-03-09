@@ -1,0 +1,177 @@
+{
+  "persona_id": "3a517a79",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-12-22",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": -1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "Even though the travel-nursing possibility pulls at her, she stops exploring it because the prospect of change and disruption is something she wants to avoid.",
+        "security": "She closes the browser tab because leaving what she already knows feels threatening, privileging familiar stability over an uncertain opportunity."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-12-28",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "Meal prep, sorted lunches, a fixed dryer vent, and checking the HSA all reinforce the household order she finds reassuring."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-12-29",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": -1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "She turns down a free, spontaneous New Year's trip that she wanted because the unpredictability feels intolerable.",
+        "security": "Her refusal is driven by road conditions, frozen pipes, cell service, insurance coverage, and distance from a hospital, all clear stability and safety concerns.",
+        "benevolence": "She frames the decision around protecting Kyle and the kids, especially the children's routine and asthma needs."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-12-31",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "The entry centers on intense care work: she covers the double shift, helps stabilize a critically injured patient, and remains emotionally affected by the family's distress."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-12-31",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2026-01-07",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "She takes visible satisfaction in autopay, emergency-fund progress, packed lunches, and everyone knowing where they need to be.",
+        "benevolence": "The good week includes coming home for family dinners and helping Owen with his reading log, showing steady care for close family."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2026-01-13",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2026-01-13",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": -1,
+        "hedonism": 0,
+        "achievement": -1,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "She rejects the urgent-care path largely because new workflows and being the new person make her stomach drop, so novelty is something she is actively avoiding.",
+        "achievement": "She admits she is not letting herself pursue a different role partly because she does not want to prove herself again, which runs against advancement-oriented striving.",
+        "security": "Solid pay, excellent benefits, and mastery of familiar ICU protocols are the reasons she gives for staying where she can do the job with her eyes closed."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2026-01-17",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "The stocked fridge, finished laundry, on-time mortgage auto-draft, and quiet Saturday ahead all contribute to the stable home life she values.",
+        "benevolence": "She is moved by a long-stay patient's transfer and also appreciates Kyle covering pickups so she can work early shifts, keeping both patient care and family care in view."
+      }
+    }
+  ]
+}

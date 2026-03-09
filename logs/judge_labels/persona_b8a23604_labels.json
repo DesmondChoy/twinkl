@@ -1,0 +1,137 @@
+{
+  "persona_id": "b8a23604",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-10-27",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He deliberately turns his phone off, cooks, reads, and savors an unproductive afternoon because his body needs pleasure and rest."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-11-01",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He tries to enjoy music and wine, but abandons the evening and returns to work because he cannot stay present in the relaxing thing he wanted.",
+        "achievement": "His attention keeps returning to whether he finished enough, and he ultimately opens the laptop to keep pushing the work forward.",
+        "benevolence": "Part of what pulls him back to work is the belief that someone on his team might be stuck if he does not step in."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-11-02",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {}
+    },
+    {
+      "t_index": 3,
+      "date": "2025-11-06",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "After a ten-hour day, he denies himself the bath and the hour off he wants, showing clear sacrifice of comfort and recovery.",
+        "achievement": "He chooses to prep for the next day's review instead of resting, prioritizing work performance over immediate relief."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-11-10",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {}
+    },
+    {
+      "t_index": 5,
+      "date": "2025-11-12",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He takes an unstructured coffee break without his laptop, lingers in a quiet pleasant moment, and explicitly recognizes that he wants more of this slower kind of day."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-11-14",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "Even at a restaurant he had wanted to try, he cannot actually enjoy the meal because work keeps colonizing the experience."
+      }
+    }
+  ]
+}

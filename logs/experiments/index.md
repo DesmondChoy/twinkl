@@ -10,9 +10,11 @@
 | 4 | SoftOrdinal | run_016-run_018 | 2025 | 11, 22, 33 | 0.346 | 0.077 | 0.283 | 0.796 | 0.781 | Best low-gap completed comparator. Competitive on QWK, but more seed-sensitive than CDWCE_a3 and no longer the minority leader. |
 | 5 | CORN | run_016-run_018 | 2025 | 11, 22, 33 | 0.315 | 0.089 | 0.273 | 0.801 | **0.818** | Best-calibrated corrected-split baseline. Keep it as the calibration anchor and sanity check for lower-confidence follow-ups. |
 
-> **Active recommendation (2026-03-08):** `run_019`-`run_021` remain the default corrected-split frontier family. The frozen-holdout follow-up `run_022`-`run_024` (`twinkl-681.5`) now merits its own secondary board row because median `recall_-1` improved from `0.313` to `0.342` and median hedging ticked down from `0.621` to `0.619`, but median `qwk_mean` still fell from `0.362` to `0.349` and median calibration fell from `0.713` to `0.687`. Treat the augmented family as the best targeted `Power`/tail-recovery branch, not as the new default baseline.
+> **Active recommendation (2026-03-09):** `run_019`-`run_021` remain the default corrected-split frontier family after the regenerated `twinkl-691.2` lift and the `twinkl-691.3` rebaseline. The new post-lift `BalancedSoftmax` family `run_025`-`run_027` is within the QWK guard but still loses the overall decision: median `qwk_mean` fell from `0.362` to `0.346`, median `security qwk` fell from `0.297` to `0.199`, and median opposite-pair violation worsened from `0.070` to `0.082`. Treat `run_025`-`run_027` as a cleaner post-lift follow-up than `run_022`-`run_024` on hedging/calibration, not as the new default baseline.
 >
 > **Latest targeted data-lift review:** [`reports/experiment_review_2026-03-08_twinkl_681_5.md`](reports/experiment_review_2026-03-08_twinkl_681_5.md)
+>
+> **Latest post-lift rebaseline review:** [`reports/experiment_review_2026-03-09_twinkl_691_3.md`](reports/experiment_review_2026-03-09_twinkl_691_3.md)
 >
 > **Latest full frontier review:** [`reports/experiment_review_2026-03-08_v6.md`](reports/experiment_review_2026-03-08_v6.md)
 >
@@ -128,11 +130,29 @@
 | 022 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 21.0 | 0.306 | 0.750 | 0.349 | 0.354 | 0.728 | 0.434 | runs/run_022_BalancedSoftmax.yaml |
 | 023 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 21.0 | 0.312 | 0.748 | 0.372 | 0.344 | 0.685 | 0.450 | runs/run_023_BalancedSoftmax.yaml |
 | 024 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 21.0 | 0.314 | 0.748 | 0.339 | 0.340 | 0.687 | 0.433 | runs/run_024_BalancedSoftmax.yaml |
+| 025 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.311 | 0.756 | 0.346 | 0.345 | 0.711 | 0.411 | runs/run_025_BalancedSoftmax.yaml |
+| 025 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 19.3 | 0.213 | 0.811 | 0.342 | 0.354 | 0.734 | 0.260 | runs/run_025_SoftOrdinal.yaml |
+| 026 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.333 | 0.728 | 0.334 | 0.342 | 0.659 | 0.457 | runs/run_026_BalancedSoftmax.yaml |
+| 026 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 19.3 | 0.213 | 0.807 | 0.322 | 0.382 | 0.738 | 0.233 | runs/run_026_SoftOrdinal.yaml |
+| 027 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.319 | 0.737 | 0.351 | 0.372 | 0.693 | 0.442 | runs/run_027_BalancedSoftmax.yaml |
+| 027 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 19.3 | 0.216 | 0.812 | 0.340 | 0.365 | 0.777 | 0.267 | runs/run_027_SoftOrdinal.yaml |
 <!-- AUTO-TABLE:END -->
 
 > **Contributor note:** Keep this section in **newest-first** chronological order (most recent date at top).
 
 ## Findings
+
+### 2026-03-09 — Regenerated `Hedonism`/`Security` lift did not displace the corrected-split default (`twinkl-691.3`)
+
+`twinkl-691.3` reran paired `BalancedSoftmax` and `SoftOrdinal` families on the frozen `twinkl-681.5` holdout after the regenerated `twinkl-691.2` batch was verified, wrangled, labeled, and consolidated. The current workspace now has `204` personas and `1651` judged entries, so the realized fixed-holdout row split is `1213 / 217 / 221` train / val / test.
+
+**1. The new `BalancedSoftmax` family is the better new-family candidate, but it still loses to the incumbent.** Relative to the rerun `SoftOrdinal` family, `run_025`-`run_027` keep higher median `qwk_mean` (`0.346` vs `0.340`), much higher median `recall_-1` (`0.328` vs `0.082`), much higher minority recall (`0.442` vs `0.260`), and far less hedging (`0.598` vs `0.823`). But relative to the current default `run_019`-`run_021`, the new `BalancedSoftmax` family gives back median `qwk_mean` (`0.346` vs `0.362`) and minority recall (`0.442` vs `0.448`) while only partially recovering calibration and hedging versus the earlier targeted branch `run_022`-`run_024`.
+
+**2. `Hedonism` improved a little, but `Security` remains the blocking regression.** The new `BalancedSoftmax` family nudged median `hedonism qwk` up to `0.256` from `0.247` in the incumbent and `0.147` in the earlier targeted branch. That gain did not transfer to `Security`: median `security qwk` fell to `0.199`, below both the incumbent `0.297` and the earlier targeted branch `0.300`, while `security` hedging also rose.
+
+**3. Circumplex diagnostics do not justify a switch either.** Recomputed family summaries from the saved selected-test artifacts show the incumbent default at median `opposite_violation_mean = 0.070` and `adjacent_support_mean = 0.077`. The new `BalancedSoftmax` family worsens opposition structure (`0.082`) without an adjacent-support gain (`0.072`), while the rerun `SoftOrdinal` family preserves opposition slightly better (`0.069`) but collapses compatible co-activation harder (`0.056`).
+
+**4. Recommendation stays unchanged.** Keep `run_019`-`run_021` as the active corrected-split default. The new post-lift `BalancedSoftmax` rerun is a useful data point, but it is not a frontier change. No post-hoc follow-up was run because the new-family winner was not blocked merely by calibration or neutral bias; the deeper issue is the unresolved `Security` and circumplex trade-off. Full details: [`reports/experiment_review_2026-03-09_twinkl_691_3.md`](reports/experiment_review_2026-03-09_twinkl_691_3.md).
 
 ### 2026-03-08 — Full frontier refresh keeps original BalancedSoftmax as the default and promotes the targeted batch to a secondary board row
 

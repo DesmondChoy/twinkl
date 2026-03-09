@@ -2,14 +2,6 @@
 
 Instructions for Claude Code to generate synthetic conversational journal data using parallel subagents.
 
-**No API keys required** - this uses Claude Code's native Task tool, not the external Claude Agent SDK.
-
-**This is the primary method for generating synthetic data at scale.** Script-level helpers for prompt iteration and generation primitives now live in:
-- `src/synthetic/generation.py`
-- `src/nudge/decision.py`
-- `src/nudge/generation.py`
-- `scripts/journalling/generation_sanity_check.py`
-
 ---
 
 ## Configuration Variables
@@ -19,138 +11,72 @@ Instructions for Claude Code to generate synthetic conversational journal data u
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `NUM_PERSONAS` | `10` | Number of personas to generate |
-| `MIN_ENTRIES` | `6` | Minimum entries per persona (supports cold-start scenarios) |
-| `MAX_ENTRIES` | `12` | Maximum entries per persona (covers rut detection window) |
-| `MIN_DAYS_BETWEEN_ENTRIES` | `0` | Minimum days between entries (0 = same-day allowed via `SAME_DAY_PROBABILITY`) |
-| `MAX_DAYS_BETWEEN_ENTRIES` | `7` | Maximum days between entries (ensures ~1 entry/week) |
-| `SAME_DAY_PROBABILITY` | `0.15` | Probability of same-day follow-up entry (only active when `MIN_DAYS_BETWEEN_ENTRIES = 0`) |
-| `NUDGE_ENABLED` | `true` | Set to `false` to disable all nudge generation (`True`/`False` when used in Python snippets) |
-| `TARGET_VALUES` | `[]` | Schwartz values to force (e.g., `["Stimulation", "Power"]`). Empty = random selection. |
-| `ADD_RANDOM_VALUE` | `false` | When targeting, sample either 1 value (`[forced]`) or 2 values (`[forced, random_other]`). |
-| `TARGET_TENSIONS` | `[]` | Values to apply tension scenarios (e.g., `["Universalism"]`). Empty = no tension targeting. |
-| `UNSETTLED_BOOST` | `0.6` | Probability of Unsettled mode when `TARGET_TENSIONS` is active. Remaining probability is split equally between Grounded and Neutral. |
+| `MIN_ENTRIES` | `6` | Minimum entries per persona |
+| `MAX_ENTRIES` | `12` | Maximum entries per persona |
+| `MIN_DAYS_BETWEEN_ENTRIES` | `0` | Minimum days between entries |
+| `MAX_DAYS_BETWEEN_ENTRIES` | `7` | Maximum days between entries |
+| `SAME_DAY_PROBABILITY` | `0.15` | Probability of a same-day follow-up when `MIN_DAYS_BETWEEN_ENTRIES = 0` |
+| `NUDGE_ENABLED` | `true` | Set to `false` to disable nudge generation |
+| `TARGET_VALUES` | `[]` | Forced Schwartz values; empty = random selection |
+| `ADD_RANDOM_VALUE` | `false` | When targeting, optionally add one random second value |
+| `TARGET_TENSIONS` | `[]` | Values that should use tension scenario banks |
+| `TARGET_FAMILIES` | `[]` | Family-specific coverage plan for targeted tension batches |
+| `FAMILY_PERSONA_TARGETS` | `{}` | Persona count per target family; sum must equal `NUM_PERSONAS` when used |
+| `REQUIRED_TARGET_LABEL_COUNTS` | `{}` | Post-judge acceptance gates keyed by dimension |
+| `UNSETTLED_BOOST` | `0.6` | Probability of Unsettled mode when `TARGET_TENSIONS` is active |
 
 ---
 
-## Targeted Value Generation (Optional)
+## Targeted Generation Rules
 
-To address value imbalance in your dataset, you can force specific Schwartz values.
+- If `TARGET_VALUES` is non-empty, assign forced values round-robin from the list.
+- If `ADD_RANDOM_VALUE = true`, each persona gets either `[forced]` or `[forced, random_other]`.
+- If `TARGET_TENSIONS` is non-empty, load the scenario banks from `.claude/skills/tension-selection/SKILL.md`.
+- If `TARGET_FAMILIES` is non-empty, assign each persona one family from `FAMILY_PERSONA_TARGETS` before generation and use the matching family-specific bank.
+- Accept or reject targeted batches using judged labels and `REQUIRED_TARGET_LABEL_COUNTS`.
 
-### When to Use
-- After analyzing distribution: some values underrepresented (e.g., if Self-Direction=8, Hedonism=17)
-- Need specific value combinations for testing
-- Building targeted training data for particular dimensions
+**Use these exact values for the next `twinkl-691.2` regeneration run:**
 
-### Configuration
+| Variable | Value |
+|----------|-------|
+| `NUM_PERSONAS` | `12` |
+| `MIN_ENTRIES` | `6` |
+| `MAX_ENTRIES` | `10` |
+| `MIN_DAYS_BETWEEN_ENTRIES` | `0` |
+| `MAX_DAYS_BETWEEN_ENTRIES` | `7` |
+| `SAME_DAY_PROBABILITY` | `0.15` |
+| `NUDGE_ENABLED` | `true` |
+| `TARGET_VALUES` | `["Hedonism", "Security"]` |
+| `ADD_RANDOM_VALUE` | `false` |
+| `TARGET_TENSIONS` | `["Hedonism", "Security"]` |
+| `TARGET_FAMILIES` | `["quiet_restorative_hedonism_positive", "security_positive_ambiguous", "security_negative_tradeoff", "self_direction_vs_security_conflict", "stimulation_vs_security_conflict"]` |
+| `FAMILY_PERSONA_TARGETS` | `{"quiet_restorative_hedonism_positive": 6, "security_positive_ambiguous": 2, "security_negative_tradeoff": 2, "self_direction_vs_security_conflict": 1, "stimulation_vs_security_conflict": 1}` |
+| `REQUIRED_TARGET_LABEL_COUNTS` | `{"security": {"min_negative": 4, "min_positive": 4}}` |
+| `UNSETTLED_BOOST` | `0.45` |
 
-| Variable | Example | Effect |
-|----------|---------|--------|
-| `TARGET_VALUES = ["Stimulation"]` | All personas get Stimulation | Single-value focus |
-| `TARGET_VALUES = ["Stimulation", "Power", "Achievement"]` | Round-robin: P1→Stimulation, P2→Power, P3→Achievement, P4→Stimulation... | Balanced multi-value |
-| `ADD_RANDOM_VALUE = true` | Each persona gets either `[forced]` or `[forced + one random value]` | Maintains variety while preserving the target |
-
-### Examples
-
-**Example 1: Fill gap in an underrepresented value**
-```
-TARGET_VALUES = ["Stimulation"]
-ADD_RANDOM_VALUE = true
-NUM_PERSONAS = 5
-```
-Result: 5 personas, all include Stimulation; each has either 1 or 2 total core values
-
-**Example 2: Balanced coverage of three underrepresented values**
-```
-TARGET_VALUES = ["Stimulation", "Power", "Achievement"]
-ADD_RANDOM_VALUE = false
-NUM_PERSONAS = 9
-```
-Result: 3 personas each for Stimulation, Power, Achievement (round-robin)
-
-**Example 3: Random selection (default behavior)**
-```
-TARGET_VALUES = []  # Empty = original random behavior
-```
-Result: Each persona gets 1-2 randomly selected values
-
----
-
-## Tension-Targeted Generation (Optional)
-
-To address label imbalance for specific values (e.g., Universalism -1),
-use `TARGET_TENSIONS` alongside `TARGET_VALUES`.
-
-### Typical usage
-```
-TARGET_VALUES = ["Universalism"]
-TARGET_TENSIONS = ["Universalism"]
-ADD_RANDOM_VALUE = false
-NUM_PERSONAS = 10
-```
-
-For leakage-safe targeted augmentation, the repo supports issue-scoped
-scenario banks via `.claude/skills/tension-selection/SKILL.md`.
-
-The exact `twinkl-681.5` batch used:
-
-```python
-TARGET_VALUES = ["Power", "Security"]
-TARGET_TENSIONS = ["Power", "Security"]
-ADD_RANDOM_VALUE = True
-NUM_PERSONAS = 12
-MIN_ENTRIES = 6
-MAX_ENTRIES = 10
-UNSETTLED_BOOST = 0.6
-```
-
-The `twinkl-691.2` Hedonism/Security batch uses:
-
-```python
-TARGET_VALUES = ["Hedonism", "Security"]
-TARGET_TENSIONS = ["Hedonism", "Security"]
-ADD_RANDOM_VALUE = False
-NUM_PERSONAS = 12
-MIN_ENTRIES = 6
-MAX_ENTRIES = 10
-UNSETTLED_BOOST = 0.45
-```
-
-This lower `UNSETTLED_BOOST` is intentional: 691.2 needs more `Grounded` and
-`Neutral` entries so quiet Hedonism-positive and Security-positive scenes can
-emerge, while still using targeted Unsettled scenarios for the conflict and
-ambiguity cases.
-
-### How it works
-- When `TARGET_TENSIONS` is non-empty, the orchestrator reads `.claude/skills/tension-selection/SKILL.md` and embeds the scenario bank in each subagent's prompt
-- ALL Unsettled entries for personas with a targeted core value use the scenario bank instead of the generic Unsettled prompt
-- Scenarios are cycled sequentially (1st Unsettled → scenario 1, 2nd → scenario 2, etc., wrapping after exhaustion)
-- `UNSETTLED_BOOST` increases the proportion of Unsettled entries (60% vs default 33%)
-- Regular batches (`TARGET_TENSIONS = []`) are completely unaffected
-
-### When to use
-- After analyzing judge labels: a specific value has very low -1 rates
-- The generic Unsettled prompt produces personal dilemmas instead of value-specific tensions (e.g., Universalism needs broader-good failures)
-- You want targeted data augmentation without changing the core pipeline
+This rerun requires `TARGET_FAMILIES`, `FAMILY_PERSONA_TARGETS`, and
+`REQUIRED_TARGET_LABEL_COUNTS`. Reject the batch after judging if
+`Security` does not reach at least `4` negative and `4` positive labels.
 
 ---
 
 ## Output Structure
 
-**Flat directory with UUID-based filenames** (no timestamp subfolders):
+Use a flat directory with UUID-based filenames:
 
 ```
 logs/
 ├── registry/
-│   └── personas.parquet              # Central tracking - source of truth
+│   └── personas.parquet
 │
 └── synthetic_data/
-    ├── persona_a3f8b2c1.md           # UUID in filename (globally unique)
+    ├── persona_a3f8b2c1.md
     ├── persona_e7d4f9a2.md
-    └── ...                           # All personas in one folder
+    └── ...
 ```
 
-**Persona ID Format:**
-- 8-character UUID (e.g., "a3f8b2c1")
+Persona ID format:
+- 8-character UUID
 - Generated by subagent: `python3 -c "import uuid; print(uuid.uuid4().hex[:8])"`
 - Used directly in filename: `persona_{uuid}.md`
 
@@ -160,7 +86,7 @@ logs/
 
 ### 1. Read Source Files
 
-Read and internalize all of the following before generating:
+Read all of the following before generating:
 
 | File | Contains |
 |------|----------|
@@ -194,11 +120,11 @@ For each of `{{NUM_PERSONAS}}` personas, randomly select:
 - Age, profession, culture from `config/synthetic_data.yaml`
 - 1-2 Schwartz values (or use targeted selection if `TARGET_VALUES` is set)
 - Look up value elaborations from `config/schwartz_values.yaml`
-- **Entry count**: `random.randint({{MIN_ENTRIES}}, {{MAX_ENTRIES}})`
-- **Start date**: Random date in 2025 (not fixed)
+- Entry count: `random.randint({{MIN_ENTRIES}}, {{MAX_ENTRIES}})`
+- Start date: random date in 2025
 - Generate dates for that persona's entry count using weighted gap probability
 
-**Random Selection via Bash** (LLMs cannot generate true randomness):
+Use Bash/Python snippets for randomized selections:
 ```bash
 # Select random age bracket
 python3 -c "import random; print(random.choice(['18-24', '25-34', '35-44', '45-54', '55+']))"
@@ -210,21 +136,19 @@ cfg = yaml.safe_load(open('config/synthetic_data.yaml'))
 print(random.choice(cfg['personas']['professions']))
 "
 
-# Value Selection (supports targeted or random)
+# Value Selection
 python3 -c "
 import random
 
-# Configuration (set by orchestrator)
-TARGET_VALUES = {{TARGET_VALUES}}  # e.g., ['Stimulation'] or []
+TARGET_VALUES = {{TARGET_VALUES}}
 ADD_RANDOM_VALUE = str('{{ADD_RANDOM_VALUE}}').strip().lower() == 'true'
-PERSONA_INDEX = {{PERSONA_INDEX}}  # 0-based persona index from orchestrator
+PERSONA_INDEX = {{PERSONA_INDEX}}
 
 ALL_VALUES = ['Self-Direction', 'Stimulation', 'Hedonism', 'Achievement',
               'Power', 'Security', 'Conformity', 'Tradition',
               'Benevolence', 'Universalism']
 
 if TARGET_VALUES:
-    # Targeted mode: round-robin from target list
     forced = TARGET_VALUES[PERSONA_INDEX % len(TARGET_VALUES)]
     if ADD_RANDOM_VALUE:
         k = random.randint(1, 2)
@@ -237,7 +161,6 @@ if TARGET_VALUES:
     else:
         print([forced])
 else:
-    # Random mode (original behavior)
     k = random.randint(1, 2)
     print(random.sample(ALL_VALUES, k))
 "
@@ -258,17 +181,17 @@ print(start_date.isoformat())
 # Generate gap between entries
 python3 -c "
 import random
-MIN_GAP = {{MIN_DAYS_BETWEEN_ENTRIES}}    # Default: 0
-MAX_GAP = {{MAX_DAYS_BETWEEN_ENTRIES}}    # Default: 7
-SAME_DAY_PROB = {{SAME_DAY_PROBABILITY}}  # Default: 0.15
+MIN_GAP = {{MIN_DAYS_BETWEEN_ENTRIES}}
+MAX_GAP = {{MAX_DAYS_BETWEEN_ENTRIES}}
+SAME_DAY_PROB = {{SAME_DAY_PROBABILITY}}
 if MIN_GAP == 0 and random.random() < SAME_DAY_PROB:
-    print(0)  # Same day
+    print(0)
 else:
-    print(random.randint(max(MIN_GAP, 1), MAX_GAP))  # MIN_GAP to MAX_GAP days
+    print(random.randint(max(MIN_GAP, 1), MAX_GAP))
 "
 ```
 
-Same-day entries (Δt=0) reflect real journaling patterns (~15% of active users make same-day follow-ups). They should read as continued thought/venting, not a restart.
+Same-day entries (Δt=0) should read as continued thought/venting, not a restart.
 
 ### 4. Launch All Persona Subagents
 
@@ -289,7 +212,7 @@ TaskOutput: task_id=[id], block=true, timeout=300000
 
 ### 6. Subagent Prompt & Internal Loop
 
-Each subagent receives everything needed to generate a complete persona, **write its own log file**, and **register in the central registry**.
+Each subagent receives everything needed to generate a complete persona, write its own log file, and register in the central registry.
 
 **Input to subagent:**
 
@@ -299,7 +222,7 @@ Each subagent receives everything needed to generate a complete persona, **write
    - Value elaborations from `config/schwartz_values.yaml`
 
 2. **Entry dates**: All dates for this persona (count varies per persona, pre-generated by orchestrator)
-   - Start date is random within 2025 (not fixed)
+   - Start date is random within 2025
    - Gaps use configured probability: `SAME_DAY_PROBABILITY` chance of Δt=0 (when `MIN_DAYS_BETWEEN_ENTRIES = 0`), otherwise `MIN_DAYS_BETWEEN_ENTRIES` to `MAX_DAYS_BETWEEN_ENTRIES` days
 
 3. **Generation parameters**:
@@ -312,6 +235,9 @@ Each subagent receives everything needed to generate a complete persona, **write
       (read by orchestrator and embedded in subagent prompt)
     - Application rule: use scenario bank for ALL Unsettled entries
       when persona has a targeted core value
+    - If `TARGET_FAMILIES` is active, each persona also gets a
+      `target_family` assignment and the subagent uses the corresponding
+      family-specific bank instead of the generic per-value bank
 
 4. **Nudge rules**:
    - `NUDGE_ENABLED` variable (if false, skip all nudge logic)
@@ -333,9 +259,21 @@ Each subagent receives everything needed to generate a complete persona, **write
 ```
 0. Generate UUID for this persona:
    python3 -c "import uuid; print(uuid.uuid4().hex[:8])"
-   → Store as persona_id (e.g., "a3f8b2c1")
+   → Store as persona_id
 
 1. Generate persona (name, bio based on constraints)
+   - If TARGET_FAMILIES is active, keep the persona naturally compatible
+     with its assigned family:
+     - `quiet_restorative_hedonism_positive`: pleasure/rest/permission
+       under duty pressure
+     - `security_positive_ambiguous`: stability/protection/caution that
+       could otherwise be mistaken for fear or playing small
+     - `security_negative_tradeoff`: the safer option is visible and real,
+       but the persona still chooses autonomy or novelty
+     - `self_direction_vs_security_conflict`: structure/help/steadiness
+       competes with doing life on one's own terms
+     - `stimulation_vs_security_conflict`: novelty/aliveness competes with
+       routine/buffer/predictability
 
 For each entry date:
   2. Randomly select tone/verbosity/reflection_mode via Bash
@@ -343,7 +281,9 @@ For each entry date:
        (remaining probability split equally across Grounded and Neutral)
      - Otherwise: equal probability (default)
   2a. If reflection_mode is Unsettled AND ANY persona core value is in TARGET_TENSIONS:
-      → Use the next scenario from the tension-selection scenario bank
+      → If persona has a target_family assignment, use the next scenario from
+        the matching family-specific bank
+      → Otherwise use the next scenario from the generic value bank
         (cycle sequentially, wrap after exhaustion)
       → Replaces the generic Unsettled text from journal_entry.yaml
       → All other template sections (persona context, tone, verbosity,
@@ -361,10 +301,10 @@ For each entry date:
      **Trigger**: {reason}
      "{nudge_text}"
      ```
-     - `{category}` = lowercase classification (elaboration, clarification, or tension_surfacing)
-     - `{reason}` = WHY the entry warrants a nudge (from classification output)
+     - `{category}` = lowercase classification (`elaboration`, `clarification`, or `tension_surfacing`)
+     - `{reason}` = classification output
      - `{nudge_text}` = the nudge question, wrapped in double quotes
-     - IMPORTANT: Use `**Trigger**:` exactly — NOT `**Category**:`, `**Type**:`, or `**Reason**:`
+     - Use `**Trigger**:` exactly
   8. Response decision via Bash:
      python3 -c "import random; RESPONSE_PROBABILITY={{RESPONSE_PROBABILITY}}; print(random.random() < RESPONSE_PROBABILITY)"
   9. If "True" → Generate `### Response` section with `**Mode**:` line and response text
@@ -381,9 +321,9 @@ For each entry date:
         age='[age]',
         profession='[profession]',
         culture='[culture]',
-        core_values=[list_of_values],      # e.g. ['Achievement', 'Power']
-        entry_count=entry_count_int,       # e.g. 8
-        nudge_enabled=NUDGE_ENABLED_BOOL,  # True/False
+        core_values=[list_of_values],
+        entry_count=entry_count_int,
+        nudge_enabled=NUDGE_ENABLED_BOOL,
     )
     print('Registered persona [uuid]')
     "
@@ -392,9 +332,7 @@ For each entry date:
      "stats": {"entries": N, "nudges": N, "responses": N}}
 ```
 
-**Note on LLM Classification**: The subagent itself performs nudge classification internally using the template as guidance. No external API call is needed.
-
-> **Note**: Grounding nudges were removed—they relied on `reflection_mode` metadata unavailable in production. See `pipeline_specs.md` for details.
+The subagent performs nudge classification internally using the template as guidance. No external API call is needed.
 
 ### 7. Collect Results & Report
 
@@ -403,8 +341,8 @@ Print:
 - Entry count distribution: min=X, max=X, avg=X.X
 - Total entries: X
 - Total nudges: X
-- Total responses: X (expect response_probability × nudges)
-- Response rate: X% (should approximate response_probability from config)
+- Total responses: X
+- Response rate: X%
 - Registry status:
 
 ```python
@@ -418,9 +356,7 @@ print(f"Pending wrangling: {status['pending_wrangling']}")
 
 ## Output File Format (MANDATORY)
 
-The downstream parser (`src/wrangling/parse_synthetic_data.py`) uses exact string matching for markers and regex patterns for sections. Any deviation causes silent parsing failures.
-
-The complete example below is the **single source of truth** for format. It covers all edge cases: nudge + response, nudge + no response, and no nudge.
+Match the example below exactly. The downstream parser uses exact string markers.
 
 ```markdown
 # Persona a3f8b2c1: Gabriela Mendoza
@@ -525,8 +461,6 @@ I assumed she was disappointed that I moved so far away and chose work over fami
 
 ### Key Format Points
 
-These are derived from the example above — when in doubt, match the example exactly.
-
 - **Header**: `# Persona {uuid}: {Name}` — colon separator
 - **Profile**: `**Persona ID:**` and `**Generated:**` are bold; Age, Profession, Culture, Core Values, and Bio are NOT bold
 - **Entry header**: `## Entry N - YYYY-MM-DD` — hyphen separator
@@ -541,36 +475,21 @@ These are derived from the example above — when in doubt, match the example ex
 - **Separators**: `---` after each entry
 - **Summary**: `## Summary Statistics` with pipe-formatted table
 
-### Validation Checklist (14 points)
+### Validation Checklist
 
-Before writing the log file, verify ALL of the following:
-
-**File Structure:**
-- [ ] 1. Header is `# Persona {uuid}: {Name}` (exact format, colon separator)
-- [ ] 2. Profile section uses bullet list with correct field names (not JSON, not table)
-- [ ] 3. Profile fields Age/Profession/Culture/Core Values/Bio are NOT bold
-- [ ] 4. Bio field starts with `- Bio:` (single line marker, content can wrap)
-
-**Entry Structure:**
-- [ ] 5. Each entry header is `## Entry N - YYYY-MM-DD` (exact format, hyphen separator)
-- [ ] 6. Each entry has `### Initial Entry` section (not "Journal Entry")
-- [ ] 7. Metadata line format is `**Tone**: X | **Verbosity**: Y | **Reflection Mode**: Z` (single line, pipe separated)
-
-**Nudge/Response Handling:**
-- [ ] 8. Nudge section (if exists) is `### Nudge (category)` with lowercase category
-- [ ] 9. Nudge text is wrapped in double quotes
-- [ ] 10. If no nudge: ONLY the marker `*(No nudge for this entry)*` appears (NO Nudge section)
-- [ ] 11. If nudge + response: `### Response` section with `**Mode**: X` line exists
-- [ ] 12. If nudge + no response: ONLY the marker `*(No response - persona did not reply to nudge)*` appears (NO Response section)
-
-**Separators & Summary:**
-- [ ] 13. Each entry ends with `---` separator
-- [ ] 14. Summary section is `## Summary Statistics` with pipe-formatted table
-
-**Forbidden:**
-- [ ] No JSON blocks anywhere in the file
-- [ ] No debug output or status messages
-- [ ] No commentary or explanatory text outside the specified structure
+Before writing the log file, verify:
+- Header is `# Persona {uuid}: {Name}`
+- Profile is a bullet list with `**Persona ID:**`, `**Generated:**`, `Age`, `Profession`, `Culture`, `Core Values`, and `Bio`
+- Each entry uses `## Entry N - YYYY-MM-DD`
+- Each entry includes `### Initial Entry`
+- Metadata line is `**Tone**: X | **Verbosity**: Y | **Reflection Mode**: Z`
+- Nudge section, when present, is `### Nudge (category)` with `**Trigger**:` and quoted nudge text
+- If there is no nudge, output only `*(No nudge for this entry)*`
+- If there is a response, output `### Response` with `**Mode**: X`
+- If there is no response, output only `*(No response - persona did not reply to nudge)*`
+- Each entry ends with `---`
+- Summary section is `## Summary Statistics` with a pipe-formatted table
+- Do not include JSON, debug output, or commentary in the log file
 
 **Subagent return format (for orchestrator, NOT in the log file):**
 ```json
@@ -590,21 +509,15 @@ Before writing the log file, verify ALL of the following:
 
 ## Checklist
 
-- [ ] Read source files (configs + prompts/ + Python modules)
-- [ ] Set configuration variables above
-- [ ] (Optional) Set `TARGET_VALUES` to force specific Schwartz values
-- [ ] (Optional) Set `ADD_RANDOM_VALUE = true` to add variety
+- [ ] Read source files
+- [ ] Set configuration variables
 - [ ] Ensure directories exist: `logs/synthetic_data/`, `logs/registry/`
-- [ ] Prepare `{{NUM_PERSONAS}}` persona configurations (random selections including entry count)
-- [ ] Launch all persona subagents with `run_in_background=true` in ONE message
-  - Each subagent generates its own UUID
-  - Each subagent writes `logs/synthetic_data/persona_{uuid}.md`
-  - Each subagent registers itself in the registry
+- [ ] Prepare `{{NUM_PERSONAS}}` persona configurations
+- [ ] Launch `{{NUM_PERSONAS}}` subagents in one message with `run_in_background=true`
+- [ ] Have each subagent generate its own UUID, write `logs/synthetic_data/persona_{uuid}.md`, and register itself
 - [ ] Wait for all subagents to complete with `TaskOutput`
 - [ ] Collect summary stats from each subagent
-- [ ] Report summary (including registry status)
-
-**Subagent count:** `{{NUM_PERSONAS}}` total (one per persona, all parallel)
+- [ ] Report summary including registry status
 
 **Verify registration:**
 ```bash
@@ -615,19 +528,9 @@ python3 -c "from src.registry import get_status; print(get_status())"
 
 ## Scope Boundary
 
-**IMPORTANT**: This instruction set covers ONLY synthetic data generation.
-
 After reporting the summary statistics (Step 7), **STOP**. Do not proceed to:
 - Wrangling (`python -m src.wrangling.parse_synthetic_data`)
 - Judge labeling (`/judge` skill)
 - Any other pipeline stages
 
-Even if the registry shows `pending_wrangling > 0`, that is expected — wrangling is a **separate pipeline step** triggered by the `/judge` skill or manual invocation.
-
 ---
-
-## Limitations
-
-- **Max 10 parallel personas**: Claude Code caps parallelism at 10; additional tasks queue automatically
-- **Context isolation**: Each subagent has separate 200k context; pass all needed info in the prompt
-- **Subagent timeout**: Set adequate timeout (5+ minutes) for full pipeline generation

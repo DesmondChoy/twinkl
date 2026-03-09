@@ -1,0 +1,175 @@
+{
+  "persona_id": "5b836f2b",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-07-03",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "She rejects the cheaper flatshare because the lease, insurance, and rent reliability feel too unstable, and says she would lie awake worrying the arrangement would collapse."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-07-04",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {}
+    },
+    {
+      "t_index": 2,
+      "date": "2025-07-10",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "The group show confirmation matters because she has been working toward it since January and experiences it as recognition of her artistic competence."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-07-14",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "She spends time fixing the monthly savings transfer and restoring the buffer because avoiding future financial precarity is a central priority for her."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-07-14",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She restarts the panel after getting the ink work wrong and keeps pushing to finish the second piece for the Moreau show despite fatigue."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-07-18",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "She explicitly values the frame shop because its predictable rhythm gives her a 'floor' under the uncertainty of freelance illustration."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-07-21",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "She defends keeping rent covered and a backup income stream, rejecting the idea that stable footing means she is not seriously pursuing her art."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-07-23",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She advances the third Moreau piece, tracks invoices, and measures progress against a concrete year-end savings target she expects to hit by November.",
+        "security": "She moves income into savings and keeps the more reliable phone plan because paying extra for certainty feels preferable to introducing instability."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-07-30",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "As soon as Girard mentions possible hour cuts, she starts contingency planning around how to handle the loss of stable income."
+      }
+    }
+  ]
+}

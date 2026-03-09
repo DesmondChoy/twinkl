@@ -1,0 +1,144 @@
+{
+  "persona_id": "43f4507b",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-01-02",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": -1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She refuses to pursue the Bangalore relocation and chooses to stay with the PhD despite external pressure, treating the decision as her own to make.",
+        "achievement": "Her response frames finishing as 'proof' that the sacrifice was worth it, showing strong investment in completing a difficult long-term goal.",
+        "security": "She knowingly rejects a generous salary-and-housing package and continues an uncertain stipend path that has already burned through savings."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-01-03",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {}
+    },
+    {
+      "t_index": 2,
+      "date": "2025-01-07",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Meera's 'Amma working hard' drawing becomes motivation to keep going, reinforcing Priya's commitment to sustained effort on the PhD."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-01-09",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": -1,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She closes the secure Chennai job email and returns to her data because the uncertain PhD path feels like the life she actually chose for herself.",
+        "security": "She turns down a permanent government role with pension and a mapped-out family future in favor of ongoing uncertainty and financial strain.",
+        "conformity": "Her response explicitly rejects 'someone else's version of my life,' pushing against family and social expectations about what a sensible path should be."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-01-15",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "She spends the whole day troubleshooting broken lab equipment instead of stopping, showing continued commitment to keeping her research work moving.",
+        "benevolence": "The lab overrun leaves her home only after Meera is already asleep, signaling a costly trade-off against time with a close family member."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-01-22",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": -1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She insists that her timeline is 'when I finish' rather than letting her mother and husband set the terms of the decision.",
+        "achievement": "She refuses to abandon four years of work simply because others are tired of waiting, showing strong attachment to completing the degree.",
+        "conformity": "She resists coordinated family pressure for a more socially acceptable or predictable plan."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-01-27",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She reaffirms that there is steadiness in work 'you've chosen' even when others think the path makes no sense on paper.",
+        "achievement": "Supervisor praise and a possible conference presentation renew her sense that the PhD is progressing and worth pursuing."
+      }
+    }
+  ]
+}

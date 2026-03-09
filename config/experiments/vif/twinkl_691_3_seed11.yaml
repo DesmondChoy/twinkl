@@ -1,0 +1,28 @@
+models_to_train:
+  - BalancedSoftmax
+  - SoftOrdinal
+encoder_model: nomic-ai/nomic-embed-text-v1.5
+truncate_dim: 256
+window_size: 1
+hidden_dim: 64
+dropout: 0.3
+batch_size: 16
+epochs: 100
+weight_decay: 0.01
+split_seed: 2025
+model_seed: 11
+fixed_holdout_manifest_path: config/experiments/vif/twinkl_681_5_holdout.yaml
+use_lr_finder: false
+experiment_group: twinkl-691.3_post_lift_rebaseline
+class_balance_source: train_split_per_dimension
+model_overrides:
+  BalancedSoftmax:
+    learning_rate: 0.015522253574270487
+    use_lr_finder: false
+    learning_rate_source: explicit_model_override
+    learning_rate_policy: run_015_cdwce_a3_valley
+  SoftOrdinal:
+    learning_rate: 0.019791668678535573
+    use_lr_finder: false
+    learning_rate_source: explicit_model_override
+    learning_rate_policy: run_014_softordinal_valley

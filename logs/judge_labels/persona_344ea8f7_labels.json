@@ -1,0 +1,180 @@
+{
+  "persona_id": "344ea8f7",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-11-07",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He makes a real dinner, opens wine, and sits down properly to enjoy it, treating sensory pleasure as worth time even before the guilt arithmetic starts."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-11-11",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He uses the unexpected free hour for a stroopwafel and quiet people-watching, and explicitly values how much better that small pleasure makes him feel."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-11-13",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He knows going home to nap would be the sensible choice, but lets imagined judgment from the department override his own better judgment.",
+        "hedonism": "He refuses a needed nap, forces himself through bad coffee and unproductive work, and ends the day eating cereal standing up, neglecting rest and comfort.",
+        "achievement": "Getting up at five and staying glued to the laptop despite exhaustion shows he is still prioritizing thesis work and performance standards over recovery.",
+        "conformity": "His decision turns on how it would look for the oldest student to leave and rest, showing restraint shaped by academic expectations and appearances."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-11-13",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He lets himself sit in the dark with a Bill Evans record without trying to make it productive, treating simple enjoyment and rest as enough for the night."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-11-20",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He buys the appelgebak, eats it slowly, and notes that he can enjoy it without the usual guilt tally.",
+        "achievement": "The archive visit gives him three absorbed hours of productive primary-source work, and he explicitly frames the treat as acceptable because it came after the work."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-11-20",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "Even during a simple beer on Pieter's terrace, he cannot allow himself to enjoy the moment without mentally pricing what it costs him.",
+        "achievement": "His attention stays fixed on the Monday supervisor meeting and rough chapter draft, showing work obligations dominating the social evening."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-11-23",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-11-27",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He gives up a meal he knows he would have enjoyed with a friend and ends the day with bleakness and a desk sandwich instead.",
+        "achievement": "He chooses desk revisions, supervision prep, and more reading even though he knows the work is not truly urgent, prioritizing responsibility over pleasure."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-12-02",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "Instead of defaulting back to the laptop, he deliberately chooses the bath and lets the thesis wait until morning on his own terms.",
+        "hedonism": "The bath, bath oil, clean clothes, and quiet tea are deliberate acts of comfort, and he concludes that for tonight this is enough."
+      }
+    }
+  ]
+}

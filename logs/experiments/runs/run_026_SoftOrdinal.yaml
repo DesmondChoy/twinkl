@@ -1,0 +1,292 @@
+# VIF Experiment: run_026_SoftOrdinal
+# Generated: 2026-03-09T13:20:10
+# Git: 5b573b1(dirty)
+metadata:
+  experiment_id: run_026_SoftOrdinal
+  run_id: run_026
+  model_name: SoftOrdinal
+  timestamp: '2026-03-09T13:20:10'
+  git_commit: 5b573b1(dirty)
+  config_hash: e809f1b20696
+provenance:
+  prev_run_id: run_025
+  prev_git_commit: 5b573b1(dirty)
+  git_log: []
+  config_delta:
+    added: {}
+    removed: {}
+    changed:
+      training.seed:
+        from: 11
+        to: 22
+  rationale: ''
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 266
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: soft_ordinal
+    learning_rate: 0.019791668678535573
+    learning_rate_configured: 0.019791668678535573
+    learning_rate_source: explicit_model_override
+    lr_finder_enabled: false
+    learning_rate_policy: run_014_softordinal_valley
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 22
+    class_balance_source: train_split_per_dimension
+    ldam_max_m: 0.5
+    ldam_scale: 30.0
+    ldam_drw_start_epoch: 50
+    ldam_beta: 0.9999
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1213
+  n_val: 217
+  n_test: 221
+capacity:
+  n_parameters: 23454
+  param_sample_ratio: 19.3355
+training_dynamics:
+  best_epoch: 11
+  total_epochs: 31
+  train_loss_at_best: 0.1851
+  val_loss_at_best: 0.196
+  gap_at_best: 0.0109
+  final_lr: 0.009896
+  selection_source: eligible_policy
+  selection_metrics:
+    qwk_mean: 0.4209
+    recall_minus1: 0.1341
+    calibration_global: 0.7604
+    hedging_mean: 0.8392
+    qwk_nan_dims_count: 0
+    eligible: true
+    ineligible_reasons: []
+evaluation:
+  mae_mean: 0.2135
+  accuracy_mean: 0.8068
+  qwk_mean: 0.3215
+  qwk_nan_dims_count: 0
+  spearman_mean: 0.3821
+  calibration_global: 0.738
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.1072
+  minority_recall_mean: 0.2328
+  recall_minus1: 0.0676
+  recall_zero: 0.9598
+  recall_plus1: 0.398
+  hedging_mean: 0.8398
+  circumplex_summary:
+    opposite_violation_mean: 0.06868419516831636
+    adjacent_support_mean: 0.05464317804823319
+per_dimension:
+  self_direction:
+    mae: 0.3665
+    accuracy: 0.6742
+    qwk: 0.496
+    spearman: 0.5557
+    calibration: 0.6174
+    hedging: 0.6244
+  stimulation:
+    mae: 0.0952
+    accuracy: 0.9095
+    qwk: 0.3729
+    spearman: 0.446
+    calibration: 0.5414
+    hedging: 0.9729
+  hedonism:
+    mae: 0.1814
+    accuracy: 0.8326
+    qwk: -0.0352
+    spearman: 0.0699
+    calibration: 0.7135
+    hedging: 0.9638
+  achievement:
+    mae: 0.2172
+    accuracy: 0.8054
+    qwk: 0.469
+    spearman: 0.5151
+    calibration: 0.7224
+    hedging: 0.8145
+  power:
+    mae: 0.1408
+    accuracy: 0.8688
+    qwk: 0.1452
+    spearman: 0.2052
+    calibration: 0.7195
+    hedging: 0.9502
+  security:
+    mae: 0.2254
+    accuracy: 0.7828
+    qwk: 0.1942
+    spearman: 0.2492
+    calibration: 0.5319
+    hedging: 0.9457
+  conformity:
+    mae: 0.2671
+    accuracy: 0.7692
+    qwk: 0.4839
+    spearman: 0.5681
+    calibration: 0.7664
+    hedging: 0.6471
+  tradition:
+    mae: 0.2129
+    accuracy: 0.8054
+    qwk: 0.3447
+    spearman: 0.4802
+    calibration: 0.6855
+    hedging: 0.8326
+  benevolence:
+    mae: 0.3443
+    accuracy: 0.6787
+    qwk: 0.2965
+    spearman: 0.3707
+    calibration: 0.5958
+    hedging: 0.7466
+  universalism:
+    mae: 0.084
+    accuracy: 0.9412
+    qwk: 0.4476
+    spearman: 0.3606
+    calibration: 0.9641
+    hedging: 0.9005
+observations: ''
+circumplex:
+  source: probabilities
+  summary:
+    opposite_violation_mean: 0.06868419516831636
+    adjacent_support_mean: 0.05464317804823319
+  opposite_pairs:
+  - pair_id: achievement__benevolence
+    left: achievement
+    right: benevolence
+    score: 0.09207765012979507
+  - pair_id: achievement__universalism
+    left: achievement
+    right: universalism
+    score: 0.058407340198755264
+  - pair_id: benevolence__power
+    left: benevolence
+    right: power
+    score: 0.061105530709028244
+  - pair_id: conformity__hedonism
+    left: conformity
+    right: hedonism
+    score: 0.07443035393953323
+  - pair_id: conformity__self_direction
+    left: conformity
+    right: self_direction
+    score: 0.10009001195430756
+  - pair_id: conformity__stimulation
+    left: conformity
+    right: stimulation
+    score: 0.06117674708366394
+  - pair_id: hedonism__tradition
+    left: hedonism
+    right: tradition
+    score: 0.05923379957675934
+  - pair_id: power__universalism
+    left: power
+    right: universalism
+    score: 0.045709844678640366
+  - pair_id: security__self_direction
+    left: security
+    right: self_direction
+    score: 0.0807647705078125
+  - pair_id: security__stimulation
+    left: security
+    right: stimulation
+    score: 0.045679401606321335
+  - pair_id: self_direction__tradition
+    left: self_direction
+    right: tradition
+    score: 0.0954766571521759
+  - pair_id: stimulation__tradition
+    left: stimulation
+    right: tradition
+    score: 0.050058234483003616
+  adjacent_pairs:
+  - pair_id: achievement__hedonism
+    left: achievement
+    right: hedonism
+    score: 0.04327455908060074
+  - pair_id: achievement__power
+    left: achievement
+    right: power
+    score: 0.04136666655540466
+  - pair_id: benevolence__conformity
+    left: benevolence
+    right: conformity
+    score: 0.07999967038631439
+  - pair_id: benevolence__tradition
+    left: benevolence
+    right: tradition
+    score: 0.08625558763742447
+  - pair_id: benevolence__universalism
+    left: benevolence
+    right: universalism
+    score: 0.056307073682546616
+  - pair_id: conformity__security
+    left: conformity
+    right: security
+    score: 0.07352356612682343
+  - pair_id: conformity__tradition
+    left: conformity
+    right: tradition
+    score: 0.07232331484556198
+  - pair_id: hedonism__stimulation
+    left: hedonism
+    right: stimulation
+    score: 0.024880534037947655
+  - pair_id: power__security
+    left: power
+    right: security
+    score: 0.025239979848265648
+  - pair_id: security__tradition
+    left: security
+    right: tradition
+    score: 0.05213644355535507
+  - pair_id: self_direction__stimulation
+    left: self_direction
+    right: stimulation
+    score: 0.047364477068185806
+  - pair_id: self_direction__universalism
+    left: self_direction
+    right: universalism
+    score: 0.05304626375436783
+selection_policy:
+  name: qwk_then_recall_guarded
+  rank_order:
+  - qwk_mean
+  - recall_minus1
+  - calibration_global
+  - hedging_mean
+  - val_loss
+  guardrails:
+    qwk_mean_must_be_finite: true
+    qwk_nan_dims_count_must_equal_zero: true
+    calibration_global_must_be_non_negative: true
+  fallback: best_finite_qwk
+artifacts:
+  checkpoint: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260309_131941/SoftOrdinal/selected_checkpoint.pt
+  validation_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260309_131941/SoftOrdinal/selected_validation_outputs.parquet
+  test_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260309_131941/SoftOrdinal/selected_test_outputs.parquet

@@ -1,0 +1,313 @@
+# VIF Experiment: run_025_SoftOrdinal
+# Generated: 2026-03-09T13:18:58
+# Git: 5b573b1(dirty)
+metadata:
+  experiment_id: run_025_SoftOrdinal
+  run_id: run_025
+  model_name: SoftOrdinal
+  timestamp: '2026-03-09T13:18:58'
+  git_commit: 5b573b1(dirty)
+  config_hash: b058dbf13994
+provenance:
+  prev_run_id: run_018
+  prev_git_commit: 09a4bd2(dirty)
+  git_log:
+  - '5b573b1 fix(synth): roll back twinkl-691.2 batch and prep regeneration'
+  - 'c6cf805 twinkl-691.2: implement hedonism/security batch pipeline'
+  - 'e76ad50 test: harden weak suite coverage (twinkl-694)'
+  - 33a4dc6 twinkl-691.1 Add circumplex diagnostics to VIF eval
+  - 'c6798a3 twinkl-691.6: sync circumplex rollout plan into experiment review'
+  - '8a8ba39 Merge pull request #31 from DesmondChoy/twinkl-681-1-metric-aligned-selection'
+  - '3c58822 twinkl-689: refresh experiment review frontier'
+  - 'b7515dd twinkl-688 twinkl-690: refresh synthetic-data docs'
+  - '287b9fc twinkl-681.5: restore generic generation doc defaults'
+  - '529bd65 twinkl-681.5: land frozen-holdout data lift run'
+  - '5b7f9a6 twinkl-681.4: complete BalancedSoftmax 3-seed family (seed-33)'
+  - '6d909d8 twinkl-687: refresh experiment review frontier'
+  - '059603d twinkl-681.4: add long-tail softmax ablations and stage-1 runs'
+  - '5908850 twinkl-681.3: implement validation-only post-hoc tuning'
+  - 'af500bc twinkl-681.2 twinkl-682 twinkl-683 twinkl-684 twinkl-685: finalize corrected-split
+    frontier'
+  config_delta:
+    added:
+      training.class_balance_source: train_split_per_dimension
+      training.ldam_max_m: 0.5
+      training.ldam_scale: 30.0
+      training.ldam_drw_start_epoch: 50
+      training.ldam_beta: 0.9999
+    removed: {}
+    changed:
+      training.seed:
+        from: 33
+        to: 11
+  rationale: ''
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 266
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: soft_ordinal
+    learning_rate: 0.019791668678535573
+    learning_rate_configured: 0.019791668678535573
+    learning_rate_source: explicit_model_override
+    lr_finder_enabled: false
+    learning_rate_policy: run_014_softordinal_valley
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 11
+    class_balance_source: train_split_per_dimension
+    ldam_max_m: 0.5
+    ldam_scale: 30.0
+    ldam_drw_start_epoch: 50
+    ldam_beta: 0.9999
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1213
+  n_val: 217
+  n_test: 221
+capacity:
+  n_parameters: 23454
+  param_sample_ratio: 19.3355
+training_dynamics:
+  best_epoch: 12
+  total_epochs: 30
+  train_loss_at_best: 0.1791
+  val_loss_at_best: 0.2016
+  gap_at_best: 0.0225
+  final_lr: 0.009896
+  selection_source: eligible_policy
+  selection_metrics:
+    qwk_mean: 0.4151
+    recall_minus1: 0.1426
+    calibration_global: 0.7629
+    hedging_mean: 0.8304
+    qwk_nan_dims_count: 0
+    eligible: true
+    ineligible_reasons: []
+evaluation:
+  mae_mean: 0.2127
+  accuracy_mean: 0.8109
+  qwk_mean: 0.3416
+  qwk_nan_dims_count: 0
+  spearman_mean: 0.354
+  calibration_global: 0.7338
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.1038
+  minority_recall_mean: 0.2598
+  recall_minus1: 0.11
+  recall_zero: 0.9571
+  recall_plus1: 0.4097
+  hedging_mean: 0.8231
+  circumplex_summary:
+    opposite_violation_mean: 0.060610900012155376
+    adjacent_support_mean: 0.05635226254040996
+per_dimension:
+  self_direction:
+    mae: 0.358
+    accuracy: 0.6878
+    qwk: 0.5329
+    spearman: 0.5469
+    calibration: 0.6468
+    hedging: 0.5973
+  stimulation:
+    mae: 0.092
+    accuracy: 0.914
+    qwk: 0.422
+    spearman: 0.2522
+    calibration: 0.589
+    hedging: 0.9683
+  hedonism:
+    mae: 0.1814
+    accuracy: 0.8371
+    qwk: -0.0802
+    spearman: -0.0848
+    calibration: 0.6854
+    hedging: 0.9683
+  achievement:
+    mae: 0.2357
+    accuracy: 0.7783
+    qwk: 0.3316
+    spearman: 0.4267
+    calibration: 0.6155
+    hedging: 0.8778
+  power:
+    mae: 0.1533
+    accuracy: 0.8688
+    qwk: 0.1864
+    spearman: 0.2505
+    calibration: 0.7862
+    hedging: 0.9231
+  security:
+    mae: 0.2421
+    accuracy: 0.7738
+    qwk: 0.2246
+    spearman: 0.1487
+    calibration: 0.5514
+    hedging: 0.8959
+  conformity:
+    mae: 0.2461
+    accuracy: 0.8009
+    qwk: 0.5466
+    spearman: 0.5977
+    calibration: 0.822
+    hedging: 0.6109
+  tradition:
+    mae: 0.2062
+    accuracy: 0.8145
+    qwk: 0.4184
+    spearman: 0.485
+    calibration: 0.6788
+    hedging: 0.7421
+  benevolence:
+    mae: 0.3424
+    accuracy: 0.6923
+    qwk: 0.3101
+    spearman: 0.3784
+    calibration: 0.5966
+    hedging: 0.7376
+  universalism:
+    mae: 0.07
+    accuracy: 0.9412
+    qwk: 0.5241
+    spearman: 0.5386
+    calibration: 0.956
+    hedging: 0.9095
+observations: ''
+circumplex:
+  source: probabilities
+  summary:
+    opposite_violation_mean: 0.060610900012155376
+    adjacent_support_mean: 0.05635226254040996
+  opposite_pairs:
+  - pair_id: achievement__benevolence
+    left: achievement
+    right: benevolence
+    score: 0.07757961750030518
+  - pair_id: achievement__universalism
+    left: achievement
+    right: universalism
+    score: 0.05202160403132439
+  - pair_id: benevolence__power
+    left: benevolence
+    right: power
+    score: 0.06066986918449402
+  - pair_id: conformity__hedonism
+    left: conformity
+    right: hedonism
+    score: 0.06732464581727982
+  - pair_id: conformity__self_direction
+    left: conformity
+    right: self_direction
+    score: 0.07635174691677094
+  - pair_id: conformity__stimulation
+    left: conformity
+    right: stimulation
+    score: 0.055150095373392105
+  - pair_id: hedonism__tradition
+    left: hedonism
+    right: tradition
+    score: 0.04823264479637146
+  - pair_id: power__universalism
+    left: power
+    right: universalism
+    score: 0.05179622024297714
+  - pair_id: security__self_direction
+    left: security
+    right: self_direction
+    score: 0.07617689669132233
+  - pair_id: security__stimulation
+    left: security
+    right: stimulation
+    score: 0.04110143706202507
+  - pair_id: self_direction__tradition
+    left: self_direction
+    right: tradition
+    score: 0.07869373261928558
+  - pair_id: stimulation__tradition
+    left: stimulation
+    right: tradition
+    score: 0.04223228991031647
+  adjacent_pairs:
+  - pair_id: achievement__hedonism
+    left: achievement
+    right: hedonism
+    score: 0.03298768028616905
+  - pair_id: achievement__power
+    left: achievement
+    right: power
+    score: 0.03365336358547211
+  - pair_id: benevolence__conformity
+    left: benevolence
+    right: conformity
+    score: 0.08952265977859497
+  - pair_id: benevolence__tradition
+    left: benevolence
+    right: tradition
+    score: 0.09170125424861908
+  - pair_id: benevolence__universalism
+    left: benevolence
+    right: universalism
+    score: 0.059587012976408005
+  - pair_id: conformity__security
+    left: conformity
+    right: security
+    score: 0.07620248943567276
+  - pair_id: conformity__tradition
+    left: conformity
+    right: tradition
+    score: 0.08985114097595215
+  - pair_id: hedonism__stimulation
+    left: hedonism
+    right: stimulation
+    score: 0.019760437309741974
+  - pair_id: power__security
+    left: power
+    right: security
+    score: 0.02700534276664257
+  - pair_id: security__tradition
+    left: security
+    right: tradition
+    score: 0.0733533501625061
+  - pair_id: self_direction__stimulation
+    left: self_direction
+    right: stimulation
+    score: 0.04052581638097763
+  - pair_id: self_direction__universalism
+    left: self_direction
+    right: universalism
+    score: 0.04207660257816315
+selection_policy:
+  name: qwk_then_recall_guarded
+  rank_order:
+  - qwk_mean
+  - recall_minus1
+  - calibration_global
+  - hedging_mean
+  - val_loss
+  guardrails:
+    qwk_mean_must_be_finite: true
+    qwk_nan_dims_count_must_equal_zero: true
+    calibration_global_must_be_non_negative: true
+  fallback: best_finite_qwk
+artifacts:
+  checkpoint: logs/experiments/artifacts/ordinal_v4_s2025_m11_20260309_131829/SoftOrdinal/selected_checkpoint.pt
+  validation_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m11_20260309_131829/SoftOrdinal/selected_validation_outputs.parquet
+  test_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m11_20260309_131829/SoftOrdinal/selected_test_outputs.parquet

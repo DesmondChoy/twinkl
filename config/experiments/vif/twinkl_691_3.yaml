@@ -1,0 +1,56 @@
+baseline:
+  labels_path: logs/judge_labels/judge_labels.parquet
+  wrangled_dir: logs/wrangled
+  registry_path: logs/registry/personas.parquet
+  synthetic_dir: logs/synthetic_data
+  split_seed: 2025
+  train_ratio: 0.70
+  val_ratio: 0.15
+  holdout_manifest_path: config/experiments/vif/twinkl_681_5_holdout.yaml
+  baseline_run_ids:
+    - run_019
+    - run_020
+    - run_021
+  prior_targeted_run_ids:
+    - run_022
+    - run_023
+    - run_024
+
+training:
+  fixed_holdout_manifest_path: config/experiments/vif/twinkl_681_5_holdout.yaml
+  experiment_group: twinkl-691.3_post_lift_rebaseline
+  split_seed: 2025
+  train_ratio: 0.70
+  val_ratio: 0.15
+  model_names:
+    - BalancedSoftmax
+    - SoftOrdinal
+  model_seeds:
+    - 11
+    - 22
+    - 33
+  run_override_configs:
+    - config/experiments/vif/twinkl_691_3_seed11.yaml
+    - config/experiments/vif/twinkl_691_3_seed22.yaml
+    - config/experiments/vif/twinkl_691_3_seed33.yaml
+  encoder_model: nomic-ai/nomic-embed-text-v1.5
+  truncate_dim: 256
+  window_size: 1
+  hidden_dim: 64
+  dropout: 0.3
+  batch_size: 16
+  epochs: 100
+  weight_decay: 0.01
+  class_balance_source: train_split_per_dimension
+  use_lr_finder: false
+  model_overrides:
+    BalancedSoftmax:
+      learning_rate: 0.015522253574270487
+      use_lr_finder: false
+      learning_rate_source: explicit_model_override
+      learning_rate_policy: run_015_cdwce_a3_valley
+    SoftOrdinal:
+      learning_rate: 0.019791668678535573
+      use_lr_finder: false
+      learning_rate_source: explicit_model_override
+      learning_rate_policy: run_014_softordinal_valley

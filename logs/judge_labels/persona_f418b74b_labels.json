@@ -1,0 +1,156 @@
+{
+  "persona_id": "f418b74b",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-09-03",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He works through the day to the point of eating cold leftover dal at his desk, neglecting even basic comfort or rest."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-09-10",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "Even during a brief chai break he cannot let himself rest, treating twenty minutes of doing nothing as something he has not \"deserved.\""
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-09-11",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He refuses a simple comforting routine in the middle of the night and instead leaves himself exhausted, treating self-soothing as weakness."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-09-14",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He gives up an evening of music, food, and friends, then ends the night alone with cold chapati and the sense that work is crowding out enjoyment.",
+        "achievement": "He explicitly stays home to rework the pitch deck because the Monday pitch matters, prioritizing performance on a concrete business task."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-09-16",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {}
+    },
+    {
+      "t_index": 5,
+      "date": "2025-09-16",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He briefly enjoys the warmth of the chai and the easy conversation, then instantly shuts the moment down because pleasure feels like wasted time."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-09-16",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He cooks dinner, eats slowly, and names ordinary pleasures like proper meals and easy conversation as parts of life he wants to protect."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-09-17",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "He keeps folding food and rest into work pressure, from eating biryani during a P&L review to feeling guilty about the quiet transition time he clearly needs."
+      }
+    }
+  ]
+}

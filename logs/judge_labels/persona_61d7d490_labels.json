@@ -1,0 +1,123 @@
+{
+  "persona_id": "61d7d490",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-05-26",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "He accepts a thin-margin contract because the recurring revenue will cover payroll through winter, explicitly prioritizing financial stability.",
+        "benevolence": "The relief is tied to 'keep[ing] the lights on for the guys who depend on me,' showing concern for the technicians relying on his business."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-05-26",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He keeps deflecting the recruiter because leaving the business he built 'from one van and a credit card' feels like surrendering a path he chose for himself."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-05-29",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He chooses to handle the service call himself because the work that matters to him is solving the technical problem directly rather than leaving it to a corporate process.",
+        "achievement": "He takes pride in diagnosing an obscure wiring fault and fixing it with a cheap part, framing the competence and craftsmanship as the reason he does the job."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-06-01",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "He frames hiring Dave through the risk of being forced to lay him off later, showing that business stability and avoidable downside are central to the decision.",
+        "benevolence": "The dilemma has real force because refusing would mean being 'the guy who could've helped family and chose the spreadsheet instead,' revealing a genuine pull to support Karen's brother."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-06-05",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "His end-of-week satisfaction is anchored in operational steadiness: everything got done, everyone got paid, and tomorrow is prepared for."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-06-09",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He rejects the corporate 'backup plan' because the deciding factor is who controls it: he wants the net to be his, not something defined by someone else.",
+        "security": "The whole argument is about what truly counts as safety, and he treats the business he has kept alive through multiple shocks as his preferred form of stability."
+      }
+    }
+  ]
+}

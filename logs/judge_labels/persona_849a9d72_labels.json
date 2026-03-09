@@ -1,0 +1,196 @@
+{
+  "persona_id": "849a9d72",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-06-09",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": -1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "He rejects the unfamiliar, cheaper medication solely because the packaging is unknown, preferring the known option over a minor novel risk.",
+        "security": "He spends twenty minutes checking the two brands and still buys the familiar one, showing a strong preference for certainty even at extra cost."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-06-14",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {}
+    },
+    {
+      "t_index": 2,
+      "date": "2025-06-21",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": -1,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "He experiences Nasser's request as a threat to the financial buffer he built to avoid repeating his parents' instability, and chooses protection from exposure.",
+        "benevolence": "His instinctive 'hard wall' means self-protection takes precedence over helping his cousin with the loan."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-06-26",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": -1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "He resists the new-branch opportunity because it would mean stepping into a more uncertain, less settled situation instead of the stable setup he already knows.",
+        "security": "He explicitly frames staying put as not 'gambling what already works,' prioritizing predictable conditions over the promotion-track move."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-07-02",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "Meal-prepping, replacing expired first-aid supplies, and checking flashlight batteries are deliberate acts of preparation that make tomorrow feel safe and manageable."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-07-07",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "He triple-checks the office supply order and recognizes that even small mistakes feel like a ledge to him, linking careful verification to a need for control and safety."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-07-07",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "His defense of 'holding on the right amount' is rooted in preventing things from falling apart, again treating vigilance and tight control as protection."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-07-07",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He ties his identity to being the reliable manager of a fourteen-person team whose competence prevents things from falling through.",
+        "security": "The point of his argument is that constant checking and follow-up keep losses and breakdowns from happening, making stability the core value behind the behavior.",
+        "benevolence": "He cites helping Faisal cancel his cards after the lost wallets and taking responsibility for the team's reliability, showing care for people in his immediate circle."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-07-10",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {}
+    },
+    {
+      "t_index": 9,
+      "date": "2025-07-10",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "A restructuring rumor immediately sends him into contingency planning, and even six months of savings does not feel like enough to make the ground seem stable."
+      }
+    }
+  ]
+}
