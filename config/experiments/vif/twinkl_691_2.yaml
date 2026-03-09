@@ -1,0 +1,62 @@
+baseline:
+  labels_path: logs/judge_labels/judge_labels.parquet
+  wrangled_dir: logs/wrangled
+  registry_path: logs/registry/personas.parquet
+  synthetic_dir: logs/synthetic_data
+  split_seed: 2025
+  train_ratio: 0.70
+  val_ratio: 0.15
+  reuse_existing_holdout: true
+  holdout_manifest_path: config/experiments/vif/twinkl_681_5_holdout.yaml
+  snapshot_path: config/experiments/vif/twinkl_691_2_baseline_snapshot.yaml
+
+generation:
+  num_personas: 12
+  target_values:
+    - Hedonism
+    - Security
+  target_tensions:
+    - Hedonism
+    - Security
+  add_random_value: false
+  unsettled_boost: 0.45
+  min_entries: 6
+  max_entries: 10
+  min_days_between_entries: 0
+  max_days_between_entries: 7
+  same_day_probability: 0.15
+  nudge_enabled: true
+  expected_min_personas_per_target: 6
+  target_families:
+    - quiet_restorative_hedonism_positive
+    - calm_buffer_building_security_positive
+    - self_direction_vs_security_tension
+    - stimulation_vs_security_tension
+
+verification:
+  registry_path: logs/registry/personas.parquet
+  synthetic_dir: logs/synthetic_data
+  required_targets:
+    - Hedonism
+    - Security
+  expected_new_persona_count: 12
+  expected_min_personas_per_target: 6
+  min_entries: 6
+  max_entries: 10
+  require_unsettled_entries: true
+  require_non_unsettled_entries: true
+  required_core_value_pairs: {}
+  report_title: twinkl-691.2 Generation Spot Check
+  summary_output_path: logs/exports/twinkl_691_2_generation_check.yaml
+  spot_check_output_path: logs/exports/twinkl_691_2_generation_spot_check.md
+
+label_qa:
+  output_path: logs/exports/twinkl_691_2_label_qa.md
+  sample_plan:
+    quiet_hedonism_positive: 3
+    security_positive_or_ambiguous: 3
+    self_direction_security_tension: 2
+    stimulation_security_tension: 2
+  gate:
+    max_bad_label: 0
+    max_ambiguous: 2

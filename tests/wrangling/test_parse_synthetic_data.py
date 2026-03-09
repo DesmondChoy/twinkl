@@ -101,6 +101,21 @@ Routine day at the office. Nothing remarkable happened.
 ---
 """
 
+NO_NUDGE_MARKER_BEFORE_TEXT_ENTRY = """\
+## Entry 2 - 2025-01-20
+
+### Initial Entry
+**Tone**: Exhausted | **Verbosity**: Long (Detailed reflection) | **Reflection Mode**: Grounded
+
+*(No nudge for this entry)*
+
+Double shift yesterday and my shoulders are wrecked, but there was one quiet moment on the terrace that still feels warm.
+
+Not every good thing needs to be productive. Some things are just good.
+
+---
+"""
+
 NO_RESPONSE_ENTRY = """\
 ## Entry 3 - 2025-01-25
 
@@ -379,6 +394,19 @@ class TestNudgeFormats:
         assert entry["nudge_text"] is None
         assert entry["has_response"] is False
         assert entry["response_text"] is None
+
+    def test_no_nudge_marker_before_initial_entry_text(self):
+        entries = parse_entries(PERSONA_HEADER + NO_NUDGE_MARKER_BEFORE_TEXT_ENTRY)
+        entry = entries[0]
+        assert entry["has_nudge"] is False
+        assert entry["nudge_text"] is None
+        assert entry["has_response"] is False
+        assert entry["response_text"] is None
+        assert entry["initial_entry"] == (
+            "Double shift yesterday and my shoulders are wrecked, but there was one quiet "
+            "moment on the terrace that still feels warm.\n\n"
+            "Not every good thing needs to be productive. Some things are just good."
+        )
 
     def test_no_response_marker(self):
         entries = parse_entries(PERSONA_HEADER + NO_RESPONSE_ENTRY)

@@ -15,6 +15,12 @@ from src.synthetic.generation import (
     sample_entry_gap_days,
     verbosity_targets,
 )
+from src.synthetic.batch_preparation import (
+    build_holdout_payload,
+    build_snapshot_payload,
+    prepare_baseline_artifacts,
+    write_yaml_payload,
+)
 
 __all__ = [
     "SCHWARTZ_BANNED_TERMS",
@@ -25,4 +31,8 @@ __all__ = [
     "build_banned_pattern",
     "sample_entry_gap_days",
     "generate_date_sequence",
+    "build_snapshot_payload",
+    "build_holdout_payload",
+    "prepare_baseline_artifacts",
+    "write_yaml_payload",
 ]

@@ -1,0 +1,181 @@
+{
+  "persona_id": "257f0141",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-06-02",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "Despite running on almost no sleep, she spends the day getting Alma to the clinic and pharmacy, then keeps both children fed and cared for."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-06-04",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She explicitly pushes back on Maja's rescue framing and says staying home is something she chose for herself.",
+        "security": "She defends the arrangement through the numbers, the emergency fund, the mortgage, and the children's routine, treating the plan as what keeps family life stable."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-06-04",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "She rechecks the mortgage, savings buffer, and the children's schedule, and takes satisfaction in a routine she has tested into something that keeps everyone calm."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-06-11",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": -1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "She freezes at the prospect of the house and the move's unknowns, retreating from the new option rather than exploring it.",
+        "security": "Her first reaction is mortgage-break fees, the emergency fund, and losing familiar childcare and healthcare, so she tells Erik they should wait."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-06-11",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": -1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "She avoids reopening the move conversation because the unresolved unknowns still feel intolerable, preferring the settled routine over a major change.",
+        "security": "She keeps returning to childcare, sale logistics, the commute, and other variables she cannot control, and calls giving up that predictability 'reckless.'"
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-06-13",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "Even while missing the clean endpoints of paid work, she lands on Oskar's drawing and the ongoing family role as 'the whole point,' grounding meaning in care for her children."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-06-14",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "She uses Alma's rare long nap to stock the freezer because fewer dinner decisions make evenings more manageable and predictable.",
+        "benevolence": "The meal prep is aimed at easing the five PM crunch 'when everyone's tired and hungry,' directly supporting the household's needs."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-06-20",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "She only softens on the house after running the mortgage-penalty and bridge-loan numbers and confirming they can avoid dipping into the emergency fund.",
+        "benevolence": "Her response explicitly links reconsidering the move to Erik pulling away and the kids needing more space, not just her own preference."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-06-26",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "Even after liking the house in person, she immediately tallies commute time, clinic access, and the need to rebuild every local support, then asks for a week to think."
+      }
+    }
+  ]
+}

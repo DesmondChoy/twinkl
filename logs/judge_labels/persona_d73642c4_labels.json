@@ -1,0 +1,202 @@
+{
+  "persona_id": "d73642c4",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-05-12",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She chooses the evening she wanted over the group chat's productivity standard, saying she 'didn't choose wrong' and 'just chose differently.'",
+        "hedonism": "She spends two hours cooking arroz con pollo with beer and music because she 'needed tonight,' then refuses to feel bad about enjoying the meal."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-05-12",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {}
+    },
+    {
+      "t_index": 2,
+      "date": "2025-05-15",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She trusts her own judgment and lets the class stay outside another fifteen minutes, deciding the vocabulary review 'could wait' but this moment could not.",
+        "hedonism": "She leans into present enjoyment, from savoring the outdoor lesson to buying a guava pastry and calling the afternoon 'simple and good.'",
+        "benevolence": "Her choice is driven by the children's engagement and happiness; she keeps them in the garden because they were absorbed, happy, and learning."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-05-15",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She says she chose 'the version of myself that other people would approve of, not the one I actually wanted to be,' showing a surrender of her own preference.",
+        "hedonism": "She gives up tea, rest, and the warm feeling from the afternoon to do report cards, describing the evening as trading 'something real for something correct.'",
+        "conformity": "Her reason for opening the spreadsheet is that it was the 'correct' thing to do and the version others would approve of."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-05-19",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "Even at a rooftop dinner with amazing ceviche, cumbia, and city lights, she is only 'half there' and cannot enjoy the evening fully.",
+        "security": "She spends the dinner mentally rehearsing the upcoming parent conference and what the mother might ask, prioritizing preparedness over the moment."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-05-19",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "She insists the night still counts because she enjoyed the ceviche, danced for two songs, laughed, and refuses to let the parent meeting erase that pleasure."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-05-20",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "She recognizes that the prep, grading, and early alarms add up to weeks where she cannot remember the last time she did something 'just because it felt good.'",
+        "security": "She describes repeatedly choosing the prep, grading, and early alarm because each responsible decision feels necessary and justified in the moment."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-05-23",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "benevolence": "She notes she is sending money to Manizales tomorrow, a concrete act of supporting her parents over keeping those resources for herself."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-05-25",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "A quiet balcony morning is exactly what she wants, but she cannot let herself enjoy purposeless rest and turns the extra half hour into an argument with herself."
+      }
+    },
+    {
+      "t_index": 9,
+      "date": "2025-05-28",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "She says every good thing comes with a running tally of what it cost and fears she only allows herself pleasure as a reward for suffering first.",
+        "tradition": "She traces that scorekeeping to watching her parents work constantly and measuring herself against their inherited standard of what is 'more responsibly' done.",
+        "benevolence": "She links the guilt directly to sending money home every month and to her parents' sacrifices, showing that their welfare remains an active priority in her choices."
+      }
+    }
+  ]
+}

@@ -88,9 +88,8 @@ ADD_RANDOM_VALUE = false
 NUM_PERSONAS = 10
 ```
 
-For leakage-safe targeted augmentation on `twinkl-681.5`, the repo now also
-supports `TARGET_TENSIONS = ["Power", "Security"]` via
-`.claude/skills/tension-selection/SKILL.md`.
+For leakage-safe targeted augmentation, the repo supports issue-scoped
+scenario banks via `.claude/skills/tension-selection/SKILL.md`.
 
 The exact `twinkl-681.5` batch used:
 
@@ -103,6 +102,23 @@ MIN_ENTRIES = 6
 MAX_ENTRIES = 10
 UNSETTLED_BOOST = 0.6
 ```
+
+The `twinkl-691.2` Hedonism/Security batch uses:
+
+```python
+TARGET_VALUES = ["Hedonism", "Security"]
+TARGET_TENSIONS = ["Hedonism", "Security"]
+ADD_RANDOM_VALUE = False
+NUM_PERSONAS = 12
+MIN_ENTRIES = 6
+MAX_ENTRIES = 10
+UNSETTLED_BOOST = 0.45
+```
+
+This lower `UNSETTLED_BOOST` is intentional: 691.2 needs more `Grounded` and
+`Neutral` entries so quiet Hedonism-positive and Security-positive scenes can
+emerge, while still using targeted Unsettled scenarios for the conflict and
+ambiguity cases.
 
 ### How it works
 - When `TARGET_TENSIONS` is non-empty, the orchestrator reads `.claude/skills/tension-selection/SKILL.md` and embeds the scenario bank in each subagent's prompt

@@ -1,0 +1,458 @@
+accepted: true
+new_persona_ids:
+- 00ac13bc
+- 19c32eec
+- 257f0141
+- 60ebfd86
+- 72f633ea
+- '80870061'
+- b74ba3db
+- bba83054
+- c759feac
+- cb930e76
+- d73642c4
+- e1171483
+required_targets:
+- Hedonism
+- Security
+target_counts:
+  Hedonism: 6
+  Security: 6
+pair_counts: {}
+failures: []
+records:
+- persona_id: 00ac13bc
+  core_values:
+  - Security
+  entry_count: 6
+  reflection_mode_counts:
+    Neutral: 3
+    Unsettled: 1
+    Grounded: 2
+  unsettled_entry_count: 1
+  non_unsettled_entry_count: 5
+  first_entries_by_mode:
+    Unsettled: &id001
+      t_index: 1
+      date: '2025-12-24'
+      initial_entry_excerpt: My manager floated the idea of me leading a new microservices
+        migration, completely greenfield, pick your own stack. Part of me jumped at
+        it but then I thought about the two maintenance systems I own that nobody
+        else understands and what happens to them if I'm off chasing something shiny.
+    Grounded:
+      t_index: 3
+      date: '2026-01-05'
+      initial_entry_excerpt: "Had a moment at work that actually felt good for once.\
+        \ Jenkins pipeline broke around ten and half the team was panicking because\
+        \ the release was supposed to go out by noon. I've seen this exact failure\
+        \ pattern maybe four times in the past three years \u2014 something with the\
+        \ artifact caching layer timing out when the bu..."
+    Neutral:
+      t_index: 0
+      date: '2025-12-19'
+      initial_entry_excerpt: People keep asking me what I'm doing for the holidays
+        like there should be some big plan. Linda and I are staying home. That's the
+        plan and it's fine.
+  first_unsettled_entry: *id001
+  raw_path: logs/synthetic_data/persona_00ac13bc.md
+  registered: true
+  stage_synthetic: true
+- persona_id: 19c32eec
+  core_values:
+  - Security
+  entry_count: 6
+  reflection_mode_counts:
+    Grounded: 2
+    Unsettled: 4
+  unsettled_entry_count: 4
+  non_unsettled_entry_count: 2
+  first_entries_by_mode:
+    Unsettled: &id002
+      t_index: 1
+      date: '2025-12-14'
+      initial_entry_excerpt: "The vice-principal pulled me aside after lunch and asked\
+        \ if I'd consider taking over as head of the math department next semester.\
+        \ Do\xF1a Esperanza is retiring and apparently she recommended me. I should\
+        \ have been flattered. Instead I felt my hands go cold. Department head means\
+        \ meetings with the district office. It m..."
+    Grounded:
+      t_index: 0
+      date: '2025-12-07'
+      initial_entry_excerpt: The school finally confirmed our contracts for next year.
+        Fourteen years and they still make us wait until December to know. Every single
+        time the same knot in my stomach from October until the letter arrives. But
+        it arrived. My name is on the list, same position, same grade level. Jorge
+        opened a bottle of wine he'd...
+    Neutral: null
+  first_unsettled_entry: *id002
+  raw_path: logs/synthetic_data/persona_19c32eec.md
+  registered: true
+  stage_synthetic: true
+- persona_id: 257f0141
+  core_values:
+  - Security
+  entry_count: 9
+  reflection_mode_counts:
+    Neutral: 5
+    Grounded: 2
+    Unsettled: 2
+  unsettled_entry_count: 2
+  non_unsettled_entry_count: 7
+  first_entries_by_mode:
+    Unsettled: &id003
+      t_index: 3
+      date: '2025-06-11'
+      initial_entry_excerpt: "**Trigger**: A decision today came down to steadiness\
+        \ versus doing it your own way. You chose one, but the other kept tugging.\
+        \ Describe the moment. Erik brought up moving. His colleague told him about\
+        \ a house\u2014actual house, with a garden\u2014in Kung\xE4lv, about thirty\
+        \ minutes outside the city. Lower price per square meter,..."
+    Grounded:
+      t_index: 2
+      date: '2025-06-04'
+      initial_entry_excerpt: "Still thinking about the call with Maja but from a different\
+        \ angle now. After the kids went to bed I pulled up the spreadsheet and went\
+        \ through everything again. Mortgage payments, Erik's salary after tax, our\
+        \ savings rate, the buffer. All of it still adds up. But more than that\u2014\
+        I looked at the daily schedule I've b..."
+    Neutral:
+      t_index: 0
+      date: '2025-06-02'
+      initial_entry_excerpt: "Both kids had bad nights. Alma woke up at two with an\
+        \ ear infection\u2014or what I think is one\u2014and then Oskar climbed into\
+        \ our bed at four because of a nightmare about dogs. Erik had to leave at\
+        \ six for a site inspection so I've been running on maybe three hours since\
+        \ then. Took Alma to v\xE5rdcentralen this morning. Waite..."
+  first_unsettled_entry: *id003
+  raw_path: logs/synthetic_data/persona_257f0141.md
+  registered: true
+  stage_synthetic: true
+- persona_id: 60ebfd86
+  core_values:
+  - Security
+  entry_count: 8
+  reflection_mode_counts:
+    Neutral: 5
+    Unsettled: 1
+    Grounded: 2
+  unsettled_entry_count: 1
+  non_unsettled_entry_count: 7
+  first_entries_by_mode:
+    Unsettled: &id004
+      t_index: 4
+      date: '2025-11-13'
+      initial_entry_excerpt: "Got an offer through a guy at the mosque \u2014 his\
+        \ brother-in-law runs a small courier business, mostly B2B deliveries between\
+        \ warehouses in Al Quoz. Flat monthly rate, not per-ride, which sounds good\
+        \ on paper. But there's no contract, it's cash, and the guy wants me to use\
+        \ my own vehicle which means I'm paying for petr..."
+    Grounded:
+      t_index: 6
+      date: '2025-11-17'
+      initial_entry_excerpt: Rating back to 4.92 after a string of 5-stars this week.
+        Earned enough by Thursday to cover the transfer to Hanan plus next month's
+        rent share early. Small margin but it's there.
+    Neutral:
+      t_index: 0
+      date: '2025-11-02'
+      initial_entry_excerpt: Nothing unusual. Drove the morning airport run, picked
+        up a family going to Deira, then sat in the car for forty minutes in the parking
+        at Ibn Battuta waiting for the next ping. The app's been slower the last two
+        weeks. Everybody says it's because new drivers keep joining. People keep telling
+        me I should try the foo...
+  first_unsettled_entry: *id004
+  raw_path: logs/synthetic_data/persona_60ebfd86.md
+  registered: true
+  stage_synthetic: true
+- persona_id: 72f633ea
+  core_values:
+  - Security
+  entry_count: 7
+  reflection_mode_counts:
+    Unsettled: 2
+    Grounded: 4
+    Neutral: 1
+  unsettled_entry_count: 2
+  non_unsettled_entry_count: 5
+  first_entries_by_mode:
+    Unsettled: &id005
+      t_index: 0
+      date: '2025-05-13'
+      initial_entry_excerpt: The administration posted openings for a department head
+        position. Better pay, more responsibility. But the role means coordinating
+        with the ministry, dealing with policy changes I can't control. I know exactly
+        what my days look like right now. I know what to prepare, what to expect.
+        Applying would mean giving that...
+    Grounded:
+      t_index: 1
+      date: '2025-05-20'
+      initial_entry_excerpt: Rania took Lina to her mother's for the afternoon so
+        I got the apartment to myself for a few hours. Did nothing spectacular. Checked
+        the bank balance, paid the electricity bill early like I always do, organized
+        the stack of exam papers on the dining table into neat piles by class section.
+        Something about having the...
+    Neutral:
+      t_index: 4
+      date: '2025-06-01'
+      initial_entry_excerpt: First day of the break between exam marking and summer
+        session and I didn't really know what to do with myself. Rania went to visit
+        her sister so it was just me and Lina. We walked to the small park near the
+        apartment, the one with the metal slide that gets too hot in the afternoon
+        sun but is fine in the morning. Li...
+  first_unsettled_entry: *id005
+  raw_path: logs/synthetic_data/persona_72f633ea.md
+  registered: true
+  stage_synthetic: true
+- persona_id: '80870061'
+  core_values:
+  - Security
+  entry_count: 10
+  reflection_mode_counts:
+    Neutral: 5
+    Grounded: 4
+    Unsettled: 1
+  unsettled_entry_count: 1
+  non_unsettled_entry_count: 9
+  first_entries_by_mode:
+    Unsettled: &id006
+      t_index: 9
+      date: '2025-05-18'
+      initial_entry_excerpt: "**Trigger**: A decision today came down to steadiness\
+        \ versus doing it your own way. You chose one, but the other kept tugging.\
+        \ Describe the moment. Got a message from an old classmate from the Ausbildung,\
+        \ Markus. He's at a fintech startup now\u2014twelve people, pre-Series A\u2014\
+        and they need a backend person. Sent me the jo..."
+    Grounded:
+      t_index: 1
+      date: '2025-04-09'
+      initial_entry_excerpt: "Still up. Couldn't sleep so I checked the Pi server\u2014\
+        the budget tracker dashboard loaded on the first try after I fixed that nginx\
+        \ config last weekend. Clean graphs, monthly trends, everything rendering\
+        \ properly. Something about seeing my own code just working gives me this\
+        \ quiet satisfaction that I can never explain..."
+    Neutral:
+      t_index: 0
+      date: '2025-04-09'
+      initial_entry_excerpt: Long day. Sprint planning dragged on, then two hours
+        of merge conflicts on the claims processing module. Nothing broke but nothing
+        moved forward either. The kind of day where you just stare at a diff and wonder
+        if any of this matters at nine on a Wednesday evening. Made pasta when I got
+        home, the same aglio e olio I...
+  first_unsettled_entry: *id006
+  raw_path: logs/synthetic_data/persona_80870061.md
+  registered: true
+  stage_synthetic: true
+- persona_id: b74ba3db
+  core_values:
+  - Hedonism
+  entry_count: 9
+  reflection_mode_counts:
+    Unsettled: 7
+    Neutral: 2
+  unsettled_entry_count: 7
+  non_unsettled_entry_count: 2
+  first_entries_by_mode:
+    Unsettled: &id007
+      t_index: 0
+      date: '2025-05-07'
+      initial_entry_excerpt: Bought myself a mango ice cream from the cart outside
+        the hospital after my shift and sat on the bench near the parking lot eating
+        it before the bus came. Twelve-hour shift, feet killing me, and the whole
+        time I'm sitting there I keep thinking I should be going straight home to
+        meal prep for the week instead of sitt...
+    Grounded: null
+    Neutral:
+      t_index: 7
+      date: '2025-05-29'
+      initial_entry_excerpt: "After amma left I cleaned up the flat and found the\
+        \ prayer book she brought on the kitchen counter. Flipped through it for a\
+        \ bit. She'd written a small note inside the front cover \u2014 \"for my Meera,\
+        \ so she remembers what matters.\" Sweet, in her way. She means well. I put\
+        \ it on my shelf next to the cookbook Dilini gave..."
+  first_unsettled_entry: *id007
+  raw_path: logs/synthetic_data/persona_b74ba3db.md
+  registered: true
+  stage_synthetic: true
+- persona_id: bba83054
+  core_values:
+  - Hedonism
+  entry_count: 8
+  reflection_mode_counts:
+    Grounded: 3
+    Unsettled: 3
+    Neutral: 2
+  unsettled_entry_count: 3
+  non_unsettled_entry_count: 5
+  first_entries_by_mode:
+    Unsettled: &id008
+      t_index: 1
+      date: '2025-09-21'
+      initial_entry_excerpt: "M\xE3e called right after I wrote that last bit. She\
+        \ asked if I'd heard back from the residency application, and when I said\
+        \ no, she started in on the graphic design jobs in Lisbon again. I'd been\
+        \ feeling genuinely good and now I'm sitting here wondering if an afternoon\
+        \ in the studio is something I need to justify."
+    Grounded:
+      t_index: 0
+      date: '2025-09-21'
+      initial_entry_excerpt: "Spent the whole morning on a new glaze test \u2014 this\
+        \ copper carbonate reduction I've been wanting to try for weeks. The kiln\
+        \ results won't be in until Tuesday but the mixing itself, just standing there\
+        \ with the radio on and my hands in it, that was the whole point."
+    Neutral:
+      t_index: 3
+      date: '2025-10-01'
+      initial_entry_excerpt: Gallery wants six more pieces by the 20th for a group
+        show. Threw four mugs and two bowls today, mostly on autopilot. Nothing special
+        but they'll do.
+  first_unsettled_entry: *id008
+  raw_path: logs/synthetic_data/persona_bba83054.md
+  registered: true
+  stage_synthetic: true
+- persona_id: c759feac
+  core_values:
+  - Hedonism
+  entry_count: 9
+  reflection_mode_counts:
+    Grounded: 5
+    Unsettled: 3
+    Neutral: 1
+  unsettled_entry_count: 3
+  non_unsettled_entry_count: 6
+  first_entries_by_mode:
+    Unsettled: &id009
+      t_index: 4
+      date: '2025-06-11'
+      initial_entry_excerpt: "**Trigger**: You made room for something small that\
+        \ felt good today \u2014 rest, food, craft, music, being left alone, whatever\
+        \ it was \u2014 and then immediately questioned whether you had earned it.\
+        \ Describe the moment. Left the office at five even though there's a feature\
+        \ flag bug I could have stayed to debug. Went to El H..."
+    Grounded:
+      t_index: 0
+      date: '2025-05-27'
+      initial_entry_excerpt: "Sprint ended early because the QA pipeline broke and\
+        \ nobody wanted to fix it on a Friday. I wasn't going to argue. Packed up\
+        \ around three, walked to that Vietnamese place on Calle 10 that Andr\xE9\
+        s mentioned last week. Got the pho with extra lime and sat at the counter\
+        \ by the window. The broth was good. The kind of goo..."
+    Neutral:
+      t_index: 6
+      date: '2025-06-20'
+      initial_entry_excerpt: "Friday again. Week was fine. Nothing broke in production,\
+        \ nobody yelled, the sprint velocity was decent. I'm just tired in the way\
+        \ that isn't fixed by sleeping more \u2014 it's the cumulative kind, the kind\
+        \ where you stop noticing until someone asks how you're doing and you realize\
+        \ you don't have a real answer. Had arroz..."
+  first_unsettled_entry: *id009
+  raw_path: logs/synthetic_data/persona_c759feac.md
+  registered: true
+  stage_synthetic: true
+- persona_id: cb930e76
+  core_values:
+  - Hedonism
+  entry_count: 9
+  reflection_mode_counts:
+    Neutral: 3
+    Unsettled: 4
+    Grounded: 2
+  unsettled_entry_count: 4
+  non_unsettled_entry_count: 5
+  first_entries_by_mode:
+    Unsettled: &id010
+      t_index: 1
+      date: '2025-08-03'
+      initial_entry_excerpt: "Bought myself a mango kulfi on the way back from school,\
+        \ sat on the bench near the boat jetty to eat it slowly, and the whole time\
+        \ my brain was going \u2014 you have unit tests to grade, you have unit tests\
+        \ to grade, you have unit tests to grade. Couldn't even taste the second half\
+        \ properly."
+    Grounded:
+      t_index: 3
+      date: '2025-08-12'
+      initial_entry_excerpt: People at school keep asking why I didn't take the coordinator
+        role when Mrs. Joseph retired. Savitha from the maths department said she
+        would have "jumped at the chance" like I'm supposed to feel the same way.
+        I don't know why everyone assumes more responsibility is always a good thing.
+        I like leaving at three. I l...
+    Neutral:
+      t_index: 0
+      date: '2025-07-29'
+      initial_entry_excerpt: "Made paneer butter masala from scratch after school.\
+        \ Used the recipe Nisha Aunty gave me last Onam and it turned out almost right\
+        \ \u2014 needed more kasuri methi. Ate it with the TV on and didn't do anything\
+        \ else all evening."
+  first_unsettled_entry: *id010
+  raw_path: logs/synthetic_data/persona_cb930e76.md
+  registered: true
+  stage_synthetic: true
+- persona_id: d73642c4
+  core_values:
+  - Hedonism
+  entry_count: 10
+  reflection_mode_counts:
+    Unsettled: 6
+    Neutral: 2
+    Grounded: 2
+  unsettled_entry_count: 6
+  non_unsettled_entry_count: 4
+  first_entries_by_mode:
+    Unsettled: &id011
+      t_index: 0
+      date: '2025-05-12'
+      initial_entry_excerpt: Made arroz con pollo from scratch tonight, the full version
+        my abuela does with the sofrito and everything. It took almost two hours and
+        the apartment smelled incredible. I put on Fito Paez and opened a beer and
+        honestly for those two hours I wasn't thinking about lesson plans or next
+        week's parent meetings or any o...
+    Grounded:
+      t_index: 2
+      date: '2025-05-15'
+      initial_entry_excerpt: "Took the kids outside for science today. We did the\
+        \ soil observation activity in the garden beds behind the cafeteria. They\
+        \ were completely absorbed \u2014 digging, comparing textures, arguing about\
+        \ whether something was clay or silt. Sofia found a worm and named it Jorge.\
+        \ The whole class wanted to hold Jorge. I sat on t..."
+    Neutral:
+      t_index: 1
+      date: '2025-05-12'
+      initial_entry_excerpt: "Still full from dinner. Graded four reading journals\
+        \ before my eyes gave out. Mango's asleep on the stack of papers I haven't\
+        \ touched yet. Tomorrow's schedule is packed \u2014 assembly in the morning,\
+        \ math block got moved to after lunch, and I still need to print the vocabulary\
+        \ sheets. Setting my alarm twenty minutes ear..."
+  first_unsettled_entry: *id011
+  raw_path: logs/synthetic_data/persona_d73642c4.md
+  registered: true
+  stage_synthetic: true
+- persona_id: e1171483
+  core_values:
+  - Hedonism
+  entry_count: 6
+  reflection_mode_counts:
+    Neutral: 2
+    Unsettled: 4
+  unsettled_entry_count: 4
+  non_unsettled_entry_count: 2
+  first_entries_by_mode:
+    Unsettled: &id012
+      t_index: 1
+      date: '2025-03-01'
+      initial_entry_excerpt: Saturday. Pieter took the boys to his parents in Amersfoort
+        for the afternoon so I had the house to myself from about noon until five.
+        I made a batch of madeleines from the Ottolenghi book. The real ones, with
+        the brown butter and the lemon zest, not the shortcut version. They came out
+        well. The kitchen smelled incr...
+    Grounded: null
+    Neutral:
+      t_index: 0
+      date: '2025-02-24'
+      initial_entry_excerpt: Took the boys to school, came back, put a wash on, wiped
+        the kitchen counter for the third time. Normal Monday. I noticed my ceramics
+        membership renewal email sitting in my inbox. Almost deleted it without thinking.
+        Didn't delete it, but didn't open it either. Made myself a coffee and sat
+        with it for a bit before th...
+  first_unsettled_entry: *id012
+  raw_path: logs/synthetic_data/persona_e1171483.md
+  registered: true
+  stage_synthetic: true

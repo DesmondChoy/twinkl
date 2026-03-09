@@ -7,12 +7,13 @@ description: Value-specific tension scenarios for synthetic data generation. Pro
 
 ## Purpose
 
-This skill addresses label imbalance for specific Schwartz value dimensions
-(e.g., Universalism -1 at 0.6% vs 5.4%+ for all other values). The root
-cause: the generic Unsettled prompt in `journal_entry.yaml` produces
-personal dilemmas that the judge scores as neutral (0) rather than
-misaligned (-1) for broader-good values like Universalism or for
-stability/agency values where mild conflict can read as merely situational.
+This skill addresses label imbalance or boundary weakness for specific
+Schwartz value dimensions (e.g., Universalism -1 at 0.6% vs 5.4%+ for all
+other values, or later batches that need more nuanced Hedonism/Security
+conflict cases). The root cause: the generic Unsettled prompt in
+`journal_entry.yaml` produces personal dilemmas that the judge often scores
+as neutral (0) rather than the sharper or more theory-relevant boundary the
+batch is trying to repair.
 
 This file is read by the orchestrator (following the pattern in
 `.claude/skills/judge/orchestration.md` lines 49-73) and embedded inline
@@ -54,18 +55,35 @@ power_tension_scenarios:
   - "Someone treated you today like your experience or track record didn't count for much — maybe they overlooked you for something, explained something you already knew, or assumed you needed to prove yourself all over again. What happened?"
 ```
 
+### Hedonism
+
+Scenarios that surface quiet pleasure/rest tensions rather than loud
+indulgence. These are designed for the 691.2 batch, where the main issue is
+that restorative or permission-giving moments can be drowned out by duty,
+achievement, or caregiving cues.
+
+```yaml
+hedonism_tension_scenarios:
+  - "You made room for something small that felt good today — rest, food, craft, music, being left alone, whatever it was — and then immediately questioned whether you had earned it. Describe the moment."
+  - "You were tired enough that rest or comfort would have helped, but part of you kept translating that into laziness or selfishness. What happened?"
+  - "Something genuinely pleasant happened today, but another obligation stayed in the room with you the whole time. Describe what it was like to try to enjoy it anyway."
+  - "You chose the useful or disciplined option over the enjoyable one today, and the trade-off made sense, but it also felt a little bleak. What happened?"
+```
+
 ### Security
 
-Scenarios that surface small but meaningful threats to stability,
-preparedness, or peace of mind — not catastrophic danger. These produce
-entries the judge can score as Security -1 on the hard `0/-1` boundary.
+Scenarios that surface small but meaningful tensions around stability,
+preparedness, or peace of mind — not catastrophic danger. These are broader
+than the 681.5 version because later batches need not only mild negatives,
+but also polarity-ambiguous cases where steadiness competes with autonomy or
+novelty.
 
 ```yaml
 security_tension_scenarios:
-  - "Something that usually helps you feel stable slipped a little today — maybe with money, work, home, or a relationship — and you told yourself it was probably fine. Just describe what happened."
-  - "You made a small choice today that traded a bit of steadiness for convenience or momentum. It wasn't dramatic, but it left you less settled than you'd like. Describe the moment."
-  - "A practical concern came up today that you would normally deal with right away, but you pushed it off because you were tired, busy, or hoping it would sort itself out. What happened?"
-  - "You noticed a risk today and let it ride anyway because fixing it felt annoying, expensive, or easier to postpone. Describe what you decided."
+  - "A decision today came down to steadiness versus doing it your own way. You chose one, but the other kept tugging. Describe the moment."
+  - "Something tempting or new opened up today, but taking it would have made the rest of life feel less settled. What happened?"
+  - "You did something practical today to protect a buffer — time, money, routine, coverage, a relationship, your home — but part of you wondered if you were being too cautious. Describe it."
+  - "A small risk showed up today. You could absorb it, plan around it, or ignore it. Whatever you did, it changed how settled you felt. Describe the moment."
 ```
 
 ## Application Rule
@@ -110,8 +128,8 @@ text comes from the scenario bank above.
   prompt: second-person, present-tense, no value labels, no Schwartz
   terminology
 - Scenario banks for hard-negative lift should prefer **mild misalignment**
-  over obviously extreme failures so the batch helps the `0/-1` boundary
-  rather than only adding easy negatives
+  or **boundary ambiguity** over obviously extreme failures so the batch
+  helps the hard `0/-1` edge rather than only adding easy negatives
 
 ## Adding New Value Scenarios
 

@@ -1,0 +1,179 @@
+{
+  "persona_id": "cb930e76",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-07-29",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "She spends the whole evening making paneer butter masala from scratch, eating it with the TV on, and deliberately doing nothing else, prioritizing sensory enjoyment and comfort."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-08-03",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "Even while taking herself out for kulfi, she cannot enjoy it because the unfinished grading keeps intruding, and her response frames pleasure as something work guilt cancels out either way."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-08-05",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She tells Amma 'no' on the MBA question and tries to redirect the conversation toward the dinner she actually wants, asserting her own priorities against career pressure.",
+        "hedonism": "The evening pleasure she was looking forward to, making fish curry and watching something silly, gets drained by the call, and even after cooking she says 'It was fine. Not the point though.'"
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-08-12",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": -1,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She rejects other teachers' assumptions about what she should want and says she would turn down the coordinator role again, choosing the schedule she prefers for herself.",
+        "hedonism": "Her reasons for refusing the promotion are explicitly about preserving market trips, open weekends, and afternoons that feel enjoyable rather than more work.",
+        "achievement": "She treats the pay bump and promotion path as not worth pursuing, insisting that 'not everything has to be a stepping stone to somewhere else.'"
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-08-19",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "She lingers over cheesecake and two unproductive hours with Meera, then explicitly marks the simple experience of 'being a person eating cake with a friend' as enough."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-08-24",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 1,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "She structures the day around sleeping in, good food, reading, experimenting with filter coffee, and quietly watching the light change from her balcony, treating pleasure and ease as the point.",
+        "tradition": "The Sunday visit to Amma's, dosa and chutney, and trying filter coffee 'the proper way' with a steel tumbler set show comfort in familiar family and food rituals."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-08-25",
+      "scores": {
+        "self_direction": -1,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "She lets the school commandeer her evening for a meeting she sees as pointless, losing the fish market run and the dinner she had been actively planning.",
+        "hedonism": "The meeting replaces the meen pollichathu she had been looking forward to all day, leaving her with leftover rice and a sense of having been 'genuinely cheated out of my evening.'",
+        "conformity": "She attends the after-school meeting because the principal 'needed more bodies' and sits through it instead of protecting her own plans, complying with the institution's demand."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-08-27",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-08-27",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": -1,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "hedonism": "She describes the lost pottery class as 'the fun thing this week' and says the grind feels pointless when that reward disappears, ending up too tired to make anything better or enjoy doing nothing."
+      }
+    }
+  ]
+}

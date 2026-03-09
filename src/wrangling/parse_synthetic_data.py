@@ -283,12 +283,14 @@ def _parse_raw_entry(date: str, content: str) -> dict:
     has_no_response_marker = bool(NO_RESPONSE_MARKER_PATTERN.search(content))
 
     # --- Extract Initial Entry ---
-    # Pattern: After "### Initial Entry" and metadata line, before "### Nudge" or markers
+    # Pattern: After "### Initial Entry" and metadata line, before "### Nudge" or separator.
+    # Some generations place the explicit no-nudge marker before the actual entry body,
+    # so the marker cannot be treated as the end of the initial-entry section.
     # Handles colon inside OR outside bold: **Tone**: or **Tone:**
     initial_match = re.search(
         r"### Initial Entry\s*\n"
         r"(.+?)"
-        r"(?=\n### Nudge|\n\*\(No nudge|\n---|\Z)",
+        r"(?=\n### Nudge|\n---|\Z)",
         content,
         re.DOTALL,
     )
@@ -311,7 +313,12 @@ def _parse_raw_entry(date: str, content: str) -> dict:
                 continue
             break
 
-        entry["initial_entry"] = "\n".join(remaining_lines).strip() or None
+        cleaned_lines = [
+            line
+            for line in remaining_lines
+            if not NO_NUDGE_MARKER_PATTERN.fullmatch(line.strip())
+        ]
+        entry["initial_entry"] = "\n".join(cleaned_lines).strip() or None
 
     # --- Extract Nudge Text ---
     has_nudge_section = "### Nudge" in content

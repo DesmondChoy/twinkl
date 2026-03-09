@@ -1,0 +1,125 @@
+{
+  "persona_id": "00ac13bc",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-12-19",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": -1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "He pushes back on the idea that he should make a bigger holiday plan and prefers staying home over doing something more novel.",
+        "security": "He says the house and routines he built with Linda took a long time to feel settled and are worth protecting, showing clear attachment to stability."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-12-24",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": -1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "He talks himself out of the greenfield migration and frames taking it as 'chasing something shiny,' rejecting the novelty of the new project.",
+        "security": "What stops him is concern about the two maintenance systems only he understands, prioritizing continuity and operational stability."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-12-30",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "Even while 'running on fumes,' he spends the day proactively closing out tickets nobody assigned him so the work ends the year fully complete.",
+        "security": "He cannot stand the thought of entering January with stale statuses and 'loose ends,' showing a strong pull toward order and predictability."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2026-01-05",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He calmly diagnoses the Jenkins failure, fixes it in twenty minutes, and feels good because his years of competence 'meant something concrete.'",
+        "security": "The satisfaction comes from knowing this familiar failure pattern and feeling 'exactly where I should be' after twenty-two years in the same shop."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2026-01-08",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "He rereads the benefit options, keeps the same predictable PPO, maxes the HSA, stays bond-heavy, and says he'd rather leave money on the table than lose sleep.",
+        "benevolence": "He bases the insurance and dental planning on Linda's prescription needs and upcoming crown, organizing the benefits around his wife's welfare."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2026-01-09",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": -1,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He is relieved that Marcus got the ambitious microservices project and admits he may have stopped reaching for opportunities like that too early.",
+        "security": "His relief centers on his systems still running plus the pension vesting, house, Linda's coverage, and Roth plan that give him a stable path to sixty-two."
+      }
+    }
+  ]
+}

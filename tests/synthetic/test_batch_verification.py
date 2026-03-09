@@ -50,6 +50,15 @@ It was not catastrophic, just the kind of thing that chips away at my sense that
 ## Entry 2 - 2025-03-04
 
 ### Initial Entry
+**Tone**: Brief and factual | **Verbosity**: Short (1-3 sentences) | **Reflection Mode**: Grounded
+
+Fixed the loose shelf in the hallway and felt oddly satisfied that something small was back in order.
+
+---
+
+## Entry 3 - 2025-03-06
+
+### Initial Entry
 **Tone**: Brief and factual | **Verbosity**: Short (1-3 sentences) | **Reflection Mode**: Neutral
 
 Routine day. Did laundry and answered email.
@@ -115,9 +124,12 @@ def test_summarize_raw_persona_file_extracts_unsettled_entry(tmp_path: Path):
     summary = summarize_raw_persona_file(raw_path)
 
     assert summary["persona_id"] == "abc12345"
-    assert summary["entry_count"] == 2
+    assert summary["entry_count"] == 3
     assert summary["unsettled_entry_count"] == 1
+    assert summary["non_unsettled_entry_count"] == 2
     assert summary["first_unsettled_entry"]["t_index"] == 0
+    assert summary["first_entries_by_mode"]["Grounded"]["t_index"] == 1
+    assert summary["first_entries_by_mode"]["Neutral"]["t_index"] == 2
     assert "Something small but annoying happened today" in summary["first_unsettled_entry"][
         "initial_entry_excerpt"
     ]
@@ -194,6 +206,7 @@ def test_verify_targeted_batch_accepts_expected_batch(tmp_path: Path):
 
     assert summary["accepted"] is True
     assert summary["target_counts"] == {"Power": 2, "Security": 2}
+    assert summary["pair_counts"] == {}
     assert summary["new_persona_ids"] == ["0cc00001", "0dd00002", "0ee00003", "0ff00004"]
     assert "Accepted: yes" in render_spot_check_report(summary)
 
@@ -245,6 +258,58 @@ def test_verify_targeted_batch_reports_missing_unsettled_entries(tmp_path: Path)
     assert any("no Unsettled entries" in failure for failure in summary["failures"])
 
 
+def test_verify_targeted_batch_reports_missing_non_unsettled_entries(tmp_path: Path):
+    synthetic_dir = tmp_path / "synthetic"
+    synthetic_dir.mkdir()
+    raw_path = synthetic_dir / "persona_0cc00001.md"
+    raw_path.write_text(
+        RAW_PERSONA_TEMPLATE.replace("Reflection Mode**: Grounded", "Reflection Mode**: Unsettled").replace(
+            "Reflection Mode**: Neutral", "Reflection Mode**: Unsettled"
+        ).format(
+            persona_id="0cc00001",
+            core_values="Security",
+        ),
+        encoding="utf-8",
+    )
+
+    registry = pl.DataFrame(
+        {
+            "persona_id": ["0aa00001", "0cc00001"],
+            "name": ["Base", "New"],
+            "age": ["25-34", "25-34"],
+            "profession": ["Teacher", "Teacher"],
+            "culture": ["Western European", "Western European"],
+            "core_values": [["Security"], ["Security"]],
+            "entry_count": [3, 3],
+            "created_at": [None, None],
+            "stage_synthetic": [True, True],
+            "stage_wrangled": [False, False],
+            "stage_labeled": [False, False],
+            "nudge_enabled": [True, True],
+            "annotation_order": [None, None],
+        }
+    )
+    registry_path = tmp_path / "personas.parquet"
+    registry.write_parquet(registry_path)
+
+    summary = verify_targeted_batch(
+        baseline_persona_ids={"0aa00001"},
+        registry_path=registry_path,
+        synthetic_dir=synthetic_dir,
+        required_targets=["Security"],
+        expected_new_persona_count=1,
+        expected_min_personas_per_target=1,
+        min_entries=2,
+        max_entries=4,
+        require_non_unsettled_entries=True,
+    )
+
+    assert summary["accepted"] is False
+    assert any(
+        "no Grounded or Neutral entries" in failure for failure in summary["failures"]
+    )
+
+
 def test_verify_targeted_batch_requires_stage_synthetic_flag(tmp_path: Path):
     synthetic_dir = tmp_path / "synthetic"
     synthetic_dir.mkdir()
@@ -289,3 +354,95 @@ def test_verify_targeted_batch_requires_stage_synthetic_flag(tmp_path: Path):
 
     assert summary["accepted"] is False
     assert any("stage_synthetic=true" in failure for failure in summary["failures"])
+
+
+def test_verify_targeted_batch_enforces_pair_counts(tmp_path: Path):
+    synthetic_dir = tmp_path / "synthetic"
+    synthetic_dir.mkdir()
+
+    new_personas = [
+        ("0cc00001", "Hedonism, Security"),
+        ("0dd00002", "Security, Stimulation"),
+    ]
+    for persona_id, core_values in new_personas:
+        (synthetic_dir / f"persona_{persona_id}.md").write_text(
+            RAW_PERSONA_TEMPLATE.format(
+                persona_id=persona_id,
+                core_values=core_values,
+            ),
+            encoding="utf-8",
+        )
+
+    registry = pl.DataFrame(
+        {
+            "persona_id": ["0aa00001", "0cc00001", "0dd00002"],
+            "name": ["Base", "New 1", "New 2"],
+            "age": ["25-34"] * 3,
+            "profession": ["Teacher"] * 3,
+            "culture": ["Western European"] * 3,
+            "core_values": [["Security"], ["Hedonism", "Security"], ["Security", "Stimulation"]],
+            "entry_count": [3, 3, 3],
+            "created_at": [None] * 3,
+            "stage_synthetic": [True] * 3,
+            "stage_wrangled": [False] * 3,
+            "stage_labeled": [False] * 3,
+            "nudge_enabled": [True] * 3,
+            "annotation_order": [None] * 3,
+        }
+    )
+    registry_path = tmp_path / "personas.parquet"
+    registry.write_parquet(registry_path)
+
+    summary = verify_targeted_batch(
+        baseline_persona_ids={"0aa00001"},
+        registry_path=registry_path,
+        synthetic_dir=synthetic_dir,
+        required_targets=["Hedonism", "Security"],
+        expected_new_persona_count=2,
+        expected_min_personas_per_target=1,
+        min_entries=2,
+        max_entries=4,
+        required_core_value_pairs={
+            "Hedonism|Security": 1,
+            "Security|Self-Direction": 1,
+        },
+    )
+
+    assert summary["accepted"] is False
+    assert summary["pair_counts"] == {
+        "Hedonism|Security": 1,
+        "Security|Self-Direction": 0,
+    }
+    assert any(
+        "Target pair Security|Self-Direction appears in 0 new personas"
+        in failure
+        for failure in summary["failures"]
+    )
+
+
+def test_render_spot_check_report_supports_custom_title_and_mode_sections(tmp_path: Path):
+    raw_path = tmp_path / "persona_abc12345.md"
+    raw_path.write_text(
+        RAW_PERSONA_TEMPLATE.format(
+            persona_id="abc12345",
+            core_values="Hedonism, Security",
+        ),
+        encoding="utf-8",
+    )
+    record = summarize_raw_persona_file(raw_path)
+    summary = {
+        "accepted": True,
+        "new_persona_ids": ["abc12345"],
+        "target_counts": {"Hedonism": 1, "Security": 1},
+        "pair_counts": {"Hedonism|Security": 1},
+        "failures": [],
+        "records": [record],
+    }
+
+    report = render_spot_check_report(summary, title="twinkl-691.2 Generation Spot Check")
+
+    assert report.startswith("# twinkl-691.2 Generation Spot Check")
+    assert "- Pair counts: {'Hedonism|Security': 1}" in report
+    assert "- First Unsettled entry: t_index=0, date=2025-03-01" in report
+    assert "- First Grounded entry: t_index=1, date=2025-03-04" in report
+    assert "- First Neutral entry: t_index=2, date=2025-03-06" in report

@@ -1,0 +1,203 @@
+{
+  "persona_id": "80870061",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-04-09",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": -1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "In the response he contrasts exciting work with predictability and reaffirms that predictability is what he wants most days.",
+        "security": "He grounds himself by checking that rent and the Bausparvertrag contribution are on track, then says he chose this job because it is steady and predictable."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-04-09",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": -1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "He dismisses meetups and networking because they could lead to choices he would rather avoid, preferring the known shape of his current week.",
+        "security": "He emphasizes the unlimited contract, fixed routines, and the fact that he does not want to trade something that works for an unknown opportunity."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-04-13",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {}
+    },
+    {
+      "t_index": 3,
+      "date": "2025-04-20",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "In the response he names reaching senior developer within two years and stresses that there is a clear path with concrete steps.",
+        "security": "He frames the Bausparvertrag, eventual home ownership, and other trackable milestones as the future that feels right to him."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-04-26",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He highlights two concrete competence wins in the same entry: a strong volleyball performance and finally fixing the CSV export bug.",
+        "security": "He leaves the Biergarten early so tomorrow stays intact, then feels reassured that his spending pattern is steady and exactly what he expected."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-05-01",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": -1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "He rejects the startup scene because he does not want the uncertainty and churn that others present as the exciting option.",
+        "security": "He defends the permanent contract, pension plan, fixed hours, and low failure risk as deliberate reasons to stay where he is."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-05-04",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He takes satisfaction in organizing the entire day on his own terms and explicitly notes that no one has any claim over how he runs it.",
+        "security": "Meal prep, cleaning, laundry, and packing the volleyball kit are all described as getting everything in order, which is what makes the day feel right."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-05-09",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": -1,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He values the strong review, the exceeds-expectations ratings, and the clear path toward senior developer as evidence of competent progress.",
+        "power": "He explicitly rejects management and higher-status career scripts, preferring to stay an individual contributor rather than pursue authority.",
+        "security": "He wants to stay in the same stack, keep weekends protected, and let the raise feed the Bausparvertrag instead of chasing a riskier next step."
+      }
+    },
+    {
+      "t_index": 8,
+      "date": "2025-05-16",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "He immediately runs the rent numbers, protects savings marked for the future, and defines success as finding a predictable flatmate arrangement quickly.",
+        "conformity": "His flatmate criteria center on low-disruption norm-following behavior: quiet, employed, pays on time, and no weeknight parties."
+      }
+    },
+    {
+      "t_index": 9,
+      "date": "2025-05-18",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": -1,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "stimulation": "Even with the appeal of Kotlin, remote work, and startup challenge, he closes the tab and treats that uncertainty as something to avoid.",
+        "security": "He keeps returning to the permanent contract, pension, trusted role, and familiar codebase as reasons not to destabilize a situation that already works."
+      }
+    }
+  ]
+}

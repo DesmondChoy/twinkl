@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Freeze the pre-generation holdout and baseline snapshot for twinkl-681.5."""
+"""Prepare the frozen-holdout baseline snapshot for twinkl-691.2."""
 
 from __future__ import annotations
 
@@ -25,12 +25,12 @@ from src.synthetic.batch_verification import load_yaml_file
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Freeze the pre-generation holdout and baseline snapshot for twinkl-681.5."
+        description="Prepare the frozen-holdout baseline snapshot for twinkl-691.2."
     )
     parser.add_argument(
         "--config",
-        default="config/experiments/vif/twinkl_681_5.yaml",
-        help="Path to the twinkl-681.5 experiment config.",
+        default="config/experiments/vif/twinkl_691_2.yaml",
+        help="Path to the twinkl-691.2 experiment config.",
     )
     args = parser.parse_args()
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify the manually generated twinkl-681.5 targeted synthetic batch."""
+"""Verify the manually generated twinkl-691.2 targeted synthetic batch."""
 
 from __future__ import annotations
 
@@ -28,12 +28,12 @@ from src.synthetic.batch_verification import (
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Verify the manually generated targeted synthetic batch for twinkl-681.5."
+        description="Verify the manually generated targeted synthetic batch for twinkl-691.2."
     )
     parser.add_argument(
         "--config",
-        default="config/experiments/vif/twinkl_681_5.yaml",
-        help="Path to the twinkl-681.5 experiment config.",
+        default="config/experiments/vif/twinkl_691_2.yaml",
+        help="Path to the twinkl-691.2 experiment config.",
     )
     args = parser.parse_args()
 
@@ -70,7 +70,7 @@ def main() -> int:
     spot_check_path.write_text(
         render_spot_check_report(
             summary,
-            title=verification.get("report_title", "twinkl-681.5 Generation Spot Check"),
+            title=verification.get("report_title", "twinkl-691.2 Generation Spot Check"),
         ),
         encoding="utf-8",
     )

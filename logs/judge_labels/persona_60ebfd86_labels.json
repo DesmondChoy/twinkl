@@ -1,0 +1,163 @@
+{
+  "persona_id": "60ebfd86",
+  "labels": [
+    {
+      "t_index": 0,
+      "date": "2025-11-02",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He treats the 4.93 rating as a performance benchmark he has to maintain and rejects anything that could hurt it.",
+        "security": "He refuses to juggle multiple apps because the familiar routes, surge patterns, and priority-dispatch threshold protect steady income."
+      }
+    },
+    {
+      "t_index": 1,
+      "date": "2025-11-04",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "He has already set aside the school-fee money despite how thin the margin is, showing careful financial buffering.",
+        "benevolence": "The money he protected is specifically for Layla's final semester, prioritizing his daughter's immediate need."
+      }
+    },
+    {
+      "t_index": 2,
+      "date": "2025-11-05",
+      "scores": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "self_direction": "He values controlling his own hours and rejects a contract that would tie him down despite the appeal of a salary.",
+        "security": "He focuses on probation risk, commute downside, and the fact that with driving he already knows what to expect."
+      }
+    },
+    {
+      "t_index": 3,
+      "date": "2025-11-11",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "achievement": "He frames the lost rating point against two years of clean driving, showing strong investment in sustained competent performance.",
+        "security": "The rating drop matters because it threatens the dispatch stability and earnings reliability he depends on."
+      }
+    },
+    {
+      "t_index": 4,
+      "date": "2025-11-13",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "He distrusts the cash courier offer because it lacks a contract, shifts vehicle costs onto him, and feels less solid than the app's guaranteed weekly deposits."
+      }
+    },
+    {
+      "t_index": 5,
+      "date": "2025-11-15",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "He advises Layla to start in Amman because family support there feels safer than Gulf salaries tied to visa uncertainty and isolation.",
+        "benevolence": "His advice is driven by wanting to spare his daughter the loneliness and instability he endured himself."
+      }
+    },
+    {
+      "t_index": 6,
+      "date": "2025-11-17",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "He measures the week by whether the transfer and next month's rent are already covered, and takes comfort in the small remaining margin.",
+        "benevolence": "The earnings milestone includes sending money to Hanan, showing continued prioritization of his household back home."
+      }
+    },
+    {
+      "t_index": 7,
+      "date": "2025-11-24",
+      "scores": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 0,
+        "power": 0,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      },
+      "rationales": {
+        "security": "He reviews the spreadsheet, keeps the emergency buffer untouched, rolls surplus forward, and explicitly says he only needs the month to avoid going bad."
+      }
+    }
+  ]
+}
