@@ -16,7 +16,7 @@ Key properties:
 - **Uncertainty-aware**: Holds back judgment when the situation is complex or data is sparse
 - **Trajectory-aware**: Detects patterns over time rather than reacting to single entries
 
-These are target design properties. The Critic model infrastructure is functional (MLP ordinal base + MC Dropout, nomic-embed-text-v1.5 encoder, CLI training scripts) but **QWK metric optimization is in progress** — see the [Implementation Status](docs/prd.md#implementation-status) for details.
+These are target design properties. The Critic model infrastructure is functional (ordinal MLP heads + MC Dropout, config-driven sentence encoders with `nomic-embed-text-v1.5` as the active default, CLI training scripts), but **QWK and structural value-consistency optimization are still in progress**. The active corrected-split default remains the `run_019`-`run_021` BalancedSoftmax family; recent post-lift reruns are logged in [`logs/experiments/index.md`](logs/experiments/index.md).
 
 **Target behavior:** When the VIF detects significant misalignment with high confidence, it triggers the Coach layer to surface evidence-based feedback. Currently the Coach is ⚠️ Partial — entry processing is ready but digest generation is not yet implemented. See `docs/vif/` for architecture details.
 
@@ -32,7 +32,7 @@ An AI **experiment-review skill** acts as an autonomous data science partner to 
 - **Intelligent Backfilling**: Reads `git` logs and configuration diffs to reconstruct the rationale for past runs, automatically backfilling missing provenance and observations.
 - **Data Science Partner**: Synthesizes interacting variables (e.g., encoder choice vs model capacity) to form hypotheses about the model's fundamental understanding of the task.
 - **Research Colleague**: Actively browses the web for state-of-the-art literature to validate its recommendations for next-step experiments.
-- **Reporting**: Produces a structured analysis of metric trade-offs (e.g., hedging vs minority recall) and maintains a leaderboard of the best models.
+- **Reporting**: Produces a structured analysis of metric trade-offs (e.g., hedging vs minority recall), logs compact circumplex summaries, and maintains a leaderboard of the best models.
 
 ## Synthetic Data Generation — ✅ Complete
 
@@ -53,35 +53,35 @@ See `docs/pipeline/pipeline_specs.md` for implementation details.
 
 | Metric | Value |
 |--------|-------|
-| Personas | 192 |
-| Journal entries | 1,555 |
+| Personas | 204 |
+| Journal entries | 1,651 |
 | Avg entries/persona | 8.1 |
-| Entries with generated nudges | 957 (61.5%) |
+| Entries with generated nudges | 1,028 (62.3%) |
 
 **Demographics:** 6 cultures, 9 professions, and 5 standard age brackets.
 
 **Schwartz Value Distribution** (personas can have 1-2 values):
 | Value | Personas | % |
 |-------|----------|---|
-| Power | 37 | 19% |
-| Universalism | 32 | 17% |
-| Security | 30 | 16% |
-| Conformity | 28 | 15% |
-| Tradition | 28 | 15% |
-| Hedonism | 27 | 14% |
-| Achievement | 25 | 13% |
-| Benevolence | 25 | 13% |
-| Self-Direction | 24 | 13% |
-| Stimulation | 24 | 13% |
+| Power | 37 | 18% |
+| Security | 36 | 18% |
+| Hedonism | 33 | 16% |
+| Universalism | 32 | 16% |
+| Conformity | 28 | 14% |
+| Tradition | 28 | 14% |
+| Achievement | 25 | 12% |
+| Benevolence | 25 | 12% |
+| Self-Direction | 24 | 12% |
+| Stimulation | 24 | 12% |
 
-**Judge Label Distribution** (15,550 per-dimension labels across 1,555 entries):
+**Judge Label Distribution** (16,510 per-dimension labels across 1,651 entries):
 | Label | Count | % |
 |-------|-------|---|
-| -1 | 1,122 | 7.2% |
-| 0 | 11,720 | 75.4% |
-| +1 | 2,708 | 17.4% |
+| -1 | 1,165 | 7.1% |
+| 0 | 12,535 | 75.9% |
+| +1 | 2,810 | 17.0% |
 
-**Standard nudge types** (953 taxonomy-tagged nudges): Tension-surfacing (42.2%), Elaboration (40.4%), Clarification (17.4%). Four older one-off nudge labels remain in legacy artifacts.
+Most generated nudges still use the standard three-category taxonomy (`tension_surfacing`, `elaboration`, `clarification`); a small number of older one-off labels remain in legacy raw artifacts.
 
 See [`docs/pipeline/data_schema.md`](docs/pipeline/data_schema.md) for parquet schemas and query examples.
 
@@ -116,8 +116,12 @@ Registry Check → Auto-Wrangle → Parallel Labeling (subagents) → Validation
 
 **Experimentation Scripts/Modules** (for prompt iteration and testing):
 - `src/synthetic/generation.py` — One-way generation primitives (context, date sampling, banned-term guards)
+- `src/synthetic/batch_preparation.py` — Baseline snapshots and frozen-holdout manifests for targeted data-lift experiments
+- `src/synthetic/batch_verification.py` — Raw-batch acceptance checks and spot-check export generation
 - `src/nudge/decision.py` + `src/nudge/generation.py` — Two-way conversational nudging logic
 - `scripts/journalling/generation_sanity_check.py` — Quick local sanity checks
+- `scripts/journalling/twinkl_681_5_freeze_baseline.py` / `scripts/journalling/twinkl_691_2_prepare_batch.py` — Example baseline-freeze wrappers
+- `scripts/journalling/twinkl_681_5_verify_batch.py` / `scripts/journalling/twinkl_691_2_verify_batch.py` — Example targeted-batch verification wrappers
 
 ## Human Annotation Tool — ✅ Complete
 

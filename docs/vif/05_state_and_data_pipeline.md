@@ -31,7 +31,7 @@ For the capstone POC, we commit to the following **concrete scope**:
 - **Values**: $K = 10$ Schwartz dimensions.
   - Each Judge alignment component $\hat{a}^{(j)}_{u,t} \in \{-1, 0, +1\}$, for $j = 1, \dots, 10$.
 
-- **Text encoder**: frozen sentence encoder (e.g. SBERT).
+- **Text encoder**: frozen sentence encoder (e.g. nomic or a SBERT-family model).
   - $\phi_{\text{text}}(T_{u,t}) \in \mathbb{R}^{d_e}$, where $d_e$ is the effective embedding dimension after any truncation (see `config/vif.yaml`).
 
 These choices keep the POC **implementable within a semester** while still honouring the trajectory‑aware, vector‑valued and uncertainty‑aware design.
@@ -250,6 +250,30 @@ does more than a simple random persona shuffle.
 
 In short: the current implementation performs **best-effort persona-level sign stratification**, not exact `-1/0/+1` label-count matching.
 
+### 4.4.2 Fixed Holdouts for Augmentation Rounds
+
+For targeted data-lift experiments, the repo also supports **frozen validation
+and test holdouts** so that before/after retrains remain comparable.
+
+- `split_by_persona()` accepts explicit `fixed_val_persona_ids` and
+  `fixed_test_persona_ids`.
+- `create_dataloaders()` additionally accepts
+  `fixed_holdout_manifest_path`, which loads those persona sets from a YAML
+  manifest via `src/vif/holdout.py`.
+- When fixed holdouts are supplied, all remaining personas route to training
+  without reshuffling.
+
+Typical workflow for a targeted batch:
+
+1. Before generation, persist a baseline snapshot plus a holdout manifest under
+   `config/experiments/vif/`.
+2. Generate, verify, wrangle, and label the new personas.
+3. Reuse the same validation/test persona IDs for the retrain so metric deltas
+   reflect the new training data rather than a changed evaluation slice.
+
+This is the regime used for recent augmentation rounds such as the frozen-holdout
+targeted lifts and the regenerated `Hedonism`/`Security` batch.
+
 ---
 
 ## 5. Link Back to Model Training and Inference
@@ -278,7 +302,7 @@ The state construction and data pipeline are implemented in `src/vif/`. Key modu
 |--------|------------|
 | `src/vif/state_encoder.py` | `StateEncoder` class — Sections 2 & 4 (state vector construction) |
 | `src/vif/dataset.py` | `VIFDataset`, `load_all_data()`, `split_by_persona()` — Sections 3 & 4.5 |
-| `src/vif/encoders.py` | `SBERTEncoder` — Section 4.1 (text embeddings) |
+| `src/vif/encoders.py` | Sentence-encoder wrapper — Section 4.1 (text embeddings) |
 
 ### 6.1 Verification of Spec Compliance
 
@@ -288,8 +312,8 @@ The implementation matches this spec exactly:
 |-----------|------------|----------------|
 | Window size | $N$ per config | `StateEncoder(window_size=N)` ✓ |
 | State dimension | $N \times d_e + (N{-}1) + 10$ | `state_encoder.state_dim` ✓ |
-| Text encoder | SBERT, $d_e$ per config | `create_encoder(config["encoder"])` ✓ |
-| Train/Val/Test split | 70/15/15 by persona, with sign-stratified val/test after `d937094` | `split_by_persona()` ✓ |
+| Text encoder | Configured sentence encoder, $d_e$ per config | `create_encoder(config["encoder"])` ✓ |
+| Train/Val/Test split | 70/15/15 by persona, with sign-stratified val/test after `d937094` and optional fixed holdout reuse | `split_by_persona()` / `load_fixed_holdout_ids()` ✓ |
 | Zero-padding for early entries | Yes | Handled in `build_state_vector()` ✓ |
 
 ### 6.2 Data Flow
@@ -300,7 +324,8 @@ logs/judge_labels/judge_labels.parquet  →  load_labels()
                                     ↓
                             merge_labels_and_entries()
                                     ↓
-                            split_by_persona() (70/15/15, persona-level sign stratified)
+                            split_by_persona() (70/15/15, persona-level sign stratified
+                                              or fixed-holdout reuse)
                                     ↓
                             VIFDataset (caches embeddings)
                                     ↓

@@ -192,42 +192,42 @@ Based on the current committed corpus:
 
 ### Corpus Snapshot
 
-- 192 personas in `logs/registry/personas.parquet`
-- 1,555 labeled journal entries in `logs/judge_labels/judge_labels.parquet`
+- 204 personas in `logs/registry/personas.parquet`
+- 1,651 labeled journal entries in `logs/judge_labels/judge_labels.parquet`
 - Average of 8.1 entries per persona (range: 2-12)
-- 280 total core-value assignments across personas
-- 957 entries with generated nudges in `logs/synthetic_data/` (61.5% of all entries)
+- 292 total core-value assignments across personas
+- 1,028 entries with generated nudges in `logs/synthetic_data/` (62.3% of all entries)
 
 ### Overall Label Balance
 
-Across all 15,550 per-dimension labels:
+Across all 16,510 per-dimension labels:
 
 | Label | Count | % |
 |-------|-------|---|
-| `-1` | 1,122 | 7.2% |
-| `0` | 11,720 | 75.4% |
-| `+1` | 2,708 | 17.4% |
+| `-1` | 1,165 | 7.1% |
+| `0` | 12,535 | 75.9% |
+| `+1` | 2,810 | 17.0% |
 
 ### Per-Dimension Label Balance
 
 | Value | `-1` | `0` | `+1` |
 |-------|------|-----|------|
-| Self-Direction | 214 (13.8%) | 941 (60.5%) | 400 (25.7%) |
-| Stimulation | 55 (3.5%) | 1,373 (88.3%) | 127 (8.2%) |
-| Hedonism | 118 (7.6%) | 1,279 (82.3%) | 158 (10.2%) |
-| Achievement | 84 (5.4%) | 1,059 (68.1%) | 412 (26.5%) |
-| Power | 146 (9.4%) | 1,242 (79.9%) | 167 (10.7%) |
-| Security | 143 (9.2%) | 1,148 (73.8%) | 264 (17.0%) |
-| Conformity | 127 (8.2%) | 1,098 (70.6%) | 330 (21.2%) |
-| Tradition | 58 (3.7%) | 1,242 (79.9%) | 255 (16.4%) |
-| Benevolence | 121 (7.8%) | 998 (64.2%) | 436 (28.0%) |
-| Universalism | 56 (3.6%) | 1,340 (86.2%) | 159 (10.2%) |
+| Self-Direction | 216 (13.1%) | 1,019 (61.7%) | 416 (25.2%) |
+| Stimulation | 60 (3.6%) | 1,464 (88.7%) | 127 (7.7%) |
+| Hedonism | 141 (8.5%) | 1,337 (81.0%) | 173 (10.5%) |
+| Achievement | 85 (5.1%) | 1,130 (68.4%) | 436 (26.4%) |
+| Power | 146 (8.8%) | 1,338 (81.0%) | 167 (10.1%) |
+| Security | 151 (9.1%) | 1,212 (73.4%) | 288 (17.4%) |
+| Conformity | 129 (7.8%) | 1,189 (72.0%) | 333 (20.2%) |
+| Tradition | 58 (3.5%) | 1,337 (81.0%) | 256 (15.5%) |
+| Benevolence | 123 (7.5%) | 1,073 (65.0%) | 455 (27.6%) |
+| Universalism | 56 (3.4%) | 1,436 (87.0%) | 159 (9.6%) |
 
 ### Sparsity
 
-- 1,509 entries (97.0%) have at least one non-zero label
-- 46 entries (3.0%) are all-zero across all 10 values
-- Mean non-zero dimensions per entry: 2.46
+- 1,594 entries (96.5%) have at least one non-zero label
+- 57 entries (3.5%) are all-zero across all 10 values
+- Mean non-zero dimensions per entry: 2.41
 - Median non-zero dimensions per entry: 2
 
 ### Demographic Notes

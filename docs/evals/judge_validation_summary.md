@@ -1,6 +1,6 @@
 # Judge Validation Summary
 
-**Last Updated:** 2026-03-08
+**Last Updated:** 2026-03-09
 
 **Purpose:** This document summarizes inter-rater reliability findings to support the academic claim that LLM Judge labeling is at least as reliable as human annotation, justifying automated labeling at scale for VIF training data.
 
@@ -100,22 +100,22 @@ The registry already contains sufficient personas for all dimensions:
 |-----------------|-------------|---------------------|-----------|
 | Self-Direction | 24 | 3 | 21 |
 | Stimulation | 24 | 1 | 23 |
-| Hedonism | 27 | 2 | 25 |
+| Hedonism | 33 | 2 | 31 |
 | Achievement | 25 | 0 | 25 |
 | Power | 37 | 1 | 36 |
-| Security | 30 | 1 | 29 |
+| Security | 36 | 1 | 35 |
 | Conformity | 28 | 2 | 26 |
 | Tradition | 28 | 1 | 27 |
 | Benevolence | 25 | 1 | 24 |
 | Universalism | 32 | 1 | 31 |
 
-**Total:** 192 personas in registry, 280 value assignments (mean 28.0 per value).
+**Total:** 204 personas in registry, 292 value assignments (mean 29.2 per value).
 
 No additional synthetic data generation required.
 
 ### 2. Run Judge Labeling ✅ COMPLETED
 
-All 192 personas have been labeled by the Judge.
+All 204 personas have been labeled by the Judge.
 
 ### 3. Conduct Additional Human Annotation Round 🔲 IN PROGRESS
 
@@ -195,4 +195,4 @@ generate_agreement_report()
 - **Human Annotators:** 3 (des, jl, km)
 - **Entries Annotated (Current):** 46 (from 10 personas)
 - **Entries to Annotate (Next Round):** ~63 (from 9 personas)
-- **Total Personas in Registry:** 192
+- **Total Personas in Registry:** 204

@@ -12,7 +12,7 @@ The Judge (LLM-as-Judge) produces training labels for the VIF. This evaluation v
 
 ### What's Implemented
 - Judge labeling pipeline operational ([`src/judge/consolidate.py`](../../src/judge/consolidate.py))
-- 1 555 labeled entries across 192 personas in [`logs/judge_labels/judge_labels.parquet`](../../logs/judge_labels/judge_labels.parquet)
+- 1 651 labeled entries across 204 personas in [`logs/judge_labels/judge_labels.parquet`](../../logs/judge_labels/judge_labels.parquet)
 - Data models with rationale support ([`src/models/judge.py`](../../src/models/judge.py))
 - Human annotation tool ([`src/annotation_tool/app.py`](../../src/annotation_tool/app.py))
 - 3 annotators × 46 entries (des, jl, km) in [`logs/annotations/`](../../logs/annotations/)

@@ -14,9 +14,9 @@ The VIF detects when a user's behavior drifts from their declared values. This e
 - Evaluation specification complete (this document)
 - Conceptual design documented in [`docs/vif/04_uncertainty_logic.md`](../vif/04_uncertainty_logic.md)
 - Trigger formulas defined (Crash: V_{t-1} - V_t > δ, Rut: sustained low)
-- Trained Critic models: 9 runs across 4+ loss functions ([`logs/experiments/index.md`](../../logs/experiments/index.md))
+- Trained Critic models: 27 run IDs / 91 persisted configs across the corrected-split regime and targeted-lift follow-ups ([`logs/experiments/index.md`](../../logs/experiments/index.md))
 - MC Dropout uncertainty estimation: [`src/vif/critic.py:predict_with_uncertainty()`](../../src/vif/critic.py) and [`src/vif/eval.py:evaluate_with_uncertainty()`](../../src/vif/eval.py)
-- Calibration metric implemented and tracked per run (best: 0.852, run_007 SoftOrdinal)
+- Calibration and circumplex summaries implemented and tracked per run in the experiment index and run YAMLs
 
 ### What's Missing
 - Crash/rut trigger implementation (the dual-trigger detection code itself)
@@ -24,7 +24,7 @@ The VIF detects when a user's behavior drifts from their declared values. This e
 - Hit rate / precision / recall metric calculation
 
 ### Blocking Dependencies
-Critic QWK remains unsatisfactory (best **0.413**, run_007 CORN; target well above this for reliable per-value triggers). Experimentation is ongoing as of 2026-02-22 to boost this metric — see [`logs/experiments/index.md`](../../logs/experiments/index.md). Until per-value Critic accuracy improves, drift triggers will inherit noisy alignment scores and produce unreliable crash/rut detections.
+The active corrected-split default (`run_019`-`run_021` BalancedSoftmax) improved misalignment sensitivity, but the frontier still sits at median QWK **0.362** with unresolved `Security`/circumplex trade-offs. That is not yet strong enough for reliable automated drift triggers. Until per-value Critic accuracy improves further, crash/rut detection will inherit noisy alignment scores and produce unreliable alerts.
 
 ### Next Steps
 1. Improve Critic QWK through ongoing experimentation (data expansion, architecture, loss tuning)

@@ -33,10 +33,10 @@ We feed the generated text into a second LLM pass (The Judge) to assign ground-t
     *   **Misaligned (-1):** The entry actively conflicts with the value.
     *   **Neutral (0):** The entry is irrelevant to the value or maintains status quo.
     *   **Aligned (+1):** The entry actively supports the value.
-    *   **Output:** These classifications are mapped to a precise integer vector, e.g., `[Health: -1, Career: +1, Family: 0]`, which serves as the regression target for the Student.
+    *   **Output:** These classifications are mapped to a precise integer vector, e.g., `[Health: -1, Career: +1, Family: 0]`, which serves as the supervised target for the Student.
 #### 1.2.3 Phase 3: Distillation (The Critic / Student)
 We train the **MLP Critic** (the VIF) on this labeled dataset.
-*   **Input:** Text Embedding (SBERT) + User Profile Embedding.
+*   **Input:** Text embedding (from the configured sentence encoder) + User Profile Embedding.
 *   **Target:** The Judge's vector scores.
 *   **Benefit:**
     1.  **Speed:** The MLP runs in milliseconds, enabling the 50+ forward passes required for MC Dropout.
@@ -71,7 +71,7 @@ $$
 \vec{V}_\theta(s_{u,t}) \approx \hat{\vec{a}}_{u,t}
 $$ 
 
-This is a **multi-output regression** problem, where the critic learns to emulate the judge, potentially with:
+This is a **multi-output prediction** problem, where the critic learns to emulate the judge, potentially with:
 
 * Lower latency.
 * Better generalisation from richer state features (e.g. using history window and profile).
@@ -143,7 +143,7 @@ For the capstone POC, training the critic is:
 
 We use:
 
-* **Pretrained models** (e.g. SBERT) for text embeddings.
+* **Pretrained sentence encoders** (e.g. nomic or SBERT-family models) for text embeddings.
 * A **from-scratch multi-output regressor** for the critic itself.
 
 ### 3.2 Loss Function
@@ -169,7 +169,7 @@ A minimal architecture:
 * Hidden layers: 2–3 dense layers (MLP) with non-linearities (e.g. ReLU or GELU), with dropout for regularisation and uncertainty estimation.
 * Output layer: linear layer with $K$ outputs (one per value dimension).
 
-The text encoder (e.g. SBERT) is:
+The text encoder (e.g. nomic or a SBERT-family model) is:
 
 * Either frozen in the first iteration (for simplicity and data efficiency).
 * Or lightly fine-tuned jointly with the critic if data allows.
@@ -189,7 +189,7 @@ The text encoder (e.g. SBERT) is:
 5. **Critic training**:
    * Train $\vec{V}_\theta$ via supervised regression on the chosen targets.
 6. **Evaluation**:
-   * Use held-out trajectories/personas to evaluate prediction quality (e.g. MSE, correlation) and ranking consistency (e.g. ordering weeks by misalignment).
+   * Use held-out trajectories/personas to evaluate prediction quality (e.g. QWK, MAE, recall, calibration, correlation) and structural consistency (e.g. circumplex opposition vs adjacency behavior), plus ranking consistency where applicable.
 
 ---
 
@@ -199,12 +199,16 @@ The VIF Critic training pipeline is implemented in `src/vif/`. Key modules:
 
 | Module | Description |
 |--------|-------------|
-| `src/vif/encoders.py` | `TextEncoder` protocol + `SBERTEncoder` (supports ablation studies) |
+| `src/vif/encoders.py` | `TextEncoder` protocol + sentence-encoder wrapper (supports ablation studies) |
 | `src/vif/state_encoder.py` | `StateEncoder` class (builds state vectors per Section 2 above) |
-| `src/vif/critic.py` | `CriticMLP` with MC Dropout for uncertainty estimation |
-| `src/vif/dataset.py` | `VIFDataset` + data loading with persona-level splits |
-| `src/vif/eval.py` | Evaluation metrics (MSE, Spearman, accuracy, calibration) |
+| `src/vif/critic.py` | Legacy regression-style `CriticMLP` with MC Dropout |
+| `src/vif/critic_ordinal.py` | Active ordinal critic heads (CORAL, CORN, EMD, CDW-CE, SoftOrdinal, BalancedSoftmax, LDAM-DRW) |
+| `src/vif/critic_bnn.py` | Bayesian neural baseline critic |
+| `src/vif/dataset.py` | `VIFDataset` + data loading with persona-level splits and optional fixed holdout reuse |
+| `src/vif/eval.py` | Evaluation metrics (QWK, MAE, Spearman, recall, calibration, raw output export, circumplex diagnostics) |
+| `src/vif/posthoc.py` | Validation-only post-hoc boundary tuning for saved ordinal outputs |
 | `src/vif/train.py` | CLI training script with config overrides |
+| `src/vif/experiment_logger.py` | Persisted run YAMLs plus the experiment index and frontier summaries |
 
 > **Note:** Specific model names, embedding dimensions, window sizes, and
 > hyperparameters referenced below are illustrative. See `config/vif.yaml`
@@ -212,13 +216,23 @@ The VIF Critic training pipeline is implemented in `src/vif/`. Key modules:
 
 ### 4.1 Implemented Architecture
 
-The POC implements **Option A (Immediate Alignment)** with these concrete choices:
+The current stack still implements **Option A (Immediate Alignment)**, but with
+more concrete runtime choices than the original POC draft:
 
-- **Text encoder**: Frozen SBERT encoder (model and $d_e$ configured in `config/vif.yaml`)
-- **State dimension**: $N \times d_e + (N{-}1) + 10 + 10$ (see config for current $N$ and $d_e$)
-- **Critic architecture**: 2-layer MLP with LayerNorm + GELU + Dropout (param count depends on `hidden_dim`)
-- **MC Dropout**: 50 forward passes for uncertainty estimation
-- **Loss**: Ordinal classification losses (CORAL, CORN, EMD, SoftOrdinal)
+- **Text encoder**: Frozen sentence encoder selected in `config/vif.yaml`
+  (`nomic-ai/nomic-embed-text-v1.5` is the active default; MiniLM/mpnet are
+  maintained as ablations)
+- **State dimension**: $N \times d_e + (N{-}1) + 10$ (text window, time gaps,
+  and the 10-dim value-weight vector only)
+- **Critic architecture**: Shared MLP backbone with multiple ordinal heads;
+  BNN training remains available as a comparator
+- **MC Dropout**: 50 forward passes for uncertainty estimation on the MLP path
+- **Loss/head family**: CORAL, CORN, EMD, CDW-CE, SoftOrdinal, BalancedSoftmax,
+  and LDAM-DRW, with weighted-MSE and BNN baselines retained for comparison
+- **Evaluation outputs**: QWK/MAE/recall/calibration plus optional raw
+  logits/probabilities and compact circumplex diagnostics
+- **Holdout policy**: corrected persona-stratified splits by default, with
+  fixed validation/test holdout manifests available for augmentation experiments
 
 ### 4.2 Usage
 
@@ -231,6 +245,9 @@ python -m src.vif.train --epochs 5 --batch-size 8
 
 # Ablation with different encoder
 python -m src.vif.train --encoder-model all-mpnet-base-v2
+
+# Validation-only post-hoc boundary tuning on saved ordinal outputs
+python -m src.vif.posthoc --help
 ```
 
 > **Default LR finder behavior (`src/vif/train.py`)**:
@@ -243,8 +260,8 @@ python -m src.vif.train --encoder-model all-mpnet-base-v2
 > and `lr_find_history.json` (or an override path via `--lr-find-output-path`).
 >
 > **Notebook entrypoint**:
-> For separate LR-finder runs across the active ordinal heads
-> (**CORAL/CORN/EMD/SoftOrdinal**), use
+> For notebook-driven sweeps across the active ordinal heads
+> (**CORAL/CORN/EMD/CDWCE/SoftOrdinal/BalancedSoftmax/LDAM-DRW**), use
 > `notebooks/critic_training/v4/critic_training_v4.ipynb`.
 
 Configuration: `config/vif.yaml`

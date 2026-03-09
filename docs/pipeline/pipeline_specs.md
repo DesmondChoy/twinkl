@@ -18,8 +18,12 @@ Journals should be:
 
 **Experimentation**: Use script modules and sanity scripts:
 - `src/synthetic/generation.py` (value context, date sampling, banned-term guards)
+- `src/synthetic/batch_preparation.py` (baseline snapshots and frozen-holdout manifests for targeted data lifts)
+- `src/synthetic/batch_verification.py` (raw-batch acceptance checks and spot-check export generation)
 - `src/nudge/decision.py` and `src/nudge/generation.py` (nudge logic)
 - `scripts/journalling/generation_sanity_check.py` (quick local validation)
+- `scripts/journalling/twinkl_681_5_freeze_baseline.py` / `scripts/journalling/twinkl_691_2_prepare_batch.py` (example baseline-freeze wrappers)
+- `scripts/journalling/twinkl_681_5_verify_batch.py` / `scripts/journalling/twinkl_691_2_verify_batch.py` (example targeted-batch verification wrappers)
 
 ## Configuration Files
 
@@ -77,6 +81,50 @@ The pipeline uses **async/await** for efficient I/O and supports **parallel pers
 - Results return in input order regardless of completion time (Persona 1, 2, 3...)
 - Failed pipelines return exceptions without crashing others (`return_exceptions=True`)
 - All prompts/outputs are buffered and displayed in order after completion
+
+## Targeted Batch QA Loop
+
+For hard-dimension augmentation work, the repo now uses a stricter
+**freeze → generate → verify → judge → retrain** loop instead of treating
+targeted synthetic batches as ad hoc prompt tweaks.
+
+### Frozen baseline before generation
+
+- Write a snapshot of the pre-generation registry and synthetic corpus.
+- Either reuse an existing validation/test holdout manifest or rebuild one
+  once and persist it under `config/experiments/vif/`.
+- These steps are implemented by `src/synthetic/batch_preparation.py` and thin
+  wrappers such as `scripts/journalling/twinkl_681_5_freeze_baseline.py` and
+  `scripts/journalling/twinkl_691_2_prepare_batch.py`.
+
+### Family-specific targeting and acceptance gates
+
+- Targeted runs may specify `TARGET_FAMILIES`, `FAMILY_PERSONA_TARGETS`, and
+  `REQUIRED_TARGET_LABEL_COUNTS` in an experiment config.
+- This supports family-specific tension banks for values that need broader
+  polarity coverage. The regenerated `Hedonism`/`Security` batch is the
+  current example of this pattern.
+- Batches are accepted or rejected based on judged outcomes, not just prompt
+  intent. If a targeted batch misses its polarity gates, it should be
+  regenerated instead of retrained blindly.
+
+### Raw-batch verification before wrangling/retraining
+
+- `src/synthetic/batch_verification.py` compares the current registry against
+  the frozen snapshot and verifies:
+  - expected new-persona count
+  - target coverage and optional required value-pair coverage
+  - entry-count bounds
+  - required `Unsettled` / non-`Unsettled` coverage
+  - registry registration and stage flags
+- The verification step also exports a YAML summary plus a markdown spot-check
+  report to `logs/exports/`.
+
+### Why this matters
+
+This workflow keeps targeted lifts auditable and makes downstream retrains
+comparable. When a post-lift model changes, the delta is more likely to reflect
+the new training data rather than a silent holdout reshuffle or an invalid batch.
 
 ## Prompt Design
 
