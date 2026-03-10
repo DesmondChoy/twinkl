@@ -1,4 +1,3 @@
-
 # ==== CELL 2 ====
 from pathlib import Path
 
@@ -57,6 +56,7 @@ CONFIG = {
         "CDWCE_a5",
     ],
     "model_overrides": {},
+    "selection_policy": {},
     # Model
     "hidden_dim": 64,
     "dropout": 0.3,
@@ -127,6 +127,7 @@ CONFIG["split_seed"] = int(CONFIG["split_seed"])
 CONFIG["model_seed"] = int(CONFIG["model_seed"])
 CONFIG["models_to_train"] = list(CONFIG["models_to_train"])
 CONFIG["model_overrides"] = dict(CONFIG.get("model_overrides", {}))
+CONFIG["selection_policy"] = dict(CONFIG.get("selection_policy", {}))
 
 print("=" * 50)
 print("CONFIGURATION")
@@ -159,6 +160,8 @@ for key in [
 print(f"  {'models_to_train':<30s} {CONFIG['models_to_train']}")
 print("  model_overrides:")
 print(json.dumps(CONFIG["model_overrides"], indent=2, sort_keys=True))
+print("  selection_policy:")
+print(json.dumps(CONFIG["selection_policy"], indent=2, sort_keys=True))
 print("=" * 50)
 
 # ==== CELL 4 ====
@@ -238,6 +241,7 @@ from src.vif.eval import (
     discretize_predictions,
     evaluate_with_uncertainty,
     export_ordinal_output_artifact,
+    finalize_ordinal_checkpoint_selection,
     format_results_table,
     is_better_ordinal_candidate,
     ordinal_selection_policy_summary,
@@ -275,7 +279,6 @@ print(f"Labels shape:  {labels_df.shape}")
 print(f"Entries shape: {entries_df.shape}")
 print(f"Merged shape:  {merged_df.shape}")
 print(f"Unique personas: {merged_df.select('persona_id').n_unique()}")
-
 
 # ==== CELL 9 ====
 labels_df.head().glimpse()
@@ -554,7 +557,6 @@ MODEL_CONFIGS = {
     },
 }
 
-
 # ==== CELL 26 ====
 # Filter to active models
 active_models = {
@@ -564,7 +566,6 @@ active_models = {
 print(f"MODEL_CONFIGS defined: {list(MODEL_CONFIGS.keys())}")
 print(f"models_to_train: {CONFIG['models_to_train']}")
 print(f"Active models: {list(active_models.keys())}")
-
 
 # ==== CELL 28 ====
 print("Creating datasets (caching embeddings)...")
@@ -621,7 +622,6 @@ if not active_models:
 
 print(f"Using ordinal models: {', '.join(active_models.keys())}")
 
-
 # ==== CELL 30 ====
 print(f"\n{'Model':<15s} {'Parameters':>12s} {'Output logits':>15s} {'Loss':>25s}")
 print("-" * 70)
@@ -667,7 +667,7 @@ else:
 # Cell 3d - Multi-model training loop with optional per-model LR policy
 
 
-ORDINAL_SELECTION_POLICY = ordinal_selection_policy_summary()
+ORDINAL_SELECTION_POLICY = ordinal_selection_policy_summary(CONFIG.get("selection_policy"))
 ordinal_run_tag = (
     f"ordinal_v4_s{CONFIG['split_seed']}_m{CONFIG['model_seed']}_"
     f"{datetime.now().strftime('%Y%m%d_%H%M%S')}"
@@ -713,22 +713,94 @@ def _save_selected_checkpoint(
     model,
     selected_candidate,
     selection_source,
+    selection_policy,
+    promotion_eligible,
+    debug_fallback_used,
     config,
     output_dir,
+    filename="selected_checkpoint.pt",
 ):
-    checkpoint_path = output_dir / "selected_checkpoint.pt"
+    checkpoint_path = output_dir / filename
     checkpoint = {
         "epoch": int(selected_candidate["epoch"]),
         "val_loss": float(selected_candidate["val_loss"]),
         "selection_source": selection_source,
+        "promotion_eligible": promotion_eligible,
+        "debug_fallback_used": debug_fallback_used,
         "selection_candidate": selected_candidate,
-        "selection_policy": ordinal_selection_policy_summary(),
+        "selection_policy": selection_policy,
         "model_state_dict": _clone_model_state(model),
         "model_config": model.get_config(),
         "training_config": config,
     }
     torch.save(checkpoint, checkpoint_path)
     return checkpoint_path
+
+
+def _selection_trace_frame(candidate_trace):
+    rows = [
+        {
+            "epoch": int(candidate["epoch"]),
+            "val_loss": float(candidate["val_loss"]),
+            "qwk_mean": float(candidate["qwk_mean"]),
+            "recall_minus1": float(candidate["recall_minus1"]),
+            "calibration_global": float(candidate["calibration_global"]),
+            "hedging_mean": float(candidate["hedging_mean"]),
+            "qwk_nan_dims_count": int(candidate["qwk_nan_dims_count"]),
+            "eligible": bool(candidate["eligible"]),
+            "ineligible_reasons": ",".join(candidate["ineligible_reasons"]),
+        }
+        for candidate in candidate_trace
+    ]
+    if rows:
+        return pl.DataFrame(rows)
+
+    return pl.DataFrame(
+        schema={
+            "epoch": pl.Int64,
+            "val_loss": pl.Float64,
+            "qwk_mean": pl.Float64,
+            "recall_minus1": pl.Float64,
+            "calibration_global": pl.Float64,
+            "hedging_mean": pl.Float64,
+            "qwk_nan_dims_count": pl.Int64,
+            "eligible": pl.Boolean,
+            "ineligible_reasons": pl.Utf8,
+        }
+    )
+
+
+def _write_selection_trace(output_path, candidate_trace):
+    trace_df = _selection_trace_frame(candidate_trace)
+    trace_df.write_parquet(output_path)
+    return output_path
+
+
+def _write_selection_summary(
+    output_path,
+    *,
+    selection_policy,
+    selected_candidate,
+    selection_source,
+    promotion_eligible,
+    debug_fallback_used,
+    candidate_trace,
+):
+    eligible_epoch_count = sum(1 for candidate in candidate_trace if candidate["eligible"])
+    summary = {
+        "selection_policy": selection_policy,
+        "selection_source": selection_source,
+        "promotion_eligible": bool(promotion_eligible),
+        "debug_fallback_used": bool(debug_fallback_used),
+        "selected_candidate": selected_candidate or None,
+        "eligible_epoch_count": int(eligible_epoch_count),
+        "ineligible_epoch_count": int(len(candidate_trace) - eligible_epoch_count),
+    }
+    output_path.write_text(
+        yaml.safe_dump(summary, sort_keys=False),
+        encoding="utf-8",
+    )
+    return output_path
 
 
 def train_model(name, model_cfg, train_loader, val_loader, config, device, class_stats):
@@ -747,6 +819,7 @@ def train_model(name, model_cfg, train_loader, val_loader, config, device, class
     model.to(device)
 
     epoch_loss_fn = _build_epoch_loss_fn(model_cfg, config, class_stats)
+    selection_policy = ordinal_selection_policy_summary(config.get("selection_policy"))
     configured_lr = config["learning_rate"]
     learning_rate_policy = config.get("learning_rate_policy")
 
@@ -866,6 +939,7 @@ def train_model(name, model_cfg, train_loader, val_loader, config, device, class
     best_model_state = None
     fallback_candidate = None
     fallback_model_state = None
+    candidate_trace = []
     patience_counter = 0
 
     for epoch in range(config["epochs"]):
@@ -911,7 +985,9 @@ def train_model(name, model_cfg, train_loader, val_loader, config, device, class
             epoch=epoch,
             val_loss=val_loss,
             eval_result=val_eval_result,
+            selection_policy=selection_policy,
         )
+        candidate_trace.append(dict(candidate))
 
         history["train_loss"].append(train_loss)
         history["val_loss"].append(val_loss)
@@ -965,17 +1041,34 @@ def train_model(name, model_cfg, train_loader, val_loader, config, device, class
             break
 
     artifact_dir = ordinal_artifact_root / name
-    selection_policy = ordinal_selection_policy_summary()
-    if best_candidate is not None:
-        selected_candidate = dict(best_candidate)
-        selected_model_state = best_model_state
-        selection_source = "eligible_policy"
-    elif fallback_candidate is not None:
-        selected_candidate = dict(fallback_candidate)
-        selected_candidate["fallback_reason"] = "no_eligible_epoch"
-        selected_model_state = fallback_model_state
-        selection_source = "fallback_best_finite_qwk"
-    else:
+    artifact_dir.mkdir(parents=True, exist_ok=True)
+    selection_outcome = finalize_ordinal_checkpoint_selection(
+        best_candidate=best_candidate,
+        fallback_candidate=fallback_candidate,
+        selection_policy=selection_policy,
+    )
+    selected_candidate = selection_outcome["selected_candidate"]
+    selection_source = selection_outcome["selection_source"]
+    promotion_eligible = selection_outcome["promotion_eligible"]
+    debug_fallback_used = selection_outcome["debug_fallback_used"]
+    selection_trace_path = _write_selection_trace(
+        artifact_dir / "selection_trace.parquet",
+        candidate_trace,
+    )
+    selection_summary_path = _write_selection_summary(
+        artifact_dir / "selection_summary.yaml",
+        selection_policy=selection_policy,
+        selected_candidate=selected_candidate,
+        selection_source=selection_source,
+        promotion_eligible=promotion_eligible,
+        debug_fallback_used=debug_fallback_used,
+        candidate_trace=candidate_trace,
+    )
+    artifact_paths = {
+        "selection_trace": str(selection_trace_path),
+        "selection_summary": str(selection_summary_path),
+    }
+    if not selected_candidate:
         print("  No finite-QWK epochs available for checkpoint selection.")
         return {
             "model": None,
@@ -991,22 +1084,32 @@ def train_model(name, model_cfg, train_loader, val_loader, config, device, class
             "learning_rate_policy": learning_rate_policy,
             "selected_candidate": {},
             "selection_policy": selection_policy,
-            "selection_source": "no_finite_qwk",
-            "artifact_paths": {},
+            "selection_source": selection_source,
+            "promotion_eligible": promotion_eligible,
+            "debug_fallback_used": debug_fallback_used,
+            "artifact_paths": artifact_paths,
             "artifact_dir": str(artifact_dir),
         }
 
+    selected_model_state = best_model_state if best_candidate is not None else fallback_model_state
     model.load_state_dict(selected_model_state)
     model.to(device)
 
-    artifact_dir.mkdir(parents=True, exist_ok=True)
+    checkpoint_filename = (
+        "selected_checkpoint.pt" if promotion_eligible else "debug_fallback_checkpoint.pt"
+    )
     checkpoint_path = _save_selected_checkpoint(
         model,
         selected_candidate,
         selection_source,
+        selection_policy,
+        promotion_eligible,
+        debug_fallback_used,
         config,
         artifact_dir,
+        filename=checkpoint_filename,
     )
+    artifact_paths["checkpoint"] = str(checkpoint_path)
 
     return {
         "model": model,
@@ -1023,9 +1126,9 @@ def train_model(name, model_cfg, train_loader, val_loader, config, device, class
         "selected_candidate": selected_candidate,
         "selection_policy": selection_policy,
         "selection_source": selection_source,
-        "artifact_paths": {
-            "checkpoint": str(checkpoint_path),
-        },
+        "promotion_eligible": promotion_eligible,
+        "debug_fallback_used": debug_fallback_used,
+        "artifact_paths": artifact_paths,
         "artifact_dir": str(artifact_dir),
     }
 
@@ -1048,6 +1151,10 @@ for name, cfg in active_models.items():
         print(
             f"  LR policy: {model_run_config['learning_rate_policy']}"
         )
+    print(
+        "  Selection policy: "
+        f"{json.dumps(ordinal_selection_policy_summary(model_run_config.get('selection_policy')), sort_keys=True)}"
+    )
     result = train_model(
         name,
         cfg,
@@ -1069,8 +1176,11 @@ for name, cfg in active_models.items():
         continue
 
     trained_models[name] = result
+    selection_label = (
+        "Selected checkpoint" if result.get("promotion_eligible", True) else "Debug fallback checkpoint"
+    )
     print(
-        f"  Selected checkpoint: epoch {result['best_epoch'] + 1}/{n_epochs}; "
+        f"  {selection_label}: epoch {result['best_epoch'] + 1}/{n_epochs}; "
         f"val={selected_candidate['val_loss']:.4f}; "
         f"qwk={_fmt_metric(selected_candidate['qwk_mean'])}; "
         f"recall_-1={_fmt_metric(selected_candidate['recall_minus1'])}; "
@@ -1084,9 +1194,16 @@ for name, cfg in active_models.items():
     print(
         f"  Lowest raw val loss observed: {_fmt_metric(result['lowest_val_loss'], digits=4)}"
     )
-    if result["selection_source"].startswith("fallback"):
+    if "fallback" in result["selection_source"]:
         fallback_reasons = ", ".join(selected_candidate.get("ineligible_reasons", []))
         print(f"  Fallback trigger: {fallback_reasons or 'none'}")
+    if not result.get("promotion_eligible", True):
+        print(
+            "  No recall-eligible checkpoint; excluding this run from ranking and experiment logging."
+        )
+        print(
+            f"  Debug checkpoint: {result['artifact_paths'].get('checkpoint')}"
+        )
 
 if not trained_models:
     raise RuntimeError("No models completed any selectable checkpoints. Check training logs.")
@@ -1245,6 +1362,7 @@ for name, result in trained_models.items():
     model = result["model"]
     artifact_dir = Path(result["artifact_dir"])
     artifact_paths = dict(result.get("artifact_paths", {}))
+    artifact_prefix = "selected" if result.get("promotion_eligible", True) else "debug_fallback"
 
     print(f"\n{'=' * 70}")
     print(f"Evaluating {name} with MC Dropout uncertainty...")
@@ -1268,8 +1386,8 @@ for name, result in trained_models.items():
     )
     all_results[name] = eval_result
 
-    val_output_path = artifact_dir / "selected_validation_outputs.parquet"
-    test_output_path = artifact_dir / "selected_test_outputs.parquet"
+    val_output_path = artifact_dir / f"{artifact_prefix}_validation_outputs.parquet"
+    test_output_path = artifact_dir / f"{artifact_prefix}_test_outputs.parquet"
     export_ordinal_output_artifact(
         val_eval_result,
         val_loader,
@@ -1293,8 +1411,9 @@ for name, result in trained_models.items():
     result["artifact_paths"] = artifact_paths
 
     print(f"\n{format_results_table(eval_result)}")
+    artifact_role = "selected-checkpoint" if result.get("promotion_eligible", True) else "debug-only"
     print(
-        f"Exported selected-checkpoint outputs to {val_output_path} and {test_output_path}"
+        f"Exported {artifact_role} outputs to {val_output_path} and {test_output_path}"
     )
 
     preds = eval_result["predictions"]
@@ -1335,6 +1454,7 @@ for name, result in trained_models.items():
         "hedging_mean": hedging_mean,
         "prediction_std": prediction_std,
         "fail_reasons": fail_reasons,
+        "promotion_eligible": result.get("promotion_eligible", True),
     }
 
 if not all_results:
@@ -1360,9 +1480,13 @@ for name, health in model_health.items():
         else "N/A"
     )
     status = (
-        "OK"
-        if not health["fail_reasons"]
-        else f"EXCLUDE ({', '.join(health['fail_reasons'])})"
+        "DEBUG_ONLY"
+        if (not health["fail_reasons"] and not health["promotion_eligible"])
+        else (
+            "OK"
+            if not health["fail_reasons"]
+            else f"EXCLUDE ({', '.join(health['fail_reasons'])})"
+        )
     )
     print(
         f"{name:<15s} {qwk_str:>8s} {health['qwk_nan_dims_count']:>10d} {sp_str:>10s} "
@@ -1373,20 +1497,26 @@ for name, health in model_health.items():
 rankable_results = {
     name: all_results[name]
     for name, health in model_health.items()
-    if not health["fail_reasons"]
+    if not health["fail_reasons"] and health["promotion_eligible"]
 }
 excluded_models = [
     name for name, health in model_health.items() if health["fail_reasons"]
 ]
+non_promotable_models = [
+    name for name, health in model_health.items() if not health["promotion_eligible"]
+]
 
 if not rankable_results:
     print(
-        "\nWARNING: All models flagged as degenerate; using all_results for comparison tables."
+        "\nWARNING: No promotion-eligible rankable models available for comparison tables."
     )
-    rankable_results = dict(all_results)
-elif excluded_models:
-    print(f"\nExcluding from ranking/comparison: {excluded_models}")
-
+elif excluded_models or non_promotable_models:
+    if excluded_models:
+        print(f"\nExcluding degenerate models from ranking/comparison: {excluded_models}")
+    if non_promotable_models:
+        print(
+            f"Excluding debug-only models from ranking/comparison: {non_promotable_models}"
+        )
 
 # ==== CELL 36 ====
 # Cell 4b - Model comparison table and grouped bar chart
@@ -1408,114 +1538,119 @@ for name, res in rankable_results.items():
     )
 
 if not rows:
-    raise RuntimeError("No rankable models available for comparison.")
+    comparison_df = None
+    print("No promotion-eligible rankable models available for comparison.")
+else:
+    comparison_df = pl.DataFrame(rows)
+    print("Model Comparison (rankable models):")
+    print(comparison_df)
+    if excluded_models:
+        print(f"Excluded models (degenerate): {excluded_models}")
+    if non_promotable_models:
+        print(f"Excluded models (debug-only): {non_promotable_models}")
 
-comparison_df = pl.DataFrame(rows)
-print("Model Comparison (rankable models):")
-print(comparison_df)
-if excluded_models:
-    print(f"Excluded models (degenerate): {excluded_models}")
+    # Grouped bar chart for 3 key metrics
+    fig, axes = plt.subplots(1, 3, figsize=(16, 5))
+    model_names = comparison_df["Model"].to_list()
+    x = np.arange(len(model_names))
+    width = 0.6
 
-# Grouped bar chart for 3 key metrics
-fig, axes = plt.subplots(1, 3, figsize=(16, 5))
-model_names = comparison_df["Model"].to_list()
-x = np.arange(len(model_names))
-width = 0.6
+    # MAE (lower is better)
+    mae_vals = comparison_df["MAE"].to_list()
+    best_mae = np.nanmin(mae_vals) if np.any(np.isfinite(mae_vals)) else None
+    colors = [
+        "#2ecc71"
+        if (best_mae is not None and np.isfinite(v) and v == best_mae)
+        else "#3498db"
+        for v in mae_vals
+    ]
+    axes[0].bar(x, mae_vals, width, color=colors)
+    axes[0].set_xticks(x)
+    axes[0].set_xticklabels(model_names, rotation=45, ha="right")
+    axes[0].set_ylabel("MAE")
+    axes[0].set_title("MAE (lower = better)")
+    axes[0].grid(True, alpha=0.3, axis="y")
 
-# MAE (lower is better)
-mae_vals = comparison_df["MAE"].to_list()
-best_mae = np.nanmin(mae_vals) if np.any(np.isfinite(mae_vals)) else None
-colors = [
-    "#2ecc71"
-    if (best_mae is not None and np.isfinite(v) and v == best_mae)
-    else "#3498db"
-    for v in mae_vals
-]
-axes[0].bar(x, mae_vals, width, color=colors)
-axes[0].set_xticks(x)
-axes[0].set_xticklabels(model_names, rotation=45, ha="right")
-axes[0].set_ylabel("MAE")
-axes[0].set_title("MAE (lower = better)")
-axes[0].grid(True, alpha=0.3, axis="y")
+    # Accuracy (higher is better)
+    acc_vals = comparison_df["Accuracy"].to_list()
+    best_acc = np.nanmax(acc_vals) if np.any(np.isfinite(acc_vals)) else None
+    colors = [
+        "#2ecc71"
+        if (best_acc is not None and np.isfinite(v) and v == best_acc)
+        else "#3498db"
+        for v in acc_vals
+    ]
+    axes[1].bar(x, acc_vals, width, color=colors)
+    axes[1].set_xticks(x)
+    axes[1].set_xticklabels(model_names, rotation=45, ha="right")
+    axes[1].set_ylabel("Accuracy")
+    axes[1].set_title("Accuracy (higher = better)")
+    axes[1].grid(True, alpha=0.3, axis="y")
 
-# Accuracy (higher is better)
-acc_vals = comparison_df["Accuracy"].to_list()
-best_acc = np.nanmax(acc_vals) if np.any(np.isfinite(acc_vals)) else None
-colors = [
-    "#2ecc71"
-    if (best_acc is not None and np.isfinite(v) and v == best_acc)
-    else "#3498db"
-    for v in acc_vals
-]
-axes[1].bar(x, acc_vals, width, color=colors)
-axes[1].set_xticks(x)
-axes[1].set_xticklabels(model_names, rotation=45, ha="right")
-axes[1].set_ylabel("Accuracy")
-axes[1].set_title("Accuracy (higher = better)")
-axes[1].grid(True, alpha=0.3, axis="y")
+    # QWK (higher is better)
+    qwk_vals = comparison_df["QWK"].to_list()
+    best_qwk = np.nanmax(qwk_vals) if np.any(np.isfinite(qwk_vals)) else None
+    colors = [
+        "#2ecc71"
+        if (best_qwk is not None and np.isfinite(v) and v == best_qwk)
+        else "#3498db"
+        for v in qwk_vals
+    ]
+    axes[2].bar(x, qwk_vals, width, color=colors)
+    axes[2].set_xticks(x)
+    axes[2].set_xticklabels(model_names, rotation=45, ha="right")
+    axes[2].set_ylabel("QWK")
+    axes[2].set_title("QWK (higher = better)")
+    axes[2].grid(True, alpha=0.3, axis="y")
 
-# QWK (higher is better)
-qwk_vals = comparison_df["QWK"].to_list()
-best_qwk = np.nanmax(qwk_vals) if np.any(np.isfinite(qwk_vals)) else None
-colors = [
-    "#2ecc71"
-    if (best_qwk is not None and np.isfinite(v) and v == best_qwk)
-    else "#3498db"
-    for v in qwk_vals
-]
-axes[2].bar(x, qwk_vals, width, color=colors)
-axes[2].set_xticks(x)
-axes[2].set_xticklabels(model_names, rotation=45, ha="right")
-axes[2].set_ylabel("QWK")
-axes[2].set_title("QWK (higher = better)")
-axes[2].grid(True, alpha=0.3, axis="y")
-
-plt.suptitle("Model Comparison - Key Metrics", fontsize=14, y=1.02)
-plt.tight_layout()
-plt.show()
-
+    plt.suptitle("Model Comparison - Key Metrics", fontsize=14, y=1.02)
+    plt.tight_layout()
+    plt.show()
 
 # ==== CELL 37 ====
 # Cell 4c - Confusion matrices for best model + per-class recall
 
-# Find best model by finite QWK among rankable models
-qwk_candidates = {
-    n: rankable_results[n]["qwk_mean"]
-    for n in rankable_results
-    if np.isfinite(rankable_results[n].get("qwk_mean", float("nan")))
-}
-if qwk_candidates:
-    best_model_name = max(qwk_candidates, key=qwk_candidates.get)
-    best_model_reason = "QWK"
+if not rankable_results:
+    print("No promotion-eligible rankable models available for confusion matrix.")
 else:
-    best_model_name = max(
-        rankable_results, key=lambda n: rankable_results[n]["accuracy_mean"]
+    # Find best model by finite QWK among rankable models
+    qwk_candidates = {
+        n: rankable_results[n]["qwk_mean"]
+        for n in rankable_results
+        if np.isfinite(rankable_results[n].get("qwk_mean", float("nan")))
+    }
+    if qwk_candidates:
+        best_model_name = max(qwk_candidates, key=qwk_candidates.get)
+        best_model_reason = "QWK"
+    else:
+        best_model_name = max(
+            rankable_results, key=lambda n: rankable_results[n]["accuracy_mean"]
+        )
+        best_model_reason = "Accuracy fallback"
+
+    print(f"Best model for confusion matrix: {best_model_name} ({best_model_reason})")
+
+    # Plot confusion matrices for best model (2x5 grid)
+    res = rankable_results[best_model_name]
+    pred_cls = discretize_predictions(res["predictions"])
+    target_cls = discretize_predictions(res["targets"])
+
+    fig, axes = plt.subplots(2, 5, figsize=(20, 8))
+    axes_flat = axes.flatten()
+    for i, dim in enumerate(SCHWARTZ_VALUE_ORDER):
+        cm = confusion_matrix(target_cls[:, i], pred_cls[:, i], labels=[-1, 0, 1])
+        disp = ConfusionMatrixDisplay(cm, display_labels=[-1, 0, 1])
+        disp.plot(ax=axes_flat[i], cmap="Blues", colorbar=False)
+        axes_flat[i].set_title(dim, fontsize=10)
+        axes_flat[i].set_xlabel("Predicted" if i >= 5 else "")
+        axes_flat[i].set_ylabel("True" if i % 5 == 0 else "")
+    plt.suptitle(
+        f"Confusion Matrices - {best_model_name} (Best {best_model_reason})",
+        fontsize=14,
+        y=1.02,
     )
-    best_model_reason = "Accuracy fallback"
-
-print(f"Best model for confusion matrix: {best_model_name} ({best_model_reason})")
-
-# Plot confusion matrices for best model (2x5 grid)
-res = rankable_results[best_model_name]
-pred_cls = discretize_predictions(res["predictions"])
-target_cls = discretize_predictions(res["targets"])
-
-fig, axes = plt.subplots(2, 5, figsize=(20, 8))
-axes_flat = axes.flatten()
-for i, dim in enumerate(SCHWARTZ_VALUE_ORDER):
-    cm = confusion_matrix(target_cls[:, i], pred_cls[:, i], labels=[-1, 0, 1])
-    disp = ConfusionMatrixDisplay(cm, display_labels=[-1, 0, 1])
-    disp.plot(ax=axes_flat[i], cmap="Blues", colorbar=False)
-    axes_flat[i].set_title(dim, fontsize=10)
-    axes_flat[i].set_xlabel("Predicted" if i >= 5 else "")
-    axes_flat[i].set_ylabel("True" if i % 5 == 0 else "")
-plt.suptitle(
-    f"Confusion Matrices - {best_model_name} (Best {best_model_reason})",
-    fontsize=14,
-    y=1.02,
-)
-plt.tight_layout()
-plt.show()
+    plt.tight_layout()
+    plt.show()
 
 # Per-class recall table across all models
 print(f"\n{'=' * 70}")
@@ -1545,7 +1680,6 @@ for model_name, res in all_results.items():
         f"{model_name:<15s} {recall_minus1:>10.1%} {recall_zero:>10.1%} "
         f"{recall_plus1:>10.1%} {mean_minority:>15.1%}"
     )
-
 
 # ==== CELL 38 ====
 # Cell 4d — Hedging comparison: % predictions in [-0.3, 0.3] per model
@@ -1628,7 +1762,6 @@ print(f"{'Mean uncertainty':<20s}", end="")
 for name in all_results:
     print(f" {all_calibration[name]['mean_uncertainty']:>12.4f}", end="")
 print()
-
 
 # ==== CELL 42 ====
 # Cell 5b — Calibration scatter for best-calibrated model
@@ -1915,7 +2048,6 @@ if best_circumplex_model and rankable_results[best_circumplex_model].get("circum
 
 print(f"\n{'=' * 90}")
 
-
 # ==== CELL 47 ====
 # Cell 6.2 - CDW-CE watch gates
 
@@ -1968,7 +2100,6 @@ else:
         f"(QWK={best_candidate['QWK']}, RecallMinus1={best_candidate['RecallMinus1']})"
     )
 
-
 # ==== CELL 48 ====
 OBSERVATIONS = ""  # Leave empty; experiment-review skill will generate observations
 
@@ -1978,22 +2109,29 @@ if CONFIG.get("skip_experiment_logging", False):
     logged_paths = []
     print("Skipping experiment logging (skip_experiment_logging=True)")
 else:
-    logged_paths = log_experiment_run(
-        config=CONFIG,
-        trained_models=trained_models,
-        all_results=all_results,
-        all_calibration=all_calibration,
-        all_hedging=all_hedging,
-        all_recall_data=all_recall_data,
-        n_train=n_train,
-        n_val=n_val,
-        n_test=n_test,
-        pct_truncated=pct_truncated,
-        state_dim=state_encoder.state_dim,
-        observations=OBSERVATIONS.strip(),
-    )
-    print()
-    print(f"Logged {len(logged_paths)} experiments:")
-    for entry in logged_paths:
-        tag = "CREATED"
-        print(f"  [{tag}] {entry['path']}  ({entry['run_id']})")
+    promotable_model_names = [
+        name for name, result in trained_models.items() if result.get("promotion_eligible", True)
+    ]
+    if not promotable_model_names:
+        logged_paths = []
+        print("Skipping experiment logging (no promotion-eligible models).")
+    else:
+        logged_paths = log_experiment_run(
+            config=CONFIG,
+            trained_models={name: trained_models[name] for name in promotable_model_names},
+            all_results={name: all_results[name] for name in promotable_model_names},
+            all_calibration={name: all_calibration[name] for name in promotable_model_names},
+            all_hedging={name: all_hedging[name] for name in promotable_model_names},
+            all_recall_data={name: all_recall_data[name] for name in promotable_model_names},
+            n_train=n_train,
+            n_val=n_val,
+            n_test=n_test,
+            pct_truncated=pct_truncated,
+            state_dim=state_encoder.state_dim,
+            observations=OBSERVATIONS.strip(),
+        )
+        print()
+        print(f"Logged {len(logged_paths)} experiments:")
+        for entry in logged_paths:
+            tag = "CREATED"
+            print(f"  [{tag}] {entry['path']}  ({entry['run_id']})")

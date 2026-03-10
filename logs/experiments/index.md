@@ -12,9 +12,11 @@
 | 6 | BalancedSoftmax + hedonism/security lift | run_025-run_027 | 2025 | 11, 22, 33 | 0.346 | 0.328 | 0.442 | **0.598** | 0.693 | Post-regenerated `twinkl-691.2` batch. Lowest hedging of any family, but loses QWK and calibration vs incumbent. Not a frontier change. |
 | 7 | SoftOrdinal + hedonism/security lift | run_025-run_027 | 2025 | 11, 22, 33 | 0.340 | 0.082 | 0.260 | 0.823 | 0.738 | Post-lift SoftOrdinal comparator. The data lift did not help SoftOrdinal escape excessive hedging; worse than original family on most metrics. |
 
-> **Active recommendation (2026-03-10):** `run_019`-`run_021` remain the default corrected-split frontier family. Neither the targeted `run_022`-`run_024` branch nor the post-lift `run_025`-`run_027` families displace the incumbent. The next highest-leverage experiment is per-dimension uncertainty weighting on BalancedSoftmax to stop hedonism/stimulation noise from dragging down the aggregate. See full analysis below.
+> **Active recommendation (2026-03-10):** `run_019`-`run_021` remain the default corrected-split frontier family. The hard validation `recall_-1` guardrail added in `twinkl-715` fixes the low-recall checkpoint-selection pathology that affected `run_028`-`run_030`, but the guarded rerun family `run_031`-`run_033` still does not beat the incumbent on holdout `recall_-1`, minority recall, or hedging. The next highest-leverage experiment remains per-dimension uncertainty weighting on BalancedSoftmax to stop hedonism/stimulation noise from dragging down the aggregate. See full analysis below.
 >
 > **Latest full frontier review:** [`reports/experiment_review_2026-03-10_v7.md`](reports/experiment_review_2026-03-10_v7.md)
+>
+> **Latest checkpoint-selection guardrail review:** [`reports/experiment_review_2026-03-10_twinkl_715.md`](reports/experiment_review_2026-03-10_twinkl_715.md)
 >
 > **Previous full frontier review:** [`reports/experiment_review_2026-03-08_v6.md`](reports/experiment_review_2026-03-08_v6.md)
 >
@@ -143,11 +145,26 @@
 | 028 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax_circreg | 23454 | 19.3 | 0.293 | 0.761 | 0.384 | 0.362 | 0.761 | 0.422 | runs/run_028_BalancedSoftmax.yaml |
 | 029 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax_circreg | 23454 | 19.3 | 0.301 | 0.760 | 0.347 | 0.346 | 0.709 | 0.411 | runs/run_029_BalancedSoftmax.yaml |
 | 030 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax_circreg | 23454 | 19.3 | 0.308 | 0.751 | 0.318 | 0.362 | 0.702 | 0.398 | runs/run_030_BalancedSoftmax.yaml |
+| 031 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax_circreg | 23454 | 19.3 | 0.306 | 0.761 | 0.353 | 0.343 | 0.707 | 0.409 | runs/run_031_BalancedSoftmax.yaml |
+| 032 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax_circreg | 23454 | 19.3 | 0.307 | 0.752 | 0.366 | 0.342 | 0.713 | 0.435 | runs/run_032_BalancedSoftmax.yaml |
+| 033 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax_circreg | 23454 | 19.3 | 0.286 | 0.779 | 0.372 | 0.359 | 0.747 | 0.409 | runs/run_033_BalancedSoftmax.yaml |
 <!-- AUTO-TABLE:END -->
 
 > **Contributor note:** Keep this section in **newest-first** chronological order (most recent date at top).
 
 ## Findings
+
+### 2026-03-10 — Hard validation `recall_-1` guardrail fixes checkpoint selection, but not the frontier (`twinkl-715`)
+
+`twinkl-715` added a hard validation `recall_-1 >= 0.4032` guardrail to ordinal checkpoint selection, persisted per-epoch selection traces, and reran the circumplex-regularized `BalancedSoftmax` family on the corrected split as `run_031`-`run_033`. The new policy blocked the same high-QWK but low-tail checkpoints that had previously been promoted in `run_028`-`run_030`.
+
+**1. The selection pathology is real and now fixed.** For all three seeds, the validation-best finite-QWK checkpoint failed the new floor and was marked ineligible with `recall_minus1_below_floor`. The promoted checkpoints moved to later eligible epochs with lower validation QWK but materially higher validation `recall_-1`, which is the intended behavior.
+
+**2. The guarded family improves aggregate holdout QWK without becoming the new default.** Relative to `run_028`-`run_030`, the guarded rerun family median `qwk_mean` improved from `0.347` to `0.366`, while median holdout `recall_-1` only nudged from `0.265` to `0.267`. Minority recall stayed slightly worse than the incumbent default (`0.409` vs `0.448`), and hedging remained higher (`0.641` vs `0.621`).
+
+**3. No seeds became debug-only.** Every rerun still had at least one promotion-eligible checkpoint above the floor, so the new debug-only fallback path was exercised only in tests and remains a safety mechanism rather than an active training outcome.
+
+**4. Recommendation stays unchanged.** Keep the guardrail as evaluation hygiene, but do not promote the circumplex-regularized family over `run_019`-`run_021`. The fix closes a selection bug; it does not yet establish a better frontier family. Full details: [`reports/experiment_review_2026-03-10_twinkl_715.md`](reports/experiment_review_2026-03-10_twinkl_715.md).
 
 ### 2026-03-10 — Full frontier refresh v7: hedonism confirmed as the structural bottleneck, per-dimension weighting recommended
 

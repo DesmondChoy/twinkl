@@ -21,3 +21,33 @@
 - Three ablation runs completed successfully as `run_028`-`run_030`.
 - Result: drop the regularizer. Circumplex structure improved, but `recall_-1`,
   minority recall, and hedging regressed relative to the post-lift control.
+
+# twinkl-715
+
+## Checklist
+
+- [x] Add config-driven `recall_-1` guardrail to ordinal checkpoint selection
+- [x] Wire the v4 notebook path and script mirror to the shared guardrail helper
+- [x] Persist selection summary and per-epoch selection trace artifacts
+- [x] Add `twinkl_715` frozen-holdout experiment configs
+- [x] Extend targeted tests for selection eligibility and logging
+- [x] Run targeted tests
+- [x] Run seed 11 smoke rerun
+- [x] Run seeds 22 and 33 reruns
+- [x] Write `twinkl-715` experiment report with guarded-selection outcome
+- [x] Close beads issue with results
+
+## Review
+
+- Added a config-driven hard validation `recall_-1` floor to ordinal checkpoint
+  eligibility, with explicit `recall_minus1_below_floor` reasons and a
+  testable finalization helper for promotable vs debug-only outcomes.
+- Wired the guardrail through the v4 notebook and its checked-in script mirror,
+  and persisted `selection_summary.yaml` plus `selection_trace.parquet` in each
+  model artifact directory.
+- Added the `twinkl_715` frozen-holdout config family and reran the motivating
+  regularized `BalancedSoftmax` branch as `run_031`-`run_033`.
+- Result: keep the new guardrail, but do not promote the regularized family.
+  The guardrail blocked the previously selected low-recall epochs cleanly, yet
+  the rerun still did not beat the incumbent default on holdout
+  `recall_-1`/minority recall/hedging.

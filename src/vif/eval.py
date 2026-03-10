@@ -484,19 +484,33 @@ DEFAULT_ORDINAL_SELECTION_POLICY = {
         "qwk_mean_must_be_finite": True,
         "qwk_nan_dims_count_must_equal_zero": True,
         "calibration_global_must_be_non_negative": True,
+        "recall_minus1_floor": None,
     },
     "fallback": "best_finite_qwk",
 }
 
 
-def ordinal_selection_policy_summary() -> dict:
-    """Return a copy of the default ordinal checkpoint selection policy."""
-    return {
+def ordinal_selection_policy_summary(overrides: dict | None = None) -> dict:
+    """Return the default ordinal checkpoint selection policy with overrides applied."""
+    policy = {
         "name": DEFAULT_ORDINAL_SELECTION_POLICY["name"],
         "rank_order": list(DEFAULT_ORDINAL_SELECTION_POLICY["rank_order"]),
         "guardrails": dict(DEFAULT_ORDINAL_SELECTION_POLICY["guardrails"]),
         "fallback": DEFAULT_ORDINAL_SELECTION_POLICY["fallback"],
     }
+    if not overrides:
+        return policy
+
+    for key, value in overrides.items():
+        if key == "guardrails" and isinstance(value, dict):
+            policy["guardrails"].update(value)
+            continue
+        if key == "rank_order" and value is not None:
+            policy["rank_order"] = list(value)
+            continue
+        policy[key] = value
+
+    return policy
 
 
 def build_ordinal_selection_candidate(
@@ -504,8 +518,11 @@ def build_ordinal_selection_candidate(
     epoch: int,
     val_loss: float,
     eval_result: dict,
+    selection_policy: dict | None = None,
 ) -> dict:
     """Build a checkpoint-selection candidate from validation metrics."""
+    resolved_policy = ordinal_selection_policy_summary(selection_policy)
+    guardrails = resolved_policy["guardrails"]
     qwk_mean = float(eval_result.get("qwk_mean", float("nan")))
     recall_minus1 = float(eval_result.get("recall_minus1", float("nan")))
     calibration_global = float(
@@ -515,12 +532,21 @@ def build_ordinal_selection_candidate(
     qwk_nan_dims_count = int(eval_result.get("qwk_nan_dims_count", 0))
 
     ineligible_reasons = []
-    if not np.isfinite(qwk_mean):
+    if guardrails.get("qwk_mean_must_be_finite", True) and not np.isfinite(qwk_mean):
         ineligible_reasons.append("qwk_mean_non_finite")
-    if qwk_nan_dims_count > 0:
+    if guardrails.get("qwk_nan_dims_count_must_equal_zero", True) and qwk_nan_dims_count > 0:
         ineligible_reasons.append("qwk_nan_dims_present")
-    if np.isfinite(calibration_global) and calibration_global < 0:
+    if (
+        guardrails.get("calibration_global_must_be_non_negative", True)
+        and np.isfinite(calibration_global)
+        and calibration_global < 0
+    ):
         ineligible_reasons.append("negative_calibration")
+    recall_minus1_floor = guardrails.get("recall_minus1_floor")
+    if recall_minus1_floor is not None:
+        recall_minus1_floor = float(recall_minus1_floor)
+        if not np.isfinite(recall_minus1) or recall_minus1 < recall_minus1_floor:
+            ineligible_reasons.append("recall_minus1_below_floor")
 
     return {
         "epoch": int(epoch),
@@ -551,6 +577,52 @@ def is_better_ordinal_candidate(candidate: dict, incumbent: dict | None) -> bool
     if incumbent is None:
         return True
     return ordinal_candidate_sort_key(candidate) > ordinal_candidate_sort_key(incumbent)
+
+
+def finalize_ordinal_checkpoint_selection(
+    *,
+    best_candidate: dict | None,
+    fallback_candidate: dict | None,
+    selection_policy: dict | None = None,
+) -> dict:
+    """Resolve ordinal checkpoint selection into promotable vs debug-only outcomes."""
+    resolved_policy = ordinal_selection_policy_summary(selection_policy)
+    fallback_mode = resolved_policy.get("fallback", "best_finite_qwk")
+
+    if best_candidate is not None:
+        return {
+            "selected_candidate": dict(best_candidate),
+            "selection_source": "eligible_policy",
+            "promotion_eligible": True,
+            "debug_fallback_used": False,
+        }
+
+    if fallback_candidate is None:
+        return {
+            "selected_candidate": {},
+            "selection_source": "no_finite_qwk",
+            "promotion_eligible": False,
+            "debug_fallback_used": False,
+        }
+
+    selected_candidate = dict(fallback_candidate)
+    selected_candidate["fallback_reason"] = "no_eligible_epoch"
+    if fallback_mode == "best_finite_qwk":
+        return {
+            "selected_candidate": selected_candidate,
+            "selection_source": "fallback_best_finite_qwk",
+            "promotion_eligible": True,
+            "debug_fallback_used": False,
+        }
+    if fallback_mode == "debug_best_finite_qwk_only":
+        return {
+            "selected_candidate": selected_candidate,
+            "selection_source": "debug_fallback_best_finite_qwk",
+            "promotion_eligible": False,
+            "debug_fallback_used": True,
+        }
+
+    raise ValueError(f"Unsupported ordinal checkpoint fallback mode: {fallback_mode}")
 
 
 def _metadata_rows_from_dataloader(

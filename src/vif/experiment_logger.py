@@ -397,6 +397,8 @@ def _build_experiment_dict(
     selected_candidate = trained_result.get("selected_candidate", {})
     selection_policy = trained_result.get("selection_policy")
     selection_source = trained_result.get("selection_source")
+    promotion_eligible = trained_result.get("promotion_eligible")
+    debug_fallback_used = trained_result.get("debug_fallback_used")
     artifact_paths = trained_result.get("artifact_paths", {})
 
     # Training dynamics
@@ -522,6 +524,8 @@ def _build_experiment_dict(
             "gap_at_best": _round_val(gap_at_best),
             "final_lr": _round_val(final_lr, dp=6),
             "selection_source": selection_source,
+            "promotion_eligible": promotion_eligible,
+            "debug_fallback_used": debug_fallback_used,
             "selection_metrics": {
                 "qwk_mean": _round_val(selected_candidate.get("qwk_mean")),
                 "recall_minus1": _round_val(selected_candidate.get("recall_minus1")),
@@ -747,6 +751,8 @@ def log_experiment_run(
     results = []
 
     for model_name in trained_models:
+        if trained_models[model_name].get("promotion_eligible", True) is False:
+            continue
         # Skip models missing from any required metrics dict
         if model_name not in all_results:
             continue

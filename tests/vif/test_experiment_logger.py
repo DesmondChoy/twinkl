@@ -270,6 +270,56 @@ def test_build_experiment_dict_records_circumplex_regularizer_metadata():
     assert training_cfg["circumplex_regularizer_adjacent_weight"] == 0.1
 
 
+def test_build_experiment_dict_records_selection_policy_metadata():
+    config, trained_result, eval_result, calibration, hedging, recall_data = _minimal_training_inputs()
+    trained_result.update(
+        {
+            "selected_candidate": {
+                "qwk_mean": 0.41,
+                "recall_minus1": 0.44,
+                "calibration_global": 0.12,
+                "hedging_mean": 0.31,
+                "qwk_nan_dims_count": 0,
+                "eligible": True,
+                "ineligible_reasons": [],
+            },
+            "selection_policy": {
+                "name": "qwk_then_recall_guarded",
+                "guardrails": {
+                    "recall_minus1_floor": 0.4032,
+                },
+                "fallback": "debug_best_finite_qwk_only",
+            },
+            "selection_source": "eligible_policy",
+            "promotion_eligible": True,
+            "debug_fallback_used": False,
+        }
+    )
+
+    with patch("src.vif.experiment_logger._get_git_commit", return_value="abc123"):
+        experiment = _build_experiment_dict(
+            run_id="run_999",
+            model_name="BalancedSoftmax",
+            config=config,
+            trained_result=trained_result,
+            eval_result=eval_result,
+            calibration=calibration,
+            hedging=hedging,
+            recall_data=recall_data,
+            n_train=100,
+            n_val=20,
+            n_test=20,
+            pct_truncated=0.0,
+            state_dim=256,
+            observations="",
+        )
+
+    assert experiment["selection_policy"]["guardrails"]["recall_minus1_floor"] == 0.4032
+    assert experiment["training_dynamics"]["selection_source"] == "eligible_policy"
+    assert experiment["training_dynamics"]["promotion_eligible"] is True
+    assert experiment["training_dynamics"]["debug_fallback_used"] is False
+
+
 # ─── _flatten_dict ───────────────────────────────────────────────────────────
 
 
