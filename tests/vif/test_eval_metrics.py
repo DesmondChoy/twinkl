@@ -1177,6 +1177,113 @@ class TestOrdinalSelectionHelpers:
         assert candidate["eligible"] is False
         assert "qwk_nan_dims_present" in candidate["ineligible_reasons"]
 
+    def test_recall_minus1_below_floor_is_ineligible(self):
+        from src.vif.eval import build_ordinal_selection_candidate
+
+        candidate = build_ordinal_selection_candidate(
+            epoch=0,
+            val_loss=0.2,
+            eval_result={
+                "qwk_mean": 0.35,
+                "recall_minus1": 0.39,
+                "hedging_mean": 0.8,
+                "qwk_nan_dims_count": 0,
+                "calibration": {"error_uncertainty_correlation": 0.1},
+            },
+            selection_policy={
+                "guardrails": {"recall_minus1_floor": 0.4032},
+            },
+        )
+
+        assert candidate["eligible"] is False
+        assert "recall_minus1_below_floor" in candidate["ineligible_reasons"]
+
+    def test_recall_minus1_at_floor_is_eligible(self):
+        from src.vif.eval import build_ordinal_selection_candidate
+
+        candidate = build_ordinal_selection_candidate(
+            epoch=0,
+            val_loss=0.2,
+            eval_result={
+                "qwk_mean": 0.35,
+                "recall_minus1": 0.4032,
+                "hedging_mean": 0.8,
+                "qwk_nan_dims_count": 0,
+                "calibration": {"error_uncertainty_correlation": 0.1},
+            },
+            selection_policy={
+                "guardrails": {"recall_minus1_floor": 0.4032},
+            },
+        )
+
+        assert candidate["eligible"] is True
+
+    def test_non_finite_recall_fails_floor(self):
+        from src.vif.eval import build_ordinal_selection_candidate
+
+        candidate = build_ordinal_selection_candidate(
+            epoch=0,
+            val_loss=0.2,
+            eval_result={
+                "qwk_mean": 0.35,
+                "recall_minus1": float("nan"),
+                "hedging_mean": 0.8,
+                "qwk_nan_dims_count": 0,
+                "calibration": {"error_uncertainty_correlation": 0.1},
+            },
+            selection_policy={
+                "guardrails": {"recall_minus1_floor": 0.4032},
+            },
+        )
+
+        assert candidate["eligible"] is False
+        assert candidate["ineligible_reasons"] == ["recall_minus1_below_floor"]
+
+    def test_finalize_selection_uses_debug_only_fallback(self):
+        from src.vif.eval import finalize_ordinal_checkpoint_selection
+
+        fallback_candidate = {
+            "epoch": 4,
+            "val_loss": 0.2,
+            "qwk_mean": 0.41,
+            "recall_minus1": 0.39,
+            "eligible": False,
+            "ineligible_reasons": ["recall_minus1_below_floor"],
+        }
+
+        selection = finalize_ordinal_checkpoint_selection(
+            best_candidate=None,
+            fallback_candidate=fallback_candidate,
+            selection_policy={"fallback": "debug_best_finite_qwk_only"},
+        )
+
+        assert selection["promotion_eligible"] is False
+        assert selection["debug_fallback_used"] is True
+        assert selection["selection_source"] == "debug_fallback_best_finite_qwk"
+        assert selection["selected_candidate"]["fallback_reason"] == "no_eligible_epoch"
+
+    def test_finalize_selection_keeps_legacy_fallback_when_requested(self):
+        from src.vif.eval import finalize_ordinal_checkpoint_selection
+
+        fallback_candidate = {
+            "epoch": 4,
+            "val_loss": 0.2,
+            "qwk_mean": 0.41,
+            "recall_minus1": 0.39,
+            "eligible": False,
+            "ineligible_reasons": ["recall_minus1_below_floor"],
+        }
+
+        selection = finalize_ordinal_checkpoint_selection(
+            best_candidate=None,
+            fallback_candidate=fallback_candidate,
+            selection_policy={"fallback": "best_finite_qwk"},
+        )
+
+        assert selection["promotion_eligible"] is True
+        assert selection["debug_fallback_used"] is False
+        assert selection["selection_source"] == "fallback_best_finite_qwk"
+
 
 class TestOrdinalArtifactExport:
     """Tests for validation/test ordinal artifact export."""

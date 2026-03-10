@@ -1,0 +1,311 @@
+# VIF Experiment: run_033_BalancedSoftmax
+# Generated: 2026-03-10T23:07:01
+# Git: 8cc6688(dirty)
+metadata:
+  experiment_id: run_033_BalancedSoftmax
+  run_id: run_033
+  model_name: BalancedSoftmax
+  timestamp: '2026-03-10T23:07:01'
+  git_commit: 8cc6688(dirty)
+  config_hash: 943d2f2b1345
+provenance:
+  prev_run_id: run_032
+  prev_git_commit: 8cc6688(dirty)
+  git_log: []
+  config_delta:
+    added: {}
+    removed: {}
+    changed:
+      training.seed:
+        from: 22
+        to: 33
+  rationale: >-
+    Third and final seed completing the `twinkl-715` guardrailed rerun family
+    for circumplex-regularized `BalancedSoftmax`. This closes the 3-seed matrix
+    needed to compare the guarded selection policy against both the original
+    regularized family and the incumbent frontier.
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 266
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: balanced_softmax_circreg
+    learning_rate: 0.015522253574270487
+    learning_rate_configured: 0.015522253574270487
+    learning_rate_source: explicit_model_override
+    lr_finder_enabled: false
+    learning_rate_policy: run_015_cdwce_a3_valley
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 33
+    class_balance_source: train_split_per_dimension
+    circumplex_regularizer_enabled: true
+    circumplex_regularizer_opposite_weight: 0.5
+    circumplex_regularizer_adjacent_weight: 0.1
+    ldam_max_m: 0.5
+    ldam_scale: 30.0
+    ldam_drw_start_epoch: 50
+    ldam_beta: 0.9999
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1213
+  n_val: 217
+  n_test: 221
+capacity:
+  n_parameters: 23454
+  param_sample_ratio: 19.3355
+training_dynamics:
+  best_epoch: 28
+  total_epochs: 33
+  train_loss_at_best: 0.3195
+  val_loss_at_best: 0.5709
+  gap_at_best: 0.2514
+  final_lr: 0.007761
+  selection_source: eligible_policy
+  promotion_eligible: true
+  debug_fallback_used: false
+  selection_metrics:
+    qwk_mean: 0.4024
+    recall_minus1: 0.4268
+    calibration_global: 0.7549
+    hedging_mean: 0.6535
+    qwk_nan_dims_count: 0
+    eligible: true
+    ineligible_reasons: []
+evaluation:
+  mae_mean: 0.2858
+  accuracy_mean: 0.7792
+  qwk_mean: 0.3723
+  qwk_nan_dims_count: 0
+  spearman_mean: 0.3595
+  calibration_global: 0.7473
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.3039
+  minority_recall_mean: 0.4093
+  recall_minus1: 0.2602
+  recall_zero: 0.8671
+  recall_plus1: 0.5585
+  hedging_mean: 0.652
+  circumplex_summary:
+    opposite_violation_mean: 0.032521472622950874
+    adjacent_support_mean: 0.0770518792172273
+per_dimension:
+  self_direction:
+    mae: 0.4119
+    accuracy: 0.6787
+    qwk: 0.4782
+    spearman: 0.5095
+    calibration: 0.6226
+    hedging: 0.4842
+  stimulation:
+    mae: 0.2135
+    accuracy: 0.8507
+    qwk: 0.2103
+    spearman: 0.1626
+    calibration: 0.8411
+    hedging: 0.7466
+  hedonism:
+    mae: 0.2654
+    accuracy: 0.8145
+    qwk: 0.1579
+    spearman: 0.1679
+    calibration: 0.7853
+    hedging: 0.7285
+  achievement:
+    mae: 0.3099
+    accuracy: 0.7738
+    qwk: 0.4843
+    spearman: 0.464
+    calibration: 0.6721
+    hedging: 0.6244
+  power:
+    mae: 0.1871
+    accuracy: 0.8597
+    qwk: 0.3704
+    spearman: 0.2713
+    calibration: 0.8278
+    hedging: 0.8371
+  security:
+    mae: 0.3607
+    accuracy: 0.6787
+    qwk: 0.2292
+    spearman: 0.1771
+    calibration: 0.507
+    hedging: 0.724
+  conformity:
+    mae: 0.2843
+    accuracy: 0.7738
+    qwk: 0.5794
+    spearman: 0.6325
+    calibration: 0.7354
+    hedging: 0.4977
+  tradition:
+    mae: 0.2643
+    accuracy: 0.7873
+    qwk: 0.4785
+    spearman: 0.5139
+    calibration: 0.7761
+    hedging: 0.5747
+  benevolence:
+    mae: 0.3991
+    accuracy: 0.6742
+    qwk: 0.3899
+    spearman: 0.4108
+    calibration: 0.5425
+    hedging: 0.5294
+  universalism:
+    mae: 0.1618
+    accuracy: 0.9005
+    qwk: 0.3448
+    spearman: 0.2857
+    calibration: 0.935
+    hedging: 0.7738
+observations: >-
+  Seed-33 delivered QWK 0.372 (fair), accuracy 0.779, and calibration 0.747
+  (moderate-to-good), but recall_-1 remained only 0.260 with minority recall
+  0.409 and hedging 65.2%. Hedonism (0.158) and security (0.229) were still
+  among the weakest dimensions despite the stronger aggregate profile. The
+  completed guarded family therefore improved on the earlier regularized branch
+  without surpassing the incumbent `run_019`-`run_021` default where tail
+  sensitivity is concerned.
+circumplex:
+  source: probabilities
+  summary:
+    opposite_violation_mean: 0.032521472622950874
+    adjacent_support_mean: 0.0770518792172273
+  opposite_pairs:
+  - pair_id: achievement__benevolence
+    left: achievement
+    right: benevolence
+    score: 0.07535892724990845
+  - pair_id: achievement__universalism
+    left: achievement
+    right: universalism
+    score: 0.009594611823558807
+  - pair_id: benevolence__power
+    left: benevolence
+    right: power
+    score: 0.017440760508179665
+  - pair_id: conformity__hedonism
+    left: conformity
+    right: hedonism
+    score: 0.02774742618203163
+  - pair_id: conformity__self_direction
+    left: conformity
+    right: self_direction
+    score: 0.04826556146144867
+  - pair_id: conformity__stimulation
+    left: conformity
+    right: stimulation
+    score: 0.014966147020459175
+  - pair_id: hedonism__tradition
+    left: hedonism
+    right: tradition
+    score: 0.03840172290802002
+  - pair_id: power__universalism
+    left: power
+    right: universalism
+    score: 0.003639599308371544
+  - pair_id: security__self_direction
+    left: security
+    right: self_direction
+    score: 0.04514523223042488
+  - pair_id: security__stimulation
+    left: security
+    right: stimulation
+    score: 0.014090631157159805
+  - pair_id: self_direction__tradition
+    left: self_direction
+    right: tradition
+    score: 0.07676053047180176
+  - pair_id: stimulation__tradition
+    left: stimulation
+    right: tradition
+    score: 0.01884652115404606
+  adjacent_pairs:
+  - pair_id: achievement__hedonism
+    left: achievement
+    right: hedonism
+    score: 0.022055108100175858
+  - pair_id: achievement__power
+    left: achievement
+    right: power
+    score: 0.07813791185617447
+  - pair_id: benevolence__conformity
+    left: benevolence
+    right: conformity
+    score: 0.0910382866859436
+  - pair_id: benevolence__tradition
+    left: benevolence
+    right: tradition
+    score: 0.17276526987552643
+  - pair_id: benevolence__universalism
+    left: benevolence
+    right: universalism
+    score: 0.11779060959815979
+  - pair_id: conformity__security
+    left: conformity
+    right: security
+    score: 0.0752916932106018
+  - pair_id: conformity__tradition
+    left: conformity
+    right: tradition
+    score: 0.09593338519334793
+  - pair_id: hedonism__stimulation
+    left: hedonism
+    right: stimulation
+    score: 0.03172359615564346
+  - pair_id: power__security
+    left: power
+    right: security
+    score: 0.029331523925065994
+  - pair_id: security__tradition
+    left: security
+    right: tradition
+    score: 0.07780424505472183
+  - pair_id: self_direction__stimulation
+    left: self_direction
+    right: stimulation
+    score: 0.06803804636001587
+  - pair_id: self_direction__universalism
+    left: self_direction
+    right: universalism
+    score: 0.06471287459135056
+selection_policy:
+  name: qwk_then_recall_guarded
+  rank_order:
+  - qwk_mean
+  - recall_minus1
+  - calibration_global
+  - hedging_mean
+  - val_loss
+  guardrails:
+    qwk_mean_must_be_finite: true
+    qwk_nan_dims_count_must_equal_zero: true
+    calibration_global_must_be_non_negative: true
+    recall_minus1_floor: 0.4032
+  fallback: debug_best_finite_qwk_only
+artifacts:
+  selection_trace: logs/experiments/artifacts/ordinal_v4_s2025_m33_20260310_230626/BalancedSoftmax/selection_trace.parquet
+  selection_summary: logs/experiments/artifacts/ordinal_v4_s2025_m33_20260310_230626/BalancedSoftmax/selection_summary.yaml
+  checkpoint: logs/experiments/artifacts/ordinal_v4_s2025_m33_20260310_230626/BalancedSoftmax/selected_checkpoint.pt
+  validation_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m33_20260310_230626/BalancedSoftmax/selected_validation_outputs.parquet
+  test_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m33_20260310_230626/BalancedSoftmax/selected_test_outputs.parquet
