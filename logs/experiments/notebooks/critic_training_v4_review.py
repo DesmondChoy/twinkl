@@ -83,6 +83,9 @@ CONFIG = {
     "model_seed": 2025,
     "fixed_holdout_manifest_path": None,
     "class_balance_source": "train_split_per_dimension",
+    "circumplex_regularizer_enabled": False,
+    "circumplex_regularizer_opposite_weight": 0.0,
+    "circumplex_regularizer_adjacent_weight": 0.0,
     "ldam_max_m": 0.5,
     "ldam_scale": 30.0,
     "ldam_drw_start_epoch": 50,
@@ -145,6 +148,9 @@ for key in [
     "model_seed",
     "fixed_holdout_manifest_path",
     "class_balance_source",
+    "circumplex_regularizer_enabled",
+    "circumplex_regularizer_opposite_weight",
+    "circumplex_regularizer_adjacent_weight",
     "use_lr_finder",
     "experiment_group",
     "skip_experiment_logging",
@@ -513,6 +519,16 @@ MODEL_CONFIGS = {
                 lambda _epoch: partial(
                     balanced_softmax_loss_multi,
                     class_priors=class_stats["class_priors"],
+                    circumplex_regularizer_opposite_weight=(
+                        float(_config.get("circumplex_regularizer_opposite_weight", 0.0))
+                        if _config.get("circumplex_regularizer_enabled")
+                        else 0.0
+                    ),
+                    circumplex_regularizer_adjacent_weight=(
+                        float(_config.get("circumplex_regularizer_adjacent_weight", 0.0))
+                        if _config.get("circumplex_regularizer_enabled")
+                        else 0.0
+                    ),
                 )
             )
         ),

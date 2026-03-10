@@ -367,6 +367,8 @@ def _loss_shorthand(model_name: str, config: dict) -> str:
             scale = config.get("weighted_mse_scale", 5.0)
             return f"weighted_mse_s{scale}"
         return "mse"
+    if model_name == "BalancedSoftmax" and config.get("circumplex_regularizer_enabled"):
+        return "balanced_softmax_circreg"
     return mapping.get(model_name, model_name.lower())
 
 
@@ -479,6 +481,13 @@ def _build_experiment_dict(
                 "scheduler_patience": config.get("scheduler_patience", 10),
                 "seed": config.get("model_seed", config.get("seed", 42)),
                 "class_balance_source": config.get("class_balance_source"),
+                "circumplex_regularizer_enabled": config.get("circumplex_regularizer_enabled"),
+                "circumplex_regularizer_opposite_weight": config.get(
+                    "circumplex_regularizer_opposite_weight"
+                ),
+                "circumplex_regularizer_adjacent_weight": config.get(
+                    "circumplex_regularizer_adjacent_weight"
+                ),
                 "ldam_max_m": config.get("ldam_max_m"),
                 "ldam_scale": config.get("ldam_scale"),
                 "ldam_drw_start_epoch": config.get("ldam_drw_start_epoch"),

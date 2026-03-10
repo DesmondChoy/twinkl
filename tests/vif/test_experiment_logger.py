@@ -72,6 +72,12 @@ class TestLossShorthand:
     def test_balanced_softmax(self):
         assert _loss_shorthand("BalancedSoftmax", {}) == "balanced_softmax"
 
+    def test_balanced_softmax_circumplex_regularizer(self):
+        assert _loss_shorthand(
+            "BalancedSoftmax",
+            {"circumplex_regularizer_enabled": True},
+        ) == "balanced_softmax_circreg"
+
     def test_ldam_drw(self):
         assert _loss_shorthand("LDAM_DRW", {}) == "ldam_drw"
 
@@ -97,6 +103,9 @@ def _minimal_training_inputs() -> tuple[dict, dict, dict, dict, np.ndarray, dict
         "epochs": 100,
         "model_seed": 11,
         "class_balance_source": "train_split_per_dimension",
+        "circumplex_regularizer_enabled": False,
+        "circumplex_regularizer_opposite_weight": 0.0,
+        "circumplex_regularizer_adjacent_weight": 0.0,
         "ldam_max_m": 0.5,
         "ldam_scale": 30.0,
         "ldam_drw_start_epoch": 50,
@@ -224,6 +233,41 @@ def test_build_experiment_dict_persists_circumplex_payload():
     assert experiment["circumplex"]["source"] == "probabilities"
     assert experiment["circumplex"]["opposite_pairs"][0]["pair_id"] == "security__self_direction"
     assert experiment["circumplex"]["adjacent_pairs"][0]["pair_id"] == "self_direction__stimulation"
+
+
+def test_build_experiment_dict_records_circumplex_regularizer_metadata():
+    config, trained_result, eval_result, calibration, hedging, recall_data = _minimal_training_inputs()
+    config.update(
+        {
+            "circumplex_regularizer_enabled": True,
+            "circumplex_regularizer_opposite_weight": 0.5,
+            "circumplex_regularizer_adjacent_weight": 0.1,
+        }
+    )
+
+    with patch("src.vif.experiment_logger._get_git_commit", return_value="abc123"):
+        experiment = _build_experiment_dict(
+            run_id="run_999",
+            model_name="BalancedSoftmax",
+            config=config,
+            trained_result=trained_result,
+            eval_result=eval_result,
+            calibration=calibration,
+            hedging=hedging,
+            recall_data=recall_data,
+            n_train=100,
+            n_val=20,
+            n_test=20,
+            pct_truncated=0.0,
+            state_dim=256,
+            observations="",
+        )
+
+    training_cfg = experiment["config"]["training"]
+    assert training_cfg["loss_fn"] == "balanced_softmax_circreg"
+    assert training_cfg["circumplex_regularizer_enabled"] is True
+    assert training_cfg["circumplex_regularizer_opposite_weight"] == 0.5
+    assert training_cfg["circumplex_regularizer_adjacent_weight"] == 0.1
 
 
 # ─── _flatten_dict ───────────────────────────────────────────────────────────
