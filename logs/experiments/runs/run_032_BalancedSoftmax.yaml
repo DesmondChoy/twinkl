@@ -19,7 +19,10 @@ provenance:
       training.seed:
         from: 11
         to: 22
-  rationale: ''
+  rationale: >-
+    Second seed for the `twinkl-715` guardrailed circumplex-regularized rerun
+    family. This run tests whether the recall-floor checkpoint policy can
+    recover the seed-22 branch without changing the underlying model or data.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -174,7 +177,14 @@ per_dimension:
     spearman: 0.2241
     calibration: 0.9005
     hedging: 0.8281
-observations: ''
+observations: >-
+  Seed-22 was the strongest tail-sensitive member of the guarded family, with
+  QWK 0.366 (fair), recall_-1 0.355, minority recall 0.435, and calibration
+  0.713. Even so, hedging stayed at 64.1% and the hardest dimensions remained
+  hedonism (0.160), stimulation (0.196), and security (0.198), so the gain was
+  incomplete rather than decisive. This seed showed the guardrail can rescue a
+  better checkpoint, but not enough to replace the incumbent corrected-split
+  default on family medians.
 circumplex:
   source: probabilities
   summary:

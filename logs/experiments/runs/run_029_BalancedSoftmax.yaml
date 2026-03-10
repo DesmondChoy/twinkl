@@ -19,7 +19,11 @@ provenance:
       training.seed:
         from: 11
         to: 22
-  rationale: ''
+  rationale: >-
+    Second seed for the `twinkl-691.4` circumplex-regularized
+    `BalancedSoftmax` family on the regenerated 1213-row dataset. This run
+    checks whether the QWK/calibration gains from `run_028` survive a different
+    model initialization strongly enough to justify completing the ablation.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -172,7 +176,13 @@ per_dimension:
     spearman: 0.2418
     calibration: 0.8981
     hedging: 0.81
-observations: ''
+observations: >-
+  Seed-22 landed at QWK 0.347 (fair), recall_-1 0.279, minority recall 0.411,
+  hedging 64.1%, and calibration 0.709 (good). Relative to `run_028`, the
+  aggregate gains softened while the hard-dimension picture stayed weak:
+  hedonism dropped to 0.111, security to 0.154, and stimulation to 0.189. The
+  family still looked structurally plausible, but the trade-off versus the
+  incumbent frontier was already leaning negative.
 circumplex:
   source: probabilities
   summary:

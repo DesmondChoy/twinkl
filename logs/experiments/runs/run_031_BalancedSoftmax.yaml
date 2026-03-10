@@ -20,7 +20,12 @@ provenance:
       training.seed:
         from: 33
         to: 11
-  rationale: ''
+  rationale: >-
+    Seed-11 guardrailed rerun for `twinkl-715`, keeping the
+    circumplex-regularized `BalancedSoftmax` training setup fixed while adding a
+    hard validation `recall_-1` floor to checkpoint promotion. The purpose was
+    to test whether the lower-recall selections in `run_028`-`run_030` were a
+    checkpoint-selection bug rather than a training limitation.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -175,7 +180,14 @@ per_dimension:
     spearman: 0.1929
     calibration: 0.9354
     hedging: 0.7919
-observations: ''
+observations: >-
+  The guardrailed seed replay posted QWK 0.353 (fair), recall_-1 0.267,
+  minority recall 0.409, hedging 62.7%, and calibration 0.707 (good). Security
+  improved to QWK 0.300 relative to `run_028`, but stimulation (0.132) and
+  hedonism (0.209) stayed weak, so the family still lacked a clean hard-dim
+  win. The new selection policy fixed the low-recall promotion pathology on
+  validation, yet the holdout outcome still trailed the incumbent
+  `BalancedSoftmax` family on tail sensitivity.
 circumplex:
   source: probabilities
   summary:

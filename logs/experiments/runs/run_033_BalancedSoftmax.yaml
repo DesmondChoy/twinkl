@@ -19,7 +19,11 @@ provenance:
       training.seed:
         from: 22
         to: 33
-  rationale: ''
+  rationale: >-
+    Third and final seed completing the `twinkl-715` guardrailed rerun family
+    for circumplex-regularized `BalancedSoftmax`. This closes the 3-seed matrix
+    needed to compare the guarded selection policy against both the original
+    regularized family and the incumbent frontier.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -174,7 +178,14 @@ per_dimension:
     spearman: 0.2857
     calibration: 0.935
     hedging: 0.7738
-observations: ''
+observations: >-
+  Seed-33 delivered QWK 0.372 (fair), accuracy 0.779, and calibration 0.747
+  (moderate-to-good), but recall_-1 remained only 0.260 with minority recall
+  0.409 and hedging 65.2%. Hedonism (0.158) and security (0.229) were still
+  among the weakest dimensions despite the stronger aggregate profile. The
+  completed guarded family therefore improved on the earlier regularized branch
+  without surpassing the incumbent `run_019`-`run_021` default where tail
+  sensitivity is concerned.
 circumplex:
   source: probabilities
   summary:

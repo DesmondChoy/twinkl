@@ -19,7 +19,12 @@ provenance:
       training.seed:
         from: 22
         to: 33
-  rationale: ''
+  rationale: >-
+    Third seed completing the `twinkl-691.4` circumplex-regularized
+    `BalancedSoftmax` family. This closes the 3-seed matrix needed to compare
+    median/IQR behavior against the incumbent `run_019`-`run_021` family and
+    determine whether the regularizer is a real frontier candidate or a
+    seed-specific artifact.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -172,7 +177,13 @@ per_dimension:
     spearman: 0.3013
     calibration: 0.9288
     hedging: 0.7738
-observations: ''
+observations: >-
+  Seed-33 regressed to QWK 0.318 (fair), recall_-1 0.239, minority recall
+  0.398, and calibration 0.702, with hedging still elevated at 62.7%. Hedonism
+  nearly collapsed (QWK 0.049) while stimulation (0.108) and security (0.199)
+  remained weak, confirming that the regularizer did not stabilize the semantic
+  bottlenecks. The completed family therefore looked worse than the incumbent
+  on the tail-sensitive metrics that mattered most.
 circumplex:
   source: probabilities
   summary:

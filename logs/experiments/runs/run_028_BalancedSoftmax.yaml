@@ -26,7 +26,12 @@ provenance:
       training.seed:
         from: 33
         to: 11
-  rationale: ''
+  rationale: >-
+    Seed-11 smoke ablation for `twinkl-691.4`, adding the soft circumplex
+    regularizer on top of the current 1213-row `BalancedSoftmax` baseline. The
+    goal was to test whether explicit opposition penalties and adjacent-support
+    rewards could improve corrected-split structure without giving back too much
+    frontier quality.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -179,7 +184,14 @@ per_dimension:
     spearman: 0.2409
     calibration: 0.9692
     hedging: 0.7964
-observations: ''
+observations: >-
+  Seed-11 produced QWK 0.384 (fair), calibration 0.761 (good), and accuracy
+  0.761, but recall_-1 fell to 0.265 and hedging rose to 64.4%. The hardest
+  dimensions were still stimulation (0.208), security (0.229), and hedonism
+  (0.254), so the regularizer improved aggregate agreement more than tail
+  recovery. As an isolated seed it looked promising on QWK, but it weakened the
+  minority-sensitive behavior that justified carrying `BalancedSoftmax`
+  forward.
 circumplex:
   source: probabilities
   summary:
