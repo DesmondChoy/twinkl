@@ -19,7 +19,9 @@ provenance:
       training.seed:
         from: 11
         to: 22
-  rationale: ''
+  rationale: >-
+    Second seed for the post-lift SoftOrdinal family on the regenerated
+    `twinkl-691.2` dataset, paired with the BalancedSoftmax seed-22 run.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -169,7 +171,13 @@ per_dimension:
     spearman: 0.3606
     calibration: 0.9641
     hedging: 0.9005
-observations: ''
+observations: >-
+  SoftOrdinal seed-22 posted QWK 0.322 (fair), calibration 0.738 (moderate),
+  minority recall 0.233 (poor), and hedging 84.0% (excessive). This was the
+  weakest SoftOrdinal seed across both the original and post-lift families,
+  with hedonism QWK at -0.035 and power at 0.145 — both near-zero. The
+  extremely low train/val gap of 0.011 again argues that SoftOrdinal converges
+  too conservatively to move the minority boundary on this dataset.
 circumplex:
   source: probabilities
   summary:

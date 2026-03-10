@@ -19,7 +19,11 @@ provenance:
       training.seed:
         from: 22
         to: 33
-  rationale: ''
+  rationale: >-
+    Third and final seed completing the post-lift BalancedSoftmax family on the
+    regenerated `twinkl-691.2` dataset. Enables median/IQR comparison with the
+    incumbent `run_019`-`run_021` family and the targeted `run_022`-`run_024`
+    branch.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -169,7 +173,13 @@ per_dimension:
     spearman: 0.2589
     calibration: 0.9046
     hedging: 0.8054
-observations: ''
+observations: >-
+  Seed-33 posted QWK 0.351 (fair), recall_-1 0.328, minority recall 0.442,
+  and hedging 59.8%. This was the strongest individual seed in the post-lift
+  family on QWK, but the completed family median of 0.346 still trailed the
+  incumbent 0.362. Security QWK at 0.240 was below the incumbent median of
+  0.297, while hedonism at 0.256 was slightly above the incumbent. The family
+  does not justify a frontier change.
 circumplex:
   source: probabilities
   summary:

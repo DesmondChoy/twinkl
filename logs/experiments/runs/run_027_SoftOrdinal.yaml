@@ -19,7 +19,9 @@ provenance:
       training.seed:
         from: 22
         to: 33
-  rationale: ''
+  rationale: >-
+    Third seed completing the post-lift SoftOrdinal family on the regenerated
+    `twinkl-691.2` dataset, paired with the BalancedSoftmax seed-33 run.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -169,7 +171,13 @@ per_dimension:
     spearman: 0.2823
     calibration: 0.9637
     hedging: 0.8869
-observations: ''
+observations: >-
+  SoftOrdinal seed-33 posted QWK 0.340 (fair), calibration 0.777 (moderate),
+  minority recall 0.267 (poor), and hedging 81.4% (excessive). This was the
+  best post-lift SoftOrdinal seed on calibration, but the family median QWK of
+  0.340 stayed below the original SoftOrdinal family of 0.346, and minority
+  recall was comparable at 0.260. The post-lift data did not measurably help
+  the SoftOrdinal loss function.
 circumplex:
   source: probabilities
   summary:

@@ -9,14 +9,18 @@
 | 3 | BalancedSoftmax + targeted batch | run_022-run_024 | 2025 | 11, 22, 33 | 0.349 | **0.342** | 0.434 | **0.619** | 0.687 | Best targeted hard-dimension follow-up so far. The frozen-holdout batch improves `recall_-1` and keeps hedging slightly lower, but it gives back QWK and calibration, so it is a secondary branch rather than the new default. |
 | 4 | SoftOrdinal | run_016-run_018 | 2025 | 11, 22, 33 | 0.346 | 0.077 | 0.283 | 0.796 | 0.781 | Best low-gap completed comparator. Competitive on QWK, but more seed-sensitive than CDWCE_a3 and no longer the minority leader. |
 | 5 | CORN | run_016-run_018 | 2025 | 11, 22, 33 | 0.315 | 0.089 | 0.273 | 0.801 | **0.818** | Best-calibrated corrected-split baseline. Keep it as the calibration anchor and sanity check for lower-confidence follow-ups. |
+| 6 | BalancedSoftmax + hedonism/security lift | run_025-run_027 | 2025 | 11, 22, 33 | 0.346 | 0.328 | 0.442 | **0.598** | 0.693 | Post-regenerated `twinkl-691.2` batch. Lowest hedging of any family, but loses QWK and calibration vs incumbent. Not a frontier change. |
+| 7 | SoftOrdinal + hedonism/security lift | run_025-run_027 | 2025 | 11, 22, 33 | 0.340 | 0.082 | 0.260 | 0.823 | 0.738 | Post-lift SoftOrdinal comparator. The data lift did not help SoftOrdinal escape excessive hedging; worse than original family on most metrics. |
 
-> **Active recommendation (2026-03-09):** `run_019`-`run_021` remain the default corrected-split frontier family after the regenerated `twinkl-691.2` lift and the `twinkl-691.3` rebaseline. The new post-lift `BalancedSoftmax` family `run_025`-`run_027` is within the QWK guard but still loses the overall decision: median `qwk_mean` fell from `0.362` to `0.346`, median `security qwk` fell from `0.297` to `0.199`, and median opposite-pair violation worsened from `0.070` to `0.082`. Treat `run_025`-`run_027` as a cleaner post-lift follow-up than `run_022`-`run_024` on hedging/calibration, not as the new default baseline.
+> **Active recommendation (2026-03-10):** `run_019`-`run_021` remain the default corrected-split frontier family. Neither the targeted `run_022`-`run_024` branch nor the post-lift `run_025`-`run_027` families displace the incumbent. The next highest-leverage experiment is per-dimension uncertainty weighting on BalancedSoftmax to stop hedonism/stimulation noise from dragging down the aggregate. See full analysis below.
 >
-> **Latest targeted data-lift review:** [`reports/experiment_review_2026-03-08_twinkl_681_5.md`](reports/experiment_review_2026-03-08_twinkl_681_5.md)
+> **Latest full frontier review:** [`reports/experiment_review_2026-03-10_v7.md`](reports/experiment_review_2026-03-10_v7.md)
+>
+> **Previous full frontier review:** [`reports/experiment_review_2026-03-08_v6.md`](reports/experiment_review_2026-03-08_v6.md)
 >
 > **Latest post-lift rebaseline review:** [`reports/experiment_review_2026-03-09_twinkl_691_3.md`](reports/experiment_review_2026-03-09_twinkl_691_3.md)
 >
-> **Latest full frontier review:** [`reports/experiment_review_2026-03-08_v6.md`](reports/experiment_review_2026-03-08_v6.md)
+> **Latest targeted data-lift review:** [`reports/experiment_review_2026-03-08_twinkl_681_5.md`](reports/experiment_review_2026-03-08_twinkl_681_5.md)
 >
 > **Post-hoc reporting:** these `681.3` results are documented in [`reports/experiment_review_2026-03-07_twinkl_681_3.md`](reports/experiment_review_2026-03-07_twinkl_681_3.md) with persisted artifacts under [`artifacts/posthoc_twinkl_681_3_20260307_142717/`](artifacts/posthoc_twinkl_681_3_20260307_142717/). They are not added as new rows in the auto-generated run log because no retraining was performed.
 >
@@ -141,6 +145,18 @@
 > **Contributor note:** Keep this section in **newest-first** chronological order (most recent date at top).
 
 ## Findings
+
+### 2026-03-10 — Full frontier refresh v7: hedonism confirmed as the structural bottleneck, per-dimension weighting recommended
+
+The v7 full review covers all 27 runs (90 configs) across both split regimes. The active corrected-split frontier is unchanged: `run_019`-`run_021` BalancedSoftmax remains the default at median QWK 0.362 (fair), recall_-1 0.313, minority recall 0.448, and hedging 62.1%. Post-lift families `run_025`-`run_027` are added to the board as reference rows but do not displace the incumbent.
+
+**1. Hedonism is effectively unmodeled.** Mean QWK across all 4 corrected-split family medians is 0.023 (poor). Only BalancedSoftmax produces positive hedonism QWK (0.247); all conservative losses go negative. Error analysis reveals the model systematically misreads quiet pleasure as tension — it has learned "strong feeling → misalignment" as a spurious correlation. With only ~21 val -1 labels for hedonism, even QWK measurement is inherently noisy.
+
+**2. Both loss correction and data augmentation matter for recall_-1.** BalancedSoftmax recovered recall_-1 from 0.089 (CORN) to 0.313 on the same 1022-row dataset by correcting the class prior in the loss — the conservative losses were suppressing minority predictions even when features supported them. Two subsequent targeted synthetic batches (`twinkl-681.5`, `twinkl-691.2`) then pushed recall_-1 further to 0.342, confirming that data scarcity remains the deeper bottleneck. Neither lever alone is sufficient.
+
+**3. All conservative losses share the same hedging ceiling.** CORN, CDWCE_a3, and SoftOrdinal are all locked at 79-80% hedging despite different ordinal loss formulations. No conservative loss achieved hedging < 60% or minority recall > 30% in 27 runs.
+
+**4. Top recommendations shift from loss sweeps to structural interventions.** (a) Per-dimension uncertainty weighting to down-weight noisy dimensions; (b) decoupled head retraining with class-balanced sampling; (c) targeted LLM augmentation for hedonism; (d) focal temperature scaling post-hoc on CORN; (e) bootstrap CI on per-dimension QWK to quantify evaluation noise. Full details: [`reports/experiment_review_2026-03-10_v7.md`](reports/experiment_review_2026-03-10_v7.md).
 
 ### 2026-03-09 — Regenerated `Hedonism`/`Security` lift did not displace the corrected-split default (`twinkl-691.3`)
 

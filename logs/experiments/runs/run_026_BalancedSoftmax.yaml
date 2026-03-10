@@ -19,7 +19,10 @@ provenance:
       training.seed:
         from: 11
         to: 22
-  rationale: ''
+  rationale: >-
+    Second seed for the post-lift BalancedSoftmax family on the regenerated
+    `twinkl-691.2` dataset. This checks whether the seed-11 result was
+    reproducible or a single-seed artifact.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -169,7 +172,13 @@ per_dimension:
     spearman: 0.2383
     calibration: 0.9151
     hedging: 0.7738
-observations: ''
+observations: >-
+  The weakest member of the post-lift BalancedSoftmax family: QWK fell to
+  0.334 (fair), recall_-1 reached 0.383, minority recall 0.457, and hedging
+  58.8% (decisive), but at the cost of MAE 0.333, accuracy 0.728, and
+  calibration 0.659 (moderate). Security QWK dropped to 0.190 and hedonism
+  stayed at 0.256. Circumplex opposite-violation at 0.082 remained worse than
+  the incumbent default family.
 circumplex:
   source: probabilities
   summary:

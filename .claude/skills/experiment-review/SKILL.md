@@ -165,10 +165,17 @@ If no checkpoint is available (e.g., it was cleaned up), skip this analysis and 
 ### 7. Systemic Insights & Hypotheses
 
 Take a step back from the individual metrics and read between the lines. Synthesize what the experiments reveal about the model's fundamental understanding of the task:
-- What is the overarching story these experiments are telling us? 
+- What is the overarching story these experiments are telling us?
 - Are there hidden interactions? (e.g., "The model isn't just failing on Power; it's failing on any dimension that relies heavily on historical state rather than immediate journal text.")
 - What assumptions did we make in the previous runs that this data proves wrong?
 - Formulate 1-2 strong hypotheses about *why* the model is behaving the way it is.
+
+**Causal Attribution Guardrail:**
+Before attributing a metric improvement (or regression) to a single intervention (e.g., a loss function change), you MUST check for confounding changes across the experimental trajectory:
+1. **Compare `n_train` across runs.** If training set size differs, data additions likely occurred. Do not claim a loss function alone caused an improvement when the model was also trained on more data.
+2. **Check the git log** between the compared runs for data-generation commits (e.g., targeted synthetic batches, new personas, label regeneration). Use `provenance.git_log` and `provenance.config_delta` as starting points, but also inspect the actual git history if the trajectory spans multiple runs.
+3. **Respect established project conclusions.** If prior analysis established a finding (e.g., "recall_-1 is fundamentally a data scarcity problem"), do not override it without direct evidence from the current runs. If a new intervention shows improvement, check whether it built on top of prior data additions rather than replacing them.
+4. **State all contributing factors.** When multiple interventions occurred (data augmentation, loss function change, split correction, hyperparameter tuning), list all of them and characterize each one's likely contribution rather than singling out one as the cause.
 
 ### 8. Actionable Recommendations
 

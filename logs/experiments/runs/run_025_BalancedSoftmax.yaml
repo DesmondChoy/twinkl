@@ -29,7 +29,12 @@ provenance:
       training.seed:
         from: 33
         to: 11
-  rationale: ''
+  rationale: >-
+    First post-lift BalancedSoftmax rerun after the regenerated `twinkl-691.2`
+    hedonism/security batch was verified, wrangled, labeled, and consolidated.
+    This tests whether 191 additional training rows (1213 total) from the
+    targeted batch improve hedonism and security modeling on the same frozen
+    holdout as the previous BalancedSoftmax families.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -179,7 +184,14 @@ per_dimension:
     spearman: 0.2511
     calibration: 0.9096
     hedging: 0.8054
-observations: ''
+observations: >-
+  The post-lift BalancedSoftmax seed-11 posted QWK 0.346 (fair), recall_-1
+  0.305, minority recall 0.411, and hedging 63.0%, staying in the same
+  tail-recovery zone as the original family but not improving on it. Hedonism
+  QWK nudged up to 0.134 (from the incumbent median of 0.247) while security
+  QWK fell to 0.199 (below the incumbent 0.297), confirming the regenerated
+  batch helped hedonism weakly but not security. Circumplex opposite-violation
+  rose to 0.092, worse than the incumbent 0.070.
 circumplex:
   source: probabilities
   summary:

@@ -40,7 +40,12 @@ provenance:
       training.seed:
         from: 33
         to: 11
-  rationale: ''
+  rationale: >-
+    First post-lift SoftOrdinal rerun on the regenerated `twinkl-691.2` dataset
+    (1213 train rows) using the frozen `twinkl-681.5` holdout. This serves as a
+    low-gap conservative comparator alongside the BalancedSoftmax post-lift
+    family to isolate whether the data lift helps SoftOrdinal's minority
+    sensitivity.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -190,7 +195,13 @@ per_dimension:
     spearman: 0.5386
     calibration: 0.956
     hedging: 0.9095
-observations: ''
+observations: >-
+  SoftOrdinal on the expanded dataset posted QWK 0.342 (fair), calibration
+  0.734 (moderate), minority recall 0.260 (poor), and hedging 82.3%
+  (excessive). The conservative boundary held: train/val gap was only 0.023,
+  but the model reverted to heavy neutral predictions. Hedonism collapsed to
+  QWK -0.080 and security stayed weak at 0.225, so the post-lift data did not
+  help the two targeted dimensions for this loss function.
 circumplex:
   source: probabilities
   summary:
