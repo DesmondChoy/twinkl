@@ -1,0 +1,314 @@
+run_id: run_036
+model_name: BalancedSoftmax
+baseline_validation_metrics:
+  qwk_mean: 0.40526711527924136
+  recall_minus1: 0.4621852661478593
+  minority_recall_mean: 0.5133730619540198
+  hedging_mean: 0.6078341013824884
+  decision_neutral_rate: 0.7046082949308756
+  calibration_global: 0.7236141786935492
+  circumplex_summary:
+    opposite_violation_mean: 0.07423491232572292
+    adjacent_support_mean: 0.07245466938084533
+selected_validation_metrics:
+  qwk_mean: 0.4024288018952693
+  recall_minus1: 0.465740865455747
+  minority_recall_mean: 0.48757815481154404
+  hedging_mean: 0.5981566820276498
+  decision_neutral_rate: 0.7345622119815668
+  calibration_global: 0.5921668266659801
+  circumplex_summary:
+    opposite_violation_mean: 0.0957351569959201
+    adjacent_support_mean: 0.08570963092170004
+baseline_test_metrics:
+  qwk_mean: 0.3806709745747184
+  recall_minus1: 0.3865536576949621
+  minority_recall_mean: 0.4917577960194522
+  hedging_mean: 0.5986425339366516
+  decision_neutral_rate: 0.7054298642533937
+  calibration_global: 0.7262955759983706
+  circumplex_summary:
+    opposite_violation_mean: 0.06802013856159353
+    adjacent_support_mean: 0.0840775980742639
+selected_test_metrics:
+  qwk_mean: 0.3598963075623383
+  recall_minus1: 0.33908816425120775
+  minority_recall_mean: 0.4403836300443137
+  hedging_mean: 0.5809954751131221
+  decision_neutral_rate: 0.7239819004524887
+  calibration_global: 0.5923380754231687
+  circumplex_summary:
+    opposite_violation_mean: 0.08867987734017263
+    adjacent_support_mean: 0.10218985261431791
+softmax_branch_comparison:
+  baseline:
+    label: Untouched baseline
+    selected_policy:
+      policy_name: logit_adjustment_tau_0.00
+      policy_family: softmax_logit_adjustment
+      policy_payload:
+        type: logit_adjustment
+        branch_name: standard_menon
+        tau_mode: shared
+        prior_source: train_split
+        class_order:
+        - -1
+        - 0
+        - 1
+        per_dimension_priors:
+          self_direction:
+          - 0.14548641542555962
+          - 0.6099912357573796
+          - 0.24452234881706086
+          stimulation:
+          - 0.04469763365544777
+          - 0.8834355828206395
+          - 0.07186678352391271
+          hedonism:
+          - 0.0797546012276606
+          - 0.8238387379478778
+          - 0.09640666082446168
+          achievement:
+          - 0.04907975460197437
+          - 0.6783523225231946
+          - 0.2725679228748311
+          power:
+          - 0.08150744960627124
+          - 0.8247151621371831
+          - 0.09377738825654573
+          security:
+          - 0.0797546012276606
+          - 0.7388255915852616
+          - 0.18141980718707776
+          conformity:
+          - 0.07800175284904996
+          - 0.7063978965809647
+          - 0.21560035056998528
+          tradition:
+          - 0.0333041191944786
+          - 0.8203330411906564
+          - 0.14636283961486496
+          benevolence:
+          - 0.08238387379557656
+          - 0.6415425065723711
+          - 0.2760736196320524
+          universalism:
+          - 0.0333041191944786
+          - 0.8895705521457767
+          - 0.07712532865974464
+        tau: 0.0
+    selection_score:
+      rank_key:
+      - 0.4621852661478593
+      - 0.40526711527924136
+      - 0.7236141786935492
+      - -0.7046082949308756
+      baseline_qwk_mean: 0.40526711527924136
+      tuned_qwk_mean: 0.40526711527924136
+      qwk_delta: 0.0
+    validation_metrics:
+      qwk_mean: 0.40526711527924136
+      recall_minus1: 0.4621852661478593
+      minority_recall_mean: 0.5133730619540198
+      hedging_mean: 0.6078341013824884
+      decision_neutral_rate: 0.7046082949308756
+      calibration_global: 0.7236141786935492
+      circumplex_summary:
+        opposite_violation_mean: 0.07423491232572292
+        adjacent_support_mean: 0.07245466938084533
+    test_metrics:
+      qwk_mean: 0.3806709745747184
+      recall_minus1: 0.3865536576949621
+      minority_recall_mean: 0.4917577960194522
+      hedging_mean: 0.5986425339366516
+      decision_neutral_rate: 0.7054298642533937
+      calibration_global: 0.7262955759983706
+      circumplex_summary:
+        opposite_violation_mean: 0.06802013856159353
+        adjacent_support_mean: 0.0840775980742639
+    used_baseline_fallback: false
+  standard_menon:
+    label: Best standard Menon branch
+    selected_policy:
+      policy_name: logit_adjustment_tau_0.00
+      policy_family: softmax_logit_adjustment
+      policy_payload:
+        type: logit_adjustment
+        branch_name: standard_menon
+        tau_mode: shared
+        prior_source: train_split
+        class_order:
+        - -1
+        - 0
+        - 1
+        per_dimension_priors:
+          self_direction:
+          - 0.14548641542555962
+          - 0.6099912357573796
+          - 0.24452234881706086
+          stimulation:
+          - 0.04469763365544777
+          - 0.8834355828206395
+          - 0.07186678352391271
+          hedonism:
+          - 0.0797546012276606
+          - 0.8238387379478778
+          - 0.09640666082446168
+          achievement:
+          - 0.04907975460197437
+          - 0.6783523225231946
+          - 0.2725679228748311
+          power:
+          - 0.08150744960627124
+          - 0.8247151621371831
+          - 0.09377738825654573
+          security:
+          - 0.0797546012276606
+          - 0.7388255915852616
+          - 0.18141980718707776
+          conformity:
+          - 0.07800175284904996
+          - 0.7063978965809647
+          - 0.21560035056998528
+          tradition:
+          - 0.0333041191944786
+          - 0.8203330411906564
+          - 0.14636283961486496
+          benevolence:
+          - 0.08238387379557656
+          - 0.6415425065723711
+          - 0.2760736196320524
+          universalism:
+          - 0.0333041191944786
+          - 0.8895705521457767
+          - 0.07712532865974464
+        tau: 0.0
+    selection_score:
+      rank_key:
+      - 0.4621852661478593
+      - 0.40526711527924136
+      - 0.7236141786935492
+      - -0.7046082949308756
+      baseline_qwk_mean: 0.40526711527924136
+      tuned_qwk_mean: 0.40526711527924136
+      qwk_delta: 0.0
+    validation_metrics:
+      qwk_mean: 0.40526711527924136
+      recall_minus1: 0.4621852661478593
+      minority_recall_mean: 0.5133730619540198
+      hedging_mean: 0.6078341013824884
+      decision_neutral_rate: 0.7046082949308756
+      calibration_global: 0.7236141786935492
+      circumplex_summary:
+        opposite_violation_mean: 0.07423491232572292
+        adjacent_support_mean: 0.07245466938084533
+    test_metrics:
+      qwk_mean: 0.3806709745747184
+      recall_minus1: 0.3865536576949621
+      minority_recall_mean: 0.4917577960194522
+      hedging_mean: 0.5986425339366516
+      decision_neutral_rate: 0.7054298642533937
+      calibration_global: 0.7262955759983706
+      circumplex_summary:
+        opposite_violation_mean: 0.06802013856159353
+        adjacent_support_mean: 0.0840775980742639
+    used_baseline_fallback: false
+  effective_prior:
+    label: Effective-prior + per-dimension tau
+    selected_policy:
+      policy_name: effective_prior_per_dimension_tau
+      policy_family: softmax_logit_adjustment
+      policy_payload:
+        type: logit_adjustment
+        branch_name: effective_prior
+        tau_mode: per_dimension
+        prior_source: validation_posteriors
+        class_order:
+        - -1
+        - 0
+        - 1
+        per_dimension_priors:
+          self_direction:
+          - 0.2748697684276243
+          - 0.4505022820088579
+          - 0.2746279495635179
+          stimulation:
+          - 0.20306606229883614
+          - 0.6309434853545784
+          - 0.16599045234658538
+          hedonism:
+          - 0.23364766700390827
+          - 0.6241502622270853
+          - 0.14220207076900657
+          achievement:
+          - 0.33419527653617187
+          - 0.3472999444339711
+          - 0.3185047790298571
+          power:
+          - 0.17957344479034634
+          - 0.6460404988035978
+          - 0.1743860564060559
+          security:
+          - 0.2052881267051689
+          - 0.6056807571389465
+          - 0.1890311161558846
+          conformity:
+          - 0.16697008664175333
+          - 0.5011635515605194
+          - 0.3318663617977273
+          tradition:
+          - 0.11993932459268562
+          - 0.6431704811761396
+          - 0.23689019423117477
+          benevolence:
+          - 0.28318010782476494
+          - 0.3719991974555008
+          - 0.3448206947197344
+          universalism:
+          - 0.05007620739953994
+          - 0.8236118405911425
+          - 0.1263119520093177
+        prior_estimation:
+          method: mean_posterior
+          eps: 1.0e-09
+        per_dimension_tau:
+          self_direction: 0.7
+          stimulation: 0.5
+          hedonism: 0.0
+          achievement: 0.3
+          power: 0.0
+          security: 1.0
+          conformity: 1.0
+          tradition: 0.7
+          benevolence: 0.0
+          universalism: 0.0
+    selection_score:
+      rank_key:
+      - 0.465740865455747
+      - 0.4024288018952693
+      - 0.5921668266659801
+      - -0.7345622119815668
+      baseline_qwk_mean: 0.40526711527924136
+      tuned_qwk_mean: 0.4024288018952693
+      qwk_delta: -0.0028383133839720576
+    validation_metrics:
+      qwk_mean: 0.4024288018952693
+      recall_minus1: 0.465740865455747
+      minority_recall_mean: 0.48757815481154404
+      hedging_mean: 0.5981566820276498
+      decision_neutral_rate: 0.7345622119815668
+      calibration_global: 0.5921668266659801
+      circumplex_summary:
+        opposite_violation_mean: 0.0957351569959201
+        adjacent_support_mean: 0.08570963092170004
+    test_metrics:
+      qwk_mean: 0.3598963075623383
+      recall_minus1: 0.33908816425120775
+      minority_recall_mean: 0.4403836300443137
+      hedging_mean: 0.5809954751131221
+      decision_neutral_rate: 0.7239819004524887
+      calibration_global: 0.5923380754231687
+      circumplex_summary:
+        opposite_violation_mean: 0.08867987734017263
+        adjacent_support_mean: 0.10218985261431791
+    used_baseline_fallback: false
