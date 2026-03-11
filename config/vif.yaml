@@ -57,6 +57,16 @@ training:
     num_iter: 200
     output_path: null     # Optional override path for loss-vs-LR plot artifact
 
+  dimension_weighting:
+    enabled: true
+    mode: inverse_loss
+    temperature: 0.5
+    ema_alpha: 0.3
+    warmup_epochs: 1
+    eps: 0.000001
+    min_weight: 0.5
+    max_weight: 1.5
+
 # Data Configuration
 # ------------------
 data:

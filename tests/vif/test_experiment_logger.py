@@ -73,11 +73,26 @@ class TestLossShorthand:
     def test_balanced_softmax(self):
         assert _loss_shorthand("BalancedSoftmax", {}) == "balanced_softmax"
 
+    def test_balanced_softmax_dimension_weighting(self):
+        assert _loss_shorthand(
+            "BalancedSoftmax",
+            {"dimension_weighting_enabled": True},
+        ) == "balanced_softmax_dimweight"
+
     def test_balanced_softmax_circumplex_regularizer(self):
         assert _loss_shorthand(
             "BalancedSoftmax",
             {"circumplex_regularizer_enabled": True},
         ) == "balanced_softmax_circreg"
+
+    def test_balanced_softmax_dimension_weighting_and_circumplex_regularizer(self):
+        assert _loss_shorthand(
+            "BalancedSoftmax",
+            {
+                "dimension_weighting_enabled": True,
+                "circumplex_regularizer_enabled": True,
+            },
+        ) == "balanced_softmax_dimweight_circreg"
 
     def test_ldam_drw(self):
         assert _loss_shorthand("LDAM_DRW", {}) == "ldam_drw"
@@ -107,6 +122,14 @@ def _minimal_training_inputs() -> tuple[dict, dict, dict, dict, np.ndarray, dict
         "circumplex_regularizer_enabled": False,
         "circumplex_regularizer_opposite_weight": 0.0,
         "circumplex_regularizer_adjacent_weight": 0.0,
+        "dimension_weighting_enabled": False,
+        "dimension_weighting_mode": "inverse_loss",
+        "dimension_weighting_temperature": 0.5,
+        "dimension_weighting_ema_alpha": 0.3,
+        "dimension_weighting_warmup_epochs": 1,
+        "dimension_weighting_eps": 1e-6,
+        "dimension_weighting_min": 0.5,
+        "dimension_weighting_max": 1.5,
         "ldam_max_m": 0.5,
         "ldam_scale": 30.0,
         "ldam_drw_start_epoch": 50,
@@ -269,6 +292,81 @@ def test_build_experiment_dict_records_circumplex_regularizer_metadata():
     assert training_cfg["circumplex_regularizer_enabled"] is True
     assert training_cfg["circumplex_regularizer_opposite_weight"] == 0.5
     assert training_cfg["circumplex_regularizer_adjacent_weight"] == 0.1
+
+
+def test_build_experiment_dict_records_dimension_weighting_metadata():
+    config, trained_result, eval_result, calibration, hedging, recall_data = _minimal_training_inputs()
+    config.update(
+        {
+            "dimension_weighting_enabled": True,
+            "dimension_weighting_mode": "inverse_loss",
+            "dimension_weighting_temperature": 0.7,
+            "dimension_weighting_ema_alpha": 0.4,
+            "dimension_weighting_warmup_epochs": 2,
+            "dimension_weighting_eps": 1e-5,
+            "dimension_weighting_min": 0.6,
+            "dimension_weighting_max": 1.4,
+        }
+    )
+
+    with patch("src.vif.experiment_logger._get_git_commit", return_value="abc123"):
+        experiment = _build_experiment_dict(
+            run_id="run_999",
+            model_name="BalancedSoftmax",
+            config=config,
+            trained_result=trained_result,
+            eval_result=eval_result,
+            calibration=calibration,
+            hedging=hedging,
+            recall_data=recall_data,
+            n_train=100,
+            n_val=20,
+            n_test=20,
+            pct_truncated=0.0,
+            state_dim=256,
+            observations="",
+        )
+
+    training_cfg = experiment["config"]["training"]
+    assert training_cfg["loss_fn"] == "balanced_softmax_dimweight"
+    assert training_cfg["dimension_weighting_enabled"] is True
+    assert training_cfg["dimension_weighting_mode"] == "inverse_loss"
+    assert training_cfg["dimension_weighting_temperature"] == 0.7
+    assert training_cfg["dimension_weighting_ema_alpha"] == 0.4
+    assert training_cfg["dimension_weighting_warmup_epochs"] == 2
+    assert training_cfg["dimension_weighting_eps"] == 1e-5
+    assert training_cfg["dimension_weighting_min"] == 0.6
+    assert training_cfg["dimension_weighting_max"] == 1.4
+
+
+def test_build_experiment_dict_preserves_dimension_weight_trace_artifact_path():
+    config, trained_result, eval_result, calibration, hedging, recall_data = _minimal_training_inputs()
+    trained_result["artifact_paths"] = {
+        "selection_trace": "logs/experiments/artifacts/run_999/selection_trace.parquet",
+        "dimension_weight_trace": "logs/experiments/artifacts/run_999/dimension_weight_trace.parquet",
+    }
+
+    with patch("src.vif.experiment_logger._get_git_commit", return_value="abc123"):
+        experiment = _build_experiment_dict(
+            run_id="run_999",
+            model_name="BalancedSoftmax",
+            config=config,
+            trained_result=trained_result,
+            eval_result=eval_result,
+            calibration=calibration,
+            hedging=hedging,
+            recall_data=recall_data,
+            n_train=100,
+            n_val=20,
+            n_test=20,
+            pct_truncated=0.0,
+            state_dim=256,
+            observations="",
+        )
+
+    assert experiment["artifacts"]["dimension_weight_trace"].endswith(
+        "dimension_weight_trace.parquet"
+    )
 
 
 def test_build_experiment_dict_records_selection_policy_metadata():

@@ -103,3 +103,32 @@
   `run_019`-`run_021` frontier on `recall_-1`, minority recall, and hedging,
   so the next better levers are per-dimension weighting and post-hoc
   `BalancedSoftmax` retargeting instead.
+
+# twinkl-719.2
+
+## Checklist
+
+- [x] Add frontier-default dimension-weighting defaults to `config/vif.yaml`
+- [x] Implement BalancedSoftmax per-dimension CE/EMA weighting helpers
+- [x] Wire notebook config, training-loop weighting, and trace artifacts
+- [x] Extend experiment logger metadata and loss shorthands
+- [x] Add targeted tests for loss, logging, and trace helpers
+- [x] Run focused pytest suites
+- [x] Review changed files and summarize results
+
+## Review
+
+- Added explicit BalancedSoftmax helpers for per-dimension CE extraction,
+  inverse-loss EMA weighting, and weighting-config validation, while keeping
+  the low-level loss unweighted unless a dimension-weight vector is passed in.
+- Wired the frontier notebook/script mirror to read default-on weighting
+  settings from `config/vif.yaml`, apply uniform weights for epoch 0, update
+  EMA-smoothed weights after each epoch, and persist both an expanded
+  `selection_trace.parquet` and a new `dimension_weight_trace.parquet`.
+- Persisted weighting metadata and distinct loss shorthands in experiment run
+  YAMLs so weighted BalancedSoftmax runs can be recognized and reproduced from
+  artifacts alone.
+- Verification: `python -m py_compile` on the touched modules passed, and
+  focused pytest passed for `tests/vif/test_losses.py`,
+  `tests/vif/test_experiment_logger.py`, and
+  `tests/vif/test_training_traces.py` (`100 passed`).
