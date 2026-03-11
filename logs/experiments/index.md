@@ -20,6 +20,8 @@
 >
 > **Latest checkpoint-selection guardrail review:** [`reports/experiment_review_2026-03-10_twinkl_715.md`](reports/experiment_review_2026-03-10_twinkl_715.md)
 >
+> **Circumplex rollout closeout:** [`reports/experiment_review_2026-03-11_twinkl_691_5.md`](reports/experiment_review_2026-03-11_twinkl_691_5.md) explicitly de-scopes the circumplex-aware batch sampler. The diagnostics remain useful, but the next better levers are per-dimension weighting on `BalancedSoftmax` and validation-only logit retargeting from `run_020`, not a training-distribution rewrite.
+>
 > **Previous full frontier review:** [`reports/experiment_review_2026-03-10_v7.md`](reports/experiment_review_2026-03-10_v7.md)
 >
 > **Latest post-lift rebaseline review:** [`reports/experiment_review_2026-03-09_twinkl_691_3.md`](reports/experiment_review_2026-03-09_twinkl_691_3.md)

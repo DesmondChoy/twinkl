@@ -78,3 +78,28 @@
 - Verification: reran the missing-field scan (`missing_count 0`) and confirmed
   the index contains the required split-aware sections plus the new v8 report
   references.
+
+# twinkl-691.5
+
+## Checklist
+
+- [x] Re-read the post-lift, regularizer, and guardrail reports
+- [x] Confirm whether a sampler hook already exists in the active ordinal path
+- [x] Write a `twinkl-691.5` de-scope report grounded in March 9-10 results
+- [x] Record the closeout recommendation in the experiment index
+- [x] Close beads issue with de-scope reason
+
+## Review
+
+- Confirmed the active ordinal frontier still uses plain shuffled train
+  loaders, with no existing sampler abstraction in the notebook review path or
+  shared dataloader helper.
+- Wrote
+  `logs/experiments/reports/experiment_review_2026-03-11_twinkl_691_5.md`
+  documenting why the circumplex-aware batch sampler is being explicitly
+  de-scoped rather than implemented now.
+- Decision: drop the sampler for this rollout. The regularizer improved
+  circumplex structure, but the guarded rerun still lagged the incumbent
+  `run_019`-`run_021` frontier on `recall_-1`, minority recall, and hedging,
+  so the next better levers are per-dimension weighting and post-hoc
+  `BalancedSoftmax` retargeting instead.
