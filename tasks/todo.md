@@ -166,3 +166,41 @@
   `hedonism` / `security` story still did not beat the incumbent.
 - Updated `logs/experiments/index.md`, backfilled rationale/observations in the
   new run YAMLs, closed `twinkl-719.3`, and unblocked `twinkl-719.4`.
+
+# twinkl-721
+
+## Checklist
+
+- [x] Read and execute `.claude/skills/experiment-review/SKILL.md`
+- [x] Audit `logs/experiments/index.md`, all `logs/experiments/runs/*.yaml`,
+  and frontier artifacts for the current split-aware board
+- [x] Backfill any empty `provenance.rationale` / `observations` fields only
+  where blank or placeholder
+- [x] Run supporting analyses for checkpoint selection, dimension weighting,
+  hard-dimension error slices, dataset label distributions, and corroborating
+  literature
+- [x] Write a refreshed experiment review report and update
+  `logs/experiments/index.md` if the audit changes the frontier narrative
+- [x] Verify changed files and close beads issue with results
+
+## Review
+
+- Confirmed the run manifests and split-aware experiment index were already
+  internally consistent: no run YAMLs needed `provenance.rationale` or
+  `observations` backfill, and the frontier medians in
+  `logs/experiments/index.md` matched the run YAML metrics for `run_016`-`run_036`.
+- Wrote `logs/experiments/reports/experiment_review_2026-03-11_twinkl_721.md`,
+  a fresh full-frontier audit covering all runs through `run_036` with
+  artifact-backed circumplex summaries, checkpoint-selection review,
+  dimension-weighting analysis, validation error slices from `run_036`, label
+  distribution checks, and literature-backed recommendations.
+- Refreshed `logs/experiments/index.md` so the latest full-frontier link points
+  at the new v9 review and the findings section records the sharper conclusion:
+  weighted `BalancedSoftmax` remains the best tail-sensitive reference branch,
+  but inverse-loss weighting mostly amplified easy low-CE heads instead of the
+  hard `hedonism` / `security` dimensions.
+- Verification: reran the missing-field scan (`0` missing), rebuilt the frozen
+  holdout from `run_036`'s checkpoint for qualitative error analysis,
+  recomputed circumplex summaries from saved test artifacts for incumbent vs
+  weighted branches, and inspected the updated report/index content before
+  closeout.

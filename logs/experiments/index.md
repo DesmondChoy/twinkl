@@ -19,13 +19,13 @@
 >
 > **Latest weighted frontier review:** [`reports/experiment_review_2026-03-11_twinkl_719_3.md`](reports/experiment_review_2026-03-11_twinkl_719_3.md)
 >
-> **Latest full frontier review:** [`reports/experiment_review_2026-03-10_v8.md`](reports/experiment_review_2026-03-10_v8.md)
+> **Latest full frontier review:** [`reports/experiment_review_2026-03-11_twinkl_721.md`](reports/experiment_review_2026-03-11_twinkl_721.md)
 >
 > **Latest checkpoint-selection guardrail review:** [`reports/experiment_review_2026-03-10_twinkl_715.md`](reports/experiment_review_2026-03-10_twinkl_715.md)
 >
 > **Circumplex rollout closeout:** [`reports/experiment_review_2026-03-11_twinkl_691_5.md`](reports/experiment_review_2026-03-11_twinkl_691_5.md) explicitly de-scopes the circumplex-aware batch sampler. The diagnostics remain useful, and the weighted rerun now supplies the training-time comparison branch for the next validation-only logit-retargeting follow-up from `run_020`.
 >
-> **Previous full frontier review:** [`reports/experiment_review_2026-03-10_v7.md`](reports/experiment_review_2026-03-10_v7.md)
+> **Previous full frontier review:** [`reports/experiment_review_2026-03-10_v8.md`](reports/experiment_review_2026-03-10_v8.md)
 >
 > **Latest post-lift rebaseline review:** [`reports/experiment_review_2026-03-09_twinkl_691_3.md`](reports/experiment_review_2026-03-09_twinkl_691_3.md)
 >
@@ -163,6 +163,35 @@
 > **Contributor note:** Keep this section in **newest-first** chronological order (most recent date at top).
 
 ## Findings
+
+### 2026-03-11 — Full frontier audit v9 keeps the default and shows why inverse-loss weighting stalls (`twinkl-721`)
+
+The fresh full audit across `run_001`-`run_036` found no missing run metadata
+to backfill and no leaderboard change on the corrected split: `run_019`-`run_021`
+BalancedSoftmax remains the active family-level default.
+
+**1. The weighted branch is still the best tail-sensitive reference family.**
+Relative to the incumbent, `run_034`-`run_036` improves median `recall_-1`
+from `0.313` to `0.378`, keeps minority recall effectively flat to slightly
+better (`0.448` to `0.449`), lowers hedging from `0.621` to `0.599`, and
+improves calibration from `0.713` to `0.726`.
+
+**2. The reason it still fails promotion is sharper now.** The new artifact
+audit shows the inverse-loss dimension-weighting path mostly upweights
+already-easy low-CE heads instead of the actual blockers. `Universalism` hits
+the max clamp `49` times, while `hedonism` stays near-neutral (`0.972`
+selected median weight) and `security` is consistently downweighted (`0.818`).
+
+**3. Hard-dimension replay still points to semantic polarity errors.** Rebuilt
+validation inference from `run_036` shows the largest `hedonism` / `security`
+misses are not random; they are consistent flips where defended rest or
+stability-seeking language is read as guilt, fragility, or threat.
+
+**4. Recommendation shifts toward lighter post-hoc follow-ups.** The next best
+step is validation-only logit retargeting on `run_020` and `run_036`, with any
+future training-time weighting rerun using an explicit hard-dimension schedule
+rather than inverse-loss weighting. Full details:
+[`reports/experiment_review_2026-03-11_twinkl_721.md`](reports/experiment_review_2026-03-11_twinkl_721.md).
 
 ### 2026-03-11 — Weighted BalancedSoftmax improves the tail package, but not enough to replace the default (`twinkl-719.3`)
 
