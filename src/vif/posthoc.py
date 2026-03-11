@@ -26,6 +26,7 @@ from src.vif.dataset import load_all_data, split_by_persona
 from src.vif.eval import (
     compute_accuracy_per_dimension,
     compute_calibration_summary,
+    compute_circumplex_diagnostics,
     compute_hedging_per_dimension,
     compute_mae_per_dimension,
     compute_qwk_nan_dims_count,
@@ -51,6 +52,7 @@ DEFAULT_CONFIG = {
     "artifact_run_prefix": "posthoc_twinkl_681_3",
     "report_path": "logs/experiments/reports/experiment_review_2026-03-07_twinkl_681_3.md",
     "report_title": None,
+    "report_scope_note": None,
     "recommended_model_label": "Recommended softmax base for `twinkl-681.4`",
     "summary_model_order": None,
     "selection_policy": {
@@ -276,6 +278,7 @@ def _compute_policy_metrics(
     predicted_classes: np.ndarray,
     expected_scores: np.ndarray,
     uncertainties: np.ndarray,
+    probabilities: np.ndarray | None = None,
 ) -> dict:
     predictions_for_discrete_metrics = predicted_classes.astype(np.float64)
     qwk_per_dim = compute_qwk_per_dimension(predictions_for_discrete_metrics, targets)
@@ -288,6 +291,7 @@ def _compute_policy_metrics(
     mae_per_dim = compute_mae_per_dimension(predictions_for_discrete_metrics, targets)
     accuracy_per_dim = compute_accuracy_per_dimension(predictions_for_discrete_metrics, targets)
     spearman_per_dim = compute_spearman_per_dimension(expected_scores, targets)
+    circumplex = compute_circumplex_diagnostics(expected_scores, probabilities=probabilities)
 
     return {
         "predictions": predictions_for_discrete_metrics,
@@ -315,6 +319,7 @@ def _compute_policy_metrics(
         "calibration": calibration,
         "spearman_per_dim": spearman_per_dim,
         "spearman_mean": float(np.nanmean(list(spearman_per_dim.values()))),
+        "circumplex": circumplex,
     }
 
 
@@ -415,6 +420,7 @@ def _baseline_candidate_record(
         predicted_classes=artifact.baseline_predicted_classes,
         expected_scores=artifact.baseline_mean_predictions,
         uncertainties=artifact.uncertainties,
+        probabilities=artifact.class_probabilities,
     )
     return _build_candidate_record(
         policy_name=policy_name,
@@ -515,6 +521,7 @@ def _candidate_frame_row(
 ) -> dict:
     metrics = candidate_record["metrics"]
     calibration_global = float(metrics["calibration"]["error_uncertainty_correlation"])
+    circumplex_summary = metrics["circumplex"]["summary"]
     return {
         "run_id": source_run.run_id,
         "model_name": source_run.model_name,
@@ -530,6 +537,8 @@ def _candidate_frame_row(
         "decision_neutral_rate": float(metrics["decision_neutral_rate"]),
         "hedging_mean": float(metrics["hedging_mean"]),
         "minority_recall_mean": float(metrics["minority_recall_mean"]),
+        "opposite_violation_mean": float(circumplex_summary["opposite_violation_mean"]),
+        "adjacent_support_mean": float(circumplex_summary["adjacent_support_mean"]),
         "selection_rank_0": float(candidate_record["selection_score"]["rank_key"][0]),
         "selection_rank_1": float(candidate_record["selection_score"]["rank_key"][1]),
         "selection_rank_2": float(candidate_record["selection_score"]["rank_key"][2]),
@@ -603,6 +612,45 @@ def _artifact_output_frame(
     return pl.DataFrame(rows)
 
 
+def _compact_metrics(metrics: dict) -> dict:
+    circumplex_summary = metrics["circumplex"]["summary"]
+    return {
+        "qwk_mean": float(metrics["qwk_mean"]),
+        "recall_minus1": float(metrics["recall_minus1"]),
+        "minority_recall_mean": float(metrics["minority_recall_mean"]),
+        "decision_neutral_rate": float(metrics["decision_neutral_rate"]),
+        "calibration_global": float(metrics["calibration"]["error_uncertainty_correlation"]),
+        "circumplex_summary": {
+            "opposite_violation_mean": float(circumplex_summary["opposite_violation_mean"]),
+            "adjacent_support_mean": float(circumplex_summary["adjacent_support_mean"]),
+        },
+    }
+
+
+def _format_run_scope(run_ids: list[str]) -> str:
+    if not run_ids:
+        return "configured frontier"
+
+    ordered = sorted(set(run_ids))
+    if len(ordered) == 1:
+        return ordered[0]
+
+    run_numbers = []
+    for run_id in ordered:
+        try:
+            run_numbers.append(int(run_id.split("_", maxsplit=1)[1]))
+        except (IndexError, ValueError):
+            return ", ".join(ordered)
+
+    is_contiguous = all(
+        current == previous + 1
+        for previous, current in zip(run_numbers, run_numbers[1:], strict=False)
+    )
+    if is_contiguous:
+        return f"{ordered[0]}-{ordered[-1]}"
+    return ", ".join(ordered)
+
+
 def _evaluate_softmax_tau_candidate(
     *,
     artifact: ArtifactBundle,
@@ -623,6 +671,7 @@ def _evaluate_softmax_tau_candidate(
         predicted_classes=predicted_classes,
         expected_scores=expected_scores,
         uncertainties=artifact.uncertainties,
+        probabilities=adjusted_probs,
     )
     candidate_record = _build_candidate_record(
         policy_name=f"logit_adjustment_tau_{tau:.2f}",
@@ -659,6 +708,7 @@ def _softmax_candidate_records(
         predicted_classes=artifact.baseline_predicted_classes,
         expected_scores=artifact.baseline_mean_predictions,
         uncertainties=artifact.uncertainties,
+        probabilities=artifact.class_probabilities,
     )
     records: list[dict] = []
     for tau in config["softmax_logit_adjustment"]["tau_grid"]:
@@ -697,6 +747,7 @@ def _shared_margin_candidates(
                 predicted_classes=predicted_classes,
                 expected_scores=artifact.baseline_mean_predictions,
                 uncertainties=artifact.uncertainties,
+                probabilities=artifact.class_probabilities,
             )
             candidate_record = _build_candidate_record(
                 policy_name=f"corn_shared_margin_m{minus_margin:.2f}_p{plus_margin:.2f}",
@@ -793,6 +844,7 @@ def _best_per_dimension_margin_policy(
         predicted_classes=predicted_classes,
         expected_scores=artifact.baseline_mean_predictions,
         uncertainties=artifact.uncertainties,
+        probabilities=artifact.class_probabilities,
     )
     candidate_record = _build_candidate_record(
         policy_name="corn_per_dimension_margin",
@@ -837,6 +889,7 @@ def _evaluate_corn_policy(
         predicted_classes=predicted_classes,
         expected_scores=artifact.baseline_mean_predictions,
         uncertainties=artifact.uncertainties,
+        probabilities=artifact.class_probabilities,
     )
     candidate_record = _build_candidate_record(
         policy_name=policy_name,
@@ -859,6 +912,7 @@ def _corn_candidate_records(artifact: ArtifactBundle, config: dict) -> list[dict
         predicted_classes=artifact.baseline_predicted_classes,
         expected_scores=artifact.baseline_mean_predictions,
         uncertainties=artifact.uncertainties,
+        probabilities=artifact.class_probabilities,
     )
     records = [
         _baseline_candidate_record(
@@ -963,6 +1017,12 @@ def _summary_metrics(records: list[dict]) -> dict[str, dict[str, float]]:
         grouped[record["model_name"]]["calibration_global"].append(
             record["test_metrics"]["calibration_global"]
         )
+        grouped[record["model_name"]]["opposite_violation_mean"].append(
+            record["test_metrics"]["circumplex_summary"]["opposite_violation_mean"]
+        )
+        grouped[record["model_name"]]["adjacent_support_mean"].append(
+            record["test_metrics"]["circumplex_summary"]["adjacent_support_mean"]
+        )
 
     summary = {}
     for model_name, metrics in grouped.items():
@@ -987,11 +1047,25 @@ def _family_delta_summary(records: list[dict]) -> dict[str, dict[str, float]]:
         tuned = record["test_metrics"]
         grouped[family]["recall_minus1_delta"].append(tuned["recall_minus1"] - baseline["recall_minus1"])
         grouped[family]["qwk_mean_delta"].append(tuned["qwk_mean"] - baseline["qwk_mean"])
+        grouped[family]["opposite_violation_mean_delta"].append(
+            tuned["circumplex_summary"]["opposite_violation_mean"]
+            - baseline["circumplex_summary"]["opposite_violation_mean"]
+        )
+        grouped[family]["adjacent_support_mean_delta"].append(
+            tuned["circumplex_summary"]["adjacent_support_mean"]
+            - baseline["circumplex_summary"]["adjacent_support_mean"]
+        )
 
     return {
         family: {
             "median_recall_minus1_delta": float(median(values["recall_minus1_delta"])),
             "median_qwk_mean_delta": float(median(values["qwk_mean_delta"])),
+            "median_opposite_violation_mean_delta": float(
+                median(values["opposite_violation_mean_delta"])
+            ),
+            "median_adjacent_support_mean_delta": float(
+                median(values["adjacent_support_mean_delta"])
+            ),
         }
         for family, values in grouped.items()
     }
@@ -1024,10 +1098,11 @@ def _render_report(summary: dict, config: dict) -> str:
     best_softmax_family_str = best_softmax_family or "N/A"
     generated_date = str(summary["generated_at"])[:10]
     run_ids = sorted({record["run_id"] for record in tuned_records})
-    run_scope = f"{run_ids[0]}-{run_ids[-1]}" if run_ids else "configured frontier"
+    run_scope = _format_run_scope(run_ids)
     report_title = config.get("report_title") or (
         f"Experiment Review — {generated_date} — twinkl-681.3 post-hoc boundary optimization"
     )
+    report_scope_note = config.get("report_scope_note")
     model_order = config.get("summary_model_order") or config["models"]
     recommended_model_label = config.get(
         "recommended_model_label",
@@ -1041,11 +1116,18 @@ def _render_report(summary: dict, config: dict) -> str:
         "",
         f"Validation-only tuning on the corrected-split frontier `{run_scope}` using existing selected-checkpoint artifacts only. No retraining was performed.",
         "",
-        "## Test Summary",
-        "",
-        "| Run | Model | Selected policy | Test QWK | Test recall_-1 | Test MinR | Test neutral rate | Test calibration |",
-        "|-----|-------|-----------------|---------:|---------------:|----------:|------------------:|-----------------:|",
     ]
+    if report_scope_note:
+        lines.extend([report_scope_note, ""])
+
+    lines.extend(
+        [
+            "## Test Summary",
+            "",
+            "| Run | Model | Selected policy | Test QWK | Test recall_-1 | Test MinR | Test neutral rate | Test calibration | OppV | AdjS |",
+            "|-----|-------|-----------------|---------:|---------------:|----------:|------------------:|-----------------:|-----:|-----:|",
+        ]
+    )
 
     for record in tuned_records:
         test_metrics = record["test_metrics"]
@@ -1054,7 +1136,9 @@ def _render_report(summary: dict, config: dict) -> str:
             f"{record['run_id']} | {record['model_name']} | {record['selected_policy']['policy_name']} | "
             f"{test_metrics['qwk_mean']:.3f} | {test_metrics['recall_minus1']:.3f} | "
             f"{test_metrics['minority_recall_mean']:.3f} | {test_metrics['decision_neutral_rate']:.3f} | "
-            f"{test_metrics['calibration_global']:.3f} |"
+            f"{test_metrics['calibration_global']:.3f} | "
+            f"{test_metrics['circumplex_summary']['opposite_violation_mean']:.3f} | "
+            f"{test_metrics['circumplex_summary']['adjacent_support_mean']:.3f} |"
         )
 
     lines.extend(
@@ -1062,8 +1146,8 @@ def _render_report(summary: dict, config: dict) -> str:
             "",
             "## Median / IQR by Family",
             "",
-            "| Model | Median QWK | IQR QWK | Median recall_-1 | IQR recall_-1 | Median MinR | Median neutral rate | Median calibration |",
-            "|-------|-----------:|--------:|-----------------:|--------------:|------------:|--------------------:|-------------------:|",
+            "| Model | Median QWK | IQR QWK | Median recall_-1 | IQR recall_-1 | Median MinR | Median neutral rate | Median calibration | Median OppV | IQR OppV | Median AdjS | IQR AdjS |",
+            "|-------|-----------:|--------:|-----------------:|--------------:|------------:|--------------------:|-------------------:|------------:|---------:|------------:|---------:|",
         ]
     )
 
@@ -1076,7 +1160,9 @@ def _render_report(summary: dict, config: dict) -> str:
             f"{model_name} | {stats['qwk_mean_median']:.3f} | {stats['qwk_mean_iqr']:.3f} | "
             f"{stats['recall_minus1_median']:.3f} | {stats['recall_minus1_iqr']:.3f} | "
             f"{stats['minority_recall_mean_median']:.3f} | {stats['decision_neutral_rate_median']:.3f} | "
-            f"{stats['calibration_global_median']:.3f} |"
+            f"{stats['calibration_global_median']:.3f} | "
+            f"{stats['opposite_violation_mean_median']:.3f} | {stats['opposite_violation_mean_iqr']:.3f} | "
+            f"{stats['adjacent_support_mean_median']:.3f} | {stats['adjacent_support_mean_iqr']:.3f} |"
         )
 
     lines.extend(
@@ -1085,9 +1171,13 @@ def _render_report(summary: dict, config: dict) -> str:
             "## Policy-Level Takeaways",
             "",
             f"- Softmax logit adjustment median delta: recall_-1 {family_summary.get('softmax_logit_adjustment', {}).get('median_recall_minus1_delta', float('nan')):.3f}, "
-            f"QWK {family_summary.get('softmax_logit_adjustment', {}).get('median_qwk_mean_delta', float('nan')):.3f}.",
+            f"QWK {family_summary.get('softmax_logit_adjustment', {}).get('median_qwk_mean_delta', float('nan')):.3f}, "
+            f"OppV {family_summary.get('softmax_logit_adjustment', {}).get('median_opposite_violation_mean_delta', float('nan')):.3f}, "
+            f"AdjS {family_summary.get('softmax_logit_adjustment', {}).get('median_adjacent_support_mean_delta', float('nan')):.3f}.",
             f"- CORN threshold tuning median delta: recall_-1 {family_summary.get('corn_margin_threshold', {}).get('median_recall_minus1_delta', float('nan')):.3f}, "
-            f"QWK {family_summary.get('corn_margin_threshold', {}).get('median_qwk_mean_delta', float('nan')):.3f}.",
+            f"QWK {family_summary.get('corn_margin_threshold', {}).get('median_qwk_mean_delta', float('nan')):.3f}, "
+            f"OppV {family_summary.get('corn_margin_threshold', {}).get('median_opposite_violation_mean_delta', float('nan')):.3f}, "
+            f"AdjS {family_summary.get('corn_margin_threshold', {}).get('median_adjacent_support_mean_delta', float('nan')):.3f}.",
             f"- {recommended_model_label}: `{best_softmax_family_str}`.",
             "",
             "## Conclusion",
@@ -1142,6 +1232,7 @@ def run_posthoc(config: dict, *, repo_root: Path | None = None) -> dict:
                 predicted_classes=test_bundle.baseline_predicted_classes,
                 expected_scores=test_bundle.baseline_mean_predictions,
                 uncertainties=test_bundle.uncertainties,
+                probabilities=test_bundle.class_probabilities,
             )
             baseline_policy_name = "logit_adjustment_tau_0.00"
         elif policy_family == "corn":
@@ -1151,6 +1242,7 @@ def run_posthoc(config: dict, *, repo_root: Path | None = None) -> dict:
                 predicted_classes=test_bundle.baseline_predicted_classes,
                 expected_scores=test_bundle.baseline_mean_predictions,
                 uncertainties=test_bundle.uncertainties,
+                probabilities=test_bundle.class_probabilities,
             )
             baseline_policy_name = "artifact_argmax"
         else:
@@ -1256,50 +1348,20 @@ def run_posthoc(config: dict, *, repo_root: Path | None = None) -> dict:
                 "policy_payload": selected_validation_candidate["policy_payload"],
             },
             "selection_score": selected_validation_candidate["selection_score"],
-            "baseline_validation_metrics": {
-                "qwk_mean": float(baseline_validation_candidate["metrics"]["qwk_mean"]),
-                "recall_minus1": float(baseline_validation_candidate["metrics"]["recall_minus1"]),
-                "minority_recall_mean": float(baseline_validation_candidate["metrics"]["minority_recall_mean"]),
-                "decision_neutral_rate": float(
-                    baseline_validation_candidate["metrics"]["decision_neutral_rate"]
-                ),
-                "calibration_global": float(
-                    baseline_validation_candidate["metrics"]["calibration"]["error_uncertainty_correlation"]
-                ),
-            },
-            "selected_validation_metrics": {
-                "qwk_mean": float(selected_validation_candidate["metrics"]["qwk_mean"]),
-                "recall_minus1": float(selected_validation_candidate["metrics"]["recall_minus1"]),
-                "minority_recall_mean": float(selected_validation_candidate["metrics"]["minority_recall_mean"]),
-                "decision_neutral_rate": float(
-                    selected_validation_candidate["metrics"]["decision_neutral_rate"]
-                ),
-                "calibration_global": float(
-                    selected_validation_candidate["metrics"]["calibration"]["error_uncertainty_correlation"]
-                ),
-            },
+            "baseline_validation_metrics": _compact_metrics(baseline_validation_candidate["metrics"]),
+            "selected_validation_metrics": _compact_metrics(selected_validation_candidate["metrics"]),
             "untouched_test_metrics": {
-                "baseline": {
-                    "qwk_mean": float(baseline_test_candidate["metrics"]["qwk_mean"]),
-                    "recall_minus1": float(baseline_test_candidate["metrics"]["recall_minus1"]),
-                    "minority_recall_mean": float(baseline_test_candidate["metrics"]["minority_recall_mean"]),
-                    "decision_neutral_rate": float(
-                        baseline_test_candidate["metrics"]["decision_neutral_rate"]
-                    ),
-                    "calibration_global": float(
-                        baseline_test_candidate["metrics"]["calibration"]["error_uncertainty_correlation"]
-                    ),
+                "baseline": _compact_metrics(baseline_test_candidate["metrics"]),
+                "selected": _compact_metrics(selected_test_candidate["metrics"]),
+            },
+            "circumplex": {
+                "validation": {
+                    "baseline": deepcopy(baseline_validation_candidate["metrics"]["circumplex"]),
+                    "selected": deepcopy(selected_validation_candidate["metrics"]["circumplex"]),
                 },
-                "selected": {
-                    "qwk_mean": float(selected_test_candidate["metrics"]["qwk_mean"]),
-                    "recall_minus1": float(selected_test_candidate["metrics"]["recall_minus1"]),
-                    "minority_recall_mean": float(selected_test_candidate["metrics"]["minority_recall_mean"]),
-                    "decision_neutral_rate": float(
-                        selected_test_candidate["metrics"]["decision_neutral_rate"]
-                    ),
-                    "calibration_global": float(
-                        selected_test_candidate["metrics"]["calibration"]["error_uncertainty_correlation"]
-                    ),
+                "test": {
+                    "baseline": deepcopy(baseline_test_candidate["metrics"]["circumplex"]),
+                    "selected": deepcopy(selected_test_candidate["metrics"]["circumplex"]),
                 },
             },
             "artifacts": {

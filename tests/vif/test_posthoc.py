@@ -320,8 +320,12 @@ def _summary_row(
     minority_recall: float,
     neutral_rate: float,
     calibration: float,
+    opposite_violation: float = 0.050,
+    adjacent_support: float = 0.080,
     qwk_iqr: float = 0.01,
     recall_iqr: float = 0.02,
+    opposite_iqr: float = 0.005,
+    adjacent_iqr: float = 0.004,
 ) -> dict[str, float]:
     return {
         "qwk_mean_median": qwk,
@@ -331,6 +335,10 @@ def _summary_row(
         "minority_recall_mean_median": minority_recall,
         "decision_neutral_rate_median": neutral_rate,
         "calibration_global_median": calibration,
+        "opposite_violation_mean_median": opposite_violation,
+        "opposite_violation_mean_iqr": opposite_iqr,
+        "adjacent_support_mean_median": adjacent_support,
+        "adjacent_support_mean_iqr": adjacent_iqr,
     }
 
 
@@ -338,7 +346,7 @@ def test_render_report_uses_config_driven_softmax_labels_and_order():
     summary = {
         "tuned_runs": [
             {
-                "run_id": "run_016",
+                "run_id": "run_020",
                 "model_name": "LDAM_DRW",
                 "selected_policy": {"policy_name": "tau_0.3"},
                 "test_metrics": {
@@ -347,10 +355,14 @@ def test_render_report_uses_config_driven_softmax_labels_and_order():
                     "minority_recall_mean": 0.236,
                     "decision_neutral_rate": 0.418,
                     "calibration_global": 0.114,
+                    "circumplex_summary": {
+                        "opposite_violation_mean": 0.061,
+                        "adjacent_support_mean": 0.071,
+                    },
                 },
             },
             {
-                "run_id": "run_016",
+                "run_id": "run_036",
                 "model_name": "BalancedSoftmax",
                 "selected_policy": {"policy_name": "tau_0.5"},
                 "test_metrics": {
@@ -359,6 +371,10 @@ def test_render_report_uses_config_driven_softmax_labels_and_order():
                     "minority_recall_mean": 0.247,
                     "decision_neutral_rate": 0.401,
                     "calibration_global": 0.121,
+                    "circumplex_summary": {
+                        "opposite_violation_mean": 0.049,
+                        "adjacent_support_mean": 0.083,
+                    },
                 },
             },
         ],
@@ -389,10 +405,14 @@ def test_render_report_uses_config_driven_softmax_labels_and_order():
             "softmax_logit_adjustment": {
                 "median_recall_minus1_delta": 0.021,
                 "median_qwk_mean_delta": 0.008,
+                "median_opposite_violation_mean_delta": -0.006,
+                "median_adjacent_support_mean_delta": 0.004,
             },
             "corn_margin_threshold": {
                 "median_recall_minus1_delta": 0.010,
                 "median_qwk_mean_delta": 0.004,
+                "median_opposite_violation_mean_delta": -0.002,
+                "median_adjacent_support_mean_delta": 0.001,
             },
         },
         "recommended_softmax_base": "BalancedSoftmax",
@@ -402,11 +422,19 @@ def test_render_report_uses_config_driven_softmax_labels_and_order():
     config["models"] = ["LDAM_DRW", "BalancedSoftmax", "CORN"]
     config["summary_model_order"] = ["BalancedSoftmax", "LDAM_DRW", "CORN"]
     config["report_title"] = "Experiment Review — 2026-03-07 — twinkl-681.4 long-tail softmax losses"
+    config["report_scope_note"] = (
+        "Primary checkpoint target: incumbent `run_020`. Weighted reference checkpoint: `run_036`."
+    )
     config["recommended_model_label"] = "Recommended long-tail softmax base for `twinkl-681.4`"
 
     report = _render_report(summary, config)
 
     assert "# Experiment Review — 2026-03-07 — twinkl-681.4 long-tail softmax losses" in report
+    assert "`run_020, run_036`" in report
+    assert "Primary checkpoint target: incumbent `run_020`. Weighted reference checkpoint: `run_036`." in report
+    assert "Test calibration | OppV | AdjS" in report
+    assert "Median OppV | IQR OppV | Median AdjS | IQR AdjS" in report
+    assert "OppV -0.006, AdjS 0.004" in report
     assert "- Recommended long-tail softmax base for `twinkl-681.4`: `BalancedSoftmax`." in report
 
     median_section = report.split("## Median / IQR by Family", maxsplit=1)[1].split(
@@ -520,6 +548,9 @@ def test_run_posthoc_smoke_writes_artifacts_and_preserves_source_runs(tmp_path, 
 
     soft_policy = yaml.safe_load(Path(soft_record["selected_policy_path"]).read_text(encoding="utf-8"))
     corn_policy = yaml.safe_load(Path(corn_record["selected_policy_path"]).read_text(encoding="utf-8"))
+    summary_yaml = yaml.safe_load(Path(summary["summary_path"]).read_text(encoding="utf-8"))
+    soft_metrics_summary = yaml.safe_load(Path(soft_record["metrics_summary_path"]).read_text(encoding="utf-8"))
+    soft_sweep = pl.read_parquet(Path(soft_policy["artifacts"]["validation_sweep"]))
 
     assert "selection_score" in soft_policy
     assert "logit_policy" in soft_policy
@@ -527,6 +558,23 @@ def test_run_posthoc_smoke_writes_artifacts_and_preserves_source_runs(tmp_path, 
     assert Path(soft_policy["artifacts"]["validation_sweep"]).is_file()
     assert Path(soft_policy["artifacts"]["tuned_test_outputs"]).is_file()
     assert Path(corn_policy["artifacts"]["tuned_test_outputs"]).is_file()
+    assert "opposite_violation_mean" in soft_sweep.columns
+    assert "adjacent_support_mean" in soft_sweep.columns
+    assert "circumplex_summary" in soft_policy["baseline_validation_metrics"]
+    assert "circumplex_summary" in soft_policy["selected_validation_metrics"]
+    assert "circumplex_summary" in soft_policy["untouched_test_metrics"]["baseline"]
+    assert "circumplex_summary" in soft_policy["untouched_test_metrics"]["selected"]
+    assert soft_policy["circumplex"]["validation"]["baseline"]["source"] == "probabilities"
+    assert "opposite_pairs" in soft_policy["circumplex"]["validation"]["selected"]
+    assert "adjacent_pairs" in soft_policy["circumplex"]["test"]["selected"]
+    assert "circumplex_summary" in soft_metrics_summary["baseline_validation_metrics"]
+    assert "circumplex_summary" in soft_metrics_summary["selected_test_metrics"]
+    soft_summary_record = next(
+        record for record in summary_yaml["tuned_runs"] if record["model_name"] == "SoftOrdinal"
+    )
+    assert "circumplex_summary" in soft_summary_record["baseline_test_metrics"]
+    assert "opposite_violation_mean_median" in summary_yaml["summary_by_model"]["SoftOrdinal"]
+    assert "median_opposite_violation_mean_delta" in summary_yaml["family_delta_summary"]["softmax_logit_adjustment"]
 
     assert (runs_dir / "run_999_SoftOrdinal.yaml").read_text(encoding="utf-8") == original_softordinal_yaml
     assert (runs_dir / "run_999_CORN.yaml").read_text(encoding="utf-8") == original_corn_yaml
@@ -542,6 +590,9 @@ def test_run_posthoc_respects_configured_softmax_model_labels_and_prefix(tmp_pat
     config["artifact_run_prefix"] = "posthoc_twinkl_681_4_stage1"
     config["report_path"] = str(report_path.relative_to(tmp_path))
     config["report_title"] = "Experiment Review — twinkl-681.4 tuned softmax long-tail comparison"
+    config["report_scope_note"] = (
+        "Primary checkpoint target: incumbent `run_999`. Weighted reference checkpoint: none in this fixture."
+    )
     config["recommended_model_label"] = "Recommended stage-1 softmax leader"
     config["summary_model_order"] = ["BalancedSoftmax"]
     config["run_ids"] = ["run_999"]
@@ -602,5 +653,12 @@ def test_run_posthoc_respects_configured_softmax_model_labels_and_prefix(tmp_pat
     assert Path(summary["output_root"]).name.startswith("posthoc_twinkl_681_4_stage1_")
 
     report_body = Path(summary["report_path"]).read_text(encoding="utf-8")
+    selected_policy = yaml.safe_load(
+        Path(summary["tuned_runs"][0]["selected_policy_path"]).read_text(encoding="utf-8")
+    )
     assert "Recommended stage-1 softmax leader: `BalancedSoftmax`." in report_body
     assert "twinkl-681.4 tuned softmax long-tail comparison" in report_body
+    assert "Test calibration | OppV | AdjS" in report_body
+    assert "Primary checkpoint target: incumbent `run_999`. Weighted reference checkpoint: none in this fixture." in report_body
+    assert selected_policy["circumplex"]["test"]["selected"]["source"] == "probabilities"
+    assert "circumplex_summary" in summary["tuned_runs"][0]["test_metrics"]
