@@ -163,6 +163,32 @@ Sequential validation pipeline for the VIF with four stages:
 
 See [`docs/evals/overview.md`](docs/evals/overview.md) for the full pipeline overview and current status.
 
+## Embedding Explorer — ✅ Complete
+
+An interactive 3D visualization that lets you explore the VIF critic's internal embedding space. By projecting high-dimensional hidden-layer activations and SBERT text embeddings into 3D via PCA and t-SNE, the explorer reveals how the critic organizes journal entries — whether entries with similar value profiles cluster together, how prediction errors distribute across the space, and where the model is most uncertain.
+
+This is useful for building intuition about what the critic has learned: do misaligned entries occupy distinct regions? Are hard dimensions (stimulation, hedonism) scattered differently than easy ones? Does the hidden-layer structure differ meaningfully from the raw text embeddings?
+
+**Generate and open:**
+```sh
+python -m src.vif.extract_embeddings \
+  --checkpoint logs/experiments/artifacts/.../BalancedSoftmax/selected_checkpoint.pt
+```
+
+**Features:**
+- 4 projection spaces: Hidden Layer / SBERT Embedding × PCA / t-SNE
+- 5 color modes: Data Split, Prediction, Ground Truth, Persona, Uncertainty
+- Per-dimension filtering across all 10 Schwartz values
+- Click-to-inspect: view journal text, predictions vs ground truth, and uncertainty per entry
+- Persona trajectory lines (toggle-able) showing temporal progression through embedding space
+- Adjustable bloom glow, auto-rotation, full orbit controls
+
+**Output:** Self-contained HTML file (`viz/embedding_explorer.html`, ~3MB) with embedded Three.js and all 1,651 data points. No server required.
+
+**Key files:**
+- `src/vif/extract_embeddings.py` — Extraction script and HTML template
+- `viz/embedding_explorer.html` — Generated visualization (gitignored)
+
 ## Known Gaps
 
 | Capability | Status | Note |
@@ -170,7 +196,7 @@ See [`docs/evals/overview.md`](docs/evals/overview.md) for the full pipeline ove
 | Onboarding (BWS Values Assessment) | 📋 Specified | Flow designed; not yet implemented |
 | Coach digest generation | ⚠️ Partial | Entry processing ready; weekly digest not built |
 | Nudge signal quality validation | 🧪 Experimental | Annotation study in progress |
-| "Map of Me" visualization | ❌ Not Started | Embedding trajectories |
+| Embedding Explorer | ✅ Complete | Interactive 3D visualization of critic embedding space |
 | Journaling anomaly radar | ❌ Not Started | Cadence/gap detection |
 | Goal-aligned inspiration feed | ❌ Not Started | External API integration |
 

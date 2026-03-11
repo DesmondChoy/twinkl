@@ -17,7 +17,7 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 | **Conversational Nudging** | 🧪 Experimental | 3-category LLM classification (clarification/elaboration/tension-surfacing); pending validation that nudging improves VIF signal quality |
 | **Weekly Alignment Coach** | ⚠️ Partial | Entry processing ready; digest generation not implemented |
 | **Onboarding (BWS Values Assessment)** | 📋 Specified | 6-set BWS flow over 10 Schwartz dimensions; PVQ21-adapted card phrases; mid-flow + end-of-flow reflective mirrors; 6 structured goal categories mapping to Coach monitoring priorities; scoring with confidence estimation and user refinement support; [full spec](onboarding/onboarding_spec.md) |
-| **"Map of Me" Visualization** | ❌ Not Started | Embedding trajectories |
+| **Embedding Explorer** | ✅ Complete | Interactive 3D visualization of VIF hidden-layer and SBERT embedding spaces; self-contained HTML with Three.js |
 | **Journaling Anomaly Radar** | ❌ Not Started | Cadence/gap detection |
 | **Goal-aligned Inspiration Feed** | ❌ Not Started | External API integration |
 
