@@ -562,6 +562,93 @@ def _validate_non_negative_loss_weight(value: float, *, name: str) -> float:
     return value
 
 
+def _validate_dimension_weighting_mode(mode: str) -> str:
+    mode = str(mode)
+    if mode != "inverse_loss":
+        raise ValueError(f"dimension_weighting_mode must be 'inverse_loss', got {mode!r}")
+    return mode
+
+
+def _validate_positive_float(value: float, *, name: str) -> float:
+    value = float(value)
+    if value <= 0.0:
+        raise ValueError(f"{name} must be > 0, got {value}")
+    return value
+
+
+def validate_dimension_weighting_config(
+    *,
+    mode: str,
+    temperature: float,
+    ema_alpha: float,
+    warmup_epochs: int,
+    eps: float,
+    min_weight: float,
+    max_weight: float,
+) -> dict[str, float | int | str]:
+    """Validate EMA-smoothed per-dimension weighting config."""
+    resolved_mode = _validate_dimension_weighting_mode(mode)
+    resolved_temperature = _validate_positive_float(
+        temperature,
+        name="dimension_weighting_temperature",
+    )
+    resolved_ema_alpha = float(ema_alpha)
+    if not 0.0 < resolved_ema_alpha <= 1.0:
+        raise ValueError(
+            f"dimension_weighting_ema_alpha must be in (0, 1], got {resolved_ema_alpha}"
+        )
+    resolved_warmup_epochs = int(warmup_epochs)
+    if resolved_warmup_epochs < 0:
+        raise ValueError(
+            f"dimension_weighting_warmup_epochs must be >= 0, got {resolved_warmup_epochs}"
+        )
+    resolved_eps = _validate_positive_float(
+        eps,
+        name="dimension_weighting_eps",
+    )
+    resolved_min_weight = _validate_positive_float(
+        min_weight,
+        name="dimension_weighting_min",
+    )
+    resolved_max_weight = _validate_positive_float(
+        max_weight,
+        name="dimension_weighting_max",
+    )
+    if resolved_min_weight > resolved_max_weight:
+        raise ValueError(
+            "dimension_weighting_min must be <= dimension_weighting_max, "
+            f"got {resolved_min_weight} > {resolved_max_weight}"
+        )
+    return {
+        "mode": resolved_mode,
+        "temperature": resolved_temperature,
+        "ema_alpha": resolved_ema_alpha,
+        "warmup_epochs": resolved_warmup_epochs,
+        "eps": resolved_eps,
+        "min_weight": resolved_min_weight,
+        "max_weight": resolved_max_weight,
+    }
+
+
+def _prepare_dimension_weights(
+    dimension_weights: torch.Tensor | np.ndarray,
+    *,
+    logits: torch.Tensor,
+) -> torch.Tensor:
+    """Move per-dimension weights onto the logits device/dtype."""
+    if isinstance(dimension_weights, torch.Tensor):
+        weights = dimension_weights.detach().to(device=logits.device, dtype=torch.float32)
+    else:
+        weights = torch.as_tensor(dimension_weights, device=logits.device, dtype=torch.float32)
+    if weights.shape != (NUM_DIMS,):
+        raise ValueError(f"dimension_weights must have shape ({NUM_DIMS},), got {tuple(weights.shape)}")
+    if not torch.isfinite(weights).all():
+        raise ValueError("dimension_weights must be finite")
+    if torch.any(weights <= 0):
+        raise ValueError("dimension_weights must be strictly positive")
+    return weights
+
+
 def _mean_pair_probability(
     probabilities: torch.Tensor,
     pairs: tuple[tuple[str, str], ...],
@@ -760,11 +847,89 @@ class CriticMLPCDWCE(OrdinalCriticBase):
 # Cross-entropy with train-prior correction in the softmax denominator.
 
 
+def balanced_softmax_ce_per_dimension(
+    logits: torch.Tensor,
+    y: torch.Tensor,
+    *,
+    class_priors: torch.Tensor | np.ndarray,
+    eps: float = 1e-12,
+) -> torch.Tensor:
+    """Return per-dimension BalancedSoftmax CE means with shape ``(10,)``."""
+    logits, y = _validate_softmax_loss_inputs(logits, y)
+    priors = _prepare_class_stat_tensor(
+        class_priors,
+        name="class_priors",
+        logits=logits,
+        eps=eps,
+    )
+
+    batch = logits.size(0)
+    logits_3d = logits.view(batch, NUM_DIMS, NUM_CLASSES).float()
+    adjusted_logits = logits_3d + torch.log(priors).view(1, NUM_DIMS, NUM_CLASSES)
+    classes = (y.long() + 1).clamp(0, NUM_CLASSES - 1)
+    per_example_loss = F.cross_entropy(
+        adjusted_logits.view(batch * NUM_DIMS, NUM_CLASSES),
+        classes.view(batch * NUM_DIMS),
+        reduction="none",
+    )
+    return per_example_loss.view(batch, NUM_DIMS).mean(dim=0)
+
+
+def compute_inverse_loss_dimension_weights(
+    loss_ema: torch.Tensor | np.ndarray,
+    *,
+    mode: str = "inverse_loss",
+    temperature: float = 0.5,
+    eps: float = 1e-6,
+    min_weight: float = 0.5,
+    max_weight: float = 1.5,
+) -> torch.Tensor:
+    """Convert a per-dimension EMA loss vector into clipped inverse-loss weights."""
+    _validate_dimension_weighting_mode(mode)
+    resolved_temperature = _validate_positive_float(
+        temperature,
+        name="dimension_weighting_temperature",
+    )
+    resolved_eps = _validate_positive_float(
+        eps,
+        name="dimension_weighting_eps",
+    )
+    resolved_min_weight = _validate_positive_float(
+        min_weight,
+        name="dimension_weighting_min",
+    )
+    resolved_max_weight = _validate_positive_float(
+        max_weight,
+        name="dimension_weighting_max",
+    )
+    if resolved_min_weight > resolved_max_weight:
+        raise ValueError(
+            "dimension_weighting_min must be <= dimension_weighting_max, "
+            f"got {resolved_min_weight} > {resolved_max_weight}"
+        )
+
+    if isinstance(loss_ema, torch.Tensor):
+        ema = loss_ema.detach().to(dtype=torch.float32)
+    else:
+        ema = torch.as_tensor(loss_ema, dtype=torch.float32)
+    if ema.shape != (NUM_DIMS,):
+        raise ValueError(f"loss_ema must have shape ({NUM_DIMS},), got {tuple(ema.shape)}")
+    if not torch.isfinite(ema).all():
+        raise ValueError("loss_ema must be finite")
+    if torch.any(ema < 0):
+        raise ValueError("loss_ema must be non-negative")
+
+    raw_weights = (ema + resolved_eps).pow(-resolved_temperature)
+    normalized_weights = raw_weights / raw_weights.mean()
+    return normalized_weights.clamp(min=resolved_min_weight, max=resolved_max_weight)
+
+
 def balanced_softmax_loss_multi(
     logits: torch.Tensor,
     y: torch.Tensor,
     *,
     class_priors: torch.Tensor | np.ndarray,
+    dimension_weights: torch.Tensor | np.ndarray | None = None,
     circumplex_regularizer_opposite_weight: float = 0.0,
     circumplex_regularizer_adjacent_weight: float = 0.0,
     eps: float = 1e-12,
@@ -784,25 +949,25 @@ def balanced_softmax_loss_multi(
         name="circumplex_regularizer_adjacent_weight",
     )
     logits, y = _validate_softmax_loss_inputs(logits, y)
-    priors = _prepare_class_stat_tensor(
-        class_priors,
-        name="class_priors",
-        logits=logits,
+    ce_per_dim = balanced_softmax_ce_per_dimension(
+        logits,
+        y,
+        class_priors=class_priors,
         eps=eps,
     )
-
-    batch = logits.size(0)
-    logits_3d = logits.view(batch, NUM_DIMS, NUM_CLASSES).float()
-    adjusted_logits = logits_3d + torch.log(priors).view(1, NUM_DIMS, NUM_CLASSES)
-    classes = (y.long() + 1).clamp(0, NUM_CLASSES - 1)
-    ce_loss = F.cross_entropy(
-        adjusted_logits.view(batch * NUM_DIMS, NUM_CLASSES),
-        classes.view(batch * NUM_DIMS),
-    )
+    if dimension_weights is None:
+        ce_loss = ce_per_dim.mean()
+    else:
+        weights = _prepare_dimension_weights(
+            dimension_weights,
+            logits=logits,
+        )
+        ce_loss = (ce_per_dim * weights).mean()
     if opposite_weight == 0.0 and adjacent_weight == 0.0:
         return ce_loss
 
-    probabilities = F.softmax(logits_3d, dim=-1)
+    batch = logits.size(0)
+    probabilities = F.softmax(logits.view(batch, NUM_DIMS, NUM_CLASSES).float(), dim=-1)
     circumplex_regularizer = _circumplex_probability_regularizer(
         probabilities,
         opposite_weight=opposite_weight,

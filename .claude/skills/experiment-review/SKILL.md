@@ -25,9 +25,18 @@ Rules:
 
 Current project context to preserve unless superseded by newer corrected-split evidence:
 
-- `CDWCE_a3` is the active corrected-split leader on median `qwk_mean` and `recall_minus1`.
-- `SoftOrdinal` is the best minority-sensitive corrected-split option on median `minority_recall_mean` and hedging.
-- `CORN` is the best-calibrated corrected-split baseline.
+- `BalancedSoftmax` `run_019`-`run_021` is the active corrected-split default.
+  It still has the best overall balance of median `qwk_mean`,
+  `recall_minus1`, minority recall, and moderate hedging.
+- Weighted `BalancedSoftmax` `run_034`-`run_036` is the best current
+  **tail-sensitive reference branch**. It improves `recall_minus1`, minority
+  recall, hedging, and calibration versus the incumbent, but its family-median
+  `qwk_mean` is lower and less stable across seeds, so it is **not** the
+  default.
+- `CDWCE_a3` is the best conservative corrected-split baseline when MAE,
+  accuracy, and calibration matter more than tail recovery.
+- `CORN` remains the best-calibrated corrected-split baseline and the main
+  calibration anchor for post-hoc follow-ups.
 
 ## Data Collection
 
@@ -46,9 +55,14 @@ Use Glob to find `logs/experiments/runs/*.yaml`, then read every file. Extract:
 - `config` (encoder, state_encoder, model, training)
 - `data` (n_train, pct_truncated, state_dim)
 - `capacity` (n_parameters, param_sample_ratio)
-- `training_dynamics` (best_epoch, gap_at_best)
+- `training_dynamics` (best_epoch, gap_at_best, selection_source,
+  promotion_eligible, debug_fallback_used, selection_metrics)
+- `selection_policy`
 - `evaluation` (all aggregate metrics)
 - `per_dimension` (all 10 Schwartz dimensions)
+- `circumplex` / `evaluation.circumplex_summary` when present
+- `artifacts` (especially `selection_trace`, `selection_summary`,
+  `dimension_weight_trace`, `validation_outputs`, `test_outputs`)
 
 ### Step 3: Identify axes of variation
 
@@ -57,6 +71,11 @@ First, group runs by **split regime / evaluation regime**. Only then group withi
 - **Capacity**: hidden_dim, param count, param/sample ratio
 - **Loss function**: within a run, compare across loss heads
 - **State encoder**: window_size, state_dim
+- **Frontier intervention family**: for `BalancedSoftmax`, treat
+  `balanced_softmax`, `balanced_softmax_dimweight`, and
+  `balanced_softmax_circreg` as distinct branches even when `model_name` is the
+  same. Use `config.training.loss_fn`, dimension-weighting flags, and
+  circumplex-regularizer settings rather than grouping only by `model_name`.
 
 Anything identical across all runs is a **constant** — mention once, don't repeat.
 
@@ -78,6 +97,51 @@ Before generating your analytical report, check all run YAML files for empty `pr
 3. **Write back**: Use the Edit tool to update only fields that are empty or contain a placeholder (any value matching `<fill in`). **Never overwrite** fields that already have substantive content — i.e., anything that is neither empty nor a placeholder.
 
 Once all historical context and observations are properly recorded, proceed to generate the cross-run comparison report.
+
+## Step 5: Artifact-Aware Debugging Pass
+
+Before finalizing conclusions, inspect the run artifacts that now exist for the
+modern ordinal frontier. Do not rely only on the YAML headline metrics when the
+artifacts can answer the question directly.
+
+1. **Checkpoint-selection audit**:
+   - If `artifacts.selection_trace` exists, inspect it.
+   - Use it to explain why a checkpoint was promoted or rejected, especially for
+     guardrailed families (`recall_minus1_floor`, non-negative calibration,
+     finite-QWK rules).
+   - Use the stored `train_loss` and `lr` columns when they help explain a
+     selection or overfitting transition.
+
+2. **Dimension-weighting audit**:
+   - If `artifacts.dimension_weight_trace` exists, inspect it for every
+     weighted `BalancedSoftmax` run.
+   - Summarize, at minimum:
+     - selected-epoch `applied_weight` by dimension
+     - which dimensions were consistently upweighted or downweighted
+     - clamp hits at the configured min/max
+     - whether `train_ce_mean` / `train_ce_ema` support the weight pattern
+     - whether the schedule actually targeted the hard dimensions discussed in
+       the report
+   - Treat this trace as a debugging surface, not just a logging novelty. If
+     the family underperforms, say whether the schedule looked coherent or
+     whether it behaved pathologically.
+
+3. **Circumplex recomputation for older runs**:
+   - Some older frontier runs predate direct circumplex payload logging in the
+     YAMLs.
+   - When comparing circumplex-sensitive families, recompute the summaries from
+     `artifacts.test_outputs` using the existing helpers:
+     - `src/vif/posthoc.py::load_artifact_bundle()`
+     - `src/vif/eval.py::compute_circumplex_diagnostics()`
+   - Prefer one consistent basis for the compared families. If you recompute
+     the incumbent family from artifacts, strongly prefer recomputing the newer
+     families the same way instead of mixing YAML-sourced and artifact-derived
+     numbers silently.
+
+4. **Artifact precedence rule**:
+   - Prefer artifact-backed conclusions over stale prose in older reports.
+   - Use the report text as context, but treat the run YAMLs and persisted
+     artifacts as the source of truth when there is any mismatch.
 
 ## Metric Interpretation Thresholds
 
@@ -118,6 +182,10 @@ If multiple split regimes are present, use separate comparison tables per regime
 
 If there are multiple loss functions, also compare within each run across losses.
 
+For corrected-split frontier reviews involving modern ordinal runs, add a
+compact structure table or extra columns for `opposite_violation_mean` and
+`adjacent_support_mean` whenever those metrics materially explain a trade-off.
+
 ### 3. Per-Dimension Analysis
 
 Identify:
@@ -126,6 +194,11 @@ Identify:
 - **Volatile dimensions**: large QWK variance across runs
 
 Present as a compact table sorted by mean QWK across all runs.
+
+If weighted `BalancedSoftmax` runs are present, add a short weighting audit to
+this section or immediately after it. Report the selected-epoch weights, clamp
+behavior, and whether the weighting schedule actually focused on the dimensions
+you describe as hard or volatile.
 
 **Error Analysis (Hardest Dimensions):**
 For the 2 hardest dimensions (lowest mean QWK), write and execute a temporary read-only Python script that:
@@ -205,7 +278,11 @@ Examples of good recommendations:
 
 - Use the threshold table above for all qualitative characterizations
 - Always cite the actual number: "QWK 0.42 (moderate)" not just "moderate QWK"
-- Context: this is a capstone POC with ~637 training samples — focus on relative comparisons, not absolute benchmarks
+- Context: this is a capstone POC with roughly `1k` corrected-split training
+  samples in the current frontier regime, though older runs may be smaller.
+  Always cite the exact `n_train` when capacity or data-volume differences are
+  part of the story, and focus on relative comparisons rather than absolute
+  benchmarks.
 ## Leaderboard Updates
 
 After generating the report, update `logs/experiments/index.md` with **split-aware** frontier sections.

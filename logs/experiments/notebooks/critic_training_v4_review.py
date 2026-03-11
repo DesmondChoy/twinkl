@@ -29,6 +29,7 @@ _vif_cfg = yaml.safe_load(_cfg_path.read_text())
 _training_defaults = _vif_cfg["training"]
 _scheduler_defaults = _training_defaults["scheduler"]
 _lr_finder_defaults = _training_defaults["lr_finder"]
+_dimension_weighting_defaults = _training_defaults.get("dimension_weighting", {})
 
 lr_finder_cfg = {
     "start_lr": _lr_finder_defaults["start_lr"],
@@ -86,6 +87,14 @@ CONFIG = {
     "circumplex_regularizer_enabled": False,
     "circumplex_regularizer_opposite_weight": 0.0,
     "circumplex_regularizer_adjacent_weight": 0.0,
+    "dimension_weighting_enabled": _dimension_weighting_defaults.get("enabled", True),
+    "dimension_weighting_mode": _dimension_weighting_defaults.get("mode", "inverse_loss"),
+    "dimension_weighting_temperature": _dimension_weighting_defaults.get("temperature", 0.5),
+    "dimension_weighting_ema_alpha": _dimension_weighting_defaults.get("ema_alpha", 0.3),
+    "dimension_weighting_warmup_epochs": _dimension_weighting_defaults.get("warmup_epochs", 1),
+    "dimension_weighting_eps": _dimension_weighting_defaults.get("eps", 1e-6),
+    "dimension_weighting_min": _dimension_weighting_defaults.get("min_weight", 0.5),
+    "dimension_weighting_max": _dimension_weighting_defaults.get("max_weight", 1.5),
     "ldam_max_m": 0.5,
     "ldam_scale": 30.0,
     "ldam_drw_start_epoch": 50,
@@ -152,6 +161,14 @@ for key in [
     "circumplex_regularizer_enabled",
     "circumplex_regularizer_opposite_weight",
     "circumplex_regularizer_adjacent_weight",
+    "dimension_weighting_enabled",
+    "dimension_weighting_mode",
+    "dimension_weighting_temperature",
+    "dimension_weighting_ema_alpha",
+    "dimension_weighting_warmup_epochs",
+    "dimension_weighting_eps",
+    "dimension_weighting_min",
+    "dimension_weighting_max",
     "use_lr_finder",
     "experiment_group",
     "skip_experiment_logging",
@@ -230,11 +247,14 @@ from src.vif.critic_ordinal import (
     CriticMLPCDWCE,
     cdw_ce_loss_multi,
     CriticMLPBalancedSoftmax,
+    balanced_softmax_ce_per_dimension,
     balanced_softmax_loss_multi,
+    compute_inverse_loss_dimension_weights,
     CriticMLPLDAMDRW,
     ldam_drw_loss_multi,
     CriticMLPSoftOrdinal,
     soft_ordinal_loss_multi,
+    validate_dimension_weighting_config,
 )
 from src.vif.eval import (
     build_ordinal_selection_candidate,
@@ -248,6 +268,10 @@ from src.vif.eval import (
 )
 from src.vif.lr_finder import run_lr_finder
 from src.vif.class_balance import compute_long_tail_statistics_from_dataframe
+from src.vif.training_traces import (
+    build_dimension_weight_trace_frame,
+    build_selection_trace_frame,
+)
 from src.models.judge import SCHWARTZ_VALUE_ORDER
 
 # Reproducibility
@@ -519,9 +543,10 @@ MODEL_CONFIGS = {
         "loss_fn": balanced_softmax_loss_multi,
         "loss_fn_factory": (
             lambda *, _config, class_stats: (
-                lambda _epoch: partial(
+                lambda _epoch, dimension_weights=None: partial(
                     balanced_softmax_loss_multi,
                     class_priors=class_stats["class_priors"],
+                    dimension_weights=dimension_weights,
                     circumplex_regularizer_opposite_weight=(
                         float(_config.get("circumplex_regularizer_opposite_weight", 0.0))
                         if _config.get("circumplex_regularizer_enabled")
@@ -705,7 +730,7 @@ def _build_epoch_loss_fn(model_cfg, config, class_stats):
     factory = model_cfg.get("loss_fn_factory")
     if factory is None:
         static_loss = model_cfg["loss_fn"]
-        return lambda _epoch: static_loss
+        return lambda _epoch, _dimension_weights=None: static_loss
     return factory(_config=config, class_stats=class_stats)
 
 
@@ -737,41 +762,39 @@ def _save_selected_checkpoint(
     return checkpoint_path
 
 
-def _selection_trace_frame(candidate_trace):
-    rows = [
-        {
-            "epoch": int(candidate["epoch"]),
-            "val_loss": float(candidate["val_loss"]),
-            "qwk_mean": float(candidate["qwk_mean"]),
-            "recall_minus1": float(candidate["recall_minus1"]),
-            "calibration_global": float(candidate["calibration_global"]),
-            "hedging_mean": float(candidate["hedging_mean"]),
-            "qwk_nan_dims_count": int(candidate["qwk_nan_dims_count"]),
-            "eligible": bool(candidate["eligible"]),
-            "ineligible_reasons": ",".join(candidate["ineligible_reasons"]),
-        }
-        for candidate in candidate_trace
-    ]
-    if rows:
-        return pl.DataFrame(rows)
-
-    return pl.DataFrame(
-        schema={
-            "epoch": pl.Int64,
-            "val_loss": pl.Float64,
-            "qwk_mean": pl.Float64,
-            "recall_minus1": pl.Float64,
-            "calibration_global": pl.Float64,
-            "hedging_mean": pl.Float64,
-            "qwk_nan_dims_count": pl.Int64,
-            "eligible": pl.Boolean,
-            "ineligible_reasons": pl.Utf8,
-        }
+def _resolve_dimension_weighting_config(model_name, config):
+    if model_name != "BalancedSoftmax" or not config.get("dimension_weighting_enabled", False):
+        return None
+    return validate_dimension_weighting_config(
+        mode=config.get("dimension_weighting_mode", "inverse_loss"),
+        temperature=config.get("dimension_weighting_temperature", 0.5),
+        ema_alpha=config.get("dimension_weighting_ema_alpha", 0.3),
+        warmup_epochs=config.get("dimension_weighting_warmup_epochs", 1),
+        eps=config.get("dimension_weighting_eps", 1e-6),
+        min_weight=config.get("dimension_weighting_min", 0.5),
+        max_weight=config.get("dimension_weighting_max", 1.5),
     )
 
 
-def _write_selection_trace(output_path, candidate_trace):
-    trace_df = _selection_trace_frame(candidate_trace)
+def _write_selection_trace(output_path, candidate_trace, history):
+    trace_df = build_selection_trace_frame(candidate_trace, history)
+    trace_df.write_parquet(output_path)
+    return output_path
+
+
+def _write_dimension_weight_trace(
+    output_path,
+    epoch_diagnostics,
+    *,
+    selected_candidate,
+):
+    selected_epoch = None
+    if selected_candidate:
+        selected_epoch = int(selected_candidate["epoch"])
+    trace_df = build_dimension_weight_trace_frame(
+        epoch_diagnostics,
+        selected_epoch=selected_epoch,
+    )
     trace_df.write_parquet(output_path)
     return output_path
 
@@ -819,6 +842,15 @@ def train_model(name, model_cfg, train_loader, val_loader, config, device, class
     model.to(device)
 
     epoch_loss_fn = _build_epoch_loss_fn(model_cfg, config, class_stats)
+    track_dimension_weights = name == "BalancedSoftmax"
+    dimension_weighting_config = _resolve_dimension_weighting_config(name, config)
+    current_dimension_weights = None
+    train_ce_ema = None
+    if track_dimension_weights:
+        current_dimension_weights = torch.ones(
+            len(SCHWARTZ_VALUE_ORDER),
+            dtype=torch.float32,
+        )
     selection_policy = ordinal_selection_policy_summary(config.get("selection_policy"))
     configured_lr = config["learning_rate"]
     learning_rate_policy = config.get("learning_rate_policy")
@@ -835,7 +867,7 @@ def train_model(name, model_cfg, train_loader, val_loader, config, device, class
         lr_finder_result = run_lr_finder(
             model=model,
             train_loader=train_loader,
-            criterion=epoch_loss_fn(0),
+            criterion=epoch_loss_fn(0, current_dimension_weights),
             configured_learning_rate=configured_lr,
             weight_decay=config["weight_decay"],
             device=device,
@@ -940,22 +972,53 @@ def train_model(name, model_cfg, train_loader, val_loader, config, device, class
     fallback_candidate = None
     fallback_model_state = None
     candidate_trace = []
+    dimension_weight_epoch_diagnostics = []
     patience_counter = 0
 
     for epoch in range(config["epochs"]):
-        loss_fn = epoch_loss_fn(epoch)
+        applied_dimension_weights = None
+        train_ce_sum = None
+        train_ce_mean = None
+        if track_dimension_weights:
+            applied_dimension_weights = current_dimension_weights.clone()
+            train_ce_sum = torch.zeros(
+                len(SCHWARTZ_VALUE_ORDER),
+                dtype=torch.float64,
+            )
+        loss_fn = epoch_loss_fn(epoch, applied_dimension_weights)
         # Train
         model.train()
         train_loss = 0.0
+        train_sample_count = 0
         for batch_x, batch_y in train_loader:
             batch_x, batch_y = batch_x.to(device), batch_y.to(device)
             optimizer.zero_grad()
             output = model(batch_x)
+            if track_dimension_weights:
+                with torch.no_grad():
+                    batch_ce_mean = balanced_softmax_ce_per_dimension(
+                        output,
+                        batch_y,
+                        class_priors=class_stats["class_priors"],
+                    )
+                batch_size = batch_y.size(0)
+                train_ce_sum += batch_ce_mean.detach().cpu().to(torch.float64) * batch_size
+                train_sample_count += batch_size
             loss = loss_fn(output, batch_y)
             loss.backward()
             optimizer.step()
             train_loss += loss.item()
         train_loss /= len(train_loader)
+        if track_dimension_weights:
+            train_ce_mean = (train_ce_sum / train_sample_count).to(dtype=torch.float32)
+            if train_ce_ema is None or dimension_weighting_config is None:
+                train_ce_ema = train_ce_mean.clone()
+            else:
+                ema_alpha = float(dimension_weighting_config["ema_alpha"])
+                train_ce_ema = (
+                    ema_alpha * train_ce_mean
+                    + (1.0 - ema_alpha) * train_ce_ema
+                )
 
         # Validate on raw loss
         model.eval()
@@ -988,6 +1051,20 @@ def train_model(name, model_cfg, train_loader, val_loader, config, device, class
             selection_policy=selection_policy,
         )
         candidate_trace.append(dict(candidate))
+        if track_dimension_weights:
+            dimension_weight_epoch_diagnostics.append(
+                {
+                    "epoch": int(epoch),
+                    "train_ce_mean": train_ce_mean.tolist(),
+                    "train_ce_ema": train_ce_ema.tolist(),
+                    "applied_weight": applied_dimension_weights.tolist(),
+                    "val_qwk_per_dim": val_eval_result["qwk_per_dim"],
+                    "val_accuracy_per_dim": val_eval_result["accuracy_per_dim"],
+                    "val_hedging_per_dim": val_eval_result["hedging_per_dim"],
+                    "val_recall_per_class_per_dim": val_eval_result["recall_per_class"]["per_dim"],
+                    "eligible": bool(candidate["eligible"]),
+                }
+            )
 
         history["train_loss"].append(train_loss)
         history["val_loss"].append(val_loss)
@@ -1040,6 +1117,19 @@ def train_model(name, model_cfg, train_loader, val_loader, config, device, class
             print(f"  Early stopping at epoch {epoch + 1}")
             break
 
+        if track_dimension_weights and dimension_weighting_config is not None:
+            if (epoch + 1) >= int(dimension_weighting_config["warmup_epochs"]):
+                current_dimension_weights = compute_inverse_loss_dimension_weights(
+                    train_ce_ema,
+                    mode=dimension_weighting_config["mode"],
+                    temperature=dimension_weighting_config["temperature"],
+                    eps=dimension_weighting_config["eps"],
+                    min_weight=dimension_weighting_config["min_weight"],
+                    max_weight=dimension_weighting_config["max_weight"],
+                )
+            else:
+                current_dimension_weights = torch.ones_like(current_dimension_weights)
+
     artifact_dir = ordinal_artifact_root / name
     artifact_dir.mkdir(parents=True, exist_ok=True)
     selection_outcome = finalize_ordinal_checkpoint_selection(
@@ -1054,6 +1144,7 @@ def train_model(name, model_cfg, train_loader, val_loader, config, device, class
     selection_trace_path = _write_selection_trace(
         artifact_dir / "selection_trace.parquet",
         candidate_trace,
+        history,
     )
     selection_summary_path = _write_selection_summary(
         artifact_dir / "selection_summary.yaml",
@@ -1068,6 +1159,13 @@ def train_model(name, model_cfg, train_loader, val_loader, config, device, class
         "selection_trace": str(selection_trace_path),
         "selection_summary": str(selection_summary_path),
     }
+    if track_dimension_weights:
+        dimension_weight_trace_path = _write_dimension_weight_trace(
+            artifact_dir / "dimension_weight_trace.parquet",
+            dimension_weight_epoch_diagnostics,
+            selected_candidate=selected_candidate,
+        )
+        artifact_paths["dimension_weight_trace"] = str(dimension_weight_trace_path)
     if not selected_candidate:
         print("  No finite-QWK epochs available for checkpoint selection.")
         return {

@@ -367,8 +367,15 @@ def _loss_shorthand(model_name: str, config: dict) -> str:
             scale = config.get("weighted_mse_scale", 5.0)
             return f"weighted_mse_s{scale}"
         return "mse"
-    if model_name == "BalancedSoftmax" and config.get("circumplex_regularizer_enabled"):
-        return "balanced_softmax_circreg"
+    if model_name == "BalancedSoftmax":
+        dimension_weighting_enabled = config.get("dimension_weighting_enabled")
+        circumplex_regularizer_enabled = config.get("circumplex_regularizer_enabled")
+        if dimension_weighting_enabled and circumplex_regularizer_enabled:
+            return "balanced_softmax_dimweight_circreg"
+        if dimension_weighting_enabled:
+            return "balanced_softmax_dimweight"
+        if circumplex_regularizer_enabled:
+            return "balanced_softmax_circreg"
     return mapping.get(model_name, model_name.lower())
 
 
@@ -490,6 +497,14 @@ def _build_experiment_dict(
                 "circumplex_regularizer_adjacent_weight": config.get(
                     "circumplex_regularizer_adjacent_weight"
                 ),
+                "dimension_weighting_enabled": config.get("dimension_weighting_enabled"),
+                "dimension_weighting_mode": config.get("dimension_weighting_mode"),
+                "dimension_weighting_temperature": config.get("dimension_weighting_temperature"),
+                "dimension_weighting_ema_alpha": config.get("dimension_weighting_ema_alpha"),
+                "dimension_weighting_warmup_epochs": config.get("dimension_weighting_warmup_epochs"),
+                "dimension_weighting_eps": config.get("dimension_weighting_eps"),
+                "dimension_weighting_min": config.get("dimension_weighting_min"),
+                "dimension_weighting_max": config.get("dimension_weighting_max"),
                 "ldam_max_m": config.get("ldam_max_m"),
                 "ldam_scale": config.get("ldam_scale"),
                 "ldam_drw_start_epoch": config.get("ldam_drw_start_epoch"),
