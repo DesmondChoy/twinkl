@@ -19,7 +19,7 @@
 >
 > **Latest weighted frontier review:** [`reports/experiment_review_2026-03-11_twinkl_719_3.md`](reports/experiment_review_2026-03-11_twinkl_719_3.md)
 >
-> **Latest post-hoc retargeting review:** [`reports/experiment_review_twinkl_719_5.md`](reports/experiment_review_twinkl_719_5.md) did **not** change the frontier. Validation-only logit adjustment chose `tau=0.30` for `run_020`, which nudged holdout `recall_-1` from `0.342` to `0.350` and reduced hedging from `0.621` to `0.562`, but it also dropped `qwk_mean` from `0.378` to `0.338`, minority recall from `0.449` to `0.397`, calibration from `0.713` to `0.583`, and worsened opposite-pair circumplex violations from `0.070` to `0.107`. The weighted reference checkpoint `run_036` selected `tau=0.00`, so the weighted branch remains the best tail-sensitive reference checkpoint and `twinkl-719.6` stays as the next stronger fallback only if an incumbent-centered follow-up is still desired.
+> **Latest post-hoc retargeting review:** [`reports/experiment_review_twinkl_729.md`](reports/experiment_review_twinkl_729.md) did **not** change the frontier. The new effective-prior + per-dimension tau branch did not beat the standard Menon control on the guarded median test comparison: standard Menon still delivered the better median `recall_-1` delta (`+0.004` vs baseline) while both branches gave back QWK, calibration, and circumplex cleanliness. On the strongest weighted checkpoint `run_036`, the new branch was validation-selected but regressed on holdout (`qwk_mean 0.381 -> 0.360`, `recall_-1 0.387 -> 0.339`, `calibration 0.726 -> 0.592`). Treat this as evidence that the current post-hoc line is likely exhausted for the active frontier; `run_034`-`run_036` remain the best tail-sensitive reference branch, and any further incumbent-centered follow-up should be a materially different intervention such as `twinkl-719.6`.
 >
 > **Latest full frontier review:** [`reports/experiment_review_2026-03-11_twinkl_721.md`](reports/experiment_review_2026-03-11_twinkl_721.md)
 >
@@ -166,6 +166,35 @@
 
 ## Findings
 
+### 2026-03-12 — Effective-prior + per-dimension tau still fails to move the frontier (`twinkl-729`)
+
+`twinkl-729` extended the validation-only softmax post-hoc path with
+validation-posterior effective-prior estimation and greedy per-dimension tau
+selection, then compared that new branch directly against the untouched
+baseline and the existing shared-tau Menon path on `run_020` and `run_036`.
+
+**1. The new branch did not beat the old post-hoc control.** Median test deltas
+versus baseline were worse for the new branch than for standard Menon:
+effective-prior + per-dim tau reached `recall_-1 -0.057`, `qwk_mean -0.028`,
+and `calibration -0.136`, while standard Menon still had the better recall
+package at `recall_-1 +0.004` with `qwk_mean -0.020`.
+
+**2. `run_036` was the critical negative result.** Validation selected the new
+branch for the strongest weighted reference checkpoint, but holdout metrics
+regressed from baseline: `qwk_mean 0.381 -> 0.360`, `recall_-1 0.387 -> 0.339`,
+minority recall `0.492 -> 0.440`, and calibration `0.726 -> 0.592`.
+
+**3. `run_020` still behaves like `twinkl-719.5`.** The incumbent checkpoint
+again preferred the old shared-tau Menon branch (`tau=0.30`), which recovered a
+small `recall_-1` lift (`0.342 -> 0.350`) but still paid too much on QWK,
+minority recall, calibration, and opposition structure.
+
+**4. Recommendation: close the current post-hoc line.** Keep `run_019`-`run_021`
+as the default corrected-split family and `run_034`-`run_036` as the best
+tail-sensitive reference branch. On current evidence, further work should move
+to materially different interventions rather than more softmax retargeting.
+Full details: [`reports/experiment_review_twinkl_729.md`](reports/experiment_review_twinkl_729.md).
+
 ### 2026-03-11 — Full frontier audit v9 keeps the default and shows why inverse-loss weighting stalls (`twinkl-721`)
 
 The fresh full audit across `run_001`-`run_036` found no missing run metadata
@@ -227,6 +256,46 @@ Weighted `BalancedSoftmax` now replaces the circumplex branches as the best
 training-time comparator for the next frontier step, but the mainline default
 stays with `run_019`-`run_021`. Full details:
 [`reports/experiment_review_2026-03-11_twinkl_719_3.md`](reports/experiment_review_2026-03-11_twinkl_719_3.md).
+
+### 2026-03-11 — Circumplex-aware batch sampler is explicitly de-scoped for the current rollout (`twinkl-691.5`)
+
+`twinkl-691.5` closed the circumplex rollout by making an explicit keep/drop
+decision on the sampler idea. This was not a feasibility punt: the March 9-10
+corrected-split evidence already answered the sequencing question strongly
+enough that a sampler ablation is not the right next experiment.
+
+**1. The current bottleneck is still hard-dimension polarity, not missing batch
+structure.** The incumbent `run_019`-`run_021` `BalancedSoftmax` family remains
+the active default at median `qwk_mean 0.362`, `recall_-1 0.313`,
+`minority_recall_mean 0.448`, `hedging_mean 0.621`, and
+`calibration_global 0.713`. The regenerated `Hedonism` / `Security` lift from
+`twinkl-691.3` nudged `hedonism` upward, but it still regressed `security` and
+opposition structure relative to the incumbent.
+
+**2. The regularizer already tested the structural hypothesis closely enough.**
+`twinkl-691.4` improved aggregate circumplex structure versus the post-lift
+control, moving `opposite_violation_mean` from `0.082` to `0.039` and
+`adjacent_support_mean` from `0.072` to `0.077`, but it gave back too much
+tail-sensitive behavior: `recall_-1` fell from `0.328` to `0.265`,
+`minority_recall_mean` from `0.442` to `0.411`, and `hedging_mean` worsened
+from `0.598` to `0.641`.
+
+**3. The checkpoint-selection fix did not change that conclusion.**
+`twinkl-715` showed the guardrailed rerun family `run_031`-`run_033` could
+recover family-level QWK to `0.366`, but it still trailed the incumbent on the
+metrics that matter operationally: `recall_-1 0.267` vs `0.313`,
+`minority_recall_mean 0.409` vs `0.448`, and `hedging_mean 0.641` vs `0.621`.
+That means the circumplex branch was not merely being held back by bad
+checkpoint promotion.
+
+**4. Recommendation: keep the sampler off the active roadmap for now.** The
+better handoff is the lower-risk sequence already supported by the frontier
+evidence: per-dimension weighting on `BalancedSoftmax`, then validation-only
+logit retargeting from `run_020`, then head-only retraining only if those still
+miss. Reopen the sampler only if those levers fail and newer circumplex
+diagnostics still show unresolved theory-violating structure errors. Full
+details:
+[`reports/experiment_review_2026-03-11_twinkl_691_5.md`](reports/experiment_review_2026-03-11_twinkl_691_5.md).
 
 ### 2026-03-10 — Full frontier refresh v8 adds the regularized branches, but the default stays put
 

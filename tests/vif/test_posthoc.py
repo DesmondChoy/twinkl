@@ -20,8 +20,10 @@ from src.vif.eval import (
 from src.vif.posthoc import (
     CLASS_VALUES,
     DEFAULT_CONFIG,
+    EFFECTIVE_PRIOR_SOFTMAX_BRANCH,
     NUM_CLASSES,
     NUM_DIMS,
+    STANDARD_SOFTMAX_BRANCH,
     _compute_score_based_policy_metrics,
     _evaluate_softmax_tau_candidate,
     _best_softmax_family,
@@ -33,6 +35,7 @@ from src.vif.posthoc import (
     _render_report,
     _softmax_logit_adjustment,
     compute_class_priors,
+    estimate_effective_priors_from_validation_posteriors,
     load_artifact_bundle,
     run_posthoc,
 )
@@ -54,6 +57,17 @@ def test_softmax_logit_adjustment_tau_zero_is_identity():
     priors = np.tile(np.array([0.1, 0.8, 0.1], dtype=np.float64), (NUM_DIMS, 1))
 
     adjusted = _softmax_logit_adjustment(raw_logits, priors.reshape(1, NUM_DIMS, NUM_CLASSES), 0.0)
+
+    assert np.allclose(adjusted, _softmax(raw_logits))
+
+
+def test_softmax_logit_adjustment_zero_tau_vector_is_identity():
+    rng = np.random.default_rng(11)
+    raw_logits = rng.normal(size=(4, NUM_DIMS, NUM_CLASSES))
+    priors = np.tile(np.array([0.1, 0.8, 0.1], dtype=np.float64), (NUM_DIMS, 1))
+    tau = np.zeros(NUM_DIMS, dtype=np.float64)
+
+    adjusted = _softmax_logit_adjustment(raw_logits, priors, tau)
 
     assert np.allclose(adjusted, _softmax(raw_logits))
 
@@ -134,6 +148,26 @@ def test_compute_class_priors_counts_alignment_vectors():
     assert np.allclose(priors[0], np.array([1 / 3, 1 / 3, 1 / 3]))
     assert np.allclose(priors[1], np.array([1 / 3, 2 / 3, 0.0]), atol=1e-8)
     assert np.allclose(priors.sum(axis=1), 1.0)
+
+
+def test_estimate_effective_priors_from_validation_posteriors_uses_mean_posterior(tmp_path):
+    raw_logits, probabilities, targets = _build_softmax_fixture_arrays()
+    artifact_path = tmp_path / "artifact.parquet"
+    _write_output_artifact(
+        artifact_path,
+        model_name="BalancedSoftmax",
+        split="val",
+        raw_logits=raw_logits,
+        probabilities=probabilities,
+        targets=targets,
+    )
+
+    artifact = load_artifact_bundle(artifact_path)
+    priors = estimate_effective_priors_from_validation_posteriors(artifact, eps=1e-9)
+
+    assert priors.shape == (NUM_DIMS, NUM_CLASSES)
+    assert np.allclose(priors.sum(axis=1), 1.0)
+    assert np.allclose(priors[0], probabilities[:, 0, :].mean(axis=0))
 
 
 def test_is_candidate_eligible_enforces_qwk_guard():
@@ -528,6 +562,132 @@ def test_render_report_uses_config_driven_softmax_labels_and_order():
     assert median_section.index("| BalancedSoftmax |") < median_section.index("| LDAM_DRW |")
 
 
+def test_render_report_includes_softmax_branch_comparison_section():
+    branch_entry = {
+        "selected_policy": {"policy_name": "logit_adjustment_tau_0.30"},
+        "test_metrics": {
+            "qwk_mean": 0.338,
+            "recall_minus1": 0.350,
+            "minority_recall_mean": 0.397,
+            "hedging_mean": 0.562,
+            "calibration_global": 0.583,
+            "circumplex_summary": {
+                "opposite_violation_mean": 0.107,
+                "adjacent_support_mean": 0.089,
+            },
+        },
+        "used_baseline_fallback": False,
+    }
+    summary = {
+        "tuned_runs": [
+            {
+                "run_id": "run_020",
+                "model_name": "BalancedSoftmax",
+                "selected_policy": {"policy_name": "effective_prior_per_dimension_tau"},
+                "test_metrics": {
+                    "qwk_mean": 0.365,
+                    "recall_minus1": 0.361,
+                    "minority_recall_mean": 0.430,
+                    "hedging_mean": 0.580,
+                    "decision_neutral_rate": 0.710,
+                    "calibration_global": 0.690,
+                    "circumplex_summary": {
+                        "opposite_violation_mean": 0.081,
+                        "adjacent_support_mean": 0.082,
+                    },
+                },
+                "softmax_branch_comparison": {
+                    "baseline": {
+                        "label": "Untouched baseline",
+                        "selected_policy": {"policy_name": "logit_adjustment_tau_0.00"},
+                        "test_metrics": {
+                            "qwk_mean": 0.378,
+                            "recall_minus1": 0.342,
+                            "minority_recall_mean": 0.449,
+                            "hedging_mean": 0.621,
+                            "calibration_global": 0.713,
+                            "circumplex_summary": {
+                                "opposite_violation_mean": 0.070,
+                                "adjacent_support_mean": 0.077,
+                            },
+                        },
+                        "used_baseline_fallback": False,
+                    },
+                    STANDARD_SOFTMAX_BRANCH: {
+                        "label": "Best standard Menon branch",
+                        **branch_entry,
+                    },
+                    EFFECTIVE_PRIOR_SOFTMAX_BRANCH: {
+                        "label": "Effective-prior + per-dimension tau",
+                        "selected_policy": {"policy_name": "effective_prior_per_dimension_tau"},
+                        "test_metrics": {
+                            "qwk_mean": 0.365,
+                            "recall_minus1": 0.361,
+                            "minority_recall_mean": 0.430,
+                            "hedging_mean": 0.580,
+                            "calibration_global": 0.690,
+                            "circumplex_summary": {
+                                "opposite_violation_mean": 0.081,
+                                "adjacent_support_mean": 0.082,
+                            },
+                        },
+                        "used_baseline_fallback": False,
+                    },
+                },
+            }
+        ],
+        "summary_by_model": {
+            "BalancedSoftmax": _summary_row(
+                qwk=0.365,
+                recall_minus1=0.361,
+                minority_recall=0.430,
+                hedging=0.580,
+                neutral_rate=0.710,
+                calibration=0.690,
+            ),
+        },
+        "family_delta_summary": {
+            "softmax_logit_adjustment": {
+                "median_recall_minus1_delta": 0.019,
+                "median_qwk_mean_delta": -0.013,
+                "median_hedging_mean_delta": -0.041,
+                "median_opposite_violation_mean_delta": 0.011,
+                "median_adjacent_support_mean_delta": 0.005,
+            }
+        },
+        "softmax_branch_delta_summary": {
+            STANDARD_SOFTMAX_BRANCH: {
+                "median_recall_minus1_delta": 0.008,
+                "median_qwk_mean_delta": -0.040,
+                "median_hedging_mean_delta": -0.059,
+                "median_opposite_violation_mean_delta": 0.037,
+                "median_adjacent_support_mean_delta": 0.012,
+            },
+            EFFECTIVE_PRIOR_SOFTMAX_BRANCH: {
+                "median_recall_minus1_delta": 0.019,
+                "median_qwk_mean_delta": -0.013,
+                "median_hedging_mean_delta": -0.041,
+                "median_opposite_violation_mean_delta": 0.011,
+                "median_adjacent_support_mean_delta": 0.005,
+            },
+        },
+        "recommended_softmax_base": "BalancedSoftmax",
+        "generated_at": "2026-03-12T10:00:00",
+    }
+    config = deepcopy(DEFAULT_CONFIG)
+    config["models"] = ["BalancedSoftmax"]
+    config["summary_model_order"] = ["BalancedSoftmax"]
+
+    report = _render_report(summary, config)
+
+    assert "## Branch Comparison" in report
+    assert "Untouched baseline" in report
+    assert "Best standard Menon branch" in report
+    assert "Effective-prior + per-dimension tau" in report
+    assert "Standard Menon median delta vs baseline" in report
+    assert "Effective-prior + per-dimension tau median delta vs baseline" in report
+
+
 def test_softmax_tau_zero_uses_saved_mean_predictions_for_metrics(tmp_path):
     raw_logits, probabilities, targets = _build_softmax_fixture_arrays()
     mean_predictions = np.repeat(
@@ -567,6 +727,47 @@ def test_softmax_tau_zero_uses_saved_mean_predictions_for_metrics(tmp_path):
     assert np.array_equal(candidate["predicted_classes"], discretize_predictions(mean_predictions))
     assert np.isclose(candidate["metrics"]["qwk_mean"], baseline_metrics["qwk_mean"])
     assert np.isclose(candidate["metrics"]["recall_minus1"], baseline_metrics["recall_minus1"])
+
+
+def test_effective_prior_candidate_serializes_per_dimension_tau_payload(tmp_path):
+    raw_logits, probabilities, targets = _build_softmax_fixture_arrays()
+    artifact_path = tmp_path / "artifact.parquet"
+    _write_output_artifact(
+        artifact_path,
+        model_name="BalancedSoftmax",
+        split="val",
+        raw_logits=raw_logits,
+        probabilities=probabilities,
+        targets=targets,
+    )
+
+    artifact = load_artifact_bundle(artifact_path)
+    priors = estimate_effective_priors_from_validation_posteriors(artifact, eps=1e-9)
+    baseline_metrics = _compute_score_based_policy_metrics(
+        targets=artifact.targets,
+        score_predictions=artifact.baseline_mean_predictions,
+        uncertainties=artifact.uncertainties,
+        probabilities=artifact.class_probabilities,
+    )
+    tau = np.linspace(0.0, 0.9, NUM_DIMS, dtype=np.float64)
+
+    candidate = _evaluate_softmax_tau_candidate(
+        artifact=artifact,
+        priors=priors,
+        tau=tau,
+        baseline_metrics=baseline_metrics,
+        config=deepcopy(DEFAULT_CONFIG),
+        branch_name=EFFECTIVE_PRIOR_SOFTMAX_BRANCH,
+        prior_source="validation_posteriors",
+        prior_estimation={"method": "mean_posterior", "eps": 1e-9},
+    )
+
+    payload = candidate["policy_payload"]
+    assert payload["branch_name"] == EFFECTIVE_PRIOR_SOFTMAX_BRANCH
+    assert payload["tau_mode"] == "per_dimension"
+    assert payload["prior_source"] == "validation_posteriors"
+    assert payload["prior_estimation"]["method"] == "mean_posterior"
+    assert np.isclose(payload["per_dimension_tau"][SCHWARTZ_VALUE_ORDER[3]], tau[3])
 
 
 def test_run_posthoc_smoke_writes_artifacts_and_preserves_source_runs(tmp_path, monkeypatch):
@@ -703,6 +904,144 @@ def test_run_posthoc_smoke_writes_artifacts_and_preserves_source_runs(tmp_path, 
 
     assert (runs_dir / "run_999_SoftOrdinal.yaml").read_text(encoding="utf-8") == original_softordinal_yaml
     assert (runs_dir / "run_999_CORN.yaml").read_text(encoding="utf-8") == original_corn_yaml
+
+
+def test_run_posthoc_effective_prior_branch_reuses_validation_priors_on_test(tmp_path, monkeypatch):
+    runs_dir = tmp_path / "logs" / "experiments" / "runs"
+    artifact_root = tmp_path / "logs" / "experiments" / "artifacts"
+    report_path = tmp_path / "logs" / "experiments" / "reports" / "effective_prior_report.md"
+    config = deepcopy(DEFAULT_CONFIG)
+    config["runs_dir"] = str(runs_dir.relative_to(tmp_path))
+    config["artifact_root"] = str(artifact_root.relative_to(tmp_path))
+    config["report_path"] = str(report_path.relative_to(tmp_path))
+    config["run_ids"] = ["run_999"]
+    config["models"] = ["BalancedSoftmax"]
+    config["corn_threshold_policy"]["enabled"] = False
+    config["softmax_logit_adjustment"]["target_models"] = ["BalancedSoftmax"]
+    config["softmax_logit_adjustment"]["effective_prior_branch"]["enabled"] = True
+    config["softmax_logit_adjustment"]["effective_prior_branch"]["target_models"] = ["BalancedSoftmax"]
+    config["softmax_logit_adjustment"]["effective_prior_branch"]["tau_grid"] = [0.0]
+    config["selection_policy"]["max_qwk_drop"] = 1.0
+    config["selection_policy"]["require_non_negative_calibration"] = False
+
+    monkeypatch.setattr(
+        "src.vif.posthoc.reconstruct_train_priors",
+        lambda **_: np.tile(np.array([0.1, 0.8, 0.1], dtype=np.float64), (NUM_DIMS, 1)),
+    )
+
+    val_logits, val_probs, val_targets = _build_softmax_fixture_arrays()
+    test_logits = val_logits.copy()
+    test_logits[:, :, 0] += 0.35
+    test_logits[:, :, 2] -= 0.20
+    test_probs = _softmax(test_logits)
+    test_targets = val_targets.copy()
+    val_mean_predictions = np.repeat(
+        np.array([[-0.70], [-0.15], [0.75], [-0.35]], dtype=np.float64),
+        NUM_DIMS,
+        axis=1,
+    )
+    test_mean_predictions = np.repeat(
+        np.array([[-0.60], [-0.10], [0.70], [-0.30]], dtype=np.float64),
+        NUM_DIMS,
+        axis=1,
+    )
+
+    val_path = artifact_root / "source" / "BalancedSoftmax" / "val.parquet"
+    test_path = artifact_root / "source" / "BalancedSoftmax" / "test.parquet"
+    _write_output_artifact(
+        val_path,
+        model_name="BalancedSoftmax",
+        split="val",
+        raw_logits=val_logits,
+        probabilities=val_probs,
+        targets=val_targets,
+        mean_predictions=val_mean_predictions,
+    )
+    _write_output_artifact(
+        test_path,
+        model_name="BalancedSoftmax",
+        split="test",
+        raw_logits=test_logits,
+        probabilities=test_probs,
+        targets=test_targets,
+        mean_predictions=test_mean_predictions,
+    )
+
+    run_path = runs_dir / "run_999_BalancedSoftmax.yaml"
+    run_path.parent.mkdir(parents=True, exist_ok=True)
+    checkpoint_path = artifact_root / "source" / "BalancedSoftmax" / "selected_checkpoint.pt"
+    checkpoint_path.write_bytes(b"stub")
+    run_path.write_text(
+        yaml.safe_dump(
+            {
+                "config": {
+                    "data": {
+                        "split_seed": 2025,
+                        "train_ratio": 0.7,
+                        "val_ratio": 0.15,
+                    }
+                },
+                "artifacts": {
+                    "checkpoint": str(checkpoint_path.relative_to(tmp_path)),
+                    "validation_outputs": str(val_path.relative_to(tmp_path)),
+                    "test_outputs": str(test_path.relative_to(tmp_path)),
+                },
+            },
+            sort_keys=False,
+        ),
+        encoding="utf-8",
+    )
+
+    summary = run_posthoc(config, repo_root=tmp_path)
+    selected_policy = yaml.safe_load(
+        Path(summary["tuned_runs"][0]["selected_policy_path"]).read_text(encoding="utf-8")
+    )
+    branch_comparison = selected_policy["softmax_branch_comparison"]
+    effective_entry = branch_comparison[EFFECTIVE_PRIOR_SOFTMAX_BRANCH]
+    effective_payload = effective_entry["selected_policy"]["policy_payload"]
+    validation_priors = np.array(
+        [effective_payload["per_dimension_priors"][dimension] for dimension in SCHWARTZ_VALUE_ORDER],
+        dtype=np.float64,
+    )
+    expected_validation_priors = val_probs.mean(axis=0)
+
+    assert np.allclose(validation_priors, expected_validation_priors)
+    assert effective_payload["tau_mode"] == "per_dimension"
+
+    test_artifact = load_artifact_bundle(test_path)
+    baseline_test_metrics = _compute_score_based_policy_metrics(
+        targets=test_artifact.targets,
+        score_predictions=test_artifact.baseline_mean_predictions,
+        uncertainties=test_artifact.uncertainties,
+        probabilities=test_artifact.class_probabilities,
+    )
+    tau = np.array(
+        [effective_payload["per_dimension_tau"][dimension] for dimension in SCHWARTZ_VALUE_ORDER],
+        dtype=np.float64,
+    )
+    expected_candidate = _evaluate_softmax_tau_candidate(
+        artifact=test_artifact,
+        priors=validation_priors,
+        tau=tau,
+        baseline_metrics=baseline_test_metrics,
+        config=config,
+        branch_name=EFFECTIVE_PRIOR_SOFTMAX_BRANCH,
+        prior_source="validation_posteriors",
+        prior_estimation=effective_payload["prior_estimation"],
+    )
+
+    assert np.isclose(
+        effective_entry["test_metrics"]["qwk_mean"],
+        expected_candidate["metrics"]["qwk_mean"],
+    )
+    assert np.isclose(
+        effective_entry["test_metrics"]["recall_minus1"],
+        expected_candidate["metrics"]["recall_minus1"],
+    )
+    assert np.isclose(
+        effective_entry["test_metrics"]["hedging_mean"],
+        expected_candidate["metrics"]["hedging_mean"],
+    )
 
 
 def test_run_posthoc_respects_configured_softmax_model_labels_and_prefix(tmp_path, monkeypatch):
