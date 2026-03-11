@@ -177,10 +177,11 @@ better (`0.448` to `0.449`), lowers hedging from `0.621` to `0.599`, and
 improves calibration from `0.713` to `0.726`.
 
 **2. The reason it still fails promotion is sharper now.** The new artifact
-audit shows the inverse-loss dimension-weighting path mostly upweights
-already-easy low-CE heads instead of the actual blockers. `Universalism` hits
-the max clamp `49` times, while `hedonism` stays near-neutral (`0.972`
-selected median weight) and `security` is consistently downweighted (`0.818`).
+audit shows inverse-loss weighting was optimizing the wrong proxy, not merely
+the wrong heads. `Universalism` hits the max clamp `49` times because it has
+very low CE, while `self_direction` stays high-CE despite being easy by QWK;
+`hedonism` stays near-neutral (`0.972` selected median weight) and `security`
+is consistently downweighted (`0.818`).
 
 **3. Hard-dimension replay still points to semantic polarity errors.** Rebuilt
 validation inference from `run_036` shows the largest `hedonism` / `security`
@@ -188,9 +189,10 @@ misses are not random; they are consistent flips where defended rest or
 stability-seeking language is read as guilt, fragility, or threat.
 
 **4. Recommendation shifts toward lighter post-hoc follow-ups.** The next best
-step is validation-only logit retargeting on `run_020` and `run_036`, with any
-future training-time weighting rerun using an explicit hard-dimension schedule
-rather than inverse-loss weighting. Full details:
+step is the repo's existing Menon-style validation-only logit-adjustment path
+on `run_020` and `run_036`, with calibration work treated as a separate follow-
+up and any future training-time weighting rerun using a better difficulty proxy
+than CE. Full details:
 [`reports/experiment_review_2026-03-11_twinkl_721.md`](reports/experiment_review_2026-03-11_twinkl_721.md).
 
 ### 2026-03-11 — Weighted BalancedSoftmax improves the tail package, but not enough to replace the default (`twinkl-719.3`)

@@ -67,8 +67,16 @@ hardest pair is still `hedonism` and `security`.
 hardest dimensions. Median selected weights were `universalism 1.500`,
 `stimulation 1.321`, `tradition 1.151`, `power 1.064`, `hedonism 0.972`, and
 `security 0.818`. `Universalism` hit the max clamp `49` times; no dimension hit
-the min clamp. Because the recipe is inverse-loss, it mostly upweighted the
-already low-CE heads instead of the hard dimensions that motivated the branch.
+the min clamp. More importantly, the problem was not just "easy heads got
+upweighted." The recipe optimizes low training CE, and that signal diverged
+from frontier difficulty: `self_direction` carried one of the highest selected-
+epoch median `train_ce_ema` values (`0.583`) despite mean QWK `0.514`, while
+`universalism` had the lowest CE EMA (`0.104`) and was repeatedly max-clamped
+despite only moderate mean QWK `0.407`. `Hedonism` sat near the middle on CE
+EMA (`0.311`) despite mean QWK `0.086`, and `security` stayed relatively high
+on CE EMA (`0.429`) while still weak on QWK (`0.232`). So inverse-loss
+weighting was optimizing the wrong difficulty proxy for this frontier, not
+merely the wrong dimensions by accident.
 
 **Error analysis:** I reran frozen-holdout validation inference from
 `run_036`'s `selected_checkpoint.pt`, the strongest single corrected-split
@@ -136,40 +144,50 @@ training-time prior correction truly mattered. After that, later improvements
 cannot be attributed to loss changes alone because `n_train` also moved from
 `1022` to `1117` and then `1213`.
 
-Two hypotheses remain strongest. First, `hedonism` and `security` are semantic
-polarity problems, not just class-count problems: the model keeps reading calm
-pleasure or stability-seeking as guilt, fragility, or threat. Second, the
-weighted branch improved the tail package mostly through broader boundary
-movement, not by fixing the hardest heads. The weight trace shows exactly why:
-inverse-loss weighting amplified easy low-CE dimensions instead of the ones with
-the worst QWK.
+Two hypotheses remain strongest. First, `hedonism` and `security` are
+primarily semantic-polarity problems, though scarcity still amplifies the
+noise: the model keeps reading calm pleasure or stability-seeking as guilt,
+fragility, or threat, and the frozen holdout still has only `14` validation
+`hedonism=-1` labels, `23` test `hedonism=-1`, `23` validation
+`security=-1`, and `14` test `security=-1`. Second, the weighted branch
+improved the tail package mostly through broader boundary movement, not by
+fixing the hardest heads. The trace suggests the deeper reason: cross-entropy
+and frontier difficulty diverged. High-CE dimensions were not necessarily hard
+by QWK, and the truly fragile heads (`hedonism`, `security`) were not the ones
+the weighting schedule emphasized. That means the branch was optimizing the
+wrong proxy, not just the wrong magnitude.
 
 ## 8. Actionable Recommendations
 
-Recent literature still supports lightweight follow-ups over heavier retraining:
-[LORT 2024](https://arxiv.org/abs/2403.00250) argues simple logits retargeting
-is strong enough to revisit decoupled classifier adaptation;
-[LIFT 2024](https://openreview.net/forum?id=ccSSKTz9LX) finds heavy fine-tuning
-hurts tail classes while lightweight adaptation helps; and
-[Focal Temperature Scaling 2024](https://arxiv.org/abs/2408.11598) reports
-better post-hoc calibration than standard temperature scaling.
+The most direct next step is the repo's existing validation-only prior-based
+logit-adjustment path for softmax heads in `src/vif/posthoc.py`, which already
+matches the planned BalancedSoftmax retargeting direction in `twinkl-719.4` and
+`twinkl-719.5`. [Menon et al.](https://research.google/pubs/long-tail-learning-via-logit-adjustment/)
+is the closest-fitting external citation for that boundary-shift experiment.
+[Focal Temperature Scaling 2024](https://arxiv.org/abs/2408.11598) remains
+useful as a separate calibration-only follow-up, not as the main tail-recovery
+lever.
 
-1. Run the planned validation-only BalancedSoftmax logit-retargeting follow-up
-   on both `run_020` and `run_036`. Evidence: the weighted branch improved
-   `recall_-1` to `0.378` without becoming a stable default. Watch family
-   median QWK, `recall_-1`, MinR, and calibration together.
-2. If a training-time rerun is still needed, replace inverse-loss weighting
-   with an explicit hard-dimension schedule keyed to validation difficulty or a
-   whitelist (`hedonism`, `security`, `stimulation`). Evidence: the current
-   recipe max-clamps `universalism` and downweights `security`.
+1. Extend the existing validation-only Menon-style logit-adjustment path to
+   BalancedSoftmax and run it on both `run_020` and `run_036`. Evidence: the
+   weighted branch improved `recall_-1` to `0.378` without becoming a stable
+   default. Watch family median QWK, `recall_-1`, MinR, and calibration
+   together.
+2. If a training-time rerun is still needed, do not reuse raw inverse-loss
+   weighting. Replace it only with a difficulty signal that tracks frontier pain
+   more faithfully, and do not feed raw per-dimension validation QWK straight
+   back into training on this tiny holdout. Evidence: CE and QWK diverged, and
+   the frozen-holdout validation split still has only `14` `hedonism=-1` labels
+   and `23` `security=-1` labels. Watch selected-epoch weights, hard-dimension
+   QWK, and family QWK IQR together.
 3. Add one small semantic batch targeted at the observed polarity failures.
-   Evidence: the frozen-holdout validation split still has only `14`
-   `hedonism=-1` labels and `23` `security=-1` labels, and the largest replay
-   errors were all semantically consistent flips. Watch `hedonism` family-median
-   QWK above `0.20` and `security` back above `0.30`.
-4. Run a post-hoc calibration pass on saved artifacts, starting with focal
-   temperature scaling on the incumbent and weighted branches. Watch whether
-   calibration rises above `0.75` without sacrificing `recall_-1`.
+   Evidence: the largest replay errors were semantically consistent flips on
+   defended rest and stability-seeking language. This should be treated as a
+   complementary fix, not the sole ceiling-breaker. Watch `hedonism`
+   family-median QWK above `0.20` and `security` back above `0.30`.
+4. Run focal temperature scaling only after the boundary-shift experiment, and
+   treat it as calibration polish rather than a recall lever. Watch whether
+   calibration rises above `0.75` while `recall_-1` and MinR stay flat.
 
 ## 9. Summary Verdict
 
@@ -178,9 +196,11 @@ corrected-split family-level default. The strongest exploratory single
 checkpoint is `run_036`, but its family is still too QWK-unstable to promote.
 
 **Key weakness:** `hedonism` and `security` remain polarity-confused, and the
-new inverse-loss weighting recipe does not actually target those heads.
+current inverse-loss weighting recipe optimizes CE, which diverges from the
+frontier difficulty signal we actually care about.
 
-**Highest-leverage next experiment:** validation-only logit retargeting on the
-incumbent and weighted BalancedSoftmax checkpoints. It is the lowest-risk way
-to test whether the current tail gains can be converted into a better frontier
-without another full training sweep.
+**Highest-leverage next experiment:** extend and run the existing Menon-style
+validation-only logit-adjustment path on the incumbent and weighted
+BalancedSoftmax checkpoints. It is the lowest-risk way to test whether the
+current tail gains can be converted into a better frontier without another full
+training sweep.

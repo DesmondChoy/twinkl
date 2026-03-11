@@ -30,6 +30,9 @@ implementations over heavy architecture.
 ## Environment and Commands
 
 Do NOT use git worktrees. Work only in the main working directory.
+Stay on the current branch by default. Do NOT create or switch to a new
+branch unless the user explicitly tells you to. If branch isolation seems
+safer, ask first instead of deciding unilaterally.
 
 Activate the virtual environment before Python commands:
 
