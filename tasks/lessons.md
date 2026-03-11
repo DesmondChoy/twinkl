@@ -14,3 +14,15 @@
 - For this repo's Git workflow, stay on the current branch unless the user
   explicitly asks for a new one. If branch isolation seems helpful, ask first
   instead of creating or switching branches unilaterally.
+- Before recommending a "next experiment," explicitly verify that it is not
+  already completed, de-scoped, or closed in `logs/experiments/index.md`,
+  recent report docs, and `bd`. Do not re-suggest a finished experiment as
+  if it were untested.
+- In this VIF stack, be precise about what counts as "representation" versus
+  "head" changes: the sentence encoder is already frozen and the state encoder
+  is deterministic, so "head-only retraining" means changing the MLP critic
+  layers, not toggling an encoder-freeze path that does not exist.
+- Before recommending a "next experiment," verify from the latest report, open
+  issues, and close reasons that it has not already been run, explicitly
+  de-scoped, or superseded. Treat stale recommendation text in older reports as
+  historical context, not current guidance.
