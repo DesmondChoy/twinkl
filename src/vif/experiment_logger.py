@@ -57,9 +57,9 @@ AUTO_TABLE_END = "<!-- AUTO-TABLE:END -->\n"
 
 TABLE_HEADER = (
     "| run | model | encoder | ws | hd | do | loss | params | ratio | "
-    "MAE | Acc | QWK | Spear | Cal | MinR | file |\n"
+    "MAE | Acc | QWK | Spear | Cal | MinR | OppV | AdjS | file |\n"
     "|-----|-------|---------|---:|---:|---:|------|-------:|------:|"
-    "----:|----:|----:|------:|----:|-----:|------|\n"
+    "----:|----:|----:|------:|----:|-----:|-----:|-----:|------|\n"
 )
 
 
@@ -616,6 +616,7 @@ def _format_index_row(data: dict) -> str:
     meta = data["metadata"]
     cfg = data["config"]
     ev = data["evaluation"]
+    circumplex_summary = ev.get("circumplex_summary", {})
 
     run_num = meta["run_id"].replace("run_", "")
     model = meta["model_name"]
@@ -635,12 +636,14 @@ def _format_index_row(data: dict) -> str:
     spear = _fmt_metric(ev["spearman_mean"])
     cal = _fmt_metric(ev["calibration_global"])
     minr = _fmt_metric(ev["minority_recall_mean"])
+    oppv = _fmt_metric(circumplex_summary.get("opposite_violation_mean"))
+    adjs = _fmt_metric(circumplex_summary.get("adjacent_support_mean"))
     file_path = f"runs/{meta['experiment_id']}.yaml"
 
     return (
         f"| {run_num} | {model} | {encoder} | {ws} | {hd} | {do} | "
         f"{loss} | {params} | {ratio} | {mae} | {acc} | {qwk} | "
-        f"{spear} | {cal} | {minr} | {file_path} |\n"
+        f"{spear} | {cal} | {minr} | {oppv} | {adjs} | {file_path} |\n"
     )
 
 

@@ -18,6 +18,7 @@ from src.vif.experiment_logger import (
     _compute_config_delta,
     _encoder_family,
     _flatten_dict,
+    _format_index_row,
     _get_git_log_between,
     _loss_shorthand,
     _rebuild_index,
@@ -516,9 +517,14 @@ class TestBuildProvenance:
 # ─── _rebuild_index ─────────────────────────────────────────────────────────
 
 
-def _make_run_yaml(run_id: str, model_name: str) -> dict:
+def _make_run_yaml(
+    run_id: str,
+    model_name: str,
+    loss_fn: str = "coral",
+    circumplex_summary: dict | None = None,
+) -> dict:
     """Build a minimal valid experiment dict for _rebuild_index tests."""
-    return {
+    data = {
         "metadata": {
             "experiment_id": f"{run_id}_{model_name}",
             "run_id": run_id,
@@ -528,7 +534,7 @@ def _make_run_yaml(run_id: str, model_name: str) -> dict:
             "encoder": {"model_name": "nomic-ai/nomic-embed-text-v1.5", "truncate_dim": 256},
             "state_encoder": {"window_size": 1},
             "model": {"hidden_dim": 64, "dropout": 0.3},
-            "training": {"loss_fn": "coral"},
+            "training": {"loss_fn": loss_fn},
         },
         "capacity": {"n_parameters": 22804, "param_sample_ratio": 22.4},
         "evaluation": {
@@ -540,6 +546,33 @@ def _make_run_yaml(run_id: str, model_name: str) -> dict:
             "minority_recall_mean": 0.244,
         },
     }
+    if circumplex_summary is not None:
+        data["evaluation"]["circumplex_summary"] = circumplex_summary
+    return data
+
+
+class TestFormatIndexRow:
+    def test_includes_circumplex_metrics_when_present(self):
+        data = _make_run_yaml(
+            "run_031",
+            "BalancedSoftmax",
+            loss_fn="balanced_softmax",
+            circumplex_summary={
+                "opposite_violation_mean": 0.035343579637507595,
+                "adjacent_support_mean": 0.07919311026732127,
+            },
+        )
+
+        row = _format_index_row(data)
+
+        assert "| 0.035 | 0.079 | runs/run_031_BalancedSoftmax.yaml |" in row
+
+    def test_renders_na_for_missing_circumplex_metrics(self):
+        data = _make_run_yaml("run_001", "CORAL")
+
+        row = _format_index_row(data)
+
+        assert "| N/A | N/A | runs/run_001_CORAL.yaml |" in row
 
 
 class TestRebuildIndex:
@@ -554,8 +587,20 @@ class TestRebuildIndex:
         monkeypatch.setattr(experiment_logger, "INDEX_PATH", index_path)
         return runs_dir, index_path
 
-    def _write_run(self, runs_dir: Path, run_id: str, model_name: str) -> None:
-        data = _make_run_yaml(run_id, model_name)
+    def _write_run(
+        self,
+        runs_dir: Path,
+        run_id: str,
+        model_name: str,
+        loss_fn: str = "coral",
+        circumplex_summary: dict | None = None,
+    ) -> None:
+        data = _make_run_yaml(
+            run_id,
+            model_name,
+            loss_fn=loss_fn,
+            circumplex_summary=circumplex_summary,
+        )
         path = runs_dir / f"{run_id}_{model_name}.yaml"
         path.write_text(yaml.dump(data, sort_keys=False), encoding="utf-8")
 
@@ -592,6 +637,46 @@ class TestRebuildIndex:
         # Old row replaced with actual data
         assert "| old row |" not in content
         assert "run_001" in content
+
+    def test_mixed_circumplex_rows_render_in_widened_table(self, tmp_path, monkeypatch):
+        """Mixed legacy and circumplex-aware runs keep manual content and render correctly."""
+        runs_dir, index_path = self._setup_dirs(tmp_path, monkeypatch)
+        self._write_run(runs_dir, "run_001", "CORAL")
+        self._write_run(
+            runs_dir,
+            "run_031",
+            "BalancedSoftmax",
+            loss_fn="balanced_softmax",
+            circumplex_summary={
+                "opposite_violation_mean": 0.035343579637507595,
+                "adjacent_support_mean": 0.07919311026732127,
+            },
+        )
+
+        manual_before = "# My Index\n\n## Leaderboard\nBest: run_031\n\n"
+        manual_after = "\n## Findings\nCircumplex metrics visible.\n"
+        old_table = AUTO_TABLE_START + TABLE_HEADER + "| old row |\n" + AUTO_TABLE_END
+        index_path.write_text(manual_before + old_table + manual_after, encoding="utf-8")
+
+        _rebuild_index()
+
+        content = index_path.read_text(encoding="utf-8")
+        assert (
+            "| run | model | encoder | ws | hd | do | loss | params | ratio | "
+            "MAE | Acc | QWK | Spear | Cal | MinR | OppV | AdjS | file |"
+        ) in content
+        assert "## Leaderboard" in content
+        assert "## Findings" in content
+        assert (
+            "| 001 | CORAL | nomic-256d | 1 | 64 | 0.3 | coral | 22804 | 22.4 | "
+            "0.209 | 0.819 | 0.364 | 0.391 | 0.823 | 0.244 | N/A | N/A | "
+            "runs/run_001_CORAL.yaml |"
+        ) in content
+        assert (
+            "| 031 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | "
+            "22804 | 22.4 | 0.209 | 0.819 | 0.364 | 0.391 | 0.823 | 0.244 | "
+            "0.035 | 0.079 | runs/run_031_BalancedSoftmax.yaml |"
+        ) in content
 
     def test_corrupt_yaml_emits_warning(self, tmp_path, monkeypatch):
         """Bad YAML emits warning, doesn't crash, skips the file."""
