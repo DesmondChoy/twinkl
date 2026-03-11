@@ -5,22 +5,25 @@
 | Rank | Candidate | Runs | Split Seed | Model Seeds | Median QWK | Median recall_-1 | Median MinR | Median Hedging | Median Cal | Positioning |
 |------|-----------|------|-----------:|------------|-----------:|-----------------:|------------:|---------------:|-----------:|-------------|
 | 1 | BalancedSoftmax | run_019-run_021 | 2025 | 11, 22, 33 | 0.362 | 0.313 | **0.448** | 0.621 | 0.713 | Active corrected-split default. Best overall balance of fair QWK, reasonable tail recovery, and only moderate hedging. |
-| 2 | BalancedSoftmax + circreg + recall floor | run_031-run_033 | 2025 | 11, 22, 33 | **0.366** | 0.267 | 0.409 | 0.641 | 0.713 | QWK/calibration are comparable to the incumbent, but the guardrailed rerun still loses on `recall_-1`, minority recall, and hedging. Keep as a reference branch, not the default. |
-| 3 | BalancedSoftmax + targeted batch | run_022-run_024 | 2025 | 11, 22, 33 | 0.349 | **0.342** | 0.434 | 0.619 | 0.687 | Best targeted hard-dimension follow-up so far. Improves `recall_-1`, but gives back QWK and calibration relative to the default family. |
-| 4 | BalancedSoftmax + hedonism/security lift | run_025-run_027 | 2025 | 11, 22, 33 | 0.346 | 0.328 | 0.442 | **0.598** | 0.693 | Lowest-hedging corrected-split family and the only one under the 60% hedging line, but still not a clean frontier change on QWK or calibration. |
-| 5 | CDWCE_a3 | run_016-run_018 | 2025 | 11, 22, 33 | 0.353 | 0.104 | 0.276 | 0.804 | 0.762 | Best conservative 3-seed baseline when MAE, accuracy, and calibration matter more than strong tail recovery. |
-| 6 | BalancedSoftmax + circumplex regularizer | run_028-run_030 | 2025 | 11, 22, 33 | 0.347 | 0.265 | 0.411 | 0.641 | 0.709 | Soft circumplex regularization improved some aggregate structure but weakened the tail-sensitive behavior that justified BalancedSoftmax in the first place. |
-| 7 | SoftOrdinal | run_016-run_018 | 2025 | 11, 22, 33 | 0.346 | 0.077 | 0.283 | 0.796 | 0.781 | Best low-gap comparator. Competitive on QWK, but it remains much more neutral-biased than the BalancedSoftmax branches. |
-| 8 | CORN | run_016-run_018 | 2025 | 11, 22, 33 | 0.315 | 0.089 | 0.273 | 0.801 | **0.818** | Best-calibrated corrected-split baseline. Keep it as the calibration anchor and sanity check for post-hoc calibration follow-ups. |
-| 9 | SoftOrdinal + hedonism/security lift | run_025-run_027 | 2025 | 11, 22, 33 | 0.340 | 0.082 | 0.260 | 0.823 | 0.738 | Post-lift SoftOrdinal comparator. The extra data did not help it escape excessive hedging. |
+| 2 | BalancedSoftmax + dimweight | run_034-run_036 | 2025 | 11, 22, 33 | 0.342 | **0.378** | **0.449** | 0.599 | **0.726** | Best tail-sensitive reference branch so far. Strongest `recall_-1` / minority-recall package with lower hedging and better calibration than the incumbent, but median QWK is too volatile and too low to replace the default. |
+| 3 | BalancedSoftmax + circreg + recall floor | run_031-run_033 | 2025 | 11, 22, 33 | **0.366** | 0.267 | 0.409 | 0.641 | 0.713 | QWK/calibration are comparable to the incumbent, but the guardrailed rerun still loses on `recall_-1`, minority recall, and hedging. Keep as a reference branch, not the default. |
+| 4 | BalancedSoftmax + targeted batch | run_022-run_024 | 2025 | 11, 22, 33 | 0.349 | 0.342 | 0.434 | 0.619 | 0.687 | Best targeted hard-dimension follow-up before weighting. Improves `recall_-1`, but gives back QWK and calibration relative to the default family. |
+| 5 | BalancedSoftmax + hedonism/security lift | run_025-run_027 | 2025 | 11, 22, 33 | 0.346 | 0.328 | 0.442 | **0.598** | 0.693 | Lowest-hedging training-time branch, but still not a clean frontier change on QWK or hard-dimension stability. |
+| 6 | CDWCE_a3 | run_016-run_018 | 2025 | 11, 22, 33 | 0.353 | 0.104 | 0.276 | 0.804 | 0.762 | Best conservative 3-seed baseline when MAE, accuracy, and calibration matter more than strong tail recovery. |
+| 7 | BalancedSoftmax + circumplex regularizer | run_028-run_030 | 2025 | 11, 22, 33 | 0.347 | 0.265 | 0.411 | 0.641 | 0.709 | Soft circumplex regularization improved some aggregate structure but weakened the tail-sensitive behavior that justified BalancedSoftmax in the first place. |
+| 8 | SoftOrdinal | run_016-run_018 | 2025 | 11, 22, 33 | 0.346 | 0.077 | 0.283 | 0.796 | 0.781 | Best low-gap comparator. Competitive on QWK, but it remains much more neutral-biased than the BalancedSoftmax branches. |
+| 9 | CORN | run_016-run_018 | 2025 | 11, 22, 33 | 0.315 | 0.089 | 0.273 | 0.801 | 0.818 | Best-calibrated corrected-split baseline. Keep it as the calibration anchor and sanity check for post-hoc calibration follow-ups. |
+| 10 | SoftOrdinal + hedonism/security lift | run_025-run_027 | 2025 | 11, 22, 33 | 0.340 | 0.082 | 0.260 | 0.823 | 0.738 | Post-lift SoftOrdinal comparator. The extra data did not help it escape excessive hedging. |
 
-> **Active recommendation (2026-03-10):** `run_019`-`run_021` remain the default corrected-split frontier family. The guarded rerun family `run_031`-`run_033` reaches comparable median QWK (`0.366` vs `0.362`) and equal median calibration (`0.713`), but it still trails the incumbent on holdout `recall_-1` (`0.267` vs `0.313`), minority recall (`0.409` vs `0.448`), and hedging (`0.641` vs `0.621`). The next highest-leverage experiment remains per-dimension uncertainty weighting on BalancedSoftmax to stop hedonism/security noise from dragging down the aggregate. See full analysis below.
+> **Active recommendation (2026-03-11):** `run_019`-`run_021` remain the default corrected-split frontier family. The new weighted family `run_034`-`run_036` is the best current tail-sensitive reference branch: it improves median holdout `recall_-1` (`0.378` vs `0.313`), keeps minority recall essentially flat to slightly better (`0.449` vs `0.448`), reduces hedging (`0.599` vs `0.621`), and improves calibration (`0.726` vs `0.713`) while keeping circumplex summaries near incumbent levels. It still gives back too much median QWK (`0.342` vs `0.362`) and is much less stable across seeds, so it should stay a reference branch rather than replace the default. See the weighted review below.
+>
+> **Latest weighted frontier review:** [`reports/experiment_review_2026-03-11_twinkl_719_3.md`](reports/experiment_review_2026-03-11_twinkl_719_3.md)
 >
 > **Latest full frontier review:** [`reports/experiment_review_2026-03-10_v8.md`](reports/experiment_review_2026-03-10_v8.md)
 >
 > **Latest checkpoint-selection guardrail review:** [`reports/experiment_review_2026-03-10_twinkl_715.md`](reports/experiment_review_2026-03-10_twinkl_715.md)
 >
-> **Circumplex rollout closeout:** [`reports/experiment_review_2026-03-11_twinkl_691_5.md`](reports/experiment_review_2026-03-11_twinkl_691_5.md) explicitly de-scopes the circumplex-aware batch sampler. The diagnostics remain useful, but the next better levers are per-dimension weighting on `BalancedSoftmax` and validation-only logit retargeting from `run_020`, not a training-distribution rewrite.
+> **Circumplex rollout closeout:** [`reports/experiment_review_2026-03-11_twinkl_691_5.md`](reports/experiment_review_2026-03-11_twinkl_691_5.md) explicitly de-scopes the circumplex-aware batch sampler. The diagnostics remain useful, and the weighted rerun now supplies the training-time comparison branch for the next validation-only logit-retargeting follow-up from `run_020`.
 >
 > **Previous full frontier review:** [`reports/experiment_review_2026-03-10_v7.md`](reports/experiment_review_2026-03-10_v7.md)
 >
@@ -152,11 +155,45 @@
 | 031 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax_circreg | 23454 | 19.3 | 0.306 | 0.761 | 0.353 | 0.343 | 0.707 | 0.409 | 0.035 | 0.079 | runs/run_031_BalancedSoftmax.yaml |
 | 032 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax_circreg | 23454 | 19.3 | 0.307 | 0.752 | 0.366 | 0.342 | 0.713 | 0.435 | 0.037 | 0.075 | runs/run_032_BalancedSoftmax.yaml |
 | 033 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax_circreg | 23454 | 19.3 | 0.286 | 0.779 | 0.372 | 0.359 | 0.747 | 0.409 | 0.033 | 0.077 | runs/run_033_BalancedSoftmax.yaml |
+| 034 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax_dimweight | 23454 | 19.3 | 0.309 | 0.752 | 0.342 | 0.323 | 0.740 | 0.412 | 0.063 | 0.068 | runs/run_034_BalancedSoftmax.yaml |
+| 035 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax_dimweight | 23454 | 19.3 | 0.333 | 0.728 | 0.321 | 0.342 | 0.686 | 0.449 | 0.092 | 0.076 | runs/run_035_BalancedSoftmax.yaml |
+| 036 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax_dimweight | 23454 | 19.3 | 0.303 | 0.758 | 0.381 | 0.388 | 0.726 | 0.492 | 0.068 | 0.084 | runs/run_036_BalancedSoftmax.yaml |
 <!-- AUTO-TABLE:END -->
 
 > **Contributor note:** Keep this section in **newest-first** chronological order (most recent date at top).
 
 ## Findings
+
+### 2026-03-11 — Weighted BalancedSoftmax improves the tail package, but not enough to replace the default (`twinkl-719.3`)
+
+`twinkl-719.3` reran `BalancedSoftmax` on the frozen holdout with the new
+inverse-loss EMA dimension weighting path as `run_034`-`run_036`. The result is
+the strongest current **reference branch** for misalignment sensitivity, but it
+still falls short of a default promotion.
+
+**1. The family wins the tail-sensitive package.** Relative to the incumbent
+`run_019`-`run_021`, the weighted family improves median `recall_-1` from
+`0.313` to `0.378`, keeps minority recall effectively flat to slightly better
+(`0.448` to `0.449`), reduces hedging from `0.621` to `0.599`, and improves
+calibration from `0.713` to `0.726`.
+
+**2. QWK and seed stability still block promotion.** Median `qwk_mean` drops
+from `0.362` to `0.342`, and the new family is much less stable across seeds
+(`IQR 0.030` vs `0.010`). The strongest single weighted seed (`run_036`) is
+excellent, but the family does not yet behave predictably enough to replace the
+incumbent default.
+
+**3. The branch is not a clean `hedonism` / `security` rescue.** Median
+`hedonism qwk` falls to `0.129`, and median `security qwk` reaches only
+`0.222` versus the incumbent `0.297`. The weight traces show a coherent but
+limited schedule: `security` is consistently downweighted, `hedonism` stays
+near neutral, and `universalism` repeatedly hits the max clamp.
+
+**4. Recommendation: keep it as the active reference branch, not the default.**
+Weighted `BalancedSoftmax` now replaces the circumplex branches as the best
+training-time comparator for the next frontier step, but the mainline default
+stays with `run_019`-`run_021`. Full details:
+[`reports/experiment_review_2026-03-11_twinkl_719_3.md`](reports/experiment_review_2026-03-11_twinkl_719_3.md).
 
 ### 2026-03-10 — Full frontier refresh v8 adds the regularized branches, but the default stays put
 

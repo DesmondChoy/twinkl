@@ -132,3 +132,37 @@
   focused pytest passed for `tests/vif/test_losses.py`,
   `tests/vif/test_experiment_logger.py`, and
   `tests/vif/test_training_traces.py` (`100 passed`).
+
+# twinkl-719.3
+
+## Checklist
+
+- [x] Add weighted frontier rerun configs for seeds `11` / `22` / `33`
+- [x] Run seed `11` smoke rerun and verify weighted artifacts/logging
+- [x] Run seeds `22` and `33` reruns
+- [x] Compare weighted family against incumbent and circumplex branches
+- [x] Write `twinkl-719.3` experiment report with keep/drop recommendation
+- [x] Update `logs/experiments/index.md` current-frontier narrative
+- [x] Close beads issue with results
+
+## Review
+
+- Added the `twinkl_719_3` family manifest plus three flat notebook override
+  YAMLs for the weighted `BalancedSoftmax` rerun, pinning the frozen holdout,
+  guarded selection policy, incumbent LR override, and explicit
+  `dimension_weighting_*` settings.
+- Ran the full 3-seed family through the notebook driver as
+  `run_034`-`run_036`, and verified that each run logged
+  `balanced_softmax_dimweight` plus the new `dimension_weight_trace.parquet`
+  artifact.
+- Recomputed the incumbent `run_019`-`run_021` circumplex summaries from saved
+  selected-test artifacts, then compared the weighted family against the
+  incumbent, post-lift, and circumplex branches in
+  `logs/experiments/reports/experiment_review_2026-03-11_twinkl_719_3.md`.
+- Result: keep weighted `BalancedSoftmax` as the strongest tail-sensitive
+  reference branch, but do not promote it over `run_019`-`run_021` as the
+  default. The weighted family materially improved `recall_-1`, minority
+  recall, hedging, and calibration, but its median QWK regressed and the hard
+  `hedonism` / `security` story still did not beat the incumbent.
+- Updated `logs/experiments/index.md`, backfilled rationale/observations in the
+  new run YAMLs, closed `twinkl-719.3`, and unblocked `twinkl-719.4`.
