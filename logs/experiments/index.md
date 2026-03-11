@@ -19,6 +19,8 @@
 >
 > **Latest weighted frontier review:** [`reports/experiment_review_2026-03-11_twinkl_719_3.md`](reports/experiment_review_2026-03-11_twinkl_719_3.md)
 >
+> **Latest post-hoc retargeting review:** [`reports/experiment_review_twinkl_719_5.md`](reports/experiment_review_twinkl_719_5.md) did **not** change the frontier. Validation-only logit adjustment chose `tau=0.30` for `run_020`, which nudged holdout `recall_-1` from `0.342` to `0.350` and reduced hedging from `0.621` to `0.562`, but it also dropped `qwk_mean` from `0.378` to `0.338`, minority recall from `0.449` to `0.397`, calibration from `0.713` to `0.583`, and worsened opposite-pair circumplex violations from `0.070` to `0.107`. The weighted reference checkpoint `run_036` selected `tau=0.00`, so the weighted branch remains the best tail-sensitive reference checkpoint and `twinkl-719.6` stays as the next stronger fallback only if an incumbent-centered follow-up is still desired.
+>
 > **Latest full frontier review:** [`reports/experiment_review_2026-03-11_twinkl_721.md`](reports/experiment_review_2026-03-11_twinkl_721.md)
 >
 > **Latest checkpoint-selection guardrail review:** [`reports/experiment_review_2026-03-10_twinkl_715.md`](reports/experiment_review_2026-03-10_twinkl_715.md)

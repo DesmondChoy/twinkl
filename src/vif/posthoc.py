@@ -33,6 +33,7 @@ from src.vif.eval import (
     compute_qwk_per_dimension,
     compute_recall_per_class,
     compute_spearman_per_dimension,
+    discretize_predictions,
 )
 from src.vif.class_balance import class_counts_to_priors, compute_ordinal_class_counts
 
@@ -272,6 +273,64 @@ def _expected_scores(probabilities: np.ndarray) -> np.ndarray:
     return probabilities @ CLASS_VALUES
 
 
+def _nanmean_or_nan(values: list[float]) -> float:
+    finite_values = [value for value in values if np.isfinite(value)]
+    if not finite_values:
+        return float("nan")
+    return float(np.mean(finite_values))
+
+
+def _compute_score_based_policy_metrics(
+    *,
+    targets: np.ndarray,
+    score_predictions: np.ndarray,
+    uncertainties: np.ndarray,
+    probabilities: np.ndarray | None = None,
+) -> dict:
+    """Match frontier run metrics by scoring thresholded continuous predictions."""
+    predicted_classes = discretize_predictions(score_predictions)
+    qwk_per_dim = compute_qwk_per_dimension(score_predictions, targets)
+    recall_per_class = compute_recall_per_class(score_predictions, targets)
+    qwk_mean = _nanmean_or_nan(list(qwk_per_dim.values()))
+    calibration = compute_calibration_summary(score_predictions, targets, uncertainties)
+    qwk_nan_dims_count = compute_qwk_nan_dims_count(qwk_per_dim)
+    decision_neutral_rate = float((predicted_classes == 0).mean())
+    hedging_per_dim = compute_hedging_per_dimension(score_predictions)
+    mae_per_dim = compute_mae_per_dimension(score_predictions, targets)
+    accuracy_per_dim = compute_accuracy_per_dimension(score_predictions, targets)
+    spearman_per_dim = compute_spearman_per_dimension(score_predictions, targets)
+    circumplex = compute_circumplex_diagnostics(score_predictions, probabilities=probabilities)
+
+    return {
+        "predictions": score_predictions,
+        "targets": targets.astype(np.int64),
+        "expected_scores": score_predictions,
+        "predicted_classes": predicted_classes.astype(np.int64),
+        "uncertainties": uncertainties,
+        "mae_per_dim": mae_per_dim,
+        "mae_mean": float(np.mean(list(mae_per_dim.values()))),
+        "accuracy_per_dim": accuracy_per_dim,
+        "accuracy_mean": float(np.mean(list(accuracy_per_dim.values()))),
+        "qwk_per_dim": qwk_per_dim,
+        "qwk_mean": qwk_mean,
+        "qwk_nan_dims_count": qwk_nan_dims_count,
+        "recall_per_class": recall_per_class,
+        "recall_minus1": float(recall_per_class["mean"]["minus1"]),
+        "recall_zero": float(recall_per_class["mean"]["zero"]),
+        "recall_plus1": float(recall_per_class["mean"]["plus1"]),
+        "minority_recall_mean": _nanmean_or_nan(
+            [recall_per_class["mean"]["minus1"], recall_per_class["mean"]["plus1"]]
+        ),
+        "decision_neutral_rate": decision_neutral_rate,
+        "hedging_per_dim": hedging_per_dim,
+        "hedging_mean": float(np.mean(list(hedging_per_dim.values()))),
+        "calibration": calibration,
+        "spearman_per_dim": spearman_per_dim,
+        "spearman_mean": _nanmean_or_nan(list(spearman_per_dim.values())),
+        "circumplex": circumplex,
+    }
+
+
 def _compute_policy_metrics(
     *,
     targets: np.ndarray,
@@ -283,7 +342,7 @@ def _compute_policy_metrics(
     predictions_for_discrete_metrics = predicted_classes.astype(np.float64)
     qwk_per_dim = compute_qwk_per_dimension(predictions_for_discrete_metrics, targets)
     recall_per_class = compute_recall_per_class(predictions_for_discrete_metrics, targets)
-    qwk_mean = float(np.nanmean(list(qwk_per_dim.values()))) if qwk_per_dim else float("nan")
+    qwk_mean = _nanmean_or_nan(list(qwk_per_dim.values()))
     calibration = compute_calibration_summary(expected_scores, targets, uncertainties)
     qwk_nan_dims_count = compute_qwk_nan_dims_count(qwk_per_dim)
     decision_neutral_rate = float((predicted_classes == 0).mean())
@@ -310,15 +369,15 @@ def _compute_policy_metrics(
         "recall_minus1": float(recall_per_class["mean"]["minus1"]),
         "recall_zero": float(recall_per_class["mean"]["zero"]),
         "recall_plus1": float(recall_per_class["mean"]["plus1"]),
-        "minority_recall_mean": float(
-            np.nanmean([recall_per_class["mean"]["minus1"], recall_per_class["mean"]["plus1"]])
+        "minority_recall_mean": _nanmean_or_nan(
+            [recall_per_class["mean"]["minus1"], recall_per_class["mean"]["plus1"]]
         ),
         "decision_neutral_rate": decision_neutral_rate,
         "hedging_per_dim": hedging_per_dim,
         "hedging_mean": float(np.mean(list(hedging_per_dim.values()))),
         "calibration": calibration,
         "spearman_per_dim": spearman_per_dim,
-        "spearman_mean": float(np.nanmean(list(spearman_per_dim.values()))),
+        "spearman_mean": _nanmean_or_nan(list(spearman_per_dim.values())),
         "circumplex": circumplex,
     }
 
@@ -618,6 +677,7 @@ def _compact_metrics(metrics: dict) -> dict:
         "qwk_mean": float(metrics["qwk_mean"]),
         "recall_minus1": float(metrics["recall_minus1"]),
         "minority_recall_mean": float(metrics["minority_recall_mean"]),
+        "hedging_mean": float(metrics["hedging_mean"]),
         "decision_neutral_rate": float(metrics["decision_neutral_rate"]),
         "calibration_global": float(metrics["calibration"]["error_uncertainty_correlation"]),
         "circumplex_summary": {
@@ -664,12 +724,16 @@ def _evaluate_softmax_tau_candidate(
         priors.reshape(1, NUM_DIMS, NUM_CLASSES),
         float(tau),
     )
-    expected_scores = _expected_scores(adjusted_probs)
-    predicted_classes = adjusted_probs.argmax(axis=-1).astype(np.int64) - 1
-    candidate_metrics = _compute_policy_metrics(
+    adjusted_expected_scores = _expected_scores(adjusted_probs)
+
+    # Preserve the saved MC-dropout score surface for tau=0 so the baseline
+    # candidate stays comparable to the frontier run YAML metrics.
+    score_predictions = (
+        artifact.baseline_mean_predictions if float(tau) == 0.0 else adjusted_expected_scores
+    )
+    candidate_metrics = _compute_score_based_policy_metrics(
         targets=artifact.targets,
-        predicted_classes=predicted_classes,
-        expected_scores=expected_scores,
+        score_predictions=score_predictions,
         uncertainties=artifact.uncertainties,
         probabilities=adjusted_probs,
     )
@@ -692,8 +756,8 @@ def _evaluate_softmax_tau_candidate(
         split=artifact.split,
     )
     candidate_record["probabilities"] = adjusted_probs
-    candidate_record["expected_scores"] = expected_scores
-    candidate_record["predicted_classes"] = predicted_classes
+    candidate_record["expected_scores"] = score_predictions
+    candidate_record["predicted_classes"] = candidate_metrics["predicted_classes"]
     return candidate_record
 
 
@@ -703,10 +767,9 @@ def _softmax_candidate_records(
     priors: np.ndarray,
     config: dict,
 ) -> list[dict]:
-    baseline_metrics = _compute_policy_metrics(
+    baseline_metrics = _compute_score_based_policy_metrics(
         targets=artifact.targets,
-        predicted_classes=artifact.baseline_predicted_classes,
-        expected_scores=artifact.baseline_mean_predictions,
+        score_predictions=artifact.baseline_mean_predictions,
         uncertainties=artifact.uncertainties,
         probabilities=artifact.class_probabilities,
     )
@@ -1011,6 +1074,7 @@ def _summary_metrics(records: list[dict]) -> dict[str, dict[str, float]]:
         grouped[record["model_name"]]["minority_recall_mean"].append(
             record["test_metrics"]["minority_recall_mean"]
         )
+        grouped[record["model_name"]]["hedging_mean"].append(record["test_metrics"]["hedging_mean"])
         grouped[record["model_name"]]["decision_neutral_rate"].append(
             record["test_metrics"]["decision_neutral_rate"]
         )
@@ -1047,6 +1111,7 @@ def _family_delta_summary(records: list[dict]) -> dict[str, dict[str, float]]:
         tuned = record["test_metrics"]
         grouped[family]["recall_minus1_delta"].append(tuned["recall_minus1"] - baseline["recall_minus1"])
         grouped[family]["qwk_mean_delta"].append(tuned["qwk_mean"] - baseline["qwk_mean"])
+        grouped[family]["hedging_mean_delta"].append(tuned["hedging_mean"] - baseline["hedging_mean"])
         grouped[family]["opposite_violation_mean_delta"].append(
             tuned["circumplex_summary"]["opposite_violation_mean"]
             - baseline["circumplex_summary"]["opposite_violation_mean"]
@@ -1060,6 +1125,7 @@ def _family_delta_summary(records: list[dict]) -> dict[str, dict[str, float]]:
         family: {
             "median_recall_minus1_delta": float(median(values["recall_minus1_delta"])),
             "median_qwk_mean_delta": float(median(values["qwk_mean_delta"])),
+            "median_hedging_mean_delta": float(median(values["hedging_mean_delta"])),
             "median_opposite_violation_mean_delta": float(
                 median(values["opposite_violation_mean_delta"])
             ),
@@ -1124,8 +1190,8 @@ def _render_report(summary: dict, config: dict) -> str:
         [
             "## Test Summary",
             "",
-            "| Run | Model | Selected policy | Test QWK | Test recall_-1 | Test MinR | Test neutral rate | Test calibration | OppV | AdjS |",
-            "|-----|-------|-----------------|---------:|---------------:|----------:|------------------:|-----------------:|-----:|-----:|",
+            "| Run | Model | Selected policy | Test QWK | Test recall_-1 | Test MinR | Test hedging | Test neutral rate | Test calibration | OppV | AdjS |",
+            "|-----|-------|-----------------|---------:|---------------:|----------:|-------------:|------------------:|-----------------:|-----:|-----:|",
         ]
     )
 
@@ -1135,7 +1201,8 @@ def _render_report(summary: dict, config: dict) -> str:
             "| "
             f"{record['run_id']} | {record['model_name']} | {record['selected_policy']['policy_name']} | "
             f"{test_metrics['qwk_mean']:.3f} | {test_metrics['recall_minus1']:.3f} | "
-            f"{test_metrics['minority_recall_mean']:.3f} | {test_metrics['decision_neutral_rate']:.3f} | "
+            f"{test_metrics['minority_recall_mean']:.3f} | {test_metrics['hedging_mean']:.3f} | "
+            f"{test_metrics['decision_neutral_rate']:.3f} | "
             f"{test_metrics['calibration_global']:.3f} | "
             f"{test_metrics['circumplex_summary']['opposite_violation_mean']:.3f} | "
             f"{test_metrics['circumplex_summary']['adjacent_support_mean']:.3f} |"
@@ -1146,8 +1213,8 @@ def _render_report(summary: dict, config: dict) -> str:
             "",
             "## Median / IQR by Family",
             "",
-            "| Model | Median QWK | IQR QWK | Median recall_-1 | IQR recall_-1 | Median MinR | Median neutral rate | Median calibration | Median OppV | IQR OppV | Median AdjS | IQR AdjS |",
-            "|-------|-----------:|--------:|-----------------:|--------------:|------------:|--------------------:|-------------------:|------------:|---------:|------------:|---------:|",
+            "| Model | Median QWK | IQR QWK | Median recall_-1 | IQR recall_-1 | Median MinR | Median hedging | IQR hedging | Median neutral rate | Median calibration | Median OppV | IQR OppV | Median AdjS | IQR AdjS |",
+            "|-------|-----------:|--------:|-----------------:|--------------:|------------:|---------------:|------------:|--------------------:|-------------------:|------------:|---------:|------------:|---------:|",
         ]
     )
 
@@ -1159,7 +1226,8 @@ def _render_report(summary: dict, config: dict) -> str:
             "| "
             f"{model_name} | {stats['qwk_mean_median']:.3f} | {stats['qwk_mean_iqr']:.3f} | "
             f"{stats['recall_minus1_median']:.3f} | {stats['recall_minus1_iqr']:.3f} | "
-            f"{stats['minority_recall_mean_median']:.3f} | {stats['decision_neutral_rate_median']:.3f} | "
+            f"{stats['minority_recall_mean_median']:.3f} | {stats['hedging_mean_median']:.3f} | "
+            f"{stats['hedging_mean_iqr']:.3f} | {stats['decision_neutral_rate_median']:.3f} | "
             f"{stats['calibration_global_median']:.3f} | "
             f"{stats['opposite_violation_mean_median']:.3f} | {stats['opposite_violation_mean_iqr']:.3f} | "
             f"{stats['adjacent_support_mean_median']:.3f} | {stats['adjacent_support_mean_iqr']:.3f} |"
@@ -1172,10 +1240,12 @@ def _render_report(summary: dict, config: dict) -> str:
             "",
             f"- Softmax logit adjustment median delta: recall_-1 {family_summary.get('softmax_logit_adjustment', {}).get('median_recall_minus1_delta', float('nan')):.3f}, "
             f"QWK {family_summary.get('softmax_logit_adjustment', {}).get('median_qwk_mean_delta', float('nan')):.3f}, "
+            f"hedging {family_summary.get('softmax_logit_adjustment', {}).get('median_hedging_mean_delta', float('nan')):.3f}, "
             f"OppV {family_summary.get('softmax_logit_adjustment', {}).get('median_opposite_violation_mean_delta', float('nan')):.3f}, "
             f"AdjS {family_summary.get('softmax_logit_adjustment', {}).get('median_adjacent_support_mean_delta', float('nan')):.3f}.",
             f"- CORN threshold tuning median delta: recall_-1 {family_summary.get('corn_margin_threshold', {}).get('median_recall_minus1_delta', float('nan')):.3f}, "
             f"QWK {family_summary.get('corn_margin_threshold', {}).get('median_qwk_mean_delta', float('nan')):.3f}, "
+            f"hedging {family_summary.get('corn_margin_threshold', {}).get('median_hedging_mean_delta', float('nan')):.3f}, "
             f"OppV {family_summary.get('corn_margin_threshold', {}).get('median_opposite_violation_mean_delta', float('nan')):.3f}, "
             f"AdjS {family_summary.get('corn_margin_threshold', {}).get('median_adjacent_support_mean_delta', float('nan')):.3f}.",
             f"- {recommended_model_label}: `{best_softmax_family_str}`.",
@@ -1227,10 +1297,9 @@ def run_posthoc(config: dict, *, repo_root: Path | None = None) -> dict:
                 priors=priors,
                 config=config,
             )
-            baseline_test_metrics = _compute_policy_metrics(
+            baseline_test_metrics = _compute_score_based_policy_metrics(
                 targets=test_bundle.targets,
-                predicted_classes=test_bundle.baseline_predicted_classes,
-                expected_scores=test_bundle.baseline_mean_predictions,
+                score_predictions=test_bundle.baseline_mean_predictions,
                 uncertainties=test_bundle.uncertainties,
                 probabilities=test_bundle.class_probabilities,
             )

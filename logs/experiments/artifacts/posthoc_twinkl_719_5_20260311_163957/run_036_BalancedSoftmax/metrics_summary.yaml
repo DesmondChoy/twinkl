@@ -1,0 +1,42 @@
+run_id: run_036
+model_name: BalancedSoftmax
+baseline_validation_metrics:
+  qwk_mean: 0.40526711527924136
+  recall_minus1: 0.4621852661478593
+  minority_recall_mean: 0.5133730619540198
+  hedging_mean: 0.6078341013824884
+  decision_neutral_rate: 0.7046082949308756
+  calibration_global: 0.7236141786935492
+  circumplex_summary:
+    opposite_violation_mean: 0.07423491232572292
+    adjacent_support_mean: 0.07245466938084533
+selected_validation_metrics:
+  qwk_mean: 0.40526711527924136
+  recall_minus1: 0.4621852661478593
+  minority_recall_mean: 0.5133730619540198
+  hedging_mean: 0.6078341013824884
+  decision_neutral_rate: 0.7046082949308756
+  calibration_global: 0.7236141786935492
+  circumplex_summary:
+    opposite_violation_mean: 0.07423491232572292
+    adjacent_support_mean: 0.07245466938084533
+baseline_test_metrics:
+  qwk_mean: 0.3806709745747184
+  recall_minus1: 0.3865536576949621
+  minority_recall_mean: 0.4917577960194522
+  hedging_mean: 0.5986425339366516
+  decision_neutral_rate: 0.7054298642533937
+  calibration_global: 0.7262955759983706
+  circumplex_summary:
+    opposite_violation_mean: 0.06802013856159353
+    adjacent_support_mean: 0.0840775980742639
+selected_test_metrics:
+  qwk_mean: 0.3806709745747184
+  recall_minus1: 0.3865536576949621
+  minority_recall_mean: 0.4917577960194522
+  hedging_mean: 0.5986425339366516
+  decision_neutral_rate: 0.7054298642533937
+  calibration_global: 0.7262955759983706
+  circumplex_summary:
+    opposite_violation_mean: 0.06802013856159353
+    adjacent_support_mean: 0.0840775980742639

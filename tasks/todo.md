@@ -321,6 +321,43 @@
   `load_config('config/experiments/vif/twinkl_719_5.yaml')` successfully loaded
   the new config.
 
+# twinkl-719.5
+
+## Checklist
+
+- [x] Align post-hoc metric semantics with frontier run metrics
+- [x] Extend targeted `tests/vif/test_posthoc.py` coverage for baseline parity
+  and `tau=0` no-drift behavior
+- [x] Run focused pytest verification for the post-hoc metric update
+- [x] Execute `twinkl_719_5` validation-only post-hoc sweep
+- [x] Review generated artifacts and finalize the report conclusion
+- [x] Update `logs/experiments/index.md` if the post-hoc result changes the
+  manual frontier narrative or needs an explicit post-hoc note
+- [x] Review changed files and summarize results
+
+## Review
+
+- Updated `src/vif/posthoc.py` so softmax post-hoc scoring now uses the same
+  thresholded continuous prediction basis as the frontier run YAMLs. This keeps
+  `tau=0` baseline metrics aligned with the original saved run metrics and
+  avoids comparing argmax-based post-hoc numbers against MC-dropout mean-based
+  frontier results.
+- Extended `tests/vif/test_posthoc.py` with focused parity coverage for
+  score-based softmax metrics, threshold-vs-argmax disagreement, and `tau=0`
+  no-drift behavior. Verification passed with
+  `source .venv/bin/activate && pytest tests/vif/test_posthoc.py -q` and
+  `python -m py_compile src/vif/posthoc.py tests/vif/test_posthoc.py`.
+- Ran `python -m src.vif.posthoc --config config/experiments/vif/twinkl_719_5.yaml`,
+  which wrote artifacts under
+  `logs/experiments/artifacts/posthoc_twinkl_719_5_20260311_163957/` and updated
+  `logs/experiments/reports/experiment_review_twinkl_719_5.md`.
+- Final result: validation-only retargeting did **not** close the frontier gap.
+  `run_020` selected `tau=0.30`, gaining a small `recall_-1` lift while losing
+  too much QWK, minority recall, calibration, and circumplex cleanliness;
+  `run_036` selected `tau=0.00`. `logs/experiments/index.md` now records that
+  the frontier remains unchanged and that `twinkl-719.6` stays as the stronger
+  fallback only if an incumbent-centered follow-up is still desired.
+
 # twinkl-724
 
 ## Checklist
