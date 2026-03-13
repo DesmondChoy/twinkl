@@ -79,6 +79,7 @@ def test_train_uses_lr_finder_selected_lr_and_logs_metadata(tmp_path, monkeypatc
         criterion,
         device,
         *,
+        epoch=1,
         grad_clip=None,
         gradient_logging_enabled=True,
         gradient_log_every=1,
@@ -86,6 +87,7 @@ def test_train_uses_lr_finder_selected_lr_and_logs_metadata(tmp_path, monkeypatc
         observed_lrs.append(optimizer.param_groups[0]["lr"])
         observed_gradient_config.update(
             {
+                "epoch": epoch,
                 "grad_clip": grad_clip,
                 "gradient_logging_enabled": gradient_logging_enabled,
                 "gradient_log_every": gradient_log_every,
@@ -119,6 +121,7 @@ def test_train_uses_lr_finder_selected_lr_and_logs_metadata(tmp_path, monkeypatc
 
     assert observed_lrs == [0.012]
     assert observed_gradient_config == {
+        "epoch": 1,
         "grad_clip": 1.0,
         "gradient_logging_enabled": True,
         "gradient_log_every": 1,

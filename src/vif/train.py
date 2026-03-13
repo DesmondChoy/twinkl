@@ -21,6 +21,7 @@ Usage:
 import argparse
 import copy
 import json
+import math
 import time
 from collections.abc import Iterable
 from datetime import datetime
@@ -43,6 +44,43 @@ from src.vif.encoders import create_encoder
 from src.vif.eval import evaluate_with_uncertainty, format_results_table
 from src.vif.lr_finder import run_lr_finder
 from src.vif.state_encoder import StateEncoder
+
+
+class NonFiniteLossError(ValueError):
+    """Raised when training or validation encounters a non-finite loss."""
+
+    def __init__(
+        self,
+        *,
+        phase: str,
+        epoch: int,
+        batch_index: int,
+        loss_name: str,
+        loss_value: str,
+    ) -> None:
+        self.phase = phase
+        self.epoch = epoch
+        self.batch_index = batch_index
+        self.loss_name = loss_name
+        self.loss_value = loss_value
+        super().__init__(
+            "Non-finite "
+            f"{loss_name} detected during {phase} at epoch {epoch}, "
+            f"batch {batch_index}: {loss_value}"
+        )
+
+    def to_metadata(self, *, best_checkpoint_path: str, best_checkpoint_exists: bool) -> dict:
+        """Return a JSON-serializable termination payload."""
+        return {
+            "status": "failed_non_finite_loss",
+            "phase": self.phase,
+            "epoch": self.epoch,
+            "batch_index": self.batch_index,
+            "loss_name": self.loss_name,
+            "loss_value": self.loss_value,
+            "best_checkpoint_path": best_checkpoint_path,
+            "best_checkpoint_exists": best_checkpoint_exists,
+        }
 
 
 def load_config(config_path: str | Path | None) -> dict:
@@ -136,6 +174,60 @@ def _resolve_gradient_config(training_config: dict) -> dict:
         "gradient_logging_enabled": gradient_logging_enabled,
         "gradient_log_every": gradient_log_every,
     }
+
+
+def _format_non_finite_value(value: float) -> str:
+    """Return a stable JSON/log-friendly representation of a scalar."""
+    if math.isnan(value):
+        return "nan"
+    if math.isinf(value):
+        return "inf" if value > 0 else "-inf"
+    return str(float(value))
+
+
+def _ensure_finite_loss(
+    loss: torch.Tensor,
+    *,
+    phase: str,
+    epoch: int,
+    batch_index: int,
+    loss_name: str = "mse_loss",
+) -> float:
+    """Return the scalar loss value or raise if it is NaN/Inf."""
+    loss_value = float(loss.item())
+    if math.isfinite(loss_value):
+        return loss_value
+
+    raise NonFiniteLossError(
+        phase=phase,
+        epoch=epoch,
+        batch_index=batch_index,
+        loss_name=loss_name,
+        loss_value=_format_non_finite_value(loss_value),
+    )
+
+
+def _find_non_finite_tensor_path(value: object, *, path: str) -> str | None:
+    """Return the first tensor path that contains NaN/Inf values."""
+    if isinstance(value, torch.Tensor):
+        if bool(torch.isfinite(value).all()):
+            return None
+        return path
+
+    if isinstance(value, dict):
+        for key, child in value.items():
+            child_path = _find_non_finite_tensor_path(child, path=f"{path}.{key}")
+            if child_path is not None:
+                return child_path
+        return None
+
+    if isinstance(value, (list, tuple)):
+        for index, child in enumerate(value):
+            child_path = _find_non_finite_tensor_path(child, path=f"{path}[{index}]")
+            if child_path is not None:
+                return child_path
+
+    return None
 
 
 def _compute_total_grad_norm(parameters: Iterable[torch.nn.Parameter]) -> float:
@@ -267,7 +359,9 @@ def save_training_curve_artifacts(
 
     loss_ax.set_ylabel("Loss")
     loss_ax.set_title("Training Curves")
-    loss_ax.legend()
+    handles, labels = loss_ax.get_legend_handles_labels()
+    if handles:
+        loss_ax.legend(handles, labels)
     loss_ax.grid(True, alpha=0.3)
 
     lr_ax.set_xlabel("Epoch")
@@ -308,6 +402,7 @@ def _summarize_training_dynamics(
     gradient_config: dict,
     best_epoch: int | None,
     curve_artifacts: dict[str, str],
+    termination: dict | None = None,
 ) -> dict:
     """Assemble additive training_dynamics payload for training_log.json."""
     training_dynamics = _summarize_gradient_history(
@@ -319,7 +414,68 @@ def _summarize_training_dynamics(
         best_epoch=best_epoch,
     )
     training_dynamics["curve_artifacts"] = curve_artifacts
+    if termination is not None:
+        training_dynamics["termination"] = termination
     return training_dynamics
+
+
+def _build_test_metrics_payload(test_results: dict | None) -> dict | None:
+    """Normalize optional final evaluation metrics for training_log.json."""
+    if test_results is None:
+        return None
+
+    return {
+        "mse_mean": test_results["mse_mean"],
+        "spearman_mean": test_results["spearman_mean"],
+        "accuracy_mean": test_results["accuracy_mean"],
+        "mse_per_dim": test_results["mse_per_dim"],
+        "spearman_per_dim": test_results["spearman_per_dim"],
+        "accuracy_per_dim": test_results["accuracy_per_dim"],
+    }
+
+
+def _persist_training_log(
+    *,
+    output_dir: Path,
+    history: dict,
+    best_epoch: int | None,
+    best_val_loss: float,
+    training_time: float,
+    gradient_config: dict,
+    lr_finder_result: dict,
+    run_config: dict,
+    test_results: dict | None = None,
+    termination: dict | None = None,
+) -> tuple[Path, dict]:
+    """Write training_log.json and return its path plus training dynamics."""
+    log_path = output_dir / "training_log.json"
+    curve_artifacts = save_training_curve_artifacts(
+        history,
+        best_epoch,
+        output_dir,
+    )
+    training_dynamics = _summarize_training_dynamics(
+        history,
+        gradient_config=gradient_config,
+        best_epoch=best_epoch,
+        curve_artifacts=curve_artifacts,
+        termination=termination,
+    )
+    log_data = {
+        "timestamp": datetime.now().isoformat(),
+        "training_time_seconds": training_time,
+        "epochs_completed": len(history["train_loss"]),
+        "best_val_loss": float(best_val_loss) if math.isfinite(best_val_loss) else None,
+        "history": history,
+        "training_dynamics": training_dynamics,
+        "test_metrics": _build_test_metrics_payload(test_results),
+        "lr_finder": lr_finder_result,
+        "config": run_config,
+    }
+    with open(log_path, "w") as f:
+        json.dump(log_data, f, indent=2)
+
+    return log_path, training_dynamics
 
 
 def train_epoch(
@@ -329,6 +485,7 @@ def train_epoch(
     criterion: nn.Module,
     device: str,
     *,
+    epoch: int = 1,
     grad_clip: float | None = None,
     gradient_logging_enabled: bool = True,
     gradient_log_every: int = 1,
@@ -341,6 +498,7 @@ def train_epoch(
         optimizer: Optimizer instance
         criterion: Loss function
         device: Device to train on
+        epoch: 1-indexed epoch number for diagnostics
         grad_clip: Total gradient-norm clipping threshold, or None to disable
         gradient_logging_enabled: Whether to record gradient telemetry
         gradient_log_every: Sample gradient telemetry every N batches
@@ -364,6 +522,12 @@ def train_epoch(
         optimizer.zero_grad()
         predictions = model(batch_x)
         loss = criterion(predictions, batch_y)
+        loss_value = _ensure_finite_loss(
+            loss,
+            phase="train",
+            epoch=epoch,
+            batch_index=batch_idx,
+        )
         loss.backward()
 
         sampled_for_logging = (
@@ -388,7 +552,7 @@ def train_epoch(
 
         optimizer.step()
 
-        total_loss += loss.item()
+        total_loss += loss_value
         n_batches += 1
 
     if n_batches == 0:
@@ -415,6 +579,8 @@ def validate(
     dataloader: torch.utils.data.DataLoader,
     criterion: nn.Module,
     device: str,
+    *,
+    epoch: int = 1,
 ) -> float:
     """Validate the model.
 
@@ -423,6 +589,7 @@ def validate(
         dataloader: Validation DataLoader
         criterion: Loss function
         device: Device to validate on
+        epoch: 1-indexed epoch number for diagnostics
 
     Returns:
         Average validation loss
@@ -432,14 +599,20 @@ def validate(
     n_batches = 0
 
     with torch.no_grad():
-        for batch_x, batch_y in dataloader:
+        for batch_idx, (batch_x, batch_y) in enumerate(dataloader, start=1):
             batch_x = batch_x.to(device)
             batch_y = batch_y.to(device)
 
             predictions = model(batch_x)
             loss = criterion(predictions, batch_y)
+            loss_value = _ensure_finite_loss(
+                loss,
+                phase="val",
+                epoch=epoch,
+                batch_index=batch_idx,
+            )
 
-            total_loss += loss.item()
+            total_loss += loss_value
             n_batches += 1
 
     if n_batches == 0:
@@ -483,6 +656,20 @@ def save_checkpoint(
         "training_config": config,
     }
 
+    val_loss_value = float(val_loss)
+    if not math.isfinite(val_loss_value):
+        raise ValueError(
+            "Refusing to save checkpoint "
+            f"{filename!r} with non-finite val_loss={_format_non_finite_value(val_loss_value)}"
+        )
+
+    non_finite_tensor_path = _find_non_finite_tensor_path(checkpoint, path="checkpoint")
+    if non_finite_tensor_path is not None:
+        raise ValueError(
+            "Refusing to save checkpoint "
+            f"{filename!r} because {non_finite_tensor_path} contains non-finite values"
+        )
+
     torch.save(checkpoint, output_dir / filename)
 
     # Also save config as JSON for easy inspection
@@ -491,7 +678,7 @@ def save_checkpoint(
         json.dump(
             {
                 "epoch": epoch,
-                "val_loss": val_loss,
+                "val_loss": val_loss_value,
                 "model_config": model.get_config(),
                 "training_config": config,
             },
@@ -712,64 +899,94 @@ def train(config: dict, verbose: bool = True) -> dict:
         print("\nStarting training...")
     start_time = time.time()
 
-    for epoch in range(config["training"]["epochs"]):
-        # Train
-        train_epoch_result = train_epoch(
-            model,
-            train_loader,
-            optimizer,
-            criterion,
-            device,
-            grad_clip=gradient_config["grad_clip"],
-            gradient_logging_enabled=gradient_config["gradient_logging_enabled"],
-            gradient_log_every=gradient_config["gradient_log_every"],
+    try:
+        for epoch in range(config["training"]["epochs"]):
+            # Train
+            train_epoch_result = train_epoch(
+                model,
+                train_loader,
+                optimizer,
+                criterion,
+                device,
+                epoch=epoch + 1,
+                grad_clip=gradient_config["grad_clip"],
+                gradient_logging_enabled=gradient_config["gradient_logging_enabled"],
+                gradient_log_every=gradient_config["gradient_log_every"],
+            )
+            train_loss, gradient_metrics = _coerce_train_epoch_result(
+                train_epoch_result,
+                grad_clip_enabled=gradient_config["grad_clip"] is not None,
+            )
+
+            # Validate
+            val_loss = validate(
+                model,
+                val_loader,
+                criterion,
+                device,
+                epoch=epoch + 1,
+            )
+
+            # Update scheduler
+            scheduler.step(val_loss)
+            current_lr = optimizer.param_groups[0]["lr"]
+
+            # Record history
+            history["train_loss"].append(train_loss)
+            history["val_loss"].append(val_loss)
+            history["train_val_gap"].append(val_loss - train_loss)
+            history["learning_rate"].append(current_lr)
+            history["grad_norm_mean"].append(gradient_metrics["grad_norm_mean"])
+            history["grad_norm_max"].append(gradient_metrics["grad_norm_max"])
+            history["grad_batches_tracked"].append(gradient_metrics["grad_batches_tracked"])
+            history["grad_clipped_fraction"].append(gradient_metrics["grad_clipped_fraction"])
+
+            # Check for improvement
+            if val_loss < best_val_loss - early_stop_delta:
+                best_val_loss = val_loss
+                best_epoch = epoch
+                epochs_without_improvement = 0
+                save_checkpoint(model, optimizer, epoch, val_loss, run_config, output_dir)
+                if verbose:
+                    print(
+                        f"Epoch {epoch+1:3d}: train={train_loss:.4f}, val={val_loss:.4f}, "
+                        f"lr={current_lr:.6f} [BEST]"
+                    )
+            else:
+                epochs_without_improvement += 1
+                if verbose and epoch % 10 == 0:
+                    print(
+                        f"Epoch {epoch+1:3d}: train={train_loss:.4f}, val={val_loss:.4f}, "
+                        f"lr={current_lr:.6f}"
+                    )
+
+            # Early stopping
+            if epochs_without_improvement >= early_stop_patience:
+                if verbose:
+                    print(f"\nEarly stopping at epoch {epoch+1}")
+                break
+    except NonFiniteLossError as exc:
+        training_time = time.time() - start_time
+        best_checkpoint_path = output_dir / "best_model.pt"
+        termination = exc.to_metadata(
+            best_checkpoint_path=str(best_checkpoint_path),
+            best_checkpoint_exists=best_checkpoint_path.exists(),
         )
-        train_loss, gradient_metrics = _coerce_train_epoch_result(
-            train_epoch_result,
-            grad_clip_enabled=gradient_config["grad_clip"] is not None,
+        log_path, _ = _persist_training_log(
+            output_dir=output_dir,
+            history=history,
+            best_epoch=best_epoch,
+            best_val_loss=best_val_loss,
+            training_time=training_time,
+            gradient_config=gradient_config,
+            lr_finder_result=lr_finder_result,
+            run_config=run_config,
+            termination=termination,
         )
-
-        # Validate
-        val_loss = validate(model, val_loader, criterion, device)
-
-        # Update scheduler
-        scheduler.step(val_loss)
-        current_lr = optimizer.param_groups[0]["lr"]
-
-        # Record history
-        history["train_loss"].append(train_loss)
-        history["val_loss"].append(val_loss)
-        history["train_val_gap"].append(val_loss - train_loss)
-        history["learning_rate"].append(current_lr)
-        history["grad_norm_mean"].append(gradient_metrics["grad_norm_mean"])
-        history["grad_norm_max"].append(gradient_metrics["grad_norm_max"])
-        history["grad_batches_tracked"].append(gradient_metrics["grad_batches_tracked"])
-        history["grad_clipped_fraction"].append(gradient_metrics["grad_clipped_fraction"])
-
-        # Check for improvement
-        if val_loss < best_val_loss - early_stop_delta:
-            best_val_loss = val_loss
-            best_epoch = epoch
-            epochs_without_improvement = 0
-            save_checkpoint(model, optimizer, epoch, val_loss, run_config, output_dir)
-            if verbose:
-                print(
-                    f"Epoch {epoch+1:3d}: train={train_loss:.4f}, val={val_loss:.4f}, "
-                    f"lr={current_lr:.6f} [BEST]"
-                )
-        else:
-            epochs_without_improvement += 1
-            if verbose and epoch % 10 == 0:
-                print(
-                    f"Epoch {epoch+1:3d}: train={train_loss:.4f}, val={val_loss:.4f}, "
-                    f"lr={current_lr:.6f}"
-                )
-
-        # Early stopping
-        if epochs_without_improvement >= early_stop_patience:
-            if verbose:
-                print(f"\nEarly stopping at epoch {epoch+1}")
-            break
+        if verbose:
+            print(f"\nTraining terminated early: {exc}")
+            print(f"Training log saved to: {log_path}")
+        raise
 
     training_time = time.time() - start_time
     if verbose:
@@ -792,39 +1009,17 @@ def train(config: dict, verbose: bool = True) -> dict:
         print("\nTest Results:")
         print(format_results_table(test_results))
 
-    # Save training log
-    log_path = output_dir / "training_log.json"
-    curve_artifacts = save_training_curve_artifacts(
-        history,
-        best_epoch,
-        output_dir,
-    )
-    training_dynamics = _summarize_training_dynamics(
-        history,
-        gradient_config=gradient_config,
+    log_path, training_dynamics = _persist_training_log(
+        output_dir=output_dir,
+        history=history,
         best_epoch=best_epoch,
-        curve_artifacts=curve_artifacts,
+        best_val_loss=best_val_loss,
+        training_time=training_time,
+        gradient_config=gradient_config,
+        lr_finder_result=lr_finder_result,
+        run_config=run_config,
+        test_results=test_results,
     )
-    log_data = {
-        "timestamp": datetime.now().isoformat(),
-        "training_time_seconds": training_time,
-        "epochs_completed": len(history["train_loss"]),
-        "best_val_loss": best_val_loss,
-        "history": history,
-        "training_dynamics": training_dynamics,
-        "test_metrics": {
-            "mse_mean": test_results["mse_mean"],
-            "spearman_mean": test_results["spearman_mean"],
-            "accuracy_mean": test_results["accuracy_mean"],
-            "mse_per_dim": test_results["mse_per_dim"],
-            "spearman_per_dim": test_results["spearman_per_dim"],
-            "accuracy_per_dim": test_results["accuracy_per_dim"],
-        },
-        "lr_finder": lr_finder_result,
-        "config": run_config,
-    }
-    with open(log_path, "w") as f:
-        json.dump(log_data, f, indent=2)
 
     if verbose:
         print(f"\nCheckpoint saved to: {output_dir / 'best_model.pt'}")

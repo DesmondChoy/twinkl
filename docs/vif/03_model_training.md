@@ -259,6 +259,13 @@ python -m src.vif.posthoc --help
 > Artifacts are saved to the checkpoint directory as `lr_find_loss_vs_lr.png`
 > and `lr_find_history.json` (or an override path via `--lr-find-output-path`).
 >
+> **Non-finite loss termination (`src/vif/train.py`)**:
+> The MLP training script now aborts immediately if train or validation loss
+> becomes `NaN`/`Inf`, preserves any previously written `best_model.pt`, and
+> records divergence metadata in `training_log.json` under
+> `training_dynamics.termination`. Partial history and curve artifacts are
+> still written for the completed finite epochs.
+>
 > **Notebook entrypoint**:
 > For notebook-driven sweeps across the active ordinal heads
 > (**CORAL/CORN/EMD/CDWCE/SoftOrdinal/BalancedSoftmax/LDAM-DRW**), use
