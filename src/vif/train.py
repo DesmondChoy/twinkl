@@ -26,12 +26,16 @@ from collections.abc import Iterable
 from datetime import datetime
 from pathlib import Path
 
+import matplotlib
 import numpy as np
 import torch
 import torch.nn as nn
 import yaml
 from torch.optim import AdamW
 from torch.optim.lr_scheduler import ReduceLROnPlateau
+
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
 
 from src.vif.critic import CriticMLP
 from src.vif.dataset import create_dataloaders
@@ -216,6 +220,106 @@ def _summarize_gradient_history(history: dict, *, gradient_config: dict) -> dict
             ),
         },
     }
+
+
+def resolve_training_curve_paths(output_dir: str | Path) -> tuple[Path, Path]:
+    """Return standard artifact paths for training-curve exports."""
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    return output_dir / "training_curves.png", output_dir / "training_curves.json"
+
+
+def save_training_curve_artifacts(
+    history: dict,
+    best_epoch: int | None,
+    output_dir: str | Path,
+) -> dict[str, str]:
+    """Persist training-curve artifacts for quick review and structured reuse."""
+    plot_path, history_path = resolve_training_curve_paths(output_dir)
+    epochs = list(range(1, len(history.get("train_loss", [])) + 1))
+    curve_history = {
+        "epochs": epochs,
+        "train_loss": history.get("train_loss", []),
+        "val_loss": history.get("val_loss", []),
+        "train_val_gap": history.get("train_val_gap", []),
+        "learning_rate": history.get("learning_rate", []),
+        "best_epoch": None if best_epoch is None else best_epoch + 1,
+    }
+    with open(history_path, "w") as f:
+        json.dump(curve_history, f, indent=2)
+
+    fig, (loss_ax, lr_ax) = plt.subplots(2, 1, figsize=(10, 8), sharex=True)
+    if epochs:
+        loss_ax.plot(epochs, history.get("train_loss", []), label="Train", alpha=0.85)
+        loss_ax.plot(epochs, history.get("val_loss", []), label="Val", alpha=0.85)
+        if best_epoch is not None and 0 <= best_epoch < len(epochs):
+            loss_ax.axvline(
+                best_epoch + 1,
+                color="green",
+                linestyle=":",
+                alpha=0.6,
+                label=f"Best ({best_epoch + 1})",
+            )
+        lr_ax.plot(epochs, history.get("learning_rate", []), color="tab:orange")
+    else:
+        loss_ax.text(0.5, 0.5, "No training history", ha="center", va="center")
+        lr_ax.text(0.5, 0.5, "No LR history", ha="center", va="center")
+
+    loss_ax.set_ylabel("Loss")
+    loss_ax.set_title("Training Curves")
+    loss_ax.legend()
+    loss_ax.grid(True, alpha=0.3)
+
+    lr_ax.set_xlabel("Epoch")
+    lr_ax.set_ylabel("Learning Rate")
+    lr_ax.grid(True, alpha=0.3)
+
+    fig.tight_layout()
+    fig.savefig(plot_path, bbox_inches="tight")
+    plt.close(fig)
+
+    return {
+        "plot_path": str(plot_path),
+        "history_path": str(history_path),
+    }
+
+
+def _summarize_gap_history(history: dict, *, best_epoch: int | None) -> dict:
+    """Build run-level train/val gap diagnostics from recorded history."""
+    train_val_gap = [float(value) for value in history.get("train_val_gap", [])]
+    total_epochs = len(history.get("train_loss", []))
+    gap_at_best = None
+    if best_epoch is not None and best_epoch < len(train_val_gap):
+        gap_at_best = float(train_val_gap[best_epoch])
+
+    return {
+        "best_epoch": None if best_epoch is None else best_epoch + 1,
+        "total_epochs": total_epochs,
+        "gap_at_best": gap_at_best,
+        "gap_at_final": float(train_val_gap[-1]) if train_val_gap else None,
+        "max_gap": float(max(train_val_gap)) if train_val_gap else None,
+        "min_gap": float(min(train_val_gap)) if train_val_gap else None,
+    }
+
+
+def _summarize_training_dynamics(
+    history: dict,
+    *,
+    gradient_config: dict,
+    best_epoch: int | None,
+    curve_artifacts: dict[str, str],
+) -> dict:
+    """Assemble additive training_dynamics payload for training_log.json."""
+    training_dynamics = _summarize_gradient_history(
+        history,
+        gradient_config=gradient_config,
+    )
+    training_dynamics["gap_summary"] = _summarize_gap_history(
+        history,
+        best_epoch=best_epoch,
+    )
+    training_dynamics["curve_artifacts"] = curve_artifacts
+    return training_dynamics
 
 
 def train_epoch(
@@ -577,6 +681,7 @@ def train(config: dict, verbose: bool = True) -> dict:
     history = {
         "train_loss": [],
         "val_loss": [],
+        "train_val_gap": [],
         "learning_rate": [],
         "grad_norm_mean": [],
         "grad_norm_max": [],
@@ -585,6 +690,7 @@ def train(config: dict, verbose: bool = True) -> dict:
     }
 
     best_val_loss = float("inf")
+    best_epoch = None
     epochs_without_improvement = 0
     early_stop_patience = config["training"]["early_stopping"]["patience"]
     early_stop_delta = config["training"]["early_stopping"]["min_delta"]
@@ -633,6 +739,7 @@ def train(config: dict, verbose: bool = True) -> dict:
         # Record history
         history["train_loss"].append(train_loss)
         history["val_loss"].append(val_loss)
+        history["train_val_gap"].append(val_loss - train_loss)
         history["learning_rate"].append(current_lr)
         history["grad_norm_mean"].append(gradient_metrics["grad_norm_mean"])
         history["grad_norm_max"].append(gradient_metrics["grad_norm_max"])
@@ -642,6 +749,7 @@ def train(config: dict, verbose: bool = True) -> dict:
         # Check for improvement
         if val_loss < best_val_loss - early_stop_delta:
             best_val_loss = val_loss
+            best_epoch = epoch
             epochs_without_improvement = 0
             save_checkpoint(model, optimizer, epoch, val_loss, run_config, output_dir)
             if verbose:
@@ -686,9 +794,16 @@ def train(config: dict, verbose: bool = True) -> dict:
 
     # Save training log
     log_path = output_dir / "training_log.json"
-    training_dynamics = _summarize_gradient_history(
+    curve_artifacts = save_training_curve_artifacts(
+        history,
+        best_epoch,
+        output_dir,
+    )
+    training_dynamics = _summarize_training_dynamics(
         history,
         gradient_config=gradient_config,
+        best_epoch=best_epoch,
+        curve_artifacts=curve_artifacts,
     )
     log_data = {
         "timestamp": datetime.now().isoformat(),
