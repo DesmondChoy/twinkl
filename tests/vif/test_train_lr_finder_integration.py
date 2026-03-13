@@ -43,6 +43,7 @@ def _minimal_config(tmp_path):
 def test_train_uses_lr_finder_selected_lr_and_logs_metadata(tmp_path, monkeypatch):
     config = _minimal_config(tmp_path)
     observed_lrs = []
+    observed_gradient_config = {}
 
     monkeypatch.setattr(train_module, "create_encoder", lambda *_args, **_kwargs: object())
     monkeypatch.setattr(train_module, "StateEncoder", _DummyStateEncoder)
@@ -70,9 +71,31 @@ def test_train_uses_lr_finder_selected_lr_and_logs_metadata(tmp_path, monkeypatc
         },
     )
 
-    def _fake_train_epoch(model, dataloader, optimizer, criterion, device):
+    def _fake_train_epoch(
+        model,
+        dataloader,
+        optimizer,
+        criterion,
+        device,
+        *,
+        grad_clip=None,
+        gradient_logging_enabled=True,
+        gradient_log_every=1,
+    ):
         observed_lrs.append(optimizer.param_groups[0]["lr"])
-        return 0.5
+        observed_gradient_config.update(
+            {
+                "grad_clip": grad_clip,
+                "gradient_logging_enabled": gradient_logging_enabled,
+                "gradient_log_every": gradient_log_every,
+            }
+        )
+        return 0.5, {
+            "grad_norm_mean": 1.2,
+            "grad_norm_max": 2.4,
+            "grad_batches_tracked": 2,
+            "grad_clipped_fraction": 0.5,
+        }
 
     monkeypatch.setattr(train_module, "train_epoch", _fake_train_epoch)
     monkeypatch.setattr(train_module, "validate", lambda *_args, **_kwargs: 0.4)
@@ -94,8 +117,30 @@ def test_train_uses_lr_finder_selected_lr_and_logs_metadata(tmp_path, monkeypatc
     results = train_module.train(config, verbose=False)
 
     assert observed_lrs == [0.012]
+    assert observed_gradient_config == {
+        "grad_clip": 1.0,
+        "gradient_logging_enabled": True,
+        "gradient_log_every": 1,
+    }
     assert results["learning_rate_configured"] == 0.001
     assert results["learning_rate_applied"] == 0.012
+    assert results["history"]["grad_norm_mean"] == [1.2]
+    assert results["history"]["grad_norm_max"] == [2.4]
+    assert results["history"]["grad_batches_tracked"] == [2]
+    assert results["history"]["grad_clipped_fraction"] == [0.5]
+    assert results["training_dynamics"]["gradient_config"] == {
+        "grad_clip": 1.0,
+        "gradient_logging_enabled": True,
+        "sample_every_batches": 1,
+    }
+    assert results["training_dynamics"]["gradient_summary"] == {
+        "epochs_with_gradient_samples": 1,
+        "total_gradient_batches_tracked": 2,
+        "grad_norm_mean_over_epochs": 1.2,
+        "grad_norm_max_over_epochs": 2.4,
+        "grad_clipped_fraction_mean": 0.5,
+        "grad_clipped_fraction_max": 0.5,
+    }
 
     log_path = tmp_path / "training_log.json"
     assert log_path.exists()
@@ -107,3 +152,27 @@ def test_train_uses_lr_finder_selected_lr_and_logs_metadata(tmp_path, monkeypatc
     assert log_data["lr_finder"]["suggestions"]["lr_valley"] == 0.012
     assert log_data["config"]["training"]["learning_rate_configured"] == 0.001
     assert log_data["config"]["training"]["learning_rate"] == 0.012
+    assert log_data["config"]["training"]["grad_clip"] == 1.0
+    assert log_data["config"]["training"]["gradient_logging"] == {
+        "enabled": True,
+        "sample_every_batches": 1,
+    }
+    assert log_data["history"]["grad_norm_mean"] == [1.2]
+    assert log_data["history"]["grad_norm_max"] == [2.4]
+    assert log_data["history"]["grad_batches_tracked"] == [2]
+    assert log_data["history"]["grad_clipped_fraction"] == [0.5]
+    assert log_data["training_dynamics"] == {
+        "gradient_config": {
+            "grad_clip": 1.0,
+            "gradient_logging_enabled": True,
+            "sample_every_batches": 1,
+        },
+        "gradient_summary": {
+            "epochs_with_gradient_samples": 1,
+            "total_gradient_batches_tracked": 2,
+            "grad_norm_mean_over_epochs": 1.2,
+            "grad_norm_max_over_epochs": 2.4,
+            "grad_clipped_fraction_mean": 0.5,
+            "grad_clipped_fraction_max": 0.5,
+        },
+    }

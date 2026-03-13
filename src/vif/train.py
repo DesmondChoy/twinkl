@@ -22,6 +22,7 @@ import argparse
 import copy
 import json
 import time
+from collections.abc import Iterable
 from datetime import datetime
 from pathlib import Path
 
@@ -66,6 +67,11 @@ def load_config(config_path: str | Path | None) -> dict:
             "batch_size": 16,
             "learning_rate": None,
             "weight_decay": 0.01,
+            "grad_clip": 1.0,
+            "gradient_logging": {
+                "enabled": True,
+                "sample_every_batches": 1,
+            },
             "scheduler": {"type": "reduce_on_plateau", "factor": 0.5, "patience": 10, "min_lr": None},
             "early_stopping": {"patience": 20, "min_delta": 0.001},
             "lr_finder": {
@@ -108,13 +114,121 @@ def _deep_update(base: dict, update: dict) -> dict:
     return base
 
 
+def _resolve_gradient_config(training_config: dict) -> dict:
+    """Resolve effective gradient clipping and telemetry settings."""
+    grad_clip_raw = training_config.get("grad_clip", 1.0)
+    grad_clip = None if grad_clip_raw is None else float(grad_clip_raw)
+    if grad_clip is not None and grad_clip <= 0:
+        grad_clip = None
+
+    gradient_logging = training_config.get("gradient_logging", {})
+    gradient_logging_enabled = bool(gradient_logging.get("enabled", True))
+    gradient_log_every = int(gradient_logging.get("sample_every_batches", 1))
+    if gradient_log_every <= 0:
+        raise ValueError("training.gradient_logging.sample_every_batches must be >= 1")
+
+    return {
+        "grad_clip": grad_clip,
+        "gradient_logging_enabled": gradient_logging_enabled,
+        "gradient_log_every": gradient_log_every,
+    }
+
+
+def _compute_total_grad_norm(parameters: Iterable[torch.nn.Parameter]) -> float:
+    """Return the total L2 norm across all parameter gradients."""
+    grad_norms = [
+        torch.linalg.vector_norm(parameter.grad.detach(), ord=2)
+        for parameter in parameters
+        if parameter.grad is not None
+    ]
+    if not grad_norms:
+        return 0.0
+    return float(torch.linalg.vector_norm(torch.stack(grad_norms), ord=2).item())
+
+
+def _empty_gradient_metrics(*, grad_clip_enabled: bool) -> dict:
+    """Return a normalized empty gradient-metrics payload."""
+    return {
+        "grad_norm_mean": None,
+        "grad_norm_max": None,
+        "grad_batches_tracked": 0,
+        "grad_clipped_fraction": 0.0 if grad_clip_enabled else None,
+    }
+
+
+def _coerce_train_epoch_result(epoch_result: float | tuple[float, dict], *, grad_clip_enabled: bool) -> tuple[float, dict]:
+    """Normalize train_epoch() results for callers and tests."""
+    if not isinstance(epoch_result, tuple):
+        return float(epoch_result), _empty_gradient_metrics(grad_clip_enabled=grad_clip_enabled)
+
+    train_loss, gradient_metrics = epoch_result
+    gradient_metrics = gradient_metrics or {}
+
+    return float(train_loss), {
+        "grad_norm_mean": (
+            float(gradient_metrics["grad_norm_mean"])
+            if gradient_metrics.get("grad_norm_mean") is not None
+            else None
+        ),
+        "grad_norm_max": (
+            float(gradient_metrics["grad_norm_max"])
+            if gradient_metrics.get("grad_norm_max") is not None
+            else None
+        ),
+        "grad_batches_tracked": int(gradient_metrics.get("grad_batches_tracked", 0)),
+        "grad_clipped_fraction": (
+            float(gradient_metrics["grad_clipped_fraction"])
+            if gradient_metrics.get("grad_clipped_fraction") is not None
+            else (0.0 if grad_clip_enabled else None)
+        ),
+    }
+
+
+def _summarize_gradient_history(history: dict, *, gradient_config: dict) -> dict:
+    """Build run-level gradient diagnostics from epoch history."""
+    grad_norm_means = [value for value in history.get("grad_norm_mean", []) if value is not None]
+    grad_norm_maxes = [value for value in history.get("grad_norm_max", []) if value is not None]
+    clipped_fractions = [
+        value for value in history.get("grad_clipped_fraction", [])
+        if value is not None
+    ]
+
+    return {
+        "gradient_config": {
+            "grad_clip": gradient_config["grad_clip"],
+            "gradient_logging_enabled": gradient_config["gradient_logging_enabled"],
+            "sample_every_batches": gradient_config["gradient_log_every"],
+        },
+        "gradient_summary": {
+            "epochs_with_gradient_samples": len(grad_norm_means),
+            "total_gradient_batches_tracked": int(sum(history.get("grad_batches_tracked", []))),
+            "grad_norm_mean_over_epochs": (
+                float(np.mean(grad_norm_means)) if grad_norm_means else None
+            ),
+            "grad_norm_max_over_epochs": (
+                float(max(grad_norm_maxes)) if grad_norm_maxes else None
+            ),
+            "grad_clipped_fraction_mean": (
+                float(np.mean(clipped_fractions)) if clipped_fractions else None
+            ),
+            "grad_clipped_fraction_max": (
+                float(max(clipped_fractions)) if clipped_fractions else None
+            ),
+        },
+    }
+
+
 def train_epoch(
     model: nn.Module,
     dataloader: torch.utils.data.DataLoader,
     optimizer: torch.optim.Optimizer,
     criterion: nn.Module,
     device: str,
-) -> float:
+    *,
+    grad_clip: float | None = None,
+    gradient_logging_enabled: bool = True,
+    gradient_log_every: int = 1,
+) -> tuple[float, dict]:
     """Train for one epoch.
 
     Args:
@@ -123,15 +237,23 @@ def train_epoch(
         optimizer: Optimizer instance
         criterion: Loss function
         device: Device to train on
+        grad_clip: Total gradient-norm clipping threshold, or None to disable
+        gradient_logging_enabled: Whether to record gradient telemetry
+        gradient_log_every: Sample gradient telemetry every N batches
 
     Returns:
-        Average training loss for the epoch
+        Tuple of average training loss and epoch-level gradient diagnostics
     """
     model.train()
     total_loss = 0.0
     n_batches = 0
+    grad_norm_total = 0.0
+    grad_norm_max = None
+    grad_batches_tracked = 0
+    clipped_batches = 0
+    parameters = [parameter for parameter in model.parameters() if parameter.requires_grad]
 
-    for batch_x, batch_y in dataloader:
+    for batch_idx, (batch_x, batch_y) in enumerate(dataloader, start=1):
         batch_x = batch_x.to(device)
         batch_y = batch_y.to(device)
 
@@ -139,6 +261,27 @@ def train_epoch(
         predictions = model(batch_x)
         loss = criterion(predictions, batch_y)
         loss.backward()
+
+        sampled_for_logging = (
+            gradient_logging_enabled and (batch_idx - 1) % gradient_log_every == 0
+        )
+        grad_norm = None
+        if grad_clip is not None:
+            grad_norm = float(
+                torch.nn.utils.clip_grad_norm_(parameters, max_norm=grad_clip)
+            )
+            if grad_norm > grad_clip:
+                clipped_batches += 1
+        elif sampled_for_logging:
+            grad_norm = _compute_total_grad_norm(parameters)
+
+        if sampled_for_logging:
+            if grad_norm is None:
+                grad_norm = _compute_total_grad_norm(parameters)
+            grad_norm_total += grad_norm
+            grad_norm_max = grad_norm if grad_norm_max is None else max(grad_norm_max, grad_norm)
+            grad_batches_tracked += 1
+
         optimizer.step()
 
         total_loss += loss.item()
@@ -150,7 +293,17 @@ def train_epoch(
             "Check split ratios and dataset size."
         )
 
-    return total_loss / n_batches
+    gradient_metrics = {
+        "grad_norm_mean": (
+            grad_norm_total / grad_batches_tracked if grad_batches_tracked else None
+        ),
+        "grad_norm_max": grad_norm_max,
+        "grad_batches_tracked": grad_batches_tracked,
+        "grad_clipped_fraction": (
+            clipped_batches / n_batches if grad_clip is not None else None
+        ),
+    }
+    return total_loss / n_batches, gradient_metrics
 
 
 def validate(
@@ -345,6 +498,7 @@ def train(config: dict, verbose: bool = True) -> dict:
     criterion = nn.MSELoss()
     output_dir = Path(config["output"]["checkpoint_dir"])
     output_dir.mkdir(parents=True, exist_ok=True)
+    gradient_config = _resolve_gradient_config(config["training"])
 
     configured_learning_rate = config["training"]["learning_rate"]
     lr_finder_config = config["training"].get("lr_finder", {})
@@ -424,6 +578,10 @@ def train(config: dict, verbose: bool = True) -> dict:
         "train_loss": [],
         "val_loss": [],
         "learning_rate": [],
+        "grad_norm_mean": [],
+        "grad_norm_max": [],
+        "grad_batches_tracked": [],
+        "grad_clipped_fraction": [],
     }
 
     best_val_loss = float("inf")
@@ -434,6 +592,14 @@ def train(config: dict, verbose: bool = True) -> dict:
     run_config = copy.deepcopy(config)
     run_config["training"]["learning_rate_configured"] = configured_learning_rate
     run_config["training"]["learning_rate"] = selected_learning_rate
+    run_config["training"]["grad_clip"] = config["training"].get("grad_clip", 1.0)
+    run_config["training"].setdefault("gradient_logging", {})
+    run_config["training"]["gradient_logging"]["enabled"] = (
+        config["training"].get("gradient_logging", {}).get("enabled", True)
+    )
+    run_config["training"]["gradient_logging"]["sample_every_batches"] = (
+        config["training"].get("gradient_logging", {}).get("sample_every_batches", 1)
+    )
 
     # Training loop
     if verbose:
@@ -442,7 +608,20 @@ def train(config: dict, verbose: bool = True) -> dict:
 
     for epoch in range(config["training"]["epochs"]):
         # Train
-        train_loss = train_epoch(model, train_loader, optimizer, criterion, device)
+        train_epoch_result = train_epoch(
+            model,
+            train_loader,
+            optimizer,
+            criterion,
+            device,
+            grad_clip=gradient_config["grad_clip"],
+            gradient_logging_enabled=gradient_config["gradient_logging_enabled"],
+            gradient_log_every=gradient_config["gradient_log_every"],
+        )
+        train_loss, gradient_metrics = _coerce_train_epoch_result(
+            train_epoch_result,
+            grad_clip_enabled=gradient_config["grad_clip"] is not None,
+        )
 
         # Validate
         val_loss = validate(model, val_loader, criterion, device)
@@ -455,6 +634,10 @@ def train(config: dict, verbose: bool = True) -> dict:
         history["train_loss"].append(train_loss)
         history["val_loss"].append(val_loss)
         history["learning_rate"].append(current_lr)
+        history["grad_norm_mean"].append(gradient_metrics["grad_norm_mean"])
+        history["grad_norm_max"].append(gradient_metrics["grad_norm_max"])
+        history["grad_batches_tracked"].append(gradient_metrics["grad_batches_tracked"])
+        history["grad_clipped_fraction"].append(gradient_metrics["grad_clipped_fraction"])
 
         # Check for improvement
         if val_loss < best_val_loss - early_stop_delta:
@@ -503,12 +686,17 @@ def train(config: dict, verbose: bool = True) -> dict:
 
     # Save training log
     log_path = output_dir / "training_log.json"
+    training_dynamics = _summarize_gradient_history(
+        history,
+        gradient_config=gradient_config,
+    )
     log_data = {
         "timestamp": datetime.now().isoformat(),
         "training_time_seconds": training_time,
         "epochs_completed": len(history["train_loss"]),
         "best_val_loss": best_val_loss,
         "history": history,
+        "training_dynamics": training_dynamics,
         "test_metrics": {
             "mse_mean": test_results["mse_mean"],
             "spearman_mean": test_results["spearman_mean"],
@@ -535,6 +723,7 @@ def train(config: dict, verbose: bool = True) -> dict:
         "lr_finder": lr_finder_result,
         "learning_rate_configured": configured_learning_rate,
         "learning_rate_applied": selected_learning_rate,
+        "training_dynamics": training_dynamics,
         "log_path": str(log_path),
     }
 
@@ -575,6 +764,21 @@ Examples:
         help="Override learning rate",
     )
     parser.add_argument(
+        "--grad-clip",
+        type=float,
+        help="Clip total gradient L2 norm at this value (<=0 disables clipping)",
+    )
+    parser.add_argument(
+        "--no-log-gradients",
+        action="store_true",
+        help="Disable gradient telemetry in training_log.json",
+    )
+    parser.add_argument(
+        "--grad-log-every",
+        type=int,
+        help="Record gradient telemetry every N training batches",
+    )
+    parser.add_argument(
         "--encoder-model",
         type=str,
         help="Override encoder model name",
@@ -612,6 +816,14 @@ Examples:
         config["training"]["batch_size"] = args.batch_size
     if args.learning_rate is not None:
         config["training"]["learning_rate"] = args.learning_rate
+    if args.grad_clip is not None:
+        config["training"]["grad_clip"] = args.grad_clip
+    if args.no_log_gradients:
+        config["training"].setdefault("gradient_logging", {})
+        config["training"]["gradient_logging"]["enabled"] = False
+    if args.grad_log_every is not None:
+        config["training"].setdefault("gradient_logging", {})
+        config["training"]["gradient_logging"]["sample_every_batches"] = args.grad_log_every
     if args.encoder_model is not None:
         config["encoder"]["model_name"] = args.encoder_model
     if args.hidden_dim is not None:
