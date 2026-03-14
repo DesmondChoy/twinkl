@@ -4,7 +4,7 @@
 
 `twinkl-691.3` reran the frozen-holdout corrected-split frontier after the regenerated `twinkl-691.2` `Hedonism`/`Security` batch was verified, wrangled, labeled, and consolidated. The current workspace now contains `204` personas and `1651` judged entries. The frozen holdout persona IDs stayed fixed; with the extra train-only personas, the realized row split is now `1213 / 217 / 221` train / val / test.
 
-The rebaseline used the notebook driver at `logs/experiments/notebooks/critic_training_v4_review.py` and trained paired `BalancedSoftmax` and `SoftOrdinal` runs on the same holdout with model seeds `11 / 22 / 33`. The new experiments are:
+The rebaseline used the frontier experiment driver at `scripts/experiments/critic_training_v4_review.py` and trained paired `BalancedSoftmax` and `SoftOrdinal` runs on the same holdout with model seeds `11 / 22 / 33`. The new experiments are:
 
 - `run_025_BalancedSoftmax`, `run_026_BalancedSoftmax`, `run_027_BalancedSoftmax`
 - `run_025_SoftOrdinal`, `run_026_SoftOrdinal`, `run_027_SoftOrdinal`

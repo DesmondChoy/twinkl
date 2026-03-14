@@ -266,10 +266,11 @@ python -m src.vif.posthoc --help
 > `training_dynamics.termination`. Partial history and curve artifacts are
 > still written for the completed finite epochs.
 >
-> **Notebook entrypoint**:
-> For notebook-driven sweeps across the active ordinal heads
-> (**CORAL/CORN/EMD/CDWCE/SoftOrdinal/BalancedSoftmax/LDAM-DRW**), use
-> `notebooks/critic_training/v4/critic_training_v4.ipynb`.
+> **Training entrypoints**:
+> Use `src/vif/train.py` for general single-model training with config and CLI
+> overrides. Use `scripts/experiments/critic_training_v4_review.py` for the
+> frontier review flow that runs paired or multi-model ordinal experiments and
+> writes experiment logging artifacts.
 
 Configuration: `config/vif.yaml`
-Scripts: `src/vif/train.py` and `src/vif/train_bnn.py`
+Scripts: `src/vif/train.py`, `src/vif/train_bnn.py`, and `scripts/experiments/critic_training_v4_review.py`

@@ -2,6 +2,10 @@
 
 ## 2026-03-11
 
+- When promoting a script out of a notebook path, avoid carrying forward
+  "notebook-derived" wording into the canonical name or docs unless the user
+  explicitly wants that provenance preserved. Prefer the clearest operational
+  label for fresh-session discoverability.
 - When a new training lever is intended to drive the active frontier path,
   default it on in that path instead of relying on a per-run opt-in flag that
   can be forgotten. Keep low-level APIs explicit, but avoid operational

@@ -103,24 +103,53 @@ def load_config(config_path: str | Path | None) -> dict:
             "text_prefix": "classification: ",
         },
         "state_encoder": {"window_size": 1},
-        "model": {"hidden_dim": 32, "dropout": 0.3, "output_dim": 10},
+        "model": {"hidden_dim": 64, "dropout": 0.3, "output_dim": 10},
         "training": {
+            "seed": 2025,
             "epochs": 100,
             "batch_size": 16,
-            "learning_rate": None,
+            "learning_rate": 0.001,
             "weight_decay": 0.01,
+            "class_balance_source": "train_split_per_dimension",
             "grad_clip": 1.0,
             "gradient_logging": {
                 "enabled": True,
                 "sample_every_batches": 1,
             },
-            "scheduler": {"type": "reduce_on_plateau", "factor": 0.5, "patience": 10, "min_lr": None},
+            "scheduler": {
+                "type": "reduce_on_plateau",
+                "factor": 0.5,
+                "patience": 10,
+                "min_lr": 0.00001,
+            },
             "early_stopping": {"patience": 20, "min_delta": 0.001},
             "lr_finder": {
-                "start_lr": None,
-                "end_lr": None,
-                "num_iter": None,
+                "enabled": True,
+                "start_lr": 0.0000001,
+                "end_lr": 1.0,
+                "num_iter": 200,
                 "output_path": None,
+            },
+            "dimension_weighting": {
+                "enabled": True,
+                "mode": "inverse_loss",
+                "temperature": 0.5,
+                "ema_alpha": 0.3,
+                "warmup_epochs": 1,
+                "eps": 0.000001,
+                "min_weight": 0.5,
+                "max_weight": 1.5,
+            },
+            "circumplex_regularizer": {
+                "enabled": False,
+                "opposite_weight": 0.0,
+                "adjacent_weight": 0.0,
+            },
+            "ldam_drw": {
+                "max_m": 0.5,
+                "scale": 30.0,
+                "drw_start_epoch": 50,
+                "beta": 0.9999,
             },
         },
         "data": {
@@ -128,7 +157,8 @@ def load_config(config_path: str | Path | None) -> dict:
             "wrangled_dir": "logs/wrangled",
             "train_ratio": 0.70,
             "val_ratio": 0.15,
-            "seed": 42,
+            "seed": 2025,
+            "split_seed": 2025,
             "fixed_holdout_manifest_path": None,
         },
         "mc_dropout": {"n_samples": 50},
@@ -144,6 +174,24 @@ def load_config(config_path: str | Path | None) -> dict:
             _deep_update(default_config, file_config)
 
     return default_config
+
+
+def resolve_split_seed(config: dict) -> int:
+    """Return the persona split seed with legacy fallback support."""
+    data_config = config.get("data", {})
+    return int(data_config.get("split_seed", data_config.get("seed", 42)))
+
+
+def resolve_training_seed(config: dict) -> int:
+    """Return the model/training seed with split-seed fallback support."""
+    training_config = config.get("training", {})
+    data_config = config.get("data", {})
+    return int(
+        training_config.get(
+            "seed",
+            data_config.get("split_seed", data_config.get("seed", 42)),
+        )
+    )
 
 
 def _deep_update(base: dict, update: dict) -> dict:
@@ -741,7 +789,7 @@ def train(config: dict, verbose: bool = True) -> dict:
     train_loader, val_loader, test_loader = create_dataloaders(
         state_encoder,
         batch_size=config["training"]["batch_size"],
-        seed=config["data"]["seed"],
+        seed=resolve_split_seed(config),
         labels_path=config["data"]["labels_path"],
         wrangled_dir=config["data"]["wrangled_dir"],
         train_ratio=config["data"]["train_ratio"],
@@ -793,6 +841,7 @@ def train(config: dict, verbose: bool = True) -> dict:
 
     configured_learning_rate = config["training"]["learning_rate"]
     lr_finder_config = config["training"].get("lr_finder", {})
+    lr_finder_enabled = lr_finder_config.get("enabled", True)
     start_lr = lr_finder_config.get("start_lr")
     end_lr = lr_finder_config.get("end_lr")
     num_iter = lr_finder_config.get("num_iter")
@@ -801,11 +850,11 @@ def train(config: dict, verbose: bool = True) -> dict:
     missing = []
     if configured_learning_rate is None:
         missing.append("training.learning_rate")
-    if start_lr is None:
+    if lr_finder_enabled and start_lr is None:
         missing.append("training.lr_finder.start_lr")
-    if end_lr is None:
+    if lr_finder_enabled and end_lr is None:
         missing.append("training.lr_finder.end_lr")
-    if num_iter is None:
+    if lr_finder_enabled and num_iter is None:
         missing.append("training.lr_finder.num_iter")
     if scheduler_min_lr is None:
         missing.append("training.scheduler.min_lr")
@@ -816,40 +865,59 @@ def train(config: dict, verbose: bool = True) -> dict:
             "Set them in config/vif.yaml or via CLI overrides."
         )
 
-    if verbose:
-        print("\nRunning default LR finder pass...")
+    if lr_finder_enabled:
+        if verbose:
+            print("\nRunning default LR finder pass...")
 
-    lr_finder_result = run_lr_finder(
-        model=model,
-        train_loader=train_loader,
-        criterion=criterion,
-        configured_learning_rate=configured_learning_rate,
-        weight_decay=config["training"]["weight_decay"],
-        device=device,
-        output_dir=output_dir,
-        output_plot_path=lr_finder_config.get("output_path"),
-        start_lr=start_lr,
-        end_lr=end_lr,
-        num_iter=int(num_iter),
-        max_selected_lr=lr_finder_config.get("max_selected_lr"),
-    )
-    selected_learning_rate = lr_finder_result["lr_selected"]
+        lr_finder_result = run_lr_finder(
+            model=model,
+            train_loader=train_loader,
+            criterion=criterion,
+            configured_learning_rate=configured_learning_rate,
+            weight_decay=config["training"]["weight_decay"],
+            device=device,
+            output_dir=output_dir,
+            output_plot_path=lr_finder_config.get("output_path"),
+            start_lr=start_lr,
+            end_lr=end_lr,
+            num_iter=int(num_iter),
+            max_selected_lr=lr_finder_config.get("max_selected_lr"),
+        )
+        selected_learning_rate = lr_finder_result["lr_selected"]
 
-    if verbose:
-        steep = lr_finder_result["suggestions"]["lr_steep"]
-        valley = lr_finder_result["suggestions"]["lr_valley"]
-        print(
-            "LR finder suggestions: "
-            f"lr_steep={steep if steep is not None else 'N/A'}, "
-            f"lr_valley={valley if valley is not None else 'N/A'}"
-        )
-        print(
-            f"LR selection source: {lr_finder_result.get('lr_selected_source', 'unknown')}"
-        )
-        if lr_finder_result.get("fallback_reason"):
-            print(f"LR selection note: {lr_finder_result['fallback_reason']}")
-        print(f"Using training learning rate: {selected_learning_rate:.6f}")
-        print(f"LR finder plot: {lr_finder_result['artifacts']['plot_path']}")
+        if verbose:
+            steep = lr_finder_result["suggestions"]["lr_steep"]
+            valley = lr_finder_result["suggestions"]["lr_valley"]
+            print(
+                "LR finder suggestions: "
+                f"lr_steep={steep if steep is not None else 'N/A'}, "
+                f"lr_valley={valley if valley is not None else 'N/A'}"
+            )
+            print(
+                f"LR selection source: {lr_finder_result.get('lr_selected_source', 'unknown')}"
+            )
+            if lr_finder_result.get("fallback_reason"):
+                print(f"LR selection note: {lr_finder_result['fallback_reason']}")
+            print(f"Using training learning rate: {selected_learning_rate:.6f}")
+            print(f"LR finder plot: {lr_finder_result['artifacts']['plot_path']}")
+    else:
+        selected_learning_rate = configured_learning_rate
+        lr_finder_result = {
+            "enabled": False,
+            "params": None,
+            "suggestions": {"lr_steep": None, "lr_valley": None},
+            "lr_selected": selected_learning_rate,
+            "lr_selected_source": "configured_learning_rate",
+            "configured_learning_rate": configured_learning_rate,
+            "fallback_reason": "lr_finder_disabled",
+            "history_points": 0,
+            "artifacts": {
+                "plot_path": None,
+                "history_path": None,
+            },
+        }
+        if verbose:
+            print("\nLR finder disabled; using configured learning rate directly.")
 
     optimizer = AdamW(
         model.parameters(),
@@ -1140,13 +1208,16 @@ Examples:
         config["model"]["hidden_dim"] = args.hidden_dim
     if args.seed is not None:
         config["data"]["seed"] = args.seed
+        config["data"]["split_seed"] = args.seed
+        config["training"]["seed"] = args.seed
     if args.lr_find_output_path is not None:
         config["training"].setdefault("lr_finder", {})
         config["training"]["lr_finder"]["output_path"] = args.lr_find_output_path
 
     # Set random seeds
-    np.random.seed(config["data"]["seed"])
-    torch.manual_seed(config["data"]["seed"])
+    training_seed = resolve_training_seed(config)
+    np.random.seed(training_seed)
+    torch.manual_seed(training_seed)
 
     # Train
     results = train(config, verbose=not args.quiet)

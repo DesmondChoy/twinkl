@@ -1,3 +1,11 @@
+"""Experiment driver for the V4 VIF critic frontier.
+
+This script preserves the cell-structured flow of the original V4 training
+notebook while serving as the canonical runnable driver for frontier review
+experiments. The interactive notebook remains at
+`notebooks/critic_training/v4/critic_training_v4.ipynb`.
+"""
+
 # ==== CELL 2 ====
 from pathlib import Path
 
@@ -26,26 +34,40 @@ if not _cfg_path.is_file():
     raise FileNotFoundError(f"Could not locate config file: {_cfg_path}")
 
 _vif_cfg = yaml.safe_load(_cfg_path.read_text())
+_encoder_defaults = _vif_cfg["encoder"]
+_state_defaults = _vif_cfg["state_encoder"]
+_model_defaults = _vif_cfg["model"]
 _training_defaults = _vif_cfg["training"]
+_data_defaults = _vif_cfg["data"]
+_mc_dropout_defaults = _vif_cfg["mc_dropout"]
+_output_defaults = _vif_cfg.get("output", {})
 _scheduler_defaults = _training_defaults["scheduler"]
 _lr_finder_defaults = _training_defaults["lr_finder"]
 _dimension_weighting_defaults = _training_defaults.get("dimension_weighting", {})
+_circumplex_defaults = _training_defaults.get("circumplex_regularizer", {})
+_ldam_defaults = _training_defaults.get("ldam_drw", {})
+
+_split_seed = int(_data_defaults.get("split_seed", _data_defaults.get("seed", 42)))
+_model_seed = int(_training_defaults.get("seed", _split_seed))
+_lr_finder_output_dir = (
+    Path(_output_defaults.get("checkpoint_dir", "models/vif")) / "lr_find_ordinal_v4"
+)
 
 lr_finder_cfg = {
     "start_lr": _lr_finder_defaults["start_lr"],
     "end_lr": _lr_finder_defaults["end_lr"],
     "num_iter": _lr_finder_defaults["num_iter"],
-    "output_dir": "models/vif/lr_find_ordinal_v4",
+    "output_dir": str(_lr_finder_output_dir),
 }
 if "max_selected_lr" in _lr_finder_defaults:
     lr_finder_cfg["max_selected_lr"] = _lr_finder_defaults["max_selected_lr"]
 
 CONFIG = {
-    # Encoder
-    "encoder_model": "nomic-ai/nomic-embed-text-v1.5",
-    "trust_remote_code": True,
-    "truncate_dim": 256,  # Matryoshka truncation (MTEB 61.04 @ 256d)
-    "text_prefix": "classification: ",  # Required task prefix for nomic models
+    # Canonical runtime defaults sourced from config/vif.yaml
+    "encoder_model": _encoder_defaults["model_name"],
+    "trust_remote_code": _encoder_defaults.get("trust_remote_code", True),
+    "truncate_dim": _encoder_defaults["truncate_dim"],
+    "text_prefix": _encoder_defaults.get("text_prefix", "classification: "),
     # Models to compare (previous 4 frontier runs + CDW-CE alpha sweep)
     "models_to_train": [
         "CORAL",
@@ -58,10 +80,9 @@ CONFIG = {
     ],
     "model_overrides": {},
     "selection_policy": {},
-    # Model
-    "hidden_dim": 64,
-    "dropout": 0.3,
-    # Optimizer / training (sourced from config/vif.yaml)
+    # Model / training
+    "hidden_dim": _model_defaults["hidden_dim"],
+    "dropout": _model_defaults["dropout"],
     "learning_rate": _training_defaults["learning_rate"],
     "weight_decay": _training_defaults["weight_decay"],
     "batch_size": _training_defaults["batch_size"],
@@ -74,20 +95,20 @@ CONFIG = {
     "scheduler_patience": _scheduler_defaults["patience"],
     "scheduler_min_lr": _scheduler_defaults["min_lr"],
     # State encoder
-    "window_size": 1,
+    "window_size": _state_defaults["window_size"],
     # MC Dropout
-    "mc_dropout_samples": 50,
+    "mc_dropout_samples": _mc_dropout_defaults["n_samples"],
     # Data split / training seeds
-    "train_ratio": 0.70,
-    "val_ratio": 0.15,
-    "split_seed": 2025,
-    "model_seed": 2025,
-    "fixed_holdout_manifest_path": None,
-    "class_balance_source": "train_split_per_dimension",
-    "circumplex_regularizer_enabled": False,
-    "circumplex_regularizer_opposite_weight": 0.0,
-    "circumplex_regularizer_adjacent_weight": 0.0,
-    "dimension_weighting_enabled": _dimension_weighting_defaults.get("enabled", True),
+    "train_ratio": _data_defaults["train_ratio"],
+    "val_ratio": _data_defaults["val_ratio"],
+    "split_seed": _split_seed,
+    "model_seed": _model_seed,
+    "fixed_holdout_manifest_path": _data_defaults.get("fixed_holdout_manifest_path"),
+    "class_balance_source": _training_defaults.get("class_balance_source"),
+    "circumplex_regularizer_enabled": _circumplex_defaults.get("enabled", False),
+    "circumplex_regularizer_opposite_weight": _circumplex_defaults.get("opposite_weight", 0.0),
+    "circumplex_regularizer_adjacent_weight": _circumplex_defaults.get("adjacent_weight", 0.0),
+    "dimension_weighting_enabled": _dimension_weighting_defaults.get("enabled", False),
     "dimension_weighting_mode": _dimension_weighting_defaults.get("mode", "inverse_loss"),
     "dimension_weighting_temperature": _dimension_weighting_defaults.get("temperature", 0.5),
     "dimension_weighting_ema_alpha": _dimension_weighting_defaults.get("ema_alpha", 0.3),
@@ -95,12 +116,12 @@ CONFIG = {
     "dimension_weighting_eps": _dimension_weighting_defaults.get("eps", 1e-6),
     "dimension_weighting_min": _dimension_weighting_defaults.get("min_weight", 0.5),
     "dimension_weighting_max": _dimension_weighting_defaults.get("max_weight", 1.5),
-    "ldam_max_m": 0.5,
-    "ldam_scale": 30.0,
-    "ldam_drw_start_epoch": 50,
-    "ldam_beta": 0.9999,
+    "ldam_max_m": _ldam_defaults.get("max_m", 0.5),
+    "ldam_scale": _ldam_defaults.get("scale", 30.0),
+    "ldam_drw_start_epoch": _ldam_defaults.get("drw_start_epoch", 50),
+    "ldam_beta": _ldam_defaults.get("beta", 0.9999),
     # LR finder config
-    "use_lr_finder": True,
+    "use_lr_finder": _lr_finder_defaults.get("enabled", True),
     "lr_finder": lr_finder_cfg,
     # Optional metadata for scripted runs
     "experiment_group": None,

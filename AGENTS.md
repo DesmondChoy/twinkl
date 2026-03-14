@@ -81,6 +81,7 @@ Script-based generation/judging helpers live in `src/synthetic/`,
 ### Scripted Workflows
 
 - `src/vif/train.py` and `src/vif/train_bnn.py` — Critic training CLIs
+- `scripts/experiments/critic_training_v4_review.py` — Canonical frontier experiment driver for multi-model VIF review runs
 - `src/synthetic/generation.py` — Synthetic generation primitives and safeguards
 - `src/judge/labeling.py` — Judge rubric + scoring helpers
 - `scripts/journalling/` — Lightweight sanity-check scripts for generation/judge flows
