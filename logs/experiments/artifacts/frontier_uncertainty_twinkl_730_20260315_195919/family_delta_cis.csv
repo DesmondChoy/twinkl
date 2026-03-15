@@ -1,0 +1,13 @@
+estimate,ci_lower,ci_upper,method,bootstrap_n,family_key,family_label,baseline_family_key,baseline_family_label,metric,verdict
+-0.019990740964499876,-0.062229060138308846,0.018149704430600634,bca,1000,weighted_balanced_softmax,BalancedSoftmax + dimweight,default_balanced_softmax,Current default BalancedSoftmax,qwk_mean,likely_noise
+0.06470238095238101,0.020641440872778822,0.12823693534711494,bca,1000,weighted_balanced_softmax,BalancedSoftmax + dimweight,default_balanced_softmax,Current default BalancedSoftmax,recall_minus1,distinguishable_gain
+0.0005754107956625898,-0.036624643348455777,0.03565441566622178,bca,1000,weighted_balanced_softmax,BalancedSoftmax + dimweight,default_balanced_softmax,Current default BalancedSoftmax,minority_recall_mean,likely_noise
+0.004459535739997134,-0.035593915723772816,0.04598604842417705,bca,1000,circreg_recall_floor,BalancedSoftmax + circreg + recall floor,default_balanced_softmax,Current default BalancedSoftmax,qwk_mean,likely_noise
+-0.046468253968253936,-0.09790254600114659,-0.008120416344287803,bca,1000,circreg_recall_floor,BalancedSoftmax + circreg + recall floor,default_balanced_softmax,Current default BalancedSoftmax,recall_minus1,distinguishable_regression
+-0.03868729577217844,-0.08243608965623218,-0.01955829885352749,bca,1000,circreg_recall_floor,BalancedSoftmax + circreg + recall floor,default_balanced_softmax,Current default BalancedSoftmax,minority_recall_mean,distinguishable_regression
+-0.013146111115539982,-0.05342228557738632,0.018726032824441192,bca,1000,targeted_batch,BalancedSoftmax + targeted batch,default_balanced_softmax,Current default BalancedSoftmax,qwk_mean,likely_noise
+0.028781918564527276,-0.029476886236463336,0.08811602508938915,bca,1000,targeted_batch,BalancedSoftmax + targeted batch,default_balanced_softmax,Current default BalancedSoftmax,recall_minus1,likely_noise
+-0.013603372893633059,-0.05468992024946546,0.005971052444658446,bca,1000,targeted_batch,BalancedSoftmax + targeted batch,default_balanced_softmax,Current default BalancedSoftmax,minority_recall_mean,likely_noise
+-0.01602394038117666,-0.05945605720943332,0.014030763627985318,bca,1000,hedonism_security_lift,BalancedSoftmax + hedonism/security lift,default_balanced_softmax,Current default BalancedSoftmax,qwk_mean,likely_noise
+0.014628191856452755,-0.03551516167942972,0.06440646734714063,bca,1000,hedonism_security_lift,BalancedSoftmax + hedonism/security lift,default_balanced_softmax,Current default BalancedSoftmax,recall_minus1,likely_noise
+-0.006185656448814303,-0.04138892711918266,0.015405867823649232,bca,1000,hedonism_security_lift,BalancedSoftmax + hedonism/security lift,default_balanced_softmax,Current default BalancedSoftmax,minority_recall_mean,likely_noise

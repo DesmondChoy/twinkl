@@ -21,6 +21,8 @@
 >
 > **Latest post-hoc retargeting review:** [`reports/experiment_review_twinkl_729.md`](reports/experiment_review_twinkl_729.md) did **not** change the frontier. The new effective-prior + per-dimension tau branch did not beat the standard Menon control on the guarded median test comparison: standard Menon still delivered the better median `recall_-1` delta (`+0.004` vs baseline) while both branches gave back QWK, calibration, and circumplex cleanliness. On the strongest weighted checkpoint `run_036`, the new branch was validation-selected but regressed on holdout (`qwk_mean 0.381 -> 0.360`, `recall_-1 0.387 -> 0.339`, `calibration 0.726 -> 0.592`). Treat this as evidence that the current post-hoc line is likely exhausted for the active frontier; `run_034`-`run_036` remain the best tail-sensitive reference branch, and any further incumbent-centered follow-up should be a materially different intervention such as `twinkl-719.6`.
 >
+> **Latest frontier uncertainty review:** [`reports/experiment_review_2026-03-14_twinkl_730.md`](reports/experiment_review_2026-03-14_twinkl_730.md) adds persona-cluster bootstrap BCa intervals and hard-dimension chance tests for the active BalancedSoftmax frontier families. The weighted reference branch still shows a statistically distinguishable family-median `recall_-1` gain over the incumbent (`+0.065`, 95% BCa CI `[+0.021, +0.128]`), but its QWK delta remains unresolved noise (`-0.020`, CI `[-0.062, +0.018]`) and minority recall is effectively flat. Future promotion decisions should therefore gate on family-delta intervals, not point medians, and treat hard-dimension QWK as secondary evidence only when it is itself above chance.
+>
 > **Latest full frontier review:** [`reports/experiment_review_2026-03-11_twinkl_721.md`](reports/experiment_review_2026-03-11_twinkl_721.md)
 >
 > **Latest checkpoint-selection guardrail review:** [`reports/experiment_review_2026-03-10_twinkl_715.md`](reports/experiment_review_2026-03-10_twinkl_715.md)
@@ -165,6 +167,39 @@
 > **Contributor note:** Keep this section in **newest-first** chronological order (most recent date at top).
 
 ## Findings
+
+### 2026-03-14 — Persona-cluster bootstrap shows the weighted branch has real recall lift but unresolved QWK cost (`twinkl-730`)
+
+`twinkl-730` quantified holdout uncertainty on the active corrected-split
+BalancedSoftmax families using saved test-output artifacts only: 1,000 persona-
+cluster bootstrap resamples for 95% BCa intervals plus 1,000 stratified
+persona-cluster permutations for hard-dimension above-chance checks.
+
+**1. The weighted reference branch does have a real tail-recovery lift.**
+Relative to the incumbent `run_019`-`run_021`, family-median `recall_-1`
+improves by `+0.065` with a 95% BCa CI of `[+0.021, +0.128]`, so that gain is
+not just holdout noise.
+
+**2. The weighted branch still does not have a clean promotion case.** Its
+family-median QWK delta versus the incumbent is `-0.020` with CI
+`[-0.062, +0.018]`, and minority recall is effectively flat at `+0.001` with
+CI `[-0.037, +0.036]`. That means the apparent QWK cost is unresolved rather
+than proven, but the branch still lacks the all-metric separation needed to
+replace the default.
+
+**3. Hard-dimension QWK remains too fragile to drive frontier calls by
+itself.** `stimulation` clears the above-chance permutation test in only `1/5`
+reviewed families, while weighted `hedonism` also fails the chance check
+despite a positive point estimate. `security` is more stable than `hedonism`,
+but neither should be treated as decisive without a non-noisy family delta.
+
+**4. Recommendation: use uncertainty-aware promotion gates going forward.**
+Future reviews should gate on 95% BCa family-median deltas first: treat any
+delta interval spanning zero as unresolved noise, require tail-first promotions
+to keep both `recall_-1` and minority-recall lower bounds above zero, and use
+hard-dimension QWK only as secondary evidence after it clears the above-chance
+test. Full details:
+[`reports/experiment_review_2026-03-14_twinkl_730.md`](reports/experiment_review_2026-03-14_twinkl_730.md).
 
 ### 2026-03-12 — Effective-prior + per-dimension tau still fails to move the frontier (`twinkl-729`)
 

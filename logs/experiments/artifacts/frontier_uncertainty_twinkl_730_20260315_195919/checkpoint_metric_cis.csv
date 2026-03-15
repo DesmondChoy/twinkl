@@ -1,0 +1,46 @@
+estimate,ci_lower,ci_upper,method,bootstrap_n,run_id,family_key,family_label,metric
+0.36191667125839005,0.2989493593661709,0.443859934880559,bca,1000,run_019,default_balanced_softmax,Current default BalancedSoftmax,qwk_mean
+0.2765338164251208,0.1764144736777394,0.3878876632287652,bca,1000,run_019,default_balanced_softmax,Current default BalancedSoftmax,recall_minus1
+0.39858655793259623,0.33552962365160977,0.4923636940278494,bca,1000,run_019,default_balanced_softmax,Current default BalancedSoftmax,minority_recall_mean
+0.37770420814541467,0.31305782131620175,0.47333147674526965,bca,1000,run_020,default_balanced_softmax,Current default BalancedSoftmax,qwk_mean
+0.3416036922015183,0.2625877468665941,0.44531431184223835,bca,1000,run_020,default_balanced_softmax,Current default BalancedSoftmax,recall_minus1
+0.4491665697479485,0.38717725107283707,0.5340405845519295,bca,1000,run_020,default_balanced_softmax,Current default BalancedSoftmax,minority_recall_mean
+0.3581692658714301,0.29400290895490405,0.43846726705225636,bca,1000,run_021,default_balanced_softmax,Current default BalancedSoftmax,qwk_mean
+0.3132375776397515,0.22024134292119865,0.44427169771339164,bca,1000,run_021,default_balanced_softmax,Current default BalancedSoftmax,recall_minus1
+0.4480285597633995,0.3888165199035053,0.529600405212624,bca,1000,run_021,default_balanced_softmax,Current default BalancedSoftmax,minority_recall_mean
+0.3419259302938902,0.2624580085850501,0.4427160000852778,bca,1000,run_034,weighted_balanced_softmax,BalancedSoftmax + dimweight,qwk_mean
+0.29849810213940653,0.19039111585851257,0.42434997994982776,bca,1000,run_034,weighted_balanced_softmax,BalancedSoftmax + dimweight,recall_minus1
+0.4122059027690464,0.3406146045075508,0.510187816460999,bca,1000,run_034,weighted_balanced_softmax,BalancedSoftmax + dimweight,minority_recall_mean
+0.32100995455888215,0.24555540765205036,0.4149372949501692,bca,1000,run_035,weighted_balanced_softmax,BalancedSoftmax + dimweight,qwk_mean
+0.37793995859213253,0.2620077392608317,0.5022548688715317,bca,1000,run_035,weighted_balanced_softmax,BalancedSoftmax + dimweight,recall_minus1
+0.4486039705590621,0.3785962362413752,0.531599612959215,bca,1000,run_035,weighted_balanced_softmax,BalancedSoftmax + dimweight,minority_recall_mean
+0.3806709745747184,0.31108659297479074,0.4708724051861019,bca,1000,run_036,weighted_balanced_softmax,BalancedSoftmax + dimweight,qwk_mean
+0.3865536576949621,0.27329650047843523,0.5018364525852635,bca,1000,run_036,weighted_balanced_softmax,BalancedSoftmax + dimweight,recall_minus1
+0.4917577960194522,0.4213255733499904,0.5762883959409328,bca,1000,run_036,weighted_balanced_softmax,BalancedSoftmax + dimweight,minority_recall_mean
+0.3527040717303299,0.2588257811545725,0.4557969389484301,bca,1000,run_031,circreg_recall_floor,BalancedSoftmax + circreg + recall floor,qwk_mean
+0.2667693236714976,0.15678111854575935,0.3791701853658669,bca,1000,run_031,circreg_recall_floor,BalancedSoftmax + circreg + recall floor,recall_minus1
+0.4089395651545251,0.347617292693313,0.4909871160123146,bca,1000,run_031,circreg_recall_floor,BalancedSoftmax + circreg + recall floor,minority_recall_mean
+0.3663762069983872,0.28112666004663883,0.46537696649195365,bca,1000,run_032,circreg_recall_floor,BalancedSoftmax + circreg + recall floor,qwk_mean
+0.35450741890959286,0.23777688820232762,0.4771759400796036,bca,1000,run_032,circreg_recall_floor,BalancedSoftmax + circreg + recall floor,recall_minus1
+0.43468811119912376,0.367163268411457,0.534633256693793,bca,1000,run_032,circreg_recall_floor,BalancedSoftmax + circreg + recall floor,minority_recall_mean
+0.372290028290729,0.30062127806544714,0.4644750217377192,bca,1000,run_033,circreg_recall_floor,BalancedSoftmax + circreg + recall floor,qwk_mean
+0.26016994478951,0.1870755531122617,0.3742647670912059,bca,1000,run_033,circreg_recall_floor,BalancedSoftmax + circreg + recall floor,recall_minus1
+0.40934126399122106,0.3581120715846796,0.4932827990432897,bca,1000,run_033,circreg_recall_floor,BalancedSoftmax + circreg + recall floor,minority_recall_mean
+0.3487705601428501,0.27156624716573863,0.4450624327068997,bca,1000,run_022,targeted_batch,BalancedSoftmax + targeted batch,qwk_mean
+0.36628536922015187,0.26101537256106827,0.5020099108379675,bca,1000,run_022,targeted_batch,BalancedSoftmax + targeted batch,recall_minus1
+0.43442518686976644,0.36017075513265223,0.5284170613046042,bca,1000,run_022,targeted_batch,BalancedSoftmax + targeted batch,minority_recall_mean
+0.3716275827958361,0.2891500748603076,0.4663531636134466,bca,1000,run_023,targeted_batch,BalancedSoftmax + targeted batch,qwk_mean
+0.3084704968944099,0.19092752637142119,0.4260887983358517,bca,1000,run_023,targeted_batch,BalancedSoftmax + targeted batch,recall_minus1
+0.44977028779445827,0.38565689221577915,0.5452518411025995,bca,1000,run_023,targeted_batch,BalancedSoftmax + targeted batch,minority_recall_mean
+0.3393118597304111,0.24955545085552966,0.4316560082729147,bca,1000,run_024,targeted_batch,BalancedSoftmax + targeted batch,qwk_mean
+0.3420194962042788,0.2151325391939881,0.47564648612530686,bca,1000,run_024,targeted_batch,BalancedSoftmax + targeted batch,recall_minus1
+0.43339443490973817,0.35634285709566865,0.5316782262729481,bca,1000,run_024,targeted_batch,BalancedSoftmax + targeted batch,minority_recall_mean
+0.3458927308772134,0.2772866045790197,0.4409380569685545,bca,1000,run_025,hedonism_security_lift,BalancedSoftmax + hedonism/security lift,qwk_mean
+0.3052734644582471,0.20159952008261536,0.45384933491951845,bca,1000,run_025,hedonism_security_lift,BalancedSoftmax + hedonism/security lift,recall_minus1
+0.4114191855928841,0.34618962828423866,0.4966553594471571,bca,1000,run_025,hedonism_security_lift,BalancedSoftmax + hedonism/security lift,minority_recall_mean
+0.33398895620177715,0.2536650438776867,0.4244023602228605,bca,1000,run_026,hedonism_security_lift,BalancedSoftmax + hedonism/security lift,qwk_mean
+0.38287784679089026,0.26293682683568986,0.5097632193481945,bca,1000,run_026,hedonism_security_lift,BalancedSoftmax + hedonism/security lift,recall_minus1
+0.45712271594887444,0.3892430106165264,0.5451052698085164,bca,1000,run_026,hedonism_security_lift,BalancedSoftmax + hedonism/security lift,minority_recall_mean
+0.3510959811872431,0.28760094470244574,0.4383016696412019,bca,1000,run_027,hedonism_security_lift,BalancedSoftmax + hedonism/security lift,qwk_mean
+0.3278657694962043,0.2207144625626547,0.43791585782806886,bca,1000,run_027,hedonism_security_lift,BalancedSoftmax + hedonism/security lift,recall_minus1
+0.4418429033145852,0.3739410646221797,0.5251843376634016,bca,1000,run_027,hedonism_security_lift,BalancedSoftmax + hedonism/security lift,minority_recall_mean
