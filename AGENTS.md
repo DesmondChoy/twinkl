@@ -118,6 +118,11 @@ Script-based generation/judging helpers live in `src/synthetic/`,
 - Naming: `snake_case` for functions/variables, `PascalCase` for classes.
 - Keep comments concise and only where they reduce cognitive load.
 
+## Communication Clarity
+
+- **General clarity rule**: Write for immediate understanding on first read. Prefer plain, everyday language, short sentences, and concrete wording over dense or abstract phrasing.
+- **Anti-jargon rule**: Do not make the user decode internal shorthand, umbrella terms, or technical jargon when a direct phrase would work. If a technical term is necessary, define it in plain English the first time you use it.
+
 ## Quality Gate Before Commit
 
 Before creating a commit:
