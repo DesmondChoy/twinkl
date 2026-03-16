@@ -23,6 +23,8 @@
 >
 > **Latest frontier uncertainty review:** [`reports/experiment_review_2026-03-14_twinkl_730.md`](reports/experiment_review_2026-03-14_twinkl_730.md) adds persona-cluster bootstrap BCa intervals and hard-dimension chance tests for the active BalancedSoftmax frontier families. The weighted reference branch still shows a statistically distinguishable family-median `recall_-1` gain over the incumbent (`+0.065`, 95% BCa CI `[+0.021, +0.128]`), but its QWK delta remains unresolved noise (`-0.020`, CI `[-0.062, +0.018]`) and minority recall is effectively flat. Future promotion decisions should therefore gate on family-delta intervals, not point medians, and treat hard-dimension QWK as secondary evidence only when it is itself above chance.
 >
+> **Latest 768d truncation diagnostic review:** [`reports/experiment_review_2026-03-16_twinkl_731.md`](reports/experiment_review_2026-03-16_twinkl_731.md) did **not** change the frontier. The unconstrained full-768d diagnostic `run_037` regressed against incumbent `run_020` on holdout `qwk_mean` (`0.378 -> 0.318`), `recall_-1` (`0.342 -> 0.269`), minority recall (`0.449 -> 0.381`), and both target hard-dimension QWKs (`hedonism 0.262 -> 0.178`, `security 0.213 -> 0.165`). The fair-budget control `run_038` matched the incumbent parameter budget more closely but degraded further (`qwk_mean 0.299`, `recall_-1 0.246`) while collapsing `hedonism qwk` to `-0.045`. Treat this as a negative representation diagnostic: drop full 768d for this frontier and proceed to `twinkl-732`.
+>
 > **Latest full frontier review:** [`reports/experiment_review_2026-03-11_twinkl_721.md`](reports/experiment_review_2026-03-11_twinkl_721.md)
 >
 > **Latest checkpoint-selection guardrail review:** [`reports/experiment_review_2026-03-10_twinkl_715.md`](reports/experiment_review_2026-03-10_twinkl_715.md)
@@ -162,11 +164,46 @@
 | 034 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax_dimweight | 23454 | 19.3 | 0.309 | 0.752 | 0.342 | 0.323 | 0.740 | 0.412 | 0.063 | 0.068 | runs/run_034_BalancedSoftmax.yaml |
 | 035 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax_dimweight | 23454 | 19.3 | 0.333 | 0.728 | 0.321 | 0.342 | 0.686 | 0.449 | 0.092 | 0.076 | runs/run_035_BalancedSoftmax.yaml |
 | 036 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax_dimweight | 23454 | 19.3 | 0.303 | 0.758 | 0.381 | 0.388 | 0.726 | 0.492 | 0.068 | 0.084 | runs/run_036_BalancedSoftmax.yaml |
+| 037 | BalancedSoftmax | nomic-768d | 1 | 64 | 0.3 | balanced_softmax | 56222 | 46.3 | 0.319 | 0.739 | 0.318 | 0.332 | 0.720 | 0.381 | 0.074 | 0.075 | runs/run_037_BalancedSoftmax.yaml |
+| 038 | BalancedSoftmax | nomic-768d | 1 | 28 | 0.3 | balanced_softmax | 23606 | 19.5 | 0.333 | 0.737 | 0.299 | 0.301 | 0.657 | 0.346 | 0.104 | 0.077 | runs/run_038_BalancedSoftmax.yaml |
 <!-- AUTO-TABLE:END -->
 
 > **Contributor note:** Keep this section in **newest-first** chronological order (most recent date at top).
 
 ## Findings
+
+### 2026-03-16 — Full 768d Nomic v1.5 does not rescue hard-dimension polarity on the frontier (`twinkl-731`)
+
+`twinkl-731` reran the incumbent single-seed frontier checkpoint (`run_020`,
+seed `22`) at full native `768d` and added a same-seed fair-budget control to
+separate embedding signal from added MLP capacity.
+
+**1. The full-width diagnostic was negative on the metrics that matter.**
+`run_037` raised `state_dim` from `266` to `778` and parameter count from
+`23,454` to `56,222`, but holdout performance regressed versus `run_020`:
+`qwk_mean 0.378 -> 0.318`, `recall_-1 0.342 -> 0.269`, and minority recall
+`0.449 -> 0.381`. Calibration stayed roughly flat and hedging barely moved, so
+there is no “pay a little QWK for much better tail recovery” argument here.
+
+**2. The matched-budget control rules out a hidden representation win.**
+`run_038` kept the same `768d` encoder and `state_dim=778` but reduced
+`hidden_dim` to `28`, yielding `23,606` parameters, essentially flat to the
+incumbent. It still fell further on aggregate performance
+(`qwk_mean 0.299`, `recall_-1 0.246`, minority recall `0.346`), so the 768d
+embedding does not appear to unlock useful polarity information once capacity is
+normalized.
+
+**3. The target hard dimensions do not improve cleanly.** `run_037` makes both
+`hedonism qwk` (`0.262 -> 0.178`) and `security qwk` (`0.213 -> 0.165`) worse.
+`run_038` nudges `security qwk` up slightly (`0.225`) and improves security
+calibration, but only alongside much heavier `security` hedging (`0.706 ->
+0.815`) and a collapse in `hedonism qwk` to `-0.045`. That is not evidence of a
+representation-level fix for the frontier’s remaining polarity failures.
+
+**4. Recommendation: stop this line and move to `twinkl-732`.** The active
+corrected-split frontier remains `run_019`-`run_021` with
+`run_034`-`run_036` as the best tail-sensitive reference branch. Full details:
+[`reports/experiment_review_2026-03-16_twinkl_731.md`](reports/experiment_review_2026-03-16_twinkl_731.md).
 
 ### 2026-03-14 — Persona-cluster bootstrap shows the weighted branch has real recall lift but unresolved QWK cost (`twinkl-730`)
 
