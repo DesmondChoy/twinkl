@@ -329,20 +329,29 @@ def _encoder_shorthand(config: dict) -> str:
 
     Examples:
         nomic-ai/nomic-embed-text-v1.5 + truncate_dim=256 → "nomic-256d"
+        nomic-ai/nomic-embed-text-v2-moe + truncate_dim=256 → "nomic-v2-moe-256d"
         all-MiniLM-L6-v2 → "MiniLM-384d"
     """
     model = config.get("encoder_model", "unknown")
     truncate_dim = config.get("truncate_dim")
+    model_slug = model.split("/")[-1]
+    lower = model.lower()
 
-    if "nomic" in model.lower():
+    if model_slug == "nomic-embed-text-v1.5":
         dim = truncate_dim if truncate_dim else "768"
         return f"nomic-{dim}d"
+    elif model_slug == "nomic-embed-text-v2-moe":
+        dim = truncate_dim if truncate_dim else "768"
+        return f"nomic-v2-moe-{dim}d"
+    elif "nomic" in lower:
+        dim = truncate_dim if truncate_dim else "768"
+        return f"{model_slug[:15]}-{dim}d"
     elif "MiniLM" in model:
         return "MiniLM-384d"
-    elif "mpnet" in model.lower():
+    elif "mpnet" in lower:
         return "mpnet-768d"
     else:
-        return model.split("/")[-1][:15]
+        return model_slug[:15]
 
 
 def _loss_shorthand(model_name: str, config: dict) -> str:

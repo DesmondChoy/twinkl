@@ -1,0 +1,325 @@
+# VIF Experiment: run_039_BalancedSoftmax
+# Generated: 2026-03-16T21:56:29
+# Git: a3c2a78(dirty)
+metadata:
+  experiment_id: run_039_BalancedSoftmax
+  run_id: run_039
+  model_name: BalancedSoftmax
+  timestamp: '2026-03-16T21:56:29'
+  git_commit: a3c2a78(dirty)
+  config_hash: 9bf91bf207f7
+provenance:
+  prev_run_id: run_038
+  prev_git_commit: 556ac6b(dirty)
+  git_log:
+  - 'a3c2a78 twinkl-731: expand review to full 9-section format with artifact analysis'
+  - '6f4fd11 twinkl-741: add communication clarity rules'
+  - '69dd5b1 twinkl-731: add 768d truncation diagnostic review'
+  config_delta:
+    added:
+      encoder.truncate_dim: 256
+    removed: {}
+    changed:
+      encoder.model_name:
+        from: nomic-ai/nomic-embed-text-v1.5
+        to: nomic-ai/nomic-embed-text-v2-moe
+      encoder.text_prefix:
+        from: 'classification: '
+        to: 'search_document: '
+      data.pct_truncated:
+        from: 0.0
+        to: 0.7874
+      data.state_dim:
+        from: 778
+        to: 266
+      model.hidden_dim:
+        from: 28
+        to: 64
+  rationale: ''
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v2-moe
+    truncate_dim: 256
+    text_prefix: 'search_document: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.7874
+    state_dim: 266
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: balanced_softmax
+    learning_rate: 0.015522253574270487
+    learning_rate_configured: 0.015522253574270487
+    learning_rate_source: explicit_model_override
+    lr_finder_enabled: false
+    learning_rate_policy: run_015_cdwce_a3_valley
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 22
+    class_balance_source: train_split_per_dimension
+    circumplex_regularizer_enabled: false
+    circumplex_regularizer_opposite_weight: 0.0
+    circumplex_regularizer_adjacent_weight: 0.0
+    dimension_weighting_enabled: false
+    dimension_weighting_mode: inverse_loss
+    dimension_weighting_temperature: 0.5
+    dimension_weighting_ema_alpha: 0.3
+    dimension_weighting_warmup_epochs: 1
+    dimension_weighting_eps: 1.0e-06
+    dimension_weighting_min: 0.5
+    dimension_weighting_max: 1.5
+    ldam_max_m: 0.5
+    ldam_scale: 30.0
+    ldam_drw_start_epoch: 50
+    ldam_beta: 0.9999
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1213
+  n_val: 217
+  n_test: 221
+capacity:
+  n_parameters: 23454
+  param_sample_ratio: 19.3355
+training_dynamics:
+  best_epoch: 21
+  total_epochs: 29
+  train_loss_at_best: 0.3034
+  val_loss_at_best: 0.5558
+  gap_at_best: 0.2524
+  final_lr: 0.007761
+  selection_source: eligible_policy
+  promotion_eligible: true
+  debug_fallback_used: false
+  selection_metrics:
+    qwk_mean: 0.3961
+    recall_minus1: 0.4552
+    calibration_global: 0.6856
+    hedging_mean: 0.5995
+    qwk_nan_dims_count: 0
+    eligible: true
+    ineligible_reasons: []
+evaluation:
+  mae_mean: 0.3252
+  accuracy_mean: 0.7371
+  qwk_mean: 0.3048
+  qwk_nan_dims_count: 0
+  spearman_mean: 0.3356
+  calibration_global: 0.6909
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.3379
+  minority_recall_mean: 0.4334
+  recall_minus1: 0.3362
+  recall_zero: 0.8088
+  recall_plus1: 0.5306
+  hedging_mean: 0.5982
+  circumplex_summary:
+    opposite_violation_mean: 0.07270896636570494
+    adjacent_support_mean: 0.08327340986579657
+per_dimension:
+  self_direction:
+    mae: 0.4309
+    accuracy: 0.6425
+    qwk: 0.4406
+    spearman: 0.4957
+    calibration: 0.5705
+    hedging: 0.3484
+  stimulation:
+    mae: 0.2845
+    accuracy: 0.81
+    qwk: 0.1679
+    spearman: 0.1496
+    calibration: 0.6773
+    hedging: 0.638
+  hedonism:
+    mae: 0.2691
+    accuracy: 0.8145
+    qwk: 0.1878
+    spearman: 0.1365
+    calibration: 0.8037
+    hedging: 0.733
+  achievement:
+    mae: 0.4027
+    accuracy: 0.6697
+    qwk: 0.2801
+    spearman: 0.3237
+    calibration: 0.5265
+    hedging: 0.552
+  power:
+    mae: 0.2536
+    accuracy: 0.8009
+    qwk: 0.1173
+    spearman: 0.1526
+    calibration: 0.7463
+    hedging: 0.7647
+  security:
+    mae: 0.3434
+    accuracy: 0.6833
+    qwk: 0.2842
+    spearman: 0.366
+    calibration: 0.5302
+    hedging: 0.6787
+  conformity:
+    mae: 0.3847
+    accuracy: 0.6742
+    qwk: 0.4539
+    spearman: 0.5064
+    calibration: 0.5409
+    hedging: 0.4615
+  tradition:
+    mae: 0.2909
+    accuracy: 0.733
+    qwk: 0.435
+    spearman: 0.5079
+    calibration: 0.7856
+    hedging: 0.5701
+  benevolence:
+    mae: 0.427
+    accuracy: 0.6471
+    qwk: 0.3073
+    spearman: 0.396
+    calibration: 0.5709
+    hedging: 0.4661
+  universalism:
+    mae: 0.1652
+    accuracy: 0.8959
+    qwk: 0.3741
+    spearman: 0.3214
+    calibration: 0.907
+    hedging: 0.7692
+observations: ''
+circumplex:
+  source: probabilities
+  summary:
+    opposite_violation_mean: 0.07270896636570494
+    adjacent_support_mean: 0.08327340986579657
+  opposite_pairs:
+  - pair_id: achievement__benevolence
+    left: achievement
+    right: benevolence
+    score: 0.1570943146944046
+  - pair_id: achievement__universalism
+    left: achievement
+    right: universalism
+    score: 0.03913058713078499
+  - pair_id: benevolence__power
+    left: benevolence
+    right: power
+    score: 0.06883056461811066
+  - pair_id: conformity__hedonism
+    left: conformity
+    right: hedonism
+    score: 0.0690339133143425
+  - pair_id: conformity__self_direction
+    left: conformity
+    right: self_direction
+    score: 0.07396368682384491
+  - pair_id: conformity__stimulation
+    left: conformity
+    right: stimulation
+    score: 0.051336582750082016
+  - pair_id: hedonism__tradition
+    left: hedonism
+    right: tradition
+    score: 0.0688488632440567
+  - pair_id: power__universalism
+    left: power
+    right: universalism
+    score: 0.018170250579714775
+  - pair_id: security__self_direction
+    left: security
+    right: self_direction
+    score: 0.07002929598093033
+  - pair_id: security__stimulation
+    left: security
+    right: stimulation
+    score: 0.043446917086839676
+  - pair_id: self_direction__tradition
+    left: self_direction
+    right: tradition
+    score: 0.15050120651721954
+  - pair_id: stimulation__tradition
+    left: stimulation
+    right: tradition
+    score: 0.06212141364812851
+  adjacent_pairs:
+  - pair_id: achievement__hedonism
+    left: achievement
+    right: hedonism
+    score: 0.0238336268812418
+  - pair_id: achievement__power
+    left: achievement
+    right: power
+    score: 0.07539390027523041
+  - pair_id: benevolence__conformity
+    left: benevolence
+    right: conformity
+    score: 0.11220289766788483
+  - pair_id: benevolence__tradition
+    left: benevolence
+    right: tradition
+    score: 0.19325898587703705
+  - pair_id: benevolence__universalism
+    left: benevolence
+    right: universalism
+    score: 0.103657566010952
+  - pair_id: conformity__security
+    left: conformity
+    right: security
+    score: 0.07950214296579361
+  - pair_id: conformity__tradition
+    left: conformity
+    right: tradition
+    score: 0.07526624947786331
+  - pair_id: hedonism__stimulation
+    left: hedonism
+    right: stimulation
+    score: 0.059643764048814774
+  - pair_id: power__security
+    left: power
+    right: security
+    score: 0.023444077000021935
+  - pair_id: security__tradition
+    left: security
+    right: tradition
+    score: 0.07089321315288544
+  - pair_id: self_direction__stimulation
+    left: self_direction
+    right: stimulation
+    score: 0.0917619988322258
+  - pair_id: self_direction__universalism
+    left: self_direction
+    right: universalism
+    score: 0.09042249619960785
+selection_policy:
+  name: qwk_then_recall_guarded
+  rank_order:
+  - qwk_mean
+  - recall_minus1
+  - calibration_global
+  - hedging_mean
+  - val_loss
+  guardrails:
+    qwk_mean_must_be_finite: true
+    qwk_nan_dims_count_must_equal_zero: true
+    calibration_global_must_be_non_negative: true
+    recall_minus1_floor: null
+  fallback: best_finite_qwk
+artifacts:
+  selection_trace: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260316_215612/BalancedSoftmax/selection_trace.parquet
+  selection_summary: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260316_215612/BalancedSoftmax/selection_summary.yaml
+  dimension_weight_trace: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260316_215612/BalancedSoftmax/dimension_weight_trace.parquet
+  checkpoint: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260316_215612/BalancedSoftmax/selected_checkpoint.pt
+  validation_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260316_215612/BalancedSoftmax/selected_validation_outputs.parquet
+  test_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260316_215612/BalancedSoftmax/selected_test_outputs.parquet

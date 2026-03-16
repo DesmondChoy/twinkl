@@ -16,6 +16,7 @@ from src.vif.experiment_logger import (
     _build_experiment_dict,
     _canonicalize_run_config,
     _compute_config_delta,
+    _encoder_shorthand,
     _encoder_family,
     _flatten_dict,
     _format_index_row,
@@ -100,6 +101,27 @@ class TestLossShorthand:
     def test_weighted_mse_includes_scale(self):
         config = {"loss_fn": "weighted_mse", "weighted_mse_scale": 7.5}
         assert _loss_shorthand("MSE", config) == "weighted_mse_s7.5"
+
+
+# ─── _encoder_shorthand ──────────────────────────────────────────────────────
+
+
+class TestEncoderShorthand:
+    def test_nomic_v15_keeps_historical_label(self):
+        assert _encoder_shorthand(
+            {
+                "encoder_model": "nomic-ai/nomic-embed-text-v1.5",
+                "truncate_dim": 256,
+            }
+        ) == "nomic-256d"
+
+    def test_nomic_v2_moe_includes_variant(self):
+        assert _encoder_shorthand(
+            {
+                "encoder_model": "nomic-ai/nomic-embed-text-v2-moe",
+                "truncate_dim": 256,
+            }
+        ) == "nomic-v2-moe-256d"
 
 
 def _per_dimension_metrics(value: float) -> dict[str, float]:
