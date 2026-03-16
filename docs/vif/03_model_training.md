@@ -214,6 +214,8 @@ The VIF Critic training pipeline is implemented in `src/vif/`. Key modules:
 > hyperparameters referenced below are illustrative. See `config/vif.yaml`
 > for current runtime values.
 
+> **Note:** [Value evolution detection](../evolution/01_value_evolution.md) is a post-hoc statistical analysis on Critic outputs (mean, standard deviation, residual over a window). It does not require changes to the training pipeline, loss function, or synthetic data — the Critic is trained to score individual entries, and evolution detection operates on the temporal *pattern* of those scores.
+
 ### 4.1 Implemented Architecture
 
 The current stack still implements **Option A (Immediate Alignment)**, but with

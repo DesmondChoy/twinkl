@@ -141,6 +141,8 @@ $$
 
 with $\text{ema\_drift}^{(j)}_{u,0} = 0$.
 
+The drift signal captures magnitude but not the *pattern* of divergence. [Value evolution detection](../evolution/01_value_evolution.md) adds a volatility layer to distinguish genuine value shifts (low volatility, sustained directional change) from behavioral struggles (high volatility, oscillating scores). Dimensions classified as EVOLUTION are excluded from drift trigger evaluation and routed to profile-update Coach messaging.
+
 ### 3.3 Profile‑Weighted Scalar Alignment
 
 `03_model_training.md` defines an optional scalar aggregation:
@@ -229,6 +231,8 @@ For drift detection, we assume access to:
   - Then mark this period as a potential **identity drift** episode.
 
 All thresholds $(w_{\text{min}}, \sigma_{\text{max}}, C_{\text{min}}, \Delta_{\text{crash}}, \Delta_{\text{cos}})$ can be tuned on synthetic personas to match intuitive behaviour.
+
+All trigger rules above apply only to dimensions **not** classified as EVOLUTION by the [evolution detection filter](../evolution/01_value_evolution.md). EVOLUTION dimensions (sustained, low-volatility directional shifts) are excluded from crash/rut evaluation and instead route to Coach profile-update messaging.
 
 ### 4.3 Separation from the Coach
 

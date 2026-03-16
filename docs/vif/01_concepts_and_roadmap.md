@@ -78,7 +78,7 @@ Each user ($u$) has a **value profile**:
 
 * A vector of value weights:
   * $w_{u,t} \in \mathbb{R}^K$, with $w_{u,t} \ge 0$ and $\sum_k w_{u,t,k} = 1$.
-  * For the POC, $w_{u,t}$ may be treated as **piecewise constant** over time (updated infrequently), but conceptually it can evolve slowly as the user refines their priorities.
+  * For the POC, $w_{u,t}$ may be treated as **piecewise constant** over time (updated infrequently), but conceptually it can evolve slowly as the user refines their priorities. The mechanism for detecting when profile updates are warranted is specified in the [Value Evolution Detection](../evolution/01_value_evolution.md) design.
 * Additional profile information:
   * Narrative descriptions of what each value means to them.
   * Known constraints and long-term goals.
@@ -124,6 +124,7 @@ Potential extensions beyond the POC:
   * Incorporate ensembles, density models, or explicit OOD detectors on the text embedding space.
 * **More Modalities** *(Out of scope for capstone)*:
   * Incorporate prosodic and physiological features robustly, especially for early warning signals of stress or overload.
+* **Value Evolution Detection**: Statistical filter classifying per-dimension divergence as STABLE/EVOLUTION/DRIFT, gating drift triggers and enabling user-confirmed profile updates. See [Value Evolution Detection](../evolution/01_value_evolution.md).
 * **Personalisation Layers**:
   * Explore global VIF plus lightweight per-user adapters for users whose trajectories systematically diverge from the population.
 * **Retrieval-Augmented Coach (scaling)**:

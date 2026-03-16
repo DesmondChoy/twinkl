@@ -102,7 +102,9 @@ For a real user session:
    * Run VIF with MC Dropout to get $\\mu_{u,t}^{(j)}$ and $\\sigma_{u,t}^{(j)}$ per dimension. (See [Uncertainty Logic](04_uncertainty_logic.md))
 5. **Aggregate over time**:
    * Compute updated weekly aggregates (e.g. weekly means of $\\mu_{u,t}^{(j)}$).
-6. **Apply trigger rules**:
+6. **Classify divergence patterns**:
+   * Before applying trigger rules, an [evolution detection](../evolution/01_value_evolution.md) step classifies each dimension's divergence as STABLE, EVOLUTION, or DRIFT. Dimensions classified as EVOLUTION (sustained, low-volatility directional shift) are excluded from crash/rut triggers and routed to profile-update Coach messaging instead.
+7. **Apply trigger rules** (on non-EVOLUTION dimensions):
    * If significant weekly drop (crash) and low uncertainty → generate a targeted critique.
    * If sustained low weekly values for $\ge C_{\text{min}}$ weeks (rut) and low uncertainty → generate a targeted critique.
    * If sustained high values over multiple weeks and low uncertainty → generate occasional evidence-based acknowledgment.
@@ -118,7 +120,7 @@ We explicitly separate two memory and reasoning systems:
    * Focus: estimate current/short-horizon alignment per dimension and uncertainty.
 
 2. **Coach / Explanation Layer** – Full-context explanation guide
-   * Activated after the VIF identifies significant patterns — whether problematic (crash or rut) or positive (sustained alignment).
+   * Activated after the VIF identifies significant patterns — whether problematic (crash or rut) or positive (sustained alignment). The Coach differentiates between evolution messaging ("your priorities may be shifting") and drift messaging ("you may be losing track") based on the [evolution classification](../evolution/01_value_evolution.md).
    * At POC scale (8–12 entries per persona), passes **all journal entries** directly into the LLM context window (full-context prompting) to:
      * Identify thematically relevant patterns (e.g. similar conflicts, repeated behaviors, or evidence of consistent alignment).
      * Provide context-rich explanations, reflective prompts, or evidence-based acknowledgment.

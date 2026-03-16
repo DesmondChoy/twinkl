@@ -285,6 +285,7 @@ targeted lifts and the regenerated `Hedonism`/`Security` batch.
 - **Inference** (`02_system_architecture.md`):
   - At runtime, the system builds \(s_{u,t}\) **incrementally** from recent entries and the user’s profile, using the same feature definition as above.
   - The Critic’s mean and variance outputs feed into weekly aggregation, crash/rut detection, and the Coach triggers.
+  - The user profile $w_u$ can be updated via the [evolution detection](../evolution/01_value_evolution.md) mechanism when a user confirms sustained directional shifts. This does not change the state construction pipeline — the profile vector slot simply receives an updated $w_u$.
 
 By pinning down \(s_{u,t}\) and the data pipeline in this document, we make the VIF implementation:
 

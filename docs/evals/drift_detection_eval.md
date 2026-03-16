@@ -26,12 +26,15 @@ The VIF detects when a user's behavior drifts from their declared values. This e
 ### Blocking Dependencies
 The active corrected-split default (`run_019`-`run_021` BalancedSoftmax) improved misalignment sensitivity, but the frontier still sits at median QWK **0.362** with unresolved `Security`/circumplex trade-offs. That is not yet strong enough for reliable automated drift triggers. Until per-value Critic accuracy improves further, crash/rut detection will inherit noisy alignment scores and produce unreliable alerts.
 
+Additionally, [evolution detection](../evolution/01_value_evolution.md) must gate drift triggers before they are production-ready — without it, genuine value shifts produce false-positive rut alerts.
+
 ### Next Steps
 1. Improve Critic QWK through ongoing experimentation (data expansion, architecture, loss tuning)
 2. Implement dual-trigger detection (crash + rut) in `src/vif/`
-3. Generate synthetic crisis injection test data
-4. Implement hit rate / precision / recall metrics
-5. Run evaluation on injected timelines
+3. Implement evolution detection gating (STABLE/EVOLUTION/DRIFT classification per dimension) — see [value evolution detection](../evolution/01_value_evolution.md)
+4. Generate synthetic crisis injection test data
+5. Implement hit rate / precision / recall metrics
+6. Run evaluation on injected timelines
 
 ---
 
@@ -47,6 +50,10 @@ The active corrected-split default (`run_019`-`run_021` BalancedSoftmax) improve
 ### Uncertainty Gating
 
 Both triggers require **low uncertainty** (σ < ε_j) to fire. High variance suppresses critiques to avoid false alarms on ambiguous or OOD inputs.
+
+### Evolution Gating
+
+Before either trigger type evaluates a dimension, [evolution detection](../evolution/01_value_evolution.md) classifies its recent divergence pattern as STABLE, EVOLUTION, or DRIFT. Dimensions classified as EVOLUTION (sustained, low-volatility directional shift from declared values) are excluded from crash/rut evaluation entirely and routed to Coach profile-update messaging instead. Only STABLE and DRIFT dimensions proceed to trigger evaluation.
 
 ---
 
@@ -67,6 +74,9 @@ Both triggers require **low uncertainty** (σ < ε_j) to fire. High variance sup
 | Benevolence > Achievement | Persona cancels on friends, works late repeatedly | Benevolence rut or crash |
 | Security > Stimulation | Persona takes risky financial decisions | Security crash |
 | Self-Direction > Conformity | Persona defers all decisions to others | Self-Direction rut |
+| Achievement > Benevolence | Persona gradually prioritizes Benevolence over career after having a child (sustained, low-volatility) | Should NOT trigger rut — should classify as EVOLUTION on Achievement |
+| Self-Direction high | Persona oscillates +1/−1 on Self-Direction week-to-week (high volatility) | Should classify as DRIFT, fire rut trigger |
+| Hedonism > Security | Persona steadily reduces hedonistic activities over 6+ weeks (low volatility, directional) | Should classify as EVOLUTION, suggest profile update |
 
 ---
 
@@ -197,6 +207,7 @@ Verify that MC Dropout uncertainty correlates with prediction errors.
 1. **Synthetic crisis injection is artificial**: Real drift may be more subtle and gradual
 2. **Profile-weighted detection**: Requires accurate value profiles; errors in w_u propagate
 3. **Cold start**: New users have no history for EMA calculation
+4. **No evolution gating**: Without [evolution detection](../evolution/01_value_evolution.md), genuine value shifts produce false-positive rut alerts. Evolution detection is designed but not yet implemented.
 
 **Mitigations:**
 - Vary crisis severity in test set (include subtle cases)
@@ -209,4 +220,5 @@ Verify that MC Dropout uncertainty correlates with prediction errors.
 
 - `docs/vif/04_uncertainty_logic.md` — Dual-trigger rules and MC Dropout
 - `docs/vif/06_profile_conditioned_drift_and_encoder.md` — Drift formulas
+- `docs/evolution/01_value_evolution.md` — Value evolution detection design
 - `docs/prd.md` — Evaluation Strategy (Row 3: Drift detection)

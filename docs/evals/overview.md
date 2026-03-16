@@ -34,7 +34,7 @@ This folder contains evaluation specifications for the **Value Identity Function
 |:-----:|-----------|----------------|-------------------|-------------|
 | 1 | [`judge_validation_eval.md`](./judge_validation_eval.md) | Data Preparation | Judge labels are consistent & agree with humans | Cohen's κ > 0.60 |
 | 2 | [`value_modeling_eval.md`](./value_modeling_eval.md) | Model Training | VIF learns value hierarchies correctly | Entry-level: QWK > 0.4, Minority Recall (-1) > 20%; Persona-level: Spearman ρ > 0.7 |
-| 3 | [`drift_detection_eval.md`](./drift_detection_eval.md) | Inference | Drift triggers fire accurately on misalignment | Hit Rate ≥ 80% |
+| 3 | [`drift_detection_eval.md`](./drift_detection_eval.md) | Inference | Drift triggers fire accurately on misalignment; includes [evolution detection](../evolution/01_value_evolution.md) gating validation | Hit Rate ≥ 80% |
 | 4 | [`explanation_quality_eval.md`](./explanation_quality_eval.md) | User Output | Explanations are grounded and useful | Likert ≥ 3.5/5 |
 
 ---
@@ -83,3 +83,4 @@ See each eval file's **Implementation Status** section for detailed breakdowns.
 - [`docs/vif/`](../vif/) — VIF architecture documentation
 - [`docs/prd.md`](../prd.md) — Product requirements (Evaluation Strategy section)
 - [`docs/pipeline/pipeline_specs.md`](../pipeline/pipeline_specs.md) — Data generation pipeline
+- [`docs/evolution/01_value_evolution.md`](../evolution/01_value_evolution.md) — Value evolution detection design

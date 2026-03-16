@@ -564,7 +564,7 @@ A key open question: how much should the system trust what users *say* they valu
 - **Weeks 7+**: Shift to 40% explicit, 60% behavioral as behavioral signal strengthens
 - **Never 0% explicit**: Users' declared values always retain some weight — the system shouldn't completely override what someone says they care about
 
-This weighting schedule requires calibration against real user data and is marked as a future implementation concern.
+This weighting schedule requires calibration against real user data and is marked as a future implementation concern. The [value evolution detection](../evolution/01_value_evolution.md) mechanism provides the statistical basis for when behavioral evidence should influence the profile — classifying sustained directional shifts as EVOLUTION triggers profile update suggestions.
 
 ### Progressive Profiling
 
@@ -576,7 +576,7 @@ The initial 6-set BWS provides a coarse profile. Future iterations could:
 
 The system should prompt re-assessment when:
 - **Major life event detected**: Journal entries mention significant changes (new job, relationship change, relocation)
-- **Profile drift**: Behavioral data diverges significantly from BWS-derived weights for >4 weeks
+- **Profile drift**: Behavioral data diverges significantly from BWS-derived weights for >4 weeks. The mechanism for classifying whether this divergence is genuine value evolution vs behavioral drift is specified in the [value evolution detection](../evolution/01_value_evolution.md) design.
 - **User request**: Users can always re-take the assessment from settings
 
 ---

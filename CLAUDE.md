@@ -99,6 +99,7 @@ Script-based generation/judging helpers live in `src/synthetic/`,
 - `docs/onboarding/` — Onboarding flow spec
 - `docs/capstone_report/` — Report sections
 - `docs/archive/` — Historical only
+- `docs/evolution/` — Value evolution detection
 - `docs/future_work/` — Non-committed ideas
 
 ## Implementation Principles
