@@ -57,6 +57,9 @@ class TestEncoderFamily:
     def test_nomic(self):
         assert _encoder_family("nomic-ai/nomic-embed-text-v1.5") == "nomic"
 
+    def test_qwen(self):
+        assert _encoder_family("Qwen/Qwen3-Embedding-0.6B") == "Qwen"
+
     def test_mpnet(self):
         assert _encoder_family("sentence-transformers/all-mpnet-base-v2") == "mpnet"
 
@@ -122,6 +125,14 @@ class TestEncoderShorthand:
                 "truncate_dim": 256,
             }
         ) == "nomic-v2-moe-256d"
+
+    def test_qwen_includes_variant_and_truncate_dim(self):
+        assert _encoder_shorthand(
+            {
+                "encoder_model": "Qwen/Qwen3-Embedding-0.6B",
+                "truncate_dim": 256,
+            }
+        ) == "Qwen3-0.6B-256d"
 
 
 def _per_dimension_metrics(value: float) -> dict[str, float]:
@@ -314,6 +325,46 @@ def test_build_experiment_dict_records_circumplex_regularizer_metadata():
     assert training_cfg["circumplex_regularizer_enabled"] is True
     assert training_cfg["circumplex_regularizer_opposite_weight"] == 0.5
     assert training_cfg["circumplex_regularizer_adjacent_weight"] == 0.1
+
+
+def test_build_experiment_dict_persists_prompt_metadata():
+    config, trained_result, eval_result, calibration, hedging, recall_data = _minimal_training_inputs()
+    prompt = (
+        "Instruct: Represent the journal entry for classification of alignment "
+        "across the 10 Schwartz value dimensions.\nQuery:"
+    )
+    config.update(
+        {
+            "encoder_model": "Qwen/Qwen3-Embedding-0.6B",
+            "text_prefix": None,
+            "prompt_name": None,
+            "prompt": prompt,
+        }
+    )
+
+    with patch("src.vif.experiment_logger._get_git_commit", return_value="abc123"):
+        experiment = _build_experiment_dict(
+            run_id="run_999",
+            model_name="BalancedSoftmax",
+            config=config,
+            trained_result=trained_result,
+            eval_result=eval_result,
+            calibration=calibration,
+            hedging=hedging,
+            recall_data=recall_data,
+            n_train=100,
+            n_val=20,
+            n_test=20,
+            pct_truncated=0.0,
+            state_dim=256,
+            observations="",
+        )
+
+    encoder_cfg = experiment["config"]["encoder"]
+    assert encoder_cfg["model_name"] == "Qwen/Qwen3-Embedding-0.6B"
+    assert encoder_cfg["text_prefix"] is None
+    assert encoder_cfg["prompt_name"] is None
+    assert encoder_cfg["prompt"] == prompt
 
 
 def test_build_experiment_dict_records_dimension_weighting_metadata():

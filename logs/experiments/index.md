@@ -17,6 +17,8 @@
 
 > **Active recommendation (2026-03-11):** `run_019`-`run_021` remain the default corrected-split frontier family. The new weighted family `run_034`-`run_036` is the best current tail-sensitive reference branch: it improves median holdout `recall_-1` (`0.378` vs `0.313`), keeps minority recall essentially flat to slightly better (`0.449` vs `0.448`), reduces hedging (`0.599` vs `0.621`), and improves calibration (`0.726` vs `0.713`) while keeping circumplex summaries near incumbent levels. It still gives back too much median QWK (`0.342` vs `0.362`) and is much less stable across seeds, so it should stay a reference branch rather than replace the default. See the weighted review below.
 >
+> **Latest Qwen final diagnostic review:** [`reports/experiment_review_2026-03-16_twinkl_742.md`](reports/experiment_review_2026-03-16_twinkl_742.md) also did **not** change the frontier, but it is the first encoder swap that materially narrowed the gap. `run_040` kept the incumbent parameter budget and state width fixed, removed truncation entirely, and recovered holdout `qwk_mean` from `0.305` (`run_039`) to `0.356`, bringing it within `0.022` of incumbent `run_020` while lowering hedging to `0.585`. It still trails the incumbent on `recall_-1` (`0.296` vs `0.342`) and the target hard dimensions remain weak (`stimulation qwk 0.165`, `hedonism qwk 0.095`), so there is no immediate promotion or rerun recommendation. Keep `run_019`-`run_021` active, move to `twinkl-733`, and treat Qwen as the only encoder branch worth reconsidering later if representation work is reopened.
+>
 > **Latest Nomic v2-MoE 256d diagnostic review:** [`reports/experiment_review_2026-03-16_twinkl_732.md`](reports/experiment_review_2026-03-16_twinkl_732.md) did **not** change the frontier. The cleaner within-family encoder swap `run_039` matched the incumbent parameter budget and recovered much of the tail-sensitive package relative to the `twinkl-731` 768d controls (`recall_-1 0.336`, minority recall `0.433`, hedging `0.598`, `security qwk 0.284`), but it still regressed sharply against incumbent `run_020` on holdout `qwk_mean` (`0.378 -> 0.305`), accuracy (`0.755 -> 0.737`), and several dimensions, especially `power` (`0.342 -> 0.117`) and `stimulation` (`0.303 -> 0.168`). Treat this as another negative representation diagnostic: no 3-seed v2-moe rerun, and move on to `twinkl-733`.
 >
 > **Latest weighted frontier review:** [`reports/experiment_review_2026-03-11_twinkl_719_3.md`](reports/experiment_review_2026-03-11_twinkl_719_3.md)
@@ -169,11 +171,47 @@
 | 037 | BalancedSoftmax | nomic-768d | 1 | 64 | 0.3 | balanced_softmax | 56222 | 46.3 | 0.319 | 0.739 | 0.318 | 0.332 | 0.720 | 0.381 | 0.074 | 0.075 | runs/run_037_BalancedSoftmax.yaml |
 | 038 | BalancedSoftmax | nomic-768d | 1 | 28 | 0.3 | balanced_softmax | 23606 | 19.5 | 0.333 | 0.737 | 0.299 | 0.301 | 0.657 | 0.346 | 0.104 | 0.077 | runs/run_038_BalancedSoftmax.yaml |
 | 039 | BalancedSoftmax | nomic-v2-moe-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.325 | 0.737 | 0.305 | 0.336 | 0.691 | 0.433 | 0.073 | 0.083 | runs/run_039_BalancedSoftmax.yaml |
+| 040 | BalancedSoftmax | Qwen3-0.6B-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.324 | 0.740 | 0.355 | 0.343 | 0.691 | 0.436 | 0.083 | 0.085 | runs/run_040_BalancedSoftmax.yaml |
 <!-- AUTO-TABLE:END -->
 
 > **Contributor note:** Keep this section in **newest-first** chronological order (most recent date at top).
 
 ## Findings
+
+### 2026-03-16 — Qwen is the first credible encoder-swap near-miss, but still not a frontier win (`twinkl-742`)
+
+`twinkl-742` ran the last planned encoder diagnostic using
+`Qwen/Qwen3-Embedding-0.6B` with a native custom classification prompt and
+native `256d` truncation, while keeping the active frontier critic budget fixed
+at `ws=1`, `hd=64`, and `23,454` parameters.
+
+**1. This is the strongest non-incumbent representation test so far.**
+`run_040` improves holdout `qwk_mean` to `0.356`, a large recovery over the
+earlier Nomic swaps (`run_039: 0.305`, `run_037: 0.318`, `run_038: 0.299`) at
+the same fair-budget `266`-dimensional state width as incumbent `run_020`.
+
+**2. Zero truncation helps, but does not close the frontier by itself.**
+The Qwen run truncates `0/1,651` entries, confirming that the shorter
+`v2-moe` context window was a real constraint. Even so, `run_040` still trails
+incumbent `run_020` on holdout `qwk_mean` (`0.378 -> 0.356`), accuracy
+(`0.755 -> 0.740`), calibration (`0.713 -> 0.691`), minority recall
+(`0.449 -> 0.436`), and `recall_-1` (`0.342 -> 0.296`).
+
+**3. The win is broad-structure recovery, not hard-dimension polarity.**
+Relative to `run_039`, Qwen recovers `self_direction qwk` (`0.441 -> 0.555`),
+`conformity qwk` (`0.454 -> 0.524`), `benevolence qwk` (`0.307 -> 0.399`), and
+`power qwk` (`0.117 -> 0.187`). But the original hard dimensions still lag:
+`stimulation qwk` stays flat (`0.165`) and `hedonism qwk` worsens further to
+`0.095`, even though `security qwk` remains better than the incumbent
+(`0.261` vs `0.213`).
+
+**4. Recommendation: no immediate rerun, but keep Qwen as the only encoder
+branch worth reopening later.** The active frontier remains `run_019`-
+`run_021`, with `run_034`-`run_036` as the best tail-sensitive reference
+branch, and `twinkl-733` should still be the next step. The main change is that
+Qwen is now the only encoder-swap line with a plausible future case if
+representation work is revisited. Full details:
+[`reports/experiment_review_2026-03-16_twinkl_742.md`](reports/experiment_review_2026-03-16_twinkl_742.md).
 
 ### 2026-03-16 — Nomic v2-MoE 256d improves security and tail recovery, but still loses the frontier (`twinkl-732`)
 

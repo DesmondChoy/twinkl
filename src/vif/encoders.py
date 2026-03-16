@@ -27,7 +27,8 @@ Usage:
     encoder = create_encoder({"type": "sbert", "model_name": "all-mpnet-base-v2"})
 """
 
-from typing import Protocol, runtime_checkable
+from dataclasses import dataclass
+from typing import Any, Protocol, runtime_checkable
 
 import numpy as np
 
@@ -76,6 +77,23 @@ class TextEncoder(Protocol):
         """
         ...
 
+    def render_inputs(self, texts: list[str]) -> list[str]:
+        """Render the exact text strings that will be tokenized by the model."""
+        ...
+
+    def count_tokens(self, texts: list[str]) -> list[int]:
+        """Return token counts for the rendered model inputs."""
+        ...
+
+
+@dataclass(frozen=True)
+class _EncodeRequest:
+    """Prepared inputs for both model encoding and token-count analysis."""
+
+    model_inputs: list[str]
+    rendered_inputs: list[str]
+    encode_kwargs: dict[str, Any]
+
 
 class SBERTEncoder:
     """Sentence-BERT encoder using the sentence-transformers library.
@@ -107,7 +125,9 @@ class SBERTEncoder:
         model_name: str = "all-MiniLM-L6-v2",
         trust_remote_code: bool = False,
         truncate_dim: int | None = None,
-        text_prefix: str = "",
+        text_prefix: str | None = "",
+        prompt_name: str | None = None,
+        prompt: str | None = None,
     ):
         """Initialize the SBERT encoder.
 
@@ -121,6 +141,10 @@ class SBERTEncoder:
             text_prefix: Prefix prepended to all input texts before encoding.
                 Nomic models require task-specific prefixes (e.g.
                 "classification: " for downstream classification tasks).
+            prompt_name: Native sentence-transformers prompt name to use
+                during encoding.
+            prompt: Native sentence-transformers prompt string to use
+                during encoding.
         """
         from sentence_transformers import SentenceTransformer
 
@@ -130,13 +154,41 @@ class SBERTEncoder:
         )
         self._native_dim = self._model.get_sentence_embedding_dimension()
         self._truncate_dim = truncate_dim
-        self._text_prefix = text_prefix
+        self._text_prefix = text_prefix or ""
+        self._prompt_name = prompt_name or None
+        self._prompt = prompt or None
+        self._use_native_truncate = self._should_use_native_truncate()
+
+        active_input_modes = [
+            mode
+            for mode, value in (
+                ("text_prefix", self._text_prefix),
+                ("prompt_name", self._prompt_name),
+                ("prompt", self._prompt),
+            )
+            if value
+        ]
+        if len(active_input_modes) > 1:
+            joined = ", ".join(active_input_modes)
+            raise ValueError(
+                "Configure at most one of text_prefix, prompt_name, or prompt; "
+                f"got {joined}."
+            )
 
         if truncate_dim is not None and truncate_dim > self._native_dim:
             raise ValueError(
                 f"truncate_dim ({truncate_dim}) exceeds native embedding "
                 f"dimension ({self._native_dim})"
             )
+
+        if self._prompt_name is not None:
+            prompts = getattr(self._model, "prompts", {}) or {}
+            if self._prompt_name not in prompts:
+                available = ", ".join(sorted(prompts)) or "none"
+                raise ValueError(
+                    f"Unknown prompt_name '{self._prompt_name}' for "
+                    f"{self._model_name}. Available prompts: {available}"
+                )
 
     @property
     def embedding_dim(self) -> int:
@@ -150,11 +202,67 @@ class SBERTEncoder:
         """Name of the underlying model."""
         return self._model_name
 
-    def _apply_prefix(self, texts: list[str]) -> list[str]:
-        """Prepend task prefix to each text if configured."""
+    @property
+    def max_seq_length(self) -> int:
+        """Maximum context window exposed by the underlying model."""
+        return self._model.max_seq_length
+
+    def _should_use_native_truncate(self) -> bool:
+        """Use model-native truncation only for models known to support it."""
+        lower = self._model_name.lower()
+        return "qwen" in lower and "embedding" in lower
+
+    def _resolve_prompt_text(self) -> str:
+        """Resolve the literal prompt string used for tokenization analysis."""
+        if self._prompt is not None:
+            return self._prompt
+        if self._prompt_name is None:
+            return ""
+        prompts = getattr(self._model, "prompts", {}) or {}
+        return prompts[self._prompt_name]
+
+    def _build_encode_request(self, texts: list[str]) -> _EncodeRequest:
+        """Prepare model inputs and rendered inputs from one config source."""
+        raw_inputs = list(texts)
+        prompt_text = self._resolve_prompt_text()
+
         if self._text_prefix:
-            return [self._text_prefix + t for t in texts]
-        return texts
+            rendered_inputs = [self._text_prefix + text for text in raw_inputs]
+            return _EncodeRequest(
+                model_inputs=rendered_inputs,
+                rendered_inputs=rendered_inputs,
+                encode_kwargs={},
+            )
+
+        if prompt_text:
+            rendered_inputs = [prompt_text + text for text in raw_inputs]
+        else:
+            rendered_inputs = raw_inputs
+
+        encode_kwargs: dict[str, Any] = {}
+        if self._prompt_name is not None:
+            encode_kwargs["prompt_name"] = self._prompt_name
+        elif self._prompt is not None:
+            encode_kwargs["prompt"] = self._prompt
+
+        return _EncodeRequest(
+            model_inputs=raw_inputs,
+            rendered_inputs=rendered_inputs,
+            encode_kwargs=encode_kwargs,
+        )
+
+    def render_inputs(self, texts: list[str]) -> list[str]:
+        """Render the exact text strings that will be tokenized by the model."""
+        return self._build_encode_request(texts).rendered_inputs
+
+    def count_tokens(self, texts: list[str]) -> list[int]:
+        """Count tokens for the rendered model inputs."""
+        rendered_inputs = self.render_inputs(texts)
+        tokenizer = self._model.tokenizer
+        return [
+            len(tokenizer.encode(rendered_text, add_special_tokens=True))
+            for rendered_text in rendered_inputs
+        ]
 
     def _matryoshka_truncate(self, embeddings: np.ndarray) -> np.ndarray:
         """Apply Matryoshka truncation: LayerNorm → slice → L2 normalize."""
@@ -172,6 +280,31 @@ class SBERTEncoder:
         embeddings = embeddings / norms
         return embeddings
 
+    def _encode_internal(
+        self,
+        texts: list[str],
+        *,
+        batch_size: int | None,
+        show_progress_bar: bool | None,
+    ) -> np.ndarray:
+        """Encode texts through one shared preparation path."""
+        request = self._build_encode_request(texts)
+        encode_kwargs = dict(request.encode_kwargs)
+        encode_kwargs["convert_to_numpy"] = True
+
+        if batch_size is not None:
+            encode_kwargs["batch_size"] = batch_size
+        if show_progress_bar is not None:
+            encode_kwargs["show_progress_bar"] = show_progress_bar
+        if self._use_native_truncate and self._truncate_dim is not None:
+            encode_kwargs["truncate_dim"] = self._truncate_dim
+
+        embeddings = self._model.encode(request.model_inputs, **encode_kwargs)
+        embeddings = embeddings.astype(np.float32)
+        if self._use_native_truncate:
+            return embeddings
+        return self._matryoshka_truncate(embeddings)
+
     def encode(self, texts: list[str]) -> np.ndarray:
         """Encode a list of texts into dense vectors.
 
@@ -181,10 +314,11 @@ class SBERTEncoder:
         Returns:
             np.ndarray of shape (len(texts), embedding_dim)
         """
-        prefixed = self._apply_prefix(texts)
-        embeddings = self._model.encode(prefixed, convert_to_numpy=True)
-        embeddings = embeddings.astype(np.float32)
-        return self._matryoshka_truncate(embeddings)
+        return self._encode_internal(
+            texts,
+            batch_size=None,
+            show_progress_bar=None,
+        )
 
     def encode_batch(self, texts: list[str], batch_size: int = 32) -> np.ndarray:
         """Encode texts in batches for memory efficiency.
@@ -196,15 +330,11 @@ class SBERTEncoder:
         Returns:
             np.ndarray of shape (len(texts), embedding_dim)
         """
-        prefixed = self._apply_prefix(texts)
-        embeddings = self._model.encode(
-            prefixed,
+        return self._encode_internal(
+            texts,
             batch_size=batch_size,
-            convert_to_numpy=True,
             show_progress_bar=len(texts) > 100,
         )
-        embeddings = embeddings.astype(np.float32)
-        return self._matryoshka_truncate(embeddings)
 
 
 def create_encoder(config: dict) -> TextEncoder:
@@ -237,6 +367,8 @@ def create_encoder(config: dict) -> TextEncoder:
             trust_remote_code=config.get("trust_remote_code", False),
             truncate_dim=config.get("truncate_dim"),
             text_prefix=config.get("text_prefix", ""),
+            prompt_name=config.get("prompt_name"),
+            prompt=config.get("prompt"),
         )
     else:
         raise ValueError(f"Unknown encoder type: {encoder_type}")

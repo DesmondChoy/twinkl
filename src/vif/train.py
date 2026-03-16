@@ -101,6 +101,8 @@ def load_config(config_path: str | Path | None) -> dict:
             "trust_remote_code": True,
             "truncate_dim": 256,
             "text_prefix": "classification: ",
+            "prompt_name": None,
+            "prompt": None,
         },
         "state_encoder": {"window_size": 1},
         "model": {"hidden_dim": 64, "dropout": 0.3, "output_dim": 10},

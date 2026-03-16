@@ -68,6 +68,8 @@ CONFIG = {
     "trust_remote_code": _encoder_defaults.get("trust_remote_code", True),
     "truncate_dim": _encoder_defaults["truncate_dim"],
     "text_prefix": _encoder_defaults.get("text_prefix", "classification: "),
+    "prompt_name": _encoder_defaults.get("prompt_name"),
+    "prompt": _encoder_defaults.get("prompt"),
     # Models to compare (previous 4 frontier runs + CDW-CE alpha sweep)
     "models_to_train": [
         "CORAL",
@@ -166,6 +168,8 @@ for key in [
     "encoder_model",
     "truncate_dim",
     "text_prefix",
+    "prompt_name",
+    "prompt",
     "hidden_dim",
     "dropout",
     "window_size",
@@ -194,7 +198,9 @@ for key in [
     "experiment_group",
     "skip_experiment_logging",
 ]:
-    print(f"  {key:<30s} {str(CONFIG.get(key)):>15s}")
+    value = CONFIG.get(key)
+    display = json.dumps(value) if key in {"text_prefix", "prompt_name", "prompt"} else str(value)
+    print(f"  {key:<30s} {display:>15s}")
 print(f"  {'models_to_train':<30s} {CONFIG['models_to_train']}")
 print("  model_overrides:")
 print(json.dumps(CONFIG["model_overrides"], indent=2, sort_keys=True))
@@ -437,6 +443,8 @@ text_encoder = SBERTEncoder(
     trust_remote_code=CONFIG["trust_remote_code"],
     truncate_dim=CONFIG["truncate_dim"],
     text_prefix=CONFIG["text_prefix"],
+    prompt_name=CONFIG.get("prompt_name"),
+    prompt=CONFIG.get("prompt"),
 )
 state_encoder = StateEncoder(
     text_encoder,
@@ -475,8 +483,7 @@ print(f"{(sample['response_text'] or '')[:200]}")
 
 # ==== CELL 22 ====
 # Cell 2c — Entry length / truncation risk
-tokenizer = text_encoder._model.tokenizer
-max_seq_length = text_encoder._model.max_seq_length
+max_seq_length = text_encoder.max_seq_length
 
 all_texts = []
 for row in merged_df.iter_rows(named=True):
@@ -485,12 +492,7 @@ for row in merged_df.iter_rows(named=True):
     )
     all_texts.append(text)
 
-token_counts = []
-for text in all_texts:
-    tokens = tokenizer.encode(text, add_special_tokens=True)
-    token_counts.append(len(tokens))
-
-token_counts = np.array(token_counts)
+token_counts = np.array(text_encoder.count_tokens(all_texts))
 n_truncated = (token_counts > max_seq_length).sum()
 pct_truncated = n_truncated / len(token_counts) * 100
 

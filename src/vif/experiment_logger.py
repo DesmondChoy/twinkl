@@ -150,6 +150,8 @@ def _encoder_family(model_name: str) -> str:
         return "MiniLM"
     if "nomic" in lower:
         return "nomic"
+    if "qwen" in lower:
+        return "Qwen"
     if "mpnet" in lower:
         return "mpnet"
     return model_name.split("/")[-1]
@@ -330,6 +332,7 @@ def _encoder_shorthand(config: dict) -> str:
     Examples:
         nomic-ai/nomic-embed-text-v1.5 + truncate_dim=256 → "nomic-256d"
         nomic-ai/nomic-embed-text-v2-moe + truncate_dim=256 → "nomic-v2-moe-256d"
+        Qwen/Qwen3-Embedding-0.6B + truncate_dim=256 → "Qwen3-0.6B-256d"
         all-MiniLM-L6-v2 → "MiniLM-384d"
     """
     model = config.get("encoder_model", "unknown")
@@ -346,6 +349,9 @@ def _encoder_shorthand(config: dict) -> str:
     elif "nomic" in lower:
         dim = truncate_dim if truncate_dim else "768"
         return f"{model_slug[:15]}-{dim}d"
+    elif model_slug == "Qwen3-Embedding-0.6B":
+        dim = truncate_dim if truncate_dim else "1024"
+        return f"Qwen3-0.6B-{dim}d"
     elif "MiniLM" in model:
         return "MiniLM-384d"
     elif "mpnet" in lower:
@@ -458,6 +464,8 @@ def _build_experiment_dict(
                 "model_name": config.get("encoder_model", "unknown"),
                 "truncate_dim": config.get("truncate_dim"),
                 "text_prefix": config.get("text_prefix"),
+                "prompt_name": config.get("prompt_name"),
+                "prompt": config.get("prompt"),
                 "trust_remote_code": config.get("trust_remote_code"),
             },
             "state_encoder": {
@@ -584,10 +592,7 @@ def _build_experiment_dict(
         experiment["evaluation"]["circumplex_summary"] = _to_python(circumplex_summary)
         experiment["circumplex"] = _to_python(eval_result["circumplex"])
 
-    # Remove None values from encoder, training, and uncertainty config
-    experiment["config"]["encoder"] = {
-        k: v for k, v in experiment["config"]["encoder"].items() if v is not None
-    }
+    # Preserve explicit nulls in encoder config so input-mode provenance is visible.
     experiment["config"]["training"] = {
         k: v for k, v in experiment["config"]["training"].items() if v is not None
     }

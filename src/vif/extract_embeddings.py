@@ -50,6 +50,8 @@ def _build_datasets(
             "trust_remote_code": training_config.get("trust_remote_code", True),
             "truncate_dim": training_config["truncate_dim"],
             "text_prefix": training_config.get("text_prefix", "classification: "),
+            "prompt_name": training_config.get("prompt_name"),
+            "prompt": training_config.get("prompt"),
         }
     )
     state_encoder = StateEncoder(

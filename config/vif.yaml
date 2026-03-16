@@ -13,6 +13,8 @@ encoder:
   trust_remote_code: true
   truncate_dim: 256          # Matryoshka truncation (MTEB 61.04 @ 256d)
   text_prefix: "classification: "  # Required task prefix for nomic models
+  prompt_name: null          # Optional model-native prompt key
+  prompt: null               # Optional model-native prompt string
   # Alternatives for ablation:
   # model_name: all-MiniLM-L6-v2     # 384 dim, fast, good quality
   # model_name: all-mpnet-base-v2     # 768 dim, higher quality, slower
