@@ -52,14 +52,14 @@ against threshold-based triggers:
   for >= C_min consecutive weeks, with low uncertainty.
 - **Global crash:** Weekly EMA of scalar alignment drops by > delta_crash
   compared to the previous week.
-- **Identity drift:** Cosine similarity falls below threshold (e.g., < 0.4)
-  and has decreased by > delta_cos from baseline.
+- **Identity drift** *(future phase)*: Cosine similarity falls below threshold (e.g., < 0.4)
+  and has decreased by > delta_cos from baseline. Deferred from the initial POC — per-dimension crash/rut triggers are sufficient at current data scale.
 
 ### 1.4 The Coach
 
 When drift triggers fire, the Coach responds:
 
-- Uses RAG over full journal history to surface thematic evidence.
+- At POC scale, reads the user's full journal history via full-context prompting to surface thematic evidence. (At production scale, this would transition to RAG — see [`docs/vif/01_concepts_and_roadmap.md` Section 4](../vif/01_concepts_and_roadmap.md#4-extensions-and-future-work).)
 - Explains *why* misalignment occurred, citing specific entry snippets.
 - Offers reflective prompts and micro-anchors (personalized nudges), never
   prescriptive advice.

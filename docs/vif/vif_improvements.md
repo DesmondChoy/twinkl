@@ -55,7 +55,7 @@ Based on `docs/vif/01_concepts_and_roadmap.md`, `02_system_architecture.md`, `03
     3. Aggregate over a coarser time scale (e.g. weekly) for stability.
     4. Apply **crash and rut rules** per dimension.
     5. If confident and a pattern is detected, trigger the **Coach**.
-  - The **Critic** uses strictly sequential, recent history; the **Coach** uses semantic retrieval over the long journal history to construct explanations.
+  - The **Critic** uses strictly sequential, recent history; the **Coach** reads the full journal history via full-context prompting to construct explanations (at POC scale; at production scale this would transition to semantic retrieval via RAG).
 
 - **Uncertainty and critique logic**
   - **MC Dropout** estimates epistemic uncertainty by keeping dropout active and sampling \(N\) outputs.
@@ -65,7 +65,7 @@ Based on `docs/vif/01_concepts_and_roadmap.md`, `02_system_architecture.md`, `03
 
 - **Critic vs Coach**
   - Critic: numeric, sequential, conservative in when it speaks.
-  - Coach: retrieval‑augmented, narrative, makes sense of patterns the Critic has flagged, and explicitly avoids gamification and generic praise.
+  - Coach: full-context (all entries in LLM prompt at POC scale), narrative, makes sense of patterns the Critic has flagged, and explicitly avoids gamification and generic praise.
 
 ### 2.2 Strengths
 

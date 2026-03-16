@@ -157,7 +157,9 @@ Example usage:
 - A **sustained drop** in the weekly EMA of \(V^{\text{scalar}}_{u,t}\) with low uncertainty
   indicates global drift away from what the user values.
 
-### 3.4 Directional Drift vs. Identity Vector
+### 3.4 Directional Drift vs. Identity Vector *(Future Phase)*
+
+> **POC scope note:** Directional drift via cosine similarity is defined here for completeness but is deferred from the initial Coach implementation. The initial POC uses only per-dimension crash/rut triggers (Sections 3.2–3.3) as they are sufficient at POC data scale. Cosine similarity becomes more valuable with longer user histories and more dimensions of behavioral data.
 
 We can also compare:
 
@@ -219,7 +221,7 @@ For drift detection, we assume access to:
   - The weekly EMA drops by more than \(\Delta_{\text{crash}}\) compared to the previous week.
   - And uncertainty remains below a chosen threshold.
 
-**Directional identity drift rule**:
+**Directional identity drift rule** *(future phase)*:
 
 - If cosine similarity $\text{cos\_sim}_u$ between $w_u$ and $\bar{\vec{a}}_{u,\text{week}}$:
   - Falls below a fixed threshold (e.g. $< 0.4$), and

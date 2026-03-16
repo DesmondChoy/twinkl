@@ -117,15 +117,15 @@ We explicitly separate two memory and reasoning systems:
    * Does **not** use semantic retrieval of arbitrary past entries for its numeric prediction.
    * Focus: estimate current/short-horizon alignment per dimension and uncertainty.
 
-2. **Coach / Explanation Layer** – Thematic, retrieval-augmented guide
+2. **Coach / Explanation Layer** – Full-context explanation guide
    * Activated after the VIF identifies significant patterns — whether problematic (crash or rut) or positive (sustained alignment).
-   * Uses **retrieval-augmented generation (RAG)** over the user's longer-term journal history to:
-     * Retrieve thematically relevant entries (e.g. similar conflicts, repeated patterns, or evidence of consistent alignment).
+   * At POC scale (8–12 entries per persona), passes **all journal entries** directly into the LLM context window (full-context prompting) to:
+     * Identify thematically relevant patterns (e.g. similar conflicts, repeated behaviors, or evidence of consistent alignment).
      * Provide context-rich explanations, reflective prompts, or evidence-based acknowledgment.
    * For positive patterns, acknowledgment is infrequent and grounded in specific behaviors — never gamified (no streaks, points, or generic praise).
-   * Retrieval is based on **semantic similarity**, not recency, to support pattern recognition and narrative insight.
+   * At POC scale, the LLM reads the complete journal history in a single prompt. Semantic similarity retrieval (RAG) becomes relevant when history exceeds context window limits — see [Section 4 of `01_concepts_and_roadmap.md`](01_concepts_and_roadmap.md#4-extensions-and-future-work) for future scaling notes.
 
 This separation ensures that:
 
 * The **numeric value scores** remain grounded in recent temporal dynamics and are not contaminated by arbitrarily distant or thematically similar but contextually irrelevant entries.
-* The **explanations and reflections** can draw on the full richness of the user’s history.
+* The **explanations and reflections** can draw on the full richness of the user’s history via full-context prompting at POC scale, or retrieval-augmented generation at production scale.

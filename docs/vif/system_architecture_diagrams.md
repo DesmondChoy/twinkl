@@ -23,7 +23,7 @@ flowchart TB
         encoder2[Text Encoder<br/>SBERT<br/>Frozen]
         critic[Critic Inference<br/>MLP + MC Dropout]
         driftDetector[Drift Detector<br/>Rule-based Logic]
-        coach[Coach<br/>LLM + RAG]
+        coach[Coach<br/>LLM + Full Context]
     end
 
     generator -->|"Personas + Entries"| encoder1
@@ -38,7 +38,7 @@ flowchart TB
     encoder2 -->|"Embedding"| critic
     trainedModel -.->|"Model Weights"| critic
     critic -->|"Mean + Variance (10-dim)"| driftDetector
-    driftDetector -->|"crash/rut/drift flags"| coach
+    driftDetector -->|"crash/rut flags"| coach
     coach -->|"Reflections"| userOut[User Feedback]
 ```
 
@@ -181,7 +181,7 @@ Where `state_dim`, `H` (hidden_dim), and `p` (dropout) are set in `config/vif.ya
 | **Model** | **None** — pure rule-based logic |
 | **Type** | Threshold-based triggers |
 | **Input** | Critic outputs + user profile $w_u$ |
-| **Output** | Boolean flags: `crash`, `rut`, `identity_drift` |
+| **Output** | Boolean flags: `crash`, `rut` (POC scope). `identity_drift` via cosine similarity is a future extension — see [`06_profile_conditioned_drift_and_encoder.md`](06_profile_conditioned_drift_and_encoder.md) |
 | **When Used** | After Critic inference, before Coach |
 | **Purpose** | Decide whether to trigger feedback |
 
@@ -201,20 +201,20 @@ drift_score = w_u · max(0, -â_ut)  # Weighted misalignment
 
 ---
 
-### **Step 6: Coach (LLM + RAG)**
+### **Step 6: Coach (LLM + Full Context)**
 | Attribute | Value |
 |-----------|-------|
-| **Model** | LLM (GPT-4 / GPT-5) + Vector retrieval |
-| **Type** | Retrieval-Augmented Generation |
-| **Input** | Critic flags + retrieved past entries + user profile |
+| **Model** | LLM (GPT-4 / GPT-5) |
+| **Type** | Full-context prompting (all entries in LLM context window at POC scale) |
+| **Input** | Critic flags + full journal history + user profile |
 | **Output** | Natural language reflection/prompt for the user |
-| **When Used** | Only when Critic triggers a crash/rut/drift event |
+| **When Used** | Only when Critic triggers a crash/rut event (POC scope) |
 | **Purpose** | Generate evidence-based, gentle accountability feedback |
 
 ```
 Critic flags: "Benevolence rut detected (3 weeks)"
                     ↓
-RAG retrieves: Past entries mentioning family, helping others
+LLM reads: All past entries (full journal history in context)
                     ↓
 Coach output: "You've mentioned wanting to be there for your 
               sister three times this month, but your entries 
@@ -233,7 +233,7 @@ Coach output: "You've mentioned wanting to be there for your
 | **3. Judge** | GPT-4/5 | N/A (inference) | Text + Profile | {-1,0,+1}¹⁰ labels |
 | **4. Critic** | MLP | **Trained** (supervised) | State vector | μ, σ ∈ ℝ¹⁰ |
 | **5. Detect** | Rules | N/A | Critic output | crash/rut flags |
-| **6. Coach** | GPT + RAG | N/A (inference) | Flags + history | Reflection text |
+| **6. Coach** | GPT (full-context) | N/A (inference) | Flags + full history | Reflection text |
 
 ---
 
@@ -246,7 +246,8 @@ Coach output: "You've mentioned wanting to be there for your
 | Judge (LLM) | 🔲 Not implemented |
 | Critic (MLP) | 🔲 Not implemented |
 | Drift Rules | 🔲 Not implemented |
-| Coach (RAG) | 🔲 Not implemented |
+| Coach (full-context) | 🔲 Not implemented |
 
+> **POC design note:** At POC scale (8–12 entries per persona), the Coach uses full-context prompting — all entries are passed directly to the LLM. RAG with vector retrieval is a future scaling path for when user histories exceed context window limits. See [Section 4 of `01_concepts_and_roadmap.md`](01_concepts_and_roadmap.md#4-extensions-and-future-work).
 
 ---

@@ -15,7 +15,7 @@ This evaluation validates that explanations feel accurate and actionable to user
 **Status:** 🟡 Partial
 
 ### What's Implemented
-- Rationale generation working (133/134 entries have rationales in parquet)
+- Rationale generation working (1,594/1,651 entries have rationales in parquet)
 - Rationale storage in [`logs/judge_labels/judge_labels.parquet`](../../logs/judge_labels/judge_labels.parquet)
 - Rationale display UI in annotation tool ([`src/annotation_tool/components/modals.py`](../../src/annotation_tool/components/modals.py))
 - Judge comparison view ([`src/annotation_tool/components/comparison_view.py`](../../src/annotation_tool/components/comparison_view.py))
@@ -28,11 +28,14 @@ This evaluation validates that explanations feel accurate and actionable to user
 ### Blocking Dependencies
 None — Tier 1 automated checks can be implemented immediately using existing rationale data.
 
+### Initial Implementation Scope
+Tier 1 automated checks are the target for the initial Coach digest release. Tier 2 (meta-judge) and Tier 3 (human calibration) are designed for later validation phases and are not blocking the initial implementation.
+
 ### Next Steps
 1. Implement Tier 1 checks in `src/judge/` (groundedness, circularity, length)
-2. Run Tier 1 on existing 134 rationales, report pass rates
-3. Design meta-judge prompt for Tier 2 evaluation
-4. Sample 20-30 rationales for Tier 3 human calibration
+2. Run Tier 1 on existing 1,594 rationales, report pass rates
+3. *(Future phase)* Design meta-judge prompt for Tier 2 evaluation
+4. *(Future phase)* Sample 20-30 rationales for Tier 3 human calibration
 
 ---
 
@@ -129,6 +132,8 @@ def check_non_circularity(rationale: str, value_name: str) -> bool:
 
 #### Tier 2: Meta-Judge Evaluation (LLM-Based)
 
+> **Implementation phase:** Future — not required for initial Coach digest release.
+
 For rationales that pass Tier 1, evaluate with LLM:
 
 | Criterion | Question | Scale |
@@ -147,6 +152,8 @@ For rationales that pass Tier 1, evaluate with LLM:
 - Meta-judge expresses uncertainty
 
 #### Tier 3: Human Calibration (Small Sample)
+
+> **Implementation phase:** Future — designed for production validation.
 
 Validate meta-judge accuracy against human judgment:
 
@@ -224,16 +231,16 @@ Judge produces rationales for N entries
 
 ## Success Criteria
 
-| Metric | Target | Tier | Rationale |
-|--------|--------|------|-----------|
-| Groundedness (code) | > 70% | 1 | Rationales should quote or reference entry content |
-| Non-circularity (code) | > 95% | 1 | Rationales shouldn't just restate value name |
-| Length compliance | > 90% | 1 | Most rationales should be 10-50 words |
-| Correctness (meta-judge) | Mean > 3.5/5 | 2 | Rationales should be factually accurate |
-| Specificity (meta-judge) | Mean > 3.5/5 | 2 | Rationales should cite concrete details |
-| Human-meta agreement | κ > 0.6 | 3 | Meta-judge should align with human judgment |
-| Mean Likert rating (users) | ≥ 3.5/5 | User study | Above neutral = generally useful |
-| % ratings ≥ 4 (users) | > 50% | User study | Majority find it "mostly accurate" or better |
+| Metric | Target | Tier | Phase | Rationale |
+|--------|--------|------|-------|-----------|
+| Groundedness (code) | > 70% | 1 | **Initial** | Rationales should quote or reference entry content |
+| Non-circularity (code) | > 95% | 1 | **Initial** | Rationales shouldn't just restate value name |
+| Length compliance | > 90% | 1 | **Initial** | Most rationales should be 10-50 words |
+| Correctness (meta-judge) | Mean > 3.5/5 | 2 | Future | Rationales should be factually accurate |
+| Specificity (meta-judge) | Mean > 3.5/5 | 2 | Future | Rationales should cite concrete details |
+| Human-meta agreement | κ > 0.6 | 3 | Future | Meta-judge should align with human judgment |
+| Mean Likert rating (users) | ≥ 3.5/5 | User study | Future | Above neutral = generally useful |
+| % ratings ≥ 4 (users) | > 50% | User study | Future | Majority find it "mostly accurate" or better |
 
 ---
 
