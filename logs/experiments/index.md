@@ -17,9 +17,11 @@
 
 > **Active recommendation (2026-03-11):** `run_019`-`run_021` remain the default corrected-split frontier family. The new weighted family `run_034`-`run_036` is the best current tail-sensitive reference branch: it improves median holdout `recall_-1` (`0.378` vs `0.313`), keeps minority recall essentially flat to slightly better (`0.449` vs `0.448`), reduces hedging (`0.599` vs `0.621`), and improves calibration (`0.726` vs `0.713`) while keeping circumplex summaries near incumbent levels. It still gives back too much median QWK (`0.342` vs `0.362`) and is much less stable across seeds, so it should stay a reference branch rather than replace the default. See the weighted review below.
 >
-> **Latest Qwen final diagnostic review:** [`reports/experiment_review_2026-03-16_twinkl_742.md`](reports/experiment_review_2026-03-16_twinkl_742.md) also did **not** change the frontier, but it is the first encoder swap that materially narrowed the gap. `run_040` kept the incumbent parameter budget and state width fixed, removed truncation entirely, and recovered holdout `qwk_mean` from `0.305` (`run_039`) to `0.356`, bringing it within `0.022` of incumbent `run_020` while lowering hedging to `0.585`. It still trails the incumbent on `recall_-1` (`0.296` vs `0.342`) and the target hard dimensions remain weak (`stimulation qwk 0.165`, `hedonism qwk 0.095`), so there is no immediate promotion or rerun recommendation. Keep `run_019`-`run_021` active, move to `twinkl-733`, and treat Qwen as the only encoder branch worth reconsidering later if representation work is reopened.
+> **Latest semantic counterexample closeout:** [`reports/experiment_review_2026-03-16_twinkl_733.md`](reports/experiment_review_2026-03-16_twinkl_733.md) explicitly de-scopes the proposed `Hedonism` / `Security` semantic counterexample batch. The repeated replay errors, earlier targeted lifts, uncertainty review, and later representation diagnostics already answer the core question strongly enough, so another generate -> judge -> retrain cycle is not justified for the current frontier. Keep `run_019`-`run_021` active, treat `twinkl-734` as tracker-unblocked but still reserve-only, and reopen `twinkl-733` only if a future branch needs a tightly matched causal falsification test.
 >
-> **Latest Nomic v2-MoE 256d diagnostic review:** [`reports/experiment_review_2026-03-16_twinkl_732.md`](reports/experiment_review_2026-03-16_twinkl_732.md) did **not** change the frontier. The cleaner within-family encoder swap `run_039` matched the incumbent parameter budget and recovered much of the tail-sensitive package relative to the `twinkl-731` 768d controls (`recall_-1 0.336`, minority recall `0.433`, hedging `0.598`, `security qwk 0.284`), but it still regressed sharply against incumbent `run_020` on holdout `qwk_mean` (`0.378 -> 0.305`), accuracy (`0.755 -> 0.737`), and several dimensions, especially `power` (`0.342 -> 0.117`) and `stimulation` (`0.303 -> 0.168`). Treat this as another negative representation diagnostic: no 3-seed v2-moe rerun, and move on to `twinkl-733`.
+> **Latest Qwen final diagnostic review:** [`reports/experiment_review_2026-03-16_twinkl_742.md`](reports/experiment_review_2026-03-16_twinkl_742.md) also did **not** change the frontier, but it is the first encoder swap that materially narrowed the gap. `run_040` kept the incumbent parameter budget and state width fixed, removed truncation entirely, and recovered holdout `qwk_mean` from `0.305` (`run_039`) to `0.356`, bringing it within `0.022` of incumbent `run_020` while lowering hedging to `0.585`. It still trails the incumbent on `recall_-1` (`0.296` vs `0.342`) and the target hard dimensions remain weak (`stimulation qwk 0.165`, `hedonism qwk 0.095`), so there is no immediate promotion or rerun recommendation. Keep `run_019`-`run_021` active, and treat Qwen as the only encoder branch worth reconsidering later if representation work is reopened.
+>
+> **Latest Nomic v2-MoE 256d diagnostic review:** [`reports/experiment_review_2026-03-16_twinkl_732.md`](reports/experiment_review_2026-03-16_twinkl_732.md) did **not** change the frontier. The cleaner within-family encoder swap `run_039` matched the incumbent parameter budget and recovered much of the tail-sensitive package relative to the `twinkl-731` 768d controls (`recall_-1 0.336`, minority recall `0.433`, hedging `0.598`, `security qwk 0.284`), but it still regressed sharply against incumbent `run_020` on holdout `qwk_mean` (`0.378 -> 0.305`), accuracy (`0.755 -> 0.737`), and several dimensions, especially `power` (`0.342 -> 0.117`) and `stimulation` (`0.303 -> 0.168`). Treat this as another negative representation diagnostic: no 3-seed v2-moe rerun, and no need to reopen `twinkl-733` just to reconfirm the already-established semantic-polarity diagnosis.
 >
 > **Latest weighted frontier review:** [`reports/experiment_review_2026-03-11_twinkl_719_3.md`](reports/experiment_review_2026-03-11_twinkl_719_3.md)
 >
@@ -178,6 +180,43 @@
 
 ## Findings
 
+### 2026-03-16 — `twinkl-733` semantic counterexample batch is explicitly de-scoped (`twinkl-733`)
+
+`twinkl-733` was opened as a narrow follow-up after the representation
+diagnostics: generate one more small `Hedonism` / `Security` counterexample
+batch and see whether matched-pair semantic support could cleanly move the hard
+dimensions. That experiment is now explicitly de-scoped.
+
+**1. The main finding was already established before this issue would have run.**
+By the March 8, March 10, and March 11 reviews, the same replay pattern had
+already appeared repeatedly: quiet pleasure and defended rest were being read as
+guilt or misalignment, while anxious-surface stability language was being read
+as insecurity or threat. The repo does not need one more experiment to show that
+this semantic-polarity failure exists.
+
+**2. The targeted-data direction already had a real test.** The earlier
+targeted batch `run_022`-`run_024` and the regenerated `Hedonism` / `Security`
+lift `run_025`-`run_027` already exercised the "add targeted semantic support"
+lever. Those lifts were informative, but they did not produce a clean frontier
+change on the family-level metrics that now gate promotion decisions.
+
+**3. The uncertainty and representation reviews reduced the value of one more
+small batch.** `twinkl-730` showed the prior lift still lacked clean
+family-level separation from the incumbent, while `twinkl-731`, `twinkl-732`,
+and `twinkl-742` failed to overturn the underlying diagnosis from the
+representation side. That means a new batch would most likely pay the full
+synthetic-data workflow cost just to reconfirm what the current record already
+supports.
+
+**4. Recommendation: close `twinkl-733` and keep the frontier unchanged.**
+`run_019`-`run_021` remain the active corrected-split default. This closeout
+does **not** mean `Hedonism` and `Security` are solved; it means another
+counterexample batch is not worth a fresh generation / labeling / retraining
+cycle right now. `twinkl-734` becomes tracker-unblocked after this closeout, but
+it should still be treated as a reserve branch rather than the automatically
+recommended next step. Full details:
+[`reports/experiment_review_2026-03-16_twinkl_733.md`](reports/experiment_review_2026-03-16_twinkl_733.md).
+
 ### 2026-03-16 — Qwen is the first credible encoder-swap near-miss, but still not a frontier win (`twinkl-742`)
 
 `twinkl-742` ran the last planned encoder diagnostic using
@@ -208,9 +247,8 @@ Relative to `run_039`, Qwen recovers `self_direction qwk` (`0.441 -> 0.555`),
 **4. Recommendation: no immediate rerun, but keep Qwen as the only encoder
 branch worth reopening later.** The active frontier remains `run_019`-
 `run_021`, with `run_034`-`run_036` as the best tail-sensitive reference
-branch, and `twinkl-733` should still be the next step. The main change is that
-Qwen is now the only encoder-swap line with a plausible future case if
-representation work is revisited. Full details:
+branch. The main change is that Qwen is now the only encoder-swap line with a
+plausible future case if representation work is revisited. Full details:
 [`reports/experiment_review_2026-03-16_twinkl_742.md`](reports/experiment_review_2026-03-16_twinkl_742.md).
 
 ### 2026-03-16 — Nomic v2-MoE 256d improves security and tail recovery, but still loses the frontier (`twinkl-732`)
@@ -247,9 +285,10 @@ v2-moe run truncates only `13/1,651` entries (`0.8%`). That matters enough to
 document, but not enough to plausibly explain the broad QWK drop on its own.
 
 **5. Recommendation: stop the representation-swap line here.** `run_019`-
-`run_021` remain the active corrected-split default, `run_034`-`run_036`
-remain the best tail-sensitive reference branch, and `twinkl-733` should be the
-next step instead of a 3-seed v2-moe rerun. Full details:
+`run_021` remain the active corrected-split default, and `run_034`-`run_036`
+remain the best tail-sensitive reference branch. This result did not justify a
+3-seed v2-moe rerun, and it also did not create a new reason to run `twinkl-733`
+once the later de-scope review reported out. Full details:
 [`reports/experiment_review_2026-03-16_twinkl_732.md`](reports/experiment_review_2026-03-16_twinkl_732.md).
 
 ### 2026-03-16 — Full 768d Nomic v1.5 does not rescue hard-dimension polarity on the frontier (`twinkl-731`)
