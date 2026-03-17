@@ -13,6 +13,91 @@ It replaces the previous placeholder state and should be read together with:
 The weekly digest is the bridge between the numeric VIF/Judge layer and the narrative Coach layer.
 Its job is not to summarize the week generically. Its job is to mirror the week back against declared values, cite evidence, and hand structured context to the Coach prompt.
 
+
+## How To Run
+
+Activate the repo virtual environment first:
+
+```sh
+source .venv/bin/activate
+```
+
+### Basic CLI
+
+Generate a digest for one persona using the latest available 7-day window:
+
+```sh
+python -m src.coach.weekly_digest --persona-id 0a2fe15c
+```
+
+Generate a digest for an explicit date window:
+
+```sh
+python -m src.coach.weekly_digest \
+  --persona-id 0a2fe15c \
+  --start-date 2025-12-03 \
+  --end-date 2025-12-09
+```
+
+### Using Upstream Drift Output
+
+Preferred long-term usage is to pass drift detection output into the digest generator.
+
+Example `drift_result.json`:
+
+```json
+{
+  "response_mode": "background_strain",
+  "rationale": "Upstream drift detector found a positive week with softer transition strain.",
+  "reasons": ["supportive_week", "transition_burden", "no_clear_negative_core_value"],
+  "source": "drift_detector"
+}
+```
+
+Run the digest generator with that upstream drift result:
+
+```sh
+python -m src.coach.weekly_digest \
+  --persona-id 0ad04582 \
+  --start-date 2025-12-26 \
+  --end-date 2026-01-01 \
+  --drift-result-json drift_result.json
+```
+
+### Temporary Fallback / Manual Override
+
+If no `--drift-result-json` is provided, the digest generator uses temporary local fallback heuristics for offline development.
+
+You can also force a mode manually for testing:
+
+```sh
+python -m src.coach.weekly_digest \
+  --persona-id 0a2fe15c \
+  --start-date 2025-12-03 \
+  --end-date 2025-12-09 \
+  --response-mode high_uncertainty
+```
+
+Manual override is for testing only.
+Normal pipeline usage should prefer upstream drift output.
+
+### Output Files
+
+By default the command writes:
+
+- `logs/exports/weekly_digests/<persona>_<week_end>.json`
+- `logs/exports/weekly_digests/<persona>_<week_end>.md`
+- `logs/exports/weekly_digests/<persona>_<week_end>.prompt.txt`
+- `logs/exports/weekly_digests/weekly_digests.parquet`
+
+You can override input/output locations with:
+
+- `--labels-path`
+- `--wrangled-dir`
+- `--output-dir`
+- `--parquet-path`
+
+
 ## Scope For The Current POC
 
 The current POC does not need RAG.
