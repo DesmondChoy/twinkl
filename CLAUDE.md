@@ -99,6 +99,7 @@ Script-based generation/judging helpers live in `src/synthetic/`,
 - `docs/onboarding/` — Onboarding flow spec
 - `docs/capstone_report/` — Report sections
 - `docs/archive/` — Historical only
+- `docs/evolution/` — Value evolution detection
 - `docs/future_work/` — Non-committed ideas
 
 ## Implementation Principles
@@ -130,13 +131,6 @@ Before creating a commit:
 If there is ambiguity and no blocking risk, proceed with explicit
 assumptions and note them. If ambiguity affects correctness or design
 direction, ask one concise clarifying question.
-## Asking the User
-
-When you need clarification, preferences, or decisions from the user,
-**always prefer the `AskUserQuestion` tool** over guessing or making
-assumptions. It presents structured, multiple-choice questions that
-resolve ambiguity quickly and keep the workflow moving.
-
 ## Issue Tracking with Beads (`bd`)
 
 Use `bd` (beads) for all issue tracking. This is mandatory, not optional.
@@ -213,12 +207,14 @@ Use `bd` (beads) for all issue tracking. This is mandatory, not optional.
 
 ## Task Management
 
-1. **Plan First**: Write plan to `tasks/todo.md` with checkable items
-2. **Verify Plan**: Check in before starting implementation
-3. **Track Progress**: Mark items complete as you go
-4. **Explain Changes**: High-level summary at each step
-5. **Document Results**: Add review section to `tasks/todo.md`
-6. **Capture Lessons**: Update `tasks/lessons.md` after corrections
+1. **Plan First**: Write a plan with checkable items
+2. **Verify Plan**: Use the `AskUserQuestion` tool to check in with the user
+   before starting implementation. Present structured, multiple-choice questions
+   to resolve ambiguity quickly and keep the workflow moving.
+3. **Explain Changes**: High-level summary at each step
+4. **Capture Lessons**: Update `tasks/lessons.md` after corrections
+5. **Update Documentation**: Run parallel sub-agents to scan potentially
+   affected documentation and update where needed
 
 ---
 

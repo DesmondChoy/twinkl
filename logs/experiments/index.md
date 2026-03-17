@@ -4,19 +4,40 @@
 
 | Rank | Candidate | Runs | Split Seed | Model Seeds | Median QWK | Median recall_-1 | Median MinR | Median Hedging | Median Cal | Positioning |
 |------|-----------|------|-----------:|------------|-----------:|-----------------:|------------:|---------------:|-----------:|-------------|
-| 1 | BalancedSoftmax | run_019-run_021 | 2025 | 11, 22, 33 | **0.362** | 0.313 | **0.448** | 0.621 | 0.713 | Confirmed 3-seed corrected-split leader. Strongest tail recovery so far, but it still trades away MAE/accuracy and some calibration versus the safer completed baselines. |
-| 2 | CDWCE_a3 | run_016-run_018 | 2025 | 11, 22, 33 | 0.353 | 0.104 | 0.276 | 0.804 | 0.762 | Best conservative 3-seed alternative when calibration, MAE, and accuracy matter more than maximum tail recovery. |
-| 3 | BalancedSoftmax + targeted batch | run_022-run_024 | 2025 | 11, 22, 33 | 0.349 | **0.342** | 0.434 | **0.619** | 0.687 | Best targeted hard-dimension follow-up so far. The frozen-holdout batch improves `recall_-1` and keeps hedging slightly lower, but it gives back QWK and calibration, so it is a secondary branch rather than the new default. |
-| 4 | SoftOrdinal | run_016-run_018 | 2025 | 11, 22, 33 | 0.346 | 0.077 | 0.283 | 0.796 | 0.781 | Best low-gap completed comparator. Competitive on QWK, but more seed-sensitive than CDWCE_a3 and no longer the minority leader. |
-| 5 | CORN | run_016-run_018 | 2025 | 11, 22, 33 | 0.315 | 0.089 | 0.273 | 0.801 | **0.818** | Best-calibrated corrected-split baseline. Keep it as the calibration anchor and sanity check for lower-confidence follow-ups. |
-| 6 | BalancedSoftmax + hedonism/security lift | run_025-run_027 | 2025 | 11, 22, 33 | 0.346 | 0.328 | 0.442 | **0.598** | 0.693 | Post-regenerated `twinkl-691.2` batch. Lowest hedging of any family, but loses QWK and calibration vs incumbent. Not a frontier change. |
-| 7 | SoftOrdinal + hedonism/security lift | run_025-run_027 | 2025 | 11, 22, 33 | 0.340 | 0.082 | 0.260 | 0.823 | 0.738 | Post-lift SoftOrdinal comparator. The data lift did not help SoftOrdinal escape excessive hedging; worse than original family on most metrics. |
+| 1 | BalancedSoftmax | run_019-run_021 | 2025 | 11, 22, 33 | 0.362 | 0.313 | **0.448** | 0.621 | 0.713 | Active corrected-split default. Best overall balance of fair QWK, reasonable tail recovery, and only moderate hedging. |
+| 2 | BalancedSoftmax + dimweight | run_034-run_036 | 2025 | 11, 22, 33 | 0.342 | **0.378** | **0.449** | 0.599 | **0.726** | Best tail-sensitive reference branch so far. Strongest `recall_-1` / minority-recall package with lower hedging and better calibration than the incumbent, but median QWK is too volatile and too low to replace the default. |
+| 3 | BalancedSoftmax + circreg + recall floor | run_031-run_033 | 2025 | 11, 22, 33 | **0.366** | 0.267 | 0.409 | 0.641 | 0.713 | QWK/calibration are comparable to the incumbent, but the guardrailed rerun still loses on `recall_-1`, minority recall, and hedging. Keep as a reference branch, not the default. |
+| 4 | BalancedSoftmax + targeted batch | run_022-run_024 | 2025 | 11, 22, 33 | 0.349 | 0.342 | 0.434 | 0.619 | 0.687 | Best targeted hard-dimension follow-up before weighting. Improves `recall_-1`, but gives back QWK and calibration relative to the default family. |
+| 5 | BalancedSoftmax + hedonism/security lift | run_025-run_027 | 2025 | 11, 22, 33 | 0.346 | 0.328 | 0.442 | **0.598** | 0.693 | Lowest-hedging training-time branch, but still not a clean frontier change on QWK or hard-dimension stability. |
+| 6 | CDWCE_a3 | run_016-run_018 | 2025 | 11, 22, 33 | 0.353 | 0.104 | 0.276 | 0.804 | 0.762 | Best conservative 3-seed baseline when MAE, accuracy, and calibration matter more than strong tail recovery. |
+| 7 | BalancedSoftmax + circumplex regularizer | run_028-run_030 | 2025 | 11, 22, 33 | 0.347 | 0.265 | 0.411 | 0.641 | 0.709 | Soft circumplex regularization improved some aggregate structure but weakened the tail-sensitive behavior that justified BalancedSoftmax in the first place. |
+| 8 | SoftOrdinal | run_016-run_018 | 2025 | 11, 22, 33 | 0.346 | 0.077 | 0.283 | 0.796 | 0.781 | Best low-gap comparator. Competitive on QWK, but it remains much more neutral-biased than the BalancedSoftmax branches. |
+| 9 | CORN | run_016-run_018 | 2025 | 11, 22, 33 | 0.315 | 0.089 | 0.273 | 0.801 | 0.818 | Best-calibrated corrected-split baseline. Keep it as the calibration anchor and sanity check for post-hoc calibration follow-ups. |
+| 10 | SoftOrdinal + hedonism/security lift | run_025-run_027 | 2025 | 11, 22, 33 | 0.340 | 0.082 | 0.260 | 0.823 | 0.738 | Post-lift SoftOrdinal comparator. The extra data did not help it escape excessive hedging. |
 
-> **Active recommendation (2026-03-10):** `run_019`-`run_021` remain the default corrected-split frontier family. Neither the targeted `run_022`-`run_024` branch nor the post-lift `run_025`-`run_027` families displace the incumbent. The next highest-leverage experiment is per-dimension uncertainty weighting on BalancedSoftmax to stop hedonism/stimulation noise from dragging down the aggregate. See full analysis below.
+> **Active recommendation (2026-03-11):** `run_019`-`run_021` remain the default corrected-split frontier family. The new weighted family `run_034`-`run_036` is the best current tail-sensitive reference branch: it improves median holdout `recall_-1` (`0.378` vs `0.313`), keeps minority recall essentially flat to slightly better (`0.449` vs `0.448`), reduces hedging (`0.599` vs `0.621`), and improves calibration (`0.726` vs `0.713`) while keeping circumplex summaries near incumbent levels. It still gives back too much median QWK (`0.342` vs `0.362`) and is much less stable across seeds, so it should stay a reference branch rather than replace the default. See the weighted review below.
 >
-> **Latest full frontier review:** [`reports/experiment_review_2026-03-10_v7.md`](reports/experiment_review_2026-03-10_v7.md)
+> **Latest semantic counterexample closeout:** [`reports/experiment_review_2026-03-16_twinkl_733.md`](reports/experiment_review_2026-03-16_twinkl_733.md) explicitly de-scopes the proposed `Hedonism` / `Security` semantic counterexample batch. The repeated replay errors, earlier targeted lifts, uncertainty review, and later representation diagnostics already answer the core question strongly enough, so another generate -> judge -> retrain cycle is not justified for the current frontier. Keep `run_019`-`run_021` active, treat `twinkl-734` as tracker-unblocked but still reserve-only, and reopen `twinkl-733` only if a future branch needs a tightly matched causal falsification test.
 >
-> **Previous full frontier review:** [`reports/experiment_review_2026-03-08_v6.md`](reports/experiment_review_2026-03-08_v6.md)
+> **Latest Qwen final diagnostic review:** [`reports/experiment_review_2026-03-16_twinkl_742.md`](reports/experiment_review_2026-03-16_twinkl_742.md) also did **not** change the frontier, but it is the first encoder swap that materially narrowed the gap. `run_040` kept the incumbent parameter budget and state width fixed, removed truncation entirely, and recovered holdout `qwk_mean` from `0.305` (`run_039`) to `0.356`, bringing it within `0.022` of incumbent `run_020` while lowering hedging to `0.585`. It still trails the incumbent on `recall_-1` (`0.296` vs `0.342`) and the target hard dimensions remain weak (`stimulation qwk 0.165`, `hedonism qwk 0.095`), so there is no immediate promotion or rerun recommendation. Keep `run_019`-`run_021` active, and treat Qwen as the only encoder branch worth reconsidering later if representation work is reopened.
+>
+> **Latest Nomic v2-MoE 256d diagnostic review:** [`reports/experiment_review_2026-03-16_twinkl_732.md`](reports/experiment_review_2026-03-16_twinkl_732.md) did **not** change the frontier. The cleaner within-family encoder swap `run_039` matched the incumbent parameter budget and recovered much of the tail-sensitive package relative to the `twinkl-731` 768d controls (`recall_-1 0.336`, minority recall `0.433`, hedging `0.598`, `security qwk 0.284`), but it still regressed sharply against incumbent `run_020` on holdout `qwk_mean` (`0.378 -> 0.305`), accuracy (`0.755 -> 0.737`), and several dimensions, especially `power` (`0.342 -> 0.117`) and `stimulation` (`0.303 -> 0.168`). Treat this as another negative representation diagnostic: no 3-seed v2-moe rerun, and no need to reopen `twinkl-733` just to reconfirm the already-established semantic-polarity diagnosis.
+>
+> **Latest weighted frontier review:** [`reports/experiment_review_2026-03-11_twinkl_719_3.md`](reports/experiment_review_2026-03-11_twinkl_719_3.md)
+>
+> **Latest post-hoc retargeting review:** [`reports/experiment_review_twinkl_729.md`](reports/experiment_review_twinkl_729.md) did **not** change the frontier. The new effective-prior + per-dimension tau branch did not beat the standard Menon control on the guarded median test comparison: standard Menon still delivered the better median `recall_-1` delta (`+0.004` vs baseline) while both branches gave back QWK, calibration, and circumplex cleanliness. On the strongest weighted checkpoint `run_036`, the new branch was validation-selected but regressed on holdout (`qwk_mean 0.381 -> 0.360`, `recall_-1 0.387 -> 0.339`, `calibration 0.726 -> 0.592`). Treat this as evidence that the current post-hoc line is likely exhausted for the active frontier; `run_034`-`run_036` remain the best tail-sensitive reference branch, and any further incumbent-centered follow-up should be a materially different intervention such as `twinkl-719.6`.
+>
+> **Latest frontier uncertainty review:** [`reports/experiment_review_2026-03-14_twinkl_730.md`](reports/experiment_review_2026-03-14_twinkl_730.md) adds persona-cluster bootstrap BCa intervals and hard-dimension chance tests for the active BalancedSoftmax frontier families. The weighted reference branch still shows a statistically distinguishable family-median `recall_-1` gain over the incumbent (`+0.065`, 95% BCa CI `[+0.021, +0.128]`), but its QWK delta remains unresolved noise (`-0.020`, CI `[-0.062, +0.018]`) and minority recall is effectively flat. Future promotion decisions should therefore gate on family-delta intervals, not point medians, and treat hard-dimension QWK as secondary evidence only when it is itself above chance.
+>
+> **Latest 768d truncation diagnostic review:** [`reports/experiment_review_2026-03-16_twinkl_731.md`](reports/experiment_review_2026-03-16_twinkl_731.md) did **not** change the frontier. The unconstrained full-768d diagnostic `run_037` regressed against incumbent `run_020` on holdout `qwk_mean` (`0.378 -> 0.318`), `recall_-1` (`0.342 -> 0.269`), minority recall (`0.449 -> 0.381`), and both target hard-dimension QWKs (`hedonism 0.262 -> 0.178`, `security 0.213 -> 0.165`). The fair-budget control `run_038` matched the incumbent parameter budget more closely but degraded further (`qwk_mean 0.299`, `recall_-1 0.246`) while collapsing `hedonism qwk` to `-0.045`. Treat this as the first negative representation diagnostic in the pair completed by `twinkl-732`.
+>
+> **Latest full frontier review:** [`reports/experiment_review_2026-03-11_twinkl_721.md`](reports/experiment_review_2026-03-11_twinkl_721.md)
+>
+> **Latest checkpoint-selection guardrail review:** [`reports/experiment_review_2026-03-10_twinkl_715.md`](reports/experiment_review_2026-03-10_twinkl_715.md)
+>
+> **Circumplex rollout closeout:** [`reports/experiment_review_2026-03-11_twinkl_691_5.md`](reports/experiment_review_2026-03-11_twinkl_691_5.md) explicitly de-scopes the circumplex-aware batch sampler. The diagnostics remain useful, and the weighted rerun now supplies the training-time comparison branch for the next validation-only logit-retargeting follow-up from `run_020`.
+>
+> **Previous full frontier review:** [`reports/experiment_review_2026-03-10_v8.md`](reports/experiment_review_2026-03-10_v8.md)
 >
 > **Latest post-lift rebaseline review:** [`reports/experiment_review_2026-03-09_twinkl_691_3.md`](reports/experiment_review_2026-03-09_twinkl_691_3.md)
 >
@@ -47,104 +68,449 @@
 ## Run Log
 
 <!-- AUTO-TABLE:START -->
-| run | model | encoder | ws | hd | do | loss | params | ratio | MAE | Acc | QWK | Spear | Cal | MinR | file |
-|-----|-------|---------|---:|---:|---:|------|-------:|------:|----:|----:|----:|------:|----:|-----:|------|
-| 001 | CORAL | MiniLM-384d | 3 | 256 | 0.2 | coral | 372756 | 585.2 | 0.232 | 0.782 | 0.398 | 0.459 | 0.644 | 0.298 | runs/run_001_CORAL.yaml |
-| 001 | CORN | MiniLM-384d | 3 | 256 | 0.2 | corn | 372756 | 585.2 | 0.236 | 0.782 | 0.384 | 0.452 | 0.633 | 0.306 | runs/run_001_CORN.yaml |
-| 001 | EMD | MiniLM-384d | 3 | 256 | 0.2 | emd | 375326 | 589.2 | 0.243 | 0.773 | 0.395 | 0.459 | 0.648 | 0.340 | runs/run_001_EMD.yaml |
-| 001 | MSE | MiniLM-384d | 3 | 256 | 0.2 | weighted_mse_s5.0 | 370186 | 581.1 | 0.450 | 0.641 | 0.338 | 0.379 | -0.218 | 0.428 | runs/run_001_MSE.yaml |
-| 001 | SoftOrdinal | MiniLM-384d | 3 | 256 | 0.2 | soft_ordinal | 375326 | 589.2 | 0.248 | 0.777 | 0.417 | 0.455 | 0.724 | 0.372 | runs/run_001_SoftOrdinal.yaml |
-| 002 | CORAL | nomic-256d | 1 | 32 | 0.3 | coral | 10708 | 16.8 | 0.263 | 0.770 | 0.335 | 0.349 | 0.734 | 0.234 | runs/run_002_CORAL.yaml |
-| 002 | CORN | nomic-256d | 1 | 32 | 0.3 | corn | 10708 | 16.8 | 0.260 | 0.766 | 0.355 | 0.371 | 0.737 | 0.204 | runs/run_002_CORN.yaml |
-| 002 | EMD | nomic-256d | 1 | 32 | 0.3 | emd | 11038 | 17.3 | 0.270 | 0.764 | 0.365 | 0.365 | 0.772 | 0.309 | runs/run_002_EMD.yaml |
-| 002 | MSE | nomic-256d | 1 | 32 | 0.3 | weighted_mse_s5.0 | 10378 | 16.3 | 0.418 | 0.683 | 0.348 | 0.378 | -0.073 | 0.390 | runs/run_002_MSE.yaml |
-| 002 | SoftOrdinal | nomic-256d | 1 | 32 | 0.3 | soft_ordinal | 11038 | 17.3 | 0.267 | 0.780 | 0.385 | 0.356 | 0.774 | 0.310 | runs/run_002_SoftOrdinal.yaml |
-| 003 | CORAL | MiniLM-384d | 3 | 256 | 0.2 | coral | 370196 | 581.2 | 0.241 | 0.776 | 0.369 | 0.394 | 0.640 | 0.265 | runs/run_003_CORAL.yaml |
-| 003 | CORN | MiniLM-384d | 3 | 256 | 0.2 | corn | 370196 | 581.2 | 0.249 | 0.764 | 0.326 | 0.395 | 0.648 | 0.260 | runs/run_003_CORN.yaml |
-| 003 | EMD | MiniLM-384d | 3 | 256 | 0.2 | emd | 372766 | 585.2 | 0.240 | 0.782 | 0.410 | 0.416 | 0.697 | 0.332 | runs/run_003_EMD.yaml |
-| 003 | SoftOrdinal | MiniLM-384d | 3 | 256 | 0.2 | soft_ordinal | 372766 | 585.2 | 0.253 | 0.772 | 0.383 | 0.396 | 0.743 | 0.333 | runs/run_003_SoftOrdinal.yaml |
-| 004 | CORAL | nomic-256d | 1 | 32 | 0.3 | coral | 10388 | 16.3 | 0.273 | 0.768 | 0.331 | 0.346 | 0.755 | 0.269 | runs/run_004_CORAL.yaml |
-| 004 | CORN | nomic-256d | 1 | 32 | 0.3 | corn | 10388 | 16.3 | 0.274 | 0.760 | 0.291 | 0.293 | 0.734 | 0.217 | runs/run_004_CORN.yaml |
-| 004 | EMD | nomic-256d | 1 | 32 | 0.3 | emd | 10718 | 16.8 | 0.266 | 0.780 | 0.391 | 0.361 | 0.766 | 0.343 | runs/run_004_EMD.yaml |
-| 004 | SoftOrdinal | nomic-256d | 1 | 32 | 0.3 | soft_ordinal | 10718 | 16.8 | 0.269 | 0.779 | 0.385 | 0.351 | 0.786 | 0.332 | runs/run_004_SoftOrdinal.yaml |
-| 005 | CORAL | MiniLM-384d | 3 | 256 | 0.2 | coral | 370196 | 386.4 | 0.215 | 0.798 | 0.282 | 0.411 | 0.629 | 0.186 | runs/run_005_CORAL.yaml |
-| 005 | CORN | MiniLM-384d | 3 | 256 | 0.2 | corn | 370196 | 386.4 | 0.216 | 0.797 | 0.254 | 0.365 | 0.640 | 0.181 | runs/run_005_CORN.yaml |
-| 005 | EMD | MiniLM-384d | 3 | 256 | 0.2 | emd | 372766 | 389.1 | 0.226 | 0.791 | 0.272 | 0.312 | 0.651 | 0.217 | runs/run_005_EMD.yaml |
-| 005 | SoftOrdinal | MiniLM-384d | 3 | 256 | 0.2 | soft_ordinal | 372766 | 389.1 | 0.215 | 0.798 | 0.304 | 0.368 | 0.650 | 0.165 | runs/run_005_SoftOrdinal.yaml |
-| 006 | CORAL | nomic-256d | 1 | 32 | 0.3 | coral | 10388 | 10.8 | 0.233 | 0.793 | 0.278 | 0.354 | 0.768 | 0.166 | runs/run_006_CORAL.yaml |
-| 006 | CORN | nomic-256d | 1 | 32 | 0.3 | corn | 10388 | 10.8 | 0.236 | 0.791 | 0.280 | 0.350 | 0.777 | 0.183 | runs/run_006_CORN.yaml |
-| 006 | EMD | nomic-256d | 1 | 32 | 0.3 | emd | 10718 | 11.2 | 0.227 | 0.803 | 0.324 | 0.334 | 0.764 | 0.225 | runs/run_006_EMD.yaml |
-| 006 | SoftOrdinal | nomic-256d | 1 | 32 | 0.3 | soft_ordinal | 10718 | 11.2 | 0.223 | 0.811 | 0.358 | 0.354 | 0.775 | 0.235 | runs/run_006_SoftOrdinal.yaml |
-| 007 | CORAL | nomic-256d | 1 | 64 | 0.3 | coral | 22804 | 22.4 | 0.208 | 0.819 | 0.367 | 0.398 | 0.830 | 0.247 | runs/run_007_CORAL.yaml |
-| 007 | CORN | nomic-256d | 1 | 64 | 0.3 | corn | 22804 | 22.4 | 0.205 | 0.821 | 0.413 | 0.402 | 0.838 | 0.285 | runs/run_007_CORN.yaml |
-| 007 | EMD | nomic-256d | 1 | 64 | 0.3 | emd | 23454 | 23.0 | 0.211 | 0.817 | 0.357 | 0.363 | 0.849 | 0.288 | runs/run_007_EMD.yaml |
-| 007 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 23.0 | 0.212 | 0.821 | 0.314 | 0.343 | 0.852 | 0.291 | runs/run_007_SoftOrdinal.yaml |
-| 008 | CORAL | nomic-256d | 1 | 128 | 0.3 | coral | 53780 | 52.7 | 0.204 | 0.824 | 0.341 | 0.397 | 0.805 | 0.273 | runs/run_008_CORAL.yaml |
-| 008 | CORN | nomic-256d | 1 | 128 | 0.3 | corn | 53780 | 52.7 | 0.203 | 0.828 | 0.344 | 0.359 | 0.785 | 0.276 | runs/run_008_CORN.yaml |
-| 008 | EMD | nomic-256d | 1 | 128 | 0.3 | emd | 55070 | 54.0 | 0.200 | 0.821 | 0.365 | 0.390 | 0.802 | 0.300 | runs/run_008_EMD.yaml |
-| 008 | SoftOrdinal | nomic-256d | 1 | 128 | 0.3 | soft_ordinal | 55070 | 54.0 | 0.201 | 0.826 | 0.354 | 0.387 | 0.811 | 0.291 | runs/run_008_SoftOrdinal.yaml |
-| 009 | CORAL | MiniLM-384d | 3 | 64 | 0.2 | coral | 80276 | 78.7 | 0.228 | 0.785 | 0.176 | 0.284 | 0.695 | 0.137 | runs/run_009_CORAL.yaml |
-| 009 | CORN | MiniLM-384d | 3 | 64 | 0.2 | corn | 80276 | 78.7 | 0.227 | 0.792 | 0.227 | 0.323 | 0.711 | 0.166 | runs/run_009_CORN.yaml |
-| 009 | EMD | MiniLM-384d | 3 | 64 | 0.2 | emd | 80926 | 79.3 | 0.225 | 0.799 | 0.259 | 0.303 | 0.776 | 0.223 | runs/run_009_EMD.yaml |
-| 009 | SoftOrdinal | MiniLM-384d | 3 | 64 | 0.2 | soft_ordinal | 80926 | 79.3 | 0.239 | 0.787 | 0.236 | 0.300 | 0.775 | 0.234 | runs/run_009_SoftOrdinal.yaml |
-| 010 | CORAL | nomic-256d | 1 | 64 | 0.3 | coral | 22804 | 22.4 | 0.209 | 0.819 | 0.364 | 0.391 | 0.823 | 0.244 | runs/run_010_CORAL.yaml |
-| 010 | CORAL_IW | nomic-256d | 1 | 64 | 0.3 | coral_iw | 22804 | 22.4 | 0.221 | 0.809 | 0.301 | 0.351 | 0.841 | 0.234 | runs/run_010_CORAL_IW.yaml |
-| 010 | CORN | nomic-256d | 1 | 64 | 0.3 | corn | 22804 | 22.4 | 0.206 | 0.821 | 0.434 | 0.407 | 0.835 | 0.285 | runs/run_010_CORN.yaml |
-| 010 | EMD | nomic-256d | 1 | 64 | 0.3 | emd | 23454 | 23.0 | 0.212 | 0.819 | 0.362 | 0.357 | 0.851 | 0.294 | runs/run_010_EMD.yaml |
-| 010 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 23.0 | 0.211 | 0.818 | 0.308 | 0.352 | 0.860 | 0.284 | runs/run_010_SoftOrdinal.yaml |
-| 011 | CORAL | nomic-256d | 2 | 64 | 0.3 | coral | 39252 | 38.5 | 0.218 | 0.807 | 0.339 | 0.368 | 0.815 | 0.245 | runs/run_011_CORAL.yaml |
-| 011 | CORAL_IW | nomic-256d | 2 | 64 | 0.3 | coral_iw | 39252 | 38.5 | 0.223 | 0.798 | 0.269 | 0.312 | 0.790 | 0.175 | runs/run_011_CORAL_IW.yaml |
-| 011 | CORN | nomic-256d | 2 | 64 | 0.3 | corn | 39252 | 38.5 | 0.209 | 0.814 | 0.335 | 0.388 | 0.811 | 0.232 | runs/run_011_CORN.yaml |
-| 011 | EMD | nomic-256d | 2 | 64 | 0.3 | emd | 39902 | 39.1 | 0.214 | 0.821 | 0.382 | 0.359 | 0.846 | 0.308 | runs/run_011_EMD.yaml |
-| 011 | SoftOrdinal | nomic-256d | 2 | 64 | 0.3 | soft_ordinal | 39902 | 39.1 | 0.222 | 0.820 | 0.333 | 0.349 | 0.862 | 0.312 | runs/run_011_SoftOrdinal.yaml |
-| 012 | CORAL | nomic-256d | 2 | 64 | 0.3 | coral | 39252 | 38.5 | 0.209 | 0.806 | 0.359 | 0.381 | 0.812 | 0.342 | runs/run_012_CORAL.yaml |
-| 012 | CORAL_IW | nomic-256d | 2 | 64 | 0.3 | coral_iw | 39252 | 38.5 | 0.214 | 0.801 | 0.271 | 0.304 | 0.802 | 0.265 | runs/run_012_CORAL_IW.yaml |
-| 012 | CORN | nomic-256d | 2 | 64 | 0.3 | corn | 39252 | 38.5 | 0.193 | 0.820 | 0.346 | 0.396 | 0.804 | 0.296 | runs/run_012_CORN.yaml |
-| 012 | EMD | nomic-256d | 2 | 64 | 0.3 | emd | 39902 | 39.1 | 0.213 | 0.808 | 0.369 | 0.357 | 0.857 | 0.364 | runs/run_012_EMD.yaml |
-| 012 | SoftOrdinal | nomic-256d | 2 | 64 | 0.3 | soft_ordinal | 39902 | 39.1 | 0.224 | 0.801 | 0.334 | 0.356 | 0.850 | 0.391 | runs/run_012_SoftOrdinal.yaml |
-| 013 | CORAL | nomic-256d | 2 | 64 | 0.3 | coral | 39252 | 38.5 | 0.215 | 0.814 | 0.384 | 0.353 | 0.820 | 0.259 | runs/run_013_CORAL.yaml |
-| 013 | CORN | nomic-256d | 2 | 64 | 0.3 | corn | 39252 | 38.5 | 0.208 | 0.821 | 0.382 | 0.388 | 0.828 | 0.269 | runs/run_013_CORN.yaml |
-| 013 | EMD | nomic-256d | 2 | 64 | 0.3 | emd | 39902 | 39.1 | 0.209 | 0.823 | 0.391 | 0.371 | 0.840 | 0.293 | runs/run_013_EMD.yaml |
-| 013 | SoftOrdinal | nomic-256d | 2 | 64 | 0.3 | soft_ordinal | 39902 | 39.1 | 0.212 | 0.820 | 0.334 | 0.367 | 0.830 | 0.269 | runs/run_013_SoftOrdinal.yaml |
-| 014 | CORAL | nomic-256d | 1 | 64 | 0.3 | coral | 22804 | 22.4 | 0.206 | 0.821 | 0.329 | 0.391 | 0.813 | 0.237 | runs/run_014_CORAL.yaml |
-| 014 | CORN | nomic-256d | 1 | 64 | 0.3 | corn | 22804 | 22.4 | 0.207 | 0.819 | 0.314 | 0.367 | 0.753 | 0.246 | runs/run_014_CORN.yaml |
-| 014 | EMD | nomic-256d | 1 | 64 | 0.3 | emd | 23454 | 23.0 | 0.203 | 0.818 | 0.373 | 0.406 | 0.785 | 0.274 | runs/run_014_EMD.yaml |
-| 014 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 23.0 | 0.204 | 0.825 | 0.388 | 0.394 | 0.801 | 0.288 | runs/run_014_SoftOrdinal.yaml |
-| 015 | CDWCE_a2 | nomic-256d | 1 | 64 | 0.3 | cdwce_a2 | 23454 | 23.0 | 0.207 | 0.811 | 0.322 | 0.350 | 0.783 | 0.220 | runs/run_015_CDWCE_a2.yaml |
-| 015 | CDWCE_a3 | nomic-256d | 1 | 64 | 0.3 | cdwce_a3 | 23454 | 23.0 | 0.203 | 0.822 | 0.402 | 0.384 | 0.755 | 0.259 | runs/run_015_CDWCE_a3.yaml |
-| 015 | CDWCE_a5 | nomic-256d | 1 | 64 | 0.3 | cdwce_a5 | 23454 | 23.0 | 0.217 | 0.795 | 0.300 | 0.371 | 0.639 | 0.174 | runs/run_015_CDWCE_a5.yaml |
-| 015 | CORAL | nomic-256d | 1 | 64 | 0.3 | coral | 22804 | 22.4 | 0.205 | 0.822 | 0.349 | 0.388 | 0.824 | 0.241 | runs/run_015_CORAL.yaml |
-| 015 | CORN | nomic-256d | 1 | 64 | 0.3 | corn | 22804 | 22.4 | 0.203 | 0.815 | 0.328 | 0.397 | 0.801 | 0.234 | runs/run_015_CORN.yaml |
-| 015 | EMD | nomic-256d | 1 | 64 | 0.3 | emd | 23454 | 23.0 | 0.204 | 0.821 | 0.372 | 0.405 | 0.781 | 0.280 | runs/run_015_EMD.yaml |
-| 015 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 23.0 | 0.208 | 0.822 | 0.335 | 0.381 | 0.846 | 0.292 | runs/run_015_SoftOrdinal.yaml |
-| 016 | CDWCE_a3 | nomic-256d | 1 | 64 | 0.3 | cdwce_a3 | 23454 | 22.9 | 0.224 | 0.802 | 0.355 | 0.373 | 0.760 | 0.266 | runs/run_016_CDWCE_a3.yaml |
-| 016 | CORN | nomic-256d | 1 | 64 | 0.3 | corn | 22804 | 22.3 | 0.230 | 0.810 | 0.315 | 0.338 | 0.821 | 0.274 | runs/run_016_CORN.yaml |
-| 016 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 22.9 | 0.221 | 0.805 | 0.388 | 0.363 | 0.781 | 0.292 | runs/run_016_SoftOrdinal.yaml |
-| 017 | CDWCE_a3 | nomic-256d | 1 | 64 | 0.3 | cdwce_a3 | 23454 | 22.9 | 0.231 | 0.799 | 0.353 | 0.334 | 0.779 | 0.294 | runs/run_017_CDWCE_a3.yaml |
-| 017 | CORN | nomic-256d | 1 | 64 | 0.3 | corn | 22804 | 22.3 | 0.218 | 0.815 | 0.315 | 0.356 | 0.818 | 0.266 | runs/run_017_CORN.yaml |
-| 017 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 22.9 | 0.219 | 0.807 | 0.330 | 0.352 | 0.746 | 0.229 | runs/run_017_SoftOrdinal.yaml |
-| 018 | CDWCE_a3 | nomic-256d | 1 | 64 | 0.3 | cdwce_a3 | 23454 | 22.9 | 0.229 | 0.796 | 0.338 | 0.365 | 0.762 | 0.276 | runs/run_018_CDWCE_a3.yaml |
-| 018 | CORN | nomic-256d | 1 | 64 | 0.3 | corn | 22804 | 22.3 | 0.218 | 0.811 | 0.355 | 0.382 | 0.815 | 0.273 | runs/run_018_CORN.yaml |
-| 018 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 22.9 | 0.220 | 0.811 | 0.346 | 0.353 | 0.798 | 0.283 | runs/run_018_SoftOrdinal.yaml |
-| 019 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 22.9 | 0.299 | 0.753 | 0.362 | 0.365 | 0.727 | 0.399 | runs/run_019_BalancedSoftmax.yaml |
-| 019 | LDAM_DRW | nomic-256d | 1 | 64 | 0.3 | ldam_drw | 23454 | 22.9 | 0.229 | 0.803 | 0.329 | 0.336 | 0.753 | 0.274 | runs/run_019_LDAM_DRW.yaml |
-| 020 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 22.9 | 0.304 | 0.755 | 0.378 | 0.359 | 0.713 | 0.449 | runs/run_020_BalancedSoftmax.yaml |
-| 020 | LDAM_DRW | nomic-256d | 1 | 64 | 0.3 | ldam_drw | 23454 | 22.9 | 0.216 | 0.812 | 0.358 | 0.348 | 0.762 | 0.296 | runs/run_020_LDAM_DRW.yaml |
-| 021 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 22.9 | 0.324 | 0.734 | 0.358 | 0.371 | 0.654 | 0.448 | runs/run_021_BalancedSoftmax.yaml |
-| 022 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 21.0 | 0.306 | 0.750 | 0.349 | 0.354 | 0.728 | 0.434 | runs/run_022_BalancedSoftmax.yaml |
-| 023 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 21.0 | 0.312 | 0.748 | 0.372 | 0.344 | 0.685 | 0.450 | runs/run_023_BalancedSoftmax.yaml |
-| 024 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 21.0 | 0.314 | 0.748 | 0.339 | 0.340 | 0.687 | 0.433 | runs/run_024_BalancedSoftmax.yaml |
-| 025 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.311 | 0.756 | 0.346 | 0.345 | 0.711 | 0.411 | runs/run_025_BalancedSoftmax.yaml |
-| 025 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 19.3 | 0.213 | 0.811 | 0.342 | 0.354 | 0.734 | 0.260 | runs/run_025_SoftOrdinal.yaml |
-| 026 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.333 | 0.728 | 0.334 | 0.342 | 0.659 | 0.457 | runs/run_026_BalancedSoftmax.yaml |
-| 026 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 19.3 | 0.213 | 0.807 | 0.322 | 0.382 | 0.738 | 0.233 | runs/run_026_SoftOrdinal.yaml |
-| 027 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.319 | 0.737 | 0.351 | 0.372 | 0.693 | 0.442 | runs/run_027_BalancedSoftmax.yaml |
-| 027 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 19.3 | 0.216 | 0.812 | 0.340 | 0.365 | 0.777 | 0.267 | runs/run_027_SoftOrdinal.yaml |
+| run | model | encoder | ws | hd | do | loss | params | ratio | MAE | Acc | QWK | Spear | Cal | MinR | OppV | AdjS | file |
+|-----|-------|---------|---:|---:|---:|------|-------:|------:|----:|----:|----:|------:|----:|-----:|-----:|-----:|------|
+| 001 | CORAL | MiniLM-384d | 3 | 256 | 0.2 | coral | 372756 | 585.2 | 0.232 | 0.782 | 0.398 | 0.459 | 0.644 | 0.298 | N/A | N/A | runs/run_001_CORAL.yaml |
+| 001 | CORN | MiniLM-384d | 3 | 256 | 0.2 | corn | 372756 | 585.2 | 0.236 | 0.782 | 0.384 | 0.452 | 0.633 | 0.306 | N/A | N/A | runs/run_001_CORN.yaml |
+| 001 | EMD | MiniLM-384d | 3 | 256 | 0.2 | emd | 375326 | 589.2 | 0.243 | 0.773 | 0.395 | 0.459 | 0.648 | 0.340 | N/A | N/A | runs/run_001_EMD.yaml |
+| 001 | MSE | MiniLM-384d | 3 | 256 | 0.2 | weighted_mse_s5.0 | 370186 | 581.1 | 0.450 | 0.641 | 0.338 | 0.379 | -0.218 | 0.428 | N/A | N/A | runs/run_001_MSE.yaml |
+| 001 | SoftOrdinal | MiniLM-384d | 3 | 256 | 0.2 | soft_ordinal | 375326 | 589.2 | 0.248 | 0.777 | 0.417 | 0.455 | 0.724 | 0.372 | N/A | N/A | runs/run_001_SoftOrdinal.yaml |
+| 002 | CORAL | nomic-256d | 1 | 32 | 0.3 | coral | 10708 | 16.8 | 0.263 | 0.770 | 0.335 | 0.349 | 0.734 | 0.234 | N/A | N/A | runs/run_002_CORAL.yaml |
+| 002 | CORN | nomic-256d | 1 | 32 | 0.3 | corn | 10708 | 16.8 | 0.260 | 0.766 | 0.355 | 0.371 | 0.737 | 0.204 | N/A | N/A | runs/run_002_CORN.yaml |
+| 002 | EMD | nomic-256d | 1 | 32 | 0.3 | emd | 11038 | 17.3 | 0.270 | 0.764 | 0.365 | 0.365 | 0.772 | 0.309 | N/A | N/A | runs/run_002_EMD.yaml |
+| 002 | MSE | nomic-256d | 1 | 32 | 0.3 | weighted_mse_s5.0 | 10378 | 16.3 | 0.418 | 0.683 | 0.348 | 0.378 | -0.073 | 0.390 | N/A | N/A | runs/run_002_MSE.yaml |
+| 002 | SoftOrdinal | nomic-256d | 1 | 32 | 0.3 | soft_ordinal | 11038 | 17.3 | 0.267 | 0.780 | 0.385 | 0.356 | 0.774 | 0.310 | N/A | N/A | runs/run_002_SoftOrdinal.yaml |
+| 003 | CORAL | MiniLM-384d | 3 | 256 | 0.2 | coral | 370196 | 581.2 | 0.241 | 0.776 | 0.369 | 0.394 | 0.640 | 0.265 | N/A | N/A | runs/run_003_CORAL.yaml |
+| 003 | CORN | MiniLM-384d | 3 | 256 | 0.2 | corn | 370196 | 581.2 | 0.249 | 0.764 | 0.326 | 0.395 | 0.648 | 0.260 | N/A | N/A | runs/run_003_CORN.yaml |
+| 003 | EMD | MiniLM-384d | 3 | 256 | 0.2 | emd | 372766 | 585.2 | 0.240 | 0.782 | 0.410 | 0.416 | 0.697 | 0.332 | N/A | N/A | runs/run_003_EMD.yaml |
+| 003 | SoftOrdinal | MiniLM-384d | 3 | 256 | 0.2 | soft_ordinal | 372766 | 585.2 | 0.253 | 0.772 | 0.383 | 0.396 | 0.743 | 0.333 | N/A | N/A | runs/run_003_SoftOrdinal.yaml |
+| 004 | CORAL | nomic-256d | 1 | 32 | 0.3 | coral | 10388 | 16.3 | 0.273 | 0.768 | 0.331 | 0.346 | 0.755 | 0.269 | N/A | N/A | runs/run_004_CORAL.yaml |
+| 004 | CORN | nomic-256d | 1 | 32 | 0.3 | corn | 10388 | 16.3 | 0.274 | 0.760 | 0.291 | 0.293 | 0.734 | 0.217 | N/A | N/A | runs/run_004_CORN.yaml |
+| 004 | EMD | nomic-256d | 1 | 32 | 0.3 | emd | 10718 | 16.8 | 0.266 | 0.780 | 0.391 | 0.361 | 0.766 | 0.343 | N/A | N/A | runs/run_004_EMD.yaml |
+| 004 | SoftOrdinal | nomic-256d | 1 | 32 | 0.3 | soft_ordinal | 10718 | 16.8 | 0.269 | 0.779 | 0.385 | 0.351 | 0.786 | 0.332 | N/A | N/A | runs/run_004_SoftOrdinal.yaml |
+| 005 | CORAL | MiniLM-384d | 3 | 256 | 0.2 | coral | 370196 | 386.4 | 0.215 | 0.798 | 0.282 | 0.411 | 0.629 | 0.186 | N/A | N/A | runs/run_005_CORAL.yaml |
+| 005 | CORN | MiniLM-384d | 3 | 256 | 0.2 | corn | 370196 | 386.4 | 0.216 | 0.797 | 0.254 | 0.365 | 0.640 | 0.181 | N/A | N/A | runs/run_005_CORN.yaml |
+| 005 | EMD | MiniLM-384d | 3 | 256 | 0.2 | emd | 372766 | 389.1 | 0.226 | 0.791 | 0.272 | 0.312 | 0.651 | 0.217 | N/A | N/A | runs/run_005_EMD.yaml |
+| 005 | SoftOrdinal | MiniLM-384d | 3 | 256 | 0.2 | soft_ordinal | 372766 | 389.1 | 0.215 | 0.798 | 0.304 | 0.368 | 0.650 | 0.165 | N/A | N/A | runs/run_005_SoftOrdinal.yaml |
+| 006 | CORAL | nomic-256d | 1 | 32 | 0.3 | coral | 10388 | 10.8 | 0.233 | 0.793 | 0.278 | 0.354 | 0.768 | 0.166 | N/A | N/A | runs/run_006_CORAL.yaml |
+| 006 | CORN | nomic-256d | 1 | 32 | 0.3 | corn | 10388 | 10.8 | 0.236 | 0.791 | 0.280 | 0.350 | 0.777 | 0.183 | N/A | N/A | runs/run_006_CORN.yaml |
+| 006 | EMD | nomic-256d | 1 | 32 | 0.3 | emd | 10718 | 11.2 | 0.227 | 0.803 | 0.324 | 0.334 | 0.764 | 0.225 | N/A | N/A | runs/run_006_EMD.yaml |
+| 006 | SoftOrdinal | nomic-256d | 1 | 32 | 0.3 | soft_ordinal | 10718 | 11.2 | 0.223 | 0.811 | 0.358 | 0.354 | 0.775 | 0.235 | N/A | N/A | runs/run_006_SoftOrdinal.yaml |
+| 007 | CORAL | nomic-256d | 1 | 64 | 0.3 | coral | 22804 | 22.4 | 0.208 | 0.819 | 0.367 | 0.398 | 0.830 | 0.247 | N/A | N/A | runs/run_007_CORAL.yaml |
+| 007 | CORN | nomic-256d | 1 | 64 | 0.3 | corn | 22804 | 22.4 | 0.205 | 0.821 | 0.413 | 0.402 | 0.838 | 0.285 | N/A | N/A | runs/run_007_CORN.yaml |
+| 007 | EMD | nomic-256d | 1 | 64 | 0.3 | emd | 23454 | 23.0 | 0.211 | 0.817 | 0.357 | 0.363 | 0.849 | 0.288 | N/A | N/A | runs/run_007_EMD.yaml |
+| 007 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 23.0 | 0.212 | 0.821 | 0.314 | 0.343 | 0.852 | 0.291 | N/A | N/A | runs/run_007_SoftOrdinal.yaml |
+| 008 | CORAL | nomic-256d | 1 | 128 | 0.3 | coral | 53780 | 52.7 | 0.204 | 0.824 | 0.341 | 0.397 | 0.805 | 0.273 | N/A | N/A | runs/run_008_CORAL.yaml |
+| 008 | CORN | nomic-256d | 1 | 128 | 0.3 | corn | 53780 | 52.7 | 0.203 | 0.828 | 0.344 | 0.359 | 0.785 | 0.276 | N/A | N/A | runs/run_008_CORN.yaml |
+| 008 | EMD | nomic-256d | 1 | 128 | 0.3 | emd | 55070 | 54.0 | 0.200 | 0.821 | 0.365 | 0.390 | 0.802 | 0.300 | N/A | N/A | runs/run_008_EMD.yaml |
+| 008 | SoftOrdinal | nomic-256d | 1 | 128 | 0.3 | soft_ordinal | 55070 | 54.0 | 0.201 | 0.826 | 0.354 | 0.387 | 0.811 | 0.291 | N/A | N/A | runs/run_008_SoftOrdinal.yaml |
+| 009 | CORAL | MiniLM-384d | 3 | 64 | 0.2 | coral | 80276 | 78.7 | 0.228 | 0.785 | 0.176 | 0.284 | 0.695 | 0.137 | N/A | N/A | runs/run_009_CORAL.yaml |
+| 009 | CORN | MiniLM-384d | 3 | 64 | 0.2 | corn | 80276 | 78.7 | 0.227 | 0.792 | 0.227 | 0.323 | 0.711 | 0.166 | N/A | N/A | runs/run_009_CORN.yaml |
+| 009 | EMD | MiniLM-384d | 3 | 64 | 0.2 | emd | 80926 | 79.3 | 0.225 | 0.799 | 0.259 | 0.303 | 0.776 | 0.223 | N/A | N/A | runs/run_009_EMD.yaml |
+| 009 | SoftOrdinal | MiniLM-384d | 3 | 64 | 0.2 | soft_ordinal | 80926 | 79.3 | 0.239 | 0.787 | 0.236 | 0.300 | 0.775 | 0.234 | N/A | N/A | runs/run_009_SoftOrdinal.yaml |
+| 010 | CORAL | nomic-256d | 1 | 64 | 0.3 | coral | 22804 | 22.4 | 0.209 | 0.819 | 0.364 | 0.391 | 0.823 | 0.244 | N/A | N/A | runs/run_010_CORAL.yaml |
+| 010 | CORAL_IW | nomic-256d | 1 | 64 | 0.3 | coral_iw | 22804 | 22.4 | 0.221 | 0.809 | 0.301 | 0.351 | 0.841 | 0.234 | N/A | N/A | runs/run_010_CORAL_IW.yaml |
+| 010 | CORN | nomic-256d | 1 | 64 | 0.3 | corn | 22804 | 22.4 | 0.206 | 0.821 | 0.434 | 0.407 | 0.835 | 0.285 | N/A | N/A | runs/run_010_CORN.yaml |
+| 010 | EMD | nomic-256d | 1 | 64 | 0.3 | emd | 23454 | 23.0 | 0.212 | 0.819 | 0.362 | 0.357 | 0.851 | 0.294 | N/A | N/A | runs/run_010_EMD.yaml |
+| 010 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 23.0 | 0.211 | 0.818 | 0.308 | 0.352 | 0.860 | 0.284 | N/A | N/A | runs/run_010_SoftOrdinal.yaml |
+| 011 | CORAL | nomic-256d | 2 | 64 | 0.3 | coral | 39252 | 38.5 | 0.218 | 0.807 | 0.339 | 0.368 | 0.815 | 0.245 | N/A | N/A | runs/run_011_CORAL.yaml |
+| 011 | CORAL_IW | nomic-256d | 2 | 64 | 0.3 | coral_iw | 39252 | 38.5 | 0.223 | 0.798 | 0.269 | 0.312 | 0.790 | 0.175 | N/A | N/A | runs/run_011_CORAL_IW.yaml |
+| 011 | CORN | nomic-256d | 2 | 64 | 0.3 | corn | 39252 | 38.5 | 0.209 | 0.814 | 0.335 | 0.388 | 0.811 | 0.232 | N/A | N/A | runs/run_011_CORN.yaml |
+| 011 | EMD | nomic-256d | 2 | 64 | 0.3 | emd | 39902 | 39.1 | 0.214 | 0.821 | 0.382 | 0.359 | 0.846 | 0.308 | N/A | N/A | runs/run_011_EMD.yaml |
+| 011 | SoftOrdinal | nomic-256d | 2 | 64 | 0.3 | soft_ordinal | 39902 | 39.1 | 0.222 | 0.820 | 0.333 | 0.349 | 0.862 | 0.312 | N/A | N/A | runs/run_011_SoftOrdinal.yaml |
+| 012 | CORAL | nomic-256d | 2 | 64 | 0.3 | coral | 39252 | 38.5 | 0.209 | 0.806 | 0.359 | 0.381 | 0.812 | 0.342 | N/A | N/A | runs/run_012_CORAL.yaml |
+| 012 | CORAL_IW | nomic-256d | 2 | 64 | 0.3 | coral_iw | 39252 | 38.5 | 0.214 | 0.801 | 0.271 | 0.304 | 0.802 | 0.265 | N/A | N/A | runs/run_012_CORAL_IW.yaml |
+| 012 | CORN | nomic-256d | 2 | 64 | 0.3 | corn | 39252 | 38.5 | 0.193 | 0.820 | 0.346 | 0.396 | 0.804 | 0.296 | N/A | N/A | runs/run_012_CORN.yaml |
+| 012 | EMD | nomic-256d | 2 | 64 | 0.3 | emd | 39902 | 39.1 | 0.213 | 0.808 | 0.369 | 0.357 | 0.857 | 0.364 | N/A | N/A | runs/run_012_EMD.yaml |
+| 012 | SoftOrdinal | nomic-256d | 2 | 64 | 0.3 | soft_ordinal | 39902 | 39.1 | 0.224 | 0.801 | 0.334 | 0.356 | 0.850 | 0.391 | N/A | N/A | runs/run_012_SoftOrdinal.yaml |
+| 013 | CORAL | nomic-256d | 2 | 64 | 0.3 | coral | 39252 | 38.5 | 0.215 | 0.814 | 0.384 | 0.353 | 0.820 | 0.259 | N/A | N/A | runs/run_013_CORAL.yaml |
+| 013 | CORN | nomic-256d | 2 | 64 | 0.3 | corn | 39252 | 38.5 | 0.208 | 0.821 | 0.382 | 0.388 | 0.828 | 0.269 | N/A | N/A | runs/run_013_CORN.yaml |
+| 013 | EMD | nomic-256d | 2 | 64 | 0.3 | emd | 39902 | 39.1 | 0.209 | 0.823 | 0.391 | 0.371 | 0.840 | 0.293 | N/A | N/A | runs/run_013_EMD.yaml |
+| 013 | SoftOrdinal | nomic-256d | 2 | 64 | 0.3 | soft_ordinal | 39902 | 39.1 | 0.212 | 0.820 | 0.334 | 0.367 | 0.830 | 0.269 | N/A | N/A | runs/run_013_SoftOrdinal.yaml |
+| 014 | CORAL | nomic-256d | 1 | 64 | 0.3 | coral | 22804 | 22.4 | 0.206 | 0.821 | 0.329 | 0.391 | 0.813 | 0.237 | N/A | N/A | runs/run_014_CORAL.yaml |
+| 014 | CORN | nomic-256d | 1 | 64 | 0.3 | corn | 22804 | 22.4 | 0.207 | 0.819 | 0.314 | 0.367 | 0.753 | 0.246 | N/A | N/A | runs/run_014_CORN.yaml |
+| 014 | EMD | nomic-256d | 1 | 64 | 0.3 | emd | 23454 | 23.0 | 0.203 | 0.818 | 0.373 | 0.406 | 0.785 | 0.274 | N/A | N/A | runs/run_014_EMD.yaml |
+| 014 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 23.0 | 0.204 | 0.825 | 0.388 | 0.394 | 0.801 | 0.288 | N/A | N/A | runs/run_014_SoftOrdinal.yaml |
+| 015 | CDWCE_a2 | nomic-256d | 1 | 64 | 0.3 | cdwce_a2 | 23454 | 23.0 | 0.207 | 0.811 | 0.322 | 0.350 | 0.783 | 0.220 | N/A | N/A | runs/run_015_CDWCE_a2.yaml |
+| 015 | CDWCE_a3 | nomic-256d | 1 | 64 | 0.3 | cdwce_a3 | 23454 | 23.0 | 0.203 | 0.822 | 0.402 | 0.384 | 0.755 | 0.259 | N/A | N/A | runs/run_015_CDWCE_a3.yaml |
+| 015 | CDWCE_a5 | nomic-256d | 1 | 64 | 0.3 | cdwce_a5 | 23454 | 23.0 | 0.217 | 0.795 | 0.300 | 0.371 | 0.639 | 0.174 | N/A | N/A | runs/run_015_CDWCE_a5.yaml |
+| 015 | CORAL | nomic-256d | 1 | 64 | 0.3 | coral | 22804 | 22.4 | 0.205 | 0.822 | 0.349 | 0.388 | 0.824 | 0.241 | N/A | N/A | runs/run_015_CORAL.yaml |
+| 015 | CORN | nomic-256d | 1 | 64 | 0.3 | corn | 22804 | 22.4 | 0.203 | 0.815 | 0.328 | 0.397 | 0.801 | 0.234 | N/A | N/A | runs/run_015_CORN.yaml |
+| 015 | EMD | nomic-256d | 1 | 64 | 0.3 | emd | 23454 | 23.0 | 0.204 | 0.821 | 0.372 | 0.405 | 0.781 | 0.280 | N/A | N/A | runs/run_015_EMD.yaml |
+| 015 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 23.0 | 0.208 | 0.822 | 0.335 | 0.381 | 0.846 | 0.292 | N/A | N/A | runs/run_015_SoftOrdinal.yaml |
+| 016 | CDWCE_a3 | nomic-256d | 1 | 64 | 0.3 | cdwce_a3 | 23454 | 22.9 | 0.224 | 0.802 | 0.355 | 0.373 | 0.760 | 0.266 | N/A | N/A | runs/run_016_CDWCE_a3.yaml |
+| 016 | CORN | nomic-256d | 1 | 64 | 0.3 | corn | 22804 | 22.3 | 0.230 | 0.810 | 0.315 | 0.338 | 0.821 | 0.274 | N/A | N/A | runs/run_016_CORN.yaml |
+| 016 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 22.9 | 0.221 | 0.805 | 0.388 | 0.363 | 0.781 | 0.292 | N/A | N/A | runs/run_016_SoftOrdinal.yaml |
+| 017 | CDWCE_a3 | nomic-256d | 1 | 64 | 0.3 | cdwce_a3 | 23454 | 22.9 | 0.231 | 0.799 | 0.353 | 0.334 | 0.779 | 0.294 | N/A | N/A | runs/run_017_CDWCE_a3.yaml |
+| 017 | CORN | nomic-256d | 1 | 64 | 0.3 | corn | 22804 | 22.3 | 0.218 | 0.815 | 0.315 | 0.356 | 0.818 | 0.266 | N/A | N/A | runs/run_017_CORN.yaml |
+| 017 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 22.9 | 0.219 | 0.807 | 0.330 | 0.352 | 0.746 | 0.229 | N/A | N/A | runs/run_017_SoftOrdinal.yaml |
+| 018 | CDWCE_a3 | nomic-256d | 1 | 64 | 0.3 | cdwce_a3 | 23454 | 22.9 | 0.229 | 0.796 | 0.338 | 0.365 | 0.762 | 0.276 | N/A | N/A | runs/run_018_CDWCE_a3.yaml |
+| 018 | CORN | nomic-256d | 1 | 64 | 0.3 | corn | 22804 | 22.3 | 0.218 | 0.811 | 0.355 | 0.382 | 0.815 | 0.273 | N/A | N/A | runs/run_018_CORN.yaml |
+| 018 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 22.9 | 0.220 | 0.811 | 0.346 | 0.353 | 0.798 | 0.283 | N/A | N/A | runs/run_018_SoftOrdinal.yaml |
+| 019 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 22.9 | 0.299 | 0.753 | 0.362 | 0.365 | 0.727 | 0.399 | N/A | N/A | runs/run_019_BalancedSoftmax.yaml |
+| 019 | LDAM_DRW | nomic-256d | 1 | 64 | 0.3 | ldam_drw | 23454 | 22.9 | 0.229 | 0.803 | 0.329 | 0.336 | 0.753 | 0.274 | N/A | N/A | runs/run_019_LDAM_DRW.yaml |
+| 020 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 22.9 | 0.304 | 0.755 | 0.378 | 0.359 | 0.713 | 0.449 | N/A | N/A | runs/run_020_BalancedSoftmax.yaml |
+| 020 | LDAM_DRW | nomic-256d | 1 | 64 | 0.3 | ldam_drw | 23454 | 22.9 | 0.216 | 0.812 | 0.358 | 0.348 | 0.762 | 0.296 | N/A | N/A | runs/run_020_LDAM_DRW.yaml |
+| 021 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 22.9 | 0.324 | 0.734 | 0.358 | 0.371 | 0.654 | 0.448 | N/A | N/A | runs/run_021_BalancedSoftmax.yaml |
+| 022 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 21.0 | 0.306 | 0.750 | 0.349 | 0.354 | 0.728 | 0.434 | N/A | N/A | runs/run_022_BalancedSoftmax.yaml |
+| 023 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 21.0 | 0.312 | 0.748 | 0.372 | 0.344 | 0.685 | 0.450 | N/A | N/A | runs/run_023_BalancedSoftmax.yaml |
+| 024 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 21.0 | 0.314 | 0.748 | 0.339 | 0.340 | 0.687 | 0.433 | N/A | N/A | runs/run_024_BalancedSoftmax.yaml |
+| 025 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.311 | 0.756 | 0.346 | 0.345 | 0.711 | 0.411 | 0.092 | 0.070 | runs/run_025_BalancedSoftmax.yaml |
+| 025 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 19.3 | 0.213 | 0.811 | 0.342 | 0.354 | 0.734 | 0.260 | 0.061 | 0.056 | runs/run_025_SoftOrdinal.yaml |
+| 026 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.333 | 0.728 | 0.334 | 0.342 | 0.659 | 0.457 | 0.082 | 0.072 | runs/run_026_BalancedSoftmax.yaml |
+| 026 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 19.3 | 0.213 | 0.807 | 0.322 | 0.382 | 0.738 | 0.233 | 0.069 | 0.055 | runs/run_026_SoftOrdinal.yaml |
+| 027 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.319 | 0.737 | 0.351 | 0.372 | 0.693 | 0.442 | 0.072 | 0.085 | runs/run_027_BalancedSoftmax.yaml |
+| 027 | SoftOrdinal | nomic-256d | 1 | 64 | 0.3 | soft_ordinal | 23454 | 19.3 | 0.216 | 0.812 | 0.340 | 0.365 | 0.777 | 0.267 | 0.072 | 0.058 | runs/run_027_SoftOrdinal.yaml |
+| 028 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax_circreg | 23454 | 19.3 | 0.293 | 0.761 | 0.384 | 0.362 | 0.761 | 0.422 | 0.031 | 0.075 | runs/run_028_BalancedSoftmax.yaml |
+| 029 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax_circreg | 23454 | 19.3 | 0.301 | 0.760 | 0.347 | 0.346 | 0.709 | 0.411 | 0.039 | 0.077 | runs/run_029_BalancedSoftmax.yaml |
+| 030 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax_circreg | 23454 | 19.3 | 0.308 | 0.751 | 0.318 | 0.362 | 0.702 | 0.398 | 0.043 | 0.095 | runs/run_030_BalancedSoftmax.yaml |
+| 031 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax_circreg | 23454 | 19.3 | 0.306 | 0.761 | 0.353 | 0.343 | 0.707 | 0.409 | 0.035 | 0.079 | runs/run_031_BalancedSoftmax.yaml |
+| 032 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax_circreg | 23454 | 19.3 | 0.307 | 0.752 | 0.366 | 0.342 | 0.713 | 0.435 | 0.037 | 0.075 | runs/run_032_BalancedSoftmax.yaml |
+| 033 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax_circreg | 23454 | 19.3 | 0.286 | 0.779 | 0.372 | 0.359 | 0.747 | 0.409 | 0.033 | 0.077 | runs/run_033_BalancedSoftmax.yaml |
+| 034 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax_dimweight | 23454 | 19.3 | 0.309 | 0.752 | 0.342 | 0.323 | 0.740 | 0.412 | 0.063 | 0.068 | runs/run_034_BalancedSoftmax.yaml |
+| 035 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax_dimweight | 23454 | 19.3 | 0.333 | 0.728 | 0.321 | 0.342 | 0.686 | 0.449 | 0.092 | 0.076 | runs/run_035_BalancedSoftmax.yaml |
+| 036 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax_dimweight | 23454 | 19.3 | 0.303 | 0.758 | 0.381 | 0.388 | 0.726 | 0.492 | 0.068 | 0.084 | runs/run_036_BalancedSoftmax.yaml |
+| 037 | BalancedSoftmax | nomic-768d | 1 | 64 | 0.3 | balanced_softmax | 56222 | 46.3 | 0.319 | 0.739 | 0.318 | 0.332 | 0.720 | 0.381 | 0.074 | 0.075 | runs/run_037_BalancedSoftmax.yaml |
+| 038 | BalancedSoftmax | nomic-768d | 1 | 28 | 0.3 | balanced_softmax | 23606 | 19.5 | 0.333 | 0.737 | 0.299 | 0.301 | 0.657 | 0.346 | 0.104 | 0.077 | runs/run_038_BalancedSoftmax.yaml |
+| 039 | BalancedSoftmax | nomic-v2-moe-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.325 | 0.737 | 0.305 | 0.336 | 0.691 | 0.433 | 0.073 | 0.083 | runs/run_039_BalancedSoftmax.yaml |
+| 040 | BalancedSoftmax | Qwen3-0.6B-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.324 | 0.740 | 0.355 | 0.343 | 0.691 | 0.436 | 0.083 | 0.085 | runs/run_040_BalancedSoftmax.yaml |
 <!-- AUTO-TABLE:END -->
 
 > **Contributor note:** Keep this section in **newest-first** chronological order (most recent date at top).
 
 ## Findings
+
+### 2026-03-16 — `twinkl-733` semantic counterexample batch is explicitly de-scoped (`twinkl-733`)
+
+`twinkl-733` was opened as a narrow follow-up after the representation
+diagnostics: generate one more small `Hedonism` / `Security` counterexample
+batch and see whether matched-pair semantic support could cleanly move the hard
+dimensions. That experiment is now explicitly de-scoped.
+
+**1. The main finding was already established before this issue would have run.**
+By the March 8, March 10, and March 11 reviews, the same replay pattern had
+already appeared repeatedly: quiet pleasure and defended rest were being read as
+guilt or misalignment, while anxious-surface stability language was being read
+as insecurity or threat. The repo does not need one more experiment to show that
+this semantic-polarity failure exists.
+
+**2. The targeted-data direction already had a real test.** The earlier
+targeted batch `run_022`-`run_024` and the regenerated `Hedonism` / `Security`
+lift `run_025`-`run_027` already exercised the "add targeted semantic support"
+lever. Those lifts were informative, but they did not produce a clean frontier
+change on the family-level metrics that now gate promotion decisions.
+
+**3. The uncertainty and representation reviews reduced the value of one more
+small batch.** `twinkl-730` showed the prior lift still lacked clean
+family-level separation from the incumbent, while `twinkl-731`, `twinkl-732`,
+and `twinkl-742` failed to overturn the underlying diagnosis from the
+representation side. That means a new batch would most likely pay the full
+synthetic-data workflow cost just to reconfirm what the current record already
+supports.
+
+**4. Recommendation: close `twinkl-733` and keep the frontier unchanged.**
+`run_019`-`run_021` remain the active corrected-split default. This closeout
+does **not** mean `Hedonism` and `Security` are solved; it means another
+counterexample batch is not worth a fresh generation / labeling / retraining
+cycle right now. `twinkl-734` becomes tracker-unblocked after this closeout, but
+it should still be treated as a reserve branch rather than the automatically
+recommended next step. Full details:
+[`reports/experiment_review_2026-03-16_twinkl_733.md`](reports/experiment_review_2026-03-16_twinkl_733.md).
+
+### 2026-03-16 — Qwen is the first credible encoder-swap near-miss, but still not a frontier win (`twinkl-742`)
+
+`twinkl-742` ran the last planned encoder diagnostic using
+`Qwen/Qwen3-Embedding-0.6B` with a native custom classification prompt and
+native `256d` truncation, while keeping the active frontier critic budget fixed
+at `ws=1`, `hd=64`, and `23,454` parameters.
+
+**1. This is the strongest non-incumbent representation test so far.**
+`run_040` improves holdout `qwk_mean` to `0.356`, a large recovery over the
+earlier Nomic swaps (`run_039: 0.305`, `run_037: 0.318`, `run_038: 0.299`) at
+the same fair-budget `266`-dimensional state width as incumbent `run_020`.
+
+**2. Zero truncation helps, but does not close the frontier by itself.**
+The Qwen run truncates `0/1,651` entries, confirming that the shorter
+`v2-moe` context window was a real constraint. Even so, `run_040` still trails
+incumbent `run_020` on holdout `qwk_mean` (`0.378 -> 0.356`), accuracy
+(`0.755 -> 0.740`), calibration (`0.713 -> 0.691`), minority recall
+(`0.449 -> 0.436`), and `recall_-1` (`0.342 -> 0.296`).
+
+**3. The win is broad-structure recovery, not hard-dimension polarity.**
+Relative to `run_039`, Qwen recovers `self_direction qwk` (`0.441 -> 0.555`),
+`conformity qwk` (`0.454 -> 0.524`), `benevolence qwk` (`0.307 -> 0.399`), and
+`power qwk` (`0.117 -> 0.187`). But the original hard dimensions still lag:
+`stimulation qwk` stays flat (`0.165`) and `hedonism qwk` worsens further to
+`0.095`, even though `security qwk` remains better than the incumbent
+(`0.261` vs `0.213`).
+
+**4. Recommendation: no immediate rerun, but keep Qwen as the only encoder
+branch worth reopening later.** The active frontier remains `run_019`-
+`run_021`, with `run_034`-`run_036` as the best tail-sensitive reference
+branch. The main change is that Qwen is now the only encoder-swap line with a
+plausible future case if representation work is revisited. Full details:
+[`reports/experiment_review_2026-03-16_twinkl_742.md`](reports/experiment_review_2026-03-16_twinkl_742.md).
+
+### 2026-03-16 — Nomic v2-MoE 256d improves security and tail recovery, but still loses the frontier (`twinkl-732`)
+
+`twinkl-732` ran the cleaner within-family encoder swap suggested by the
+negative `twinkl-731` result: replace `nomic-embed-text-v1.5` with
+`nomic-embed-text-v2-moe` at the same `256d`, `ws=1`, `hd=64`,
+BalancedSoftmax frontier budget.
+
+**1. The cleaner encoder swap is still a negative frontier result.**
+`run_039` keeps the incumbent parameter budget (`23,454`) and state width
+(`266`), then still regresses against `run_020` on holdout `qwk_mean`
+(`0.378 -> 0.305`), accuracy (`0.755 -> 0.737`), minority recall
+(`0.449 -> 0.433`), and calibration (`0.713 -> 0.691`). `recall_-1` is almost
+flat (`0.342 -> 0.336`), so there is no convincing “trade a little QWK for a
+lot more tail recovery” case here.
+
+**2. It does recover much of what the 768d controls lost.** Relative to
+`run_037` and `run_038`, `run_039` improves `recall_-1` (`0.336` vs `0.269` /
+`0.246`), minority recall (`0.433` vs `0.381` / `0.346`), and hedging
+(`0.598` vs `0.620` / `0.612`). `security qwk` also rises to `0.284`, the best
+of the three representation diagnostics. That is useful signal, but it still
+does not get the run back into the incumbent QWK range.
+
+**3. The regressions spread beyond the original hard dimensions.** `hedonism`
+only partially recovers (`0.188` vs incumbent `0.262`), `stimulation` drops
+further to `0.168`, and `power` collapses from `0.342` to `0.117`. Easy/fair
+dimensions such as `self_direction` (`0.541 -> 0.441`) and `conformity`
+(`0.577 -> 0.454`) also slide. That broader erosion is why the aggregate
+frontier case stays negative.
+
+**4. The shorter context window is a caveat, not the main explanation.** The
+v2-moe run truncates only `13/1,651` entries (`0.8%`). That matters enough to
+document, but not enough to plausibly explain the broad QWK drop on its own.
+
+**5. Recommendation: stop the representation-swap line here.** `run_019`-
+`run_021` remain the active corrected-split default, and `run_034`-`run_036`
+remain the best tail-sensitive reference branch. This result did not justify a
+3-seed v2-moe rerun, and it also did not create a new reason to run `twinkl-733`
+once the later de-scope review reported out. Full details:
+[`reports/experiment_review_2026-03-16_twinkl_732.md`](reports/experiment_review_2026-03-16_twinkl_732.md).
+
+### 2026-03-16 — Full 768d Nomic v1.5 does not rescue hard-dimension polarity on the frontier (`twinkl-731`)
+
+`twinkl-731` reran the incumbent single-seed frontier checkpoint (`run_020`,
+seed `22`) at full native `768d` and added a same-seed fair-budget control to
+separate embedding signal from added MLP capacity.
+
+**1. The full-width diagnostic was negative on the metrics that matter.**
+`run_037` raised `state_dim` from `266` to `778` and parameter count from
+`23,454` to `56,222`, but holdout performance regressed versus `run_020`:
+`qwk_mean 0.378 -> 0.318`, `recall_-1 0.342 -> 0.269`, and minority recall
+`0.449 -> 0.381`. Calibration stayed roughly flat and hedging barely moved, so
+there is no “pay a little QWK for much better tail recovery” argument here.
+
+**2. The matched-budget control rules out a hidden representation win.**
+`run_038` kept the same `768d` encoder and `state_dim=778` but reduced
+`hidden_dim` to `28`, yielding `23,606` parameters, essentially flat to the
+incumbent. It still fell further on aggregate performance
+(`qwk_mean 0.299`, `recall_-1 0.246`, minority recall `0.346`), so the 768d
+embedding does not appear to unlock useful polarity information once capacity is
+normalized.
+
+**3. The target hard dimensions do not improve cleanly.** `run_037` makes both
+`hedonism qwk` (`0.262 -> 0.178`) and `security qwk` (`0.213 -> 0.165`) worse.
+`run_038` nudges `security qwk` up slightly (`0.225`) and improves security
+calibration, but only alongside much heavier `security` hedging (`0.706 ->
+0.815`) and a collapse in `hedonism qwk` to `-0.045`. That is not evidence of a
+representation-level fix for the frontier’s remaining polarity failures.
+
+**4. Recommendation: stop this line and move to `twinkl-732`.** The active
+corrected-split frontier remains `run_019`-`run_021` with
+`run_034`-`run_036` as the best tail-sensitive reference branch. Full details:
+[`reports/experiment_review_2026-03-16_twinkl_731.md`](reports/experiment_review_2026-03-16_twinkl_731.md).
+
+### 2026-03-14 — Persona-cluster bootstrap shows the weighted branch has real recall lift but unresolved QWK cost (`twinkl-730`)
+
+`twinkl-730` quantified holdout uncertainty on the active corrected-split
+BalancedSoftmax families using saved test-output artifacts only: 1,000 persona-
+cluster bootstrap resamples for 95% BCa intervals plus 1,000 stratified
+persona-cluster permutations for hard-dimension above-chance checks.
+
+**1. The weighted reference branch does have a real tail-recovery lift.**
+Relative to the incumbent `run_019`-`run_021`, family-median `recall_-1`
+improves by `+0.065` with a 95% BCa CI of `[+0.021, +0.128]`, so that gain is
+not just holdout noise.
+
+**2. The weighted branch still does not have a clean promotion case.** Its
+family-median QWK delta versus the incumbent is `-0.020` with CI
+`[-0.062, +0.018]`, and minority recall is effectively flat at `+0.001` with
+CI `[-0.037, +0.036]`. That means the apparent QWK cost is unresolved rather
+than proven, but the branch still lacks the all-metric separation needed to
+replace the default.
+
+**3. Hard-dimension QWK remains too fragile to drive frontier calls by
+itself.** `stimulation` clears the above-chance permutation test in only `1/5`
+reviewed families, while weighted `hedonism` also fails the chance check
+despite a positive point estimate. `security` is more stable than `hedonism`,
+but neither should be treated as decisive without a non-noisy family delta.
+
+**4. Recommendation: use uncertainty-aware promotion gates going forward.**
+Future reviews should gate on 95% BCa family-median deltas first: treat any
+delta interval spanning zero as unresolved noise, require tail-first promotions
+to keep both `recall_-1` and minority-recall lower bounds above zero, and use
+hard-dimension QWK only as secondary evidence after it clears the above-chance
+test. Full details:
+[`reports/experiment_review_2026-03-14_twinkl_730.md`](reports/experiment_review_2026-03-14_twinkl_730.md).
+
+### 2026-03-12 — Effective-prior + per-dimension tau still fails to move the frontier (`twinkl-729`)
+
+`twinkl-729` extended the validation-only softmax post-hoc path with
+validation-posterior effective-prior estimation and greedy per-dimension tau
+selection, then compared that new branch directly against the untouched
+baseline and the existing shared-tau Menon path on `run_020` and `run_036`.
+
+**1. The new branch did not beat the old post-hoc control.** Median test deltas
+versus baseline were worse for the new branch than for standard Menon:
+effective-prior + per-dim tau reached `recall_-1 -0.057`, `qwk_mean -0.028`,
+and `calibration -0.136`, while standard Menon still had the better recall
+package at `recall_-1 +0.004` with `qwk_mean -0.020`.
+
+**2. `run_036` was the critical negative result.** Validation selected the new
+branch for the strongest weighted reference checkpoint, but holdout metrics
+regressed from baseline: `qwk_mean 0.381 -> 0.360`, `recall_-1 0.387 -> 0.339`,
+minority recall `0.492 -> 0.440`, and calibration `0.726 -> 0.592`.
+
+**3. `run_020` still behaves like `twinkl-719.5`.** The incumbent checkpoint
+again preferred the old shared-tau Menon branch (`tau=0.30`), which recovered a
+small `recall_-1` lift (`0.342 -> 0.350`) but still paid too much on QWK,
+minority recall, calibration, and opposition structure.
+
+**4. Recommendation: close the current post-hoc line.** Keep `run_019`-`run_021`
+as the default corrected-split family and `run_034`-`run_036` as the best
+tail-sensitive reference branch. On current evidence, further work should move
+to materially different interventions rather than more softmax retargeting.
+Full details: [`reports/experiment_review_twinkl_729.md`](reports/experiment_review_twinkl_729.md).
+
+### 2026-03-11 — Full frontier audit v9 keeps the default and shows why inverse-loss weighting stalls (`twinkl-721`)
+
+The fresh full audit across `run_001`-`run_036` found no missing run metadata
+to backfill and no leaderboard change on the corrected split: `run_019`-`run_021`
+BalancedSoftmax remains the active family-level default.
+
+**1. The weighted branch is still the best tail-sensitive reference family.**
+Relative to the incumbent, `run_034`-`run_036` improves median `recall_-1`
+from `0.313` to `0.378`, keeps minority recall effectively flat to slightly
+better (`0.448` to `0.449`), lowers hedging from `0.621` to `0.599`, and
+improves calibration from `0.713` to `0.726`.
+
+**2. The reason it still fails promotion is sharper now.** The new artifact
+audit shows inverse-loss weighting was optimizing the wrong proxy, not merely
+the wrong heads. `Universalism` hits the max clamp `49` times because it has
+very low CE, while `self_direction` stays high-CE despite being easy by QWK;
+`hedonism` stays near-neutral (`0.972` selected median weight) and `security`
+is consistently downweighted (`0.818`).
+
+**3. Hard-dimension replay still points to semantic polarity errors.** Rebuilt
+validation inference from `run_036` shows the largest `hedonism` / `security`
+misses are not random; they are consistent flips where defended rest or
+stability-seeking language is read as guilt, fragility, or threat.
+
+**4. Recommendation shifts toward lighter post-hoc follow-ups.** The next best
+step is the repo's existing Menon-style validation-only logit-adjustment path
+on `run_020` and `run_036`, with calibration work treated as a separate follow-
+up and any future training-time weighting rerun using a better difficulty proxy
+than CE. Full details:
+[`reports/experiment_review_2026-03-11_twinkl_721.md`](reports/experiment_review_2026-03-11_twinkl_721.md).
+
+### 2026-03-11 — Weighted BalancedSoftmax improves the tail package, but not enough to replace the default (`twinkl-719.3`)
+
+`twinkl-719.3` reran `BalancedSoftmax` on the frozen holdout with the new
+inverse-loss EMA dimension weighting path as `run_034`-`run_036`. The result is
+the strongest current **reference branch** for misalignment sensitivity, but it
+still falls short of a default promotion.
+
+**1. The family wins the tail-sensitive package.** Relative to the incumbent
+`run_019`-`run_021`, the weighted family improves median `recall_-1` from
+`0.313` to `0.378`, keeps minority recall effectively flat to slightly better
+(`0.448` to `0.449`), reduces hedging from `0.621` to `0.599`, and improves
+calibration from `0.713` to `0.726`.
+
+**2. QWK and seed stability still block promotion.** Median `qwk_mean` drops
+from `0.362` to `0.342`, and the new family is much less stable across seeds
+(`IQR 0.030` vs `0.010`). The strongest single weighted seed (`run_036`) is
+excellent, but the family does not yet behave predictably enough to replace the
+incumbent default.
+
+**3. The branch is not a clean `hedonism` / `security` rescue.** Median
+`hedonism qwk` falls to `0.129`, and median `security qwk` reaches only
+`0.222` versus the incumbent `0.297`. The weight traces show a coherent but
+limited schedule: `security` is consistently downweighted, `hedonism` stays
+near neutral, and `universalism` repeatedly hits the max clamp.
+
+**4. Recommendation: keep it as the active reference branch, not the default.**
+Weighted `BalancedSoftmax` now replaces the circumplex branches as the best
+training-time comparator for the next frontier step, but the mainline default
+stays with `run_019`-`run_021`. Full details:
+[`reports/experiment_review_2026-03-11_twinkl_719_3.md`](reports/experiment_review_2026-03-11_twinkl_719_3.md).
+
+### 2026-03-11 — Circumplex-aware batch sampler is explicitly de-scoped for the current rollout (`twinkl-691.5`)
+
+`twinkl-691.5` closed the circumplex rollout by making an explicit keep/drop
+decision on the sampler idea. This was not a feasibility punt: the March 9-10
+corrected-split evidence already answered the sequencing question strongly
+enough that a sampler ablation is not the right next experiment.
+
+**1. The current bottleneck is still hard-dimension polarity, not missing batch
+structure.** The incumbent `run_019`-`run_021` `BalancedSoftmax` family remains
+the active default at median `qwk_mean 0.362`, `recall_-1 0.313`,
+`minority_recall_mean 0.448`, `hedging_mean 0.621`, and
+`calibration_global 0.713`. The regenerated `Hedonism` / `Security` lift from
+`twinkl-691.3` nudged `hedonism` upward, but it still regressed `security` and
+opposition structure relative to the incumbent.
+
+**2. The regularizer already tested the structural hypothesis closely enough.**
+`twinkl-691.4` improved aggregate circumplex structure versus the post-lift
+control, moving `opposite_violation_mean` from `0.082` to `0.039` and
+`adjacent_support_mean` from `0.072` to `0.077`, but it gave back too much
+tail-sensitive behavior: `recall_-1` fell from `0.328` to `0.265`,
+`minority_recall_mean` from `0.442` to `0.411`, and `hedging_mean` worsened
+from `0.598` to `0.641`.
+
+**3. The checkpoint-selection fix did not change that conclusion.**
+`twinkl-715` showed the guardrailed rerun family `run_031`-`run_033` could
+recover family-level QWK to `0.366`, but it still trailed the incumbent on the
+metrics that matter operationally: `recall_-1 0.267` vs `0.313`,
+`minority_recall_mean 0.409` vs `0.448`, and `hedging_mean 0.641` vs `0.621`.
+That means the circumplex branch was not merely being held back by bad
+checkpoint promotion.
+
+**4. Recommendation: keep the sampler off the active roadmap for now.** The
+better handoff is the lower-risk sequence already supported by the frontier
+evidence: per-dimension weighting on `BalancedSoftmax`, then validation-only
+logit retargeting from `run_020`, then head-only retraining only if those still
+miss. Reopen the sampler only if those levers fail and newer circumplex
+diagnostics still show unresolved theory-violating structure errors. Full
+details:
+[`reports/experiment_review_2026-03-11_twinkl_691_5.md`](reports/experiment_review_2026-03-11_twinkl_691_5.md).
+
+### 2026-03-10 — Full frontier refresh v8 adds the regularized branches, but the default stays put
+
+The v8 full review now covers all `run_001`-`run_033` manifests, including the circumplex-regularized family `run_028`-`run_030` and the guardrailed rerun family `run_031`-`run_033`. The corrected-split recommendation is still unchanged: `run_019`-`run_021` BalancedSoftmax remains the best default family.
+
+**1. The guarded rerun is only a partial recovery.** `run_031`-`run_033` reach median QWK `0.366` (fair), comparable to the incumbent `0.362`, and median calibration `0.713`, but they still trail on `recall_-1` (`0.267` vs `0.313`), minority recall (`0.409` vs `0.448`), and hedging (`0.641` vs `0.621`).
+
+**2. The regularizer smooths ranking more than it fixes tail errors.** The unguarded regularized family `run_028`-`run_030` kept moderate calibration (`0.709`) and fair median QWK (`0.347`), yet its median `recall_-1` fell to `0.265` and the hard dimensions stayed weak, especially `hedonism`, `security`, and `stimulation`.
+
+**3. Hedonism and security are still the structural blockers.** Across corrected-split family medians, `hedonism` remains the hardest dimension at mean QWK `0.081`, followed by `security` at `0.234`. Replay on the strongest active single checkpoint (`run_020`) again showed polarity errors on quiet pleasure and stability-seeking language rather than random misses.
+
+**4. Recommendation stays structural, not loss-sweep driven.** The next experiment should focus on per-dimension weighting and targeted semantic data support, not another generic loss swap. Full details: [`reports/experiment_review_2026-03-10_v8.md`](reports/experiment_review_2026-03-10_v8.md).
+
+### 2026-03-10 — Hard validation `recall_-1` guardrail fixes checkpoint selection, but not the frontier (`twinkl-715`)
+
+`twinkl-715` added a hard validation `recall_-1 >= 0.4032` guardrail to ordinal checkpoint selection, persisted per-epoch selection traces, and reran the circumplex-regularized `BalancedSoftmax` family on the corrected split as `run_031`-`run_033`. The new policy blocked the same high-QWK but low-tail checkpoints that had previously been promoted in `run_028`-`run_030`.
+
+**1. The selection pathology is real and now fixed.** For all three seeds, the validation-best finite-QWK checkpoint failed the new floor and was marked ineligible with `recall_minus1_below_floor`. The promoted checkpoints moved to later eligible epochs with lower validation QWK but materially higher validation `recall_-1`, which is the intended behavior.
+
+**2. The guarded family improves aggregate holdout QWK without becoming the new default.** Relative to `run_028`-`run_030`, the guarded rerun family median `qwk_mean` improved from `0.347` to `0.366`, while median holdout `recall_-1` only nudged from `0.265` to `0.267`. Minority recall stayed slightly worse than the incumbent default (`0.409` vs `0.448`), and hedging remained higher (`0.641` vs `0.621`).
+
+**3. No seeds became debug-only.** Every rerun still had at least one promotion-eligible checkpoint above the floor, so the new debug-only fallback path was exercised only in tests and remains a safety mechanism rather than an active training outcome.
+
+**4. Recommendation stays unchanged.** Keep the guardrail as evaluation hygiene, but do not promote the circumplex-regularized family over `run_019`-`run_021`. The fix closes a selection bug; it does not yet establish a better frontier family. Full details: [`reports/experiment_review_2026-03-10_twinkl_715.md`](reports/experiment_review_2026-03-10_twinkl_715.md).
 
 ### 2026-03-10 — Full frontier refresh v7: hedonism confirmed as the structural bottleneck, per-dimension weighting recommended
 

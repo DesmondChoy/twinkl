@@ -1,0 +1,38 @@
+runs_dir: logs/experiments/runs
+labels_path: logs/judge_labels/judge_labels.parquet
+wrangled_dir: logs/wrangled
+run_ids:
+  - run_020
+  - run_036
+models:
+  - BalancedSoftmax
+artifact_root: logs/experiments/artifacts
+artifact_run_prefix: posthoc_twinkl_719_5
+report_path: logs/experiments/reports/experiment_review_twinkl_719_5.md
+report_title: Experiment Review — twinkl-719.5 run_020 vs run_036 BalancedSoftmax post-hoc retargeting
+report_scope_note: "Primary checkpoint target: incumbent `run_020` `BalancedSoftmax`. Weighted reference checkpoint: `run_036` from `twinkl-719.3`."
+recommended_model_label: Recommended retargeted BalancedSoftmax family anchor for `twinkl-719.5`
+summary_model_order:
+  - BalancedSoftmax
+selection_policy:
+  name: recall_minus1_then_qwk_guarded
+  max_qwk_drop: 0.03
+  require_non_negative_calibration: true
+  rank_order:
+    - recall_minus1
+    - qwk_mean
+    - calibration_global
+    - decision_neutral_rate
+softmax_logit_adjustment:
+  enabled: true
+  prior_source: train_split
+  target_models:
+    - BalancedSoftmax
+  tau_grid:
+    - 0.0
+    - 0.3
+    - 0.5
+    - 0.7
+    - 1.0
+corn_threshold_policy:
+  enabled: false

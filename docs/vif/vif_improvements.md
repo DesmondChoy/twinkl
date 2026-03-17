@@ -55,7 +55,7 @@ Based on `docs/vif/01_concepts_and_roadmap.md`, `02_system_architecture.md`, `03
     3. Aggregate over a coarser time scale (e.g. weekly) for stability.
     4. Apply **crash and rut rules** per dimension.
     5. If confident and a pattern is detected, trigger the **Coach**.
-  - The **Critic** uses strictly sequential, recent history; the **Coach** uses semantic retrieval over the long journal history to construct explanations.
+  - The **Critic** uses strictly sequential, recent history; the **Coach** reads the full journal history via full-context prompting to construct explanations (at POC scale; at production scale this would transition to semantic retrieval via RAG).
 
 - **Uncertainty and critique logic**
   - **MC Dropout** estimates epistemic uncertainty by keeping dropout active and sampling \(N\) outputs.
@@ -65,7 +65,7 @@ Based on `docs/vif/01_concepts_and_roadmap.md`, `02_system_architecture.md`, `03
 
 - **Critic vs Coach**
   - Critic: numeric, sequential, conservative in when it speaks.
-  - Coach: retrieval‑augmented, narrative, makes sense of patterns the Critic has flagged, and explicitly avoids gamification and generic praise.
+  - Coach: full-context (all entries in LLM prompt at POC scale), narrative, makes sense of patterns the Critic has flagged, and explicitly avoids gamification and generic praise.
 
 ### 2.2 Strengths
 
@@ -97,6 +97,7 @@ These are natural next frontiers rather than flaws:
   - Sliding window + simple statistics is robust and simple, but may miss:
     - Longer‑range patterns beyond the window.
     - Differential importance of events (e.g., major crisis vs routine update).
+  - The current system cannot distinguish genuine value evolution from behavioral drift. A [value evolution detection](../evolution/01_value_evolution.md) layer is designed to address this by classifying per-dimension divergence patterns.
 
 - **Coach behaviour and UX**
   - Example dialogues are excellent, but a **formal rubric** for what counts as an acceptable Coach response (and how often to speak) is implicit rather than codified.
@@ -216,6 +217,9 @@ This section groups improvement ideas into categories and, where relevant, disti
     - **Non‑prescriptive by default**: avoid direct advice unless the user asks or explicitly signals readiness.
     - **Non‑comparative**: no social comparison or gamified scores.
   - Encode this rubric in prompt templates and in qualitative evaluation forms.
+
+- **Evolution vs drift messaging (capstone-friendly)**
+  - [Value evolution detection](../evolution/01_value_evolution.md) introduces a second Coach messaging type: evolution messaging ("your priorities may be shifting — would you like to update your profile?") alongside existing drift messaging ("you may be losing track"). This requires distinct prompt templates and tone calibration.
 
 - **Critique frequency & prioritisation (capstone‑friendly)**
   - Define simple policies like:

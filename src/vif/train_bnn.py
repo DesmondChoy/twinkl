@@ -24,7 +24,12 @@ from src.vif.dataset import create_dataloaders
 from src.vif.encoders import create_encoder
 from src.vif.eval import evaluate_with_uncertainty, format_results_table
 from src.vif.state_encoder import StateEncoder
-from src.vif.train import load_config, save_checkpoint
+from src.vif.train import (
+    load_config,
+    resolve_split_seed,
+    resolve_training_seed,
+    save_checkpoint,
+)
 
 
 def train_epoch_bnn(
@@ -131,7 +136,7 @@ def train(config: dict, verbose: bool = True) -> dict:
     train_loader, val_loader, test_loader = create_dataloaders(
         state_encoder,
         batch_size=config["training"]["batch_size"],
-        seed=config["data"]["seed"],
+        seed=resolve_split_seed(config),
         labels_path=config["data"]["labels_path"],
         wrangled_dir=config["data"]["wrangled_dir"],
         train_ratio=config["data"]["train_ratio"],
@@ -317,9 +322,12 @@ def main():
         config["model"]["hidden_dim"] = args.hidden_dim
     if args.seed is not None:
         config["data"]["seed"] = args.seed
+        config["data"]["split_seed"] = args.seed
+        config["training"]["seed"] = args.seed
 
-    np.random.seed(config["data"]["seed"])
-    torch.manual_seed(config["data"]["seed"])
+    training_seed = resolve_training_seed(config)
+    np.random.seed(training_seed)
+    torch.manual_seed(training_seed)
 
     results = train(config, verbose=not args.quiet)
 

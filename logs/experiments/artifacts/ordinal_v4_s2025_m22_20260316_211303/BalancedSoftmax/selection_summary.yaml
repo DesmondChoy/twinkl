@@ -1,0 +1,29 @@
+selection_policy:
+  name: qwk_then_recall_guarded
+  rank_order:
+  - qwk_mean
+  - recall_minus1
+  - calibration_global
+  - hedging_mean
+  - val_loss
+  guardrails:
+    qwk_mean_must_be_finite: true
+    qwk_nan_dims_count_must_equal_zero: true
+    calibration_global_must_be_non_negative: true
+    recall_minus1_floor: null
+  fallback: best_finite_qwk
+selection_source: eligible_policy
+promotion_eligible: true
+debug_fallback_used: false
+selected_candidate:
+  epoch: 34
+  val_loss: 0.5988074285643441
+  qwk_mean: 0.35390694195959155
+  recall_minus1: 0.411262607222506
+  calibration_global: 0.7216855520487471
+  hedging_mean: 0.6184331797235024
+  qwk_nan_dims_count: 0
+  eligible: true
+  ineligible_reasons: []
+eligible_epoch_count: 35
+ineligible_epoch_count: 0

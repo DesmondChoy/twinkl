@@ -16,8 +16,10 @@ from src.vif.experiment_logger import (
     _build_experiment_dict,
     _canonicalize_run_config,
     _compute_config_delta,
+    _encoder_shorthand,
     _encoder_family,
     _flatten_dict,
+    _format_index_row,
     _get_git_log_between,
     _loss_shorthand,
     _rebuild_index,
@@ -55,6 +57,9 @@ class TestEncoderFamily:
     def test_nomic(self):
         assert _encoder_family("nomic-ai/nomic-embed-text-v1.5") == "nomic"
 
+    def test_qwen(self):
+        assert _encoder_family("Qwen/Qwen3-Embedding-0.6B") == "Qwen"
+
     def test_mpnet(self):
         assert _encoder_family("sentence-transformers/all-mpnet-base-v2") == "mpnet"
 
@@ -72,12 +77,62 @@ class TestLossShorthand:
     def test_balanced_softmax(self):
         assert _loss_shorthand("BalancedSoftmax", {}) == "balanced_softmax"
 
+    def test_balanced_softmax_dimension_weighting(self):
+        assert _loss_shorthand(
+            "BalancedSoftmax",
+            {"dimension_weighting_enabled": True},
+        ) == "balanced_softmax_dimweight"
+
+    def test_balanced_softmax_circumplex_regularizer(self):
+        assert _loss_shorthand(
+            "BalancedSoftmax",
+            {"circumplex_regularizer_enabled": True},
+        ) == "balanced_softmax_circreg"
+
+    def test_balanced_softmax_dimension_weighting_and_circumplex_regularizer(self):
+        assert _loss_shorthand(
+            "BalancedSoftmax",
+            {
+                "dimension_weighting_enabled": True,
+                "circumplex_regularizer_enabled": True,
+            },
+        ) == "balanced_softmax_dimweight_circreg"
+
     def test_ldam_drw(self):
         assert _loss_shorthand("LDAM_DRW", {}) == "ldam_drw"
 
     def test_weighted_mse_includes_scale(self):
         config = {"loss_fn": "weighted_mse", "weighted_mse_scale": 7.5}
         assert _loss_shorthand("MSE", config) == "weighted_mse_s7.5"
+
+
+# ─── _encoder_shorthand ──────────────────────────────────────────────────────
+
+
+class TestEncoderShorthand:
+    def test_nomic_v15_keeps_historical_label(self):
+        assert _encoder_shorthand(
+            {
+                "encoder_model": "nomic-ai/nomic-embed-text-v1.5",
+                "truncate_dim": 256,
+            }
+        ) == "nomic-256d"
+
+    def test_nomic_v2_moe_includes_variant(self):
+        assert _encoder_shorthand(
+            {
+                "encoder_model": "nomic-ai/nomic-embed-text-v2-moe",
+                "truncate_dim": 256,
+            }
+        ) == "nomic-v2-moe-256d"
+
+    def test_qwen_includes_variant_and_truncate_dim(self):
+        assert _encoder_shorthand(
+            {
+                "encoder_model": "Qwen/Qwen3-Embedding-0.6B",
+                "truncate_dim": 256,
+            }
+        ) == "Qwen3-0.6B-256d"
 
 
 def _per_dimension_metrics(value: float) -> dict[str, float]:
@@ -97,6 +152,17 @@ def _minimal_training_inputs() -> tuple[dict, dict, dict, dict, np.ndarray, dict
         "epochs": 100,
         "model_seed": 11,
         "class_balance_source": "train_split_per_dimension",
+        "circumplex_regularizer_enabled": False,
+        "circumplex_regularizer_opposite_weight": 0.0,
+        "circumplex_regularizer_adjacent_weight": 0.0,
+        "dimension_weighting_enabled": False,
+        "dimension_weighting_mode": "inverse_loss",
+        "dimension_weighting_temperature": 0.5,
+        "dimension_weighting_ema_alpha": 0.3,
+        "dimension_weighting_warmup_epochs": 1,
+        "dimension_weighting_eps": 1e-6,
+        "dimension_weighting_min": 0.5,
+        "dimension_weighting_max": 1.5,
         "ldam_max_m": 0.5,
         "ldam_scale": 30.0,
         "ldam_drw_start_epoch": 50,
@@ -224,6 +290,206 @@ def test_build_experiment_dict_persists_circumplex_payload():
     assert experiment["circumplex"]["source"] == "probabilities"
     assert experiment["circumplex"]["opposite_pairs"][0]["pair_id"] == "security__self_direction"
     assert experiment["circumplex"]["adjacent_pairs"][0]["pair_id"] == "self_direction__stimulation"
+
+
+def test_build_experiment_dict_records_circumplex_regularizer_metadata():
+    config, trained_result, eval_result, calibration, hedging, recall_data = _minimal_training_inputs()
+    config.update(
+        {
+            "circumplex_regularizer_enabled": True,
+            "circumplex_regularizer_opposite_weight": 0.5,
+            "circumplex_regularizer_adjacent_weight": 0.1,
+        }
+    )
+
+    with patch("src.vif.experiment_logger._get_git_commit", return_value="abc123"):
+        experiment = _build_experiment_dict(
+            run_id="run_999",
+            model_name="BalancedSoftmax",
+            config=config,
+            trained_result=trained_result,
+            eval_result=eval_result,
+            calibration=calibration,
+            hedging=hedging,
+            recall_data=recall_data,
+            n_train=100,
+            n_val=20,
+            n_test=20,
+            pct_truncated=0.0,
+            state_dim=256,
+            observations="",
+        )
+
+    training_cfg = experiment["config"]["training"]
+    assert training_cfg["loss_fn"] == "balanced_softmax_circreg"
+    assert training_cfg["circumplex_regularizer_enabled"] is True
+    assert training_cfg["circumplex_regularizer_opposite_weight"] == 0.5
+    assert training_cfg["circumplex_regularizer_adjacent_weight"] == 0.1
+
+
+def test_build_experiment_dict_persists_prompt_metadata():
+    config, trained_result, eval_result, calibration, hedging, recall_data = _minimal_training_inputs()
+    prompt = (
+        "Instruct: Represent the journal entry for classification of alignment "
+        "across the 10 Schwartz value dimensions.\nQuery:"
+    )
+    config.update(
+        {
+            "encoder_model": "Qwen/Qwen3-Embedding-0.6B",
+            "text_prefix": None,
+            "prompt_name": None,
+            "prompt": prompt,
+        }
+    )
+
+    with patch("src.vif.experiment_logger._get_git_commit", return_value="abc123"):
+        experiment = _build_experiment_dict(
+            run_id="run_999",
+            model_name="BalancedSoftmax",
+            config=config,
+            trained_result=trained_result,
+            eval_result=eval_result,
+            calibration=calibration,
+            hedging=hedging,
+            recall_data=recall_data,
+            n_train=100,
+            n_val=20,
+            n_test=20,
+            pct_truncated=0.0,
+            state_dim=256,
+            observations="",
+        )
+
+    encoder_cfg = experiment["config"]["encoder"]
+    assert encoder_cfg["model_name"] == "Qwen/Qwen3-Embedding-0.6B"
+    assert encoder_cfg["text_prefix"] is None
+    assert encoder_cfg["prompt_name"] is None
+    assert encoder_cfg["prompt"] == prompt
+
+
+def test_build_experiment_dict_records_dimension_weighting_metadata():
+    config, trained_result, eval_result, calibration, hedging, recall_data = _minimal_training_inputs()
+    config.update(
+        {
+            "dimension_weighting_enabled": True,
+            "dimension_weighting_mode": "inverse_loss",
+            "dimension_weighting_temperature": 0.7,
+            "dimension_weighting_ema_alpha": 0.4,
+            "dimension_weighting_warmup_epochs": 2,
+            "dimension_weighting_eps": 1e-5,
+            "dimension_weighting_min": 0.6,
+            "dimension_weighting_max": 1.4,
+        }
+    )
+
+    with patch("src.vif.experiment_logger._get_git_commit", return_value="abc123"):
+        experiment = _build_experiment_dict(
+            run_id="run_999",
+            model_name="BalancedSoftmax",
+            config=config,
+            trained_result=trained_result,
+            eval_result=eval_result,
+            calibration=calibration,
+            hedging=hedging,
+            recall_data=recall_data,
+            n_train=100,
+            n_val=20,
+            n_test=20,
+            pct_truncated=0.0,
+            state_dim=256,
+            observations="",
+        )
+
+    training_cfg = experiment["config"]["training"]
+    assert training_cfg["loss_fn"] == "balanced_softmax_dimweight"
+    assert training_cfg["dimension_weighting_enabled"] is True
+    assert training_cfg["dimension_weighting_mode"] == "inverse_loss"
+    assert training_cfg["dimension_weighting_temperature"] == 0.7
+    assert training_cfg["dimension_weighting_ema_alpha"] == 0.4
+    assert training_cfg["dimension_weighting_warmup_epochs"] == 2
+    assert training_cfg["dimension_weighting_eps"] == 1e-5
+    assert training_cfg["dimension_weighting_min"] == 0.6
+    assert training_cfg["dimension_weighting_max"] == 1.4
+
+
+def test_build_experiment_dict_preserves_dimension_weight_trace_artifact_path():
+    config, trained_result, eval_result, calibration, hedging, recall_data = _minimal_training_inputs()
+    trained_result["artifact_paths"] = {
+        "selection_trace": "logs/experiments/artifacts/run_999/selection_trace.parquet",
+        "dimension_weight_trace": "logs/experiments/artifacts/run_999/dimension_weight_trace.parquet",
+    }
+
+    with patch("src.vif.experiment_logger._get_git_commit", return_value="abc123"):
+        experiment = _build_experiment_dict(
+            run_id="run_999",
+            model_name="BalancedSoftmax",
+            config=config,
+            trained_result=trained_result,
+            eval_result=eval_result,
+            calibration=calibration,
+            hedging=hedging,
+            recall_data=recall_data,
+            n_train=100,
+            n_val=20,
+            n_test=20,
+            pct_truncated=0.0,
+            state_dim=256,
+            observations="",
+        )
+
+    assert experiment["artifacts"]["dimension_weight_trace"].endswith(
+        "dimension_weight_trace.parquet"
+    )
+
+
+def test_build_experiment_dict_records_selection_policy_metadata():
+    config, trained_result, eval_result, calibration, hedging, recall_data = _minimal_training_inputs()
+    trained_result.update(
+        {
+            "selected_candidate": {
+                "qwk_mean": 0.41,
+                "recall_minus1": 0.44,
+                "calibration_global": 0.12,
+                "hedging_mean": 0.31,
+                "qwk_nan_dims_count": 0,
+                "eligible": True,
+                "ineligible_reasons": [],
+            },
+            "selection_policy": {
+                "name": "qwk_then_recall_guarded",
+                "guardrails": {
+                    "recall_minus1_floor": 0.4032,
+                },
+                "fallback": "debug_best_finite_qwk_only",
+            },
+            "selection_source": "eligible_policy",
+            "promotion_eligible": True,
+            "debug_fallback_used": False,
+        }
+    )
+
+    with patch("src.vif.experiment_logger._get_git_commit", return_value="abc123"):
+        experiment = _build_experiment_dict(
+            run_id="run_999",
+            model_name="BalancedSoftmax",
+            config=config,
+            trained_result=trained_result,
+            eval_result=eval_result,
+            calibration=calibration,
+            hedging=hedging,
+            recall_data=recall_data,
+            n_train=100,
+            n_val=20,
+            n_test=20,
+            pct_truncated=0.0,
+            state_dim=256,
+            observations="",
+        )
+
+    assert experiment["selection_policy"]["guardrails"]["recall_minus1_floor"] == 0.4032
+    assert experiment["training_dynamics"]["selection_source"] == "eligible_policy"
+    assert experiment["training_dynamics"]["promotion_eligible"] is True
+    assert experiment["training_dynamics"]["debug_fallback_used"] is False
 
 
 # ─── _flatten_dict ───────────────────────────────────────────────────────────
@@ -422,9 +688,14 @@ class TestBuildProvenance:
 # ─── _rebuild_index ─────────────────────────────────────────────────────────
 
 
-def _make_run_yaml(run_id: str, model_name: str) -> dict:
+def _make_run_yaml(
+    run_id: str,
+    model_name: str,
+    loss_fn: str = "coral",
+    circumplex_summary: dict | None = None,
+) -> dict:
     """Build a minimal valid experiment dict for _rebuild_index tests."""
-    return {
+    data = {
         "metadata": {
             "experiment_id": f"{run_id}_{model_name}",
             "run_id": run_id,
@@ -434,7 +705,7 @@ def _make_run_yaml(run_id: str, model_name: str) -> dict:
             "encoder": {"model_name": "nomic-ai/nomic-embed-text-v1.5", "truncate_dim": 256},
             "state_encoder": {"window_size": 1},
             "model": {"hidden_dim": 64, "dropout": 0.3},
-            "training": {"loss_fn": "coral"},
+            "training": {"loss_fn": loss_fn},
         },
         "capacity": {"n_parameters": 22804, "param_sample_ratio": 22.4},
         "evaluation": {
@@ -446,6 +717,33 @@ def _make_run_yaml(run_id: str, model_name: str) -> dict:
             "minority_recall_mean": 0.244,
         },
     }
+    if circumplex_summary is not None:
+        data["evaluation"]["circumplex_summary"] = circumplex_summary
+    return data
+
+
+class TestFormatIndexRow:
+    def test_includes_circumplex_metrics_when_present(self):
+        data = _make_run_yaml(
+            "run_031",
+            "BalancedSoftmax",
+            loss_fn="balanced_softmax",
+            circumplex_summary={
+                "opposite_violation_mean": 0.035343579637507595,
+                "adjacent_support_mean": 0.07919311026732127,
+            },
+        )
+
+        row = _format_index_row(data)
+
+        assert "| 0.035 | 0.079 | runs/run_031_BalancedSoftmax.yaml |" in row
+
+    def test_renders_na_for_missing_circumplex_metrics(self):
+        data = _make_run_yaml("run_001", "CORAL")
+
+        row = _format_index_row(data)
+
+        assert "| N/A | N/A | runs/run_001_CORAL.yaml |" in row
 
 
 class TestRebuildIndex:
@@ -460,8 +758,20 @@ class TestRebuildIndex:
         monkeypatch.setattr(experiment_logger, "INDEX_PATH", index_path)
         return runs_dir, index_path
 
-    def _write_run(self, runs_dir: Path, run_id: str, model_name: str) -> None:
-        data = _make_run_yaml(run_id, model_name)
+    def _write_run(
+        self,
+        runs_dir: Path,
+        run_id: str,
+        model_name: str,
+        loss_fn: str = "coral",
+        circumplex_summary: dict | None = None,
+    ) -> None:
+        data = _make_run_yaml(
+            run_id,
+            model_name,
+            loss_fn=loss_fn,
+            circumplex_summary=circumplex_summary,
+        )
         path = runs_dir / f"{run_id}_{model_name}.yaml"
         path.write_text(yaml.dump(data, sort_keys=False), encoding="utf-8")
 
@@ -498,6 +808,46 @@ class TestRebuildIndex:
         # Old row replaced with actual data
         assert "| old row |" not in content
         assert "run_001" in content
+
+    def test_mixed_circumplex_rows_render_in_widened_table(self, tmp_path, monkeypatch):
+        """Mixed legacy and circumplex-aware runs keep manual content and render correctly."""
+        runs_dir, index_path = self._setup_dirs(tmp_path, monkeypatch)
+        self._write_run(runs_dir, "run_001", "CORAL")
+        self._write_run(
+            runs_dir,
+            "run_031",
+            "BalancedSoftmax",
+            loss_fn="balanced_softmax",
+            circumplex_summary={
+                "opposite_violation_mean": 0.035343579637507595,
+                "adjacent_support_mean": 0.07919311026732127,
+            },
+        )
+
+        manual_before = "# My Index\n\n## Leaderboard\nBest: run_031\n\n"
+        manual_after = "\n## Findings\nCircumplex metrics visible.\n"
+        old_table = AUTO_TABLE_START + TABLE_HEADER + "| old row |\n" + AUTO_TABLE_END
+        index_path.write_text(manual_before + old_table + manual_after, encoding="utf-8")
+
+        _rebuild_index()
+
+        content = index_path.read_text(encoding="utf-8")
+        assert (
+            "| run | model | encoder | ws | hd | do | loss | params | ratio | "
+            "MAE | Acc | QWK | Spear | Cal | MinR | OppV | AdjS | file |"
+        ) in content
+        assert "## Leaderboard" in content
+        assert "## Findings" in content
+        assert (
+            "| 001 | CORAL | nomic-256d | 1 | 64 | 0.3 | coral | 22804 | 22.4 | "
+            "0.209 | 0.819 | 0.364 | 0.391 | 0.823 | 0.244 | N/A | N/A | "
+            "runs/run_001_CORAL.yaml |"
+        ) in content
+        assert (
+            "| 031 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | "
+            "22804 | 22.4 | 0.209 | 0.819 | 0.364 | 0.391 | 0.823 | 0.244 | "
+            "0.035 | 0.079 | runs/run_031_BalancedSoftmax.yaml |"
+        ) in content
 
     def test_corrupt_yaml_emits_warning(self, tmp_path, monkeypatch):
         """Bad YAML emits warning, doesn't crash, skips the file."""

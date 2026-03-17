@@ -1,0 +1,165 @@
+generated_at: '2026-03-15T19:59:19.551374'
+artifact_root: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/frontier_uncertainty_twinkl_730_20260315_195919
+report_path: /Users/desmondchoy/Projects/twinkl/logs/experiments/reports/experiment_review_2026-03-14_twinkl_730.md
+confidence_level: 0.95
+n_bootstrap: 1000
+n_permutations: 1000
+hard_dimensions:
+- hedonism
+- security
+- stimulation
+weighted_branch_summary:
+  qwk_delta:
+    estimate: -0.019990740964499876
+    ci_lower: -0.062229060138308846
+    ci_upper: 0.018149704430600634
+    verdict: likely_noise
+  recall_minus1_delta:
+    estimate: 0.06470238095238101
+    ci_lower: 0.020641440872778822
+    ci_upper: 0.12823693534711494
+    verdict: distinguishable_gain
+files:
+  checkpoint_metric_cis: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/frontier_uncertainty_twinkl_730_20260315_195919/checkpoint_metric_cis.parquet
+  family_metric_cis: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/frontier_uncertainty_twinkl_730_20260315_195919/family_metric_cis.parquet
+  dimension_qwk_cis: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/frontier_uncertainty_twinkl_730_20260315_195919/dimension_qwk_cis.parquet
+  family_delta_cis: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/frontier_uncertainty_twinkl_730_20260315_195919/family_delta_cis.parquet
+  hard_dimension_significance: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/frontier_uncertainty_twinkl_730_20260315_195919/hard_dimension_significance.parquet
+  family_delta_plot: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/frontier_uncertainty_twinkl_730_20260315_195919/plots/family_delta_intervals.png
+  hard_dimension_plot: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/frontier_uncertainty_twinkl_730_20260315_195919/plots/hard_dimension_qwk.png
+significance_summary:
+- family_key: default_balanced_softmax
+  family_label: Current default BalancedSoftmax
+  dimension: hedonism
+  observed_qwk: 0.24707004633415108
+  null_q95: 0.14054883058552892
+  p_value: 0.000999000999000999
+  significant_above_chance: true
+  n_permutations: 1000
+  permutation_method: persona_cluster_permutation_stratified_by_sequence_length
+- family_key: default_balanced_softmax
+  family_label: Current default BalancedSoftmax
+  dimension: security
+  observed_qwk: 0.29727956392267696
+  null_q95: 0.17717035960770067
+  p_value: 0.001998001998001998
+  significant_above_chance: true
+  n_permutations: 1000
+  permutation_method: persona_cluster_permutation_stratified_by_sequence_length
+- family_key: default_balanced_softmax
+  family_label: Current default BalancedSoftmax
+  dimension: stimulation
+  observed_qwk: 0.16122665856991036
+  null_q95: 0.14161936062145197
+  p_value: 0.04695304695304695
+  significant_above_chance: true
+  n_permutations: 1000
+  permutation_method: persona_cluster_permutation_stratified_by_sequence_length
+- family_key: weighted_balanced_softmax
+  family_label: BalancedSoftmax + dimweight
+  dimension: hedonism
+  observed_qwk: 0.1286783612365009
+  null_q95: 0.1400778210116732
+  p_value: 0.09090909090909091
+  significant_above_chance: false
+  n_permutations: 1000
+  permutation_method: persona_cluster_permutation_stratified_by_sequence_length
+- family_key: weighted_balanced_softmax
+  family_label: BalancedSoftmax + dimweight
+  dimension: security
+  observed_qwk: 0.221575165547363
+  null_q95: 0.11778518762034473
+  p_value: 0.002997002997002997
+  significant_above_chance: true
+  n_permutations: 1000
+  permutation_method: persona_cluster_permutation_stratified_by_sequence_length
+- family_key: weighted_balanced_softmax
+  family_label: BalancedSoftmax + dimweight
+  dimension: stimulation
+  observed_qwk: 0.15174945764031822
+  null_q95: 0.2120275730924649
+  p_value: 0.1258741258741259
+  significant_above_chance: false
+  n_permutations: 1000
+  permutation_method: persona_cluster_permutation_stratified_by_sequence_length
+- family_key: circreg_recall_floor
+  family_label: BalancedSoftmax + circreg + recall floor
+  dimension: hedonism
+  observed_qwk: 0.1600442263838021
+  null_q95: 0.1538841546251698
+  p_value: 0.028971028971028972
+  significant_above_chance: true
+  n_permutations: 1000
+  permutation_method: persona_cluster_permutation_stratified_by_sequence_length
+- family_key: circreg_recall_floor
+  family_label: BalancedSoftmax + circreg + recall floor
+  dimension: security
+  observed_qwk: 0.22916666666666663
+  null_q95: 0.125
+  p_value: 0.000999000999000999
+  significant_above_chance: true
+  n_permutations: 1000
+  permutation_method: persona_cluster_permutation_stratified_by_sequence_length
+- family_key: circreg_recall_floor
+  family_label: BalancedSoftmax + circreg + recall floor
+  dimension: stimulation
+  observed_qwk: 0.19600564258668052
+  null_q95: 0.2461875853907519
+  p_value: 0.11888111888111888
+  significant_above_chance: false
+  n_permutations: 1000
+  permutation_method: persona_cluster_permutation_stratified_by_sequence_length
+- family_key: targeted_batch
+  family_label: BalancedSoftmax + targeted batch
+  dimension: hedonism
+  observed_qwk: 0.14661011584478068
+  null_q95: 0.156106400880202
+  p_value: 0.08791208791208792
+  significant_above_chance: false
+  n_permutations: 1000
+  permutation_method: persona_cluster_permutation_stratified_by_sequence_length
+- family_key: targeted_batch
+  family_label: BalancedSoftmax + targeted batch
+  dimension: security
+  observed_qwk: 0.2995411325039028
+  null_q95: 0.15555555555555556
+  p_value: 0.000999000999000999
+  significant_above_chance: true
+  n_permutations: 1000
+  permutation_method: persona_cluster_permutation_stratified_by_sequence_length
+- family_key: targeted_batch
+  family_label: BalancedSoftmax + targeted batch
+  dimension: stimulation
+  observed_qwk: 0.1593269934162399
+  null_q95: 0.1888200252722787
+  p_value: 0.1008991008991009
+  significant_above_chance: false
+  n_permutations: 1000
+  permutation_method: persona_cluster_permutation_stratified_by_sequence_length
+- family_key: hedonism_security_lift
+  family_label: BalancedSoftmax + hedonism/security lift
+  dimension: hedonism
+  observed_qwk: 0.25607117095455645
+  null_q95: 0.14979562394806445
+  p_value: 0.000999000999000999
+  significant_above_chance: true
+  n_permutations: 1000
+  permutation_method: persona_cluster_permutation_stratified_by_sequence_length
+- family_key: hedonism_security_lift
+  family_label: BalancedSoftmax + hedonism/security lift
+  dimension: security
+  observed_qwk: 0.19909399773499437
+  null_q95: 0.1129587155963303
+  p_value: 0.002997002997002997
+  significant_above_chance: true
+  n_permutations: 1000
+  permutation_method: persona_cluster_permutation_stratified_by_sequence_length
+- family_key: hedonism_security_lift
+  family_label: BalancedSoftmax + hedonism/security lift
+  dimension: stimulation
+  observed_qwk: 0.18644682947062785
+  null_q95: 0.19999999999999996
+  p_value: 0.08091908091908091
+  significant_above_chance: false
+  n_permutations: 1000
+  permutation_method: persona_cluster_permutation_stratified_by_sequence_length

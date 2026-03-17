@@ -1,6 +1,7 @@
 """Integration-style tests for default LR finder usage in train()."""
 
 import json
+from pathlib import Path
 
 import src.vif.train as train_module
 
@@ -43,6 +44,7 @@ def _minimal_config(tmp_path):
 def test_train_uses_lr_finder_selected_lr_and_logs_metadata(tmp_path, monkeypatch):
     config = _minimal_config(tmp_path)
     observed_lrs = []
+    observed_gradient_config = {}
 
     monkeypatch.setattr(train_module, "create_encoder", lambda *_args, **_kwargs: object())
     monkeypatch.setattr(train_module, "StateEncoder", _DummyStateEncoder)
@@ -70,9 +72,33 @@ def test_train_uses_lr_finder_selected_lr_and_logs_metadata(tmp_path, monkeypatc
         },
     )
 
-    def _fake_train_epoch(model, dataloader, optimizer, criterion, device):
+    def _fake_train_epoch(
+        model,
+        dataloader,
+        optimizer,
+        criterion,
+        device,
+        *,
+        epoch=1,
+        grad_clip=None,
+        gradient_logging_enabled=True,
+        gradient_log_every=1,
+    ):
         observed_lrs.append(optimizer.param_groups[0]["lr"])
-        return 0.5
+        observed_gradient_config.update(
+            {
+                "epoch": epoch,
+                "grad_clip": grad_clip,
+                "gradient_logging_enabled": gradient_logging_enabled,
+                "gradient_log_every": gradient_log_every,
+            }
+        )
+        return 0.5, {
+            "grad_norm_mean": 1.2,
+            "grad_norm_max": 2.4,
+            "grad_batches_tracked": 2,
+            "grad_clipped_fraction": 0.5,
+        }
 
     monkeypatch.setattr(train_module, "train_epoch", _fake_train_epoch)
     monkeypatch.setattr(train_module, "validate", lambda *_args, **_kwargs: 0.4)
@@ -94,8 +120,46 @@ def test_train_uses_lr_finder_selected_lr_and_logs_metadata(tmp_path, monkeypatc
     results = train_module.train(config, verbose=False)
 
     assert observed_lrs == [0.012]
+    assert observed_gradient_config == {
+        "epoch": 1,
+        "grad_clip": 1.0,
+        "gradient_logging_enabled": True,
+        "gradient_log_every": 1,
+    }
     assert results["learning_rate_configured"] == 0.001
     assert results["learning_rate_applied"] == 0.012
+    assert results["history"]["train_val_gap"] == [-0.09999999999999998]
+    assert results["history"]["grad_norm_mean"] == [1.2]
+    assert results["history"]["grad_norm_max"] == [2.4]
+    assert results["history"]["grad_batches_tracked"] == [2]
+    assert results["history"]["grad_clipped_fraction"] == [0.5]
+    assert results["training_dynamics"] == {
+        "gradient_config": {
+            "grad_clip": 1.0,
+            "gradient_logging_enabled": True,
+            "sample_every_batches": 1,
+        },
+        "gradient_summary": {
+            "epochs_with_gradient_samples": 1,
+            "total_gradient_batches_tracked": 2,
+            "grad_norm_mean_over_epochs": 1.2,
+            "grad_norm_max_over_epochs": 2.4,
+            "grad_clipped_fraction_mean": 0.5,
+            "grad_clipped_fraction_max": 0.5,
+        },
+        "gap_summary": {
+            "best_epoch": 1,
+            "total_epochs": 1,
+            "gap_at_best": -0.09999999999999998,
+            "gap_at_final": -0.09999999999999998,
+            "max_gap": -0.09999999999999998,
+            "min_gap": -0.09999999999999998,
+        },
+        "curve_artifacts": {
+            "plot_path": str(tmp_path / "training_curves.png"),
+            "history_path": str(tmp_path / "training_curves.json"),
+        },
+    }
 
     log_path = tmp_path / "training_log.json"
     assert log_path.exists()
@@ -107,3 +171,58 @@ def test_train_uses_lr_finder_selected_lr_and_logs_metadata(tmp_path, monkeypatc
     assert log_data["lr_finder"]["suggestions"]["lr_valley"] == 0.012
     assert log_data["config"]["training"]["learning_rate_configured"] == 0.001
     assert log_data["config"]["training"]["learning_rate"] == 0.012
+    assert log_data["config"]["training"]["grad_clip"] == 1.0
+    assert log_data["config"]["training"]["gradient_logging"] == {
+        "enabled": True,
+        "sample_every_batches": 1,
+    }
+    assert log_data["history"]["train_val_gap"] == [-0.09999999999999998]
+    assert log_data["history"]["grad_norm_mean"] == [1.2]
+    assert log_data["history"]["grad_norm_max"] == [2.4]
+    assert log_data["history"]["grad_batches_tracked"] == [2]
+    assert log_data["history"]["grad_clipped_fraction"] == [0.5]
+    assert log_data["training_dynamics"] == {
+        "gradient_config": {
+            "grad_clip": 1.0,
+            "gradient_logging_enabled": True,
+            "sample_every_batches": 1,
+        },
+        "gradient_summary": {
+            "epochs_with_gradient_samples": 1,
+            "total_gradient_batches_tracked": 2,
+            "grad_norm_mean_over_epochs": 1.2,
+            "grad_norm_max_over_epochs": 2.4,
+            "grad_clipped_fraction_mean": 0.5,
+            "grad_clipped_fraction_max": 0.5,
+        },
+        "gap_summary": {
+            "best_epoch": 1,
+            "total_epochs": 1,
+            "gap_at_best": -0.09999999999999998,
+            "gap_at_final": -0.09999999999999998,
+            "max_gap": -0.09999999999999998,
+            "min_gap": -0.09999999999999998,
+        },
+        "curve_artifacts": {
+            "plot_path": str(tmp_path / "training_curves.png"),
+            "history_path": str(tmp_path / "training_curves.json"),
+        },
+    }
+
+    curve_artifacts = log_data["training_dynamics"]["curve_artifacts"]
+    plot_path = Path(curve_artifacts["plot_path"])
+    history_path = Path(curve_artifacts["history_path"])
+    assert plot_path.is_file()
+    assert history_path.is_file()
+
+    with open(history_path) as f:
+        curve_history = json.load(f)
+
+    assert curve_history == {
+        "epochs": [1],
+        "train_loss": [0.5],
+        "val_loss": [0.4],
+        "train_val_gap": [-0.09999999999999998],
+        "learning_rate": [0.012],
+        "best_epoch": 1,
+    }

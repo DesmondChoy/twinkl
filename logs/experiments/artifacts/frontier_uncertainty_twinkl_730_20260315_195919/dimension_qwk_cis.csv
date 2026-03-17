@@ -1,0 +1,51 @@
+estimate,ci_lower,ci_upper,method,bootstrap_n,family_key,family_label,dimension,metric
+0.4943569629501452,0.3407073261460578,0.638042701423394,bca,1000,default_balanced_softmax,Current default BalancedSoftmax,self_direction,qwk
+0.16122665856991036,-0.04000085307057979,0.5260092424355673,bca,1000,default_balanced_softmax,Current default BalancedSoftmax,stimulation,qwk
+0.24707004633415108,0.11994054214162997,0.48136777500433753,bca,1000,default_balanced_softmax,Current default BalancedSoftmax,hedonism,qwk
+0.3705065801334054,0.22878203087126436,0.5449686729219355,bca,1000,default_balanced_softmax,Current default BalancedSoftmax,achievement,qwk
+0.3336987803206797,0.19107969438963798,0.5150737810794563,bca,1000,default_balanced_softmax,Current default BalancedSoftmax,power,qwk
+0.29727956392267696,0.16169517976366446,0.45684956238734664,bca,1000,default_balanced_softmax,Current default BalancedSoftmax,security,qwk
+0.5525309336332958,0.405043483353855,0.6689459576521113,bca,1000,default_balanced_softmax,Current default BalancedSoftmax,conformity,qwk
+0.4851968740607153,0.3012033210546713,0.6148908613039179,bca,1000,default_balanced_softmax,Current default BalancedSoftmax,tradition,qwk
+0.3784496396554755,0.26252866756692994,0.5041939707256217,bca,1000,default_balanced_softmax,Current default BalancedSoftmax,benevolence,qwk
+0.3699215965787598,-0.009978288378983922,0.4823316259539483,bca,990,default_balanced_softmax,Current default BalancedSoftmax,universalism,qwk
+0.5299418923363666,0.3703429858188864,0.6803120888945481,bca,1000,weighted_balanced_softmax,BalancedSoftmax + dimweight,self_direction,qwk
+0.15174945764031822,-0.09399863427475807,0.5494340105690718,bca,1000,weighted_balanced_softmax,BalancedSoftmax + dimweight,stimulation,qwk
+0.1286783612365009,0.00038859526616542774,0.3672857608945982,bca,1000,weighted_balanced_softmax,BalancedSoftmax + dimweight,hedonism,qwk
+0.30045219638242904,0.1377496689635486,0.4777380784688921,bca,1000,weighted_balanced_softmax,BalancedSoftmax + dimweight,achievement,qwk
+0.36782769644960456,0.11148638895641264,0.5281068696460703,bca,1000,weighted_balanced_softmax,BalancedSoftmax + dimweight,power,qwk
+0.221575165547363,0.08567349191717345,0.4098741594106503,bca,1000,weighted_balanced_softmax,BalancedSoftmax + dimweight,security,qwk
+0.5327695560253699,0.4012918042168121,0.6485763301593721,bca,1000,weighted_balanced_softmax,BalancedSoftmax + dimweight,conformity,qwk
+0.5030627277661472,0.34438762643341125,0.6344548010049572,bca,1000,weighted_balanced_softmax,BalancedSoftmax + dimweight,tradition,qwk
+0.34068616372101435,0.20152997507372797,0.4414212055843758,bca,1000,weighted_balanced_softmax,BalancedSoftmax + dimweight,benevolence,qwk
+0.3945205479452055,0.1519518945527394,0.6369686009489441,bca,990,weighted_balanced_softmax,BalancedSoftmax + dimweight,universalism,qwk
+0.47815210530007246,0.2577323886180776,0.6318582405953432,bca,1000,circreg_recall_floor,BalancedSoftmax + circreg + recall floor,self_direction,qwk
+0.19600564258668052,-0.09874392195796226,0.6916264124947757,bca,1000,circreg_recall_floor,BalancedSoftmax + circreg + recall floor,stimulation,qwk
+0.1600442263838021,-0.004695427376989858,0.3781844971080012,bca,1000,circreg_recall_floor,BalancedSoftmax + circreg + recall floor,hedonism,qwk
+0.41416604813911573,0.24424657206255093,0.6183032367024184,bca,1000,circreg_recall_floor,BalancedSoftmax + circreg + recall floor,achievement,qwk
+0.37037037037037035,0.14490986291709354,0.5484829260644235,bca,1000,circreg_recall_floor,BalancedSoftmax + circreg + recall floor,power,qwk
+0.22916666666666663,0.09351314965491064,0.4255603270677404,bca,1000,circreg_recall_floor,BalancedSoftmax + circreg + recall floor,security,qwk
+0.5152266188075093,0.3233864467753006,0.6416614496288946,bca,1000,circreg_recall_floor,BalancedSoftmax + circreg + recall floor,conformity,qwk
+0.4989798231693493,0.2941984468635185,0.6281356753187177,bca,1000,circreg_recall_floor,BalancedSoftmax + circreg + recall floor,tradition,qwk
+0.35067766088522423,0.2305893054461019,0.48157984307205787,bca,1000,circreg_recall_floor,BalancedSoftmax + circreg + recall floor,benevolence,qwk
+0.3448441631279545,0.06828434380597007,0.582538141321934,bca,990,circreg_recall_floor,BalancedSoftmax + circreg + recall floor,universalism,qwk
+0.48874868559411144,0.2751652702391852,0.6353570261732676,bca,1000,targeted_batch,BalancedSoftmax + targeted batch,self_direction,qwk
+0.1593269934162399,-0.1202897649238605,0.56722096047291,bca,1000,targeted_batch,BalancedSoftmax + targeted batch,stimulation,qwk
+0.14661011584478068,-0.001874160860458081,0.3120112400921606,bca,1000,targeted_batch,BalancedSoftmax + targeted batch,hedonism,qwk
+0.32990624891088416,0.13537816998294044,0.5113698586242116,bca,1000,targeted_batch,BalancedSoftmax + targeted batch,achievement,qwk
+0.3452239867267125,0.11637326896230839,0.5034292842057,bca,1000,targeted_batch,BalancedSoftmax + targeted batch,power,qwk
+0.2995411325039028,0.1615575966601938,0.4604305710653538,bca,1000,targeted_batch,BalancedSoftmax + targeted batch,security,qwk
+0.5158497637712144,0.3401947614058922,0.636970683721119,bca,1000,targeted_batch,BalancedSoftmax + targeted batch,conformity,qwk
+0.5165227403569372,0.386798167815779,0.6619439885795855,bca,1000,targeted_batch,BalancedSoftmax + targeted batch,tradition,qwk
+0.39768754301445297,0.28049504373902656,0.5323470288778848,bca,1000,targeted_batch,BalancedSoftmax + targeted batch,benevolence,qwk
+0.3251302317226513,0.10677577791083642,0.538115400717902,bca,990,targeted_batch,BalancedSoftmax + targeted batch,universalism,qwk
+0.521976521976522,0.35056770837317247,0.670427976766183,bca,1000,hedonism_security_lift,BalancedSoftmax + hedonism/security lift,self_direction,qwk
+0.18644682947062785,-0.05621118225491163,0.5919261917494413,bca,1000,hedonism_security_lift,BalancedSoftmax + hedonism/security lift,stimulation,qwk
+0.25607117095455645,0.180800986424091,0.5249619163425445,bca,1000,hedonism_security_lift,BalancedSoftmax + hedonism/security lift,hedonism,qwk
+0.3864431224085091,0.26214947960431423,0.5816748568815091,bca,1000,hedonism_security_lift,BalancedSoftmax + hedonism/security lift,achievement,qwk
+0.30721003134796254,0.15396394268685387,0.43741249733906185,bca,1000,hedonism_security_lift,BalancedSoftmax + hedonism/security lift,power,qwk
+0.19909399773499437,0.05143673085274488,0.3972964226914889,bca,1000,hedonism_security_lift,BalancedSoftmax + hedonism/security lift,security,qwk
+0.513277472597018,0.3197787941176243,0.6389715906432699,bca,1000,hedonism_security_lift,BalancedSoftmax + hedonism/security lift,conformity,qwk
+0.47339158061953934,0.35660859251206034,0.5891093723614054,bca,1000,hedonism_security_lift,BalancedSoftmax + hedonism/security lift,tradition,qwk
+0.33064109035840483,0.19383086752393452,0.4620662283403677,bca,1000,hedonism_security_lift,BalancedSoftmax + hedonism/security lift,benevolence,qwk
+0.31276595744680846,-0.007251132136026365,0.5443333782498775,bca,990,hedonism_security_lift,BalancedSoftmax + hedonism/security lift,universalism,qwk

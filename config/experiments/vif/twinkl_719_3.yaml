@@ -1,0 +1,74 @@
+baseline:
+  labels_path: logs/judge_labels/judge_labels.parquet
+  wrangled_dir: logs/wrangled
+  registry_path: logs/registry/personas.parquet
+  synthetic_dir: logs/synthetic_data
+  split_seed: 2025
+  train_ratio: 0.70
+  val_ratio: 0.15
+  holdout_manifest_path: config/experiments/vif/twinkl_681_5_holdout.yaml
+  baseline_run_ids:
+    - run_019
+    - run_020
+    - run_021
+  post_lift_control_run_ids:
+    - run_025
+    - run_026
+    - run_027
+  circumplex_regularized_run_ids:
+    - run_028
+    - run_029
+    - run_030
+  circumplex_guardrailed_run_ids:
+    - run_031
+    - run_032
+    - run_033
+
+training:
+  fixed_holdout_manifest_path: config/experiments/vif/twinkl_681_5_holdout.yaml
+  experiment_group: twinkl-719.3_dimweight_frontier_rerun
+  split_seed: 2025
+  train_ratio: 0.70
+  val_ratio: 0.15
+  model_names:
+    - BalancedSoftmax
+  model_seeds:
+    - 11
+    - 22
+    - 33
+  run_override_configs:
+    - config/experiments/vif/twinkl_719_3_seed11.yaml
+    - config/experiments/vif/twinkl_719_3_seed22.yaml
+    - config/experiments/vif/twinkl_719_3_seed33.yaml
+  encoder_model: nomic-ai/nomic-embed-text-v1.5
+  truncate_dim: 256
+  window_size: 1
+  hidden_dim: 64
+  dropout: 0.3
+  batch_size: 16
+  epochs: 100
+  weight_decay: 0.01
+  class_balance_source: train_split_per_dimension
+  circumplex_regularizer_enabled: false
+  circumplex_regularizer_opposite_weight: 0.0
+  circumplex_regularizer_adjacent_weight: 0.0
+  dimension_weighting_enabled: true
+  dimension_weighting_mode: inverse_loss
+  dimension_weighting_temperature: 0.5
+  dimension_weighting_ema_alpha: 0.3
+  dimension_weighting_warmup_epochs: 1
+  dimension_weighting_eps: 0.000001
+  dimension_weighting_min: 0.5
+  dimension_weighting_max: 1.5
+  use_lr_finder: false
+  selection_policy:
+    name: qwk_then_recall_guarded
+    guardrails:
+      recall_minus1_floor: 0.4032
+    fallback: debug_best_finite_qwk_only
+  model_overrides:
+    BalancedSoftmax:
+      learning_rate: 0.015522253574270487
+      use_lr_finder: false
+      learning_rate_source: explicit_model_override
+      learning_rate_policy: run_015_cdwce_a3_valley

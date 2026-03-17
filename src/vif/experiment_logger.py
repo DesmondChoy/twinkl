@@ -57,9 +57,9 @@ AUTO_TABLE_END = "<!-- AUTO-TABLE:END -->\n"
 
 TABLE_HEADER = (
     "| run | model | encoder | ws | hd | do | loss | params | ratio | "
-    "MAE | Acc | QWK | Spear | Cal | MinR | file |\n"
+    "MAE | Acc | QWK | Spear | Cal | MinR | OppV | AdjS | file |\n"
     "|-----|-------|---------|---:|---:|---:|------|-------:|------:|"
-    "----:|----:|----:|------:|----:|-----:|------|\n"
+    "----:|----:|----:|------:|----:|-----:|-----:|-----:|------|\n"
 )
 
 
@@ -150,6 +150,8 @@ def _encoder_family(model_name: str) -> str:
         return "MiniLM"
     if "nomic" in lower:
         return "nomic"
+    if "qwen" in lower:
+        return "Qwen"
     if "mpnet" in lower:
         return "mpnet"
     return model_name.split("/")[-1]
@@ -329,20 +331,33 @@ def _encoder_shorthand(config: dict) -> str:
 
     Examples:
         nomic-ai/nomic-embed-text-v1.5 + truncate_dim=256 → "nomic-256d"
+        nomic-ai/nomic-embed-text-v2-moe + truncate_dim=256 → "nomic-v2-moe-256d"
+        Qwen/Qwen3-Embedding-0.6B + truncate_dim=256 → "Qwen3-0.6B-256d"
         all-MiniLM-L6-v2 → "MiniLM-384d"
     """
     model = config.get("encoder_model", "unknown")
     truncate_dim = config.get("truncate_dim")
+    model_slug = model.split("/")[-1]
+    lower = model.lower()
 
-    if "nomic" in model.lower():
+    if model_slug == "nomic-embed-text-v1.5":
         dim = truncate_dim if truncate_dim else "768"
         return f"nomic-{dim}d"
+    elif model_slug == "nomic-embed-text-v2-moe":
+        dim = truncate_dim if truncate_dim else "768"
+        return f"nomic-v2-moe-{dim}d"
+    elif "nomic" in lower:
+        dim = truncate_dim if truncate_dim else "768"
+        return f"{model_slug[:15]}-{dim}d"
+    elif model_slug == "Qwen3-Embedding-0.6B":
+        dim = truncate_dim if truncate_dim else "1024"
+        return f"Qwen3-0.6B-{dim}d"
     elif "MiniLM" in model:
         return "MiniLM-384d"
-    elif "mpnet" in model.lower():
+    elif "mpnet" in lower:
         return "mpnet-768d"
     else:
-        return model.split("/")[-1][:15]
+        return model_slug[:15]
 
 
 def _loss_shorthand(model_name: str, config: dict) -> str:
@@ -367,6 +382,15 @@ def _loss_shorthand(model_name: str, config: dict) -> str:
             scale = config.get("weighted_mse_scale", 5.0)
             return f"weighted_mse_s{scale}"
         return "mse"
+    if model_name == "BalancedSoftmax":
+        dimension_weighting_enabled = config.get("dimension_weighting_enabled")
+        circumplex_regularizer_enabled = config.get("circumplex_regularizer_enabled")
+        if dimension_weighting_enabled and circumplex_regularizer_enabled:
+            return "balanced_softmax_dimweight_circreg"
+        if dimension_weighting_enabled:
+            return "balanced_softmax_dimweight"
+        if circumplex_regularizer_enabled:
+            return "balanced_softmax_circreg"
     return mapping.get(model_name, model_name.lower())
 
 
@@ -395,6 +419,8 @@ def _build_experiment_dict(
     selected_candidate = trained_result.get("selected_candidate", {})
     selection_policy = trained_result.get("selection_policy")
     selection_source = trained_result.get("selection_source")
+    promotion_eligible = trained_result.get("promotion_eligible")
+    debug_fallback_used = trained_result.get("debug_fallback_used")
     artifact_paths = trained_result.get("artifact_paths", {})
 
     # Training dynamics
@@ -438,6 +464,8 @@ def _build_experiment_dict(
                 "model_name": config.get("encoder_model", "unknown"),
                 "truncate_dim": config.get("truncate_dim"),
                 "text_prefix": config.get("text_prefix"),
+                "prompt_name": config.get("prompt_name"),
+                "prompt": config.get("prompt"),
                 "trust_remote_code": config.get("trust_remote_code"),
             },
             "state_encoder": {
@@ -479,6 +507,21 @@ def _build_experiment_dict(
                 "scheduler_patience": config.get("scheduler_patience", 10),
                 "seed": config.get("model_seed", config.get("seed", 42)),
                 "class_balance_source": config.get("class_balance_source"),
+                "circumplex_regularizer_enabled": config.get("circumplex_regularizer_enabled"),
+                "circumplex_regularizer_opposite_weight": config.get(
+                    "circumplex_regularizer_opposite_weight"
+                ),
+                "circumplex_regularizer_adjacent_weight": config.get(
+                    "circumplex_regularizer_adjacent_weight"
+                ),
+                "dimension_weighting_enabled": config.get("dimension_weighting_enabled"),
+                "dimension_weighting_mode": config.get("dimension_weighting_mode"),
+                "dimension_weighting_temperature": config.get("dimension_weighting_temperature"),
+                "dimension_weighting_ema_alpha": config.get("dimension_weighting_ema_alpha"),
+                "dimension_weighting_warmup_epochs": config.get("dimension_weighting_warmup_epochs"),
+                "dimension_weighting_eps": config.get("dimension_weighting_eps"),
+                "dimension_weighting_min": config.get("dimension_weighting_min"),
+                "dimension_weighting_max": config.get("dimension_weighting_max"),
                 "ldam_max_m": config.get("ldam_max_m"),
                 "ldam_scale": config.get("ldam_scale"),
                 "ldam_drw_start_epoch": config.get("ldam_drw_start_epoch"),
@@ -513,6 +556,8 @@ def _build_experiment_dict(
             "gap_at_best": _round_val(gap_at_best),
             "final_lr": _round_val(final_lr, dp=6),
             "selection_source": selection_source,
+            "promotion_eligible": promotion_eligible,
+            "debug_fallback_used": debug_fallback_used,
             "selection_metrics": {
                 "qwk_mean": _round_val(selected_candidate.get("qwk_mean")),
                 "recall_minus1": _round_val(selected_candidate.get("recall_minus1")),
@@ -547,10 +592,7 @@ def _build_experiment_dict(
         experiment["evaluation"]["circumplex_summary"] = _to_python(circumplex_summary)
         experiment["circumplex"] = _to_python(eval_result["circumplex"])
 
-    # Remove None values from encoder, training, and uncertainty config
-    experiment["config"]["encoder"] = {
-        k: v for k, v in experiment["config"]["encoder"].items() if v is not None
-    }
+    # Preserve explicit nulls in encoder config so input-mode provenance is visible.
     experiment["config"]["training"] = {
         k: v for k, v in experiment["config"]["training"].items() if v is not None
     }
@@ -603,6 +645,7 @@ def _format_index_row(data: dict) -> str:
     meta = data["metadata"]
     cfg = data["config"]
     ev = data["evaluation"]
+    circumplex_summary = ev.get("circumplex_summary", {})
 
     run_num = meta["run_id"].replace("run_", "")
     model = meta["model_name"]
@@ -622,12 +665,14 @@ def _format_index_row(data: dict) -> str:
     spear = _fmt_metric(ev["spearman_mean"])
     cal = _fmt_metric(ev["calibration_global"])
     minr = _fmt_metric(ev["minority_recall_mean"])
+    oppv = _fmt_metric(circumplex_summary.get("opposite_violation_mean"))
+    adjs = _fmt_metric(circumplex_summary.get("adjacent_support_mean"))
     file_path = f"runs/{meta['experiment_id']}.yaml"
 
     return (
         f"| {run_num} | {model} | {encoder} | {ws} | {hd} | {do} | "
         f"{loss} | {params} | {ratio} | {mae} | {acc} | {qwk} | "
-        f"{spear} | {cal} | {minr} | {file_path} |\n"
+        f"{spear} | {cal} | {minr} | {oppv} | {adjs} | {file_path} |\n"
     )
 
 
@@ -738,6 +783,8 @@ def log_experiment_run(
     results = []
 
     for model_name in trained_models:
+        if trained_models[model_name].get("promotion_eligible", True) is False:
+            continue
         # Skip models missing from any required metrics dict
         if model_name not in all_results:
             continue

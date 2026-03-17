@@ -214,6 +214,8 @@ The VIF Critic training pipeline is implemented in `src/vif/`. Key modules:
 > hyperparameters referenced below are illustrative. See `config/vif.yaml`
 > for current runtime values.
 
+> **Note:** [Value evolution detection](../evolution/01_value_evolution.md) is a post-hoc statistical analysis on Critic outputs (mean, standard deviation, residual over a window). It does not require changes to the training pipeline, loss function, or synthetic data — the Critic is trained to score individual entries, and evolution detection operates on the temporal *pattern* of those scores.
+
 ### 4.1 Implemented Architecture
 
 The current stack still implements **Option A (Immediate Alignment)**, but with
@@ -259,10 +261,18 @@ python -m src.vif.posthoc --help
 > Artifacts are saved to the checkpoint directory as `lr_find_loss_vs_lr.png`
 > and `lr_find_history.json` (or an override path via `--lr-find-output-path`).
 >
-> **Notebook entrypoint**:
-> For notebook-driven sweeps across the active ordinal heads
-> (**CORAL/CORN/EMD/CDWCE/SoftOrdinal/BalancedSoftmax/LDAM-DRW**), use
-> `notebooks/critic_training/v4/critic_training_v4.ipynb`.
+> **Non-finite loss termination (`src/vif/train.py`)**:
+> The MLP training script now aborts immediately if train or validation loss
+> becomes `NaN`/`Inf`, preserves any previously written `best_model.pt`, and
+> records divergence metadata in `training_log.json` under
+> `training_dynamics.termination`. Partial history and curve artifacts are
+> still written for the completed finite epochs.
+>
+> **Training entrypoints**:
+> Use `src/vif/train.py` for general single-model training with config and CLI
+> overrides. Use `scripts/experiments/critic_training_v4_review.py` for the
+> frontier review flow that runs paired or multi-model ordinal experiments and
+> writes experiment logging artifacts.
 
 Configuration: `config/vif.yaml`
-Scripts: `src/vif/train.py` and `src/vif/train_bnn.py`
+Scripts: `src/vif/train.py`, `src/vif/train_bnn.py`, and `scripts/experiments/critic_training_v4_review.py`

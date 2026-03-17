@@ -13,6 +13,8 @@ encoder:
   trust_remote_code: true
   truncate_dim: 256          # Matryoshka truncation (MTEB 61.04 @ 256d)
   text_prefix: "classification: "  # Required task prefix for nomic models
+  prompt_name: null          # Optional model-native prompt key
+  prompt: null               # Optional model-native prompt string
   # Alternatives for ablation:
   # model_name: all-MiniLM-L6-v2     # 384 dim, fast, good quality
   # model_name: all-mpnet-base-v2     # 768 dim, higher quality, slower
@@ -26,17 +28,19 @@ state_encoder:
 # Model Architecture
 # ------------------
 model:
-  hidden_dim: 32       # Reduced from 256 to control overfitting (~10k params)
+  hidden_dim: 64       # Current corrected-split frontier width (~23k params at ws=1)
   dropout: 0.3         # Increased from 0.2 for stronger regularization
   output_dim: 10       # Number of Schwartz dimensions (fixed)
 
 # Training Configuration
 # ----------------------
 training:
+  seed: 2025              # Model/init seed for notebook frontier runs
   epochs: 100
   batch_size: 16
   learning_rate: 0.001
   weight_decay: 0.01      # L2 regularization
+  class_balance_source: train_split_per_dimension
 
   # Learning rate scheduler
   scheduler:
@@ -52,10 +56,32 @@ training:
 
   # LR finder (runs before training by default in src/vif/train.py)
   lr_finder:
+    enabled: true
     start_lr: 0.0000001
     end_lr: 1.0
     num_iter: 200
     output_path: null     # Optional override path for loss-vs-LR plot artifact
+
+  dimension_weighting:
+    enabled: true
+    mode: inverse_loss
+    temperature: 0.5
+    ema_alpha: 0.3
+    warmup_epochs: 1
+    eps: 0.000001
+    min_weight: 0.5
+    max_weight: 1.5
+
+  circumplex_regularizer:
+    enabled: false
+    opposite_weight: 0.0
+    adjacent_weight: 0.0
+
+  ldam_drw:
+    max_m: 0.5
+    scale: 30.0
+    drw_start_epoch: 50
+    beta: 0.9999
 
 # Data Configuration
 # ------------------
@@ -64,7 +90,9 @@ data:
   wrangled_dir: logs/wrangled
   train_ratio: 0.70
   val_ratio: 0.15
-  seed: 42
+  seed: 2025                # Legacy shared-seed fallback for older scripts
+  split_seed: 2025          # Persona split seed for corrected-split frontier
+  fixed_holdout_manifest_path: null
 
 # MC Dropout / BNN Configuration
 # ------------------------------

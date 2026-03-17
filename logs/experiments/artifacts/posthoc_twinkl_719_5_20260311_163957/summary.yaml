@@ -1,0 +1,250 @@
+generated_at: '2026-03-11T16:39:57.911966'
+output_root: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_719_5_20260311_163957
+selection_policy:
+  name: recall_minus1_then_qwk_guarded
+  max_qwk_drop: 0.03
+  require_non_negative_calibration: true
+  rank_order:
+  - recall_minus1
+  - qwk_mean
+  - calibration_global
+  - decision_neutral_rate
+tuned_runs:
+- run_id: run_020
+  model_name: BalancedSoftmax
+  selected_policy:
+    policy_name: logit_adjustment_tau_0.30
+    policy_family: softmax_logit_adjustment
+    policy_payload:
+      type: logit_adjustment
+      tau: 0.3
+      prior_source: train_split
+      class_order:
+      - -1
+      - 0
+      - 1
+      per_dimension_priors:
+        self_direction:
+        - 0.14548641542555962
+        - 0.6099912357573796
+        - 0.24452234881706086
+        stimulation:
+        - 0.04469763365544777
+        - 0.8834355828206395
+        - 0.07186678352391271
+        hedonism:
+        - 0.0797546012276606
+        - 0.8238387379478778
+        - 0.09640666082446168
+        achievement:
+        - 0.04907975460197437
+        - 0.6783523225231946
+        - 0.2725679228748311
+        power:
+        - 0.08150744960627124
+        - 0.8247151621371831
+        - 0.09377738825654573
+        security:
+        - 0.0797546012276606
+        - 0.7388255915852616
+        - 0.18141980718707776
+        conformity:
+        - 0.07800175284904996
+        - 0.7063978965809647
+        - 0.21560035056998528
+        tradition:
+        - 0.0333041191944786
+        - 0.8203330411906564
+        - 0.14636283961486496
+        benevolence:
+        - 0.08238387379557656
+        - 0.6415425065723711
+        - 0.2760736196320524
+        universalism:
+        - 0.0333041191944786
+        - 0.8895705521457767
+        - 0.07712532865974464
+  selection_score:
+    rank_key:
+    - 0.4726618639228442
+    - 0.3803313281020466
+    - 0.5562172237406916
+    - -0.7267281105990784
+    baseline_qwk_mean: 0.40410459172524443
+    tuned_qwk_mean: 0.3803313281020466
+    qwk_delta: -0.023773263623197816
+  baseline_validation_metrics:
+    qwk_mean: 0.40410459172524443
+    recall_minus1: 0.4596725388261337
+    minority_recall_mean: 0.5192799897044847
+    hedging_mean: 0.5903225806451612
+    decision_neutral_rate: 0.7064516129032258
+    calibration_global: 0.7040342213338711
+    circumplex_summary:
+      opposite_violation_mean: 0.07905783402754007
+      adjacent_support_mean: 0.07789833239155687
+  validation_metrics:
+    qwk_mean: 0.3803313281020466
+    recall_minus1: 0.4726618639228442
+    minority_recall_mean: 0.4619538799120181
+    hedging_mean: 0.5539170506912442
+    decision_neutral_rate: 0.7267281105990784
+    calibration_global: 0.5562172237406916
+    circumplex_summary:
+      opposite_violation_mean: 0.11842025962288237
+      adjacent_support_mean: 0.08852502345089287
+  baseline_test_metrics:
+    qwk_mean: 0.37770420814541467
+    recall_minus1: 0.3416036922015183
+    minority_recall_mean: 0.4491665697479485
+    hedging_mean: 0.6212669683257919
+    decision_neutral_rate: 0.7221719457013575
+    calibration_global: 0.7134396413232043
+    circumplex_summary:
+      opposite_violation_mean: 0.06991981668417245
+      adjacent_support_mean: 0.07679919464871653
+  test_metrics:
+    qwk_mean: 0.3382759578522675
+    recall_minus1: 0.3495548654244306
+    minority_recall_mean: 0.3967553586446607
+    hedging_mean: 0.5615384615384615
+    decision_neutral_rate: 0.7398190045248869
+    calibration_global: 0.5826973075626088
+    circumplex_summary:
+      opposite_violation_mean: 0.1068274707919367
+      adjacent_support_mean: 0.08894407887442489
+  artifact_dir: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_719_5_20260311_163957/run_020_BalancedSoftmax
+  selected_policy_path: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_719_5_20260311_163957/run_020_BalancedSoftmax/selected_policy.yaml
+  metrics_summary_path: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_719_5_20260311_163957/run_020_BalancedSoftmax/metrics_summary.yaml
+- run_id: run_036
+  model_name: BalancedSoftmax
+  selected_policy:
+    policy_name: logit_adjustment_tau_0.00
+    policy_family: softmax_logit_adjustment
+    policy_payload:
+      type: logit_adjustment
+      tau: 0.0
+      prior_source: train_split
+      class_order:
+      - -1
+      - 0
+      - 1
+      per_dimension_priors:
+        self_direction:
+        - 0.14548641542555962
+        - 0.6099912357573796
+        - 0.24452234881706086
+        stimulation:
+        - 0.04469763365544777
+        - 0.8834355828206395
+        - 0.07186678352391271
+        hedonism:
+        - 0.0797546012276606
+        - 0.8238387379478778
+        - 0.09640666082446168
+        achievement:
+        - 0.04907975460197437
+        - 0.6783523225231946
+        - 0.2725679228748311
+        power:
+        - 0.08150744960627124
+        - 0.8247151621371831
+        - 0.09377738825654573
+        security:
+        - 0.0797546012276606
+        - 0.7388255915852616
+        - 0.18141980718707776
+        conformity:
+        - 0.07800175284904996
+        - 0.7063978965809647
+        - 0.21560035056998528
+        tradition:
+        - 0.0333041191944786
+        - 0.8203330411906564
+        - 0.14636283961486496
+        benevolence:
+        - 0.08238387379557656
+        - 0.6415425065723711
+        - 0.2760736196320524
+        universalism:
+        - 0.0333041191944786
+        - 0.8895705521457767
+        - 0.07712532865974464
+  selection_score:
+    rank_key:
+    - 0.4621852661478593
+    - 0.40526711527924136
+    - 0.7236141786935492
+    - -0.7046082949308756
+    baseline_qwk_mean: 0.40526711527924136
+    tuned_qwk_mean: 0.40526711527924136
+    qwk_delta: 0.0
+  baseline_validation_metrics:
+    qwk_mean: 0.40526711527924136
+    recall_minus1: 0.4621852661478593
+    minority_recall_mean: 0.5133730619540198
+    hedging_mean: 0.6078341013824884
+    decision_neutral_rate: 0.7046082949308756
+    calibration_global: 0.7236141786935492
+    circumplex_summary:
+      opposite_violation_mean: 0.07423491232572292
+      adjacent_support_mean: 0.07245466938084533
+  validation_metrics:
+    qwk_mean: 0.40526711527924136
+    recall_minus1: 0.4621852661478593
+    minority_recall_mean: 0.5133730619540198
+    hedging_mean: 0.6078341013824884
+    decision_neutral_rate: 0.7046082949308756
+    calibration_global: 0.7236141786935492
+    circumplex_summary:
+      opposite_violation_mean: 0.07423491232572292
+      adjacent_support_mean: 0.07245466938084533
+  baseline_test_metrics:
+    qwk_mean: 0.3806709745747184
+    recall_minus1: 0.3865536576949621
+    minority_recall_mean: 0.4917577960194522
+    hedging_mean: 0.5986425339366516
+    decision_neutral_rate: 0.7054298642533937
+    calibration_global: 0.7262955759983706
+    circumplex_summary:
+      opposite_violation_mean: 0.06802013856159353
+      adjacent_support_mean: 0.0840775980742639
+  test_metrics:
+    qwk_mean: 0.3806709745747184
+    recall_minus1: 0.3865536576949621
+    minority_recall_mean: 0.4917577960194522
+    hedging_mean: 0.5986425339366516
+    decision_neutral_rate: 0.7054298642533937
+    calibration_global: 0.7262955759983706
+    circumplex_summary:
+      opposite_violation_mean: 0.06802013856159353
+      adjacent_support_mean: 0.0840775980742639
+  artifact_dir: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_719_5_20260311_163957/run_036_BalancedSoftmax
+  selected_policy_path: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_719_5_20260311_163957/run_036_BalancedSoftmax/selected_policy.yaml
+  metrics_summary_path: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_719_5_20260311_163957/run_036_BalancedSoftmax/metrics_summary.yaml
+summary_by_model:
+  BalancedSoftmax:
+    qwk_mean_median: 0.35947346621349296
+    recall_minus1_median: 0.36805426155969634
+    minority_recall_mean_median: 0.4442565773320565
+    hedging_mean_median: 0.5800904977375565
+    decision_neutral_rate_median: 0.7226244343891404
+    calibration_global_median: 0.6544964417804897
+    opposite_violation_mean_median: 0.08742380467676511
+    adjacent_support_mean_median: 0.0865108384743444
+    qwk_mean_iqr: 0.021197508361225414
+    recall_minus1_iqr: 0.018499396135265744
+    minority_recall_mean_iqr: 0.04750121868739571
+    hedging_mean_iqr: 0.018552036199095068
+    decision_neutral_rate_iqr: 0.017194570135746656
+    calibration_global_iqr: 0.07179913421788076
+    opposite_violation_mean_iqr: 0.019403666115171594
+    adjacent_support_mean_iqr: 0.002433240400080486
+family_delta_summary:
+  softmax_logit_adjustment:
+    median_recall_minus1_delta: 0.003975586611456139
+    median_qwk_mean_delta: -0.019714125146573586
+    median_hedging_mean_delta: -0.029864253393665163
+    median_opposite_violation_mean_delta: 0.018453827053882127
+    median_adjacent_support_mean_delta: 0.006072442112854182
+recommended_softmax_base: BalancedSoftmax

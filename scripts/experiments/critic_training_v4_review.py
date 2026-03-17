@@ -1,3 +1,10 @@
+"""Experiment driver for the V4 VIF critic frontier.
+
+This script preserves the cell-structured flow of the original V4 training
+notebook while serving as the canonical runnable driver for frontier review
+experiments. The interactive notebook remains at
+`notebooks/critic_training/v4/critic_training_v4.ipynb`.
+"""
 
 # ==== CELL 2 ====
 from pathlib import Path
@@ -27,25 +34,42 @@ if not _cfg_path.is_file():
     raise FileNotFoundError(f"Could not locate config file: {_cfg_path}")
 
 _vif_cfg = yaml.safe_load(_cfg_path.read_text())
+_encoder_defaults = _vif_cfg["encoder"]
+_state_defaults = _vif_cfg["state_encoder"]
+_model_defaults = _vif_cfg["model"]
 _training_defaults = _vif_cfg["training"]
+_data_defaults = _vif_cfg["data"]
+_mc_dropout_defaults = _vif_cfg["mc_dropout"]
+_output_defaults = _vif_cfg.get("output", {})
 _scheduler_defaults = _training_defaults["scheduler"]
 _lr_finder_defaults = _training_defaults["lr_finder"]
+_dimension_weighting_defaults = _training_defaults.get("dimension_weighting", {})
+_circumplex_defaults = _training_defaults.get("circumplex_regularizer", {})
+_ldam_defaults = _training_defaults.get("ldam_drw", {})
+
+_split_seed = int(_data_defaults.get("split_seed", _data_defaults.get("seed", 42)))
+_model_seed = int(_training_defaults.get("seed", _split_seed))
+_lr_finder_output_dir = (
+    Path(_output_defaults.get("checkpoint_dir", "models/vif")) / "lr_find_ordinal_v4"
+)
 
 lr_finder_cfg = {
     "start_lr": _lr_finder_defaults["start_lr"],
     "end_lr": _lr_finder_defaults["end_lr"],
     "num_iter": _lr_finder_defaults["num_iter"],
-    "output_dir": "models/vif/lr_find_ordinal_v4",
+    "output_dir": str(_lr_finder_output_dir),
 }
 if "max_selected_lr" in _lr_finder_defaults:
     lr_finder_cfg["max_selected_lr"] = _lr_finder_defaults["max_selected_lr"]
 
 CONFIG = {
-    # Encoder
-    "encoder_model": "nomic-ai/nomic-embed-text-v1.5",
-    "trust_remote_code": True,
-    "truncate_dim": 256,  # Matryoshka truncation (MTEB 61.04 @ 256d)
-    "text_prefix": "classification: ",  # Required task prefix for nomic models
+    # Canonical runtime defaults sourced from config/vif.yaml
+    "encoder_model": _encoder_defaults["model_name"],
+    "trust_remote_code": _encoder_defaults.get("trust_remote_code", True),
+    "truncate_dim": _encoder_defaults["truncate_dim"],
+    "text_prefix": _encoder_defaults.get("text_prefix", "classification: "),
+    "prompt_name": _encoder_defaults.get("prompt_name"),
+    "prompt": _encoder_defaults.get("prompt"),
     # Models to compare (previous 4 frontier runs + CDW-CE alpha sweep)
     "models_to_train": [
         "CORAL",
@@ -57,10 +81,10 @@ CONFIG = {
         "CDWCE_a5",
     ],
     "model_overrides": {},
-    # Model
-    "hidden_dim": 64,
-    "dropout": 0.3,
-    # Optimizer / training (sourced from config/vif.yaml)
+    "selection_policy": {},
+    # Model / training
+    "hidden_dim": _model_defaults["hidden_dim"],
+    "dropout": _model_defaults["dropout"],
     "learning_rate": _training_defaults["learning_rate"],
     "weight_decay": _training_defaults["weight_decay"],
     "batch_size": _training_defaults["batch_size"],
@@ -73,22 +97,33 @@ CONFIG = {
     "scheduler_patience": _scheduler_defaults["patience"],
     "scheduler_min_lr": _scheduler_defaults["min_lr"],
     # State encoder
-    "window_size": 1,
+    "window_size": _state_defaults["window_size"],
     # MC Dropout
-    "mc_dropout_samples": 50,
+    "mc_dropout_samples": _mc_dropout_defaults["n_samples"],
     # Data split / training seeds
-    "train_ratio": 0.70,
-    "val_ratio": 0.15,
-    "split_seed": 2025,
-    "model_seed": 2025,
-    "fixed_holdout_manifest_path": None,
-    "class_balance_source": "train_split_per_dimension",
-    "ldam_max_m": 0.5,
-    "ldam_scale": 30.0,
-    "ldam_drw_start_epoch": 50,
-    "ldam_beta": 0.9999,
+    "train_ratio": _data_defaults["train_ratio"],
+    "val_ratio": _data_defaults["val_ratio"],
+    "split_seed": _split_seed,
+    "model_seed": _model_seed,
+    "fixed_holdout_manifest_path": _data_defaults.get("fixed_holdout_manifest_path"),
+    "class_balance_source": _training_defaults.get("class_balance_source"),
+    "circumplex_regularizer_enabled": _circumplex_defaults.get("enabled", False),
+    "circumplex_regularizer_opposite_weight": _circumplex_defaults.get("opposite_weight", 0.0),
+    "circumplex_regularizer_adjacent_weight": _circumplex_defaults.get("adjacent_weight", 0.0),
+    "dimension_weighting_enabled": _dimension_weighting_defaults.get("enabled", False),
+    "dimension_weighting_mode": _dimension_weighting_defaults.get("mode", "inverse_loss"),
+    "dimension_weighting_temperature": _dimension_weighting_defaults.get("temperature", 0.5),
+    "dimension_weighting_ema_alpha": _dimension_weighting_defaults.get("ema_alpha", 0.3),
+    "dimension_weighting_warmup_epochs": _dimension_weighting_defaults.get("warmup_epochs", 1),
+    "dimension_weighting_eps": _dimension_weighting_defaults.get("eps", 1e-6),
+    "dimension_weighting_min": _dimension_weighting_defaults.get("min_weight", 0.5),
+    "dimension_weighting_max": _dimension_weighting_defaults.get("max_weight", 1.5),
+    "ldam_max_m": _ldam_defaults.get("max_m", 0.5),
+    "ldam_scale": _ldam_defaults.get("scale", 30.0),
+    "ldam_drw_start_epoch": _ldam_defaults.get("drw_start_epoch", 50),
+    "ldam_beta": _ldam_defaults.get("beta", 0.9999),
     # LR finder config
-    "use_lr_finder": True,
+    "use_lr_finder": _lr_finder_defaults.get("enabled", True),
     "lr_finder": lr_finder_cfg,
     # Optional metadata for scripted runs
     "experiment_group": None,
@@ -124,6 +159,7 @@ CONFIG["split_seed"] = int(CONFIG["split_seed"])
 CONFIG["model_seed"] = int(CONFIG["model_seed"])
 CONFIG["models_to_train"] = list(CONFIG["models_to_train"])
 CONFIG["model_overrides"] = dict(CONFIG.get("model_overrides", {}))
+CONFIG["selection_policy"] = dict(CONFIG.get("selection_policy", {}))
 
 print("=" * 50)
 print("CONFIGURATION")
@@ -132,6 +168,8 @@ for key in [
     "encoder_model",
     "truncate_dim",
     "text_prefix",
+    "prompt_name",
+    "prompt",
     "hidden_dim",
     "dropout",
     "window_size",
@@ -145,14 +183,29 @@ for key in [
     "model_seed",
     "fixed_holdout_manifest_path",
     "class_balance_source",
+    "circumplex_regularizer_enabled",
+    "circumplex_regularizer_opposite_weight",
+    "circumplex_regularizer_adjacent_weight",
+    "dimension_weighting_enabled",
+    "dimension_weighting_mode",
+    "dimension_weighting_temperature",
+    "dimension_weighting_ema_alpha",
+    "dimension_weighting_warmup_epochs",
+    "dimension_weighting_eps",
+    "dimension_weighting_min",
+    "dimension_weighting_max",
     "use_lr_finder",
     "experiment_group",
     "skip_experiment_logging",
 ]:
-    print(f"  {key:<30s} {str(CONFIG.get(key)):>15s}")
+    value = CONFIG.get(key)
+    display = json.dumps(value) if key in {"text_prefix", "prompt_name", "prompt"} else str(value)
+    print(f"  {key:<30s} {display:>15s}")
 print(f"  {'models_to_train':<30s} {CONFIG['models_to_train']}")
 print("  model_overrides:")
 print(json.dumps(CONFIG["model_overrides"], indent=2, sort_keys=True))
+print("  selection_policy:")
+print(json.dumps(CONFIG["selection_policy"], indent=2, sort_keys=True))
 print("=" * 50)
 
 # ==== CELL 4 ====
@@ -221,23 +274,31 @@ from src.vif.critic_ordinal import (
     CriticMLPCDWCE,
     cdw_ce_loss_multi,
     CriticMLPBalancedSoftmax,
+    balanced_softmax_ce_per_dimension,
     balanced_softmax_loss_multi,
+    compute_inverse_loss_dimension_weights,
     CriticMLPLDAMDRW,
     ldam_drw_loss_multi,
     CriticMLPSoftOrdinal,
     soft_ordinal_loss_multi,
+    validate_dimension_weighting_config,
 )
 from src.vif.eval import (
     build_ordinal_selection_candidate,
     discretize_predictions,
     evaluate_with_uncertainty,
     export_ordinal_output_artifact,
+    finalize_ordinal_checkpoint_selection,
     format_results_table,
     is_better_ordinal_candidate,
     ordinal_selection_policy_summary,
 )
 from src.vif.lr_finder import run_lr_finder
 from src.vif.class_balance import compute_long_tail_statistics_from_dataframe
+from src.vif.training_traces import (
+    build_dimension_weight_trace_frame,
+    build_selection_trace_frame,
+)
 from src.models.judge import SCHWARTZ_VALUE_ORDER
 
 # Reproducibility
@@ -269,7 +330,6 @@ print(f"Labels shape:  {labels_df.shape}")
 print(f"Entries shape: {entries_df.shape}")
 print(f"Merged shape:  {merged_df.shape}")
 print(f"Unique personas: {merged_df.select('persona_id').n_unique()}")
-
 
 # ==== CELL 9 ====
 labels_df.head().glimpse()
@@ -383,6 +443,8 @@ text_encoder = SBERTEncoder(
     trust_remote_code=CONFIG["trust_remote_code"],
     truncate_dim=CONFIG["truncate_dim"],
     text_prefix=CONFIG["text_prefix"],
+    prompt_name=CONFIG.get("prompt_name"),
+    prompt=CONFIG.get("prompt"),
 )
 state_encoder = StateEncoder(
     text_encoder,
@@ -421,8 +483,7 @@ print(f"{(sample['response_text'] or '')[:200]}")
 
 # ==== CELL 22 ====
 # Cell 2c — Entry length / truncation risk
-tokenizer = text_encoder._model.tokenizer
-max_seq_length = text_encoder._model.max_seq_length
+max_seq_length = text_encoder.max_seq_length
 
 all_texts = []
 for row in merged_df.iter_rows(named=True):
@@ -431,12 +492,7 @@ for row in merged_df.iter_rows(named=True):
     )
     all_texts.append(text)
 
-token_counts = []
-for text in all_texts:
-    tokens = tokenizer.encode(text, add_special_tokens=True)
-    token_counts.append(len(tokens))
-
-token_counts = np.array(token_counts)
+token_counts = np.array(text_encoder.count_tokens(all_texts))
 n_truncated = (token_counts > max_seq_length).sum()
 pct_truncated = n_truncated / len(token_counts) * 100
 
@@ -510,9 +566,20 @@ MODEL_CONFIGS = {
         "loss_fn": balanced_softmax_loss_multi,
         "loss_fn_factory": (
             lambda *, _config, class_stats: (
-                lambda _epoch: partial(
+                lambda _epoch, dimension_weights=None: partial(
                     balanced_softmax_loss_multi,
                     class_priors=class_stats["class_priors"],
+                    dimension_weights=dimension_weights,
+                    circumplex_regularizer_opposite_weight=(
+                        float(_config.get("circumplex_regularizer_opposite_weight", 0.0))
+                        if _config.get("circumplex_regularizer_enabled")
+                        else 0.0
+                    ),
+                    circumplex_regularizer_adjacent_weight=(
+                        float(_config.get("circumplex_regularizer_adjacent_weight", 0.0))
+                        if _config.get("circumplex_regularizer_enabled")
+                        else 0.0
+                    ),
                 )
             )
         ),
@@ -538,7 +605,6 @@ MODEL_CONFIGS = {
     },
 }
 
-
 # ==== CELL 26 ====
 # Filter to active models
 active_models = {
@@ -548,7 +614,6 @@ active_models = {
 print(f"MODEL_CONFIGS defined: {list(MODEL_CONFIGS.keys())}")
 print(f"models_to_train: {CONFIG['models_to_train']}")
 print(f"Active models: {list(active_models.keys())}")
-
 
 # ==== CELL 28 ====
 print("Creating datasets (caching embeddings)...")
@@ -605,7 +670,6 @@ if not active_models:
 
 print(f"Using ordinal models: {', '.join(active_models.keys())}")
 
-
 # ==== CELL 30 ====
 print(f"\n{'Model':<15s} {'Parameters':>12s} {'Output logits':>15s} {'Loss':>25s}")
 print("-" * 70)
@@ -651,7 +715,7 @@ else:
 # Cell 3d - Multi-model training loop with optional per-model LR policy
 
 
-ORDINAL_SELECTION_POLICY = ordinal_selection_policy_summary()
+ORDINAL_SELECTION_POLICY = ordinal_selection_policy_summary(CONFIG.get("selection_policy"))
 ordinal_run_tag = (
     f"ordinal_v4_s{CONFIG['split_seed']}_m{CONFIG['model_seed']}_"
     f"{datetime.now().strftime('%Y%m%d_%H%M%S')}"
@@ -689,7 +753,7 @@ def _build_epoch_loss_fn(model_cfg, config, class_stats):
     factory = model_cfg.get("loss_fn_factory")
     if factory is None:
         static_loss = model_cfg["loss_fn"]
-        return lambda _epoch: static_loss
+        return lambda _epoch, _dimension_weights=None: static_loss
     return factory(_config=config, class_stats=class_stats)
 
 
@@ -697,22 +761,92 @@ def _save_selected_checkpoint(
     model,
     selected_candidate,
     selection_source,
+    selection_policy,
+    promotion_eligible,
+    debug_fallback_used,
     config,
     output_dir,
+    filename="selected_checkpoint.pt",
 ):
-    checkpoint_path = output_dir / "selected_checkpoint.pt"
+    checkpoint_path = output_dir / filename
     checkpoint = {
         "epoch": int(selected_candidate["epoch"]),
         "val_loss": float(selected_candidate["val_loss"]),
         "selection_source": selection_source,
+        "promotion_eligible": promotion_eligible,
+        "debug_fallback_used": debug_fallback_used,
         "selection_candidate": selected_candidate,
-        "selection_policy": ordinal_selection_policy_summary(),
+        "selection_policy": selection_policy,
         "model_state_dict": _clone_model_state(model),
         "model_config": model.get_config(),
         "training_config": config,
     }
     torch.save(checkpoint, checkpoint_path)
     return checkpoint_path
+
+
+def _resolve_dimension_weighting_config(model_name, config):
+    if model_name != "BalancedSoftmax" or not config.get("dimension_weighting_enabled", False):
+        return None
+    return validate_dimension_weighting_config(
+        mode=config.get("dimension_weighting_mode", "inverse_loss"),
+        temperature=config.get("dimension_weighting_temperature", 0.5),
+        ema_alpha=config.get("dimension_weighting_ema_alpha", 0.3),
+        warmup_epochs=config.get("dimension_weighting_warmup_epochs", 1),
+        eps=config.get("dimension_weighting_eps", 1e-6),
+        min_weight=config.get("dimension_weighting_min", 0.5),
+        max_weight=config.get("dimension_weighting_max", 1.5),
+    )
+
+
+def _write_selection_trace(output_path, candidate_trace, history):
+    trace_df = build_selection_trace_frame(candidate_trace, history)
+    trace_df.write_parquet(output_path)
+    return output_path
+
+
+def _write_dimension_weight_trace(
+    output_path,
+    epoch_diagnostics,
+    *,
+    selected_candidate,
+):
+    selected_epoch = None
+    if selected_candidate:
+        selected_epoch = int(selected_candidate["epoch"])
+    trace_df = build_dimension_weight_trace_frame(
+        epoch_diagnostics,
+        selected_epoch=selected_epoch,
+    )
+    trace_df.write_parquet(output_path)
+    return output_path
+
+
+def _write_selection_summary(
+    output_path,
+    *,
+    selection_policy,
+    selected_candidate,
+    selection_source,
+    promotion_eligible,
+    debug_fallback_used,
+    candidate_trace,
+):
+    eligible_epoch_count = sum(1 for candidate in candidate_trace if candidate["eligible"])
+    summary = {
+        "selection_policy": selection_policy,
+        "selection_source": selection_source,
+        "promotion_eligible": bool(promotion_eligible),
+        "debug_fallback_used": bool(debug_fallback_used),
+        "selected_candidate": selected_candidate or None,
+        "eligible_epoch_count": int(eligible_epoch_count),
+        "ineligible_epoch_count": int(len(candidate_trace) - eligible_epoch_count),
+    }
+    output_path.write_text(
+        yaml.safe_dump(summary, sort_keys=False),
+        encoding="utf-8",
+    )
+    return output_path
 
 
 def train_model(name, model_cfg, train_loader, val_loader, config, device, class_stats):
@@ -731,6 +865,16 @@ def train_model(name, model_cfg, train_loader, val_loader, config, device, class
     model.to(device)
 
     epoch_loss_fn = _build_epoch_loss_fn(model_cfg, config, class_stats)
+    track_dimension_weights = name == "BalancedSoftmax"
+    dimension_weighting_config = _resolve_dimension_weighting_config(name, config)
+    current_dimension_weights = None
+    train_ce_ema = None
+    if track_dimension_weights:
+        current_dimension_weights = torch.ones(
+            len(SCHWARTZ_VALUE_ORDER),
+            dtype=torch.float32,
+        )
+    selection_policy = ordinal_selection_policy_summary(config.get("selection_policy"))
     configured_lr = config["learning_rate"]
     learning_rate_policy = config.get("learning_rate_policy")
 
@@ -746,7 +890,7 @@ def train_model(name, model_cfg, train_loader, val_loader, config, device, class
         lr_finder_result = run_lr_finder(
             model=model,
             train_loader=train_loader,
-            criterion=epoch_loss_fn(0),
+            criterion=epoch_loss_fn(0, current_dimension_weights),
             configured_learning_rate=configured_lr,
             weight_decay=config["weight_decay"],
             device=device,
@@ -850,22 +994,54 @@ def train_model(name, model_cfg, train_loader, val_loader, config, device, class
     best_model_state = None
     fallback_candidate = None
     fallback_model_state = None
+    candidate_trace = []
+    dimension_weight_epoch_diagnostics = []
     patience_counter = 0
 
     for epoch in range(config["epochs"]):
-        loss_fn = epoch_loss_fn(epoch)
+        applied_dimension_weights = None
+        train_ce_sum = None
+        train_ce_mean = None
+        if track_dimension_weights:
+            applied_dimension_weights = current_dimension_weights.clone()
+            train_ce_sum = torch.zeros(
+                len(SCHWARTZ_VALUE_ORDER),
+                dtype=torch.float64,
+            )
+        loss_fn = epoch_loss_fn(epoch, applied_dimension_weights)
         # Train
         model.train()
         train_loss = 0.0
+        train_sample_count = 0
         for batch_x, batch_y in train_loader:
             batch_x, batch_y = batch_x.to(device), batch_y.to(device)
             optimizer.zero_grad()
             output = model(batch_x)
+            if track_dimension_weights:
+                with torch.no_grad():
+                    batch_ce_mean = balanced_softmax_ce_per_dimension(
+                        output,
+                        batch_y,
+                        class_priors=class_stats["class_priors"],
+                    )
+                batch_size = batch_y.size(0)
+                train_ce_sum += batch_ce_mean.detach().cpu().to(torch.float64) * batch_size
+                train_sample_count += batch_size
             loss = loss_fn(output, batch_y)
             loss.backward()
             optimizer.step()
             train_loss += loss.item()
         train_loss /= len(train_loader)
+        if track_dimension_weights:
+            train_ce_mean = (train_ce_sum / train_sample_count).to(dtype=torch.float32)
+            if train_ce_ema is None or dimension_weighting_config is None:
+                train_ce_ema = train_ce_mean.clone()
+            else:
+                ema_alpha = float(dimension_weighting_config["ema_alpha"])
+                train_ce_ema = (
+                    ema_alpha * train_ce_mean
+                    + (1.0 - ema_alpha) * train_ce_ema
+                )
 
         # Validate on raw loss
         model.eval()
@@ -895,7 +1071,23 @@ def train_model(name, model_cfg, train_loader, val_loader, config, device, class
             epoch=epoch,
             val_loss=val_loss,
             eval_result=val_eval_result,
+            selection_policy=selection_policy,
         )
+        candidate_trace.append(dict(candidate))
+        if track_dimension_weights:
+            dimension_weight_epoch_diagnostics.append(
+                {
+                    "epoch": int(epoch),
+                    "train_ce_mean": train_ce_mean.tolist(),
+                    "train_ce_ema": train_ce_ema.tolist(),
+                    "applied_weight": applied_dimension_weights.tolist(),
+                    "val_qwk_per_dim": val_eval_result["qwk_per_dim"],
+                    "val_accuracy_per_dim": val_eval_result["accuracy_per_dim"],
+                    "val_hedging_per_dim": val_eval_result["hedging_per_dim"],
+                    "val_recall_per_class_per_dim": val_eval_result["recall_per_class"]["per_dim"],
+                    "eligible": bool(candidate["eligible"]),
+                }
+            )
 
         history["train_loss"].append(train_loss)
         history["val_loss"].append(val_loss)
@@ -948,18 +1140,56 @@ def train_model(name, model_cfg, train_loader, val_loader, config, device, class
             print(f"  Early stopping at epoch {epoch + 1}")
             break
 
+        if track_dimension_weights and dimension_weighting_config is not None:
+            if (epoch + 1) >= int(dimension_weighting_config["warmup_epochs"]):
+                current_dimension_weights = compute_inverse_loss_dimension_weights(
+                    train_ce_ema,
+                    mode=dimension_weighting_config["mode"],
+                    temperature=dimension_weighting_config["temperature"],
+                    eps=dimension_weighting_config["eps"],
+                    min_weight=dimension_weighting_config["min_weight"],
+                    max_weight=dimension_weighting_config["max_weight"],
+                )
+            else:
+                current_dimension_weights = torch.ones_like(current_dimension_weights)
+
     artifact_dir = ordinal_artifact_root / name
-    selection_policy = ordinal_selection_policy_summary()
-    if best_candidate is not None:
-        selected_candidate = dict(best_candidate)
-        selected_model_state = best_model_state
-        selection_source = "eligible_policy"
-    elif fallback_candidate is not None:
-        selected_candidate = dict(fallback_candidate)
-        selected_candidate["fallback_reason"] = "no_eligible_epoch"
-        selected_model_state = fallback_model_state
-        selection_source = "fallback_best_finite_qwk"
-    else:
+    artifact_dir.mkdir(parents=True, exist_ok=True)
+    selection_outcome = finalize_ordinal_checkpoint_selection(
+        best_candidate=best_candidate,
+        fallback_candidate=fallback_candidate,
+        selection_policy=selection_policy,
+    )
+    selected_candidate = selection_outcome["selected_candidate"]
+    selection_source = selection_outcome["selection_source"]
+    promotion_eligible = selection_outcome["promotion_eligible"]
+    debug_fallback_used = selection_outcome["debug_fallback_used"]
+    selection_trace_path = _write_selection_trace(
+        artifact_dir / "selection_trace.parquet",
+        candidate_trace,
+        history,
+    )
+    selection_summary_path = _write_selection_summary(
+        artifact_dir / "selection_summary.yaml",
+        selection_policy=selection_policy,
+        selected_candidate=selected_candidate,
+        selection_source=selection_source,
+        promotion_eligible=promotion_eligible,
+        debug_fallback_used=debug_fallback_used,
+        candidate_trace=candidate_trace,
+    )
+    artifact_paths = {
+        "selection_trace": str(selection_trace_path),
+        "selection_summary": str(selection_summary_path),
+    }
+    if track_dimension_weights:
+        dimension_weight_trace_path = _write_dimension_weight_trace(
+            artifact_dir / "dimension_weight_trace.parquet",
+            dimension_weight_epoch_diagnostics,
+            selected_candidate=selected_candidate,
+        )
+        artifact_paths["dimension_weight_trace"] = str(dimension_weight_trace_path)
+    if not selected_candidate:
         print("  No finite-QWK epochs available for checkpoint selection.")
         return {
             "model": None,
@@ -975,22 +1205,32 @@ def train_model(name, model_cfg, train_loader, val_loader, config, device, class
             "learning_rate_policy": learning_rate_policy,
             "selected_candidate": {},
             "selection_policy": selection_policy,
-            "selection_source": "no_finite_qwk",
-            "artifact_paths": {},
+            "selection_source": selection_source,
+            "promotion_eligible": promotion_eligible,
+            "debug_fallback_used": debug_fallback_used,
+            "artifact_paths": artifact_paths,
             "artifact_dir": str(artifact_dir),
         }
 
+    selected_model_state = best_model_state if best_candidate is not None else fallback_model_state
     model.load_state_dict(selected_model_state)
     model.to(device)
 
-    artifact_dir.mkdir(parents=True, exist_ok=True)
+    checkpoint_filename = (
+        "selected_checkpoint.pt" if promotion_eligible else "debug_fallback_checkpoint.pt"
+    )
     checkpoint_path = _save_selected_checkpoint(
         model,
         selected_candidate,
         selection_source,
+        selection_policy,
+        promotion_eligible,
+        debug_fallback_used,
         config,
         artifact_dir,
+        filename=checkpoint_filename,
     )
+    artifact_paths["checkpoint"] = str(checkpoint_path)
 
     return {
         "model": model,
@@ -1007,9 +1247,9 @@ def train_model(name, model_cfg, train_loader, val_loader, config, device, class
         "selected_candidate": selected_candidate,
         "selection_policy": selection_policy,
         "selection_source": selection_source,
-        "artifact_paths": {
-            "checkpoint": str(checkpoint_path),
-        },
+        "promotion_eligible": promotion_eligible,
+        "debug_fallback_used": debug_fallback_used,
+        "artifact_paths": artifact_paths,
         "artifact_dir": str(artifact_dir),
     }
 
@@ -1032,6 +1272,10 @@ for name, cfg in active_models.items():
         print(
             f"  LR policy: {model_run_config['learning_rate_policy']}"
         )
+    print(
+        "  Selection policy: "
+        f"{json.dumps(ordinal_selection_policy_summary(model_run_config.get('selection_policy')), sort_keys=True)}"
+    )
     result = train_model(
         name,
         cfg,
@@ -1053,8 +1297,11 @@ for name, cfg in active_models.items():
         continue
 
     trained_models[name] = result
+    selection_label = (
+        "Selected checkpoint" if result.get("promotion_eligible", True) else "Debug fallback checkpoint"
+    )
     print(
-        f"  Selected checkpoint: epoch {result['best_epoch'] + 1}/{n_epochs}; "
+        f"  {selection_label}: epoch {result['best_epoch'] + 1}/{n_epochs}; "
         f"val={selected_candidate['val_loss']:.4f}; "
         f"qwk={_fmt_metric(selected_candidate['qwk_mean'])}; "
         f"recall_-1={_fmt_metric(selected_candidate['recall_minus1'])}; "
@@ -1068,9 +1315,16 @@ for name, cfg in active_models.items():
     print(
         f"  Lowest raw val loss observed: {_fmt_metric(result['lowest_val_loss'], digits=4)}"
     )
-    if result["selection_source"].startswith("fallback"):
+    if "fallback" in result["selection_source"]:
         fallback_reasons = ", ".join(selected_candidate.get("ineligible_reasons", []))
         print(f"  Fallback trigger: {fallback_reasons or 'none'}")
+    if not result.get("promotion_eligible", True):
+        print(
+            "  No recall-eligible checkpoint; excluding this run from ranking and experiment logging."
+        )
+        print(
+            f"  Debug checkpoint: {result['artifact_paths'].get('checkpoint')}"
+        )
 
 if not trained_models:
     raise RuntimeError("No models completed any selectable checkpoints. Check training logs.")
@@ -1229,6 +1483,7 @@ for name, result in trained_models.items():
     model = result["model"]
     artifact_dir = Path(result["artifact_dir"])
     artifact_paths = dict(result.get("artifact_paths", {}))
+    artifact_prefix = "selected" if result.get("promotion_eligible", True) else "debug_fallback"
 
     print(f"\n{'=' * 70}")
     print(f"Evaluating {name} with MC Dropout uncertainty...")
@@ -1252,8 +1507,8 @@ for name, result in trained_models.items():
     )
     all_results[name] = eval_result
 
-    val_output_path = artifact_dir / "selected_validation_outputs.parquet"
-    test_output_path = artifact_dir / "selected_test_outputs.parquet"
+    val_output_path = artifact_dir / f"{artifact_prefix}_validation_outputs.parquet"
+    test_output_path = artifact_dir / f"{artifact_prefix}_test_outputs.parquet"
     export_ordinal_output_artifact(
         val_eval_result,
         val_loader,
@@ -1277,8 +1532,9 @@ for name, result in trained_models.items():
     result["artifact_paths"] = artifact_paths
 
     print(f"\n{format_results_table(eval_result)}")
+    artifact_role = "selected-checkpoint" if result.get("promotion_eligible", True) else "debug-only"
     print(
-        f"Exported selected-checkpoint outputs to {val_output_path} and {test_output_path}"
+        f"Exported {artifact_role} outputs to {val_output_path} and {test_output_path}"
     )
 
     preds = eval_result["predictions"]
@@ -1319,6 +1575,7 @@ for name, result in trained_models.items():
         "hedging_mean": hedging_mean,
         "prediction_std": prediction_std,
         "fail_reasons": fail_reasons,
+        "promotion_eligible": result.get("promotion_eligible", True),
     }
 
 if not all_results:
@@ -1344,9 +1601,13 @@ for name, health in model_health.items():
         else "N/A"
     )
     status = (
-        "OK"
-        if not health["fail_reasons"]
-        else f"EXCLUDE ({', '.join(health['fail_reasons'])})"
+        "DEBUG_ONLY"
+        if (not health["fail_reasons"] and not health["promotion_eligible"])
+        else (
+            "OK"
+            if not health["fail_reasons"]
+            else f"EXCLUDE ({', '.join(health['fail_reasons'])})"
+        )
     )
     print(
         f"{name:<15s} {qwk_str:>8s} {health['qwk_nan_dims_count']:>10d} {sp_str:>10s} "
@@ -1357,20 +1618,26 @@ for name, health in model_health.items():
 rankable_results = {
     name: all_results[name]
     for name, health in model_health.items()
-    if not health["fail_reasons"]
+    if not health["fail_reasons"] and health["promotion_eligible"]
 }
 excluded_models = [
     name for name, health in model_health.items() if health["fail_reasons"]
 ]
+non_promotable_models = [
+    name for name, health in model_health.items() if not health["promotion_eligible"]
+]
 
 if not rankable_results:
     print(
-        "\nWARNING: All models flagged as degenerate; using all_results for comparison tables."
+        "\nWARNING: No promotion-eligible rankable models available for comparison tables."
     )
-    rankable_results = dict(all_results)
-elif excluded_models:
-    print(f"\nExcluding from ranking/comparison: {excluded_models}")
-
+elif excluded_models or non_promotable_models:
+    if excluded_models:
+        print(f"\nExcluding degenerate models from ranking/comparison: {excluded_models}")
+    if non_promotable_models:
+        print(
+            f"Excluding debug-only models from ranking/comparison: {non_promotable_models}"
+        )
 
 # ==== CELL 36 ====
 # Cell 4b - Model comparison table and grouped bar chart
@@ -1392,114 +1659,119 @@ for name, res in rankable_results.items():
     )
 
 if not rows:
-    raise RuntimeError("No rankable models available for comparison.")
+    comparison_df = None
+    print("No promotion-eligible rankable models available for comparison.")
+else:
+    comparison_df = pl.DataFrame(rows)
+    print("Model Comparison (rankable models):")
+    print(comparison_df)
+    if excluded_models:
+        print(f"Excluded models (degenerate): {excluded_models}")
+    if non_promotable_models:
+        print(f"Excluded models (debug-only): {non_promotable_models}")
 
-comparison_df = pl.DataFrame(rows)
-print("Model Comparison (rankable models):")
-print(comparison_df)
-if excluded_models:
-    print(f"Excluded models (degenerate): {excluded_models}")
+    # Grouped bar chart for 3 key metrics
+    fig, axes = plt.subplots(1, 3, figsize=(16, 5))
+    model_names = comparison_df["Model"].to_list()
+    x = np.arange(len(model_names))
+    width = 0.6
 
-# Grouped bar chart for 3 key metrics
-fig, axes = plt.subplots(1, 3, figsize=(16, 5))
-model_names = comparison_df["Model"].to_list()
-x = np.arange(len(model_names))
-width = 0.6
+    # MAE (lower is better)
+    mae_vals = comparison_df["MAE"].to_list()
+    best_mae = np.nanmin(mae_vals) if np.any(np.isfinite(mae_vals)) else None
+    colors = [
+        "#2ecc71"
+        if (best_mae is not None and np.isfinite(v) and v == best_mae)
+        else "#3498db"
+        for v in mae_vals
+    ]
+    axes[0].bar(x, mae_vals, width, color=colors)
+    axes[0].set_xticks(x)
+    axes[0].set_xticklabels(model_names, rotation=45, ha="right")
+    axes[0].set_ylabel("MAE")
+    axes[0].set_title("MAE (lower = better)")
+    axes[0].grid(True, alpha=0.3, axis="y")
 
-# MAE (lower is better)
-mae_vals = comparison_df["MAE"].to_list()
-best_mae = np.nanmin(mae_vals) if np.any(np.isfinite(mae_vals)) else None
-colors = [
-    "#2ecc71"
-    if (best_mae is not None and np.isfinite(v) and v == best_mae)
-    else "#3498db"
-    for v in mae_vals
-]
-axes[0].bar(x, mae_vals, width, color=colors)
-axes[0].set_xticks(x)
-axes[0].set_xticklabels(model_names, rotation=45, ha="right")
-axes[0].set_ylabel("MAE")
-axes[0].set_title("MAE (lower = better)")
-axes[0].grid(True, alpha=0.3, axis="y")
+    # Accuracy (higher is better)
+    acc_vals = comparison_df["Accuracy"].to_list()
+    best_acc = np.nanmax(acc_vals) if np.any(np.isfinite(acc_vals)) else None
+    colors = [
+        "#2ecc71"
+        if (best_acc is not None and np.isfinite(v) and v == best_acc)
+        else "#3498db"
+        for v in acc_vals
+    ]
+    axes[1].bar(x, acc_vals, width, color=colors)
+    axes[1].set_xticks(x)
+    axes[1].set_xticklabels(model_names, rotation=45, ha="right")
+    axes[1].set_ylabel("Accuracy")
+    axes[1].set_title("Accuracy (higher = better)")
+    axes[1].grid(True, alpha=0.3, axis="y")
 
-# Accuracy (higher is better)
-acc_vals = comparison_df["Accuracy"].to_list()
-best_acc = np.nanmax(acc_vals) if np.any(np.isfinite(acc_vals)) else None
-colors = [
-    "#2ecc71"
-    if (best_acc is not None and np.isfinite(v) and v == best_acc)
-    else "#3498db"
-    for v in acc_vals
-]
-axes[1].bar(x, acc_vals, width, color=colors)
-axes[1].set_xticks(x)
-axes[1].set_xticklabels(model_names, rotation=45, ha="right")
-axes[1].set_ylabel("Accuracy")
-axes[1].set_title("Accuracy (higher = better)")
-axes[1].grid(True, alpha=0.3, axis="y")
+    # QWK (higher is better)
+    qwk_vals = comparison_df["QWK"].to_list()
+    best_qwk = np.nanmax(qwk_vals) if np.any(np.isfinite(qwk_vals)) else None
+    colors = [
+        "#2ecc71"
+        if (best_qwk is not None and np.isfinite(v) and v == best_qwk)
+        else "#3498db"
+        for v in qwk_vals
+    ]
+    axes[2].bar(x, qwk_vals, width, color=colors)
+    axes[2].set_xticks(x)
+    axes[2].set_xticklabels(model_names, rotation=45, ha="right")
+    axes[2].set_ylabel("QWK")
+    axes[2].set_title("QWK (higher = better)")
+    axes[2].grid(True, alpha=0.3, axis="y")
 
-# QWK (higher is better)
-qwk_vals = comparison_df["QWK"].to_list()
-best_qwk = np.nanmax(qwk_vals) if np.any(np.isfinite(qwk_vals)) else None
-colors = [
-    "#2ecc71"
-    if (best_qwk is not None and np.isfinite(v) and v == best_qwk)
-    else "#3498db"
-    for v in qwk_vals
-]
-axes[2].bar(x, qwk_vals, width, color=colors)
-axes[2].set_xticks(x)
-axes[2].set_xticklabels(model_names, rotation=45, ha="right")
-axes[2].set_ylabel("QWK")
-axes[2].set_title("QWK (higher = better)")
-axes[2].grid(True, alpha=0.3, axis="y")
-
-plt.suptitle("Model Comparison - Key Metrics", fontsize=14, y=1.02)
-plt.tight_layout()
-plt.show()
-
+    plt.suptitle("Model Comparison - Key Metrics", fontsize=14, y=1.02)
+    plt.tight_layout()
+    plt.show()
 
 # ==== CELL 37 ====
 # Cell 4c - Confusion matrices for best model + per-class recall
 
-# Find best model by finite QWK among rankable models
-qwk_candidates = {
-    n: rankable_results[n]["qwk_mean"]
-    for n in rankable_results
-    if np.isfinite(rankable_results[n].get("qwk_mean", float("nan")))
-}
-if qwk_candidates:
-    best_model_name = max(qwk_candidates, key=qwk_candidates.get)
-    best_model_reason = "QWK"
+if not rankable_results:
+    print("No promotion-eligible rankable models available for confusion matrix.")
 else:
-    best_model_name = max(
-        rankable_results, key=lambda n: rankable_results[n]["accuracy_mean"]
+    # Find best model by finite QWK among rankable models
+    qwk_candidates = {
+        n: rankable_results[n]["qwk_mean"]
+        for n in rankable_results
+        if np.isfinite(rankable_results[n].get("qwk_mean", float("nan")))
+    }
+    if qwk_candidates:
+        best_model_name = max(qwk_candidates, key=qwk_candidates.get)
+        best_model_reason = "QWK"
+    else:
+        best_model_name = max(
+            rankable_results, key=lambda n: rankable_results[n]["accuracy_mean"]
+        )
+        best_model_reason = "Accuracy fallback"
+
+    print(f"Best model for confusion matrix: {best_model_name} ({best_model_reason})")
+
+    # Plot confusion matrices for best model (2x5 grid)
+    res = rankable_results[best_model_name]
+    pred_cls = discretize_predictions(res["predictions"])
+    target_cls = discretize_predictions(res["targets"])
+
+    fig, axes = plt.subplots(2, 5, figsize=(20, 8))
+    axes_flat = axes.flatten()
+    for i, dim in enumerate(SCHWARTZ_VALUE_ORDER):
+        cm = confusion_matrix(target_cls[:, i], pred_cls[:, i], labels=[-1, 0, 1])
+        disp = ConfusionMatrixDisplay(cm, display_labels=[-1, 0, 1])
+        disp.plot(ax=axes_flat[i], cmap="Blues", colorbar=False)
+        axes_flat[i].set_title(dim, fontsize=10)
+        axes_flat[i].set_xlabel("Predicted" if i >= 5 else "")
+        axes_flat[i].set_ylabel("True" if i % 5 == 0 else "")
+    plt.suptitle(
+        f"Confusion Matrices - {best_model_name} (Best {best_model_reason})",
+        fontsize=14,
+        y=1.02,
     )
-    best_model_reason = "Accuracy fallback"
-
-print(f"Best model for confusion matrix: {best_model_name} ({best_model_reason})")
-
-# Plot confusion matrices for best model (2x5 grid)
-res = rankable_results[best_model_name]
-pred_cls = discretize_predictions(res["predictions"])
-target_cls = discretize_predictions(res["targets"])
-
-fig, axes = plt.subplots(2, 5, figsize=(20, 8))
-axes_flat = axes.flatten()
-for i, dim in enumerate(SCHWARTZ_VALUE_ORDER):
-    cm = confusion_matrix(target_cls[:, i], pred_cls[:, i], labels=[-1, 0, 1])
-    disp = ConfusionMatrixDisplay(cm, display_labels=[-1, 0, 1])
-    disp.plot(ax=axes_flat[i], cmap="Blues", colorbar=False)
-    axes_flat[i].set_title(dim, fontsize=10)
-    axes_flat[i].set_xlabel("Predicted" if i >= 5 else "")
-    axes_flat[i].set_ylabel("True" if i % 5 == 0 else "")
-plt.suptitle(
-    f"Confusion Matrices - {best_model_name} (Best {best_model_reason})",
-    fontsize=14,
-    y=1.02,
-)
-plt.tight_layout()
-plt.show()
+    plt.tight_layout()
+    plt.show()
 
 # Per-class recall table across all models
 print(f"\n{'=' * 70}")
@@ -1529,7 +1801,6 @@ for model_name, res in all_results.items():
         f"{model_name:<15s} {recall_minus1:>10.1%} {recall_zero:>10.1%} "
         f"{recall_plus1:>10.1%} {mean_minority:>15.1%}"
     )
-
 
 # ==== CELL 38 ====
 # Cell 4d — Hedging comparison: % predictions in [-0.3, 0.3] per model
@@ -1612,7 +1883,6 @@ print(f"{'Mean uncertainty':<20s}", end="")
 for name in all_results:
     print(f" {all_calibration[name]['mean_uncertainty']:>12.4f}", end="")
 print()
-
 
 # ==== CELL 42 ====
 # Cell 5b — Calibration scatter for best-calibrated model
@@ -1899,7 +2169,6 @@ if best_circumplex_model and rankable_results[best_circumplex_model].get("circum
 
 print(f"\n{'=' * 90}")
 
-
 # ==== CELL 47 ====
 # Cell 6.2 - CDW-CE watch gates
 
@@ -1952,7 +2221,6 @@ else:
         f"(QWK={best_candidate['QWK']}, RecallMinus1={best_candidate['RecallMinus1']})"
     )
 
-
 # ==== CELL 48 ====
 OBSERVATIONS = ""  # Leave empty; experiment-review skill will generate observations
 
@@ -1962,22 +2230,29 @@ if CONFIG.get("skip_experiment_logging", False):
     logged_paths = []
     print("Skipping experiment logging (skip_experiment_logging=True)")
 else:
-    logged_paths = log_experiment_run(
-        config=CONFIG,
-        trained_models=trained_models,
-        all_results=all_results,
-        all_calibration=all_calibration,
-        all_hedging=all_hedging,
-        all_recall_data=all_recall_data,
-        n_train=n_train,
-        n_val=n_val,
-        n_test=n_test,
-        pct_truncated=pct_truncated,
-        state_dim=state_encoder.state_dim,
-        observations=OBSERVATIONS.strip(),
-    )
-    print()
-    print(f"Logged {len(logged_paths)} experiments:")
-    for entry in logged_paths:
-        tag = "CREATED"
-        print(f"  [{tag}] {entry['path']}  ({entry['run_id']})")
+    promotable_model_names = [
+        name for name, result in trained_models.items() if result.get("promotion_eligible", True)
+    ]
+    if not promotable_model_names:
+        logged_paths = []
+        print("Skipping experiment logging (no promotion-eligible models).")
+    else:
+        logged_paths = log_experiment_run(
+            config=CONFIG,
+            trained_models={name: trained_models[name] for name in promotable_model_names},
+            all_results={name: all_results[name] for name in promotable_model_names},
+            all_calibration={name: all_calibration[name] for name in promotable_model_names},
+            all_hedging={name: all_hedging[name] for name in promotable_model_names},
+            all_recall_data={name: all_recall_data[name] for name in promotable_model_names},
+            n_train=n_train,
+            n_val=n_val,
+            n_test=n_test,
+            pct_truncated=pct_truncated,
+            state_dim=state_encoder.state_dim,
+            observations=OBSERVATIONS.strip(),
+        )
+        print()
+        print(f"Logged {len(logged_paths)} experiments:")
+        for entry in logged_paths:
+            tag = "CREATED"
+            print(f"  [{tag}] {entry['path']}  ({entry['run_id']})")

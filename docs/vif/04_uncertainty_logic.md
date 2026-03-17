@@ -92,6 +92,8 @@ If the uncertainty is **high** (i.e. $\sigma_{V_t}^{(j)} \ge \epsilon_j$), the s
 * Avoid issuing a strong critique.
 * Prefer asking clarifying questions or deferring judgment.
 
+In addition to the uncertainty gate, a [value evolution detection](../evolution/01_value_evolution.md) layer classifies dimensions as STABLE/EVOLUTION/DRIFT before triggers fire. EVOLUTION dimensions — those showing sustained, low-volatility directional shift from declared values — bypass crash/rut triggers entirely and route to profile-update Coach messaging instead.
+
 ### 1.4 Time and Aggregation
 
 To implement crash and rut logic robustly:

@@ -1,0 +1,584 @@
+run_id: run_036
+model_name: BalancedSoftmax
+selection_policy:
+  name: recall_minus1_then_qwk_guarded
+  max_qwk_drop: 0.03
+  require_non_negative_calibration: true
+  rank_order:
+  - recall_minus1
+  - qwk_mean
+  - calibration_global
+  - decision_neutral_rate
+selection_source: validation_only_recall_first_guarded
+selected_policy:
+  policy_name: logit_adjustment_tau_0.00
+  policy_family: softmax_logit_adjustment
+  policy_payload:
+    type: logit_adjustment
+    tau: 0.0
+    prior_source: train_split
+    class_order:
+    - -1
+    - 0
+    - 1
+    per_dimension_priors:
+      self_direction:
+      - 0.14548641542555962
+      - 0.6099912357573796
+      - 0.24452234881706086
+      stimulation:
+      - 0.04469763365544777
+      - 0.8834355828206395
+      - 0.07186678352391271
+      hedonism:
+      - 0.0797546012276606
+      - 0.8238387379478778
+      - 0.09640666082446168
+      achievement:
+      - 0.04907975460197437
+      - 0.6783523225231946
+      - 0.2725679228748311
+      power:
+      - 0.08150744960627124
+      - 0.8247151621371831
+      - 0.09377738825654573
+      security:
+      - 0.0797546012276606
+      - 0.7388255915852616
+      - 0.18141980718707776
+      conformity:
+      - 0.07800175284904996
+      - 0.7063978965809647
+      - 0.21560035056998528
+      tradition:
+      - 0.0333041191944786
+      - 0.8203330411906564
+      - 0.14636283961486496
+      benevolence:
+      - 0.08238387379557656
+      - 0.6415425065723711
+      - 0.2760736196320524
+      universalism:
+      - 0.0333041191944786
+      - 0.8895705521457767
+      - 0.07712532865974464
+selection_score:
+  rank_key:
+  - 0.4621852661478593
+  - 0.40526711527924136
+  - 0.7236141786935492
+  - -0.7046082949308756
+  baseline_qwk_mean: 0.40526711527924136
+  tuned_qwk_mean: 0.40526711527924136
+  qwk_delta: 0.0
+baseline_validation_metrics:
+  qwk_mean: 0.40526711527924136
+  recall_minus1: 0.4621852661478593
+  minority_recall_mean: 0.5133730619540198
+  hedging_mean: 0.6078341013824884
+  decision_neutral_rate: 0.7046082949308756
+  calibration_global: 0.7236141786935492
+  circumplex_summary:
+    opposite_violation_mean: 0.07423491232572292
+    adjacent_support_mean: 0.07245466938084533
+selected_validation_metrics:
+  qwk_mean: 0.40526711527924136
+  recall_minus1: 0.4621852661478593
+  minority_recall_mean: 0.5133730619540198
+  hedging_mean: 0.6078341013824884
+  decision_neutral_rate: 0.7046082949308756
+  calibration_global: 0.7236141786935492
+  circumplex_summary:
+    opposite_violation_mean: 0.07423491232572292
+    adjacent_support_mean: 0.07245466938084533
+untouched_test_metrics:
+  baseline:
+    qwk_mean: 0.3806709745747184
+    recall_minus1: 0.3865536576949621
+    minority_recall_mean: 0.4917577960194522
+    hedging_mean: 0.5986425339366516
+    decision_neutral_rate: 0.7054298642533937
+    calibration_global: 0.7262955759983706
+    circumplex_summary:
+      opposite_violation_mean: 0.06802013856159353
+      adjacent_support_mean: 0.0840775980742639
+  selected:
+    qwk_mean: 0.3806709745747184
+    recall_minus1: 0.3865536576949621
+    minority_recall_mean: 0.4917577960194522
+    hedging_mean: 0.5986425339366516
+    decision_neutral_rate: 0.7054298642533937
+    calibration_global: 0.7262955759983706
+    circumplex_summary:
+      opposite_violation_mean: 0.06802013856159353
+      adjacent_support_mean: 0.0840775980742639
+circumplex:
+  validation:
+    baseline:
+      source: probabilities
+      summary:
+        opposite_violation_mean: 0.07423491232572292
+        adjacent_support_mean: 0.07245466938084533
+      opposite_pairs:
+      - pair_id: achievement__benevolence
+        left: achievement
+        right: benevolence
+        score: 0.1934577212977139
+      - pair_id: achievement__universalism
+        left: achievement
+        right: universalism
+        score: 0.032819633206505834
+      - pair_id: benevolence__power
+        left: benevolence
+        right: power
+        score: 0.09671773072333047
+      - pair_id: conformity__hedonism
+        left: conformity
+        right: hedonism
+        score: 0.07142720802905284
+      - pair_id: conformity__self_direction
+        left: conformity
+        right: self_direction
+        score: 0.08194782582889375
+      - pair_id: conformity__stimulation
+        left: conformity
+        right: stimulation
+        score: 0.04674334558284899
+      - pair_id: hedonism__tradition
+        left: hedonism
+        right: tradition
+        score: 0.08514012873311827
+      - pair_id: power__universalism
+        left: power
+        right: universalism
+        score: 0.01225750803888513
+      - pair_id: security__self_direction
+        left: security
+        right: self_direction
+        score: 0.06927736051884041
+      - pair_id: security__stimulation
+        left: security
+        right: stimulation
+        score: 0.05607041962272116
+      - pair_id: self_direction__tradition
+        left: self_direction
+        right: tradition
+        score: 0.09640671404992401
+      - pair_id: stimulation__tradition
+        left: stimulation
+        right: tradition
+        score: 0.04855335227684031
+      adjacent_pairs:
+      - pair_id: achievement__hedonism
+        left: achievement
+        right: hedonism
+        score: 0.04254334684376709
+      - pair_id: achievement__power
+        left: achievement
+        right: power
+        score: 0.0957813682781835
+      - pair_id: benevolence__conformity
+        left: benevolence
+        right: conformity
+        score: 0.09345292421188514
+      - pair_id: benevolence__tradition
+        left: benevolence
+        right: tradition
+        score: 0.14798480350408538
+      - pair_id: benevolence__universalism
+        left: benevolence
+        right: universalism
+        score: 0.07472177670106
+      - pair_id: conformity__security
+        left: conformity
+        right: security
+        score: 0.07530913553211142
+      - pair_id: conformity__tradition
+        left: conformity
+        right: tradition
+        score: 0.06550531314283646
+      - pair_id: hedonism__stimulation
+        left: hedonism
+        right: stimulation
+        score: 0.045016520305008266
+      - pair_id: power__security
+        left: power
+        right: security
+        score: 0.033653123490995925
+      - pair_id: security__tradition
+        left: security
+        right: tradition
+        score: 0.06280410562311463
+      - pair_id: self_direction__stimulation
+        left: self_direction
+        right: stimulation
+        score: 0.09333769908944886
+      - pair_id: self_direction__universalism
+        left: self_direction
+        right: universalism
+        score: 0.0393459158476471
+    selected:
+      source: probabilities
+      summary:
+        opposite_violation_mean: 0.07423491232572292
+        adjacent_support_mean: 0.07245466938084533
+      opposite_pairs:
+      - pair_id: achievement__benevolence
+        left: achievement
+        right: benevolence
+        score: 0.1934577212977139
+      - pair_id: achievement__universalism
+        left: achievement
+        right: universalism
+        score: 0.032819633206505834
+      - pair_id: benevolence__power
+        left: benevolence
+        right: power
+        score: 0.09671773072333047
+      - pair_id: conformity__hedonism
+        left: conformity
+        right: hedonism
+        score: 0.07142720802905284
+      - pair_id: conformity__self_direction
+        left: conformity
+        right: self_direction
+        score: 0.08194782582889375
+      - pair_id: conformity__stimulation
+        left: conformity
+        right: stimulation
+        score: 0.04674334558284899
+      - pair_id: hedonism__tradition
+        left: hedonism
+        right: tradition
+        score: 0.08514012873311827
+      - pair_id: power__universalism
+        left: power
+        right: universalism
+        score: 0.01225750803888513
+      - pair_id: security__self_direction
+        left: security
+        right: self_direction
+        score: 0.06927736051884041
+      - pair_id: security__stimulation
+        left: security
+        right: stimulation
+        score: 0.05607041962272116
+      - pair_id: self_direction__tradition
+        left: self_direction
+        right: tradition
+        score: 0.09640671404992401
+      - pair_id: stimulation__tradition
+        left: stimulation
+        right: tradition
+        score: 0.04855335227684031
+      adjacent_pairs:
+      - pair_id: achievement__hedonism
+        left: achievement
+        right: hedonism
+        score: 0.04254334684376709
+      - pair_id: achievement__power
+        left: achievement
+        right: power
+        score: 0.0957813682781835
+      - pair_id: benevolence__conformity
+        left: benevolence
+        right: conformity
+        score: 0.09345292421188514
+      - pair_id: benevolence__tradition
+        left: benevolence
+        right: tradition
+        score: 0.14798480350408538
+      - pair_id: benevolence__universalism
+        left: benevolence
+        right: universalism
+        score: 0.07472177670106
+      - pair_id: conformity__security
+        left: conformity
+        right: security
+        score: 0.07530913553211142
+      - pair_id: conformity__tradition
+        left: conformity
+        right: tradition
+        score: 0.06550531314283646
+      - pair_id: hedonism__stimulation
+        left: hedonism
+        right: stimulation
+        score: 0.045016520305008266
+      - pair_id: power__security
+        left: power
+        right: security
+        score: 0.033653123490995925
+      - pair_id: security__tradition
+        left: security
+        right: tradition
+        score: 0.06280410562311463
+      - pair_id: self_direction__stimulation
+        left: self_direction
+        right: stimulation
+        score: 0.09333769908944886
+      - pair_id: self_direction__universalism
+        left: self_direction
+        right: universalism
+        score: 0.0393459158476471
+  test:
+    baseline:
+      source: probabilities
+      summary:
+        opposite_violation_mean: 0.06802013856159353
+        adjacent_support_mean: 0.0840775980742639
+      opposite_pairs:
+      - pair_id: achievement__benevolence
+        left: achievement
+        right: benevolence
+        score: 0.18168797348736118
+      - pair_id: achievement__universalism
+        left: achievement
+        right: universalism
+        score: 0.032407908015572195
+      - pair_id: benevolence__power
+        left: benevolence
+        right: power
+        score: 0.06970859620517007
+      - pair_id: conformity__hedonism
+        left: conformity
+        right: hedonism
+        score: 0.06666385108807549
+      - pair_id: conformity__self_direction
+        left: conformity
+        right: self_direction
+        score: 0.07748641043837877
+      - pair_id: conformity__stimulation
+        left: conformity
+        right: stimulation
+        score: 0.0492916813949974
+      - pair_id: hedonism__tradition
+        left: hedonism
+        right: tradition
+        score: 0.06282022812909671
+      - pair_id: power__universalism
+        left: power
+        right: universalism
+        score: 0.007741419585823855
+      - pair_id: security__self_direction
+        left: security
+        right: self_direction
+        score: 0.06519399562663586
+      - pair_id: security__stimulation
+        left: security
+        right: stimulation
+        score: 0.03950653480689708
+      - pair_id: self_direction__tradition
+        left: self_direction
+        right: tradition
+        score: 0.11531494583527148
+      - pair_id: stimulation__tradition
+        left: stimulation
+        right: tradition
+        score: 0.04841811812584225
+      adjacent_pairs:
+      - pair_id: achievement__hedonism
+        left: achievement
+        right: hedonism
+        score: 0.03611047125587762
+      - pair_id: achievement__power
+        left: achievement
+        right: power
+        score: 0.09067053778107388
+      - pair_id: benevolence__conformity
+        left: benevolence
+        right: conformity
+        score: 0.11615734416324748
+      - pair_id: benevolence__tradition
+        left: benevolence
+        right: tradition
+        score: 0.20400314378516657
+      - pair_id: benevolence__universalism
+        left: benevolence
+        right: universalism
+        score: 0.10088716941367064
+      - pair_id: conformity__security
+        left: conformity
+        right: security
+        score: 0.07970637040369521
+      - pair_id: conformity__tradition
+        left: conformity
+        right: tradition
+        score: 0.10292410408919611
+      - pair_id: hedonism__stimulation
+        left: hedonism
+        right: stimulation
+        score: 0.04194184018960747
+      - pair_id: power__security
+        left: power
+        right: security
+        score: 0.03229102552161125
+      - pair_id: security__tradition
+        left: security
+        right: tradition
+        score: 0.07484666957021176
+      - pair_id: self_direction__stimulation
+        left: self_direction
+        right: stimulation
+        score: 0.0739851910497141
+      - pair_id: self_direction__universalism
+        left: self_direction
+        right: universalism
+        score: 0.05540730966809463
+    selected:
+      source: probabilities
+      summary:
+        opposite_violation_mean: 0.06802013856159353
+        adjacent_support_mean: 0.0840775980742639
+      opposite_pairs:
+      - pair_id: achievement__benevolence
+        left: achievement
+        right: benevolence
+        score: 0.18168797348736118
+      - pair_id: achievement__universalism
+        left: achievement
+        right: universalism
+        score: 0.032407908015572195
+      - pair_id: benevolence__power
+        left: benevolence
+        right: power
+        score: 0.06970859620517007
+      - pair_id: conformity__hedonism
+        left: conformity
+        right: hedonism
+        score: 0.06666385108807549
+      - pair_id: conformity__self_direction
+        left: conformity
+        right: self_direction
+        score: 0.07748641043837877
+      - pair_id: conformity__stimulation
+        left: conformity
+        right: stimulation
+        score: 0.0492916813949974
+      - pair_id: hedonism__tradition
+        left: hedonism
+        right: tradition
+        score: 0.06282022812909671
+      - pair_id: power__universalism
+        left: power
+        right: universalism
+        score: 0.007741419585823855
+      - pair_id: security__self_direction
+        left: security
+        right: self_direction
+        score: 0.06519399562663586
+      - pair_id: security__stimulation
+        left: security
+        right: stimulation
+        score: 0.03950653480689708
+      - pair_id: self_direction__tradition
+        left: self_direction
+        right: tradition
+        score: 0.11531494583527148
+      - pair_id: stimulation__tradition
+        left: stimulation
+        right: tradition
+        score: 0.04841811812584225
+      adjacent_pairs:
+      - pair_id: achievement__hedonism
+        left: achievement
+        right: hedonism
+        score: 0.03611047125587762
+      - pair_id: achievement__power
+        left: achievement
+        right: power
+        score: 0.09067053778107388
+      - pair_id: benevolence__conformity
+        left: benevolence
+        right: conformity
+        score: 0.11615734416324748
+      - pair_id: benevolence__tradition
+        left: benevolence
+        right: tradition
+        score: 0.20400314378516657
+      - pair_id: benevolence__universalism
+        left: benevolence
+        right: universalism
+        score: 0.10088716941367064
+      - pair_id: conformity__security
+        left: conformity
+        right: security
+        score: 0.07970637040369521
+      - pair_id: conformity__tradition
+        left: conformity
+        right: tradition
+        score: 0.10292410408919611
+      - pair_id: hedonism__stimulation
+        left: hedonism
+        right: stimulation
+        score: 0.04194184018960747
+      - pair_id: power__security
+        left: power
+        right: security
+        score: 0.03229102552161125
+      - pair_id: security__tradition
+        left: security
+        right: tradition
+        score: 0.07484666957021176
+      - pair_id: self_direction__stimulation
+        left: self_direction
+        right: stimulation
+        score: 0.0739851910497141
+      - pair_id: self_direction__universalism
+        left: self_direction
+        right: universalism
+        score: 0.05540730966809463
+artifacts:
+  source_validation_outputs: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/ordinal_v4_s2025_m33_20260311_125227/BalancedSoftmax/selected_validation_outputs.parquet
+  source_test_outputs: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/ordinal_v4_s2025_m33_20260311_125227/BalancedSoftmax/selected_test_outputs.parquet
+  validation_sweep: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_719_5_20260311_163957/run_036_BalancedSoftmax/validation_sweep.parquet
+  tuned_validation_outputs: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_719_5_20260311_163957/run_036_BalancedSoftmax/tuned_validation_outputs.parquet
+  tuned_test_outputs: /Users/desmondchoy/Projects/twinkl/logs/experiments/artifacts/posthoc_twinkl_719_5_20260311_163957/run_036_BalancedSoftmax/tuned_test_outputs.parquet
+logit_policy:
+  type: logit_adjustment
+  tau: 0.0
+  prior_source: train_split
+  class_order:
+  - -1
+  - 0
+  - 1
+  per_dimension_priors:
+    self_direction:
+    - 0.14548641542555962
+    - 0.6099912357573796
+    - 0.24452234881706086
+    stimulation:
+    - 0.04469763365544777
+    - 0.8834355828206395
+    - 0.07186678352391271
+    hedonism:
+    - 0.0797546012276606
+    - 0.8238387379478778
+    - 0.09640666082446168
+    achievement:
+    - 0.04907975460197437
+    - 0.6783523225231946
+    - 0.2725679228748311
+    power:
+    - 0.08150744960627124
+    - 0.8247151621371831
+    - 0.09377738825654573
+    security:
+    - 0.0797546012276606
+    - 0.7388255915852616
+    - 0.18141980718707776
+    conformity:
+    - 0.07800175284904996
+    - 0.7063978965809647
+    - 0.21560035056998528
+    tradition:
+    - 0.0333041191944786
+    - 0.8203330411906564
+    - 0.14636283961486496
+    benevolence:
+    - 0.08238387379557656
+    - 0.6415425065723711
+    - 0.2760736196320524
+    universalism:
+    - 0.0333041191944786
+    - 0.8895705521457767
+    - 0.07712532865974464

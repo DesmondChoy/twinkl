@@ -251,13 +251,35 @@ class TestCDWCELoss:
 class TestBalancedSoftmaxLoss:
     """Tests for Balanced Softmax loss."""
 
+    @staticmethod
+    def _class_priors() -> torch.Tensor:
+        return torch.tensor([[0.1, 0.8, 0.1]] * 10, dtype=torch.float32)
+
+    @staticmethod
+    def _uniform_priors() -> torch.Tensor:
+        return torch.full((10, 3), 1.0 / 3.0, dtype=torch.float32)
+
+    @staticmethod
+    def _uniform_weights() -> torch.Tensor:
+        return torch.ones(10, dtype=torch.float32)
+
+    @staticmethod
+    def _neutral_logits(batch_size: int = 1, confidence: float = 8.0) -> torch.Tensor:
+        logits = torch.zeros(batch_size, 30, dtype=torch.float32)
+        logits[:, 1::3] = confidence
+        return logits
+
+    @staticmethod
+    def _neutral_targets(batch_size: int = 1) -> torch.Tensor:
+        return torch.zeros(batch_size, 10, dtype=torch.float32)
+
     def test_balanced_softmax_loss_scalar_output(self):
         """Loss should be a non-negative scalar tensor."""
         from src.vif.critic_ordinal import balanced_softmax_loss_multi
 
         logits = torch.randn(4, 30)
         y = torch.randint(-1, 2, (4, 10)).float()
-        class_priors = torch.tensor([[0.1, 0.8, 0.1]] * 10, dtype=torch.float32)
+        class_priors = self._class_priors()
 
         loss = balanced_softmax_loss_multi(logits, y, class_priors=class_priors)
 
@@ -270,9 +292,97 @@ class TestBalancedSoftmaxLoss:
 
         logits = torch.randn(4, 30, requires_grad=True)
         y = torch.randint(-1, 2, (4, 10)).float()
-        class_priors = torch.tensor([[0.1, 0.8, 0.1]] * 10, dtype=torch.float32)
+        class_priors = self._class_priors()
 
         loss = balanced_softmax_loss_multi(logits, y, class_priors=class_priors)
+        loss.backward()
+
+        assert logits.grad is not None
+        assert logits.grad.shape == (4, 30)
+        assert not torch.all(logits.grad == 0)
+
+    def test_balanced_softmax_zero_weight_regularizer_matches_legacy_path(self):
+        """Explicit zero regularizer weights should preserve legacy loss exactly."""
+        from src.vif.critic_ordinal import balanced_softmax_loss_multi
+
+        torch.manual_seed(42)
+        logits = torch.randn(4, 30)
+        y = torch.randint(-1, 2, (4, 10)).float()
+        class_priors = self._class_priors()
+
+        legacy_loss = balanced_softmax_loss_multi(logits, y, class_priors=class_priors)
+        zero_weight_loss = balanced_softmax_loss_multi(
+            logits,
+            y,
+            class_priors=class_priors,
+            circumplex_regularizer_opposite_weight=0.0,
+            circumplex_regularizer_adjacent_weight=0.0,
+        )
+
+        assert torch.equal(legacy_loss, zero_weight_loss)
+
+    def test_uniform_dimension_weights_match_unweighted_loss(self):
+        """Uniform dimension weights should preserve the unweighted CE path."""
+        from src.vif.critic_ordinal import balanced_softmax_loss_multi
+
+        torch.manual_seed(123)
+        logits = torch.randn(4, 30)
+        y = torch.randint(-1, 2, (4, 10)).float()
+        class_priors = self._class_priors()
+
+        unweighted_loss = balanced_softmax_loss_multi(
+            logits,
+            y,
+            class_priors=class_priors,
+        )
+        weighted_loss = balanced_softmax_loss_multi(
+            logits,
+            y,
+            class_priors=class_priors,
+            dimension_weights=self._uniform_weights(),
+        )
+
+        torch.testing.assert_close(weighted_loss, unweighted_loss)
+
+    def test_balanced_softmax_dimension_weights_change_loss(self):
+        """Non-uniform dimension weights should change the CE contribution."""
+        from src.vif.critic_ordinal import balanced_softmax_loss_multi
+
+        logits = self._neutral_logits()
+        targets = self._neutral_targets()
+        # Make the first dimension a high-confidence error while the rest stay correct.
+        logits[:, 0:3] = torch.tensor([0.0, 0.0, 8.0])
+        targets[:, 0] = -1.0
+        dimension_weights = torch.tensor([2.0] + [0.5] * 9, dtype=torch.float32)
+
+        unweighted_loss = balanced_softmax_loss_multi(
+            logits,
+            targets,
+            class_priors=self._uniform_priors(),
+        )
+        weighted_loss = balanced_softmax_loss_multi(
+            logits,
+            targets,
+            class_priors=self._uniform_priors(),
+            dimension_weights=dimension_weights,
+        )
+
+        assert weighted_loss.item() > unweighted_loss.item()
+
+    def test_balanced_softmax_circumplex_regularizer_gradient_flow(self):
+        """Circumplex-regularized loss should still backpropagate gradients."""
+        from src.vif.critic_ordinal import balanced_softmax_loss_multi
+
+        logits = torch.randn(4, 30, requires_grad=True)
+        y = torch.randint(-1, 2, (4, 10)).float()
+
+        loss = balanced_softmax_loss_multi(
+            logits,
+            y,
+            class_priors=self._class_priors(),
+            circumplex_regularizer_opposite_weight=0.5,
+            circumplex_regularizer_adjacent_weight=0.1,
+        )
         loss.backward()
 
         assert logits.grad is not None
@@ -285,7 +395,7 @@ class TestBalancedSoftmaxLoss:
 
         logits = torch.zeros(1, 30)
         y = -torch.ones(1, 10)
-        uniform_priors = torch.full((10, 3), 1.0 / 3.0, dtype=torch.float32)
+        uniform_priors = self._uniform_priors()
         imbalanced_priors = torch.tensor([[0.05, 0.90, 0.05]] * 10, dtype=torch.float32)
 
         loss_uniform = balanced_softmax_loss_multi(logits, y, class_priors=uniform_priors)
@@ -293,12 +403,108 @@ class TestBalancedSoftmaxLoss:
 
         assert loss_imbalanced.item() > loss_uniform.item()
 
+    def test_balanced_softmax_regularizer_penalizes_opposite_pair_same_sign_activation(self):
+        """Confident same-sign activation on opposing pairs should increase loss."""
+        from src.models.judge import SCHWARTZ_VALUE_ORDER
+        from src.vif.critic_ordinal import balanced_softmax_loss_multi
+
+        security_idx = SCHWARTZ_VALUE_ORDER.index("security")
+        self_direction_idx = SCHWARTZ_VALUE_ORDER.index("self_direction")
+
+        logits_benign = self._neutral_logits()
+        targets_benign = self._neutral_targets()
+        logits_benign[:, security_idx * 3 : (security_idx + 1) * 3] = torch.tensor([0.0, 0.0, 8.0])
+        logits_benign[:, self_direction_idx * 3 : (self_direction_idx + 1) * 3] = torch.tensor([0.0, 8.0, 0.0])
+        targets_benign[:, security_idx] = 1.0
+
+        logits_opposite = logits_benign.clone()
+        targets_opposite = targets_benign.clone()
+        logits_opposite[:, self_direction_idx * 3 : (self_direction_idx + 1) * 3] = torch.tensor([0.0, 0.0, 8.0])
+        targets_opposite[:, self_direction_idx] = 1.0
+
+        loss_benign = balanced_softmax_loss_multi(
+            logits_benign,
+            targets_benign,
+            class_priors=self._uniform_priors(),
+            circumplex_regularizer_opposite_weight=0.5,
+        )
+        loss_opposite = balanced_softmax_loss_multi(
+            logits_opposite,
+            targets_opposite,
+            class_priors=self._uniform_priors(),
+            circumplex_regularizer_opposite_weight=0.5,
+        )
+
+        assert loss_opposite.item() > loss_benign.item()
+
+    def test_balanced_softmax_regularizer_rewards_adjacent_positive_support(self):
+        """Positive adjacent-pair support should reduce the total loss."""
+        from src.models.judge import SCHWARTZ_VALUE_ORDER
+        from src.vif.critic_ordinal import balanced_softmax_loss_multi
+
+        self_direction_idx = SCHWARTZ_VALUE_ORDER.index("self_direction")
+        stimulation_idx = SCHWARTZ_VALUE_ORDER.index("stimulation")
+
+        logits_isolated = self._neutral_logits()
+        targets_isolated = self._neutral_targets()
+        logits_isolated[:, self_direction_idx * 3 : (self_direction_idx + 1) * 3] = torch.tensor([0.0, 0.0, 8.0])
+        logits_isolated[:, stimulation_idx * 3 : (stimulation_idx + 1) * 3] = torch.tensor([0.0, 8.0, 0.0])
+        targets_isolated[:, self_direction_idx] = 1.0
+
+        logits_adjacent = logits_isolated.clone()
+        targets_adjacent = targets_isolated.clone()
+        logits_adjacent[:, stimulation_idx * 3 : (stimulation_idx + 1) * 3] = torch.tensor([0.0, 0.0, 8.0])
+        targets_adjacent[:, stimulation_idx] = 1.0
+
+        loss_isolated = balanced_softmax_loss_multi(
+            logits_isolated,
+            targets_isolated,
+            class_priors=self._uniform_priors(),
+            circumplex_regularizer_adjacent_weight=0.1,
+        )
+        loss_adjacent = balanced_softmax_loss_multi(
+            logits_adjacent,
+            targets_adjacent,
+            class_priors=self._uniform_priors(),
+            circumplex_regularizer_adjacent_weight=0.1,
+        )
+
+        assert loss_adjacent.item() < loss_isolated.item()
+
+    def test_inverse_loss_dimension_weights_downweight_higher_losses(self):
+        """Higher EMA loss should map to a smaller inverse-loss weight."""
+        from src.vif.critic_ordinal import compute_inverse_loss_dimension_weights
+
+        loss_ema = torch.tensor([4.0, 0.25] + [1.0] * 8, dtype=torch.float32)
+
+        weights = compute_inverse_loss_dimension_weights(loss_ema, temperature=0.5)
+
+        assert weights.shape == (10,)
+        assert weights[1].item() > weights[0].item()
+
+    def test_inverse_loss_dimension_weights_respect_clamps(self):
+        """Configured min/max clamps should bound the resulting weights."""
+        from src.vif.critic_ordinal import compute_inverse_loss_dimension_weights
+
+        loss_ema = torch.tensor([0.0, 100.0] + [1.0] * 8, dtype=torch.float32)
+
+        weights = compute_inverse_loss_dimension_weights(
+            loss_ema,
+            temperature=1.0,
+            eps=1e-6,
+            min_weight=0.8,
+            max_weight=1.2,
+        )
+
+        assert torch.all(weights >= 0.8)
+        assert torch.all(weights <= 1.2)
+
     def test_balanced_softmax_rejects_wrong_shapes(self):
         """Shape mismatches should raise ValueError."""
         from src.vif.critic_ordinal import balanced_softmax_loss_multi
 
         y = torch.randint(-1, 2, (4, 10)).float()
-        class_priors = torch.tensor([[0.1, 0.8, 0.1]] * 10, dtype=torch.float32)
+        class_priors = self._class_priors()
 
         with pytest.raises(ValueError):
             balanced_softmax_loss_multi(torch.randn(4, 10, 3), y, class_priors=class_priors)
@@ -308,6 +514,142 @@ class TestBalancedSoftmaxLoss:
 
         with pytest.raises(ValueError):
             balanced_softmax_loss_multi(torch.randn(4, 30), y, class_priors=torch.ones(9, 3))
+
+        with pytest.raises(ValueError, match="dimension_weights"):
+            balanced_softmax_loss_multi(
+                torch.randn(4, 30),
+                y,
+                class_priors=class_priors,
+                dimension_weights=torch.ones(9),
+            )
+
+    def test_balanced_softmax_rejects_non_positive_dimension_weights(self):
+        """Dimension weights must be finite and strictly positive."""
+        from src.vif.critic_ordinal import balanced_softmax_loss_multi
+
+        logits = torch.randn(4, 30)
+        y = torch.randint(-1, 2, (4, 10)).float()
+        class_priors = self._class_priors()
+
+        with pytest.raises(ValueError, match="strictly positive"):
+            balanced_softmax_loss_multi(
+                logits,
+                y,
+                class_priors=class_priors,
+                dimension_weights=torch.tensor([0.0] + [1.0] * 9),
+            )
+
+        with pytest.raises(ValueError, match="finite"):
+            balanced_softmax_loss_multi(
+                logits,
+                y,
+                class_priors=class_priors,
+                dimension_weights=torch.tensor([float("inf")] + [1.0] * 9),
+            )
+
+    def test_balanced_softmax_rejects_negative_regularizer_weights(self):
+        """Circumplex regularizer weights must be non-negative."""
+        from src.vif.critic_ordinal import balanced_softmax_loss_multi
+
+        logits = torch.randn(4, 30)
+        y = torch.randint(-1, 2, (4, 10)).float()
+
+        with pytest.raises(ValueError, match="circumplex_regularizer_opposite_weight"):
+            balanced_softmax_loss_multi(
+                logits,
+                y,
+                class_priors=self._class_priors(),
+                circumplex_regularizer_opposite_weight=-0.1,
+            )
+
+        with pytest.raises(ValueError, match="circumplex_regularizer_adjacent_weight"):
+            balanced_softmax_loss_multi(
+                logits,
+                y,
+                class_priors=self._class_priors(),
+                circumplex_regularizer_adjacent_weight=-0.1,
+            )
+
+    def test_validate_dimension_weighting_config_rejects_invalid_inputs(self):
+        """Dimension-weighting config should reject invalid schedule parameters."""
+        from src.vif.critic_ordinal import validate_dimension_weighting_config
+
+        with pytest.raises(ValueError, match="dimension_weighting_mode"):
+            validate_dimension_weighting_config(
+                mode="unknown",
+                temperature=0.5,
+                ema_alpha=0.3,
+                warmup_epochs=1,
+                eps=1e-6,
+                min_weight=0.5,
+                max_weight=1.5,
+            )
+
+        with pytest.raises(ValueError, match="dimension_weighting_temperature"):
+            validate_dimension_weighting_config(
+                mode="inverse_loss",
+                temperature=0.0,
+                ema_alpha=0.3,
+                warmup_epochs=1,
+                eps=1e-6,
+                min_weight=0.5,
+                max_weight=1.5,
+            )
+
+        with pytest.raises(ValueError, match="dimension_weighting_ema_alpha"):
+            validate_dimension_weighting_config(
+                mode="inverse_loss",
+                temperature=0.5,
+                ema_alpha=1.1,
+                warmup_epochs=1,
+                eps=1e-6,
+                min_weight=0.5,
+                max_weight=1.5,
+            )
+
+        with pytest.raises(ValueError, match="dimension_weighting_warmup_epochs"):
+            validate_dimension_weighting_config(
+                mode="inverse_loss",
+                temperature=0.5,
+                ema_alpha=0.3,
+                warmup_epochs=-1,
+                eps=1e-6,
+                min_weight=0.5,
+                max_weight=1.5,
+            )
+
+        with pytest.raises(ValueError, match="dimension_weighting_eps"):
+            validate_dimension_weighting_config(
+                mode="inverse_loss",
+                temperature=0.5,
+                ema_alpha=0.3,
+                warmup_epochs=1,
+                eps=0.0,
+                min_weight=0.5,
+                max_weight=1.5,
+            )
+
+        with pytest.raises(ValueError, match="dimension_weighting_min"):
+            validate_dimension_weighting_config(
+                mode="inverse_loss",
+                temperature=0.5,
+                ema_alpha=0.3,
+                warmup_epochs=1,
+                eps=1e-6,
+                min_weight=0.0,
+                max_weight=1.5,
+            )
+
+        with pytest.raises(ValueError, match="dimension_weighting_min must be <="):
+            validate_dimension_weighting_config(
+                mode="inverse_loss",
+                temperature=0.5,
+                ema_alpha=0.3,
+                warmup_epochs=1,
+                eps=1e-6,
+                min_weight=1.6,
+                max_weight=1.5,
+            )
 
 
 class TestLDAMDRWLoss:

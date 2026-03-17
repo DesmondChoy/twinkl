@@ -1,0 +1,16 @@
+estimate,ci_lower,ci_upper,method,bootstrap_n,family_key,family_label,metric
+0.36191667125839005,0.30041066707686814,0.4440959662979311,bca,1000,default_balanced_softmax,Current default BalancedSoftmax,qwk_mean
+0.3132375776397515,0.2259855920921174,0.42066502344798407,bca,1000,default_balanced_softmax,Current default BalancedSoftmax,recall_minus1
+0.4480285597633995,0.3933090763423482,0.5405260071024819,bca,1000,default_balanced_softmax,Current default BalancedSoftmax,minority_recall_mean
+0.3419259302938902,0.265133561174632,0.4415869164737797,bca,1000,weighted_balanced_softmax,BalancedSoftmax + dimweight,qwk_mean
+0.37793995859213253,0.26619287907087336,0.4981783390016214,bca,1000,weighted_balanced_softmax,BalancedSoftmax + dimweight,recall_minus1
+0.4486039705590621,0.37899720057259245,0.531599612959215,bca,1000,weighted_balanced_softmax,BalancedSoftmax + dimweight,minority_recall_mean
+0.3663762069983872,0.2885502578012391,0.4639532930678171,bca,1000,circreg_recall_floor,BalancedSoftmax + circreg + recall floor,qwk_mean
+0.2667693236714976,0.1715942420150502,0.368225070550177,bca,1000,circreg_recall_floor,BalancedSoftmax + circreg + recall floor,recall_minus1
+0.40934126399122106,0.3496446667885825,0.48679047786390156,bca,1000,circreg_recall_floor,BalancedSoftmax + circreg + recall floor,minority_recall_mean
+0.3487705601428501,0.2671701294785649,0.4414178869668727,bca,1000,targeted_batch,BalancedSoftmax + targeted batch,qwk_mean
+0.3420194962042788,0.22240097886494545,0.4610782660923718,bca,1000,targeted_batch,BalancedSoftmax + targeted batch,recall_minus1
+0.43442518686976644,0.3671772462795599,0.526624158511429,bca,1000,targeted_batch,BalancedSoftmax + targeted batch,minority_recall_mean
+0.3458927308772134,0.27941158558551776,0.43476746834666213,bca,1000,hedonism_security_lift,BalancedSoftmax + hedonism/security lift,qwk_mean
+0.3278657694962043,0.22170649719016897,0.4318741132839401,bca,1000,hedonism_security_lift,BalancedSoftmax + hedonism/security lift,recall_minus1
+0.4418429033145852,0.3777569452644567,0.5260167088577756,bca,1000,hedonism_security_lift,BalancedSoftmax + hedonism/security lift,minority_recall_mean

@@ -54,7 +54,7 @@ The VIF is designed to:
    The VIF explicitly incorporates **recent temporal history** (sliding windows and simple statistics) instead of assuming that a single entry and static profile fully determine future trajectories.
 
 5. **Separation of concerns: Critic vs Coach**
-   The VIF (critic) focuses on **temporal, numeric evaluation** using sequential history. A separate **Coach / Explanation layer** uses retrieval-augmented generation (RAG) to surface thematic evidence and narratives *after* the critic has produced its scores.
+   The VIF (critic) focuses on **temporal, numeric evaluation** using sequential history. A separate **Coach / Explanation layer** reads the user's full journal history via **full-context prompting** (at POC scale, all entries fit in the LLM context window) to surface thematic evidence and narratives *after* the critic has produced its scores. At production scale with longer histories, this would transition to retrieval-augmented generation (RAG) — see [Section 4](#4-extensions-and-future-work).
 
 ---
 
@@ -78,7 +78,7 @@ Each user ($u$) has a **value profile**:
 
 * A vector of value weights:
   * $w_{u,t} \in \mathbb{R}^K$, with $w_{u,t} \ge 0$ and $\sum_k w_{u,t,k} = 1$.
-  * For the POC, $w_{u,t}$ may be treated as **piecewise constant** over time (updated infrequently), but conceptually it can evolve slowly as the user refines their priorities.
+  * For the POC, $w_{u,t}$ may be treated as **piecewise constant** over time (updated infrequently), but conceptually it can evolve slowly as the user refines their priorities. The mechanism for detecting when profile updates are warranted is specified in the [Value Evolution Detection](../evolution/01_value_evolution.md) design.
 * Additional profile information:
   * Narrative descriptions of what each value means to them.
   * Known constraints and long-term goals.
@@ -124,5 +124,8 @@ Potential extensions beyond the POC:
   * Incorporate ensembles, density models, or explicit OOD detectors on the text embedding space.
 * **More Modalities** *(Out of scope for capstone)*:
   * Incorporate prosodic and physiological features robustly, especially for early warning signals of stress or overload.
+* **Value Evolution Detection**: Statistical filter classifying per-dimension divergence as STABLE/EVOLUTION/DRIFT, gating drift triggers and enabling user-confirmed profile updates. See [Value Evolution Detection](../evolution/01_value_evolution.md).
 * **Personalisation Layers**:
   * Explore global VIF plus lightweight per-user adapters for users whose trajectories systematically diverge from the population.
+* **Retrieval-Augmented Coach (scaling)**:
+  * At POC scale (8–12 entries per persona), all journal entries fit in the LLM context window, so the Coach uses full-context prompting — passing all entries directly in the prompt. For production deployment with longer user histories (50+ entries), the Coach would transition to RAG with a vector store for semantic similarity retrieval over the journal corpus. This is a scaling concern, not a capability gap at current data volumes.

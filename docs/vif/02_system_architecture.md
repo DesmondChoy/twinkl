@@ -102,7 +102,9 @@ For a real user session:
    * Run VIF with MC Dropout to get $\\mu_{u,t}^{(j)}$ and $\\sigma_{u,t}^{(j)}$ per dimension. (See [Uncertainty Logic](04_uncertainty_logic.md))
 5. **Aggregate over time**:
    * Compute updated weekly aggregates (e.g. weekly means of $\\mu_{u,t}^{(j)}$).
-6. **Apply trigger rules**:
+6. **Classify divergence patterns**:
+   * Before applying trigger rules, an [evolution detection](../evolution/01_value_evolution.md) step classifies each dimension's divergence as STABLE, EVOLUTION, or DRIFT. Dimensions classified as EVOLUTION (sustained, low-volatility directional shift) are excluded from crash/rut triggers and routed to profile-update Coach messaging instead.
+7. **Apply trigger rules** (on non-EVOLUTION dimensions):
    * If significant weekly drop (crash) and low uncertainty → generate a targeted critique.
    * If sustained low weekly values for $\ge C_{\text{min}}$ weeks (rut) and low uncertainty → generate a targeted critique.
    * If sustained high values over multiple weeks and low uncertainty → generate occasional evidence-based acknowledgment.
@@ -117,15 +119,15 @@ We explicitly separate two memory and reasoning systems:
    * Does **not** use semantic retrieval of arbitrary past entries for its numeric prediction.
    * Focus: estimate current/short-horizon alignment per dimension and uncertainty.
 
-2. **Coach / Explanation Layer** – Thematic, retrieval-augmented guide
-   * Activated after the VIF identifies significant patterns — whether problematic (crash or rut) or positive (sustained alignment).
-   * Uses **retrieval-augmented generation (RAG)** over the user's longer-term journal history to:
-     * Retrieve thematically relevant entries (e.g. similar conflicts, repeated patterns, or evidence of consistent alignment).
+2. **Coach / Explanation Layer** – Full-context explanation guide
+   * Activated after the VIF identifies significant patterns — whether problematic (crash or rut) or positive (sustained alignment). The Coach differentiates between evolution messaging ("your priorities may be shifting") and drift messaging ("you may be losing track") based on the [evolution classification](../evolution/01_value_evolution.md).
+   * At POC scale (8–12 entries per persona), passes **all journal entries** directly into the LLM context window (full-context prompting) to:
+     * Identify thematically relevant patterns (e.g. similar conflicts, repeated behaviors, or evidence of consistent alignment).
      * Provide context-rich explanations, reflective prompts, or evidence-based acknowledgment.
    * For positive patterns, acknowledgment is infrequent and grounded in specific behaviors — never gamified (no streaks, points, or generic praise).
-   * Retrieval is based on **semantic similarity**, not recency, to support pattern recognition and narrative insight.
+   * At POC scale, the LLM reads the complete journal history in a single prompt. Semantic similarity retrieval (RAG) becomes relevant when history exceeds context window limits — see [Section 4 of `01_concepts_and_roadmap.md`](01_concepts_and_roadmap.md#4-extensions-and-future-work) for future scaling notes.
 
 This separation ensures that:
 
 * The **numeric value scores** remain grounded in recent temporal dynamics and are not contaminated by arbitrarily distant or thematically similar but contextually irrelevant entries.
-* The **explanations and reflections** can draw on the full richness of the user’s history.
+* The **explanations and reflections** can draw on the full richness of the user’s history via full-context prompting at POC scale, or retrieval-augmented generation at production scale.

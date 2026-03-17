@@ -209,7 +209,7 @@ Sarah's situation changes. A major client pitch consumes her.
 
 ### Coach's Response
 
-The Coach retrieves relevant context from Sarah's history and speaks:
+The Coach reads Sarah's full journal history and speaks:
 
 > "I noticed something in what you wrote. You mentioned Emma's recital — and that you 'always say' you'll make it up. Looking back at your entries, this is the third time this month you've written something similar.
 >

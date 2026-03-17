@@ -1,0 +1,317 @@
+# VIF Experiment: run_035_BalancedSoftmax
+# Generated: 2026-03-11T12:51:39
+# Git: 05ff2c7(dirty)
+metadata:
+  experiment_id: run_035_BalancedSoftmax
+  run_id: run_035
+  model_name: BalancedSoftmax
+  timestamp: '2026-03-11T12:51:39'
+  git_commit: 05ff2c7(dirty)
+  config_hash: b0f143103931
+provenance:
+  prev_run_id: run_034
+  prev_git_commit: 05ff2c7(dirty)
+  git_log: []
+  config_delta:
+    added: {}
+    removed: {}
+    changed:
+      training.seed:
+        from: 11
+        to: 22
+  rationale: >-
+    Second seed for the weighted `BalancedSoftmax` frozen-holdout rerun. This
+    run checks whether the seed-11 weighting trade-off is stable or whether the
+    branch can recover a stronger tail-sensitive profile on the same holdout.
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    pct_truncated: 0.0
+    state_dim: 266
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: balanced_softmax_dimweight
+    learning_rate: 0.015522253574270487
+    learning_rate_configured: 0.015522253574270487
+    learning_rate_source: explicit_model_override
+    lr_finder_enabled: false
+    learning_rate_policy: run_015_cdwce_a3_valley
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 22
+    class_balance_source: train_split_per_dimension
+    circumplex_regularizer_enabled: false
+    circumplex_regularizer_opposite_weight: 0.0
+    circumplex_regularizer_adjacent_weight: 0.0
+    dimension_weighting_enabled: true
+    dimension_weighting_mode: inverse_loss
+    dimension_weighting_temperature: 0.5
+    dimension_weighting_ema_alpha: 0.3
+    dimension_weighting_warmup_epochs: 1
+    dimension_weighting_eps: 1.0e-06
+    dimension_weighting_min: 0.5
+    dimension_weighting_max: 1.5
+    ldam_max_m: 0.5
+    ldam_scale: 30.0
+    ldam_drw_start_epoch: 50
+    ldam_beta: 0.9999
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1213
+  n_val: 217
+  n_test: 221
+capacity:
+  n_parameters: 23454
+  param_sample_ratio: 19.3355
+training_dynamics:
+  best_epoch: 20
+  total_epochs: 32
+  train_loss_at_best: 0.3391
+  val_loss_at_best: 0.466
+  gap_at_best: 0.1269
+  final_lr: 0.007761
+  selection_source: eligible_policy
+  promotion_eligible: true
+  debug_fallback_used: false
+  selection_metrics:
+    qwk_mean: 0.3906
+    recall_minus1: 0.5545
+    calibration_global: 0.6221
+    hedging_mean: 0.5498
+    qwk_nan_dims_count: 0
+    eligible: true
+    ineligible_reasons: []
+evaluation:
+  mae_mean: 0.3328
+  accuracy_mean: 0.7276
+  qwk_mean: 0.321
+  qwk_nan_dims_count: 0
+  spearman_mean: 0.3417
+  calibration_global: 0.6862
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.3504
+  minority_recall_mean: 0.4486
+  recall_minus1: 0.3779
+  recall_zero: 0.788
+  recall_plus1: 0.5193
+  hedging_mean: 0.5783
+  circumplex_summary:
+    opposite_violation_mean: 0.0916384148101012
+    adjacent_support_mean: 0.07580852353324492
+per_dimension:
+  self_direction:
+    mae: 0.3934
+    accuracy: 0.7059
+    qwk: 0.5357
+    spearman: 0.5701
+    calibration: 0.5689
+    hedging: 0.371
+  stimulation:
+    mae: 0.2971
+    accuracy: 0.7692
+    qwk: 0.1517
+    spearman: 0.1569
+    calibration: 0.704
+    hedging: 0.6425
+  hedonism:
+    mae: 0.2843
+    accuracy: 0.7828
+    qwk: 0.1287
+    spearman: 0.1801
+    calibration: 0.7462
+    hedging: 0.7014
+  achievement:
+    mae: 0.427
+    accuracy: 0.5973
+    qwk: 0.3005
+    spearman: 0.411
+    calibration: 0.4233
+    hedging: 0.4072
+  power:
+    mae: 0.2343
+    accuracy: 0.8009
+    qwk: 0.2572
+    spearman: 0.2607
+    calibration: 0.7951
+    hedging: 0.7647
+  security:
+    mae: 0.3847
+    accuracy: 0.6787
+    qwk: 0.1205
+    spearman: 0.2221
+    calibration: 0.4883
+    hedging: 0.6652
+  conformity:
+    mae: 0.37
+    accuracy: 0.7059
+    qwk: 0.5081
+    spearman: 0.5199
+    calibration: 0.5576
+    hedging: 0.4842
+  tradition:
+    mae: 0.27
+    accuracy: 0.7783
+    qwk: 0.4625
+    spearman: 0.5047
+    calibration: 0.7916
+    hedging: 0.6063
+  benevolence:
+    mae: 0.5273
+    accuracy: 0.5385
+    qwk: 0.3407
+    spearman: 0.3696
+    calibration: 0.2858
+    hedging: 0.3077
+  universalism:
+    mae: 0.14
+    accuracy: 0.9186
+    qwk: 0.4045
+    spearman: 0.2213
+    calibration: 0.9325
+    hedging: 0.8326
+observations: >-
+  Seed-22 leaned harder into the tail-sensitive operating point: recall_-1
+  rose to 0.378, minority recall to 0.449, and hedging dropped to 57.8%, but
+  aggregate QWK fell to 0.321 and security remained weak. This keeps the
+  weighted family promising as a recall-oriented branch, not yet as a default
+  replacement.
+circumplex:
+  source: probabilities
+  summary:
+    opposite_violation_mean: 0.0916384148101012
+    adjacent_support_mean: 0.07580852353324492
+  opposite_pairs:
+  - pair_id: achievement__benevolence
+    left: achievement
+    right: benevolence
+    score: 0.25443094968795776
+  - pair_id: achievement__universalism
+    left: achievement
+    right: universalism
+    score: 0.060554228723049164
+  - pair_id: benevolence__power
+    left: benevolence
+    right: power
+    score: 0.09660627692937851
+  - pair_id: conformity__hedonism
+    left: conformity
+    right: hedonism
+    score: 0.10692121833562851
+  - pair_id: conformity__self_direction
+    left: conformity
+    right: self_direction
+    score: 0.11048214137554169
+  - pair_id: conformity__stimulation
+    left: conformity
+    right: stimulation
+    score: 0.0789966806769371
+  - pair_id: hedonism__tradition
+    left: hedonism
+    right: tradition
+    score: 0.07046948373317719
+  - pair_id: power__universalism
+    left: power
+    right: universalism
+    score: 0.01896705850958824
+  - pair_id: security__self_direction
+    left: security
+    right: self_direction
+    score: 0.09695476293563843
+  - pair_id: security__stimulation
+    left: security
+    right: stimulation
+    score: 0.05448395013809204
+  - pair_id: self_direction__tradition
+    left: self_direction
+    right: tradition
+    score: 0.10604554414749146
+  - pair_id: stimulation__tradition
+    left: stimulation
+    right: tradition
+    score: 0.04474868252873421
+  adjacent_pairs:
+  - pair_id: achievement__hedonism
+    left: achievement
+    right: hedonism
+    score: 0.051177579909563065
+  - pair_id: achievement__power
+    left: achievement
+    right: power
+    score: 0.05155245214700699
+  - pair_id: benevolence__conformity
+    left: benevolence
+    right: conformity
+    score: 0.09416378289461136
+  - pair_id: benevolence__tradition
+    left: benevolence
+    right: tradition
+    score: 0.16723185777664185
+  - pair_id: benevolence__universalism
+    left: benevolence
+    right: universalism
+    score: 0.09599735587835312
+  - pair_id: conformity__security
+    left: conformity
+    right: security
+    score: 0.07957838475704193
+  - pair_id: conformity__tradition
+    left: conformity
+    right: tradition
+    score: 0.06825971603393555
+  - pair_id: hedonism__stimulation
+    left: hedonism
+    right: stimulation
+    score: 0.03579967841506004
+  - pair_id: power__security
+    left: power
+    right: security
+    score: 0.024011772125959396
+  - pair_id: security__tradition
+    left: security
+    right: tradition
+    score: 0.0849234089255333
+  - pair_id: self_direction__stimulation
+    left: self_direction
+    right: stimulation
+    score: 0.08632927387952805
+  - pair_id: self_direction__universalism
+    left: self_direction
+    right: universalism
+    score: 0.0706770196557045
+selection_policy:
+  name: qwk_then_recall_guarded
+  rank_order:
+  - qwk_mean
+  - recall_minus1
+  - calibration_global
+  - hedging_mean
+  - val_loss
+  guardrails:
+    qwk_mean_must_be_finite: true
+    qwk_nan_dims_count_must_equal_zero: true
+    calibration_global_must_be_non_negative: true
+    recall_minus1_floor: 0.4032
+  fallback: debug_best_finite_qwk_only
+artifacts:
+  selection_trace: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260311_125122/BalancedSoftmax/selection_trace.parquet
+  selection_summary: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260311_125122/BalancedSoftmax/selection_summary.yaml
+  dimension_weight_trace: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260311_125122/BalancedSoftmax/dimension_weight_trace.parquet
+  checkpoint: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260311_125122/BalancedSoftmax/selected_checkpoint.pt
+  validation_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260311_125122/BalancedSoftmax/selected_validation_outputs.parquet
+  test_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260311_125122/BalancedSoftmax/selected_test_outputs.parquet

@@ -30,6 +30,9 @@ implementations over heavy architecture.
 ## Environment and Commands
 
 Do NOT use git worktrees. Work only in the main working directory.
+Stay on the current branch by default. Do NOT create or switch to a new
+branch unless the user explicitly tells you to. If branch isolation seems
+safer, ask first instead of deciding unilaterally.
 
 Activate the virtual environment before Python commands:
 
@@ -78,6 +81,7 @@ Script-based generation/judging helpers live in `src/synthetic/`,
 ### Scripted Workflows
 
 - `src/vif/train.py` and `src/vif/train_bnn.py` — Critic training CLIs
+- `scripts/experiments/critic_training_v4_review.py` — Canonical frontier experiment driver for multi-model VIF review runs
 - `src/synthetic/generation.py` — Synthetic generation primitives and safeguards
 - `src/judge/labeling.py` — Judge rubric + scoring helpers
 - `scripts/journalling/` — Lightweight sanity-check scripts for generation/judge flows
@@ -114,6 +118,11 @@ Script-based generation/judging helpers live in `src/synthetic/`,
 - Naming: `snake_case` for functions/variables, `PascalCase` for classes.
 - Keep comments concise and only where they reduce cognitive load.
 
+## Communication Clarity
+
+- **General clarity rule**: Write for immediate understanding on first read. Prefer plain, everyday language, short sentences, and concrete wording over dense or abstract phrasing.
+- **Anti-jargon rule**: Do not make the user decode internal shorthand, umbrella terms, or technical jargon when a direct phrase would work. If a technical term is necessary, define it in plain English the first time you use it.
+
 ## Quality Gate Before Commit
 
 Before creating a commit:
@@ -127,15 +136,6 @@ Before creating a commit:
 If there is ambiguity and no blocking risk, proceed with explicit
 assumptions and note them. If ambiguity affects correctness or design
 direction, ask one concise clarifying question.
-
-## Asking the User
-
-When you need clarification, preferences, or decisions from the user,
-**always prefer the `ask_user_question` tool** over guessing or making
-assumptions. It presents structured, multiple-choice questions that
-resolve ambiguity quickly and keep the workflow moving.
-
-Note: this tool is unavailable in non-interactive mode (`codex exec`).
 
 ## Issue Tracking with Beads (`bd`)
 
@@ -213,12 +213,15 @@ Use `bd` (beads) for all issue tracking. This is mandatory, not optional.
 
 ## Task Management
 
-1. **Plan First**: Write plan to `tasks/todo.md` with checkable items
-2. **Verify Plan**: Check in before starting implementation
-3. **Track Progress**: Mark items complete as you go
-4. **Explain Changes**: High-level summary at each step
-5. **Document Results**: Add review section to `tasks/todo.md`
-6. **Capture Lessons**: Update `tasks/lessons.md` after corrections
+1. **Plan First**: Write a plan with checkable items
+2. **Verify Plan**: Use the `AskUserQuestion` tool to check in with the user
+   before starting implementation. Present structured, multiple-choice questions
+   to resolve ambiguity quickly and keep the workflow moving. (Unavailable in
+   non-interactive mode / `codex exec`.)
+3. **Explain Changes**: High-level summary at each step
+4. **Capture Lessons**: Update `tasks/lessons.md` after corrections
+5. **Update Documentation**: Run parallel sub-agents to scan potentially
+   affected documentation and update where needed
 
 ---
 
