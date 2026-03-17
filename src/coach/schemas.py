@@ -5,7 +5,14 @@ from typing import Literal
 from pydantic import BaseModel, Field
 
 
-CoachResponseMode = Literal["stable", "rut", "crash", "high_uncertainty"]
+CoachResponseMode = Literal[
+    "stable",
+    "rut",
+    "crash",
+    "high_uncertainty",
+    "mixed_state",
+    "background_strain",
+]
 
 
 class DimensionDigest(BaseModel):
@@ -23,7 +30,7 @@ class EvidenceSnippet(BaseModel):
 
     date: str
     t_index: int = Field(ge=0)
-    direction: Literal["misaligned", "aligned"]
+    direction: Literal["misaligned", "aligned", "strain"]
     dimensions: list[str]
     score_mean: float
     excerpt: str
@@ -76,6 +83,23 @@ class DigestValidation(BaseModel):
         return any(check.name == "length" and check.passed for check in self.checks)
 
 
+class DriftDetectionResult(BaseModel):
+    """Structured drift-detection output consumed by the weekly digest layer."""
+
+    response_mode: CoachResponseMode
+    rationale: str = Field(
+        description="Human-readable explanation for why drift detection selected this mode."
+    )
+    reasons: list[str] = Field(
+        default_factory=list,
+        description="Optional machine-readable or audit-friendly supporting reasons.",
+    )
+    source: str = Field(
+        default="drift_detector",
+        description="Upstream component that produced the mode, typically drift_detector.",
+    )
+
+
 class WeeklyDigest(BaseModel):
     """Structured weekly digest payload for downstream coach generation."""
 
@@ -93,6 +117,7 @@ class WeeklyDigest(BaseModel):
     n_entries: int = Field(ge=1)
     overall_mean: float
     core_values: list[str] = Field(default_factory=list)
+    drift_reasons: list[str] = Field(default_factory=list)
     top_tensions: list[str]
     top_strengths: list[str]
     dimensions: list[DimensionDigest]

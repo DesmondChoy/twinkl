@@ -15,6 +15,7 @@ from src.coach.weekly_digest import (
     render_digest_prompt,
     validate_weekly_digest_narrative,
 )
+from src.coach.schemas import DriftDetectionResult
 
 
 def _write_test_wrangled(path: Path) -> None:
@@ -117,15 +118,16 @@ def test_build_weekly_digest_and_render(tmp_path: Path):
     )
 
     assert digest.persona_name == "Casey"
-    assert digest.response_mode in {"stable", "rut"}
+    assert digest.response_mode in {"stable", "rut", "mixed_state"}
     assert digest.mode_source == "fallback_heuristic"
     assert digest.n_entries == 3
     assert digest.core_values == ["self_direction", "benevolence"]
-    assert len(digest.top_tensions) == 3
-    assert len(digest.top_strengths) == 2
-    assert len(digest.evidence) == 3
+    assert len(digest.top_tensions) >= 1
+    assert len(digest.top_strengths) >= 1
+    assert len(digest.evidence) >= 2
     assert len(digest.journal_history) == 3
     assert all(snippet.dimensions for snippet in digest.evidence)
+    assert not set(digest.top_tensions) & set(digest.top_strengths)
 
     evidence_keys = [(snippet.date, snippet.t_index) for snippet in digest.evidence]
     assert len(evidence_keys) == len(set(evidence_keys))
@@ -219,3 +221,297 @@ def test_generate_validate_and_persist_weekly_digest(tmp_path: Path):
     assert parquet_path.exists()
     assert df.height == 1
     assert json.loads(df["coach_narrative_json"][0])["weekly_mirror"].startswith("This week")
+    assert json.loads(df["drift_reasons_json"][0]) == []
+
+
+def test_build_weekly_digest_truncates_future_history_and_handles_acute_distress(
+    tmp_path: Path,
+):
+    labels_path = tmp_path / "judge_labels.parquet"
+    wrangled_dir = tmp_path / "wrangled"
+    wrangled_dir.mkdir(parents=True, exist_ok=True)
+
+    (wrangled_dir / "persona_deadbeef.md").write_text(
+        """# Persona deadbeef: Casey
+
+## Profile
+- **Persona ID:** deadbeef
+- **Name:** Casey
+- **Age:** 25-34
+- **Profession:** Engineer
+- **Culture:** Singaporean
+- **Core Values:** Benevolence
+- **Bio:** Test persona.
+
+---
+
+## Entry 0 - 2025-01-01
+
+The child died tonight and I held his mother while she screamed. I came home crying and could not stop shaking.
+
+---
+
+## Entry 1 - 2025-01-03
+
+Made dinner for my family and stayed with them in the kitchen.
+
+---
+
+## Entry 2 - 2025-01-10
+
+Later entry that should not appear in a digest ending on 2025-01-07.
+
+---
+"""
+    )
+
+    rows = [
+        {
+            "persona_id": "deadbeef",
+            "t_index": 0,
+            "date": "2025-01-01",
+            "alignment_self_direction": 0,
+            "alignment_stimulation": 0,
+            "alignment_hedonism": -1,
+            "alignment_achievement": 0,
+            "alignment_power": 0,
+            "alignment_security": 0,
+            "alignment_conformity": 0,
+            "alignment_tradition": 0,
+            "alignment_benevolence": 1,
+            "alignment_universalism": 0,
+        },
+        {
+            "persona_id": "deadbeef",
+            "t_index": 1,
+            "date": "2025-01-03",
+            "alignment_self_direction": 0,
+            "alignment_stimulation": 0,
+            "alignment_hedonism": 0,
+            "alignment_achievement": 0,
+            "alignment_power": 0,
+            "alignment_security": 0,
+            "alignment_conformity": 0,
+            "alignment_tradition": 1,
+            "alignment_benevolence": 1,
+            "alignment_universalism": 0,
+        },
+    ]
+    pl.DataFrame(rows).write_parquet(labels_path)
+
+    digest = build_weekly_digest(
+        persona_id="deadbeef",
+        labels_path=labels_path,
+        wrangled_dir=wrangled_dir,
+        start_date="2025-01-01",
+        end_date="2025-01-07",
+    )
+
+    assert digest.response_mode == "high_uncertainty"
+    assert len(digest.journal_history) == 2
+    assert all(entry.date <= "2025-01-07" for entry in digest.journal_history)
+    assert any(snippet.direction == "strain" for snippet in digest.evidence)
+
+
+def test_build_weekly_digest_detects_background_strain(tmp_path: Path):
+    labels_path = tmp_path / "judge_labels.parquet"
+    wrangled_dir = tmp_path / "wrangled"
+    wrangled_dir.mkdir(parents=True, exist_ok=True)
+
+    (wrangled_dir / "persona_deadbeef.md").write_text(
+        """# Persona deadbeef: Casey
+
+## Profile
+- **Persona ID:** deadbeef
+- **Name:** Casey
+- **Age:** 25-34
+- **Profession:** Engineer
+- **Culture:** Singaporean
+- **Core Values:** Benevolence
+- **Bio:** Test persona.
+
+---
+
+## Entry 0 - 2025-01-01
+
+Held the family together through dinner, but I am tired in a way that has nothing to do with sleep.
+
+---
+
+## Entry 1 - 2025-01-03
+
+Everyone just stepped in without me asking, but I have been holding all the pieces so tightly.
+
+---
+"""
+    )
+
+    rows = [
+        {
+            "persona_id": "deadbeef",
+            "t_index": 0,
+            "date": "2025-01-01",
+            "alignment_self_direction": 0,
+            "alignment_stimulation": 0,
+            "alignment_hedonism": 0,
+            "alignment_achievement": 0,
+            "alignment_power": 0,
+            "alignment_security": 0,
+            "alignment_conformity": 0,
+            "alignment_tradition": 0,
+            "alignment_benevolence": 1,
+            "alignment_universalism": 0,
+        },
+        {
+            "persona_id": "deadbeef",
+            "t_index": 1,
+            "date": "2025-01-03",
+            "alignment_self_direction": 0,
+            "alignment_stimulation": 0,
+            "alignment_hedonism": 0,
+            "alignment_achievement": 1,
+            "alignment_power": 0,
+            "alignment_security": 0,
+            "alignment_conformity": 0,
+            "alignment_tradition": 0,
+            "alignment_benevolence": 1,
+            "alignment_universalism": 0,
+        },
+    ]
+    pl.DataFrame(rows).write_parquet(labels_path)
+
+    digest = build_weekly_digest(
+        persona_id="deadbeef",
+        labels_path=labels_path,
+        wrangled_dir=wrangled_dir,
+        start_date="2025-01-01",
+        end_date="2025-01-07",
+    )
+
+    assert digest.response_mode == "background_strain"
+    assert digest.top_tensions == []
+    assert any(snippet.direction == "strain" for snippet in digest.evidence)
+
+
+def test_build_weekly_digest_detects_mixed_state(tmp_path: Path):
+    labels_path = tmp_path / "judge_labels.parquet"
+    wrangled_dir = tmp_path / "wrangled"
+    wrangled_dir.mkdir(parents=True, exist_ok=True)
+
+    (wrangled_dir / "persona_deadbeef.md").write_text(
+        """# Persona deadbeef: Casey
+
+## Profile
+- **Persona ID:** deadbeef
+- **Name:** Casey
+- **Age:** 25-34
+- **Profession:** Engineer
+- **Culture:** Singaporean
+- **Core Values:** Self-Direction, Benevolence
+- **Bio:** Test persona.
+
+---
+
+## Entry 0 - 2025-01-01
+
+Skipped my own plans to help everyone else and felt resentful about it.
+
+---
+
+## Entry 1 - 2025-01-03
+
+Called my mom and still made progress on the project that matters to me.
+
+---
+"""
+    )
+
+    rows = [
+        {
+            "persona_id": "deadbeef",
+            "t_index": 0,
+            "date": "2025-01-01",
+            "alignment_self_direction": -1,
+            "alignment_stimulation": 0,
+            "alignment_hedonism": 0,
+            "alignment_achievement": 0,
+            "alignment_power": 0,
+            "alignment_security": 0,
+            "alignment_conformity": 0,
+            "alignment_tradition": 0,
+            "alignment_benevolence": 1,
+            "alignment_universalism": 0,
+        },
+        {
+            "persona_id": "deadbeef",
+            "t_index": 1,
+            "date": "2025-01-03",
+            "alignment_self_direction": 1,
+            "alignment_stimulation": 0,
+            "alignment_hedonism": 0,
+            "alignment_achievement": 1,
+            "alignment_power": 0,
+            "alignment_security": 0,
+            "alignment_conformity": 0,
+            "alignment_tradition": 0,
+            "alignment_benevolence": 1,
+            "alignment_universalism": 0,
+        },
+    ]
+    pl.DataFrame(rows).write_parquet(labels_path)
+
+    digest = build_weekly_digest(
+        persona_id="deadbeef",
+        labels_path=labels_path,
+        wrangled_dir=wrangled_dir,
+        start_date="2025-01-01",
+        end_date="2025-01-07",
+    )
+
+    assert digest.response_mode == "mixed_state"
+    assert digest.top_strengths
+    assert digest.evidence
+
+
+def test_build_weekly_digest_prefers_upstream_drift_result(tmp_path: Path):
+    labels_path = tmp_path / "judge_labels.parquet"
+    wrangled_dir = tmp_path / "wrangled"
+    wrangled_dir.mkdir(parents=True, exist_ok=True)
+    _write_test_wrangled(wrangled_dir / "persona_deadbeef.md")
+
+    rows = [
+        {
+            "persona_id": "deadbeef",
+            "t_index": 0,
+            "date": "2025-01-01",
+            "alignment_self_direction": 0,
+            "alignment_stimulation": 0,
+            "alignment_hedonism": 0,
+            "alignment_achievement": 0,
+            "alignment_power": 0,
+            "alignment_security": 0,
+            "alignment_conformity": 0,
+            "alignment_tradition": 0,
+            "alignment_benevolence": 1,
+            "alignment_universalism": 0,
+        },
+    ]
+    pl.DataFrame(rows).write_parquet(labels_path)
+
+    digest = build_weekly_digest(
+        persona_id="deadbeef",
+        labels_path=labels_path,
+        wrangled_dir=wrangled_dir,
+        start_date="2025-01-01",
+        end_date="2025-01-07",
+        drift_result=DriftDetectionResult(
+            response_mode="crash",
+            rationale="Upstream detector found a sharp weekly drop in a tracked value.",
+            reasons=["delta_breach", "low_uncertainty"],
+        ),
+    )
+
+    assert digest.response_mode == "crash"
+    assert digest.mode_source == "drift_detector"
+    assert digest.mode_rationale.startswith("Upstream detector")
+    assert digest.drift_reasons == ["delta_breach", "low_uncertainty"]

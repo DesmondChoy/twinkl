@@ -19,9 +19,15 @@ import polars as pl
 import yaml
 
 from prompts import load_prompt
+from src.coach.mode_logic import (
+    WeeklyModeSignals,
+    has_acute_distress_context,
+    infer_response_mode,
+)
 from src.coach.schemas import (
     CoachNarrative,
     CoachResponseMode,
+    DriftDetectionResult,
     DigestValidation,
     DimensionDigest,
     EvidenceSnippet,
@@ -46,6 +52,13 @@ def _parse_iso_date(raw: str) -> date:
 def _format_dim_name(dim: str) -> str:
     """Format snake_case value names for human-readable output."""
     return dim.replace("_", " ").title()
+
+
+def _format_dimension_list(dimensions: list[str], empty_label: str) -> str:
+    """Format a dimension list for human-readable output."""
+    if not dimensions:
+        return empty_label
+    return ", ".join(_format_dim_name(dim) for dim in dimensions)
 
 
 def _truncate_excerpt(text: str, max_words: int = 40) -> str:
@@ -93,7 +106,9 @@ def _summarize_value_context(
 
 
 def _load_persona_context(
-    persona_id: str, wrangled_dir: Path
+    persona_id: str,
+    wrangled_dir: Path,
+    history_end_date: date | None = None,
 ) -> tuple[dict, list[JournalHistoryEntry], dict[tuple[str, int], str]]:
     """Load profile, full journal history, and entry texts for one persona."""
     wrangled_file = wrangled_dir / f"persona_{persona_id}.md"
@@ -105,6 +120,10 @@ def _load_persona_context(
     text_by_key: dict[tuple[str, int], str] = {}
     journal_history: list[JournalHistoryEntry] = []
     for entry in entries:
+        entry_date = _parse_iso_date(entry["date"])
+        if history_end_date is not None and entry_date > history_end_date:
+            continue
+
         combined = entry["initial_entry"] or ""
         if entry.get("has_response") and entry.get("response_text"):
             combined = f"{combined}\n\nResponse: {entry['response_text']}"
@@ -127,6 +146,19 @@ def _load_persona_context(
         if isinstance(value_name, str)
     ]
     return profile, journal_history, text_by_key
+
+
+def _window_history(
+    journal_history: list[JournalHistoryEntry],
+    start_date: date,
+    end_date: date,
+) -> list[JournalHistoryEntry]:
+    """Return journal entries that fall within the requested digest window."""
+    return [
+        entry
+        for entry in journal_history
+        if start_date <= _parse_iso_date(entry.date) <= end_date
+    ]
 
 
 def _resolve_week_window(
@@ -157,36 +189,30 @@ def _rank_dimensions(
     core_values: list[str],
     direction: str,
     limit: int,
+    exclude: set[str] | None = None,
 ) -> list[str]:
     """Rank digest focus dimensions, preferring declared core values when useful."""
     if direction not in {"tension", "strength"}:
         raise ValueError("direction must be 'tension' or 'strength'")
+    excluded = exclude or set()
 
     if direction == "tension":
         primary_core = [item for item in dim_means if item[0] in core_values and item[1] < 0]
         primary_other = [item for item in dim_means if item[0] not in core_values and item[1] < 0]
-        secondary_core = [item for item in dim_means if item[0] in core_values and item[1] >= 0]
-        secondary_other = [item for item in dim_means if item[0] not in core_values and item[1] >= 0]
-
         primary_core.sort(key=lambda item: item[1])
         primary_other.sort(key=lambda item: item[1])
-        secondary_core.sort(key=lambda item: item[1])
-        secondary_other.sort(key=lambda item: item[1])
+        buckets = (primary_core, primary_other)
     else:
         primary_core = [item for item in dim_means if item[0] in core_values and item[1] > 0]
         primary_other = [item for item in dim_means if item[0] not in core_values and item[1] > 0]
-        secondary_core = [item for item in dim_means if item[0] in core_values and item[1] <= 0]
-        secondary_other = [item for item in dim_means if item[0] not in core_values and item[1] <= 0]
-
         primary_core.sort(key=lambda item: item[1], reverse=True)
         primary_other.sort(key=lambda item: item[1], reverse=True)
-        secondary_core.sort(key=lambda item: item[1], reverse=True)
-        secondary_other.sort(key=lambda item: item[1], reverse=True)
+        buckets = (primary_core, primary_other)
 
     ranked: list[str] = []
-    for bucket in (primary_core, primary_other, secondary_core, secondary_other):
+    for bucket in buckets:
         for dim, _score in bucket:
-            if dim not in ranked:
+            if dim not in ranked and dim not in excluded:
                 ranked.append(dim)
             if len(ranked) >= limit:
                 return ranked
@@ -210,26 +236,34 @@ def _select_row_dimensions(row: dict, candidate_dims: list[str], direction: str)
     return [scored_dims[0][0]] if scored_dims else []
 
 
-def _infer_response_mode(
-    overall_mean: float,
-    top_tensions: list[str],
-    core_values: list[str],
-) -> tuple[CoachResponseMode, str, str]:
-    """Assign a conservative fallback mode until drift detection is wired."""
-    critical_core_tensions = [dim for dim in top_tensions if dim in core_values]
+def _select_soft_strain_entry(
+    rows: list[dict],
+    selected_keys: set[tuple[str, int]],
+) -> dict | None:
+    """Select a softer strain example when the week is not cleanly misaligned."""
+    for row in rows:
+        key = (row["date"], int(row["t_index"]))
+        if key not in selected_keys:
+            return row
+    return None
 
-    if overall_mean < -0.15 and critical_core_tensions:
-        return (
-            "rut",
-            "fallback_heuristic",
-            "Weekly aggregate is negative and a declared core value appears among the main tensions.",
-        )
 
-    return (
-        "stable",
-        "fallback_heuristic",
-        "Drift detection is not wired yet, so the digest defaults to a stable reflective mode unless there is clear weekly strain on core values.",
-    )
+def _has_mixed_core_polarity(labels: pl.DataFrame, core_values: list[str]) -> bool:
+    """Detect whether any declared core value swings both negative and positive in-window."""
+    for dim in core_values:
+        column = f"alignment_{dim}"
+        if column not in labels.columns:
+            continue
+        if int(labels[column].min()) < 0 and int(labels[column].max()) > 0:
+            return True
+    return False
+
+
+def _format_evidence_dimensions(dimensions: list[str]) -> str:
+    """Format evidence dimensions with an explicit empty-state label."""
+    if not dimensions:
+        return "none"
+    return ", ".join(_format_dim_name(dim) for dim in dimensions)
 
 
 def build_weekly_digest(
@@ -238,6 +272,7 @@ def build_weekly_digest(
     wrangled_dir: Path,
     start_date: str | None = None,
     end_date: str | None = None,
+    drift_result: DriftDetectionResult | None = None,
     response_mode: CoachResponseMode | None = None,
 ) -> WeeklyDigest:
     """Build a structured weekly digest payload for one persona."""
@@ -257,9 +292,14 @@ def build_weekly_digest(
             f"for persona_id={persona_id}"
         )
 
-    profile, journal_history, entry_texts = _load_persona_context(persona_id, wrangled_dir)
+    profile, journal_history, entry_texts = _load_persona_context(
+        persona_id,
+        wrangled_dir,
+        history_end_date=resolved_end,
+    )
     core_values = profile.get("core_values") or []
-
+    window_history = _window_history(journal_history, resolved_start, resolved_end)
+    acute_distress = has_acute_distress_context(window_history)
     dim_rows: list[DimensionDigest] = []
     dim_means: list[tuple[str, float]] = []
     n_rows = labels.height
@@ -281,27 +321,44 @@ def build_weekly_digest(
         )
         dim_means.append((dim, mean_score))
 
-    top_tensions = _rank_dimensions(dim_means, core_values, direction="tension", limit=3)
     top_strengths = _rank_dimensions(dim_means, core_values, direction="strength", limit=2)
-
-    if not top_tensions:
-        top_tensions = [dim for dim, _score in dim_means[:3]]
     if not top_strengths:
-        top_strengths = [dim for dim, _score in dim_means[-2:]]
+        positive_dims = [dim for dim, score in dim_means if score > 0]
+        top_strengths = positive_dims[:2]
+
+    suppressed_tensions: set[str] = set()
+    if acute_distress:
+        negative_core_tensions = [
+            dim for dim, score in dim_means if dim in core_values and score < 0
+        ]
+        if not negative_core_tensions:
+            suppressed_tensions.update({"hedonism", "stimulation"})
+
+    top_tensions = _rank_dimensions(
+        dim_means,
+        core_values,
+        direction="tension",
+        limit=3,
+        exclude=set(top_strengths) | suppressed_tensions,
+    )
 
     tension_cols = [f"alignment_{dim}" for dim in top_tensions]
     strength_cols = [f"alignment_{dim}" for dim in top_strengths]
-    with_entry_scores = labels.with_columns(
-        [
-            pl.mean_horizontal(ALIGNMENT_COLUMNS).alias("entry_mean"),
-            pl.mean_horizontal(tension_cols).alias("tension_score"),
-            pl.mean_horizontal(strength_cols).alias("strength_score"),
-        ]
-    )
+    score_columns = [pl.mean_horizontal(ALIGNMENT_COLUMNS).alias("entry_mean")]
+    if tension_cols:
+        score_columns.append(pl.mean_horizontal(tension_cols).alias("tension_score"))
+    else:
+        score_columns.append(pl.lit(0.0).alias("tension_score"))
+    if strength_cols:
+        score_columns.append(pl.mean_horizontal(strength_cols).alias("strength_score"))
+    else:
+        score_columns.append(pl.lit(0.0).alias("strength_score"))
+
+    with_entry_scores = labels.with_columns(score_columns)
 
     n_entries = with_entry_scores.height
-    mis_target = 1 if n_entries <= 2 else 2
-    aligned_target = 1
+    mis_target = 0 if not top_tensions else (1 if n_entries <= 2 else 2)
+    aligned_target = 1 if top_strengths else 0
 
     mis_primary = with_entry_scores.filter(pl.col("tension_score") < 0).sort(
         ["tension_score", "entry_mean"]
@@ -362,16 +419,58 @@ def build_weekly_digest(
 
     overall_mean = float(with_entry_scores["entry_mean"].mean())
 
-    if response_mode is None:
-        resolved_mode, mode_source, mode_rationale = _infer_response_mode(
-            overall_mean=overall_mean,
-            top_tensions=top_tensions,
-            core_values=core_values,
-        )
-    else:
+    drift_reasons: list[str] = []
+    if drift_result is not None:
+        resolved_mode = drift_result.response_mode
+        mode_source = drift_result.source
+        mode_rationale = drift_result.rationale
+        drift_reasons = list(drift_result.reasons)
+    elif response_mode is not None:
         resolved_mode = response_mode
         mode_source = "manual_override"
         mode_rationale = "Response mode supplied explicitly for testing or manual review."
+    else:
+        mode_decision = infer_response_mode(
+            WeeklyModeSignals(
+                overall_mean=overall_mean,
+                top_tensions=top_tensions,
+                top_strengths=top_strengths,
+                core_values=core_values,
+                window_entries=window_history,
+                has_mixed_core_polarity=_has_mixed_core_polarity(labels, core_values),
+            )
+        )
+        resolved_mode = mode_decision.response_mode
+        mode_source = mode_decision.mode_source
+        mode_rationale = mode_decision.mode_rationale
+
+    if resolved_mode == "high_uncertainty":
+        normalized_evidence: list[EvidenceSnippet] = []
+        for snippet in evidence_rows:
+            if snippet.direction == "misaligned":
+                normalized_evidence.append(
+                    snippet.model_copy(update={"direction": "strain"})
+                )
+            else:
+                normalized_evidence.append(snippet)
+        evidence_rows = normalized_evidence
+
+    if resolved_mode in {"high_uncertainty", "background_strain"}:
+        soft_row = _select_soft_strain_entry(mis_candidates + aligned_candidates, selected_keys)
+        if soft_row is not None:
+            key = (soft_row["date"], int(soft_row["t_index"]))
+            selected_keys.add(key)
+            raw_text = entry_texts.get(key, "")
+            soft_dims = top_tensions[:2]
+            strain_snippet = EvidenceSnippet(
+                date=soft_row["date"],
+                t_index=int(soft_row["t_index"]),
+                direction="strain",
+                dimensions=soft_dims,
+                score_mean=float(soft_row["entry_mean"]),
+                excerpt=_truncate_excerpt(raw_text),
+            )
+            evidence_rows.insert(0, strain_snippet)
 
     return WeeklyDigest(
         persona_id=persona_id,
@@ -384,6 +483,7 @@ def build_weekly_digest(
         n_entries=n_rows,
         overall_mean=overall_mean,
         core_values=core_values,
+        drift_reasons=drift_reasons,
         top_tensions=top_tensions,
         top_strengths=top_strengths,
         dimensions=dim_rows,
@@ -410,7 +510,7 @@ def _build_prompt_inputs(
     evidence_lines = [
         (
             f"- {snippet.date} (entry {snippet.t_index}, {snippet.direction}, "
-            f"dims={', '.join(_format_dim_name(d) for d in snippet.dimensions)}, "
+            f"dims={_format_evidence_dimensions(snippet.dimensions)}, "
             f"mean={snippet.score_mean:.3f}): {snippet.excerpt}"
         )
         for snippet in digest.evidence
@@ -434,8 +534,13 @@ def _build_prompt_inputs(
         "n_entries": digest.n_entries,
         "overall_mean": f"{digest.overall_mean:.3f}",
         "core_values": ", ".join(_format_dim_name(dim) for dim in digest.core_values) or "None captured",
-        "top_tensions": ", ".join(_format_dim_name(d) for d in digest.top_tensions),
-        "top_strengths": ", ".join(_format_dim_name(d) for d in digest.top_strengths),
+        "drift_reasons": digest.drift_reasons,
+        "top_tensions": _format_dimension_list(
+            digest.top_tensions, "None clear this week"
+        ),
+        "top_strengths": _format_dimension_list(
+            digest.top_strengths, "None clear this week"
+        ),
         "dimension_lines": dimension_lines,
         "evidence_lines": evidence_lines,
         "history_lines": history_lines,
@@ -459,15 +564,20 @@ def render_digest_markdown(digest: WeeklyDigest) -> str:
         f"- Window: `{digest.week_start}` to `{digest.week_end}`",
         f"- Response mode: `{digest.response_mode}` (`{digest.mode_source}`)",
         f"- Mode rationale: {digest.mode_rationale}",
+        (
+            f"- Drift reasons: {', '.join(digest.drift_reasons)}"
+            if digest.drift_reasons
+            else "- Drift reasons: none recorded"
+        ),
         f"- Entries scored: `{digest.n_entries}`",
         f"- Overall mean alignment: `{digest.overall_mean:.3f}`",
         f"- Declared core values: {', '.join(_format_dim_name(dim) for dim in digest.core_values) or 'None captured'}",
         "",
         "## Tensions",
-        ", ".join(_format_dim_name(d) for d in digest.top_tensions),
+        _format_dimension_list(digest.top_tensions, "None clear this week"),
         "",
         "## Strengths",
-        ", ".join(_format_dim_name(d) for d in digest.top_strengths),
+        _format_dimension_list(digest.top_strengths, "None clear this week"),
         "",
         "## Dimension Summary",
         "",
@@ -486,7 +596,7 @@ def render_digest_markdown(digest: WeeklyDigest) -> str:
     for snippet in digest.evidence:
         lines.append(
             f"- `{snippet.date}` entry `{snippet.t_index}` "
-            f"({snippet.direction}, dims={', '.join(_format_dim_name(d) for d in snippet.dimensions)}, "
+            f"({snippet.direction}, dims={_format_evidence_dimensions(snippet.dimensions)}, "
             f"mean={snippet.score_mean:.3f}): {snippet.excerpt}"
         )
 
@@ -647,6 +757,7 @@ def persist_weekly_digest_record(digest: WeeklyDigest, parquet_path: Path) -> pl
         "response_mode": digest.response_mode,
         "mode_source": digest.mode_source,
         "mode_rationale": digest.mode_rationale,
+        "drift_reasons_json": json.dumps(digest.drift_reasons),
         "n_entries": digest.n_entries,
         "overall_mean": digest.overall_mean,
         "core_values_json": json.dumps(digest.core_values),
@@ -706,8 +817,20 @@ def _build_cli_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--response-mode",
         default=None,
-        choices=["stable", "rut", "crash", "high_uncertainty"],
-        help="Optional manual response mode override.",
+        choices=[
+            "stable",
+            "rut",
+            "crash",
+            "high_uncertainty",
+            "mixed_state",
+            "background_strain",
+        ],
+        help="Optional manual response mode override. Prefer upstream drift detection in normal use.",
+    )
+    parser.add_argument(
+        "--drift-result-json",
+        default=None,
+        help="Optional JSON file containing upstream drift detection output for this week.",
     )
     parser.add_argument(
         "--labels-path",
@@ -735,12 +858,18 @@ def _build_cli_parser() -> argparse.ArgumentParser:
 def main() -> None:
     args = _build_cli_parser().parse_args()
 
+    drift_result = None
+    if args.drift_result_json:
+        drift_payload = json.loads(Path(args.drift_result_json).read_text())
+        drift_result = DriftDetectionResult.model_validate(drift_payload)
+
     digest = build_weekly_digest(
         persona_id=args.persona_id,
         labels_path=Path(args.labels_path),
         wrangled_dir=Path(args.wrangled_dir),
         start_date=args.start_date,
         end_date=args.end_date,
+        drift_result=drift_result,
         response_mode=args.response_mode,
     )
 
