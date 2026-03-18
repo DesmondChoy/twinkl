@@ -15,16 +15,16 @@ The Judge (LLM-as-Judge) produces training labels for the VIF. This evaluation v
 - 1 651 labeled entries across 204 personas in [`logs/judge_labels/judge_labels.parquet`](../../logs/judge_labels/judge_labels.parquet)
 - Data models with rationale support ([`src/models/judge.py`](../../src/models/judge.py))
 - Human annotation tool ([`src/annotation_tool/app.py`](../../src/annotation_tool/app.py))
-- 3 annotators × 46 entries (des, jl, km) in [`logs/annotations/`](../../logs/annotations/)
+- 3 annotators × 115 shared entries across 19 personas (des, jl, km) in [`logs/annotations/`](../../logs/annotations/)
 - Cohen's κ and Fleiss' κ calculation ([`src/annotation_tool/agreement_metrics.py`](../../src/annotation_tool/agreement_metrics.py))
-- Agreement report: aggregate Cohen's κ 0.57–0.76, Fleiss' κ 0.56 ([report](../../logs/exports/agreement_report_20260128_133444.md))
+- Agreement report: avg Cohen's κ 0.66, Fleiss' κ 0.56 ([report](../../logs/exports/agreement_report_20260318_130642.md))
 
 ### What's Missing
 - Automated quality checks (all-zero rate, sparsity, distribution)
 - Consistency checks (re-running same entry multiple times)
 
 ### Next Steps
-1. Review low-agreement values (Universalism, Power, Benevolence) and refine rubrics
+1. Review low-agreement values (Conformity, Self-Direction, Achievement) and refine rubrics
 2. Add automated quality checks as post-labeling validation
 3. Re-annotate subset after rubric improvements to measure κ improvement
 
