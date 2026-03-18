@@ -375,6 +375,7 @@ def _loss_shorthand(model_name: str, config: dict) -> str:
         "SoftOrdinal": "soft_ordinal",
         "BalancedSoftmax": "balanced_softmax",
         "LDAM_DRW": "ldam_drw",
+        "SLACE": "slace",
     }
     if model_name == "MSE":
         loss_fn = config.get("loss_fn", "mse")
@@ -526,6 +527,7 @@ def _build_experiment_dict(
                 "ldam_scale": config.get("ldam_scale"),
                 "ldam_drw_start_epoch": config.get("ldam_drw_start_epoch"),
                 "ldam_beta": config.get("ldam_beta"),
+                "slace_alpha": config.get("slace_alpha"),
                 "weighted_mse_scale": (
                     config.get("weighted_mse_scale")
                     if model_name == "MSE" and config.get("loss_fn") == "weighted_mse"

@@ -1,6 +1,6 @@
 """Tests for OrdinalCriticBase and all ordinal model variants.
 
-Parametrized over all 7 models to verify the shared interface contract.
+Parametrized over all 8 models to verify the shared interface contract.
 """
 
 import torch
@@ -13,6 +13,7 @@ from src.vif.critic_ordinal import (
     CriticMLPCDWCE,
     CriticMLPEMD,
     CriticMLPLDAMDRW,
+    CriticMLPSLACE,
     CriticMLPSoftOrdinal,
     OrdinalCriticBase,
 )
@@ -28,6 +29,7 @@ ALL_MODELS = [
     CriticMLPCDWCE,
     CriticMLPBalancedSoftmax,
     CriticMLPLDAMDRW,
+    CriticMLPSLACE,
     CriticMLPSoftOrdinal,
 ]
 
@@ -37,6 +39,7 @@ SOFTMAX_MODELS = [
     CriticMLPCDWCE,
     CriticMLPBalancedSoftmax,
     CriticMLPLDAMDRW,
+    CriticMLPSLACE,
     CriticMLPSoftOrdinal,
 ]
 
@@ -196,6 +199,7 @@ class TestConfigRoundTrip:
             "cdw_ce",
             "balanced_softmax",
             "ldam_drw",
+            "slace",
             "soft_ordinal",
         }
 

@@ -17,6 +17,8 @@
 
 > **Active recommendation (2026-03-11):** `run_019`-`run_021` remain the default corrected-split frontier family. The new weighted family `run_034`-`run_036` is the best current tail-sensitive reference branch: it improves median holdout `recall_-1` (`0.378` vs `0.313`), keeps minority recall essentially flat to slightly better (`0.449` vs `0.448`), reduces hedging (`0.599` vs `0.621`), and improves calibration (`0.726` vs `0.713`) while keeping circumplex summaries near incumbent levels. It still gives back too much median QWK (`0.342` vs `0.362`) and is much less stable across seeds, so it should stay a reference branch rather than replace the default. See the weighted review below.
 >
+> **Latest SLACE reserve-branch diagnostic review:** [`reports/experiment_review_2026-03-18_twinkl_734.md`](reports/experiment_review_2026-03-18_twinkl_734.md) did **not** change the frontier. `run_041` matched the incumbent parameter budget and improved surface metrics like MAE / accuracy, but it failed the actual frontier gates: holdout `qwk_mean` stayed below the incumbent family median (`0.338` vs `0.362`), `recall_-1` collapsed (`0.134` vs `0.313` incumbent, `0.378` weighted reference), and hedging rebounded to `0.810`, back in the conservative-family regime. Treat `twinkl-734` as completed and drop SLACE from the active roadmap.
+>
 > **Latest semantic counterexample closeout:** [`reports/experiment_review_2026-03-16_twinkl_733.md`](reports/experiment_review_2026-03-16_twinkl_733.md) explicitly de-scopes the proposed `Hedonism` / `Security` semantic counterexample batch. The repeated replay errors, earlier targeted lifts, uncertainty review, and later representation diagnostics already answer the core question strongly enough, so another generate -> judge -> retrain cycle is not justified for the current frontier. Keep `run_019`-`run_021` active, treat `twinkl-734` as tracker-unblocked but still reserve-only, and reopen `twinkl-733` only if a future branch needs a tightly matched causal falsification test.
 >
 > **Latest Qwen final diagnostic review:** [`reports/experiment_review_2026-03-16_twinkl_742.md`](reports/experiment_review_2026-03-16_twinkl_742.md) also did **not** change the frontier, but it is the first encoder swap that materially narrowed the gap. `run_040` kept the incumbent parameter budget and state width fixed, removed truncation entirely, and recovered holdout `qwk_mean` from `0.305` (`run_039`) to `0.356`, bringing it within `0.022` of incumbent `run_020` while lowering hedging to `0.585`. It still trails the incumbent on `recall_-1` (`0.296` vs `0.342`) and the target hard dimensions remain weak (`stimulation qwk 0.165`, `hedonism qwk 0.095`), so there is no immediate promotion or rerun recommendation. Keep `run_019`-`run_021` active, and treat Qwen as the only encoder branch worth reconsidering later if representation work is reopened.
@@ -174,11 +176,43 @@
 | 038 | BalancedSoftmax | nomic-768d | 1 | 28 | 0.3 | balanced_softmax | 23606 | 19.5 | 0.333 | 0.737 | 0.299 | 0.301 | 0.657 | 0.346 | 0.104 | 0.077 | runs/run_038_BalancedSoftmax.yaml |
 | 039 | BalancedSoftmax | nomic-v2-moe-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.325 | 0.737 | 0.305 | 0.336 | 0.691 | 0.433 | 0.073 | 0.083 | runs/run_039_BalancedSoftmax.yaml |
 | 040 | BalancedSoftmax | Qwen3-0.6B-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.324 | 0.740 | 0.355 | 0.343 | 0.691 | 0.436 | 0.083 | 0.085 | runs/run_040_BalancedSoftmax.yaml |
+| 041 | SLACE | nomic-256d | 1 | 64 | 0.3 | slace | 23454 | 19.3 | 0.222 | 0.811 | 0.338 | 0.316 | 0.772 | 0.293 | 0.029 | 0.034 | runs/run_041_SLACE.yaml |
 <!-- AUTO-TABLE:END -->
 
 > **Contributor note:** Keep this section in **newest-first** chronological order (most recent date at top).
 
 ## Findings
+
+### 2026-03-18 — SLACE fails the reserve-branch gate and returns to conservative-family hedging (`twinkl-734`)
+
+`twinkl-734` tested whether `SLACE` could add ordinal structure to the active
+`nomic-256d`, `ws=1`, `hd=64` frontier budget without sacrificing the
+tail-sensitive behavior that justified `BalancedSoftmax`.
+
+**1. The run did not clear the incumbent or weighted-reference floor.**
+`run_041` finished at `qwk_mean 0.338`, below the incumbent family median
+(`0.362`) and even slightly below the weighted reference median (`0.342`).
+More importantly, `recall_-1` collapsed to `0.134`, well below both the
+incumbent (`0.313`) and weighted (`0.378`) branches.
+
+**2. Hedging snapped back to the conservative-loss regime.** Overall hedging
+rose to `81.0%`, much worse than the active frontier (`62.1%`) and weighted
+reference (`59.9%`). That puts SLACE back in the same qualitative zone as the
+repo's earlier conservative ordinal families, which were already ruled out for
+production-facing drift detection.
+
+**3. Calibration stayed strong, but the hard-dimension package did not.**
+`run_041` kept `10/10` positively calibrated dimensions and strong global
+calibration (`0.772`), but `hedonism qwk` fell to `0.055`, `security qwk`
+remained below the incumbent family median (`0.196` vs `0.297`), and `power`
+collapsed to chance. `stimulation qwk` improved, but only alongside `91.9%`
+hedging on that dimension, so it does not rescue the run.
+
+**4. Recommendation: close `twinkl-734` and drop SLACE from the active
+roadmap.** `run_019`-`run_021` remain the active corrected-split default, and
+`run_034`-`run_036` remain the best tail-sensitive reference branch. Full
+details:
+[`reports/experiment_review_2026-03-18_twinkl_734.md`](reports/experiment_review_2026-03-18_twinkl_734.md).
 
 ### 2026-03-16 — `twinkl-733` semantic counterexample batch is explicitly de-scoped (`twinkl-733`)
 

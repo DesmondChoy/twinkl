@@ -35,7 +35,10 @@ provenance:
       model.hidden_dim:
         from: 28
         to: 64
-  rationale: ''
+  rationale: 'Cleaner within-family encoder-swap diagnostic after the negative
+    768d v1.5 result. This run replaced nomic-embed-text-v1.5 with nomic-embed-text-v2-moe
+    at 256d while restoring the incumbent 266-dimensional state width and hidden_dim=64
+    budget to isolate representation effects from the earlier 768d capacity confound.'
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v2-moe
@@ -198,7 +201,12 @@ per_dimension:
     spearman: 0.3214
     calibration: 0.907
     hedging: 0.7692
-observations: ''
+observations: '`run_039` recovered much of the tail-sensitive package lost in
+  the 768d controls, including recall_minus1 0.336, minority recall 0.433, and
+  hedging 0.598. It also delivered the strongest security QWK in the representation-diagnostic
+  batch at 0.284. But aggregate holdout quality remained weak at qwk_mean 0.305,
+  with notable regressions in power, stimulation, and hedonism, so the encoder
+  swap did not change the frontier.'
 circumplex:
   source: probabilities
   summary:

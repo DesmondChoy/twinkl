@@ -743,6 +743,105 @@ class TestLDAMDRWLoss:
             ldam_drw_loss_multi(torch.randn(4, 30), y, class_counts=torch.ones(9, 3), epoch=0)
 
 
+class TestSLACELoss:
+    """Tests for SLACE loss."""
+
+    def test_make_slace_targets_sharpen_with_alpha(self):
+        """Higher alpha should sharpen the target distribution around the true class."""
+        from src.vif.critic_ordinal import make_slace_targets, slace_loss_multi
+
+        y = torch.tensor([[0.0]])  # true class index 1
+        low_alpha_targets = make_slace_targets(y, alpha=0.5)
+        high_alpha_targets = make_slace_targets(y, alpha=2.0)
+
+        assert high_alpha_targets[0, 0, 1].item() > low_alpha_targets[0, 0, 1].item()
+        assert high_alpha_targets[0, 0, 0].item() < low_alpha_targets[0, 0, 0].item()
+        assert high_alpha_targets[0, 0, 2].item() < low_alpha_targets[0, 0, 2].item()
+
+        logits = torch.zeros(1, 30)
+        loss_low_alpha = slace_loss_multi(logits, torch.zeros(1, 10), alpha=0.5)
+        loss_high_alpha = slace_loss_multi(logits, torch.zeros(1, 10), alpha=2.0)
+
+        assert loss_high_alpha.item() != pytest.approx(loss_low_alpha.item())
+
+    def test_slace_loss_scalar_output(self):
+        """Loss should be a non-negative scalar tensor."""
+        from src.vif.critic_ordinal import slace_loss_multi
+
+        logits = torch.randn(4, 30)
+        y = torch.randint(-1, 2, (4, 10)).float()
+
+        loss = slace_loss_multi(logits, y)
+
+        assert loss.dim() == 0
+        assert loss.item() >= 0
+
+    def test_slace_loss_gradient_flow(self):
+        """Loss should allow gradient backpropagation."""
+        from src.vif.critic_ordinal import slace_loss_multi
+
+        logits = torch.randn(4, 30, requires_grad=True)
+        y = torch.randint(-1, 2, (4, 10)).float()
+
+        loss = slace_loss_multi(logits, y)
+        loss.backward()
+
+        assert logits.grad is not None
+        assert logits.grad.shape == (4, 30)
+        assert not torch.all(logits.grad == 0)
+
+    def test_slace_loss_perfect_prediction(self):
+        """SLACE should be near zero for confident correct predictions."""
+        from src.vif.critic_ordinal import slace_loss_multi
+
+        batch = 4
+        logits = torch.zeros(batch, 30)
+        for d in range(10):
+            logits[:, d * 3 + 1] = 100.0
+        y = torch.zeros(batch, 10)
+
+        loss = slace_loss_multi(logits, y)
+        assert loss.item() < 1e-4
+
+    def test_slace_loss_ordinal_sensitivity(self):
+        """Off-by-2 error should produce larger loss than off-by-1."""
+        from src.vif.critic_ordinal import slace_loss_multi
+
+        batch = 8
+        y = -torch.ones(batch, 10)
+
+        logits_off1 = torch.zeros(batch, 30)
+        for d in range(10):
+            logits_off1[:, d * 3 + 1] = 100.0
+
+        logits_off2 = torch.zeros(batch, 30)
+        for d in range(10):
+            logits_off2[:, d * 3 + 2] = 100.0
+
+        loss_off1 = slace_loss_multi(logits_off1, y).item()
+        loss_off2 = slace_loss_multi(logits_off2, y).item()
+
+        assert loss_off2 > loss_off1
+
+    def test_slace_loss_rejects_invalid_inputs(self):
+        """Shape mismatches and invalid alpha should raise ValueError."""
+        from src.vif.critic_ordinal import slace_loss_multi
+
+        y = torch.randint(-1, 2, (4, 10)).float()
+
+        with pytest.raises(ValueError, match="logits must be 2D"):
+            slace_loss_multi(torch.randn(4, 10, 3), y)
+
+        with pytest.raises(ValueError, match="logits second dimension must be 30"):
+            slace_loss_multi(torch.randn(4, 29), y)
+
+        with pytest.raises(ValueError, match="y second dimension must be 10"):
+            slace_loss_multi(torch.randn(4, 30), torch.randint(-1, 2, (4, 9)).float())
+
+        with pytest.raises(ValueError, match="slace_alpha"):
+            slace_loss_multi(torch.randn(4, 30), y, alpha=0.0)
+
+
 class TestSoftOrdinalLoss:
     """Tests for Soft Ordinal loss."""
 
