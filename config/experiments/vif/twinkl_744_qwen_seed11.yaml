@@ -1,0 +1,36 @@
+models_to_train:
+  - BalancedSoftmax
+encoder_model: Qwen/Qwen3-Embedding-0.6B
+truncate_dim: 256
+text_prefix: null
+prompt_name: null
+prompt: "Instruct: Represent the journal entry for classification of alignment across the 10 Schwartz value dimensions.\nQuery:"
+window_size: 1
+hidden_dim: 64
+dropout: 0.3
+batch_size: 16
+epochs: 100
+weight_decay: 0.01
+split_seed: 2025
+model_seed: 11
+fixed_holdout_manifest_path: config/experiments/vif/twinkl_681_5_holdout.yaml
+use_lr_finder: false
+experiment_group: twinkl-744_qwen_frontier_rerun
+class_balance_source: train_split_per_dimension
+circumplex_regularizer_enabled: false
+circumplex_regularizer_opposite_weight: 0.0
+circumplex_regularizer_adjacent_weight: 0.0
+dimension_weighting_enabled: false
+selection_policy:
+  name: qwk_then_recall_guarded
+  guardrails:
+    qwk_mean_must_be_finite: true
+    qwk_nan_dims_count_must_equal_zero: true
+    calibration_global_must_be_non_negative: true
+  fallback: best_finite_qwk
+model_overrides:
+  BalancedSoftmax:
+    learning_rate: 0.015522253574270487
+    use_lr_finder: false
+    learning_rate_source: explicit_model_override
+    learning_rate_policy: run_015_cdwce_a3_valley
