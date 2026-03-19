@@ -77,6 +77,9 @@ class TestLossShorthand:
     def test_balanced_softmax(self):
         assert _loss_shorthand("BalancedSoftmax", {}) == "balanced_softmax"
 
+    def test_two_stage_balanced_softmax(self):
+        assert _loss_shorthand("TwoStageBalancedSoftmax", {}) == "two_stage_balanced_softmax"
+
     def test_balanced_softmax_dimension_weighting(self):
         assert _loss_shorthand(
             "BalancedSoftmax",
@@ -234,6 +237,7 @@ def _minimal_training_inputs() -> tuple[dict, dict, dict, dict, np.ndarray, dict
     ("model_name", "expected_loss"),
     [
         ("BalancedSoftmax", "balanced_softmax"),
+        ("TwoStageBalancedSoftmax", "two_stage_balanced_softmax"),
         ("LDAM_DRW", "ldam_drw"),
         ("SLACE", "slace"),
     ],

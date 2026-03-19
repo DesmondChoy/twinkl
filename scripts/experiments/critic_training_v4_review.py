@@ -280,6 +280,8 @@ from src.vif.critic_ordinal import (
     balanced_softmax_ce_per_dimension,
     balanced_softmax_loss_multi,
     compute_inverse_loss_dimension_weights,
+    CriticMLPTwoStageBalancedSoftmax,
+    two_stage_balanced_softmax_loss_multi,
     CriticMLPLDAMDRW,
     ldam_drw_loss_multi,
     CriticMLPSLACE,
@@ -585,6 +587,20 @@ MODEL_CONFIGS = {
                         if _config.get("circumplex_regularizer_enabled")
                         else 0.0
                     ),
+                )
+            )
+        ),
+        "is_ordinal": True,
+    },
+    "TwoStageBalancedSoftmax": {
+        "class": CriticMLPTwoStageBalancedSoftmax,
+        "loss_fn": two_stage_balanced_softmax_loss_multi,
+        "loss_fn_factory": (
+            lambda *, _config, class_stats: (
+                lambda _epoch, _dimension_weights=None: partial(
+                    two_stage_balanced_softmax_loss_multi,
+                    activation_priors=class_stats["activation_priors"],
+                    polarity_priors=class_stats["polarity_priors"],
                 )
             )
         ),

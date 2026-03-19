@@ -374,6 +374,7 @@ def _loss_shorthand(model_name: str, config: dict) -> str:
         "EMD": "emd",
         "SoftOrdinal": "soft_ordinal",
         "BalancedSoftmax": "balanced_softmax",
+        "TwoStageBalancedSoftmax": "two_stage_balanced_softmax",
         "LDAM_DRW": "ldam_drw",
         "SLACE": "slace",
     }
@@ -450,6 +451,15 @@ def _build_experiment_dict(
         # Add per-dim hedging
         dim_idx = SCHWARTZ_VALUE_ORDER.index(dim)
         dim_metrics["hedging"] = _round_val(float(hedging[dim_idx]))
+        if "active_sign_accuracy_per_dim" in eval_result:
+            dim_metrics["active_sign_accuracy"] = _round_val(
+                eval_result["active_sign_accuracy_per_dim"][dim]
+            )
+        activation_metrics = eval_result.get("activation_metrics", {}).get("per_dim", {}).get(dim)
+        if activation_metrics is not None:
+            dim_metrics["activation_precision"] = _round_val(activation_metrics["precision"])
+            dim_metrics["activation_recall"] = _round_val(activation_metrics["recall"])
+            dim_metrics["activation_f1"] = _round_val(activation_metrics["f1"])
         per_dimension[dim] = dim_metrics
 
     experiment = {
@@ -593,6 +603,21 @@ def _build_experiment_dict(
     if circumplex_summary:
         experiment["evaluation"]["circumplex_summary"] = _to_python(circumplex_summary)
         experiment["circumplex"] = _to_python(eval_result["circumplex"])
+    activation_mean = eval_result.get("activation_metrics", {}).get("mean")
+    if activation_mean:
+        experiment["evaluation"]["activation_precision_mean"] = _round_val(
+            activation_mean.get("precision")
+        )
+        experiment["evaluation"]["activation_recall_mean"] = _round_val(
+            activation_mean.get("recall")
+        )
+        experiment["evaluation"]["activation_f1_mean"] = _round_val(
+            activation_mean.get("f1")
+        )
+    if "active_sign_accuracy_mean" in eval_result:
+        experiment["evaluation"]["active_sign_accuracy_mean"] = _round_val(
+            eval_result["active_sign_accuracy_mean"]
+        )
 
     # Preserve explicit nulls in encoder config so input-mode provenance is visible.
     experiment["config"]["training"] = {

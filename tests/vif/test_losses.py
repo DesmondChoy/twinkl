@@ -652,6 +652,110 @@ class TestBalancedSoftmaxLoss:
             )
 
 
+class TestTwoStageBalancedSoftmaxLoss:
+    """Tests for the two-stage activation + polarity loss."""
+
+    @staticmethod
+    def _activation_priors() -> torch.Tensor:
+        return torch.tensor([[0.8, 0.2]] * 10, dtype=torch.float32)
+
+    @staticmethod
+    def _polarity_priors() -> torch.Tensor:
+        return torch.tensor([[0.5, 0.5]] * 10, dtype=torch.float32)
+
+    def test_two_stage_loss_scalar_output(self):
+        """Loss should be a non-negative scalar tensor."""
+        from src.vif.critic_ordinal import two_stage_balanced_softmax_loss_multi
+
+        logits = torch.randn(4, 40)
+        y = torch.randint(-1, 2, (4, 10)).float()
+
+        loss = two_stage_balanced_softmax_loss_multi(
+            logits,
+            y,
+            activation_priors=self._activation_priors(),
+            polarity_priors=self._polarity_priors(),
+        )
+
+        assert loss.dim() == 0
+        assert loss.item() >= 0
+
+    def test_two_stage_loss_gradient_flow(self):
+        """Loss should allow gradient backpropagation."""
+        from src.vif.critic_ordinal import two_stage_balanced_softmax_loss_multi
+
+        logits = torch.randn(4, 40, requires_grad=True)
+        y = torch.randint(-1, 2, (4, 10)).float()
+
+        loss = two_stage_balanced_softmax_loss_multi(
+            logits,
+            y,
+            activation_priors=self._activation_priors(),
+            polarity_priors=self._polarity_priors(),
+        )
+        loss.backward()
+
+        assert logits.grad is not None
+        assert logits.grad.shape == (4, 40)
+        assert not torch.all(logits.grad == 0)
+
+    def test_two_stage_masks_inactive_examples_out_of_polarity_loss(self):
+        """Changing polarity logits for inactive targets should not change the loss."""
+        from src.vif.critic_ordinal import two_stage_balanced_softmax_loss_multi
+
+        logits = torch.zeros(2, 40, dtype=torch.float32)
+        targets = torch.zeros(2, 10, dtype=torch.float32)
+
+        loss_reference = two_stage_balanced_softmax_loss_multi(
+            logits,
+            targets,
+            activation_priors=self._activation_priors(),
+            polarity_priors=self._polarity_priors(),
+        )
+
+        logits_with_changed_polarity = logits.clone()
+        logits_with_changed_polarity[:, 2::4] = 25.0
+        logits_with_changed_polarity[:, 3::4] = -25.0
+        loss_changed = two_stage_balanced_softmax_loss_multi(
+            logits_with_changed_polarity,
+            targets,
+            activation_priors=self._activation_priors(),
+            polarity_priors=self._polarity_priors(),
+        )
+
+        torch.testing.assert_close(loss_changed, loss_reference)
+
+    def test_two_stage_rejects_wrong_shapes(self):
+        """Shape mismatches should raise ValueError with actionable messages."""
+        from src.vif.critic_ordinal import two_stage_balanced_softmax_loss_multi
+
+        targets = torch.randint(-1, 2, (4, 10)).float()
+
+        with pytest.raises(ValueError, match="logits second dimension must be 40"):
+            two_stage_balanced_softmax_loss_multi(
+                torch.randn(4, 30),
+                targets,
+                activation_priors=self._activation_priors(),
+                polarity_priors=self._polarity_priors(),
+            )
+
+        with pytest.raises(ValueError, match="activation_priors"):
+            two_stage_balanced_softmax_loss_multi(
+                torch.randn(4, 40),
+                targets,
+                activation_priors=torch.ones(10, 3),
+                polarity_priors=self._polarity_priors(),
+            )
+
+        with pytest.raises(ValueError, match="polarity_priors"):
+            two_stage_balanced_softmax_loss_multi(
+                torch.randn(4, 40),
+                targets,
+                activation_priors=self._activation_priors(),
+                polarity_priors=torch.ones(9, 2),
+            )
+
+
 class TestLDAMDRWLoss:
     """Tests for LDAM-DRW loss."""
 
