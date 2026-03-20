@@ -1,0 +1,51 @@
+case_id,dimension,persona_id,t_index,date,selection_reason,persisted_label,human_majority_label,blind_review_priority,blind_review_rank,reviewer_id,blind_text_label,blind_text_notes,rich_context_label,rich_context_notes,label_changed_after_context,preferred_target,recommendation_notes
+hedonism__7a086972__1,hedonism,7a086972,1,2025-08-02,stable_non_neutral_miss,-1,,true,1,claude_opus_4_6,0,No hedonism signal in text. Core tension is conformity vs self-direction (mentor pressure). No pleasure-seeking or denial visible.,-1,Lucie declares hedonism as core value; bio shows pleasure-seeking lifestyle. Entry shows her suppressing that nature to conform. Hedonism misalignment only visible with declared values.,true,reduced_context,"Hedonism misalignment requires knowing declared values. Student model seeing only text would score 0, not -1. Label is unreachable from text alone."
+hedonism__663cb334__3,hedonism,663cb334,3,2025-05-14,stable_non_neutral_miss,1,,true,2,claude_opus_4_6,1,"Clear sensory pleasure: pan dulce, golden light, settled feeling on bench. Hedonism signal readable from text alone.",1,Context confirms. Graciela's bio does not emphasize hedonism but the textual evidence is sufficient.,false,keep_current,Reachable from text. Pleasure-seeking behavior explicit in session.
+hedonism__e809d252__4,hedonism,e809d252,4,2025-01-17,stable_non_neutral_miss,1,1,true,3,claude_opus_4_6,1,Chose strawberries (pleasure) over environmental principles. 'I was tired and wanted something sweet.' Hedonism overriding universalism.,1,"Context strengthens: Marcus's core values are Universalism/Tradition, making the hedonistic choice even more notable. Human annotators also agree (majority=1).",false,keep_current,Reachable from text. Behavioral hedonism clear even without profile.
+hedonism__2da4f100__0,hedonism,2da4f100,0,2025-01-23,stable_non_neutral_miss,-1,,false,,,,,,,,,
+hedonism__f990a261__1,hedonism,f990a261,1,2025-10-12,stable_non_neutral_miss,-1,,false,,,,,,,,,
+hedonism__663cb334__4,hedonism,663cb334,4,2025-05-17,stable_non_neutral_miss,1,,false,,,,,,,,,
+hedonism__7a086972__6,hedonism,7a086972,6,2025-08-14,stable_non_neutral_miss,1,,false,,,,,,,,,
+hedonism__f2a0de6f__5,hedonism,f2a0de6f,5,2025-09-19,stable_non_neutral_miss,1,,false,,,,,,,,,
+hedonism__440e5deb__4,hedonism,440e5deb,4,2025-12-27,stable_non_neutral_miss,1,1,false,,,,,,,,,
+hedonism__f990a261__10,hedonism,f990a261,10,2025-11-11,stable_non_neutral_miss,-1,,false,,,,,,,,,
+hedonism__440e5deb__3,hedonism,440e5deb,3,2025-12-24,stable_non_neutral_miss,1,1,false,,,,,,,,,
+hedonism__f2a0de6f__8,hedonism,f2a0de6f,8,2025-09-28,stable_non_neutral_miss,1,,false,,,,,,,,,
+hedonism__f990a261__11,hedonism,f990a261,11,2025-11-16,stable_non_neutral_miss,-1,,false,,,,,,,,,
+hedonism__440e5deb__1,hedonism,440e5deb,1,2025-12-10,judge_human_majority_disagree,0,-1,false,,,,,,,,,
+security__799f3751__2,security,799f3751,2,2025-05-22,stable_non_neutral_miss,1,,true,1,claude_opus_4_6,0,Dominant theme is self-suppression and inability to ask for needs. Chai ritual hints at stability but reads more as conformity/hedonism tension.,1,Meera's joint-family structure and career sacrifice frame the chai ritual as a security anchor. Kids recovering = stability restored. Mother-in-law's gesture = reliable family bonds. Security pattern only visible with biographical context.,true,reduced_context,"Security signal requires biographical context (joint family, career sacrifice). From text alone, the stability-seeking is indistinguishable from conformity."
+security__7a086972__5,security,7a086972,5,2025-08-08,stable_non_neutral_miss,1,,true,2,claude_opus_4_6,1,Classic security: retreating to safety after perceived social threat (honest remark 3 weeks ago). Replaying risk assessment. Comfortable in safe space.,1,Context confirms. Lucie's sociable bio makes the retreat MORE notable as security behavior. Signal readable from text alone.,false,keep_current,Reachable from text. Security-driven retreat clearly visible in session narrative.
+security__a13aa34b__5,security,a13aa34b,5,2025-10-20,stable_non_neutral_miss,1,,true,3,claude_opus_4_6,0,"Primary tension reads as self-direction vs tradition (experimental vs classical calligraphy). Hiding behavior reads as conformity, not security.",1,"Nadia's family context (grandfather legacy, grandmother living with her) frames the hiding as preserving relational stability. 'End up somewhere I didn't agree to' = protecting trajectory stability. Security signal emerges with family context.",true,text_only_ambiguous,"Security vs conformity ambiguity. From text alone, the hiding reads as conformity or self-direction tension. Security reading requires family context."
+security__58d843b6__10,security,58d843b6,10,2025-06-27,stable_non_neutral_miss,1,,false,,,,,,,,,
+security__f2a0de6f__4,security,f2a0de6f,4,2025-09-18,stable_non_neutral_miss,-1,,false,,,,,,,,,
+security__799f3751__1,security,799f3751,1,2025-05-20,stable_non_neutral_miss,1,,false,,,,,,,,,
+security__606f182e__2,security,606f182e,2,2025-08-14,stable_non_neutral_miss,1,,false,,,,,,,,,
+security__755c4960__8,security,755c4960,8,2025-04-10,stable_non_neutral_miss,-1,,false,,,,,,,,,
+security__e74a0721__1,security,e74a0721,1,2025-10-28,stable_non_neutral_miss,1,,false,,,,,,,,,
+security__58d843b6__3,security,58d843b6,3,2025-06-07,stable_non_neutral_miss,1,,false,,,,,,,,,
+security__881c7960__1,security,881c7960,1,2025-01-20,stable_non_neutral_miss,1,,false,,,,,,,,,
+security__7a086972__0,security,7a086972,0,2025-07-26,stable_non_neutral_miss,1,,false,,,,,,,,,
+security__58d843b6__7,security,58d843b6,7,2025-06-19,stable_non_neutral_miss,1,,false,,,,,,,,,
+security__606f182e__6,security,606f182e,6,2025-08-30,stable_non_neutral_miss,1,,false,,,,,,,,,
+self_direction__606f182e__1,self_direction,606f182e,1,2025-08-10,stable_non_neutral_miss,1,,false,,,,,,,,,
+self_direction__f990a261__7,self_direction,f990a261,7,2025-11-04,stable_non_neutral_miss,1,,false,,,,,,,,,
+self_direction__f990a261__2,self_direction,f990a261,2,2025-10-18,stable_non_neutral_miss,1,,false,,,,,,,,,
+self_direction__5d145c6f__0,self_direction,5d145c6f,0,2025-09-13,stable_non_neutral_miss,1,,false,,,,,,,,,
+stimulation__5d145c6f__0,stimulation,5d145c6f,0,2025-09-13,stable_non_neutral_miss,1,,true,1,claude_opus_4_6,1,"12-hour day of varied high-stakes activities: operations, investors, officials, competitors. Objectively high-challenge, high-variety lifestyle.",1,"Faris's core value is Power, not stimulation. The variety serves power goals. But behavioral alignment with stimulation dimension is clear regardless of motivation.",false,keep_current,Reachable from text. Stimulation-aligned behavior visible even though motivation is power-driven.
+stimulation__e74a0721__0,stimulation,e74a0721,0,2025-10-26,stable_non_neutral_miss,-1,,true,2,claude_opus_4_6,-1,Explicitly anti-novelty: 'spent years giving clients exactly what they ask for.' Lost to bolder competitor. Cannot make bold work. Anti-stimulation clear.,-1,Context strengthens: Santiago's bio confirms career built on reliable commissions and fitting briefs. Father's influence toward respectability. Anti-stimulation is core to identity.,false,keep_current,Reachable from text. Anti-stimulation posture is the explicit theme of the entry.
+stimulation__7a086972__0,stimulation,7a086972,0,2025-07-26,stable_non_neutral_miss,-1,,true,3,claude_opus_4_6,-1,Actively rejects stimulating activity (bar with colleagues) for quiet balcony. 'The small stuff is enough.' 'The balcony doesn't ask anything from me.',-1,"Lucie's bio shows she normally seeks novelty (restaurants, day-trips). This makes the entry MORE notable as anti-stimulation. But the text-alone signal is already clear.",false,keep_current,Reachable from text. Rejection of stimulation is the explicit narrative choice.
+stimulation__f990a261__11,stimulation,f990a261,11,2025-11-16,stable_non_neutral_miss,-1,,false,,,,,,,,,
+stimulation__440e5deb__3,stimulation,440e5deb,3,2025-12-24,stable_non_neutral_miss,1,0,false,,,,,,,,,
+stimulation__f990a261__1,stimulation,f990a261,1,2025-10-12,stable_non_neutral_miss,-1,,false,,,,,,,,,
+stimulation__11de77e8__4,stimulation,11de77e8,4,2025-09-12,stable_non_neutral_miss,1,,false,,,,,,,,,
+stimulation__f990a261__10,stimulation,f990a261,10,2025-11-11,stable_non_neutral_miss,-1,,false,,,,,,,,,
+stimulation__f2a0de6f__8,stimulation,f2a0de6f,8,2025-09-28,stable_non_neutral_miss,1,,false,,,,,,,,,
+stimulation__f990a261__4,stimulation,f990a261,4,2025-10-28,stable_non_neutral_miss,-1,,false,,,,,,,,,
+stimulation__f990a261__0,stimulation,f990a261,0,2025-10-07,stable_non_neutral_miss,-1,,false,,,,,,,,,
+stimulation__2e6270bb__0,stimulation,2e6270bb,0,2025-12-07,low_uncertainty_correct_control,0,0,false,,,,,,,,,
+stimulation__2e6270bb__9,stimulation,2e6270bb,9,2026-01-04,low_uncertainty_correct_control,0,0,false,,,,,,,,,
+stimulation__5a522de7__7,stimulation,5a522de7,7,2025-06-21,low_uncertainty_correct_control,0,,false,,,,,,,,,
+universalism__075f8fdb__0,universalism,075f8fdb,0,2025-01-07,stable_non_neutral_miss,1,,false,,,,,,,,,
+universalism__5a522de7__3,universalism,5a522de7,3,2025-06-13,stable_non_neutral_miss,1,,false,,,,,,,,,
+universalism__e809d252__4,universalism,e809d252,4,2025-01-17,stable_non_neutral_miss,-1,-1,false,,,,,,,,,
+universalism__5a522de7__5,universalism,5a522de7,5,2025-06-18,stable_non_neutral_miss,1,,false,,,,,,,,,

@@ -6,13 +6,13 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 
 ## Implementation Status
 
-*Last updated: 2026-03-09*
+*Last updated: 2026-03-20*
 
 | Feature | Status | Details |
 |---------|--------|---------|
 | **Synthetic Data Pipeline** | ✅ Complete | 204 personas (1,651 entries) generated via Claude Code parallel subagents; YAML prompt templates with Jinja2; targeted value generation now supports family-specific tension banks, frozen-holdout experiments, and judged acceptance gates for hard-dimension batches |
-| **Judge Labeling (VIF)** | ✅ Complete | 1,651 entries labeled across 204 personas; two-phase pipeline (Python wrangling + parallel subagents); consolidated to `judge_labels.parquet` with rationales |
-| **VIF Critic Training** | 🧪 Experimental | Training stack complete with ordinal MLP heads, BNN baseline, and configurable sentence encoders (`nomic` active default; MiniLM/mpnet ablations). Corrected-split multi-seed experiments are logged across 27 run IDs / 91 persisted configs; `run_019`-`run_021` BalancedSoftmax remains the active default after the regenerated Hedonism/Security rebaseline, while QWK and Security/circumplex trade-offs are still open |
+| **Judge Labeling (VIF)** | ✅ Complete | 1,651 entries labeled across 204 personas; two-phase pipeline (Python wrangling + parallel subagents); consolidated to `judge_labels.parquet` with rationales. A completed reachability audit (`twinkl-747`) found that the stored hard-dimension labels, especially `security`, are not the right distillation target for the current student because many sampled labels are not reproducible from the current judge path or the student-visible context. |
+| **VIF Critic Training** | 🧪 Experimental | Training stack complete with ordinal MLP heads, BNN baseline, and configurable sentence encoders (`nomic` active default; MiniLM/mpnet ablations). Corrected-split multi-seed experiments are logged across 27 run IDs / 91 persisted configs; `run_019`-`run_021` BalancedSoftmax remains the frontier reference point for the pre-audit target, but the completed `twinkl-747` reachability audit recommends changing the distillation target before the next hard-dimension training cycle, with `security` as the highest-priority rebase. |
 | **Human Annotation Tool** | ✅ Complete | ~4,200 LOC Shiny app; 46 annotations across 3 annotators; Cohen's κ / Fleiss' κ metrics; modular components with analysis view; annotation ordering for persona prioritization |
 | **Conversational Nudging** | 🧪 Experimental | 3-category LLM classification (clarification/elaboration/tension-surfacing); pending validation that nudging improves VIF signal quality |
 | **Weekly Alignment Coach** | ⚠️ Partial | Entry processing ready; digest generation not implemented |
@@ -38,6 +38,7 @@ models/
 > - [Synthetic Data Pipeline](pipeline/pipeline_specs.md)
 > - [Claude Code Generation Instructions](pipeline/claude_gen_instructions.md)
 > - [Claude Judge Labeling Instructions](pipeline/claude_judge_instructions.md)
+> - [Judge Reachability Audit Instructions](pipeline/judge_reachability_audit_instructions.md)
 > - [Human Annotation Tool](pipeline/annotation_tool_plan.md)
 > - [VIF Critic Training](vif/03_model_training.md) — Training strategy and implementation
 > - [CLAUDE.md](../CLAUDE.md) — Project architecture overview
@@ -249,6 +250,7 @@ This avoids the trap of matching windows "for consistency" when the constraints 
 | [pipeline_specs.md](pipeline/pipeline_specs.md) | Synthetic data pipeline design and rationale |
 | [claude_gen_instructions.md](pipeline/claude_gen_instructions.md) | Parallel subagent generation workflow |
 | [claude_judge_instructions.md](pipeline/claude_judge_instructions.md) | Judge labeling workflow (wrangling + scoring) |
+| [judge_reachability_audit_instructions.md](pipeline/judge_reachability_audit_instructions.md) | LLM-agnostic workflow for the twinkl-747 reachability audit |
 | [annotation_guidelines.md](pipeline/annotation_guidelines.md) | Human annotation for nudge effectiveness study |
 | [annotation_tool_plan.md](pipeline/annotation_tool_plan.md) | Shiny annotation tool implementation plan |
 | [nudge_design_rationale.md](pipeline/nudge_design_rationale.md) | Nudge validation plan and design rationale |
