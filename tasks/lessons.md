@@ -46,3 +46,16 @@
   output format. For experiment reviews here, that means artifact-aware
   analysis, provenance backfill, and index updates before treating the review
   as done.
+
+## 2026-03-20
+
+- When a task-specific go/no-go rule is an exact threshold on a noisy eval
+  metric, do not assume a tiny miss should permanently close the follow-up as
+  "not needed." If the user treats the gate as advisory, record that override
+  explicitly on the issue and reopen the downstream task instead of leaving the
+  hard-stop interpretation in place.
+- When an audit invalidates execution data, do not talk about the recovery as
+  "done" just because the workflow code is fixed. Separate "rerun-ready" from
+  "fresh artifacts regenerated," and avoid suggesting that a partial rerun is
+  equivalent to a statistically clean rerun unless the independence claim has
+  actually been re-established.

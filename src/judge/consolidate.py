@@ -1,4 +1,4 @@
-"""Consolidate judge label JSON files into a single parquet file.
+"""Consolidate judge label JSON files into parquet outputs.
 
 This module validates and merges the JSON output files from judge subagents
 into a single parquet file for downstream processing. Also updates the
@@ -18,6 +18,11 @@ Usage (library):
         labels_dir="logs/judge_labels",
         output_path="logs/judge_labels/judge_labels.parquet"
     )
+
+    consensus_df = consolidate_consensus_labels(
+        consensus_frame,
+        output_path="logs/judge_labels/consensus_labels.parquet",
+    )
 """
 
 import json
@@ -28,6 +33,13 @@ import polars as pl
 from pydantic import ValidationError
 
 from src.models.judge import SCHWARTZ_VALUE_ORDER, PersonaLabels
+
+CONSENSUS_CONFIDENCE_TIERS = (
+    "unanimous",
+    "strong",
+    "bare_majority",
+    "no_majority",
+)
 
 
 def _normalize_legacy_entry_schema(entry: dict) -> tuple[dict, bool]:
@@ -233,6 +245,63 @@ def consolidate_judge_labels(
             errors.append("Registry module not available")
 
     return df, errors
+
+
+def consolidate_consensus_labels(
+    consensus_frame: pl.DataFrame,
+    output_path: str | Path = "logs/judge_labels/consensus_labels.parquet",
+) -> pl.DataFrame:
+    """Validate and persist consensus labels with confidence metadata.
+
+    Args:
+        consensus_frame: Wide DataFrame containing base judge-label columns plus
+            confidence/agreement/change metadata for every Schwartz dimension.
+        output_path: Destination parquet path.
+
+    Returns:
+        The ordered DataFrame that was written to disk.
+    """
+    base_columns = (
+        ["persona_id", "t_index", "date", "alignment_vector"]
+        + [f"alignment_{value}" for value in SCHWARTZ_VALUE_ORDER]
+        + ["rationales_json"]
+    )
+    confidence_columns = [
+        f"confidence_{value}" for value in SCHWARTZ_VALUE_ORDER
+    ]
+    agreement_columns = [
+        f"consensus_agreement_{value}" for value in SCHWARTZ_VALUE_ORDER
+    ]
+    changed_columns = [
+        f"label_changed_{value}" for value in SCHWARTZ_VALUE_ORDER
+    ]
+    required_columns = (
+        base_columns + confidence_columns + agreement_columns + changed_columns
+    )
+    missing = [column for column in required_columns if column not in consensus_frame.columns]
+    if missing:
+        raise ValueError(
+            "Consensus frame is missing required columns: "
+            + ", ".join(sorted(missing))
+        )
+
+    for value_name in SCHWARTZ_VALUE_ORDER:
+        invalid_confidence = (
+            consensus_frame.filter(
+                ~pl.col(f"confidence_{value_name}").is_in(CONSENSUS_CONFIDENCE_TIERS)
+            )
+            .height
+        )
+        if invalid_confidence > 0:
+            raise ValueError(
+                f"Consensus frame contains invalid confidence tiers for {value_name}."
+            )
+
+    ordered_frame = consensus_frame.select(required_columns)
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    ordered_frame.write_parquet(output_path)
+    return ordered_frame
 
 
 def main():
