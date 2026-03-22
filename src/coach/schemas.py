@@ -117,7 +117,10 @@ class WeeklyDigest(BaseModel):
     n_entries: int = Field(ge=1)
     overall_mean: float
     core_values: list[str] = Field(default_factory=list)
+<<<<<<< Updated upstream
     drift_reasons: list[str] = Field(default_factory=list)
+=======
+>>>>>>> Stashed changes
     top_tensions: list[str]
     top_strengths: list[str]
     dimensions: list[DimensionDigest]

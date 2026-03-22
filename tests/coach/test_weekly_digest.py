@@ -15,7 +15,10 @@ from src.coach.weekly_digest import (
     render_digest_prompt,
     validate_weekly_digest_narrative,
 )
+<<<<<<< Updated upstream
 from src.coach.schemas import DriftDetectionResult
+=======
+>>>>>>> Stashed changes
 
 
 def _write_test_wrangled(path: Path) -> None:
@@ -118,6 +121,7 @@ def test_build_weekly_digest_and_render(tmp_path: Path):
     )
 
     assert digest.persona_name == "Casey"
+<<<<<<< Updated upstream
     assert digest.response_mode in {"stable", "rut", "mixed_state"}
     assert digest.mode_source == "fallback_heuristic"
     assert digest.n_entries == 3
@@ -128,6 +132,17 @@ def test_build_weekly_digest_and_render(tmp_path: Path):
     assert len(digest.journal_history) == 3
     assert all(snippet.dimensions for snippet in digest.evidence)
     assert not set(digest.top_tensions) & set(digest.top_strengths)
+=======
+    assert digest.response_mode in {"stable", "rut"}
+    assert digest.mode_source == "fallback_heuristic"
+    assert digest.n_entries == 3
+    assert digest.core_values == ["self_direction", "benevolence"]
+    assert len(digest.top_tensions) == 3
+    assert len(digest.top_strengths) == 2
+    assert len(digest.evidence) == 3
+    assert len(digest.journal_history) == 3
+    assert all(snippet.dimensions for snippet in digest.evidence)
+>>>>>>> Stashed changes
 
     evidence_keys = [(snippet.date, snippet.t_index) for snippet in digest.evidence]
     assert len(evidence_keys) == len(set(evidence_keys))
@@ -221,6 +236,7 @@ def test_generate_validate_and_persist_weekly_digest(tmp_path: Path):
     assert parquet_path.exists()
     assert df.height == 1
     assert json.loads(df["coach_narrative_json"][0])["weekly_mirror"].startswith("This week")
+<<<<<<< Updated upstream
     assert json.loads(df["drift_reasons_json"][0]) == []
 
 
@@ -515,3 +531,5 @@ def test_build_weekly_digest_prefers_upstream_drift_result(tmp_path: Path):
     assert digest.mode_source == "drift_detector"
     assert digest.mode_rationale.startswith("Upstream detector")
     assert digest.drift_reasons == ["delta_breach", "low_uncertainty"]
+=======
+>>>>>>> Stashed changes
