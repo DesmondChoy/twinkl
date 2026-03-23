@@ -410,6 +410,100 @@ def compute_recall_per_class(
     }
 
 
+def compute_activation_metrics(
+    probabilities: np.ndarray,
+    targets: np.ndarray,
+) -> dict:
+    """Compute binary inactive-vs-active metrics from final 3-class probabilities."""
+    if probabilities.ndim != 3 or probabilities.shape[1:] != (len(SCHWARTZ_VALUE_ORDER), 3):
+        raise ValueError(
+            "probabilities must have shape "
+            f"(n_samples, {len(SCHWARTZ_VALUE_ORDER)}, 3)"
+        )
+    if targets.ndim != 2 or targets.shape[1] != len(SCHWARTZ_VALUE_ORDER):
+        raise ValueError(
+            "targets must have shape "
+            f"(n_samples, {len(SCHWARTZ_VALUE_ORDER)})"
+        )
+
+    target_active = targets.astype(int) != 0
+    predicted_active = (probabilities[:, :, 0] + probabilities[:, :, 2]) >= 0.5
+
+    precision_values = []
+    recall_values = []
+    f1_values = []
+    per_dim = {}
+
+    for dim_idx, dim_name in enumerate(SCHWARTZ_VALUE_ORDER):
+        pred_dim = predicted_active[:, dim_idx]
+        target_dim = target_active[:, dim_idx]
+
+        tp = int(np.logical_and(pred_dim, target_dim).sum())
+        fp = int(np.logical_and(pred_dim, ~target_dim).sum())
+        fn = int(np.logical_and(~pred_dim, target_dim).sum())
+
+        precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
+        recall = tp / (tp + fn) if (tp + fn) > 0 else float("nan")
+        if np.isnan(recall) or (precision + recall) == 0:
+            f1 = float("nan") if np.isnan(recall) else 0.0
+        else:
+            f1 = 2.0 * precision * recall / (precision + recall)
+
+        precision_values.append(float(precision))
+        recall_values.append(float(recall))
+        f1_values.append(float(f1))
+        per_dim[dim_name] = {
+            "precision": float(precision),
+            "recall": float(recall),
+            "f1": float(f1),
+            "support_active": int(target_dim.sum()),
+            "support_predicted_active": int(pred_dim.sum()),
+        }
+
+    return {
+        "per_dim": per_dim,
+        "mean": {
+            "precision": _nanmean_or_nan(precision_values),
+            "recall": _nanmean_or_nan(recall_values),
+            "f1": _nanmean_or_nan(f1_values),
+        },
+    }
+
+
+def compute_active_sign_accuracy_per_dimension(
+    probabilities: np.ndarray,
+    targets: np.ndarray,
+) -> dict[str, float]:
+    """Compute sign accuracy on the active subset only, using final probabilities."""
+    if probabilities.ndim != 3 or probabilities.shape[1:] != (len(SCHWARTZ_VALUE_ORDER), 3):
+        raise ValueError(
+            "probabilities must have shape "
+            f"(n_samples, {len(SCHWARTZ_VALUE_ORDER)}, 3)"
+        )
+    if targets.ndim != 2 or targets.shape[1] != len(SCHWARTZ_VALUE_ORDER):
+        raise ValueError(
+            "targets must have shape "
+            f"(n_samples, {len(SCHWARTZ_VALUE_ORDER)})"
+        )
+
+    per_dim = {}
+    for dim_idx, dim_name in enumerate(SCHWARTZ_VALUE_ORDER):
+        target_dim = targets[:, dim_idx].astype(int)
+        active_mask = target_dim != 0
+        if not np.any(active_mask):
+            per_dim[dim_name] = float("nan")
+            continue
+
+        pred_sign = np.where(
+            probabilities[:, dim_idx, 2] >= probabilities[:, dim_idx, 0],
+            1,
+            -1,
+        )
+        per_dim[dim_name] = float((pred_sign[active_mask] == target_dim[active_mask]).mean())
+
+    return per_dim
+
+
 def compute_hedging_per_dimension(
     predictions: np.ndarray,
     *,
@@ -733,6 +827,7 @@ def evaluate_with_uncertainty(
     all_targets = []
     all_raw_logits = []
     all_probabilities = []
+    metric_probabilities = []
     is_ordinal_model = _is_ordinal_model(model)
 
     for batch_x, batch_y in dataloader:
@@ -744,16 +839,24 @@ def evaluate_with_uncertainty(
         all_stds.append(std.cpu().numpy())
         all_targets.append(batch_y.numpy())
 
-        if include_raw_outputs:
-            if not is_ordinal_model or not hasattr(model, "predict_logits_and_probabilities"):
+        collect_probabilities = (include_ordinal_metrics or include_raw_outputs) and is_ordinal_model
+        if collect_probabilities:
+            if not hasattr(model, "predict_logits_and_probabilities"):
                 raise ValueError(
-                    "include_raw_outputs=True requires an ordinal model with "
+                    "Ordinal probability collection requires an ordinal model with "
                     "predict_logits_and_probabilities()."
                 )
             with torch.no_grad():
                 raw_logits, probabilities = model.predict_logits_and_probabilities(batch_x)
-            all_raw_logits.append(raw_logits.detach().cpu().numpy())
-            all_probabilities.append(probabilities.detach().cpu().numpy())
+            metric_probabilities.append(probabilities.detach().cpu().numpy())
+            if include_raw_outputs:
+                all_raw_logits.append(raw_logits.detach().cpu().numpy())
+                all_probabilities.append(probabilities.detach().cpu().numpy())
+        elif include_raw_outputs:
+            raise ValueError(
+                "Ordinal probability collection requires an ordinal model with "
+                "predict_logits_and_probabilities()."
+            )
 
     if not all_means:
         raise ValueError(
@@ -764,6 +867,11 @@ def evaluate_with_uncertainty(
     predictions = np.concatenate(all_means, axis=0)
     uncertainties = np.concatenate(all_stds, axis=0)
     targets = np.concatenate(all_targets, axis=0)
+    ordinal_probabilities = (
+        np.concatenate(metric_probabilities, axis=0)
+        if metric_probabilities
+        else None
+    )
 
     # Compute metrics
     spearman_per_dim = compute_spearman_per_dimension(predictions, targets)
@@ -807,6 +915,17 @@ def evaluate_with_uncertainty(
         )
         results["hedging_per_dim"] = hedging_per_dim
         results["hedging_mean"] = float(np.mean(list(hedging_per_dim.values())))
+        if ordinal_probabilities is not None:
+            activation_metrics = compute_activation_metrics(ordinal_probabilities, targets)
+            active_sign_accuracy_per_dim = compute_active_sign_accuracy_per_dimension(
+                ordinal_probabilities,
+                targets,
+            )
+            results["activation_metrics"] = activation_metrics
+            results["active_sign_accuracy_per_dim"] = active_sign_accuracy_per_dim
+            results["active_sign_accuracy_mean"] = _nanmean_or_nan(
+                list(active_sign_accuracy_per_dim.values())
+            )
 
     if include_raw_outputs:
         results["raw_logits"] = np.concatenate(all_raw_logits, axis=0)
@@ -815,7 +934,7 @@ def evaluate_with_uncertainty(
     if include_ordinal_metrics:
         results["circumplex"] = compute_circumplex_diagnostics(
             predictions,
-            results.get("probabilities"),
+            ordinal_probabilities,
         )
 
     return results
@@ -853,6 +972,7 @@ def evaluate_model(
 
     all_predictions = []
     all_targets = []
+    all_probabilities = []
 
     with torch.no_grad():
         for batch_x, batch_y in dataloader:
@@ -861,6 +981,9 @@ def evaluate_model(
 
             all_predictions.append(pred.cpu().numpy())
             all_targets.append(batch_y.numpy())
+            if include_ordinal_metrics and use_predict and hasattr(model, "predict_logits_and_probabilities"):
+                _, probabilities = model.predict_logits_and_probabilities(batch_x)
+                all_probabilities.append(probabilities.detach().cpu().numpy())
 
     if not all_predictions:
         raise ValueError(
@@ -870,6 +993,11 @@ def evaluate_model(
 
     predictions = np.concatenate(all_predictions, axis=0)
     targets = np.concatenate(all_targets, axis=0)
+    ordinal_probabilities = (
+        np.concatenate(all_probabilities, axis=0)
+        if all_probabilities
+        else None
+    )
 
     spearman_per_dim = compute_spearman_per_dimension(predictions, targets)
     accuracy_per_dim = compute_accuracy_per_dimension(predictions, targets)
@@ -893,6 +1021,17 @@ def evaluate_model(
         results["mae_mean"] = float(np.mean(list(mae_per_dim.values())))
         results["qwk_per_dim"] = qwk_per_dim
         results["qwk_mean"] = _nanmean_or_nan(list(qwk_per_dim.values()))
+        if ordinal_probabilities is not None:
+            activation_metrics = compute_activation_metrics(ordinal_probabilities, targets)
+            active_sign_accuracy_per_dim = compute_active_sign_accuracy_per_dimension(
+                ordinal_probabilities,
+                targets,
+            )
+            results["activation_metrics"] = activation_metrics
+            results["active_sign_accuracy_per_dim"] = active_sign_accuracy_per_dim
+            results["active_sign_accuracy_mean"] = _nanmean_or_nan(
+                list(active_sign_accuracy_per_dim.values())
+            )
 
     return results
 
@@ -978,6 +1117,22 @@ def format_results_table(results: dict) -> str:
             f"{recall_mean['minus1']:.2%} | "
             f"0: {recall_mean['zero']:.2%} | "
             f"+1: {recall_mean['plus1']:.2%}"
+        )
+
+    if "activation_metrics" in results:
+        activation_mean = results["activation_metrics"]["mean"]
+        lines.append("\nActivation metrics:")
+        lines.append(
+            "  precision: "
+            f"{activation_mean['precision']:.2%} | "
+            f"recall: {activation_mean['recall']:.2%} | "
+            f"f1: {activation_mean['f1']:.2%}"
+        )
+
+    if "active_sign_accuracy_mean" in results:
+        lines.append(
+            "Active sign accuracy: "
+            f"{results['active_sign_accuracy_mean']:.2%}"
         )
 
     if "hedging_mean" in results:

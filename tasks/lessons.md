@@ -30,3 +30,19 @@
   issues, and close reasons that it has not already been run, explicitly
   de-scoped, or superseded. Treat stale recommendation text in older reports as
   historical context, not current guidance.
+
+## 2026-03-19
+
+- When creating experiment epics, make the dependency posture explicit in the
+  issue body: call out which epics can run in parallel, which are hard-blocked,
+  and which have only soft sequencing constraints. Do not assume a fresh
+  session will infer this from prose alone.
+- For research epics, include concrete scoping constraints in the issue itself
+  when they are part of the rationale: target dataset size, rough parameter
+  budget, and any explicit stopping or narrowing decision points. This prevents
+  open-ended execution in later sessions.
+- If a repo-local skill or workflow file is named explicitly for a task, read
+  it before doing the work and follow its required audit steps, not just its
+  output format. For experiment reviews here, that means artifact-aware
+  analysis, provenance backfill, and index updates before treating the review
+  as done.

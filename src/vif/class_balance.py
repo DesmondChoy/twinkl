@@ -14,6 +14,7 @@ import polars as pl
 
 NUM_DIMS = 10
 NUM_CLASSES = 3
+NUM_BINARY_CLASSES = 2
 
 
 def _validate_targets(targets: np.ndarray) -> np.ndarray:
@@ -41,8 +42,11 @@ def compute_ordinal_class_counts(targets: np.ndarray) -> np.ndarray:
 def class_counts_to_priors(counts: np.ndarray, eps: float = 1e-12) -> np.ndarray:
     """Convert per-dimension class counts into strictly positive priors."""
     counts = np.asarray(counts, dtype=np.float64)
-    if counts.shape != (NUM_DIMS, NUM_CLASSES):
-        raise ValueError(f"counts must have shape ({NUM_DIMS}, {NUM_CLASSES}), got {counts.shape}")
+    if counts.ndim != 2 or counts.shape[0] != NUM_DIMS or counts.shape[1] <= 0:
+        raise ValueError(
+            "counts must have shape "
+            f"({NUM_DIMS}, n_classes>0), got {counts.shape}"
+        )
 
     stabilized = np.clip(counts, a_min=0.0, a_max=None) + float(eps)
     normalizer = stabilized.sum(axis=1, keepdims=True)
@@ -52,6 +56,22 @@ def class_counts_to_priors(counts: np.ndarray, eps: float = 1e-12) -> np.ndarray
 def compute_ordinal_class_priors(counts: np.ndarray, eps: float = 1e-12) -> np.ndarray:
     """Backward-compatible alias for count -> prior conversion."""
     return class_counts_to_priors(counts, eps=eps)
+
+
+def compute_activation_class_counts(targets: np.ndarray) -> np.ndarray:
+    """Count binary activation labels per dimension in [inactive, active] order."""
+    targets = _validate_targets(targets)
+    inactive = (targets == 0).sum(axis=0, dtype=np.int64)
+    active = (targets != 0).sum(axis=0, dtype=np.int64)
+    return np.stack([inactive, active], axis=1).astype(np.float64)
+
+
+def compute_polarity_class_counts(targets: np.ndarray) -> np.ndarray:
+    """Count active-only polarity labels per dimension in [misaligned, aligned] order."""
+    targets = _validate_targets(targets)
+    misaligned = (targets == -1).sum(axis=0, dtype=np.int64)
+    aligned = (targets == 1).sum(axis=0, dtype=np.int64)
+    return np.stack([misaligned, aligned], axis=1).astype(np.float64)
 
 
 def compute_ldam_margins(counts: np.ndarray, max_m: float = 0.5, eps: float = 1e-12) -> np.ndarray:
@@ -96,8 +116,15 @@ def compute_long_tail_statistics_from_dataframe(train_df: pl.DataFrame) -> dict[
     targets = np.asarray(train_df.get_column("alignment_vector").to_list(), dtype=np.int64)
     counts = compute_ordinal_class_counts(targets)
     priors = class_counts_to_priors(counts, eps=1e-12)
+    activation_counts = compute_activation_class_counts(targets)
+    activation_priors = class_counts_to_priors(activation_counts, eps=1e-12)
+    polarity_counts = compute_polarity_class_counts(targets)
+    polarity_priors = class_counts_to_priors(polarity_counts, eps=1e-12)
     return {
         "class_counts": counts.astype(np.float32),
         "class_priors": priors.astype(np.float32),
+        "activation_counts": activation_counts.astype(np.float32),
+        "activation_priors": activation_priors.astype(np.float32),
+        "polarity_counts": polarity_counts.astype(np.float32),
+        "polarity_priors": polarity_priors.astype(np.float32),
     }
-

@@ -77,6 +77,9 @@ class TestLossShorthand:
     def test_balanced_softmax(self):
         assert _loss_shorthand("BalancedSoftmax", {}) == "balanced_softmax"
 
+    def test_two_stage_balanced_softmax(self):
+        assert _loss_shorthand("TwoStageBalancedSoftmax", {}) == "two_stage_balanced_softmax"
+
     def test_balanced_softmax_dimension_weighting(self):
         assert _loss_shorthand(
             "BalancedSoftmax",
@@ -100,6 +103,9 @@ class TestLossShorthand:
 
     def test_ldam_drw(self):
         assert _loss_shorthand("LDAM_DRW", {}) == "ldam_drw"
+
+    def test_slace(self):
+        assert _loss_shorthand("SLACE", {}) == "slace"
 
     def test_weighted_mse_includes_scale(self):
         config = {"loss_fn": "weighted_mse", "weighted_mse_scale": 7.5}
@@ -167,6 +173,7 @@ def _minimal_training_inputs() -> tuple[dict, dict, dict, dict, np.ndarray, dict
         "ldam_scale": 30.0,
         "ldam_drw_start_epoch": 50,
         "ldam_beta": 0.9999,
+        "slace_alpha": 1.0,
     }
     trained_result = {
         "model": torch.nn.Linear(4, 30),
@@ -230,7 +237,9 @@ def _minimal_training_inputs() -> tuple[dict, dict, dict, dict, np.ndarray, dict
     ("model_name", "expected_loss"),
     [
         ("BalancedSoftmax", "balanced_softmax"),
+        ("TwoStageBalancedSoftmax", "two_stage_balanced_softmax"),
         ("LDAM_DRW", "ldam_drw"),
+        ("SLACE", "slace"),
     ],
 )
 def test_build_experiment_dict_records_long_tail_loss_shorthands(model_name, expected_loss):
@@ -260,6 +269,8 @@ def test_build_experiment_dict_records_long_tail_loss_shorthands(model_name, exp
     if model_name == "LDAM_DRW":
         assert experiment["config"]["training"]["ldam_drw_start_epoch"] == 50
         assert experiment["config"]["training"]["ldam_beta"] == 0.9999
+    if model_name == "SLACE":
+        assert experiment["config"]["training"]["slace_alpha"] == 1.0
 
 
 def test_build_experiment_dict_persists_circumplex_payload():

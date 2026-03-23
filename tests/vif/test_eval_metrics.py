@@ -268,6 +268,48 @@ class TestCircumplexDiagnostics:
         assert adjacent_row["score"] == pytest.approx(0.0)
 
 
+class TestDecompositionMetrics:
+    """Tests for activation and active-sign diagnostics derived from probabilities."""
+
+    def test_compute_activation_metrics(self):
+        from src.vif.eval import compute_activation_metrics
+
+        probabilities = np.zeros((4, 10, 3), dtype=np.float64)
+        probabilities[:, :, 1] = 1.0
+        targets = np.zeros((4, 10), dtype=np.float64)
+
+        # One true positive active prediction, one false positive, one false negative.
+        probabilities[0, 0] = [0.7, 0.1, 0.2]  # active
+        targets[0, 0] = -1
+        probabilities[1, 0] = [0.6, 0.2, 0.2]  # active false positive
+        probabilities[2, 0] = [0.2, 0.7, 0.1]  # inactive false negative
+        targets[2, 0] = 1
+
+        metrics = compute_activation_metrics(probabilities, targets)
+
+        assert metrics["per_dim"]["self_direction"]["precision"] == pytest.approx(0.5)
+        assert metrics["per_dim"]["self_direction"]["recall"] == pytest.approx(0.5)
+        assert metrics["per_dim"]["self_direction"]["f1"] == pytest.approx(0.5)
+
+    def test_compute_active_sign_accuracy_per_dimension(self):
+        from src.vif.eval import compute_active_sign_accuracy_per_dimension
+
+        probabilities = np.zeros((3, 10, 3), dtype=np.float64)
+        probabilities[:, :, 1] = 1.0
+        targets = np.zeros((3, 10), dtype=np.float64)
+
+        probabilities[0, 0] = [0.8, 0.1, 0.1]
+        targets[0, 0] = -1
+        probabilities[1, 0] = [0.2, 0.1, 0.7]
+        targets[1, 0] = 1
+        probabilities[2, 0] = [0.7, 0.1, 0.2]
+        targets[2, 0] = 1
+
+        per_dim = compute_active_sign_accuracy_per_dimension(probabilities, targets)
+
+        assert per_dim["self_direction"] == pytest.approx(2 / 3)
+
+
 class TestMAE:
     """Tests for compute_mae_per_dimension."""
 
@@ -642,9 +684,12 @@ class TestEvaluateWithUncertainty:
         assert "hedging_per_dim" in results
         assert "hedging_mean" in results
         assert "qwk_nan_dims_count" in results
+        assert "activation_metrics" in results
+        assert "active_sign_accuracy_per_dim" in results
+        assert "active_sign_accuracy_mean" in results
         assert "positive_count" in results["calibration"]
         assert "circumplex" in results
-        assert results["circumplex"]["source"] == "expected_scores"
+        assert results["circumplex"]["source"] == "probabilities"
 
     def test_include_raw_outputs_for_ordinal_model(self):
         """Ordinal eval can capture deterministic logits/probabilities for export."""
@@ -694,7 +739,7 @@ class TestEvaluateWithUncertainty:
         targets = np.zeros((4, 10))
         dl = _make_dataloader(np.random.default_rng(0).standard_normal((4, 20)), targets)
 
-        with pytest.raises(ValueError, match="include_raw_outputs=True"):
+        with pytest.raises(ValueError, match="predict_logits_and_probabilities"):
             evaluate_with_uncertainty(model, dl, include_raw_outputs=True)
 
     def test_mean_uncertainty_positive(self):
@@ -790,6 +835,22 @@ class TestFormatResultsTable:
         assert "Recall per class" in table
         assert "Hedging mean" in table
         assert "QWK NaN dims" in table
+
+    def test_activation_sections_included(self):
+        """Activation diagnostics should be rendered when present."""
+        from src.vif.eval import format_results_table
+
+        results = self._base_results(use_mae=True)
+        results["activation_metrics"] = {
+            "mean": {"precision": 0.4, "recall": 0.5, "f1": 0.44},
+            "per_dim": {},
+        }
+        results["active_sign_accuracy_mean"] = 0.6
+
+        table = format_results_table(results)
+
+        assert "Activation metrics" in table
+        assert "Active sign accuracy" in table
 
     def test_nan_spearman_shows_na(self):
         """NaN Spearman values should render as 'N/A' in the table."""

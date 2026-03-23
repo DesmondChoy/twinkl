@@ -4,18 +4,26 @@
 
 | Rank | Candidate | Runs | Split Seed | Model Seeds | Median QWK | Median recall_-1 | Median MinR | Median Hedging | Median Cal | Positioning |
 |------|-----------|------|-----------:|------------|-----------:|-----------------:|------------:|---------------:|-----------:|-------------|
-| 1 | BalancedSoftmax | run_019-run_021 | 2025 | 11, 22, 33 | 0.362 | 0.313 | **0.448** | 0.621 | 0.713 | Active corrected-split default. Best overall balance of fair QWK, reasonable tail recovery, and only moderate hedging. |
-| 2 | BalancedSoftmax + dimweight | run_034-run_036 | 2025 | 11, 22, 33 | 0.342 | **0.378** | **0.449** | 0.599 | **0.726** | Best tail-sensitive reference branch so far. Strongest `recall_-1` / minority-recall package with lower hedging and better calibration than the incumbent, but median QWK is too volatile and too low to replace the default. |
-| 3 | BalancedSoftmax + circreg + recall floor | run_031-run_033 | 2025 | 11, 22, 33 | **0.366** | 0.267 | 0.409 | 0.641 | 0.713 | QWK/calibration are comparable to the incumbent, but the guardrailed rerun still loses on `recall_-1`, minority recall, and hedging. Keep as a reference branch, not the default. |
-| 4 | BalancedSoftmax + targeted batch | run_022-run_024 | 2025 | 11, 22, 33 | 0.349 | 0.342 | 0.434 | 0.619 | 0.687 | Best targeted hard-dimension follow-up before weighting. Improves `recall_-1`, but gives back QWK and calibration relative to the default family. |
-| 5 | BalancedSoftmax + hedonism/security lift | run_025-run_027 | 2025 | 11, 22, 33 | 0.346 | 0.328 | 0.442 | **0.598** | 0.693 | Lowest-hedging training-time branch, but still not a clean frontier change on QWK or hard-dimension stability. |
-| 6 | CDWCE_a3 | run_016-run_018 | 2025 | 11, 22, 33 | 0.353 | 0.104 | 0.276 | 0.804 | 0.762 | Best conservative 3-seed baseline when MAE, accuracy, and calibration matter more than strong tail recovery. |
-| 7 | BalancedSoftmax + circumplex regularizer | run_028-run_030 | 2025 | 11, 22, 33 | 0.347 | 0.265 | 0.411 | 0.641 | 0.709 | Soft circumplex regularization improved some aggregate structure but weakened the tail-sensitive behavior that justified BalancedSoftmax in the first place. |
-| 8 | SoftOrdinal | run_016-run_018 | 2025 | 11, 22, 33 | 0.346 | 0.077 | 0.283 | 0.796 | 0.781 | Best low-gap comparator. Competitive on QWK, but it remains much more neutral-biased than the BalancedSoftmax branches. |
-| 9 | CORN | run_016-run_018 | 2025 | 11, 22, 33 | 0.315 | 0.089 | 0.273 | 0.801 | 0.818 | Best-calibrated corrected-split baseline. Keep it as the calibration anchor and sanity check for post-hoc calibration follow-ups. |
-| 10 | SoftOrdinal + hedonism/security lift | run_025-run_027 | 2025 | 11, 22, 33 | 0.340 | 0.082 | 0.260 | 0.823 | 0.738 | Post-lift SoftOrdinal comparator. The extra data did not help it escape excessive hedging. |
+| 1 | BalancedSoftmax | run_019-run_021 | 2025 | 11, 22, 33 | 0.362 | 0.313 | **0.448** | 0.621 | **0.713** | Active corrected-split default. Still the best all-around package once hard-dimension stability, minority recall, and calibration are considered together. |
+| 2 | Qwen3-0.6B + BalancedSoftmax | run_042-run_044 | 2025 | 11, 22, 33 | **0.370** | 0.318 | 0.436 | **0.591** | 0.691 | Strongest encoder-swap challenger so far. Family medians are comparable to the incumbent on QWK and `recall_-1` while reducing hedging, but `hedonism` / `power` stay too weak for a clean default swap. |
+| 3 | BalancedSoftmax + dimweight | run_034-run_036 | 2025 | 11, 22, 33 | 0.342 | **0.378** | **0.449** | 0.599 | **0.726** | Best tail-sensitive reference branch so far. Strongest `recall_-1` / minority-recall package with lower hedging and better calibration than the incumbent, but median QWK is too volatile and too low to replace the default. |
+| 4 | BalancedSoftmax + circreg + recall floor | run_031-run_033 | 2025 | 11, 22, 33 | 0.366 | 0.267 | 0.409 | 0.641 | 0.713 | QWK/calibration are comparable to the incumbent, but the guardrailed rerun still loses on `recall_-1`, minority recall, and hedging. Keep as a reference branch, not the default. |
+| 5 | BalancedSoftmax + targeted batch | run_022-run_024 | 2025 | 11, 22, 33 | 0.349 | 0.342 | 0.434 | 0.619 | 0.687 | Best targeted hard-dimension follow-up before weighting. Improves `recall_-1`, but gives back QWK and calibration relative to the default family. |
+| 6 | BalancedSoftmax + hedonism/security lift | run_025-run_027 | 2025 | 11, 22, 33 | 0.346 | 0.328 | 0.442 | 0.598 | 0.693 | Lowest-hedging training-time branch, but still not a clean frontier change on QWK or hard-dimension stability. |
+| 7 | TwoStageBalancedSoftmax | run_045-run_047 | 2025 | 11, 22, 33 | 0.360 | 0.266 | 0.382 | 0.708 | 0.743 | Structurally promising reformulation. It keeps comparable QWK and the best calibration, and it materially helps `stimulation`, but it still hedges too much and gives back too much `recall_-1` to replace the frontier. |
+| 8 | CDWCE_a3 | run_016-run_018 | 2025 | 11, 22, 33 | 0.353 | 0.104 | 0.276 | 0.804 | 0.762 | Best conservative 3-seed baseline when MAE, accuracy, and calibration matter more than strong tail recovery. |
+| 9 | BalancedSoftmax + circumplex regularizer | run_028-run_030 | 2025 | 11, 22, 33 | 0.347 | 0.265 | 0.411 | 0.641 | 0.709 | Soft circumplex regularization improved some aggregate structure but weakened the tail-sensitive behavior that justified BalancedSoftmax in the first place. |
+| 10 | SoftOrdinal | run_016-run_018 | 2025 | 11, 22, 33 | 0.346 | 0.077 | 0.283 | 0.796 | 0.781 | Best low-gap comparator. Competitive on QWK, but it remains much more neutral-biased than the BalancedSoftmax branches. |
+| 11 | CORN | run_016-run_018 | 2025 | 11, 22, 33 | 0.315 | 0.089 | 0.273 | 0.801 | 0.818 | Best-calibrated corrected-split baseline. Keep it as the calibration anchor and sanity check for post-hoc calibration follow-ups. |
+| 12 | SoftOrdinal + hedonism/security lift | run_025-run_027 | 2025 | 11, 22, 33 | 0.340 | 0.082 | 0.260 | 0.823 | 0.738 | Post-lift SoftOrdinal comparator. The extra data did not help it escape excessive hedging. |
 
-> **Active recommendation (2026-03-11):** `run_019`-`run_021` remain the default corrected-split frontier family. The new weighted family `run_034`-`run_036` is the best current tail-sensitive reference branch: it improves median holdout `recall_-1` (`0.378` vs `0.313`), keeps minority recall essentially flat to slightly better (`0.449` vs `0.448`), reduces hedging (`0.599` vs `0.621`), and improves calibration (`0.726` vs `0.713`) while keeping circumplex summaries near incumbent levels. It still gives back too much median QWK (`0.342` vs `0.362`) and is much less stable across seeds, so it should stay a reference branch rather than replace the default. See the weighted review below.
+> **Active recommendation (2026-03-19):** `run_019`-`run_021` remain the default corrected-split frontier family. The new two-stage reformulation family `run_045`-`run_047` reached comparable median holdout `qwk_mean` (`0.360` vs `0.362`) and the best calibration on the current board (`0.743`), but it gave back too much `recall_-1` (`0.266`) and hedging (`0.708`). `run_034`-`run_036` remain the best tail-sensitive reference branch, and `run_042`-`run_044` remain the strongest encoder-swap challenger.
+>
+> **Latest two-stage reformulation review:** [`reports/experiment_review_2026-03-19_twinkl_746.md`](reports/experiment_review_2026-03-19_twinkl_746.md) did **not** change the frontier. `TwoStageBalancedSoftmax` improved activation precision, kept active-sign accuracy competitive, and materially lifted `stimulation`, but the branch still missed too many active hard-dimension cases: family-median `recall_-1` fell from incumbent `0.313` to `0.266`, minority recall fell to `0.382`, and hedging rose to `70.8%`. Treat it as a useful structural diagnostic branch rather than a new default or reserve replacement.
+>
+> **Latest controlled Qwen frontier rerun review:** [`reports/experiment_review_2026-03-18_twinkl_744.md`](reports/experiment_review_2026-03-18_twinkl_744.md) did **not** change the active default, but it did materially upgrade the status of the encoder branch. `run_042`-`run_044` confirmed that Qwen is a legitimate family rather than a one-off near-miss: median holdout `qwk_mean` reached `0.370`, median `recall_-1` stayed at `0.318`, and hedging stayed lower than the incumbent. But the family still gives back too much on `hedonism` and `power`, so keep it as the strongest representation challenger rather than the new default.
+>
+> **Latest SLACE reserve-branch diagnostic review:** [`reports/experiment_review_2026-03-18_twinkl_734.md`](reports/experiment_review_2026-03-18_twinkl_734.md) did **not** change the frontier. `run_041` matched the incumbent parameter budget and improved surface metrics like MAE / accuracy, but it failed the actual frontier gates: holdout `qwk_mean` stayed below the incumbent family median (`0.338` vs `0.362`), `recall_-1` collapsed (`0.134` vs `0.313` incumbent, `0.378` weighted reference), and hedging rebounded to `0.810`, back in the conservative-family regime. Treat `twinkl-734` as completed and drop SLACE from the active roadmap.
 >
 > **Latest semantic counterexample closeout:** [`reports/experiment_review_2026-03-16_twinkl_733.md`](reports/experiment_review_2026-03-16_twinkl_733.md) explicitly de-scopes the proposed `Hedonism` / `Security` semantic counterexample batch. The repeated replay errors, earlier targeted lifts, uncertainty review, and later representation diagnostics already answer the core question strongly enough, so another generate -> judge -> retrain cycle is not justified for the current frontier. Keep `run_019`-`run_021` active, treat `twinkl-734` as tracker-unblocked but still reserve-only, and reopen `twinkl-733` only if a future branch needs a tightly matched causal falsification test.
 >
@@ -174,11 +182,79 @@
 | 038 | BalancedSoftmax | nomic-768d | 1 | 28 | 0.3 | balanced_softmax | 23606 | 19.5 | 0.333 | 0.737 | 0.299 | 0.301 | 0.657 | 0.346 | 0.104 | 0.077 | runs/run_038_BalancedSoftmax.yaml |
 | 039 | BalancedSoftmax | nomic-v2-moe-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.325 | 0.737 | 0.305 | 0.336 | 0.691 | 0.433 | 0.073 | 0.083 | runs/run_039_BalancedSoftmax.yaml |
 | 040 | BalancedSoftmax | Qwen3-0.6B-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.324 | 0.740 | 0.355 | 0.343 | 0.691 | 0.436 | 0.083 | 0.085 | runs/run_040_BalancedSoftmax.yaml |
+| 041 | SLACE | nomic-256d | 1 | 64 | 0.3 | slace | 23454 | 19.3 | 0.222 | 0.811 | 0.338 | 0.316 | 0.772 | 0.293 | 0.029 | 0.034 | runs/run_041_SLACE.yaml |
+| 042 | BalancedSoftmax | Qwen3-0.6B-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.325 | 0.739 | 0.378 | 0.345 | 0.691 | 0.436 | 0.081 | 0.090 | runs/run_042_BalancedSoftmax.yaml |
+| 043 | BalancedSoftmax | Qwen3-0.6B-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.324 | 0.740 | 0.355 | 0.343 | 0.691 | 0.436 | 0.083 | 0.085 | runs/run_043_BalancedSoftmax.yaml |
+| 044 | BalancedSoftmax | Qwen3-0.6B-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.302 | 0.754 | 0.370 | 0.366 | 0.711 | 0.446 | 0.064 | 0.067 | runs/run_044_BalancedSoftmax.yaml |
+| 045 | TwoStageBalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | two_stage_balanced_softmax | 24104 | 19.9 | 0.268 | 0.787 | 0.393 | 0.371 | 0.758 | 0.404 | 0.051 | 0.077 | runs/run_045_TwoStageBalancedSoftmax.yaml |
+| 046 | TwoStageBalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | two_stage_balanced_softmax | 24104 | 19.9 | 0.267 | 0.788 | 0.360 | 0.351 | 0.743 | 0.382 | 0.063 | 0.071 | runs/run_046_TwoStageBalancedSoftmax.yaml |
+| 047 | TwoStageBalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | two_stage_balanced_softmax | 24104 | 19.9 | 0.270 | 0.779 | 0.339 | 0.353 | 0.737 | 0.373 | 0.073 | 0.070 | runs/run_047_TwoStageBalancedSoftmax.yaml |
 <!-- AUTO-TABLE:END -->
 
 > **Contributor note:** Keep this section in **newest-first** chronological order (most recent date at top).
 
 ## Findings
+
+### 2026-03-18 — Qwen graduates from single-seed near-miss to real frontier challenger (`twinkl-744`)
+
+`twinkl-744` reran `Qwen/Qwen3-Embedding-0.6B` across the full 3-seed corrected-split
+matrix to answer the question left open by the original single-seed diagnostic:
+is Qwen actually frontier-credible as a family, or was `run_040` just a near-miss?
+
+**1. The Qwen branch is real.** `run_042`-`run_044` finished with family-median
+`qwk_mean 0.370`, `recall_-1 0.318`, minority recall `0.436`, hedging `0.591`,
+and calibration `0.691`. That makes it broadly comparable to the incumbent
+family (`0.362`, `0.313`, `0.448`, `0.621`, `0.713`) rather than a speculative
+encoder revisit.
+
+**2. It still does not clear promotion cleanly.** The family improves the
+headline QWK/hedging package slightly, but the gains are small enough to treat
+as comparable, not decisive, and the hard-dimension profile is still weaker on
+`hedonism` and `power`. The new family-median `hedonism qwk` is only `0.154`,
+and `power qwk` is only `0.149`, both materially below the incumbent family.
+
+**3. Qwen should move onto the active board, but not replace the default.**
+`run_019`-`run_021` remain the active corrected-split default because they still
+offer the cleaner all-around package once hard-dimension stability, minority
+recall, and calibration are considered together. But `run_042`-`run_044` are
+now the strongest encoder-swap challenger and the first representation branch
+worth reopening if encoder work resumes.
+
+**4. Recommendation: keep the incumbent default, keep the weighted branch as
+the tail-sensitive reference, and log Qwen as the strongest representation
+challenger.** Full details:
+[`reports/experiment_review_2026-03-18_twinkl_744.md`](reports/experiment_review_2026-03-18_twinkl_744.md).
+
+### 2026-03-18 — SLACE fails the reserve-branch gate and returns to conservative-family hedging (`twinkl-734`)
+
+`twinkl-734` tested whether `SLACE` could add ordinal structure to the active
+`nomic-256d`, `ws=1`, `hd=64` frontier budget without sacrificing the
+tail-sensitive behavior that justified `BalancedSoftmax`.
+
+**1. The run did not clear the incumbent or weighted-reference floor.**
+`run_041` finished at `qwk_mean 0.338`, below the incumbent family median
+(`0.362`) and even slightly below the weighted reference median (`0.342`).
+More importantly, `recall_-1` collapsed to `0.134`, well below both the
+incumbent (`0.313`) and weighted (`0.378`) branches.
+
+**2. Hedging snapped back to the conservative-loss regime.** Overall hedging
+rose to `81.0%`, much worse than the active frontier (`62.1%`) and weighted
+reference (`59.9%`). That puts SLACE back in the same qualitative zone as the
+repo's earlier conservative ordinal families, which were already ruled out for
+production-facing drift detection.
+
+**3. Calibration stayed strong, but the hard-dimension package did not.**
+`run_041` kept `10/10` positively calibrated dimensions and strong global
+calibration (`0.772`), but `hedonism qwk` fell to `0.055`, `security qwk`
+remained below the incumbent family median (`0.196` vs `0.297`), and `power`
+collapsed to chance. `stimulation qwk` improved, but only alongside `91.9%`
+hedging on that dimension, so it does not rescue the run.
+
+**4. Recommendation: close `twinkl-734` and drop SLACE from the active
+roadmap.** `run_019`-`run_021` remain the active corrected-split default, and
+`run_034`-`run_036` remain the best tail-sensitive reference branch. Full
+details:
+[`reports/experiment_review_2026-03-18_twinkl_734.md`](reports/experiment_review_2026-03-18_twinkl_734.md).
 
 ### 2026-03-16 — `twinkl-733` semantic counterexample batch is explicitly de-scoped (`twinkl-733`)
 

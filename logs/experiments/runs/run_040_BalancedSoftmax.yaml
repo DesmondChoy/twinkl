@@ -16,7 +16,10 @@ provenance:
     added: {}
     removed: {}
     changed: {}
-  rationale: ''
+  rationale: 'Final encoder-swap diagnostic after the negative Nomic-family results.
+    This run tested Qwen/Qwen3-Embedding-0.6B at the incumbent 256d, window_size=1,
+    hidden_dim=64 budget to see whether a stronger zero-truncation encoder could
+    recover the representation gap without changing the classifier head.'
 config:
   encoder:
     model_name: Qwen/Qwen3-Embedding-0.6B
@@ -184,7 +187,11 @@ per_dimension:
     spearman: 0.4134
     calibration: 0.9476
     hedging: 0.7873
-observations: ''
+observations: '`run_040` was the strongest encoder-swap near-miss: qwk_mean rebounded
+  to 0.356 and hedging fell to 0.585, materially narrowing the gap to the incumbent
+  while keeping the same parameter budget. But recall_minus1 remained below the
+  incumbent family at 0.296, hedonism QWK fell to 0.095, and the hard-dimension
+  package stayed too weak for promotion.'
 circumplex:
   source: probabilities
   summary:

@@ -1,6 +1,6 @@
 """Tests for OrdinalCriticBase and all ordinal model variants.
 
-Parametrized over all 7 models to verify the shared interface contract.
+Parametrized over all 8 models to verify the shared interface contract.
 """
 
 import torch
@@ -13,7 +13,9 @@ from src.vif.critic_ordinal import (
     CriticMLPCDWCE,
     CriticMLPEMD,
     CriticMLPLDAMDRW,
+    CriticMLPSLACE,
     CriticMLPSoftOrdinal,
+    CriticMLPTwoStageBalancedSoftmax,
     OrdinalCriticBase,
 )
 
@@ -27,7 +29,9 @@ ALL_MODELS = [
     CriticMLPEMD,
     CriticMLPCDWCE,
     CriticMLPBalancedSoftmax,
+    CriticMLPTwoStageBalancedSoftmax,
     CriticMLPLDAMDRW,
+    CriticMLPSLACE,
     CriticMLPSoftOrdinal,
 ]
 
@@ -37,8 +41,10 @@ SOFTMAX_MODELS = [
     CriticMLPCDWCE,
     CriticMLPBalancedSoftmax,
     CriticMLPLDAMDRW,
+    CriticMLPSLACE,
     CriticMLPSoftOrdinal,
 ]
+TWO_STAGE_MODELS = [CriticMLPTwoStageBalancedSoftmax]
 
 
 def _constant_forward(flat_logits: torch.Tensor):
@@ -60,6 +66,20 @@ def _threshold_family_fixture() -> tuple[torch.Tensor, torch.Tensor]:
 def _softmax_family_fixture() -> tuple[torch.Tensor, torch.Tensor]:
     per_dim_logits = torch.tensor(
         [[6.0, -2.0, -3.0], [-3.0, 6.0, -2.0], [-3.0, -2.0, 6.0]] + [[6.0, -2.0, -3.0]] * 7,
+        dtype=torch.float32,
+    )
+    expected_classes = torch.tensor([0, 1, 2] + [0] * 7, dtype=torch.long)
+    return per_dim_logits.reshape(-1), expected_classes
+
+
+def _two_stage_family_fixture() -> tuple[torch.Tensor, torch.Tensor]:
+    per_dim_logits = torch.tensor(
+        [
+            [-6.0, 6.0, 6.0, -6.0],   # active + misaligned -> -1
+            [6.0, -6.0, 0.0, 0.0],    # inactive -> 0
+            [-6.0, 6.0, -6.0, 6.0],   # active + aligned -> +1
+        ]
+        + [[-6.0, 6.0, 6.0, -6.0]] * 7,
         dtype=torch.float32,
     )
     expected_classes = torch.tensor([0, 1, 2] + [0] * 7, dtype=torch.long)
@@ -134,6 +154,18 @@ class TestPredict:
 
         assert torch.equal(pred, expected)
 
+    @pytest.mark.parametrize("model_cls", TWO_STAGE_MODELS, ids=lambda c: c.__name__)
+    def test_two_stage_family_predict_decodes_known_logits(self, model_cls, sample_input):
+        """Two-stage decoders should reconstruct all three final classes."""
+        model = model_cls(input_dim=INPUT_DIM, hidden_dim=HIDDEN_DIM, dropout=0.0)
+        flat_logits, expected_classes = _two_stage_family_fixture()
+        model.forward = _constant_forward(flat_logits)
+
+        pred = model.predict(sample_input)
+        expected = (expected_classes.float() - 1.0).unsqueeze(0).repeat(BATCH_SIZE, 1)
+
+        assert torch.equal(pred, expected)
+
 
 class TestOrdinalOutputs:
     """Tests for standardized logits/probability export helpers."""
@@ -142,7 +174,7 @@ class TestOrdinalOutputs:
         logits = model.logits_per_dim(sample_input)
         assert logits.shape[0] == BATCH_SIZE
         assert logits.shape[1] == 10
-        assert logits.shape[2] in {2, 3}
+        assert logits.shape[2] in {2, 3, 4}
 
     def test_predict_probabilities_shape(self, model, sample_input):
         probabilities = model.predict_probabilities(sample_input)
@@ -181,6 +213,17 @@ class TestOrdinalOutputs:
 
         assert torch.equal(probabilities.argmax(dim=-1), expected)
 
+    @pytest.mark.parametrize("model_cls", TWO_STAGE_MODELS, ids=lambda c: c.__name__)
+    def test_two_stage_probabilities_match_known_classes(self, model_cls, sample_input):
+        model = model_cls(input_dim=INPUT_DIM, hidden_dim=HIDDEN_DIM, dropout=0.0)
+        flat_logits, expected_classes = _two_stage_family_fixture()
+        model.forward = _constant_forward(flat_logits)
+
+        probabilities = model.predict_probabilities(sample_input)
+        expected = expected_classes.unsqueeze(0).repeat(BATCH_SIZE, 1)
+
+        assert torch.equal(probabilities.argmax(dim=-1), expected)
+
 
 class TestConfigRoundTrip:
     """Tests for get_config()/from_config() serialization."""
@@ -195,7 +238,9 @@ class TestConfigRoundTrip:
             "emd",
             "cdw_ce",
             "balanced_softmax",
+            "two_stage_balanced_softmax",
             "ldam_drw",
+            "slace",
             "soft_ordinal",
         }
 

@@ -83,6 +83,9 @@ training:
     drw_start_epoch: 50
     beta: 0.9999
 
+  slace:
+    alpha: 1.0
+
 # Data Configuration
 # ------------------
 data:

@@ -1,8 +1,9 @@
 """Ordinal critic models for VIF alignment prediction.
 
-This module contains the shared base class and all seven ordinal critic variants:
-CORAL, CORN, EMD, SoftOrdinal, CDW-CE, Balanced Softmax, and LDAM-DRW. Each predicts per-dimension
-alignment as ordinal classes {-1, 0, +1} across 10 Schwartz value dimensions.
+This module contains the shared base class and all nine ordinal critic
+variants: CORAL, CORN, EMD, SoftOrdinal, CDW-CE, Balanced Softmax,
+Two-Stage Balanced Softmax, LDAM-DRW, and SLACE. Each predicts per-dimension alignment as ordinal
+classes {-1, 0, +1} across 10 Schwartz value dimensions.
 
 Shared architecture (OrdinalCriticBase):
     Input → Linear → LayerNorm → GELU → Dropout
@@ -16,7 +17,9 @@ Variants differ only in output layer size, loss function, and prediction decodin
 - SoftOrdinal: K=3 logits/dim, KL divergence with smoothed ordinal targets
 - CDW-CE: K=3 logits/dim, class-distance weighted cross-entropy over non-target probs
 - Balanced Softmax: K=3 logits/dim, cross-entropy with train-prior logit correction
+- Two-Stage Balanced Softmax: 2 logits for activation + 2 logits for polarity per dim
 - LDAM-DRW: K=3 logits/dim, label-distribution-aware margins with deferred re-weighting
+- SLACE: K=3 logits/dim, soft-label accumulated cross-entropy
 
 Usage:
     from src.vif.critic_ordinal import CriticMLPCORAL, coral_loss_multi
@@ -45,6 +48,14 @@ LOGITS_PER_DIM = NUM_CLASSES - 1
 # Schwartz value dimensions
 NUM_DIMS = 10
 _DIMENSION_INDEX = {name: idx for idx, name in enumerate(SCHWARTZ_VALUE_ORDER)}
+_SLACE_CLASS_POSITIONS = torch.arange(NUM_CLASSES, dtype=torch.float32)
+_SLACE_PROX_DOM = (
+    (
+        torch.abs(_SLACE_CLASS_POSITIONS.view(1, 1, -1) - _SLACE_CLASS_POSITIONS.view(-1, 1, 1))
+        <= torch.abs(_SLACE_CLASS_POSITIONS.view(1, -1, 1) - _SLACE_CLASS_POSITIONS.view(-1, 1, 1))
+    )
+    .float()
+)
 
 
 # ─── OrdinalCriticBase ────────────────────────────────────────────────────────
@@ -54,9 +65,10 @@ class OrdinalCriticBase(ABC, nn.Module):
     """Abstract base for ordinal critic MLP variants.
 
     Provides the identical 2-layer backbone used by CORAL, CORN, EMD,
-    SoftOrdinal, CDW-CE, Balanced Softmax, and LDAM-DRW models. Subclasses only need to specify the
-    output logit count and how to reconstruct 3-class probabilities from
-    their raw logits.
+    SoftOrdinal, CDW-CE, Balanced Softmax, Two-Stage Balanced Softmax,
+    LDAM-DRW, and SLACE models.
+    Subclasses only need to specify the output logit count and how to
+    reconstruct 3-class probabilities from their raw logits.
     """
 
     def __init__(
@@ -203,7 +215,9 @@ class OrdinalCriticBase(ABC, nn.Module):
                 "soft_ordinal": CriticMLPSoftOrdinal,
                 "cdw_ce": CriticMLPCDWCE,
                 "balanced_softmax": CriticMLPBalancedSoftmax,
+                "two_stage_balanced_softmax": CriticMLPTwoStageBalancedSoftmax,
                 "ldam_drw": CriticMLPLDAMDRW,
+                "slace": CriticMLPSLACE,
             }
             variant = config["variant"]
             if variant not in registry:
@@ -513,17 +527,20 @@ _EMD_OUTPUT_LOGITS = NUM_DIMS * NUM_CLASSES  # 30
 def _validate_softmax_loss_inputs(
     logits: torch.Tensor,
     y: torch.Tensor,
+    *,
+    num_classes: int = NUM_CLASSES,
 ) -> tuple[torch.Tensor, torch.Tensor]:
-    """Validate shared (batch, 30) softmax-head loss inputs."""
+    """Validate shared softmax-head loss inputs."""
+    expected_logits = NUM_DIMS * int(num_classes)
     if logits.dim() != 2:
         raise ValueError(
-            f"logits must be 2D (batch, {NUM_DIMS * NUM_CLASSES}), got {tuple(logits.shape)}"
+            f"logits must be 2D (batch, {expected_logits}), got {tuple(logits.shape)}"
         )
     if y.dim() != 2:
         raise ValueError(f"y must be 2D (batch, {NUM_DIMS}), got {tuple(y.shape)}")
-    if logits.size(1) != NUM_DIMS * NUM_CLASSES:
+    if logits.size(1) != expected_logits:
         raise ValueError(
-            f"logits second dimension must be {NUM_DIMS * NUM_CLASSES}, got {logits.size(1)}"
+            f"logits second dimension must be {expected_logits}, got {logits.size(1)}"
         )
     if y.size(1) != NUM_DIMS:
         raise ValueError(f"y second dimension must be {NUM_DIMS}, got {y.size(1)}")
@@ -540,6 +557,7 @@ def _prepare_class_stat_tensor(
     *,
     name: str,
     logits: torch.Tensor,
+    num_classes: int = NUM_CLASSES,
     eps: float = 1e-12,
 ) -> torch.Tensor:
     """Move per-dimension class statistics onto the logits device/dtype."""
@@ -547,9 +565,9 @@ def _prepare_class_stat_tensor(
         stat = class_stat.detach().to(device=logits.device, dtype=torch.float32)
     else:
         stat = torch.as_tensor(class_stat, device=logits.device, dtype=torch.float32)
-    if stat.shape != (NUM_DIMS, NUM_CLASSES):
+    if stat.shape != (NUM_DIMS, int(num_classes)):
         raise ValueError(
-            f"{name} must have shape ({NUM_DIMS}, {NUM_CLASSES}), got {tuple(stat.shape)}"
+            f"{name} must have shape ({NUM_DIMS}, {int(num_classes)}), got {tuple(stat.shape)}"
         )
     return stat.clamp_min(float(eps))
 
@@ -846,6 +864,9 @@ class CriticMLPCDWCE(OrdinalCriticBase):
 #
 # Cross-entropy with train-prior correction in the softmax denominator.
 
+_TWO_STAGE_LOGITS_PER_DIM = 4
+_TWO_STAGE_OUTPUT_LOGITS = NUM_DIMS * _TWO_STAGE_LOGITS_PER_DIM  # 40
+
 
 def balanced_softmax_ce_per_dimension(
     logits: torch.Tensor,
@@ -1006,6 +1027,113 @@ class CriticMLPBalancedSoftmax(OrdinalCriticBase):
         return "balanced_softmax"
 
 
+def _split_two_stage_logits(logits: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
+    """Split flattened two-stage logits into activation and polarity heads."""
+    logits, _ = _validate_softmax_loss_inputs(
+        logits,
+        torch.zeros(logits.size(0), NUM_DIMS, device=logits.device, dtype=torch.float32),
+        num_classes=_TWO_STAGE_LOGITS_PER_DIM,
+    )
+    batch = logits.size(0)
+    logits_3d = logits.view(batch, NUM_DIMS, _TWO_STAGE_LOGITS_PER_DIM).float()
+    return logits_3d[:, :, :2], logits_3d[:, :, 2:]
+
+
+def two_stage_balanced_softmax_loss_multi(
+    logits: torch.Tensor,
+    y: torch.Tensor,
+    *,
+    activation_priors: torch.Tensor | np.ndarray,
+    polarity_priors: torch.Tensor | np.ndarray,
+    eps: float = 1e-12,
+) -> torch.Tensor:
+    """Balanced-softmax loss over activation and active-only polarity heads."""
+    logits, y = _validate_softmax_loss_inputs(
+        logits,
+        y,
+        num_classes=_TWO_STAGE_LOGITS_PER_DIM,
+    )
+    activation_logits, polarity_logits = _split_two_stage_logits(logits)
+    activation_priors = _prepare_class_stat_tensor(
+        activation_priors,
+        name="activation_priors",
+        logits=activation_logits.reshape(logits.size(0), NUM_DIMS * 2),
+        num_classes=2,
+        eps=eps,
+    )
+    polarity_priors = _prepare_class_stat_tensor(
+        polarity_priors,
+        name="polarity_priors",
+        logits=polarity_logits.reshape(logits.size(0), NUM_DIMS * 2),
+        num_classes=2,
+        eps=eps,
+    )
+
+    activation_targets = (y != 0).long()
+    activation_adjusted_logits = activation_logits + torch.log(activation_priors).view(1, NUM_DIMS, 2)
+    activation_loss = F.cross_entropy(
+        activation_adjusted_logits.view(logits.size(0) * NUM_DIMS, 2),
+        activation_targets.view(logits.size(0) * NUM_DIMS),
+        reduction="mean",
+    )
+
+    active_mask = activation_targets.bool()
+    if bool(active_mask.any()):
+        polarity_targets = (y > 0).long()
+        polarity_adjusted_logits = polarity_logits + torch.log(polarity_priors).view(1, NUM_DIMS, 2)
+        polarity_loss = F.cross_entropy(
+            polarity_adjusted_logits[active_mask],
+            polarity_targets[active_mask],
+            reduction="mean",
+        )
+        return 0.5 * (activation_loss + polarity_loss)
+
+    return activation_loss
+
+
+class CriticMLPTwoStageBalancedSoftmax(OrdinalCriticBase):
+    """MLP critic with separate activation and polarity softmax heads per dimension."""
+
+    def __init__(
+        self,
+        input_dim: int,
+        hidden_dim: int = 256,
+        output_dim: int = NUM_DIMS,
+        dropout: float = 0.2,
+    ):
+        super().__init__(
+            input_dim=input_dim,
+            hidden_dim=hidden_dim,
+            output_dim=output_dim,
+            dropout=dropout,
+            output_logits=_TWO_STAGE_OUTPUT_LOGITS,
+        )
+
+    def logits_per_dim(self, x: torch.Tensor) -> torch.Tensor:
+        logits = self.forward(x)
+        batch = logits.size(0)
+        return logits.view(batch, NUM_DIMS, _TWO_STAGE_LOGITS_PER_DIM)
+
+    def probabilities_from_logits(self, logits_per_dim: torch.Tensor) -> torch.Tensor:
+        activation_probs = F.softmax(logits_per_dim[:, :, :2].float(), dim=-1)
+        polarity_probs = F.softmax(logits_per_dim[:, :, 2:].float(), dim=-1)
+
+        prob_inactive = activation_probs[:, :, 0]
+        prob_active = activation_probs[:, :, 1]
+        prob_minus1 = prob_active * polarity_probs[:, :, 0]
+        prob_plus1 = prob_active * polarity_probs[:, :, 1]
+
+        probabilities = torch.stack(
+            [prob_minus1, prob_inactive, prob_plus1],
+            dim=-1,
+        )
+        denom = probabilities.sum(dim=-1, keepdim=True).clamp_min(1e-12)
+        return probabilities / denom
+
+    def _variant_name(self) -> str:
+        return "two_stage_balanced_softmax"
+
+
 # ─── LDAM-DRW ────────────────────────────────────────────────────────────────
 #
 # Label-distribution-aware margins with deferred re-weighting.
@@ -1097,6 +1225,98 @@ class CriticMLPLDAMDRW(OrdinalCriticBase):
 
     def _variant_name(self) -> str:
         return "ldam_drw"
+
+
+# ─── SLACE ───────────────────────────────────────────────────────────────────
+#
+# Soft Labels Accumulating Cross Entropy (Nachmani et al. 2025).
+
+_SLACE_OUTPUT_LOGITS = NUM_DIMS * NUM_CLASSES  # 30
+
+
+def make_slace_targets(
+    y: torch.Tensor,
+    *,
+    alpha: float = 1.0,
+    num_classes: int = NUM_CLASSES,
+) -> torch.Tensor:
+    """Convert hard labels to the soft ordinal targets used by SLACE."""
+    resolved_alpha = _validate_positive_float(alpha, name="slace_alpha")
+    classes = (y.long() + 1).clamp(0, num_classes - 1)
+    class_positions = torch.arange(
+        num_classes,
+        device=y.device,
+        dtype=torch.float32,
+    ).view(1, 1, -1)
+    distances = (
+        class_positions
+        - classes.unsqueeze(-1).to(torch.float32)
+    ).abs()
+    return F.softmax(-resolved_alpha * distances, dim=-1)
+
+
+def slace_loss_multi(
+    logits: torch.Tensor,
+    y: torch.Tensor,
+    *,
+    alpha: float = 1.0,
+    eps: float = 1e-9,
+) -> torch.Tensor:
+    """SLACE loss for multi-output ordinal classification."""
+    logits, y = _validate_softmax_loss_inputs(logits, y)
+    resolved_eps = _validate_positive_float(eps, name="slace_eps")
+
+    batch = logits.size(0)
+    logits_flat = logits.view(batch * NUM_DIMS, NUM_CLASSES).float()
+    probabilities = F.softmax(logits_flat, dim=-1)
+    classes = (y.long() + 1).clamp(0, NUM_CLASSES - 1).view(batch * NUM_DIMS)
+    soft_targets = make_slace_targets(
+        y,
+        alpha=alpha,
+        num_classes=NUM_CLASSES,
+    ).view(batch * NUM_DIMS, NUM_CLASSES)
+
+    prox_dom = _SLACE_PROX_DOM.to(device=probabilities.device, dtype=probabilities.dtype)
+    accumulating_softmax = torch.matmul(
+        prox_dom[classes],
+        probabilities.unsqueeze(-1),
+    ).squeeze(-1)
+
+    per_sample_loss = -torch.sum(
+        soft_targets * torch.log(accumulating_softmax.clamp_min(resolved_eps)),
+        dim=-1,
+    )
+    return per_sample_loss.mean()
+
+
+class CriticMLPSLACE(OrdinalCriticBase):
+    """MLP critic with a 3-class softmax head for SLACE training."""
+
+    def __init__(
+        self,
+        input_dim: int,
+        hidden_dim: int = 256,
+        output_dim: int = NUM_DIMS,
+        dropout: float = 0.2,
+    ):
+        super().__init__(
+            input_dim=input_dim,
+            hidden_dim=hidden_dim,
+            output_dim=output_dim,
+            dropout=dropout,
+            output_logits=_SLACE_OUTPUT_LOGITS,
+        )
+
+    def logits_per_dim(self, x: torch.Tensor) -> torch.Tensor:
+        logits = self.forward(x)
+        batch = logits.size(0)
+        return logits.view(batch, NUM_DIMS, NUM_CLASSES)
+
+    def probabilities_from_logits(self, logits_per_dim: torch.Tensor) -> torch.Tensor:
+        return F.softmax(logits_per_dim.float(), dim=-1)
+
+    def _variant_name(self) -> str:
+        return "slace"
 
 
 # ─── SoftOrdinal ──────────────────────────────────────────────────────────────

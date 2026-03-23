@@ -115,6 +115,61 @@ def _normalize_rationales(raw_rationales: object) -> dict[str, str] | None:
     return cleaned or None
 
 
+def build_session_content(
+    initial_entry: str | None,
+    nudge_text: str | None,
+    response_text: str | None,
+) -> str:
+    """Render a journal session in the wrangled markdown format.
+
+    This mirrors the format used in the wrangled persona files so the judge sees
+    the same current-session structure regardless of whether prompts are built
+    from markdown or from the parsed entry rows.
+    """
+    parts: list[str] = []
+
+    if initial_entry and initial_entry.strip():
+        parts.append(initial_entry.strip())
+
+    if nudge_text and nudge_text.strip():
+        parts.append(f'**Nudge:** "{nudge_text.strip()}"')
+
+    if response_text and response_text.strip():
+        parts.append(f"**Response:** {response_text.strip()}")
+
+    return "\n\n".join(parts)
+
+
+def render_judge_prompt(
+    *,
+    session_content: str,
+    entry_date: str,
+    persona_name: str,
+    persona_age: str,
+    persona_profession: str,
+    persona_culture: str,
+    persona_core_values: Sequence[str],
+    persona_bio: str,
+    schwartz_config: dict,
+    previous_entries: list[dict] | None = None,
+) -> str:
+    """Render the current judge prompt with explicit context controls."""
+    value_rubric = build_value_rubric_context(schwartz_config)
+
+    return judge_alignment_prompt.render(
+        persona_name=persona_name,
+        persona_age=persona_age,
+        persona_profession=persona_profession,
+        persona_culture=persona_culture,
+        persona_core_values=list(persona_core_values),
+        persona_bio=persona_bio,
+        entry_date=entry_date,
+        session_content=session_content,
+        value_rubric=value_rubric,
+        previous_entries=previous_entries,
+    )
+
+
 async def judge_session(
     session_content: str,
     entry_date: str,
@@ -133,18 +188,16 @@ async def judge_session(
     Returns:
         Tuple of (scores_or_none, rationales_or_none, prompt_used)
     """
-    value_rubric = build_value_rubric_context(schwartz_config)
-
-    prompt = judge_alignment_prompt.render(
+    prompt = render_judge_prompt(
+        session_content=session_content,
+        entry_date=entry_date,
         persona_name=persona_name,
         persona_age=persona_age,
         persona_profession=persona_profession,
         persona_culture=persona_culture,
         persona_core_values=list(persona_core_values),
         persona_bio=persona_bio,
-        entry_date=entry_date,
-        session_content=session_content,
-        value_rubric=value_rubric,
+        schwartz_config=schwartz_config,
         previous_entries=previous_entries,
     )
 

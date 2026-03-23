@@ -7,8 +7,10 @@ import pytest
 from src.judge.labeling import (
     SCHWARTZ_VALUE_DISPLAY,
     build_value_rubric_context,
+    build_session_content,
     judge_session,
     load_schwartz_values,
+    render_judge_prompt,
 )
 from src.models.judge import SCHWARTZ_VALUE_ORDER
 
@@ -24,6 +26,41 @@ def test_build_value_rubric_context_contains_expected_sections():
     assert rubric.count("**Core Motivation:**") == len(SCHWARTZ_VALUE_ORDER)
     assert rubric.count("**Key Behaviors (Aligned):**") == len(SCHWARTZ_VALUE_ORDER)
     assert rubric.count("**Key Behaviors (Misaligned):**") == len(SCHWARTZ_VALUE_ORDER)
+
+
+def test_build_session_content_matches_wrangled_format():
+    rendered = build_session_content(
+        "I stayed late to finish the launch deck.",
+        "What made you keep going?",
+        "I did not want to hand it off.",
+    )
+
+    assert rendered == (
+        "I stayed late to finish the launch deck.\n\n"
+        '**Nudge:** "What made you keep going?"\n\n'
+        "**Response:** I did not want to hand it off."
+    )
+
+
+def test_render_judge_prompt_omits_previous_entries_when_none():
+    schwartz_config = load_schwartz_values("config/schwartz_values.yaml")
+
+    prompt = render_judge_prompt(
+        session_content="Routine day.",
+        entry_date="2025-01-10",
+        persona_name="Test User",
+        persona_age="25-34",
+        persona_profession="Teacher",
+        persona_culture="East Asian",
+        persona_core_values=["Security"],
+        persona_bio="Prefers predictable routines.",
+        schwartz_config=schwartz_config,
+        previous_entries=None,
+    )
+
+    assert "## Recent Entries (for context)" not in prompt
+    assert "- **Core Values (from profile):** Security" in prompt
+    assert "- **Bio:** Prefers predictable routines." in prompt
 
 
 @pytest.mark.asyncio

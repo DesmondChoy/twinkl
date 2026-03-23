@@ -46,6 +46,7 @@ _lr_finder_defaults = _training_defaults["lr_finder"]
 _dimension_weighting_defaults = _training_defaults.get("dimension_weighting", {})
 _circumplex_defaults = _training_defaults.get("circumplex_regularizer", {})
 _ldam_defaults = _training_defaults.get("ldam_drw", {})
+_slace_defaults = _training_defaults.get("slace", {})
 
 _split_seed = int(_data_defaults.get("split_seed", _data_defaults.get("seed", 42)))
 _model_seed = int(_training_defaults.get("seed", _split_seed))
@@ -122,6 +123,7 @@ CONFIG = {
     "ldam_scale": _ldam_defaults.get("scale", 30.0),
     "ldam_drw_start_epoch": _ldam_defaults.get("drw_start_epoch", 50),
     "ldam_beta": _ldam_defaults.get("beta", 0.9999),
+    "slace_alpha": _slace_defaults.get("alpha", 1.0),
     # LR finder config
     "use_lr_finder": _lr_finder_defaults.get("enabled", True),
     "lr_finder": lr_finder_cfg,
@@ -194,6 +196,7 @@ for key in [
     "dimension_weighting_eps",
     "dimension_weighting_min",
     "dimension_weighting_max",
+    "slace_alpha",
     "use_lr_finder",
     "experiment_group",
     "skip_experiment_logging",
@@ -277,8 +280,12 @@ from src.vif.critic_ordinal import (
     balanced_softmax_ce_per_dimension,
     balanced_softmax_loss_multi,
     compute_inverse_loss_dimension_weights,
+    CriticMLPTwoStageBalancedSoftmax,
+    two_stage_balanced_softmax_loss_multi,
     CriticMLPLDAMDRW,
     ldam_drw_loss_multi,
+    CriticMLPSLACE,
+    slace_loss_multi,
     CriticMLPSoftOrdinal,
     soft_ordinal_loss_multi,
     validate_dimension_weighting_config,
@@ -585,6 +592,20 @@ MODEL_CONFIGS = {
         ),
         "is_ordinal": True,
     },
+    "TwoStageBalancedSoftmax": {
+        "class": CriticMLPTwoStageBalancedSoftmax,
+        "loss_fn": two_stage_balanced_softmax_loss_multi,
+        "loss_fn_factory": (
+            lambda *, _config, class_stats: (
+                lambda _epoch, _dimension_weights=None: partial(
+                    two_stage_balanced_softmax_loss_multi,
+                    activation_priors=class_stats["activation_priors"],
+                    polarity_priors=class_stats["polarity_priors"],
+                )
+            )
+        ),
+        "is_ordinal": True,
+    },
     "LDAM_DRW": {
         "class": CriticMLPLDAMDRW,
         "loss_fn": ldam_drw_loss_multi,
@@ -598,6 +619,19 @@ MODEL_CONFIGS = {
                     max_m=float(_config.get("ldam_max_m", 0.5)),
                     scale=float(_config.get("ldam_scale", 30.0)),
                     beta=float(_config.get("ldam_beta", 0.9999)),
+                )
+            )
+        ),
+        "is_ordinal": True,
+    },
+    "SLACE": {
+        "class": CriticMLPSLACE,
+        "loss_fn": slace_loss_multi,
+        "loss_fn_factory": (
+            lambda *, _config, class_stats: (
+                lambda _epoch, _dimension_weights=None: partial(
+                    slace_loss_multi,
+                    alpha=float(_config.get("slace_alpha", 1.0)),
                 )
             )
         ),

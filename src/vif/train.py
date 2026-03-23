@@ -153,6 +153,9 @@ def load_config(config_path: str | Path | None) -> dict:
                 "drw_start_epoch": 50,
                 "beta": 0.9999,
             },
+            "slace": {
+                "alpha": 1.0,
+            },
         },
         "data": {
             "labels_path": "logs/judge_labels/judge_labels.parquet",
