@@ -1,0 +1,95 @@
+You are Twinkl's weekly alignment coach.
+Draft a concise, evidence-grounded weekly reflection that mirrors the user's week against their declared values.
+Stay reflective, not prescriptive.
+Do not use score jargon, gamification, or judgmental language.
+Avoid giving advice, action plans, or micro-habits.
+Use direct quoted evidence from the journal history when possible.
+
+Persona: Fatima Al-Hassan (0a2fe15c)
+Window: 2025-12-03 to 2025-12-09
+Response mode: high_uncertainty
+Mode source: fallback_heuristic
+Mode rationale: Acute distress or grief markers were detected in the week, so the digest falls back to a presence-oriented mode instead of forcing a confident critique.
+Entries scored: 2
+Overall mean alignment: 0.050
+Declared core values: Benevolence
+
+Primary tensions: None clear this week
+Primary strengths: Benevolence, Tradition
+
+Value context:
+
+- Benevolence | motivation: The fundamental drive to care for and support the people closest to them. Benevolence-oriented individuals feel most fulfilled when they are helping, nurturing, or supporting family, friends, and close community. The wellbeing of their "people" is experienced as their own wellbeing. | common tensions: Power (caring vs. dominance), Achievement (others' welfare vs. personal success)
+
+- Tradition | motivation: The fundamental drive to maintain continuity with the past and honor established ways. Tradition-oriented individuals feel most grounded when connected to their cultural, religious, or familial heritage. Abandoning tradition feels like betrayal of something important. | common tensions: Self-Direction (established ways vs. choosing own path), Stimulation (continuity vs. novelty), Hedonism (self-denial in traditional practices vs. pleasure)
+
+
+Per-dimension summary:
+
+- Self Direction: mean=0.000, neg=0%, neutral=100%, pos=0%
+
+- Stimulation: mean=0.000, neg=0%, neutral=100%, pos=0%
+
+- Hedonism: mean=-1.000, neg=100%, neutral=0%, pos=0%
+
+- Achievement: mean=0.000, neg=0%, neutral=100%, pos=0%
+
+- Power: mean=0.000, neg=0%, neutral=100%, pos=0%
+
+- Security: mean=0.000, neg=0%, neutral=100%, pos=0%
+
+- Conformity: mean=0.000, neg=0%, neutral=100%, pos=0%
+
+- Tradition: mean=0.500, neg=0%, neutral=50%, pos=50%
+
+- Benevolence: mean=1.000, neg=0%, neutral=0%, pos=100%
+
+- Universalism: mean=0.000, neg=0%, neutral=100%, pos=0%
+
+
+Evidence excerpts:
+
+- 2025-12-09 (entry 2, strain, dims=Benevolence, Tradition, mean=0.000): The boy with pneumonia died tonight. Ahmed. Seven years old. I was not even on shift but the day nurse called me because his mother was asking for me. I held her while she screamed. I did not know what...
+
+- 2025-12-07 (entry 1, aligned, dims=Benevolence, Tradition, mean=0.100): Sunday. My day off. I woke up early anyway — the habit of years — and made mansaf for the whole family. Layla came home from medical school for the weekend, and Yousef brought his girlfriend Sarah to meet us...
+
+
+Full journal history:
+
+- 2025-12-01 (entry 0, has_response): Twelve-hour shift again. My feet hurt and my back is screaming at me. There was a boy today, maybe seven years old, admitted with pneumonia. His mother was alone with him — the father works in Abu Dhabi and couldn't come. She looked so frightened sitting by his bed, not understanding what the doctors were telling her. I stayed past my shift to explain everything to her in Arabic, to help her fill out forms, to just sit with her while her son slept.
+
+My own dinner went cold. Khalid texted me three times asking when I would be home. I could hear the frustration in his words even through the phone. But how do I leave a terrified mother alone? How do I explain that to him?
+
+I am tired in my bones. Not just from standing all day but from carrying everyone's worry. Sometimes I wonder if there is anything left of me at the end of the day, or if I have given it all away.
+
+Response: He was worried, I think. Not angry. Khalid has been married to me for twenty-three years — he knows who I am. But lately I have noticed something in his eyes. A tiredness that mirrors my own. Last week he said, "The children are grown now, Fatima. When will it be our turn?"
+
+I did not have an answer for him. I still do not. Because every time I think I can step back, there is another mother with frightened eyes, another child reaching for my hand. And I cannot make myself walk away from them. But I am also afraid that one day I will look up and find that Khalid has stopped waiting.
+
+- 2025-12-07 (entry 1, has_response): Sunday. My day off. I woke up early anyway — the habit of years — and made mansaf for the whole family. Layla came home from medical school for the weekend, and Yousef brought his girlfriend Sarah to meet us for the first time. An American girl, very polite but clearly nervous. I watched my mother-in-law's face when Yousef introduced her. That slight tightening around her eyes. But then Sarah complimented her embroidered thobe, asked about the patterns, and I saw my mother-in-law soften.
+
+The house was loud and full all day. Arguments about politics, laughter over old photos, my youngest Nadia showing everyone videos on her phone. At one point I stood in the kitchen doorway just watching them all. Khalid caught my eye and smiled at me across the room.
+
+This is what I work for. This noise, this chaos, this fullness. When I am at the hospital giving pieces of myself to strangers' children, I am also doing it for my own. I want Layla to see that a woman can have both purpose and family. I want Yousef to know that love means showing up even when you are tired. I want Nadia to understand that our home will always be open, always warm.
+
+My mother used to say: "A woman's heart is like a well. The more you draw from it, the more water rises." I did not understand her when I was young. I thought she was saying women should give endlessly. Now I think she meant something else — that love is not a finite resource. It grows when you share it. The exhaustion comes not from giving too much, but from forgetting to drink from the well yourself.
+
+Response: I think that is a question I am still learning to answer. My sister Reem keeps telling me to take a spa day, get a massage. She does not understand that sitting still makes me anxious. I feel most myself when my hands are busy, when someone needs me.
+
+Maybe that is the problem. Maybe I do not know how to receive. Even compliments make me uncomfortable. But this is too much philosophy for a Sunday evening. The dishes are not going to wash themselves.
+
+- 2025-12-09 (entry 2): The boy with pneumonia died tonight. Ahmed. Seven years old. I was not even on shift but the day nurse called me because his mother was asking for me. I held her while she screamed. I did not know what else to do.
+
+I cannot stop seeing his small face. The way he used to smile at me when I checked his temperature. He called me "auntie."
+
+I came home and hugged Nadia so tight she asked if something was wrong. I could not tell her. I just needed to feel her breathing against me. Alive. Healthy. Mine.
+
+Khalid found me crying in the bathroom later. He did not say anything. Just sat on the floor next to me and held my hand until I stopped shaking. Twenty-three years and he still knows when words are not what I need.
+
+I chose this work. I chose to love other people's children as my own. But tonight the cost feels unbearable.
+
+
+Return JSON with exactly these keys:
+- weekly_mirror: 2-3 sentences, specific and grounded
+- tension_explanation: explain the main tension or pattern, tied to quoted evidence
+- reflective_question: one open-ended question

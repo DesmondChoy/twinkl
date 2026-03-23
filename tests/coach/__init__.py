@@ -1,0 +1,2 @@
+"""Coach module tests."""
+

@@ -211,6 +211,9 @@ __marimo__/
 
 .playwright-mcp/
 
+# Generated visualizations (large embedded data)
+viz/*.html
+
 # Model checkpoints
 models/vif/*.pt
 models/vif/*.json
