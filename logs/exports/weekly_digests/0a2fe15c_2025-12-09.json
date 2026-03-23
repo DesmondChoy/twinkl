@@ -11,6 +11,7 @@
   "core_values": [
     "benevolence"
   ],
+  "drift_reasons": [],
   "top_tensions": [],
   "top_strengths": [
     "benevolence",
@@ -93,7 +94,10 @@
       "date": "2025-12-09",
       "t_index": 2,
       "direction": "strain",
-      "dimensions": [],
+      "dimensions": [
+        "benevolence",
+        "tradition"
+      ],
       "score_mean": 0.0,
       "excerpt": "The boy with pneumonia died tonight. Ahmed. Seven years old. I was not even on shift but the day nurse called me because his mother was asking for me. I held her while she screamed. I did not know what..."
     },

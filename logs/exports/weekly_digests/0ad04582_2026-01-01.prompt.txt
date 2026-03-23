@@ -7,9 +7,9 @@ Use direct quoted evidence from the journal history when possible.
 
 Persona: Chen Meiling (0ad04582)
 Window: 2025-12-26 to 2026-01-01
-Response mode: background_strain
+Response mode: high_uncertainty
 Mode source: fallback_heuristic
-Mode rationale: The week trends positive overall, but softer burden or transition signals suggest background strain rather than clean stability.
+Mode rationale: Acute distress or grief markers were detected in the week, so the digest falls back to a presence-oriented mode instead of forcing a confident critique.
 Entries scored: 3
 Overall mean alignment: 0.167
 Declared core values: Benevolence
@@ -49,9 +49,13 @@ Per-dimension summary:
 
 Evidence excerpts:
 
-- 2025-12-28 (entry 8, strain, dims=none, mean=0.100): Yuwen flew in from Kaohsiung to say goodbye before Singapore. She brought me a new set of Kolinsky brushes, the kind I would never buy myself. We sat in the studio and painted together for the first time since she...
+- 2025-12-19 (entry 6, strain, dims=Benevolence, Achievement, mean=0.000): Xiaoli called after midnight crying, saying she cannot keep doing this. I told her we will figure it out together. I do not know what that looks like yet but I meant it. Response: I do not know, I just...
 
-- 2025-12-31 (entry 9, aligned, dims=Benevolence, mean=0.200): New Year's Eve. Xiaoli closed the restaurant early and we all ate together at Ma's place. Yuwen leaves on the third. I keep looking at her across the table and memorizing how she holds her chopsticks. Response: The way things...
+- 2025-12-28 (entry 8, misaligned, dims=, mean=0.100): Yuwen flew in from Kaohsiung to say goodbye before Singapore. She brought me a new set of Kolinsky brushes, the kind I would never buy myself. We sat in the studio and painted together for the first time since she...
+
+- 2025-12-31 (entry 9, misaligned, dims=, mean=0.200): New Year's Eve. Xiaoli closed the restaurant early and we all ate together at Ma's place. Yuwen leaves on the third. I keep looking at her across the table and memorizing how she holds her chopsticks. Response: The way things...
+
+- 2026-01-01 (entry 10, aligned, dims=Achievement, mean=0.200): Woke up early, first day of the year. The studio was cold so I boiled water for tea and just stood there holding the cup until my hands warmed up. Started grinding ink out of habit more than intention. Then...
 
 
 Full journal history:

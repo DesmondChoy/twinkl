@@ -3,14 +3,15 @@
   "persona_name": "Chen Meiling",
   "week_start": "2025-12-26",
   "week_end": "2026-01-01",
-  "response_mode": "background_strain",
+  "response_mode": "high_uncertainty",
   "mode_source": "fallback_heuristic",
-  "mode_rationale": "The week trends positive overall, but softer burden or transition signals suggest background strain rather than clean stability.",
+  "mode_rationale": "Acute distress or grief markers were detected in the week, so the digest falls back to a presence-oriented mode instead of forcing a confident critique.",
   "n_entries": 3,
   "overall_mean": 0.16666666666666666,
   "core_values": [
     "benevolence"
   ],
+  "drift_reasons": [],
   "top_tensions": [],
   "top_strengths": [
     "benevolence",
@@ -90,9 +91,20 @@
   ],
   "evidence": [
     {
+      "date": "2025-12-19",
+      "t_index": 6,
+      "direction": "strain",
+      "dimensions": [
+        "benevolence",
+        "achievement"
+      ],
+      "score_mean": 0.0,
+      "excerpt": "Xiaoli called after midnight crying, saying she cannot keep doing this. I told her we will figure it out together. I do not know what that looks like yet but I meant it. Response: I do not know, I just..."
+    },
+    {
       "date": "2025-12-28",
       "t_index": 8,
-      "direction": "strain",
+      "direction": "misaligned",
       "dimensions": [],
       "score_mean": 0.1,
       "excerpt": "Yuwen flew in from Kaohsiung to say goodbye before Singapore. She brought me a new set of Kolinsky brushes, the kind I would never buy myself. We sat in the studio and painted together for the first time since she..."
@@ -100,12 +112,20 @@
     {
       "date": "2025-12-31",
       "t_index": 9,
-      "direction": "aligned",
-      "dimensions": [
-        "benevolence"
-      ],
+      "direction": "misaligned",
+      "dimensions": [],
       "score_mean": 0.2,
       "excerpt": "New Year's Eve. Xiaoli closed the restaurant early and we all ate together at Ma's place. Yuwen leaves on the third. I keep looking at her across the table and memorizing how she holds her chopsticks. Response: The way things..."
+    },
+    {
+      "date": "2026-01-01",
+      "t_index": 10,
+      "direction": "aligned",
+      "dimensions": [
+        "achievement"
+      ],
+      "score_mean": 0.2,
+      "excerpt": "Woke up early, first day of the year. The studio was cold so I boiled water for tea and just stood there holding the cup until my hands warmed up. Started grinding ink out of habit more than intention. Then..."
     }
   ],
   "journal_history": [
