@@ -24,10 +24,10 @@ Drift detection involves two questions that must not be conflated:
 
 | Signal pattern | Description | Example |
 |---|---|---|
-| **Crash** | Sharp drop in one step | +1 → -1 or +1 → 0 |
-| **Rut** | Sustained low over many steps | 0, 0, 0, 0 on a core value |
+| **Crash** | Sharp reversal in one step — behavior contradicts the value | +1 → -1, or 0 → -1 |
+| **Rut** | Sustained low over many steps | -1, -1, -1 or prolonged 0s on a core value |
 | **Spike** | Single bad step that recovers | -1 then back to 0 or +1 |
-| **Fade** | Gradual decline | +1 → +1 → 0 → 0 → -1 |
+| **Fade** | Gradual decline from alignment to dormancy or misalignment | +1 → +1 → 0 → 0 → -1 |
 
 **Question B — What does it mean?** This requires user input. The Coach resolves it.
 
@@ -40,6 +40,70 @@ Drift detection involves two questions that must not be conflated:
 
 These axes are **independent**. A crash (signal) could be noise, a tradeoff, or drift. A rut (signal) could be drift or evolution. There is no 1:1 mapping between signal patterns and interpretations.
 
+### Running example: Maya
+
+Maya completes onboarding. Her BWS results: **Benevolence (w=0.45)** and **Self-Direction (w=0.40)** are her top two values. Achievement is low (w=0.05). Her profile `w_u` is set.
+
+Over 12 weeks of journaling, four different things happen:
+
+**Crash — Benevolence collapses in one step (week 7)**
+
+Maya writes about blowing up at her sister who asked for help during a stressful move. Critic scores Benevolence as -1, down from +1 the previous week.
+
+```
+Benevolence:  +1  +1  +1  +1  +1  +1  [-1]  ...
+                                        ^^^
+                                      crash: +1 → -1 in one step
+```
+
+Signal is strong (w=0.45 × 2.0 magnitude = 0.90). But is it drift? Depends on what happens next.
+
+**Spike — Benevolence recovers (weeks 8-9)**
+
+Maya writes about calling her sister to apologize and helping with the move after all. Benevolence bounces back to +1.
+
+```
+Benevolence:  +1  +1  +1  +1  +1  +1  -1  [+1  +1]  ...
+                                            ^^^^^^^
+                                          recovery: spike, not drift
+```
+
+The crash was real but the pattern wasn't sustained → **noise**. EMA worry rises briefly, then decays. CUSUM jar fills then drains. No alert fires.
+
+**Fade — Self-Direction gradually goes dormant (weeks 5-12)**
+
+Maya's journal entries slowly stop mentioning independent choices. She's not acting *against* Self-Direction — it just stops appearing.
+
+```
+Self-Direction:  +1  +1  +1  +1  [0   0   0   0   0   0   0   0]
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                  fade: value goes dormant over 8 weeks
+```
+
+With the standard formula (τ_expect=0), this produces zero drift signal — scores never go negative. With the absence-aware formula (τ_expect=0.3), each 0 on a w=0.40 dimension produces `0.40 × 0.3 = 0.12` per step, accumulating in EMA/CUSUM over time.
+
+This is the case where **absence is the signal**. Maya's cognitive filtering may be at work — she doesn't write about Self-Direction because she's avoiding the tension of not exercising it.
+
+**Rise — Achievement emerges as a new dominant value (weeks 4-12)**
+
+Maya starts writing about career goals, promotions, and outperforming peers. Achievement was w=0.05 at onboarding — the system isn't monitoring it.
+
+```
+Achievement:  0   0   0  [+1  +1  +1  +1  +1  +1  +1  +1  +1]
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                          sustained +1 on a non-core value
+```
+
+**This is the gap in the current framework.** The detectors only watch for decline on declared core values. They don't notice a new value rising. But Maya's behavioral profile has shifted: she now acts like someone who values Achievement highly, even though her onboarding said otherwise.
+
+This matters because:
+- The Self-Direction fade and the Achievement rise may be connected — she's trading autonomy for career advancement
+- The Coach should surface this: "Achievement has been a consistent theme in your recent entries, but you ranked it low during onboarding. Has something changed?"
+- If Maya endorses it → evolution (update `w_u`: Achievement goes up, possibly Self-Direction goes down)
+- If Maya is surprised → drift she wasn't aware of
+
+**How to detect rising values:** Periodically compare the behavioral profile (aggregated recent `â_t` scores) against `w_u`. If a non-core dimension (w_j < w_min) shows sustained positive alignment (+1 for ≥ C_min steps), flag it as a **profile divergence** — not a crisis, but a prompt for the Coach to ask whether the user's priorities have shifted. This is separate from the crash/rut detectors and uses the same Critic output.
+
 ### Three factors connect the axes
 
 | Factor | What it determines | Who measures it |
@@ -51,41 +115,62 @@ These axes are **independent**. A crash (signal) could be noise, a tradeoff, or 
 ### The decision tree
 
 ```
-Journal entry → Critic scores â_t
+Journal entry → Critic scores â_t (all 10 dimensions)
         │
-        ▼
-   Is the change big enough to notice?
-   (size: was it on a core dimension? how far did it move?)
+        ├─── Core values (w_j ≥ w_min): watch for DECLINE
+        │           │
+        │           ▼
+        │      Is the change big enough to notice?
+        │      (size: magnitude × profile weight)
+        │           │
+        │       no ──┘              yes
+        │       (ignore)             │
+        │                            ▼
+        │                      Is it sustained?
+        │                      (duration: one step or a pattern?)
+        │                            │
+        │                    no ──┘              yes
+        │                    (spike → noise)      │
+        │                                         ▼
+        │                                   Does the user know?
+        │                                   (Coach asks)
+        │                                         │
+        │                                ┌────────┴────────┐
+        │                                no                yes
+        │                                = DRIFT           │
+        │                                                  ▼
+        │                                            Does the user endorse it?
+        │                                                  │
+        │                                          ┌───────┴───────┐
+        │                                          no              yes
+        │                                          = DRIFT         │
+        │                                          (with denial)   ▼
+        │                                                     Is it short-term?
+        │                                                          │
+        │                                                  ┌───────┴───────┐
+        │                                                  yes             no
+        │                                                  = TRADEOFF      = EVOLUTION
+        │                                                  (schedule        (update w_u)
+        │                                                   follow-up)
         │
-    no ──┘              yes
-    (ignore)             │
-                         ▼
-                   Is it sustained?
-                   (duration: one step or a pattern?)
-                         │
-                 no ──┘              yes
-                 (spike → noise)      │
-                                      ▼
-                                Does the user know?
-                                (Coach asks)
-                                      │
-                             ┌────────┴────────┐
-                             no                yes
-                             = DRIFT           │
-                                               ▼
-                                         Does the user endorse it?
-                                               │
-                                       ┌───────┴───────┐
-                                       no              yes
-                                       = DRIFT         │
-                                       (with denial)   ▼
-                                                  Is it short-term?
-                                                       │
-                                               ┌───────┴───────┐
-                                               yes             no
-                                               = TRADEOFF      = EVOLUTION
-                                               (schedule        (update w_u)
-                                                follow-up)
+        └─── Non-core values (w_j < w_min): watch for RISE
+                    │
+                    ▼
+              Is a non-core dimension sustained positive?
+              (+1 for ≥ C_min steps)
+                    │
+                no ──┘         yes
+                (ignore)        │
+                                ▼
+                          PROFILE DIVERGENCE
+                          Coach asks: "Achievement has been a consistent
+                          theme — has something changed?"
+                                │
+                        ┌───────┴───────┐
+                        "No, just        "Yes, it matters
+                         a phase"         to me now"
+                        (keep w_u)       = EVOLUTION
+                                          (update w_u)
 ```
 
 Duration plays two distinct roles here:
@@ -130,8 +215,8 @@ signal_strength = w_j × |change from expected|
 | Transition | On core value (w=0.5) | On peripheral (w=0.05) | Signal type |
 |---|---|---|---|
 | **+1 → -1** | 1.0 (strong) | 0.1 (ignore) | Crash |
-| **+1 → 0** | 0.5 (moderate) | 0.05 (ignore) | Fade / dormancy |
-| **0 → -1** | 0.5 (moderate) | 0.05 (ignore) | Emerging misalignment |
+| **0 → -1** | 0.5 (moderate) | 0.05 (ignore) | Crash (emerging) |
+| **+1 → 0** | 0.5 (moderate) | 0.05 (ignore) | Fade / dormancy onset |
 | **0 → 0 → 0 → 0** (was +1) | Depends on formula | Ignore | Sustained dormancy |
 | **-1 → +1** or **0 → +1** | Recovery (reduces signal) | n/a | Drains EMA/CUSUM |
 
