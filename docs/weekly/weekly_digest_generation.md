@@ -118,8 +118,12 @@ That means:
 Primary code lives in:
 
 - `src/coach/weekly_digest.py`
+- `src/coach/runtime.py`
 - `src/coach/mode_logic.py`
 - `src/coach/schemas.py`
+- `src/vif/runtime.py`
+- `src/vif/evolution.py`
+- `src/vif/drift.py`
 - `prompts/weekly_digest_coach.yaml`
 
 The current implementation now supports:
@@ -150,6 +154,11 @@ The current implementation now supports:
    - length bounds
 16. Persisting each weekly digest into a consolidated parquet artifact for future longitudinal analysis
 17. Exporting per-run JSON, markdown, and prompt artifacts
+18. Rebuilding per-entry VIF signal timelines from a trained Critic checkpoint at runtime
+19. Aggregating those signals into weekly VIF summaries for drift detection
+20. Running deterministic evolution detection before crash/rut logic
+21. Running uncertainty-gated crash/rut detection and emitting a structured `DriftDetectionResult`
+22. Executing the full offline runtime path through `src/coach/runtime.py`
 
 ### Current Digest Data Model
 
@@ -210,9 +219,10 @@ Supported schema modes:
 Current implementation status:
 
 - all modes are schema-supported as upstream drift outputs
-- fallback-only local inference currently exists for `stable`, `rut`, `high_uncertainty`, `mixed_state`, and `background_strain`
-- `crash`: schema-ready, not inferred yet
-- `high_uncertainty`: not yet driven by real Critic uncertainty
+- live upstream runtime now supports `stable`, `rut`, `crash`, `evolution`, and `high_uncertainty` from VIF outputs
+- fallback-only local inference still exists for `stable`, `rut`, `high_uncertainty`, `mixed_state`, and `background_strain` when no upstream drift result is supplied
+- `mixed_state` and `background_strain` remain heuristic-only local modes
+- `high_uncertainty` can now come from real aggregated Critic uncertainty in the runtime path
 
 This is deliberate.
 The digest contract is designed for full trigger wiring from drift detection. The in-module heuristics are temporary scaffolding for offline development and prompt testing.
@@ -325,6 +335,10 @@ This is enough for POC-scale querying and later anomaly or pattern analysis.
 
 - structured weekly digest building
 - explicit drift-result input contract
+- runtime VIF inference from trained checkpoints
+- deterministic evolution detection
+- uncertainty-gated crash/rut drift detection
+- end-to-end offline weekly Coach runtime entrypoint
 - full-history Coach prompt rendering
 - structured Coach output contract
 - Tier 1 validation helpers
@@ -333,10 +347,6 @@ This is enough for POC-scale querying and later anomaly or pattern analysis.
 
 ### Still Missing
 
-- real upstream Drift Detection Engine integration in the end-to-end runtime
-- real Critic `predict_with_uncertainty()` integration
-- true crash/rut detection from trajectory formulas
-- true high-uncertainty routing from model uncertainty rather than lexical heuristics
 - learned/calibrated routing for `mixed_state` and `background_strain`
 - live production LLM orchestration for the Coach path
 - user-facing rating capture for "Did this feel accurate?"
@@ -381,18 +391,19 @@ The new `mixed_state` fallback partially corrects for this by looking beyond mea
 
 To finish the whole digest Coach flow cleanly, the next implementation stage should satisfy all of the following:
 
-1. Replace fallback mode assignment with actual drift-detector outputs.
-2. Feed real Critic means and uncertainties into the digest.
+1. Calibrate the new drift-detector thresholds against synthetic scenario sweeps and held-out personas.
+2. Decide whether `evolution` should become its own dedicated Coach prompt template instead of flowing through the general weekly prompt.
 3. Distinguish clearly between:
    - weekly descriptive summary
    - triggered critique or acknowledgement mode
    - uncertainty-driven presence mode
-4. Add a proper Coach orchestration entrypoint under `src/coach/`.
+4. Extend the Coach runtime from offline artifact generation to production-facing orchestration.
 5. Store generated Coach narratives and validation outcomes in a queryable way that supports evaluation.
 6. Add scenario-based tests for:
    - stable alignment
    - rut
    - crash
+   - evolution
    - high uncertainty
 7. Add user-study instrumentation for perceived accuracy.
 

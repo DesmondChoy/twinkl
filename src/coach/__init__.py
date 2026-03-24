@@ -12,6 +12,13 @@ from src.coach.schemas import (
     WeeklyDigest,
 )
 
+
+def run_weekly_coach_cycle(*args, **kwargs):
+    """Lazily import the runtime bridge to avoid package cycles."""
+    from src.coach.runtime import run_weekly_coach_cycle as _run_weekly_coach_cycle
+
+    return _run_weekly_coach_cycle(*args, **kwargs)
+
 __all__ = [
     "CoachNarrative",
     "DriftDetectionResult",
@@ -19,6 +26,7 @@ __all__ = [
     "DimensionDigest",
     "EvidenceSnippet",
     "JournalHistoryEntry",
+    "run_weekly_coach_cycle",
     "ValidationCheck",
     "WeeklyModeDecision",
     "WeeklyModeSignals",

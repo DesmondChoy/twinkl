@@ -55,6 +55,7 @@ class WeeklyModeSignals:
     """Signals used by the fallback mode router."""
 
     overall_mean: float
+    overall_uncertainty: float | None
     top_tensions: list[str]
     top_strengths: list[str]
     core_values: list[str]
@@ -76,6 +77,16 @@ def has_background_strain_context(window_entries: list[JournalHistoryEntry]) -> 
 
 def infer_response_mode(signals: WeeklyModeSignals) -> WeeklyModeDecision:
     """Assign a conservative fallback mode until drift detection is wired."""
+    if signals.overall_uncertainty is not None and signals.overall_uncertainty >= 0.3:
+        return WeeklyModeDecision(
+            response_mode="high_uncertainty",
+            mode_source="fallback_heuristic",
+            mode_rationale=(
+                "Weekly aggregate uncertainty is high, so the digest should avoid a "
+                "confident directional critique."
+            ),
+        )
+
     if has_acute_distress_context(signals.window_entries):
         return WeeklyModeDecision(
             response_mode="high_uncertainty",

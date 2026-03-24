@@ -9,9 +9,22 @@ CoachResponseMode = Literal[
     "stable",
     "rut",
     "crash",
+    "evolution",
     "high_uncertainty",
     "mixed_state",
     "background_strain",
+]
+
+DriftDimensionClassification = Literal["stable", "evolution", "drift"]
+DriftTriggerType = Literal[
+    "stable",
+    "rut",
+    "crash",
+    "evolution",
+    "high_uncertainty",
+    "mixed_state",
+    "background_strain",
+    "acknowledgement",
 ]
 
 
@@ -86,6 +99,17 @@ class DigestValidation(BaseModel):
 class DriftDetectionResult(BaseModel):
     """Structured drift-detection output consumed by the weekly digest layer."""
 
+    class DimensionSignal(BaseModel):
+        """Per-dimension drift/evolution summary for one weekly decision."""
+
+        dimension: str
+        classification: DriftDimensionClassification
+        mean_alignment: float
+        mean_uncertainty: float
+        trigger: DriftTriggerType | None = None
+        residual: float | None = None
+        volatility: float | None = None
+
     response_mode: CoachResponseMode
     rationale: str = Field(
         description="Human-readable explanation for why drift detection selected this mode."
@@ -97,6 +121,20 @@ class DriftDetectionResult(BaseModel):
     source: str = Field(
         default="drift_detector",
         description="Upstream component that produced the mode, typically drift_detector.",
+    )
+    trigger_type: DriftTriggerType | None = Field(
+        default=None,
+        description="Primary trigger category that produced the response mode.",
+    )
+    week_start: str | None = None
+    week_end: str | None = None
+    overall_mean: float | None = None
+    overall_uncertainty: float | None = None
+    triggered_dimensions: list[str] = Field(default_factory=list)
+    dimension_signals: list[DimensionSignal] = Field(default_factory=list)
+    profile_update: dict[str, float] | None = Field(
+        default=None,
+        description="Optional suggested profile weights when evolution is detected.",
     )
 
 
@@ -114,8 +152,13 @@ class WeeklyDigest(BaseModel):
     mode_rationale: str = Field(
         description="Short explanation for why this response mode was selected."
     )
+    signal_source: str = Field(
+        default="judge_labels",
+        description="Origin of the numeric signals used to build this digest.",
+    )
     n_entries: int = Field(ge=1)
     overall_mean: float
+    overall_uncertainty: float | None = None
     core_values: list[str] = Field(default_factory=list)
     drift_reasons: list[str] = Field(default_factory=list)
     top_tensions: list[str]

@@ -1,0 +1,121 @@
+{
+  "response_mode": "evolution",
+  "rationale": "Recent divergence looks sustained and low-volatility, which suggests a genuine shift in priorities rather than behavioral drift.",
+  "reasons": [
+    "low_volatility_directional_shift",
+    "self_direction"
+  ],
+  "source": "drift_detector",
+  "trigger_type": "evolution",
+  "week_start": "2026-01-26",
+  "week_end": "2026-02-01",
+  "overall_mean": 0.9800000190734863,
+  "overall_uncertainty": 0.1414213627576828,
+  "triggered_dimensions": [
+    "self_direction"
+  ],
+  "dimension_signals": [
+    {
+      "dimension": "self_direction",
+      "classification": "evolution",
+      "mean_alignment": 1.0,
+      "mean_uncertainty": 0.0,
+      "trigger": "evolution",
+      "residual": 0.4415686270039456,
+      "volatility": 0.32795663769956945
+    },
+    {
+      "dimension": "stimulation",
+      "classification": "stable",
+      "mean_alignment": 0.2800000011920929,
+      "mean_uncertainty": 0.4535573720932007,
+      "trigger": "high_uncertainty",
+      "residual": 0.1333333340783914,
+      "volatility": 0.12944325358733716
+    },
+    {
+      "dimension": "hedonism",
+      "classification": "stable",
+      "mean_alignment": 0.9599999785423279,
+      "mean_uncertainty": 0.2828427255153656,
+      "trigger": null,
+      "residual": -0.20343138124136362,
+      "volatility": 0.6416233756552198
+    },
+    {
+      "dimension": "achievement",
+      "classification": "stable",
+      "mean_alignment": -0.2199999988079071,
+      "mean_uncertainty": 0.9321907758712769,
+      "trigger": "high_uncertainty",
+      "residual": -0.07999999759097894,
+      "volatility": 0.26882459904254935
+    },
+    {
+      "dimension": "power",
+      "classification": "stable",
+      "mean_alignment": -0.05999999865889549,
+      "mean_uncertainty": 0.2398979365825653,
+      "trigger": null,
+      "residual": 0.230000006655852,
+      "volatility": 0.3146956254733375
+    },
+    {
+      "dimension": "security",
+      "classification": "evolution",
+      "mean_alignment": 0.3400000035762787,
+      "mean_uncertainty": 0.7982122898101807,
+      "trigger": "high_uncertainty",
+      "residual": -0.5699999916056792,
+      "volatility": 0.43646305311749567
+    },
+    {
+      "dimension": "conformity",
+      "classification": "evolution",
+      "mean_alignment": -0.4399999976158142,
+      "mean_uncertainty": 0.5014265179634094,
+      "trigger": "high_uncertainty",
+      "residual": -0.5516666695475578,
+      "volatility": 0.3037771515428786
+    },
+    {
+      "dimension": "tradition",
+      "classification": "evolution",
+      "mean_alignment": -0.05999999865889549,
+      "mean_uncertainty": 0.7669180035591125,
+      "trigger": "high_uncertainty",
+      "residual": -0.5316666724781195,
+      "volatility": 0.3434344543946396
+    },
+    {
+      "dimension": "benevolence",
+      "classification": "stable",
+      "mean_alignment": 0.8600000143051147,
+      "mean_uncertainty": 0.4045657813549042,
+      "trigger": "high_uncertainty",
+      "residual": -0.11666666654249032,
+      "volatility": 0.4786671343497524
+    },
+    {
+      "dimension": "universalism",
+      "classification": "stable",
+      "mean_alignment": 0.019999999552965164,
+      "mean_uncertainty": 0.1414213627576828,
+      "trigger": null,
+      "residual": 0.006666666517655055,
+      "volatility": 0.00942809020508639
+    }
+  ],
+  "profile_update": {
+    "self_direction": 0.482380952372505,
+    "stimulation": 0.0,
+    "hedonism": 0.42142857144124246,
+    "achievement": 0.0,
+    "power": 0.0,
+    "security": 0.030714286319328613,
+    "conformity": 0.03202380932371244,
+    "tradition": 0.03345238054321145,
+    "benevolence": 0.0,
+    "universalism": 0.0
+  }
+}

@@ -41,6 +41,7 @@ from src.models.judge import SCHWARTZ_VALUE_ORDER
 from src.wrangling.parse_wrangled_data import parse_wrangled_file
 
 ALIGNMENT_COLUMNS = [f"alignment_{value}" for value in SCHWARTZ_VALUE_ORDER]
+UNCERTAINTY_COLUMNS = [f"uncertainty_{value}" for value in SCHWARTZ_VALUE_ORDER]
 SCHWARTZ_CONFIG_PATH = Path("config/schwartz_values.yaml")
 LLMCompleteFn = Callable[[str, dict | None], Awaitable[str | None]]
 
@@ -163,6 +164,61 @@ def _resolve_week_window(
         )
 
     return resolved_start, resolved_end
+
+
+def _load_signal_frame(
+    *,
+    persona_id: str,
+    labels_path: Path | None,
+    signals_path: Path | None,
+    signals_df: pl.DataFrame | None,
+) -> tuple[pl.DataFrame, str]:
+    """Load either live VIF signals or judge labels for one persona."""
+    if signals_df is not None:
+        frame = signals_df.filter(pl.col("persona_id") == persona_id)
+        source = "vif_runtime"
+    elif signals_path is not None:
+        frame = pl.read_parquet(signals_path).filter(pl.col("persona_id") == persona_id)
+        source = "vif_runtime"
+    else:
+        if labels_path is None:
+            raise ValueError("Either signals_path/signals_df or labels_path must be provided.")
+        frame = pl.read_parquet(labels_path).filter(pl.col("persona_id") == persona_id)
+        source = "judge_labels"
+
+    if frame.is_empty():
+        raise ValueError(f"No numeric signals found for persona_id={persona_id}")
+    return frame, source
+
+
+def _prioritize_dimensions_from_drift(
+    ranked_dims: list[str],
+    drift_result: DriftDetectionResult | None,
+    *,
+    direction: str,
+) -> list[str]:
+    """Prioritize dimensions highlighted by upstream drift/evolution output."""
+    if drift_result is None or not drift_result.dimension_signals:
+        return ranked_dims
+
+    prioritized: list[str] = []
+    for signal in drift_result.dimension_signals:
+        if direction == "tension" and signal.mean_alignment < 0 and signal.trigger in {
+            "crash",
+            "rut",
+            "evolution",
+        }:
+            prioritized.append(signal.dimension)
+        if direction == "strength" and signal.mean_alignment > 0 and signal.trigger in {
+            "evolution",
+            "acknowledgement",
+        }:
+            prioritized.append(signal.dimension)
+
+    for dim in ranked_dims:
+        if dim not in prioritized:
+            prioritized.append(dim)
+    return prioritized
 
 
 def _rank_dimensions(
@@ -301,17 +357,22 @@ def _append_mode_specific_strain_evidence(
 
 def build_weekly_digest(
     persona_id: str,
-    labels_path: Path,
+    labels_path: Path | None,
     wrangled_dir: Path,
+    signals_path: Path | None = None,
+    signals_df: pl.DataFrame | None = None,
     start_date: str | None = None,
     end_date: str | None = None,
     drift_result: DriftDetectionResult | None = None,
     response_mode: CoachResponseMode | None = None,
 ) -> WeeklyDigest:
     """Build a structured weekly digest payload for one persona."""
-    labels = pl.read_parquet(labels_path).filter(pl.col("persona_id") == persona_id)
-    if labels.is_empty():
-        raise ValueError(f"No labels found for persona_id={persona_id}")
+    labels, signal_source = _load_signal_frame(
+        persona_id=persona_id,
+        labels_path=labels_path,
+        signals_path=signals_path,
+        signals_df=signals_df,
+    )
 
     resolved_start, resolved_end = _resolve_week_window(labels, start_date, end_date)
 
@@ -355,7 +416,19 @@ def build_weekly_digest(
 
     top_tensions = _rank_dimensions(dim_means, core_values, direction="tension", limit=3)
     top_strengths = _rank_dimensions(dim_means, core_values, direction="strength", limit=2)
+    top_tensions = _prioritize_dimensions_from_drift(
+        top_tensions,
+        drift_result,
+        direction="tension",
+    )
+    top_strengths = _prioritize_dimensions_from_drift(
+        top_strengths,
+        drift_result,
+        direction="strength",
+    )
     top_strengths = [dim for dim in top_strengths if dim not in top_tensions]
+    top_tensions = top_tensions[:3]
+    top_strengths = top_strengths[:2]
 
     tension_cols = [f"alignment_{dim}" for dim in top_tensions]
     strength_cols = [f"alignment_{dim}" for dim in top_strengths]
@@ -429,6 +502,13 @@ def build_weekly_digest(
         aligned_added += 1
 
     overall_mean = float(with_entry_scores["entry_mean"].mean())
+    overall_uncertainty = None
+    if "overall_uncertainty" in labels.columns:
+        overall_uncertainty = float(labels["overall_uncertainty"].mean())
+    elif all(column in labels.columns for column in UNCERTAINTY_COLUMNS):
+        overall_uncertainty = float(
+            labels.select(pl.mean_horizontal(UNCERTAINTY_COLUMNS).alias("u"))["u"].mean()
+        )
     has_mixed_core_polarity = _find_dimension_polarity(labels, core_values)
 
     if response_mode is not None:
@@ -445,6 +525,7 @@ def build_weekly_digest(
         mode_decision = infer_response_mode(
             WeeklyModeSignals(
                 overall_mean=overall_mean,
+                overall_uncertainty=overall_uncertainty,
                 top_tensions=top_tensions,
                 top_strengths=top_strengths,
                 core_values=core_values,
@@ -480,8 +561,10 @@ def build_weekly_digest(
         response_mode=resolved_mode,
         mode_source=mode_source,
         mode_rationale=mode_rationale,
+        signal_source=signal_source,
         n_entries=n_rows,
         overall_mean=overall_mean,
+        overall_uncertainty=overall_uncertainty,
         core_values=core_values,
         drift_reasons=drift_reasons,
         top_tensions=top_tensions,
@@ -531,8 +614,14 @@ def _build_prompt_inputs(
         "response_mode": digest.response_mode,
         "mode_source": digest.mode_source,
         "mode_rationale": digest.mode_rationale,
+        "signal_source": digest.signal_source,
         "n_entries": digest.n_entries,
         "overall_mean": f"{digest.overall_mean:.3f}",
+        "overall_uncertainty": (
+            f"{digest.overall_uncertainty:.3f}"
+            if digest.overall_uncertainty is not None
+            else "N/A"
+        ),
         "core_values": ", ".join(_format_dim_name(dim) for dim in digest.core_values) or "None captured",
         "top_tensions": (
             ", ".join(_format_dim_name(d) for d in digest.top_tensions)
@@ -565,6 +654,7 @@ def render_digest_markdown(digest: WeeklyDigest) -> str:
         f"- Window: `{digest.week_start}` to `{digest.week_end}`",
         f"- Response mode: `{digest.response_mode}` (`{digest.mode_source}`)",
         f"- Mode rationale: {digest.mode_rationale}",
+        f"- Signal source: `{digest.signal_source}`",
         f"- Entries scored: `{digest.n_entries}`",
         f"- Overall mean alignment: `{digest.overall_mean:.3f}`",
         f"- Declared core values: {', '.join(_format_dim_name(dim) for dim in digest.core_values) or 'None captured'}",
@@ -580,6 +670,8 @@ def render_digest_markdown(digest: WeeklyDigest) -> str:
         "| Dimension | Mean | -1 | 0 | +1 |",
         "|---|---:|---:|---:|---:|",
     ]
+    if digest.overall_uncertainty is not None:
+        lines.insert(8, f"- Overall uncertainty: `{digest.overall_uncertainty:.3f}`")
 
     for dim in digest.dimensions:
         lines.append(
@@ -753,8 +845,10 @@ def persist_weekly_digest_record(digest: WeeklyDigest, parquet_path: Path) -> pl
         "response_mode": digest.response_mode,
         "mode_source": digest.mode_source,
         "mode_rationale": digest.mode_rationale,
+        "signal_source": digest.signal_source,
         "n_entries": digest.n_entries,
         "overall_mean": digest.overall_mean,
+        "overall_uncertainty": digest.overall_uncertainty,
         "core_values_json": json.dumps(digest.core_values),
         "drift_reasons_json": json.dumps(digest.drift_reasons),
         "top_tensions_json": json.dumps(digest.top_tensions),
@@ -824,6 +918,7 @@ def _build_cli_parser() -> argparse.ArgumentParser:
             "stable",
             "rut",
             "crash",
+            "evolution",
             "high_uncertainty",
             "mixed_state",
             "background_strain",
@@ -839,6 +934,11 @@ def _build_cli_parser() -> argparse.ArgumentParser:
         "--labels-path",
         default="logs/judge_labels/judge_labels.parquet",
         help="Path to consolidated judge labels parquet.",
+    )
+    parser.add_argument(
+        "--signals-path",
+        default=None,
+        help="Optional path to live VIF timeline signals parquet.",
     )
     parser.add_argument(
         "--wrangled-dir",
@@ -870,6 +970,7 @@ def main() -> None:
         persona_id=args.persona_id,
         labels_path=Path(args.labels_path),
         wrangled_dir=Path(args.wrangled_dir),
+        signals_path=Path(args.signals_path) if args.signals_path else None,
         start_date=args.start_date,
         end_date=args.end_date,
         drift_result=drift_result,
