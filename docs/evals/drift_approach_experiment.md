@@ -40,6 +40,8 @@ Drift detection involves two questions that must not be conflated:
 
 These axes are **independent**. A crash (signal) could be noise, a tradeoff, or drift. A rut (signal) could be drift or evolution. There is no 1:1 mapping between signal patterns and interpretations.
 
+**NOTES: Get an LLM to link signal pattern + interpretation to a question. Link to Weekly Digest & Coach 
+
 ### Running example: Maya
 
 Maya completes onboarding. Her BWS results: **Benevolence (w=0.45)** and **Self-Direction (w=0.40)** are her top two values. Achievement is low (w=0.05). Her profile `w_u` is set.
