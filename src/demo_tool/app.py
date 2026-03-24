@@ -152,13 +152,16 @@ def _build_table(records: list[dict[str, Any]], columns: list[tuple[str, str]]) 
             value = record.get(key)
             if isinstance(value, list):
                 value = ", ".join(str(item) for item in value)
-            cells.append(ui.tags.td("" if value is None else str(value)))
+            cells.append(ui.tags.td("" if value is None else value))
         body_rows.append(ui.tags.tr(*cells))
 
-    return ui.tags.table(
-        ui.tags.thead(ui.tags.tr(*header_cells)),
-        ui.tags.tbody(*body_rows),
-        class_="data-table",
+    return ui.div(
+        ui.tags.table(
+            ui.tags.thead(ui.tags.tr(*header_cells)),
+            ui.tags.tbody(*body_rows),
+            class_="data-table",
+        ),
+        class_="table-shell",
     )
 
 
@@ -714,22 +717,18 @@ def _render_weekly_results(weekly_df: pl.DataFrame) -> ui.Tag:
         strengths, tensions = _top_dimensions(row)
         records.append(
             {
-                "week_start": row["week_start"],
-                "week_end": row["week_end"],
-                "n_entries": row["n_entries"],
+                "window": f"{row['week_start']} to {row['week_end']}",
                 "overall_mean": f"{float(row['overall_mean']):+.3f}",
                 "overall_uncertainty": f"{float(row['overall_uncertainty']):.3f}",
-                "top_strengths": ", ".join(strengths) or "None",
-                "top_tensions": ", ".join(tensions) or "None",
+                "top_strengths": _build_badges(strengths, "badge-positive", "None"),
+                "top_tensions": _build_badges(tensions, "badge-negative", "None"),
             }
         )
 
     return _build_table(
         records,
         [
-            ("week_start", "Week start"),
-            ("week_end", "Week end"),
-            ("n_entries", "Entries"),
+            ("window", "Week window"),
             ("overall_mean", "Overall mean"),
             ("overall_uncertainty", "Uncertainty"),
             ("top_strengths", "Top strengths"),

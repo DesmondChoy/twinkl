@@ -418,10 +418,21 @@ select,
     margin-top: 0;
 }
 
+.table-shell {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border-radius: 18px;
+    border: 1px solid rgba(138, 75, 36, 0.12);
+    background: var(--surface);
+}
+
 .data-table {
     width: 100%;
+    min-width: 680px;
     border-collapse: collapse;
-    font-size: 0.9rem;
+    table-layout: fixed;
+    font-size: 0.88rem;
 }
 
 .data-table th,
@@ -430,12 +441,36 @@ select,
     border-bottom: 1px solid rgba(138, 75, 36, 0.12);
     vertical-align: top;
     text-align: left;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .data-table th {
     color: var(--text-muted);
     font-weight: 600;
     background: rgba(138, 75, 36, 0.04);
+}
+
+.data-table th:nth-child(1),
+.data-table td:nth-child(1) {
+    width: 184px;
+}
+
+.data-table th:nth-child(2),
+.data-table td:nth-child(2),
+.data-table th:nth-child(3),
+.data-table td:nth-child(3) {
+    width: 100px;
+}
+
+.data-table .badge-row {
+    gap: 6px;
+}
+
+.data-table .badge {
+    font-size: 0.74rem;
+    padding: 4px 8px;
 }
 
 .empty-state {
