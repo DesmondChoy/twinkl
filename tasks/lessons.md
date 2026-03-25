@@ -46,3 +46,10 @@
   output format. For experiment reviews here, that means artifact-aware
   analysis, provenance backfill, and index updates before treating the review
   as done.
+
+## 2026-03-24
+
+- Be careful when exporting new runtime entrypoints from package `__init__`
+  files. If a low-level module imports a schema from that package, eager
+  `__init__` imports can create circular dependencies. Prefer lazy wrappers or
+  importing the concrete submodule directly when wiring new runtime bridges.

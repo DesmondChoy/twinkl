@@ -1,6 +1,6 @@
 name: weekly_digest_coach
 description: Prompt scaffold for generating reflective weekly Coach narrative from full digest context
-version: "2.0"
+version: "2.1"
 input_variables:
   - persona_id
   - persona_name
@@ -9,8 +9,10 @@ input_variables:
   - response_mode
   - mode_source
   - mode_rationale
+  - signal_source
   - n_entries
   - overall_mean
+  - overall_uncertainty
   - core_values
   - top_tensions
   - top_strengths
@@ -32,8 +34,10 @@ template: |
   Response mode: {{ response_mode }}
   Mode source: {{ mode_source }}
   Mode rationale: {{ mode_rationale }}
+  Signal source: {{ signal_source }}
   Entries scored: {{ n_entries }}
   Overall mean alignment: {{ overall_mean }}
+  Overall uncertainty: {{ overall_uncertainty }}
   Declared core values: {{ core_values }}
 
   Primary tensions: {{ top_tensions }}
