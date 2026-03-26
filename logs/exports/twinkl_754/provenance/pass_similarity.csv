@@ -1,0 +1,11 @@
+left_pass_index,right_pass_index,left_pass_name,right_pass_name,raw_hash_match,score_hash_match,differing_entry_vectors,identical_entry_vectors
+1,2,pass_1,pass_2,false,false,817,834
+1,3,pass_1,pass_3,false,false,783,868
+1,4,pass_1,pass_4,false,false,760,891
+1,5,pass_1,pass_5,false,false,834,817
+2,3,pass_2,pass_3,false,false,818,833
+2,4,pass_2,pass_4,false,false,805,846
+2,5,pass_2,pass_5,false,false,878,773
+3,4,pass_3,pass_4,false,false,786,865
+3,5,pass_3,pass_5,false,false,828,823
+4,5,pass_4,pass_5,false,false,819,832

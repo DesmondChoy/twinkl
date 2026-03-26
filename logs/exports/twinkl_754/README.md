@@ -2,16 +2,24 @@
 
 This bundle was prepared by `scripts/journalling/twinkl_754_prepare_consensus.py`.
 
-> Warning: the staged twinkl-754 results in this bundle were later found to contain duplicate passes and should not be used for retraining or merge decisions. Regenerate the bundle and rerun the workflow after the recovery hardening lands.
+## Scope
 
-The invalid generated artifacts from that run were intentionally removed on
-March 20, 2026. This directory now keeps only the lightweight invalidation
-markers until a fresh rerun recreates the bundle.
+- Bundle mode: `full`
+- Selected entries: `1651`
+- Prompt condition: `profile_only`
 
 ## Files
 
-- `README.md`: explains why the previous bundle was invalidated and cleared.
-- `bundle_status.json`: lifecycle status for this bundle, including the list of removed invalid artifacts.
+- `manifest.csv`: the selected entries with deterministic `entry_id` keys and persisted labels.
+- `shard_manifest.csv`: shard-level execution plan for all 5 passes.
+- `bundle_status.json`: bundle lifecycle state, selection mode, and operator warnings.
+- `prompts/pass_<n>.jsonl`: full pass prompt files.
+- `shards/pass_<n>/shard_*.jsonl`: persona-preserving worker shards.
+- `results/pass_<n>_results.jsonl`: merged per-pass result placeholders.
+- `results/pass_<n>/shards/shard_*_results.jsonl`: shard result placeholders.
+- `provenance/shard_provenance.csv`: accepted shard validation and hash records.
+- `provenance/pass_provenance.csv`: merged pass fingerprints and rationale coverage.
+- `provenance/pass_similarity.csv`: pairwise pass similarity diagnostics.
 
 ## Worker Model
 

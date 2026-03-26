@@ -1,23 +1,12 @@
 {
-  "status": "invalidated_pruned",
-  "invalidated": true,
-  "warning": "Duplicate-pass QC on March 20, 2026 found byte-identical and score-identical pass pairs in this staged bundle. Treat these artifacts as forensic-only until a fresh rerun replaces them.",
+  "status": "summarized",
+  "invalidated": false,
+  "warning": "",
+  "generated_at": "2026-03-20T06:57:01.700132+00:00",
   "prompt_condition": "profile_only",
   "bundle_mode": "full",
   "selected_entry_count": 1651,
-  "cleaned_at": "2026-03-20",
-  "removed_artifacts": [
-    "manifest.csv",
-    "shard_manifest.csv",
-    "prompts/",
-    "shards/",
-    "results/",
-    "comparison_rows.csv",
-    "confidence_summary.csv",
-    "consensus_rejudging_report.md",
-    "flip_summary.csv",
-    "irr_summary.csv",
-    "joined_results.csv",
-    "logs/judge_labels/consensus_labels.parquet"
-  ]
+  "expected_total_entries": 1651,
+  "selection_summary": null,
+  "merged_at": "2026-03-26T15:01:39.556723+00:00"
 }

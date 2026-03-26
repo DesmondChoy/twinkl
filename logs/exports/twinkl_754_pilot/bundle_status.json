@@ -1,0 +1,30 @@
+{
+  "status": "summarized",
+  "invalidated": false,
+  "warning": "",
+  "generated_at": "2026-03-20T06:23:52.786258+00:00",
+  "prompt_condition": "profile_only",
+  "bundle_mode": "pilot",
+  "selected_entry_count": 50,
+  "expected_total_entries": 1651,
+  "selection_summary": {
+    "requested_size": 50,
+    "selected_size": 50,
+    "hard_dimensions": [
+      "security",
+      "hedonism",
+      "stimulation"
+    ],
+    "candidate_non_zero_counts": {
+      "security": 439,
+      "hedonism": 314,
+      "stimulation": 187
+    },
+    "selected_non_zero_counts": {
+      "security": 30,
+      "hedonism": 18,
+      "stimulation": 18
+    }
+  },
+  "merged_at": "2026-03-20T06:54:34.375339+00:00"
+}
