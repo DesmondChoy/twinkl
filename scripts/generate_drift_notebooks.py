@@ -85,12 +85,16 @@ persona_ids = sorted(mean_df["persona_id"].unique().to_list())
 print(f"Loaded {len(judge_df)} judge-labelled entries across {len(persona_ids)} personas")
 
 # --- Sample: verify input scores look correct ---
-sample_pid = persona_ids[0]
+# Pick first persona with ≥5 entries so the sample is representative
+sample_pid = next(
+    pid for pid in persona_ids
+    if mean_df.filter(pl.col("persona_id") == pid).height >= 5
+)
 sample_data = mean_df.filter(pl.col("persona_id") == sample_pid).head(5)
-print(f"\\nSample scores for persona '{id_to_name.get(sample_pid, sample_pid)}':")
+print(f"\\nSample scores (first 5 entries) for '{id_to_name.get(sample_pid, sample_pid)}':")
 print(f"  Core values: {id_to_core.get(sample_pid, [])}")
-print(sample_data.select(["t_index"] + VALUE_COLS[:5]))
-print("  (scores are integers in {{-1, 0, 1}})")
+print(sample_data.select(["t_index"] + VALUE_COLS))
+print("  Scores are integers in {{-1, 0, +1}} across all 10 Schwartz dimensions")
 
 
 def get_persona_matrix(pid: str) -> tuple[list[int], np.ndarray]:
