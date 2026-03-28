@@ -1,6 +1,93 @@
 # Drift Detection
 
-## 1. What is drift?
+## 0. Critic performance and its implications for drift detection
+
+The trained Critic (median QWK 0.362, recall_-1 = 0.313) produces ordinal alignment scores `â_t ∈ {-1, 0, +1}^10`. 62.1% of predictions are neutral (0), meaning genuine misalignment events are often predicted as 0 rather than -1. Because a 0 is indistinguishable from noise to any drift detector, crashes that the Critic hedges on become invisible to the detection layer.
+
+**Example.** Maya's Benevolence scores (true vs. Critic predicted):
+
+```
+Week:   1    2    3    4    5    6    7    8
+True:  +1   +1    0   -1   -1   -1    0   +1    ← crash weeks 4–6
+Pred:   0    0    0    0   -1    0    0    0    ← only week 5 caught
+```
+
+A detector looking for two consecutive −1s (or a rolling mean below −0.5 for three weeks) fires on the true scores but stays silent on the Critic's output.
+
+**Why the notebooks decouple the two.** The detection notebooks (Section 4) currently run on Judge labels — clean, directly scored ground truth — rather than Critic predictions. This deliberate separation means drift detector thresholds can be designed and tuned independently of Critic quality. Once thresholds are locked, Phase 2 re-runs detectors on Critic-predicted score sequences to quantify the gap. At the current Critic frontier, meaningful drift results will not be achievable for all ten value dimensions — dimensions with sparse −1 signal (e.g. Power, Security) are most at risk of being undetectable in practice.
+
+---
+
+## 1. Where drift detection sits in the pipeline
+
+### The Critic and the drift detector are not the same thing
+
+The **Critic** (also called the VIF — Value Identity Function) and the **drift detector** are two sequential stages. A common point of confusion is treating them as one component.
+
+```
+Journal Entry
+      ↓
+Text Encoder (SBERT — frozen)
+      ↓
+State Encoder (assembles text window + time gaps + w_u)
+      ↓
+Critic / VIF  ← produces â_t and σ_t per entry
+      ↓
+Drift Detector  ← reads the sequence of â_t scores over time
+      ↓
+Coach / Weekly Digest
+```
+
+| Stage | Question it answers | Temporal scope |
+|---|---|---|
+| **Critic / VIF** | "For this entry, is Maya aligned with her values?" | Single entry |
+| **Drift detector** | "Across entries over time, is there a pattern worth surfacing?" | All entries so far |
+
+The Critic produces scores. The drift detector reads the history of those scores.
+
+### Why the Critic has a temporal window
+
+The Critic predicts alignment **per entry** — one score vector `â_t` per journal entry. But the state it receives as input includes a window of recent entries (`N` embeddings + time gaps), not just the current one.
+
+This window is the **input** to the Critic, not the output. It exists to help the Critic score the current entry more accurately — some entries only make sense in context:
+
+> *"I finally called her back"* — aligned with Benevolence? Only interpretable if the Critic can see that two weeks ago Maya wrote about avoiding her sister.
+
+The window goes *in*. One score vector comes *out*.
+
+```
+Entry 6  +  [Entry 5, Entry 4, Entry 3]  +  time gaps  +  w_u
+                        ↓
+                    Critic / VIF
+                        ↓
+              â_6 = [+1, 0, -1, ...]    ← single score for entry 6 only
+```
+
+The drift detector never sees the window. It only sees the sequence of output scores the Critic has produced over time: `â_1, â_2, â_3, â_4, â_5, â_6, ...`
+
+### This design assumes Option A (immediate alignment)
+
+The Critic has three possible target options (from `docs/vif/03_model_training.md`):
+
+| Option | What the Critic outputs | Temporal smoothing |
+|---|---|---|
+| **A — Immediate alignment** | Raw score for this entry: `â_t ∈ {-1, 0, +1}` | None — done downstream by drift detector |
+| **B — Short-horizon forecast** | Average alignment over next H days | Pre-smoothed by construction |
+| **C — Discounted returns** | Long-horizon cumulative alignment with time-aware discounting | Heavily pre-smoothed |
+
+**The entire drift detection spec in this document is designed for Option A outputs.** All temporal reasoning — EMA, CUSUM, weekly aggregation, the evolution classifier's volatility measure, the crash fast-path — lives in the drift layer because the Critic hands off raw, unsmoothed scores.
+
+If the POC ever switched to Option B or C, the drift layer would need to be redesigned from scratch:
+
+- **Crash fast-path breaks:** A sharp behavioral `+1 → -1` produces a gradual slope in a forecast output, not a step. The single-step crash detector never fires.
+- **Spike/retract logic breaks:** There are no sharp transitions to retract — the forecast has already smoothed the dip and recovery into a shallow curve.
+- **Evolution classifier breaks:** `sigma_j` (the volatility measure used to distinguish DRIFT from EVOLUTION) would reflect VIF smoothing artifacts, not behavioral volatility. A volatile Maya whose forecast hovers near 0 would be classified as STABLE — the wrong answer.
+
+Options B and C move temporal reasoning *into* the Critic. The drift layer can no longer do it independently. The division of responsibility collapses.
+
+---
+
+## 2. What is drift?
 
 ### Definition
 
@@ -45,7 +132,7 @@ If the Critic scores a -1 on a core value, that's a *strong* signal — the misa
 
 ---
 
-## 2. Applicable to all approaches
+## 3. Applicable to all approaches
 
 ### Core vs peripheral values
 
@@ -129,7 +216,7 @@ Dimensions classified as EVOLUTION are excluded from drift trigger evaluation en
 
 ---
 
-## 3. Approach-specific
+## 4. Approach-specific
 
 ### Comparison
 
@@ -294,7 +381,42 @@ DEFER                            GATE 2–4 below
 
 #### Sequential ordering of evolution check
 
-After Gate 1 (confidence), four checks remain. The recommended order is **Order B: Signal-type first**:
+After Gate 1 (confidence), four checks remain.
+
+| Order | Early-week behavior | Crash handling | Fade handling | False alert risk |
+|---|---|---|---|---|
+| **A: Evolution-first** | Blind (can't assess volatility) | Unnecessary check | Good | Low (after ramp-up) |
+| **B: Signal-type-first** | Works immediately | Fast-pathed, clean | Good | Low |
+| **C: Size-then-duration** | Works immediately | Passes | Late — detector state polluted | Medium |
+| **D: Duration-first** | Works immediately | Fires when threshold met | Evolution pollutes detectors | Highest |
+
+#### Open design conflict: should crashes bypass the evolution check?
+
+This is the key fork between two defensible positions. The choice affects whether a sudden value reversal can ever be routed as evolution rather than drift.
+
+---
+
+**Option 1 — Universal evolution pre-filter (from `01_value_evolution.md`)**
+
+Evolution detection runs before all signal types, including crashes. Every confident score first passes through the three-way classifier (STABLE / EVOLUTION / DRIFT) before any drift trigger fires.
+
+```
+Confident score → Evolution detection (all signal types) →
+  If EVOLUTION: route to Coach ("priorities shifting?") — skip drift triggers
+  If STABLE or DRIFT: → Size → Duration → Awareness
+```
+
+*Consequence for crashes:* A `+1 → -1` crash on a dimension that has been trending negative for several weeks might already satisfy the evolution classifier (low volatility, high residual). Under this option, that crash is classified as EVOLUTION and never reaches the drift alert. The Coach asks whether priorities shifted, not whether the user is struggling.
+
+*Consequence for early entries:* The evolution classifier requires `min_entries ≥ 6` to compute a stable residual and volatility estimate. Before that window is full, the classifier defaults to STABLE — meaning crashes in the first ~3 weeks are silently suppressed rather than alerting. This is the "blind early-week" problem in the table above.
+
+*When to prefer this:* If the system should be conservative about firing drift alerts until it has enough history to distinguish a crash from a trend reversal. Prioritizes false-negative drift over false-positive drift.
+
+---
+
+**Option 2 — Signal-type-conditional evolution check (Order B)**
+
+Crashes and spikes bypass the evolution check. Evolution check only runs on gradual patterns (fade, sustained shift). The intuition: a single-step reversal is too short to have stable volatility statistics — running the evolution classifier on it produces noise.
 
 ```
 Confident score → Classify signal pattern (crash/fade/rise/spike) →
@@ -302,14 +424,23 @@ Confident score → Classify signal pattern (crash/fade/rise/spike) →
   If fade or sustained shift: check evolution (volatility) → Size → Duration → Awareness
 ```
 
-| Order | Early-week behavior | Crash handling | Fade handling | False alert risk |
-|---|---|---|---|---|
-| **A: Evolution-first** | Blind (can't assess volatility) | Unnecessary check | Good | Low (after ramp-up) |
-| **B: Signal-type-first** ✓ | Works immediately | Fast-pathed, clean | Good | Low |
-| **C: Size-then-duration** | Works immediately | Passes | Late — detector state polluted | Medium |
-| **D: Duration-first** | Works immediately | Fires when threshold met | Evolution pollutes detectors | Highest |
+*Consequence for crashes:* Every crash reaches the size gate immediately, regardless of prior trend. A sudden `+1 → -1` always produces a potential alert — even if the preceding weeks suggested a directional shift was underway. The evolution classifier cannot intercept it.
 
-Crashes are fast-pathed — no unnecessary evolution check on single-step events. Works from week 1.
+*Consequence for fades:* Evolution check runs where it is most meaningful — on gradual, multi-step patterns where volatility statistics are stable and the classifier has signal to work with.
+
+*When to prefer this:* If crashes should always be surfaced to the user, letting the Coach conversation (Gate 4) resolve whether it is drift, tradeoff, or evolution. Prioritizes false-positive drift over silent suppression of sudden events.
+
+---
+
+**The design question this forces:**
+
+> *Can a crash ever be classified as evolution — and if so, what is lost by not alerting?*
+
+If the answer is "yes, a crash can be evolution" → Option 1. The evolution pre-filter intercepts it before the drift trigger fires.
+
+If the answer is "a crash should always alert, and the user resolves the meaning" → Option 2. The Coach conversation handles the ambiguity at Gate 4.
+
+**Current recommendation: Option 2 (Order B).** Crashes are fast-pathed — no unnecessary evolution check on single-step events. Works from week 1 without a ramp-up period. The Coach's Gate 4 conversation is the correct place to distinguish a genuine crash from a trend reversal the user was already aware of.
 
 #### Uncertainty gating per signal type
 
@@ -538,7 +669,7 @@ The signal taxonomy is **not an input** — any deviation from learned normal be
 
 ---
 
-## 4. Experiment plan
+## 5. Experiment plan
 
 ### Data
 
