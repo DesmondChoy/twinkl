@@ -698,11 +698,174 @@ def bocpd_dimension(
     return {"p_change": p_change}
 """),
 
-    md("## Run BOCPD on All Personas\n\nFor each persona × core dimension, compute P(changepoint at t) across all time steps.\nAlert when P(changepoint) > threshold."),
+    md("""\
+## Why BOCPD Has No Training Phase
+
+BOCPD is a **fully online** algorithm: it updates its beliefs with each new observation and
+requires no separate training step. This is a fundamental design difference from supervised
+approaches (like the Critic) or batch methods (like the Autoencoder).
+
+What BOCPD does instead of training:
+
+| Rule-based equivalent | BOCPD equivalent |
+|---|---|
+| Grid search over δ, τ_low, C_min | Grid search over **H** (hazard rate) and **α₀** (Dirichlet prior) |
+| Consensus hit-rate tuning | Consensus hit-rate tuning — same metric, different parameters |
+| Threshold picked once, applied online | H picked once, applied online |
+
+**H (hazard rate):** prior probability of a changepoint at each step.
+- Low H (e.g. 0.05) → conservative: needs strong evidence before flagging.
+- High H (e.g. 0.40) → sensitive: fires frequently, higher false-positive rate.
+
+**α₀ (Dirichlet prior):** initial belief about score distribution within a regime.
+- Uninformative (α₀ = [1, 1, 1]) → equal prior over {-1, 0, +1}.
+- Informative (e.g. α₀ = [1, 2, 4]) → prior belief that aligned scores are more likely.
+
+The cell below selects H by grid search against consensus labels derived from
+the 6 rule-based sub-approaches (same method as notebook 01).
+"""),
 
     code("""\
-HAZARD    = 0.15    # prior probability of changepoint per step
-CP_THRESH = 0.5     # alert when P(changepoint) exceeds this
+# --- Inline consensus from rule-based approaches (mirrors notebook 01) ---
+# We need a ground-truth proxy to tune H. Recompute it here using the same 6 sub-approaches.
+
+def _ema_alerts(matrix, w, alpha=0.3, threshold=0.10, w_min=0.15):
+    T, K = matrix.shape
+    ema = np.zeros(K)
+    alerts = set()
+    for t in range(T):
+        for j in range(K):
+            if w[j] < w_min: continue
+            ema[j] = alpha * w[j] * max(0., -matrix[t, j]) + (1 - alpha) * ema[j]
+            if ema[j] > threshold: alerts.add(t)
+    return alerts
+
+def _cusum_alerts(matrix, w, k=0.3, h=1.5, w_min=0.15):
+    T, K = matrix.shape
+    jar = np.zeros(K)
+    alerts = set()
+    for t in range(T):
+        for j in range(K):
+            if w[j] < w_min: continue
+            jar[j] = max(0., jar[j] + w[j] * max(0., -matrix[t, j]) - k)
+            if jar[j] > h: alerts.add(t)
+    return alerts
+
+def _cosine_alerts(matrix, w, threshold=0.0):
+    alerts = set()
+    for t in range(len(matrix)):
+        a = matrix[t]; norm = np.linalg.norm(w) * np.linalg.norm(a)
+        if norm > 1e-8 and np.dot(w, a) / norm < threshold: alerts.add(t)
+    return alerts
+
+def _cc_alerts(matrix, w, baseline_end=3, n_sigma=2.0, w_min=0.15):
+    T, K = matrix.shape
+    if baseline_end >= T: return set()
+    mu = matrix[:baseline_end].mean(0); sig = matrix[:baseline_end].std(0)
+    alerts = set()
+    for t in range(baseline_end, T):
+        for j in range(K):
+            if w[j] >= w_min and matrix[t, j] < mu[j] - n_sigma * sig[j]:
+                alerts.add(t)
+    return alerts
+
+def _kl_alerts(matrix, w, baseline_end=3, window=3, kl_thresh=0.15, w_min=0.15):
+    from scipy.special import rel_entr
+    T, K = matrix.shape
+    bins = [-1.5, -0.5, 0.5, 1.5]
+    def dist(vals):
+        c, _ = np.histogram(vals, bins=bins); d = c.astype(float) + 0.05
+        return d / d.sum()
+    alerts = set()
+    for j in range(K):
+        if w[j] < w_min: continue
+        bd = dist(matrix[:baseline_end, j])
+        for t in range(baseline_end + window, T + 1):
+            if np.sum(rel_entr(dist(matrix[t-window:t, j]), bd)) > kl_thresh:
+                alerts.add(t - 1)
+    return alerts
+
+def _baseline_alerts(matrix, w, delta=0.5, tau=-0.4, c_min=3, w_min=0.15):
+    T, K = matrix.shape
+    scalar = matrix @ w; state = np.zeros(K); alerts = set()
+    for t in range(1, T):
+        if scalar[t-1] - scalar[t] > delta: alerts.add(t)
+        for j in range(K):
+            if w[j] < w_min: state[j] = 0; continue
+            if matrix[t, j] < tau: state[j] += 1;
+            else: state[j] = 0
+            if state[j] >= c_min: alerts.add(t)
+    return alerts
+
+def compute_consensus(pid):
+    t_idx, matrix = get_persona_matrix(pid)
+    T = len(t_idx)
+    if T < 5: return {}
+    w = get_profile_weights(pid)
+    be = max(2, min(4, T // 3))
+    votes = {t: 0 for t in range(T)}
+    for fn, kw in [
+        (_baseline_alerts, {}), (_ema_alerts, {}), (_cusum_alerts, {}),
+        (_cosine_alerts, {}), (_cc_alerts, {"baseline_end": be}),
+        (_kl_alerts, {"baseline_end": be}),
+    ]:
+        for t in fn(matrix, w, **kw):
+            if t in votes: votes[t] += 1
+    return votes
+
+
+# --- Grid search over H ---
+print("Grid searching hazard rate H against consensus labels...\\n")
+
+hazard_grid = [0.05, 0.10, 0.15, 0.20, 0.30, 0.40]
+cp_thresh   = 0.5
+w_min_gs    = 0.15
+
+grid_results = []
+
+for H in hazard_grid:
+    tp = fp = fn = tn = 0
+    for pid in persona_ids:
+        t_idx, matrix = get_persona_matrix(pid)
+        T = len(t_idx)
+        if T < 5: continue
+        w  = get_profile_weights(pid)
+        sv = compute_consensus(pid)
+        crisis     = {t for t, s in sv.items() if s >= 4}
+        non_crisis = {t for t, s in sv.items() if s < 4}
+
+        alerted = set()
+        for j in core_dim_indices(w, w_min_gs):
+            out = bocpd_dimension(matrix[:, j], hazard=H)
+            for t, pc in enumerate(out["p_change"]):
+                if pc > cp_thresh: alerted.add(t)
+
+        tp += len(alerted & crisis); fp += len(alerted & non_crisis)
+        fn += len(crisis - alerted); tn += len(non_crisis - alerted)
+
+    hit   = tp / max(tp + fn, 1)
+    prec  = tp / max(tp + fp, 1)
+    f1    = 2 * hit * prec / max(hit + prec, 1e-9)
+    fpr   = fp / max(fp + tn, 1)
+    grid_results.append({"H": H, "hit": hit, "prec": prec, "f1": f1, "fpr": fpr})
+
+print(f"{'H':>6s}  {'Hit%':>6s}  {'Prec%':>6s}  {'F1':>6s}  {'FPR%':>6s}")
+print("-" * 40)
+best = max(grid_results, key=lambda r: r["f1"])
+for r in grid_results:
+    marker = " ← best F1" if r["H"] == best["H"] else ""
+    print(f"{r['H']:>6.2f}  {r['hit']*100:>5.1f}%  {r['prec']*100:>5.1f}%  "
+          f"{r['f1']:>6.3f}  {r['fpr']*100:>5.1f}%{marker}")
+
+HAZARD = best["H"]
+print(f"\\nSelected H = {HAZARD} (best F1 = {best['f1']:.3f})")
+"""),
+
+    md("## Run BOCPD on All Personas\n\nUsing the selected hazard rate H from grid search above.\nFor each persona × core dimension, compute P(changepoint at t) across all time steps."),
+
+    code("""\
+# HAZARD is set by grid search above
+CP_THRESH = 0.5
 W_MIN     = 0.15
 
 bocpd_results = {}
