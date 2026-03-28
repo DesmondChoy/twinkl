@@ -55,12 +55,9 @@ sns.set_theme(style="whitegrid", font_scale=0.9)
 """
 
 SHARED_DATA = """\
-# --- Load annotations ---
-files = {
-    "JL":  "../../logs/annotations/jl.parquet",
-    "KM":  "../../logs/annotations/km.parquet",
-    "Des": "../../logs/annotations/des.parquet",
-}
+# --- Load judge labels (204 personas, 1651 entries, integer {-1, 0, 1} scores) ---
+# Using judge labels rather than human annotations: more data (all 204 personas vs 24),
+# and clean integer scores (no averaging artefacts).
 
 VALUE_COLS = [
     "alignment_self_direction", "alignment_stimulation", "alignment_hedonism",
@@ -71,21 +68,29 @@ VALUE_COLS = [
 SHORT_NAMES = [c.replace("alignment_", "") for c in VALUE_COLS]
 DIM_LABELS  = ["SD", "ST", "HE", "AC", "PO", "SE", "CO", "TR", "BE", "UN"]
 
-dfs = [pl.read_parquet(p) for p in files.values()]
-raw = pl.concat(dfs)
+judge_df = pl.read_parquet("../../logs/judge_labels/judge_labels.parquet")
+mean_df  = (
+    judge_df
+    .select(["persona_id", "t_index"] + VALUE_COLS)
+    .with_columns([pl.col(c).cast(pl.Float64) for c in VALUE_COLS])
+    .sort(["persona_id", "t_index"])
+)
 
 registry   = pl.read_parquet("../../logs/registry/personas.parquet").select(
                 ["persona_id", "name", "core_values"])
 id_to_name = dict(zip(registry["persona_id"].to_list(), registry["name"].to_list()))
 id_to_core = dict(zip(registry["persona_id"].to_list(), registry["core_values"].to_list()))
 
-mean_df = (
-    raw.group_by(["persona_id", "t_index"])
-    .agg([pl.col(c).cast(pl.Float64).mean().alias(c) for c in VALUE_COLS])
-    .sort(["persona_id", "t_index"])
-)
 persona_ids = sorted(mean_df["persona_id"].unique().to_list())
-print(f"Loaded {len(raw)} annotations across {len(persona_ids)} personas")
+print(f"Loaded {len(judge_df)} judge-labelled entries across {len(persona_ids)} personas")
+
+# --- Sample: verify input scores look correct ---
+sample_pid = persona_ids[0]
+sample_data = mean_df.filter(pl.col("persona_id") == sample_pid).head(5)
+print(f"\\nSample scores for persona '{id_to_name.get(sample_pid, sample_pid)}':")
+print(f"  Core values: {id_to_core.get(sample_pid, [])}")
+print(sample_data.select(["t_index"] + VALUE_COLS[:5]))
+print("  (scores are integers in {{-1, 0, 1}})")
 
 
 def get_persona_matrix(pid: str) -> tuple[list[int], np.ndarray]:
@@ -620,17 +625,22 @@ def bocpd_dimension(
     \"\"\"
     Bayesian Online Changepoint Detection with Dirichlet-Categorical likelihood.
 
+    Correct formulation (Fearnhead & Liu, 2007):
+      P(r_t=0, x_{1:t}) = H * p(x_t | alpha0) * sum_r P(r_{t-1}=r, x_{1:t-1})
+
+    The new-run predictive uses alpha0 (fresh regime prior), NOT the old run's
+    posterior — that was the bug in the earlier version.
+
     Parameters
     ----------
-    scores_1d : (T,) array of alignment scores in {-1, 0, +1}
-    hazard    : prior probability of changepoint at each step
+    scores_1d : (T,) array of alignment scores — integers {-1, 0, +1}
+    hazard    : prior probability of changepoint at each step (H)
     alpha0    : Dirichlet prior pseudo-counts for bins [-1, 0, +1]. Default [1,1,1].
 
     Returns
     -------
-    dict with keys:
-        p_change : (T,) array — P(changepoint at t | data_{1:t})
-        run_probs: list of (T,) arrays — run-length posterior at each step
+    dict with key:
+        p_change : (T,) — P(changepoint at t | data_{1:t})
     \"\"\"
     if alpha0 is None:
         alpha0 = np.array([1.0, 1.0, 1.0])
@@ -638,62 +648,52 @@ def bocpd_dimension(
     T = len(scores_1d)
 
     def score_to_bin(s: float) -> int:
-        \"\"\"Map {-1, 0, +1} (possibly fractional means) to bin index.\"\"\"
         if s < -0.5: return 0
         if s <  0.5: return 1
         return 2
 
-    # R[t] is a list of (run_length, alpha) tuples — one per hypothetical run
-    # Start with a single run of length 0 at t=0
-    runs = [(0.0, alpha0.copy())]   # (log_prob, alpha)
-    # We track unnormalised log-probabilities for numerical stability
-    log_weights = [0.0]             # log P(run_length = 0 at t=0)
+    # Each particle: (alpha posterior for this run)
+    # log_weights[i] = log P(run i, x_{1:t-1}) — normalised after each step
+    alphas      = [alpha0.copy()]
+    log_weights = np.array([0.0])   # starts normalised (single run, weight 1)
 
     p_change = np.zeros(T)
 
+    log_p_new = np.log(alpha0[0] / alpha0.sum())  # placeholder, recomputed each step
+
     for t in range(T):
         obs_bin = score_to_bin(scores_1d[t])
-        n_runs = len(runs)
 
-        new_runs = []
-        new_log_weights = []
+        # Predictive log-prob under each existing run
+        log_preds = np.array([np.log(a[obs_bin] / a.sum()) for a in alphas])
 
-        # Changepoint: new run starts (run_length = 0)
-        cp_log_weight = -np.inf
+        # --- Changepoint term ---
+        # P(r_t=0, x_{1:t}) = H * p(x_t | alpha0) * sum_r exp(log_weights[r])
+        # Since weights are normalised, sum = 1 → log_sum = 0
+        log_new = np.log(hazard) + np.log(alpha0[obs_bin] / alpha0.sum())
 
-        for i, ((rl, alpha), lw) in enumerate(zip(runs, log_weights)):
-            total = alpha.sum()
-            log_pred = np.log(alpha[obs_bin] / total)   # predictive under this run
-            updated_alpha = alpha.copy()
-            updated_alpha[obs_bin] += 1
+        # --- Continue terms ---
+        log_continue = log_weights + log_preds + np.log(1 - hazard)
 
-            # Probability of continuing this run (no changepoint)
-            log_continue = lw + log_pred + np.log(1 - hazard)
-            new_runs.append((rl + 1, updated_alpha))
-            new_log_weights.append(log_continue)
+        # --- Combine and normalise ---
+        all_lw = np.append(log_continue, log_new)
+        max_lw = all_lw.max()
+        w_unnorm = np.exp(all_lw - max_lw)
+        w_norm   = w_unnorm / w_unnorm.sum()
 
-            # Probability of changepoint (new run) — accumulate
-            log_cp_contrib = lw + log_pred + np.log(hazard)
-            if cp_log_weight == -np.inf:
-                cp_log_weight = log_cp_contrib
-            else:
-                m = max(cp_log_weight, log_cp_contrib)
-                cp_log_weight = m + np.log(np.exp(cp_log_weight - m) + np.exp(log_cp_contrib - m))
+        p_change[t] = w_norm[-1]   # weight of the new run = P(changepoint at t)
 
-        # Add the new run (changepoint at t)
-        new_runs.append((0, alpha0.copy()))
-        new_log_weights.append(cp_log_weight)
+        # --- Update alphas and weights ---
+        new_alphas = []
+        for i, a in enumerate(alphas):
+            upd = a.copy(); upd[obs_bin] += 1
+            new_alphas.append(upd)
+        # New run has already observed x_t
+        new_run_alpha = alpha0.copy(); new_run_alpha[obs_bin] += 1
+        new_alphas.append(new_run_alpha)
 
-        # Normalise
-        max_lw = max(new_log_weights)
-        weights_unnorm = np.array([np.exp(lw - max_lw) for lw in new_log_weights])
-        weights_norm = weights_unnorm / weights_unnorm.sum()
-
-        # P(changepoint at t) = weight of the new run (last entry)
-        p_change[t] = weights_norm[-1]
-
-        runs = new_runs
-        log_weights = [np.log(max(w, 1e-300)) for w in weights_norm]
+        alphas      = new_alphas
+        log_weights = np.log(np.maximum(w_norm, 1e-300))
 
     return {"p_change": p_change}
 """),
@@ -814,59 +814,72 @@ def compute_consensus(pid):
     return votes
 
 
-# --- Grid search over H ---
-print("Grid searching hazard rate H against consensus labels...\\n")
+# --- Grid search over H and cp_thresh ---
+print("Grid searching H × cp_thresh against consensus labels...\\n")
 
-hazard_grid = [0.05, 0.10, 0.15, 0.20, 0.30, 0.40]
-cp_thresh   = 0.5
-w_min_gs    = 0.15
+hazard_grid  = [0.05, 0.10, 0.15, 0.25, 0.40]
+thresh_grid  = [0.30, 0.40, 0.50, 0.60]
+w_min_gs     = 0.15
 
-grid_results = []
+# Cache BOCPD outputs per (pid, j, H) to avoid recomputation
+from functools import lru_cache
 
+bocpd_cache = {}
 for H in hazard_grid:
-    tp = fp = fn = tn = 0
     for pid in persona_ids:
         t_idx, matrix = get_persona_matrix(pid)
-        T = len(t_idx)
-        if T < 5: continue
-        w  = get_profile_weights(pid)
-        sv = compute_consensus(pid)
-        crisis     = {t for t, s in sv.items() if s >= 4}
-        non_crisis = {t for t, s in sv.items() if s < 4}
-
-        alerted = set()
+        if len(t_idx) < 5: continue
+        w = get_profile_weights(pid)
         for j in core_dim_indices(w, w_min_gs):
-            out = bocpd_dimension(matrix[:, j], hazard=H)
-            for t, pc in enumerate(out["p_change"]):
-                if pc > cp_thresh: alerted.add(t)
+            bocpd_cache[(pid, j, H)] = bocpd_dimension(matrix[:, j], hazard=H)["p_change"]
 
-        tp += len(alerted & crisis); fp += len(alerted & non_crisis)
-        fn += len(crisis - alerted); tn += len(non_crisis - alerted)
+grid_results = []
+for H in hazard_grid:
+    for cp_thresh in thresh_grid:
+        tp = fp = fn = tn = 0
+        for pid in persona_ids:
+            t_idx, matrix = get_persona_matrix(pid)
+            T = len(t_idx)
+            if T < 5: continue
+            w  = get_profile_weights(pid)
+            sv = compute_consensus(pid)
+            crisis     = {t for t, s in sv.items() if s >= 4}
+            non_crisis = {t for t, s in sv.items() if s < 4}
 
-    hit   = tp / max(tp + fn, 1)
-    prec  = tp / max(tp + fp, 1)
-    f1    = 2 * hit * prec / max(hit + prec, 1e-9)
-    fpr   = fp / max(fp + tn, 1)
-    grid_results.append({"H": H, "hit": hit, "prec": prec, "f1": f1, "fpr": fpr})
+            alerted = set()
+            for j in core_dim_indices(w, w_min_gs):
+                p_change = bocpd_cache.get((pid, j, H), [])
+                for t, pc in enumerate(p_change):
+                    if pc > cp_thresh: alerted.add(t)
 
-print(f"{'H':>6s}  {'Hit%':>6s}  {'Prec%':>6s}  {'F1':>6s}  {'FPR%':>6s}")
-print("-" * 40)
+            tp += len(alerted & crisis); fp += len(alerted & non_crisis)
+            fn += len(crisis - alerted); tn += len(non_crisis - alerted)
+
+        hit  = tp / max(tp + fn, 1)
+        prec = tp / max(tp + fp, 1)
+        f1   = 2 * hit * prec / max(hit + prec, 1e-9)
+        fpr  = fp / max(fp + tn, 1)
+        grid_results.append({"H": H, "cp_thresh": cp_thresh,
+                              "hit": hit, "prec": prec, "f1": f1, "fpr": fpr})
+
+print(f"{'H':>5s}  {'Thresh':>6s}  {'Hit%':>5s}  {'Prec%':>5s}  {'F1':>6s}  {'FPR%':>5s}")
+print("-" * 50)
 best = max(grid_results, key=lambda r: r["f1"])
 for r in grid_results:
-    marker = " ← best F1" if r["H"] == best["H"] else ""
-    print(f"{r['H']:>6.2f}  {r['hit']*100:>5.1f}%  {r['prec']*100:>5.1f}%  "
-          f"{r['f1']:>6.3f}  {r['fpr']*100:>5.1f}%{marker}")
+    marker = " ←" if r == best else ""
+    print(f"{r['H']:>5.2f}  {r['cp_thresh']:>6.2f}  {r['hit']*100:>4.1f}%  "
+          f"{r['prec']*100:>4.1f}%  {r['f1']:>6.3f}  {r['fpr']*100:>4.1f}%{marker}")
 
-HAZARD = best["H"]
-print(f"\\nSelected H = {HAZARD} (best F1 = {best['f1']:.3f})")
+HAZARD    = best["H"]
+CP_THRESH = best["cp_thresh"]
+print(f"\\nSelected H={HAZARD}, cp_thresh={CP_THRESH} (best F1={best['f1']:.3f})")
 """),
 
     md("## Run BOCPD on All Personas\n\nUsing the selected hazard rate H from grid search above.\nFor each persona × core dimension, compute P(changepoint at t) across all time steps."),
 
     code("""\
-# HAZARD is set by grid search above
-CP_THRESH = 0.5
-W_MIN     = 0.15
+# HAZARD and CP_THRESH are set by grid search above
+W_MIN = 0.15
 
 bocpd_results = {}
 
