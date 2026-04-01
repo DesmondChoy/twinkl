@@ -60,6 +60,13 @@
   equivalent to a statistically clean rerun unless the independence claim has
   actually been re-established.
 
+## 2026-03-24
+
+- Be careful when exporting new runtime entrypoints from package `__init__`
+  files. If a low-level module imports a schema from that package, eager
+  `__init__` imports can create circular dependencies. Prefer lazy wrappers or
+  importing the concrete submodule directly when wiring new runtime bridges.
+
 ## 2026-03-26
 
 - Do not describe human annotation subsets as "ground truth" unless the user or
@@ -75,5 +82,5 @@
 
 - When a repo-local skill is the required workflow for a task, run it before
   closing the issue or epic and before reporting conclusions. Do not rely on
-  “roughly equivalent” manual analysis and wait for the user to notice the
+  "roughly equivalent" manual analysis and wait for the user to notice the
   missing workflow step.

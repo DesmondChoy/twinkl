@@ -6,16 +6,17 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 
 ## Implementation Status
 
-*Last updated: 2026-03-09*
+*Last updated: 2026-03-20*
 
 | Feature | Status | Details |
 |---------|--------|---------|
 | **Synthetic Data Pipeline** | ✅ Complete | 204 personas (1,651 entries) generated via Claude Code parallel subagents; YAML prompt templates with Jinja2; targeted value generation now supports family-specific tension banks, frozen-holdout experiments, and judged acceptance gates for hard-dimension batches |
-| **Judge Labeling (VIF)** | ✅ Complete | 1,651 entries labeled across 204 personas; two-phase pipeline (Python wrangling + parallel subagents); consolidated to `judge_labels.parquet` with rationales |
-| **VIF Critic Training** | 🧪 Experimental | Training stack complete with ordinal MLP heads, BNN baseline, and configurable sentence encoders (`nomic` active default; MiniLM/mpnet ablations). Corrected-split multi-seed experiments are logged across 27 run IDs / 91 persisted configs; `run_019`-`run_021` BalancedSoftmax remains the active default after the regenerated Hedonism/Security rebaseline, while QWK and Security/circumplex trade-offs are still open |
+| **Judge Labeling (VIF)** | ✅ Complete | 1,651 entries labeled across 204 personas; two-phase pipeline (Python wrangling + parallel subagents); consolidated to `judge_labels.parquet` with rationales. A completed reachability audit (`twinkl-747`) found that the stored hard-dimension labels, especially `security`, are not the right distillation target for the current student because many sampled labels are not reproducible from the current judge path or the student-visible context. |
+| **VIF Critic Training** | 🧪 Experimental | Training stack complete with ordinal MLP heads, BNN baseline, and configurable sentence encoders (`nomic` active default; MiniLM/mpnet ablations). Corrected-split multi-seed experiments are logged across 27 run IDs / 91 persisted configs; `run_019`-`run_021` BalancedSoftmax remains the frontier reference point for the pre-audit target, but the completed `twinkl-747` reachability audit recommends changing the distillation target before the next hard-dimension training cycle, with `security` as the highest-priority rebase. |
 | **Human Annotation Tool** | ✅ Complete | ~4,200 LOC Shiny app; 46 annotations across 3 annotators; Cohen's κ / Fleiss' κ metrics; modular components with analysis view; annotation ordering for persona prioritization |
 | **Conversational Nudging** | 🧪 Experimental | 3-category LLM classification (clarification/elaboration/tension-surfacing); pending validation that nudging improves VIF signal quality |
-| **Weekly Alignment Coach** | ⚠️ Partial | Entry processing ready; digest generation not implemented |
+| **Drift Detection Engine** | 🧪 Experimental | Runtime bridge now exists from Critic checkpoint inference -> weekly VIF signals -> evolution filter -> uncertainty-gated crash/rut detection -> structured drift result for the Coach. Thresholds and evaluation coverage are still experimental and need calibration before production use. |
+| **Weekly Alignment Coach** | 🧪 Experimental | Weekly digest generation is implemented and can now build from live VIF signal artifacts plus upstream drift output. Narrative generation, validation depth, and trigger calibration are still being refined. |
 | **Onboarding (BWS Values Assessment)** | 📋 Specified | 6-set BWS flow over 10 Schwartz dimensions; PVQ21-adapted card phrases; mid-flow + end-of-flow reflective mirrors; 6 structured goal categories mapping to Coach monitoring priorities; scoring with confidence estimation and user refinement support; [full spec](onboarding/onboarding_spec.md) |
 | **Embedding Explorer** | ✅ Complete | Interactive 3D visualization of VIF hidden-layer and SBERT embedding spaces; self-contained HTML with Three.js |
 | **Journaling Anomaly Radar** | ❌ Not Started | Cadence/gap detection |
@@ -38,6 +39,7 @@ models/
 > - [Synthetic Data Pipeline](pipeline/pipeline_specs.md)
 > - [Claude Code Generation Instructions](pipeline/claude_gen_instructions.md)
 > - [Claude Judge Labeling Instructions](pipeline/claude_judge_instructions.md)
+> - [Judge Reachability Audit Instructions](pipeline/judge_reachability_audit_instructions.md)
 > - [Human Annotation Tool](pipeline/annotation_tool_plan.md)
 > - [VIF Critic Training](vif/03_model_training.md) — Training strategy and implementation
 > - [CLAUDE.md](../CLAUDE.md) — Project architecture overview
@@ -84,7 +86,7 @@ AI journaling apps (Reflection, Mindsera, Insight Journal, Day One, Pixel Journa
 2. **Memory:** Tags incrementally update a decay-aware user profile/knowledge base (value weights, goals, tensions, evidence snippets) instead of resetting each week.
 3. **Reasoning + action:** A two-stage evaluative layer powered by the **[Value Identity Function (VIF)](vif/01_concepts_and_roadmap.md)**:
    * **Critic (VIF):** A numeric, uncertainty-aware engine that computes per-value-dimension alignment scores from a sliding window of recent entries. Uses [LLM-as-Judge for reward modeling](vif/03_model_training.md) and [MC Dropout for epistemic uncertainty](vif/04_uncertainty_logic.md). Triggers critiques only when confident and detecting significant patterns (sudden crashes or chronic ruts).
-   * **Coach:** Activated when the Critic identifies significant patterns — whether problematic (crashes, ruts) or positive (sustained alignment). Reads the user's full journal history via **full-context prompting** (at POC scale, all entries fit in the LLM context window) to surface thematic evidence, explain *why* misalignment occurred, and offer reflective prompts or "micro-anchors." For positive patterns, provides occasional evidence-based acknowledgment without gamification. At production scale with longer histories, this would transition to retrieval-augmented generation (RAG). (See [System Architecture](vif/02_system_architecture.md)). For a concrete scenario, see [Worked Example: Sarah's Journey](vif/example.md). *(Entry processing ready; digest generation not yet implemented — see [Implementation Status](#implementation-status).)*
+   * **Coach:** Activated when the Critic identifies significant patterns — whether problematic (crashes, ruts) or positive (sustained alignment). Reads the user's full journal history via **full-context prompting** (at POC scale, all entries fit in the LLM context window) to surface thematic evidence, explain *why* misalignment occurred, and offer reflective prompts or "micro-anchors." For positive patterns, provides occasional evidence-based acknowledgment without gamification. At production scale with longer histories, this would transition to retrieval-augmented generation (RAG). (See [System Architecture](vif/02_system_architecture.md)). For a concrete scenario, see [Worked Example: Sarah's Journey](vif/example.md). *(The weekly digest/runtime bridge now exists, but trigger calibration and evaluation are still experimental — see [Implementation Status](#implementation-status).)*
    * A **[Value Evolution Detection](evolution/01_value_evolution.md)** layer is designed to sit between Critic outputs and drift triggers, classifying per-dimension divergence as STABLE, EVOLUTION, or DRIFT. This distinguishes genuine value shifts (sustained, low-volatility) from behavioral drift (volatile, inconsistent), reducing false-positive rut alerts when a user's priorities have genuinely changed.
 
 ### Prompt Templates
@@ -249,6 +251,7 @@ This avoids the trap of matching windows "for consistency" when the constraints 
 | [pipeline_specs.md](pipeline/pipeline_specs.md) | Synthetic data pipeline design and rationale |
 | [claude_gen_instructions.md](pipeline/claude_gen_instructions.md) | Parallel subagent generation workflow |
 | [claude_judge_instructions.md](pipeline/claude_judge_instructions.md) | Judge labeling workflow (wrangling + scoring) |
+| [judge_reachability_audit_instructions.md](pipeline/judge_reachability_audit_instructions.md) | LLM-agnostic workflow for the twinkl-747 reachability audit |
 | [annotation_guidelines.md](pipeline/annotation_guidelines.md) | Human annotation for nudge effectiveness study |
 | [annotation_tool_plan.md](pipeline/annotation_tool_plan.md) | Shiny annotation tool implementation plan |
 | [nudge_design_rationale.md](pipeline/nudge_design_rationale.md) | Nudge validation plan and design rationale |

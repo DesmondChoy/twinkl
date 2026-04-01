@@ -153,6 +153,23 @@ Open `http://127.0.0.1:8000` in your browser.
 - `src/annotation_tool/state.py` — Centralized state management
 - `docs/pipeline/annotation_tool_plan.md` — Full implementation plan
 
+## Demo Review App — 🧪 Experimental
+
+A sibling Shiny app for showcasing the end-to-end runtime flow on top of existing wrangled personas and local Critic checkpoints. It lets you browse persona details, read the full journal timeline, choose a checkpoint, run the live Critic -> drift -> weekly digest cycle, and inspect the resulting artifacts in one place.
+
+**Run the app:**
+```sh
+shiny run src/demo_tool/app.py
+```
+
+Open `http://127.0.0.1:8000` in your browser when running via `shiny run`, or `http://127.0.0.1:8001` when launching the file directly with Python.
+
+**Key files:**
+- `src/demo_tool/app.py` — Main Shiny demo application
+- `src/demo_tool/data_loader.py` — Persona catalog and chronological timeline loading
+- `src/demo_tool/runtime_bridge.py` — Checkpoint discovery and weekly Coach runtime wrapper
+- `src/demo_tool/state.py` — Centralized reactive UI state
+
 ## Evaluation Pipeline — ⚠️ Partial
 
 Sequential validation pipeline for the VIF with four stages:
@@ -237,6 +254,28 @@ Dependencies are declared in `pyproject.toml` and pinned in `uv.lock`.
   ```sh
   uv sync --dev
   ```
+
+## Running tests
+
+Install the dev dependencies first:
+
+```sh
+uv sync --group dev
+```
+
+Run the full pytest suite:
+
+```sh
+uv run pytest
+```
+
+Run the deterministic local end-to-end smoke pipeline only:
+
+```sh
+uv run pytest tests/e2e -q
+```
+
+This smoke test exercises the offline path `synthetic_data -> wrangled markdown -> consolidated judge labels -> VIF training` using tiny local fixtures and a mock text encoder, so it does not require live LLM calls.
 
 ## Adding a dependency
 

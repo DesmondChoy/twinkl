@@ -499,8 +499,11 @@ def test_prepare_consensus_bundle_is_deterministic_and_strips_profile_history(tm
     assert "Alicia is careful with routines" not in second_entry["prompt"]
     assert "## Recent Entries" not in second_entry["prompt"]
     assert "Core Values (from profile):** Security, Benevolence" in second_entry["prompt"]
-    assert 'Nudge: "Did you resent missing the evening?"' in second_entry["prompt"]
-    assert "Response: Not really. It felt useful, even if I was tired." in second_entry["prompt"]
+    assert '**Nudge:** "Did you resent missing the evening?"' in second_entry["prompt"]
+    assert (
+        "**Response:** Not really. It felt useful, even if I was tired."
+        in second_entry["prompt"]
+    )
 
     bundle_status = json.loads((output_dir / "bundle_status.json").read_text(encoding="utf-8"))
     assert bundle_status["status"] == "prepared"
