@@ -420,6 +420,72 @@ Confidence breakdown:
 | universalism | 0 | 1 | 8 |
 | universalism | 1 | 0 | 18 |
 
-## 11. Recommendation
+## 11. Retrain Comparison
 
-Eligible for retrain comparison under full-corpus stability criteria.
+The full-corpus stability gate passed, so the retrain comparison was run with
+the run-specific configs `config/experiments/vif/twinkl_754_seed11.yaml`,
+`config/experiments/vif/twinkl_754_seed22.yaml`, and
+`config/experiments/vif/twinkl_754_seed33.yaml`. Each config overrides
+`data.labels_path` to `logs/judge_labels/consensus_labels.parquet` without
+editing the repo default `config/vif.yaml`. The three seeded retrains produced
+`run_048`-`run_050` `BalancedSoftmax` on the fixed holdout with seeds
+`11 / 22 / 33`.
+
+The required primary comparison is against incumbent `run_019`-`run_021`.
+Because that incumbent family predates the later `1,651`-row dataset refresh,
+its training split is `1,022` rows rather than the `1,213` rows used by both
+the refreshed persisted-label family `run_025`-`run_027` and the consensus
+family `run_048`-`run_050`. Treat the `run_019`-`run_021` deltas below as the
+requested baseline comparison, not a pure label-only ablation. The refreshed
+persisted-label family is included as advisory same-size context. One further
+warning matters: this retrain path also changed the evaluation labels on the
+same fixed holdout, so the aggregate metric deltas below are diagnostic rather
+than a strict leaderboard replacement for the persisted-label board.
+
+| Family | Train rows | Labels | qwk_mean | recall_-1 | minority recall | hedging | calibration |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `run_019`-`run_021` baseline | 1022 | persisted | 0.362 | 0.313 | 0.448 | 0.621 | 0.713 |
+| `run_025`-`run_027` refreshed persisted (advisory) | 1213 | persisted | 0.346 | 0.328 | 0.442 | 0.598 | 0.693 |
+| `run_048`-`run_050` consensus | 1213 | consensus | 0.372 | 0.270 | 0.408 | 0.655 | 0.770 |
+
+Seed-aligned comparison versus the requested incumbent baseline:
+
+| Seed | Baseline run | Consensus run | Δ qwk_mean | Δ recall_-1 | Δ minority recall | Δ hedging | Δ calibration |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 11 | `run_019` | `run_048` | +0.010 | -0.017 | -0.010 | +0.014 | +0.051 |
+| 22 | `run_020` | `run_049` | -0.009 | -0.072 | -0.042 | +0.067 | +0.057 |
+| 33 | `run_021` | `run_050` | +0.034 | +0.025 | +0.032 | +0.058 | +0.070 |
+
+Hard-dimension QWK outcome versus the incumbent family:
+
+| Dimension | `run_019`-`run_021` median | `run_048`-`run_050` median | Δ median | `run_019`-`run_021` ceiling | `run_048`-`run_050` ceiling | Δ ceiling |
+| --- | --- | --- | --- | --- | --- | --- |
+| security | 0.297 | 0.247 | -0.051 | 0.338 | 0.278 | -0.059 |
+| hedonism | 0.247 | 0.104 | -0.143 | 0.262 | 0.108 | -0.153 |
+| stimulation | 0.161 | 0.340 | +0.179 | 0.303 | 0.406 | +0.104 |
+
+Advisory same-size read versus `run_025`-`run_027`: consensus labels recover
+aggregate `qwk_mean` (`0.372` vs `0.346`) and calibration (`0.770` vs `0.693`)
+and strongly lift `stimulation qwk` (`0.340` vs `0.186` median) while modestly
+helping `security qwk` (`0.247` vs `0.199` median). But they materially worsen
+`hedonism qwk` (`0.104` vs `0.256` median), `recall_-1` (`0.270` vs `0.328`),
+minority recall (`0.408` vs `0.442`), and hedging (`0.655` vs `0.598`).
+
+## 12. Recommendation
+
+The stability-first retrain gate passed and the retrain comparison is now
+complete, but the consensus-label family does not deliver a clean
+hard-dimension ceiling lift. Relative to the requested incumbent baseline
+`run_019`-`run_021`, it improves aggregate `qwk_mean` slightly (`0.372` vs
+`0.362`) and materially improves `stimulation`, yet it weakens `security` and
+especially `hedonism`, while also giving back `recall_-1`, minority recall, and
+decisiveness.
+
+Treat this as a mixed or negative diagnostic result rather than a promotion
+case. The evidence is good enough to say the full-corpus stability gate was not
+too loose, because the retrain could be run safely and the resulting branch can
+be audited. But it is **not** a clean frontier replacement for the persisted
+label regime, and it is not strong enough to claim that hard consensus labels
+improve the hard-dimension ceiling overall. If this line is revisited,
+`hedonism` remains the clearest blocker, and a same-code persisted-label sibling
+rerun should be established first.

@@ -70,3 +70,10 @@
   explicitly: how many entries and personas are in the overlap, how many are
   excluded, and that the metric is computed on the intersection only rather than
   the full dataset.
+
+## 2026-04-01
+
+- When a repo-local skill is the required workflow for a task, run it before
+  closing the issue or epic and before reporting conclusions. Do not rely on
+  “roughly equivalent” manual analysis and wait for the user to notice the
+  missing workflow step.
