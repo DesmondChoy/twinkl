@@ -9,6 +9,7 @@ import math
 import sys
 from pathlib import Path
 
+import numpy as np
 import polars as pl
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -39,7 +40,32 @@ HUMAN_FLEISS_BASELINES = {
     "hedonism": 0.64,
     "stimulation": 0.58,
 }
+LOW_CONFIDENCE_TIERS = ("bare_majority", "no_majority")
+BOOTSTRAP_REPLICATES = 2000
+BOOTSTRAP_SEED = 42
 N_PASSES = 5
+STABILITY_METRICS = (
+    "n_entries",
+    "n_non_neutral_entries",
+    "non_unanimous_rate_all",
+    "mean_vote_entropy_all",
+    "polarity_flip_rate_all",
+    "low_confidence_non_neutral_ratio",
+    "non_unanimous_rate_non_neutral",
+    "mean_vote_entropy_non_neutral",
+    "polarity_flip_rate_non_neutral",
+)
+PERSONA_AGG_COLUMNS = (
+    "n_entries",
+    "n_non_neutral_entries",
+    "non_unanimous_count_all",
+    "vote_entropy_sum_all",
+    "polarity_flip_count_all",
+    "low_confidence_non_neutral_count",
+    "non_unanimous_count_non_neutral",
+    "vote_entropy_sum_non_neutral",
+    "polarity_flip_count_non_neutral",
+)
 
 
 def _load_manifest(bundle_dir: Path) -> pl.DataFrame:
@@ -51,10 +77,6 @@ def _load_manifest(bundle_dir: Path) -> pl.DataFrame:
 
 def _manifest_entry_ids(manifest: pl.DataFrame) -> list[str]:
     return manifest["entry_id"].to_list()
-
-
-def _is_valid_kappa(value: object) -> bool:
-    return isinstance(value, int | float) and not math.isnan(float(value))
 
 
 def _validate_pass_results(
@@ -237,16 +259,33 @@ def _resolve_votes(votes: list[int]) -> tuple[int, str, int]:
     return consensus_label, tier, winning_count
 
 
-def _load_human_majority_wide(annotations_dir: Path) -> pl.DataFrame:
+def _empty_alignment_wide_frame() -> pl.DataFrame:
+    return pl.DataFrame(
+        schema={
+            "persona_id": pl.Utf8,
+            "t_index": pl.Int64,
+            **{f"alignment_{value_name}": pl.Int64 for value_name in SCHWARTZ_VALUE_ORDER},
+        }
+    )
+
+
+def _load_human_benchmark(
+    annotations_dir: Path,
+    *,
+    full_corpus_entry_count: int,
+) -> tuple[pl.DataFrame, dict[str, int]]:
     parquet_files = sorted(annotations_dir.glob("*.parquet"))
+    summary = {
+        "annotator_file_count": len(parquet_files),
+        "union_entry_count": 0,
+        "union_persona_count": 0,
+        "strict_overlap_entry_count": 0,
+        "strict_overlap_persona_count": 0,
+        "single_annotated_entry_count": 0,
+        "excluded_full_corpus_entry_count": full_corpus_entry_count,
+    }
     if not parquet_files:
-        return pl.DataFrame(
-            schema={
-                "persona_id": pl.Utf8,
-                "t_index": pl.Int64,
-                **{f"alignment_{value_name}": pl.Int64 for value_name in SCHWARTZ_VALUE_ORDER},
-            }
-        )
+        return _empty_alignment_wide_frame(), summary
 
     annotations = pl.concat([pl.read_parquet(path) for path in parquet_files], how="vertical")
     expected_annotators = len(parquet_files)
@@ -259,17 +298,30 @@ def _load_human_majority_wide(annotations_dir: Path) -> pl.DataFrame:
             for value_name in SCHWARTZ_VALUE_ORDER
         ]
     )
-    shared = grouped.filter(pl.col("annotator_count") == expected_annotators)
-    if shared.height == 0:
-        return pl.DataFrame(
-            schema={
-                "persona_id": pl.Utf8,
-                "t_index": pl.Int64,
-                **{f"alignment_{value_name}": pl.Int64 for value_name in SCHWARTZ_VALUE_ORDER},
-            }
-        )
+    union = annotations.select(["persona_id", "t_index"]).unique()
+    strict_overlap = grouped.filter(pl.col("annotator_count") == expected_annotators)
 
-    return shared.select(
+    summary.update(
+        {
+            "union_entry_count": int(union.height),
+            "union_persona_count": int(union.select("persona_id").n_unique()),
+            "strict_overlap_entry_count": int(strict_overlap.height),
+            "strict_overlap_persona_count": int(
+                strict_overlap.select("persona_id").n_unique()
+            ),
+            "single_annotated_entry_count": int(
+                grouped.filter(pl.col("annotator_count") == 1).height
+            ),
+            "excluded_full_corpus_entry_count": max(
+                0,
+                full_corpus_entry_count - int(strict_overlap.height),
+            ),
+        }
+    )
+    if strict_overlap.height == 0:
+        return _empty_alignment_wide_frame(), summary
+
+    majority_wide = strict_overlap.select(
         ["persona_id", "t_index"]
         + [
             pl.col(f"votes_{value_name}")
@@ -278,7 +330,8 @@ def _load_human_majority_wide(annotations_dir: Path) -> pl.DataFrame:
             .alias(f"alignment_{value_name}")
             for value_name in SCHWARTZ_VALUE_ORDER
         ]
-    )
+    ).sort(["persona_id", "t_index"])
+    return majority_wide, summary
 
 
 def _build_wide_label_frame(rows: list[dict]) -> pl.DataFrame:
@@ -473,6 +526,7 @@ def _build_irr_summary(
                     if value_name in HUMAN_FLEISS_BASELINES
                     else None
                 ),
+                "decision_role": "informational",
             }
         )
         rows.append(
@@ -481,6 +535,7 @@ def _build_irr_summary(
                 "dimension": value_name,
                 "value": consensus_vs_persisted.get(value_name),
                 "reference": None,
+                "decision_role": "informational",
             }
         )
         rows.append(
@@ -489,6 +544,7 @@ def _build_irr_summary(
                 "dimension": value_name,
                 "value": consensus_vs_human.get(value_name),
                 "reference": persisted_vs_human.get(value_name),
+                "decision_role": "advisory_only",
             }
         )
         rows.append(
@@ -497,6 +553,7 @@ def _build_irr_summary(
                 "dimension": value_name,
                 "value": persisted_vs_human.get(value_name),
                 "reference": None,
+                "decision_role": "advisory_only",
             }
         )
 
@@ -506,6 +563,7 @@ def _build_irr_summary(
             "dimension": "aggregate",
             "value": fleiss.get("n_shared"),
             "reference": None,
+            "decision_role": "informational",
         }
     )
     return (
@@ -516,47 +574,250 @@ def _build_irr_summary(
     )
 
 
-def _evaluate_gate(comparison_rows: pl.DataFrame, *, consensus_vs_human: dict[str, float], persisted_vs_human: dict[str, float]) -> dict:
-    aggregate_consensus = consensus_vs_human.get("aggregate")
-    aggregate_persisted = persisted_vs_human.get("aggregate")
-    agreement_passed = (
-        _is_valid_kappa(aggregate_consensus)
-        and _is_valid_kappa(aggregate_persisted)
-        and aggregate_consensus >= aggregate_persisted
+def _vote_entropy(votes: list[int]) -> float:
+    counts = np.asarray(
+        [
+            sum(vote == -1 for vote in votes),
+            sum(vote == 0 for vote in votes),
+            sum(vote == 1 for vote in votes),
+        ],
+        dtype=np.float64,
+    )
+    probabilities = counts[counts > 0] / float(len(votes))
+    return float(-(probabilities * np.log2(probabilities)).sum())
+
+
+def _ratio_array(
+    numerator: np.ndarray,
+    denominator: np.ndarray,
+    *,
+    missing_if_zero: bool = False,
+) -> np.ndarray:
+    result = np.full(
+        numerator.shape,
+        np.nan if missing_if_zero else 0.0,
+        dtype=np.float64,
+    )
+    valid = denominator > 0
+    result[valid] = numerator[valid] / denominator[valid]
+    return result
+
+
+def _compute_metric_arrays(total_matrix: np.ndarray) -> dict[str, np.ndarray]:
+    n_entries = total_matrix[:, 0]
+    n_non_neutral_entries = total_matrix[:, 1]
+    return {
+        "n_entries": n_entries.astype(np.float64),
+        "n_non_neutral_entries": n_non_neutral_entries.astype(np.float64),
+        "non_unanimous_rate_all": _ratio_array(total_matrix[:, 2], n_entries),
+        "mean_vote_entropy_all": _ratio_array(total_matrix[:, 3], n_entries),
+        "polarity_flip_rate_all": _ratio_array(total_matrix[:, 4], n_entries),
+        "low_confidence_non_neutral_ratio": _ratio_array(
+            total_matrix[:, 5],
+            n_non_neutral_entries,
+            missing_if_zero=True,
+        ),
+        "non_unanimous_rate_non_neutral": _ratio_array(
+            total_matrix[:, 6],
+            n_non_neutral_entries,
+            missing_if_zero=True,
+        ),
+        "mean_vote_entropy_non_neutral": _ratio_array(
+            total_matrix[:, 7],
+            n_non_neutral_entries,
+            missing_if_zero=True,
+        ),
+        "polarity_flip_rate_non_neutral": _ratio_array(
+            total_matrix[:, 8],
+            n_non_neutral_entries,
+            missing_if_zero=True,
+        ),
+    }
+
+
+def _bootstrap_interval(values: np.ndarray) -> tuple[float, float]:
+    finite_values = values[np.isfinite(values)]
+    if finite_values.size == 0:
+        return float("nan"), float("nan")
+    lower, upper = np.quantile(finite_values, [0.025, 0.975])
+    return float(lower), float(upper)
+
+
+def _build_stability_summary(comparison_rows: pl.DataFrame) -> pl.DataFrame:
+    feature_rows: list[dict] = []
+    for row in comparison_rows.sort(["dimension", "persona_id", "t_index"]).to_dicts():
+        votes = [int(row[f"pass_{pass_index}_label"]) for pass_index in range(1, N_PASSES + 1)]
+        non_neutral = int(row["consensus_label"]) != 0
+        low_confidence = row["confidence_tier"] in LOW_CONFIDENCE_TIERS
+        has_positive = any(vote == 1 for vote in votes)
+        has_negative = any(vote == -1 for vote in votes)
+        feature_rows.append(
+            {
+                "dimension": row["dimension"],
+                "persona_id": row["persona_id"],
+                "non_neutral": non_neutral,
+                "low_confidence_non_neutral": non_neutral and low_confidence,
+                "non_unanimous": len(set(votes)) > 1,
+                "vote_entropy": _vote_entropy(votes),
+                "polarity_flip": has_positive and has_negative,
+            }
+        )
+
+    feature_frame = pl.DataFrame(feature_rows)
+    persona_aggregates = feature_frame.group_by(["dimension", "persona_id"]).agg(
+        [
+            pl.len().alias("n_entries"),
+            pl.col("non_neutral").sum().alias("n_non_neutral_entries"),
+            pl.col("non_unanimous").sum().alias("non_unanimous_count_all"),
+            pl.col("vote_entropy").sum().alias("vote_entropy_sum_all"),
+            pl.col("polarity_flip").sum().alias("polarity_flip_count_all"),
+            pl.col("low_confidence_non_neutral").sum().alias(
+                "low_confidence_non_neutral_count"
+            ),
+            (pl.col("non_unanimous") & pl.col("non_neutral")).sum().alias(
+                "non_unanimous_count_non_neutral"
+            ),
+            pl.when(pl.col("non_neutral"))
+            .then(pl.col("vote_entropy"))
+            .otherwise(0.0)
+            .sum()
+            .alias("vote_entropy_sum_non_neutral"),
+            (pl.col("polarity_flip") & pl.col("non_neutral")).sum().alias(
+                "polarity_flip_count_non_neutral"
+            ),
+        ]
     )
 
+    persona_ids = sorted(persona_aggregates["persona_id"].unique().to_list())
+    if not persona_ids:
+        return pl.DataFrame(
+            schema={
+                "dimension": pl.Utf8,
+                "difficulty_rank": pl.Int64,
+                **{
+                    f"{metric}_{suffix}": pl.Float64
+                    for metric in STABILITY_METRICS
+                    for suffix in ("point", "ci_lo", "ci_hi")
+                },
+            }
+        )
+
+    rng = np.random.default_rng(BOOTSTRAP_SEED)
+    bootstrap_indices = rng.integers(
+        0,
+        len(persona_ids),
+        size=(BOOTSTRAP_REPLICATES, len(persona_ids)),
+    )
+
+    rows: list[dict] = []
+    for value_name in SCHWARTZ_VALUE_ORDER:
+        dimension_aggregates = (
+            pl.DataFrame({"persona_id": persona_ids})
+            .join(
+                persona_aggregates.filter(pl.col("dimension") == value_name),
+                on="persona_id",
+                how="left",
+            )
+            .with_columns(
+                [pl.col(column).fill_null(0).alias(column) for column in PERSONA_AGG_COLUMNS]
+            )
+        )
+        totals = (
+            dimension_aggregates.select(list(PERSONA_AGG_COLUMNS))
+            .to_numpy()
+            .astype(np.float64)
+        )
+        observed_totals = totals.sum(axis=0, keepdims=True)
+        bootstrap_totals = totals[bootstrap_indices].sum(axis=1)
+
+        observed_metrics = _compute_metric_arrays(observed_totals)
+        bootstrap_metrics = _compute_metric_arrays(bootstrap_totals)
+
+        summary_row: dict[str, object] = {"dimension": value_name}
+        for metric_name in STABILITY_METRICS:
+            summary_row[f"{metric_name}_point"] = float(observed_metrics[metric_name][0])
+            ci_lo, ci_hi = _bootstrap_interval(bootstrap_metrics[metric_name])
+            summary_row[f"{metric_name}_ci_lo"] = ci_lo
+            summary_row[f"{metric_name}_ci_hi"] = ci_hi
+        rows.append(summary_row)
+
+    ranked_rows = sorted(
+        rows,
+        key=lambda row: (
+            not math.isfinite(float(row["mean_vote_entropy_non_neutral_point"])),
+            -float(row["mean_vote_entropy_non_neutral_point"])
+            if math.isfinite(float(row["mean_vote_entropy_non_neutral_point"]))
+            else 0.0,
+            str(row["dimension"]),
+        ),
+    )
+    for rank, row in enumerate(ranked_rows, start=1):
+        row["difficulty_rank"] = rank
+
+    return pl.DataFrame(ranked_rows)
+
+
+def _evaluate_gate(stability_summary: pl.DataFrame) -> dict:
     hard_rows: list[dict] = []
-    confidence_passed = True
+    stability_gate_passed = True
+
     for value_name in HARD_DIMENSIONS:
-        subset = comparison_rows.filter(pl.col("dimension") == value_name)
-        non_neutral = subset.filter(pl.col("consensus_label") != 0)
-        low_confidence = non_neutral.filter(
-            pl.col("confidence_tier").is_in(["bare_majority", "no_majority"])
-        )
-        ratio = (
-            float(low_confidence.height) / float(non_neutral.height)
-            if non_neutral.height > 0
-            else 0.0
-        )
-        passes = ratio < 0.5
-        confidence_passed = confidence_passed and passes
+        row = stability_summary.filter(pl.col("dimension") == value_name).to_dicts()[0]
+        ci_hi = float(row["low_confidence_non_neutral_ratio_ci_hi"])
+        passes = math.isfinite(ci_hi) and ci_hi < 0.5
+        stability_gate_passed = stability_gate_passed and passes
         hard_rows.append(
             {
                 "dimension": value_name,
-                "non_neutral_count": non_neutral.height,
-                "low_confidence_count": low_confidence.height,
-                "low_confidence_ratio": ratio,
+                "n_non_neutral_entries": int(round(float(row["n_non_neutral_entries_point"]))),
+                "low_confidence_non_neutral_ratio_point": float(
+                    row["low_confidence_non_neutral_ratio_point"]
+                ),
+                "low_confidence_non_neutral_ratio_ci_lo": float(
+                    row["low_confidence_non_neutral_ratio_ci_lo"]
+                ),
+                "low_confidence_non_neutral_ratio_ci_hi": ci_hi,
+                "non_unanimous_rate_non_neutral_point": float(
+                    row["non_unanimous_rate_non_neutral_point"]
+                ),
+                "non_unanimous_rate_non_neutral_ci_lo": float(
+                    row["non_unanimous_rate_non_neutral_ci_lo"]
+                ),
+                "non_unanimous_rate_non_neutral_ci_hi": float(
+                    row["non_unanimous_rate_non_neutral_ci_hi"]
+                ),
+                "mean_vote_entropy_non_neutral_point": float(
+                    row["mean_vote_entropy_non_neutral_point"]
+                ),
+                "mean_vote_entropy_non_neutral_ci_lo": float(
+                    row["mean_vote_entropy_non_neutral_ci_lo"]
+                ),
+                "mean_vote_entropy_non_neutral_ci_hi": float(
+                    row["mean_vote_entropy_non_neutral_ci_hi"]
+                ),
+                "polarity_flip_rate_non_neutral_point": float(
+                    row["polarity_flip_rate_non_neutral_point"]
+                ),
+                "polarity_flip_rate_non_neutral_ci_lo": float(
+                    row["polarity_flip_rate_non_neutral_ci_lo"]
+                ),
+                "polarity_flip_rate_non_neutral_ci_hi": float(
+                    row["polarity_flip_rate_non_neutral_ci_hi"]
+                ),
                 "passes": passes,
             }
         )
 
+    recommendation = (
+        "Eligible for retrain comparison under full-corpus stability criteria."
+        if stability_gate_passed
+        else "Hold retrain until full-corpus stability improves."
+    )
     return {
-        "agreement_passed": agreement_passed,
-        "confidence_passed": confidence_passed,
-        "overall_passed": agreement_passed and confidence_passed,
-        "aggregate_consensus_vs_human": aggregate_consensus,
-        "aggregate_persisted_vs_human": aggregate_persisted,
+        "stability_gate_passed": stability_gate_passed,
+        "overall_passed": stability_gate_passed,
         "hard_dimension_rows": hard_rows,
+        "recommendation": recommendation,
     }
 
 
@@ -582,15 +843,31 @@ def _fmt_float(value: object) -> str:
     return str(value)
 
 
+def _fmt_count(value: object) -> str:
+    if value is None:
+        return "N/A"
+    if isinstance(value, int | float):
+        if math.isnan(float(value)):
+            return "N/A"
+        return str(int(round(float(value))))
+    return str(value)
+
+
+def _fmt_interval(point: object, ci_lo: object, ci_hi: object) -> str:
+    return f"{_fmt_float(point)} [{_fmt_float(ci_lo)}, {_fmt_float(ci_hi)}]"
+
+
 def build_report(
     *,
     manifest: pl.DataFrame,
     flip_summary: pl.DataFrame,
     confidence_summary: pl.DataFrame,
     irr_summary: pl.DataFrame,
+    stability_summary: pl.DataFrame,
     joined_results: pl.DataFrame,
     comparison_rows: pl.DataFrame,
     gate_summary: dict,
+    human_benchmark_summary: dict[str, int],
     pass_provenance: pl.DataFrame,
     pass_similarity: pl.DataFrame,
     bundle_status: dict | None = None,
@@ -629,6 +906,7 @@ def build_report(
             f"- Passes: `{N_PASSES}`",
             f"- Personas: `{manifest.select('persona_id').n_unique()}`",
             f"- Worker model: `{', '.join(worker_models)}`",
+            f"- Stability bootstrap: `{BOOTSTRAP_REPLICATES}` persona-cluster resamples, seed `{BOOTSTRAP_SEED}`",
             "",
             "## 1. Judge Repeated-Call Self-Consistency",
             "",
@@ -718,7 +996,32 @@ def build_report(
     lines.extend(
         [
             "",
-            "## 3. Consensus vs Human",
+            "## 3. Human-Overlap Benchmark (Advisory)",
+            "",
+            (
+                "These kappas are a limited non-expert human-overlap benchmark. "
+                "They are advisory only and do not act as the hard retrain gate."
+            ),
+            "",
+            f"- Annotator files loaded: `{human_benchmark_summary['annotator_file_count']}`",
+            (
+                "- Union coverage: "
+                f"`{human_benchmark_summary['union_entry_count']}` unique annotated entries across "
+                f"`{human_benchmark_summary['union_persona_count']}` personas"
+            ),
+            (
+                "- Strict 3-way overlap used for comparison: "
+                f"`{human_benchmark_summary['strict_overlap_entry_count']}` entries across "
+                f"`{human_benchmark_summary['strict_overlap_persona_count']}` personas"
+            ),
+            (
+                "- Singly annotated entries excluded from majority aggregation: "
+                f"`{human_benchmark_summary['single_annotated_entry_count']}`"
+            ),
+            (
+                "- Full-corpus entries outside the overlap excluded from the human benchmark: "
+                f"`{human_benchmark_summary['excluded_full_corpus_entry_count']}`"
+            ),
             "",
         ]
     )
@@ -737,7 +1040,11 @@ def build_report(
         )
     lines.append(
         _format_table(
-            ["Dimension", "Consensus vs human", "Persisted vs human"],
+            [
+                "Dimension",
+                "Consensus vs human overlap (advisory)",
+                "Persisted vs human overlap (advisory)",
+            ],
             human_rows,
         )
     )
@@ -825,22 +1132,38 @@ def build_report(
     lines.extend(
         [
             "",
-            "## 6. Hard-Dimension Gate",
+            "## 6. Full-Corpus Stability Gate",
             "",
-            f"- Aggregate consensus-vs-human kappa: `{_fmt_float(gate_summary['aggregate_consensus_vs_human'])}`",
-            f"- Aggregate persisted-vs-human kappa: `{_fmt_float(gate_summary['aggregate_persisted_vs_human'])}`",
-            f"- Agreement gate passed: `{gate_summary['agreement_passed']}`",
-            f"- Confidence gate passed: `{gate_summary['confidence_passed']}`",
-            f"- Overall retrain gate passed: `{gate_summary['overall_passed']}`",
+            (
+                "This is the hard retrain gate. It uses full-corpus stability only: "
+                "the upper 95% CI of `low_confidence_non_neutral_ratio` must stay below "
+                "`0.5` for `security`, `hedonism`, and `stimulation`."
+            ),
+            "",
+            (
+                "The human-overlap benchmark above remains advisory and limited-sample; "
+                "it is not used in this go/no-go decision."
+            ),
+            "",
+            f"- Full-corpus stability gate passed: `{gate_summary['stability_gate_passed']}`",
+            f"- Retrain readiness summary: `{gate_summary['recommendation']}`",
             "",
         ]
     )
     hard_rows = [
         [
             row["dimension"],
-            str(int(row["non_neutral_count"])),
-            str(int(row["low_confidence_count"])),
-            f"{row['low_confidence_ratio']:.3f}",
+            str(int(row["n_non_neutral_entries"])),
+            _fmt_interval(
+                row["low_confidence_non_neutral_ratio_point"],
+                row["low_confidence_non_neutral_ratio_ci_lo"],
+                row["low_confidence_non_neutral_ratio_ci_hi"],
+            ),
+            _fmt_interval(
+                row["mean_vote_entropy_non_neutral_point"],
+                row["mean_vote_entropy_non_neutral_ci_lo"],
+                row["mean_vote_entropy_non_neutral_ci_hi"],
+            ),
             str(row["passes"]),
         ]
         for row in gate_summary["hard_dimension_rows"]
@@ -850,8 +1173,8 @@ def build_report(
             [
                 "Dimension",
                 "Non-neutral labels",
-                "Bare/no-majority labels",
-                "Low-confidence ratio",
+                "Low-confidence ratio (95% CI)",
+                "Mean vote entropy (95% CI)",
                 "Passes",
             ],
             hard_rows,
@@ -860,7 +1183,74 @@ def build_report(
     lines.extend(
         [
             "",
-            "## 7. Hard-Dimension Deep Dive",
+            "## 7. Per-Dimension Stability",
+            "",
+            (
+                "Dimensions are ranked by `mean_vote_entropy_non_neutral` point estimate "
+                "from highest to lowest. The 95% CIs below show uncertainty around the "
+                "estimate; they are not the difficulty ranking itself."
+            ),
+            "",
+        ]
+    )
+    stability_rows = []
+    for row in stability_summary.sort("difficulty_rank").to_dicts():
+        stability_rows.append(
+            [
+                str(int(row["difficulty_rank"])),
+                row["dimension"],
+                _fmt_count(row["n_non_neutral_entries_point"]),
+                _fmt_interval(
+                    row["mean_vote_entropy_non_neutral_point"],
+                    row["mean_vote_entropy_non_neutral_ci_lo"],
+                    row["mean_vote_entropy_non_neutral_ci_hi"],
+                ),
+                _fmt_interval(
+                    row["non_unanimous_rate_non_neutral_point"],
+                    row["non_unanimous_rate_non_neutral_ci_lo"],
+                    row["non_unanimous_rate_non_neutral_ci_hi"],
+                ),
+                _fmt_interval(
+                    row["polarity_flip_rate_non_neutral_point"],
+                    row["polarity_flip_rate_non_neutral_ci_lo"],
+                    row["polarity_flip_rate_non_neutral_ci_hi"],
+                ),
+                _fmt_interval(
+                    row["low_confidence_non_neutral_ratio_point"],
+                    row["low_confidence_non_neutral_ratio_ci_lo"],
+                    row["low_confidence_non_neutral_ratio_ci_hi"],
+                ),
+            ]
+        )
+    lines.append(
+        _format_table(
+            [
+                "Rank",
+                "Dimension",
+                "Non-neutral labels",
+                "Mean vote entropy (95% CI)",
+                "Non-unanimous rate (95% CI)",
+                "Polarity-flip rate (95% CI)",
+                "Low-confidence ratio (95% CI)",
+            ],
+            stability_rows,
+        )
+    )
+    lines.extend(["", "Hard-dimension callouts:", ""])
+    for row in gate_summary["hard_dimension_rows"]:
+        lines.append(
+            (
+                f"- `{row['dimension']}`: low-confidence ratio "
+                f"`{_fmt_interval(row['low_confidence_non_neutral_ratio_point'], row['low_confidence_non_neutral_ratio_ci_lo'], row['low_confidence_non_neutral_ratio_ci_hi'])}`; "
+                f"mean vote entropy "
+                f"`{_fmt_interval(row['mean_vote_entropy_non_neutral_point'], row['mean_vote_entropy_non_neutral_ci_lo'], row['mean_vote_entropy_non_neutral_ci_hi'])}`; "
+                f"gate pass=`{row['passes']}`"
+            )
+        )
+    lines.extend(
+        [
+            "",
+            "## 8. Hard-Dimension Deep Dive",
             "",
         ]
     )
@@ -881,12 +1271,25 @@ def build_report(
                 f"### {value_name}",
                 "",
                 (
-                    "Persisted-vs-consensus kappa: "
+                    "Full-corpus stability first: "
+                    f"`{hard_gate_row['n_non_neutral_entries']}` non-neutral labels, "
+                    "mean vote entropy "
+                    f"`{_fmt_interval(hard_gate_row['mean_vote_entropy_non_neutral_point'], hard_gate_row['mean_vote_entropy_non_neutral_ci_lo'], hard_gate_row['mean_vote_entropy_non_neutral_ci_hi'])}`, "
+                    "non-unanimous rate "
+                    f"`{_fmt_interval(hard_gate_row['non_unanimous_rate_non_neutral_point'], hard_gate_row['non_unanimous_rate_non_neutral_ci_lo'], hard_gate_row['non_unanimous_rate_non_neutral_ci_hi'])}`, "
+                    "polarity-flip rate "
+                    f"`{_fmt_interval(hard_gate_row['polarity_flip_rate_non_neutral_point'], hard_gate_row['polarity_flip_rate_non_neutral_ci_lo'], hard_gate_row['polarity_flip_rate_non_neutral_ci_hi'])}`, "
+                    "and low-confidence ratio "
+                    f"`{_fmt_interval(hard_gate_row['low_confidence_non_neutral_ratio_point'], hard_gate_row['low_confidence_non_neutral_ratio_ci_lo'], hard_gate_row['low_confidence_non_neutral_ratio_ci_hi'])}` "
+                    f"(gate pass=`{hard_gate_row['passes']}`)."
+                ),
+                "",
+                (
+                    "Secondary advisory benchmark: persisted-vs-consensus kappa "
                     f"`{_fmt_float(persisted_kappa['value'])}`; "
-                    "consensus-vs-human kappa: "
-                    f"`{_fmt_float(human_kappa['value'])}`; "
-                    "low-confidence non-neutral labels: "
-                    f"`{hard_gate_row['low_confidence_count']}/{hard_gate_row['non_neutral_count']}`."
+                    "consensus-vs-human overlap kappa "
+                    f"`{_fmt_float(human_kappa['value'])}` on the strict "
+                    f"`{human_benchmark_summary['strict_overlap_entry_count']}`-entry advisory subset."
                 ),
                 "",
             ]
@@ -949,7 +1352,7 @@ def build_report(
     lines.extend(
         [
             "",
-            "## 8. Rationale Source Summary",
+            "## 9. Rationale Source Summary",
             "",
             f"- Entries with a perfect 10/10 rationale-source match: `{manifest.height - fallback_rationale_count}`",
             f"- Entries using fallback rationale selection: `{fallback_rationale_count}`",
@@ -973,7 +1376,7 @@ def build_report(
     lines.extend(
         [
             "",
-            "## 9. Label Migration Summary",
+            "## 10. Label Migration Summary",
             "",
         ]
     )
@@ -993,17 +1396,12 @@ def build_report(
         )
     )
 
-    recommendation = (
-        "Proceed to `twinkl-754.6` retraining."
-        if gate_summary["overall_passed"]
-        else "Stop after repeated-call diagnostics review; do not retrain until the gate is addressed."
-    )
     lines.extend(
         [
             "",
-            "## 10. Recommendation",
+            "## 11. Recommendation",
             "",
-            recommendation,
+            gate_summary["recommendation"],
             "",
         ]
     )
@@ -1016,6 +1414,7 @@ def summarize_bundle(
     annotations_dir: Path | None = None,
 ) -> tuple[
     str,
+    pl.DataFrame,
     pl.DataFrame,
     pl.DataFrame,
     pl.DataFrame,
@@ -1059,31 +1458,31 @@ def summarize_bundle(
     comparison_rows = _build_comparison_rows(joined_results)
     flip_summary = _build_flip_summary(comparison_rows)
     confidence_summary = _build_confidence_summary(comparison_rows)
+    stability_summary = _build_stability_summary(comparison_rows)
 
     persisted_wide = _build_persisted_wide(manifest)
     consensus_wide = _build_consensus_wide(consensus_frame)
-    human_majority_wide = _load_human_majority_wide(
-        annotations_dir or (ROOT / "logs" / "annotations")
+    human_majority_wide, human_benchmark_summary = _load_human_benchmark(
+        annotations_dir or (ROOT / "logs" / "annotations"),
+        full_corpus_entry_count=manifest.height,
     )
-    irr_summary, _fleiss, consensus_vs_human, persisted_vs_human = _build_irr_summary(
+    irr_summary, _fleiss, _consensus_vs_human, _persisted_vs_human = _build_irr_summary(
         persisted_wide=persisted_wide,
         consensus_wide=consensus_wide,
         human_majority_wide=human_majority_wide,
         pass_payloads=pass_payloads,
     )
-    gate_summary = _evaluate_gate(
-        comparison_rows,
-        consensus_vs_human=consensus_vs_human,
-        persisted_vs_human=persisted_vs_human,
-    )
+    gate_summary = _evaluate_gate(stability_summary)
     report = build_report(
         manifest=manifest,
         flip_summary=flip_summary,
         confidence_summary=confidence_summary,
         irr_summary=irr_summary,
+        stability_summary=stability_summary,
         joined_results=joined_results,
         comparison_rows=comparison_rows,
         gate_summary=gate_summary,
+        human_benchmark_summary=human_benchmark_summary,
         pass_provenance=pass_provenance,
         pass_similarity=pass_similarity,
         bundle_status=bundle_status,
@@ -1096,6 +1495,7 @@ def summarize_bundle(
         flip_summary,
         confidence_summary,
         irr_summary,
+        stability_summary,
         gate_summary,
     )
 
@@ -1140,6 +1540,7 @@ def main() -> None:
         flip_summary,
         confidence_summary,
         irr_summary,
+        stability_summary,
         _gate_summary,
     ) = summarize_bundle(
         bundle_dir,
@@ -1153,6 +1554,7 @@ def main() -> None:
     flip_summary.write_csv(bundle_dir / "flip_summary.csv")
     confidence_summary.write_csv(bundle_dir / "confidence_summary.csv")
     irr_summary.write_csv(bundle_dir / "irr_summary.csv")
+    stability_summary.write_csv(bundle_dir / "stability_summary.csv")
     consolidate_consensus_labels(
         consensus_frame,
         output_path=Path(args.consensus_output),

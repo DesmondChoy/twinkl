@@ -8,6 +8,7 @@
 - Passes: `5`
 - Personas: `204`
 - Worker model: `gpt-5.4`
+- Stability bootstrap: `2000` persona-cluster resamples, seed `42`
 
 ## 1. Judge Repeated-Call Self-Consistency
 
@@ -133,9 +134,17 @@ Confusion counts:
 | universalism | 1 | 0 | 18 |
 | universalism | 1 | 1 | 141 |
 
-## 3. Consensus vs Human
+## 3. Human-Overlap Benchmark (Advisory)
 
-| Dimension | Consensus vs human | Persisted vs human |
+These kappas are a limited non-expert human-overlap benchmark. They are advisory only and do not act as the hard retrain gate.
+
+- Annotator files loaded: `3`
+- Union coverage: `150` unique annotated entries across `24` personas
+- Strict 3-way overlap used for comparison: `115` entries across `19` personas
+- Singly annotated entries excluded from majority aggregation: `35`
+- Full-corpus entries outside the overlap excluded from the human benchmark: `1536`
+
+| Dimension | Consensus vs human overlap (advisory) | Persisted vs human overlap (advisory) |
 | --- | --- | --- |
 | self_direction | 0.483 | 0.699 |
 | stimulation | 0.714 | 0.763 |
@@ -214,25 +223,51 @@ Pairwise similarity:
 | pass_3 vs pass_5 | False | False | 823 | 828 |
 | pass_4 vs pass_5 | False | False | 832 | 819 |
 
-## 6. Hard-Dimension Gate
+## 6. Full-Corpus Stability Gate
 
-- Aggregate consensus-vs-human kappa: `0.674`
-- Aggregate persisted-vs-human kappa: `0.723`
-- Agreement gate passed: `False`
-- Confidence gate passed: `True`
-- Overall retrain gate passed: `False`
+This is the hard retrain gate. It uses full-corpus stability only: the upper 95% CI of `low_confidence_non_neutral_ratio` must stay below `0.5` for `security`, `hedonism`, and `stimulation`.
 
-| Dimension | Non-neutral labels | Bare/no-majority labels | Low-confidence ratio | Passes |
+The human-overlap benchmark above remains advisory and limited-sample; it is not used in this go/no-go decision.
+
+- Full-corpus stability gate passed: `True`
+- Retrain readiness summary: `Eligible for retrain comparison under full-corpus stability criteria.`
+
+| Dimension | Non-neutral labels | Low-confidence ratio (95% CI) | Mean vote entropy (95% CI) | Passes |
 | --- | --- | --- | --- | --- |
-| security | 432 | 75 | 0.174 | True |
-| hedonism | 316 | 46 | 0.146 | True |
-| stimulation | 163 | 29 | 0.178 | True |
+| security | 432 | 0.174 [0.131, 0.218] | 0.310 [0.255, 0.363] | True |
+| hedonism | 316 | 0.146 [0.104, 0.193] | 0.256 [0.206, 0.317] | True |
+| stimulation | 163 | 0.178 [0.112, 0.255] | 0.280 [0.207, 0.364] | True |
 
-## 7. Hard-Dimension Deep Dive
+## 7. Per-Dimension Stability
+
+Dimensions are ranked by `mean_vote_entropy_non_neutral` point estimate from highest to lowest. The 95% CIs below show uncertainty around the estimate; they are not the difficulty ranking itself.
+
+| Rank | Dimension | Non-neutral labels | Mean vote entropy (95% CI) | Non-unanimous rate (95% CI) | Polarity-flip rate (95% CI) | Low-confidence ratio (95% CI) |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 | power | 258 | 0.312 [0.249, 0.382] | 0.341 [0.274, 0.413] | 0.116 [0.074, 0.161] | 0.217 [0.157, 0.285] |
+| 2 | security | 432 | 0.310 [0.255, 0.363] | 0.361 [0.300, 0.421] | 0.081 [0.052, 0.113] | 0.174 [0.131, 0.218] |
+| 3 | conformity | 389 | 0.298 [0.247, 0.353] | 0.339 [0.281, 0.401] | 0.028 [0.011, 0.048] | 0.170 [0.131, 0.212] |
+| 4 | stimulation | 163 | 0.280 [0.207, 0.364] | 0.319 [0.240, 0.407] | 0.037 [0.006, 0.077] | 0.178 [0.112, 0.255] |
+| 5 | tradition | 256 | 0.272 [0.212, 0.343] | 0.316 [0.246, 0.401] | 0.051 [0.026, 0.082] | 0.156 [0.110, 0.212] |
+| 6 | hedonism | 316 | 0.256 [0.206, 0.317] | 0.301 [0.241, 0.370] | 0.028 [0.011, 0.048] | 0.146 [0.104, 0.193] |
+| 7 | self_direction | 516 | 0.251 [0.208, 0.298] | 0.283 [0.236, 0.334] | 0.037 [0.021, 0.055] | 0.159 [0.123, 0.199] |
+| 8 | benevolence | 538 | 0.249 [0.210, 0.292] | 0.283 [0.242, 0.330] | 0.033 [0.019, 0.050] | 0.162 [0.124, 0.203] |
+| 9 | achievement | 495 | 0.243 [0.201, 0.288] | 0.279 [0.232, 0.328] | 0.030 [0.016, 0.046] | 0.131 [0.100, 0.169] |
+| 10 | universalism | 200 | 0.192 [0.120, 0.278] | 0.215 [0.135, 0.310] | 0.050 [0.011, 0.094] | 0.130 [0.069, 0.208] |
+
+Hard-dimension callouts:
+
+- `security`: low-confidence ratio `0.174 [0.131, 0.218]`; mean vote entropy `0.310 [0.255, 0.363]`; gate pass=`True`
+- `hedonism`: low-confidence ratio `0.146 [0.104, 0.193]`; mean vote entropy `0.256 [0.206, 0.317]`; gate pass=`True`
+- `stimulation`: low-confidence ratio `0.178 [0.112, 0.255]`; mean vote entropy `0.280 [0.207, 0.364]`; gate pass=`True`
+
+## 8. Hard-Dimension Deep Dive
 
 ### security
 
-Persisted-vs-consensus kappa: `0.775`; consensus-vs-human kappa: `0.501`; low-confidence non-neutral labels: `75/432`.
+Full-corpus stability first: `432` non-neutral labels, mean vote entropy `0.310 [0.255, 0.363]`, non-unanimous rate `0.361 [0.300, 0.421]`, polarity-flip rate `0.081 [0.052, 0.113]`, and low-confidence ratio `0.174 [0.131, 0.218]` (gate pass=`True`).
+
+Secondary advisory benchmark: persisted-vs-consensus kappa `0.775`; consensus-vs-human overlap kappa `0.501` on the strict `115`-entry advisory subset.
 
 | Persisted | Consensus | Count |
 | --- | --- | --- |
@@ -257,7 +292,9 @@ Confidence breakdown:
 
 ### hedonism
 
-Persisted-vs-consensus kappa: `0.776`; consensus-vs-human kappa: `0.554`; low-confidence non-neutral labels: `46/316`.
+Full-corpus stability first: `316` non-neutral labels, mean vote entropy `0.256 [0.206, 0.317]`, non-unanimous rate `0.301 [0.241, 0.370]`, polarity-flip rate `0.028 [0.011, 0.048]`, and low-confidence ratio `0.146 [0.104, 0.193]` (gate pass=`True`).
+
+Secondary advisory benchmark: persisted-vs-consensus kappa `0.776`; consensus-vs-human overlap kappa `0.554` on the strict `115`-entry advisory subset.
 
 | Persisted | Consensus | Count |
 | --- | --- | --- |
@@ -281,7 +318,9 @@ Confidence breakdown:
 
 ### stimulation
 
-Persisted-vs-consensus kappa: `0.804`; consensus-vs-human kappa: `0.714`; low-confidence non-neutral labels: `29/163`.
+Full-corpus stability first: `163` non-neutral labels, mean vote entropy `0.280 [0.207, 0.364]`, non-unanimous rate `0.319 [0.240, 0.407]`, polarity-flip rate `0.037 [0.006, 0.077]`, and low-confidence ratio `0.178 [0.112, 0.255]` (gate pass=`True`).
+
+Secondary advisory benchmark: persisted-vs-consensus kappa `0.804`; consensus-vs-human overlap kappa `0.714` on the strict `115`-entry advisory subset.
 
 | Persisted | Consensus | Count |
 | --- | --- | --- |
@@ -303,7 +342,7 @@ Confidence breakdown:
 | unanimous | 1530 | 111 |
 
 
-## 8. Rationale Source Summary
+## 9. Rationale Source Summary
 
 - Entries with a perfect 10/10 rationale-source match: `1622`
 - Entries using fallback rationale selection: `29`
@@ -320,7 +359,7 @@ Confidence breakdown:
 | 4 | 0 | 55 |
 | 5 | 0 | 15 |
 
-## 9. Label Migration Summary
+## 10. Label Migration Summary
 
 | Dimension | Persisted | Consensus | Changed entries |
 | --- | --- | --- | --- |
@@ -381,6 +420,6 @@ Confidence breakdown:
 | universalism | 0 | 1 | 8 |
 | universalism | 1 | 0 | 18 |
 
-## 10. Recommendation
+## 11. Recommendation
 
-Stop after repeated-call diagnostics review; do not retrain until the gate is addressed.
+Eligible for retrain comparison under full-corpus stability criteria.

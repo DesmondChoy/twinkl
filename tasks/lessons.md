@@ -59,3 +59,14 @@
   "fresh artifacts regenerated," and avoid suggesting that a partial rerun is
   equivalent to a statistically clean rerun unless the independence claim has
   actually been re-established.
+
+## 2026-03-26
+
+- Do not describe human annotation subsets as "ground truth" unless the user or
+  project docs explicitly define them that way. In this repo, human annotations
+  can serve as a limited external benchmark, but they may be sparse, non-expert,
+  and narrower than the full judged corpus.
+- When reporting judge-vs-human agreement, state the evaluation coverage
+  explicitly: how many entries and personas are in the overlap, how many are
+  excluded, and that the metric is computed on the intersection only rather than
+  the full dataset.

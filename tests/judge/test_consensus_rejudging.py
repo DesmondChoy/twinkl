@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import math
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -426,6 +427,33 @@ def _build_summary_fixture(
     return bundle_dir, annotations_dir
 
 
+def _make_comparison_row(
+    *,
+    dimension: str,
+    persona_id: str,
+    t_index: int,
+    votes: list[int],
+    consensus_label: int,
+    confidence_tier: str,
+) -> dict:
+    return {
+        "entry_id": f"{persona_id}__{t_index}",
+        "persona_id": persona_id,
+        "t_index": t_index,
+        "date": f"2025-04-{t_index + 1:02d}",
+        "dimension": dimension,
+        "persisted_label": 0,
+        "consensus_label": consensus_label,
+        "confidence_tier": confidence_tier,
+        "consensus_agreement": 0,
+        "label_changed": False,
+        **{
+            f"pass_{pass_index}_label": vote
+            for pass_index, vote in enumerate(votes, start=1)
+        },
+    }
+
+
 def test_prepare_consensus_bundle_is_deterministic_and_strips_profile_history(tmp_path):
     labels_path, wrangled_dir = _build_prepare_fixture(tmp_path)
     output_dir = tmp_path / "export"
@@ -630,6 +658,192 @@ def test_resolve_votes_tier_boundaries():
     assert SUMMARIZE._resolve_votes([0, 0, 0, 1, -1]) == (0, "bare_majority", 3)
 
 
+def test_load_human_benchmark_counts_strict_three_way_overlap(tmp_path):
+    annotations_dir = tmp_path / "annotations"
+    annotations_dir.mkdir()
+    timestamp = datetime(2026, 1, 2, tzinfo=timezone.utc)
+
+    annotator_rows = {
+        "des": [("aaa11111", 0), ("aaa11111", 1), ("bbb22222", 0)],
+        "jl": [("aaa11111", 0), ("aaa11111", 1)],
+        "km": [("aaa11111", 0), ("ccc33333", 0)],
+    }
+
+    for annotator_id, keys in annotator_rows.items():
+        rows = []
+        for persona_id, t_index in keys:
+            rows.append(
+                {
+                    "persona_id": persona_id,
+                    "t_index": t_index,
+                    "annotator_id": annotator_id,
+                    "timestamp": timestamp,
+                    **{f"alignment_{value_name}": 0 for value_name in SCHWARTZ_VALUE_ORDER},
+                }
+            )
+        pl.DataFrame(rows).write_parquet(annotations_dir / f"{annotator_id}.parquet")
+
+    majority_wide, summary = SUMMARIZE._load_human_benchmark(
+        annotations_dir,
+        full_corpus_entry_count=10,
+    )
+
+    assert summary == {
+        "annotator_file_count": 3,
+        "union_entry_count": 4,
+        "union_persona_count": 3,
+        "strict_overlap_entry_count": 1,
+        "strict_overlap_persona_count": 1,
+        "single_annotated_entry_count": 2,
+        "excluded_full_corpus_entry_count": 9,
+    }
+    assert majority_wide.height == 1
+    assert majority_wide.select(["persona_id", "t_index"]).to_dicts() == [
+        {"persona_id": "aaa11111", "t_index": 0}
+    ]
+
+
+def test_build_stability_summary_computes_metrics_and_is_deterministic():
+    comparison_rows = pl.DataFrame(
+        [
+            _make_comparison_row(
+                dimension="security",
+                persona_id="aaa11111",
+                t_index=0,
+                votes=[1, 1, 1, 1, 1],
+                consensus_label=1,
+                confidence_tier="unanimous",
+            ),
+            _make_comparison_row(
+                dimension="security",
+                persona_id="aaa11111",
+                t_index=1,
+                votes=[1, 1, 1, -1, -1],
+                consensus_label=1,
+                confidence_tier="bare_majority",
+            ),
+            _make_comparison_row(
+                dimension="security",
+                persona_id="bbb22222",
+                t_index=0,
+                votes=[0, 0, 0, 0, 0],
+                consensus_label=0,
+                confidence_tier="unanimous",
+            ),
+            _make_comparison_row(
+                dimension="security",
+                persona_id="bbb22222",
+                t_index=1,
+                votes=[1, -1, 0, 0, 0],
+                consensus_label=0,
+                confidence_tier="bare_majority",
+            ),
+        ]
+    )
+
+    first = SUMMARIZE._build_stability_summary(comparison_rows)
+    second = SUMMARIZE._build_stability_summary(comparison_rows)
+
+    assert first.equals(second)
+
+    security_row = first.filter(pl.col("dimension") == "security").to_dicts()[0]
+    entropy_three_two = -(0.6 * math.log2(0.6) + 0.4 * math.log2(0.4))
+    entropy_three_one_one = (
+        -(0.6 * math.log2(0.6) + 0.2 * math.log2(0.2) + 0.2 * math.log2(0.2))
+    )
+
+    assert security_row["difficulty_rank"] == 1
+    assert security_row["n_entries_point"] == pytest.approx(4.0)
+    assert security_row["n_non_neutral_entries_point"] == pytest.approx(2.0)
+    assert security_row["non_unanimous_rate_all_point"] == pytest.approx(0.5)
+    assert security_row["polarity_flip_rate_all_point"] == pytest.approx(0.5)
+    assert security_row["low_confidence_non_neutral_ratio_point"] == pytest.approx(0.5)
+    assert security_row["non_unanimous_rate_non_neutral_point"] == pytest.approx(0.5)
+    assert security_row["polarity_flip_rate_non_neutral_point"] == pytest.approx(0.5)
+    assert security_row["mean_vote_entropy_all_point"] == pytest.approx(
+        (entropy_three_two + entropy_three_one_one) / 4.0
+    )
+    assert security_row["mean_vote_entropy_non_neutral_point"] == pytest.approx(
+        entropy_three_two / 2.0
+    )
+    assert math.isfinite(security_row["low_confidence_non_neutral_ratio_ci_lo"])
+    assert math.isfinite(security_row["low_confidence_non_neutral_ratio_ci_hi"])
+
+
+def test_evaluate_gate_uses_upper_ci_on_low_confidence_ratio():
+    stability_summary = pl.DataFrame(
+        [
+            {
+                "dimension": "security",
+                "n_non_neutral_entries_point": 40.0,
+                "low_confidence_non_neutral_ratio_point": 0.31,
+                "low_confidence_non_neutral_ratio_ci_lo": 0.20,
+                "low_confidence_non_neutral_ratio_ci_hi": 0.49,
+                "non_unanimous_rate_non_neutral_point": 0.42,
+                "non_unanimous_rate_non_neutral_ci_lo": 0.30,
+                "non_unanimous_rate_non_neutral_ci_hi": 0.54,
+                "mean_vote_entropy_non_neutral_point": 0.81,
+                "mean_vote_entropy_non_neutral_ci_lo": 0.70,
+                "mean_vote_entropy_non_neutral_ci_hi": 0.92,
+                "polarity_flip_rate_non_neutral_point": 0.11,
+                "polarity_flip_rate_non_neutral_ci_lo": 0.06,
+                "polarity_flip_rate_non_neutral_ci_hi": 0.17,
+            },
+            {
+                "dimension": "hedonism",
+                "n_non_neutral_entries_point": 32.0,
+                "low_confidence_non_neutral_ratio_point": 0.28,
+                "low_confidence_non_neutral_ratio_ci_lo": 0.17,
+                "low_confidence_non_neutral_ratio_ci_hi": 0.44,
+                "non_unanimous_rate_non_neutral_point": 0.39,
+                "non_unanimous_rate_non_neutral_ci_lo": 0.25,
+                "non_unanimous_rate_non_neutral_ci_hi": 0.52,
+                "mean_vote_entropy_non_neutral_point": 0.76,
+                "mean_vote_entropy_non_neutral_ci_lo": 0.64,
+                "mean_vote_entropy_non_neutral_ci_hi": 0.89,
+                "polarity_flip_rate_non_neutral_point": 0.08,
+                "polarity_flip_rate_non_neutral_ci_lo": 0.03,
+                "polarity_flip_rate_non_neutral_ci_hi": 0.15,
+            },
+            {
+                "dimension": "stimulation",
+                "n_non_neutral_entries_point": 18.0,
+                "low_confidence_non_neutral_ratio_point": 0.24,
+                "low_confidence_non_neutral_ratio_ci_lo": 0.13,
+                "low_confidence_non_neutral_ratio_ci_hi": 0.48,
+                "non_unanimous_rate_non_neutral_point": 0.33,
+                "non_unanimous_rate_non_neutral_ci_lo": 0.20,
+                "non_unanimous_rate_non_neutral_ci_hi": 0.47,
+                "mean_vote_entropy_non_neutral_point": 0.58,
+                "mean_vote_entropy_non_neutral_ci_lo": 0.45,
+                "mean_vote_entropy_non_neutral_ci_hi": 0.71,
+                "polarity_flip_rate_non_neutral_point": 0.05,
+                "polarity_flip_rate_non_neutral_ci_lo": 0.01,
+                "polarity_flip_rate_non_neutral_ci_hi": 0.11,
+            },
+        ]
+    )
+
+    passing_gate = SUMMARIZE._evaluate_gate(stability_summary)
+    assert passing_gate["stability_gate_passed"] is True
+    assert passing_gate["overall_passed"] is True
+    assert passing_gate["recommendation"] == (
+        "Eligible for retrain comparison under full-corpus stability criteria."
+    )
+
+    failing_gate = SUMMARIZE._evaluate_gate(
+        stability_summary.with_columns(
+            pl.when(pl.col("dimension") == "security")
+            .then(0.51)
+            .otherwise(pl.col("low_confidence_non_neutral_ratio_ci_hi"))
+            .alias("low_confidence_non_neutral_ratio_ci_hi")
+        )
+    )
+    assert failing_gate["stability_gate_passed"] is False
+    assert failing_gate["overall_passed"] is False
+    assert failing_gate["recommendation"] == "Hold retrain until full-corpus stability improves."
+
+
 def test_summarize_bundle_applies_consensus_voting_and_gate_rules(tmp_path):
     bundle_dir, annotations_dir = _build_summary_fixture(tmp_path)
 
@@ -640,7 +854,8 @@ def test_summarize_bundle_applies_consensus_voting_and_gate_rules(tmp_path):
         comparison_rows,
         _flip_summary,
         _confidence_summary,
-        _irr_summary,
+        irr_summary,
+        stability_summary,
         gate_summary,
     ) = SUMMARIZE.summarize_bundle(bundle_dir, annotations_dir=annotations_dir)
 
@@ -675,14 +890,30 @@ def test_summarize_bundle_applies_consensus_voting_and_gate_rules(tmp_path):
     assert by_entry["bbb22222__2"]["confidence_security"] == "unanimous"
     assert by_entry["bbb22222__2"]["consensus_agreement_security"] == 5
 
-    assert gate_summary["agreement_passed"] is True
-    assert gate_summary["confidence_passed"] is True
-    assert gate_summary["overall_passed"] is True
+    assert gate_summary["overall_passed"] == gate_summary["stability_gate_passed"]
+    assert "agreement_passed" not in gate_summary
     assert "Entries using fallback rationale selection: `1`" in report
     assert "Judge Repeated-Call Self-Consistency" in report
     assert "Consensus vs persisted Cohen kappa" in report
     assert "Pairwise similarity:" in report
+    assert "Human-Overlap Benchmark (Advisory)" in report
+    assert "non-expert human-overlap benchmark" in report
+    assert "- Annotator files loaded: `3`" in report
+    assert "- Strict 3-way overlap used for comparison: `6` entries across `2` personas" in report
+    assert "Full-Corpus Stability Gate" in report
+    assert "Hard-Dimension Gate" not in report
+    assert "Full-corpus stability first:" in report
     assert "Hard-Dimension Deep Dive" in report
+    assert "Stop after repeated-call diagnostics review" not in report
+    assert (
+        "Eligible for retrain comparison under full-corpus stability criteria." in report
+        or "Hold retrain until full-corpus stability improves." in report
+    )
+    assert stability_summary.filter(pl.col("dimension") == "security").height == 1
+    advisory_roles = irr_summary.filter(
+        pl.col("metric") == "consensus_vs_human_cohen_kappa"
+    )["decision_role"].to_list()
+    assert advisory_roles == ["advisory_only"] * (len(SCHWARTZ_VALUE_ORDER) + 1)
 
     power_row = comparison_rows.filter(
         (pl.col("entry_id") == "bbb22222__1") & (pl.col("dimension") == "power")
@@ -722,6 +953,7 @@ def test_consensus_parquet_is_compatible_with_dataset_loader(tmp_path):
         _flip_summary,
         _confidence_summary,
         _irr_summary,
+        _stability_summary,
         _gate_summary,
     ) = SUMMARIZE.summarize_bundle(bundle_dir, annotations_dir=annotations_dir)
 
