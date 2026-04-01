@@ -195,7 +195,7 @@ async def judge_session(
         persona_age=persona_age,
         persona_profession=persona_profession,
         persona_culture=persona_culture,
-        persona_core_values=list(persona_core_values),
+        persona_core_values=persona_core_values,
         persona_bio=persona_bio,
         schwartz_config=schwartz_config,
         previous_entries=previous_entries,

@@ -47,9 +47,40 @@
   analysis, provenance backfill, and index updates before treating the review
   as done.
 
+## 2026-03-20
+
+- When a task-specific go/no-go rule is an exact threshold on a noisy eval
+  metric, do not assume a tiny miss should permanently close the follow-up as
+  "not needed." If the user treats the gate as advisory, record that override
+  explicitly on the issue and reopen the downstream task instead of leaving the
+  hard-stop interpretation in place.
+- When an audit invalidates execution data, do not talk about the recovery as
+  "done" just because the workflow code is fixed. Separate "rerun-ready" from
+  "fresh artifacts regenerated," and avoid suggesting that a partial rerun is
+  equivalent to a statistically clean rerun unless the independence claim has
+  actually been re-established.
+
 ## 2026-03-24
 
 - Be careful when exporting new runtime entrypoints from package `__init__`
   files. If a low-level module imports a schema from that package, eager
   `__init__` imports can create circular dependencies. Prefer lazy wrappers or
   importing the concrete submodule directly when wiring new runtime bridges.
+
+## 2026-03-26
+
+- Do not describe human annotation subsets as "ground truth" unless the user or
+  project docs explicitly define them that way. In this repo, human annotations
+  can serve as a limited external benchmark, but they may be sparse, non-expert,
+  and narrower than the full judged corpus.
+- When reporting judge-vs-human agreement, state the evaluation coverage
+  explicitly: how many entries and personas are in the overlap, how many are
+  excluded, and that the metric is computed on the intersection only rather than
+  the full dataset.
+
+## 2026-04-01
+
+- When a repo-local skill is the required workflow for a task, run it before
+  closing the issue or epic and before reporting conclusions. Do not rely on
+  "roughly equivalent" manual analysis and wait for the user to notice the
+  missing workflow step.

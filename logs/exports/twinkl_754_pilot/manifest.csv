@@ -1,0 +1,51 @@
+entry_id,persona_id,t_index,date,persona_name,persona_age,persona_profession,persona_culture,session_chars,prompt_chars,alignment_self_direction,alignment_stimulation,alignment_hedonism,alignment_achievement,alignment_power,alignment_security,alignment_conformity,alignment_tradition,alignment_benevolence,alignment_universalism
+013d8101__0,013d8101,0,2025-12-01,Emma Lindqvist,25-34,Teacher,Western European,375,11444,0,0,0,0,0,1,1,0,0,0
+013d8101__2,013d8101,2,2025-12-20,Emma Lindqvist,25-34,Teacher,Western European,935,12004,0,-1,0,0,0,1,0,0,0,0
+019235dc__5,019235dc,5,2025-02-01,Megan Torres,18-24,Nurse,North American,426,11521,0,0,0,0,0,1,0,0,1,0
+019235dc__9,019235dc,9,2025-02-09,Megan Torres,18-24,Nurse,North American,1099,12194,0,0,-1,1,0,0,0,0,1,0
+01b6f22a__5,01b6f22a,5,2025-04-04,Tariq Mansour,35-44,Manager,Middle Eastern,1207,12293,0,0,0,0,1,1,0,0,0,0
+056f46ad__0,056f46ad,0,2025-12-01,Tariq Al-Rashid,35-44,Manager,Middle Eastern,1560,12652,0,0,1,0,0,0,1,1,1,0
+056f46ad__3,056f46ad,3,2025-12-28,Tariq Al-Rashid,35-44,Manager,Middle Eastern,575,11667,0,0,0,1,0,1,0,0,1,0
+06f1d745__0,06f1d745,0,2025-12-04,Roberto Espinoza,45-54,Teacher,Latin American,786,11855,0,0,0,0,0,1,0,0,0,0
+06f1d745__4,06f1d745,4,2025-12-10,Roberto Espinoza,45-54,Teacher,Latin American,1768,12837,0,-1,0,0,0,1,0,0,0,0
+075f8fdb__0,075f8fdb,0,2025-01-07,Chen Wei-Lin,45-54,Teacher,East Asian,1295,12362,1,1,0,0,0,-1,-1,0,0,1
+08c7f073__4,08c7f073,4,2025-10-17,Mathilde Delvaux,35-44,Artist,Western European,1220,12292,0,0,0,0,0,1,0,1,0,0
+08c7f073__5,08c7f073,5,2025-10-20,Mathilde Delvaux,35-44,Artist,Western European,945,12017,0,-1,0,0,0,0,0,1,0,0
+0a2fe15c__0,0a2fe15c,0,2025-12-01,Fatima Al-Hassan,45-54,Nurse,Middle Eastern,1583,12656,0,0,-1,0,0,-1,0,0,1,0
+0ad04582__1,0ad04582,1,2025-12-06,Chen Meiling,55+,Artist,East Asian,1411,12475,0,0,0,0,0,1,0,0,-1,0
+0d272008__2,0d272008,2,2025-12-09,Marcus Chen,35-44,Entrepreneur,North American,672,11753,1,0,0,0,0,-1,0,0,0,0
+0d272008__5,0d272008,5,2025-12-19,Marcus Chen,35-44,Entrepreneur,North American,1000,12081,1,0,1,0,0,0,0,0,0,0
+0d42f985__3,0d42f985,3,2025-08-25,Tariq Haddad,35-44,Grad Student,Middle Eastern,485,11587,0,0,-1,1,0,0,0,0,-1,0
+0e9a45e9__0,0e9a45e9,0,2025-12-01,Karim Nazari,35-44,Entrepreneur,Middle Eastern,1114,12216,1,0,0,0,0,-1,0,0,0,0
+0e9a45e9__1,0e9a45e9,1,2025-12-10,Karim Nazari,35-44,Entrepreneur,Middle Eastern,135,11237,1,0,1,0,0,0,0,0,0,0
+110fcd4f__1,110fcd4f,1,2025-06-25,Lukas Bergmann,18-24,Grad Student,Western European,682,11792,1,0,0,0,-1,-1,-1,-1,-1,0
+110fcd4f__2,110fcd4f,2,2025-06-28,Lukas Bergmann,18-24,Grad Student,Western European,819,11929,1,0,-1,1,0,-1,-1,0,-1,0
+11a31f12__5,11a31f12,5,2025-08-13,Valentina Reyes,25-34,Teacher,Latin American,1208,12314,0,0,-1,0,0,0,0,0,1,0
+11de77e8__4,11de77e8,4,2025-09-12,Lukas Vermeer,25-34,Software Engineer,Western European,582,11696,1,1,0,0,0,0,0,0,0,0
+127aefff__4,127aefff,4,2025-06-14,Tariq Haddad,35-44,Grad Student,Middle Eastern,1193,12293,-1,1,0,0,0,0,1,0,0,0
+1496159d__1,1496159d,1,2025-07-11,Soo-jin Park,25-34,Gig Worker,East Asian,886,11958,1,0,0,0,0,-1,0,0,0,0
+15f8d4b9__2,15f8d4b9,2,2025-08-25,Farid Al-Rashid,55+,Gig Worker,Middle Eastern,1255,12326,1,0,0,1,0,-1,-1,1,0,0
+15f8d4b9__3,15f8d4b9,3,2025-08-26,Farid Al-Rashid,55+,Gig Worker,Middle Eastern,744,11815,0,1,0,0,0,0,0,0,1,0
+1628bd07__4,1628bd07,4,2025-06-01,Gerald Thornton,55+,Software Engineer,North American,1070,12166,1,0,1,0,0,0,0,0,0,0
+18415364__0,18415364,0,2025-01-05,Tariq Al-Mansouri,55+,Entrepreneur,Middle Eastern,836,11943,0,-1,0,0,0,0,0,1,1,0
+18415364__1,18415364,1,2025-01-06,Tariq Al-Mansouri,55+,Entrepreneur,Middle Eastern,1034,12141,1,0,-1,0,0,-1,-1,1,1,1
+1ae9b1c1__0,1ae9b1c1,0,2025-12-26,Layla Mansour,25-34,Teacher,Middle Eastern,899,11991,0,1,0,0,0,-1,-1,1,0,0
+1b8b7276__0,1b8b7276,0,2025-07-05,Nabil Khoury,45-54,Software Engineer,Middle Eastern,913,12012,-1,-1,0,0,0,1,1,0,0,0
+1b8b7276__5,1b8b7276,5,2025-07-31,Nabil Khoury,45-54,Software Engineer,Middle Eastern,531,11630,0,0,1,1,0,1,0,0,1,0
+1d529c71__2,1d529c71,2,2025-04-03,Luuk Janssen,18-24,Gig Worker,Western European,1010,12084,0,0,0,0,0,1,1,0,0,0
+1ed90155__0,1ed90155,0,2025-12-08,Maya Chen,18-24,Artist,North American,1120,12213,1,1,0,1,0,0,-1,0,0,0
+1ed90155__2,1ed90155,2,2025-12-12,Maya Chen,18-24,Artist,North American,1100,12193,0,1,0,1,0,-1,0,0,0,0
+1ed90155__4,1ed90155,4,2025-12-17,Maya Chen,18-24,Artist,North American,220,11313,0,1,-1,1,0,0,0,0,0,0
+1f86f569__2,1f86f569,2,2025-12-06,Erik Lindqvist,35-44,Software Engineer,Western European,2057,13172,-1,0,0,0,0,1,1,1,1,0
+20730018__0,20730018,0,2025-06-02,Arjun Rathore,35-44,Gig Worker,South Asian,1388,12482,0,0,0,0,0,1,0,0,0,0
+22b117be__2,22b117be,2,2025-04-30,Harold Delacroix,55+,Grad Student,North American,1472,12562,-1,0,0,1,-1,-1,1,0,0,0
+22b117be__11,22b117be,11,2025-05-30,Harold Delacroix,55+,Grad Student,North American,230,11320,0,1,0,1,0,0,0,0,0,0
+23d101f8__4,23d101f8,4,2025-08-20,Meera Krishnamurthy,45-54,Teacher,South Asian,349,11444,0,-1,0,0,0,1,0,0,1,0
+2719f938__0,2719f938,0,2025-07-04,Yasmin Khalil,25-34,Artist,Middle Eastern,674,11739,0,0,1,1,0,0,-1,0,0,0
+2719f938__5,2719f938,5,2025-07-22,Yasmin Khalil,25-34,Artist,Middle Eastern,584,11649,0,1,1,0,0,0,0,0,1,0
+2d928d8a__0,2d928d8a,0,2025-02-07,Henrik Larsson,45-54,Entrepreneur,Western European,1102,12202,0,1,0,0,0,-1,0,0,0,0
+2d928d8a__7,2d928d8a,7,2025-03-08,Henrik Larsson,45-54,Entrepreneur,Western European,252,11352,0,0,1,0,0,0,0,0,0,0
+2da4f100__0,2da4f100,0,2025-01-23,Santiago Herrera,25-34,Entrepreneur,Latin American,644,11724,0,0,-1,1,0,0,0,0,0,0
+2e6270bb__1,2e6270bb,1,2025-12-13,Chen Wei-Lin,45-54,Gig Worker,East Asian,1255,12333,1,0,-1,1,0,1,1,0,1,0
+344ea8f7__0,344ea8f7,0,2025-11-07,Matthijs van der Berg,45-54,Grad Student,Western European,997,12078,0,0,1,0,0,0,0,0,0,0
+3a517a79__0,3a517a79,0,2025-12-22,Megan Calloway,35-44,Nurse,North American,1002,12067,0,-1,0,0,0,1,0,0,0,0

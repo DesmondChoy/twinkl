@@ -106,6 +106,8 @@ CONFIG = {
     "val_ratio": _data_defaults["val_ratio"],
     "split_seed": _split_seed,
     "model_seed": _model_seed,
+    "labels_path": _data_defaults["labels_path"],
+    "wrangled_dir": _data_defaults["wrangled_dir"],
     "fixed_holdout_manifest_path": _data_defaults.get("fixed_holdout_manifest_path"),
     "class_balance_source": _training_defaults.get("class_balance_source"),
     "circumplex_regularizer_enabled": _circumplex_defaults.get("enabled", False),
@@ -183,6 +185,8 @@ for key in [
     "val_ratio",
     "split_seed",
     "model_seed",
+    "labels_path",
+    "wrangled_dir",
     "fixed_holdout_manifest_path",
     "class_balance_source",
     "circumplex_regularizer_enabled",
@@ -330,7 +334,10 @@ print(f"Split seed: {CONFIG['split_seed']}")
 print(f"Model seed: {CONFIG['model_seed']}")
 
 # ==== CELL 8 ====
-labels_df, entries_df = load_all_data()
+labels_df, entries_df = load_all_data(
+    labels_path=CONFIG["labels_path"],
+    wrangled_dir=CONFIG["wrangled_dir"],
+)
 merged_df = merge_labels_and_entries(labels_df, entries_df)
 
 print(f"Labels shape:  {labels_df.shape}")

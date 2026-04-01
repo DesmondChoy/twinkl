@@ -1,0 +1,1652 @@
+entry_id,persona_id,t_index,date,persona_name,persona_age,persona_profession,persona_culture,session_chars,prompt_chars,alignment_self_direction,alignment_stimulation,alignment_hedonism,alignment_achievement,alignment_power,alignment_security,alignment_conformity,alignment_tradition,alignment_benevolence,alignment_universalism
+013d8101__0,013d8101,0,2025-12-01,Emma Lindqvist,25-34,Teacher,Western European,375,11444,0,0,0,0,0,1,1,0,0,0
+013d8101__1,013d8101,1,2025-12-11,Emma Lindqvist,25-34,Teacher,Western European,489,11558,0,0,0,0,0,1,0,0,1,0
+013d8101__2,013d8101,2,2025-12-20,Emma Lindqvist,25-34,Teacher,Western European,935,12004,0,-1,0,0,0,1,0,0,0,0
+019235dc__0,019235dc,0,2025-01-15,Megan Torres,18-24,Nurse,North American,408,11503,0,0,0,1,1,0,0,0,0,0
+019235dc__1,019235dc,1,2025-01-15,Megan Torres,18-24,Nurse,North American,1765,12860,0,0,0,1,0,0,0,0,1,0
+019235dc__2,019235dc,2,2025-01-22,Megan Torres,18-24,Nurse,North American,190,11285,0,0,0,1,0,0,0,0,-1,0
+019235dc__3,019235dc,3,2025-01-29,Megan Torres,18-24,Nurse,North American,1195,12290,0,0,0,1,0,0,0,0,1,0
+019235dc__4,019235dc,4,2025-02-01,Megan Torres,18-24,Nurse,North American,1732,12827,0,0,0,1,0,0,1,0,-1,0
+019235dc__5,019235dc,5,2025-02-01,Megan Torres,18-24,Nurse,North American,426,11521,0,0,0,0,0,1,0,0,1,0
+019235dc__6,019235dc,6,2025-02-02,Megan Torres,18-24,Nurse,North American,1233,12328,0,0,0,1,0,0,0,0,1,0
+019235dc__7,019235dc,7,2025-02-07,Megan Torres,18-24,Nurse,North American,1285,12380,-1,0,0,0,0,0,1,0,1,0
+019235dc__8,019235dc,8,2025-02-09,Megan Torres,18-24,Nurse,North American,128,11223,0,0,0,1,0,0,0,0,1,0
+019235dc__9,019235dc,9,2025-02-09,Megan Torres,18-24,Nurse,North American,1099,12194,0,0,-1,1,0,0,0,0,1,0
+01b6f22a__0,01b6f22a,0,2025-03-20,Tariq Mansour,35-44,Manager,Middle Eastern,1238,12324,0,0,0,1,1,0,0,0,1,0
+01b6f22a__1,01b6f22a,1,2025-03-20,Tariq Mansour,35-44,Manager,Middle Eastern,1229,12315,0,0,0,0,0,0,0,0,1,0
+01b6f22a__2,01b6f22a,2,2025-03-20,Tariq Mansour,35-44,Manager,Middle Eastern,147,11233,0,0,0,0,0,0,0,0,0,0
+01b6f22a__3,01b6f22a,3,2025-03-26,Tariq Mansour,35-44,Manager,Middle Eastern,1222,12308,0,0,0,0,1,0,1,0,0,0
+01b6f22a__4,01b6f22a,4,2025-03-30,Tariq Mansour,35-44,Manager,Middle Eastern,173,11259,0,0,0,0,0,0,0,0,0,0
+01b6f22a__5,01b6f22a,5,2025-04-04,Tariq Mansour,35-44,Manager,Middle Eastern,1207,12293,0,0,0,0,1,1,0,0,0,0
+01b6f22a__6,01b6f22a,6,2025-04-05,Tariq Mansour,35-44,Manager,Middle Eastern,1283,12369,0,0,0,0,1,0,0,0,1,0
+01b6f22a__7,01b6f22a,7,2025-04-07,Tariq Mansour,35-44,Manager,Middle Eastern,163,11249,0,0,0,0,0,0,0,0,1,0
+01b6f22a__8,01b6f22a,8,2025-04-13,Tariq Mansour,35-44,Manager,Middle Eastern,788,11874,0,0,0,0,0,0,0,0,1,0
+02fb94f3__0,02fb94f3,0,2025-04-15,Noor Haddad,18-24,Parent (Stay-at-home),Middle Eastern,774,11886,-1,0,0,0,0,0,1,0,0,0
+02fb94f3__1,02fb94f3,1,2025-04-20,Noor Haddad,18-24,Parent (Stay-at-home),Middle Eastern,554,11666,-1,0,0,0,0,0,0,0,1,0
+02fb94f3__2,02fb94f3,2,2025-04-21,Noor Haddad,18-24,Parent (Stay-at-home),Middle Eastern,667,11779,1,0,0,1,0,0,0,0,0,0
+02fb94f3__3,02fb94f3,3,2025-04-27,Noor Haddad,18-24,Parent (Stay-at-home),Middle Eastern,373,11485,0,0,0,0,0,0,0,0,1,0
+02fb94f3__4,02fb94f3,4,2025-05-02,Noor Haddad,18-24,Parent (Stay-at-home),Middle Eastern,1269,12381,1,0,0,0,0,0,-1,1,0,0
+02fb94f3__5,02fb94f3,5,2025-05-02,Noor Haddad,18-24,Parent (Stay-at-home),Middle Eastern,318,11430,1,0,0,0,0,0,0,0,0,0
+02fb94f3__6,02fb94f3,6,2025-05-05,Noor Haddad,18-24,Parent (Stay-at-home),Middle Eastern,1047,12159,1,0,0,1,0,0,0,-1,0,0
+02fb94f3__7,02fb94f3,7,2025-05-06,Noor Haddad,18-24,Parent (Stay-at-home),Middle Eastern,1059,12171,0,0,0,0,0,0,0,1,1,0
+02fb94f3__8,02fb94f3,8,2025-05-10,Noor Haddad,18-24,Parent (Stay-at-home),Middle Eastern,680,11792,1,0,0,0,0,0,0,1,0,0
+02fb94f3__9,02fb94f3,9,2025-05-15,Noor Haddad,18-24,Parent (Stay-at-home),Middle Eastern,675,11787,1,0,0,1,0,0,0,0,0,0
+02fb94f3__10,02fb94f3,10,2025-05-22,Noor Haddad,18-24,Parent (Stay-at-home),Middle Eastern,1393,12505,1,0,0,0,0,0,-1,0,0,0
+02fb94f3__11,02fb94f3,11,2025-05-22,Noor Haddad,18-24,Parent (Stay-at-home),Middle Eastern,330,11442,0,0,0,0,0,0,1,0,0,0
+0465b7ad__0,0465b7ad,0,2025-04-11,Lukas Vermeer,18-24,Artist,Western European,797,11866,1,0,0,0,0,0,0,1,0,0
+0465b7ad__1,0465b7ad,1,2025-04-17,Lukas Vermeer,18-24,Artist,Western European,1155,12224,1,0,0,0,0,0,0,1,0,0
+0465b7ad__2,0465b7ad,2,2025-04-24,Lukas Vermeer,18-24,Artist,Western European,256,11325,0,0,0,0,0,0,0,0,0,0
+0465b7ad__3,0465b7ad,3,2025-04-24,Lukas Vermeer,18-24,Artist,Western European,1018,12087,0,0,0,0,0,0,0,1,0,0
+0465b7ad__4,0465b7ad,4,2025-04-26,Lukas Vermeer,18-24,Artist,Western European,180,11249,0,0,0,0,0,0,0,1,0,0
+0465b7ad__5,0465b7ad,5,2025-04-27,Lukas Vermeer,18-24,Artist,Western European,1165,12234,1,0,0,0,0,0,0,1,0,0
+0465b7ad__6,0465b7ad,6,2025-04-27,Lukas Vermeer,18-24,Artist,Western European,565,11634,0,0,0,0,0,0,0,1,0,0
+0465b7ad__7,0465b7ad,7,2025-04-30,Lukas Vermeer,18-24,Artist,Western European,435,11504,0,0,0,0,0,0,0,1,0,0
+0465b7ad__8,0465b7ad,8,2025-05-02,Lukas Vermeer,18-24,Artist,Western European,614,11683,1,0,0,0,0,0,0,1,0,0
+0465b7ad__9,0465b7ad,9,2025-05-06,Lukas Vermeer,18-24,Artist,Western European,444,11513,1,0,0,0,0,0,0,1,0,0
+0465b7ad__10,0465b7ad,10,2025-05-11,Lukas Vermeer,18-24,Artist,Western European,600,11669,0,0,0,0,0,0,-1,1,0,0
+0465b7ad__11,0465b7ad,11,2025-05-14,Lukas Vermeer,18-24,Artist,Western European,1137,12206,1,0,0,0,0,0,0,1,0,0
+056f46ad__0,056f46ad,0,2025-12-01,Tariq Al-Rashid,35-44,Manager,Middle Eastern,1560,12652,0,0,1,0,0,0,1,1,1,0
+056f46ad__1,056f46ad,1,2025-12-09,Tariq Al-Rashid,35-44,Manager,Middle Eastern,2202,13294,-1,0,1,-1,0,0,1,1,0,0
+056f46ad__2,056f46ad,2,2025-12-18,Tariq Al-Rashid,35-44,Manager,Middle Eastern,2578,13670,1,0,0,0,0,0,1,1,1,0
+056f46ad__3,056f46ad,3,2025-12-28,Tariq Al-Rashid,35-44,Manager,Middle Eastern,575,11667,0,0,0,1,0,1,0,0,1,0
+058722a1__0,058722a1,0,2025-10-11,Patricia Moreno,45-54,Parent (Stay-at-home),North American,1239,12329,1,0,0,0,0,0,0,0,1,1
+058722a1__1,058722a1,1,2025-10-15,Patricia Moreno,45-54,Parent (Stay-at-home),North American,1449,12539,-1,0,0,0,0,0,1,0,0,-1
+058722a1__2,058722a1,2,2025-10-18,Patricia Moreno,45-54,Parent (Stay-at-home),North American,1189,12279,1,0,0,0,0,0,-1,0,0,1
+058722a1__3,058722a1,3,2025-10-25,Patricia Moreno,45-54,Parent (Stay-at-home),North American,518,11608,0,0,0,0,0,0,0,0,1,0
+058722a1__4,058722a1,4,2025-11-01,Patricia Moreno,45-54,Parent (Stay-at-home),North American,165,11255,0,0,0,0,0,0,0,0,0,0
+058722a1__5,058722a1,5,2025-11-06,Patricia Moreno,45-54,Parent (Stay-at-home),North American,1037,12127,1,0,0,-1,-1,0,0,0,1,1
+06f1d745__0,06f1d745,0,2025-12-04,Roberto Espinoza,45-54,Teacher,Latin American,786,11855,0,0,0,0,0,1,0,0,0,0
+06f1d745__1,06f1d745,1,2025-12-04,Roberto Espinoza,45-54,Teacher,Latin American,1615,12684,0,0,0,0,0,1,0,0,1,0
+06f1d745__2,06f1d745,2,2025-12-05,Roberto Espinoza,45-54,Teacher,Latin American,663,11732,0,0,0,0,0,1,0,0,0,0
+06f1d745__3,06f1d745,3,2025-12-08,Roberto Espinoza,45-54,Teacher,Latin American,602,11671,0,0,0,0,0,1,1,0,0,0
+06f1d745__4,06f1d745,4,2025-12-10,Roberto Espinoza,45-54,Teacher,Latin American,1768,12837,0,-1,0,0,0,1,0,0,0,0
+06f1d745__5,06f1d745,5,2025-12-17,Roberto Espinoza,45-54,Teacher,Latin American,749,11818,0,0,0,0,0,1,0,0,0,0
+075f8fdb__0,075f8fdb,0,2025-01-07,Chen Wei-Lin,45-54,Teacher,East Asian,1295,12362,1,1,0,0,0,-1,-1,0,0,1
+075f8fdb__1,075f8fdb,1,2025-01-10,Chen Wei-Lin,45-54,Teacher,East Asian,144,11211,0,0,0,0,0,0,-1,0,0,0
+075f8fdb__2,075f8fdb,2,2025-01-13,Chen Wei-Lin,45-54,Teacher,East Asian,561,11628,1,1,0,0,0,0,0,-1,0,0
+075f8fdb__3,075f8fdb,3,2025-01-19,Chen Wei-Lin,45-54,Teacher,East Asian,1549,12616,1,1,0,0,0,-1,0,-1,0,1
+075f8fdb__4,075f8fdb,4,2025-01-23,Chen Wei-Lin,45-54,Teacher,East Asian,1633,12700,1,1,0,0,0,-1,-1,0,0,0
+075f8fdb__5,075f8fdb,5,2025-01-24,Chen Wei-Lin,45-54,Teacher,East Asian,708,11775,1,1,0,0,0,-1,0,-1,-1,0
+075f8fdb__6,075f8fdb,6,2025-01-25,Chen Wei-Lin,45-54,Teacher,East Asian,1126,12193,1,1,0,0,0,0,0,0,0,0
+075f8fdb__7,075f8fdb,7,2025-01-29,Chen Wei-Lin,45-54,Teacher,East Asian,1958,13025,1,1,0,0,0,0,0,0,-1,0
+08c7f073__0,08c7f073,0,2025-10-07,Mathilde Delvaux,35-44,Artist,Western European,889,11961,0,0,0,0,0,0,0,1,0,0
+08c7f073__1,08c7f073,1,2025-10-10,Mathilde Delvaux,35-44,Artist,Western European,1147,12219,0,0,0,0,0,0,0,1,0,0
+08c7f073__2,08c7f073,2,2025-10-12,Mathilde Delvaux,35-44,Artist,Western European,758,11830,0,0,0,-1,0,0,0,1,0,0
+08c7f073__3,08c7f073,3,2025-10-17,Mathilde Delvaux,35-44,Artist,Western European,258,11330,0,0,0,0,0,0,0,1,0,0
+08c7f073__4,08c7f073,4,2025-10-17,Mathilde Delvaux,35-44,Artist,Western European,1220,12292,0,0,0,0,0,1,0,1,0,0
+08c7f073__5,08c7f073,5,2025-10-20,Mathilde Delvaux,35-44,Artist,Western European,945,12017,0,-1,0,0,0,0,0,1,0,0
+08c7f073__6,08c7f073,6,2025-10-27,Mathilde Delvaux,35-44,Artist,Western European,259,11331,0,0,0,0,0,0,0,1,1,0
+08c7f073__7,08c7f073,7,2025-10-31,Mathilde Delvaux,35-44,Artist,Western European,271,11343,0,0,0,0,0,0,0,1,0,0
+08c7f073__8,08c7f073,8,2025-11-04,Mathilde Delvaux,35-44,Artist,Western European,309,11381,0,0,0,0,0,0,0,1,1,0
+0a2fe15c__0,0a2fe15c,0,2025-12-01,Fatima Al-Hassan,45-54,Nurse,Middle Eastern,1583,12656,0,0,-1,0,0,-1,0,0,1,0
+0a2fe15c__1,0a2fe15c,1,2025-12-07,Fatima Al-Hassan,45-54,Nurse,Middle Eastern,2092,13165,0,0,-1,0,0,0,0,1,1,0
+0a2fe15c__2,0a2fe15c,2,2025-12-09,Fatima Al-Hassan,45-54,Nurse,Middle Eastern,829,11902,0,0,-1,0,0,0,0,0,1,0
+0ad04582__0,0ad04582,0,2025-12-03,Chen Meiling,55+,Artist,East Asian,1117,12181,0,0,0,1,0,0,0,0,1,0
+0ad04582__1,0ad04582,1,2025-12-06,Chen Meiling,55+,Artist,East Asian,1411,12475,0,0,0,0,0,1,0,0,-1,0
+0ad04582__2,0ad04582,2,2025-12-06,Chen Meiling,55+,Artist,East Asian,877,11941,1,0,0,0,0,0,0,0,1,0
+0ad04582__3,0ad04582,3,2025-12-12,Chen Meiling,55+,Artist,East Asian,1097,12161,0,0,0,0,0,0,0,0,1,0
+0ad04582__4,0ad04582,4,2025-12-13,Chen Meiling,55+,Artist,East Asian,1082,12146,0,0,0,-1,0,0,0,0,1,0
+0ad04582__5,0ad04582,5,2025-12-19,Chen Meiling,55+,Artist,East Asian,663,11727,0,0,0,0,0,0,0,0,1,0
+0ad04582__6,0ad04582,6,2025-12-19,Chen Meiling,55+,Artist,East Asian,445,11509,0,0,0,0,0,0,0,0,1,0
+0ad04582__7,0ad04582,7,2025-12-22,Chen Meiling,55+,Artist,East Asian,917,11981,0,0,0,1,0,1,0,0,1,0
+0ad04582__8,0ad04582,8,2025-12-28,Chen Meiling,55+,Artist,East Asian,229,11293,0,0,0,0,0,0,0,0,1,0
+0ad04582__9,0ad04582,9,2025-12-31,Chen Meiling,55+,Artist,East Asian,714,11778,0,0,0,0,0,0,0,1,1,0
+0ad04582__10,0ad04582,10,2026-01-01,Chen Meiling,55+,Artist,East Asian,1190,12254,0,0,0,1,0,1,0,0,0,0
+0d272008__0,0d272008,0,2025-12-01,Marcus Chen,35-44,Entrepreneur,North American,718,11799,1,0,0,1,0,0,0,0,0,0
+0d272008__1,0d272008,1,2025-12-07,Marcus Chen,35-44,Entrepreneur,North American,864,11945,1,0,0,0,0,0,-1,0,0,0
+0d272008__2,0d272008,2,2025-12-09,Marcus Chen,35-44,Entrepreneur,North American,672,11753,1,0,0,0,0,-1,0,0,0,0
+0d272008__3,0d272008,3,2025-12-14,Marcus Chen,35-44,Entrepreneur,North American,836,11917,1,0,0,0,0,0,0,0,0,0
+0d272008__4,0d272008,4,2025-12-16,Marcus Chen,35-44,Entrepreneur,North American,437,11518,1,0,0,0,0,0,0,0,0,0
+0d272008__5,0d272008,5,2025-12-19,Marcus Chen,35-44,Entrepreneur,North American,1000,12081,1,0,1,0,0,0,0,0,0,0
+0d272008__6,0d272008,6,2025-12-22,Marcus Chen,35-44,Entrepreneur,North American,1195,12276,1,0,-1,1,0,0,0,0,-1,0
+0d272008__7,0d272008,7,2025-12-30,Marcus Chen,35-44,Entrepreneur,North American,1932,13013,1,0,0,1,0,0,0,0,1,0
+0d42f985__0,0d42f985,0,2025-08-13,Tariq Haddad,35-44,Grad Student,Middle Eastern,842,11944,0,0,0,1,0,0,0,0,-1,0
+0d42f985__1,0d42f985,1,2025-08-18,Tariq Haddad,35-44,Grad Student,Middle Eastern,1295,12397,0,0,0,1,0,0,0,0,-1,0
+0d42f985__2,0d42f985,2,2025-08-18,Tariq Haddad,35-44,Grad Student,Middle Eastern,1202,12304,0,0,0,0,0,0,0,0,1,0
+0d42f985__3,0d42f985,3,2025-08-25,Tariq Haddad,35-44,Grad Student,Middle Eastern,485,11587,0,0,-1,1,0,0,0,0,-1,0
+0d42f985__4,0d42f985,4,2025-08-26,Tariq Haddad,35-44,Grad Student,Middle Eastern,539,11641,0,0,0,0,0,0,0,0,1,0
+0d42f985__5,0d42f985,5,2025-09-01,Tariq Haddad,35-44,Grad Student,Middle Eastern,583,11685,0,0,0,1,0,0,0,0,1,0
+0d42f985__6,0d42f985,6,2025-09-05,Tariq Haddad,35-44,Grad Student,Middle Eastern,782,11884,0,0,0,1,0,0,0,0,0,0
+0d42f985__7,0d42f985,7,2025-09-08,Tariq Haddad,35-44,Grad Student,Middle Eastern,317,11419,0,0,0,0,0,0,0,0,0,0
+0d42f985__8,0d42f985,8,2025-09-15,Tariq Haddad,35-44,Grad Student,Middle Eastern,1142,12244,0,0,0,1,0,0,0,0,1,0
+0e9a45e9__0,0e9a45e9,0,2025-12-01,Karim Nazari,35-44,Entrepreneur,Middle Eastern,1114,12216,1,0,0,0,0,-1,0,0,0,0
+0e9a45e9__1,0e9a45e9,1,2025-12-10,Karim Nazari,35-44,Entrepreneur,Middle Eastern,135,11237,1,0,1,0,0,0,0,0,0,0
+0e9a45e9__2,0e9a45e9,2,2025-12-16,Karim Nazari,35-44,Entrepreneur,Middle Eastern,1655,12757,1,0,1,0,0,0,0,-1,0,0
+0e9a45e9__3,0e9a45e9,3,2025-12-23,Karim Nazari,35-44,Entrepreneur,Middle Eastern,1063,12165,0,0,-1,1,0,0,0,0,-1,0
+0e9a45e9__4,0e9a45e9,4,2025-12-28,Karim Nazari,35-44,Entrepreneur,Middle Eastern,623,11725,1,0,1,0,0,0,0,0,1,0
+0e9a45e9__5,0e9a45e9,5,2026-01-07,Karim Nazari,35-44,Entrepreneur,Middle Eastern,576,11678,0,0,-1,1,0,0,0,0,0,0
+0e9a45e9__6,0e9a45e9,6,2026-01-17,Karim Nazari,35-44,Entrepreneur,Middle Eastern,1154,12256,1,0,0,1,1,0,0,0,0,0
+0e9a45e9__7,0e9a45e9,7,2026-01-25,Karim Nazari,35-44,Entrepreneur,Middle Eastern,1009,12111,1,0,1,0,0,1,0,0,0,0
+0e9a45e9__8,0e9a45e9,8,2026-01-31,Karim Nazari,35-44,Entrepreneur,Middle Eastern,731,11833,1,0,1,0,0,0,0,0,1,0
+110fcd4f__0,110fcd4f,0,2025-06-24,Lukas Bergmann,18-24,Grad Student,Western European,333,11443,0,0,0,-1,-1,0,1,0,0,0
+110fcd4f__1,110fcd4f,1,2025-06-25,Lukas Bergmann,18-24,Grad Student,Western European,682,11792,1,0,0,0,-1,-1,-1,-1,-1,0
+110fcd4f__2,110fcd4f,2,2025-06-28,Lukas Bergmann,18-24,Grad Student,Western European,819,11929,1,0,-1,1,0,-1,-1,0,-1,0
+114c62d8__0,114c62d8,0,2025-12-01,Tariq Al-Rashid,18-24,Entrepreneur,Middle Eastern,1621,12688,0,0,0,0,1,0,0,-1,-1,0
+114c62d8__1,114c62d8,1,2025-12-11,Tariq Al-Rashid,18-24,Entrepreneur,Middle Eastern,800,11867,0,0,0,-1,-1,0,0,0,0,0
+114c62d8__2,114c62d8,2,2025-12-13,Tariq Al-Rashid,18-24,Entrepreneur,Middle Eastern,1082,12149,1,0,0,0,0,0,0,0,1,0
+11a31f12__0,11a31f12,0,2025-07-28,Valentina Reyes,25-34,Teacher,Latin American,333,11439,1,0,0,0,0,0,-1,0,0,0
+11a31f12__1,11a31f12,1,2025-07-31,Valentina Reyes,25-34,Teacher,Latin American,935,12041,1,0,0,0,0,0,-1,0,1,0
+11a31f12__2,11a31f12,2,2025-08-04,Valentina Reyes,25-34,Teacher,Latin American,749,11855,0,0,0,0,0,0,0,1,1,0
+11a31f12__3,11a31f12,3,2025-08-06,Valentina Reyes,25-34,Teacher,Latin American,392,11498,0,0,0,1,0,0,0,0,-1,0
+11a31f12__4,11a31f12,4,2025-08-13,Valentina Reyes,25-34,Teacher,Latin American,1305,12411,1,0,0,0,0,0,-1,0,1,0
+11a31f12__5,11a31f12,5,2025-08-13,Valentina Reyes,25-34,Teacher,Latin American,1208,12314,0,0,-1,0,0,0,0,0,1,0
+11a31f12__6,11a31f12,6,2025-08-14,Valentina Reyes,25-34,Teacher,Latin American,1427,12533,1,0,0,0,0,0,0,1,1,0
+11a31f12__7,11a31f12,7,2025-08-14,Valentina Reyes,25-34,Teacher,Latin American,374,11480,0,0,0,0,0,0,0,0,0,0
+11de77e8__0,11de77e8,0,2025-08-23,Lukas Vermeer,25-34,Software Engineer,Western European,686,11800,-1,0,0,1,0,0,1,0,0,0
+11de77e8__1,11de77e8,1,2025-08-30,Lukas Vermeer,25-34,Software Engineer,Western European,286,11400,0,0,0,0,0,0,0,0,1,0
+11de77e8__2,11de77e8,2,2025-09-05,Lukas Vermeer,25-34,Software Engineer,Western European,702,11816,-1,0,0,0,0,0,1,0,0,0
+11de77e8__3,11de77e8,3,2025-09-10,Lukas Vermeer,25-34,Software Engineer,Western European,1136,12250,1,0,0,0,0,0,1,0,0,0
+11de77e8__4,11de77e8,4,2025-09-12,Lukas Vermeer,25-34,Software Engineer,Western European,582,11696,1,1,0,0,0,0,0,0,0,0
+11de77e8__5,11de77e8,5,2025-09-19,Lukas Vermeer,25-34,Software Engineer,Western European,1124,12238,-1,0,0,1,0,0,1,0,0,0
+11de77e8__6,11de77e8,6,2025-09-26,Lukas Vermeer,25-34,Software Engineer,Western European,230,11344,0,0,0,1,0,0,1,0,0,0
+11de77e8__7,11de77e8,7,2025-10-02,Lukas Vermeer,25-34,Software Engineer,Western European,650,11764,1,0,0,1,0,0,1,0,0,0
+11de77e8__8,11de77e8,8,2025-10-07,Lukas Vermeer,25-34,Software Engineer,Western European,304,11418,1,0,0,1,0,0,0,0,0,0
+11de77e8__9,11de77e8,9,2025-10-11,Lukas Vermeer,25-34,Software Engineer,Western European,1223,12337,-1,0,0,0,0,0,1,0,0,0
+11de77e8__10,11de77e8,10,2025-10-14,Lukas Vermeer,25-34,Software Engineer,Western European,160,11274,-1,0,0,1,0,0,1,0,0,0
+11de77e8__11,11de77e8,11,2025-10-14,Lukas Vermeer,25-34,Software Engineer,Western European,721,11835,-1,0,0,0,0,0,1,0,0,0
+11fa5348__0,11fa5348,0,2025-06-02,Ryan Whitfield,25-34,Manager,North American,184,11279,0,0,0,-1,0,0,0,-1,0,0
+11fa5348__1,11fa5348,1,2025-06-07,Ryan Whitfield,25-34,Manager,North American,348,11443,0,0,0,-1,0,0,0,1,0,0
+11fa5348__2,11fa5348,2,2025-06-12,Ryan Whitfield,25-34,Manager,North American,252,11347,0,0,0,1,0,0,0,1,0,0
+11fa5348__3,11fa5348,3,2025-06-18,Ryan Whitfield,25-34,Manager,North American,931,12026,0,0,0,-1,0,0,0,1,0,0
+11fa5348__4,11fa5348,4,2025-06-19,Ryan Whitfield,25-34,Manager,North American,1178,12273,0,0,0,1,0,0,0,1,0,0
+11fa5348__5,11fa5348,5,2025-06-19,Ryan Whitfield,25-34,Manager,North American,344,11439,0,0,0,1,0,0,0,0,1,0
+11fa5348__6,11fa5348,6,2025-06-24,Ryan Whitfield,25-34,Manager,North American,1298,12393,0,0,0,0,0,0,0,1,0,0
+11fa5348__7,11fa5348,7,2025-06-25,Ryan Whitfield,25-34,Manager,North American,1071,12166,0,0,0,1,0,0,0,1,0,0
+11fa5348__8,11fa5348,8,2025-06-27,Ryan Whitfield,25-34,Manager,North American,310,11405,0,0,0,1,0,0,0,0,0,0
+11fa5348__9,11fa5348,9,2025-06-29,Ryan Whitfield,25-34,Manager,North American,1251,12346,-1,0,0,0,0,0,0,1,0,0
+11fa5348__10,11fa5348,10,2025-07-05,Ryan Whitfield,25-34,Manager,North American,1006,12101,0,0,0,1,0,0,0,1,0,0
+11fa5348__11,11fa5348,11,2025-07-12,Ryan Whitfield,25-34,Manager,North American,1441,12536,1,0,0,0,0,0,0,1,0,0
+127aefff__0,127aefff,0,2025-06-05,Tariq Haddad,35-44,Grad Student,Middle Eastern,881,11981,0,0,0,0,0,0,0,0,-1,0
+127aefff__1,127aefff,1,2025-06-12,Tariq Haddad,35-44,Grad Student,Middle Eastern,535,11635,-1,0,0,0,0,0,1,0,0,0
+127aefff__2,127aefff,2,2025-06-13,Tariq Haddad,35-44,Grad Student,Middle Eastern,227,11327,0,0,0,0,0,0,0,0,0,0
+127aefff__3,127aefff,3,2025-06-14,Tariq Haddad,35-44,Grad Student,Middle Eastern,583,11683,0,0,0,0,0,0,0,0,1,0
+127aefff__4,127aefff,4,2025-06-14,Tariq Haddad,35-44,Grad Student,Middle Eastern,1193,12293,-1,1,0,0,0,0,1,0,0,0
+127aefff__5,127aefff,5,2025-06-19,Tariq Haddad,35-44,Grad Student,Middle Eastern,1214,12314,0,1,0,0,0,0,1,0,0,0
+127aefff__6,127aefff,6,2025-06-26,Tariq Haddad,35-44,Grad Student,Middle Eastern,927,12027,1,1,0,0,0,0,1,0,0,0
+127aefff__7,127aefff,7,2025-06-27,Tariq Haddad,35-44,Grad Student,Middle Eastern,627,11727,-1,0,0,0,0,0,1,0,0,0
+127aefff__8,127aefff,8,2025-06-29,Tariq Haddad,35-44,Grad Student,Middle Eastern,1086,12186,1,1,0,0,0,0,0,0,0,0
+1496159d__0,1496159d,0,2025-07-08,Soo-jin Park,25-34,Gig Worker,East Asian,313,11385,0,0,0,0,0,0,0,1,0,0
+1496159d__1,1496159d,1,2025-07-11,Soo-jin Park,25-34,Gig Worker,East Asian,886,11958,1,0,0,0,0,-1,0,0,0,0
+1496159d__2,1496159d,2,2025-07-16,Soo-jin Park,25-34,Gig Worker,East Asian,439,11511,0,0,0,0,0,0,1,0,0,-1
+1496159d__3,1496159d,3,2025-07-21,Soo-jin Park,25-34,Gig Worker,East Asian,873,11945,0,0,0,0,0,1,0,0,0,-1
+1496159d__4,1496159d,4,2025-07-22,Soo-jin Park,25-34,Gig Worker,East Asian,924,11996,0,0,0,0,0,0,0,0,-1,-1
+1496159d__5,1496159d,5,2025-07-22,Soo-jin Park,25-34,Gig Worker,East Asian,347,11419,0,0,0,0,0,0,0,0,0,-1
+152df7a4__0,152df7a4,0,2025-02-12,Joon-ho Park,25-34,Manager,East Asian,1451,12520,0,0,0,0,0,0,0,0,1,0
+152df7a4__1,152df7a4,1,2025-02-18,Joon-ho Park,25-34,Manager,East Asian,252,11321,-1,0,0,0,0,0,1,0,0,-1
+152df7a4__2,152df7a4,2,2025-02-24,Joon-ho Park,25-34,Manager,East Asian,1187,12256,-1,0,0,0,0,0,1,0,0,-1
+152df7a4__3,152df7a4,3,2025-03-03,Joon-ho Park,25-34,Manager,East Asian,961,12030,-1,0,0,0,0,0,1,0,0,-1
+152df7a4__4,152df7a4,4,2025-03-08,Joon-ho Park,25-34,Manager,East Asian,190,11259,0,0,0,0,0,0,0,0,0,1
+152df7a4__5,152df7a4,5,2025-03-14,Joon-ho Park,25-34,Manager,East Asian,1357,12426,-1,0,0,0,0,0,1,0,0,-1
+152df7a4__6,152df7a4,6,2025-03-16,Joon-ho Park,25-34,Manager,East Asian,1304,12373,0,0,0,0,0,0,0,0,0,0
+152df7a4__7,152df7a4,7,2025-03-21,Joon-ho Park,25-34,Manager,East Asian,1408,12477,-1,0,0,0,0,0,1,0,0,-1
+15f8d4b9__0,15f8d4b9,0,2025-08-11,Farid Al-Rashid,55+,Gig Worker,Middle Eastern,607,11678,1,0,0,1,0,0,0,1,1,0
+15f8d4b9__1,15f8d4b9,1,2025-08-18,Farid Al-Rashid,55+,Gig Worker,Middle Eastern,197,11268,0,0,0,0,0,0,1,0,0,0
+15f8d4b9__2,15f8d4b9,2,2025-08-25,Farid Al-Rashid,55+,Gig Worker,Middle Eastern,1255,12326,1,0,0,1,0,-1,-1,1,0,0
+15f8d4b9__3,15f8d4b9,3,2025-08-26,Farid Al-Rashid,55+,Gig Worker,Middle Eastern,744,11815,0,1,0,0,0,0,0,0,1,0
+15f8d4b9__4,15f8d4b9,4,2025-09-05,Farid Al-Rashid,55+,Gig Worker,Middle Eastern,375,11446,0,0,0,1,-1,0,0,0,0,0
+15f8d4b9__5,15f8d4b9,5,2025-09-08,Farid Al-Rashid,55+,Gig Worker,Middle Eastern,652,11723,1,0,0,0,0,0,0,1,0,0
+15f8d4b9__6,15f8d4b9,6,2025-09-15,Farid Al-Rashid,55+,Gig Worker,Middle Eastern,1409,12480,0,0,0,1,0,0,0,1,1,1
+15f8d4b9__7,15f8d4b9,7,2025-09-15,Farid Al-Rashid,55+,Gig Worker,Middle Eastern,279,11350,0,0,0,0,0,0,0,0,1,0
+1628bd07__0,1628bd07,0,2025-05-15,Gerald Thornton,55+,Software Engineer,North American,379,11475,0,0,0,1,1,0,0,0,0,0
+1628bd07__1,1628bd07,1,2025-05-20,Gerald Thornton,55+,Software Engineer,North American,1203,12299,0,0,0,1,1,0,0,0,0,0
+1628bd07__2,1628bd07,2,2025-05-25,Gerald Thornton,55+,Software Engineer,North American,157,11253,0,0,0,1,1,0,0,0,0,0
+1628bd07__3,1628bd07,3,2025-05-25,Gerald Thornton,55+,Software Engineer,North American,395,11491,0,0,0,1,1,0,0,0,0,0
+1628bd07__4,1628bd07,4,2025-06-01,Gerald Thornton,55+,Software Engineer,North American,1070,12166,1,0,1,0,0,0,0,0,0,0
+1628bd07__5,1628bd07,5,2025-06-06,Gerald Thornton,55+,Software Engineer,North American,545,11641,0,0,0,0,1,0,1,0,-1,0
+1628bd07__6,1628bd07,6,2025-06-08,Gerald Thornton,55+,Software Engineer,North American,524,11620,0,0,0,1,1,0,0,0,0,0
+1628bd07__7,1628bd07,7,2025-06-10,Gerald Thornton,55+,Software Engineer,North American,546,11642,0,0,0,1,1,0,1,0,0,0
+1628bd07__8,1628bd07,8,2025-06-13,Gerald Thornton,55+,Software Engineer,North American,725,11821,1,0,1,0,0,0,0,0,0,0
+1628bd07__9,1628bd07,9,2025-06-19,Gerald Thornton,55+,Software Engineer,North American,1261,12357,0,0,0,1,1,0,0,0,-1,0
+1628bd07__10,1628bd07,10,2025-06-20,Gerald Thornton,55+,Software Engineer,North American,434,11530,1,0,1,0,0,0,0,0,1,0
+1628bd07__11,1628bd07,11,2025-06-24,Gerald Thornton,55+,Software Engineer,North American,1088,12184,1,0,0,1,0,0,0,0,1,0
+18415364__0,18415364,0,2025-01-05,Tariq Al-Mansouri,55+,Entrepreneur,Middle Eastern,836,11943,0,-1,0,0,0,0,0,1,1,0
+18415364__1,18415364,1,2025-01-06,Tariq Al-Mansouri,55+,Entrepreneur,Middle Eastern,1034,12141,1,0,-1,0,0,-1,-1,1,1,1
+18415364__2,18415364,2,2025-01-13,Tariq Al-Mansouri,55+,Entrepreneur,Middle Eastern,1366,12473,0,0,1,1,0,0,0,1,1,1
+18415364__3,18415364,3,2025-01-19,Tariq Al-Mansouri,55+,Entrepreneur,Middle Eastern,579,11686,0,0,-1,0,0,0,0,0,1,1
+18415364__4,18415364,4,2025-01-20,Tariq Al-Mansouri,55+,Entrepreneur,Middle Eastern,922,12029,-1,-1,-1,0,-1,0,-1,0,1,0
+1ae9b1c1__0,1ae9b1c1,0,2025-12-26,Layla Mansour,25-34,Teacher,Middle Eastern,899,11991,0,1,0,0,0,-1,-1,1,0,0
+1ae9b1c1__1,1ae9b1c1,1,2025-12-28,Layla Mansour,25-34,Teacher,Middle Eastern,604,11696,1,1,0,0,0,0,0,0,0,0
+1ae9b1c1__2,1ae9b1c1,2,2026-01-02,Layla Mansour,25-34,Teacher,Middle Eastern,629,11721,1,1,0,0,0,1,0,0,0,0
+1b8b7276__0,1b8b7276,0,2025-07-05,Nabil Khoury,45-54,Software Engineer,Middle Eastern,913,12012,-1,-1,0,0,0,1,1,0,0,0
+1b8b7276__1,1b8b7276,1,2025-07-09,Nabil Khoury,45-54,Software Engineer,Middle Eastern,897,11996,-1,0,0,0,-1,1,1,0,0,0
+1b8b7276__2,1b8b7276,2,2025-07-15,Nabil Khoury,45-54,Software Engineer,Middle Eastern,478,11577,0,0,0,1,0,0,1,1,1,0
+1b8b7276__3,1b8b7276,3,2025-07-19,Nabil Khoury,45-54,Software Engineer,Middle Eastern,562,11661,-1,0,0,0,-1,1,1,1,0,0
+1b8b7276__4,1b8b7276,4,2025-07-24,Nabil Khoury,45-54,Software Engineer,Middle Eastern,777,11876,-1,-1,0,0,0,1,0,0,0,0
+1b8b7276__5,1b8b7276,5,2025-07-31,Nabil Khoury,45-54,Software Engineer,Middle Eastern,531,11630,0,0,1,1,0,1,0,0,1,0
+1b8b7276__6,1b8b7276,6,2025-08-07,Nabil Khoury,45-54,Software Engineer,Middle Eastern,1263,12362,-1,-1,0,1,-1,1,1,0,0,0
+1b8b7276__7,1b8b7276,7,2025-08-13,Nabil Khoury,45-54,Software Engineer,Middle Eastern,799,11898,0,-1,0,1,0,1,1,0,0,0
+1b8b7276__8,1b8b7276,8,2025-08-19,Nabil Khoury,45-54,Software Engineer,Middle Eastern,215,11314,0,0,1,0,0,0,0,1,1,0
+1bcd8599__0,1bcd8599,0,2025-02-11,Tariq Hadid,45-54,Nurse,Middle Eastern,937,11993,0,0,0,0,-1,0,1,0,0,0
+1bcd8599__1,1bcd8599,1,2025-02-11,Tariq Hadid,45-54,Nurse,Middle Eastern,1823,12879,-1,0,0,0,-1,0,0,0,0,0
+1bcd8599__2,1bcd8599,2,2025-02-15,Tariq Hadid,45-54,Nurse,Middle Eastern,661,11717,0,0,0,1,0,0,0,0,0,0
+1bcd8599__3,1bcd8599,3,2025-02-22,Tariq Hadid,45-54,Nurse,Middle Eastern,1288,12344,-1,0,0,0,-1,0,1,0,0,0
+1bcd8599__4,1bcd8599,4,2025-02-22,Tariq Hadid,45-54,Nurse,Middle Eastern,1258,12314,0,0,0,0,-1,0,1,0,0,0
+1bcd8599__5,1bcd8599,5,2025-02-28,Tariq Hadid,45-54,Nurse,Middle Eastern,244,11300,0,0,0,0,0,0,0,0,0,0
+1bcd8599__6,1bcd8599,6,2025-03-06,Tariq Hadid,45-54,Nurse,Middle Eastern,754,11810,0,0,0,0,-1,0,1,0,0,0
+1bcd8599__7,1bcd8599,7,2025-03-10,Tariq Hadid,45-54,Nurse,Middle Eastern,1800,12856,0,0,0,0,-1,0,0,0,1,0
+1bcd8599__8,1bcd8599,8,2025-03-11,Tariq Hadid,45-54,Nurse,Middle Eastern,731,11787,0,0,0,0,0,0,0,1,1,0
+1bcd8599__9,1bcd8599,9,2025-03-12,Tariq Hadid,45-54,Nurse,Middle Eastern,1068,12124,1,0,0,0,-1,0,0,0,0,0
+1d529c71__0,1d529c71,0,2025-03-24,Luuk Janssen,18-24,Gig Worker,Western European,227,11301,-1,0,0,0,0,0,1,0,0,0
+1d529c71__1,1d529c71,1,2025-03-31,Luuk Janssen,18-24,Gig Worker,Western European,1180,12254,-1,0,0,0,0,0,1,1,0,0
+1d529c71__2,1d529c71,2,2025-04-03,Luuk Janssen,18-24,Gig Worker,Western European,1010,12084,0,0,0,0,0,1,1,0,0,0
+1d529c71__3,1d529c71,3,2025-04-05,Luuk Janssen,18-24,Gig Worker,Western European,1121,12195,0,0,0,0,0,1,1,0,0,0
+1d529c71__4,1d529c71,4,2025-04-09,Luuk Janssen,18-24,Gig Worker,Western European,1248,12322,-1,0,0,0,0,0,1,0,0,0
+1d529c71__5,1d529c71,5,2025-04-16,Luuk Janssen,18-24,Gig Worker,Western European,252,11326,0,0,0,0,0,0,1,1,0,0
+1d529c71__6,1d529c71,6,2025-04-16,Luuk Janssen,18-24,Gig Worker,Western European,417,11491,-1,0,0,0,0,0,1,0,0,0
+1d529c71__7,1d529c71,7,2025-04-21,Luuk Janssen,18-24,Gig Worker,Western European,987,12061,-1,0,0,0,0,0,1,0,0,0
+1ed90155__0,1ed90155,0,2025-12-08,Maya Chen,18-24,Artist,North American,1120,12213,1,1,0,1,0,0,-1,0,0,0
+1ed90155__1,1ed90155,1,2025-12-09,Maya Chen,18-24,Artist,North American,1152,12245,1,1,0,1,0,0,0,0,0,0
+1ed90155__2,1ed90155,2,2025-12-12,Maya Chen,18-24,Artist,North American,1100,12193,0,1,0,1,0,-1,0,0,0,0
+1ed90155__3,1ed90155,3,2025-12-14,Maya Chen,18-24,Artist,North American,271,11364,-1,0,0,1,0,0,0,0,0,0
+1ed90155__4,1ed90155,4,2025-12-17,Maya Chen,18-24,Artist,North American,220,11313,0,1,-1,1,0,0,0,0,0,0
+1ed90155__5,1ed90155,5,2025-12-20,Maya Chen,18-24,Artist,North American,1992,13085,1,1,0,1,0,0,0,0,1,0
+1f86f569__0,1f86f569,0,2025-11-27,Erik Lindqvist,35-44,Software Engineer,Western European,692,11807,-1,0,0,0,0,0,1,0,0,0
+1f86f569__1,1f86f569,1,2025-12-01,Erik Lindqvist,35-44,Software Engineer,Western European,1364,12479,-1,0,0,0,0,0,1,0,1,0
+1f86f569__2,1f86f569,2,2025-12-06,Erik Lindqvist,35-44,Software Engineer,Western European,2057,13172,-1,0,0,0,0,1,1,1,1,0
+1f86f569__3,1f86f569,3,2025-12-09,Erik Lindqvist,35-44,Software Engineer,Western European,941,12056,-1,0,0,1,0,0,1,0,1,0
+20730018__0,20730018,0,2025-06-02,Arjun Rathore,35-44,Gig Worker,South Asian,1388,12482,0,0,0,0,0,1,0,0,0,0
+20730018__1,20730018,1,2025-06-09,Arjun Rathore,35-44,Gig Worker,South Asian,369,11463,0,0,0,0,0,0,0,0,0,1
+20730018__2,20730018,2,2025-06-15,Arjun Rathore,35-44,Gig Worker,South Asian,658,11752,0,0,0,0,0,1,0,0,0,0
+20730018__3,20730018,3,2025-06-20,Arjun Rathore,35-44,Gig Worker,South Asian,1226,12320,0,0,0,0,0,0,0,0,1,0
+20730018__4,20730018,4,2025-06-26,Arjun Rathore,35-44,Gig Worker,South Asian,813,11907,0,0,0,0,0,0,0,0,0,1
+20730018__5,20730018,5,2025-07-03,Arjun Rathore,35-44,Gig Worker,South Asian,989,12083,0,0,0,0,0,1,0,0,0,1
+20730018__6,20730018,6,2025-07-04,Arjun Rathore,35-44,Gig Worker,South Asian,1246,12340,0,0,0,0,0,0,0,0,0,1
+20730018__7,20730018,7,2025-07-06,Arjun Rathore,35-44,Gig Worker,South Asian,512,11606,0,0,0,0,0,1,0,0,0,1
+20730018__8,20730018,8,2025-07-13,Arjun Rathore,35-44,Gig Worker,South Asian,1691,12785,0,0,0,0,0,1,0,0,-1,-1
+22b117be__0,22b117be,0,2025-04-28,Harold Delacroix,55+,Grad Student,North American,1034,12124,-1,0,0,0,1,0,1,0,0,0
+22b117be__1,22b117be,1,2025-04-30,Harold Delacroix,55+,Grad Student,North American,214,11304,0,0,0,0,0,0,0,0,0,0
+22b117be__2,22b117be,2,2025-04-30,Harold Delacroix,55+,Grad Student,North American,1472,12562,-1,0,0,1,-1,-1,1,0,0,0
+22b117be__3,22b117be,3,2025-05-01,Harold Delacroix,55+,Grad Student,North American,934,12024,-1,0,0,0,0,1,1,0,-1,0
+22b117be__4,22b117be,4,2025-05-03,Harold Delacroix,55+,Grad Student,North American,250,11340,0,0,0,1,0,0,1,0,0,0
+22b117be__5,22b117be,5,2025-05-08,Harold Delacroix,55+,Grad Student,North American,1634,12724,1,0,0,1,-1,0,1,0,0,0
+22b117be__6,22b117be,6,2025-05-14,Harold Delacroix,55+,Grad Student,North American,575,11665,0,0,0,0,-1,0,1,0,0,0
+22b117be__7,22b117be,7,2025-05-15,Harold Delacroix,55+,Grad Student,North American,558,11648,0,0,0,1,1,1,0,0,0,0
+22b117be__8,22b117be,8,2025-05-19,Harold Delacroix,55+,Grad Student,North American,787,11877,-1,0,0,-1,0,0,1,0,0,0
+22b117be__9,22b117be,9,2025-05-25,Harold Delacroix,55+,Grad Student,North American,1185,12275,1,0,0,0,0,-1,0,0,0,0
+22b117be__10,22b117be,10,2025-05-30,Harold Delacroix,55+,Grad Student,North American,937,12027,1,0,0,1,1,0,0,0,0,0
+22b117be__11,22b117be,11,2025-05-30,Harold Delacroix,55+,Grad Student,North American,230,11320,0,1,0,1,0,0,0,0,0,0
+236d4507__0,236d4507,0,2025-02-14,Lukas Weiß,25-34,Grad Student,Western European,1071,12135,0,0,0,0,-1,0,1,0,0,0
+236d4507__1,236d4507,1,2025-02-15,Lukas Weiß,25-34,Grad Student,Western European,1354,12418,0,0,0,0,1,0,0,0,0,0
+236d4507__2,236d4507,2,2025-02-22,Lukas Weiß,25-34,Grad Student,Western European,1218,12282,-1,0,0,0,1,0,0,0,0,0
+236d4507__3,236d4507,3,2025-02-28,Lukas Weiß,25-34,Grad Student,Western European,1080,12144,0,0,0,0,-1,0,0,0,0,0
+236d4507__4,236d4507,4,2025-03-01,Lukas Weiß,25-34,Grad Student,Western European,531,11595,0,0,0,1,0,0,0,0,0,0
+236d4507__5,236d4507,5,2025-03-04,Lukas Weiß,25-34,Grad Student,Western European,295,11359,0,0,0,0,1,0,0,0,0,0
+23d101f8__0,23d101f8,0,2025-08-05,Meera Krishnamurthy,45-54,Teacher,South Asian,260,11355,0,0,0,1,0,0,0,0,0,0
+23d101f8__1,23d101f8,1,2025-08-05,Meera Krishnamurthy,45-54,Teacher,South Asian,725,11820,0,0,0,1,0,1,0,0,0,0
+23d101f8__2,23d101f8,2,2025-08-10,Meera Krishnamurthy,45-54,Teacher,South Asian,358,11453,0,0,0,1,0,0,0,0,1,0
+23d101f8__3,23d101f8,3,2025-08-14,Meera Krishnamurthy,45-54,Teacher,South Asian,229,11324,0,0,0,1,0,0,0,0,0,0
+23d101f8__4,23d101f8,4,2025-08-20,Meera Krishnamurthy,45-54,Teacher,South Asian,349,11444,0,-1,0,0,0,1,0,0,1,0
+23d101f8__5,23d101f8,5,2025-08-22,Meera Krishnamurthy,45-54,Teacher,South Asian,1250,12345,1,0,0,1,0,0,1,0,0,0
+23d101f8__6,23d101f8,6,2025-08-27,Meera Krishnamurthy,45-54,Teacher,South Asian,748,11843,0,0,0,0,0,1,0,0,0,0
+23d101f8__7,23d101f8,7,2025-09-02,Meera Krishnamurthy,45-54,Teacher,South Asian,1111,12206,0,0,0,1,0,1,0,0,-1,0
+23d101f8__8,23d101f8,8,2025-09-09,Meera Krishnamurthy,45-54,Teacher,South Asian,1004,12099,0,0,0,0,0,0,0,0,1,0
+23d101f8__9,23d101f8,9,2025-09-12,Meera Krishnamurthy,45-54,Teacher,South Asian,331,11426,0,0,0,1,0,1,0,0,0,0
+23d101f8__10,23d101f8,10,2025-09-19,Meera Krishnamurthy,45-54,Teacher,South Asian,1065,12160,0,0,0,1,0,1,0,0,1,0
+2541429a__0,2541429a,0,2025-11-10,Farid Al-Khatib,55+,Parent (Stay-at-home),Middle Eastern,302,11416,0,0,0,0,1,1,0,0,0,0
+2541429a__1,2541429a,1,2025-11-14,Farid Al-Khatib,55+,Parent (Stay-at-home),Middle Eastern,575,11689,0,0,0,0,0,0,0,1,1,0
+2541429a__2,2541429a,2,2025-11-18,Farid Al-Khatib,55+,Parent (Stay-at-home),Middle Eastern,240,11354,0,0,0,0,0,1,0,1,0,0
+2541429a__3,2541429a,3,2025-11-18,Farid Al-Khatib,55+,Parent (Stay-at-home),Middle Eastern,694,11808,0,0,0,0,0,1,0,1,0,0
+2541429a__4,2541429a,4,2025-11-24,Farid Al-Khatib,55+,Parent (Stay-at-home),Middle Eastern,219,11333,0,0,0,0,0,0,0,1,0,0
+2541429a__5,2541429a,5,2025-11-24,Farid Al-Khatib,55+,Parent (Stay-at-home),Middle Eastern,780,11894,0,0,0,0,-1,0,0,1,0,0
+2541429a__6,2541429a,6,2025-11-28,Farid Al-Khatib,55+,Parent (Stay-at-home),Middle Eastern,880,11994,0,0,0,0,0,1,0,1,0,0
+2541429a__7,2541429a,7,2025-11-30,Farid Al-Khatib,55+,Parent (Stay-at-home),Middle Eastern,617,11731,1,0,0,0,-1,0,0,0,1,0
+2541429a__8,2541429a,8,2025-12-04,Farid Al-Khatib,55+,Parent (Stay-at-home),Middle Eastern,738,11852,1,0,0,0,0,0,0,0,1,0
+2719f938__0,2719f938,0,2025-07-04,Yasmin Khalil,25-34,Artist,Middle Eastern,674,11739,0,0,1,1,0,0,-1,0,0,0
+2719f938__1,2719f938,1,2025-07-09,Yasmin Khalil,25-34,Artist,Middle Eastern,385,11450,0,0,1,-1,0,0,0,0,0,0
+2719f938__2,2719f938,2,2025-07-12,Yasmin Khalil,25-34,Artist,Middle Eastern,1590,12655,1,0,1,0,0,-1,-1,-1,0,0
+2719f938__3,2719f938,3,2025-07-18,Yasmin Khalil,25-34,Artist,Middle Eastern,149,11214,0,0,1,1,0,0,0,0,0,0
+2719f938__4,2719f938,4,2025-07-20,Yasmin Khalil,25-34,Artist,Middle Eastern,1210,12275,1,0,1,0,0,0,-1,-1,0,0
+2719f938__5,2719f938,5,2025-07-22,Yasmin Khalil,25-34,Artist,Middle Eastern,584,11649,0,1,1,0,0,0,0,0,1,0
+2719f938__6,2719f938,6,2025-07-23,Yasmin Khalil,25-34,Artist,Middle Eastern,411,11476,1,0,0,0,0,0,-1,-1,0,0
+2719f938__7,2719f938,7,2025-07-29,Yasmin Khalil,25-34,Artist,Middle Eastern,1074,12139,1,0,1,0,0,-1,0,0,0,0
+2719f938__8,2719f938,8,2025-08-03,Yasmin Khalil,25-34,Artist,Middle Eastern,681,11746,0,0,1,1,0,0,-1,0,1,0
+2a4a97ee__0,2a4a97ee,0,2025-10-04,Carmen Lucia Vargas,35-44,Teacher,Latin American,223,11329,1,0,0,-1,0,0,0,0,1,0
+2a4a97ee__1,2a4a97ee,1,2025-10-10,Carmen Lucia Vargas,35-44,Teacher,Latin American,1461,12567,1,0,0,0,0,0,1,0,1,1
+2a4a97ee__2,2a4a97ee,2,2025-10-10,Carmen Lucia Vargas,35-44,Teacher,Latin American,1173,12279,1,0,0,-1,-1,0,0,0,1,1
+2a4a97ee__3,2a4a97ee,3,2025-10-15,Carmen Lucia Vargas,35-44,Teacher,Latin American,148,11254,0,0,0,0,0,0,0,0,1,0
+2a4a97ee__4,2a4a97ee,4,2025-10-20,Carmen Lucia Vargas,35-44,Teacher,Latin American,1410,12516,1,0,0,0,0,1,0,0,1,1
+2d928d8a__0,2d928d8a,0,2025-02-07,Henrik Larsson,45-54,Entrepreneur,Western European,1102,12202,0,1,0,0,0,-1,0,0,0,0
+2d928d8a__1,2d928d8a,1,2025-02-13,Henrik Larsson,45-54,Entrepreneur,Western European,690,11790,0,1,0,0,0,1,0,0,0,0
+2d928d8a__2,2d928d8a,2,2025-02-14,Henrik Larsson,45-54,Entrepreneur,Western European,1060,12160,0,0,0,1,0,0,0,0,-1,0
+2d928d8a__3,2d928d8a,3,2025-02-15,Henrik Larsson,45-54,Entrepreneur,Western European,921,12021,1,0,0,0,0,1,0,0,0,0
+2d928d8a__4,2d928d8a,4,2025-02-22,Henrik Larsson,45-54,Entrepreneur,Western European,991,12091,0,0,0,0,0,1,0,0,0,0
+2d928d8a__5,2d928d8a,5,2025-02-27,Henrik Larsson,45-54,Entrepreneur,Western European,999,12099,0,0,0,1,0,1,0,0,0,0
+2d928d8a__6,2d928d8a,6,2025-03-03,Henrik Larsson,45-54,Entrepreneur,Western European,1385,12485,0,1,0,0,0,-1,0,0,0,0
+2d928d8a__7,2d928d8a,7,2025-03-08,Henrik Larsson,45-54,Entrepreneur,Western European,252,11352,0,0,1,0,0,0,0,0,0,0
+2d928d8a__8,2d928d8a,8,2025-03-13,Henrik Larsson,45-54,Entrepreneur,Western European,635,11735,0,1,0,0,0,1,0,0,0,0
+2d928d8a__9,2d928d8a,9,2025-03-14,Henrik Larsson,45-54,Entrepreneur,Western European,710,11810,0,1,0,0,0,1,0,0,0,0
+2d928d8a__10,2d928d8a,10,2025-03-14,Henrik Larsson,45-54,Entrepreneur,Western European,1087,12187,0,1,0,0,0,-1,0,0,0,0
+2d928d8a__11,2d928d8a,11,2025-03-14,Henrik Larsson,45-54,Entrepreneur,Western European,637,11737,1,0,0,0,0,1,0,0,0,0
+2da4f100__0,2da4f100,0,2025-01-23,Santiago Herrera,25-34,Entrepreneur,Latin American,644,11724,0,0,-1,1,0,0,0,0,0,0
+2da4f100__1,2da4f100,1,2025-01-29,Santiago Herrera,25-34,Entrepreneur,Latin American,524,11604,0,0,0,1,0,0,0,0,0,0
+2da4f100__2,2da4f100,2,2025-02-04,Santiago Herrera,25-34,Entrepreneur,Latin American,1293,12373,0,0,0,1,1,0,0,0,0,0
+2da4f100__3,2da4f100,3,2025-02-09,Santiago Herrera,25-34,Entrepreneur,Latin American,198,11278,0,0,0,1,0,0,0,0,0,0
+2da4f100__4,2da4f100,4,2025-02-09,Santiago Herrera,25-34,Entrepreneur,Latin American,976,12056,0,0,0,1,0,0,0,0,-1,0
+2da4f100__5,2da4f100,5,2025-02-15,Santiago Herrera,25-34,Entrepreneur,Latin American,1403,12483,0,0,0,1,1,0,0,0,0,0
+2da4f100__6,2da4f100,6,2025-02-19,Santiago Herrera,25-34,Entrepreneur,Latin American,357,11437,0,0,0,1,0,0,0,-1,-1,0
+2da4f100__7,2da4f100,7,2025-02-19,Santiago Herrera,25-34,Entrepreneur,Latin American,241,11321,0,0,0,1,0,0,0,0,0,0
+2da4f100__8,2da4f100,8,2025-02-25,Santiago Herrera,25-34,Entrepreneur,Latin American,997,12077,0,0,0,1,1,0,0,0,0,0
+2da4f100__9,2da4f100,9,2025-03-02,Santiago Herrera,25-34,Entrepreneur,Latin American,438,11518,0,0,0,1,0,0,0,0,0,0
+2da4f100__10,2da4f100,10,2025-03-08,Santiago Herrera,25-34,Entrepreneur,Latin American,666,11746,0,0,0,1,0,0,0,0,0,0
+2e6270bb__0,2e6270bb,0,2025-12-07,Chen Wei-Lin,45-54,Gig Worker,East Asian,302,11380,0,0,0,0,1,0,0,0,0,0
+2e6270bb__1,2e6270bb,1,2025-12-13,Chen Wei-Lin,45-54,Gig Worker,East Asian,1255,12333,1,0,-1,1,0,1,1,0,1,0
+2e6270bb__2,2e6270bb,2,2025-12-13,Chen Wei-Lin,45-54,Gig Worker,East Asian,1252,12330,1,0,0,0,-1,1,-1,0,1,0
+2e6270bb__3,2e6270bb,3,2025-12-16,Chen Wei-Lin,45-54,Gig Worker,East Asian,223,11301,0,0,0,0,0,0,0,0,0,0
+2e6270bb__4,2e6270bb,4,2025-12-16,Chen Wei-Lin,45-54,Gig Worker,East Asian,236,11314,0,0,0,-1,-1,-1,0,0,0,0
+2e6270bb__5,2e6270bb,5,2025-12-20,Chen Wei-Lin,45-54,Gig Worker,East Asian,670,11748,1,0,-1,1,1,1,0,0,0,0
+2e6270bb__6,2e6270bb,6,2025-12-25,Chen Wei-Lin,45-54,Gig Worker,East Asian,1563,12641,1,0,-1,1,0,1,0,-1,-1,0
+2e6270bb__7,2e6270bb,7,2025-12-25,Chen Wei-Lin,45-54,Gig Worker,East Asian,227,11305,0,0,0,0,0,0,0,0,-1,0
+2e6270bb__8,2e6270bb,8,2025-12-28,Chen Wei-Lin,45-54,Gig Worker,East Asian,1447,12525,0,0,0,0,-1,0,1,0,1,0
+2e6270bb__9,2e6270bb,9,2026-01-04,Chen Wei-Lin,45-54,Gig Worker,East Asian,285,11363,0,0,0,1,1,1,0,0,0,0
+344ea8f7__0,344ea8f7,0,2025-11-07,Matthijs van der Berg,45-54,Grad Student,Western European,997,12078,0,0,1,0,0,0,0,0,0,0
+344ea8f7__1,344ea8f7,1,2025-11-11,Matthijs van der Berg,45-54,Grad Student,Western European,344,11425,0,0,1,0,0,0,0,0,0,0
+344ea8f7__2,344ea8f7,2,2025-11-13,Matthijs van der Berg,45-54,Grad Student,Western European,1230,12311,-1,0,-1,1,0,0,1,0,0,0
+344ea8f7__3,344ea8f7,3,2025-11-13,Matthijs van der Berg,45-54,Grad Student,Western European,412,11493,0,0,1,0,0,0,0,0,0,0
+344ea8f7__4,344ea8f7,4,2025-11-20,Matthijs van der Berg,45-54,Grad Student,Western European,679,11760,0,0,1,1,0,0,0,0,0,0
+344ea8f7__5,344ea8f7,5,2025-11-20,Matthijs van der Berg,45-54,Grad Student,Western European,739,11820,0,0,-1,1,0,0,0,0,0,0
+344ea8f7__6,344ea8f7,6,2025-11-23,Matthijs van der Berg,45-54,Grad Student,Western European,769,11850,0,0,0,0,0,0,0,0,0,0
+344ea8f7__7,344ea8f7,7,2025-11-27,Matthijs van der Berg,45-54,Grad Student,Western European,1551,12632,0,0,-1,1,0,0,0,0,0,0
+344ea8f7__8,344ea8f7,8,2025-12-02,Matthijs van der Berg,45-54,Grad Student,Western European,1191,12272,1,0,1,0,0,0,0,0,0,0
+3a3b15e4__0,3a3b15e4,0,2025-05-29,Nasser Haddad,45-54,Grad Student,Middle Eastern,1020,12113,1,0,1,0,0,0,0,1,0,0
+3a3b15e4__1,3a3b15e4,1,2025-06-03,Nasser Haddad,45-54,Grad Student,Middle Eastern,195,11288,0,0,0,1,0,0,0,0,0,0
+3a3b15e4__2,3a3b15e4,2,2025-06-10,Nasser Haddad,45-54,Grad Student,Middle Eastern,1219,12312,0,0,0,0,0,0,1,1,0,0
+3a3b15e4__3,3a3b15e4,3,2025-06-10,Nasser Haddad,45-54,Grad Student,Middle Eastern,247,11340,0,0,1,0,0,0,-1,0,0,0
+3a3b15e4__4,3a3b15e4,4,2025-06-12,Nasser Haddad,45-54,Grad Student,Middle Eastern,2018,13111,1,0,0,0,0,0,0,-1,0,0
+3a3b15e4__5,3a3b15e4,5,2025-06-15,Nasser Haddad,45-54,Grad Student,Middle Eastern,1491,12584,1,0,1,0,0,0,0,0,0,0
+3a3b15e4__6,3a3b15e4,6,2025-06-17,Nasser Haddad,45-54,Grad Student,Middle Eastern,754,11847,0,0,0,1,0,0,0,1,0,0
+3a3b15e4__7,3a3b15e4,7,2025-06-18,Nasser Haddad,45-54,Grad Student,Middle Eastern,2045,13138,0,0,1,0,0,0,0,1,0,0
+3a3b15e4__8,3a3b15e4,8,2025-06-19,Nasser Haddad,45-54,Grad Student,Middle Eastern,1004,12097,0,0,1,-1,0,0,0,0,0,0
+3a3b15e4__9,3a3b15e4,9,2025-06-19,Nasser Haddad,45-54,Grad Student,Middle Eastern,246,11339,0,0,0,-1,0,0,-1,0,0,0
+3a3b15e4__10,3a3b15e4,10,2025-06-22,Nasser Haddad,45-54,Grad Student,Middle Eastern,1979,13072,0,0,0,1,0,0,0,1,0,0
+3a517a79__0,3a517a79,0,2025-12-22,Megan Calloway,35-44,Nurse,North American,1002,12067,0,-1,0,0,0,1,0,0,0,0
+3a517a79__1,3a517a79,1,2025-12-28,Megan Calloway,35-44,Nurse,North American,271,11336,0,0,0,0,0,1,0,0,0,0
+3a517a79__2,3a517a79,2,2025-12-29,Megan Calloway,35-44,Nurse,North American,1294,12359,0,-1,0,0,0,1,0,0,1,0
+3a517a79__3,3a517a79,3,2025-12-31,Megan Calloway,35-44,Nurse,North American,702,11767,0,0,0,0,0,0,0,0,1,0
+3a517a79__4,3a517a79,4,2025-12-31,Megan Calloway,35-44,Nurse,North American,530,11595,0,0,0,0,0,0,0,0,0,0
+3a517a79__5,3a517a79,5,2026-01-07,Megan Calloway,35-44,Nurse,North American,732,11797,0,0,0,0,0,1,0,0,1,0
+3a517a79__6,3a517a79,6,2026-01-13,Megan Calloway,35-44,Nurse,North American,277,11342,0,0,0,0,0,0,0,0,0,0
+3a517a79__7,3a517a79,7,2026-01-13,Megan Calloway,35-44,Nurse,North American,1561,12626,0,-1,0,-1,0,1,0,0,0,0
+3a517a79__8,3a517a79,8,2026-01-17,Megan Calloway,35-44,Nurse,North American,698,11763,0,0,0,0,0,1,0,0,1,0
+3b836198__0,3b836198,0,2025-07-19,Marcus Callahan,25-34,Entrepreneur,North American,854,11921,0,0,0,0,-1,0,1,0,0,0
+3b836198__1,3b836198,1,2025-07-21,Marcus Callahan,25-34,Entrepreneur,North American,796,11863,0,0,0,1,1,0,0,0,0,0
+3b836198__2,3b836198,2,2025-07-27,Marcus Callahan,25-34,Entrepreneur,North American,787,11854,0,0,-1,0,1,0,0,0,0,0
+3b836198__3,3b836198,3,2025-08-02,Marcus Callahan,25-34,Entrepreneur,North American,817,11884,1,0,0,0,1,0,0,0,0,0
+3b836198__4,3b836198,4,2025-08-02,Marcus Callahan,25-34,Entrepreneur,North American,981,12048,0,0,0,0,1,0,0,0,-1,0
+3b836198__5,3b836198,5,2025-08-04,Marcus Callahan,25-34,Entrepreneur,North American,1074,12141,0,0,0,0,1,0,0,0,0,0
+3b836198__6,3b836198,6,2025-08-08,Marcus Callahan,25-34,Entrepreneur,North American,1412,12479,1,0,0,1,1,0,0,0,0,0
+3b8b0795__0,3b8b0795,0,2025-04-09,Ricardo Fuentes Molina,45-54,Manager,Latin American,565,11640,0,0,0,-1,0,1,0,0,0,0
+3b8b0795__1,3b8b0795,1,2025-04-15,Ricardo Fuentes Molina,45-54,Manager,Latin American,323,11398,0,0,0,0,0,1,0,0,0,0
+3b8b0795__2,3b8b0795,2,2025-04-19,Ricardo Fuentes Molina,45-54,Manager,Latin American,249,11324,0,0,0,0,0,0,0,0,0,0
+3b8b0795__3,3b8b0795,3,2025-04-21,Ricardo Fuentes Molina,45-54,Manager,Latin American,1440,12515,0,0,0,0,0,1,0,0,0,0
+3b8b0795__4,3b8b0795,4,2025-04-26,Ricardo Fuentes Molina,45-54,Manager,Latin American,1210,12285,0,0,0,0,0,1,0,0,1,0
+3b8b0795__5,3b8b0795,5,2025-05-03,Ricardo Fuentes Molina,45-54,Manager,Latin American,217,11292,0,0,0,0,0,1,0,0,0,0
+3b8b0795__6,3b8b0795,6,2025-05-08,Ricardo Fuentes Molina,45-54,Manager,Latin American,1452,12527,0,0,0,1,0,1,0,0,0,0
+3b8b0795__7,3b8b0795,7,2025-05-13,Ricardo Fuentes Molina,45-54,Manager,Latin American,1489,12564,0,0,0,0,0,1,0,0,0,0
+3cfa2ebf__0,3cfa2ebf,0,2025-01-28,Margot van den Berg,45-54,Artist,Western European,373,11486,1,0,0,0,0,-1,-1,0,0,1
+3cfa2ebf__1,3cfa2ebf,1,2025-02-02,Margot van den Berg,45-54,Artist,Western European,1278,12391,0,0,0,-1,0,0,0,0,1,1
+3cfa2ebf__2,3cfa2ebf,2,2025-02-07,Margot van den Berg,45-54,Artist,Western European,538,11651,1,0,0,0,0,-1,-1,0,0,0
+3cfa2ebf__3,3cfa2ebf,3,2025-02-07,Margot van den Berg,45-54,Artist,Western European,380,11493,0,0,0,0,0,1,0,0,0,0
+3cfa2ebf__4,3cfa2ebf,4,2025-02-12,Margot van den Berg,45-54,Artist,Western European,629,11742,1,0,-1,1,0,0,0,0,0,1
+3cfa2ebf__5,3cfa2ebf,5,2025-02-17,Margot van den Berg,45-54,Artist,Western European,155,11268,0,0,0,0,0,0,0,0,0,0
+3cfa2ebf__6,3cfa2ebf,6,2025-02-21,Margot van den Berg,45-54,Artist,Western European,139,11252,1,0,1,1,0,0,0,0,0,0
+3cfa2ebf__7,3cfa2ebf,7,2025-02-25,Margot van den Berg,45-54,Artist,Western European,792,11905,0,0,-1,1,0,0,0,0,-1,-1
+3cfa2ebf__8,3cfa2ebf,8,2025-02-28,Margot van den Berg,45-54,Artist,Western European,121,11234,0,0,0,1,0,0,0,0,0,0
+3cfa2ebf__9,3cfa2ebf,9,2025-02-28,Margot van den Berg,45-54,Artist,Western European,1349,12462,-1,0,0,1,0,1,1,0,0,0
+3cfa2ebf__10,3cfa2ebf,10,2025-03-02,Margot van den Berg,45-54,Artist,Western European,538,11651,1,0,1,0,0,-1,0,0,1,1
+3dfb718b__0,3dfb718b,0,2025-12-29,Camila Restrepo,18-24,Manager,Latin American,1020,12126,-1,0,0,1,0,0,0,0,0,0
+3dfb718b__1,3dfb718b,1,2025-12-29,Camila Restrepo,18-24,Manager,Latin American,684,11790,0,0,0,1,0,0,0,0,-1,0
+3dfb718b__2,3dfb718b,2,2026-01-02,Camila Restrepo,18-24,Manager,Latin American,993,12099,1,0,0,1,0,0,0,0,0,0
+3dfb718b__3,3dfb718b,3,2026-01-08,Camila Restrepo,18-24,Manager,Latin American,911,12017,1,0,0,1,0,0,-1,0,0,0
+3dfb718b__4,3dfb718b,4,2026-01-14,Camila Restrepo,18-24,Manager,Latin American,719,11825,0,0,0,1,0,0,0,0,0,0
+3dfb718b__5,3dfb718b,5,2026-01-18,Camila Restrepo,18-24,Manager,Latin American,1149,12255,0,0,0,1,0,0,0,0,0,0
+3dfb718b__6,3dfb718b,6,2026-01-19,Camila Restrepo,18-24,Manager,Latin American,239,11345,-1,0,0,0,0,0,1,0,0,0
+3dfb718b__7,3dfb718b,7,2026-01-20,Camila Restrepo,18-24,Manager,Latin American,607,11713,0,0,0,1,0,0,0,0,0,0
+3dfb718b__8,3dfb718b,8,2026-01-26,Camila Restrepo,18-24,Manager,Latin American,747,11853,0,0,0,1,0,0,0,0,0,0
+3dfb718b__9,3dfb718b,9,2026-01-27,Camila Restrepo,18-24,Manager,Latin American,678,11784,1,0,0,0,0,0,-1,0,0,0
+3dfb718b__10,3dfb718b,10,2026-02-03,Camila Restrepo,18-24,Manager,Latin American,289,11395,0,0,0,1,1,0,0,0,0,0
+3dfe4749__0,3dfe4749,0,2025-12-01,Valentina Reyes,18-24,Nurse,Latin American,1701,12797,0,0,0,0,0,0,1,1,0,1
+3dfe4749__1,3dfe4749,1,2025-12-08,Valentina Reyes,18-24,Nurse,Latin American,512,11608,0,0,0,0,0,0,-1,-1,-1,0
+3dfe4749__2,3dfe4749,2,2025-12-16,Valentina Reyes,18-24,Nurse,Latin American,526,11622,0,0,0,0,0,0,0,1,1,1
+3dfe4749__3,3dfe4749,3,2025-12-19,Valentina Reyes,18-24,Nurse,Latin American,1158,12254,0,0,0,0,0,0,0,-1,-1,0
+3dfe4749__4,3dfe4749,4,2025-12-25,Valentina Reyes,18-24,Nurse,Latin American,264,11360,0,0,0,0,0,0,0,0,1,1
+3dfe4749__5,3dfe4749,5,2025-12-31,Valentina Reyes,18-24,Nurse,Latin American,762,11858,1,0,0,0,0,0,0,-1,-1,0
+3ec38c16__0,3ec38c16,0,2025-12-01,Nadia Tehrani,55+,Grad Student,Middle Eastern,1357,12466,1,0,0,0,-1,0,0,0,0,1
+3ec38c16__1,3ec38c16,1,2025-12-07,Nadia Tehrani,55+,Grad Student,Middle Eastern,1363,12472,1,0,0,0,0,0,-1,0,0,1
+3ec38c16__2,3ec38c16,2,2025-12-11,Nadia Tehrani,55+,Grad Student,Middle Eastern,680,11789,1,0,0,1,0,0,0,0,0,0
+3ec38c16__3,3ec38c16,3,2025-12-17,Nadia Tehrani,55+,Grad Student,Middle Eastern,259,11368,1,0,0,1,0,0,0,0,0,0
+3ec75d68__0,3ec75d68,0,2025-09-19,Park Jiyeon,25-34,Teacher,East Asian,701,11783,0,-1,0,0,0,1,1,1,1,0
+3ec75d68__1,3ec75d68,1,2025-09-21,Park Jiyeon,25-34,Teacher,East Asian,595,11677,-1,-1,0,-1,0,1,1,1,0,0
+3ec75d68__2,3ec75d68,2,2025-09-25,Park Jiyeon,25-34,Teacher,East Asian,1455,12537,-1,-1,0,-1,-1,1,1,1,0,0
+3ec75d68__3,3ec75d68,3,2025-09-26,Park Jiyeon,25-34,Teacher,East Asian,689,11771,-1,-1,0,0,0,1,0,0,1,0
+3ec75d68__4,3ec75d68,4,2025-09-28,Park Jiyeon,25-34,Teacher,East Asian,939,12021,-1,-1,0,0,0,1,1,1,0,0
+3f984932__0,3f984932,0,2025-04-05,Tariq Haddad,45-54,Software Engineer,Middle Eastern,534,11621,1,0,0,1,0,0,-1,0,0,0
+3f984932__1,3f984932,1,2025-04-12,Tariq Haddad,45-54,Software Engineer,Middle Eastern,1589,12676,1,0,0,0,0,0,-1,0,0,0
+3f984932__2,3f984932,2,2025-04-15,Tariq Haddad,45-54,Software Engineer,Middle Eastern,737,11824,1,0,0,0,0,0,-1,0,0,0
+3f984932__3,3f984932,3,2025-04-16,Tariq Haddad,45-54,Software Engineer,Middle Eastern,1141,12228,1,0,0,0,0,-1,-1,0,0,0
+3f984932__4,3f984932,4,2025-04-18,Tariq Haddad,45-54,Software Engineer,Middle Eastern,753,11840,1,0,0,0,0,-1,0,0,0,0
+3f984932__5,3f984932,5,2025-04-18,Tariq Haddad,45-54,Software Engineer,Middle Eastern,737,11824,1,0,0,0,0,-1,0,0,0,0
+3f984932__6,3f984932,6,2025-04-21,Tariq Haddad,45-54,Software Engineer,Middle Eastern,824,11911,1,0,0,0,0,-1,0,0,1,0
+4236a5ff__0,4236a5ff,0,2025-11-24,Kevin Lim,18-24,Manager,East Asian,1338,12396,1,0,1,0,0,0,-1,0,1,0
+4236a5ff__1,4236a5ff,1,2025-11-28,Kevin Lim,18-24,Manager,East Asian,1223,12281,1,0,1,0,0,0,-1,-1,0,0
+42d9f988__0,42d9f988,0,2025-12-11,Sandra Kowalski,45-54,Grad Student,North American,1088,12167,-1,0,-1,1,0,0,0,1,1,0
+42d9f988__1,42d9f988,1,2025-12-17,Sandra Kowalski,45-54,Grad Student,North American,623,11702,0,0,-1,0,0,0,0,1,1,0
+42d9f988__2,42d9f988,2,2025-12-17,Sandra Kowalski,45-54,Grad Student,North American,422,11501,1,0,0,-1,0,0,-1,1,1,0
+42d9f988__3,42d9f988,3,2025-12-24,Sandra Kowalski,45-54,Grad Student,North American,691,11770,0,0,0,0,0,0,0,0,1,0
+42d9f988__4,42d9f988,4,2025-12-28,Sandra Kowalski,45-54,Grad Student,North American,1867,12946,1,0,-1,0,0,0,0,1,1,1
+42d9f988__5,42d9f988,5,2025-12-28,Sandra Kowalski,45-54,Grad Student,North American,1324,12403,0,0,-1,1,0,1,0,0,1,0
+42d9f988__6,42d9f988,6,2026-01-02,Sandra Kowalski,45-54,Grad Student,North American,220,11299,-1,0,0,-1,0,0,0,1,1,0
+42d9f988__7,42d9f988,7,2026-01-07,Sandra Kowalski,45-54,Grad Student,North American,1466,12545,1,0,0,0,0,1,0,1,1,0
+42d9f988__8,42d9f988,8,2026-01-09,Sandra Kowalski,45-54,Grad Student,North American,987,12066,1,0,0,0,0,0,1,0,1,1
+42d9f988__9,42d9f988,9,2026-01-12,Sandra Kowalski,45-54,Grad Student,North American,689,11768,0,0,0,0,0,1,0,1,1,0
+42d9f988__10,42d9f988,10,2026-01-17,Sandra Kowalski,45-54,Grad Student,North American,199,11278,1,0,0,1,0,1,0,0,1,0
+43f4507b__0,43f4507b,0,2025-01-02,Priya Venkatesh,35-44,Grad Student,South Asian,1163,12233,1,0,0,1,0,-1,0,0,0,0
+43f4507b__1,43f4507b,1,2025-01-03,Priya Venkatesh,35-44,Grad Student,South Asian,210,11280,0,0,0,0,0,0,0,0,0,0
+43f4507b__2,43f4507b,2,2025-01-07,Priya Venkatesh,35-44,Grad Student,South Asian,204,11274,0,0,0,1,0,0,0,0,0,0
+43f4507b__3,43f4507b,3,2025-01-09,Priya Venkatesh,35-44,Grad Student,South Asian,1625,12695,1,0,0,0,0,-1,-1,0,0,0
+43f4507b__4,43f4507b,4,2025-01-15,Priya Venkatesh,35-44,Grad Student,South Asian,162,11232,0,0,0,1,0,0,0,0,-1,0
+43f4507b__5,43f4507b,5,2025-01-22,Priya Venkatesh,35-44,Grad Student,South Asian,927,11997,1,0,0,1,0,0,-1,0,0,0
+43f4507b__6,43f4507b,6,2025-01-27,Priya Venkatesh,35-44,Grad Student,South Asian,1118,12188,1,0,0,1,0,0,0,0,0,0
+4403b4f9__0,4403b4f9,0,2025-01-27,Lars Henriksen,45-54,Parent (Stay-at-home),Western European,1006,12121,1,1,0,1,1,0,0,0,0,0
+4403b4f9__1,4403b4f9,1,2025-01-30,Lars Henriksen,45-54,Parent (Stay-at-home),Western European,1525,12640,1,1,0,1,0,0,0,0,1,0
+440e5deb__0,440e5deb,0,2025-12-01,Priya Sharma,18-24,Teacher,South Asian,650,11738,0,0,-1,1,0,0,0,0,-1,0
+440e5deb__1,440e5deb,1,2025-12-10,Priya Sharma,18-24,Teacher,South Asian,1034,12122,0,0,0,1,0,0,1,0,0,0
+440e5deb__2,440e5deb,2,2025-12-20,Priya Sharma,18-24,Teacher,South Asian,2036,13124,0,0,-1,1,0,0,0,0,-1,0
+440e5deb__3,440e5deb,3,2025-12-24,Priya Sharma,18-24,Teacher,South Asian,1205,12293,0,1,1,0,0,0,0,0,1,0
+440e5deb__4,440e5deb,4,2025-12-27,Priya Sharma,18-24,Teacher,South Asian,1322,12410,1,0,1,-1,0,0,0,0,0,0
+440e5deb__5,440e5deb,5,2026-01-03,Priya Sharma,18-24,Teacher,South Asian,2073,13161,-1,0,0,1,0,0,1,0,1,0
+440e5deb__6,440e5deb,6,2026-01-06,Priya Sharma,18-24,Teacher,South Asian,894,11982,1,0,0,0,0,0,0,0,1,0
+440e5deb__7,440e5deb,7,2026-01-12,Priya Sharma,18-24,Teacher,South Asian,695,11783,0,0,-1,1,0,0,0,0,0,0
+4a061287__0,4a061287,0,2025-07-11,Sofia Reyes Castillo,25-34,Teacher,Latin American,793,11868,0,0,0,0,0,0,0,1,1,0
+4a061287__1,4a061287,1,2025-07-11,Sofia Reyes Castillo,25-34,Teacher,Latin American,934,12009,-1,0,0,0,0,1,1,1,0,0
+4a061287__2,4a061287,2,2025-07-17,Sofia Reyes Castillo,25-34,Teacher,Latin American,348,11423,0,0,0,0,0,0,0,1,1,0
+4a061287__3,4a061287,3,2025-07-22,Sofia Reyes Castillo,25-34,Teacher,Latin American,1755,12830,-1,0,0,0,0,0,1,1,0,0
+4a061287__4,4a061287,4,2025-07-26,Sofia Reyes Castillo,25-34,Teacher,Latin American,384,11459,1,0,0,0,0,0,0,1,1,0
+4a061287__5,4a061287,5,2025-08-02,Sofia Reyes Castillo,25-34,Teacher,Latin American,1501,12576,0,0,0,0,0,1,1,1,-1,0
+4a061287__6,4a061287,6,2025-08-09,Sofia Reyes Castillo,25-34,Teacher,Latin American,966,12041,1,0,0,0,0,0,0,1,0,0
+4a061287__7,4a061287,7,2025-08-13,Sofia Reyes Castillo,25-34,Teacher,Latin American,282,11357,0,0,0,0,0,0,0,1,0,0
+4a061287__8,4a061287,8,2025-08-19,Sofia Reyes Castillo,25-34,Teacher,Latin American,1348,12423,-1,0,0,0,0,1,1,1,0,0
+4a061287__9,4a061287,9,2025-08-24,Sofia Reyes Castillo,25-34,Teacher,Latin American,961,12036,1,0,0,0,0,-1,-1,1,1,0
+4cfc3c8e__0,4cfc3c8e,0,2025-08-31,Layla Khoury,25-34,Nurse,Middle Eastern,659,11722,1,0,1,0,0,0,0,0,1,0
+4cfc3c8e__1,4cfc3c8e,1,2025-08-31,Layla Khoury,25-34,Nurse,Middle Eastern,358,11421,0,0,1,0,0,0,0,0,1,0
+4cfc3c8e__2,4cfc3c8e,2,2025-09-04,Layla Khoury,25-34,Nurse,Middle Eastern,752,11815,1,0,0,0,0,0,-1,-1,1,0
+4cfc3c8e__3,4cfc3c8e,3,2025-09-09,Layla Khoury,25-34,Nurse,Middle Eastern,1462,12525,1,0,1,0,0,1,-1,0,1,0
+4cfc3c8e__4,4cfc3c8e,4,2025-09-12,Layla Khoury,25-34,Nurse,Middle Eastern,202,11265,0,1,1,0,0,0,0,0,1,0
+4cfc3c8e__5,4cfc3c8e,5,2025-09-16,Layla Khoury,25-34,Nurse,Middle Eastern,987,12050,1,1,1,-1,0,0,0,0,1,0
+4cfc3c8e__6,4cfc3c8e,6,2025-09-21,Layla Khoury,25-34,Nurse,Middle Eastern,863,11926,1,0,0,0,0,0,-1,-1,0,0
+4cfc3c8e__7,4cfc3c8e,7,2025-09-25,Layla Khoury,25-34,Nurse,Middle Eastern,1054,12117,1,0,1,-1,0,0,0,0,1,0
+4cfc3c8e__8,4cfc3c8e,8,2025-09-30,Layla Khoury,25-34,Nurse,Middle Eastern,716,11779,1,0,1,0,0,0,0,0,1,0
+4cfc3c8e__9,4cfc3c8e,9,2025-10-07,Layla Khoury,25-34,Nurse,Middle Eastern,988,12051,1,0,1,-1,0,0,0,0,1,0
+4cfc3c8e__10,4cfc3c8e,10,2025-10-12,Layla Khoury,25-34,Nurse,Middle Eastern,177,11240,1,0,1,-1,0,0,0,0,0,0
+4cfc3c8e__11,4cfc3c8e,11,2025-10-19,Layla Khoury,25-34,Nurse,Middle Eastern,1104,12167,1,0,1,0,0,1,-1,0,1,0
+54fbe6b5__0,54fbe6b5,0,2025-08-02,Arjun Mehta,25-34,Software Engineer,South Asian,703,11808,0,0,0,1,0,0,0,0,0,1
+54fbe6b5__1,54fbe6b5,1,2025-08-07,Arjun Mehta,25-34,Software Engineer,South Asian,312,11417,0,0,0,0,0,1,0,0,1,0
+54fbe6b5__2,54fbe6b5,2,2025-08-07,Arjun Mehta,25-34,Software Engineer,South Asian,728,11833,0,0,0,0,0,1,0,0,1,0
+54fbe6b5__3,54fbe6b5,3,2025-08-09,Arjun Mehta,25-34,Software Engineer,South Asian,794,11899,0,0,0,0,0,0,0,0,1,1
+54fbe6b5__4,54fbe6b5,4,2025-08-09,Arjun Mehta,25-34,Software Engineer,South Asian,1270,12375,0,0,0,0,0,1,0,0,1,1
+54fbe6b5__5,54fbe6b5,5,2025-08-12,Arjun Mehta,25-34,Software Engineer,South Asian,360,11465,0,0,0,0,0,0,0,0,1,0
+54fbe6b5__6,54fbe6b5,6,2025-08-12,Arjun Mehta,25-34,Software Engineer,South Asian,719,11824,0,0,0,0,0,0,0,0,1,1
+54fbe6b5__7,54fbe6b5,7,2025-08-12,Arjun Mehta,25-34,Software Engineer,South Asian,316,11421,0,0,0,0,0,0,0,0,0,0
+58d843b6__0,58d843b6,0,2025-05-25,Tariq Al-Mansouri,45-54,Entrepreneur,Middle Eastern,458,11535,0,0,0,0,1,0,0,1,0,0
+58d843b6__1,58d843b6,1,2025-05-31,Tariq Al-Mansouri,45-54,Entrepreneur,Middle Eastern,629,11706,0,0,0,1,1,0,0,1,0,0
+58d843b6__2,58d843b6,2,2025-06-06,Tariq Al-Mansouri,45-54,Entrepreneur,Middle Eastern,908,11985,1,0,0,0,0,0,0,1,0,0
+58d843b6__3,58d843b6,3,2025-06-07,Tariq Al-Mansouri,45-54,Entrepreneur,Middle Eastern,1236,12313,0,0,0,0,0,1,0,1,0,0
+58d843b6__4,58d843b6,4,2025-06-10,Tariq Al-Mansouri,45-54,Entrepreneur,Middle Eastern,1312,12389,0,0,0,0,1,0,0,1,1,0
+58d843b6__5,58d843b6,5,2025-06-14,Tariq Al-Mansouri,45-54,Entrepreneur,Middle Eastern,476,11553,0,0,0,0,0,0,0,0,1,0
+58d843b6__6,58d843b6,6,2025-06-14,Tariq Al-Mansouri,45-54,Entrepreneur,Middle Eastern,224,11301,0,0,0,0,0,0,0,1,0,0
+58d843b6__7,58d843b6,7,2025-06-19,Tariq Al-Mansouri,45-54,Entrepreneur,Middle Eastern,954,12031,0,0,0,0,-1,1,0,1,0,0
+58d843b6__8,58d843b6,8,2025-06-20,Tariq Al-Mansouri,45-54,Entrepreneur,Middle Eastern,868,11945,0,0,0,0,0,0,0,1,0,0
+58d843b6__9,58d843b6,9,2025-06-26,Tariq Al-Mansouri,45-54,Entrepreneur,Middle Eastern,206,11283,0,0,0,0,0,0,0,0,1,0
+58d843b6__10,58d843b6,10,2025-06-27,Tariq Al-Mansouri,45-54,Entrepreneur,Middle Eastern,1093,12170,0,0,0,0,0,1,0,1,0,0
+58d843b6__11,58d843b6,11,2025-07-02,Tariq Al-Mansouri,45-54,Entrepreneur,Middle Eastern,444,11521,1,0,0,0,-1,0,0,0,1,0
+5943c186__0,5943c186,0,2025-08-31,Layla Haddad,35-44,Parent (Stay-at-home),Middle Eastern,1221,12300,0,0,1,0,0,0,0,0,0,0
+5943c186__1,5943c186,1,2025-09-02,Layla Haddad,35-44,Parent (Stay-at-home),Middle Eastern,833,11912,0,0,1,0,0,0,-1,0,0,0
+5943c186__2,5943c186,2,2025-09-03,Layla Haddad,35-44,Parent (Stay-at-home),Middle Eastern,172,11251,0,0,1,0,0,0,0,0,0,0
+5943c186__3,5943c186,3,2025-09-10,Layla Haddad,35-44,Parent (Stay-at-home),Middle Eastern,404,11483,0,0,-1,0,0,0,1,0,0,0
+5943c186__4,5943c186,4,2025-09-13,Layla Haddad,35-44,Parent (Stay-at-home),Middle Eastern,770,11849,0,0,1,0,0,0,1,0,0,0
+5943c186__5,5943c186,5,2025-09-15,Layla Haddad,35-44,Parent (Stay-at-home),Middle Eastern,1066,12145,0,0,1,0,0,0,0,0,1,0
+5943c186__6,5943c186,6,2025-09-20,Layla Haddad,35-44,Parent (Stay-at-home),Middle Eastern,328,11407,1,0,1,0,0,0,0,0,0,0
+5943c186__7,5943c186,7,2025-09-24,Layla Haddad,35-44,Parent (Stay-at-home),Middle Eastern,787,11866,-1,0,-1,0,0,0,1,0,0,0
+59bb28b8__0,59bb28b8,0,2025-08-14,Mariana Delgado,35-44,Teacher,Latin American,1262,12336,0,0,-1,1,0,0,1,1,1,0
+59bb28b8__1,59bb28b8,1,2025-08-14,Mariana Delgado,35-44,Teacher,Latin American,621,11695,0,0,0,0,0,1,0,1,1,0
+59bb28b8__2,59bb28b8,2,2025-08-21,Mariana Delgado,35-44,Teacher,Latin American,256,11330,0,0,0,0,0,0,0,0,0,0
+59bb28b8__3,59bb28b8,3,2025-08-21,Mariana Delgado,35-44,Teacher,Latin American,1246,12320,1,0,1,1,-1,1,0,1,1,0
+59bb28b8__4,59bb28b8,4,2025-08-22,Mariana Delgado,35-44,Teacher,Latin American,302,11376,0,0,1,0,0,0,0,0,1,0
+5a522de7__0,5a522de7,0,2025-06-05,Henrik Lindqvist,55+,Software Engineer,Western European,774,11861,0,0,0,0,0,0,0,0,0,1
+5a522de7__1,5a522de7,1,2025-06-08,Henrik Lindqvist,55+,Software Engineer,Western European,431,11518,0,0,0,0,0,0,0,0,0,1
+5a522de7__2,5a522de7,2,2025-06-10,Henrik Lindqvist,55+,Software Engineer,Western European,353,11440,0,0,0,0,0,0,0,0,0,1
+5a522de7__3,5a522de7,3,2025-06-13,Henrik Lindqvist,55+,Software Engineer,Western European,475,11562,0,0,0,0,0,0,1,0,0,1
+5a522de7__4,5a522de7,4,2025-06-17,Henrik Lindqvist,55+,Software Engineer,Western European,1143,12230,0,0,0,0,0,0,0,0,1,1
+5a522de7__5,5a522de7,5,2025-06-18,Henrik Lindqvist,55+,Software Engineer,Western European,299,11386,0,0,0,1,0,0,0,0,0,1
+5a522de7__6,5a522de7,6,2025-06-21,Henrik Lindqvist,55+,Software Engineer,Western European,906,11993,0,0,0,0,0,0,1,0,0,1
+5a522de7__7,5a522de7,7,2025-06-21,Henrik Lindqvist,55+,Software Engineer,Western European,716,11803,0,0,0,0,0,0,1,0,0,1
+5a522de7__8,5a522de7,8,2025-06-21,Henrik Lindqvist,55+,Software Engineer,Western European,1286,12373,0,0,0,0,0,0,0,0,0,1
+5a522de7__9,5a522de7,9,2025-06-25,Henrik Lindqvist,55+,Software Engineer,Western European,865,11952,0,0,0,0,0,0,0,0,0,1
+5a522de7__10,5a522de7,10,2025-06-28,Henrik Lindqvist,55+,Software Engineer,Western European,1136,12223,0,0,0,0,0,0,0,0,0,1
+5a522de7__11,5a522de7,11,2025-06-28,Henrik Lindqvist,55+,Software Engineer,Western European,1379,12466,0,0,0,0,0,0,0,0,0,1
+5adacfb2__0,5adacfb2,0,2025-01-04,Tariq Al-Mohammadi,18-24,Gig Worker,Middle Eastern,547,11615,0,0,0,1,1,0,0,0,0,0
+5adacfb2__1,5adacfb2,1,2025-01-07,Tariq Al-Mohammadi,18-24,Gig Worker,Middle Eastern,362,11430,0,0,0,0,1,0,0,0,0,0
+5adacfb2__2,5adacfb2,2,2025-01-13,Tariq Al-Mohammadi,18-24,Gig Worker,Middle Eastern,899,11967,0,0,0,1,1,0,0,0,0,0
+5adacfb2__3,5adacfb2,3,2025-01-17,Tariq Al-Mohammadi,18-24,Gig Worker,Middle Eastern,689,11757,0,0,-1,1,1,0,0,0,0,0
+5adacfb2__4,5adacfb2,4,2025-01-17,Tariq Al-Mohammadi,18-24,Gig Worker,Middle Eastern,675,11743,0,0,0,0,-1,0,0,1,0,0
+5adacfb2__5,5adacfb2,5,2025-01-20,Tariq Al-Mohammadi,18-24,Gig Worker,Middle Eastern,439,11507,0,0,0,-1,-1,0,0,0,0,0
+5adacfb2__6,5adacfb2,6,2025-01-23,Tariq Al-Mohammadi,18-24,Gig Worker,Middle Eastern,1000,12068,0,0,0,1,1,0,0,0,0,0
+5adacfb2__7,5adacfb2,7,2025-01-25,Tariq Al-Mohammadi,18-24,Gig Worker,Middle Eastern,379,11447,0,0,0,-1,-1,0,0,0,0,0
+5adacfb2__8,5adacfb2,8,2025-01-25,Tariq Al-Mohammadi,18-24,Gig Worker,Middle Eastern,1595,12663,1,0,0,0,1,0,0,0,0,0
+5adacfb2__9,5adacfb2,9,2025-01-31,Tariq Al-Mohammadi,18-24,Gig Worker,Middle Eastern,1164,12232,0,0,0,1,-1,1,0,0,0,0
+5b45e4a8__0,5b45e4a8,0,2025-11-01,Priya Malhotra,18-24,Artist,South Asian,800,11895,1,1,1,1,0,0,-1,0,0,0
+5b45e4a8__1,5b45e4a8,1,2025-11-08,Priya Malhotra,18-24,Artist,South Asian,1596,12691,1,0,0,1,0,-1,-1,-1,1,0
+5b45e4a8__2,5b45e4a8,2,2025-11-13,Priya Malhotra,18-24,Artist,South Asian,727,11822,1,1,1,1,0,0,0,0,1,0
+5b45e4a8__3,5b45e4a8,3,2025-11-20,Priya Malhotra,18-24,Artist,South Asian,407,11502,1,0,1,1,0,1,0,0,0,0
+5b45e4a8__4,5b45e4a8,4,2025-11-21,Priya Malhotra,18-24,Artist,South Asian,805,11900,1,0,0,1,0,-1,-1,-1,0,0
+5b45e4a8__5,5b45e4a8,5,2025-11-24,Priya Malhotra,18-24,Artist,South Asian,113,11208,1,0,0,1,0,0,0,0,0,0
+5b45e4a8__6,5b45e4a8,6,2025-11-29,Priya Malhotra,18-24,Artist,South Asian,1418,12513,1,0,1,0,0,1,-1,-1,1,0
+5b45e4a8__7,5b45e4a8,7,2025-12-03,Priya Malhotra,18-24,Artist,South Asian,718,11813,1,1,1,0,0,0,-1,0,1,0
+5b836f2b__0,5b836f2b,0,2025-07-03,Mathilde Dupont,18-24,Artist,Western European,1213,12282,0,0,0,0,0,1,0,0,0,0
+5b836f2b__1,5b836f2b,1,2025-07-04,Mathilde Dupont,18-24,Artist,Western European,203,11272,0,0,0,0,0,0,0,0,0,0
+5b836f2b__2,5b836f2b,2,2025-07-10,Mathilde Dupont,18-24,Artist,Western European,303,11372,0,0,0,1,0,0,0,0,0,0
+5b836f2b__3,5b836f2b,3,2025-07-14,Mathilde Dupont,18-24,Artist,Western European,1627,12696,0,0,0,0,0,1,0,0,0,0
+5b836f2b__4,5b836f2b,4,2025-07-14,Mathilde Dupont,18-24,Artist,Western European,241,11310,0,0,0,1,0,0,0,0,0,0
+5b836f2b__5,5b836f2b,5,2025-07-18,Mathilde Dupont,18-24,Artist,Western European,1019,12088,0,0,0,0,0,1,0,0,0,0
+5b836f2b__6,5b836f2b,6,2025-07-21,Mathilde Dupont,18-24,Artist,Western European,909,11978,0,0,0,0,0,1,0,0,0,0
+5b836f2b__7,5b836f2b,7,2025-07-23,Mathilde Dupont,18-24,Artist,Western European,1735,12804,0,0,0,1,0,1,0,0,0,0
+5b836f2b__8,5b836f2b,8,2025-07-30,Mathilde Dupont,18-24,Artist,Western European,235,11304,0,0,0,0,0,1,0,0,0,0
+5c8ad0db__0,5c8ad0db,0,2025-05-13,Rohan Mehta,30,Entrepreneur,South Asian,189,11246,0,0,0,0,0,0,0,0,0,0
+5c8ad0db__1,5c8ad0db,1,2025-05-19,Rohan Mehta,30,Entrepreneur,South Asian,1060,12117,1,0,0,1,1,0,0,0,0,0
+5c8ad0db__2,5c8ad0db,2,2025-05-19,Rohan Mehta,30,Entrepreneur,South Asian,283,11340,0,0,0,0,-1,0,1,0,0,0
+5c8ad0db__3,5c8ad0db,3,2025-05-26,Rohan Mehta,30,Entrepreneur,South Asian,1310,12367,0,0,0,-1,-1,0,0,0,0,0
+5c8ad0db__4,5c8ad0db,4,2025-06-01,Rohan Mehta,30,Entrepreneur,South Asian,1341,12398,-1,0,0,0,-1,0,1,1,0,0
+5c8ad0db__5,5c8ad0db,5,2025-06-07,Rohan Mehta,30,Entrepreneur,South Asian,879,11936,0,0,0,-1,-1,0,0,0,-1,0
+5d145c6f__0,5d145c6f,0,2025-09-13,Faris Al-Rashid,25-34,Entrepreneur,Middle Eastern,2505,13572,1,1,-1,1,1,0,0,0,-1,0
+5d145c6f__1,5d145c6f,1,2025-09-14,Faris Al-Rashid,25-34,Entrepreneur,Middle Eastern,137,11204,0,0,-1,1,0,0,0,0,0,0
+5d145c6f__2,5d145c6f,2,2025-09-19,Faris Al-Rashid,25-34,Entrepreneur,Middle Eastern,1279,12346,1,0,0,1,1,0,1,0,-1,0
+5e3e1706__0,5e3e1706,0,2025-10-26,Marcus Chen,18-24,Manager,North American,555,11625,0,0,0,0,0,0,-1,0,1,0
+5e3e1706__1,5e3e1706,1,2025-10-29,Marcus Chen,18-24,Manager,North American,754,11824,0,0,-1,0,0,0,0,0,1,0
+5e3e1706__2,5e3e1706,2,2025-11-04,Marcus Chen,18-24,Manager,North American,1524,12594,0,0,0,0,-1,0,1,0,1,0
+5e3e1706__3,5e3e1706,3,2025-11-06,Marcus Chen,18-24,Manager,North American,208,11278,0,0,0,0,0,0,-1,0,1,0
+5e3e1706__4,5e3e1706,4,2025-11-12,Marcus Chen,18-24,Manager,North American,763,11833,0,0,0,0,0,0,0,0,1,0
+5e3e1706__5,5e3e1706,5,2025-11-13,Marcus Chen,18-24,Manager,North American,1042,12112,0,0,-1,0,0,-1,0,-1,1,0
+5e3e1706__6,5e3e1706,6,2025-11-19,Marcus Chen,18-24,Manager,North American,776,11846,0,0,-1,0,0,0,0,0,1,0
+5fa8b540__0,5fa8b540,0,2025-02-12,Nisha Agarwal,18-24,Teacher,South Asian,164,11235,0,0,0,0,0,0,0,0,0,0
+5fa8b540__1,5fa8b540,1,2025-02-16,Nisha Agarwal,18-24,Teacher,South Asian,1117,12188,0,0,0,0,0,0,0,0,0,1
+5fa8b540__2,5fa8b540,2,2025-02-23,Nisha Agarwal,18-24,Teacher,South Asian,828,11899,0,0,0,0,0,0,0,0,0,1
+5fa8b540__3,5fa8b540,3,2025-03-02,Nisha Agarwal,18-24,Teacher,South Asian,237,11308,0,0,0,0,0,0,0,0,0,0
+5fa8b540__4,5fa8b540,4,2025-03-07,Nisha Agarwal,18-24,Teacher,South Asian,208,11279,0,0,0,0,0,0,0,0,1,0
+5fa8b540__5,5fa8b540,5,2025-03-08,Nisha Agarwal,18-24,Teacher,South Asian,968,12039,0,0,0,0,0,0,1,0,0,-1
+5fa8b540__6,5fa8b540,6,2025-03-09,Nisha Agarwal,18-24,Teacher,South Asian,1575,12646,0,0,0,0,0,0,0,0,0,-1
+5fa8b540__7,5fa8b540,7,2025-03-16,Nisha Agarwal,18-24,Teacher,South Asian,1182,12253,1,0,0,0,0,0,0,0,0,1
+5fcf93f5__0,5fcf93f5,0,2025-01-20,Priya Sharma,35-44,Nurse,South Asian,1657,12737,0,0,-1,0,0,1,0,1,1,1
+5fcf93f5__1,5fcf93f5,1,2025-01-23,Priya Sharma,35-44,Nurse,South Asian,760,11840,-1,-1,-1,0,0,-1,0,0,0,0
+5fcf93f5__2,5fcf93f5,2,2025-01-30,Priya Sharma,35-44,Nurse,South Asian,1471,12551,1,-1,-1,0,0,1,1,0,0,0
+606f182e__0,606f182e,0,2025-08-09,Park Joonho,45-54,Entrepreneur,East Asian,1425,12484,0,0,0,1,1,0,-1,0,-1,0
+606f182e__1,606f182e,1,2025-08-10,Park Joonho,45-54,Entrepreneur,East Asian,174,11233,1,0,0,0,1,0,-1,0,-1,0
+606f182e__2,606f182e,2,2025-08-14,Park Joonho,45-54,Entrepreneur,East Asian,1043,12102,0,0,0,1,1,1,1,0,-1,0
+606f182e__3,606f182e,3,2025-08-21,Park Joonho,45-54,Entrepreneur,East Asian,203,11262,0,0,0,1,1,0,0,0,1,0
+606f182e__4,606f182e,4,2025-08-25,Park Joonho,45-54,Entrepreneur,East Asian,1617,12676,0,0,0,1,1,1,0,0,-1,0
+606f182e__5,606f182e,5,2025-08-25,Park Joonho,45-54,Entrepreneur,East Asian,189,11248,0,0,0,0,0,0,0,0,1,0
+606f182e__6,606f182e,6,2025-08-30,Park Joonho,45-54,Entrepreneur,East Asian,1150,12209,0,0,-1,1,1,1,0,0,-1,0
+611c5ef3__0,611c5ef3,0,2025-05-28,Tariq Al-Mansouri,18-24,Manager,Middle Eastern,777,11861,0,0,0,1,1,0,0,0,-1,0
+611c5ef3__1,611c5ef3,1,2025-06-01,Tariq Al-Mansouri,18-24,Manager,Middle Eastern,172,11256,0,0,1,0,0,0,0,0,0,0
+611c5ef3__2,611c5ef3,2,2025-06-07,Tariq Al-Mansouri,18-24,Manager,Middle Eastern,1559,12643,-1,0,0,0,1,0,1,0,0,0
+611c5ef3__3,611c5ef3,3,2025-06-09,Tariq Al-Mansouri,18-24,Manager,Middle Eastern,704,11788,0,0,1,0,1,-1,0,0,0,0
+611c5ef3__4,611c5ef3,4,2025-06-14,Tariq Al-Mansouri,18-24,Manager,Middle Eastern,280,11364,0,0,0,0,1,-1,0,-1,0,0
+611c5ef3__5,611c5ef3,5,2025-06-19,Tariq Al-Mansouri,18-24,Manager,Middle Eastern,1204,12288,0,0,-1,1,0,0,0,0,0,0
+611c5ef3__6,611c5ef3,6,2025-06-22,Tariq Al-Mansouri,18-24,Manager,Middle Eastern,1328,12412,1,0,0,0,-1,0,0,0,0,0
+611c5ef3__7,611c5ef3,7,2025-06-27,Tariq Al-Mansouri,18-24,Manager,Middle Eastern,216,11300,0,0,0,1,0,0,0,0,0,0
+611c5ef3__8,611c5ef3,8,2025-07-02,Tariq Al-Mansouri,18-24,Manager,Middle Eastern,692,11776,0,0,0,0,1,0,0,0,-1,0
+611c5ef3__9,611c5ef3,9,2025-07-03,Tariq Al-Mansouri,18-24,Manager,Middle Eastern,1113,12197,1,0,0,0,-1,0,0,0,0,0
+61d7d490__0,61d7d490,0,2025-05-26,Grant Kowalski,45-54,Entrepreneur,North American,651,11723,0,0,0,0,0,1,0,0,1,0
+61d7d490__1,61d7d490,1,2025-05-26,Grant Kowalski,45-54,Entrepreneur,North American,1121,12193,1,0,0,0,0,0,0,0,0,0
+61d7d490__2,61d7d490,2,2025-05-29,Grant Kowalski,45-54,Entrepreneur,North American,1412,12484,1,0,0,1,0,0,0,0,0,0
+61d7d490__3,61d7d490,3,2025-06-01,Grant Kowalski,45-54,Entrepreneur,North American,853,11925,0,0,0,0,0,1,0,0,1,0
+61d7d490__4,61d7d490,4,2025-06-05,Grant Kowalski,45-54,Entrepreneur,North American,322,11394,0,0,0,0,0,1,0,0,0,0
+61d7d490__5,61d7d490,5,2025-06-09,Grant Kowalski,45-54,Entrepreneur,North American,1267,12339,1,0,0,0,0,1,0,0,0,0
+621be543__0,621be543,0,2025-09-25,Mathilde Renard,25-34,Artist,Western European,1127,12214,0,0,0,-1,0,0,1,0,0,0
+621be543__1,621be543,1,2025-09-26,Mathilde Renard,25-34,Artist,Western European,993,12080,0,0,0,1,1,0,0,0,0,0
+621be543__2,621be543,2,2025-09-27,Mathilde Renard,25-34,Artist,Western European,576,11663,0,0,0,-1,0,0,1,0,1,0
+621be543__3,621be543,3,2025-09-27,Mathilde Renard,25-34,Artist,Western European,1039,12126,0,0,0,1,0,0,0,0,0,0
+621be543__4,621be543,4,2025-09-27,Mathilde Renard,25-34,Artist,Western European,530,11617,0,0,0,1,0,0,0,0,0,0
+621be543__5,621be543,5,2025-09-28,Mathilde Renard,25-34,Artist,Western European,797,11884,0,0,0,-1,0,0,1,0,0,0
+621be543__6,621be543,6,2025-09-29,Mathilde Renard,25-34,Artist,Western European,1366,12453,0,0,0,-1,1,0,0,0,0,0
+621be543__7,621be543,7,2025-09-29,Mathilde Renard,25-34,Artist,Western European,711,11798,0,0,0,0,0,0,1,0,0,0
+621be543__8,621be543,8,2025-10-04,Mathilde Renard,25-34,Artist,Western European,234,11321,0,0,0,1,0,0,0,0,0,0
+621be543__9,621be543,9,2025-10-10,Mathilde Renard,25-34,Artist,Western European,1095,12182,0,0,0,1,1,0,0,0,0,0
+6367cfac__0,6367cfac,0,2025-12-02,Park Jungsoo,45-54,Artist,East Asian,390,11452,0,0,0,0,0,0,0,1,1,0
+6367cfac__1,6367cfac,1,2025-12-05,Park Jungsoo,45-54,Artist,East Asian,731,11793,0,0,0,0,0,0,0,1,0,0
+6367cfac__2,6367cfac,2,2025-12-07,Park Jungsoo,45-54,Artist,East Asian,965,12027,0,0,0,0,0,0,0,1,0,0
+6367cfac__3,6367cfac,3,2025-12-12,Park Jungsoo,45-54,Artist,East Asian,427,11489,0,0,0,0,0,0,0,1,1,0
+6367cfac__4,6367cfac,4,2025-12-18,Park Jungsoo,45-54,Artist,East Asian,505,11567,0,0,0,0,0,0,0,1,0,0
+6367cfac__5,6367cfac,5,2025-12-21,Park Jungsoo,45-54,Artist,East Asian,211,11273,0,0,0,0,0,0,0,1,0,0
+6367cfac__6,6367cfac,6,2025-12-23,Park Jungsoo,45-54,Artist,East Asian,832,11894,0,0,0,0,0,1,0,1,0,0
+6367cfac__7,6367cfac,7,2025-12-26,Park Jungsoo,45-54,Artist,East Asian,392,11454,0,0,0,0,0,0,1,0,1,0
+63d31987__0,63d31987,0,2025-04-25,Matthias Lindqvist,35-44,Grad Student,Western European,954,12058,0,0,0,1,0,-1,0,0,-1,0
+63d31987__1,63d31987,1,2025-04-28,Matthias Lindqvist,35-44,Grad Student,Western European,203,11307,0,0,0,0,0,0,0,0,0,0
+63d31987__2,63d31987,2,2025-05-02,Matthias Lindqvist,35-44,Grad Student,Western European,849,11953,-1,0,0,0,0,-1,0,0,0,0
+63d31987__3,63d31987,3,2025-05-08,Matthias Lindqvist,35-44,Grad Student,Western European,1258,12362,1,0,1,0,0,1,0,0,1,0
+63d31987__4,63d31987,4,2025-05-12,Matthias Lindqvist,35-44,Grad Student,Western European,793,11897,-1,0,0,-1,-1,1,0,1,-1,0
+63d31987__5,63d31987,5,2025-05-19,Matthias Lindqvist,35-44,Grad Student,Western European,662,11766,0,0,0,0,-1,0,1,0,0,0
+63d31987__6,63d31987,6,2025-05-19,Matthias Lindqvist,35-44,Grad Student,Western European,814,11918,1,0,0,0,0,1,0,0,1,0
+64afd6a1__0,64afd6a1,0,2025-12-01,Camila Reyes,25-34,Gig Worker,Latin American,1251,12325,0,0,-1,0,0,-1,0,0,1,0
+64afd6a1__1,64afd6a1,1,2025-12-09,Camila Reyes,25-34,Gig Worker,Latin American,140,11214,0,0,0,0,0,0,0,0,1,0
+64afd6a1__2,64afd6a1,2,2025-12-11,Camila Reyes,25-34,Gig Worker,Latin American,346,11420,0,0,0,0,0,0,0,0,1,0
+64afd6a1__3,64afd6a1,3,2025-12-14,Camila Reyes,25-34,Gig Worker,Latin American,163,11237,0,0,0,0,0,0,0,1,1,0
+64afd6a1__4,64afd6a1,4,2025-12-21,Camila Reyes,25-34,Gig Worker,Latin American,455,11529,0,0,-1,0,0,-1,0,0,1,0
+64afd6a1__5,64afd6a1,5,2025-12-27,Camila Reyes,25-34,Gig Worker,Latin American,460,11534,0,0,0,0,0,0,0,0,1,0
+64afd6a1__6,64afd6a1,6,2026-01-01,Camila Reyes,25-34,Gig Worker,Latin American,1972,13046,-1,0,-1,0,0,0,0,1,1,0
+64afd6a1__7,64afd6a1,7,2026-01-11,Camila Reyes,25-34,Gig Worker,Latin American,445,11519,-1,0,0,0,0,0,0,0,1,0
+65ed1278__0,65ed1278,0,2025-02-25,Klaus Mertens,55+,Teacher,Western European,1035,12133,0,0,0,1,0,0,0,0,1,0
+65ed1278__1,65ed1278,1,2025-03-04,Klaus Mertens,55+,Teacher,Western European,817,11915,0,0,0,1,1,0,0,0,0,0
+65ed1278__2,65ed1278,2,2025-03-09,Klaus Mertens,55+,Teacher,Western European,653,11751,-1,0,0,0,0,0,0,0,1,0
+65ed1278__3,65ed1278,3,2025-03-13,Klaus Mertens,55+,Teacher,Western European,612,11710,0,0,0,0,0,0,0,0,-1,0
+65ed1278__4,65ed1278,4,2025-03-16,Klaus Mertens,55+,Teacher,Western European,777,11875,0,0,0,-1,0,0,0,0,1,0
+65ed1278__5,65ed1278,5,2025-03-19,Klaus Mertens,55+,Teacher,Western European,264,11362,0,0,0,0,0,0,0,0,0,0
+65ed1278__6,65ed1278,6,2025-03-20,Klaus Mertens,55+,Teacher,Western European,152,11250,0,0,0,-1,0,0,0,0,1,0
+65ed1278__7,65ed1278,7,2025-03-21,Klaus Mertens,55+,Teacher,Western European,457,11555,0,0,0,1,0,0,0,0,1,0
+65ed1278__8,65ed1278,8,2025-03-21,Klaus Mertens,55+,Teacher,Western European,684,11782,0,0,0,1,0,0,0,0,0,0
+65ed1278__9,65ed1278,9,2025-03-23,Klaus Mertens,55+,Teacher,Western European,1131,12229,1,0,0,1,0,0,0,0,0,0
+65ed1278__10,65ed1278,10,2025-03-25,Klaus Mertens,55+,Teacher,Western European,1233,12331,0,0,0,1,0,0,0,0,-1,0
+6608a6f8__0,6608a6f8,0,2025-03-10,Rajan Mehta,55+,Entrepreneur,South Asian,562,11654,0,0,0,1,0,0,0,1,0,0
+6608a6f8__1,6608a6f8,1,2025-03-12,Rajan Mehta,55+,Entrepreneur,South Asian,1291,12383,0,0,0,1,0,0,0,1,0,0
+6608a6f8__2,6608a6f8,2,2025-03-12,Rajan Mehta,55+,Entrepreneur,South Asian,1243,12335,0,0,0,1,0,0,0,1,0,0
+6608a6f8__3,6608a6f8,3,2025-03-14,Rajan Mehta,55+,Entrepreneur,South Asian,1726,12818,0,0,0,1,0,0,0,0,-1,0
+6608a6f8__4,6608a6f8,4,2025-03-14,Rajan Mehta,55+,Entrepreneur,South Asian,1246,12338,0,0,0,1,0,0,0,1,0,0
+6608a6f8__5,6608a6f8,5,2025-03-19,Rajan Mehta,55+,Entrepreneur,South Asian,756,11848,0,0,0,1,0,0,0,1,0,0
+6608a6f8__6,6608a6f8,6,2025-03-24,Rajan Mehta,55+,Entrepreneur,South Asian,338,11430,0,0,0,0,0,0,0,0,0,0
+6608a6f8__7,6608a6f8,7,2025-03-26,Rajan Mehta,55+,Entrepreneur,South Asian,1263,12355,0,0,0,1,0,0,0,1,0,0
+6608a6f8__8,6608a6f8,8,2025-03-27,Rajan Mehta,55+,Entrepreneur,South Asian,1720,12812,0,0,0,1,0,0,0,1,1,0
+6608a6f8__9,6608a6f8,9,2025-03-31,Rajan Mehta,55+,Entrepreneur,South Asian,1291,12383,0,0,0,1,0,0,0,1,0,0
+6608a6f8__10,6608a6f8,10,2025-04-05,Rajan Mehta,55+,Entrepreneur,South Asian,1183,12275,0,0,0,1,0,0,0,1,0,1
+663cb334__0,663cb334,0,2025-05-05,Graciela Montero,55+,Grad Student,Latin American,1719,12795,-1,0,0,1,0,0,1,1,1,0
+663cb334__1,663cb334,1,2025-05-12,Graciela Montero,55+,Grad Student,Latin American,876,11952,-1,0,0,0,0,1,1,0,0,0
+663cb334__2,663cb334,2,2025-05-14,Graciela Montero,55+,Grad Student,Latin American,1252,12328,-1,0,0,0,0,0,1,1,0,0
+663cb334__3,663cb334,3,2025-05-14,Graciela Montero,55+,Grad Student,Latin American,1450,12526,0,0,1,1,0,1,0,1,1,0
+663cb334__4,663cb334,4,2025-05-17,Graciela Montero,55+,Grad Student,Latin American,1073,12149,0,0,1,0,0,1,0,1,1,0
+66ced716__0,66ced716,0,2025-05-01,Layla Haddad,25-34,Artist,Middle Eastern,1382,12454,1,0,0,0,0,0,0,0,1,1
+66ced716__1,66ced716,1,2025-05-06,Layla Haddad,25-34,Artist,Middle Eastern,1389,12461,0,0,0,0,0,0,1,0,0,-1
+66ced716__2,66ced716,2,2025-05-11,Layla Haddad,25-34,Artist,Middle Eastern,780,11852,0,0,0,0,0,0,0,0,1,1
+66ced716__3,66ced716,3,2025-05-11,Layla Haddad,25-34,Artist,Middle Eastern,406,11478,0,0,1,0,0,0,0,0,0,-1
+66ced716__4,66ced716,4,2025-05-12,Layla Haddad,25-34,Artist,Middle Eastern,217,11289,0,0,0,0,0,0,1,0,0,0
+66ced716__5,66ced716,5,2025-05-16,Layla Haddad,25-34,Artist,Middle Eastern,811,11883,0,0,0,0,0,0,0,0,1,1
+68d0e778__0,68d0e778,0,2025-01-26,Tariq Haddad,45-54,Software Engineer,Middle Eastern,425,11532,0,1,0,0,0,-1,0,0,0,0
+68d0e778__1,68d0e778,1,2025-01-30,Tariq Haddad,45-54,Software Engineer,Middle Eastern,700,11807,0,1,0,1,0,-1,0,0,0,0
+68d0e778__2,68d0e778,2,2025-01-30,Tariq Haddad,45-54,Software Engineer,Middle Eastern,236,11343,0,1,0,1,0,0,0,0,0,0
+68d0e778__3,68d0e778,3,2025-02-01,Tariq Haddad,45-54,Software Engineer,Middle Eastern,1162,12269,0,0,0,1,0,0,0,0,0,0
+68d0e778__4,68d0e778,4,2025-02-07,Tariq Haddad,45-54,Software Engineer,Middle Eastern,487,11594,0,0,0,1,1,0,0,0,0,0
+68d0e778__5,68d0e778,5,2025-02-08,Tariq Haddad,45-54,Software Engineer,Middle Eastern,264,11371,0,0,0,0,0,0,0,0,0,0
+68d0e778__6,68d0e778,6,2025-02-15,Tariq Haddad,45-54,Software Engineer,Middle Eastern,779,11886,0,1,0,-1,0,0,0,0,0,0
+68d0e778__7,68d0e778,7,2025-02-18,Tariq Haddad,45-54,Software Engineer,Middle Eastern,1403,12510,0,0,0,1,1,0,0,0,0,0
+68d0e778__8,68d0e778,8,2025-02-24,Tariq Haddad,45-54,Software Engineer,Middle Eastern,699,11806,0,0,0,1,1,0,0,0,0,0
+68d0e778__9,68d0e778,9,2025-02-28,Tariq Haddad,45-54,Software Engineer,Middle Eastern,1383,12490,0,1,0,1,0,-1,0,0,0,0
+68d0e778__10,68d0e778,10,2025-03-07,Tariq Haddad,45-54,Software Engineer,Middle Eastern,497,11604,0,1,0,0,0,-1,0,0,0,0
+68d0e778__11,68d0e778,11,2025-03-07,Tariq Haddad,45-54,Software Engineer,Middle Eastern,1728,12835,0,1,0,1,0,-1,0,0,0,0
+694bb341__0,694bb341,0,2025-03-03,Priya Sharma,18-24,Teacher,South Asian,367,11423,0,0,0,1,1,0,0,0,0,0
+694bb341__1,694bb341,1,2025-03-03,Priya Sharma,18-24,Teacher,South Asian,1308,12364,0,0,-1,1,1,0,0,-1,-1,0
+694bb341__2,694bb341,2,2025-03-08,Priya Sharma,18-24,Teacher,South Asian,822,11878,1,0,0,1,1,0,-1,0,0,0
+694bb341__3,694bb341,3,2025-03-08,Priya Sharma,18-24,Teacher,South Asian,203,11259,0,0,0,1,1,0,0,0,0,0
+694bb341__4,694bb341,4,2025-03-13,Priya Sharma,18-24,Teacher,South Asian,1223,12279,0,0,0,1,1,0,0,0,1,0
+6b42a906__0,6b42a906,0,2025-10-20,Yuki Tanaka,18-24,Grad Student,East Asian,212,11277,0,0,1,-1,0,0,0,0,0,0
+6b42a906__1,6b42a906,1,2025-10-21,Yuki Tanaka,18-24,Grad Student,East Asian,191,11256,0,0,1,0,0,0,0,0,0,0
+6b42a906__2,6b42a906,2,2025-10-21,Yuki Tanaka,18-24,Grad Student,East Asian,1322,12387,1,0,1,-1,0,0,0,0,0,0
+6b42a906__3,6b42a906,3,2025-10-26,Yuki Tanaka,18-24,Grad Student,East Asian,1044,12109,0,0,-1,0,0,0,0,0,0,0
+6b42a906__4,6b42a906,4,2025-10-30,Yuki Tanaka,18-24,Grad Student,East Asian,1228,12293,1,0,1,-1,0,0,0,0,0,0
+6b42a906__5,6b42a906,5,2025-11-02,Yuki Tanaka,18-24,Grad Student,East Asian,1040,12105,0,0,1,-1,0,0,1,0,0,0
+6b42a906__6,6b42a906,6,2025-11-08,Yuki Tanaka,18-24,Grad Student,East Asian,559,11624,1,0,1,0,0,0,0,-1,0,0
+6b42a906__7,6b42a906,7,2025-11-14,Yuki Tanaka,18-24,Grad Student,East Asian,942,12007,0,0,1,-1,0,0,0,0,1,0
+6b42a906__8,6b42a906,8,2025-11-17,Yuki Tanaka,18-24,Grad Student,East Asian,455,11520,1,0,1,0,0,0,0,0,0,0
+6b42a906__9,6b42a906,9,2025-11-19,Yuki Tanaka,18-24,Grad Student,East Asian,74,11139,0,0,0,0,0,0,0,0,0,0
+6b42a906__10,6b42a906,10,2025-11-24,Yuki Tanaka,18-24,Grad Student,East Asian,1361,12426,1,0,1,-1,0,0,0,1,1,0
+7094acd8__0,7094acd8,0,2025-11-21,Valentina Morales,18-24,Teacher,Latin American,894,11964,0,-1,0,1,0,1,0,0,1,0
+7094acd8__1,7094acd8,1,2025-11-22,Valentina Morales,18-24,Teacher,Latin American,912,11982,1,-1,0,0,0,1,-1,0,0,0
+7094acd8__2,7094acd8,2,2025-11-25,Valentina Morales,18-24,Teacher,Latin American,694,11764,1,0,0,0,0,1,0,0,0,0
+709e706c__0,709e706c,0,2025-05-27,Tariq Haddad,45-54,Grad Student,Middle Eastern,487,11589,0,0,0,1,0,0,0,1,1,0
+709e706c__1,709e706c,1,2025-06-02,Tariq Haddad,45-54,Grad Student,Middle Eastern,1235,12337,0,0,-1,1,0,-1,0,1,1,0
+709e706c__2,709e706c,2,2025-06-05,Tariq Haddad,45-54,Grad Student,Middle Eastern,615,11717,0,0,1,1,0,1,0,1,1,0
+709e706c__3,709e706c,3,2025-06-10,Tariq Haddad,45-54,Grad Student,Middle Eastern,1805,12907,0,0,-1,1,-1,-1,1,1,1,0
+709e706c__4,709e706c,4,2025-06-16,Tariq Haddad,45-54,Grad Student,Middle Eastern,1201,12303,0,-1,0,1,0,1,0,1,1,0
+709e706c__5,709e706c,5,2025-06-22,Tariq Haddad,45-54,Grad Student,Middle Eastern,1491,12593,1,0,0,1,0,-1,-1,0,0,0
+709e706c__6,709e706c,6,2025-06-25,Tariq Haddad,45-54,Grad Student,Middle Eastern,1399,12501,1,1,1,1,0,1,0,1,1,0
+709e706c__7,709e706c,7,2025-06-27,Tariq Haddad,45-54,Grad Student,Middle Eastern,692,11794,1,0,1,1,0,1,0,1,1,0
+709e706c__8,709e706c,8,2025-06-27,Tariq Haddad,45-54,Grad Student,Middle Eastern,586,11688,0,0,0,1,0,0,0,1,1,0
+70b51a5b__0,70b51a5b,0,2025-09-22,Meena Subramanian,55+,Parent (Stay-at-home),South Asian,363,11436,0,0,0,0,-1,0,1,0,0,0
+70b51a5b__1,70b51a5b,1,2025-09-29,Meena Subramanian,55+,Parent (Stay-at-home),South Asian,631,11704,0,0,0,0,-1,0,0,0,0,0
+70b51a5b__2,70b51a5b,2,2025-10-04,Meena Subramanian,55+,Parent (Stay-at-home),South Asian,719,11792,0,0,0,0,1,1,0,0,0,0
+70b51a5b__3,70b51a5b,3,2025-10-08,Meena Subramanian,55+,Parent (Stay-at-home),South Asian,538,11611,0,0,0,0,1,0,0,0,1,0
+70b51a5b__4,70b51a5b,4,2025-10-08,Meena Subramanian,55+,Parent (Stay-at-home),South Asian,1097,12170,0,0,0,0,-1,0,1,0,0,0
+70b51a5b__5,70b51a5b,5,2025-10-13,Meena Subramanian,55+,Parent (Stay-at-home),South Asian,882,11955,0,0,0,0,1,0,0,1,0,0
+70b51a5b__6,70b51a5b,6,2025-10-20,Meena Subramanian,55+,Parent (Stay-at-home),South Asian,1353,12426,0,0,0,0,-1,0,1,0,1,0
+70b51a5b__7,70b51a5b,7,2025-10-25,Meena Subramanian,55+,Parent (Stay-at-home),South Asian,1149,12222,0,0,0,0,-1,0,0,1,0,0
+70b51a5b__8,70b51a5b,8,2025-10-28,Meena Subramanian,55+,Parent (Stay-at-home),South Asian,254,11327,0,0,0,0,1,0,0,0,0,0
+7227db82__0,7227db82,0,2025-04-18,Ryu Tanaka,18-24,Entrepreneur,East Asian,1450,12520,1,1,0,1,0,-1,0,0,0,0
+7227db82__1,7227db82,1,2025-04-20,Ryu Tanaka,18-24,Entrepreneur,East Asian,1602,12672,1,1,0,0,0,-1,-1,-1,0,0
+7227db82__2,7227db82,2,2025-04-20,Ryu Tanaka,18-24,Entrepreneur,East Asian,1020,12090,1,1,0,0,0,-1,0,0,-1,0
+7227db82__3,7227db82,3,2025-04-27,Ryu Tanaka,18-24,Entrepreneur,East Asian,1217,12287,1,1,0,1,0,0,-1,0,0,0
+7227db82__4,7227db82,4,2025-05-02,Ryu Tanaka,18-24,Entrepreneur,East Asian,175,11245,1,0,0,0,1,-1,0,0,0,0
+7227db82__5,7227db82,5,2025-05-03,Ryu Tanaka,18-24,Entrepreneur,East Asian,807,11877,1,1,0,0,0,-1,-1,-1,0,0
+7227db82__6,7227db82,6,2025-05-09,Ryu Tanaka,18-24,Entrepreneur,East Asian,643,11713,0,-1,0,-1,0,-1,0,0,0,0
+7227db82__7,7227db82,7,2025-05-10,Ryu Tanaka,18-24,Entrepreneur,East Asian,1295,12365,1,0,1,-1,0,0,0,0,0,0
+7227db82__8,7227db82,8,2025-05-15,Ryu Tanaka,18-24,Entrepreneur,East Asian,1076,12146,1,1,0,1,0,-1,0,0,0,0
+7227db82__9,7227db82,9,2025-05-22,Ryu Tanaka,18-24,Entrepreneur,East Asian,736,11806,1,0,0,0,0,0,0,1,1,0
+7253e69f__0,7253e69f,0,2025-09-12,Ricardo Valenzuela,45-54,Manager,Latin American,275,11372,0,1,1,0,-1,0,0,0,0,0
+7253e69f__1,7253e69f,1,2025-09-12,Ricardo Valenzuela,45-54,Manager,Latin American,1079,12176,0,1,1,0,0,0,0,0,0,0
+7253e69f__2,7253e69f,2,2025-09-18,Ricardo Valenzuela,45-54,Manager,Latin American,1359,12456,0,1,1,1,0,0,0,0,0,0
+7253e69f__3,7253e69f,3,2025-09-19,Ricardo Valenzuela,45-54,Manager,Latin American,308,11405,0,1,1,0,0,0,0,0,0,0
+7253e69f__4,7253e69f,4,2025-09-21,Ricardo Valenzuela,45-54,Manager,Latin American,1211,12308,0,-1,0,0,0,0,1,0,0,0
+7253e69f__5,7253e69f,5,2025-09-28,Ricardo Valenzuela,45-54,Manager,Latin American,906,12003,0,1,1,0,0,0,0,0,0,0
+73efad77__0,73efad77,0,2025-09-15,Luciana Paredes,18-24,Parent (Stay-at-home),Latin American,656,11738,0,0,0,0,0,1,0,0,0,0
+73efad77__1,73efad77,1,2025-09-15,Luciana Paredes,18-24,Parent (Stay-at-home),Latin American,877,11959,0,0,0,0,0,1,0,0,0,0
+73efad77__2,73efad77,2,2025-09-16,Luciana Paredes,18-24,Parent (Stay-at-home),Latin American,1192,12274,-1,0,0,0,0,1,1,0,0,0
+73efad77__3,73efad77,3,2025-09-19,Luciana Paredes,18-24,Parent (Stay-at-home),Latin American,892,11974,0,0,0,0,0,1,0,0,1,0
+73efad77__4,73efad77,4,2025-09-21,Luciana Paredes,18-24,Parent (Stay-at-home),Latin American,877,11959,-1,0,0,0,0,1,1,0,0,0
+73efad77__5,73efad77,5,2025-09-25,Luciana Paredes,18-24,Parent (Stay-at-home),Latin American,802,11884,0,0,0,0,0,1,0,0,0,0
+742c98d6__0,742c98d6,0,2025-09-07,Margot van den Berg,55+,Nurse,Western European,1459,12537,0,0,0,0,0,0,1,0,0,-1
+742c98d6__1,742c98d6,1,2025-09-11,Margot van den Berg,55+,Nurse,Western European,1106,12184,0,0,0,0,0,0,0,0,1,1
+742c98d6__2,742c98d6,2,2025-09-13,Margot van den Berg,55+,Nurse,Western European,1249,12327,0,0,0,0,0,0,0,0,0,1
+742c98d6__3,742c98d6,3,2025-09-19,Margot van den Berg,55+,Nurse,Western European,1275,12353,0,0,0,0,0,0,1,0,0,-1
+742c98d6__4,742c98d6,4,2025-09-25,Margot van den Berg,55+,Nurse,Western European,174,11252,0,0,0,0,0,0,1,0,0,-1
+742c98d6__5,742c98d6,5,2025-09-29,Margot van den Berg,55+,Nurse,Western European,1344,12422,0,0,0,0,0,0,1,0,0,-1
+742c98d6__6,742c98d6,6,2025-09-29,Margot van den Berg,55+,Nurse,Western European,1290,12368,0,0,0,0,0,0,1,0,0,-1
+742c98d6__7,742c98d6,7,2025-10-05,Margot van den Berg,55+,Nurse,Western European,144,11222,0,0,0,0,0,0,0,0,0,0
+742c98d6__8,742c98d6,8,2025-10-07,Margot van den Berg,55+,Nurse,Western European,1333,12411,0,0,0,0,0,0,0,0,0,-1
+742c98d6__9,742c98d6,9,2025-10-08,Margot van den Berg,55+,Nurse,Western European,1357,12435,0,0,0,0,0,0,1,0,-1,-1
+742c98d6__10,742c98d6,10,2025-10-14,Margot van den Berg,55+,Nurse,Western European,141,11219,0,0,0,0,0,0,0,0,1,1
+745bbe84__0,745bbe84,0,2025-02-26,Marcus Chen,35-44,Gig Worker,North American,1649,12716,1,0,-1,0,0,1,-1,0,0,0
+745bbe84__1,745bbe84,1,2025-03-01,Marcus Chen,35-44,Gig Worker,North American,538,11605,0,0,0,0,0,1,0,0,0,0
+745bbe84__2,745bbe84,2,2025-03-07,Marcus Chen,35-44,Gig Worker,North American,2051,13118,1,0,-1,1,-1,-1,0,0,0,0
+745bbe84__3,745bbe84,3,2025-03-08,Marcus Chen,35-44,Gig Worker,North American,634,11701,1,0,-1,1,0,1,0,0,0,0
+745bbe84__4,745bbe84,4,2025-03-10,Marcus Chen,35-44,Gig Worker,North American,1154,12221,1,0,-1,1,0,1,0,0,0,0
+755c4960__0,755c4960,0,2025-03-13,Kevin Lim,25-34,Entrepreneur,East Asian,135,11200,0,0,0,0,0,0,0,1,0,0
+755c4960__1,755c4960,1,2025-03-14,Kevin Lim,25-34,Entrepreneur,East Asian,488,11553,0,0,0,0,0,0,1,0,0,0
+755c4960__2,755c4960,2,2025-03-15,Kevin Lim,25-34,Entrepreneur,East Asian,1418,12483,0,0,0,0,0,0,0,1,1,0
+755c4960__3,755c4960,3,2025-03-15,Kevin Lim,25-34,Entrepreneur,East Asian,1180,12245,1,0,0,0,0,0,0,1,0,0
+755c4960__4,755c4960,4,2025-03-20,Kevin Lim,25-34,Entrepreneur,East Asian,354,11419,0,0,0,1,0,0,0,1,0,0
+755c4960__5,755c4960,5,2025-03-26,Kevin Lim,25-34,Entrepreneur,East Asian,649,11714,0,0,0,0,0,0,1,1,0,0
+755c4960__6,755c4960,6,2025-03-28,Kevin Lim,25-34,Entrepreneur,East Asian,1257,12322,1,0,0,0,0,0,-1,0,0,0
+755c4960__7,755c4960,7,2025-04-04,Kevin Lim,25-34,Entrepreneur,East Asian,615,11680,0,0,0,0,0,0,0,1,1,0
+755c4960__8,755c4960,8,2025-04-10,Kevin Lim,25-34,Entrepreneur,East Asian,1390,12455,0,0,0,0,0,-1,0,1,0,0
+755c4960__9,755c4960,9,2025-04-15,Kevin Lim,25-34,Entrepreneur,East Asian,581,11646,0,0,0,0,0,0,0,1,1,0
+755c4960__10,755c4960,10,2025-04-16,Kevin Lim,25-34,Entrepreneur,East Asian,1035,12100,0,0,0,1,0,0,0,-1,-1,0
+755c4960__11,755c4960,11,2025-04-19,Kevin Lim,25-34,Entrepreneur,East Asian,934,11999,0,0,0,0,0,0,0,1,1,0
+7664d969__0,7664d969,0,2025-12-01,Valentina Reyes,18-24,Nurse,Latin American,1102,12190,0,0,0,0,0,0,0,1,1,0
+7664d969__1,7664d969,1,2025-12-03,Valentina Reyes,18-24,Nurse,Latin American,319,11407,0,0,0,0,0,1,0,0,1,0
+7664d969__2,7664d969,2,2025-12-13,Valentina Reyes,18-24,Nurse,Latin American,1353,12441,0,0,0,0,0,0,0,1,1,0
+7664d969__3,7664d969,3,2025-12-21,Valentina Reyes,18-24,Nurse,Latin American,1052,12140,-1,-1,0,0,0,1,1,0,1,0
+7664d969__4,7664d969,4,2025-12-31,Valentina Reyes,18-24,Nurse,Latin American,1252,12340,0,0,0,0,0,1,0,1,1,0
+7664d969__5,7664d969,5,2026-01-05,Valentina Reyes,18-24,Nurse,Latin American,279,11367,0,0,0,0,0,1,0,0,0,0
+7664d969__6,7664d969,6,2026-01-07,Valentina Reyes,18-24,Nurse,Latin American,1725,12813,0,0,0,0,0,0,-1,1,1,0
+7664d969__7,7664d969,7,2026-01-10,Valentina Reyes,18-24,Nurse,Latin American,580,11668,0,0,0,0,0,1,0,0,1,0
+7664d969__8,7664d969,8,2026-01-12,Valentina Reyes,18-24,Nurse,Latin American,1868,12956,0,0,0,0,0,0,0,1,1,0
+775c7d71__0,775c7d71,0,2025-05-11,Yoon Jihye,18-24,Entrepreneur,East Asian,247,11349,1,0,-1,0,0,0,-1,0,-1,0
+775c7d71__1,775c7d71,1,2025-05-12,Yoon Jihye,18-24,Entrepreneur,East Asian,290,11392,0,0,0,0,0,0,0,0,-1,0
+775c7d71__2,775c7d71,2,2025-05-16,Yoon Jihye,18-24,Entrepreneur,East Asian,805,11907,0,0,-1,0,0,-1,0,0,1,1
+775c7d71__3,775c7d71,3,2025-05-16,Yoon Jihye,18-24,Entrepreneur,East Asian,1143,12245,1,0,0,0,0,-1,0,1,1,1
+775c7d71__4,775c7d71,4,2025-05-22,Yoon Jihye,18-24,Entrepreneur,East Asian,275,11377,1,0,0,0,-1,0,-1,0,0,0
+775c7d71__5,775c7d71,5,2025-05-27,Yoon Jihye,18-24,Entrepreneur,East Asian,1449,12551,1,0,-1,0,0,-1,0,0,1,1
+775c7d71__6,775c7d71,6,2025-05-30,Yoon Jihye,18-24,Entrepreneur,East Asian,553,11655,1,0,-1,0,0,-1,-1,-1,0,0
+775c7d71__7,775c7d71,7,2025-06-01,Yoon Jihye,18-24,Entrepreneur,East Asian,266,11368,0,0,-1,1,0,0,0,0,1,0
+799f3751__0,799f3751,0,2025-05-18,Meera Sharma,25-34,Parent (Stay-at-home),South Asian,2763,13863,-1,0,-1,0,-1,1,1,1,1,0
+799f3751__1,799f3751,1,2025-05-20,Meera Sharma,25-34,Parent (Stay-at-home),South Asian,1305,12405,0,0,-1,0,-1,1,1,0,1,0
+799f3751__2,799f3751,2,2025-05-22,Meera Sharma,25-34,Parent (Stay-at-home),South Asian,794,11894,-1,0,0,0,-1,1,1,1,1,0
+7a086972__0,7a086972,0,2025-07-26,Lucie Bergmann,18-24,Teacher,Western European,923,12016,1,-1,1,0,0,1,-1,0,0,0
+7a086972__1,7a086972,1,2025-08-02,Lucie Bergmann,18-24,Teacher,Western European,999,12092,-1,0,-1,0,-1,1,1,0,1,0
+7a086972__2,7a086972,2,2025-08-05,Lucie Bergmann,18-24,Teacher,Western European,604,11697,-1,0,-1,0,-1,0,1,0,-1,0
+7a086972__3,7a086972,3,2025-08-06,Lucie Bergmann,18-24,Teacher,Western European,1518,12611,-1,0,0,0,0,1,1,1,1,0
+7a086972__4,7a086972,4,2025-08-07,Lucie Bergmann,18-24,Teacher,Western European,1656,12749,-1,0,1,1,-1,1,1,0,1,0
+7a086972__5,7a086972,5,2025-08-08,Lucie Bergmann,18-24,Teacher,Western European,1497,12590,-1,-1,1,0,0,1,1,0,0,0
+7a086972__6,7a086972,6,2025-08-14,Lucie Bergmann,18-24,Teacher,Western European,1831,12924,-1,0,1,-1,-1,1,1,0,1,0
+7adc5866__0,7adc5866,0,2025-05-21,Meena Krishnamurthy,55+,Teacher,South Asian,712,11809,0,0,0,1,0,0,0,0,-1,0
+7adc5866__1,7adc5866,1,2025-05-27,Meena Krishnamurthy,55+,Teacher,South Asian,377,11474,0,0,0,0,0,0,0,0,0,0
+7adc5866__2,7adc5866,2,2025-05-27,Meena Krishnamurthy,55+,Teacher,South Asian,329,11426,0,0,0,0,0,0,0,0,1,0
+7adc5866__3,7adc5866,3,2025-05-28,Meena Krishnamurthy,55+,Teacher,South Asian,1028,12125,0,0,0,0,0,0,0,1,1,0
+7adc5866__4,7adc5866,4,2025-05-31,Meena Krishnamurthy,55+,Teacher,South Asian,441,11538,0,0,0,0,0,0,0,0,1,0
+7adc5866__5,7adc5866,5,2025-06-06,Meena Krishnamurthy,55+,Teacher,South Asian,215,11312,-1,0,0,0,0,0,1,0,0,0
+7adc5866__6,7adc5866,6,2025-06-08,Meena Krishnamurthy,55+,Teacher,South Asian,873,11970,0,0,0,0,0,0,0,0,1,0
+7adc5866__7,7adc5866,7,2025-06-14,Meena Krishnamurthy,55+,Teacher,South Asian,933,12030,-1,0,0,0,0,0,1,0,0,0
+7adc5866__8,7adc5866,8,2025-06-18,Meena Krishnamurthy,55+,Teacher,South Asian,403,11500,-1,0,0,0,0,0,1,0,0,0
+7becbd6e__0,7becbd6e,0,2025-08-02,Mathilde Janssen,25-34,Artist,Western European,742,11842,-1,0,0,1,0,0,1,0,0,0
+7becbd6e__1,7becbd6e,1,2025-08-04,Mathilde Janssen,25-34,Artist,Western European,289,11389,-1,0,0,0,0,0,1,0,0,0
+7becbd6e__2,7becbd6e,2,2025-08-09,Mathilde Janssen,25-34,Artist,Western European,1525,12625,-1,0,0,1,0,1,1,0,0,0
+7becbd6e__3,7becbd6e,3,2025-08-10,Mathilde Janssen,25-34,Artist,Western European,109,11209,-1,0,0,0,0,0,1,0,0,0
+7becbd6e__4,7becbd6e,4,2025-08-15,Mathilde Janssen,25-34,Artist,Western European,942,12042,0,0,0,1,0,0,1,0,0,0
+7becbd6e__5,7becbd6e,5,2025-08-16,Mathilde Janssen,25-34,Artist,Western European,841,11941,-1,0,0,1,0,0,1,0,0,0
+7becbd6e__6,7becbd6e,6,2025-08-18,Mathilde Janssen,25-34,Artist,Western European,843,11943,-1,0,0,1,0,0,1,0,0,0
+7becbd6e__7,7becbd6e,7,2025-08-24,Mathilde Janssen,25-34,Artist,Western European,190,11290,-1,0,0,1,0,0,1,0,0,0
+7becbd6e__8,7becbd6e,8,2025-08-31,Mathilde Janssen,25-34,Artist,Western European,963,12063,0,1,0,0,0,0,0,0,0,0
+7becbd6e__9,7becbd6e,9,2025-09-03,Mathilde Janssen,25-34,Artist,Western European,874,11974,-1,0,0,1,0,0,1,0,0,0
+7c712a0a__0,7c712a0a,0,2025-11-05,Ricardo Mendoza,55+,Software Engineer,Latin American,245,11351,0,-1,0,0,0,0,1,0,0,0
+7c712a0a__1,7c712a0a,1,2025-11-11,Ricardo Mendoza,55+,Software Engineer,Latin American,784,11890,-1,-1,0,0,0,1,1,0,0,0
+7c712a0a__2,7c712a0a,2,2025-11-14,Ricardo Mendoza,55+,Software Engineer,Latin American,1544,12650,0,1,0,0,0,0,0,0,0,0
+7c712a0a__3,7c712a0a,3,2025-11-17,Ricardo Mendoza,55+,Software Engineer,Latin American,1814,12920,-1,0,0,1,-1,1,1,0,0,0
+7c712a0a__4,7c712a0a,4,2025-11-18,Ricardo Mendoza,55+,Software Engineer,Latin American,523,11629,-1,-1,0,0,0,0,1,0,0,0
+7c712a0a__5,7c712a0a,5,2025-11-22,Ricardo Mendoza,55+,Software Engineer,Latin American,1444,12550,1,1,0,0,0,0,0,1,1,0
+7c712a0a__6,7c712a0a,6,2025-11-28,Ricardo Mendoza,55+,Software Engineer,Latin American,798,11904,-1,-1,0,0,0,1,1,0,0,0
+7c712a0a__7,7c712a0a,7,2025-12-04,Ricardo Mendoza,55+,Software Engineer,Latin American,1046,12152,-1,-1,-1,1,0,0,1,0,1,0
+7c712a0a__8,7c712a0a,8,2025-12-11,Ricardo Mendoza,55+,Software Engineer,Latin American,1206,12312,1,1,0,-1,-1,-1,-1,0,1,0
+7c712a0a__9,7c712a0a,9,2025-12-16,Ricardo Mendoza,55+,Software Engineer,Latin American,187,11293,1,1,0,1,0,0,0,0,0,0
+7cc5cf92__0,7cc5cf92,0,2025-06-27,Arjun Venkataraman,25-34,Software Engineer,South Asian,1075,12169,0,0,0,1,1,0,1,1,1,0
+7cc5cf92__1,7cc5cf92,1,2025-07-02,Arjun Venkataraman,25-34,Software Engineer,South Asian,126,11220,0,0,0,0,1,1,0,-1,-1,0
+7cc5cf92__2,7cc5cf92,2,2025-07-08,Arjun Venkataraman,25-34,Software Engineer,South Asian,474,11568,0,0,-1,1,1,0,0,0,0,0
+7cc5cf92__3,7cc5cf92,3,2025-07-10,Arjun Venkataraman,25-34,Software Engineer,South Asian,1521,12615,-1,0,0,1,1,0,1,1,0,0
+7cc5cf92__4,7cc5cf92,4,2025-07-17,Arjun Venkataraman,25-34,Software Engineer,South Asian,208,11302,0,0,0,1,1,0,1,0,0,0
+7cc5cf92__5,7cc5cf92,5,2025-07-21,Arjun Venkataraman,25-34,Software Engineer,South Asian,616,11710,0,0,0,0,1,1,1,1,-1,0
+7cc5cf92__6,7cc5cf92,6,2025-07-22,Arjun Venkataraman,25-34,Software Engineer,South Asian,1104,12198,0,0,0,1,1,0,0,1,-1,0
+7cc5cf92__7,7cc5cf92,7,2025-07-29,Arjun Venkataraman,25-34,Software Engineer,South Asian,1021,12115,0,0,-1,1,1,0,0,1,-1,0
+7cc5cf92__8,7cc5cf92,8,2025-07-31,Arjun Venkataraman,25-34,Software Engineer,South Asian,419,11513,1,0,0,1,1,0,0,0,0,0
+7cc5cf92__9,7cc5cf92,9,2025-08-03,Arjun Venkataraman,25-34,Software Engineer,South Asian,482,11576,0,0,0,1,1,0,0,0,-1,0
+7cc5cf92__10,7cc5cf92,10,2025-08-03,Arjun Venkataraman,25-34,Software Engineer,South Asian,1626,12720,-1,0,0,1,1,0,0,1,1,0
+7ff1d0fb__0,7ff1d0fb,0,2025-11-26,Seo-yun Park,25-34,Artist,East Asian,878,11960,1,0,0,0,0,0,1,0,0,0
+7ff1d0fb__1,7ff1d0fb,1,2025-11-30,Seo-yun Park,25-34,Artist,East Asian,323,11405,0,0,0,0,0,0,0,1,0,0
+7ff1d0fb__2,7ff1d0fb,2,2025-12-07,Seo-yun Park,25-34,Artist,East Asian,1276,12358,0,0,0,1,0,0,1,0,0,0
+7ff1d0fb__3,7ff1d0fb,3,2025-12-07,Seo-yun Park,25-34,Artist,East Asian,746,11828,0,0,0,1,0,0,0,1,0,0
+7ff1d0fb__4,7ff1d0fb,4,2025-12-07,Seo-yun Park,25-34,Artist,East Asian,719,11801,1,0,0,0,0,0,0,1,0,0
+7ff1d0fb__5,7ff1d0fb,5,2025-12-07,Seo-yun Park,25-34,Artist,East Asian,492,11574,0,0,0,0,0,1,0,0,1,0
+7ff1d0fb__6,7ff1d0fb,6,2025-12-14,Seo-yun Park,25-34,Artist,East Asian,773,11855,0,0,0,0,0,1,0,1,0,0
+806f76a7__0,806f76a7,0,2025-12-01,Maya Littlefeather,18-24,Gig Worker,North American,1697,12773,1,0,0,0,0,0,0,-1,-1,0
+806f76a7__1,806f76a7,1,2025-12-10,Maya Littlefeather,18-24,Gig Worker,North American,1207,12283,0,0,0,0,0,1,0,-1,-1,0
+806f76a7__2,806f76a7,2,2025-12-15,Maya Littlefeather,18-24,Gig Worker,North American,2079,13155,0,0,0,0,0,-1,0,1,1,0
+81e96381__0,81e96381,0,2025-03-08,Rodrigo Espinoza,35-44,Grad Student,Latin American,1227,12327,1,0,0,1,0,0,0,0,0,0
+81e96381__1,81e96381,1,2025-03-12,Rodrigo Espinoza,35-44,Grad Student,Latin American,1204,12304,-1,0,0,0,0,0,1,0,0,0
+81e96381__2,81e96381,2,2025-03-18,Rodrigo Espinoza,35-44,Grad Student,Latin American,798,11898,1,0,0,0,0,0,-1,0,0,0
+81e96381__3,81e96381,3,2025-03-18,Rodrigo Espinoza,35-44,Grad Student,Latin American,868,11968,1,0,0,1,0,0,0,0,0,0
+81e96381__4,81e96381,4,2025-03-21,Rodrigo Espinoza,35-44,Grad Student,Latin American,1271,12371,1,0,0,0,1,0,0,0,0,0
+81e96381__5,81e96381,5,2025-03-22,Rodrigo Espinoza,35-44,Grad Student,Latin American,778,11878,1,0,0,0,-1,0,0,0,0,0
+81e96381__6,81e96381,6,2025-03-24,Rodrigo Espinoza,35-44,Grad Student,Latin American,377,11477,0,0,0,0,-1,0,0,0,0,0
+81e96381__7,81e96381,7,2025-03-24,Rodrigo Espinoza,35-44,Grad Student,Latin American,1271,12371,1,0,0,1,1,0,0,0,0,0
+825125b1__0,825125b1,0,2025-10-11,Megan Kowalski,25-34,Parent (Stay-at-home),North American,495,11580,-1,0,0,0,0,0,1,0,0,0
+825125b1__1,825125b1,1,2025-10-12,Megan Kowalski,25-34,Parent (Stay-at-home),North American,1458,12543,-1,0,0,-1,0,1,0,0,1,0
+825125b1__2,825125b1,2,2025-10-13,Megan Kowalski,25-34,Parent (Stay-at-home),North American,501,11586,-1,0,0,0,0,0,1,0,0,0
+825125b1__3,825125b1,3,2025-10-16,Megan Kowalski,25-34,Parent (Stay-at-home),North American,1217,12302,-1,0,-1,0,0,0,1,1,1,0
+825125b1__4,825125b1,4,2025-10-16,Megan Kowalski,25-34,Parent (Stay-at-home),North American,698,11783,-1,0,-1,0,0,0,1,0,0,0
+849a9d72__0,849a9d72,0,2025-06-09,Tariq Al-Harbi,25-34,Manager,Middle Eastern,288,11355,0,-1,0,0,0,1,0,0,0,0
+849a9d72__1,849a9d72,1,2025-06-14,Tariq Al-Harbi,25-34,Manager,Middle Eastern,221,11288,0,0,0,0,0,0,0,0,0,0
+849a9d72__2,849a9d72,2,2025-06-21,Tariq Al-Harbi,25-34,Manager,Middle Eastern,724,11791,0,0,0,0,0,1,0,0,-1,0
+849a9d72__3,849a9d72,3,2025-06-26,Tariq Al-Harbi,25-34,Manager,Middle Eastern,313,11380,0,-1,0,0,0,1,0,0,0,0
+849a9d72__4,849a9d72,4,2025-07-02,Tariq Al-Harbi,25-34,Manager,Middle Eastern,268,11335,0,0,0,0,0,1,0,0,0,0
+849a9d72__5,849a9d72,5,2025-07-07,Tariq Al-Harbi,25-34,Manager,Middle Eastern,783,11850,0,0,0,0,0,1,0,0,0,0
+849a9d72__6,849a9d72,6,2025-07-07,Tariq Al-Harbi,25-34,Manager,Middle Eastern,748,11815,0,0,0,0,0,1,0,0,0,0
+849a9d72__7,849a9d72,7,2025-07-07,Tariq Al-Harbi,25-34,Manager,Middle Eastern,573,11640,0,0,0,1,0,1,0,0,1,0
+849a9d72__8,849a9d72,8,2025-07-10,Tariq Al-Harbi,25-34,Manager,Middle Eastern,528,11595,0,0,0,0,0,0,0,0,0,0
+849a9d72__9,849a9d72,9,2025-07-10,Tariq Al-Harbi,25-34,Manager,Middle Eastern,904,11971,0,0,0,0,0,1,0,0,0,0
+8594a3ef__0,8594a3ef,0,2025-11-14,Priya Menon,35-44,Teacher,South Asian,367,11468,1,0,0,0,0,0,0,0,0,1
+8594a3ef__1,8594a3ef,1,2025-11-15,Priya Menon,35-44,Teacher,South Asian,655,11756,-1,0,0,0,0,0,1,0,0,1
+8594a3ef__2,8594a3ef,2,2025-11-17,Priya Menon,35-44,Teacher,South Asian,549,11650,-1,0,0,0,0,1,1,0,0,1
+8662a63f__0,8662a63f,0,2025-02-03,Marguerite Delacroix,35-44,Parent (Stay-at-home),Western European,769,11860,0,0,0,0,0,0,0,-1,-1,0
+8662a63f__1,8662a63f,1,2025-02-08,Marguerite Delacroix,35-44,Parent (Stay-at-home),Western European,1043,12134,-1,0,-1,0,0,0,0,1,1,0
+8662a63f__2,8662a63f,2,2025-02-11,Marguerite Delacroix,35-44,Parent (Stay-at-home),Western European,1047,12138,0,0,0,0,0,0,0,1,1,0
+8662a63f__3,8662a63f,3,2025-02-17,Marguerite Delacroix,35-44,Parent (Stay-at-home),Western European,1080,12171,0,0,0,0,0,1,0,1,1,0
+8662a63f__4,8662a63f,4,2025-02-21,Marguerite Delacroix,35-44,Parent (Stay-at-home),Western European,1242,12333,-1,-1,-1,-1,0,1,1,1,1,0
+8662a63f__5,8662a63f,5,2025-02-25,Marguerite Delacroix,35-44,Parent (Stay-at-home),Western European,926,12017,0,0,-1,0,0,0,0,1,1,1
+87b8187f__0,87b8187f,0,2025-07-26,Nadia Khoury,35-44,Artist,Middle Eastern,396,11492,0,0,0,1,0,1,0,0,0,0
+87b8187f__1,87b8187f,1,2025-08-01,Nadia Khoury,35-44,Artist,Middle Eastern,890,11986,1,0,0,0,0,0,0,0,0,0
+87b8187f__2,87b8187f,2,2025-08-04,Nadia Khoury,35-44,Artist,Middle Eastern,569,11665,0,0,0,0,0,1,0,0,0,0
+87b8187f__3,87b8187f,3,2025-08-04,Nadia Khoury,35-44,Artist,Middle Eastern,502,11598,1,0,0,0,0,1,0,0,0,0
+87b8187f__4,87b8187f,4,2025-08-05,Nadia Khoury,35-44,Artist,Middle Eastern,594,11690,1,0,0,0,0,-1,0,0,0,0
+87b8187f__5,87b8187f,5,2025-08-12,Nadia Khoury,35-44,Artist,Middle Eastern,242,11338,0,0,0,0,0,1,0,0,0,0
+87b8187f__6,87b8187f,6,2025-08-14,Nadia Khoury,35-44,Artist,Middle Eastern,697,11793,1,0,0,1,0,0,0,0,0,0
+87b8187f__7,87b8187f,7,2025-08-21,Nadia Khoury,35-44,Artist,Middle Eastern,1112,12208,0,0,0,1,0,1,0,0,0,0
+87b8187f__8,87b8187f,8,2025-08-26,Nadia Khoury,35-44,Artist,Middle Eastern,1356,12452,0,0,0,0,0,1,0,0,1,0
+87b8187f__9,87b8187f,9,2025-08-29,Nadia Khoury,35-44,Artist,Middle Eastern,334,11430,0,0,0,0,0,0,0,0,0,0
+87b8187f__10,87b8187f,10,2025-09-02,Nadia Khoury,35-44,Artist,Middle Eastern,1185,12281,1,0,0,0,0,1,0,0,0,0
+87e92805__0,87e92805,0,2025-03-13,Roberto Estrada,45-54,Gig Worker,Latin American,775,11866,0,0,1,0,0,1,0,0,0,0
+87e92805__1,87e92805,1,2025-03-17,Roberto Estrada,45-54,Gig Worker,Latin American,587,11678,1,0,0,0,0,-1,-1,0,0,0
+87e92805__2,87e92805,2,2025-03-23,Roberto Estrada,45-54,Gig Worker,Latin American,1399,12490,1,0,0,0,0,-1,0,0,0,0
+87e92805__3,87e92805,3,2025-03-24,Roberto Estrada,45-54,Gig Worker,Latin American,224,11315,0,0,0,0,0,1,0,0,0,0
+87e92805__4,87e92805,4,2025-03-31,Roberto Estrada,45-54,Gig Worker,Latin American,1416,12507,0,0,0,0,0,1,0,0,0,0
+87e92805__5,87e92805,5,2025-03-31,Roberto Estrada,45-54,Gig Worker,Latin American,229,11320,0,0,-1,1,0,1,0,0,0,0
+87e92805__6,87e92805,6,2025-04-01,Roberto Estrada,45-54,Gig Worker,Latin American,1219,12310,0,0,1,0,0,-1,0,0,0,0
+87e92805__7,87e92805,7,2025-04-03,Roberto Estrada,45-54,Gig Worker,Latin American,209,11300,0,0,1,0,0,1,0,0,0,0
+87e92805__8,87e92805,8,2025-04-10,Roberto Estrada,45-54,Gig Worker,Latin American,1584,12675,1,0,0,0,0,-1,0,0,0,0
+87e92805__9,87e92805,9,2025-04-11,Roberto Estrada,45-54,Gig Worker,Latin American,1469,12560,0,0,1,0,0,-1,0,0,0,0
+87e92805__10,87e92805,10,2025-04-18,Roberto Estrada,45-54,Gig Worker,Latin American,824,11915,0,0,1,1,0,1,0,0,0,0
+881c7960__0,881c7960,0,2025-01-18,Ricardo Espinoza,45-54,Software Engineer,Latin American,766,11875,0,0,0,1,0,0,1,0,0,0
+881c7960__1,881c7960,1,2025-01-20,Ricardo Espinoza,45-54,Software Engineer,Latin American,1159,12268,-1,0,0,0,0,1,1,0,0,0
+881c7960__2,881c7960,2,2025-01-26,Ricardo Espinoza,45-54,Software Engineer,Latin American,1269,12378,0,0,0,1,0,0,1,0,0,0
+881c7960__3,881c7960,3,2025-01-26,Ricardo Espinoza,45-54,Software Engineer,Latin American,1317,12426,0,0,0,1,0,0,1,0,0,0
+881c7960__4,881c7960,4,2025-01-31,Ricardo Espinoza,45-54,Software Engineer,Latin American,341,11450,0,0,0,0,0,0,0,0,0,0
+881c7960__5,881c7960,5,2025-02-02,Ricardo Espinoza,45-54,Software Engineer,Latin American,1990,13099,0,0,0,1,0,0,1,0,0,0
+881c7960__6,881c7960,6,2025-02-05,Ricardo Espinoza,45-54,Software Engineer,Latin American,935,12044,0,0,0,1,0,0,1,0,0,0
+881c7960__7,881c7960,7,2025-02-12,Ricardo Espinoza,45-54,Software Engineer,Latin American,322,11431,0,0,0,1,0,0,1,0,0,0
+882767c0__0,882767c0,0,2025-02-07,Renata Villalobos,35-44,Artist,Latin American,1003,12086,0,0,0,1,1,0,0,0,0,0
+882767c0__1,882767c0,1,2025-02-12,Renata Villalobos,35-44,Artist,Latin American,689,11772,0,0,0,1,0,1,0,0,0,0
+882767c0__2,882767c0,2,2025-02-17,Renata Villalobos,35-44,Artist,Latin American,248,11331,-1,0,0,0,-1,0,0,0,0,0
+882767c0__3,882767c0,3,2025-02-22,Renata Villalobos,35-44,Artist,Latin American,711,11794,0,0,0,0,1,0,0,0,0,0
+882767c0__4,882767c0,4,2025-02-23,Renata Villalobos,35-44,Artist,Latin American,1038,12121,0,0,0,0,0,1,0,0,0,0
+882767c0__5,882767c0,5,2025-02-27,Renata Villalobos,35-44,Artist,Latin American,1605,12688,0,0,0,0,1,1,0,0,0,0
+882767c0__6,882767c0,6,2025-03-05,Renata Villalobos,35-44,Artist,Latin American,481,11564,1,0,0,0,1,0,0,0,0,0
+882767c0__7,882767c0,7,2025-03-11,Renata Villalobos,35-44,Artist,Latin American,238,11321,0,0,0,1,0,0,0,0,0,0
+882767c0__8,882767c0,8,2025-03-18,Renata Villalobos,35-44,Artist,Latin American,807,11890,0,0,0,1,0,1,0,0,0,0
+882767c0__9,882767c0,9,2025-03-22,Renata Villalobos,35-44,Artist,Latin American,559,11642,0,0,0,0,1,0,0,0,0,0
+882767c0__10,882767c0,10,2025-03-25,Renata Villalobos,35-44,Artist,Latin American,467,11550,0,0,0,0,1,1,0,0,0,0
+88f2ee2c__0,88f2ee2c,0,2025-10-11,Sander Hoekstra,35-44,Gig Worker,Western European,1223,12302,0,0,-1,0,0,0,0,0,1,0
+88f2ee2c__1,88f2ee2c,1,2025-10-12,Sander Hoekstra,35-44,Gig Worker,Western European,819,11898,0,0,0,0,0,0,0,0,1,0
+88f2ee2c__2,88f2ee2c,2,2025-10-12,Sander Hoekstra,35-44,Gig Worker,Western European,743,11822,0,0,0,0,0,0,0,0,1,0
+88f2ee2c__3,88f2ee2c,3,2025-10-13,Sander Hoekstra,35-44,Gig Worker,Western European,901,11980,0,0,0,0,0,0,0,0,1,0
+88f2ee2c__4,88f2ee2c,4,2025-10-15,Sander Hoekstra,35-44,Gig Worker,Western European,1522,12601,-1,0,0,0,0,0,0,0,1,0
+88f2ee2c__5,88f2ee2c,5,2025-10-18,Sander Hoekstra,35-44,Gig Worker,Western European,345,11424,0,0,1,0,0,0,0,0,1,0
+88f2ee2c__6,88f2ee2c,6,2025-10-19,Sander Hoekstra,35-44,Gig Worker,Western European,1637,12716,0,0,-1,0,0,0,0,0,1,0
+8da1ab6d__0,8da1ab6d,0,2025-06-23,Arvind Krishnamurthy,55+,Software Engineer,South Asian,667,11753,0,0,0,0,0,0,1,0,0,1
+8da1ab6d__1,8da1ab6d,1,2025-06-24,Arvind Krishnamurthy,55+,Software Engineer,South Asian,489,11575,1,0,0,0,0,0,0,1,1,1
+8da1ab6d__2,8da1ab6d,2,2025-06-27,Arvind Krishnamurthy,55+,Software Engineer,South Asian,159,11245,1,1,0,1,0,0,0,1,1,1
+8da1ab6d__3,8da1ab6d,3,2025-07-03,Arvind Krishnamurthy,55+,Software Engineer,South Asian,1415,12501,1,1,0,0,0,-1,-1,1,0,1
+8da1ab6d__4,8da1ab6d,4,2025-07-06,Arvind Krishnamurthy,55+,Software Engineer,South Asian,896,11982,1,0,0,0,-1,1,0,0,0,1
+8da1ab6d__5,8da1ab6d,5,2025-07-09,Arvind Krishnamurthy,55+,Software Engineer,South Asian,919,12005,0,0,0,0,0,0,1,0,0,1
+8da1ab6d__6,8da1ab6d,6,2025-07-11,Arvind Krishnamurthy,55+,Software Engineer,South Asian,999,12085,1,0,0,0,0,0,0,1,1,1
+8da1ab6d__7,8da1ab6d,7,2025-07-11,Arvind Krishnamurthy,55+,Software Engineer,South Asian,209,11295,0,0,0,0,0,0,0,0,0,0
+8da1ab6d__8,8da1ab6d,8,2025-07-17,Arvind Krishnamurthy,55+,Software Engineer,South Asian,487,11573,1,1,0,1,-1,-1,-1,0,1,1
+8da1ab6d__9,8da1ab6d,9,2025-07-21,Arvind Krishnamurthy,55+,Software Engineer,South Asian,1085,12171,1,1,0,0,-1,0,0,0,1,1
+8da1ab6d__10,8da1ab6d,10,2025-07-22,Arvind Krishnamurthy,55+,Software Engineer,South Asian,739,11825,1,0,1,1,0,0,0,0,1,1
+8da4834c__0,8da4834c,0,2025-02-06,Lukas Engström,18-24,Teacher,Western European,1901,12964,-1,0,0,0,-1,0,1,0,0,0
+8da4834c__1,8da4834c,1,2025-02-10,Lukas Engström,18-24,Teacher,Western European,1326,12389,0,0,0,1,1,0,0,0,0,0
+8da4834c__2,8da4834c,2,2025-02-17,Lukas Engström,18-24,Teacher,Western European,982,12045,-1,0,0,0,-1,0,0,0,0,0
+8da4834c__3,8da4834c,3,2025-02-20,Lukas Engström,18-24,Teacher,Western European,831,11894,0,0,0,1,1,0,0,0,0,0
+8da4834c__4,8da4834c,4,2025-02-20,Lukas Engström,18-24,Teacher,Western European,423,11486,-1,0,0,0,-1,0,1,0,0,0
+8da4834c__5,8da4834c,5,2025-02-24,Lukas Engström,18-24,Teacher,Western European,914,11977,1,0,0,0,1,0,0,0,0,0
+8da4834c__6,8da4834c,6,2025-03-02,Lukas Engström,18-24,Teacher,Western European,803,11866,0,0,0,1,1,0,0,0,0,0
+8e3b4017__0,8e3b4017,0,2025-04-30,Ricardo Mendieta,45-54,Teacher,Latin American,400,11463,0,0,0,0,1,0,0,0,-1,0
+8e3b4017__1,8e3b4017,1,2025-04-30,Ricardo Mendieta,45-54,Teacher,Latin American,431,11494,0,0,0,0,1,0,0,0,-1,0
+8e3b4017__2,8e3b4017,2,2025-05-01,Ricardo Mendieta,45-54,Teacher,Latin American,1426,12489,0,0,0,0,-1,0,1,0,0,0
+8e3b4017__3,8e3b4017,3,2025-05-02,Ricardo Mendieta,45-54,Teacher,Latin American,414,11477,1,0,0,0,1,0,0,0,0,0
+8e3b4017__4,8e3b4017,4,2025-05-07,Ricardo Mendieta,45-54,Teacher,Latin American,422,11485,0,0,-1,1,0,0,0,0,0,0
+8e3b4017__5,8e3b4017,5,2025-05-07,Ricardo Mendieta,45-54,Teacher,Latin American,1268,12331,0,0,-1,1,1,1,0,0,-1,0
+8e3b4017__6,8e3b4017,6,2025-05-07,Ricardo Mendieta,45-54,Teacher,Latin American,270,11333,0,0,0,0,1,0,0,0,-1,0
+8e3b4017__7,8e3b4017,7,2025-05-08,Ricardo Mendieta,45-54,Teacher,Latin American,616,11679,0,0,0,0,1,0,0,0,0,0
+8e3b4017__8,8e3b4017,8,2025-05-08,Ricardo Mendieta,45-54,Teacher,Latin American,467,11530,-1,0,0,0,-1,0,1,0,0,0
+8f83c818__0,8f83c818,0,2025-05-31,Wei Jun Chen,35-44,Software Engineer,East Asian,1667,12746,-1,0,0,0,0,0,1,0,0,-1
+8f83c818__1,8f83c818,1,2025-06-07,Wei Jun Chen,35-44,Software Engineer,East Asian,807,11886,0,0,0,0,0,0,0,0,0,1
+8f83c818__2,8f83c818,2,2025-06-09,Wei Jun Chen,35-44,Software Engineer,East Asian,618,11697,0,0,0,0,0,0,0,0,0,0
+8f83c818__3,8f83c818,3,2025-06-09,Wei Jun Chen,35-44,Software Engineer,East Asian,197,11276,0,0,0,0,0,0,0,0,0,-1
+8f83c818__4,8f83c818,4,2025-06-10,Wei Jun Chen,35-44,Software Engineer,East Asian,147,11226,0,0,0,0,0,0,0,0,0,0
+8f83c818__5,8f83c818,5,2025-06-13,Wei Jun Chen,35-44,Software Engineer,East Asian,968,12047,-1,0,0,0,0,0,1,0,0,-1
+8f83c818__6,8f83c818,6,2025-06-16,Wei Jun Chen,35-44,Software Engineer,East Asian,1158,12237,0,0,0,0,0,0,0,0,1,1
+8f83c818__7,8f83c818,7,2025-06-22,Wei Jun Chen,35-44,Software Engineer,East Asian,225,11304,0,0,0,0,0,0,0,0,0,1
+8f83c818__8,8f83c818,8,2025-06-25,Wei Jun Chen,35-44,Software Engineer,East Asian,630,11709,-1,0,0,0,0,0,1,0,0,-1
+8f83c818__9,8f83c818,9,2025-07-01,Wei Jun Chen,35-44,Software Engineer,East Asian,788,11867,0,0,0,0,0,0,1,0,0,-1
+8f83c818__10,8f83c818,10,2025-07-05,Wei Jun Chen,35-44,Software Engineer,East Asian,802,11881,0,0,0,0,0,0,0,0,0,-1
+8fcd7947__0,8fcd7947,0,2025-12-01,Marcus Chen,25-34,Gig Worker,North American,166,11259,0,0,0,0,0,0,0,0,0,0
+8fcd7947__1,8fcd7947,1,2025-12-08,Marcus Chen,25-34,Gig Worker,North American,381,11474,0,0,0,0,0,1,0,0,1,0
+8fcd7947__2,8fcd7947,2,2025-12-15,Marcus Chen,25-34,Gig Worker,North American,947,12040,0,0,-1,1,0,1,0,0,1,0
+8fcd7947__3,8fcd7947,3,2025-12-18,Marcus Chen,25-34,Gig Worker,North American,731,11824,0,0,-1,0,0,1,0,1,1,0
+909b67de__0,909b67de,0,2025-02-11,Riya Kapoor,18-24,Entrepreneur,South Asian,934,12026,1,1,0,0,0,0,0,0,-1,0
+909b67de__1,909b67de,1,2025-02-15,Riya Kapoor,18-24,Entrepreneur,South Asian,650,11742,0,0,1,1,0,0,0,0,0,0
+909b67de__2,909b67de,2,2025-02-22,Riya Kapoor,18-24,Entrepreneur,South Asian,855,11947,1,0,0,0,0,-1,0,0,0,0
+909b67de__3,909b67de,3,2025-02-22,Riya Kapoor,18-24,Entrepreneur,South Asian,219,11311,0,0,0,1,0,0,0,0,0,0
+909b67de__4,909b67de,4,2025-02-24,Riya Kapoor,18-24,Entrepreneur,South Asian,782,11874,1,0,0,0,0,-1,-1,0,0,0
+909b67de__5,909b67de,5,2025-02-24,Riya Kapoor,18-24,Entrepreneur,South Asian,1183,12275,1,1,0,0,0,-1,0,0,0,0
+909b67de__6,909b67de,6,2025-03-03,Riya Kapoor,18-24,Entrepreneur,South Asian,390,11482,0,0,0,0,0,-1,0,0,0,0
+911ca77a__0,911ca77a,0,2025-06-15,Dirk Van Heusen,45-54,Manager,Western European,377,11461,0,0,0,0,1,0,1,0,0,0
+911ca77a__1,911ca77a,1,2025-06-15,Dirk Van Heusen,45-54,Manager,Western European,900,11984,0,0,-1,1,1,0,0,0,0,0
+911ca77a__2,911ca77a,2,2025-06-17,Dirk Van Heusen,45-54,Manager,Western European,261,11345,0,0,-1,1,0,0,0,0,0,0
+911ca77a__3,911ca77a,3,2025-06-19,Dirk Van Heusen,45-54,Manager,Western European,857,11941,0,0,-1,0,1,0,1,0,0,0
+911ca77a__4,911ca77a,4,2025-06-25,Dirk Van Heusen,45-54,Manager,Western European,221,11305,0,0,0,1,1,0,0,0,0,0
+911ca77a__5,911ca77a,5,2025-06-30,Dirk Van Heusen,45-54,Manager,Western European,1191,12275,0,0,1,0,1,0,0,0,0,0
+911ca77a__6,911ca77a,6,2025-07-05,Dirk Van Heusen,45-54,Manager,Western European,1345,12429,0,0,-1,1,0,0,0,0,-1,0
+911ca77a__7,911ca77a,7,2025-07-08,Dirk Van Heusen,45-54,Manager,Western European,222,11306,0,0,0,0,0,0,0,0,0,0
+911ca77a__8,911ca77a,8,2025-07-15,Dirk Van Heusen,45-54,Manager,Western European,951,12035,0,0,1,0,1,0,0,0,0,0
+911ca77a__9,911ca77a,9,2025-07-18,Dirk Van Heusen,45-54,Manager,Western European,1527,12611,0,0,-1,0,1,0,0,0,0,0
+940d34da__0,940d34da,0,2025-07-25,Marcus Delgado,35-44,Gig Worker,North American,1306,12408,1,-1,0,1,0,-1,0,0,0,0
+940d34da__1,940d34da,1,2025-08-01,Marcus Delgado,35-44,Gig Worker,North American,1606,12708,1,0,0,1,0,-1,-1,0,0,0
+940d34da__2,940d34da,2,2025-08-01,Marcus Delgado,35-44,Gig Worker,North American,553,11655,1,0,0,0,0,0,-1,0,-1,0
+940d34da__3,940d34da,3,2025-08-03,Marcus Delgado,35-44,Gig Worker,North American,173,11275,0,0,0,0,0,0,0,0,0,0
+940d34da__4,940d34da,4,2025-08-03,Marcus Delgado,35-44,Gig Worker,North American,1461,12563,1,0,0,1,0,-1,0,0,-1,0
+940d34da__5,940d34da,5,2025-08-03,Marcus Delgado,35-44,Gig Worker,North American,1169,12271,0,-1,0,-1,0,0,0,0,0,0
+940d34da__6,940d34da,6,2025-08-04,Marcus Delgado,35-44,Gig Worker,North American,1055,12157,0,0,0,0,0,0,1,0,1,0
+940d34da__7,940d34da,7,2025-08-10,Marcus Delgado,35-44,Gig Worker,North American,2008,13110,0,1,0,1,0,-1,0,0,1,0
+9510e81a__0,9510e81a,0,2025-11-11,Lukas Verhoeven,30,Manager,Western European,1412,12473,0,0,0,0,-1,0,1,0,0,0
+9510e81a__1,9510e81a,1,2025-11-15,Lukas Verhoeven,30,Manager,Western European,1000,12061,0,0,0,0,1,0,0,0,0,0
+9510e81a__2,9510e81a,2,2025-11-22,Lukas Verhoeven,30,Manager,Western European,837,11898,0,0,0,0,1,0,0,0,0,0
+9510e81a__3,9510e81a,3,2025-11-25,Lukas Verhoeven,30,Manager,Western European,1713,12774,0,0,0,1,-1,0,0,0,0,0
+9510e81a__4,9510e81a,4,2025-11-26,Lukas Verhoeven,30,Manager,Western European,2021,13082,0,0,0,1,1,0,0,0,0,0
+9510e81a__5,9510e81a,5,2025-11-29,Lukas Verhoeven,30,Manager,Western European,1399,12460,0,0,0,0,-1,0,0,0,0,0
+9510e81a__6,9510e81a,6,2025-12-01,Lukas Verhoeven,30,Manager,Western European,1296,12357,0,0,0,0,0,0,0,0,1,0
+961a4e3f__0,961a4e3f,0,2025-11-14,Meera Krishnamurthy,45-54,Parent (Stay-at-home),South Asian,1134,12251,-1,0,0,0,0,0,1,0,0,0
+961a4e3f__1,961a4e3f,1,2025-11-15,Meera Krishnamurthy,45-54,Parent (Stay-at-home),South Asian,688,11805,-1,0,0,0,0,0,1,0,0,0
+961a4e3f__2,961a4e3f,2,2025-11-20,Meera Krishnamurthy,45-54,Parent (Stay-at-home),South Asian,222,11339,0,0,0,0,0,0,0,1,0,0
+961a4e3f__3,961a4e3f,3,2025-11-23,Meera Krishnamurthy,45-54,Parent (Stay-at-home),South Asian,598,11715,1,0,0,0,0,0,0,1,0,0
+961a4e3f__4,961a4e3f,4,2025-11-24,Meera Krishnamurthy,45-54,Parent (Stay-at-home),South Asian,613,11730,0,0,0,0,0,0,0,1,0,0
+961a4e3f__5,961a4e3f,5,2025-11-30,Meera Krishnamurthy,45-54,Parent (Stay-at-home),South Asian,1058,12175,0,0,0,0,0,0,0,1,1,0
+961a4e3f__6,961a4e3f,6,2025-11-30,Meera Krishnamurthy,45-54,Parent (Stay-at-home),South Asian,1054,12171,1,0,0,1,0,0,0,0,0,0
+961a4e3f__7,961a4e3f,7,2025-12-02,Meera Krishnamurthy,45-54,Parent (Stay-at-home),South Asian,1094,12211,1,0,0,0,0,0,0,-1,0,0
+961a4e3f__8,961a4e3f,8,2025-12-07,Meera Krishnamurthy,45-54,Parent (Stay-at-home),South Asian,665,11782,-1,0,0,0,0,0,1,0,0,0
+961a4e3f__9,961a4e3f,9,2025-12-07,Meera Krishnamurthy,45-54,Parent (Stay-at-home),South Asian,691,11808,1,0,0,0,0,0,0,0,0,0
+961a4e3f__10,961a4e3f,10,2025-12-14,Meera Krishnamurthy,45-54,Parent (Stay-at-home),South Asian,717,11834,0,0,0,0,0,0,0,1,0,0
+961a4e3f__11,961a4e3f,11,2025-12-14,Meera Krishnamurthy,45-54,Parent (Stay-at-home),South Asian,598,11715,1,0,0,1,0,0,0,0,0,0
+988d1a65__0,988d1a65,0,2025-02-16,Marc Vandenberghe,45-54,Manager,Western European,314,11380,-1,0,0,0,-1,0,1,0,0,0
+988d1a65__1,988d1a65,1,2025-02-22,Marc Vandenberghe,45-54,Manager,Western European,239,11305,0,0,0,1,1,0,0,0,0,0
+988d1a65__2,988d1a65,2,2025-02-23,Marc Vandenberghe,45-54,Manager,Western European,736,11802,-1,0,0,0,-1,0,1,0,0,0
+988d1a65__3,988d1a65,3,2025-02-26,Marc Vandenberghe,45-54,Manager,Western European,154,11220,0,0,0,0,0,0,0,0,0,0
+988d1a65__4,988d1a65,4,2025-03-03,Marc Vandenberghe,45-54,Manager,Western European,600,11666,0,0,0,0,1,0,0,0,-1,0
+988d1a65__5,988d1a65,5,2025-03-10,Marc Vandenberghe,45-54,Manager,Western European,698,11764,-1,0,0,0,-1,0,1,0,0,0
+988d1a65__6,988d1a65,6,2025-03-16,Marc Vandenberghe,45-54,Manager,Western European,1256,12322,-1,0,0,0,-1,0,1,0,0,0
+988d1a65__7,988d1a65,7,2025-03-21,Marc Vandenberghe,45-54,Manager,Western European,185,11251,0,0,0,0,1,0,-1,0,0,0
+988d1a65__8,988d1a65,8,2025-03-23,Marc Vandenberghe,45-54,Manager,Western European,625,11691,0,0,0,0,0,0,0,0,0,0
+988d1a65__9,988d1a65,9,2025-03-25,Marc Vandenberghe,45-54,Manager,Western European,663,11729,0,0,0,0,1,0,0,0,1,0
+988d1a65__10,988d1a65,10,2025-03-26,Marc Vandenberghe,45-54,Manager,Western European,649,11715,0,0,0,0,-1,0,1,0,-1,0
+988d1a65__11,988d1a65,11,2025-03-31,Marc Vandenberghe,45-54,Manager,Western European,175,11241,0,0,0,0,0,0,0,0,1,0
+991917dc__0,991917dc,0,2025-06-06,Chen Weiming,55+,Entrepreneur,East Asian,1286,12350,0,0,0,0,0,1,0,0,0,0
+991917dc__1,991917dc,1,2025-06-06,Chen Weiming,55+,Entrepreneur,East Asian,1221,12285,0,0,0,0,0,1,0,1,0,0
+991917dc__2,991917dc,2,2025-06-09,Chen Weiming,55+,Entrepreneur,East Asian,1533,12597,0,0,0,0,0,1,0,0,0,0
+991917dc__3,991917dc,3,2025-06-16,Chen Weiming,55+,Entrepreneur,East Asian,905,11969,0,0,0,0,0,1,0,0,0,0
+991917dc__4,991917dc,4,2025-06-16,Chen Weiming,55+,Entrepreneur,East Asian,604,11668,0,0,0,0,0,1,0,0,0,0
+991917dc__5,991917dc,5,2025-06-22,Chen Weiming,55+,Entrepreneur,East Asian,1443,12507,0,0,0,0,0,1,0,0,1,0
+998d7090__0,998d7090,0,2025-10-05,Nasser Al-Farsi,55+,Gig Worker,Middle Eastern,872,11941,0,0,1,0,0,-1,0,0,0,0
+998d7090__1,998d7090,1,2025-10-12,Nasser Al-Farsi,55+,Gig Worker,Middle Eastern,621,11690,0,0,1,0,0,0,0,0,0,0
+998d7090__2,998d7090,2,2025-10-16,Nasser Al-Farsi,55+,Gig Worker,Middle Eastern,146,11215,0,0,0,0,0,0,0,0,0,0
+998d7090__3,998d7090,3,2025-10-16,Nasser Al-Farsi,55+,Gig Worker,Middle Eastern,444,11513,0,0,0,1,0,0,0,0,0,0
+998d7090__4,998d7090,4,2025-10-17,Nasser Al-Farsi,55+,Gig Worker,Middle Eastern,313,11382,0,0,1,0,0,-1,0,0,0,0
+998d7090__5,998d7090,5,2025-10-17,Nasser Al-Farsi,55+,Gig Worker,Middle Eastern,152,11221,0,0,1,0,0,0,0,0,0,0
+998d7090__6,998d7090,6,2025-10-17,Nasser Al-Farsi,55+,Gig Worker,Middle Eastern,961,12030,0,0,1,0,0,1,0,0,0,0
+998d7090__7,998d7090,7,2025-10-23,Nasser Al-Farsi,55+,Gig Worker,Middle Eastern,812,11881,1,0,1,0,0,0,0,0,0,0
+998d7090__8,998d7090,8,2025-10-29,Nasser Al-Farsi,55+,Gig Worker,Middle Eastern,733,11802,1,0,0,0,0,1,0,0,0,0
+998d7090__9,998d7090,9,2025-10-29,Nasser Al-Farsi,55+,Gig Worker,Middle Eastern,1514,12583,1,0,1,0,0,1,0,0,0,0
+9aec9ae9__0,9aec9ae9,0,2025-09-07,Maren Lindqvist,25-34,Parent (Stay-at-home),Western European,1188,12284,1,0,0,0,0,1,-1,0,-1,0
+9aec9ae9__1,9aec9ae9,1,2025-09-11,Maren Lindqvist,25-34,Parent (Stay-at-home),Western European,1546,12642,-1,0,-1,1,0,1,0,0,0,0
+9aec9ae9__2,9aec9ae9,2,2025-09-11,Maren Lindqvist,25-34,Parent (Stay-at-home),Western European,303,11399,0,0,0,0,0,0,0,0,0,0
+9aec9ae9__3,9aec9ae9,3,2025-09-17,Maren Lindqvist,25-34,Parent (Stay-at-home),Western European,1171,12267,1,0,0,0,0,0,-1,0,0,0
+9aec9ae9__4,9aec9ae9,4,2025-09-17,Maren Lindqvist,25-34,Parent (Stay-at-home),Western European,1556,12652,1,0,0,0,0,0,-1,-1,0,0
+9aec9ae9__5,9aec9ae9,5,2025-09-21,Maren Lindqvist,25-34,Parent (Stay-at-home),Western European,231,11327,1,0,0,1,0,0,0,0,0,0
+9aec9ae9__6,9aec9ae9,6,2025-09-24,Maren Lindqvist,25-34,Parent (Stay-at-home),Western European,501,11597,1,0,0,0,0,-1,0,0,0,0
+9aec9ae9__7,9aec9ae9,7,2025-09-28,Maren Lindqvist,25-34,Parent (Stay-at-home),Western European,1475,12571,1,0,0,-1,0,0,0,0,0,0
+9aec9ae9__8,9aec9ae9,8,2025-10-01,Maren Lindqvist,25-34,Parent (Stay-at-home),Western European,1627,12723,1,0,1,1,-1,0,-1,0,0,0
+9aec9ae9__9,9aec9ae9,9,2025-10-03,Maren Lindqvist,25-34,Parent (Stay-at-home),Western European,478,11574,1,0,0,1,1,0,0,0,1,0
+9aec9ae9__10,9aec9ae9,10,2025-10-09,Maren Lindqvist,25-34,Parent (Stay-at-home),Western European,807,11903,1,0,0,1,0,0,0,0,1,1
+9ca30614__0,9ca30614,0,2025-10-27,Priya Kapoor,35-44,Parent (Stay-at-home),South Asian,565,11661,-1,-1,-1,0,0,1,1,0,1,0
+9ca30614__1,9ca30614,1,2025-10-28,Priya Kapoor,35-44,Parent (Stay-at-home),South Asian,343,11439,1,0,-1,0,0,0,-1,0,0,0
+9ca30614__2,9ca30614,2,2025-10-30,Priya Kapoor,35-44,Parent (Stay-at-home),South Asian,620,11716,0,0,-1,0,0,1,1,0,1,0
+9ca30614__3,9ca30614,3,2025-11-03,Priya Kapoor,35-44,Parent (Stay-at-home),South Asian,1000,12096,1,1,1,0,0,-1,-1,-1,0,0
+9ca30614__4,9ca30614,4,2025-11-10,Priya Kapoor,35-44,Parent (Stay-at-home),South Asian,2021,13117,-1,0,-1,-1,-1,0,1,0,1,0
+9ca30614__5,9ca30614,5,2025-11-16,Priya Kapoor,35-44,Parent (Stay-at-home),South Asian,679,11775,1,0,1,1,0,0,0,0,1,0
+9ca30614__6,9ca30614,6,2025-11-22,Priya Kapoor,35-44,Parent (Stay-at-home),South Asian,793,11889,-1,0,0,0,0,1,1,0,1,0
+9ca30614__7,9ca30614,7,2025-11-23,Priya Kapoor,35-44,Parent (Stay-at-home),South Asian,1001,12097,-1,0,0,-1,0,0,0,0,1,0
+9ca30614__8,9ca30614,8,2025-11-29,Priya Kapoor,35-44,Parent (Stay-at-home),South Asian,703,11799,1,0,1,1,0,1,0,1,1,0
+9d126412__0,9d126412,0,2025-09-22,Kenneth Goh,55+,Manager,East Asian,1191,12243,0,0,0,1,1,0,0,0,0,0
+9d126412__1,9d126412,1,2025-09-29,Kenneth Goh,55+,Manager,East Asian,574,11626,0,0,0,1,1,0,0,0,0,0
+9d126412__2,9d126412,2,2025-10-02,Kenneth Goh,55+,Manager,East Asian,492,11544,-1,0,0,0,-1,0,1,0,0,0
+9d126412__3,9d126412,3,2025-10-09,Kenneth Goh,55+,Manager,East Asian,797,11849,0,0,0,-1,-1,0,0,0,0,0
+9d126412__4,9d126412,4,2025-10-16,Kenneth Goh,55+,Manager,East Asian,1291,12343,-1,0,0,0,-1,1,1,0,0,0
+9d126412__5,9d126412,5,2025-10-20,Kenneth Goh,55+,Manager,East Asian,1124,12176,-1,0,0,0,-1,0,1,0,0,0
+9d126412__6,9d126412,6,2025-10-26,Kenneth Goh,55+,Manager,East Asian,652,11704,0,0,0,0,0,0,0,0,0,0
+9d126412__7,9d126412,7,2025-11-01,Kenneth Goh,55+,Manager,East Asian,1697,12749,0,0,0,-1,-1,0,0,0,-1,0
+a13aa34b__0,a13aa34b,0,2025-10-07,Nadia Khoury,18-24,Artist,Middle Eastern,1073,12163,-1,0,0,-1,0,0,1,1,0,0
+a13aa34b__1,a13aa34b,1,2025-10-10,Nadia Khoury,18-24,Artist,Middle Eastern,972,12062,-1,0,0,0,0,0,0,1,1,0
+a13aa34b__2,a13aa34b,2,2025-10-14,Nadia Khoury,18-24,Artist,Middle Eastern,791,11881,-1,0,0,0,0,0,1,1,0,0
+a13aa34b__3,a13aa34b,3,2025-10-14,Nadia Khoury,18-24,Artist,Middle Eastern,209,11299,1,0,0,0,0,0,0,0,0,0
+a13aa34b__4,a13aa34b,4,2025-10-15,Nadia Khoury,18-24,Artist,Middle Eastern,1318,12408,-1,0,0,-1,0,0,1,1,1,0
+a13aa34b__5,a13aa34b,5,2025-10-20,Nadia Khoury,18-24,Artist,Middle Eastern,1123,12213,1,0,0,0,0,1,0,1,0,0
+a1c52200__0,a1c52200,0,2025-12-01,Nadia Al-Rashid,35-44,Teacher,Middle Eastern,962,12030,1,0,1,-1,0,0,0,0,0,0
+a1c52200__1,a1c52200,1,2025-12-08,Nadia Al-Rashid,35-44,Teacher,Middle Eastern,1925,12993,0,0,1,-1,0,0,1,0,0,0
+a1c52200__2,a1c52200,2,2025-12-18,Nadia Al-Rashid,35-44,Teacher,Middle Eastern,333,11401,0,0,1,0,0,0,0,0,0,0
+a1c52200__3,a1c52200,3,2025-12-25,Nadia Al-Rashid,35-44,Teacher,Middle Eastern,1407,12475,1,0,1,0,0,0,0,0,0,0
+a1c52200__4,a1c52200,4,2026-01-03,Nadia Al-Rashid,35-44,Teacher,Middle Eastern,1496,12564,1,0,-1,0,0,0,0,0,0,0
+a1c52200__5,a1c52200,5,2026-01-12,Nadia Al-Rashid,35-44,Teacher,Middle Eastern,1050,12118,0,0,1,0,0,0,0,0,1,0
+a1c52200__6,a1c52200,6,2026-01-21,Nadia Al-Rashid,35-44,Teacher,Middle Eastern,1725,12793,1,0,1,-1,-1,0,0,0,0,0
+a1c52200__7,a1c52200,7,2026-01-31,Nadia Al-Rashid,35-44,Teacher,Middle Eastern,462,11530,1,0,1,0,0,0,0,0,0,0
+a1c52200__8,a1c52200,8,2026-02-08,Nadia Al-Rashid,35-44,Teacher,Middle Eastern,1627,12695,1,0,1,0,0,0,0,0,0,0
+a1c52200__9,a1c52200,9,2026-02-14,Nadia Al-Rashid,35-44,Teacher,Middle Eastern,1462,12530,1,0,1,0,0,0,0,0,0,0
+a24b8d8f__0,a24b8d8f,0,2025-06-10,Lukas Vetter,25-34,Software Engineer,Western European,326,11411,0,0,-1,0,0,0,0,0,1,1
+a24b8d8f__1,a24b8d8f,1,2025-06-11,Lukas Vetter,25-34,Software Engineer,Western European,802,11887,0,0,0,0,0,0,1,0,0,-1
+a24b8d8f__2,a24b8d8f,2,2025-06-14,Lukas Vetter,25-34,Software Engineer,Western European,607,11692,0,0,1,0,0,1,0,0,0,-1
+a24b8d8f__3,a24b8d8f,3,2025-06-19,Lukas Vetter,25-34,Software Engineer,Western European,574,11659,0,0,0,0,-1,0,1,0,0,-1
+a24b8d8f__4,a24b8d8f,4,2025-06-25,Lukas Vetter,25-34,Software Engineer,Western European,1382,12467,-1,0,0,0,0,0,1,0,0,-1
+a24b8d8f__5,a24b8d8f,5,2025-07-01,Lukas Vetter,25-34,Software Engineer,Western European,729,11814,0,0,0,0,0,0,1,0,0,-1
+a24b8d8f__6,a24b8d8f,6,2025-07-07,Lukas Vetter,25-34,Software Engineer,Western European,1105,12190,0,0,0,0,0,0,0,0,1,1
+a24b8d8f__7,a24b8d8f,7,2025-07-11,Lukas Vetter,25-34,Software Engineer,Western European,1203,12288,1,0,0,0,0,0,-1,0,0,1
+a24b8d8f__8,a24b8d8f,8,2025-07-12,Lukas Vetter,25-34,Software Engineer,Western European,1118,12203,0,0,0,0,0,1,0,0,0,-1
+a24b8d8f__9,a24b8d8f,9,2025-07-12,Lukas Vetter,25-34,Software Engineer,Western European,151,11236,0,0,0,0,0,0,0,0,0,-1
+a532dde6__0,a532dde6,0,2025-05-05,Priya Menon,18-24,Teacher,South Asian,1603,12668,-1,0,0,0,0,0,1,0,0,0
+a532dde6__1,a532dde6,1,2025-05-12,Priya Menon,18-24,Teacher,South Asian,123,11188,0,0,0,0,0,0,1,0,0,0
+a532dde6__2,a532dde6,2,2025-05-16,Priya Menon,18-24,Teacher,South Asian,1601,12666,-1,0,0,0,0,0,1,0,0,0
+a532dde6__3,a532dde6,3,2025-05-20,Priya Menon,18-24,Teacher,South Asian,794,11859,-1,0,0,0,0,0,1,1,0,0
+a532dde6__4,a532dde6,4,2025-05-22,Priya Menon,18-24,Teacher,South Asian,980,12045,-1,0,0,0,0,0,1,0,-1,0
+a532dde6__5,a532dde6,5,2025-05-22,Priya Menon,18-24,Teacher,South Asian,1042,12107,-1,0,0,0,0,0,1,0,1,0
+a532dde6__6,a532dde6,6,2025-05-27,Priya Menon,18-24,Teacher,South Asian,521,11586,1,0,0,0,0,0,0,0,1,0
+a532dde6__7,a532dde6,7,2025-05-30,Priya Menon,18-24,Teacher,South Asian,1237,12302,1,0,0,0,0,0,1,0,0,0
+a532dde6__8,a532dde6,8,2025-06-01,Priya Menon,18-24,Teacher,South Asian,386,11451,-1,0,0,0,0,0,1,0,0,0
+a532dde6__9,a532dde6,9,2025-06-02,Priya Menon,18-24,Teacher,South Asian,173,11238,-1,0,0,0,0,0,1,0,0,0
+a532dde6__10,a532dde6,10,2025-06-07,Priya Menon,18-24,Teacher,South Asian,1136,12201,0,0,-1,0,0,0,1,0,1,0
+a532dde6__11,a532dde6,11,2025-06-14,Priya Menon,18-24,Teacher,South Asian,1700,12765,-1,0,0,0,0,0,1,0,0,-1
+a5f7ed3a__0,a5f7ed3a,0,2025-08-29,Marcus Beaulieu,25-34,Gig Worker,North American,560,11665,1,0,0,-1,0,0,-1,0,0,0
+a5f7ed3a__1,a5f7ed3a,1,2025-09-05,Marcus Beaulieu,25-34,Gig Worker,North American,691,11796,1,0,-1,0,0,-1,0,1,0,0
+a5f7ed3a__2,a5f7ed3a,2,2025-09-11,Marcus Beaulieu,25-34,Gig Worker,North American,621,11726,1,0,0,1,0,0,0,1,1,0
+a5f7ed3a__3,a5f7ed3a,3,2025-09-18,Marcus Beaulieu,25-34,Gig Worker,North American,886,11991,1,0,0,0,0,-1,-1,0,0,0
+a5f7ed3a__4,a5f7ed3a,4,2025-09-25,Marcus Beaulieu,25-34,Gig Worker,North American,1177,12282,1,0,0,0,0,-1,-1,-1,-1,0
+a8371567__0,a8371567,0,2025-07-05,Yoon Seo-jin,25-34,Parent (Stay-at-home),East Asian,1129,12212,0,0,0,0,0,0,-1,0,0,1
+a8371567__1,a8371567,1,2025-07-12,Yoon Seo-jin,25-34,Parent (Stay-at-home),East Asian,1214,12297,0,0,0,0,0,0,0,0,0,1
+a8371567__2,a8371567,2,2025-07-17,Yoon Seo-jin,25-34,Parent (Stay-at-home),East Asian,1315,12398,0,0,0,0,0,0,0,0,0,-1
+a8371567__3,a8371567,3,2025-07-17,Yoon Seo-jin,25-34,Parent (Stay-at-home),East Asian,898,11981,0,0,-1,0,0,0,0,0,0,1
+a8371567__4,a8371567,4,2025-07-20,Yoon Seo-jin,25-34,Parent (Stay-at-home),East Asian,932,12015,0,0,0,0,0,0,0,0,0,1
+a8371567__5,a8371567,5,2025-07-21,Yoon Seo-jin,25-34,Parent (Stay-at-home),East Asian,534,11617,0,0,0,0,0,0,0,0,1,-1
+a8371567__6,a8371567,6,2025-07-22,Yoon Seo-jin,25-34,Parent (Stay-at-home),East Asian,1379,12462,0,0,-1,0,0,0,0,0,0,1
+a8371567__7,a8371567,7,2025-07-23,Yoon Seo-jin,25-34,Parent (Stay-at-home),East Asian,204,11287,1,0,0,0,0,0,0,0,0,1
+a8371567__8,a8371567,8,2025-07-28,Yoon Seo-jin,25-34,Parent (Stay-at-home),East Asian,240,11323,0,0,0,0,0,0,0,0,0,1
+abefb352__0,abefb352,0,2025-04-29,Priya Sharma,35-44,Gig Worker,South Asian,752,11825,1,0,0,0,0,0,0,1,0,1
+abefb352__1,abefb352,1,2025-05-05,Priya Sharma,35-44,Gig Worker,South Asian,1625,12698,1,0,0,0,0,0,0,1,1,1
+abefb352__2,abefb352,2,2025-05-11,Priya Sharma,35-44,Gig Worker,South Asian,1608,12681,1,0,0,0,0,0,0,0,0,1
+abefb352__3,abefb352,3,2025-05-17,Priya Sharma,35-44,Gig Worker,South Asian,890,11963,0,0,0,0,0,0,0,0,1,1
+abefb352__4,abefb352,4,2025-05-17,Priya Sharma,35-44,Gig Worker,South Asian,1241,12314,0,0,0,0,0,0,0,1,1,1
+abefb352__5,abefb352,5,2025-05-17,Priya Sharma,35-44,Gig Worker,South Asian,1056,12129,1,0,0,0,0,0,0,0,1,1
+abf1ce49__0,abf1ce49,0,2025-09-07,Jordan Reeves,18-24,Teacher,North American,1197,12263,0,0,0,1,0,0,0,0,1,0
+abf1ce49__1,abf1ce49,1,2025-09-13,Jordan Reeves,18-24,Teacher,North American,815,11881,1,0,0,0,0,-1,0,0,1,0
+abf1ce49__2,abf1ce49,2,2025-09-14,Jordan Reeves,18-24,Teacher,North American,204,11270,1,0,0,0,0,-1,0,0,0,0
+abf1ce49__3,abf1ce49,3,2025-09-21,Jordan Reeves,18-24,Teacher,North American,822,11888,1,0,0,0,0,-1,0,0,0,0
+abf1ce49__4,abf1ce49,4,2025-09-24,Jordan Reeves,18-24,Teacher,North American,934,12000,0,0,0,0,0,0,0,0,1,0
+abf1ce49__5,abf1ce49,5,2025-09-29,Jordan Reeves,18-24,Teacher,North American,791,11857,1,0,0,1,0,0,0,0,1,0
+abf1ce49__6,abf1ce49,6,2025-10-04,Jordan Reeves,18-24,Teacher,North American,158,11224,0,0,0,0,0,0,0,0,0,0
+abf1ce49__7,abf1ce49,7,2025-10-06,Jordan Reeves,18-24,Teacher,North American,409,11475,1,0,0,0,0,-1,0,0,0,0
+abf1ce49__8,abf1ce49,8,2025-10-10,Jordan Reeves,18-24,Teacher,North American,1048,12114,1,0,0,0,0,-1,0,0,1,0
+abf1ce49__9,abf1ce49,9,2025-10-14,Jordan Reeves,18-24,Teacher,North American,668,11734,1,0,0,0,0,-1,0,0,0,0
+ad378991__0,ad378991,0,2025-04-15,Lim Wei Keong,55+,Entrepreneur,East Asian,1557,12630,0,0,0,0,0,1,1,0,0,-1
+ad378991__1,ad378991,1,2025-04-22,Lim Wei Keong,55+,Entrepreneur,East Asian,886,11959,0,0,0,0,0,-1,0,0,1,1
+ad378991__2,ad378991,2,2025-04-24,Lim Wei Keong,55+,Entrepreneur,East Asian,711,11784,0,0,0,0,0,0,1,0,0,-1
+ad378991__3,ad378991,3,2025-04-27,Lim Wei Keong,55+,Entrepreneur,East Asian,384,11457,0,0,0,0,0,0,0,0,1,1
+ad378991__4,ad378991,4,2025-05-03,Lim Wei Keong,55+,Entrepreneur,East Asian,1066,12139,0,0,0,0,0,0,1,0,0,1
+ad378991__5,ad378991,5,2025-05-05,Lim Wei Keong,55+,Entrepreneur,East Asian,673,11746,0,0,0,0,0,0,1,0,0,-1
+ad378991__6,ad378991,6,2025-05-06,Lim Wei Keong,55+,Entrepreneur,East Asian,295,11368,0,0,0,0,0,0,0,0,0,-1
+ae2912e8__0,ae2912e8,0,2025-12-01,Rami Hakim,25-34,Manager,Middle Eastern,782,11871,0,0,0,1,0,1,0,1,0,0
+ae2912e8__1,ae2912e8,1,2025-12-08,Rami Hakim,25-34,Manager,Middle Eastern,182,11271,0,0,0,1,0,0,0,0,0,0
+ae2912e8__2,ae2912e8,2,2025-12-11,Rami Hakim,25-34,Manager,Middle Eastern,1296,12385,0,0,0,1,0,-1,1,0,0,0
+ae2912e8__3,ae2912e8,3,2025-12-20,Rami Hakim,25-34,Manager,Middle Eastern,981,12070,0,0,0,1,0,1,0,0,-1,0
+ae2912e8__4,ae2912e8,4,2025-12-29,Rami Hakim,25-34,Manager,Middle Eastern,856,11945,0,0,0,0,0,1,0,-1,-1,0
+ae2912e8__5,ae2912e8,5,2026-01-02,Rami Hakim,25-34,Manager,Middle Eastern,823,11912,0,0,-1,0,0,1,0,0,0,0
+ae2912e8__6,ae2912e8,6,2026-01-05,Rami Hakim,25-34,Manager,Middle Eastern,1182,12271,1,0,0,1,0,0,0,1,1,0
+ae2912e8__7,ae2912e8,7,2026-01-12,Rami Hakim,25-34,Manager,Middle Eastern,344,11433,0,0,0,1,0,0,1,0,0,0
+ae2912e8__8,ae2912e8,8,2026-01-20,Rami Hakim,25-34,Manager,Middle Eastern,1375,12464,0,0,1,1,0,0,0,1,1,0
+b0968b05__0,b0968b05,0,2025-08-17,Marcus Delgado,25-34,Teacher,North American,1192,12265,1,1,0,0,0,0,-1,0,0,0
+b0968b05__1,b0968b05,1,2025-08-21,Marcus Delgado,25-34,Teacher,North American,283,11356,0,0,0,0,0,0,0,0,0,0
+b0968b05__2,b0968b05,2,2025-08-21,Marcus Delgado,25-34,Teacher,North American,724,11797,0,-1,0,0,0,1,0,0,0,0
+b0968b05__3,b0968b05,3,2025-08-28,Marcus Delgado,25-34,Teacher,North American,1712,12785,1,1,0,0,0,0,-1,0,0,0
+b0968b05__4,b0968b05,4,2025-09-02,Marcus Delgado,25-34,Teacher,North American,834,11907,0,1,0,0,0,-1,0,0,0,0
+b0968b05__5,b0968b05,5,2025-09-05,Marcus Delgado,25-34,Teacher,North American,1374,12447,1,1,0,0,0,0,0,0,0,0
+b12682c6__0,b12682c6,0,2025-04-17,Gerrit van der Berg,45-54,Gig Worker,Western European,820,11899,0,0,0,0,0,1,0,-1,0,0
+b12682c6__1,b12682c6,1,2025-04-22,Gerrit van der Berg,45-54,Gig Worker,Western European,1602,12681,0,0,0,0,0,0,0,1,0,0
+b12682c6__2,b12682c6,2,2025-04-22,Gerrit van der Berg,45-54,Gig Worker,Western European,1268,12347,0,0,0,0,0,0,-1,1,1,0
+b12682c6__3,b12682c6,3,2025-04-28,Gerrit van der Berg,45-54,Gig Worker,Western European,314,11393,0,0,0,0,0,1,0,-1,0,0
+b12682c6__4,b12682c6,4,2025-05-03,Gerrit van der Berg,45-54,Gig Worker,Western European,787,11866,0,0,0,0,0,1,0,1,0,0
+b12682c6__5,b12682c6,5,2025-05-07,Gerrit van der Berg,45-54,Gig Worker,Western European,1724,12803,0,0,0,0,0,0,0,1,0,0
+b12682c6__6,b12682c6,6,2025-05-08,Gerrit van der Berg,45-54,Gig Worker,Western European,712,11791,0,0,0,0,0,0,0,1,1,0
+b12682c6__7,b12682c6,7,2025-05-12,Gerrit van der Berg,45-54,Gig Worker,Western European,1317,12396,0,0,0,0,-1,-1,0,0,0,0
+b12682c6__8,b12682c6,8,2025-05-13,Gerrit van der Berg,45-54,Gig Worker,Western European,1939,13018,0,0,0,0,0,1,0,1,0,0
+b1a2bf43__0,b1a2bf43,0,2025-07-21,Rajesh Iyer,45-54,Software Engineer,South Asian,666,11759,0,0,0,0,0,1,0,0,1,0
+b1a2bf43__1,b1a2bf43,1,2025-07-27,Rajesh Iyer,45-54,Software Engineer,South Asian,325,11418,0,-1,0,0,0,1,0,0,0,0
+b1a2bf43__2,b1a2bf43,2,2025-07-31,Rajesh Iyer,45-54,Software Engineer,South Asian,382,11475,-1,0,0,0,0,1,0,0,1,0
+b1a2bf43__3,b1a2bf43,3,2025-08-07,Rajesh Iyer,45-54,Software Engineer,South Asian,872,11965,0,0,0,0,0,0,0,1,1,0
+b1a2bf43__4,b1a2bf43,4,2025-08-14,Rajesh Iyer,45-54,Software Engineer,South Asian,844,11937,0,-1,0,0,0,1,0,0,1,0
+b1a2bf43__5,b1a2bf43,5,2025-08-17,Rajesh Iyer,45-54,Software Engineer,South Asian,317,11410,0,0,0,0,0,0,0,1,0,0
+b1a2bf43__6,b1a2bf43,6,2025-08-24,Rajesh Iyer,45-54,Software Engineer,South Asian,1138,12231,0,0,0,0,0,1,0,1,1,0
+b1a2bf43__7,b1a2bf43,7,2025-08-28,Rajesh Iyer,45-54,Software Engineer,South Asian,873,11966,0,0,0,0,0,1,0,1,1,0
+b2720706__0,b2720706,0,2025-10-17,Nasser Hadid,35-44,Grad Student,Middle Eastern,1261,12325,1,0,0,1,1,0,0,0,1,0
+b2720706__1,b2720706,1,2025-10-19,Nasser Hadid,35-44,Grad Student,Middle Eastern,977,12041,0,0,0,0,1,0,1,0,-1,0
+b2720706__2,b2720706,2,2025-10-23,Nasser Hadid,35-44,Grad Student,Middle Eastern,1576,12640,1,0,0,1,1,0,-1,0,-1,-1
+b2720706__3,b2720706,3,2025-10-23,Nasser Hadid,35-44,Grad Student,Middle Eastern,1293,12357,0,0,0,1,1,0,0,-1,-1,0
+b4cdcfee__0,b4cdcfee,0,2025-07-25,Ricardo Mendoza Vargas,55+,Manager,Latin American,477,11556,0,1,0,0,0,-1,0,0,0,0
+b4cdcfee__1,b4cdcfee,1,2025-07-30,Ricardo Mendoza Vargas,55+,Manager,Latin American,909,11988,0,1,1,0,0,0,0,0,1,0
+b4cdcfee__2,b4cdcfee,2,2025-07-31,Ricardo Mendoza Vargas,55+,Manager,Latin American,158,11237,0,1,0,0,0,-1,0,0,0,0
+b4cdcfee__3,b4cdcfee,3,2025-08-03,Ricardo Mendoza Vargas,55+,Manager,Latin American,1450,12529,0,1,0,0,0,-1,0,-1,0,0
+b4cdcfee__4,b4cdcfee,4,2025-08-10,Ricardo Mendoza Vargas,55+,Manager,Latin American,470,11549,0,1,0,1,0,0,0,0,0,0
+b4cdcfee__5,b4cdcfee,5,2025-08-11,Ricardo Mendoza Vargas,55+,Manager,Latin American,152,11231,0,1,1,0,0,0,0,0,1,0
+b4cdcfee__6,b4cdcfee,6,2025-08-17,Ricardo Mendoza Vargas,55+,Manager,Latin American,475,11554,0,0,0,0,0,-1,0,-1,0,0
+b4cdcfee__7,b4cdcfee,7,2025-08-20,Ricardo Mendoza Vargas,55+,Manager,Latin American,468,11547,0,1,0,0,0,-1,0,0,0,0
+b4cdcfee__8,b4cdcfee,8,2025-08-26,Ricardo Mendoza Vargas,55+,Manager,Latin American,1361,12440,0,1,1,0,0,-1,0,0,1,0
+b4cdcfee__9,b4cdcfee,9,2025-08-27,Ricardo Mendoza Vargas,55+,Manager,Latin American,987,12066,0,1,1,0,0,0,0,0,1,0
+b4cdcfee__10,b4cdcfee,10,2025-08-31,Ricardo Mendoza Vargas,55+,Manager,Latin American,1768,12847,1,1,0,0,0,-1,0,0,0,0
+b604addd__0,b604addd,0,2025-10-14,Tariq Al-Mansouri,45-54,Nurse,Middle Eastern,958,12020,0,0,0,0,-1,0,0,0,0,0
+b604addd__1,b604addd,1,2025-10-20,Tariq Al-Mansouri,45-54,Nurse,Middle Eastern,1378,12440,0,0,0,0,-1,0,0,0,-1,0
+b604addd__2,b604addd,2,2025-10-25,Tariq Al-Mansouri,45-54,Nurse,Middle Eastern,973,12035,0,0,0,1,1,0,0,0,0,0
+b604addd__3,b604addd,3,2025-10-29,Tariq Al-Mansouri,45-54,Nurse,Middle Eastern,620,11682,0,0,0,0,-1,0,0,0,1,0
+b604addd__4,b604addd,4,2025-11-05,Tariq Al-Mansouri,45-54,Nurse,Middle Eastern,1390,12452,1,0,0,0,-1,0,0,0,0,0
+b604addd__5,b604addd,5,2025-11-10,Tariq Al-Mansouri,45-54,Nurse,Middle Eastern,653,11715,0,0,0,0,1,0,0,0,0,0
+b604addd__6,b604addd,6,2025-11-16,Tariq Al-Mansouri,45-54,Nurse,Middle Eastern,1091,12153,0,0,0,0,-1,0,1,0,0,0
+b604addd__7,b604addd,7,2025-11-19,Tariq Al-Mansouri,45-54,Nurse,Middle Eastern,462,11524,0,0,0,1,-1,0,0,0,0,0
+b604addd__8,b604addd,8,2025-11-22,Tariq Al-Mansouri,45-54,Nurse,Middle Eastern,1484,12546,0,0,0,1,-1,0,0,0,0,0
+b604addd__9,b604addd,9,2025-11-22,Tariq Al-Mansouri,45-54,Nurse,Middle Eastern,533,11595,0,0,0,1,0,0,0,0,0,0
+b63d80df__0,b63d80df,0,2025-03-17,Padma Krishnamurthy,45-54,Parent (Stay-at-home),South Asian,1138,12241,0,0,0,0,-1,0,1,0,0,0
+b63d80df__1,b63d80df,1,2025-03-22,Padma Krishnamurthy,45-54,Parent (Stay-at-home),South Asian,551,11654,0,0,0,0,0,0,0,0,1,0
+b63d80df__2,b63d80df,2,2025-03-24,Padma Krishnamurthy,45-54,Parent (Stay-at-home),South Asian,446,11549,0,0,0,0,0,0,0,0,1,0
+b63d80df__3,b63d80df,3,2025-03-27,Padma Krishnamurthy,45-54,Parent (Stay-at-home),South Asian,830,11933,-1,0,0,0,0,0,1,0,1,0
+b63d80df__4,b63d80df,4,2025-04-01,Padma Krishnamurthy,45-54,Parent (Stay-at-home),South Asian,1078,12181,0,0,0,1,0,0,0,0,1,0
+b63d80df__5,b63d80df,5,2025-04-04,Padma Krishnamurthy,45-54,Parent (Stay-at-home),South Asian,247,11350,1,0,0,0,-1,0,0,0,0,0
+b63d80df__6,b63d80df,6,2025-04-11,Padma Krishnamurthy,45-54,Parent (Stay-at-home),South Asian,242,11345,1,0,1,0,0,0,0,0,0,0
+b63d80df__7,b63d80df,7,2025-04-16,Padma Krishnamurthy,45-54,Parent (Stay-at-home),South Asian,965,12068,0,0,0,0,0,0,0,0,1,0
+b63d80df__8,b63d80df,8,2025-04-16,Padma Krishnamurthy,45-54,Parent (Stay-at-home),South Asian,253,11356,0,0,0,0,0,0,1,0,0,0
+b63d80df__9,b63d80df,9,2025-04-20,Padma Krishnamurthy,45-54,Parent (Stay-at-home),South Asian,1146,12249,-1,0,0,0,0,0,1,0,1,0
+b63d80df__10,b63d80df,10,2025-04-24,Padma Krishnamurthy,45-54,Parent (Stay-at-home),South Asian,1341,12444,0,0,0,0,1,0,0,0,1,0
+b63d80df__11,b63d80df,11,2025-04-27,Padma Krishnamurthy,45-54,Parent (Stay-at-home),South Asian,1677,12780,1,0,0,0,0,0,-1,0,1,0
+b7b942ab__0,b7b942ab,0,2025-11-05,Arjun Krishnamurthy,18-24,Grad Student,South Asian,1748,12828,1,1,0,0,0,-1,-1,0,0,0
+b7b942ab__1,b7b942ab,1,2025-11-06,Arjun Krishnamurthy,18-24,Grad Student,South Asian,2066,13146,0,1,0,-1,0,-1,-1,0,-1,0
+b7b942ab__2,b7b942ab,2,2025-11-12,Arjun Krishnamurthy,18-24,Grad Student,South Asian,2112,13192,1,1,0,-1,0,-1,0,0,0,0
+b7b942ab__3,b7b942ab,3,2025-11-15,Arjun Krishnamurthy,18-24,Grad Student,South Asian,1334,12414,1,1,0,0,0,0,-1,0,0,0
+b7b942ab__4,b7b942ab,4,2025-11-16,Arjun Krishnamurthy,18-24,Grad Student,South Asian,200,11280,0,1,0,-1,0,0,0,0,0,0
+b7b942ab__5,b7b942ab,5,2025-11-21,Arjun Krishnamurthy,18-24,Grad Student,South Asian,1701,12781,1,1,0,0,0,-1,0,-1,-1,0
+b7b942ab__6,b7b942ab,6,2025-11-21,Arjun Krishnamurthy,18-24,Grad Student,South Asian,1853,12933,1,1,0,0,0,-1,0,0,-1,0
+b7b942ab__7,b7b942ab,7,2025-11-21,Arjun Krishnamurthy,18-24,Grad Student,South Asian,131,11211,1,1,0,0,0,-1,0,0,0,0
+b7b942ab__8,b7b942ab,8,2025-11-26,Arjun Krishnamurthy,18-24,Grad Student,South Asian,2070,13150,1,1,0,0,0,0,0,-1,1,0
+b7b942ab__9,b7b942ab,9,2025-12-03,Arjun Krishnamurthy,18-24,Grad Student,South Asian,604,11684,1,1,0,0,0,0,0,-1,0,0
+b7b942ab__10,b7b942ab,10,2025-12-04,Arjun Krishnamurthy,18-24,Grad Student,South Asian,887,11967,1,1,0,0,0,-1,0,0,0,0
+b8a23604__0,b8a23604,0,2025-10-27,Tyler Brogan,25-34,Manager,North American,973,12038,0,0,1,0,0,0,0,0,0,0
+b8a23604__1,b8a23604,1,2025-11-01,Tyler Brogan,25-34,Manager,North American,1104,12169,0,0,-1,1,0,0,0,0,1,0
+b8a23604__2,b8a23604,2,2025-11-02,Tyler Brogan,25-34,Manager,North American,624,11689,0,0,0,0,0,0,0,0,0,0
+b8a23604__3,b8a23604,3,2025-11-06,Tyler Brogan,25-34,Manager,North American,292,11357,0,0,-1,1,0,0,0,0,0,0
+b8a23604__4,b8a23604,4,2025-11-10,Tyler Brogan,25-34,Manager,North American,558,11623,0,0,0,0,0,0,0,0,0,0
+b8a23604__5,b8a23604,5,2025-11-12,Tyler Brogan,25-34,Manager,North American,1133,12198,0,0,1,0,0,0,0,0,0,0
+b8a23604__6,b8a23604,6,2025-11-14,Tyler Brogan,25-34,Manager,North American,387,11452,0,0,-1,0,0,0,0,0,0,0
+b963f9bc__0,b963f9bc,0,2025-12-01,Mei-Lin Chen,35-44,Teacher,East Asian,1036,12101,0,0,0,0,0,0,1,0,0,0
+b963f9bc__1,b963f9bc,1,2025-12-08,Mei-Lin Chen,35-44,Teacher,East Asian,1948,13013,-1,0,0,0,0,0,1,0,0,0
+b963f9bc__2,b963f9bc,2,2025-12-10,Mei-Lin Chen,35-44,Teacher,East Asian,630,11695,0,0,0,0,0,0,0,1,0,0
+b963f9bc__3,b963f9bc,3,2025-12-13,Mei-Lin Chen,35-44,Teacher,East Asian,2558,13623,-1,0,0,0,0,0,1,1,0,0
+b963f9bc__4,b963f9bc,4,2025-12-18,Mei-Lin Chen,35-44,Teacher,East Asian,1277,12342,-1,0,0,0,0,1,1,0,0,0
+ba3883ac__0,ba3883ac,0,2025-12-01,Henrik Larsson,45-54,Entrepreneur,Western European,1289,12375,1,0,0,0,0,0,0,0,1,0
+ba3883ac__1,ba3883ac,1,2025-12-08,Henrik Larsson,45-54,Entrepreneur,Western European,465,11551,1,0,0,0,0,0,-1,0,0,0
+ba3883ac__2,ba3883ac,2,2025-12-12,Henrik Larsson,45-54,Entrepreneur,Western European,1919,13005,1,0,0,0,1,-1,0,0,0,0
+ba3883ac__3,ba3883ac,3,2025-12-18,Henrik Larsson,45-54,Entrepreneur,Western European,762,11848,1,0,0,0,0,0,1,1,1,0
+ba3883ac__4,ba3883ac,4,2025-12-23,Henrik Larsson,45-54,Entrepreneur,Western European,1544,12630,1,0,0,0,0,-1,0,0,1,0
+bcfa309d__0,bcfa309d,0,2025-09-16,Henrik Lindqvist,35-44,Grad Student,Western European,322,11392,0,0,0,-1,-1,0,0,0,0,0
+bcfa309d__1,bcfa309d,1,2025-09-18,Henrik Lindqvist,35-44,Grad Student,Western European,594,11664,0,0,0,0,-1,0,0,0,0,0
+bcfa309d__2,bcfa309d,2,2025-09-25,Henrik Lindqvist,35-44,Grad Student,Western European,571,11641,-1,0,-1,1,0,0,0,0,0,0
+bcfa309d__3,bcfa309d,3,2025-09-25,Henrik Lindqvist,35-44,Grad Student,Western European,1000,12070,0,0,0,1,1,0,0,0,0,0
+bcfa309d__4,bcfa309d,4,2025-09-29,Henrik Lindqvist,35-44,Grad Student,Western European,1587,12657,0,0,0,0,1,0,0,0,0,1
+bcfa309d__5,bcfa309d,5,2025-10-01,Henrik Lindqvist,35-44,Grad Student,Western European,1083,12153,1,0,0,1,0,0,0,0,0,0
+bcfa309d__6,bcfa309d,6,2025-10-02,Henrik Lindqvist,35-44,Grad Student,Western European,1145,12215,0,0,0,0,1,0,-1,0,0,0
+bcfa309d__7,bcfa309d,7,2025-10-07,Henrik Lindqvist,35-44,Grad Student,Western European,738,11808,-1,0,0,0,-1,0,0,0,0,0
+bf10d976__0,bf10d976,0,2025-02-16,Tariq Mansour,45-54,Entrepreneur,Middle Eastern,1044,12123,0,0,0,0,0,0,0,0,0,1
+bf10d976__1,bf10d976,1,2025-02-16,Tariq Mansour,45-54,Entrepreneur,Middle Eastern,1379,12458,0,0,0,0,0,-1,0,0,0,1
+bf10d976__2,bf10d976,2,2025-02-23,Tariq Mansour,45-54,Entrepreneur,Middle Eastern,298,11377,0,0,0,0,0,0,0,0,0,1
+bf10d976__3,bf10d976,3,2025-02-27,Tariq Mansour,45-54,Entrepreneur,Middle Eastern,616,11695,0,0,0,0,0,0,1,0,0,0
+bf10d976__4,bf10d976,4,2025-03-02,Tariq Mansour,45-54,Entrepreneur,Middle Eastern,701,11780,0,0,0,0,0,0,0,0,0,1
+bf10d976__5,bf10d976,5,2025-03-06,Tariq Mansour,45-54,Entrepreneur,Middle Eastern,1046,12125,0,0,0,0,0,0,1,0,0,1
+bf10d976__6,bf10d976,6,2025-03-10,Tariq Mansour,45-54,Entrepreneur,Middle Eastern,1232,12311,0,0,0,0,0,-1,0,0,0,1
+bf10d976__7,bf10d976,7,2025-03-12,Tariq Mansour,45-54,Entrepreneur,Middle Eastern,428,11507,0,0,0,0,0,0,0,0,0,1
+bf10d976__8,bf10d976,8,2025-03-18,Tariq Mansour,45-54,Entrepreneur,Middle Eastern,1119,12198,0,0,0,0,-1,0,0,0,0,1
+bf44e50f__0,bf44e50f,0,2025-11-20,Tariq Haddad,35-44,Manager,Middle Eastern,1352,12417,0,0,-1,0,0,0,0,0,1,0
+bf44e50f__1,bf44e50f,1,2025-11-20,Tariq Haddad,35-44,Manager,Middle Eastern,908,11973,0,0,-1,1,0,0,0,0,0,0
+bf44e50f__2,bf44e50f,2,2025-11-20,Tariq Haddad,35-44,Manager,Middle Eastern,123,11188,0,0,-1,0,0,0,0,0,0,0
+bf44e50f__3,bf44e50f,3,2025-11-22,Tariq Haddad,35-44,Manager,Middle Eastern,200,11265,0,0,1,0,0,0,0,0,0,0
+bf44e50f__4,bf44e50f,4,2025-11-25,Tariq Haddad,35-44,Manager,Middle Eastern,1500,12565,0,0,-1,0,0,0,1,0,1,0
+bf44e50f__5,bf44e50f,5,2025-12-01,Tariq Haddad,35-44,Manager,Middle Eastern,231,11296,0,0,-1,1,0,0,0,0,0,0
+c0484aad__0,c0484aad,0,2025-04-07,Lieke van der Berg,18-24,Artist,Western European,2352,13458,1,0,0,0,0,-1,0,0,0,1
+c0484aad__1,c0484aad,1,2025-04-12,Lieke van der Berg,18-24,Artist,Western European,3146,14252,1,1,0,-1,0,-1,-1,0,0,1
+c130f2e3__0,c130f2e3,0,2025-08-11,Tariq Haddad,35-44,Artist,Middle Eastern,1460,12528,-1,0,0,0,0,0,1,0,0,0
+c130f2e3__1,c130f2e3,1,2025-08-18,Tariq Haddad,35-44,Artist,Middle Eastern,1325,12393,-1,0,0,0,0,0,1,0,0,0
+c130f2e3__2,c130f2e3,2,2025-08-24,Tariq Haddad,35-44,Artist,Middle Eastern,1205,12273,-1,-1,0,0,0,0,1,0,0,0
+c130f2e3__3,c130f2e3,3,2025-08-26,Tariq Haddad,35-44,Artist,Middle Eastern,531,11599,0,0,0,0,0,0,1,0,0,0
+c130f2e3__4,c130f2e3,4,2025-08-31,Tariq Haddad,35-44,Artist,Middle Eastern,1232,12300,0,0,0,0,0,0,1,0,0,0
+c130f2e3__5,c130f2e3,5,2025-09-04,Tariq Haddad,35-44,Artist,Middle Eastern,869,11937,-1,0,0,0,0,0,1,0,0,0
+c130f2e3__6,c130f2e3,6,2025-09-05,Tariq Haddad,35-44,Artist,Middle Eastern,1584,12652,-1,0,0,0,0,0,1,0,0,0
+c130f2e3__7,c130f2e3,7,2025-09-07,Tariq Haddad,35-44,Artist,Middle Eastern,1429,12497,-1,0,0,0,0,0,1,0,0,0
+c130f2e3__8,c130f2e3,8,2025-09-13,Tariq Haddad,35-44,Artist,Middle Eastern,263,11331,-1,0,0,0,0,0,1,0,0,0
+c130f2e3__9,c130f2e3,9,2025-09-15,Tariq Haddad,35-44,Artist,Middle Eastern,825,11893,1,0,0,0,0,0,-1,0,0,0
+c3ad003f__0,c3ad003f,0,2025-01-10,Priya Nair,25-34,Teacher,South Asian,1001,12095,0,0,0,1,0,0,0,0,1,1
+c3ad003f__1,c3ad003f,1,2025-01-14,Priya Nair,25-34,Teacher,South Asian,596,11690,0,0,0,1,0,0,0,0,0,0
+c3ad003f__2,c3ad003f,2,2025-01-14,Priya Nair,25-34,Teacher,South Asian,1106,12200,0,0,-1,1,0,0,0,0,0,1
+c3ad003f__3,c3ad003f,3,2025-01-18,Priya Nair,25-34,Teacher,South Asian,959,12053,0,0,0,1,0,0,0,0,0,1
+c3ad003f__4,c3ad003f,4,2025-01-19,Priya Nair,25-34,Teacher,South Asian,1678,12772,0,0,0,1,0,0,0,0,-1,0
+c3ad003f__5,c3ad003f,5,2025-01-25,Priya Nair,25-34,Teacher,South Asian,817,11911,1,0,0,0,0,0,0,0,0,1
+c3ad003f__6,c3ad003f,6,2025-01-27,Priya Nair,25-34,Teacher,South Asian,1340,12434,0,0,-1,1,0,0,0,0,0,1
+c3ad003f__7,c3ad003f,7,2025-01-29,Priya Nair,25-34,Teacher,South Asian,1208,12302,0,0,0,1,0,0,0,0,0,1
+c3ad003f__8,c3ad003f,8,2025-02-02,Priya Nair,25-34,Teacher,South Asian,884,11978,0,0,0,1,0,0,0,-1,-1,0
+c3ad003f__9,c3ad003f,9,2025-02-08,Priya Nair,25-34,Teacher,South Asian,1840,12934,0,0,0,1,0,0,0,0,-1,1
+c876219a__0,c876219a,0,2025-04-06,Ramiro Castañeda,45-54,Gig Worker,Latin American,612,11684,0,0,0,0,0,1,0,0,0,0
+c876219a__1,c876219a,1,2025-04-08,Ramiro Castañeda,45-54,Gig Worker,Latin American,1127,12199,0,0,0,0,0,-1,0,0,0,0
+c876219a__2,c876219a,2,2025-04-10,Ramiro Castañeda,45-54,Gig Worker,Latin American,861,11933,0,0,0,0,0,1,0,0,0,0
+c876219a__3,c876219a,3,2025-04-17,Ramiro Castañeda,45-54,Gig Worker,Latin American,1040,12112,0,0,0,1,0,-1,0,0,0,0
+c876219a__4,c876219a,4,2025-04-24,Ramiro Castañeda,45-54,Gig Worker,Latin American,244,11316,0,0,0,0,0,1,0,0,0,0
+c876219a__5,c876219a,5,2025-05-01,Ramiro Castañeda,45-54,Gig Worker,Latin American,1117,12189,0,0,0,0,0,1,0,0,0,0
+c876219a__6,c876219a,6,2025-05-08,Ramiro Castañeda,45-54,Gig Worker,Latin American,273,11345,0,0,0,0,0,1,0,0,0,0
+c876219a__7,c876219a,7,2025-05-12,Ramiro Castañeda,45-54,Gig Worker,Latin American,1321,12393,0,0,0,0,0,-1,0,0,0,0
+c876219a__8,c876219a,8,2025-05-14,Ramiro Castañeda,45-54,Gig Worker,Latin American,872,11944,0,0,0,0,0,1,0,0,0,0
+c876219a__9,c876219a,9,2025-05-20,Ramiro Castañeda,45-54,Gig Worker,Latin American,1323,12395,0,0,0,0,0,1,0,0,0,0
+cac7b9ce__0,cac7b9ce,0,2025-11-13,Priya Sharma,45-54,Nurse,South Asian,942,12004,0,0,0,0,0,0,0,1,1,0
+cac7b9ce__1,cac7b9ce,1,2025-11-19,Priya Sharma,45-54,Nurse,South Asian,1633,12695,0,0,-1,0,0,1,0,1,1,0
+cac7b9ce__2,cac7b9ce,2,2025-11-25,Priya Sharma,45-54,Nurse,South Asian,1094,12156,1,0,0,0,0,0,1,0,0,0
+cac7b9ce__3,cac7b9ce,3,2025-11-28,Priya Sharma,45-54,Nurse,South Asian,563,11625,0,0,0,0,0,0,0,0,0,0
+cac7b9ce__4,cac7b9ce,4,2025-12-02,Priya Sharma,45-54,Nurse,South Asian,607,11669,0,0,0,0,0,0,0,0,1,0
+cac7b9ce__5,cac7b9ce,5,2025-12-03,Priya Sharma,45-54,Nurse,South Asian,281,11343,0,0,0,0,0,0,-1,-1,0,0
+cac7b9ce__6,cac7b9ce,6,2025-12-08,Priya Sharma,45-54,Nurse,South Asian,764,11826,0,0,0,0,0,0,0,0,1,1
+cac7b9ce__7,cac7b9ce,7,2025-12-09,Priya Sharma,45-54,Nurse,South Asian,1130,12192,0,0,0,0,0,1,0,1,0,0
+cac7b9ce__8,cac7b9ce,8,2025-12-16,Priya Sharma,45-54,Nurse,South Asian,989,12051,0,0,0,0,0,0,0,1,1,0
+cac7b9ce__9,cac7b9ce,9,2025-12-17,Priya Sharma,45-54,Nurse,South Asian,415,11477,0,0,0,0,0,0,0,1,1,0
+cd0d027f__0,cd0d027f,0,2025-07-04,Cheng Wei-Lin,18-24,Teacher,East Asian,301,11383,0,1,0,0,0,-1,0,0,0,0
+cd0d027f__1,cd0d027f,1,2025-07-11,Cheng Wei-Lin,18-24,Teacher,East Asian,499,11581,1,1,0,0,1,0,0,0,0,0
+cd0d027f__2,cd0d027f,2,2025-07-13,Cheng Wei-Lin,18-24,Teacher,East Asian,1163,12245,0,0,0,1,1,0,-1,-1,0,0
+cd0d027f__3,cd0d027f,3,2025-07-13,Cheng Wei-Lin,18-24,Teacher,East Asian,1243,12325,1,1,0,0,0,0,1,0,1,0
+cd7c2a11__0,cd7c2a11,0,2025-08-28,Roshni Malik,18-24,Manager,South Asian,1419,12475,-1,0,0,0,-1,0,1,0,0,0
+cd7c2a11__1,cd7c2a11,1,2025-09-04,Roshni Malik,18-24,Manager,South Asian,1633,12689,0,0,0,0,-1,0,1,0,0,0
+cd7c2a11__2,cd7c2a11,2,2025-09-05,Roshni Malik,18-24,Manager,South Asian,893,11949,-1,0,0,0,-1,0,1,0,0,0
+cd7c2a11__3,cd7c2a11,3,2025-09-08,Roshni Malik,18-24,Manager,South Asian,175,11231,0,0,0,1,0,0,0,1,0,0
+cd7c2a11__4,cd7c2a11,4,2025-09-11,Roshni Malik,18-24,Manager,South Asian,1464,12520,1,0,0,0,-1,0,0,0,0,0
+cd7c2a11__5,cd7c2a11,5,2025-09-12,Roshni Malik,18-24,Manager,South Asian,773,11829,0,0,0,1,1,0,0,0,0,0
+cd7c2a11__6,cd7c2a11,6,2025-09-13,Roshni Malik,18-24,Manager,South Asian,717,11773,0,0,0,1,1,0,0,0,0,0
+cd7c2a11__7,cd7c2a11,7,2025-09-19,Roshni Malik,18-24,Manager,South Asian,188,11244,0,0,0,1,0,0,0,0,0,0
+cd7c2a11__8,cd7c2a11,8,2025-09-26,Roshni Malik,18-24,Manager,South Asian,903,11959,0,0,0,1,-1,0,0,0,0,0
+cd7c2a11__9,cd7c2a11,9,2025-09-28,Roshni Malik,18-24,Manager,South Asian,542,11598,0,0,0,0,-1,0,1,0,0,0
+d056ba20__0,d056ba20,0,2025-07-21,Marcus Chen,35-44,Teacher,North American,397,11461,0,0,1,0,0,0,0,0,0,0
+d056ba20__1,d056ba20,1,2025-07-26,Marcus Chen,35-44,Teacher,North American,189,11253,1,0,1,0,0,0,0,0,1,0
+d056ba20__2,d056ba20,2,2025-07-26,Marcus Chen,35-44,Teacher,North American,716,11780,1,0,1,0,0,0,-1,0,0,0
+d056ba20__3,d056ba20,3,2025-08-02,Marcus Chen,35-44,Teacher,North American,623,11687,0,1,1,0,0,0,0,0,0,0
+d1243cd1__0,d1243cd1,0,2025-01-25,Lena Geerts,18-24,Teacher,Western European,1204,12278,0,0,0,0,0,0,-1,0,0,1
+d1243cd1__1,d1243cd1,1,2025-01-27,Lena Geerts,18-24,Teacher,Western European,903,11977,0,0,0,0,0,0,0,0,0,1
+d1243cd1__2,d1243cd1,2,2025-02-03,Lena Geerts,18-24,Teacher,Western European,577,11651,0,0,0,0,0,0,0,0,1,1
+d1243cd1__3,d1243cd1,3,2025-02-05,Lena Geerts,18-24,Teacher,Western European,1432,12506,0,0,0,0,0,0,1,0,1,1
+d1243cd1__4,d1243cd1,4,2025-02-09,Lena Geerts,18-24,Teacher,Western European,500,11574,0,0,0,0,0,0,0,0,0,1
+d1243cd1__5,d1243cd1,5,2025-02-15,Lena Geerts,18-24,Teacher,Western European,939,12013,0,0,0,0,0,0,0,0,0,1
+d1243cd1__6,d1243cd1,6,2025-02-20,Lena Geerts,18-24,Teacher,Western European,1463,12537,1,0,0,0,0,0,0,0,0,1
+d1243cd1__7,d1243cd1,7,2025-02-26,Lena Geerts,18-24,Teacher,Western European,1046,12120,0,0,0,0,0,0,-1,0,0,1
+d262771c__0,d262771c,0,2025-12-23,Ricardo Mendoza Vargas,55+,Manager,Latin American,1010,12095,1,0,-1,1,0,0,-1,0,0,0
+d262771c__1,d262771c,1,2025-12-30,Ricardo Mendoza Vargas,55+,Manager,Latin American,1254,12339,1,0,0,0,0,1,-1,1,0,0
+d262771c__2,d262771c,2,2026-01-06,Ricardo Mendoza Vargas,55+,Manager,Latin American,1253,12338,1,0,0,1,0,0,-1,0,1,0
+d262771c__3,d262771c,3,2026-01-10,Ricardo Mendoza Vargas,55+,Manager,Latin American,554,11639,-1,0,0,0,-1,0,1,0,0,0
+d262771c__4,d262771c,4,2026-01-17,Ricardo Mendoza Vargas,55+,Manager,Latin American,811,11896,1,0,0,0,-1,0,-1,0,1,0
+d28dbcc2__0,d28dbcc2,0,2025-12-01,Arjun Menon,35-44,Gig Worker,South Asian,1926,13024,0,1,0,0,0,0,0,0,0,1
+d28dbcc2__1,d28dbcc2,1,2025-12-08,Arjun Menon,35-44,Gig Worker,South Asian,631,11729,1,0,0,0,-1,0,0,0,0,0
+d28dbcc2__2,d28dbcc2,2,2025-12-14,Arjun Menon,35-44,Gig Worker,South Asian,1253,12351,0,0,0,0,0,0,0,0,1,1
+d28dbcc2__3,d28dbcc2,3,2025-12-18,Arjun Menon,35-44,Gig Worker,South Asian,195,11293,0,0,0,0,0,-1,0,0,0,0
+d28dbcc2__4,d28dbcc2,4,2025-12-20,Arjun Menon,35-44,Gig Worker,South Asian,703,11801,0,0,0,1,0,0,0,0,1,0
+d28dbcc2__5,d28dbcc2,5,2025-12-29,Arjun Menon,35-44,Gig Worker,South Asian,815,11913,0,-1,0,0,0,0,0,0,0,0
+d28dbcc2__6,d28dbcc2,6,2026-01-01,Arjun Menon,35-44,Gig Worker,South Asian,1048,12146,-1,0,0,0,0,1,0,0,0,0
+d28dbcc2__7,d28dbcc2,7,2026-01-06,Arjun Menon,35-44,Gig Worker,South Asian,238,11336,1,0,0,0,-1,0,0,0,0,0
+d28dbcc2__8,d28dbcc2,8,2026-01-08,Arjun Menon,35-44,Gig Worker,South Asian,1254,12352,-1,0,0,0,0,1,0,0,1,1
+d7a0683f__0,d7a0683f,0,2025-12-31,Lukas Engström,18-24,Grad Student,Western European,888,11970,0,0,0,0,0,0,1,0,0,-1
+d7a0683f__1,d7a0683f,1,2026-01-04,Lukas Engström,18-24,Grad Student,Western European,1478,12560,0,0,0,0,0,0,0,0,0,-1
+d7a0683f__2,d7a0683f,2,2026-01-08,Lukas Engström,18-24,Grad Student,Western European,187,11269,0,0,0,0,0,0,1,0,0,-1
+d7a0683f__3,d7a0683f,3,2026-01-13,Lukas Engström,18-24,Grad Student,Western European,689,11771,0,0,1,0,0,0,0,0,0,-1
+d7a0683f__4,d7a0683f,4,2026-01-16,Lukas Engström,18-24,Grad Student,Western European,1472,12554,0,0,0,1,0,0,0,0,0,-1
+d7a0683f__5,d7a0683f,5,2026-01-16,Lukas Engström,18-24,Grad Student,Western European,1382,12464,1,0,0,0,0,0,0,0,0,1
+d7a0683f__6,d7a0683f,6,2026-01-23,Lukas Engström,18-24,Grad Student,Western European,1134,12216,1,0,0,0,0,0,1,0,0,1
+d7a0683f__7,d7a0683f,7,2026-01-28,Lukas Engström,18-24,Grad Student,Western European,630,11712,0,0,0,0,0,0,0,0,0,0
+d7a0683f__8,d7a0683f,8,2026-02-02,Lukas Engström,18-24,Grad Student,Western European,1616,12698,0,0,0,0,0,0,0,0,0,1
+d7a0683f__9,d7a0683f,9,2026-02-02,Lukas Engström,18-24,Grad Student,Western European,409,11491,0,0,0,0,0,0,0,0,0,-1
+d7a0683f__10,d7a0683f,10,2026-02-08,Lukas Engström,18-24,Grad Student,Western European,1566,12648,0,0,0,0,0,0,0,0,0,-1
+d911e384__0,d911e384,0,2025-03-31,Tariq Mansour,55+,Software Engineer,Middle Eastern,641,11721,1,1,0,1,0,0,0,0,0,0
+d911e384__1,d911e384,1,2025-04-07,Tariq Mansour,55+,Software Engineer,Middle Eastern,621,11701,0,0,0,0,0,0,-1,0,-1,0
+d911e384__2,d911e384,2,2025-04-14,Tariq Mansour,55+,Software Engineer,Middle Eastern,459,11539,0,0,0,1,0,0,0,0,1,0
+d911e384__3,d911e384,3,2025-04-15,Tariq Mansour,55+,Software Engineer,Middle Eastern,143,11223,0,0,0,0,0,1,0,0,1,0
+d911e384__4,d911e384,4,2025-04-22,Tariq Mansour,55+,Software Engineer,Middle Eastern,197,11277,0,0,0,0,0,-1,0,0,-1,0
+d911e384__5,d911e384,5,2025-04-22,Tariq Mansour,55+,Software Engineer,Middle Eastern,459,11539,1,0,0,0,0,0,0,-1,-1,0
+d911e384__6,d911e384,6,2025-04-26,Tariq Mansour,55+,Software Engineer,Middle Eastern,437,11517,0,0,0,1,0,0,0,0,1,0
+d911e384__7,d911e384,7,2025-05-01,Tariq Mansour,55+,Software Engineer,Middle Eastern,317,11397,0,0,0,-1,-1,0,0,0,0,0
+d911e384__8,d911e384,8,2025-05-03,Tariq Mansour,55+,Software Engineer,Middle Eastern,395,11475,0,1,0,0,0,0,0,0,0,0
+d911e384__9,d911e384,9,2025-05-03,Tariq Mansour,55+,Software Engineer,Middle Eastern,684,11764,1,1,0,0,0,-1,0,0,0,0
+d911e384__10,d911e384,10,2025-05-06,Tariq Mansour,55+,Software Engineer,Middle Eastern,625,11705,1,-1,0,-1,0,0,0,0,0,0
+d911e384__11,d911e384,11,2025-05-12,Tariq Mansour,55+,Software Engineer,Middle Eastern,1104,12184,1,1,0,1,0,-1,0,0,0,0
+d9bf06c1__0,d9bf06c1,0,2025-12-16,Britta Karlsen,45-54,Nurse,Western European,786,11847,0,0,-1,0,0,0,0,0,1,0
+d9bf06c1__1,d9bf06c1,1,2025-12-16,Britta Karlsen,45-54,Nurse,Western European,1325,12386,-1,0,0,0,-1,0,1,0,0,0
+d9bf06c1__2,d9bf06c1,2,2025-12-20,Britta Karlsen,45-54,Nurse,Western European,329,11390,0,0,0,0,0,0,0,0,0,0
+d9bf06c1__3,d9bf06c1,3,2025-12-21,Britta Karlsen,45-54,Nurse,Western European,809,11870,0,0,0,1,0,0,0,0,0,0
+d9bf06c1__4,d9bf06c1,4,2025-12-24,Britta Karlsen,45-54,Nurse,Western European,799,11860,0,0,0,0,-1,1,0,0,0,0
+d9bf06c1__5,d9bf06c1,5,2025-12-26,Britta Karlsen,45-54,Nurse,Western European,875,11936,0,0,0,0,-1,0,1,0,0,0
+d9bf06c1__6,d9bf06c1,6,2025-12-28,Britta Karlsen,45-54,Nurse,Western European,838,11899,0,0,0,0,1,0,0,1,1,0
+d9bf06c1__7,d9bf06c1,7,2026-01-03,Britta Karlsen,45-54,Nurse,Western European,348,11409,0,0,0,0,1,0,0,0,0,0
+dab3e9b9__0,dab3e9b9,0,2025-12-25,Nate Bergeron,35-44,Entrepreneur,North American,348,11427,0,0,0,0,0,0,1,0,0,-1
+dab3e9b9__1,dab3e9b9,1,2025-12-31,Nate Bergeron,35-44,Entrepreneur,North American,1418,12497,0,0,0,0,0,1,0,0,0,-1
+dab3e9b9__2,dab3e9b9,2,2026-01-03,Nate Bergeron,35-44,Entrepreneur,North American,1013,12092,0,0,0,0,0,-1,0,0,0,1
+dab3e9b9__3,dab3e9b9,3,2026-01-08,Nate Bergeron,35-44,Entrepreneur,North American,1181,12260,0,0,0,0,0,0,0,0,0,1
+dab3e9b9__4,dab3e9b9,4,2026-01-12,Nate Bergeron,35-44,Entrepreneur,North American,1068,12147,0,0,0,0,0,0,0,0,0,1
+dab3e9b9__5,dab3e9b9,5,2026-01-13,Nate Bergeron,35-44,Entrepreneur,North American,267,11346,1,0,0,0,0,-1,0,0,0,1
+daee11de__0,daee11de,0,2025-12-01,Maren Lindqvist,45-54,Artist,Western European,746,11843,0,0,0,0,0,1,0,0,1,1
+daee11de__1,daee11de,1,2025-12-08,Maren Lindqvist,45-54,Artist,Western European,1912,13009,1,0,0,0,0,1,0,0,0,1
+daee11de__2,daee11de,2,2025-12-17,Maren Lindqvist,45-54,Artist,Western European,313,11410,0,0,0,1,0,0,0,0,0,0
+daee11de__3,daee11de,3,2025-12-19,Maren Lindqvist,45-54,Artist,Western European,1423,12520,1,0,0,0,0,0,0,0,1,1
+daee11de__4,daee11de,4,2025-12-23,Maren Lindqvist,45-54,Artist,Western European,418,11515,0,0,0,0,0,1,0,0,1,0
+daee11de__5,daee11de,5,2025-12-30,Maren Lindqvist,45-54,Artist,Western European,1228,12325,0,0,0,0,0,0,0,1,1,1
+daee11de__6,daee11de,6,2026-01-06,Maren Lindqvist,45-54,Artist,Western European,925,12022,1,0,0,0,0,0,1,0,0,1
+daee11de__7,daee11de,7,2026-01-14,Maren Lindqvist,45-54,Artist,Western European,1417,12514,1,0,0,1,0,1,0,0,0,1
+db2b7c93__0,db2b7c93,0,2025-09-06,Rajesh Menon,35-44,Gig Worker,South Asian,1155,12226,0,0,0,0,0,-1,0,0,1,0
+db2b7c93__1,db2b7c93,1,2025-09-10,Rajesh Menon,35-44,Gig Worker,South Asian,1590,12661,0,0,0,1,0,1,0,0,1,0
+db2b7c93__2,db2b7c93,2,2025-09-10,Rajesh Menon,35-44,Gig Worker,South Asian,451,11522,0,0,1,0,0,0,0,0,1,0
+db2b7c93__3,db2b7c93,3,2025-09-15,Rajesh Menon,35-44,Gig Worker,South Asian,809,11880,0,0,0,0,0,0,0,0,1,0
+db2b7c93__4,db2b7c93,4,2025-09-16,Rajesh Menon,35-44,Gig Worker,South Asian,829,11900,0,0,0,1,0,1,0,0,0,0
+db2b7c93__5,db2b7c93,5,2025-09-19,Rajesh Menon,35-44,Gig Worker,South Asian,1762,12833,0,0,-1,0,0,1,0,0,1,0
+dbe2c53d__0,dbe2c53d,0,2025-01-30,Luciana Ferreira Vidal,35-44,Artist,Latin American,492,11598,-1,0,0,0,0,0,1,0,0,0
+dbe2c53d__1,dbe2c53d,1,2025-02-04,Luciana Ferreira Vidal,35-44,Artist,Latin American,646,11752,0,0,0,0,0,0,0,0,0,1
+dbe2c53d__2,dbe2c53d,2,2025-02-05,Luciana Ferreira Vidal,35-44,Artist,Latin American,1147,12253,1,0,0,0,0,0,0,0,0,1
+dbe2c53d__3,dbe2c53d,3,2025-02-11,Luciana Ferreira Vidal,35-44,Artist,Latin American,1632,12738,0,0,0,0,0,0,1,0,0,1
+dbe2c53d__4,dbe2c53d,4,2025-02-17,Luciana Ferreira Vidal,35-44,Artist,Latin American,1111,12217,0,0,0,0,0,0,1,0,0,-1
+dbe2c53d__5,dbe2c53d,5,2025-02-22,Luciana Ferreira Vidal,35-44,Artist,Latin American,247,11353,1,0,0,0,0,0,0,0,0,1
+dbe2c53d__6,dbe2c53d,6,2025-02-23,Luciana Ferreira Vidal,35-44,Artist,Latin American,447,11553,0,0,0,0,0,0,1,0,1,0
+dbe2c53d__7,dbe2c53d,7,2025-02-24,Luciana Ferreira Vidal,35-44,Artist,Latin American,180,11286,0,0,0,0,0,0,0,0,0,0
+dbe2c53d__8,dbe2c53d,8,2025-02-26,Luciana Ferreira Vidal,35-44,Artist,Latin American,1379,12485,0,0,0,0,0,0,1,0,0,1
+dbe2c53d__9,dbe2c53d,9,2025-03-05,Luciana Ferreira Vidal,35-44,Artist,Latin American,1265,12371,1,0,0,0,0,0,-1,0,0,1
+dbe2c53d__10,dbe2c53d,10,2025-03-05,Luciana Ferreira Vidal,35-44,Artist,Latin American,1221,12327,0,0,0,0,0,0,1,0,0,1
+dd3e3d44__0,dd3e3d44,0,2025-05-28,Liesel Bergmann,25-34,Nurse,Western European,892,11966,1,0,0,1,0,0,0,0,0,0
+dd3e3d44__1,dd3e3d44,1,2025-06-01,Liesel Bergmann,25-34,Nurse,Western European,547,11621,0,0,0,1,0,0,0,0,0,0
+dd3e3d44__2,dd3e3d44,2,2025-06-07,Liesel Bergmann,25-34,Nurse,Western European,497,11571,0,0,0,0,0,0,1,0,0,0
+dd3e3d44__3,dd3e3d44,3,2025-06-10,Liesel Bergmann,25-34,Nurse,Western European,249,11323,0,0,0,1,0,0,0,0,0,0
+dd3e3d44__4,dd3e3d44,4,2025-06-15,Liesel Bergmann,25-34,Nurse,Western European,746,11820,0,0,0,1,0,0,0,0,-1,0
+dd3e3d44__5,dd3e3d44,5,2025-06-20,Liesel Bergmann,25-34,Nurse,Western European,1056,12130,0,0,-1,1,0,0,0,0,0,0
+dd3e3d44__6,dd3e3d44,6,2025-06-26,Liesel Bergmann,25-34,Nurse,Western European,603,11677,0,0,0,1,0,0,1,0,-1,0
+dd3e3d44__7,dd3e3d44,7,2025-06-26,Liesel Bergmann,25-34,Nurse,Western European,275,11349,0,0,0,0,0,0,0,0,-1,0
+dd3e3d44__8,dd3e3d44,8,2025-07-03,Liesel Bergmann,25-34,Nurse,Western European,162,11236,0,0,0,1,0,0,0,0,0,0
+dd3e3d44__9,dd3e3d44,9,2025-07-03,Liesel Bergmann,25-34,Nurse,Western European,266,11340,0,0,0,0,0,0,0,0,-1,0
+dd3e3d44__10,dd3e3d44,10,2025-07-07,Liesel Bergmann,25-34,Nurse,Western European,226,11300,0,0,0,1,0,0,0,0,0,0
+de68f949__0,de68f949,0,2025-08-07,Layla Mansouri,25-34,Artist,Middle Eastern,809,11901,0,0,1,0,0,0,1,1,1,0
+de68f949__1,de68f949,1,2025-08-12,Layla Mansouri,25-34,Artist,Middle Eastern,1815,12907,-1,0,1,0,0,0,1,1,1,0
+de68f949__2,de68f949,2,2025-08-18,Layla Mansouri,25-34,Artist,Middle Eastern,382,11474,0,0,0,0,0,0,0,0,1,0
+de68f949__3,de68f949,3,2025-08-19,Layla Mansouri,25-34,Artist,Middle Eastern,816,11908,1,0,0,0,0,0,1,1,1,0
+de68f949__4,de68f949,4,2025-08-25,Layla Mansouri,25-34,Artist,Middle Eastern,1304,12396,1,0,1,0,0,0,0,0,1,0
+debb6ed8__0,debb6ed8,0,2025-12-01,Padmini Raghunathan,55+,Teacher,South Asian,641,11740,0,0,0,0,0,0,1,0,1,0
+debb6ed8__1,debb6ed8,1,2025-12-09,Padmini Raghunathan,55+,Teacher,South Asian,624,11723,0,0,0,0,0,0,0,0,1,0
+debb6ed8__2,debb6ed8,2,2025-12-12,Padmini Raghunathan,55+,Teacher,South Asian,1270,12369,-1,0,0,0,0,1,1,0,0,0
+debb6ed8__3,debb6ed8,3,2025-12-21,Padmini Raghunathan,55+,Teacher,South Asian,123,11222,0,0,0,1,0,0,0,0,0,0
+debb6ed8__4,debb6ed8,4,2025-12-24,Padmini Raghunathan,55+,Teacher,South Asian,880,11979,-1,0,0,0,0,0,1,0,0,0
+debb6ed8__5,debb6ed8,5,2026-01-03,Padmini Raghunathan,55+,Teacher,South Asian,1464,12563,0,0,0,0,0,0,0,1,1,0
+debb6ed8__6,debb6ed8,6,2026-01-10,Padmini Raghunathan,55+,Teacher,South Asian,1536,12635,-1,0,0,0,0,0,1,0,0,1
+debb6ed8__7,debb6ed8,7,2026-01-18,Padmini Raghunathan,55+,Teacher,South Asian,1547,12646,0,0,0,0,0,0,0,0,0,1
+debb6ed8__8,debb6ed8,8,2026-01-24,Padmini Raghunathan,55+,Teacher,South Asian,1804,12903,-1,0,0,0,0,0,1,0,1,1
+df9720d1__0,df9720d1,0,2025-02-26,Kevin Yeung,18-24,Entrepreneur,East Asian,599,11694,0,1,0,1,0,0,0,0,0,0
+df9720d1__1,df9720d1,1,2025-03-01,Kevin Yeung,18-24,Entrepreneur,East Asian,549,11644,0,1,0,0,0,0,0,0,0,0
+df9720d1__2,df9720d1,2,2025-03-06,Kevin Yeung,18-24,Entrepreneur,East Asian,636,11731,-1,0,0,0,0,0,1,0,0,0
+df9720d1__3,df9720d1,3,2025-03-09,Kevin Yeung,18-24,Entrepreneur,East Asian,669,11764,-1,0,0,0,0,0,1,0,0,0
+df9720d1__4,df9720d1,4,2025-03-09,Kevin Yeung,18-24,Entrepreneur,East Asian,1408,12503,-1,0,0,0,0,0,1,0,0,0
+df9720d1__5,df9720d1,5,2025-03-09,Kevin Yeung,18-24,Entrepreneur,East Asian,692,11787,1,0,0,0,0,0,1,0,0,0
+e209b4cd__0,e209b4cd,0,2025-10-22,Margit Ahlström,45-54,Artist,Western European,342,11411,0,0,-1,1,0,0,0,0,0,0
+e209b4cd__1,e209b4cd,1,2025-10-24,Margit Ahlström,45-54,Artist,Western European,734,11803,0,0,1,1,0,0,0,0,0,0
+e209b4cd__2,e209b4cd,2,2025-10-30,Margit Ahlström,45-54,Artist,Western European,293,11362,0,0,1,0,0,0,0,0,0,0
+e209b4cd__3,e209b4cd,3,2025-11-04,Margit Ahlström,45-54,Artist,Western European,757,11826,-1,0,0,0,0,0,1,0,0,0
+e209b4cd__4,e209b4cd,4,2025-11-05,Margit Ahlström,45-54,Artist,Western European,1261,12330,1,0,0,1,0,0,0,0,0,0
+e209b4cd__5,e209b4cd,5,2025-11-05,Margit Ahlström,45-54,Artist,Western European,702,11771,0,0,1,0,0,0,0,0,0,0
+e34fb79e__0,e34fb79e,0,2025-05-21,Gary Hutchins,55+,Teacher,North American,875,11951,1,0,0,1,0,0,0,0,0,0
+e34fb79e__1,e34fb79e,1,2025-05-21,Gary Hutchins,55+,Teacher,North American,1042,12118,1,0,0,0,0,0,-1,0,0,0
+e34fb79e__2,e34fb79e,2,2025-05-23,Gary Hutchins,55+,Teacher,North American,1043,12119,1,0,0,0,0,0,0,0,1,0
+e34fb79e__3,e34fb79e,3,2025-05-26,Gary Hutchins,55+,Teacher,North American,347,11423,0,0,0,0,0,0,0,0,0,0
+e34fb79e__4,e34fb79e,4,2025-05-27,Gary Hutchins,55+,Teacher,North American,1120,12196,1,0,0,0,-1,0,0,0,0,0
+e34fb79e__5,e34fb79e,5,2025-06-01,Gary Hutchins,55+,Teacher,North American,1132,12208,1,0,1,0,0,0,0,0,1,0
+e448979e__0,e448979e,0,2025-03-15,Nadia Hussain,18-24,Parent (Stay-at-home),South Asian,796,11867,1,0,0,1,1,0,0,0,0,0
+e448979e__1,e448979e,1,2025-03-22,Nadia Hussain,18-24,Parent (Stay-at-home),South Asian,1565,12636,-1,0,0,0,-1,0,1,0,0,0
+e448979e__2,e448979e,2,2025-03-29,Nadia Hussain,18-24,Parent (Stay-at-home),South Asian,653,11724,-1,0,0,0,-1,0,0,0,0,0
+e448979e__3,e448979e,3,2025-04-03,Nadia Hussain,18-24,Parent (Stay-at-home),South Asian,781,11852,1,0,0,1,1,0,0,0,0,0
+e448979e__4,e448979e,4,2025-04-04,Nadia Hussain,18-24,Parent (Stay-at-home),South Asian,1447,12518,-1,0,0,0,-1,0,1,0,0,0
+e448979e__5,e448979e,5,2025-04-06,Nadia Hussain,18-24,Parent (Stay-at-home),South Asian,1302,12373,-1,0,0,0,-1,0,1,0,0,0
+e448979e__6,e448979e,6,2025-04-12,Nadia Hussain,18-24,Parent (Stay-at-home),South Asian,1216,12287,1,0,0,1,1,0,0,0,0,0
+e448979e__7,e448979e,7,2025-04-12,Nadia Hussain,18-24,Parent (Stay-at-home),South Asian,1286,12357,1,0,0,1,1,0,0,0,0,0
+e448979e__8,e448979e,8,2025-04-15,Nadia Hussain,18-24,Parent (Stay-at-home),South Asian,1434,12505,0,0,0,1,1,0,0,0,0,0
+e448979e__9,e448979e,9,2025-04-21,Nadia Hussain,18-24,Parent (Stay-at-home),South Asian,647,11718,-1,0,0,0,-1,0,1,0,0,0
+e57a8664__0,e57a8664,0,2025-11-07,Mei-Ling Chen,55+,Grad Student,East Asian,1328,12419,-1,0,0,-1,0,0,0,0,1,0
+e57a8664__1,e57a8664,1,2025-11-13,Mei-Ling Chen,55+,Grad Student,East Asian,1265,12356,-1,0,0,-1,0,0,1,0,1,0
+e57a8664__2,e57a8664,2,2025-11-20,Mei-Ling Chen,55+,Grad Student,East Asian,482,11573,0,0,1,-1,0,0,0,0,1,0
+e57a8664__3,e57a8664,3,2025-11-26,Mei-Ling Chen,55+,Grad Student,East Asian,593,11684,0,0,1,1,0,0,0,0,1,0
+e57a8664__4,e57a8664,4,2025-11-30,Mei-Ling Chen,55+,Grad Student,East Asian,1339,12430,1,1,1,0,0,0,0,0,0,0
+e57a8664__5,e57a8664,5,2025-12-07,Mei-Ling Chen,55+,Grad Student,East Asian,782,11873,1,0,0,0,0,0,-1,-1,0,0
+e57a8664__6,e57a8664,6,2025-12-07,Mei-Ling Chen,55+,Grad Student,East Asian,1889,12980,1,0,0,0,0,0,-1,-1,0,0
+e57a8664__7,e57a8664,7,2025-12-07,Mei-Ling Chen,55+,Grad Student,East Asian,428,11519,1,0,1,0,1,0,-1,0,0,0
+e57a8664__8,e57a8664,8,2025-12-11,Mei-Ling Chen,55+,Grad Student,East Asian,402,11493,0,0,1,1,0,1,0,0,0,0
+e57a8664__9,e57a8664,9,2025-12-14,Mei-Ling Chen,55+,Grad Student,East Asian,1552,12643,1,0,1,1,0,0,0,0,1,0
+e5c9d9e5__0,e5c9d9e5,0,2025-03-25,Henrik van den Berg,55+,Entrepreneur,Western European,1198,12269,1,0,0,0,1,0,-1,0,0,0
+e5c9d9e5__1,e5c9d9e5,1,2025-03-25,Henrik van den Berg,55+,Entrepreneur,Western European,319,11390,0,0,0,0,-1,-1,0,0,-1,0
+e5c9d9e5__2,e5c9d9e5,2,2025-04-01,Henrik van den Berg,55+,Entrepreneur,Western European,1372,12443,0,0,-1,1,1,0,0,0,-1,0
+e5c9d9e5__3,e5c9d9e5,3,2025-04-08,Henrik van den Berg,55+,Entrepreneur,Western European,702,11773,-1,0,0,0,1,0,1,0,0,0
+e5c9d9e5__4,e5c9d9e5,4,2025-04-08,Henrik van den Berg,55+,Entrepreneur,Western European,348,11419,0,-1,-1,0,-1,0,0,0,0,0
+e5c9d9e5__5,e5c9d9e5,5,2025-04-10,Henrik van den Berg,55+,Entrepreneur,Western European,296,11367,0,0,0,1,1,0,0,0,1,0
+e5c9d9e5__6,e5c9d9e5,6,2025-04-11,Henrik van den Berg,55+,Entrepreneur,Western European,1217,12288,-1,0,0,0,1,0,0,0,1,0
+e5c9d9e5__7,e5c9d9e5,7,2025-04-14,Henrik van den Berg,55+,Entrepreneur,Western European,1687,12758,1,0,0,0,1,1,0,0,-1,0
+e5c9d9e5__8,e5c9d9e5,8,2025-04-15,Henrik van den Berg,55+,Entrepreneur,Western European,650,11721,1,0,0,0,-1,-1,0,0,0,0
+e5c9d9e5__9,e5c9d9e5,9,2025-04-15,Henrik van den Berg,55+,Entrepreneur,Western European,846,11917,1,0,0,0,-1,1,0,0,1,0
+e5c9d9e5__10,e5c9d9e5,10,2025-04-17,Henrik van den Berg,55+,Entrepreneur,Western European,298,11369,1,0,0,0,-1,1,0,0,1,0
+e5c9d9e5__11,e5c9d9e5,11,2025-04-19,Henrik van den Berg,55+,Entrepreneur,Western European,1123,12194,1,1,1,0,-1,0,0,0,1,0
+e5cea325__0,e5cea325,0,2025-06-11,Rachel Munoz,35-44,Nurse,North American,1114,12203,0,0,1,0,0,0,0,0,1,0
+e5cea325__1,e5cea325,1,2025-06-15,Rachel Munoz,35-44,Nurse,North American,967,12056,0,0,1,-1,0,0,0,0,1,0
+e5cea325__2,e5cea325,2,2025-06-18,Rachel Munoz,35-44,Nurse,North American,609,11698,0,0,-1,0,0,0,0,0,1,0
+e5cea325__3,e5cea325,3,2025-06-20,Rachel Munoz,35-44,Nurse,North American,1584,12673,0,0,0,0,0,0,0,0,1,0
+e5cea325__4,e5cea325,4,2025-06-24,Rachel Munoz,35-44,Nurse,North American,782,11871,0,0,-1,0,0,0,0,0,1,0
+e5cea325__5,e5cea325,5,2025-06-25,Rachel Munoz,35-44,Nurse,North American,698,11787,1,0,1,0,0,0,0,0,0,0
+e5cea325__6,e5cea325,6,2025-06-27,Rachel Munoz,35-44,Nurse,North American,387,11476,0,0,1,0,0,0,0,0,0,0
+e5cea325__7,e5cea325,7,2025-06-29,Rachel Munoz,35-44,Nurse,North American,747,11836,0,0,1,0,0,0,0,0,1,0
+e5ff1efb__0,e5ff1efb,0,2025-12-25,Priya Sharma,25-34,Teacher,South Asian,1162,12236,1,0,0,0,0,0,-1,-1,-1,0
+e5ff1efb__1,e5ff1efb,1,2025-12-27,Priya Sharma,25-34,Teacher,South Asian,454,11528,0,0,0,1,0,0,0,0,1,0
+e5ff1efb__2,e5ff1efb,2,2026-01-01,Priya Sharma,25-34,Teacher,South Asian,1154,12228,1,0,0,0,0,-1,-1,1,0,0
+e5ff1efb__3,e5ff1efb,3,2026-01-03,Priya Sharma,25-34,Teacher,South Asian,1293,12367,1,0,1,0,0,0,0,0,-1,0
+e5ff1efb__4,e5ff1efb,4,2026-01-04,Priya Sharma,25-34,Teacher,South Asian,1402,12476,1,0,0,1,0,0,-1,0,0,0
+e5ff1efb__5,e5ff1efb,5,2026-01-09,Priya Sharma,25-34,Teacher,South Asian,164,11238,1,0,0,1,0,0,0,0,0,0
+e5ff1efb__6,e5ff1efb,6,2026-01-12,Priya Sharma,25-34,Teacher,South Asian,1501,12575,1,0,0,0,0,0,-1,-1,-1,0
+e5ff1efb__7,e5ff1efb,7,2026-01-17,Priya Sharma,25-34,Teacher,South Asian,716,11790,1,0,0,1,0,0,0,0,1,0
+e5ff1efb__8,e5ff1efb,8,2026-01-23,Priya Sharma,25-34,Teacher,South Asian,165,11239,1,0,0,1,0,0,0,0,0,0
+e6838e16__0,e6838e16,0,2025-02-15,Rohan Kulkarni,18-24,Manager,South Asian,1002,12066,0,0,0,0,0,1,0,0,1,0
+e6838e16__1,e6838e16,1,2025-02-22,Rohan Kulkarni,18-24,Manager,South Asian,591,11655,0,0,0,1,0,1,0,0,0,0
+e6838e16__2,e6838e16,2,2025-02-28,Rohan Kulkarni,18-24,Manager,South Asian,508,11572,0,0,0,0,0,1,0,0,0,0
+e6838e16__3,e6838e16,3,2025-03-02,Rohan Kulkarni,18-24,Manager,South Asian,482,11546,0,0,0,0,0,-1,0,0,0,0
+e6838e16__4,e6838e16,4,2025-03-04,Rohan Kulkarni,18-24,Manager,South Asian,537,11601,0,0,0,0,0,-1,0,0,0,0
+e6838e16__5,e6838e16,5,2025-03-08,Rohan Kulkarni,18-24,Manager,South Asian,887,11951,0,0,0,0,0,-1,0,0,1,0
+e6838e16__6,e6838e16,6,2025-03-10,Rohan Kulkarni,18-24,Manager,South Asian,606,11670,0,0,0,0,0,1,0,0,0,0
+e6838e16__7,e6838e16,7,2025-03-13,Rohan Kulkarni,18-24,Manager,South Asian,1451,12515,0,0,0,0,0,1,0,0,0,0
+e6838e16__8,e6838e16,8,2025-03-19,Rohan Kulkarni,18-24,Manager,South Asian,195,11259,0,-1,0,0,0,1,0,0,0,0
+e6838e16__9,e6838e16,9,2025-03-25,Rohan Kulkarni,18-24,Manager,South Asian,1045,12109,0,-1,0,0,0,1,0,0,0,0
+e74a0721__0,e74a0721,0,2025-10-26,Santiago Herrera,35-44,Artist,Latin American,677,11763,-1,-1,0,0,-1,1,1,0,0,0
+e74a0721__1,e74a0721,1,2025-10-28,Santiago Herrera,35-44,Artist,Latin American,974,12060,-1,-1,0,1,1,1,1,1,0,0
+e7f5aa8b__0,e7f5aa8b,0,2025-05-06,Roberto Mendoza,55+,Manager,Latin American,438,11510,0,0,0,1,1,0,0,0,0,0
+e7f5aa8b__1,e7f5aa8b,1,2025-05-09,Roberto Mendoza,55+,Manager,Latin American,428,11500,0,0,0,1,1,0,1,0,0,0
+e7f5aa8b__2,e7f5aa8b,2,2025-05-11,Roberto Mendoza,55+,Manager,Latin American,501,11573,1,0,0,1,1,0,0,0,0,0
+e7f5aa8b__3,e7f5aa8b,3,2025-05-18,Roberto Mendoza,55+,Manager,Latin American,593,11665,0,0,0,1,1,0,-1,0,0,0
+e7f5aa8b__4,e7f5aa8b,4,2025-05-19,Roberto Mendoza,55+,Manager,Latin American,175,11247,0,0,-1,1,0,0,0,0,-1,0
+e7f5aa8b__5,e7f5aa8b,5,2025-05-25,Roberto Mendoza,55+,Manager,Latin American,1183,12255,1,0,0,-1,-1,-1,0,0,1,0
+e7f5aa8b__6,e7f5aa8b,6,2025-05-28,Roberto Mendoza,55+,Manager,Latin American,630,11702,1,0,0,0,0,0,0,0,1,0
+e809d252__0,e809d252,0,2025-01-10,Marcus Chen,25-34,Teacher,North American,703,11797,1,0,0,0,0,0,-1,0,0,1
+e809d252__1,e809d252,1,2025-01-14,Marcus Chen,25-34,Teacher,North American,490,11584,0,0,0,0,0,0,0,-1,-1,0
+e809d252__2,e809d252,2,2025-01-16,Marcus Chen,25-34,Teacher,North American,832,11926,1,0,0,0,0,0,1,1,0,1
+e809d252__3,e809d252,3,2025-01-17,Marcus Chen,25-34,Teacher,North American,1065,12159,0,0,0,0,0,0,0,0,1,1
+e809d252__4,e809d252,4,2025-01-17,Marcus Chen,25-34,Teacher,North American,1118,12212,0,0,1,0,0,0,0,0,0,-1
+e809d252__5,e809d252,5,2025-01-22,Marcus Chen,25-34,Teacher,North American,466,11560,0,0,0,0,0,0,0,1,1,0
+e809d252__6,e809d252,6,2025-01-29,Marcus Chen,25-34,Teacher,North American,1070,12164,1,0,0,1,0,0,0,0,1,1
+e809d252__7,e809d252,7,2025-02-01,Marcus Chen,25-34,Teacher,North American,679,11773,0,0,0,0,0,0,0,1,1,0
+e809d252__8,e809d252,8,2025-02-07,Marcus Chen,25-34,Teacher,North American,544,11638,0,0,0,0,0,0,0,1,1,1
+e809d252__9,e809d252,9,2025-02-12,Marcus Chen,25-34,Teacher,North American,978,12072,0,0,0,0,0,0,0,1,1,1
+e809d252__10,e809d252,10,2025-02-18,Marcus Chen,25-34,Teacher,North American,659,11753,0,0,0,0,0,0,-1,1,1,0
+e99eacac__0,e99eacac,0,2025-10-16,Ricardo Maldonado,45-54,Entrepreneur,Latin American,773,11876,1,1,0,1,0,-1,0,0,0,0
+e99eacac__1,e99eacac,1,2025-10-18,Ricardo Maldonado,45-54,Entrepreneur,Latin American,250,11353,0,1,0,0,0,0,0,0,0,0
+e99eacac__2,e99eacac,2,2025-10-22,Ricardo Maldonado,45-54,Entrepreneur,Latin American,1080,12183,0,0,-1,0,0,0,0,1,1,0
+e99eacac__3,e99eacac,3,2025-10-26,Ricardo Maldonado,45-54,Entrepreneur,Latin American,1251,12354,1,0,0,1,0,0,0,1,0,1
+e99eacac__4,e99eacac,4,2025-10-27,Ricardo Maldonado,45-54,Entrepreneur,Latin American,1575,12678,0,1,0,0,0,0,0,1,1,0
+e99eacac__5,e99eacac,5,2025-10-29,Ricardo Maldonado,45-54,Entrepreneur,Latin American,458,11561,0,1,0,1,0,0,0,1,0,0
+e99eacac__6,e99eacac,6,2025-11-05,Ricardo Maldonado,45-54,Entrepreneur,Latin American,280,11383,0,0,0,-1,0,-1,0,0,0,0
+e99eacac__7,e99eacac,7,2025-11-11,Ricardo Maldonado,45-54,Entrepreneur,Latin American,1375,12478,1,0,0,1,0,0,0,1,1,0
+e99eacac__8,e99eacac,8,2025-11-16,Ricardo Maldonado,45-54,Entrepreneur,Latin American,633,11736,0,1,0,0,0,-1,0,0,0,1
+e99eacac__9,e99eacac,9,2025-11-16,Ricardo Maldonado,45-54,Entrepreneur,Latin American,595,11698,0,1,0,0,0,0,0,1,1,0
+e99eacac__10,e99eacac,10,2025-11-20,Ricardo Maldonado,45-54,Entrepreneur,Latin American,1768,12871,1,1,0,0,0,0,0,1,1,1
+eb969aef__0,eb969aef,0,2025-12-21,Ethan Caldwell,18-24,Grad Student,North American,491,11563,0,-1,0,0,0,1,0,0,0,0
+eb969aef__1,eb969aef,1,2025-12-27,Ethan Caldwell,18-24,Grad Student,North American,262,11334,0,0,0,0,0,1,0,0,0,0
+eb969aef__2,eb969aef,2,2025-12-28,Ethan Caldwell,18-24,Grad Student,North American,1244,12316,0,0,0,0,0,1,0,0,0,0
+eb969aef__3,eb969aef,3,2026-01-03,Ethan Caldwell,18-24,Grad Student,North American,704,11776,0,0,0,0,0,-1,0,0,0,0
+eb969aef__4,eb969aef,4,2026-01-07,Ethan Caldwell,18-24,Grad Student,North American,886,11958,-1,0,0,0,0,1,0,0,0,0
+eb969aef__5,eb969aef,5,2026-01-14,Ethan Caldwell,18-24,Grad Student,North American,1255,12327,0,0,0,0,0,1,0,0,1,0
+eb969aef__6,eb969aef,6,2026-01-21,Ethan Caldwell,18-24,Grad Student,North American,862,11934,0,0,0,1,0,1,0,0,0,0
+eb969aef__7,eb969aef,7,2026-01-28,Ethan Caldwell,18-24,Grad Student,North American,1357,12429,0,0,0,0,0,1,0,0,0,0
+ed67c9cc__0,ed67c9cc,0,2025-02-02,Lim Sook Yin,55+,Parent (Stay-at-home),East Asian,272,11345,0,0,1,0,0,0,0,0,0,0
+ed67c9cc__1,ed67c9cc,1,2025-02-02,Lim Sook Yin,55+,Parent (Stay-at-home),East Asian,630,11703,0,0,-1,0,0,0,0,0,1,0
+ed67c9cc__2,ed67c9cc,2,2025-02-08,Lim Sook Yin,55+,Parent (Stay-at-home),East Asian,1006,12079,0,0,-1,0,0,0,0,0,1,0
+ed67c9cc__3,ed67c9cc,3,2025-02-09,Lim Sook Yin,55+,Parent (Stay-at-home),East Asian,630,11703,0,0,-1,0,0,0,0,1,0,0
+ed67c9cc__4,ed67c9cc,4,2025-02-11,Lim Sook Yin,55+,Parent (Stay-at-home),East Asian,706,11779,0,0,1,0,0,0,0,0,0,0
+ed67c9cc__5,ed67c9cc,5,2025-02-14,Lim Sook Yin,55+,Parent (Stay-at-home),East Asian,1334,12407,0,0,-1,0,0,0,0,0,1,0
+ed67c9cc__6,ed67c9cc,6,2025-02-16,Lim Sook Yin,55+,Parent (Stay-at-home),East Asian,539,11612,0,0,0,0,0,0,0,0,1,0
+ed67c9cc__7,ed67c9cc,7,2025-02-19,Lim Sook Yin,55+,Parent (Stay-at-home),East Asian,662,11735,0,0,-1,0,0,0,0,0,0,0
+ed67c9cc__8,ed67c9cc,8,2025-02-21,Lim Sook Yin,55+,Parent (Stay-at-home),East Asian,707,11780,0,0,1,0,0,0,0,0,0,0
+f2a0de6f__0,f2a0de6f,0,2025-09-07,Sarah Chen,25-34,Teacher,North American,496,11589,-1,0,0,0,0,0,1,0,1,0
+f2a0de6f__1,f2a0de6f,1,2025-09-08,Sarah Chen,25-34,Teacher,North American,519,11612,1,0,0,0,0,0,0,0,1,0
+f2a0de6f__2,f2a0de6f,2,2025-09-10,Sarah Chen,25-34,Teacher,North American,951,12044,-1,0,0,0,-1,0,1,0,-1,0
+f2a0de6f__3,f2a0de6f,3,2025-09-15,Sarah Chen,25-34,Teacher,North American,260,11353,-1,0,0,-1,0,0,1,0,0,0
+f2a0de6f__4,f2a0de6f,4,2025-09-18,Sarah Chen,25-34,Teacher,North American,820,11913,-1,0,0,0,-1,-1,1,0,0,0
+f2a0de6f__5,f2a0de6f,5,2025-09-19,Sarah Chen,25-34,Teacher,North American,218,11311,0,0,1,0,0,0,0,0,1,0
+f2a0de6f__6,f2a0de6f,6,2025-09-21,Sarah Chen,25-34,Teacher,North American,467,11560,0,0,0,0,0,1,0,0,1,0
+f2a0de6f__7,f2a0de6f,7,2025-09-27,Sarah Chen,25-34,Teacher,North American,1038,12131,-1,0,0,-1,-1,0,1,0,-1,0
+f2a0de6f__8,f2a0de6f,8,2025-09-28,Sarah Chen,25-34,Teacher,North American,297,11390,0,1,1,0,0,1,0,0,1,0
+f2a0de6f__9,f2a0de6f,9,2025-09-29,Sarah Chen,25-34,Teacher,North American,677,11770,-1,0,0,0,0,0,1,1,1,0
+f418b74b__0,f418b74b,0,2025-09-03,Rohan Shetty,25-34,Entrepreneur,South Asian,256,11323,0,0,-1,0,0,0,0,0,0,0
+f418b74b__1,f418b74b,1,2025-09-10,Rohan Shetty,25-34,Entrepreneur,South Asian,633,11700,0,0,-1,0,0,0,0,0,0,0
+f418b74b__2,f418b74b,2,2025-09-11,Rohan Shetty,25-34,Entrepreneur,South Asian,1025,12092,0,0,-1,0,0,0,0,0,0,0
+f418b74b__3,f418b74b,3,2025-09-14,Rohan Shetty,25-34,Entrepreneur,South Asian,1063,12130,0,0,-1,1,0,0,0,0,0,0
+f418b74b__4,f418b74b,4,2025-09-16,Rohan Shetty,25-34,Entrepreneur,South Asian,450,11517,0,0,0,0,0,0,0,0,0,0
+f418b74b__5,f418b74b,5,2025-09-16,Rohan Shetty,25-34,Entrepreneur,South Asian,1036,12103,0,0,-1,0,0,0,0,0,0,0
+f418b74b__6,f418b74b,6,2025-09-16,Rohan Shetty,25-34,Entrepreneur,South Asian,594,11661,0,0,1,0,0,0,0,0,0,0
+f418b74b__7,f418b74b,7,2025-09-17,Rohan Shetty,25-34,Entrepreneur,South Asian,1202,12269,0,0,-1,0,0,0,0,0,0,0
+f6180c27__0,f6180c27,0,2025-07-03,Chen Weimin,45-54,Entrepreneur,East Asian,870,11941,0,0,0,-1,0,0,0,0,1,0
+f6180c27__1,f6180c27,1,2025-07-07,Chen Weimin,45-54,Entrepreneur,East Asian,745,11816,-1,0,0,-1,0,0,0,0,1,0
+f6180c27__2,f6180c27,2,2025-07-13,Chen Weimin,45-54,Entrepreneur,East Asian,1420,12491,0,0,0,1,0,1,1,0,1,0
+f6180c27__3,f6180c27,3,2025-07-19,Chen Weimin,45-54,Entrepreneur,East Asian,180,11251,0,0,0,0,0,0,0,0,1,0
+f6180c27__4,f6180c27,4,2025-07-23,Chen Weimin,45-54,Entrepreneur,East Asian,1118,12189,-1,0,0,1,0,0,1,0,-1,0
+f6180c27__5,f6180c27,5,2025-07-23,Chen Weimin,45-54,Entrepreneur,East Asian,435,11506,0,0,0,1,0,0,0,0,-1,0
+f6180c27__6,f6180c27,6,2025-07-29,Chen Weimin,45-54,Entrepreneur,East Asian,1083,12154,1,0,0,0,0,0,0,0,1,0
+f6180c27__7,f6180c27,7,2025-08-04,Chen Weimin,45-54,Entrepreneur,East Asian,493,11564,0,0,0,1,0,0,0,0,-1,0
+f6180c27__8,f6180c27,8,2025-08-05,Chen Weimin,45-54,Entrepreneur,East Asian,289,11360,0,0,0,0,0,0,0,0,1,0
+f6180c27__9,f6180c27,9,2025-08-07,Chen Weimin,45-54,Entrepreneur,East Asian,1060,12131,0,0,0,0,0,0,0,1,1,0
+f6180c27__10,f6180c27,10,2025-08-14,Chen Weimin,45-54,Entrepreneur,East Asian,586,11657,0,0,0,0,0,0,0,1,1,0
+f79f99b6__0,f79f99b6,0,2025-06-29,Lars Brenner,45-54,Entrepreneur,Western European,1482,12560,1,1,0,1,1,-1,-1,0,0,0
+f79f99b6__1,f79f99b6,1,2025-07-01,Lars Brenner,45-54,Entrepreneur,Western European,1296,12374,1,1,-1,1,0,-1,0,0,-1,0
+f79f99b6__2,f79f99b6,2,2025-07-02,Lars Brenner,45-54,Entrepreneur,Western European,1528,12606,1,1,-1,1,0,-1,0,0,0,0
+f79f99b6__3,f79f99b6,3,2025-07-03,Lars Brenner,45-54,Entrepreneur,Western European,1150,12228,0,-1,0,0,0,0,0,0,1,0
+f79f99b6__4,f79f99b6,4,2025-07-06,Lars Brenner,45-54,Entrepreneur,Western European,938,12016,0,1,0,0,0,0,0,0,1,0
+f79f99b6__5,f79f99b6,5,2025-07-13,Lars Brenner,45-54,Entrepreneur,Western European,1312,12390,1,0,0,-1,0,-1,0,0,0,0
+f79f99b6__6,f79f99b6,6,2025-07-15,Lars Brenner,45-54,Entrepreneur,Western European,161,11239,0,0,1,0,0,0,0,0,0,0
+f79f99b6__7,f79f99b6,7,2025-07-16,Lars Brenner,45-54,Entrepreneur,Western European,1685,12763,1,1,0,0,-1,-1,0,0,0,0
+f990a261__0,f990a261,0,2025-10-07,Brooke Callahan,35-44,Parent (Stay-at-home),North American,979,12087,0,-1,-1,0,0,0,0,0,1,0
+f990a261__1,f990a261,1,2025-10-12,Brooke Callahan,35-44,Parent (Stay-at-home),North American,315,11423,0,-1,-1,0,0,0,0,0,1,0
+f990a261__2,f990a261,2,2025-10-18,Brooke Callahan,35-44,Parent (Stay-at-home),North American,195,11303,1,1,1,0,0,0,0,0,0,0
+f990a261__3,f990a261,3,2025-10-23,Brooke Callahan,35-44,Parent (Stay-at-home),North American,1232,12340,1,1,1,0,0,-1,0,0,0,0
+f990a261__4,f990a261,4,2025-10-28,Brooke Callahan,35-44,Parent (Stay-at-home),North American,1572,12680,-1,-1,-1,0,0,0,0,0,0,0
+f990a261__5,f990a261,5,2025-10-28,Brooke Callahan,35-44,Parent (Stay-at-home),North American,1295,12403,-1,0,-1,0,0,0,1,0,1,0
+f990a261__6,f990a261,6,2025-11-02,Brooke Callahan,35-44,Parent (Stay-at-home),North American,239,11347,0,0,0,0,0,0,0,0,0,0
+f990a261__7,f990a261,7,2025-11-04,Brooke Callahan,35-44,Parent (Stay-at-home),North American,229,11337,1,1,1,1,0,0,0,0,0,0
+f990a261__8,f990a261,8,2025-11-05,Brooke Callahan,35-44,Parent (Stay-at-home),North American,449,11557,-1,-1,-1,0,0,0,0,0,0,0
+f990a261__9,f990a261,9,2025-11-08,Brooke Callahan,35-44,Parent (Stay-at-home),North American,204,11312,0,0,0,0,0,0,0,0,0,0
+f990a261__10,f990a261,10,2025-11-11,Brooke Callahan,35-44,Parent (Stay-at-home),North American,718,11826,-1,-1,-1,0,0,0,0,0,1,0
+f990a261__11,f990a261,11,2025-11-16,Brooke Callahan,35-44,Parent (Stay-at-home),North American,1745,12853,-1,-1,-1,0,0,0,1,0,1,0
+fa7d280a__0,fa7d280a,0,2025-01-20,Gerald Mackie,55+,Grad Student,North American,377,11450,0,0,0,0,0,0,1,0,1,0
+fa7d280a__1,fa7d280a,1,2025-01-23,Gerald Mackie,55+,Grad Student,North American,1301,12374,-1,0,0,0,0,0,1,0,0,0
+fa7d280a__2,fa7d280a,2,2025-01-26,Gerald Mackie,55+,Grad Student,North American,419,11492,-1,0,0,0,0,1,1,0,0,0
+fa7d280a__3,fa7d280a,3,2025-02-02,Gerald Mackie,55+,Grad Student,North American,1160,12233,0,0,0,-1,0,0,1,0,1,0
+fa7d280a__4,fa7d280a,4,2025-02-06,Gerald Mackie,55+,Grad Student,North American,1278,12351,1,0,0,1,0,0,0,0,0,0
+fa7d280a__5,fa7d280a,5,2025-02-07,Gerald Mackie,55+,Grad Student,North American,1600,12673,1,0,0,1,0,0,0,0,0,0
+fa7d280a__6,fa7d280a,6,2025-02-12,Gerald Mackie,55+,Grad Student,North American,1634,12707,-1,0,0,0,0,0,1,0,1,0
+fa7d280a__7,fa7d280a,7,2025-02-15,Gerald Mackie,55+,Grad Student,North American,391,11464,-1,0,0,0,0,0,1,0,0,0
+fa7d280a__8,fa7d280a,8,2025-02-17,Gerald Mackie,55+,Grad Student,North American,1260,12333,1,0,0,1,0,0,0,0,0,0
+fa7d280a__9,fa7d280a,9,2025-02-19,Gerald Mackie,55+,Grad Student,North American,1077,12150,0,0,0,0,0,0,1,0,1,0
+fa7d280a__10,fa7d280a,10,2025-02-21,Gerald Mackie,55+,Grad Student,North American,1485,12558,1,0,0,1,0,0,-1,0,0,0
+fac91d3b__0,fac91d3b,0,2025-05-23,Meenakshi Iyer,45-54,Parent (Stay-at-home),South Asian,1669,12775,-1,0,0,1,1,0,1,0,-1,0
+fac91d3b__1,fac91d3b,1,2025-05-26,Meenakshi Iyer,45-54,Parent (Stay-at-home),South Asian,1264,12370,0,0,0,0,0,1,0,1,1,0
+fac91d3b__2,fac91d3b,2,2025-05-29,Meenakshi Iyer,45-54,Parent (Stay-at-home),South Asian,413,11519,0,0,0,1,0,0,1,1,0,0
+fac91d3b__3,fac91d3b,3,2025-05-30,Meenakshi Iyer,45-54,Parent (Stay-at-home),South Asian,266,11372,0,0,0,0,0,0,1,0,0,0
+fac91d3b__4,fac91d3b,4,2025-06-04,Meenakshi Iyer,45-54,Parent (Stay-at-home),South Asian,643,11749,-1,0,0,0,1,0,1,1,-1,0
+fac91d3b__5,fac91d3b,5,2025-06-08,Meenakshi Iyer,45-54,Parent (Stay-at-home),South Asian,201,11307,0,0,0,1,1,0,0,1,0,0
+fac91d3b__6,fac91d3b,6,2025-06-10,Meenakshi Iyer,45-54,Parent (Stay-at-home),South Asian,363,11469,0,0,0,1,0,-1,0,0,0,0
+fac91d3b__7,fac91d3b,7,2025-06-16,Meenakshi Iyer,45-54,Parent (Stay-at-home),South Asian,1203,12309,0,0,0,1,0,1,1,1,1,0
+fac91d3b__8,fac91d3b,8,2025-06-21,Meenakshi Iyer,45-54,Parent (Stay-at-home),South Asian,884,11990,0,0,0,1,0,0,0,1,1,0
+fac91d3b__9,fac91d3b,9,2025-06-28,Meenakshi Iyer,45-54,Parent (Stay-at-home),South Asian,948,12054,0,0,0,1,0,0,0,0,1,0
+fb28552f__0,fb28552f,0,2025-05-25,Margot Lindqvist,55+,Teacher,Western European,1402,12477,1,1,0,0,0,-1,-1,-1,-1,0
+fb28552f__1,fb28552f,1,2025-06-01,Margot Lindqvist,55+,Teacher,Western European,435,11510,1,1,0,0,0,-1,-1,0,0,0
+fcd73de1__0,fcd73de1,0,2025-01-09,Chen Weiming,45-54,Teacher,East Asian,694,11759,-1,0,0,0,0,0,1,0,1,0
+fcd73de1__1,fcd73de1,1,2025-01-13,Chen Weiming,45-54,Teacher,East Asian,558,11623,-1,-1,0,0,0,1,1,0,0,0
+fcd73de1__2,fcd73de1,2,2025-01-19,Chen Weiming,45-54,Teacher,East Asian,1519,12584,-1,0,0,0,-1,1,1,0,-1,-1
+fcd73de1__3,fcd73de1,3,2025-01-22,Chen Weiming,45-54,Teacher,East Asian,941,12006,-1,-1,0,0,0,1,1,1,0,0
+fd063e8d__0,fd063e8d,0,2025-12-15,Klaus-Dieter Bergmann,55+,Artist,Western European,1492,12579,0,0,1,0,1,0,0,0,-1,0
+fd063e8d__1,fd063e8d,1,2025-12-18,Klaus-Dieter Bergmann,55+,Artist,Western European,1698,12785,0,0,1,1,1,0,0,0,0,0
+fd063e8d__2,fd063e8d,2,2025-12-25,Klaus-Dieter Bergmann,55+,Artist,Western European,137,11224,0,0,1,0,0,0,0,0,-1,0
+fd063e8d__3,fd063e8d,3,2025-12-28,Klaus-Dieter Bergmann,55+,Artist,Western European,1287,12374,0,0,0,0,1,-1,-1,0,0,0
+fd063e8d__4,fd063e8d,4,2025-12-30,Klaus-Dieter Bergmann,55+,Artist,Western European,1235,12322,1,0,0,0,-1,0,0,0,0,0
+fd063e8d__5,fd063e8d,5,2025-12-31,Klaus-Dieter Bergmann,55+,Artist,Western European,860,11947,0,0,1,1,1,0,0,0,0,0
+fd063e8d__6,fd063e8d,6,2026-01-05,Klaus-Dieter Bergmann,55+,Artist,Western European,1207,12294,1,0,1,0,-1,0,0,0,0,0
+fd063e8d__7,fd063e8d,7,2026-01-12,Klaus-Dieter Bergmann,55+,Artist,Western European,1805,12892,1,0,0,1,-1,0,0,0,0,1
+fd97883e__0,fd97883e,0,2025-12-01,Mei-Lin Chen,35-44,Parent (Stay-at-home),East Asian,572,11673,0,0,0,1,0,0,1,1,1,0
+fd97883e__1,fd97883e,1,2025-12-03,Mei-Lin Chen,35-44,Parent (Stay-at-home),East Asian,671,11772,0,0,0,1,0,1,0,0,1,0
+fd97883e__2,fd97883e,2,2025-12-09,Mei-Lin Chen,35-44,Parent (Stay-at-home),East Asian,1066,12167,-1,0,-1,1,0,0,1,0,1,0
+fd97883e__3,fd97883e,3,2025-12-16,Mei-Lin Chen,35-44,Parent (Stay-at-home),East Asian,1578,12679,-1,0,0,1,0,1,1,1,1,0
+fd97883e__4,fd97883e,4,2025-12-26,Mei-Lin Chen,35-44,Parent (Stay-at-home),East Asian,362,11463,0,0,0,0,0,0,1,0,-1,0
+fd97883e__5,fd97883e,5,2025-12-28,Mei-Lin Chen,35-44,Parent (Stay-at-home),East Asian,578,11679,0,0,0,1,1,0,0,0,-1,0
+fd97883e__6,fd97883e,6,2026-01-03,Mei-Lin Chen,35-44,Parent (Stay-at-home),East Asian,1493,12594,1,0,1,-1,0,0,0,0,1,0
+fec355ea__0,fec355ea,0,2025-02-25,Ryan Cheswick,35-44,Manager,North American,1429,12489,-1,0,0,0,-1,0,1,0,0,0
+fec355ea__1,fec355ea,1,2025-03-04,Ryan Cheswick,35-44,Manager,North American,935,11995,0,0,0,-1,-1,0,0,0,0,0
+fec355ea__2,fec355ea,2,2025-03-09,Ryan Cheswick,35-44,Manager,North American,327,11387,-1,0,0,0,-1,0,1,0,0,0
+fec355ea__3,fec355ea,3,2025-03-15,Ryan Cheswick,35-44,Manager,North American,1110,12170,0,0,0,1,1,0,0,0,0,0
+fec355ea__4,fec355ea,4,2025-03-22,Ryan Cheswick,35-44,Manager,North American,899,11959,0,0,0,1,1,0,0,0,0,0
+fec355ea__5,fec355ea,5,2025-03-26,Ryan Cheswick,35-44,Manager,North American,601,11661,0,0,0,0,-1,0,1,0,0,0

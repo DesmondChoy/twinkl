@@ -1,0 +1,12 @@
+{
+  "status": "summarized",
+  "invalidated": false,
+  "warning": "",
+  "generated_at": "2026-03-20T06:57:01.700132+00:00",
+  "prompt_condition": "profile_only",
+  "bundle_mode": "full",
+  "selected_entry_count": 1651,
+  "expected_total_entries": 1651,
+  "selection_summary": null,
+  "merged_at": "2026-03-26T15:01:39.556723+00:00"
+}

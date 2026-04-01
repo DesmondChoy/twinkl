@@ -19,6 +19,8 @@
 
 > **Active recommendation (2026-03-19):** `run_019`-`run_021` remain the default corrected-split frontier family. The new two-stage reformulation family `run_045`-`run_047` reached comparable median holdout `qwk_mean` (`0.360` vs `0.362`) and the best calibration on the current board (`0.743`), but it gave back too much `recall_-1` (`0.266`) and hedging (`0.708`). `run_034`-`run_036` remain the best tail-sensitive reference branch, and `run_042`-`run_044` remain the strongest encoder-swap challenger.
 >
+> **Latest consensus-label retrain diagnostic review:** [`reports/experiment_review_2026-04-01_twinkl_754_6.md`](reports/experiment_review_2026-04-01_twinkl_754_6.md) did **not** change the frontier. `run_048`-`run_050` improved median consensus-label holdout QWK to `0.372` and calibration to `0.770`, but the branch changed the evaluation labels on the same frozen holdout (`17` `hedonism`, `27` `security`, and `13` `stimulation` test entries were relabeled), so it is not a like-for-like replacement for the persisted-label board. Inside that diagnostic regime it still regressed on `recall_-1` (`0.270`), minority recall (`0.408`), and `hedonism qwk` (`0.104` median). Keep `run_019`-`run_021` active, and treat consensus labels as a diagnostic branch until a same-code persisted-label sibling rerun or soft-label variant is evaluated.
+>
 > **Latest two-stage reformulation review:** [`reports/experiment_review_2026-03-19_twinkl_746.md`](reports/experiment_review_2026-03-19_twinkl_746.md) did **not** change the frontier. `TwoStageBalancedSoftmax` improved activation precision, kept active-sign accuracy competitive, and materially lifted `stimulation`, but the branch still missed too many active hard-dimension cases: family-median `recall_-1` fell from incumbent `0.313` to `0.266`, minority recall fell to `0.382`, and hedging rose to `70.8%`. Treat it as a useful structural diagnostic branch rather than a new default or reserve replacement.
 >
 > **Latest controlled Qwen frontier rerun review:** [`reports/experiment_review_2026-03-18_twinkl_744.md`](reports/experiment_review_2026-03-18_twinkl_744.md) did **not** change the active default, but it did materially upgrade the status of the encoder branch. `run_042`-`run_044` confirmed that Qwen is a legitimate family rather than a one-off near-miss: median holdout `qwk_mean` reached `0.370`, median `recall_-1` stayed at `0.318`, and hedging stayed lower than the incumbent. But the family still gives back too much on `hedonism` and `power`, so keep it as the strongest representation challenger rather than the new default.
@@ -189,11 +191,39 @@
 | 045 | TwoStageBalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | two_stage_balanced_softmax | 24104 | 19.9 | 0.268 | 0.787 | 0.393 | 0.371 | 0.758 | 0.404 | 0.051 | 0.077 | runs/run_045_TwoStageBalancedSoftmax.yaml |
 | 046 | TwoStageBalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | two_stage_balanced_softmax | 24104 | 19.9 | 0.267 | 0.788 | 0.360 | 0.351 | 0.743 | 0.382 | 0.063 | 0.071 | runs/run_046_TwoStageBalancedSoftmax.yaml |
 | 047 | TwoStageBalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | two_stage_balanced_softmax | 24104 | 19.9 | 0.270 | 0.779 | 0.339 | 0.353 | 0.737 | 0.373 | 0.073 | 0.070 | runs/run_047_TwoStageBalancedSoftmax.yaml |
+| 048 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.275 | 0.781 | 0.372 | 0.363 | 0.778 | 0.389 | 0.044 | 0.062 | runs/run_048_BalancedSoftmax.yaml |
+| 049 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.253 | 0.803 | 0.369 | 0.362 | 0.770 | 0.408 | 0.047 | 0.058 | runs/run_049_BalancedSoftmax.yaml |
+| 050 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.285 | 0.768 | 0.393 | 0.382 | 0.724 | 0.480 | 0.069 | 0.086 | runs/run_050_BalancedSoftmax.yaml |
 <!-- AUTO-TABLE:END -->
 
 > **Contributor note:** Keep this section in **newest-first** chronological order (most recent date at top).
 
 ## Findings
+
+### 2026-04-01 — Consensus-label retrains are informative diagnostics, not a clean frontier board (`twinkl-754.6`)
+
+`twinkl-754.6` reran the active `BalancedSoftmax` recipe with
+`consensus_labels.parquet` across seeds `11/22/33` (`run_048`-`run_050`) on the
+same corrected-split holdout IDs. The family improved consensus-label holdout
+surface metrics such as median `qwk_mean` (`0.372`), accuracy (`0.781`),
+calibration (`0.770`), and circumplex cleanliness, and it materially lifted
+`stimulation`.
+
+That still does **not** make it the new frontier. The branch changed the
+evaluation labels on the same holdout, so its results are not directly
+comparable to the persisted-label board. On the fixed 221-row test split,
+consensus relabeled `17` `hedonism`, `27` `security`, and `13` `stimulation`
+entries. Inside that diagnostic regime, the family also stayed too conservative:
+median `recall_-1` fell to `0.270`, minority recall fell to `0.408`, hedging
+rose to `65.5%`, and `hedonism qwk` collapsed to `0.104`.
+
+The updated recommendation is therefore narrow and explicit: keep
+`run_019`-`run_021` as the active corrected-split default, do **not** add the
+consensus family to the active frontier board, and use the new review to drive
+a cleaner next ablation. The highest-leverage follow-up is a same-code sibling
+rerun with persisted labels plus a confidence-tiered or soft-label variant so
+we can separate true learning gains from relabeling gains. Full details:
+[`reports/experiment_review_2026-04-01_twinkl_754_6.md`](reports/experiment_review_2026-04-01_twinkl_754_6.md).
 
 ### 2026-03-18 — Qwen graduates from single-seed near-miss to real frontier challenger (`twinkl-744`)
 
