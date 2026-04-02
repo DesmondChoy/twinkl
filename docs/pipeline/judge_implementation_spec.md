@@ -22,7 +22,7 @@ This document specifies the **Reward Model (LLM-as-Judge)** component that produ
 
 When validating Judge labels, human annotators **must read entries in chronological order** and consider the cumulative context. Labeling entries in isolation will produce systematic disagreements.
 
-See also: [`annotation_guidelines.md`](../synthetic_data/annotation_guidelines.md) for human annotation methodology.
+See also: [`annotation_guidelines.md`](annotation_guidelines.md) for human annotation methodology.
 
 ---
 

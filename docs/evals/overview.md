@@ -69,10 +69,10 @@ judge_validation_eval  ─┐
 
 | Eval | Status | Evidence | Remaining Work |
 |------|--------|----------|----------------|
-| Judge Validation | 🟢 Operational | 1 651 labels across 204 personas; 3 annotators × 46 entries; aggregate Cohen's κ 0.57–0.76 ([report](../../logs/exports/agreement_report_20260128_133444.md)) | Automated quality checks (all-zero rate, sparsity) |
-| Value Modeling | 🟡 In Progress | 27 run IDs / 91 persisted configs; active corrected-split frontier is `run_019`-`run_021` BalancedSoftmax with median QWK **0.362**, `recall_-1` **31.3%**, minority recall **44.8%**, and logged circumplex summaries. `run_025`-`run_027` did not replace it ([experiment index](../../logs/experiments/index.md)) | Improve Security/Hedonism without giving back QWK or circumplex structure; persona-level aggregation for Top-K accuracy |
+| Judge Validation | 🟢 Operational | 1 651 labels across 204 personas; the current shared 115-entry / 19-persona benchmark yields Fleiss' κ **0.56** and avg Judge-human Cohen's κ **0.66** ([report](../../logs/exports/agreement_report_20260318_130642.md)). Later reachability and consensus audits add hard-dimension caveats. | Automated quality checks (all-zero rate, sparsity); continue hard-dimension label refinement after `twinkl-747` / `twinkl-754` |
+| Value Modeling | 🟡 In Progress | Experiment archive now spans 50 run IDs / 114 persisted configs; active corrected-split frontier is `run_019`-`run_021` BalancedSoftmax with median QWK **0.362**, `recall_-1` **31.3%**, minority recall **44.8%**, and logged circumplex summaries. Later diagnostics did not replace it ([experiment index](../../logs/experiments/index.md)). | Improve Security/Hedonism without giving back QWK or circumplex structure; persona-level aggregation for Top-K accuracy |
 | Drift Detection | 🟡 Partial | Critic trained + MC Dropout implemented ([`src/vif/critic.py`](../../src/vif/critic.py)); runtime inference, evolution classification, and crash/rut trigger code now exist in `src/vif/` | Critic QWK too low for reliable triggers; threshold calibration; crisis-injection test data; end-to-end evaluation metrics |
-| Explanation Quality | 🟡 Partial | 133/134 rationales stored in parquet; display UI operational | Tier 1 automated checks (groundedness, circularity, length) |
+| Explanation Quality | 🟡 Partial | 1 594 / 1 651 entries have rationales stored in parquet; display UI operational | Tier 1 automated checks (groundedness, circularity, length) |
 
 See each eval file's **Implementation Status** section for detailed breakdowns.
 

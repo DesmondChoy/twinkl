@@ -1,8 +1,8 @@
 # Judge Validation Summary
 
-**Last Updated:** 2026-03-18
+**Last Updated:** 2026-04-02
 
-**Purpose:** This document summarizes inter-rater reliability findings to support the academic claim that LLM Judge labeling is at least as reliable as human annotation, justifying automated labeling at scale for VIF training data.
+**Purpose:** This document summarizes inter-rater reliability findings for the shared human-annotation subset. The results support using the LLM Judge as a scalable supervision source for the POC, while later reachability and consensus audits add important caveats for the hardest dimensions and for student-label reachability.
 
 **Analysis Source:** `src/annotation_tool/agreement_metrics.py`
 **Full Report:** `logs/exports/agreement_report_20260318_130642.md`
@@ -19,7 +19,7 @@
 | **Human-Human Agreement** (Fleiss' κ) | 0.56 | Moderate |
 | **Judge-Human Agreement** (Avg Cohen's κ) | 0.66 | Substantial |
 
-**Conclusion:** The Judge exceeds human-human consistency across 9 of 10 Schwartz value dimensions, demonstrating that automated labeling produces training data at least as reliable as human annotation.
+**Conclusion:** On the shared 115-entry subset, the Judge exceeds human-human consistency across 9 of 10 Schwartz value dimensions. This supports using automated labeling as a scalable supervision source for the POC, while later audits show that aggregate agreement alone does not guarantee that every hard-dimension label is a clean distillation target for the current student.
 
 #### Why This Matters
 
@@ -31,7 +31,7 @@ The key insight is that **Fleiss' κ (0.56) establishes the ceiling of human con
 2. **The Judge may capture consensus**---its labels likely approximate what a majority of humans would agree on, even when individual humans disagree
 3. **Automated labels are defensible**---if we trust human-labeled data for training, we can trust Judge-labeled data at least as much, since the Judge is more consistent with humans than they are with themselves
 
-In practical terms: replacing human annotation with Judge labeling at scale does not degrade training data quality---it may even *reduce* noise from inter-annotator variability.
+In practical terms: the Judge is strong enough to replace large-scale manual labeling for most dimensions in the current POC, and it may even *reduce* some inter-annotator noise. However, the later `twinkl-747` reachability audit and `twinkl-754` consensus re-judging work show that a few hard dimensions, especially `Security`, still require tighter target design and follow-up analysis.
 
 #### Diagnostic Framework
 

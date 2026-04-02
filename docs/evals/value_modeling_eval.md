@@ -8,14 +8,14 @@ The VIF (Value Identity Function) maps journal entries to a 10-dimensional Schwa
 
 ## Implementation Status
 
-**Status:** 🟡 In Progress (as of 2026-03-09)
+**Status:** 🟡 In Progress (as of 2026-04-02)
 
 ### What's Implemented
 - Evaluation specification complete (this document)
 - Judge training data: 1 651 labeled entries across 204 personas in [`logs/judge_labels/judge_labels.parquet`](../../logs/judge_labels/judge_labels.parquet)
 - Ground truth value orderings embedded in persona bios
 - Critic architecture: MLP ordinal ([`src/vif/critic_ordinal.py`](../../src/vif/critic_ordinal.py)) and BNN ([`src/vif/critic_bnn.py`](../../src/vif/critic_bnn.py))
-- Training pipeline spans 27 run IDs / 91 persisted run configs, including CORAL, CORN, EMD, CDW-CE, SoftOrdinal, BalancedSoftmax, LDAM-DRW, and legacy weighted-MSE baselines ([`logs/experiments/index.md`](../../logs/experiments/index.md))
+- Experiment archive spans 50 run IDs / 114 persisted run configs, including CORAL, CORN, EMD, CDW-CE, SoftOrdinal, BalancedSoftmax, LDAM-DRW, TwoStageBalancedSoftmax, SLACE, encoder diagnostics, and legacy weighted-MSE baselines ([`logs/experiments/index.md`](../../logs/experiments/index.md))
 - Text and state encoders: nomic-embed-text-v1.5, MiniLM ([`src/vif/encoders.py`](../../src/vif/encoders.py))
 - Evaluation metrics: QWK, Spearman ρ, MAE, calibration, per-dimension recall, raw ordinal exports, and compact circumplex diagnostics ([`src/vif/eval.py`](../../src/vif/eval.py))
 - Current corrected-split default: `run_019`-`run_021` BalancedSoftmax — median QWK **0.362**, median `recall_-1` **0.313**, median minority recall **0.448**, median hedging **0.621**, median calibration **0.713**

@@ -14,7 +14,7 @@ The VIF detects when a user's behavior drifts from their declared values. This e
 - Evaluation specification complete (this document)
 - Conceptual design documented in [`docs/vif/04_uncertainty_logic.md`](../vif/04_uncertainty_logic.md)
 - Trigger formulas defined (Crash: V_{t-1} - V_t > δ, Rut: sustained low)
-- Trained Critic models: 27 run IDs / 91 persisted configs across the corrected-split regime and targeted-lift follow-ups ([`logs/experiments/index.md`](../../logs/experiments/index.md))
+- Experiment archive: 50 run IDs / 114 persisted configs, with corrected-split frontier runs and later diagnostics tracked in [`logs/experiments/index.md`](../../logs/experiments/index.md)
 - MC Dropout uncertainty estimation: [`src/vif/critic.py:predict_with_uncertainty()`](../../src/vif/critic.py) and [`src/vif/eval.py:evaluate_with_uncertainty()`](../../src/vif/eval.py)
 - Calibration and circumplex summaries implemented and tracked per run in the experiment index and run YAMLs
 

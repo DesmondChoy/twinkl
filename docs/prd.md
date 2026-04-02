@@ -6,14 +6,14 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 
 ## Implementation Status
 
-*Last updated: 2026-03-20*
+*Last updated: 2026-04-02*
 
 | Feature | Status | Details |
 |---------|--------|---------|
 | **Synthetic Data Pipeline** | ✅ Complete | 204 personas (1,651 entries) generated via Claude Code parallel subagents; YAML prompt templates with Jinja2; targeted value generation now supports family-specific tension banks, frozen-holdout experiments, and judged acceptance gates for hard-dimension batches |
 | **Judge Labeling (VIF)** | ✅ Complete | 1,651 entries labeled across 204 personas; two-phase pipeline (Python wrangling + parallel subagents); consolidated to `judge_labels.parquet` with rationales. A completed reachability audit (`twinkl-747`) found that the stored hard-dimension labels, especially `security`, are not the right distillation target for the current student because many sampled labels are not reproducible from the current judge path or the student-visible context. |
-| **VIF Critic Training** | 🧪 Experimental | Training stack complete with ordinal MLP heads, BNN baseline, and configurable sentence encoders (`nomic` active default; MiniLM/mpnet ablations). Corrected-split multi-seed experiments are logged across 27 run IDs / 91 persisted configs; `run_019`-`run_021` BalancedSoftmax remains the frontier reference point for the pre-audit target, but the completed `twinkl-747` reachability audit recommends changing the distillation target before the next hard-dimension training cycle, with `security` as the highest-priority rebase. |
-| **Human Annotation Tool** | ✅ Complete | ~4,200 LOC Shiny app; 46 annotations across 3 annotators; Cohen's κ / Fleiss' κ metrics; modular components with analysis view; annotation ordering for persona prioritization |
+| **VIF Critic Training** | 🧪 Experimental | Training stack complete with ordinal MLP heads, BNN baseline, and configurable sentence encoders (`nomic` active default; MiniLM/mpnet ablations). The experiment archive now contains 50 run IDs / 114 persisted run configs; `run_019`-`run_021` BalancedSoftmax remains the corrected-split frontier reference point for the pre-audit target, but the completed `twinkl-747` reachability audit recommends changing the distillation target before the next hard-dimension training cycle, with `security` as the highest-priority rebase. |
+| **Human Annotation Tool** | ✅ Complete | ~4,200 LOC Shiny app; 380 saved annotations across 24 personas, with a 115-entry shared subset across 19 personas used for the current inter-rater agreement benchmark; Cohen's κ / Fleiss' κ metrics; modular components with analysis view; annotation ordering for persona prioritization |
 | **Conversational Nudging** | 🧪 Experimental | 3-category LLM classification (clarification/elaboration/tension-surfacing); pending validation that nudging improves VIF signal quality |
 | **Drift Detection Engine** | 🧪 Experimental | Runtime bridge now exists from Critic checkpoint inference -> weekly VIF signals -> evolution filter -> uncertainty-gated crash/rut detection -> structured drift result for the Coach. Thresholds and evaluation coverage are still experimental and need calibration before production use. |
 | **Weekly Alignment Coach** | 🧪 Experimental | Weekly digest generation is implemented and can now build from live VIF signal artifacts plus upstream drift output. Narrative generation, validation depth, and trigger calibration are still being refined. |
@@ -28,7 +28,7 @@ logs/
 ├── synthetic_data/     # 204 persona markdown files
 ├── wrangled/           # 204 cleaned files (generation metadata stripped)
 ├── judge_labels/       # 204 JSON label files + consolidated parquet
-├── annotations/        # 3 annotator parquet files (46 entries each)
+├── annotations/        # 3 annotator parquet files (380 saved annotations; 115-entry shared subset)
 └── registry/           # personas.parquet (tracks pipeline stages)
 
 models/
@@ -141,7 +141,7 @@ This onboarding directly anchors the capstone submodules: the latent dimensions 
    * **State representation:** sliding window of N recent entry embeddings + time deltas + a 10-dim value-weight vector, with zero-padding for early timesteps and no label-derived history features at inference time.
 5. Implement **[Reward Modeling (LLM-as-Judge)](vif/03_model_training.md):** For each entry, the Judge outputs per-dimension categorical alignment labels in `{-1, 0, +1}` with rationales. Use synthetic personas for initial training/validation.
 
-   > **Status:** Steps 1-5 complete (204 personas, 1,651 labeled entries). Human annotation tool operational with 46 annotations for inter-rater agreement. Multiple Critic architectures evaluated (ordinal MLP heads, BNN, TCN). See [Implementation Status](#implementation-status) for current progress. Step 6 (lightweight classifiers) remains deferred pending Critic training results.
+   > **Status:** Steps 1-5 complete (204 personas, 1,651 labeled entries). Human annotation tool is operational with 380 saved annotations, including the current 115-entry shared subset used for inter-rater agreement. Multiple Critic architectures have been evaluated (ordinal MLP heads, BNN, TCN). See [Implementation Status](#implementation-status) for current progress. Step 6 (lightweight classifiers) remains deferred pending Critic training results.
 
 6. Tooling: start with API LLM for tagging + reflection, add lightweight classifiers later if needed; keep reasoning layer explainable for XRAI.
 7. Evaluation plan: combine Likert feedback on "felt accurate?" with inter-rater agreement on value tags and stability metrics for the profile.

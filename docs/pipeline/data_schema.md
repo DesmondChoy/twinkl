@@ -196,7 +196,7 @@ Based on the current committed corpus:
 - 1,651 labeled journal entries in `logs/judge_labels/judge_labels.parquet`
 - Average of 8.1 entries per persona (range: 2-12)
 - 292 total core-value assignments across personas
-- 1,028 entries with generated nudges in `logs/synthetic_data/` (62.3% of all entries)
+- 1,040 entries with generated nudges in `logs/synthetic_data/` (63.0% of all entries)
 
 ### Overall Label Balance
 
