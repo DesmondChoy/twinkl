@@ -7,7 +7,7 @@
 flowchart TB
     subgraph offline["OFFLINE (Training Data Generation)"]
         generator[Generator<br/>LLM]
-        encoder1[Text Encoder<br/>SBERT<br/>Frozen]
+        encoder1[Text Encoder<br/>Nomic v1.5, 256d]
         judge[Judge<br/>LLM-as-Judge]
         stateBuilder[State Construction<br/>Sliding Window + History]
         dataset[StateTargetSample<br/>state, target pairs]
