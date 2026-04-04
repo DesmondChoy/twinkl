@@ -13,20 +13,24 @@ The Judge (LLM-as-Judge) produces training labels for the VIF. This evaluation v
 ### What's Implemented
 - Judge labeling pipeline operational ([`src/judge/consolidate.py`](../../src/judge/consolidate.py))
 - 1 651 labeled entries across 204 personas in [`logs/judge_labels/judge_labels.parquet`](../../logs/judge_labels/judge_labels.parquet)
+- 1 651 confidence-tiered consensus labels in [`logs/judge_labels/consensus_labels.parquet`](../../logs/judge_labels/consensus_labels.parquet)
 - Data models with rationale support ([`src/models/judge.py`](../../src/models/judge.py))
 - Human annotation tool ([`src/annotation_tool/app.py`](../../src/annotation_tool/app.py))
 - 3 annotators × 115 shared entries across 19 personas (des, jl, km) in [`logs/annotations/`](../../logs/annotations/)
 - Cohen's κ and Fleiss' κ calculation ([`src/annotation_tool/agreement_metrics.py`](../../src/annotation_tool/agreement_metrics.py))
 - Agreement report: avg Cohen's κ 0.66, Fleiss' κ 0.56 ([report](../../logs/exports/agreement_report_20260318_130642.md))
+- Reachability audit completed for hard dimensions with a recommendation to change the distillation target for `security` and use targeted relabeling for `hedonism` / `stimulation` ([report](../../logs/exports/twinkl_747/reachability_audit_report.md))
+- Repeated-call self-consistency and full-corpus stability analysis completed via the 5-pass `twinkl-754` rerun ([report](../../logs/exports/twinkl_754/consensus_rejudging_report.md))
 
 ### What's Missing
 - Automated quality checks (all-zero rate, sparsity, distribution)
-- Consistency checks (re-running same entry multiple times)
+- Hard-dimension target redesign and follow-up relabeling after the `twinkl-747` / `twinkl-754` findings
 
 ### Next Steps
-1. Review low-agreement values (Conformity, Self-Direction, Achievement) and refine rubrics
-2. Add automated quality checks as post-labeling validation
-3. Re-annotate subset after rubric improvements to measure κ improvement
+1. Add automated quality checks as post-labeling validation
+2. Use the `twinkl-747` findings to redesign or relabel hard-dimension targets, especially `security`
+3. Build the matched hard-set follow-up in `twinkl-748` so hard cases can be audited and re-evaluated more cleanly
+4. Re-annotate a subset after rubric / target improvements to measure κ improvement
 
 ---
 
@@ -113,9 +117,9 @@ Reports are saved to `logs/exports/agreement_report_<timestamp>.md`.
 
 ### 2. Internal Consistency
 
-Check that the Judge produces consistent scores for similar entries:
+Check that the Judge produces consistent scores when the same workflow is rerun:
 
-- **Same entry, multiple runs**: Run Judge on same entry 3x with temperature=0. All scores should match.
+- **Repeated-call reruns**: `twinkl-754` reran the profile-only Judge workflow 5 times over all 1,651 entries and measured per-dimension Fleiss' κ from **0.775** (`security`) to **0.890** (`universalism`). This is now the main consistency benchmark in the repo.
 - **Semantically similar entries**: Paraphrased versions of same content should get same scores.
 
 ### 3. Calibration Checks
@@ -250,7 +254,7 @@ def validate_judge_output(labels_df):
 |--------|--------|-----------|
 | Fleiss' κ (human vs human) | > 0.60 | Humans must agree before evaluating Judge |
 | Cohen's κ (human vs Judge) | > 0.60 | Substantial agreement with human intuition |
-| Internal consistency | 100% | Same entry → same scores |
+| Repeated-call self-consistency | Fleiss' κ > 0.75 | The same judge workflow should remain strongly stable when rerun on the same data |
 | All-zero rate | < 30% | Most entries have signal |
 | Per-persona sparsity | < 20% with >80% zeros | Personas should show patterns |
 

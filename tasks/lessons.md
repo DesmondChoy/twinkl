@@ -84,3 +84,12 @@
   closing the issue or epic and before reporting conclusions. Do not rely on
   "roughly equivalent" manual analysis and wait for the user to notice the
   missing workflow step.
+
+## 2026-04-04
+
+- When syncing docs, distinguish carefully between prototype code that exists in
+  the repo and project scope that is actually decided. Do not document an idea
+  as implemented, or as an active planned dependency, unless the user or the
+  authoritative project docs clearly treat it that way. In this repo, evolution
+  gating should be described as an undecided idea unless explicitly confirmed
+  otherwise.

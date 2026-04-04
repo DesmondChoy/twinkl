@@ -19,23 +19,27 @@ This evaluation validates that explanations feel accurate and actionable to user
 - Rationale storage in [`logs/judge_labels/judge_labels.parquet`](../../logs/judge_labels/judge_labels.parquet)
 - Rationale display UI in annotation tool ([`src/annotation_tool/components/modals.py`](../../src/annotation_tool/components/modals.py))
 - Judge comparison view ([`src/annotation_tool/components/comparison_view.py`](../../src/annotation_tool/components/comparison_view.py))
+- Weekly Coach narrative generation and persistence in [`src/coach/weekly_digest.py`](../../src/coach/weekly_digest.py) and [`src/coach/runtime.py`](../../src/coach/runtime.py)
+- Tier 1 Coach narrative checks are implemented: groundedness via quoted substring matches, non-circularity via score-jargon avoidance, and length bounds via [`validate_weekly_digest_narrative()`](../../src/coach/weekly_digest.py)
 
 ### What's Missing
-- **Tier 1:** Groundedness checker, non-circularity check, length validation (code checks)
+- **Tier 1 for Judge rationales:** No batch checker/report yet in `src/judge/`
+- **Tier 1 reporting for Coach narratives:** Validation code exists, but there is no committed benchmark summary with pass rates across a digest set
 - **Tier 2:** Meta-judge LLM evaluation pipeline
 - **Tier 3:** Human calibration protocol and κ calculation
 
 ### Blocking Dependencies
-None — Tier 1 automated checks can be implemented immediately using existing rationale data.
+Tier 1 Coach checks are unblocked and implemented. Deeper end-to-end explanation evaluation still depends on stable upstream drift signals plus explicit explainability hooks from Critic outputs into Coach evidence selection (`twinkl-3sg`).
 
 ### Initial Implementation Scope
-Tier 1 automated checks are the target for the initial Coach digest release. Tier 2 (meta-judge) and Tier 3 (human calibration) are designed for later validation phases and are not blocking the initial implementation.
+The initial implementation landed on the user-facing Coach path first: weekly digest generation plus Tier 1 narrative validation are now in code. The analogous batch checker for Judge rationales remains planned, while Tier 2 (meta-judge) and Tier 3 (human calibration) stay as later validation phases.
 
 ### Next Steps
-1. Implement Tier 1 checks in `src/judge/` (groundedness, circularity, length)
-2. Run Tier 1 on existing 1,594 rationales, report pass rates
-3. *(Future phase)* Design meta-judge prompt for Tier 2 evaluation
-4. *(Future phase)* Sample 20-30 rationales for Tier 3 human calibration
+1. Add a batch Tier 1 checker for Judge rationales in `src/judge/` and run it over the existing 1,594 rationale-bearing rows
+2. Run the existing Coach Tier 1 validation over a real weekly digest set and publish pass-rate summaries
+3. Add explainability hooks from Critic outputs to Coach evidence selection (`twinkl-3sg`) so explanation evaluation can inspect why a dimension was surfaced
+4. *(Future phase)* Design a meta-judge prompt for Tier 2 evaluation
+5. *(Future phase)* Sample 20-30 explanations for Tier 3 human calibration
 
 ---
 
@@ -57,7 +61,7 @@ For each alignment score, the Judge provides a rationale:
 - Explains *why* the score was assigned
 - Ties behavior to the value dimension
 
-### Coach Narratives (Future)
+### Coach Narratives (Implemented, Experimental)
 
 Weekly summaries that synthesize patterns:
 
@@ -70,6 +74,8 @@ cancelled on a friend Saturday. This pattern has appeared in 3 of the last 4 wee
 - Cites specific evidence from journal entries
 - Identifies patterns over time (not just single entries)
 - Avoids prescriptive or judgmental language
+
+The offline runtime path for this now exists in `src/coach/weekly_digest.py` and `src/coach/runtime.py`, but the evaluation layer is still incomplete: Tier 1 checks are implemented, while benchmark pass-rate reporting and user-study calibration are still pending.
 
 ---
 
@@ -113,21 +119,14 @@ Fast, objective checks that don't require LLM calls:
 | **Non-circularity** | % that don't contain the value name itself | > 95% |
 | **Length** | Flag too-short (<10 words) or too-long (>50 words) | 90% in range |
 
-**Implementation:**
-```python
-def check_groundedness(rationale: str, entry_text: str) -> bool:
-    """Check if rationale contains verifiable content from entry."""
-    # Extract quoted phrases from rationale
-    quotes = re.findall(r'"([^"]+)"', rationale)
-    if not quotes:
-        return False  # No quotes = not grounded
-    return any(quote.lower() in entry_text.lower() for quote in quotes)
+**Current code status:**
+- Coach narratives: implemented today in `validate_weekly_digest_narrative()` inside [`src/coach/weekly_digest.py`](../../src/coach/weekly_digest.py)
+- Judge rationales: still planned as a batch checker in `src/judge/`
 
-def check_non_circularity(rationale: str, value_name: str) -> bool:
-    """Check if rationale avoids using the value name."""
-    # Normalize: "self_direction" -> ["self", "direction"]
-    terms = value_name.replace("_", " ").split()
-    return not any(term.lower() in rationale.lower() for term in terms)
+**Reference implementation shape:**
+```python
+validation = validate_weekly_digest_narrative(digest, narrative)
+results = {check.name: check.passed for check in validation.checks}
 ```
 
 #### Tier 2: Meta-Judge Evaluation (LLM-Based)

@@ -6,7 +6,7 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 
 ## Implementation Status
 
-*Last updated: 2026-04-02*
+*Last updated: 2026-04-04*
 
 | Feature | Status | Details |
 |---------|--------|---------|
@@ -15,7 +15,7 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 | **VIF Critic Training** | 🧪 Experimental | Training stack complete with ordinal MLP heads, BNN baseline, and configurable sentence encoders (`nomic` active default; MiniLM/mpnet ablations). The experiment archive now contains 50 run IDs / 114 persisted run configs; `run_019`-`run_021` BalancedSoftmax remains the corrected-split frontier reference point for the pre-audit target, but the completed `twinkl-747` reachability audit recommends changing the distillation target before the next hard-dimension training cycle, with `security` as the highest-priority rebase. |
 | **Human Annotation Tool** | ✅ Complete | ~4,200 LOC Shiny app; 380 saved annotations across 24 personas, with a 115-entry shared subset across 19 personas used for the current inter-rater agreement benchmark; Cohen's κ / Fleiss' κ metrics; modular components with analysis view; annotation ordering for persona prioritization |
 | **Conversational Nudging** | 🧪 Experimental | 3-category LLM classification (clarification/elaboration/tension-surfacing); pending validation that nudging improves VIF signal quality |
-| **Drift Detection Engine** | 🧪 Experimental | Runtime bridge now exists from Critic checkpoint inference -> weekly VIF signals -> evolution filter -> uncertainty-gated crash/rut detection -> structured drift result for the Coach. Thresholds and evaluation coverage are still experimental and need calibration before production use. |
+| **Drift Detection Engine** | 🧪 Experimental | Runtime bridge now exists from Critic checkpoint inference -> weekly VIF signals -> uncertainty-gated crash/rut-style detection experiments -> structured drift result for the Coach. Thresholds and evaluation coverage are still experimental and need calibration before production use. A separate value-evolution filter is still only a design idea and is not part of the current committed scope. |
 | **Weekly Alignment Coach** | 🧪 Experimental | Weekly digest generation is implemented and can now build from live VIF signal artifacts plus upstream drift output. Narrative generation, validation depth, and trigger calibration are still being refined. |
 | **Onboarding (BWS Values Assessment)** | 📋 Specified | 6-set BWS flow over 10 Schwartz dimensions; PVQ21-adapted card phrases; mid-flow + end-of-flow reflective mirrors; 6 structured goal categories mapping to Coach monitoring priorities; scoring with confidence estimation and user refinement support; [full spec](onboarding/onboarding_spec.md) |
 | **Embedding Explorer** | ✅ Complete | Interactive 3D visualization of VIF hidden-layer and SBERT embedding spaces; self-contained HTML with Three.js |
@@ -87,7 +87,7 @@ AI journaling apps (Reflection, Mindsera, Insight Journal, Day One, Pixel Journa
 3. **Reasoning + action:** A two-stage evaluative layer powered by the **[Value Identity Function (VIF)](vif/01_concepts_and_roadmap.md)**:
    * **Critic (VIF):** A numeric, uncertainty-aware engine that computes per-value-dimension alignment scores from a sliding window of recent entries. Uses [LLM-as-Judge for reward modeling](vif/03_model_training.md) and [MC Dropout for epistemic uncertainty](vif/04_uncertainty_logic.md). Triggers critiques only when confident and detecting significant patterns (sudden crashes or chronic ruts).
    * **Coach:** Activated when the Critic identifies significant patterns — whether problematic (crashes, ruts) or positive (sustained alignment). Reads the user's full journal history via **full-context prompting** (at POC scale, all entries fit in the LLM context window) to surface thematic evidence, explain *why* misalignment occurred, and offer reflective prompts or "micro-anchors." For positive patterns, provides occasional evidence-based acknowledgment without gamification. At production scale with longer histories, this would transition to retrieval-augmented generation (RAG). (See [System Architecture](vif/02_system_architecture.md)). For a concrete scenario, see [Worked Example: Sarah's Journey](vif/example.md). *(The weekly digest/runtime bridge now exists, but trigger calibration and evaluation are still experimental — see [Implementation Status](#implementation-status).)*
-   * A **[Value Evolution Detection](evolution/01_value_evolution.md)** layer is designed to sit between Critic outputs and drift triggers, classifying per-dimension divergence as STABLE, EVOLUTION, or DRIFT. This distinguishes genuine value shifts (sustained, low-volatility) from behavioral drift (volatile, inconsistent), reducing false-positive rut alerts when a user's priorities have genuinely changed.
+   * A **possible future idea** is a **[Value Evolution Detection](evolution/01_value_evolution.md)** layer between Critic outputs and drift triggers. If revisited later, it would aim to distinguish genuine value shifts from behavioral drift. It is not part of the current committed system scope.
 
 ### Prompt Templates
 
@@ -228,7 +228,7 @@ This avoids the trap of matching windows "for consistency" when the constraints 
 | :--- | :--- | :--- | :--- | :--- |
 | 1 | **Value-mention tagging** | Verify LLM correctly identifies which Schwartz values an entry touches | Hand-label 50 journal entries with Schwartz value dimensions. Measure **Cohen's κ** between LLM and human labels. | Entry: *"Dropped everything to help my sister move."* Human tags: `Benevolence`. LLM tags: `Benevolence`. → Agreement ✓ |
 | 2 | **Value profile modeling** | Check if predicted Schwartz value rankings match ground truth | Create 3–5 synthetic personas with known value orderings. Feed their simulated entries and compare predicted vs. true rankings using **Spearman correlation**. | Persona "Mia" values Benevolence > Achievement > Self-Direction. After 10 entries, model predicts same ordering. ρ = 1.0 ✓ |
-| 3 | **Drift detection** | Confirm system flags obvious misalignment | Generate 10 synthetic "crisis weeks" (e.g., Benevolence-first persona neglects family for work). Measure **hit rate**: did the system flag it? [Evolution detection](evolution/01_value_evolution.md) gates drift triggers to reduce false positives when values genuinely shift. | Ground truth: Week 3 is a crisis. System flags Week 3? Yes → Hit. Target: ≥8/10 hits. |
+| 3 | **Drift detection** | Confirm system flags obvious misalignment | Generate 10 synthetic "crisis weeks" (e.g., Benevolence-first persona neglects family for work). Measure **hit rate**: did the system flag it? A separate [evolution detection](evolution/01_value_evolution.md) concept exists, but it is not part of the current evaluation scope. | Ground truth: Week 3 is a crisis. System flags Week 3? Yes → Hit. Target: ≥8/10 hits. |
 | 4 | **Explanation quality** | Ensure explanations feel accurate and actionable | Show 5–10 users their weekly digest and ask "Did this feel accurate?" on a **5-point Likert scale**. | User sees: *"Your Benevolence score dropped—you mentioned helping others twice but cancelled on a friend."* Rates it 4/5 for accuracy. |
 | 5 | **Nudge relevance** | Verify the top prompt is contextually appropriate | A/B test: random prompt vs. model-selected prompt. Measure **engagement rate** (did user respond?). | Model picks *"What held you back from helping?"* after detecting Benevolence drift. User responds → engagement ✓ |
 | 6 | **Nudge signal quality** | Validate that nudging improves VIF training data | Compare Judge alignment scores for nudged vs. non-nudged entries from same personas. Measure **mean alignment confidence** and **value dimension coverage**. | Hypothesis: Nudged entries yield higher-confidence scores and more explicit value signals due to increased expressiveness. |
@@ -264,6 +264,6 @@ This avoids the trap of matching windows "for consistency" when the constraints 
 | [evals/overview.md](evals/overview.md) | Evaluation pipeline overview |
 | [evals/judge_validation_summary.md](evals/judge_validation_summary.md) | Judge validation results |
 | **Other** | |
-| [01_value_evolution.md](evolution/01_value_evolution.md) | Statistical filter distinguishing value evolution from behavioral drift |
+| [01_value_evolution.md](evolution/01_value_evolution.md) | Concept note for a possible future filter distinguishing value evolution from behavioral drift |
 | [onboarding_spec.md](onboarding/onboarding_spec.md) | BWS-based onboarding flow, item design, and data output schema |
 | [capstone_report/](capstone_report/) | Capstone report materials |

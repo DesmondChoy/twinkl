@@ -8,7 +8,7 @@ The VIF (Value Identity Function) maps journal entries to a 10-dimensional Schwa
 
 ## Implementation Status
 
-**Status:** 🟡 In Progress (as of 2026-04-02)
+**Status:** 🟡 In Progress (as of 2026-04-04)
 
 ### What's Implemented
 - Evaluation specification complete (this document)
@@ -20,20 +20,27 @@ The VIF (Value Identity Function) maps journal entries to a 10-dimensional Schwa
 - Evaluation metrics: QWK, Spearman ρ, MAE, calibration, per-dimension recall, raw ordinal exports, and compact circumplex diagnostics ([`src/vif/eval.py`](../../src/vif/eval.py))
 - Current corrected-split default: `run_019`-`run_021` BalancedSoftmax — median QWK **0.362**, median `recall_-1` **0.313**, median minority recall **0.448**, median hedging **0.621**, median calibration **0.713**
 - Post-lift rebaseline `run_025`-`run_027` is logged and reviewable, but it did not replace the incumbent frontier because `Security` and circumplex structure regressed
+- Controlled Qwen encoder rerun `run_042`-`run_044` is now logged as the strongest representation challenger, but it did not replace the default because `hedonism` / `power` remained too weak
+- Two-stage reformulation `run_045`-`run_047` is logged as a structural diagnostic branch, but it did not replace the default because `recall_-1` and hedging regressed
+- Consensus-label retrains `run_048`-`run_050` are logged as a diagnostic branch only; they improved within-regime QWK/calibration, but they changed holdout labels and did not beat the persisted-label frontier cleanly
 
 ### What's Missing
 - **Corrected-split frontier still below target**: The active default has better minority recovery than the old pre-split baselines, but median QWK remains 0.362 and still sits below the moderate target range.
 - **Hard dimensions remain unresolved**: `Hedonism` and especially `Security` still lag, and the latest regenerated targeted batch improved some local behavior without producing a cleaner overall frontier.
 - **Circumplex structure is now measured, but not yet optimized**: recent reruns can improve one metric family while worsening opposite-pair violations or adjacent-pair support.
+- Matched hard-case evaluation and augmentation set for `hedonism` / `security` / `stimulation` (`twinkl-748`)
+- Compact student-context prototype that adds legal history without parameter blow-up (`twinkl-749`)
+- Epoch-level training-signal analysis to test whether validation loss is steering checkpoints away from frontier metrics (`twinkl-751`)
+- Gated parameter-efficient encoder adaptation path (`twinkl-750`)
 - Persona-level aggregation protocol (aggregate per-entry scores into persona-level value profile for Top-K accuracy)
 - Formal held-out evaluation against declared value orderings (Spearman ρ > 0.7 target)
 
 ### Next Steps
-1. Improve `Security`/`Hedonism` behavior without giving back corrected-split QWK or circumplex structure
-2. Continue class-imbalance and decision-boundary work, but evaluate on the fixed-holdout targeted-lift regime rather than fresh reshuffles
-3. Implement persona-level score aggregation across entries
-4. Compute Spearman ρ between aggregated profiles and declared orderings
-5. Report Top-K accuracy on synthetic personas
+1. Build the matched hard-set in `twinkl-748` so the frontier can be tested on boundary cases, not just aggregate holdout metrics
+2. Prototype compact student context in `twinkl-749` before assuming frozen single-entry context is the final ceiling
+3. Quantify validation-loss vs frontier-metric divergence in `twinkl-751` before changing more training recipes
+4. Revisit PEFT only through the gated `twinkl-750` path after the cheaper falsification work above
+5. Implement persona-level score aggregation across entries, then compute Spearman ρ and Top-K accuracy
 
 ---
 
@@ -70,6 +77,8 @@ QWK is the primary entry-level metric for ordinal classification. It measures ag
 - QWK < 0.2: Poor (near-chance or degenerate predictions)
 
 **Current corrected-split default:** median QWK 0.362 for `run_019`-`run_021` BalancedSoftmax. A historical pre-split high of 0.434 (`run_010` CORN) is kept in the experiment index for context only and is not the active evaluation regime.
+
+**Latest challengers:** Qwen `run_042`-`run_044` reached a slightly higher median QWK (`0.370`) with lower hedging, but stayed too weak on `hedonism` and `power`. Two-stage `run_045`-`run_047` stayed close on QWK (`0.360`) but gave back too much `recall_-1` and hedged more. Consensus-label retrains `run_048`-`run_050` improved within-regime QWK to `0.372`, but they are not a like-for-like frontier replacement because the evaluation labels changed on the same frozen holdout.
 
 #### Minority Recall
 
@@ -198,6 +207,8 @@ From PRD (Evaluation Strategy, Row 2):
 1. **Synthetic bias**: Model may learn artifacts of the generation process rather than true value signals
 2. **Small sample size**: 3-5 personas limits statistical power
 3. **Value leakage**: If personas explicitly mention values in entries, the evaluation is trivial
+4. **Reachability ceiling**: `twinkl-747` showed that some hard-dimension labels, especially `security`, may not be cleanly reachable from the current student-visible context
+5. **Board comparability**: consensus-label retrains are informative diagnostics, but they are not directly comparable to the persisted-label frontier because the holdout labels changed
 
 **Mitigations:**
 - Use banned terms validation to prevent explicit value mentions

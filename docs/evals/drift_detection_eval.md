@@ -4,6 +4,8 @@
 
 The VIF detects when a user's behavior drifts from their declared values. This evaluation validates that the dual-trigger system (Sudden Crash + Chronic Rut) correctly identifies misalignment episodes.
 
+For the current project scope, this evaluation is about crash/rut-style drift detection only. A separate evolution-gating concept exists in the docs, but it is currently undecided and should be treated as an idea rather than part of the active implementation or evaluation plan.
+
 ---
 
 ## Implementation Status
@@ -16,25 +18,29 @@ The VIF detects when a user's behavior drifts from their declared values. This e
 - Trigger formulas defined (Crash: V_{t-1} - V_t > δ, Rut: sustained low)
 - Experiment archive: 50 run IDs / 114 persisted configs, with corrected-split frontier runs and later diagnostics tracked in [`logs/experiments/index.md`](../../logs/experiments/index.md)
 - MC Dropout uncertainty estimation: [`src/vif/critic.py:predict_with_uncertainty()`](../../src/vif/critic.py) and [`src/vif/eval.py:evaluate_with_uncertainty()`](../../src/vif/eval.py)
+- Uncertainty-gated crash/rut-style routing experiments in [`src/vif/drift.py`](../../src/vif/drift.py)
+- Weekly runtime bridge from Critic checkpoint -> timeline -> weekly signals in [`src/vif/runtime.py`](../../src/vif/runtime.py)
+- Full offline Coach path from VIF output -> drift result -> weekly digest artifact in [`src/coach/runtime.py`](../../src/coach/runtime.py)
+- Unit coverage for drift behavior in [`tests/vif/test_drift.py`](../../tests/vif/test_drift.py)
 - Calibration and circumplex summaries implemented and tracked per run in the experiment index and run YAMLs
 
 ### What's Missing
-- Crash/rut trigger implementation (the dual-trigger detection code itself)
 - Crisis injection test data generation
-- Hit rate / precision / recall metric calculation
+- Threshold calibration against a labeled weekly benchmark
+- Hit rate / precision / recall reporting on injected timelines
+- A project decision on whether evolution gating belongs in scope at all
 
 ### Blocking Dependencies
 The active corrected-split default (`run_019`-`run_021` BalancedSoftmax) improved misalignment sensitivity, but the frontier still sits at median QWK **0.362** with unresolved `Security`/circumplex trade-offs. That is not yet strong enough for reliable automated drift triggers. Until per-value Critic accuracy improves further, crash/rut detection will inherit noisy alignment scores and produce unreliable alerts.
 
-Additionally, [evolution detection](../evolution/01_value_evolution.md) must gate drift triggers before they are production-ready — without it, genuine value shifts produce false-positive rut alerts.
+Separately, evolution gating should not be treated as a dependency for the current drift evaluation. It remains an undecided idea rather than an active implementation commitment.
 
 ### Next Steps
-1. Improve Critic QWK through ongoing experimentation (data expansion, architecture, loss tuning)
-2. Implement dual-trigger detection (crash + rut) in `src/vif/`
-3. Implement evolution detection gating (STABLE/EVOLUTION/DRIFT classification per dimension) — see [value evolution detection](../evolution/01_value_evolution.md)
-4. Generate synthetic crisis injection test data
-5. Implement hit rate / precision / recall metrics
-6. Run evaluation on injected timelines
+1. Improve upstream Critic reliability through the current frontier follow-ups (`twinkl-748`, `twinkl-749`, `twinkl-751`, and the gated `twinkl-750` path)
+2. Generate synthetic crisis-injection timelines with explicit ground-truth crisis weeks
+3. Run the implemented `predict_persona_timeline()` -> `aggregate_timeline_by_week()` -> `detect_weekly_drift()` path end to end on those timelines
+4. Tune crash/rut thresholds on the injected benchmark
+5. Report hit rate, precision, recall, F1, and false-positive rate on the calibrated benchmark
 
 ---
 
@@ -51,9 +57,9 @@ Additionally, [evolution detection](../evolution/01_value_evolution.md) must gat
 
 Both triggers require **low uncertainty** (σ < ε_j) to fire. High variance suppresses critiques to avoid false alarms on ambiguous or OOD inputs.
 
-### Evolution Gating
+### Possible Future Extension: Evolution Gating
 
-Before either trigger type evaluates a dimension, [evolution detection](../evolution/01_value_evolution.md) classifies its recent divergence pattern as STABLE, EVOLUTION, or DRIFT. Dimensions classified as EVOLUTION (sustained, low-volatility directional shift from declared values) are excluded from crash/rut evaluation entirely and routed to Coach profile-update messaging instead. Only STABLE and DRIFT dimensions proceed to trigger evaluation.
+A separate idea documented in [`docs/evolution/01_value_evolution.md`](../evolution/01_value_evolution.md) is to classify recent divergence as STABLE, EVOLUTION, or DRIFT before evaluating crash/rut triggers. If the project chooses to revisit that idea later, the intended goal would be to suppress false-positive rut alerts when a user's priorities have genuinely changed. It is not part of the current drift-evaluation contract.
 
 ---
 
@@ -74,9 +80,9 @@ Before either trigger type evaluates a dimension, [evolution detection](../evolu
 | Benevolence > Achievement | Persona cancels on friends, works late repeatedly | Benevolence rut or crash |
 | Security > Stimulation | Persona takes risky financial decisions | Security crash |
 | Self-Direction > Conformity | Persona defers all decisions to others | Self-Direction rut |
-| Achievement > Benevolence | Persona gradually prioritizes Benevolence over career after having a child (sustained, low-volatility) | Should NOT trigger rut — should classify as EVOLUTION on Achievement |
-| Self-Direction high | Persona oscillates +1/−1 on Self-Direction week-to-week (high volatility) | Should classify as DRIFT, fire rut trigger |
-| Hedonism > Security | Persona steadily reduces hedonistic activities over 6+ weeks (low volatility, directional) | Should classify as EVOLUTION, suggest profile update |
+| Achievement > Benevolence | Persona gradually prioritizes Benevolence over career after having a child | Current eval: do not count as a crash/rut hit unless the active crash/rut detector fires; future evolution-gating idea would treat this as a non-drift value shift |
+| Self-Direction high | Persona oscillates +1/−1 on Self-Direction week-to-week | Current eval: stress-test crash/rut robustness on volatile timelines |
+| Hedonism > Security | Persona steadily reduces hedonistic activities over 6+ weeks | Current eval: treat as a boundary-case timeline; future evolution-gating idea would likely route it away from rut alerts |
 
 ---
 
@@ -123,18 +129,20 @@ For each of 3-5 synthetic personas:
 
 ```python
 for persona in test_personas:
-    for week in persona.weeks:
-        # Get Critic predictions with uncertainty
-        alignment, uncertainty = critic.predict_with_uncertainty(week.entries)
+    timeline_df, _meta = predict_persona_timeline(
+        persona_id=persona.persona_id,
+        checkpoint_path=checkpoint_path,
+        wrangled_dir=wrangled_dir,
+    )
+    weekly_df = aggregate_timeline_by_week(timeline_df)
 
-        # Apply dual-trigger rules
-        crash_triggered = check_crash(alignment, prev_alignment, delta_threshold)
-        rut_triggered = check_rut(alignment, consecutive_low_count, tau_low)
-        uncertainty_ok = uncertainty < epsilon
-
-        # Log detection
-        if (crash_triggered or rut_triggered) and uncertainty_ok:
-            detections.append(week)
+    for week_end in persona.week_ends:
+        result = detect_weekly_drift(
+            weekly_df,
+            target_week_end=week_end,
+        )
+        if result.trigger_type in {"crash", "rut"}:
+            detections.append((persona.persona_id, week_end, result.trigger_type))
 ```
 
 ### Step 3: Compute Metrics
@@ -207,7 +215,7 @@ Verify that MC Dropout uncertainty correlates with prediction errors.
 1. **Synthetic crisis injection is artificial**: Real drift may be more subtle and gradual
 2. **Profile-weighted detection**: Requires accurate value profiles; errors in w_u propagate
 3. **Cold start**: New users have no history for EMA calculation
-4. **No evolution gating**: Without [evolution detection](../evolution/01_value_evolution.md), genuine value shifts produce false-positive rut alerts. Evolution detection is designed but not yet implemented.
+4. **Evolution handling is undecided**: A separate evolution-gating idea exists, but it is not part of the current committed drift-evaluation path.
 
 **Mitigations:**
 - Vary crisis severity in test set (include subtle cases)
@@ -220,5 +228,5 @@ Verify that MC Dropout uncertainty correlates with prediction errors.
 
 - `docs/vif/04_uncertainty_logic.md` — Dual-trigger rules and MC Dropout
 - `docs/vif/06_profile_conditioned_drift_and_encoder.md` — Drift formulas
-- `docs/evolution/01_value_evolution.md` — Value evolution detection design
+- `docs/evolution/01_value_evolution.md` — Concept note for a possible future evolution-vs-drift filter
 - `docs/prd.md` — Evaluation Strategy (Row 3: Drift detection)

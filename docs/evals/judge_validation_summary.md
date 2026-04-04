@@ -1,11 +1,13 @@
 # Judge Validation Summary
 
-**Last Updated:** 2026-04-02
+**Last Updated:** 2026-04-04
 
-**Purpose:** This document summarizes inter-rater reliability findings for the shared human-annotation subset. The results support using the LLM Judge as a scalable supervision source for the POC, while later reachability and consensus audits add important caveats for the hardest dimensions and for student-label reachability.
+**Purpose:** This document summarizes inter-rater reliability findings for the shared human-annotation subset. The results support using the LLM Judge as a scalable supervision source for the POC, while the later `twinkl-747` reachability audit and `twinkl-754` consensus rerun add important caveats for the hardest dimensions and for student-label reachability.
 
 **Analysis Source:** `src/annotation_tool/agreement_metrics.py`
 **Full Report:** `logs/exports/agreement_report_20260318_130642.md`
+**Reachability Audit:** `logs/exports/twinkl_747/reachability_audit_report.md`
+**Consensus Report:** `logs/exports/twinkl_754/consensus_rejudging_report.md`
 **Evaluation Spec:** [`docs/evals/judge_validation_eval.md`](judge_validation_eval.md)
 
 ---
@@ -83,6 +85,18 @@ All values below are computed on the shared 115-entry subset for consistency wit
 | **Aggregate** | **0.50** | **0.80** | **0.69** |
 
 JL shows the highest alignment with the Judge (0.80, Substantial), followed by KM (0.69, Substantial) and Des (0.50, Moderate). Variation across annotators is expected and reflects individual differences in rubric interpretation.
+
+### Subsequent Audit Caveats
+
+The human-overlap benchmark above is still the right summary of shared-subset agreement, but two later audits materially changed how the project interprets those numbers:
+
+1. **Reachability is the main hard-dimension caveat.** The `twinkl-747` audit sampled 50 cases and found that aggregate Judge-human agreement did not guarantee that every hard-dimension label was a clean student target. Its recommendation grid was:
+   - `security` → `change_distillation_target`
+   - `hedonism` → `targeted_relabeling`
+   - `stimulation` → `targeted_relabeling`
+2. **Consensus improved stability, not the active frontier target.** The `twinkl-754` five-pass profile-only rerun showed strong repeated-call self-consistency (per-dimension Fleiss' κ `0.775` to `0.890`) and passed the full-corpus stability gate for `security`, `hedonism`, and `stimulation`. But it did **not** become the default supervision source for frontier claims, because the consensus branch changed labels on the frozen holdout and did not improve the advisory human-overlap benchmark enough to replace persisted labels cleanly.
+
+Practical takeaway: the shared-subset agreement results still justify using Judge labels at POC scale, but later work narrowed that claim. They are strongest as broad supervision evidence, not as proof that every hard-dimension label is equally reachable or equally promotion-ready for the current student.
 
 ---
 

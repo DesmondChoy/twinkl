@@ -122,9 +122,10 @@ Primary code lives in:
 - `src/coach/mode_logic.py`
 - `src/coach/schemas.py`
 - `src/vif/runtime.py`
-- `src/vif/evolution.py`
 - `src/vif/drift.py`
 - `prompts/weekly_digest_coach.yaml`
+
+An experimental `src/vif/evolution.py` module also exists in the repo, but evolution gating is currently undecided and is not part of the committed weekly Coach flow described in this document.
 
 The current implementation now supports:
 
@@ -156,9 +157,8 @@ The current implementation now supports:
 17. Exporting per-run JSON, markdown, and prompt artifacts
 18. Rebuilding per-entry VIF signal timelines from a trained Critic checkpoint at runtime
 19. Aggregating those signals into weekly VIF summaries for drift detection
-20. Running deterministic evolution detection before crash/rut logic
-21. Running uncertainty-gated crash/rut detection and emitting a structured `DriftDetectionResult`
-22. Executing the full offline runtime path through `src/coach/runtime.py`
+20. Running uncertainty-gated crash/rut-style detection experiments and emitting a structured `DriftDetectionResult`
+21. Executing the full offline runtime path through `src/coach/runtime.py`
 
 ### Current Digest Data Model
 
@@ -219,10 +219,12 @@ Supported schema modes:
 Current implementation status:
 
 - all modes are schema-supported as upstream drift outputs
-- live upstream runtime now supports `stable`, `rut`, `crash`, `evolution`, and `high_uncertainty` from VIF outputs
+- the active upstream-facing runtime contract is `stable`, `rut`, `crash`, and `high_uncertainty`
 - fallback-only local inference still exists for `stable`, `rut`, `high_uncertainty`, `mixed_state`, and `background_strain` when no upstream drift result is supplied
 - `mixed_state` and `background_strain` remain heuristic-only local modes
 - `high_uncertainty` can now come from real aggregated Critic uncertainty in the runtime path
+
+`evolution` remains an undecided idea rather than an active runtime commitment for the Coach flow.
 
 This is deliberate.
 The digest contract is designed for full trigger wiring from drift detection. The in-module heuristics are temporary scaffolding for offline development and prompt testing.
@@ -336,8 +338,7 @@ This is enough for POC-scale querying and later anomaly or pattern analysis.
 - structured weekly digest building
 - explicit drift-result input contract
 - runtime VIF inference from trained checkpoints
-- deterministic evolution detection
-- uncertainty-gated crash/rut drift detection
+- uncertainty-gated crash/rut-style drift detection experiments
 - end-to-end offline weekly Coach runtime entrypoint
 - full-history Coach prompt rendering
 - structured Coach output contract
@@ -392,27 +393,27 @@ The new `mixed_state` fallback partially corrects for this by looking beyond mea
 To finish the whole digest Coach flow cleanly, the next implementation stage should satisfy all of the following:
 
 1. Calibrate the new drift-detector thresholds against synthetic scenario sweeps and held-out personas.
-2. Decide whether `evolution` should become its own dedicated Coach prompt template instead of flowing through the general weekly prompt.
-3. Distinguish clearly between:
+2. Distinguish clearly between:
    - weekly descriptive summary
    - triggered critique or acknowledgement mode
    - uncertainty-driven presence mode
-4. Extend the Coach runtime from offline artifact generation to production-facing orchestration.
-5. Store generated Coach narratives and validation outcomes in a queryable way that supports evaluation.
-6. Add scenario-based tests for:
+3. Extend the Coach runtime from offline artifact generation to production-facing orchestration.
+4. Store generated Coach narratives and validation outcomes in a queryable way that supports evaluation.
+5. Add scenario-based tests for:
    - stable alignment
    - rut
    - crash
-   - evolution
    - high uncertainty
-7. Add user-study instrumentation for perceived accuracy.
+6. Add user-study instrumentation for perceived accuracy.
+
+If the project later decides to revisit evolution gating, that should be handled as a fresh scope decision rather than assumed as part of this flow.
 
 ## Recommended Next Steps
 
 ### P1
 
-- Wire the weekly digest to live Critic outputs and uncertainty vectors.
-- Implement drift detector logic as a separate module and pass its mode into the digest.
+- Harden the live Critic-output and uncertainty wiring against a wider batch of weekly scenarios.
+- Calibrate and simplify the existing drift-detector module, then keep the digest contract narrow and explicit.
 - Add scenario tests that verify the correct mode for representative weeks.
 - Add scenario fixtures specifically for:
   - grief / bereavement
@@ -452,10 +453,10 @@ To finish the whole digest Coach flow cleanly, the next implementation stage sho
 
 ## TODO
 
-- [ ] Replace fallback `response_mode` inference with drift-detector output
-- [ ] Integrate Critic uncertainty and support `high_uncertainty`
+- [ ] Reduce or remove fallback `response_mode` inference once upstream drift output is trusted
+- [ ] Calibrate Critic uncertainty thresholds for `high_uncertainty`
 - [ ] Support true `crash` detection over multi-week trajectories
-- [ ] Add a real Coach runtime entrypoint instead of only library helpers and CLI exports
+- [ ] Add a production-facing Coach service entrypoint beyond the current offline runtime and CLI exports
 - [ ] Run Tier 1 validation over a larger batch of digest generations
 - [ ] Add scenario fixtures that cover grief/acute-life-event handling conservatively
 - [ ] Add scenario fixtures for subtle mixed-state weeks so the digest does not collapse too often to `None clear this week`
