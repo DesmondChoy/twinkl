@@ -221,3 +221,8 @@ models/vif/*.json
 logs/vif_training/
 logs/exports/demo_tool_runs/
 logs/exports/weekly_digests/
+
+# Beads / Dolt files (added by bd init)
+.dolt/
+*.db
+.beads-credential-key

@@ -134,36 +134,44 @@ direction, ask one concise clarifying question.
 ## Issue Tracking with Beads (`bd`)
 
 Use `bd` (beads) for all issue tracking. This is mandatory, not optional.
+Run `bd prime` for the full command reference and workflow context.
 
 ### Before starting work
-- Run `bd list` to see open issues and find relevant ones.
-- If the work maps to an existing issue, note its ID (e.g., `twinkl-abc`).
-- If no issue exists, create one before starting:
-  ```sh
-  bd create "Short descriptive title" -d "Description of what needs to be done"
-  ```
+- Run `bd ready` to find available work, or `bd list` to see all open issues.
+- If the work maps to an existing issue, claim it: `bd update <id> --claim`
+- If no issue exists, create one: `bd create "title" -d "description"`
 
 ### During implementation
 - Reference the issue ID in commit messages when relevant.
 
 ### After completing work
-- Close the issue with a reason:
-  ```sh
-  bd close <issue-id> -r "Implemented in <commit or PR ref>"
-  ```
-- Use `--suggest-next` to see newly unblocked issues:
-  ```sh
-  bd close <issue-id> -r "Done" --suggest-next
-  ```
+- Close the issue: `bd close <id> -r "Implemented in <commit or PR ref>"`
+- Use `--suggest-next` to see newly unblocked issues.
 
 ### Key commands
 | Action | Command |
 |---|---|
+| Find available work | `bd ready` |
 | List open issues | `bd list` |
 | Show issue details | `bd show <id>` |
+| Claim work | `bd update <id> --claim` |
 | Create issue | `bd create "title" -d "description"` |
 | Close issue | `bd close <id> -r "reason"` |
 | Search issues | `bd search "query"` |
+| Full command reference | `bd prime` |
+
+### Session completion
+When ending a work session, complete ALL steps:
+1. File issues for remaining work.
+2. Run quality gates if code changed.
+3. Update issue status — close finished work, update in-progress items.
+4. Push to remote:
+   ```bash
+   git pull --rebase
+   bd dolt push
+   git push
+   ```
+5. Verify all changes committed and pushed.
 
 ## Workflow Orchestration
 
