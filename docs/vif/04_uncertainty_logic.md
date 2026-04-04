@@ -1,114 +1,206 @@
-# VIF – Uncertainty & Critique Logic
+# VIF – Uncertainty, Drift, and Trigger Logic
 
-This document details the mathematical logic for **uncertainty estimation** and the **dual-trigger critique rule** (Crash & Rut detection).
+This document describes how the VIF turns raw model outputs into Coach-facing
+signals. It combines the uncertainty rules, profile-conditioned drift framing,
+and the weekly trigger logic used by the experimental runtime bridge.
 
 ---
 
-## 1. Uncertainty-Aware Critiques
+## 1. Why Uncertainty Gating Matters
 
-### 1.1 Problem: Overconfident Critic on OOD Inputs
+A critic trained on synthetic or otherwise limited data can be confidently wrong
+on unfamiliar inputs. In a values-alignment product, that is more harmful than a
+well-calibrated refusal to judge.
 
-A critic trained offline (especially on synthetic or limited datasets) can produce **over-confident, incorrect** predictions when faced with out-of-distribution (OOD) inputs (e.g. novel situations or unusual life events).
+The system therefore separates two questions:
 
-This is especially problematic in a mental health or values-alignment context.
+1. What alignment signal does the student predict?
+2. How much should we trust that signal?
 
-### 1.2 Monte Carlo Dropout
+Only the combination of a meaningful pattern and low enough uncertainty should
+reach the Coach as a confident critique.
 
-To estimate **epistemic uncertainty**, we use **Monte Carlo Dropout** at inference time:
+---
 
-1. Keep dropout layers **active** during testing.
-2. For a given state $s_{u,t}$, run the critic $N$ times:
-   * $\vec{V}^{(i)} = V_\theta^{(i)}(s_{u,t})$, for $i = 1, \dots, N$.
-3. Compute, for each value dimension $j$:
-   * Mean (estimate):
+## 2. Monte Carlo Dropout
 
-$$ 
-\mu_{u,t}^{(j)} = \frac{1}{N} \sum_{i=1}^N V^{(i)}_j
-$$ 
+For the MLP path, epistemic uncertainty is estimated with MC Dropout:
 
-* Variance (uncertainty):
+1. keep dropout active at inference time
+2. run the same state through the model `N` times
+3. compute a mean and spread over those predictions
 
-$$ 
-\sigma_{u,t}^{2(j)} = \text{Var}_i[V^{(i)}_j]
-$$ 
+For a dimension `j`:
 
-The mean $\mu_{u,t}^{(j)}$ serves as the value estimate; the variance $\sigma_{u,t}^{2(j)}$ is a proxy for epistemic uncertainty.
+$$
+\mu_{u,t}^{(j)} = \frac{1}{N}\sum_{i=1}^{N} V_j^{(i)}(s_{u,t})
+$$
 
-We can monitor calibration by checking, on held-out data, whether higher $\sigma_{u,t}^{2(j)}$ correlates with larger prediction errors.
+$$
+\sigma_{u,t}^{2(j)} = \text{Var}_i[V_j^{(i)}(s_{u,t})]
+$$
 
-### 1.2.1 Handling Ambiguity (Bimodality) via Variance
+The mean is the usable alignment estimate. The spread is the uncertainty proxy.
 
-A common critique of regression models is that they fail in **ambiguous, bimodal scenarios**.
-*   **The Scenario:** A user entry is highly polarized, effectively implying both "Aligned (+1)" and "Misaligned (-1)" simultaneously (e.g., "I worked 100 hours this week," which implies high Career alignment but high Health misalignment, but the prompt only asks for a single "Well-being" score).
-*   **The Regression Trap:** A standard deterministic regressor would average these conflicting signals $((+1) + (-1)) / 2 = 0$, predicting "Neutral." This is factually incorrect; the entry is intense, not neutral.
-*   **The MC Dropout Rescue:** In such ambiguous cases, the different dropout sub-networks will likely latch onto different features (some seeing the "Career" signal, others the "Health" signal).
-    *   Pass 1: +0.8
-    *   Pass 2: -0.7
-    *   Pass 3: +0.9
-    *   ...
-    *   **Result:** The Mean might still be near 0, but the **Variance will be extremely high**.
-*   **Conclusion:** High Variance serves the same function as **High Entropy** in classification tasks. It flags that the model is "confused" or "conflicted," triggering the **Uncertainty Constraint** (Section 1.3) effectively preventing the system from treating the entry as "Neutral."
+### 2.1 Ambiguous Inputs
 
-### 1.3 Dual-Trigger Critique Rule (Crashes and Ruts)
+Variance is especially useful when the entry contains mixed evidence. An
+ambiguous input may average toward neutral while still producing high spread
+across dropout samples. In practice, that is a good reason not to treat the
+output as a confident neutral judgment.
 
-We define two types of problematic patterns for each value dimension $j$:
+---
 
-* **Sudden crash:** recent sharp negative change.
-* **Chronic rut:** sustained low values over time.
+## 3. Weekly Signal Surface
 
-Let:
+The runtime bridge does not feed raw per-entry predictions directly into the
+Coach. It first aggregates them into weekly signals.
 
-* $V_{t-1}^{(j)} = \mu_{u,t-1}^{(j)}$: previous estimate.
-* $V_t^{(j)} = \mu_{u,t}^{(j)}$: current estimate.
-* $\sigma_{V_t}^{(j)} = \sqrt{\sigma_{u,t}^{2(j)}}$: current uncertainty.
-* $\delta_j$: crash threshold for dimension $j$.
-* $\tau_{\text{low}}^{(j)}$: low-value threshold for dimension $j$.
-* $C_t^{(j)}$: count of **consecutive time windows** (e.g. weeks) where $V_t^{(j)} < \tau_{\text{low}}^{(j)}$.
+Each weekly row includes:
 
-We trigger a **critique** for dimension $j$ if **uncertainty is low enough** and either a crash or rut condition is met.
+- per-dimension mean alignment
+- per-dimension mean uncertainty
+- profile weights
+- profile-weighted overall mean alignment
+- profile-weighted overall uncertainty
 
-**Condition A – Sudden Crash:**
+These weekly summaries are the input to crash/rut-style detection.
 
-$$ 
-V_{t-1}^{(j)} - V_t^{(j)} > \delta_j
-$$ 
+---
 
-**Condition B – Chronic Rut:**
+## 4. Profile-Conditioned Drift Framing
 
-$$ 
-V_t^{(j)} < \tau_{\text{low}}^{(j)} \quad \text{and} \quad C_t^{(j)} \ge C_{\text{min}}
-$$ 
+The VIF is not only asking "is this behavior negative?" It is asking whether the
+behavior conflicts with what this user says matters.
 
-where $C_{\text{min}}$ is a minimum number of consecutive periods (e.g. 3 weeks).
+### 4.1 Per-Dimension Weighted Misalignment
 
-**Uncertainty Constraint:**
+For a profile weight `w_{u,j}` and predicted alignment `\hat{a}_{u,t}^{(j)}`:
 
-$$ 
-\sigma_{V_t}^{(j)} < \epsilon_j
-$$ 
+$$
+d_{u,t}^{(j)} = w_{u,j} \cdot \max(0, -\hat{a}_{u,t}^{(j)})
+$$
 
-If the uncertainty is **high** (i.e. $\sigma_{V_t}^{(j)} \ge \epsilon_j$), the system should:
+This is a useful conceptual drift signal:
 
-* Avoid issuing a strong critique.
-* Prefer asking clarifying questions or deferring judgment.
+- if alignment is positive or neutral, the contribution is zero
+- if alignment is negative, the contribution scales with user importance
 
-In addition to the uncertainty gate, a [value evolution detection](../evolution/01_value_evolution.md) layer classifies dimensions as STABLE/EVOLUTION/DRIFT before triggers fire. EVOLUTION dimensions — those showing sustained, low-volatility directional shift from declared values — bypass crash/rut triggers entirely and route to profile-update Coach messaging instead.
+### 4.2 Profile-Weighted Scalar Alignment
 
-### 1.4 Time and Aggregation
+The scalar summary used downstream is:
 
-To implement crash and rut logic robustly:
+$$
+V_{u,t}^{\text{scalar}} = w_u^\top \hat{\vec{a}}_{u,t}
+$$
 
-* VIF outputs can be aggregated to **weekly averages** per dimension.
-* Crash/rut detection operates on these weekly aggregates, not raw per-entry values.
-* $C_t^{(j)}$ is then defined over weeks, making –three weeks in a rut– a natural threshold.
+This is not a replacement for the vector output. It is a compact summary used
+for weekly monitoring and trigger decisions.
 
-### 1.5 Alternative Uncertainty Methods (Comparison)
+---
 
-While MC Dropout is chosen for the Tier 1 POC due to its implementation simplicity, other methods exist and may be appropriate for production systems.
+## 5. Crash and Rut Logic
 
-| Method | Pros | Cons | Best For |
-| :--- | :--- | :--- | :--- |
-| **MC Dropout** (Chosen for POC) | • Zero extra code complexity.<br>• No storage overhead.<br>• "Good enough" epistemic uncertainty. | • Requires multiple forward passes (inference latency).<br>• Calibration can be sensitive to dropout rate. | **Academic POCs & MVP** where dev speed > perfect calibration. |
-| **Deep Ensembles** | • Gold standard for accuracy & calibration.<br>• Handles both aleatoric & epistemic well. | • High compute/storage cost (train & store 5+ models). | **High-budget Production** where reliability is paramount. |
-| **Deep Evidential Regression** | • Fast (single forward pass).<br>• Disentangles uncertainty types explicitly. | • Custom loss functions can be unstable to train.<br>• Harder to implement. | **Low-latency Production** apps on mobile/edge. |
-| **Conformal Prediction** | • Provides statistical **guarantees** (e.g., "90% confidence interval").<br>• Model-agnostic. | • Requires separate calibration dataset.<br>• Focuses on intervals, not just scalar uncertainty. | **Safety-Critical Systems** (Medical/Finance) needing strict bounds. |
+### 5.1 High-Uncertainty Gate
+
+At the weekly level, the first gate is uncertainty:
+
+- if overall uncertainty is above threshold, do not emit a confident critique
+- instead route to a high-uncertainty / clarifying Coach mode
+
+This matches the current runtime detector more closely than a purely
+dimension-local rule.
+
+### 5.2 Rut
+
+A rut is a sustained low-alignment pattern on an important value dimension.
+
+In the current runtime detector, a dimension is a rut candidate when:
+
+- its profile weight is above a minimum importance threshold
+- its weekly alignment stays below a low threshold
+- this persists for at least `C_min` weeks
+- weekly uncertainty stays below threshold during that span
+
+### 5.3 Crash
+
+A crash is a sharp week-over-week drop in overall profile-weighted alignment.
+
+In the current runtime detector:
+
+- compute the drop in overall weekly scalar alignment
+- if that drop exceeds the crash threshold, inspect important dimensions
+- dimensions that declined become the triggered crash dimensions
+
+This makes the crash rule profile-aware without requiring a separate learned
+drift model.
+
+### 5.4 Stable and Positive Weeks
+
+When neither crash nor rut fires and uncertainty stays acceptable, the system
+can classify the week as stable. Positive acknowledgment remains a Coach-layer
+behavior built on top of these signals rather than a separate student target.
+
+---
+
+## 6. Experimental Evolution Routing
+
+There is now experimental code that classifies recent weekly behavior as:
+
+- `stable`
+- `evolution`
+- `drift`
+
+The idea is to distinguish:
+
+- **behavioral struggle**: noisy or volatile divergence from stated values
+- **genuine value change**: sustained, lower-volatility directional shift
+
+When enabled, dimensions classified as `evolution` can bypass crash/rut
+messaging and instead route to profile-update-style Coach language.
+
+Important scope note:
+
+- the runtime experiment path supports this
+- the PRD still treats value-evolution filtering as experimental rather than
+  part of the committed product scope
+
+So this logic should be read as an active experiment, not settled product
+behavior.
+
+---
+
+## 7. Future Drift Signals
+
+Some useful drift summaries remain future-facing:
+
+- EMA-based smoothed drift curves
+- cosine similarity between recent behavioral alignment and declared profile
+- explicit embedding-space OOD detectors layered on top of MC Dropout
+
+These can strengthen monitoring and calibration later, but they are not required
+for the current crash/rut runtime bridge.
+
+---
+
+## 8. Implementation Reference
+
+| Module | Role |
+|--------|------|
+| `src/vif/eval.py` | Uncertainty-aware evaluation utilities |
+| `src/vif/runtime.py` | Per-entry and weekly VIF artifact generation |
+| `src/vif/drift.py` | Weekly crash/rut/high-uncertainty detection |
+| `src/vif/evolution.py` | Experimental stable/evolution/drift classification |
+
+---
+
+## 9. Alternative Uncertainty Methods
+
+MC Dropout remains the practical POC default, but future alternatives include:
+
+- deep ensembles
+- evidential methods
+- conformal wrappers
+
+Those may improve calibration later, but they are not needed to understand the
+current runtime trigger stack.

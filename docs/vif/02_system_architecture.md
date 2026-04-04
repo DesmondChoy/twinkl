@@ -1,133 +1,227 @@
-# VIF – System Architecture & Inference
+# VIF – System Architecture, State, and Runtime Flow
 
-This document details the inputs, state representation, and inference flow for the **Value Identity Function (VIF)**. It covers how raw data is processed into state vectors and how the system separates the "Critic" (numeric evaluation) from the "Coach" (explanation).
+This document is the canonical technical overview for the live VIF stack. It
+combines the earlier architecture overview with the concrete state/data pipeline
+choices that now drive training and runtime inference.
+
+For training details, see [Reward Modeling & Training](03_model_training.md).
+For uncertainty and drift logic, see [Uncertainty, Drift, and Trigger Logic](04_uncertainty_logic.md).
 
 ---
 
-## 1. Inputs and State Representation
+## 1. Current POC Shape
 
-### 1.1 Raw Inputs
+The current VIF implementation is intentionally narrow:
 
-For each user $u$ at time step $t$, we assume:
+- **Modality**: text only
+- **Training target**: immediate per-dimension alignment labels in `{-1, 0, +1}`
+- **Encoder**: frozen sentence encoder configured in `config/vif.yaml`
+- **State**: text window + time gaps + 10-dim value-profile weights
+- **Runtime output**: per-entry alignment means and uncertainties, plus weekly aggregates
+- **Downstream use**: experimental crash/rut-style drift detection and weekly Coach inputs
 
-* Text journal entry: $T_{u,t}$.
-* *(Out of scope for capstone)* Audio: $A_{u,t}$ (voice recordings, prosody).
-* *(Out of scope for capstone)* Physiological signals: $H_{u,t}$ (e.g. heart rate, HRV).
-* Time features:
-  * $\Delta t_{u,t} = t_{u,t} - t_{u,t-1}$: time since previous entry.
-* User profile:
-  * $z_u$: embedding or feature vector representing the user’s values and identity.
+> **Note:** Specific model names, embedding dimensions, and default window sizes
+> change over time. Treat `config/vif.yaml` as the source of truth for current
+> runtime values.
 
-### 1.2 Embedding Functions
+---
 
-We define embedding functions:
+## 2. Inputs and State Representation
 
-* Text encoder (e.g. SBERT or similar):
-  $\\phi_{\text{text}}(T_{u,t}) \in \mathbb{R}^{d_e}$
-* *(Out of scope for capstone)* Audio/prosodic encoder:
-  $\\phi_{\text{audio}}(A_{u,t}) \in \mathbb{R}^{d_p}$
-* *(Out of scope for capstone)* Physiological encoder (e.g. via time-series feature extraction):
-  $\\phi_{\text{physio}}(H_{u,t}) \in \mathbb{R}^{d_h}$
-* User profile embedding:
-  $z_u \in \mathbb{R}^{d_z}$
+### 2.1 Raw Inputs
 
-### 1.3 State Vector – Sliding Window Design
+For a user or synthetic persona `u` at step `t`, the VIF consumes:
 
-#### 1.3.1 Motivation: Beyond the Markov Assumption
+- journal text `T_{u,t}`
+- time gap features derived from entry dates
+- user profile weights `w_u` over the 10 Schwartz dimensions
 
-A design that uses only the current entry $T_{u,t}$ and static profile $z_u$ implicitly assumes a **Markov state**: all relevant information for future alignment is contained in the present features. In real life, this is false. A single entry of —I’m exhausted— may be noise; three consecutive entries with the same theme form a **trajectory**.
+Audio, prosody, and physiological signals remain out of scope for the capstone
+POC.
 
-To capture trajectories without complex recurrent architectures in the critic, we adopt a **sliding window** of recent entries.
+### 2.2 State Definition
 
-> **Note:** Specific model names, embedding dimensions, window sizes, and
-> hyperparameters referenced below are illustrative. See `config/vif.yaml`
-> for current runtime values.
-
-#### 1.3.2 Sliding Window State Definition (Core POC Option)
-
-For a window size $N$ (configured in `config/vif.yaml`):
+For a configured window size `N`:
 
 $$
- s_{u,t} = \text{Concat}\Big[
- \phi_{\text{text}}(T_{u,t}),
- \phi_{\text{text}}(T_{u,t-1}),\ \dots,\
- \phi_{\text{text}}(T_{u,t-N+1}),
- \Delta t_{u,t},\dots,\Delta t_{u,t-N+2},
- z_u
+s_{u,t} = \text{Concat}\Big[
+\phi_{\text{text}}(T_{u,t}),
+\phi_{\text{text}}(T_{u,t-1}), \dots,
+\phi_{\text{text}}(T_{u,t-N+1}),
+\Delta t_{u,t}, \dots, \Delta t_{u,t-N+2},
+w_u
 \Big]
 $$
 
-This state intentionally excludes label-derived history statistics to avoid
-train/serve skew. Temporal context comes from the text window and time gaps.
+Where:
 
-For early time steps, where fewer than $N$ entries exist, we can:
+- `\phi_text(T)` is the frozen sentence embedding
+- `\Delta t` are normalized time-gap features
+- `w_u` is the normalized 10-dim value profile
 
-* Pad missing embeddings with zeros, or
-* Use special —no-history— tokens/flags.
+The state intentionally excludes any label-derived history statistics. Earlier
+drafts used EMA-style history features built from Judge labels, but those were
+removed because they create train/serve skew.
 
-#### 1.3.3 Minimal MVP State (Simplified Option)
+### 2.3 Current Default vs General Form
 
-For the simplest POC, the state can initially be:
+The architecture is written generically in terms of `N`, but the current config
+defaults to `window_size: 1` because larger windows inflated the parameter
+budget and overfit at current data scale.
 
-$$
- s_{u,t} = \text{Concat}\big[\\phi_{\text{text}}(T_{u,t}),\ z_u\big]
-$$
-
-with the sliding window and time-gap features added in a later iteration.
-
-#### 1.3.4 Multimodal Extension (Out of Scope for Capstone)
-
-Audio and physiological channels could be appended in future work:
+That means the live default state is effectively:
 
 $$
- s_{u,t} = \text{Concat}\Big[\text{(text window)},\ \Delta t,\ \\phi_{\text{audio}}(A_{u,t}),\ \\phi_{\text{physio}}(H_{u,t}),\ z_u\Big]
+s_{u,t} = \text{Concat}\big[\phi_{\text{text}}(T_{u,t}), w_u\big]
 $$
+
+with no time-gap terms when `N = 1`.
+
+### 2.4 Missing History Handling
+
+When `N > 1` and earlier entries are unavailable:
+
+- missing embeddings are zero-padded
+- missing time gaps are zero-filled
+
+This keeps the state dimension fixed while allowing early-timeline inference.
 
 ---
 
-## 2. Inference Flow and Memory Architecture
+## 3. Training Data Pipeline
 
-### 2.1 Inference Flow for VIF (Critic)
+### 3.1 Logical Data Objects
 
-For a real user session:
+The training pipeline turns synthetic journals plus Judge labels into fixed
+state/target rows:
 
-1. **Collect input**:
-   * User submits a new journal entry.
-2. **Build sequential state**:
-   * Construct sliding window state $s_{u,t}$ from the current and $N-1$ previous entries, plus time gaps and profile vector.
-3. **Reward Model (optional at inference)**:
-   * Option A: call LLM-as-Judge online for immediate alignment scores and explanations.
-   * Option B: use an offline-trained distilled reward model to approximate judge scores.
-4. **Critic evaluation with uncertainty**:
-   * Run VIF with MC Dropout to get $\\mu_{u,t}^{(j)}$ and $\\sigma_{u,t}^{(j)}$ per dimension. (See [Uncertainty Logic](04_uncertainty_logic.md))
-5. **Aggregate over time**:
-   * Compute updated weekly aggregates (e.g. weekly means of $\\mu_{u,t}^{(j)}$).
-6. **Classify divergence patterns**:
-   * Before applying trigger rules, an [evolution detection](../evolution/01_value_evolution.md) step classifies each dimension's divergence as STABLE, EVOLUTION, or DRIFT. Dimensions classified as EVOLUTION (sustained, low-volatility directional shift) are excluded from crash/rut triggers and routed to profile-update Coach messaging instead.
-7. **Apply trigger rules** (on non-EVOLUTION dimensions):
-   * If significant weekly drop (crash) and low uncertainty → generate a targeted critique.
-   * If sustained low weekly values for $\ge C_{\text{min}}$ weeks (rut) and low uncertainty → generate a targeted critique.
-   * If sustained high values over multiple weeks and low uncertainty → generate occasional evidence-based acknowledgment.
-   * If high uncertainty → generate a clarifying prompt instead of a critique or acknowledgment.
+- **Persona**: profile, core values, and narrative context
+- **Entry**: journal text, date, and per-entry metadata
+- **JudgeLabel**: per-dimension labels in `{-1, 0, +1}`
+- **StateTargetSample**: the flattened state vector paired with the target vector
 
-### 2.2 Separation of Concerns: Critic vs Coach
+### 3.2 Entry Text Used by the Student
 
-We explicitly separate two memory and reasoning systems:
+The runtime and dataset layers build VIF input text from the wrangled entry
+components:
 
-1. **VIF (Critic)** – Sequential, time-aware evaluator
-   * Uses **strict sequential history** (sliding window of recent entries and derived stats).
-   * Does **not** use semantic retrieval of arbitrary past entries for its numeric prediction.
-   * Focus: estimate current/short-horizon alignment per dimension and uncertainty.
+- `initial_entry`
+- `nudge_text`
+- `response_text`
 
-2. **Coach / Explanation Layer** – Full-context explanation guide
-   * Activated after the VIF identifies significant patterns — whether problematic (crash or rut) or positive (sustained alignment). The Coach differentiates between evolution messaging ("your priorities may be shifting") and drift messaging ("you may be losing track") based on the [evolution classification](../evolution/01_value_evolution.md).
-   * At POC scale (8–12 entries per persona), passes **all journal entries** directly into the LLM context window (full-context prompting) to:
-     * Identify thematically relevant patterns (e.g. similar conflicts, repeated behaviors, or evidence of consistent alignment).
-     * Provide context-rich explanations, reflective prompts, or evidence-based acknowledgment.
-   * For positive patterns, acknowledgment is infrequent and grounded in specific behaviors — never gamified (no streaks, points, or generic praise).
-   * At POC scale, the LLM reads the complete journal history in a single prompt. Semantic similarity retrieval (RAG) becomes relevant when history exceeds context window limits — see [Section 4 of `01_concepts_and_roadmap.md`](01_concepts_and_roadmap.md#4-extensions-and-future-work) for future scaling notes.
+This is concatenated into one text field before encoding so the student sees
+the same enriched entry representation in both training and inference.
 
-This separation ensures that:
+### 3.3 State Construction Procedure
 
-* The **numeric value scores** remain grounded in recent temporal dynamics and are not contaminated by arbitrarily distant or thematically similar but contextually irrelevant entries.
-* The **explanations and reflections** can draw on the full richness of the user’s history via full-context prompting at POC scale, or retrieval-augmented generation at production scale.
+The concrete state-construction path is:
+
+1. Load wrangled entries and consolidated Judge labels.
+2. Join them on `(persona_id, t_index)` with integrity checks.
+3. Precompute or cache sentence embeddings for entry text.
+4. Build each state vector from:
+   - the current entry and `N-1` previous entries
+   - normalized time gaps between those entries
+   - the persona's 10-dim normalized value profile
+5. Emit one training sample per labeled entry.
+
+### 3.4 Splits and Holdouts
+
+Evaluation is persona-level, not entry-level.
+
+- default split: 70/15/15 by persona
+- holdout selection: best-effort sign-stratified validation/test partitions
+- optional experiment mode: fixed validation/test holdout manifests for
+  before/after retrains
+
+This is the regime used by the current frontier experiment archive.
+
+---
+
+## 4. Runtime Inference Flow
+
+### 4.1 Critic Runtime Path
+
+The runtime path rebuilds the same state definition used in training:
+
+1. Load a trained checkpoint and recover runtime-relevant config metadata.
+2. Recreate the text encoder and `StateEncoder`.
+3. Rebuild one state vector per wrangled entry in a timeline.
+4. Run uncertainty-aware Critic inference.
+5. Persist:
+   - per-entry alignment means and uncertainties
+   - weekly aggregated signals for downstream drift detection
+
+The bridge from checkpoint -> timeline -> weekly VIF artifacts is implemented in
+`src/vif/runtime.py`.
+
+### 4.2 Weekly Aggregation
+
+Per-entry outputs are aggregated into weekly tables containing:
+
+- per-dimension mean alignment
+- per-dimension mean uncertainty
+- profile weights
+- profile-weighted overall mean alignment
+- profile-weighted overall uncertainty
+
+These weekly artifacts are the input surface for drift experiments and Coach
+generation.
+
+### 4.3 Experimental Drift Routing
+
+The runtime bridge now supports experimental crash/rut-style detection on top of
+weekly signals. The core product scope is still the simpler crash/rut framing in
+the PRD; more ambitious routing, such as an evolution-vs-drift filter, should be
+treated as experimental analysis unless explicitly promoted in the PRD.
+
+---
+
+## 5. Critic vs Coach Separation
+
+The architecture keeps the numeric evaluator and the explanation layer separate.
+
+### 5.1 Critic
+
+The Critic:
+
+- reads only the structured state described above
+- uses strict recent-history context rather than arbitrary retrieval
+- outputs numeric alignment estimates plus uncertainty
+
+### 5.2 Coach
+
+The Coach:
+
+- is activated from downstream trigger logic rather than raw text alone
+- reads the user's full journal history at current POC scale
+- turns numeric signals into reflective, evidence-based language
+
+This keeps the score-generation path auditable while letting the Coach speak in
+a richer, more contextual way.
+
+---
+
+## 6. Implementation Reference
+
+Key files for the architecture described here:
+
+| Module | Role |
+|--------|------|
+| `src/vif/state_encoder.py` | Builds fixed-length state vectors |
+| `src/vif/dataset.py` | Loads labels/entries, joins them, and manages persona splits |
+| `src/vif/encoders.py` | Creates the configured sentence encoder |
+| `src/vif/runtime.py` | Rebuilds states from history and emits runtime artifacts |
+| `src/vif/holdout.py` | Loads fixed holdout manifests for experiment reruns |
+
+---
+
+## 7. Future Extensions
+
+The current architecture leaves room for later work without changing the core
+spine:
+
+- larger context windows when justified by data scale
+- richer profile conditioning
+- multimodal inputs
+- retrieval once journal histories outgrow the context window

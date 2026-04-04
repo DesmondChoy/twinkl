@@ -226,7 +226,6 @@ Verify that MC Dropout uncertainty correlates with prediction errors.
 
 ## References
 
-- `docs/vif/04_uncertainty_logic.md` — Dual-trigger rules and MC Dropout
-- `docs/vif/06_profile_conditioned_drift_and_encoder.md` — Drift formulas
+- `docs/vif/04_uncertainty_logic.md` — Uncertainty, drift formulas, and trigger logic
 - `docs/evolution/01_value_evolution.md` — Concept note for a possible future evolution-vs-drift filter
 - `docs/prd.md` — Evaluation Strategy (Row 3: Drift detection)

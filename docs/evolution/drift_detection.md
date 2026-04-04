@@ -27,7 +27,7 @@ The **Critic** (also called the VIF — Value Identity Function) and the **drift
 ```
 Journal Entry
       ↓
-Text Encoder (SBERT — frozen)
+Configured frozen sentence encoder
       ↓
 State Encoder (assembles text window + time gaps + w_u)
       ↓
@@ -751,8 +751,8 @@ Output: Decision on whether to include the absence-aware formula.
 
 ## Related documents
 
-- [`docs/vif/06_profile_conditioned_drift_and_encoder.md`](../vif/06_profile_conditioned_drift_and_encoder.md) — drift formulas and profile interaction
-- [`docs/vif/04_uncertainty_logic.md`](../vif/04_uncertainty_logic.md) — dual-trigger rules and MC Dropout
+- [`docs/vif/04_uncertainty_logic.md`](../vif/04_uncertainty_logic.md) — uncertainty, drift formulas, and trigger logic
+- [`docs/vif/02_system_architecture.md`](../vif/02_system_architecture.md) — state and runtime artifact flow
 - [`docs/evals/drift_detection_eval.md`](../evals/drift_detection_eval.md) — evaluation protocol and success criteria
 - [`docs/evolution/01_value_evolution.md`](01_value_evolution.md) — value evolution detection design
 - [`notebooks/annotations/drift_detection_comparison.ipynb`](../../notebooks/annotations/drift_detection_comparison.ipynb) — 5-approach comparison on annotation data

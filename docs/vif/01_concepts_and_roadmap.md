@@ -3,9 +3,9 @@
 This document outlines the high-level objectives, core concepts, and implementation roadmap for Twinkl’s **Value Identity Function (VIF)**. The VIF is the core evaluative engine that estimates alignment between a user's behavior and their long-term values.
 
 For technical details, see:
-*   [System Architecture & Inference](02_system_architecture.md)
+*   [System Architecture, State, and Runtime Flow](02_system_architecture.md)
 *   [Reward Modeling & Training](03_model_training.md)
-*   [Uncertainty & Critique Logic](04_uncertainty_logic.md)
+*   [Uncertainty, Drift, and Trigger Logic](04_uncertainty_logic.md)
 
 ---
 
@@ -51,7 +51,7 @@ The VIF is designed to:
    * Detecting a significant pattern (negative or positive).
 
 4. **Trajectory-aware, not purely Markovian**
-   The VIF explicitly incorporates **recent temporal history** (sliding windows and simple statistics) instead of assuming that a single entry and static profile fully determine future trajectories.
+   The VIF explicitly incorporates **recent temporal history** (for the POC, recent entry windows and time gaps) instead of assuming that a single entry and static profile fully determine future trajectories.
 
 5. **Separation of concerns: Critic vs Coach**
    The VIF (critic) focuses on **temporal, numeric evaluation** using sequential history. A separate **Coach / Explanation layer** reads the user's full journal history via **full-context prompting** (at POC scale, all entries fit in the LLM context window) to surface thematic evidence and narratives *after* the critic has produced its scores. At production scale with longer histories, this would transition to retrieval-augmented generation (RAG) — see [Section 4](#4-extensions-and-future-work).
@@ -99,7 +99,7 @@ To make this design capstone-friendly, we summarise a recommended tiered approac
   * Critique rule: dual-trigger (crash + rut) on simple rolling averages.
 
 * **Tier 2 (Enhanced POC)**
-  * State: sliding window over last $N$ entries with history stats.
+  * State: sliding window over last $N$ entries with time gaps and stronger runtime calibration.
   * Target: short-horizon average (Option B).
   * Critic: MLP with tuned hyperparameters and calibrated uncertainty.
   * Critique rule: weekly crash/rut logic with user-specific thresholds.

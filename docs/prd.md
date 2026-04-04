@@ -257,9 +257,10 @@ This avoids the trap of matching windows "for consistency" when the constraints 
 | [nudge_design_rationale.md](pipeline/nudge_design_rationale.md) | Nudge validation plan and design rationale |
 | **VIF** | |
 | [01_concepts_and_roadmap.md](vif/01_concepts_and_roadmap.md) | Value Identity Function theory |
+| [02_system_architecture.md](vif/02_system_architecture.md) | System architecture, state, and runtime flow |
 | [03_model_training.md](vif/03_model_training.md) | LLM-as-Judge and Critic training |
-| [05_state_and_data_pipeline.md](vif/05_state_and_data_pipeline.md) | State encoding and data pipeline |
-| [06_profile_conditioned_drift_and_encoder.md](vif/06_profile_conditioned_drift_and_encoder.md) | Profile-conditioned drift detection |
+| [04_uncertainty_logic.md](vif/04_uncertainty_logic.md) | Uncertainty, drift, and trigger logic |
+| [example.md](vif/example.md) | Worked end-to-end VIF behavior example |
 | **Evals** | |
 | [evals/overview.md](evals/overview.md) | Evaluation pipeline overview |
 | [evals/judge_validation_summary.md](evals/judge_validation_summary.md) | Judge validation results |

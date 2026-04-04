@@ -1,278 +1,213 @@
 # VIF – Reward Modeling & Training Strategy
 
-This document specifies the **Reward Model**, the **Vector-Valued Value Function** targets, and the **Training Strategy** for the VIF Critic.
+This document describes the current training story for the Value Identity
+Function (VIF): how Judge labels become student targets, what the live student
+families are, and how frontier evaluation is managed.
 
 ---
 
-## 1. Reward Modeling (LLM-as-Judge)
+## 1. Teacher-Student Training Stack
 
-### 1.1 Problem: No Oracle Reward in Real Data
+### 1.1 Why Reward Modeling Exists
 
-For real users, we do not observe:
+For real users, Twinkl observes journal text and profile context, not an oracle
+alignment score. The project therefore uses an explicit teacher-student setup:
 
-* True per-dimension alignment $a_{u,t}^{(j)}$ (e.g. “Health = −0.8”).
-* True cumulative returns.
+1. **Generator** creates synthetic personas and journal trajectories.
+2. **Judge** labels each entry against the Schwartz dimensions.
+3. **Critic** distills those labels into a fast supervised student.
 
-We only observe **text and signals**. To bridge this, we explicitly introduce a **Reward Model**.
+This lets the live scoring path stay fast and uncertainty-aware without calling
+an LLM on every runtime inference.
 
-### 1.2 The Generator-Judge-Critic Workflow (Teacher-Student Architecture)
+### 1.2 Judge Output Contract
 
-To handle the complexity of real-life trade-offs (e.g., sacrificing sleep for work) while enabling efficient uncertainty estimation, we adopt a **Knowledge Distillation** approach.
+The Judge emits a per-dimension categorical label:
 
-This workflow transforms rich but slow LLM reasoning into a fast, uncertainty-aware numerical signal.
+- `-1`: misaligned
+- `0`: neutral / not enough evidence
+- `+1`: aligned
 
-#### 1.2.1 Phase 1: Synthesis (The Generator)
-We use an LLM to generate a diverse dataset of synthetic journal entries.
-*   **Goal:** Create "messy," realistic data that reflects genuine human conflict, not just clean archetypes.
-*   **Prompt Strategy:** Instead of asking for "A bad health entry," we ask for scenarios involving specific tensions, e.g., *"Write an entry from a user who is proud of their work achievement but is neglecting their physical needs to get there."*
-
-#### 1.2.2 Phase 2: Labeling (The Judge / Teacher)
-We feed the generated text into a second LLM pass (The Judge) to assign ground-truth scores.
-*   **Why this is needed:** A user entry often impacts multiple values simultaneously (Side Effects). The Generator prompt might target "Work," but the resulting text might inadvertently reveal neglect of "Family."
-    *   **Mechanism (Categorical Protocol):** To avoid subjective noise (e.g., arbitrary "4.5" vs "4.2"), the Judge classifies behavior using a strict 3-point rubric:
-    *   **Misaligned (-1):** The entry actively conflicts with the value.
-    *   **Neutral (0):** The entry is irrelevant to the value or maintains status quo.
-    *   **Aligned (+1):** The entry actively supports the value.
-    *   **Output:** These classifications are mapped to a precise integer vector, e.g., `[Health: -1, Career: +1, Family: 0]`, which serves as the supervised target for the Student.
-#### 1.2.3 Phase 3: Distillation (The Critic / Student)
-We train the **MLP Critic** (the VIF) on this labeled dataset.
-*   **Input:** Text embedding (from the configured sentence encoder) + User Profile Embedding.
-*   **Target:** The Judge's vector scores.
-*   **Benefit:**
-    1.  **Speed:** The MLP runs in milliseconds, enabling the 50+ forward passes required for MC Dropout.
-    2.  **Privacy:** The MLP can potentially run locally or with lower privacy overhead than a full LLM call.
-
-### 1.3 Uncertainty Gating
-By using the MLP as the live Critic, we unlock **Epistemic Uncertainty** estimation via MC Dropout.
-*   If the MLP's 50 predictions cluster tightly (Low Variance), we trust the score.
-*   If the MLP's predictions scatter widely (High Variance), it means the input is **Out-of-Distribution** (unlike anything the Judge taught it).
-    *   *Action:* The system suppresses the critique and instead triggers the Coach to ask a clarifying question ("I'm sensing some complexity here...").
+These labels are the current student target surface.
 
 ---
 
-## 2. Vector-Valued Value Function – Multiple Target Options
+## 2. Training Target: What Is Current vs Exploratory
 
-### 2.1 Motivation
+### 2.1 Current Mainline Target
 
-Scalarizing rewards too early (e.g. $r = w^	op a$) hides important conflicts:
+The live stack uses **Option A: immediate alignment**.
 
-* A week with (+10) Career and (−10) Relationships is not “neutral” in human terms.
-* Twinkl’s purpose is to **surface such tensions**, not to flatten them away.
-
-Therefore, we keep the value function **vector-valued**.
-
-We define several **target options** for the VIF, from simplest to most advanced. The capstone team can choose one for implementation.
-
-### 2.2 Option A: Immediate Alignment (Simplest)
-
-The VIF directly predicts the Reward Model’s immediate alignment scores:
-
-$$ 
+$$
 \vec{V}_\theta(s_{u,t}) \approx \hat{\vec{a}}_{u,t}
-$$ 
+$$
 
-This is a **multi-output prediction** problem, where the critic learns to emulate the judge, potentially with:
+That means the student predicts the Judge's current-entry alignment labels, and
+longer-horizon drift logic is derived downstream from aggregated outputs rather
+than learned as a discounted-return target.
 
-* Lower latency.
-* Better generalisation from richer state features (e.g. using history window and profile).
+### 2.2 Exploratory Alternatives
 
-Longer-term trends are then derived via **deterministic smoothing** (e.g. EMA over time), not via discounted returns.
+The older design space still matters conceptually, but it is not the active
+training path:
 
-### 2.3 Option B: Short-Horizon Forecast (Intermediate)
+- **Option B**: short-horizon forecast targets
+- **Option C**: discounted return targets
 
-The VIF predicts short-horizon average alignment, e.g. over the next $H$ days or entries (e.g. $H = 7$ days):
+These remain future research directions, not the current implementation.
 
-$$ 
-G_{u,t}^{(j, H)} = \frac{1}{H'} \sum_{k=0}^{H'-1} \hat{a}_{u,t+k}^{(j)}
-$$ 
+### 2.3 Scalar Aggregation
 
-where $H'$ is the number of future entries within the horizon. The critic is trained to predict:
+When a single summary score is needed, the vector output can be aggregated with
+profile weights:
 
-$$ 
-\vec{V}_\theta(s_{u,t}) \approx \vec{G}_{u,t}^{(H)} = \big(G_{u,t}^{(1,H)}, \dots, G_{u,t}^{(K,H)}\big)
-$$ 
+$$
+V^{\text{scalar}}_{u,t} = w_u^\top \vec{V}_\theta(s_{u,t})
+$$
 
-This gives genuinely **prospective** signals but limits the horizon to a more realistic, data-supported window.
-
-### 2.4 Option C: Discounted Returns (Advanced)
-
-For each user $u$, time $t$, and value dimension $j$:
-
-1. The Reward Model provides immediate alignment: $\hat{a}_{u,t}^{(j)} \in [-1,1]$.
-2. We define a **discounted cumulative alignment** (return):
-
-$$ 
-G_{u,t}^{(j)} = \sum_{k=0}^{T_u - t} \gamma^{g(\Delta t_{u,t+k})} \hat{a}_{u,t+k}^{(j)}
-$$ 
-
-where:
-
-* $\gamma \in (0,1]$ is the base discount factor.
-* $g(\Delta t)$ is a function that maps irregular time gaps to effective discount exponents (e.g. $g(\Delta t) = \Delta t / \tau$ for some time constant $\tau$).
-* $T_u$ is the final time step for user $u$.
-
-The critic approximates:
-
-$$ 
-\vec{V}_\theta(s_{u,t}) \approx \mathbb{E}[\vec{G}_{u,t} \mid s_{u,t}]
-$$ 
-
-This option is closest to an RL-style value function but also the most demanding.
-
-### 2.5 Scalar Aggregation (for Summaries Only)
-
-When needed (e.g. for an overall weekly alignment score), we can aggregate:
-
-$$ V^{\text{scalar}}_{u,t} = w_{u,t}^\top \vec{V}_\theta(s_{u,t})
-$$ 
-
-This scalar is used only for **summary views**; critiques and explanations are primarily based on the vector $\vec{V}_\theta$.
+This scalar is for summaries and downstream trigger logic. The student itself is
+trained to preserve the vector of trade-offs.
 
 ---
 
-## 3. Training Objective and Strategy
+## 3. Student Model Families
 
-### 3.1 Training Type
+### 3.1 Shared Input Setup
 
-For the capstone POC, training the critic is:
+All student variants consume the same state vector described in
+[System Architecture, State, and Runtime Flow](02_system_architecture.md):
 
-* **Supervised learning**, not reinforcement learning.
-* The model learns a mapping:
-  * From state $s_{u,t}$
-  * To a chosen target vector (depending on Option A/B/C): $\hat{\vec{a}}_{u,t}$, $\vec{G}_{u,t}^{(H)}$, or $\vec{G}_{u,t}$.
+- frozen sentence embeddings
+- optional recent-history window
+- time-gap features
+- 10-dim value-profile weights
 
-We use:
+The encoder is frozen in the current POC for simplicity, reproducibility, and
+data efficiency.
 
-* **Pretrained sentence encoders** (e.g. nomic or SBERT-family models) for text embeddings.
-* A **from-scratch multi-output regressor** for the critic itself.
+### 3.2 Active Student Families
 
-### 3.2 Loss Function
+The mainline student is no longer a single regression head. The active training
+stack now centers on a shared MLP backbone with multiple comparison families:
 
-For a generic target vector $\vec{Y}_{u,t}$ (immediate, short-horizon, or discounted), we define the loss over all users and time steps:
+- **Ordinal heads**: CORAL, CORN, EMD, CDW-CE, SoftOrdinal
+- **Long-tail baselines**: BalancedSoftmax, LDAM-DRW
+- **Experimental reformulation**: two-stage BalancedSoftmax
+- **Baselines retained for comparison**: legacy MSE MLP and Bayesian neural net
 
-$$ 
-\mathcal{L}(\theta) = \frac{1}{|\mathcal{D}|} \sum_{(u,t) \in \mathcal{D}} \sum_{j=1}^K w_{u,t}^{\text{label}} \Big( V_\theta^{(j)}(s_{u,t}) - Y_{u,t}^{(j)} \Big)^2
-$$ 
+In practice, the corrected-split experiment board currently treats the
+BalancedSoftmax family as the default frontier reference, while newer branches
+such as the two-stage formulation remain diagnostic challengers rather than the
+mainline default. See `logs/experiments/index.md` for the live ranking.
 
-where:
+### 3.3 Uncertainty Path
 
-* $\mathcal{D}$ is the dataset of all (state, target) pairs.
-* $w_{u,t}^{\text{label}}$ is an optional **label-weighting term** (e.g. based on judge confidence or label variance estimates).
-
-In the simplest version (Option A), $\vec{Y}_{u,t} = \hat{\vec{a}}_{u,t}$ and $w_{u,t}^{\text{label}} = 1$.
-
-### 3.3 Model Architecture
-
-A minimal architecture:
-
-* Input: state vector $s_{u,t}$.
-* Hidden layers: 2–3 dense layers (MLP) with non-linearities (e.g. ReLU or GELU), with dropout for regularisation and uncertainty estimation.
-* Output layer: linear layer with $K$ outputs (one per value dimension).
-
-The text encoder (e.g. nomic or a SBERT-family model) is:
-
-* Either frozen in the first iteration (for simplicity and data efficiency).
-* Or lightly fine-tuned jointly with the critic if data allows.
-
-### 3.4 Training Pipeline Overview
-
-1. **Ontology creation**: define value dimensions, rubrics, and examples.
-2. **Reward modeling (offline)**:
-   * Run LLM-as-Judge on existing (synthetic and/or real) entries to obtain $\hat{\vec{a}}_{u,t}$ and optional confidence scores.
-3. **Target construction**:
-   * Depending on chosen option:
-     * Option A: set $\vec{Y}_{u,t} = \hat{\vec{a}}_{u,t}$.
-     * Option B: compute short-horizon averages $\vec{G}_{u,t}^{(H)}$.
-     * Option C: compute discounted returns $\vec{G}_{u,t}$ with time-aware discounting.
-4. **State construction**:
-   * Encode text (and other signals if available) into windowed state vectors $s_{u,t}$.
-5. **Critic training**:
-   * Train $\vec{V}_\theta$ via supervised regression on the chosen targets.
-6. **Evaluation**:
-   * Use held-out trajectories/personas to evaluate prediction quality (e.g. QWK, MAE, recall, calibration, correlation) and structural consistency (e.g. circumplex opposition vs adjacency behavior), plus ranking consistency where applicable.
+For the MLP path, uncertainty is estimated with MC Dropout over repeated forward
+passes. The BNN path provides a separate Bayesian baseline.
 
 ---
 
-## 4. Implementation Reference
+## 4. Data, Splits, and Evaluation
 
-The VIF Critic training pipeline is implemented in `src/vif/`. Key modules:
+### 4.1 Data Path
+
+Training rows are built by joining:
+
+- wrangled journal entries from `logs/wrangled`
+- consolidated Judge labels from `logs/judge_labels/judge_labels.parquet`
+
+Each labeled entry becomes one `(state_vector, target_vector)` pair.
+
+### 4.2 Split Policy
+
+The current evaluation regime is persona-level and holdout-aware:
+
+- train/val/test splits are by persona, not by entry
+- validation/test are sign-stratified at the persona level
+- optional fixed holdout manifests are used for augmentation and audit rounds
+
+This is the only fair basis for comparing current frontier runs.
+
+### 4.3 Metrics
+
+The training stack tracks more than loss:
+
+- QWK
+- MAE
+- accuracy / recall
+- calibration
+- raw probability/logit exports when needed
+- circumplex diagnostics and related experiment summaries
+
+### 4.4 Current Caveat: Reachability Audit
+
+The training pipeline is operational, but the completed `twinkl-747`
+reachability audit changed how the current board should be interpreted. The hard
+dimensions, especially `security`, are not yet a clean long-term distillation
+target for the current student. That means the current frontier should be read
+as a useful experimental baseline, not the final target definition.
+
+---
+
+## 5. Implementation Reference
+
+The VIF training stack lives in `src/vif/`.
 
 | Module | Description |
 |--------|-------------|
-| `src/vif/encoders.py` | `TextEncoder` protocol + sentence-encoder wrapper (supports ablation studies) |
-| `src/vif/state_encoder.py` | `StateEncoder` class (builds state vectors per Section 2 above) |
-| `src/vif/critic.py` | Legacy regression-style `CriticMLP` with MC Dropout |
-| `src/vif/critic_ordinal.py` | Active ordinal critic heads (CORAL, CORN, EMD, CDW-CE, SoftOrdinal, BalancedSoftmax, LDAM-DRW) |
-| `src/vif/critic_bnn.py` | Bayesian neural baseline critic |
-| `src/vif/dataset.py` | `VIFDataset` + data loading with persona-level splits and optional fixed holdout reuse |
-| `src/vif/eval.py` | Evaluation metrics (QWK, MAE, Spearman, recall, calibration, raw output export, circumplex diagnostics) |
-| `src/vif/posthoc.py` | Validation-only post-hoc boundary tuning for saved ordinal outputs |
-| `src/vif/train.py` | CLI training script with config overrides |
-| `src/vif/experiment_logger.py` | Persisted run YAMLs plus the experiment index and frontier summaries |
+| `src/vif/encoders.py` | Sentence-encoder wrapper and encoder creation |
+| `src/vif/state_encoder.py` | State-vector construction |
+| `src/vif/critic.py` | Legacy regression-style Critic MLP |
+| `src/vif/critic_ordinal.py` | Active ordinal and long-tail head families |
+| `src/vif/critic_bnn.py` | Bayesian neural baseline |
+| `src/vif/dataset.py` | Data loading, joins, and persona-level splits |
+| `src/vif/eval.py` | Evaluation metrics and uncertainty-aware evaluation |
+| `src/vif/posthoc.py` | Validation-only post-hoc boundary tuning |
+| `src/vif/experiment_logger.py` | Persisted run YAMLs and experiment index support |
+| `src/vif/train.py` | General single-model training entrypoint |
+| `src/vif/train_bnn.py` | BNN training entrypoint |
+| `scripts/experiments/critic_training_v4_review.py` | Canonical frontier review driver |
 
-> **Note:** Specific model names, embedding dimensions, window sizes, and
-> hyperparameters referenced below are illustrative. See `config/vif.yaml`
-> for current runtime values.
+---
 
-> **Note:** [Value evolution detection](../evolution/01_value_evolution.md) is a post-hoc statistical analysis on Critic outputs (mean, standard deviation, residual over a window). It does not require changes to the training pipeline, loss function, or synthetic data — the Critic is trained to score individual entries, and evolution detection operates on the temporal *pattern* of those scores.
+## 6. Operational Notes
 
-### 4.1 Implemented Architecture
+### 6.1 Current Runtime Choices
 
-The current stack still implements **Option A (Immediate Alignment)**, but with
-more concrete runtime choices than the original POC draft:
+The current config defaults matter:
 
-- **Text encoder**: Frozen sentence encoder selected in `config/vif.yaml`
-  (`nomic-ai/nomic-embed-text-v1.5` is the active default; MiniLM/mpnet are
-  maintained as ablations)
-- **State dimension**: $N \times d_e + (N{-}1) + 10$ (text window, time gaps,
-  and the 10-dim value-weight vector only)
-- **Critic architecture**: Shared MLP backbone with multiple ordinal heads;
-  BNN training remains available as a comparator
-- **MC Dropout**: 50 forward passes for uncertainty estimation on the MLP path
-- **Loss/head family**: CORAL, CORN, EMD, CDW-CE, SoftOrdinal, BalancedSoftmax,
-  and LDAM-DRW, with weighted-MSE and BNN baselines retained for comparison
-- **Evaluation outputs**: QWK/MAE/recall/calibration plus optional raw
-  logits/probabilities and compact circumplex diagnostics
-- **Holdout policy**: corrected persona-stratified splits by default, with
-  fixed validation/test holdout manifests available for augmentation experiments
+- encoder family is configured in `config/vif.yaml`
+- the live default state currently uses `window_size: 1`
+- MC Dropout uses 50 samples by default
 
-### 4.2 Usage
+These are implementation choices, not permanent design constraints.
+
+### 6.2 Training Instrumentation
+
+The general training entrypoint now includes:
+
+- default LR-finder pass before training
+- gradient clipping and gradient telemetry
+- immediate non-finite loss termination with preserved artifacts
+
+These used to live as design notes; they are now part of the implemented
+training workflow.
+
+### 6.3 Recommended Entrypoints
 
 ```bash
-# Full training with default config
+# Single-model training with config defaults
 python -m src.vif.train
 
-# Quick test run
+# Quick smoke run
 python -m src.vif.train --epochs 5 --batch-size 8
 
-# Ablation with different encoder
+# Encoder ablation
 python -m src.vif.train --encoder-model all-mpnet-base-v2
 
-# Validation-only post-hoc boundary tuning on saved ordinal outputs
-python -m src.vif.posthoc --help
+# BNN baseline
+python -m src.vif.train_bnn
+
+# Frontier experiment workflow
+python scripts/experiments/critic_training_v4_review.py
 ```
-
-> **Default LR finder behavior (`src/vif/train.py`)**:
-> The training script now runs an LR range test before training by default,
-> logs `lr_steep`/`lr_valley`, and applies `lr_valley` as the optimizer LR.
-> If the valley signal is edge/monotonic, it falls back to a safer
-> `lr_steep` selection. Optional clipping via `max_selected_lr` is available
-> when explicitly configured.
-> Artifacts are saved to the checkpoint directory as `lr_find_loss_vs_lr.png`
-> and `lr_find_history.json` (or an override path via `--lr-find-output-path`).
->
-> **Non-finite loss termination (`src/vif/train.py`)**:
-> The MLP training script now aborts immediately if train or validation loss
-> becomes `NaN`/`Inf`, preserves any previously written `best_model.pt`, and
-> records divergence metadata in `training_log.json` under
-> `training_dynamics.termination`. Partial history and curve artifacts are
-> still written for the completed finite epochs.
->
-> **Training entrypoints**:
-> Use `src/vif/train.py` for general single-model training with config and CLI
-> overrides. Use `scripts/experiments/critic_training_v4_review.py` for the
-> frontier review flow that runs paired or multi-model ordinal experiments and
-> writes experiment logging artifacts.
-
-Configuration: `config/vif.yaml`
-Scripts: `src/vif/train.py`, `src/vif/train_bnn.py`, and `scripts/experiments/critic_training_v4_review.py`

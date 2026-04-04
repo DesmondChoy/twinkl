@@ -4,10 +4,10 @@
 >
 > | Stage | Status |
 > |---|---|
-> | Stage 0 (Offline Training) | 🧪 Experimental — pipeline functional; QWK optimization in progress |
+> | Stage 0 (Offline Training) | 🧪 Experimental — synthetic generation, judge labeling, and critic training are all implemented; frontier quality is still under active review |
 > | Stage 1 (Onboarding) | 📋 Specified |
-> | Stages 2–4 (Journaling + Coach) | ⚠️ Partial — Critic experimental (QWK optimization in progress); Coach digest not implemented |
-> | Stage 5 (High-uncertainty) | ⚠️ Partial — MC Dropout implemented; trigger thresholds under tuning |
+> | Stages 2–4 (Journaling + Coach) | ⚠️ Partial — runtime bridge, weekly signals, and draft Coach generation exist experimentally; trigger calibration and response validation are still under refinement |
+> | Stage 5 (High-uncertainty) | ⚠️ Partial — MC Dropout and high-uncertainty routing exist experimentally; sensitive-case behavior should still be treated as target behavior under evaluation |
 >
 > See the [Implementation Status](../prd.md#implementation-status) table in prd.md for the full breakdown.
 
@@ -30,9 +30,9 @@ Before any user signs up, the system must be trained.
 
 | Component | Status | Activity |
 |-----------|--------|----------|
-| Generator | **ACTIVE** | Creates 200 synthetic journal entries with diverse value tensions |
+| Generator | **ACTIVE** | Creates synthetic personas and journal trajectories with diverse value tensions |
 | Judge | **ACTIVE** | Scores each synthetic entry across all Schwartz value dimensions |
-| Critic | **ACTIVE** | Trains on (embedding, Judge scores) pairs via linear probing |
+| Critic | **ACTIVE** | Trains on state vectors and Judge labels as a supervised student |
 | Coach | N/A | No users exist yet |
 
 **Output:** A trained Critic model ready to score real user entries.
@@ -137,7 +137,7 @@ Sarah has been journaling for a month. Here's this week's entry:
 
 ### Critic's Processing
 
-**Input:** SBERT embedding of journal entry + Sarah's profile
+**Input:** Configured sentence embedding of the journal entry + Sarah's profile
 **Output:** Alignment scores across all 10 Schwartz dimensions (showing Sarah's declared values below)
 
 **This Week's Scores:**
@@ -266,7 +266,7 @@ The pitch succeeded, but Sarah doesn't bounce back. Her entries become flat:
 | **C_min (minimum weeks)** | Developer default | System-wide. 3 weeks balances sensitivity (catching real ruts) vs. specificity (ignoring normal fluctuations). Shorter risks false alarms; longer delays intervention. |
 | **Uncertainty threshold (ε)** | Algorithm (calibrated) | Derived from model calibration on held-out data. Not user-facing — ensures the system only speaks when confident. |
 
-For the full mathematical formulation of crash/rut detection and uncertainty gating, see [Uncertainty & Critique Logic](04_uncertainty_logic.md).
+For the full mathematical formulation of crash/rut detection and uncertainty gating, see [Uncertainty, Drift, and Trigger Logic](04_uncertainty_logic.md).
 
 **System Decision:** Trigger Coach.
 
