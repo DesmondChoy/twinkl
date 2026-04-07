@@ -519,6 +519,87 @@ select,
     margin: 18px 0;
 }
 
+/* ── Per-entry drift alerts ───────────────────────────────────────────── */
+
+.timeline-card-alert {
+    border-left: 3px solid var(--danger);
+    background: linear-gradient(135deg, rgba(138, 45, 42, 0.04), transparent 60%);
+}
+
+.alert-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+}
+
+.alert-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--danger);
+}
+
+.badge-alert {
+    background: var(--danger-soft);
+    color: var(--danger);
+    font-size: 0.72rem;
+}
+
+/* ── Detector comparison ──────────────────────────────────────────────── */
+
+.detector-meta {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+}
+
+.detector-summary-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.detector-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 8px 10px;
+    font-size: 0.8rem;
+}
+
+.detector-name {
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 2px;
+}
+
+.detector-fired {
+    color: var(--danger);
+    font-size: 0.75rem;
+}
+
+.detector-silent {
+    color: var(--success);
+    font-size: 0.75rem;
+}
+
+.consensus-badge {
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 8px;
+    font-size: 0.78rem;
+}
+
+.consensus-0 { background: var(--surface); color: var(--text-muted); }
+.consensus-1 { background: #fef3cd; color: #856404; }
+.consensus-2 { background: #ffe0b2; color: #8a4b24; }
+.consensus-3 { background: #ffc8c4; color: #8a2d2a; }
+.consensus-4 { background: var(--danger-soft); color: var(--danger); font-weight: 900; }
+
 @media (max-width: 1260px) {
     .demo-grid {
         grid-template-columns: 1fr;

@@ -23,12 +23,16 @@ from src.demo_tool.data_loader import (
     load_demo_personas,
     summarize_warnings,
 )
+import plotly.graph_objects as go
+from shinywidgets import output_widget, render_widget
+
 from src.demo_tool.runtime_bridge import (
     CheckpointOption,
     build_checkpoint_choices,
     discover_checkpoints,
     get_checkpoint_option,
     load_cached_run,
+    load_multi_drift_bundle,
     run_demo_pipeline,
 )
 from src.demo_tool.state import DemoAppState, create_demo_state
@@ -224,6 +228,12 @@ def _build_main_app_ui() -> ui.Tag:
                     ui.input_select("persona_id", "Persona", choices={}),
                     ui.output_ui("persona_summary_compact"),
                     ui.input_select("checkpoint_path", "Critic checkpoint", choices={}),
+                    ui.input_select(
+                        "drift_source",
+                        "Detector input source",
+                        choices={"judge": "Judge labels", "critic": "Critic predictions"},
+                        selected="judge",
+                    ),
                     ui.output_ui("checkpoint_summary"),
                     ui.div(
                         ui.input_action_button(
@@ -294,6 +304,20 @@ def server(input, output, session):
     @reactive.calc
     def current_checkpoint() -> CheckpointOption | None:
         return get_checkpoint_option(checkpoints(), input.checkpoint_path())
+
+    @reactive.calc
+    def multi_drift_bundle():
+        persona_id = input.persona_id()
+        source = input.drift_source()
+        if not persona_id:
+            return None
+        timeline_df = None
+        if source == "critic":
+            bundle = state.run_bundle()
+            if bundle is None:
+                return None
+            timeline_df = bundle["artifacts"]["timeline_df"]
+        return load_multi_drift_bundle(persona_id, source=source, timeline_df=timeline_df)
 
     @reactive.effect
     def _sync_persona_select():
@@ -407,6 +431,14 @@ def server(input, output, session):
                     type="error",
                     duration=6,
                 )
+
+    @render_widget
+    def detector_chart():
+        return _build_detector_chart(multi_drift_bundle())
+
+    @render.ui
+    def detector_table():
+        return _render_detector_table(multi_drift_bundle())
 
     @render.ui
     def catalog_warning_banner():
@@ -600,19 +632,20 @@ def server(input, output, session):
     def results_panel():
         bundle = state.run_bundle()
         if bundle is None:
-            if state.run_status() == "running":
-                return ui.div(
-                    ui.h3("Results", class_="panel-title"),
-                    ui.div(
-                        "The live pipeline is running. Tabs will populate when the artifacts are ready.",
-                        class_="empty-state",
-                    ),
-                )
-            return ui.div(
+            status_msg = (
+                "The live pipeline is running. Tabs will populate when the artifacts are ready."
+                if state.run_status() == "running"
+                else "No artifacts loaded yet. Use the run button or choose a selection with cached outputs."
+            )
+            return ui.TagList(
                 ui.h3("Results", class_="panel-title"),
-                ui.div(
-                    "No artifacts loaded yet for this selection. Use the run button or choose a selection with cached outputs.",
-                    class_="empty-state",
+                ui.div(status_msg, class_="empty-state"),
+                ui.navset_tab(
+                    ui.nav_panel(
+                        "Detector comparison",
+                        output_widget("detector_chart"),
+                        ui.output_ui("detector_table"),
+                    ),
                 ),
             )
 
@@ -621,6 +654,19 @@ def server(input, output, session):
         drift = artifacts["drift_payload"]
         timeline_df = artifacts["timeline_df"].sort(["date", "t_index"])
         weekly_df = artifacts["weekly_df"].sort(["week_start"])
+
+        # Build critic-based detector alert map for per-entry annotations
+        critic_alert_map: dict[int, list[str]] = {}
+        try:
+            critic_bundle = load_multi_drift_bundle(
+                bundle["persona_id"], source="critic", timeline_df=timeline_df
+            )
+            if critic_bundle is not None:
+                for detector in critic_bundle.detectors:
+                    for t in detector.alert_steps:
+                        critic_alert_map.setdefault(t, []).append(detector.name)
+        except Exception:
+            pass
 
         return ui.TagList(
             ui.h3("Pipeline results", class_="panel-title"),
@@ -645,7 +691,7 @@ def server(input, output, session):
             ui.navset_tab(
                 ui.nav_panel(
                     "Per-entry critic",
-                    _render_timeline_results(timeline_df),
+                    _render_timeline_results(timeline_df, critic_alert_map),
                 ),
                 ui.nav_panel(
                     "Weekly signals",
@@ -659,22 +705,43 @@ def server(input, output, session):
                     "Weekly digest",
                     _render_digest_results(artifacts["digest_markdown"], digest),
                 ),
+                ui.nav_panel(
+                    "Detector comparison",
+                    output_widget("detector_chart"),
+                    ui.output_ui("detector_table"),
+                ),
             ),
         )
 
 
-def _render_timeline_results(timeline_df: pl.DataFrame) -> ui.Tag:
-    """Render per-entry VIF outputs."""
+def _render_timeline_results(
+    timeline_df: pl.DataFrame,
+    alert_map: dict[int, list[str]] | None = None,
+) -> ui.Tag:
+    """Render per-entry VIF outputs with optional detector alert annotations."""
+    alert_map = alert_map or {}
     cards = []
     for row in timeline_df.to_dicts():
         strengths, tensions = _top_dimensions(row)
+        t = int(row["t_index"])
+        fired_detectors = alert_map.get(t, [])
+
+        alert_row = None
+        if fired_detectors:
+            alert_row = ui.div(
+                ui.span("Drift alert", class_="alert-label"),
+                *[ui.span(name, class_="badge badge-alert") for name in fired_detectors],
+                class_="alert-row",
+            )
+
         cards.append(
             ui.div(
                 ui.div(
-                    ui.span(f"Entry {int(row['t_index']) + 1}", class_="entry-index"),
+                    ui.span(f"Entry {t + 1}", class_="entry-index"),
                     ui.span(str(row["date"]), class_="entry-date"),
                     class_="entry-meta",
                 ),
+                alert_row,
                 ui.p(str(row.get("initial_entry") or ""), class_="entry-text compact"),
                 ui.div(
                     ui.div(
@@ -703,7 +770,7 @@ def _render_timeline_results(timeline_df: pl.DataFrame) -> ui.Tag:
                     ),
                     class_="subsection-stack",
                 ),
-                class_="timeline-card",
+                class_=f"timeline-card {'timeline-card-alert' if fired_detectors else ''}",
             )
         )
 
@@ -817,6 +884,148 @@ def _render_digest_results(markdown_text: str, digest: dict[str, Any]) -> ui.Tag
             class_="subsection-stack",
         ),
         ui.div(ui.markdown(markdown_text), class_="digest-markdown"),
+    )
+
+
+def _build_detector_chart(bundle: Any | None) -> go.Figure:
+    """Build a Plotly figure showing per-dimension alignment trajectories with detector alert markers."""
+    from src.demo_tool.multi_drift import DETECTOR_KEYS, DETECTOR_NAMES, DIM_LABELS
+
+    fig = go.Figure()
+
+    if bundle is None:
+        fig.add_annotation(
+            text="Select a persona (and run the critic if using Critic source)",
+            xref="paper", yref="paper", x=0.5, y=0.5,
+            showarrow=False, font=dict(size=13, color="#6b625c"),
+        )
+        fig.update_layout(_detector_chart_layout("Detector comparison — no data"))
+        return fig
+
+    T = bundle.n_entries
+    x_labels = [f"E{t + 1}" for t in range(T)]
+    colors = [
+        "#8a4b24", "#285943", "#294f74", "#7a3d7a", "#8a6a24", "#2a6a6a",
+        "#c0392b", "#27ae60", "#2980b9", "#8e44ad", "#d4a017", "#16a085",
+    ]
+
+    # One trace per dimension
+    for j, short in enumerate(DIM_LABELS):
+        y_vals = bundle.scores_matrix[:, j].tolist()
+        is_core = bundle.weights[j] > 0
+        opacity = 1.0 if is_core else 0.35
+        fig.add_trace(go.Scatter(
+            x=x_labels, y=y_vals,
+            mode="lines+markers",
+            name=short,
+            line=dict(color=colors[j % len(colors)], width=2 if is_core else 1),
+            marker=dict(size=5),
+            opacity=opacity,
+        ))
+
+    # Alert markers per detector (symbols along bottom)
+    marker_symbols = ["circle", "square", "diamond", "cross", "x", "triangle-up"]
+    marker_y_offset = -1.35
+    for di, detector in enumerate(bundle.detectors):
+        for t in sorted(detector.alert_steps):
+            if t < T:
+                fig.add_trace(go.Scatter(
+                    x=[x_labels[t]],
+                    y=[marker_y_offset - di * 0.12],
+                    mode="markers",
+                    marker=dict(symbol=marker_symbols[di], size=9, color=colors[di % len(colors)]),
+                    name=detector.name,
+                    showlegend=False,
+                    hovertext=f"{detector.name} alert at {x_labels[t]}",
+                    hoverinfo="text",
+                ))
+
+    # Consensus bar as subtle background shading
+    for t, votes in bundle.consensus.items():
+        if votes >= 3 and t < T:
+            fig.add_vrect(
+                x0=t - 0.4, x1=t + 0.4,
+                fillcolor="rgba(138,45,42,0.08)", line_width=0,
+            )
+
+    # Zero line
+    fig.add_hline(y=0, line_dash="dot", line_color="#d8cdc0", line_width=1)
+
+    source_label = "Judge labels" if bundle.source == "judge" else "Critic predictions"
+    fig.update_layout(_detector_chart_layout(
+        f"Alignment trajectories — {source_label} ({bundle.n_entries} entries)"
+    ))
+    return fig
+
+
+def _detector_chart_layout(title: str) -> dict:
+    return dict(
+        title=dict(text=title, font=dict(size=13, color="#1f1a17")),
+        height=420,
+        margin=dict(l=40, r=20, t=40, b=60),
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(255,253,250,0.6)",
+        font=dict(family="Iowan Old Style, Palatino Linotype, serif", size=11, color="#1f1a17"),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(size=10)),
+        xaxis=dict(gridcolor="#ece7e0", showgrid=True),
+        yaxis=dict(gridcolor="#ece7e0", showgrid=True, range=[-1.7, 1.1]),
+    )
+
+
+def _render_detector_table(bundle: Any | None) -> ui.Tag:
+    """Render the step × detector alert grid table."""
+    from src.demo_tool.multi_drift import DETECTOR_KEYS, DETECTOR_NAMES
+
+    if bundle is None:
+        return ui.div(
+            "Select a persona to see detector comparison. Judge labels work without running the critic.",
+            class_="empty-state",
+        )
+
+    if bundle.n_entries < 3:
+        return ui.div(
+            f"This persona has only {bundle.n_entries} entries — some detectors need more history.",
+            class_="empty-state",
+        )
+
+    # Summary chips row
+    chips = []
+    for detector in bundle.detectors:
+        fired = len(detector.alert_steps)
+        chips.append(
+            ui.div(
+                ui.div(detector.name, class_="detector-name"),
+                ui.div(
+                    f"{fired} step{'s' if fired != 1 else ''} fired",
+                    class_="detector-fired" if fired > 0 else "detector-silent",
+                ),
+                class_="detector-card",
+            )
+        )
+
+    # Step × detector table
+    columns = [("step", "Step"), ("date", "Date")]
+    for key, name in zip(DETECTOR_KEYS, DETECTOR_NAMES):
+        columns.append((key, name))
+    columns.append(("consensus", "Votes"))
+
+    records = []
+    for i, (t, date) in enumerate(zip(bundle.t_indices, bundle.dates)):
+        row: dict[str, Any] = {"step": f"E{t + 1}", "date": date}
+        for detector in bundle.detectors:
+            row[detector.key] = "●" if t in detector.alert_steps else "–"
+        votes = bundle.consensus.get(t, 0)
+        row["consensus"] = ui.span(
+            str(votes),
+            class_=f"consensus-badge consensus-{min(votes, 4)}",
+        )
+        records.append(row)
+
+    source_label = "Judge labels" if bundle.source == "judge" else "Critic predictions"
+    return ui.div(
+        ui.div(f"Source: {source_label} · {bundle.n_entries} entries · core values: {', '.join(bundle.core_values) or 'none'}", class_="detector-meta"),
+        ui.div(*chips, class_="detector-summary-row"),
+        _build_table(records, columns),
     )
 
 

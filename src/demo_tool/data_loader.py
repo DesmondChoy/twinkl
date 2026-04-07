@@ -83,12 +83,7 @@ def load_demo_personas(
         if grouped_entries:
             personas.append(_build_persona_record(grouped_entries))
 
-    personas.sort(
-        key=lambda persona: (
-            persona["annotation_order"] if persona["annotation_order"] is not None else 999999,
-            persona["persona_id"],
-        )
-    )
+    personas.sort(key=lambda persona: (persona["persona_name"] or "").lower())
     return DemoLoadResult(personas=personas, warnings=result.warnings)
 
 

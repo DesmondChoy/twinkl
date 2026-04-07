@@ -318,6 +318,39 @@ def load_cached_run(
     }
 
 
+def load_multi_drift_bundle(
+    persona_id: str,
+    source: str = "judge",
+    timeline_df: Any | None = None,
+    judge_labels_path: str | Path = "logs/judge_labels/judge_labels.parquet",
+    registry_path: str | Path = "logs/registry/personas.parquet",
+) -> Any | None:
+    """Run all 6 drift detectors for a persona and return a MultiDriftBundle.
+
+    source: "judge" uses judge_labels.parquet; "critic" uses the provided timeline_df.
+    Returns None if insufficient data or source files are missing.
+    """
+    from src.demo_tool.multi_drift import (
+        run_multi_drift_from_critic,
+        run_multi_drift_from_judge,
+    )
+
+    if source == "critic":
+        if timeline_df is None:
+            return None
+        return run_multi_drift_from_critic(
+            persona_id=persona_id,
+            timeline_df=timeline_df,
+            registry_path=Path(registry_path),
+        )
+
+    return run_multi_drift_from_judge(
+        persona_id=persona_id,
+        judge_labels_path=Path(judge_labels_path),
+        registry_path=Path(registry_path),
+    )
+
+
 def run_demo_pipeline(
     *,
     persona_id: str,
