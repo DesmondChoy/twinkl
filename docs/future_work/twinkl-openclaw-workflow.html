@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Twinkl × OpenClaw — Integration 6 Workflow</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e17;
+    --card: #131a2b;
+    --card-hover: #1a2340;
+    --accent: #4fd1c5;
+    --accent-dim: #2a7a72;
+    --warm: #f6ad55;
+    --purple: #b794f4;
+    --red: #fc8181;
+    --green: #68d391;
+    --text: #e2e8f0;
+    --text-dim: #718096;
+    --border: #1e2d4a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'JetBrains Mono', 'SF Mono', monospace;
+    padding: 20px;
+    line-height: 1.6;
+  }
+
+  .container { max-width: 800px; margin: 0 auto; }
+
+  .eyebrow {
+    font-size: 10px;
+    color: var(--accent-dim);
+    letter-spacing: 3px;
+    margin-bottom: 6px;
+  }
+
+  h1 {
+    font-size: clamp(20px, 4vw, 26px);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    font-size: 12px;
+    color: var(--text-dim);
+    max-width: 640px;
+    margin-bottom: 24px;
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .tab {
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 18px;
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+  }
+
+  .tab.active {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+  }
+
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* Architecture Flow */
+  .flow-zone {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 12px;
+    background: var(--card);
+  }
+
+  .zone-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .zone-title {
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+
+  .zone-badge {
+    font-size: 9px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  .zone-desc {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-bottom: 14px;
+  }
+
+  .flow-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .flow-step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: #0a0e17;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    font-size: 11px;
+  }
+
+  .step-icon { font-size: 16px; flex-shrink: 0; }
+  .step-label { font-weight: 600; }
+  .step-sub { color: var(--text-dim); font-size: 10px; margin-top: 2px; }
+
+  .arrow-down {
+    text-align: center;
+    color: var(--accent);
+    font-size: 18px;
+    padding: 4px 0;
+    opacity: 0.5;
+  }
+
+  /* Callout */
+  .callout {
+    padding: 16px 20px;
+    background: #111927;
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    font-size: 12px;
+    color: var(--text-dim);
+    margin: 20px 0;
+    line-height: 1.7;
+  }
+
+  .callout-label {
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  /* Skill Package */
+  .pkg-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  @media (max-width: 500px) {
+    .pkg-grid { grid-template-columns: 1fr; }
+  }
+
+  .pkg-item {
+    padding: 10px 14px;
+    background: #0a0e17;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    font-size: 11px;
+  }
+
+  .pkg-file { color: var(--purple); font-weight: 600; }
+  .pkg-desc { color: var(--text-dim); font-size: 10px; margin-top: 3px; }
+
+  /* Compute View */
+  .compute-card {
+    padding: 16px 20px;
+    background: var(--card);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    margin-bottom: 12px;
+    transition: all 0.2s;
+  }
+
+  .compute-card:hover {
+    background: var(--card-hover);
+    border-color: var(--accent);
+  }
+
+  .compute-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .compute-zone { font-weight: 600; font-size: 13px; }
+
+  .load-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 1px;
+  }
+
+  .load-zero { background: #1a332a; color: var(--green); }
+  .load-light { background: #1a2d33; color: var(--accent); }
+  .load-offload { background: #1f1a33; color: var(--purple); }
+  .load-mod { background: #33291a; color: var(--warm); }
+
+  .compute-detail {
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  .verdict {
+    margin-top: 20px;
+    padding: 20px 24px;
+    background: #0d1f1a;
+    border-radius: 10px;
+    border: 1px solid rgba(104, 211, 145, 0.2);
+  }
+
+  .verdict-title {
+    font-size: 11px;
+    color: var(--green);
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+
+  .verdict-body {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 16px;
+    padding: 20px;
+    background: var(--card);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+
+  @media (max-width: 500px) {
+    .compare-grid { grid-template-columns: 1fr; }
+  }
+
+  .compare-title {
+    font-weight: 600;
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
+
+  .compare-body {
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 14px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="eyebrow">INTEGRATION 6 — WORKFLOW</div>
+  <h1>Twinkl as OpenClaw Skill Package</h1>
+  <p class="subtitle">Distribution via ClawHub's 270K+ community. Phone is a dumb pipe — all compute lives on laptop/server.</p>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchView('arch', this)">⬡ ARCHITECTURE</button>
+    <button class="tab" onclick="switchView('compute', this)">⚡ COMPUTE</button>
+    <button class="tab" onclick="switchView('package', this)">📦 SKILL PKG</button>
+  </div>
+
+  <!-- ARCHITECTURE VIEW -->
+  <div id="arch" class="view active">
+
+    <!-- Zone 1: Phone -->
+    <div class="flow-zone">
+      <div class="zone-header">
+        <span class="zone-title" style="color:var(--warm)">📱 USER DEVICE (PHONE)</span>
+        <span class="zone-badge" style="background:#33291a;color:var(--warm)">ZERO COMPUTE</span>
+      </div>
+      <div class="zone-desc">Thin client only — sends & receives text via existing chat APIs. No ML, no storage, no processing.</div>
+      <div class="flow-steps">
+        <div class="flow-step">
+          <span class="step-icon">💬</span>
+          <div><div class="step-label">WhatsApp / Telegram / Signal</div><div class="step-sub">User sends message or receives nudge in their existing chat app</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow-down">▼ chat message via API ▼</div>
+
+    <!-- Zone 2: OpenClaw -->
+    <div class="flow-zone" style="border-color:var(--accent-dim)">
+      <div class="zone-header">
+        <span class="zone-title" style="color:var(--accent)">🖥 OPENCLAW HOST (LAPTOP / SERVER)</span>
+        <span class="zone-badge" style="background:#1a2d33;color:var(--accent)">ALL ORCHESTRATION</span>
+      </div>
+      <div class="zone-desc">Node.js gateway handles routing, heartbeat scheduling, skill execution, and memory I/O. ~200-500MB RAM.</div>
+      <div class="flow-steps">
+        <div class="flow-step">
+          <span class="step-icon">🔀</span>
+          <div><div class="step-label">Message Router</div><div class="step-sub">Receives inbound chat → routes to Twinkl skill</div></div>
+        </div>
+        <div class="arrow-down">↓</div>
+        <div class="flow-step">
+          <span class="step-icon">🧭</span>
+          <div><div class="step-label">Twinkl Skill (SKILL.md)</div><div class="step-sub">Main orchestrator — decides: onboarding? nudge? journal? digest?</div></div>
+        </div>
+        <div class="arrow-down">↓</div>
+        <div class="flow-step" style="border-color:var(--red)33">
+          <span class="step-icon">♥️</span>
+          <div><div class="step-label" style="color:var(--red)">Heartbeat Daemon</div><div class="step-sub">Every 30min: check journal cadence, scan calendar for value-relevant events, detect work-life drift. Silent when nothing needs attention (HEARTBEAT_OK).</div></div>
+        </div>
+        <div class="arrow-down">↓</div>
+        <div class="flow-steps" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div class="flow-step">
+            <span class="step-icon">📋</span>
+            <div><div class="step-label">BWS Onboarding</div><div class="step-sub">Value assessment via chat</div></div>
+          </div>
+          <div class="flow-step">
+            <span class="step-icon">🔔</span>
+            <div><div class="step-label">Nudge Engine</div><div class="step-sub">3-category classifier</div></div>
+          </div>
+          <div class="flow-step">
+            <span class="step-icon">📊</span>
+            <div><div class="step-label">Digest Generator</div><div class="step-sub">Weekly alignment report</div></div>
+          </div>
+          <div class="flow-step">
+            <span class="step-icon">🔍</span>
+            <div><div class="step-label">memory_search</div><div class="step-sub">RAG over journal history</div></div>
+          </div>
+        </div>
+        <div class="arrow-down">↓</div>
+        <div class="flow-steps" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div class="flow-step" style="border-color:var(--accent-dim)55">
+            <span class="step-icon">📁</span>
+            <div><div class="step-label">MEMORY.md</div><div class="step-sub">Value vector w_u, identity themes, goals — human-readable & editable</div></div>
+          </div>
+          <div class="flow-step" style="border-color:var(--accent-dim)55">
+            <span class="step-icon">💾</span>
+            <div><div class="step-label">SQLite / Parquet</div><div class="step-sub">Twinkl source of truth. Daily logs in YYYY-MM-DD.md</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow-down">▼ inference calls ▼</div>
+
+    <!-- Zone 3: External -->
+    <div class="flow-zone" style="border-color:var(--purple)44">
+      <div class="zone-header">
+        <span class="zone-title" style="color:var(--purple)">☁️ EXTERNAL APIs</span>
+        <span class="zone-badge" style="background:#1f1a33;color:var(--purple)">OFFLOADED INFERENCE</span>
+      </div>
+      <div class="zone-desc">All heavy ML inference runs on remote GPU clusters. This is where the actual compute cost lives — but it's a $ problem, not a CPU problem.</div>
+      <div class="flow-steps" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div class="flow-step">
+          <span class="step-icon">🧠</span>
+          <div><div class="step-label">LLM API</div><div class="step-sub">GPT-4o / Claude / etc for nudge phrasing, coaching</div></div>
+        </div>
+        <div class="flow-step">
+          <span class="step-icon">📐</span>
+          <div><div class="step-label">VIF Critic</div><div class="step-sub">Scoring endpoint for value alignment</div></div>
+        </div>
+        <div class="flow-step">
+          <span class="step-icon">📚</span>
+          <div><div class="step-label">Coach RAG</div><div class="step-sub">Evidence-based alignment generation</div></div>
+        </div>
+        <div class="flow-step">
+          <span class="step-icon">🏪</span>
+          <div><div class="step-label">ClawHub</div><div class="step-sub">Skill registry — publish & pull (270K+ users)</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow-down">▼ response back to user ▼</div>
+
+    <div class="flow-zone" style="border-color:var(--green)44">
+      <div class="zone-header">
+        <span class="zone-title" style="color:var(--green)">✅ BACK TO PHONE</span>
+      </div>
+      <div class="zone-desc">Nudge, digest, or coach message delivered as a plain chat message. User reflects and replies in-chat → fed back into the pipeline as a journal entry.</div>
+    </div>
+
+    <div class="callout">
+      <span class="callout-label">KEY INSIGHT →</span>
+      The phone never runs inference, stores models, or processes data. It's literally just a chat window.
+      OpenClaw on laptop/server handles all orchestration. Heavy ML inference is offloaded to external APIs.
+      The only "compute" on the user's device is rendering text messages.
+    </div>
+  </div>
+
+  <!-- COMPUTE VIEW -->
+  <div id="compute" class="view">
+    <div class="compute-card">
+      <div class="compute-header">
+        <span class="compute-zone">📱 Phone / Messaging App</span>
+        <span class="load-badge load-zero">NEAR ZERO</span>
+      </div>
+      <div class="compute-detail">Thin client only — sends/receives text via existing chat APIs. No ML, no storage, no processing.</div>
+    </div>
+
+    <div class="compute-card">
+      <div class="compute-header">
+        <span class="compute-zone">🖥 OpenClaw Gateway</span>
+        <span class="load-badge load-mod">LIGHT → MODERATE</span>
+      </div>
+      <div class="compute-detail">Node.js process handling message routing, heartbeat scheduling, skill orchestration, and memory I/O. CPU-bound only during skill execution. ~200-500MB RAM typical.</div>
+    </div>
+
+    <div class="compute-card">
+      <div class="compute-header">
+        <span class="compute-zone">🧭 Twinkl Skill Package</span>
+        <span class="load-badge load-light">LIGHT</span>
+      </div>
+      <div class="compute-detail">Markdown-defined logic for onboarding (BWS), nudge classification, digest generation. Most "intelligence" is delegated to the LLM API — the skill just orchestrates.</div>
+    </div>
+
+    <div class="compute-card">
+      <div class="compute-header">
+        <span class="compute-zone">☁️ LLM API (External)</span>
+        <span class="load-badge load-offload">OFFLOADED ENTIRELY</span>
+      </div>
+      <div class="compute-detail">All heavy inference (VIF Critic scoring, Coach RAG generation, nudge phrasing) hits the external API. This is the most expensive compute — but it's someone else's GPU cluster.</div>
+    </div>
+
+    <div class="compute-card">
+      <div class="compute-header">
+        <span class="compute-zone">📐 VIF Critic Model</span>
+        <span class="load-badge load-light">LIGHT (IF LOCAL) / NONE (IF API)</span>
+      </div>
+      <div class="compute-detail">If hosted locally as a fine-tuned model: moderate GPU spike during scoring. If exposed as API endpoint: zero local compute. For capstone POC, API is the move.</div>
+    </div>
+
+    <div class="compute-card">
+      <div class="compute-header">
+        <span class="compute-zone">💾 Local Storage</span>
+        <span class="load-badge load-zero">NEGLIGIBLE</span>
+      </div>
+      <div class="compute-detail">MEMORY.md, daily logs, parquet/SQLite for Twinkl state. All sequential disk I/O. A Raspberry Pi could handle this.</div>
+    </div>
+
+    <div class="verdict">
+      <div class="verdict-title">✓ VERDICT: NO COMPUTE BOTTLENECK</div>
+      <div class="verdict-body">
+        Your instinct is correct. The phone is a dumb pipe. OpenClaw on a modern laptop (your M4 Pro is overkill) handles orchestration comfortably. All heavy inference is API-offloaded. The only scaling concern is <span style="color:var(--warm)">token cost</span> from heartbeat + multi-signal sensing hitting the LLM API — that's a dollars problem, not a compute problem.
+      </div>
+    </div>
+
+    <div class="compare-grid">
+      <div>
+        <div class="compare-title" style="color:var(--warm)">💻 Local Laptop</div>
+        <div class="compare-body">Heartbeat only runs while laptop is open. Privacy maximum — nothing leaves your machine except LLM API calls. Perfect for capstone demo. M4 Pro could even run a local VIF Critic.</div>
+      </div>
+      <div>
+        <div class="compare-title" style="color:var(--purple)">🖥 Server (VPS/Cloud)</div>
+        <div class="compare-body">Heartbeat runs 24/7 — catches late-night emails, weekend calendar events. Required for production multi-user. Adds ~$5-20/mo hosting but architecture is identical.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PACKAGE VIEW -->
+  <div id="package" class="view">
+    <div class="section-label" style="color:var(--purple)">CLAWHUB SKILL PACKAGE CONTENTS</div>
+    <div class="pkg-grid">
+      <div class="pkg-item"><div class="pkg-file">SKILL.md</div><div class="pkg-desc">Alignment engine instructions + persona definition</div></div>
+      <div class="pkg-item"><div class="pkg-file">onboarding/bws.md</div><div class="pkg-desc">BWS assessment conversation flow</div></div>
+      <div class="pkg-item"><div class="pkg-file">nudge/classify.md</div><div class="pkg-desc">3-category nudge decision logic</div></div>
+      <div class="pkg-item"><div class="pkg-file">digest/weekly.md</div><div class="pkg-desc">Weekly alignment digest template</div></div>
+      <div class="pkg-item"><div class="pkg-file">vif/scoring.md</div><div class="pkg-desc">VIF Critic API integration config</div></div>
+      <div class="pkg-item"><div class="pkg-file">HEARTBEAT.md</div><div class="pkg-desc">Cadence monitoring + event triggers</div></div>
+    </div>
+
+    <div class="callout" style="margin-top:20px;border-color:var(--purple)">
+      <span class="callout-label" style="color:var(--purple)">DISTRIBUTION STRATEGY →</span>
+      This isn't just a technical integration — it's a go-to-market play. Instead of competing for app-store downloads, Twinkl rides OpenClaw's existing 270K+ user base and messaging-native UX. Users install one skill package and get the full alignment loop delivered through WhatsApp/Telegram.
+    </div>
+
+    <div class="flow-zone" style="margin-top:16px;border-color:var(--purple)44">
+      <div class="zone-header">
+        <span class="zone-title" style="color:var(--purple)">INSTALL FLOW</span>
+      </div>
+      <div class="flow-steps">
+        <div class="flow-step"><span class="step-icon">1️⃣</span><div><div class="step-label">User discovers Twinkl on ClawHub</div><div class="step-sub">Browsing skill registry or via recommendation</div></div></div>
+        <div class="arrow-down">↓</div>
+        <div class="flow-step"><span class="step-icon">2️⃣</span><div><div class="step-label">One-command install</div><div class="step-sub">openclaw install twinkl-alignment</div></div></div>
+        <div class="arrow-down">↓</div>
+        <div class="flow-step"><span class="step-icon">3️⃣</span><div><div class="step-label">Skill auto-triggers onboarding</div><div class="step-sub">BWS value assessment via their existing chat app</div></div></div>
+        <div class="arrow-down">↓</div>
+        <div class="flow-step"><span class="step-icon">4️⃣</span><div><div class="step-label">Heartbeat activates</div><div class="step-sub">Cadence monitoring, nudges, weekly digests — all running</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchView(id, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
