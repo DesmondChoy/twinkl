@@ -93,3 +93,11 @@
   authoritative project docs clearly treat it that way. In this repo, evolution
   gating should be described as an undecided idea unless explicitly confirmed
   otherwise.
+
+## 2026-04-10
+
+- In sponsor-facing or evaluative project writing, do not flatten every
+  assertive sentence into neutral wording after the user asks to remove
+  self-judging language. Keep engineering characterizations that the report can
+  support with concrete architecture, benchmarks, or workflow evidence, and cut
+  only the lines that make the value judgment for the reader.
