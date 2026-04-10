@@ -52,6 +52,17 @@ uv pip install <package>
 Script-based generation/judging helpers live in `src/synthetic/`,
 `src/judge/`, and `scripts/journalling/`.
 
+## Commit Messages
+
+- Write every commit as: `<type>: <summary>`
+- Prefer conventional types: `feat`, `fix`, `refactor`, `chore`, `docs`, `test`
+- When a commit is scoped to a single beads issue, the issue ID may be
+  used as the type prefix: `twinkl-4b3s: consolidate and archive VIF docs`
+- For conventional-type commits tied to issues, reference them in
+  parentheses: `docs: refresh eval scope (twinkl-3cb)`
+- Use `chore:` for tracker-only or maintenance-only commits
+- Keep the summary short, specific, and descriptive
+
 ## Architecture Snapshot
 
 ### Source Code (`src/`)
@@ -123,6 +134,11 @@ Script-based generation/judging helpers live in `src/synthetic/`,
 - **General clarity rule**: Write for immediate understanding on first read. Prefer plain, everyday language, short sentences, and concrete wording over dense or abstract phrasing.
 - **Anti-jargon rule**: Do not make the user decode internal shorthand, umbrella terms, or technical jargon when a direct phrase would work. If a technical term is necessary, define it in plain English the first time you use it.
 
+## Collaboration Signals
+
+- Include a short summary of assumptions, chosen approach, and risk areas in handoff notes.
+- Keep documentation updates aligned with behavioral changes where appropriate.
+
 ## Quality Gate Before Commit
 
 Before creating a commit:
@@ -141,6 +157,11 @@ direction, ask one concise clarifying question.
 
 Use `bd` (beads) for all issue tracking. This is mandatory, not optional.
 Run `bd prime` for the full command reference and workflow context.
+
+### Rules
+
+- Use `bd` for ALL task tracking — do NOT use TodoWrite, TaskCreate, or markdown TODO lists.
+- Use `bd remember` for persistent knowledge — do NOT use MEMORY.md files.
 
 ### Before starting work
 - Run `bd ready` to find available work, or `bd list` to see all open issues.
@@ -167,17 +188,26 @@ Run `bd prime` for the full command reference and workflow context.
 | Full command reference | `bd prime` |
 
 ### Session completion
-When ending a work session, complete ALL steps:
-1. File issues for remaining work.
-2. Run quality gates if code changed.
-3. Update issue status — close finished work, update in-progress items.
-4. Push to remote:
+
+**When ending a work session**, you MUST complete ALL steps below. Work is NOT complete until `git push` succeeds.
+
+1. **File issues** for remaining work.
+2. **Run quality gates** if code changed.
+3. **Update issue status** — close finished work, update in-progress items.
+4. **Push to remote** — this is MANDATORY:
    ```bash
    git pull --rebase
    bd dolt push
    git push
+   git status  # MUST show "up to date with origin"
    ```
-5. Verify all changes committed and pushed.
+5. **Verify** all changes committed and pushed.
+
+**CRITICAL RULES:**
+- Work is NOT complete until `git push` succeeds.
+- NEVER stop before pushing — that leaves work stranded locally.
+- NEVER say "ready to push when you are" — YOU must push.
+- If push fails, resolve and retry until it succeeds.
 
 ## Workflow Orchestration
 
@@ -221,15 +251,17 @@ When ending a work session, complete ALL steps:
 
 ## Task Management
 
-1. **Plan First**: Write a plan with checkable items
+1. **Plan First**: Capture plans in the active `bd` issue description, notes, or design fields. Do not create markdown TODO trackers.
 2. **Verify Plan**: Use the `AskUserQuestion` tool to check in with the user
    before starting implementation. Present structured, multiple-choice questions
    to resolve ambiguity quickly and keep the workflow moving. (Unavailable in
    non-interactive mode / `codex exec`.)
-3. **Explain Changes**: High-level summary at each step
-4. **Capture Lessons**: Update `tasks/lessons.md` after corrections
-5. **Update Documentation**: Run parallel sub-agents to scan potentially
-   affected documentation and update where needed
+3. **Track Progress**: Update the relevant `bd` issue status or notes as you go.
+4. **Explain Changes**: High-level summary at each step.
+5. **Document Results**: Record the outcome in the `bd` issue and in the final handoff.
+6. **Capture Lessons**: Update `tasks/lessons.md` after corrections.
+7. **Update Documentation**: Run parallel sub-agents to scan potentially
+   affected documentation and update where needed.
 
 ---
 
