@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Twinkl Milestone Scorecard</title>
+    <style>
+      :root {
+        --bg: #f7f1e7;
+        --panel: rgba(255, 255, 255, 0.76);
+        --ink: #25303b;
+        --muted: #67727d;
+        --line: rgba(37, 48, 59, 0.08);
+        --green: #2f8f57;
+        --amber: #d49600;
+        --orange: #c46f17;
+        --red: #c2312b;
+        --indigo: #6954cf;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Avenir Next", "Segoe UI", Helvetica, Arial, sans-serif;
+        background:
+          radial-gradient(circle at top left, rgba(255, 255, 255, 0.95), transparent 40%),
+          linear-gradient(180deg, #fbf7ef 0%, var(--bg) 100%);
+        color: var(--ink);
+      }
+
+      .canvas {
+        width: 1600px;
+        min-height: 980px;
+        margin: 0 auto;
+        padding: 56px 64px 64px;
+      }
+
+      h1 {
+        margin: 0 0 8px;
+        font-size: 54px;
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+      }
+
+      .subtitle {
+        margin: 0 0 30px;
+        font-size: 23px;
+        color: var(--muted);
+      }
+
+      .header-row,
+      .row {
+        display: grid;
+        grid-template-columns: 1.2fr 0.55fr 1.65fr;
+        gap: 22px;
+        align-items: center;
+      }
+
+      .header-row {
+        padding: 0 30px 18px;
+        font-size: 21px;
+        font-weight: 700;
+        color: #4f5d68;
+      }
+
+      .table {
+        display: grid;
+        gap: 18px;
+      }
+
+      .row {
+        padding: 28px 30px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 26px;
+        box-shadow: 0 18px 32px rgba(71, 52, 21, 0.05);
+      }
+
+      .label {
+        font-size: 36px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 56px;
+        padding: 10px 22px;
+        border-radius: 999px;
+        font-size: 24px;
+        font-weight: 800;
+        color: #fff;
+      }
+
+      .passed { background: var(--green); }
+      .partial { background: var(--amber); }
+      .experimental { background: var(--orange); }
+      .not-built { background: var(--red); }
+      .internal { background: var(--indigo); }
+
+      .evidence {
+        display: grid;
+        gap: 4px;
+        font-size: 24px;
+        color: #37424c;
+      }
+
+      .evidence span {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="canvas">
+      <h1>Twinkl Milestone Scorecard</h1>
+      <p class="subtitle">What is validated, what is partially working, and what is still not delivered.</p>
+
+      <section class="header-row" aria-hidden="true">
+        <div>System Gate</div>
+        <div>Status</div>
+        <div>Evidence / Current Readout</div>
+      </section>
+
+      <section class="table">
+        <article class="row">
+          <div class="label">Judge Validation</div>
+          <div><span class="badge passed">Passed</span></div>
+          <div class="evidence">
+            <span>Human benchmark completed</span>
+            <span>Judge-human agreement: 0.66</span>
+            <span>Human-human agreement: 0.56</span>
+          </div>
+        </article>
+
+        <article class="row">
+          <div class="label">Value Modeling</div>
+          <div><span class="badge partial">Partial</span></div>
+          <div class="evidence">
+            <span>Current frontier QWK: 0.362 vs 0.40 target</span>
+            <span>Misalignment recall: 31.3%</span>
+            <span>Hard dimensions still cap reliability</span>
+          </div>
+        </article>
+
+        <article class="row">
+          <div class="label">Drift Detection</div>
+          <div><span class="badge experimental">Experimental</span></div>
+          <div class="evidence">
+            <span>Runtime path exists</span>
+            <span>Weekly routing is implemented</span>
+            <span>Calibration benchmark still missing</span>
+          </div>
+        </article>
+
+        <article class="row">
+          <div class="label">Coach Output</div>
+          <div><span class="badge partial">Partial</span></div>
+          <div class="evidence">
+            <span>Structured digest exists</span>
+            <span>Narrative checks exist</span>
+            <span>User-facing evaluation still pending</span>
+          </div>
+        </article>
+
+        <article class="row">
+          <div class="label">Onboarding to Runtime</div>
+          <div><span class="badge not-built">Not Built</span></div>
+          <div class="evidence">
+            <span>Onboarding flow is specified</span>
+            <span>Not yet live</span>
+            <span>Not yet feeding the active runtime path</span>
+          </div>
+        </article>
+
+        <article class="row">
+          <div class="label">Demo Path</div>
+          <div><span class="badge internal">Internal Only</span></div>
+          <div class="evidence">
+            <span>Internal review flow exists</span>
+            <span>Checkpoint-to-digest path works</span>
+            <span>Not yet a full live user product loop</span>
+          </div>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>
