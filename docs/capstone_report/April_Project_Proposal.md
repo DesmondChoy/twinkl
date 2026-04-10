@@ -70,7 +70,7 @@
 
 [Phase 2 (June-September 2026)](#phase-2-june-september-2026)
 
-[Deployment and Cost Sketch](#deployment-and-cost-sketch)
+[Delivery Surfaces and Cost Sketch](#delivery-surfaces-and-cost-sketch)
 
 [Deferred and Out-of-Scope](#deferred-and-out-of-scope)
 
@@ -672,8 +672,8 @@ the current review surface is still internal rather than end-user facing.
 The team also built an interactive embedding explorer using Three.js for
 qualitative inspection of what the critic has learned across all **1,651**
 labeled entries. The tool offers 3D visualization with multiple projection
-modes (PCA, t-SNE, UMAP), per-dimension coloring, individual point inspection,
-and persona trajectory tracing through the learned representation over time. It
+modes (PCA and t-SNE), per-dimension coloring, individual point inspection, and
+persona trajectory tracing through the learned representation over time. It
 serves as an internal review tool for auditing model behaviour beyond aggregate
 metrics.
 
@@ -742,34 +742,26 @@ current scope-locking work proves.
 Phase 2 output should include a final system path and a final capstone claim
 about what Twinkl can and cannot yet do based on the completed work.
 
-### Deployment and Cost Sketch
+### Delivery Surfaces and Cost Sketch
 
 The critic model contains approximately **23,000 parameters** and runs **50
-MC Dropout forward passes** per inference. At this scale, two deployment paths
-are feasible:
+MC Dropout forward passes** per inference. At this scale, model footprint and
+entry-level scoring cost are not the main commercialization constraint. The
+more significant recurring cost sits in weekly narrative generation rather than
+in alignment inference itself.
 
-**Path 1: Standalone mobile application**
+That makes the next packaging question less about raw model deployability and
+more about delivery surface. Two Phase 2 paths remain credible:
 
-| Component | Deployment | Cost driver |
-| :--- | :--- | :--- |
-| Critic (VIF) | On-device via TensorFlow Lite (iOS/Android) or Core ML (iOS) | Zero marginal cost per inference; model size < 100 KB |
-| Weekly coach narrative | Cloud LLM API call (e.g. Claude Haiku) | ~1 call per user per week; at current pricing ($1/$5 per M input/output tokens), a weekly digest costs fractions of a cent |
-| Drift detection | On-device rule-based engine | Zero marginal cost |
-| Storage | Local journal encrypted on device; value profile and weekly signals synced to cloud | Standard mobile backend costs |
+| Delivery surface | Why it fits Twinkl | Main trade-off | Current status |
+| :--- | :--- | :--- | :--- |
+| Standalone mobile app | Provides a fully owned surface for onboarding, journaling, nudges, and weekly coaching | Highest product and UX implementation burden | Plausible Phase 2 path; not yet built |
+| OpenClaw-based conversational surface | Preserves the same Twinkl core while delivering journaling and weekly review through existing messaging channels, with a natural place for scheduled check-ins and orchestration | Adds a dependency on an external orchestration layer and still requires a scoped wrapper around the current core | Researched integration option; not yet implemented |
 
-**Path 2: Integration as a Claude feature**
-
-| Component | Deployment | Cost driver |
-| :--- | :--- | :--- |
-| Critic (VIF) | Lightweight server-side model or compiled into Claude's tool-use context | Negligible compute relative to the host LLM |
-| Weekly coach narrative | Native Claude generation within the existing conversation | No additional API cost beyond the user's existing session |
-| Drift detection | Server-side, integrated into Claude's memory and context system | Minimal |
-| User experience | Journal entries as part of normal Claude conversation; weekly digest surfaces as a proactive message | Leverages existing Claude infrastructure |
-
-In both paths, the critic's small footprint means inference cost is
-negligible. The dominant variable cost is the weekly LLM call for narrative
-generation, which at current Haiku pricing amounts to well under $0.01 per
-user per week.
+The project does not need to commit to either path yet. The sponsor-relevant
+point is that the alignment engine is lightweight enough to support more than
+one credible delivery surface, while the real Phase 2 decision is which user
+experience should carry the proven core into a demonstrable end-to-end product.
 
 ### Deferred and Out-of-Scope
 

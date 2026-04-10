@@ -101,3 +101,8 @@
   self-judging language. Keep engineering characterizations that the report can
   support with concrete architecture, benchmarks, or workflow evidence, and cut
   only the lines that make the value judgment for the reader.
+- When a user corrects a product or platform name during report review, re-check
+  whether that correction changes the strategic assessment before keeping the
+  earlier recommendation. In this repo, confusing OpenClaw with Claude would
+  wrongly turn a researched messaging-native delivery path into speculative
+  vendor integration.
