@@ -11,8 +11,6 @@ product slice.
 
 [Differentiation and Target Users](#differentiation-and-target-users)
 
-[Relevance to Program Submodules](#relevance-to-program-submodules)
-
 [Related Academic Work](#related-academic-work)
 
 [**2. System Architecture**](#2-system-architecture)
@@ -91,6 +89,8 @@ product slice.
 
 [**8. Conclusion**](#8-conclusion)
 
+[**Appendix: Program Submodule Mapping**](#appendix-program-submodule-mapping)
+
 ## 1. Introduction
 
 ### Problem Statement
@@ -159,18 +159,9 @@ feedback beyond synthetic and internal review settings.
 This milestone should therefore be read as a technically coherent internal
 prototype, not as a user-ready product.
 
-### Relevance to Program Submodules
-
-The project remains a strong fit for the practice module because the main value
-proposition depends on four concrete capabilities working together rather than
-on a single model.
-
-| Submodule | Twinkl Mapping |
-| :---- | :---- |
-| Pattern Recognition | Ordinal value classification, uncertainty estimation, and sequence-aware weekly aggregation |
-| Intelligent Sensing | Text-derived signals from journal content, temporal patterns, and declared priority profiles |
-| Intelligent Reasoning | Weekly routing logic, evidence-grounded explanation, and profile-conditioned interpretation |
-| Architecting AI Systems | End-to-end orchestration from offline supervision to runtime scoring, weekly review, and future user-facing delivery |
+Although this report is written for a sponsor audience, the project still spans
+intelligent sensing, pattern recognition, reasoning, and AI systems
+orchestration; the formal program mapping is provided in the appendix.
 
 ### Related Academic Work
 
@@ -299,6 +290,8 @@ subset spanning **19 personas**, producing roughly **380 total annotations**.
 This gives the project a credible human reference point for judging whether the
 LLM supervision is usable at POC scale.
 
+![Annotation tool](annotation_tool.png)
+
 ### Critic (VIF) Model Training
 
 The critic is a compact multi-layer perceptron that learns to approximate the
@@ -340,6 +333,12 @@ This matters for sponsor confidence because the team is no longer making claims
 from isolated best-seed results. The project now has a repeatable evaluation
 regime, an archived experiment history, and explicit promotion criteria for new
 challengers.
+
+The codebase also maintains automated tests across the core pipeline, including
+critic training and evaluation, judge labeling, data wrangling, coaching and
+runtime behavior, and local integration smoke checks. For a sponsor, that is a
+practical sign that the engineering workflow is mature enough to support
+continued iteration without treating every change as a manual regression risk.
 
 ### Evaluation Framework
 
@@ -655,6 +654,14 @@ the team can actually inspect, debug, and demonstrate. A sponsor should read
 this as evidence of delivery momentum, even though the current review surface
 is still internal rather than end-user facing.
 
+The team also has an interactive embedding explorer for qualitative inspection
+of what the critic has learned across all **1,651** labeled entries. It
+supports multiple projection and coloring modes, lets reviewers inspect
+individual points in detail, and traces persona trajectories through the learned
+representation over time. This is valuable not as proof on its own, but as an
+internal review tool that helps the team inspect model behavior beyond
+aggregate metrics.
+
 ### Phase 1 (April 2026 Scope-Locking Wave)
 
 As of **6 April 2026**, the project has moved from broad exploration into a
@@ -713,6 +720,7 @@ current scope-locking work proves.
 | Representation follow-up | Add a gated parameter-efficient adaptation path if the frozen encoder is still the main bottleneck | Keeps the model search focused on the strongest remaining technical question | Only after target cleanup and compact-context testing |
 | Drift calibration | Generate synthetic crisis-injection timelines and report hit rate / precision / recall | Converts the current runtime bridge into a properly evaluated weekly routing layer | Requires a stronger upstream critic and a benchmark pass |
 | Narrow messaging-native pilot | Prototype chat-based journaling, cadence checks, and digest delivery | Offers a sponsor-friendly demonstration path without building a separate full application | Only if the core critic and digest outputs are stable enough to surface |
+| External user pilot | Run a small structured validation study with real users to test whether the current alignment and digest outputs transfer beyond synthetic personas and internal review | Converts the largest remaining product risk, external validity, into a measured outcome | Requires stable core outputs and one narrow end-to-end path that is safe to demonstrate |
 | Evolution decision | Decide whether evolution gating remains experimental or enters active scope | Prevents overclaiming long-horizon behaviour change | Depends on the calibrated weekly-routing story |
 | Full end-to-end demonstration | Connect onboarding, scoring, weekly routing, digest generation, and coach output into one clear flow | Moves the project from component validation to system demonstration | Depends on the final scope choice and Phase 1 outcomes |
 
@@ -746,7 +754,8 @@ of the semester. The main technical bottleneck is concentrated in a small
 number of hard dimensions and in the quality of their supervision targets.
 Separately, the biggest product risk is still external validity: most of the
 current evidence comes from synthetic personas and internal review rather than
-from real users.
+from real users. Closing that gap through a small external pilot is an explicit
+Phase 2 deliverable.
 
 ### Hard Dimensions Still Set the Ceiling
 
@@ -840,3 +849,15 @@ a real benchmark, and demonstrate one narrow, sponsor-ready path from declared
 priorities to scored evidence to weekly reflective output. If those three steps
 succeed, Twinkl will have a strong claim not just as an interesting capstone,
 but as a viable product concept with a technically credible core.
+
+## Appendix: Program Submodule Mapping
+
+The following table maps the project's main technical contributions to the
+practice module's four capability areas.
+
+| Submodule | Twinkl Mapping |
+| :---- | :---- |
+| Pattern Recognition | Ordinal value classification, uncertainty estimation, and sequence-aware weekly aggregation |
+| Intelligent Sensing | Text-derived signals from journal content, temporal patterns, and declared priority profiles |
+| Intelligent Reasoning | Weekly routing logic, evidence-grounded explanation, and profile-conditioned interpretation |
+| Architecting AI Systems | End-to-end orchestration from offline supervision to runtime scoring, weekly review, and future user-facing delivery |
