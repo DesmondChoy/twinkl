@@ -1,0 +1,65 @@
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'fontFamily': 'Aptos, Calibri, Arial, sans-serif',
+    'background': '#FFFFFF',
+    'lineColor': '#5F6B7A',
+    'primaryTextColor': '#1E2430',
+    'secondaryTextColor': '#1E2430',
+    'tertiaryTextColor': '#1E2430',
+    'clusterBkg': '#FBFBF9',
+    'clusterBorder': '#C7CDD4'
+  }
+}}%%
+flowchart LR
+    classDef offline fill:#EAF4F1,stroke:#4E8A7C,color:#143831,stroke-width:1.4px;
+    classDef runtime fill:#EEF2FB,stroke:#5A78B9,color:#1C2A4A,stroke-width:1.4px;
+    classDef coach fill:#FFF4DE,stroke:#C28A1B,color:#473004,stroke-width:1.4px;
+    classDef optional fill:#F6F6F4,stroke:#9AA39D,color:#38413B,stroke-dasharray: 4 4,stroke-width:1.2px;
+    classDef note fill:#FFFFFF,stroke:#AAB4C2,color:#44505F,stroke-dasharray: 3 3;
+
+    subgraph offline_lane["Offline Training"]
+        direction TB
+        synth["Synthetic journals"]
+        labels["Judge labels"]
+        shared_train["Shared text + state representation"]
+        critic_model["Trained VIF Critic"]
+        synth --> shared_train --> critic_model
+        labels --> shared_train
+    end
+
+    subgraph product_lane["Runtime + Weekly Coaching"]
+        direction TB
+        subgraph runtime_lane["Runtime Scoring"]
+            direction LR
+            history["Journal history<br/>+ value profile"]
+            shared_runtime["Same text + state<br/>representation"]
+            entry_scores["Per-entry VIF scores<br/>+ uncertainty"]
+            weekly["Weekly VIF signals"]
+            history --> shared_runtime --> entry_scores --> weekly
+        end
+        subgraph coach_lane["Weekly Coaching"]
+            direction LR
+            drift["Weekly alignment check<br/>stable / crash / rut<br/>high uncertainty"]
+            digest["Weekly digest"]
+            coach["Coach reflection"]
+            drift --> digest --> coach
+        end
+    end
+
+    critic_model -. "model weights" .-> entry_scores
+    shared_train -. "same state definition" .-> shared_runtime
+    weekly --> drift
+
+    evolution["Experimental evolution analysis"]
+    weekly -. "optional" .-> evolution
+    evolution -. "optional" .-> drift
+
+    default_note["Current default: window_size = 1"]
+    default_note -.-> shared_runtime
+
+    class synth,labels,shared_train,critic_model offline;
+    class history,shared_runtime,entry_scores,weekly runtime;
+    class drift,digest,coach coach;
+    class evolution optional;
+    class default_note note;

@@ -147,6 +147,12 @@ dimensions, especially `security`, are not yet a clean long-term distillation
 target for the current student. That means the current frontier should be read
 as a useful experimental baseline, not the final target definition.
 
+The latest consensus-label diagnostic branch (`run_048`-`run_050`) reinforces
+that framing. It improved within-regime QWK and calibration on the
+consensus-relabeled holdout, but it changed labels on the frozen test split and
+did not replace the persisted-label frontier cleanly. The active corrected-split
+default remains `run_019`-`run_021`.
+
 ---
 
 ## 5. Implementation Reference
@@ -193,21 +199,56 @@ The general training entrypoint now includes:
 These used to live as design notes; they are now part of the implemented
 training workflow.
 
-### 6.3 Recommended Entrypoints
+### 6.3 CLI Override Surface
+
+The mainline training CLI exposes the following commonly used overrides:
+
+- `--config`
+  - alternate config YAML
+- `--epochs`, `--batch-size`, `--learning-rate`
+  - basic optimization overrides
+- `--grad-clip`
+  - clip total gradient norm; `<= 0` disables clipping
+- `--no-log-gradients`
+  - disable gradient telemetry in `training_log.json`
+- `--grad-log-every`
+  - control gradient telemetry sampling frequency
+- `--encoder-model`, `--hidden-dim`, `--seed`
+  - quick architecture and reproducibility overrides
+- `--quiet`
+  - reduce CLI output
+- `--lr-find-output-path`
+  - save the LR-finder plot plus matching history JSON
+
+The BNN entrypoint keeps the shared config/optimization overrides:
+
+- `--config`
+- `--epochs`
+- `--batch-size`
+- `--learning-rate`
+- `--encoder-model`
+- `--hidden-dim`
+- `--seed`
+- `--quiet`
+
+### 6.4 Recommended Entrypoints
 
 ```bash
 # Single-model training with config defaults
-python -m src.vif.train
+uv run python -m src.vif.train
 
 # Quick smoke run
-python -m src.vif.train --epochs 5 --batch-size 8
+uv run python -m src.vif.train --epochs 5 --batch-size 8
 
 # Encoder ablation
-python -m src.vif.train --encoder-model all-mpnet-base-v2
+uv run python -m src.vif.train --encoder-model all-mpnet-base-v2
+
+# Export LR-finder artifacts for review
+uv run python -m src.vif.train --lr-find-output-path logs/exports/lr_find.png
 
 # BNN baseline
-python -m src.vif.train_bnn
+uv run python -m src.vif.train_bnn
 
 # Frontier experiment workflow
-python scripts/experiments/critic_training_v4_review.py
+uv run python scripts/experiments/critic_training_v4_review.py
 ```

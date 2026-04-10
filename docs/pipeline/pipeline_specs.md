@@ -126,6 +126,49 @@ This workflow keeps targeted lifts auditable and makes downstream retrains
 comparable. When a post-lift model changes, the delta is more likely to reflect
 the new training data rather than a silent holdout reshuffle or an invalid batch.
 
+## Consensus Re-judging and Stability Diagnostics
+
+The repo also maintains a separate multi-pass Judge diagnostics path for
+stability-first label analysis.
+
+### Workflow shape
+
+The operational guide lives in
+[`docs/pipeline/consensus_rejudging_instructions.md`](consensus_rejudging_instructions.md).
+That workflow runs the `profile_only` Judge path five times over the same
+corpus, validates each shard result, merges pass outputs with provenance, and
+then summarizes repeated-call stability.
+
+### Main scripts
+
+- `scripts/journalling/twinkl_754_prepare_consensus.py`
+  - builds the bundle layout, supports deterministic pilot runs via
+    `--pilot-size` and `--pilot-hard-dimensions`
+- `scripts/journalling/twinkl_754_validate_results.py`
+  - validates shard or merged pass JSONL against the prompt manifest
+- `scripts/journalling/twinkl_754_merge_pass_results.py`
+  - re-validates shard outputs, merges pass files, and writes provenance CSVs
+- `scripts/journalling/twinkl_754_summarize_consensus.py`
+  - writes the summary report, confidence tiers, full-corpus stability metrics,
+    and `logs/judge_labels/consensus_labels.parquet`
+
+### Artifacts
+
+The workflow writes:
+
+- `logs/judge_labels/consensus_labels.parquet`
+- `logs/exports/twinkl_754/consensus_rejudging_report.md`
+- `logs/exports/twinkl_754/stability_summary.csv`
+- provenance files under `logs/exports/twinkl_754/provenance/`
+
+### Interpretation
+
+This path is a diagnostics surface for label stability, confidence tiering, and
+retrain gating. It is not the default training-label path for the frontier
+board. The active corrected-split frontier still uses the persisted label
+surface in `logs/judge_labels/judge_labels.parquet`, while
+`consensus_labels.parquet` supports stability analysis and diagnostic retrains.
+
 ## Prompt Design
 
 Note: Synthetic journals read like typed text input, matching the text-only input modality of the production system.

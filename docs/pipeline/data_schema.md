@@ -1,6 +1,8 @@
 # Data Schema Reference
 
-This document describes the parquet files produced by the synthetic data and judge labeling pipelines, including schemas, relationships, and example queries.
+This document describes the parquet files produced by the synthetic-data,
+judge-labeling, and weekly Coach runtime paths, including schemas,
+relationships, and example queries.
 
 ## File Locations
 
@@ -8,6 +10,8 @@ This document describes the parquet files produced by the synthetic data and jud
 |------|---------|
 | `logs/registry/personas.parquet` | Central registry tracking personas through pipeline stages |
 | `logs/judge_labels/judge_labels.parquet` | Training labels for the VIF (all entries, all personas) |
+| `logs/judge_labels/consensus_labels.parquet` | Confidence-tiered 5-pass consensus label surface for stability analysis and diagnostic retrains |
+| `logs/exports/weekly_digests/weekly_digests.parquet` | Consolidated weekly Coach digest records (created on first runtime/digest run) |
 
 ---
 
@@ -99,6 +103,92 @@ This order matches `src/models/judge.py:SCHWARTZ_VALUE_ORDER`.
 
 ---
 
+## Consensus Labels
+
+**Path:** `logs/judge_labels/consensus_labels.parquet`
+
+This parquet keeps the same row key and alignment columns as
+`judge_labels.parquet`, then adds 5-pass consensus metadata per dimension.
+
+### Additional Columns
+
+For each Schwartz dimension, the file includes three extra column families:
+
+- `confidence_<dimension>`
+  - confidence tier for the consensus label
+  - values come from the 5-pass voting result and include tiers such as
+    `bare_majority`, `strong`, `unanimous`, and `no_majority`
+- `consensus_agreement_<dimension>`
+  - integer agreement count from the five consensus passes
+- `label_changed_<dimension>`
+  - boolean flag indicating whether the consensus label differs from the
+    persisted label in `judge_labels.parquet`
+
+### What It Is Used For
+
+- full-corpus stability analysis
+- confidence-tiered label inspection
+- diagnostic retrains that explicitly point `data.labels_path` at this parquet
+
+The active corrected-split frontier still treats
+`logs/judge_labels/judge_labels.parquet` as the default label surface. The
+consensus parquet is a diagnostics and audit artifact.
+
+---
+
+## Weekly Coach Digest Records
+
+**Path:** `logs/exports/weekly_digests/weekly_digests.parquet`
+
+This file is created by `src.coach.weekly_digest` and `src.coach.runtime` when
+you run the weekly Coach flow. Each row is one `(persona_id, week_start,
+week_end)` digest record.
+
+### Schema
+
+| Column | Type | Description |
+|--------|------|-------------|
+| `persona_id` | `str` | Persona ID |
+| `week_start` | `str` | Inclusive week start in `YYYY-MM-DD` |
+| `week_end` | `str` | Inclusive week end in `YYYY-MM-DD` |
+| `persona_name` | `str` | Persona display name |
+| `response_mode` | `str` | Coach response mode used for the digest |
+| `mode_source` | `str` | Whether the mode came from upstream drift or local fallback logic |
+| `mode_rationale` | `str` | Short rationale for the selected mode |
+| `signal_source` | `str` | Numeric source for the digest (`judge_labels` or `vif_runtime`) |
+| `n_entries` | `i64` | Number of entries included in the week |
+| `overall_mean` | `f64` | Profile-weighted overall weekly alignment |
+| `overall_uncertainty` | `f64` | Profile-weighted weekly uncertainty |
+| `core_values_json` | `str` | JSON array of declared core values |
+| `drift_reasons_json` | `str` | JSON array of drift-routing reasons |
+| `top_tensions_json` | `str` | JSON array of ranked tension dimensions |
+| `top_strengths_json` | `str` | JSON array of ranked strength dimensions |
+| `dimensions_json` | `str` | JSON array of per-dimension weekly summaries |
+| `evidence_json` | `str` | JSON array of representative evidence snippets |
+| `journal_history_json` | `str` | JSON array of history entries capped at `week_end` |
+| `coach_narrative_json` | `str \| null` | JSON Coach narrative payload if generation ran |
+| `validation_json` | `str \| null` | JSON narrative-validation payload if validation ran |
+
+### Related Runtime Artifacts
+
+The weekly Coach flow and demo review UI also write per-run artifacts beside the
+consolidated parquet:
+
+- `vif_timeline.parquet` or `<persona_id>_vif_timeline.parquet`
+- `vif_weekly.parquet` or `<persona_id>_vif_weekly.parquet`
+- `*.drift.json`
+- `*.json`
+- `*.md`
+- `*.prompt.txt`
+
+The demo review UI stores those bundles under:
+
+```text
+logs/exports/demo_tool_runs/<persona_id>/<checkpoint-stem>-<hash>/
+```
+
+---
+
 ## Example Queries
 
 ### Basic: Load and inspect
@@ -184,6 +274,28 @@ persona_means = labels.group_by("persona_id").agg([
 ])
 ```
 
+### Find low-confidence consensus rows for one value
+
+```python
+import polars as pl
+
+consensus = pl.read_parquet("logs/judge_labels/consensus_labels.parquet")
+
+security_rows = consensus.filter(
+    pl.col("confidence_security").is_in(["bare_majority", "no_majority"])
+)
+```
+
+### Find rows where consensus changed the persisted label
+
+```python
+import polars as pl
+
+consensus = pl.read_parquet("logs/judge_labels/consensus_labels.parquet")
+
+changed_hedonism = consensus.filter(pl.col("label_changed_hedonism"))
+```
+
 ---
 
 ## Known Data Characteristics
@@ -196,7 +308,7 @@ Based on the current committed corpus:
 - 1,651 labeled journal entries in `logs/judge_labels/judge_labels.parquet`
 - Average of 8.1 entries per persona (range: 2-12)
 - 292 total core-value assignments across personas
-- 1,040 entries with generated nudges in `logs/synthetic_data/` (63.0% of all entries)
+- 1,028 entries with generated nudges in `logs/wrangled/` (62.3% of all entries)
 
 ### Overall Label Balance
 

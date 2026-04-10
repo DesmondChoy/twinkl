@@ -1,0 +1,88 @@
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'fontFamily': 'Aptos, Calibri, Arial, sans-serif',
+    'background': '#FFFFFF',
+    'lineColor': '#5F6B7A',
+    'primaryTextColor': '#1E2430',
+    'secondaryTextColor': '#1E2430',
+    'tertiaryTextColor': '#1E2430',
+    'clusterBkg': '#FBFBF9',
+    'clusterBorder': '#C7CDD4'
+  }
+}}%%
+flowchart LR
+    classDef prep fill:#EAF4F1,stroke:#4E8A7C,color:#143831,stroke-width:1.3px;
+    classDef train fill:#F0F4FB,stroke:#607DBA,color:#1C2A4A,stroke-width:1.3px;
+    classDef run fill:#EEF6FF,stroke:#4F86B3,color:#153246,stroke-width:1.3px;
+    classDef coach fill:#FFF4DE,stroke:#C28A1B,color:#473004,stroke-width:1.3px;
+    classDef optional fill:#F6F6F4,stroke:#9AA39D,color:#38413B,stroke-dasharray: 4 4,stroke-width:1.1px;
+    classDef artifact fill:#FFFDF7,stroke:#D3B980,color:#564212,stroke-width:1.1px;
+    classDef note fill:#FFFFFF,stroke:#AAB4C2,color:#44505F,stroke-dasharray: 3 3;
+
+    subgraph build_lane["Model Building"]
+        direction TB
+        subgraph prep_lane["Offline Data Preparation"]
+            direction LR
+            generator["Synthetic persona generation"]
+            wrangled["Processed journal corpus<br/>text + dates + core values"]
+            judge["Judge labeling<br/>{-1, 0, +1} x 10"]
+            labels["Consolidated label table"]
+            generator --> wrangled --> judge --> labels
+        end
+
+        merge["Join + integrity checks"]
+        encoder_train["Configured frozen encoder"]
+        state_train["State encoder<br/>entry window + time gaps + profile weights"]
+        samples["Training examples"]
+        critic_train["Critic training<br/>MLP / ordinal / BNN"]
+        checkpoint["Checkpoint + runtime metadata"]
+
+        wrangled --> merge
+        labels --> merge
+        merge --> encoder_train --> state_train --> samples --> critic_train --> checkpoint
+    end
+
+    subgraph product_lane["Runtime + Coach"]
+        direction TB
+        subgraph run_lane["Runtime Scoring"]
+            direction LR
+            runtime_input["Processed journal timeline"]
+            state_runtime["Recreate encoder + state encoder"]
+            critic["Per-entry Critic inference"]
+            timeline["Per-entry VIF timeline"]
+            weekly["Weekly aggregation"]
+            drift["Drift routing<br/>stable / crash / rut<br/>high uncertainty"]
+            runtime_input --> state_runtime --> critic --> timeline --> weekly --> drift
+        end
+
+        subgraph coach_lane["Coach Generation"]
+            direction LR
+            digest["Weekly digest builder"]
+            prompt["Full-context Coach prompt"]
+            narrative["Optional Coach narrative"]
+            exports["Reportable artifacts"]
+            digest --> prompt --> narrative --> exports
+        end
+    end
+
+    checkpoint -. "weights + config" .-> state_runtime
+    runtime_input --> digest
+    weekly --> digest
+    drift --> digest
+
+    evolution["Experimental evolution analysis"]
+    weekly -. "optional context" .-> evolution
+    evolution -. "optional signal shaping" .-> drift
+
+    state_note["Current default state:<br/>current entry embedding + 10-dim value profile"]
+    state_note -.-> state_train
+    state_note -.-> state_runtime
+
+    class generator,wrangled,judge,labels,merge prep;
+    class encoder_train,state_train,samples,critic_train,checkpoint train;
+    class runtime_input,state_runtime,critic,timeline,weekly,drift run;
+    class digest,prompt,narrative coach;
+    class evolution optional;
+    class exports artifact;
+    class state_note note;

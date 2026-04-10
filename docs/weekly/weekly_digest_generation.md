@@ -16,24 +16,21 @@ Its job is not to summarize the week generically. Its job is to mirror the week 
 
 ## How To Run
 
-Activate the repo virtual environment first:
-
-```sh
-source .venv/bin/activate
-```
+The examples below use `uv run` so they pick up the project environment
+directly. Activating `.venv` manually also works.
 
 ### Basic CLI
 
 Generate a digest for one persona using the latest available 7-day window:
 
 ```sh
-python -m src.coach.weekly_digest --persona-id 0a2fe15c
+uv run python -m src.coach.weekly_digest --persona-id 0a2fe15c
 ```
 
 Generate a digest for an explicit date window:
 
 ```sh
-python -m src.coach.weekly_digest \
+uv run python -m src.coach.weekly_digest \
   --persona-id 0a2fe15c \
   --start-date 2025-12-03 \
   --end-date 2025-12-09
@@ -57,7 +54,7 @@ Example `drift_result.json`:
 Run the digest generator with that upstream drift result:
 
 ```sh
-python -m src.coach.weekly_digest \
+uv run python -m src.coach.weekly_digest \
   --persona-id 0ad04582 \
   --start-date 2025-12-26 \
   --end-date 2026-01-01 \
@@ -71,7 +68,7 @@ If no `--drift-result-json` is provided, the digest generator uses temporary loc
 You can also force a mode manually for testing:
 
 ```sh
-python -m src.coach.weekly_digest \
+uv run python -m src.coach.weekly_digest \
   --persona-id 0a2fe15c \
   --start-date 2025-12-03 \
   --end-date 2025-12-09 \
@@ -80,6 +77,52 @@ python -m src.coach.weekly_digest \
 
 Manual override is for testing only.
 Normal pipeline usage should prefer upstream drift output.
+
+The CLI accepts `evolution` as a schema-compatible manual override, but the
+active runtime does not automatically route weeks into `evolution`.
+
+### End-to-End Runtime CLI
+
+Run the full local checkpoint -> weekly signals -> drift -> digest flow:
+
+```sh
+uv run python -m src.coach.runtime \
+  --persona-id 0a2fe15c \
+  --checkpoint-path logs/experiments/artifacts/.../selected_checkpoint.pt
+```
+
+Useful overrides for the runtime CLI:
+
+- `--config-path` to point at a non-default VIF config
+- `--start-date` and `--end-date` to pin the weekly window
+- `--n-mc-samples` to override checkpoint/default MC Dropout sampling
+- `--batch-size` to control inference batch size
+- `--device` to force CPU or CUDA
+- `--output-dir` to change the runtime artifact folder
+- `--parquet-path` to change the consolidated weekly digest parquet path
+
+The runtime CLI writes:
+
+- `vif_timeline.parquet`
+- `vif_weekly.parquet`
+- `<persona>_<week_end>.drift.json`
+- `<persona>_<week_end>.json`
+- `<persona>_<week_end>.md`
+- `<persona>_<week_end>.prompt.txt`
+- the upserted consolidated parquet at `--parquet-path`
+
+### Demo Review UI
+
+The Shiny review UI sits on top of the same runtime path:
+
+```sh
+uv run shiny run src/demo_tool/app.py
+```
+
+It loads cached artifact bundles when available, runs the live checkpoint flow
+on demand, and compares six detector families against either judge labels or
+Critic predictions. See [`docs/demo/review_app.md`](../demo/review_app.md) for
+the full workflow.
 
 ### Output Files
 
@@ -93,6 +136,7 @@ By default the command writes:
 You can override input/output locations with:
 
 - `--labels-path`
+- `--signals-path`
 - `--wrangled-dir`
 - `--output-dir`
 - `--parquet-path`
@@ -159,6 +203,7 @@ The current implementation now supports:
 19. Aggregating those signals into weekly VIF summaries for drift detection
 20. Running uncertainty-gated crash/rut-style detection experiments and emitting a structured `DriftDetectionResult`
 21. Executing the full offline runtime path through `src/coach/runtime.py`
+22. Loading the persisted runtime bundle into the demo review UI, including cached run reuse and detector-source switching
 
 ### Current Digest Data Model
 
@@ -223,6 +268,7 @@ Current implementation status:
 - fallback-only local inference still exists for `stable`, `rut`, `high_uncertainty`, `mixed_state`, and `background_strain` when no upstream drift result is supplied
 - `mixed_state` and `background_strain` remain heuristic-only local modes
 - `high_uncertainty` can now come from real aggregated Critic uncertainty in the runtime path
+- `evolution` remains available for schema/manual override compatibility, but it is not an automatically-routed mode in the active runtime
 
 `evolution` remains an undecided idea rather than an active runtime commitment for the Coach flow.
 

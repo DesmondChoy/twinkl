@@ -24,6 +24,29 @@ The current VIF implementation is intentionally narrow:
 > change over time. Treat `config/vif.yaml` as the source of truth for current
 > runtime values.
 
+## Current Diagram
+
+The current architecture diagram is maintained in two synced forms:
+
+- Mermaid source: [`current_system_architecture.mmd`](current_system_architecture.mmd)
+- Rendered SVG: [`current_system_architecture.svg`](current_system_architecture.svg)
+
+![Current VIF architecture](current_system_architecture.svg)
+
+## Publication Figures
+
+For report and presentation use, there are two simplified variants of the same
+architecture:
+
+- Compact report/slide figure:
+  - Mermaid source: [`publication_system_architecture.mmd`](publication_system_architecture.mmd)
+  - Rendered SVG: [`publication_system_architecture.svg`](publication_system_architecture.svg)
+- Slightly more detailed appendix figure:
+  - Mermaid source: [`appendix_system_architecture.mmd`](appendix_system_architecture.mmd)
+  - Rendered SVG: [`appendix_system_architecture.svg`](appendix_system_architecture.svg)
+
+![Compact publication VIF architecture](publication_system_architecture.svg)
+
 ---
 
 ## 2. Inputs and State Representation

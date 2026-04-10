@@ -1,0 +1,186 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1700 1200" role="img" aria-labelledby="title desc">
+  <title id="title">Appendix Twinkl VIF architecture diagram</title>
+  <desc id="desc">A more detailed publication-ready architecture diagram showing offline data preparation, critic training, runtime scoring, and Coach generation for the Twinkl VIF stack.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5F6B7A"/>
+    </marker>
+    <style>
+      text { font-family: Aptos, Calibri, Arial, sans-serif; fill: #1E2430; }
+      .lane-title { font-size: 26px; font-weight: 700; letter-spacing: 0.3px; }
+      .box-title { font-size: 21px; font-weight: 650; text-anchor: middle; }
+      .small { font-size: 17px; text-anchor: middle; }
+      .lane-prep { fill: #F4FBF8; stroke: #B8D8CF; stroke-width: 2; }
+      .lane-train { fill: #F5F7FD; stroke: #CAD3EA; stroke-width: 2; }
+      .lane-run { fill: #F1F8FD; stroke: #C5DDF1; stroke-width: 2; }
+      .lane-coach { fill: #FFF8EA; stroke: #E6CB8D; stroke-width: 2; }
+      .box-prep { fill: #EAF4F1; stroke: #4E8A7C; stroke-width: 2.2; }
+      .box-train { fill: #F0F4FB; stroke: #607DBA; stroke-width: 2.2; }
+      .box-run { fill: #EEF6FF; stroke: #4F86B3; stroke-width: 2.2; }
+      .box-coach { fill: #FFF4DE; stroke: #C28A1B; stroke-width: 2.2; }
+      .box-optional { fill: #F7F7F5; stroke: #9AA39D; stroke-width: 2; stroke-dasharray: 8 6; }
+      .box-note { fill: #FFFFFF; stroke: #AAB4C2; stroke-width: 1.8; }
+      .line { stroke: #5F6B7A; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+      .dashed { stroke-dasharray: 10 8; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1700" height="1200" fill="#FFFFFF"/>
+
+  <rect x="30" y="70" width="380" height="1030" rx="28" class="lane-prep"/>
+  <rect x="440" y="70" width="380" height="1030" rx="28" class="lane-train"/>
+  <rect x="850" y="70" width="380" height="1030" rx="28" class="lane-run"/>
+  <rect x="1260" y="70" width="410" height="1030" rx="28" class="lane-coach"/>
+
+  <text x="220" y="118" class="lane-title" text-anchor="middle">Offline Data Preparation</text>
+  <text x="630" y="118" class="lane-title" text-anchor="middle">Critic Training</text>
+  <text x="1040" y="118" class="lane-title" text-anchor="middle">Runtime Scoring</text>
+  <text x="1465" y="118" class="lane-title" text-anchor="middle">Coach Generation</text>
+
+  <rect x="80" y="170" width="280" height="88" rx="20" class="box-prep"/>
+  <rect x="80" y="310" width="280" height="100" rx="20" class="box-prep"/>
+  <rect x="80" y="470" width="280" height="96" rx="20" class="box-prep"/>
+  <rect x="80" y="620" width="280" height="88" rx="20" class="box-prep"/>
+  <rect x="80" y="770" width="280" height="88" rx="20" class="box-prep"/>
+
+  <text x="220" y="205" class="box-title">
+    <tspan x="220" dy="0">Synthetic persona</tspan>
+    <tspan x="220" dy="26">generation</tspan>
+  </text>
+  <text x="220" y="348" class="box-title">
+    <tspan x="220" dy="0">Processed journal corpus</tspan>
+    <tspan x="220" dy="26">text + dates + core values</tspan>
+  </text>
+  <text x="220" y="506" class="box-title">
+    <tspan x="220" dy="0">Judge labeling</tspan>
+    <tspan x="220" dy="26">{-1, 0, +1} x 10</tspan>
+  </text>
+  <text x="220" y="654" class="box-title">
+    <tspan x="220" dy="0">Consolidated</tspan>
+    <tspan x="220" dy="26">label table</tspan>
+  </text>
+  <text x="220" y="804" class="box-title">
+    <tspan x="220" dy="0">Join + integrity</tspan>
+    <tspan x="220" dy="26">checks</tspan>
+  </text>
+
+  <path d="M 220 258 L 220 310" class="line"/>
+  <path d="M 220 410 L 220 470" class="line"/>
+  <path d="M 220 566 L 220 620" class="line"/>
+  <path d="M 220 708 L 220 770" class="line"/>
+
+  <rect x="490" y="200" width="280" height="88" rx="20" class="box-train"/>
+  <rect x="490" y="350" width="280" height="100" rx="20" class="box-train"/>
+  <rect x="490" y="510" width="280" height="88" rx="20" class="box-train"/>
+  <rect x="490" y="660" width="280" height="100" rx="20" class="box-train"/>
+  <rect x="490" y="830" width="280" height="96" rx="20" class="box-train"/>
+
+  <text x="630" y="235" class="box-title">
+    <tspan x="630" dy="0">Configured frozen</tspan>
+    <tspan x="630" dy="26">encoder</tspan>
+  </text>
+  <text x="630" y="386" class="box-title">
+    <tspan x="630" dy="0">State encoder</tspan>
+    <tspan x="630" dy="26">entry window + time gaps</tspan>
+    <tspan x="630" dy="26">+ profile weights</tspan>
+  </text>
+  <text x="630" y="544" class="box-title">
+    <tspan x="630" dy="0">Training examples</tspan>
+  </text>
+  <text x="630" y="698" class="box-title">
+    <tspan x="630" dy="0">Critic training</tspan>
+    <tspan x="630" dy="26">MLP / ordinal / BNN</tspan>
+  </text>
+  <text x="630" y="866" class="box-title">
+    <tspan x="630" dy="0">Checkpoint</tspan>
+    <tspan x="630" dy="26">+ runtime metadata</tspan>
+  </text>
+
+  <path d="M 630 288 L 630 350" class="line"/>
+  <path d="M 630 450 L 630 510" class="line"/>
+  <path d="M 630 598 L 630 660" class="line"/>
+  <path d="M 630 760 L 630 830" class="line"/>
+  <path d="M 360 814 C 420 814, 440 244, 490 244" class="line"/>
+  <path d="M 360 814 C 420 814, 440 400, 490 400" class="line"/>
+
+  <rect x="900" y="170" width="280" height="88" rx="20" class="box-run"/>
+  <rect x="900" y="310" width="280" height="100" rx="20" class="box-run"/>
+  <rect x="900" y="470" width="280" height="88" rx="20" class="box-run"/>
+  <rect x="900" y="620" width="280" height="88" rx="20" class="box-run"/>
+  <rect x="900" y="770" width="280" height="88" rx="20" class="box-run"/>
+  <rect x="930" y="900" width="220" height="72" rx="18" class="box-optional"/>
+  <rect x="900" y="995" width="280" height="90" rx="20" class="box-run"/>
+
+  <text x="1040" y="205" class="box-title">
+    <tspan x="1040" dy="0">Processed journal</tspan>
+    <tspan x="1040" dy="26">timeline</tspan>
+  </text>
+  <text x="1040" y="345" class="box-title">
+    <tspan x="1040" dy="0">Recreate encoder</tspan>
+    <tspan x="1040" dy="26">+ state encoder</tspan>
+  </text>
+  <text x="1040" y="505" class="box-title">
+    <tspan x="1040" dy="0">Per-entry Critic</tspan>
+    <tspan x="1040" dy="26">inference</tspan>
+  </text>
+  <text x="1040" y="655" class="box-title">
+    <tspan x="1040" dy="0">Per-entry VIF</tspan>
+    <tspan x="1040" dy="26">timeline</tspan>
+  </text>
+  <text x="1040" y="805" class="box-title">
+    <tspan x="1040" dy="0">Weekly aggregation</tspan>
+  </text>
+  <text x="1040" y="936" class="box-title">
+    <tspan x="1040" dy="0">Experimental</tspan>
+    <tspan x="1040" dy="24">evolution analysis</tspan>
+  </text>
+  <text x="1040" y="1032" class="box-title">
+    <tspan x="1040" dy="0">Drift routing</tspan>
+    <tspan x="1040" dy="26">stable / crash / rut</tspan>
+    <tspan x="1040" dy="26">high uncertainty</tspan>
+  </text>
+
+  <path d="M 1040 258 L 1040 310" class="line"/>
+  <path d="M 1040 410 L 1040 470" class="line"/>
+  <path d="M 1040 558 L 1040 620" class="line"/>
+  <path d="M 1040 708 L 1040 770" class="line"/>
+  <path d="M 1040 858 L 1040 995" class="line"/>
+  <path d="M 1040 858 L 1040 900" class="line dashed"/>
+  <path d="M 1040 972 L 1040 995" class="line dashed"/>
+  <path d="M 770 878 C 830 878, 860 360, 900 360" class="line dashed"/>
+
+  <rect x="1325" y="330" width="280" height="88" rx="20" class="box-coach"/>
+  <rect x="1325" y="500" width="280" height="100" rx="20" class="box-coach"/>
+  <rect x="1325" y="680" width="280" height="88" rx="20" class="box-coach"/>
+  <rect x="1325" y="850" width="280" height="100" rx="20" class="box-coach"/>
+
+  <text x="1465" y="365" class="box-title">
+    <tspan x="1465" dy="0">Weekly digest</tspan>
+    <tspan x="1465" dy="26">builder</tspan>
+  </text>
+  <text x="1465" y="535" class="box-title">
+    <tspan x="1465" dy="0">Full-context</tspan>
+    <tspan x="1465" dy="26">Coach prompt</tspan>
+  </text>
+  <text x="1465" y="715" class="box-title">
+    <tspan x="1465" dy="0">Optional Coach</tspan>
+    <tspan x="1465" dy="26">narrative</tspan>
+  </text>
+  <text x="1465" y="885" class="box-title">
+    <tspan x="1465" dy="0">Reportable</tspan>
+    <tspan x="1465" dy="26">artifacts</tspan>
+  </text>
+
+  <path d="M 1465 418 L 1465 500" class="line"/>
+  <path d="M 1465 600 L 1465 680" class="line"/>
+  <path d="M 1465 768 L 1465 850" class="line"/>
+
+  <path d="M 1180 815 C 1260 815, 1260 374, 1325 374" class="line"/>
+  <path d="M 1180 1040 C 1240 1040, 1260 374, 1325 374" class="line"/>
+  <path d="M 1180 214 C 1240 214, 1260 374, 1325 374" class="line"/>
+
+  <rect x="430" y="1120" width="860" height="48" rx="18" class="box-note"/>
+  <text x="860" y="1150" class="small">
+    Current default state: current entry embedding + 10-dim value profile (window_size = 1). Dashed arrows show shared or experimental links.
+  </text>
+</svg>

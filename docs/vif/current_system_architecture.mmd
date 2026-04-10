@@ -1,0 +1,96 @@
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'fontFamily': 'ui-sans-serif, system-ui, sans-serif',
+    'primaryColor': '#E8F2F0',
+    'primaryTextColor': '#16302D',
+    'primaryBorderColor': '#3F7C73',
+    'lineColor': '#5B6B88',
+    'secondaryColor': '#EAF0FF',
+    'secondaryTextColor': '#15223E',
+    'secondaryBorderColor': '#4767B3',
+    'tertiaryColor': '#FFF4D9',
+    'tertiaryTextColor': '#3B2C00',
+    'tertiaryBorderColor': '#B38600',
+    'clusterBkg': '#F8F8F6',
+    'clusterBorder': '#9CA39A'
+  }
+}}%%
+flowchart TB
+    classDef data fill:#F6F1E8,stroke:#8B6F47,color:#2D2418;
+    classDef process fill:#E8F2F0,stroke:#3F7C73,color:#16302D;
+    classDef model fill:#EAF0FF,stroke:#4767B3,color:#15223E;
+    classDef artifact fill:#FFF4D9,stroke:#B38600,color:#3B2C00;
+    classDef note fill:#F8F8F6,stroke:#9CA39A,color:#36413B,stroke-dasharray: 4 4;
+
+    subgraph offline["Offline: training data + Critic training"]
+        generator["Synthetic persona generation"]
+        wrangled_train["Wrangled persona files<br/>entry text + dates + core values"]
+        judge["Judge labeling<br/>{-1, 0, +1} x 10"]
+        labels["Consolidated judge labels<br/>parquet"]
+        merge["Join + integrity checks<br/>(persona_id, t_index)"]
+        encoder_train["Configured frozen sentence encoder"]
+        state_train["State encoder<br/>entry window + time gaps + profile weights"]
+        dataset["StateTargetSample rows"]
+        critic_train["Critic training<br/>MLP / ordinal / BNN"]
+        checkpoint["Checkpoint<br/>weights + runtime metadata"]
+    end
+
+    subgraph runtime["Runtime: VIF -> weekly Coach cycle"]
+        wrangled_runtime["Wrangled journal timeline<br/>entry text + dates + core values"]
+        encoder_runtime["Configured frozen sentence encoder<br/>resolved from config + checkpoint"]
+        state_runtime["State encoder<br/>current default: window_size = 1"]
+        critic["Critic inference<br/>per-entry mean + uncertainty"]
+        timeline["Per-entry VIF timeline"]
+        weekly["Weekly aggregation<br/>per-dimension + profile-weighted signals"]
+        evolution["Experimental evolution analysis"]
+        drift["Uncertainty-gated drift routing<br/>stable / crash / rut / high_uncertainty"]
+        digest["Weekly digest builder<br/>structured Coach artifact"]
+        prompt["Full-context Coach prompt<br/>history capped at week_end"]
+        coach["Optional Coach LLM narrative"]
+        exports["Artifacts<br/>timeline.parquet + weekly.parquet<br/>drift.json + digest.json/md + prompt.txt"]
+    end
+
+    default_note["Current default state:<br/>current entry embedding + 10-dim value profile<br/>(time gaps appear only when window_size > 1)"]
+
+    generator --> wrangled_train
+    wrangled_train --> judge
+    judge --> labels
+    wrangled_train --> merge
+    labels --> merge
+    merge --> encoder_train
+    merge --> state_train
+    encoder_train --> state_train
+    state_train --> dataset
+    dataset --> critic_train
+    critic_train --> checkpoint
+
+    checkpoint -. "trained weights" .-> critic
+    checkpoint -. "runtime metadata" .-> encoder_runtime
+    wrangled_runtime --> encoder_runtime
+    wrangled_runtime --> state_runtime
+    encoder_runtime --> state_runtime
+    state_runtime --> critic
+    critic --> timeline
+    timeline --> weekly
+    weekly --> drift
+    weekly -. "experimental context" .-> evolution
+    evolution -. "optional signal shaping" .-> drift
+    drift --> digest
+    weekly --> digest
+    wrangled_runtime --> digest
+    digest --> prompt
+    prompt --> coach
+    timeline --> exports
+    weekly --> exports
+    digest --> exports
+    prompt --> exports
+
+    default_note -.-> state_train
+    default_note -.-> state_runtime
+
+    class generator,wrangled_train,labels,wrangled_runtime data;
+    class merge,state_train,state_runtime,weekly,drift,digest,prompt process;
+    class judge,encoder_train,encoder_runtime,critic_train,checkpoint,critic,coach,evolution model;
+    class dataset,exports artifact;
+    class default_note note;

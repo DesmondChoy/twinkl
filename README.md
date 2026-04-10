@@ -7,6 +7,15 @@ Twinkl is an "inner compass" that helps users align their daily behavior with th
 >
 > See [Known Gaps](#known-gaps) for the summary and [Implementation Status](docs/prd.md#implementation-status) for the full breakdown.
 
+## Documentation Guide
+
+- [`docs/prd.md`](docs/prd.md) — authoritative product intent and implementation status
+- [`docs/vif/01_concepts_and_roadmap.md`](docs/vif/01_concepts_and_roadmap.md), [`docs/vif/02_system_architecture.md`](docs/vif/02_system_architecture.md), [`docs/vif/03_model_training.md`](docs/vif/03_model_training.md), [`docs/vif/04_uncertainty_logic.md`](docs/vif/04_uncertainty_logic.md) — VIF design, runtime, training, and uncertainty logic
+- [`docs/pipeline/pipeline_specs.md`](docs/pipeline/pipeline_specs.md), [`docs/pipeline/data_schema.md`](docs/pipeline/data_schema.md), [`docs/pipeline/consensus_rejudging_instructions.md`](docs/pipeline/consensus_rejudging_instructions.md) — data generation, label surfaces, and consensus diagnostics
+- [`docs/weekly/weekly_digest_generation.md`](docs/weekly/weekly_digest_generation.md) — weekly Coach digest contract and runtime CLI
+- [`docs/demo/review_app.md`](docs/demo/review_app.md) — Shiny review UI for the local end-to-end runtime
+- [`docs/future_work/README.md`](docs/future_work/README.md) — exploratory directions, including OpenClaw integration research
+
 ## Value Identity Function (VIF) — 🧪 Experimental
 
 The VIF is Twinkl's core evaluative engine. It compares what users *do* (daily journal entries) against what they *value* (their declared priorities) across multiple dimensions like Health, Relationships, and Growth.
@@ -16,9 +25,9 @@ Key properties:
 - **Uncertainty-aware**: Holds back judgment when the situation is complex or data is sparse
 - **Trajectory-aware**: Detects patterns over time rather than reacting to single entries
 
-These are target design properties. The Critic model infrastructure is functional (ordinal MLP heads + MC Dropout, config-driven sentence encoders with `nomic-embed-text-v1.5` as the active default, CLI training scripts), but **QWK and structural value-consistency optimization are still in progress**. The active corrected-split default remains the `run_019`-`run_021` BalancedSoftmax family; recent post-lift reruns are logged in [`logs/experiments/index.md`](logs/experiments/index.md).
+These are implemented properties of the current stack, not target-only aspirations. The Critic path includes ordinal MLP heads with MC Dropout, a BNN baseline, config-driven frozen encoders with `nomic-embed-text-v1.5` as the active default, corrected-split experiment logging, checkpoint discovery, runtime timeline reconstruction, weekly aggregation, and Coach-facing drift routing. The active corrected-split frontier remains the `run_019`-`run_021` BalancedSoftmax family; the consensus-label branch `run_048`-`run_050` stays diagnostic because it relabels the frozen holdout. See [`logs/experiments/index.md`](logs/experiments/index.md) for the live board.
 
-**Target behavior:** When the VIF detects significant misalignment with high confidence, it triggers the Coach layer to surface evidence-based feedback. Currently the Coach is ⚠️ Partial — entry processing is ready but digest generation is not yet implemented. See `docs/vif/` for architecture details.
+**Current runtime behavior:** A local checkpoint can drive the full offline path from per-entry VIF signals to weekly aggregates, structured drift output, and a weekly digest artifact. The review UI can inspect that path end to end and compare six rule-based drift detectors against either judge labels or Critic predictions. See `docs/vif/`, [`docs/weekly/weekly_digest_generation.md`](docs/weekly/weekly_digest_generation.md), and [`docs/demo/review_app.md`](docs/demo/review_app.md).
 
 ### Automated Experiment Logging & Review
 
@@ -105,6 +114,8 @@ Registry Check → Auto-Wrangle → Parallel Labeling (subagents) → Validation
 
 **Data outputs:** See [`docs/pipeline/data_schema.md`](docs/pipeline/data_schema.md) for parquet file schemas, example Polars queries, and analytics guidance.
 
+**Diagnostic label surface:** [`logs/judge_labels/consensus_labels.parquet`](logs/judge_labels/consensus_labels.parquet) stores the 5-pass consensus rerun with per-dimension confidence tiers, agreement counts, and label-change flags. The orchestration guide lives in [`docs/pipeline/consensus_rejudging_instructions.md`](docs/pipeline/consensus_rejudging_instructions.md), and the stability-first report lives in [`logs/exports/twinkl_754/consensus_rejudging_report.md`](logs/exports/twinkl_754/consensus_rejudging_report.md).
+
 **Key files:**
 - `.claude/commands/judge.md` — Skill entry point
 - `.claude/skills/judge/orchestration.md` — Detailed workflow
@@ -122,6 +133,7 @@ Registry Check → Auto-Wrangle → Parallel Labeling (subagents) → Validation
 - `scripts/journalling/generation_sanity_check.py` — Quick local sanity checks
 - `scripts/journalling/twinkl_681_5_freeze_baseline.py` / `scripts/journalling/twinkl_691_2_prepare_batch.py` — Example baseline-freeze wrappers
 - `scripts/journalling/twinkl_681_5_verify_batch.py` / `scripts/journalling/twinkl_691_2_verify_batch.py` — Example targeted-batch verification wrappers
+- `scripts/journalling/twinkl_754_prepare_consensus.py` / `twinkl_754_validate_results.py` / `twinkl_754_merge_pass_results.py` / `twinkl_754_summarize_consensus.py` — Consensus rerun bundle preparation, validation, merge, and stability-first reporting
 
 ## Human Annotation Tool — ✅ Complete
 
@@ -129,7 +141,7 @@ Validates LLM Judge labels via blind human annotation across 10 Schwartz value d
 
 **Run the tool:**
 ```sh
-shiny run src/annotation_tool/app.py
+uv run shiny run src/annotation_tool/app.py
 ```
 
 Open `http://127.0.0.1:8000` in your browser.
@@ -159,15 +171,36 @@ A sibling Shiny app for showcasing the end-to-end runtime flow on top of existin
 
 **Run the app:**
 ```sh
-shiny run src/demo_tool/app.py
+uv run shiny run src/demo_tool/app.py
 ```
 
-Open `http://127.0.0.1:8000` in your browser when running via `shiny run`, or `http://127.0.0.1:8001` when launching the file directly with Python.
+Open `http://127.0.0.1:8000` in your browser when running via `shiny run`.
+
+To launch the same app directly with Python:
+```sh
+uv run python src/demo_tool/app.py
+```
+
+Open `http://127.0.0.1:8001` when running the file directly.
+
+**Features:**
+- Persona browser with full timeline, nudges, responses, and collapsible bio
+- Checkpoint catalog sourced from `logs/experiments/artifacts`, `models/vif`, and `logs/experiments`
+- Cached artifact loading for previously run persona/checkpoint pairs
+- End-to-end runtime execution via `src.coach.runtime.run_weekly_coach_cycle`
+- Detector input source toggle between **Judge labels** and **Critic predictions**
+- Detector comparison across **Baseline**, **EMA**, **CUSUM**, **Cosine**, **Control Chart**, and **KL Div**, with per-entry consensus vote counts
+- Result tabs for per-entry Critic outputs, weekly signals, drift payloads, weekly digest markdown, and detector comparison
+
+**Generated artifacts:** The app writes persona/checkpoint-specific runtime bundles under `logs/exports/demo_tool_runs/<persona_id>/<checkpoint-stem>-<hash>/`.
+
+See [`docs/demo/review_app.md`](docs/demo/review_app.md) for the full workflow and artifact layout.
 
 **Key files:**
 - `src/demo_tool/app.py` — Main Shiny demo application
 - `src/demo_tool/data_loader.py` — Persona catalog and chronological timeline loading
 - `src/demo_tool/runtime_bridge.py` — Checkpoint discovery and weekly Coach runtime wrapper
+- `src/demo_tool/multi_drift.py` — Multi-detector comparison bundle for judge-label and Critic-signal views
 - `src/demo_tool/state.py` — Centralized reactive UI state
 
 ## Evaluation Pipeline — ⚠️ Partial
@@ -188,7 +221,7 @@ This is useful for building intuition about what the critic has learned: do misa
 
 **Generate and open:**
 ```sh
-python -m src.vif.extract_embeddings \
+uv run python -m src.vif.extract_embeddings \
   --checkpoint logs/experiments/artifacts/.../BalancedSoftmax/selected_checkpoint.pt
 ```
 
@@ -211,13 +244,28 @@ python -m src.vif.extract_embeddings \
 | Capability | Status | Note |
 |---|---|---|
 | Onboarding (BWS Values Assessment) | 📋 Specified | Flow designed; not yet implemented |
-| Coach digest generation | ⚠️ Partial | Entry processing ready; weekly digest not built |
-| Nudge signal quality validation | 🧪 Experimental | Annotation study in progress |
+| Weekly Coach validation depth | ⚠️ Partial | Digest generation, runtime artifacts, and demo review flow exist; trigger calibration and narrative evaluation still need broader validation |
+| Nudge signal quality validation | 🧪 Experimental | Annotation study and downstream usefulness checks remain in progress |
 | Embedding Explorer | ✅ Complete | Interactive 3D visualization of critic embedding space |
-| Journaling anomaly radar | ❌ Not Started | Cadence/gap detection |
+| Drift threshold calibration | 🧪 Experimental | Weekly routing and detector comparison exist; benchmark coverage and threshold tuning remain incomplete |
+| Journaling anomaly radar | ❌ Not Started | Cadence/gap detection beyond the current drift tooling |
 | Goal-aligned inspiration feed | ❌ Not Started | External API integration |
 
 For the full breakdown, see the [Implementation Status](docs/prd.md#implementation-status) table in prd.md.
+
+## Common Commands
+
+Examples below use `uv run` so they pick up the project environment directly. Activating `.venv` manually also works.
+
+- Launch the annotation tool: `uv run shiny run src/annotation_tool/app.py`
+- Launch the demo review UI: `uv run shiny run src/demo_tool/app.py`
+- Run the demo review UI directly on port `8001`: `uv run python src/demo_tool/app.py`
+- Run a local checkpoint through the full weekly Coach path: `uv run python -m src.coach.runtime --persona-id 0a2fe15c --checkpoint-path logs/experiments/artifacts/.../selected_checkpoint.pt`
+- Build a digest from judge labels or saved runtime signals: `uv run python -m src.coach.weekly_digest --persona-id 0a2fe15c --signals-path path/to/vif_timeline.parquet`
+- Train the mainline Critic with CLI overrides and LR-finder export: `uv run python -m src.vif.train --grad-clip 1.0 --lr-find-output-path logs/exports/lr_find.png`
+- Run the BNN baseline: `uv run python -m src.vif.train_bnn --epochs 10 --batch-size 16`
+- Generate the embedding explorer without auto-opening a browser: `uv run python -m src.vif.extract_embeddings --checkpoint logs/experiments/artifacts/.../selected_checkpoint.pt --no-browser`
+- Prepare a deterministic consensus pilot bundle: `uv run python scripts/journalling/twinkl_754_prepare_consensus.py --pilot-size 50 --pilot-hard-dimensions security,hedonism,stimulation`
 
 # Setup
 
@@ -233,9 +281,13 @@ This repo uses `uv` and `pyproject.toml` for dependency management.
    ```sh
    uv venv
    ```
-3. Activate it (Fish shell):
+3. Activate it when you want an interactive shell (Fish shell preferred in this repo):
    ```sh
    source .venv/bin/activate.fish
+   ```
+   Bash/Zsh fallback:
+   ```sh
+   source .venv/bin/activate
    ```
 4. Create a `.env` file in the project root with your OpenAI API key:
    ```sh

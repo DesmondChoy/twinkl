@@ -36,6 +36,13 @@ difference is that `manifest.csv`, `prompts/`, `shards/`, and downstream
 outputs are restricted to the selected 50 entries. The generated
 `bundle_status.json` records whether a bundle is a `pilot` or `full` rerun.
 
+Useful prepare options:
+
+- `--labels-path` to point at a non-default persisted label parquet
+- `--wrangled-dir` to point at a different wrangled corpus
+- `--schwartz-path` to point at a different Schwartz value config
+- `--pilot-size` and `--pilot-hard-dimensions` to build a deterministic pilot bundle
+
 ## Roles
 
 ### Main Agent
@@ -245,6 +252,11 @@ python scripts/journalling/twinkl_754_summarize_consensus.py \
   --consensus-output logs/judge_labels/consensus_labels.parquet
 ```
 
+Useful summarize options:
+
+- `--output` to write the markdown report to a non-default location
+- `--annotations-dir` to point at a different set of human annotation parquet files
+
 This writes:
 
 - `joined_results.csv`
@@ -252,5 +264,10 @@ This writes:
 - `flip_summary.csv`
 - `irr_summary.csv`
 - `confidence_summary.csv`
+- `stability_summary.csv`
 - `consensus_rejudging_report.md`
 - `logs/judge_labels/consensus_labels.parquet`
+
+The markdown report includes the full-corpus stability gate, per-dimension
+stability diagnostics, and the diagnostic retrain comparison for the consensus
+label branch.
