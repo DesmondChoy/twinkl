@@ -1,13 +1,10 @@
 # April Project Proposal
 
-This report presents Twinkl's April 2026 milestone as a project update for
-sponsors. The goal is to show that the team has built a technical core,
-understands the main delivery risks, and has a path to a demonstrable product
-slice.
-
 [**1. Introduction**](#1-introduction)
 
 [Problem Statement](#problem-statement)
+
+[Milestone Status](#milestone-status)
 
 [Differentiation and Target Users](#differentiation-and-target-users)
 
@@ -73,6 +70,8 @@ slice.
 
 [Phase 2 (June-September 2026)](#phase-2-june-september-2026)
 
+[Deployment and Cost Sketch](#deployment-and-cost-sketch)
+
 [Deferred and Out-of-Scope](#deferred-and-out-of-scope)
 
 [**7. Challenges and Open Questions**](#7-challenges-and-open-questions)
@@ -113,25 +112,7 @@ For this milestone, the core question is whether this alignment engine can be
 built, trained, validated, and run in a way that justifies continued
 investment.
 
-### Differentiation and Target Users
-
-Twinkl is aimed first at knowledge workers in transition: graduate students,
-new managers, founders, and other high-agency professionals managing recurring
-trade-offs across work, health, relationships, and identity. These users
-already journal, seek coaching, or pay for reflective productivity tools, yet
-most available products still stop at summarisation, prompting, or general
-wellness encouragement.
-
-The product distinction is straightforward: most AI journaling tools explain
-what the user has been feeling; Twinkl is designed to ask whether the user has
-been living in line with what they said matters.
-
-| Current AI Journals | Twinkl |
-| :--- | :--- |
-| Summarise mood, topics, and streaks | Compare behaviour against a declared value profile |
-| Treat each entry mainly as a stand-alone reflection | Maintain an evolving self-model across entries |
-| Offer general prompts or coaching questions | Surface evidence-grounded tensions, trade-offs, and alignment patterns |
-| Optimise for engagement and reflection volume | Optimise for honest accountability and explainable weekly review |
+### Milestone Status
 
 This milestone already answers four practical questions:
 
@@ -159,9 +140,35 @@ settings.
 At this stage, Twinkl remains an internal prototype rather than a user-ready
 product.
 
-The project still spans intelligent sensing, pattern recognition, reasoning,
-and AI systems orchestration; the formal program mapping is provided in the
-appendix.
+### Differentiation and Target Users
+
+Twinkl is aimed first at knowledge workers in transition: graduate students,
+new managers, founders, and other high-agency professionals managing recurring
+trade-offs across work, health, relationships, and identity. These users
+already journal, seek coaching, or pay for reflective productivity tools, yet
+most available products still stop at summarisation, prompting, or general
+wellness encouragement.
+
+The product distinction is straightforward: most AI journaling tools explain
+what the user has been feeling; Twinkl is designed to ask whether the user has
+been living in line with what they said matters. Several funded competitors
+illustrate the gap:
+
+| App | Core Approach | Gap vs Twinkl |
+| :--- | :--- | :--- |
+| Rosebud | CBT/ACT-based therapeutic reflection with habit tracking | No declared-value model; analyses mental patterns, not behavioural drift from stated priorities |
+| Reflection | AI companion with mood tracking and retrospective theme discovery | Values discovered post-hoc from entries, not proactively declared or tracked over time |
+| Mindsera | 50+ generic mental frameworks (CBT, Stoic, Ikigai, etc.) with multi-perspective AI | External frameworks applied uniformly, not adapted to user-specific value trade-offs |
+| Reflectly | Mood tracking with conversational AI and daily challenges | Purely emotional pattern analysis; no values framework or alignment assessment |
+| Life Note | 1,000+ AI mentors modelled on historical figures | Mentor philosophies are fixed; no mechanism to track the user's own evolving priorities |
+| Stoic | Stoic philosophy daily rituals with GPT-4 | Single prescriptive philosophy, not a user-declared values model |
+
+The addressable market spans digital journal apps (USD 5.69 billion in 2025,
+11.5% CAGR), mental health apps (USD 7.48 billion, 14.6% CAGR), and personal
+development tools (USD 46.1 billion, 8.0% CAGR). Twinkl sits at the
+intersection: structured value-alignment coaching delivered through journaling.
+
+![Market context](market_context.png)
 
 ### Related Academic Work
 
@@ -241,9 +248,11 @@ trajectories rather than isolated text snippets.
 Each persona combines a demographic profile with 1-2 emphasized Schwartz
 dimensions. Generation runs in parallel across personas but sequentially within
 each persona so later entries can refer to earlier events. Entries vary in tone
-and reflection style, and the pipeline can optionally generate conversational
-nudge-response turns to better reflect how users interact with modern
-journaling products.
+and reflection style, and the pipeline includes a conversational nudge system
+that uses a three-category decision engine (clarification, elaboration,
+tension-surfacing) with anti-annoyance throttling (maximum two nudges per three
+entries). Nudge-response pairs are integrated across 62% of the current corpus
+and better reflect how users interact with modern journaling products.
 
 The pipeline also includes leakage controls. Explicit Schwartz terminology is
 banned from generated text, generation context is separated from labeling
@@ -334,9 +343,11 @@ make follow-up experiments more comparable. The project now has a repeatable
 evaluation regime, an archived experiment history, and explicit promotion
 criteria for new challengers.
 
-The codebase also maintains automated tests across the core pipeline, including
-critic training and evaluation, judge labeling, data wrangling, coaching and
-runtime behavior, and local integration smoke checks. That level of test
+The codebase maintains **53 test modules** covering all nine ordinal loss
+functions (CORAL, CORN, EMD, SoftOrdinal, CDW-CE, BalancedSoftmax, Two-Stage
+BalancedSoftmax, LDAM-DRW, and SLACE), gradient flow and numerical stability,
+evaluation metrics, coach runtime, nudge decision logic, data wrangling, the
+demo workbench, and local integration smoke tests. That level of automated
 coverage supports continued iteration without turning every change into a
 manual regression risk.
 
@@ -432,7 +443,7 @@ The project also contains two related but different extensions:
 
 | Capability | Current role |
 | :--- | :--- |
-| Multi-detector comparison | Evaluation surface used to compare alternative heuristic families offline |
+| Multi-detector comparison | A demo workbench comparing six drift-detection families (Baseline, EMA, CUSUM, Cosine Similarity, Control Chart, KL Divergence) with source toggling between judge labels and critic predictions and interactive visualisations; used to evaluate alternative heuristics offline |
 | Evolution analysis | Experimental layer used to test whether sustained divergence may reflect changing priorities rather than failure |
 
 Neither should be presented as committed production behaviour yet. For this
@@ -451,6 +462,12 @@ the form of a weekly artifact that:
 - builds a full-context weekly prompt
 - can optionally generate a narrative response
 - runs first-pass checks on groundedness, non-circularity, and length
+
+The coach selects from four active behavioural modes — **high uncertainty**,
+**rut**, **mixed state**, and **background strain** — plus a **stable**
+fallback when no tension is detected. Each mode shapes the tone, evidence
+selection, and question framing of the weekly digest so the feedback matches
+the user's current behavioural pattern rather than applying a generic template.
 
 This is further along than a design sketch, but it is not a finished product
 experience. Structured digest generation is implemented, narrative-generation
@@ -602,6 +619,11 @@ The current frontier remains below the report's target range for end-user
 reliability, but the critic is clearly learning signal. The next round of work
 therefore remains focused on hard dimensions and target quality.
 
+The per-dimension breakdown shows where the critic already captures meaningful
+signal and where hard dimensions drag the aggregate:
+
+![Per-dimension QWK frontier](per_dimension_qwk_frontier.png)
+
 ### What Was Tried Beyond the Frontier
 
 The main post-frontier challengers clarified what still does and does not move
@@ -647,12 +669,13 @@ model checkpoint all the way through to weekly outputs.
 This makes the pipeline inspectable, debuggable, and demonstrable, even though
 the current review surface is still internal rather than end-user facing.
 
-The team also has an interactive embedding explorer for qualitative inspection
-of what the critic has learned across all **1,651** labeled entries. It
-supports multiple projection and coloring modes, lets reviewers inspect
-individual points in detail, and traces persona trajectories through the learned
-representation over time. It serves as an internal review tool for inspecting
-model behavior beyond aggregate metrics.
+The team also built an interactive embedding explorer using Three.js for
+qualitative inspection of what the critic has learned across all **1,651**
+labeled entries. The tool offers 3D visualization with multiple projection
+modes (PCA, t-SNE, UMAP), per-dimension coloring, individual point inspection,
+and persona trajectory tracing through the learned representation over time. It
+serves as an internal review tool for auditing model behaviour beyond aggregate
+metrics.
 
 ### Phase 1 (April 2026 Scope-Locking Wave)
 
@@ -718,6 +741,35 @@ current scope-locking work proves.
 
 Phase 2 output should include a final system path and a final capstone claim
 about what Twinkl can and cannot yet do based on the completed work.
+
+### Deployment and Cost Sketch
+
+The critic model contains approximately **23,000 parameters** and runs **50
+MC Dropout forward passes** per inference. At this scale, two deployment paths
+are feasible:
+
+**Path 1: Standalone mobile application**
+
+| Component | Deployment | Cost driver |
+| :--- | :--- | :--- |
+| Critic (VIF) | On-device via TensorFlow Lite (iOS/Android) or Core ML (iOS) | Zero marginal cost per inference; model size < 100 KB |
+| Weekly coach narrative | Cloud LLM API call (e.g. Claude Haiku) | ~1 call per user per week; at current pricing ($1/$5 per M input/output tokens), a weekly digest costs fractions of a cent |
+| Drift detection | On-device rule-based engine | Zero marginal cost |
+| Storage | Local journal encrypted on device; value profile and weekly signals synced to cloud | Standard mobile backend costs |
+
+**Path 2: Integration as a Claude feature**
+
+| Component | Deployment | Cost driver |
+| :--- | :--- | :--- |
+| Critic (VIF) | Lightweight server-side model or compiled into Claude's tool-use context | Negligible compute relative to the host LLM |
+| Weekly coach narrative | Native Claude generation within the existing conversation | No additional API cost beyond the user's existing session |
+| Drift detection | Server-side, integrated into Claude's memory and context system | Minimal |
+| User experience | Journal entries as part of normal Claude conversation; weekly digest surfaces as a proactive message | Leverages existing Claude infrastructure |
+
+In both paths, the critic's small footprint means inference cost is
+negligible. The dominant variable cost is the weekly LLM call for narrative
+generation, which at current Haiku pricing amounts to well under $0.01 per
+user per week.
 
 ### Deferred and Out-of-Scope
 
@@ -814,22 +866,37 @@ The most important remaining questions are:
 
 ## 8. Conclusion
 
-By this milestone, the project has a functioning offline supervision pipeline,
-a human benchmark, a critic-training program, and an internal runtime path that
-can produce weekly review artifacts from saved checkpoints.
+By this milestone, the project has delivered a functioning offline supervision
+pipeline, a human benchmark, a disciplined critic-training program, and an
+internal runtime path that produces weekly review artifacts from saved
+checkpoints. The engineering foundation — 53 test modules, nine ordinal loss
+variants, six drift detectors, and a four-mode coaching engine — is deeper than
+a typical POC and designed to support continued iteration.
 
-At the same time, the report should be honest about what remains unfinished.
-The project has not yet proven a live onboarding-to-runtime loop, a calibrated
-weekly drift benchmark, or real-user explanation quality. The central remaining
-risk is whether the value model can be made reliable enough on the hardest
-dimensions to support trustworthy user-facing feedback.
+The honest gaps remain: the critic has not yet reached the QWK target on the
+hardest dimensions, the weekly drift benchmark is not yet calibrated, and no
+real user has seen the output. These are the right problems to have at this
+stage — they are measurable, scoped, and addressed by the Phase 2 plan.
 
-The next milestone must therefore do three things clearly: improve the quality
-of the hardest supervision targets, calibrate the weekly routing layer against
-a real benchmark, and demonstrate one narrow path from declared priorities to
-scored evidence to weekly reflective output that is ready to present
-externally. If those three steps succeed, the project will be in a better
-position to argue for its capstone and product relevance.
+Three concrete steps define the path forward:
+
+1. **Improve hard-dimension supervision targets** so the critic trains against
+   labels that are actually reachable from student-visible context.
+2. **Calibrate the weekly routing layer** against synthetic crisis-injection
+   timelines with measured hit rate, precision, and recall.
+3. **Run a narrow external pilot** to test whether alignment signals and weekly
+   digests transfer from synthetic personas to real journaling behaviour.
+
+Risk mitigation is built into the timeline. If hard-dimension targets do not
+improve sufficiently, the project will narrow the active value set to the
+dimensions where the critic already performs credibly — preserving a
+demonstrable end-to-end path while being transparent about scope. If the
+external pilot reveals systematic gaps, the team will treat those findings as
+the capstone's concluding contribution rather than as a failure.
+
+The team is committed to delivering a working end-to-end demonstration by the
+final milestone: from declared priorities to scored evidence to a weekly
+reflective output that a real user can evaluate.
 
 ## Appendix: Program Submodule Mapping
 
