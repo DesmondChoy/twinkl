@@ -5,21 +5,21 @@ update. The goal is to show that the team has built a credible technical core,
 understands the main delivery risks, and has a realistic path to a demonstrable
 product slice.
 
-[**1\. Introduction**](#1.-introduction)
+[**1. Introduction**](#1-introduction)
 
-[1.1 Problem Statement](#1.1-problem-statement)
+[Problem Statement](#problem-statement)
 
-[1.2 Differentiation & Target Users](#1.2-differentiation-&-target-users)
+[Differentiation and Target Users](#differentiation-and-target-users)
 
-[1.3 Relevance to Program Submodules](#1.3-relevance-to-program-submodules)
+[Relevance to Program Submodules](#relevance-to-program-submodules)
 
-[1.4 Related Academic Work](#1.4-related-academic-work)
+[Related Academic Work](#related-academic-work)
 
-[**2\. System Architecture**](#2.-system-architecture)
+[**2. System Architecture**](#2-system-architecture)
 
-[2.1 End-to-end Pipeline](#2.1-end-to-end-pipeline)
+[End-to-end Pipeline](#end-to-end-pipeline)
 
-[**3\. Offline Data Generation and Model Training**](#3.-offline-data-generation-and-model-training)
+[**3. Offline Data Generation and Model Training**](#3-offline-data-generation-and-model-training)
 
 [Synthetic Persona Generation](#synthetic-persona-generation)
 
@@ -27,37 +27,37 @@ product slice.
 
 [Human Annotation and Validation](#human-annotation-and-validation)
 
-[Critic (VIF) Model Training](#critic-\(vif\)-model-training)
+[Critic (VIF) Model Training](#critic-vif-model-training)
 
 [Training and Experiment Infrastructure](#training-and-experiment-infrastructure)
 
 [Evaluation Framework](#evaluation-framework)
 
-[**4\. Online Model Inference**](#4.-online-model-inference)
+[**4. Online Model Inference**](#4-online-model-inference)
 
-[4.1 User Value Profile Construction](#4.1-user-value-profile-construction)
+[User Value Profile Construction](#user-value-profile-construction)
 
-[4.2 Journal Entry Ordinal Alignment Classification](#4.2-journal-entry-ordinal-alignment-classification)
+[Journal Entry Ordinal Alignment Classification](#journal-entry-ordinal-alignment-classification)
 
-[4.3 Journal Entry Uncertainty Quantification](#journal-entry-uncertainty-quantification)
+[Journal Entry Uncertainty Quantification](#journal-entry-uncertainty-quantification)
 
-[4.4 Behavioral Intelligence: Drift & Evolution](#behavioral-intelligence:-drift-&-evolution)
+[Behavioral Intelligence: Drift and Evolution](#behavioral-intelligence-drift-and-evolution)
 
-[4.5 Explainable Feedback via Coach](#4.5-explainable-feedback-via-coach)
+[Explainable Feedback via Coach](#explainable-feedback-via-coach)
 
-[**5\. Project Evaluation Metrics**](#5.-project-evaluation-metrics)
+[**5. Project Evaluation Metrics**](#5-project-evaluation-metrics)
 
-[5.1 Four-Stage Gate Structure](#5.1-four-stage-gate-structure)
+[Four-Stage Gate Structure](#four-stage-gate-structure)
 
-[5.2 Judge Validation with Human Annotation](#5.2-judge-validation-with-human-annotation)
+[Judge Validation with Human Annotation](#judge-validation-with-human-annotation)
 
-[5.3 Value Modelling](#5.3-value-modelling)
+[Value Modelling](#value-modelling)
 
-[5.4 Drift Detection](#5.4-drift-detection)
+[Drift Detection](#drift-detection)
 
-[5.5 Explainable Feedback via Coach](#5.5-explainable-feedback-via-coach)
+[Explainable Feedback via Coach](#explainable-feedback-via-coach-1)
 
-[**6\. Project Progress & Results**](#6.-project-progress-&-results)
+[**6. Project Progress and Results**](#6-project-progress-and-results)
 
 [Judge Validation](#judge-validation)
 
@@ -67,21 +67,21 @@ product slice.
 
 [What Was Tried Beyond the Frontier](#what-was-tried-beyond-the-frontier)
 
-[What the Results Now Mean](#current-findings)
+[Current Findings](#current-findings)
 
 [Annotation Tool](#annotation-tool)
 
-[Phase 1 (April 2026 Scope-Locking Wave)](#phase-1-\(april-2026-scope-locking-wave\))
+[Phase 1 (April 2026 Scope-Locking Wave)](#phase-1-april-2026-scope-locking-wave)
 
-[Phase 2 (June \- September 2026\)](#phase-2-\(june---september-2026\))
+[Phase 2 (June-September 2026)](#phase-2-june-september-2026)
 
-[Deferred / Out-of-Scope](#deferred-/-out-of-scope)
+[Deferred and Out-of-Scope](#deferred-and-out-of-scope)
 
-[**7\. Challenges & Open Questions**](#7.-challenges-&-open-questions)
+[**7. Challenges and Open Questions**](#7-challenges-and-open-questions)
 
 [Hard Dimensions Still Set the Ceiling](#hard-dimensions-still-set-the-ceiling)
 
-[Label Stability Improved, But Did Not Fully Solve the Problem](#label-stability-improved,-but-did-not-fully-solve-the-problem)
+[Label Stability Improved, But Did Not Fully Solve the Problem](#label-stability-improved-but-did-not-fully-solve-the-problem)
 
 [Statistical Power Remains a Real Constraint](#statistical-power-remains-a-real-constraint)
 
@@ -89,11 +89,11 @@ product slice.
 
 [Open Questions for the Next Phase](#open-questions-for-the-next-phase)
 
-[**8\. Conclusion**](#8.-conclusion)
+[**8. Conclusion**](#8-conclusion)
 
-## 1\. Introduction {#1.-introduction}
+## 1. Introduction
 
-### 1.1 Problem Statement {#1.1-problem-statement}
+### Problem Statement
 
 Ambitious people often know what matters to them, but their weekly behaviour
 drifts quietly away from those priorities. Health, relationships, meaningful
@@ -113,7 +113,7 @@ For this milestone, the core question is practical rather than theoretical:
 can this alignment engine be built, trained, validated, and run in a way that
 is technically credible enough to justify continued investment?
 
-### 1.2 Differentiation & Target Users {#1.2-differentiation-&-target-users}
+### Differentiation and Target Users
 
 Twinkl is aimed first at knowledge workers in transition: graduate students,
 new managers, founders, and other high-agency professionals managing recurring
@@ -159,7 +159,7 @@ feedback beyond synthetic and internal review settings.
 This milestone should therefore be read as a technically coherent internal
 prototype, not as a user-ready product.
 
-### 1.3 Relevance to Program Submodules {#1.3-relevance-to-program-submodules}
+### Relevance to Program Submodules
 
 The project remains a strong fit for the practice module because the main value
 proposition depends on four concrete capabilities working together rather than
@@ -172,9 +172,9 @@ on a single model.
 | Intelligent Reasoning | Weekly routing logic, evidence-grounded explanation, and profile-conditioned interpretation |
 | Architecting AI Systems | End-to-end orchestration from offline supervision to runtime scoring, weekly review, and future user-facing delivery |
 
-### **1.4 Related Academic Work** {#1.4-related-academic-work}
+### Related Academic Work
 
-#### **1.4.1 Schwartz Theory of Basic Human Values**
+#### Schwartz Theory of Basic Human Values
 
 Twinkl uses Schwartz's ten-value framework because it provides a practical and
 well-studied structure for modelling competing priorities rather than treating
@@ -183,7 +183,7 @@ this project, the framework is not included as background theory alone; it is
 the operational schema for persona generation, judge rubrics, and model
 targets.
 
-#### 1.4.2 Best-Worst Scaling for Value Elicitation
+#### Best-Worst Scaling for Value Elicitation
 
 Best-Worst Scaling was chosen for onboarding because it produces clearer
 trade-offs than Likert-style self-rating and reduces the "everything matters"
@@ -191,7 +191,7 @@ problem common in value elicitation (Louviere et al., 2015). That matters for
 Twinkl because the critic is intended to interpret journal behaviour in light
 of the user's declared priorities, not in light of generic values alone.
 
-#### 1.4.3 Synthetic Data & LLM-as-Judge
+#### Synthetic Data & LLM-as-Judge
 
 Twinkl uses a generate-annotate-learn pipeline because there is no public
 dataset that pairs longitudinal journal behaviour with per-dimension value
@@ -202,9 +202,9 @@ scalable supervision that can then be distilled into a smaller runtime model
 the project validates it explicitly against human annotation rather than
 treating synthetic labels as self-justifying.
 
-## 2\. System Architecture {#2.-system-architecture}
+## 2. System Architecture
 
-### 2.1 End-to-end Pipeline {#2.1-end-to-end-pipeline}
+### End-to-end Pipeline
 
 ![End-to-end pipeline](end_to_end_pipeline.png)
 
@@ -233,14 +233,14 @@ Each layer operates over a different scope of information: entry-level state
 for scoring, weekly aggregation for routing, and broader journal history for
 explanation.
 
-## **3\. Offline Data Generation and Model Training** {#3.-offline-data-generation-and-model-training}
+## 3. Offline Data Generation and Model Training
 
 Twinkl's offline core is no longer conceptual. The project now has a complete
 teacher-student pipeline covering data generation, labeling, human validation,
 critic training, and experiment review. As of this milestone, that pipeline
 operates over **204 synthetic personas** and **1,651 judged journal entries**.
 
-### **Synthetic Persona Generation** {#synthetic-persona-generation}
+### Synthetic Persona Generation
 
 The project requires paired training data: journal entries and per-dimension
 value-alignment labels. Because no public dataset exists for this problem, the
@@ -264,7 +264,7 @@ dimensions. Instead of relying only on generic "misaligned" scenarios, the
 pipeline can produce value-specific tension cases designed to probe the critic's
 weakest semantic boundaries.
 
-### **LLM-as-Judge Labeling** {#llm-as-judge-labeling}
+### LLM-as-Judge Labeling
 
 The judge labels each journal entry across all ten Schwartz dimensions on a
 three-way ordinal scale:
@@ -286,7 +286,7 @@ consolidated into a deterministic training dataset. A consensus re-judging path
 also exists as a diagnostic branch so the team can test label stability across
 multiple independent judge passes.
 
-### **Human Annotation and Validation** {#human-annotation-and-validation}
+### Human Annotation and Validation
 
 Because the supervision problem is subjective, Twinkl validates judge labels
 against human scoring rather than assuming that synthetic labels are reliable by
@@ -299,7 +299,7 @@ subset spanning **19 personas**, producing roughly **380 total annotations**.
 This gives the project a credible human reference point for judging whether the
 LLM supervision is usable at POC scale.
 
-### **Critic (VIF) Model Training** {#critic-(vif)-model-training}
+### Critic (VIF) Model Training
 
 The critic is a compact multi-layer perceptron that learns to approximate the
 judge's per-dimension alignment decisions while remaining cheap enough for
@@ -325,7 +325,7 @@ reference, but the main sponsor story remains the same: the project already has
 a working student model, and the open question is how far that model can be
 pushed before target quality becomes the real bottleneck.
 
-### **Training and Experiment Infrastructure** {#training-and-experiment-infrastructure}
+### Training and Experiment Infrastructure
 
 The training workflow is disciplined rather than ad hoc. It includes:
 
@@ -341,7 +341,7 @@ from isolated best-seed results. The project now has a repeatable evaluation
 regime, an archived experiment history, and explicit promotion criteria for new
 challengers.
 
-### **Evaluation Framework** {#evaluation-framework}
+### Evaluation Framework
 
 The evaluation suite tracks both aggregate and tail-sensitive behaviour:
 
@@ -358,9 +358,9 @@ training seeds and reviewed at the family level rather than on single runs.
 Persona-cluster bootstrap intervals are then used to test whether apparent
 gains survive holdout uncertainty.
 
-## 4\. Online Model Inference {#4.-online-model-inference}
+## 4. Online Model Inference
 
-### 4.1 User Value Profile Construction {#4.1-user-value-profile-construction}
+### User Value Profile Construction
 
 Twinkl is designed to address the cold-start problem through a Best-Worst
 Scaling onboarding flow that elicits an initial value profile from forced
@@ -378,7 +378,7 @@ This distinction matters. The product vision depends on live onboarding, but
 the technical milestone delivered so far is the profile-conditioned critic path,
 not the onboarding-to-runtime loop itself.
 
-### 4.2 Journal Entry Ordinal Alignment Classification {#4.2-journal-entry-ordinal-alignment-classification}
+### Journal Entry Ordinal Alignment Classification
 
 At runtime, the critic outputs per-dimension alignment scores for each journal
 entry in \{-1, 0, +1\}. The current baseline uses ordinal heads because the
@@ -402,7 +402,7 @@ generation, but the current runtime is not yet a fully wired live journaling
 experience. The project can model entry-plus-response behaviour internally, but
 it does not yet provide a complete session-time product loop for end users.
 
-### Journal Entry Uncertainty Quantification {#journal-entry-uncertainty-quantification}
+### Journal Entry Uncertainty Quantification
 
 MC Dropout remains active at inference time so the critic can produce both a
 point estimate and an uncertainty estimate for each dimension. In the current
@@ -414,7 +414,7 @@ critiques when the model is unsure. In the current design, uncertainty acts as
 a gating signal: high uncertainty should suppress strong claims and route the
 system toward clarification or lighter-touch feedback instead.
 
-### Behavioral Intelligence: Drift & Evolution {#behavioral-intelligence:-drift-&-evolution}
+### Behavioral Intelligence: Drift and Evolution
 
 The runtime aggregates per-entry critic outputs into weekly signals so that the
 system can reason about patterns rather than overreacting to single entries. In
@@ -441,7 +441,7 @@ story for this milestone is narrower: weekly crash/rut-style routing is
 implemented experimentally, but calibration and benchmark validation are still
 pending.
 
-### 4.5 Explainable Feedback via Coach {#4.5-explainable-feedback-via-coach}
+### Explainable Feedback via Coach
 
 The coach layer converts critic and weekly-routing signals into a digest that is
 clear, evidence-grounded, and non-judgmental. In the current POC, this takes
@@ -458,9 +458,9 @@ experience. Structured digest generation is implemented, narrative-generation
 hooks exist, and internal validation checks exist, but user-facing explanation
 quality has not yet been proven through real evaluation.
 
-## 5\. Project Evaluation Metrics {#5.-project-evaluation-metrics}
+## 5. Project Evaluation Metrics
 
-### 5.1 Four-Stage Gate Structure {#5.1-four-stage-gate-structure}
+### Four-Stage Gate Structure
 
 ![VIF evaluation pipeline](vif_evaluation_pipeline.png)
 
@@ -476,7 +476,7 @@ that feed it.
 | Drift detection | Can weekly routing identify crash/rut patterns reliably? | Hit rate, precision, recall | **Partial**: runtime path exists, benchmark still pending |
 | Explanation quality | Can the system produce grounded, useful feedback? | User-rated usefulness / accuracy | **Partial**: digest generation exists, user-facing evaluation still pending |
 
-### 5.2 Judge Validation with Human Annotation  {#5.2-judge-validation-with-human-annotation}
+### Judge Validation with Human Annotation
 
 Judge validation is the strongest completed evaluation gate in the project.
 Three annotators independently labeled a shared subset of entries using the
@@ -495,7 +495,7 @@ the hardest dimensions can still be unstable or unreachable from the student's
 available context. That is why the project now treats supervision quality as an
 active design problem rather than as a solved preprocessing step.
 
-### 5.3 Value Modelling  {#5.3-value-modelling}
+### Value Modelling
 
 Value modelling is evaluated at two levels.
 
@@ -512,7 +512,7 @@ reliability. Until that improves further, persona-level ranking is better
 treated as a follow-on evaluation than as the main proof point for this
 milestone.
 
-### 5.4 Drift Detection {#5.4-drift-detection}
+### Drift Detection
 
 Drift detection is currently evaluated as a weekly crash/rut-style routing task
 over aggregated critic outputs and uncertainty estimates. The implementation is
@@ -520,7 +520,7 @@ in place, but the benchmark is not. The team still needs synthetic
 crisis-injection timelines, calibrated thresholds, and measured hit
 rate/precision/recall before this layer can be treated as validated.
 
-### 5.5 Explainable Feedback via Coach {#5.5-explainable-feedback-via-coach}
+### Explainable Feedback via Coach
 
 Explanation quality is evaluated by asking whether weekly feedback is grounded,
 clear, and useful. The project already supports structured digest generation and
@@ -529,7 +529,7 @@ current evidence. For this milestone, the honest claim is partial progress: the
 explanation path is implemented enough to inspect and improve internally, but it
 is not yet validated with user ratings.
 
-## 6\. Project Progress & Results {#6.-project-progress-&-results}
+## 6. Project Progress and Results
 
 This milestone moved Twinkl from concept and architecture into a measured,
 auditable technical core. The project now has a complete offline supervision
@@ -547,7 +547,7 @@ artifacts.
   route crash/rut modes, and generate weekly digest artifacts for internal
   review
 
-### **Judge Validation** {#judge-validation}
+### Judge Validation
 
 Before relying on LLM-generated supervision at scale, the team expanded the
 human benchmark from a small initial sample to **115 shared entries across 19
@@ -570,7 +570,7 @@ The project's later audits made this story more precise rather than weaker:
 The sponsor-relevant takeaway is simple: judge supervision is usable overall,
 but not equally trustworthy across all dimensions.
 
-### **VIF Experiment Progression** {#vif-experiment-progression}
+### VIF Experiment Progression
 
 The model search is now large enough to support disciplined comparison rather
 than isolated intuition. The archive covers **50 run IDs** and **114 persisted
@@ -589,7 +589,7 @@ The frontier is now narrow, the remaining questions are better isolated, and
 the project has evidence for why several tempting alternatives did not become
 the default.
 
-### **Current Critic VIF Frontier** {#current-critic-vif-frontier}
+### Current Critic VIF Frontier
 
 The active reference point is the current BalancedSoftmax family under the
 corrected-split, persisted-label regime.
@@ -607,7 +607,7 @@ reliability. It is, however, strong enough to justify the next round of focused
 work. The critic is clearly learning meaningful signal, but hard dimensions and
 target quality still cap the ceiling.
 
-### What Was Tried Beyond the Frontier {#what-was-tried-beyond-the-frontier}
+### What Was Tried Beyond the Frontier
 
 The main post-frontier challengers clarified what still does and does not move
 the system:
@@ -623,7 +623,7 @@ The most important methodological improvement from this phase is not a single
 metric gain. It is that the project now compares challengers using family-level
 medians and bootstrap confidence intervals rather than point estimates alone.
 
-### Current Findings {#current-findings}
+### Current Findings
 
 The project is now in a healthier position than it was earlier in the semester.
 The main conclusions are:
@@ -641,7 +641,7 @@ The next phase is therefore no longer "try more model ideas." It is focused
 work on hard-dimension targets, compact context, and better alignment between
 training signals and frontier metrics.
 
-### **Annotation Tool**  {#annotation-tool}
+### Annotation Tool
 
 The project's support tooling is also materially stronger than a typical first
 milestone. Beyond the core training stack, the team has a functioning
@@ -655,7 +655,7 @@ the team can actually inspect, debug, and demonstrate. A sponsor should read
 this as evidence of delivery momentum, even though the current review surface
 is still internal rather than end-user facing.
 
-### Phase 1 (April \- 2026 Scope-Locking Wave) {#phase-1-(april-2026-scope-locking-wave)}
+### Phase 1 (April 2026 Scope-Locking Wave)
 
 As of **6 April 2026**, the project has moved from broad exploration into a
 scope-locking phase. The central question is now narrower: is the remaining VIF
@@ -702,7 +702,7 @@ The sponsor-relevant point is that the project can now show a technically
 coherent path from declared priorities to scored evidence to weekly reflective
 output, even though the full end-user journey is not yet complete.
 
-### Phase 2 (June \- September 2026\) {#phase-2-(june---september-2026)}
+### Phase 2 (June-September 2026)
 
 Phase 2 should be treated as a conditional deepening phase, not an automatic
 continuation of broad model search. The emphasis should depend on what the
@@ -720,7 +720,7 @@ The intended Phase 2 output is therefore twofold: a more defensible final
 system path, and a clearer final capstone claim about what Twinkl can and
 cannot yet do credibly.
 
-### Deferred / Out-of-Scope {#deferred-/-out-of-scope}
+### Deferred and Out-of-Scope
 
 Several ideas remain attractive, but they are not the right focus for the
 current capstone milestone. The guiding rule is simple: do not let downstream
@@ -739,7 +739,7 @@ loop.
 The project has deliberately chosen depth over breadth. That remains the right
 choice.
 
-## 7\. Challenges & Open Questions {#7.-challenges-&-open-questions}
+## 7. Challenges and Open Questions
 
 The project's remaining challenges are now clearer than they were at the start
 of the semester. The main technical bottleneck is concentrated in a small
@@ -748,7 +748,7 @@ Separately, the biggest product risk is still external validity: most of the
 current evidence comes from synthetic personas and internal review rather than
 from real users.
 
-### Hard Dimensions Still Set the Ceiling {#hard-dimensions-still-set-the-ceiling}
+### Hard Dimensions Still Set the Ceiling
 
 The current frontier stabilises around a BalancedSoftmax-based student that is
 better than earlier baselines at recovering rare active labels. Even so,
@@ -768,7 +768,7 @@ The project is therefore no longer asking only which loss function works best.
 It is asking which parts of the current supervision signal are genuinely
 learnable from the available inputs.
 
-### Label Stability Improved, But Did Not Fully Solve the Problem {#label-stability-improved,-but-did-not-fully-solve-the-problem}
+### Label Stability Improved, But Did Not Fully Solve the Problem
 
 Recent work showed clearly that the hard-dimension ceiling is partly a
 target-quality problem, not only a modelling problem. Consensus re-judging was
@@ -781,7 +781,7 @@ assuming that more relabeling is automatically better. The current challenge is
 to improve target quality without erasing the rare, disagreement-heavy edge
 cases that matter most operationally.
 
-### Statistical Power Remains a Real Constraint {#statistical-power-remains-a-real-constraint}
+### Statistical Power Remains a Real Constraint
 
 The corrected holdout is much more credible than the earlier regime, but it is
 still small enough that moderate model differences can disappear under proper
@@ -793,7 +793,7 @@ That constraint is frustrating, but it is not a failure. It is exactly why the
 project now relies on family medians, bootstrap intervals, and more disciplined
 promotion criteria.
 
-### What Has Been Ruled Out {#what-has-been-ruled-out}
+### What Has Been Ruled Out
 
 This phase has already ruled out several simpler explanations:
 
@@ -805,7 +805,7 @@ This phase has already ruled out several simpler explanations:
 Those are useful negative results. They narrow the remaining search space and
 make the next milestone more focused.
 
-### Open Questions for the Next Phase {#open-questions-for-the-next-phase}
+### Open Questions for the Next Phase
 
 The most important remaining questions are:
 
@@ -820,7 +820,7 @@ The most important remaining questions are:
 5. **How much of the current synthetic-persona performance transfers to real
    journaling behaviour once the project begins external validation?**
 
-## 8\. Conclusion {#8.-conclusion}
+## 8. Conclusion
 
 Twinkl has now cleared the most important first-milestone hurdle: the project
 is no longer just a product idea with an architecture diagram. It has a
