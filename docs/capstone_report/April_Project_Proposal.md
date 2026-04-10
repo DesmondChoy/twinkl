@@ -1,94 +1,30 @@
-# April Project Proposal
-
-[**1. Introduction**](#1-introduction)
-
-[Problem Statement](#problem-statement)
-
-[Milestone Status](#milestone-status)
-
-[Differentiation and Target Users](#differentiation-and-target-users)
-
-[Related Academic Work](#related-academic-work)
-
-[**2. System Architecture**](#2-system-architecture)
-
-[End-to-end Pipeline](#end-to-end-pipeline)
-
-[**3. Offline Data Generation and Model Training**](#3-offline-data-generation-and-model-training)
-
-[Synthetic Persona Generation](#synthetic-persona-generation)
-
-[LLM-as-Judge Labeling](#llm-as-judge-labeling)
-
-[Human Annotation and Validation](#human-annotation-and-validation)
-
-[Critic (VIF) Model Training](#critic-vif-model-training)
-
-[Training and Experiment Infrastructure](#training-and-experiment-infrastructure)
-
-[Evaluation Framework](#evaluation-framework)
-
-[**4. Online Model Inference**](#4-online-model-inference)
-
-[User Value Profile Construction](#user-value-profile-construction)
-
-[Journal Entry Ordinal Alignment Classification](#journal-entry-ordinal-alignment-classification)
-
-[Journal Entry Uncertainty Quantification](#journal-entry-uncertainty-quantification)
-
-[Behavioral Intelligence: Drift and Evolution](#behavioral-intelligence-drift-and-evolution)
-
-[Explainable Feedback via Coach](#explainable-feedback-via-coach)
-
-[**5. Project Evaluation Metrics**](#5-project-evaluation-metrics)
-
-[Four-Stage Gate Structure](#four-stage-gate-structure)
-
-[Judge Validation with Human Annotation](#judge-validation-with-human-annotation)
-
-[Value Modelling](#value-modelling)
-
-[Drift Detection](#drift-detection)
-
-[Explainable Feedback via Coach](#explainable-feedback-via-coach-1)
-
-[**6. Project Progress and Results**](#6-project-progress-and-results)
-
-[Judge Validation](#judge-validation)
-
-[VIF Experiment Progression](#vif-experiment-progression)
-
-[Current Critic VIF Frontier](#current-critic-vif-frontier)
-
-[What Was Tried Beyond the Frontier](#what-was-tried-beyond-the-frontier)
-
-[Current Findings](#current-findings)
-
-[Annotation Tool](#annotation-tool)
-
-[Phase 1 (April 2026 Scope-Locking Wave)](#phase-1-april-2026-scope-locking-wave)
-
-[Phase 2 (June-September 2026)](#phase-2-june-september-2026)
-
-[Delivery Surfaces and Cost Sketch](#delivery-surfaces-and-cost-sketch)
-
-[Deferred and Out-of-Scope](#deferred-and-out-of-scope)
-
-[**7. Challenges and Open Questions**](#7-challenges-and-open-questions)
-
-[Hard Dimensions Still Set the Ceiling](#hard-dimensions-still-set-the-ceiling)
-
-[Label Stability Improved, But Did Not Fully Solve the Problem](#label-stability-improved-but-did-not-fully-solve-the-problem)
-
-[Statistical Power Remains a Real Constraint](#statistical-power-remains-a-real-constraint)
-
-[What Has Been Ruled Out](#what-has-been-ruled-out)
-
-[Open Questions for the Next Phase](#open-questions-for-the-next-phase)
-
-[**8. Conclusion**](#8-conclusion)
-
-[**Appendix: Program Submodule Mapping**](#appendix-program-submodule-mapping)
+---
+title: "Twinkl: An inner compass that helps users align behavior with long-term values."
+subtitle: "Capstone 5 - Project Proposal (Apr 2026)"
+format:
+  pdf:
+    toc: true
+    toc-depth: 3
+    documentclass: scrartcl
+    papersize: a4
+    geometry:
+      - top=25mm
+      - bottom=25mm
+      - left=25mm
+      - right=25mm
+    mainfont: "TeX Gyre Pagella"
+    sansfont: "TeX Gyre Heros"
+    monofont: "TeX Gyre Cursor"
+    colorlinks: true
+    linkcolor: "black"
+    urlcolor: "blue"
+    header-includes:
+      - \usepackage{float}
+      - \floatplacement{figure}{H}
+      - \usepackage{needspace}
+      - \usepackage{etoolbox}
+      - \BeforeBeginEnvironment{longtable}{\Needspace*{5cm}}
+---
 
 ## 1. Introduction
 
