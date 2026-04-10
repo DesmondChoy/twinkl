@@ -1,9 +1,9 @@
 # April Project Proposal
 
-This report presents Twinkl's April 2026 milestone as a sponsor-facing project
-update. The goal is to show that the team has built a credible technical core,
-understands the main delivery risks, and has a realistic path to a demonstrable
-product slice.
+This report presents Twinkl's April 2026 milestone as a project update for
+sponsors. The goal is to show that the team has built a credible technical
+core, understands the main delivery risks, and has a realistic path to a
+demonstrable product slice.
 
 [**1. Introduction**](#1-introduction)
 
@@ -105,9 +105,9 @@ the user said they care about and then evaluate later behaviour against it.
 Twinkl addresses that gap. The product treats declared priorities as system
 state, then compares new journal behaviour against that state through the Value
 Identity Function (VIF): a multi-dimensional, uncertainty-aware evaluator built
-around Schwartz's ten-value framework. The intended result is not a better mood
-summary. It is an evidence-grounded weekly reflection on whether the user's
-actions still match the direction they claimed to want.
+around Schwartz's ten-value framework. The intended result is an
+evidence-grounded weekly reflection on whether the user's actions still match
+the direction they claimed to want, rather than a better mood summary.
 
 For this milestone, the core question is practical rather than theoretical:
 can this alignment engine be built, trained, validated, and run in a way that
@@ -133,7 +133,7 @@ been living in line with what they said matters.
 | Offer general prompts or coaching questions | Surface evidence-grounded tensions, trade-offs, and alignment patterns |
 | Optimise for engagement and reflection volume | Optimise for honest accountability and explainable weekly review |
 
-This milestone has already de-risked four important questions:
+This milestone already answers four practical questions:
 
 1. The offline teacher-student pipeline can be built at usable scale.
 2. Human calibration is strong enough to justify judge supervision for a POC.
@@ -142,26 +142,26 @@ This milestone has already de-risked four important questions:
 4. The project already has an internal runtime path from model checkpoint to
    weekly output.
 
-The main remaining risk is not whether the concept is interesting. It is
-whether the value model is reliable enough to support trustworthy user-facing
-feedback beyond synthetic and internal review settings.
+The main remaining risk is whether the value model is reliable enough to
+support trustworthy user-facing feedback beyond synthetic and internal review
+settings.
 
-![Sponsor milestone scorecard](sponsor_milestone_scorecard.png)
+![Milestone scorecard](sponsor_milestone_scorecard.png)
 
 **Current delivery state**
 
 | Delivery state | What it means in this milestone |
 | :--- | :--- |
 | Implemented now | Synthetic persona generation, judge labeling, annotation workflow, critic training, experiment archive, and an internal checkpoint-to-digest review flow are all working today. |
-| Implemented experimentally / not yet validated | Runtime inference, weekly aggregation, crash/rut routing, weekly digest generation, and first-pass narrative validation can run, but they are not yet calibrated or sponsor-ready. |
+| Implemented experimentally / not yet validated | Runtime inference, weekly aggregation, crash/rut routing, weekly digest generation, and first-pass narrative validation can run, but they are not yet calibrated or ready for external demonstration. |
 | Specified but not built | Live onboarding, onboarding-to-runtime integration, real-user journaling orchestration, calibrated weekly detection benchmarks, and a true end-user product loop are not yet delivered. |
 
-This milestone should therefore be read as a technically coherent internal
-prototype, not as a user-ready product.
+At this stage, Twinkl is best described as a technically coherent internal
+prototype rather than a user-ready product.
 
-Although this report is written for a sponsor audience, the project still spans
-intelligent sensing, pattern recognition, reasoning, and AI systems
-orchestration; the formal program mapping is provided in the appendix.
+The project still spans intelligent sensing, pattern recognition, reasoning,
+and AI systems orchestration; the formal program mapping is provided in the
+appendix.
 
 ### Related Academic Work
 
@@ -202,9 +202,9 @@ treating synthetic labels as self-justifying.
 Twinkl has two linked but distinct system layers. The first is an offline
 teacher-student pipeline that creates data, labels it, and trains the critic.
 The second is an experimental runtime path that turns a saved critic checkpoint
-into weekly alignment signals and coach-ready artifacts. The important sponsor
-point is that the offline core is already real, while the runtime path is
-usable internally but not yet fully validated as a product experience.
+into weekly alignment signals and coach-ready artifacts. The offline core is
+already real, while the runtime path is usable internally but not yet fully
+validated as a product experience.
 
 | System layer | Role | Current state |
 | :--- | :--- | :--- |
@@ -226,7 +226,7 @@ explanation.
 
 ## 3. Offline Data Generation and Model Training
 
-Twinkl's offline core is no longer conceptual. The project now has a complete
+Twinkl's offline core is now implemented. The project has a complete
 teacher-student pipeline covering data generation, labeling, human validation,
 critic training, and experiment review. As of this milestone, that pipeline
 operates over **204 synthetic personas** and **1,651 judged journal entries**.
@@ -313,10 +313,10 @@ ambition. Larger history windows were explored but overfit badly at current
 data scale, so the active baseline keeps the runtime state compact and treats
 short-horizon context as a targeted next-step question rather than a default.
 
-A Bayesian baseline is also implemented to provide a secondary uncertainty
-reference, but the main sponsor story remains the same: the project already has
-a working student model, and the open question is how far that model can be
-pushed before target quality becomes the real bottleneck.
+A Bayesian baseline is also implemented as a secondary uncertainty reference.
+The broader takeaway is unchanged: the project already has a working student
+model, and the open question is how far that model can be pushed before target
+quality becomes the real bottleneck.
 
 ### Training and Experiment Infrastructure
 
@@ -329,16 +329,15 @@ The training workflow is disciplined rather than ad hoc. It includes:
 - logging of configurations, metrics, and run commentary
 - post-hoc threshold tuning on validation data only
 
-This matters for sponsor confidence because the team is no longer making claims
-from isolated best-seed results. The project now has a repeatable evaluation
-regime, an archived experiment history, and explicit promotion criteria for new
-challengers.
+This reduces the risk of over-reading isolated best-seed results. The project
+now has a repeatable evaluation regime, an archived experiment history, and
+explicit promotion criteria for new challengers.
 
 The codebase also maintains automated tests across the core pipeline, including
 critic training and evaluation, judge labeling, data wrangling, coaching and
-runtime behavior, and local integration smoke checks. For a sponsor, that is a
-practical sign that the engineering workflow is mature enough to support
-continued iteration without treating every change as a manual regression risk.
+runtime behavior, and local integration smoke checks. That level of test
+coverage supports continued iteration without turning every change into a
+manual regression risk.
 
 ### Evaluation Framework
 
@@ -373,9 +372,9 @@ weights are not yet wired into the active runtime path. The working runtime
 still uses declared core values already present in persona data to condition
 inference.
 
-This distinction matters. The product vision depends on live onboarding, but
-the technical milestone delivered so far is the profile-conditioned critic path,
-not the onboarding-to-runtime loop itself.
+That distinction matters. The product vision depends on live onboarding, but
+the technical milestone delivered so far is the profile-conditioned critic
+path, not the onboarding-to-runtime loop itself.
 
 ### Journal Entry Ordinal Alignment Classification
 
@@ -435,10 +434,10 @@ The project also contains two related but different extensions:
 | Multi-detector comparison | Evaluation surface used to compare alternative heuristic families offline |
 | Evolution analysis | Experimental layer used to test whether sustained divergence may reflect changing priorities rather than failure |
 
-Neither should be presented as committed production behaviour yet. The sponsor
-story for this milestone is narrower: weekly crash/rut-style routing is
-implemented experimentally, but calibration and benchmark validation are still
-pending.
+Neither should be presented as committed production behaviour yet. For this
+milestone, the narrower claim is that weekly crash/rut-style routing is
+implemented experimentally, while calibration and benchmark validation are
+still pending.
 
 ### Explainable Feedback via Coach
 
@@ -488,11 +487,11 @@ On the shared benchmark:
 - **Average Cohen's κ = 0.66** for judge-human agreement
 - the judge exceeds human-human consistency on **9 of 10 dimensions**
 
-This is strong enough to support judge supervision for a POC, but it is not the
-end of the story. Follow-up audits showed that agreement alone is not enough:
-the hardest dimensions can still be unstable or unreachable from the student's
-available context. That is why the project now treats supervision quality as an
-active design problem rather than as a solved preprocessing step.
+This is strong enough to support judge supervision for a POC, but it does not
+settle the question. Follow-up audits showed that agreement alone is not
+enough: the hardest dimensions can still be unstable or unreachable from the
+student's available context. That is why the project now treats supervision
+quality as an active design problem rather than as a solved preprocessing step.
 
 ### Value Modelling
 
@@ -524,13 +523,13 @@ rate/precision/recall before this layer can be treated as validated.
 Explanation quality is evaluated by asking whether weekly feedback is grounded,
 clear, and useful. The project already supports structured digest generation and
 first-pass automated checks, but user-facing quality targets remain ahead of the
-current evidence. For this milestone, the honest claim is partial progress: the
-explanation path is implemented enough to inspect and improve internally, but it
-is not yet validated with user ratings.
+current evidence. For this milestone, the explanation path is implemented
+enough to inspect and improve internally, but it is not yet validated with user
+ratings.
 
 ## 6. Project Progress and Results
 
-This milestone moved Twinkl from concept and architecture into a measured,
+This milestone moved Twinkl beyond concept and architecture into a measured,
 auditable technical core. The project now has a complete offline supervision
 pipeline, a validated human benchmark, a serious experiment archive, and an
 internal runtime path that can turn a saved checkpoint into weekly review
@@ -559,15 +558,15 @@ personas**.
 | Judge-Human Agreement (Avg Cohen's κ) | 0.66 | Substantial |
 | Dimensions where Judge \> Human-Human | 9 / 10 | Strong enough for POC supervision |
 
-The project's later audits made this story more precise rather than weaker:
+Later audits refined that conclusion:
 
 | Follow-up audit | Scope | Key result | Practical implication |
 | :--- | :--- | :--- | :--- |
-| Reachability audit | 50 hard cases | Security labels, especially positive ones, were often not reproducible from student-visible context | Some of the bottleneck sits in the target, not just the student |
+| Reachability audit | 50 hard cases | Security labels, especially positive ones, were often not reproducible from student-visible context | Part of the bottleneck sits in the target as well as the student |
 | Consensus re-judging | 5 judge passes over all 1,651 entries | Judge self-consistency was strong, but the relabeled holdout changed too much for clean replacement of the persisted-label benchmark | Consensus labels are useful diagnostics, not yet a direct frontier replacement |
 
-The sponsor-relevant takeaway is simple: judge supervision is usable overall,
-but not equally trustworthy across all dimensions.
+In practical terms, judge supervision is usable overall, but not equally
+trustworthy across all dimensions.
 
 ### VIF Experiment Progression
 
@@ -583,10 +582,9 @@ representation choices, and reformulations.
 | Frontier discovery | Established a BalancedSoftmax family as the first convincing corrected-split baseline | The first credible gains came from reducing neutral collapse without abandoning QWK entirely |
 | Systematic follow-up | Tested weighting, encoder changes, two-stage reformulation, and relabeling diagnostics | Several ideas improved specific metrics, but none yet replaced the incumbent cleanly |
 
-This matters because the team is no longer moving randomly through model ideas.
-The frontier is now narrow, the remaining questions are better isolated, and
-the project has evidence for why several tempting alternatives did not become
-the default.
+Model search is now much more disciplined. The frontier is narrower, the
+remaining questions are better isolated, and the project has evidence for why
+several tempting alternatives did not become the default.
 
 ### Current Critic VIF Frontier
 
@@ -601,10 +599,10 @@ corrected-split, persisted-label regime.
 | Hedging | 62.1% |
 | Calibration | 0.713 |
 
-This is not yet good enough to support strong sponsor claims about end-user
-reliability. It is, however, strong enough to justify the next round of focused
-work. The critic is clearly learning meaningful signal, but hard dimensions and
-target quality still cap the ceiling.
+This is still short of what would support strong claims about end-user
+reliability, but it is enough to justify the next round of focused work. The
+critic is clearly learning meaningful signal, while hard dimensions and target
+quality still cap the ceiling.
 
 ### What Was Tried Beyond the Frontier
 
@@ -618,9 +616,9 @@ the system:
 | Two-stage reformulation | Competitive QWK and strong calibration | Became too conservative overall; misalignment recall fell too much |
 | Consensus-label retrain | Better within-regime QWK under relabeled evaluation | Changed the holdout labels, so the result is not a clean like-for-like replacement |
 
-The most important methodological improvement from this phase is not a single
-metric gain. It is that the project now compares challengers using family-level
-medians and bootstrap confidence intervals rather than point estimates alone.
+The most important methodological improvement from this phase is that the
+project now compares challengers using family-level medians and bootstrap
+confidence intervals rather than point estimates alone.
 
 ### Current Findings
 
@@ -629,16 +627,17 @@ The main conclusions are:
 
 1. **The supervision pipeline is defensible at POC scale**, but hard dimensions
    still expose target-design weaknesses.
-2. **The current critic is credible as a baseline, not as a finished model**.
+2. **The current critic is credible as a baseline, but it is not yet a finished
+   model**.
 3. **Several nearby alternatives have now been tested and ruled out as default
    replacements**, which narrows the remaining search space.
 4. **The remaining ceiling is better understood**: part representation problem,
    part target-quality problem, with Security the clearest example of the
    latter.
 
-The next phase is therefore no longer "try more model ideas." It is focused
-work on hard-dimension targets, compact context, and better alignment between
-training signals and frontier metrics.
+The next phase should focus on hard-dimension targets, compact context, and
+better alignment between training signals and frontier metrics, instead of
+returning to broad model search.
 
 ### Annotation Tool
 
@@ -649,18 +648,16 @@ model checkpoint all the way through to weekly outputs.
 
 ![Internal review surface](demo_review.png)
 
-This matters because it turns the project from a paper pipeline into something
-the team can actually inspect, debug, and demonstrate. A sponsor should read
-this as evidence of delivery momentum, even though the current review surface
-is still internal rather than end-user facing.
+This turns the project from a paper pipeline into something the team can
+actually inspect, debug, and demonstrate, even though the current review
+surface is still internal rather than end-user facing.
 
 The team also has an interactive embedding explorer for qualitative inspection
 of what the critic has learned across all **1,651** labeled entries. It
 supports multiple projection and coloring modes, lets reviewers inspect
 individual points in detail, and traces persona trajectories through the learned
-representation over time. This is valuable not as proof on its own, but as an
-internal review tool that helps the team inspect model behavior beyond
-aggregate metrics.
+representation over time. This is valuable mainly as an internal review tool
+that helps the team inspect model behavior beyond aggregate metrics.
 
 ### Phase 1 (April 2026 Scope-Locking Wave)
 
@@ -679,13 +676,13 @@ short-horizon context, or by limits in the frozen representation?
 
 The most decisive completed result is the reachability audit. It showed that
 aggregate judge-human agreement was not enough to guarantee that the hardest
-stored labels are clean student targets. That finding changes how the current
-frontier should be read: it remains the active baseline, but it is partly a
-pre-target-redesign reference point rather than the final capstone endpoint.
+stored labels are clean student targets. The current frontier therefore remains
+the active baseline, but it is partly a pre-target-redesign reference point
+rather than the final capstone endpoint.
 
 #### Integration Milestone
 
-In parallel, the team now has a clearer picture of what a sponsor-facing
+In parallel, the team now has a clearer picture of what a plausible
 demonstration could look like. The core path remains:
 
 **onboarding -> critic -> weekly digest -> coach**
@@ -705,9 +702,9 @@ rather than as part of the current proven core.
 | Confidence-gated triggering | Partial concept plus supporting pieces | Policy layer is not yet finalized as a product behaviour |
 | Messaging-native wrapper | Conditional future direction | No implementation yet; only worth pursuing once core outputs are stable enough to show users |
 
-The sponsor-relevant point is that the project can now show a technically
-coherent path from declared priorities to scored evidence to weekly reflective
-output, even though the full end-user journey is not yet complete.
+The project can now show a technically coherent path from declared priorities
+to scored evidence to weekly reflective output, even though the full end-user
+journey is not yet complete.
 
 ### Phase 2 (June-September 2026)
 
@@ -719,7 +716,7 @@ current scope-locking work proves.
 | :--- | :--- | :--- | :--- |
 | Representation follow-up | Add a gated parameter-efficient adaptation path if the frozen encoder is still the main bottleneck | Keeps the model search focused on the strongest remaining technical question | Only after target cleanup and compact-context testing |
 | Drift calibration | Generate synthetic crisis-injection timelines and report hit rate / precision / recall | Converts the current runtime bridge into a properly evaluated weekly routing layer | Requires a stronger upstream critic and a benchmark pass |
-| Narrow messaging-native pilot | Prototype chat-based journaling, cadence checks, and digest delivery | Offers a sponsor-friendly demonstration path without building a separate full application | Only if the core critic and digest outputs are stable enough to surface |
+| Narrow messaging-native pilot | Prototype chat-based journaling, cadence checks, and digest delivery | Offers a clear demonstration path without building a separate full application | Only if the core critic and digest outputs are stable enough to surface |
 | External user pilot | Run a small structured validation study with real users to test whether the current alignment and digest outputs transfer beyond synthetic personas and internal review | Converts the largest remaining product risk, external validity, into a measured outcome | Requires stable core outputs and one narrow end-to-end path that is safe to demonstrate |
 | Evolution decision | Decide whether evolution gating remains experimental or enters active scope | Prevents overclaiming long-horizon behaviour change | Depends on the calibrated weekly-routing story |
 | Full end-to-end demonstration | Connect onboarding, scoring, weekly routing, digest generation, and coach output into one clear flow | Moves the project from component validation to system demonstration | Depends on the final scope choice and Phase 1 outcomes |
@@ -731,9 +728,8 @@ cannot yet do credibly.
 ### Deferred and Out-of-Scope
 
 Several ideas remain attractive, but they are not the right focus for the
-current capstone milestone. The guiding rule is simple: do not let downstream
-product richness dilute the validation of the core judge -> critic -> coach
-loop.
+current capstone milestone. The guiding rule is to avoid letting downstream
+product richness dilute validation of the core judge -> critic -> coach loop.
 
 | Deferred area | Current status | Why deferred |
 | :--- | :--- | :--- |
@@ -744,8 +740,8 @@ loop.
 | Offline RL for nudge or intervention policies | Later-stage idea | Requires stable rewards and longer user trajectories than the project currently has |
 | Adaptive onboarding and dynamic profile refinement | Conceptually important | Depends on validated value-evolution logic and real-user calibration |
 
-The project has deliberately chosen depth over breadth. That remains the right
-choice.
+The project has deliberately chosen depth over breadth, and that remains the
+right choice.
 
 ## 7. Challenges and Open Questions
 
@@ -773,9 +769,9 @@ These dimensions do not fail for the same reason:
 - **Stimulation** is both semantically difficult and statistically weak under
   the current evaluation regime.
 
-The project is therefore no longer asking only which loss function works best.
-It is asking which parts of the current supervision signal are genuinely
-learnable from the available inputs.
+The project has moved past asking only which loss function works best. The more
+important question now is which parts of the current supervision signal are
+genuinely learnable from the available inputs.
 
 ### Label Stability Improved, But Did Not Fully Solve the Problem
 
@@ -798,21 +794,18 @@ uncertainty analysis. This means the project must be careful not to overclaim
 incremental gains, especially on dimensions that remain close to chance-level
 behaviour.
 
-That constraint is frustrating, but it is not a failure. It is exactly why the
-project now relies on family medians, bootstrap intervals, and more disciplined
-promotion criteria.
+That constraint is frustrating, but it also explains why the project now relies
+on family medians, bootstrap intervals, and more disciplined promotion
+criteria.
 
 ### What Has Been Ruled Out
 
-This phase has already ruled out several simpler explanations:
+This phase has already ruled out several simpler explanations. The remaining
+bottleneck cannot be explained by loss design, generic model capacity, class
+imbalance, or task formulation alone.
 
-- The bottleneck is **not only** loss design.
-- It is **not only** generic model capacity.
-- It is **not only** class imbalance.
-- It is **not only** task formulation.
-
-Those are useful negative results. They narrow the remaining search space and
-make the next milestone more focused.
+Those negative results narrow the remaining search space and make the next
+milestone more focused.
 
 ### Open Questions for the Next Phase
 
@@ -831,9 +824,8 @@ The most important remaining questions are:
 
 ## 8. Conclusion
 
-Twinkl has now cleared the most important first-milestone hurdle: the project
-is no longer just a product idea with an architecture diagram. It has a
-functioning offline supervision pipeline, a defensible human benchmark, a
+Twinkl has now cleared the most important first-milestone hurdle. The project
+has a functioning offline supervision pipeline, a defensible human benchmark, a
 measured critic-training program, and an internal runtime path that can produce
 weekly review artifacts from saved checkpoints.
 
@@ -845,10 +837,10 @@ dimensions to support trustworthy user-facing feedback.
 
 The next milestone must therefore do three things clearly: improve the quality
 of the hardest supervision targets, calibrate the weekly routing layer against
-a real benchmark, and demonstrate one narrow, sponsor-ready path from declared
-priorities to scored evidence to weekly reflective output. If those three steps
-succeed, Twinkl will have a strong claim not just as an interesting capstone,
-but as a viable product concept with a technically credible core.
+a real benchmark, and demonstrate one narrow path from declared priorities to
+scored evidence to weekly reflective output that is ready to present
+externally. If those three steps succeed, Twinkl will have a strong claim as a
+capstone with a technically credible core and as a viable product concept.
 
 ## Appendix: Program Submodule Mapping
 
