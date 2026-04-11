@@ -1,5 +1,5 @@
 ---
-title: "Twinkl: An inner compass that helps users align behavior with long-term values."
+title: "Twinkl: An inner compass that helps users align behavior with long-term values"
 subtitle: "Capstone 5 - Project Proposal (Apr 2026)"
 format:
   pdf:
@@ -19,11 +19,12 @@ format:
     linkcolor: "black"
     urlcolor: "blue"
     header-includes:
+      - \addtokomafont{disposition}{\rmfamily}
       - \usepackage{float}
       - \floatplacement{figure}{H}
       - \usepackage{needspace}
       - \usepackage{etoolbox}
-      - \BeforeBeginEnvironment{longtable}{\Needspace*{5cm}}
+      - \BeforeBeginEnvironment{longtable}{\Needspace{0.3\textheight}}
 ---
 
 ## 1. Introduction
@@ -306,86 +307,141 @@ gains survive holdout uncertainty.
 
 ## 4. Online Model Inference
 
-### User Value Profile Construction
+### BWS Onboarding
 
-Twinkl is designed to address the cold-start problem through a Best-Worst
-Scaling onboarding flow that elicits an initial value profile from forced
-trade-offs. The proposed flow presents six 4-item sets, a mid-flow mirror, and
-a goal-selection step so the system can capture both value priorities and the
-reason the user joined.
+Twinkl addresses cold-start with a Best-Worst Scaling (BWS) onboarding flow.
+Six 4-item sets — adapted from PVQ-21 portrait items (Schwartz et al., 2001)
+as concise first-person mobile cards — produce an ordinal ranking of the 10
+Schwartz value dimensions. The top two are designated **core values**
+(monitored for decline); the remaining eight are **peripheral** (monitored for
+emergence). A mid-flow mirror presents the emerging ranking for optional
+refinement, and a goal-selection step (work-life balance, life transition,
+relationships, health/wellbeing, direction, meaningful work) anchors the
+Coach's initial framing.
 
-That design remains part of the intended system, but it is not yet live. In the
-current POC, the onboarding flow is fully specified but not deployed, and
-graded onboarding weights are not yet wired into the active runtime path. The
-working runtime still uses declared core values already present in persona data
-to condition inference.
+For the Critic, core/peripheral designation is converted into a binary weight
+vector (equal weight on core, zero on peripheral) concatenated with the text
+embedding in the State Encoder, conditioning alignment predictions so that
+ambiguous entries are interpreted against declared priorities.
 
-That distinction matters. The product vision depends on live onboarding, but
-the technical milestone delivered so far is the profile-conditioned critic
-path, not the onboarding-to-runtime loop itself.
+The BWS flow is fully specified but not yet deployed. A planned extension
+derives a continuous 10-dimensional weight vector from raw BWS scores, giving
+every dimension a signal proportional to its rank.
 
-### Journal Entry Ordinal Alignment Classification
+### Journal Entry Alignment Classification
 
-At runtime, the critic outputs per-dimension alignment scores for each journal
-entry in \{-1, 0, +1\}. The current baseline uses ordinal heads because the
-classes have meaningful order: misaligned, neutral, and aligned are not merely
-three unrelated buckets.
+#### Conversational Nudges
+
+Within a session, nudges operate on observable text signals:
+**clarification** (ambiguous entries), **elaboration** (terse entries), and
+**tension surfacing** (Critic-detected misalignment on a core value). An
+anti-annoyance gate suppresses nudges after two have fired in the last three
+entries.
+
+#### Per-Dimension Scoring
+
+For each journal entry, the Critic outputs per-dimension alignment scores in
+\{−1, 0, +1\}:
 
 | Value | Score | Interpretation | Example |
-| :--- | :---: | :--- | :--- |
-| Benevolence | \+1 | The entry supports the value | "I dropped everything to help my neighbour move." |
-| Hedonism | 0 | The value is not materially active | "I worked extra hours today." |
-| Tradition | \-1 | The entry conflicts with the value | "I snapped at my parents over something they expected me to do." |
+|---|---|---|---|
+| Benevolence | +1 | Lived this value | "I dropped everything to help my neighbour move" |
+| Hedonism | 0 | Not relevant to entry | "I worked extra hours today" |
+| Tradition | −1 | Acted against this value | "I snapped at my parents over something they expected me to do" |
 
-The current operating point uses BalancedSoftmax because the main practical
-failure mode in earlier models was excessive neutral hedging. For Twinkl, that
-failure mode is especially damaging: a critic that suppresses rare \-1 signals
-cannot support any downstream drift logic.
+Each dimension uses an **ordinal classification head** enforcing −1 < 0 < +1,
+preventing the model from assigning high probability to both extremes while
+giving low probability to the neutral class.
 
-It is also important to distinguish the synthetic-data pipeline from the live
-runtime. Conversational nudge logic exists and is used in synthetic data
-generation, but the current runtime is not yet a fully wired live journaling
-experience. The project can model entry-plus-response behaviour internally, but
-it does not yet provide a complete session-time product loop for end users.
+**Balanced Softmax loss** corrects class priors in the softmax denominator,
+addressing severe imbalance (75.9% neutral, 7.1% misaligned) without
+resampling. This shifts the decision boundary so rare misalignment signals
+surface at inference without inflating false positives — critical because a
+Critic that suppresses −1 predictions would blind downstream drift detection.
 
-### Journal Entry Uncertainty Quantification
+**MC Dropout** (50 forward passes) estimates epistemic uncertainty,
+suppressing critiques when confidence is low and triggering clarifying
+questions instead.
 
-MC Dropout remains active at inference time so the critic can produce both a
-point estimate and an uncertainty estimate for each dimension. In the current
-setup, **50 stochastic forward passes** are used to estimate epistemic
-uncertainty.
+### Drift & Evolution
 
-This is operationally important because Twinkl should not surface confident
-critiques when the model is unsure. In the current design, uncertainty acts as
-a gating signal: high uncertainty should suppress strong claims and route the
-system toward clarification or lighter-touch feedback instead.
+Drift is the gap between declared values and the temporal trend of
+Critic-observed behaviour, sustained beyond noise thresholds — not a single
+bad entry but a pattern persisting across weeks and surviving uncertainty
+gating.
 
-### Behavioral Intelligence: Drift and Evolution
+The drift layer operates on **weekly aggregates** of raw per-entry Critic
+scores, smoothing within-week noise while preserving trends.
 
-The runtime aggregates per-entry critic outputs into weekly signals so that the
-system can reason about patterns rather than overreacting to single entries. In
-the active POC, the core routing logic is a simple crash/rut framing:
+#### Core Value Signals (decline)
 
-- **Crash**: a sharp weekly drop on important dimensions
-- **Rut**: sustained low alignment on declared priorities
-- **High uncertainty**: the model is too unsure to support a strong critique
+| Signal | Pattern |
+|---|---|
+| **Crash** | Weekly profile-weighted mean drops >0.5 from previous week |
+| **Rut** | Alignment stays below −0.4 for ≥3 consecutive low-uncertainty weeks |
 
-This layer exists and runs today, but it should still be treated as
-experimental. The thresholds are not yet calibrated against a weekly benchmark,
-and the quality of the routing logic is still constrained by the upstream
-critic's current frontier quality.
+#### Peripheral Value Signals (emergence)
 
-The project also contains two related but different extensions:
+| Signal | Pattern |
+|---|---|
+| **Rise** | Sustained 0→+1 shift — a previously peripheral value consistently appears, suggesting genuine value evolution |
 
-| Capability | Current role |
-| :--- | :--- |
-| Multi-detector comparison | A demo workbench comparing six drift-detection families (Baseline, EMA, CUSUM, Cosine Similarity, Control Chart, KL Divergence) with source toggling between judge labels and critic predictions and interactive visualisations; used to evaluate alternative heuristics offline |
-| Evolution analysis | Experimental layer used to test whether sustained divergence may reflect changing priorities rather than failure |
+#### Detection Pipeline
 
-Neither should be presented as committed production behaviour yet. For this
-milestone, the narrower claim is that weekly crash/rut-style routing is
-implemented experimentally, while calibration and benchmark validation are
-still pending.
+The detector makes a single weekly decision, evaluating triggers in priority
+order (first match wins):
+
+1. **High Uncertainty Gate** — If overall model uncertainty exceeds 0.3,
+   return immediately. The Coach asks for clarification rather than judging on
+   unreliable scores.
+
+2. **Evolution Classification** — Over a 6-week lookback, compute
+   per-dimension residual (observed minus expected alignment) and volatility
+   (s.d. of scores). Residual < 0.4 → stable; residual ≥ 0.4 with volatility <
+   0.5 → evolution (genuine shift); residual ≥ 0.4 with volatility ≥ 0.5 →
+   volatile (divergent but unsettled). Evolution dimensions are excluded from
+   crash/rut checks and routed to Coach messaging inviting profile updates.
+
+3. **Rut Detection** — For each non-evolution core dimension (weight ≥ 0.15),
+   flag as rut if all of the last 3 weeks show low alignment.
+
+4. **Crash Detection** — If this week's profile-weighted mean drops >0.5 from
+   last week, flag each non-evolution core dimension where alignment
+   decreased.
+
+5. **Stable** — No trigger fired.
+
+The dual-trigger design was chosen for interpretability: crash maps to
+"something shifted this week," rut maps to "this has been weighing on you for a
+while."
+
+#### Experimental Detector Ensemble
+
+To evaluate whether the dual-trigger approach has blind spots, complementary
+rule-based detectors were benchmarked:
+
+```{=latex}
+\Needspace{0.55\textheight}
+```
+
+| Detector | Mechanism | Catches |
+|---|---|---|
+| **EMA** | Running average of misalignment (recent-weighted, negative scores only); alerts when average exceeds threshold | Slow fades (+1→0) that never reach −1 |
+| **CUSUM** | Cumulative sum with slack parameter (k=0.3) absorbing minor noise; jar grows on persistent misalignment, resets to zero on recovery | Intermittent dips (−1,+1,−1,+1) that individually recover but accumulate |
+| **Cosine** | Cosine similarity between profile weight vector and alignment vector; alerts when vectors oppose | Multi-value reversals where several dimensions shift moderately negative |
+| **Control Chart** | Per-dimension baseline from early entries; lower control limit = mean − 2 s.d. | Scores nominally neutral but abnormally low for that user (e.g., habitual +1 dropping to 0) |
+| **KL Divergence** | KL divergence between baseline and rolling 3-entry score distributions (Laplace-smoothed) | Distributional shape changes (e.g., consistent +1 shifting to a 0/−1 mix) |
+
+These detectors run over the full synthetic corpus and are visualised in a
+comparison dashboard. In the absence of human-labelled crisis weeks,
+cross-detector consensus (≥4 of 6 flagging the same timestep) serves as
+pseudo-ground-truth.
+
+A direction under exploration is replacing the dual-trigger with
+consensus-based firing (multiple detectors must agree), reducing blind spots at
+the cost of interpretability. Proper evaluation requires synthetic
+crisis-injection timelines with ground-truth labels, which is planned but not
+yet completed.
 
 ### Explainable Feedback via Coach
 
@@ -666,6 +722,10 @@ Phase 2 should be treated as a conditional deepening phase, not an automatic
 continuation of broad model search. The emphasis should depend on what the
 current scope-locking work proves.
 
+```{=latex}
+\Needspace{0.85\textheight}
+```
+
 | Phase 2 track | Planned work | Why it belongs in Phase 2 | Dependency / Gate |
 | :--- | :--- | :--- | :--- |
 | Representation follow-up | Add a gated parameter-efficient adaptation path if the frozen encoder is still the main bottleneck | Keeps the model search focused on one remaining technical question | Only after target cleanup and compact-context testing |
@@ -689,6 +749,10 @@ in alignment inference itself.
 That makes the next packaging question less about raw model deployability and
 more about delivery surface. Two Phase 2 paths remain credible:
 
+```{=latex}
+\Needspace{0.45\textheight}
+```
+
 | Delivery surface | Why it fits Twinkl | Main trade-off | Current status |
 | :--- | :--- | :--- | :--- |
 | Standalone mobile app | Provides a fully owned surface for onboarding, journaling, nudges, and weekly coaching | Highest product and UX implementation burden | Plausible Phase 2 path; not yet built |
@@ -704,6 +768,10 @@ experience should carry the proven core into a demonstrable end-to-end product.
 Several ideas remain attractive, but they are not the right focus for the
 current capstone milestone. The guiding rule is to avoid letting downstream
 product richness dilute validation of the core judge -> critic -> coach loop.
+
+```{=latex}
+\Needspace{0.6\textheight}
+```
 
 | Deferred area | Current status | Why deferred |
 | :--- | :--- | :--- |
