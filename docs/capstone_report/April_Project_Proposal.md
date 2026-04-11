@@ -20,6 +20,7 @@ format:
     urlcolor: "blue"
     header-includes:
       - \addtokomafont{disposition}{\rmfamily}
+      - \AtBeginDocument{\author{Choy Yong Yi Desmond [A0315402W] \\ Leong Kay Mei [A0188702Y] \\ Loke Yuen Ying, Jodie [A0310555M]}}
       - \usepackage{float}
       - \floatplacement{figure}{H}
       - \usepackage{needspace}
