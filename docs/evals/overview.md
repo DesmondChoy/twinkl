@@ -8,9 +8,9 @@ This folder contains evaluation specifications for the **Value Identity Function
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────┐
-│                           VIF EVALUATION PIPELINE                                │
+│                           VIF EVALUATION PIPELINE                               │
 ├─────────────────────────────────────────────────────────────────────────────────┤
-│                                                                                  │
+│                                                                                 │
 │   ┌──────────────┐    ┌──────────────┐    ┌──────────────┐    ┌──────────────┐  │
 │   │    Stage 1   │    │    Stage 2   │    │    Stage 3   │    │    Stage 4   │  │
 │   │  Data Prep   │───▶│   Training   │───▶│  Inference   │───▶│ User Output  │  │
@@ -22,7 +22,7 @@ This folder contains evaluation specifications for the **Value Identity Function
 │   │  Validation  │    │   Modeling   │    │  Detection   │    │   Quality    │  │
 │   │     Eval     │    │     Eval     │    │     Eval     │    │     Eval     │  │
 │   └──────────────┘    └──────────────┘    └──────────────┘    └──────────────┘  │
-│                                                                                  │
+│                                                                                 │
 └─────────────────────────────────────────────────────────────────────────────────┘
 ```
 

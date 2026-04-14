@@ -13,7 +13,8 @@ class DemoAppState:
 
     selected_persona_id: reactive.value = field(default_factory=lambda: reactive.value(None))
     selected_checkpoint_path: reactive.value = field(default_factory=lambda: reactive.value(None))
-    bio_expanded: reactive.value = field(default_factory=lambda: reactive.value(True))
+    bio_expanded: reactive.value = field(default_factory=lambda: reactive.value(False))
+    journal_expanded: reactive.value = field(default_factory=lambda: reactive.value(False))
     run_status: reactive.value = field(default_factory=lambda: reactive.value("idle"))
     run_error: reactive.value = field(default_factory=lambda: reactive.value(None))
     run_bundle: reactive.value = field(default_factory=lambda: reactive.value(None))

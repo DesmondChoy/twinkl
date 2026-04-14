@@ -26,6 +26,7 @@ from src.demo_tool.data_loader import (
 import plotly.graph_objects as go
 from shinywidgets import output_widget, render_widget
 
+from src.demo_tool.multi_drift import DETECTOR_KEYS, DETECTOR_NAMES, DIM_LABELS
 from src.demo_tool.runtime_bridge import (
     CheckpointOption,
     build_checkpoint_choices,
@@ -206,61 +207,67 @@ def _build_main_app_ui() -> ui.Tag:
     """Render the main demo app shell."""
     return ui.TagList(
         ui.div(
+            # ── Header ──────────────────────────────────────────────────────
             ui.div(
                 ui.div(
-                    ui.h1("Twinkl Demo Review", class_="demo-title"),
+                    ui.h1("Twinkl Demo Review", class_="app-title"),
                     ui.p(
-                        "Browse a persona, inspect the journal history, then run the live critic to drift and weekly digest flow.",
-                        class_="demo-subtitle",
+                        "Select a persona and checkpoint, run the critic, inspect drift and the weekly digest.",
+                        class_="app-subtitle",
                     ),
-                    class_="hero-copy",
                 ),
-                ui.div(
-                    ui.output_ui("run_status_banner"),
-                    class_="hero-status",
-                ),
-                class_="hero",
+                ui.output_ui("run_status_banner"),
+                class_="app-header",
             ),
             ui.output_ui("catalog_warning_banner"),
+            # ── Controls strip ───────────────────────────────────────────────
             ui.div(
                 ui.div(
-                    ui.h3("Controls", class_="panel-title"),
-                    ui.input_select("persona_id", "Persona", choices={}),
-                    ui.output_ui("persona_summary_compact"),
-                    ui.input_select("checkpoint_path", "Critic checkpoint", choices={}),
+                    ui.tags.label("Persona", class_="field-label"),
+                    ui.input_select("persona_id", None, choices={}),
+                    class_="field",
+                ),
+                ui.div(
+                    ui.tags.label("Critic checkpoint", class_="field-label"),
+                    ui.input_select("checkpoint_path", None, choices={}),
+                    class_="field",
+                ),
+                ui.div(
+                    ui.tags.label("Detector source", class_="field-label"),
                     ui.input_select(
                         "drift_source",
-                        "Detector input source",
+                        None,
                         choices={"judge": "Judge labels", "critic": "Critic predictions"},
                         selected="judge",
                     ),
-                    ui.output_ui("checkpoint_summary"),
+                    class_="field",
+                ),
+                ui.div(
                     ui.div(
                         ui.input_action_button(
                             "refresh_catalog_btn",
-                            "Refresh data",
+                            "Refresh",
                             class_="btn-secondary",
                         ),
                         ui.input_task_button(
                             "run_pipeline_btn",
-                            "Run critic flow",
+                            "Run critic",
                             class_="btn-primary",
                         ),
                         class_="control-actions",
                     ),
-                    class_="panel left-panel",
+                    class_="field field-actions",
                 ),
-                ui.div(
-                    ui.output_ui("persona_detail_card"),
-                    ui.output_ui("journal_timeline"),
-                    class_="panel center-panel",
-                ),
-                ui.div(
-                    ui.output_ui("results_panel"),
-                    class_="panel right-panel",
-                ),
-                class_="demo-grid",
+                class_="controls-strip",
             ),
+            # ── Persona detail ───────────────────────────────────────────────
+            ui.output_ui("persona_detail_card"),
+            # ── Checkpoint summary ───────────────────────────────────────────
+            ui.output_ui("checkpoint_summary"),
+            # ── Journal (collapsible, hidden by default) ─────────────────────
+            ui.output_ui("journal_timeline"),
+            # ── Results ──────────────────────────────────────────────────────
+            ui.output_ui("results_panel"),
             class_="app-shell",
         )
     )
@@ -319,6 +326,20 @@ def server(input, output, session):
             timeline_df = bundle["artifacts"]["timeline_df"]
         return load_multi_drift_bundle(persona_id, source=source, timeline_df=timeline_df)
 
+    @reactive.calc
+    def critic_drift_bundle():
+        """Critic-source drift bundle derived from the current run bundle.
+
+        Computed once and cached by reactive; avoids re-running all 6 detectors
+        on every results_panel invalidation.
+        """
+        bundle = state.run_bundle()
+        if bundle is None:
+            return None
+        persona_id = bundle["persona_id"]
+        timeline_df = bundle["artifacts"]["timeline_df"].sort(["date", "t_index"])
+        return load_multi_drift_bundle(persona_id, source="critic", timeline_df=timeline_df)
+
     @reactive.effect
     def _sync_persona_select():
         result = catalog_result()
@@ -360,17 +381,18 @@ def server(input, output, session):
 
     @reactive.effect
     @reactive.event(input.persona_id, input.checkpoint_path)
-    def _sync_selection_and_cache():
+    async def _sync_selection_and_cache():
         persona_id = input.persona_id()
         checkpoint_path = input.checkpoint_path()
         state.set_selection(persona_id, checkpoint_path)
-        state.bio_expanded.set(True)
+        state.bio_expanded.set(False)
+        state.journal_expanded.set(False)
 
         if not persona_id or not checkpoint_path:
             state.clear_result("idle")
             return
 
-        cached = load_cached_run(persona_id, checkpoint_path)
+        cached = await asyncio.to_thread(load_cached_run, persona_id, checkpoint_path)
         if cached is None:
             state.clear_result("idle")
             return
@@ -446,52 +468,21 @@ def server(input, output, session):
         if not warning:
             return None
         return ui.div(
-            ui.strong("Catalog note"),
-            ui.span(warning),
-            class_="banner banner-warning",
-        )
-
-    @render.ui
-    def persona_summary_compact():
-        persona = current_persona()
-        if persona is None:
-            return ui.div("Select a persona to inspect its details.", class_="empty-state")
-
-        core_values = persona.get("persona_core_values") or []
-        return ui.div(
-            ui.div(
-                ui.span(str(persona["n_entries"]), class_="stat-number"),
-                ui.span("entries", class_="stat-label"),
-                class_="mini-stat",
-            ),
-            ui.div(
-                ui.span(persona["first_entry_date"], class_="stat-number"),
-                ui.span("first entry", class_="stat-label"),
-                class_="mini-stat",
-            ),
-            ui.div(
-                ui.span(persona["last_entry_date"], class_="stat-number"),
-                ui.span("latest entry", class_="stat-label"),
-                class_="mini-stat",
-            ),
-            _build_badges(core_values, "badge-core", "No core values"),
-            class_="summary-stack",
+            ui.strong("Catalog note"), f" — {warning}",
+            class_="status-bar s-warning",
         )
 
     @render.ui
     def checkpoint_summary():
         checkpoint = current_checkpoint()
         if checkpoint is None:
-            return ui.div(
-                "Select a checkpoint to enable live runtime inference.",
-                class_="empty-state",
-            )
+            return None
 
         metrics = checkpoint.metrics_summary or {}
         metric_bits = []
         for label, key in (
             ("QWK", "qwk_mean"),
-            ("Recall -1", "recall_minus1"),
+            ("Recall −1", "recall_minus1"),
             ("Calibration", "calibration_global"),
         ):
             if key in metrics:
@@ -505,10 +496,7 @@ def server(input, output, session):
 
         return ui.div(
             ui.div(checkpoint.label, class_="checkpoint-label"),
-            ui.div(
-                f"Source: {checkpoint.source}",
-                class_="checkpoint-source",
-            ),
+            ui.div(f"Source: {checkpoint.source}", class_="checkpoint-source"),
             ui.div(*metric_bits, class_="metric-chip-row") if metric_bits else None,
             class_="checkpoint-summary",
         )
@@ -518,67 +506,80 @@ def server(input, output, session):
         status = state.run_status()
         if status == "running":
             return ui.div(
-                ui.strong("Running now"),
-                ui.span("The critic flow is executing in the background."),
-                class_="banner banner-info",
+                ui.strong("Running"), " — critic flow executing in background.",
+                class_="status-bar s-running",
             )
         if status == "success":
             return ui.div(
-                ui.strong("Live results"),
-                ui.span("This view reflects a freshly completed pipeline run."),
-                class_="banner banner-success",
+                ui.strong("Live results"), " — freshly completed pipeline run.",
+                class_="status-bar s-success",
             )
         if status == "cached":
             return ui.div(
-                ui.strong("Cached results"),
-                ui.span("Loaded the latest persisted artifacts for this persona and checkpoint."),
-                class_="banner banner-neutral",
+                ui.strong("Cached"), " — latest persisted artifacts loaded.",
+                class_="status-bar s-cached",
             )
         if status == "error":
             return ui.div(
-                ui.strong("Run failed"),
-                ui.span(state.run_error() or "Unknown error"),
-                class_="banner banner-danger",
+                ui.strong("Run failed"), f" — {state.run_error() or 'Unknown error'}",
+                class_="status-bar s-error",
             )
         return ui.div(
-            ui.strong("Ready"),
-            ui.span("Pick a persona and checkpoint, then run the critic flow."),
-            class_="banner banner-neutral",
+            ui.strong("Ready"), " — select a persona and checkpoint, then run the critic.",
+            class_="status-bar s-neutral",
         )
 
     @render.ui
     def persona_detail_card():
         persona = current_persona()
         if persona is None:
-            return ui.div("No persona selected.", class_="empty-state")
+            return ui.div("Select a persona above.", class_="empty-state")
 
         bio = persona.get("persona_bio")
         is_expanded = state.bio_expanded()
+        core_values = persona.get("persona_core_values") or []
+
+        meta_parts = []
+        if persona.get("persona_age"):
+            meta_parts.append(str(persona["persona_age"]))
+        if persona.get("persona_profession"):
+            meta_parts.append(persona["persona_profession"])
+        if persona.get("persona_culture"):
+            meta_parts.append(persona["persona_culture"])
+
         return ui.div(
             ui.div(
                 ui.div(
                     ui.h2(persona["persona_name"], class_="persona-name"),
-                    ui.div(
-                        f"{persona.get('persona_age') or 'Age n/a'} • "
-                        f"{persona.get('persona_profession') or 'Profession n/a'}",
-                        class_="persona-subtitle",
-                    ),
-                    ui.div(persona.get("persona_culture") or "Culture n/a", class_="persona-subtitle"),
+                    ui.div(" · ".join(meta_parts) if meta_parts else "", class_="persona-meta"),
                 ),
                 ui.input_action_button(
                     "bio_toggle",
-                    "Hide bio" if is_expanded else "Show bio",
+                    "Hide bio" if is_expanded else "About",
                     class_="btn-secondary",
+                ) if bio else None,
+                class_="persona-strip",
+            ),
+            ui.div(
+                ui.div(
+                    ui.span(str(persona["n_entries"]), class_="stat-value"),
+                    ui.span("entries", class_="stat-label"),
+                    class_="stat-item",
                 ),
-                class_="persona-header",
+                ui.div(
+                    ui.span(persona["first_entry_date"], class_="stat-value"),
+                    ui.span("first entry", class_="stat-label"),
+                    class_="stat-item",
+                ),
+                ui.div(
+                    ui.span(persona["last_entry_date"], class_="stat-value"),
+                    ui.span("latest entry", class_="stat-label"),
+                    class_="stat-item",
+                ),
+                class_="persona-stats",
             ),
-            _build_badges(
-                persona.get("persona_core_values") or [],
-                "badge-core",
-                "No core values",
-            ),
-            ui.div(bio, class_="persona-bio") if bio and is_expanded else None,
-            class_="persona-card",
+            _build_badges(core_values, "badge-core", "No core values"),
+            ui.div(bio, class_="persona-bio-block") if bio and is_expanded else None,
         )
 
     @reactive.effect
@@ -586,14 +587,41 @@ def server(input, output, session):
     def _toggle_bio():
         state.bio_expanded.set(not state.bio_expanded())
 
+    @reactive.effect
+    @reactive.event(input.journal_toggle)
+    def _toggle_journal():
+        state.journal_expanded.set(not state.journal_expanded())
+
     @render.ui
     def journal_timeline():
         persona = current_persona()
         if persona is None:
-            return ui.div("No journal history available.", class_="empty-state")
+            return None
+
+        is_expanded = state.journal_expanded()
+        entries = persona["entries"]
+        _max_visible = 30
+        overflow = len(entries) - _max_visible
+        visible_entries = entries[:_max_visible]
+
+        toggle_btn = ui.input_action_button(
+            "journal_toggle",
+            f"Hide journal ({len(entries)} entries)" if is_expanded else f"Show journal ({len(entries)} entries)",
+            class_="btn-secondary",
+        )
+
+        if not is_expanded:
+            return ui.div(
+                ui.div(
+                    ui.h3("Journal", class_="section-heading"),
+                    toggle_btn,
+                    class_="journal-toggle-row",
+                ),
+                class_="journal-section",
+            )
 
         timeline_cards = []
-        for entry in persona["entries"]:
+        for entry in visible_entries:
             timeline_cards.append(
                 ui.div(
                     ui.div(
@@ -623,9 +651,24 @@ def server(input, output, session):
                 )
             )
 
+        overflow_notice = (
+            ui.div(
+                f"Showing first {_max_visible} of {len(entries)} entries.",
+                class_="empty-state",
+            )
+            if overflow > 0
+            else None
+        )
+
         return ui.div(
-            ui.div("Journal timeline", class_="section-title"),
+            ui.div(
+                ui.h3("Journal", class_="section-heading"),
+                toggle_btn,
+                class_="journal-toggle-row",
+            ),
             ui.div(*timeline_cards, class_="timeline-stack"),
+            overflow_notice,
+            class_="journal-section",
         )
 
     @render.ui
@@ -633,12 +676,12 @@ def server(input, output, session):
         bundle = state.run_bundle()
         if bundle is None:
             status_msg = (
-                "The live pipeline is running. Tabs will populate when the artifacts are ready."
+                "Critic flow running — results will appear when complete."
                 if state.run_status() == "running"
-                else "No artifacts loaded yet. Use the run button or choose a selection with cached outputs."
+                else "No results yet. Run the critic or select a persona with cached outputs."
             )
-            return ui.TagList(
-                ui.h3("Results", class_="panel-title"),
+            return ui.div(
+                ui.h3("Results", class_="results-heading"),
                 ui.div(status_msg, class_="empty-state"),
                 ui.navset_tab(
                     ui.nav_panel(
@@ -647,6 +690,7 @@ def server(input, output, session):
                         ui.output_ui("detector_table"),
                     ),
                 ),
+                class_="results-section",
             )
 
         artifacts = bundle["artifacts"]
@@ -655,38 +699,35 @@ def server(input, output, session):
         timeline_df = artifacts["timeline_df"].sort(["date", "t_index"])
         weekly_df = artifacts["weekly_df"].sort(["week_start"])
 
-        # Build critic-based detector alert map for per-entry annotations
         critic_alert_map: dict[int, list[str]] = {}
         try:
-            critic_bundle = load_multi_drift_bundle(
-                bundle["persona_id"], source="critic", timeline_df=timeline_df
-            )
-            if critic_bundle is not None:
-                for detector in critic_bundle.detectors:
+            c_bundle = critic_drift_bundle()
+            if c_bundle is not None:
+                for detector in c_bundle.detectors:
                     for t in detector.alert_steps:
                         critic_alert_map.setdefault(t, []).append(detector.name)
         except Exception:
             pass
 
-        return ui.TagList(
-            ui.h3("Pipeline results", class_="panel-title"),
+        return ui.div(
+            ui.h3("Results", class_="results-heading"),
             ui.div(
                 ui.div(
-                    ui.span("Mode", class_="metric-label"),
-                    ui.span(str(digest.get("response_mode", "n/a")), class_="metric-value"),
-                    class_="metric-card",
+                    ui.span("Mode", class_="digest-kv-label"),
+                    ui.span(str(digest.get("response_mode", "n/a")), class_="digest-kv-value"),
+                    class_="digest-kv",
                 ),
                 ui.div(
-                    ui.span("Overall mean", class_="metric-label"),
-                    ui.span(_format_signed(digest.get("overall_mean")), class_="metric-value"),
-                    class_="metric-card",
+                    ui.span("Overall mean", class_="digest-kv-label"),
+                    ui.span(_format_signed(digest.get("overall_mean")), class_="digest-kv-value"),
+                    class_="digest-kv",
                 ),
                 ui.div(
-                    ui.span("Uncertainty", class_="metric-label"),
-                    ui.span(_format_signed(digest.get("overall_uncertainty")), class_="metric-value"),
-                    class_="metric-card",
+                    ui.span("Uncertainty", class_="digest-kv-label"),
+                    ui.span(_format_signed(digest.get("overall_uncertainty")), class_="digest-kv-value"),
+                    class_="digest-kv",
                 ),
-                class_="metric-card-row",
+                class_="digest-summary-strip",
             ),
             ui.navset_tab(
                 ui.nav_panel(
@@ -711,6 +752,7 @@ def server(input, output, session):
                     ui.output_ui("detector_table"),
                 ),
             ),
+            class_="results-section",
         )
 
 
@@ -828,25 +870,21 @@ def _render_drift_results(drift: dict[str, Any]) -> ui.Tag:
     return ui.div(
         ui.div(
             ui.div(
-                ui.span("Trigger type", class_="metric-label"),
-                ui.span(str(drift.get("trigger_type") or "stable"), class_="metric-value"),
-                class_="metric-card",
+                ui.span("Trigger", class_="digest-kv-label"),
+                ui.span(str(drift.get("trigger_type") or "stable"), class_="digest-kv-value"),
+                class_="digest-kv",
             ),
             ui.div(
-                ui.span("Window", class_="metric-label"),
+                ui.span("Window", class_="digest-kv-label"),
                 ui.span(
-                    f"{drift.get('week_start') or 'n/a'} to {drift.get('week_end') or 'n/a'}",
-                    class_="metric-value",
+                    f"{drift.get('week_start') or 'n/a'} → {drift.get('week_end') or 'n/a'}",
+                    class_="digest-kv-value",
                 ),
-                class_="metric-card",
+                class_="digest-kv",
             ),
-            class_="metric-card-row",
+            class_="drift-summary-strip",
         ),
-        ui.div(
-            ui.strong("Rationale"),
-            ui.p(str(drift.get("rationale") or "No rationale captured."), class_="drift-rationale"),
-            class_="drift-summary",
-        ),
+        ui.p(str(drift.get("rationale") or "No rationale captured."), class_="drift-rationale"),
         ui.div(
             ui.span("Triggered dimensions", class_="subsection-label"),
             _build_badges(
@@ -889,8 +927,6 @@ def _render_digest_results(markdown_text: str, digest: dict[str, Any]) -> ui.Tag
 
 def _build_detector_chart(bundle: Any | None) -> go.Figure:
     """Build a Plotly figure showing per-dimension alignment trajectories with detector alert markers."""
-    from src.demo_tool.multi_drift import DETECTOR_KEYS, DETECTOR_NAMES, DIM_LABELS
-
     fig = go.Figure()
 
     if bundle is None:
@@ -974,8 +1010,6 @@ def _detector_chart_layout(title: str) -> dict:
 
 def _render_detector_table(bundle: Any | None) -> ui.Tag:
     """Render the step × detector alert grid table."""
-    from src.demo_tool.multi_drift import DETECTOR_KEYS, DETECTOR_NAMES
-
     if bundle is None:
         return ui.div(
             "Select a persona to see detector comparison. Judge labels work without running the critic.",
@@ -1010,7 +1044,7 @@ def _render_detector_table(bundle: Any | None) -> ui.Tag:
     columns.append(("consensus", "Votes"))
 
     records = []
-    for i, (t, date) in enumerate(zip(bundle.t_indices, bundle.dates)):
+    for t, date in zip(bundle.t_indices, bundle.dates):
         row: dict[str, Any] = {"step": f"E{t + 1}", "date": date}
         for detector in bundle.detectors:
             row[detector.key] = "●" if t in detector.alert_steps else "–"
