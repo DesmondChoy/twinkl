@@ -273,8 +273,10 @@ def _build_main_app_ui() -> ui.Tag:
     )
 
 
+_app_dir = Path(__file__).parent
+
 app_ui = ui.page_fluid(
-    ui.tags.link(rel="stylesheet", href="styles.css"),
+    ui.head_content(ui.include_css(_app_dir / "static" / "styles.css")),
     ui.output_ui("app_content"),
 )
 
@@ -1062,8 +1064,6 @@ def _render_detector_table(bundle: Any | None) -> ui.Tag:
         _build_table(records, columns),
     )
 
-
-_app_dir = Path(__file__).parent
 
 app = App(
     app_ui,
