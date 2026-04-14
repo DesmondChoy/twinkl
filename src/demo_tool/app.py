@@ -26,6 +26,7 @@ from src.demo_tool.data_loader import (
 import plotly.graph_objects as go
 from shinywidgets import output_widget, render_widget
 
+from src.demo_tool.multi_drift import DETECTOR_KEYS, DETECTOR_NAMES, DIM_LABELS
 from src.demo_tool.runtime_bridge import (
     CheckpointOption,
     build_checkpoint_choices,
@@ -319,6 +320,20 @@ def server(input, output, session):
             timeline_df = bundle["artifacts"]["timeline_df"]
         return load_multi_drift_bundle(persona_id, source=source, timeline_df=timeline_df)
 
+    @reactive.calc
+    def critic_drift_bundle():
+        """Critic-source drift bundle derived from the current run bundle.
+
+        Computed once and cached by reactive; avoids re-running all 6 detectors
+        on every results_panel invalidation.
+        """
+        bundle = state.run_bundle()
+        if bundle is None:
+            return None
+        persona_id = bundle["persona_id"]
+        timeline_df = bundle["artifacts"]["timeline_df"].sort(["date", "t_index"])
+        return load_multi_drift_bundle(persona_id, source="critic", timeline_df=timeline_df)
+
     @reactive.effect
     def _sync_persona_select():
         result = catalog_result()
@@ -360,7 +375,7 @@ def server(input, output, session):
 
     @reactive.effect
     @reactive.event(input.persona_id, input.checkpoint_path)
-    def _sync_selection_and_cache():
+    async def _sync_selection_and_cache():
         persona_id = input.persona_id()
         checkpoint_path = input.checkpoint_path()
         state.set_selection(persona_id, checkpoint_path)
@@ -370,7 +385,7 @@ def server(input, output, session):
             state.clear_result("idle")
             return
 
-        cached = load_cached_run(persona_id, checkpoint_path)
+        cached = await asyncio.to_thread(load_cached_run, persona_id, checkpoint_path)
         if cached is None:
             state.clear_result("idle")
             return
@@ -592,8 +607,13 @@ def server(input, output, session):
         if persona is None:
             return ui.div("No journal history available.", class_="empty-state")
 
+        _max_visible = 30
+        entries = persona["entries"]
+        overflow = len(entries) - _max_visible
+        visible_entries = entries[:_max_visible]
+
         timeline_cards = []
-        for entry in persona["entries"]:
+        for entry in visible_entries:
             timeline_cards.append(
                 ui.div(
                     ui.div(
@@ -623,9 +643,19 @@ def server(input, output, session):
                 )
             )
 
+        overflow_notice = (
+            ui.div(
+                f"Showing first {_max_visible} of {len(entries)} entries.",
+                class_="empty-state",
+            )
+            if overflow > 0
+            else None
+        )
+
         return ui.div(
             ui.div("Journal timeline", class_="section-title"),
             ui.div(*timeline_cards, class_="timeline-stack"),
+            overflow_notice,
         )
 
     @render.ui
@@ -658,11 +688,9 @@ def server(input, output, session):
         # Build critic-based detector alert map for per-entry annotations
         critic_alert_map: dict[int, list[str]] = {}
         try:
-            critic_bundle = load_multi_drift_bundle(
-                bundle["persona_id"], source="critic", timeline_df=timeline_df
-            )
-            if critic_bundle is not None:
-                for detector in critic_bundle.detectors:
+            c_bundle = critic_drift_bundle()
+            if c_bundle is not None:
+                for detector in c_bundle.detectors:
                     for t in detector.alert_steps:
                         critic_alert_map.setdefault(t, []).append(detector.name)
         except Exception:
@@ -889,8 +917,6 @@ def _render_digest_results(markdown_text: str, digest: dict[str, Any]) -> ui.Tag
 
 def _build_detector_chart(bundle: Any | None) -> go.Figure:
     """Build a Plotly figure showing per-dimension alignment trajectories with detector alert markers."""
-    from src.demo_tool.multi_drift import DETECTOR_KEYS, DETECTOR_NAMES, DIM_LABELS
-
     fig = go.Figure()
 
     if bundle is None:
@@ -974,8 +1000,6 @@ def _detector_chart_layout(title: str) -> dict:
 
 def _render_detector_table(bundle: Any | None) -> ui.Tag:
     """Render the step × detector alert grid table."""
-    from src.demo_tool.multi_drift import DETECTOR_KEYS, DETECTOR_NAMES
-
     if bundle is None:
         return ui.div(
             "Select a persona to see detector comparison. Judge labels work without running the critic.",
