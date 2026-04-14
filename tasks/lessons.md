@@ -106,3 +106,17 @@
   earlier recommendation. In this repo, confusing OpenClaw with Claude would
   wrongly turn a researched messaging-native delivery path into speculative
   vendor integration.
+
+## 2026-04-11
+
+- When iterating on presentation drafts, keep one canonical output file unless
+  the user explicitly asks for variants. Do not leave parallel "short" and
+  "20min" slide markdown files behind; consolidate the stronger draft into the
+  requested filename.
+- When turning a report into slides, use the report's table of contents to set
+  the section structure, then fold thin subsections into stronger composite
+  slides. Do not give lightweight topics like target users their own slide when
+  they can be integrated into a fuller introduction or differentiation slide.
+- For sponsor-academic presentation decks in this repo, do not stop at the
+  proposal prose. Cross-check the implemented system docs and evaluation docs so
+  the slides reflect the real engineering depth rather than a thinner summary.
