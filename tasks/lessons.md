@@ -120,3 +120,10 @@
 - For sponsor-academic presentation decks in this repo, do not stop at the
   proposal prose. Cross-check the implemented system docs and evaluation docs so
   the slides reflect the real engineering depth rather than a thinner summary.
+
+## 2026-06-06
+
+- When updating `logs/experiments/index.md` after an experiment review, update
+  both commentary layers: the top "latest" note near the frontier table and the
+  newest-first `## Findings` entry below the run log. Run table rows alone are
+  not enough.

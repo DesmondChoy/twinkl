@@ -210,6 +210,37 @@
 
 ## Findings
 
+### 2026-06-06 — Recall-aware checkpoint retention is worth keeping; recall-aware selection is not (`twinkl-upb5`)
+
+`twinkl-upb5` reran the exact candidate-checkpoint question left open by
+`twinkl-t2r0`: same frozen split, same labels per branch, same seeds, same LR
+override, same encoder, but with extra `0.01` and `0.02` recall-aware candidate
+checkpoints retained and scored on the fixed corrected test split. That closes
+the old reproducibility gap. The alternate epochs are no longer hypothetical.
+
+**1. The consensus branch likes the wider recall window.** On the
+consensus-label diagnostic reruns (`run_051`-`run_053`), the `0.02` window
+raised median test `recall_-1` from `0.257` to `0.323`, raised median minority
+recall from `0.397` to `0.445`, lowered hedging from `0.656` to `0.650`, and
+raised median QWK from `0.374` to `0.393`. That is real evidence that recall
+aware checkpointing can help when the label target is the consensus branch.
+
+**2. The persisted-label branch fails promotion.** On the weighted
+persisted-label reruns (`run_054`-`run_056`), the `0.01` window dropped median
+QWK from `0.345` to `0.332` while leaving recall effectively flat-to-worse, and
+the `0.02` window dropped median QWK to `0.329`, median `recall_-1` to `0.350`,
+and worsened hedging. Seed `11` had a useful `0.01` trade-off, but seed `33`
+went the other way. That is not a frontier policy; that is a tempting footgun.
+
+**3. Recommendation: keep retention, reject default recall-aware selection.**
+The training driver should keep candidate-checkpoint retention because it
+prevents another "interesting epoch but no checkpoint" problem. But the default
+persisted-label checkpoint policy should stay QWK-first with the existing
+tie-breakers. If consensus or soft vote-distribution labels become the active
+target later, carry the `0.02` candidate as a standard retained checkpoint and
+judge it in that target regime. Full details:
+[`reports/experiment_review_2026-06-06_twinkl_upb5.md`](reports/experiment_review_2026-06-06_twinkl_upb5.md).
+
 ### 2026-04-01 — Consensus-label retrains are informative diagnostics, not a clean frontier board (`twinkl-754.6`)
 
 `twinkl-754.6` reran the active `BalancedSoftmax` recipe with
