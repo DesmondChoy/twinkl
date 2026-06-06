@@ -1,0 +1,30 @@
+generated_at: '2026-06-06T20:59:19'
+policies:
+  current_qwk_then_recall:
+    description: Existing qwk_mean-first selected checkpoint
+  recall_qwk_window_0.01:
+    description: Maximize recall_minus1 subject to qwk_mean within window of best
+      validation qwk_mean
+    qwk_window: 0.01
+    tie_breakers:
+    - lower hedging_mean
+    - higher calibration_global
+    - earlier epoch
+  recall_qwk_window_0.02:
+    description: Maximize recall_minus1 subject to qwk_mean within window of best
+      validation qwk_mean
+    qwk_window: 0.02
+    tie_breakers:
+    - lower hedging_mean
+    - higher calibration_global
+    - earlier epoch
+run_files:
+- /Users/desmondchoy/Projects/twinkl/logs/experiments/runs/run_019_BalancedSoftmax.yaml
+- /Users/desmondchoy/Projects/twinkl/logs/experiments/runs/run_020_BalancedSoftmax.yaml
+- /Users/desmondchoy/Projects/twinkl/logs/experiments/runs/run_021_BalancedSoftmax.yaml
+- /Users/desmondchoy/Projects/twinkl/logs/experiments/runs/run_034_BalancedSoftmax.yaml
+- /Users/desmondchoy/Projects/twinkl/logs/experiments/runs/run_035_BalancedSoftmax.yaml
+- /Users/desmondchoy/Projects/twinkl/logs/experiments/runs/run_036_BalancedSoftmax.yaml
+- /Users/desmondchoy/Projects/twinkl/logs/experiments/runs/run_048_BalancedSoftmax.yaml
+- /Users/desmondchoy/Projects/twinkl/logs/experiments/runs/run_049_BalancedSoftmax.yaml
+- /Users/desmondchoy/Projects/twinkl/logs/experiments/runs/run_050_BalancedSoftmax.yaml
