@@ -1,0 +1,480 @@
+==================================================
+CONFIGURATION
+==================================================
+  encoder_model                  nomic-ai/nomic-embed-text-v1.5
+  truncate_dim                               256
+  text_prefix                    "classification: "
+  prompt_name                               null
+  prompt                                    null
+  hidden_dim                                  64
+  dropout                                    0.3
+  window_size                                  1
+  learning_rate                            0.001
+  weight_decay                              0.01
+  batch_size                                  16
+  epochs                                     100
+  train_ratio                                0.7
+  val_ratio                                 0.15
+  split_seed                                2025
+  model_seed                                  11
+  labels_path                    logs/judge_labels/consensus_labels.parquet
+  wrangled_dir                     logs/wrangled
+  fixed_holdout_manifest_path    config/experiments/vif/twinkl_681_5_holdout.yaml
+  class_balance_source           train_split_per_dimension
+  circumplex_regularizer_enabled           False
+  circumplex_regularizer_opposite_weight             0.0
+  circumplex_regularizer_adjacent_weight             0.0
+  dimension_weighting_enabled              False
+  dimension_weighting_mode          inverse_loss
+  dimension_weighting_temperature             0.5
+  dimension_weighting_ema_alpha              0.3
+  dimension_weighting_warmup_epochs               1
+  dimension_weighting_eps                  1e-06
+  dimension_weighting_min                    0.5
+  dimension_weighting_max                    1.5
+  slace_alpha                                1.0
+  use_lr_finder                            False
+  experiment_group               twinkl-upb5_recall_checkpoint_retention_consensus
+  skip_experiment_logging                  False
+  candidate_checkpoint_policies  [{'name': 'recall_qwk_window_0.01', 'type': 'recall_qwk_window', 'qwk_window': 0.01}, {'name': 'recall_qwk_window_0.02', 'type': 'recall_qwk_window', 'qwk_window': 0.02}]
+  models_to_train                ['BalancedSoftmax']
+  model_overrides:
+{
+  "BalancedSoftmax": {
+    "learning_rate": 0.015522253574270487,
+    "learning_rate_policy": "run_015_cdwce_a3_valley",
+    "learning_rate_source": "explicit_model_override",
+    "use_lr_finder": false
+  }
+}
+  selection_policy:
+{
+  "fallback": "best_finite_qwk",
+  "guardrails": {
+    "calibration_global_must_be_non_negative": true,
+    "qwk_mean_must_be_finite": true,
+    "qwk_nan_dims_count_must_equal_zero": true
+  },
+  "name": "qwk_then_recall_guarded",
+  "rank_order": [
+    "qwk_mean",
+    "recall_minus1",
+    "calibration_global",
+    "hedging_mean",
+    "val_loss"
+  ]
+}
+==================================================
+Working directory: /Users/desmondchoy/Projects/twinkl
+Device: mps
+PyTorch: 2.9.1
+Schwartz dimensions: 10
+Split seed: 2025
+Model seed: 11
+Labels shape:  (1651, 45)
+Entries shape: (1651, 8)
+Merged shape:  (1651, 51)
+Unique personas: 204
+Rows: 5
+Columns: 45
+$ persona_id                               <str> '013d8101', '013d8101', '013d8101', '019235dc', '019235dc'
+$ t_index                                  <i64> 0, 1, 2, 0, 1
+$ date                                     <str> '2025-12-01', '2025-12-11', '2025-12-20', '2025-01-15', '2025-01-15'
+$ alignment_vector                   <list[i64]> [0, 0, 0, 0, 0, 1, 1, 0, 0, 0], [0, 0, 0, 0, 0, 1, 0, 0, 1, 0], [0, -1, 0, 0, 0, 1, 0, 0, 0, 0], [0, 0, 0, 1, 0, 0, 0, 0, 0, 0], [0, 0, 0, 1, 0, 0, 0, 0, 1, 0]
+$ alignment_self_direction                 <i64> 0, 0, 0, 0, 0
+$ alignment_stimulation                    <i64> 0, 0, -1, 0, 0
+$ alignment_hedonism                       <i64> 0, 0, 0, 0, 0
+$ alignment_achievement                    <i64> 0, 0, 0, 1, 1
+$ alignment_power                          <i64> 0, 0, 0, 0, 0
+$ alignment_security                       <i64> 1, 1, 1, 0, 0
+$ alignment_conformity                     <i64> 1, 0, 0, 0, 0
+$ alignment_tradition                      <i64> 0, 0, 0, 0, 0
+$ alignment_benevolence                    <i64> 0, 1, 0, 0, 1
+$ alignment_universalism                   <i64> 0, 0, 0, 0, 0
+$ rationales_json                          <str> '{"security": "She is \\"running through the talking points\\" and would \\"rather have every answer ready\\" than face uncertainty, showing a strong preference for predictability and preparedness.", "conformity": "Her worry about \\"stumble[ing] in front of someone asking about their child\\" reflects careful self-monitoring to meet parents\' expectations and avoid social disapproval."}', '{"security": "She felt \\"steady\\" during budget cuts because \\"my position is permanent,\\" grounding her response in job stability and protection from threat.", "benevolence": "Seeing newer teachers worry, she \\"offered to help one of them update her CV after work,\\" taking concrete action to support someone close in her immediate circle."}', '{"stimulation": "She resists the move because of the uncertainty, saying she needs \\"a guarantee\\" and feels unable to handle the risk of starting over in Berlin.", "security": "She emphasizes the \\"rent-controlled\\" flat, her job, savings, and closeness to her parents, and says she sees \\"all the things that could collapse,\\" showing a strong drive to preserve stability."}', '{"achievement": "The core frustration is that Priya stepped in \\"in front of the resident\\" and \\"made me look like I didn\'t know what I was doing,\\" showing concern with appearing competent in a performance setting."}', '{"achievement": "She \\"pushed for\\" a cardiac placement and wants to be \\"in the ICU by the time I\'m twenty-five,\\" with repeated focus on how career decision-makers evaluate her competence.", "benevolence": "She sat with \\"Mrs. Okonkwo for twenty minutes, got her water, called her daughter,\\" and says that caring response is \\"the reason I became a nurse in the first place.\\""}'
+$ confidence_self_direction                <str> 'unanimous', 'unanimous', 'unanimous', 'unanimous', 'unanimous'
+$ confidence_stimulation                   <str> 'unanimous', 'unanimous', 'unanimous', 'unanimous', 'unanimous'
+$ confidence_hedonism                      <str> 'unanimous', 'unanimous', 'unanimous', 'unanimous', 'unanimous'
+$ confidence_achievement                   <str> 'unanimous', 'unanimous', 'unanimous', 'unanimous', 'unanimous'
+$ confidence_power                         <str> 'unanimous', 'unanimous', 'unanimous', 'strong', 'unanimous'
+$ confidence_security                      <str> 'unanimous', 'unanimous', 'unanimous', 'unanimous', 'unanimous'
+$ confidence_conformity                    <str> 'unanimous', 'unanimous', 'unanimous', 'unanimous', 'unanimous'
+$ confidence_tradition                     <str> 'unanimous', 'unanimous', 'unanimous', 'unanimous', 'unanimous'
+$ confidence_benevolence                   <str> 'unanimous', 'unanimous', 'unanimous', 'unanimous', 'unanimous'
+$ confidence_universalism                  <str> 'unanimous', 'unanimous', 'unanimous', 'unanimous', 'unanimous'
+$ consensus_agreement_self_direction       <i64> 5, 5, 5, 5, 5
+$ consensus_agreement_stimulation          <i64> 5, 5, 5, 5, 5
+$ consensus_agreement_hedonism             <i64> 5, 5, 5, 5, 5
+$ consensus_agreement_achievement          <i64> 5, 5, 5, 5, 5
+$ consensus_agreement_power                <i64> 5, 5, 5, 4, 5
+$ consensus_agreement_security             <i64> 5, 5, 5, 5, 5
+$ consensus_agreement_conformity           <i64> 5, 5, 5, 5, 5
+$ consensus_agreement_tradition            <i64> 5, 5, 5, 5, 5
+$ consensus_agreement_benevolence          <i64> 5, 5, 5, 5, 5
+$ consensus_agreement_universalism         <i64> 5, 5, 5, 5, 5
+$ label_changed_self_direction            <bool> False, False, False, False, False
+$ label_changed_stimulation               <bool> False, False, False, False, False
+$ label_changed_hedonism                  <bool> False, False, False, False, False
+$ label_changed_achievement               <bool> False, False, False, False, False
+$ label_changed_power                     <bool> False, False, False, True, False
+$ label_changed_security                  <bool> False, False, False, False, False
+$ label_changed_conformity                <bool> False, False, False, False, False
+$ label_changed_tradition                 <bool> False, False, False, False, False
+$ label_changed_benevolence               <bool> False, False, False, False, False
+$ label_changed_universalism              <bool> False, False, False, False, False
+/Users/desmondchoy/Projects/twinkl/scripts/experiments/critic_training_v4_review.py:439: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+  plt.show()
+<All keys matched successfully>
+/Users/desmondchoy/Projects/twinkl/scripts/experiments/critic_training_v4_review.py:544: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+  plt.show()
+
+Rows: 5
+Columns: 8
+$ persona_id          <str> '013d8101', '013d8101', '013d8101', '019235dc', '019235dc'
+$ persona_name        <str> 'Emma Lindqvist', 'Emma Lindqvist', 'Emma Lindqvist', 'Megan Torres', 'Megan Torres'
+$ core_values   <list[str]> ['Security'], ['Security'], ['Security'], ['Achievement', 'Benevolence'], ['Achievement', 'Benevolence']
+$ t_index             <i64> 0, 1, 2, 0, 1
+$ date                <str> '2025-12-01', '2025-12-11', '2025-12-20', '2025-01-15', '2025-01-15'
+$ initial_entry       <str> 'Parent-teacher conferences tomorrow and I keep running through the talking points in my head. Mikkel says I over-prepare but I would rather have every answer ready than stumble in front of someone asking about their child.', 'The school announced budget cuts today and there were some worried faces in the staff room. I felt steady, actually. My position is permanent and I have been here longer than most.', 'Mikkel brought up the idea of moving to Berlin again at dinner. His company has an office there and he thinks his career would grow faster in a bigger city. We have talked about this before but he seemed more serious this time.\n\nI listed the usual things: our flat is rent-controlled, my job does not transfer, we do not speak German well enough. He said we could figure it out. I said I would think about it but I have been turning it over for hours now and my stomach keeps tightening.', 'I don\'t care what Priya thinks, I handled that IV alarm correctly. The patient was stable and I had already checked the line twice before she came over to "help." I\'ve been on this unit for fourteen months now, I know the protocols.', "Still thinking about the Priya thing from earlier. I know I sounded annoyed in my last entry but there's more to it. She's been a nurse for nine years and sometimes she does this thing where she swoops in and takes over, and the doctors start looking at her for answers instead of me. I worked hard to get assigned to the step-down unit. Most new grads end up on med-surg for at least two years before they get a chance at cardiac, and I pushed for this placement because I want to be in the ICU by the time I'm twenty-five.\n\nBut here's what bugs me. When Mr. Okonkwo's wife was crying in the hallway after the cardiologist explained his prognosis, Priya was charting. I was the one who sat with Mrs. Okonkwo for twenty minutes, got her water, called her daughter. Nobody saw that. Nobody writes that in your evaluation. The doctors remember who looked competent with the IV pump, not who held someone's hand. And I did both today, but only one of those things is going to show up when they're deciding who moves to the ICU.\n\nI'm not saying Priya's a bad nurse. She's great, actually. She taught me half of what I know about reading telemetry strips. I just wish the people making decisions about my career could see the full picture instead of whatever three-second snapshot they happened to catch."
+$ nudge_text          <str> 'What happens if you do stumble?', 'How did it feel watching your colleagues worry?', 'What would you need to feel okay about considering it?', 'What made her stepping in feel different from just helping out?', 'You mentioned two things you did today — the clinical work and sitting with Mrs. Okonkwo. If you had to pick one to be known for, which would it be?'
+$ response_text       <str> 'Nothing dramatic, I suppose. Anyway, I should probably get some sleep instead of thinking about it.', 'A bit guilty, honestly. I knew I was safe while some of the newer teachers were clearly doing mental math about their contracts. I offered to help one of them update her CV after work, though I am not sure it made either of us feel better.', 'A guarantee, probably, and I know that does not exist. The truth is I have built everything carefully here: the job, the savings, being close to my parents. Mikkel sees possibility but I see all the things that could collapse. I do not think either of us is wrong. But I also do not know how to bridge the gap between what he wants and what I can actually handle risking.', "Because it was in front of the resident. Made me look like I didn't know what I was doing.", "Both. That's the whole point. I don't want to pick. But if I'm being honest, the Mrs. Okonkwo thing is the reason I became a nurse in the first place. The ICU stuff, the certifications — that's how you get taken seriously so you can keep doing the other part. At least that's what I tell myself."
+
+
+Label columns: ['alignment_vector', 'alignment_self_direction', 'alignment_stimulation', 'alignment_hedonism', 'alignment_achievement', 'alignment_power', 'alignment_security', 'alignment_conformity', 'alignment_tradition', 'alignment_benevolence', 'alignment_universalism']
+
+Entry text columns: ['persona_name', 'core_values', 'initial_entry', 'nudge_text', 'response_text']
+Dimension                -1      0     +1    Ratio     Flag
+-------------------------------------------------------
+self_direction          132   1135    384      8.6
+stimulation              43   1488    120     34.6     >10x
+hedonism                141   1335    175      9.5
+achievement              50   1156    445     23.1     >10x
+power                    86   1393    172     16.2     >10x
+security                142   1219    290      8.6
+conformity              115   1262    274     11.0     >10x
+tradition                37   1395    219     37.7     >10x
+benevolence              84   1113    454     13.2     >10x
+universalism             46   1451    154     31.5     >10x
+
+Overall neutral %: 78.4%
+Dimension             Min class  Min count       Status
+-------------------------------------------------------
+self_direction               -1        132           OK
+stimulation                  -1         43           OK
+hedonism                     -1        141           OK
+achievement                  -1         50           OK
+power                        -1         86           OK
+security                     -1        142           OK
+conformity                   -1        115           OK
+tradition                    -1         37           OK
+benevolence                  -1         84           OK
+universalism                 -1         46           OK
+
+Unlearnable dims (any class < 10 samples): None
+Encoder: nomic-ai/nomic-embed-text-v1.5
+Embedding dim: 256
+State dim: 266
+
+============================================================
+RANDOM ENTRY VERIFICATION (row 738)
+============================================================
+persona_id:    742c98d6
+persona_name:  Margot van den Berg
+core_values:   ['Universalism']
+date:          2025-09-07
+t_index:       0
+
+--- initial_entry (first 200 chars) ---
+Had a terrible shift today and I can't stop going over it. We had a team meeting about the new triage protocols and someone — one of the younger consultants — made a comment about how we should be "mo
+
+--- nudge_text (first 200 chars) ---
+What stopped you in that moment?
+
+--- response_text (first 200 chars) ---
+I think I was just exhausted and didn't want to be the difficult one again.
+Max context length: 8192 tokens
+
+Token count statistics:
+  Min:    20
+  Mean:   201.9
+  Median: 193.0
+  P90:    340
+  P95:    386
+  Max:    711
+
+Truncated entries: 0/1651 (0.0%)
+MODEL_CONFIGS defined: ['CORAL', 'CORN', 'EMD', 'SoftOrdinal', 'CDWCE_a2', 'CDWCE_a3', 'CDWCE_a5', 'BalancedSoftmax', 'TwoStageBalancedSoftmax', 'LDAM_DRW', 'SLACE']
+models_to_train: ['BalancedSoftmax']
+Active models: ['BalancedSoftmax']
+Creating datasets (caching embeddings)...
+Batches:   0%|          | 0/38 [00:00<?, ?it/s]Batches:   3%|▎         | 1/38 [00:01<01:08,  1.86s/it]Batches:   5%|▌         | 2/38 [00:02<00:47,  1.32s/it]Batches:   8%|▊         | 3/38 [00:03<00:39,  1.12s/it]Batches:  11%|█         | 4/38 [00:04<00:34,  1.01s/it]Batches:  13%|█▎        | 5/38 [00:05<00:31,  1.06it/s]Batches:  16%|█▌        | 6/38 [00:06<00:28,  1.13it/s]Batches:  18%|█▊        | 7/38 [00:06<00:26,  1.19it/s]Batches:  21%|██        | 8/38 [00:07<00:23,  1.26it/s]Batches:  24%|██▎       | 9/38 [00:08<00:22,  1.30it/s]Batches:  26%|██▋       | 10/38 [00:08<00:20,  1.37it/s]Batches:  29%|██▉       | 11/38 [00:09<00:19,  1.42it/s]Batches:  32%|███▏      | 12/38 [00:10<00:17,  1.46it/s]Batches:  34%|███▍      | 13/38 [00:10<00:16,  1.50it/s]Batches:  37%|███▋      | 14/38 [00:11<00:15,  1.55it/s]Batches:  39%|███▉      | 15/38 [00:12<00:14,  1.60it/s]Batches:  42%|████▏     | 16/38 [00:12<00:13,  1.69it/s]Batches:  45%|████▍     | 17/38 [00:13<00:11,  1.79it/s]Batches:  47%|████▋     | 18/38 [00:13<00:10,  1.90it/s]Batches:  50%|█████     | 19/38 [00:13<00:09,  2.02it/s]Batches:  53%|█████▎    | 20/38 [00:14<00:08,  2.13it/s]Batches:  55%|█████▌    | 21/38 [00:14<00:07,  2.24it/s]Batches:  58%|█████▊    | 22/38 [00:15<00:06,  2.37it/s]Batches:  61%|██████    | 23/38 [00:15<00:06,  2.49it/s]Batches:  63%|██████▎   | 24/38 [00:15<00:05,  2.60it/s]Batches:  66%|██████▌   | 25/38 [00:16<00:04,  2.71it/s]Batches:  68%|██████▊   | 26/38 [00:16<00:04,  2.88it/s]Batches:  71%|███████   | 27/38 [00:16<00:03,  3.04it/s]Batches:  74%|███████▎  | 28/38 [00:16<00:03,  3.18it/s]Batches:  76%|███████▋  | 29/38 [00:17<00:02,  3.32it/s]Batches:  79%|███████▉  | 30/38 [00:17<00:02,  3.55it/s]Batches:  82%|████████▏ | 31/38 [00:17<00:01,  3.86it/s]Batches:  84%|████████▍ | 32/38 [00:17<00:01,  4.33it/s]Batches:  87%|████████▋ | 33/38 [00:17<00:01,  4.82it/s]Batches:  89%|████████▉ | 34/38 [00:18<00:00,  5.39it/s]Batches:  92%|█████████▏| 35/38 [00:18<00:00,  5.92it/s]Batches:  95%|█████████▍| 36/38 [00:18<00:00,  6.60it/s]Batches:  97%|█████████▋| 37/38 [00:18<00:00,  7.30it/s]Batches: 100%|██████████| 38/38 [00:18<00:00,  2.05it/s]
+Batches:   0%|          | 0/7 [00:00<?, ?it/s]Batches:  14%|█▍        | 1/7 [00:01<00:08,  1.49s/it]Batches:  29%|██▊       | 2/7 [00:02<00:05,  1.02s/it]Batches:  43%|████▎     | 3/7 [00:02<00:03,  1.23it/s]Batches:  57%|█████▋    | 4/7 [00:03<00:01,  1.50it/s]Batches:  71%|███████▏  | 5/7 [00:03<00:01,  1.81it/s]Batches:  86%|████████▌ | 6/7 [00:03<00:00,  2.25it/s]Batches: 100%|██████████| 7/7 [00:03<00:00,  2.97it/s]Batches: 100%|██████████| 7/7 [00:03<00:00,  1.80it/s]
+Batches:   0%|          | 0/7 [00:00<?, ?it/s]Batches:  14%|█▍        | 1/7 [00:02<00:12,  2.00s/it]Batches:  29%|██▊       | 2/7 [00:02<00:06,  1.25s/it]Batches:  43%|████▎     | 3/7 [00:03<00:03,  1.05it/s]Batches:  57%|█████▋    | 4/7 [00:03<00:02,  1.31it/s]Batches:  71%|███████▏  | 5/7 [00:04<00:01,  1.63it/s]Batches:  86%|████████▌ | 6/7 [00:04<00:00,  2.05it/s]Batches: 100%|██████████| 7/7 [00:04<00:00,  2.70it/s]Batches: 100%|██████████| 7/7 [00:04<00:00,  1.55it/s]
+/Users/desmondchoy/Projects/twinkl/scripts/experiments/critic_training_v4_review.py:1601: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+  plt.show()
+/Users/desmondchoy/Projects/twinkl/scripts/experiments/critic_training_v4_review.py:1703: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+  plt.show()
+/Users/desmondchoy/Projects/twinkl/scripts/experiments/critic_training_v4_review.py:2055: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+  plt.show()
+/Users/desmondchoy/Projects/twinkl/scripts/experiments/critic_training_v4_review.py:2100: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+  plt.show()
+
+Split sizes:
+  Train: 1213 samples (149 personas) -> 76 batches
+  Val:   217 samples (28 personas) -> 14 batches
+  Test:  221 samples (27 personas) -> 14 batches
+Using ordinal models: BalancedSoftmax
+
+Model             Parameters   Output logits                      Loss
+----------------------------------------------------------------------
+BalancedSoftmax       23,454              30 balanced_softmax_loss_multi
+----------------------------------------------------------------------
+
+Max parameters (for overfitting check): 23,454
+Parameters:       23,454
+Training samples: 1213
+Param/sample ratio: 19.3x
+
+HIGH overfitting risk (>10x). Strong regularization essential.
+Ordinal artifact root: logs/experiments/artifacts/ordinal_v4_s2025_m11_20260606_214517
+
+======================================================================
+Training BalancedSoftmax
+======================================================================
+  Seeds -> split=2025, model=11
+  Model overrides: ['learning_rate', 'learning_rate_policy', 'learning_rate_source', 'use_lr_finder']
+  LR policy: run_015_cdwce_a3_valley
+  Selection policy: {"fallback": "best_finite_qwk", "guardrails": {"calibration_global_must_be_non_negative": true, "qwk_mean_must_be_finite": true, "qwk_nan_dims_count_must_equal_zero": true, "recall_minus1_floor": null}, "name": "qwk_then_recall_guarded", "rank_order": ["qwk_mean", "recall_minus1", "calibration_global", "hedging_mean", "val_loss"]}
+  LR finder disabled -> using configured learning rate: 0.015522253574270487 (explicit_model_override)
+  Epoch   1: train=0.5703, val=0.5173, qwk=0.216, recall_-1=0.416, cal=0.585, hedge=0.579, qwk_nan_dims=0, lr=0.015522 [SELECT]
+  Epoch   2: train=0.4806, val=0.4830, qwk=0.322, recall_-1=0.449, cal=0.716, hedge=0.600, qwk_nan_dims=0, lr=0.015522 [SELECT]
+  Epoch   3: train=0.4453, val=0.5006, qwk=0.263, recall_-1=0.579, cal=0.567, hedge=0.537, qwk_nan_dims=0, lr=0.015522
+  Epoch   7: train=0.3971, val=0.4614, qwk=0.430, recall_-1=0.360, cal=0.778, hedge=0.658, qwk_nan_dims=0, lr=0.015522 [SELECT]
+  Epoch  10: train=0.3787, val=0.4692, qwk=0.397, recall_-1=0.417, cal=0.727, hedge=0.600, qwk_nan_dims=0, lr=0.015522
+  Epoch  20: train=0.2969, val=0.4944, qwk=0.393, recall_-1=0.466, cal=0.768, hedge=0.667, qwk_nan_dims=0, lr=0.007761
+  Epoch  27: train=0.2615, val=0.5183, qwk=0.441, recall_-1=0.453, cal=0.765, hedge=0.656, qwk_nan_dims=0, lr=0.007761 [SELECT]
+  Early stopping at epoch 27
+  Selected checkpoint: epoch 27/27; val=0.5183; qwk=0.441; recall_-1=0.453; cal=0.765; hedge=0.656; qwk_nan_dims=0; source=eligible_policy; applied_lr=0.0155223 (explicit_model_override)
+  Lowest raw val loss observed: 0.4614
+
+======================================================================
+Training complete: 1 successful, 0 skipped
+======================================================================
+
+Model             Best epoch   Train loss     Val loss        Gap    LR(applied)               LR(source)
+------------------------------------------------------------------------------------------------------------
+BalancedSoftmax    27/27          0.2615       0.5183    +0.2567      0.0155223  explicit_model_override
+
+======================================================================
+Evaluating BalancedSoftmax with MC Dropout uncertainty...
+======================================================================
+
+================================================================
+Dimension                   MAE   Spearman   Accuracy        QWK
+----------------------------------------------------------------
+self_direction           0.4136      0.489     62.90%      0.497
+stimulation              0.1950      0.281     85.97%      0.423
+hedonism                 0.2469      0.168     81.00%      0.051
+achievement              0.2827      0.490     78.73%      0.481
+power                    0.1538      0.209     90.05%      0.319
+security                 0.3071      0.314     72.40%      0.264
+conformity               0.3188      0.561     72.85%      0.520
+tradition                0.2037      0.515     83.71%      0.540
+benevolence              0.4995      0.351     57.01%      0.260
+universalism             0.1226      0.279     92.31%      0.293
+----------------------------------------------------------------
+MEAN                     0.2744      0.366     77.69%      0.365
+================================================================
+
+Calibration:
+  Error-uncertainty correlation: 0.767
+  Mean uncertainty: 0.3011
+  Quality: good
+  Positive dims: 10/10
+
+Recall per class:
+  -1: 25.63% | 0: 83.95% | +1: 53.34%
+
+Activation metrics:
+  precision: 51.99% | recall: 75.81% | f1: 61.22%
+Active sign accuracy: 75.42%
+
+Hedging mean: 65.61%
+QWK NaN dims: 0
+Exported selected-checkpoint outputs to logs/experiments/artifacts/ordinal_v4_s2025_m11_20260606_214517/BalancedSoftmax/selected_validation_outputs.parquet and logs/experiments/artifacts/ordinal_v4_s2025_m11_20260606_214517/BalancedSoftmax/selected_test_outputs.parquet
+Candidate recall_qwk_window_0.01: epoch 27; test qwk=0.365; test recall_-1=0.256
+Candidate recall_qwk_window_0.02: epoch 14; test qwk=0.393; test recall_-1=0.311
+
+======================================================================
+Model Health Check
+======================================================================
+Model                QWK   QWK NaNs   Spearman      Cal  Mean unc.    Hedging   Pred std  Status
+----------------------------------------------------------------------------------------------------------------------
+BalancedSoftmax    0.365          0      0.366   +0.767     0.3011     65.6%   0.431736  OK
+Model Comparison (rankable models):
+shape: (1, 6)
+┌─────────────────┬────────┬──────────┬────────┬──────────┬─────────────┐
+│ Model           ┆ MAE    ┆ Accuracy ┆ QWK    ┆ Spearman ┆ Calibration │
+│ ---             ┆ ---    ┆ ---      ┆ ---    ┆ ---      ┆ ---         │
+│ str             ┆ f64    ┆ f64      ┆ f64    ┆ f64      ┆ f64         │
+╞═════════════════╪════════╪══════════╪════════╪══════════╪═════════════╡
+│ BalancedSoftmax ┆ 0.2744 ┆ 0.7769   ┆ 0.3648 ┆ 0.3657   ┆ 0.7674      │
+└─────────────────┴────────┴──────────┴────────┴──────────┴─────────────┘
+Best model for confusion matrix: BalancedSoftmax (QWK)
+
+======================================================================
+Per-Class Recall Across Models (aggregated over 10 dimensions)
+======================================================================
+
+Model            Recall -1   Recall 0  Recall +1   Mean minority
+--------------------------------------------------------------
+BalancedSoftmax      25.6%      83.9%      53.3%           39.5%
+=================================
+Hedging Comparison — % predictions in [-0.3, 0.3]
+=================================
+
+Dimension            BalancedSoftmax
+---------------------------------
+self_direction             46.6%
+stimulation                78.3%
+hedonism                   79.2%
+achievement                57.9%
+power                      86.4%*
+security                   61.1%
+conformity                 44.8%
+tradition                  66.5%
+benevolence                49.8%
+universalism               85.5%*
+MEAN                       65.6%
+
+* = hedging (>80% near zero)
+=================================
+Calibration Analysis - Error-Uncertainty Spearman Correlation
+=================================
+
+Dimension            BalancedSoftmax
+---------------------------------
+self_direction             +0.511
+stimulation                +0.852
+hedonism                   +0.857
+achievement                +0.652
+power                      +0.882
+security                   +0.707
+conformity                 +0.659/Users/desmondchoy/Projects/twinkl/scripts/experiments/critic_training_v4_review.py:2240: UserWarning: FigureCanvasAgg is non-interactive, and thus cannot be shown
+  plt.show()
+
+tradition                  +0.768
+benevolence                +0.409
+universalism               +0.981
+
+Global correlation         +0.767
+Positive dims                10/10
+Mean uncertainty           0.3011
+==========================================================================================
+DIAGNOSTIC SCORECARD - MULTI-MODEL COMPARISON
+==========================================================================================
+
+--- #9 Calibration -----------------------------------------------------------------------
+  Model            Global corr   Positive dims    Mean unc.
+  --------------------------------------------------------
+  BalancedSoftmax       +0.767            10/10       0.3011
+  Guidance: >0.1 useful, <0 dangerous (uncertainty misleads)
+
+--- #10 Imbalance ------------------------------------------------------------------------
+  Overall neutral %: 78.4%
+  Flagged dims (>10x imbalance): 7/10
+  Unlearnable dims: None
+
+  Model            Recall -1  Recall +1   Mean minority
+  ----------------------------------------------------
+  BalancedSoftmax      25.6%      53.3%           39.5%
+  Guidance: Minority recall near 0% = model ignores rare classes
+
+--- Ordinal Quality ----------------------------------------------------------------------
+  Model                QWK  Hedging %   QWK NaNs       Status
+  ----------------------------------------------------------------
+  BalancedSoftmax    0.365      65.6%          0           OK
+  Guidance: High hedging % = neutral collapse; QWK near 0 = chance
+
+--- Selection / Overfitting --------------------------------------------------------------
+  Model            Sel epoch      Sel val          Gap      QWK                   Source
+  --------------------------------------------------------------------------------------
+  BalancedSoftmax    27/27         0.5183      +0.2567    0.441          eligible_policy
+  Guidance: Selected checkpoints should be finite-QWK and non-negative-calibration; large positive gaps still suggest overfitting
+
+--- #14 Embedding ------------------------------------------------------------------------
+  Encoder: nomic-ai/nomic-embed-text-v1.5
+  Truncated entries: 0.0%
+  Guidance: Gap <0.1 = poor discrimination; >5% truncation = losing information
+
+--- Winner Summary (Rankable Models) -----------------------------------------------------
+  Best by QWK:         BalancedSoftmax (0.365)
+  Best by Accuracy:    BalancedSoftmax (77.69%)
+  Best by MAE:         BalancedSoftmax (0.2744)
+  Best by Calibration: BalancedSoftmax (0.767)
+
+==========================================================================================
+
+==========================================================================================
+CIRCUMPLEX DIAGNOSTICS
+==========================================================================================
+shape: (1, 3)
+┌─────────────────┬──────────────┬────────────┐
+│ Model           ┆ OppViolation ┆ AdjSupport │
+│ ---             ┆ ---          ┆ ---        │
+│ str             ┆ f64          ┆ f64        │
+╞═════════════════╪══════════════╪════════════╡
+│ BalancedSoftmax ┆ 0.0436       ┆ 0.0618     │
+└─────────────────┴──────────────┴────────────┘
+
+Pair deep dive for best-QWK rankable model: BalancedSoftmax
+  High opposite score = collapsing opposition structure.
+  Low adjacent score = missing compatible co-activation.
+
+Top 5 opposite pairs by score:
+shape: (5, 2)
+┌──────────────────────────────┬────────┐
+│ Pair                         ┆ Score  │
+│ ---                          ┆ ---    │
+│ str                          ┆ f64    │
+╞══════════════════════════════╪════════╡
+│ achievement <> benevolence   ┆ 0.1403 │
+│ self_direction <> tradition  ┆ 0.0844 │
+│ security <> self_direction   ┆ 0.0607 │
+│ conformity <> self_direction ┆ 0.0496 │
+│ benevolence <> power         ┆ 0.0407 │
+└──────────────────────────────┴────────┘
+
+Bottom 5 adjacent pairs by score:
+shape: (5, 2)
+┌────────────────────────────────┬────────┐
+│ Pair                           ┆ Score  │
+│ ---                            ┆ ---    │
+│ str                            ┆ f64    │
+╞════════════════════════════════╪════════╡
+│ hedonism <> stimulation        ┆ 0.0158 │
+│ achievement <> hedonism        ┆ 0.0231 │
+│ power <> security              ┆ 0.0289 │
+│ self_direction <> universalism ┆ 0.0315 │
+│ self_direction <> stimulation  ┆ 0.0442 │
+└────────────────────────────────┴────────┘
+
+==========================================================================================
+==========================================================================================
+CDW-CE WATCH GATES
+==========================================================================================
+Targets: recall_minus1 > 0.15 AND QWK > 0.40
+shape: (1, 6)
+┌─────────────────┬────────┬──────────────┬─────────┬──────────────────┬───────────┐
+│ Model           ┆ QWK    ┆ RecallMinus1 ┆ PassQWK ┆ PassRecallMinus1 ┆ PassJoint │
+│ ---             ┆ ---    ┆ ---          ┆ ---     ┆ ---              ┆ ---       │
+│ str             ┆ f64    ┆ f64          ┆ bool    ┆ bool             ┆ bool      │
+╞═════════════════╪════════╪══════════════╪═════════╪══════════════════╪═══════════╡
+│ BalancedSoftmax ┆ 0.3648 ┆ 0.2563       ┆ false   ┆ true             ┆ false     │
+└─────────────────┴────────┴──────────────┴─────────┴──────────────────┴───────────┘
+
+NO JOINT PASS: no model met both thresholds.
+Best candidate by (PassQWK, RecallMinus1, QWK): BalancedSoftmax (QWK=0.3648, RecallMinus1=0.2563)
+
+Logged 1 experiments:
+  [CREATED] logs/experiments/runs/run_051_BalancedSoftmax.yaml  (run_051)

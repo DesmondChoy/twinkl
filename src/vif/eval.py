@@ -666,6 +666,54 @@ def ordinal_candidate_sort_key(candidate: dict) -> tuple[float, float, float, fl
     )
 
 
+def select_recall_window_candidate(
+    candidates: list[dict],
+    *,
+    qwk_window: float,
+) -> dict | None:
+    """Select max recall_-1 among eligible candidates near the best validation QWK."""
+    eligible = [
+        candidate
+        for candidate in candidates
+        if candidate.get("eligible")
+        and np.isfinite(float(candidate.get("qwk_mean", float("nan"))))
+    ]
+    if not eligible:
+        return None
+
+    best_qwk = max(float(candidate["qwk_mean"]) for candidate in eligible)
+    if not np.isfinite(best_qwk):
+        return None
+
+    threshold = best_qwk - float(qwk_window)
+    window_candidates = [
+        candidate
+        for candidate in eligible
+        if float(candidate.get("qwk_mean", float("nan"))) >= threshold
+    ]
+    if not window_candidates:
+        return None
+
+    def recall_window_sort_key(candidate: dict) -> tuple[float, float, float, float]:
+        return (
+            _metric_sort_value(
+                candidate.get("recall_minus1", float("nan")),
+                higher_is_better=True,
+            ),
+            _metric_sort_value(
+                candidate.get("hedging_mean", float("nan")),
+                higher_is_better=False,
+            ),
+            _metric_sort_value(
+                candidate.get("calibration_global", float("nan")),
+                higher_is_better=True,
+            ),
+            -float(candidate.get("epoch", float("inf"))),
+        )
+
+    return dict(max(window_candidates, key=recall_window_sort_key))
+
+
 def is_better_ordinal_candidate(candidate: dict, incumbent: dict | None) -> bool:
     """Return True when the candidate outranks the current incumbent."""
     if incumbent is None:

@@ -1345,6 +1345,108 @@ class TestOrdinalSelectionHelpers:
         assert selection["debug_fallback_used"] is False
         assert selection["selection_source"] == "fallback_best_finite_qwk"
 
+    def test_recall_window_selection_picks_higher_recall_inside_qwk_window(self):
+        from src.vif.eval import select_recall_window_candidate
+
+        candidates = [
+            {
+                "epoch": 0,
+                "qwk_mean": 0.50,
+                "recall_minus1": 0.20,
+                "hedging_mean": 0.60,
+                "calibration_global": 0.70,
+                "eligible": True,
+            },
+            {
+                "epoch": 1,
+                "qwk_mean": 0.49,
+                "recall_minus1": 0.80,
+                "hedging_mean": 0.65,
+                "calibration_global": 0.70,
+                "eligible": True,
+            },
+            {
+                "epoch": 2,
+                "qwk_mean": 0.47,
+                "recall_minus1": 0.95,
+                "hedging_mean": 0.50,
+                "calibration_global": 0.90,
+                "eligible": True,
+            },
+        ]
+
+        selected = select_recall_window_candidate(candidates, qwk_window=0.02)
+
+        assert selected["epoch"] == 1
+
+    def test_recall_window_selection_excludes_ineligible_candidates(self):
+        from src.vif.eval import select_recall_window_candidate
+
+        candidates = [
+            {
+                "epoch": 0,
+                "qwk_mean": 0.50,
+                "recall_minus1": 0.20,
+                "hedging_mean": 0.60,
+                "calibration_global": 0.70,
+                "eligible": True,
+            },
+            {
+                "epoch": 1,
+                "qwk_mean": 0.49,
+                "recall_minus1": 0.80,
+                "hedging_mean": 0.55,
+                "calibration_global": 0.90,
+                "eligible": False,
+            },
+        ]
+
+        selected = select_recall_window_candidate(candidates, qwk_window=0.02)
+
+        assert selected["epoch"] == 0
+
+    def test_recall_window_selection_tiebreaks_then_prefers_earlier_epoch(self):
+        from src.vif.eval import select_recall_window_candidate
+
+        candidates = [
+            {
+                "epoch": 0,
+                "qwk_mean": 0.50,
+                "recall_minus1": 0.80,
+                "hedging_mean": 0.60,
+                "calibration_global": 0.95,
+                "eligible": True,
+            },
+            {
+                "epoch": 1,
+                "qwk_mean": 0.49,
+                "recall_minus1": 0.80,
+                "hedging_mean": 0.55,
+                "calibration_global": 0.70,
+                "eligible": True,
+            },
+            {
+                "epoch": 2,
+                "qwk_mean": 0.49,
+                "recall_minus1": 0.80,
+                "hedging_mean": 0.55,
+                "calibration_global": 0.80,
+                "eligible": True,
+            },
+            {
+                "epoch": 3,
+                "qwk_mean": 0.49,
+                "recall_minus1": 0.80,
+                "hedging_mean": 0.55,
+                "calibration_global": 0.80,
+                "eligible": True,
+            },
+        ]
+
+        selected = select_recall_window_candidate(candidates, qwk_window=0.02)
+
+        assert selected["epoch"] == 2
+
 
 class TestOrdinalArtifactExport:
     """Tests for validation/test ordinal artifact export."""

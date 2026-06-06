@@ -1,0 +1,14 @@
+run_files:
+- logs/experiments/runs/run_051_BalancedSoftmax.yaml
+- logs/experiments/runs/run_052_BalancedSoftmax.yaml
+- logs/experiments/runs/run_053_BalancedSoftmax.yaml
+- logs/experiments/runs/run_054_BalancedSoftmax.yaml
+- logs/experiments/runs/run_055_BalancedSoftmax.yaml
+- logs/experiments/runs/run_056_BalancedSoftmax.yaml
+comparison_csv: logs/experiments/artifacts/recall_checkpoint_retention_twinkl_upb5_20260606/checkpoint_comparison.csv
+comparison_parquet: logs/experiments/artifacts/recall_checkpoint_retention_twinkl_upb5_20260606/checkpoint_comparison.parquet
+summary_csv: logs/experiments/artifacts/recall_checkpoint_retention_twinkl_upb5_20260606/policy_family_summary.csv
+summary_parquet: logs/experiments/artifacts/recall_checkpoint_retention_twinkl_upb5_20260606/policy_family_summary.parquet
+note: Generated from run_051-run_056 candidate_checkpoint_metrics.yaml artifacts;
+  run_051-run_053 are consensus-label diagnostics, run_054-run_056 are persisted-label
+  weighted reruns.

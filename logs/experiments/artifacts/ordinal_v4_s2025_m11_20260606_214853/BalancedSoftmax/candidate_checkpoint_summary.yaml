@@ -1,0 +1,28 @@
+- policy: recall_qwk_window_0.01
+  policy_type: recall_qwk_window
+  qwk_window: 0.01
+  candidate:
+    epoch: 20
+    val_loss: 0.4739700236490795
+    qwk_mean: 0.3997210697088435
+    recall_minus1: 0.4914561681521155
+    calibration_global: 0.6469027971215614
+    hedging_mean: 0.594930875576037
+    qwk_nan_dims_count: 0
+    eligible: true
+    ineligible_reasons: []
+  checkpoint_path: logs/experiments/artifacts/ordinal_v4_s2025_m11_20260606_214853/BalancedSoftmax/candidate_recall_qwk_window_0_01_checkpoint.pt
+- policy: recall_qwk_window_0.02
+  policy_type: recall_qwk_window
+  qwk_window: 0.02
+  candidate:
+    epoch: 31
+    val_loss: 0.4992667245013373
+    qwk_mean: 0.3854599643539854
+    recall_minus1: 0.5358266916600865
+    calibration_global: 0.7061864026581552
+    hedging_mean: 0.6055299539170507
+    qwk_nan_dims_count: 0
+    eligible: true
+    ineligible_reasons: []
+  checkpoint_path: logs/experiments/artifacts/ordinal_v4_s2025_m11_20260606_214853/BalancedSoftmax/candidate_recall_qwk_window_0_02_checkpoint.pt

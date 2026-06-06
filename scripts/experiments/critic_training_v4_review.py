@@ -132,6 +132,7 @@ CONFIG = {
     # Optional metadata for scripted runs
     "experiment_group": None,
     "skip_experiment_logging": False,
+    "candidate_checkpoint_policies": [],
 }
 
 config_override_path = os.environ.get("TWINKL_VIF_NOTEBOOK_CONFIG")
@@ -164,6 +165,9 @@ CONFIG["model_seed"] = int(CONFIG["model_seed"])
 CONFIG["models_to_train"] = list(CONFIG["models_to_train"])
 CONFIG["model_overrides"] = dict(CONFIG.get("model_overrides", {}))
 CONFIG["selection_policy"] = dict(CONFIG.get("selection_policy", {}))
+CONFIG["candidate_checkpoint_policies"] = list(
+    CONFIG.get("candidate_checkpoint_policies", [])
+)
 
 print("=" * 50)
 print("CONFIGURATION")
@@ -204,6 +208,7 @@ for key in [
     "use_lr_finder",
     "experiment_group",
     "skip_experiment_logging",
+    "candidate_checkpoint_policies",
 ]:
     value = CONFIG.get(key)
     display = json.dumps(value) if key in {"text_prefix", "prompt_name", "prompt"} else str(value)
@@ -303,6 +308,7 @@ from src.vif.eval import (
     format_results_table,
     is_better_ordinal_candidate,
     ordinal_selection_policy_summary,
+    select_recall_window_candidate,
 )
 from src.vif.lr_finder import run_lr_finder
 from src.vif.class_balance import compute_long_tail_statistics_from_dataframe
@@ -773,6 +779,13 @@ def _clone_model_state(model):
     }
 
 
+def _safe_artifact_stem(value):
+    return "".join(
+        char if char.isalnum() or char in {"-", "_"} else "_"
+        for char in str(value)
+    )
+
+
 def _fmt_metric(value, digits=3):
     if not np.isfinite(value):
         return "N/A"
@@ -809,6 +822,32 @@ def _save_selected_checkpoint(
     output_dir,
     filename="selected_checkpoint.pt",
 ):
+    return _save_checkpoint_from_state(
+        model,
+        _clone_model_state(model),
+        selected_candidate,
+        selection_source,
+        selection_policy,
+        promotion_eligible,
+        debug_fallback_used,
+        config,
+        output_dir,
+        filename=filename,
+    )
+
+
+def _save_checkpoint_from_state(
+    model,
+    model_state,
+    selected_candidate,
+    selection_source,
+    selection_policy,
+    promotion_eligible,
+    debug_fallback_used,
+    config,
+    output_dir,
+    filename,
+):
     checkpoint_path = output_dir / filename
     checkpoint = {
         "epoch": int(selected_candidate["epoch"]),
@@ -818,12 +857,104 @@ def _save_selected_checkpoint(
         "debug_fallback_used": debug_fallback_used,
         "selection_candidate": selected_candidate,
         "selection_policy": selection_policy,
-        "model_state_dict": _clone_model_state(model),
+        "model_state_dict": model_state,
         "model_config": model.get_config(),
         "training_config": config,
     }
     torch.save(checkpoint, checkpoint_path)
     return checkpoint_path
+
+
+def _select_candidate_checkpoint_records(candidate_state_trace, policies):
+    records = []
+    candidates = [entry["candidate"] for entry in candidate_state_trace]
+    state_by_epoch = {
+        int(entry["candidate"]["epoch"]): entry["model_state"]
+        for entry in candidate_state_trace
+    }
+
+    for policy in policies:
+        policy_name = policy["name"]
+        policy_type = policy.get("type", "recall_qwk_window")
+        if policy_type != "recall_qwk_window":
+            raise ValueError(f"Unsupported candidate checkpoint policy: {policy}")
+
+        selected = select_recall_window_candidate(
+            candidates,
+            qwk_window=float(policy["qwk_window"]),
+        )
+        if selected is None:
+            records.append(
+                {
+                    "policy": policy_name,
+                    "policy_type": policy_type,
+                    "qwk_window": float(policy["qwk_window"]),
+                    "candidate": None,
+                    "model_state": None,
+                    "checkpoint_path": None,
+                }
+            )
+            continue
+
+        selected_epoch = int(selected["epoch"])
+        records.append(
+            {
+                "policy": policy_name,
+                "policy_type": policy_type,
+                "qwk_window": float(policy["qwk_window"]),
+                "candidate": dict(selected),
+                "model_state": state_by_epoch[selected_epoch],
+                "checkpoint_path": None,
+            }
+        )
+
+    return records
+
+
+def _write_candidate_checkpoint_summary(output_path, records):
+    payload = []
+    for record in records:
+        payload.append(
+            {
+                key: value
+                for key, value in record.items()
+                if key != "model_state"
+            }
+        )
+    output_path.write_text(
+        yaml.safe_dump(payload, sort_keys=False),
+        encoding="utf-8",
+    )
+    return output_path
+
+
+def _compact_eval_metrics(eval_result):
+    calibration = eval_result.get("calibration", {})
+    per_dim = eval_result.get("qwk_per_dim", {})
+    return {
+        "qwk_mean": float(eval_result.get("qwk_mean", float("nan"))),
+        "recall_minus1": float(eval_result.get("recall_minus1", float("nan"))),
+        "minority_recall_mean": float(
+            eval_result.get("minority_recall_mean", float("nan"))
+        ),
+        "hedging_mean": float(eval_result.get("hedging_mean", float("nan"))),
+        "calibration_global": float(
+            calibration.get("error_uncertainty_correlation", float("nan"))
+        ),
+        "mae_mean": float(eval_result.get("mae_mean", float("nan"))),
+        "accuracy_mean": float(eval_result.get("accuracy_mean", float("nan"))),
+        "hedonism_qwk": float(per_dim.get("hedonism", float("nan"))),
+        "security_qwk": float(per_dim.get("security", float("nan"))),
+        "stimulation_qwk": float(per_dim.get("stimulation", float("nan"))),
+    }
+
+
+def _reset_evaluation_rng(config):
+    seed = int(config["model_seed"]) + 100_003
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
 
 
 def _resolve_dimension_weighting_config(model_name, config):
@@ -916,6 +1047,9 @@ def train_model(name, model_cfg, train_loader, val_loader, config, device, class
             dtype=torch.float32,
         )
     selection_policy = ordinal_selection_policy_summary(config.get("selection_policy"))
+    candidate_checkpoint_policies = list(
+        config.get("candidate_checkpoint_policies") or []
+    )
     configured_lr = config["learning_rate"]
     learning_rate_policy = config.get("learning_rate_policy")
 
@@ -1036,6 +1170,7 @@ def train_model(name, model_cfg, train_loader, val_loader, config, device, class
     fallback_candidate = None
     fallback_model_state = None
     candidate_trace = []
+    candidate_state_trace = []
     dimension_weight_epoch_diagnostics = []
     patience_counter = 0
 
@@ -1140,6 +1275,13 @@ def train_model(name, model_cfg, train_loader, val_loader, config, device, class
         history["qwk_nan_dims_count"].append(candidate["qwk_nan_dims_count"])
 
         current_state = _clone_model_state(model)
+        if candidate_checkpoint_policies:
+            candidate_state_trace.append(
+                {
+                    "candidate": dict(candidate),
+                    "model_state": current_state,
+                }
+            )
         selected_this_epoch = False
         if candidate["eligible"] and is_better_ordinal_candidate(candidate, best_candidate):
             best_candidate = dict(candidate)
@@ -1251,6 +1393,7 @@ def train_model(name, model_cfg, train_loader, val_loader, config, device, class
             "debug_fallback_used": debug_fallback_used,
             "artifact_paths": artifact_paths,
             "artifact_dir": str(artifact_dir),
+            "run_config": dict(config),
         }
 
     selected_model_state = best_model_state if best_candidate is not None else fallback_model_state
@@ -1273,6 +1416,50 @@ def train_model(name, model_cfg, train_loader, val_loader, config, device, class
     )
     artifact_paths["checkpoint"] = str(checkpoint_path)
 
+    candidate_checkpoint_records = []
+    if candidate_checkpoint_policies:
+        candidate_checkpoint_records = _select_candidate_checkpoint_records(
+            candidate_state_trace,
+            candidate_checkpoint_policies,
+        )
+        candidate_checkpoint_paths = {}
+        for record in candidate_checkpoint_records:
+            candidate = record["candidate"]
+            if candidate is None:
+                continue
+            policy_stem = _safe_artifact_stem(record["policy"])
+            candidate_path = _save_checkpoint_from_state(
+                model,
+                record["model_state"],
+                candidate,
+                record["policy"],
+                {
+                    "name": record["policy"],
+                    "type": record["policy_type"],
+                    "qwk_window": record["qwk_window"],
+                    "tie_breakers": [
+                        "higher recall_minus1",
+                        "lower hedging_mean",
+                        "higher calibration_global",
+                        "earlier epoch",
+                    ],
+                },
+                promotion_eligible,
+                debug_fallback_used,
+                config,
+                artifact_dir,
+                filename=f"candidate_{policy_stem}_checkpoint.pt",
+            )
+            record["checkpoint_path"] = str(candidate_path)
+            candidate_checkpoint_paths[record["policy"]] = str(candidate_path)
+
+        summary_path = _write_candidate_checkpoint_summary(
+            artifact_dir / "candidate_checkpoint_summary.yaml",
+            candidate_checkpoint_records,
+        )
+        artifact_paths["candidate_checkpoints"] = candidate_checkpoint_paths
+        artifact_paths["candidate_checkpoint_summary"] = str(summary_path)
+
     return {
         "model": model,
         "history": history,
@@ -1292,6 +1479,8 @@ def train_model(name, model_cfg, train_loader, val_loader, config, device, class
         "debug_fallback_used": debug_fallback_used,
         "artifact_paths": artifact_paths,
         "artifact_dir": str(artifact_dir),
+        "candidate_checkpoint_records": candidate_checkpoint_records,
+        "run_config": dict(config),
     }
 
 
@@ -1522,6 +1711,7 @@ model_health = {}
 
 for name, result in trained_models.items():
     model = result["model"]
+    run_config = result.get("run_config", CONFIG)
     artifact_dir = Path(result["artifact_dir"])
     artifact_paths = dict(result.get("artifact_paths", {}))
     artifact_prefix = "selected" if result.get("promotion_eligible", True) else "debug_fallback"
@@ -1530,6 +1720,7 @@ for name, result in trained_models.items():
     print(f"Evaluating {name} with MC Dropout uncertainty...")
     print(f"{'=' * 70}")
 
+    _reset_evaluation_rng(run_config)
     val_eval_result = evaluate_with_uncertainty(
         model,
         val_loader,
@@ -1538,6 +1729,7 @@ for name, result in trained_models.items():
         include_ordinal_metrics=True,
         include_raw_outputs=True,
     )
+    _reset_evaluation_rng(run_config)
     eval_result = evaluate_with_uncertainty(
         model,
         test_loader,
@@ -1570,13 +1762,109 @@ for name, result in trained_models.items():
             "test_outputs": str(test_output_path),
         }
     )
-    result["artifact_paths"] = artifact_paths
 
     print(f"\n{format_results_table(eval_result)}")
     artifact_role = "selected-checkpoint" if result.get("promotion_eligible", True) else "debug-only"
     print(
         f"Exported {artifact_role} outputs to {val_output_path} and {test_output_path}"
     )
+
+    candidate_records = result.get("candidate_checkpoint_records") or []
+    candidate_checkpoint_metrics = []
+    candidate_validation_outputs = {}
+    candidate_test_outputs = {}
+    if candidate_records:
+        selected_model_state = _clone_model_state(model)
+        for record in candidate_records:
+            policy_name = record["policy"]
+            policy_stem = _safe_artifact_stem(policy_name)
+            candidate = record.get("candidate")
+            if candidate is None or record.get("model_state") is None:
+                candidate_checkpoint_metrics.append(
+                    {
+                        "policy": policy_name,
+                        "qwk_window": record.get("qwk_window"),
+                        "candidate": None,
+                        "checkpoint_path": None,
+                        "validation": None,
+                        "test": None,
+                    }
+                )
+                continue
+
+            model.load_state_dict(record["model_state"])
+            model.to(device)
+            _reset_evaluation_rng(run_config)
+            candidate_val_eval = evaluate_with_uncertainty(
+                model,
+                val_loader,
+                n_mc_samples=CONFIG["mc_dropout_samples"],
+                device=device,
+                include_ordinal_metrics=True,
+                include_raw_outputs=True,
+            )
+            _reset_evaluation_rng(run_config)
+            candidate_test_eval = evaluate_with_uncertainty(
+                model,
+                test_loader,
+                n_mc_samples=CONFIG["mc_dropout_samples"],
+                device=device,
+                include_ordinal_metrics=True,
+                include_raw_outputs=True,
+            )
+            candidate_val_output_path = (
+                artifact_dir / f"candidate_{policy_stem}_validation_outputs.parquet"
+            )
+            candidate_test_output_path = (
+                artifact_dir / f"candidate_{policy_stem}_test_outputs.parquet"
+            )
+            export_ordinal_output_artifact(
+                candidate_val_eval,
+                val_loader,
+                candidate_val_output_path,
+                split="val",
+                model_name=name,
+            )
+            export_ordinal_output_artifact(
+                candidate_test_eval,
+                test_loader,
+                candidate_test_output_path,
+                split="test",
+                model_name=name,
+            )
+            candidate_validation_outputs[policy_name] = str(candidate_val_output_path)
+            candidate_test_outputs[policy_name] = str(candidate_test_output_path)
+            candidate_checkpoint_metrics.append(
+                {
+                    "policy": policy_name,
+                    "qwk_window": record.get("qwk_window"),
+                    "candidate": candidate,
+                    "checkpoint_path": record.get("checkpoint_path"),
+                    "validation_outputs": str(candidate_val_output_path),
+                    "test_outputs": str(candidate_test_output_path),
+                    "validation": _compact_eval_metrics(candidate_val_eval),
+                    "test": _compact_eval_metrics(candidate_test_eval),
+                }
+            )
+            print(
+                f"Candidate {policy_name}: epoch {int(candidate['epoch']) + 1}; "
+                f"test qwk={_fmt_metric(candidate_test_eval['qwk_mean'])}; "
+                f"test recall_-1={_fmt_metric(candidate_test_eval['recall_minus1'])}"
+            )
+
+        model.load_state_dict(selected_model_state)
+        model.to(device)
+        candidate_metrics_path = artifact_dir / "candidate_checkpoint_metrics.yaml"
+        candidate_metrics_path.write_text(
+            yaml.safe_dump(candidate_checkpoint_metrics, sort_keys=False),
+            encoding="utf-8",
+        )
+        artifact_paths["candidate_validation_outputs"] = candidate_validation_outputs
+        artifact_paths["candidate_test_outputs"] = candidate_test_outputs
+        artifact_paths["candidate_checkpoint_metrics"] = str(candidate_metrics_path)
+        result["candidate_checkpoint_metrics"] = candidate_checkpoint_metrics
+
+    result["artifact_paths"] = artifact_paths
 
     preds = eval_result["predictions"]
     qwk_mean = float(eval_result.get("qwk_mean", float("nan")))
