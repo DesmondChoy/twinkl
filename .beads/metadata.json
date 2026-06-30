@@ -1,0 +1,7 @@
+{
+  "database": "dolt",
+  "backend": "dolt",
+  "dolt_mode": "embedded",
+  "dolt_database": "twinkl",
+  "project_id": "9beed560-1b6d-4387-b00c-11a243f3a9f4"
+}
