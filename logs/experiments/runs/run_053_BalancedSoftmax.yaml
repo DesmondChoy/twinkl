@@ -19,7 +19,9 @@ provenance:
       training.seed:
         from: 22
         to: 33
-  rationale: ''
+  rationale: 'Seed 33 sibling of the twinkl-upb5 consensus-label retention rerun (training.seed
+    22 -> 33), completing the 3-seed retention matrix over the run_048-run_050 consensus
+    diagnostic family.'
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -229,7 +231,10 @@ per_dimension:
     activation_precision: 0.55
     activation_recall: 0.9167
     activation_f1: 0.6875
-observations: ''
+observations: 'All three policies converge on the same epoch-14 checkpoint (test qwk_mean
+  0.403, recall_-1 0.323, minority recall 0.469, hedging 0.617): the default QWK-first
+  selection is already recall-friendly for this seed, so the candidate windows add nothing.
+  Strongest consensus-family seed on QWK; reproduces run_050 within rerun noise.'
 circumplex:
   source: probabilities
   summary:

@@ -22,7 +22,10 @@ provenance:
       training.dimension_weighting_enabled:
         from: false
         to: true
-  rationale: ''
+  rationale: 'twinkl-upb5 retention rerun of the weighted persisted-label reference branch
+    run_034 (config delta re-enables training.dimension_weighting_enabled, seed back to
+    11): tests whether recall-aware candidate selection should become the default checkpoint
+    policy on the active label regime.'
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -232,7 +235,12 @@ per_dimension:
     activation_precision: 0.7742
     activation_recall: 0.9231
     activation_f1: 0.8421
-observations: ''
+observations: 'Default QWK-first selection (epoch 27) reproduces run_034: test qwk_mean
+  0.344, recall_-1 0.281, hedging 0.627. The 0.01-window candidate (epoch 21) is a tempting
+  seed-level trade (qwk_mean 0.332, recall_-1 0.360, hedging 0.611), but the 0.02 window
+  is strictly worse (qwk_mean 0.310, recall_-1 0.275). At the family level the persisted-label
+  branch does not support recall-aware selection as default policy; keep retention as
+  hygiene only.'
 circumplex:
   source: probabilities
   summary:

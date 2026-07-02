@@ -19,7 +19,9 @@ provenance:
       training.seed:
         from: 11
         to: 22
-  rationale: ''
+  rationale: 'Seed 22 sibling of the twinkl-upb5 weighted persisted-label retention rerun
+    (training.seed 11 -> 22), reproducing run_035 with 0.01/0.02 recall-aware candidate
+    checkpoints retained.'
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -229,7 +231,10 @@ per_dimension:
     activation_precision: 0.6944
     activation_recall: 0.9615
     activation_f1: 0.8065
-observations: ''
+observations: 'All three policies converge on the same epoch-20 checkpoint (test qwk_mean
+  0.329, recall_-1 0.376, minority recall 0.448, hedging 0.579): the recall windows never
+  move this seed off its default checkpoint. Tracks run_035 within rerun noise; lowest-hedging
+  seed of the weighted persisted family.'
 circumplex:
   source: probabilities
   summary:

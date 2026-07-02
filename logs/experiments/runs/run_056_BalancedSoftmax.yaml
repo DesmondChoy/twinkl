@@ -19,7 +19,9 @@ provenance:
       training.seed:
         from: 22
         to: 33
-  rationale: ''
+  rationale: 'Seed 33 sibling of the twinkl-upb5 weighted persisted-label retention rerun
+    (training.seed 22 -> 33), reproducing run_036 (the strongest weighted seed) with recall-aware
+    candidate checkpoints retained.'
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -229,7 +231,11 @@ per_dimension:
     activation_precision: 0.6857
     activation_recall: 0.9231
     activation_f1: 0.7869
-observations: ''
+observations: 'Default QWK-first selection (epoch 26) keeps the best package: test qwk_mean
+  0.367, recall_-1 0.391, minority recall 0.485, hedging 0.597. Both recall windows pick
+  epoch 30 and regress (qwk_mean 0.346, recall_-1 0.350, hedging 0.636) — the clearest
+  per-seed evidence against recall-aware selection on the persisted branch. Family conclusion:
+  keep candidate retention, keep QWK-first default selection.'
 circumplex:
   source: probabilities
   summary:

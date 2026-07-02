@@ -79,7 +79,10 @@ provenance:
       training.seed:
         from: 33
         to: 11
-  rationale: ''
+  rationale: 'twinkl-upb5 exact rerun of the run_048 consensus-label diagnostic config
+    (same frozen split, consensus labels, seed 11, LR override, encoder) with recall-aware
+    candidate checkpoint retention enabled, so the alternate epochs flagged by twinkl-t2r0
+    are serialized and scorable on the fixed corrected test split.'
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -289,7 +292,13 @@ per_dimension:
     activation_precision: 0.7097
     activation_recall: 0.9167
     activation_f1: 0.8
-observations: ''
+observations: 'Default QWK-first selection reproduces run_048 within rerun noise (test
+  qwk_mean 0.365, recall_-1 0.256, hedging 0.656, calibration 0.767; epoch 27). The
+  retained 0.02-window candidate at epoch 14 is materially stronger on this consensus
+  branch: qwk_mean 0.393, recall_-1 0.311, minority recall 0.427, hedging 0.650. The
+  0.01 window is a no-op (same epoch as default). Supports keeping candidate-checkpoint
+  retention as hygiene; the consensus regime stays diagnostic-only and does not change
+  the persisted-label frontier.'
 circumplex:
   source: probabilities
   summary:

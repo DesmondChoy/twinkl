@@ -19,6 +19,8 @@
 
 > **Active recommendation (2026-03-19):** `run_019`-`run_021` remain the default corrected-split frontier family. The new two-stage reformulation family `run_045`-`run_047` reached comparable median holdout `qwk_mean` (`0.360` vs `0.362`) and the best calibration on the current board (`0.743`), but it gave back too much `recall_-1` (`0.266`) and hedging (`0.708`). `run_034`-`run_036` remain the best tail-sensitive reference branch, and `run_042`-`run_044` remain the strongest encoder-swap challenger.
 >
+> **Latest strategic review (2026-07-02):** [`reports/experiment_review_2026-07-02_strategy.md`](reports/experiment_review_2026-07-02_strategy.md) keeps the frontier unchanged and recommends shifting the primary evaluation from entry-level QWK to decision-level drift-trigger metrics plus `recall_-1` at a precision floor, gated by a zero-shot LLM critic baseline and the human-agreement ceiling (Fleiss κ 0.56 aggregate).
+>
 > **Latest recall-aware checkpoint rerun:** [`reports/experiment_review_2026-06-06_twinkl_upb5.md`](reports/experiment_review_2026-06-06_twinkl_upb5.md) does **not** change the persisted-label frontier. `run_051`-`run_056` reran the weighted persisted-label and consensus-label configs with `0.01` / `0.02` recall-aware candidate checkpoint retention. The consensus diagnostic branch likes the wider `0.02` window, but the active persisted-label branch does not: median QWK drops, `recall_-1` is flat-to-worse, minority recall gives back ground, and hedging worsens under the wider window. Keep candidate-checkpoint retention as experiment hygiene; do not promote recall-aware checkpoint selection as the default policy.
 >
 > **Previous recall-aware checkpoint replay:** [`reports/experiment_review_2026-06-06_twinkl_t2r0.md`](reports/experiment_review_2026-06-06_twinkl_t2r0.md) is now superseded by the exact rerun above. It correctly found promising alternate validation epochs, but those checkpoints were not serialized in the original artifacts, so it was only a lead, not promotion evidence.
@@ -209,6 +211,35 @@
 > **Contributor note:** Keep this section in **newest-first** chronological order (most recent date at top).
 
 ## Findings
+
+### 2026-07-02 — Strategic review: the metric regime, not the model, is the active bottleneck
+
+Full 56-run/120-config review after the two-month break. No frontier change:
+`run_019`-`run_021` BalancedSoftmax remains the default and `run_034`-`run_036`
+the tail-sensitive reference.
+
+**1. New human-ceiling cross-reference.** Per-dimension model QWK vs the
+115-entry inter-annotator benchmark shows `self_direction`, `conformity`, and
+`tradition` already at or above human Fleiss κ, while `hedonism` (model 0.11 vs
+human 0.64), `stimulation`, and `power` carry the only large defensible gaps.
+Aggregate human-human agreement is κ 0.56, so the QWK ≥ 0.40 aggregate
+promotion floor is partly chasing dimensions whose human ceiling is ~0.45.
+
+**2. Metric strategy should move to the decision level.** QWK has documented
+imbalance pathologies (asymmetric-marginal reward, all-zero-column optima ==
+hedging), and the product only acts on confidence-gated weekly crash/rut
+triggers (PRD eval #3: ≥8/10 crisis-week hit rate). Recommended primary:
+trigger-level hit-rate/false-alarm benchmark plus entry-level `recall_-1` at a
+precision floor; QWK becomes diagnostic.
+
+**3. Two bounding experiments before more training.** A zero-shot/few-shot LLM
+critic baseline on the frozen test split under the student-visible context
+contract (ValueEval'24: reasoning LLMs reach 0.62-0.64 F1, near-human value
+selection), and a data-scaling curve (25/50/75/100% of train) to decide whether
+any further synthetic generation is justified. Then proceed with `twinkl-a30f`
+→ `twinkl-j0ck` as planned; soft vote-distribution training is strongly
+corroborated by the disagreement-learning literature. Full details:
+[`reports/experiment_review_2026-07-02_strategy.md`](reports/experiment_review_2026-07-02_strategy.md).
 
 ### 2026-06-06 — Recall-aware checkpoint retention is worth keeping; recall-aware selection is not (`twinkl-upb5`)
 

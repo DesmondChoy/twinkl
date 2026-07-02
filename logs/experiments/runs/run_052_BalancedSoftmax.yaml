@@ -19,7 +19,9 @@ provenance:
       training.seed:
         from: 11
         to: 22
-  rationale: ''
+  rationale: 'Seed 22 sibling of the twinkl-upb5 consensus-label retention rerun (config
+    delta is only training.seed 11 -> 22); reruns run_049 with 0.01/0.02 recall-aware
+    candidate checkpoints retained and scored on the fixed corrected test split.'
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -229,7 +231,11 @@ per_dimension:
     activation_precision: 0.5
     activation_recall: 0.9167
     activation_f1: 0.6471
-observations: ''
+observations: 'Default selection lands at epoch 22 with test qwk_mean 0.374, recall_-1
+  0.257, hedging 0.695, matching run_049. The 0.02-window candidate (epoch 14) trades
+  qwk_mean 0.374 -> 0.352 for recall_-1 0.257 -> 0.380 and minority recall 0.397 ->
+  0.445, the strongest tail lift of the three consensus seeds. The 0.01 window is a
+  no-op. Consensus regime remains diagnostic-only.'
 circumplex:
   source: probabilities
   summary:
