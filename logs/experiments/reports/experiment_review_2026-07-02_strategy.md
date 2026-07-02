@@ -169,9 +169,10 @@ miscalibration.
    shortcut features (model above human agreement). Optionally distill the
    unused `rationales_json` as an auxiliary target.
 
-Hygiene: recover the stranded lct3 report from `git stash@{0}` before it is
-lost; wire BWS graded weights (twinkl-1m8) so the state matches the PRD
-contract before decision-level evaluation.
+Hygiene: the stranded lct3 policy-hunt report is now recovered at
+[`reports/experiment_review_2026-05-28_twinkl_lct3.md`](experiment_review_2026-05-28_twinkl_lct3.md);
+wire BWS graded weights (twinkl-1m8) so the state matches the PRD contract
+before decision-level evaluation.
 
 ## 9. Summary Verdict
 

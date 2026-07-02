@@ -1,0 +1,171 @@
+selected_policy: router[qwk;self_direction=qwen,stimulation=dimweight,hedonism=twostage,achievement=twostage,power=qwen,security=twostage,conformity=dimweight,tradition=twostage,benevolence=twostage,universalism=qwen]
+policy:
+  kind: dimension_router
+  payload:
+    objective: qwk
+    dimension_family:
+      self_direction: qwen
+      stimulation: dimweight
+      hedonism: twostage
+      achievement: twostage
+      power: qwen
+      security: twostage
+      conformity: dimweight
+      tradition: twostage
+      benevolence: twostage
+      universalism: qwen
+promotion_floors:
+  qwk_mean: 0.4
+  recall_minus1: 0.4
+  minority_recall_mean: 0.48
+  hedging_mean: 0.58
+  calibration_global: 0.72
+validation_summary:
+  policy: router[qwk;self_direction=qwen,stimulation=dimweight,hedonism=twostage,achievement=twostage,power=qwen,security=twostage,conformity=dimweight,tradition=twostage,benevolence=twostage,universalism=qwen]
+  split: validation
+  qwk_mean: 0.4636445327101509
+  recall_minus1: 0.42503728534860885
+  minority_recall_mean: 0.49419924314024677
+  hedging_mean: 0.6714285714285714
+  calibration_global: 0.7618608200448119
+  accuracy_mean: 0.7806451612903227
+  mae_mean: 0.2664331796325846
+  decision_neutral_rate: 0.7576036866359447
+  hedonism_qwk: 0.43113530953821333
+  hedonism_active_recall: 0.3761904761904762
+  security_qwk: 0.49436107745363034
+  security_active_recall: 0.4817671809256662
+  stimulation_qwk: 0.5497500707346978
+  stimulation_active_recall: 0.7013888888888888
+  qwk_floor: true
+  recall_minus1_floor: true
+  minority_recall_floor: true
+  hedging_floor: false
+  calibration_floor: true
+test_summary:
+  policy: router[qwk;self_direction=qwen,stimulation=dimweight,hedonism=twostage,achievement=twostage,power=qwen,security=twostage,conformity=dimweight,tradition=twostage,benevolence=twostage,universalism=qwen]
+  split: test
+  qwk_mean: 0.36494426036023764
+  recall_minus1: 0.24364130434782605
+  minority_recall_mean: 0.392609274981629
+  hedging_mean: 0.6764705882352942
+  calibration_global: 0.718062986243913
+  accuracy_mean: 0.7647058823529412
+  mae_mean: 0.27822624406360125
+  decision_neutral_rate: 0.7542986425339366
+  hedonism_qwk: 0.24247391952309982
+  hedonism_active_recall: 0.27391304347826084
+  security_qwk: 0.2764918729538798
+  security_active_recall: 0.26691729323308266
+  stimulation_qwk: 0.15174945764031822
+  stimulation_active_recall: 0.44047619047619047
+  qwk_floor: false
+  recall_minus1_floor: false
+  minority_recall_floor: false
+  hedging_floor: false
+  calibration_floor: false
+baseline_validation_summary:
+  policy: ensemble[incumbent=1.00;temp=1.00]
+  split: validation
+  qwk_mean: 0.40410459172524443
+  recall_minus1: 0.4294314235320547
+  minority_recall_mean: 0.49829261105876643
+  hedging_mean: 0.5903225806451612
+  calibration_global: 0.7040342213338711
+  accuracy_mean: 0.7474654377880184
+  mae_mean: 0.31724423966821164
+  decision_neutral_rate: 0.7064516129032258
+  hedonism_qwk: 0.3641336198476264
+  hedonism_active_recall: 0.430952380952381
+  security_qwk: 0.47639426360118364
+  security_active_recall: 0.5518934081346424
+  stimulation_qwk: 0.4816420419357692
+  stimulation_active_recall: 0.7013888888888888
+  qwk_floor: true
+  recall_minus1_floor: true
+  minority_recall_floor: true
+  hedging_floor: false
+  calibration_floor: false
+baseline_test_summary:
+  policy: ensemble[incumbent=1.00;temp=1.00]
+  split: test
+  qwk_mean: 0.36191667125839005
+  recall_minus1: 0.3132375776397515
+  minority_recall_mean: 0.4480285597633995
+  hedging_mean: 0.6212669683257919
+  calibration_global: 0.7134396413232043
+  accuracy_mean: 0.7533936651583711
+  mae_mean: 0.30421719427191024
+  decision_neutral_rate: 0.7221719457013575
+  hedonism_qwk: 0.24707004633415108
+  hedonism_active_recall: 0.28405797101449276
+  security_qwk: 0.29727956392267696
+  security_active_recall: 0.34210526315789475
+  stimulation_qwk: 0.16122665856991036
+  stimulation_active_recall: 0.36309523809523814
+  qwk_floor: false
+  recall_minus1_floor: false
+  minority_recall_floor: false
+  hedging_floor: false
+  calibration_floor: false
+validation_oracle_summary:
+  policy: validation_oracle_per_cell
+  split: validation
+  qwk_mean: 0.768796431542549
+  recall_minus1: 0.6851377848282144
+  minority_recall_mean: 0.7297769022391942
+  hedging_mean: 0.7884792626728111
+  calibration_global: 0.08540036160071827
+  accuracy_mean: 0.9129032258064516
+  mae_mean: 0.09170506912442397
+  decision_neutral_rate: 0.7884792626728111
+  hedonism_qwk: 0.6717509139039455
+  hedonism_active_recall: 0.5666666666666667
+  security_qwk: 0.7685744756487736
+  security_active_recall: 0.7517531556802244
+  stimulation_qwk: 0.8484213467449008
+  stimulation_active_recall: 0.8819444444444444
+  qwk_floor: true
+  recall_minus1_floor: true
+  minority_recall_floor: true
+  hedging_floor: false
+  calibration_floor: false
+hard_guardrail_validation:
+  hard_qwk_deltas:
+    hedonism: 0.06700168969058695
+    security: 0.017966813852446695
+    stimulation: 0.06810802879892863
+  hard_improvement_deltas:
+    hedonism: 0.06700168969058695
+    security: 0.017966813852446695
+    stimulation: 0.06810802879892863
+  hard_no_material_regression: true
+  hard_has_required_gain: true
+hard_guardrail_test:
+  hard_qwk_deltas:
+    hedonism: -0.00459612681105126
+    security: -0.02078769096879718
+    stimulation: -0.009477200929592144
+  hard_improvement_deltas:
+    hedonism: -0.00459612681105126
+    security: -0.02078769096879718
+    stimulation: 0.07738095238095233
+  hard_no_material_regression: false
+  hard_has_required_gain: true
+run_groups:
+  incumbent:
+    11: logs/experiments/runs/run_019_BalancedSoftmax.yaml
+    22: logs/experiments/runs/run_020_BalancedSoftmax.yaml
+    33: logs/experiments/runs/run_021_BalancedSoftmax.yaml
+  dimweight:
+    11: logs/experiments/runs/run_034_BalancedSoftmax.yaml
+    22: logs/experiments/runs/run_035_BalancedSoftmax.yaml
+    33: logs/experiments/runs/run_036_BalancedSoftmax.yaml
+  qwen:
+    11: logs/experiments/runs/run_042_BalancedSoftmax.yaml
+    22: logs/experiments/runs/run_043_BalancedSoftmax.yaml
+    33: logs/experiments/runs/run_044_BalancedSoftmax.yaml
+  twostage:
+    11: logs/experiments/runs/run_045_TwoStageBalancedSoftmax.yaml
+    22: logs/experiments/runs/run_046_TwoStageBalancedSoftmax.yaml
+    33: logs/experiments/runs/run_047_TwoStageBalancedSoftmax.yaml
