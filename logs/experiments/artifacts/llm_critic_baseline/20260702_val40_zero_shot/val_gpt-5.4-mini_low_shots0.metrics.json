@@ -1,0 +1,135 @@
+{
+  "accuracy_mean": 0.8282051282051281,
+  "accuracy_per_dim": {
+    "achievement": 0.7948717948717948,
+    "benevolence": 0.7692307692307693,
+    "conformity": 0.7948717948717948,
+    "hedonism": 0.8717948717948718,
+    "power": 0.8974358974358975,
+    "security": 0.7435897435897436,
+    "self_direction": 0.7435897435897436,
+    "stimulation": 0.9487179487179487,
+    "tradition": 0.7435897435897436,
+    "universalism": 0.9743589743589743
+  },
+  "hedging_mean": 0.8461538461538461,
+  "hedging_per_dim": {
+    "achievement": 0.7692307692307693,
+    "benevolence": 0.9230769230769231,
+    "conformity": 0.8461538461538461,
+    "hedonism": 0.8461538461538461,
+    "power": 0.8717948717948718,
+    "security": 0.8205128205128205,
+    "self_direction": 0.8974358974358975,
+    "stimulation": 0.8974358974358975,
+    "tradition": 0.7435897435897436,
+    "universalism": 0.8461538461538461
+  },
+  "latency_seconds": {
+    "max": 5.892999958014116,
+    "p50": 1.8596624580095522,
+    "p90": 3.127760916820262,
+    "p95": 3.7393294250185165
+  },
+  "mae_mean": 0.17692308276891708,
+  "mae_per_dim": {
+    "achievement": 0.20512820780277252,
+    "benevolence": 0.23076923191547394,
+    "conformity": 0.20512820780277252,
+    "hedonism": 0.1538461595773697,
+    "power": 0.10256410390138626,
+    "security": 0.25641027092933655,
+    "self_direction": 0.25641027092933655,
+    "stimulation": 0.05128205195069313,
+    "tradition": 0.25641027092933655,
+    "universalism": 0.05128205195069313
+  },
+  "minority_recall_mean": 0.3858333333333333,
+  "model": "gpt-5.4-mini",
+  "n_error": 1,
+  "n_ok": 39,
+  "n_rows": 40,
+  "qwk_mean": 0.5108036269676519,
+  "qwk_nan_dims_count": 0,
+  "qwk_per_dim": {
+    "achievement": 0.6040609137055837,
+    "benevolence": 0.34636871508379896,
+    "conformity": 0.4285714285714286,
+    "hedonism": 0.3929961089494163,
+    "power": 0.5894736842105264,
+    "security": 0.4196428571428571,
+    "self_direction": 0.35855263157894735,
+    "stimulation": 0.7914438502673797,
+    "tradition": 0.5220588235294118,
+    "universalism": 0.654867256637168
+  },
+  "reasoning_effort": "low",
+  "recall_minus1": 0.125,
+  "recall_per_class": {
+    "mean": {
+      "minus1": 0.125,
+      "plus1": 0.6466666666666666,
+      "zero": 0.9471041241420748
+    },
+    "per_dim": {
+      "achievement": {
+        "minus1": 0.25,
+        "plus1": 0.6666666666666666,
+        "zero": 0.9230769230769231
+      },
+      "benevolence": {
+        "minus1": 0.0,
+        "plus1": 0.3,
+        "zero": 1.0
+      },
+      "conformity": {
+        "minus1": 0.5,
+        "plus1": 0.25,
+        "zero": 0.9032258064516129
+      },
+      "hedonism": {
+        "minus1": 0.0,
+        "plus1": 0.6666666666666666,
+        "zero": 0.967741935483871
+      },
+      "power": {
+        "minus1": 0.0,
+        "plus1": 1.0,
+        "zero": 0.9411764705882353
+      },
+      "security": {
+        "minus1": 0.0,
+        "plus1": 0.5714285714285714,
+        "zero": 0.8928571428571429
+      },
+      "self_direction": {
+        "minus1": 0.0,
+        "plus1": 0.42857142857142855,
+        "zero": 0.9629629629629629
+      },
+      "stimulation": {
+        "minus1": 0.0,
+        "plus1": 1.0,
+        "zero": 1.0
+      },
+      "tradition": {
+        "minus1": 0.0,
+        "plus1": 0.5833333333333334,
+        "zero": 0.88
+      },
+      "universalism": {
+        "minus1": 0.5,
+        "plus1": 1.0,
+        "zero": 1.0
+      }
+    }
+  },
+  "recall_plus1": 0.6466666666666666,
+  "recall_zero": 0.9471041241420748,
+  "shots": 0,
+  "usage": {
+    "estimated_cost_usd": 0.04661925,
+    "input_tokens": 28301,
+    "output_tokens": 5643
+  }
+}
