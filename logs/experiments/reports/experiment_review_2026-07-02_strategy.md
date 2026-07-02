@@ -184,3 +184,32 @@ contract before decision-level evaluation.
   decision-level (weekly trigger) benchmark — together they bound the ceiling
   and test whether the current student already clears the product bar, before
   any further training investment.
+
+## Addendum — full report-corpus sweep (same day)
+
+A follow-up pass extracted the recommendation/verdict sections of all 24
+corrected-split-era reports in `reports/` (the five pre-`d937094` reports are
+archival and their conclusions are reproduced in the index's historical
+section). Nothing above is contradicted; every report's frontier verdict is
+consistent with the board. Three residual items surfaced that the index
+digests under-weight:
+
+1. **Decoupled head-only retraining with class-balanced sampling was
+   recommended four times (v7, v8, twinkl-719.5, twinkl-746) and never
+   executed** — verified: no run config or `src/vif` code implements it. It is
+   partially subsumed by the fncm (frozen features lack generalizable
+   hard-dim signal) and lct3 (no label-free extractable policy) negatives,
+   but it remains the only *training-time* lever with a specific untested
+   mechanism. Cheapest honest disposition: fold it into `twinkl-j0ck` — when
+   the head is retrained on soft vote-distribution targets, run one
+   class-balanced-sampling arm rather than giving it a separate cycle.
+2. **`twinkl-upb5` carries a conditional recommendation that must not be
+   lost:** if soft/consensus labels become the training target, retain and
+   evaluate the `0.02` recall-window candidate checkpoint as standard — the
+   consensus branch showed real gains under it (QWK 0.374→0.393, recall_-1
+   0.257→0.323). Noted on `twinkl-j0ck` in the tracker.
+3. **Focal temperature scaling, Kendall log-sigma weighting, PCGrad, and PCA
+   ablations** were recommended in v7/v8/731 and never run. The ceiling
+   evidence deprioritizes all of them; they should stay dead unless the
+   decision-level benchmark shows calibration (not recall) is the binding
+   constraint at the trigger layer.
