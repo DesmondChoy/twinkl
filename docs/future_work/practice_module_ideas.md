@@ -54,20 +54,24 @@ reviewer (the **judge**) scored every entry to create the training labels.
 
 ## The Twelve Ideas at a Glance
 
-| #  | Idea                                                          | Modules covered        | Effort      |
-|----|---------------------------------------------------------------|------------------------|-------------|
-| 1  | Better labels: a panel of AI reviewers that debate            | Agentic, XRAI, Deploy  | Medium-High |
-| 2  | Fact-check the Coach before it speaks                         | XRAI, Deploy           | Medium      |
-| 3  | A safe socket so other AI assistants can use Twinkl           | Agentic, Cyber, Deploy | Medium      |
-| 4  | Attack our own app to find the holes                          | Cyber, Agentic         | Medium      |
-| 5  | Keep journals on the phone: a privacy-first redesign          | Cyber, Deploy, XRAI    | High        |
-| 6  | A dashboard and quality gate for the whole pipeline           | Deploy                 | Medium      |
-| 7  | Teach the model to say "I don't know" and hand off to a human | XRAI, Deploy           | Medium-Low  |
-| 8  | Audit Twinkl against official AI rulebooks (SG + EU)          | XRAI, Deploy           | Low-Medium  |
-| 9  | A long-term memory that updates the way people change         | Agentic, XRAI          | High        |
-| 10 | Cheap AI for easy entries, expensive AI only when needed      | Deploy, Agentic        | Medium-Low  |
-| 11 | An assistant that suggests small real-life experiments        | Agentic, XRAI, Deploy  | Medium-High |
-| 12 | A safety switch for sensitive moments                         | XRAI, Cyber, Deploy    | Medium      |
+| #  | Idea                                                          | Modules covered        | Head start   | Effort      |
+|----|---------------------------------------------------------------|------------------------|--------------|-------------|
+| 1  | Better labels: a panel of AI reviewers that debate            | Agentic, XRAI, Deploy  | Large        | Medium-High |
+| 2  | Fact-check the Coach before it speaks                         | XRAI, Deploy           | Medium       | Medium      |
+| 3  | A safe socket so other AI assistants can use Twinkl           | Agentic, Cyber, Deploy | Small-Medium | Medium      |
+| 4  | Attack our own app to find the holes                          | Cyber, Agentic         | Large        | Medium      |
+| 5  | Keep journals on the phone: a privacy-first redesign          | Cyber, Deploy, XRAI    | Small        | High        |
+| 6  | A dashboard and quality gate for the whole pipeline           | Deploy                 | Large        | Medium      |
+| 7  | Teach the model to say "I don't know" and hand off to a human | XRAI, Deploy           | Large        | Medium-Low  |
+| 8  | Audit Twinkl against official AI rulebooks (SG + EU)          | XRAI, Deploy           | Medium-Large | Low-Medium  |
+| 9  | A long-term memory that updates the way people change         | Agentic, XRAI          | Small        | High        |
+| 10 | Cheap AI for easy entries, expensive AI only when needed      | Deploy, Agentic        | Medium       | Medium-Low  |
+| 11 | An assistant that suggests small real-life experiments        | Agentic, XRAI, Deploy  | Medium       | Medium-High |
+| 12 | A safety switch for sensitive moments                         | XRAI, Cyber, Deploy    | Medium       | Medium      |
+
+*"Head start" gauges how much of the build already exists in the repo — each
+idea has a "Head start in the current repo" section explaining exactly what
+is reusable and what is genuinely new.*
 
 ---
 
@@ -93,6 +97,17 @@ versioned, tested infrastructure).
 
 **What changes in Twinkl:** New, better training labels — the most valuable
 single improvement available to the capstone.
+
+**Head start in the current repo: Large.** The judging pipeline is fully
+built (`src/judge/labeling.py` for rubric scoring, `consolidate.py` for
+merging results), and the repo has already run a multi-pass consensus
+re-judging exercise with its own shared helpers and batch scripts
+(`src/judge/consensus_utils.py`, `scripts/journalling/twinkl_754_*`) — so
+"score the same entry several times and reconcile the answers" is solved
+plumbing. The measuring stick exists too: 380 human-labeled entries with
+agreement metrics (`src/annotation_tool/agreement_metrics.py`). Genuinely
+new: calling several *different* models, the debate-and-arbiter round, and
+per-label cost tracking.
 
 **Effort:** Medium-High. Making models debate is easy; proving the labels are
 actually better, and at what cost per label, is the real work.
@@ -122,6 +137,16 @@ automatically before every release).
 **What changes in Twinkl:** The Coach's feedback becomes verified-evidence
 only.
 
+**Head start in the current repo: Medium.** The core mechanical need —
+"re-score an entry with a piece of evidence removed" — is a loop over
+existing code: `src/vif/runtime.py` already rebuilds state from journal
+history and runs checkpoint inference. The Coach digest is generated from a
+template we control (`prompts/weekly_digest_coach.yaml`, `src/coach/`), and
+the evaluation spec is already written
+(`docs/evals/explanation_quality_eval.md`). Genuinely new: the checker
+itself — matching claims to quoted evidence, the pass/fail rules, and the
+regenerate-or-drop flow. No new model training required.
+
 **Effort:** Medium. The checking machinery is cheap to run; designing honest
 tests is the thinking work.
 
@@ -150,6 +175,13 @@ Deploy (running a real service).
 tools can build on — including the OpenClaw integration already researched in
 this folder.
 
+**Head start in the current repo: Small-Medium.** The engine is cleanly
+callable — trained checkpoints run through `src/vif/runtime.py` and emit
+structured per-entry and per-week signals — so wrapping it in a service is
+mechanical. But nothing server-shaped exists anywhere in the repo: no API,
+no authentication, no rate limiting. The wrapper is quick; the security and
+abuse-testing half — which is the point of the project — is all new.
+
 **Effort:** Medium. The service itself is small; the care goes into
 permissions and abuse testing.
 
@@ -176,6 +208,16 @@ AI agents), XRAI (safety evaluation).
 **What changes in Twinkl:** A reusable library of attack cases, hardened
 prompts, and a measured robustness report.
 
+**Head start in the current repo: Large.** The attack factory mostly exists:
+persona and entry generation (`src/synthetic/generation.py` plus the prompt
+templates), batch preparation, and — usefully — programmatic verification of
+generated batches (`src/synthetic/batch_verification.py`), so "generate
+targeted content, then check it automatically" is an established pattern
+here. The judge pipeline provides the measurement (did the attack change the
+label?), and the existing banned-term leakage checks are the same shape as
+attack detection. Genuinely new: the attack taxonomy, hostile prompt
+variants, success metrics, and the fixes.
+
 **Effort:** Medium. Most of the generation machinery already exists; the new
 work is designing the attacks and the pass/fail metrics.
 
@@ -200,6 +242,16 @@ models on-device), XRAI (privacy as responsible design).
 
 **What changes in Twinkl:** From "send your diary to the cloud" to an
 architecture you could actually ship to privacy-conscious users.
+
+**Head start in the current repo: Small.** Two real assets: the scoring
+model is genuinely tiny (a small network over precomputed text embeddings —
+`src/vif/critic*.py`), and both the embedding step (`src/vif/encoders.py`)
+and the training loop (`src/vif/train.py`) are our own code, so
+privacy-preserving training can be inserted rather than bolted on.
+Everything else is new: differential-privacy training and its accuracy
+re-validation, extraction-attack audits, on-device packaging, and replacing
+the cloud-LLM steps with local models. Alongside #9, the largest genuine
+build on this list.
 
 **Effort:** High. Privacy-preserving training usually costs some accuracy,
 and our accuracy has no room to spare — though measuring that trade-off
@@ -228,6 +280,16 @@ pipelines).
 **What changes in Twinkl:** Every future experiment becomes faster, cheaper
 to audit, and harder to fool yourself with.
 
+**Head start in the current repo: Large.** The "record what happened" half
+is substantially done for the training stage: `src/vif/experiment_logger.py`
+writes one structured YAML file per run plus a Markdown index (this is how
+all 56 experiments were logged), `training_traces.py` captures training-time
+traces, and the evaluation suite (`src/vif/eval.py`) has its own tests. We
+are not starting from a blank slate. Genuinely new: extending tracing to the
+LLM stages (generation, judging, Coach — token counts, costs, latencies),
+the dashboards, and the automation — the repo has no CI today, so the
+auto-promote/block gate is new.
+
 **Effort:** Medium. Mostly integrating mature tools; low research risk, high
 operational payoff.
 
@@ -255,6 +317,17 @@ exactly the ones humans label next.
 annotation tool becomes a living part of the pipeline rather than a one-off
 study instrument.
 
+**Head start in the current repo: Large.** Almost every ingredient exists.
+Uncertainty-aware inference is already how the model runs
+(`src/vif/runtime.py` performs MC-uncertainty inference, and
+`frontier_uncertainty.py` / `posthoc.py` already analyse and calibrate
+confidence), and the human side is a working annotation app with storage and
+agreement metrics (`src/annotation_tool/`). Genuinely new: the conformal
+wrapper itself (small, well-documented math) and the routing that sends
+abstained entries into the annotation queue and back into training. Mostly
+wiring existing parts together — which is why the effort rating is the
+lowest here.
+
 **Effort:** Medium-Low. The statistical wrapper is a few hundred lines of
 code; the best effort-to-payoff ratio on this list.
 
@@ -278,6 +351,16 @@ Deploy (governance as an operational discipline).
 
 **What changes in Twinkl:** A governance layer few student projects will
 have — and the fairness analysis may surface real model problems.
+
+**Head start in the current repo: Medium-Large.** An audit needs a
+well-documented system to point at, and that is this repo's strong suit: the
+PRD, pipeline specs, data schema, judge instructions, and evaluation specs
+in `docs/` already describe the system end to end, and the persona registry
+(`src/registry/personas.py`, `logs/registry/`) provides full data lineage
+from generation through labeling. The 204-persona dataset carries the
+metadata needed for fairness slicing. Genuinely new: the regulatory
+classification analysis, the AI Verify / Moonshot runs, and the formal
+artifacts themselves.
 
 **Effort:** Low-Medium on engineering; the weight is in analysis and writing.
 Pairs well with any other idea on this list.
@@ -306,6 +389,16 @@ you can read and query is far more explainable than ten opaque numbers).
 **What changes in Twinkl:** The "dynamic self-model" in the product vision
 becomes real instead of aspirational.
 
+**Head start in the current repo: Small.** Useful edges exist: weekly
+per-value signal tables already flow out of `src/vif/runtime.py`, and a
+first deterministic value-evolution classifier is in code with tests
+(`src/vif/evolution.py`) — so "did this value shift?" has a starting
+heuristic. The ten-number profile lives in one clean place
+(`src/vif/state_encoder.py`), which is exactly where a richer memory would
+plug in. But the memory itself — the schema, extracting values and
+commitments from entries, the curation process, and evaluating memory
+quality — is all new. The deepest build on this list.
+
 **Effort:** High. The hardest idea here to evaluate well; scope tightly if
 chosen.
 
@@ -329,6 +422,15 @@ our actual bottleneck (see idea 1).
 logic).
 
 **What changes in Twinkl:** The labeling budget stretches severalfold.
+
+**Head start in the current repo: Medium.** The signals to route on already
+exist — per-entry uncertainty from runtime inference, plus documented
+knowledge of which value dimensions are hard — and every LLM call is
+templated in `prompts/*.yaml`, so pointing a step at a cheaper model is
+configuration, not surgery. The batch scripts in `scripts/journalling/` make
+cost measurement straightforward. Genuinely new: the routing policy, a cheap
+first-pass model tier, and the evaluation proving triage does not drop the
+rare misaligned entries.
 
 **Effort:** Medium-Low. The router is simple; the rigor is in proving the
 cheap first pass does not miss the rare "misaligned" entries — the ones we
@@ -358,6 +460,16 @@ cost and latency budgets, monitoring).
 
 **What changes in Twinkl:** Closes the loop from detection to action — and
 gives the capstone a far stronger demo than a weekly digest alone.
+
+**Head start in the current repo: Medium.** The detection half of the loop
+is built: uncertainty-gated drift detection (`src/vif/drift.py`) already
+emits structured results for the Coach (`src/coach/`). And a miniature of
+the "suggest something, then capture the response" pattern already exists in
+the nudge prompts (`prompts/nudge_decision.yaml`, `nudge_generation.yaml`,
+`nudge_response.yaml`), with tests. Genuinely new: everything agentic — live
+external search, checking suggestions against the user's constraints, safety
+filtering, and the accept/decline feedback loop. The inspiration-feed
+feature this upgrades is currently listed as not started.
 
 **Effort:** Medium-High. The integration is manageable; the hard parts are
 avoiding generic advice, filtering unsafe suggestions, and measuring whether
@@ -389,6 +501,16 @@ audit logs, regression tests).
 route through a separate, narrower policy with a logged reason for every
 suppression.
 
+**Head start in the current repo: Medium.** Both trigger inputs are already
+computed: per-entry and weekly uncertainty (runtime inference), and the repo
+already contains one working example of exactly the right pattern — the
+nudge decision classifier (`prompts/nudge_decision.yaml`) reads an entry and
+decides whether acting is appropriate. The synthetic pipeline can
+manufacture crisis test fixtures, and the per-module test discipline in
+`tests/` suits a regression suite. Genuinely new: the crisis classifier and
+policy layer, the constrained "presence, not judgment" Coach mode,
+escalation content, and the over-/under-blocking evaluation.
+
 **Effort:** Medium. A first version needs rules, classifier prompts, and
 synthetic test cases; the serious work is proving it neither over-blocks
 ordinary venting nor under-blocks genuine crises.
@@ -411,6 +533,11 @@ ordinary venting nor under-blocks genuine crises.
   naturally on 9's memory; 12 is the safety companion to anything that
   touches live Coach behaviour. A well-chosen pair covers all four
   submodules.
+- **Weigh head start against effort.** Ideas 4, 6, and 7 combine a large
+  head start with moderate effort — most of their machinery already exists,
+  so the semester goes into the interesting new part. Ideas 5 and 9 are the
+  opposite: small head start *and* high effort, so choose them only for
+  their ambition, with tight scoping.
 
 **Shortlist:** #1 for maximum capstone leverage; #7 for the best
 rigor-to-effort ratio; #3 + #4 together for the strongest
