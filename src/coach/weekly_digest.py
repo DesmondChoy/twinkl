@@ -38,10 +38,13 @@ from src.coach.schemas import (
     WeeklyDigest,
 )
 from src.models.judge import SCHWARTZ_VALUE_ORDER
+from src.vif.weekly_schema import (
+    ALIGNMENT_COLUMNS,
+    UNCERTAINTY_COLUMNS,
+    alignment_col,
+)
 from src.wrangling.parse_wrangled_data import parse_wrangled_file
 
-ALIGNMENT_COLUMNS = [f"alignment_{value}" for value in SCHWARTZ_VALUE_ORDER]
-UNCERTAINTY_COLUMNS = [f"uncertainty_{value}" for value in SCHWARTZ_VALUE_ORDER]
 SCHWARTZ_CONFIG_PATH = Path("config/schwartz_values.yaml")
 LLMCompleteFn = Callable[[str, dict | None], Awaitable[str | None]]
 
@@ -255,7 +258,7 @@ def _rank_dimensions(
 
 def _select_row_dimensions(row: dict, candidate_dims: list[str], direction: str) -> list[str]:
     """Select the most representative focus dimensions for one evidence row."""
-    scored_dims = [(dim, float(row[f"alignment_{dim}"])) for dim in candidate_dims]
+    scored_dims = [(dim, float(row[alignment_col(dim)])) for dim in candidate_dims]
     reverse = direction == "aligned"
     scored_dims.sort(key=lambda item: item[1], reverse=reverse)
 
@@ -282,7 +285,7 @@ def _find_dimension_polarity(
 ) -> bool:
     """Detect within-week polarity flips on the declared core dimensions."""
     for dim in dimensions:
-        col = f"alignment_{dim}"
+        col = alignment_col(dim)
         if col not in labels.columns:
             continue
         series = labels[col]
@@ -430,8 +433,8 @@ def build_weekly_digest(
     top_tensions = top_tensions[:3]
     top_strengths = top_strengths[:2]
 
-    tension_cols = [f"alignment_{dim}" for dim in top_tensions]
-    strength_cols = [f"alignment_{dim}" for dim in top_strengths]
+    tension_cols = [alignment_col(dim) for dim in top_tensions]
+    strength_cols = [alignment_col(dim) for dim in top_strengths]
     with_entry_scores = labels.with_columns(
         [
             pl.mean_horizontal(ALIGNMENT_COLUMNS).alias("entry_mean"),

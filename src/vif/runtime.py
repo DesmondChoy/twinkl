@@ -23,12 +23,13 @@ from src.vif.critic_ordinal import OrdinalCriticBase
 from src.vif.encoders import create_encoder
 from src.vif.state_encoder import StateEncoder
 from src.vif.train import load_config as load_train_config
+from src.vif.weekly_schema import (
+    ALIGNMENT_COLUMNS,
+    PROFILE_WEIGHT_COLUMNS,
+    UNCERTAINTY_COLUMNS,
+    WEEKLY_SIGNAL_COLUMNS,
+)
 from src.wrangling.parse_wrangled_data import parse_wrangled_file
-
-
-ALIGNMENT_COLUMNS = [f"alignment_{dim}" for dim in SCHWARTZ_VALUE_ORDER]
-UNCERTAINTY_COLUMNS = [f"uncertainty_{dim}" for dim in SCHWARTZ_VALUE_ORDER]
-PROFILE_WEIGHT_COLUMNS = [f"profile_weight_{dim}" for dim in SCHWARTZ_VALUE_ORDER]
 
 
 def _deep_update(base: dict[str, Any], update: dict[str, Any]) -> dict[str, Any]:
@@ -297,23 +298,7 @@ def aggregate_timeline_by_week(timeline_df: pl.DataFrame) -> pl.DataFrame:
         ]
     )
 
-    return weekly.select(
-        [
-            "persona_id",
-            "persona_name",
-            "week_start",
-            "week_end",
-            "n_entries",
-            "core_values",
-            "alignment_vector",
-            "uncertainty_vector",
-            *ALIGNMENT_COLUMNS,
-            *UNCERTAINTY_COLUMNS,
-            *PROFILE_WEIGHT_COLUMNS,
-            "overall_mean",
-            "overall_uncertainty",
-        ]
-    )
+    return weekly.select(WEEKLY_SIGNAL_COLUMNS)
 
 
 def persist_runtime_artifacts(
