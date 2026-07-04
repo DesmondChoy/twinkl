@@ -1,9 +1,25 @@
 """Tests for uncertainty-gated weekly drift detection."""
 
 import polars as pl
+import pytest
 
 from src.models.judge import SCHWARTZ_VALUE_ORDER
 from src.vif.drift import detect_weekly_drift
+from src.vif.weekly_schema import (
+    ALIGNMENT_VECTOR,
+    CORE_VALUES,
+    N_ENTRIES,
+    OVERALL_MEAN,
+    OVERALL_UNCERTAINTY,
+    PERSONA_ID,
+    PERSONA_NAME,
+    UNCERTAINTY_VECTOR,
+    WEEK_END,
+    WEEK_START,
+    alignment_col,
+    profile_weight_col,
+    uncertainty_col,
+)
 
 
 def _weekly_row(
@@ -20,27 +36,27 @@ def _weekly_row(
     benevolence_weight: float = 0.1,
 ) -> dict:
     row = {
-        "persona_id": "deadbeef",
-        "persona_name": "Casey",
-        "week_start": week_start,
-        "week_end": week_end,
-        "n_entries": 2,
-        "core_values": ["Achievement", "Self-Direction"],
-        "overall_mean": overall_mean,
-        "overall_uncertainty": overall_uncertainty,
+        PERSONA_ID: "deadbeef",
+        PERSONA_NAME: "Casey",
+        WEEK_START: week_start,
+        WEEK_END: week_end,
+        N_ENTRIES: 2,
+        CORE_VALUES: ["Achievement", "Self-Direction"],
+        OVERALL_MEAN: overall_mean,
+        OVERALL_UNCERTAINTY: overall_uncertainty,
     }
     for dim in SCHWARTZ_VALUE_ORDER:
-        row[f"alignment_{dim}"] = 0.0
-        row[f"uncertainty_{dim}"] = 0.1
-        row[f"profile_weight_{dim}"] = 0.0
-    row["alignment_achievement"] = achievement
-    row["alignment_self_direction"] = self_direction
-    row["alignment_benevolence"] = benevolence
-    row["profile_weight_achievement"] = achievement_weight
-    row["profile_weight_self_direction"] = self_direction_weight
-    row["profile_weight_benevolence"] = benevolence_weight
-    row["alignment_vector"] = [row[f"alignment_{dim}"] for dim in SCHWARTZ_VALUE_ORDER]
-    row["uncertainty_vector"] = [row[f"uncertainty_{dim}"] for dim in SCHWARTZ_VALUE_ORDER]
+        row[alignment_col(dim)] = 0.0
+        row[uncertainty_col(dim)] = 0.1
+        row[profile_weight_col(dim)] = 0.0
+    row[alignment_col("achievement")] = achievement
+    row[alignment_col("self_direction")] = self_direction
+    row[alignment_col("benevolence")] = benevolence
+    row[profile_weight_col("achievement")] = achievement_weight
+    row[profile_weight_col("self_direction")] = self_direction_weight
+    row[profile_weight_col("benevolence")] = benevolence_weight
+    row[ALIGNMENT_VECTOR] = [row[alignment_col(d)] for d in SCHWARTZ_VALUE_ORDER]
+    row[UNCERTAINTY_VECTOR] = [row[uncertainty_col(d)] for d in SCHWARTZ_VALUE_ORDER]
     return row
 
 
@@ -172,3 +188,11 @@ def test_detect_weekly_drift_routes_low_volatility_shift_to_evolution():
     assert result.trigger_type == "evolution"
     assert "achievement" in result.triggered_dimensions
     assert result.profile_update is not None
+
+
+def test_detect_weekly_drift_raises_on_missing_required_column():
+    row = _weekly_row(week_start="2025-01-06", week_end="2025-01-12", overall_mean=0.1)
+    weekly_df = pl.DataFrame([row]).drop(alignment_col("achievement"))
+
+    with pytest.raises(ValueError, match="alignment_achievement"):
+        detect_weekly_drift(weekly_df)

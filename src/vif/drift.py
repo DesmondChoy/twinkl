@@ -7,6 +7,16 @@ import polars as pl
 from src.coach.schemas import DriftDetectionResult
 from src.models.judge import SCHWARTZ_VALUE_ORDER
 from src.vif.evolution import EvolutionDetectionResult, classify_weekly_evolution
+from src.vif.weekly_schema import (
+    OVERALL_MEAN,
+    OVERALL_UNCERTAINTY,
+    WEEK_END,
+    WEEK_START,
+    alignment_col,
+    profile_weight_col,
+    uncertainty_col,
+    validate_weekly_frame,
+)
 
 
 def _build_dimension_signals(
@@ -30,15 +40,15 @@ def _build_dimension_signals(
             trigger = "rut"
         elif dim in evolution_dims:
             trigger = "evolution"
-        elif float(target_row[f"uncertainty_{dim}"]) >= uncertainty_threshold:
+        elif float(target_row[uncertainty_col(dim)]) >= uncertainty_threshold:
             trigger = "high_uncertainty"
 
         signals.append(
             DriftDetectionResult.DimensionSignal(
                 dimension=dim,
                 classification=evo_row.classification,
-                mean_alignment=float(target_row[f"alignment_{dim}"]),
-                mean_uncertainty=float(target_row[f"uncertainty_{dim}"]),
+                mean_alignment=float(target_row[alignment_col(dim)]),
+                mean_uncertainty=float(target_row[uncertainty_col(dim)]),
                 trigger=trigger,
                 residual=evo_row.residual,
                 volatility=evo_row.volatility,
@@ -68,13 +78,15 @@ def detect_weekly_drift(
     if weekly_df.is_empty():
         raise ValueError("weekly_df must contain at least one weekly signal row")
 
+    validate_weekly_frame(weekly_df)
+
     persona_ids = weekly_df["persona_id"].unique().to_list()
     if len(persona_ids) != 1:
         raise ValueError(f"detect_weekly_drift expects one persona, found {len(persona_ids)}")
 
-    ordered = weekly_df.sort("week_end")
+    ordered = weekly_df.sort(WEEK_END)
     if target_week_end is not None:
-        ordered = ordered.filter(pl.col("week_end") <= target_week_end)
+        ordered = ordered.filter(pl.col(WEEK_END) <= target_week_end)
     if ordered.is_empty():
         raise ValueError("No weekly rows remain after applying target_week_end filter")
 
@@ -84,7 +96,7 @@ def detect_weekly_drift(
     if evolution_result is None:
         evolution_result = classify_weekly_evolution(
             ordered,
-            target_week_end=target_row["week_end"],
+            target_week_end=target_row[WEEK_END],
             lookback_weeks=lookback_weeks,
             min_weeks=max(min_rut_weeks, 3),
             residual_threshold=residual_threshold,
@@ -93,8 +105,8 @@ def detect_weekly_drift(
             importance_floor=importance_floor,
         )
 
-    overall_mean = float(target_row["overall_mean"])
-    overall_uncertainty = float(target_row["overall_uncertainty"])
+    overall_mean = float(target_row[OVERALL_MEAN])
+    overall_uncertainty = float(target_row[OVERALL_UNCERTAINTY])
 
     if overall_uncertainty >= uncertainty_threshold:
         dimension_signals = _build_dimension_signals(
@@ -114,8 +126,8 @@ def detect_weekly_drift(
             reasons=["overall_uncertainty_above_threshold"],
             source="drift_detector",
             trigger_type="high_uncertainty",
-            week_start=str(target_row["week_start"]),
-            week_end=str(target_row["week_end"]),
+            week_start=str(target_row[WEEK_START]),
+            week_end=str(target_row[WEEK_END]),
             overall_mean=overall_mean,
             overall_uncertainty=overall_uncertainty,
             triggered_dimensions=[
@@ -127,7 +139,7 @@ def detect_weekly_drift(
         )
 
     profile_weights = {
-        dim: float(target_row[f"profile_weight_{dim}"]) for dim in SCHWARTZ_VALUE_ORDER
+        dim: float(target_row[profile_weight_col(dim)]) for dim in SCHWARTZ_VALUE_ORDER
     }
     evolution_dims = {
         row.dimension
@@ -141,8 +153,8 @@ def detect_weekly_drift(
         for dim in SCHWARTZ_VALUE_ORDER:
             if profile_weights[dim] < min_profile_weight or dim in evolution_dims:
                 continue
-            recent_scores = recent[f"alignment_{dim}"].to_list()
-            recent_uncertainty = recent[f"uncertainty_{dim}"].to_list()
+            recent_scores = recent[alignment_col(dim)].to_list()
+            recent_uncertainty = recent[uncertainty_col(dim)].to_list()
             if all(
                 float(score) < rut_threshold and float(sig) < uncertainty_threshold
                 for score, sig in zip(recent_scores, recent_uncertainty)
@@ -151,12 +163,12 @@ def detect_weekly_drift(
 
     crash_dims: set[str] = set()
     if previous_row is not None:
-        scalar_drop = float(previous_row["overall_mean"]) - overall_mean
+        scalar_drop = float(previous_row[OVERALL_MEAN]) - overall_mean
         if scalar_drop > crash_delta:
             for dim in SCHWARTZ_VALUE_ORDER:
                 if profile_weights[dim] < min_profile_weight or dim in evolution_dims:
                     continue
-                dim_drop = float(previous_row[f"alignment_{dim}"]) - float(target_row[f"alignment_{dim}"])
+                dim_drop = float(previous_row[alignment_col(dim)]) - float(target_row[alignment_col(dim)])
                 if dim_drop > 0:
                     crash_dims.add(dim)
 
@@ -179,8 +191,8 @@ def detect_weekly_drift(
             reasons=["weekly_scalar_drop_above_threshold", *sorted(crash_dims)],
             source="drift_detector",
             trigger_type="crash",
-            week_start=str(target_row["week_start"]),
-            week_end=str(target_row["week_end"]),
+            week_start=str(target_row[WEEK_START]),
+            week_end=str(target_row[WEEK_END]),
             overall_mean=overall_mean,
             overall_uncertainty=overall_uncertainty,
             triggered_dimensions=sorted(crash_dims),
@@ -197,8 +209,8 @@ def detect_weekly_drift(
             reasons=["consecutive_low_core_value_weeks", *sorted(rut_dims)],
             source="drift_detector",
             trigger_type="rut",
-            week_start=str(target_row["week_start"]),
-            week_end=str(target_row["week_end"]),
+            week_start=str(target_row[WEEK_START]),
+            week_end=str(target_row[WEEK_END]),
             overall_mean=overall_mean,
             overall_uncertainty=overall_uncertainty,
             triggered_dimensions=sorted(rut_dims),
@@ -218,8 +230,8 @@ def detect_weekly_drift(
             reasons=["low_volatility_directional_shift", *sorted(evolution_dims)],
             source="drift_detector",
             trigger_type="evolution",
-            week_start=str(target_row["week_start"]),
-            week_end=str(target_row["week_end"]),
+            week_start=str(target_row[WEEK_START]),
+            week_end=str(target_row[WEEK_END]),
             overall_mean=overall_mean,
             overall_uncertainty=overall_uncertainty,
             triggered_dimensions=sorted(evolution_dims),
@@ -229,7 +241,7 @@ def detect_weekly_drift(
 
     strongest_dims = sorted(
         SCHWARTZ_VALUE_ORDER,
-        key=lambda dim: (abs(float(target_row[f"alignment_{dim}"])), profile_weights[dim]),
+        key=lambda dim: (abs(float(target_row[alignment_col(dim)])), profile_weights[dim]),
         reverse=True,
     )
     return DriftDetectionResult(
@@ -241,8 +253,8 @@ def detect_weekly_drift(
         reasons=["no_trigger_fired"],
         source="drift_detector",
         trigger_type="stable",
-        week_start=str(target_row["week_start"]),
-        week_end=str(target_row["week_end"]),
+        week_start=str(target_row[WEEK_START]),
+        week_end=str(target_row[WEEK_END]),
         overall_mean=overall_mean,
         overall_uncertainty=overall_uncertainty,
         triggered_dimensions=strongest_dims[:2],

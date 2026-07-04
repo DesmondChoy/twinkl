@@ -226,3 +226,4 @@ logs/exports/weekly_digests/
 .dolt/
 *.db
 .beads-credential-key
+.beads/
