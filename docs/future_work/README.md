@@ -7,8 +7,9 @@ distribution ideas, not active product guarantees.
 ## Current Documents
 
 - [`practice_module_ideas.md`](practice_module_ideas.md)
-  - ten candidate projects for the NUS-ISS Architecting AI Systems practice
-    module, each doubling as a Twinkl enhancement
+  - twelve candidate projects for the NUS-ISS Architecting AI Systems practice
+    module, each doubling as a Twinkl enhancement; written in plain language
+    for a non-specialist audience
 - [`habit_recommendations.md`](habit_recommendations.md)
   - concept note for a goal-aligned recommendation layer
 - [`OpenClaw_Twinkl_Integration_Research.pdf`](OpenClaw_Twinkl_Integration_Research.pdf)
