@@ -203,73 +203,116 @@ def _build_error_view(result: CatalogLoadResult) -> ui.Tag:
     )
 
 
-def _build_main_app_ui() -> ui.Tag:
-    """Render the main demo app shell."""
-    return ui.TagList(
+def _build_control_sidebar() -> ui.Tag:
+    """The persistent left rail: brand, selection, actions, live status.
+
+    Every input id is preserved from the old controls strip, so the server
+    reactives (``_sync_persona_select``, ``_start_pipeline_run`` …) keep working
+    unchanged — only their location on the page moves.
+    """
+    return ui.sidebar(
+        # ── Collapsed T-rail (shown only when .app-shell has .t-collapsed) ─
         ui.div(
-            # ── Header ──────────────────────────────────────────────────────
             ui.div(
-                ui.div(
-                    ui.h1("Twinkl Demo Review", class_="app-title"),
-                    ui.p(
-                        "Select a persona and checkpoint, run the critic, inspect drift and the weekly digest.",
-                        class_="app-subtitle",
-                    ),
-                ),
-                ui.output_ui("run_status_banner"),
-                class_="app-header",
+                "T",
+                class_="mini-mark",
+                title="Expand sidebar",
+                onclick="document.querySelector('.app-shell').classList.remove('t-collapsed')",
             ),
-            ui.output_ui("catalog_warning_banner"),
-            # ── Controls strip ───────────────────────────────────────────────
             ui.div(
-                ui.div(
-                    ui.tags.label("Persona", class_="field-label"),
-                    ui.input_select("persona_id", None, choices={}),
-                    class_="field",
-                ),
-                ui.div(
-                    ui.tags.label("Critic checkpoint", class_="field-label"),
-                    ui.input_select("checkpoint_path", None, choices={}),
-                    class_="field",
-                ),
-                ui.div(
-                    ui.tags.label("Detector source", class_="field-label"),
-                    ui.input_select(
-                        "drift_source",
-                        None,
-                        choices={"judge": "Judge labels", "critic": "Critic predictions"},
-                        selected="judge",
-                    ),
-                    class_="field",
-                ),
-                ui.div(
-                    ui.div(
-                        ui.input_action_button(
-                            "refresh_catalog_btn",
-                            "Refresh",
-                            class_="btn-secondary",
-                        ),
-                        ui.input_task_button(
-                            "run_pipeline_btn",
-                            "Run critic",
-                            class_="btn-primary",
-                        ),
-                        class_="control-actions",
-                    ),
-                    class_="field field-actions",
-                ),
-                class_="controls-strip",
+                "\u00bb",
+                class_="mini-expand",
+                title="Expand sidebar",
+                onclick="document.querySelector('.app-shell').classList.remove('t-collapsed')",
             ),
-            # ── Persona detail ───────────────────────────────────────────────
-            ui.output_ui("persona_detail_card"),
-            # ── Checkpoint summary ───────────────────────────────────────────
-            ui.output_ui("checkpoint_summary"),
-            # ── Journal (collapsible, hidden by default) ─────────────────────
-            ui.output_ui("journal_timeline"),
-            # ── Results ──────────────────────────────────────────────────────
-            ui.output_ui("results_panel"),
-            class_="app-shell",
-        )
+            ui.div(class_="mini-sep"),
+            ui.div(
+                "\u25b8",
+                class_="mini-run",
+                title="Run critic",
+                onclick="document.getElementById('run_pipeline_btn').click()",
+            ),
+            class_="sidebar-mini",
+        ),
+        # ── Brand (with collapse control) ────────────────────────────────
+        ui.div(
+            ui.div(
+                ui.div("TWINKL", class_="brand-mark"),
+                ui.div("Critic review", class_="brand-sub"),
+            ),
+            ui.div(
+                "\u00ab",
+                class_="sidebar-collapse-btn",
+                title="Collapse sidebar",
+                onclick="document.querySelector('.app-shell').classList.add('t-collapsed')",
+            ),
+            class_="sidebar-brand",
+        ),
+        # ── Selection ────────────────────────────────────────────────────
+        ui.div(
+            ui.tags.label("Persona", class_="field-label"),
+            ui.input_select("persona_id", None, choices={}),
+            class_="field",
+        ),
+        ui.div(
+            ui.tags.label("Critic checkpoint", class_="field-label"),
+            ui.input_select("checkpoint_path", None, choices={}),
+            class_="field",
+        ),
+        ui.div(
+            ui.tags.label("Detector source", class_="field-label"),
+            ui.input_select(
+                "drift_source",
+                None,
+                choices={"judge": "Judge labels", "critic": "Critic predictions"},
+                selected="judge",
+            ),
+            class_="field",
+        ),
+        # ── Actions ──────────────────────────────────────────────────────
+        ui.div(
+            ui.input_task_button("run_pipeline_btn", "Run critic", class_="btn-primary"),
+            ui.input_action_button("refresh_catalog_btn", "Refresh", class_="btn-secondary"),
+            class_="sidebar-actions",
+        ),
+        # ── Live status ──────────────────────────────────────────────────
+        ui.output_ui("run_status_banner"),
+        id="controls_sidebar",
+        title=None,
+        width=308,
+        open="always",  # collapse is driven by our own T-rail (.app-shell.t-collapsed)
+        class_="app-sidebar",
+    )
+
+
+def _build_main_app_ui() -> ui.Tag:
+    """Render the main demo app shell: a persistent control sidebar + results canvas."""
+    main_content = ui.div(
+        # ── Header ───────────────────────────────────────────────────────
+        ui.div(
+            ui.h1("Twinkl Critic Review", class_="app-title"),
+            ui.p(
+                "Select a persona and checkpoint, run the critic, "
+                "then inspect drift and the weekly digest.",
+                class_="app-subtitle",
+            ),
+            class_="app-header",
+        ),
+        ui.output_ui("catalog_warning_banner"),
+        # ── Persona detail ───────────────────────────────────────────────
+        ui.output_ui("persona_detail_card"),
+        # ── Checkpoint summary ───────────────────────────────────────────
+        ui.output_ui("checkpoint_summary"),
+        # ── Journal (collapsible, hidden by default) ─────────────────────
+        ui.output_ui("journal_timeline"),
+        # ── Results ──────────────────────────────────────────────────────
+        ui.output_ui("results_panel"),
+        class_="app-main",
+    )
+
+    return ui.div(
+        ui.layout_sidebar(_build_control_sidebar(), main_content),
+        class_="app-shell",
     )
 
 
@@ -460,9 +503,18 @@ def server(input, output, session):
     def detector_chart():
         return _build_detector_chart(multi_drift_bundle())
 
+    @render_widget
+    def overview_chart():
+        # Same figure as detector_chart, shown on the Overview landing tab.
+        return _build_detector_chart(multi_drift_bundle())
+
     @render.ui
     def detector_table():
         return _render_detector_table(multi_drift_bundle())
+
+    @render.ui
+    def overview_detectors():
+        return _render_detector_chips(multi_drift_bundle())
 
     @render.ui
     def catalog_warning_banner():
@@ -687,6 +739,19 @@ def server(input, output, session):
                 ui.div(status_msg, class_="empty-state"),
                 ui.navset_tab(
                     ui.nav_panel(
+                        "Overview",
+                        ui.div(
+                            ui.span("Alignment trajectories", class_="subsection-label"),
+                            output_widget("overview_chart"),
+                            class_="overview-chart-block",
+                        ),
+                        ui.div(
+                            ui.span("Detector agreement", class_="subsection-label"),
+                            ui.output_ui("overview_detectors"),
+                            class_="overview-detectors-block",
+                        ),
+                    ),
+                    ui.nav_panel(
                         "Detector comparison",
                         output_widget("detector_chart"),
                         ui.output_ui("detector_table"),
@@ -732,6 +797,20 @@ def server(input, output, session):
                 class_="digest-summary-strip",
             ),
             ui.navset_tab(
+                ui.nav_panel(
+                    "Overview",
+                    _render_overview_summary(drift, digest),
+                    ui.div(
+                        ui.span("Alignment trajectories", class_="subsection-label"),
+                        output_widget("overview_chart"),
+                        class_="overview-chart-block",
+                    ),
+                    ui.div(
+                        ui.span("Detector agreement", class_="subsection-label"),
+                        ui.output_ui("overview_detectors"),
+                        class_="overview-detectors-block",
+                    ),
+                ),
                 ui.nav_panel(
                     "Per-entry critic",
                     _render_timeline_results(timeline_df, critic_alert_map),
@@ -927,6 +1006,72 @@ def _render_digest_results(markdown_text: str, digest: dict[str, Any]) -> ui.Tag
     )
 
 
+def _render_overview_summary(drift: dict[str, Any], digest: dict[str, Any]) -> ui.Tag:
+    """Synthesised landing view: drift status + the week's strengths and tensions."""
+    trigger = str(drift.get("trigger_type") or "stable")
+    triggered = [_format_dimension(dim) for dim in drift.get("triggered_dimensions", [])]
+    return ui.div(
+        ui.div(
+            ui.div(
+                ui.span("Drift status", class_="subsection-label"),
+                ui.span(trigger, class_="overview-tag"),
+                class_="overview-card-head",
+            ),
+            ui.p(
+                str(drift.get("rationale") or "No drift rationale captured for this window."),
+                class_="drift-rationale",
+            ),
+            _build_badges(triggered, "badge-negative", "None triggered"),
+            class_="overview-card",
+        ),
+        ui.div(
+            ui.div(
+                ui.span("Top strengths", class_="subsection-label"),
+                _build_badges(
+                    [_format_dimension(d) for d in digest.get("top_strengths", [])],
+                    "badge-positive", "None clear",
+                ),
+                class_="overview-block",
+            ),
+            ui.div(
+                ui.span("Top tensions", class_="subsection-label"),
+                _build_badges(
+                    [_format_dimension(d) for d in digest.get("top_tensions", [])],
+                    "badge-negative", "None clear",
+                ),
+                class_="overview-block",
+            ),
+            class_="overview-card",
+        ),
+        class_="overview-grid",
+    )
+
+
+def _render_detector_chips(bundle: Any | None) -> ui.Tag:
+    """Compact per-detector fired/silent chips (no step table)."""
+    if bundle is None:
+        return ui.div("Select a persona to see detector agreement.", class_="empty-state")
+    if bundle.n_entries < 3:
+        return ui.div(
+            f"This persona has only {bundle.n_entries} entries \u2014 detectors need more history.",
+            class_="empty-state",
+        )
+    chips = []
+    for detector in bundle.detectors:
+        fired = len(detector.alert_steps)
+        chips.append(
+            ui.div(
+                ui.div(detector.name, class_="detector-name"),
+                ui.div(
+                    f"{fired} fired" if fired else "silent",
+                    class_="detector-fired" if fired else "detector-silent",
+                ),
+                class_="detector-card",
+            )
+        )
+    return ui.div(*chips, class_="detector-summary-row")
+
+
 def _build_detector_chart(bundle: Any | None) -> go.Figure:
     """Build a Plotly figure showing per-dimension alignment trajectories with detector alert markers."""
     fig = go.Figure()
@@ -935,7 +1080,7 @@ def _build_detector_chart(bundle: Any | None) -> go.Figure:
         fig.add_annotation(
             text="Select a persona (and run the critic if using Critic source)",
             xref="paper", yref="paper", x=0.5, y=0.5,
-            showarrow=False, font=dict(size=13, color="#6b625c"),
+            showarrow=False, font=dict(size=13, color="#6b7178"),
         )
         fig.update_layout(_detector_chart_layout("Detector comparison — no data"))
         return fig
@@ -943,7 +1088,7 @@ def _build_detector_chart(bundle: Any | None) -> go.Figure:
     T = bundle.n_entries
     x_labels = [f"E{t + 1}" for t in range(T)]
     colors = [
-        "#8a4b24", "#285943", "#294f74", "#7a3d7a", "#8a6a24", "#2a6a6a",
+        "#35618e", "#2f7d55", "#2f8f8a", "#7a3d7a", "#9a6a1a", "#b04338",
         "#c0392b", "#27ae60", "#2980b9", "#8e44ad", "#d4a017", "#16a085",
     ]
 
@@ -987,7 +1132,7 @@ def _build_detector_chart(bundle: Any | None) -> go.Figure:
             )
 
     # Zero line
-    fig.add_hline(y=0, line_dash="dot", line_color="#d8cdc0", line_width=1)
+    fig.add_hline(y=0, line_dash="dot", line_color="#c3c8cd", line_width=1)
 
     source_label = "Judge labels" if bundle.source == "judge" else "Critic predictions"
     fig.update_layout(_detector_chart_layout(
@@ -998,15 +1143,15 @@ def _build_detector_chart(bundle: Any | None) -> go.Figure:
 
 def _detector_chart_layout(title: str) -> dict:
     return dict(
-        title=dict(text=title, font=dict(size=13, color="#1f1a17")),
+        title=dict(text=title, font=dict(size=13, color="#1a1c1f")),
         height=420,
         margin=dict(l=40, r=20, t=40, b=60),
         paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(255,253,250,0.6)",
-        font=dict(family="Iowan Old Style, Palatino Linotype, serif", size=11, color="#1f1a17"),
+        plot_bgcolor="#ffffff",
+        font=dict(family="IBM Plex Sans, system-ui, sans-serif", size=11, color="#1a1c1f"),
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(size=10)),
-        xaxis=dict(gridcolor="#ece7e0", showgrid=True),
-        yaxis=dict(gridcolor="#ece7e0", showgrid=True, range=[-1.7, 1.1]),
+        xaxis=dict(gridcolor="#eff1f3", showgrid=True),
+        yaxis=dict(gridcolor="#eff1f3", showgrid=True, range=[-1.7, 1.1]),
     )
 
 
