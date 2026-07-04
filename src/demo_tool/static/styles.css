@@ -1,44 +1,51 @@
+/* ── Fonts ────────────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
 /* ── Design tokens ────────────────────────────────────────────────────────── */
 :root {
+    /* Type */
+    --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
     /* Surfaces */
-    --bg:              #f4f1ec;
-    --surface:         #fdfaf6;
-    --surface-raised:  #fff8f2;
-    --surface-recessed:#ede9e2;
+    --bg:              #f6f7f8;
+    --surface:         #ffffff;
+    --surface-raised:  #ffffff;
+    --surface-recessed:#f0f1f3;
 
     /* Borders */
-    --border:          #d6cfc5;
-    --border-subtle:   rgba(90, 72, 55, 0.12);
+    --border:          #e6e8eb;
+    --border-subtle:   rgba(26, 28, 31, 0.10);
 
     /* Text */
-    --text:            #1e1a16;
-    --text-muted:      #6a5f56;
-    --text-faint:      #9e948c;
+    --text:            #1a1c1f;
+    --text-muted:      #6b7178;
+    --text-faint:      #9aa0a6;
 
     /* Brand */
-    --accent:          #8a4b24;
-    --accent-soft:     #f0dcc8;
-    --accent-faint:    rgba(138, 75, 36, 0.07);
+    --accent:          #35618e;
+    --accent-soft:     #e7eef5;
+    --accent-faint:    rgba(53, 97, 142, 0.07);
 
     /* Semantic */
-    --ok:              #235c3e;
-    --ok-soft:         #d7ede3;
-    --warn:            #7a4a00;
-    --warn-soft:       #fdefd5;
-    --danger:          #852926;
-    --danger-soft:     #f5dbd7;
-    --info:            #1e4870;
-    --info-soft:       #d8e8f6;
+    --ok:              #2f7d55;
+    --ok-soft:         #e3f0e9;
+    --warn:            #9a6a1a;
+    --warn-soft:       #f6ecd8;
+    --danger:          #b04338;
+    --danger-soft:     #f6e2df;
+    --info:            #35618e;
+    --info-soft:       #e7eef5;
 
     /* Consensus scale — tokenised */
     --c0-bg: var(--surface-recessed); --c0-fg: var(--text-faint);
-    --c1-bg: #fdefd5;                 --c1-fg: #7a4a00;
+    --c1-bg: #f6ecd8;                 --c1-fg: #9a6a1a;
     --c2-bg: #fde0c0;                 --c2-fg: #8a4b24;
-    --c3-bg: #fac8c4;                 --c3-fg: #852926;
+    --c3-bg: #fac8c4;                 --c3-fg: #b04338;
     --c4-bg: var(--danger-soft);      --c4-fg: var(--danger);
 
     /* Geometry */
-    --radius:    16px;
+    --radius:    14px;
     --radius-sm: 10px;
     --radius-xs: 6px;
 
@@ -60,7 +67,7 @@ body {
     margin: 0;
     background: var(--bg);
     color: var(--text);
-    font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
+    font-family: var(--font-sans);
     font-size: 16px;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
@@ -149,10 +156,11 @@ body {
 }
 
 .field-label {
-    font-size: 0.8rem;
+    font-size: 0.72rem;
     color: var(--text-muted);
-    font-variant: small-caps;
-    letter-spacing: 0.04em;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
 }
 
 select,
@@ -180,9 +188,10 @@ button,
 .btn-secondary,
 .btn-default {
     font-family: inherit;
+    font-weight: 600;
     cursor: pointer;
-    border-radius: 999px;
-    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-sm);
+    padding: var(--space-3) var(--space-4);
     border: 1px solid transparent;
     font-size: 0.88rem;
     white-space: nowrap;
@@ -191,8 +200,8 @@ button,
 
 .btn-primary {
     background: var(--accent);
-    color: #fff7f1;
-    box-shadow: 0 2px 8px rgba(138, 75, 36, 0.22);
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(53, 97, 142, 0.28);
 }
 
 .btn-primary:hover  { opacity: 0.88; }
@@ -251,8 +260,9 @@ button,
 }
 
 .stat-value {
+    font-family: var(--font-mono);
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 600;
     color: var(--text);
 }
 
@@ -405,8 +415,9 @@ button,
 }
 
 .digest-kv-value {
+    font-family: var(--font-mono);
     font-size: 1.1rem;
-    font-weight: 700;
+    font-weight: 600;
     color: var(--text);
 }
 
@@ -468,8 +479,9 @@ button,
 }
 
 .metric-value {
+    font-family: var(--font-mono);
     font-size: 0.9rem;
-    font-weight: 700;
+    font-weight: 600;
     color: var(--text);
 }
 
@@ -723,4 +735,237 @@ button,
 
     .persona-stats { flex-wrap: wrap; gap: var(--space-3); }
     .digest-summary-strip { gap: var(--space-4); }
+}
+
+/* ══ Sidebar layout ═══════════════════════════════════════════════════════════
+   Added for the control-sidebar refactor (_build_control_sidebar / layout_sidebar).
+   These rules override the old single-column .app-shell and style the bslib
+   sidebar chrome + the new sidebar-only classes. Cascade order: this block is
+   last, so it wins over the earlier .app-shell / .app-header rules.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Shell now spans the full viewport; the bslib layout owns the grid. */
+.app-shell {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+.app-shell .bslib-sidebar-layout {
+    border: none;
+    min-height: 100vh;
+    --bs-body-bg: var(--bg);
+}
+
+/* Left rail panel */
+.app-shell .bslib-sidebar-layout > .sidebar {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+}
+
+.app-shell .bslib-sidebar-layout > .sidebar > .sidebar-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    padding: var(--space-5) var(--space-4);
+}
+
+/* Results canvas */
+.app-shell .bslib-sidebar-layout > .main {
+    background: var(--bg);
+    padding: var(--space-6) var(--space-6) var(--space-8);
+}
+
+.app-main {
+    max-width: 1080px;
+    margin: 0 auto;
+}
+
+/* Native collapse toggle — tint it to the brand */
+.app-shell .bslib-sidebar-layout > .collapse-toggle {
+    color: var(--text-muted);
+}
+
+/* Brand block */
+.sidebar-brand { margin-bottom: var(--space-1); }
+
+.brand-mark {
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.22em;
+    color: var(--accent);
+}
+
+.brand-sub {
+    font-size: 0.82rem;
+    color: var(--text-faint);
+    margin-top: 4px;
+}
+
+/* Fields stack tightly in the rail */
+.app-sidebar .field,
+.bslib-sidebar-layout > .sidebar .field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+/* Full-width stacked actions */
+.sidebar-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-top: var(--space-1);
+}
+
+.sidebar-actions .btn-primary,
+.sidebar-actions .btn-secondary,
+.sidebar-actions .bslib-input-task-button,
+.sidebar-actions button {
+    width: 100%;
+    justify-content: center;
+}
+
+/* Status banner sits in the rail now — no bottom margin needed */
+.app-sidebar .status-bar,
+.bslib-sidebar-layout > .sidebar .status-bar {
+    margin-bottom: 0;
+}
+
+/* Header no longer carries the status banner on the right — make it a simple stack */
+.app-main .app-header {
+    display: block;
+}
+
+/* ══ T-rail collapsed state ═══════════════════════════════════════════════════
+   Driven entirely by a `.t-collapsed` class on `.app-shell` (toggled by the
+   inline onclick handlers in the sidebar). The sidebar is `open="always"`, so
+   bslib never touches it — we own the collapse behaviour.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Brand row: wordmark left, collapse « right */
+.sidebar-brand {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-bottom: var(--space-1);
+}
+
+.sidebar-collapse-btn {
+    cursor: pointer;
+    color: var(--text-faint);
+    font-size: 1.15rem;
+    line-height: 1;
+    padding: 0 2px;
+    user-select: none;
+}
+.sidebar-collapse-btn:hover { color: var(--text-muted); }
+
+/* Mini rail is hidden until collapsed */
+.sidebar-mini { display: none; }
+
+/* Collapsed: shrink the grid column + sidebar to a 64px rail */
+.app-shell.t-collapsed .bslib-sidebar-layout {
+    grid-template-columns: 64px 1fr !important;
+}
+.app-shell.t-collapsed .bslib-sidebar-layout > .sidebar {
+    width: 64px !important;
+    min-width: 64px !important;
+}
+.app-shell.t-collapsed .bslib-sidebar-layout > .sidebar > .sidebar-content {
+    padding: var(--space-5) 0 !important;
+    align-items: center;
+}
+
+/* Collapsed: hide everything except the mini rail */
+.app-shell.t-collapsed .sidebar-content > *:not(.sidebar-mini) { display: none !important; }
+.app-shell.t-collapsed .sidebar-mini {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+}
+
+/* Mini rail items */
+.mini-mark {
+    cursor: pointer;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius-sm);
+    background: var(--accent-soft);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.05rem;
+    user-select: none;
+}
+.mini-expand {
+    cursor: pointer;
+    color: var(--text-faint);
+    font-size: 1.1rem;
+    line-height: 1;
+    user-select: none;
+}
+.mini-expand:hover { color: var(--text-muted); }
+.mini-sep { width: 20px; height: 1px; background: var(--border); }
+.mini-run {
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    background: var(--accent);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+    box-shadow: 0 4px 12px rgba(53, 97, 142, 0.28);
+}
+.mini-run:hover { opacity: 0.9; }
+
+/* ══ Overview landing tab ═════════════════════════════════════════════════════ */
+.overview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+    margin-bottom: var(--space-5);
+}
+
+.overview-card {
+    background: var(--surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius);
+    padding: var(--space-4) var(--space-5);
+}
+
+.overview-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-2);
+}
+
+.overview-tag {
+    font-size: 0.74rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--warn);
+    background: var(--warn-soft);
+    padding: 3px var(--space-2);
+    border-radius: 999px;
+}
+
+.overview-block { margin-top: var(--space-3); }
+.overview-block:first-child { margin-top: 0; }
+
+.overview-chart-block,
+.overview-detectors-block { margin-top: var(--space-5); }
+
+@media (max-width: 720px) {
+    .overview-grid { grid-template-columns: 1fr; }
 }
