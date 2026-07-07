@@ -127,3 +127,13 @@
   both commentary layers: the top "latest" note near the frontier table and the
   newest-first `## Findings` entry below the run log. Run table rows alone are
   not enough.
+
+## 2026-07-07
+
+- Prototype code existing (module + tests + an import site) is not the same as
+  a feature being adopted. Before recommending an issue be closed as
+  "implemented", check the product-facing docs for adoption/decision status —
+  e.g. `src/vif/evolution.py` exists with tests, but
+  `docs/weekly/weekly_digest_generation.md` explicitly marks evolution gating
+  as undecided and outside the committed Coach flow. Issues about product
+  capabilities track the decision, not just the code.

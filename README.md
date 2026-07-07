@@ -10,6 +10,7 @@ Twinkl is an "inner compass" that helps users align their daily behavior with th
 ## Documentation Guide
 
 - [`docs/prd.md`](docs/prd.md) — authoritative product intent and implementation status
+- [`docs/architecture/e2e_architecture.md`](docs/architecture/e2e_architecture.md) — high-level end-to-end architecture map with unresolved product decisions called out
 - [`docs/vif/01_concepts_and_roadmap.md`](docs/vif/01_concepts_and_roadmap.md), [`docs/vif/02_system_architecture.md`](docs/vif/02_system_architecture.md), [`docs/vif/03_model_training.md`](docs/vif/03_model_training.md), [`docs/vif/04_uncertainty_logic.md`](docs/vif/04_uncertainty_logic.md) — VIF design, runtime, training, and uncertainty logic
 - [`docs/pipeline/pipeline_specs.md`](docs/pipeline/pipeline_specs.md), [`docs/pipeline/data_schema.md`](docs/pipeline/data_schema.md), [`docs/pipeline/consensus_rejudging_instructions.md`](docs/pipeline/consensus_rejudging_instructions.md) — data generation, label surfaces, and consensus diagnostics
 - [`docs/weekly/weekly_digest_generation.md`](docs/weekly/weekly_digest_generation.md) — weekly Coach digest contract and runtime CLI
