@@ -1,0 +1,9 @@
+label_source,label_path,week_mode,definition,personas_flagged,n_personas,pct_personas
+judge,logs/judge_labels/judge_labels.parquet,runtime,R1 sustained conflict (-1 run >= 2),49,204,24.0
+judge,logs/judge_labels/judge_labels.parquet,runtime,R2 conflict week (>=2 -1 entries in a week),39,204,19.1
+judge,logs/judge_labels/judge_labels.parquet,runtime,R3 unrecovered departure (>=0 -> -1 -> -1),35,204,17.2
+judge,logs/judge_labels/judge_labels.parquet,runtime,union,52,204,25.5
+consensus,logs/judge_labels/consensus_labels.parquet,runtime,R1 sustained conflict (-1 run >= 2),40,204,19.6
+consensus,logs/judge_labels/consensus_labels.parquet,runtime,R2 conflict week (>=2 -1 entries in a week),32,204,15.7
+consensus,logs/judge_labels/consensus_labels.parquet,runtime,R3 unrecovered departure (>=0 -> -1 -> -1),30,204,14.7
+consensus,logs/judge_labels/consensus_labels.parquet,runtime,union,41,204,20.1

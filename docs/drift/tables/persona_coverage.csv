@@ -1,0 +1,6 @@
+pattern,param,personas_flagged,n_personas
+dip_hard (+1→-1),entry,70,204
+dip_any (0/+1→-1),entry,92,204
+sustained (-1 run),C=2,40,204
+sustained (-1 run),C=3,20,204
+fade (+1→0s),C=2,72,204
