@@ -1,5 +1,3 @@
-# Decision: drift definition (blocks P0 benchmark work)
-
 ## TL;DR
 
 We need to settle on **one v1 definition of drift** so that several P0 tasks can move.
@@ -80,7 +78,7 @@ Adopt **Option 1: Sustained Conflict Episode** for v1 and ship the end-to-end pa
 - **Development reference** — two consecutive consensus conflict labels on a declared core value.
 - **Runtime detector** — accumulated soft conflict confidence over recent entries, rather than two hard verdicts.
 - **Final evaluation** — a separate held-out scripted or adjudicated episode set; the organic label-derived corpus is for EDA and tuning.
-- **Delivery** — a weekly Coach digest citing the entries. An episode is detected when the first `-1, -1` pair completes; later evidence in that digest week classifies it as open, unresolved, or recovered. Recovered episodes (9/41 flagged trajectories, 22%) get recovery framing rather than a warning, so benchmark coverage is detection volume, not warning volume.
+- **Delivery** — a weekly Coach digest citing the entries. An episode is detected when the first `-1, -1` pair completes; later evidence in that digest week classifies it as open, unresolved, or recovered. Recovered episodes (9/41 flagged trajectories, 22%) get recovery framing rather than a warning, so detected coverage is not the same as warning volume.
 
 Options 2 and 3 remain secondary analysis slices (digest QA; departure-from-alignment analysis), not the v1 definition.
 
