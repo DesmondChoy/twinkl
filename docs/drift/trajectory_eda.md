@@ -115,9 +115,9 @@ down to **Conformity 14% (4/28)**. Sustained conflict (C=2) ranges from Power
 over-represent Power/Hedonism/Universalism personas in the benchmark. Keep this
 in mind for stratified reporting even if v1 uses one definition.
 
-### F7 — Label-derived crisis weeks are enough for tuning, not final unbiased eval
+### F7 — Label-derived conflict-heavy weeks are enough for tuning, not final unbiased eval
 
-Candidate crisis weeks are runtime weeks with >=2 entries and a share of entries
+Candidate conflict-heavy weeks are runtime weeks with >=2 entries and a share of entries
 labeled -1 above threshold:
 
 | -1 density >= | Core-dim weeks | Non-core weeks |
@@ -127,15 +127,15 @@ labeled -1 above threshold:
 | 0.75 | 28 | 29 |
 | 1.00 | 27 | 28 |
 
-![Crisis week candidates](figures/fig5_crisis_week_candidates.png)
+![Conflict-heavy week candidates](figures/fig5_conflict_heavy_weeks.png)
 
-There are enough consensus-reference crisis weeks for twinkl-wq9p threshold
+There are enough consensus-reference conflict-heavy weeks for twinkl-wq9p threshold
 tuning. Composition is skewed (Power 31, Hedonism 21, Security 15,
 Universalism 15, Achievement 1), and these labels are still judge-derived. Use
 them for tuning and error analysis; keep a held-out scripted set for unbiased
 evaluation if time allows.
 
-Full list: [`tables/crisis_week_candidates.csv`](tables/crisis_week_candidates.csv).
+Full list: [`tables/conflict_heavy_week_candidates.csv`](tables/conflict_heavy_week_candidates.csv).
 
 ## Implications for the definition debate
 
@@ -216,7 +216,7 @@ bundle.
 - Core-gated denominators per dimension are small (24-37); per-dimension
   percentages carry wide uncertainty.
 - Five personas have <=2 entries and cannot exhibit multi-step patterns.
-- The `crisis_week_candidates.csv` table is filtered to density >=0.5; lower
+- The `conflict_heavy_week_candidates.csv` table is filtered to density >=0.5; lower
   threshold counts in this report come from the full in-memory candidate frame.
 
 ## Reproduction
@@ -242,5 +242,5 @@ Generated outputs:
 - `figures/*.png`
 - `tables/pattern_prevalence_grid.csv`
 - `tables/persona_coverage.csv`
-- `tables/crisis_week_candidates.csv`
+- `tables/conflict_heavy_week_candidates.csv`
 - `tables/single_definition_impact_comparison.csv`

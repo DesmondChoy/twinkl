@@ -278,8 +278,8 @@ def run_length_stats(personas):
     return dict(sorted(runs.items()))
 
 
-def crisis_week_candidates(personas, core):
-    """Label-derived candidate crisis weeks for the wq9p benchmark."""
+def conflict_heavy_week_candidates(personas, core):
+    """Label-derived candidate conflict-heavy weeks for the wq9p benchmark."""
     rows = []
     for p, data in personas.items():
         for d in DIMS:
@@ -517,8 +517,8 @@ def fig_cliffs(grid: pl.DataFrame):
     plt.close(fig)
 
 
-def fig_crisis_weeks(cand: pl.DataFrame):
-    """Candidate crisis-week counts under -1 density definitions."""
+def fig_conflict_heavy_weeks(cand: pl.DataFrame):
+    """Candidate conflict-heavy-week counts under -1 density definitions."""
     fig, ax = plt.subplots(figsize=(7.0, 3.4))
     thresholds = [0.25, 0.5, 0.75, 1.0]
     for is_core, color, label in [(True, RED, "core dims"), (False, MUTED, "non-core dims")]:
@@ -540,12 +540,12 @@ def fig_crisis_weeks(cand: pl.DataFrame):
                     fontsize=8.5, color=color)
     ax.set_xticks(thresholds)
     ax.set_xlabel("−1 density threshold (share of week's entries labeled −1)")
-    ax.set_ylabel("candidate crisis weeks")
+    ax.set_ylabel("candidate conflict-heavy weeks")
     ax.set_xlim(0.2, 1.13)
-    ax.set_title("Label-derived crisis-week candidates (weeks with ≥2 entries)",
+    ax.set_title("Label-derived conflict-heavy weeks (weeks with ≥2 entries)",
                  fontsize=11, loc="left", color=INK)
     fig.tight_layout()
-    fig.savefig(FIG / "fig5_crisis_week_candidates.png", dpi=160)
+    fig.savefig(FIG / "fig5_conflict_heavy_weeks.png", dpi=160)
     plt.close(fig)
 
 
@@ -564,11 +564,11 @@ def main():
     coverage = persona_coverage(personas, core)
     coverage.write_csv(TAB / "persona_coverage.csv")
 
-    cand = crisis_week_candidates(personas, core)
+    cand = conflict_heavy_week_candidates(personas, core)
     cand.filter(
         (pl.col("neg_density") >= 0.5) & (pl.col("n_entries") >= 2)
     ).sort("neg_density", descending=True).write_csv(
-        TAB / "crisis_week_candidates.csv")
+        TAB / "conflict_heavy_week_candidates.csv")
 
     impact = impact_comparison(week_mode=args.week_mode)
     impact.write_csv(TAB / "single_definition_impact_comparison.csv")
@@ -580,7 +580,7 @@ def main():
     fig_trajectories(personas, core)
     fig_prevalence(grid)
     fig_cliffs(grid)
-    fig_crisis_weeks(cand)
+    fig_conflict_heavy_weeks(cand)
 
     # ---- stdout summary (consumed for the report) ----
     n_weeks = [d["n_weeks"] for d in personas.values()]
