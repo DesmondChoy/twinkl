@@ -8,9 +8,10 @@
 
 The team is deciding how to define and quantify drift. The drift-detection docs
 (`docs/evolution/drift_detection.md`, `docs/evals/drift_detection_eval.md`) are
-**not final**; this EDA treats their signal taxonomy (crash / rut / fade / rise /
-spike) as a **hypothesis menu** and measures the base rate of each candidate
-pattern in the judge-label reference data.
+**not final**; this EDA treats their signal taxonomy as a **hypothesis menu**
+and measures the base rate of each candidate pattern (single-entry dips,
+sustained conflict runs, fades, rises, spikes) in the judge-label reference
+data.
 
 This version uses the 5-pass **consensus reference** as the default decision
 table, with persisted single-pass judge labels shown side-by-side where the
@@ -36,7 +37,7 @@ class balance through benchmark construction.
 ### F1 — Timelines are short, so v1 should avoid multi-week machinery
 
 The runtime-compatible weekly bins give a median of **5 active weeks** per
-persona. A 3-week rut is still most of the observed life for the median persona,
+persona. A 3-week low period is still most of the observed life for the median persona,
 and a baseline-vs-recent comparison has little room to breathe.
 
 The practical answer is not to abandon the weekly Coach. It is to separate the
@@ -45,18 +46,18 @@ two layers:
 - **Detection evidence:** rolling entry-level evidence over recent entries.
 - **Delivery cadence:** weekly Coach digest.
 
-That keeps the product cadence while avoiding a fragile weekly-rut definition.
+That keeps the product cadence while avoiding fragile multi-week low-mean definitions.
 
-### F2 — Crashes are common but mostly transient
+### F2 — Dips into conflict are common but mostly transient
 
-| Crash definition | % of core trajectories | Personas with >=1 core crash |
+| Dip definition | % of core trajectories | Personas with >=1 core dip |
 |---|---:|---:|
 | any transition into -1 (from 0/+1) | 34.9% (102/292) | 92/204 = 45.1% |
-| hard crash only (+1 -> -1) | 25.0% (73/292) | 70/204 = 34.3% |
+| hard dip only (+1 -> -1) | 25.0% (73/292) | 70/204 = 34.3% |
 
-But **84.4% of core-dim crash events recover to >= 0 within 2 steps** (114/135;
-90.6% across all dims, 434/479). A crash-only definition would mostly count
-single-entry dips. Any usable definition needs persistence.
+But **84.4% of core-dim dip events recover to >= 0 within 2 entries** (114/135;
+90.6% across all dims, 434/479). A dip-only definition would mostly count
+single-entry blips. Any usable definition needs persistence.
 
 ### F3 — Sustained negativity is rare, and thresholds cliff quickly
 
@@ -68,7 +69,7 @@ On declared core values:
 | Pattern | C=2 | C=3 | C=4 |
 |---|---:|---:|---:|
 | -1 run >= C | 14.0% (41/292), 40 personas | 6.8% (20/292), 20 personas | 1.7% (5/292) |
-| weekly rut (mean < -0.4, >= C runtime weeks) | 7.5% (22/292) | too thin for v1 | too thin for v1 |
+| low-mean weeks (mean < -0.4, >= C runtime weeks) | 7.5% (22/292) | too thin for v1 | too thin for v1 |
 | fade: +1 then >= C zeros | 31.2% (91/292), 72 personas | 11.3% (33/292) | parked |
 
 Every extra step of persistence sharply reduces the positive class. **Two
@@ -88,7 +89,7 @@ This matches how the synthetic data was generated: per-entry variation, not
 long scripted arcs. Consequences:
 
 - The current data can support a sustained-conflict definition.
-- It cannot validate fade/evolution/slow-rut concepts without new arc-scripted
+- It cannot validate fade/evolution/slow-decline concepts without new arc-scripted
   generation.
 - Evolution-vs-drift remains parked for later.
 
@@ -108,7 +109,7 @@ definition.
 
 ![Per-dimension prevalence, core-gated](figures/fig3_prevalence_core.png)
 
-Crash into -1 on core dims ranges from **Power 59% (22/37)** and Hedonism 58%
+Dips into -1 on core dims range from **Power 59% (22/37)** and Hedonism 58%
 down to **Conformity 14% (4/28)**. Sustained conflict (C=2) ranges from Power
 32% and Universalism 28% down to Tradition 0%. A single global threshold will
 over-represent Power/Hedonism/Universalism personas in the benchmark. Keep this
@@ -141,8 +142,8 @@ Full list: [`tables/crisis_week_candidates.csv`](tables/crisis_week_candidates.c
 1. **Feasible on current data:** a core-gated, persistence-based definition:
    strict two consecutive -1 consensus reference labels on a declared core
    value.
-2. **Not supportable for v1:** crash-only alerts, fade/dormancy, peripheral
-   value rise, value evolution, and multi-week chronic rut. The current data
+2. **Not supportable for v1:** single-entry dip alerts, fade/dormancy, peripheral
+   value rise, value evolution, and multi-week chronic low periods. The current data
    does not contain clean long arcs.
 3. **Architecture choice:** the label benchmark can be hard and strict, but the
    runtime detector should consume soft evidence. Two hard argmax -1 predictions
@@ -154,7 +155,8 @@ Full list: [`tables/crisis_week_candidates.csv`](tables/crisis_week_candidates.c
 ## Top-3 recommendations for a single drift definition (de-scoped)
 
 Scope decision: v1 uses **one** definition of drift: sustained conflict with a
-declared core value. No crash+rut split. No fade/rise/evolution machinery. Build
+declared core value. No separate single-entry vs multi-week pattern taxonomy.
+No fade/rise/evolution machinery. Build
 the end-to-end path first; expand only if time remains.
 
 | # | Label-side reference definition | Consensus impact | Persisted-label comparison | One-line case |
@@ -181,7 +183,7 @@ Layer split:
 | Label benchmark | strict 2 consecutive consensus -1 labels on a declared core/high-weight value |
 | Runtime detector | rolling soft P(-1) evidence mass, not two hard argmax -1 predictions |
 | Delivery | weekly Coach digest with cited entries |
-| Parked scope | single-entry crash alerts, fade/dormancy, peripheral-value rise, onboarding-gap messaging, evolution gating, multi-week weekly ruts |
+| Parked scope | single-entry dip alerts, fade/dormancy, peripheral-value rise, onboarding-gap messaging, evolution gating, multi-week low-mean definitions |
 
 Why this is the right v1:
 

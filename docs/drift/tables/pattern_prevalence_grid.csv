@@ -1,54 +1,54 @@
 pattern,param,dim,all_hits,all_n,core_hits,core_n
-crash_hard (+1→-1),entry,self_direction,17,204,4,24
-crash_hard (+1→-1),entry,stimulation,4,204,4,24
-crash_hard (+1→-1),entry,hedonism,19,204,14,33
-crash_hard (+1→-1),entry,achievement,8,204,2,25
-crash_hard (+1→-1),entry,power,16,204,16,37
-crash_hard (+1→-1),entry,security,18,204,10,36
-crash_hard (+1→-1),entry,conformity,9,204,3,28
-crash_hard (+1→-1),entry,tradition,5,204,5,28
-crash_hard (+1→-1),entry,benevolence,18,204,6,25
-crash_hard (+1→-1),entry,universalism,9,204,9,32
-crash_any (0/+1→-1),entry,self_direction,53,204,5,24
-crash_any (0/+1→-1),entry,stimulation,21,204,7,24
-crash_any (0/+1→-1),entry,hedonism,63,204,19,33
-crash_any (0/+1→-1),entry,achievement,28,204,4,25
-crash_any (0/+1→-1),entry,power,33,204,22,37
-crash_any (0/+1→-1),entry,security,55,204,15,36
-crash_any (0/+1→-1),entry,conformity,53,204,4,28
-crash_any (0/+1→-1),entry,tradition,26,204,9,28
-crash_any (0/+1→-1),entry,benevolence,50,204,6,25
-crash_any (0/+1→-1),entry,universalism,12,204,11,32
-rut (-1 run),C=2,self_direction,21,204,2,24
-rut (-1 run),C=2,stimulation,7,204,2,24
-rut (-1 run),C=2,hedonism,16,204,8,33
-rut (-1 run),C=2,achievement,6,204,1,25
-rut (-1 run),C=2,power,13,204,12,37
-rut (-1 run),C=2,security,19,204,3,36
-rut (-1 run),C=2,conformity,15,204,1,28
-rut (-1 run),C=2,tradition,0,204,0,28
-rut (-1 run),C=2,benevolence,11,204,3,25
-rut (-1 run),C=2,universalism,9,204,9,32
-rut (-1 run),C=3,self_direction,7,204,1,24
-rut (-1 run),C=3,stimulation,0,204,0,24
-rut (-1 run),C=3,hedonism,9,204,6,33
-rut (-1 run),C=3,achievement,0,204,0,25
-rut (-1 run),C=3,power,5,204,5,37
-rut (-1 run),C=3,security,7,204,3,36
-rut (-1 run),C=3,conformity,3,204,0,28
-rut (-1 run),C=3,tradition,0,204,0,28
-rut (-1 run),C=3,benevolence,2,204,0,25
-rut (-1 run),C=3,universalism,5,204,5,32
-rut (-1 run),C=4,self_direction,1,204,0,24
-rut (-1 run),C=4,stimulation,0,204,0,24
-rut (-1 run),C=4,hedonism,1,204,1,33
-rut (-1 run),C=4,achievement,0,204,0,25
-rut (-1 run),C=4,power,0,204,0,37
-rut (-1 run),C=4,security,1,204,0,36
-rut (-1 run),C=4,conformity,3,204,0,28
-rut (-1 run),C=4,tradition,0,204,0,28
-rut (-1 run),C=4,benevolence,0,204,0,25
-rut (-1 run),C=4,universalism,4,204,4,32
+dip_hard (+1→-1),entry,self_direction,17,204,4,24
+dip_hard (+1→-1),entry,stimulation,4,204,4,24
+dip_hard (+1→-1),entry,hedonism,19,204,14,33
+dip_hard (+1→-1),entry,achievement,8,204,2,25
+dip_hard (+1→-1),entry,power,16,204,16,37
+dip_hard (+1→-1),entry,security,18,204,10,36
+dip_hard (+1→-1),entry,conformity,9,204,3,28
+dip_hard (+1→-1),entry,tradition,5,204,5,28
+dip_hard (+1→-1),entry,benevolence,18,204,6,25
+dip_hard (+1→-1),entry,universalism,9,204,9,32
+dip_any (0/+1→-1),entry,self_direction,53,204,5,24
+dip_any (0/+1→-1),entry,stimulation,21,204,7,24
+dip_any (0/+1→-1),entry,hedonism,63,204,19,33
+dip_any (0/+1→-1),entry,achievement,28,204,4,25
+dip_any (0/+1→-1),entry,power,33,204,22,37
+dip_any (0/+1→-1),entry,security,55,204,15,36
+dip_any (0/+1→-1),entry,conformity,53,204,4,28
+dip_any (0/+1→-1),entry,tradition,26,204,9,28
+dip_any (0/+1→-1),entry,benevolence,50,204,6,25
+dip_any (0/+1→-1),entry,universalism,12,204,11,32
+sustained (-1 run),C=2,self_direction,21,204,2,24
+sustained (-1 run),C=2,stimulation,7,204,2,24
+sustained (-1 run),C=2,hedonism,16,204,8,33
+sustained (-1 run),C=2,achievement,6,204,1,25
+sustained (-1 run),C=2,power,13,204,12,37
+sustained (-1 run),C=2,security,19,204,3,36
+sustained (-1 run),C=2,conformity,15,204,1,28
+sustained (-1 run),C=2,tradition,0,204,0,28
+sustained (-1 run),C=2,benevolence,11,204,3,25
+sustained (-1 run),C=2,universalism,9,204,9,32
+sustained (-1 run),C=3,self_direction,7,204,1,24
+sustained (-1 run),C=3,stimulation,0,204,0,24
+sustained (-1 run),C=3,hedonism,9,204,6,33
+sustained (-1 run),C=3,achievement,0,204,0,25
+sustained (-1 run),C=3,power,5,204,5,37
+sustained (-1 run),C=3,security,7,204,3,36
+sustained (-1 run),C=3,conformity,3,204,0,28
+sustained (-1 run),C=3,tradition,0,204,0,28
+sustained (-1 run),C=3,benevolence,2,204,0,25
+sustained (-1 run),C=3,universalism,5,204,5,32
+sustained (-1 run),C=4,self_direction,1,204,0,24
+sustained (-1 run),C=4,stimulation,0,204,0,24
+sustained (-1 run),C=4,hedonism,1,204,1,33
+sustained (-1 run),C=4,achievement,0,204,0,25
+sustained (-1 run),C=4,power,0,204,0,37
+sustained (-1 run),C=4,security,1,204,0,36
+sustained (-1 run),C=4,conformity,3,204,0,28
+sustained (-1 run),C=4,tradition,0,204,0,28
+sustained (-1 run),C=4,benevolence,0,204,0,25
+sustained (-1 run),C=4,universalism,4,204,4,32
 fade (+1→0s),C=2,self_direction,65,204,9,24
 fade (+1→0s),C=2,stimulation,16,204,9,24
 fade (+1→0s),C=2,hedonism,36,204,14,33
@@ -119,83 +119,83 @@ never +1 (n>=3),entry,conformity,97,204,0,28
 never +1 (n>=3),entry,tradition,133,204,0,28
 never +1 (n>=3),entry,benevolence,50,204,0,25
 never +1 (n>=3),entry,universalism,160,204,1,32
-weekly crash (mean drop),δ=0.5,self_direction,100,204,15,24
-weekly crash (mean drop),δ=0.5,stimulation,32,204,16,24
-weekly crash (mean drop),δ=0.5,hedonism,75,204,25,33
-weekly crash (mean drop),δ=0.5,achievement,104,204,17,25
-weekly crash (mean drop),δ=0.5,power,47,204,24,37
-weekly crash (mean drop),δ=0.5,security,87,204,25,36
-weekly crash (mean drop),δ=0.5,conformity,93,204,16,28
-weekly crash (mean drop),δ=0.5,tradition,54,204,20,28
-weekly crash (mean drop),δ=0.5,benevolence,110,204,13,25
-weekly crash (mean drop),δ=0.5,universalism,28,204,24,32
-weekly crash (mean drop),δ=1.0,self_direction,54,204,8,24
-weekly crash (mean drop),δ=1.0,stimulation,17,204,8,24
-weekly crash (mean drop),δ=1.0,hedonism,36,204,19,33
-weekly crash (mean drop),δ=1.0,achievement,68,204,12,25
-weekly crash (mean drop),δ=1.0,power,28,204,17,37
-weekly crash (mean drop),δ=1.0,security,44,204,16,36
-weekly crash (mean drop),δ=1.0,conformity,53,204,11,28
-weekly crash (mean drop),δ=1.0,tradition,25,204,10,28
-weekly crash (mean drop),δ=1.0,benevolence,50,204,4,25
-weekly crash (mean drop),δ=1.0,universalism,16,204,15,32
-weekly crash (mean drop),δ=1.5,self_direction,10,204,3,24
-weekly crash (mean drop),δ=1.5,stimulation,0,204,0,24
-weekly crash (mean drop),δ=1.5,hedonism,5,204,4,33
-weekly crash (mean drop),δ=1.5,achievement,4,204,2,25
-weekly crash (mean drop),δ=1.5,power,7,204,7,37
-weekly crash (mean drop),δ=1.5,security,5,204,4,36
-weekly crash (mean drop),δ=1.5,conformity,2,204,0,28
-weekly crash (mean drop),δ=1.5,tradition,3,204,3,28
-weekly crash (mean drop),δ=1.5,benevolence,6,204,1,25
-weekly crash (mean drop),δ=1.5,universalism,4,204,4,32
-weekly crash (mean drop),δ=2.0,self_direction,7,204,2,24
-weekly crash (mean drop),δ=2.0,stimulation,0,204,0,24
-weekly crash (mean drop),δ=2.0,hedonism,3,204,3,33
-weekly crash (mean drop),δ=2.0,achievement,2,204,1,25
-weekly crash (mean drop),δ=2.0,power,3,204,3,37
-weekly crash (mean drop),δ=2.0,security,2,204,2,36
-weekly crash (mean drop),δ=2.0,conformity,1,204,0,28
-weekly crash (mean drop),δ=2.0,tradition,2,204,2,28
-weekly crash (mean drop),δ=2.0,benevolence,4,204,1,25
-weekly crash (mean drop),δ=2.0,universalism,3,204,3,32
-weekly rut (mean<τ),"τ=-0.4,C=2",self_direction,14,204,0,24
-weekly rut (mean<τ),"τ=-0.4,C=2",stimulation,5,204,1,24
-weekly rut (mean<τ),"τ=-0.4,C=2",hedonism,9,204,5,33
-weekly rut (mean<τ),"τ=-0.4,C=2",achievement,3,204,0,25
-weekly rut (mean<τ),"τ=-0.4,C=2",power,6,204,5,37
-weekly rut (mean<τ),"τ=-0.4,C=2",security,16,204,4,36
-weekly rut (mean<τ),"τ=-0.4,C=2",conformity,12,204,0,28
-weekly rut (mean<τ),"τ=-0.4,C=2",tradition,2,204,1,28
-weekly rut (mean<τ),"τ=-0.4,C=2",benevolence,3,204,0,25
-weekly rut (mean<τ),"τ=-0.4,C=2",universalism,6,204,6,32
-weekly rut (mean<τ),"τ=-0.4,C=3",self_direction,5,204,0,24
-weekly rut (mean<τ),"τ=-0.4,C=3",stimulation,0,204,0,24
-weekly rut (mean<τ),"τ=-0.4,C=3",hedonism,1,204,1,33
-weekly rut (mean<τ),"τ=-0.4,C=3",achievement,0,204,0,25
-weekly rut (mean<τ),"τ=-0.4,C=3",power,2,204,2,37
-weekly rut (mean<τ),"τ=-0.4,C=3",security,4,204,0,36
-weekly rut (mean<τ),"τ=-0.4,C=3",conformity,6,204,0,28
-weekly rut (mean<τ),"τ=-0.4,C=3",tradition,1,204,0,28
-weekly rut (mean<τ),"τ=-0.4,C=3",benevolence,0,204,0,25
-weekly rut (mean<τ),"τ=-0.4,C=3",universalism,2,204,2,32
-weekly rut (mean<τ),"τ=-0.25,C=2",self_direction,16,204,0,24
-weekly rut (mean<τ),"τ=-0.25,C=2",stimulation,6,204,1,24
-weekly rut (mean<τ),"τ=-0.25,C=2",hedonism,12,204,5,33
-weekly rut (mean<τ),"τ=-0.25,C=2",achievement,4,204,0,25
-weekly rut (mean<τ),"τ=-0.25,C=2",power,6,204,5,37
-weekly rut (mean<τ),"τ=-0.25,C=2",security,19,204,4,36
-weekly rut (mean<τ),"τ=-0.25,C=2",conformity,12,204,0,28
-weekly rut (mean<τ),"τ=-0.25,C=2",tradition,2,204,1,28
-weekly rut (mean<τ),"τ=-0.25,C=2",benevolence,5,204,0,25
-weekly rut (mean<τ),"τ=-0.25,C=2",universalism,6,204,6,32
-weekly rut (mean<τ),"τ=-0.25,C=3",self_direction,6,204,0,24
-weekly rut (mean<τ),"τ=-0.25,C=3",stimulation,0,204,0,24
-weekly rut (mean<τ),"τ=-0.25,C=3",hedonism,2,204,1,33
-weekly rut (mean<τ),"τ=-0.25,C=3",achievement,1,204,0,25
-weekly rut (mean<τ),"τ=-0.25,C=3",power,2,204,2,37
-weekly rut (mean<τ),"τ=-0.25,C=3",security,5,204,0,36
-weekly rut (mean<τ),"τ=-0.25,C=3",conformity,7,204,0,28
-weekly rut (mean<τ),"τ=-0.25,C=3",tradition,1,204,0,28
-weekly rut (mean<τ),"τ=-0.25,C=3",benevolence,0,204,0,25
-weekly rut (mean<τ),"τ=-0.25,C=3",universalism,3,204,3,32
+weekly mean drop,δ=0.5,self_direction,100,204,15,24
+weekly mean drop,δ=0.5,stimulation,32,204,16,24
+weekly mean drop,δ=0.5,hedonism,75,204,25,33
+weekly mean drop,δ=0.5,achievement,104,204,17,25
+weekly mean drop,δ=0.5,power,47,204,24,37
+weekly mean drop,δ=0.5,security,87,204,25,36
+weekly mean drop,δ=0.5,conformity,93,204,16,28
+weekly mean drop,δ=0.5,tradition,54,204,20,28
+weekly mean drop,δ=0.5,benevolence,110,204,13,25
+weekly mean drop,δ=0.5,universalism,28,204,24,32
+weekly mean drop,δ=1.0,self_direction,54,204,8,24
+weekly mean drop,δ=1.0,stimulation,17,204,8,24
+weekly mean drop,δ=1.0,hedonism,36,204,19,33
+weekly mean drop,δ=1.0,achievement,68,204,12,25
+weekly mean drop,δ=1.0,power,28,204,17,37
+weekly mean drop,δ=1.0,security,44,204,16,36
+weekly mean drop,δ=1.0,conformity,53,204,11,28
+weekly mean drop,δ=1.0,tradition,25,204,10,28
+weekly mean drop,δ=1.0,benevolence,50,204,4,25
+weekly mean drop,δ=1.0,universalism,16,204,15,32
+weekly mean drop,δ=1.5,self_direction,10,204,3,24
+weekly mean drop,δ=1.5,stimulation,0,204,0,24
+weekly mean drop,δ=1.5,hedonism,5,204,4,33
+weekly mean drop,δ=1.5,achievement,4,204,2,25
+weekly mean drop,δ=1.5,power,7,204,7,37
+weekly mean drop,δ=1.5,security,5,204,4,36
+weekly mean drop,δ=1.5,conformity,2,204,0,28
+weekly mean drop,δ=1.5,tradition,3,204,3,28
+weekly mean drop,δ=1.5,benevolence,6,204,1,25
+weekly mean drop,δ=1.5,universalism,4,204,4,32
+weekly mean drop,δ=2.0,self_direction,7,204,2,24
+weekly mean drop,δ=2.0,stimulation,0,204,0,24
+weekly mean drop,δ=2.0,hedonism,3,204,3,33
+weekly mean drop,δ=2.0,achievement,2,204,1,25
+weekly mean drop,δ=2.0,power,3,204,3,37
+weekly mean drop,δ=2.0,security,2,204,2,36
+weekly mean drop,δ=2.0,conformity,1,204,0,28
+weekly mean drop,δ=2.0,tradition,2,204,2,28
+weekly mean drop,δ=2.0,benevolence,4,204,1,25
+weekly mean drop,δ=2.0,universalism,3,204,3,32
+low-mean weeks (mean<τ),"τ=-0.4,C=2",self_direction,14,204,0,24
+low-mean weeks (mean<τ),"τ=-0.4,C=2",stimulation,5,204,1,24
+low-mean weeks (mean<τ),"τ=-0.4,C=2",hedonism,9,204,5,33
+low-mean weeks (mean<τ),"τ=-0.4,C=2",achievement,3,204,0,25
+low-mean weeks (mean<τ),"τ=-0.4,C=2",power,6,204,5,37
+low-mean weeks (mean<τ),"τ=-0.4,C=2",security,16,204,4,36
+low-mean weeks (mean<τ),"τ=-0.4,C=2",conformity,12,204,0,28
+low-mean weeks (mean<τ),"τ=-0.4,C=2",tradition,2,204,1,28
+low-mean weeks (mean<τ),"τ=-0.4,C=2",benevolence,3,204,0,25
+low-mean weeks (mean<τ),"τ=-0.4,C=2",universalism,6,204,6,32
+low-mean weeks (mean<τ),"τ=-0.4,C=3",self_direction,5,204,0,24
+low-mean weeks (mean<τ),"τ=-0.4,C=3",stimulation,0,204,0,24
+low-mean weeks (mean<τ),"τ=-0.4,C=3",hedonism,1,204,1,33
+low-mean weeks (mean<τ),"τ=-0.4,C=3",achievement,0,204,0,25
+low-mean weeks (mean<τ),"τ=-0.4,C=3",power,2,204,2,37
+low-mean weeks (mean<τ),"τ=-0.4,C=3",security,4,204,0,36
+low-mean weeks (mean<τ),"τ=-0.4,C=3",conformity,6,204,0,28
+low-mean weeks (mean<τ),"τ=-0.4,C=3",tradition,1,204,0,28
+low-mean weeks (mean<τ),"τ=-0.4,C=3",benevolence,0,204,0,25
+low-mean weeks (mean<τ),"τ=-0.4,C=3",universalism,2,204,2,32
+low-mean weeks (mean<τ),"τ=-0.25,C=2",self_direction,16,204,0,24
+low-mean weeks (mean<τ),"τ=-0.25,C=2",stimulation,6,204,1,24
+low-mean weeks (mean<τ),"τ=-0.25,C=2",hedonism,12,204,5,33
+low-mean weeks (mean<τ),"τ=-0.25,C=2",achievement,4,204,0,25
+low-mean weeks (mean<τ),"τ=-0.25,C=2",power,6,204,5,37
+low-mean weeks (mean<τ),"τ=-0.25,C=2",security,19,204,4,36
+low-mean weeks (mean<τ),"τ=-0.25,C=2",conformity,12,204,0,28
+low-mean weeks (mean<τ),"τ=-0.25,C=2",tradition,2,204,1,28
+low-mean weeks (mean<τ),"τ=-0.25,C=2",benevolence,5,204,0,25
+low-mean weeks (mean<τ),"τ=-0.25,C=2",universalism,6,204,6,32
+low-mean weeks (mean<τ),"τ=-0.25,C=3",self_direction,6,204,0,24
+low-mean weeks (mean<τ),"τ=-0.25,C=3",stimulation,0,204,0,24
+low-mean weeks (mean<τ),"τ=-0.25,C=3",hedonism,2,204,1,33
+low-mean weeks (mean<τ),"τ=-0.25,C=3",achievement,1,204,0,25
+low-mean weeks (mean<τ),"τ=-0.25,C=3",power,2,204,2,37
+low-mean weeks (mean<τ),"τ=-0.25,C=3",security,5,204,0,36
+low-mean weeks (mean<τ),"τ=-0.25,C=3",conformity,7,204,0,28
+low-mean weeks (mean<τ),"τ=-0.25,C=3",tradition,1,204,0,28
+low-mean weeks (mean<τ),"τ=-0.25,C=3",benevolence,0,204,0,25
+low-mean weeks (mean<τ),"τ=-0.25,C=3",universalism,3,204,3,32

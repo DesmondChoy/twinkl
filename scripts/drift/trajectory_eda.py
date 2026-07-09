@@ -2,7 +2,7 @@
 
 Treats the draft drift taxonomy (docs/evolution/drift_detection.md) as a
 hypothesis menu, not a spec: measures per-dimension base rates of each
-candidate pattern (crash / rut / fade / rise / spike) across a parameter
+candidate pattern (dip / sustained conflict / fade / rise / spike) across a parameter
 grid, at entry-level and weekly granularity, gated by declared core values.
 Consensus labels are the default reference because the drift benchmark should
 target the more stable 5-pass labels, while still reporting persisted
@@ -82,7 +82,7 @@ def max_run(seq: list[int], val: int) -> int:
     return best
 
 
-def crash_events(seq: list[int]) -> list[tuple[int, int]]:
+def dip_events(seq: list[int]) -> list[tuple[int, int]]:
     """(index, severity) for transitions into -1; severity = size of drop."""
     return [
         (i, seq[i - 1] - seq[i])
@@ -100,12 +100,12 @@ def has_fade(seq: list[int], c_min: int) -> bool:
     return False
 
 
-def crash_recovers(seq: list[int], idx: int, within: int = 2) -> bool:
-    """Does the score return to >= 0 within `within` steps after a crash?"""
+def dip_recovers(seq: list[int], idx: int, within: int = 2) -> bool:
+    """Does the score return to >= 0 within `within` steps after a dip?"""
     return any(s >= 0 for s in seq[idx + 1 : idx + 1 + within])
 
 
-def weekly_rut(means: list[float], tau: float, c_min: int) -> bool:
+def weekly_low_mean(means: list[float], tau: float, c_min: int) -> bool:
     return max_run([1 if m < tau else 0 for m in means], 1) >= c_min
 
 
@@ -218,12 +218,12 @@ def pattern_grid(personas, core):
     def flags_for(fn):
         return {(p, d): fn(personas[p]["entry"][d]) for p in personas for d in DIMS}
 
-    add("crash_hard (+1→-1)", "entry", flags_for(
-        lambda s: any(sev == 2 for _, sev in crash_events(s))))
-    add("crash_any (0/+1→-1)", "entry", flags_for(
-        lambda s: len(crash_events(s)) > 0))
+    add("dip_hard (+1→-1)", "entry", flags_for(
+        lambda s: any(sev == 2 for _, sev in dip_events(s))))
+    add("dip_any (0/+1→-1)", "entry", flags_for(
+        lambda s: len(dip_events(s)) > 0))
     for c in (2, 3, 4):
-        add("rut (-1 run)", f"C={c}", flags_for(lambda s, c=c: max_run(s, -1) >= c))
+        add("sustained (-1 run)", f"C={c}", flags_for(lambda s, c=c: max_run(s, -1) >= c))
     for c in (2, 3):
         add("fade (+1→0s)", f"C={c}", flags_for(lambda s, c=c: has_fade(s, c)))
     for c in (2, 3, 4):
@@ -239,27 +239,27 @@ def pattern_grid(personas, core):
             for d in DIMS:
                 m = personas[p]["weekly"][d]["mean"]
                 fl[(p, d)] = any(m[i - 1] - m[i] >= delta for i in range(1, len(m)))
-        add("weekly crash (mean drop)", f"δ={delta}", fl)
+        add("weekly mean drop", f"δ={delta}", fl)
     for tau, c in [(-0.4, 2), (-0.4, 3), (-0.25, 2), (-0.25, 3)]:
         fl = {}
         for p in personas:
             for d in DIMS:
-                fl[(p, d)] = weekly_rut(personas[p]["weekly"][d]["mean"], tau, c)
-        add("weekly rut (mean<τ)", f"τ={tau},C={c}", fl)
+                fl[(p, d)] = weekly_low_mean(personas[p]["weekly"][d]["mean"], tau, c)
+        add("low-mean weeks (mean<τ)", f"τ={tau},C={c}", fl)
 
     return pl.DataFrame(rows)
 
 
 def spike_stats(personas, core):
-    """How often do crashes self-recover within 2 steps (spike = noise)?"""
+    """How often do dips self-recover within 2 steps (spike = noise)?"""
     out = {"all": [0, 0], "core": [0, 0]}  # [recovered, total]
     for p, data in personas.items():
         for d in DIMS:
             seq = data["entry"][d]
-            for idx, _sev in crash_events(seq):
+            for idx, _sev in dip_events(seq):
                 if idx + 1 >= len(seq):
-                    continue  # crash at trajectory end: recovery unobservable
-                rec = crash_recovers(seq, idx)
+                    continue  # dip at trajectory end: recovery unobservable
+                rec = dip_recovers(seq, idx)
                 out["all"][1] += 1
                 out["all"][0] += rec
                 if d in core[p]:
@@ -348,10 +348,10 @@ def persona_coverage(personas, core):
     """Share of personas flagged on >=1 core dim, per pattern/param."""
     rows = []
     defs = {
-        ("crash_hard (+1→-1)", "entry"): lambda s: any(sev == 2 for _, sev in crash_events(s)),
-        ("crash_any (0/+1→-1)", "entry"): lambda s: len(crash_events(s)) > 0,
-        ("rut (-1 run)", "C=2"): lambda s: max_run(s, -1) >= 2,
-        ("rut (-1 run)", "C=3"): lambda s: max_run(s, -1) >= 3,
+        ("dip_hard (+1→-1)", "entry"): lambda s: any(sev == 2 for _, sev in dip_events(s)),
+        ("dip_any (0/+1→-1)", "entry"): lambda s: len(dip_events(s)) > 0,
+        ("sustained (-1 run)", "C=2"): lambda s: max_run(s, -1) >= 2,
+        ("sustained (-1 run)", "C=3"): lambda s: max_run(s, -1) >= 3,
         ("fade (+1→0s)", "C=2"): lambda s: has_fade(s, 2),
     }
     for (pattern, param), fn in defs.items():
@@ -434,12 +434,12 @@ def fig_trajectories(personas, core):
 def fig_prevalence(grid: pl.DataFrame):
     """Per-dimension core-gated prevalence, one panel per pattern."""
     panels = [
-        ("crash_any (0/+1→-1)", "entry", "Crash into −1 (any)"),
-        ("rut (-1 run)", "C=2", "Rut: ≥2 consecutive −1"),
+        ("dip_any (0/+1→-1)", "entry", "Dip into −1 (any)"),
+        ("sustained (-1 run)", "C=2", "Sustained: ≥2 consecutive −1"),
         ("fade (+1→0s)", "C=2", "Fade: +1 then ≥2 zeros"),
         ("never +1 (n>=3)", "entry", "Never +1 (onboarding gap)"),
     ]
-    # one fixed dim order across panels, sorted by crash prevalence
+    # one fixed dim order across panels, sorted by dip prevalence
     first = grid.filter(
         (pl.col("pattern") == panels[0][0]) & (pl.col("param") == panels[0][1])
     ).with_columns(pct=pl.col("core_hits") / pl.col("core_n") * 100).sort("pct")
@@ -475,7 +475,7 @@ def fig_cliffs(grid: pl.DataFrame):
 
     ax = axes[0]
     for pattern, color, label in [
-        ("rut (-1 run)", RED, "rut: −1 run ≥ C"),
+        ("sustained (-1 run)", RED, "sustained: −1 run ≥ C"),
         ("rise (+1 run)", BLUE, "rise: +1 run ≥ C"),
     ]:
         sub = (grid.filter(pl.col("pattern") == pattern)
@@ -494,7 +494,7 @@ def fig_cliffs(grid: pl.DataFrame):
     ax.set_title("Entry-level run patterns vs C", fontsize=10, loc="left")
 
     ax = axes[1]
-    sub = (grid.filter(pl.col("pattern") == "weekly crash (mean drop)")
+    sub = (grid.filter(pl.col("pattern") == "weekly mean drop")
            .group_by("param").agg(pl.col("core_hits").sum(), pl.col("core_n").sum())
            .sort("param"))
     deltas = [float(p.split("=")[1]) for p in sub["param"]]
@@ -505,7 +505,7 @@ def fig_cliffs(grid: pl.DataFrame):
     ax.plot(deltas, pct, color=AQUA, marker="o", markersize=5, linewidth=2)
     ax.set_ylim(0, max(pct) * 1.18)
     ax.set_xlabel("δ (weekly-mean drop)")
-    ax.set_title("Weekly crash vs δ", fontsize=10, loc="left")
+    ax.set_title("Weekly-mean drop vs δ", fontsize=10, loc="left")
     for x, y in zip(deltas, pct):
         ax.annotate(f"{y:.0f}%", (x, y), textcoords="offset points",
                     xytext=(0, 7), fontsize=8, color=INK2, ha="center")
@@ -613,11 +613,11 @@ def main():
 
     # key grid slices for the report
     for pattern, param in [
-        ("crash_any (0/+1→-1)", "entry"), ("crash_hard (+1→-1)", "entry"),
-        ("rut (-1 run)", "C=2"), ("rut (-1 run)", "C=3"),
+        ("dip_any (0/+1→-1)", "entry"), ("dip_hard (+1→-1)", "entry"),
+        ("sustained (-1 run)", "C=2"), ("sustained (-1 run)", "C=3"),
         ("fade (+1→0s)", "C=2"), ("rise (+1 run)", "C=3"),
         ("all-neutral", "entry"), ("never +1 (n>=3)", "entry"),
-        ("weekly crash (mean drop)", "δ=1.0"), ("weekly rut (mean<τ)", "τ=-0.4,C=2"),
+        ("weekly mean drop", "δ=1.0"), ("low-mean weeks (mean<τ)", "τ=-0.4,C=2"),
     ]:
         sub = grid.filter((pl.col("pattern") == pattern) & (pl.col("param") == param))
         tot_all = sub["all_hits"].sum(), sub["all_n"].sum()
