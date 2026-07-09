@@ -125,7 +125,7 @@ def test_build_weekly_digest_and_render(tmp_path: Path):
     assert len(digest.top_tensions) >= 1
     assert len(digest.top_strengths) >= 1
     assert len(digest.evidence) >= 2
-    assert len(digest.journal_history) == 3
+    assert not hasattr(digest, "journal_history")
     assert all(snippet.dimensions for snippet in digest.evidence)
     assert not set(digest.top_tensions) & set(digest.top_strengths)
 
@@ -137,12 +137,12 @@ def test_build_weekly_digest_and_render(tmp_path: Path):
 
     assert "Weekly Alignment Digest: Casey" in md
     assert "Response mode" in md
-    assert "Full Journal History" in md
+    assert "Full Journal History" not in md
     assert "Evidence Snippets" in md
     assert "dims=" in md
     assert "Persona: Casey (deadbeef)" in prompt
     assert "Declared core values: Self Direction, Benevolence" in prompt
-    assert "Full journal history:" in prompt
+    assert "Full journal history:" not in prompt
     assert "Primary tensions:" in prompt
 
 
@@ -308,8 +308,7 @@ Later entry that should not appear in a digest ending on 2025-01-07.
     )
 
     assert digest.response_mode == "high_uncertainty"
-    assert len(digest.journal_history) == 2
-    assert all(entry.date <= "2025-01-07" for entry in digest.journal_history)
+    assert all(snippet.date <= "2025-01-07" for snippet in digest.evidence)
     assert any(snippet.direction == "strain" for snippet in digest.evidence)
 
 

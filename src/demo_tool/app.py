@@ -17,6 +17,11 @@ _project_root = Path(__file__).parent.parent.parent
 if str(_project_root) not in sys.path:
     sys.path.insert(0, str(_project_root))
 
+# Load .env so provider keys (e.g. GEMINI_API_KEY) are available without exporting.
+from dotenv import load_dotenv
+
+load_dotenv(_project_root / ".env")
+
 from src.demo_tool.data_loader import (
     build_persona_choices,
     get_persona,
@@ -825,7 +830,7 @@ def server(input, output, session):
                 ),
                 ui.nav_panel(
                     "Weekly digest",
-                    _render_digest_results(artifacts["digest_markdown"], digest),
+                    _render_digest_results(digest),
                 ),
                 ui.nav_panel(
                     "Detector comparison",
@@ -980,9 +985,70 @@ def _render_drift_results(drift: dict[str, Any]) -> ui.Tag:
     )
 
 
-def _render_digest_results(markdown_text: str, digest: dict[str, Any]) -> ui.Tag:
-    """Render the deterministic weekly digest plus summary badges."""
+def _render_digest_narrative(digest: dict[str, Any]) -> ui.Tag:
+    """Render the human-language coach narrative, or a numeric-only fallback note."""
+    narrative = digest.get("coach_narrative")
+    if not narrative:
+        return ui.div(
+            ui.p(
+                "Narrative unavailable — showing metrics only.",
+                class_="digest-narrative-empty",
+            ),
+            class_="digest-narrative",
+        )
+
     return ui.div(
+        ui.div(
+            ui.span("Weekly mirror", class_="subsection-label"),
+            ui.p(str(narrative.get("weekly_mirror", "")), class_="digest-narrative-body"),
+            class_="digest-narrative-block",
+        ),
+        ui.div(
+            ui.span("What's in tension", class_="subsection-label"),
+            ui.p(
+                str(narrative.get("tension_explanation", "")),
+                class_="digest-narrative-body",
+            ),
+            class_="digest-narrative-block",
+        ),
+        ui.div(
+            ui.span("A question to sit with", class_="subsection-label"),
+            ui.p(
+                str(narrative.get("reflective_question", "")),
+                class_="digest-narrative-question",
+            ),
+            class_="digest-narrative-block",
+        ),
+        class_="digest-narrative",
+    )
+
+
+def _render_digest_dimension_table(digest: dict[str, Any]) -> ui.Tag:
+    """Render the per-dimension summary as a native compact table."""
+    records = [
+        {
+            "dimension": _format_dimension(dim.get("dimension", "")),
+            "mean": _format_signed(dim.get("mean_score")),
+            "neg": f"{float(dim.get('pct_neg', 0.0)):.0%}",
+            "neutral": f"{float(dim.get('pct_neutral', 0.0)):.0%}",
+            "pos": f"{float(dim.get('pct_pos', 0.0)):.0%}",
+        }
+        for dim in digest.get("dimensions", [])
+    ]
+    columns = [
+        ("dimension", "Dimension"),
+        ("mean", "Mean"),
+        ("neg", "-1"),
+        ("neutral", "0"),
+        ("pos", "+1"),
+    ]
+    return _build_table(records, columns)
+
+
+def _render_digest_results(digest: dict[str, Any]) -> ui.Tag:
+    """Render the weekly digest: coach narrative, badges, and a dimension table."""
+    return ui.div(
+        _render_digest_narrative(digest),
         ui.div(
             ui.div(
                 ui.span("Top tensions", class_="subsection-label"),
@@ -1002,7 +1068,11 @@ def _render_digest_results(markdown_text: str, digest: dict[str, Any]) -> ui.Tag
             ),
             class_="subsection-stack",
         ),
-        ui.div(ui.markdown(markdown_text), class_="digest-markdown"),
+        ui.div(
+            ui.span("Dimension summary", class_="subsection-label"),
+            _render_digest_dimension_table(digest),
+            class_="digest-dimension-block",
+        ),
     )
 
 

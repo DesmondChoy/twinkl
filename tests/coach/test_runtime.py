@@ -192,3 +192,93 @@ def test_run_weekly_coach_cycle_persists_bridge_artifacts(tmp_path: Path, monkey
 
     drift_payload = json.loads(Path(artifact_paths["drift_json_path"]).read_text())
     assert drift_payload["response_mode"] in {"crash", "rut", "evolution", "stable"}
+    assert digest.coach_narrative is None
+
+
+def _stub_timeline_df() -> pl.DataFrame:
+    return pl.DataFrame(
+        [
+            _signal_row(date="2025-01-06", t_index=0, achievement=0.6, benevolence=-0.6, overall_mean=0.25),
+            _signal_row(date="2025-01-08", t_index=1, achievement=0.3, benevolence=0.2, overall_mean=0.2),
+            _signal_row(date="2025-01-14", t_index=2, achievement=-0.8, benevolence=0.6, overall_mean=-0.2),
+            _signal_row(date="2025-01-16", t_index=3, achievement=-0.9, benevolence=0.1, overall_mean=-0.35),
+        ]
+    )
+
+
+def test_run_weekly_coach_cycle_attaches_narrative_with_llm(tmp_path: Path, monkeypatch):
+    wrangled_dir = tmp_path / "wrangled"
+    wrangled_dir.mkdir(parents=True, exist_ok=True)
+    _write_runtime_wrangled(wrangled_dir / "persona_deadbeef.md")
+
+    monkeypatch.setattr(
+        "src.coach.runtime.predict_persona_timeline",
+        lambda **_kwargs: (
+            _stub_timeline_df(),
+            {"persona_id": "deadbeef", "checkpoint_path": "unused"},
+        ),
+    )
+
+    async def stub_llm(prompt: str, response_format: dict | None) -> str:
+        assert response_format is not None
+        return json.dumps(
+            {
+                "weekly_mirror": "A short reflective mirror sentence for the week that stays grounded.",
+                "tension_explanation": "The week pulled between staying late for work and protecting family time.",
+                "reflective_question": "What made it easier to shut the laptop on the evenings you managed to?",
+            }
+        )
+
+    digest, _paths = run_weekly_coach_cycle(
+        persona_id="deadbeef",
+        checkpoint_path="unused.pt",
+        wrangled_dir=wrangled_dir,
+        output_dir=tmp_path / "exports",
+        parquet_path=tmp_path / "weekly_digests.parquet",
+        end_date="2025-01-19",
+        llm_complete=stub_llm,
+    )
+
+    assert digest.coach_narrative is not None
+    assert digest.coach_narrative.weekly_mirror.startswith("A short reflective")
+    assert digest.validation is not None
+
+
+def test_build_llm_complete_returns_none_without_keys(monkeypatch):
+    from src.coach.llm_client import build_llm_complete
+
+    for var in ("OPENAI_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY"):
+        monkeypatch.delenv(var, raising=False)
+
+    assert build_llm_complete(provider="gemini") is None
+    assert build_llm_complete(provider="openai") is None
+
+
+def test_build_llm_complete_selects_provider_by_env(monkeypatch):
+    from src.coach.llm_client import build_llm_complete
+
+    for var in ("OPENAI_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY"):
+        monkeypatch.delenv(var, raising=False)
+
+    # Only a Gemini key is present: gemini builds, openai does not.
+    monkeypatch.setenv("GEMINI_API_KEY", "test-key")
+    monkeypatch.setenv("TWINKL_COACH_PROVIDER", "gemini")
+    assert build_llm_complete() is not None
+    assert build_llm_complete(provider="openai") is None
+
+    # Provider defaults to gemini and unknown providers yield None.
+    monkeypatch.delenv("TWINKL_COACH_PROVIDER", raising=False)
+    assert build_llm_complete() is not None
+    assert build_llm_complete(provider="not-a-provider") is None
+
+
+def test_unwrap_json_schema_extracts_inner_schema():
+    from src.coach.llm_client import _unwrap_json_schema
+    from src.coach.schemas import WEEKLY_DIGEST_COACH_RESPONSE_FORMAT
+
+    schema = _unwrap_json_schema(WEEKLY_DIGEST_COACH_RESPONSE_FORMAT)
+    assert schema is not None
+    assert schema["type"] == "object"
+    assert "weekly_mirror" in schema["properties"]
+    assert _unwrap_json_schema(None) is None
+    assert _unwrap_json_schema({"type": "json_schema"}) is None

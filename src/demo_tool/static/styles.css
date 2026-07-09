@@ -562,6 +562,49 @@ button,
 .digest-markdown h2,
 .digest-markdown h3 { margin-top: 0; }
 
+/* ── Digest narrative ─────────────────────────────────────────────────────── */
+.digest-narrative {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-5);
+    margin-bottom: var(--space-4);
+    border-radius: var(--radius);
+    border: 1px solid var(--border-subtle);
+    background: var(--surface);
+}
+
+.digest-narrative-block { display: flex; flex-direction: column; }
+
+.digest-narrative-body {
+    margin: 0;
+    font-size: 0.96rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+    max-width: 72ch;
+}
+
+.digest-narrative-question {
+    margin: 0;
+    padding: var(--space-3) var(--space-4);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius-sm);
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 0.96rem;
+    line-height: 1.6;
+    font-style: italic;
+    max-width: 72ch;
+}
+
+.digest-narrative-empty {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-faint);
+}
+
+.digest-dimension-block { margin-top: var(--space-4); }
+
 /* ── Table ────────────────────────────────────────────────────────────────── */
 .table-shell {
     width: 100%;

@@ -32,6 +32,7 @@ dependencies = [
     "torch-lr-finder>=0.2.2",
     "plotly>=6.7.0",
     "shinywidgets>=0.7.1",
+    "google-genai>=2.10.0",
 ]
 
 [tool.setuptools]

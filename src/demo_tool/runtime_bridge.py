@@ -12,6 +12,7 @@ from typing import Any
 import polars as pl
 import yaml
 
+from src.coach.llm_client import build_llm_complete
 from src.coach.runtime import run_weekly_coach_cycle
 
 DEFAULT_CHECKPOINT_ROOTS = (
@@ -372,6 +373,7 @@ def run_demo_pipeline(
         wrangled_dir=wrangled_dir,
         output_dir=output_dir,
         parquet_path=parquet_path,
+        llm_complete=build_llm_complete(),
     )
     return {
         "persona_id": persona_id,
