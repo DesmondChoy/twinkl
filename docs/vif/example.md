@@ -195,7 +195,7 @@ consecutive journal sessions conflict with Benevolence.
 | Generator | N/A | Only used during offline training |
 | Judge | N/A | Stored five-pass consensus labels define the benchmark reference, not live runtime input |
 | Critic | **ACTIVE** | Produces per-entry class evidence and uncertainty |
-| Drift detector | **TARGET BEHAVIOR** | Accumulates rolling soft `P(-1)` evidence on Benevolence |
+| Drift detector | **BENCHMARKED, NOT WIRED** | Accumulates rolling soft `P(-1)` evidence on Benevolence |
 | Coach | **ACTIVE AT DELIVERY** | Uses the weekly artifact to surface the repeated conflict |
 
 ### Reference and Runtime Views
@@ -209,6 +209,11 @@ The strict benchmark records one sustained-conflict episode because the same
 declared core value receives two consecutive `-1` labels. The runtime does not
 require two hard argmax `-1` predictions; it estimates the episode from soft
 probability mass under uncertainty gating.
+
+This walkthrough illustrates intended behavior for an explicit conflict case;
+it is not production-validation evidence. Both LLM arms detect the similarly
+explicit locked designed cases, but those same arms miss all five frozen
+consensus episodes. No scorer is approved until that disagreement is reviewed.
 
 **System decision:** Include the conflict in the weekly digest with both entries
 as evidence.

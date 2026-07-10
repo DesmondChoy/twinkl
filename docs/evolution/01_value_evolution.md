@@ -52,8 +52,9 @@ different: the same declared core value has a qualifying conflict on two
 adjacent entries, using the stored five-pass Judge consensus `-1` label.
 Other value dimensions do not offset the episode. Runtime estimates the same
 construct from rolling soft `P(-1)` evidence under uncertainty gating. The
-runtime detector is not implemented yet; the six-detector comparison's vote
-count is not the Judge reference.
+rule is implemented in the offline benchmark, but it remains unwired in
+production because no scorer passed the current cross-set evaluation. The
+six-detector comparison's vote count is not the Judge reference.
 
 The older prototype research includes these deterministic metrics:
 

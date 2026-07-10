@@ -242,9 +242,10 @@ separate value-specific records. The six-detector comparison's detector-vote
 count is not the five-pass Judge reference.
 
 The current runtime persists alignment means and uncertainties rather than
-class probabilities, so the rolling-soft-evidence detector is not implemented.
-The crash/rut/evolution output modes remain prototype compatibility values, not
-the accepted v1 definition.
+class probabilities. The rolling-soft-evidence rule is implemented in the
+offline benchmark, but no scorer is approved and the detector is not wired
+into the weekly runtime. The crash/rut/evolution output modes remain prototype
+compatibility values, not the accepted v1 definition.
 
 ### Delivery-Time Recovery
 

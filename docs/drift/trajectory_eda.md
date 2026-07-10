@@ -114,7 +114,7 @@ down to **Conformity 14% (4/28)**. Sustained conflict (C=2) ranges from Power
 over-represent Power/Hedonism/Universalism personas in the benchmark. Keep this
 in mind for stratified reporting even if v1 uses one definition.
 
-### F7 — Label-derived conflict-heavy weeks are enough for tuning, not final unbiased eval
+### F7 — Label-derived conflict-heavy weeks are enough for tuning, not independent validation
 
 Candidate conflict-heavy weeks are runtime weeks with >=2 entries and a share of entries
 labeled -1 above threshold:
@@ -131,8 +131,9 @@ labeled -1 above threshold:
 There are enough consensus-reference conflict-heavy weeks for twinkl-wq9p threshold
 tuning. Composition is skewed (Power 31, Hedonism 21, Security 15,
 Universalism 15, Achievement 1), and these labels are still judge-derived. Use
-them for tuning and error analysis; keep a held-out scripted set for unbiased
-evaluation if time allows.
+them for tuning and error analysis; keep a held-out designed set isolated from
+threshold and prompt selection. That set is a capability probe until its cases
+are independently human-reviewed.
 
 Full list: [`tables/conflict_heavy_week_candidates.csv`](tables/conflict_heavy_week_candidates.csv).
 
@@ -175,7 +176,8 @@ stored five-pass Judge consensus `-1` label on two adjacent journal entries.
 Other value dimensions are ignored for this per-value test. At runtime, the
 detector will estimate the construct from rolling soft P(-1) evidence under
 uncertainty gating, and the Coach will surface it in the weekly digest. The
-runtime detector is not implemented yet.**
+offline soft-evidence benchmark is implemented, but no scorer is approved and
+the detector is not wired into the runtime or Coach path.**
 
 Layer split:
 
@@ -185,7 +187,7 @@ Layer split:
 | Runtime detector | rolling soft P(-1) evidence mass, not two hard argmax -1 predictions |
 | Delivery | weekly Coach digest with cited entries |
 | Parked scope | single-entry dip alerts, fade/dormancy, peripheral-value rise, onboarding-gap messaging, evolution gating, multi-week low-mean definitions |
-| Implementation status | strict reference exists; runtime timeline artifacts do not yet persist `P(-1)`, and the selected soft-evidence detector is not implemented |
+| Implementation status | strict reference builder and offline soft-evidence benchmark implemented; no scorer promoted; human review and production `P(-1)` wiring remain open |
 
 Why this is the right v1:
 
@@ -199,6 +201,15 @@ Why this is the right v1:
   the user sees it in the weekly Coach digest.
 - **Noise is named.** Consensus changes the R1 set from 49 to 40 personas:
   11 persisted-only flags disappear and 2 consensus-only flags appear.
+
+### Benchmark follow-up
+
+The completed `twinkl-wq9p` benchmark produces a cross-set disagreement rather
+than a scorer win. Both LLM context arms detect 10/10 deliberately explicit
+designed episodes but 0/5 consensus-derived frozen episodes. The MLP arms
+detect only 1–2/10 designed episodes. Human review must determine which cases
+match the intended input and product contract before production wiring. See the
+[`twinkl-wq9p` report](../../logs/experiments/reports/experiment_review_2026-07-10_twinkl_wq9p.md).
 
 ### Weekly delivery and recovery
 

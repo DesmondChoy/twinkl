@@ -20,8 +20,9 @@ The current VIF implementation is intentionally narrow:
 - **Downstream use**: validated weekly signal frames, an experimental
   crash/rut/evolution router, and weekly Coach inputs
 - **Selected drift v1 target**: rolling soft `P(-1)` evidence for sustained
-  conflict on a declared core value; not yet implemented in the
-  runtime router
+  conflict on a declared core value. The decision-level benchmark is
+  implemented offline, but no scorer is approved and the rule is not wired
+  into the runtime router.
 
 > **Note:** Specific model names, embedding dimensions, and default window sizes
 > change over time. Treat `config/vif.yaml` as the source of truth for current
@@ -223,8 +224,12 @@ the offline Coach runtime and demo UI.
 
 The selected product/benchmark contract is narrower: sustained conflict on a
 declared core value, with stored five-pass Judge consensus `-1` labels on two
-adjacent entries and rolling soft `P(-1)` runtime evidence. The existing weekly
-router is a prototype compatibility surface rather than the v1 implementation.
+adjacent entries and rolling soft `P(-1)` runtime evidence.
+`src/vif/drift_benchmark.py` now implements the offline reference, detector,
+matching, and metrics path. It does not replace `src/vif/drift.py` in the Coach
+runtime. The benchmark promoted no scorer, so that production edge remains
+deliberately absent and the existing weekly router remains a compatibility
+prototype.
 See
 [`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md) and
 [`docs/evals/drift_detection_eval.md`](../evals/drift_detection_eval.md).

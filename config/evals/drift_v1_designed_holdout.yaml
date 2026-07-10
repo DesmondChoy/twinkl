@@ -1,0 +1,292 @@
+schema_version: 1
+holdout_id: twinkl_wq9p_drift_v1_designed_holdout
+locked_before_scoring: true
+locked_at: "2026-07-10"
+purpose: >-
+  Isolated POC capability probe for sustained conflict on declared core values.
+  These author-designed trajectories are not used for threshold selection or
+  prompt tuning and are not human-reviewed ground truth.
+review_status: designed_not_human_reviewed
+label_contract: >-
+  A reference episode is two adjacent -1 labels on the same declared core
+  value. Null represents deliberately uncertain evidence and breaks a run.
+cases:
+  - case_id: positive_security_active
+    persona_id: holdout_drift_001
+    persona_name: Mara
+    persona_age: 35-44
+    persona_profession: Operations manager
+    persona_culture: Singapore
+    core_values: [Security]
+    expected_case_state: active
+    design_note: Same-day sustained conflict; remains active at cutoff.
+    entries:
+      - {t_index: 0, date: "2026-01-05", initial_entry: "I skipped the medical appointment again because the work queue felt more urgent, even though I know the follow-up protects my health.", core_labels: {security: -1}}
+      - {t_index: 1, date: "2026-01-05", initial_entry: "I also left the prescription unfilled and told myself I would deal with the risk next month.", core_labels: {security: -1}}
+      - {t_index: 2, date: "2026-01-12", initial_entry: "Another week passed and I still avoided both the appointment and the prescription refill.", core_labels: {security: -1}}
+
+  - case_id: positive_benevolence_recovered
+    persona_id: holdout_drift_002
+    persona_name: Inez
+    persona_age: 25-34
+    persona_profession: Designer
+    persona_culture: Spain
+    core_values: [Benevolence]
+    expected_case_state: recovered
+    design_note: Conflict pair crosses a calendar-week boundary, then recovers.
+    entries:
+      - {t_index: 0, date: "2026-02-01", initial_entry: "My sister asked for help moving, but I ignored her messages so I could keep my weekend completely free.", core_labels: {benevolence: -1}}
+      - {t_index: 1, date: "2026-02-02", initial_entry: "She called again and I refused to help even though I had no real commitment preventing me.", core_labels: {benevolence: -1}}
+      - {t_index: 2, date: "2026-02-04", initial_entry: "I apologized, rearranged my plans, and spent the afternoon helping her finish the move.", core_labels: {benevolence: 1}}
+
+  - case_id: positive_self_direction_active
+    persona_id: holdout_drift_003
+    persona_name: Theo
+    persona_age: 25-34
+    persona_profession: Analyst
+    persona_culture: Canada
+    core_values: [Self-Direction]
+    expected_case_state: active
+    design_note: Adjacent observations qualify despite a long calendar gap.
+    entries:
+      - {t_index: 0, date: "2026-01-01", initial_entry: "I let my parents choose the course for me and did not say what I actually wanted to study.", core_labels: {self_direction: -1}}
+      - {t_index: 1, date: "2026-02-15", initial_entry: "When enrollment opened, I copied their choices again instead of making my own decision.", core_labels: {self_direction: -1}}
+      - {t_index: 2, date: "2026-03-20", initial_entry: "I signed the final form without reviewing alternatives because deciding for myself felt uncomfortable.", core_labels: {self_direction: -1}}
+
+  - case_id: positive_stimulation_recovered
+    persona_id: holdout_drift_004
+    persona_name: Amara
+    persona_age: 25-34
+    persona_profession: Researcher
+    persona_culture: Kenya
+    core_values: [Stimulation]
+    expected_case_state: recovered
+    design_note: Clear avoidance of desired novelty followed by re-engagement.
+    entries:
+      - {t_index: 0, date: "2026-03-01", initial_entry: "I turned down the field assignment solely because it was unfamiliar, even though new experiences are what I say I want.", core_labels: {stimulation: -1}}
+      - {t_index: 1, date: "2026-03-05", initial_entry: "I rejected the workshop for the same reason and stayed with the routine that has been making me feel stuck.", core_labels: {stimulation: -1}}
+      - {t_index: 2, date: "2026-03-08", initial_entry: "I registered for the field assignment and felt energized by learning a completely new method.", core_labels: {stimulation: 1}}
+
+  - case_id: positive_hedonism_active
+    persona_id: holdout_drift_005
+    persona_name: Jun
+    persona_age: 35-44
+    persona_profession: Engineer
+    persona_culture: South Korea
+    core_values: [Hedonism]
+    expected_case_state: active
+    design_note: Repeated voluntary denial of rest and enjoyment for unnecessary work.
+    entries:
+      - {t_index: 0, date: "2026-04-01", initial_entry: "I cancelled the concert I had looked forward to and stayed late doing non-urgent work that could wait.", core_labels: {hedonism: -1}}
+      - {t_index: 1, date: "2026-04-03", initial_entry: "I cancelled my day off too, not because of a deadline, but because I felt leisure was undeserved.", core_labels: {hedonism: -1}}
+      - {t_index: 2, date: "2026-04-05", initial_entry: "I worked through another planned break and avoided anything enjoyable even though nothing was urgent.", core_labels: {hedonism: -1}}
+
+  - case_id: positive_achievement_recovered
+    persona_id: holdout_drift_006
+    persona_name: Elena
+    persona_age: 25-34
+    persona_profession: Student
+    persona_culture: Mexico
+    core_values: [Achievement]
+    expected_case_state: recovered
+    design_note: Repeated abandonment of a declared milestone, then concrete recovery.
+    entries:
+      - {t_index: 0, date: "2026-05-01", initial_entry: "I skipped the certification exam without preparing, even though completing it is my main goal this term.", core_labels: {achievement: -1}}
+      - {t_index: 1, date: "2026-05-08", initial_entry: "I ignored the rescheduling deadline too and spent the study block scrolling instead.", core_labels: {achievement: -1}}
+      - {t_index: 2, date: "2026-05-12", initial_entry: "I booked the next exam date and completed the first two planned study sessions.", core_labels: {achievement: 1}}
+
+  - case_id: positive_power_active
+    persona_id: holdout_drift_007
+    persona_name: Ravi
+    persona_age: 35-44
+    persona_profession: Founder
+    persona_culture: India
+    core_values: [Power]
+    expected_case_state: active
+    design_note: Repeated surrender of explicitly desired authority and influence.
+    entries:
+      - {t_index: 0, date: "2026-06-01", initial_entry: "I gave away the final product decision even though securing real authority over the company is a priority I chose.", core_labels: {power: -1}}
+      - {t_index: 1, date: "2026-06-03", initial_entry: "I avoided the investor negotiation and accepted terms that remove my voting control because I did not want the confrontation.", core_labels: {power: -1}}
+      - {t_index: 2, date: "2026-06-05", initial_entry: "I let another partner take the board seat I wanted and made no attempt to preserve my influence.", core_labels: {power: -1}}
+
+  - case_id: positive_conformity_recovered
+    persona_id: holdout_drift_008
+    persona_name: Claire
+    persona_age: 35-44
+    persona_profession: Nurse
+    persona_culture: France
+    core_values: [Conformity]
+    expected_case_state: recovered
+    design_note: Two deliberate breaches of shared rules followed by compliance.
+    entries:
+      - {t_index: 0, date: "2026-07-01", initial_entry: "I knowingly ignored the ward handoff procedure because I did not feel like completing it.", core_labels: {conformity: -1}}
+      - {t_index: 1, date: "2026-07-02", initial_entry: "I bypassed the same team rule again despite understanding why everyone relies on it.", core_labels: {conformity: -1}}
+      - {t_index: 2, date: "2026-07-03", initial_entry: "I completed the handoff properly and checked with the team that I had followed the shared procedure.", core_labels: {conformity: 1}}
+
+  - case_id: positive_tradition_active
+    persona_id: holdout_drift_009
+    persona_name: Samir
+    persona_age: 45-54
+    persona_profession: Teacher
+    persona_culture: Lebanon
+    core_values: [Tradition]
+    expected_case_state: active
+    design_note: Repeated abandonment of personally declared family observances.
+    entries:
+      - {t_index: 0, date: "2026-08-01", initial_entry: "I skipped the family observance I had promised to maintain and chose routine work instead.", core_labels: {tradition: -1}}
+      - {t_index: 1, date: "2026-08-08", initial_entry: "I missed the second observance too and did not pass the ritual on to the children as I intended.", core_labels: {tradition: -1}}
+      - {t_index: 2, date: "2026-08-15", initial_entry: "I avoided the gathering again even though preserving this practice remains important to me.", core_labels: {tradition: -1}}
+
+  - case_id: positive_universalism_recovered
+    persona_id: holdout_drift_010
+    persona_name: Nia
+    persona_age: 25-34
+    persona_profession: Architect
+    persona_culture: New Zealand
+    core_values: [Universalism]
+    expected_case_state: recovered
+    design_note: Repeated avoidable environmental harm followed by corrective action.
+    entries:
+      - {t_index: 0, date: "2026-09-01", initial_entry: "I selected the waste-heavy option for convenience even though the lower-impact supplier met every project need.", core_labels: {universalism: -1}}
+      - {t_index: 1, date: "2026-09-04", initial_entry: "I made the same choice again and dismissed the environmental cost because changing the order would take an extra call.", core_labels: {universalism: -1}}
+      - {t_index: 2, date: "2026-09-06", initial_entry: "I switched the remaining order to the lower-impact supplier and documented the sustainable option for the team.", core_labels: {universalism: 1}}
+
+  - case_id: control_security_isolated_dips
+    persona_id: holdout_drift_011
+    persona_name: Laila
+    persona_age: 35-44
+    persona_profession: Accountant
+    persona_culture: Jordan
+    core_values: [Security]
+    expected_case_state: none
+    design_note: Two conflicts separated by a concrete recovery.
+    entries:
+      - {t_index: 0, date: "2026-01-10", initial_entry: "I forgot to renew the insurance before the deadline.", core_labels: {security: -1}}
+      - {t_index: 1, date: "2026-01-11", initial_entry: "I renewed the policy, checked the coverage, and set a reminder for next year.", core_labels: {security: 1}}
+      - {t_index: 2, date: "2026-01-20", initial_entry: "I delayed backing up one device even though I meant to do it today.", core_labels: {security: -1}}
+
+  - case_id: control_benevolence_aligned
+    persona_id: holdout_drift_012
+    persona_name: Omar
+    persona_age: 25-34
+    persona_profession: Social worker
+    persona_culture: Egypt
+    core_values: [Benevolence]
+    expected_case_state: none
+    design_note: Consistently supportive behavior.
+    entries:
+      - {t_index: 0, date: "2026-02-10", initial_entry: "I stayed late to help a colleague finish a difficult case review.", core_labels: {benevolence: 1}}
+      - {t_index: 1, date: "2026-02-12", initial_entry: "I checked in on my neighbor and brought the groceries she needed.", core_labels: {benevolence: 1}}
+      - {t_index: 2, date: "2026-02-14", initial_entry: "I made time to listen when my brother needed support.", core_labels: {benevolence: 1}}
+
+  - case_id: control_self_direction_single_conflict
+    persona_id: holdout_drift_013
+    persona_name: Ava
+    persona_age: 18-24
+    persona_profession: Student
+    persona_culture: Australia
+    core_values: [Self-Direction]
+    expected_case_state: none
+    design_note: One conflict followed by autonomous action.
+    entries:
+      - {t_index: 0, date: "2026-03-10", initial_entry: "I chose the research topic because it genuinely interested me.", core_labels: {self_direction: 1}}
+      - {t_index: 1, date: "2026-03-11", initial_entry: "I let a friend choose my elective even though I preferred another option.", core_labels: {self_direction: -1}}
+      - {t_index: 2, date: "2026-03-12", initial_entry: "I changed the elective to the one I had independently researched and wanted.", core_labels: {self_direction: 1}}
+
+  - case_id: control_stimulation_separated_conflicts
+    persona_id: holdout_drift_014
+    persona_name: Felix
+    persona_age: 25-34
+    persona_profession: Chef
+    persona_culture: Germany
+    core_values: [Stimulation]
+    expected_case_state: none
+    design_note: Conflicts are separated by neutral evidence.
+    entries:
+      - {t_index: 0, date: "2026-04-10", initial_entry: "I declined a new menu project because I wanted to avoid anything unfamiliar.", core_labels: {stimulation: -1}}
+      - {t_index: 1, date: "2026-04-12", initial_entry: "Most of today was ordinary prep work with no real choice about novelty.", core_labels: {stimulation: 0}}
+      - {t_index: 2, date: "2026-04-15", initial_entry: "I rejected a guest-chef exchange because the change felt uncomfortable.", core_labels: {stimulation: -1}}
+
+  - case_id: control_hedonism_balanced_rest
+    persona_id: holdout_drift_015
+    persona_name: Priya
+    persona_age: 35-44
+    persona_profession: Physician
+    persona_culture: India
+    core_values: [Hedonism]
+    expected_case_state: none
+    design_note: Protected enjoyment without neglecting obligations.
+    entries:
+      - {t_index: 0, date: "2026-05-10", initial_entry: "I finished the urgent work and took the evening off for dinner with friends.", core_labels: {hedonism: 1}}
+      - {t_index: 1, date: "2026-05-12", initial_entry: "I kept my planned day off and enjoyed a long walk after arranging coverage.", core_labels: {hedonism: 1}}
+      - {t_index: 2, date: "2026-05-14", initial_entry: "I handled my responsibilities and made room for a concert afterward.", core_labels: {hedonism: 1}}
+
+  - case_id: control_achievement_one_missed_step
+    persona_id: holdout_drift_016
+    persona_name: Tomas
+    persona_age: 25-34
+    persona_profession: Sales manager
+    persona_culture: Argentina
+    core_values: [Achievement]
+    expected_case_state: none
+    design_note: One missed milestone followed by immediate recovery.
+    entries:
+      - {t_index: 0, date: "2026-06-10", initial_entry: "I missed today's practice presentation because I did not prepare.", core_labels: {achievement: -1}}
+      - {t_index: 1, date: "2026-06-11", initial_entry: "I rescheduled it, rehearsed twice, and asked for feedback.", core_labels: {achievement: 1}}
+      - {t_index: 2, date: "2026-06-12", initial_entry: "I delivered the presentation and completed the follow-up target.", core_labels: {achievement: 1}}
+
+  - case_id: control_power_neutral
+    persona_id: holdout_drift_017
+    persona_name: Hana
+    persona_age: 35-44
+    persona_profession: Librarian
+    persona_culture: Japan
+    core_values: [Power]
+    expected_case_state: none
+    design_note: Entries contain no meaningful authority or status decision.
+    entries:
+      - {t_index: 0, date: "2026-07-10", initial_entry: "I catalogued the new books and cleared the returns desk.", core_labels: {power: 0}}
+      - {t_index: 1, date: "2026-07-11", initial_entry: "I spent the afternoon updating the reading list.", core_labels: {power: 0}}
+      - {t_index: 2, date: "2026-07-12", initial_entry: "I reviewed next month's event schedule and went home on time.", core_labels: {power: 0}}
+
+  - case_id: control_conformity_alternating
+    persona_id: holdout_drift_018
+    persona_name: Malik
+    persona_age: 25-34
+    persona_profession: Technician
+    persona_culture: United States
+    core_values: [Conformity]
+    expected_case_state: none
+    design_note: Rule-breaking events are not adjacent.
+    entries:
+      - {t_index: 0, date: "2026-08-10", initial_entry: "I ignored the team checklist even though the group had agreed to use it.", core_labels: {conformity: -1}}
+      - {t_index: 1, date: "2026-08-11", initial_entry: "I followed the shared checklist carefully and documented every handoff.", core_labels: {conformity: 1}}
+      - {t_index: 2, date: "2026-08-12", initial_entry: "I skipped the checklist again because I wanted to leave early.", core_labels: {conformity: -1}}
+
+  - case_id: control_tradition_uncertain_gap
+    persona_id: holdout_drift_019
+    persona_name: Fatima
+    persona_age: 45-54
+    persona_profession: Shop owner
+    persona_culture: Morocco
+    core_values: [Tradition]
+    expected_case_state: uncertain
+    design_note: Uncertain middle evidence breaks the possible conflict run.
+    entries:
+      - {t_index: 0, date: "2026-09-10", initial_entry: "I skipped the family ceremony even though I had promised to preserve it.", core_labels: {tradition: -1}}
+      - {t_index: 1, date: "2026-09-11", initial_entry: "I am not sure what happened with the observance today; the entry contains no reliable account.", core_labels: {tradition: null}}
+      - {t_index: 2, date: "2026-09-12", initial_entry: "I avoided the next ceremony too despite saying the practice matters to me.", core_labels: {tradition: -1}}
+
+  - case_id: control_universalism_aligned
+    persona_id: holdout_drift_020
+    persona_name: Lucas
+    persona_age: 25-34
+    persona_profession: Procurement specialist
+    persona_culture: Brazil
+    core_values: [Universalism]
+    expected_case_state: none
+    design_note: Repeated choices support environmental and social concern.
+    entries:
+      - {t_index: 0, date: "2026-10-10", initial_entry: "I selected the lower-impact supplier after checking that its labor standards were credible.", core_labels: {universalism: 1}}
+      - {t_index: 1, date: "2026-10-11", initial_entry: "I reduced unnecessary packaging and documented the environmental savings.", core_labels: {universalism: 1}}
+      - {t_index: 2, date: "2026-10-12", initial_entry: "I invited the affected community group to review the sourcing plan before approval.", core_labels: {universalism: 1}}

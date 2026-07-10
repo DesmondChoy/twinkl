@@ -130,7 +130,8 @@ toward neutral.
 | Layer | v1 behavior |
 |---|---|
 | Reference | Strict per-value episode: stored five-pass Judge consensus `-1` labels on two adjacent entries |
-| Runtime | Rolling `P(-1)` evidence with declared-core and uncertainty gates; not implemented yet |
+| Benchmark detector | Two-entry mean `P(-1)` with one global uncertainty ceiling per MLP arm; implemented in `twinkl-wq9p` for evaluation only |
+| Runtime | Rolling `P(-1)` evidence with declared-core and uncertainty gates; production integration remains blocked |
 | Delivery | Weekly digest with cited journal evidence and active, recovered, mixed, or uncertain wording; exact schema pending |
 
 The EDA supports this definition because most single-entry dips recover within
@@ -240,6 +241,9 @@ path.
 
 MC Dropout remains the practical POC default. Later candidates include deep
 ensembles, evidential methods, conformal wrappers, and explicit embedding-space
-out-of-distribution detection. They should be evaluated only if the v1
-decision-level benchmark shows uncertainty calibration is the binding
-constraint.
+out-of-distribution detection. The `twinkl-wq9p` benchmark does not show that
+uncertainty calibration is the binding constraint: the evaluated MLP arms
+detected only 1–2 of 10 designed episodes, while both hard-label LLM arms
+detected all 10 designed episodes but none of the five consensus-derived frozen
+episodes. The next step is target-validity and input-contract review, not a
+heavier uncertainty method.

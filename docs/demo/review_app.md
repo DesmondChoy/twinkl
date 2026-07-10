@@ -116,7 +116,8 @@ five-pass Judge consensus artifact and is not benchmark ground truth.
 The comparison remains a diagnostic surface. Drift v1 uses the strict
 sustained-conflict reference described in
 [`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md), and the rolling
-soft-evidence runtime detector remains to be implemented.
+soft-evidence rule is implemented in the offline benchmark. It is not wired
+into this review app or the Coach runtime because no scorer is promotion-ready.
 
 ## Generated Artifacts
 

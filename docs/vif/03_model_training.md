@@ -185,9 +185,14 @@ On the 221-row test split:
 
 History improves the LLM's misalignment recall and broad minority-class
 performance. The MLP still retains higher `recall_-1`, lower hedging, local
-execution, and a fixed cost profile. The current conclusion is an LLM
-teacher/oracle/fallback role or a measured cascade, with the sustained-conflict
-decision benchmark deciding among them.
+execution, and a fixed cost profile. The completed decision-level benchmark
+does not select among these architectures. Both LLM context arms detect 0/5
+frozen consensus episodes but 10/10 locked author-designed episodes. `run_020`
+detects only 1/10 designed episodes, while the evaluated consensus-trained MLPs
+detect 2/10. The LLM result is therefore a cross-set validity warning rather
+than a teacher/fallback promotion, and the MLP result rules out the current
+local scorer as a production drift trigger. Human review must precede an LLM,
+MLP, or cascade decision.
 
 ---
 
@@ -203,6 +208,8 @@ The VIF training stack lives in `src/vif/`.
 | `src/vif/critic_ordinal.py` | Active ordinal and long-tail head families |
 | `src/vif/critic_bnn.py` | Bayesian neural baseline |
 | `src/vif/dataset.py` | Data loading, joins, and persona-level splits |
+| `src/vif/drift_benchmark.py` | Strict drift reference, adjacent-pair detector, matching, and decision metrics |
+| `scripts/experiments/drift_trigger_benchmark.py` | Frozen and locked designed-holdout orchestration |
 | `src/vif/eval.py` | Evaluation metrics and uncertainty-aware evaluation |
 | `src/vif/posthoc.py` | Validation-only post-hoc boundary tuning |
 | `src/vif/experiment_logger.py` | Persisted run YAMLs and experiment index support |

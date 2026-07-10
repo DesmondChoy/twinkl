@@ -19,7 +19,8 @@ The three layers of the contract are deliberately different:
 | Layer | Contract |
 |---|---|
 | Reference labels | Stored five-pass Judge consensus `-1` labels for the same declared core value on two adjacent entries |
-| Runtime detector | Rolling soft `P(-1)` evidence under uncertainty gating; not implemented yet |
+| Offline detector benchmark | Two-entry mean `P(-1)` with declared-core gating and a maximum uncertainty ceiling; implemented and evaluated |
+| Production runtime | Selected scorer and detector are not approved or wired |
 | User delivery | The weekly Coach digest cites the relevant entries and uses active, recovered, mixed, or uncertain wording without score jargon; exact schema implementation is pending |
 
 The reference definition is strict and auditable. The runtime detector is soft
@@ -59,6 +60,17 @@ The empirical basis is
   timeline, weekly, drift, digest, markdown, and prompt artifacts.
 - The demo review app compares six exploratory rule-based detector families
   against Judge labels or Critic means.
+- `src/vif/drift_benchmark.py` materializes strict reference episodes, retains
+  every adjacent decision window, detects predicted episodes, matches them
+  one-to-one, and reports episode and false-positive metrics.
+- `scripts/experiments/drift_trigger_benchmark.py` calibrates one global
+  two-entry `P(-1)` plus uncertainty rule on frozen validation personas and
+  compares the incumbent MLP, persisted-label sibling, consensus-trained MLPs,
+  and both LLM context arms.
+- The locked designed holdout contains 10 reference episodes across all 10
+  Schwartz dimensions plus 10 matched control trajectories. It was fixed
+  before scoring and is explicitly author-designed rather than human ground
+  truth.
 
 ### Current Prototype Boundary
 
@@ -72,17 +84,34 @@ The six-detector comparison in `src/demo_tool/multi_drift.py` is another
 exploratory surface. Its per-entry vote count is detector agreement, not the
 five-pass Judge reference.
 
-### Missing for v1
+### Benchmark Result (`twinkl-wq9p`)
+
+The frozen consensus split contains 52 strict episodes overall, but only six
+on validation personas and five on test personas. Threshold selection on that
+small validation surface produced conservative operating points:
+
+- `run_020` predicted no frozen-test episode and detected 1/10 designed
+  episodes;
+- the two evaluated consensus-trained MLP variants detected 2/10 designed
+  episodes, so hard-consensus retraining did not close the recall gap;
+- both `gpt-5.4-mini` context arms detected 10/10 deliberately explicit
+  designed episodes with no false alarms, but detected 0/5 consensus-derived
+  frozen-test episodes.
+
+That cross-set disagreement is the decision. The LLM result proves that clear,
+observable sustained conflict is within the scorer's capability; it does not
+validate the consensus-derived episodes or justify a production cascade. No
+scorer is promotion-ready until the frozen reference episodes and designed
+cases receive human review under the declared input contract. Full evidence is
+in the [`twinkl-wq9p` report](../../logs/experiments/reports/experiment_review_2026-07-10_twinkl_wq9p.md).
+
+### Still Missing for Product v1
 
 - Per-entry `P(-1)` persistence in the runtime artifact surface
-- A rolling soft-evidence detector aligned with the sustained-conflict reference
-- Uncertainty and probability-mass thresholds calibrated on held-out data
-- An event-matching harness that compares predicted episodes with reference
-  episodes by persona, value dimension, and time window
-- A scripted held-out episode set that is independent of the Judge labels used
-  to choose and tune the definition
-- End-to-end hit rate, precision, recall, F1, false-positive rate, and alert
-  latency reporting
+- Human review of the frozen-versus-designed benchmark disagreement
+- A scorer and calibrated operating point that pass both target-validity and
+  decision-level promotion checks
+- Production integration of the selected soft-evidence detector
 - Coach-language checks for active, recovered, mixed, and uncertain states at
   digest time
 
@@ -206,7 +235,7 @@ Hard argmax predictions are not the runtime contract. Requiring two predicted
 5. Compare the active MLP frontier and the LLM context arms at this decision
    layer.
 
-### Phase 3: Unbiased Scripted Holdout
+### Phase 3: Isolated Designed Holdout
 
 1. Create trajectories with explicitly scripted sustained-conflict episodes and
    matched non-conflict controls.
@@ -214,8 +243,10 @@ Hard argmax predictions are not the runtime contract. Requiring two predicted
 3. Include easy, subtle, recovery, and volatile cases.
 4. Report event metrics and Coach evidence quality on this holdout once.
 
-The label-derived candidates are adequate for tuning. They are not a final
-unbiased benchmark because the same Judge regime defines the reference.
+The label-derived candidates are adequate for tuning. They are not independent
+validation because the same Judge regime defines the reference. The designed
+holdout is isolated from tuning, but it is author-designed and not yet
+human-reviewed, so it is a capability probe rather than a final benchmark.
 
 ---
 
@@ -277,13 +308,26 @@ Options:
 Generated evidence lives under `docs/drift/figures/` and
 `docs/drift/tables/`.
 
+Run the decision-level benchmark from the locked fixture and cached scorer
+artifacts:
+
+```sh
+uv run python scripts/experiments/drift_trigger_benchmark.py
+```
+
+Use `--execute-llm` only when the locked designed-holdout LLM response cache is
+absent and fresh API inference is intended. Benchmark artifacts live under
+`logs/experiments/artifacts/drift_trigger_benchmark_twinkl_wq9p_20260710/`.
+
 ---
 
 ## Limitations
 
 1. Consensus labels are a more stable Judge reference, not human ground truth.
-2. Current checkpoints were trained on persisted single-pass labels, so
-   consensus evaluation mixes model error with label-regime shift.
+2. The incumbent `run_020` checkpoint was trained on persisted single-pass
+   labels, so its consensus evaluation mixes model error with label-regime
+   shift. The consensus-trained comparison arms reduce that mismatch but still
+   miss most designed episodes.
 3. Core-gated per-dimension denominators are small and uneven.
 4. Five personas have only two entries, so their temporal evidence is limited
    to one possible adjacent pair.
@@ -306,4 +350,8 @@ Generated evidence lives under `docs/drift/figures/` and
 | [`src/coach/runtime.py`](../../src/coach/runtime.py) | Offline checkpoint-to-digest orchestration |
 | [`src/demo_tool/multi_drift.py`](../../src/demo_tool/multi_drift.py) | Six-detector exploratory comparison |
 | [`scripts/experiments/llm_critic_baseline.py`](../../scripts/experiments/llm_critic_baseline.py) | Student-visible and history-context comparison arms |
+| [`src/vif/drift_benchmark.py`](../../src/vif/drift_benchmark.py) | Strict reference builder, pair decisions, detector, matching, and event metrics |
+| [`scripts/experiments/drift_trigger_benchmark.py`](../../scripts/experiments/drift_trigger_benchmark.py) | Frozen and designed-holdout benchmark orchestration |
+| [`config/evals/drift_v1_designed_holdout.yaml`](../../config/evals/drift_v1_designed_holdout.yaml) | Locked 10-episode plus 10-control designed holdout |
 | [`logs/experiments/reports/experiment_review_20260702_twinkl_w2mu_frozen_context_gap.md`](../../logs/experiments/reports/experiment_review_20260702_twinkl_w2mu_frozen_context_gap.md) | Frozen test-split LLM context results |
+| [`logs/experiments/reports/experiment_review_2026-07-10_twinkl_wq9p.md`](../../logs/experiments/reports/experiment_review_2026-07-10_twinkl_wq9p.md) | Decision-level benchmark result and promotion recommendation |

@@ -113,12 +113,14 @@ To make this design capstone-friendly, we summarise a recommended tiered approac
   * Uncertainty: MC Dropout.
   * Drift reference: stored five-pass Judge consensus `-1` labels on two
     adjacent entries for the same declared core value.
-  * Runtime target: rolling soft `P(-1)` evidence under uncertainty gating,
-    delivered weekly; not implemented yet.
+  * Offline drift benchmark: implemented, but no scorer is promotion-ready.
+    Production `P(-1)` persistence and weekly delivery remain blocked pending
+    human review of the frozen-versus-designed disagreement.
 
 * **Tier 2 (Optional capstone extension)**
-  * State: compact legal-history context when the decision-level benchmark
-    demonstrates a context bottleneck.
+  * State: compact legal-history context only if human review confirms that the
+    frozen failures reflect missing legal context rather than questionable
+    reference labels.
   * Target: soft vote-distribution labels after target/context repair; immediate
     alignment remains the output contract.
   * Critic: calibrated local MLP, LLM teacher/fallback, or a measured cascade.

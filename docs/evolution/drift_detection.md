@@ -31,10 +31,11 @@ declared core values. The reference records them separately by value; it never
 averages core values into one profile-wide verdict.
 
 The runtime target is rolling soft `P(-1)` evidence under uncertainty gating,
-and the user sees the result in the weekly Coach digest. The target detector is
-not implemented yet. The intended delivery vocabulary is **active**,
-**recovered**, **mixed**, or **uncertain**; exact schema values and state
-transitions remain implementation work.
+and the user sees the result in the weekly Coach digest. The target rule is
+implemented and evaluated in the offline benchmark, but no scorer is
+promotion-ready and the production path remains unwired. The intended delivery
+vocabulary is **active**, **recovered**, **mixed**, or **uncertain**; exact
+schema values and state transitions remain implementation work.
 
 The team recorded this adoption on 2026-07-10 in
 [GitHub issue #49](https://github.com/DesmondChoy/twinkl/issues/49).
