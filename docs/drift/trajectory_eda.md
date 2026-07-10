@@ -1,19 +1,17 @@
 # Trajectory-Level EDA on Judge Labels — Grounding the Drift Definition
 
-**Date:** 2026-07-08 · **Issue:** twinkl-uac7 · **Feeds:** twinkl-wq9p (drift-trigger benchmark, step 2)
+**Analysis date:** 2026-07-08
 
 **Script:** [`scripts/drift/trajectory_eda.py`](../../scripts/drift/trajectory_eda.py) · **Default data:** `logs/judge_labels/consensus_labels.parquet` + `logs/registry/personas.parquet` · **Week mode:** runtime-compatible `dt.truncate("1w")`
 
 ## Purpose
 
-The team is deciding how to define and quantify drift. The drift-detection docs
-(`docs/evolution/drift_detection.md`, `docs/evals/drift_detection_eval.md`) are
-**not final**; this EDA treats their signal taxonomy as a **hypothesis menu**
-and measures the base rate of each candidate pattern (single-entry dips,
-sustained conflict runs, fades, rises, spikes) in the judge-label reference
-data.
+This EDA is the empirical basis for the v1 drift definition. It treats the
+broader signal taxonomy (single-entry dips, sustained conflict runs, fades,
+rises, and spikes) as a candidate menu and measures each pattern's base rate in
+the Judge-label reference data.
 
-This version uses the 5-pass **consensus reference** as the default decision
+The analysis uses the 5-pass **consensus reference** as the default decision
 table, with persisted single-pass judge labels shown side-by-side where the
 choice matters. Prevalence numbers are **measurements, not targets**: choose the
 definition for construct fit and threshold stability, then control positive
@@ -152,7 +150,7 @@ Full list: [`tables/conflict_heavy_week_candidates.csv`](tables/conflict_heavy_w
    single-pass labels. Benchmarking against consensus labels is the right target,
    but Phase 2 will mix model error with label-regime shift.
 
-## Top-3 recommendations for a single drift definition (de-scoped)
+## Candidate definitions considered
 
 Scope decision: v1 uses **one** definition of drift: sustained conflict with a
 declared core value. No separate single-entry vs multi-week pattern taxonomy.
@@ -184,6 +182,7 @@ Layer split:
 | Runtime detector | rolling soft P(-1) evidence mass, not two hard argmax -1 predictions |
 | Delivery | weekly Coach digest with cited entries |
 | Parked scope | single-entry dip alerts, fade/dormancy, peripheral-value rise, onboarding-gap messaging, evolution gating, multi-week low-mean definitions |
+| Implementation status | strict reference exists; runtime timeline artifacts do not yet persist `P(-1)`, and the selected soft-evidence detector is not implemented |
 
 Why this is the right v1:
 
@@ -197,6 +196,14 @@ Why this is the right v1:
   the user sees it in the weekly Coach digest.
 - **Noise is named.** Consensus changes the R1 set from 49 to 40 personas:
   11 persisted-only flags disappear and 2 consensus-only flags appear.
+
+### Weekly delivery and recovery
+
+The benchmark records whether a sustained-conflict episode occurred. The
+weekly Coach describes the state at delivery time. A sequence such as
+`-1, -1, +1, +1, +1` remains a true reference episode, but the digest should
+describe recovery rather than ongoing drift. The current Coach schema has no
+`recovered` mode, so this distinction remains implementation work.
 
 ## Soft-label note
 
@@ -222,7 +229,7 @@ bundle.
 ## Reproduction
 
 ```sh
-.venv/bin/python scripts/drift/trajectory_eda.py
+uv run python scripts/drift/trajectory_eda.py
 ```
 
 Defaults:
@@ -233,8 +240,8 @@ Defaults:
 Useful checks:
 
 ```sh
-.venv/bin/python scripts/drift/trajectory_eda.py --labels judge --week-mode persona_anchor
-.venv/bin/python scripts/drift/trajectory_eda.py --labels consensus --week-mode runtime
+uv run python scripts/drift/trajectory_eda.py --labels judge --week-mode persona_anchor
+uv run python scripts/drift/trajectory_eda.py --labels consensus --week-mode runtime
 ```
 
 Generated outputs:
@@ -244,3 +251,10 @@ Generated outputs:
 - `tables/persona_coverage.csv`
 - `tables/conflict_heavy_week_candidates.csv`
 - `tables/single_definition_impact_comparison.csv`
+
+## Related current-state documents
+
+- [`docs/prd.md`](../prd.md) — authoritative product scope
+- [`docs/evals/drift_detection_eval.md`](../evals/drift_detection_eval.md) — v1 benchmark protocol
+- [`docs/weekly/weekly_digest_generation.md`](../weekly/weekly_digest_generation.md) — delivery and runtime artifacts
+- [`docs/demo/review_app.md`](../demo/review_app.md) — exploratory runtime and detector review surface

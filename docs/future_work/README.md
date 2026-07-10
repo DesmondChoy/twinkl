@@ -16,6 +16,18 @@ distribution ideas, not active product guarantees.
   - integration research for packaging Twinkl as an OpenClaw-compatible skill
 - [`twinkl-openclaw-workflow.html`](twinkl-openclaw-workflow.html)
   - visual workflow for the same OpenClaw distribution/integration direction
+- [`viz/dashboard_directions.html`](viz/dashboard_directions.html)
+  - four synchronized developer-facing VIF dashboard directions (Phosphor TUI,
+    Specimen Swiss, Mission Control, and Field Notes) over seeded fake data;
+    interaction and layout study only, with no backend wiring
+
+Serve the dashboard study locally with the `mockups` launch configuration or:
+
+```sh
+python3 -m http.server 8734 --directory docs/future_work/viz
+```
+
+Then open `http://127.0.0.1:8734/dashboard_directions.html`.
 
 ## Scope Note
 

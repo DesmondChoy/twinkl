@@ -181,6 +181,13 @@ consolidated parquet:
 - `*.md`
 - `*.prompt.txt`
 
+`src/vif/weekly_schema.py` defines the ordered weekly signal-frame columns and
+the required producer/consumer boundary used by `src/vif/runtime.py` and
+`src/vif/drift.py`. Consumers validate the frame before routing and raise a
+`ValueError` that names any missing columns. The current runtime artifacts store
+alignment means and uncertainties; they do not yet persist the ordinal class
+probabilities required by the rolling-`P(-1)` drift v1 target.
+
 The demo review UI stores those bundles under:
 
 ```text

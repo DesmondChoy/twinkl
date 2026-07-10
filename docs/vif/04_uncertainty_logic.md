@@ -1,24 +1,26 @@
 # VIF – Uncertainty, Drift, and Trigger Logic
 
-This document describes how the VIF turns raw model outputs into Coach-facing
-signals. It combines the uncertainty rules, profile-conditioned drift framing,
-and the weekly trigger logic used by the experimental runtime bridge.
+This document describes how VIF outputs become Coach-facing signals. It keeps
+the selected sustained-conflict contract separate from the weekly
+crash/rut/evolution prototype that is still wired into the offline runtime.
 
 ---
 
 ## 1. Why Uncertainty Gating Matters
 
-A critic trained on synthetic or otherwise limited data can be confidently wrong
-on unfamiliar inputs. In a values-alignment product, that is more harmful than a
-well-calibrated refusal to judge.
+A Critic trained on synthetic or otherwise limited data can be confidently
+wrong on unfamiliar inputs. In a values-alignment product, a conservative
+deferral is safer than a confident but brittle interpretation.
 
-The system therefore separates two questions:
+The system therefore separates three questions:
 
-1. What alignment signal does the student predict?
-2. How much should we trust that signal?
+1. What class probabilities or alignment estimate does the Critic produce?
+2. How much should the system trust that estimate?
+3. Does the recent evidence form the sustained pattern required by the drift
+   contract?
 
-Only the combination of a meaningful pattern and low enough uncertainty should
-reach the Coach as a confident critique.
+Only low-enough uncertainty plus meaningful repeated evidence should reach the
+Coach as a confident conflict reflection.
 
 ---
 
@@ -26,9 +28,9 @@ reach the Coach as a confident critique.
 
 For the MLP path, epistemic uncertainty is estimated with MC Dropout:
 
-1. keep dropout active at inference time
-2. run the same state through the model `N` times
-3. compute a mean and spread over those predictions
+1. keep dropout active at inference time;
+2. run the same state through the model `N` times; and
+3. summarize the predictive distribution.
 
 For a dimension `j`:
 
@@ -37,170 +39,203 @@ $$
 $$
 
 $$
-\sigma_{u,t}^{2(j)} = \text{Var}_i[V_j^{(i)}(s_{u,t})]
+\sigma_{u,t}^{2(j)} = \operatorname{Var}_i[V_j^{(i)}(s_{u,t})]
 $$
 
-The mean is the usable alignment estimate. The spread is the uncertainty proxy.
+The mean is the current runtime alignment estimate. The spread is the
+uncertainty proxy.
 
-### 2.1 Ambiguous Inputs
+Ambiguous inputs can average toward neutral while still producing high spread
+across dropout samples. That combination should not be interpreted as a
+confident neutral judgment.
 
-Variance is especially useful when the entry contains mixed evidence. An
-ambiguous input may average toward neutral while still producing high spread
-across dropout samples. In practice, that is a good reason not to treat the
-output as a confident neutral judgment.
-
----
-
-## 3. Weekly Signal Surface
-
-The runtime bridge does not feed raw per-entry predictions directly into the
-Coach. It first aggregates them into weekly signals.
-
-Each weekly row includes:
-
-- per-dimension mean alignment
-- per-dimension mean uncertainty
-- profile weights
-- profile-weighted overall mean alignment
-- profile-weighted overall uncertainty
-
-These weekly summaries are the input to crash/rut-style detection.
+Global calibration is not sufficient for the drift use case. Uncertainty must
+also be checked on the `-1` class because selective prediction can otherwise
+suppress the exact minority cases Twinkl needs to detect.
 
 ---
 
-## 4. Profile-Conditioned Drift Framing
+## 3. Runtime Signal Surfaces
 
-The VIF is not only asking "is this behavior negative?" It is asking whether the
-behavior conflicts with what this user says matters.
+### 3.1 Per-Entry Timeline
 
-### 4.1 Per-Dimension Weighted Misalignment
+`src/vif/runtime.py` reconstructs student-visible states and writes one row per
+journal session with:
 
-For a profile weight `w_{u,j}` and predicted alignment `\hat{a}_{u,t}^{(j)}`:
+- per-dimension alignment means;
+- per-dimension uncertainties;
+- the persona profile weights; and
+- entry metadata.
+
+The current timeline artifact does not persist ordinal class probabilities.
+The selected v1 detector needs `P(-1)`, so the runtime still requires either a
+probability artifact surface or a deterministic reconstruction path from the
+checkpoint output.
+
+### 3.2 Weekly Frame
+
+The existing prototype also aggregates the timeline into weekly rows with:
+
+- per-dimension mean alignment;
+- per-dimension mean uncertainty;
+- profile weights;
+- profile-weighted overall mean alignment; and
+- profile-weighted overall uncertainty.
+
+`src/vif/weekly_schema.py` is the source of truth for this producer/consumer
+contract. `aggregate_timeline_by_week()` emits the ordered columns and
+`detect_weekly_drift()` validates all required fields before routing. Missing
+columns fail at the boundary with a `ValueError` that names them.
+
+---
+
+## 4. Profile-Conditioned Evidence
+
+Twinkl asks whether behavior conflicts with what this person says matters, not
+whether the behavior is generically negative.
+
+For profile weight `w_{u,j}` and predicted alignment
+`\hat{a}_{u,t}^{(j)}`:
 
 $$
 d_{u,t}^{(j)} = w_{u,j} \cdot \max(0, -\hat{a}_{u,t}^{(j)})
 $$
 
-This is a useful conceptual drift signal:
+This conceptual signal is zero for positive or neutral alignment and scales
+negative alignment by declared importance.
 
-- if alignment is positive or neutral, the contribution is zero
-- if alignment is negative, the contribution scales with user importance
-
-### 4.2 Profile-Weighted Scalar Alignment
-
-The scalar summary used downstream is:
+The profile-weighted scalar summary is:
 
 $$
 V_{u,t}^{\text{scalar}} = w_u^\top \hat{\vec{a}}_{u,t}
 $$
 
-This is not a replacement for the vector output. It is a compact summary used
-for weekly monitoring and trigger decisions.
+The scalar is useful for monitoring. It does not replace the vector output or
+the named value dimension required for an explainable Coach reflection.
 
 ---
 
-## 5. Crash and Rut Logic
+## 5. Selected v1 Drift Contract
 
-### 5.1 High-Uncertainty Gate
+Drift v1 is a sustained conflict episode:
 
-At the weekly level, the first gate is uncertainty:
+> A declared core/high-weight value receives two consecutive consensus `-1`
+> reference labels.
 
-- if overall uncertainty is above threshold, do not emit a confident critique
-- instead route to a high-uncertainty / clarifying Coach mode
+The runtime target accumulates recent soft `P(-1)` evidence for that value while
+uncertainty remains below a calibrated ceiling. Hard argmax sequences are not
+the runtime target because the current Critic frequently hedges true conflict
+toward neutral.
 
-This matches the current runtime detector more closely than a purely
-dimension-local rule.
+| Layer | v1 behavior |
+|---|---|
+| Reference | Strict two-consecutive-`-1` consensus-label episode |
+| Runtime | Rolling `P(-1)` evidence with importance and uncertainty gates |
+| Delivery | Weekly digest with cited journal evidence |
 
-### 5.2 Rut
+The EDA supports this definition because most single-entry dips recover within
+two entries, while three-step and multi-week definitions are too sparse for the
+short observed trajectories. See
+[`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md).
 
-A rut is a sustained low-alignment pattern on an important value dimension.
+### 5.1 Delivery-Time Recovery
 
-In the current runtime detector, a dimension is a rut candidate when:
+Benchmark detection and Coach wording answer different questions. The strict
+reference records whether a sustained-conflict episode occurred. The weekly
+digest should describe the state at delivery time.
 
-- its profile weight is above a minimum importance threshold
-- its weekly alignment stays below a low threshold
-- this persists for at least `C_min` weeks
-- weekly uncertainty stays below threshold during that span
-
-### 5.3 Crash
-
-A crash is a sharp week-over-week drop in overall profile-weighted alignment.
-
-In the current runtime detector:
-
-- compute the drop in overall weekly scalar alignment
-- if that drop exceeds the crash threshold, inspect important dimensions
-- dimensions that declined become the triggered crash dimensions
-
-This makes the crash rule profile-aware without requiring a separate learned
-drift model.
-
-### 5.4 Stable and Positive Weeks
-
-When neither crash nor rut fires and uncertainty stays acceptable, the system
-can classify the week as stable. Positive acknowledgment remains a Coach-layer
-behavior built on top of these signals rather than a separate student target.
+For example, `-1, -1, +1, +1, +1` remains a true benchmark episode, but the
+Coach should describe it as recovered or resolved rather than ongoing drift.
+The current schema has no `recovered` response mode, so this delivery policy
+still requires implementation and scenario tests.
 
 ---
 
-## 6. Experimental Evolution Routing
+## 6. Existing Weekly Runtime Prototype
 
-There is now experimental code that classifies recent weekly behavior as:
+`src/vif/drift.py` consumes the weekly mean/uncertainty frame and can emit:
 
-- `stable`
-- `evolution`
-- `drift`
+- `stable`;
+- `crash`;
+- `rut`;
+- `evolution`; or
+- `high_uncertainty`.
 
-The idea is to distinguish:
+Its first gate routes high overall uncertainty away from a confident critique.
+It then checks a week-over-week profile-weighted drop, consecutive low weekly
+means on important dimensions, and experimental evolution classifications.
 
-- **behavioral struggle**: noisy or volatile divergence from stated values
-- **genuine value change**: sustained, lower-volatility directional shift
-
-When enabled, dimensions classified as `evolution` can bypass crash/rut
-messaging and instead route to profile-update-style Coach language.
-
-Important scope note:
-
-- the runtime experiment path supports this
-- the PRD still treats value-evolution filtering as experimental rather than
-  part of the committed product scope
-
-So this logic should be read as an active experiment, not settled product
-behavior.
+This path is wired into `src/coach/runtime.py` and is useful for end-to-end
+schema, artifact, and UI testing. It is not the selected v1 detector because it
+does not consume rolling `P(-1)` evidence or evaluate the strict
+sustained-conflict construct.
 
 ---
 
-## 7. Future Drift Signals
+## 7. Experimental Evolution Routing
 
-Some useful drift summaries remain future-facing:
+The current prototype automatically calls `classify_weekly_evolution()` when
+no precomputed evolution result is supplied. Eligible dimensions can therefore
+produce the literal `evolution` response mode and an optional profile-update
+suggestion.
 
-- EMA-based smoothed drift curves
-- cosine similarity between recent behavioral alignment and declared profile
-- explicit embedding-space OOD detectors layered on top of MC Dropout
-
-These can strengthen monitoring and calibration later, but they are not required
-for the current crash/rut runtime bridge.
+This is implementation truth, not a product-scope decision. The PRD parks value
+evolution outside the committed v1 contract. The prototype branch remains an
+experimental compatibility surface until it is either adopted explicitly or
+removed from the active router.
 
 ---
 
-## 8. Implementation Reference
+## 8. Exploratory Detector Comparison
+
+The demo review app compares six rule-based detector families:
+
+- Baseline;
+- EMA;
+- CUSUM;
+- Cosine;
+- Control Chart; and
+- KL Divergence.
+
+These detectors operate on persisted single-pass Judge labels or Critic mean
+predictions. Their vote count is detector agreement, not five-pass Judge
+consensus and not v1 benchmark ground truth. They remain useful for diagnosis
+and visualization but do not define the promoted runtime rule.
+
+---
+
+## 9. Coach-Facing Safety Behavior
+
+The standalone weekly digest also has conservative fallback modes for offline
+prompt testing when no upstream drift result is supplied. Acute grief or
+distress markers can route to `high_uncertainty`, while mixed or burdened weeks
+can use `mixed_state` or `background_strain`.
+
+These lexical/aggregate fallbacks are not substitutes for calibrated Critic
+uncertainty. They are local safety scaffolding around the artifact-generation
+path.
+
+---
+
+## 10. Implementation Reference
 
 | Module | Role |
-|--------|------|
-| `src/vif/eval.py` | Uncertainty-aware evaluation utilities |
+|---|---|
+| `src/vif/eval.py` | Entry-level metrics and uncertainty-aware evaluation |
 | `src/vif/runtime.py` | Per-entry and weekly VIF artifact generation |
-| `src/vif/drift.py` | Weekly crash/rut/high-uncertainty detection |
-| `src/vif/evolution.py` | Experimental stable/evolution/drift classification |
+| `src/vif/weekly_schema.py` | Shared weekly frame names and required-column validation |
+| `src/vif/drift.py` | Existing weekly crash/rut/evolution/high-uncertainty router |
+| `src/vif/evolution.py` | Experimental stable/evolution/drift classifier |
+| `src/coach/runtime.py` | Offline checkpoint-to-digest orchestration |
+| `src/demo_tool/multi_drift.py` | Six-detector exploratory comparison |
+| `scripts/drift/trajectory_eda.py` | Sustained-conflict definition analysis |
 
 ---
 
-## 9. Alternative Uncertainty Methods
+## 11. Later Uncertainty Extensions
 
-MC Dropout remains the practical POC default, but future alternatives include:
-
-- deep ensembles
-- evidential methods
-- conformal wrappers
-
-Those may improve calibration later, but they are not needed to understand the
-current runtime trigger stack.
+MC Dropout remains the practical POC default. Later candidates include deep
+ensembles, evidential methods, conformal wrappers, and explicit embedding-space
+out-of-distribution detection. They should be evaluated only if the v1
+decision-level benchmark shows uncertainty calibration is the binding
+constraint.

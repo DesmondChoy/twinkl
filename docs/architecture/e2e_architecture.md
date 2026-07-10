@@ -34,10 +34,12 @@ flowchart TB
 
     subgraph training["Training core"]
         personas["Synthetic personas"]
-        judge["LLM Judge labels"]
+        judge["Persisted single-pass<br/>LLM Judge labels"]
+        consensus["Five-pass consensus labels<br/>diagnostic + drift reference"]
         annotation["Human labels<br/>agreement benchmark"]
         critic_train["Critic training +<br/>experiment archive"]
         checkpoint["Selected Critic checkpoint"]
+        llm_baseline["LLM Critic context baseline"]
     end
 
     subgraph product["Product shell"]
@@ -52,14 +54,17 @@ flowchart TB
         state["Runtime state builder<br/>(entry + profile → Critic input)"]
         scores["VIF Critic scores<br/>+ uncertainty"]
         weekly["Weekly aggregation"]
-        drift["Drift detection"]
+        drift["Weekly crash / rut / evolution<br/>prototype router"]
+        drift_v1["Sustained-conflict v1<br/>rolling soft P(-1) target"]
+        evolution["Evolution classifier<br/>automatic in prototype"]
         d_trigger["??? When to trust<br/>drift alerts?"]
-        d_evolution["??? Value evolution:<br/>in scope or future work?"]
+        d_evolution["Value evolution<br/>parked for v1"]
     end
 
     subgraph coach["Coach + review"]
         digest["Weekly digest"]
-        narrative["Coach prompt / narrative"]
+        prompt["Coach prompt artifact"]
+        narrative["Optional live Coach narrative<br/>(injected callable only)"]
         review["Internal review app +<br/>evaluation reports"]
         d_boundary["??? What is the Coach<br/>allowed to do?"]
         d_feedback["??? Does user feedback<br/>update the profile?"]
@@ -67,6 +72,10 @@ flowchart TB
 
     %% Training flow (wired)
     personas --> judge --> critic_train --> checkpoint
+    judge --> consensus
+    consensus -. "diagnostic retraining" .-> critic_train
+    personas --> llm_baseline
+    llm_baseline -. "benchmark comparison" .-> review
 
     %% Human benchmark, not label production
     annotation -. "benchmark comparison" .-> review
@@ -83,24 +92,29 @@ flowchart TB
     %% Scoring runtime (wired, experimental)
     checkpoint --> scores
     state --> scores --> weekly --> drift
+    weekly --> evolution --> drift
+    scores -. "P(-1) artifact not persisted" .-> drift_v1
+    consensus -. "strict reference episodes" .-> drift_v1
 
     %% Coach + review (wired, experimental)
     drift --> digest
     weekly --> digest
-    digest --> narrative
+    drift_v1 -. "selected v1 path" .-> digest
+    digest --> prompt
+    prompt -. "programmatic LLM injection" .-> narrative
     digest --> review
 
     %% Open decisions attached to where they bite
     journaling -.- d_surface
     drift -.- d_trigger
-    weekly -.- d_evolution
+    evolution -.- d_evolution
     narrative -.- d_boundary
     narrative -.- d_feedback
 
-    class personas,judge,annotation,critic_train,checkpoint implemented;
-    class state,scores,weekly,drift,digest,narrative,review,nudges partial;
-    class onboarding,profile,journaling specified;
-    class d_surface,d_trigger,d_evolution,d_boundary,d_feedback decision;
+    class personas,judge,consensus,annotation,critic_train,checkpoint,llm_baseline implemented;
+    class state,scores,weekly,drift,evolution,digest,prompt,narrative,review,nudges partial;
+    class onboarding,profile,journaling,drift_v1,d_evolution specified;
+    class d_surface,d_trigger,d_boundary,d_feedback decision;
 ```
 
 ## Read This As
@@ -108,12 +122,20 @@ flowchart TB
 The dashed grey `???` nodes and edge labels mark team decisions that still
 need calls. Read this as a product/system map, not a literal runtime sequence.
 
-Twinkl's proven spine runs top to bottom: generated and judged data trains a
+Twinkl's working spine runs top to bottom: generated and judged data trains a
 Critic, and a trained checkpoint then scores each journal entry, rolls the
-scores up into weekly signals, flags drift, and packages everything into a
-weekly digest the Coach can narrate. Today that spine runs on synthetic
-persona journals, which stand in for real user journals — that is the solid
-edge from the training core into the runtime.
+scores up into validated weekly signals, runs the weekly prototype router, and
+packages everything into a weekly digest plus Coach prompt artifact. The CLI
+and review app do not call a live Coach model; narrative generation requires an
+injected callable. The spine runs on synthetic persona journals, which stand in
+for real user journals — that is the solid edge from the training core into the
+runtime.
+
+Two evaluation paths sit beside that spine. The five-pass consensus table is a
+diagnostic label surface and the strict reference for the sustained-conflict
+v1 benchmark. The LLM Critic baseline compares student-visible, historical, and
+upper-bound context arms against the local MLP without feeding production
+runtime scores.
 
 The product shell is designed on paper but not built: where the product ships
 (app, web, something else), the journaling UI itself, and how a user's
@@ -121,8 +143,17 @@ onboarding answers get turned into the value profile the runtime reads. One
 exception inside it: the conversational nudging engine already exists as an
 experimental slice, even though the journaling UI it would attach to does not.
 
-The remaining open decisions are when drift alerts are reliable enough to act
-on, what the Coach is allowed to do or say, whether user feedback should
-update the profile over time, and whether telling genuine value change apart
-from behavioral drift ("value evolution") is in scope now or left for future
-work.
+The selected v1 drift construct is sustained conflict on a declared
+core/high-weight value, with a strict two-consecutive-`-1` reference and rolling
+soft `P(-1)` runtime target. The existing crash/rut/evolution router remains a
+prototype; class probabilities and the selected v1 detector are not yet wired.
+Value evolution is parked for v1 even though the prototype invokes its
+classifier automatically.
+
+The remaining open decisions are when alerts are reliable enough to act on,
+what the Coach is allowed to do or say, and whether user feedback should update
+the profile over time. See
+[`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md),
+[`docs/vif/03_model_training.md`](../vif/03_model_training.md),
+[`docs/weekly/weekly_digest_generation.md`](../weekly/weekly_digest_generation.md),
+and [`docs/demo/review_app.md`](../demo/review_app.md).

@@ -19,7 +19,11 @@ This evaluation validates that explanations feel accurate and actionable to user
 - Rationale storage in [`logs/judge_labels/judge_labels.parquet`](../../logs/judge_labels/judge_labels.parquet)
 - Rationale display UI in annotation tool ([`src/annotation_tool/components/modals.py`](../../src/annotation_tool/components/modals.py))
 - Judge comparison view ([`src/annotation_tool/components/comparison_view.py`](../../src/annotation_tool/components/comparison_view.py))
-- Weekly Coach narrative generation and persistence in [`src/coach/weekly_digest.py`](../../src/coach/weekly_digest.py) and [`src/coach/runtime.py`](../../src/coach/runtime.py)
+- Weekly Coach prompt rendering plus programmatic narrative generation,
+  validation, and persistence support in
+  [`src/coach/weekly_digest.py`](../../src/coach/weekly_digest.py) and
+  [`src/coach/runtime.py`](../../src/coach/runtime.py); the CLIs do not inject a
+  live Coach LLM
 - Tier 1 Coach narrative checks are implemented: groundedness via quoted substring matches, non-circularity via score-jargon avoidance, and length bounds via [`validate_weekly_digest_narrative()`](../../src/coach/weekly_digest.py)
 
 ### What's Missing
@@ -31,8 +35,13 @@ This evaluation validates that explanations feel accurate and actionable to user
 ### Blocking Dependencies
 Tier 1 Coach checks are unblocked and implemented. Deeper end-to-end explanation evaluation still depends on stable upstream drift signals plus explicit explainability hooks from Critic outputs into Coach evidence selection (`twinkl-3sg`).
 
-### Initial Implementation Scope
-The initial implementation landed on the user-facing Coach path first: weekly digest generation plus Tier 1 narrative validation are now in code. The analogous batch checker for Judge rationales remains planned, while Tier 2 (meta-judge) and Tier 3 (human calibration) stay as later validation phases.
+### Implementation Scope
+
+The implemented slice covers weekly digest construction, Coach prompt
+rendering, programmatic narrative generation with an injected callable, and
+Tier 1 narrative validation. The analogous batch checker for Judge rationales
+remains planned, while Tier 2 (meta-judge) and Tier 3 (human calibration) are
+later validation phases.
 
 ### Next Steps
 1. Add a batch Tier 1 checker for Judge rationales in `src/judge/` and run it over the existing 1,594 rationale-bearing rows
@@ -66,8 +75,9 @@ For each alignment score, the Judge provides a rationale:
 Weekly summaries that synthesize patterns:
 
 ```
-"Your Benevolence score dropped this week. You mentioned helping others twice but
-cancelled on a friend Saturday. This pattern has appeared in 3 of the last 4 weeks."
+"You wrote about cancelling on your friend after two weeks of saying you wanted
+to make more room for the people close to you. What made this Saturday feel
+different from the plan you had in mind?"
 ```
 
 **Criteria for good narratives:**
@@ -75,7 +85,10 @@ cancelled on a friend Saturday. This pattern has appeared in 3 of the last 4 wee
 - Identifies patterns over time (not just single entries)
 - Avoids prescriptive or judgmental language
 
-The offline runtime path for this now exists in `src/coach/weekly_digest.py` and `src/coach/runtime.py`, but the evaluation layer is still incomplete: Tier 1 checks are implemented, while benchmark pass-rate reporting and user-study calibration are still pending.
+The offline runtime path lives in `src/coach/weekly_digest.py` and
+`src/coach/runtime.py`. The evaluation layer remains incomplete: Tier 1 checks
+are implemented, while benchmark pass-rate reporting and user-study calibration
+are pending.
 
 ---
 
@@ -120,7 +133,7 @@ Fast, objective checks that don't require LLM calls:
 | **Length** | Flag too-short (<10 words) or too-long (>50 words) | 90% in range |
 
 **Current code status:**
-- Coach narratives: implemented today in `validate_weekly_digest_narrative()` inside [`src/coach/weekly_digest.py`](../../src/coach/weekly_digest.py)
+- Coach narratives: validated by `validate_weekly_digest_narrative()` inside [`src/coach/weekly_digest.py`](../../src/coach/weekly_digest.py)
 - Judge rationales: still planned as a batch checker in `src/judge/`
 
 **Reference implementation shape:**

@@ -17,15 +17,13 @@ human-like raters:
 The bundle is prepared by:
 
 ```bash
-source .venv/bin/activate
-python scripts/journalling/twinkl_754_prepare_consensus.py
+uv run python scripts/journalling/twinkl_754_prepare_consensus.py
 ```
 
 Run the audit-recovery pilot first:
 
 ```bash
-source .venv/bin/activate
-python scripts/journalling/twinkl_754_prepare_consensus.py \
+uv run python scripts/journalling/twinkl_754_prepare_consensus.py \
   --output-dir logs/exports/twinkl_754_pilot \
   --pilot-size 50 \
   --pilot-hard-dimensions security,hedonism,stimulation
@@ -35,6 +33,11 @@ The pilot bundle remains format-compatible with the full bundle. The only
 difference is that `manifest.csv`, `prompts/`, `shards/`, and downstream
 outputs are restricted to the selected 50 entries. The generated
 `bundle_status.json` records whether a bundle is a `pilot` or `full` rerun.
+
+> **Bundle reset:** Preparation clears the target bundle's `prompts/`,
+> `shards/`, `results/`, and `provenance/` directories plus prior
+> manifest/report/status files before writing. Use a separate `--output-dir`
+> when existing results must be preserved.
 
 Useful prepare options:
 
@@ -184,12 +187,14 @@ Rules:
 Validate each shard before merging it:
 
 ```bash
-source .venv/bin/activate
-python scripts/journalling/twinkl_754_validate_results.py \
+uv run python scripts/journalling/twinkl_754_validate_results.py \
   --manifest logs/exports/twinkl_754/manifest.csv \
   --expected-jsonl logs/exports/twinkl_754/shards/pass_1/pass_1_shard_001.jsonl \
   --results logs/exports/twinkl_754/results/pass_1/shards/pass_1_shard_001_results.jsonl
 ```
+
+Add `--output <validated.jsonl>` to write normalized validated rows to a
+separate file.
 
 If validation fails:
 
@@ -205,8 +210,7 @@ Merge only validated shard result files into `pass_N_results.jsonl`.
 After all accepted shard result files are ready, run:
 
 ```bash
-source .venv/bin/activate
-python scripts/journalling/twinkl_754_merge_pass_results.py \
+uv run python scripts/journalling/twinkl_754_merge_pass_results.py \
   --bundle-dir logs/exports/twinkl_754 \
   --worker-model gpt-5.4
 ```
@@ -246,8 +250,7 @@ layout, shard result files, provenance CSVs, and summarizer inputs.
 Run:
 
 ```bash
-source .venv/bin/activate
-python scripts/journalling/twinkl_754_summarize_consensus.py \
+uv run python scripts/journalling/twinkl_754_summarize_consensus.py \
   --bundle-dir logs/exports/twinkl_754 \
   --consensus-output logs/judge_labels/consensus_labels.parquet
 ```

@@ -15,12 +15,12 @@ Think of the **Value Identity Function (VIF)** as Twinkl's internal "compass."
 
 While the user journals and interacts with the app, the VIF quietly observes their behavior over time. It compares what the user *does* (their daily actions and struggles) against what they *value* (their long-term identity and goals).
 
-Instead of just giving a generic "sentiment score," the VIF tracks multiple dimensions of life simultaneously—like Health, Career, and Relationships. It answers the question: *"Is the user moving towards the person they want to be, or drifting away?"*
+Instead of giving a generic sentiment score, the VIF tracks the ten Schwartz value dimensions: Self-Direction, Stimulation, Hedonism, Achievement, Power, Security, Conformity, Tradition, Benevolence, and Universalism. It answers the question: *"Is the user moving towards the person they want to be, or drifting away?"*
 
 Crucially, the VIF is designed to be:
 *   **Nuanced:** It acknowledges trade-offs (e.g., "You crushed your work goals this week, but your sleep suffered").
 *   **Cautious:** It knows when it's unsure. If the user's situation is complex or new, the VIF holds back its judgment rather than giving bad advice.
-*   **Time-Aware:** It looks for patterns, not just snapshots. One bad day isn't a crisis, but a three-week slide is.
+*   **Time-Aware:** The downstream timeline looks for repeated evidence rather than reacting to a single entry. Drift v1 requires sustained conflict on a declared core/high-weight value.
 
 This engine powers Twinkl's feedback system: flagging drifts so the Coach (the conversational AI) can gently surface tensions, and recognizing sustained alignment so the Coach can offer occasional evidence-based acknowledgment.
 
@@ -43,18 +43,25 @@ The VIF is designed to:
    The system does not assume access to ground-truth alignment labels. Instead, it uses an explicit **Reward Model (RM)** to infer alignment scores from text and user profiles.
 
 2. **Vector-valued evaluation**
-   Alignment is evaluated in **multiple value dimensions** (e.g. Health, Relationships, Growth, Contribution). The value function remains **vector-valued** to preserve tensions and trade-offs, and is only aggregated when needed.
+   Alignment is evaluated across all ten Schwartz value dimensions. The value function remains **vector-valued** to preserve tensions and trade-offs, and is only aggregated when needed.
 
 3. **Uncertainty-aware feedback**
    The system estimates **epistemic uncertainty** in its predictions and only issues feedback when it is both:
    * Confident in its judgment, and
    * Detecting a significant pattern (negative or positive).
 
-4. **Trajectory-aware, not purely Markovian**
-   The VIF explicitly incorporates **recent temporal history** (for the POC, recent entry windows and time gaps) instead of assuming that a single entry and static profile fully determine future trajectories.
+4. **Trajectory-aware downstream evaluation**
+   The live Critic default uses `window_size: 1`, so each prediction sees the current journal session and normalized value profile. Runtime timeline reconstruction and drift detection provide the temporal layer. Larger legal-history windows remain an explicit experiment rather than an assumed property of the default Critic.
 
 5. **Separation of concerns: Critic vs Coach**
-   The VIF (critic) focuses on **temporal, numeric evaluation** using sequential history. A separate **Coach / Explanation layer** reads the user's full journal history via **full-context prompting** (at POC scale, all entries fit in the LLM context window) to surface thematic evidence and narratives *after* the critic has produced its scores. At production scale with longer histories, this would transition to retrieval-augmented generation (RAG) — see [Section 4](#4-extensions-and-future-work).
+   The VIF Critic produces numeric per-entry alignment evidence and uncertainty
+   from the configured student-visible state. The downstream timeline supplies
+   temporal evaluation. A separate **Coach / Explanation layer** reads the
+   user's full journal history via **full-context prompting** (at POC scale, all
+   entries fit in the LLM context window) to surface thematic evidence after
+   the Critic and drift layer produce structured signals. At production scale
+   with longer histories, this would transition to retrieval-augmented
+   generation (RAG) — see [Section 4](#4-extensions-and-future-work).
 
 ---
 
@@ -64,7 +71,9 @@ The VIF is designed to:
 
 We define a set of $K$ value dimensions:
 
-* Example: Health, Relationships, Growth, Contribution, Autonomy, etc.
+* The canonical dimensions are Self-Direction, Stimulation, Hedonism,
+  Achievement, Power, Security, Conformity, Tradition, Benevolence, and
+  Universalism.
 * Each value dimension has:
   * A **definition** in natural language.
   * Positive and negative **examples**.
@@ -78,7 +87,13 @@ Each user ($u$) has a **value profile**:
 
 * A vector of value weights:
   * $w_{u,t} \in \mathbb{R}^K$, with $w_{u,t} \ge 0$ and $\sum_k w_{u,t,k} = 1$.
-  * For the POC, $w_{u,t}$ may be treated as **piecewise constant** over time (updated infrequently), but conceptually it can evolve slowly as the user refines their priorities. The mechanism for detecting when profile updates are warranted is specified in the [Value Evolution Detection](../evolution/01_value_evolution.md) design.
+  * The synthetic runtime assigns equal mass to declared core values and falls
+    back to a uniform vector if none match. The graded BWS output is specified
+    but is not wired into runtime state construction.
+  * The profile is piecewise constant in the current POC. [Value Evolution
+    Detection](../evolution/01_value_evolution.md) remains a future product
+    decision even though an experimental classifier exists in the prototype
+    router.
 * Additional profile information:
   * Narrative descriptions of what each value means to them.
   * Known constraints and long-term goals.
@@ -91,18 +106,24 @@ This profile is used both in the **Reward Model prompts** and in aggregating vec
 
 To make this design capstone-friendly, we summarise a recommended tiered approach. The team can choose which tier to implement while keeping a coherent long-term architecture.
 
-* **Tier 1 (Minimum POC)**
-  * State: current text embedding + profile (optional small history window).
+* **Tier 1 (Current POC)**
+  * State: current journal-session embedding + normalized profile.
   * Target: immediate alignment (Option A).
-  * Critic: MLP regressor.
+  * Critic: ordinal MLP with a BNN comparison baseline.
   * Uncertainty: MC Dropout.
-  * Critique rule: dual-trigger (crash + rut) on simple rolling averages.
+  * Drift reference: two consecutive consensus `-1` labels on a declared
+    core/high-weight value.
+  * Runtime target: rolling soft `P(-1)` evidence under uncertainty gating,
+    delivered weekly.
 
-* **Tier 2 (Enhanced POC)**
-  * State: sliding window over last $N$ entries with time gaps and stronger runtime calibration.
-  * Target: short-horizon average (Option B).
-  * Critic: MLP with tuned hyperparameters and calibrated uncertainty.
-  * Critique rule: weekly crash/rut logic with user-specific thresholds.
+* **Tier 2 (Optional capstone extension)**
+  * State: compact legal-history context when the decision-level benchmark
+    demonstrates a context bottleneck.
+  * Target: soft vote-distribution labels after target/context repair; immediate
+    alignment remains the output contract.
+  * Critic: calibrated local MLP, LLM teacher/fallback, or a measured cascade.
+  * Drift rule: the same sustained-conflict construct with calibrated
+    user/profile thresholds and active-versus-recovered weekly wording.
 
 * **Tier 3 (Out of Scope for Capstone)**
   * State: multimodal, sliding-window state with audio/physio.
@@ -124,7 +145,7 @@ Potential extensions beyond the POC:
   * Incorporate ensembles, density models, or explicit OOD detectors on the text embedding space.
 * **More Modalities** *(Out of scope for capstone)*:
   * Incorporate prosodic and physiological features robustly, especially for early warning signals of stress or overload.
-* **Value Evolution Detection**: Statistical filter classifying per-dimension divergence as STABLE/EVOLUTION/DRIFT, gating drift triggers and enabling user-confirmed profile updates. See [Value Evolution Detection](../evolution/01_value_evolution.md).
+* **Value Evolution Detection**: Possible statistical filter for user-confirmed profile updates after the sustained-conflict path is validated. See [Value Evolution Detection](../evolution/01_value_evolution.md).
 * **Personalisation Layers**:
   * Explore global VIF plus lightweight per-user adapters for users whose trajectories systematically diverge from the population.
 * **Retrieval-Augmented Coach (scaling)**:

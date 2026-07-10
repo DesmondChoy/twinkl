@@ -27,8 +27,10 @@ flowchart LR
             generator["Synthetic persona generation"]
             wrangled["Processed journal corpus<br/>text + dates + core values"]
             judge["Judge labeling<br/>{-1, 0, +1} x 10"]
-            labels["Consolidated label table"]
+            labels["Persisted single-pass label table"]
+            consensus["Five-pass consensus reference"]
             generator --> wrangled --> judge --> labels
+            labels --> consensus
         end
 
         merge["Join + integrity checks"]
@@ -52,7 +54,8 @@ flowchart LR
             critic["Per-entry Critic inference"]
             timeline["Per-entry VIF timeline"]
             weekly["Weekly aggregation"]
-            drift["Drift routing<br/>stable / crash / rut<br/>high uncertainty"]
+            drift["Weekly prototype routing<br/>crash / rut / evolution<br/>high uncertainty"]
+            drift_v1["Sustained-conflict v1 target<br/>rolling soft P(-1)"]
             runtime_input --> state_runtime --> critic --> timeline --> weekly --> drift
         end
 
@@ -62,7 +65,10 @@ flowchart LR
             prompt["Full-context Coach prompt"]
             narrative["Optional Coach narrative"]
             exports["Reportable artifacts"]
-            digest --> prompt --> narrative --> exports
+            digest --> prompt
+            prompt -.-> narrative
+            prompt --> exports
+            narrative --> exports
         end
     end
 
@@ -70,19 +76,21 @@ flowchart LR
     runtime_input --> digest
     weekly --> digest
     drift --> digest
+    timeline -. "P(-1) not persisted" .-> drift_v1
+    consensus -. "strict reference" .-> drift_v1
+    drift_v1 -. "selected replacement" .-> digest
 
-    evolution["Experimental evolution analysis"]
-    weekly -. "optional context" .-> evolution
-    evolution -. "optional signal shaping" .-> drift
+    evolution["Automatic experimental<br/>evolution classifier"]
+    weekly --> evolution --> drift
 
     state_note["Current default state:<br/>current entry embedding + 10-dim value profile"]
     state_note -.-> state_train
     state_note -.-> state_runtime
 
-    class generator,wrangled,judge,labels,merge prep;
+    class generator,wrangled,judge,labels,consensus,merge prep;
     class encoder_train,state_train,samples,critic_train,checkpoint train;
     class runtime_input,state_runtime,critic,timeline,weekly,drift run;
     class digest,prompt,narrative coach;
     class evolution optional;
     class exports artifact;
-    class state_note note;
+    class state_note,drift_v1 note;

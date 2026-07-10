@@ -1,20 +1,51 @@
 # Drift Detection
 
+## Current v1 Contract
+
+Drift v1 has one operational definition: a declared core/high-weight value
+receives two consecutive consensus `-1` reference labels. The runtime target is
+rolling soft `P(-1)` evidence under uncertainty gating, and the user sees the
+result in the weekly Coach digest.
+
+The strict reference and empirical rationale live in
+[`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md). The evaluation
+contract lives in
+[`docs/evals/drift_detection_eval.md`](../evals/drift_detection_eval.md).
+
+The repository also contains two exploratory predecessors:
+
+- `src/vif/drift.py` routes weekly means into `crash`, `rut`, `evolution`,
+  `high_uncertainty`, or `stable`; and
+- the demo compares six rule-based detector families and counts their votes.
+
+Neither predecessor implements the selected rolling-`P(-1)` v1 detector. The
+remaining sections preserve the broader detector research catalog and design
+trade-offs; crash/fade/rise/evolution material is not active v1 scope.
+
 ## 0. Critic performance and its implications for drift detection
 
-The trained Critic (median QWK 0.362, recall_-1 = 0.313) produces ordinal alignment scores `â_t ∈ {-1, 0, +1}^10`. 62.1% of predictions are neutral (0), meaning genuine misalignment events are often predicted as 0 rather than -1. Because a 0 is indistinguishable from noise to any drift detector, crashes that the Critic hedges on become invisible to the detection layer.
+The trained Critic frontier (median QWK 0.362, `recall_-1 = 0.313`)
+produces ordinal alignment estimates across ten dimensions. Its 62.1% hedging
+rate means genuine conflict is often predicted as neutral, so hard argmax rules
+can miss sustained-conflict episodes.
 
 **Example.** Maya's Benevolence scores (true vs. Critic predicted):
 
 ```
 Week:   1    2    3    4    5    6    7    8
-True:  +1   +1    0   -1   -1   -1    0   +1    ← crash weeks 4–6
+True:  +1   +1    0   -1   -1   -1    0   +1    ← conflict entries 4–6
 Pred:   0    0    0    0   -1    0    0    0    ← only week 5 caught
 ```
 
-A detector looking for two consecutive −1s (or a rolling mean below −0.5 for three weeks) fires on the true scores but stays silent on the Critic's output.
+A hard detector looking for two consecutive predicted `-1` labels fires on the
+reference scores but stays silent on the Critic output. This is why v1 uses a
+strict label reference and a soft runtime evidence target.
 
-**Why the notebooks decouple the two.** The detection notebooks (Section 4) currently run on Judge labels — clean, directly scored ground truth — rather than Critic predictions. This deliberate separation means drift detector thresholds can be designed and tuned independently of Critic quality. Once thresholds are locked, Phase 2 re-runs detectors on Critic-predicted score sequences to quantify the gap. At the current Critic frontier, meaningful drift results will not be achievable for all ten value dimensions — dimensions with sparse −1 signal (e.g. Power, Security) are most at risk of being undetectable in practice.
+**Why reference and runtime are evaluated separately.** The trajectory EDA runs
+on five-pass consensus Judge labels, while the runtime evaluation runs on Critic
+outputs. This separates construct definition from model quality and exposes the
+Critic noise penalty directly. Consensus labels are a Judge reference, not human
+ground truth.
 
 ---
 
@@ -47,7 +78,7 @@ The Critic produces scores. The drift detector reads the history of those scores
 
 ### Why the Critic has a temporal window
 
-The Critic predicts alignment **per entry** — one score vector `â_t` per journal entry. But the state it receives as input includes a window of recent entries (`N` embeddings + time gaps), not just the current one.
+The Critic predicts alignment **per entry** — one score vector `â_t` per journal entry. The architecture supports a configurable recent-entry window, but the live default is `window_size: 1`: the current journal session plus the normalized profile.
 
 This window is the **input** to the Critic, not the output. It exists to help the Critic score the current entry more accurately — some entries only make sense in context:
 
@@ -91,11 +122,13 @@ Options B and C move temporal reasoning *into* the Critic. The drift layer can n
 
 ### Definition
 
-Drift is operationally defined as: **the gap between `w_u` (what the user says they value) and the temporal trend of `â_t` (what the Critic observes in their behavior), sustained beyond noise thresholds, and not yet endorsed by the user as intentional.**
+Drift v1 is a **sustained conflict episode on a declared core/high-weight
+value**. The strict reference is entry-level persistence; the runtime target is
+rolling soft evidence; the weekly boundary controls delivery only.
 
-The moment the user endorses the change, `w_u` updates and the gap closes — not because behavior changed, but because the declared values caught up to reality. This is evolution, and the drift signal resets.
-
-Drift detection operates on **weekly aggregates**, not individual entries. If a user writes 5 entries in a week with Benevolence scores [+1, +1, -1, +1, +1], the weekly average is +0.6 — no crash. This smooths within-week noise. Skipped weeks produce no data point; the system waits for the next entry without imputing.
+The broader interpretation question—unintended drift, an accepted trade-off, or
+genuine value change—belongs to the Coach conversation. Automatic profile
+updates are not part of the committed POC.
 
 ### Two independent axes
 
@@ -132,14 +165,15 @@ If the Critic scores a -1 on a core value, that's a *strong* signal — the misa
 
 ---
 
-## 3. Applicable to all approaches
+## 3. Shared considerations in the alternative detector research
 
 ### Core vs peripheral values
 
-All detection approaches must distinguish between dimensions the user declared as important and those they didn't:
+The explored approaches distinguish between dimensions the user declared as important and those they did not:
 
 - **Core values** (`w_j ≥ w_min`): monitored for **decline** — the system watches for the value going misaligned or dormant.
-- **Peripheral values** (`w_j < w_min`): monitored only for **rise** — a previously unimportant dimension becoming consistently positive may signal emerging priorities.
+- **Peripheral values** (`w_j < w_min`): rise detection is an explored
+  extension and remains parked outside v1.
 
 If Power is `w=0.05` and scores -1, that's not a drift alert regardless of detection approach — the user didn't declare it as important.
 
@@ -174,9 +208,10 @@ Once any approach fires an alert, the resolution pathway is the same. The Coach:
 
 The profile `w_u` is **not** automatically updated by any detection approach. It changes only when the user explicitly endorses a value shift in the Coach conversation, edits it directly in settings, or confirms a re-assessment result.
 
-### Evolution gating (applies to all approaches)
+### Evolution gating in the prototype research path
 
-Before drift triggers evaluate a dimension, evolution detection classifies its recent divergence pattern:
+The current weekly prototype classifies recent divergence before its crash/rut
+checks:
 
 | Classification | Pattern | Volatility | Routing |
 |---|---|---|---|
@@ -184,9 +219,10 @@ Before drift triggers evaluate a dimension, evolution detection classifies its r
 | **Evolution** | Sustained, directional divergence | Low | Coach: "priorities shifting?" → suggest profile update |
 | **Drift** | Volatile, inconsistent divergence | High | Drift triggers evaluate normally |
 
-Dimensions classified as EVOLUTION are excluded from drift trigger evaluation entirely. This prevents genuine value shifts from being misread as behavioral failure.
+Dimensions classified as EVOLUTION are excluded from the prototype's crash/rut
+checks. The code path is automatic, but product adoption remains outside v1.
 
-### State lifecycle
+### Conceptual future state lifecycle
 
 ```
 ┌─────────────┐     ┌──────────────┐     ┌───────────────┐     ┌──────────────┐
@@ -216,7 +252,7 @@ Dimensions classified as EVOLUTION are excluded from drift trigger evaluation en
 
 ---
 
-## 4. Approach-specific
+## 4. Explored detector families (not the v1 contract)
 
 ### Comparison
 
@@ -230,7 +266,9 @@ Dimensions classified as EVOLUTION are excluded from drift trigger evaluation en
 
 **Selection rationale:**
 
-- **POC: Rule-based.** Dataset (24 annotated personas, ~380 annotations) is too small for learned models. Every alert is explainable and thresholds are tractable to tune.
+- **Exploratory baseline: rule-based.** The 24-persona human-annotation subset
+  is too small for learned trajectory models. Rule-based alerts remain
+  interpretable and easy to compare, but they do not define drift v1.
 - **First upgrade: BOCPD.** At ~50+ personas with confirmed changepoints, BOCPD replaces the hand-coded taxonomy with a unified probabilistic framework.
 - **Second upgrade: HMM.** At ~30+ entries/user, a hierarchical HMM can learn regime structure the hand-coded taxonomy might miss.
 - **GP regression:** Lateral option — useful if irregular journaling (skipped weeks, bursts) proves problematic for weekly aggregation.
@@ -238,7 +276,7 @@ Dimensions classified as EVOLUTION are excluded from drift trigger evaluation en
 
 ---
 
-### 3.1 Rule-based (selected for POC)
+### 3.1 Rule-based taxonomy study
 
 Hand-coded thresholds define what counts as a crash, fade, or rise. No learning — the signal taxonomy is specified upfront and detectors check whether each pattern's conditions are met.
 
@@ -669,73 +707,22 @@ The signal taxonomy is **not an input** — any deviation from learned normal be
 
 ---
 
-## 5. Experiment plan
+## 5. Exploratory six-detector comparison
 
-### Data
+The demo retains Baseline, EMA, CUSUM, Cosine, Control Chart, and KL Divergence
+detectors for visual diagnosis. It can apply them to persisted single-pass Judge
+labels or Critic mean predictions and displays the number of detectors firing at
+each step.
 
-- **204 personas** (1,651 entries) with declared core values and judge-labeled alignment scores in `logs/judge_labels/judge_labels.parquet`
-- **24 personas with human annotations** (380 annotations from 3 annotators) in `logs/annotations/`
-- **Qualitative drift narratives** for each annotated persona in `notebooks/annotations/persona_drift.ipynb`
-- **Trained Critic** (median QWK 0.362, recall_-1 0.313)
+That vote count is **detector agreement**, not the five-pass Judge consensus
+reference and not ground truth. No `consensus_crisis_labels.parquet` artifact is
+part of the current benchmark.
 
-### Consensus ground truth
-
-Rather than manually labeling crisis points, use **cross-approach agreement** as a proxy for ground truth:
-
-```
-consensus_score = number of approaches that flag this (t, dim)  # 0–6
-
-strong  = consensus_score ≥ 4   (majority agreement → high-confidence crisis)
-weak    = consensus_score ∈ {2, 3} (split opinion → ambiguous)
-none    = consensus_score ≤ 1   (at most one approach → not a crisis)
-```
-
-**Why it works:** The 6 rule-based sub-approaches have genuinely different philosophies (memoryless vs. stateful, per-dimension vs. holistic, threshold vs. distributional). Agreement across philosophically different methods is stronger evidence than agreement across similar methods.
-
-**Limitation:** If all approaches share a blind spot (e.g., none detect fades because all use τ_expect=0), consensus will miss it too. Phase 3 addresses this.
-
-### Phases
-
-**Phase 1: Consensus ground truth + approach selection (1-2 days)**
-
-1. Add baseline approach (simple crash/no-recovery thresholds) to the comparison notebook
-2. Run all 6 sub-approaches × parameter grid on human annotation means for personas with ≥5 steps
-3. Compute consensus labels
-4. Score each sub-approach against consensus (hit rate, precision, F1, FPR, latency)
-5. If baseline meets targets: stop — simple thresholds win
-6. If not: select best crash sub-approach + best fade/no-recovery sub-approach
-
-Output: Selected sub-approach pair with tuned parameters. Labels stored as `logs/annotations/consensus_crisis_labels.parquet`.
-
-**Phase 2: Critic-in-the-loop evaluation (1 day)**
-
-1. Run selected sub-approach pair on Critic predictions (with MC Dropout uncertainty)
-2. Apply uncertainty gating: exclude entries where σ ≥ ε_j from detector state
-3. Compare hit rate / precision / FPR against Phase 1 results
-4. Quantify the "Critic noise penalty"
-
-Output: Gap analysis showing which Critic improvements would most benefit drift detection.
-
-**Phase 3: Absence-aware variant (0.5 day)**
-
-1. Re-run Phase 1 with `τ_expect ∈ {0.0, 0.2, 0.3}` as an additional grid parameter
-2. Compare on consensus points involving fade patterns
-3. If it improves fade detection without increasing FPR, adopt it
-
-Output: Decision on whether to include the absence-aware formula.
-
-### Metrics
-
-| Metric | Target | Measured on |
-|---|---|---|
-| **Hit Rate** (consensus crises correctly flagged) | ≥ 80% | Phase 1 (human annotations) |
-| **Precision** (alerts that are consensus crises) | > 60% | Phase 1 |
-| **F1 per value dimension** | > 0.5 | Phase 1 |
-| **FPR** (false alarm rate) | < 20% | Phase 1 |
-| **Critic noise penalty** (hit rate drop Phase 1 → Phase 2) | < 15pp | Phase 2 |
-| **First-alert latency** | ≤ 2 steps after crisis onset | Phase 1 |
-
-**Blocking dependency:** The Critic frontier (median QWK 0.362) may not be strong enough for reliable automated drift triggers. Phase 2 will quantify exactly how much this matters. If the Critic noise penalty exceeds 15pp on hit rate, further Critic improvement should be prioritized before productionizing drift detection.
+The v1 evaluation instead uses strict sustained-conflict episodes from the
+five-pass consensus table, then measures the rolling-soft-evidence runtime
+detector on persona-isolated tuning and held-out sets. See
+[`docs/evals/drift_detection_eval.md`](../evals/drift_detection_eval.md) for the
+active protocol.
 
 ---
 
@@ -755,4 +742,4 @@ Output: Decision on whether to include the absence-aware formula.
 - [`docs/vif/02_system_architecture.md`](../vif/02_system_architecture.md) — state and runtime artifact flow
 - [`docs/evals/drift_detection_eval.md`](../evals/drift_detection_eval.md) — evaluation protocol and success criteria
 - [`docs/evolution/01_value_evolution.md`](01_value_evolution.md) — value evolution detection design
-- [`notebooks/annotations/drift_detection_comparison.ipynb`](../../notebooks/annotations/drift_detection_comparison.ipynb) — 5-approach comparison on annotation data
+- [`notebooks/drift_experiment_MVP/01_drift_detection_rule_based.ipynb`](../../notebooks/drift_experiment_MVP/01_drift_detection_rule_based.ipynb) — exploratory rule-based detector comparison

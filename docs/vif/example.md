@@ -6,7 +6,7 @@
 > |---|---|
 > | Stage 0 (Offline Training) | 🧪 Experimental — synthetic generation, judge labeling, and critic training are all implemented; frontier quality is still under active review |
 > | Stage 1 (Onboarding) | 📋 Specified |
-> | Stages 2–4 (Journaling + Coach) | ⚠️ Partial — runtime bridge, weekly signals, and draft Coach generation exist experimentally; trigger calibration and response validation are still under refinement |
+> | Stages 2–4 (Journaling + Coach) | ⚠️ Partial — runtime bridge, weekly signals, digest artifacts, and prompt rendering exist; the selected rolling-soft-evidence sustained-conflict detector and recovery wording remain to be implemented |
 > | Stage 5 (High-uncertainty) | ⚠️ Partial — MC Dropout and high-uncertainty routing exist experimentally; sensitive-case behavior should still be treated as target behavior under evaluation |
 >
 > See the [Implementation Status](../prd.md#implementation-status) table in prd.md for the full breakdown.
@@ -20,7 +20,8 @@ This example follows a single user through onboarding and four scenarios, showin
 | **Generator** | Creates synthetic training data | Offline only (before any user exists) |
 | **Judge** | LLM that scores entries against values | Training time; optionally live for novel inputs |
 | **Critic** | Fast neural net that predicts value alignment | Every journal entry |
-| **Coach** | Conversational AI that surfaces insights | When Critic flags a tension or uncertainty |
+| **Drift detector** | Reads Critic outputs over time and decides whether a pattern meets the trigger contract | After each scored entry; delivered through the weekly digest |
+| **Coach** | Conversational AI that turns structured signals into evidence-based reflection | When the weekly artifact calls for a tension, uncertainty, or occasional acknowledgment |
 
 ---
 
@@ -147,13 +148,13 @@ Sarah has been journaling for a month. Here's this week's entry:
 | Benevolence | +0.9 | 0.2 (low) | Aligned — prioritized Emma, fully present |
 | Self-Direction | +0.6 | 0.3 (low) | Aligned — creative work with energy and ownership |
 
-> _The Critic always outputs all 10 Schwartz dimension scores. Tables in this walkthrough show only Benevolence and Self-Direction — Sarah's declared values — because those drive crash/rut detection for her profile. The remaining 8 dimensions are scored but not surfaced to the Coach unless they cross thresholds._
+> _The Critic always outputs all 10 Schwartz dimension scores. Tables in this walkthrough show only Benevolence and Self-Direction — Sarah's declared values — because v1 drift detection is gated to declared core/high-weight values. The remaining eight dimensions are still scored._
 
-**Trajectory Check (4-week rolling averages):**
-- Benevolence: +0.8 → stable
-- Self-Direction: +0.7 → stable
-- No crash (no sudden drop)
-- No rut (not below threshold)
+**Trajectory check:**
+
+- no two-entry sustained-conflict episode is active on either declared value;
+- uncertainty is low enough to retain the evidence; and
+- the weekly artifact can support occasional, evidence-based acknowledgment.
 
 **System Decision:** Occasional reinforcement. Sarah has shown sustained alignment — worth acknowledging.
 
@@ -173,110 +174,98 @@ The reinforcement is *evidence-based* (cites specific behavior), *tied to the us
 
 ---
 
-## Stage 3: Week 7 — Crash Detected
+## Stage 3: Weeks 7–8 — Sustained Conflict Detected
 
-Sarah's situation changes. A major client pitch consumes her.
+Sarah's situation changes. A major client pitch consumes her, and two
+consecutive journal sessions conflict with Benevolence.
 
-### Sarah's Journal Entry
+### Sarah's Journal Entries
 
-> "The pitch is tomorrow. I've been at the office until midnight every night. Emma asked why I missed her recital. I said I'd make it up to her. I always say that."
+> **Week 7:** "The pitch is tomorrow. I've been at the office until midnight
+> every night. Emma asked why I missed her recital. I said I'd make it up to
+> her. I always say that."
+
+> **Week 8:** "The client wants another revision. I cancelled Sunday with Emma
+> and told myself it was just one more time. She didn't argue. That felt worse."
 
 ### Component Involvement
 
 | Component | Status | Activity |
 |-----------|--------|----------|
 | Generator | N/A | Only used during offline training |
-| Judge | N/A | Critic is confident; pattern matches training data |
-| Critic | **ACTIVE** | Detects sharp drop in Benevolence |
-| Coach | **ACTIVE** | Surfaces the tension to Sarah |
+| Judge | N/A | Consensus labels define the benchmark reference, not live runtime input |
+| Critic | **ACTIVE** | Produces per-entry class evidence and uncertainty |
+| Drift detector | **TARGET BEHAVIOR** | Accumulates rolling soft `P(-1)` evidence on Benevolence |
+| Coach | **ACTIVE AT DELIVERY** | Uses the weekly artifact to surface the repeated conflict |
 
-### Critic's Processing
+### Reference and Runtime Views
 
-**This Week's Scores:**
+| Entry | Consensus Benevolence reference | Runtime target |
+|---|---:|---|
+| Week 7 | `-1` | elevated `P(-1)`, low enough uncertainty to retain |
+| Week 8 | `-1` | repeated `P(-1)` evidence crosses the calibrated persistence gate |
 
-| Value | Score | Uncertainty (σ) | Interpretation |
-|-------|-------|-----------------|----------------|
-| Benevolence | -0.9 | 0.25 (low) | Misaligned — missed key moment, acknowledged pattern |
-| Self-Direction | +0.2 | 0.4 (low) | Neutral — work is obligation-driven, not creative expression |
+The strict benchmark records one sustained-conflict episode because the same
+declared core value receives two consecutive `-1` labels. The runtime does not
+require two hard argmax `-1` predictions; it estimates the episode from soft
+probability mass under uncertainty gating.
 
-**Crash Detection (comparing to rolling average):**
-- Benevolence previous average (weeks 5-6): +0.7
-- Benevolence current: -0.9
-- **Drop: 1.6 points** → exceeds crash threshold (δ = 1.0)
-- Uncertainty: Low → confident enough to act
-
-**System Decision:** Trigger Coach.
+**System decision:** Include the conflict in the weekly digest with both entries
+as evidence.
 
 ### Coach's Response
 
 The Coach reads Sarah's full journal history and speaks:
 
-> "I noticed something in what you wrote. You mentioned Emma's recital — and that you 'always say' you'll make it up. Looking back at your entries, this is the third time this month you've written something similar.
+> "You wrote that missing Emma's recital was something you would 'make up,' and
+> then the following week you cancelled Sunday with her for another revision.
+> You also told me that being present for her is central to who you want to be.
 >
-> I'm not here to tell you the pitch isn't important. But you told me when we started that being present for Emma is core to who you want to be.
->
-> When the pitch is done, what would 'making it up' actually look like this time?"
+> The pitch can matter and this pattern can still be worth noticing. What feels
+> hardest to admit about the trade-off you are making?"
 
 **What the Coach does NOT say:**
+
 - "You're failing as a parent" (judgment)
 - "You should skip the pitch" (advice)
-- "Your Achievement score is up!" (Sarah never said she cared about Achievement)
+- "Your Benevolence score is down" (score jargon)
 
 ---
 
-## Stage 4: Weeks 9-12 — Rut Detected
+## Stage 4: Weeks 9–12 — Recovery Changes the Wording
 
-The pitch succeeded, but Sarah doesn't bounce back. Her entries become flat:
+The benchmark episode remains part of Sarah's history, but later evidence
+changes what the weekly Coach should say:
 
-- Week 9: "Work's fine. Nothing exciting. Emma's at her dad's."
-- Week 10: "Same routine. Did some client revisions. Whatever."
-- Week 11: "Stayed in all weekend. Watched TV."
-- Week 12: "I used to have ideas. Now I just execute tasks."
+- Week 9: "I moved the Monday review and took Emma to dinner. We actually talked."
+- Week 10: "Left the laptop at the office Friday. Emma picked the movie."
+- Week 11: "The client work is still intense, but I stopped treating every request like an emergency."
+- Week 12: "I made a full weekend free before anyone asked me to."
 
-### Component Involvement
+### Critic and Delivery Views
 
-| Component | Status | Activity |
-|-----------|--------|----------|
-| Generator | N/A | Only used during offline training |
-| Judge | N/A | Critic is confident; low-energy entries are well-represented in training |
-| Critic | **ACTIVE** | Tracks sustained low scores over time |
-| Coach | **ACTIVE** | Surfaces the pattern after rut threshold is crossed |
+| Week | Benevolence reference | Delivery interpretation |
+|---|---:|---|
+| 7 | `-1` | conflict evidence begins |
+| 8 | `-1` | sustained-conflict episode confirmed |
+| 9 | `0` | conflict is no longer accumulating |
+| 10–12 | `+1` | recovery is sustained |
 
-### Critic's Processing (Weekly Scores)
+The v1 benchmark still counts the Weeks 7–8 episode as a true event. At Week 12,
+the Coach should not say Sarah is in ongoing drift. It can acknowledge the
+recovery with evidence and remain alert to recurrence.
 
-| Week | Benevolence | Self-Direction |
-|------|-------------|----------------|
-| 9 | 0.0 | -0.4 |
-| 10 | +0.2 | -0.6 |
-| 11 | -0.2 | -0.8 |
-| 12 | +0.1 | -0.7 |
-
-**Rut Detection (Self-Direction):**
-- Threshold for "low": τ = -0.3
-- Weeks below threshold: 4 consecutive
-- Minimum for rut: 3 weeks
-- Uncertainty: Low across all weeks
-- **Rut confirmed**
-
-**About These Thresholds:**
-
-| Parameter | Who Sets It | Rationale |
-|-----------|-------------|-----------|
-| **τ (low threshold)** | Developer default, potentially user-adjustable | Set per value dimension. Default τ = -0.3 means "mildly misaligned." Users with high self-compassion might prefer τ = -0.5 (only flag severe dips); stricter users might want τ = -0.2. |
-| **C_min (minimum weeks)** | Developer default | System-wide. 3 weeks balances sensitivity (catching real ruts) vs. specificity (ignoring normal fluctuations). Shorter risks false alarms; longer delays intervention. |
-| **Uncertainty threshold (ε)** | Algorithm (calibrated) | Derived from model calibration on held-out data. Not user-facing — ensures the system only speaks when confident. |
-
-For the full mathematical formulation of crash/rut detection and uncertainty gating, see [Uncertainty, Drift, and Trigger Logic](04_uncertainty_logic.md).
-
-**System Decision:** Trigger Coach.
+The current response-mode schema has no dedicated `recovered` value, so this
+active-versus-recovered delivery rule remains implementation work. See
+[Uncertainty, Drift, and Trigger Logic](04_uncertainty_logic.md).
 
 ### Coach's Response
 
-> "I've been reading your entries over the past month. There's a phrase from this week that stood out: 'I used to have ideas. Now I just execute tasks.'
+> "A few weeks ago, work repeatedly displaced time with Emma. Your more recent
+> entries show a different pattern: dinner together, a laptop-free Friday, and
+> a weekend you protected before anyone asked.
 >
-> When you first told me about yourself, you said creative freedom is how you feel alive. That voice has been quieter lately — not just this week, but for about a month now.
->
-> I'm curious: when was the last time you made something just because you wanted to?"
+> What helped you stop treating every request as an emergency?"
 
 ---
 
@@ -312,7 +301,8 @@ Something happens outside the Critic's training distribution.
 - Parental terminal illness is therefore out-of-distribution
 - MC Dropout reveals the model doesn't know how to score this — predictions scatter widely across forward passes
 
-**System Decision:** Suppress scores. Do not trigger crash/rut logic. Coach responds differently.
+**System Decision:** Suppress confident value-level interpretation. Do not add
+the entry to sustained-conflict evidence. The Coach responds with presence.
 
 ### Coach's Response
 
@@ -334,8 +324,8 @@ Something happens outside the Critic's training distribution.
 | Offline Training | ✅ Creates data | ✅ Labels data | ✅ Trains | — |
 | Onboarding | — | — | — | ✅ Captures values |
 | Stable Alignment | — | — | ✅ Scores | ✅ Occasional acknowledgment |
-| Crash Detected | — | — | ✅ Flags drop | ✅ Surfaces tension |
-| Rut Detected | — | — | ✅ Flags pattern | ✅ Invites reflection |
+| Sustained Conflict | — | Reference only | ✅ Produces soft evidence | ✅ Surfaces repeated conflict |
+| Recovery at Delivery | — | Reference only | ✅ Continues scoring | ✅ Describes recovery rather than ongoing drift |
 | High Uncertainty | — | (optional) | ✅ Admits uncertainty | ✅ Offers presence |
 
 Key insight: The Generator and Judge do their work *before* any user arrives. The Critic handles the real-time evaluation. The Coach speaks when there's something worth saying — including occasional evidence-based acknowledgment when users sustain alignment, but never through gamification or generic praise.

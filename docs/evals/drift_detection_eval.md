@@ -1,10 +1,31 @@
-# Alignment & Drift Detection Evaluation
+# Alignment and Drift Detection Evaluation
 
-## What We're Evaluating
+## Evaluation Contract
 
-The VIF detects when a user's behavior drifts from their declared values. This evaluation validates that the dual-trigger system (Sudden Crash + Chronic Rut) correctly identifies misalignment episodes.
+Twinkl evaluates one v1 definition of drift:
 
-For the current project scope, this evaluation is about crash/rut-style drift detection only. A separate evolution-gating concept exists in the docs, but it is currently undecided and should be treated as an idea rather than part of the active implementation or evaluation plan.
+> A sustained conflict episode occurs when a declared core or high-weight value
+> receives two consecutive consensus `-1` reference labels.
+
+The three layers of the contract are deliberately different:
+
+| Layer | Contract |
+|---|---|
+| Reference labels | Two consecutive consensus `-1` labels on the same declared core/high-weight value |
+| Runtime detector | Rolling soft `P(-1)` evidence under uncertainty gating |
+| User delivery | The weekly Coach digest cites the relevant entries and reflects the conflict without score jargon |
+
+The reference definition is strict and auditable. The runtime detector is soft
+because the current Critic often hedges a true `-1` toward neutral. Weekly
+delivery remains a product cadence rather than a requirement that the evidence
+itself be grouped into multi-week averages.
+
+Single-entry dip alerts, crash/rut taxonomies, fade/dormancy, peripheral-value
+rise, onboarding-gap messaging, value-evolution gating, and multi-week low-mean
+rules are outside the v1 evaluation contract.
+
+The empirical basis is
+[`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md).
 
 ---
 
@@ -12,220 +33,234 @@ For the current project scope, this evaluation is about crash/rut-style drift de
 
 **Status:** 🟡 Partial
 
-### What's Implemented
-- Evaluation specification complete (this document)
-- Conceptual design documented in [`docs/vif/04_uncertainty_logic.md`](../vif/04_uncertainty_logic.md)
-- Trigger formulas defined (Crash: V_{t-1} - V_t > δ, Rut: sustained low)
-- Experiment archive: 50 run IDs / 114 persisted configs, with corrected-split frontier runs and later diagnostics tracked in [`logs/experiments/index.md`](../../logs/experiments/index.md)
-- MC Dropout uncertainty estimation: [`src/vif/critic.py:predict_with_uncertainty()`](../../src/vif/critic.py) and [`src/vif/eval.py:evaluate_with_uncertainty()`](../../src/vif/eval.py)
-- Uncertainty-gated crash/rut-style routing experiments in [`src/vif/drift.py`](../../src/vif/drift.py)
-- Weekly runtime bridge from Critic checkpoint -> timeline -> weekly signals in [`src/vif/runtime.py`](../../src/vif/runtime.py)
-- Full offline Coach path from VIF output -> drift result -> weekly digest artifact in [`src/coach/runtime.py`](../../src/coach/runtime.py)
-- Unit coverage for drift behavior in [`tests/vif/test_drift.py`](../../tests/vif/test_drift.py)
-- Calibration and circumplex summaries implemented and tracked per run in the experiment index and run YAMLs
+### Implemented and Measured
 
-### What's Missing
-- Crisis injection test data generation
-- Threshold calibration against a labeled weekly benchmark
-- Hit rate / precision / recall reporting on injected timelines
-- A project decision on whether evolution gating belongs in scope at all
+- The five-pass consensus reference table is available at
+  `logs/judge_labels/consensus_labels.parquet`.
+- The trajectory EDA covers 204 personas and 1,651 entries with
+  runtime-compatible weekly bins.
+- The selected reference definition identifies 40 of 204 personas (19.6%);
+  the persisted single-pass label comparison identifies 49 of 204 (24.0%).
+- The conflict-heavy-week candidate table contains 106 core-dimension weeks
+  across 71 personas at `-1` density `>= 0.5` and at least two entries.
+- Per-entry MC Dropout means and uncertainties are emitted by the Critic
+  runtime.
+- `src/vif/weekly_schema.py` defines and validates the weekly-frame contract
+  shared by `aggregate_timeline_by_week()` and `detect_weekly_drift()`.
+- `src/coach/runtime.py` runs the offline checkpoint-to-digest path and writes
+  timeline, weekly, drift, digest, markdown, and prompt artifacts.
+- The demo review app compares six exploratory rule-based detector families
+  against Judge labels or Critic means.
 
-### Blocking Dependencies
-The active corrected-split default (`run_019`-`run_021` BalancedSoftmax) improved misalignment sensitivity, but the frontier still sits at median QWK **0.362** with unresolved `Security`/circumplex trade-offs. That is not yet strong enough for reliable automated drift triggers. Until per-value Critic accuracy improves further, crash/rut detection will inherit noisy alignment scores and produce unreliable alerts.
+### Current Prototype Boundary
 
-Separately, evolution gating should not be treated as a dependency for the current drift evaluation. It remains an undecided idea rather than an active implementation commitment.
+`src/vif/drift.py` implements an experimental weekly router with literal output
+modes `stable`, `crash`, `rut`, `evolution`, and `high_uncertainty`. It also
+invokes the experimental evolution classifier automatically. That router is a
+working prototype and remains useful for end-to-end UI and schema testing, but
+it is not the selected sustained-conflict detector.
 
-### Next Steps
-1. Improve upstream Critic reliability through the current frontier follow-ups (`twinkl-748`, `twinkl-749`, `twinkl-751`, and the gated `twinkl-750` path)
-2. Generate synthetic crisis-injection timelines with explicit ground-truth crisis weeks
-3. Run the implemented `predict_persona_timeline()` -> `aggregate_timeline_by_week()` -> `detect_weekly_drift()` path end to end on those timelines
-4. Tune crash/rut thresholds on the injected benchmark
-5. Report hit rate, precision, recall, F1, and false-positive rate on the calibrated benchmark
+The six-detector comparison in `src/demo_tool/multi_drift.py` is another
+exploratory surface. Its per-entry vote count is detector agreement, not the
+five-pass Judge consensus reference.
 
----
+### Missing for v1
 
-## Drift Detection System Overview
-
-### Two Trigger Types
-
-| Trigger | Definition | Formula |
-|---------|------------|---------|
-| **Sudden Crash** | Sharp negative change in alignment | V_{t-1} - V_t > δ_j |
-| **Chronic Rut** | Sustained low values over time | V_t < τ_low for ≥ C_min consecutive weeks |
-
-### Uncertainty Gating
-
-Both triggers require **low uncertainty** (σ < ε_j) to fire. High variance suppresses critiques to avoid false alarms on ambiguous or OOD inputs.
-
-### Possible Future Extension: Evolution Gating
-
-A separate idea documented in [`docs/evolution/01_value_evolution.md`](../evolution/01_value_evolution.md) is to classify recent divergence as STABLE, EVOLUTION, or DRIFT before evaluating crash/rut triggers. If the project chooses to revisit that idea later, the intended goal would be to suppress false-positive rut alerts when a user's priorities have genuinely changed. It is not part of the current drift-evaluation contract.
+- Per-entry `P(-1)` persistence in the runtime artifact surface
+- A rolling soft-evidence detector aligned with the sustained-conflict reference
+- Uncertainty and probability-mass thresholds calibrated on held-out data
+- An event-matching harness that compares predicted episodes with reference
+  episodes by persona, value dimension, and time window
+- A scripted held-out episode set that is independent of the Judge labels used
+  to choose and tune the definition
+- End-to-end hit rate, precision, recall, F1, false-positive rate, and alert
+  latency reporting
+- Coach-language checks that distinguish active conflict, recovery, and stable
+  weeks at digest time
 
 ---
 
-## Ground Truth: Synthetic Crisis Injection
+## Why This Definition Fits the Current Data
 
-### Methodology
+The observed timelines are short: the median persona has five active runtime
+weeks. Multi-week low-period machinery therefore consumes most of the available
+history and is too sparse for a robust capstone benchmark.
 
-1. **Baseline period**: Generate 4-6 weeks of "aligned" entries for each synthetic persona
-2. **Crisis injection**: At week N, introduce systematic misalignment:
-   - For "Benevolence-first" persona: inject work-obsession entries that neglect relationships
-   - For "Achievement-first" persona: inject entries showing stagnation or avoidance
-3. **Label**: Mark injected weeks as ground-truth "crisis weeks"
+Single-entry dips are common but noisy. On declared core dimensions, 84.4% of
+dip events recover to `>= 0` within two entries. Requiring two consecutive
+conflicts removes most spike noise without imposing calendar logic that the
+dataset cannot support.
 
-### Example Crisis Scenarios
-
-| Persona Values | Crisis Injection | Expected Detection |
-|---------------|------------------|-------------------|
-| Benevolence > Achievement | Persona cancels on friends, works late repeatedly | Benevolence rut or crash |
-| Security > Stimulation | Persona takes risky financial decisions | Security crash |
-| Self-Direction > Conformity | Persona defers all decisions to others | Self-Direction rut |
-| Achievement > Benevolence | Persona gradually prioritizes Benevolence over career after having a child | Current eval: do not count as a crash/rut hit unless the active crash/rut detector fires; future evolution-gating idea would treat this as a non-drift value shift |
-| Self-Direction high | Persona oscillates +1/−1 on Self-Direction week-to-week | Current eval: stress-test crash/rut robustness on volatile timelines |
-| Hedonism > Security | Persona steadily reduces hedonistic activities over 6+ weeks | Current eval: treat as a boundary-case timeline; future evolution-gating idea would likely route it away from rut alerts |
+Core-value gating is also load-bearing. Nearly half of all persona-by-dimension
+trajectories are all-neutral, while only 1.0% of declared core trajectories are
+all-neutral. An ungated benchmark would be dominated by dimensions the persona
+did not declare as important.
 
 ---
 
-## Metrics
+## Reference Event Construction
 
-### Primary: Hit Rate (from PRD)
+For each persona and declared core/high-weight value:
 
-```
-Hit Rate = (# of ground-truth crisis weeks correctly flagged) / (# of total crisis weeks)
-```
+1. Sort entries by `t_index` and date.
+2. Read the consensus label for that value on each entry.
+3. Start an episode when two consecutive labels are `-1`.
+4. Extend the episode while consecutive `-1` labels continue.
+5. End the episode when the label returns to `0` or `+1`.
+6. Keep persona ID, value dimension, onset entry, end entry, dates, and the
+   supporting journal rows.
 
-**Target: ≥ 8/10 (80%)**
+This event table is the reference surface for detector evaluation. A weekly
+digest is considered timely when it surfaces an active episode during the
+delivery week or within the allowed latency window.
 
-### Secondary: Per-Value Precision & Recall
+`consensus_agreement_*` fields can weight event confidence. They are not the
+full class distribution. Soft target probabilities require the per-pass vote
+files from the consensus rerun bundle.
 
-For each value dimension j:
+---
 
-```
-Precision_j = TP_j / (TP_j + FP_j)  # When we flag, are we right?
-Recall_j = TP_j / (TP_j + FN_j)     # Do we catch all crises?
-F1_j = 2 * (Precision_j * Recall_j) / (Precision_j + Recall_j)
-```
+## Runtime Detector Target
 
-### Tertiary: False Positive Rate
+For dimension `j` at entry `t`, let `p^-_{t,j}` be the Critic probability of
+class `-1` and `u_{t,j}` be its uncertainty estimate. A v1 detector accumulates
+recent negative evidence only when:
 
-```
-FPR = (# of non-crisis weeks incorrectly flagged) / (# of total non-crisis weeks)
-```
+- the dimension is declared core or its profile weight passes the importance
+  floor;
+- uncertainty is below the calibrated ceiling; and
+- the recent `P(-1)` mass passes a persistence threshold.
 
-**Target: < 20%** (users shouldn't be bombarded with false alarms)
+The exact rolling function and thresholds are evaluation parameters, not part
+of the reference-label definition. Candidate forms include a two-entry mean,
+an exponentially weighted sum, or a small cumulative evidence score. They all
+produce the same output concept: active sustained conflict on a named value.
+
+Hard argmax predictions are not the runtime contract. Requiring two predicted
+`-1` classes would be brittle at the current `recall_-1` frontier.
 
 ---
 
 ## Evaluation Protocol
 
-### Step 1: Generate Test Timelines
+### Phase 1: Reference and Tuning Split
 
-For each of 3-5 synthetic personas:
-- Generate 8-10 weeks of journal entries
-- Inject 2-3 crisis weeks at known positions
-- Ensure crisis severity varies (some obvious, some subtle)
+1. Reproduce the consensus trajectory EDA.
+2. Materialize sustained-conflict reference episodes.
+3. Split by persona so no person's entries appear in both tuning and evaluation
+   sets.
+4. Use label-derived conflict-heavy weeks and reference episodes for threshold
+   tuning and error analysis only.
+5. Stratify reports by value dimension because event prevalence is highly
+   asymmetric.
 
-### Step 2: Run Drift Detection
+### Phase 2: Critic in the Loop
 
-```python
-for persona in test_personas:
-    timeline_df, _meta = predict_persona_timeline(
-        persona_id=persona.persona_id,
-        checkpoint_path=checkpoint_path,
-        wrangled_dir=wrangled_dir,
-    )
-    weekly_df = aggregate_timeline_by_week(timeline_df)
+1. Run a frozen Critic checkpoint over the same persona timelines.
+2. Persist `P(-1)` and uncertainty per entry and dimension.
+3. Run candidate soft-evidence policies without reading evaluation labels.
+4. Match predicted episodes to reference episodes by persona, value, and onset
+   tolerance.
+5. Compare the active MLP frontier and the LLM context arms at this decision
+   layer.
 
-    for week_end in persona.week_ends:
-        result = detect_weekly_drift(
-            weekly_df,
-            target_week_end=week_end,
-        )
-        if result.trigger_type in {"crash", "rut"}:
-            detections.append((persona.persona_id, week_end, result.trigger_type))
+### Phase 3: Unbiased Scripted Holdout
+
+1. Create trajectories with explicitly scripted sustained-conflict episodes and
+   matched non-conflict controls.
+2. Keep the scripted set isolated from threshold selection and prompt tuning.
+3. Include easy, subtle, recovery, and volatile cases.
+4. Report event metrics and Coach evidence quality on this holdout once.
+
+The label-derived candidates are adequate for tuning. They are not a final
+unbiased benchmark because the same Judge regime defines the reference.
+
+---
+
+## Metrics and Targets
+
+### Primary Event Metrics
+
+| Metric | Target | Meaning |
+|---|---:|---|
+| Episode hit rate / recall | `>= 80%` | At least 8 of 10 held-out sustained-conflict episodes are detected |
+| Precision | `> 60%` | Most surfaced episodes match a reference conflict |
+| Event F1 | `> 0.5` | Precision and recall remain jointly useful |
+| False-positive rate | `< 20%` | Non-conflict windows rarely produce alerts |
+| First-alert latency | `<= 2 entries` | The detector reacts soon after reference onset |
+
+### Required Slices
+
+- Per Schwartz value dimension
+- Core-value rank or profile-weight band
+- Episode length and severity
+- Consensus agreement tier
+- Active conflict versus recovered-by-digest-time cases
+- MLP versus LLM context arm
+
+### Uncertainty Validation
+
+Uncertainty gating must be evaluated on the `-1` class specifically. Global
+calibration can look acceptable while the minority class is poorly calibrated.
+Report:
+
+- error rate by uncertainty decile;
+- retained episode recall at each uncertainty ceiling;
+- false-positive reduction from gating; and
+- the number of true episodes suppressed by high uncertainty.
+
+---
+
+## Reproduction
+
+Run the default consensus analysis with runtime-compatible week bins:
+
+```sh
+uv run python scripts/drift/trajectory_eda.py
 ```
 
-### Step 3: Compute Metrics
+Compare persisted labels and first-entry-anchored bins:
 
-```python
-# Ground truth crisis weeks
-ground_truth = set(persona.crisis_weeks for persona in test_personas)
-
-# Detected weeks
-detected = set(detections)
-
-# Metrics
-hits = len(ground_truth & detected)
-hit_rate = hits / len(ground_truth)
-precision = hits / len(detected) if detected else 0
-recall = hit_rate
-fpr = len(detected - ground_truth) / len(all_weeks - ground_truth)
+```sh
+uv run python scripts/drift/trajectory_eda.py \
+  --labels judge \
+  --week-mode persona_anchor
 ```
 
----
+Options:
 
-## Success Criteria
+- `--labels {consensus,judge}`; default: `consensus`
+- `--week-mode {runtime,persona_anchor}`; default: `runtime`
 
-| Metric | Target | Rationale |
-|--------|--------|-----------|
-| Hit Rate | ≥ 80% (8/10) | From PRD evaluation strategy |
-| Precision | > 60% | Minimize false alarms |
-| F1 per value | > 0.5 | Balanced detection |
-| FPR | < 20% | User experience |
+Generated evidence lives under `docs/drift/figures/` and
+`docs/drift/tables/`.
 
 ---
 
-## Threshold Tuning
+## Limitations
 
-The following parameters need tuning on synthetic data:
-
-| Parameter | Symbol | Description | Starting Value |
-|-----------|--------|-------------|----------------|
-| Crash threshold | δ_j | Minimum drop to trigger crash | 0.5 |
-| Rut threshold | τ_low | Value below which counts as "low" | -0.4 |
-| Rut duration | C_min | Consecutive weeks needed | 3 |
-| Uncertainty ceiling | ε_j | Maximum uncertainty to allow critique | 0.3 |
-
-**Tuning approach**: Grid search over synthetic personas to maximize F1 while keeping FPR acceptable.
-
----
-
-## Uncertainty Validation
-
-### Goal
-Verify that MC Dropout uncertainty correlates with prediction errors.
-
-### Method
-1. Run 50 forward passes per entry
-2. Compute variance σ² for each prediction
-3. Compute actual error |predicted - ground_truth|
-4. Calculate Pearson correlation between σ² and error
-
-**Expected**: Positive correlation (r > 0.3). Higher uncertainty should predict larger errors.
-
-### Bimodal Scenario Test
-- Create entries with conflicting signals (e.g., "worked 100 hours but spent quality time with family")
-- Verify these produce high variance (model is "confused")
-- Confirm system avoids issuing confident critiques on such entries
+1. Consensus labels are a more stable Judge reference, not human ground truth.
+2. Current checkpoints were trained on persisted single-pass labels, so
+   consensus evaluation mixes model error with label-regime shift.
+3. Core-gated per-dimension denominators are small and uneven.
+4. Five personas have at most two entries and cannot express a two-step episode.
+5. The current synthetic corpus contains volatility more readily than clean,
+   gradual arcs; it cannot validate fade or value-evolution claims.
+6. Weekly Coach delivery can lag entry-level onset, so event matching must
+   distinguish detector latency from delivery cadence.
 
 ---
 
-## Known Limitations
+## Implementation References
 
-1. **Synthetic crisis injection is artificial**: Real drift may be more subtle and gradual
-2. **Profile-weighted detection**: Requires accurate value profiles; errors in w_u propagate
-3. **Cold start**: New users have no history for EMA calculation
-4. **Evolution handling is undecided**: A separate evolution-gating idea exists, but it is not part of the current committed drift-evaluation path.
-
-**Mitigations:**
-- Vary crisis severity in test set (include subtle cases)
-- Test with perturbed value profiles to assess robustness
-- Define fallback rules for cold-start period
-
----
-
-## References
-
-- `docs/vif/04_uncertainty_logic.md` — Uncertainty, drift formulas, and trigger logic
-- `docs/evolution/01_value_evolution.md` — Concept note for a possible future evolution-vs-drift filter
-- `docs/prd.md` — Evaluation Strategy (Row 3: Drift detection)
+| File | Role |
+|---|---|
+| [`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md) | Empirical definition analysis and prevalence results |
+| [`scripts/drift/trajectory_eda.py`](../../scripts/drift/trajectory_eda.py) | Reproducible trajectory analysis |
+| [`src/vif/runtime.py`](../../src/vif/runtime.py) | Per-entry inference and weekly aggregation |
+| [`src/vif/weekly_schema.py`](../../src/vif/weekly_schema.py) | Weekly producer/consumer column contract |
+| [`src/vif/drift.py`](../../src/vif/drift.py) | Existing experimental weekly router |
+| [`src/coach/runtime.py`](../../src/coach/runtime.py) | Offline checkpoint-to-digest orchestration |
+| [`src/demo_tool/multi_drift.py`](../../src/demo_tool/multi_drift.py) | Six-detector exploratory comparison |
+| [`scripts/experiments/llm_critic_baseline.py`](../../scripts/experiments/llm_critic_baseline.py) | Student-visible and history-context comparison arms |
+| [`logs/experiments/reports/experiment_review_20260702_twinkl_w2mu_frozen_context_gap.md`](../../logs/experiments/reports/experiment_review_20260702_twinkl_w2mu_frozen_context_gap.md) | Frozen test-split LLM context results |

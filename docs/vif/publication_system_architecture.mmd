@@ -21,11 +21,13 @@ flowchart LR
     subgraph offline_lane["Offline Training"]
         direction TB
         synth["Synthetic journals"]
-        labels["Judge labels"]
+        labels["Persisted Judge labels"]
+        consensus["Five-pass consensus reference"]
         shared_train["Shared text + state representation"]
         critic_model["Trained VIF Critic"]
         synth --> shared_train --> critic_model
         labels --> shared_train
+        labels --> consensus
     end
 
     subgraph product_lane["Runtime + Weekly Coaching"]
@@ -40,26 +42,29 @@ flowchart LR
         end
         subgraph coach_lane["Weekly Coaching"]
             direction LR
-            drift["Weekly alignment check<br/>stable / crash / rut<br/>high uncertainty"]
+            drift["Weekly prototype router<br/>crash / rut / evolution<br/>high uncertainty"]
+            drift_v1["Sustained-conflict v1 target<br/>rolling soft P(-1)"]
             digest["Weekly digest"]
-            coach["Coach reflection"]
-            drift --> digest --> coach
+            coach["Coach prompt / optional reflection"]
+            drift --> digest -.-> coach
         end
     end
 
     critic_model -. "model weights" .-> entry_scores
     shared_train -. "same state definition" .-> shared_runtime
     weekly --> drift
+    entry_scores -. "P(-1) not persisted" .-> drift_v1
+    consensus -. "strict reference" .-> drift_v1
+    drift_v1 -. "selected replacement" .-> digest
 
-    evolution["Experimental evolution analysis"]
-    weekly -. "optional" .-> evolution
-    evolution -. "optional" .-> drift
+    evolution["Automatic experimental<br/>evolution classifier"]
+    weekly --> evolution --> drift
 
     default_note["Current default: window_size = 1"]
     default_note -.-> shared_runtime
 
-    class synth,labels,shared_train,critic_model offline;
+    class synth,labels,consensus,shared_train,critic_model offline;
     class history,shared_runtime,entry_scores,weekly runtime;
     class drift,digest,coach coach;
     class evolution optional;
-    class default_note note;
+    class default_note,drift_v1 note;
