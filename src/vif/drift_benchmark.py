@@ -370,16 +370,31 @@ def evidence_from_llm_records(
 ) -> pl.DataFrame:
     """Convert hard LLM scores to the common core-gated evidence schema."""
     rows = []
-    for record in records:
+    for record_index, record in enumerate(records):
         if record.get("status") != "ok" or not isinstance(record.get("scores"), dict):
-            continue
-        core_values = {
+            raise ValueError(
+                "LLM evidence record is not scoreable: "
+                f"index={record_index}, persona_id={record.get('persona_id')}, "
+                f"t_index={record.get('t_index')}, status={record.get('status')}"
+            )
+        normalized_core_values = {
             normalize_value_name(str(value))
             for value in record.get("core_values") or []
         }
+        invalid_core_values = normalized_core_values - set(SCHWARTZ_VALUE_ORDER)
+        if invalid_core_values:
+            raise ValueError(
+                "LLM evidence record has invalid core values: "
+                + ", ".join(sorted(invalid_core_values))
+            )
+        if not normalized_core_values:
+            raise ValueError("LLM evidence record has no declared core values")
+        core_values = [
+            dimension
+            for dimension in SCHWARTZ_VALUE_ORDER
+            if dimension in normalized_core_values
+        ]
         for dimension in core_values:
-            if dimension not in SCHWARTZ_VALUE_ORDER:
-                continue
             score = record["scores"].get(dimension)
             rows.append(
                 {
@@ -487,6 +502,10 @@ def detect_sustained_conflict_episodes(
                 )
             ):
                 delivery_state = "uncertain"
+            elif next_row.get("predicted_class") is None:
+                delivery_state = "uncertain"
+            elif int(next_row["predicted_class"]) == -1:
+                delivery_state = "active"
             else:
                 delivery_state = "recovered"
 
@@ -593,6 +612,8 @@ def build_detection_decisions(
             alert = probability_passed and uncertainty_passed
             if alert:
                 suppression_reason = None
+            elif pair_probability is None:
+                suppression_reason = "missing_probability"
             elif not probability_passed:
                 suppression_reason = "low_probability"
             elif pair_uncertainty is None:
@@ -703,7 +724,10 @@ def episode_metrics(
     recall = true_positive / reference_df.height if reference_df.height else 0.0
     f1 = 2 * precision * recall / (precision + recall) if precision + recall else 0.0
 
-    eligible_keys = set(eligible_df.select("persona_id", "dimension").iter_rows())
+    if "n_entries" not in eligible_df.columns:
+        raise ValueError("eligible_df is missing required column: n_entries")
+    decision_eligible = eligible_df.filter(pl.col("n_entries") >= 2)
+    eligible_keys = set(decision_eligible.select("persona_id", "dimension").iter_rows())
     reference_keys = set(reference_df.select("persona_id", "dimension").iter_rows())
     predicted_keys = set(predicted_df.select("persona_id", "dimension").iter_rows())
     negative_keys = eligible_keys - reference_keys
@@ -838,6 +862,8 @@ def tune_detector_thresholds(
 
     def rank(row: dict[str, Any]) -> tuple[float, ...]:
         latency = row["mean_latency_entries"]
+        # When observed metrics tie exactly, prefer the more recall-sensitive
+        # operating point: lower conflict threshold and wider uncertainty gate.
         return (
             float(row["f1"]),
             float(row["recall"]),

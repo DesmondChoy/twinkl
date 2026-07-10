@@ -300,9 +300,9 @@
     "evidence_kind": "soft_probability",
     "overall": {
       "alerted_negative_windows": 4,
-      "delivery_state_accuracy": 0.0,
+      "delivery_state_accuracy": 1.0,
       "delivery_state_cases": 1,
-      "delivery_state_correct": 0,
+      "delivery_state_correct": 1,
       "f1": 0.25,
       "false_alarm_trajectories": 2,
       "false_negative": 4,
@@ -405,9 +405,9 @@
       },
       "hedonism": {
         "alerted_negative_windows": 2,
-        "delivery_state_accuracy": 0.0,
+        "delivery_state_accuracy": 1.0,
         "delivery_state_cases": 1,
-        "delivery_state_correct": 0,
+        "delivery_state_correct": 1,
         "f1": 0.5,
         "false_alarm_trajectories": 1,
         "false_negative": 1,

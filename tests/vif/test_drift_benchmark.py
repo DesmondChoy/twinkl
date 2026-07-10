@@ -221,6 +221,21 @@ def test_hard_label_detector_allows_missing_uncertainty_only_when_gate_disabled(
     assert hard.height == 1
 
 
+def test_predicted_delivery_stays_active_when_next_class_is_still_conflict():
+    evidence = _evidence_rows("p1", "security", [0.9, 0.9, 0.55], [0.1, 0.1, 0.1])
+
+    episodes = detect_sustained_conflict_episodes(
+        evidence,
+        probability_threshold=0.8,
+        uncertainty_threshold=0.3,
+    )
+
+    assert episodes.height == 1
+    assert episodes["end_t_index"].item() == 1
+    assert episodes["termination_label"].item() == -1
+    assert episodes["delivery_state"].item() == "active"
+
+
 def test_pair_threshold_boundaries_are_inclusive():
     evidence = _evidence_rows("p1", "security", [0.5, 0.7], [0.3, 0.2])
 
@@ -233,6 +248,18 @@ def test_pair_threshold_boundaries_are_inclusive():
     assert decisions["pair_probability"].item() == pytest.approx(0.6)
     assert decisions["pair_uncertainty"].item() == pytest.approx(0.3)
     assert decisions["alert"].item() is True
+
+
+def test_missing_probability_has_distinct_suppression_reason():
+    evidence = _evidence_rows("p1", "security", [None, 0.9], [0.1, 0.1])
+
+    decisions = build_detection_decisions(
+        evidence,
+        probability_threshold=0.8,
+        uncertainty_threshold=0.3,
+    )
+
+    assert decisions["suppression_reason"].item() == "missing_probability"
 
 
 def test_detector_keeps_sources_separate_and_rejects_duplicate_coordinates():
@@ -359,6 +386,42 @@ def test_evidence_adapters_gate_to_declared_core_values():
     assert llm_evidence["uncertainty"].item() is None
 
 
+def test_llm_evidence_uses_canonical_dimension_order():
+    records = [
+        {
+            "status": "ok",
+            "persona_id": "p1",
+            "t_index": 0,
+            "date": "2026-01-01",
+            "core_values": ["Power", "Security", "Benevolence"],
+            "scores": {dimension: 0 for dimension in SCHWARTZ_VALUE_ORDER},
+        }
+    ]
+
+    evidence = evidence_from_llm_records(records, source="llm")
+
+    assert evidence["dimension"].to_list() == [
+        "power",
+        "security",
+        "benevolence",
+    ]
+
+
+def test_llm_evidence_adapter_rejects_failed_rows():
+    with pytest.raises(ValueError, match="LLM evidence record is not scoreable"):
+        evidence_from_llm_records(
+            [
+                {
+                    "status": "error",
+                    "persona_id": "p1",
+                    "t_index": 0,
+                    "date": "2026-01-01",
+                }
+            ],
+            source="llm",
+        )
+
+
 def test_threshold_tuning_prefers_guardrail_eligible_candidate():
     profiles = _profiles(("positive", ["Security"]), ("negative", ["Security"]))
     positive_labels = _label_rows(
@@ -392,3 +455,59 @@ def test_threshold_tuning_prefers_guardrail_eligible_candidate():
         "uncertainty_threshold": pytest.approx(0.3),
     }
     assert grid.filter(pl.col("meets_guardrails")).height == 1
+
+
+def test_threshold_tuning_uses_recall_sensitive_tie_break():
+    profiles = _profiles(("positive", ["Security"]), ("negative", ["Security"]))
+    labels = pl.concat(
+        [
+            _label_rows(
+                "positive", ["2026-01-01", "2026-01-02"], {"security": [-1, -1]}
+            ),
+            _label_rows("negative", ["2026-01-01", "2026-01-02"], {"security": [0, 0]}),
+        ]
+    )
+    evidence = pl.concat(
+        [
+            _evidence_rows("positive", "security", [0.9, 0.9], [0.1, 0.1]),
+            _evidence_rows("negative", "security", [0.1, 0.1], [0.1, 0.1]),
+        ]
+    )
+
+    selected, _grid = tune_detector_thresholds(
+        evidence,
+        build_reference_episodes(labels, profiles),
+        build_eligible_trajectories(labels, profiles),
+        probability_thresholds=[0.5, 0.7],
+        uncertainty_thresholds=[0.2, 0.3],
+    )
+
+    assert selected == {
+        "probability_threshold": pytest.approx(0.5),
+        "uncertainty_threshold": pytest.approx(0.3),
+    }
+
+
+def test_single_entry_trajectory_does_not_dilute_false_alarm_denominator():
+    profiles = _profiles(("single", ["Security"]), ("negative", ["Security"]))
+    labels = pl.concat(
+        [
+            _label_rows("single", ["2026-01-01"], {"security": [0]}),
+            _label_rows("negative", ["2026-01-01", "2026-01-02"], {"security": [0, 0]}),
+        ]
+    )
+    evidence = _evidence_rows("negative", "security", [0.9, 0.9], [0.1, 0.1])
+    predicted = detect_sustained_conflict_episodes(
+        evidence,
+        probability_threshold=0.8,
+        uncertainty_threshold=0.3,
+    )
+
+    metrics = episode_metrics(
+        build_reference_episodes(labels, profiles),
+        predicted,
+        build_eligible_trajectories(labels, profiles),
+    )
+
+    assert metrics["negative_trajectories"] == 1
+    assert metrics["trajectory_false_alarm_rate"] == pytest.approx(1.0)

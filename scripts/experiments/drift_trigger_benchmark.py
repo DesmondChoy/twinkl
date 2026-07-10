@@ -9,6 +9,7 @@ import hashlib
 import json
 import os
 import sys
+from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -123,6 +124,73 @@ def _write_json(path: Path, payload: Any) -> None:
     path.write_text(
         json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
+
+
+def _validate_llm_records(
+    records: list[dict[str, Any]],
+    *,
+    arm_id: str,
+    expected_keys: set[tuple[str, int]],
+) -> list[dict[str, Any]]:
+    """Fail closed when an LLM benchmark arm has incomplete row coverage."""
+    observed_keys: list[tuple[str, int]] = []
+    for record_index, record in enumerate(records):
+        if record.get("persona_id") is None or record.get("t_index") is None:
+            raise ValueError(
+                f"{arm_id} row at index {record_index} is missing persona_id or t_index"
+            )
+        if record.get("date") is None:
+            raise ValueError(f"{arm_id} row at index {record_index} is missing date")
+        key = (str(record["persona_id"]), int(record["t_index"]))
+        if record.get("status") != "ok":
+            raise ValueError(
+                f"{arm_id} has failed LLM row {key} at index {record_index}: "
+                f"status={record.get('status')}"
+            )
+        scores = record.get("scores")
+        if not isinstance(scores, dict):
+            raise ValueError(f"{arm_id} row {key} is missing a score dictionary")
+        missing_dimensions = set(SCHWARTZ_VALUE_ORDER) - set(scores)
+        if missing_dimensions:
+            raise ValueError(
+                f"{arm_id} row {key} is missing score dimensions: "
+                + ", ".join(sorted(missing_dimensions))
+            )
+        invalid_scores = {
+            dimension: scores[dimension]
+            for dimension in SCHWARTZ_VALUE_ORDER
+            if scores[dimension] not in {-1, 0, 1}
+        }
+        if invalid_scores:
+            raise ValueError(f"{arm_id} row {key} has invalid scores: {invalid_scores}")
+        core_values = record.get("core_values")
+        if not isinstance(core_values, (list, tuple)) or not core_values:
+            raise ValueError(f"{arm_id} row {key} has no declared core values")
+        normalized_core_values = {
+            normalize_value_name(str(value)) for value in core_values
+        }
+        invalid_core_values = normalized_core_values - set(SCHWARTZ_VALUE_ORDER)
+        if invalid_core_values:
+            raise ValueError(
+                f"{arm_id} row {key} has invalid core values: "
+                + ", ".join(sorted(invalid_core_values))
+            )
+        observed_keys.append(key)
+
+    duplicate_keys = sorted(
+        key for key, count in Counter(observed_keys).items() if count > 1
+    )
+    if duplicate_keys:
+        raise ValueError(f"{arm_id} has duplicate LLM row keys: {duplicate_keys[:5]}")
+    observed_key_set = set(observed_keys)
+    missing_keys = sorted(expected_keys - observed_key_set)
+    unexpected_keys = sorted(observed_key_set - expected_keys)
+    if missing_keys or unexpected_keys:
+        raise ValueError(
+            f"{arm_id} LLM row coverage mismatch: "
+            f"missing={missing_keys[:5]}, unexpected={unexpected_keys[:5]}"
+        )
+    return records
 
 
 def _artifact_paths(arm: MLPArm) -> tuple[Path, Path, Path]:
@@ -474,9 +542,17 @@ def _score_llm_holdout(
             max_output_tokens=1000,
         )
         write_jsonl(output_path, records)
-    if any(record.get("status") != "ok" for record in records):
-        raise RuntimeError(f"{arm_id} designed holdout contains failed LLM rows")
-    return evidence_from_llm_records(records, source=arm_id)
+    expected_keys = {
+        (str(case["persona_id"]), int(entry["t_index"]))
+        for case in cases
+        for entry in case["entries"]
+    }
+    validated = _validate_llm_records(
+        records,
+        arm_id=arm_id,
+        expected_keys=expected_keys,
+    )
+    return evidence_from_llm_records(validated, source=arm_id)
 
 
 def _passes_targets(metrics: dict[str, Any]) -> bool:
@@ -501,6 +577,19 @@ def _fmt(value: Any) -> str:
     return str(value)
 
 
+def _episode_hit_summary(results: list[dict[str, Any]]) -> str:
+    if not results:
+        return "not evaluated"
+    return "; ".join(
+        "`{arm}` {hits}/{reference}".format(
+            arm=result["arm_id"],
+            hits=result["overall"]["true_positive"],
+            reference=result["overall"]["reference_episodes"],
+        )
+        for result in results
+    )
+
+
 def render_report(
     *,
     fixture: dict[str, Any],
@@ -513,55 +602,77 @@ def render_report(
         "## Decision",
         "",
     ]
-    passing = [row for row in holdout_results if _passes_targets(row["overall"])]
+    frozen_by_arm = {row["arm_id"]: row for row in frozen_results}
+    passing = [
+        row
+        for row in holdout_results
+        if _passes_targets(row["overall"])
+        and row["arm_id"] in frozen_by_arm
+        and _passes_targets(frozen_by_arm[row["arm_id"]]["overall"])
+    ]
+    holdout_only_passing = [
+        row for row in holdout_results if _passes_targets(row["overall"])
+    ]
     incumbent = next(
         (row for row in passing if row["arm_id"] == "run_020_selected"), None
     )
     consensus = next((row for row in passing if "consensus" in row["arm_id"]), None)
     llm = next((row for row in passing if row["arm_id"].startswith("llm_")), None)
+    other = next(
+        (
+            row
+            for row in passing
+            if row is not incumbent and row is not consensus and row is not llm
+        ),
+        None,
+    )
     if incumbent:
         decision = (
-            "The current run_020 MLP clears the designed POC gate. Keep the local MLP "
-            "as the trigger scorer; do not add an LLM cascade unless later human review "
-            "reverses this result."
+            "The current run_020 MLP clears both decision checks. Keep the local MLP "
+            "as the trigger scorer; do not add an LLM cascade unless later human "
+            "review reverses this result."
         )
     elif consensus:
         decision = (
-            "A consensus-trained MLP clears the designed POC gate while run_020 does "
+            "A consensus-trained MLP clears both decision checks while run_020 does "
             "not. Treat target regime as the active lever before production wiring."
         )
     elif llm:
-        frozen_llm = next(
-            (row for row in frozen_results if row["arm_id"] == llm["arm_id"]),
-            None,
+        decision = (
+            "Only an LLM arm clears both available decision checks. Do not replace "
+            "the local MLP automatically; use this as evidence for a bounded "
+            "verifier experiment."
         )
-        if frozen_llm and frozen_llm["overall"]["recall"] < TARGETS["recall"]:
-            decision = (
-                "No scorer is promotion-ready. The LLM arms clear the deliberately "
-                "explicit designed holdout but miss the consensus-derived frozen "
-                "episodes, while every MLP arm misses most designed episodes. Human "
-                "review of the cross-set disagreement must precede production wiring "
-                "or a cascade decision."
-            )
-        else:
-            decision = (
-                "Only an LLM arm clears both available decision checks. Do not replace "
-                "the local MLP automatically; use this as evidence for a bounded "
-                "verifier experiment."
-            )
+    elif other:
+        decision = (
+            f"`{other['arm_id']}` clears both available decision checks. Treat this "
+            "as a candidate for human review before production wiring."
+        )
+    elif holdout_only_passing:
+        decision = (
+            "No scorer is promotion-ready. At least one arm clears the deliberately "
+            "explicit designed holdout but not the frozen consensus evaluation. "
+            "Human review of the cross-set disagreement must precede production "
+            "wiring or a cascade decision."
+        )
     else:
         decision = (
             "No evaluated arm clears the designed POC gate. Do not promote a production "
             "drift trigger yet; use the benchmark failures to choose the next target or "
             "context repair."
         )
+    frozen_reference_count = max(
+        (row["overall"]["reference_episodes"] for row in frozen_results),
+        default=0,
+    )
     lines.extend([decision, "", "## Scope and evidence", ""])
     lines.extend(
         [
             "- Strict reference: two adjacent stored consensus `-1` labels on the same declared core value.",
             "- Soft detector: the mean `P(-1)` over an adjacent pair plus a maximum uncertainty gate.",
             "- Thresholds were selected on frozen validation personas only.",
-            "- Frozen test results are diagnostic because that split has only five strict episodes.",
+            "- Frozen test results are diagnostic because that split has only "
+            f"{frozen_reference_count} strict episodes.",
             f"- Designed holdout: `{fixture['holdout_id']}`, SHA-256 `{fixture['sha256']}`.",
             f"- Designed holdout review status: `{fixture['review_status']}`; it is not human ground truth.",
             "",
@@ -618,16 +729,74 @@ def render_report(
                 passed="yes" if _passes_targets(metrics) else "no",
             )
         )
+    frozen_llm_results = [
+        row for row in frozen_results if row["arm_id"].startswith("llm_")
+    ]
+    holdout_llm_results = [
+        row for row in holdout_results if row["arm_id"].startswith("llm_")
+    ]
+    holdout_incumbent_results = [
+        row for row in holdout_results if row["arm_id"] == "run_020_selected"
+    ]
+    holdout_consensus_results = [
+        row for row in holdout_results if "consensus" in row["arm_id"]
+    ]
+    consensus_closes_gap = any(
+        _passes_targets(row["overall"])
+        and row["arm_id"] in frozen_by_arm
+        and _passes_targets(frozen_by_arm[row["arm_id"]]["overall"])
+        for row in holdout_consensus_results
+    )
+    consensus_conclusion = (
+        "At least one consensus-trained arm clears both evaluation surfaces."
+        if consensus_closes_gap
+        else "No consensus-trained arm clears both evaluation surfaces, so the "
+        "current consensus retraining has not closed the decision-level recall gap."
+    )
+    llm_designed_passes = bool(holdout_llm_results) and all(
+        row["overall"]["recall"] >= TARGETS["recall"] for row in holdout_llm_results
+    )
+    llm_frozen_fails = bool(frozen_llm_results) and all(
+        row["overall"]["recall"] < TARGETS["recall"] for row in frozen_llm_results
+    )
+    if llm_designed_passes and llm_frozen_fails:
+        cross_set_summary = (
+            "The designed holdout and frozen consensus split disagree sharply. "
+            "This is not evidence that an LLM is generally perfect; it shows that "
+            "observable, explicit sustained conflict is within the evaluated "
+            "scorers' capability while the consensus-derived cases may depend on "
+            "subtler context, disputed labels, or a different target contract."
+        )
+    else:
+        cross_set_summary = (
+            "The designed and frozen results must be interpreted together; neither "
+            "set alone is sufficient to establish a production scorer."
+        )
     lines.extend(
         [
             "",
             "## Cross-set interpretation",
             "",
-            "The designed holdout and frozen consensus split disagree sharply. Both LLM arms detect all 10 deliberately explicit designed episodes with no false alarms, but neither detects any of the five consensus-derived frozen episodes. This is not evidence that the LLM is generally perfect; it is evidence that observable, explicit sustained conflict is within its capability while the consensus-derived cases may depend on subtler context, disputed labels, or a different target contract.",
+            cross_set_summary,
             "",
-            "The MLP conclusion is less ambiguous: run_020 detects 1/10 designed episodes, and the two consensus-trained variants detect only 2/10. Hard-consensus retraining therefore does not close the decision-level recall gap.",
+            "Designed LLM episode hits: "
+            + _episode_hit_summary(holdout_llm_results)
+            + ". Frozen LLM episode hits: "
+            + _episode_hit_summary(frozen_llm_results)
+            + ".",
             "",
-            "Architecture consequence: keep the production trigger blocked. Human-review the five frozen reference episodes alongside the designed cases before deciding whether to repair labels/context, test an LLM verifier, or narrow the capstone claim to explicit conflict detection.",
+            "Designed incumbent MLP episode hits: "
+            + _episode_hit_summary(holdout_incumbent_results)
+            + ". Designed consensus-trained MLP episode hits: "
+            + _episode_hit_summary(holdout_consensus_results)
+            + ". "
+            + consensus_conclusion,
+            "",
+            "Architecture consequence: keep the production trigger blocked unless "
+            "one scorer passes both evaluation surfaces. Human-review the frozen "
+            "reference episodes alongside the designed cases before deciding whether "
+            "to repair labels/context, test an LLM verifier, or narrow the capstone "
+            "claim to explicit conflict detection.",
             "",
             "## Promotion regime",
             "",
@@ -695,9 +864,17 @@ def run(args: argparse.Namespace) -> None:
         thresholds_by_arm[arm.arm_id] = thresholds
 
     for arm_id, relative_path in LLM_TEST_ARMS.items():
-        evidence = evidence_from_llm_records(
-            read_jsonl(_rooted(relative_path)), source=arm_id
+        records = _validate_llm_records(
+            read_jsonl(_rooted(relative_path)),
+            arm_id=arm_id,
+            expected_keys={
+                (str(persona_id), int(t_index))
+                for persona_id, t_index in test_labels.select(
+                    "persona_id", "t_index"
+                ).iter_rows()
+            },
         )
+        evidence = evidence_from_llm_records(records, source=arm_id)
         frozen_results.append(
             _evaluate_hard_arm(
                 arm_id=arm_id,
