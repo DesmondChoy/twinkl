@@ -227,10 +227,15 @@ promotion floor is partly chasing dimensions whose human ceiling is ~0.45.
 
 **2. Metric strategy should move to the decision level.** QWK has documented
 imbalance pathologies (asymmetric-marginal reward, all-zero-column optima ==
-hedging), and the product only acts on confidence-gated weekly crash/rut
-triggers (PRD eval #3: ≥8/10 crisis-week hit rate). Recommended primary:
-trigger-level hit-rate/false-alarm benchmark plus entry-level `recall_-1` at a
-precision floor; QWK becomes diagnostic.
+hedging). **2026-07-10 adoption update:** the product target is now
+confidence-gated sustained conflict on a declared core value. The strict
+reference independently checks each core value for stored five-pass Judge
+consensus `-1` labels on two adjacent entries, while runtime will use rolling
+soft `P(-1)` evidence under uncertainty gating.
+The primary benchmark is therefore episode-level hit rate and false-alarm
+behavior (PRD eval #3: ≥8/10 held-out episodes detected), plus entry-level
+`recall_-1` at a precision floor; QWK becomes diagnostic. The older weekly
+crash/rut router and crisis-week wording do not define this promotion metric.
 
 **3. Two bounding experiments before more training.** A zero-shot/few-shot LLM
 critic baseline on the frozen test split under the student-visible context

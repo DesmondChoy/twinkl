@@ -2,10 +2,42 @@
 
 ## Current v1 Contract
 
-Drift v1 has one operational definition: a declared core/high-weight value
-receives two consecutive consensus `-1` reference labels. The runtime target is
-rolling soft `P(-1)` evidence under uncertainty gating, and the user sees the
-result in the weekly Coach digest.
+Drift v1 has one adopted definition: the same declared core value receives a
+qualifying conflict label on two adjacent journal entries. For the strict
+reference, a qualifying conflict is a stored `-1` from the existing five-pass
+Judge consensus resolver.
+
+That resolver first decides whether a majority of passes are non-neutral. If
+so, it chooses the majority polarity among the non-neutral votes; a polarity
+tie resolves to `0` with `no_majority` confidence. Drift consumes that resolved
+label as one input. It does not reinterpret the five raw votes.
+
+Evaluate this rule independently for each `(persona, declared_core_value)`:
+
+- Labels on other values do not cancel, offset, or complete the pair.
+- The first qualifying `-1` is the episode onset; the second confirms it.
+- Further adjacent qualifying `-1` labels extend the same episode.
+- The first non-qualifying entry ends the run. A later pair starts a new
+  episode.
+- Adjacent means adjacent observed journal entries after sorting by `t_index`
+  and date. Same-day entries and entries across a week boundary count. V1 adds
+  no maximum elapsed-time threshold.
+- Any entry without a resolved `-1` breaks the run. A resolved `0` or `+1` can
+  support recovery; a missing label or `no_majority` result supports
+  uncertainty instead.
+
+One persona may therefore have separate or simultaneous episodes on several
+declared core values. The reference records them separately by value; it never
+averages core values into one profile-wide verdict.
+
+The runtime target is rolling soft `P(-1)` evidence under uncertainty gating,
+and the user sees the result in the weekly Coach digest. The target detector is
+not implemented yet. The intended delivery vocabulary is **active**,
+**recovered**, **mixed**, or **uncertain**; exact schema values and state
+transitions remain implementation work.
+
+The team recorded this adoption on 2026-07-10 in
+[GitHub issue #49](https://github.com/DesmondChoy/twinkl/issues/49).
 
 The strict reference and empirical rationale live in
 [`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md). The evaluation
@@ -42,10 +74,11 @@ reference scores but stays silent on the Critic output. This is why v1 uses a
 strict label reference and a soft runtime evidence target.
 
 **Why reference and runtime are evaluated separately.** The trajectory EDA runs
-on five-pass consensus Judge labels, while the runtime evaluation runs on Critic
-outputs. This separates construct definition from model quality and exposes the
-Critic noise penalty directly. Consensus labels are a Judge reference, not human
-ground truth.
+on the stored five-pass Judge consensus labels, while the runtime evaluation
+runs on Critic outputs. This
+separates construct definition from model quality and exposes the Critic noise
+penalty directly. Judge reference labels are not human ground truth or the
+six-detector comparison's detector vote.
 
 ---
 
@@ -122,9 +155,10 @@ Options B and C move temporal reasoning *into* the Critic. The drift layer can n
 
 ### Definition
 
-Drift v1 is a **sustained conflict episode on a declared core/high-weight
-value**. The strict reference is entry-level persistence; the runtime target is
-rolling soft evidence; the weekly boundary controls delivery only.
+Drift v1 is a **sustained conflict episode on a declared core value**. The
+strict reference applies the per-value rules in the Current v1 Contract above;
+the runtime target is rolling soft evidence; the weekly boundary controls
+delivery only.
 
 The broader interpretation question—unintended drift, an accepted trade-off, or
 genuine value change—belongs to the Coach conversation. Automatic profile
@@ -134,7 +168,9 @@ updates are not part of the committed POC.
 
 Drift detection involves two questions that must not be conflated:
 
-**Question A — What happened in the signal?** This is observable. The Critic measures it. Drift detection cares about **transitions**, not states.
+**Question A — What happened in the signal?** This is observable. The Critic
+measures it. Drift detection cares about a **pattern across entries**, not an
+isolated score.
 
 **Question B — What does it mean?** This requires user input. The Coach resolves it.
 
@@ -159,7 +195,7 @@ Values are central schemas resistant to change — people remember value-congrue
 
 ### Absence as signal
 
-Because users cognitively filter value-incongruent experiences from their writing, a core value going dormant (sustained 0 on a high-weight dimension) may indicate suppressed drift, not true neutrality. A user who values Benevolence but neglected a friend might write "I was so busy with the project" (reframing as Achievement) rather than "I ignored my friend."
+Because users cognitively filter value-incongruent experiences from their writing, a declared core value going dormant (sustained 0 on that dimension) may indicate suppressed drift, not true neutrality. A user who values Benevolence but neglected a friend might write "I was so busy with the project" (reframing as Achievement) rather than "I ignored my friend."
 
 If the Critic scores a -1 on a core value, that's a *strong* signal — the misalignment survived the user's own cognitive filtering. A sustained 0 on a core value that was previously active may be soft drift the user has rationalized away.
 
@@ -714,12 +750,13 @@ detectors for visual diagnosis. It can apply them to persisted single-pass Judge
 labels or Critic mean predictions and displays the number of detectors firing at
 each step.
 
-That vote count is **detector agreement**, not the five-pass Judge consensus
-reference and not ground truth. No `consensus_crisis_labels.parquet` artifact is
-part of the current benchmark.
+That vote count is **detector agreement**, not the five-pass Judge reference
+and not ground truth. No
+`consensus_crisis_labels.parquet` artifact is part of the current benchmark.
 
-The v1 evaluation instead uses strict sustained-conflict episodes from the
-five-pass consensus table, then measures the rolling-soft-evidence runtime
+The v1 evaluation instead uses strict sustained-conflict episodes requiring
+stored five-pass Judge consensus `-1` labels on two adjacent entries for the
+same declared core value, then measures the rolling-soft-evidence runtime
 detector on persona-isolated tuning and held-out sets. See
 [`docs/evals/drift_detection_eval.md`](../evals/drift_detection_eval.md) for the
 active protocol.

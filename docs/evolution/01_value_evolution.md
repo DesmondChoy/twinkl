@@ -48,9 +48,12 @@ differently depending on which dimensions the user cares about.
 
 The repository contains an experimental weekly crash/rut/evolution router and a
 six-detector comparison surface. The selected v1 product/benchmark contract is
-different: two consecutive consensus `-1` reference labels on a declared
-core/high-weight value, estimated at runtime from rolling soft `P(-1)` evidence
-under uncertainty gating.
+different: the same declared core value has a qualifying conflict on two
+adjacent entries, using the stored five-pass Judge consensus `-1` label.
+Other value dimensions do not offset the episode. Runtime estimates the same
+construct from rolling soft `P(-1)` evidence under uncertainty gating. The
+runtime detector is not implemented yet; the six-detector comparison's vote
+count is not the Judge reference.
 
 The older prototype research includes these deterministic metrics:
 
@@ -98,13 +101,13 @@ Six months later, after having a child, they consistently prioritize
 Benevolence over career milestones. Their journal entries reflect genuine,
 sustained reorientation — not a lapse in discipline.
 
-Without an adopted evolution layer:
+Under the older crash/rut research path, without an adopted evolution layer:
 
 - The Critic correctly scores low alignment on Achievement, high on
   Benevolence.
-- Drift detection sees sustained negative alignment on a high-weight
+- Drift detection sees sustained negative alignment on a declared core
   dimension.
-- The per-dimension rut trigger fires: weekly EMA < -0.4 for multiple
+- The prototype per-dimension rut trigger fires: weekly EMA < -0.4 for multiple
   consecutive weeks.
 - The Coach surfaces: *"You seem to be losing track of Achievement."*
 
@@ -127,8 +130,10 @@ The answer depends on *how* the divergence manifests:
   the user is struggling, not evolving.
 - A small shift (+1 to 0) may not be meaningful at all.
 
-The current system cannot make this distinction. It treats all divergence from
-`w_u` as drift.
+That prototype cannot make this distinction and treats all divergence from
+`w_u` as drift. The selected v1 contract is narrower: it records sustained
+conflict on each declared core value without deciding whether that conflict
+means temporary struggle or genuine value evolution.
 
 ### 2.3 What the Architecture Already Anticipated
 
@@ -264,7 +269,7 @@ crash/rut/identity-drift triggers.
 | **Critic** | Produces alignment evidence and uncertainty | Unchanged |
 | **Evolution Detection** | Outside committed scope | Classifies per-dimension patterns |
 | **Drift Detection** | Detects sustained conflict | Skips user-confirmed evolution candidates |
-| **Coach** | Reflects conflict, recovery, or uncertainty | Asks whether priorities are shifting |
+| **Coach** | Reflects active, recovered, mixed, or uncertain states | Asks whether priorities are shifting |
 | **Profile `w_u`** | Fixed runtime input | Updates only after explicit user confirmation |
 
 ### 4.3 Coach Messaging Differences

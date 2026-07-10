@@ -21,13 +21,16 @@ flowchart LR
     subgraph offline_lane["Offline Training"]
         direction TB
         synth["Synthetic journals"]
-        labels["Persisted Judge labels"]
-        consensus["Five-pass consensus reference"]
+        judge["Judge labeling<br/>single pass + five-pass"]
+        labels["Persisted single-pass Judge labels"]
+        consensus["Five-pass Judge consensus reference"]
         shared_train["Shared text + state representation"]
         critic_model["Trained VIF Critic"]
         synth --> shared_train --> critic_model
+        synth --> judge
+        judge --> labels
+        judge --> consensus
         labels --> shared_train
-        labels --> consensus
     end
 
     subgraph product_lane["Runtime + Weekly Coaching"]
@@ -63,7 +66,7 @@ flowchart LR
     default_note["Current default: window_size = 1"]
     default_note -.-> shared_runtime
 
-    class synth,labels,consensus,shared_train,critic_model offline;
+    class synth,judge,labels,consensus,shared_train,critic_model offline;
     class history,shared_runtime,entry_scores,weekly runtime;
     class drift,digest,coach coach;
     class evolution optional;

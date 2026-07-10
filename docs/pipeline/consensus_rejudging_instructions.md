@@ -260,6 +260,20 @@ Useful summarize options:
 - `--output` to write the markdown report to a non-default location
 - `--annotations-dir` to point at a different set of human annotation parquet files
 
+### Consensus resolution rule
+
+The summarizer resolves each value dimension in two steps:
+
+1. If at least three of the five passes vote `0`, store `0`.
+2. Otherwise, compare the `+1` and `-1` votes among the non-neutral passes and
+   store the more common polarity. If those polarity counts tie, store `0` with
+   `no_majority` confidence.
+
+This is an activity-then-polarity consensus rule, not a literal requirement
+that one class receive three of all five votes. Downstream consumers should use
+the stored consensus label as the resolved reference and retain the confidence
+and agreement fields for diagnostics.
+
 This writes:
 
 - `joined_results.csv`

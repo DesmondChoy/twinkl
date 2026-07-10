@@ -20,7 +20,7 @@ The current VIF implementation is intentionally narrow:
 - **Downstream use**: validated weekly signal frames, an experimental
   crash/rut/evolution router, and weekly Coach inputs
 - **Selected drift v1 target**: rolling soft `P(-1)` evidence for sustained
-  conflict on a declared core/high-weight value; not yet implemented in the
+  conflict on a declared core value; not yet implemented in the
   runtime router
 
 > **Note:** Specific model names, embedding dimensions, and default window sizes
@@ -131,9 +131,10 @@ state/target rows:
 - **StateTargetSample**: the flattened state vector paired with the target vector
 
 The mainline student trains on persisted single-pass Judge labels in
-`judge_labels.parquet`. The five-pass consensus table is a diagnostic retraining
-surface and the strict reference for the sustained-conflict drift benchmark; it
-is not the mainline training target.
+`judge_labels.parquet`. The five-pass Judge table is a diagnostic retraining
+surface. Drift v1 uses it strictly: each qualifying reference conflict requires
+`alignment_<value> == -1`. It is not the
+mainline training target or the six-detector comparison's detector vote.
 
 ### 3.2 Entry Text Used by the Student
 
@@ -221,9 +222,10 @@ automatically when no precomputed result is supplied. This is the route used by
 the offline Coach runtime and demo UI.
 
 The selected product/benchmark contract is narrower: sustained conflict on a
-declared core/high-weight value, with a strict two-consecutive-`-1` reference
-and rolling soft `P(-1)` runtime evidence. The existing weekly router is a
-prototype compatibility surface rather than the v1 implementation. See
+declared core value, with stored five-pass Judge consensus `-1` labels on two
+adjacent entries and rolling soft `P(-1)` runtime evidence. The existing weekly
+router is a prototype compatibility surface rather than the v1 implementation.
+See
 [`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md) and
 [`docs/evals/drift_detection_eval.md`](../evals/drift_detection_eval.md).
 

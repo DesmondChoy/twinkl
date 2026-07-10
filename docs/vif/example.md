@@ -148,7 +148,7 @@ Sarah has been journaling for a month. Here's this week's entry:
 | Benevolence | +0.9 | 0.2 (low) | Aligned — prioritized Emma, fully present |
 | Self-Direction | +0.6 | 0.3 (low) | Aligned — creative work with energy and ownership |
 
-> _The Critic always outputs all 10 Schwartz dimension scores. Tables in this walkthrough show only Benevolence and Self-Direction — Sarah's declared values — because v1 drift detection is gated to declared core/high-weight values. The remaining eight dimensions are still scored._
+> _The Critic always outputs all 10 Schwartz dimension scores. Tables in this walkthrough show only Benevolence and Self-Direction — Sarah's declared values — because v1 drift detection is gated to declared core values. The remaining eight dimensions are still scored._
 
 **Trajectory check:**
 
@@ -193,14 +193,14 @@ consecutive journal sessions conflict with Benevolence.
 | Component | Status | Activity |
 |-----------|--------|----------|
 | Generator | N/A | Only used during offline training |
-| Judge | N/A | Consensus labels define the benchmark reference, not live runtime input |
+| Judge | N/A | Stored five-pass consensus labels define the benchmark reference, not live runtime input |
 | Critic | **ACTIVE** | Produces per-entry class evidence and uncertainty |
 | Drift detector | **TARGET BEHAVIOR** | Accumulates rolling soft `P(-1)` evidence on Benevolence |
 | Coach | **ACTIVE AT DELIVERY** | Uses the weekly artifact to surface the repeated conflict |
 
 ### Reference and Runtime Views
 
-| Entry | Consensus Benevolence reference | Runtime target |
+| Entry | Five-pass Judge consensus Benevolence reference | Runtime target |
 |---|---:|---|
 | Week 7 | `-1` | elevated `P(-1)`, low enough uncertainty to retain |
 | Week 8 | `-1` | repeated `P(-1)` evidence crosses the calibrated persistence gate |
@@ -255,8 +255,9 @@ The v1 benchmark still counts the Weeks 7–8 episode as a true event. At Week 1
 the Coach should not say Sarah is in ongoing drift. It can acknowledge the
 recovery with evidence and remain alert to recurrence.
 
-The current response-mode schema has no dedicated `recovered` value, so this
-active-versus-recovered delivery rule remains implementation work. See
+The intended delivery-time vocabulary is **active**, **recovered**, **mixed**,
+or **uncertain**. The exact response-mode schema and transition rules remain
+implementation work. See
 [Uncertainty, Drift, and Trigger Logic](04_uncertainty_logic.md).
 
 ### Coach's Response
@@ -269,7 +270,7 @@ active-versus-recovered delivery rule remains implementation work. See
 
 ---
 
-## Stage 5: Week 14 — High Uncertainty (Novel Situation)
+## Stage 5: Week 14 — Uncertain Delivery (Novel Situation)
 
 Something happens outside the Critic's training distribution.
 
@@ -326,6 +327,6 @@ the entry to sustained-conflict evidence. The Coach responds with presence.
 | Stable Alignment | — | — | ✅ Scores | ✅ Occasional acknowledgment |
 | Sustained Conflict | — | Reference only | ✅ Produces soft evidence | ✅ Surfaces repeated conflict |
 | Recovery at Delivery | — | Reference only | ✅ Continues scoring | ✅ Describes recovery rather than ongoing drift |
-| High Uncertainty | — | (optional) | ✅ Admits uncertainty | ✅ Offers presence |
+| Uncertain Delivery | — | (optional) | ✅ Admits uncertainty | ✅ Offers presence |
 
 Key insight: The Generator and Judge do their work *before* any user arrives. The Critic handles the real-time evaluation. The Coach speaks when there's something worth saying — including occasional evidence-based acknowledgment when users sustain alignment, but never through gamification or generic praise.

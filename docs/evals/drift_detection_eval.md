@@ -4,16 +4,23 @@
 
 Twinkl evaluates one v1 definition of drift:
 
-> A sustained conflict episode occurs when a declared core or high-weight value
-> receives two consecutive consensus `-1` reference labels.
+> A sustained conflict episode occurs when the same declared core value
+> receives a qualifying conflict label on two adjacent journal entries.
+
+For the strict reference, a conflict qualifies when the existing five-pass
+Judge consensus resolver stores `-1` for that value. The resolver first decides
+whether most passes are non-neutral, then selects the majority polarity among
+those non-neutral votes; a polarity tie resolves to `0` with `no_majority`
+confidence. Drift consumes the resolved label rather than rerunning vote
+aggregation. This is distinct from the six-detector comparison's vote count.
 
 The three layers of the contract are deliberately different:
 
 | Layer | Contract |
 |---|---|
-| Reference labels | Two consecutive consensus `-1` labels on the same declared core/high-weight value |
-| Runtime detector | Rolling soft `P(-1)` evidence under uncertainty gating |
-| User delivery | The weekly Coach digest cites the relevant entries and reflects the conflict without score jargon |
+| Reference labels | Stored five-pass Judge consensus `-1` labels for the same declared core value on two adjacent entries |
+| Runtime detector | Rolling soft `P(-1)` evidence under uncertainty gating; not implemented yet |
+| User delivery | The weekly Coach digest cites the relevant entries and uses active, recovered, mixed, or uncertain wording without score jargon; exact schema implementation is pending |
 
 The reference definition is strict and auditable. The runtime detector is soft
 because the current Critic often hedges a true `-1` toward neutral. Weekly
@@ -35,8 +42,9 @@ The empirical basis is
 
 ### Implemented and Measured
 
-- The five-pass consensus reference table is available at
-  `logs/judge_labels/consensus_labels.parquet`.
+- The five-pass Judge consensus table is available at
+  `logs/judge_labels/consensus_labels.parquet`. For an executable strict
+  conflict check, require `alignment_<value> == -1`.
 - The trajectory EDA covers 204 personas and 1,651 entries with
   runtime-compatible weekly bins.
 - The selected reference definition identifies 40 of 204 personas (19.6%);
@@ -62,7 +70,7 @@ it is not the selected sustained-conflict detector.
 
 The six-detector comparison in `src/demo_tool/multi_drift.py` is another
 exploratory surface. Its per-entry vote count is detector agreement, not the
-five-pass Judge consensus reference.
+five-pass Judge reference.
 
 ### Missing for v1
 
@@ -75,8 +83,8 @@ five-pass Judge consensus reference.
   to choose and tune the definition
 - End-to-end hit rate, precision, recall, F1, false-positive rate, and alert
   latency reporting
-- Coach-language checks that distinguish active conflict, recovery, and stable
-  weeks at digest time
+- Coach-language checks for active, recovered, mixed, and uncertain states at
+  digest time
 
 ---
 
@@ -100,23 +108,55 @@ did not declare as important.
 
 ## Reference Event Construction
 
-For each persona and declared core/high-weight value:
+Construct the reference independently for each
+`(persona_id, declared_core_value)`:
 
-1. Sort entries by `t_index` and date.
-2. Read the consensus label for that value on each entry.
-3. Start an episode when two consecutive labels are `-1`.
-4. Extend the episode while consecutive `-1` labels continue.
-5. End the episode when the label returns to `0` or `+1`.
-6. Keep persona ID, value dimension, onset entry, end entry, dates, and the
-   supporting journal rows.
+1. Use the declared-core set stored with the profile. Do not infer eligibility
+   from the graded weight vector.
+2. Sort the persona's entries by `t_index`, then date. Adjacent entries count
+   even when they occur on the same day or cross a calendar-week boundary. V1
+   has no maximum elapsed-time threshold.
+3. For the value being evaluated, mark an entry as a qualifying conflict when
+   `alignment_<value> == -1` in `consensus_labels.parquet`. Missing consensus
+   rows are non-qualifying and must not be skipped to join conflicts on either
+   side. A reference builder should report malformed or incomplete input.
+4. Ignore every other value dimension when evaluating this value's run. An
+   aligned second core value cannot cancel the conflict, and a conflict on a
+   different value cannot complete the pair.
+5. On the first qualifying conflict, remember a candidate onset. On the second
+   adjacent qualifying conflict, confirm one episode whose `onset_entry` is the
+   first entry and whose `confirmation_entry` is the second.
+6. Extend that episode through further adjacent qualifying conflicts. Store the
+   final qualifying conflict as `end_entry`. If the run reaches the end of the
+   observed timeline, keep the episode open and active.
+7. Any non-qualifying or missing entry breaks the run. A later qualifying pair
+   starts a new episode. A broken run is not automatically a recovered episode:
+   a stored `0` with `no_majority` confidence or missing evidence supports
+   **uncertain**, while a resolved neutral or aligned result can support
+   **recovered** at delivery time.
+8. Keep each value's episodes as separate records. A persona may have multiple
+   or simultaneous value-specific episodes.
 
-This event table is the reference surface for detector evaluation. A weekly
-digest is considered timely when it surfaces an active episode during the
-delivery week or within the allowed latency window.
+These examples follow directly from the rules:
 
-`consensus_agreement_*` fields can weight event confidence. They are not the
-full class distribution. Soft target probabilities require the per-pass vote
-files from the consensus rerun bundle.
+| Value sequence | Reference result |
+|---|---|
+| `-1, -1` | One episode; onset at the first entry, confirmed at the second |
+| `-1, -1, -1` | One extended episode, not two overlapping episodes |
+| `-1, 0, -1` | No episode |
+| `-1, -1, 0, -1, -1` | Two episodes |
+| Core A `-1, -1`; Core B `+1, +1` | One episode on Core A; Core B does not cancel it |
+| Core A `-1, -1`; Core B `-1, -1` | Two simultaneous value-specific episodes |
+
+This event table is the reference surface for detector evaluation. The first
+observable reference trigger is `confirmation_entry`, so detector latency is
+measured from confirmation rather than the candidate onset. A weekly digest is
+considered timely when it surfaces an active episode during the delivery week
+or within the allowed latency window.
+
+`consensus_agreement_*` is confidence metadata, not a second eligibility gate
+and not the full class distribution. Soft target probabilities require the
+per-pass vote files from the consensus rerun bundle.
 
 ---
 
@@ -126,10 +166,12 @@ For dimension `j` at entry `t`, let `p^-_{t,j}` be the Critic probability of
 class `-1` and `u_{t,j}` be its uncertainty estimate. A v1 detector accumulates
 recent negative evidence only when:
 
-- the dimension is declared core or its profile weight passes the importance
-  floor;
+- the dimension is a declared core value;
 - uncertainty is below the calibrated ceiling; and
 - the recent `P(-1)` mass passes a persistence threshold.
+
+Profile weights may calibrate evidence or thresholds among declared core
+values, but they do not make an undeclared value eligible for v1 drift.
 
 The exact rolling function and thresholds are evaluation parameters, not part
 of the reference-label definition. Candidate forms include a two-entry mean,
@@ -187,15 +229,15 @@ unbiased benchmark because the same Judge regime defines the reference.
 | Precision | `> 60%` | Most surfaced episodes match a reference conflict |
 | Event F1 | `> 0.5` | Precision and recall remain jointly useful |
 | False-positive rate | `< 20%` | Non-conflict windows rarely produce alerts |
-| First-alert latency | `<= 2 entries` | The detector reacts soon after reference onset |
+| First-alert latency | `<= 2 entries` | The detector reacts soon after `confirmation_entry`, when the reference episode first becomes observable |
 
 ### Required Slices
 
 - Per Schwartz value dimension
-- Core-value rank or profile-weight band
+- Declared-core-value rank or profile-weight band
 - Episode length and severity
 - Consensus agreement tier
-- Active conflict versus recovered-by-digest-time cases
+- Active, recovered, mixed, and uncertain digest-time cases
 - MLP versus LLM context arm
 
 ### Uncertainty Validation
@@ -243,10 +285,11 @@ Generated evidence lives under `docs/drift/figures/` and
 2. Current checkpoints were trained on persisted single-pass labels, so
    consensus evaluation mixes model error with label-regime shift.
 3. Core-gated per-dimension denominators are small and uneven.
-4. Five personas have at most two entries and cannot express a two-step episode.
+4. Five personas have only two entries, so their temporal evidence is limited
+   to one possible adjacent pair.
 5. The current synthetic corpus contains volatility more readily than clean,
    gradual arcs; it cannot validate fade or value-evolution claims.
-6. Weekly Coach delivery can lag entry-level onset, so event matching must
+6. Weekly Coach delivery can lag reference confirmation, so event matching must
    distinguish detector latency from delivery cadence.
 
 ---

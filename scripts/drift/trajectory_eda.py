@@ -5,8 +5,8 @@ hypothesis menu, not a spec: measures per-dimension base rates of each
 candidate pattern (dip / sustained conflict / fade / rise / spike) across a parameter
 grid, at entry-level and weekly granularity, gated by declared core values.
 Consensus labels are the default reference because the drift benchmark should
-target the more stable 5-pass labels, while still reporting persisted
-single-pass label impact for comparison.
+target the more stable five-pass resolver output, while still reporting
+persisted single-pass label impact for comparison.
 
 Outputs figures + CSV tables to docs/drift/ and a stats summary to stdout.
 

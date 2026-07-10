@@ -119,8 +119,8 @@ the named value dimension required for an explainable Coach reflection.
 
 Drift v1 is a sustained conflict episode:
 
-> A declared core/high-weight value receives two consecutive consensus `-1`
-> reference labels.
+> The same declared core value has a qualifying conflict on two adjacent
+> journal entries, using the stored five-pass Judge consensus `-1` label.
 
 The runtime target accumulates recent soft `P(-1)` evidence for that value while
 uncertainty remains below a calibrated ceiling. Hard argmax sequences are not
@@ -129,9 +129,9 @@ toward neutral.
 
 | Layer | v1 behavior |
 |---|---|
-| Reference | Strict two-consecutive-`-1` consensus-label episode |
-| Runtime | Rolling `P(-1)` evidence with importance and uncertainty gates |
-| Delivery | Weekly digest with cited journal evidence |
+| Reference | Strict per-value episode: stored five-pass Judge consensus `-1` labels on two adjacent entries |
+| Runtime | Rolling `P(-1)` evidence with declared-core and uncertainty gates; not implemented yet |
+| Delivery | Weekly digest with cited journal evidence and active, recovered, mixed, or uncertain wording; exact schema pending |
 
 The EDA supports this definition because most single-entry dips recover within
 two entries, while three-step and multi-week definitions are too sparse for the
@@ -145,9 +145,12 @@ reference records whether a sustained-conflict episode occurred. The weekly
 digest should describe the state at delivery time.
 
 For example, `-1, -1, +1, +1, +1` remains a true benchmark episode, but the
-Coach should describe it as recovered or resolved rather than ongoing drift.
-The current schema has no `recovered` response mode, so this delivery policy
-still requires implementation and scenario tests.
+Coach should describe it as **recovered** rather than **active**. **Mixed** is a
+digest-level summary used only when relevant value-specific episodes have
+different delivery states; it is not another state for a single episode.
+**Uncertain** applies when evidence reliability is too low to call an episode
+active or recovered. Exact schema values and transition rules still require
+implementation and scenario tests.
 
 ---
 
@@ -198,9 +201,10 @@ The demo review app compares six rule-based detector families:
 - KL Divergence.
 
 These detectors operate on persisted single-pass Judge labels or Critic mean
-predictions. Their vote count is detector agreement, not five-pass Judge
-consensus and not v1 benchmark ground truth. They remain useful for diagnosis
-and visualization but do not define the promoted runtime rule.
+predictions. Their vote count is detector agreement, not the five-pass Judge
+reference and not v1 benchmark ground truth.
+They remain useful for diagnosis and visualization but do not define the
+promoted runtime rule.
 
 ---
 

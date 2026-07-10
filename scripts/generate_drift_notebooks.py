@@ -1,9 +1,17 @@
-"""Generate drift detection notebooks (01-05) for notebooks/annotations/."""
+"""Retired generator for historical drift-detection diagnostic notebooks.
+
+These notebooks preserve pre-v1 detector comparisons. Their six-detector
+agreement is an exploratory proxy, not the adopted drift benchmark reference.
+The script writes the legacy ``notebooks/annotations`` set; it is not the
+authoritative generator for the checked-in ``notebooks/drift_experiment_MVP``
+artifacts.
+"""
 
 import json
 import pathlib
 
 OUT = pathlib.Path("notebooks/annotations")
+OUT.mkdir(parents=True, exist_ok=True)
 
 
 # ---------------------------------------------------------------------------
@@ -127,7 +135,15 @@ NB01_CELLS = [
     md("""\
 # Drift Detection — 01: Rule-Based (6 Sub-Approaches)
 
-Evaluates six rule-based drift detectors on human-annotated persona data:
+> **Historical diagnostic — not the drift v1 benchmark.** The selected v1
+> contract is two adjacent qualifying conflicts on the same declared core
+> value, using stored five-pass Judge consensus `-1` labels. Six-detector
+> agreement below is only exploratory proxy agreement; it is neither that
+> Judge reference nor benchmark ground truth.
+> This notebook remains as a record of the earlier detector comparison.
+
+Evaluates six rule-based drift detectors on synthetic persona trajectories with
+persisted single-pass Judge labels:
 
 | # | Sub-approach | Philosophy |
 |---|---|---|
@@ -381,7 +397,7 @@ for pid, r in results.items():
           "  ".join(f"{c:>5d}" for c in counts))
 """),
 
-    md("## Consensus Ground Truth\n\nRather than manually labelling crisis points, use **cross-approach agreement** as a proxy for ground truth.\nIf ≥4 of 6 sub-approaches independently flag the same `(persona, t_index)`, treat it as a high-confidence crisis.\n\n```\nconsensus_score = number of approaches flagging (pid, t)   # 0–6\nstrong  → score ≥ 4   (majority agreement)\nweak    → score ∈ {2, 3}\nnone    → score ≤ 1\n```\n\nThis produces labels without manual work and covers all personas with ≥5 steps."),
+    md("## Exploratory Six-Detector Proxy Agreement\n\nRather than manually labelling crisis points, this historical comparison uses **cross-approach agreement** as an exploratory proxy label.\nIf ≥4 of 6 sub-approaches independently flag the same `(persona, t_index)`, the notebook calls it a high-confidence crisis for within-notebook comparison.\n\n```\nproxy_agreement_score = number of approaches flagging (pid, t)   # 0–6\nstrong  → score ≥ 4   (majority agreement)\nweak    → score ∈ {2, 3}\nnone    → score ≤ 1\n```\n\nThese proxy labels cover all personas with ≥5 steps, but they are not the five-pass Judge reference or benchmark ground truth."),
 
     code("""\
 def get_alert_steps(r: dict, key: str) -> set[int]:
@@ -417,7 +433,7 @@ strong_total = sum(1 for pid, sv in consensus.items()
 weak_total   = sum(1 for pid, sv in consensus.items()
                    for score in sv.values() if 2 <= score < 4)
 
-print(f"Consensus summary across {len(consensus)} personas:")
+print(f"Proxy-agreement summary across {len(consensus)} personas:")
 print(f"  Strong crisis steps (≥4 agree): {strong_total}")
 print(f"  Weak crisis steps   (2-3 agree): {weak_total}")
 print()
@@ -428,7 +444,7 @@ for pid, sv in consensus.items():
         print(f"  {name:<25s} strong at t={strong_steps}")
 """),
 
-    md("## Metrics: Score Each Sub-Approach Against Consensus\n\nFor each sub-approach, compute hit rate, precision, F1, FPR, and first-alert latency against the consensus strong-crisis labels.\n\n| Metric | Target |\n|---|---|\n| Hit Rate | ≥ 80% |\n| Precision | > 60% |\n| F1 | > 0.5 |\n| FPR | < 20% |\n| First-alert latency | ≤ 2 steps |"),
+    md("## Metrics: Score Each Sub-Approach Against Proxy Agreement\n\nFor each sub-approach, compute hit rate, precision, F1, FPR, and first-alert latency against the strong six-detector proxy labels. These are diagnostic agreement metrics, not v1 benchmark scores.\n\n| Metric | Target |\n|---|---|\n| Hit Rate | ≥ 80% |\n| Precision | > 60% |\n| F1 | > 0.5 |\n| FPR | < 20% |\n| First-alert latency | ≤ 2 steps |"),
 
     code("""\
 from dataclasses import dataclass
@@ -516,7 +532,7 @@ def plot_persona(pid: str):
         ax.set_ylim(-1.4, 1.4)
         ax.set_ylabel(DIM_LABELS[j], fontsize=9)
 
-        # Mark consensus crisis steps
+        # Mark six-detector proxy-agreement crisis steps
         sv = consensus[pid]
         for t, score in sv.items():
             if score >= 4:
@@ -542,8 +558,8 @@ def plot_persona(pid: str):
     handles = [Line2D([0], [0], color=c, marker="|", ms=8, mew=1.5, ls="none", label=n)
                for c, n in zip(APPROACH_COLORS, APPROACH_NAMES)]
     from matplotlib.patches import Patch
-    handles += [Patch(color="red", alpha=0.3, label="strong consensus"),
-                Patch(color="orange", alpha=0.2, label="weak consensus")]
+    handles += [Patch(color="red", alpha=0.3, label="strong proxy agreement"),
+                Patch(color="orange", alpha=0.2, label="weak proxy agreement")]
     axes[0].legend(handles=handles, fontsize=7, ncol=4, loc="upper right")
 
     plt.tight_layout()
@@ -590,6 +606,13 @@ plt.show()
 NB02_CELLS = [
     md("""\
 # Drift Detection — 02: Bayesian Online Changepoint Detection (BOCPD)
+
+> **Historical diagnostic — not the drift v1 benchmark.** The selected v1
+> contract is two adjacent qualifying conflicts on the same declared core
+> value, using stored five-pass Judge consensus `-1` labels. Six-detector
+> agreement used for tuning below is only exploratory proxy agreement; it is
+> neither that Judge reference nor benchmark ground truth. This notebook
+> remains as an earlier detector diagnostic.
 
 Instead of hand-coded signal patterns, BOCPD models the **posterior probability that a changepoint
 occurred at each time step**. It maintains a "run length" distribution — how long the current
@@ -714,7 +737,7 @@ What BOCPD does instead of training:
 | Rule-based equivalent | BOCPD equivalent |
 |---|---|
 | Grid search over δ, τ_low, C_min | Grid search over **H** (hazard rate) and **α₀** (Dirichlet prior) |
-| Consensus hit-rate tuning | Consensus hit-rate tuning — same metric, different parameters |
+| Six-detector proxy tuning | Six-detector proxy tuning — same diagnostic metric, different parameters |
 | Threshold picked once, applied online | H picked once, applied online |
 
 **H (hazard rate):** prior probability of a changepoint at each step.
@@ -725,13 +748,13 @@ What BOCPD does instead of training:
 - Uninformative (α₀ = [1, 1, 1]) → equal prior over {-1, 0, +1}.
 - Informative (e.g. α₀ = [1, 2, 4]) → prior belief that aligned scores are more likely.
 
-The cell below selects H by grid search against consensus labels derived from
+The cell below selects H by grid search against exploratory proxy-agreement labels derived from
 the 6 rule-based sub-approaches (same method as notebook 01).
 """),
 
     code("""\
-# --- Inline consensus from rule-based approaches (mirrors notebook 01) ---
-# We need a ground-truth proxy to tune H. Recompute it here using the same 6 sub-approaches.
+# --- Inline six-detector proxy agreement (mirrors notebook 01) ---
+# Recompute the historical diagnostic proxy using the same 6 sub-approaches.
 
 def _ema_alerts(matrix, w, alpha=0.3, threshold=0.10, w_min=0.15):
     T, K = matrix.shape
@@ -819,7 +842,7 @@ def compute_consensus(pid):
 
 
 # --- Grid search over H and cp_thresh ---
-print("Grid searching H × cp_thresh against consensus labels...\\n")
+print("Grid searching H × cp_thresh against proxy-agreement labels...\\n")
 
 hazard_grid  = [0.05, 0.10, 0.15, 0.25, 0.40]
 thresh_grid  = [0.30, 0.40, 0.50, 0.60]
@@ -1024,6 +1047,13 @@ plt.show()
 NB03_CELLS = [
     md("""\
 # Drift Detection — 03: Gaussian Process Regression
+
+> **Historical diagnostic — not the drift v1 benchmark.** The selected v1
+> contract is two adjacent qualifying conflicts on the same declared core
+> value, using stored five-pass Judge consensus `-1` labels. Six-detector
+> agreement used for comparison is only exploratory proxy agreement; it is
+> neither that Judge reference nor benchmark ground truth. This notebook
+> remains as an earlier detector diagnostic.
 
 Models each dimension's alignment trajectory as a **Gaussian Process** — a distribution over
 smooth functions. Drift = observation falling outside the GP's predictive interval.

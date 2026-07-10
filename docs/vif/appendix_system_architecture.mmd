@@ -28,9 +28,9 @@ flowchart LR
             wrangled["Processed journal corpus<br/>text + dates + core values"]
             judge["Judge labeling<br/>{-1, 0, +1} x 10"]
             labels["Persisted single-pass label table"]
-            consensus["Five-pass consensus reference"]
+            consensus["Five-pass Judge consensus reference"]
             generator --> wrangled --> judge --> labels
-            labels --> consensus
+            judge --> consensus
         end
 
         merge["Join + integrity checks"]

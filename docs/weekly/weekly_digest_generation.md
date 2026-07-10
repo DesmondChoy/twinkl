@@ -220,16 +220,26 @@ The sources differ:
 The schema is intentionally wider than the selected product contract so the
 current prototype and prompt experiments remain inspectable.
 
+These literal prototype modes are not the adopted v1 delivery vocabulary. The
+weekly Coach is intended to describe the delivery-time state as **active**,
+**recovered**, **mixed**, or **uncertain**. The exact schema fields and mapping
+from the current compatibility modes remain implementation work.
+
 ---
 
 ## Drift v1 Versus the Prototype Router
 
-The selected v1 construct is sustained conflict on a declared core/high-weight
-value:
+The selected v1 construct is sustained conflict on a declared core value:
 
-- strict reference: two consecutive consensus `-1` labels;
+- strict reference: the same declared core value has a stored five-pass Judge
+  consensus `-1` label on two adjacent entries;
 - runtime target: rolling soft `P(-1)` evidence under uncertainty gating; and
 - delivery: the weekly digest cites the supporting entries.
+
+Each declared core value is evaluated independently. Another core value's
+aligned label cannot cancel an episode, and simultaneous episodes remain
+separate value-specific records. The six-detector comparison's detector-vote
+count is not the five-pass Judge reference.
 
 The current runtime persists alignment means and uncertainties rather than
 class probabilities, so the rolling-soft-evidence detector is not implemented.
@@ -241,10 +251,19 @@ the accepted v1 definition.
 Benchmark detection records whether a strict sustained-conflict episode
 occurred. Digest wording reflects the state when the weekly Coach is delivered.
 
-A sequence such as `-1, -1, +1, +1, +1` is still a true benchmark episode, but
-the Coach should describe recovery rather than claim that drift is ongoing.
-`recovered` is not currently a schema mode, so active/recovered/mixed delivery
-semantics remain implementation work.
+For each value-specific episode:
+
+- **active**: its conflict run reaches the digest cutoff;
+- **recovered**: a later resolved `0` or `+1` closes the run before the cutoff;
+- **uncertain**: missing, no-majority, or unreliable later evidence prevents a
+  confident active-versus-recovered claim; and
+- **mixed**: a digest-level summary when relevant value-specific episodes have
+  different delivery states. It is not a fourth reference-episode type.
+
+A sequence such as `-1, -1, +1, +1, +1` therefore remains a true benchmark
+episode but is described as recovered rather than active. Exact production
+schema values and compatibility mapping from current modes remain
+implementation work.
 
 ---
 
@@ -315,7 +334,7 @@ learned routing policies.
    `P(-1)`.
 2. Implement rolling soft-evidence sustained-conflict detection.
 3. Calibrate probability-mass and uncertainty thresholds against strict
-   consensus-reference episodes.
+   per-value episodes from the stored five-pass Judge consensus labels.
 4. Evaluate the MLP and LLM context arms on episode hit rate, false alarms,
    latency, and per-dimension behavior.
 5. Add active, recovered, mixed, and uncertain digest-time wording semantics.

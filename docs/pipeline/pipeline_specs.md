@@ -238,7 +238,7 @@ If all synthetic personas have the same number of entries (e.g., all 5), the VIF
 
 | VIF Capability | Minimum Entries | Rationale |
 |----------------|-----------------|-----------|
-| Sustained-conflict reference | 2+ | Requires two consecutive labels on the same declared core/high-weight value |
+| Sustained-conflict reference | 2+ | Requires stored five-pass Judge consensus `-1` labels on two adjacent entries for the same declared core value |
 | Current Critic state | 1 | Live default uses `window_size: 1`; larger legal-history windows are experiments |
 | Session cap (nudges) | 4+ | "2 nudges in last 3 entries" needs depth |
 | Weekly delivery analysis | 2+ active weeks | Separates entry-level evidence from weekly Coach cadence |

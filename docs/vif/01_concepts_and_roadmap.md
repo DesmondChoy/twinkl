@@ -20,7 +20,7 @@ Instead of giving a generic sentiment score, the VIF tracks the ten Schwartz val
 Crucially, the VIF is designed to be:
 *   **Nuanced:** It acknowledges trade-offs (e.g., "You crushed your work goals this week, but your sleep suffered").
 *   **Cautious:** It knows when it's unsure. If the user's situation is complex or new, the VIF holds back its judgment rather than giving bad advice.
-*   **Time-Aware:** The downstream timeline looks for repeated evidence rather than reacting to a single entry. Drift v1 requires sustained conflict on a declared core/high-weight value.
+*   **Time-Aware:** The downstream timeline looks for repeated evidence rather than reacting to a single entry. Drift v1 requires sustained conflict on a declared core value.
 
 This engine powers Twinkl's feedback system: flagging drifts so the Coach (the conversational AI) can gently surface tensions, and recognizing sustained alignment so the Coach can offer occasional evidence-based acknowledgment.
 
@@ -111,10 +111,10 @@ To make this design capstone-friendly, we summarise a recommended tiered approac
   * Target: immediate alignment (Option A).
   * Critic: ordinal MLP with a BNN comparison baseline.
   * Uncertainty: MC Dropout.
-  * Drift reference: two consecutive consensus `-1` labels on a declared
-    core/high-weight value.
+  * Drift reference: stored five-pass Judge consensus `-1` labels on two
+    adjacent entries for the same declared core value.
   * Runtime target: rolling soft `P(-1)` evidence under uncertainty gating,
-    delivered weekly.
+    delivered weekly; not implemented yet.
 
 * **Tier 2 (Optional capstone extension)**
   * State: compact legal-history context when the decision-level benchmark
@@ -123,7 +123,8 @@ To make this design capstone-friendly, we summarise a recommended tiered approac
     alignment remains the output contract.
   * Critic: calibrated local MLP, LLM teacher/fallback, or a measured cascade.
   * Drift rule: the same sustained-conflict construct with calibrated
-    user/profile thresholds and active-versus-recovered weekly wording.
+    thresholds for declared core values and active, recovered, mixed, or
+    uncertain weekly wording.
 
 * **Tier 3 (Out of Scope for Capstone)**
   * State: multimodal, sliding-window state with audio/physio.

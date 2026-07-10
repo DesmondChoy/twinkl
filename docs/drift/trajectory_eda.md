@@ -1,21 +1,22 @@
 # Trajectory-Level EDA on Judge Labels — Grounding the Drift Definition
 
-**Analysis date:** 2026-07-08
+**Analysis date:** 2026-07-08 · **Definition adopted:** 2026-07-10 in [GitHub issue #49](https://github.com/DesmondChoy/twinkl/issues/49)
 
 **Script:** [`scripts/drift/trajectory_eda.py`](../../scripts/drift/trajectory_eda.py) · **Default data:** `logs/judge_labels/consensus_labels.parquet` + `logs/registry/personas.parquet` · **Week mode:** runtime-compatible `dt.truncate("1w")`
 
 ## Purpose
 
-This EDA is the empirical basis for the v1 drift definition. It treats the
-broader signal taxonomy (single-entry dips, sustained conflict runs, fades,
-rises, and spikes) as a candidate menu and measures each pattern's base rate in
-the Judge-label reference data.
+This EDA supplied the empirical basis for the adopted v1 drift definition. It
+treats the broader signal taxonomy (single-entry dips, sustained conflict runs,
+fades, rises, and spikes) as a candidate menu and measures each pattern's base
+rate in the Judge-label reference data.
 
-The analysis uses the 5-pass **consensus reference** as the default decision
-table, with persisted single-pass judge labels shown side-by-side where the
-choice matters. Prevalence numbers are **measurements, not targets**: choose the
-definition for construct fit and threshold stability, then control positive
-class balance through benchmark construction.
+The analysis uses the stored five-pass Judge consensus labels by default.
+Persisted single-pass Judge labels appear side-by-side where the choice matters.
+This Judge reference is distinct from the six-detector comparison's
+detector-vote count. Prevalence numbers are **measurements, not targets**:
+choose the definition for construct fit and threshold stability, then control
+positive-class balance through benchmark construction.
 
 ## Data at a glance
 
@@ -25,7 +26,7 @@ class balance through benchmark construction.
 | Core-value declarations | 292 (116 personas declare 1, 88 declare 2) |
 | Runtime active weeks | median 5 active weeks (IQR 3-6) |
 | Entry gaps | mostly 0-7 days; max 10 (0-day gaps = multi-entry days) |
-| Reference labels | 5-pass consensus judge labels in {-1, 0, +1} x 10 Schwartz dims |
+| Reference labels | stored five-pass Judge consensus labels in {-1, 0, +1} x 10 Schwartz dimensions |
 | Comparison labels | persisted single-pass judge labels |
 
 ![Trajectory structure](figures/fig1_structure.png)
@@ -138,8 +139,8 @@ Full list: [`tables/conflict_heavy_week_candidates.csv`](tables/conflict_heavy_w
 ## Implications for the definition debate
 
 1. **Feasible on current data:** a core-gated, persistence-based definition:
-   strict two consecutive -1 consensus reference labels on a declared core
-   value.
+   the same declared core value has stored five-pass Judge consensus `-1`
+   labels on two adjacent entries.
 2. **Not supportable for v1:** single-entry dip alerts, fade/dormancy, peripheral
    value rise, value evolution, and multi-week chronic low periods. The current data
    does not contain clean long arcs.
@@ -159,7 +160,7 @@ the end-to-end path first; expand only if time remains.
 
 | # | Label-side reference definition | Consensus impact | Persisted-label comparison | One-line case |
 |---|---|---:|---:|---|
-| **R1 — Sustained conflict** (recommended) | a declared core value has **2 consecutive consensus -1 labels** | **40/204 = 19.6%** | 49/204 = 24.0% | simplest stable reference; kills spike noise without calendar logic |
+| **R1 — Sustained conflict** (adopted) | the same declared core value has **2 adjacent consensus -1 labels** | **40/204 = 19.6%** | 49/204 = 24.0% | simplest stable reference; kills spike noise without calendar logic |
 | R2 — Conflict week | a runtime week contains **>=2 consensus -1 entries** on a core value | 32/204 = 15.7% | 39/204 = 19.1% | aligns with weekly digest bins, but misses cross-week runs |
 | R3 — Unrecovered departure | core value goes **>=0 -> -1 -> -1** | 30/204 = 14.7% | 35/204 = 17.2% | purest "drift from alignment" shape, but excludes already-low onboarding-gap cases |
 
@@ -167,18 +168,20 @@ The consensus-reference union is 41 personas (20.1%); the persisted-label union
 is 52 personas (25.5%). Consensus shrinks the apparent impact, but it does not
 change the ranking. Prevalence is not the deciding factor; architecture is.
 
-## Recommended v1 definition
+## Adopted v1 definition
 
-**Drift v1 is a sustained conflict episode: a declared core/high-weight value
-receives two consecutive consensus -1 reference labels. At runtime, the detector
-estimates this from rolling soft P(-1) evidence under uncertainty gating, and
-the Coach surfaces it in the weekly digest.**
+**Drift v1 is a sustained conflict episode: the same declared core value has a
+stored five-pass Judge consensus `-1` label on two adjacent journal entries.
+Other value dimensions are ignored for this per-value test. At runtime, the
+detector will estimate the construct from rolling soft P(-1) evidence under
+uncertainty gating, and the Coach will surface it in the weekly digest. The
+runtime detector is not implemented yet.**
 
 Layer split:
 
 | Layer | v1 choice |
 |---|---|
-| Label benchmark | strict 2 consecutive consensus -1 labels on a declared core/high-weight value |
+| Label benchmark | 2 adjacent stored five-pass Judge consensus `-1` labels on the same declared core value |
 | Runtime detector | rolling soft P(-1) evidence mass, not two hard argmax -1 predictions |
 | Delivery | weekly Coach digest with cited entries |
 | Parked scope | single-entry dip alerts, fade/dormancy, peripheral-value rise, onboarding-gap messaging, evolution gating, multi-week low-mean definitions |
@@ -200,10 +203,12 @@ Why this is the right v1:
 ### Weekly delivery and recovery
 
 The benchmark records whether a sustained-conflict episode occurred. The
-weekly Coach describes the state at delivery time. A sequence such as
-`-1, -1, +1, +1, +1` remains a true reference episode, but the digest should
-describe recovery rather than ongoing drift. The current Coach schema has no
-`recovered` mode, so this distinction remains implementation work.
+weekly Coach describes the state at delivery time using the intended product
+vocabulary: **active**, **recovered**, **mixed**, or **uncertain**. A sequence
+such as `-1, -1, +1, +1, +1` remains a true reference episode, but the digest
+should describe it as recovered rather than active. The exact schema values,
+state-transition rules, and mapping from current prototype modes remain
+implementation work.
 
 ## Soft-label note
 
@@ -222,7 +227,8 @@ bundle.
   is judge-label reference data, not a final human-labeled benchmark.
 - Core-gated denominators per dimension are small (24-37); per-dimension
   percentages carry wide uncertainty.
-- Five personas have <=2 entries and cannot exhibit multi-step patterns.
+- Five personas have only two entries, so their temporal evidence is limited to
+  one possible adjacent pair.
 - The `conflict_heavy_week_candidates.csv` table is filtered to density >=0.5; lower
   threshold counts in this report come from the full in-memory candidate frame.
 
