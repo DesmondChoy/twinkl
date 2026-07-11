@@ -191,8 +191,11 @@ frozen consensus episodes but 10/10 locked author-designed episodes. `run_020`
 detects only 1/10 designed episodes, while the evaluated consensus-trained MLPs
 detect 2/10. The LLM result is therefore a cross-set validity warning rather
 than a teacher/fallback promotion, and the MLP result rules out the current
-local scorer as a production drift trigger. Human review must precede an LLM,
-MLP, or cascade decision.
+local scorer as a production drift trigger. A procedurally metadata-blinded Codex audit found the
+frozen reference unsuitable as a stable student-visible promotion surface;
+`twinkl-v8pb` must repair the target and establish an untouched promotion
+surface before an LLM, MLP, or cascade decision. The audit is not human ground
+truth.
 
 ---
 

@@ -7,7 +7,7 @@ Twinkl evaluates one v1 definition of drift:
 > A sustained conflict episode occurs when the same declared core value
 > receives a qualifying conflict label on two adjacent journal entries.
 
-For the strict reference, a conflict qualifies when the existing five-pass
+For the strict development reference, a conflict qualifies when the existing five-pass
 Judge consensus resolver stores `-1` for that value. The resolver first decides
 whether most passes are non-neutral, then selects the majority polarity among
 those non-neutral votes; a polarity tie resolves to `0` with `no_majority`
@@ -18,15 +18,17 @@ The three layers of the contract are deliberately different:
 
 | Layer | Contract |
 |---|---|
-| Reference labels | Stored five-pass Judge consensus `-1` labels for the same declared core value on two adjacent entries |
+| Development reference labels | Stored five-pass Judge consensus `-1` labels for the same declared core value on two adjacent entries |
 | Offline detector benchmark | Two-entry mean `P(-1)` with declared-core gating and a maximum uncertainty ceiling; implemented and evaluated |
 | Production runtime | Selected scorer and detector are not approved or wired |
 | User delivery | The weekly Coach digest cites the relevant entries and uses active, recovered, mixed, or uncertain wording without score jargon; exact schema implementation is pending |
 
-The reference definition is strict and auditable. The runtime detector is soft
-because the current Critic often hedges a true `-1` toward neutral. Weekly
-delivery remains a product cadence rather than a requirement that the evidence
-itself be grouped into multi-week averages.
+The stored reference definition is mechanically reproducible, but its current
+frozen episode surface is not a validated student-visible promotion target: the
+final procedurally metadata-blinded Codex audit accepted only 1 of 5 frozen
+cases. The runtime detector is soft because the current Critic often hedges a
+true `-1` toward neutral. Weekly delivery remains a product cadence rather than
+a requirement that the evidence itself be grouped into multi-week averages.
 
 Single-entry dip alerts, crash/rut taxonomies, fade/dormancy, peripheral-value
 rise, onboarding-gap messaging, value-evolution gating, and multi-week low-mean
@@ -100,15 +102,31 @@ small validation surface produced conservative operating points:
 
 That cross-set disagreement is the decision. The LLM result proves that clear,
 observable sustained conflict is within the scorer's capability; it does not
-validate the consensus-derived episodes or justify a production cascade. No
-scorer is promotion-ready until the frozen reference episodes and designed
-cases receive human review under the declared input contract. Full evidence is
-in the [`twinkl-wq9p` report](../../logs/experiments/reports/experiment_review_2026-07-10_twinkl_wq9p.md).
+validate the consensus-derived episodes or justify a production cascade.
+
+The final procedurally metadata-blinded Codex audit packet contained 25 randomly
+ordered trajectories and 74 journal entries. Two separate Codex passes agreed
+25/25 on the sustained-conflict qualification verdict: **1/5** frozen consensus
+cases qualified, **10/10** designed positives qualified, and **0/10** designed
+controls qualified. The four rejected frozen cases overreached the displayed
+student-visible evidence under the immediate adjacent-pair rule. Secondary
+delivery/context fields differed and did not affect qualification. These are
+AI-audit verdicts, separate from the MLP/LLM benchmark metrics, and are not
+human ground truth or a promotion basis.
+
+No scorer is promotion-ready. `twinkl-v8pb` must repair the student-visible
+label/target contract and establish an untouched promotion surface before
+production trigger wiring proceeds in `twinkl-a2w`. Full evidence is in the
+[`twinkl-wq9p` report](../../logs/experiments/reports/experiment_review_2026-07-10_twinkl_wq9p.md)
+and its
+[`Codex audit`](../../logs/experiments/artifacts/drift_trigger_benchmark_twinkl_wq9p_20260710/codex_audit/assessment.md).
 
 ### Still Missing for Product v1
 
 - Per-entry `P(-1)` persistence in the runtime artifact surface
-- Human review of the frozen-versus-designed benchmark disagreement
+- Student-visible label/target repair and an untouched promotion surface
+  (`twinkl-v8pb`); the completed Codex audit is diagnostic, not human ground
+  truth
 - A scorer and calibrated operating point that pass both target-validity and
   decision-level promotion checks
 - Production integration of the selected soft-evidence detector
@@ -135,7 +153,7 @@ did not declare as important.
 
 ---
 
-## Reference Event Construction
+## Development Reference Event Construction
 
 Construct the reference independently for each
 `(persona_id, declared_core_value)`:
@@ -177,11 +195,12 @@ These examples follow directly from the rules:
 | Core A `-1, -1`; Core B `+1, +1` | One episode on Core A; Core B does not cancel it |
 | Core A `-1, -1`; Core B `-1, -1` | Two simultaneous value-specific episodes |
 
-This event table is the reference surface for detector evaluation. The first
-observable reference trigger is `confirmation_entry`, so detector latency is
-measured from confirmation rather than the candidate onset. A weekly digest is
-considered timely when it surfaces an active episode during the delivery week
-or within the allowed latency window.
+This frozen event table remains a diagnostic surface for historical comparison
+and target-repair development; it is not a promotion surface under the current
+student-visible contract. The first observable reference trigger is
+`confirmation_entry`, so detector latency is measured from confirmation rather
+than the candidate onset. A weekly digest is considered timely when it surfaces
+an active episode during the delivery week or within the allowed latency window.
 
 `consensus_agreement_*` is confidence metadata, not a second eligibility gate
 and not the full class distribution. Soft target probabilities require the
@@ -245,8 +264,9 @@ Hard argmax predictions are not the runtime contract. Requiring two predicted
 
 The label-derived candidates are adequate for tuning. They are not independent
 validation because the same Judge regime defines the reference. The designed
-holdout is isolated from tuning, but it is author-designed and not yet
-human-reviewed, so it is a capability probe rather than a final benchmark.
+holdout is isolated from tuning and has a procedurally metadata-blinded Codex
+audit, but it remains author-designed rather than human ground truth, so it is
+a capability probe rather than a final benchmark.
 
 ---
 
@@ -256,11 +276,16 @@ human-reviewed, so it is a capability probe rather than a final benchmark.
 
 | Metric | Target | Meaning |
 |---|---:|---|
-| Episode hit rate / recall | `>= 80%` | At least 8 of 10 held-out sustained-conflict episodes are detected |
+| Designed-positive capability recall | `>= 80%` | At least 8 of 10 author-designed sustained-conflict episodes are detected; this is a capability check, not a scorer-promotion gate |
 | Precision | `> 60%` | Most surfaced episodes match a reference conflict |
 | Event F1 | `> 0.5` | Precision and recall remain jointly useful |
 | False-positive rate | `< 20%` | Non-conflict windows rarely produce alerts |
 | First-alert latency | `<= 2 entries` | The detector reacts soon after `confirmation_entry`, when the reference episode first becomes observable |
+
+The 10 designed controls must be reported alongside positive-case recall.
+Neither the frozen reference nor the author-designed holdout can promote a
+scorer under the current contract; promotion criteria apply only to the
+untouched evaluation surface established by `twinkl-v8pb`.
 
 ### Required Slices
 
@@ -323,7 +348,9 @@ absent and fresh API inference is intended. Benchmark artifacts live under
 
 ## Limitations
 
-1. Consensus labels are a more stable Judge reference, not human ground truth.
+1. Consensus labels are a stored Judge reference, not human ground truth. The
+   final procedurally metadata-blinded Codex audit also found the current frozen
+   episode surface unsuitable as a stable student-visible promotion target.
 2. The incumbent `run_020` checkpoint was trained on persisted single-pass
    labels, so its consensus evaluation mixes model error with label-regime
    shift. The consensus-trained comparison arms reduce that mismatch but still

@@ -114,13 +114,15 @@ To make this design capstone-friendly, we summarise a recommended tiered approac
   * Drift reference: stored five-pass Judge consensus `-1` labels on two
     adjacent entries for the same declared core value.
   * Offline drift benchmark: implemented, but no scorer is promotion-ready.
-    Production `P(-1)` persistence and weekly delivery remain blocked pending
-    human review of the frozen-versus-designed disagreement.
+    A procedurally metadata-blinded Codex audit found the frozen reference unsuitable as a stable
+    student-visible promotion surface. Production `P(-1)` persistence and
+    weekly delivery remain blocked by student-visible target repair in
+    `twinkl-v8pb`; the audit is not human ground truth.
 
 * **Tier 2 (Optional capstone extension)**
-  * State: compact legal-history context only if human review confirms that the
-    frozen failures reflect missing legal context rather than questionable
-    reference labels.
+  * State: compact legal-history context only if target repair on an untouched
+    promotion surface shows that frozen failures reflect missing legal context
+    rather than questionable reference labels.
   * Target: soft vote-distribution labels after target/context repair; immediate
     alignment remains the output contract.
   * Critic: calibrated local MLP, LLM teacher/fallback, or a measured cascade.

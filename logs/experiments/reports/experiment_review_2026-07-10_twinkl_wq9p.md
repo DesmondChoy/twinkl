@@ -2,7 +2,7 @@
 
 ## Decision
 
-No scorer is promotion-ready. At least one arm clears the deliberately explicit designed holdout but not the frozen consensus evaluation. Human review of the cross-set disagreement must precede production wiring or a cascade decision.
+No scorer is promotion-ready. At least one arm clears the deliberately explicit designed holdout but not the frozen consensus evaluation. A procedurally metadata-blinded Codex audit found the frozen reference cases materially more ambiguous and less student-visible than the designed cases, so the next step is student-visible label/target repair in `twinkl-v8pb`, not production wiring or a cascade decision. The audit is not human ground truth.
 
 ## Scope and evidence
 
@@ -26,9 +26,9 @@ No scorer is promotion-ready. At least one arm clears the deliberately explicit 
 
 ## Isolated designed holdout
 
-POC targets: recall `>= 0.80`, precision `> 0.60`, F1 `> 0.50`, window false-positive rate `< 0.20`, and maximum confirmation-anchored latency `<= 2` entries.
+POC capability targets, not promotion gates: recall `>= 0.80`, precision `> 0.60`, F1 `> 0.50`, window false-positive rate `< 0.20`, and maximum confirmation-anchored latency `<= 2` entries.
 
-| Arm | Evidence | Ref | Pred | Precision | Recall | F1 | Window FPR | Max latency | Recovery | Pass |
+| Arm | Evidence | Ref | Pred | Precision | Recall | F1 | Window FPR | Max latency | Recovery | Capability pass |
 |---|---|---:|---:|---:|---:|---:|---:|---:|---:|:---:|
 | run_020_selected | soft_probability | 10 | 1 | 1.000 | 0.100 | 0.182 | 0.040 | 0 | 0.000 | no |
 | run_052_consensus_recall_0.02 | soft_probability | 10 | 3 | 0.667 | 0.200 | 0.308 | 0.120 | 1 | 0.000 | no |
@@ -44,18 +44,20 @@ Designed LLM episode hits: `llm_gpt-5.4-mini_student_visible` 10/10; `llm_gpt-5.
 
 Designed incumbent MLP episode hits: `run_020_selected` 1/10. Designed consensus-trained MLP episode hits: `run_052_consensus_recall_0.02` 2/10; `run_053_consensus_selected` 2/10. No consensus-trained arm clears both evaluation surfaces, so the current consensus retraining has not closed the decision-level recall gap.
 
-Architecture consequence: keep the production trigger blocked unless one scorer passes both evaluation surfaces. Human-review the frozen reference episodes alongside the designed cases before deciding whether to repair labels/context, test an LLM verifier, or narrow the capstone claim to explicit conflict detection.
+Architecture consequence: no current scorer can be promoted. The final procedurally metadata-blinded `twinkl-16ar` Codex audit had 25/25 agreement on the sustained-conflict qualification verdict: only 1/5 frozen consensus cases qualified under the strict adjacent-pair rule, while the reviewers perfectly separated the 10 designed positives from the 10 controls. Secondary delivery/context fields differed and did not affect that verdict. Release requires the repaired student-visible target and a separately untouched promotion surface in `twinkl-v8pb`, not a pass against the current frozen reference. Full audit: [`codex_audit/assessment.md`](../artifacts/drift_trigger_benchmark_twinkl_wq9p_20260710/codex_audit/assessment.md).
 
 ## Promotion regime
 
-1. Primary: episode precision/recall/F1, window false-positive rate, and confirmation-anchored latency on an isolated holdout.
+1. Primary: episode precision/recall/F1, window false-positive rate, and confirmation-anchored latency on the untouched promotion surface to be established by `twinkl-v8pb`.
 2. Supporting: entry-level `recall_-1` at a declared precision floor.
 3. Diagnostic: QWK, hedging, calibration, and per-value slices.
 4. Production trigger schema and Coach delivery integration remain in `twinkl-a2w`.
 
 ## Limitations
 
-- The designed holdout is intentionally small and author-designed; human review is the next validity upgrade.
+- The designed holdout is intentionally small and author-designed. It has a procedurally metadata-blinded Codex audit but remains neither human-reviewed nor independent human ground truth.
 - LLM arms emit hard classes, not calibrated conflict probabilities, so their detector uses the strict two-label rule without uncertainty gating.
 - Per-value results are descriptive only; the benchmark does not fit per-value thresholds.
 - The consensus reference is more stable than one-pass labels but remains an AI-Judge reference rather than human ground truth.
+- The Codex audit is a diagnostic for student-visible observability, not a promotion basis; `twinkl-v8pb` must establish a non-destructive repaired target and untouched promotion surface.
+- The completed audit used procedural metadata blinding rather than technical reviewer isolation. Its 25/25 agreement applies only to the sustained-conflict qualification verdict; secondary delivery/context fields differed.

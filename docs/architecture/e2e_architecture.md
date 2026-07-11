@@ -149,8 +149,10 @@ with a strict per-value two-adjacent-entry reference using stored five-pass
 Judge consensus `-1` labels and a rolling soft `P(-1)` runtime target. The
 existing crash/rut/evolution router remains a prototype; class probabilities
 and the selected v1 detector are not yet wired. The offline benchmark can
-evaluate the rule from persisted scorer artifacts, but it promoted no scorer,
-so the production edge remains deliberately blocked pending human review.
+evaluate the rule from persisted scorer artifacts, but it promoted no scorer.
+A procedurally metadata-blinded Codex audit found the frozen reference unsuitable as a stable
+student-visible promotion surface, so the production edge remains deliberately
+blocked by `twinkl-v8pb` target repair. The audit is not human ground truth.
 Value evolution is parked for v1 even though the prototype invokes its
 classifier automatically.
 

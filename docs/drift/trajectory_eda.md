@@ -132,8 +132,9 @@ There are enough consensus-reference conflict-heavy weeks for twinkl-wq9p thresh
 tuning. Composition is skewed (Power 31, Hedonism 21, Security 15,
 Universalism 15, Achievement 1), and these labels are still judge-derived. Use
 them for tuning and error analysis; keep a held-out designed set isolated from
-threshold and prompt selection. That set is a capability probe until its cases
-are independently human-reviewed.
+threshold and prompt selection. That set has since received a procedurally metadata-blinded Codex
+audit, but remains author-designed rather than human ground truth and therefore
+serves as a capability probe rather than final promotion evidence.
 
 Full list: [`tables/conflict_heavy_week_candidates.csv`](tables/conflict_heavy_week_candidates.csv).
 
@@ -149,8 +150,12 @@ Full list: [`tables/conflict_heavy_week_candidates.csv`](tables/conflict_heavy_w
    runtime detector should consume soft evidence. Two hard argmax -1 predictions
    would be too brittle under current Critic recall.
 4. **Label-regime caveat:** current Critic checkpoints were trained on persisted
-   single-pass labels. Benchmarking against consensus labels is the right target,
-   but Phase 2 will mix model error with label-regime shift.
+   single-pass labels. Consensus labels remain a reproducible development
+   reference, but the final Codex audit found the current frozen episode surface
+   unsuitable as a stable student-visible promotion target. Treat frozen-surface
+   gaps as diagnostic target-mismatch evidence, not as a basis for scorer
+   promotion, until `twinkl-v8pb` produces a repaired target and untouched
+   evaluation surface.
 
 ## Candidate definitions considered
 
@@ -177,26 +182,32 @@ Other value dimensions are ignored for this per-value test. At runtime, the
 detector will estimate the construct from rolling soft P(-1) evidence under
 uncertainty gating, and the Coach will surface it in the weekly digest. The
 offline soft-evidence benchmark is implemented, but no scorer is approved and
-the detector is not wired into the runtime or Coach path.**
+the detector is not wired into the runtime or Coach path. The stored rule is a
+mechanically precise development reference, not a current student-visible
+promotion target.**
 
 Layer split:
 
 | Layer | v1 choice |
 |---|---|
-| Label benchmark | 2 adjacent stored five-pass Judge consensus `-1` labels on the same declared core value |
+| Development label reference | 2 adjacent stored five-pass Judge consensus `-1` labels on the same declared core value |
 | Runtime detector | rolling soft P(-1) evidence mass, not two hard argmax -1 predictions |
 | Delivery | weekly Coach digest with cited entries |
 | Parked scope | single-entry dip alerts, fade/dormancy, peripheral-value rise, onboarding-gap messaging, evolution gating, multi-week low-mean definitions |
-| Implementation status | strict reference builder and offline soft-evidence benchmark implemented; no scorer promoted; human review and production `P(-1)` wiring remain open |
+| Implementation status | strict reference builder, offline soft-evidence benchmark, and procedurally metadata-blinded Codex audit implemented; no scorer promoted; `twinkl-v8pb` student-visible target repair and production `P(-1)` wiring remain open |
 
 Why this is the right v1:
 
 - **One definition, not a taxonomy.** Sustained conflict is the thing Twinkl can
   explain cleanly: "you keep saying this matters, but recent entries repeatedly
   conflict with it."
-- **Strict reference, forgiving detector.** The benchmark uses an unambiguous
-  two-label rule; the runtime detector uses probability mass so current Critic
-  recall does not turn the trigger into a coin slot.
+- **Mechanically precise historical reference, forgiving detector.** The stored
+  two-label rule is reproducible, but the final procedurally metadata-blinded
+  Codex audit found that only 1 of 5 frozen consensus cases qualifies from the
+  displayed student-visible evidence. Treat the frozen surface as diagnostic
+  rather than a promotion target until `twinkl-v8pb` defines a repaired target
+  and an untouched evaluation surface. The runtime detector uses probability
+  mass so current Critic recall does not turn the trigger into a coin slot.
 - **Weekly product stays intact.** Detection can be rolling-entry evidence while
   the user sees it in the weekly Coach digest.
 - **Noise is named.** Consensus changes the R1 set from 49 to 40 personas:
@@ -207,8 +218,13 @@ Why this is the right v1:
 The completed `twinkl-wq9p` benchmark produces a cross-set disagreement rather
 than a scorer win. Both LLM context arms detect 10/10 deliberately explicit
 designed episodes but 0/5 consensus-derived frozen episodes. The MLP arms
-detect only 1–2/10 designed episodes. Human review must determine which cases
-match the intended input and product contract before production wiring. See the
+detect only 1–2/10 designed episodes. A procedurally metadata-blinded Codex
+audit found that 1/5 frozen cases qualified, versus 10/10 designed positives
+and 0/10 designed controls; its secondary delivery/context fields differed and
+did not affect qualification. The frozen reference is unsuitable as a stable
+student-visible promotion surface; target repair in `twinkl-v8pb` must
+determine the next evaluable contract before production wiring. The audit is
+not human ground truth. See the
 [`twinkl-wq9p` report](../../logs/experiments/reports/experiment_review_2026-07-10_twinkl_wq9p.md).
 
 ### Weekly delivery and recovery
@@ -230,10 +246,12 @@ bundle.
 
 ## Caveats
 
-- Consensus labels are the better benchmark reference, but current Critic
-  checkpoints were trained on persisted single-pass labels. Treat consensus
-  benchmark gaps as "performance against the more stable target," not pure
-  model noise against the original training labels.
+- Consensus labels remain a reproducible historical Judge reference, but the
+  final Codex audit found the current frozen episode surface unsuitable as a
+  stable student-visible promotion target. Treat frozen-surface results as
+  diagnostic target-mismatch evidence, not as a basis for scorer promotion,
+  until `twinkl-v8pb` produces a repaired target and untouched evaluation
+  surface.
 - Consensus-vs-human agreement is still advisory in the existing reports; this
   is judge-label reference data, not a final human-labeled benchmark.
 - Core-gated denominators per dimension are small (24-37); per-dimension

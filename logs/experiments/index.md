@@ -19,7 +19,7 @@
 
 > **Active recommendation (2026-03-19):** `run_019`-`run_021` remain the default corrected-split frontier family. The new two-stage reformulation family `run_045`-`run_047` reached comparable median holdout `qwk_mean` (`0.360` vs `0.362`) and the best calibration on the current board (`0.743`), but it gave back too much `recall_-1` (`0.266`) and hedging (`0.708`). `run_034`-`run_036` remain the best tail-sensitive reference branch, and `run_042`-`run_044` remain the strongest encoder-swap challenger.
 >
-> **Latest decision-level drift benchmark (2026-07-10):** [`reports/experiment_review_2026-07-10_twinkl_wq9p.md`](reports/experiment_review_2026-07-10_twinkl_wq9p.md) implements the sustained-conflict reference, adjacent-window detector, threshold search, matching, frozen comparison, and locked 10-episode designed holdout. `run_020` detected 1/10 designed episodes; the evaluated consensus-trained MLPs detected 2/10. Both `gpt-5.4-mini` context arms detected 10/10 explicit designed episodes with no false alarms but 0/5 consensus-derived frozen episodes. No scorer is promotion-ready: human-review the cross-set disagreement before production wiring or a cascade decision. The active entry-level frontier stays unchanged.
+> **Latest decision-level drift benchmark (2026-07-10):** [`reports/experiment_review_2026-07-10_twinkl_wq9p.md`](reports/experiment_review_2026-07-10_twinkl_wq9p.md) implements the sustained-conflict reference, adjacent-window detector, threshold search, matching, frozen comparison, and locked 10-episode designed holdout; it is updated with the findings of the subsequently completed `twinkl-16ar` procedurally metadata-blinded Codex audit. `run_020` detected 1/10 designed episodes; the evaluated consensus-trained MLPs detected 2/10. Both `gpt-5.4-mini` context arms detected 10/10 explicit designed episodes with no false alarms but 0/5 consensus-derived frozen episodes. The audit's sustained-conflict verdicts were 1/5 frozen cases, 10/10 designed positives, and 0/10 controls. No scorer is promotion-ready: `twinkl-v8pb` must repair the student-visible target contract and establish an untouched promotion surface before production wiring or a cascade decision. The audit is not human ground truth, and the active entry-level frontier stays unchanged.
 >
 > **Latest strategic review (2026-07-02):** [`reports/experiment_review_2026-07-02_strategy.md`](reports/experiment_review_2026-07-02_strategy.md) keeps the frontier unchanged and recommends shifting the primary evaluation from entry-level QWK to decision-level drift-trigger metrics plus `recall_-1` at a precision floor, gated by a zero-shot LLM critic baseline and the human-agreement ceiling (Fleiss κ 0.56 aggregate).
 >
@@ -241,10 +241,12 @@ the existing consensus episodes may be subtler, context-dependent, disputed,
 or based on a different target contract.
 
 **3. Recommendation: no production scorer yet.** Keep the active entry-level
-frontier unchanged and keep `twinkl-a2w` production wiring blocked. Human-review
-the frozen-versus-designed disagreement before choosing label/context repair,
-a bounded LLM verifier experiment, or a narrower capstone claim around explicit
-conflict detection. Full rerunnable evidence:
+frontier unchanged and keep `twinkl-a2w` production wiring blocked. A
+procedurally metadata-blinded Codex audit found the frozen reference unsuitable as a stable student-visible
+promotion surface; `twinkl-v8pb` now owns label/target repair and an untouched
+promotion surface before considering a bounded LLM verifier or a narrower
+capstone claim around explicit conflict detection. The audit is not human
+ground truth. Full rerunnable evidence:
 [`reports/experiment_review_2026-07-10_twinkl_wq9p.md`](reports/experiment_review_2026-07-10_twinkl_wq9p.md).
 
 ### 2026-07-02 — Strategic review: the metric regime, not the model, is the active bottleneck
@@ -280,6 +282,13 @@ any further synthetic generation is justified. Then proceed with `twinkl-a30f`
 → `twinkl-j0ck` as planned; soft vote-distribution training is strongly
 corroborated by the disagreement-learning literature. Full details:
 [`reports/experiment_review_2026-07-02_strategy.md`](reports/experiment_review_2026-07-02_strategy.md).
+
+> **Supersession note (2026-07-10):** This July 2 training sequence remains
+> relevant to entry-level hard-dimension work, but it is not the next gate for
+> drift promotion. The later `twinkl-wq9p` benchmark and final `twinkl-16ar`
+> Codex audit found that the frozen drift reference needs student-visible target
+> repair first; `twinkl-v8pb` now owns that gate before any scorer, cascade, or
+> production decision.
 
 ### 2026-06-06 — Recall-aware checkpoint retention is worth keeping; recall-aware selection is not (`twinkl-upb5`)
 

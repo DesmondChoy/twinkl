@@ -213,7 +213,7 @@ From PRD (Evaluation Strategy, Row 2):
 3. **Value leakage**: If personas explicitly mention values in entries, the evaluation is trivial
 4. **Reachability ceiling**: `twinkl-747` showed that some hard-dimension labels, especially `security`, may not be cleanly reachable from the current student-visible context
 5. **Board comparability**: consensus-label retrains are informative diagnostics, but they are not directly comparable to the persisted-label frontier because the holdout labels changed
-6. **Context and decision contract**: the completed episode benchmark is more cautionary than the entry-level comparison. Both LLM arms score 0/5 frozen versus 10/10 designed episodes, while the MLP arms detect only 1–2/10 designed episodes. No replacement claim is justified until the cases are human-reviewed.
+6. **Context and decision contract**: the completed episode benchmark is more cautionary than the entry-level comparison. Both LLM arms score 0/5 frozen versus 10/10 designed episodes, while the MLP arms detect only 1–2/10 designed episodes. A procedurally metadata-blinded Codex audit then qualified 1/5 frozen cases, 10/10 designed positives, and 0/10 controls; it found the frozen reference unsuitable as a stable student-visible promotion surface. `twinkl-v8pb` must repair the target and establish an untouched promotion surface. The audit is AI diagnostic evidence, not human ground truth.
 
 **Mitigations:**
 - Use banned terms validation to prevent explicit value mentions
