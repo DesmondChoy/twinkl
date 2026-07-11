@@ -157,3 +157,7 @@
   Audit and retire every runnable, configured, artifact, report, and test
   surface; preserve provenance in a clearly marked archive; and add a
   regression check that prevents the old default or paths from returning.
+- When a commit review uncovers actionable defects and the user asks to make
+  the changes, carry the review through implementation and verification while
+  preserving the existing branch and unrelated work. Do not stop at a revised
+  assessment or leave the invalid artifact active.

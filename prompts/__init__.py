@@ -66,6 +66,7 @@ nudge_decision_prompt = load_prompt("nudge_decision")
 nudge_generation_prompt = load_prompt("nudge_generation")
 nudge_response_prompt = load_prompt("nudge_response")
 judge_alignment_prompt = load_prompt("judge_alignment")
+judge_active_critic_state_prompt = load_prompt("judge_active_critic_state")
 weekly_digest_coach_prompt = load_prompt("weekly_digest_coach")
 
 __all__ = [
@@ -77,5 +78,6 @@ __all__ = [
     "nudge_generation_prompt",
     "nudge_response_prompt",
     "judge_alignment_prompt",
+    "judge_active_critic_state_prompt",
     "weekly_digest_coach_prompt",
 ]

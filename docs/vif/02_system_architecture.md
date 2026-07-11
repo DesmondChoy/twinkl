@@ -82,7 +82,9 @@ $$
 
 Where:
 
-- `\phi_text(T)` is the frozen sentence embedding
+- `\phi_text(T)` is the frozen sentence embedding. `T` is built by the runtime
+  `concatenate_entry_text` helper from `initial_entry`, `nudge_text`, and
+  `response_text`.
 - `\Delta t` are normalized time-gap features
 - `w_u` is the normalized 10-dim value profile
 
@@ -107,6 +109,13 @@ s_{u,t} = \text{Concat}\big[\phi_{\text{text}}(T_{u,t}), w_u\big]
 $$
 
 with no time-gap terms when `N = 1`.
+
+The active default therefore does not contain entry date, persona name, age,
+profession, culture, biography, or earlier entries. Any audit that proposes a
+replacement distillation target must review a faithful representation of the
+runtime-formatted session and the numeric profile vector, without those hidden
+fields. The fail-closed Security workflow is specified in
+[Security Distillation Target Contract](security_target_contract.md).
 
 ### 2.4 Missing History Handling
 

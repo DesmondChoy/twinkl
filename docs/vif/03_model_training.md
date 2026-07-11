@@ -148,6 +148,15 @@ dimensions, especially `security`, are not yet a clean long-term distillation
 target for the current student. That means the current frontier should be read
 as a useful experimental baseline, not the final target definition.
 
+The historical audit established the target-contract risk, but its three prompt
+arms did not exactly match the active `window_size: 1` state. The 14-case
+Security artifact formerly derived from its legacy `student_visible` arm has
+been retired. It is not a retraining source, evaluation lens, or repaired-target
+result. A new artifact can be written only after a receipt-bound
+`active_critic_state_v1` review; the selected frozen-test subset remains
+diagnostic-only even then. See the
+[Security target contract](security_target_contract.md).
+
 The consensus-label diagnostic branch (`run_048`-`run_050`) reinforces
 that framing. It improved within-regime QWK and calibration on the
 consensus-relabeled holdout, but it changed labels on the frozen test split and
@@ -174,6 +183,10 @@ under three context contracts:
 
 Future entries, target labels, rationales, and generation metadata are excluded
 from every arm.
+
+This script's `student_visible` name refers to its own session-plus-profile
+contract. It must not be confused with the differently scoped legacy
+`twinkl-747` condition of the same name.
 
 On the 221-row test split:
 
@@ -209,6 +222,9 @@ The VIF training stack lives in `src/vif/`.
 | `src/vif/critic_bnn.py` | Bayesian neural baseline |
 | `src/vif/dataset.py` | Data loading, joins, and persona-level splits |
 | `src/vif/drift_target.py` | Student-visible review packets, reconciliation, and target materialization |
+| `src/vif/security_target.py` | Fail-closed exact-state Security target validation and diagnostic materialization |
+| `scripts/experiments/prepare_a30f_security_target_audit.py` | Receipt-bound active-Critic-state Security review bundle |
+| `scripts/experiments/build_a30f_security_target.py` | Diagnostic Security target materialization after exact-state review |
 | `scripts/experiments/build_v8pb_student_visible_target.py` | Development or locked-promotion review packet generation |
 | `scripts/experiments/materialize_v8pb_student_visible_target.py` | Reviewed student-visible target materialization |
 | `src/vif/eval.py` | Evaluation metrics and uncertainty-aware evaluation |

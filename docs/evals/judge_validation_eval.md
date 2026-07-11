@@ -19,12 +19,12 @@ The Judge (LLM-as-Judge) produces training labels for the VIF. This evaluation v
 - 3 annotators × 115 shared entries across 19 personas (des, jl, km) in [`logs/annotations/`](../../logs/annotations/)
 - Cohen's κ and Fleiss' κ calculation ([`src/annotation_tool/agreement_metrics.py`](../../src/annotation_tool/agreement_metrics.py))
 - Agreement report: avg Cohen's κ 0.66, Fleiss' κ 0.56 ([report](../../logs/exports/agreement_report_20260318_130642.md))
-- Reachability audit completed for hard dimensions with a recommendation to change the distillation target for `security` and use targeted relabeling for `hedonism` / `stimulation` ([report](../../logs/exports/twinkl_747/reachability_audit_report.md))
+- Historical reachability audit completed for hard dimensions with a diagnostic recommendation to change the target regime for `security` and use targeted relabeling for `hedonism` / `stimulation` ([report](../../logs/exports/twinkl_747/reachability_audit_report.md)); its legacy arms did not exactly match the active Critic state and did not create a repaired target
 - Repeated-call self-consistency and full-corpus stability analysis completed via the 5-pass `twinkl-754` rerun ([report](../../logs/exports/twinkl_754/consensus_rejudging_report.md))
 
 ### What's Missing
 - Automated quality checks (all-zero rate, sparsity, distribution)
-- Hard-dimension target redesign and follow-up relabeling after the `twinkl-747` / `twinkl-754` findings
+- Exact-state hard-dimension review, target redesign, and follow-up relabeling after the `twinkl-747` / `twinkl-754` findings
 
 ### Next Steps
 1. Add automated quality checks as post-labeling validation

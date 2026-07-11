@@ -27,6 +27,7 @@ Usage:
     )
 """
 
+from collections.abc import Sequence
 from datetime import datetime
 
 import numpy as np
@@ -49,6 +50,44 @@ VALUE_NAME_TO_KEY = {
     "Benevolence": "benevolence",
     "Universalism": "universalism",
 }
+
+
+def core_values_to_profile_weights(core_values: Sequence[str]) -> np.ndarray:
+    """Map declared core values to the runtime's normalized profile vector.
+
+    The active VIF state encodes every declared core value with equal mass and
+    uses a uniform fallback when no valid declaration is available. Keeping this
+    mapping outside ``StateEncoder`` lets audit tooling render the exact profile
+    information the student receives without constructing a text encoder.
+    """
+    weights = np.zeros(len(SCHWARTZ_VALUE_ORDER), dtype=np.float32)
+    matched_indices = []
+
+    for value in core_values:
+        canonical_key = VALUE_NAME_TO_KEY.get(value)
+        if canonical_key is None:
+            canonical_key = VALUE_NAME_TO_KEY.get(value.strip())
+        if canonical_key is None:
+            lower_value = value.lower().replace("-", "_").strip()
+            if lower_value in SCHWARTZ_VALUE_ORDER:
+                canonical_key = lower_value
+
+        if canonical_key and canonical_key in SCHWARTZ_VALUE_ORDER:
+            matched_indices.append(SCHWARTZ_VALUE_ORDER.index(canonical_key))
+
+    matched_indices = list(dict.fromkeys(matched_indices))
+    if matched_indices:
+        weight_per_value = 1.0 / len(matched_indices)
+        for index in matched_indices:
+            weights[index] = weight_per_value
+    else:
+        weights = np.full(
+            len(SCHWARTZ_VALUE_ORDER),
+            1.0 / len(SCHWARTZ_VALUE_ORDER),
+            dtype=np.float32,
+        )
+
+    return weights
 
 
 def concatenate_entry_text(
@@ -149,41 +188,7 @@ class StateEncoder:
             >>> print(weights)  # [0, 0, 0, 0, 0, 0.5, 0, 0, 0.5, 0]
             >>> print(weights.sum())  # 1.0
         """
-        weights = np.zeros(self.num_values, dtype=np.float32)
-
-        matched_indices = []
-        for value in core_values:
-            # Try direct lookup first (handles title case like "Security")
-            canonical_key = VALUE_NAME_TO_KEY.get(value)
-
-            # If not found, try lowercase version
-            if canonical_key is None:
-                canonical_key = VALUE_NAME_TO_KEY.get(value.strip())
-
-            # If still not found, try matching directly against SCHWARTZ_VALUE_ORDER
-            if canonical_key is None:
-                lower_value = value.lower().replace("-", "_").strip()
-                if lower_value in SCHWARTZ_VALUE_ORDER:
-                    canonical_key = lower_value
-
-            if canonical_key and canonical_key in SCHWARTZ_VALUE_ORDER:
-                idx = SCHWARTZ_VALUE_ORDER.index(canonical_key)
-                matched_indices.append(idx)
-
-        # Deduplicate while preserving first-seen order so repeated values
-        # don't accidentally reduce total profile mass.
-        matched_indices = list(dict.fromkeys(matched_indices))
-
-        # Assign equal weight to matched values
-        if matched_indices:
-            weight_per_value = 1.0 / len(matched_indices)
-            for idx in matched_indices:
-                weights[idx] = weight_per_value
-        else:
-            # Fallback: uniform weights if no valid core values found
-            weights = np.full(self.num_values, 1.0 / self.num_values, dtype=np.float32)
-
-        return weights
+        return core_values_to_profile_weights(core_values)
 
     def compute_time_gaps(
         self,

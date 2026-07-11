@@ -94,6 +94,9 @@ The human-overlap benchmark above is still the right summary of shared-subset ag
    - `security` → `change_distillation_target`
    - `hedonism` → `targeted_relabeling`
    - `stimulation` → `targeted_relabeling`
+   This was a historical diagnostic recommendation. The legacy reduced-context
+   prompts did not exactly represent the active session-plus-profile Critic
+   state, so the audit did not create or validate a repaired target artifact.
 2. **Consensus improved stability, not the active frontier target.** The `twinkl-754` five-pass profile-only rerun showed strong repeated-call self-consistency (per-dimension Fleiss' κ `0.775` to `0.890`) and passed the full-corpus stability gate for `security`, `hedonism`, and `stimulation`. But it did **not** become the default supervision source for frontier claims, because the consensus branch changed labels on the frozen holdout and did not improve the advisory human-overlap benchmark enough to replace persisted labels cleanly.
 
 Practical takeaway: the shared-subset agreement results still justify using Judge labels at POC scale, but later work narrowed that claim. They are strongest as broad supervision evidence, not as proof that every hard-dimension label is equally reachable or equally promotion-ready for the current student.

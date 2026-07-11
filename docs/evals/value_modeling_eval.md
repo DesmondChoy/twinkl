@@ -211,7 +211,7 @@ From PRD (Evaluation Strategy, Row 2):
 1. **Synthetic bias**: Model may learn artifacts of the generation process rather than true value signals
 2. **Small sample size**: 3-5 personas limits statistical power
 3. **Value leakage**: If personas explicitly mention values in entries, the evaluation is trivial
-4. **Reachability ceiling**: `twinkl-747` showed that some hard-dimension labels, especially `security`, may not be cleanly reachable from the current student-visible context
+4. **Reachability ceiling**: `twinkl-747` established a hard-dimension target-contract warning, especially for `security`, but its legacy reduced-context arms did not exactly represent the active session-plus-profile state. It did not create a repaired target or an exact active-state leaderboard.
 5. **Board comparability**: consensus-label retrains are informative diagnostics, but they are not directly comparable to the persisted-label frontier because the holdout labels changed
 6. **Context and decision contract**: the retired consensus-derived drift benchmark is historical diagnostic evidence, not a valid student-visible promotion surface. [`twinkl-v8pb`](./drift_v1_student_visible_target.md) completed a separate full-runtime-text target and locked promotion review; low development recall and one unresolved promotion case mean no scorer comparison supports a promotion claim. The earlier AI audit is diagnostic evidence, not human ground truth.
 

@@ -10,6 +10,13 @@ This document is intentionally **LLM-agnostic**. It does not assume Claude-speci
 
 The finalized bundle for the completed run lives in `logs/exports/twinkl_747/`. Its final report recommends `change_distillation_target`, driven primarily by severe `security` mismatch between the stored labels and the rerun conditions.
 
+> **Historical-scope correction (2026-07-11):** The three completed prompt
+> arms reproduce the original audit, but none is an exact representation of the
+> active `window_size: 1` Critic state. The legacy `student_visible` arm omitted
+> the normalized profile while retaining demographics and date. Do not use its
+> labels to materialize a Security target. The replacement exact-state workflow
+> is defined in [the Security target contract](../vif/security_target_contract.md).
+
 ---
 
 ## What This Audit Produces
@@ -19,9 +26,11 @@ The audit answers three questions on the same 50-case sample:
 1. **Persisted label vs full context**
    - Are the stored labels in `judge_labels.parquet` reproducible under the rich prompt path?
 2. **Full context vs profile only**
-   - How much does biography and trajectory context change the label?
+   - Does the combined addition of biography and trajectory context change the
+     label? This comparison does not isolate which source caused a change.
 3. **Profile only vs student visible**
-   - How much does declared profile information change the label once bio/history are removed?
+   - How do the two legacy reduced-context prompts differ? Their unavailable
+     metadata and non-runtime serialization prevent a causal active-state claim.
 
 The final output is a short report recommending one of:
 - keep current labels
@@ -184,9 +193,10 @@ Rules:
 - `rationales` is optional for the summarizer, but strongly recommended for audit review.
 - Write exactly one result row per `case_id` per condition.
 
-### Condition Semantics
+### Historical Condition Semantics
 
-Treat the three condition files as **already-authoritative**:
+Treat the three condition files as authoritative only for reproducing the
+completed historical audit:
 
 - `full_context`
   - rich teacher comparison baseline
@@ -194,11 +204,17 @@ Treat the three condition files as **already-authoritative**:
 - `profile_only`
   - removes bio and previous-entry history
   - keeps the declared core values
+  - still renders persona demographics and date, so it is not the active state
 - `student_visible`
   - removes bio, declared core values, and previous-entry history
-  - leaves only the current session text visible
+  - still renders persona demographics and date while omitting the active
+    profile vector, so its historical name must not be interpreted as the live
+    Critic contract
 
 Do **not** try to “fix” or reinterpret the condition yourself. If the prompt bundle says a field is omitted, keep it omitted.
+
+For new Security target work, generate a separate `active_critic_state_v1`
+bundle. Do not overwrite or append to `logs/exports/twinkl_747/`.
 
 ### Execution Strategy
 
@@ -317,6 +333,10 @@ It compares:
 - persisted label vs full-context rerun
 - full-context rerun vs profile-only rerun
 - profile-only rerun vs student-visible rerun
+
+These are observed prompt-condition deltas. In particular, a full-context
+difference cannot be attributed specifically to biography or prior trajectory
+because that arm adds both together.
 
 It then maps hard-dimension flip counts into:
 - `low` = 0–1 flips

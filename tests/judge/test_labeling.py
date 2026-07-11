@@ -6,13 +6,15 @@ import pytest
 
 from src.judge.labeling import (
     SCHWARTZ_VALUE_DISPLAY,
-    build_value_rubric_context,
     build_session_content,
+    build_value_rubric_context,
     judge_session,
     load_schwartz_values,
+    render_active_critic_state_prompt,
     render_judge_prompt,
 )
 from src.models.judge import SCHWARTZ_VALUE_ORDER
+from src.vif.state_encoder import concatenate_entry_text, core_values_to_profile_weights
 
 
 def test_build_value_rubric_context_contains_expected_sections():
@@ -63,6 +65,49 @@ def test_render_judge_prompt_omits_previous_entries_when_none():
     assert "- **Bio:** Prefers predictable routines." in prompt
 
 
+def test_active_critic_state_prompt_contains_only_runtime_state_fields():
+    schwartz_config = load_schwartz_values("config/schwartz_values.yaml")
+    session = concatenate_entry_text(
+        "I declined the risky offer after reviewing my savings.",
+        "What made that feel right?",
+        "I need the next few months to be predictable.",
+    )
+    profile = core_values_to_profile_weights(["Security", "Benevolence"])
+
+    prompt = render_active_critic_state_prompt(
+        session_content=session,
+        profile_weights=profile.tolist(),
+        schwartz_config=schwartz_config,
+    )
+
+    assert session in prompt
+    assert "- security: 0.500000" in prompt
+    assert "- benevolence: 0.500000" in prompt
+    assert "Core Values" not in prompt
+    for forbidden in (
+        "## Persona Context",
+        "- **Name:**",
+        "- **Age:**",
+        "- **Profession:**",
+        "- **Culture:**",
+        "- **Bio:**",
+        "## Recent Entries",
+        "**Date:**",
+    ):
+        assert forbidden not in prompt
+
+
+def test_active_critic_state_prompt_rejects_noncanonical_profile_length():
+    schwartz_config = load_schwartz_values("config/schwartz_values.yaml")
+
+    with pytest.raises(ValueError, match="10 weights"):
+        render_active_critic_state_prompt(
+            session_content="A session.",
+            profile_weights=[0.0],
+            schwartz_config=schwartz_config,
+        )
+
+
 @pytest.mark.asyncio
 async def test_judge_session_parses_valid_scores():
     schwartz_config = load_schwartz_values("config/schwartz_values.yaml")
@@ -74,7 +119,8 @@ async def test_judge_session_parses_valid_scores():
             '{"scores": {"self_direction": 0, "stimulation": 0, "hedonism": 0, '
             '"achievement": 1, "power": 0, "security": 0, "conformity": 0, '
             '"tradition": 0, "benevolence": 0, "universalism": 0}, '
-            '"rationales": {"achievement": "Worked late to finish a difficult deliverable."}}'
+            '"rationales": {"achievement": '
+            '"Worked late to finish a difficult deliverable."}}'
         )
 
     scores, rationales, _ = await judge_session(

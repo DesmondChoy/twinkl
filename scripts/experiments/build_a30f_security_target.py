@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Materialize the twinkl-a30f sampled Security target audit."""
+"""Materialize a receipt-bound twinkl-a30f Security target audit."""
 
 from __future__ import annotations
 
@@ -24,11 +24,33 @@ def main() -> None:
     parser.add_argument(
         "--output-dir",
         type=Path,
-        default=Path("logs/experiments/artifacts/security_target_twinkl_a30f_20260711"),
+        default=Path(
+            "logs/experiments/artifacts/"
+            "security_target_twinkl_a30f_active_critic_state_v1"
+        ),
+    )
+    parser.add_argument(
+        "--active-state-manifest",
+        type=Path,
+        required=True,
+        help=(
+            "Exact active-Critic-state prompt manifest from "
+            "prepare_a30f_security_target_audit.py."
+        ),
+    )
+    parser.add_argument(
+        "--active-state-results",
+        type=Path,
+        required=True,
+        help=(
+            "Completed exact active-Critic-state review results bound to the manifest."
+        ),
     )
     args = parser.parse_args()
     target_path, summary_path = write_security_target_artifacts(
         joined_results_path=args.joined_results,
+        active_state_manifest_path=args.active_state_manifest,
+        active_state_results_path=args.active_state_results,
         output_dir=args.output_dir,
     )
     print(f"Wrote {target_path}")

@@ -7,13 +7,13 @@ so docs and scripts can reference stable Python paths instead of notebooks.
 from __future__ import annotations
 
 import json
+from collections.abc import Awaitable, Callable, Sequence
 from pathlib import Path
-from typing import Awaitable, Callable, Sequence
 
 import yaml
 
-from prompts import judge_alignment_prompt
-from src.models.judge import AlignmentScores, SCHWARTZ_VALUE_ORDER
+from prompts import judge_active_critic_state_prompt, judge_alignment_prompt
+from src.models.judge import SCHWARTZ_VALUE_ORDER, AlignmentScores
 
 LLMCompleteFn = Callable[[str, dict | None], Awaitable[str | None]]
 
@@ -38,7 +38,10 @@ JUDGE_LABEL_SCHEMA = {
         "scores": {
             "type": "object",
             "additionalProperties": False,
-            "properties": {key: {"type": "integer", "minimum": -1, "maximum": 1} for key in SCHWARTZ_VALUE_ORDER},
+            "properties": {
+                key: {"type": "integer", "minimum": -1, "maximum": 1}
+                for key in SCHWARTZ_VALUE_ORDER
+            },
             "required": SCHWARTZ_VALUE_ORDER,
         },
         "rationales": {
@@ -60,7 +63,7 @@ JUDGE_LABEL_RESPONSE_FORMAT = {
 def load_schwartz_values(path: str | Path = "config/schwartz_values.yaml") -> dict:
     """Load Schwartz value elaborations YAML."""
     config_path = Path(path)
-    with open(config_path, "r") as f:
+    with open(config_path) as f:
         return yaml.safe_load(f)
 
 
@@ -75,13 +78,17 @@ def build_value_rubric_context(schwartz_config: dict) -> str:
         if not value_data:
             continue
 
+        aligned_behaviors = chr(10).join(
+            f"- {behavior}"
+            for behavior in value_data["behavioral_manifestations"][:3]
+        )
         context_parts.append(
             f"""
 ### {display_name}
 **Core Motivation:** {value_data["core_motivation"].strip()}
 
 **Key Behaviors (Aligned):**
-{chr(10).join(f"- {behavior}" for behavior in value_data["behavioral_manifestations"][:3])}
+{aligned_behaviors}
 
 **Key Behaviors (Misaligned):**
 - Acting against the core motivation
@@ -167,6 +174,35 @@ def render_judge_prompt(
         session_content=session_content,
         value_rubric=value_rubric,
         previous_entries=previous_entries,
+    )
+
+
+def render_active_critic_state_prompt(
+    *,
+    session_content: str,
+    profile_weights: Sequence[float],
+    schwartz_config: dict,
+) -> str:
+    """Render a Judge prompt faithful to the active ``window_size: 1`` state.
+
+    This deliberately excludes every persona field and temporal field that the
+    current Critic does not encode. ``profile_weights`` must use the canonical
+    Schwartz order so the review prompt mirrors the state-vector suffix.
+    """
+    if len(profile_weights) != len(SCHWARTZ_VALUE_ORDER):
+        raise ValueError(
+            "Active-Critic profile must contain "
+            f"{len(SCHWARTZ_VALUE_ORDER)} weights."
+        )
+
+    rendered_profile = "\n".join(
+        f"- {dimension}: {float(profile_weights[index]):.6f}"
+        for index, dimension in enumerate(SCHWARTZ_VALUE_ORDER)
+    )
+    return judge_active_critic_state_prompt.render(
+        session_content=session_content,
+        profile_weights=rendered_profile,
+        value_rubric=build_value_rubric_context(schwartz_config),
     )
 
 
