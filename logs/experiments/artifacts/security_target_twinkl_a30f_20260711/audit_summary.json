@@ -1,0 +1,15 @@
+{
+  "artifact_scope": "selected_audit_subset_only",
+  "case_count": 14,
+  "changed_label_count": 10,
+  "likely_label_error_or_overreach_count": 8,
+  "reachability_bucket_counts": {
+    "requires_prior_trajectory": 1,
+    "requires_profile_or_bio_context": 2,
+    "visible_from_student_input": 11
+  },
+  "source": "logs/exports/twinkl_747/joined_results.csv",
+  "target_policy": "student_visible_current_session_v1",
+  "training_blocker": "The 14 cases were selected from known frontier errors and do not form an unbiased full-corpus Security target.",
+  "training_ready": false
+}
