@@ -239,7 +239,7 @@ If all synthetic personas have the same number of entries (e.g., all 5), the VIF
 | VIF Capability | Minimum Entries | Rationale |
 |----------------|-----------------|-----------|
 | Sustained-conflict target | 2+ | Requires two adjacent entries that visibly show a behavior or choice against the same declared core value; `twinkl-v8pb` completed its full-runtime-text review, but one unresolved promotion case keeps production blocked |
-| Current Critic state | 1 | Live default uses `window_size: 1`; larger legal-history windows are experiments |
+| Current Critic state | 1 | Live default uses `window_size: 1`; the rejected `twinkl-749` compact-history diagnostic emits a zero summary at cold start and is not the default |
 | Session cap (nudges) | 4+ | "2 nudges in last 3 entries" needs depth |
 | Weekly delivery analysis | 2+ active weeks | Separates entry-level evidence from weekly Coach cadence |
 

@@ -31,7 +31,9 @@ provenance:
       training.training_target_mode:
         from: hard
         to: vote_distribution
-  rationale: ''
+  rationale: >-
+    Seed-22 soft arm pairing `run_065`; identical except for vote-distribution
+    targets, fractional vote-mass priors, and `soft_balanced_softmax`.
 provenance_backfill:
   reason: Composite source manifest added after fresh-eyes review; training inputs and model weights are unchanged.
   target_source_path: logs/exports/twinkl_j0ck_soft_vote_target_v1/target_provenance.json
@@ -273,7 +275,12 @@ per_dimension:
     activation_precision: 0.6389
     activation_recall: 0.9583
     activation_f1: 0.7667
-observations: ''
+observations: >-
+  The only seed where soft training improves the tail over its control:
+  recall_-1 0.3467 vs 0.2412, minority recall 0.4498, and hedging down to
+  0.5982, at the cost of 0.012 aggregate QWK (0.3769 vs 0.3890). Together with
+  seeds 11 and 33 moving the other way on recall_-1, this confirms the soft
+  objective's tail behavior is seed-dependent rather than systematic.
 circumplex:
   source: probabilities
   summary:

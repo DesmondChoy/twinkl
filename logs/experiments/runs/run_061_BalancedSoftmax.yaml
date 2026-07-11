@@ -43,7 +43,9 @@ provenance:
       training.seed:
         from: 22
         to: 33
-  rationale: ''
+  rationale: >-
+    Seed-33 historical-label control arm completing the three-seed
+    `twinkl-a30f` baseline matrix on persisted `judge_labels.parquet`.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -264,7 +266,12 @@ per_dimension:
     activation_precision: 0.6098
     activation_recall: 0.9615
     activation_f1: 0.7463
-observations: ''
+observations: >-
+  Test qwk_mean 0.3532, recall_-1 0.3239, minority recall 0.4400, hedging
+  0.5924, and Security QWK 0.2047 under historical labels. The run trains late
+  (best epoch 26 of 30) and carries the family's largest gap at 0.216,
+  suggesting the historical-label objective keeps pushing without a stable
+  validation optimum.
 circumplex:
   source: probabilities
   summary:

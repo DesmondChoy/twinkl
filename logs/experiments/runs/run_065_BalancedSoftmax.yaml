@@ -34,7 +34,9 @@ provenance:
       training.training_target_mode:
         from: vote_distribution
         to: hard
-  rationale: ''
+  rationale: >-
+    Seed-22 hard-target control arm of `twinkl-j0ck`, repeating the `run_063`
+    configuration with only the model seed changed.
 provenance_backfill:
   reason: Composite source manifest added after fresh-eyes review; training inputs and model weights are unchanged.
   target_source_path: logs/exports/twinkl_j0ck_soft_vote_target_v1/target_provenance.json
@@ -276,7 +278,13 @@ per_dimension:
     activation_precision: 0.6176
     activation_recall: 0.875
     activation_f1: 0.7241
-observations: ''
+observations: >-
+  Aggregate qwk_mean 0.3890 matches seed 11, but this is the experiment's
+  weakest tail seed: recall_-1 0.2412 and Hedonism QWK goes negative (-0.023).
+  The retained 0.02 recall-window candidate (epoch 21) trades 0.032 test QWK
+  for recall_-1 0.4064 - the strongest tail result among all twelve
+  `twinkl-j0ck` checkpoints - showing the hard arm's tail weakness here is a
+  checkpoint-selection effect as much as an objective effect.
 circumplex:
   source: probabilities
   summary:

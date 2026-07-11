@@ -55,10 +55,19 @@ def _build_datasets(
         }
     )
     state_encoder = StateEncoder(
-        encoder, window_size=training_config.get("window_size", 1)
+        encoder,
+        window_size=training_config.get("window_size", 1),
+        history_pooling=training_config.get("history_pooling", "none"),
+        history_window_size=training_config.get("history_window_size", 3),
+        history_summary_dim=training_config.get("history_summary_dim", 64),
     )
 
-    labels_df, entries_df = load_all_data()
+    labels_df, entries_df = load_all_data(
+        labels_path=training_config.get(
+            "labels_path", "logs/judge_labels/judge_labels.parquet"
+        ),
+        wrangled_dir=training_config.get("wrangled_dir", "logs/wrangled"),
+    )
 
     # Reproduce the exact split from training
     holdout_path = training_config.get("fixed_holdout_manifest_path")
@@ -117,8 +126,9 @@ def _extract_from_dataset(
             preds_np = preds.squeeze(0).numpy()  # (10,)
             target_np = target.numpy()  # (10,)
 
-            # Extract SBERT embedding from the state vector (first 256 dims)
-            sbert_emb = state.numpy()[:256]  # (256,)
+            # The current entry embedding is always the leading state slice.
+            embedding_dim = dataset.state_encoder.text_encoder.embedding_dim
+            sbert_emb = state.numpy()[:embedding_dim]
 
             # Metadata
             meta = dataset.get_sample_metadata(idx)

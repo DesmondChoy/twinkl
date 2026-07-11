@@ -117,6 +117,18 @@ runtime-formatted session and the numeric profile vector, without those hidden
 fields. The fail-closed Security workflow is specified in
 [Security Distillation Target Contract](security_target_contract.md).
 
+`twinkl-749` added a config-gated compact-history diagnostic without changing
+that default. The tested mode is Nomic-specific: with `history_pooling: mean`,
+the state keeps the full current
+embedding and appends the normalized leading 64 dimensions of the mean of up to
+three strictly prior embeddings plus a normalized prior-count feature. The
+first entry receives zeros for that channel. Dataset and runtime both select
+prior entries by chronological position inside the same persona; future
+entries and label-derived data are excluded. Seed-11 `run_069` regressed on the
+overall package, so the mode remains diagnostic. See the
+[design note](compact_history_ablation.md) and
+[experiment review](../../logs/experiments/reports/experiment_review_2026-07-11_twinkl_749_compact_history.md).
+
 ### 2.4 Missing History Handling
 
 When `N > 1` and earlier entries are unavailable:
@@ -125,6 +137,8 @@ When `N > 1` and earlier entries are unavailable:
 - missing time gaps are zero-filled
 
 This keeps the state dimension fixed while allowing early-timeline inference.
+Compact-history mode instead averages only real prior entries and emits a zero
+summary plus zero count at cold start; padding is never included in the mean.
 
 ---
 
@@ -255,7 +269,7 @@ The architecture keeps the numeric evaluator and the explanation layer separate.
 The Critic:
 
 - reads only the structured state described above
-- uses strict recent-history context rather than arbitrary retrieval
+- uses only the configured state; optional history is strictly prior-only
 - outputs numeric alignment estimates plus uncertainty
 
 ### 5.2 Coach

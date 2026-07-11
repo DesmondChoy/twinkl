@@ -503,6 +503,9 @@ def _build_experiment_dict(
             },
             "state_encoder": {
                 "window_size": config.get("window_size", 1),
+                "history_pooling": config.get("history_pooling", "none"),
+                "history_window_size": config.get("history_window_size", 3),
+                "history_summary_dim": config.get("history_summary_dim", 64),
             },
             "data": {
                 "train_ratio": config.get("train_ratio", 0.70),

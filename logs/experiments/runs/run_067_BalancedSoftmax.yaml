@@ -34,7 +34,8 @@ provenance:
       training.training_target_mode:
         from: vote_distribution
         to: hard
-  rationale: ''
+  rationale: >-
+    Seed-33 hard-target control arm completing the `twinkl-j0ck` hard family.
 provenance_backfill:
   reason: Composite source manifest added after fresh-eyes review; training inputs and model weights are unchanged.
   target_source_path: logs/exports/twinkl_j0ck_soft_vote_target_v1/target_provenance.json
@@ -276,7 +277,12 @@ per_dimension:
     activation_precision: 0.6667
     activation_recall: 0.9167
     activation_f1: 0.7719
-observations: ''
+observations: >-
+  Strongest hard-arm seed: qwk_mean 0.3998 with an early best epoch (13 of 34)
+  and the smallest hard-arm gap (0.119). Stimulation 0.4106 continues the
+  hybrid-contract lift, minority recall reaches 0.4529, and recall_-1 0.3267
+  is the hard family's best selected-checkpoint tail. Hedging 0.6357 remains
+  the hard arm's persistent weakness relative to the soft arm.
 circumplex:
   source: probabilities
   summary:

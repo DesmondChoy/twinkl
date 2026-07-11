@@ -75,7 +75,12 @@ provenance:
       training.dimension_weighting_enabled:
         from: true
         to: false
-  rationale: ''
+  rationale: >-
+    Seed-11 historical-label control arm for the `twinkl-a30f` paired
+    Security-target comparison. Re-establishes the plain `balanced_softmax`
+    incumbent config on the persisted `judge_labels.parquet` (dimension
+    weighting switched off after the `run_054`-`run_056` weighted rerun) so
+    the repaired-Security arm has an exact-config baseline.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -296,7 +301,12 @@ per_dimension:
     activation_precision: 0.5714
     activation_recall: 0.9231
     activation_f1: 0.7059
-observations: ''
+observations: >-
+  Test qwk_mean 0.3425, recall_-1 0.3372, hedging 0.6281, and calibration
+  0.7128 sit inside the incumbent family's usual range. Security QWK is only
+  0.195 under the historical labels, reconfirming the weak persisted-label
+  Security boundary that motivated the exact-state repair. Self-direction
+  (0.535) and conformity (0.553) remain the strongest dimensions.
 circumplex:
   source: probabilities
   summary:

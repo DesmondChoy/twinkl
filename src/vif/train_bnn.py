@@ -123,10 +123,7 @@ def train(config: dict, verbose: bool = True) -> dict:
     if verbose:
         print(f"Loading encoder: {config['encoder']['model_name']}...")
     text_encoder = create_encoder(config["encoder"])
-    state_encoder = StateEncoder(
-        text_encoder,
-        window_size=config["state_encoder"]["window_size"],
-    )
+    state_encoder = StateEncoder(text_encoder, **config["state_encoder"])
 
     if verbose:
         print(f"State dimension: {state_encoder.state_dim}")

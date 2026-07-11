@@ -40,7 +40,11 @@ provenance:
       data.security_target_summary_sha256:
         from: null
         to: e9f1e0d8cb9aa4f21023052018f2f2b372eed8236b0d9c160cef7f926be13d4d
-  rationale: ''
+  rationale: >-
+    Seed-11 repaired-target arm of `twinkl-a30f`: identical config to
+    `run_057` but trained and evaluated on `security_repaired_labels.parquet`
+    (`security_active_critic_state_v1`; 678 of 1,651 Security labels changed)
+    to measure what exact-state Security supervision buys.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -261,7 +265,12 @@ per_dimension:
     activation_precision: 0.5333
     activation_recall: 0.9231
     activation_f1: 0.6761
-observations: ''
+observations: >-
+  Security QWK reaches 0.3389 under the repaired lens versus 0.195 for the
+  paired historical control, with aggregate qwk_mean up to 0.3631, minority
+  recall 0.4456, and hedging down to 0.5968. The gains are Security-specific:
+  recall_-1 gives back ground (0.2966 vs 0.3372) and Hedonism falls to 0.1519,
+  so the repair fixes the target, not the general tail behavior.
 circumplex:
   source: probabilities
   summary:

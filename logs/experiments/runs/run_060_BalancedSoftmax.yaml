@@ -40,7 +40,10 @@ provenance:
       data.security_target_summary_sha256:
         from: null
         to: e9f1e0d8cb9aa4f21023052018f2f2b372eed8236b0d9c160cef7f926be13d4d
-  rationale: ''
+  rationale: >-
+    Seed-22 repaired-target arm pairing `run_059` exactly, again swapping only
+    the label artifact to `security_repaired_labels.parquet` under
+    `security_active_critic_state_v1`.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -261,7 +264,12 @@ per_dimension:
     activation_precision: 0.6667
     activation_recall: 0.9231
     activation_f1: 0.7742
-observations: ''
+observations: >-
+  Security QWK improves to 0.3282 from the paired control's 0.2142, aggregate
+  qwk_mean edges up to 0.3348, and the gap tightens to 0.090 with an earlier
+  best epoch (16 vs 22). As with seed 11, the tail pays: recall_-1 drops to
+  0.3552 from the control's 0.4395 while minority recall stays comparable
+  (0.4515 vs 0.4847).
 circumplex:
   source: probabilities
   summary:

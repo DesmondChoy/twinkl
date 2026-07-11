@@ -43,7 +43,10 @@ provenance:
       training.seed:
         from: 11
         to: 22
-  rationale: ''
+  rationale: >-
+    Seed-22 historical-label control arm of the `twinkl-a30f` paired
+    comparison; labels return to the persisted `judge_labels.parquet` and only
+    the model seed changes relative to `run_057`.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -264,7 +267,11 @@ per_dimension:
     activation_precision: 0.5714
     activation_recall: 0.9231
     activation_f1: 0.7059
-observations: ''
+observations: >-
+  The strongest tail seed of the historical arm: recall_-1 0.4395 and minority
+  recall 0.4847 with hedging 0.5873, but aggregate qwk_mean 0.3195 is the
+  family's weakest and the train/val gap is the larger 0.199. Security QWK
+  stays low (0.2142) under historical labels, matching the seed-11 picture.
 circumplex:
   source: probabilities
   summary:

@@ -40,7 +40,9 @@ provenance:
       data.security_target_summary_sha256:
         from: null
         to: e9f1e0d8cb9aa4f21023052018f2f2b372eed8236b0d9c160cef7f926be13d4d
-  rationale: ''
+  rationale: >-
+    Seed-33 repaired-target arm closing the `twinkl-a30f` paired matrix;
+    identical to `run_061` except for the repaired Security label artifact.
 config:
   encoder:
     model_name: nomic-ai/nomic-embed-text-v1.5
@@ -261,7 +263,13 @@ per_dimension:
     activation_precision: 0.7742
     activation_recall: 0.9231
     activation_f1: 0.8421
-observations: ''
+observations: >-
+  Improves on its paired control across the board: qwk_mean 0.3633 vs 0.3532,
+  recall_-1 0.3760 vs 0.3239, minority recall 0.4722 vs 0.4400, and a much
+  smaller gap (0.087 vs 0.216, best epoch 15 vs 26). Security QWK 0.2772 is
+  the smallest repaired-lens gain of the three seeds but stays directionally
+  positive; all three seeds improving under both lenses is what justified
+  adopting `security_active_critic_state_v1` for future window_size-1 work.
 circumplex:
   source: probabilities
   summary:

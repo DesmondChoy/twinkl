@@ -99,6 +99,9 @@ CONFIG = {
     "scheduler_min_lr": _scheduler_defaults["min_lr"],
     # State encoder
     "window_size": _state_defaults["window_size"],
+    "history_pooling": _state_defaults.get("history_pooling", "none"),
+    "history_window_size": _state_defaults.get("history_window_size", 3),
+    "history_summary_dim": _state_defaults.get("history_summary_dim", 64),
     # MC Dropout
     "mc_dropout_samples": _mc_dropout_defaults["n_samples"],
     # Data split / training seeds
@@ -168,6 +171,14 @@ if legacy_seed is not None:
 
 CONFIG["split_seed"] = int(CONFIG["split_seed"])
 CONFIG["model_seed"] = int(CONFIG["model_seed"])
+if (
+    CONFIG.get("history_pooling", "none") != "none"
+    and "nomic" not in str(CONFIG["encoder_model"]).lower()
+):
+    raise ValueError(
+        "Compact leading-dimension history is currently validated only for "
+        "Nomic Matryoshka embeddings"
+    )
 CONFIG["models_to_train"] = list(CONFIG["models_to_train"])
 CONFIG["model_overrides"] = dict(CONFIG.get("model_overrides", {}))
 CONFIG["selection_policy"] = dict(CONFIG.get("selection_policy", {}))
@@ -205,6 +216,9 @@ for key in [
     "hidden_dim",
     "dropout",
     "window_size",
+    "history_pooling",
+    "history_window_size",
+    "history_summary_dim",
     "learning_rate",
     "weight_decay",
     "batch_size",
@@ -504,6 +518,9 @@ text_encoder = SBERTEncoder(
 state_encoder = StateEncoder(
     text_encoder,
     window_size=CONFIG["window_size"],
+    history_pooling=CONFIG["history_pooling"],
+    history_window_size=CONFIG["history_window_size"],
+    history_summary_dim=CONFIG["history_summary_dim"],
 )
 
 print(f"Encoder: {text_encoder.model_name}")
@@ -901,6 +918,31 @@ def _fmt_metric(value, digits=3):
 def _resolve_model_run_config(base_config, model_name):
     resolved = copy.deepcopy(base_config)
     overrides = base_config.get("model_overrides", {}).get(model_name, {})
+    shared_input_keys = {
+        "encoder_model",
+        "trust_remote_code",
+        "truncate_dim",
+        "text_prefix",
+        "prompt_name",
+        "prompt",
+        "window_size",
+        "history_pooling",
+        "history_window_size",
+        "history_summary_dim",
+        "labels_path",
+        "wrangled_dir",
+        "split_seed",
+        "fixed_holdout_manifest_path",
+        "training_target_mode",
+        "hard_target_column",
+        "soft_target_column",
+    }
+    invalid_keys = sorted(shared_input_keys.intersection(overrides))
+    if invalid_keys:
+        raise ValueError(
+            "model_overrides cannot change shared encoder/state/data inputs: "
+            + ", ".join(invalid_keys)
+        )
     if overrides:
         _deep_update(resolved, overrides)
     resolved["active_model_name"] = model_name

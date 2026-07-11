@@ -23,6 +23,9 @@ encoder:
 # ---------------------------
 state_encoder:
   window_size: 1       # Current entry only (param budget too tight for window)
+  history_pooling: none # Set to mean to pool strictly prior embeddings
+  history_window_size: 3
+  history_summary_dim: 64
   # Previous: window_size: 3 (state_dim=780, ratio=432x — severe overfitting)
 
 # Model Architecture

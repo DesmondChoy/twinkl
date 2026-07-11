@@ -49,6 +49,50 @@ def _checkpoint_to_runtime_overrides(checkpoint: dict[str, Any]) -> dict[str, An
     training_config = checkpoint.get("training_config")
     if isinstance(training_config, dict):
         _deep_update(overrides, training_config)
+        # Canonical V4 experiment checkpoints store a flat config. Translate
+        # its runtime-relevant fields into the nested training config contract.
+        flat_encoder = {
+            "model_name": training_config.get("encoder_model"),
+            "trust_remote_code": training_config.get("trust_remote_code"),
+            "truncate_dim": training_config.get("truncate_dim"),
+            "text_prefix": training_config.get("text_prefix"),
+            "prompt_name": training_config.get("prompt_name"),
+            "prompt": training_config.get("prompt"),
+        }
+        flat_state = {
+            "window_size": training_config.get("window_size"),
+            "history_pooling": training_config.get("history_pooling"),
+            "history_window_size": training_config.get("history_window_size"),
+            "history_summary_dim": training_config.get("history_summary_dim"),
+        }
+        encoder_source_keys = {
+            "model_name": "encoder_model",
+            "trust_remote_code": "trust_remote_code",
+            "truncate_dim": "truncate_dim",
+            "text_prefix": "text_prefix",
+            "prompt_name": "prompt_name",
+            "prompt": "prompt",
+        }
+        # Explicit nulls are meaningful for fields such as truncate_dim and
+        # prompt: they must clear repo defaults rather than being discarded.
+        encoder_clean = {
+            target_key: training_config[source_key]
+            for target_key, source_key in encoder_source_keys.items()
+            if source_key in training_config
+        }
+        state_clean = {key: value for key, value in flat_state.items() if value is not None}
+        if encoder_clean:
+            overrides.setdefault("encoder", {}).update(encoder_clean)
+        if state_clean:
+            overrides.setdefault("state_encoder", {}).update(state_clean)
+        nested_state = training_config.get("state_encoder")
+        has_legacy_state = "window_size" in training_config or isinstance(
+            nested_state, dict
+        )
+        if has_legacy_state:
+            overrides.setdefault("state_encoder", {}).setdefault(
+                "history_pooling", "none"
+            )
 
     training_metadata = checkpoint.get("training_metadata")
     if isinstance(training_metadata, dict):
@@ -61,6 +105,9 @@ def _checkpoint_to_runtime_overrides(checkpoint: dict[str, Any]) -> dict[str, An
         }
         state_overrides = {
             "window_size": training_metadata.get("window_size"),
+            "history_pooling": training_metadata.get("history_pooling"),
+            "history_window_size": training_metadata.get("history_window_size"),
+            "history_summary_dim": training_metadata.get("history_summary_dim"),
         }
         mc_overrides = {
             "n_samples": training_metadata.get("mc_dropout_samples"),
@@ -68,6 +115,8 @@ def _checkpoint_to_runtime_overrides(checkpoint: dict[str, Any]) -> dict[str, An
 
         encoder_clean = {k: v for k, v in encoder_overrides.items() if v is not None}
         state_clean = {k: v for k, v in state_overrides.items() if v is not None}
+        if training_metadata.get("window_size") is not None:
+            state_clean.setdefault("history_pooling", "none")
         mc_clean = {k: v for k, v in mc_overrides.items() if v is not None}
 
         if encoder_clean:
@@ -120,10 +169,7 @@ def load_runtime_bundle(
 
     runtime_config = _resolve_runtime_config(checkpoint, config_path=config_path)
     text_encoder = create_encoder(runtime_config["encoder"])
-    state_encoder = StateEncoder(
-        text_encoder,
-        window_size=runtime_config["state_encoder"]["window_size"],
-    )
+    state_encoder = StateEncoder(text_encoder, **runtime_config["state_encoder"])
     return model, state_encoder, runtime_config, checkpoint, resolved_device
 
 
@@ -152,7 +198,7 @@ def _build_state_matrix(
     for index, _entry in enumerate(entries):
         texts: list[str] = []
         dates: list[str] = []
-        for offset in range(state_encoder.window_size):
+        for offset in range(state_encoder.input_entry_count):
             target_index = index - offset
             if target_index < 0:
                 continue
@@ -256,6 +302,9 @@ def predict_persona_timeline(
         "persona_name": profile.get("name"),
         "core_values": profile.get("core_values") or [],
         "window_size": state_encoder.window_size,
+        "history_pooling": state_encoder.history_pooling,
+        "history_window_size": state_encoder.history_window_size,
+        "history_summary_dim": state_encoder.history_summary_dim,
         "n_mc_samples": sample_count,
         "device": resolved_device,
         "checkpoint_path": str(checkpoint_path),

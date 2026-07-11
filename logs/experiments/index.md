@@ -19,6 +19,8 @@
 
 > **Active recommendation (2026-03-19):** `run_019`-`run_021` remain the default corrected-split frontier family. The new two-stage reformulation family `run_045`-`run_047` reached comparable median holdout `qwk_mean` (`0.360` vs `0.362`) and the best calibration on the current board (`0.743`), but it gave back too much `recall_-1` (`0.266`) and hedging (`0.708`). `run_034`-`run_036` remain the best tail-sensitive reference branch, and `run_042`-`run_044` remain the strongest encoder-swap challenger.
 >
+> **Compact-history decision (2026-07-11):** [`twinkl-749`](reports/experiment_review_2026-07-11_twinkl_749_compact_history.md) stopped after its planned seed-11 gate. Against repaired-Security baseline `run_058`, `run_069` lowered QWK (`0.363` to `0.342`), minority recall (`0.446` to `0.400`), and Security QWK (`0.339` to `0.267`), while raising hedging and the train-validation gap. Calibration and Stimulation improved, but the combined package did not justify seeds 22/33. Keep compact mean history diagnostic and keep the default unchanged.
+>
 > **Soft vote-distribution decision (2026-07-11):** [`twinkl-j0ck`](reports/experiment_review_2026-07-11_twinkl_j0ck_soft_vote_labels.md) completed a current-contract paired hard-versus-soft comparison in `run_063`-`run_068`. Soft BalancedSoftmax reduces median hedging (`0.641` to `0.605`), lifts minority recall (`0.416` to `0.436`), and helps Hedonism, but median `recall_-1` falls (`0.320` to `0.308`), Security and Stimulation QWK regress, and raw-output NLL/Brier worsen. The soft objective fits slightly better only in its prior-adjusted loss space, exposing an objective/decoding mismatch. Do not make this soft regime the default; keep `run_019`-`run_021` active.
 >
 > **Security target decision (2026-07-11):** [`twinkl-a30f`](reports/experiment_review_2026-07-11_twinkl_a30f_security_target.md) completed a receipt-bound, full-corpus active-state Security review and the paired `run_057`-`run_062` comparison. Repaired-target training raises median test Security QWK from `0.156` to `0.328` under repaired labels and from `0.205` to `0.372` under historical labels. Future `window_size: 1` training should use `security_active_critic_state_v1`, but the repaired runs stay off the historical frontier table because 678 Security labels changed. Absolute Security QWK and disagreement-case accuracy still leave representation and semantic work open.
@@ -226,11 +228,25 @@
 | 066 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | soft_balanced_softmax | 23454 | 19.3 | 0.308 | 0.765 | 0.377 | 0.370 | 0.722 | 0.450 | 0.082 | 0.080 | runs/run_066_BalancedSoftmax.yaml |
 | 067 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.282 | 0.778 | 0.400 | 0.375 | 0.734 | 0.453 | 0.069 | 0.088 | runs/run_067_BalancedSoftmax.yaml |
 | 068 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | soft_balanced_softmax | 23454 | 19.3 | 0.290 | 0.761 | 0.397 | 0.378 | 0.758 | 0.414 | 0.080 | 0.081 | runs/run_068_BalancedSoftmax.yaml |
+| 069 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 27614 | 22.8 | 0.331 | 0.729 | 0.342 | 0.330 | 0.724 | 0.400 | 0.078 | 0.075 | runs/run_069_BalancedSoftmax.yaml |
 <!-- AUTO-TABLE:END -->
 
 > **Contributor note:** Keep this section in **newest-first** chronological order (most recent date at top).
 
 ## Findings
+
+### 2026-07-11 — Compact mean history does not transfer the LLM context gain (`twinkl-749`)
+
+`run_069` appends a 64-dimensional mean of up to three strictly prior Nomic
+embeddings plus one availability feature to the repaired-Security seed-11
+baseline. The state grows from 266 to 331 dimensions and adds 4,160 weights,
+inside the issue budget. The candidate improves calibration (`0.688` to
+`0.724`) and Stimulation QWK (`0.163` to `0.356`), but test QWK falls from
+`0.363` to `0.342`, minority recall from `0.446` to `0.400`, Security QWK from
+`0.339` to `0.267`, and the train-validation gap widens from `0.108` to `0.147`.
+Stop at one seed, retain the path as a diagnostic, and do not describe the local
+MLP as trajectory-aware. Full details:
+[`reports/experiment_review_2026-07-11_twinkl_749_compact_history.md`](reports/experiment_review_2026-07-11_twinkl_749_compact_history.md).
 
 ### 2026-07-11 — Soft vote distributions change behavior but do not improve the full VIF package (`twinkl-j0ck`)
 

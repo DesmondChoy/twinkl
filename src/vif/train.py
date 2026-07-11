@@ -104,7 +104,12 @@ def load_config(config_path: str | Path | None) -> dict:
             "prompt_name": None,
             "prompt": None,
         },
-        "state_encoder": {"window_size": 1},
+        "state_encoder": {
+            "window_size": 1,
+            "history_pooling": "none",
+            "history_window_size": 3,
+            "history_summary_dim": 64,
+        },
         "model": {"hidden_dim": 64, "dropout": 0.3, "output_dim": 10},
         "training": {
             "seed": 2025,
@@ -780,10 +785,7 @@ def train(config: dict, verbose: bool = True) -> dict:
     if verbose:
         print(f"Loading encoder: {config['encoder']['model_name']}...")
     text_encoder = create_encoder(config["encoder"])
-    state_encoder = StateEncoder(
-        text_encoder,
-        window_size=config["state_encoder"]["window_size"],
-    )
+    state_encoder = StateEncoder(text_encoder, **config["state_encoder"])
 
     if verbose:
         print(f"State dimension: {state_encoder.state_dim}")

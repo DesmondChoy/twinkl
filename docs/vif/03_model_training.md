@@ -78,7 +78,7 @@ All student variants consume the same state vector described in
 [System Architecture, State, and Runtime Flow](02_system_architecture.md):
 
 - frozen sentence embeddings
-- optional recent-history window
+- optional raw recent-history window or config-gated compact prior summary
 - time-gap features
 - 10-dim value-profile weights
 
@@ -95,10 +95,13 @@ families:
 - **Experimental reformulation**: two-stage BalancedSoftmax
 - **Baselines retained for comparison**: legacy MSE MLP and Bayesian neural net
 
-The 56-run / 120-config corrected-split experiment board treats the
+The experiment board treats the
 BalancedSoftmax `run_019`-`run_021` family as the default frontier reference.
-The two-stage, consensus-label, and recall-aware candidate-retention branches
-remain diagnostic challengers rather than the mainline default. See
+The two-stage, consensus-label, recall-aware candidate-retention, soft-label,
+and compact-history branches remain diagnostic challengers rather than the
+mainline default. Compact-history `run_069` stayed under its 5,000-weight
+increment but regressed on QWK, minority recall, Security, hedging, and
+overfitting versus seed-matched repaired-target baseline `run_058`. See
 `logs/experiments/index.md` for the live ranking.
 
 ### 3.3 Uncertainty Path

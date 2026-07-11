@@ -5,7 +5,6 @@ import pytest
 
 from src.vif.state_encoder import StateEncoder
 
-from .conftest import MockTextEncoder
 
 
 # ── TestStateDim ─────────────────────────────────────────────────────────────
@@ -28,6 +27,42 @@ class TestStateDim:
         enc = StateEncoder(mock_text_encoder, window_size=5)
         # 5*8 + 4 + 10 = 54
         assert enc.state_dim == 54
+
+    def test_compact_history_adds_summary_and_count(self, mock_text_encoder):
+        enc = StateEncoder(
+            mock_text_encoder,
+            window_size=1,
+            history_pooling="mean",
+            history_window_size=3,
+            history_summary_dim=4,
+        )
+        # current 8 + history 4 + count 1 + profile 10
+        assert enc.state_dim == 23
+        assert enc.input_entry_count == 4
+
+
+class TestCompactHistoryValidation:
+    @pytest.mark.parametrize("pooling", ["median", "ema", ""])
+    def test_rejects_unknown_pooling(self, mock_text_encoder, pooling):
+        with pytest.raises(ValueError, match="history_pooling"):
+            StateEncoder(mock_text_encoder, history_pooling=pooling)
+
+    def test_rejects_raw_and_compact_history_mix(self, mock_text_encoder):
+        with pytest.raises(ValueError, match="window_size=1"):
+            StateEncoder(
+                mock_text_encoder,
+                window_size=2,
+                history_pooling="mean",
+                history_summary_dim=4,
+            )
+
+    def test_rejects_oversized_summary(self, mock_text_encoder):
+        with pytest.raises(ValueError, match="embedding dimension"):
+            StateEncoder(
+                mock_text_encoder,
+                history_pooling="mean",
+                history_summary_dim=9,
+            )
 
 
 # ── TestParseCoreValuesToWeights ─────────────────────────────────────────────
@@ -253,6 +288,77 @@ class TestBuildStateVector:
         )
 
         np.testing.assert_array_equal(state_from_text, state_from_emb)
+
+    def test_compact_history_is_prior_only_and_mean_pooled(self):
+        class FixedEncoder:
+            embedding_dim = 4
+
+            def encode_batch(self, _texts):
+                raise AssertionError("precomputed embeddings should be used")
+
+        enc = StateEncoder(
+            FixedEncoder(),
+            window_size=1,
+            history_pooling="mean",
+            history_window_size=2,
+            history_summary_dim=2,
+        )
+        state = enc.build_state_vector_from_embeddings(
+            embeddings=[
+                np.array([9.0, 8.0, 7.0, 6.0]),
+                np.array([1.0, 0.0, 4.0, 4.0]),
+                np.array([0.0, 1.0, 5.0, 5.0]),
+                np.array([100.0, 100.0, 100.0, 100.0]),
+            ],
+            dates=["2025-01-03", "2025-01-02", "2025-01-01"],
+            core_values=["Security"],
+        )
+
+        np.testing.assert_array_equal(state[:4], [9.0, 8.0, 7.0, 6.0])
+        np.testing.assert_allclose(
+            state[4:6],
+            np.array([0.5, 0.5]) / np.linalg.norm([0.5, 0.5]),
+            atol=1e-6,
+        )
+        assert state[6] == pytest.approx(1.0)
+
+    def test_compact_history_cold_start_emits_zero_channel(self, mock_text_encoder):
+        enc = StateEncoder(
+            mock_text_encoder,
+            window_size=1,
+            history_pooling="mean",
+            history_window_size=3,
+            history_summary_dim=4,
+        )
+        current = np.arange(8, dtype=np.float32)
+        state = enc.build_state_vector_from_embeddings(
+            embeddings=[current],
+            dates=["2025-01-01"],
+            core_values=["Security"],
+        )
+
+        np.testing.assert_array_equal(state[:8], current)
+        np.testing.assert_array_equal(state[8:12], np.zeros(4))
+        assert state[12] == 0.0
+
+    def test_compact_history_count_uses_only_real_priors(self, mock_text_encoder):
+        enc = StateEncoder(
+            mock_text_encoder,
+            history_pooling="mean",
+            history_window_size=3,
+            history_summary_dim=4,
+            window_size=1,
+        )
+        embeddings = [
+            np.ones(8, dtype=np.float32),
+            np.full(8, 2.0, dtype=np.float32),
+        ]
+        state = enc.build_state_vector_from_embeddings(
+            embeddings=embeddings,
+            dates=["2025-01-02", "2025-01-01"],
+            core_values=[],
+        )
+        assert state[12] == pytest.approx(1 / 3)
 
 
 # ── TestConcatenateEntryText ─────────────────────────────────────────────────

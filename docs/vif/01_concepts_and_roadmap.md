@@ -51,7 +51,7 @@ The VIF is designed to:
    * Detecting a significant pattern (negative or positive).
 
 4. **Trajectory-aware downstream evaluation**
-   The live Critic default uses `window_size: 1`, so each prediction sees the current journal session and normalized value profile. Runtime timeline reconstruction and drift detection provide the temporal layer. Larger legal-history windows remain an explicit experiment rather than an assumed property of the default Critic.
+   The live Critic default uses `window_size: 1`, so each prediction sees the current journal session and normalized value profile. Runtime timeline reconstruction and drift detection provide the temporal layer. `twinkl-749` tested a small prior-entry mean summary, but its seed-11 package regressed and was not promoted. History support therefore remains diagnostic rather than an assumed property of the default Critic.
 
 5. **Separation of concerns: Critic vs Coach**
    The VIF Critic produces numeric per-entry alignment evidence and uncertainty
@@ -121,11 +121,11 @@ To make this design capstone-friendly, we summarise a recommended tiered approac
     runnable benchmark or promotion surface.
 
 * **Tier 2 (Optional capstone extension)**
-  * State: compact legal-history context only if the untouched promotion check
-    shows that remaining failures reflect missing legal context rather than an
-    unclear target.
-  * Target: soft vote-distribution labels after target/context repair; immediate
-    alignment remains the output contract.
+  * Evaluated diagnostics: compact mean history (`twinkl-749`) and soft
+    vote-distribution labels (`twinkl-j0ck`) both completed without promotion.
+    Neither changes the Tier 1 state or target default.
+  * State or target extensions should reopen only with a materially different,
+    evidence-backed mechanism and a matching student-visible target contract.
   * Critic: calibrated local MLP, LLM teacher/fallback, or a measured cascade.
   * Drift rule: the same sustained-conflict construct with calibrated
     thresholds for declared core values and active, recovered, mixed, or

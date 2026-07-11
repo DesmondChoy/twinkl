@@ -31,7 +31,9 @@ provenance:
       training.training_target_mode:
         from: hard
         to: vote_distribution
-  rationale: ''
+  rationale: >-
+    Seed-33 soft arm closing the `twinkl-j0ck` paired matrix against
+    `run_067`.
 provenance_backfill:
   reason: Composite source manifest added after fresh-eyes review; training inputs and model weights are unchanged.
   target_source_path: logs/exports/twinkl_j0ck_soft_vote_target_v1/target_provenance.json
@@ -273,7 +275,13 @@ per_dimension:
     activation_precision: 0.6571
     activation_recall: 0.9583
     activation_f1: 0.7797
-observations: ''
+observations: >-
+  Stimulation QWK 0.5571 is the highest Stimulation score in the corrected-split
+  era, yet the soft family's median Stimulation still trails the hard
+  arm (0.319 vs 0.411) because the seeds diverge widely (0.307/0.319/0.557).
+  The package is otherwise mid-pack: qwk_mean 0.3966, recall_-1 0.3008,
+  hedging 0.6262, calibration 0.7584. Reinforces that soft targets
+  redistribute per-dimension behavior rather than uniformly improving it.
 circumplex:
   source: probabilities
   summary:

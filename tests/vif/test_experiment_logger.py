@@ -279,6 +279,45 @@ def test_build_experiment_dict_records_long_tail_loss_shorthands(model_name, exp
         assert experiment["config"]["training"]["slace_alpha"] == 1.0
 
 
+def test_build_experiment_dict_records_compact_history_contract():
+    config, trained_result, eval_result, calibration, hedging, recall_data = (
+        _minimal_training_inputs()
+    )
+    config.update(
+        {
+            "window_size": 1,
+            "history_pooling": "mean",
+            "history_window_size": 3,
+            "history_summary_dim": 64,
+        }
+    )
+
+    with patch("src.vif.experiment_logger._get_git_commit", return_value="abc123"):
+        experiment = _build_experiment_dict(
+            run_id="run_999",
+            model_name="BalancedSoftmax",
+            config=config,
+            trained_result=trained_result,
+            eval_result=eval_result,
+            calibration=calibration,
+            hedging=hedging,
+            recall_data=recall_data,
+            n_train=100,
+            n_val=20,
+            n_test=20,
+            pct_truncated=0.0,
+            state_dim=331,
+            observations="",
+        )
+
+    assert experiment["config"]["state_encoder"] == {
+        "window_size": 1,
+        "history_pooling": "mean",
+        "history_window_size": 3,
+        "history_summary_dim": 64,
+    }
+
+
 def test_build_experiment_dict_records_hashed_target_provenance(tmp_path):
     config, trained_result, eval_result, calibration, hedging, recall_data = (
         _minimal_training_inputs()

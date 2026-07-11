@@ -60,7 +60,13 @@ provenance:
       training.seed:
         from: 33
         to: 11
-  rationale: ''
+  rationale: >-
+    Seed-11 hard-target control arm for the `twinkl-j0ck` soft vote-
+    distribution experiment. Switches training targets to the hybrid artifact
+    (`twinkl-754` five-vote consensus for the nine non-Security values plus
+    the `twinkl-a30f` repaired active-state Security decisions) while keeping
+    hard labels, so the paired soft arm isolates target softness rather than
+    the contract change.
 provenance_backfill:
   reason: Composite source manifest added after fresh-eyes review; training inputs and model weights are unchanged.
   target_source_path: logs/exports/twinkl_j0ck_soft_vote_target_v1/target_provenance.json
@@ -302,7 +308,12 @@ per_dimension:
     activation_precision: 0.5641
     activation_recall: 0.9167
     activation_f1: 0.6984
-observations: ''
+observations: >-
+  Test qwk_mean 0.3894 with calibration 0.7710, and Stimulation QWK jumps to
+  0.534 under the hybrid contract, but hedging rises to 0.6575 and Hedonism
+  stays weak at 0.153. Security holds at 0.358, consistent with the repaired-target
+  gains seen in `run_057`-`run_062`. These scores live on the
+  hybrid-label lens and stay off the persisted-label frontier.
 circumplex:
   source: probabilities
   summary:

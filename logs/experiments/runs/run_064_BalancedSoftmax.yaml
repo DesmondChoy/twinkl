@@ -31,7 +31,11 @@ provenance:
       training.training_target_mode:
         from: hard
         to: vote_distribution
-  rationale: ''
+  rationale: >-
+    Seed-11 soft arm of `twinkl-j0ck`: same hybrid artifact as `run_063` but
+    trains on empirical vote fractions (`vote_distribution` mode) with
+    `soft_balanced_softmax` and fractional vote-mass class priors, testing
+    whether preserving Judge disagreement helps the window_size-1 MLP.
 provenance_backfill:
   reason: Composite source manifest added after fresh-eyes review; training inputs and model weights are unchanged.
   target_source_path: logs/exports/twinkl_j0ck_soft_vote_target_v1/target_provenance.json
@@ -273,7 +277,13 @@ per_dimension:
     activation_precision: 0.6111
     activation_recall: 0.9167
     activation_f1: 0.7333
-observations: ''
+observations: >-
+  Best aggregate seed of the experiment (qwk_mean 0.4050) with hedging down to
+  0.6045 and Hedonism up to 0.2393 versus the paired control's 0.153. The
+  costs show elsewhere: recall_-1 slips to 0.3075 (control 0.3200), Security
+  falls to 0.3243, and the raw runtime-output NLL/Brier worsen even though the
+  prior-adjusted loss-space NLL improves - the objective/decoding mismatch
+  that drove the do-not-promote decision.
 circumplex:
   source: probabilities
   summary:

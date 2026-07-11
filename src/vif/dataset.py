@@ -466,6 +466,7 @@ class VIFDataset(Dataset):
         self.persona_entries = {}
         # Direct lookup: (persona_id, t_index) -> row dict for O(1) access
         self.entry_lookup = {}
+        self.entry_position = {}
 
         for persona_id in self.data_df.select("persona_id").unique().to_series():
             persona_df = (
@@ -476,8 +477,9 @@ class VIFDataset(Dataset):
             self.persona_entries[persona_id] = persona_df
 
             # Build direct lookup for each entry
-            for row in persona_df.iter_rows(named=True):
+            for position, row in enumerate(persona_df.iter_rows(named=True)):
                 self.entry_lookup[(persona_id, row["t_index"])] = row
+                self.entry_position[(persona_id, row["t_index"])] = position
 
         # Create flat list of (persona_id, t_index) for indexing
         self.index_map = []
@@ -564,26 +566,21 @@ class VIFDataset(Dataset):
         # Get current entry via O(1) dict lookup
         current_row = self.entry_lookup[(persona_id, t_index)]
 
-        # Build text window embeddings and dates (current + previous entries)
-        window_size = self.state_encoder.window_size
+        # Build current + strictly prior entries by chronological position. This
+        # matches runtime even when t_index values are not contiguous.
+        input_entry_count = self.state_encoder.input_entry_count
         embeddings = []
         dates = []
+        current_position = self.entry_position[(persona_id, t_index)]
 
-        for offset in range(window_size):
-            target_t = t_index - offset
-            key = (persona_id, target_t)
-
-            if target_t >= 0 and key in self.entry_lookup:
-                # Use cached embedding if available, else encode on-the-fly
-                emb = self._get_embedding(persona_id, target_t)
-                embeddings.append(emb)
-                dates.append(self.entry_lookup[key]["date"])
-            else:
-                # Zero embedding for missing/padding entries
-                embeddings.append(
-                    np.zeros(self.state_encoder.text_encoder.embedding_dim, dtype=np.float32)
-                )
-                dates.append(None)
+        for offset in range(input_entry_count):
+            target_position = current_position - offset
+            if target_position < 0:
+                break
+            history_row = persona_df.row(target_position, named=True)
+            history_t_index = history_row["t_index"]
+            embeddings.append(self._get_embedding(persona_id, history_t_index))
+            dates.append(history_row["date"])
 
         # Get core values
         core_values = current_row["core_values"]

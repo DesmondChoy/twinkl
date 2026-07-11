@@ -1,4 +1,4 @@
-"""Regression tests: EMA alignment history removed from state vector.
+"""Regression tests: label-derived EMA alignment history stays removed.
 
 These tests verify that the train/serve skew fix (removing EMA alignment
 history) is correctly implemented and that backward compatibility is
@@ -7,16 +7,18 @@ maintained for v1 notebooks via **kwargs absorption.
 
 import inspect
 
-import numpy as np
 import pytest
 
 from src.vif.state_encoder import StateEncoder
 
-from .conftest import MockTextEncoder
 
 
 class TestNoAlignmentHistory:
-    """Verify EMA alignment history is fully removed from the state vector."""
+    """Verify leaked label-derived history is absent from the state vector.
+
+    Production-legal prior-entry embedding summaries are tested separately in
+    ``test_state_encoder.py`` and do not reintroduce alignment-label history.
+    """
 
     def test_state_dim_excludes_ema(self, mock_text_encoder):
         """state_dim equals window_size * emb_dim + (window_size-1) + 10 (no EMA)."""

@@ -46,9 +46,14 @@ def _make_encoder(
     window_size: int = 3,
     *,
     text_encoder: MockTextEncoder | ContentAwareMockTextEncoder | None = None,
+    **kwargs,
 ) -> StateEncoder:
     """Create a StateEncoder with MockTextEncoder."""
-    return StateEncoder(text_encoder or MockTextEncoder(), window_size=window_size)
+    return StateEncoder(
+        text_encoder or MockTextEncoder(),
+        window_size=window_size,
+        **kwargs,
+    )
 
 
 # ── TestPersonaIndex ─────────────────────────────────────────────────────────
@@ -246,6 +251,48 @@ class TestSlidingWindow:
             state, _ = ds[i]
             assert state.shape == (enc.state_dim,), f"Shape mismatch at index {i}"
 
+    def test_compact_history_uses_prior_rows_with_noncontiguous_indices(
+        self, content_aware_text_encoder
+    ):
+        df = _make_merged_df(n_personas=1, entries_per_persona=4).with_columns(
+            pl.Series("t_index", [0, 2, 5, 9])
+        )
+        enc = _make_encoder(
+            window_size=1,
+            text_encoder=content_aware_text_encoder,
+            history_pooling="mean",
+            history_window_size=2,
+            history_summary_dim=4,
+        )
+        ds = VIFDataset(df, enc, cache_embeddings=False)
+        state, _ = ds[3]
+        prior_embeddings = np.stack(
+            [
+                ds._get_embedding("persona_000", 5),
+                ds._get_embedding("persona_000", 2),
+            ]
+        )
+        expected = prior_embeddings.mean(axis=0)[:4]
+        expected /= np.linalg.norm(expected)
+
+        np.testing.assert_allclose(state[8:12].numpy(), expected, atol=1e-6)
+        assert state[12].item() == pytest.approx(1.0)
+
+    def test_compact_history_does_not_cross_personas(self, content_aware_text_encoder):
+        enc = _make_encoder(
+            window_size=1,
+            text_encoder=content_aware_text_encoder,
+            history_pooling="mean",
+            history_window_size=3,
+            history_summary_dim=4,
+        )
+        df = _make_merged_df(n_personas=2, entries_per_persona=2)
+        ds = VIFDataset(df, enc, cache_embeddings=False)
+
+        first_second_persona, _ = ds[2]
+        np.testing.assert_array_equal(first_second_persona[8:12].numpy(), np.zeros(4))
+        assert first_second_persona[12].item() == 0.0
+
 
 # ── TestEmbeddingCaching ─────────────────────────────────────────────────────
 
@@ -279,6 +326,21 @@ class TestEmbeddingCaching:
             state_u, target_u = ds_uncached[i]
             torch.testing.assert_close(state_c, state_u)
             torch.testing.assert_close(target_c, target_u)
+
+    def test_compact_history_cache_parity(self, content_aware_text_encoder):
+        df = _make_merged_df(n_personas=2, entries_per_persona=4)
+        kwargs = {
+            "window_size": 1,
+            "history_pooling": "mean",
+            "history_window_size": 3,
+            "history_summary_dim": 4,
+            "text_encoder": content_aware_text_encoder,
+        }
+        cached = VIFDataset(df, _make_encoder(**kwargs), cache_embeddings=True)
+        uncached = VIFDataset(df, _make_encoder(**kwargs), cache_embeddings=False)
+
+        for index in range(len(cached)):
+            torch.testing.assert_close(cached[index][0], uncached[index][0])
 
 
 # ── TestTrainInferenceParity ─────────────────────────────────────────────────

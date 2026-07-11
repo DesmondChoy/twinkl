@@ -3,12 +3,14 @@
 This module constructs the full state vector from journal entries,
 combining text embeddings with temporal features and persona context.
 
-State Vector Components (per VIF_05 spec):
-- text_window: N × d_e (current + N-1 previous entry embeddings)
-- time_gaps: N-1 (days since previous entries)
+State Vector Components:
+- current/raw text window: N × d_e
+- optional compact prior-history summary: d_h + 1 history-count feature
+- time_gaps: N-1 (raw-window mode only)
 - user_profile: 10 (normalized weights from Core Values)
 
-Total dimension: N × d_e + (N-1) + 10  (see config/vif.yaml)
+The default remains the current entry only. The compact-history experiment keeps
+that full embedding and appends a small summary of strictly prior embeddings.
 
 Note: Encoder choice, window size, and other hyperparameters in config/vif.yaml
 are preliminary and subject to revision through ongoing model ablation studies.
@@ -128,6 +130,9 @@ class StateEncoder:
         self,
         text_encoder: TextEncoder,
         window_size: int = 3,
+        history_pooling: str = "none",
+        history_window_size: int = 3,
+        history_summary_dim: int = 64,
         **kwargs: object,
     ):
         """Initialize the state encoder.
@@ -135,6 +140,12 @@ class StateEncoder:
         Args:
             text_encoder: TextEncoder instance for converting text to embeddings
             window_size: Number of entries in the text window (default: 3)
+            history_pooling: ``none`` or ``mean``. Compact history is separate
+                from the raw text window and is strictly prior-only.
+            history_window_size: Maximum number of prior entries to summarize.
+            history_summary_dim: Leading dimensions retained from the pooled
+                prior embedding. The official experiment uses Nomic's
+                Matryoshka ordering; other encoders need separate validation.
             **kwargs: Deprecated compatibility args. ``ema_alpha`` is accepted
                 and ignored for v1 notebook compatibility; all other kwargs
                 raise ``TypeError``.
@@ -147,9 +158,40 @@ class StateEncoder:
                 f"{unknown}. Only deprecated 'ema_alpha' is accepted."
             )
 
+        if window_size < 1:
+            raise ValueError("window_size must be >= 1")
+        if history_pooling not in {"none", "mean"}:
+            raise ValueError("history_pooling must be 'none' or 'mean'")
+        if history_window_size < 1:
+            raise ValueError("history_window_size must be >= 1")
+        if history_summary_dim < 1:
+            raise ValueError("history_summary_dim must be >= 1")
+        if (
+            history_pooling != "none"
+            and history_summary_dim > text_encoder.embedding_dim
+        ):
+            raise ValueError(
+                "history_summary_dim cannot exceed the text embedding dimension"
+            )
+        if history_pooling != "none" and window_size != 1:
+            raise ValueError(
+                "compact history requires window_size=1 so raw concatenation "
+                "and pooled history cannot be mixed"
+            )
+
         self.text_encoder = text_encoder
         self.window_size = window_size
+        self.history_pooling = history_pooling
+        self.history_window_size = history_window_size
+        self.history_summary_dim = history_summary_dim
         self.num_values = len(SCHWARTZ_VALUE_ORDER)  # 10
+
+    @property
+    def input_entry_count(self) -> int:
+        """Number of current/prior entries needed to build one state."""
+        if self.history_pooling == "none":
+            return self.window_size
+        return 1 + self.history_window_size
 
     @property
     def state_dim(self) -> int:
@@ -160,10 +202,18 @@ class StateEncoder:
         - time_gaps: window_size - 1
         - user_profile: num_values (10)
         """
-        return (
+        raw_state_dim = (
             self.window_size * self.text_encoder.embedding_dim
             + (self.window_size - 1)  # time gaps
             + self.num_values  # profile weights
+        )
+        if self.history_pooling == "none":
+            return raw_state_dim
+        return (
+            self.text_encoder.embedding_dim
+            + self.history_summary_dim
+            + 1  # normalized count of real prior entries
+            + self.num_values
         )
 
     def parse_core_values_to_weights(self, core_values: list[str]) -> np.ndarray:
@@ -258,13 +308,12 @@ class StateEncoder:
         Returns:
             np.ndarray of shape (state_dim,) containing the full state vector.
         """
-        # 1. Text embeddings with zero-padding for early entries
+        # 1. Encode only real entries; assembly handles cold-start padding.
         text_embeddings = []
-        for i in range(self.window_size):
-            if i < len(texts) and texts[i]:
+        for i in range(min(len(texts), self.input_entry_count)):
+            if texts[i]:
                 emb = self.text_encoder.encode_batch([texts[i]])[0]
             else:
-                # Zero embedding for missing entries
                 emb = np.zeros(self.text_encoder.embedding_dim, dtype=np.float32)
             text_embeddings.append(emb)
 
@@ -281,8 +330,9 @@ class StateEncoder:
         Use this when embeddings are cached to avoid redundant encoding.
 
         Args:
-            embeddings: List of pre-computed embeddings, current entry first.
-                       Length should be window_size.
+            embeddings: Real pre-computed embeddings, current entry first.
+                Compact-history mode accepts current plus prior entries without
+                padding; raw-window mode pads internally.
             dates: List of dates corresponding to embeddings (YYYY-MM-DD format).
             core_values: List of Schwartz value names from persona profile.
 
@@ -298,7 +348,37 @@ class StateEncoder:
         core_values: list[str],
     ) -> np.ndarray:
         """Internal method to assemble state vector from components."""
-        text_vector = np.concatenate(text_embeddings)
+        embedding_dim = self.text_encoder.embedding_dim
+        limited_embeddings = [
+            np.asarray(embedding, dtype=np.float32)
+            for embedding in text_embeddings[: self.input_entry_count]
+        ]
+
+        if self.history_pooling == "none":
+            while len(limited_embeddings) < self.window_size:
+                limited_embeddings.append(np.zeros(embedding_dim, dtype=np.float32))
+            text_vector = np.concatenate(limited_embeddings[: self.window_size])
+        else:
+            current_embedding = (
+                limited_embeddings[0]
+                if limited_embeddings
+                else np.zeros(embedding_dim, dtype=np.float32)
+            )
+            prior_embeddings = limited_embeddings[1 : 1 + self.history_window_size]
+            history_summary = np.zeros(self.history_summary_dim, dtype=np.float32)
+            if prior_embeddings:
+                pooled = np.mean(np.stack(prior_embeddings), axis=0)
+                history_summary = pooled[: self.history_summary_dim].astype(np.float32)
+                summary_norm = float(np.linalg.norm(history_summary))
+                if summary_norm > 0:
+                    history_summary /= summary_norm
+            history_count = np.array(
+                [len(prior_embeddings) / self.history_window_size],
+                dtype=np.float32,
+            )
+            text_vector = np.concatenate(
+                [current_embedding, history_summary, history_count]
+            )
 
         # 2. Time gaps
         padded_dates = dates + [None] * (self.window_size - len(dates))
