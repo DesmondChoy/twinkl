@@ -128,6 +128,9 @@ def _build_cli_parser() -> argparse.ArgumentParser:
 
 
 def main() -> None:
+    from dotenv import load_dotenv
+
+    load_dotenv()
     args = _build_cli_parser().parse_args()
     digest, artifact_paths = run_weekly_coach_cycle(
         persona_id=args.persona_id,

@@ -389,7 +389,7 @@ def build_weekly_digest(
             f"for persona_id={persona_id}"
         )
 
-    profile, journal_history, entry_texts = _load_persona_context(
+    profile, window_entries, entry_texts = _load_persona_context(
         persona_id,
         wrangled_dir,
         history_end=resolved_end,
@@ -532,7 +532,7 @@ def build_weekly_digest(
                 top_tensions=top_tensions,
                 top_strengths=top_strengths,
                 core_values=core_values,
-                window_entries=journal_history,
+                window_entries=window_entries,
                 has_mixed_core_polarity=has_mixed_core_polarity,
             )
         )
@@ -548,7 +548,7 @@ def build_weekly_digest(
         evidence_rows=evidence_rows,
         selected_keys=selected_keys,
         response_mode=resolved_mode,
-        journal_history=journal_history,
+        journal_history=window_entries,
         entry_texts=entry_texts,
         core_values=core_values,
         top_tensions=top_tensions,
@@ -574,7 +574,6 @@ def build_weekly_digest(
         top_strengths=top_strengths,
         dimensions=dim_rows,
         evidence=evidence_rows,
-        journal_history=journal_history,
     )
 
 
@@ -601,14 +600,6 @@ def _build_prompt_inputs(
         )
         for snippet in digest.evidence
     ]
-    history_lines = [
-        (
-            f"- {entry.date} (entry {entry.t_index}"
-            f"{', has_response' if entry.has_response else ''}): {entry.content}"
-        )
-        for entry in digest.journal_history
-    ]
-
     return {
         "persona_id": digest.persona_id,
         "persona_name": digest.persona_name or "Unknown Persona",
@@ -636,7 +627,6 @@ def _build_prompt_inputs(
         ),
         "dimension_lines": dimension_lines,
         "evidence_lines": evidence_lines,
-        "history_lines": history_lines,
         "value_context_lines": _summarize_value_context(value_map, focus_dimensions),
     }
 
@@ -690,11 +680,6 @@ def render_digest_markdown(digest: WeeklyDigest) -> str:
             f"({snippet.direction}, dims={', '.join(_format_dim_name(d) for d in snippet.dimensions)}, "
             f"mean={snippet.score_mean:.3f}): {snippet.excerpt}"
         )
-
-    lines.extend(["", "## Full Journal History", ""])
-    for entry in digest.journal_history:
-        suffix = ", has_response" if entry.has_response else ""
-        lines.append(f"- `{entry.date}` entry `{entry.t_index}`{suffix}: {entry.content}")
 
     if digest.coach_narrative is not None:
         lines.extend(
@@ -771,9 +756,7 @@ def validate_weekly_digest_narrative(
     ).strip()
     word_count = len(combined_text.split())
 
-    source_texts = [entry.content for entry in digest.journal_history] + [
-        snippet.excerpt for snippet in digest.evidence
-    ]
+    source_texts = [snippet.excerpt for snippet in digest.evidence]
     grounded_quotes = [
         quote
         for quote in _extract_quoted_phrases(combined_text)
@@ -858,9 +841,6 @@ def persist_weekly_digest_record(digest: WeeklyDigest, parquet_path: Path) -> pl
         "top_strengths_json": json.dumps(digest.top_strengths),
         "dimensions_json": json.dumps([row.model_dump() for row in digest.dimensions]),
         "evidence_json": json.dumps([row.model_dump() for row in digest.evidence]),
-        "journal_history_json": json.dumps(
-            [row.model_dump() for row in digest.journal_history]
-        ),
         "coach_narrative_json": (
             json.dumps(digest.coach_narrative.model_dump())
             if digest.coach_narrative is not None
@@ -888,6 +868,16 @@ def persist_weekly_digest_record(digest: WeeklyDigest, parquet_path: Path) -> pl
             for name, dtype in existing.schema.items():
                 if name not in new_df.columns:
                     new_df = new_df.with_columns(pl.lit(None).cast(dtype).alias(name))
+            # Reconcile dtype drift: older rows may carry all-null (Null dtype)
+            # columns (e.g. coach_narrative_json before narratives existed) that
+            # clash with a now-populated dtype. Cast the all-null side to match.
+            for name, new_dtype in new_df.schema.items():
+                existing_dtype = existing.schema.get(name)
+                if existing_dtype is not None and existing_dtype != new_dtype:
+                    if existing_dtype == pl.Null:
+                        existing = existing.with_columns(pl.col(name).cast(new_dtype))
+                    elif new_dtype == pl.Null:
+                        new_df = new_df.with_columns(pl.col(name).cast(existing_dtype))
             existing = existing.filter(
                 ~(
                     (pl.col("persona_id") == digest.persona_id)

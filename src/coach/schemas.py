@@ -165,7 +165,6 @@ class WeeklyDigest(BaseModel):
     top_strengths: list[str]
     dimensions: list[DimensionDigest]
     evidence: list[EvidenceSnippet]
-    journal_history: list[JournalHistoryEntry] = Field(default_factory=list)
     coach_narrative: CoachNarrative | None = None
     validation: DigestValidation | None = None
 
