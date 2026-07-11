@@ -1,0 +1,395 @@
+{
+  "schema_version": "twinkl-v8pb-review-v2",
+  "target_version": "twinkl-v8pb-student-visible-v1",
+  "split": "promotion",
+  "packet_sha256": "b03bc2701304c176d11ccee7f18df95f9373331dfa0fbe50ea04ab738829581d",
+  "reviewer_id": "promotion_full_b",
+  "reviewed_at": "2026-07-11T04:51:49Z",
+  "reviewer_prompt_version": "twinkl-v8pb-packet-only-v2",
+  "reviewer_runtime": "codex-subagent",
+  "cases": [
+    {
+      "review_case_id": "case_001",
+      "entry_assessments": [
+        {"position": 1, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 2, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "medium"},
+        {"position": 3, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 5, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 6, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 7, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 8, "observable_negative": "no", "reason_code": "external_constraint", "confidence": "high"},
+        {"position": 9, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 10, "observable_negative": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"}
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Positions 1, 5, and 7 directly show withholding or yielding personal authority, but each is separated by a no, so there is no adjacent yes pair."
+    },
+    {
+      "review_case_id": "case_002",
+      "entry_assessments": [
+        {"position": 1, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 2, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 5, "observable_negative": "no", "reason_code": "external_constraint", "confidence": "high"},
+        {"position": 6, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 7, "observable_negative": "no", "reason_code": "feeling_or_intent_only", "confidence": "medium"}
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The writer directly declines or continues to defer more secure employment at positions 1, 4, and 6, but the yes assessments are not adjacent."
+    },
+    {
+      "review_case_id": "case_003",
+      "entry_assessments": [
+        {"position": 1, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "medium"},
+        {"position": 2, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 4, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 5, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 7, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 8, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "medium"}
+      ],
+      "sustained_conflict": "yes",
+      "delivery_state": "active",
+      "rationale": "Positions 3 and 4 are an adjacent direct run of declining rest and a desired social evening for work; later entries 6 and 8 again show choosing work over enjoyment."
+    },
+    {
+      "review_case_id": "case_004",
+      "entry_assessments": [
+        {"position": 1, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 5, "observable_negative": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 6, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 7, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "medium"},
+        {"position": 8, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 9, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The displayed choices favor predictability, preparation, and household financial order; worries about change are not direct negative behavior against Security."
+    },
+    {
+      "review_case_id": "case_005",
+      "entry_assessments": [
+        {"position": 1, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 2, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "medium"},
+        {"position": 3, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 4, "observable_negative": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 5, "observable_negative": "no", "reason_code": "external_constraint", "confidence": "high"},
+        {"position": 6, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The writer directly stays silent when credit is taken at position 1 and yields the chapter plan at position 3, but the two yes entries are not adjacent."
+    },
+    {
+      "review_case_id": "case_006",
+      "entry_assessments": [
+        {"position": 1, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "medium"},
+        {"position": 5, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 6, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 7, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 8, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 9, "observable_negative": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 10, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ],
+      "sustained_conflict": "yes",
+      "delivery_state": "recovered",
+      "rationale": "Positions 4 through 7 contain a direct run of breaking the budget and postponing known financial, contractual, and physical-safety safeguards; later entries return to routine security-preserving actions."
+    },
+    {
+      "review_case_id": "case_007",
+      "entry_assessments": [
+        {"position": 1, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 3, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 5, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 7, "observable_negative": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"}
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The writer stops leisure to work at position 2 and chooses preparation over a bath at position 4, but the direct choices are separated by no entries."
+    },
+    {
+      "review_case_id": "case_008",
+      "entry_assessments": [
+        {"position": 1, "observable_negative": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 2, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 3, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 5, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 7, "observable_negative": "no", "reason_code": "external_constraint", "confidence": "high"},
+        {"position": 8, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 9, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 10, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Positions 2, 4, and 8 directly destabilize established income or safety routines, but no two yes assessments are adjacent."
+    },
+    {
+      "review_case_id": "case_009",
+      "entry_assessments": [
+        {"position": 1, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 2, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "medium"},
+        {"position": 4, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "medium"},
+        {"position": 5, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 7, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 8, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"}
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The direct choices to remain silent at position 1 and accept the co-supervisor's case selection at position 8 are isolated."
+    },
+    {
+      "review_case_id": "case_010",
+      "entry_assessments": [
+        {"position": 1, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_negative": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 3, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_negative": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 5, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_negative": "no", "reason_code": "feeling_or_intent_only", "confidence": "medium"}
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The writer schedules the heater inspection, responds cautiously to restructuring news, and otherwise describes feelings or future possibilities rather than direct behavior against Security."
+    },
+    {
+      "review_case_id": "case_011",
+      "entry_assessments": [
+        {"position": 1, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 2, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_negative": "no", "reason_code": "external_constraint", "confidence": "high"},
+        {"position": 4, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 5, "observable_negative": "no", "reason_code": "feeling_or_intent_only", "confidence": "medium"},
+        {"position": 6, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 7, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The writer directly remains quiet when interrupted, does not contest the steering decision, and does not correct Clara's attribution, but the yes entries are non-adjacent."
+    },
+    {
+      "review_case_id": "case_012",
+      "entry_assessments": [
+        {"position": 1, "observable_negative": "no", "reason_code": "external_constraint", "confidence": "high"},
+        {"position": 2, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "medium"},
+        {"position": 3, "observable_negative": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 4, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 5, "observable_negative": "no", "reason_code": "external_constraint", "confidence": "high"},
+        {"position": 6, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Changed housing terms and the in-laws' water-heater decision are external constraints; the displayed actions otherwise center preparation and routine."
+    },
+    {
+      "review_case_id": "case_013",
+      "entry_assessments": [
+        {"position": 1, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_negative": "no", "reason_code": "ambiguous", "confidence": "medium"},
+        {"position": 3, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_negative": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 5, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The current business supplies recurring revenue, payroll, and an operating buffer; deferring the recruiter is not directly shown to be against Security."
+    },
+    {
+      "review_case_id": "case_014",
+      "entry_assessments": [
+        {"position": 1, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "medium"},
+        {"position": 2, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 3, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 4, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 5, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 7, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 8, "observable_negative": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 9, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 10, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"}
+      ],
+      "sustained_conflict": "yes",
+      "delivery_state": "active",
+      "rationale": "Positions 2 through 4 directly reject or delete safer employment options, and positions 9 and 10 directly continue that choice; both are adjacent yes runs."
+    },
+    {
+      "review_case_id": "case_015",
+      "entry_assessments": [
+        {"position": 1, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_negative": "no", "reason_code": "feeling_or_intent_only", "confidence": "medium"},
+        {"position": 5, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_negative": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 7, "observable_negative": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 8, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 9, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 10, "observable_negative": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"}
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The writer's directly shown choices are precautionary, and the remaining material is worry or reflection rather than behavior against Security."
+    },
+    {
+      "review_case_id": "case_016",
+      "entry_assessments": [
+        {"position": 1, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 2, "observable_negative": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 3, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 5, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 6, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"}
+      ],
+      "sustained_conflict": "yes",
+      "delivery_state": "active",
+      "rationale": "The writer turns the balcony break back into work at position 1 and then directly stays late instead of resting and leaves a desired gathering early at positions 5 and 6."
+    },
+    {
+      "review_case_id": "case_017",
+      "entry_assessments": [
+        {"position": 1, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 3, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 4, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 5, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 7, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 8, "observable_negative": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 9, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ],
+      "sustained_conflict": "yes",
+      "delivery_state": "recovered",
+      "rationale": "Positions 2 through 4 directly set aside leisure or bodily rest for obligations and chores. The later deliberate laksa and reflexology entries show direct re-engagement with enjoyment."
+    },
+    {
+      "review_case_id": "case_018",
+      "entry_assessments": [
+        {"position": 1, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 5, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 7, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 8, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The writer's choices preserve employment, household safeguards, documentation, and financial buffers; none directly acts against Security."
+    },
+    {
+      "review_case_id": "case_019",
+      "entry_assessments": [
+        {"position": 1, "observable_negative": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 2, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 4, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 5, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_negative": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 7, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 8, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 9, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The writer directly forgoes a needed nap at position 3 and a desired lunch with a friend at position 8; neither yes is adjacent to another."
+    },
+    {
+      "review_case_id": "case_020",
+      "entry_assessments": [
+        {"position": 1, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_negative": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 3, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_negative": "no", "reason_code": "ambiguous", "confidence": "medium"},
+        {"position": 5, "observable_negative": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 6, "observable_negative": "no", "reason_code": "external_constraint", "confidence": "high"},
+        {"position": 7, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 8, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Housing uncertainty and a possible conference cost are external or unresolved; the direct completed choices include early thesis work and accepting a budgeted, known-housemate arrangement."
+    },
+    {
+      "review_case_id": "case_021",
+      "entry_assessments": [
+        {"position": 1, "observable_negative": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 2, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 5, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The displayed behavior repeatedly permits pleasure, social time, rest, and stopping work; self-criticism at position 1 is not itself a direct negative behavior."
+    },
+    {
+      "review_case_id": "case_022",
+      "entry_assessments": [
+        {"position": 1, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 2, "observable_negative": "no", "reason_code": "external_constraint", "confidence": "high"},
+        {"position": 3, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 4, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 5, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The writer goes quiet after being talked over at position 1 and folds the vendor proposal at position 3, but those direct choices are not adjacent."
+    },
+    {
+      "review_case_id": "case_023",
+      "entry_assessments": [
+        {"position": 1, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 2, "observable_negative": "no", "reason_code": "external_constraint", "confidence": "high"},
+        {"position": 3, "observable_negative": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 4, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 5, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 7, "observable_negative": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 8, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 9, "observable_negative": "no", "reason_code": "external_constraint", "confidence": "high"},
+        {"position": 10, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "medium"}
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The direct yes choices are remaining silent while Amna presents the writer's work and backing down on the floor at position 3; no adjacent yes pair is present."
+    },
+    {
+      "review_case_id": "case_024",
+      "entry_assessments": [
+        {"position": 1, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 5, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 7, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 8, "observable_negative": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 9, "observable_negative": "no", "reason_code": "external_constraint", "confidence": "high"}
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The direct choices favor a lease, savings transfer, predictable work, and known service; a possible future reduction in hours is an external condition."
+    }
+  ]
+}

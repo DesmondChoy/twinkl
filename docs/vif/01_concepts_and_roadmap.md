@@ -111,18 +111,19 @@ To make this design capstone-friendly, we summarise a recommended tiered approac
   * Target: immediate alignment (Option A).
   * Critic: ordinal MLP with a BNN comparison baseline.
   * Uncertainty: MC Dropout.
-  * Drift reference: stored five-pass Judge consensus `-1` labels on two
-    adjacent entries for the same declared core value.
-  * Offline drift benchmark: implemented, but no scorer is promotion-ready.
-    A procedurally metadata-blinded Codex audit found the frozen reference unsuitable as a stable
-    student-visible promotion surface. Production `P(-1)` persistence and
-    weekly delivery remain blocked by student-visible target repair in
-    `twinkl-v8pb`; the audit is not human ground truth.
+  * Drift target: two adjacent entries that each visibly show a behavior or
+    choice against the same declared core value.
+  * Student-visible drift target: [`twinkl-v8pb`](../evals/drift_v1_student_visible_target.md)
+    completed a full-runtime-text development target and locked promotion
+    review. `run_020` found 1/5 development episodes, and one 19-entry
+    promotion case remained unresolved, so no promotion score was run. The old
+    consensus-derived frozen benchmark is retired historical evidence, not a
+    runnable benchmark or promotion surface.
 
 * **Tier 2 (Optional capstone extension)**
-  * State: compact legal-history context only if target repair on an untouched
-    promotion surface shows that frozen failures reflect missing legal context
-    rather than questionable reference labels.
+  * State: compact legal-history context only if the untouched promotion check
+    shows that remaining failures reflect missing legal context rather than an
+    unclear target.
   * Target: soft vote-distribution labels after target/context repair; immediate
     alignment remains the output contract.
   * Critic: calibrated local MLP, LLM teacher/fallback, or a measured cascade.

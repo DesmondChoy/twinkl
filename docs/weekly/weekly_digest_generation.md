@@ -231,8 +231,8 @@ from the current compatibility modes remain implementation work.
 
 The selected v1 construct is sustained conflict on a declared core value:
 
-- strict reference: the same declared core value has a stored five-pass Judge
-  consensus `-1` label on two adjacent entries;
+- student-visible target: two adjacent entries visibly show a behavior or
+  choice against the same declared core value;
 - runtime target: rolling soft `P(-1)` evidence under uncertainty gating; and
 - delivery: the weekly digest cites the supporting entries.
 
@@ -242,14 +242,16 @@ separate value-specific records. The six-detector comparison's detector-vote
 count is not the five-pass Judge reference.
 
 The current runtime persists alignment means and uncertainties rather than
-class probabilities. The rolling-soft-evidence rule is implemented in the
-offline benchmark, but no scorer is approved and the detector is not wired
-into the weekly runtime. The crash/rut/evolution output modes remain prototype
-compatibility values, not the accepted v1 definition.
+class probabilities. [`twinkl-v8pb`](../evals/drift_v1_student_visible_target.md)
+completed the full-runtime-text target review, but its weak development recall
+and unresolved promotion case mean no scorer is approved and the detector is
+not wired into the weekly runtime. The former consensus-derived frozen
+benchmark is retired historical evidence. The crash/rut/evolution output modes
+remain prototype compatibility values, not the accepted v1 definition.
 
 ### Delivery-Time Recovery
 
-Benchmark detection records whether a strict sustained-conflict episode
+The student-visible target records whether a sustained-conflict episode
 occurred. Digest wording reflects the state when the weekly Coach is delivered.
 
 For each value-specific episode:

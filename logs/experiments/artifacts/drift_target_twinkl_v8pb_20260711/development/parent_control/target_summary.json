@@ -1,0 +1,36 @@
+{
+  "audit_manifest_sha256": "f9fec04692688a85699066ed2fbe7db321076e4164912bc7979ae021f12503bf",
+  "case_count": 42,
+  "entry_agreement_count": 324,
+  "entry_agreement_rate": 0.9671641791044776,
+  "entry_count": 335,
+  "expected_case_count": 42,
+  "expected_entry_count": 335,
+  "materialization_complete": true,
+  "packet_sha256": "eb206a99cd9d136716a859c43006b555cdfd8e7a6a30110b6ceaa326122507b7",
+  "promotable": true,
+  "qualification_agreement_count": 41,
+  "qualification_agreement_rate": 0.9761904761904762,
+  "reconciliation_key_sha256": "5bb221b8d611ab98271420b69b743e1b2d627e5fcdddbb5ada198ce40e6eb87d",
+  "review_cases_sha256": "a510cbf03a564c7bcc9646a41f00d42a4b874dc0ad29b4a1c1fcf771875a1b69",
+  "reviewer_a_sha256": "fcd3d5c21dec1ef36dc2d826b70cbc230ea92fade6fbd65eaf88725d73155958",
+  "reviewer_b_sha256": "57eeaebdd408f7e1e5b7ae7a9edfcfc9f769b9f69c70ca11330a1c7561d52efd",
+  "reviewer_ids": [
+    "development_full_a",
+    "development_full_b"
+  ],
+  "reviewer_submission_timestamps": [
+    "2026-07-11T04:34:42Z",
+    "2026-07-11T04:42:56Z"
+  ],
+  "split": "development",
+  "target_delta_sha256": "57e1270ab9d30ea8ca6e85377c3f25cce833ca8541cb32b293cec491f5ccbcce",
+  "target_manifest_sha256": "633433ad1a65b7180afc70e7634f9314d2a67eab624beee690dec964b43bdd09",
+  "target_split_sha256": "73fd8bd711bdf6b4e761198f9fc196cddfd2fe3aa09b6d2651a791529b695a14",
+  "target_variant_sha256": "b5be22aa03cdf221e31f7a3b390b270454fa1f1463bec238dc00af30b0c8e633",
+  "target_version": "twinkl-v8pb-student-visible-v1",
+  "unresolved_case_ids": [
+    "case_037"
+  ],
+  "unresolved_entry_count": 19
+}

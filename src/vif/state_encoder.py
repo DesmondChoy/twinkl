@@ -34,7 +34,6 @@ import numpy as np
 from src.models.judge import SCHWARTZ_VALUE_ORDER
 from src.vif.encoders import TextEncoder
 
-
 # Mapping from display names (in markdown) to canonical keys (in SCHWARTZ_VALUE_ORDER)
 # Core Values in persona files use title case, need to map to snake_case
 VALUE_NAME_TO_KEY = {
@@ -52,6 +51,22 @@ VALUE_NAME_TO_KEY = {
 }
 
 
+def concatenate_entry_text(
+    initial_entry: str | None,
+    nudge_text: str | None,
+    response_text: str | None,
+) -> str:
+    """Build the exact per-entry text used by the trained and runtime VIF path."""
+    parts = []
+    if initial_entry:
+        parts.append(initial_entry)
+    if nudge_text:
+        parts.append(f'Nudge: "{nudge_text}"')
+    if response_text:
+        parts.append(f"Response: {response_text}")
+    return "\n\n".join(parts) if parts else ""
+
+
 class StateEncoder:
     """Encodes journal entries into state vectors for VIF training.
 
@@ -67,7 +82,7 @@ class StateEncoder:
         state_encoder = StateEncoder(encoder, **config["state_encoder"])
 
         # Get state dimension (for MLP input size)
-        print(f"State dim: {state_encoder.state_dim}")  # depends on encoder and window_size
+        print(f"State dim: {state_encoder.state_dim}")
     """
 
     def __init__(
@@ -129,7 +144,8 @@ class StateEncoder:
             uniform weights (0.1 each).
 
         Example:
-            >>> weights = encoder.parse_core_values_to_weights(["Security", "Benevolence"])
+            >>> values = ["Security", "Benevolence"]
+            >>> weights = encoder.parse_core_values_to_weights(values)
             >>> print(weights)  # [0, 0, 0, 0, 0, 0.5, 0, 0, 0.5, 0]
             >>> print(weights.sum())  # 1.0
         """
@@ -213,7 +229,7 @@ class StateEncoder:
             gaps.append(default_gap)
 
         # Normalize to [0, 1]
-        gaps_array = np.array(gaps[:self.window_size - 1], dtype=np.float32) / 30.0
+        gaps_array = np.array(gaps[: self.window_size - 1], dtype=np.float32) / 30.0
 
         return gaps_array
 
@@ -247,9 +263,7 @@ class StateEncoder:
                 emb = np.zeros(self.text_encoder.embedding_dim, dtype=np.float32)
             text_embeddings.append(emb)
 
-        return self._build_state_from_components(
-            text_embeddings, dates, core_values
-        )
+        return self._build_state_from_components(text_embeddings, dates, core_values)
 
     def build_state_vector_from_embeddings(
         self,
@@ -270,9 +284,7 @@ class StateEncoder:
         Returns:
             np.ndarray of shape (state_dim,) containing the full state vector.
         """
-        return self._build_state_from_components(
-            embeddings, dates, core_values
-        )
+        return self._build_state_from_components(embeddings, dates, core_values)
 
     def _build_state_from_components(
         self,
@@ -285,17 +297,19 @@ class StateEncoder:
 
         # 2. Time gaps
         padded_dates = dates + [None] * (self.window_size - len(dates))
-        time_gaps = self.compute_time_gaps(padded_dates[:self.window_size])
+        time_gaps = self.compute_time_gaps(padded_dates[: self.window_size])
 
         # 3. Profile weights
         profile_weights = self.parse_core_values_to_weights(core_values)
 
         # Concatenate all components
-        state_vector = np.concatenate([
-            text_vector,
-            time_gaps,
-            profile_weights,
-        ])
+        state_vector = np.concatenate(
+            [
+                text_vector,
+                time_gaps,
+                profile_weights,
+            ]
+        )
 
         return state_vector.astype(np.float32)
 
@@ -319,15 +333,4 @@ class StateEncoder:
         Returns:
             Concatenated text with appropriate separators
         """
-        parts = []
-
-        if initial_entry:
-            parts.append(initial_entry)
-
-        if nudge_text:
-            parts.append(f'Nudge: "{nudge_text}"')
-
-        if response_text:
-            parts.append(f"Response: {response_text}")
-
-        return "\n\n".join(parts) if parts else ""
+        return concatenate_entry_text(initial_entry, nudge_text, response_text)

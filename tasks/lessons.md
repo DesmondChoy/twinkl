@@ -149,3 +149,11 @@
   assets together, preserve relative paths, and verify byte identity against
   the pre-move Git content. Add an explicit archive note so future sessions do
   not mistake the snapshot for a maintained current-state document.
+
+## 2026-07-11
+
+- When a user points out that an invalid benchmark could be confused with, or
+  accidentally used as, an active one, do not solve only the wording problem.
+  Audit and retire every runnable, configured, artifact, report, and test
+  surface; preserve provenance in a clearly marked archive; and add a
+  regression check that prevents the old default or paths from returning.

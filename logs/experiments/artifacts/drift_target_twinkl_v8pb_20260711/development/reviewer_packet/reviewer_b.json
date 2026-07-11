@@ -1,0 +1,2358 @@
+{
+  "schema_version": "twinkl-v8pb-review-v2",
+  "target_version": "twinkl-v8pb-student-visible-v1",
+  "split": "development",
+  "packet_sha256": "eb206a99cd9d136716a859c43006b555cdfd8e7a6a30110b6ceaa326122507b7",
+  "reviewer_id": "development_full_b",
+  "reviewed_at": "2026-07-11T04:42:56Z",
+  "reviewer_prompt_version": "twinkl-v8pb-packet-only-v2",
+  "reviewer_runtime": "codex-subagent",
+  "cases": [
+    {
+      "review_case_id": "case_001",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 6,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 7,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 8,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 9,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Family, prayer, and holiday practices are repeatedly shown; no direct action against Tradition appears."
+    },
+    {
+      "review_case_id": "case_002",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 6,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 7,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 8,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 9,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Work and family decisions show no direct choice clearly contrary to Security; worries alone are not treated as negative behavior."
+    },
+    {
+      "review_case_id": "case_003",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 6,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 7,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 8,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 9,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 10,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 11,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 12,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The displayed work, task-force, and hobby actions do not directly oppose Achievement; frustration is not labeled behavior."
+    },
+    {
+      "review_case_id": "case_004",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 6,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 7,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 8,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 9,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Cautious work and family choices are consistent with or neutral to Security, with no direct contrary choice shown."
+    },
+    {
+      "review_case_id": "case_005",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Furniture restoration and workshop planning are competence-directed, with no direct action against Achievement."
+    },
+    {
+      "review_case_id": "case_006",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 6,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 7,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 8,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 9,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 10,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Teaching and water-advocacy actions pursue broad welfare; no direct contrary behavior to Universalism appears."
+    },
+    {
+      "review_case_id": "case_007",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 6,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 7,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 8,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 9,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 10,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 11,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 12,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Leadership and career actions are neutral to or support Power; exclusion and feelings are not the writer's contrary actions."
+    },
+    {
+      "review_case_id": "case_008",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "medium"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "At position 1 the writer stays silent while another presents their idea; later independent project choices are not negative."
+    },
+    {
+      "review_case_id": "case_009",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Protocol-following and family/social restraint are consistent with Conformity; no contrary action appears."
+    },
+    {
+      "review_case_id": "case_010",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 6,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 7,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 8,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 9,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 10,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 11,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 12,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Job change, technical learning, and novel activities do not directly conflict with Stimulation."
+    },
+    {
+      "review_case_id": "case_011",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "medium"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 6,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 7,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "medium"
+        },
+        {
+          "position": 8,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 9,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 10,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 11,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "At 1 the writer defers despite their proposal; at 7 they copy Diego's style to seek acceptance. The yes entries are separated."
+    },
+    {
+      "review_case_id": "case_012",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "medium"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 6,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 7,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 8,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 9,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 10,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 11,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "At 2 the writer spends twelve painful library hours; the other displayed entries contain pleasure or neutral work."
+    },
+    {
+      "review_case_id": "case_013",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "high"
+        },
+        {
+          "position": 6,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 7,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 8,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 9,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 10,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "high"
+        },
+        {
+          "position": 11,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "yes",
+      "delivery_state": "recovered",
+      "rationale": "At 4 and 5 the writer drinks secretly against maternal norms and has stopped regular prayer, an adjacent conflict run; later tradition-affirming actions recover it, though a later lie is isolated."
+    },
+    {
+      "review_case_id": "case_014",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 6,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 7,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 8,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 9,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Cautious, polite, and rule-aware actions are consistent with Conformity."
+    },
+    {
+      "review_case_id": "case_015",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 6,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Translation and garden actions aim at other people and environmental welfare; no contrary behavior appears."
+    },
+    {
+      "review_case_id": "case_016",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 6,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Creative teaching, camping, and considering an innovation lab do not oppose Stimulation; imposed routine is not a negative choice."
+    },
+    {
+      "review_case_id": "case_017",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "medium"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 6,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "medium"
+        },
+        {
+          "position": 7,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 8,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "At 2 and 6 the writer lets others override them rather than asserting authority; those choices are not adjacent."
+    },
+    {
+      "review_case_id": "case_018",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Rest, cabin time, work boundaries, and cooking are pleasure-oriented rather than against Hedonism."
+    },
+    {
+      "review_case_id": "case_019",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 6,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 7,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 8,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 9,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 10,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "At 2 the writer chooses caregiving over planned personal quiet; surrounding actions include pleasures and neutral obligations, with no adjacent yes."
+    },
+    {
+      "review_case_id": "case_020",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "uncertain",
+          "reason_code": "external_constraint",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "At 1 the writer stays extra and cancels a planned dinner; the rota disruption is externally imposed and the later swap protects Goa."
+    },
+    {
+      "review_case_id": "case_021",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "medium"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "medium"
+        },
+        {
+          "position": 4,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 6,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "medium"
+        },
+        {
+          "position": 7,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "medium"
+        },
+        {
+          "position": 8,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 9,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 10,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 11,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "medium"
+        },
+        {
+          "position": 12,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "yes",
+      "delivery_state": "recovered",
+      "rationale": "At 1, 3, 6, 7, and 11 the writer accepts overriding or permission limits; 6 and 7 are adjacent, followed by renewed direct leadership."
+    },
+    {
+      "review_case_id": "case_022",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "medium"
+        },
+        {
+          "position": 2,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 6,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "yes",
+      "delivery_state": "recovered",
+      "rationale": "At 1 the writer avoids challenging anti-refugee remarks and at 2 orders potentially polluting components; later donation and sourcing actions reverse that run."
+    },
+    {
+      "review_case_id": "case_023",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "uncertain",
+          "reason_code": "external_constraint",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The unstable rota and double shifts are externally imposed; the writer seeks predictable scheduling rather than choosing against Security."
+    },
+    {
+      "review_case_id": "case_024",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "medium"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 6,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "medium"
+        },
+        {
+          "position": 7,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 8,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 9,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "medium"
+        },
+        {
+          "position": 10,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "At 2, 6, and 9 concealment and relationship decisions depart from the religious family script; they are separated by tradition-affirming behavior and final honesty."
+    },
+    {
+      "review_case_id": "case_025",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 6,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 7,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 8,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "high"
+        },
+        {
+          "position": 9,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "yes",
+      "delivery_state": "active",
+      "rationale": "At 1 the writer leaves household needs waiting; at 8 and 9 they decline action supporting overburdened peers, an adjacent current run."
+    },
+    {
+      "review_case_id": "case_026",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "medium"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 6,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 7,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 8,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 9,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "At 1 the writer leaves family waiting after repeated promises; later restraint and relationship-preserving choices are not contrary to Conformity."
+    },
+    {
+      "review_case_id": "case_027",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 6,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 7,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 8,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 9,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 10,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 11,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Travel, dancing, exploration, and project novelty pursue Stimulation rather than oppose it."
+    },
+    {
+      "review_case_id": "case_028",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 6,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 7,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 8,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 9,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 10,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Improving students, preparing materials and data, and recognition are not direct contrary Achievement actions."
+    },
+    {
+      "review_case_id": "case_029",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 6,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 7,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 8,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 9,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 10,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 11,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 12,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "No displayed behavior is clearly contrary to Achievement; job-change tradeoffs are ambiguous rather than labeled negative."
+    },
+    {
+      "review_case_id": "case_030",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "medium"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 6,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 7,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 8,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 9,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 10,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 11,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "At 1 the writer yields on a substantive routing proposal; the subsequent pilot and presentation are achievement-directed."
+    },
+    {
+      "review_case_id": "case_031",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Restoration and workshop actions are neutral to or create fresh challenges, with no contrary Stimulation act."
+    },
+    {
+      "review_case_id": "case_032",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "high"
+        },
+        {
+          "position": 6,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "At 3 and 5 the writer stays silent or cedes strategic control; the entries are not adjacent."
+    },
+    {
+      "review_case_id": "case_033",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 6,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 7,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 8,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 9,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "At 1 and 4 the writer lets gig work displace family Sunday and Koningsdag rituals; later visits, grace, and church reaffirm Tradition."
+    },
+    {
+      "review_case_id": "case_034",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The writer's interest in and booking of Nairobi travel pursue novelty, not a Stimulation conflict."
+    },
+    {
+      "review_case_id": "case_035",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 6,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 7,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 8,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "At 3 the writer snaps at their vulnerable mother; surrounding care and boundary actions otherwise do not oppose Benevolence."
+    },
+    {
+      "review_case_id": "case_036",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 6,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 7,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 8,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 9,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Family rootedness, saving, and declining travel nursing support or are neutral to Security."
+    },
+    {
+      "review_case_id": "case_037",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 6,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 7,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 8,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 9,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 10,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Caregiving and limited shared responsibility uphold close others' welfare; the writer calls back and shares planning, with no contrary Benevolence choice."
+    },
+    {
+      "review_case_id": "case_038",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 6,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 7,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 8,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 9,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Translations, accessible recycling, advocacy, and cleanup support broad welfare; no direct contrary action appears."
+    },
+    {
+      "review_case_id": "case_039",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "high"
+        },
+        {
+          "position": 6,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 7,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 8,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "At 3 and 5 care and an extra shift cost the writer rest or planned pleasure; they are separated by neutral/self-care action."
+    },
+    {
+      "review_case_id": "case_040",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 6,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 7,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 8,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 9,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Career effort, visibility, and promotion behavior support or are neutral to Achievement."
+    },
+    {
+      "review_case_id": "case_041",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 4,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 5,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Conflict avoidance, agreement at playgroup, and accepting Sunday dinner are Conformity-aligned."
+    },
+    {
+      "review_case_id": "case_042",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_negative": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        },
+        {
+          "position": 2,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "high"
+        },
+        {
+          "position": 3,
+          "observable_negative": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "high"
+        }
+      ],
+      "sustained_conflict": "yes",
+      "delivery_state": "active",
+      "rationale": "At 2 the writer rejects an expected placement for their own project and at 3 refuses help to keep it entirely theirs, an adjacent active conflict."
+    }
+  ]
+}

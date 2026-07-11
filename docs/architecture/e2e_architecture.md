@@ -35,7 +35,7 @@ flowchart TB
     subgraph training["Training core"]
         personas["Synthetic personas"]
         judge["Persisted single-pass<br/>LLM Judge labels"]
-        consensus["Five-pass Judge consensus labels<br/>diagnostic + drift reference"]
+        consensus["Five-pass Judge consensus labels<br/>diagnostic provenance"]
         annotation["Human labels<br/>agreement benchmark"]
         critic_train["Critic training +<br/>experiment archive"]
         checkpoint["Selected Critic checkpoint"]
@@ -94,7 +94,6 @@ flowchart TB
     state --> scores --> weekly --> drift
     weekly --> evolution --> drift
     scores -. "P(-1) artifact not persisted" .-> drift_v1
-    consensus -. "strict reference episodes" .-> drift_v1
 
     %% Coach + review (wired, experimental)
     drift --> digest
@@ -132,11 +131,12 @@ for real user journals — that is the solid edge from the training core into th
 runtime.
 
 Two evaluation paths sit beside that spine. The five-pass Judge consensus table
-is a diagnostic label surface. Drift v1 uses it strictly: the same declared
-core value must receive a stored consensus `-1` on two adjacent entries.
-This is distinct from the six-detector comparison's detector vote. The LLM
-Critic baseline compares student-visible, historical, and upper-bound context
-arms against the local MLP without feeding production runtime scores.
+is historical diagnostic label provenance, not the active drift target. The
+retired consensus-derived frozen benchmark must not be rerun, tuned, or used to
+promote a scorer. This is distinct from the six-detector comparison's detector
+vote. The LLM Critic baseline compares student-visible, historical, and
+upper-bound context arms against the local MLP without feeding production
+runtime scores.
 
 The product shell is designed on paper but not built: where the product ships
 (app, web, something else), the journaling UI itself, and how a user's
@@ -144,17 +144,15 @@ onboarding answers get turned into the value profile the runtime reads. One
 exception inside it: the conversational nudging engine already exists as an
 experimental slice, even though the journaling UI it would attach to does not.
 
-The selected v1 drift construct is sustained conflict on a declared core value,
-with a strict per-value two-adjacent-entry reference using stored five-pass
-Judge consensus `-1` labels and a rolling soft `P(-1)` runtime target. The
-existing crash/rut/evolution router remains a prototype; class probabilities
-and the selected v1 detector are not yet wired. The offline benchmark can
-evaluate the rule from persisted scorer artifacts, but it promoted no scorer.
-A procedurally metadata-blinded Codex audit found the frozen reference unsuitable as a stable
-student-visible promotion surface, so the production edge remains deliberately
-blocked by `twinkl-v8pb` target repair. The audit is not human ground truth.
-Value evolution is parked for v1 even though the prototype invokes its
-classifier automatically.
+The selected v1 drift construct is sustained conflict on a declared core value:
+two adjacent entries must each visibly show a behavior or choice against that
+value. [`twinkl-v8pb` completed the student-visible review](../evals/drift_v1_student_visible_target.md)
+and locked promotion check. The existing crash/rut/evolution router remains a
+prototype; class probabilities and the selected v1 detector are not yet wired.
+The development score found only 1/5 reference episodes and the promotion
+review left one 19-entry case unresolved, so there is no active promotion
+benchmark and the production edge remains deliberately blocked. The prior
+consensus-derived benchmark is [retired historical evidence](../archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md), and its AI audit is not human ground truth. Value evolution is parked for v1 even though the prototype invokes its classifier automatically.
 
 The remaining open decisions are when alerts are reliable enough to act on,
 what the Coach is allowed to do or say, and whether user feedback should update

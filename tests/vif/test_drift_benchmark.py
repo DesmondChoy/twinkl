@@ -85,7 +85,9 @@ def test_reference_builder_tracks_extended_open_episode_and_confirmation():
         {"security": [-1, -1, -1]},
     )
 
-    episodes = build_reference_episodes(labels, _profiles(("p1", ["Security"])))
+    episodes = build_reference_episodes(
+        labels, _profiles(("p1", ["Security"])), source="test_target"
+    )
 
     assert episodes.height == 1
     episode = episodes.row(0, named=True)
@@ -105,7 +107,9 @@ def test_reference_builder_separates_runs_and_marks_recovery():
         {"security": [-1, -1, 0, -1, -1]},
     )
 
-    episodes = build_reference_episodes(labels, _profiles(("p1", ["Security"])))
+    episodes = build_reference_episodes(
+        labels, _profiles(("p1", ["Security"])), source="test_target"
+    )
 
     assert episodes["onset_t_index"].to_list() == [0, 3]
     assert episodes["delivery_state"].to_list() == ["recovered", "active"]
@@ -125,6 +129,7 @@ def test_reference_builder_keeps_values_independent_and_simultaneous():
     episodes = build_reference_episodes(
         labels,
         _profiles(("p1", ["Security", "Benevolence", "Power"])),
+        source="test_target",
     )
 
     assert episodes.select("dimension").to_series().to_list() == [
@@ -141,7 +146,9 @@ def test_reference_builder_treats_missing_or_no_majority_as_uncertain_break():
         confidence_by_dimension={"security": ["high", "high", "no_majority", "high"]},
     )
 
-    episodes = build_reference_episodes(labels, _profiles(("p1", ["Security"])))
+    episodes = build_reference_episodes(
+        labels, _profiles(("p1", ["Security"])), source="test_target"
+    )
 
     assert episodes.height == 1
     assert episodes["delivery_state"].item() == "uncertain"
@@ -154,7 +161,9 @@ def test_single_conflicts_do_not_form_reference_episode():
         {"security": [-1, 0, -1]},
     )
 
-    episodes = build_reference_episodes(labels, _profiles(("p1", ["Security"])))
+    episodes = build_reference_episodes(
+        labels, _profiles(("p1", ["Security"])), source="test_target"
+    )
 
     assert episodes.is_empty()
 
@@ -169,7 +178,9 @@ def test_missing_t_index_breaks_reference_and_soft_evidence_runs():
         pl.Series("t_index", [0, 2])
     )
 
-    assert build_reference_episodes(labels, _profiles(("p1", ["Security"]))).is_empty()
+    assert build_reference_episodes(
+        labels, _profiles(("p1", ["Security"])), source="test_target"
+    ).is_empty()
     assert detect_sustained_conflict_episodes(
         evidence,
         probability_threshold=0.8,
@@ -181,7 +192,9 @@ def test_invalid_declared_core_value_fails_clearly():
     labels = _label_rows("p1", ["2026-01-01", "2026-01-02"], {"security": [-1, -1]})
 
     with pytest.raises(ValueError, match="invalid core value"):
-        build_reference_episodes(labels, _profiles(("p1", ["Not A Value"])))
+        build_reference_episodes(
+            labels, _profiles(("p1", ["Not A Value"])), source="test_target"
+        )
 
 
 def test_soft_detector_uses_probability_and_uncertainty_gates():
@@ -295,7 +308,7 @@ def test_episode_metrics_measure_hits_false_alarms_latency_and_recovery():
         {"security": [0, 0, 0]},
     )
     labels = pl.concat([positive_labels, negative_labels])
-    reference = build_reference_episodes(labels, profiles)
+    reference = build_reference_episodes(labels, profiles, source="test_target")
     eligible = build_eligible_trajectories(labels, profiles)
     predicted = pl.concat(
         [
@@ -444,7 +457,7 @@ def test_threshold_tuning_prefers_guardrail_eligible_candidate():
 
     selected, grid = tune_detector_thresholds(
         evidence,
-        build_reference_episodes(labels, profiles),
+        build_reference_episodes(labels, profiles, source="test_target"),
         build_eligible_trajectories(labels, profiles),
         probability_thresholds=[0.5, 0.7],
         uncertainty_thresholds=[0.3],
@@ -476,7 +489,7 @@ def test_threshold_tuning_uses_recall_sensitive_tie_break():
 
     selected, _grid = tune_detector_thresholds(
         evidence,
-        build_reference_episodes(labels, profiles),
+        build_reference_episodes(labels, profiles, source="test_target"),
         build_eligible_trajectories(labels, profiles),
         probability_thresholds=[0.5, 0.7],
         uncertainty_thresholds=[0.2, 0.3],
@@ -504,7 +517,7 @@ def test_single_entry_trajectory_does_not_dilute_false_alarm_denominator():
     )
 
     metrics = episode_metrics(
-        build_reference_episodes(labels, profiles),
+        build_reference_episodes(labels, profiles, source="test_target"),
         predicted,
         build_eligible_trajectories(labels, profiles),
     )

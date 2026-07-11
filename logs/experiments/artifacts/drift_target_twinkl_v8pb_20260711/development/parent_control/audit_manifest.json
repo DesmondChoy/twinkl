@@ -1,0 +1,71 @@
+{
+  "assessment_submissions": {
+    "reviewer_a": {
+      "response_path": "logs/experiments/artifacts/drift_target_twinkl_v8pb_20260711/development/reviewer_packet/reviewer_a.json",
+      "reviewed_at": "2026-07-11T04:34:42Z",
+      "reviewer_id": "development_full_a",
+      "reviewer_prompt_version": "twinkl-v8pb-packet-only-v2",
+      "reviewer_runtime": "codex-subagent",
+      "role": "reviewer_a",
+      "sha256": "fcd3d5c21dec1ef36dc2d826b70cbc230ea92fade6fbd65eaf88725d73155958"
+    },
+    "reviewer_b": {
+      "response_path": "logs/experiments/artifacts/drift_target_twinkl_v8pb_20260711/development/reviewer_packet/reviewer_b.json",
+      "reviewed_at": "2026-07-11T04:42:56Z",
+      "reviewer_id": "development_full_b",
+      "reviewer_prompt_version": "twinkl-v8pb-packet-only-v2",
+      "reviewer_runtime": "codex-subagent",
+      "role": "reviewer_b",
+      "sha256": "57eeaebdd408f7e1e5b7ae7a9edfcfc9f769b9f69c70ca11330a1c7561d52efd"
+    }
+  },
+  "assessments_recorded_at": "2026-07-11T04:43:26.069782+00:00",
+  "case_count": 42,
+  "created_at": "2026-07-11T04:27:29.765933+00:00",
+  "entry_count": 335,
+  "known_limitations": [
+    "Codex agents share a workspace. Packet-only disclosure is a procedural control, not proof of enforced technical isolation.",
+    "Paired Codex review is diagnostic AI evidence, not human ground truth."
+  ],
+  "outputs": {
+    "parent_control/reconciliation_key.json": "5bb221b8d611ab98271420b69b743e1b2d627e5fcdddbb5ada198ce40e6eb87d",
+    "reviewer_packet/blind_packet.json": "eb206a99cd9d136716a859c43006b555cdfd8e7a6a30110b6ceaa326122507b7",
+    "reviewer_packet/response_schema.json": "a44d18794e363290ce244f6bad7944c3e7fcd528281d202a0715e3a9ed7c0dfb"
+  },
+  "review_cases_sha256": "a510cbf03a564c7bcc9646a41f00d42a4b874dc0ad29b4a1c1fcf771875a1b69",
+  "review_protocol": {
+    "controlled_disclosure": true,
+    "primary_agreement": "case-level sustained_conflict",
+    "response_schema": "twinkl-v8pb-review-v2",
+    "reviewer_input": "reviewer_packet/blind_packet.json and reviewer_packet/response_schema.json only",
+    "reviewer_prompt_version": "twinkl-v8pb-packet-only-v2",
+    "secondary_agreement": [
+      "per-entry observable_negative",
+      "delivery_state",
+      "confidence"
+    ],
+    "technical_isolation": false
+  },
+  "review_schema_version": "twinkl-v8pb-review-v2",
+  "schema_version": 1,
+  "source_inputs": {
+    "consensus_labels_provenance": {
+      "path": "logs/judge_labels/consensus_labels.parquet",
+      "sha256": "b57b03d0cea1885a02d1d9ae7d9246ba029c210768b41cb97b4959ec7b18e112"
+    },
+    "original_holdout_manifest": {
+      "path": "config/experiments/vif/twinkl_681_5_holdout.yaml",
+      "sha256": "0e6e6c8e2569df1f1792aede4cb4a9e79a05fe8789e015c2f5ce8bb993fb3065"
+    },
+    "registry": {
+      "path": "logs/registry/personas.parquet",
+      "sha256": "c6b975711471140b6cd8faf4d730a3b9b3078c2cc37704d38cdc143526be91fd"
+    },
+    "target_manifest": {
+      "path": "config/evals/drift_v1_student_visible_v1.yaml",
+      "sha256": "633433ad1a65b7180afc70e7634f9314d2a67eab624beee690dec964b43bdd09"
+    }
+  },
+  "split": "development",
+  "target_version": "twinkl-v8pb-student-visible-v1"
+}

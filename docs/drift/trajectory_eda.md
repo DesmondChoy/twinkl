@@ -4,6 +4,11 @@
 
 **Script:** [`scripts/drift/trajectory_eda.py`](../../scripts/drift/trajectory_eda.py) · **Default data:** `logs/judge_labels/consensus_labels.parquet` + `logs/registry/personas.parquet` · **Week mode:** runtime-compatible `dt.truncate("1w")`
 
+**Status:** Historical consensus-label EDA only. It informs the shape of the
+v1 construct, but it does not create a student-visible drift target, select a
+threshold, or promote a scorer. The former frozen consensus benchmark is
+[retired](../archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md).
+
 ## Purpose
 
 This EDA supplied the empirical basis for the adopted v1 drift definition. It
@@ -128,21 +133,19 @@ labeled -1 above threshold:
 
 ![Conflict-heavy week candidates](figures/fig5_conflict_heavy_weeks.png)
 
-There are enough consensus-reference conflict-heavy weeks for twinkl-wq9p threshold
-tuning. Composition is skewed (Power 31, Hedonism 21, Security 15,
-Universalism 15, Achievement 1), and these labels are still judge-derived. Use
-them for tuning and error analysis; keep a held-out designed set isolated from
-threshold and prompt selection. That set has since received a procedurally metadata-blinded Codex
-audit, but remains author-designed rather than human ground truth and therefore
-serves as a capability probe rather than final promotion evidence.
+The retired `twinkl-wq9p` benchmark used these consensus-derived weeks for
+threshold tuning. That use is no longer allowed. Composition is skewed (Power
+31, Hedonism 21, Security 15, Universalism 15, Achievement 1), and the labels
+remain Judge-derived historical evidence. The author-designed set remains only
+a capability probe, not final promotion evidence.
 
 Full list: [`tables/conflict_heavy_week_candidates.csv`](tables/conflict_heavy_week_candidates.csv).
 
 ## Implications for the definition debate
 
 1. **Feasible on current data:** a core-gated, persistence-based definition:
-   the same declared core value has stored five-pass Judge consensus `-1`
-   labels on two adjacent entries.
+   two adjacent entries visibly show a behavior or choice against the same
+   declared core value.
 2. **Not supportable for v1:** single-entry dip alerts, fade/dormancy, peripheral
    value rise, value evolution, and multi-week chronic low periods. The current data
    does not contain clean long arcs.
@@ -150,12 +153,10 @@ Full list: [`tables/conflict_heavy_week_candidates.csv`](tables/conflict_heavy_w
    runtime detector should consume soft evidence. Two hard argmax -1 predictions
    would be too brittle under current Critic recall.
 4. **Label-regime caveat:** current Critic checkpoints were trained on persisted
-   single-pass labels. Consensus labels remain a reproducible development
-   reference, but the final Codex audit found the current frozen episode surface
-   unsuitable as a stable student-visible promotion target. Treat frozen-surface
-   gaps as diagnostic target-mismatch evidence, not as a basis for scorer
-   promotion, until `twinkl-v8pb` produces a repaired target and untouched
-   evaluation surface.
+   single-pass labels. Consensus labels are now historical diagnostic provenance,
+   not a development target. `twinkl-v8pb` completed its student-visible review,
+   but weak development recall and an unresolved promotion case prevent any
+   scorer claim.
 
 ## Candidate definitions considered
 
@@ -166,7 +167,7 @@ the end-to-end path first; expand only if time remains.
 
 | # | Label-side reference definition | Consensus impact | Persisted-label comparison | One-line case |
 |---|---|---:|---:|---|
-| **R1 — Sustained conflict** (adopted) | the same declared core value has **2 adjacent consensus -1 labels** | **40/204 = 19.6%** | 49/204 = 24.0% | simplest stable reference; kills spike noise without calendar logic |
+| **R1 — Sustained conflict** (historical candidate) | the same declared core value has **2 adjacent consensus -1 labels** | **40/204 = 19.6%** | 49/204 = 24.0% | historical prevalence comparison; not an active target |
 | R2 — Conflict week | a runtime week contains **>=2 consensus -1 entries** on a core value | 32/204 = 15.7% | 39/204 = 19.1% | aligns with weekly digest bins, but misses cross-week runs |
 | R3 — Unrecovered departure | core value goes **>=0 -> -1 -> -1** | 30/204 = 14.7% | 35/204 = 17.2% | purest "drift from alignment" shape, but excludes already-low onboarding-gap cases |
 
@@ -174,58 +175,52 @@ The consensus-reference union is 41 personas (20.1%); the persisted-label union
 is 52 personas (25.5%). Consensus shrinks the apparent impact, but it does not
 change the ranking. Prevalence is not the deciding factor; architecture is.
 
-## Adopted v1 definition
+## Current v1 target and historical label rule
 
-**Drift v1 is a sustained conflict episode: the same declared core value has a
-stored five-pass Judge consensus `-1` label on two adjacent journal entries.
+**Drift v1 is a sustained conflict episode: two adjacent journal entries must
+each clearly show a behavior or choice against the same declared core value.
 Other value dimensions are ignored for this per-value test. At runtime, the
-detector will estimate the construct from rolling soft P(-1) evidence under
-uncertainty gating, and the Coach will surface it in the weekly digest. The
-offline soft-evidence benchmark is implemented, but no scorer is approved and
-the detector is not wired into the runtime or Coach path. The stored rule is a
-mechanically precise development reference, not a current student-visible
-promotion target.**
+detector will estimate the construct from rolling soft `P(-1)` evidence under
+uncertainty gating, and the Coach will surface it in the weekly digest.
+[`twinkl-v8pb`](../evals/drift_v1_student_visible_target.md) completed the
+student-visible target and locked promotion review. The former consensus-derived
+frozen benchmark is retired and cannot be used to tune, score, or promote a
+scorer; the unresolved promotion case means no new scorer score exists.**
 
 Layer split:
 
 | Layer | v1 choice |
 |---|---|
-| Development label reference | 2 adjacent stored five-pass Judge consensus `-1` labels on the same declared core value |
+| Student-visible target | 2 adjacent entries visibly show a behavior or choice against the same declared core value; full-runtime-text review completed |
+| Historical consensus labels | Diagnostic provenance only; not a target, threshold-selection input, or promotion surface |
 | Runtime detector | rolling soft P(-1) evidence mass, not two hard argmax -1 predictions |
 | Delivery | weekly Coach digest with cited entries |
 | Parked scope | single-entry dip alerts, fade/dormancy, peripheral-value rise, onboarding-gap messaging, evolution gating, multi-week low-mean definitions |
-| Implementation status | strict reference builder, offline soft-evidence benchmark, and procedurally metadata-blinded Codex audit implemented; no scorer promoted; `twinkl-v8pb` student-visible target repair and production `P(-1)` wiring remain open |
+| Implementation status | development review completed, but one locked promotion case is unresolved; no scorer is promoted and production `P(-1)` wiring remains blocked |
 
 Why this is the right v1:
 
 - **One definition, not a taxonomy.** Sustained conflict is the thing Twinkl can
   explain cleanly: "you keep saying this matters, but recent entries repeatedly
   conflict with it."
-- **Mechanically precise historical reference, forgiving detector.** The stored
-  two-label rule is reproducible, but the final procedurally metadata-blinded
-  Codex audit found that only 1 of 5 frozen consensus cases qualifies from the
-  displayed student-visible evidence. Treat the frozen surface as diagnostic
-  rather than a promotion target until `twinkl-v8pb` defines a repaired target
-  and an untouched evaluation surface. The runtime detector uses probability
-  mass so current Critic recall does not turn the trigger into a coin slot.
+- **Visible evidence, forgiving detector.** The target requires displayed
+  behavior or choices rather than inferred context. The historical consensus
+  surface is retired, while the runtime detector still uses probability mass so
+  current Critic recall does not turn the trigger into a coin slot.
 - **Weekly product stays intact.** Detection can be rolling-entry evidence while
   the user sees it in the weekly Coach digest.
 - **Noise is named.** Consensus changes the R1 set from 49 to 40 personas:
   11 persisted-only flags disappear and 2 consensus-only flags appear.
 
-### Benchmark follow-up
+### Retired benchmark follow-up
 
-The completed `twinkl-wq9p` benchmark produces a cross-set disagreement rather
-than a scorer win. Both LLM context arms detect 10/10 deliberately explicit
-designed episodes but 0/5 consensus-derived frozen episodes. The MLP arms
-detect only 1–2/10 designed episodes. A procedurally metadata-blinded Codex
-audit found that 1/5 frozen cases qualified, versus 10/10 designed positives
-and 0/10 designed controls; its secondary delivery/context fields differed and
-did not affect qualification. The frozen reference is unsuitable as a stable
-student-visible promotion surface; target repair in `twinkl-v8pb` must
-determine the next evaluable contract before production wiring. The audit is
-not human ground truth. See the
-[`twinkl-wq9p` report](../../logs/experiments/reports/experiment_review_2026-07-10_twinkl_wq9p.md).
+The completed `twinkl-wq9p` benchmark is historical evidence only. Its audit
+showed that the frozen consensus surface was not a fair student-visible
+promotion target. The benchmark, its artifacts, and its report are retired;
+see the [retirement record](../archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md).
+`twinkl-v8pb` completed the new target and locked promotion review, but the
+unresolved promotion case prevents production wiring. The historical AI audit
+is not human ground truth.
 
 ### Weekly delivery and recovery
 
@@ -239,19 +234,19 @@ implementation work.
 
 ## Soft-label note
 
-`consensus_agreement_*` can confidence-weight reference events. It is **not** a
-full soft target distribution. For actual soft probabilities such as P(-1),
-P(0), and P(+1), use the per-pass vote files from the consensus re-judging
-bundle.
+`consensus_agreement_*` is historical confidence metadata. It is **not** a
+student-visible target or a full soft target distribution. For historical soft
+probabilities such as P(-1), P(0), and P(+1), use the per-pass vote files from
+the consensus re-judging bundle.
 
 ## Caveats
 
-- Consensus labels remain a reproducible historical Judge reference, but the
-  final Codex audit found the current frozen episode surface unsuitable as a
-  stable student-visible promotion target. Treat frozen-surface results as
-  diagnostic target-mismatch evidence, not as a basis for scorer promotion,
-  until `twinkl-v8pb` produces a repaired target and untouched evaluation
-  surface.
+- Consensus labels remain reproducible historical Judge provenance, but the
+  final Codex audit found the frozen episode surface unsuitable as a
+  student-visible promotion target. Treat those results as diagnostic
+  target-mismatch evidence, not as a basis for scorer promotion. `twinkl-v8pb`'s
+  completed review remains a no-go result because the locked promotion case was
+  unresolved.
 - Consensus-vs-human agreement is still advisory in the existing reports; this
   is judge-label reference data, not a final human-labeled benchmark.
 - Core-gated denominators per dimension are small (24-37); per-dimension

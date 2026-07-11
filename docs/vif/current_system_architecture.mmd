@@ -28,7 +28,7 @@ flowchart TB
         wrangled_train["Wrangled persona files<br/>entry text + dates + core values"]
         judge["Judge labeling<br/>{-1, 0, +1} x 10"]
         labels["Persisted single-pass labels<br/>mainline training parquet"]
-        consensus["Five-pass Judge consensus labels<br/>diagnostic + drift reference"]
+        consensus["Five-pass Judge consensus labels<br/>diagnostic provenance"]
         merge["Join + integrity checks<br/>(persona_id, t_index)"]
         encoder_train["Configured frozen sentence encoder"]
         state_train["State encoder<br/>entry window + time gaps + profile weights"]
@@ -46,7 +46,7 @@ flowchart TB
         weekly["Weekly aggregation<br/>per-dimension + profile-weighted signals"]
         evolution["Experimental evolution classifier<br/>automatic in prototype"]
         drift["Weekly prototype routing<br/>stable / crash / rut / evolution / high_uncertainty"]
-        drift_v1["Selected v1 target<br/>rolling soft P(-1) sustained conflict"]
+        drift_v1["Student-visible v1 target<br/>visible conflict + rolling soft P(-1)"]
         digest["Weekly digest builder<br/>structured Coach artifact"]
         prompt["Full-context Coach prompt<br/>history capped at week_end"]
         coach["Optional Coach LLM narrative"]
@@ -80,7 +80,6 @@ flowchart TB
     weekly --> drift
     weekly --> evolution --> drift
     timeline -. "P(-1) not persisted" .-> drift_v1
-    consensus -. "strict reference" .-> drift_v1
     drift --> digest
     drift_v1 -. "selected replacement path" .-> digest
     weekly --> digest

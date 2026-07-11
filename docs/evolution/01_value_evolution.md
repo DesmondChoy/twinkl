@@ -47,13 +47,14 @@ differently depending on which dimensions the user cares about.
 ### 1.3 Drift Detection
 
 The repository contains an experimental weekly crash/rut/evolution router and a
-six-detector comparison surface. The selected v1 product/benchmark contract is
-different: the same declared core value has a qualifying conflict on two
-adjacent entries, using the stored five-pass Judge consensus `-1` label.
-Other value dimensions do not offset the episode. Runtime estimates the same
-construct from rolling soft `P(-1)` evidence under uncertainty gating. The
-rule is implemented in the offline benchmark, but it remains unwired in
-production because no scorer passed the current cross-set evaluation. The
+six-detector comparison surface. The selected v1 product target is different:
+two adjacent entries must visibly show a behavior or choice against the same
+declared core value. Other value dimensions do not offset the episode. Runtime
+estimates the construct from rolling soft `P(-1)` evidence under uncertainty
+gating. [`twinkl-v8pb`](../evals/drift_v1_student_visible_target.md) completed
+the full-runtime-text review, but weak development recall and an unresolved
+promotion case keep the detector unwired in production. The former
+consensus-derived frozen benchmark is retired historical evidence, and the
 six-detector comparison's vote count is not the Judge reference.
 
 The older prototype research includes these deterministic metrics:

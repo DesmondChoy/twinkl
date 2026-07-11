@@ -1,8 +1,9 @@
-"""Decision-level benchmark helpers for sustained-conflict drift v1.
+"""Decision-level helpers for supplied sustained-conflict target labels.
 
-This module keeps the strict label-side reference separate from model evidence.
-Reference episodes come from stored consensus labels. Predicted episodes come
-from per-entry ``P(-1)`` plus uncertainty, or from hard LLM class outputs.
+This module keeps a caller-provided label-side reference separate from model
+evidence. Callers must name the target provenance explicitly. Predicted
+episodes come from per-entry ``P(-1)`` plus uncertainty, or from hard LLM
+class outputs.
 """
 
 from __future__ import annotations
@@ -183,9 +184,9 @@ def build_reference_episodes(
     labels_df: pl.DataFrame,
     profiles_df: pl.DataFrame,
     *,
-    source: str = "five_pass_consensus",
+    source: str,
 ) -> pl.DataFrame:
-    """Materialize strict sustained-conflict episodes from stored labels.
+    """Materialize strict sustained-conflict episodes from supplied labels.
 
     Each declared core value is scanned independently. Two adjacent observed
     ``-1`` labels confirm an episode. Further adjacent ``-1`` labels extend the

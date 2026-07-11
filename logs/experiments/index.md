@@ -19,7 +19,9 @@
 
 > **Active recommendation (2026-03-19):** `run_019`-`run_021` remain the default corrected-split frontier family. The new two-stage reformulation family `run_045`-`run_047` reached comparable median holdout `qwk_mean` (`0.360` vs `0.362`) and the best calibration on the current board (`0.743`), but it gave back too much `recall_-1` (`0.266`) and hedging (`0.708`). `run_034`-`run_036` remain the best tail-sensitive reference branch, and `run_042`-`run_044` remain the strongest encoder-swap challenger.
 >
-> **Latest decision-level drift benchmark (2026-07-10):** [`reports/experiment_review_2026-07-10_twinkl_wq9p.md`](reports/experiment_review_2026-07-10_twinkl_wq9p.md) implements the sustained-conflict reference, adjacent-window detector, threshold search, matching, frozen comparison, and locked 10-episode designed holdout; it is updated with the findings of the subsequently completed `twinkl-16ar` procedurally metadata-blinded Codex audit. `run_020` detected 1/10 designed episodes; the evaluated consensus-trained MLPs detected 2/10. Both `gpt-5.4-mini` context arms detected 10/10 explicit designed episodes with no false alarms but 0/5 consensus-derived frozen episodes. The audit's sustained-conflict verdicts were 1/5 frozen cases, 10/10 designed positives, and 0/10 controls. No scorer is promotion-ready: `twinkl-v8pb` must repair the student-visible target contract and establish an untouched promotion surface before production wiring or a cascade decision. The audit is not human ground truth, and the active entry-level frontier stays unchanged.
+> **Current drift-target status (2026-07-11):** [`twinkl-v8pb` completed its student-visible review](../../docs/evals/drift_v1_student_visible_target.md) using full runtime text and separate development and locked promotion populations. The fixed `run_020` development threshold (probability 0.8, uncertainty 1.010153) found 1/5 reference episodes (precision 1.0, recall 0.2, F1 0.3333, false-positive rate 0.0). The 24-case promotion review left case_023 unresolved across 19 entries, so the promotion score was deliberately not performed. There is no active drift-promotion benchmark, no scorer is promotion-ready, and the active entry-level frontier stays unchanged.
+>
+> **Retired decision-level drift benchmark:** The former `twinkl-wq9p` consensus-derived frozen benchmark is [historical evidence only](../../docs/archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md). Do not rerun, score, tune, or promote from it; its former report and artifacts are not active repository surfaces.
 >
 > **Latest strategic review (2026-07-02):** [`reports/experiment_review_2026-07-02_strategy.md`](reports/experiment_review_2026-07-02_strategy.md) keeps the frontier unchanged and recommends shifting the primary evaluation from entry-level QWK to decision-level drift-trigger metrics plus `recall_-1` at a precision floor, gated by a zero-shot LLM critic baseline and the human-agreement ceiling (Fleiss κ 0.56 aggregate).
 >
@@ -214,40 +216,18 @@
 
 ## Findings
 
-### 2026-07-10 — Decision-level drift benchmark exposes a target-validity split (`twinkl-wq9p`)
+### 2026-07-10 — Retired decision-level drift benchmark (`twinkl-wq9p`)
 
-The POC benchmark now evaluates what Twinkl actually acts on: sustained-conflict
-episodes rather than isolated entry labels. It materializes 52 strict
-consensus-reference episodes across 40 personas, tunes one two-entry `P(-1)`
-plus uncertainty rule on the six validation episodes, and reports episode
-precision/recall/F1, adjacent-window false-positive rate, confirmation-anchored
-latency, and recovery handling. The frozen test has only five reference
-episodes, so the final evaluation also uses a locked, author-designed set of 10
-positive episodes across all Schwartz dimensions plus 10 matched controls.
+This historical benchmark used consensus-derived frozen episodes, an
+author-designed capability set, and an AI audit. It exposed a target-validity
+mismatch: the frozen consensus cases were not a fair student-visible promotion
+surface. The benchmark was retired on 2026-07-11; its scripts, artifacts,
+report, and dedicated tests are not active repository surfaces.
 
-**1. The MLP decision-level recall gap is real.** `run_020` detected 1/10
-designed episodes at precision `1.00`, recall `0.10`, and window FPR `0.04`.
-The recall-retargeted and normally selected consensus-trained MLP arms each
-detected 2/10 at precision `0.67`, recall `0.20`, F1 `0.31`, and window FPR
-`0.12` / `0.08`. Hard-consensus retraining therefore does not solve the
-product-level recall problem.
-
-**2. The LLM result is a capability ceiling, not a promotion.** Both
-`gpt-5.4-mini` context arms detected all 10 deliberately explicit designed
-episodes with no false alarms, yet neither detected any of the five
-consensus-derived frozen episodes. The designed result shows that clear,
-observable conflict is within the LLM's capability. The frozen failure means
-the existing consensus episodes may be subtler, context-dependent, disputed,
-or based on a different target contract.
-
-**3. Recommendation: no production scorer yet.** Keep the active entry-level
-frontier unchanged and keep `twinkl-a2w` production wiring blocked. A
-procedurally metadata-blinded Codex audit found the frozen reference unsuitable as a stable student-visible
-promotion surface; `twinkl-v8pb` now owns label/target repair and an untouched
-promotion surface before considering a bounded LLM verifier or a narrower
-capstone claim around explicit conflict detection. The audit is not human
-ground truth. Full rerunnable evidence:
-[`reports/experiment_review_2026-07-10_twinkl_wq9p.md`](reports/experiment_review_2026-07-10_twinkl_wq9p.md).
+The historical results remain useful only to explain why `twinkl-v8pb` built a
+separate student-visible target and locked promotion check. They must not be
+rerun, scored, tuned, or used to promote a scorer. See the
+[retirement record](../../docs/archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md).
 
 ### 2026-07-02 — Strategic review: the metric regime, not the model, is the active bottleneck
 
@@ -283,12 +263,13 @@ any further synthetic generation is justified. Then proceed with `twinkl-a30f`
 corroborated by the disagreement-learning literature. Full details:
 [`reports/experiment_review_2026-07-02_strategy.md`](reports/experiment_review_2026-07-02_strategy.md).
 
-> **Supersession note (2026-07-10):** This July 2 training sequence remains
+> **Supersession note (2026-07-11):** This July 2 training sequence remains
 > relevant to entry-level hard-dimension work, but it is not the next gate for
-> drift promotion. The later `twinkl-wq9p` benchmark and final `twinkl-16ar`
-> Codex audit found that the frozen drift reference needs student-visible target
-> repair first; `twinkl-v8pb` now owns that gate before any scorer, cascade, or
-> production decision.
+> drift promotion. The later `twinkl-wq9p` benchmark was retired after its
+> audit showed that the frozen reference was not student-visible. `twinkl-v8pb`
+> completed that separate review, but the unresolved locked promotion case and
+> weak development recall still block any scorer, cascade, or production
+> decision.
 
 ### 2026-06-06 — Recall-aware checkpoint retention is worth keeping; recall-aware selection is not (`twinkl-upb5`)
 

@@ -28,7 +28,7 @@ flowchart LR
             wrangled["Processed journal corpus<br/>text + dates + core values"]
             judge["Judge labeling<br/>{-1, 0, +1} x 10"]
             labels["Persisted single-pass label table"]
-            consensus["Five-pass Judge consensus reference"]
+            consensus["Five-pass Judge consensus<br/>diagnostic provenance"]
             generator --> wrangled --> judge --> labels
             judge --> consensus
         end
@@ -55,7 +55,7 @@ flowchart LR
             timeline["Per-entry VIF timeline"]
             weekly["Weekly aggregation"]
             drift["Weekly prototype routing<br/>crash / rut / evolution<br/>high uncertainty"]
-            drift_v1["Sustained-conflict v1 target<br/>rolling soft P(-1)"]
+            drift_v1["Student-visible v1 target<br/>visible conflict + rolling soft P(-1)"]
             runtime_input --> state_runtime --> critic --> timeline --> weekly --> drift
         end
 
@@ -77,7 +77,6 @@ flowchart LR
     weekly --> digest
     drift --> digest
     timeline -. "P(-1) not persisted" .-> drift_v1
-    consensus -. "strict reference" .-> drift_v1
     drift_v1 -. "selected replacement" .-> digest
 
     evolution["Automatic experimental<br/>evolution classifier"]

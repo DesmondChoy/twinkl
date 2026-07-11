@@ -279,7 +279,7 @@ def run_length_stats(personas):
 
 
 def conflict_heavy_week_candidates(personas, core):
-    """Label-derived candidate conflict-heavy weeks for the wq9p benchmark."""
+    """Label-derived candidate conflict-heavy weeks for exploratory analysis."""
     rows = []
     for p, data in personas.items():
         for d in DIMS:

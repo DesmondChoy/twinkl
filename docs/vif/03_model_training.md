@@ -185,17 +185,14 @@ On the 221-row test split:
 
 History improves the LLM's misalignment recall and broad minority-class
 performance. The MLP still retains higher `recall_-1`, lower hedging, local
-execution, and a fixed cost profile. The completed decision-level benchmark
-does not select among these architectures. Both LLM context arms detect 0/5
-frozen consensus episodes but 10/10 locked author-designed episodes. `run_020`
-detects only 1/10 designed episodes, while the evaluated consensus-trained MLPs
-detect 2/10. The LLM result is therefore a cross-set validity warning rather
-than a teacher/fallback promotion, and the MLP result rules out the current
-local scorer as a production drift trigger. A procedurally metadata-blinded Codex audit found the
-frozen reference unsuitable as a stable student-visible promotion surface;
-`twinkl-v8pb` must repair the target and establish an untouched promotion
-surface before an LLM, MLP, or cascade decision. The audit is not human ground
-truth.
+execution, and a fixed cost profile. The retired consensus-derived drift
+benchmark exposed a target-validity mismatch; it does not select among these
+architectures and must not be rerun or used for a promotion decision.
+[`twinkl-v8pb`](../evals/drift_v1_student_visible_target.md) completed a
+student-visible full-runtime-text review before an LLM, MLP, or cascade
+decision. Its weak development recall and unresolved locked promotion case mean
+no scorer can be promoted. The earlier AI audit is diagnostic evidence, not
+human ground truth.
 
 ---
 
@@ -211,8 +208,9 @@ The VIF training stack lives in `src/vif/`.
 | `src/vif/critic_ordinal.py` | Active ordinal and long-tail head families |
 | `src/vif/critic_bnn.py` | Bayesian neural baseline |
 | `src/vif/dataset.py` | Data loading, joins, and persona-level splits |
-| `src/vif/drift_benchmark.py` | Strict drift reference, adjacent-pair detector, matching, and decision metrics |
-| `scripts/experiments/drift_trigger_benchmark.py` | Frozen and locked designed-holdout orchestration |
+| `src/vif/drift_target.py` | Student-visible review packets, reconciliation, and target materialization |
+| `scripts/experiments/build_v8pb_student_visible_target.py` | Development or locked-promotion review packet generation |
+| `scripts/experiments/materialize_v8pb_student_visible_target.py` | Reviewed student-visible target materialization |
 | `src/vif/eval.py` | Evaluation metrics and uncertainty-aware evaluation |
 | `src/vif/posthoc.py` | Validation-only post-hoc boundary tuning |
 | `src/vif/experiment_logger.py` | Persisted run YAMLs and experiment index support |

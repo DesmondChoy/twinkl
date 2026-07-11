@@ -119,8 +119,8 @@ the named value dimension required for an explainable Coach reflection.
 
 Drift v1 is a sustained conflict episode:
 
-> The same declared core value has a qualifying conflict on two adjacent
-> journal entries, using the stored five-pass Judge consensus `-1` label.
+> Two adjacent journal entries clearly show the writer making a behavior or
+> choice against the same declared core value.
 
 The runtime target accumulates recent soft `P(-1)` evidence for that value while
 uncertainty remains below a calibrated ceiling. Hard argmax sequences are not
@@ -129,8 +129,8 @@ toward neutral.
 
 | Layer | v1 behavior |
 |---|---|
-| Reference | Strict per-value episode: stored five-pass Judge consensus `-1` labels on two adjacent entries |
-| Benchmark detector | Two-entry mean `P(-1)` with one global uncertainty ceiling per MLP arm; implemented in `twinkl-wq9p` for evaluation only |
+| Student-visible target | Two adjacent entries visibly show a behavior or choice against the same declared core value; `twinkl-v8pb` completed its full-runtime-text review, but no promotion score was allowed after one case remained unresolved |
+| Historical consensus table | Retired diagnostic provenance only; not a drift target, threshold-selection input, or promotion surface |
 | Runtime | Rolling `P(-1)` evidence with declared-core and uncertainty gates; production integration remains blocked |
 | Delivery | Weekly digest with cited journal evidence and active, recovered, mixed, or uncertain wording; exact schema pending |
 
@@ -141,9 +141,9 @@ short observed trajectories. See
 
 ### 5.1 Delivery-Time Recovery
 
-Benchmark detection and Coach wording answer different questions. The strict
-reference records whether a sustained-conflict episode occurred. The weekly
-digest should describe the state at delivery time.
+Target detection and Coach wording answer different questions. The
+student-visible target records whether a sustained-conflict episode occurred.
+The weekly digest should describe the state at delivery time.
 
 For example, `-1, -1, +1, +1, +1` remains a true benchmark episode, but the
 Coach should describe it as **recovered** rather than **active**. **Mixed** is a
@@ -241,9 +241,9 @@ path.
 
 MC Dropout remains the practical POC default. Later candidates include deep
 ensembles, evidential methods, conformal wrappers, and explicit embedding-space
-out-of-distribution detection. The `twinkl-wq9p` benchmark does not show that
-uncertainty calibration is the binding constraint: the evaluated MLP arms
-detected only 1–2 of 10 designed episodes, while both hard-label LLM arms
-detected all 10 designed episodes but none of the five consensus-derived frozen
-episodes. The next step is target-validity and input-contract review, not a
-heavier uncertainty method.
+out-of-distribution detection. The retired `twinkl-wq9p` diagnostic showed a
+target-validity problem before it could establish whether uncertainty calibration
+is the binding constraint. `twinkl-v8pb` completed that review and withheld a
+promotion score because one locked case was unresolved; the next step is a
+fresh, independently resolved promotion surface, not a heavier uncertainty
+method.

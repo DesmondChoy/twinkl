@@ -2,28 +2,24 @@
 
 ## Current v1 Contract
 
-Drift v1 has one adopted definition: the same declared core value receives a
-qualifying conflict label on two adjacent journal entries. For the strict
-reference, a qualifying conflict is a stored `-1` from the existing five-pass
-Judge consensus resolver.
-
-That resolver first decides whether a majority of passes are non-neutral. If
-so, it chooses the majority polarity among the non-neutral votes; a polarity
-tie resolves to `0` with `no_majority` confidence. Drift consumes that resolved
-label as one input. It does not reinterpret the five raw votes.
+Drift v1 has one product target: two adjacent journal entries clearly show the
+writer making a behavior or choice against the same declared core value. The
+student-visible target uses only the displayed value and journal text; it does
+not infer a conflict from biography, hidden labels, outside constraints without
+a voluntary choice, or ambiguous prose. The former five-pass consensus surface
+is retired diagnostic provenance, not the active target.
 
 Evaluate this rule independently for each `(persona, declared_core_value)`:
 
 - Labels on other values do not cancel, offset, or complete the pair.
-- The first qualifying `-1` is the episode onset; the second confirms it.
-- Further adjacent qualifying `-1` labels extend the same episode.
-- The first non-qualifying entry ends the run. A later pair starts a new
+- The first negative entry is the episode onset; the second confirms it.
+- Further adjacent negative entries extend the same episode.
+- The first non-negative or uncertain entry ends the run. A later pair starts a new
   episode.
 - Adjacent means adjacent observed journal entries after sorting by `t_index`
   and date. Same-day entries and entries across a week boundary count. V1 adds
   no maximum elapsed-time threshold.
-- Any entry without a resolved `-1` breaks the run. A resolved `0` or `+1` can
-  support recovery; a missing label or `no_majority` result supports
+- A non-negative entry can support recovery; an uncertain entry supports
   uncertainty instead.
 
 One persona may therefore have separate or simultaneous episodes on several
@@ -31,8 +27,10 @@ declared core values. The reference records them separately by value; it never
 averages core values into one profile-wide verdict.
 
 The runtime target is rolling soft `P(-1)` evidence under uncertainty gating,
-and the user sees the result in the weekly Coach digest. The target rule is
-implemented and evaluated in the offline benchmark, but no scorer is
+and the user sees the result in the weekly Coach digest. The prior
+consensus-derived frozen benchmark is retired, so there is no active promotion
+benchmark. `twinkl-v8pb` completed the student-visible target and locked
+promotion review, but one 19-entry case was unresolved, so no scorer is
 promotion-ready and the production path remains unwired. The intended delivery
 vocabulary is **active**, **recovered**, **mixed**, or **uncertain**; exact
 schema values and state transitions remain implementation work.
@@ -40,9 +38,9 @@ schema values and state transitions remain implementation work.
 The team recorded this adoption on 2026-07-10 in
 [GitHub issue #49](https://github.com/DesmondChoy/twinkl/issues/49).
 
-The strict reference and empirical rationale live in
-[`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md). The evaluation
-contract lives in
+The historical consensus EDA and empirical rationale live in
+[`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md). The active
+student-visible target and evaluation contract live in
 [`docs/evals/drift_detection_eval.md`](../evals/drift_detection_eval.md).
 
 The repository also contains two exploratory predecessors:
@@ -157,9 +155,9 @@ Options B and C move temporal reasoning *into* the Critic. The drift layer can n
 ### Definition
 
 Drift v1 is a **sustained conflict episode on a declared core value**. The
-strict reference applies the per-value rules in the Current v1 Contract above;
-the runtime target is rolling soft evidence; the weekly boundary controls
-delivery only.
+student-visible target applies the per-value rules in the Current v1 Contract
+above; the runtime target is rolling soft evidence; the weekly boundary
+controls delivery only.
 
 The broader interpretation question—unintended drift, an accepted trade-off, or
 genuine value change—belongs to the Coach conversation. Automatic profile
@@ -755,10 +753,11 @@ That vote count is **detector agreement**, not the five-pass Judge reference
 and not ground truth. No
 `consensus_crisis_labels.parquet` artifact is part of the current benchmark.
 
-The v1 evaluation instead uses strict sustained-conflict episodes requiring
-stored five-pass Judge consensus `-1` labels on two adjacent entries for the
-same declared core value, then measures the rolling-soft-evidence runtime
-detector on persona-isolated tuning and held-out sets. See
+The v1 target instead requires two adjacent entries that visibly show a
+behavior or choice against the same declared core value. `twinkl-v8pb`
+completed the student-visible target and locked promotion review, but the
+promotion score was withheld after one case remained unresolved; the former
+consensus-derived frozen benchmark is retired. See
 [`docs/evals/drift_detection_eval.md`](../evals/drift_detection_eval.md) for the
 active protocol.
 

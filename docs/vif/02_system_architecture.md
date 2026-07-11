@@ -222,14 +222,15 @@ uncertainties and can emit `stable`, `crash`, `rut`, `evolution`, or
 automatically when no precomputed result is supplied. This is the route used by
 the offline Coach runtime and demo UI.
 
-The selected product/benchmark contract is narrower: sustained conflict on a
-declared core value, with stored five-pass Judge consensus `-1` labels on two
-adjacent entries and rolling soft `P(-1)` runtime evidence.
-`src/vif/drift_benchmark.py` now implements the offline reference, detector,
-matching, and metrics path. It does not replace `src/vif/drift.py` in the Coach
-runtime. The benchmark promoted no scorer, so that production edge remains
-deliberately absent and the existing weekly router remains a compatibility
-prototype.
+The selected product contract is narrower: sustained conflict on a declared
+core value means two adjacent entries visibly show a behavior or choice against
+that value, with rolling soft `P(-1)` runtime evidence. The former
+consensus-derived frozen benchmark is retired historical evidence; it does not
+implement or justify the active target. [`twinkl-v8pb`](../evals/drift_v1_student_visible_target.md)
+completed the separate full-runtime-text review, but `run_020` found only 1/5
+development episodes and the locked promotion review left one 19-entry case
+unresolved. The production edge therefore remains deliberately absent and the
+existing weekly router remains a compatibility prototype.
 See
 [`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md) and
 [`docs/evals/drift_detection_eval.md`](../evals/drift_detection_eval.md).

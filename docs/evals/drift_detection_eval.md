@@ -4,30 +4,28 @@
 
 Twinkl evaluates one v1 definition of drift:
 
-> A sustained conflict episode occurs when the same declared core value
-> receives a qualifying conflict label on two adjacent journal entries.
+> A sustained conflict episode occurs when two adjacent journal entries clearly
+> show the writer making a behavior or choice against the same declared core
+> value.
 
-For the strict development reference, a conflict qualifies when the existing five-pass
-Judge consensus resolver stores `-1` for that value. The resolver first decides
-whether most passes are non-neutral, then selects the majority polarity among
-those non-neutral votes; a polarity tie resolves to `0` with `no_majority`
-confidence. Drift consumes the resolved label rather than rerunning vote
-aggregation. This is distinct from the six-detector comparison's vote count.
+The earlier consensus-derived frozen benchmark is [retired historical
+evidence](../archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md). The
+five-pass Judge consensus table remains label provenance and a diagnostic, but
+it is not a drift target, threshold-selection input, or promotion surface. This
+is distinct from the six-detector comparison's vote count.
 
-The three layers of the contract are deliberately different:
+The current layers of the contract are deliberately different:
 
 | Layer | Contract |
 |---|---|
-| Development reference labels | Stored five-pass Judge consensus `-1` labels for the same declared core value on two adjacent entries |
-| Offline detector benchmark | Two-entry mean `P(-1)` with declared-core gating and a maximum uncertainty ceiling; implemented and evaluated |
-| Production runtime | Selected scorer and detector are not approved or wired |
-| User delivery | The weekly Coach digest cites the relevant entries and uses active, recovered, mixed, or uncertain wording without score jargon; exact schema implementation is pending |
+| Student-visible target | An entry is negative only when the full displayed runtime text clearly shows a behavior or choice against a declared core value. `twinkl-v8pb` completed the paired review. |
+| Development population | The original fixed validation personas defined the target and selected one fixed `run_020` threshold: probability 0.8 and uncertainty 1.010153. |
+| Promotion population | A separate 24-case population was locked before review and threshold selection. One 19-entry case remained unresolved, so its promotion score was deliberately not performed. |
+| Production runtime | Selected scorer and detector are not approved or wired. |
+| User delivery | The weekly Coach digest cites the relevant entries and uses active, recovered, mixed, or uncertain wording without score jargon; exact schema implementation is pending. |
 
-The stored reference definition is mechanically reproducible, but its current
-frozen episode surface is not a validated student-visible promotion target: the
-final procedurally metadata-blinded Codex audit accepted only 1 of 5 frozen
-cases. The runtime detector is soft because the current Critic often hedges a
-true `-1` toward neutral. Weekly delivery remains a product cadence rather than
+The runtime detector is soft because the current Critic often hedges a true
+conflict toward neutral. Weekly delivery remains a product cadence rather than
 a requirement that the evidence itself be grouped into multi-week averages.
 
 Single-entry dip alerts, crash/rut taxonomies, fade/dormancy, peripheral-value
@@ -62,17 +60,17 @@ The empirical basis is
   timeline, weekly, drift, digest, markdown, and prompt artifacts.
 - The demo review app compares six exploratory rule-based detector families
   against Judge labels or Critic means.
-- `src/vif/drift_benchmark.py` materializes strict reference episodes, retains
-  every adjacent decision window, detects predicted episodes, matches them
-  one-to-one, and reports episode and false-positive metrics.
-- `scripts/experiments/drift_trigger_benchmark.py` calibrates one global
-  two-entry `P(-1)` plus uncertainty rule on frozen validation personas and
-  compares the incumbent MLP, persisted-label sibling, consensus-trained MLPs,
-  and both LLM context arms.
-- The locked designed holdout contains 10 reference episodes across all 10
-  Schwartz dimensions plus 10 matched control trajectories. It was fixed
-  before scoring and is explicitly author-designed rather than human ground
-  truth.
+- `twinkl-v8pb` completed its full-runtime-text review. Development had 42
+  cases / 335 entries, with 41/42 case agreement (0.97619) and 324/335
+  entry agreement (0.96716). At the fixed threshold, `run_020` found 1/5
+  reference episodes (precision 1.0, recall 0.2, F1 0.3333, false-positive
+  rate 0.0).
+- The locked promotion review had 24 cases / 191 entries, with 23/24 case
+  agreement (0.95833) and 180/191 entry agreement (0.94241). case_023 was
+  unresolved across 19 entries, so the promotion score was deliberately not
+  performed rather than scoring only the agreed cases.
+- The retained author-designed trajectories are a capability probe only. They
+  are not a target, a threshold-selection input, or a promotion surface.
 
 ### Current Prototype Boundary
 
@@ -86,49 +84,23 @@ The six-detector comparison in `src/demo_tool/multi_drift.py` is another
 exploratory surface. Its per-entry vote count is detector agreement, not the
 five-pass Judge reference.
 
-### Benchmark Result (`twinkl-wq9p`)
+### Retired consensus-derived benchmark (historical)
 
-The frozen consensus split contains 52 strict episodes overall, but only six
-on validation personas and five on test personas. Threshold selection on that
-small validation surface produced conservative operating points:
+`twinkl-wq9p` was retired because its frozen consensus episodes were not a fair
+student-visible promotion surface. Its former scripts, artifacts, report, and
+dedicated tests are not active repository surfaces. The historical audit is
+useful only for explaining that retirement; it must not be rerun, tuned, scored,
+or used to promote a scorer. See the [retirement record](../archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md).
 
-- `run_020` predicted no frozen-test episode and detected 1/10 designed
-  episodes;
-- the two evaluated consensus-trained MLP variants detected 2/10 designed
-  episodes, so hard-consensus retraining did not close the recall gap;
-- both `gpt-5.4-mini` context arms detected 10/10 deliberately explicit
-  designed episodes with no false alarms, but detected 0/5 consensus-derived
-  frozen-test episodes.
-
-That cross-set disagreement is the decision. The LLM result proves that clear,
-observable sustained conflict is within the scorer's capability; it does not
-validate the consensus-derived episodes or justify a production cascade.
-
-The final procedurally metadata-blinded Codex audit packet contained 25 randomly
-ordered trajectories and 74 journal entries. Two separate Codex passes agreed
-25/25 on the sustained-conflict qualification verdict: **1/5** frozen consensus
-cases qualified, **10/10** designed positives qualified, and **0/10** designed
-controls qualified. The four rejected frozen cases overreached the displayed
-student-visible evidence under the immediate adjacent-pair rule. Secondary
-delivery/context fields differed and did not affect qualification. These are
-AI-audit verdicts, separate from the MLP/LLM benchmark metrics, and are not
-human ground truth or a promotion basis.
-
-No scorer is promotion-ready. `twinkl-v8pb` must repair the student-visible
-label/target contract and establish an untouched promotion surface before
-production trigger wiring proceeds in `twinkl-a2w`. Full evidence is in the
-[`twinkl-wq9p` report](../../logs/experiments/reports/experiment_review_2026-07-10_twinkl_wq9p.md)
-and its
-[`Codex audit`](../../logs/experiments/artifacts/drift_trigger_benchmark_twinkl_wq9p_20260710/codex_audit/assessment.md).
+The full evidence is in the [student-visible target record](drift_v1_student_visible_target.md), the [development threshold receipt](../../logs/experiments/artifacts/drift_target_twinkl_v8pb_20260711/development/thresholds.json), and the [promotion no-score record](../../logs/experiments/artifacts/drift_target_twinkl_v8pb_20260711/promotion/promotion_no_score.json). No fallback score was taken from the retired benchmark.
 
 ### Still Missing for Product v1
 
 - Per-entry `P(-1)` persistence in the runtime artifact surface
-- Student-visible label/target repair and an untouched promotion surface
-  (`twinkl-v8pb`); the completed Codex audit is diagnostic, not human ground
-  truth
-- A scorer and calibrated operating point that pass both target-validity and
-  decision-level promotion checks
+- A fresh, independently resolved promotion surface; the reviewed population
+  cannot be reduced to its agreed cases after disagreement was observed
+- A scorer and calibrated operating point that pass a future fair
+  decision-level promotion check
 - Production integration of the selected soft-evidence detector
 - Coach-language checks for active, recovered, mixed, and uncertain states at
   digest time
@@ -153,58 +125,33 @@ did not declare as important.
 
 ---
 
-## Development Reference Event Construction
+## Student-Visible Target Outcome (2026-07-11)
 
-Construct the reference independently for each
-`(persona_id, declared_core_value)`:
+The [student-visible target](drift_v1_student_visible_target.md) labels an
+entry negative only when its displayed text clearly shows the writer making a
+behavior or choice against a declared core value. Frustration, guilt, wishes,
+outside constraints without a voluntary choice, biography, and ambiguous prose
+do not qualify on their own.
 
-1. Use the declared-core set stored with the profile. Do not infer eligibility
-   from the graded weight vector.
-2. Sort the persona's entries by `t_index`, then date. Adjacent entries count
-   even when they occur on the same day or cross a calendar-week boundary. V1
-   has no maximum elapsed-time threshold.
-3. For the value being evaluated, mark an entry as a qualifying conflict when
-   `alignment_<value> == -1` in `consensus_labels.parquet`. Missing consensus
-   rows are non-qualifying and must not be skipped to join conflicts on either
-   side. A reference builder should report malformed or incomplete input.
-4. Ignore every other value dimension when evaluating this value's run. An
-   aligned second core value cannot cancel the conflict, and a conflict on a
-   different value cannot complete the pair.
-5. On the first qualifying conflict, remember a candidate onset. On the second
-   adjacent qualifying conflict, confirm one episode whose `onset_entry` is the
-   first entry and whose `confirmation_entry` is the second.
-6. Extend that episode through further adjacent qualifying conflicts. Store the
-   final qualifying conflict as `end_entry`. If the run reaches the end of the
-   observed timeline, keep the episode open and active.
-7. Any non-qualifying or missing entry breaks the run. A later qualifying pair
-   starts a new episode. A broken run is not automatically a recovered episode:
-   a stored `0` with `no_majority` confidence or missing evidence supports
-   **uncertain**, while a resolved neutral or aligned result can support
-   **recovered** at delivery time.
-8. Keep each value's episodes as separate records. A persona may have multiple
-   or simultaneous value-specific episodes.
+Two immediately adjacent negative entries for the same value form one
+sustained-conflict episode. A non-negative or uncertain entry breaks the run.
+Later entries can describe whether an already-recorded episode is active,
+recovered, or uncertain; they do not change whether the earlier pair occurred.
 
-These examples follow directly from the rules:
+The target used two deliberately separate populations. The development review
+used the original fixed validation personas; the locked promotion review used
+24 registry personas added after the original model split. Both reviews used
+the full text the runtime state encoder receives: journal entry, displayed
+nudge, and displayed response.
 
-| Value sequence | Reference result |
-|---|---|
-| `-1, -1` | One episode; onset at the first entry, confirmed at the second |
-| `-1, -1, -1` | One extended episode, not two overlapping episodes |
-| `-1, 0, -1` | No episode |
-| `-1, -1, 0, -1, -1` | Two episodes |
-| Core A `-1, -1`; Core B `+1, +1` | One episode on Core A; Core B does not cancel it |
-| Core A `-1, -1`; Core B `-1, -1` | Two simultaneous value-specific episodes |
-
-This frozen event table remains a diagnostic surface for historical comparison
-and target-repair development; it is not a promotion surface under the current
-student-visible contract. The first observable reference trigger is
-`confirmation_entry`, so detector latency is measured from confirmation rather
-than the candidate onset. A weekly digest is considered timely when it surfaces
-an active episode during the delivery week or within the allowed latency window.
-
-`consensus_agreement_*` is confidence metadata, not a second eligibility gate
-and not the full class distribution. Soft target probabilities require the
-per-pass vote files from the consensus rerun bundle.
+The development result is diagnostic, not a promotion pass: 42 cases / 335
+entries, 41/42 case agreement, 324/335 entry agreement, and `run_020` detecting
+1/5 reference episodes at the fixed probability 0.8 / uncertainty 1.010153
+threshold. The promotion result is a valid no-go outcome: 23/24 case agreement
+and 180/191 entry agreement, but case_023 remained unresolved across 19
+entries. No promotion score was run. The old consensus event table remains
+retired historical evidence and must not be materialized or used for either
+population.
 
 ---
 
@@ -222,7 +169,7 @@ Profile weights may calibrate evidence or thresholds among declared core
 values, but they do not make an undeclared value eligible for v1 drift.
 
 The exact rolling function and thresholds are evaluation parameters, not part
-of the reference-label definition. Candidate forms include a two-entry mean,
+of the student-visible label definition. Candidate forms include a two-entry mean,
 an exponentially weighted sum, or a small cumulative evidence score. They all
 produce the same output concept: active sustained conflict on a named value.
 
@@ -233,40 +180,36 @@ Hard argmax predictions are not the runtime contract. Requiring two predicted
 
 ## Evaluation Protocol
 
-### Phase 1: Reference and Tuning Split
+### Phase 1: Student-Visible Target Development
 
-1. Reproduce the consensus trajectory EDA.
-2. Materialize sustained-conflict reference episodes.
-3. Split by persona so no person's entries appear in both tuning and evaluation
-   sets.
-4. Use label-derived conflict-heavy weeks and reference episodes for threshold
-   tuning and error analysis only.
-5. Stratify reports by value dimension because event prevalence is highly
-   asymmetric.
+1. Review the fixed development population using only the declared core value
+   and displayed journal trajectory.
+2. Reconcile the paired reviews into a versioned target while preserving the
+   original Judge labels as provenance rather than overwriting them.
+3. Choose at most one detector threshold from that development target.
+4. Record uncertainty, rationale, and unresolved-case handling separately from
+   the main sustained-conflict decision.
 
-### Phase 2: Critic in the Loop
+### Phase 2: Locked Promotion Review
 
-1. Run a frozen Critic checkpoint over the same persona timelines.
-2. Persist `P(-1)` and uncertainty per entry and dimension.
-3. Run candidate soft-evidence policies without reading evaluation labels.
-4. Match predicted episodes to reference episodes by persona, value, and onset
-   tolerance.
-5. Compare the active MLP frontier and the LLM context arms at this decision
-   layer.
+1. Keep the promotion population locked before its review and before threshold
+   selection.
+2. Review it under the same student-visible rule and reconcile only after both
+   review responses are recorded.
+3. Treat an unresolved promotion case as a block on a promotion claim.
 
-### Phase 3: Isolated Designed Holdout
+### Phase 3: One Fair Scorer Comparison
 
-1. Create trajectories with explicitly scripted sustained-conflict episodes and
-   matched non-conflict controls.
-2. Keep the scripted set isolated from threshold selection and prompt tuning.
-3. Include easy, subtle, recovery, and volatile cases.
-4. Report event metrics and Coach evidence quality on this holdout once.
+1. Run the allowed scorer once against the locked promotion target after the
+   development threshold is fixed.
+2. Report episode hits, false positives, and delivery-state handling without
+   changing the target or threshold after seeing those results.
+3. Keep author-designed trajectories separate as a capability probe; they can
+   never substitute for the locked promotion population.
 
-The label-derived candidates are adequate for tuning. They are not independent
-validation because the same Judge regime defines the reference. The designed
-holdout is isolated from tuning and has a procedurally metadata-blinded Codex
-audit, but it remains author-designed rather than human ground truth, so it is
-a capability probe rather than a final benchmark.
+`twinkl-v8pb` completed Phases 1 and 2 under this protocol. Phase 3 stopped
+before scoring: the unresolved promotion case makes the target invalid for a
+fair score, and scoring only the agreed cases would be cherry-picking.
 
 ---
 
@@ -274,27 +217,28 @@ a capability probe rather than a final benchmark.
 
 ### Primary Event Metrics
 
-| Metric | Target | Meaning |
-|---|---:|---|
-| Designed-positive capability recall | `>= 80%` | At least 8 of 10 author-designed sustained-conflict episodes are detected; this is a capability check, not a scorer-promotion gate |
-| Precision | `> 60%` | Most surfaced episodes match a reference conflict |
-| Event F1 | `> 0.5` | Precision and recall remain jointly useful |
-| False-positive rate | `< 20%` | Non-conflict windows rarely produce alerts |
-| First-alert latency | `<= 2 entries` | The detector reacts soon after `confirmation_entry`, when the reference episode first becomes observable |
+| Metric | Status | Meaning |
+|---|---|---|
+| Development episode recall (`run_020`) | 1/5 (0.2) | The fixed development threshold found one of five reviewed reference episodes |
+| Development precision / false-positive rate (`run_020`) | 1.0 / 0.0 | The single predicted development episode was correct, but four reference episodes were missed |
+| Development F1 (`run_020`) | 0.3333 | Balances the perfect precision with low recall |
+| Promotion episode metrics | Deliberately not scored | case_023 remained unresolved across 19 entries; the target is not valid for a fair score |
+| First-alert latency | Not scored | It requires a resolved promotion target |
+| Author-designed capability recall | Capability-only diagnostic | Whether the scorer can find deliberately clear episodes; never a scorer-promotion gate |
 
-The 10 designed controls must be reported alongside positive-case recall.
-Neither the frozen reference nor the author-designed holdout can promote a
-scorer under the current contract; promotion criteria apply only to the
-untouched evaluation surface established by `twinkl-v8pb`.
+A development-only operating point exists (probability 0.8, uncertainty
+1.010153), but no numerical promotion threshold is active. The retained
+author-designed controls remain capability-only diagnostics and cannot
+substitute for a fresh, resolved locked promotion population.
 
 ### Required Slices
 
 - Per Schwartz value dimension
 - Declared-core-value rank or profile-weight band
 - Episode length and severity
-- Consensus agreement tier
+- Review confidence and disagreement state
 - Active, recovered, mixed, and uncertain digest-time cases
-- MLP versus LLM context arm
+- Allowed scorer and input-contract version
 
 ### Uncertainty Validation
 
@@ -311,7 +255,7 @@ Report:
 
 ## Reproduction
 
-Run the default consensus analysis with runtime-compatible week bins:
+Run the historical consensus analysis with runtime-compatible week bins:
 
 ```sh
 uv run python scripts/drift/trajectory_eda.py
@@ -333,28 +277,22 @@ Options:
 Generated evidence lives under `docs/drift/figures/` and
 `docs/drift/tables/`.
 
-Run the decision-level benchmark from the locked fixture and cached scorer
-artifacts:
-
-```sh
-uv run python scripts/experiments/drift_trigger_benchmark.py
-```
-
-Use `--execute-llm` only when the locked designed-holdout LLM response cache is
-absent and fresh API inference is intended. Benchmark artifacts live under
-`logs/experiments/artifacts/drift_trigger_benchmark_twinkl_wq9p_20260710/`.
+These commands reproduce historical EDA only. They must not be used to build a
+drift target, select a threshold, or promote a scorer. There is deliberately no
+active command for the retired `twinkl-wq9p` benchmark. The completed
+student-visible review and its blocked promotion result are described in
+[`drift_v1_student_visible_target.md`](drift_v1_student_visible_target.md).
 
 ---
 
 ## Limitations
 
-1. Consensus labels are a stored Judge reference, not human ground truth. The
-   final procedurally metadata-blinded Codex audit also found the current frozen
-   episode surface unsuitable as a stable student-visible promotion target.
-2. The incumbent `run_020` checkpoint was trained on persisted single-pass
-   labels, so its consensus evaluation mixes model error with label-regime
-   shift. The consensus-trained comparison arms reduce that mismatch but still
-   miss most designed episodes.
+1. Consensus labels are stored Judge provenance, not human ground truth. The
+   former frozen consensus benchmark is retired and cannot support a target,
+   threshold, or promotion claim.
+2. The incumbent `run_020` checkpoint predates the student-visible target. It
+   was evaluated only on the completed development target; the unresolved
+   promotion target deliberately received no score.
 3. Core-gated per-dimension denominators are small and uneven.
 4. Five personas have only two entries, so their temporal evidence is limited
    to one possible adjacent pair.
@@ -377,8 +315,11 @@ absent and fresh API inference is intended. Benchmark artifacts live under
 | [`src/coach/runtime.py`](../../src/coach/runtime.py) | Offline checkpoint-to-digest orchestration |
 | [`src/demo_tool/multi_drift.py`](../../src/demo_tool/multi_drift.py) | Six-detector exploratory comparison |
 | [`scripts/experiments/llm_critic_baseline.py`](../../scripts/experiments/llm_critic_baseline.py) | Student-visible and history-context comparison arms |
-| [`src/vif/drift_benchmark.py`](../../src/vif/drift_benchmark.py) | Strict reference builder, pair decisions, detector, matching, and event metrics |
-| [`scripts/experiments/drift_trigger_benchmark.py`](../../scripts/experiments/drift_trigger_benchmark.py) | Frozen and designed-holdout benchmark orchestration |
-| [`config/evals/drift_v1_designed_holdout.yaml`](../../config/evals/drift_v1_designed_holdout.yaml) | Locked 10-episode plus 10-control designed holdout |
+| [`drift_v1_student_visible_target.md`](drift_v1_student_visible_target.md) | Completed target rule, review boundary, development result, and blocked promotion result |
+| [`../../config/evals/drift_v1_student_visible_v1.yaml`](../../config/evals/drift_v1_student_visible_v1.yaml) | Locks the development and promotion populations before review or threshold selection |
+| [`../../src/vif/drift_target.py`](../../src/vif/drift_target.py) | Student-visible review packets, reconciliation, and target materialization |
+| [`../../scripts/experiments/build_v8pb_student_visible_target.py`](../../scripts/experiments/build_v8pb_student_visible_target.py) | Builds the development or promotion review packet |
+| [`../../scripts/experiments/materialize_v8pb_student_visible_target.py`](../../scripts/experiments/materialize_v8pb_student_visible_target.py) | Materializes a reviewed student-visible target variant |
+| [`../../config/evals/drift_v1_author_designed_capability.yaml`](../../config/evals/drift_v1_author_designed_capability.yaml) | Author-designed capability probe; never a promotion surface |
 | [`logs/experiments/reports/experiment_review_20260702_twinkl_w2mu_frozen_context_gap.md`](../../logs/experiments/reports/experiment_review_20260702_twinkl_w2mu_frozen_context_gap.md) | Frozen test-split LLM context results |
-| [`logs/experiments/reports/experiment_review_2026-07-10_twinkl_wq9p.md`](../../logs/experiments/reports/experiment_review_2026-07-10_twinkl_wq9p.md) | Decision-level benchmark result and promotion recommendation |
+| [`../archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md`](../archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md) | Retired benchmark record; do not rerun, score, tune, or promote from it |

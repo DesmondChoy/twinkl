@@ -113,11 +113,13 @@ table shows per-entry detector votes plus a detector-vote count for each step.
 That count is agreement among the six exploratory methods; it is not the
 five-pass Judge consensus artifact and is not benchmark ground truth.
 
-The comparison remains a diagnostic surface. Drift v1 uses the strict
-sustained-conflict reference described in
-[`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md), and the rolling
-soft-evidence rule is implemented in the offline benchmark. It is not wired
-into this review app or the Coach runtime because no scorer is promotion-ready.
+The comparison remains a diagnostic surface. Drift v1 requires two adjacent
+entries that visibly show a behavior or choice against the same declared core
+value. [`twinkl-v8pb`](../evals/drift_v1_student_visible_target.md) completed
+the student-visible target and locked promotion review. It is not wired into
+this review app or the Coach runtime because the development score was weak and
+one promotion case remained unresolved; the old consensus-derived frozen
+benchmark is retired historical evidence.
 
 ## Generated Artifacts
 

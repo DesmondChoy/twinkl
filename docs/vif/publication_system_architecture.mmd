@@ -23,7 +23,7 @@ flowchart LR
         synth["Synthetic journals"]
         judge["Judge labeling<br/>single pass + five-pass"]
         labels["Persisted single-pass Judge labels"]
-        consensus["Five-pass Judge consensus reference"]
+        consensus["Five-pass Judge consensus<br/>diagnostic provenance"]
         shared_train["Shared text + state representation"]
         critic_model["Trained VIF Critic"]
         synth --> shared_train --> critic_model
@@ -46,7 +46,7 @@ flowchart LR
         subgraph coach_lane["Weekly Coaching"]
             direction LR
             drift["Weekly prototype router<br/>crash / rut / evolution<br/>high uncertainty"]
-            drift_v1["Sustained-conflict v1 target<br/>rolling soft P(-1)"]
+            drift_v1["Student-visible v1 target<br/>visible conflict + rolling soft P(-1)"]
             digest["Weekly digest"]
             coach["Coach prompt / optional reflection"]
             drift --> digest -.-> coach
@@ -57,7 +57,6 @@ flowchart LR
     shared_train -. "same state definition" .-> shared_runtime
     weekly --> drift
     entry_scores -. "P(-1) not persisted" .-> drift_v1
-    consensus -. "strict reference" .-> drift_v1
     drift_v1 -. "selected replacement" .-> digest
 
     evolution["Automatic experimental<br/>evolution classifier"]

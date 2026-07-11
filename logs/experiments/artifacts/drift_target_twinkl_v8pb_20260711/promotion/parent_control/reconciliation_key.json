@@ -1,0 +1,1178 @@
+{
+  "schema_version": "twinkl-v8pb-review-v2",
+  "target_version": "twinkl-v8pb-student-visible-v1",
+  "warning": "Parent-held reconciliation key. Do not give this file, source labels, model evidence, or source artifacts to a reviewer before submission.",
+  "cases": [
+    {
+      "review_case_id": "case_001",
+      "case_id": "promotion:b604addd:power",
+      "split": "promotion",
+      "persona_id": "b604addd",
+      "dimension": "power",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-10-14"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-10-20"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-10-25"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-10-29"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-11-05"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-11-10"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-11-16"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-11-19"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-11-22"
+        },
+        {
+          "position": 10,
+          "t_index": 9,
+          "date": "2025-11-22"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_002",
+      "case_id": "promotion:43f4507b:security",
+      "split": "promotion",
+      "persona_id": "43f4507b",
+      "dimension": "security",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-01-02"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-01-03"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-01-07"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-01-09"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-01-15"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-01-22"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-01-27"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_003",
+      "case_id": "promotion:f418b74b:hedonism",
+      "split": "promotion",
+      "persona_id": "f418b74b",
+      "dimension": "hedonism",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-09-03"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-09-10"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-09-11"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-09-14"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-09-16"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-09-16"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-09-16"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-09-17"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_004",
+      "case_id": "promotion:3a517a79:security",
+      "split": "promotion",
+      "persona_id": "3a517a79",
+      "dimension": "security",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-12-22"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-12-28"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-12-29"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-12-31"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-12-31"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2026-01-07"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2026-01-13"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2026-01-13"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2026-01-17"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_005",
+      "case_id": "promotion:236d4507:power",
+      "split": "promotion",
+      "persona_id": "236d4507",
+      "dimension": "power",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-02-14"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-02-15"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-02-22"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-02-28"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-03-01"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-03-04"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_006",
+      "case_id": "promotion:e6838e16:security",
+      "split": "promotion",
+      "persona_id": "e6838e16",
+      "dimension": "security",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-02-15"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-02-22"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-02-28"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-03-02"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-03-04"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-03-08"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-03-10"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-03-13"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-03-19"
+        },
+        {
+          "position": 10,
+          "t_index": 9,
+          "date": "2025-03-25"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_007",
+      "case_id": "promotion:b8a23604:hedonism",
+      "split": "promotion",
+      "persona_id": "b8a23604",
+      "dimension": "hedonism",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-10-27"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-11-01"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-11-02"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-11-06"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-11-10"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-11-12"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-11-14"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_008",
+      "case_id": "promotion:c876219a:security",
+      "split": "promotion",
+      "persona_id": "c876219a",
+      "dimension": "security",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-04-06"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-04-08"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-04-10"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-04-17"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-04-24"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-05-01"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-05-08"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-05-12"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-05-14"
+        },
+        {
+          "position": 10,
+          "t_index": 9,
+          "date": "2025-05-20"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_009",
+      "case_id": "promotion:bcfa309d:power",
+      "split": "promotion",
+      "persona_id": "bcfa309d",
+      "dimension": "power",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-09-16"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-09-18"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-09-25"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-09-25"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-09-29"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-10-01"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-10-02"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-10-07"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_010",
+      "case_id": "promotion:06f1d745:security",
+      "split": "promotion",
+      "persona_id": "06f1d745",
+      "dimension": "security",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-12-04"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-12-04"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-12-05"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-12-08"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-12-10"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-12-17"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_011",
+      "case_id": "promotion:9510e81a:power",
+      "split": "promotion",
+      "persona_id": "9510e81a",
+      "dimension": "power",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-11-11"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-11-15"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-11-22"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-11-25"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-11-26"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-11-29"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-12-01"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_012",
+      "case_id": "promotion:73efad77:security",
+      "split": "promotion",
+      "persona_id": "73efad77",
+      "dimension": "security",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-09-15"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-09-15"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-09-16"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-09-19"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-09-21"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-09-25"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_013",
+      "case_id": "promotion:61d7d490:security",
+      "split": "promotion",
+      "persona_id": "61d7d490",
+      "dimension": "security",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-05-26"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-05-26"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-05-29"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-06-01"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-06-05"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-06-09"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_014",
+      "case_id": "promotion:abf1ce49:security",
+      "split": "promotion",
+      "persona_id": "abf1ce49",
+      "dimension": "security",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-09-07"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-09-13"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-09-14"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-09-21"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-09-24"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-09-29"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-10-04"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-10-06"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-10-10"
+        },
+        {
+          "position": 10,
+          "t_index": 9,
+          "date": "2025-10-14"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_015",
+      "case_id": "promotion:849a9d72:security",
+      "split": "promotion",
+      "persona_id": "849a9d72",
+      "dimension": "security",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-06-09"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-06-14"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-06-21"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-06-26"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-07-02"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-07-07"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-07-07"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-07-07"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-07-10"
+        },
+        {
+          "position": 10,
+          "t_index": 9,
+          "date": "2025-07-10"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_016",
+      "case_id": "promotion:bf44e50f:hedonism",
+      "split": "promotion",
+      "persona_id": "bf44e50f",
+      "dimension": "hedonism",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-11-20"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-11-20"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-11-20"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-11-22"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-11-25"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-12-01"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_017",
+      "case_id": "promotion:ed67c9cc:hedonism",
+      "split": "promotion",
+      "persona_id": "ed67c9cc",
+      "dimension": "hedonism",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-02-02"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-02-02"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-02-08"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-02-09"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-02-11"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-02-14"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-02-16"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-02-19"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-02-21"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_018",
+      "case_id": "promotion:3b8b0795:security",
+      "split": "promotion",
+      "persona_id": "3b8b0795",
+      "dimension": "security",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-04-09"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-04-15"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-04-19"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-04-21"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-04-26"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-05-03"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-05-08"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-05-13"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_019",
+      "case_id": "promotion:344ea8f7:hedonism",
+      "split": "promotion",
+      "persona_id": "344ea8f7",
+      "dimension": "hedonism",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-11-07"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-11-11"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-11-13"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-11-13"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-11-20"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-11-20"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-11-23"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-11-27"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-12-02"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_020",
+      "case_id": "promotion:eb969aef:security",
+      "split": "promotion",
+      "persona_id": "eb969aef",
+      "dimension": "security",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-12-21"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-12-27"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-12-28"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2026-01-03"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2026-01-07"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2026-01-14"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2026-01-21"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2026-01-28"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_021",
+      "case_id": "promotion:e209b4cd:hedonism",
+      "split": "promotion",
+      "persona_id": "e209b4cd",
+      "dimension": "hedonism",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-10-22"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-10-24"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-10-30"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-11-04"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-11-05"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-11-05"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_022",
+      "case_id": "promotion:fec355ea:power",
+      "split": "promotion",
+      "persona_id": "fec355ea",
+      "dimension": "power",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-02-25"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-03-04"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-03-09"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-03-15"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-03-22"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-03-26"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_023",
+      "case_id": "promotion:cd7c2a11:power",
+      "split": "promotion",
+      "persona_id": "cd7c2a11",
+      "dimension": "power",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-08-28"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-09-04"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-09-05"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-09-08"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-09-11"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-09-12"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-09-13"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-09-19"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-09-26"
+        },
+        {
+          "position": 10,
+          "t_index": 9,
+          "date": "2025-09-28"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_024",
+      "case_id": "promotion:5b836f2b:security",
+      "split": "promotion",
+      "persona_id": "5b836f2b",
+      "dimension": "security",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-07-03"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-07-04"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-07-10"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-07-14"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-07-14"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-07-18"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-07-21"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-07-23"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-07-30"
+        }
+      ]
+    }
+  ]
+}

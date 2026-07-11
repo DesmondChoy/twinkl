@@ -1,0 +1,44 @@
+{
+  "schema_version": "twinkl-v8pb-review-v2",
+  "purpose": "Paired evidence-only review of whether displayed entries show directly observable behavior or choice against the declared core value.",
+  "case_fields": {
+    "review_case_id": "Opaque identifier from blind_packet.json.",
+    "entry_assessments": "One assessment for every displayed position, in any order.",
+    "sustained_conflict": "yes, no, or uncertain.",
+    "delivery_state": "active, recovered, none, or uncertain.",
+    "rationale": "Short evidence-based explanation using only displayed text."
+  },
+  "entry_assessment_fields": {
+    "position": "One-based position from the reviewer packet.",
+    "observable_negative": "yes, no, or uncertain.",
+    "reason_code": [
+      "ambiguous",
+      "direct_aligned_or_neutral_behavior",
+      "direct_behavior_or_choice",
+      "external_constraint",
+      "feeling_or_intent_only",
+      "missing_text",
+      "needs_hidden_context"
+    ],
+    "confidence": [
+      "high",
+      "low",
+      "medium"
+    ]
+  },
+  "submission_fields": {
+    "target_version": "twinkl-v8pb-student-visible-v1",
+    "split": "The exact split named by blind_packet.json.",
+    "packet_sha256": "SHA-256 of the exact blind_packet.json reviewed.",
+    "reviewer_id": "Distinct reviewer identifier.",
+    "reviewed_at": "Timezone-aware ISO-8601 timestamp.",
+    "reviewer_prompt_version": "twinkl-v8pb-packet-only-v2",
+    "reviewer_runtime": "Model or runtime identifier when available."
+  },
+  "rules": [
+    "Mark yes only for the writer's directly observable behavior or choice against the declared core value.",
+    "Do not infer a negative label from a feeling, wish, external constraint, biography, or information missing from the displayed entries.",
+    "A sustained conflict requires two immediately adjacent displayed entries that both receive yes.",
+    "A no or uncertain entry breaks a possible run."
+  ]
+}

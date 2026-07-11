@@ -1,0 +1,22 @@
+{
+  "created_at": "2026-07-11T05:04:38.819227+00:00",
+  "disposition": "promotion score not run because the locked target is unresolved; production wiring remains blocked",
+  "metrics": null,
+  "promotion_summary_sha256": "9c018e5e8bbc3686a4a260ec171e65125d356bcc45bd4f6f193a92a46e575617",
+  "promotion_target_path": "logs/experiments/artifacts/drift_target_twinkl_v8pb_20260711/promotion/parent_control/student_visible_target_variant.parquet",
+  "promotion_target_sha256": "1534037cb42c5e9a606b6b6c8aac971adb4a440ad07bc91739200680265e215d",
+  "run_id": "run_020",
+  "run_yaml_sha256": "20c09e9a61ace7a150db91fc65336b6a5aa41e7b1bd327b727cd97d5fd189054",
+  "scoring_performed": false,
+  "stage": "promotion_review_blocked",
+  "target_version": "twinkl-v8pb-student-visible-v1",
+  "threshold_manifest_sha256": "ec8c746b87cdf7f8893e562b0fb440bccf16b7750e0993446ebd7f168bd77446",
+  "thresholds": {
+    "probability_threshold": 0.8,
+    "uncertainty_threshold": 1.010153
+  },
+  "unresolved_case_ids": [
+    "case_023"
+  ],
+  "unresolved_entry_count": 19
+}

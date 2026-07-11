@@ -193,20 +193,21 @@ consecutive journal sessions conflict with Benevolence.
 | Component | Status | Activity |
 |-----------|--------|----------|
 | Generator | N/A | Only used during offline training |
-| Judge | N/A | Stored five-pass consensus labels define the benchmark reference, not live runtime input |
+| Judge | N/A | Stored five-pass consensus labels are diagnostic provenance, not an active drift benchmark or live runtime input |
 | Critic | **ACTIVE** | Produces per-entry class evidence and uncertainty |
-| Drift detector | **BENCHMARKED, NOT WIRED** | Accumulates rolling soft `P(-1)` evidence on Benevolence |
+| Drift detector | **EXPERIMENTAL, NOT WIRED** | Accumulates rolling soft `P(-1)` evidence on Benevolence; no scorer is promotion-ready |
 | Coach | **ACTIVE AT DELIVERY** | Uses the weekly artifact to surface the repeated conflict |
 
-### Reference and Runtime Views
+### Illustrative Historical Label and Runtime Views
 
-| Entry | Five-pass Judge consensus Benevolence reference | Runtime target |
+| Entry | Illustrative historical Benevolence label | Runtime target |
 |---|---:|---|
 | Week 7 | `-1` | elevated `P(-1)`, low enough uncertainty to retain |
 | Week 8 | `-1` | repeated `P(-1)` evidence crosses the calibrated persistence gate |
 
-The strict benchmark records one sustained-conflict episode because the same
-declared core value receives two consecutive `-1` labels. The runtime does not
+This illustration shows how two adjacent value-conflicting entries could form
+one sustained-conflict episode. It is not an active benchmark target: the
+five-pass consensus table is diagnostic provenance only. The runtime does not
 require two hard argmax `-1` predictions; it estimates the episode from soft
 probability mass under uncertainty gating.
 
