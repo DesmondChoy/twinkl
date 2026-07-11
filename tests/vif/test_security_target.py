@@ -11,6 +11,7 @@ from src.vif.security_target import (
     ACTIVE_CRITIC_STATE_CONTRACT_VERSION,
     EXPECTED_CONTEXT_FLAGS,
     TARGET_POLICY,
+    build_full_corpus_security_target,
     build_security_target_variant,
     classify_reachability_bucket,
     sha256_canonical_json,
@@ -102,10 +103,8 @@ def test_build_rejects_manifest_whose_prompt_changed_after_hashing():
 
 def test_build_rejects_noncanonical_prompt_with_matching_hash():
     manifest = _manifest()
-    manifest["prompt"] = f'{manifest["prompt"]}\nHidden biography: secret context.'
-    manifest["prompt_sha256"] = sha256_canonical_json(
-        {"prompt": manifest["prompt"]}
-    )
+    manifest["prompt"] = f"{manifest['prompt']}\nHidden biography: secret context."
+    manifest["prompt_sha256"] = sha256_canonical_json({"prompt": manifest["prompt"]})
 
     with pytest.raises(ValueError, match="canonical rendering"):
         build_security_target_variant(
@@ -181,6 +180,86 @@ def test_writer_records_exact_evidence_hashes_and_leaves_no_output_on_invalid_in
             output_dir=invalid_output_dir,
         )
     assert not invalid_output_dir.exists()
+
+
+def test_full_corpus_target_majority_updates_only_security_label_vector_and_rationale():
+    manifest = _manifest()
+    base = pl.DataFrame(
+        {
+            "persona_id": ["example"],
+            "t_index": [1],
+            "date": ["2026-01-01"],
+            "alignment_vector": [[1, 0, 0, 0, 0, 1, 0, 0, 0, 0]],
+            "alignment_self_direction": [1],
+            "alignment_stimulation": [0],
+            "alignment_hedonism": [0],
+            "alignment_achievement": [0],
+            "alignment_power": [0],
+            "alignment_security": [1],
+            "alignment_conformity": [0],
+            "alignment_tradition": [0],
+            "alignment_benevolence": [0],
+            "alignment_universalism": [0],
+            "rationales_json": ['{"security":"old","self_direction":"keep"}'],
+        }
+    )
+    passes = {}
+    for index, label in enumerate((-1, -1, 0), start=1):
+        result = _result(manifest, security_label=label)
+        result.update(
+            {
+                "pass_index": index,
+                "status": "ok",
+                "response_id": f"r{index}",
+                "response_model": "gpt-5.4-mini",
+                "usage": {"input_tokens": 1, "output_tokens": 1, "total_tokens": 2},
+                "estimated_cost_usd": 0.01,
+            }
+        )
+        passes[index] = [result]
+    target, repaired = build_full_corpus_security_target(
+        base, active_state_manifest=[manifest], review_passes=passes
+    )
+    assert target["new_label"].to_list() == [-1]
+    assert target["decision_method"].to_list() == ["majority"]
+    row = repaired.to_dicts()[0]
+    assert row["alignment_security"] == -1
+    assert row["alignment_vector"] == [1, 0, 0, 0, 0, -1, 0, 0, 0, 0]
+    rationales = json.loads(row["rationales_json"])
+    assert rationales["self_direction"] == "keep"
+    assert rationales["security"] == "Direct session evidence."
+
+
+def test_full_corpus_target_fails_closed_on_unresolved_three_way_tie():
+    manifest = _manifest()
+    base = pl.DataFrame(
+        {
+            "persona_id": ["example"],
+            "t_index": [1],
+            "date": ["2026-01-01"],
+            "alignment_vector": [[0] * 10],
+            "alignment_security": [0],
+            "rationales_json": ["{}"],
+        }
+    )
+    passes = {}
+    for index, label in enumerate((-1, 0, 1), start=1):
+        result = _result(manifest, security_label=label)
+        result.update(
+            {
+                "pass_index": index,
+                "status": "ok",
+                "response_id": str(index),
+                "response_model": "gpt-5.4-mini",
+                "usage": {"input_tokens": 1, "output_tokens": 1, "total_tokens": 2},
+                "estimated_cost_usd": 0.0,
+            }
+        )
+        passes[index] = [result]
+    with pytest.raises(ValueError, match="Missing required tiebreak"):
+        build_full_corpus_security_target(
+            base, active_state_manifest=[manifest], review_passes=passes
+        )
 
 
 def _source_frame(

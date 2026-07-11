@@ -1,5 +1,6 @@
 """Tests for experiment provenance helpers in src.vif.experiment_logger."""
 
+import hashlib
 import warnings
 from pathlib import Path
 from unittest.mock import patch
@@ -12,23 +13,22 @@ import yaml
 import src.vif.experiment_logger as experiment_logger
 from src.models.judge import SCHWARTZ_VALUE_ORDER
 from src.vif.experiment_logger import (
-    _build_provenance,
+    AUTO_TABLE_END,
+    AUTO_TABLE_START,
+    TABLE_HEADER,
     _build_experiment_dict,
+    _build_provenance,
     _canonicalize_run_config,
     _compute_config_delta,
-    _encoder_shorthand,
     _encoder_family,
+    _encoder_shorthand,
     _flatten_dict,
     _format_index_row,
     _get_git_log_between,
     _loss_shorthand,
     _rebuild_index,
     _strip_dirty,
-    AUTO_TABLE_END,
-    AUTO_TABLE_START,
-    TABLE_HEADER,
 )
-
 
 # ─── _strip_dirty ────────────────────────────────────────────────────────────
 
@@ -271,6 +271,93 @@ def test_build_experiment_dict_records_long_tail_loss_shorthands(model_name, exp
         assert experiment["config"]["training"]["ldam_beta"] == 0.9999
     if model_name == "SLACE":
         assert experiment["config"]["training"]["slace_alpha"] == 1.0
+
+
+def test_build_experiment_dict_records_hashed_target_provenance(tmp_path):
+    config, trained_result, eval_result, calibration, hedging, recall_data = (
+        _minimal_training_inputs()
+    )
+    labels = tmp_path / "labels.parquet"
+    holdout = tmp_path / "holdout.yaml"
+    target = tmp_path / "security_target_variant.parquet"
+    summary = tmp_path / "target_summary.json"
+    labels.write_bytes(b"labels")
+    holdout.write_text("test_persona_ids: []\n", encoding="utf-8")
+    target.write_bytes(b"target")
+    summary.write_text(
+        '{"target_policy":"security_active_critic_state_v1"}\n', encoding="utf-8"
+    )
+    config.update(
+        {
+            "labels_path": str(labels),
+            "fixed_holdout_manifest_path": str(holdout),
+            "target_regime": "security_repaired",
+            "security_target_policy": "security_active_critic_state_v1",
+            "security_target_artifact_path": str(target),
+            "security_target_summary_path": str(summary),
+            "experiment_group": "twinkl-a30f_security_target_comparison",
+        }
+    )
+
+    with patch("src.vif.experiment_logger._get_git_commit", return_value="abc123"):
+        experiment = _build_experiment_dict(
+            run_id="run_999",
+            model_name="BalancedSoftmax",
+            config=config,
+            trained_result=trained_result,
+            eval_result=eval_result,
+            calibration=calibration,
+            hedging=hedging,
+            recall_data=recall_data,
+            n_train=100,
+            n_val=20,
+            n_test=20,
+            pct_truncated=0.0,
+            state_dim=256,
+            observations="",
+        )
+
+    data_config = experiment["config"]["data"]
+    assert data_config["labels_path"] == str(labels)
+    assert data_config["labels_sha256"] == hashlib.sha256(b"labels").hexdigest()
+    assert data_config["fixed_holdout_manifest_sha256"] == hashlib.sha256(
+        holdout.read_bytes()
+    ).hexdigest()
+    assert data_config["security_target_artifact_sha256"] == hashlib.sha256(
+        b"target"
+    ).hexdigest()
+    assert data_config["security_target_summary_sha256"] == hashlib.sha256(
+        summary.read_bytes()
+    ).hexdigest()
+    assert data_config["target_regime"] == "security_repaired"
+    assert data_config["experiment_group"] == "twinkl-a30f_security_target_comparison"
+
+
+def test_build_experiment_dict_rejects_missing_configured_provenance_file(tmp_path):
+    config, trained_result, eval_result, calibration, hedging, recall_data = (
+        _minimal_training_inputs()
+    )
+    config["labels_path"] = str(tmp_path / "missing.parquet")
+
+    with pytest.raises(
+        FileNotFoundError, match="Configured experiment input not found"
+    ):
+        _build_experiment_dict(
+            run_id="run_999",
+            model_name="BalancedSoftmax",
+            config=config,
+            trained_result=trained_result,
+            eval_result=eval_result,
+            calibration=calibration,
+            hedging=hedging,
+            recall_data=recall_data,
+            n_train=100,
+            n_val=20,
+            n_test=20,
+            pct_truncated=0.0,
+            state_dim=256,
+            observations="",
+        )
 
 
 def test_build_experiment_dict_persists_circumplex_payload():

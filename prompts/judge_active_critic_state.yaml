@@ -52,7 +52,10 @@ template: |
   Return ONLY valid JSON with:
 
   1. integer scores (`-1`, `0`, or `+1`) for every value dimension; and
-  2. rationales for non-zero scores only, citing the current journal session.
+  2. one `security_rationale` citing the current journal session, or an empty
+     string when Security is neutral; and
+  3. `security_confidence` (`high`, `medium`, or `low`) describing how clearly
+     the allowed evidence supports the Security score, including a neutral score.
 
   ```json
   {
@@ -68,9 +71,7 @@ template: |
       "benevolence": <integer>,
       "universalism": <integer>
     },
-    "rationales": {
-      "<value_name>": "<concise evidence-based explanation>",
-      "...": "..."
-    }
+    "security_rationale": "<concise evidence-based explanation or empty string>",
+    "security_confidence": "<high|medium|low>"
   }
   ```

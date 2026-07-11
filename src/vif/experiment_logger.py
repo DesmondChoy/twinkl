@@ -63,6 +63,22 @@ TABLE_HEADER = (
 )
 
 
+def _configured_file_sha256(path_value: str | Path | None) -> str | None:
+    """Hash a configured input file, failing if its provenance is unavailable."""
+    if path_value is None:
+        return None
+
+    path = Path(path_value)
+    if not path.is_file():
+        raise FileNotFoundError(f"Configured experiment input not found: {path}")
+
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
 # ─── Internal helpers ─────────────────────────────────────────────────────────
 
 
@@ -486,6 +502,29 @@ def _build_experiment_dict(
                 "train_ratio": config.get("train_ratio", 0.70),
                 "val_ratio": config.get("val_ratio", 0.15),
                 "split_seed": config.get("split_seed", config.get("seed", 42)),
+                "labels_path": config.get("labels_path"),
+                "labels_sha256": _configured_file_sha256(config.get("labels_path")),
+                "fixed_holdout_manifest_path": config.get(
+                    "fixed_holdout_manifest_path"
+                ),
+                "fixed_holdout_manifest_sha256": _configured_file_sha256(
+                    config.get("fixed_holdout_manifest_path")
+                ),
+                "target_regime": config.get("target_regime"),
+                "security_target_policy": config.get("security_target_policy"),
+                "security_target_artifact_path": config.get(
+                    "security_target_artifact_path"
+                ),
+                "security_target_artifact_sha256": _configured_file_sha256(
+                    config.get("security_target_artifact_path")
+                ),
+                "security_target_summary_path": config.get(
+                    "security_target_summary_path"
+                ),
+                "security_target_summary_sha256": _configured_file_sha256(
+                    config.get("security_target_summary_path")
+                ),
+                "experiment_group": config.get("experiment_group"),
                 "pct_truncated": _round_val(pct_truncated),
                 "state_dim": state_dim,
             },

@@ -7,6 +7,7 @@ import json
 import math
 import shutil
 import tempfile
+from collections import Counter
 from collections.abc import Iterable, Mapping
 from datetime import datetime
 from pathlib import Path
@@ -20,6 +21,8 @@ from src.models.judge import SCHWARTZ_VALUE_ORDER, AlignmentScores
 ACTIVE_CRITIC_STATE_CONTRACT_VERSION = "active_critic_state_v1"
 TARGET_POLICY = "security_active_critic_state_v1"
 ARTIFACT_SCOPE = "selected_frozen_test_audit_subset_only"
+FULL_CORPUS_ARTIFACT_SCOPE = "full_corpus_security_target"
+EXPECTED_FULL_CORPUS_ROWS = 1651
 
 REQUIRED_LEGACY_COLUMNS = {
     "case_id",
@@ -111,9 +114,7 @@ def read_jsonl(path: str | Path) -> list[dict[str, Any]]:
             try:
                 record = json.loads(line)
             except json.JSONDecodeError as exc:
-                raise ValueError(
-                    f"{source}:{line_number} is not valid JSON."
-                ) from exc
+                raise ValueError(f"{source}:{line_number} is not valid JSON.") from exc
             if not isinstance(record, dict):
                 raise ValueError(f"{source}:{line_number} must contain a JSON object.")
             records.append(record)
@@ -156,8 +157,7 @@ def build_security_target_variant(
     missing = REQUIRED_LEGACY_COLUMNS - set(joined_results.columns)
     if missing:
         raise ValueError(
-            "Missing required legacy reachability columns: "
-            f"{sorted(missing)}."
+            f"Missing required legacy reachability columns: {sorted(missing)}."
         )
 
     security = joined_results.filter(pl.col("dimension") == "security")
@@ -273,9 +273,7 @@ def write_security_target_artifacts(
         for row in target.group_by("reachability_bucket").len().to_dicts()
     }
     output.parent.mkdir(parents=True, exist_ok=True)
-    temporary_dir = Path(
-        tempfile.mkdtemp(prefix=f".{output.name}.", dir=output.parent)
-    )
+    temporary_dir = Path(tempfile.mkdtemp(prefix=f".{output.name}.", dir=output.parent))
     try:
         target_path = temporary_dir / "security_target_variant.parquet"
         summary_path = temporary_dir / "audit_summary.json"
@@ -315,6 +313,280 @@ def write_security_target_artifacts(
     )
 
 
+def build_full_corpus_security_target(
+    base_labels: pl.DataFrame,
+    *,
+    active_state_manifest: Iterable[Mapping[str, Any]],
+    review_passes: Mapping[int, Iterable[Mapping[str, Any]]],
+    tiebreak_results: Iterable[Mapping[str, Any]] = (),
+) -> tuple[pl.DataFrame, pl.DataFrame]:
+    """Build a full-corpus majority target and loader-compatible label variant."""
+    required = {
+        "persona_id",
+        "t_index",
+        "date",
+        "alignment_vector",
+        "alignment_security",
+        "rationales_json",
+    }
+    missing = required - set(base_labels.columns)
+    if missing:
+        raise ValueError(f"Base labels are missing required fields: {sorted(missing)}.")
+    if (
+        base_labels.select(["persona_id", "t_index", "date"]).n_unique()
+        != base_labels.height
+    ):
+        raise ValueError("Base labels have duplicate entry coordinates.")
+    if set(review_passes) != {1, 2, 3}:
+        raise ValueError(
+            "Full-corpus target requires exactly review passes 1, 2, and 3."
+        )
+
+    source_rows: dict[str, dict[str, Any]] = {}
+    for row in base_labels.iter_rows(named=True):
+        case_id = f"security__{row['persona_id']}__{int(row['t_index'])}"
+        source_rows[case_id] = {**row, "case_id": case_id, "dimension": "security"}
+    manifest_by_case = _validate_manifest(active_state_manifest, source_rows)
+    validated_passes: dict[int, dict[str, dict[str, Any]]] = {}
+    for pass_index in (1, 2, 3):
+        raw_rows = list(review_passes[pass_index])
+        for row in raw_rows:
+            _validate_full_review_provenance(row, pass_index=pass_index)
+        validated_passes[pass_index] = _validate_results(raw_rows, manifest_by_case)
+
+    tie_rows = list(tiebreak_results)
+    tie_by_case: dict[str, dict[str, Any]] = {}
+    if tie_rows:
+        tie_manifest = {
+            case_id: manifest_by_case[case_id]
+            for case_id in {str(row["case_id"]) for row in tie_rows}
+            if case_id in manifest_by_case
+        }
+        for row in tie_rows:
+            _validate_full_review_provenance(row, pass_index=4)
+        tie_by_case = _validate_results(tie_rows, tie_manifest)
+
+    target_rows: list[dict[str, Any]] = []
+    replacement: dict[str, tuple[int, str]] = {}
+    expected_ties: set[str] = set()
+    for case_id in sorted(source_rows):
+        votes = [
+            validated_passes[index][case_id]["security_label"] for index in (1, 2, 3)
+        ]
+        counts = Counter(votes)
+        if len(counts) == 3:
+            expected_ties.add(case_id)
+            tie = tie_by_case.get(case_id)
+            if tie is None:
+                raise ValueError(f"Missing required tiebreak review for {case_id}.")
+            votes.append(tie["security_label"])
+            counts = Counter(votes)
+            decision_method = "tie_break_review"
+        else:
+            decision_method = "unanimous" if max(counts.values()) == 3 else "majority"
+        max_count = max(counts.values())
+        winners = [label for label, count in counts.items() if count == max_count]
+        if len(winners) != 1:
+            raise ValueError(f"Tiebreak review did not resolve {case_id}.")
+        new_label = winners[0]
+        selected_results = [
+            validated_passes[index][case_id]
+            for index in (1, 2, 3)
+            if validated_passes[index][case_id]["security_label"] == new_label
+        ]
+        if (
+            case_id in tie_by_case
+            and tie_by_case[case_id]["security_label"] == new_label
+        ):
+            selected_results.append(tie_by_case[case_id])
+        rationale = next(
+            (row["rationale"] for row in selected_results if row["rationale"]), ""
+        )
+        total = len(votes)
+        entropy = -sum(
+            (count / total) * math.log2(count / total) for count in counts.values()
+        )
+        old_label = _as_alignment_label(
+            source_rows[case_id]["alignment_security"], field="alignment_security"
+        )
+        example_id = (
+            f"{source_rows[case_id]['persona_id']}::"
+            f"{int(source_rows[case_id]['t_index'])}"
+        )
+        target_rows.append(
+            {
+                "case_id": case_id,
+                "example_id": example_id,
+                "persona_id": source_rows[case_id]["persona_id"],
+                "t_index": int(source_rows[case_id]["t_index"]),
+                "date": str(source_rows[case_id]["date"]),
+                "dimension": "security",
+                "old_label": old_label,
+                "new_label": new_label,
+                "label_changed": old_label != new_label,
+                "vote_minus1": counts.get(-1, 0),
+                "vote_neutral": counts.get(0, 0),
+                "vote_plus1": counts.get(1, 0),
+                "vote_count": total,
+                "agreement_count": max_count,
+                "vote_entropy": entropy,
+                "decision_method": decision_method,
+                "review_confidences": json.dumps(
+                    [validated_passes[i][case_id]["confidence"] for i in (1, 2, 3)]
+                    + (
+                        [tie_by_case[case_id]["confidence"]]
+                        if case_id in tie_by_case
+                        else []
+                    )
+                ),
+                "rationale": rationale,
+                "target_policy": TARGET_POLICY,
+                "state_contract_version": ACTIVE_CRITIC_STATE_CONTRACT_VERSION,
+                "state_input_sha256": manifest_by_case[case_id]["state_input_sha256"],
+                "prompt_sha256": manifest_by_case[case_id]["prompt_sha256"],
+                "artifact_scope": FULL_CORPUS_ARTIFACT_SCOPE,
+                "training_ready": True,
+                "evaluation_ready": True,
+            }
+        )
+        replacement[case_id] = (new_label, rationale)
+    if set(tie_by_case) != expected_ties:
+        raise ValueError(
+            "Tiebreak result set does not exactly match the three-way ties."
+        )
+
+    label_rows: list[dict[str, Any]] = []
+    security_index = SCHWARTZ_VALUE_ORDER.index("security")
+    for row in base_labels.iter_rows(named=True):
+        case_id = f"security__{row['persona_id']}__{int(row['t_index'])}"
+        new_label, rationale = replacement[case_id]
+        updated = dict(row)
+        vector = list(row["alignment_vector"])
+        if len(vector) != len(SCHWARTZ_VALUE_ORDER):
+            raise ValueError(f"Invalid alignment_vector length for {case_id}.")
+        vector[security_index] = new_label
+        updated["alignment_security"] = new_label
+        updated["alignment_vector"] = vector
+        try:
+            rationales = json.loads(row["rationales_json"] or "{}")
+        except json.JSONDecodeError as exc:
+            raise ValueError(f"Invalid rationales_json for {case_id}.") from exc
+        if new_label == 0:
+            rationales.pop("security", None)
+        else:
+            rationales["security"] = rationale
+        updated["rationales_json"] = json.dumps(
+            rationales, ensure_ascii=False, sort_keys=True
+        )
+        label_rows.append(updated)
+    return pl.DataFrame(target_rows).sort("case_id"), pl.DataFrame(
+        label_rows, schema=base_labels.schema
+    )
+
+
+def _validate_full_review_provenance(
+    row: Mapping[str, Any], *, pass_index: int
+) -> None:
+    if int(row.get("pass_index", -1)) != pass_index:
+        raise ValueError(f"Review pass {pass_index} contains a mismatched pass_index.")
+    if row.get("status") != "ok":
+        raise ValueError(f"Review pass {pass_index} contains a non-ok result.")
+    for field in ("response_id", "response_model"):
+        if not isinstance(row.get(field), str) or not row[field].strip():
+            raise ValueError(f"Review pass {pass_index} result has invalid {field}.")
+    usage = row.get("usage")
+    if not isinstance(usage, dict) or not {
+        "input_tokens",
+        "output_tokens",
+        "total_tokens",
+    }.issubset(usage):
+        raise ValueError(
+            f"Review pass {pass_index} result has invalid usage provenance."
+        )
+    cost = row.get("estimated_cost_usd")
+    if isinstance(cost, bool) or not isinstance(cost, (int, float)):
+        raise ValueError(
+            f"Review pass {pass_index} result has invalid cost provenance."
+        )
+    if not math.isfinite(float(cost)) or float(cost) < 0:
+        raise ValueError(
+            f"Review pass {pass_index} result has invalid cost provenance."
+        )
+
+
+def write_full_corpus_security_target_artifacts(
+    *,
+    base_labels_path: str | Path,
+    active_state_manifest_path: str | Path,
+    review_pass_paths: Mapping[int, str | Path],
+    tiebreak_results_path: str | Path,
+    output_dir: str | Path,
+) -> tuple[Path, Path, Path]:
+    """Validate all evidence before atomically publishing a full target."""
+    output = Path(output_dir)
+    if output.exists():
+        raise FileExistsError(
+            f"Refusing to overwrite full-corpus Security target: {output}"
+        )
+    base_path = Path(base_labels_path)
+    manifest_path = Path(active_state_manifest_path)
+    tie_path = Path(tiebreak_results_path)
+    base_labels = pl.read_parquet(base_path)
+    if base_labels.height != EXPECTED_FULL_CORPUS_ROWS:
+        raise ValueError(
+            f"Expected exactly {EXPECTED_FULL_CORPUS_ROWS} base-label rows, "
+            f"found {base_labels.height}."
+        )
+    target, labels = build_full_corpus_security_target(
+        base_labels,
+        active_state_manifest=read_jsonl(manifest_path),
+        review_passes={
+            index: read_jsonl(path) for index, path in review_pass_paths.items()
+        },
+        tiebreak_results=read_jsonl(tie_path) if tie_path.exists() else [],
+    )
+    output.parent.mkdir(parents=True, exist_ok=True)
+    temporary = Path(tempfile.mkdtemp(prefix=f".{output.name}.", dir=output.parent))
+    try:
+        target_path = temporary / "security_target_variant.parquet"
+        labels_path = temporary / "security_repaired_labels.parquet"
+        summary_path = temporary / "target_summary.json"
+        target.write_parquet(target_path)
+        labels.write_parquet(labels_path)
+        summary = {
+            "artifact_scope": FULL_CORPUS_ARTIFACT_SCOPE,
+            "case_count": target.height,
+            "changed_label_count": target.filter(pl.col("label_changed")).height,
+            "training_ready": True,
+            "evaluation_ready": True,
+            "base_labels_sha256": sha256_file(base_path),
+            "manifest_sha256": sha256_file(manifest_path),
+            "review_pass_sha256": {
+                str(index): sha256_file(path)
+                for index, path in review_pass_paths.items()
+            },
+            "tiebreak_sha256": sha256_file(tie_path) if tie_path.exists() else None,
+            "target_variant_sha256": sha256_file(target_path),
+            "repaired_labels_sha256": sha256_file(labels_path),
+            "decision_method_counts": {
+                row["decision_method"]: int(row["len"])
+                for row in target.group_by("decision_method").len().to_dicts()
+            },
+        }
+        summary_path.write_text(
+            json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        temporary.rename(output)
+    except Exception:
+        shutil.rmtree(temporary, ignore_errors=True)
+        raise
+    return (
+        output / target_path.name,
+        output / labels_path.name,
+        output / summary_path.name,
+    )
+
+
 def _validate_manifest(
     active_state_manifest: Iterable[Mapping[str, Any]],
     source_rows: Mapping[str, Mapping[str, Any]],
@@ -330,8 +602,7 @@ def _validate_manifest(
         case_id = str(record["case_id"])
         if case_id in manifest_by_case:
             raise ValueError(
-                "Active-Critic-state manifest has duplicate case_id: "
-                f"{case_id}"
+                f"Active-Critic-state manifest has duplicate case_id: {case_id}"
             )
         source_row = source_rows.get(case_id)
         if source_row is None:
@@ -366,8 +637,7 @@ def _validate_results(
         case_id = str(record["case_id"])
         if case_id in results_by_case:
             raise ValueError(
-                "Active-Critic-state results have duplicate case_id: "
-                f"{case_id}"
+                f"Active-Critic-state results have duplicate case_id: {case_id}"
             )
         manifest = manifest_by_case.get(case_id)
         if manifest is None:
@@ -390,8 +660,7 @@ def _validate_results(
             raise ValueError(f"Active-Critic-state result {case_id} has no reviewer.")
         if not isinstance(reviewed_at, str) or not reviewed_at.strip():
             raise ValueError(
-                f"Active-Critic-state result {case_id} has no reviewed_at "
-                "timestamp."
+                f"Active-Critic-state result {case_id} has no reviewed_at timestamp."
             )
         try:
             reviewed_at_value = datetime.fromisoformat(reviewed_at.strip())
@@ -399,10 +668,7 @@ def _validate_results(
             raise ValueError(
                 f"Active-Critic-state result {case_id} has invalid reviewed_at."
             ) from exc
-        if (
-            reviewed_at_value.tzinfo is None
-            or reviewed_at_value.utcoffset() is None
-        ):
+        if reviewed_at_value.tzinfo is None or reviewed_at_value.utcoffset() is None:
             raise ValueError(
                 f"Active-Critic-state result {case_id} reviewed_at must include "
                 "a timezone."
@@ -495,9 +761,10 @@ def _validate_contract(record: Mapping[str, Any]) -> None:
             "Active-Critic-state manifest has unsupported contract version: "
             f"{record['state_contract_version']!r}."
         )
-    if not isinstance(record["state_input_sha256"], str) or not record[
-        "state_input_sha256"
-    ]:
+    if (
+        not isinstance(record["state_input_sha256"], str)
+        or not record["state_input_sha256"]
+    ):
         raise ValueError("Active-Critic-state manifest is missing state_input_sha256.")
     if not isinstance(record["prompt_sha256"], str) or not record["prompt_sha256"]:
         raise ValueError("Active-Critic-state manifest is missing prompt_sha256.")
@@ -519,9 +786,10 @@ def _validate_contract(record: Mapping[str, Any]) -> None:
         )
     if state_input["window_size"] != 1:
         raise ValueError("Active-Critic-state manifest must use window_size=1.")
-    if not isinstance(state_input["session_content"], str) or not state_input[
-        "session_content"
-    ]:
+    if (
+        not isinstance(state_input["session_content"], str)
+        or not state_input["session_content"]
+    ):
         raise ValueError("Active-Critic-state manifest has no runtime session text.")
     profile_weights = state_input["profile_weights"]
     if not isinstance(profile_weights, dict) or set(profile_weights) != set(

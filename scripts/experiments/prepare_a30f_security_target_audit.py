@@ -32,6 +32,8 @@ from src.vif.state_encoder import (  # noqa: E402
     core_values_to_profile_weights,
 )
 
+FULL_CORPUS_EXPECTED_ROWS = 1651
+
 
 def build_active_state_manifest(
     *,
@@ -43,8 +45,7 @@ def build_active_state_manifest(
     missing = REQUIRED_LEGACY_COLUMNS - set(joined_results.columns)
     if missing:
         raise ValueError(
-            "Missing required legacy reachability columns: "
-            f"{sorted(missing)}."
+            f"Missing required legacy reachability columns: {sorted(missing)}."
         )
     required_entries = {
         "persona_id",
@@ -77,9 +78,7 @@ def build_active_state_manifest(
 
     entry_subset = entries.select(sorted(required_entries))
     duplicate_entries = (
-        entry_subset.group_by(coordinate_columns)
-        .len()
-        .filter(pl.col("len") > 1)
+        entry_subset.group_by(coordinate_columns).len().filter(pl.col("len") > 1)
     )
     if not duplicate_entries.is_empty():
         raise ValueError("Wrangled entries have duplicate entry coordinates.")
@@ -141,10 +140,58 @@ def build_active_state_manifest(
     return records
 
 
+def build_full_corpus_manifest(
+    *,
+    labels: pl.DataFrame,
+    entries: pl.DataFrame,
+    schwartz_config: dict[str, Any],
+    expected_rows: int = FULL_CORPUS_EXPECTED_ROWS,
+) -> list[dict[str, Any]]:
+    """Render the exact active state for every immutable label coordinate."""
+    required_labels = {"persona_id", "t_index", "date", "alignment_security"}
+    missing = required_labels - set(labels.columns)
+    if missing:
+        raise ValueError(f"Labels are missing full-corpus fields: {sorted(missing)}.")
+    if labels.height != expected_rows:
+        raise ValueError(
+            f"Expected exactly {expected_rows} label rows, found {labels.height}."
+        )
+    coordinates = ["persona_id", "t_index", "date"]
+    if labels.select(coordinates).n_unique() != labels.height:
+        raise ValueError("Labels have duplicate full-corpus entry coordinates.")
+    source = labels.select([*coordinates, "alignment_security"]).with_columns(
+        pl.concat_str(
+            [
+                pl.lit("security__"),
+                pl.col("persona_id"),
+                pl.lit("__"),
+                pl.col("t_index"),
+            ]
+        ).alias("case_id"),
+        pl.lit("security").alias("dimension"),
+        pl.col("alignment_security").alias("persisted_label"),
+        pl.lit(0).alias("student_visible_label"),
+        pl.lit(0).alias("profile_only_label"),
+        pl.lit(0).alias("full_context_label"),
+    )
+    records = build_active_state_manifest(
+        joined_results=source,
+        entries=entries,
+        schwartz_config=schwartz_config,
+    )
+    if len(records) != expected_rows:
+        raise ValueError(
+            f"Expected exactly {expected_rows} full-corpus prompts, "
+            f"found {len(records)}."
+        )
+    return records
+
+
 def write_active_state_bundle(
     *,
     output_dir: Path,
     manifest: list[dict[str, Any]],
+    artifact_scope: str = "selected",
 ) -> tuple[Path, Path]:
     """Write immutable reviewer inputs and an empty result template."""
     if output_dir.exists():
@@ -157,7 +204,12 @@ def write_active_state_bundle(
     _write_jsonl(manifest_path, manifest)
     results_path.write_text("", encoding="utf-8")
     (output_dir / "README.md").write_text(
-        _bundle_readme(manifest_path.name, results_path.name), encoding="utf-8"
+        _bundle_readme(
+            manifest_path.name,
+            results_path.name,
+            artifact_scope=artifact_scope,
+        ),
+        encoding="utf-8",
     )
     return manifest_path, results_path
 
@@ -168,11 +220,24 @@ def _write_jsonl(path: Path, records: list[dict[str, Any]]) -> None:
             handle.write(json.dumps(record, ensure_ascii=True, sort_keys=True) + "\n")
 
 
-def _bundle_readme(manifest_name: str, results_name: str) -> str:
+def _bundle_readme(
+    manifest_name: str,
+    results_name: str,
+    *,
+    artifact_scope: str,
+) -> str:
+    scope_note = (
+        "This full-corpus bundle may supply a training and evaluation target only "
+        "after all three review passes, any required tie-break reviews, and strict "
+        "materialization succeed."
+        if artifact_scope == "full"
+        else "This bundle is the only review input that may supply `new_label` for "
+        "the selected Security diagnostic subset. It is not a training or evaluation "
+        "target."
+    )
     return f"""# twinkl-a30f Active-Critic-State Review Bundle
 
-This bundle is the only review input that may supply `new_label` for the
-selected Security diagnostic subset. It is not a training or evaluation target.
+{scope_note}
 
 ## Contract
 
@@ -241,6 +306,18 @@ def main() -> None:
         help="Legacy reachability summary used only to identify the selected cases.",
     )
     parser.add_argument(
+        "--scope",
+        choices=("selected", "full"),
+        default="selected",
+        help="Prepare the historical selected subset or the full target population.",
+    )
+    parser.add_argument(
+        "--labels-path",
+        type=Path,
+        default=Path("logs/judge_labels/judge_labels.parquet"),
+        help="Immutable labels defining the full-corpus coordinates.",
+    )
+    parser.add_argument(
         "--wrangled-dir",
         type=Path,
         default=Path("logs/wrangled"),
@@ -260,14 +337,24 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    manifest = build_active_state_manifest(
-        joined_results=pl.read_csv(args.joined_results),
-        entries=load_entries(args.wrangled_dir),
-        schwartz_config=load_schwartz_values(args.schwartz_path),
-    )
+    entries = load_entries(args.wrangled_dir)
+    schwartz_config = load_schwartz_values(args.schwartz_path)
+    if args.scope == "full":
+        manifest = build_full_corpus_manifest(
+            labels=pl.read_parquet(args.labels_path),
+            entries=entries,
+            schwartz_config=schwartz_config,
+        )
+    else:
+        manifest = build_active_state_manifest(
+            joined_results=pl.read_csv(args.joined_results),
+            entries=entries,
+            schwartz_config=schwartz_config,
+        )
     manifest_path, results_path = write_active_state_bundle(
         output_dir=args.output_dir,
         manifest=manifest,
+        artifact_scope=args.scope,
     )
     print(f"Wrote {len(manifest)} active-state prompts: {manifest_path}")
     print(f"Fill exact-state review results: {results_path}")

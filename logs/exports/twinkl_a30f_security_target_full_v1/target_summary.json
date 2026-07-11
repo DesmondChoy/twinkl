@@ -1,0 +1,22 @@
+{
+  "artifact_scope": "full_corpus_security_target",
+  "base_labels_sha256": "cbb101a1c05509a8c2105b9ffcfd6cc83e9ddc707256ca6eb63379f384e4770c",
+  "case_count": 1651,
+  "changed_label_count": 678,
+  "decision_method_counts": {
+    "majority": 464,
+    "tie_break_review": 25,
+    "unanimous": 1162
+  },
+  "evaluation_ready": true,
+  "manifest_sha256": "dc458ceb04fdb7191a3a4c6f86748acb9936ab1740e733a81d0d1ee78358baea",
+  "repaired_labels_sha256": "aec13a9062cc3a3c3052487db59a85039c82175a4d4d836b4f769149fa9dff74",
+  "review_pass_sha256": {
+    "1": "3a9e53c7b6047bc21b4e2b14cd0e85d2941936489d812d6334306d4805304220",
+    "2": "a7a4ea6b065eddeac0c0335a6294152898c5cb60badde1e81950c55da670f833",
+    "3": "4f2f3951e7458c0864e36fc2c3cc96c2ac8ef8280ace6b480bb1281015641387"
+  },
+  "target_variant_sha256": "65e59321643c908f7a39a3d92603665075d4e72f2d595d2e82bb76644f016155",
+  "tiebreak_sha256": "0c43f261f99eb8fbc4317b6c29baeb8133f66670a5b01fc06879109b241b58e2",
+  "training_ready": true
+}

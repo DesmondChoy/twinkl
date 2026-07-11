@@ -128,6 +128,35 @@ def test_manifest_rejects_duplicate_entry_coordinates_even_if_counts_cancel():
         )
 
 
+def test_full_corpus_manifest_requires_complete_unbiased_population():
+    labels = pl.DataFrame(
+        {
+            "persona_id": ["example"],
+            "t_index": [1],
+            "date": ["2026-01-01"],
+            "alignment_security": [1],
+        }
+    )
+    manifest = mod.build_full_corpus_manifest(
+        labels=labels,
+        entries=_entries("Entry.", None, None),
+        schwartz_config=load_schwartz_values(
+            REPO_ROOT / "config" / "schwartz_values.yaml"
+        ),
+        expected_rows=1,
+    )
+    assert [row["case_id"] for row in manifest] == ["security__example__1"]
+    with pytest.raises(ValueError, match="Expected exactly 2 label rows"):
+        mod.build_full_corpus_manifest(
+            labels=labels,
+            entries=_entries("Entry.", None, None),
+            schwartz_config=load_schwartz_values(
+                REPO_ROOT / "config" / "schwartz_values.yaml"
+            ),
+            expected_rows=2,
+        )
+
+
 def _joined_results() -> pl.DataFrame:
     return pl.DataFrame(
         {
