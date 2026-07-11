@@ -39,6 +39,38 @@ def compute_ordinal_class_counts(targets: np.ndarray) -> np.ndarray:
     return counts
 
 
+def compute_soft_ordinal_class_counts(target_distributions: np.ndarray) -> np.ndarray:
+    """Sum fractional ordinal targets per dimension in ``[-1, 0, +1]`` order.
+
+    Args:
+        target_distributions: ``(n_samples, 10, 3)`` probability array or its
+            flattened ``(n_samples, 30)`` representation. Each class row must
+            be finite, non-negative, and sum to one.
+
+    Returns:
+        ``(10, 3)`` fractional class counts.
+    """
+    distributions = np.asarray(target_distributions, dtype=np.float64)
+    if distributions.ndim == 2 and distributions.shape[1] == NUM_DIMS * NUM_CLASSES:
+        distributions = distributions.reshape(-1, NUM_DIMS, NUM_CLASSES)
+    elif distributions.ndim != 3 or distributions.shape[1:] != (NUM_DIMS, NUM_CLASSES):
+        raise ValueError(
+            "target_distributions must have shape "
+            f"(n_samples, {NUM_DIMS}, {NUM_CLASSES}) or "
+            f"(n_samples, {NUM_DIMS * NUM_CLASSES}), got {distributions.shape}"
+        )
+    if distributions.shape[0] == 0:
+        raise ValueError("target_distributions must contain at least one sample")
+    if not np.isfinite(distributions).all():
+        raise ValueError("target_distributions must contain only finite values")
+    if np.any(distributions < 0.0):
+        raise ValueError("target_distributions must be non-negative")
+    row_sums = distributions.sum(axis=-1)
+    if not np.allclose(row_sums, 1.0, rtol=0.0, atol=1e-6):
+        raise ValueError("target_distributions must sum to 1 along the class axis")
+    return distributions.sum(axis=0)
+
+
 def class_counts_to_priors(counts: np.ndarray, eps: float = 1e-12) -> np.ndarray:
     """Convert per-dimension class counts into strictly positive priors."""
     counts = np.asarray(counts, dtype=np.float64)
@@ -127,4 +159,25 @@ def compute_long_tail_statistics_from_dataframe(train_df: pl.DataFrame) -> dict[
         "activation_priors": activation_priors.astype(np.float32),
         "polarity_counts": polarity_counts.astype(np.float32),
         "polarity_priors": polarity_priors.astype(np.float32),
+    }
+
+
+def compute_soft_long_tail_statistics_from_dataframe(
+    train_df: pl.DataFrame,
+    *,
+    target_column: str,
+) -> dict[str, Any]:
+    """Extract fractional ordinal counts and priors from a soft-target column."""
+    if target_column not in train_df.columns:
+        raise ValueError(f"train_df must contain a {target_column!r} column")
+
+    target_distributions = np.asarray(
+        train_df.get_column(target_column).to_list(),
+        dtype=np.float64,
+    )
+    counts = compute_soft_ordinal_class_counts(target_distributions)
+    priors = class_counts_to_priors(counts, eps=1e-12)
+    return {
+        "class_counts": counts.astype(np.float32),
+        "class_priors": priors.astype(np.float32),
     }

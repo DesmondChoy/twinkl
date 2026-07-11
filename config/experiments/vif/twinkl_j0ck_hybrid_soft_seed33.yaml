@@ -1,0 +1,47 @@
+models_to_train: [BalancedSoftmax]
+labels_path: logs/exports/twinkl_j0ck_soft_vote_target_v1/hybrid_soft_vote_labels.parquet
+wrangled_dir: logs/wrangled
+training_target_mode: vote_distribution
+hard_target_column: alignment_vector
+soft_target_column: soft_alignment_vector
+target_class_order: [-1, 0, 1]
+target_regime: twinkl_j0ck_hybrid_soft_vote_v1
+target_source_path: logs/exports/twinkl_j0ck_soft_vote_target_v1/target_provenance.json
+target_artifact_path: logs/exports/twinkl_j0ck_soft_vote_target_v1/hybrid_soft_vote_labels.parquet
+security_target_policy: security_active_critic_state_v1
+security_target_artifact_path: logs/exports/twinkl_a30f_security_target_full_v1/security_target_variant.parquet
+security_target_summary_path: logs/exports/twinkl_a30f_security_target_full_v1/target_summary.json
+encoder_model: nomic-ai/nomic-embed-text-v1.5
+truncate_dim: 256
+window_size: 1
+hidden_dim: 64
+dropout: 0.3
+batch_size: 16
+epochs: 100
+weight_decay: 0.01
+split_seed: 2025
+model_seed: 33
+fixed_holdout_manifest_path: config/experiments/vif/twinkl_681_5_holdout.yaml
+use_lr_finder: false
+experiment_group: twinkl-j0ck_hybrid_soft_vote
+class_balance_source: train_split_fractional_vote_mass
+circumplex_regularizer_enabled: false
+dimension_weighting_enabled: false
+candidate_checkpoint_policies:
+  - name: recall_qwk_window_0.02
+    type: recall_qwk_window
+    qwk_window: 0.02
+selection_policy:
+  name: qwk_then_recall_guarded
+  rank_order: [qwk_mean, recall_minus1, calibration_global, hedging_mean, val_loss]
+  guardrails:
+    qwk_mean_must_be_finite: true
+    qwk_nan_dims_count_must_equal_zero: true
+    calibration_global_must_be_non_negative: true
+  fallback: best_finite_qwk
+model_overrides:
+  BalancedSoftmax:
+    learning_rate: 0.015522253574270487
+    use_lr_finder: false
+    learning_rate_source: explicit_model_override
+    learning_rate_policy: run_015_cdwce_a3_valley

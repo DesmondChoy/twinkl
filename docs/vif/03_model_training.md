@@ -173,6 +173,17 @@ the consensus diagnostic regime but does not improve the persisted-label
 frontier. Candidate retention is therefore reproducibility and analysis
 hygiene, not the default checkpoint selector.
 
+The hybrid soft vote-distribution experiment (`run_063`-`run_068`) preserves
+the five `twinkl-754` vote fractions for nine dimensions and uses the repaired
+active-state Security reviews from `twinkl-a30f`. Against a matching hard
+hybrid control, soft BalancedSoftmax lowers median hedging and improves
+minority recall and Hedonism QWK, but it slightly lowers `recall_-1` and
+materially weakens Security and Stimulation. Its prior-adjusted training-space
+NLL improves slightly, while the raw probabilities exported for runtime have
+worse NLL and Brier scores. Keep the soft path config-gated and diagnostic; do
+not make it the default target regime. See the
+[experiment review](../../logs/experiments/reports/experiment_review_2026-07-11_twinkl_j0ck_soft_vote_labels.md).
+
 ### 4.5 LLM Critic Context Baseline
 
 `scripts/experiments/llm_critic_baseline.py` measures the frozen-holdout ceiling

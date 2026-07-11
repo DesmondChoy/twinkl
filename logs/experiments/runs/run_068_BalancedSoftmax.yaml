@@ -1,0 +1,408 @@
+# VIF Experiment: run_068_BalancedSoftmax
+# Generated: 2026-07-11T19:25:15
+# Git: 8dd05d5(dirty)
+metadata:
+  experiment_id: run_068_BalancedSoftmax
+  run_id: run_068
+  model_name: BalancedSoftmax
+  timestamp: '2026-07-11T19:25:15'
+  git_commit: 8dd05d5(dirty)
+  config_hash: 0e5f7d982be9
+provenance:
+  prev_run_id: run_067
+  prev_git_commit: 8dd05d5(dirty)
+  git_log: []
+  config_delta:
+    added: {}
+    removed: {}
+    changed:
+      data.target_regime:
+        from: twinkl_j0ck_hybrid_hard_v1
+        to: twinkl_j0ck_hybrid_soft_vote_v1
+      data.training_target_mode:
+        from: hard
+        to: vote_distribution
+      data.experiment_group:
+        from: twinkl-j0ck_hybrid_hard_control
+        to: twinkl-j0ck_hybrid_soft_vote
+      training.class_balance_source:
+        from: train_split_per_dimension
+        to: train_split_fractional_vote_mass
+      training.training_target_mode:
+        from: hard
+        to: vote_distribution
+  rationale: ''
+provenance_backfill:
+  reason: Composite source manifest added after fresh-eyes review; training inputs and model weights are unchanged.
+  target_source_path: logs/exports/twinkl_j0ck_soft_vote_target_v1/target_provenance.json
+  target_source_sha256: b4704c44a7ec9cb56c35520d5d96e02c86f25b06b8873aa8a71d067c3a5295cf
+  security_target_policy: security_active_critic_state_v1
+  security_target_artifact_path: logs/exports/twinkl_a30f_security_target_full_v1/security_target_variant.parquet
+  security_target_artifact_sha256: 65e59321643c908f7a39a3d92603665075d4e72f2d595d2e82bb76644f016155
+  security_target_summary_path: logs/exports/twinkl_a30f_security_target_full_v1/target_summary.json
+  security_target_summary_sha256: e9f1e0d8cb9aa4f21023052018f2f2b372eed8236b0d9c160cef7f926be13d4d
+config:
+  encoder:
+    model_name: nomic-ai/nomic-embed-text-v1.5
+    truncate_dim: 256
+    text_prefix: 'classification: '
+    prompt_name: null
+    prompt: null
+    trust_remote_code: true
+  state_encoder:
+    window_size: 1
+  data:
+    train_ratio: 0.7
+    val_ratio: 0.15
+    split_seed: 2025
+    labels_path: logs/exports/twinkl_j0ck_soft_vote_target_v1/hybrid_soft_vote_labels.parquet
+    labels_sha256: 728b4076b9245ac71d30781f2ea2abb8ca38ba6ffd990af82e689dc5b7d84073
+    fixed_holdout_manifest_path: config/experiments/vif/twinkl_681_5_holdout.yaml
+    fixed_holdout_manifest_sha256: 0e6e6c8e2569df1f1792aede4cb4a9e79a05fe8789e015c2f5ce8bb993fb3065
+    target_regime: twinkl_j0ck_hybrid_soft_vote_v1
+    training_target_mode: vote_distribution
+    hard_target_column: alignment_vector
+    soft_target_column: soft_alignment_vector
+    target_class_order:
+    - -1
+    - 0
+    - 1
+    target_source_path: logs/exports/twinkl_754/comparison_rows.csv
+    target_source_sha256: 42164012c0f7dc419f739f746daf41cd8046ba330c8c484127b142126d840282
+    target_artifact_path: logs/exports/twinkl_j0ck_soft_vote_target_v1/hybrid_soft_vote_labels.parquet
+    target_artifact_sha256: 728b4076b9245ac71d30781f2ea2abb8ca38ba6ffd990af82e689dc5b7d84073
+    security_target_policy: null
+    security_target_artifact_path: null
+    security_target_artifact_sha256: null
+    security_target_summary_path: null
+    security_target_summary_sha256: null
+    experiment_group: twinkl-j0ck_hybrid_soft_vote
+    pct_truncated: 0.0
+    state_dim: 266
+  model:
+    hidden_dim: 64
+    dropout: 0.3
+  training:
+    loss_fn: soft_balanced_softmax
+    learning_rate: 0.015522253574270487
+    learning_rate_configured: 0.015522253574270487
+    learning_rate_source: explicit_model_override
+    lr_finder_enabled: false
+    learning_rate_policy: run_015_cdwce_a3_valley
+    weight_decay: 0.01
+    batch_size: 16
+    epochs: 100
+    early_stopping_patience: 20
+    scheduler_factor: 0.5
+    scheduler_patience: 10
+    seed: 33
+    class_balance_source: train_split_fractional_vote_mass
+    training_target_mode: vote_distribution
+    circumplex_regularizer_enabled: false
+    circumplex_regularizer_opposite_weight: 0.0
+    circumplex_regularizer_adjacent_weight: 0.0
+    dimension_weighting_enabled: false
+    dimension_weighting_mode: inverse_loss
+    dimension_weighting_temperature: 0.5
+    dimension_weighting_ema_alpha: 0.3
+    dimension_weighting_warmup_epochs: 1
+    dimension_weighting_eps: 1.0e-06
+    dimension_weighting_min: 0.5
+    dimension_weighting_max: 1.5
+    ldam_max_m: 0.5
+    ldam_scale: 30.0
+    ldam_drw_start_epoch: 50
+    ldam_beta: 0.9999
+    slace_alpha: 1.0
+  uncertainty:
+    mc_dropout_samples: 50
+data:
+  n_train: 1213
+  n_val: 217
+  n_test: 221
+capacity:
+  n_parameters: 23454
+  param_sample_ratio: 19.3355
+training_dynamics:
+  best_epoch: 24
+  total_epochs: 34
+  train_loss_at_best: 0.3773
+  val_loss_at_best: 0.5238
+  gap_at_best: 0.1465
+  final_lr: 0.007761
+  selection_source: eligible_policy
+  promotion_eligible: true
+  debug_fallback_used: false
+  selection_metrics:
+    qwk_mean: 0.441
+    recall_minus1: 0.4206
+    calibration_global: 0.761
+    hedging_mean: 0.6313
+    qwk_nan_dims_count: 0
+    eligible: true
+    ineligible_reasons: []
+evaluation:
+  mae_mean: 0.2897
+  accuracy_mean: 0.7615
+  qwk_mean: 0.3966
+  qwk_nan_dims_count: 0
+  spearman_mean: 0.3776
+  calibration_global: 0.7584
+  calibration_positive_dims: 10
+  mean_uncertainty: 0.3182
+  minority_recall_mean: 0.4138
+  recall_minus1: 0.3008
+  recall_zero: 0.8303
+  recall_plus1: 0.5268
+  hedging_mean: 0.6262
+  circumplex_summary:
+    opposite_violation_mean: 0.08030790307869513
+    adjacent_support_mean: 0.08106537458176415
+  activation_precision_mean: 0.5266
+  activation_recall_mean: 0.7964
+  activation_f1_mean: 0.6269
+  active_sign_accuracy_mean: 0.7638
+per_dimension:
+  self_direction:
+    mae: 0.4013
+    accuracy: 0.6516
+    qwk: 0.4715
+    spearman: 0.4597
+    calibration: 0.6318
+    hedging: 0.5068
+    active_sign_accuracy: 0.7412
+    activation_precision: 0.5678
+    activation_recall: 0.7882
+    activation_f1: 0.6601
+  stimulation:
+    mae: 0.125
+    accuracy: 0.9231
+    qwk: 0.5573
+    spearman: 0.323
+    calibration: 0.8308
+    hedging: 0.8778
+    active_sign_accuracy: 0.64
+    activation_precision: 0.5
+    activation_recall: 0.6
+    activation_f1: 0.5455
+  hedonism:
+    mae: 0.2918
+    accuracy: 0.7692
+    qwk: 0.216
+    spearman: 0.2157
+    calibration: 0.8183
+    hedging: 0.6516
+    active_sign_accuracy: 0.65
+    activation_precision: 0.4605
+    activation_recall: 0.875
+    activation_f1: 0.6034
+  achievement:
+    mae: 0.3284
+    accuracy: 0.7511
+    qwk: 0.5003
+    spearman: 0.4966
+    calibration: 0.5328
+    hedging: 0.5204
+    active_sign_accuracy: 0.8704
+    activation_precision: 0.3636
+    activation_recall: 0.8889
+    activation_f1: 0.5161
+  power:
+    mae: 0.1377
+    accuracy: 0.8959
+    qwk: 0.3363
+    spearman: 0.2064
+    calibration: 0.9108
+    hedging: 0.8688
+    active_sign_accuracy: 0.6818
+    activation_precision: 0.4375
+    activation_recall: 0.6364
+    activation_f1: 0.5185
+  security:
+    mae: 0.4697
+    accuracy: 0.5792
+    qwk: 0.2691
+    spearman: 0.3705
+    calibration: 0.4863
+    hedging: 0.5339
+    active_sign_accuracy: 0.7297
+    activation_precision: 0.6404
+    activation_recall: 0.6577
+    activation_f1: 0.6489
+  conformity:
+    mae: 0.302
+    accuracy: 0.7511
+    qwk: 0.5212
+    spearman: 0.5593
+    calibration: 0.6647
+    hedging: 0.5294
+    active_sign_accuracy: 0.8889
+    activation_precision: 0.5872
+    activation_recall: 0.8889
+    activation_f1: 0.7072
+  tradition:
+    mae: 0.2195
+    accuracy: 0.8235
+    qwk: 0.5188
+    spearman: 0.5535
+    calibration: 0.8054
+    hedging: 0.629
+    active_sign_accuracy: 0.9038
+    activation_precision: 0.5714
+    activation_recall: 0.8462
+    activation_f1: 0.6822
+  benevolence:
+    mae: 0.4635
+    accuracy: 0.5566
+    qwk: 0.3032
+    spearman: 0.4162
+    calibration: 0.3877
+    hedging: 0.3575
+    active_sign_accuracy: 0.8242
+    activation_precision: 0.4808
+    activation_recall: 0.8242
+    activation_f1: 0.6073
+  universalism:
+    mae: 0.1577
+    accuracy: 0.914
+    qwk: 0.2726
+    spearman: 0.175
+    calibration: 0.9703
+    hedging: 0.7873
+    active_sign_accuracy: 0.7083
+    activation_precision: 0.6571
+    activation_recall: 0.9583
+    activation_f1: 0.7797
+observations: ''
+circumplex:
+  source: probabilities
+  summary:
+    opposite_violation_mean: 0.08030790307869513
+    adjacent_support_mean: 0.08106537458176415
+  opposite_pairs:
+  - pair_id: achievement__benevolence
+    left: achievement
+    right: benevolence
+    score: 0.21970608830451965
+  - pair_id: achievement__universalism
+    left: achievement
+    right: universalism
+    score: 0.0451425202190876
+  - pair_id: benevolence__power
+    left: benevolence
+    right: power
+    score: 0.06408058106899261
+  - pair_id: conformity__hedonism
+    left: conformity
+    right: hedonism
+    score: 0.07663005590438843
+  - pair_id: conformity__self_direction
+    left: conformity
+    right: self_direction
+    score: 0.0974520593881607
+  - pair_id: conformity__stimulation
+    left: conformity
+    right: stimulation
+    score: 0.04093015938997269
+  - pair_id: hedonism__tradition
+    left: hedonism
+    right: tradition
+    score: 0.05775398015975952
+  - pair_id: power__universalism
+    left: power
+    right: universalism
+    score: 0.01643727719783783
+  - pair_id: security__self_direction
+    left: security
+    right: self_direction
+    score: 0.15278597176074982
+  - pair_id: security__stimulation
+    left: security
+    right: stimulation
+    score: 0.051094599068164825
+  - pair_id: self_direction__tradition
+    left: self_direction
+    right: tradition
+    score: 0.10157556086778641
+  - pair_id: stimulation__tradition
+    left: stimulation
+    right: tradition
+    score: 0.04010598361492157
+  adjacent_pairs:
+  - pair_id: achievement__hedonism
+    left: achievement
+    right: hedonism
+    score: 0.05063759535551071
+  - pair_id: achievement__power
+    left: achievement
+    right: power
+    score: 0.06375126540660858
+  - pair_id: benevolence__conformity
+    left: benevolence
+    right: conformity
+    score: 0.10839717835187912
+  - pair_id: benevolence__tradition
+    left: benevolence
+    right: tradition
+    score: 0.18280205130577087
+  - pair_id: benevolence__universalism
+    left: benevolence
+    right: universalism
+    score: 0.10233667492866516
+  - pair_id: conformity__security
+    left: conformity
+    right: security
+    score: 0.11569476127624512
+  - pair_id: conformity__tradition
+    left: conformity
+    right: tradition
+    score: 0.08032770454883575
+  - pair_id: hedonism__stimulation
+    left: hedonism
+    right: stimulation
+    score: 0.01814679242670536
+  - pair_id: power__security
+    left: power
+    right: security
+    score: 0.048886317759752274
+  - pair_id: security__tradition
+    left: security
+    right: tradition
+    score: 0.11707764863967896
+  - pair_id: self_direction__stimulation
+    left: self_direction
+    right: stimulation
+    score: 0.04260244965553284
+  - pair_id: self_direction__universalism
+    left: self_direction
+    right: universalism
+    score: 0.042124055325984955
+selection_policy:
+  name: qwk_then_recall_guarded
+  rank_order:
+  - qwk_mean
+  - recall_minus1
+  - calibration_global
+  - hedging_mean
+  - val_loss
+  guardrails:
+    qwk_mean_must_be_finite: true
+    qwk_nan_dims_count_must_equal_zero: true
+    calibration_global_must_be_non_negative: true
+    recall_minus1_floor: null
+  fallback: best_finite_qwk
+artifacts:
+  selection_trace: logs/experiments/artifacts/ordinal_v4_s2025_m33_20260711_192450/BalancedSoftmax/selection_trace.parquet
+  selection_summary: logs/experiments/artifacts/ordinal_v4_s2025_m33_20260711_192450/BalancedSoftmax/selection_summary.yaml
+  dimension_weight_trace: logs/experiments/artifacts/ordinal_v4_s2025_m33_20260711_192450/BalancedSoftmax/dimension_weight_trace.parquet
+  checkpoint: logs/experiments/artifacts/ordinal_v4_s2025_m33_20260711_192450/BalancedSoftmax/selected_checkpoint.pt
+  candidate_checkpoints:
+    recall_qwk_window_0.02: logs/experiments/artifacts/ordinal_v4_s2025_m33_20260711_192450/BalancedSoftmax/candidate_recall_qwk_window_0_02_checkpoint.pt
+  candidate_checkpoint_summary: logs/experiments/artifacts/ordinal_v4_s2025_m33_20260711_192450/BalancedSoftmax/candidate_checkpoint_summary.yaml
+  validation_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m33_20260711_192450/BalancedSoftmax/selected_validation_outputs.parquet
+  test_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m33_20260711_192450/BalancedSoftmax/selected_test_outputs.parquet
+  candidate_validation_outputs:
+    recall_qwk_window_0.02: logs/experiments/artifacts/ordinal_v4_s2025_m33_20260711_192450/BalancedSoftmax/candidate_recall_qwk_window_0_02_validation_outputs.parquet
+  candidate_test_outputs:
+    recall_qwk_window_0.02: logs/experiments/artifacts/ordinal_v4_s2025_m33_20260711_192450/BalancedSoftmax/candidate_recall_qwk_window_0_02_test_outputs.parquet
+  candidate_checkpoint_metrics: logs/experiments/artifacts/ordinal_v4_s2025_m33_20260711_192450/BalancedSoftmax/candidate_checkpoint_metrics.yaml

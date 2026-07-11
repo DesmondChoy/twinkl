@@ -1,0 +1,14 @@
+- policy: recall_qwk_window_0.02
+  policy_type: recall_qwk_window
+  qwk_window: 0.02
+  candidate:
+    epoch: 23
+    val_loss: 0.49466210177966524
+    qwk_mean: 0.4435623781481818
+    recall_minus1: 0.586296918767507
+    calibration_global: 0.7114824724315624
+    hedging_mean: 0.5972350230414747
+    qwk_nan_dims_count: 0
+    eligible: true
+    ineligible_reasons: []
+  checkpoint_path: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260711_192245/BalancedSoftmax/candidate_recall_qwk_window_0_02_checkpoint.pt

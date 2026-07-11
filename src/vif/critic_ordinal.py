@@ -896,6 +896,132 @@ def balanced_softmax_ce_per_dimension(
     return per_example_loss.view(batch, NUM_DIMS).mean(dim=0)
 
 
+def _validate_soft_distribution_targets(
+    logits: torch.Tensor,
+    target_distributions: torch.Tensor,
+) -> tuple[torch.Tensor, torch.Tensor]:
+    """Validate a 3-class probability target for each Schwartz dimension."""
+    expected_logits = NUM_DIMS * NUM_CLASSES
+    if logits.dim() != 2 or logits.size(1) != expected_logits:
+        raise ValueError(
+            f"logits must have shape (batch, {expected_logits}), got "
+            f"{tuple(logits.shape)}"
+        )
+    if target_distributions.dim() == 2 and target_distributions.size(1) == (
+        NUM_DIMS * NUM_CLASSES
+    ):
+        target_distributions = target_distributions.reshape(
+            target_distributions.size(0),
+            NUM_DIMS,
+            NUM_CLASSES,
+        )
+    elif target_distributions.dim() != 3 or target_distributions.shape[1:] != (
+        NUM_DIMS,
+        NUM_CLASSES,
+    ):
+        raise ValueError(
+            "target_distributions must have shape "
+            f"(batch, {NUM_DIMS}, {NUM_CLASSES}) or "
+            f"(batch, {NUM_DIMS * NUM_CLASSES}), got "
+            f"{tuple(target_distributions.shape)}"
+        )
+    if logits.size(0) != target_distributions.size(0):
+        raise ValueError(
+            "batch sizes must match between logits and target_distributions, got "
+            f"{logits.size(0)} and {target_distributions.size(0)}"
+        )
+    if not torch.isfinite(target_distributions).all():
+        raise ValueError("target_distributions must contain only finite values")
+    if torch.any(target_distributions < 0):
+        raise ValueError("target_distributions must be non-negative")
+    row_sums = target_distributions.float().sum(dim=-1)
+    if not torch.allclose(
+        row_sums,
+        torch.ones_like(row_sums),
+        rtol=0.0,
+        atol=1e-6,
+    ):
+        raise ValueError("target_distributions must sum to 1 along the class axis")
+    return logits, target_distributions
+
+
+def soft_balanced_softmax_ce_per_dimension(
+    logits: torch.Tensor,
+    target_distributions: torch.Tensor,
+    *,
+    class_priors: torch.Tensor | np.ndarray,
+    eps: float = 1e-12,
+) -> torch.Tensor:
+    """Return per-dimension soft BalancedSoftmax CE means with shape ``(10,)``."""
+    logits, target_distributions = _validate_soft_distribution_targets(
+        logits,
+        target_distributions,
+    )
+    priors = _prepare_class_stat_tensor(
+        class_priors,
+        name="class_priors",
+        logits=logits,
+        eps=eps,
+    )
+
+    batch = logits.size(0)
+    logits_3d = logits.view(batch, NUM_DIMS, NUM_CLASSES).float()
+    adjusted_logits = logits_3d + torch.log(priors).view(1, NUM_DIMS, NUM_CLASSES)
+    log_probabilities = F.log_softmax(adjusted_logits, dim=-1)
+    per_example_loss = -(
+        target_distributions.to(device=logits.device, dtype=torch.float32)
+        * log_probabilities
+    ).sum(dim=-1)
+    return per_example_loss.mean(dim=0)
+
+
+def soft_balanced_softmax_loss_multi(
+    logits: torch.Tensor,
+    target_distributions: torch.Tensor,
+    *,
+    class_priors: torch.Tensor | np.ndarray,
+    dimension_weights: torch.Tensor | np.ndarray | None = None,
+    circumplex_regularizer_opposite_weight: float = 0.0,
+    circumplex_regularizer_adjacent_weight: float = 0.0,
+    eps: float = 1e-12,
+) -> torch.Tensor:
+    """Balanced Softmax cross-entropy against empirical class distributions."""
+    opposite_weight = _validate_non_negative_loss_weight(
+        circumplex_regularizer_opposite_weight,
+        name="circumplex_regularizer_opposite_weight",
+    )
+    adjacent_weight = _validate_non_negative_loss_weight(
+        circumplex_regularizer_adjacent_weight,
+        name="circumplex_regularizer_adjacent_weight",
+    )
+    logits, target_distributions = _validate_soft_distribution_targets(
+        logits,
+        target_distributions,
+    )
+    ce_per_dim = soft_balanced_softmax_ce_per_dimension(
+        logits,
+        target_distributions,
+        class_priors=class_priors,
+        eps=eps,
+    )
+    if dimension_weights is None:
+        ce_loss = ce_per_dim.mean()
+    else:
+        weights = _prepare_dimension_weights(dimension_weights, logits=logits)
+        ce_loss = (ce_per_dim * weights).mean()
+    if opposite_weight == 0.0 and adjacent_weight == 0.0:
+        return ce_loss
+
+    batch = logits.size(0)
+    probabilities = F.softmax(logits.view(batch, NUM_DIMS, NUM_CLASSES).float(), dim=-1)
+    circumplex_regularizer = _circumplex_probability_regularizer(
+        probabilities,
+        opposite_weight=opposite_weight,
+        adjacent_weight=adjacent_weight,
+    )
+    return ce_loss + circumplex_regularizer
+
+
 def compute_inverse_loss_dimension_weights(
     loss_ema: torch.Tensor | np.ndarray,
     *,

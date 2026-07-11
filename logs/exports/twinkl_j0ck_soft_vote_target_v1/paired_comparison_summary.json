@@ -1,0 +1,1030 @@
+{
+  "class_order": [
+    -1,
+    0,
+    1
+  ],
+  "families": {
+    "hard": {
+      "max_distribution_metrics.entropy_correlation": 0.23701365258225798,
+      "max_distribution_metrics.entropy_mae_bits": 0.7448705444721998,
+      "max_distribution_metrics.multiclass_brier": 0.2878422822043403,
+      "max_distribution_metrics.soft_nll": 0.6399286231531597,
+      "max_hard_metrics.calibration_global": 0.771,
+      "max_hard_metrics.hedging_mean": 0.6575,
+      "max_hard_metrics.minority_recall_mean": 0.4529,
+      "max_hard_metrics.qwk_mean": 0.3998,
+      "max_hard_metrics.recall_minus1": 0.3267,
+      "max_loss_space_distribution_metrics.entropy_correlation": 0.31245075986547366,
+      "max_loss_space_distribution_metrics.entropy_mae_bits": 0.4278607800236366,
+      "max_loss_space_distribution_metrics.multiclass_brier": 0.22545690967326562,
+      "max_loss_space_distribution_metrics.soft_nll": 0.5592255429117031,
+      "median_distribution_metrics.entropy_correlation": 0.23047606749258928,
+      "median_distribution_metrics.entropy_mae_bits": 0.7167146466849479,
+      "median_distribution_metrics.multiclass_brier": 0.2844345549232107,
+      "median_distribution_metrics.soft_nll": 0.6239154639578981,
+      "median_hard_metrics.calibration_global": 0.7547,
+      "median_hard_metrics.hedging_mean": 0.6407,
+      "median_hard_metrics.minority_recall_mean": 0.4159,
+      "median_hard_metrics.qwk_mean": 0.3894,
+      "median_hard_metrics.recall_minus1": 0.32,
+      "median_loss_space_distribution_metrics.entropy_correlation": 0.31137259992453326,
+      "median_loss_space_distribution_metrics.entropy_mae_bits": 0.4117072340805781,
+      "median_loss_space_distribution_metrics.multiclass_brier": 0.2130917422302475,
+      "median_loss_space_distribution_metrics.soft_nll": 0.5216291849705402,
+      "min_distribution_metrics.entropy_correlation": 0.21807199377929035,
+      "min_distribution_metrics.entropy_mae_bits": 0.6960100527089602,
+      "min_distribution_metrics.multiclass_brier": 0.27529760241992496,
+      "min_distribution_metrics.soft_nll": 0.611122542445236,
+      "min_hard_metrics.calibration_global": 0.7344,
+      "min_hard_metrics.hedging_mean": 0.6357,
+      "min_hard_metrics.minority_recall_mean": 0.4081,
+      "min_hard_metrics.qwk_mean": 0.389,
+      "min_hard_metrics.recall_minus1": 0.2412,
+      "min_loss_space_distribution_metrics.entropy_correlation": 0.30988294535231314,
+      "min_loss_space_distribution_metrics.entropy_mae_bits": 0.4090690242229857,
+      "min_loss_space_distribution_metrics.multiclass_brier": 0.21303742513909024,
+      "min_loss_space_distribution_metrics.soft_nll": 0.5133306674687119,
+      "run_ids": [
+        "run_063",
+        "run_065",
+        "run_067"
+      ]
+    },
+    "vote_distribution": {
+      "max_distribution_metrics.entropy_correlation": 0.23211706853766284,
+      "max_distribution_metrics.entropy_mae_bits": 0.7705789672793554,
+      "max_distribution_metrics.multiclass_brier": 0.31282966381633315,
+      "max_distribution_metrics.soft_nll": 0.676391176012014,
+      "max_hard_metrics.calibration_global": 0.7584,
+      "max_hard_metrics.hedging_mean": 0.6262,
+      "max_hard_metrics.minority_recall_mean": 0.4498,
+      "max_hard_metrics.qwk_mean": 0.405,
+      "max_hard_metrics.recall_minus1": 0.3467,
+      "max_loss_space_distribution_metrics.entropy_correlation": 0.3384689696598305,
+      "max_loss_space_distribution_metrics.entropy_mae_bits": 0.4477739315740352,
+      "max_loss_space_distribution_metrics.multiclass_brier": 0.22043983222584337,
+      "max_loss_space_distribution_metrics.soft_nll": 0.5208717421524832,
+      "median_distribution_metrics.entropy_correlation": 0.22488767824550085,
+      "median_distribution_metrics.entropy_mae_bits": 0.7675958295341886,
+      "median_distribution_metrics.multiclass_brier": 0.3096711605215118,
+      "median_distribution_metrics.soft_nll": 0.6705494930241731,
+      "median_hard_metrics.calibration_global": 0.7232,
+      "median_hard_metrics.hedging_mean": 0.6045,
+      "median_hard_metrics.minority_recall_mean": 0.4355,
+      "median_hard_metrics.qwk_mean": 0.3966,
+      "median_hard_metrics.recall_minus1": 0.3075,
+      "median_loss_space_distribution_metrics.entropy_correlation": 0.31941190036345574,
+      "median_loss_space_distribution_metrics.entropy_mae_bits": 0.44757026008937056,
+      "median_loss_space_distribution_metrics.multiclass_brier": 0.21049654993428785,
+      "median_loss_space_distribution_metrics.soft_nll": 0.5076256996496316,
+      "min_distribution_metrics.entropy_correlation": 0.22146203327341754,
+      "min_distribution_metrics.entropy_mae_bits": 0.7656102936471525,
+      "min_distribution_metrics.multiclass_brier": 0.2977961519504865,
+      "min_distribution_metrics.soft_nll": 0.6536112044413637,
+      "min_hard_metrics.calibration_global": 0.7223,
+      "min_hard_metrics.hedging_mean": 0.5982,
+      "min_hard_metrics.minority_recall_mean": 0.4138,
+      "min_hard_metrics.qwk_mean": 0.3769,
+      "min_hard_metrics.recall_minus1": 0.3008,
+      "min_loss_space_distribution_metrics.entropy_correlation": 0.29129616876821524,
+      "min_loss_space_distribution_metrics.entropy_mae_bits": 0.43968514573141215,
+      "min_loss_space_distribution_metrics.multiclass_brier": 0.20477528305874032,
+      "min_loss_space_distribution_metrics.soft_nll": 0.4928888330649101,
+      "run_ids": [
+        "run_064",
+        "run_066",
+        "run_068"
+      ]
+    }
+  },
+  "paired_seed_deltas": [
+    {
+      "model_seed": 11,
+      "soft_minus_hard": {
+        "distribution_metrics.entropy_correlation": -0.015551619308840442,
+        "distribution_metrics.entropy_mae_bits": 0.04889564696220461,
+        "distribution_metrics.multiclass_brier": 0.03437355810158682,
+        "distribution_metrics.soft_nll": 0.0594269505789371,
+        "hard_metrics.calibration_global": -0.047800000000000065,
+        "hard_metrics.hedging_mean": -0.052999999999999936,
+        "hard_metrics.minority_recall_mean": 0.019600000000000006,
+        "hard_metrics.qwk_mean": 0.015600000000000003,
+        "hard_metrics.recall_minus1": -0.012500000000000011,
+        "loss_space_distribution_metrics.entropy_correlation": 0.026018209794356817,
+        "loss_space_distribution_metrics.entropy_mae_bits": 0.027977911650834075,
+        "loss_space_distribution_metrics.multiclass_brier": -0.008316459171507168,
+        "loss_space_distribution_metrics.soft_nll": -0.028740351905630124
+      }
+    },
+    {
+      "model_seed": 22,
+      "soft_minus_hard": {
+        "distribution_metrics.entropy_correlation": 0.001641001045073559,
+        "distribution_metrics.entropy_mae_bits": 0.07456891457039516,
+        "distribution_metrics.multiclass_brier": 0.02498738161199282,
+        "distribution_metrics.soft_nll": 0.03646255285885436,
+        "hard_metrics.calibration_global": -0.032399999999999984,
+        "hard_metrics.hedging_mean": -0.04250000000000009,
+        "hard_metrics.minority_recall_mean": 0.04169999999999996,
+        "hard_metrics.qwk_mean": -0.0121,
+        "hard_metrics.recall_minus1": 0.10550000000000001,
+        "loss_space_distribution_metrics.entropy_correlation": 0.009528955011142592,
+        "loss_space_distribution_metrics.entropy_mae_bits": 0.038501235866384875,
+        "loss_space_distribution_metrics.multiclass_brier": -0.014960359738977774,
+        "loss_space_distribution_metrics.soft_nll": -0.051599843262071565
+      }
+    },
+    {
+      "model_seed": 33,
+      "soft_minus_hard": {
+        "distribution_metrics.entropy_correlation": 0.006815684466210503,
+        "distribution_metrics.entropy_mae_bits": 0.022725285061988787,
+        "distribution_metrics.multiclass_brier": 0.013361597027275796,
+        "distribution_metrics.soft_nll": 0.02969574048346557,
+        "hard_metrics.calibration_global": 0.02399999999999991,
+        "hard_metrics.hedging_mean": -0.009500000000000064,
+        "hard_metrics.minority_recall_mean": -0.039100000000000024,
+        "hard_metrics.qwk_mean": -0.0031999999999999806,
+        "hard_metrics.recall_minus1": -0.02589999999999998,
+        "loss_space_distribution_metrics.entropy_correlation": -0.02007643115631802,
+        "loss_space_distribution_metrics.entropy_mae_bits": 0.019913151550398633,
+        "loss_space_distribution_metrics.multiclass_brier": 0.007402407086753132,
+        "loss_space_distribution_metrics.soft_nll": 0.007541074683771298
+      }
+    }
+  ],
+  "run_scores": [
+    {
+      "distribution_metrics": {
+        "entropy_correlation": 0.23701365258225798,
+        "entropy_mae_bits": 0.7167146466849479,
+        "multiclass_brier": 0.27529760241992496,
+        "n": 2210,
+        "soft_nll": 0.611122542445236
+      },
+      "hard_metrics": {
+        "calibration_global": 0.771,
+        "hedging_mean": 0.6575,
+        "minority_recall_mean": 0.4159,
+        "qwk_mean": 0.3894,
+        "recall_minus1": 0.32
+      },
+      "loss_space_distribution_metrics": {
+        "entropy_correlation": 0.31245075986547366,
+        "entropy_mae_bits": 0.4117072340805781,
+        "multiclass_brier": 0.2130917422302475,
+        "n": 2210,
+        "soft_nll": 0.5216291849705402
+      },
+      "model_seed": 11,
+      "per_confidence": {
+        "bare_majority": {
+          "entropy_correlation": 0.09045374250987989,
+          "entropy_mae_bits": 0.3195348489708059,
+          "multiclass_brier": 0.30565119781913164,
+          "n": 130,
+          "soft_nll": 1.4061154701488756
+        },
+        "majority": {
+          "entropy_correlation": -9.05230716085775e-16,
+          "entropy_mae_bits": 0.36622455482434535,
+          "multiclass_brier": 0.2190494140324059,
+          "n": 70,
+          "soft_nll": 1.1198461728097393
+        },
+        "no_majority": {
+          "entropy_correlation": null,
+          "entropy_mae_bits": 0.7484103833791349,
+          "multiclass_brier": 0.3238061825056908,
+          "n": 1,
+          "soft_nll": 1.9144429880598426
+        },
+        "strong": {
+          "entropy_correlation": 1.4757029537843035e-17,
+          "entropy_mae_bits": 0.4227309322533907,
+          "multiclass_brier": 0.3534763046598412,
+          "n": 152,
+          "soft_nll": 1.180115574037238
+        },
+        "tie_break_review": {
+          "entropy_correlation": null,
+          "entropy_mae_bits": 0.20422968214385853,
+          "multiclass_brier": 0.1839668895499679,
+          "n": 6,
+          "soft_nll": 1.3479675651765077
+        },
+        "unanimous": {
+          "entropy_correlation": null,
+          "entropy_mae_bits": 0.7836495028584918,
+          "multiclass_brier": 0.26914293939555767,
+          "n": 1851,
+          "soft_nll": 0.48623271742580065
+        }
+      },
+      "per_dimension": {
+        "achievement": {
+          "entropy_correlation": 0.17848210804001305,
+          "entropy_mae_bits": 1.0210301150845353,
+          "multiclass_brier": 0.3477435671287881,
+          "n": 221,
+          "soft_nll": 0.7523800982684884
+        },
+        "benevolence": {
+          "entropy_correlation": 0.16010288764294492,
+          "entropy_mae_bits": 0.9309296380839048,
+          "multiclass_brier": 0.4546828309164427,
+          "n": 221,
+          "soft_nll": 0.9335643390997721
+        },
+        "conformity": {
+          "entropy_correlation": -0.008216010830407008,
+          "entropy_mae_bits": 0.76357295490218,
+          "multiclass_brier": 0.34512280360547065,
+          "n": 221,
+          "soft_nll": 0.7166069476505481
+        },
+        "hedonism": {
+          "entropy_correlation": 0.30376673812985155,
+          "entropy_mae_bits": 0.6535686585486467,
+          "multiclass_brier": 0.19423217532896062,
+          "n": 221,
+          "soft_nll": 0.47134905599866633
+        },
+        "power": {
+          "entropy_correlation": 0.3256915510154615,
+          "entropy_mae_bits": 0.5807895479100577,
+          "multiclass_brier": 0.13582931783227908,
+          "n": 221,
+          "soft_nll": 0.347803578720424
+        },
+        "security": {
+          "entropy_correlation": 0.13638193126379072,
+          "entropy_mae_bits": 0.8625741195752623,
+          "multiclass_brier": 0.3533468363100334,
+          "n": 221,
+          "soft_nll": 0.8796833751892327
+        },
+        "self_direction": {
+          "entropy_correlation": 0.04038411802833615,
+          "entropy_mae_bits": 0.7435921460372144,
+          "multiclass_brier": 0.37315942416594905,
+          "n": 221,
+          "soft_nll": 0.7763848465095227
+        },
+        "stimulation": {
+          "entropy_correlation": 0.16218929496283352,
+          "entropy_mae_bits": 0.5806747359051295,
+          "multiclass_brier": 0.12018576276814803,
+          "n": 221,
+          "soft_nll": 0.3268691176025835
+        },
+        "tradition": {
+          "entropy_correlation": 0.06271103573883993,
+          "entropy_mae_bits": 0.5639346458073361,
+          "multiclass_brier": 0.270328427876557,
+          "n": 221,
+          "soft_nll": 0.5810026479738746
+        },
+        "universalism": {
+          "entropy_correlation": 0.13825182470238892,
+          "entropy_mae_bits": 0.46647990499521214,
+          "multiclass_brier": 0.1583448782666207,
+          "n": 221,
+          "soft_nll": 0.325581417439248
+        }
+      },
+      "run_id": "run_063",
+      "run_path": "logs/experiments/runs/run_063_BalancedSoftmax.yaml",
+      "training_target_mode": "hard"
+    },
+    {
+      "distribution_metrics": {
+        "entropy_correlation": 0.22146203327341754,
+        "entropy_mae_bits": 0.7656102936471525,
+        "multiclass_brier": 0.3096711605215118,
+        "n": 2210,
+        "soft_nll": 0.6705494930241731
+      },
+      "hard_metrics": {
+        "calibration_global": 0.7232,
+        "hedging_mean": 0.6045,
+        "minority_recall_mean": 0.4355,
+        "qwk_mean": 0.405,
+        "recall_minus1": 0.3075
+      },
+      "loss_space_distribution_metrics": {
+        "entropy_correlation": 0.3384689696598305,
+        "entropy_mae_bits": 0.43968514573141215,
+        "multiclass_brier": 0.20477528305874032,
+        "n": 2210,
+        "soft_nll": 0.4928888330649101
+      },
+      "model_seed": 11,
+      "per_confidence": {
+        "bare_majority": {
+          "entropy_correlation": 0.04679164688098786,
+          "entropy_mae_bits": 0.31888603215019545,
+          "multiclass_brier": 0.30697211779347516,
+          "n": 130,
+          "soft_nll": 1.4008020115503848
+        },
+        "majority": {
+          "entropy_correlation": -7.82618385232432e-16,
+          "entropy_mae_bits": 0.41469247777717677,
+          "multiclass_brier": 0.2731561096351906,
+          "n": 70,
+          "soft_nll": 1.2041735300292218
+        },
+        "no_majority": {
+          "entropy_correlation": null,
+          "entropy_mae_bits": 0.8122698838184482,
+          "multiclass_brier": 0.3419314814345594,
+          "n": 1,
+          "soft_nll": 2.1948546106991533
+        },
+        "strong": {
+          "entropy_correlation": 3.237715515533867e-17,
+          "entropy_mae_bits": 0.414333088718455,
+          "multiclass_brier": 0.3889418112666174,
+          "n": 152,
+          "soft_nll": 1.2634842904635535
+        },
+        "tie_break_review": {
+          "entropy_correlation": null,
+          "entropy_mae_bits": 0.1493644770201256,
+          "multiclass_brier": 0.1556985562753009,
+          "n": 6,
+          "soft_nll": 1.2915151873723234
+        },
+        "unanimous": {
+          "entropy_correlation": null,
+          "entropy_mae_bits": 0.8410740168045028,
+          "multiclass_brier": 0.3052137674950371,
+          "n": 1851,
+          "soft_nll": 0.5475550583978572
+        }
+      },
+      "per_dimension": {
+        "achievement": {
+          "entropy_correlation": 0.1826843988273498,
+          "entropy_mae_bits": 0.9915592104243068,
+          "multiclass_brier": 0.36580770886422326,
+          "n": 221,
+          "soft_nll": 0.772583144094567
+        },
+        "benevolence": {
+          "entropy_correlation": 0.07789364733059631,
+          "entropy_mae_bits": 0.8631766512328032,
+          "multiclass_brier": 0.4386815007353358,
+          "n": 221,
+          "soft_nll": 0.9096804818888844
+        },
+        "conformity": {
+          "entropy_correlation": 0.09076652412975714,
+          "entropy_mae_bits": 0.7681917130022636,
+          "multiclass_brier": 0.3478745771428786,
+          "n": 221,
+          "soft_nll": 0.7239377782630882
+        },
+        "hedonism": {
+          "entropy_correlation": 0.24020756747770583,
+          "entropy_mae_bits": 0.7716168288722438,
+          "multiclass_brier": 0.2871295478445106,
+          "n": 221,
+          "soft_nll": 0.6301907787113922
+        },
+        "power": {
+          "entropy_correlation": 0.23837098540367546,
+          "entropy_mae_bits": 0.5682670197641831,
+          "multiclass_brier": 0.13978395329724788,
+          "n": 221,
+          "soft_nll": 0.3623663774623193
+        },
+        "security": {
+          "entropy_correlation": 0.19191562232817794,
+          "entropy_mae_bits": 0.8741214447237043,
+          "multiclass_brier": 0.40830558964027835,
+          "n": 221,
+          "soft_nll": 0.9622320639693628
+        },
+        "self_direction": {
+          "entropy_correlation": 0.1686810587220463,
+          "entropy_mae_bits": 0.788612878498413,
+          "multiclass_brier": 0.3454041078809781,
+          "n": 221,
+          "soft_nll": 0.7476769444171144
+        },
+        "stimulation": {
+          "entropy_correlation": 0.07922460095910278,
+          "entropy_mae_bits": 0.9408893783801386,
+          "multiclass_brier": 0.2987748017205308,
+          "n": 221,
+          "soft_nll": 0.5967291886955884
+        },
+        "tradition": {
+          "entropy_correlation": 0.08249546299852391,
+          "entropy_mae_bits": 0.6404264265224203,
+          "multiclass_brier": 0.3343565617160699,
+          "n": 221,
+          "soft_nll": 0.7301253058570111
+        },
+        "universalism": {
+          "entropy_correlation": 0.15415997683386495,
+          "entropy_mae_bits": 0.4492413850510478,
+          "multiclass_brier": 0.13059325637306454,
+          "n": 221,
+          "soft_nll": 0.2699728668824028
+        }
+      },
+      "run_id": "run_064",
+      "run_path": "logs/experiments/runs/run_064_BalancedSoftmax.yaml",
+      "training_target_mode": "vote_distribution"
+    },
+    {
+      "distribution_metrics": {
+        "entropy_correlation": 0.23047606749258928,
+        "entropy_mae_bits": 0.6960100527089602,
+        "multiclass_brier": 0.2878422822043403,
+        "n": 2210,
+        "soft_nll": 0.6399286231531597
+      },
+      "hard_metrics": {
+        "calibration_global": 0.7547,
+        "hedging_mean": 0.6407,
+        "minority_recall_mean": 0.4081,
+        "qwk_mean": 0.389,
+        "recall_minus1": 0.2412
+      },
+      "loss_space_distribution_metrics": {
+        "entropy_correlation": 0.30988294535231314,
+        "entropy_mae_bits": 0.4090690242229857,
+        "multiclass_brier": 0.22545690967326562,
+        "n": 2210,
+        "soft_nll": 0.5592255429117031
+      },
+      "model_seed": 22,
+      "per_confidence": {
+        "bare_majority": {
+          "entropy_correlation": -0.06121837877175549,
+          "entropy_mae_bits": 0.34824550789598985,
+          "multiclass_brier": 0.30325315790327667,
+          "n": 130,
+          "soft_nll": 1.441609197284499
+        },
+        "majority": {
+          "entropy_correlation": -7.908305458568687e-16,
+          "entropy_mae_bits": 0.38882923702985145,
+          "multiclass_brier": 0.2811437925615741,
+          "n": 70,
+          "soft_nll": 1.251216505816022
+        },
+        "no_majority": {
+          "entropy_correlation": null,
+          "entropy_mae_bits": 0.7791047385923191,
+          "multiclass_brier": 0.32832586033966094,
+          "n": 1,
+          "soft_nll": 1.6245541264046253
+        },
+        "strong": {
+          "entropy_correlation": 9.254259156680193e-17,
+          "entropy_mae_bits": 0.41388663946660437,
+          "multiclass_brier": 0.37679811644882816,
+          "n": 152,
+          "soft_nll": 1.2404284294813188
+        },
+        "tie_break_review": {
+          "entropy_correlation": null,
+          "entropy_mae_bits": 0.3359298861990354,
+          "multiclass_brier": 0.23860214736772065,
+          "n": 6,
+          "soft_nll": 1.5060070281145386
+        },
+        "unanimous": {
+          "entropy_correlation": null,
+          "entropy_mae_bits": 0.756340789094286,
+          "multiclass_brier": 0.2798461454457526,
+          "n": 1851,
+          "soft_nll": 0.5078563957526332
+        }
+      },
+      "per_dimension": {
+        "achievement": {
+          "entropy_correlation": 0.07682613041500715,
+          "entropy_mae_bits": 0.9968232497600468,
+          "multiclass_brier": 0.3773530321435654,
+          "n": 221,
+          "soft_nll": 0.7710235739487366
+        },
+        "benevolence": {
+          "entropy_correlation": 0.17386112439864437,
+          "entropy_mae_bits": 0.9149394099740158,
+          "multiclass_brier": 0.3907232434003744,
+          "n": 221,
+          "soft_nll": 0.8487247409157948
+        },
+        "conformity": {
+          "entropy_correlation": 0.14751740684386913,
+          "entropy_mae_bits": 0.6504150349672477,
+          "multiclass_brier": 0.2904744835637991,
+          "n": 221,
+          "soft_nll": 0.643525011665115
+        },
+        "hedonism": {
+          "entropy_correlation": 0.23592702314776826,
+          "entropy_mae_bits": 0.7550442219729936,
+          "multiclass_brier": 0.25103272755378697,
+          "n": 221,
+          "soft_nll": 0.5920184086565912
+        },
+        "power": {
+          "entropy_correlation": 0.3419276416757876,
+          "entropy_mae_bits": 0.3505397299506164,
+          "multiclass_brier": 0.0983958918903807,
+          "n": 221,
+          "soft_nll": 0.2897744016761739
+        },
+        "security": {
+          "entropy_correlation": 0.13333066491464757,
+          "entropy_mae_bits": 0.8771948301764908,
+          "multiclass_brier": 0.4215036891536594,
+          "n": 221,
+          "soft_nll": 0.9926581604436724
+        },
+        "self_direction": {
+          "entropy_correlation": 0.11807746087292786,
+          "entropy_mae_bits": 0.7425254512749679,
+          "multiclass_brier": 0.3659998666581418,
+          "n": 221,
+          "soft_nll": 0.7608945675613608
+        },
+        "stimulation": {
+          "entropy_correlation": 0.08223516033252457,
+          "entropy_mae_bits": 0.7658565889379497,
+          "multiclass_brier": 0.24290910303981267,
+          "n": 221,
+          "soft_nll": 0.4952466831103534
+        },
+        "tradition": {
+          "entropy_correlation": 0.09679593075380118,
+          "entropy_mae_bits": 0.4755971195754542,
+          "multiclass_brier": 0.3218246081464295,
+          "n": 221,
+          "soft_nll": 0.7334784300194032
+        },
+        "universalism": {
+          "entropy_correlation": 0.017292222595077872,
+          "entropy_mae_bits": 0.43116489049981843,
+          "multiclass_brier": 0.11820617649345318,
+          "n": 221,
+          "soft_nll": 0.2719422535343953
+        }
+      },
+      "run_id": "run_065",
+      "run_path": "logs/experiments/runs/run_065_BalancedSoftmax.yaml",
+      "training_target_mode": "hard"
+    },
+    {
+      "distribution_metrics": {
+        "entropy_correlation": 0.23211706853766284,
+        "entropy_mae_bits": 0.7705789672793554,
+        "multiclass_brier": 0.31282966381633315,
+        "n": 2210,
+        "soft_nll": 0.676391176012014
+      },
+      "hard_metrics": {
+        "calibration_global": 0.7223,
+        "hedging_mean": 0.5982,
+        "minority_recall_mean": 0.4498,
+        "qwk_mean": 0.3769,
+        "recall_minus1": 0.3467
+      },
+      "loss_space_distribution_metrics": {
+        "entropy_correlation": 0.31941190036345574,
+        "entropy_mae_bits": 0.44757026008937056,
+        "multiclass_brier": 0.21049654993428785,
+        "n": 2210,
+        "soft_nll": 0.5076256996496316
+      },
+      "model_seed": 22,
+      "per_confidence": {
+        "bare_majority": {
+          "entropy_correlation": -0.11527410394258916,
+          "entropy_mae_bits": 0.32827365960175886,
+          "multiclass_brier": 0.2957414158157537,
+          "n": 130,
+          "soft_nll": 1.3859136388019446
+        },
+        "majority": {
+          "entropy_correlation": -1.4766979852335607e-16,
+          "entropy_mae_bits": 0.405132213920529,
+          "multiclass_brier": 0.2704345277421172,
+          "n": 70,
+          "soft_nll": 1.1878435516660617
+        },
+        "no_majority": {
+          "entropy_correlation": null,
+          "entropy_mae_bits": 0.8188137880222461,
+          "multiclass_brier": 0.3368555847725808,
+          "n": 1,
+          "soft_nll": 1.6400702987426312
+        },
+        "strong": {
+          "entropy_correlation": 4.3443330872581943e-16,
+          "entropy_mae_bits": 0.4107670421116927,
+          "multiclass_brier": 0.36648530852437516,
+          "n": 152,
+          "soft_nll": 1.1947665137205885
+        },
+        "tie_break_review": {
+          "entropy_correlation": null,
+          "entropy_mae_bits": 0.1263294230268082,
+          "multiclass_brier": 0.13459269900753232,
+          "n": 6,
+          "soft_nll": 1.3170464441159495
+        },
+        "unanimous": {
+          "entropy_correlation": null,
+          "entropy_mae_bits": 0.8470725587452994,
+          "multiclass_brier": 0.3117917759922082,
+          "n": 1851,
+          "soft_nll": 0.5620528461786637
+        }
+      },
+      "per_dimension": {
+        "achievement": {
+          "entropy_correlation": 0.22578443116541447,
+          "entropy_mae_bits": 0.9378258598358746,
+          "multiclass_brier": 0.3615216175069196,
+          "n": 221,
+          "soft_nll": 0.7541941178189052
+        },
+        "benevolence": {
+          "entropy_correlation": 0.02731357181220477,
+          "entropy_mae_bits": 0.9135731832340176,
+          "multiclass_brier": 0.46003664143529405,
+          "n": 221,
+          "soft_nll": 0.9452177662207121
+        },
+        "conformity": {
+          "entropy_correlation": 0.06312851436487793,
+          "entropy_mae_bits": 0.8172806423594524,
+          "multiclass_brier": 0.35124607931168306,
+          "n": 221,
+          "soft_nll": 0.7361492153847996
+        },
+        "hedonism": {
+          "entropy_correlation": 0.2880766419908816,
+          "entropy_mae_bits": 0.7492310440617289,
+          "multiclass_brier": 0.2665294130266796,
+          "n": 221,
+          "soft_nll": 0.5972069031499424
+        },
+        "power": {
+          "entropy_correlation": 0.23022076236712152,
+          "entropy_mae_bits": 0.6275119062161554,
+          "multiclass_brier": 0.1384257986051217,
+          "n": 221,
+          "soft_nll": 0.3703712912657036
+        },
+        "security": {
+          "entropy_correlation": 0.1860333066098939,
+          "entropy_mae_bits": 0.889304556266757,
+          "multiclass_brier": 0.4195932442353143,
+          "n": 221,
+          "soft_nll": 0.9711442723074647
+        },
+        "self_direction": {
+          "entropy_correlation": 0.058652887526305854,
+          "entropy_mae_bits": 0.8649620954309926,
+          "multiclass_brier": 0.40462901037903615,
+          "n": 221,
+          "soft_nll": 0.8326846876622774
+        },
+        "stimulation": {
+          "entropy_correlation": 0.1405046669394991,
+          "entropy_mae_bits": 0.8092578592481473,
+          "multiclass_brier": 0.25186721436157117,
+          "n": 221,
+          "soft_nll": 0.5219882865471512
+        },
+        "tradition": {
+          "entropy_correlation": 0.16079979465516475,
+          "entropy_mae_bits": 0.6318290615927549,
+          "multiclass_brier": 0.3289447733613913,
+          "n": 221,
+          "soft_nll": 0.7194455037630273
+        },
+        "universalism": {
+          "entropy_correlation": 0.09995236479938611,
+          "entropy_mae_bits": 0.4650134645476732,
+          "multiclass_brier": 0.1455028459403209,
+          "n": 221,
+          "soft_nll": 0.31550971600015687
+        }
+      },
+      "run_id": "run_066",
+      "run_path": "logs/experiments/runs/run_066_BalancedSoftmax.yaml",
+      "training_target_mode": "vote_distribution"
+    },
+    {
+      "distribution_metrics": {
+        "entropy_correlation": 0.21807199377929035,
+        "entropy_mae_bits": 0.7448705444721998,
+        "multiclass_brier": 0.2844345549232107,
+        "n": 2210,
+        "soft_nll": 0.6239154639578981
+      },
+      "hard_metrics": {
+        "calibration_global": 0.7344,
+        "hedging_mean": 0.6357,
+        "minority_recall_mean": 0.4529,
+        "qwk_mean": 0.3998,
+        "recall_minus1": 0.3267
+      },
+      "loss_space_distribution_metrics": {
+        "entropy_correlation": 0.31137259992453326,
+        "entropy_mae_bits": 0.4278607800236366,
+        "multiclass_brier": 0.21303742513909024,
+        "n": 2210,
+        "soft_nll": 0.5133306674687119
+      },
+      "model_seed": 33,
+      "per_confidence": {
+        "bare_majority": {
+          "entropy_correlation": 0.09728514796884728,
+          "entropy_mae_bits": 0.31188197529790584,
+          "multiclass_brier": 0.2980721331577956,
+          "n": 130,
+          "soft_nll": 1.3609219605786036
+        },
+        "majority": {
+          "entropy_correlation": -1.391807079326771e-15,
+          "entropy_mae_bits": 0.4013783637123341,
+          "multiclass_brier": 0.23768372775150537,
+          "n": 70,
+          "soft_nll": 1.1368019727028527
+        },
+        "no_majority": {
+          "entropy_correlation": null,
+          "entropy_mae_bits": 1.230466593547374,
+          "multiclass_brier": 0.4896854710275324,
+          "n": 1,
+          "soft_nll": 2.4795101422854335
+        },
+        "strong": {
+          "entropy_correlation": 1.3933754210532407e-16,
+          "entropy_mae_bits": 0.3798186191255228,
+          "multiclass_brier": 0.3654805115118509,
+          "n": 152,
+          "soft_nll": 1.17605849288036
+        },
+        "tie_break_review": {
+          "entropy_correlation": null,
+          "entropy_mae_bits": 0.1535072302534417,
+          "multiclass_brier": 0.15650688842113814,
+          "n": 6,
+          "soft_nll": 1.2949353294618395
+        },
+        "unanimous": {
+          "entropy_correlation": null,
+          "entropy_mae_bits": 0.8199021182889373,
+          "multiclass_brier": 0.27889322721546245,
+          "n": 1851,
+          "soft_nll": 0.5042394215805863
+        }
+      },
+      "per_dimension": {
+        "achievement": {
+          "entropy_correlation": 0.1402095022345929,
+          "entropy_mae_bits": 0.9006154874175464,
+          "multiclass_brier": 0.3208147565391441,
+          "n": 221,
+          "soft_nll": 0.6961540275228184
+        },
+        "benevolence": {
+          "entropy_correlation": 0.09268978333288214,
+          "entropy_mae_bits": 0.8523223552387557,
+          "multiclass_brier": 0.4106075190382224,
+          "n": 221,
+          "soft_nll": 0.8570423057266909
+        },
+        "conformity": {
+          "entropy_correlation": 0.03499291291646997,
+          "entropy_mae_bits": 0.7505519343418501,
+          "multiclass_brier": 0.35484892901401277,
+          "n": 221,
+          "soft_nll": 0.7596413685968804
+        },
+        "hedonism": {
+          "entropy_correlation": 0.24150007120249462,
+          "entropy_mae_bits": 0.8280103138642906,
+          "multiclass_brier": 0.27739306062877905,
+          "n": 221,
+          "soft_nll": 0.6049487528826776
+        },
+        "power": {
+          "entropy_correlation": 0.272968151061212,
+          "entropy_mae_bits": 0.6164949036238837,
+          "multiclass_brier": 0.13971369245697468,
+          "n": 221,
+          "soft_nll": 0.3530591783454882
+        },
+        "security": {
+          "entropy_correlation": 0.20855909503375702,
+          "entropy_mae_bits": 0.8658824364501634,
+          "multiclass_brier": 0.35958393732936794,
+          "n": 221,
+          "soft_nll": 0.8763415187757971
+        },
+        "self_direction": {
+          "entropy_correlation": 0.022069799750377348,
+          "entropy_mae_bits": 0.834747146422808,
+          "multiclass_brier": 0.36317484095548075,
+          "n": 221,
+          "soft_nll": 0.7697340084501678
+        },
+        "stimulation": {
+          "entropy_correlation": 0.15462102412724069,
+          "entropy_mae_bits": 0.7539487676364809,
+          "multiclass_brier": 0.17319229835913602,
+          "n": 221,
+          "soft_nll": 0.4105356299510544
+        },
+        "tradition": {
+          "entropy_correlation": 0.05453602204716924,
+          "entropy_mae_bits": 0.620859705570017,
+          "multiclass_brier": 0.3267274652571358,
+          "n": 221,
+          "soft_nll": 0.6590076749608185
+        },
+        "universalism": {
+          "entropy_correlation": 0.10932009441212694,
+          "entropy_mae_bits": 0.42527239415620266,
+          "multiclass_brier": 0.11828904965385241,
+          "n": 221,
+          "soft_nll": 0.2526901743665871
+        }
+      },
+      "run_id": "run_067",
+      "run_path": "logs/experiments/runs/run_067_BalancedSoftmax.yaml",
+      "training_target_mode": "hard"
+    },
+    {
+      "distribution_metrics": {
+        "entropy_correlation": 0.22488767824550085,
+        "entropy_mae_bits": 0.7675958295341886,
+        "multiclass_brier": 0.2977961519504865,
+        "n": 2210,
+        "soft_nll": 0.6536112044413637
+      },
+      "hard_metrics": {
+        "calibration_global": 0.7584,
+        "hedging_mean": 0.6262,
+        "minority_recall_mean": 0.4138,
+        "qwk_mean": 0.3966,
+        "recall_minus1": 0.3008
+      },
+      "loss_space_distribution_metrics": {
+        "entropy_correlation": 0.29129616876821524,
+        "entropy_mae_bits": 0.4477739315740352,
+        "multiclass_brier": 0.22043983222584337,
+        "n": 2210,
+        "soft_nll": 0.5208717421524832
+      },
+      "model_seed": 33,
+      "per_confidence": {
+        "bare_majority": {
+          "entropy_correlation": 0.12464418721871871,
+          "entropy_mae_bits": 0.32241933952176155,
+          "multiclass_brier": 0.28573549951288746,
+          "n": 130,
+          "soft_nll": 1.3779741869645512
+        },
+        "majority": {
+          "entropy_correlation": 1.6278694519148892e-16,
+          "entropy_mae_bits": 0.35644292939404226,
+          "multiclass_brier": 0.27167756748330363,
+          "n": 70,
+          "soft_nll": 1.2150025202547714
+        },
+        "no_majority": {
+          "entropy_correlation": null,
+          "entropy_mae_bits": 1.0932557806235736,
+          "multiclass_brier": 0.44678073282137265,
+          "n": 1,
+          "soft_nll": 2.2745009667941836
+        },
+        "strong": {
+          "entropy_correlation": -1.1027285671291315e-16,
+          "entropy_mae_bits": 0.4143744327341254,
+          "multiclass_brier": 0.3592267772688942,
+          "n": 152,
+          "soft_nll": 1.1810674031247912
+        },
+        "tie_break_review": {
+          "entropy_correlation": null,
+          "entropy_mae_bits": 0.17035005175995943,
+          "multiclass_brier": 0.14005594986653194,
+          "n": 6,
+          "soft_nll": 1.3063615390801837
+        },
+        "unanimous": {
+          "entropy_correlation": null,
+          "entropy_mae_bits": 0.8451761178867501,
+          "multiclass_brier": 0.2950172147883177,
+          "n": 1851,
+          "soft_nll": 0.5352020667833302
+        }
+      },
+      "per_dimension": {
+        "achievement": {
+          "entropy_correlation": 0.18296414127561958,
+          "entropy_mae_bits": 1.0699473721377288,
+          "multiclass_brier": 0.4013175137230694,
+          "n": 221,
+          "soft_nll": 0.8234482683387994
+        },
+        "benevolence": {
+          "entropy_correlation": -0.007047609170272446,
+          "entropy_mae_bits": 0.8764753257527033,
+          "multiclass_brier": 0.5045613522404745,
+          "n": 221,
+          "soft_nll": 1.0592568477183366
+        },
+        "conformity": {
+          "entropy_correlation": 0.10538418007270305,
+          "entropy_mae_bits": 0.8172137631889264,
+          "multiclass_brier": 0.306510176810582,
+          "n": 221,
+          "soft_nll": 0.6744958262013145
+        },
+        "hedonism": {
+          "entropy_correlation": 0.34714958218311975,
+          "entropy_mae_bits": 0.8198891074190237,
+          "multiclass_brier": 0.28060844529926815,
+          "n": 221,
+          "soft_nll": 0.6086507293282643
+        },
+        "power": {
+          "entropy_correlation": 0.27120709981640145,
+          "entropy_mae_bits": 0.5693180212870184,
+          "multiclass_brier": 0.1374982759147247,
+          "n": 221,
+          "soft_nll": 0.35572637654463857
+        },
+        "security": {
+          "entropy_correlation": 0.1633746636430163,
+          "entropy_mae_bits": 0.824181254062398,
+          "multiclass_brier": 0.39616220235009136,
+          "n": 221,
+          "soft_nll": 0.9434362798622932
+        },
+        "self_direction": {
+          "entropy_correlation": 0.0069923434662579696,
+          "entropy_mae_bits": 0.8841784639687871,
+          "multiclass_brier": 0.38986330377682027,
+          "n": 221,
+          "soft_nll": 0.8078947575147247
+        },
+        "stimulation": {
+          "entropy_correlation": 0.13460774029816336,
+          "entropy_mae_bits": 0.7701523679861836,
+          "multiclass_brier": 0.16554482768287926,
+          "n": 221,
+          "soft_nll": 0.40746839289591436
+        },
+        "tradition": {
+          "entropy_correlation": 0.23349691755081442,
+          "entropy_mae_bits": 0.5924240040059834,
+          "multiclass_brier": 0.25669795080922236,
+          "n": 221,
+          "soft_nll": 0.579509298757946
+        },
+        "universalism": {
+          "entropy_correlation": 0.13757082361106412,
+          "entropy_mae_bits": 0.45217861553313377,
+          "multiclass_brier": 0.1391974708977331,
+          "n": 221,
+          "soft_nll": 0.27622526725140395
+        }
+      },
+      "run_id": "run_068",
+      "run_path": "logs/experiments/runs/run_068_BalancedSoftmax.yaml",
+      "training_target_mode": "vote_distribution"
+    }
+  ],
+  "target_path": "logs/exports/twinkl_j0ck_soft_vote_target_v1/hybrid_soft_vote_labels.parquet",
+  "value_order": [
+    "self_direction",
+    "stimulation",
+    "hedonism",
+    "achievement",
+    "power",
+    "security",
+    "conformity",
+    "tradition",
+    "benevolence",
+    "universalism"
+  ]
+}

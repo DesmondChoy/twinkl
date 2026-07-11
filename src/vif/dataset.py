@@ -433,6 +433,7 @@ class VIFDataset(Dataset):
         data_df: pl.DataFrame,
         state_encoder: StateEncoder,
         cache_embeddings: bool = True,
+        target_column: str = "alignment_vector",
     ):
         """Initialize the dataset.
 
@@ -440,10 +441,18 @@ class VIFDataset(Dataset):
             data_df: Merged DataFrame with labels and entries
             state_encoder: StateEncoder instance for building state vectors
             cache_embeddings: If True, pre-compute and cache all text embeddings
+            target_column: DataFrame column returned as the target tensor. The
+                hard-label default remains ``alignment_vector``; experiments
+                may opt into a separate soft-target column explicitly.
         """
+        if target_column not in data_df.columns:
+            raise ValueError(
+                f"Target column {target_column!r} not found in dataset columns"
+            )
         self.data_df = data_df
         self.state_encoder = state_encoder
         self.cache_embeddings = cache_embeddings
+        self.target_column = target_column
 
         # Group data by persona for efficient history lookup
         self._build_persona_index()
@@ -588,8 +597,9 @@ class VIFDataset(Dataset):
             core_values=core_values,
         )
 
-        # Get target (alignment vector)
-        target = np.array(current_row["alignment_vector"], dtype=np.float32)
+        # Get the explicitly configured target without changing the hard-label
+        # default used by training and runtime callers.
+        target = np.array(current_row[self.target_column], dtype=np.float32)
 
         return torch.from_numpy(state), torch.from_numpy(target)
 
@@ -605,6 +615,7 @@ def create_dataloaders(
     fixed_val_persona_ids: set[str] | list[str] | tuple[str, ...] | None = None,
     fixed_test_persona_ids: set[str] | list[str] | tuple[str, ...] | None = None,
     fixed_holdout_manifest_path: str | Path | None = None,
+    target_column: str = "alignment_vector",
 ) -> tuple[torch.utils.data.DataLoader, torch.utils.data.DataLoader, torch.utils.data.DataLoader]:
     """Create train/val/test DataLoaders in one call.
 
@@ -623,6 +634,7 @@ def create_dataloaders(
         fixed_test_persona_ids: Optional explicit test persona IDs.
         fixed_holdout_manifest_path: Optional YAML manifest containing
             ``val_persona_ids`` and ``test_persona_ids``.
+        target_column: DataFrame column returned as the target tensor.
 
     Returns:
         Tuple of (train_loader, val_loader, test_loader)
@@ -652,9 +664,12 @@ def create_dataloaders(
     )
 
     # Create datasets
-    train_dataset = VIFDataset(train_df, state_encoder, cache_embeddings=True)
-    val_dataset = VIFDataset(val_df, state_encoder, cache_embeddings=True)
-    test_dataset = VIFDataset(test_df, state_encoder, cache_embeddings=True)
+    dataset_kwargs = {"cache_embeddings": True}
+    if target_column != "alignment_vector":
+        dataset_kwargs["target_column"] = target_column
+    train_dataset = VIFDataset(train_df, state_encoder, **dataset_kwargs)
+    val_dataset = VIFDataset(val_df, state_encoder, **dataset_kwargs)
+    test_dataset = VIFDataset(test_df, state_encoder, **dataset_kwargs)
 
     # Create DataLoaders
     train_loader = torch.utils.data.DataLoader(

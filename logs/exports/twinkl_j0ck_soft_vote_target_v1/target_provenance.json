@@ -1,0 +1,85 @@
+{
+  "class_order": [
+    -1,
+    0,
+    1
+  ],
+  "input_files": {
+    "historical_base_labels": {
+      "path": "logs/judge_labels/judge_labels.parquet",
+      "sha256": "cbb101a1c05509a8c2105b9ffcfd6cc83e9ddc707256ca6eb63379f384e4770c"
+    },
+    "security_active_state_manifest": {
+      "path": "logs/exports/twinkl_a30f_active_critic_state_full_v1/active_critic_state_manifest.jsonl",
+      "sha256": "dc458ceb04fdb7191a3a4c6f86748acb9936ab1740e733a81d0d1ee78358baea"
+    },
+    "security_repaired_labels": {
+      "path": "logs/exports/twinkl_a30f_security_target_full_v1/security_repaired_labels.parquet",
+      "sha256": "aec13a9062cc3a3c3052487db59a85039c82175a4d4d836b4f769149fa9dff74"
+    },
+    "security_review_pass_1": {
+      "path": "logs/exports/twinkl_a30f_active_critic_state_full_v1/results/pass_1_results.jsonl",
+      "sha256": "3a9e53c7b6047bc21b4e2b14cd0e85d2941936489d812d6334306d4805304220"
+    },
+    "security_review_pass_2": {
+      "path": "logs/exports/twinkl_a30f_active_critic_state_full_v1/results/pass_2_results.jsonl",
+      "sha256": "a7a4ea6b065eddeac0c0335a6294152898c5cb60badde1e81950c55da670f833"
+    },
+    "security_review_pass_3": {
+      "path": "logs/exports/twinkl_a30f_active_critic_state_full_v1/results/pass_3_results.jsonl",
+      "sha256": "4f2f3951e7458c0864e36fc2c3cc96c2ac8ef8280ace6b480bb1281015641387"
+    },
+    "security_tiebreak_results": {
+      "path": "logs/exports/twinkl_a30f_active_critic_state_full_v1/results/tiebreak_results.jsonl",
+      "sha256": "0c43f261f99eb8fbc4317b6c29baeb8133f66670a5b01fc06879109b241b58e2"
+    },
+    "twinkl_754_consensus_labels": {
+      "path": "logs/judge_labels/consensus_labels.parquet",
+      "sha256": "b57b03d0cea1885a02d1d9ae7d9246ba029c210768b41cb97b4959ec7b18e112"
+    },
+    "twinkl_754_manifest": {
+      "path": "logs/exports/twinkl_754/manifest.csv",
+      "sha256": "2c7cb13795b0841d6a473581445dda180eb7cde64bf21a00ce644d786609e7cb"
+    },
+    "twinkl_754_pass_1": {
+      "path": "logs/exports/twinkl_754/results/pass_1_results.jsonl",
+      "sha256": "1053dde9b7309204163752bb94dc42bd797c7c261ee9d2f5aac715850c38b3e1"
+    },
+    "twinkl_754_pass_2": {
+      "path": "logs/exports/twinkl_754/results/pass_2_results.jsonl",
+      "sha256": "09c747ca998f26c35fb7b0b108a45e3ef1e0186585466e3250d408ba97c12a73"
+    },
+    "twinkl_754_pass_3": {
+      "path": "logs/exports/twinkl_754/results/pass_3_results.jsonl",
+      "sha256": "36539617f0902f581c880c4aaf5d4666dd905e14070d82b6c04a7b5a0eb0e388"
+    },
+    "twinkl_754_pass_4": {
+      "path": "logs/exports/twinkl_754/results/pass_4_results.jsonl",
+      "sha256": "469fa3426d63dbd1279ececd5e772601707246a097dcc9faa295fc5d28c3ff89"
+    },
+    "twinkl_754_pass_5": {
+      "path": "logs/exports/twinkl_754/results/pass_5_results.jsonl",
+      "sha256": "0dcfd26d647a4fb44b3b2a9b923862db228e8adfbfd129c28b4d32465edee07a"
+    }
+  },
+  "output": {
+    "path": "logs/exports/twinkl_j0ck_soft_vote_target_v1/hybrid_soft_vote_labels.parquet",
+    "row_count": 1651,
+    "sha256": "728b4076b9245ac71d30781f2ea2abb8ca38ba6ffd990af82e689dc5b7d84073",
+    "soft_target_length": 30
+  },
+  "schema_version": 1,
+  "target_regime": "twinkl_j0ck_hybrid_soft_vote_v1",
+  "value_order": [
+    "self_direction",
+    "stimulation",
+    "hedonism",
+    "achievement",
+    "power",
+    "security",
+    "conformity",
+    "tradition",
+    "benevolence",
+    "universalism"
+  ]
+}

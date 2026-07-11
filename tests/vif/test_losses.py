@@ -1,8 +1,9 @@
 """Tests for ordinal loss functions."""
 
 import numpy as np
-import torch
 import pytest
+import torch
+import torch.nn.functional as F
 
 
 class TestCoralLoss:
@@ -300,6 +301,107 @@ class TestBalancedSoftmaxLoss:
         assert logits.grad is not None
         assert logits.grad.shape == (4, 30)
         assert not torch.all(logits.grad == 0)
+
+    def test_soft_balanced_softmax_unanimous_targets_match_hard_loss(self):
+        """A unanimous distribution should reduce to the existing hard CE."""
+        from src.vif.critic_ordinal import (
+            balanced_softmax_loss_multi,
+            soft_balanced_softmax_loss_multi,
+        )
+
+        torch.manual_seed(7)
+        logits = torch.randn(4, 30)
+        hard_targets = torch.randint(-1, 2, (4, 10)).float()
+        soft_targets = F.one_hot((hard_targets.long() + 1), num_classes=3).float()
+
+        hard_loss = balanced_softmax_loss_multi(
+            logits,
+            hard_targets,
+            class_priors=self._class_priors(),
+        )
+        soft_loss = soft_balanced_softmax_loss_multi(
+            logits,
+            soft_targets,
+            class_priors=self._class_priors(),
+        )
+
+        torch.testing.assert_close(soft_loss, hard_loss)
+
+    def test_soft_balanced_softmax_matches_manual_fractional_cross_entropy(self):
+        from src.vif.critic_ordinal import soft_balanced_softmax_ce_per_dimension
+
+        logits = torch.zeros(1, 30)
+        targets = torch.tensor([[[0.6, 0.2, 0.2]] * 10], dtype=torch.float32)
+        priors = torch.tensor([[0.2, 0.3, 0.5]] * 10, dtype=torch.float32)
+
+        loss_per_dim = soft_balanced_softmax_ce_per_dimension(
+            logits,
+            targets,
+            class_priors=priors,
+        )
+        expected = -(targets[0, 0] * torch.log(priors[0])).sum()
+
+        torch.testing.assert_close(loss_per_dim, expected.expand(10))
+
+    def test_soft_balanced_softmax_accepts_flattened_distributions(self):
+        from src.vif.critic_ordinal import soft_balanced_softmax_loss_multi
+
+        logits = torch.randn(2, 30)
+        targets = torch.rand(2, 10, 3)
+        targets = targets / targets.sum(dim=-1, keepdim=True)
+
+        nested_loss = soft_balanced_softmax_loss_multi(
+            logits,
+            targets,
+            class_priors=self._class_priors(),
+        )
+        flattened_loss = soft_balanced_softmax_loss_multi(
+            logits,
+            targets.reshape(2, 30),
+            class_priors=self._class_priors(),
+        )
+
+        torch.testing.assert_close(flattened_loss, nested_loss)
+
+    def test_soft_balanced_softmax_loss_gradient_flow(self):
+        from src.vif.critic_ordinal import soft_balanced_softmax_loss_multi
+
+        logits = torch.randn(4, 30, requires_grad=True)
+        targets = torch.rand(4, 10, 3)
+        targets = targets / targets.sum(dim=-1, keepdim=True)
+
+        loss = soft_balanced_softmax_loss_multi(
+            logits,
+            targets,
+            class_priors=self._class_priors(),
+        )
+        loss.backward()
+
+        assert logits.grad is not None
+        assert torch.isfinite(logits.grad).all()
+
+    @pytest.mark.parametrize(
+        ("targets", "message"),
+        [
+            (torch.ones(2, 10), "shape"),
+            (torch.full((2, 10, 3), float("nan")), "finite"),
+            (torch.tensor([[[-0.1, 0.6, 0.5]] * 10] * 2), "non-negative"),
+            (torch.tensor([[[0.2, 0.2, 0.2]] * 10] * 2), "sum to 1"),
+        ],
+    )
+    def test_soft_balanced_softmax_rejects_invalid_distributions(
+        self,
+        targets,
+        message,
+    ):
+        from src.vif.critic_ordinal import soft_balanced_softmax_loss_multi
+
+        with pytest.raises(ValueError, match=message):
+            soft_balanced_softmax_loss_multi(
+                torch.randn(2, 30),
+                targets,
+                class_priors=self._class_priors(),
+            )
 
     def test_balanced_softmax_zero_weight_regularizer_matches_legacy_path(self):
         """Explicit zero regularizer weights should preserve legacy loss exactly."""

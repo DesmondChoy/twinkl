@@ -143,6 +143,43 @@ class TestGetItem:
         _, target = ds[2]  # t_index=2, alignment = [0.2]*10
         np.testing.assert_allclose(target.numpy(), np.full(10, 0.2), atol=1e-6)
 
+    def test_target_column_can_select_soft_distribution(self):
+        df = _make_merged_df(n_personas=1, entries_per_persona=2).with_columns(
+            pl.Series(
+                "soft_alignment_vector",
+                [
+                    [[1.0, 0.0, 0.0]] * 10,
+                    [[0.6, 0.2, 0.2]] * 10,
+                ],
+            )
+        )
+        ds = VIFDataset(
+            df,
+            _make_encoder(),
+            cache_embeddings=False,
+            target_column="soft_alignment_vector",
+        )
+
+        _, target = ds[1]
+
+        assert target.shape == (10, 3)
+        np.testing.assert_allclose(
+            target.numpy(),
+            np.tile([0.6, 0.2, 0.2], (10, 1)),
+            atol=1e-6,
+        )
+
+    def test_missing_target_column_fails_closed(self):
+        df = _make_merged_df(n_personas=1, entries_per_persona=1)
+
+        with pytest.raises(ValueError, match="Target column 'missing'"):
+            VIFDataset(
+                df,
+                _make_encoder(),
+                cache_embeddings=False,
+                target_column="missing",
+            )
+
 
 # ── TestSlidingWindow ────────────────────────────────────────────────────────
 

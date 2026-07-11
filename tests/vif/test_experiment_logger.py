@@ -77,6 +77,12 @@ class TestLossShorthand:
     def test_balanced_softmax(self):
         assert _loss_shorthand("BalancedSoftmax", {}) == "balanced_softmax"
 
+    def test_soft_balanced_softmax(self):
+        assert _loss_shorthand(
+            "BalancedSoftmax",
+            {"training_target_mode": "vote_distribution"},
+        ) == "soft_balanced_softmax"
+
     def test_two_stage_balanced_softmax(self):
         assert _loss_shorthand("TwoStageBalancedSoftmax", {}) == "two_stage_balanced_softmax"
 
@@ -281,12 +287,16 @@ def test_build_experiment_dict_records_hashed_target_provenance(tmp_path):
     holdout = tmp_path / "holdout.yaml"
     target = tmp_path / "security_target_variant.parquet"
     summary = tmp_path / "target_summary.json"
+    target_source = tmp_path / "five_pass_results.jsonl"
+    soft_target = tmp_path / "soft_vote_labels.parquet"
     labels.write_bytes(b"labels")
     holdout.write_text("test_persona_ids: []\n", encoding="utf-8")
     target.write_bytes(b"target")
     summary.write_text(
         '{"target_policy":"security_active_critic_state_v1"}\n', encoding="utf-8"
     )
+    target_source.write_bytes(b"five-pass-source")
+    soft_target.write_bytes(b"soft-target")
     config.update(
         {
             "labels_path": str(labels),
@@ -296,6 +306,12 @@ def test_build_experiment_dict_records_hashed_target_provenance(tmp_path):
             "security_target_artifact_path": str(target),
             "security_target_summary_path": str(summary),
             "experiment_group": "twinkl-a30f_security_target_comparison",
+            "training_target_mode": "vote_distribution",
+            "hard_target_column": "alignment_vector",
+            "soft_target_column": "soft_alignment_vector",
+            "target_class_order": [-1, 0, 1],
+            "target_source_path": str(target_source),
+            "target_artifact_path": str(soft_target),
         }
     )
 
@@ -331,6 +347,19 @@ def test_build_experiment_dict_records_hashed_target_provenance(tmp_path):
     ).hexdigest()
     assert data_config["target_regime"] == "security_repaired"
     assert data_config["experiment_group"] == "twinkl-a30f_security_target_comparison"
+    assert data_config["training_target_mode"] == "vote_distribution"
+    assert data_config["hard_target_column"] == "alignment_vector"
+    assert data_config["soft_target_column"] == "soft_alignment_vector"
+    assert data_config["target_class_order"] == [-1, 0, 1]
+    assert data_config["target_source_sha256"] == hashlib.sha256(
+        b"five-pass-source"
+    ).hexdigest()
+    assert data_config["target_artifact_sha256"] == hashlib.sha256(
+        b"soft-target"
+    ).hexdigest()
+    assert experiment["config"]["training"]["training_target_mode"] == (
+        "vote_distribution"
+    )
 
 
 def test_build_experiment_dict_rejects_missing_configured_provenance_file(tmp_path):

@@ -401,14 +401,20 @@ def _loss_shorthand(model_name: str, config: dict) -> str:
             return f"weighted_mse_s{scale}"
         return "mse"
     if model_name == "BalancedSoftmax":
+        prefix = (
+            "soft_balanced_softmax"
+            if config.get("training_target_mode") == "vote_distribution"
+            else "balanced_softmax"
+        )
         dimension_weighting_enabled = config.get("dimension_weighting_enabled")
         circumplex_regularizer_enabled = config.get("circumplex_regularizer_enabled")
         if dimension_weighting_enabled and circumplex_regularizer_enabled:
-            return "balanced_softmax_dimweight_circreg"
+            return f"{prefix}_dimweight_circreg"
         if dimension_weighting_enabled:
-            return "balanced_softmax_dimweight"
+            return f"{prefix}_dimweight"
         if circumplex_regularizer_enabled:
-            return "balanced_softmax_circreg"
+            return f"{prefix}_circreg"
+        return prefix
     return mapping.get(model_name, model_name.lower())
 
 
@@ -511,6 +517,22 @@ def _build_experiment_dict(
                     config.get("fixed_holdout_manifest_path")
                 ),
                 "target_regime": config.get("target_regime"),
+                "training_target_mode": config.get("training_target_mode", "hard"),
+                "hard_target_column": config.get(
+                    "hard_target_column", "alignment_vector"
+                ),
+                "soft_target_column": config.get(
+                    "soft_target_column", "soft_alignment_vector"
+                ),
+                "target_class_order": config.get("target_class_order", [-1, 0, 1]),
+                "target_source_path": config.get("target_source_path"),
+                "target_source_sha256": _configured_file_sha256(
+                    config.get("target_source_path")
+                ),
+                "target_artifact_path": config.get("target_artifact_path"),
+                "target_artifact_sha256": _configured_file_sha256(
+                    config.get("target_artifact_path")
+                ),
                 "security_target_policy": config.get("security_target_policy"),
                 "security_target_artifact_path": config.get(
                     "security_target_artifact_path"
@@ -557,6 +579,7 @@ def _build_experiment_dict(
                 "scheduler_patience": config.get("scheduler_patience", 10),
                 "seed": config.get("model_seed", config.get("seed", 42)),
                 "class_balance_source": config.get("class_balance_source"),
+                "training_target_mode": config.get("training_target_mode", "hard"),
                 "circumplex_regularizer_enabled": config.get("circumplex_regularizer_enabled"),
                 "circumplex_regularizer_opposite_weight": config.get(
                     "circumplex_regularizer_opposite_weight"

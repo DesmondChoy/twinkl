@@ -1,0 +1,37 @@
+- policy: recall_qwk_window_0.02
+  qwk_window: 0.02
+  candidate:
+    epoch: 21
+    val_loss: 0.5103563708918435
+    qwk_mean: 0.4327035404191711
+    recall_minus1: 0.5170046685340803
+    calibration_global: 0.7543848324937444
+    hedging_mean: 0.652073732718894
+    qwk_nan_dims_count: 0
+    eligible: true
+    ineligible_reasons: []
+  checkpoint_path: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260711_192146/BalancedSoftmax/candidate_recall_qwk_window_0_02_checkpoint.pt
+  validation_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260711_192146/BalancedSoftmax/candidate_recall_qwk_window_0_02_validation_outputs.parquet
+  test_outputs: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260711_192146/BalancedSoftmax/candidate_recall_qwk_window_0_02_test_outputs.parquet
+  validation:
+    qwk_mean: 0.44565839868019397
+    recall_minus1: 0.5361157796451914
+    minority_recall_mean: 0.5295422666767547
+    hedging_mean: 0.6525345622119816
+    calibration_global: 0.7667229477257802
+    mae_mean: 0.28885713443160055
+    accuracy_mean: 0.7755760368663595
+    hedonism_qwk: 0.4592524227041994
+    security_qwk: 0.3839470061940812
+    stimulation_qwk: 0.7286762707257406
+  test:
+    qwk_mean: 0.35730071717894607
+    recall_minus1: 0.4064046574770259
+    minority_recall_mean: 0.44510896505925174
+    hedging_mean: 0.6538461538461537
+    calibration_global: 0.7589807779011836
+    mae_mean: 0.29497736543416975
+    accuracy_mean: 0.767873303167421
+    hedonism_qwk: 0.08110876770111464
+    security_qwk: 0.314201113348336
+    stimulation_qwk: 0.43839658988441677

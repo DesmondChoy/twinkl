@@ -19,6 +19,8 @@
 
 > **Active recommendation (2026-03-19):** `run_019`-`run_021` remain the default corrected-split frontier family. The new two-stage reformulation family `run_045`-`run_047` reached comparable median holdout `qwk_mean` (`0.360` vs `0.362`) and the best calibration on the current board (`0.743`), but it gave back too much `recall_-1` (`0.266`) and hedging (`0.708`). `run_034`-`run_036` remain the best tail-sensitive reference branch, and `run_042`-`run_044` remain the strongest encoder-swap challenger.
 >
+> **Soft vote-distribution decision (2026-07-11):** [`twinkl-j0ck`](reports/experiment_review_2026-07-11_twinkl_j0ck_soft_vote_labels.md) completed a current-contract paired hard-versus-soft comparison in `run_063`-`run_068`. Soft BalancedSoftmax reduces median hedging (`0.641` to `0.605`), lifts minority recall (`0.416` to `0.436`), and helps Hedonism, but median `recall_-1` falls (`0.320` to `0.308`), Security and Stimulation QWK regress, and raw-output NLL/Brier worsen. The soft objective fits slightly better only in its prior-adjusted loss space, exposing an objective/decoding mismatch. Do not make this soft regime the default; keep `run_019`-`run_021` active.
+>
 > **Security target decision (2026-07-11):** [`twinkl-a30f`](reports/experiment_review_2026-07-11_twinkl_a30f_security_target.md) completed a receipt-bound, full-corpus active-state Security review and the paired `run_057`-`run_062` comparison. Repaired-target training raises median test Security QWK from `0.156` to `0.328` under repaired labels and from `0.205` to `0.372` under historical labels. Future `window_size: 1` training should use `security_active_critic_state_v1`, but the repaired runs stay off the historical frontier table because 678 Security labels changed. Absolute Security QWK and disagreement-case accuracy still leave representation and semantic work open.
 >
 > **Current drift-target status (2026-07-11):** [`twinkl-v8pb` completed its student-visible review](../../docs/evals/drift_v1_student_visible_target.md) using full runtime text and separate development and locked promotion populations. The fixed `run_020` development threshold (probability 0.8, uncertainty 1.010153) found 1/5 reference episodes (precision 1.0, recall 0.2, F1 0.3333, false-positive rate 0.0). The 24-case promotion review left case_023 unresolved across 19 entries, so the promotion score was deliberately not performed. There is no active drift-promotion benchmark, no scorer is promotion-ready, and the active entry-level frontier stays unchanged.
@@ -218,11 +220,39 @@
 | 060 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.335 | 0.729 | 0.335 | 0.333 | 0.693 | 0.452 | 0.095 | 0.086 | runs/run_060_BalancedSoftmax.yaml |
 | 061 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.319 | 0.738 | 0.353 | 0.383 | 0.698 | 0.440 | 0.072 | 0.085 | runs/run_061_BalancedSoftmax.yaml |
 | 062 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.319 | 0.741 | 0.363 | 0.386 | 0.703 | 0.472 | 0.097 | 0.079 | runs/run_062_BalancedSoftmax.yaml |
+| 063 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.279 | 0.774 | 0.389 | 0.374 | 0.771 | 0.416 | 0.054 | 0.074 | runs/run_063_BalancedSoftmax.yaml |
+| 064 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | soft_balanced_softmax | 23454 | 19.3 | 0.303 | 0.761 | 0.405 | 0.369 | 0.723 | 0.435 | 0.084 | 0.082 | runs/run_064_BalancedSoftmax.yaml |
+| 065 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.281 | 0.776 | 0.389 | 0.371 | 0.755 | 0.408 | 0.071 | 0.069 | runs/run_065_BalancedSoftmax.yaml |
+| 066 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | soft_balanced_softmax | 23454 | 19.3 | 0.308 | 0.765 | 0.377 | 0.370 | 0.722 | 0.450 | 0.082 | 0.080 | runs/run_066_BalancedSoftmax.yaml |
+| 067 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.282 | 0.778 | 0.400 | 0.375 | 0.734 | 0.453 | 0.069 | 0.088 | runs/run_067_BalancedSoftmax.yaml |
+| 068 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | soft_balanced_softmax | 23454 | 19.3 | 0.290 | 0.761 | 0.397 | 0.378 | 0.758 | 0.414 | 0.080 | 0.081 | runs/run_068_BalancedSoftmax.yaml |
 <!-- AUTO-TABLE:END -->
 
 > **Contributor note:** Keep this section in **newest-first** chronological order (most recent date at top).
 
 ## Findings
+
+### 2026-07-11 — Soft vote distributions change behavior but do not improve the full VIF package (`twinkl-j0ck`)
+
+`run_063`-`run_068` compare matching hard and soft targets across seeds
+11/22/33. Both arms use five validated votes for the nine non-Security values
+and the repaired active-state Security reviews, so the experiment isolates
+target softness rather than mixing in the Security contract change.
+
+The soft family lowers median hedging from `0.641` to `0.605`, raises minority
+recall from `0.416` to `0.436`, and lifts median Hedonism QWK from `0.153` to
+`0.216`. Those gains do not generalize: median `recall_-1` falls from `0.320`
+to `0.308`, Security QWK falls from `0.358` to `0.281`, and Stimulation QWK
+falls from `0.411` to `0.319`.
+
+The probability scores identify the mechanism. Soft training improves median
+NLL slightly in the prior-adjusted loss space (`0.522` to `0.508`), but the raw
+runtime-output NLL worsens (`0.624` to `0.671`) and Brier worsens (`0.284` to
+`0.310`). The implementation is learning its configured objective; the
+BalancedSoftmax prior correction and the runtime probability contract are the
+mismatch. Keep the soft artifact and retained recall-window checkpoints as
+diagnostics, but do not make this regime the default. Full review:
+[`reports/experiment_review_2026-07-11_twinkl_j0ck_soft_vote_labels.md`](reports/experiment_review_2026-07-11_twinkl_j0ck_soft_vote_labels.md).
 
 ### 2026-07-11 — Active-state Security target repair materially improves the learned boundary (`twinkl-a30f`)
 

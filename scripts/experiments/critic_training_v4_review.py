@@ -108,6 +108,12 @@ CONFIG = {
     "model_seed": _model_seed,
     "labels_path": _data_defaults["labels_path"],
     "wrangled_dir": _data_defaults["wrangled_dir"],
+    "training_target_mode": "hard",
+    "hard_target_column": "alignment_vector",
+    "soft_target_column": "soft_alignment_vector",
+    "target_class_order": [-1, 0, 1],
+    "target_source_path": None,
+    "target_artifact_path": None,
     "fixed_holdout_manifest_path": _data_defaults.get("fixed_holdout_manifest_path"),
     "class_balance_source": _training_defaults.get("class_balance_source"),
     "circumplex_regularizer_enabled": _circumplex_defaults.get("enabled", False),
@@ -168,6 +174,24 @@ CONFIG["selection_policy"] = dict(CONFIG.get("selection_policy", {}))
 CONFIG["candidate_checkpoint_policies"] = list(
     CONFIG.get("candidate_checkpoint_policies", [])
 )
+CONFIG["training_target_mode"] = str(CONFIG.get("training_target_mode", "hard"))
+if CONFIG["training_target_mode"] not in {"hard", "vote_distribution"}:
+    raise ValueError(
+        "training_target_mode must be 'hard' or 'vote_distribution', got "
+        f"{CONFIG['training_target_mode']!r}"
+    )
+CONFIG["hard_target_column"] = str(
+    CONFIG.get("hard_target_column", "alignment_vector")
+)
+CONFIG["soft_target_column"] = str(
+    CONFIG.get("soft_target_column", "soft_alignment_vector")
+)
+CONFIG["target_class_order"] = list(CONFIG.get("target_class_order", [-1, 0, 1]))
+if CONFIG["target_class_order"] != [-1, 0, 1]:
+    raise ValueError(
+        "target_class_order must be exactly [-1, 0, 1], got "
+        f"{CONFIG['target_class_order']!r}"
+    )
 
 print("=" * 50)
 print("CONFIGURATION")
@@ -191,6 +215,12 @@ for key in [
     "model_seed",
     "labels_path",
     "wrangled_dir",
+    "training_target_mode",
+    "hard_target_column",
+    "soft_target_column",
+    "target_class_order",
+    "target_source_path",
+    "target_artifact_path",
     "fixed_holdout_manifest_path",
     "class_balance_source",
     "circumplex_regularizer_enabled",
@@ -288,6 +318,8 @@ from src.vif.critic_ordinal import (
     CriticMLPBalancedSoftmax,
     balanced_softmax_ce_per_dimension,
     balanced_softmax_loss_multi,
+    soft_balanced_softmax_ce_per_dimension,
+    soft_balanced_softmax_loss_multi,
     compute_inverse_loss_dimension_weights,
     CriticMLPTwoStageBalancedSoftmax,
     two_stage_balanced_softmax_loss_multi,
@@ -311,7 +343,10 @@ from src.vif.eval import (
     select_recall_window_candidate,
 )
 from src.vif.lr_finder import run_lr_finder
-from src.vif.class_balance import compute_long_tail_statistics_from_dataframe
+from src.vif.class_balance import (
+    compute_long_tail_statistics_from_dataframe,
+    compute_soft_long_tail_statistics_from_dataframe,
+)
 from src.vif.training_traces import (
     build_dimension_weight_trace_frame,
     build_selection_trace_frame,
@@ -603,6 +638,25 @@ MODEL_CONFIGS = {
                 )
             )
         ),
+        "soft_loss_fn_factory": (
+            lambda *, _config, class_stats: (
+                lambda _epoch, dimension_weights=None: partial(
+                    soft_balanced_softmax_loss_multi,
+                    class_priors=class_stats["class_priors"],
+                    dimension_weights=dimension_weights,
+                    circumplex_regularizer_opposite_weight=(
+                        float(_config.get("circumplex_regularizer_opposite_weight", 0.0))
+                        if _config.get("circumplex_regularizer_enabled")
+                        else 0.0
+                    ),
+                    circumplex_regularizer_adjacent_weight=(
+                        float(_config.get("circumplex_regularizer_adjacent_weight", 0.0))
+                        if _config.get("circumplex_regularizer_enabled")
+                        else 0.0
+                    ),
+                )
+            )
+        ),
         "is_ordinal": True,
     },
     "TwoStageBalancedSoftmax": {
@@ -657,6 +711,13 @@ MODEL_CONFIGS = {
 active_models = {
     k: dict(v) for k, v in MODEL_CONFIGS.items() if k in CONFIG["models_to_train"]
 }
+if CONFIG["training_target_mode"] == "vote_distribution" and set(active_models) != {
+    "BalancedSoftmax"
+}:
+    raise ValueError(
+        "vote_distribution training currently supports only a single "
+        "BalancedSoftmax model"
+    )
 
 print(f"MODEL_CONFIGS defined: {list(MODEL_CONFIGS.keys())}")
 print(f"models_to_train: {CONFIG['models_to_train']}")
@@ -681,13 +742,52 @@ train_df, val_df, test_df = split_by_persona(
     fixed_test_persona_ids=fixed_test_persona_ids,
 )
 
-train_dataset = VIFDataset(train_df, state_encoder, cache_embeddings=True)
-val_dataset = VIFDataset(val_df, state_encoder, cache_embeddings=True)
-test_dataset = VIFDataset(test_df, state_encoder, cache_embeddings=True)
+hard_target_column = CONFIG["hard_target_column"]
+target_mode = CONFIG["training_target_mode"]
+train_target_column = (
+    CONFIG["soft_target_column"]
+    if target_mode == "vote_distribution"
+    else hard_target_column
+)
+train_dataset = VIFDataset(
+    train_df,
+    state_encoder,
+    cache_embeddings=True,
+    target_column=train_target_column,
+)
+val_dataset = VIFDataset(
+    val_df,
+    state_encoder,
+    cache_embeddings=True,
+    target_column=hard_target_column,
+)
+test_dataset = VIFDataset(
+    test_df,
+    state_encoder,
+    cache_embeddings=True,
+    target_column=hard_target_column,
+)
 
 train_loader = DataLoader(train_dataset, batch_size=CONFIG["batch_size"], shuffle=True)
 val_loader = DataLoader(val_dataset, batch_size=CONFIG["batch_size"], shuffle=False)
 test_loader = DataLoader(test_dataset, batch_size=CONFIG["batch_size"], shuffle=False)
+loss_val_loader = val_loader
+if target_mode == "vote_distribution":
+    # Use the same cached states while keeping hard targets isolated for
+    # checkpoint selection and all frontier evaluation.
+    loss_val_dataset = VIFDataset(
+        val_df,
+        state_encoder,
+        cache_embeddings=False,
+        target_column=CONFIG["soft_target_column"],
+    )
+    loss_val_dataset.embedding_cache = val_dataset.embedding_cache
+    loss_val_dataset.cache_embeddings = True
+    loss_val_loader = DataLoader(
+        loss_val_dataset,
+        batch_size=CONFIG["batch_size"],
+        shuffle=False,
+    )
 
 n_train = len(train_dataset)
 n_val = len(val_dataset)
@@ -705,7 +805,13 @@ print(
     f"  Test:  {n_test} samples ({test_df.select('persona_id').n_unique()} personas) -> {len(test_loader)} batches"
 )
 
-class_balance_stats = compute_long_tail_statistics_from_dataframe(train_df)
+if target_mode == "vote_distribution":
+    class_balance_stats = compute_soft_long_tail_statistics_from_dataframe(
+        train_df,
+        target_column=CONFIG["soft_target_column"],
+    )
+else:
+    class_balance_stats = compute_long_tail_statistics_from_dataframe(train_df)
 
 # ==== CELL 29 ====
 # Active model validation (v4 frontier set)
@@ -804,7 +910,15 @@ def _resolve_model_run_config(base_config, model_name):
 
 
 def _build_epoch_loss_fn(model_cfg, config, class_stats):
-    factory = model_cfg.get("loss_fn_factory")
+    if config.get("training_target_mode", "hard") == "vote_distribution":
+        factory = model_cfg.get("soft_loss_fn_factory")
+        if factory is None:
+            raise ValueError(
+                f"{config.get('active_model_name', 'Model')} does not support "
+                "vote_distribution training"
+            )
+    else:
+        factory = model_cfg.get("loss_fn_factory")
     if factory is None:
         static_loss = model_cfg["loss_fn"]
         return lambda _epoch, _dimension_weights=None: static_loss
@@ -1021,8 +1135,20 @@ def _write_selection_summary(
     return output_path
 
 
-def train_model(name, model_cfg, train_loader, val_loader, config, device, class_stats):
+def train_model(
+    name,
+    model_cfg,
+    train_loader,
+    val_loader,
+    config,
+    device,
+    class_stats,
+    *,
+    loss_val_loader=None,
+):
     """Train a single model and return its selected state + history."""
+    if loss_val_loader is None:
+        loss_val_loader = val_loader
     # Per-model seed for reproducibility on a fixed split.
     torch.manual_seed(config["model_seed"])
     if torch.cuda.is_available():
@@ -1195,7 +1321,13 @@ def train_model(name, model_cfg, train_loader, val_loader, config, device, class
             output = model(batch_x)
             if track_dimension_weights:
                 with torch.no_grad():
-                    batch_ce_mean = balanced_softmax_ce_per_dimension(
+                    ce_per_dimension_fn = (
+                        soft_balanced_softmax_ce_per_dimension
+                        if config.get("training_target_mode", "hard")
+                        == "vote_distribution"
+                        else balanced_softmax_ce_per_dimension
+                    )
+                    batch_ce_mean = ce_per_dimension_fn(
                         output,
                         batch_y,
                         class_priors=class_stats["class_priors"],
@@ -1223,11 +1355,11 @@ def train_model(name, model_cfg, train_loader, val_loader, config, device, class
         model.eval()
         val_loss = 0.0
         with torch.no_grad():
-            for batch_x, batch_y in val_loader:
+            for batch_x, batch_y in loss_val_loader:
                 batch_x, batch_y = batch_x.to(device), batch_y.to(device)
                 output = model(batch_x)
                 val_loss += loss_fn(output, batch_y).item()
-        val_loss /= len(val_loader)
+        val_loss /= len(loss_val_loader)
 
         if not np.isfinite(val_loss):
             print(f"  Epoch {epoch + 1:3d}: non-finite val_loss, stopping")
@@ -1514,6 +1646,7 @@ for name, cfg in active_models.items():
         model_run_config,
         device,
         class_balance_stats,
+        loss_val_loader=loss_val_loader,
     )
     n_epochs = len(result["history"]["train_loss"])
     selected_candidate = result.get("selected_candidate") or {}

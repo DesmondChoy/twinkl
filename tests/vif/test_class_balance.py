@@ -10,6 +10,8 @@ from src.vif.class_balance import (
     compute_long_tail_statistics_from_dataframe,
     compute_ordinal_class_counts,
     compute_polarity_class_counts,
+    compute_soft_long_tail_statistics_from_dataframe,
+    compute_soft_ordinal_class_counts,
 )
 
 
@@ -100,3 +102,62 @@ def test_activation_and_polarity_counts_match_ordinal_projection():
     )
     np.testing.assert_allclose(polarity_counts[:, 0], ordinal_counts[:, 0])
     np.testing.assert_allclose(polarity_counts[:, 1], ordinal_counts[:, 2])
+
+
+def test_compute_soft_ordinal_class_counts_sums_fractional_targets():
+    distributions = np.zeros((2, 10, 3), dtype=np.float64)
+    distributions[0, :, :] = [1.0, 0.0, 0.0]
+    distributions[1, :, :] = [0.2, 0.6, 0.2]
+
+    counts = compute_soft_ordinal_class_counts(distributions)
+
+    assert counts.shape == (10, 3)
+    np.testing.assert_allclose(counts, np.array([[1.2, 0.6, 0.2]] * 10))
+
+
+def test_compute_soft_ordinal_class_counts_accepts_flattened_targets():
+    distributions = np.tile([0.2, 0.6, 0.2], (2, 10, 1))
+
+    nested_counts = compute_soft_ordinal_class_counts(distributions)
+    flattened_counts = compute_soft_ordinal_class_counts(distributions.reshape(2, 30))
+
+    np.testing.assert_allclose(flattened_counts, nested_counts)
+
+
+@pytest.mark.parametrize(
+    ("distributions", "message"),
+    [
+        (np.ones((2, 10)), "shape"),
+        (np.full((2, 10, 3), np.nan), "finite"),
+        (np.tile([-0.1, 0.6, 0.5], (2, 10, 1)), "non-negative"),
+        (np.tile([0.2, 0.2, 0.2], (2, 10, 1)), "sum to 1"),
+    ],
+)
+def test_compute_soft_ordinal_class_counts_rejects_invalid_distributions(
+    distributions,
+    message,
+):
+    with pytest.raises(ValueError, match=message):
+        compute_soft_ordinal_class_counts(distributions)
+
+
+def test_compute_soft_long_tail_statistics_uses_explicit_target_column():
+    distributions = np.tile([0.2, 0.6, 0.2], (3, 10, 1))
+    train_df = pl.DataFrame({"vote_distribution": distributions.tolist()})
+
+    stats = compute_soft_long_tail_statistics_from_dataframe(
+        train_df,
+        target_column="vote_distribution",
+    )
+
+    assert set(stats) == {"class_counts", "class_priors"}
+    np.testing.assert_allclose(stats["class_counts"], np.array([[0.6, 1.8, 0.6]] * 10))
+    np.testing.assert_allclose(stats["class_priors"], np.array([[0.2, 0.6, 0.2]] * 10))
+
+
+def test_compute_soft_long_tail_statistics_requires_configured_column():
+    with pytest.raises(ValueError, match="vote_distribution"):
+        compute_soft_long_tail_statistics_from_dataframe(
+            pl.DataFrame({"alignment_vector": [[0] * 10]}),
+            target_column="vote_distribution",
+        )
