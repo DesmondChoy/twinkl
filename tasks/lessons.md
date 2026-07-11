@@ -127,3 +127,25 @@
   both commentary layers: the top "latest" note near the frontier table and the
   newest-first `## Findings` entry below the run log. Run table rows alone are
   not enough.
+
+## 2026-07-07
+
+- Prototype code existing (module + tests + an import site) is not the same as
+  a feature being adopted. Before recommending an issue be closed as
+  "implemented", check the product-facing docs for adoption/decision status —
+  e.g. `src/vif/evolution.py` exists with tests, but
+  `docs/weekly/weekly_digest_generation.md` explicitly marks evolution gating
+  as undecided and outside the committed Coach flow. Issues about product
+  capabilities track the decision, not just the code.
+
+## 2026-07-10
+
+- Treat submitted academic and sponsor-facing deliverables as immutable
+  records. Before editing a proposal, report, slide deck, generated figure, or
+  PDF, verify whether it has already been submitted. If it has, preserve the
+  submitted bundle unchanged and create a separate current-state artifact
+  instead of regenerating the submitted files in place.
+- When archiving a submitted document, keep its referenced images and source
+  assets together, preserve relative paths, and verify byte identity against
+  the pre-move Git content. Add an explicit archive note so future sessions do
+  not mistake the snapshot for a maintained current-state document.

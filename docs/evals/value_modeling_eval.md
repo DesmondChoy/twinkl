@@ -8,39 +8,43 @@ The VIF (Value Identity Function) maps journal entries to a 10-dimensional Schwa
 
 ## Implementation Status
 
-**Status:** 🟡 In Progress (as of 2026-04-04)
+**Status:** 🟡 In Progress (as of 2026-07-10)
 
 ### What's Implemented
 - Evaluation specification complete (this document)
 - Judge training data: 1 651 labeled entries across 204 personas in [`logs/judge_labels/judge_labels.parquet`](../../logs/judge_labels/judge_labels.parquet)
 - Ground truth value orderings embedded in persona bios
 - Critic architecture: MLP ordinal ([`src/vif/critic_ordinal.py`](../../src/vif/critic_ordinal.py)) and BNN ([`src/vif/critic_bnn.py`](../../src/vif/critic_bnn.py))
-- Experiment archive spans 50 run IDs / 114 persisted run configs, including CORAL, CORN, EMD, CDW-CE, SoftOrdinal, BalancedSoftmax, LDAM-DRW, TwoStageBalancedSoftmax, SLACE, encoder diagnostics, and legacy weighted-MSE baselines ([`logs/experiments/index.md`](../../logs/experiments/index.md))
+- Experiment archive spans 56 run IDs / 120 persisted run configs, including CORAL, CORN, EMD, CDW-CE, SoftOrdinal, BalancedSoftmax, LDAM-DRW, TwoStageBalancedSoftmax, SLACE, encoder diagnostics, recall-aware candidate retention, and legacy weighted-MSE baselines ([`logs/experiments/index.md`](../../logs/experiments/index.md))
 - Text and state encoders: nomic-embed-text-v1.5, MiniLM ([`src/vif/encoders.py`](../../src/vif/encoders.py))
 - Evaluation metrics: QWK, Spearman ρ, MAE, calibration, per-dimension recall, raw ordinal exports, and compact circumplex diagnostics ([`src/vif/eval.py`](../../src/vif/eval.py))
 - Current corrected-split default: `run_019`-`run_021` BalancedSoftmax — median QWK **0.362**, median `recall_-1` **0.313**, median minority recall **0.448**, median hedging **0.621**, median calibration **0.713**
 - Post-lift rebaseline `run_025`-`run_027` is logged and reviewable, but it did not replace the incumbent frontier because `Security` and circumplex structure regressed
-- Controlled Qwen encoder rerun `run_042`-`run_044` is now logged as the strongest representation challenger, but it did not replace the default because `hedonism` / `power` remained too weak
+- Controlled Qwen encoder rerun `run_042`-`run_044` is the strongest representation challenger, but it did not replace the default because `hedonism` / `power` remained too weak
 - Two-stage reformulation `run_045`-`run_047` is logged as a structural diagnostic branch, but it did not replace the default because `recall_-1` and hedging regressed
 - Consensus-label retrains `run_048`-`run_050` are logged as a diagnostic branch only; they improved within-regime QWK/calibration, but they changed holdout labels and did not beat the persisted-label frontier cleanly
+- Recall-aware candidate reruns `run_051`-`run_056` persist alternate validation-selected checkpoints and their validation/test outputs; the wider `0.02` window helps the consensus diagnostic branch but does not improve the persisted-label frontier, so candidate retention is experiment hygiene rather than the default selector
+- The frozen-holdout LLM Critic baseline compares `student_visible`, `human_context`, and upper-bound `full_judge_context` arms. The strongest 221-row `human_context` arm reaches QWK **0.450**, `recall_-1` **0.302**, minority recall **0.534**, and hedging **0.707**; `run_020` reaches QWK **0.378**, `recall_-1` **0.342**, minority recall **0.449**, and hedging **0.621**. The LLM is useful as a teacher/oracle/fallback diagnostic, not a clean MLP replacement.
 
 ### What's Missing
 - **Corrected-split frontier still below target**: The active default has better minority recovery than the old pre-split baselines, but median QWK remains 0.362 and still sits below the moderate target range.
 - **Hard dimensions remain unresolved**: `Hedonism` and especially `Security` still lag, and the latest regenerated targeted batch improved some local behavior without producing a cleaner overall frontier.
-- **Circumplex structure is now measured, but not yet optimized**: recent reruns can improve one metric family while worsening opposite-pair violations or adjacent-pair support.
+- **Circumplex structure is measured but not optimized**: reruns can improve one metric family while worsening opposite-pair violations or adjacent-pair support.
 - Matched hard-case evaluation and augmentation set for `hedonism` / `security` / `stimulation` (`twinkl-748`)
 - Compact student-context prototype that adds legal history without parameter blow-up (`twinkl-749`)
 - Epoch-level training-signal analysis to test whether validation loss is steering checkpoints away from frontier metrics (`twinkl-751`)
 - Gated parameter-efficient encoder adaptation path (`twinkl-750`)
 - Persona-level aggregation protocol (aggregate per-entry scores into persona-level value profile for Top-K accuracy)
 - Formal held-out evaluation against declared value orderings (Spearman ρ > 0.7 target)
+- Decision-level evaluation of whether Critic outputs support the sustained-conflict detector under a precision floor
 
 ### Next Steps
-1. Build the matched hard-set in `twinkl-748` so the frontier can be tested on boundary cases, not just aggregate holdout metrics
-2. Prototype compact student context in `twinkl-749` before assuming frozen single-entry context is the final ceiling
-3. Quantify validation-loss vs frontier-metric divergence in `twinkl-751` before changing more training recipes
-4. Revisit PEFT only through the gated `twinkl-750` path after the cheaper falsification work above
-5. Implement persona-level score aggregation across entries, then compute Spearman ρ and Top-K accuracy
+1. Repair the target/context contract in `twinkl-a30f`, then preserve vote distributions through `twinkl-j0ck`
+2. Build the matched hard-set in `twinkl-748` so the frontier can be tested on boundary cases, not just aggregate holdout metrics
+3. Prototype compact student context in `twinkl-749` before assuming frozen single-entry context is the final ceiling
+4. Quantify validation-loss vs frontier-metric divergence in `twinkl-751` before changing more training recipes
+5. Evaluate Critic and LLM arms at the sustained-conflict decision layer before revisiting the gated `twinkl-750` PEFT path
+6. Implement persona-level score aggregation across entries, then compute Spearman ρ and Top-K accuracy
 
 ---
 
@@ -66,7 +70,7 @@ Evaluation operates at two levels: **entry-level** metrics assess whether the Cr
 
 #### Quadratic Weighted Kappa (QWK)
 
-QWK is the primary entry-level metric for ordinal classification. It measures agreement between predicted and true classes {-1, 0, +1}, adjusted for chance, with quadratic penalty for larger ordinal distances (predicting +1 when truth is -1 is penalised more than predicting 0).
+QWK is the primary entry-level ordinal-agreement metric on the experiment board. It measures agreement between predicted and true classes {-1, 0, +1}, adjusted for chance, with quadratic penalty for larger ordinal distances (predicting +1 when truth is -1 is penalised more than predicting 0). Product promotion also requires decision-level sustained-conflict results; QWK alone is not the deployment gate.
 
 **Why QWK over accuracy:** With severe class imbalance (neutral class is 60.5–88.3% per dimension), a model that predicts 0 for everything achieves high accuracy but zero QWK. QWK exposes this pathology.
 
@@ -209,6 +213,7 @@ From PRD (Evaluation Strategy, Row 2):
 3. **Value leakage**: If personas explicitly mention values in entries, the evaluation is trivial
 4. **Reachability ceiling**: `twinkl-747` showed that some hard-dimension labels, especially `security`, may not be cleanly reachable from the current student-visible context
 5. **Board comparability**: consensus-label retrains are informative diagnostics, but they are not directly comparable to the persisted-label frontier because the holdout labels changed
+6. **Context and decision contract**: the completed episode benchmark is more cautionary than the entry-level comparison. Both LLM arms score 0/5 frozen versus 10/10 designed episodes, while the MLP arms detect only 1–2/10 designed episodes. A procedurally metadata-blinded Codex audit then qualified 1/5 frozen cases, 10/10 designed positives, and 0/10 controls; it found the frozen reference unsuitable as a stable student-visible promotion surface. `twinkl-v8pb` must repair the target and establish an untouched promotion surface. The audit is AI diagnostic evidence, not human ground truth.
 
 **Mitigations:**
 - Use banned terms validation to prevent explicit value mentions
@@ -222,3 +227,5 @@ From PRD (Evaluation Strategy, Row 2):
 - `docs/vif/03_model_training.md` — Training approach and loss function
 - `docs/prd.md` — Evaluation Strategy table (Row 2)
 - `config/schwartz_values.yaml` — Value dimension definitions
+- `logs/experiments/reports/experiment_review_20260702_twinkl_w2mu_frozen_context_gap.md` — 221-row LLM context-arm comparison
+- `logs/experiments/reports/experiment_review_2026-06-06_twinkl_upb5.md` — recall-aware candidate-retention rerun

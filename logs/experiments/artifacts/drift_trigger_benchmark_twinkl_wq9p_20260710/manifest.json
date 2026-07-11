@@ -1,0 +1,48 @@
+{
+  "designed_holdout_arms": [
+    "run_020_selected",
+    "run_052_consensus_recall_0.02",
+    "run_053_consensus_selected",
+    "llm_gpt-5.4-mini_student_visible",
+    "llm_gpt-5.4-mini_human_context"
+  ],
+  "designed_holdout_sha256": "2c6f9c163b753bbc70a672a3d400d522490c16f609bee44f77983c9eb00aa1e3",
+  "designed_reference_episode_count": 10,
+  "frozen_arms": [
+    "run_020_selected",
+    "run_025_same_budget_persisted",
+    "run_052_consensus_recall_0.02",
+    "run_053_consensus_selected",
+    "llm_gpt-5.4-mini_student_visible",
+    "llm_gpt-5.4-mini_human_context"
+  ],
+  "issue_id": "twinkl-wq9p",
+  "reference_episode_count_all": 52,
+  "reference_episode_count_test": 5,
+  "reference_episode_count_validation": 6,
+  "targets": {
+    "f1": 0.5,
+    "false_positive_rate": 0.2,
+    "max_latency_entries": 2,
+    "precision": 0.6,
+    "recall": 0.8
+  },
+  "thresholds_by_arm": {
+    "run_020_selected": {
+      "probability_threshold": 0.8,
+      "uncertainty_threshold": 1.010153
+    },
+    "run_025_same_budget_persisted": {
+      "probability_threshold": 0.6,
+      "uncertainty_threshold": 1.009344
+    },
+    "run_052_consensus_recall_0.02": {
+      "probability_threshold": 0.8,
+      "uncertainty_threshold": 0.69282
+    },
+    "run_053_consensus_selected": {
+      "probability_threshold": 0.5,
+      "uncertainty_threshold": 1.010153
+    }
+  }
+}

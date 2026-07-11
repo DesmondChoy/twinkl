@@ -1,0 +1,386 @@
+{
+  "schema_version": 1,
+  "purpose": "Metadata-blinded Codex audit for twinkl-16ar",
+  "review_instructions": [
+    "Do not inspect the reconciliation key or benchmark predictions before recording the blind assessment.",
+    "Answer yes only when two immediately adjacent displayed entries each show the writer's own directly observable behavior or choice conflicting with the declared core value.",
+    "A neutral, unknown, recovered, or non-conflicting entry breaks the run. Do not bridge across it, even if an earlier and later entry both look conflicting.",
+    "Do not count a feeling, desire, external constraint, or a single conflicting action as a sustained conflict without a second adjacent directly conflicting action.",
+    "Record whether the conclusion is visible from the displayed text, needs prior history, needs profile or biography context, is ambiguous, or appears to overreach the available evidence.",
+    "Use a short evidence-based rationale. This is an AI audit, not human ground truth."
+  ],
+  "cases": [
+    {
+      "review_case_id": "case_01",
+      "declared_core_value": "Self Direction",
+      "entries": [
+        {
+          "journal_entry": "Martijn pulled me aside after standup. Apparently someone mentioned to him that I've been spending time on Pieter's tool and he wanted to know if it was affecting my sprint commitments. It isn't \u2014 I've been keeping my velocity up \u2014 but the way he framed it made it sound like a warning. \"Just want to make sure your priorities are clear,\" he said.\n\nI told him it wouldn't be an issue and that the tool is now being folded into the platform roadmap anyway, so it's legitimate work. He nodded and dropped it. But I've been replaying the conversation all afternoon. The rational part of me knows he was just doing his job. The other part feels like I got caught doing something I wasn't supposed to enjoy. I hate that I felt the need to justify it. I hate more that I did justify it, immediately, without pushing back at all."
+        },
+        {
+          "journal_entry": "Got the tech lead offer. Accepted on the spot because that's what you do. Texted Noor and she sent about fifteen celebration emojis. Calling my parents tonight."
+        },
+        {
+          "journal_entry": "Same day, later. Parents were thrilled, mum teared up a little. Had a glass of wine with Noor and she kept saying she knew it would happen. Everyone's reaction confirmed that this was the right move, or at least the expected one, and those two things feel like they should be different but tonight they're the same and I'm too tired to untangle it.\n\nI keep coming back to something small. When Martijn told me, my first feeling wasn't excitement. It was relief. Relief that it's done, that I don't have to hold the performance anymore, that I can stop wondering and just be in the role. Maybe excitement comes later. Or maybe relief is enough. I genuinely don't know and I'm going to stop thinking about it and go to bed."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_02",
+      "declared_core_value": "Security",
+      "entries": [
+        {
+          "journal_entry": "I forgot to renew the insurance before the deadline."
+        },
+        {
+          "journal_entry": "I renewed the policy, checked the coverage, and set a reminder for next year."
+        },
+        {
+          "journal_entry": "I delayed backing up one device even though I meant to do it today."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_03",
+      "declared_core_value": "Universalism",
+      "entries": [
+        {
+          "journal_entry": "I selected the waste-heavy option for convenience even though the lower-impact supplier met every project need."
+        },
+        {
+          "journal_entry": "I made the same choice again and dismissed the environmental cost because changing the order would take an extra call."
+        },
+        {
+          "journal_entry": "I switched the remaining order to the lower-impact supplier and documented the sustainable option for the team."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_04",
+      "declared_core_value": "Universalism",
+      "entries": [
+        {
+          "journal_entry": "I selected the lower-impact supplier after checking that its labor standards were credible."
+        },
+        {
+          "journal_entry": "I reduced unnecessary packaging and documented the environmental savings."
+        },
+        {
+          "journal_entry": "I invited the affected community group to review the sourcing plan before approval."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_05",
+      "declared_core_value": "Tradition",
+      "entries": [
+        {
+          "journal_entry": "I skipped the family ceremony even though I had promised to preserve it."
+        },
+        {
+          "journal_entry": "I am not sure what happened with the observance today; the entry contains no reliable account."
+        },
+        {
+          "journal_entry": "I avoided the next ceremony too despite saying the practice matters to me."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_06",
+      "declared_core_value": "Benevolence",
+      "entries": [
+        {
+          "journal_entry": "I stayed late to help a colleague finish a difficult case review."
+        },
+        {
+          "journal_entry": "I checked in on my neighbor and brought the groceries she needed."
+        },
+        {
+          "journal_entry": "I made time to listen when my brother needed support."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_07",
+      "declared_core_value": "Hedonism",
+      "entries": [
+        {
+          "journal_entry": "Olive got sick, so I missed ceramics. Sat in her room rubbing her back while she slept and scrolled through the class group chat watching everyone post photos of their glazed pieces from last week. Mine is still sitting on the drying shelf. Greta texted me separately and said she'd fire it for me.\n\nI know missing one class isn't a big deal. But it felt like something being taken away. Like the universe reminding me that I don't actually get to have my own thing. Every time I carve out something that's mine, a fever or a school closure or a dentist appointment swallows it back up. I sat there watching Olive breathe and felt both tender and trapped at the same time."
+        },
+        {
+          "journal_entry": "My college friend Dana visited this weekend. She lives in Portland, runs a food truck, just got back from a month in Vietnam. She showed up with good wine and stories about motorbike rides through rice paddies and a tattoo she got from a guy in Hanoi. The kids loved her because she's loud and funny and let them paint her toenails.\n\nAfter they went to bed she asked me the question everyone eventually asks: \"Do you miss working?\" And I gave my usual answer which is that I don't miss the job, I miss the energy. The feeling of making something happen. The chaos of event day when everything could go wrong and you're the one holding it together with duct tape and charm.\n\nShe said I should start planning events again, freelance. Small stuff. Birthday parties, local festivals. I said maybe. She said \"you always say maybe\" and she's right. I do always say maybe. Maybe is how you say no without having to defend it.\n\nBut here's what I didn't tell Dana. I don't want to plan other people's good times anymore. I want to have my own. I want to be the person at the festival, not the person who booked the porta-potties. I want to be surprised by something. I want to walk into a room and not know what's about to happen. That's what I miss. Not the logistics. The feeling.\n\nKyle wouldn't understand that. He'd say I can go to a festival anytime. He'd buy me tickets and think he'd solved the problem. But it's not about the ticket. It's about the fact that somewhere along the way, I became the kind of person who needs permission to enjoy things, and I don't know how to undo that."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_08",
+      "declared_core_value": "Self Direction",
+      "entries": [
+        {
+          "journal_entry": "I let my parents choose the course for me and did not say what I actually wanted to study."
+        },
+        {
+          "journal_entry": "When enrollment opened, I copied their choices again instead of making my own decision."
+        },
+        {
+          "journal_entry": "I signed the final form without reviewing alternatives because deciding for myself felt uncomfortable."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_09",
+      "declared_core_value": "Hedonism",
+      "entries": [
+        {
+          "journal_entry": "I finished the urgent work and took the evening off for dinner with friends."
+        },
+        {
+          "journal_entry": "I kept my planned day off and enjoyed a long walk after arranging coverage."
+        },
+        {
+          "journal_entry": "I handled my responsibilities and made room for a concert afterward."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_10",
+      "declared_core_value": "Tradition",
+      "entries": [
+        {
+          "journal_entry": "I skipped the family observance I had promised to maintain and chose routine work instead."
+        },
+        {
+          "journal_entry": "I missed the second observance too and did not pass the ritual on to the children as I intended."
+        },
+        {
+          "journal_entry": "I avoided the gathering again even though preserving this practice remains important to me."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_11",
+      "declared_core_value": "Achievement",
+      "entries": [
+        {
+          "journal_entry": "I skipped the certification exam without preparing, even though completing it is my main goal this term."
+        },
+        {
+          "journal_entry": "I ignored the rescheduling deadline too and spent the study block scrolling instead."
+        },
+        {
+          "journal_entry": "I booked the next exam date and completed the first two planned study sessions."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_12",
+      "declared_core_value": "Security",
+      "entries": [
+        {
+          "journal_entry": "I skipped the medical appointment again because the work queue felt more urgent, even though I know the follow-up protects my health."
+        },
+        {
+          "journal_entry": "I also left the prescription unfilled and told myself I would deal with the risk next month."
+        },
+        {
+          "journal_entry": "Another week passed and I still avoided both the appointment and the prescription refill."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_13",
+      "declared_core_value": "Hedonism",
+      "entries": [
+        {
+          "journal_entry": "Okay so today was one of those days where everything just sort of piled up and I don't even know where to start really. Woke up early because Arjun had a nightmare, then couldn't go back to sleep because my mind started racing about the lunch I'm supposed to make for the pooja tomorrow. Mummyji has her specific expectations you know, the dal has to be a certain consistency, the rice has to be this particular grain she likes, and I keep thinking about all the relatives who will be there judging every single dish I put out.\n\nBut here's the thing that's been bothering me all day\u2014Priya messaged the group chat about going to that new spa place next weekend. The one with the aromatherapy and the hot stone massage. And I just... I really want to go? Like my shoulders have been killing me for weeks, carrying Aanya around, sleeping in weird positions when she has colds. I haven't done anything just for myself in so long. The last time was probably Diwali when I bought that kurta and even then I felt guilty about spending on something that wasn't for the kids.\n\nI typed out \"I'm in!\" three times and deleted it each time. Because what will everyone think? Mummyji will do that thing where she doesn't say anything but you can tell she's disappointed. She'll mention something about how she never had time for \"all this spa-shpa\" when she was raising three kids. And my husband will probably be fine with it but then I'll have to coordinate everything\u2014who will give Arjun his evening milk, what if Aanya doesn't nap for anyone else, all of that. It just seems like so much effort for a few hours of relaxation that I'll probably spend feeling guilty anyway.\n\nBut also... don't I deserve to feel good? My body hurts. I'm tired all the time. My friends are going and they keep saying I never come to anything anymore. I miss laughing with them about nothing. I miss being Meera who had opinions and went places and wasn't just someone's mother and someone's wife and someone's daughter-in-law.\n\nI don't know. I'll probably say no. It's easier."
+        },
+        {
+          "journal_entry": "Both kids have a stomach bug. I've been cleaning vomit since 3am. Lost count of how many sheet changes. Mummyji keeps hovering and suggesting home remedies that I know won't work but I just nod and say \"yes, good idea\" because I don't have the energy to argue. Husband took the morning off but had to go back for some urgent meeting so I've been solo since noon.\n\nI keep thinking about that spa. Priya sent the confirmation today\u2014they booked for Saturday. The message just sat there in my notifications while I was elbow-deep in laundry. I want to cry but even that feels like too much effort. All I want is to lie down somewhere quiet where nobody needs anything from me. Just for an hour. Is that too much to ask?"
+        },
+        {
+          "journal_entry": "Kids are finally better. Mummyji made khichdi today without me asking\u2014small gestures like this remind me she cares in her own way. Still thinking about the spa thing, wondering why it's so hard for me to just ask for what I want."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_14",
+      "declared_core_value": "Stimulation",
+      "entries": [
+        {
+          "journal_entry": "I turned down the field assignment solely because it was unfamiliar, even though new experiences are what I say I want."
+        },
+        {
+          "journal_entry": "I rejected the workshop for the same reason and stayed with the routine that has been making me feel stuck."
+        },
+        {
+          "journal_entry": "I registered for the field assignment and felt energized by learning a completely new method."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_15",
+      "declared_core_value": "Stimulation",
+      "entries": [
+        {
+          "journal_entry": "I declined a new menu project because I wanted to avoid anything unfamiliar."
+        },
+        {
+          "journal_entry": "Most of today was ordinary prep work with no real choice about novelty."
+        },
+        {
+          "journal_entry": "I rejected a guest-chef exchange because the change felt uncomfortable."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_16",
+      "declared_core_value": "Power",
+      "entries": [
+        {
+          "journal_entry": "I gave away the final product decision even though securing real authority over the company is a priority I chose."
+        },
+        {
+          "journal_entry": "I avoided the investor negotiation and accepted terms that remove my voting control because I did not want the confrontation."
+        },
+        {
+          "journal_entry": "I let another partner take the board seat I wanted and made no attempt to preserve my influence."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_17",
+      "declared_core_value": "Self Direction",
+      "entries": [
+        {
+          "journal_entry": "Mummyji made a comment at lunch about the indigo stains on my fingernails. She didn't say anything directly, just that thing she does where she looks at my hands and then looks at the dal and raises her eyebrows. Ravi was right there and said nothing. I know he thinks the dyeing thing is fine, he's told me so, but he won't say it in front of her. So I'm the one who looks like I'm neglecting things.\n\nThe thing is, the kitchen was spotless. Lunch was on time. Arjun's tiffin was packed before school. I don't know what more she wants from me. Or maybe I do know and I just don't want to give it, which is this complete surrender of any time that's mine. Like the house should swallow me whole and I should be grateful for it.\n\nI scrubbed the indigo off after lunch. Took ten minutes with lemon and baking soda. I shouldn't have had to do that. But I did it anyway and I'm not sure what that says about me."
+        },
+        {
+          "journal_entry": "Arjun's parent-teacher meeting today. The class teacher mentioned he draws during free period instead of playing cricket with the other boys and asked if everything is okay at home. I wanted to say, yes, everything is fine, my son likes drawing, why is that a problem? But I smiled and nodded and said I'd encourage him to be more social.\n\nCame home and told Ravi about it and he said maybe Arjun should join a sport, that it would be good for him. And I thought, here we go. Everyone has an opinion about what the boy should be doing except the boy himself."
+        },
+        {
+          "journal_entry": "Made aloo paratha for breakfast the way Appa used to, with extra ajwain in the dough. The smell filled the whole kitchen and for a second I was back in our old house in Mysore, watching him roll them out, flour everywhere."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_18",
+      "declared_core_value": "Conformity",
+      "entries": [
+        {
+          "journal_entry": "I ignored the team checklist even though the group had agreed to use it."
+        },
+        {
+          "journal_entry": "I followed the shared checklist carefully and documented every handoff."
+        },
+        {
+          "journal_entry": "I skipped the checklist again because I wanted to leave early."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_19",
+      "declared_core_value": "Benevolence",
+      "entries": [
+        {
+          "journal_entry": "My sister asked for help moving, but I ignored her messages so I could keep my weekend completely free."
+        },
+        {
+          "journal_entry": "She called again and I refused to help even though I had no real commitment preventing me."
+        },
+        {
+          "journal_entry": "I apologized, rearranged my plans, and spent the afternoon helping her finish the move."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_20",
+      "declared_core_value": "Conformity",
+      "entries": [
+        {
+          "journal_entry": "I knowingly ignored the ward handoff procedure because I did not feel like completing it."
+        },
+        {
+          "journal_entry": "I bypassed the same team rule again despite understanding why everyone relies on it."
+        },
+        {
+          "journal_entry": "I completed the handoff properly and checked with the team that I had followed the shared procedure."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_21",
+      "declared_core_value": "Hedonism",
+      "entries": [
+        {
+          "journal_entry": "I cancelled the concert I had looked forward to and stayed late doing non-urgent work that could wait."
+        },
+        {
+          "journal_entry": "I cancelled my day off too, not because of a deadline, but because I felt leisure was undeserved."
+        },
+        {
+          "journal_entry": "I worked through another planned break and avoided anything enjoyable even though nothing was urgent."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_22",
+      "declared_core_value": "Self Direction",
+      "entries": [
+        {
+          "journal_entry": "I chose the research topic because it genuinely interested me."
+        },
+        {
+          "journal_entry": "I let a friend choose my elective even though I preferred another option."
+        },
+        {
+          "journal_entry": "I changed the elective to the one I had independently researched and wanted."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_23",
+      "declared_core_value": "Stimulation",
+      "entries": [
+        {
+          "journal_entry": "My sister asked me if I was \"doing okay\" on the phone last night with that voice she uses when she's actually asking if I'm depressed. I'm not depressed. I made banana bread with Olive yesterday and we painted rocks in the backyard and I reorganized the entire pantry because it was driving me insane. That's not depression, that's Tuesday.\n\nShe doesn't get it because she's single and works in marketing and goes to Barcelona on a whim. Good for her. I chose this. I'm not sitting here wishing I had her life. I just wish mine had a few more surprise elements built in. Like a plot twist every now and then. Something I didn't see coming at 6am when I set the cereal bowls out."
+        },
+        {
+          "journal_entry": "Spent three hours at a pumpkin patch watching kids run in circles. I stood there holding juice boxes like a human vending machine. Got home and Kyle asked how my day was and I said \"fine\" and went to bed at 8:30."
+        },
+        {
+          "journal_entry": "Signed up for a ceramics class on Thursday evenings. Kyle said he'd handle bedtime. First class is next week. Already looking forward to getting my hands dirty with something that isn't Play-Doh."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_24",
+      "declared_core_value": "Power",
+      "entries": [
+        {
+          "journal_entry": "I catalogued the new books and cleared the returns desk."
+        },
+        {
+          "journal_entry": "I spent the afternoon updating the reading list."
+        },
+        {
+          "journal_entry": "I reviewed next month's event schedule and went home on time."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_25",
+      "declared_core_value": "Achievement",
+      "entries": [
+        {
+          "journal_entry": "I missed today's practice presentation because I did not prepare."
+        },
+        {
+          "journal_entry": "I rescheduled it, rehearsed twice, and asked for feedback."
+        },
+        {
+          "journal_entry": "I delivered the presentation and completed the follow-up target."
+        }
+      ]
+    }
+  ]
+}

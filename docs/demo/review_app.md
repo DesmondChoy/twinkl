@@ -18,7 +18,7 @@ The app lets you:
 - run the full local checkpoint -> weekly signals -> drift -> digest path
 - reload cached results for a previously-run persona/checkpoint pair
 - compare six rule-based drift detectors against either judge labels or Critic predictions
-- inspect the resulting per-entry signals, weekly aggregates, drift payload, and weekly digest in one place
+- inspect an Overview plus the resulting per-entry signals, weekly aggregates, drift payload, weekly digest, and detector comparison in one place
 
 ## How To Run
 
@@ -38,6 +38,10 @@ uv run python src/demo_tool/app.py
 
 Open `http://127.0.0.1:8001`.
 
+The direct Python launcher frees port `8001` before starting and can terminate
+another process already bound to that port. Use the Shiny runner or choose a
+different workflow when the port is in use by unrelated work.
+
 ## Inputs
 
 ### Required local data
@@ -54,16 +58,20 @@ The detector comparison panel supports two input surfaces:
 
 - `Judge labels`
   - reads `logs/judge_labels/judge_labels.parquet`
+  - uses persisted single-pass labels, not the five-pass consensus reference
   - works without running the Critic first
 - `Critic predictions`
-  - reads the per-entry runtime timeline from a cached or freshly completed run
+  - reads continuous per-entry mean predictions from a cached or freshly completed runtime timeline
   - requires a checkpoint-backed runtime bundle
+
+Neither source supplies rolling ordinal `P(-1)` evidence, so the app does not
+run the selected sustained-conflict v1 detector.
 
 ## UI Flow
 
 ### Controls
 
-The left panel controls:
+The persistent, collapsible left rail controls:
 
 - persona selection
 - checkpoint selection
@@ -71,24 +79,23 @@ The left panel controls:
 - catalog refresh
 - live runtime execution
 
-### Center panel
+### Results canvas
 
-The center panel shows:
+The main canvas shows:
 
 - persona metadata
+- checkpoint summary
 - collapsible bio
 - core-value badges
 - the full journal timeline with nudge and response threads
+- six result tabs:
+  - `Overview` — drift status, triggered dimensions, strengths, and tensions
+  - `Per-entry critic` — per-entry alignment means, uncertainties, strongest alignments, and detector badges
+  - `Weekly signals` — weekly aggregate table from the runtime timeline
+  - `Drift` — structured drift payload plus triggered dimensions
+  - `Weekly digest` — rendered markdown digest and summary badges
+  - `Detector comparison` — chart, table, and fired/silent chips for all six detector families
 
-### Results panel
-
-The right panel exposes five tabs:
-
-- `Per-entry critic` — per-entry alignment means, uncertainties, strongest alignments, and detector badges
-- `Weekly signals` — weekly aggregate table from the runtime timeline
-- `Drift` — structured drift payload plus triggered dimensions
-- `Weekly digest` — rendered markdown digest and summary badges
-- `Detector comparison` — chart and table for all six detector families
 
 ## Detector Comparison
 
@@ -102,7 +109,15 @@ The app renders all six rule-based detectors from the notebook evaluation path:
 - `KL Div`
 
 The chart overlays detector alerts on top of the alignment trajectories. The
-table shows per-entry detector votes plus a consensus count for each step.
+table shows per-entry detector votes plus a detector-vote count for each step.
+That count is agreement among the six exploratory methods; it is not the
+five-pass Judge consensus artifact and is not benchmark ground truth.
+
+The comparison remains a diagnostic surface. Drift v1 uses the strict
+sustained-conflict reference described in
+[`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md), and the rolling
+soft-evidence rule is implemented in the offline benchmark. It is not wired
+into this review app or the Coach runtime because no scorer is promotion-ready.
 
 ## Generated Artifacts
 
@@ -135,4 +150,6 @@ Key modules:
 - `src/demo_tool/state.py`
 
 The app uses `src.coach.runtime.run_weekly_coach_cycle()` for live execution,
-then reads the persisted artifacts back into the UI.
+then reads the persisted artifacts back into the UI. It renders the weekly
+digest and Coach prompt but does not inject a live Coach LLM or generate a live
+narrative.

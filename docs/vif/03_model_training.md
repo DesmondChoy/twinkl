@@ -87,18 +87,19 @@ data efficiency.
 
 ### 3.2 Active Student Families
 
-The mainline student is no longer a single regression head. The active training
-stack now centers on a shared MLP backbone with multiple comparison families:
+The mainline student uses a shared MLP backbone with multiple comparison
+families:
 
 - **Ordinal heads**: CORAL, CORN, EMD, CDW-CE, SoftOrdinal
 - **Long-tail baselines**: BalancedSoftmax, LDAM-DRW
 - **Experimental reformulation**: two-stage BalancedSoftmax
 - **Baselines retained for comparison**: legacy MSE MLP and Bayesian neural net
 
-In practice, the corrected-split experiment board currently treats the
-BalancedSoftmax family as the default frontier reference, while newer branches
-such as the two-stage formulation remain diagnostic challengers rather than the
-mainline default. See `logs/experiments/index.md` for the live ranking.
+The 56-run / 120-config corrected-split experiment board treats the
+BalancedSoftmax `run_019`-`run_021` family as the default frontier reference.
+The two-stage, consensus-label, and recall-aware candidate-retention branches
+remain diagnostic challengers rather than the mainline default. See
+`logs/experiments/index.md` for the live ranking.
 
 ### 3.3 Uncertainty Path
 
@@ -147,11 +148,54 @@ dimensions, especially `security`, are not yet a clean long-term distillation
 target for the current student. That means the current frontier should be read
 as a useful experimental baseline, not the final target definition.
 
-The latest consensus-label diagnostic branch (`run_048`-`run_050`) reinforces
+The consensus-label diagnostic branch (`run_048`-`run_050`) reinforces
 that framing. It improved within-regime QWK and calibration on the
 consensus-relabeled holdout, but it changed labels on the frozen test split and
 did not replace the persisted-label frontier cleanly. The active corrected-split
 default remains `run_019`-`run_021`.
+
+The recall-aware reruns (`run_051`-`run_056`) persist alternate candidate
+checkpoints and their validation/test outputs. The wider `0.02` QWK window helps
+the consensus diagnostic regime but does not improve the persisted-label
+frontier. Candidate retention is therefore reproducibility and analysis
+hygiene, not the default checkpoint selector.
+
+### 4.5 LLM Critic Context Baseline
+
+`scripts/experiments/llm_critic_baseline.py` measures the frozen-holdout ceiling
+under three context contracts:
+
+- `student_visible`: current journal session plus the normalized ten-dimensional
+  value profile
+- `human_context`: student-visible input plus earlier entries from the same
+  persona
+- `full_judge_context`: human context plus persona biography and demographics;
+  upper-bound diagnostic only
+
+Future entries, target labels, rationales, and generation metadata are excluded
+from every arm.
+
+On the 221-row test split:
+
+| Critic | QWK | `recall_-1` | Minority recall | Hedging |
+|---|---:|---:|---:|---:|
+| `gpt-5.4-mini`, `student_visible` | 0.434 | 0.188 | 0.428 | 0.789 |
+| `gpt-5.4-mini`, `human_context` | 0.450 | 0.302 | 0.534 | 0.707 |
+| `run_020` BalancedSoftmax MLP | 0.378 | 0.342 | 0.449 | 0.621 |
+
+History improves the LLM's misalignment recall and broad minority-class
+performance. The MLP still retains higher `recall_-1`, lower hedging, local
+execution, and a fixed cost profile. The completed decision-level benchmark
+does not select among these architectures. Both LLM context arms detect 0/5
+frozen consensus episodes but 10/10 locked author-designed episodes. `run_020`
+detects only 1/10 designed episodes, while the evaluated consensus-trained MLPs
+detect 2/10. The LLM result is therefore a cross-set validity warning rather
+than a teacher/fallback promotion, and the MLP result rules out the current
+local scorer as a production drift trigger. A procedurally metadata-blinded Codex audit found the
+frozen reference unsuitable as a stable student-visible promotion surface;
+`twinkl-v8pb` must repair the target and establish an untouched promotion
+surface before an LLM, MLP, or cascade decision. The audit is not human ground
+truth.
 
 ---
 
@@ -167,12 +211,17 @@ The VIF training stack lives in `src/vif/`.
 | `src/vif/critic_ordinal.py` | Active ordinal and long-tail head families |
 | `src/vif/critic_bnn.py` | Bayesian neural baseline |
 | `src/vif/dataset.py` | Data loading, joins, and persona-level splits |
+| `src/vif/drift_benchmark.py` | Strict drift reference, adjacent-pair detector, matching, and decision metrics |
+| `scripts/experiments/drift_trigger_benchmark.py` | Frozen and locked designed-holdout orchestration |
 | `src/vif/eval.py` | Evaluation metrics and uncertainty-aware evaluation |
 | `src/vif/posthoc.py` | Validation-only post-hoc boundary tuning |
 | `src/vif/experiment_logger.py` | Persisted run YAMLs and experiment index support |
 | `src/vif/train.py` | General single-model training entrypoint |
 | `src/vif/train_bnn.py` | BNN training entrypoint |
 | `scripts/experiments/critic_training_v4_review.py` | Canonical frontier review driver |
+| `scripts/experiments/llm_critic_baseline.py` | LLM context-arm estimate/run/score/report workflow |
+| `scripts/experiments/replay_recall_aware_checkpoint_selection.py` | Artifact-only replay of candidate checkpoint policies |
+| `scripts/experiments/no_new_data_vif_policy_search.py` | Validation-selected no-new-data ensemble/routing diagnostic |
 
 ---
 
@@ -190,14 +239,29 @@ These are implementation choices, not permanent design constraints.
 
 ### 6.2 Training Instrumentation
 
-The general training entrypoint now includes:
+The general training entrypoint includes:
 
 - default LR-finder pass before training
 - gradient clipping and gradient telemetry
 - immediate non-finite loss termination with preserved artifacts
 
-These used to live as design notes; they are now part of the implemented
-training workflow.
+The frontier driver also accepts optional candidate-checkpoint policies in its
+YAML/JSON override surface:
+
+```yaml
+candidate_checkpoint_policies:
+  - name: recall_qwk_window_0.01
+    type: recall_qwk_window
+    qwk_window: 0.01
+  - name: recall_qwk_window_0.02
+    type: recall_qwk_window
+    qwk_window: 0.02
+```
+
+Each policy selects the strongest `recall_-1` checkpoint within the configured
+QWK window, then persists its checkpoint, validation/test outputs, selection
+summary, and compact metric comparison. These candidates supplement the
+mainline selected checkpoint; they do not change the default promotion policy.
 
 ### 6.3 CLI Override Surface
 
@@ -231,6 +295,11 @@ The BNN entrypoint keeps the shared config/optimization overrides:
 - `--seed`
 - `--quiet`
 
+Both training entrypoints use the checkpoint directory from the selected config
+and write `best_model.pt` plus `training_log.json`. Use an alternate config with
+a separate `output.checkpoint_dir` for BNN runs that must not overwrite an MLP
+run; neither CLI exposes a direct `--output-dir` flag.
+
 ### 6.4 Recommended Entrypoints
 
 ```bash
@@ -252,3 +321,50 @@ uv run python -m src.vif.train_bnn
 # Frontier experiment workflow
 uv run python scripts/experiments/critic_training_v4_review.py
 ```
+
+The frontier driver has no `argparse` interface; passing `--help` starts the
+experiment. Its supported overrides are environment variables:
+
+- `TWINKL_VIF_NOTEBOOK_CONFIG`: YAML override path, resolved from the repo root
+- `TWINKL_VIF_NOTEBOOK_OVERRIDES`: JSON object deep-merged after the YAML file
+
+### 6.5 LLM Baseline Commands
+
+```bash
+# Estimate token use and cost without API calls
+uv run python scripts/experiments/llm_critic_baseline.py estimate \
+  --split test \
+  --context-arms student_visible human_context
+
+# Write dry-run records; still no API calls
+uv run python scripts/experiments/llm_critic_baseline.py run \
+  --limit 10 \
+  --context-arms student_visible human_context
+
+# Execute API calls; requires OPENAI_API_KEY in the environment or root .env
+uv run python scripts/experiments/llm_critic_baseline.py run \
+  --execute \
+  --context-arms student_visible human_context \
+  --reasoning-efforts none
+
+# Score result JSONL and build a comparison report
+uv run python scripts/experiments/llm_critic_baseline.py score \
+  logs/experiments/artifacts/llm_critic_baseline/<run>/<results>.jsonl
+uv run python scripts/experiments/llm_critic_baseline.py report \
+  logs/experiments/artifacts/llm_critic_baseline/<run>/*.metrics.json
+```
+
+`estimate` and `run` accept `--labels-path`, `--wrangled-dir`,
+`--holdout-manifest`, `--split`, `--limit`, `--seed`, `--shots`, `--models`,
+and `--context-arms`. `run` also accepts `--reasoning-efforts`, `--output-dir`,
+`--timeout`, `--max-attempts`, `--max-output-tokens`, and `--execute`. Without
+`--execute`, `run` only writes dry-run records.
+
+### 6.6 Experiment Utilities
+
+| Purpose | Command | Important options |
+|---|---|---|
+| Replay recall-aware selection without retraining | `uv run python scripts/experiments/replay_recall_aware_checkpoint_selection.py` | repeatable `--run-file`, `--repo-root`, `--output-dir` |
+| Search persisted no-new-data policies | `uv run python scripts/experiments/no_new_data_vif_policy_search.py` | `--weight-step`, `--temperatures`, `--output-dir` |
+| Run frontier uncertainty review | `uv run python scripts/experiments/frontier_uncertainty_review.py` | `--config` |
+| Run validation-only boundary tuning | `uv run python -m src.vif.posthoc` | `--config` |

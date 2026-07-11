@@ -84,7 +84,7 @@ The pipeline uses **async/await** for efficient I/O and supports **parallel pers
 
 ## Targeted Batch QA Loop
 
-For hard-dimension augmentation work, the repo now uses a stricter
+For hard-dimension augmentation work, the repo uses a
 **freeze → generate → verify → judge → retrain** loop instead of treating
 targeted synthetic batches as ad hoc prompt tweaks.
 
@@ -238,10 +238,10 @@ If all synthetic personas have the same number of entries (e.g., all 5), the VIF
 
 | VIF Capability | Minimum Entries | Rationale |
 |----------------|-----------------|-----------|
-| Crash detection | 2+ | Needs V_{t-1} vs V_t comparison |
-| State vector window | 3+ | Uses sliding window of N=3 |
+| Sustained-conflict reference | 2+ | Requires stored five-pass Judge consensus `-1` labels on two adjacent entries for the same declared core value |
+| Current Critic state | 1 | Live default uses `window_size: 1`; larger legal-history windows are experiments |
 | Session cap (nudges) | 4+ | "2 nudges in last 3 entries" needs depth |
-| Rut detection | ~8-10 | Requires 3+ consecutive weeks |
+| Weekly delivery analysis | 2+ active weeks | Separates entry-level evidence from weekly Coach cadence |
 
 ### Recommended Approach
 
@@ -250,7 +250,7 @@ Use `MIN_ENTRIES=2` and `MAX_ENTRIES=12` with the following configuration:
 | Parameter | Value | Rationale |
 |-----------|-------|-----------|
 | `MIN_ENTRIES` | 2 | Include cold-start scenarios; VIF must learn uncertainty with sparse data |
-| `MAX_ENTRIES` | 12 | Better rut detection coverage (3+ consecutive weeks even with longer gaps) |
+| `MAX_ENTRIES` | 12 | Supports repeated-conflict, recovery, and weekly-delivery scenarios without forcing long scripted arcs |
 | `MIN_DAYS_BETWEEN_ENTRIES` | 0 | Allow same-day entries (realistic for venting, follow-up thoughts) |
 | `MAX_DAYS_BETWEEN_ENTRIES` | 7 | Ensures at least ~1 entry per week for meaningful aggregation |
 | `SAME_DAY_PROBABILITY` | 0.15 | 15% chance of same-day follow-up entry |
@@ -258,7 +258,7 @@ Use `MIN_ENTRIES=2` and `MAX_ENTRIES=12` with the following configuration:
 
 This ensures:
 - Minimum of 2 entries for cold-start training
-- Maximum of 12 covers extended rut detection windows
+- Maximum of 12 covers repeated-conflict, recovery, and weekly-delivery scenarios
 - Same-day entries expose VIF to rapid Δt=0 sequences (realistic ~15% of sessions)
 - Random start dates prevent December bias in training data
 - Variable counts train the VIF to handle uncertainty gracefully with sparse data

@@ -1,8 +1,7 @@
 # VIF – System Architecture, State, and Runtime Flow
 
-This document is the canonical technical overview for the live VIF stack. It
-combines the earlier architecture overview with the concrete state/data pipeline
-choices that now drive training and runtime inference.
+This document is the canonical technical overview for the live VIF stack and
+its training/runtime data contracts.
 
 For training details, see [Reward Modeling & Training](03_model_training.md).
 For uncertainty and drift logic, see [Uncertainty, Drift, and Trigger Logic](04_uncertainty_logic.md).
@@ -18,7 +17,12 @@ The current VIF implementation is intentionally narrow:
 - **Encoder**: frozen sentence encoder configured in `config/vif.yaml`
 - **State**: text window + time gaps + 10-dim value-profile weights
 - **Runtime output**: per-entry alignment means and uncertainties, plus weekly aggregates
-- **Downstream use**: experimental crash/rut-style drift detection and weekly Coach inputs
+- **Downstream use**: validated weekly signal frames, an experimental
+  crash/rut/evolution router, and weekly Coach inputs
+- **Selected drift v1 target**: rolling soft `P(-1)` evidence for sustained
+  conflict on a declared core value. The decision-level benchmark is
+  implemented offline, but no scorer is approved and the rule is not wired
+  into the runtime router.
 
 > **Note:** Specific model names, embedding dimensions, and default window sizes
 > change over time. Treat `config/vif.yaml` as the source of truth for current
@@ -82,9 +86,13 @@ Where:
 - `\Delta t` are normalized time-gap features
 - `w_u` is the normalized 10-dim value profile
 
-The state intentionally excludes any label-derived history statistics. Earlier
-drafts used EMA-style history features built from Judge labels, but those were
-removed because they create train/serve skew.
+For synthetic personas, the runtime assigns equal mass to each declared core
+value and falls back to a uniform ten-dimensional vector if no declared value
+matches. The graded BWS profile is specified in the onboarding contract but is
+not wired into this state path.
+
+The state excludes label-derived history statistics because they create
+train/serve skew.
 
 ### 2.3 Current Default vs General Form
 
@@ -122,6 +130,12 @@ state/target rows:
 - **Entry**: journal text, date, and per-entry metadata
 - **JudgeLabel**: per-dimension labels in `{-1, 0, +1}`
 - **StateTargetSample**: the flattened state vector paired with the target vector
+
+The mainline student trains on persisted single-pass Judge labels in
+`judge_labels.parquet`. The five-pass Judge table is a diagnostic retraining
+surface. Drift v1 uses it strictly: each qualifying reference conflict requires
+`alignment_<value> == -1`. It is not the
+mainline training target or the six-detector comparison's detector vote.
 
 ### 3.2 Entry Text Used by the Student
 
@@ -175,6 +189,10 @@ The runtime path rebuilds the same state definition used in training:
    - per-entry alignment means and uncertainties
    - weekly aggregated signals for downstream drift detection
 
+The runtime artifacts do not currently persist ordinal class probabilities.
+The selected v1 detector therefore still needs a `P(-1)` artifact surface or a
+deterministic way to reconstruct it from checkpoint outputs.
+
 The bridge from checkpoint -> timeline -> weekly VIF artifacts is implemented in
 `src/vif/runtime.py`.
 
@@ -191,12 +209,30 @@ Per-entry outputs are aggregated into weekly tables containing:
 These weekly artifacts are the input surface for drift experiments and Coach
 generation.
 
-### 4.3 Experimental Drift Routing
+`src/vif/weekly_schema.py` owns the ordered column contract between
+`aggregate_timeline_by_week()` and `detect_weekly_drift()`. It defines the
+per-dimension alignment, uncertainty, and profile-weight names and raises a
+`ValueError` naming any required columns missing at the consumer boundary.
 
-The runtime bridge now supports experimental crash/rut-style detection on top of
-weekly signals. The core product scope is still the simpler crash/rut framing in
-the PRD; more ambitious routing, such as an evolution-vs-drift filter, should be
-treated as experimental analysis unless explicitly promoted in the PRD.
+### 4.3 Drift Routing: Prototype and v1 Target
+
+The working runtime prototype in `src/vif/drift.py` consumes weekly means and
+uncertainties and can emit `stable`, `crash`, `rut`, `evolution`, or
+`high_uncertainty`. It invokes the experimental evolution classifier
+automatically when no precomputed result is supplied. This is the route used by
+the offline Coach runtime and demo UI.
+
+The selected product/benchmark contract is narrower: sustained conflict on a
+declared core value, with stored five-pass Judge consensus `-1` labels on two
+adjacent entries and rolling soft `P(-1)` runtime evidence.
+`src/vif/drift_benchmark.py` now implements the offline reference, detector,
+matching, and metrics path. It does not replace `src/vif/drift.py` in the Coach
+runtime. The benchmark promoted no scorer, so that production edge remains
+deliberately absent and the existing weekly router remains a compatibility
+prototype.
+See
+[`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md) and
+[`docs/evals/drift_detection_eval.md`](../evals/drift_detection_eval.md).
 
 ---
 
@@ -235,7 +271,12 @@ Key files for the architecture described here:
 | `src/vif/dataset.py` | Loads labels/entries, joins them, and manages persona splits |
 | `src/vif/encoders.py` | Creates the configured sentence encoder |
 | `src/vif/runtime.py` | Rebuilds states from history and emits runtime artifacts |
+| `src/vif/weekly_schema.py` | Defines and validates the weekly signal-frame contract |
+| `src/vif/drift.py` | Implements the existing weekly crash/rut/evolution prototype router |
+| `src/vif/evolution.py` | Supplies the prototype's automatic evolution classification |
 | `src/vif/holdout.py` | Loads fixed holdout manifests for experiment reruns |
+| `src/coach/runtime.py` | Orchestrates checkpoint inference, routing, digest building, and exports |
+| `src/demo_tool/multi_drift.py` | Compares six exploratory detector families |
 
 ---
 

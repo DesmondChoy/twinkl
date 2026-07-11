@@ -1,3 +1,14 @@
+# Historical Weekly Digest Specification Review
+
+> **Historical context (March 2026):** This file records review commentary from
+> before the offline runtime and digest artifacts were implemented. Statements
+> below that describe missing code, crash/rut as the selected product contract,
+> or four response modes are not current-state guidance. Use
+> [`weekly_digest_generation.md`](weekly_digest_generation.md) for the live
+> digest/runtime contract and
+> [`../drift/trajectory_eda.md`](../drift/trajectory_eda.md) for the selected v1
+> drift definition.
+
 The existing documentation has been reviewed, and there are a couple of things that needed to be changed related to RAG and semantic similarity, which would be overkill at POC scale.
 
 ## What was changed

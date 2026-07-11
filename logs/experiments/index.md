@@ -19,6 +19,8 @@
 
 > **Active recommendation (2026-03-19):** `run_019`-`run_021` remain the default corrected-split frontier family. The new two-stage reformulation family `run_045`-`run_047` reached comparable median holdout `qwk_mean` (`0.360` vs `0.362`) and the best calibration on the current board (`0.743`), but it gave back too much `recall_-1` (`0.266`) and hedging (`0.708`). `run_034`-`run_036` remain the best tail-sensitive reference branch, and `run_042`-`run_044` remain the strongest encoder-swap challenger.
 >
+> **Latest decision-level drift benchmark (2026-07-10):** [`reports/experiment_review_2026-07-10_twinkl_wq9p.md`](reports/experiment_review_2026-07-10_twinkl_wq9p.md) implements the sustained-conflict reference, adjacent-window detector, threshold search, matching, frozen comparison, and locked 10-episode designed holdout; it is updated with the findings of the subsequently completed `twinkl-16ar` procedurally metadata-blinded Codex audit. `run_020` detected 1/10 designed episodes; the evaluated consensus-trained MLPs detected 2/10. Both `gpt-5.4-mini` context arms detected 10/10 explicit designed episodes with no false alarms but 0/5 consensus-derived frozen episodes. The audit's sustained-conflict verdicts were 1/5 frozen cases, 10/10 designed positives, and 0/10 controls. No scorer is promotion-ready: `twinkl-v8pb` must repair the student-visible target contract and establish an untouched promotion surface before production wiring or a cascade decision. The audit is not human ground truth, and the active entry-level frontier stays unchanged.
+>
 > **Latest strategic review (2026-07-02):** [`reports/experiment_review_2026-07-02_strategy.md`](reports/experiment_review_2026-07-02_strategy.md) keeps the frontier unchanged and recommends shifting the primary evaluation from entry-level QWK to decision-level drift-trigger metrics plus `recall_-1` at a precision floor, gated by a zero-shot LLM critic baseline and the human-agreement ceiling (Fleiss κ 0.56 aggregate).
 >
 > **Latest recall-aware checkpoint rerun:** [`reports/experiment_review_2026-06-06_twinkl_upb5.md`](reports/experiment_review_2026-06-06_twinkl_upb5.md) does **not** change the persisted-label frontier. `run_051`-`run_056` reran the weighted persisted-label and consensus-label configs with `0.01` / `0.02` recall-aware candidate checkpoint retention. The consensus diagnostic branch likes the wider `0.02` window, but the active persisted-label branch does not: median QWK drops, `recall_-1` is flat-to-worse, minority recall gives back ground, and hedging worsens under the wider window. Keep candidate-checkpoint retention as experiment hygiene; do not promote recall-aware checkpoint selection as the default policy.
@@ -212,6 +214,41 @@
 
 ## Findings
 
+### 2026-07-10 — Decision-level drift benchmark exposes a target-validity split (`twinkl-wq9p`)
+
+The POC benchmark now evaluates what Twinkl actually acts on: sustained-conflict
+episodes rather than isolated entry labels. It materializes 52 strict
+consensus-reference episodes across 40 personas, tunes one two-entry `P(-1)`
+plus uncertainty rule on the six validation episodes, and reports episode
+precision/recall/F1, adjacent-window false-positive rate, confirmation-anchored
+latency, and recovery handling. The frozen test has only five reference
+episodes, so the final evaluation also uses a locked, author-designed set of 10
+positive episodes across all Schwartz dimensions plus 10 matched controls.
+
+**1. The MLP decision-level recall gap is real.** `run_020` detected 1/10
+designed episodes at precision `1.00`, recall `0.10`, and window FPR `0.04`.
+The recall-retargeted and normally selected consensus-trained MLP arms each
+detected 2/10 at precision `0.67`, recall `0.20`, F1 `0.31`, and window FPR
+`0.12` / `0.08`. Hard-consensus retraining therefore does not solve the
+product-level recall problem.
+
+**2. The LLM result is a capability ceiling, not a promotion.** Both
+`gpt-5.4-mini` context arms detected all 10 deliberately explicit designed
+episodes with no false alarms, yet neither detected any of the five
+consensus-derived frozen episodes. The designed result shows that clear,
+observable conflict is within the LLM's capability. The frozen failure means
+the existing consensus episodes may be subtler, context-dependent, disputed,
+or based on a different target contract.
+
+**3. Recommendation: no production scorer yet.** Keep the active entry-level
+frontier unchanged and keep `twinkl-a2w` production wiring blocked. A
+procedurally metadata-blinded Codex audit found the frozen reference unsuitable as a stable student-visible
+promotion surface; `twinkl-v8pb` now owns label/target repair and an untouched
+promotion surface before considering a bounded LLM verifier or a narrower
+capstone claim around explicit conflict detection. The audit is not human
+ground truth. Full rerunnable evidence:
+[`reports/experiment_review_2026-07-10_twinkl_wq9p.md`](reports/experiment_review_2026-07-10_twinkl_wq9p.md).
+
 ### 2026-07-02 — Strategic review: the metric regime, not the model, is the active bottleneck
 
 Full 56-run/120-config review after the two-month break. No frontier change:
@@ -227,10 +264,15 @@ promotion floor is partly chasing dimensions whose human ceiling is ~0.45.
 
 **2. Metric strategy should move to the decision level.** QWK has documented
 imbalance pathologies (asymmetric-marginal reward, all-zero-column optima ==
-hedging), and the product only acts on confidence-gated weekly crash/rut
-triggers (PRD eval #3: ≥8/10 crisis-week hit rate). Recommended primary:
-trigger-level hit-rate/false-alarm benchmark plus entry-level `recall_-1` at a
-precision floor; QWK becomes diagnostic.
+hedging). **2026-07-10 adoption update:** the product target is now
+confidence-gated sustained conflict on a declared core value. The strict
+reference independently checks each core value for stored five-pass Judge
+consensus `-1` labels on two adjacent entries, while runtime will use rolling
+soft `P(-1)` evidence under uncertainty gating.
+The primary benchmark is therefore episode-level hit rate and false-alarm
+behavior (PRD eval #3: ≥8/10 held-out episodes detected), plus entry-level
+`recall_-1` at a precision floor; QWK becomes diagnostic. The older weekly
+crash/rut router and crisis-week wording do not define this promotion metric.
 
 **3. Two bounding experiments before more training.** A zero-shot/few-shot LLM
 critic baseline on the frozen test split under the student-visible context
@@ -240,6 +282,13 @@ any further synthetic generation is justified. Then proceed with `twinkl-a30f`
 → `twinkl-j0ck` as planned; soft vote-distribution training is strongly
 corroborated by the disagreement-learning literature. Full details:
 [`reports/experiment_review_2026-07-02_strategy.md`](reports/experiment_review_2026-07-02_strategy.md).
+
+> **Supersession note (2026-07-10):** This July 2 training sequence remains
+> relevant to entry-level hard-dimension work, but it is not the next gate for
+> drift promotion. The later `twinkl-wq9p` benchmark and final `twinkl-16ar`
+> Codex audit found that the frozen drift reference needs student-visible target
+> repair first; `twinkl-v8pb` now owns that gate before any scorer, cascade, or
+> production decision.
 
 ### 2026-06-06 — Recall-aware checkpoint retention is worth keeping; recall-aware selection is not (`twinkl-upb5`)
 

@@ -9,13 +9,19 @@ The onboarding flow solves Twinkl's **cold-start problem**: before a user has wr
 The onboarding uses **Best-Worst Scaling (BWS)** — a forced-choice psychometric technique — to elicit a user's value priorities across the 10 Schwartz value dimensions. Combined with a structured goal selection, this produces:
 
 1. A **value weight vector** (`w_u ∈ ℝ^10`) that initializes the user's VIF profile
-2. A **primary goal/tension** that focuses the Coach's initial monitoring
-3. A **confidence baseline** that signals how much to trust explicit vs. behavioral data
+2. A discrete **declared-core set** (`top_values`) containing every value tied for the highest adjusted BWS score
+3. A **primary goal/tension** that focuses the Coach's initial monitoring
+4. A **confidence baseline** that signals how much to trust explicit vs. behavioral data
+
+These two value outputs have different jobs. The Critic keeps the full graded
+10-dimensional weight vector for conditioning. Drift v1 uses `top_values` as the
+eligibility gate: only sustained conflict on a declared core value can form a
+reference episode or runtime trigger.
 
 ### What's Out of Scope
 
 - **Contextual story / narrative input** — The user's first personal narrative is captured via a guided journal prompt *after* onboarding, not during it. Onboarding is structured choice only.
-- **VIF integration mechanics** — How BWS weights feed into the StateEncoder is a future concern. This spec defines the UX and data output; integration is documented in [Section 8: Future Considerations](#8-future-considerations).
+- **VIF integration mechanics** — This spec defines the semantic contract for `weights` and `top_values`; wiring both fields into the runtime remains future work documented in [Section 8: Future Considerations](#8-future-considerations).
 - **Adaptive item selection** — All users see the same 6 BWS sets. Computerized adaptive testing (CAT) is a future optimization.
 
 ### Cross-References
@@ -176,7 +182,7 @@ After the first 3 sets, the system computes a preliminary profile and reflects i
 - **Agency**: Users feel heard, not categorized
 - **Data quality**: "Not quite" responses are logged and used to adjust final weights (see [Section 5: Scoring Logic](#5-scoring-logic))
 
-**"Not quite" flow:** If the user taps "Not quite," they see a simplified correction screen showing their top 3 and bottom 3 values with the ability to promote/demote one value. This correction is recorded as a `refinement` in the output schema.
+**"Not quite" flow:** If the user taps "Not quite," they see a simplified correction screen showing the highest- and lowest-scoring value groups, including ties, with the ability to promote/demote one value. This correction is recorded as a `refinement` in the output schema.
 
 ### 3.4 BWS Sets 4–6
 
@@ -238,10 +244,9 @@ Single selection. See [Section 6: Goal Categories](#6-goal-categories) for how e
 │                                 │
 │   Your Inner Compass            │
 │                                 │
-│   Your top values:              │
-│   1. [Top value phrase]         │
-│   2. [Second value phrase]      │
-│   3. [Third value phrase]       │
+│   Your declared core values:    │
+│   [Every value tied for the     │
+│    highest adjusted score]      │
 │                                 │
 │   Your focus:                   │
 │   "[Goal display text]"         │
@@ -387,8 +392,13 @@ The +1 in the shift ensures no value has zero weight (even the least-preferred v
 
 If multiple values have the same raw score:
 - They receive the same weight after normalization (no arbitrary tie-breaking)
-- If the user's top 2 values are tied, both are shown as "top values" in the summary
+- If the highest score is tied, every tied value is shown in the summary
 - The Coach treats tied values as genuinely co-important
+
+The final `top_values` field is the complete set of values tied for the highest
+adjusted score after refinements. It is not a fixed top-two or top-three list. A
+single highest-scoring value produces a one-value declared-core set; a tie
+produces a larger set with every tied value retained.
 
 ### Confidence Estimation
 
@@ -525,7 +535,7 @@ Over time, behavioral data from journal entries should supersede the initial goa
 | `value_scores.raw` | object | Raw BWS scores (best_count − worst_count) per value |
 | `value_scores.weights` | object | Normalized weight vector (sums to 1.0) |
 | `confidence` | object | Confidence metadata (consistency, spread, refinement count) |
-| `top_values` | array | Values with highest weights (may be >2 if tied) |
+| `top_values` | array | Discrete declared-core set: every value tied for the highest adjusted BWS score; never truncated to a fixed count |
 | `goal_category` | string | Selected tension category key |
 | `user_confirmed` | boolean | Whether user accepted the end summary |
 | `refinements` | array | User corrections at mirror/summary stages |
@@ -543,7 +553,19 @@ VIF User Profile
 └── goal: goal_category (from structured selection)
 ```
 
-The `weights` vector replaces a simple "pick 2 values" approach (which would produce equal weights like `[0.5, 0.5]` for selected values and zero for everything else). BWS produces a graded 10-dimensional vector that better reflects the reality that all values matter to some degree.
+The two value fields are intentionally complementary:
+
+- `value_scores.weights` is the full graded 10-dimensional vector used to
+  condition the Critic. It replaces a simple "pick 2 values" profile and
+  reflects that all Schwartz values matter to some degree.
+- `top_values` is the discrete declared-core set used to gate drift v1. A
+  sustained-conflict episode is only eligible when it occurs on one of these
+  values.
+
+The current synthetic personas already carry an explicit `core_values` list, so
+their declared-core gate does not need to be inferred from graded weights.
+Persisting BWS `weights` and `top_values` for real users, and threading both
+through the VIF runtime, remains pending under `twinkl-1m8`.
 
 ---
 
@@ -551,7 +573,10 @@ The `weights` vector replaces a simple "pick 2 values" approach (which would pro
 
 ### VIF Integration Points
 
-- **StateEncoder initialization**: BWS `weights` should feed into the user profile vector `z_u` that the StateEncoder uses (see [VIF System Architecture](../vif/02_system_architecture.md) §1.1). The exact mechanism (direct concatenation, learned mapping, or simple lookup) is TBD.
+- **Critic conditioning**: BWS `weights` should feed into the user profile vector `z_u` that the StateEncoder uses (see [VIF System Architecture](../vif/02_system_architecture.md) §1.1). The Critic continues to receive all 10 graded weights.
+- **Drift eligibility**: BWS `top_values` should populate the user's declared-core set. Drift v1 evaluates sustained conflict only on these values; it must not infer eligibility from an undocumented weight threshold.
+- **Synthetic-persona compatibility**: Existing synthetic personas already provide `core_values`. That field remains their declared-core gate until onboarding output is integrated.
+- **Implementation status**: Persisting and consuming both onboarding fields is pending under `twinkl-1m8`; this spec defines the contract rather than claiming the runtime wiring exists.
 - **Critic cold-start**: Until enough journal entries exist for the Critic to produce reliable scores, the BWS weights serve as the *only* value signal. The Coach should acknowledge this explicitly ("Based on what you told me during setup...").
 
 ### Explicit vs. Behavioral Weighting (60–70% Strategy)
