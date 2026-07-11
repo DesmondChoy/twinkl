@@ -44,6 +44,24 @@ and recorded in the
 Its former counts are historical only; they are not proposed-label results
 under the replacement policy.
 
+## Completed full-corpus review
+
+The training-ready review used the complete 1,651-entry corpus. Each entry
+received three isolated `gpt-5.4-mini` reviews under the exact contract; 25
+three-way ties received a fourth review. The receipt-bound materializer
+accepted all entries and wrote a non-destructive target variant.
+
+- 1,162 unanimous decisions, 464 two-of-three majorities, 25 tie breaks;
+- 678 changed Security labels;
+- historical `-1 / 0 / +1`: `151 / 1,212 / 288`;
+- repaired `-1 / 0 / +1`: `265 / 697 / 689`; and
+- artifacts under `logs/exports/twinkl_a30f_active_critic_state_full_v1/` and
+  `logs/exports/twinkl_a30f_security_target_full_v1/`.
+
+The selected policy remains `security_active_critic_state_v1`. The reviews are
+repeated model judgments with recorded disagreement, not independent human
+ground truth. Historical labels remain immutable.
+
 ## Exact-state review workflow
 
 First prepare a separate receipt-bound review bundle for the same selected
@@ -121,8 +139,9 @@ frozen test population. Even a completed exact-state review therefore remains:
 - unsuitable as an old-label or repaired-label evaluation population; and
 - unable to support a promotion or production-readiness claim.
 
-A controlled retrain still requires an unbiased full-corpus or independently
-sampled Security target population under the exact contract, with immutable
-case coordinates and review provenance. Architecture, split, and optimization
-must then be held fixed, and both the historical-label and repaired-target
-lenses reported separately.
+A controlled retrain therefore used the separate full-corpus target rather
+than this selected subset. `run_057`-`run_062` held architecture, split, and
+optimization fixed across three paired seeds and reported both historical and
+repaired lenses. Median test Security QWK improved from `0.156` to `0.328`
+under the repaired lens and from `0.205` to `0.372` under the historical lens.
+See the [decision report](../../logs/experiments/reports/experiment_review_2026-07-11_twinkl_a30f_security_target.md).

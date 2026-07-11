@@ -161,3 +161,7 @@
   the changes, carry the review through implementation and verification while
   preserving the existing branch and unrelated work. Do not stop at a revised
   assessment or leave the invalid artifact active.
+- When work on a Beads issue is described as complete, check every acceptance
+  criterion, record the evidence, and close the issue in the same session. If
+  only a safe checkpoint is complete, say that plainly and continue the
+  remaining acceptance work when the user has authorized the full task.

@@ -143,19 +143,23 @@ The training stack tracks more than loss:
 ### 4.4 Current Caveat: Reachability Audit
 
 The training pipeline is operational, but the completed `twinkl-747`
-reachability audit changed how the current board should be interpreted. The hard
-dimensions, especially `security`, are not yet a clean long-term distillation
-target for the current student. That means the current frontier should be read
-as a useful experimental baseline, not the final target definition.
+reachability audit changed how the historical board should be interpreted. The
+full-corpus `twinkl-a30f` review has now produced a separate, training-ready
+Security target under the exact active `window_size: 1` state contract.
 
 The historical audit established the target-contract risk, but its three prompt
 arms did not exactly match the active `window_size: 1` state. The 14-case
 Security artifact formerly derived from its legacy `student_visible` arm has
 been retired. It is not a retraining source, evaluation lens, or repaired-target
-result. A new artifact can be written only after a receipt-bound
+result. The replacement artifact was written only after a receipt-bound
 `active_critic_state_v1` review; the selected frozen-test subset remains
-diagnostic-only even then. See the
-[Security target contract](security_target_contract.md).
+diagnostic-only. The completed full-corpus review changed 678 of
+1,651 Security labels. Paired BalancedSoftmax runs `run_057`-`run_062` improved
+median test Security QWK from `0.156` to `0.328` under the repaired lens and
+from `0.205` to `0.372` under the historical lens. Use the repaired regime for
+future comparable training, but do not merge its scores into the historical
+leaderboard. See the [Security target contract](security_target_contract.md)
+and [experiment review](../../logs/experiments/reports/experiment_review_2026-07-11_twinkl_a30f_security_target.md).
 
 The consensus-label diagnostic branch (`run_048`-`run_050`) reinforces
 that framing. It improved within-regime QWK and calibration on the
@@ -225,6 +229,9 @@ The VIF training stack lives in `src/vif/`.
 | `src/vif/security_target.py` | Fail-closed exact-state Security target validation and diagnostic materialization |
 | `scripts/experiments/prepare_a30f_security_target_audit.py` | Receipt-bound active-Critic-state Security review bundle |
 | `scripts/experiments/build_a30f_security_target.py` | Diagnostic Security target materialization after exact-state review |
+| `scripts/experiments/run_a30f_security_target_reviews.py` | Full-corpus repeated exact-state review runner with receipts and resume support |
+| `scripts/experiments/materialize_a30f_full_security_target.py` | Training-ready full-corpus Security target materialization |
+| `scripts/experiments/evaluate_a30f_security_comparison.py` | Historical/repaired model × label-lens comparison |
 | `scripts/experiments/build_v8pb_student_visible_target.py` | Development or locked-promotion review packet generation |
 | `scripts/experiments/materialize_v8pb_student_visible_target.py` | Reviewed student-visible target materialization |
 | `src/vif/eval.py` | Evaluation metrics and uncertainty-aware evaluation |

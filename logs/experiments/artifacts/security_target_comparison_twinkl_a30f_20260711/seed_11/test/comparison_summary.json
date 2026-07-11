@@ -1,0 +1,476 @@
+{
+  "cells": [
+    {
+      "metrics": {
+        "calibration_global": 0.7127867423834999,
+        "calibration_per_dimension": {
+          "achievement": 0.5339273663100124,
+          "benevolence": 0.407090957316053,
+          "conformity": 0.6924835770596706,
+          "hedonism": 0.8838268642097298,
+          "power": 0.7394898502519086,
+          "security": 0.5649516986014711,
+          "self_direction": 0.6032690666089424,
+          "stimulation": 0.7319292137441958,
+          "tradition": 0.6119010506757779,
+          "universalism": 0.9479779030408905
+        },
+        "confusion_labels": [
+          -1,
+          0,
+          1
+        ],
+        "confusion_matrices": {
+          "conformity": [
+            [
+              12,
+              5,
+              1
+            ],
+            [
+              21,
+              110,
+              7
+            ],
+            [
+              2,
+              26,
+              37
+            ]
+          ],
+          "security": [
+            [
+              6,
+              8,
+              0
+            ],
+            [
+              11,
+              156,
+              2
+            ],
+            [
+              2,
+              34,
+              2
+            ]
+          ],
+          "tradition": [
+            [
+              3,
+              3,
+              4
+            ],
+            [
+              13,
+              119,
+              27
+            ],
+            [
+              0,
+              8,
+              44
+            ]
+          ]
+        },
+        "hedging_mean": 0.6280542986425339,
+        "hedging_per_dimension": {
+          "achievement": 0.5429864253393665,
+          "benevolence": 0.38009049773755654,
+          "conformity": 0.5701357466063348,
+          "hedonism": 0.8416289592760181,
+          "power": 0.7737556561085973,
+          "security": 0.8099547511312217,
+          "self_direction": 0.3665158371040724,
+          "stimulation": 0.6787330316742082,
+          "tradition": 0.5158371040723982,
+          "universalism": 0.8009049773755657
+        },
+        "minority_recall_mean": 0.4206180716213611,
+        "qwk_mean": 0.34252782407192645,
+        "qwk_per_dimension": {
+          "achievement": 0.26397896581945657,
+          "benevolence": 0.28854440097072953,
+          "conformity": 0.5527463443833196,
+          "hedonism": 0.23492472425730615,
+          "power": 0.3274497869750457,
+          "security": 0.1949696444058977,
+          "self_direction": 0.5351900639819345,
+          "stimulation": 0.13762774852895632,
+          "tradition": 0.4868835984336556,
+          "universalism": 0.40296296296296297
+        },
+        "recall_mean": {
+          "minus1": 0.33716356107660456,
+          "plus1": 0.5040725821661176,
+          "zero": 0.8305832176153964
+        },
+        "security_qwk": 0.1949696444058977,
+        "security_recall": {
+          "minus1": 0.42857142857142855,
+          "plus1": 0.05263157894736842,
+          "zero": 0.9230769230769231
+        }
+      },
+      "model_arm": "historical_model",
+      "n_samples": 221,
+      "split": "test",
+      "target_lens": "historical_labels"
+    },
+    {
+      "metrics": {
+        "calibration_global": 0.6849689793915692,
+        "calibration_per_dimension": {
+          "achievement": 0.5339273663100124,
+          "benevolence": 0.407090957316053,
+          "conformity": 0.6924835770596706,
+          "hedonism": 0.8838268642097298,
+          "power": 0.7394898502519086,
+          "security": 0.4006720906881102,
+          "self_direction": 0.6032690666089424,
+          "stimulation": 0.7319292137441958,
+          "tradition": 0.6119010506757779,
+          "universalism": 0.9479779030408905
+        },
+        "confusion_labels": [
+          -1,
+          0,
+          1
+        ],
+        "confusion_matrices": {
+          "conformity": [
+            [
+              12,
+              5,
+              1
+            ],
+            [
+              21,
+              110,
+              7
+            ],
+            [
+              2,
+              26,
+              37
+            ]
+          ],
+          "security": [
+            [
+              8,
+              19,
+              1
+            ],
+            [
+              4,
+              106,
+              0
+            ],
+            [
+              7,
+              73,
+              3
+            ]
+          ],
+          "tradition": [
+            [
+              3,
+              3,
+              4
+            ],
+            [
+              13,
+              119,
+              27
+            ],
+            [
+              0,
+              8,
+              44
+            ]
+          ]
+        },
+        "hedging_mean": 0.6280542986425339,
+        "hedging_per_dimension": {
+          "achievement": 0.5429864253393665,
+          "benevolence": 0.38009049773755654,
+          "conformity": 0.5701357466063348,
+          "hedonism": 0.8416289592760181,
+          "power": 0.7737556561085973,
+          "security": 0.8099547511312217,
+          "self_direction": 0.3665158371040724,
+          "stimulation": 0.6787330316742082,
+          "tradition": 0.5158371040723982,
+          "universalism": 0.8009049773755657
+        },
+        "minority_recall_mean": 0.41265086444679816,
+        "qwk_mean": 0.33254979514822514,
+        "qwk_per_dimension": {
+          "achievement": 0.26397896581945657,
+          "benevolence": 0.28854440097072953,
+          "conformity": 0.5527463443833196,
+          "hedonism": 0.23492472425730615,
+          "power": 0.3274497869750457,
+          "security": 0.09518935516888438,
+          "self_direction": 0.5351900639819345,
+          "stimulation": 0.13762774852895632,
+          "tradition": 0.4868835984336556,
+          "universalism": 0.40296296296296297
+        },
+        "recall_mean": {
+          "minus1": 0.32287784679089027,
+          "plus1": 0.502423882102706,
+          "zero": 0.8346391616713404
+        },
+        "security_qwk": 0.09518935516888438,
+        "security_recall": {
+          "minus1": 0.2857142857142857,
+          "plus1": 0.03614457831325301,
+          "zero": 0.9636363636363636
+        }
+      },
+      "model_arm": "historical_model",
+      "n_samples": 221,
+      "split": "test",
+      "target_lens": "repaired_labels"
+    },
+    {
+      "metrics": {
+        "calibration_global": 0.6741853144672076,
+        "calibration_per_dimension": {
+          "achievement": 0.5847440272867629,
+          "benevolence": 0.47015118613958834,
+          "conformity": 0.6560246317675729,
+          "hedonism": 0.8574449262782547,
+          "power": 0.7611527096647213,
+          "security": 0.28365696337760177,
+          "self_direction": 0.6357222427882299,
+          "stimulation": 0.5343396900914716,
+          "tradition": 0.6751056240199922,
+          "universalism": 0.9239850180733662
+        },
+        "confusion_labels": [
+          -1,
+          0,
+          1
+        ],
+        "confusion_matrices": {
+          "conformity": [
+            [
+              11,
+              6,
+              1
+            ],
+            [
+              19,
+              107,
+              12
+            ],
+            [
+              2,
+              15,
+              48
+            ]
+          ],
+          "security": [
+            [
+              7,
+              5,
+              2
+            ],
+            [
+              21,
+              104,
+              44
+            ],
+            [
+              1,
+              5,
+              32
+            ]
+          ],
+          "tradition": [
+            [
+              3,
+              3,
+              4
+            ],
+            [
+              15,
+              127,
+              17
+            ],
+            [
+              1,
+              14,
+              37
+            ]
+          ]
+        },
+        "hedging_mean": 0.5968325791855204,
+        "hedging_per_dimension": {
+          "achievement": 0.5656108597285068,
+          "benevolence": 0.4660633484162896,
+          "conformity": 0.5067873303167421,
+          "hedonism": 0.8009049773755657,
+          "power": 0.7647058823529411,
+          "security": 0.416289592760181,
+          "self_direction": 0.45248868778280543,
+          "stimulation": 0.6199095022624435,
+          "tradition": 0.5746606334841629,
+          "universalism": 0.8009049773755657
+        },
+        "minority_recall_mean": 0.46175349492390394,
+        "qwk_mean": 0.3705632776923481,
+        "qwk_per_dimension": {
+          "achievement": 0.32386363636363635,
+          "benevolence": 0.38546475527118595,
+          "conformity": 0.608957699751175,
+          "hedonism": 0.15190789950039818,
+          "power": 0.35629614576983004,
+          "security": 0.41357855247506625,
+          "self_direction": 0.556541514313743,
+          "stimulation": 0.16283534845104042,
+          "tradition": 0.44433917574609183,
+          "universalism": 0.30184804928131415
+        },
+        "recall_mean": {
+          "minus1": 0.2966425120772947,
+          "plus1": 0.6268644777705132,
+          "zero": 0.7972039815829516
+        },
+        "security_qwk": 0.41357855247506625,
+        "security_recall": {
+          "minus1": 0.5,
+          "plus1": 0.8421052631578947,
+          "zero": 0.6153846153846154
+        }
+      },
+      "model_arm": "repaired_model",
+      "n_samples": 221,
+      "split": "test",
+      "target_lens": "historical_labels"
+    },
+    {
+      "metrics": {
+        "calibration_global": 0.68836149319929,
+        "calibration_per_dimension": {
+          "achievement": 0.5847440272867629,
+          "benevolence": 0.47015118613958834,
+          "conformity": 0.6560246317675729,
+          "hedonism": 0.8574449262782547,
+          "power": 0.7611527096647213,
+          "security": 0.45360872683077247,
+          "self_direction": 0.6357222427882299,
+          "stimulation": 0.5343396900914716,
+          "tradition": 0.6751056240199922,
+          "universalism": 0.9239850180733662
+        },
+        "confusion_labels": [
+          -1,
+          0,
+          1
+        ],
+        "confusion_matrices": {
+          "conformity": [
+            [
+              11,
+              6,
+              1
+            ],
+            [
+              19,
+              107,
+              12
+            ],
+            [
+              2,
+              15,
+              48
+            ]
+          ],
+          "security": [
+            [
+              14,
+              9,
+              5
+            ],
+            [
+              8,
+              72,
+              30
+            ],
+            [
+              7,
+              33,
+              43
+            ]
+          ],
+          "tradition": [
+            [
+              3,
+              3,
+              4
+            ],
+            [
+              15,
+              127,
+              17
+            ],
+            [
+              1,
+              14,
+              37
+            ]
+          ]
+        },
+        "hedging_mean": 0.5968325791855204,
+        "hedging_per_dimension": {
+          "achievement": 0.5656108597285068,
+          "benevolence": 0.4660633484162896,
+          "conformity": 0.5067873303167421,
+          "hedonism": 0.8009049773755657,
+          "power": 0.7647058823529411,
+          "security": 0.416289592760181,
+          "self_direction": 0.45248868778280543,
+          "stimulation": 0.6199095022624435,
+          "tradition": 0.5746606334841629,
+          "universalism": 0.8009049773755657
+        },
+        "minority_recall_mean": 0.4455518462238406,
+        "qwk_mean": 0.3630934284278274,
+        "qwk_per_dimension": {
+          "achievement": 0.32386363636363635,
+          "benevolence": 0.38546475527118595,
+          "conformity": 0.608957699751175,
+          "hedonism": 0.15190789950039818,
+          "power": 0.35629614576983004,
+          "security": 0.3388800598298589,
+          "self_direction": 0.556541514313743,
+          "stimulation": 0.16283534845104042,
+          "tradition": 0.44433917574609183,
+          "universalism": 0.30184804928131415
+        },
+        "recall_mean": {
+          "minus1": 0.2966425120772947,
+          "plus1": 0.5944611803703864,
+          "zero": 0.8011200654990354
+        },
+        "security_qwk": 0.3388800598298589,
+        "security_recall": {
+          "minus1": 0.5,
+          "plus1": 0.5180722891566265,
+          "zero": 0.6545454545454545
+        }
+      },
+      "model_arm": "repaired_model",
+      "n_samples": 221,
+      "split": "test",
+      "target_lens": "repaired_labels"
+    }
+  ],
+  "changed_security_target_count": 86,
+  "comparison": "twinkl-a30f_security_target_2x2",
+  "sample_count": 221,
+  "split": "test"
+}

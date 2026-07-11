@@ -39,7 +39,7 @@ The VIF (Value Identity Function) maps journal entries to a 10-dimensional Schwa
 - Decision-level evaluation of whether Critic outputs support the sustained-conflict detector under a precision floor
 
 ### Next Steps
-1. Repair the target/context contract in `twinkl-a30f`, then preserve vote distributions through `twinkl-j0ck`
+1. Use the completed `twinkl-a30f` active-state Security target, then preserve its vote distributions through `twinkl-j0ck`
 2. Build the matched hard-set in `twinkl-748` so the frontier can be tested on boundary cases, not just aggregate holdout metrics
 3. Prototype compact student context in `twinkl-749` before assuming frozen single-entry context is the final ceiling
 4. Quantify validation-loss vs frontier-metric divergence in `twinkl-751` before changing more training recipes

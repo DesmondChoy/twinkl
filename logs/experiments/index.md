@@ -19,6 +19,8 @@
 
 > **Active recommendation (2026-03-19):** `run_019`-`run_021` remain the default corrected-split frontier family. The new two-stage reformulation family `run_045`-`run_047` reached comparable median holdout `qwk_mean` (`0.360` vs `0.362`) and the best calibration on the current board (`0.743`), but it gave back too much `recall_-1` (`0.266`) and hedging (`0.708`). `run_034`-`run_036` remain the best tail-sensitive reference branch, and `run_042`-`run_044` remain the strongest encoder-swap challenger.
 >
+> **Security target decision (2026-07-11):** [`twinkl-a30f`](reports/experiment_review_2026-07-11_twinkl_a30f_security_target.md) completed a receipt-bound, full-corpus active-state Security review and the paired `run_057`-`run_062` comparison. Repaired-target training raises median test Security QWK from `0.156` to `0.328` under repaired labels and from `0.205` to `0.372` under historical labels. Future `window_size: 1` training should use `security_active_critic_state_v1`, but the repaired runs stay off the historical frontier table because 678 Security labels changed. Absolute Security QWK and disagreement-case accuracy still leave representation and semantic work open.
+>
 > **Current drift-target status (2026-07-11):** [`twinkl-v8pb` completed its student-visible review](../../docs/evals/drift_v1_student_visible_target.md) using full runtime text and separate development and locked promotion populations. The fixed `run_020` development threshold (probability 0.8, uncertainty 1.010153) found 1/5 reference episodes (precision 1.0, recall 0.2, F1 0.3333, false-positive rate 0.0). The 24-case promotion review left case_023 unresolved across 19 entries, so the promotion score was deliberately not performed. There is no active drift-promotion benchmark, no scorer is promotion-ready, and the active entry-level frontier stays unchanged.
 >
 > **Retired decision-level drift benchmark:** The former `twinkl-wq9p` consensus-derived frozen benchmark is [historical evidence only](../../docs/archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md). Do not rerun, score, tune, or promote from it; its former report and artifacts are not active repository surfaces.
@@ -210,11 +212,35 @@
 | 054 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax_dimweight | 23454 | 19.3 | 0.308 | 0.752 | 0.344 | 0.333 | 0.731 | 0.400 | 0.063 | 0.068 | runs/run_054_BalancedSoftmax.yaml |
 | 055 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax_dimweight | 23454 | 19.3 | 0.332 | 0.728 | 0.329 | 0.343 | 0.670 | 0.448 | 0.092 | 0.076 | runs/run_055_BalancedSoftmax.yaml |
 | 056 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax_dimweight | 23454 | 19.3 | 0.305 | 0.756 | 0.367 | 0.381 | 0.713 | 0.485 | 0.068 | 0.084 | runs/run_056_BalancedSoftmax.yaml |
+| 057 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.314 | 0.748 | 0.343 | 0.335 | 0.713 | 0.421 | 0.092 | 0.070 | runs/run_057_BalancedSoftmax.yaml |
+| 058 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.324 | 0.737 | 0.363 | 0.364 | 0.688 | 0.446 | 0.089 | 0.090 | runs/run_058_BalancedSoftmax.yaml |
+| 059 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.334 | 0.729 | 0.320 | 0.334 | 0.675 | 0.485 | 0.082 | 0.072 | runs/run_059_BalancedSoftmax.yaml |
+| 060 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.335 | 0.729 | 0.335 | 0.333 | 0.693 | 0.452 | 0.095 | 0.086 | runs/run_060_BalancedSoftmax.yaml |
+| 061 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.319 | 0.738 | 0.353 | 0.383 | 0.698 | 0.440 | 0.072 | 0.085 | runs/run_061_BalancedSoftmax.yaml |
+| 062 | BalancedSoftmax | nomic-256d | 1 | 64 | 0.3 | balanced_softmax | 23454 | 19.3 | 0.319 | 0.741 | 0.363 | 0.386 | 0.703 | 0.472 | 0.097 | 0.079 | runs/run_062_BalancedSoftmax.yaml |
 <!-- AUTO-TABLE:END -->
 
 > **Contributor note:** Keep this section in **newest-first** chronological order (most recent date at top).
 
 ## Findings
+
+### 2026-07-11 — Active-state Security target repair materially improves the learned boundary (`twinkl-a30f`)
+
+The full-corpus exact-state review changed 678 of 1,651 Security labels. In the
+paired `run_057`-`run_062` comparison, repaired-target training raises median
+test Security QWK from `0.156` to `0.328` under repaired labels and from `0.205`
+to `0.372` under historical labels. All three seeds improve under both lenses,
+so this is evidence of a better learned Security boundary rather than only an
+easier evaluation target. Aggregate QWK, global `recall_-1`, and hedging do not
+regress.
+
+Use `security_active_critic_state_v1` for future comparable `window_size: 1`
+training, but keep this branch separate from the historical frontier because
+the target regime changed. Median repaired-lens Security QWK is still only
+`0.328`, and exact-class accuracy falls from `0.628` on unanimous test cases to
+`0.514` on majority cases. Remaining errors therefore mix representation limits
+with review ambiguity. Full review:
+[`reports/experiment_review_2026-07-11_twinkl_a30f_security_target.md`](reports/experiment_review_2026-07-11_twinkl_a30f_security_target.md).
 
 ### 2026-07-10 — Retired decision-level drift benchmark (`twinkl-wq9p`)
 
