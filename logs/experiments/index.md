@@ -24,6 +24,8 @@ It is not the forward model-development policy after `twinkl-752`.
 >
 > **Adopted VIF scope and metric policy (2026-07-12):** [`twinkl-752`](../../docs/vif/05_capstone_scope_decision.md) defines the Critic primarily as a conflict screener. Entry-level `recall_-1` is the primary model-development metric; episode recall is the future product metric; QWK and `+1` recall are diagnostics. No numerical precision or false-alert tolerance is adopted yet, so recall-focused development cannot support promotion by itself. The ternary ten-value output remains, and no MLP, LLM, verifier, ensemble, or cascade architecture has been adopted. Existing code is still QWK-first and must be updated and tested before another run is treated as recall-first decision evidence.
 >
+> **Conformity / Self-Direction shortcut audit (2026-07-12):** [`twinkl-1r3d`](reports/experiment_review_2026-07-12_twinkl_1r3d_shortcut_audit.md) removed 3,406 individual word occurrences plus 20 repeated-word or phrase cues across 35 polarity-stratified, confident-correct `run_020` validation cases. No removal flipped a class, and no candidate cue was the most influential individual removal in a case. The audit does not support the tested brittle lexical-shortcut explanations, so the MLP may remain a baseline in `twinkl-752.1`; it does not prove construct understanding or replace the required consensus and human-anchor checks.
+>
 > **Hedonism matched hard-set decision (2026-07-12):** [`twinkl-748`](reports/experiment_review_2026-07-12_twinkl_748_hedonism_hard_set.md) produced 24 matched pairs / 48 entries and froze 20 pairs / 40 entries after two packet-only Codex reviews agreed on 47/48 entry labels. This is AI diagnostic evidence, not human validation. On the frozen set, the incumbent `run_019`-`run_021` family reaches median exact accuracy `0.525`, Hedonism `-1` recall `0.05`, and strict both-members-correct pair rate `0.05`; the tail-sensitive `run_034`-`run_036` reference improves those to `0.575`, `0.20`, and `0.15`, but remains inadequate. Keep the frontier unchanged, stop `twinkl-748` at evaluation-only, and require `twinkl-kof2` before any separate augmentation branch.
 >
 > **Compact-history decision (2026-07-11):** [`twinkl-749`](reports/experiment_review_2026-07-11_twinkl_749_compact_history.md) stopped after its planned seed-11 gate. Against repaired-Security baseline `run_058`, `run_069` lowered QWK (`0.363` to `0.342`), minority recall (`0.446` to `0.400`), and Security QWK (`0.339` to `0.267`), while raising hedging and the train-validation gap. Calibration and Stimulation improved, but the combined package did not justify seeds 22/33. Keep compact mean history diagnostic and keep the default unchanged.
@@ -241,6 +243,22 @@ It is not the forward model-development policy after `twinkl-752`.
 > **Contributor note:** Keep this section in **newest-first** chronological order (most recent date at top).
 
 ## Findings
+
+### 2026-07-12 — Single-word shortcut sensitivity does not explain the MLP's strongest dimensions (`twinkl-1r3d`)
+
+The audit replayed `run_020` exactly and removed 3,406 individual content-word
+occurrences plus 20 repeated-word or phrase cues across 35 confident-correct
+active validation cases, stratified by Conformity / Self-Direction and `-1` /
+`+1`. No removal flipped a class. Narrow rule/duty/family and
+choice/independence cue families were never the most influential individual
+removal in a case.
+
+This does not support the simplest brittle-word shortcut hypothesis. It also
+does not prove construct learning: the audit selects correct confident cases,
+tests one deletion at a time, and uses paraphrased rationales. Keep the MLP as a
+baseline in the bounded verifier study, but retain the consensus replay and
+human-anchor checks before crediting MLP-only wins. Full details:
+[`reports/experiment_review_2026-07-12_twinkl_1r3d_shortcut_audit.md`](reports/experiment_review_2026-07-12_twinkl_1r3d_shortcut_audit.md).
 
 ### 2026-07-12 — Conflict screening and `recall_-1` become the VIF capstone focus (`twinkl-752`)
 

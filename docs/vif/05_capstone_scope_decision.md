@@ -98,8 +98,13 @@ abstain rather than emit a drift claim.
 
 This decision does not adopt an MLP-only, LLM-only, ensemble, cascade, or
 verifier architecture. Architecture adoption still requires explicit user
-approval after the bounded study. Before crediting the MLP with unique value,
-`twinkl-1r3d` must audit the suspected Conformity and Self-direction shortcuts.
+approval after the bounded study. [`twinkl-1r3d`](../../logs/experiments/reports/experiment_review_2026-07-12_twinkl_1r3d_shortcut_audit.md)
+completed the prerequisite Conformity and Self-Direction audit: 3,406
+single-word removals plus 20 repeated-word or phrase removals across 35
+confident-correct active validation cases caused no class flips. This does not
+support the tested brittle lexical-shortcut explanations, but it does not prove
+construct understanding; the bounded study must still use its consensus replay
+and human-anchor checks before crediting MLP-only wins.
 
 ## Evidence Behind the Scope Change
 

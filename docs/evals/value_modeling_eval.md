@@ -32,6 +32,7 @@ longer the primary model-development claim. See the adopted
 - Recall-aware candidate reruns `run_051`-`run_056` persist alternate validation-selected checkpoints and their validation/test outputs; the wider `0.02` window helps the consensus diagnostic branch but does not improve the persisted-label frontier, so candidate retention is experiment hygiene rather than the default selector
 - The frozen-holdout LLM Critic baseline compares `student_visible`, `human_context`, and upper-bound `full_judge_context` arms. The strongest 221-row `human_context` arm reaches QWK **0.450**, `recall_-1` **0.302**, minority recall **0.534**, and hedging **0.707**; `run_020` reaches QWK **0.378**, `recall_-1` **0.342**, minority recall **0.449**, and hedging **0.621**. The LLM is useful as a teacher/oracle/fallback diagnostic, not a clean MLP replacement.
 - Compact-history `run_069` stayed within the `<5k` added-weight budget but failed its seed-11 expansion gate versus repaired-target `run_058`: QWK **0.342** vs **0.363**, minority recall **0.400** vs **0.446**, and Security QWK **0.267** vs **0.339**. The path remains diagnostic and the local MLP is not claimed to be trajectory-aware.
+- The [`twinkl-1r3d` shortcut audit](../../logs/experiments/reports/experiment_review_2026-07-12_twinkl_1r3d_shortcut_audit.md) removed 3,406 individual words plus 20 repeated-word or phrase cues across 35 confident-correct active Conformity and Self-Direction validation cases. No removal flipped a class, so the tested brittle lexical-shortcut explanations are not supported. This is a bounded sensitivity result, not evidence that either construct is solved.
 
 ### What's Missing
 - **Recall-first selection is not implemented**: the current experiment code still selects mainline checkpoints QWK-first. Historical run rankings remain valid provenance, but a future decision run needs tested recall-first selection behavior.
@@ -46,7 +47,7 @@ longer the primary model-development claim. See the adopted
 
 ### Next Steps
 1. Implement and verify recall-first candidate selection before treating another training run as decision evidence
-2. Run the bounded verifier comparison with identical weekly inputs, with and without Critic signals; keep the MLP family and entry-level LLM as baselines
+2. Run the bounded verifier comparison with identical weekly inputs, with and without Critic signals; keep the MLP family and entry-level LLM as baselines, and retain the planned consensus replay and human-anchor checks when interpreting MLP-only wins
 3. Report `-1` precision and the precision-recall curve while prioritizing `recall_-1`; do not infer deployment readiness until a false-alert tolerance is adopted
 4. Keep QWK, `+1` recall, calibration, circumplex diagnostics, and persona-level aggregation as secondary health checks
 
