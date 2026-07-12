@@ -165,3 +165,14 @@
   criterion, record the evidence, and close the issue in the same session. If
   only a safe checkpoint is complete, say that plainly and continue the
   remaining acceptance work when the user has authorized the full task.
+
+## 2026-07-12
+
+- Before proposing a VIF architecture study, separate model-development metrics
+  from product deployment gates. Pre-register the with-versus-without-Critic
+  ablation, audit suspected shortcut dimensions, and do not invent an episode
+  benchmark or false-alert tolerance that the project has not adopted.
+- When metric policy changes, inspect the executable metric and checkpoint
+  selection paths before calling the change implemented. Document a policy/code
+  mismatch explicitly and require a tested implementation before treating new
+  runs as decision evidence.

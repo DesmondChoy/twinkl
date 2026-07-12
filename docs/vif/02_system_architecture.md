@@ -5,6 +5,8 @@ its training/runtime data contracts.
 
 For training details, see [Reward Modeling & Training](03_model_training.md).
 For uncertainty and drift logic, see [Uncertainty, Drift, and Trigger Logic](04_uncertainty_logic.md).
+For the adopted capstone scope and metric hierarchy, see
+[VIF Capstone Scope and Evaluation Decision](05_capstone_scope_decision.md).
 
 ---
 
@@ -17,16 +19,23 @@ The current VIF implementation is intentionally narrow:
 - **Encoder**: frozen sentence encoder configured in `config/vif.yaml`
 - **State**: text window + time gaps + 10-dim value-profile weights
 - **Runtime output**: per-entry alignment means and uncertainties, plus weekly aggregates
+- **Primary capstone role**: recover visible `-1` conflict evidence; retain
+  ternary outputs for diagnostics and non-gating positive context
 - **Downstream use**: validated weekly signal frames, an experimental
   crash/rut/evolution router, and weekly Coach inputs
 - **Selected drift v1 target**: rolling soft `P(-1)` evidence for sustained
-  conflict on a declared core value. The decision-level benchmark is
-  implemented offline, but no scorer is approved and the rule is not wired
-  into the runtime router.
+  conflict on a declared core value. Development target tooling is implemented
+  offline, but the locked promotion surface remains unresolved, no scorer is
+  approved, and the rule is not wired into the runtime router.
 
 > **Note:** Specific model names, embedding dimensions, and default window sizes
 > change over time. Treat `config/vif.yaml` as the source of truth for current
 > runtime values.
+
+The metric policy is ahead of implementation: training still selects
+checkpoints QWK-first, the runtime still uses synthetic `core_values` rather
+than persisted `top_values`, and verifier abstention is not wired. No MLP, LLM,
+verifier, ensemble, or cascade architecture is adopted yet.
 
 ## Current Diagram
 

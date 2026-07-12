@@ -6,6 +6,7 @@ For technical details, see:
 *   [System Architecture, State, and Runtime Flow](02_system_architecture.md)
 *   [Reward Modeling & Training](03_model_training.md)
 *   [Uncertainty, Drift, and Trigger Logic](04_uncertainty_logic.md)
+*   [Capstone Scope and Evaluation Decision](05_capstone_scope_decision.md)
 
 ---
 
@@ -44,6 +45,10 @@ The VIF is designed to:
 
 2. **Vector-valued evaluation**
    Alignment is evaluated across all ten Schwartz value dimensions. The value function remains **vector-valued** to preserve tensions and trade-offs, and is only aggregated when needed.
+
+   For the remaining capstone scope, the Critic's primary operational role is
+   conflict screening. Entry-level `recall_-1` drives model development; QWK
+   and positive alignment remain diagnostics and non-gating Coach context.
 
 3. **Uncertainty-aware feedback**
    The system estimates **epistemic uncertainty** in its predictions and only issues feedback when it is both:
@@ -110,6 +115,9 @@ To make this design capstone-friendly, we summarise a recommended tiered approac
   * State: current journal-session embedding + normalized profile.
   * Target: immediate alignment (Option A).
   * Critic: ordinal MLP with a BNN comparison baseline.
+  * Adopted evaluation scope: recover `-1` evidence for sustained conflict;
+    preserve the ternary ten-value output without claiming equal reliability
+    across dimensions.
   * Uncertainty: MC Dropout.
   * Drift target: two adjacent entries that each visibly show a behavior or
     choice against the same declared core value.

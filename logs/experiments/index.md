@@ -1,6 +1,9 @@
 # VIF Experiment Index
 
-## Current Frontier (Post-d937094 Split)
+## Historical Corrected-Split Frontier (Post-d937094 Split)
+
+This table preserves the QWK-led policy used to select the historical frontier.
+It is not the forward model-development policy after `twinkl-752`.
 
 | Rank | Candidate | Runs | Split Seed | Model Seeds | Median QWK | Median recall_-1 | Median MinR | Median Hedging | Median Cal | Positioning |
 |------|-----------|------|-----------:|------------|-----------:|-----------------:|------------:|---------------:|-----------:|-------------|
@@ -17,7 +20,9 @@
 | 11 | CORN | run_016-run_018 | 2025 | 11, 22, 33 | 0.315 | 0.089 | 0.273 | 0.801 | 0.818 | Best-calibrated corrected-split baseline. Keep it as the calibration anchor and sanity check for post-hoc calibration follow-ups. |
 | 12 | SoftOrdinal + hedonism/security lift | run_025-run_027 | 2025 | 11, 22, 33 | 0.340 | 0.082 | 0.260 | 0.823 | 0.738 | Post-lift SoftOrdinal comparator. The extra data did not help it escape excessive hedging. |
 
-> **Active recommendation (2026-03-19):** `run_019`-`run_021` remain the default corrected-split frontier family. The new two-stage reformulation family `run_045`-`run_047` reached comparable median holdout `qwk_mean` (`0.360` vs `0.362`) and the best calibration on the current board (`0.743`), but it gave back too much `recall_-1` (`0.266`) and hedging (`0.708`). `run_034`-`run_036` remain the best tail-sensitive reference branch, and `run_042`-`run_044` remain the strongest encoder-swap challenger.
+> **Historical frontier recommendation (2026-03-19):** `run_019`-`run_021` remain the default corrected-split frontier family. The new two-stage reformulation family `run_045`-`run_047` reached comparable median holdout `qwk_mean` (`0.360` vs `0.362`) and the best calibration on the current board (`0.743`), but it gave back too much `recall_-1` (`0.266`) and hedging (`0.708`). `run_034`-`run_036` remain the best tail-sensitive reference branch, and `run_042`-`run_044` remain the strongest encoder-swap challenger.
+>
+> **Adopted VIF scope and metric policy (2026-07-12):** [`twinkl-752`](../../docs/vif/05_capstone_scope_decision.md) defines the Critic primarily as a conflict screener. Entry-level `recall_-1` is the primary model-development metric; episode recall is the future product metric; QWK and `+1` recall are diagnostics. No numerical precision or false-alert tolerance is adopted yet, so recall-focused development cannot support promotion by itself. The ternary ten-value output remains, and no MLP, LLM, verifier, ensemble, or cascade architecture has been adopted. Existing code is still QWK-first and must be updated and tested before another run is treated as recall-first decision evidence.
 >
 > **Hedonism matched hard-set decision (2026-07-12):** [`twinkl-748`](reports/experiment_review_2026-07-12_twinkl_748_hedonism_hard_set.md) produced 24 matched pairs / 48 entries and froze 20 pairs / 40 entries after two packet-only Codex reviews agreed on 47/48 entry labels. This is AI diagnostic evidence, not human validation. On the frozen set, the incumbent `run_019`-`run_021` family reaches median exact accuracy `0.525`, Hedonism `-1` recall `0.05`, and strict both-members-correct pair rate `0.05`; the tail-sensitive `run_034`-`run_036` reference improves those to `0.575`, `0.20`, and `0.15`, but remains inadequate. Keep the frontier unchanged, stop `twinkl-748` at evaluation-only, and require `twinkl-kof2` before any separate augmentation branch.
 >
@@ -31,9 +36,9 @@
 >
 > **Retired decision-level drift benchmark:** The former `twinkl-wq9p` consensus-derived frozen benchmark is [historical evidence only](../../docs/archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md). Do not rerun, score, tune, or promote from it; its former report and artifacts are not active repository surfaces.
 >
-> **Latest strategic review (2026-07-02):** [`reports/experiment_review_2026-07-02_strategy.md`](reports/experiment_review_2026-07-02_strategy.md) keeps the frontier unchanged and recommends shifting the primary evaluation from entry-level QWK to decision-level drift-trigger metrics plus `recall_-1` at a precision floor, gated by a zero-shot LLM critic baseline and the human-agreement ceiling (Fleiss κ 0.56 aggregate).
+> **Previous strategic review (2026-07-02):** [`reports/experiment_review_2026-07-02_strategy.md`](reports/experiment_review_2026-07-02_strategy.md) kept the frontier unchanged and proposed decision-level metrics plus `recall_-1` at a precision floor. The adopted 2026-07-12 scope above supersedes that floor: recall-focused candidate development comes first, while the precision or false-alert tolerance remains deliberately deferred.
 >
-> **Latest recall-aware checkpoint rerun:** [`reports/experiment_review_2026-06-06_twinkl_upb5.md`](reports/experiment_review_2026-06-06_twinkl_upb5.md) does **not** change the persisted-label frontier. `run_051`-`run_056` reran the weighted persisted-label and consensus-label configs with `0.01` / `0.02` recall-aware candidate checkpoint retention. The consensus diagnostic branch likes the wider `0.02` window, but the active persisted-label branch does not: median QWK drops, `recall_-1` is flat-to-worse, minority recall gives back ground, and hedging worsens under the wider window. Keep candidate-checkpoint retention as experiment hygiene; do not promote recall-aware checkpoint selection as the default policy.
+> **Historical recall-aware checkpoint rerun:** [`reports/experiment_review_2026-06-06_twinkl_upb5.md`](reports/experiment_review_2026-06-06_twinkl_upb5.md) does **not** change the persisted-label frontier. `run_051`-`run_056` reran the weighted persisted-label and consensus-label configs with `0.01` / `0.02` recall-aware candidate checkpoint retention. The consensus diagnostic branch likes the wider `0.02` window, but the active persisted-label branch does not: median QWK drops, `recall_-1` is flat-to-worse, minority recall gives back ground, and hedging worsens under the wider window. Keep candidate-checkpoint retention as experiment hygiene, but do not mistake that failed QWK-window selector for the adopted recall-first policy, which still needs a tested implementation.
 >
 > **Previous recall-aware checkpoint replay:** [`reports/experiment_review_2026-06-06_twinkl_t2r0.md`](reports/experiment_review_2026-06-06_twinkl_t2r0.md) is now superseded by the exact rerun above. It correctly found promising alternate validation epochs, but those checkpoints were not serialized in the original artifacts, so it was only a lead, not promotion evidence.
 >
@@ -237,6 +242,30 @@
 
 ## Findings
 
+### 2026-07-12 — Conflict screening and `recall_-1` become the VIF capstone focus (`twinkl-752`)
+
+The intervention wave did not produce a broadly superior Critic family. The
+one material improvement came from repairing the student-visible Security
+target; soft labels and compact history were not promoted, and the Hedonism
+matched hard-set exposed confident `-1` misses. The capstone therefore narrows
+the Critic's operational claim to conflict screening rather than equal
+ten-dimension reliability.
+
+Model development now prioritizes macro per-dimension `recall_-1`. `-1`
+precision, the precision-recall curve, predicted-negative rate, calibration,
+per-dimension results, and seed spread remain mandatory reports. QWK, `+1`
+recall, minority recall, and circumplex metrics become diagnostics. No fixed
+precision floor is active during candidate development.
+
+The product decision remains the sustained-conflict episode: two adjacent
+student-visible choices against the same declared core value. Future product
+evaluation prioritizes episode recall, but deployment still requires a
+conservative precision or false-alert tolerance that has not been selected.
+Abstention emits no drift claim and must report coverage. The current promotion
+surface is unresolved, so this decision makes no promotion or architecture
+claim. See the canonical
+[scope decision](../../docs/vif/05_capstone_scope_decision.md).
+
 ### 2026-07-11 — Compact mean history does not transfer the LLM context gain (`twinkl-749`)
 
 `run_069` appends a 64-dimensional mean of up to three strictly prior Nomic
@@ -316,17 +345,15 @@ human 0.64), `stimulation`, and `power` carry the only large defensible gaps.
 Aggregate human-human agreement is κ 0.56, so the QWK ≥ 0.40 aggregate
 promotion floor is partly chasing dimensions whose human ceiling is ~0.45.
 
-**2. Metric strategy should move to the decision level.** QWK has documented
+**2. Metric strategy moved to the decision level.** QWK has documented
 imbalance pathologies (asymmetric-marginal reward, all-zero-column optima ==
-hedging). **2026-07-10 adoption update:** the product target is now
-confidence-gated sustained conflict on a declared core value. The strict
-reference independently checks each core value for stored five-pass Judge
-consensus `-1` labels on two adjacent entries, while runtime will use rolling
-soft `P(-1)` evidence under uncertainty gating.
-The primary benchmark is therefore episode-level hit rate and false-alarm
-behavior (PRD eval #3: ≥8/10 held-out episodes detected), plus entry-level
-`recall_-1` at a precision floor; QWK becomes diagnostic. The older weekly
-crash/rut router and crisis-week wording do not define this promotion metric.
+hedging). **2026-07-12 supersession:** the product target is student-visible
+sustained conflict on a declared core value, not the retired stored-consensus
+episode table. Model development prioritizes entry-level `recall_-1`; product
+evaluation prioritizes episode recall. Precision and false-alert behavior must
+be reported, but no numerical tolerance is adopted yet. QWK is diagnostic. The
+older weekly crash/rut router and crisis-week wording do not define this
+promotion metric.
 
 **3. Two bounding experiments before more training.** A zero-shot/few-shot LLM
 critic baseline on the frozen test split under the student-visible context
@@ -345,7 +372,7 @@ corroborated by the disagreement-learning literature. Full details:
 > weak development recall still block any scorer, cascade, or production
 > decision.
 
-### 2026-06-06 — Recall-aware checkpoint retention is worth keeping; recall-aware selection is not (`twinkl-upb5`)
+### 2026-06-06 — Historical QWK-window recall selection did not transfer (`twinkl-upb5`)
 
 `twinkl-upb5` reran the exact candidate-checkpoint question left open by
 `twinkl-t2r0`: same frozen split, same labels per branch, same seeds, same LR
@@ -367,13 +394,17 @@ the `0.02` window dropped median QWK to `0.329`, median `recall_-1` to `0.350`,
 and worsened hedging. Seed `11` had a useful `0.01` trade-off, but seed `33`
 went the other way. That is not a frontier policy; that is a tempting footgun.
 
-**3. Recommendation: keep retention, reject default recall-aware selection.**
+**3. Historical recommendation: keep retention, reject that QWK-window
+recall-aware selector.**
 The training driver should keep candidate-checkpoint retention because it
 prevents another "interesting epoch but no checkpoint" problem. But the default
 persisted-label checkpoint policy should stay QWK-first with the existing
 tie-breakers. If consensus or soft vote-distribution labels become the active
 target later, carry the `0.02` candidate as a standard retained checkpoint and
-judge it in that target regime. Full details:
+judge it in that target regime. This recommendation predates and is superseded
+by the adopted 2026-07-12 recall-first development policy; it remains evidence
+against this particular QWK-window implementation, not against recall-first
+selection in general. Full details:
 [`reports/experiment_review_2026-06-06_twinkl_upb5.md`](reports/experiment_review_2026-06-06_twinkl_upb5.md).
 
 ### 2026-04-01 — Consensus-label retrains are informative diagnostics, not a clean frontier board (`twinkl-754.6`)

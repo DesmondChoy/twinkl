@@ -4,6 +4,11 @@ This document describes the current training story for the Value Identity
 Function (VIF): how Judge labels become student targets, what the live student
 families are, and how frontier evaluation is managed.
 
+The forward capstone policy is defined in
+[VIF Capstone Scope and Evaluation Decision](05_capstone_scope_decision.md):
+the Critic is primarily a conflict screener, entry-level `recall_-1` is the
+primary development metric, and QWK is an ordinal-health diagnostic.
+
 ---
 
 ## 1. Teacher-Student Training Stack
@@ -134,14 +139,24 @@ This is the only fair basis for comparing current frontier runs.
 
 ### 4.3 Metrics
 
-The training stack tracks more than loss:
+The training stack tracks more than loss. Under the adopted `twinkl-752`
+policy, the metric roles are:
 
-- QWK
-- MAE
-- accuracy / recall
-- calibration
+- primary development metric: macro per-dimension `recall_-1`;
+- mandatory companion reports: `-1` precision, precision-recall behavior,
+  predicted-negative rate, per-dimension results, and seed spread;
+- ordinal-health diagnostics: QWK, MAE, accuracy, `+1` recall, minority recall,
+  calibration, and circumplex behavior;
 - raw probability/logit exports when needed
-- circumplex diagnostics and related experiment summaries
+
+No fixed precision floor is active yet. Recall-first development can identify
+candidates, but episode recall plus an adopted false-alert tolerance is required
+before deployment.
+
+Implementation caveat: `src/vif/eval.py` still selects mainline checkpoints
+QWK-first. Historical runs and the current board therefore reflect their
+original policy. Recall-first selection needs a tested implementation before a
+future training run is decision evidence.
 
 ### 4.4 Current Caveat: Reachability Audit
 
@@ -293,10 +308,11 @@ candidate_checkpoint_policies:
     qwk_window: 0.02
 ```
 
-Each policy selects the strongest `recall_-1` checkpoint within the configured
-QWK window, then persists its checkpoint, validation/test outputs, selection
-summary, and compact metric comparison. These candidates supplement the
-mainline selected checkpoint; they do not change the default promotion policy.
+Each historical policy selected the strongest `recall_-1` checkpoint within the
+configured QWK window, then persisted its checkpoint, validation/test outputs,
+selection summary, and compact metric comparison. These candidates supplemented
+the QWK-first mainline checkpoint. They remain reproducibility evidence, not the
+implementation of the adopted recall-first policy.
 
 ### 6.3 CLI Override Surface
 

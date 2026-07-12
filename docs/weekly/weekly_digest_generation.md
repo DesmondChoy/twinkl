@@ -336,11 +336,16 @@ learned routing policies.
 1. Persist or reconstruct per-entry ordinal class probabilities, including
    `P(-1)`.
 2. Implement rolling soft-evidence sustained-conflict detection.
-3. Calibrate probability-mass and uncertainty thresholds against strict
-   per-value episodes from the stored five-pass Judge consensus labels.
-4. Evaluate the MLP and LLM context arms on episode hit rate, false alarms,
-   latency, and per-dimension behavior.
+3. Calibrate probability-mass and uncertainty thresholds against the active
+   student-visible development target or a fresh resolved surface. The stored
+   five-pass consensus episodes are retired historical evidence, not a
+   calibration target.
+4. Compare the weekly verifier with and without Critic inputs, with the MLP
+   family and entry-level LLM as baselines. Prioritize episode recall and
+   report precision / false-alert behavior. No deployment tolerance is adopted
+   yet.
 5. Add active, recovered, mixed, and uncertain digest-time wording semantics.
+   An abstaining scorer must emit no drift claim, and coverage must be reported.
 6. Add a production-facing Coach service entrypoint that injects the live LLM,
    validates the narrative, and persists the result.
 7. Report Tier 1 pass rates over a batch and add Tier 2 meta-judge plus Tier 3

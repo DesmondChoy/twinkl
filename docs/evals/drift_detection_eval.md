@@ -24,6 +24,24 @@ The current layers of the contract are deliberately different:
 | Production runtime | Selected scorer and detector are not approved or wired. |
 | User delivery | The weekly Coach digest cites the relevant entries and uses active, recovered, mixed, or uncertain wording without score jargon; exact schema implementation is pending. |
 
+### Adopted metric hierarchy (`twinkl-752`)
+
+- The product decision unit is the sustained-conflict **episode**, not an
+  isolated entry or aggregate QWK.
+- Future product evaluation prioritizes episode recall. Before deployment, its
+  operating point must also satisfy a conservative episode precision or
+  user-facing false-alert constraint.
+- The acceptable false-alert tolerance is deliberately deferred until after
+  recall-focused model development. No new numerical precision floor is active.
+- Entry-level `recall_-1` is the primary development proxy because an episode
+  cannot be recovered when its component negative entries are missed.
+- QWK and `+1` recall are diagnostics. Positive evidence cannot trigger or
+  cancel a conflict episode.
+- An uncertain or abstaining scorer produces no drift claim. Coverage,
+  abstention, and true episodes suppressed by uncertainty must be reported.
+
+See the adopted [VIF scope decision](../vif/05_capstone_scope_decision.md).
+
 The runtime detector is soft because the current Critic often hedges a true
 conflict toward neutral. Weekly delivery remains a product cadence rather than
 a requirement that the evidence itself be grouped into multi-week averages.
@@ -169,9 +187,13 @@ Profile weights may calibrate evidence or thresholds among declared core
 values, but they do not make an undeclared value eligible for v1 drift.
 
 The exact rolling function and thresholds are evaluation parameters, not part
-of the student-visible label definition. Candidate forms include a two-entry mean,
-an exponentially weighted sum, or a small cumulative evidence score. They all
-produce the same output concept: active sustained conflict on a named value.
+of the student-visible label definition. Candidate forms include a two-entry
+mean, an exponentially weighted sum, or a small cumulative evidence score.
+These forms are not automatically equivalent: a pair mean can pass because of
+one very strong entry even when the other lacks adequate evidence. The runtime
+rule must either enforce a per-entry evidence condition or demonstrate that its
+chosen soft rule preserves the canonical two-entry event. That choice remains
+open.
 
 Hard argmax predictions are not the runtime contract. Requiring two predicted
 `-1` classes would be brittle at the current `recall_-1` frontier.
@@ -226,8 +248,9 @@ fair score, and scoring only the agreed cases would be cherry-picking.
 | First-alert latency | Not scored | It requires a resolved promotion target |
 | Author-designed capability recall | Capability-only diagnostic | Whether the scorer can find deliberately clear episodes; never a scorer-promotion gate |
 
-A development-only operating point exists (probability 0.8, uncertainty
-1.010153), but no numerical promotion threshold is active. The retained
+A historical development-only operating point exists (probability 0.8,
+uncertainty 1.010153), but it is not the newly adopted recall-first policy and
+no numerical promotion threshold is active. The retained
 author-designed controls remain capability-only diagnostics and cannot
 substitute for a fresh, resolved locked promotion population.
 
@@ -249,7 +272,9 @@ Report:
 - error rate by uncertainty decile;
 - retained episode recall at each uncertainty ceiling;
 - false-positive reduction from gating; and
-- the number of true episodes suppressed by high uncertainty.
+- the number of true episodes suppressed by high uncertainty;
+- abstention count and coverage; and
+- the number of false user-facing claims per non-drift trajectory or week.
 
 ---
 

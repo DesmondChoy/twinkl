@@ -6,7 +6,7 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 
 ## Implementation Status
 
-*Last updated: 2026-07-11*
+*Last updated: 2026-07-12*
 
 | Feature | Status | Details |
 |---------|--------|---------|
@@ -89,6 +89,34 @@ AI journaling apps (Reflection, Mindsera, Insight Journal, Day One, Pixel Journa
    * **Drift detector:** Reads Critic outputs over time. The v1 product target is two adjacent entries that each visibly show a behavior or choice against the same declared core value; other values do not cancel that per-value episode. `twinkl-v8pb` completed the full-runtime-text development review and a locked promotion review. The development threshold found only 1 of 5 reference episodes, while one 19-entry promotion case was unresolved; the promotion score was not run. The old consensus-derived frozen benchmark is retired historical evidence, so no production scorer may be promoted from it. The intended runtime still estimates sustained conflict from rolling soft `P(-1)` evidence under uncertainty gating. The existing crash/rut/evolution router is an experimental implementation surface, not the selected v1 contract.
    * **Coach:** Receives a weekly structured artifact and reads the user's full journal history via **full-context prompting** (at POC scale, all entries fit in the LLM context window) to surface thematic evidence, explain *why* misalignment occurred, and offer reflective prompts. For positive patterns, it provides occasional evidence-based acknowledgment without gamification. At production scale with longer histories, this would transition to retrieval-augmented generation (RAG). (See [System Architecture](vif/02_system_architecture.md)). For a concrete scenario, see [Worked Example: Sarah's Journey](vif/example.md). Trigger calibration and evaluation remain experimental — see [Implementation Status](#implementation-status).
    * A **possible future idea** is a **[Value Evolution Detection](evolution/01_value_evolution.md)** layer between Critic outputs and drift triggers. If revisited later, it would aim to distinguish genuine value shifts from behavioral drift. It is not part of the current committed system scope.
+
+### Canonical VIF scope and evaluation contract
+
+> Twinkl's Critic is primarily a conflict-screening component. Its
+> product-critical job is to recover `-1` evidence that supports correctly
+> detecting sustained two-entry drift episodes. We maximize episode recall
+> subject to a conservative precision/false-alert constraint. Entry-level
+> `recall_-1` is the main model-development metric; QWK is retained only as an
+> ordinal-health diagnostic.
+
+For the remaining capstone scope, a sustained-conflict episode means two
+adjacent entries that each visibly show a choice against the same declared
+core value.
+
+- Entry-level `recall_-1` is the primary model-development metric.
+- Product evaluation prioritizes episode recall. A conservative precision or
+  user-facing false-alert constraint must be chosen before deployment, but no
+  numerical tolerance is adopted yet.
+- QWK, `+1` recall, calibration, and circumplex metrics remain diagnostics.
+- Only the discrete `top_values` set can trigger drift. `+1` evidence is
+  non-gating and may support occasional positive Coach acknowledgment.
+- An uncertain or abstaining scorer produces no drift claim; coverage and
+  suppressed true episodes must be reported.
+- The ternary ten-value output remains. No MLP, LLM, verifier, ensemble, or
+  cascade architecture is adopted by this scope decision.
+
+The detailed adopted decision and its implementation gaps are recorded in
+[VIF Capstone Scope and Evaluation Decision](vif/05_capstone_scope_decision.md).
 
 ### Prompt Templates
 
@@ -228,8 +256,8 @@ This avoids the trap of matching windows "for consistency" when the constraints 
 | # | Component | Purpose | Method | Example |
 | :--- | :--- | :--- | :--- | :--- |
 | 1 | **Value-mention tagging** | Verify LLM correctly identifies which Schwartz values an entry touches | Hand-label 50 journal entries with Schwartz value dimensions. Measure **Cohen's κ** between LLM and human labels. | Entry: *"Dropped everything to help my sister move."* Human tags: `Benevolence`. LLM tags: `Benevolence`. → Agreement ✓ |
-| 2 | **Value profile modeling** | Check if predicted Schwartz value rankings match ground truth | Create 3–5 synthetic personas with known value orderings. Feed their simulated entries and compare predicted vs. true rankings using **Spearman correlation**. | Persona "Mia" values Benevolence > Achievement > Self-Direction. After 10 entries, model predicts same ordering. ρ = 1.0 ✓ |
-| 3 | **Drift detection** | Confirm the runtime detects sustained conflict with a declared core value | Use a student-visible target: each of two adjacent entries must clearly show a behavior or choice against the same declared core value. `twinkl-v8pb` used its development population to choose one operating threshold, then separately reviewed the locked promotion population. The fixed `run_020` threshold found 1 of 5 development episodes (precision 1.0, recall 0.2, F1 0.3333, false-positive rate 0.0). One promotion case remains unresolved, so no promotion score or production claim exists. The retired consensus-derived frozen benchmark is historical diagnostic evidence only. The author-designed cases remain a capability probe, not a promotion test. Single-entry dips, fade/rise taxonomies, and value evolution remain outside v1. | Reference event: two adjacent entries both visibly show a clear choice against Benevolence. The soft-evidence detector can flag the episode for the weekly digest. The author-designed capability set may report clear-case recall and false positives, but only an untouched, resolved student-visible promotion population can support a promotion claim. |
+| 2 | **Critic conflict screening** | Recover visible misalignment evidence without collapsing into neutral predictions | Prioritize entry-level `recall_-1`; report `-1` precision and precision-recall behavior alongside QWK, calibration, `+1` recall, and per-dimension diagnostics. No fixed precision floor is adopted during recall-focused development. | A candidate that recovers more true `-1` entries is useful development evidence, but cannot be deployed if the resulting false-alert burden is unacceptable. |
+| 3 | **Drift detection** | Confirm the runtime detects sustained conflict with a declared core value | Use a student-visible target: each of two adjacent entries must clearly show a behavior or choice against the same declared core value. Optimize future product evaluation for episode recall, then choose a conservative precision or false-alert operating constraint before deployment. `twinkl-v8pb` found 1 of 5 development episodes and withheld the promotion score after one unresolved case, so no production claim exists. | Reference event: two adjacent entries both visibly show a clear choice against Benevolence. An uncertain scorer abstains. `+1` on another value cannot cancel the episode. |
 | 4 | **Explanation quality** | Ensure explanations feel accurate and actionable | Show 5–10 users their weekly digest and ask "Did this feel accurate?" on a **5-point Likert scale**. | User sees: *"Your Benevolence score dropped—you mentioned helping others twice but cancelled on a friend."* Rates it 4/5 for accuracy. |
 | 5 | **Nudge relevance** | Verify the top prompt is contextually appropriate | A/B test: random prompt vs. model-selected prompt. Measure **engagement rate** (did user respond?). | Model picks *"What held you back from helping?"* after detecting Benevolence drift. User responds → engagement ✓ |
 | 6 | **Nudge signal quality** | Validate that nudging improves VIF training data | Compare Judge alignment scores for nudged vs. non-nudged entries from same personas. Measure **mean alignment confidence** and **value dimension coverage**. | Hypothesis: Nudged entries yield higher-confidence scores and more explicit value signals due to increased expressiveness. |
@@ -261,6 +289,7 @@ This avoids the trap of matching windows "for consistency" when the constraints 
 | [02_system_architecture.md](vif/02_system_architecture.md) | System architecture, state, and runtime flow |
 | [03_model_training.md](vif/03_model_training.md) | LLM-as-Judge and Critic training |
 | [04_uncertainty_logic.md](vif/04_uncertainty_logic.md) | Uncertainty, drift, and trigger logic |
+| [05_capstone_scope_decision.md](vif/05_capstone_scope_decision.md) | Adopted VIF capstone scope, metric hierarchy, and deferred decisions |
 | [example.md](vif/example.md) | Worked end-to-end VIF behavior example |
 | **Evals** | |
 | [evals/overview.md](evals/overview.md) | Evaluation pipeline overview |

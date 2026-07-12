@@ -22,6 +22,11 @@ The system therefore separates three questions:
 Only low-enough uncertainty plus meaningful repeated evidence should reach the
 Coach as a confident conflict reflection.
 
+Under the adopted [capstone scope decision](05_capstone_scope_decision.md), an
+uncertain or abstaining scorer emits no drift claim. Evaluation must report
+coverage, abstention count, and any true episodes suppressed by uncertainty.
+The conservative precision or false-alert tolerance is not fixed yet.
+
 ---
 
 ## 2. Monte Carlo Dropout
@@ -132,7 +137,7 @@ toward neutral.
 | Student-visible target | Two adjacent entries visibly show a behavior or choice against the same declared core value; `twinkl-v8pb` completed its full-runtime-text review, but no promotion score was allowed after one case remained unresolved |
 | Historical consensus table | Retired diagnostic provenance only; not a drift target, threshold-selection input, or promotion surface |
 | Runtime | Rolling `P(-1)` evidence with declared-core and uncertainty gates; production integration remains blocked |
-| Delivery | Weekly digest with cited journal evidence and active, recovered, mixed, or uncertain wording; exact schema pending |
+| Delivery | Weekly digest with cited journal evidence and active, recovered, mixed, or uncertain wording; abstention emits no drift claim; exact schema pending |
 
 The EDA supports this definition because most single-entry dips recover within
 two entries, while three-step and multi-week definitions are too sparse for the
@@ -152,6 +157,10 @@ different delivery states; it is not another state for a single episode.
 **Uncertain** applies when evidence reliability is too low to call an episode
 active or recovered. Exact schema values and transition rules still require
 implementation and scenario tests.
+
+Abstention is not a correct negative. Coverage and suppressed reference
+episodes must remain visible in evaluation reports so uncertainty gating cannot
+improve apparent precision merely by hiding hard cases.
 
 ---
 

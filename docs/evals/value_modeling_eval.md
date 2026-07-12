@@ -2,13 +2,19 @@
 
 ## What We're Evaluating
 
-The VIF (Value Identity Function) maps journal entries to a 10-dimensional Schwartz value vector. This evaluation validates that the learned mapping captures the user's true value priorities.
+The VIF (Value Identity Function) maps journal entries to a 10-dimensional
+Schwartz value vector. For the remaining capstone scope, its primary operational
+role is **conflict screening**: recovering visible `-1` evidence that can support
+the downstream sustained-conflict detector. The ternary vector remains useful
+for trade-offs and positive Coach context, but broad profile recovery is no
+longer the primary model-development claim. See the adopted
+[VIF scope decision](../vif/05_capstone_scope_decision.md).
 
 ---
 
 ## Implementation Status
 
-**Status:** 🟡 In Progress (as of 2026-07-11)
+**Status:** 🟡 In Progress (as of 2026-07-12)
 
 ### What's Implemented
 - Evaluation specification complete (this document)
@@ -28,7 +34,7 @@ The VIF (Value Identity Function) maps journal entries to a 10-dimensional Schwa
 - Compact-history `run_069` stayed within the `<5k` added-weight budget but failed its seed-11 expansion gate versus repaired-target `run_058`: QWK **0.342** vs **0.363**, minority recall **0.400** vs **0.446**, and Security QWK **0.267** vs **0.339**. The path remains diagnostic and the local MLP is not claimed to be trajectory-aware.
 
 ### What's Missing
-- **Corrected-split frontier still below target**: The active default has better minority recovery than the old pre-split baselines, but median QWK remains 0.362 and still sits below the moderate target range.
+- **Recall-first selection is not implemented**: the current experiment code still selects mainline checkpoints QWK-first. Historical run rankings remain valid provenance, but a future decision run needs tested recall-first selection behavior.
 - **Hard dimensions remain unresolved**: `Hedonism` and especially `Security` still lag, and the latest regenerated targeted batch improved some local behavior without producing a cleaner overall frontier.
 - **Circumplex structure is measured but not optimized**: reruns can improve one metric family while worsening opposite-pair violations or adjacent-pair support.
 - Codex-reviewed matched Hedonism diagnostic (`twinkl-748`): 20 frozen pairs show that the incumbent recognizes nearly every `+1` case but recovers only 5% of matched self-denial `-1` cases; the tail-sensitive reference reaches 20% `-1` recall and 15% strict-pair accuracy. This is AI diagnostic evidence, not human validation, and remains evaluation-only pending `twinkl-kof2`.
@@ -36,28 +42,30 @@ The VIF (Value Identity Function) maps journal entries to a 10-dimensional Schwa
 - Gated parameter-efficient encoder adaptation path (`twinkl-750`)
 - Persona-level aggregation protocol (aggregate per-entry scores into persona-level value profile for Top-K accuracy)
 - Formal held-out evaluation against declared value orderings (Spearman ρ > 0.7 target)
-- Decision-level evaluation of whether Critic outputs support the sustained-conflict detector under a precision floor
+- Decision-level evaluation of whether Critic outputs support the sustained-conflict detector. Episode recall is primary; the conservative precision or false-alert tolerance is deliberately not fixed yet.
 
 ### Next Steps
-1. Carry the completed `twinkl-748` Hedonism hard-set result into the final scope decision; do not train on the frozen diagnostic set
-2. Quantify validation-loss vs frontier-metric divergence in `twinkl-751` before changing more training recipes
-3. Carry the negative compact-history result into the final VIF scope decision instead of escalating architecture
-4. Evaluate Critic and LLM arms at the sustained-conflict decision layer before revisiting the gated `twinkl-750` PEFT path
-5. Implement persona-level score aggregation across entries, then compute Spearman ρ and Top-K accuracy
+1. Implement and verify recall-first candidate selection before treating another training run as decision evidence
+2. Run the bounded verifier comparison with identical weekly inputs, with and without Critic signals; keep the MLP family and entry-level LLM as baselines
+3. Report `-1` precision and the precision-recall curve while prioritizing `recall_-1`; do not infer deployment readiness until a false-alert tolerance is adopted
+4. Keep QWK, `+1` recall, calibration, circumplex diagnostics, and persona-level aggregation as secondary health checks
 
 ---
 
 ## Ground Truth
 
-**Synthetic personas with known value profiles:**
+**Synthetic personas with controlled declared value profiles:**
 - Each persona has a declared value ordering (e.g., Benevolence > Achievement > Self-Direction)
 - This ordering is embedded in their bio and reflected in generated journal entries
-- The declared ordering serves as ground truth for evaluation
+- The declared ordering is the controlled reference for persona-level evaluation;
+  it does not make each entry-level Judge label objective ground truth
 
-**Why synthetic data works here:**
-- Real users don't have objective value orderings we can measure
-- Synthetic personas let us control the ground truth perfectly
-- If the model captures synthetic personas correctly, it validates the mapping mechanism
+**Why synthetic data is useful here:**
+- Real users do not have objective value orderings that the project can measure
+- Synthetic personas let the project control the declared profile and test the
+  mapping mechanism
+- Judge self-consistency and human-anchor checks are still needed because the
+  entry labels inherit model and rubric uncertainty
 
 ---
 
@@ -67,9 +75,24 @@ Evaluation operates at two levels: **entry-level** metrics assess whether the Cr
 
 ### Entry-Level Metrics (Current Training Focus)
 
-#### Quadratic Weighted Kappa (QWK)
+The adopted hierarchy is:
 
-QWK is the primary entry-level ordinal-agreement metric on the experiment board. It measures agreement between predicted and true classes {-1, 0, +1}, adjusted for chance, with quadratic penalty for larger ordinal distances (predicting +1 when truth is -1 is penalised more than predicting 0). Product promotion also requires decision-level sustained-conflict results; QWK alone is not the deployment gate.
+1. `recall_-1` is the primary model-development metric;
+2. `-1` precision, the precision-recall curve, predicted-negative rate,
+   calibration, per-dimension results, and seed spread are mandatory reports;
+3. QWK, `+1` recall, minority recall, and circumplex metrics are diagnostics.
+
+No fixed entry-level precision floor is active yet. Recall-focused development
+can generate candidates, but recall alone cannot support a deployment claim.
+
+#### Quadratic Weighted Kappa (QWK) — Diagnostic
+
+QWK is the historical entry-level ordinal-agreement metric on the experiment
+board. It measures agreement between predicted and true classes `{-1, 0, +1}`,
+adjusted for chance, with a quadratic penalty for larger ordinal distances.
+It remains useful for historical comparison and for detecting whether
+recall-focused work collapses the ternary output. It no longer selects the
+product direction or defines the deployment gate.
 
 **Why QWK over accuracy:** With severe class imbalance (neutral class is 60.5–88.3% per dimension), a model that predicts 0 for everything achieves high accuracy but zero QWK. QWK exposes this pathology.
 
@@ -83,23 +106,43 @@ QWK is the primary entry-level ordinal-agreement metric on the experiment board.
 
 **Latest challengers:** Qwen `run_042`-`run_044` reached a slightly higher median QWK (`0.370`) with lower hedging, but stayed too weak on `hedonism` and `power`. Two-stage `run_045`-`run_047` stayed close on QWK (`0.360`) but gave back too much `recall_-1` and hedged more. Consensus-label retrains `run_048`-`run_050` improved within-regime QWK to `0.372`, but they are not a like-for-like frontier replacement because the evaluation labels changed on the same frozen holdout.
 
-#### Minority Recall
+#### Misalignment Recall (`recall_-1`) — Primary
 
-Minority recall measures the model's ability to detect non-neutral entries — the {-1, +1} classes that represent value misalignment and alignment. This is the product-critical metric: Twinkl's purpose is to surface tensions between behavior and values. A model that cannot detect -1 (misalignment) entries cannot fulfil this purpose, regardless of its QWK.
+`recall_-1` measures how often the model recovers entries labeled as visible
+misalignment. This is the primary model-development metric because two-entry
+drift episodes cannot be detected when the Critic misses their component
+negative evidence.
 
 ```
-Minority Recall = mean of per-dimension recall for -1 and +1 classes
-Recall_class = TP / (TP + FN) for that class
+recall_-1 = mean of per-dimension TP_-1 / (TP_-1 + FN_-1)
 ```
 
-**Why this matters:** The -1 class ranges from 3.5% (Stimulation) to 13.8% (Self-direction) of labels. Models overwhelmingly hedge toward neutral (0), achieving >80% hedging rates. Minority recall directly measures whether the model can break through this tendency.
+**Why this matters:** The `-1` class ranges from 3.5% (Stimulation) to
+13.8% (Self-direction) of labels. Models frequently hedge toward neutral.
+`recall_-1` directly measures whether the model can recover the conflict signal
+Twinkl needs.
 
 **Interpretation:**
 - Recall > 30%: Reasonable detection of non-neutral entries
 - Recall 10 – 30%: Poor; model catches some signal but misses most
 - Recall < 10%: Model effectively ignores the minority class
 
-**Current corrected-split default:** median `recall_-1` is 31.3% and median minority recall is 44.8% for `run_019`-`run_021` BalancedSoftmax. This is materially better than the old pre-split baselines on misalignment sensitivity, but still not strong enough to treat drift triggers as production-ready.
+**Current corrected-split default:** median `recall_-1` is 31.3% for
+`run_019`-`run_021` BalancedSoftmax. This is materially better than the old
+pre-split baselines, but still not strong enough to treat drift triggers as
+production-ready.
+
+Every recall result must also report `-1` precision, its precision-recall
+curve, and predicted-negative rate. Otherwise a model can raise recall simply
+by over-predicting conflict. The acceptable deployment trade-off remains a
+later product decision.
+
+#### `+1` and Minority Recall — Diagnostic
+
+`+1` recall remains useful for occasional evidence-based Coach acknowledgment,
+and minority recall still summarizes both non-neutral classes. Neither is a
+drift trigger or a primary selection metric. Positive evidence on one value
+cannot cancel negative evidence on another.
 
 #### Circumplex Diagnostics
 
@@ -182,19 +225,24 @@ mean_rho = np.mean(results)
 
 ---
 
-## Success Criteria
+## Decision Criteria
 
 ### Entry-Level (per-entry classification)
 
-| Metric | Target | Rationale |
-|--------|--------|-----------|
-| QWK (mean) | > 0.4 (moderate) | Chance-corrected ordinal agreement; demonstrates model learns value structure beyond majority-class bias |
-| Minority Recall (-1) | > 20% | Model can detect value misalignment — the signal Twinkl exists to surface |
-| Minority Recall (+1) | > 40% | Model can detect value alignment with reasonable sensitivity |
+| Metric | Role | Rationale |
+|--------|------|-----------|
+| `recall_-1` | Primary development metric | Measures recovery of the conflict evidence required by the downstream episode detector |
+| `-1` precision and precision-recall curve | Mandatory report; threshold deferred | Exposes false-conflict inflation while recall is optimized |
+| QWK | Ordinal-health diagnostic | Detects collapse of the retained ternary output and preserves historical comparability |
+| `+1` recall / minority recall | Non-gating diagnostic | Supports occasional positive context without defining drift |
+| Episode recall | Future product metric | Measures the actual two-entry decision consumed by the Coach |
+| Episode precision / false-alert burden | Required before deployment; no threshold yet | Prevents a high-recall detector from producing unacceptable false accountability |
 
-**Why these thresholds:** At QWK > 0.4 with meaningful minority recall, the Critic's per-entry scores are reliable enough that persona-level aggregation can compensate for remaining entry-level noise. Below these thresholds, aggregation inherits too much bias toward neutral.
+There is no active numerical promotion gate. The study may prioritize
+`recall_-1`, but no candidate can be promoted until an untouched resolved
+episode surface and an approved false-alert tolerance exist.
 
-### Persona-Level (aggregated profile recovery)
+### Persona-Level (secondary aggregated profile recovery)
 
 From PRD (Evaluation Strategy, Row 2):
 
