@@ -340,9 +340,9 @@ learned routing policies.
    student-visible development target or a fresh resolved surface. The stored
    five-pass consensus episodes are retired historical evidence, not a
    calibration target.
-4. Compare the weekly verifier with and without Critic inputs, with the MLP
-   family and entry-level LLM as baselines. Prioritize episode recall and
-   report precision / false-alert behavior. No deployment tolerance is adopted
+4. Review the completed `twinkl-752.1` result under `twinkl-752.2`. The tested
+   raw Critic inputs halved median episode recall, so the no-Critic verifier is
+   the conditional choice; no architecture or deployment tolerance is adopted
    yet.
 5. Add active, recovered, mixed, and uncertain digest-time wording semantics.
    An abstaining scorer must emit no drift claim, and coverage must be reported.

@@ -83,6 +83,12 @@ The empirical basis is
   entry agreement (0.96716). At the fixed threshold, `run_020` found 1/5
   reference episodes (precision 1.0, recall 0.2, F1 0.3333, false-positive
   rate 0.0).
+- `twinkl-752.1` compared the same weekly verifier with and without fixed
+  `run_020` inputs on 41 resolved development trajectories. The no-Critic arm
+  reached median episode recall 0.40, one false episode, and coverage 0.756;
+  the Critic arm reached 0.20, zero, and 0.732. Ten genuinely invalid outputs
+  remained fail-closed; 69 raw receipts rejected by an over-strict optional-
+  quote validator were recovered under the registered prompt contract.
 - The locked promotion review had 24 cases / 191 entries, with 23/24 case
   agreement (0.95833) and 180/191 entry agreement (0.94241). case_023 was
   unresolved across 19 entries, so the promotion score was deliberately not
@@ -244,6 +250,8 @@ fair score, and scoring only the agreed cases would be cherry-picking.
 | Development episode recall (`run_020`) | 1/5 (0.2) | The fixed development threshold found one of five reviewed reference episodes |
 | Development precision / false-positive rate (`run_020`) | 1.0 / 0.0 | The single predicted development episode was correct, but four reference episodes were missed |
 | Development F1 (`run_020`) | 0.3333 | Balances the perfect precision with low recall |
+| Weekly verifier without Critic (`twinkl-752.1`) | Median recall 0.40 / 1 false episode / coverage 0.756 | Development-only result over three repeats; conditionally favored under the registered recall-first rule |
+| Weekly verifier with Critic (`twinkl-752.1`) | Median recall 0.20 / 0 false episodes / coverage 0.732 | Safer but blinder; the tested raw `run_020` input path is not recommended |
 | Promotion episode metrics | Deliberately not scored | case_023 remained unresolved across 19 entries; the target is not valid for a fair score |
 | First-alert latency | Not scored | It requires a resolved promotion target |
 | Author-designed capability recall | Capability-only diagnostic | Whether the scorer can find deliberately clear episodes; never a scorer-promotion gate |

@@ -1,0 +1,56 @@
+{
+  "arms": [
+    "without_critic",
+    "with_critic"
+  ],
+  "case_count": 42,
+  "config_payload_sha256": "bb92d2fa2a9fc7a12c1dc87b98be4760b7e572fb51aba250dc02114e17c86e7a",
+  "created_at": "2026-07-12T12:26:15.206013+00:00",
+  "entry_count": 217,
+  "estimate": {
+    "estimated_cost_usd": 1.38305475,
+    "estimated_input_tokens": 1051893,
+    "estimated_output_tokens": 132030,
+    "max_budget_usd": 5.0,
+    "repeats": 3,
+    "successful_calls": 756,
+    "token_estimator": "ceil(utf8_characters/4); output=55+45*assessment_count",
+    "unique_prompts": 252
+  },
+  "locked_promotion_used": false,
+  "mlp_seed_input_divergence": {
+    "cell_count": 335,
+    "fraction_range_at_least_0_20": 0.28955223880597014,
+    "max_p_minus1_range": 0.7074221670627594,
+    "mean_p_minus1_range": 0.15702024628825265,
+    "median_p_minus1_range": 0.12932665087282658,
+    "note": "Local input-sensitivity annex only; no family-aggregate API arm.",
+    "p90_p_minus1_range": 0.34802448749542236,
+    "run_ids": [
+      "run_019",
+      "run_020",
+      "run_021"
+    ]
+  },
+  "model": "gpt-5.4-mini-2026-03-17",
+  "packet_sha256": "eb206a99cd9d136716a859c43006b555cdfd8e7a6a30110b6ceaa326122507b7",
+  "persona_count": 28,
+  "persona_week_count": 126,
+  "planned_successful_calls": 756,
+  "prompt_count": 252,
+  "prompt_manifest_sha256": "a456c1e01a6861a292b90396e68aaaa550cc541db04dda09bc51657a5b44db89",
+  "prompt_template_sha256": "c64b5cf8f0a8bcb0fb5472c7c8082541c696a861efd1e034b0f7b2f0b3ca42a1",
+  "reasoning_effort": "none",
+  "reconciliation_key_sha256": "5bb221b8d611ab98271420b69b743e1b2d627e5fcdddbb5ada198ce40e6eb87d",
+  "repeats": 3,
+  "repo_head": "127cfaa7f3df79c1041c3ffeb350629c3f6b3947",
+  "retired_benchmark_used": false,
+  "reviewer_a_sha256": "fcd3d5c21dec1ef36dc2d826b70cbc230ea92fade6fbd65eaf88725d73155958",
+  "reviewer_b_sha256": "57eeaebdd408f7e1e5b7ae7a9edfcfc9f769b9f69c70ca11330a1c7561d52efd",
+  "run_020_evidence_sha256": "34148b0f9f3afc24e3ce1d68e88d3c20ad9e9c295a5da954e4c7983b6a7e69f9",
+  "runtime_contract_sha256": "0c10bf015d0618583fc7b3013fc9ef095e8a36c28dd2ed74a0a43ad86eae0363",
+  "store": false,
+  "study_id": "twinkl_752_1_weekly_verifier_ablation_v1",
+  "target_split": "development",
+  "week_definition": "iso_monday_sunday"
+}

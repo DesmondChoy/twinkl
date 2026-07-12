@@ -89,22 +89,28 @@ Positive alignment remains useful, but it is non-gating:
 The capstone no longer treats an aggregate QWK threshold as the product bar.
 QWK is retained for historical comparison and ordinal-health monitoring.
 
-## Architecture Study Boundary
+## Architecture Study Result and Boundary
 
-The approved follow-up is development-only. Its primary architecture comparison
-is the same weekly verifier **with** versus **without** Critic inputs. The MLP
-family and entry-level LLM remain baselines. Any uncertain verifier result must
-abstain rather than emit a drift claim.
+The development-only comparison is complete. The same weekly verifier was run
+with and without fixed `run_020` Critic inputs. Adding those inputs cut median
+episode recall from 0.40 to 0.20, removed the median false episode from 1 to 0,
+and reduced coverage from 0.756 to 0.732. Under the registered recall-first rule,
+the result is negative. The conditional recommendation for `twinkl-752.2` is to
+prefer the no-Critic verifier over the tested raw Critic-input path.
 
 This decision does not adopt an MLP-only, LLM-only, ensemble, cascade, or
 verifier architecture. Architecture adoption still requires explicit user
-approval after the bounded study. [`twinkl-1r3d`](../../logs/experiments/reports/experiment_review_2026-07-12_twinkl_1r3d_shortcut_audit.md)
+approval. The full study is recorded in the
+[`twinkl-752.1` report](../../logs/experiments/reports/experiment_review_2026-07-12_twinkl_752_1_weekly_verifier_ablation.md).
+[`twinkl-1r3d`](../../logs/experiments/reports/experiment_review_2026-07-12_twinkl_1r3d_shortcut_audit.md)
 completed the prerequisite Conformity and Self-Direction audit: 3,406
 single-word removals plus 20 repeated-word or phrase removals across 35
 confident-correct active validation cases caused no class flips. This does not
 support the tested brittle lexical-shortcut explanations, but it does not prove
-construct understanding; the bounded study must still use its consensus replay
-and human-anchor checks before crediting MLP-only wins.
+construct understanding. The study replayed the same cells against the
+`twinkl-754` consensus target. The existing three-annotator human anchor had no
+strict overlap with the development population, so it was explicitly unavailable
+rather than substituted.
 
 ## Evidence Behind the Scope Change
 

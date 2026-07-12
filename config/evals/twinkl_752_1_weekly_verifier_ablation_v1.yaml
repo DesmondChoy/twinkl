@@ -1,0 +1,81 @@
+study_id: twinkl_752_1_weekly_verifier_ablation_v1
+status: preregistered
+created_at: '2026-07-12'
+
+population:
+  packet_path: logs/experiments/artifacts/drift_target_twinkl_v8pb_20260711/development/reviewer_packet/blind_packet.json
+  reconciliation_key_path: logs/experiments/artifacts/drift_target_twinkl_v8pb_20260711/development/parent_control/reconciliation_key.json
+  reviewer_a_path: logs/experiments/artifacts/drift_target_twinkl_v8pb_20260711/development/reviewer_packet/reviewer_a.json
+  reviewer_b_path: logs/experiments/artifacts/drift_target_twinkl_v8pb_20260711/development/reviewer_packet/reviewer_b.json
+  run_020_evidence_path: logs/experiments/artifacts/drift_target_twinkl_v8pb_20260711/development/run_020_evidence.parquet
+  mlp_run_paths:
+    - logs/experiments/runs/run_019_BalancedSoftmax.yaml
+    - logs/experiments/runs/run_020_BalancedSoftmax.yaml
+    - logs/experiments/runs/run_021_BalancedSoftmax.yaml
+  wrangled_dir: logs/wrangled
+  split: development
+  week_definition: iso_monday_sunday
+  expected_personas: 28
+  expected_persona_weeks: 126
+  expected_cases: 42
+  expected_entries: 217
+  expected_resolved_entry_cells: 316
+  expected_resolved_trajectories: 41
+  expected_reference_episodes: 5
+  unresolved_case_ids:
+    - case_037
+
+study:
+  arms:
+    - without_critic
+    - with_critic
+  repeats: 3
+  critic_source: run_020
+  assess_current_week_only: true
+  cumulative_history: true
+  derive_episodes_deterministically: true
+  entry_target_policy: reviewer_agreement_only
+  episode_target_policy: reviewer_agreement_only
+  baselines:
+    same_surface_llm: without_critic
+    mlp_family:
+      - run_019
+      - run_020
+      - run_021
+    historical_entry_llm: student_visible_gpt-5.4-mini_fixed_test
+    consensus_replay: logs/judge_labels/consensus_labels.parquet
+    clean_human_anchor: 37 held-out entries across 4 personas
+
+api:
+  provider: openai
+  endpoint: responses
+  model: gpt-5.4-mini-2026-03-17
+  reasoning_effort: none
+  max_output_tokens: 2000
+  timeout_seconds: 60
+  max_attempts: 2
+  concurrency: 4
+  service_tier: default
+  store: false
+  max_budget_usd: 5.0
+  pricing_usd_per_million_tokens:
+    input: 0.75
+    output: 4.50
+
+artifacts:
+  output_dir: logs/experiments/artifacts/twinkl_752_1_weekly_verifier_ablation_20260712
+  prompts_filename: prompts.jsonl
+  manifest_filename: manifest.json
+  responses_filename: responses.jsonl
+  metrics_filename: metrics.json
+
+decision:
+  positive: Median episode recall improves across repeats, median false alerts do not increase, and coverage does not fall.
+  negative: Critic inputs produce no recall gain or consistently worsen the paired result.
+  inconclusive: Gains trade against false alerts or coverage, vary materially across repeats, or conflict with consensus or human-anchor checks.
+  restrictions:
+    - Development evidence only; no architecture adoption or promotion claim.
+    - Do not score or call the locked promotion population.
+    - Do not use the retired drift benchmark.
+    - Report run_020 validation-selection optimism.
+    - Decline per-dimension conclusions when the resolved target count is below 10.
