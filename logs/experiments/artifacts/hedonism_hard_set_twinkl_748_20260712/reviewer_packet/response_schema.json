@@ -1,0 +1,54 @@
+{
+  "schema_version": "twinkl-748-review-v1",
+  "target_version": "twinkl-748-hedonism-hard-set-v1",
+  "reviewer_prompt_version": "twinkl-748-packet-only-v1",
+  "submission_fields": {
+    "packet_sha256": "SHA-256 of the exact blind_packet.json reviewed.",
+    "reviewer_id": "Distinct reviewer identifier.",
+    "reviewed_at": "Timezone-aware ISO-8601 timestamp.",
+    "reviewer_runtime": "Actual model/runtime if known; otherwise unknown.",
+    "requested_runtime": "5.6 Sol / Light (request may be unenforceable)."
+  },
+  "pair_fields": {
+    "review_pair_id": "Opaque identifier from blind_packet.json.",
+    "entry_reviews": "One review for each opaque entry.",
+    "comparable_except_choice": [
+      "no",
+      "uncertain",
+      "yes"
+    ],
+    "realistic": [
+      "no",
+      "uncertain",
+      "yes"
+    ],
+    "issue_codes": [
+      "ambiguous",
+      "implausible",
+      "lexical_leakage",
+      "not_comparable",
+      "unintended_multi_value_change"
+    ],
+    "accept_pair": [
+      "no",
+      "uncertain",
+      "yes"
+    ],
+    "pair_rationale": "Short evidence-based explanation."
+  },
+  "entry_fields": {
+    "review_entry_id": "Opaque identifier from blind_packet.json.",
+    "hedonism_label": [
+      -1,
+      0,
+      1,
+      "uncertain"
+    ],
+    "confidence": [
+      "high",
+      "low",
+      "medium"
+    ],
+    "rationale": "Explain the behavior or choice shown in the text."
+  }
+}

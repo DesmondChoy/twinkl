@@ -31,7 +31,7 @@ The VIF (Value Identity Function) maps journal entries to a 10-dimensional Schwa
 - **Corrected-split frontier still below target**: The active default has better minority recovery than the old pre-split baselines, but median QWK remains 0.362 and still sits below the moderate target range.
 - **Hard dimensions remain unresolved**: `Hedonism` and especially `Security` still lag, and the latest regenerated targeted batch improved some local behavior without producing a cleaner overall frontier.
 - **Circumplex structure is measured but not optimized**: reruns can improve one metric family while worsening opposite-pair violations or adjacent-pair support.
-- Matched hard-case evaluation and augmentation set for `hedonism` / `security` / `stimulation` (`twinkl-748`)
+- Codex-reviewed matched Hedonism diagnostic (`twinkl-748`): 20 frozen pairs show that the incumbent recognizes nearly every `+1` case but recovers only 5% of matched self-denial `-1` cases; the tail-sensitive reference reaches 20% `-1` recall and 15% strict-pair accuracy. This is AI diagnostic evidence, not human validation, and remains evaluation-only pending `twinkl-kof2`.
 - Epoch-level training-signal analysis to test whether validation loss is steering checkpoints away from frontier metrics (`twinkl-751`)
 - Gated parameter-efficient encoder adaptation path (`twinkl-750`)
 - Persona-level aggregation protocol (aggregate per-entry scores into persona-level value profile for Top-K accuracy)
@@ -39,7 +39,7 @@ The VIF (Value Identity Function) maps journal entries to a 10-dimensional Schwa
 - Decision-level evaluation of whether Critic outputs support the sustained-conflict detector under a precision floor
 
 ### Next Steps
-1. Build the matched hard-set in `twinkl-748` so the frontier can be tested on boundary cases, not just aggregate holdout metrics
+1. Carry the completed `twinkl-748` Hedonism hard-set result into the final scope decision; do not train on the frozen diagnostic set
 2. Quantify validation-loss vs frontier-metric divergence in `twinkl-751` before changing more training recipes
 3. Carry the negative compact-history result into the final VIF scope decision instead of escalating architecture
 4. Evaluate Critic and LLM arms at the sustained-conflict decision layer before revisiting the gated `twinkl-750` PEFT path

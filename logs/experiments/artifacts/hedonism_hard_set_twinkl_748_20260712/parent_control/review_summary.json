@@ -1,0 +1,17 @@
+{
+  "target_version": "twinkl-748-hedonism-hard-set-v1",
+  "evidence_class": "Codex-reviewed diagnostic; not human validation",
+  "pair_count": 24,
+  "entry_count": 48,
+  "entry_label_agreement_count": 47,
+  "entry_label_agreement_rate": 0.9791666666666666,
+  "accepted_pair_count": 20,
+  "excluded_pair_count": 4,
+  "accepted_entry_count": 40,
+  "author_label_match_count": 40,
+  "author_label_match_rate": 1.0,
+  "frozen_hard_set_sha256": "c2c825b27867c6f15e61ca8ed945fc92a42db43ffbac6953994d81cb8bca0637",
+  "reconciliation_sha256": "1b61c67750ecc5a535482b8e12f3023f00554bf0c685033b6146f70daf33b596",
+  "reviewer_a_sha256": "caefacf4527bd00907c5a2ba650f71ad5ffd57503381eedb594628e4a9950d84",
+  "reviewer_b_sha256": "eac53f92337089b90251b5583cbaed0837a2548a7548eabb4a28773f30f8a0ab"
+}

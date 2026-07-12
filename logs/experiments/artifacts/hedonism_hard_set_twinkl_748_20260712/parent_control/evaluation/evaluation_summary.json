@@ -1,0 +1,514 @@
+{
+  "schema_version": 1,
+  "target": "twinkl-748-hedonism-hard-set-v1",
+  "evidence_class": "Codex-reviewed diagnostic; not human validation",
+  "frozen_hard_set_path": "logs/experiments/artifacts/hedonism_hard_set_twinkl_748_20260712/parent_control/frozen_hedonism_hard_set.parquet",
+  "frozen_hard_set_sha256": "c2c825b27867c6f15e61ca8ed945fc92a42db43ffbac6953994d81cb8bca0637",
+  "review_summary_sha256": "0049fc427d167b576b5aded26e0f832f407c5613280bd8c903263327a75ed788",
+  "audit_manifest_sha256": "c79f032b580718194a99d77c4fc3603b6917c3314ededb31281e12a89279b53b",
+  "entry_count": 40,
+  "pair_count": 20,
+  "base_seed": 748,
+  "mc_samples": 50,
+  "confidence_threshold": 0.8,
+  "run_summaries": [
+    {
+      "model_family": "incumbent",
+      "run_name": "run_019",
+      "run_id": 19,
+      "seed": 767,
+      "entry_count": 40,
+      "pair_count": 20,
+      "exact_accuracy": 0.525,
+      "class_recall": {
+        "minus1": 0.05,
+        "zero": null,
+        "plus1": 1.0
+      },
+      "strict_both_members_correct_pair_rate": 0.05,
+      "pair_directional_accuracy": 0.65,
+      "pair_margin": {
+        "mean": 0.0855885922908783,
+        "median": 0.009150058031082153,
+        "minimum": -0.030146002769470215,
+        "maximum": 1.1453602313995361
+      },
+      "qwk_secondary": 0.050000000000000044,
+      "mc_class_mean": {
+        "mean": 0.9294999837875366,
+        "minimum": -0.3199999928474426,
+        "maximum": 1.0
+      },
+      "mc_class_std": {
+        "mean": 0.17857997119426727,
+        "median": 0.1414213627576828,
+        "maximum": 0.7677159309387207
+      },
+      "high_confidence_error_threshold": 0.8,
+      "high_confidence_error_count": 19,
+      "high_confidence_error_rate": 0.475,
+      "high_confidence_error_entry_ids": [
+        "entry_002_2",
+        "entry_003_2",
+        "entry_004_1",
+        "entry_005_2",
+        "entry_006_2",
+        "entry_007_2",
+        "entry_008_1",
+        "entry_009_2",
+        "entry_010_1",
+        "entry_011_2",
+        "entry_013_2",
+        "entry_015_1",
+        "entry_017_1",
+        "entry_018_1",
+        "entry_019_2",
+        "entry_020_2",
+        "entry_021_2",
+        "entry_022_1",
+        "entry_023_2"
+      ],
+      "runtime": {
+        "device": "cpu",
+        "mc_samples": 50,
+        "encoder_model": "nomic-ai/nomic-embed-text-v1.5",
+        "truncate_dim": 256,
+        "text_prefix": "classification: ",
+        "window_size": 1,
+        "checkpoint_epoch": 21
+      },
+      "manifest_path": "logs/experiments/runs/run_019_BalancedSoftmax.yaml",
+      "manifest_sha256": "d53827ef878a14959f321e00748b56a0830c00ad5fbf2b4833952be9ce833781",
+      "checkpoint_path": "logs/experiments/artifacts/ordinal_v4_s2025_m11_20260307_151844/BalancedSoftmax/selected_checkpoint.pt",
+      "checkpoint_sha256": "f1a15b9eaec27319288db5474c9be9ad874b7af12b1345d09cd925d9f83fc1f2"
+    },
+    {
+      "model_family": "incumbent",
+      "run_name": "run_020",
+      "run_id": 20,
+      "seed": 768,
+      "entry_count": 40,
+      "pair_count": 20,
+      "exact_accuracy": 0.525,
+      "class_recall": {
+        "minus1": 0.05,
+        "zero": null,
+        "plus1": 1.0
+      },
+      "strict_both_members_correct_pair_rate": 0.05,
+      "pair_directional_accuracy": 0.65,
+      "pair_margin": {
+        "mean": 0.07988955676555634,
+        "median": 0.014816701412200928,
+        "minimum": -0.1611592173576355,
+        "maximum": 0.8862422704696655
+      },
+      "qwk_secondary": 0.050000000000000044,
+      "mc_class_mean": {
+        "mean": 0.9255000352859497,
+        "minimum": -0.20000000298023224,
+        "maximum": 1.0
+      },
+      "mc_class_std": {
+        "mean": 0.2049921303987503,
+        "median": 0.1414213627576828,
+        "maximum": 0.9258201122283936
+      },
+      "high_confidence_error_threshold": 0.8,
+      "high_confidence_error_count": 18,
+      "high_confidence_error_rate": 0.45,
+      "high_confidence_error_entry_ids": [
+        "entry_002_2",
+        "entry_003_2",
+        "entry_004_1",
+        "entry_005_2",
+        "entry_006_2",
+        "entry_007_2",
+        "entry_008_1",
+        "entry_009_2",
+        "entry_011_2",
+        "entry_013_2",
+        "entry_015_1",
+        "entry_017_1",
+        "entry_018_1",
+        "entry_019_2",
+        "entry_020_2",
+        "entry_021_2",
+        "entry_022_1",
+        "entry_023_2"
+      ],
+      "runtime": {
+        "device": "cpu",
+        "mc_samples": 50,
+        "encoder_model": "nomic-ai/nomic-embed-text-v1.5",
+        "truncate_dim": 256,
+        "text_prefix": "classification: ",
+        "window_size": 1,
+        "checkpoint_epoch": 18
+      },
+      "manifest_path": "logs/experiments/runs/run_020_BalancedSoftmax.yaml",
+      "manifest_sha256": "20c09e9a61ace7a150db91fc65336b6a5aa41e7b1bd327b727cd97d5fd189054",
+      "checkpoint_path": "logs/experiments/artifacts/ordinal_v4_s2025_m22_20260307_152002/BalancedSoftmax/selected_checkpoint.pt",
+      "checkpoint_sha256": "a061287cc23ea8e04bb4f423542afb945ce7a339e284bf1c9ad267777591e2d2"
+    },
+    {
+      "model_family": "incumbent",
+      "run_name": "run_021",
+      "run_id": 21,
+      "seed": 769,
+      "entry_count": 40,
+      "pair_count": 20,
+      "exact_accuracy": 0.5,
+      "class_recall": {
+        "minus1": 0.0,
+        "zero": null,
+        "plus1": 1.0
+      },
+      "strict_both_members_correct_pair_rate": 0.0,
+      "pair_directional_accuracy": 0.65,
+      "pair_margin": {
+        "mean": 0.04738086462020874,
+        "median": 0.029978394508361816,
+        "minimum": -0.11242616176605225,
+        "maximum": 0.5399543046951294
+      },
+      "qwk_secondary": null,
+      "mc_class_mean": {
+        "mean": 0.9545000195503235,
+        "minimum": 0.5199999809265137,
+        "maximum": 1.0
+      },
+      "mc_class_std": {
+        "mean": 0.15902045369148254,
+        "median": 0.0707106813788414,
+        "maximum": 0.8381223082542419
+      },
+      "high_confidence_error_threshold": 0.8,
+      "high_confidence_error_count": 18,
+      "high_confidence_error_rate": 0.45,
+      "high_confidence_error_entry_ids": [
+        "entry_002_2",
+        "entry_003_2",
+        "entry_004_1",
+        "entry_005_2",
+        "entry_006_2",
+        "entry_007_2",
+        "entry_008_1",
+        "entry_009_2",
+        "entry_010_1",
+        "entry_011_2",
+        "entry_015_1",
+        "entry_017_1",
+        "entry_018_1",
+        "entry_019_2",
+        "entry_020_2",
+        "entry_021_2",
+        "entry_022_1",
+        "entry_023_2"
+      ],
+      "runtime": {
+        "device": "cpu",
+        "mc_samples": 50,
+        "encoder_model": "nomic-ai/nomic-embed-text-v1.5",
+        "truncate_dim": 256,
+        "text_prefix": "classification: ",
+        "window_size": 1,
+        "checkpoint_epoch": 13
+      },
+      "manifest_path": "logs/experiments/runs/run_021_BalancedSoftmax.yaml",
+      "manifest_sha256": "9e382e6a0fca72ed99e87dbfbe051880a9b8d141818bb014560f912e7d17940c",
+      "checkpoint_path": "logs/experiments/artifacts/ordinal_v4_s2025_m33_20260307_205557/BalancedSoftmax/selected_checkpoint.pt",
+      "checkpoint_sha256": "964beacfe9fff5e1ce9deafaaa22af08736152cd6c3b9f59e0373a114529ed62"
+    },
+    {
+      "model_family": "tail_sensitive_reference",
+      "run_name": "run_034",
+      "run_id": 34,
+      "seed": 782,
+      "entry_count": 40,
+      "pair_count": 20,
+      "exact_accuracy": 0.55,
+      "class_recall": {
+        "minus1": 0.25,
+        "zero": null,
+        "plus1": 0.85
+      },
+      "strict_both_members_correct_pair_rate": 0.1,
+      "pair_directional_accuracy": 0.8,
+      "pair_margin": {
+        "mean": 0.19642528891563416,
+        "median": 0.14437752962112427,
+        "minimum": -0.5973822474479675,
+        "maximum": 0.8149089217185974
+      },
+      "qwk_secondary": 0.12658227848101267,
+      "mc_class_mean": {
+        "mean": 0.5110000371932983,
+        "minimum": -0.7400000095367432,
+        "maximum": 1.0
+      },
+      "mc_class_std": {
+        "mean": 0.5730270147323608,
+        "median": 0.6087733507156372,
+        "maximum": 1.0093441009521484
+      },
+      "high_confidence_error_threshold": 0.8,
+      "high_confidence_error_count": 10,
+      "high_confidence_error_rate": 0.25,
+      "high_confidence_error_entry_ids": [
+        "entry_002_2",
+        "entry_003_2",
+        "entry_006_2",
+        "entry_007_2",
+        "entry_011_2",
+        "entry_013_2",
+        "entry_018_1",
+        "entry_019_2",
+        "entry_020_2",
+        "entry_023_2"
+      ],
+      "runtime": {
+        "device": "cpu",
+        "mc_samples": 50,
+        "encoder_model": "nomic-ai/nomic-embed-text-v1.5",
+        "truncate_dim": 256,
+        "text_prefix": "classification: ",
+        "window_size": 1,
+        "checkpoint_epoch": 26
+      },
+      "manifest_path": "logs/experiments/runs/run_034_BalancedSoftmax.yaml",
+      "manifest_sha256": "344719b084f6ab83212579656e5c9cd433ae976449a727b51dbd47ed6e5cc249",
+      "checkpoint_path": "logs/experiments/artifacts/ordinal_v4_s2025_m11_20260311_125001/BalancedSoftmax/selected_checkpoint.pt",
+      "checkpoint_sha256": "f8c10bd5cd46824378b56ac8384a5aa9a1d66047bc2d64dee57b136c13a4e50d"
+    },
+    {
+      "model_family": "tail_sensitive_reference",
+      "run_name": "run_035",
+      "run_id": 35,
+      "seed": 783,
+      "entry_count": 40,
+      "pair_count": 20,
+      "exact_accuracy": 0.575,
+      "class_recall": {
+        "minus1": 0.2,
+        "zero": null,
+        "plus1": 0.95
+      },
+      "strict_both_members_correct_pair_rate": 0.15,
+      "pair_directional_accuracy": 0.6,
+      "pair_margin": {
+        "mean": 0.1629600018262863,
+        "median": 0.20770207047462463,
+        "minimum": -0.2841658294200897,
+        "maximum": 0.9179199934005737
+      },
+      "qwk_secondary": 0.15000000000000002,
+      "mc_class_mean": {
+        "mean": 0.527999997138977,
+        "minimum": -0.9200000166893005,
+        "maximum": 1.0
+      },
+      "mc_class_std": {
+        "mean": 0.5745377540588379,
+        "median": 0.5480950474739075,
+        "maximum": 1.0093441009521484
+      },
+      "high_confidence_error_threshold": 0.8,
+      "high_confidence_error_count": 7,
+      "high_confidence_error_rate": 0.175,
+      "high_confidence_error_entry_ids": [
+        "entry_002_2",
+        "entry_003_2",
+        "entry_006_2",
+        "entry_007_2",
+        "entry_013_2",
+        "entry_018_1",
+        "entry_020_2"
+      ],
+      "runtime": {
+        "device": "cpu",
+        "mc_samples": 50,
+        "encoder_model": "nomic-ai/nomic-embed-text-v1.5",
+        "truncate_dim": 256,
+        "text_prefix": "classification: ",
+        "window_size": 1,
+        "checkpoint_epoch": 19
+      },
+      "manifest_path": "logs/experiments/runs/run_035_BalancedSoftmax.yaml",
+      "manifest_sha256": "0d9c960bd3467bfd2610e12a8781e95cec9749a8e1b9aefe3e45dc08f286816b",
+      "checkpoint_path": "logs/experiments/artifacts/ordinal_v4_s2025_m22_20260311_125122/BalancedSoftmax/selected_checkpoint.pt",
+      "checkpoint_sha256": "a86243b6fde4d3c2a6166871227944d2bc38a1577e315b9ad2af003d3adf3d17"
+    },
+    {
+      "model_family": "tail_sensitive_reference",
+      "run_name": "run_036",
+      "run_id": 36,
+      "seed": 784,
+      "entry_count": 40,
+      "pair_count": 20,
+      "exact_accuracy": 0.575,
+      "class_recall": {
+        "minus1": 0.2,
+        "zero": null,
+        "plus1": 0.95
+      },
+      "strict_both_members_correct_pair_rate": 0.15,
+      "pair_directional_accuracy": 0.75,
+      "pair_margin": {
+        "mean": 0.22456636726856233,
+        "median": 0.22701501846313477,
+        "minimum": -0.35829147696495056,
+        "maximum": 1.2236607074737549
+      },
+      "qwk_secondary": 0.15000000000000002,
+      "mc_class_mean": {
+        "mean": 0.5850000381469727,
+        "minimum": -0.9200000166893005,
+        "maximum": 1.0
+      },
+      "mc_class_std": {
+        "mean": 0.6051872968673706,
+        "median": 0.6906039714813232,
+        "maximum": 1.0028530359268188
+      },
+      "high_confidence_error_threshold": 0.8,
+      "high_confidence_error_count": 5,
+      "high_confidence_error_rate": 0.125,
+      "high_confidence_error_entry_ids": [
+        "entry_003_2",
+        "entry_007_2",
+        "entry_011_2",
+        "entry_013_2",
+        "entry_018_1"
+      ],
+      "runtime": {
+        "device": "cpu",
+        "mc_samples": 50,
+        "encoder_model": "nomic-ai/nomic-embed-text-v1.5",
+        "truncate_dim": 256,
+        "text_prefix": "classification: ",
+        "window_size": 1,
+        "checkpoint_epoch": 25
+      },
+      "manifest_path": "logs/experiments/runs/run_036_BalancedSoftmax.yaml",
+      "manifest_sha256": "a45d7ae29e31dc60d5dd453c431822141ae92e8e34c3cb7c50e5ad4c753fe227",
+      "checkpoint_path": "logs/experiments/artifacts/ordinal_v4_s2025_m33_20260311_125227/BalancedSoftmax/selected_checkpoint.pt",
+      "checkpoint_sha256": "ea75c452a1eb9e587480b90bc1cdc4e096f8856b5a17df71c5c49ed7616f6491"
+    }
+  ],
+  "family_summaries": [
+    {
+      "model_family": "incumbent",
+      "runs": [
+        "run_019",
+        "run_020",
+        "run_021"
+      ],
+      "exact_accuracy": {
+        "median": 0.525,
+        "minimum": 0.5,
+        "maximum": 0.525
+      },
+      "recall_minus1": {
+        "median": 0.05,
+        "minimum": 0.0,
+        "maximum": 0.05
+      },
+      "recall_plus1": {
+        "median": 1.0,
+        "minimum": 1.0,
+        "maximum": 1.0
+      },
+      "strict_both_members_correct_pair_rate": {
+        "median": 0.05,
+        "minimum": 0.0,
+        "maximum": 0.05
+      },
+      "pair_directional_accuracy": {
+        "median": 0.65,
+        "minimum": 0.65,
+        "maximum": 0.65
+      },
+      "pair_margin_mean": {
+        "median": 0.07988955676555634,
+        "minimum": 0.04738086462020874,
+        "maximum": 0.0855885922908783
+      },
+      "qwk_secondary": {
+        "median": 0.050000000000000044,
+        "minimum": 0.050000000000000044,
+        "maximum": 0.050000000000000044
+      },
+      "mc_class_std_mean": {
+        "median": 0.17857997119426727,
+        "minimum": 0.15902045369148254,
+        "maximum": 0.2049921303987503
+      },
+      "high_confidence_error_rate": {
+        "median": 0.45,
+        "minimum": 0.45,
+        "maximum": 0.475
+      }
+    },
+    {
+      "model_family": "tail_sensitive_reference",
+      "runs": [
+        "run_034",
+        "run_035",
+        "run_036"
+      ],
+      "exact_accuracy": {
+        "median": 0.575,
+        "minimum": 0.55,
+        "maximum": 0.575
+      },
+      "recall_minus1": {
+        "median": 0.2,
+        "minimum": 0.2,
+        "maximum": 0.25
+      },
+      "recall_plus1": {
+        "median": 0.95,
+        "minimum": 0.85,
+        "maximum": 0.95
+      },
+      "strict_both_members_correct_pair_rate": {
+        "median": 0.15,
+        "minimum": 0.1,
+        "maximum": 0.15
+      },
+      "pair_directional_accuracy": {
+        "median": 0.75,
+        "minimum": 0.6,
+        "maximum": 0.8
+      },
+      "pair_margin_mean": {
+        "median": 0.19642528891563416,
+        "minimum": 0.1629600018262863,
+        "maximum": 0.22456636726856233
+      },
+      "qwk_secondary": {
+        "median": 0.15000000000000002,
+        "minimum": 0.12658227848101267,
+        "maximum": 0.15000000000000002
+      },
+      "mc_class_std_mean": {
+        "median": 0.5745377540588379,
+        "minimum": 0.5730270147323608,
+        "maximum": 0.6051872968673706
+      },
+      "high_confidence_error_rate": {
+        "median": 0.175,
+        "minimum": 0.125,
+        "maximum": 0.25
+      }
+    }
+  ],
+  "limitations": [
+    "Labels are paired Codex agreement, not human ground truth.",
+    "The small balanced diagnostic makes QWK unstable; pair metrics are primary.",
+    "Family summaries report seed medians and ranges; checkpoints are not pooled as independent cases."
+  ],
+  "predictions_path": "logs/experiments/artifacts/hedonism_hard_set_twinkl_748_20260712/parent_control/evaluation/hedonism_predictions.parquet",
+  "predictions_sha256": "05d8fc75fcd3465faebb8046157da2ce35cd2f45b9907a5e05ef364692564a7b"
+}

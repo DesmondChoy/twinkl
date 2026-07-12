@@ -1,0 +1,324 @@
+schema_version: 1
+target_version: twinkl-748-hedonism-hard-set-v1
+review_prompt_version: twinkl-748-packet-only-v1
+description: >-
+  Parent-controlled candidate source for a Codex-reviewed Hedonism diagnostic
+  hard-set. Author labels are generation intent only and never enter the
+  reviewer packet or become ground truth without paired reviewer agreement.
+core_values:
+  - Hedonism
+quality_gates:
+  maximum_word_count_delta_ratio: 0.10
+  minimum_normalized_similarity: 0.50
+pairs:
+  - pair_id: hp_001
+    family: quiet_sensory_pleasure
+    isolated_behavior: linger over coffee versus return to work
+    affect_band: calm
+    secondary_value_risk: [Achievement]
+    variants:
+      - variant_id: hp_001_a
+        author_label: 1
+        text: The meeting ended early, so I sat by the window with my coffee and let myself taste it slowly before heading back upstairs.
+      - variant_id: hp_001_b
+        author_label: -1
+        text: The meeting ended early, so I carried my coffee back upstairs and opened the next deck before I had taken more than a sip.
+
+  - pair_id: hp_002
+    family: quiet_sensory_pleasure
+    isolated_behavior: enjoy warm bath versus replace it with chores
+    affect_band: tired
+    secondary_value_risk: [Achievement]
+    variants:
+      - variant_id: hp_002_a
+        author_label: 1
+        text: I was worn out after the commute, but I filled the bath and stayed in the warm water until my shoulders finally loosened.
+      - variant_id: hp_002_b
+        author_label: -1
+        text: I was worn out after the commute, but I skipped the bath and folded laundry until the tightness in my shoulders felt normal again.
+
+  - pair_id: hp_003
+    family: quiet_sensory_pleasure
+    isolated_behavior: savor favorite meal versus eat while working
+    affect_band: content
+    secondary_value_risk: [Achievement]
+    variants:
+      - variant_id: hp_003_a
+        author_label: 1
+        text: I made the noodles I like, put my phone away, and ate them slowly at the table while the apartment was quiet.
+      - variant_id: hp_003_b
+        author_label: -1
+        text: I made the noodles I like, kept my laptop open, and ate them quickly at the table while answering messages from work.
+
+  - pair_id: hp_004
+    family: quiet_sensory_pleasure
+    isolated_behavior: listen to music versus use the time productively
+    affect_band: reflective
+    secondary_value_risk: [Achievement]
+    variants:
+      - variant_id: hp_004_a
+        author_label: 1
+        text: The record arrived today. I lay on the rug and listened to the whole first side without doing anything else.
+      - variant_id: hp_004_b
+        author_label: -1
+        text: The record arrived today. I left it wrapped on the shelf and used the whole evening to clear another batch of work.
+
+  - pair_id: hp_005
+    family: guilt_coded_rest
+    isolated_behavior: keep planned rest versus surrender it to guilt
+    affect_band: guilty
+    secondary_value_risk: [Achievement]
+    variants:
+      - variant_id: hp_005_a
+        author_label: 1
+        text: I felt guilty seeing the unread messages, but I kept the afternoon I had set aside and watched the film from the sofa.
+      - variant_id: hp_005_b
+        author_label: -1
+        text: I felt guilty seeing the unread messages, so I gave up the afternoon I had set aside and answered them from the sofa.
+
+  - pair_id: hp_006
+    family: guilt_coded_rest
+    isolated_behavior: take a nap versus force wakefulness
+    affect_band: guilty
+    secondary_value_risk: [Achievement]
+    variants:
+      - variant_id: hp_006_a
+        author_label: 1
+        text: Part of me said a nap was lazy, but I closed the curtains and slept for an hour because my body was asking for it.
+      - variant_id: hp_006_b
+        author_label: -1
+        text: Part of me said a nap was lazy, so I left the curtains open and kept working for an hour although my body was asking for it.
+
+  - pair_id: hp_007
+    family: guilt_coded_rest
+    isolated_behavior: enjoy game night versus cancel from guilt
+    affect_band: uneasy
+    secondary_value_risk: [Achievement, Benevolence]
+    variants:
+      - variant_id: hp_007_a
+        author_label: 1
+        text: Mum's paperwork is still unfinished and I felt uneasy, but I went to game night and let myself laugh with everyone for once.
+      - variant_id: hp_007_b
+        author_label: -1
+        text: Mum's paperwork is still unfinished and I felt uneasy, so I cancelled game night and spent the evening sorting forms alone again.
+
+  - pair_id: hp_008
+    family: guilt_coded_rest
+    isolated_behavior: sit in the park versus turn the break into errands
+    affect_band: restless
+    secondary_value_risk: [Achievement]
+    variants:
+      - variant_id: hp_008_a
+        author_label: 1
+        text: Sitting in the park felt undeserved with so much pending, but I stayed on the bench and enjoyed the sun until lunch ended.
+      - variant_id: hp_008_b
+        author_label: -1
+        text: Sitting in the park felt undeserved with so much pending, so I left the bench and ran errands until lunch ended.
+
+  - pair_id: hp_009
+    family: protected_leisure_boundary
+    isolated_behavior: protect Saturday versus accept unnecessary work
+    affect_band: firm
+    secondary_value_risk: [Achievement]
+    variants:
+      - variant_id: hp_009_a
+        author_label: 1
+        text: My manager asked if I could cover Saturday again. Nothing was urgent, so I said no and kept the day for the beach.
+      - variant_id: hp_009_b
+        author_label: -1
+        text: My manager asked if I could cover Saturday again. Nothing was urgent, but I said yes and dropped the day at the beach.
+
+  - pair_id: hp_010
+    family: protected_leisure_boundary
+    isolated_behavior: leave work for dinner versus stay for optional polishing
+    affect_band: conflicted
+    secondary_value_risk: [Achievement, Benevolence]
+    variants:
+      - variant_id: hp_010_a
+        author_label: 1
+        text: The draft was already good enough, so I shut the laptop at six and went to the dinner I had been looking forward to.
+      - variant_id: hp_010_b
+        author_label: -1
+        text: The draft was already good enough, but I kept the laptop open past six and missed the dinner I had been looking forward to.
+
+  - pair_id: hp_011
+    family: protected_leisure_boundary
+    isolated_behavior: preserve holiday versus attend optional planning call
+    affect_band: resigned
+    secondary_value_risk: [Achievement]
+    variants:
+      - variant_id: hp_011_a
+        author_label: 1
+        text: The planning call was optional and I was finally on leave, so I muted the thread and went down to the pool.
+      - variant_id: hp_011_b
+        author_label: -1
+        text: The planning call was optional and I was finally on leave, but I joined the thread and stayed upstairs from the pool.
+
+  - pair_id: hp_012
+    family: protected_leisure_boundary
+    isolated_behavior: keep hobby evening versus volunteer for extra work
+    affect_band: weary
+    secondary_value_risk: [Achievement]
+    variants:
+      - variant_id: hp_012_a
+        author_label: 1
+        text: Nobody needed me to take the extra review. I left it unclaimed and spent the evening shaping the little bowl at pottery class.
+      - variant_id: hp_012_b
+        author_label: -1
+        text: Nobody needed me to take the extra review. I claimed it anyway and spent the evening marking comments instead of going to pottery class.
+
+  - pair_id: hp_013
+    family: celebration_and_savoring
+    isolated_behavior: celebrate promotion versus resume work immediately
+    affect_band: positive
+    secondary_value_risk: [Achievement]
+    variants:
+      - variant_id: hp_013_a
+        author_label: 1
+        text: The promotion finally came through after all those late nights. I booked our favorite restaurant and let the evening feel like a reward.
+      - variant_id: hp_013_b
+        author_label: -1
+        text: The promotion finally came through after all those late nights. I skipped our favorite restaurant and used the evening to start the new workload.
+
+  - pair_id: hp_014
+    family: celebration_and_savoring
+    isolated_behavior: enjoy completed launch versus begin next task
+    affect_band: positive
+    secondary_value_risk: [Achievement]
+    variants:
+      - variant_id: hp_014_a
+        author_label: 1
+        text: The launch landed cleanly and everyone was relieved. I poured the good drink, ordered dessert, and stayed with that feeling tonight.
+      - variant_id: hp_014_b
+        author_label: -1
+        text: The launch landed cleanly and everyone was relieved. I left the good drink untouched, skipped dessert, and started tomorrow's list tonight.
+
+  - pair_id: hp_015
+    family: celebration_and_savoring
+    isolated_behavior: take birthday outing versus defer celebration
+    affect_band: positive
+    secondary_value_risk: [Achievement]
+    variants:
+      - variant_id: hp_015_a
+        author_label: 1
+        text: It was a good birthday and the report could wait. I took the long lunch, ordered the cake, and enjoyed being fussed over.
+      - variant_id: hp_015_b
+        author_label: -1
+        text: It was a good birthday and the report could wait. I skipped the long lunch, declined the cake, and went back to the report.
+
+  - pair_id: hp_016
+    family: celebration_and_savoring
+    isolated_behavior: savor race finish versus treat it as another task
+    affect_band: positive
+    secondary_value_risk: [Achievement]
+    variants:
+      - variant_id: hp_016_a
+        author_label: 1
+        text: I crossed the finish line faster than I expected. I stayed for the food and music instead of rushing home to plan the next race.
+      - variant_id: hp_016_b
+        author_label: -1
+        text: I crossed the finish line faster than I expected. I skipped the food and music and rushed home to plan the next race.
+
+  - pair_id: hp_017
+    family: lifestyle_quality_choice
+    isolated_behavior: choose livable role versus higher-status grind
+    affect_band: thoughtful
+    secondary_value_risk: [Achievement, Power]
+    variants:
+      - variant_id: hp_017_a
+        author_label: 1
+        text: The smaller role pays enough and leaves my evenings alone. I accepted it because I want dinners, walks, and weekends that belong to me.
+      - variant_id: hp_017_b
+        author_label: -1
+        text: The bigger role pays more and takes most evenings. I accepted it although it means dinners, walks, and weekends will stop belonging to me.
+
+  - pair_id: hp_018
+    family: lifestyle_quality_choice
+    isolated_behavior: choose comfortable home versus prestige address
+    affect_band: practical
+    secondary_value_risk: [Power, Security]
+    variants:
+      - variant_id: hp_018_a
+        author_label: 1
+        text: The modest flat has a sunny balcony and room for a deep chair. I chose it over the impressive address with nowhere comfortable to sit.
+      - variant_id: hp_018_b
+        author_label: -1
+        text: The impressive flat has the address people notice but nowhere comfortable to sit. I chose it over the modest place with the sunny balcony.
+
+  - pair_id: hp_019
+    family: lifestyle_quality_choice
+    isolated_behavior: preserve relaxed commute versus accept draining commute
+    affect_band: uncertain
+    secondary_value_risk: [Achievement, Power]
+    variants:
+      - variant_id: hp_019_a
+        author_label: 1
+        text: The offer is less impressive, but I can walk there and still cook at night. I chose the ordinary title and the easier days.
+      - variant_id: hp_019_b
+        author_label: -1
+        text: The offer is more impressive, but the commute will erase cooking at night. I chose the stronger title and the harder days.
+
+  - pair_id: hp_020
+    family: lifestyle_quality_choice
+    isolated_behavior: fund enjoyable trip versus optimize savings
+    affect_band: conflicted
+    secondary_value_risk: [Security]
+    variants:
+      - variant_id: hp_020_a
+        author_label: 1
+        text: The savings plan is ahead of target, so I booked the little coastal trip and chose a room where I can hear the water.
+      - variant_id: hp_020_b
+        author_label: -1
+        text: The savings plan is ahead of target, but I cancelled the little coastal trip and moved the room money into the account.
+
+  - pair_id: hp_021
+    family: pleasure_despite_commitment
+    isolated_behavior: choose dessert versus return to optional work
+    affect_band: defiant
+    secondary_value_risk: [Achievement]
+    variants:
+      - variant_id: hp_021_a
+        author_label: 1
+        text: The optional report was still open, but I ordered the chocolate cake and stayed at the table until I had finished every bite.
+      - variant_id: hp_021_b
+        author_label: -1
+        text: The optional report was still open, so I skipped the chocolate cake and returned to the laptop before everyone else had finished.
+
+  - pair_id: hp_022
+    family: pleasure_despite_commitment
+    isolated_behavior: enjoy evening swim versus complete nonurgent admin
+    affect_band: conflicted
+    secondary_value_risk: [Achievement]
+    variants:
+      - variant_id: hp_022_a
+        author_label: 1
+        text: The expense forms were not due, and the water looked perfect. I left them for tomorrow and swam until the lights came on.
+      - variant_id: hp_022_b
+        author_label: -1
+        text: The expense forms were not due, and the water looked perfect. I stayed inside to finish them and watched the pool lights come on.
+
+  - pair_id: hp_023
+    family: pleasure_despite_commitment
+    isolated_behavior: keep concert plan versus finish optional preparation
+    affect_band: anxious
+    secondary_value_risk: [Achievement]
+    variants:
+      - variant_id: hp_023_a
+        author_label: 1
+        text: I could polish Monday's slides again, but the concert ticket was already in my pocket. I went, sang badly, and came home smiling.
+      - variant_id: hp_023_b
+        author_label: -1
+        text: I could polish Monday's slides again, and the concert ticket was already in my pocket. I stayed, revised them, and let the ticket expire.
+
+  - pair_id: hp_024
+    family: pleasure_despite_commitment
+    isolated_behavior: take scenic detour versus maximize efficiency
+    affect_band: calm
+    secondary_value_risk: [Achievement]
+    variants:
+      - variant_id: hp_024_a
+        author_label: 1
+        text: There was enough time before the appointment, so I took the riverside path and stopped for the cold juice I like.
+      - variant_id: hp_024_b
+        author_label: -1
+        text: There was enough time before the appointment, but I took the direct path and passed the cold juice place without stopping.

@@ -1,0 +1,231 @@
+{
+  "schema_version": "twinkl-748-review-v1",
+  "target_version": "twinkl-748-hedonism-hard-set-v1",
+  "reviewer_prompt_version": "twinkl-748-packet-only-v1",
+  "packet_sha256": "a1d9e91dd2b7ff4a009ca3d0a69d194c445783b28974cf6bf9334e439d2120cf",
+  "reviewer_id": "twinkl-748-reviewer-a",
+  "reviewed_at": "2026-07-12T13:15:08+08:00",
+  "reviewer_runtime": "platform-default-subagent (requested 5.6 Sol / Light; selector unavailable)",
+  "requested_runtime": "5.6 Sol / Light",
+  "pair_reviews": [
+    {
+      "review_pair_id": "pair_001",
+      "entry_reviews": [
+        {"review_entry_id": "entry_001_1", "hedonism_label": -1, "confidence": "high", "rationale": "Chooses the prestigious role despite knowingly giving up easier days and evening cooking."},
+        {"review_entry_id": "entry_001_2", "hedonism_label": 1, "confidence": "high", "rationale": "Chooses an easier commute and preserves enjoyable cooking and daily comfort."}
+      ],
+      "comparable_except_choice": "yes",
+      "realistic": "yes",
+      "issue_codes": [],
+      "accept_pair": "yes",
+      "pair_rationale": "A realistic job tradeoff contrasting prestige and strain with comfort and enjoyable evenings."
+    },
+    {
+      "review_pair_id": "pair_002",
+      "entry_reviews": [
+        {"review_entry_id": "entry_002_1", "hedonism_label": 1, "confidence": "high", "rationale": "Immediately makes unhurried time to enjoy the new record."},
+        {"review_entry_id": "entry_002_2", "hedonism_label": -1, "confidence": "high", "rationale": "Leaves an anticipated pleasure unopened and gives the evening to more work."}
+      ],
+      "comparable_except_choice": "yes", "realistic": "yes", "issue_codes": [], "accept_pair": "yes",
+      "pair_rationale": "The same available leisure pleasure is either enjoyed or explicitly deferred for work."
+    },
+    {
+      "review_pair_id": "pair_003",
+      "entry_reviews": [
+        {"review_entry_id": "entry_003_1", "hedonism_label": 1, "confidence": "high", "rationale": "Uses spare time for a pleasant route and a favorite cold drink."},
+        {"review_entry_id": "entry_003_2", "hedonism_label": -1, "confidence": "high", "rationale": "Despite having time, rejects both the pleasant route and a liked drink."}
+      ],
+      "comparable_except_choice": "yes", "realistic": "yes", "issue_codes": [], "accept_pair": "yes",
+      "pair_rationale": "Both entries have the same time constraint and differ in choosing or passing up simple pleasures."
+    },
+    {
+      "review_pair_id": "pair_004",
+      "entry_reviews": [
+        {"review_entry_id": "entry_004_1", "hedonism_label": -1, "confidence": "high", "rationale": "Gives up a reserved afternoon of rest to answer non-urgent messages from guilt."},
+        {"review_entry_id": "entry_004_2", "hedonism_label": 1, "confidence": "high", "rationale": "Keeps the reserved leisure time and watches a film despite guilt."}
+      ],
+      "comparable_except_choice": "yes", "realistic": "yes", "issue_codes": [], "accept_pair": "yes",
+      "pair_rationale": "A credible contrast between surrendering leisure to messages and protecting it for a film."
+    },
+    {
+      "review_pair_id": "pair_005",
+      "entry_reviews": [
+        {"review_entry_id": "entry_005_1", "hedonism_label": 1, "confidence": "high", "rationale": "Celebrates success through a good drink, dessert, and savoring relief."},
+        {"review_entry_id": "entry_005_2", "hedonism_label": -1, "confidence": "high", "rationale": "Explicitly refuses celebratory food and drink to resume planning work."}
+      ],
+      "comparable_except_choice": "yes", "realistic": "yes", "issue_codes": [], "accept_pair": "yes",
+      "pair_rationale": "The same successful launch leads either to savoring a reward or rejecting it for more work."
+    },
+    {
+      "review_pair_id": "pair_006",
+      "entry_reviews": [
+        {"review_entry_id": "entry_006_1", "hedonism_label": 1, "confidence": "high", "rationale": "Declines unnecessary extra work and spends the evening on enjoyable pottery."},
+        {"review_entry_id": "entry_006_2", "hedonism_label": -1, "confidence": "high", "rationale": "Volunteers for unneeded work and gives up the available pottery class."}
+      ],
+      "comparable_except_choice": "yes", "realistic": "yes", "issue_codes": [], "accept_pair": "yes",
+      "pair_rationale": "A clean choice between optional work and an established pleasurable activity."
+    },
+    {
+      "review_pair_id": "pair_007",
+      "entry_reviews": [
+        {"review_entry_id": "entry_007_1", "hedonism_label": 1, "confidence": "high", "rationale": "Chooses the concert, participates freely, and returns visibly happy."},
+        {"review_entry_id": "entry_007_2", "hedonism_label": -1, "confidence": "high", "rationale": "Lets a paid-for concert pleasure expire to do optional extra polishing."}
+      ],
+      "comparable_except_choice": "yes", "realistic": "yes", "issue_codes": [], "accept_pair": "yes",
+      "pair_rationale": "The entries differ directly between enjoying a concert and sacrificing it for nonessential work."
+    },
+    {
+      "review_pair_id": "pair_008",
+      "entry_reviews": [
+        {"review_entry_id": "entry_008_1", "hedonism_label": -1, "confidence": "high", "rationale": "Abandons restful time in the park because pleasure feels undeserved."},
+        {"review_entry_id": "entry_008_2", "hedonism_label": 1, "confidence": "high", "rationale": "Allows the planned rest and enjoys the sun despite pending tasks."}
+      ],
+      "comparable_except_choice": "yes", "realistic": "yes", "issue_codes": [], "accept_pair": "yes",
+      "pair_rationale": "A plausible guilt-driven choice to reject or accept the same available park break."
+    },
+    {
+      "review_pair_id": "pair_009",
+      "entry_reviews": [
+        {"review_entry_id": "entry_009_1", "hedonism_label": 1, "confidence": "high", "rationale": "Uses unexpected free time to sit and savor coffee slowly."},
+        {"review_entry_id": "entry_009_2", "hedonism_label": -1, "confidence": "high", "rationale": "Cuts short an available coffee break and returns to work almost immediately."}
+      ],
+      "comparable_except_choice": "yes", "realistic": "yes", "issue_codes": [], "accept_pair": "yes",
+      "pair_rationale": "The same early finish enables either savoring comfort or rejecting it for more work."
+    },
+    {
+      "review_pair_id": "pair_010",
+      "entry_reviews": [
+        {"review_entry_id": "entry_010_1", "hedonism_label": -1, "confidence": "high", "rationale": "Skips an available dessert and leaves the table for optional work."},
+        {"review_entry_id": "entry_010_2", "hedonism_label": 1, "confidence": "high", "rationale": "Orders the desired dessert and remains to enjoy it fully."}
+      ],
+      "comparable_except_choice": "yes", "realistic": "yes", "issue_codes": [], "accept_pair": "yes",
+      "pair_rationale": "A direct and realistic dessert-versus-optional-work choice."
+    },
+    {
+      "review_pair_id": "pair_011",
+      "entry_reviews": [
+        {"review_entry_id": "entry_011_1", "hedonism_label": 1, "confidence": "high", "rationale": "Refuses non-urgent weekend work and preserves a beach day."},
+        {"review_entry_id": "entry_011_2", "hedonism_label": -1, "confidence": "high", "rationale": "Accepts non-urgent weekend work and cancels the planned beach day."}
+      ],
+      "comparable_except_choice": "yes", "realistic": "yes", "issue_codes": [], "accept_pair": "yes",
+      "pair_rationale": "The same optional coverage request is weighed against the same leisure plan."
+    },
+    {
+      "review_pair_id": "pair_012",
+      "entry_reviews": [
+        {"review_entry_id": "entry_012_1", "hedonism_label": 1, "confidence": "high", "rationale": "Chooses sufficient pay while protecting pleasurable dinners, walks, and weekends."},
+        {"review_entry_id": "entry_012_2", "hedonism_label": -1, "confidence": "high", "rationale": "Chooses higher pay while knowingly surrendering evenings and enjoyable personal time."}
+      ],
+      "comparable_except_choice": "yes", "realistic": "yes", "issue_codes": [], "accept_pair": "yes",
+      "pair_rationale": "A credible role-size tradeoff chiefly contrasting more money with protected leisure."
+    },
+    {
+      "review_pair_id": "pair_013",
+      "entry_reviews": [
+        {"review_entry_id": "entry_013_1", "hedonism_label": 1, "confidence": "high", "rationale": "Uses surplus savings to book a pleasurable coastal getaway."},
+        {"review_entry_id": "entry_013_2", "hedonism_label": -1, "confidence": "high", "rationale": "Cancels an affordable planned trip and redirects its cost to already-ahead savings."}
+      ],
+      "comparable_except_choice": "yes", "realistic": "yes", "issue_codes": [], "accept_pair": "yes",
+      "pair_rationale": "With savings already ahead, the entries cleanly choose or cancel the same leisure trip."
+    },
+    {
+      "review_pair_id": "pair_014",
+      "entry_reviews": [
+        {"review_entry_id": "entry_014_1", "hedonism_label": 1, "confidence": "high", "rationale": "Keeps game night and allows herself social enjoyment despite unfinished paperwork."},
+        {"review_entry_id": "entry_014_2", "hedonism_label": -1, "confidence": "high", "rationale": "Cancels enjoyable social time to continue paperwork alone."}
+      ],
+      "comparable_except_choice": "yes", "realistic": "yes", "issue_codes": [], "accept_pair": "yes",
+      "pair_rationale": "A realistic tension between a recurring obligation and an available social pleasure."
+    },
+    {
+      "review_pair_id": "pair_015",
+      "entry_reviews": [
+        {"review_entry_id": "entry_015_1", "hedonism_label": -1, "confidence": "high", "rationale": "Rejects the available post-race food and music to begin planning more work."},
+        {"review_entry_id": "entry_015_2", "hedonism_label": 1, "confidence": "high", "rationale": "Stays to enjoy the food, music, and achievement celebration."}
+      ],
+      "comparable_except_choice": "yes", "realistic": "yes", "issue_codes": [], "accept_pair": "yes",
+      "pair_rationale": "The same race result is followed by either rejecting or enjoying the available celebration."
+    },
+    {
+      "review_pair_id": "pair_016",
+      "entry_reviews": [
+        {"review_entry_id": "entry_016_1", "hedonism_label": 1, "confidence": "high", "rationale": "Chooses the home with a sunny balcony and physical comfort over status."},
+        {"review_entry_id": "entry_016_2", "hedonism_label": -1, "confidence": "high", "rationale": "Chooses the status address despite knowingly giving up comfort and the sunny balcony."}
+      ],
+      "comparable_except_choice": "yes", "realistic": "yes", "issue_codes": [], "accept_pair": "yes",
+      "pair_rationale": "A plausible housing choice contrasting lived comfort with a prestigious address."
+    },
+    {
+      "review_pair_id": "pair_017",
+      "entry_reviews": [
+        {"review_entry_id": "entry_017_1", "hedonism_label": -1, "confidence": "high", "rationale": "Refuses a long birthday lunch and cake even though the report can wait."},
+        {"review_entry_id": "entry_017_2", "hedonism_label": 1, "confidence": "high", "rationale": "Enjoys the birthday lunch, cake, and others' attention while work can wait."}
+      ],
+      "comparable_except_choice": "yes", "realistic": "yes", "issue_codes": [], "accept_pair": "yes",
+      "pair_rationale": "A direct contrast between rejecting and accepting an available birthday pleasure."
+    },
+    {
+      "review_pair_id": "pair_018",
+      "entry_reviews": [
+        {"review_entry_id": "entry_018_1", "hedonism_label": -1, "confidence": "high", "rationale": "Stays inside for non-urgent forms and passes up inviting pool time."},
+        {"review_entry_id": "entry_018_2", "hedonism_label": 1, "confidence": "high", "rationale": "Defers non-urgent forms and enjoys swimming until evening."}
+      ],
+      "comparable_except_choice": "yes", "realistic": "yes", "issue_codes": [], "accept_pair": "yes",
+      "pair_rationale": "The same non-urgent chore and appealing pool produce opposite pleasure choices."
+    },
+    {
+      "review_pair_id": "pair_019",
+      "entry_reviews": [
+        {"review_entry_id": "entry_019_1", "hedonism_label": 1, "confidence": "high", "rationale": "Responds to exhaustion by taking a warm, physically relieving bath."},
+        {"review_entry_id": "entry_019_2", "hedonism_label": -1, "confidence": "high", "rationale": "Rejects available bodily comfort and continues chores while remaining tense."}
+      ],
+      "comparable_except_choice": "yes", "realistic": "yes", "issue_codes": [], "accept_pair": "yes",
+      "pair_rationale": "A clean and credible choice between restorative comfort and continued household work."
+    },
+    {
+      "review_pair_id": "pair_020",
+      "entry_reviews": [
+        {"review_entry_id": "entry_020_1", "hedonism_label": 1, "confidence": "high", "rationale": "Marks the promotion with a favorite meal and consciously enjoys the reward."},
+        {"review_entry_id": "entry_020_2", "hedonism_label": -1, "confidence": "high", "rationale": "Rejects the celebratory meal to start the next workload immediately."}
+      ],
+      "comparable_except_choice": "yes", "realistic": "yes", "issue_codes": [], "accept_pair": "yes",
+      "pair_rationale": "The same promotion leads either to a pleasurable reward or its explicit sacrifice for work."
+    },
+    {
+      "review_pair_id": "pair_021",
+      "entry_reviews": [
+        {"review_entry_id": "entry_021_1", "hedonism_label": 1, "confidence": "high", "rationale": "Stops sufficient work on time and attends an anticipated dinner."},
+        {"review_entry_id": "entry_021_2", "hedonism_label": -1, "confidence": "high", "rationale": "Keeps polishing already-sufficient work and misses an anticipated dinner."}
+      ],
+      "comparable_except_choice": "yes", "realistic": "yes", "issue_codes": [], "accept_pair": "yes",
+      "pair_rationale": "A realistic choice between unnecessary extra work and a planned enjoyable dinner."
+    },
+    {
+      "review_pair_id": "pair_022",
+      "entry_reviews": [
+        {"review_entry_id": "entry_022_1", "hedonism_label": -1, "confidence": "high", "rationale": "Joins optional work while on leave and gives up pool time."},
+        {"review_entry_id": "entry_022_2", "hedonism_label": 1, "confidence": "high", "rationale": "Declines an optional work thread while on leave and enjoys the pool."}
+      ],
+      "comparable_except_choice": "yes", "realistic": "yes", "issue_codes": [], "accept_pair": "yes",
+      "pair_rationale": "The same optional call competes directly with the same available leave-time pleasure."
+    },
+    {
+      "review_pair_id": "pair_023",
+      "entry_reviews": [
+        {"review_entry_id": "entry_023_1", "hedonism_label": 1, "confidence": "high", "rationale": "Allows an hour of bodily rest despite judging the nap as lazy."},
+        {"review_entry_id": "entry_023_2", "hedonism_label": -1, "confidence": "high", "rationale": "Rejects needed and available rest because it feels lazy, then keeps working."}
+      ],
+      "comparable_except_choice": "yes", "realistic": "yes", "issue_codes": [], "accept_pair": "yes",
+      "pair_rationale": "A direct, plausible contrast between accepting and denying requested bodily rest."
+    },
+    {
+      "review_pair_id": "pair_024",
+      "entry_reviews": [
+        {"review_entry_id": "entry_024_1", "hedonism_label": 0, "confidence": "high", "rationale": "Eats liked food but rushes through it while working, showing neither clear pleasure-seeking nor explicit rejection."},
+        {"review_entry_id": "entry_024_2", "hedonism_label": 1, "confidence": "high", "rationale": "Removes distractions and deliberately savors liked food in a quiet setting."}
+      ],
+      "comparable_except_choice": "yes", "realistic": "yes", "issue_codes": [], "accept_pair": "yes",
+      "pair_rationale": "Both eat the same food; the main difference is distracted consumption versus deliberate enjoyment."
+    }
+  ]
+}

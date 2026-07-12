@@ -1,0 +1,540 @@
+{
+  "schema_version": "twinkl-748-review-v1",
+  "target_version": "twinkl-748-hedonism-hard-set-v1",
+  "random_seed": 748,
+  "cases": [
+    {
+      "review_pair_id": "pair_001",
+      "pair_id": "hp_019",
+      "family": "lifestyle_quality_choice",
+      "isolated_behavior": "preserve relaxed commute versus accept draining commute",
+      "affect_band": "uncertain",
+      "secondary_value_risk": [
+        "Achievement",
+        "Power"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_001_1",
+          "variant_id": "hp_019_b",
+          "author_label": -1
+        },
+        {
+          "review_entry_id": "entry_001_2",
+          "variant_id": "hp_019_a",
+          "author_label": 1
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_002",
+      "pair_id": "hp_004",
+      "family": "quiet_sensory_pleasure",
+      "isolated_behavior": "listen to music versus use the time productively",
+      "affect_band": "reflective",
+      "secondary_value_risk": [
+        "Achievement"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_002_1",
+          "variant_id": "hp_004_a",
+          "author_label": 1
+        },
+        {
+          "review_entry_id": "entry_002_2",
+          "variant_id": "hp_004_b",
+          "author_label": -1
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_003",
+      "pair_id": "hp_024",
+      "family": "pleasure_despite_commitment",
+      "isolated_behavior": "take scenic detour versus maximize efficiency",
+      "affect_band": "calm",
+      "secondary_value_risk": [
+        "Achievement"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_003_1",
+          "variant_id": "hp_024_a",
+          "author_label": 1
+        },
+        {
+          "review_entry_id": "entry_003_2",
+          "variant_id": "hp_024_b",
+          "author_label": -1
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_004",
+      "pair_id": "hp_005",
+      "family": "guilt_coded_rest",
+      "isolated_behavior": "keep planned rest versus surrender it to guilt",
+      "affect_band": "guilty",
+      "secondary_value_risk": [
+        "Achievement"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_004_1",
+          "variant_id": "hp_005_b",
+          "author_label": -1
+        },
+        {
+          "review_entry_id": "entry_004_2",
+          "variant_id": "hp_005_a",
+          "author_label": 1
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_005",
+      "pair_id": "hp_014",
+      "family": "celebration_and_savoring",
+      "isolated_behavior": "enjoy completed launch versus begin next task",
+      "affect_band": "positive",
+      "secondary_value_risk": [
+        "Achievement"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_005_1",
+          "variant_id": "hp_014_a",
+          "author_label": 1
+        },
+        {
+          "review_entry_id": "entry_005_2",
+          "variant_id": "hp_014_b",
+          "author_label": -1
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_006",
+      "pair_id": "hp_012",
+      "family": "protected_leisure_boundary",
+      "isolated_behavior": "keep hobby evening versus volunteer for extra work",
+      "affect_band": "weary",
+      "secondary_value_risk": [
+        "Achievement"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_006_1",
+          "variant_id": "hp_012_a",
+          "author_label": 1
+        },
+        {
+          "review_entry_id": "entry_006_2",
+          "variant_id": "hp_012_b",
+          "author_label": -1
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_007",
+      "pair_id": "hp_023",
+      "family": "pleasure_despite_commitment",
+      "isolated_behavior": "keep concert plan versus finish optional preparation",
+      "affect_band": "anxious",
+      "secondary_value_risk": [
+        "Achievement"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_007_1",
+          "variant_id": "hp_023_a",
+          "author_label": 1
+        },
+        {
+          "review_entry_id": "entry_007_2",
+          "variant_id": "hp_023_b",
+          "author_label": -1
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_008",
+      "pair_id": "hp_008",
+      "family": "guilt_coded_rest",
+      "isolated_behavior": "sit in the park versus turn the break into errands",
+      "affect_band": "restless",
+      "secondary_value_risk": [
+        "Achievement"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_008_1",
+          "variant_id": "hp_008_b",
+          "author_label": -1
+        },
+        {
+          "review_entry_id": "entry_008_2",
+          "variant_id": "hp_008_a",
+          "author_label": 1
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_009",
+      "pair_id": "hp_001",
+      "family": "quiet_sensory_pleasure",
+      "isolated_behavior": "linger over coffee versus return to work",
+      "affect_band": "calm",
+      "secondary_value_risk": [
+        "Achievement"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_009_1",
+          "variant_id": "hp_001_a",
+          "author_label": 1
+        },
+        {
+          "review_entry_id": "entry_009_2",
+          "variant_id": "hp_001_b",
+          "author_label": -1
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_010",
+      "pair_id": "hp_021",
+      "family": "pleasure_despite_commitment",
+      "isolated_behavior": "choose dessert versus return to optional work",
+      "affect_band": "defiant",
+      "secondary_value_risk": [
+        "Achievement"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_010_1",
+          "variant_id": "hp_021_b",
+          "author_label": -1
+        },
+        {
+          "review_entry_id": "entry_010_2",
+          "variant_id": "hp_021_a",
+          "author_label": 1
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_011",
+      "pair_id": "hp_009",
+      "family": "protected_leisure_boundary",
+      "isolated_behavior": "protect Saturday versus accept unnecessary work",
+      "affect_band": "firm",
+      "secondary_value_risk": [
+        "Achievement"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_011_1",
+          "variant_id": "hp_009_a",
+          "author_label": 1
+        },
+        {
+          "review_entry_id": "entry_011_2",
+          "variant_id": "hp_009_b",
+          "author_label": -1
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_012",
+      "pair_id": "hp_017",
+      "family": "lifestyle_quality_choice",
+      "isolated_behavior": "choose livable role versus higher-status grind",
+      "affect_band": "thoughtful",
+      "secondary_value_risk": [
+        "Achievement",
+        "Power"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_012_1",
+          "variant_id": "hp_017_a",
+          "author_label": 1
+        },
+        {
+          "review_entry_id": "entry_012_2",
+          "variant_id": "hp_017_b",
+          "author_label": -1
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_013",
+      "pair_id": "hp_020",
+      "family": "lifestyle_quality_choice",
+      "isolated_behavior": "fund enjoyable trip versus optimize savings",
+      "affect_band": "conflicted",
+      "secondary_value_risk": [
+        "Security"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_013_1",
+          "variant_id": "hp_020_a",
+          "author_label": 1
+        },
+        {
+          "review_entry_id": "entry_013_2",
+          "variant_id": "hp_020_b",
+          "author_label": -1
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_014",
+      "pair_id": "hp_007",
+      "family": "guilt_coded_rest",
+      "isolated_behavior": "enjoy game night versus cancel from guilt",
+      "affect_band": "uneasy",
+      "secondary_value_risk": [
+        "Achievement",
+        "Benevolence"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_014_1",
+          "variant_id": "hp_007_a",
+          "author_label": 1
+        },
+        {
+          "review_entry_id": "entry_014_2",
+          "variant_id": "hp_007_b",
+          "author_label": -1
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_015",
+      "pair_id": "hp_016",
+      "family": "celebration_and_savoring",
+      "isolated_behavior": "savor race finish versus treat it as another task",
+      "affect_band": "positive",
+      "secondary_value_risk": [
+        "Achievement"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_015_1",
+          "variant_id": "hp_016_b",
+          "author_label": -1
+        },
+        {
+          "review_entry_id": "entry_015_2",
+          "variant_id": "hp_016_a",
+          "author_label": 1
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_016",
+      "pair_id": "hp_018",
+      "family": "lifestyle_quality_choice",
+      "isolated_behavior": "choose comfortable home versus prestige address",
+      "affect_band": "practical",
+      "secondary_value_risk": [
+        "Power",
+        "Security"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_016_1",
+          "variant_id": "hp_018_a",
+          "author_label": 1
+        },
+        {
+          "review_entry_id": "entry_016_2",
+          "variant_id": "hp_018_b",
+          "author_label": -1
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_017",
+      "pair_id": "hp_015",
+      "family": "celebration_and_savoring",
+      "isolated_behavior": "take birthday outing versus defer celebration",
+      "affect_band": "positive",
+      "secondary_value_risk": [
+        "Achievement"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_017_1",
+          "variant_id": "hp_015_b",
+          "author_label": -1
+        },
+        {
+          "review_entry_id": "entry_017_2",
+          "variant_id": "hp_015_a",
+          "author_label": 1
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_018",
+      "pair_id": "hp_022",
+      "family": "pleasure_despite_commitment",
+      "isolated_behavior": "enjoy evening swim versus complete nonurgent admin",
+      "affect_band": "conflicted",
+      "secondary_value_risk": [
+        "Achievement"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_018_1",
+          "variant_id": "hp_022_b",
+          "author_label": -1
+        },
+        {
+          "review_entry_id": "entry_018_2",
+          "variant_id": "hp_022_a",
+          "author_label": 1
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_019",
+      "pair_id": "hp_002",
+      "family": "quiet_sensory_pleasure",
+      "isolated_behavior": "enjoy warm bath versus replace it with chores",
+      "affect_band": "tired",
+      "secondary_value_risk": [
+        "Achievement"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_019_1",
+          "variant_id": "hp_002_a",
+          "author_label": 1
+        },
+        {
+          "review_entry_id": "entry_019_2",
+          "variant_id": "hp_002_b",
+          "author_label": -1
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_020",
+      "pair_id": "hp_013",
+      "family": "celebration_and_savoring",
+      "isolated_behavior": "celebrate promotion versus resume work immediately",
+      "affect_band": "positive",
+      "secondary_value_risk": [
+        "Achievement"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_020_1",
+          "variant_id": "hp_013_a",
+          "author_label": 1
+        },
+        {
+          "review_entry_id": "entry_020_2",
+          "variant_id": "hp_013_b",
+          "author_label": -1
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_021",
+      "pair_id": "hp_010",
+      "family": "protected_leisure_boundary",
+      "isolated_behavior": "leave work for dinner versus stay for optional polishing",
+      "affect_band": "conflicted",
+      "secondary_value_risk": [
+        "Achievement",
+        "Benevolence"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_021_1",
+          "variant_id": "hp_010_a",
+          "author_label": 1
+        },
+        {
+          "review_entry_id": "entry_021_2",
+          "variant_id": "hp_010_b",
+          "author_label": -1
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_022",
+      "pair_id": "hp_011",
+      "family": "protected_leisure_boundary",
+      "isolated_behavior": "preserve holiday versus attend optional planning call",
+      "affect_band": "resigned",
+      "secondary_value_risk": [
+        "Achievement"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_022_1",
+          "variant_id": "hp_011_b",
+          "author_label": -1
+        },
+        {
+          "review_entry_id": "entry_022_2",
+          "variant_id": "hp_011_a",
+          "author_label": 1
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_023",
+      "pair_id": "hp_006",
+      "family": "guilt_coded_rest",
+      "isolated_behavior": "take a nap versus force wakefulness",
+      "affect_band": "guilty",
+      "secondary_value_risk": [
+        "Achievement"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_023_1",
+          "variant_id": "hp_006_a",
+          "author_label": 1
+        },
+        {
+          "review_entry_id": "entry_023_2",
+          "variant_id": "hp_006_b",
+          "author_label": -1
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_024",
+      "pair_id": "hp_003",
+      "family": "quiet_sensory_pleasure",
+      "isolated_behavior": "savor favorite meal versus eat while working",
+      "affect_band": "content",
+      "secondary_value_risk": [
+        "Achievement"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_024_1",
+          "variant_id": "hp_003_b",
+          "author_label": -1
+        },
+        {
+          "review_entry_id": "entry_024_2",
+          "variant_id": "hp_003_a",
+          "author_label": 1
+        }
+      ]
+    }
+  ]
+}

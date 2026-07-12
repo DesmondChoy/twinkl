@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "target_version": "twinkl-748-hedonism-hard-set-v1",
+  "evidence_class": "Codex-reviewed diagnostic; not human validation",
+  "technical_isolation": false,
+  "requested_reviewer_runtime": "5.6 Sol / Light",
+  "runtime_control_available": false,
+  "protocol_limitations": [
+    "The subagent launcher does not expose model or reasoning-level selectors, so the requested runtime cannot be enforced.",
+    "Packet-only instructions provide controlled disclosure in a shared workspace, not enforced filesystem isolation.",
+    "Agreement between Codex reviewers is shared-model consistency, not human validity.",
+    "The v1 response schema omitted the top-level review-array field; both reviewers independently used pair_reviews and the materializer accepted that shared interpretation."
+  ],
+  "source_spec_path": "config/evals/twinkl_748_hedonism_hard_set_v1.yaml",
+  "source_spec_sha256": "b9b07ebb02e2a3dded97d970fe66d5bddab4dcb1b1042bbf1afab621cde27092",
+  "blind_packet_path": "logs/experiments/artifacts/hedonism_hard_set_twinkl_748_20260712/reviewer_packet/blind_packet.json",
+  "blind_packet_sha256": "a1d9e91dd2b7ff4a009ca3d0a69d194c445783b28974cf6bf9334e439d2120cf",
+  "response_schema_path": "logs/experiments/artifacts/hedonism_hard_set_twinkl_748_20260712/reviewer_packet/response_schema.json",
+  "response_schema_sha256": "5958cc5a56199ceeb88c5dfef5cf764dcb954380154b7bff32e3889fb3b7ef02",
+  "reconciliation_key_path": "logs/experiments/artifacts/hedonism_hard_set_twinkl_748_20260712/parent_control/reconciliation_key.json",
+  "reconciliation_key_sha256": "0c0176ed49d7ec1cf2fa4c6b57a5d4f5bb56eeecd3921b6314c6c8e5e5cfcc43",
+  "pair_count": 24,
+  "entry_count": 48,
+  "reviewers": [
+    {
+      "reviewer_id": "twinkl-748-reviewer-a",
+      "reviewed_at": "2026-07-12T13:15:08+08:00",
+      "reviewer_runtime": "platform-default-subagent (requested 5.6 Sol / Light; selector unavailable)",
+      "response_path": "reviewer_packet/reviewer_a.json",
+      "response_sha256": "caefacf4527bd00907c5a2ba650f71ad5ffd57503381eedb594628e4a9950d84"
+    },
+    {
+      "reviewer_id": "twinkl-748-reviewer-b",
+      "reviewed_at": "2026-07-12T13:15:21+08:00",
+      "reviewer_runtime": "platform-default-subagent (requested 5.6 Sol / Light; selector unavailable)",
+      "response_path": "reviewer_packet/reviewer_b.json",
+      "response_sha256": "eac53f92337089b90251b5583cbaed0837a2548a7548eabb4a28773f30f8a0ab"
+    }
+  ],
+  "materialization_complete": true,
+  "review_summary_path": "parent_control/review_summary.json",
+  "review_summary_sha256": "0049fc427d167b576b5aded26e0f832f407c5613280bd8c903263327a75ed788"
+}

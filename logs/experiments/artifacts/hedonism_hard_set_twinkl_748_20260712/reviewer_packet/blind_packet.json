@@ -1,0 +1,399 @@
+{
+  "schema_version": "twinkl-748-review-v1",
+  "target_version": "twinkl-748-hedonism-hard-set-v1",
+  "reviewer_prompt_version": "twinkl-748-packet-only-v1",
+  "purpose": "Codex-reviewed diagnostic of whether close journal-entry pairs differ cleanly in behavior that supports or conflicts with Hedonism.",
+  "rules": [
+    "Score Hedonism independently: choosing present pleasure or comfort can be +1 even when another commitment is harmed.",
+    "Use -1 only for clear self-denial, cancellation, or rejection of available pleasure, rest, or comfort.",
+    "Use 0 when neither direction is clearly shown and uncertain when ambiguous.",
+    "Accept a pair only if both entries are realistic and differ mainly in the behavior or choice relevant to Hedonism.",
+    "Do not infer or search for author intent, model predictions, or source metadata."
+  ],
+  "cases": [
+    {
+      "review_pair_id": "pair_001",
+      "core_values": [
+        "Hedonism"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_001_1",
+          "journal_entry": "The offer is more impressive, but the commute will erase cooking at night. I chose the stronger title and the harder days."
+        },
+        {
+          "review_entry_id": "entry_001_2",
+          "journal_entry": "The offer is less impressive, but I can walk there and still cook at night. I chose the ordinary title and the easier days."
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_002",
+      "core_values": [
+        "Hedonism"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_002_1",
+          "journal_entry": "The record arrived today. I lay on the rug and listened to the whole first side without doing anything else."
+        },
+        {
+          "review_entry_id": "entry_002_2",
+          "journal_entry": "The record arrived today. I left it wrapped on the shelf and used the whole evening to clear another batch of work."
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_003",
+      "core_values": [
+        "Hedonism"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_003_1",
+          "journal_entry": "There was enough time before the appointment, so I took the riverside path and stopped for the cold juice I like."
+        },
+        {
+          "review_entry_id": "entry_003_2",
+          "journal_entry": "There was enough time before the appointment, but I took the direct path and passed the cold juice place without stopping."
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_004",
+      "core_values": [
+        "Hedonism"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_004_1",
+          "journal_entry": "I felt guilty seeing the unread messages, so I gave up the afternoon I had set aside and answered them from the sofa."
+        },
+        {
+          "review_entry_id": "entry_004_2",
+          "journal_entry": "I felt guilty seeing the unread messages, but I kept the afternoon I had set aside and watched the film from the sofa."
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_005",
+      "core_values": [
+        "Hedonism"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_005_1",
+          "journal_entry": "The launch landed cleanly and everyone was relieved. I poured the good drink, ordered dessert, and stayed with that feeling tonight."
+        },
+        {
+          "review_entry_id": "entry_005_2",
+          "journal_entry": "The launch landed cleanly and everyone was relieved. I left the good drink untouched, skipped dessert, and started tomorrow's list tonight."
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_006",
+      "core_values": [
+        "Hedonism"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_006_1",
+          "journal_entry": "Nobody needed me to take the extra review. I left it unclaimed and spent the evening shaping the little bowl at pottery class."
+        },
+        {
+          "review_entry_id": "entry_006_2",
+          "journal_entry": "Nobody needed me to take the extra review. I claimed it anyway and spent the evening marking comments instead of going to pottery class."
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_007",
+      "core_values": [
+        "Hedonism"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_007_1",
+          "journal_entry": "I could polish Monday's slides again, but the concert ticket was already in my pocket. I went, sang badly, and came home smiling."
+        },
+        {
+          "review_entry_id": "entry_007_2",
+          "journal_entry": "I could polish Monday's slides again, and the concert ticket was already in my pocket. I stayed, revised them, and let the ticket expire."
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_008",
+      "core_values": [
+        "Hedonism"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_008_1",
+          "journal_entry": "Sitting in the park felt undeserved with so much pending, so I left the bench and ran errands until lunch ended."
+        },
+        {
+          "review_entry_id": "entry_008_2",
+          "journal_entry": "Sitting in the park felt undeserved with so much pending, but I stayed on the bench and enjoyed the sun until lunch ended."
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_009",
+      "core_values": [
+        "Hedonism"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_009_1",
+          "journal_entry": "The meeting ended early, so I sat by the window with my coffee and let myself taste it slowly before heading back upstairs."
+        },
+        {
+          "review_entry_id": "entry_009_2",
+          "journal_entry": "The meeting ended early, so I carried my coffee back upstairs and opened the next deck before I had taken more than a sip."
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_010",
+      "core_values": [
+        "Hedonism"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_010_1",
+          "journal_entry": "The optional report was still open, so I skipped the chocolate cake and returned to the laptop before everyone else had finished."
+        },
+        {
+          "review_entry_id": "entry_010_2",
+          "journal_entry": "The optional report was still open, but I ordered the chocolate cake and stayed at the table until I had finished every bite."
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_011",
+      "core_values": [
+        "Hedonism"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_011_1",
+          "journal_entry": "My manager asked if I could cover Saturday again. Nothing was urgent, so I said no and kept the day for the beach."
+        },
+        {
+          "review_entry_id": "entry_011_2",
+          "journal_entry": "My manager asked if I could cover Saturday again. Nothing was urgent, but I said yes and dropped the day at the beach."
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_012",
+      "core_values": [
+        "Hedonism"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_012_1",
+          "journal_entry": "The smaller role pays enough and leaves my evenings alone. I accepted it because I want dinners, walks, and weekends that belong to me."
+        },
+        {
+          "review_entry_id": "entry_012_2",
+          "journal_entry": "The bigger role pays more and takes most evenings. I accepted it although it means dinners, walks, and weekends will stop belonging to me."
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_013",
+      "core_values": [
+        "Hedonism"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_013_1",
+          "journal_entry": "The savings plan is ahead of target, so I booked the little coastal trip and chose a room where I can hear the water."
+        },
+        {
+          "review_entry_id": "entry_013_2",
+          "journal_entry": "The savings plan is ahead of target, but I cancelled the little coastal trip and moved the room money into the account."
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_014",
+      "core_values": [
+        "Hedonism"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_014_1",
+          "journal_entry": "Mum's paperwork is still unfinished and I felt uneasy, but I went to game night and let myself laugh with everyone for once."
+        },
+        {
+          "review_entry_id": "entry_014_2",
+          "journal_entry": "Mum's paperwork is still unfinished and I felt uneasy, so I cancelled game night and spent the evening sorting forms alone again."
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_015",
+      "core_values": [
+        "Hedonism"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_015_1",
+          "journal_entry": "I crossed the finish line faster than I expected. I skipped the food and music and rushed home to plan the next race."
+        },
+        {
+          "review_entry_id": "entry_015_2",
+          "journal_entry": "I crossed the finish line faster than I expected. I stayed for the food and music instead of rushing home to plan the next race."
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_016",
+      "core_values": [
+        "Hedonism"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_016_1",
+          "journal_entry": "The modest flat has a sunny balcony and room for a deep chair. I chose it over the impressive address with nowhere comfortable to sit."
+        },
+        {
+          "review_entry_id": "entry_016_2",
+          "journal_entry": "The impressive flat has the address people notice but nowhere comfortable to sit. I chose it over the modest place with the sunny balcony."
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_017",
+      "core_values": [
+        "Hedonism"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_017_1",
+          "journal_entry": "It was a good birthday and the report could wait. I skipped the long lunch, declined the cake, and went back to the report."
+        },
+        {
+          "review_entry_id": "entry_017_2",
+          "journal_entry": "It was a good birthday and the report could wait. I took the long lunch, ordered the cake, and enjoyed being fussed over."
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_018",
+      "core_values": [
+        "Hedonism"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_018_1",
+          "journal_entry": "The expense forms were not due, and the water looked perfect. I stayed inside to finish them and watched the pool lights come on."
+        },
+        {
+          "review_entry_id": "entry_018_2",
+          "journal_entry": "The expense forms were not due, and the water looked perfect. I left them for tomorrow and swam until the lights came on."
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_019",
+      "core_values": [
+        "Hedonism"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_019_1",
+          "journal_entry": "I was worn out after the commute, but I filled the bath and stayed in the warm water until my shoulders finally loosened."
+        },
+        {
+          "review_entry_id": "entry_019_2",
+          "journal_entry": "I was worn out after the commute, but I skipped the bath and folded laundry until the tightness in my shoulders felt normal again."
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_020",
+      "core_values": [
+        "Hedonism"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_020_1",
+          "journal_entry": "The promotion finally came through after all those late nights. I booked our favorite restaurant and let the evening feel like a reward."
+        },
+        {
+          "review_entry_id": "entry_020_2",
+          "journal_entry": "The promotion finally came through after all those late nights. I skipped our favorite restaurant and used the evening to start the new workload."
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_021",
+      "core_values": [
+        "Hedonism"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_021_1",
+          "journal_entry": "The draft was already good enough, so I shut the laptop at six and went to the dinner I had been looking forward to."
+        },
+        {
+          "review_entry_id": "entry_021_2",
+          "journal_entry": "The draft was already good enough, but I kept the laptop open past six and missed the dinner I had been looking forward to."
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_022",
+      "core_values": [
+        "Hedonism"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_022_1",
+          "journal_entry": "The planning call was optional and I was finally on leave, but I joined the thread and stayed upstairs from the pool."
+        },
+        {
+          "review_entry_id": "entry_022_2",
+          "journal_entry": "The planning call was optional and I was finally on leave, so I muted the thread and went down to the pool."
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_023",
+      "core_values": [
+        "Hedonism"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_023_1",
+          "journal_entry": "Part of me said a nap was lazy, but I closed the curtains and slept for an hour because my body was asking for it."
+        },
+        {
+          "review_entry_id": "entry_023_2",
+          "journal_entry": "Part of me said a nap was lazy, so I left the curtains open and kept working for an hour although my body was asking for it."
+        }
+      ]
+    },
+    {
+      "review_pair_id": "pair_024",
+      "core_values": [
+        "Hedonism"
+      ],
+      "entries": [
+        {
+          "review_entry_id": "entry_024_1",
+          "journal_entry": "I made the noodles I like, kept my laptop open, and ate them quickly at the table while answering messages from work."
+        },
+        {
+          "review_entry_id": "entry_024_2",
+          "journal_entry": "I made the noodles I like, put my phone away, and ate them slowly at the table while the apartment was quiet."
+        }
+      ]
+    }
+  ]
+}
