@@ -176,3 +176,10 @@
   selection paths before calling the change implemented. Document a policy/code
   mismatch explicitly and require a tested implementation before treating new
   runs as decision evidence.
+
+## 2026-07-13
+
+- Do not replace one vague experiment word with another. Instead of `arm` or
+  `condition`, name the exact experiment setup being compared, and reserve
+  `run` or `repeat` for one execution of that setup. Likewise, do not use a bare `set`;
+  say `development set`, `final test set`, or name the exact reviewed cases.

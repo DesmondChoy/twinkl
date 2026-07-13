@@ -103,6 +103,7 @@ Script-based generation/judging helpers live in `src/synthetic/`,
 
 ### Documentation (`docs/`)
 
+- `docs/canonical_nouns.md` — Canonical product terms for explanations and documentation
 - `docs/prd.md` — Product requirements (authoritative)
 - `docs/vif/` — VIF concepts, architecture, training, uncertainty, state pipeline
 - `docs/pipeline/` — Pipeline specs, annotation guidelines, judge instructions, data schema
@@ -128,6 +129,10 @@ Script-based generation/judging helpers live in `src/synthetic/`,
 - Imports: standard library first, then third-party, then local.
 - Naming: `snake_case` for functions/variables, `PascalCase` for classes.
 - Keep comments concise and only where they reduce cognitive load.
+
+## Communication Clarity
+
+- **Canonical nouns**: For product concepts in explanations and documentation, use `docs/canonical_nouns.md`. Avoid synonyms or extra jargon unless a real distinction requires them; define any necessary new term in plain English.
 
 ## Collaboration Signals
 

@@ -104,6 +104,7 @@ Script-based generation/judging helpers live in `src/synthetic/`,
 
 ### Documentation (`docs/`)
 
+- `docs/canonical_nouns.md` — Canonical product terms for explanations and documentation
 - `docs/prd.md` — Product requirements (authoritative)
 - `docs/vif/` — VIF concepts, architecture, training, uncertainty, state pipeline
 - `docs/pipeline/` — Pipeline specs, annotation guidelines, judge instructions, data schema
@@ -133,6 +134,7 @@ Script-based generation/judging helpers live in `src/synthetic/`,
 
 - **General clarity rule**: Write for immediate understanding on first read. Prefer plain, everyday language, short sentences, and concrete wording over dense or abstract phrasing.
 - **Anti-jargon rule**: Do not make the user decode internal shorthand, umbrella terms, or technical jargon when a direct phrase would work. If a technical term is necessary, define it in plain English the first time you use it.
+- **Canonical nouns**: For product concepts in explanations and documentation, use `docs/canonical_nouns.md`. Avoid synonyms or extra jargon unless a real distinction requires them; define any necessary new term in plain English.
 
 ## Collaboration Signals
 
