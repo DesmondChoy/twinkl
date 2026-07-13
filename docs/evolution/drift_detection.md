@@ -2,36 +2,37 @@
 
 ## Current v1 Contract
 
-Drift v1 has one product target: two adjacent journal entries clearly show the
-writer making a behavior or choice against the same declared core value. The
-student-visible target uses only the displayed value and journal text; it does
-not infer a conflict from biography, hidden labels, outside constraints without
-a voluntary choice, or ambiguous prose. The former five-pass consensus surface
-is retired diagnostic provenance, not the active target.
+Drift has one product definition: two consecutive Journal Entries each contain
+Conflict for the same Core Value. The student-visible target uses only the
+displayed value and Journal Entry text; it does not infer Conflict from
+biography, hidden labels, outside constraints without
+a voluntary choice, or ambiguous prose. The former five-pass consensus label
+set is retired diagnostic provenance, not the active target.
 
 Evaluate this rule independently for each `(persona, declared_core_value)`:
 
-- Labels on other values do not cancel, offset, or complete the pair.
-- The first negative entry is the episode onset; the second confirms it.
-- Further adjacent negative entries extend the same episode.
-- The first non-negative or uncertain entry ends the run. A later pair starts a new
-  episode.
-- Adjacent means adjacent observed journal entries after sorting by `t_index`
-  and date. Same-day entries and entries across a week boundary count. V1 adds
-  no maximum elapsed-time threshold.
-- A non-negative entry can support recovery; an uncertain entry supports
-  uncertainty instead.
+- Labels on other values do not cancel, offset, or complete the Drift.
+- The first Conflict starts a possible Drift; the second confirms it.
+- Further consecutive Conflicts extend the same Drift.
+- The first non-Conflict or uncertain Journal Entry ends the run. A later pair
+  starts a new Drift.
+- Consecutive means consecutive observed Journal Entries after sorting by
+  `t_index` and date. Same-day Journal Entries and Journal Entries across a
+  week boundary count. V1 adds no maximum elapsed-time threshold.
+- A non-Conflict Journal Entry can support recovery; an uncertain Journal Entry
+  supports uncertainty instead.
 
-One persona may therefore have separate or simultaneous episodes on several
-declared core values. The reference records them separately by value; it never
-averages core values into one profile-wide verdict.
+One persona may therefore have separate or simultaneous Drifts on several Core
+Values. The reference records them separately by value; it never averages Core
+Values into one profile-wide verdict.
 
 The runtime target is rolling soft `P(-1)` evidence under uncertainty gating,
-and the user sees the result in the weekly Coach digest. The prior
-consensus-derived frozen benchmark is retired, so there is no active promotion
-benchmark. `twinkl-v8pb` completed the student-visible target and locked
-promotion review, but one 19-entry case was unresolved, so no scorer is
-promotion-ready and the production path remains unwired. The intended delivery
+and the user sees the result through the Weekly Digest and Weekly Coach. The
+prior consensus-derived frozen benchmark is retired, so there is no active
+final test set. `twinkl-v8pb` completed the student-visible target and locked
+final test review, but one 19-entry case was unresolved, so no VIF Critic and
+Drift Detector setup has deployment approval and the production path remains
+unwired. The intended delivery
 vocabulary is **active**, **recovered**, **mixed**, or **uncertain**; exact
 schema values and state transitions remain implementation work.
 
@@ -49,11 +50,15 @@ The repository also contains two exploratory predecessors:
   `high_uncertainty`, or `stable`; and
 - the demo compares six rule-based detector families and counts their votes.
 
-Neither predecessor implements the selected rolling-`P(-1)` v1 detector. The
-remaining sections preserve the broader detector research catalog and design
-trade-offs; crash/fade/rise/evolution material is not active v1 scope.
+Neither predecessor implements the selected rolling-`P(-1)` Drift Detector.
 
-## 0. Critic performance and its implications for drift detection
+> **Historical research boundary:** The remaining sections preserve the
+> pre-canonical detector research catalog and its original terminology for
+> provenance. Terms such as “drift,” “episode,” “Critic,” and “Coach” below are
+> legacy research labels, not current product nouns or behavior. They must not
+> override the Current v1 Contract above.
+
+## 0. Historical Detector Research Catalog: Critic performance and implications
 
 The trained Critic frontier (median QWK 0.362, `recall_-1 = 0.313`)
 produces ordinal alignment estimates across ten dimensions. Its 62.1% hedging

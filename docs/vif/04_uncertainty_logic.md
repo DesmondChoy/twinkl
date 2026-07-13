@@ -1,31 +1,30 @@
-# VIF – Uncertainty, Drift, and Trigger Logic
+# VIF – Uncertainty and Drift Detector Logic
 
-This document describes how VIF outputs become Coach-facing signals. It keeps
-the selected sustained-conflict contract separate from the weekly
+This document describes how VIF outputs become Weekly Coach inputs. It keeps
+the selected Drift contract separate from the weekly
 crash/rut/evolution prototype that is still wired into the offline runtime.
 
 ---
 
 ## 1. Why Uncertainty Gating Matters
 
-A Critic trained on synthetic or otherwise limited data can be confidently
+A VIF Critic trained on synthetic or otherwise limited data can be confidently
 wrong on unfamiliar inputs. In a values-alignment product, a conservative
 deferral is safer than a confident but brittle interpretation.
 
-The system therefore separates three questions:
+The VIF runtime therefore separates three questions:
 
-1. What class probabilities or alignment estimate does the Critic produce?
-2. How much should the system trust that estimate?
-3. Does the recent evidence form the sustained pattern required by the drift
-   contract?
+1. What class probabilities or alignment estimate does the VIF Critic produce?
+2. How much should the Drift Detector trust that estimate?
+3. Do the recent Journal Entries meet the Drift definition?
 
 Only low-enough uncertainty plus meaningful repeated evidence should reach the
-Coach as a confident conflict reflection.
+Weekly Coach as a confident Conflict reflection.
 
 Under the adopted [capstone scope decision](05_capstone_scope_decision.md), an
-uncertain or abstaining scorer emits no drift claim. Evaluation must report
-coverage, abstention count, and any true episodes suppressed by uncertainty.
-The conservative precision or false-alert tolerance is not fixed yet.
+uncertain VIF Critic prediction produces no Drift claim. Evaluation must report
+coverage, abstention count, and any true Drifts suppressed by uncertainty.
+The conservative precision or false Drift alert tolerance is not fixed yet.
 
 ---
 
@@ -54,27 +53,27 @@ Ambiguous inputs can average toward neutral while still producing high spread
 across dropout samples. That combination should not be interpreted as a
 confident neutral judgment.
 
-Global calibration is not sufficient for the drift use case. Uncertainty must
+Global calibration is not sufficient for the Drift use case. Uncertainty must
 also be checked on the `-1` class because selective prediction can otherwise
 suppress the exact minority cases Twinkl needs to detect.
 
 ---
 
-## 3. Runtime Signal Surfaces
+## 3. Runtime Outputs
 
-### 3.1 Per-Entry Timeline
+### 3.1 Journal Entry Timeline
 
 `src/vif/runtime.py` reconstructs student-visible states and writes one row per
-journal session with:
+Journal Entry, including its displayed nudge and response when present, with:
 
 - per-dimension alignment means;
 - per-dimension uncertainties;
 - the persona profile weights; and
-- entry metadata.
+- Journal Entry metadata.
 
-The current timeline artifact does not persist ordinal class probabilities.
-The selected v1 detector needs `P(-1)`, so the runtime still requires either a
-probability artifact surface or a deterministic reconstruction path from the
+The current timeline parquet does not persist ordinal class probabilities.
+The selected v1 Drift Detector needs `P(-1)`, so the runtime still requires
+either persisted probabilities or a deterministic reconstruction path from the
 checkpoint output.
 
 ### 3.2 Weekly Frame
@@ -116,50 +115,50 @@ V_{u,t}^{\text{scalar}} = w_u^\top \hat{\vec{a}}_{u,t}
 $$
 
 The scalar is useful for monitoring. It does not replace the vector output or
-the named value dimension required for an explainable Coach reflection.
+the named value dimension required for an explainable Weekly Coach reflection.
 
 ---
 
 ## 5. Selected v1 Drift Contract
 
-Drift v1 is a sustained conflict episode:
+Drift v1 is:
 
-> Two adjacent journal entries clearly show the writer making a behavior or
-> choice against the same declared core value.
+> Two consecutive Journal Entries each clearly show the writer making a
+> behavior or choice against the same Core Value.
 
 The runtime target accumulates recent soft `P(-1)` evidence for that value while
 uncertainty remains below a calibrated ceiling. Hard argmax sequences are not
-the runtime target because the current Critic frequently hedges true conflict
-toward neutral.
+the runtime target because the current VIF Critic frequently hedges true
+Conflict toward neutral.
 
 | Layer | v1 behavior |
 |---|---|
-| Student-visible target | Two adjacent entries visibly show a behavior or choice against the same declared core value; `twinkl-v8pb` completed its full-runtime-text review, but no promotion score was allowed after one case remained unresolved |
-| Historical consensus table | Retired diagnostic provenance only; not a drift target, threshold-selection input, or promotion surface |
-| Runtime | Rolling `P(-1)` evidence with declared-core and uncertainty gates; production integration remains blocked |
-| Delivery | Weekly digest with cited journal evidence and active, recovered, mixed, or uncertain wording; abstention emits no drift claim; exact schema pending |
+| Student-visible target | Two consecutive Journal Entries each visibly show a Conflict for the same Core Value; `twinkl-v8pb` completed its full-runtime-text review, but no final test score was allowed after one case remained unresolved |
+| Historical consensus table | Retired diagnostic provenance only; not a Drift target, threshold-selection input, or final test set |
+| Runtime | Rolling `P(-1)` evidence with Core Value and uncertainty gates; production integration remains blocked |
+| Delivery | Weekly Digest with cited Journal Entry evidence and active, recovered, mixed, or uncertain wording; abstention emits no Drift claim; exact schema pending |
 
-The EDA supports this definition because most single-entry dips recover within
-two entries, while three-step and multi-week definitions are too sparse for the
-short observed trajectories. See
+The EDA supports this definition because most dips spanning one Journal Entry
+recover within two Journal Entries, while three-step and multi-week definitions are too
+sparse for the short observed trajectories. See
 [`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md).
 
 ### 5.1 Delivery-Time Recovery
 
-Target detection and Coach wording answer different questions. The
-student-visible target records whether a sustained-conflict episode occurred.
-The weekly digest should describe the state at delivery time.
+Drift detection and Weekly Coach wording answer different questions. The
+student-visible target records whether Drift occurred. The Weekly Digest should
+describe the state at delivery time.
 
-For example, `-1, -1, +1, +1, +1` remains a true benchmark episode, but the
-Coach should describe it as **recovered** rather than **active**. **Mixed** is a
-digest-level summary used only when relevant value-specific episodes have
-different delivery states; it is not another state for a single episode.
-**Uncertain** applies when evidence reliability is too low to call an episode
+For example, `-1, -1, +1, +1, +1` remains a true benchmark Drift, but the
+Weekly Coach should describe it as **recovered** rather than **active**.
+**Mixed** is a Weekly Digest summary used only when relevant value-specific
+Drifts have different delivery states; it is not another state for one Drift.
+**Uncertain** applies when evidence reliability is too low to call a Drift
 active or recovered. Exact schema values and transition rules still require
 implementation and scenario tests.
 
 Abstention is not a correct negative. Coverage and suppressed reference
-episodes must remain visible in evaluation reports so uncertainty gating cannot
+Drifts must remain visible in evaluation reports so uncertainty gating cannot
 improve apparent precision merely by hiding hard cases.
 
 ---
@@ -179,9 +178,9 @@ It then checks a week-over-week profile-weighted drop, consecutive low weekly
 means on important dimensions, and experimental evolution classifications.
 
 This path is wired into `src/coach/runtime.py` and is useful for end-to-end
-schema, artifact, and UI testing. It is not the selected v1 detector because it
-does not consume rolling `P(-1)` evidence or evaluate the strict
-sustained-conflict construct.
+schema, output-file, and UI testing. It is not the selected v1 Drift Detector
+because it does not consume rolling `P(-1)` evidence or evaluate the Drift
+definition.
 
 ---
 
@@ -194,7 +193,7 @@ suggestion.
 
 This is implementation truth, not a product-scope decision. The PRD parks value
 evolution outside the committed v1 contract. The prototype branch remains an
-experimental compatibility surface until it is either adopted explicitly or
+experimental compatibility path until it is either adopted explicitly or
 removed from the active router.
 
 ---
@@ -210,24 +209,25 @@ The demo review app compares six rule-based detector families:
 - Control Chart; and
 - KL Divergence.
 
-These detectors operate on persisted single-pass Judge labels or Critic mean
-predictions. Their vote count is detector agreement, not the five-pass Judge
-reference and not v1 benchmark ground truth.
+These detectors operate on persisted single-pass LLM-Judge labels or VIF Critic
+mean predictions. Their vote count is agreement among the six exploratory
+detectors, not the five-pass LLM-Judge reference and not v1 benchmark ground
+truth.
 They remain useful for diagnosis and visualization but do not define the
-promoted runtime rule.
+selected runtime rule.
 
 ---
 
-## 9. Coach-Facing Safety Behavior
+## 9. Weekly Coach Safety Behavior
 
-The standalone weekly digest also has conservative fallback modes for offline
-prompt testing when no upstream drift result is supplied. Acute grief or
+The standalone Weekly Digest also has conservative fallback modes for offline
+prompt testing when no upstream Drift result is supplied. Acute grief or
 distress markers can route to `high_uncertainty`, while mixed or burdened weeks
 can use `mixed_state` or `background_strain`.
 
-These lexical/aggregate fallbacks are not substitutes for calibrated Critic
-uncertainty. They are local safety scaffolding around the artifact-generation
-path.
+These lexical/aggregate fallbacks are not substitutes for calibrated VIF Critic
+uncertainty. They are local safety scaffolding around Weekly Digest file
+generation.
 
 ---
 
@@ -235,24 +235,24 @@ path.
 
 | Module | Role |
 |---|---|
-| `src/vif/eval.py` | Entry-level metrics and uncertainty-aware evaluation |
-| `src/vif/runtime.py` | Per-entry and weekly VIF artifact generation |
+| `src/vif/eval.py` | Metrics for individual Journal Entries and uncertainty-aware evaluation |
+| `src/vif/runtime.py` | Per-Journal-Entry and weekly VIF parquet generation |
 | `src/vif/weekly_schema.py` | Shared weekly frame names and required-column validation |
 | `src/vif/drift.py` | Existing weekly crash/rut/evolution/high-uncertainty router |
-| `src/vif/evolution.py` | Experimental stable/evolution/drift classifier |
-| `src/coach/runtime.py` | Offline checkpoint-to-digest orchestration |
+| `src/vif/evolution.py` | Experimental `stable`/`evolution`/`drift` classifier |
+| `src/coach/runtime.py` | Offline checkpoint-to-Weekly-Digest orchestration |
 | `src/demo_tool/multi_drift.py` | Six-detector exploratory comparison |
-| `scripts/drift/trajectory_eda.py` | Sustained-conflict definition analysis |
+| `scripts/drift/trajectory_eda.py` | Drift-definition analysis |
 
 ---
 
 ## 11. Later Uncertainty Extensions
 
-MC Dropout remains the practical POC default. Later candidates include deep
+MC Dropout remains the practical POC default. Later options include deep
 ensembles, evidential methods, conformal wrappers, and explicit embedding-space
 out-of-distribution detection. The retired `twinkl-wq9p` diagnostic showed a
 target-validity problem before it could establish whether uncertainty calibration
 is the binding constraint. `twinkl-v8pb` completed that review and withheld a
-promotion score because one locked case was unresolved; the next step is a
-fresh, independently resolved promotion surface, not a heavier uncertainty
+final test score because one case was unresolved; the next step is a
+fresh, independently resolved final test set, not a heavier uncertainty
 method.

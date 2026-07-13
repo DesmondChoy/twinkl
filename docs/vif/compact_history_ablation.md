@@ -2,36 +2,37 @@
 
 ## Question
 
-Can the VIF student use a small, production-legal summary of prior journal
-entries without repeating the parameter explosion of raw window
+Can the VIF Critic use a small, production-legal summary of prior Journal
+Entries without repeating the parameter explosion of raw window
 concatenation?
 
 The live default remains `window_size: 1`. This is a representation ablation,
-not a change to the repaired Security target or the product's drift contract.
+not a change to the repaired Security target or the product's Drift contract.
 
 ## Input contract
 
-For entry `t`, the candidate state contains:
+For Journal Entry `t`, the tested state contains:
 
-1. the complete 256-dimensional Nomic embedding for entry `t`, including its
-   already-completed same-session nudge and response;
-2. the mean of up to three strictly prior entry embeddings, truncated to the
-   leading 64 Matryoshka dimensions and L2-normalized;
+1. the complete 256-dimensional Nomic embedding for Journal Entry `t`,
+   including its already-completed same-session nudge and response;
+2. the mean of up to three strictly prior Journal Entry embeddings, truncated
+   to the leading 64 Matryoshka dimensions and L2-normalized;
 3. one history-availability feature: `real_prior_count / 3`; and
-4. the existing ten-dimensional declared-value profile.
+4. the existing ten-dimensional value profile.
 
-The first entry receives 65 history zeros. Padding is never averaged. Prior
-entries are selected by chronological position inside the same persona, so
-future entries, other personas, labels, Judge rationales, biography,
-demographics, and synthetic metadata cannot enter the state.
+The first Journal Entry receives 65 history zeros. Padding is never averaged.
+Prior Journal Entries are selected by chronological position inside the same
+persona, so future Journal Entries, other personas, labels, LLM-Judge
+rationales, biography, demographics, and synthetic metadata cannot enter the
+state.
 
 This grows the state from 266 to 331 dimensions. At hidden width 64, the first
 layer gains `65 * 64 = 4,160` trainable weights, within the issue's roughly
 5,000-parameter increment.
 
-## Candidate choice
+## Design choice
 
-| Candidate | Budget | Decision |
+| History representation | Budget | Decision |
 |---|---:|---|
 | Full pooled 256-d summary | +16,384 first-layer weights | Reject: exceeds budget. |
 | Mean-pooled 64-d Matryoshka summary | +4,160 weights | Test first: preserves the current embedding and provides a separate context channel. |
@@ -56,6 +57,7 @@ combined package: QWK, `recall_-1`, minority recall, hedging, calibration, and
 the hard dimensions.
 
 Security interpretation is deliberately limited. Its repaired labels were
-created from the exact current-session state, so this experiment can show
-whether legal history helps prediction under that fixed regime; it cannot
-prove that a history-visible Security target is better.
+created from the exact current Journal Entry, including its displayed nudge and
+response, so this experiment can show whether legal history helps prediction
+under that fixed regime; it cannot prove that a history-visible Security target
+is better.

@@ -4,19 +4,19 @@
 
 ### What Onboarding Achieves
 
-The onboarding flow solves Twinkl's **cold-start problem**: before a user has written any journal entries, the system needs an initial value profile to power the VIF Critic and Coach. Without it, the alignment engine has nothing to align *against*.
+The onboarding flow solves Twinkl's **cold-start problem**: before a user has written any Journal Entries, Twinkl needs an initial value profile to power the VIF Critic and Weekly Coach. Without it, the alignment engine has nothing to align *against*.
 
 The onboarding uses **Best-Worst Scaling (BWS)** — a forced-choice psychometric technique — to elicit a user's value priorities across the 10 Schwartz value dimensions. Combined with a structured goal selection, this produces:
 
 1. A **value weight vector** (`w_u ∈ ℝ^10`) that initializes the user's VIF profile
-2. A discrete **declared-core set** (`top_values`) containing every value tied for the highest adjusted BWS score
-3. A **primary goal/tension** that focuses the Coach's initial monitoring
+2. A discrete set of **Core Values** (`top_values`) containing every value tied for the highest adjusted BWS score
+3. A **primary goal/tension** that focuses the Weekly Coach's initial monitoring
 4. A **confidence baseline** that signals how much to trust explicit vs. behavioral data
 
-These two value outputs have different jobs. The Critic keeps the full graded
-10-dimensional weight vector for conditioning. Drift v1 uses `top_values` as the
-eligibility gate: only sustained conflict on a declared core value can form a
-reference episode or runtime trigger.
+These two value outputs have different jobs. The VIF Critic keeps the full
+graded 10-dimensional weight vector for conditioning. Drift v1 uses the Core
+Values stored in `top_values` as the eligibility gate: only two consecutive
+Conflicts on the same Core Value can form Drift.
 
 ### What's Out of Scope
 
@@ -29,7 +29,7 @@ reference episode or runtime trigger.
 - [PRD](../prd.md) — Product requirements and implementation status
 - [VIF Concepts & Roadmap](../vif/01_concepts_and_roadmap.md) — Value Identity Function theory
 - [VIF System Architecture](../vif/02_system_architecture.md) — State representation and inference flow
-- [VIF Worked Example](../vif/example.md) — Sarah's journey through the system (includes BWS onboarding walkthrough)
+- [VIF Worked Example](../vif/example.md) — Sarah's journey through Twinkl (includes BWS onboarding walkthrough)
 
 ---
 
@@ -154,7 +154,7 @@ Each set displays 4 cards. The user taps one as "Most like me" and one as "Least
 
 ### 3.3 Mid-flow Mirror (After Set 3)
 
-After the first 3 sets, the system computes a preliminary profile and reflects it back:
+After the first 3 sets, the onboarding scoring logic computes a preliminary profile and reflects it back:
 
 ```
 ┌─────────────────────────────────┐
@@ -235,7 +235,7 @@ After all BWS sets, the user selects their primary tension/goal from structured 
 └─────────────────────────────────┘
 ```
 
-Single selection. See [Section 6: Goal Categories](#6-goal-categories) for how each goal maps to Coach monitoring priorities.
+Single selection. See [Section 6: Goal Categories](#6-goal-categories) for how each goal maps to Weekly Coach monitoring priorities.
 
 ### 3.6 End Summary + Refinement
 
@@ -244,7 +244,7 @@ Single selection. See [Section 6: Goal Categories](#6-goal-categories) for how e
 │                                 │
 │   Your Inner Compass            │
 │                                 │
-│   Your declared core values:    │
+│   Your Core Values:             │
 │   [Every value tied for the     │
 │    highest adjusted score]      │
 │                                 │
@@ -276,7 +276,7 @@ Example transition:
 ┌─────────────────────────────────┐
 │                                 │
 │   Let's start your first        │
-│   journal entry.                │
+│   Journal Entry.                │
 │                                 │
 │   Think about the past week.    │
 │   When was a moment where you   │
@@ -288,7 +288,7 @@ Example transition:
 │   │                       │     │
 │   └───────────────────────┘     │
 │                                 │
-│        [ Save entry → ]         │
+│     [ Save Journal Entry → ]    │
 └─────────────────────────────────┘
 ```
 
@@ -393,19 +393,19 @@ The +1 in the shift ensures no value has zero weight (even the least-preferred v
 If multiple values have the same raw score:
 - They receive the same weight after normalization (no arbitrary tie-breaking)
 - If the highest score is tied, every tied value is shown in the summary
-- The Coach treats tied values as genuinely co-important
+- The Weekly Coach treats tied values as genuinely co-important
 
 The final `top_values` field is the complete set of values tied for the highest
 adjusted score after refinements. It is not a fixed top-two or top-three list. A
-single highest-scoring value produces a one-value declared-core set; a tie
+single highest-scoring value produces a one-value Core Value set; a tie
 produces a larger set with every tied value retained.
 
 ### Confidence Estimation
 
-The system estimates confidence in the BWS-derived profile based on:
+The onboarding scoring logic estimates confidence in the BWS-derived profile based on:
 
 1. **Response consistency**: If a user selects a value as "Most" in one set and "Least" in another, this signals low confidence in that value's placement
-2. **Score spread**: A flat profile (all scores near 0) suggests the BWS didn't differentiate well — the system should weight behavioral data more heavily once available
+2. **Score spread**: A flat profile (all scores near 0) suggests the BWS didn't differentiate well — Twinkl should weight behavioral data more heavily once available
 3. **Refinement count**: If the user corrected the profile at mid-flow mirror and/or end summary, this indicates the BWS alone didn't capture their self-model — log this for future analysis
 
 ```
@@ -430,24 +430,24 @@ When a user adjusts the profile at mid-flow mirror or end summary:
 
 ### Enumerated Tension Categories
 
-| Category Key | Display Text | Primary Value Tensions to Monitor | Coach Monitoring Priority |
+| Category Key | Display Text | Primary Value Tensions to Monitor | Weekly Coach Monitoring Priority |
 |-------------|-------------|----------------------------------|--------------------------|
-| `work_life_balance` | I'm stretched too thin between work and everything else | Achievement vs Benevolence, Achievement vs Hedonism | Work-related entries; time allocation patterns |
-| `life_transition` | I'm going through a career or life transition | Security vs Self-Direction, Tradition vs Stimulation | Decision-making entries; uncertainty/ambiguity language |
+| `work_life_balance` | I'm stretched too thin between work and everything else | Achievement vs Benevolence, Achievement vs Hedonism | Work-related Journal Entries; time allocation patterns |
+| `life_transition` | I'm going through a career or life transition | Security vs Self-Direction, Tradition vs Stimulation | Decision-making Journal Entries; uncertainty/ambiguity language |
 | `relationships` | I want to be more present for people I care about | Benevolence vs Achievement, Benevolence vs Self-Direction | Mentions of close others; presence/absence patterns |
-| `health_wellbeing` | I'm neglecting my health or wellbeing | Hedonism vs Achievement, Security vs Stimulation | Health-related entries; self-care language |
+| `health_wellbeing` | I'm neglecting my health or wellbeing | Hedonism vs Achievement, Security vs Stimulation | Health-related Journal Entries; self-care language |
 | `direction` | I feel stuck or unclear about my direction | Self-Direction vs Security, Stimulation vs Conformity | Purpose/meaning language; expressions of stagnation |
 | `meaningful_work` | I want to make more room for what matters to me | Self-Direction vs Conformity, Universalism vs Power | Fulfillment language; value-action gaps |
 
-### How Goals Map to Coach Behavior
+### How Goals Map to Weekly Coach Behavior
 
 The selected goal does **not** override BWS-derived values. Instead, it:
 
-1. **Focuses initial attention** — The Coach prioritizes entries related to the goal tension in its first 2–3 weeks of monitoring
+1. **Focuses initial attention** — The Weekly Coach prioritizes Journal Entries related to the goal tension in its first 2–3 weeks of monitoring
 2. **Chooses starter prompts** — The first guided journal prompt is tailored to the goal category
 3. **Sets expectation** — The user understands *why* they're journaling (not just "reflect on your day" but "let's explore this tension")
 
-Over time, behavioral data from journal entries should supersede the initial goal selection as the primary driver of Coach focus.
+Over time, behavioral data from Journal Entries should supersede the initial goal selection as the primary driver of Weekly Coach focus.
 
 ---
 
@@ -535,7 +535,7 @@ Over time, behavioral data from journal entries should supersede the initial goa
 | `value_scores.raw` | object | Raw BWS scores (best_count − worst_count) per value |
 | `value_scores.weights` | object | Normalized weight vector (sums to 1.0) |
 | `confidence` | object | Confidence metadata (consistency, spread, refinement count) |
-| `top_values` | array | Discrete declared-core set: every value tied for the highest adjusted BWS score; never truncated to a fixed count |
+| `top_values` | array | Core Values: every value tied for the highest adjusted BWS score; never truncated to a fixed count |
 | `goal_category` | string | Selected tension category key |
 | `user_confirmed` | boolean | Whether user accepted the end summary |
 | `refinements` | array | User corrections at mirror/summary stages |
@@ -549,21 +549,20 @@ The onboarding output maps to the existing VIF profile structure:
 VIF User Profile
 ├── values: top_values (from BWS)
 ├── weights: value_scores.weights (from BWS normalization)
-├── descriptions: (empty — populated from first journal entries)
+├── descriptions: (empty — populated from first Journal Entries)
 └── goal: goal_category (from structured selection)
 ```
 
 The two value fields are intentionally complementary:
 
 - `value_scores.weights` is the full graded 10-dimensional vector used to
-  condition the Critic. It replaces a simple "pick 2 values" profile and
+  condition the VIF Critic. It replaces a simple "pick 2 values" profile and
   reflects that all Schwartz values matter to some degree.
-- `top_values` is the discrete declared-core set used to gate drift v1. A
-  sustained-conflict episode is only eligible when it occurs on one of these
-  values.
+- `top_values` stores the Core Values used to gate Drift v1. Drift is only
+  eligible when two consecutive Conflicts occur on one of these values.
 
 The current synthetic personas already carry an explicit `core_values` list, so
-their declared-core gate does not need to be inferred from graded weights.
+their Core Value gate does not need to be inferred from graded weights.
 Persisting BWS `weights` and `top_values` for real users, and threading both
 through the VIF runtime, remains pending under `twinkl-1m8`.
 
@@ -573,21 +572,21 @@ through the VIF runtime, remains pending under `twinkl-1m8`.
 
 ### VIF Integration Points
 
-- **Critic conditioning**: BWS `weights` should feed into the user profile vector `z_u` that the StateEncoder uses (see [VIF System Architecture](../vif/02_system_architecture.md) §1.1). The Critic continues to receive all 10 graded weights.
-- **Drift eligibility**: BWS `top_values` should populate the user's declared-core set. Drift v1 evaluates sustained conflict only on these values; it must not infer eligibility from an undocumented weight threshold.
-- **Synthetic-persona compatibility**: Existing synthetic personas already provide `core_values`. That field remains their declared-core gate until onboarding output is integrated.
+- **VIF Critic conditioning**: BWS `weights` should feed into the user profile vector `z_u` that the StateEncoder uses (see [VIF System Architecture](../vif/02_system_architecture.md) §1.1). The VIF Critic continues to receive all 10 graded weights.
+- **Drift eligibility**: BWS `top_values` should populate the user's Core Values. Drift v1 evaluates consecutive Conflicts only on these values; it must not infer eligibility from an undocumented weight threshold.
+- **Synthetic-persona compatibility**: Existing synthetic personas already provide `core_values`. That field remains their Core Value gate until onboarding output is integrated.
 - **Implementation status**: Persisting and consuming both onboarding fields is pending under `twinkl-1m8`; this spec defines the contract rather than claiming the runtime wiring exists.
-- **Critic cold-start**: Until enough journal entries exist for the Critic to produce reliable scores, the BWS weights serve as the *only* value signal. The Coach should acknowledge this explicitly ("Based on what you told me during setup...").
+- **VIF Critic cold-start**: Until enough Journal Entries exist for the VIF Critic to produce reliable predictions, the BWS weights serve as the *only* value signal. The Weekly Coach should acknowledge this explicitly ("Based on what you told me during setup...").
 
 ### Explicit vs. Behavioral Weighting (60–70% Strategy)
 
-A key open question: how much should the system trust what users *say* they value (BWS) vs. what they *do* (journal entries)?
+A key open question: how much should Twinkl trust what users *say* they value (BWS) vs. what they *do* (Journal Entries)?
 
 **Proposed approach (not yet implemented):**
 - **Weeks 1–2**: 100% explicit (BWS weights only — no behavioral data yet)
-- **Weeks 3–6**: Gradual blend (70% explicit, 30% behavioral) as entry history builds
+- **Weeks 3–6**: Gradual blend (70% explicit, 30% behavioral) as Journal Entry history builds
 - **Weeks 7+**: Shift to 40% explicit, 60% behavioral as behavioral signal strengthens
-- **Never 0% explicit**: Users' declared values always retain some weight — the system shouldn't completely override what someone says they care about
+- **Never 0% explicit**: Users' declared values always retain some weight — Twinkl shouldn't completely override what someone says they care about
 
 This weighting schedule requires calibration against real user data and is marked as a future implementation concern. The [value evolution detection](../evolution/01_value_evolution.md) mechanism provides the statistical basis for when behavioral evidence should influence the profile — classifying sustained directional shifts as EVOLUTION triggers profile update suggestions.
 
@@ -595,13 +594,13 @@ This weighting schedule requires calibration against real user data and is marke
 
 The initial 6-set BWS provides a coarse profile. Future iterations could:
 - **Add sets over time**: Introduce additional BWS sets (e.g., 2 more after 1 month) that focus on values with high uncertainty
-- **Narrow items**: Use entry history to generate personalized BWS items that probe specific tensions (e.g., "Working late to hit a deadline" vs. "Leaving on time to cook dinner" for a user showing Achievement-Benevolence tension)
+- **Narrow items**: Use Journal Entry history to generate personalized BWS items that probe specific tensions (e.g., "Working late to hit a deadline" vs. "Leaving on time to cook dinner" for a user showing Achievement-Benevolence tension)
 
 ### Re-Assessment Triggers
 
-The system should prompt re-assessment when:
-- **Major life event detected**: Journal entries mention significant changes (new job, relationship change, relocation)
-- **Profile drift**: Behavioral data diverges significantly from BWS-derived weights for >4 weeks. The mechanism for classifying whether this divergence is genuine value evolution vs behavioral drift is specified in the [value evolution detection](../evolution/01_value_evolution.md) design.
+Twinkl should prompt re-assessment when:
+- **Major life event detected**: Journal Entries mention significant changes (new job, relationship change, relocation)
+- **Profile divergence**: Behavioral data diverges significantly from BWS-derived weights for >4 weeks. The mechanism for classifying whether this divergence is genuine value evolution or a behavior-value conflict pattern is specified in the [value evolution detection](../evolution/01_value_evolution.md) design.
 - **User request**: Users can always re-take the assessment from settings
 
 ---
@@ -623,5 +622,5 @@ The system should prompt re-assessment when:
 - [Schwartz Values Configuration](../../config/schwartz_values.yaml) — Value elaborations used in synthetic data generation
 - [VIF Concepts & Roadmap](../vif/01_concepts_and_roadmap.md) — Value Identity Function theory
 - [VIF System Architecture](../vif/02_system_architecture.md) — State representation
-- [VIF Model Training](../vif/03_model_training.md) — Critic training pipeline
+- [VIF Model Training](../vif/03_model_training.md) — VIF Critic training workflow
 - [VIF Worked Example](../vif/example.md) — End-to-end scenario walkthrough

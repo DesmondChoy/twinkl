@@ -11,10 +11,10 @@ Instructions for Claude Code to generate synthetic conversational journal data u
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `NUM_PERSONAS` | `10` | Number of personas to generate |
-| `MIN_ENTRIES` | `6` | Minimum entries per persona |
-| `MAX_ENTRIES` | `12` | Maximum entries per persona |
-| `MIN_DAYS_BETWEEN_ENTRIES` | `0` | Minimum days between entries |
-| `MAX_DAYS_BETWEEN_ENTRIES` | `7` | Maximum days between entries |
+| `MIN_ENTRIES` | `6` | Minimum Journal Entries per persona |
+| `MAX_ENTRIES` | `12` | Maximum Journal Entries per persona |
+| `MIN_DAYS_BETWEEN_ENTRIES` | `0` | Minimum days between Journal Entries |
+| `MAX_DAYS_BETWEEN_ENTRIES` | `7` | Maximum days between Journal Entries |
 | `SAME_DAY_PROBABILITY` | `0.15` | Probability of a same-day follow-up when `MIN_DAYS_BETWEEN_ENTRIES = 0` |
 | `NUDGE_ENABLED` | `true` | Set to `false` to disable nudge generation |
 | `TARGET_VALUES` | `[]` | Forced Schwartz values; empty = random selection |
@@ -90,10 +90,10 @@ Read all of the following before generating:
 
 | File | Contains |
 |------|----------|
-| `config/synthetic_data.yaml` | Persona attributes, journal entry options, nudge settings |
+| `config/synthetic_data.yaml` | Persona attributes, Journal Entry options, nudge settings |
 | `config/schwartz_values.yaml` | Value elaborations for persona generation |
 | `prompts/persona_generation.yaml` | Template for creating personas |
-| `prompts/journal_entry.yaml` | Template for journal entries |
+| `prompts/journal_entry.yaml` | Template for Journal Entries |
 | `prompts/nudge_decision.yaml` | Template for LLM-based nudge classification |
 | `prompts/nudge_generation.yaml` | Template for generating nudges |
 | `prompts/nudge_response.yaml` | Template for persona responses |
@@ -122,7 +122,7 @@ For each of `{{NUM_PERSONAS}}` personas, randomly select:
 - Look up value elaborations from `config/schwartz_values.yaml`
 - Entry count: `random.randint({{MIN_ENTRIES}}, {{MAX_ENTRIES}})`
 - Start date: random date in 2025
-- Generate dates for that persona's entry count using weighted gap probability
+- Generate dates for that persona's Journal Entry count using weighted gap probability
 
 Use Bash/Python snippets for randomized selections:
 ```bash
@@ -191,7 +191,7 @@ else:
 "
 ```
 
-Same-day entries (Δt=0) should read as continued thought/venting, not a restart.
+Same-day Journal Entries (Δt=0) should read as continued thought/venting, not a restart.
 
 ### 4. Launch All Persona Subagents
 
@@ -233,8 +233,8 @@ Each subagent receives everything needed to generate a complete persona, write i
 3a. **Tension scenarios** (when `TARGET_TENSIONS` is non-empty):
     - Scenario bank from `.claude/skills/tension-selection/SKILL.md`
       (read by orchestrator and embedded in subagent prompt)
-    - Application rule: use scenario bank for ALL Unsettled entries
-      when persona has a targeted core value
+    - Application rule: use scenario bank for ALL Unsettled Journal Entries
+      when persona has a targeted Core Value
     - If `TARGET_FAMILIES` is active, each persona also gets a
       `target_family` assignment and the subagent uses the corresponding
       family-specific bank instead of the generic per-value bank
@@ -242,7 +242,7 @@ Each subagent receives everything needed to generate a complete persona, write i
 4. **Nudge rules**:
    - `NUDGE_ENABLED` variable (if false, skip all nudge logic)
    - `decide_nudge()` logic from `src/nudge/decision.py` (LLM-based classification)
-   - `prompts/nudge_decision.yaml` for semantic entry classification
+   - `prompts/nudge_decision.yaml` for semantic Journal Entry classification
    - Nudge generation instructions from `prompts/nudge_generation.yaml`
 
 5. **Response parameters**:
@@ -280,7 +280,7 @@ For each entry date:
      - If TARGET_TENSIONS active: boost Unsettled to UNSETTLED_BOOST probability
        (remaining probability split equally across Grounded and Neutral)
      - Otherwise: equal probability (default)
-  2a. If reflection_mode is Unsettled AND ANY persona core value is in TARGET_TENSIONS:
+  2a. If reflection_mode is Unsettled AND ANY persona Core Value is in TARGET_TENSIONS:
       → If persona has a target_family assignment, use the next scenario from
         the matching family-specific bank
       → Otherwise use the next scenario from the generic value bank
@@ -339,7 +339,7 @@ The subagent performs nudge classification internally using the template as guid
 Print:
 - Personas generated: X/{{NUM_PERSONAS}}
 - Entry count distribution: min=X, max=X, avg=X.X
-- Total entries: X
+- Total Journal Entries: X
 - Total nudges: X
 - Total responses: X
 - Response rate: X%
@@ -469,10 +469,10 @@ I assumed she was disappointed that I moved so far away and chose work over fami
 - **Nudge section**: `### Nudge (category)` — category in lowercase parentheses
 - **Trigger line**: `**Trigger**: {reason}` — NOT `**Category**:`, `**Type**:`, or `**Reason**:`
 - **Nudge text**: Wrapped in double quotes on its own line
-- **No-nudge**: Only the marker `*(No nudge for this entry)*` — NO `### Nudge` section header
+- **No-nudge**: Only the marker `*(No nudge for this Journal Entry)*` — NO `### Nudge` section header
 - **Response**: `### Response` with `**Mode**: X` line
 - **No-response**: Only the marker `*(No response - persona did not reply to nudge)*` — NO `### Response` section header
-- **Separators**: `---` after each entry
+- **Separators**: `---` after each Journal Entry
 - **Summary**: `## Summary Statistics` with pipe-formatted table
 
 ### Validation Checklist
@@ -480,14 +480,14 @@ I assumed she was disappointed that I moved so far away and chose work over fami
 Before writing the log file, verify:
 - Header is `# Persona {uuid}: {Name}`
 - Profile is a bullet list with `**Persona ID:**`, `**Generated:**`, `Age`, `Profession`, `Culture`, `Core Values`, and `Bio`
-- Each entry uses `## Entry N - YYYY-MM-DD`
-- Each entry includes `### Initial Entry`
+- Each Journal Entry uses `## Entry N - YYYY-MM-DD`
+- Each Journal Entry includes `### Initial Entry`
 - Metadata line is `**Tone**: X | **Verbosity**: Y | **Reflection Mode**: Z`
 - Nudge section, when present, is `### Nudge (category)` with `**Trigger**:` and quoted nudge text
-- If there is no nudge, output only `*(No nudge for this entry)*`
+- If there is no nudge, output only `*(No nudge for this Journal Entry)*`
 - If there is a response, output `### Response` with `**Mode**: X`
 - If there is no response, output only `*(No response - persona did not reply to nudge)*`
-- Each entry ends with `---`
+- Each Journal Entry ends with `---`
 - Summary section is `## Summary Statistics` with a pipe-formatted table
 - Do not include JSON, debug output, or commentary in the log file
 
@@ -530,7 +530,7 @@ python3 -c "from src.registry import get_status; print(get_status())"
 
 After reporting the summary statistics (Step 7), **STOP**. Do not proceed to:
 - Wrangling (`python -m src.wrangling.parse_synthetic_data`)
-- Judge labeling (`/judge` skill)
-- Any other pipeline stages
+- LLM-Judge labeling (`/judge` skill)
+- Any other workflow stages
 
 ---

@@ -2,11 +2,11 @@
 
 ## What We're Evaluating
 
-The VIF (Value Identity Function) maps journal entries to a 10-dimensional
+The VIF (Value Identity Function) maps Journal Entries to a 10-dimensional
 Schwartz value vector. For the remaining capstone scope, its primary operational
-role is **conflict screening**: recovering visible `-1` evidence that can support
-the downstream sustained-conflict detector. The ternary vector remains useful
-for trade-offs and positive Coach context, but broad profile recovery is no
+role is **conflict screening**: recovering Conflict (`-1`) that can support the
+the downstream Drift Detector. The ternary vector remains useful for trade-offs and
+positive Weekly Coach context, but broad profile recovery is no
 longer the primary model-development claim. See the adopted
 [VIF scope decision](../vif/05_capstone_scope_decision.md).
 
@@ -18,10 +18,10 @@ longer the primary model-development claim. See the adopted
 
 ### What's Implemented
 - Evaluation specification complete (this document)
-- Judge training data: 1 651 labeled entries across 204 personas in [`logs/judge_labels/judge_labels.parquet`](../../logs/judge_labels/judge_labels.parquet)
+- LLM-Judge training data: 1 651 labeled Journal Entries across 204 personas in [`logs/judge_labels/judge_labels.parquet`](../../logs/judge_labels/judge_labels.parquet)
 - Ground truth value orderings embedded in persona bios
-- Critic architecture: MLP ordinal ([`src/vif/critic_ordinal.py`](../../src/vif/critic_ordinal.py)) and BNN ([`src/vif/critic_bnn.py`](../../src/vif/critic_bnn.py))
-- Experiment archive spans 69 run IDs / 133 persisted run configs, including CORAL, CORN, EMD, CDW-CE, SoftOrdinal, BalancedSoftmax, LDAM-DRW, TwoStageBalancedSoftmax, SLACE, encoder diagnostics, recall-aware candidate retention, target-repair, soft-label, compact-history, and legacy weighted-MSE baselines ([`logs/experiments/index.md`](../../logs/experiments/index.md))
+- VIF Critic architecture: MLP ordinal ([`src/vif/critic_ordinal.py`](../../src/vif/critic_ordinal.py)) and BNN ([`src/vif/critic_bnn.py`](../../src/vif/critic_bnn.py))
+- Experiment archive spans 69 run IDs / 133 persisted run configs, including CORAL, CORN, EMD, CDW-CE, SoftOrdinal, BalancedSoftmax, LDAM-DRW, TwoStageBalancedSoftmax, SLACE, encoder diagnostics, recall-aware checkpoint retention, target-repair, soft-label, compact-history, and legacy weighted-MSE baselines ([`logs/experiments/index.md`](../../logs/experiments/index.md))
 - Text and state encoders: nomic-embed-text-v1.5, MiniLM ([`src/vif/encoders.py`](../../src/vif/encoders.py))
 - Evaluation metrics: QWK, Spearman ρ, MAE, calibration, per-dimension recall, raw ordinal exports, and compact circumplex diagnostics ([`src/vif/eval.py`](../../src/vif/eval.py))
 - Current corrected-split default: `run_019`-`run_021` BalancedSoftmax — median QWK **0.362**, median `recall_-1` **0.313**, median minority recall **0.448**, median hedging **0.621**, median calibration **0.713**
@@ -29,11 +29,11 @@ longer the primary model-development claim. See the adopted
 - Controlled Qwen encoder rerun `run_042`-`run_044` is the strongest representation challenger, but it did not replace the default because `hedonism` / `power` remained too weak
 - Two-stage reformulation `run_045`-`run_047` is logged as a structural diagnostic branch, but it did not replace the default because `recall_-1` and hedging regressed
 - Consensus-label retrains `run_048`-`run_050` are logged as a diagnostic branch only; they improved within-regime QWK/calibration, but they changed holdout labels and did not beat the persisted-label frontier cleanly
-- Recall-aware candidate reruns `run_051`-`run_056` persist alternate validation-selected checkpoints and their validation/test outputs; the wider `0.02` window helps the consensus diagnostic branch but does not improve the persisted-label frontier, so candidate retention is experiment hygiene rather than the default selector
-- The frozen-holdout LLM Critic baseline compares `student_visible`, `human_context`, and upper-bound `full_judge_context` arms. The strongest 221-row `human_context` arm reaches QWK **0.450**, `recall_-1` **0.302**, minority recall **0.534**, and hedging **0.707**; `run_020` reaches QWK **0.378**, `recall_-1` **0.342**, minority recall **0.449**, and hedging **0.621**. The LLM is useful as a teacher/oracle/fallback diagnostic, not a clean MLP replacement.
+- Recall-aware checkpoint-selection reruns `run_051`-`run_056` persist alternate validation-selected checkpoints and their validation/test outputs; the wider `0.02` window helps the consensus diagnostic branch but does not improve the persisted-label frontier, so checkpoint retention is experiment hygiene rather than the default selector
+- The frozen-holdout LLM baseline compares `student_visible`, `human_context`, and upper-bound `full_judge_context` experiment setups. The strongest 221-row `human_context` experiment setup reaches QWK **0.450**, `recall_-1` **0.302**, minority recall **0.534**, and hedging **0.707**; `run_020` reaches QWK **0.378**, `recall_-1` **0.342**, minority recall **0.449**, and hedging **0.621**. The LLM is useful as a reference or fallback diagnostic, not a clean MLP replacement.
 - Compact-history `run_069` stayed within the `<5k` added-weight budget but failed its seed-11 expansion gate versus repaired-target `run_058`: QWK **0.342** vs **0.363**, minority recall **0.400** vs **0.446**, and Security QWK **0.267** vs **0.339**. The path remains diagnostic and the local MLP is not claimed to be trajectory-aware.
 - The [`twinkl-1r3d` shortcut audit](../../logs/experiments/reports/experiment_review_2026-07-12_twinkl_1r3d_shortcut_audit.md) removed 3,406 individual words plus 20 repeated-word or phrase cues across 35 confident-correct active Conformity and Self-Direction validation cases. No removal flipped a class, so the tested brittle lexical-shortcut explanations are not supported. This is a bounded sensitivity result, not evidence that either construct is solved.
-- The [`twinkl-752.1` weekly verifier ablation](../../logs/experiments/reports/experiment_review_2026-07-12_twinkl_752_1_weekly_verifier_ablation.md) is complete. Adding fixed `run_020` signals reduced median development episode recall from **0.40** to **0.20**, removed the median false episode (**1** to **0**), and reduced coverage from **0.756** to **0.732**. The registered result is negative; no architecture was adopted.
+- The [`twinkl-752.1` Weekly Drift Reviewer ablation](../../logs/experiments/reports/experiment_review_2026-07-12_twinkl_752_1_weekly_verifier_ablation.md) is complete. Adding fixed `run_020` signals reduced median development Drift recall from **0.40** to **0.20**, removed the median false Drift alert (**1** to **0**), and reduced coverage from **0.756** to **0.732**. The registered result is negative; no architecture was adopted.
 
 ### What's Missing
 - **Recall-first selection is not implemented**: the current experiment code still selects mainline checkpoints QWK-first. Historical run rankings remain valid provenance, but a future training run needs tested recall-first selection behavior before it can count as decision evidence.
@@ -44,11 +44,11 @@ longer the primary model-development claim. See the adopted
 - Gated parameter-efficient encoder adaptation path (`twinkl-750`)
 - Persona-level aggregation protocol (aggregate per-entry scores into persona-level value profile for Top-K accuracy)
 - Formal held-out evaluation against declared value orderings (Spearman ρ > 0.7 target)
-- Final architecture approval under `twinkl-752.2`. The completed ablation conditionally favors the no-Critic verifier, but the conservative precision or false-alert tolerance is deliberately not fixed yet.
+- Final architecture approval under `twinkl-752.2`. The completed ablation conditionally favors the Weekly Drift Reviewer without VIF Critic input, but the conservative precision or false-alert tolerance is deliberately not fixed yet.
 
 ### Next Steps
-1. Implement and verify recall-first candidate selection before treating another training run as decision evidence
-2. Review the completed bounded verifier result under `twinkl-752.2`; do not adopt the conditional no-Critic recommendation without explicit approval
+1. Implement and verify recall-first checkpoint selection before treating another training run as decision evidence
+2. Review the completed bounded Weekly Drift Reviewer result under `twinkl-752.2`; do not adopt the conditional recommendation to omit VIF Critic input without explicit approval
 3. Report `-1` precision and the precision-recall curve while prioritizing `recall_-1`; do not infer deployment readiness until a false-alert tolerance is adopted
 4. Keep QWK, `+1` recall, calibration, circumplex diagnostics, and persona-level aggregation as secondary health checks
 
@@ -58,22 +58,22 @@ longer the primary model-development claim. See the adopted
 
 **Synthetic personas with controlled declared value profiles:**
 - Each persona has a declared value ordering (e.g., Benevolence > Achievement > Self-Direction)
-- This ordering is embedded in their bio and reflected in generated journal entries
+- This ordering is embedded in their bio and reflected in generated Journal Entries
 - The declared ordering is the controlled reference for persona-level evaluation;
-  it does not make each entry-level Judge label objective ground truth
+  it does not make each entry-level LLM-Judge label objective ground truth
 
 **Why synthetic data is useful here:**
 - Real users do not have objective value orderings that the project can measure
 - Synthetic personas let the project control the declared profile and test the
   mapping mechanism
-- Judge self-consistency and human-anchor checks are still needed because the
+- LLM-Judge self-consistency and human-anchor checks are still needed because the
   entry labels inherit model and rubric uncertainty
 
 ---
 
 ## Metrics
 
-Evaluation operates at two levels: **entry-level** metrics assess whether the Critic can correctly classify individual journal entries, while **persona-level** metrics assess whether aggregated entry scores recover the persona's declared value profile. Entry-level metrics are the current training bottleneck and the focus of ongoing experimentation.
+Evaluation operates at two levels: **entry-level** metrics assess whether the VIF Critic can correctly classify individual Journal Entries, while **persona-level** metrics assess whether aggregated entry scores recover the persona's declared value profile. Entry-level metrics are the current training bottleneck and the focus of ongoing experimentation.
 
 ### Entry-Level Metrics (Current Training Focus)
 
@@ -85,7 +85,7 @@ The adopted hierarchy is:
 3. QWK, `+1` recall, minority recall, and circumplex metrics are diagnostics.
 
 No fixed entry-level precision floor is active yet. Recall-focused development
-can generate candidates, but recall alone cannot support a deployment claim.
+can generate checkpoints, but recall alone cannot support a deployment claim.
 
 #### Quadratic Weighted Kappa (QWK) — Diagnostic
 
@@ -108,12 +108,11 @@ product direction or defines the deployment gate.
 
 **Latest challengers:** Qwen `run_042`-`run_044` reached a slightly higher median QWK (`0.370`) with lower hedging, but stayed too weak on `hedonism` and `power`. Two-stage `run_045`-`run_047` stayed close on QWK (`0.360`) but gave back too much `recall_-1` and hedged more. Consensus-label retrains `run_048`-`run_050` improved within-regime QWK to `0.372`, but they are not a like-for-like frontier replacement because the evaluation labels changed on the same frozen holdout.
 
-#### Misalignment Recall (`recall_-1`) — Primary
+#### Conflict Recall (`recall_-1`) — Primary
 
-`recall_-1` measures how often the model recovers entries labeled as visible
-misalignment. This is the primary model-development metric because two-entry
-drift episodes cannot be detected when the Critic misses their component
-negative evidence.
+`recall_-1` measures how often the VIF Critic recovers Journal Entries with LLM-Judge
+Conflict labels. This is the primary model-development metric because Drift cannot be detected when the VIF Critic misses either component Conflict.
+
 
 ```
 recall_-1 = mean of per-dimension TP_-1 / (TP_-1 + FN_-1)
@@ -121,17 +120,17 @@ recall_-1 = mean of per-dimension TP_-1 / (TP_-1 + FN_-1)
 
 **Why this matters:** The `-1` class ranges from 3.5% (Stimulation) to
 13.8% (Self-direction) of labels. Models frequently hedge toward neutral.
-`recall_-1` directly measures whether the model can recover the conflict signal
+`recall_-1` directly measures whether the VIF Critic can recover the Conflict
 Twinkl needs.
 
 **Interpretation:**
-- Recall > 30%: Reasonable detection of non-neutral entries
+- Recall > 30%: Reasonable detection of non-neutral Journal Entries
 - Recall 10 – 30%: Poor; model catches some signal but misses most
 - Recall < 10%: Model effectively ignores the minority class
 
 **Current corrected-split default:** median `recall_-1` is 31.3% for
 `run_019`-`run_021` BalancedSoftmax. This is materially better than the old
-pre-split baselines, but still not strong enough to treat drift triggers as
+pre-split baselines, but still not strong enough to treat Drift claims as
 production-ready.
 
 Every recall result must also report `-1` precision, its precision-recall
@@ -141,10 +140,10 @@ later product decision.
 
 #### `+1` and Minority Recall — Diagnostic
 
-`+1` recall remains useful for occasional evidence-based Coach acknowledgment,
+`+1` recall remains useful for occasional evidence-based Weekly Coach acknowledgment,
 and minority recall still summarizes both non-neutral classes. Neither is a
-drift trigger or a primary selection metric. Positive evidence on one value
-cannot cancel negative evidence on another.
+Drift input or a primary selection metric. Positive evidence on one value
+cannot cancel Conflict on another.
 
 #### Circumplex Diagnostics
 
@@ -167,7 +166,7 @@ to `0.082` without an adjacent-support gain.
 
 ### Persona-Level Metrics (Downstream Goal)
 
-These metrics assess whether entry-level scores, when aggregated across a persona's journal entries, recover the persona's declared value profile. They depend on adequate entry-level performance: if QWK and minority recall are poor, persona-level aggregation inherits noisy inputs.
+These metrics assess whether entry-level scores, when aggregated across a persona's Journal Entries, recover the persona's declared value profile. They depend on adequate entry-level performance: if QWK and minority recall are poor, persona-level aggregation inherits noisy inputs.
 
 #### Spearman Correlation
 
@@ -190,7 +189,7 @@ Does the model correctly identify the persona's top 1-3 values?
 
 ```
 Top-1 Accuracy = % of personas where predicted #1 value matches declared #1 value
-Top-3 Accuracy = % of personas where predicted top-3 contains all declared core values
+Top-3 Accuracy = % of personas where predicted top-3 contains all Core Values
 ```
 
 ---
@@ -200,7 +199,7 @@ Top-3 Accuracy = % of personas where predicted top-3 contains all declared core 
 ### Step 1: Generate Test Personas
 - Create 3-5 synthetic personas with distinct value profiles
 - Ensure diversity: vary age, culture, profession
-- Each persona has 1-2 declared core values
+- Each persona has 1-2 Core Values
 
 ### Step 2: Generate Journal Entries
 - Generate 5-10 entries per persona
@@ -208,7 +207,7 @@ Top-3 Accuracy = % of personas where predicted top-3 contains all declared core 
 - Use existing synthetic data pipeline
 
 ### Step 3: Run VIF Inference
-- Process each persona's entries through the trained Critic
+- Process each persona's entries through the trained VIF Critic
 - Aggregate per-entry scores into a persona-level value profile
 - Rank values by aggregated scores
 
@@ -233,16 +232,16 @@ mean_rho = np.mean(results)
 
 | Metric | Role | Rationale |
 |--------|------|-----------|
-| `recall_-1` | Primary development metric | Measures recovery of the conflict evidence required by the downstream episode detector |
+| `recall_-1` | Primary development metric | Measures recovery of Conflict required by the downstream Drift Detector |
 | `-1` precision and precision-recall curve | Mandatory report; threshold deferred | Exposes false-conflict inflation while recall is optimized |
 | QWK | Ordinal-health diagnostic | Detects collapse of the retained ternary output and preserves historical comparability |
-| `+1` recall / minority recall | Non-gating diagnostic | Supports occasional positive context without defining drift |
-| Episode recall | Future product metric | Measures the actual two-entry decision consumed by the Coach |
-| Episode precision / false-alert burden | Required before deployment; no threshold yet | Prevents a high-recall detector from producing unacceptable false accountability |
+| `+1` recall / minority recall | Non-gating diagnostic | Supports occasional positive context without defining Drift |
+| Drift recall | Future product metric | Measures the actual two-Conflict decision consumed by the Weekly Coach |
+| Drift precision / false-alert burden | Required before deployment; no threshold yet | Prevents a high-recall Drift Detector from producing unacceptable false accountability |
 
-There is no active numerical promotion gate. The study may prioritize
-`recall_-1`, but no candidate can be promoted until an untouched resolved
-episode surface and an approved false-alert tolerance exist.
+There is no active numerical deployment gate. The study may prioritize
+`recall_-1`, but no VIF Critic can receive deployment approval until an untouched, resolved
+final test set and an approved false-alert tolerance exist.
 
 ### Persona-Level (secondary aggregated profile recovery)
 
@@ -257,16 +256,16 @@ From PRD (Evaluation Strategy, Row 2):
 
 ## Known Limitations
 
-1. **Synthetic bias**: Model may learn artifacts of the generation process rather than true value signals
+1. **Synthetic bias**: The VIF Critic may learn cues from the generation process rather than true value signals
 2. **Small sample size**: 3-5 personas limits statistical power
-3. **Value leakage**: If personas explicitly mention values in entries, the evaluation is trivial
-4. **Reachability ceiling**: `twinkl-747` established a hard-dimension target-contract warning, especially for `security`, but its legacy reduced-context arms did not exactly represent the active session-plus-profile state. It did not create a repaired target or an exact active-state leaderboard.
+3. **Value leakage**: If personas explicitly mention values in Journal Entries, the evaluation is trivial
+4. **Reachability ceiling**: `twinkl-747` established a hard-dimension target-contract warning, especially for `security`, but its legacy reduced-context experiment setups did not exactly represent the active session-plus-profile state. It did not create a repaired target or an exact active-state leaderboard.
 5. **Board comparability**: consensus-label retrains are informative diagnostics, but they are not directly comparable to the persisted-label frontier because the holdout labels changed
-6. **Context and decision contract**: the retired consensus-derived drift benchmark is historical diagnostic evidence, not a valid student-visible promotion surface. [`twinkl-v8pb`](./drift_v1_student_visible_target.md) completed a separate full-runtime-text target and locked promotion review; low development recall and one unresolved promotion case mean no scorer comparison supports a promotion claim. The earlier AI audit is diagnostic evidence, not human ground truth.
+6. **Context and decision contract**: the retired consensus-derived Drift benchmark is historical diagnostic evidence, not a valid student-visible final test set. [`twinkl-v8pb`](./drift_v1_student_visible_target.md) completed a separate full-runtime-text target and locked final-test review; low development recall and one unresolved final-test case mean no VIF Critic comparison supports a deployment claim. The earlier AI audit is diagnostic evidence, not human ground truth.
 
 **Mitigations:**
 - Use banned terms validation to prevent explicit value mentions
-- Qualitatively review entries to ensure values are shown through behavior, not stated
+- Qualitatively review Journal Entries to ensure values are shown through behavior, not stated
 - Report confidence intervals alongside point estimates
 
 ---
@@ -276,5 +275,5 @@ From PRD (Evaluation Strategy, Row 2):
 - `docs/vif/03_model_training.md` — Training approach and loss function
 - `docs/prd.md` — Evaluation Strategy table (Row 2)
 - `config/schwartz_values.yaml` — Value dimension definitions
-- `logs/experiments/reports/experiment_review_20260702_twinkl_w2mu_frozen_context_gap.md` — 221-row LLM context-arm comparison
-- `logs/experiments/reports/experiment_review_2026-06-06_twinkl_upb5.md` — recall-aware candidate-retention rerun
+- `logs/experiments/reports/experiment_review_20260702_twinkl_w2mu_frozen_context_gap.md` — 221-row LLM context-setup comparison
+- `logs/experiments/reports/experiment_review_2026-06-06_twinkl_upb5.md` — recall-aware alternate-checkpoint rerun

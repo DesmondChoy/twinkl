@@ -5,7 +5,7 @@ This document outlines the high-level objectives, core concepts, and implementat
 For technical details, see:
 *   [System Architecture, State, and Runtime Flow](02_system_architecture.md)
 *   [Reward Modeling & Training](03_model_training.md)
-*   [Uncertainty, Drift, and Trigger Logic](04_uncertainty_logic.md)
+*   [Uncertainty and Drift Detector Logic](04_uncertainty_logic.md)
 *   [Capstone Scope and Evaluation Decision](05_capstone_scope_decision.md)
 
 ---
@@ -21,9 +21,9 @@ Instead of giving a generic sentiment score, the VIF tracks the ten Schwartz val
 Crucially, the VIF is designed to be:
 *   **Nuanced:** It acknowledges trade-offs (e.g., "You crushed your work goals this week, but your sleep suffered").
 *   **Cautious:** It knows when it's unsure. If the user's situation is complex or new, the VIF holds back its judgment rather than giving bad advice.
-*   **Time-Aware:** The downstream timeline looks for repeated evidence rather than reacting to a single entry. Drift v1 requires sustained conflict on a declared core value.
+*   **Time-Aware:** The downstream timeline looks for repeated evidence rather than reacting to one Journal Entry. Drift v1 requires two consecutive Conflicts for the same Core Value.
 
-This engine powers Twinkl's feedback system: flagging drifts so the Coach (the conversational AI) can gently surface tensions, and recognizing sustained alignment so the Coach can offer occasional evidence-based acknowledgment.
+This engine supports Twinkl's feedback: the Drift Detector flags Drift so the Weekly Coach can gently surface tensions, while sustained alignment can support occasional evidence-based acknowledgment.
 
 ---
 
@@ -40,31 +40,36 @@ The VIF is designed to:
 
 ### 1.2 Key Design Principles
 
-1. **Reward modeling, not oracle reward**
-   The system does not assume access to ground-truth alignment labels. Instead, it uses an explicit **Reward Model (RM)** to infer alignment scores from text and user profiles.
+1. **Reward modeling, not ground-truth reward**
+   Twinkl does not assume access to ground-truth alignment labels. Instead, the
+   **LLM-Judge** creates reference labels from Journal Entry text and user
+   profiles.
 
 2. **Vector-valued evaluation**
    Alignment is evaluated across all ten Schwartz value dimensions. The value function remains **vector-valued** to preserve tensions and trade-offs, and is only aggregated when needed.
 
-   For the remaining capstone scope, the Critic's primary operational role is
-   conflict screening. Entry-level `recall_-1` drives model development; QWK
-   and positive alignment remain diagnostics and non-gating Coach context.
+   For the remaining capstone scope, the VIF Critic's primary operational role
+   is Conflict screening. Per-Journal-Entry `recall_-1` drives model development;
+   QWK and positive alignment remain diagnostics and non-gating Weekly Coach
+   context.
 
 3. **Uncertainty-aware feedback**
-   The system estimates **epistemic uncertainty** in its predictions and only issues feedback when it is both:
+   The VIF Critic estimates **epistemic uncertainty** in its predictions, and Twinkl only issues feedback when the prediction is both:
    * Confident in its judgment, and
    * Detecting a significant pattern (negative or positive).
 
 4. **Trajectory-aware downstream evaluation**
-   The live Critic default uses `window_size: 1`, so each prediction sees the current journal session and normalized value profile. Runtime timeline reconstruction and drift detection provide the temporal layer. `twinkl-749` tested a small prior-entry mean summary, but its seed-11 package regressed and was not promoted. History support therefore remains diagnostic rather than an assumed property of the default Critic.
+   The live VIF Critic default uses `window_size: 1`, so each prediction sees the current Journal Entry, including its displayed nudge and response when present, plus the normalized value profile. Runtime timeline reconstruction and the Drift Detector provide the temporal layer. `twinkl-749` tested a small prior-Journal-Entry mean summary, but its seed-11 results regressed and did not receive deployment approval. History support therefore remains diagnostic rather than an assumed property of the default VIF Critic.
 
-5. **Separation of concerns: Critic vs Coach**
-   The VIF Critic produces numeric per-entry alignment evidence and uncertainty
+5. **Separation of concerns: VIF Critic vs Weekly Coach**
+   The VIF Critic produces numeric per-Journal-Entry alignment evidence and
+   uncertainty
    from the configured student-visible state. The downstream timeline supplies
-   temporal evaluation. A separate **Coach / Explanation layer** reads the
+   temporal evaluation. A separate **Weekly Coach** reads the
    user's full journal history via **full-context prompting** (at POC scale, all
-   entries fit in the LLM context window) to surface thematic evidence after
-   the Critic and drift layer produce structured signals. At production scale
+   Journal Entries fit in the LLM context window) to surface thematic evidence
+   after the VIF Critic and Drift Detector produce structured signals. At
+   production scale
    with longer histories, this would transition to retrieval-augmented
    generation (RAG) — see [Section 4](#4-extensions-and-future-work).
 
@@ -84,7 +89,7 @@ We define a set of $K$ value dimensions:
   * Positive and negative **examples**.
   * A **rating rubric** (e.g. from “misaligned” to “aligned”).
 
-These dimensions form an ontology for both the reward model and the critic.
+These dimensions form an ontology for both the LLM-Judge and the VIF Critic.
 
 ### 2.2 User Value Profile
 
@@ -92,7 +97,7 @@ Each user ($u$) has a **value profile**:
 
 * A vector of value weights:
   * $w_{u,t} \in \mathbb{R}^K$, with $w_{u,t} \ge 0$ and $\sum_k w_{u,t,k} = 1$.
-  * The synthetic runtime assigns equal mass to declared core values and falls
+  * The synthetic runtime assigns equal mass to Core Values and falls
     back to a uniform vector if none match. The graded BWS output is specified
     but is not wired into runtime state construction.
   * The profile is piecewise constant in the current POC. [Value Evolution
@@ -103,7 +108,7 @@ Each user ($u$) has a **value profile**:
   * Narrative descriptions of what each value means to them.
   * Known constraints and long-term goals.
 
-This profile is used both in the **Reward Model prompts** and in aggregating vector-valued outputs for summaries.
+This profile is used both in the **LLM-Judge prompts** and in aggregating vector-valued outputs for summaries.
 
 ---
 
@@ -112,31 +117,37 @@ This profile is used both in the **Reward Model prompts** and in aggregating vec
 To make this design capstone-friendly, we summarise a recommended tiered approach. The team can choose which tier to implement while keeping a coherent long-term architecture.
 
 * **Tier 1 (Current POC)**
-  * State: current journal-session embedding + normalized profile.
+  * State: current Journal Entry embedding, including any displayed nudge and
+    response, plus the normalized profile.
   * Target: immediate alignment (Option A).
-  * Critic: ordinal MLP with a BNN comparison baseline.
-  * Adopted evaluation scope: recover `-1` evidence for sustained conflict;
+  * VIF Critic: ordinal MLP with a BNN comparison baseline.
+  * Adopted evaluation scope: recover LLM-Judge Conflict (`-1`) labels that
+    support Drift detection;
     preserve the ternary ten-value output without claiming equal reliability
     across dimensions.
   * Uncertainty: MC Dropout.
-  * Drift target: two adjacent entries that each visibly show a behavior or
-    choice against the same declared core value.
-  * Student-visible drift target: [`twinkl-v8pb`](../evals/drift_v1_student_visible_target.md)
-    completed a full-runtime-text development target and locked promotion
-    review. `run_020` found 1/5 development episodes, and one 19-entry
-    promotion case remained unresolved, so no promotion score was run. The old
+  * Drift target: two consecutive Journal Entries that each show a Conflict
+    for the same Core Value.
+  * Student-visible Drift target: [`twinkl-v8pb`](../evals/drift_v1_student_visible_target.md)
+    completed a full-runtime-text development-set review and final-test-set
+    review. `run_020` found 1/5 development-set Drifts, and one final-test-set
+    case containing 19 Journal Entries remained unresolved, so no final test
+    score was run.
+    The old
     consensus-derived frozen benchmark is retired historical evidence, not a
-    runnable benchmark or promotion surface.
+    runnable benchmark or final test set.
 
 * **Tier 2 (Optional capstone extension)**
   * Evaluated diagnostics: compact mean history (`twinkl-749`) and soft
-    vote-distribution labels (`twinkl-j0ck`) both completed without promotion.
+    vote-distribution labels (`twinkl-j0ck`) both completed without deployment
+    approval.
     Neither changes the Tier 1 state or target default.
   * State or target extensions should reopen only with a materially different,
     evidence-backed mechanism and a matching student-visible target contract.
-  * Critic: calibrated local MLP, LLM teacher/fallback, or a measured cascade.
-  * Drift rule: the same sustained-conflict construct with calibrated
-    thresholds for declared core values and active, recovered, mixed, or
+  * VIF Critic: calibrated local MLP, `gpt-5.4-mini` per-Journal-Entry
+    fallback, or an MLP-to-LLM cascade.
+  * Drift rule: the same Drift definition with calibrated
+    thresholds for Core Values and active, recovered, mixed, or
     uncertain weekly wording.
 
 * **Tier 3 (Out of Scope for Capstone)**
@@ -151,16 +162,16 @@ To make this design capstone-friendly, we summarise a recommended tiered approac
 
 Potential extensions beyond the POC:
 
-* **Distilled Reward Model**:
-  * Train a smaller supervised model to mimic the LLM-as-Judge, reducing latency and cost.
+* **LLM-Judge Distillation**:
+  * Train a smaller supervised model to mimic the LLM-Judge, reducing latency and cost.
 * **Policy Learning**:
   * After VIF is stable and safety mechanisms are validated, explore offline RL to learn and evaluate **action suggestions** (micro-experiments, habits). This remains out of scope for the core capstone POC.
 * **Richer Uncertainty Modeling**:
   * Incorporate ensembles, density models, or explicit OOD detectors on the text embedding space.
 * **More Modalities** *(Out of scope for capstone)*:
   * Incorporate prosodic and physiological features robustly, especially for early warning signals of stress or overload.
-* **Value Evolution Detection**: Possible statistical filter for user-confirmed profile updates after the sustained-conflict path is validated. See [Value Evolution Detection](../evolution/01_value_evolution.md).
+* **Value Evolution Detection**: Possible statistical filter for user-confirmed profile updates after the Drift path is validated. See [Value Evolution Detection](../evolution/01_value_evolution.md).
 * **Personalisation Layers**:
-  * Explore global VIF plus lightweight per-user adapters for users whose trajectories systematically diverge from the population.
-* **Retrieval-Augmented Coach (scaling)**:
-  * At POC scale (8–12 entries per persona), all journal entries fit in the LLM context window, so the Coach uses full-context prompting — passing all entries directly in the prompt. For production deployment with longer user histories (50+ entries), the Coach would transition to RAG with a vector store for semantic similarity retrieval over the journal corpus. This is a scaling concern, not a capability gap at current data volumes.
+  * Explore global VIF plus lightweight per-user adapters for users whose trajectories systematically diverge from other users.
+* **Retrieval-Augmented Weekly Coach (scaling)**:
+  * At POC scale (8–12 Journal Entries per persona), all Journal Entries fit in the LLM context window, so the Weekly Coach uses full-context prompting. For production deployment with longer user histories (50+ Journal Entries), the Weekly Coach would transition to RAG with a vector store for semantic similarity retrieval over the journal corpus. This is a scaling concern, not a capability gap at current data volumes.

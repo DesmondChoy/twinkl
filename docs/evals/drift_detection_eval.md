@@ -2,48 +2,47 @@
 
 ## Evaluation Contract
 
-Twinkl evaluates one v1 definition of drift:
+Twinkl evaluates one v1 definition of Drift:
 
-> A sustained conflict episode occurs when two adjacent journal entries clearly
-> show the writer making a behavior or choice against the same declared core
-> value.
+> Drift occurs when two consecutive Journal Entries each clearly show the
+> writer making a behavior or choice against the same Core Value.
 
 The earlier consensus-derived frozen benchmark is [retired historical
 evidence](../archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md). The
-five-pass Judge consensus table remains label provenance and a diagnostic, but
-it is not a drift target, threshold-selection input, or promotion surface. This
+five-pass LLM-Judge consensus table remains label provenance and a diagnostic,
+but it is not a Drift target, threshold-selection input, or final test set. This
 is distinct from the six-detector comparison's vote count.
 
 The current layers of the contract are deliberately different:
 
 | Layer | Contract |
 |---|---|
-| Student-visible target | An entry is negative only when the full displayed runtime text clearly shows a behavior or choice against a declared core value. `twinkl-v8pb` completed the paired review. |
-| Development population | The original fixed validation personas defined the target and selected one fixed `run_020` threshold: probability 0.8 and uncertainty 1.010153. |
-| Promotion population | A separate 24-case population was locked before review and threshold selection. One 19-entry case remained unresolved, so its promotion score was deliberately not performed. |
-| Production runtime | Selected scorer and detector are not approved or wired. |
-| User delivery | The weekly Coach digest cites the relevant entries and uses active, recovered, mixed, or uncertain wording without score jargon; exact schema implementation is pending. |
+| Student-visible target | A Journal Entry is a Conflict only when the full displayed text clearly shows a behavior or choice against a Core Value. `twinkl-v8pb` completed the paired review. |
+| Development set | The original fixed validation personas defined the target and selected one fixed `run_020` threshold: probability 0.8 and uncertainty 1.010153. |
+| Final test set | A separate 24-case final test set was locked before review and threshold selection. One 19-entry case remained unresolved, so the deployment-approval score was deliberately not calculated. |
+| Production runtime | The VIF Critic and Drift Detector are not approved or wired. |
+| User delivery | The Weekly Digest cites the relevant Journal Entries and uses active, recovered, mixed, or uncertain wording without score jargon; exact schema implementation is pending. |
 
 ### Adopted metric hierarchy (`twinkl-752`)
 
-- The product decision unit is the sustained-conflict **episode**, not an
-  isolated entry or aggregate QWK.
-- Future product evaluation prioritizes episode recall. Before deployment, its
-  operating point must also satisfy a conservative episode precision or
-  user-facing false-alert constraint.
+- The product decision unit is **Drift**, not an
+  isolated Journal Entry or aggregate QWK.
+- Future product evaluation prioritizes Drift recall. Before deployment, its
+  operating point must also satisfy conservative Drift precision or a
+  user-facing false Drift alert constraint.
 - The acceptable false-alert tolerance is deliberately deferred until after
   recall-focused model development. No new numerical precision floor is active.
-- Entry-level `recall_-1` is the primary development proxy because an episode
-  cannot be recovered when its component negative entries are missed.
+- Entry-level `recall_-1` is the primary development proxy because Drift
+  cannot be recovered when either component Conflict is missed.
 - QWK and `+1` recall are diagnostics. Positive evidence cannot trigger or
-  cancel a conflict episode.
-- An uncertain or abstaining scorer produces no drift claim. Coverage,
-  abstention, and true episodes suppressed by uncertainty must be reported.
+  cancel Drift.
+- An uncertain or abstaining VIF Critic produces no Drift claim. Coverage,
+  abstention, and true Drifts suppressed by uncertainty must be reported.
 
 See the adopted [VIF scope decision](../vif/05_capstone_scope_decision.md).
 
-The runtime detector is soft because the current Critic often hedges a true
-conflict toward neutral. Weekly delivery remains a product cadence rather than
+The runtime Drift Detector target uses soft probabilities because the current
+VIF Critic often hedges a true Conflict toward neutral. Weekly delivery remains
 a requirement that the evidence itself be grouped into multi-week averages.
 
 Single-entry dip alerts, crash/rut taxonomies, fade/dormancy, peripheral-value
@@ -61,40 +60,41 @@ The empirical basis is
 
 ### Implemented and Measured
 
-- The five-pass Judge consensus table is available at
+- The five-pass LLM-Judge consensus table is available at
   `logs/judge_labels/consensus_labels.parquet`. For an executable strict
   conflict check, require `alignment_<value> == -1`.
-- The trajectory EDA covers 204 personas and 1,651 entries with
+- The trajectory EDA covers 204 personas and 1,651 Journal Entries with
   runtime-compatible weekly bins.
 - The selected reference definition identifies 40 of 204 personas (19.6%);
   the persisted single-pass label comparison identifies 49 of 204 (24.0%).
-- The conflict-heavy-week candidate table contains 106 core-dimension weeks
-  across 71 personas at `-1` density `>= 0.5` and at least two entries.
-- Per-entry MC Dropout means and uncertainties are emitted by the Critic
+- The conflict-heavy-week table contains 106 Core-Value weeks
+  across 71 personas at `-1` density `>= 0.5` and at least two Journal Entries.
+- Per-entry MC Dropout means and uncertainties are emitted by the VIF Critic
   runtime.
 - `src/vif/weekly_schema.py` defines and validates the weekly-frame contract
   shared by `aggregate_timeline_by_week()` and `detect_weekly_drift()`.
 - `src/coach/runtime.py` runs the offline checkpoint-to-digest path and writes
-  timeline, weekly, drift, digest, markdown, and prompt artifacts.
+  timeline, weekly, Drift, Weekly Digest, markdown, and prompt files.
 - The demo review app compares six exploratory rule-based detector families
-  against Judge labels or Critic means.
+  against LLM-Judge labels or VIF Critic means.
 - `twinkl-v8pb` completed its full-runtime-text review. Development had 42
-  cases / 335 entries, with 41/42 case agreement (0.97619) and 324/335
-  entry agreement (0.96716). At the fixed threshold, `run_020` found 1/5
-  reference episodes (precision 1.0, recall 0.2, F1 0.3333, false-positive
+  cases / 335 Journal Entries, with 41/42 case agreement (0.97619) and 324/335
+  Journal Entry agreement (0.96716). At the fixed threshold, `run_020` found 1/5
+  reference Drifts (precision 1.0, recall 0.2, F1 0.3333, false-positive
   rate 0.0).
-- `twinkl-752.1` compared the same weekly verifier with and without fixed
-  `run_020` inputs on 41 resolved development trajectories. The no-Critic arm
-  reached median episode recall 0.40, one false episode, and coverage 0.756;
-  the Critic arm reached 0.20, zero, and 0.732. Ten genuinely invalid outputs
+- `twinkl-752.1` compared the Weekly Drift Reviewer without VIF Critic input
+  against the Weekly Drift Reviewer with fixed `run_020` predictions across 41
+  resolved development trajectories. Without VIF Critic input, median Drift
+  recall was 0.40 with one false Drift alert and 0.756 coverage; with VIF
+  VIF Critic input, those results were 0.20, zero, and 0.732. Ten genuinely invalid outputs
   remained fail-closed; 69 raw receipts rejected by an over-strict optional-
   quote validator were recovered under the registered prompt contract.
-- The locked promotion review had 24 cases / 191 entries, with 23/24 case
-  agreement (0.95833) and 180/191 entry agreement (0.94241). case_023 was
-  unresolved across 19 entries, so the promotion score was deliberately not
+- The locked final-test review had 24 cases / 191 Journal Entries, with 23/24 case
+  agreement (0.95833) and 180/191 Journal Entry agreement (0.94241). case_023 was
+  unresolved across 19 Journal Entries, so the deployment-approval score was deliberately not
   performed rather than scoring only the agreed cases.
 - The retained author-designed trajectories are a capability probe only. They
-  are not a target, a threshold-selection input, or a promotion surface.
+  are not a target, a threshold-selection input, or a final test set.
 
 ### Current Prototype Boundary
 
@@ -102,31 +102,31 @@ The empirical basis is
 modes `stable`, `crash`, `rut`, `evolution`, and `high_uncertainty`. It also
 invokes the experimental evolution classifier automatically. That router is a
 working prototype and remains useful for end-to-end UI and schema testing, but
-it is not the selected sustained-conflict detector.
+it is not the selected Drift Detector.
 
 The six-detector comparison in `src/demo_tool/multi_drift.py` is another
-exploratory surface. Its per-entry vote count is detector agreement, not the
-five-pass Judge reference.
+exploratory comparison. Its per-entry vote count is detector agreement, not the
+five-pass LLM-Judge reference.
 
 ### Retired consensus-derived benchmark (historical)
 
-`twinkl-wq9p` was retired because its frozen consensus episodes were not a fair
-student-visible promotion surface. Its former scripts, artifacts, report, and
+`twinkl-wq9p` was retired because its frozen consensus Drifts were not a fair
+student-visible final test set. Its former scripts, files, report, and
 dedicated tests are not active repository surfaces. The historical audit is
 useful only for explaining that retirement; it must not be rerun, tuned, scored,
-or used to promote a scorer. See the [retirement record](../archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md).
+or used to approve a VIF Critic for deployment. See the [retirement record](../archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md).
 
-The full evidence is in the [student-visible target record](drift_v1_student_visible_target.md), the [development threshold receipt](../../logs/experiments/artifacts/drift_target_twinkl_v8pb_20260711/development/thresholds.json), and the [promotion no-score record](../../logs/experiments/artifacts/drift_target_twinkl_v8pb_20260711/promotion/promotion_no_score.json). No fallback score was taken from the retired benchmark.
+The full evidence is in the [student-visible target record](drift_v1_student_visible_target.md), the [development threshold receipt](../../logs/experiments/artifacts/drift_target_twinkl_v8pb_20260711/development/thresholds.json), and the [final test no-score record](../../logs/experiments/artifacts/drift_target_twinkl_v8pb_20260711/promotion/promotion_no_score.json). No fallback score was taken from the retired benchmark.
 
 ### Still Missing for Product v1
 
-- Per-entry `P(-1)` persistence in the runtime artifact surface
-- A fresh, independently resolved promotion surface; the reviewed population
+- Per-entry `P(-1)` persistence in the runtime output
+- A fresh, independently resolved final test set; the reviewed cases
   cannot be reduced to its agreed cases after disagreement was observed
-- A scorer and calibrated operating point that pass a future fair
-  decision-level promotion check
+- A VIF Critic and calibrated operating point that pass a future fair
+  decision-level deployment-approval check
 - Production integration of the selected soft-evidence detector
-- Coach-language checks for active, recovered, mixed, and uncertain states at
+- Weekly Coach language checks for active, recovered, mixed, and uncertain states at
   digest time
 
 ---
@@ -137,13 +137,13 @@ The observed timelines are short: the median persona has five active runtime
 weeks. Multi-week low-period machinery therefore consumes most of the available
 history and is too sparse for a robust capstone benchmark.
 
-Single-entry dips are common but noisy. On declared core dimensions, 84.4% of
-dip events recover to `>= 0` within two entries. Requiring two consecutive
+Single-entry dips are common but noisy. On Core Values, 84.4% of
+dip events recover to `>= 0` within two Journal Entries. Requiring two consecutive
 conflicts removes most spike noise without imposing calendar logic that the
 dataset cannot support.
 
 Core-value gating is also load-bearing. Nearly half of all persona-by-dimension
-trajectories are all-neutral, while only 1.0% of declared core trajectories are
+trajectories are all-neutral, while only 1.0% of Core-Value trajectories are
 all-neutral. An ungated benchmark would be dominated by dimensions the persona
 did not declare as important.
 
@@ -152,51 +152,51 @@ did not declare as important.
 ## Student-Visible Target Outcome (2026-07-11)
 
 The [student-visible target](drift_v1_student_visible_target.md) labels an
-entry negative only when its displayed text clearly shows the writer making a
-behavior or choice against a declared core value. Frustration, guilt, wishes,
+Journal Entry as a Conflict only when its displayed text clearly shows the writer making a
+behavior or choice against a Core Value. Frustration, guilt, wishes,
 outside constraints without a voluntary choice, biography, and ambiguous prose
 do not qualify on their own.
 
-Two immediately adjacent negative entries for the same value form one
-sustained-conflict episode. A non-negative or uncertain entry breaks the run.
-Later entries can describe whether an already-recorded episode is active,
+Two consecutive Conflicts for the same Core Value form one Drift. A
+non-Conflict or uncertain Journal Entry breaks the run. Later Journal Entries
+can describe whether an already-recorded Drift is active,
 recovered, or uncertain; they do not change whether the earlier pair occurred.
 
-The target used two deliberately separate populations. The development review
-used the original fixed validation personas; the locked promotion review used
+The target used two deliberately separate sets. The development review
+used the original fixed validation personas; the locked final-test review used
 24 registry personas added after the original model split. Both reviews used
-the full text the runtime state encoder receives: journal entry, displayed
+the full text the runtime state encoder receives: Journal Entry, displayed
 nudge, and displayed response.
 
-The development result is diagnostic, not a promotion pass: 42 cases / 335
-entries, 41/42 case agreement, 324/335 entry agreement, and `run_020` detecting
-1/5 reference episodes at the fixed probability 0.8 / uncertainty 1.010153
-threshold. The promotion result is a valid no-go outcome: 23/24 case agreement
-and 180/191 entry agreement, but case_023 remained unresolved across 19
-entries. No promotion score was run. The old consensus event table remains
+The development result is diagnostic, not deployment approval: 42 cases / 335
+Journal Entries, 41/42 case agreement, 324/335 Journal Entry agreement, and `run_020` detecting
+1/5 reference Drifts at the fixed probability 0.8 / uncertainty 1.010153
+threshold. The final-test result is a valid no-go outcome: 23/24 case agreement
+and 180/191 Journal Entry agreement, but case_023 remained unresolved across 19
+Journal Entries. No deployment-approval score was run. The old consensus event table remains
 retired historical evidence and must not be materialized or used for either
-population.
+set.
 
 ---
 
 ## Runtime Detector Target
 
-For dimension `j` at entry `t`, let `p^-_{t,j}` be the Critic probability of
+For dimension `j` at Journal Entry `t`, let `p^-_{t,j}` be the VIF Critic probability of
 class `-1` and `u_{t,j}` be its uncertainty estimate. A v1 detector accumulates
-recent negative evidence only when:
+recent Conflict evidence only when:
 
-- the dimension is a declared core value;
+- the dimension is a Core Value;
 - uncertainty is below the calibrated ceiling; and
 - the recent `P(-1)` mass passes a persistence threshold.
 
-Profile weights may calibrate evidence or thresholds among declared core
-values, but they do not make an undeclared value eligible for v1 drift.
+Profile weights may calibrate evidence or thresholds among Core Values, but
+they do not make another value eligible for v1 Drift.
 
 The exact rolling function and thresholds are evaluation parameters, not part
-of the student-visible label definition. Candidate forms include a two-entry
+of the student-visible label definition. Options include a two-entry
 mean, an exponentially weighted sum, or a small cumulative evidence score.
 These forms are not automatically equivalent: a pair mean can pass because of
-one very strong entry even when the other lacks adequate evidence. The runtime
+one very strong Journal Entry even when the other lacks adequate evidence. The runtime
 rule must either enforce a per-entry evidence condition or demonstrate that its
 chosen soft rule preserves the canonical two-entry event. That choice remains
 open.
@@ -210,33 +210,33 @@ Hard argmax predictions are not the runtime contract. Requiring two predicted
 
 ### Phase 1: Student-Visible Target Development
 
-1. Review the fixed development population using only the declared core value
+1. Review the fixed development set using only the Core Value
    and displayed journal trajectory.
 2. Reconcile the paired reviews into a versioned target while preserving the
-   original Judge labels as provenance rather than overwriting them.
+   original LLM-Judge labels as provenance rather than overwriting them.
 3. Choose at most one detector threshold from that development target.
 4. Record uncertainty, rationale, and unresolved-case handling separately from
-   the main sustained-conflict decision.
+   the main Drift decision.
 
-### Phase 2: Locked Promotion Review
+### Phase 2: Locked Final-Test Review
 
-1. Keep the promotion population locked before its review and before threshold
+1. Keep the final test set locked before its review and before threshold
    selection.
 2. Review it under the same student-visible rule and reconcile only after both
    review responses are recorded.
-3. Treat an unresolved promotion case as a block on a promotion claim.
+3. Treat an unresolved final-test case as a block on deployment approval.
 
-### Phase 3: One Fair Scorer Comparison
+### Phase 3: One Fair VIF Critic Comparison
 
-1. Run the allowed scorer once against the locked promotion target after the
+1. Run the allowed VIF Critic once against the locked final-test target after the
    development threshold is fixed.
-2. Report episode hits, false positives, and delivery-state handling without
+2. Report Drift hits, false positives, and delivery-state handling without
    changing the target or threshold after seeing those results.
 3. Keep author-designed trajectories separate as a capability probe; they can
-   never substitute for the locked promotion population.
+   never substitute for the locked final test set.
 
 `twinkl-v8pb` completed Phases 1 and 2 under this protocol. Phase 3 stopped
-before scoring: the unresolved promotion case makes the target invalid for a
+before scoring: the unresolved final-test case makes the target invalid for a
 fair score, and scoring only the agreed cases would be cherry-picking.
 
 ---
@@ -247,29 +247,29 @@ fair score, and scoring only the agreed cases would be cherry-picking.
 
 | Metric | Status | Meaning |
 |---|---|---|
-| Development episode recall (`run_020`) | 1/5 (0.2) | The fixed development threshold found one of five reviewed reference episodes |
-| Development precision / false-positive rate (`run_020`) | 1.0 / 0.0 | The single predicted development episode was correct, but four reference episodes were missed |
+| Development Drift recall (`run_020`) | 1/5 (0.2) | The fixed development threshold found one of five reviewed Drifts |
+| Development precision / false-positive rate (`run_020`) | 1.0 / 0.0 | The single predicted development Drift was correct, but four reference Drifts were missed |
 | Development F1 (`run_020`) | 0.3333 | Balances the perfect precision with low recall |
-| Weekly verifier without Critic (`twinkl-752.1`) | Median recall 0.40 / 1 false episode / coverage 0.756 | Development-only result over three repeats; conditionally favored under the registered recall-first rule |
-| Weekly verifier with Critic (`twinkl-752.1`) | Median recall 0.20 / 0 false episodes / coverage 0.732 | Safer but blinder; the tested raw `run_020` input path is not recommended |
-| Promotion episode metrics | Deliberately not scored | case_023 remained unresolved across 19 entries; the target is not valid for a fair score |
-| First-alert latency | Not scored | It requires a resolved promotion target |
-| Author-designed capability recall | Capability-only diagnostic | Whether the scorer can find deliberately clear episodes; never a scorer-promotion gate |
+| Weekly Drift Reviewer without VIF Critic input (`twinkl-752.1`) | Median Drift recall 0.40 / 1 false Drift alert / coverage 0.756 | Development-only result over three repeats; conditionally favored under the registered recall-first rule |
+| Weekly Drift Reviewer with VIF Critic input (`twinkl-752.1`) | Median Drift recall 0.20 / 0 false Drift alerts / coverage 0.732 | Safer but blinder; the tested raw `run_020` input path is not recommended |
+| Final-test Drift metrics | Deliberately not scored | case_023 remained unresolved across 19 Journal Entries; the target is not valid for a fair score |
+| First-alert latency | Not scored | It requires a resolved final-test target |
+| Author-designed capability recall | Capability-only diagnostic | Whether the VIF Critic can find deliberately clear Drifts; never a deployment-approval gate |
 
 A historical development-only operating point exists (probability 0.8,
 uncertainty 1.010153), but it is not the newly adopted recall-first policy and
-no numerical promotion threshold is active. The retained
+no numerical deployment threshold is active. The retained
 author-designed controls remain capability-only diagnostics and cannot
-substitute for a fresh, resolved locked promotion population.
+substitute for a fresh, resolved locked final test set.
 
 ### Required Slices
 
 - Per Schwartz value dimension
-- Declared-core-value rank or profile-weight band
-- Episode length and severity
+- Core-Value rank or profile-weight band
+- Drift length and severity
 - Review confidence and disagreement state
 - Active, recovered, mixed, and uncertain digest-time cases
-- Allowed scorer and input-contract version
+- Allowed VIF Critic and input-contract version
 
 ### Uncertainty Validation
 
@@ -278,11 +278,11 @@ calibration can look acceptable while the minority class is poorly calibrated.
 Report:
 
 - error rate by uncertainty decile;
-- retained episode recall at each uncertainty ceiling;
+- retained Drift recall at each uncertainty ceiling;
 - false-positive reduction from gating; and
-- the number of true episodes suppressed by high uncertainty;
+- the number of true Drifts suppressed by high uncertainty;
 - abstention count and coverage; and
-- the number of false user-facing claims per non-drift trajectory or week.
+- the number of false user-facing claims per trajectory or week without Drift.
 
 ---
 
@@ -311,27 +311,27 @@ Generated evidence lives under `docs/drift/figures/` and
 `docs/drift/tables/`.
 
 These commands reproduce historical EDA only. They must not be used to build a
-drift target, select a threshold, or promote a scorer. There is deliberately no
+Drift target, select a threshold, or approve a VIF Critic for deployment. There is deliberately no
 active command for the retired `twinkl-wq9p` benchmark. The completed
-student-visible review and its blocked promotion result are described in
+student-visible review and its blocked final-test result are described in
 [`drift_v1_student_visible_target.md`](drift_v1_student_visible_target.md).
 
 ---
 
 ## Limitations
 
-1. Consensus labels are stored Judge provenance, not human ground truth. The
+1. Consensus labels are stored LLM-Judge provenance, not human ground truth. The
    former frozen consensus benchmark is retired and cannot support a target,
-   threshold, or promotion claim.
+   threshold, or deployment claim.
 2. The incumbent `run_020` checkpoint predates the student-visible target. It
    was evaluated only on the completed development target; the unresolved
-   promotion target deliberately received no score.
+   final-test target deliberately received no score.
 3. Core-gated per-dimension denominators are small and uneven.
-4. Five personas have only two entries, so their temporal evidence is limited
+4. Five personas have only two Journal Entries, so their temporal evidence is limited
    to one possible adjacent pair.
 5. The current synthetic corpus contains volatility more readily than clean,
    gradual arcs; it cannot validate fade or value-evolution claims.
-6. Weekly Coach delivery can lag reference confirmation, so event matching must
+6. Weekly Coach delivery can lag reference confirmation, so Drift matching must
    distinguish detector latency from delivery cadence.
 
 ---
@@ -348,11 +348,11 @@ student-visible review and its blocked promotion result are described in
 | [`src/coach/runtime.py`](../../src/coach/runtime.py) | Offline checkpoint-to-digest orchestration |
 | [`src/demo_tool/multi_drift.py`](../../src/demo_tool/multi_drift.py) | Six-detector exploratory comparison |
 | [`scripts/experiments/llm_critic_baseline.py`](../../scripts/experiments/llm_critic_baseline.py) | Student-visible and history-context comparison arms |
-| [`drift_v1_student_visible_target.md`](drift_v1_student_visible_target.md) | Completed target rule, review boundary, development result, and blocked promotion result |
-| [`../../config/evals/drift_v1_student_visible_v1.yaml`](../../config/evals/drift_v1_student_visible_v1.yaml) | Locks the development and promotion populations before review or threshold selection |
+| [`drift_v1_student_visible_target.md`](drift_v1_student_visible_target.md) | Completed target rule, review boundary, development result, and blocked final-test result |
+| [`../../config/evals/drift_v1_student_visible_v1.yaml`](../../config/evals/drift_v1_student_visible_v1.yaml) | Locks the development and final-test sets before review or threshold selection |
 | [`../../src/vif/drift_target.py`](../../src/vif/drift_target.py) | Student-visible review packets, reconciliation, and target materialization |
-| [`../../scripts/experiments/build_v8pb_student_visible_target.py`](../../scripts/experiments/build_v8pb_student_visible_target.py) | Builds the development or promotion review packet |
+| [`../../scripts/experiments/build_v8pb_student_visible_target.py`](../../scripts/experiments/build_v8pb_student_visible_target.py) | Builds the development or final-test review input file |
 | [`../../scripts/experiments/materialize_v8pb_student_visible_target.py`](../../scripts/experiments/materialize_v8pb_student_visible_target.py) | Materializes a reviewed student-visible target variant |
-| [`../../config/evals/drift_v1_author_designed_capability.yaml`](../../config/evals/drift_v1_author_designed_capability.yaml) | Author-designed capability probe; never a promotion surface |
+| [`../../config/evals/drift_v1_author_designed_capability.yaml`](../../config/evals/drift_v1_author_designed_capability.yaml) | Author-designed capability probe; never a final test set |
 | [`logs/experiments/reports/experiment_review_20260702_twinkl_w2mu_frozen_context_gap.md`](../../logs/experiments/reports/experiment_review_20260702_twinkl_w2mu_frozen_context_gap.md) | Frozen test-split LLM context results |
 | [`../archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md`](../archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md) | Retired benchmark record; do not rerun, score, tune, or promote from it |

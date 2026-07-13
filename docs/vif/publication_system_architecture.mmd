@@ -20,10 +20,10 @@ flowchart LR
 
     subgraph offline_lane["Offline Training"]
         direction TB
-        synth["Synthetic journals"]
-        judge["Judge labeling<br/>single pass + five-pass"]
-        labels["Persisted single-pass Judge labels"]
-        consensus["Five-pass Judge consensus<br/>diagnostic provenance"]
+        synth["Synthetic Journal Entries"]
+        judge["LLM-Judge labeling<br/>single pass + five-pass"]
+        labels["Persisted single-pass LLM-Judge labels"]
+        consensus["Five-pass LLM-Judge consensus<br/>diagnostic provenance"]
         shared_train["Shared text + state representation"]
         critic_model["Trained VIF Critic"]
         synth --> shared_train --> critic_model
@@ -37,18 +37,18 @@ flowchart LR
         direction TB
         subgraph runtime_lane["Runtime Scoring"]
             direction LR
-            history["Journal history<br/>+ value profile"]
+            history["Journal Entries<br/>+ value profile"]
             shared_runtime["Same text + state<br/>representation"]
-            entry_scores["Per-entry VIF scores<br/>+ uncertainty"]
+            entry_scores["Per-Journal-Entry VIF Critic<br/>predictions + uncertainty"]
             weekly["Weekly VIF signals"]
             history --> shared_runtime --> entry_scores --> weekly
         end
-        subgraph coach_lane["Weekly Coaching"]
+        subgraph coach_lane["Weekly Coach"]
             direction LR
             drift["Weekly prototype router<br/>crash / rut / evolution<br/>high uncertainty"]
-            drift_v1["Student-visible v1 target<br/>visible conflict + rolling soft P(-1)"]
-            digest["Weekly digest"]
-            coach["Coach prompt / optional reflection"]
+            drift_v1["Student-visible Drift v1 target<br/>Conflict + rolling soft P(-1)<br/>for the same Core Value"]
+            digest["Weekly Digest"]
+            coach["Weekly Coach prompt<br/>optional reflection"]
             drift --> digest -.-> coach
         end
     end

@@ -5,12 +5,12 @@ an orchestrator agent plus short-lived worker sub-agents.
 
 ## Goal
 
-Run the same Judge prompt path `k=5` times over all `1,651` labeled entries
+Run the same LLM-Judge prompt path `k=5` times over all `1,651` labeled Journal Entries
 using the `profile_only` prompt variant. The goal is repeated-call
 self-consistency of one judge workflow, not simulated independence among five
 human-like raters:
 
-- keep `name`, `age`, `profession`, `culture`, and `core values`
+- keep `name`, `age`, `profession`, `culture`, and `Core Values`
 - remove `bio`
 - remove previous-entry history
 
@@ -31,7 +31,7 @@ uv run python scripts/journalling/twinkl_754_prepare_consensus.py \
 
 The pilot bundle remains format-compatible with the full bundle. The only
 difference is that `manifest.csv`, `prompts/`, `shards/`, and downstream
-outputs are restricted to the selected 50 entries. The generated
+outputs are restricted to the selected 50 Journal Entries. The generated
 `bundle_status.json` records whether a bundle is a `pilot` or `full` rerun.
 
 > **Bundle reset:** Preparation clears the target bundle's `prompts/`,
@@ -59,7 +59,7 @@ The main agent is the orchestrator only. It must:
 5. merge validated shard files into per-pass result files while recording provenance
 6. run the summarizer only after the merge step succeeds
 
-The main agent does **not** judge entries itself.
+The main agent does **not** judge Journal Entries itself.
 
 ### Worker Sub-agents
 
@@ -115,8 +115,8 @@ logs/exports/twinkl_754/
 Shards are deterministic and persona-preserving:
 
 - sort by `persona_id`, then `t_index`
-- keep a persona's entries together
-- cap at `5 personas` or `24 entries`, whichever comes first
+- keep a persona's Journal Entries together
+- cap at `5 personas` or `24 Journal Entries`, whichever comes first
 
 Run passes sequentially for safety. Within a pass, use waves of up to `10`
 workers at a time.

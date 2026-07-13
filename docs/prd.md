@@ -10,14 +10,14 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 
 | Feature | Status | Details |
 |---------|--------|---------|
-| **Synthetic Data Pipeline** | ✅ Complete | 204 personas (1,651 entries) generated via Claude Code parallel subagents; YAML prompt templates with Jinja2; targeted value generation supports family-specific tension banks, frozen-holdout experiments, and judged acceptance gates for hard-dimension batches |
-| **Judge Labeling (VIF)** | ✅ Complete | 1,651 entries labeled across 204 personas; two-phase pipeline (Python wrangling + parallel subagents); consolidated to `judge_labels.parquet` with rationales. A separate receipt-bound full-corpus Security review now provides a non-destructive `security_active_critic_state_v1` target; persisted labels remain immutable. |
-| **VIF Critic Training** | 🧪 Experimental | Training stack complete with ordinal MLP heads, BNN baseline, and configurable sentence encoders (`nomic` active default; MiniLM/mpnet ablations). `run_019`-`run_021` remains the historical corrected-split reference. Repaired Security supervision raises median test Security QWK by about 0.17 without regressing aggregate QWK. Soft vote-distribution training changed behavior but was not promoted. Compact-history `run_069` stayed within its added-weight budget but regressed on QWK, minority recall, Security, hedging, and overfitting versus its seed-matched repaired-target baseline. A 20-pair Codex-reviewed Hedonism diagnostic found median `-1` recall of only 0.05 for the incumbent and 0.20 for the tail-sensitive reference, with strict both-members-correct pair rates of 0.05 and 0.15. This is AI diagnostic evidence, not human validation. The local MLP default remains `window_size: 1` and Hedonism remains an unresolved hard dimension. |
+| **Synthetic Data Workflow** | ✅ Complete | 204 personas (1,651 Journal Entries) generated via Claude Code parallel subagents; YAML prompt templates with Jinja2; targeted value generation supports family-specific tension banks, frozen-holdout experiments, and judged acceptance gates for hard-dimension batches |
+| **LLM-Judge Labeling** | ✅ Complete | 1,651 Journal Entries labeled across 204 personas; two-phase workflow (Python wrangling + parallel subagents); consolidated to `judge_labels.parquet` with rationales. A separate receipt-bound full-corpus Security review now provides a non-destructive `security_active_critic_state_v1` target; persisted labels remain immutable. |
+| **VIF Critic Training** | 🧪 Experimental | Training stack complete with ordinal MLP heads, BNN baseline, and configurable sentence encoders (`nomic` active default; MiniLM/mpnet ablations). `run_019`-`run_021` remains the historical corrected-split reference. Repaired Security supervision raises median test Security QWK by about 0.17 without regressing aggregate QWK. Soft vote-distribution training changed behavior but did not receive deployment approval. Compact-history `run_069` stayed within its added-weight budget but regressed on QWK, minority recall, Security, hedging, and overfitting versus its seed-matched repaired-target baseline. A 20-pair Codex-reviewed Hedonism diagnostic found median `-1` recall of only 0.05 for the incumbent and 0.20 for the tail-sensitive reference, with strict both-members-correct pair rates of 0.05 and 0.15. This is AI diagnostic evidence, not human validation. The local MLP default remains `window_size: 1` and Hedonism remains an unresolved hard dimension. |
 | **Human Annotation Tool** | ✅ Complete | ~4,200 LOC Shiny app; 380 saved annotations across 24 personas, with a 115-entry shared subset across 19 personas used for the current inter-rater agreement benchmark; Cohen's κ / Fleiss' κ metrics; modular components with analysis view; annotation ordering for persona prioritization |
 | **Conversational Nudging** | 🧪 Experimental | 3-category LLM classification (clarification/elaboration/tension-surfacing); pending validation that nudging improves VIF signal quality |
-| **Drift Detection Engine** | 🧪 Experimental | Drift v1 is a per-value sustained conflict episode: two adjacent entries must each clearly show the writer making a behavior or choice against the same declared core value. The former consensus-derived frozen benchmark is [retired historical evidence](archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md), not a target, threshold-selection input, or promotion surface. [`twinkl-v8pb` completed the separate student-visible review](evals/drift_v1_student_visible_target.md) using the full runtime text; `run_020` found 1 of 5 development episodes, and one 19-entry promotion case remained unresolved. The `twinkl-752.1` development ablation conditionally favors the no-Critic weekly verifier because adding `run_020` signals halved median episode recall. No architecture or scorer is adopted, no promotion score was run, and trigger wiring remains blocked. The weekly crash/rut/evolution prototype is still not the selected v1 detector. |
-| **Weekly Alignment Coach** | 🧪 Experimental | Weekly digest generation consumes Judge labels or live VIF signal artifacts plus optional upstream drift output. The offline runtime exports validated weekly frames, structured drift payloads, prompts, JSON, markdown, and consolidated parquet records. Narrative generation, validation depth, product-facing orchestration, and trigger calibration remain incomplete. |
-| **Onboarding (BWS Values Assessment)** | 📋 Specified | 6-set BWS flow over 10 Schwartz dimensions; PVQ21-adapted card phrases; mid-flow + end-of-flow reflective mirrors; a graded 10-value weight vector for Critic conditioning plus a discrete `top_values` declared-core set for drift gating; 6 structured goal categories mapping to Coach monitoring priorities; scoring with confidence estimation and user refinement support; [full spec](onboarding/onboarding_spec.md) |
+| **Drift Detector** | 🧪 Experimental | Drift is two consecutive Conflicts for the same Core Value. The former consensus-derived frozen benchmark is [retired historical evidence](archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md), not a target, threshold-selection input, or final test set. [`twinkl-v8pb` completed the separate student-visible review](evals/drift_v1_student_visible_target.md) using the full runtime text; `run_020` found 1 of 5 development-set Drifts, and one 19-entry final test case remained unresolved. The `twinkl-752.1` development ablation conditionally favors the Weekly Drift Reviewer without VIF Critic input because adding `run_020` predictions halved median Drift recall. No VIF Critic and Drift Detector setup has deployment approval, no final test score was run, and Drift Detector wiring remains blocked. The weekly crash/rut/evolution prototype is still not the selected Drift Detector. |
+| **Weekly Coach** | 🧪 Experimental | Weekly Digest generation consumes LLM-Judge labels or live VIF Critic predictions plus optional upstream Drift output. The offline runtime exports validated weekly frames, structured prototype-router JSON, prompts, markdown, and consolidated parquet records. Weekly Coach generation, validation depth, product-facing orchestration, and Drift Detector calibration remain incomplete. |
+| **Onboarding (BWS Values Assessment)** | 📋 Specified | 6-set BWS flow over 10 Schwartz dimensions; PVQ21-adapted card phrases; mid-flow + end-of-flow reflective mirrors; a graded 10-value weight vector for VIF Critic conditioning plus Core Values stored in `top_values` for Drift gating; 6 structured goal categories mapping to Weekly Coach monitoring priorities; scoring with confidence estimation and user refinement support; [full spec](onboarding/onboarding_spec.md) |
 | **Embedding Explorer** | ✅ Complete | Interactive 3D visualization of VIF hidden-layer and SBERT embedding spaces; self-contained HTML with Three.js |
 | **Journaling Anomaly Radar** | ❌ Not Started | Cadence/gap detection |
 | **Goal-aligned Inspiration Feed** | ❌ Not Started | External API integration |
@@ -38,8 +38,8 @@ models/
 > **References:**
 > - [Synthetic Data Pipeline](pipeline/pipeline_specs.md)
 > - [Claude Code Generation Instructions](pipeline/claude_gen_instructions.md)
-> - [Claude Judge Labeling Instructions](pipeline/claude_judge_instructions.md)
-> - [Judge Reachability Audit Instructions](pipeline/judge_reachability_audit_instructions.md)
+> - [Historical Claude LLM-Judge Labeling Instructions](pipeline/claude_judge_instructions.md)
+> - [Historical LLM-Judge Reachability Audit Instructions](pipeline/judge_reachability_audit_instructions.md)
 > - [Human Annotation Tool](pipeline/annotation_tool_plan.md)
 > - [VIF Critic Training](vif/03_model_training.md) — Training strategy and implementation
 > - [CLAUDE.md](../CLAUDE.md) — Project architecture overview
@@ -57,7 +57,7 @@ models/
 # Pain Point(s) it solves & Target Users
 
 * **Pain points**
-    * Ambitious people articulate values (health, family, creativity) yet their weeks quietly fill with conflicting work, doomscrolling, or obligation; very few tools hold up a mirror to that drift.
+    * Ambitious people articulate values (health, family, creativity) yet their weeks quietly fill with conflicting work, doomscrolling, or obligation; very few tools hold up a mirror to that behavioral divergence.
     * Traditional journaling is high-friction and dies off; light prompts and low-barrier entry match how people naturally reflect, but current apps stay at mood-tracking or streak mechanics.
     * Users crave kind accountability—context-aware reflections that cite evidence—while commercial products optimise for dopamine loops, not truth.
 * **Target users / addressable market**
@@ -70,7 +70,7 @@ AI journaling apps (Reflection, Mindsera, Insight Journal, Day One, Pixel Journa
 
 | Feature                | Scenario A: Current AI Journals (The "Summarizer")                                                                                                                                                                | Scenario B: Twinkl (The "Alignment Engine")                                                                                                                                                                       |
 | :--------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Core Premise**       | **Starts with a "Blank Slate."** Knowledge is built *only* from the entries as they come in.                                                                                                                      | **Starts with a "Self-Model."** The user first defines their core values, goals, and priorities during onboarding.                                                                                                |
+| **Core Premise**       | **Starts with a "Blank Slate."** Knowledge is built *only* from the Journal Entries as they come in.                                                                                                              | **Starts with a "Self-Model."** The user first defines their Core Values, goals, and priorities during onboarding.                                                                                                |
 | **Example Self-Model** | *None exists.*                                                                                                                                                                                                    | **Value 1:** "My health is my foundation." **Value 2:** "My relationship is my anchor." **Priority 1:** "The 'Project X' at work is my focus this month."                                                         |
 | **User Entries**       | *(Constant for both scenarios)*  1\. "So stressed, the big project at work is derailing everything." 2\. "Skipped the gym again... feel guilty." 3\. "Had a nice dinner with my partner, which was a good break." | *(Constant for both scenarios)*  1\. "So stressed, the big project at work is derailing everything." 2\. "Skipped the gym again... feel guilty." 3\. "Had a nice dinner with my partner, which was a good break." |
 
@@ -82,37 +82,36 @@ AI journaling apps (Reflection, Mindsera, Insight Journal, Day One, Pixel Journa
 
 ## **System loop**
 
-1. **Perception:** Typed journal entries flow through an LLM that tags values, identity claims, sentiment, intent, and direction-of-travel.
+1. **Perception:** Typed Journal Entries flow through an LLM that tags values, identity claims, sentiment, intent, and direction-of-travel.
 2. **Memory:** Tags incrementally update a decay-aware user profile/knowledge base (value weights, goals, tensions, evidence snippets) instead of resetting each week.
 3. **Reasoning + action:** A two-stage evaluative layer powered by the **[Value Identity Function (VIF)](vif/01_concepts_and_roadmap.md)**:
-   * **Critic (VIF):** A numeric, uncertainty-aware engine that computes per-value-dimension alignment estimates from the current student-visible state. It uses [LLM-as-Judge for reward modeling](vif/03_model_training.md) and [MC Dropout for epistemic uncertainty](vif/04_uncertainty_logic.md). The current config uses the runtime-formatted journal session plus the normalized 10-dimensional value profile. At `window_size: 1`, it has no date/time-gap feature, prior entries, demographics, or biography; larger legal-history windows remain an experiment. The exact relabeling invariant is defined in the [Security target contract](vif/security_target_contract.md).
-   * **Drift detector:** Reads Critic outputs over time. The v1 product target is two adjacent entries that each visibly show a behavior or choice against the same declared core value; other values do not cancel that per-value episode. `twinkl-v8pb` completed the full-runtime-text development review and a locked promotion review. The development threshold found only 1 of 5 reference episodes, while one 19-entry promotion case was unresolved; the promotion score was not run. The old consensus-derived frozen benchmark is retired historical evidence, so no production scorer may be promoted from it. The intended runtime still estimates sustained conflict from rolling soft `P(-1)` evidence under uncertainty gating. The existing crash/rut/evolution router is an experimental implementation surface, not the selected v1 contract.
-   * **Coach:** Receives a weekly structured artifact and reads the user's full journal history via **full-context prompting** (at POC scale, all entries fit in the LLM context window) to surface thematic evidence, explain *why* misalignment occurred, and offer reflective prompts. For positive patterns, it provides occasional evidence-based acknowledgment without gamification. At production scale with longer histories, this would transition to retrieval-augmented generation (RAG). (See [System Architecture](vif/02_system_architecture.md)). For a concrete scenario, see [Worked Example: Sarah's Journey](vif/example.md). Trigger calibration and evaluation remain experimental — see [Implementation Status](#implementation-status).
-   * A **possible future idea** is a **[Value Evolution Detection](evolution/01_value_evolution.md)** layer between Critic outputs and drift triggers. If revisited later, it would aim to distinguish genuine value shifts from behavioral drift. It is not part of the current committed system scope.
+   * **VIF Critic:** A numeric, uncertainty-aware model that predicts `-1`, `0`, or `+1` for each value from the current Journal Entry plus the normalized 10-dimensional value profile. It uses [LLM-Judge labels for reward modeling](vif/03_model_training.md) and [MC Dropout for epistemic uncertainty](vif/04_uncertainty_logic.md). At `window_size: 1`, it has no date/time-gap feature, prior Journal Entries, demographics, or biography; larger legal-history windows remain an experiment. The exact relabeling invariant is defined in the [Security target contract](vif/security_target_contract.md).
+   * **Drift Detector:** Reads VIF Critic predictions over time. Drift is two consecutive Conflicts for the same Core Value; other values do not cancel it. `twinkl-v8pb` completed the full-runtime-text development review and a locked final test review. The development threshold found only 1 of 5 known Drifts, while one 19-entry final test case was unresolved; the final test score was not run. The old consensus-derived frozen benchmark is retired historical evidence, so it cannot support deployment approval. The intended runtime still estimates Drift from rolling soft `P(-1)` evidence under uncertainty gating. The existing crash/rut/evolution router is an experimental predecessor, not the selected v1 contract.
+   * **Weekly Coach:** Receives the Weekly Digest and reads the user's full Journal Entry history via **full-context prompting** (at POC scale, all Journal Entries fit in the LLM context window) to surface thematic evidence, explain *why* Conflict occurred, and offer reflective prompts. For positive patterns, it provides occasional evidence-based acknowledgment without gamification. At production scale with longer histories, this would transition to retrieval-augmented generation (RAG). (See [System Architecture](vif/02_system_architecture.md)). For a concrete scenario, see [Worked Example: Sarah's Journey](vif/example.md). Drift Detector calibration and evaluation remain experimental — see [Implementation Status](#implementation-status).
+   * A **possible future idea** is a **[Value Evolution Detection](evolution/01_value_evolution.md)** layer between VIF Critic predictions and the Drift Detector. If revisited later, it would aim to distinguish genuine value shifts from behavioral Drift. It is not part of the current committed system scope.
 
 ### Canonical VIF scope and evaluation contract
 
-> Twinkl's Critic is primarily a conflict-screening component. Its
+> Twinkl's VIF Critic is primarily a Conflict-screening component. Its
 > product-critical job is to recover `-1` evidence that supports correctly
-> detecting sustained two-entry drift episodes. We maximize episode recall
+> detecting Drift. We maximize Drift recall
 > subject to a conservative precision/false-alert constraint. Entry-level
 > `recall_-1` is the main model-development metric; QWK is retained only as an
 > ordinal-health diagnostic.
 
-For the remaining capstone scope, a sustained-conflict episode means two
-adjacent entries that each visibly show a choice against the same declared
-core value.
+For the remaining capstone scope, Drift means two consecutive Conflicts for the
+same Core Value.
 
 - Entry-level `recall_-1` is the primary model-development metric.
-- Product evaluation prioritizes episode recall. A conservative precision or
+- Product evaluation prioritizes Drift recall. A conservative precision or
   user-facing false-alert constraint must be chosen before deployment, but no
   numerical tolerance is adopted yet.
 - QWK, `+1` recall, calibration, and circumplex metrics remain diagnostics.
-- Only the discrete `top_values` set can trigger drift. `+1` evidence is
-  non-gating and may support occasional positive Coach acknowledgment.
-- An uncertain or abstaining scorer produces no drift claim; coverage and
-  suppressed true episodes must be reported.
-- The ternary ten-value output remains. No MLP, LLM, verifier, ensemble, or
+- Only Core Values, stored in `top_values`, can produce Drift. `+1` evidence is
+  non-gating and may support occasional positive Weekly Coach acknowledgment.
+- An uncertain or abstaining VIF Critic produces no Drift claim; coverage and
+  suppressed known Drifts must be reported.
+- The ternary ten-value output remains. No MLP, LLM, Weekly Drift Reviewer, ensemble, or
   cascade architecture is adopted by this scope decision.
 
 The detailed adopted decision and its implementation gaps are recorded in
@@ -142,13 +141,13 @@ Value context is injected from `config/schwartz_values.yaml`, which contains ric
 
 The onboarding flow uses **Best-Worst Scaling (BWS)** — a forced-choice psychometric technique — to elicit value priorities across 10 Schwartz dimensions while minimizing social desirability bias. The **[Onboarding Spec](onboarding/onboarding_spec.md)** is the source of truth for the canonical flow (number of screens, interaction model, scoring logic, and data output schema). That spec is still subject to change as the design evolves, but this PRD defers to it for onboarding details rather than duplicating them here.
 
-In summary: users complete BWS forced-choice screens, see reflective mirrors for correction, and select a structured goal category. The output includes a graded 10-dimensional value weight vector for Critic conditioning, a discrete `top_values` set representing the user's declared core values for drift gating, and an initial Coach monitoring focus. Persisting and consuming both value fields remains implementation work under `twinkl-1m8`.
+In summary: users complete BWS forced-choice screens, see reflective mirrors for correction, and select a structured goal category. The output includes a graded 10-dimensional value weight vector for VIF Critic conditioning, Core Values stored in `top_values` for Drift gating, and an initial Weekly Coach monitoring focus. Persisting and consuming both value fields remains implementation work under `twinkl-1m8`.
 
 This onboarding directly anchors the capstone submodules: the latent dimensions form named slots in the knowledge base and rule layer (**Intelligent Reasoning Systems**), the mapping from user responses to those dimensions plus later corrections is a compact supervised modelling task (**Pattern Recognition Systems**), entry content analysis and temporal patterns feed the sensing layer (**Intelligent Sensing Systems**), and treating the quiz as just one input stream into a shared user-state vector `z` illustrates end-to-end orchestration and state management across Perception → Memory → Reasoning → Action (**Architecting AI Systems**).
 
 ## **Core Feature Modules**
 
-* **Weekly alignment coach** ⚠️: Batch entries, run the reasoning engine, ship a 1-page digest (Pattern Recognition + Reasoning).
+* **Weekly Coach** ⚠️: Batch Journal Entries, run the reasoning components, and produce a one-page Weekly Digest (Pattern Recognition + Reasoning).
 * **Conversational introspection agent** 🧪: Live mirroring via agent loop (Perception → Cognition → Action) to highlight contradictions mid-conversation. The system uses a three-category **nudge taxonomy**:
   - **Clarification** — for vague entries lacking concrete details
   - **Elaboration** — for surface-level entries with unexplored depth
@@ -163,14 +162,14 @@ This onboarding directly anchors the capstone submodules: the latent dimensions 
 
 1. Frame the research question (“How do we sustain a dynamic model of values/identity and reflect alignment?”) and map subsystems to submodules.
 2. Define the MVP loop: onboarding (BWS-based values assessment — see [spec](onboarding/onboarding_spec.md))
-3. **Scoping Strategy:** Adopt a **Hybrid Approach** (Simple journaling loop + weekly digest + lightweight trajectory viz). Build small slices of each feature to demonstrate breadth without over-building.
+3. **Scoping Strategy:** Adopt a **Hybrid Approach** (simple journaling loop + Weekly Digest + lightweight trajectory visualization). Build small slices of each feature to demonstrate breadth without over-building.
 4. Specify the profile schema:
    * **Value dimensions** anchored in [Schwartz's theory of basic human values](https://en.wikipedia.org/wiki/Theory_of_basic_human_values) (e.g., Self-Direction, Benevolence, Achievement, Security) with definitions, rubrics, and examples.
-   * **User value profile:** vector of value weights `w_u ∈ ℝ^K` (normalized, sum to 1), a discrete declared-core `top_values` set, plus narrative descriptions and constraints. The full vector conditions the Critic; `top_values` gates drift v1.
-   * **State representation:** sliding window of N recent entry embeddings + time deltas + a 10-dim value-weight vector, with zero-padding for early timesteps and no label-derived history features at inference time.
-5. Implement **[Reward Modeling (LLM-as-Judge)](vif/03_model_training.md):** For each entry, the Judge outputs per-dimension categorical alignment labels in `{-1, 0, +1}` with rationales. Use synthetic personas for initial training/validation.
+   * **User value profile:** vector of value weights `w_u ∈ ℝ^K` (normalized, sum to 1), Core Values stored in `top_values`, plus narrative descriptions and constraints. The full vector conditions the VIF Critic; `top_values` gates Drift v1.
+   * **State representation:** sliding window of N recent Journal Entry embeddings + time deltas + a 10-dimensional value-weight vector, with zero-padding for early timesteps and no label-derived history features at inference time.
+5. Implement **[LLM-Judge labeling and VIF Critic training](vif/03_model_training.md):** For each Journal Entry, the LLM-Judge outputs per-dimension categorical alignment labels in `{-1, 0, +1}` with rationales. Use synthetic personas for initial training and validation.
 
-   > **Status:** Steps 1-5 complete (204 personas, 1,651 labeled entries). Human annotation tool is operational with 380 saved annotations, including the current 115-entry shared subset used for inter-rater agreement. Multiple Critic architectures have been evaluated (ordinal MLP heads, BNN, TCN). See [Implementation Status](#implementation-status) for current progress. Step 6 (lightweight classifiers) remains deferred pending Critic training results.
+   > **Status:** Steps 1-5 complete (204 personas, 1,651 labeled Journal Entries). Human annotation tool is operational with 380 saved annotations, including the current 115-entry shared subset used for inter-rater agreement. Multiple VIF Critic architectures have been evaluated (ordinal MLP heads, BNN, TCN). See [Implementation Status](#implementation-status) for current progress. Step 6 (lightweight classifiers) remains deferred pending VIF Critic training results.
 
 6. Tooling: start with API LLM for tagging + reflection, add lightweight classifiers later if needed; keep reasoning layer explainable for XRAI.
 7. Evaluation plan: combine Likert feedback on "felt accurate?" with inter-rater agreement on value tags and stability metrics for the profile.
@@ -178,7 +177,7 @@ This onboarding directly anchors the capstone submodules: the latent dimensions 
 
 | Component | Traditional Journaling (Summarizer) | Twinkl (Alignment Engine) |
 | :--- | :--- | :--- |
-| **Process** | **1. Tagging:** Identifies sentiment and topics.<br>• Entry 1: Negative, Work<br>• Entry 2: Guilt, Health<br>• Entry 3: Positive, Partner<br>**2. Aggregation:** Groups these tags together. | **1. Reasoning:** Compares entries *against* the Self-Model.<br>• Entry 1 → **Matches** Priority 1 = **Expected Friction**<br>• Entry 2 → **Conflicts with** Value 1 = **Misalignment**<br>• Entry 3 → **Matches** Value 2 = **Alignment** |
+| **Process** | **1. Tagging:** Identifies sentiment and topics.<br>• Journal Entry 1: Negative, Work<br>• Journal Entry 2: Guilt, Health<br>• Journal Entry 3: Positive, Partner<br>**2. Aggregation:** Groups these tags together. | **1. Reasoning:** Compares Journal Entries *against* the Self-Model.<br>• Journal Entry 1 → **Matches** Priority 1 = **Expected Friction**<br>• Journal Entry 2 → **Conflicts with** Value 1 = **Conflict (`-1`)**<br>• Journal Entry 3 → **Matches** Value 2 = **Alignment** |
 | **Question it Answers** | **"What have I been feeling/talking about?"** | **"Am I living in line with what I *said* I value?"** |
 | **Final Output (Insight)** | A high-level summary: "This week, your mood was primarily **stressed** and **guilty**. Your main topics were **'Work'** and the **'Gym'**. A dinner with your **'Partner'** was a positive moment." | An evidence-based alignment report:<br>**1. Alignment (Partner):** You honored your 'Partnership' value. (Evidence: *'nice dinner...'*)<br>**2. Misalignment (Health):** You broke your 'Health' value. (Evidence: *'Skipped the gym...'*)<br>**Prompt:** Your 'Work' priority is creating high stress, just as you expected, but it is now in conflict with your 'Health' value. Is this an acceptable trade-off for this week?" |
 | **Core Concept** | **Retrospective Summarization** | **Prospective Accountability** |
@@ -213,16 +212,16 @@ Early nudge logic used regex patterns for hedging detection. This was replaced w
 
 The tradeoff is latency (additional LLM call), acceptable for conversational journaling but may need distillation for real-time use cases.
 
-### Judge vs Critic Context Windows
+### LLM-Judge vs VIF Critic Context Windows
 
-A key architectural decision: the Judge (LLM-as-Judge for labeling) and Critic (VIF model) use different context windows.
+A key architectural decision: the LLM-Judge and VIF Critic use different context windows.
 
 | Component | Context | Rationale |
 |-----------|---------|-----------|
-| **Judge** | Persona context plus previous entries | Better labeling: trajectory context helps disambiguate vague entries like "feeling better" |
-| **Critic** | Current journal session plus normalized value profile (`window_size: 1`) | Fixed student-visible contract for fast local inference + MC Dropout |
+| **LLM-Judge** | Persona context plus previous Journal Entries | Better labeling: trajectory context helps disambiguate vague Journal Entries like "feeling better" |
+| **VIF Critic** | Current Journal Entry plus normalized value profile (`window_size: 1`) | Fixed student-visible contract for fast local inference + MC Dropout |
 
-**Why decouple?** The Judge runs offline during training data creation, while the Critic runs locally at inference time. The frozen-holdout LLM baseline measures the consequence directly: adding previous entries improves the strongest LLM arm's `recall_-1`, but the local MLP still retains higher `recall_-1` and lower hedging. The result supports a target/context repair or teacher/fallback role for the LLM rather than an automatic replacement of the MLP.
+**Why decouple?** The LLM-Judge runs offline during training data creation, while the VIF Critic runs locally at inference time. The frozen-holdout LLM baseline measures the consequence directly: adding previous Journal Entries improves the `human_context` setup's `recall_-1`, but the local MLP still retains higher `recall_-1` and lower hedging. The result supports LLM-Judge target repair or an LLM inference fallback rather than automatic replacement of the MLP.
 
 This avoids the trap of matching windows "for consistency" when the constraints are fundamentally different.
 
@@ -233,7 +232,7 @@ This avoids the trap of matching windows "for consistency" when the constraints 
 | **Neuro-symbolic reasoning** | Add a tiny knowledge graph + rule layer on top of LLM outputs to show which logical checks fired (great for XRAI storytelling). |
 | **Multimodal fusion** | *Future work (out of scope for capstone):* Blend text + prosodic audio cues to extend Intelligent Sensing value beyond text-only analysis. |
 | **Personalised quote recommender** | Build embeddings of quotes + user resonance to deliver “micro-anchors” tuned to each identity conflict. |
-| **Distilled Reward Model** | Train a smaller supervised model to mimic LLM-as-Judge, reducing latency and cost while enabling offline VIF training. (See [Model Training](vif/03_model_training.md)) |
+| **Distilled VIF Critic** | Train a smaller supervised model from LLM-Judge labels, reducing latency and cost while enabling offline inference. (See [Model Training](vif/03_model_training.md)) |
 | **Ordinal regression models** | Treat alignment as ordinal classification {-1, 0, +1} instead of regression; architectures under investigation include CORAL, CORN, EMD, and soft ordinal ranking losses. |
 | **Advanced uncertainty modeling** | Extend MC Dropout with ensembles or density models; add explicit OOD detectors on the text embedding space. (See [Uncertainty Logic](vif/04_uncertainty_logic.md)) |
 | **Tiered VIF implementation** | Progress from Tier 1 (immediate alignment) → Tier 2 (short-horizon forecast) → Tier 3 (time-aware discounted returns). See [VIF design](vif/01_concepts_and_roadmap.md). |
@@ -255,12 +254,12 @@ This avoids the trap of matching windows "for consistency" when the constraints 
 
 | # | Component | Purpose | Method | Example |
 | :--- | :--- | :--- | :--- | :--- |
-| 1 | **Value-mention tagging** | Verify LLM correctly identifies which Schwartz values an entry touches | Hand-label 50 journal entries with Schwartz value dimensions. Measure **Cohen's κ** between LLM and human labels. | Entry: *"Dropped everything to help my sister move."* Human tags: `Benevolence`. LLM tags: `Benevolence`. → Agreement ✓ |
-| 2 | **Critic conflict screening** | Recover visible misalignment evidence without collapsing into neutral predictions | Prioritize entry-level `recall_-1`; report `-1` precision and precision-recall behavior alongside QWK, calibration, `+1` recall, and per-dimension diagnostics. No fixed precision floor is adopted during recall-focused development. | A candidate that recovers more true `-1` entries is useful development evidence, but cannot be deployed if the resulting false-alert burden is unacceptable. |
-| 3 | **Drift detection** | Confirm the runtime detects sustained conflict with a declared core value | Use a student-visible target: each of two adjacent entries must clearly show a behavior or choice against the same declared core value. Optimize future product evaluation for episode recall, then choose a conservative precision or false-alert operating constraint before deployment. `twinkl-v8pb` found 1 of 5 development episodes and withheld the promotion score after one unresolved case, so no production claim exists. | Reference event: two adjacent entries both visibly show a clear choice against Benevolence. An uncertain scorer abstains. `+1` on another value cannot cancel the episode. |
-| 4 | **Explanation quality** | Ensure explanations feel accurate and actionable | Show 5–10 users their weekly digest and ask "Did this feel accurate?" on a **5-point Likert scale**. | User sees: *"Your Benevolence score dropped—you mentioned helping others twice but cancelled on a friend."* Rates it 4/5 for accuracy. |
-| 5 | **Nudge relevance** | Verify the top prompt is contextually appropriate | A/B test: random prompt vs. model-selected prompt. Measure **engagement rate** (did user respond?). | Model picks *"What held you back from helping?"* after detecting Benevolence drift. User responds → engagement ✓ |
-| 6 | **Nudge signal quality** | Validate that nudging improves VIF training data | Compare Judge alignment scores for nudged vs. non-nudged entries from same personas. Measure **mean alignment confidence** and **value dimension coverage**. | Hypothesis: Nudged entries yield higher-confidence scores and more explicit value signals due to increased expressiveness. |
+| 1 | **Value-mention tagging** | Verify LLM correctly identifies which Schwartz values a Journal Entry touches | Hand-label 50 Journal Entries with Schwartz value dimensions. Measure **Cohen's κ** between LLM and human labels. | Journal Entry: *"Dropped everything to help my sister move."* Human tags: `Benevolence`. LLM tags: `Benevolence`. → Agreement ✓ |
+| 2 | **VIF Critic Conflict screening** | Recover visible Conflict without collapsing into neutral predictions | Prioritize entry-level `recall_-1`; report `-1` precision and precision-recall behavior alongside QWK, calibration, `+1` recall, and per-dimension diagnostics. No fixed precision floor is adopted during recall-focused development. | A VIF Critic setup that recovers more true `-1` Journal Entries is useful development evidence, but cannot be deployed if the resulting false-alert burden is unacceptable. |
+| 3 | **Drift detection** | Confirm the Drift Detector finds Drift for a Core Value | Use a student-visible target: each of two consecutive Journal Entries must clearly show Conflict against the same Core Value. Optimize future product evaluation for Drift recall, then choose a conservative precision or false-alert operating constraint before deployment. `twinkl-v8pb` found 1 of 5 development-set Drifts and withheld the final test score after one unresolved case, so no production claim exists. | Drift: two consecutive Journal Entries both visibly show Conflict against Benevolence. An uncertain VIF Critic abstains. `+1` on another value cannot cancel the Drift. |
+| 4 | **Explanation quality** | Ensure explanations feel accurate and actionable | Show 5–10 users their Weekly Digest and ask "Did this feel accurate?" on a **5-point Likert scale**. | User sees: *"Your Benevolence score dropped—you mentioned helping others twice but cancelled on a friend."* Rates it 4/5 for accuracy. |
+| 5 | **Nudge relevance** | Verify the top prompt is contextually appropriate | A/B test: random prompt vs. model-selected prompt. Measure **engagement rate** (did user respond?). | Model picks *"What held you back from helping?"* after detecting a Benevolence Conflict. User responds → engagement ✓ |
+| 6 | **Nudge signal quality** | Validate that nudging improves VIF Critic training data | Compare LLM-Judge alignment scores for nudged vs. non-nudged Journal Entries from the same personas. Measure **mean alignment confidence** and **value dimension coverage**. | Hypothesis: Nudged Journal Entries yield higher-confidence scores and more explicit value signals due to increased expressiveness. |
 
 ## Operational & User Success Metrics
 
@@ -277,9 +276,9 @@ This avoids the trap of matching windows "for consistency" when the constraints 
 |----------|---------|
 | [CLAUDE.md](../CLAUDE.md) | Project architecture, commands, code style |
 | **Pipeline** | |
-| [pipeline_specs.md](pipeline/pipeline_specs.md) | Synthetic data pipeline design and rationale |
+| [pipeline_specs.md](pipeline/pipeline_specs.md) | Synthetic data workflow design and rationale |
 | [claude_gen_instructions.md](pipeline/claude_gen_instructions.md) | Parallel subagent generation workflow |
-| [claude_judge_instructions.md](pipeline/claude_judge_instructions.md) | Judge labeling workflow (wrangling + scoring) |
+| [claude_judge_instructions.md](pipeline/claude_judge_instructions.md) | Historical LLM-Judge labeling workflow (wrangling + scoring) |
 | [judge_reachability_audit_instructions.md](pipeline/judge_reachability_audit_instructions.md) | LLM-agnostic workflow for the twinkl-747 reachability audit |
 | [annotation_guidelines.md](pipeline/annotation_guidelines.md) | Human annotation for nudge effectiveness study |
 | [annotation_tool_plan.md](pipeline/annotation_tool_plan.md) | Shiny annotation tool implementation plan |
@@ -287,21 +286,21 @@ This avoids the trap of matching windows "for consistency" when the constraints 
 | **VIF** | |
 | [01_concepts_and_roadmap.md](vif/01_concepts_and_roadmap.md) | Value Identity Function theory |
 | [02_system_architecture.md](vif/02_system_architecture.md) | System architecture, state, and runtime flow |
-| [03_model_training.md](vif/03_model_training.md) | LLM-as-Judge and Critic training |
-| [04_uncertainty_logic.md](vif/04_uncertainty_logic.md) | Uncertainty, drift, and trigger logic |
+| [03_model_training.md](vif/03_model_training.md) | LLM-Judge labeling and VIF Critic training |
+| [04_uncertainty_logic.md](vif/04_uncertainty_logic.md) | VIF Critic uncertainty and Drift Detector logic |
 | [05_capstone_scope_decision.md](vif/05_capstone_scope_decision.md) | Adopted VIF capstone scope, metric hierarchy, and deferred decisions |
 | [example.md](vif/example.md) | Worked end-to-end VIF behavior example |
 | **Evals** | |
-| [evals/overview.md](evals/overview.md) | Evaluation pipeline overview |
-| [evals/judge_validation_summary.md](evals/judge_validation_summary.md) | Judge validation results |
-| [drift/trajectory_eda.md](drift/trajectory_eda.md) | Empirical basis for the sustained-conflict drift definition and benchmark candidates |
-| [evals/drift_detection_eval.md](evals/drift_detection_eval.md) | Sustained-conflict runtime target and evaluation protocol |
-| [evals/drift_v1_student_visible_target.md](evals/drift_v1_student_visible_target.md) | Completed student-visible development review and blocked locked-promotion result |
+| [evals/overview.md](evals/overview.md) | Evaluation workflow overview |
+| [evals/judge_validation_summary.md](evals/judge_validation_summary.md) | LLM-Judge validation results |
+| [drift/trajectory_eda.md](drift/trajectory_eda.md) | Historical empirical basis for the Drift definition |
+| [evals/drift_detection_eval.md](evals/drift_detection_eval.md) | Drift Detector target and evaluation protocol |
+| [evals/drift_v1_student_visible_target.md](evals/drift_v1_student_visible_target.md) | Completed development review and blocked final test result |
 | **Other** | |
 | [architecture/e2e_architecture.md](architecture/e2e_architecture.md) | High-level product and system map |
-| [weekly/weekly_digest_generation.md](weekly/weekly_digest_generation.md) | Weekly digest contract, runtime commands, and artifacts |
+| [weekly/weekly_digest_generation.md](weekly/weekly_digest_generation.md) | Weekly Digest contract, runtime commands, and generated files |
 | [demo/review_app.md](demo/review_app.md) | Local Shiny review and detector-comparison UI |
-| [01_value_evolution.md](evolution/01_value_evolution.md) | Concept note for a possible future filter distinguishing value evolution from behavioral drift |
+| [01_value_evolution.md](evolution/01_value_evolution.md) | Concept note for a possible future filter distinguishing value evolution from Drift |
 | [onboarding_spec.md](onboarding/onboarding_spec.md) | BWS-based onboarding flow, item design, and data output schema |
-| [capstone_report/](capstone_report/) | Current capstone report work and guidance for new artifacts |
+| [capstone_report/](capstone_report/) | Current capstone report work and guidance for new reports |
 | [April 2026 proposal submission](archive/capstone/2026-04-proposal-submission/) | Immutable snapshot of the already-submitted proposal, slides, figures, and sources |

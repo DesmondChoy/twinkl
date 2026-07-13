@@ -12,31 +12,31 @@ Twinkl is an "inner compass" that helps users align their daily behavior with th
 - [`docs/prd.md`](docs/prd.md) — authoritative product intent and implementation status
 - [`docs/architecture/e2e_architecture.md`](docs/architecture/e2e_architecture.md) — high-level end-to-end architecture map with unresolved product decisions called out
 - [`docs/vif/01_concepts_and_roadmap.md`](docs/vif/01_concepts_and_roadmap.md), [`docs/vif/02_system_architecture.md`](docs/vif/02_system_architecture.md), [`docs/vif/03_model_training.md`](docs/vif/03_model_training.md), [`docs/vif/04_uncertainty_logic.md`](docs/vif/04_uncertainty_logic.md) — VIF design, runtime, training, and uncertainty logic
-- [`docs/pipeline/pipeline_specs.md`](docs/pipeline/pipeline_specs.md), [`docs/pipeline/data_schema.md`](docs/pipeline/data_schema.md), [`docs/pipeline/consensus_rejudging_instructions.md`](docs/pipeline/consensus_rejudging_instructions.md) — data generation, label surfaces, and consensus diagnostics
-- [`docs/drift/trajectory_eda.md`](docs/drift/trajectory_eda.md) — empirical drift-definition analysis, five-pass Judge consensus vs persisted-label comparisons, and benchmark candidate tables
-- [`docs/evals/drift_v1_student_visible_target.md`](docs/evals/drift_v1_student_visible_target.md) — completed student-visible development target and blocked promotion review
-- [`docs/weekly/weekly_digest_generation.md`](docs/weekly/weekly_digest_generation.md) — weekly Coach digest contract and runtime CLI
+- [`docs/pipeline/pipeline_specs.md`](docs/pipeline/pipeline_specs.md), [`docs/pipeline/data_schema.md`](docs/pipeline/data_schema.md), [`docs/pipeline/consensus_rejudging_instructions.md`](docs/pipeline/consensus_rejudging_instructions.md) — data generation, label datasets, and consensus diagnostics
+- [`docs/drift/trajectory_eda.md`](docs/drift/trajectory_eda.md) — historical Drift-definition analysis comparing five-pass LLM-Judge consensus with persisted labels
+- [`docs/evals/drift_v1_student_visible_target.md`](docs/evals/drift_v1_student_visible_target.md) — completed development-set target and blocked final test review
+- [`docs/weekly/weekly_digest_generation.md`](docs/weekly/weekly_digest_generation.md) — Weekly Digest contract and runtime CLI
 - [`docs/demo/review_app.md`](docs/demo/review_app.md) — Shiny review UI for the local end-to-end runtime
 - [`docs/future_work/README.md`](docs/future_work/README.md) — exploratory directions, including OpenClaw integration research
 
 ## Value Identity Function (VIF) — 🧪 Experimental
 
-The VIF is Twinkl's core evaluative engine. It compares what users *do* (daily journal entries) against what they *value* (their declared priorities) across the ten Schwartz value dimensions.
+The VIF is Twinkl's core evaluative engine. It compares what users *do* (daily Journal Entries) against what they *value* (their declared priorities) across the ten Schwartz value dimensions.
 
 Key properties:
 - **Vector-valued**: Tracks multiple life dimensions simultaneously, preserving trade-offs (e.g., "work goals crushed, but sleep suffered")
 - **Uncertainty-aware**: Holds back judgment when the situation is complex or data is sparse
-- **Trajectory-aware**: Detects patterns over time rather than reacting to single entries
+- **Trajectory-aware**: Detects patterns over time rather than reacting to single Journal Entries
 
-These are implemented properties of the current stack, not target-only aspirations. The Critic path includes ordinal MLP heads with MC Dropout, a BNN baseline, config-driven frozen encoders with `nomic-embed-text-v1.5` as the active default, corrected-split experiment logging, candidate-checkpoint retention, checkpoint discovery, runtime timeline reconstruction, weekly aggregation, and Coach-facing drift routing. The 56-run / 120-config archive keeps `run_019`-`run_021` BalancedSoftmax as the active corrected-split frontier. The consensus-label branch `run_048`-`run_050` and recall-aware candidate reruns `run_051`-`run_056` remain diagnostic rather than frontier replacements. See [`logs/experiments/index.md`](logs/experiments/index.md) for the live board.
+These are implemented properties of the current stack, not target-only aspirations. The VIF Critic path includes ordinal MLP heads with MC Dropout, a BNN baseline, config-driven frozen encoders with `nomic-embed-text-v1.5` as the active default, corrected-split experiment logging, alternate-checkpoint retention, checkpoint discovery, runtime timeline reconstruction, weekly aggregation, and Weekly Coach-facing Drift routing. The 56-run / 120-config archive keeps `run_019`-`run_021` BalancedSoftmax as the active corrected-split frontier. The consensus-label branch `run_048`-`run_050` and recall-aware alternate-checkpoint reruns `run_051`-`run_056` remain diagnostic rather than frontier replacements. See [`logs/experiments/index.md`](logs/experiments/index.md) for the live board.
 
-**Current drift contract:** Drift v1 asks whether two adjacent journal entries clearly show the writer making a behavior or choice against the same declared core value. [`twinkl-v8pb` completed a student-visible review](docs/evals/drift_v1_student_visible_target.md) using the full runtime text, with separate development and locked promotion populations. The fixed `run_020` development threshold (probability 0.8, uncertainty 1.010153) found only 1 of 5 reference episodes. The promotion review left one 19-entry case unresolved, so no promotion score was run and `twinkl-a2w` remains blocked. The earlier consensus-derived frozen benchmark is [retired historical evidence](docs/archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md), not a runnable benchmark, a threshold-selection input, or a fallback promotion surface. The current runtime remains an experimental predecessor that emits `stable`, `crash`, `rut`, `evolution`, and `high_uncertainty`. See [`docs/evals/drift_detection_eval.md`](docs/evals/drift_detection_eval.md).
+**Current Drift contract:** Drift is two consecutive Conflicts for the same Core Value. [`twinkl-v8pb` completed a student-visible review](docs/evals/drift_v1_student_visible_target.md) using the full runtime text, with separate development and locked final test sets. The fixed `run_020` development threshold (probability 0.8, uncertainty 1.010153) found only 1 of 5 known Drifts. The final test review left one 19-entry case unresolved, so no final test score was run and `twinkl-a2w` remains blocked. The earlier consensus-derived frozen benchmark is [retired historical evidence](docs/archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md), not a runnable benchmark, a threshold-selection input, or a fallback final test set. The current runtime remains an experimental predecessor that emits `stable`, `crash`, `rut`, `evolution`, and `high_uncertainty`. See [`docs/evals/drift_detection_eval.md`](docs/evals/drift_detection_eval.md).
 
-**Current runtime behavior:** A local checkpoint can drive the full offline path from per-entry VIF signals to validated weekly aggregates, structured prototype drift output, and a weekly digest artifact. A shared schema in `src/vif/weekly_schema.py` defines the producer/consumer column contract and fails early when a required weekly column is missing. See `docs/vif/`, [`docs/weekly/weekly_digest_generation.md`](docs/weekly/weekly_digest_generation.md), and [`docs/demo/review_app.md`](docs/demo/review_app.md).
+**Current runtime behavior:** A local VIF Critic checkpoint can drive the full offline path from per-Journal Entry predictions to validated weekly aggregates, structured prototype-router JSON, and a Weekly Digest. A shared schema in `src/vif/weekly_schema.py` defines the producer/consumer column contract and fails early when a required weekly column is missing. See `docs/vif/`, [`docs/weekly/weekly_digest_generation.md`](docs/weekly/weekly_digest_generation.md), and [`docs/demo/review_app.md`](docs/demo/review_app.md).
 
 ### Automated Experiment Logging & Review
 
-An automated logging system tracks VIF training experiments. The canonical frontier driver, `scripts/experiments/critic_training_v4_review.py`, writes metadata, configurations, model capacity, selection traces, candidate checkpoints, and evaluation metrics to `logs/experiments/`.
+The experiment log tracks VIF Critic training runs. The canonical frontier driver, `scripts/experiments/critic_training_v4_review.py`, writes metadata, configurations, model capacity, selection traces, alternate checkpoints, and evaluation metrics to `logs/experiments/`.
 
 An AI **experiment-review skill** acts as an autonomous data science partner to process these runs. Rather than mechanically tuning hyperparameters, it synthesizes results to provide research-backed insights and hypotheses.
 
@@ -48,18 +48,18 @@ An AI **experiment-review skill** acts as an autonomous data science partner to 
 - **Research Colleague**: Actively browses the web for state-of-the-art literature to validate its recommendations for next-step experiments.
 - **Reporting**: Produces a structured analysis of metric trade-offs (e.g., hedging vs minority recall), logs compact circumplex summaries, and maintains a leaderboard of the best models.
 
-### LLM Critic Context Baseline
+### LLM Context Baseline
 
-The frozen-holdout baseline in `scripts/experiments/llm_critic_baseline.py` compares small OpenAI models under three explicit context contracts: `student_visible`, `human_context`, and the upper-bound-only `full_judge_context`. On the 221-row test split, the strongest `human_context` arm improves QWK and mean minority recall over `run_020`, while the MLP retains higher `recall_-1` and lower hedging. The LLM therefore serves as a teacher, oracle, or fallback diagnostic rather than a drop-in replacement for the local Critic. See [`docs/vif/03_model_training.md`](docs/vif/03_model_training.md) for the command surface and interpretation.
+The frozen-holdout baseline in `scripts/experiments/llm_critic_baseline.py` compares small OpenAI models under three explicit context setups: `student_visible`, `human_context`, and the upper-bound-only `full_judge_context`. On the 221-row test split, the `human_context` setup improves QWK and mean minority recall over `run_020`, while the VIF Critic retains higher `recall_-1` and lower hedging. The LLM is useful for LLM-Judge target repair or inference fallback diagnostics, not as a drop-in VIF Critic replacement. See [`docs/vif/03_model_training.md`](docs/vif/03_model_training.md) for the CLI and interpretation.
 
 ## Synthetic Data Generation — ✅ Complete
 
-Bootstraps training data for value tagging and reward modeling. Generates realistic, longitudinal journal entries from synthetic personas with known Schwartz value profiles.
+Bootstraps training data for value tagging and reward modeling. Generates realistic, longitudinal Journal Entries from synthetic personas with known Schwartz value profiles.
 
 Key features:
 - Personas with 1-2 assigned values expressed through concrete life details (not labels)
-- Longitudinal entries that exhibit value drift, conflicts, and ambiguity
-- Parallel async pipeline for efficient generation
+- Longitudinal Journal Entries that exhibit value tensions, Conflicts, and ambiguity
+- Parallel asynchronous generation workflow
 - Configurable tone, verbosity, and reflection mode per entry
 - 🧪 Two-way conversational journaling with nudge system (LLM-based classification determines when/how to nudge, LLM generates contextual follow-up questions)
 
@@ -72,7 +72,7 @@ See `docs/pipeline/pipeline_specs.md` for implementation details.
 | Metric | Value |
 |--------|-------|
 | Personas | 204 |
-| Journal entries | 1,651 |
+| Journal Entries | 1,651 |
 | Avg entries/persona | 8.1 |
 | Entries with generated nudges | 1,028 (62.3%) |
 
@@ -92,7 +92,7 @@ See `docs/pipeline/pipeline_specs.md` for implementation details.
 | Self-Direction | 24 | 12% |
 | Stimulation | 24 | 12% |
 
-**Judge Label Distribution** (16,510 per-dimension labels across 1,651 entries):
+**LLM-Judge Label Distribution** (16,510 per-dimension labels across 1,651 Journal Entries):
 | Label | Count | % |
 |-------|-------|---|
 | -1 | 1,165 | 7.1% |
@@ -103,27 +103,27 @@ Most generated nudges still use the standard three-category taxonomy (`tension_s
 
 See [`docs/pipeline/data_schema.md`](docs/pipeline/data_schema.md) for parquet schemas and query examples.
 
-## Judge Labeling Pipeline — ✅ Complete
+## LLM-Judge Labeling Workflow — ✅ Complete
 
-Scores synthetic journal entries against the 10 Schwartz value dimensions to create training labels for the VIF. The pipeline uses Claude Code subagents for parallel, consistent scoring.
+Scores synthetic Journal Entries against the 10 Schwartz value dimensions to create VIF Critic training labels. The workflow uses Claude Code subagents for parallel, consistent scoring.
 
 **Workflow:**
 ```
 Registry Check → Auto-Wrangle → Parallel Labeling (subagents) → Validation → Consolidation
 ```
 
-**Usage:** Run `/judge` in Claude Code to execute the full pipeline. The skill:
+**Usage:** Run `/judge` in Claude Code to execute the full workflow. The skill:
 1. Checks the registry for pending work (`logs/registry/personas.parquet`)
 2. Auto-wrangles raw synthetic data if needed (`logs/synthetic_data/` → `logs/wrangled/`)
-3. Spawns parallel subagents — one per persona — each scoring all entries
+3. Spawns parallel subagents — one per persona — each scoring all Journal Entries
 4. Validates JSON output against Pydantic models
 5. Consolidates labels to `logs/judge_labels/judge_labels.parquet`
 
-**Scoring:** Each entry receives a 10-dimensional vector with values `{-1, 0, +1}` indicating misalignment, neutrality, or alignment with each Schwartz value. **Rationales** explain each non-zero score. Most entries have 1-3 non-zero scores.
+**Scoring:** Each Journal Entry receives a 10-dimensional vector with values `{-1, 0, +1}` indicating Conflict, neutrality, or alignment with each Schwartz value. **Rationales** explain each non-zero score. Most Journal Entries have 1-3 non-zero scores.
 
 **Data outputs:** See [`docs/pipeline/data_schema.md`](docs/pipeline/data_schema.md) for parquet file schemas, example Polars queries, and analytics guidance.
 
-**Consensus reference surface:** [`logs/judge_labels/consensus_labels.parquet`](logs/judge_labels/consensus_labels.parquet) stores the five-pass Judge resolver output, confidence tiers, agreement counts, and label-change flags. It remains diagnostic rather than the mainline Critic training target. For drift v1, a strict conflict is `alignment_<value> == -1`; the resolver first chooses neutral versus non-neutral, then polarity among non-neutral votes. The agreement fields are confidence metadata, not full class distributions; actual `P(-1)`, `P(0)`, and `P(+1)` targets require the per-pass Judge vote files. This Judge reference is distinct from the six-detector comparison's detector-vote count. The orchestration guide lives in [`docs/pipeline/consensus_rejudging_instructions.md`](docs/pipeline/consensus_rejudging_instructions.md), and the stability-first report lives in [`logs/exports/twinkl_754/consensus_rejudging_report.md`](logs/exports/twinkl_754/consensus_rejudging_report.md). It is label provenance and diagnostic evidence only: it must not be used as a drift target, threshold-selection input, or promotion surface.
+**Consensus reference labels:** [`logs/judge_labels/consensus_labels.parquet`](logs/judge_labels/consensus_labels.parquet) stores the five-pass LLM-Judge resolver output, confidence tiers, agreement counts, and label-change flags. It remains diagnostic rather than the mainline VIF Critic training target. For Drift v1, a strict Conflict is `alignment_<value> == -1`; the resolver first chooses neutral versus non-neutral, then polarity among non-neutral votes. The agreement fields are confidence metadata, not full class distributions; actual `P(-1)`, `P(0)`, and `P(+1)` targets require the per-pass LLM-Judge vote files. This LLM-Judge reference is distinct from the six-detector comparison's detector-vote count. The orchestration guide lives in [`docs/pipeline/consensus_rejudging_instructions.md`](docs/pipeline/consensus_rejudging_instructions.md), and the stability-first report lives in [`logs/exports/twinkl_754/consensus_rejudging_report.md`](logs/exports/twinkl_754/consensus_rejudging_report.md). It is label provenance and diagnostic evidence only: it must not be used as a Drift target, threshold-selection input, or final test set.
 
 **Key files:**
 - `.claude/commands/judge.md` — Skill entry point
@@ -146,7 +146,7 @@ Registry Check → Auto-Wrangle → Parallel Labeling (subagents) → Validation
 
 ## Human Annotation Tool — ✅ Complete
 
-Validates LLM Judge labels via blind human annotation across 10 Schwartz value dimensions. Annotators provide independent scores without seeing Judge labels first; the system then computes agreement metrics (Cohen's κ, Fleiss' κ).
+Validates LLM-Judge labels via blind human annotation across 10 Schwartz value dimensions. Annotators provide independent scores without seeing LLM-Judge labels first; the annotation tool then computes agreement metrics (Cohen's κ, Fleiss' κ).
 
 **Run the tool:**
 ```sh
@@ -156,14 +156,14 @@ uv run shiny run src/annotation_tool/app.py
 Open `http://127.0.0.1:8000` in your browser.
 
 **Features:**
-- Displays persona context (name, age, profession, culture, core values, collapsible bio)
-- Shows journal entries with nudge/response threading
+- Displays persona context (name, age, profession, culture, Core Values, collapsible bio)
+- Shows Journal Entries with nudge/response threading
 - 10-value scoring grid with -1 (misaligned) / 0 (neutral) / +1 (aligned) with CSS tooltips for Schwartz value definitions
 - Progress tracking per annotator
 - Annotations persisted to `logs/annotations/<annotator>.parquet`
 - **Analysis & Metrics panel** — Computes inter-annotator agreement (Cohen's κ, Fleiss' κ)
 - **Export functionality** — CSV, Parquet, and Markdown report formats
-- **Comparison view** — Inline display of human vs judge labels for review
+- **Comparison view** — Inline display of human vs LLM-Judge labels for review
 
 **Key files:**
 - `src/annotation_tool/app.py` — Main Shiny application
@@ -176,7 +176,7 @@ Open `http://127.0.0.1:8000` in your browser.
 
 ## Demo Review App — 🧪 Experimental
 
-A sibling Shiny app for showcasing the end-to-end runtime flow on top of existing wrangled personas and local Critic checkpoints. It lets you browse persona details, read the full journal timeline, choose a checkpoint, run the live Critic -> drift -> weekly digest cycle, and inspect the resulting artifacts in one place.
+A sibling Shiny app for showcasing the end-to-end runtime flow on top of existing wrangled personas and local VIF Critic checkpoints. It lets you browse persona details, read the full Journal Entry timeline, choose a checkpoint, run the live VIF Critic → prototype router → Weekly Digest cycle, and inspect the resulting files in one place.
 
 **Run the app:**
 ```sh
@@ -195,38 +195,38 @@ Open `http://127.0.0.1:8001` when running the file directly.
 **Features:**
 - Persona browser with full timeline, nudges, responses, and collapsible bio
 - Checkpoint catalog sourced from `logs/experiments/artifacts`, `models/vif`, and `logs/experiments`
-- Cached artifact loading for previously run persona/checkpoint pairs
+- Cached output loading for previously run persona/checkpoint pairs
 - End-to-end runtime execution via `src.coach.runtime.run_weekly_coach_cycle`
-- Detector input source toggle between **Judge labels** and **Critic predictions**
-- Detector comparison across **Baseline**, **EMA**, **CUSUM**, **Cosine**, **Control Chart**, and **KL Div**, with per-entry detector-vote counts (not the five-pass Judge reference)
-- A six-tab result canvas with Overview, per-entry Critic outputs, weekly signals, drift payloads, weekly digest markdown, and detector comparison
+- Detector input source toggle between **LLM-Judge labels** and **VIF Critic predictions**
+- Detector comparison across **Baseline**, **EMA**, **CUSUM**, **Cosine**, **Control Chart**, and **KL Div**, with per-Journal Entry detector-vote counts (not the five-pass LLM-Judge reference)
+- A six-tab result canvas with Overview, per-Journal Entry VIF Critic outputs, weekly signals, prototype-router JSON, Weekly Digest markdown, and detector comparison
 
-**Generated artifacts:** The app writes persona/checkpoint-specific runtime bundles under `logs/exports/demo_tool_runs/<persona_id>/<checkpoint-stem>-<hash>/`.
+**Generated files:** The app writes persona/checkpoint-specific runtime bundles under `logs/exports/demo_tool_runs/<persona_id>/<checkpoint-stem>-<hash>/`.
 
-See [`docs/demo/review_app.md`](docs/demo/review_app.md) for the full workflow and artifact layout.
+See [`docs/demo/review_app.md`](docs/demo/review_app.md) for the full workflow and file layout.
 
 **Key files:**
 - `src/demo_tool/app.py` — Main Shiny demo application
 - `src/demo_tool/data_loader.py` — Persona catalog and chronological timeline loading
-- `src/demo_tool/runtime_bridge.py` — Checkpoint discovery and weekly Coach runtime wrapper
-- `src/demo_tool/multi_drift.py` — Multi-detector comparison bundle for judge-label and Critic-signal views
+- `src/demo_tool/runtime_bridge.py` — Checkpoint discovery and Weekly Coach runtime wrapper
+- `src/demo_tool/multi_drift.py` — Multi-detector comparison bundle for LLM-Judge-label and VIF Critic-prediction views
 - `src/demo_tool/state.py` — Centralized reactive UI state
 
-## Evaluation Pipeline — ⚠️ Partial
+## Evaluation Workflow — ⚠️ Partial
 
-Sequential validation pipeline for the VIF with four stages:
-1. **Judge Validation** — Training data quality (Cohen's κ > 0.60)
-2. **Value Modeling** — Critic learns value hierarchies correctly
-3. **Drift Detection** — Triggers fire accurately on misalignment
+Sequential validation workflow for the VIF with four stages:
+1. **LLM-Judge Validation** — Training data quality (Cohen's κ > 0.60)
+2. **Value Modeling** — VIF Critic learns value hierarchies correctly
+3. **Drift Detection** — Drift Detector finds Drift without unacceptable false alerts
 4. **Explanation Quality** — Explanations are grounded and useful
 
-See [`docs/evals/overview.md`](docs/evals/overview.md) for the full pipeline overview and current status.
+See [`docs/evals/overview.md`](docs/evals/overview.md) for the full evaluation workflow and current status.
 
 ## Embedding Explorer — ✅ Complete
 
-An interactive 3D visualization that lets you explore the VIF critic's internal embedding space. By projecting high-dimensional hidden-layer activations and SBERT text embeddings into 3D via PCA and t-SNE, the explorer reveals how the critic organizes journal entries — whether entries with similar value profiles cluster together, how prediction errors distribute across the space, and where the model is most uncertain.
+An interactive 3D visualization that lets you explore the VIF Critic's internal embedding space. By projecting high-dimensional hidden-layer activations and SBERT text embeddings into 3D via PCA and t-SNE, the explorer reveals how the VIF Critic organizes Journal Entries — whether Journal Entries with similar value profiles cluster together, how prediction errors distribute across the space, and where the model is most uncertain.
 
-This is useful for building intuition about what the critic has learned: do misaligned entries occupy distinct regions? Are hard dimensions (stimulation, hedonism) scattered differently than easy ones? Does the hidden-layer structure differ meaningfully from the raw text embeddings?
+This is useful for building intuition about what the VIF Critic has learned: do Conflict predictions occupy distinct regions? Are hard dimensions (stimulation, hedonism) scattered differently than easy ones? Does the hidden-layer structure differ meaningfully from the raw text embeddings?
 
 **Generate and open:**
 ```sh
@@ -257,11 +257,11 @@ opening.
 | Capability | Status | Note |
 |---|---|---|
 | Onboarding (BWS Values Assessment) | 📋 Specified | Flow designed; not yet implemented |
-| Weekly Coach validation depth | ⚠️ Partial | Digest generation, runtime artifacts, and demo review flow exist; selected-v1 production wiring is blocked after the student-visible promotion review left one case unresolved, and narrative evaluation remains incomplete |
+| Weekly Coach validation depth | ⚠️ Partial | Weekly Digest generation, runtime files, and demo review flow exist; selected-v1 production wiring is blocked after the final test review left one case unresolved, and Weekly Coach evaluation remains incomplete |
 | Nudge signal quality validation | 🧪 Experimental | Annotation study and downstream usefulness checks remain in progress |
-| Embedding Explorer | ✅ Complete | Interactive 3D visualization of critic embedding space |
-| Drift scorer validity and production wiring | 🧪 Experimental | The former consensus-derived frozen benchmark is retired historical evidence after its audit showed that it was not a fair student-visible promotion surface. [`twinkl-v8pb`'s full-runtime-text review](docs/evals/drift_v1_student_visible_target.md) recorded a weak `run_020` development result (1/5 episodes) and deliberately withheld the promotion score after one 19-entry case remained unresolved. No scorer is promotion-ready, and production wiring remains blocked. |
-| Journaling anomaly radar | ❌ Not Started | Cadence/gap detection beyond the current drift tooling |
+| Embedding Explorer | ✅ Complete | Interactive 3D visualization of VIF Critic embeddings |
+| Drift Detector validity and production wiring | 🧪 Experimental | The former consensus-derived frozen benchmark is retired historical evidence after its audit showed that it was not a fair final test set. [`twinkl-v8pb`'s full-runtime-text review](docs/evals/drift_v1_student_visible_target.md) recorded a weak `run_020` development result (1/5 Drifts) and deliberately withheld the final test score after one 19-entry case remained unresolved. No VIF Critic and Drift Detector setup has deployment approval, and production wiring remains blocked. |
+| Journaling anomaly radar | ❌ Not Started | Cadence/gap detection beyond the current prototype-router tooling |
 | Goal-aligned inspiration feed | ❌ Not Started | External API integration |
 
 For the full breakdown, see the [Implementation Status](docs/prd.md#implementation-status) table in prd.md.
@@ -273,19 +273,19 @@ Examples below use `uv run` so they pick up the project environment directly. Ac
 - Launch the annotation tool: `uv run shiny run src/annotation_tool/app.py`
 - Launch the demo review UI: `uv run shiny run src/demo_tool/app.py`
 - Run the demo review UI directly on port `8001`: `uv run python src/demo_tool/app.py`
-- Run a local checkpoint through the full weekly Coach path: `uv run python -m src.coach.runtime --persona-id 0a2fe15c --checkpoint-path logs/experiments/artifacts/.../selected_checkpoint.pt`
-- Build a digest from the default persisted Judge labels: `uv run python -m src.coach.weekly_digest --persona-id 0a2fe15c`
-- Build a digest from saved Critic signals: `uv run python -m src.coach.weekly_digest --persona-id 0a2fe15c --signals-path logs/exports/weekly_coach/0a2fe15c_vif_timeline.parquet`
-- Train the mainline Critic with CLI overrides and LR-finder export: `uv run python -m src.vif.train --grad-clip 1.0 --lr-find-output-path logs/exports/lr_find.png`
+- Run a local VIF Critic checkpoint through the full Weekly Coach path: `uv run python -m src.coach.runtime --persona-id 0a2fe15c --checkpoint-path logs/experiments/artifacts/.../selected_checkpoint.pt`
+- Build a Weekly Digest from the default persisted LLM-Judge labels: `uv run python -m src.coach.weekly_digest --persona-id 0a2fe15c`
+- Build a Weekly Digest from saved VIF Critic predictions: `uv run python -m src.coach.weekly_digest --persona-id 0a2fe15c --signals-path logs/exports/weekly_coach/0a2fe15c_vif_timeline.parquet`
+- Train the mainline VIF Critic with CLI overrides and LR-finder export: `uv run python -m src.vif.train --grad-clip 1.0 --lr-find-output-path logs/exports/lr_find.png`
 - Run the BNN baseline: `uv run python -m src.vif.train_bnn --epochs 10 --batch-size 16`
 - Generate the embedding explorer without auto-opening a browser: `uv run python -m src.vif.extract_embeddings --checkpoint logs/experiments/artifacts/.../selected_checkpoint.pt --no-browser`
 - Prepare a deterministic consensus pilot bundle: `uv run python scripts/journalling/twinkl_754_prepare_consensus.py --pilot-size 50 --pilot-hard-dimensions security,hedonism,stimulation`
-- Reproduce the default consensus-label drift EDA with runtime-compatible week bins: `uv run python scripts/drift/trajectory_eda.py`
-- Compare persisted Judge labels with first-entry-anchored week bins: `uv run python scripts/drift/trajectory_eda.py --labels judge --week-mode persona_anchor`
-- Estimate the LLM Critic baseline cost without making API calls: `uv run python scripts/experiments/llm_critic_baseline.py estimate --split test --context-arms student_visible human_context`
+- Reproduce the default consensus-label Drift EDA with runtime-compatible week bins: `uv run python scripts/drift/trajectory_eda.py`
+- Compare persisted LLM-Judge labels with week bins anchored to the first Journal Entry: `uv run python scripts/drift/trajectory_eda.py --labels judge --week-mode persona_anchor`
+- Estimate the LLM context baseline cost without making API calls: `uv run python scripts/experiments/llm_critic_baseline.py estimate --split test --context-arms student_visible human_context`
 - Replay recall-aware checkpoint selection from saved traces without retraining: `uv run python scripts/experiments/replay_recall_aware_checkpoint_selection.py`
 
-The drift EDA accepts `--labels {consensus,judge}` (default: `consensus`) and `--week-mode {runtime,persona_anchor}` (default: `runtime`). The LLM baseline exposes `estimate`, `run`, `score`, and `report`; `run` writes dry-run records unless `--execute` is supplied.
+The Drift EDA accepts `--labels {consensus,judge}` (default: `consensus`) and `--week-mode {runtime,persona_anchor}` (default: `runtime`). The LLM baseline exposes `estimate`, `run`, `score`, and `report`; `run` writes dry-run records unless `--execute` is supplied.
 
 # Setup
 
@@ -356,7 +356,7 @@ Run the deterministic local end-to-end smoke pipeline only:
 uv run pytest tests/e2e -q
 ```
 
-This smoke test exercises the offline path `synthetic_data -> wrangled markdown -> consolidated judge labels -> VIF training` using tiny local fixtures and a mock text encoder, so it does not require live LLM calls.
+This smoke test exercises the offline path `synthetic_data -> wrangled markdown -> consolidated LLM-Judge labels -> VIF Critic training` using tiny local fixtures and a mock text encoder, so it does not require live LLM calls.
 
 ## Adding a dependency
 

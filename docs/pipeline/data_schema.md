@@ -1,17 +1,17 @@
 # Data Schema Reference
 
 This document describes the parquet files produced by the synthetic-data,
-judge-labeling, and weekly Coach runtime paths, including schemas,
+LLM-Judge labeling, and Weekly Coach runtime paths, including schemas,
 relationships, and example queries.
 
 ## File Locations
 
 | File | Purpose |
 |------|---------|
-| `logs/registry/personas.parquet` | Central registry tracking personas through pipeline stages |
-| `logs/judge_labels/judge_labels.parquet` | Training labels for the VIF (all entries, all personas) |
-| `logs/judge_labels/consensus_labels.parquet` | Confidence-tiered 5-pass consensus label surface for stability analysis and diagnostic retrains |
-| `logs/exports/weekly_digests/weekly_digests.parquet` | Consolidated weekly Coach digest records (created on first runtime/digest run) |
+| `logs/registry/personas.parquet` | Central registry tracking personas through workflow stages |
+| `logs/judge_labels/judge_labels.parquet` | Training labels for the VIF (all Journal Entries, all personas) |
+| `logs/judge_labels/consensus_labels.parquet` | Confidence-tiered 5-pass consensus label file for stability analysis and diagnostic retrains |
+| `logs/exports/weekly_digests/weekly_digests.parquet` | Consolidated Weekly Digest records (created on first runtime/digest run) |
 
 ---
 
@@ -19,7 +19,7 @@ relationships, and example queries.
 
 **Path:** `logs/registry/personas.parquet`
 
-Tracks each synthetic persona and their progress through the data pipeline.
+Tracks each synthetic persona and their progress through the data workflow.
 
 ### Schema
 
@@ -31,7 +31,7 @@ Tracks each synthetic persona and their progress through the data pipeline.
 | `profession` | `str` | Occupation (e.g., `"Teacher"`, `"Gig Worker"`, `"Entrepreneur"`) |
 | `culture` | `str` | Cultural background (e.g., `"North American"`, `"East Asian"`) |
 | `core_values` | `list[str]` | Declared Schwartz values (1-2 values per persona) |
-| `entry_count` | `i64` | Number of journal entries generated |
+| `entry_count` | `i64` | Number of Journal Entries generated |
 | `created_at` | `datetime[μs, UTC]` | Generation timestamp |
 | `stage_synthetic` | `bool` | `true` after synthetic journal generation |
 | `stage_wrangled` | `bool` | `true` after data cleaning/parsing |
@@ -57,18 +57,18 @@ Generation-time metadata stripped during wrangling (not available in production)
 
 ---
 
-## Judge Labels
+## LLM-Judge Labels
 
 **Path:** `logs/judge_labels/judge_labels.parquet`
 
-Training labels for the VIF. Each row represents one journal entry with its alignment scores across all 10 Schwartz value dimensions.
+Training labels for the VIF. Each row represents one Journal Entry with its alignment scores across all 10 Schwartz value dimensions.
 
 ### Schema
 
 | Column | Type | Description |
 |--------|------|-------------|
 | `persona_id` | `str` | Links to registry (foreign key) |
-| `t_index` | `i64` | 0-based entry index within persona's journal |
+| `t_index` | `i64` | 0-based Journal Entry index within persona's journal |
 | `date` | `str` | Entry date in `YYYY-MM-DD` format |
 | `alignment_vector` | `list[i64]` | Full 10-element score vector (see order below) |
 | `alignment_self_direction` | `i64` | Score: `-1`, `0`, or `+1` |
@@ -131,17 +131,17 @@ For each Schwartz dimension, the file includes three extra column families:
 - diagnostic retrains that explicitly point `data.labels_path` at this parquet
 
 The active corrected-split frontier still treats
-`logs/judge_labels/judge_labels.parquet` as the default label surface. The
-consensus parquet is a diagnostics and audit artifact.
+`logs/judge_labels/judge_labels.parquet` as the default label file. The
+consensus parquet is a diagnostic and audit file.
 
 ---
 
-## Weekly Coach Digest Records
+## Weekly Digest Records
 
 **Path:** `logs/exports/weekly_digests/weekly_digests.parquet`
 
 This file is created by `src.coach.weekly_digest` and `src.coach.runtime` when
-you run the weekly Coach flow. Each row is one `(persona_id, week_start,
+you run the Weekly Coach workflow. Each row is one `(persona_id, week_start,
 week_end)` digest record.
 
 ### Schema
@@ -152,26 +152,26 @@ week_end)` digest record.
 | `week_start` | `str` | Inclusive week start in `YYYY-MM-DD` |
 | `week_end` | `str` | Inclusive week end in `YYYY-MM-DD` |
 | `persona_name` | `str` | Persona display name |
-| `response_mode` | `str` | Coach response mode used for the digest |
-| `mode_source` | `str` | Whether the mode came from upstream drift or local fallback logic |
+| `response_mode` | `str` | Weekly Coach response mode used for the Weekly Digest |
+| `mode_source` | `str` | Whether the mode came from upstream Drift output or local fallback logic |
 | `mode_rationale` | `str` | Short rationale for the selected mode |
 | `signal_source` | `str` | Numeric source for the digest (`judge_labels` or `vif_runtime`) |
-| `n_entries` | `i64` | Number of entries included in the week |
+| `n_entries` | `i64` | Number of Journal Entries included in the week |
 | `overall_mean` | `f64` | Profile-weighted overall weekly alignment |
 | `overall_uncertainty` | `f64` | Profile-weighted weekly uncertainty |
-| `core_values_json` | `str` | JSON array of declared core values |
-| `drift_reasons_json` | `str` | JSON array of drift-routing reasons |
+| `core_values_json` | `str` | JSON array of Core Values |
+| `drift_reasons_json` | `str` | JSON array of Drift-routing reasons |
 | `top_tensions_json` | `str` | JSON array of ranked tension dimensions |
 | `top_strengths_json` | `str` | JSON array of ranked strength dimensions |
 | `dimensions_json` | `str` | JSON array of per-dimension weekly summaries |
 | `evidence_json` | `str` | JSON array of representative evidence snippets |
-| `journal_history_json` | `str` | JSON array of history entries capped at `week_end` |
-| `coach_narrative_json` | `str \| null` | JSON Coach narrative payload if generation ran |
-| `validation_json` | `str \| null` | JSON narrative-validation payload if validation ran |
+| `journal_history_json` | `str` | JSON array of history Journal Entries capped at `week_end` |
+| `coach_narrative_json` | `str \| null` | Weekly Coach narrative JSON if generation ran |
+| `validation_json` | `str \| null` | narrative-validation JSON if validation ran |
 
-### Related Runtime Artifacts
+### Related Runtime Files
 
-The weekly Coach flow and demo review UI also write per-run artifacts beside the
+The Weekly Coach workflow and demo review UI also write per-run files beside the
 consolidated parquet:
 
 - `vif_timeline.parquet` or `<persona_id>_vif_timeline.parquet`
@@ -186,7 +186,7 @@ the required producer/consumer boundary used by `src/vif/runtime.py` and
 `src/vif/drift.py`. Consumers validate the frame before routing and raise a
 `ValueError` that names any missing columns. The current runtime artifacts store
 alignment means and uncertainties; they do not yet persist the ordinal class
-probabilities required by the rolling-`P(-1)` drift v1 target.
+probabilities required by the rolling-`P(-1)` Drift v1 target.
 
 The demo review UI stores those bundles under:
 
@@ -232,7 +232,7 @@ for col in value_cols:
     print(f"{col}: {counts.to_dicts()}")
 ```
 
-### Find entries with strong signals (multiple non-zero scores)
+### Find Journal Entries with strong signals (multiple non-zero scores)
 
 ```python
 # Count non-zero values per entry
@@ -312,10 +312,10 @@ Based on the current committed corpus:
 ### Corpus Snapshot
 
 - 204 personas in `logs/registry/personas.parquet`
-- 1,651 labeled journal entries in `logs/judge_labels/judge_labels.parquet`
-- Average of 8.1 entries per persona (range: 2-12)
+- 1,651 labeled Journal Entries in `logs/judge_labels/judge_labels.parquet`
+- Average of 8.1 Journal Entries per persona (range: 2-12)
 - 292 total core-value assignments across personas
-- 1,028 entries with generated nudges in `logs/wrangled/` (62.3% of all entries)
+- 1,028 Journal Entries with generated nudges in `logs/wrangled/` (62.3% of all Journal Entries)
 
 ### Overall Label Balance
 
@@ -344,10 +344,10 @@ Across all 16,510 per-dimension labels:
 
 ### Sparsity
 
-- 1,594 entries (96.5%) have at least one non-zero label
-- 57 entries (3.5%) are all-zero across all 10 values
-- Mean non-zero dimensions per entry: 2.41
-- Median non-zero dimensions per entry: 2
+- 1,594 Journal Entries (96.5%) have at least one non-zero label
+- 57 Journal Entries (3.5%) are all-zero across all 10 values
+- Mean non-zero dimensions per Journal Entry: 2.41
+- Median non-zero dimensions per Journal Entry: 2
 
 ### Demographic Notes
 

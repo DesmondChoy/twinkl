@@ -23,37 +23,37 @@ flowchart TB
     classDef artifact fill:#FFF4D9,stroke:#B38600,color:#3B2C00;
     classDef note fill:#F8F8F6,stroke:#9CA39A,color:#36413B,stroke-dasharray: 4 4;
 
-    subgraph offline["Offline: training data + Critic training"]
+    subgraph offline["Offline: training data + VIF Critic training"]
         generator["Synthetic persona generation"]
-        wrangled_train["Wrangled persona files<br/>entry text + dates + core values"]
-        judge["Judge labeling<br/>{-1, 0, +1} x 10"]
-        labels["Persisted single-pass labels<br/>mainline training parquet"]
-        consensus["Five-pass Judge consensus labels<br/>diagnostic provenance"]
+        wrangled_train["Wrangled persona files<br/>Journal Entry text + dates + Core Values"]
+        judge["LLM-Judge labeling<br/>{-1, 0, +1} x 10"]
+        labels["Persisted single-pass LLM-Judge labels<br/>mainline training parquet"]
+        consensus["Five-pass LLM-Judge consensus labels<br/>diagnostic provenance"]
         merge["Join + integrity checks<br/>(persona_id, t_index)"]
         encoder_train["Configured frozen sentence encoder"]
-        state_train["State encoder<br/>entry window + time gaps + profile weights"]
+        state_train["State encoder<br/>Journal Entry window + time gaps + profile weights"]
         dataset["StateTargetSample rows"]
-        critic_train["Critic training<br/>MLP / ordinal / BNN"]
+        critic_train["VIF Critic training<br/>MLP / ordinal / BNN"]
         checkpoint["Checkpoint<br/>weights + runtime metadata"]
     end
 
-    subgraph runtime["Runtime: VIF -> weekly Coach cycle"]
-        wrangled_runtime["Wrangled journal timeline<br/>entry text + dates + core values"]
+    subgraph runtime["Runtime: VIF -> Weekly Coach cycle"]
+        wrangled_runtime["Wrangled Journal Entry timeline<br/>text + dates + Core Values"]
         encoder_runtime["Configured frozen sentence encoder<br/>resolved from config + checkpoint"]
         state_runtime["State encoder<br/>current default: window_size = 1"]
-        critic["Critic inference<br/>per-entry mean + uncertainty"]
-        timeline["Per-entry VIF timeline"]
+        critic["VIF Critic inference<br/>per-Journal-Entry mean + uncertainty"]
+        timeline["Per-Journal-Entry VIF timeline"]
         weekly["Weekly aggregation<br/>per-dimension + profile-weighted signals"]
         evolution["Experimental evolution classifier<br/>automatic in prototype"]
         drift["Weekly prototype routing<br/>stable / crash / rut / evolution / high_uncertainty"]
-        drift_v1["Student-visible v1 target<br/>visible conflict + rolling soft P(-1)"]
-        digest["Weekly digest builder<br/>structured Coach artifact"]
-        prompt["Full-context Coach prompt<br/>history capped at week_end"]
-        coach["Optional Coach LLM narrative"]
-        exports["Artifacts<br/>timeline.parquet + weekly.parquet<br/>drift.json + digest.json/md + prompt.txt"]
+        drift_v1["Student-visible Drift v1 target<br/>Conflict + rolling soft P(-1)<br/>for the same Core Value"]
+        digest["Weekly Digest builder"]
+        prompt["Full-context Weekly Coach prompt<br/>history capped at week_end"]
+        coach["Optional Weekly Coach reflection"]
+        exports["Exported files<br/>timeline.parquet + weekly.parquet<br/>drift.json + digest.json/md + prompt.txt"]
     end
 
-    default_note["Current default state:<br/>current entry embedding + 10-dim value profile<br/>(time gaps appear only when window_size > 1)"]
+    default_note["Current default state:<br/>current Journal Entry embedding + 10-dim value profile<br/>(time gaps appear only when window_size > 1)"]
 
     generator --> wrangled_train
     wrangled_train --> judge

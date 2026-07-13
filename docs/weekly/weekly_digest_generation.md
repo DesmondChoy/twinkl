@@ -2,19 +2,19 @@
 
 ## Purpose
 
-The weekly digest is the structured bridge between VIF/Judge signals and the
-narrative Coach. It does not produce a generic summary. It organizes the week
-against declared values, selects evidence, records the routing rationale, and
-renders the prompt that a Coach model can consume.
+The Weekly Digest is the structured bridge between VIF Critic predictions or
+LLM-Judge labels and the Weekly Coach. It does not produce a generic summary. It
+organizes the week against Core Values, selects evidence, records the routing
+rationale, and renders the prompt that the Weekly Coach can consume.
 
 Read this document with:
 
 - [`docs/prd.md`](../prd.md) for product intent;
 - [`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md) for the selected
-  sustained-conflict definition;
+  Drift definition;
 - [`docs/evals/drift_detection_eval.md`](../evals/drift_detection_eval.md) for
   the benchmark contract;
-- [`docs/vif/example.md`](../vif/example.md) for target Coach tone; and
+- [`docs/vif/example.md`](../vif/example.md) for target Weekly Coach tone; and
 - [`docs/evals/explanation_quality_eval.md`](../evals/explanation_quality_eval.md)
   for narrative checks.
 
@@ -24,14 +24,14 @@ Read this document with:
 
 ### Standalone Digest CLI
 
-The standalone command defaults to persisted single-pass Judge labels:
+The standalone command defaults to persisted single-pass LLM-Judge labels:
 
 ```sh
 uv run python -m src.coach.weekly_digest --persona-id 0a2fe15c
 ```
 
-With no explicit dates, it uses the latest available entry date and a seven-day
-inclusive window. Pin a window with:
+With no explicit dates, it uses the latest available Journal Entry date and a
+seven-day inclusive window. Pin a window with:
 
 ```sh
 uv run python -m src.coach.weekly_digest \
@@ -40,7 +40,7 @@ uv run python -m src.coach.weekly_digest \
   --end-date 2025-12-09
 ```
 
-Use a saved Critic timeline instead of Judge labels with `--signals-path`:
+Use a saved VIF Critic timeline instead of LLM-Judge labels with `--signals-path`:
 
 ```sh
 uv run python -m src.coach.weekly_digest \
@@ -67,7 +67,7 @@ uv run python -m src.coach.weekly_digest \
 ```
 
 If both `--response-mode` and `--drift-result-json` are present, the manual
-response mode wins and upstream drift reasons are not carried into the digest.
+response mode wins and upstream Drift reasons are not carried into the Weekly Digest.
 
 #### Standalone Options
 
@@ -86,8 +86,8 @@ response mode wins and upstream drift reasons are not carried into the digest.
 
 ### End-to-End Checkpoint Runtime
 
-The full offline runtime predicts a Critic timeline, aggregates weekly signals,
-runs the existing prototype router, and builds the digest:
+The full offline runtime predicts a VIF Critic timeline, aggregates weekly
+signals, runs the existing prototype router, and builds the Weekly Digest:
 
 ```sh
 uv run python -m src.coach.runtime \
@@ -127,8 +127,9 @@ logs/exports/weekly_coach/
 
 It also upserts the consolidated parquet at `--parquet-path`.
 
-Both CLIs render and persist the Coach prompt. They do not call a live Coach
-LLM. Programmatic callers can inject an asynchronous `llm_complete` callable
+Both CLIs render and persist the Weekly Coach prompt. They do not call a live
+Weekly Coach LLM. Programmatic callers can inject an asynchronous
+`llm_complete` callable
 into `run_weekly_coach_cycle()` or the lower-level generation functions to
 populate `CoachNarrative` and `DigestValidation`.
 
@@ -150,12 +151,12 @@ live LLM narrative. See [`docs/demo/review_app.md`](../demo/review_app.md).
 
 ### Standalone Path
 
-1. Load persisted Judge labels, or a saved Critic timeline from
+1. Load persisted LLM-Judge labels, or a saved VIF Critic timeline from
    `--signals-path`.
 2. Resolve the requested seven-day or explicit date window.
-3. Read an upstream drift result when supplied.
+3. Read an upstream Drift result when supplied.
 4. Load the persona profile and journal history from wrangled markdown.
-5. Truncate the history at `week_end` to prevent future-entry leakage.
+5. Truncate the history at `week_end` to prevent future-Journal-Entry leakage.
 6. Compute dimension summaries and select evidence.
 7. Use a local fallback mode only when no upstream result or manual override is
    available.
@@ -164,16 +165,16 @@ live LLM narrative. See [`docs/demo/review_app.md`](../demo/review_app.md).
 ### End-to-End Runtime Path
 
 1. Reconstruct student-visible states from the wrangled timeline.
-2. Run the frozen Critic checkpoint with MC Dropout.
-3. Persist per-entry means and uncertainties.
+2. Run the frozen VIF Critic checkpoint with MC Dropout.
+3. Persist per-Journal-Entry means and uncertainties.
 4. Aggregate the timeline into a validated weekly frame.
 5. Run the weekly crash/rut/evolution prototype router.
-6. Pass the live Critic signals and structured routing result into the digest
-   builder.
+6. Pass the live VIF Critic predictions and structured routing result into the
+   Weekly Digest builder.
 7. Render and persist the runtime bundle.
 
 `src/vif/weekly_schema.py` owns the weekly column contract between the runtime
-producer and the prototype drift consumer. Missing required columns fail early
+producer and the prototype router. Missing required columns fail early
 with a descriptive `ValueError`.
 
 ---
@@ -185,15 +186,15 @@ with a descriptive `ValueError`.
 - persona ID, name, and date-window metadata;
 - response mode, source, rationale, and optional upstream reasons;
 - weekly aggregate metrics;
-- declared core values;
+- Core Values;
 - per-dimension summaries;
 - representative evidence snippets;
-- journal history capped at `week_end`;
+- Journal Entry history capped at `week_end`;
 - an optional `CoachNarrative`; and
 - an optional `DigestValidation`.
 
-The digest is the canonical Coach-facing weekly artifact rather than a transient
-prompt intermediary.
+The Weekly Digest is the canonical record passed to the Weekly Coach rather
+than a transient prompt intermediary.
 
 ### Schema Modes
 
@@ -221,7 +222,7 @@ The schema is intentionally wider than the selected product contract so the
 current prototype and prompt experiments remain inspectable.
 
 These literal prototype modes are not the adopted v1 delivery vocabulary. The
-weekly Coach is intended to describe the delivery-time state as **active**,
+Weekly Coach is intended to describe the delivery-time state as **active**,
 **recovered**, **mixed**, or **uncertain**. The exact schema fields and mapping
 from the current compatibility modes remain implementation work.
 
@@ -229,42 +230,43 @@ from the current compatibility modes remain implementation work.
 
 ## Drift v1 Versus the Prototype Router
 
-The selected v1 construct is sustained conflict on a declared core value:
+Drift v1 is two consecutive Conflicts on the same Core Value:
 
-- student-visible target: two adjacent entries visibly show a behavior or
-  choice against the same declared core value;
-- runtime target: rolling soft `P(-1)` evidence under uncertainty gating; and
-- delivery: the weekly digest cites the supporting entries.
+- student-visible target: two adjacent Journal Entries visibly show a behavior
+  or choice against the same Core Value;
+- runtime target: rolling soft `P(-1)` predictions under uncertainty gating; and
+- delivery: the Weekly Digest cites the supporting Journal Entries.
 
-Each declared core value is evaluated independently. Another core value's
-aligned label cannot cancel an episode, and simultaneous episodes remain
-separate value-specific records. The six-detector comparison's detector-vote
-count is not the five-pass Judge reference.
+Each Core Value is evaluated independently. An aligned label for another Core
+Value cannot cancel Drift, and simultaneous Drifts remain separate
+value-specific records. The six-detector comparison's detector-vote count is
+not the five-pass LLM-Judge reference.
 
 The current runtime persists alignment means and uncertainties rather than
 class probabilities. [`twinkl-v8pb`](../evals/drift_v1_student_visible_target.md)
-completed the full-runtime-text target review, but its weak development recall
-and unresolved promotion case mean no scorer is approved and the detector is
-not wired into the weekly runtime. The former consensus-derived frozen
+completed the full-runtime-text target review, but its weak development Drift
+recall and unresolved final test case mean no VIF Critic or Drift Detector has
+deployment approval, and the Drift Detector is not wired into the weekly
+runtime. The former consensus-derived frozen
 benchmark is retired historical evidence. The crash/rut/evolution output modes
 remain prototype compatibility values, not the accepted v1 definition.
 
 ### Delivery-Time Recovery
 
-The student-visible target records whether a sustained-conflict episode
-occurred. Digest wording reflects the state when the weekly Coach is delivered.
+The student-visible target records whether Drift occurred. Weekly Digest
+wording reflects the state when the Weekly Coach is delivered.
 
-For each value-specific episode:
+For each value-specific Drift:
 
 - **active**: its conflict run reaches the digest cutoff;
 - **recovered**: a later resolved `0` or `+1` closes the run before the cutoff;
 - **uncertain**: missing, no-majority, or unreliable later evidence prevents a
   confident active-versus-recovered claim; and
-- **mixed**: a digest-level summary when relevant value-specific episodes have
-  different delivery states. It is not a fourth reference-episode type.
+- **mixed**: a Weekly Digest summary when relevant value-specific Drifts have
+  different delivery states. It is not a fourth Drift type.
 
-A sequence such as `-1, -1, +1, +1, +1` therefore remains a true benchmark
-episode but is described as recovered rather than active. Exact production
+A sequence such as `-1, -1, +1, +1, +1` therefore remains a true Drift but is
+described as recovered rather than active. Exact production
 schema values and compatibility mapping from current modes remain
 implementation work.
 
@@ -280,19 +282,19 @@ conservative local heuristics for offline development:
 - `mixed_state`: the week contains meaningful supportive and straining signals;
 - `background_strain`: the week is positive overall but carries softer burden
   or transition cues;
-- `rut`: a clearly negative weekly aggregate includes a declared core value
+- `rut`: a clearly negative weekly aggregate includes a Core Value
   among the main tensions; and
 - `stable`: none of the preceding conditions apply.
 
-These heuristics do not implement calibrated Critic uncertainty or the selected
-v1 detector. They keep prompt and artifact work usable when upstream results are
-absent.
+These heuristics do not implement calibrated VIF Critic uncertainty or the
+selected Drift Detector. They keep prompt and Weekly Digest work usable when
+upstream results are absent.
 
 ---
 
 ## Prompt and Narrative Contract
 
-The Coach prompt requires:
+The Weekly Coach prompt requires:
 
 - reflective rather than prescriptive language;
 - no score jargon, gamification, or judgmental framing;
@@ -316,10 +318,10 @@ These checks are narrow guardrails, not a complete explanation-quality claim.
 
 ## Safety and Selection Behavior
 
-- Declared core values receive priority when dimension summaries are equally
+- Core Values receive priority when dimension summaries are equally
   informative.
 - A dimension does not appear in both tension and strength sections by default.
-- Backfilled digests cannot read entries after `week_end`.
+- Backfilled Weekly Digests cannot read Journal Entries after `week_end`.
 - Empty sections render `None clear this week` rather than inventing a tension.
 - Acute grief/distress fallback favors presence over brittle value scoring.
 - Mixed-state and background-strain fallbacks preserve nuance that a weekly
@@ -333,20 +335,22 @@ learned routing policies.
 
 ## Remaining Work
 
-1. Persist or reconstruct per-entry ordinal class probabilities, including
-   `P(-1)`.
-2. Implement rolling soft-evidence sustained-conflict detection.
+1. Persist or reconstruct per-Journal-Entry ordinal class probabilities,
+   including `P(-1)`.
+2. Implement the rolling soft-evidence Drift Detector.
 3. Calibrate probability-mass and uncertainty thresholds against the active
-   student-visible development target or a fresh resolved surface. The stored
-   five-pass consensus episodes are retired historical evidence, not a
+   student-visible development set or a fresh resolved final test set. The stored
+   five-pass consensus Drifts are retired historical evidence, not a
    calibration target.
 4. Review the completed `twinkl-752.1` result under `twinkl-752.2`. The tested
-   raw Critic inputs halved median episode recall, so the no-Critic verifier is
-   the conditional choice; no architecture or deployment tolerance is adopted
-   yet.
-5. Add active, recovered, mixed, and uncertain digest-time wording semantics.
-   An abstaining scorer must emit no drift claim, and coverage must be reported.
-6. Add a production-facing Coach service entrypoint that injects the live LLM,
+   raw VIF Critic inputs halved median Drift recall, so the Weekly Drift Reviewer
+   without VIF Critic input is the conditional choice; no architecture or
+   deployment tolerance is adopted yet.
+5. Add active, recovered, mixed, and uncertain Weekly Digest delivery wording.
+   An abstaining Drift Detector must emit no Drift claim, and coverage must be
+   reported.
+6. Add a production-facing Weekly Coach service entrypoint that injects the
+   live LLM,
    validates the narrative, and persists the result.
 7. Report Tier 1 pass rates over a batch and add Tier 2 meta-judge plus Tier 3
    human calibration.
@@ -362,10 +366,10 @@ learned routing policies.
 | `src/coach/runtime.py` | Checkpoint-to-digest offline orchestration |
 | `src/coach/mode_logic.py` | Standalone fallback response-mode logic |
 | `src/coach/schemas.py` | Drift, digest, narrative, and validation schemas |
-| `src/vif/runtime.py` | Per-entry inference and weekly aggregation |
+| `src/vif/runtime.py` | Per-Journal-Entry inference and weekly aggregation |
 | `src/vif/weekly_schema.py` | Weekly frame column contract and validation |
 | `src/vif/drift.py` | Existing weekly crash/rut/evolution prototype router |
-| `prompts/weekly_digest_coach.yaml` | Coach prompt template |
+| `prompts/weekly_digest_coach.yaml` | Weekly Coach prompt template |
 
 ---
 
@@ -377,6 +381,6 @@ Targeted checks:
 uv run pytest tests/coach/test_weekly_digest.py tests/vif/test_drift.py -q
 ```
 
-The tests cover digest construction, future-entry isolation, upstream/manual
+The tests cover Weekly Digest construction, future-Journal-Entry isolation, upstream/manual
 mode handling, safety fallbacks, prompt rendering, structured generation with a
-fake LLM, persistence, weekly schema validation, and prototype drift behavior.
+fake LLM, persistence, weekly schema validation, and prototype router behavior.

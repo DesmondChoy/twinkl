@@ -1,8 +1,8 @@
-# Judge Validation Summary
+# LLM-Judge Validation Summary
 
 **Last Updated:** 2026-04-04
 
-**Purpose:** This document summarizes inter-rater reliability findings for the shared human-annotation subset. The results support using the LLM Judge as a scalable supervision source for the POC, while the later `twinkl-747` reachability audit and `twinkl-754` consensus rerun add important caveats for the hardest dimensions and for student-label reachability.
+**Purpose:** This document summarizes inter-rater reliability findings for the shared human-annotation subset. The results support using the LLM-Judge as a scalable supervision source for the POC, while the later `twinkl-747` reachability audit and `twinkl-754` consensus rerun add important caveats for the hardest dimensions and for VIF Critic label reachability.
 
 **Analysis Source:** `src/annotation_tool/agreement_metrics.py`
 **Full Report:** `logs/exports/agreement_report_20260318_130642.md`
@@ -19,21 +19,21 @@
 | Metric | Value | Interpretation |
 |--------|-------|----------------|
 | **Human-Human Agreement** (Fleiss' κ) | 0.56 | Moderate |
-| **Judge-Human Agreement** (Avg Cohen's κ) | 0.66 | Substantial |
+| **LLM-Judge-Human Agreement** (Avg Cohen's κ) | 0.66 | Substantial |
 
-**Conclusion:** On the shared 115-entry subset, the Judge exceeds human-human consistency across 9 of 10 Schwartz value dimensions. This supports using automated labeling as a scalable supervision source for the POC, while later audits show that aggregate agreement alone does not guarantee that every hard-dimension label is a clean distillation target for the current student.
+**Conclusion:** On the shared 115-Journal-Entry subset, the LLM-Judge exceeds human-human consistency across 9 of 10 Schwartz value dimensions. This supports using automated labeling as a scalable supervision source for the POC, while later audits show that aggregate agreement alone does not guarantee that every hard-dimension label is a clean distillation target for the current VIF Critic.
 
 #### Why This Matters
 
-The key insight is that **Fleiss' κ (0.56) establishes the ceiling of human consistency**---it measures how much humans agree with *each other*. This represents the inherent subjectivity in the labeling task; even trained annotators interpret the same journal entry differently.
+The key insight is that **Fleiss' κ (0.56) establishes the ceiling of human consistency**---it measures how much humans agree with *each other*. This represents the inherent subjectivity in the labeling task; even trained annotators interpret the same Journal Entry differently.
 
-**Cohen's κ (0.66) measures Judge-Human alignment**, averaged across all three annotators. Since the Judge achieves *higher* agreement with individual humans than humans achieve with each other, this implies:
+**Cohen's κ (0.66) measures LLM-Judge-Human alignment**, averaged across all three annotators. Since the LLM-Judge achieves *higher* agreement with individual humans than humans achieve with each other, this implies:
 
-1. **The Judge is not an outlier**---it sits "within the distribution" of human judgments, not outside it
-2. **The Judge may capture consensus**---its labels likely approximate what a majority of humans would agree on, even when individual humans disagree
-3. **Automated labels are defensible**---if we trust human-labeled data for training, we can trust Judge-labeled data at least as much, since the Judge is more consistent with humans than they are with themselves
+1. **The LLM-Judge is not an outlier**---it sits "within the distribution" of human judgments, not outside it
+2. **The LLM-Judge may capture consensus**---its labels likely approximate what a majority of humans would agree on, even when individual humans disagree
+3. **Automated labels are defensible**---if we trust human-labeled data for training, we can trust LLM-Judge-labeled data at least as much, since the LLM-Judge is more consistent with humans than they are with themselves
 
-In practical terms: the Judge is strong enough to replace large-scale manual labeling for most dimensions in the current POC, and it may even *reduce* some inter-annotator noise. However, the later `twinkl-747` reachability audit and `twinkl-754` consensus re-judging work show that a few hard dimensions, especially `Security`, still require tighter target design and follow-up analysis.
+In practical terms: the LLM-Judge is strong enough to replace large-scale manual labeling for most dimensions in the current POC, and it may even *reduce* some inter-annotator noise. However, the later `twinkl-747` reachability audit and `twinkl-754` consensus re-judging work show that a few hard dimensions, especially `Security`, still require tighter target design and follow-up analysis.
 
 #### Diagnostic Framework
 
@@ -41,15 +41,15 @@ The evaluation spec ([`judge_validation_eval.md`](judge_validation_eval.md)) def
 
 | Fleiss' κ | Cohen's κ | Diagnosis |
 |-----------|-----------|-----------|
-| High | High | Judge is well-calibrated |
-| High | Low | Judge has systematic bias --- fix Judge prompt |
+| High | High | LLM-Judge is well-calibrated |
+| High | Low | LLM-Judge has systematic bias --- fix LLM-Judge prompt |
 | Low | Varies | Rubric is ambiguous --- fix definitions first |
 
-**Observed pattern:** Moderate Fleiss' κ with higher Cohen's κ. This indicates the Judge is well-calibrated relative to the level of human consensus achievable for this task. Where individual annotators show low Cohen's κ (e.g., Des on Conformity: 0.30), Fleiss' κ for those dimensions is also low (0.43), suggesting rubric ambiguity rather than Judge error.
+**Observed pattern:** Moderate Fleiss' κ with higher Cohen's κ. This indicates the LLM-Judge is well-calibrated relative to the level of human consensus achievable for this task. Where individual annotators show low Cohen's κ (e.g., Des on Conformity: 0.30), Fleiss' κ for those dimensions is also low (0.43), suggesting rubric ambiguity rather than LLM-Judge error.
 
 ### Per-Dimension Breakdown
 
-| Value Dimension | Fleiss' κ (Human-Human) | Avg Cohen's κ (Judge-Human) | Judge > Human? |
+| Value Dimension | Fleiss' κ (Human-Human) | Avg Cohen's κ (LLM-Judge-Human) | LLM-Judge > Human? |
 |-----------------|-------------------------|------------------------------|----------------|
 | Self-Direction | 0.44 | 0.64 | Yes |
 | Stimulation | 0.58 | 0.67 | Yes |
@@ -62,13 +62,13 @@ The evaluation spec ([`judge_validation_eval.md`](judge_validation_eval.md)) def
 | Benevolence | 0.61 | 0.68 | Yes |
 | Universalism | 0.72 | 0.83 | Yes |
 
-All metrics in this table are computed on the shared 115-entry subset to ensure like-for-like comparison with Fleiss' κ.
+All metrics in this table are computed on the shared 115-Journal-Entry subset to ensure like-for-like comparison with Fleiss' κ.
 
 **Power** is the sole dimension where average Cohen's κ (0.60) falls slightly below Fleiss' κ (0.61). The gap is marginal (0.01) and both values fall within the Moderate-Substantial range.
 
-### Per-Annotator Cohen's κ vs Judge
+### Per-Annotator Cohen's κ vs LLM-Judge
 
-All values below are computed on the shared 115-entry subset for consistency with Fleiss' κ.
+All values below are computed on the shared 115-Journal-Entry subset for consistency with Fleiss' κ.
 
 | Value | Des | JL | KM |
 |-------|-----|-----|-----|
@@ -84,22 +84,22 @@ All values below are computed on the shared 115-entry subset for consistency wit
 | Universalism | 0.74 | 0.96 | 0.78 |
 | **Aggregate** | **0.50** | **0.80** | **0.69** |
 
-JL shows the highest alignment with the Judge (0.80, Substantial), followed by KM (0.69, Substantial) and Des (0.50, Moderate). Variation across annotators is expected and reflects individual differences in rubric interpretation.
+JL shows the highest alignment with the LLM-Judge (0.80, Substantial), followed by KM (0.69, Substantial) and Des (0.50, Moderate). Variation across annotators is expected and reflects individual differences in rubric interpretation.
 
 ### Subsequent Audit Caveats
 
 The human-overlap benchmark above is still the right summary of shared-subset agreement, but two later audits materially changed how the project interprets those numbers:
 
-1. **Reachability is the main hard-dimension caveat.** The `twinkl-747` audit sampled 50 cases and found that aggregate Judge-human agreement did not guarantee that every hard-dimension label was a clean student target. Its recommendation grid was:
+1. **Reachability is the main hard-dimension caveat.** The `twinkl-747` audit sampled 50 cases and found that aggregate LLM-Judge-human agreement did not guarantee that every hard-dimension label was a clean VIF Critic target. Its recommendation grid was:
    - `security` → `change_distillation_target`
    - `hedonism` → `targeted_relabeling`
    - `stimulation` → `targeted_relabeling`
    This was a historical diagnostic recommendation. The legacy reduced-context
-   prompts did not exactly represent the active session-plus-profile Critic
-   state, so the audit did not create or validate a repaired target artifact.
+   prompts did not exactly represent the active session-plus-profile VIF Critic
+   state, so the audit did not create or validate a repaired target labels.
 2. **Consensus improved stability, not the active frontier target.** The `twinkl-754` five-pass profile-only rerun showed strong repeated-call self-consistency (per-dimension Fleiss' κ `0.775` to `0.890`) and passed the full-corpus stability gate for `security`, `hedonism`, and `stimulation`. But it did **not** become the default supervision source for frontier claims, because the consensus branch changed labels on the frozen holdout and did not improve the advisory human-overlap benchmark enough to replace persisted labels cleanly.
 
-Practical takeaway: the shared-subset agreement results still justify using Judge labels at POC scale, but later work narrowed that claim. They are strongest as broad supervision evidence, not as proof that every hard-dimension label is equally reachable or equally promotion-ready for the current student.
+Practical takeaway: the shared-subset agreement results still justify using LLM-Judge labels at POC scale, but later work narrowed that claim. They are strongest as broad supervision evidence, not as proof that every hard-dimension label is equally reachable or equally suitable as training targets for the current VIF Critic.
 
 ---
 
@@ -107,7 +107,7 @@ Practical takeaway: the shared-subset agreement results still justify using Judg
 
 ### Sample Composition (19 Personas, 115 Shared Entries)
 
-Three annotators (Des, JL, KM) independently labeled all entries for 19 personas (annotation orders 1--19). 9 of 10 Schwartz value dimensions meet the target of >= 3 core personas; Stimulation remains at 2.
+Three annotators (Des, JL, KM) independently labeled all Journal Entries for 19 personas (annotation orders 1--19). 9 of 10 Schwartz value dimensions meet the target of >= 3 core personas; Stimulation remains at 2.
 
 ### Core Persona Value Coverage
 
@@ -128,9 +128,9 @@ Three annotators (Des, JL, KM) independently labeled all entries for 19 personas
 
 ### Why Core Persona Values Drive Reliable Signal
 
-Coverage is measured by **Core Persona Values**---the count of personas whose profile includes a dimension as a core value. This is the best predictor of reliable kappa calculation because personas consistently express their core values across multiple journal entries.
+Coverage is measured by **Core Persona Values**---the count of personas whose profile includes a dimension as a Core Value. This is the best predictor of reliable kappa calculation because personas consistently express their Core Values across multiple Journal Entries.
 
-Entry-level signal (count of entries with non-zero labels) can be misleading---dimensions like Achievement showed entry-level signal through incidental "crossover" expressions in the initial 10-persona sample, despite having zero core personas. Such crossover signal is less consistent, harder to validate, and less reliable for kappa calculation.
+Entry-level signal (count of Journal Entries with non-zero labels) can be misleading---dimensions like Achievement showed entry-level signal through incidental "crossover" expressions in the initial 10-persona sample, despite having zero core personas. Such crossover signal is less consistent, harder to validate, and less reliable for kappa calculation.
 
 ---
 
@@ -140,21 +140,21 @@ Entry-level signal (count of entries with non-zero labels) can be misleading---d
 
 The registry already contained sufficient personas for all dimensions (204 personas, 292 value assignments, mean 29.2 per value).
 
-### 2. Run Judge Labeling --- COMPLETED
+### 2. Run LLM-Judge Labeling --- COMPLETED
 
-All 204 personas have been labeled by the Judge. Labels stored in `logs/judge_labels/judge_labels.parquet` (1,651 entries).
+All 204 personas have been labeled by the LLM-Judge. Labels stored in `logs/judge_labels/judge_labels.parquet` (1,651 Journal Entries).
 
 ### 3. Conduct Additional Human Annotation Round --- COMPLETED
 
-9 additional personas were annotated (annotation orders 11--19), expanding the sample from 10 to 19 personas (46 to 115 shared entries). All three annotators labeled all entries. Persona selection was optimized to maximize dimension coverage with minimum annotations.
+9 additional personas were annotated (annotation orders 11--19), expanding the sample from 10 to 19 personas (46 to 115 shared Journal Entries). All three annotators labeled all Journal Entries. Persona selection was optimized to maximize dimension coverage with minimum annotations.
 
 ### 4. Re-calculate Agreement Metrics --- COMPLETED
 
 Agreement report generated: `logs/exports/agreement_report_20260318_130642.md`
 
 **Success criteria evaluation:**
-- All 10 dimensions have >= 3 personas with that core value in the annotated sample --- **MET for 9/10 dimensions** (Stimulation has 2 core personas; annotation order 21 was not completed)
-- Judge-Human kappa >= Fleiss' kappa for all dimensions --- **MET for 9/10 dimensions** (Power is the sole exception with a marginal gap of 0.01)
+- All 10 dimensions have >= 3 personas with that Core Value in the annotated sample --- **MET for 9/10 dimensions** (Stimulation has 2 core personas; annotation order 21 was not completed)
+- LLM-Judge-Human kappa >= Fleiss' kappa for all dimensions --- **MET for 9/10 dimensions** (Power is the sole exception with a marginal gap of 0.01)
 
 ---
 
@@ -168,7 +168,7 @@ The following dimensions show the lowest Fleiss' kappa (human-human agreement), 
 | Self-Direction | 0.44 | Broad scope---autonomy, creativity, and curiosity all qualify |
 | Achievement | 0.47 | Overlap with Power (both involve competence/success) |
 
-Per the evaluation spec, low Fleiss' kappa indicates rubric ambiguity rather than Judge error. Improving rubric definitions for these dimensions would be expected to raise both human-human and Judge-human agreement.
+Per the evaluation spec, low Fleiss' kappa indicates rubric ambiguity rather than LLM-Judge error. Improving rubric definitions for these dimensions would be expected to raise both human-human and LLM-Judge-human agreement.
 
 ---
 
@@ -187,7 +187,7 @@ Per the evaluation spec, low Fleiss' kappa indicates rubric ambiguity rather tha
 
 ### Metrics Used
 
-- **Cohen's κ**: Pairwise agreement between one human annotator and the Judge (accounts for chance agreement)
+- **Cohen's κ**: Pairwise agreement between one human annotator and the LLM-Judge (accounts for chance agreement)
 - **Fleiss' κ**: Multi-rater agreement among all human annotators (measures human consensus)
 
 ### Sample Size

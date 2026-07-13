@@ -2,9 +2,9 @@
 
 ## Overview
 
-Build a Shiny for Python annotation tool for **validating** LLM-as-Judge labels via blind human annotation across 10 Schwartz value dimensions. Humans provide independent scores WITHOUT seeing Judge labels first; the system then computes agreement metrics (Cohen's κ, Fleiss' κ) automatically.
+Build a Shiny for Python annotation tool for **validating** LLM-Judge labels via blind human annotation across 10 Schwartz value dimensions. Humans provide independent scores WITHOUT seeing LLM-Judge labels first; the system then computes agreement metrics (Cohen's κ, Fleiss' κ) automatically.
 
-**Key Clarification**: This is NOT a tool for humans to manually assign scores from scratch. The Judge has already labeled entries. This tool validates whether humans agree with the Judge's assessments.
+**Key Clarification**: This is NOT a tool for humans to manually assign scores from scratch. The LLM-Judge has already labeled Journal Entries. This tool validates whether humans agree with the LLM-Judge's assessments.
 
 ## Data Schema Alignment
 
@@ -13,7 +13,7 @@ The `annotation_tool.md` proposal aligns well with `data_schema.md`:
 | Aspect | annotation_tool.md | data_schema.md | Status |
 |--------|-------------------|----------------|--------|
 | Entry loader | Wrangled files (`logs/wrangled/`) | N/A (synthetic data) | ✓ Custom parser in `src/annotation_tool/data_loader.py` |
-| Judge labels | `logs/judge_labels/judge_labels.parquet` | Same path | ✓ Matches |
+| LLM-Judge labels | `logs/judge_labels/judge_labels.parquet` | Same path | ✓ Matches |
 | Composite key | `(persona_id, t_index)` | Same | ✓ Matches |
 | Value columns | `alignment_self_direction`, etc. | Same names | ✓ Matches |
 | Value order | 10 Schwartz values | `SCHWARTZ_VALUE_ORDER` constant | ✓ Defined in `src/models/judge.py` |
@@ -35,7 +35,7 @@ src/annotation_tool/
     ├── __init__.py
     ├── header.py          # Annotator input + progress bar + navigation
     ├── sidebar.py         # Persona info + entry navigation list
-    ├── entry_display.py   # Journal entry rendering (center column)
+    ├── entry_display.py   # Journal Entry rendering (center column)
     ├── scoring_grid.py    # 10-value counter buttons + save
     ├── modals.py          # Warning dialogs (all-neutral, keyboard help)
     ├── comparison_view.py # Post-save human vs judge comparison
@@ -83,7 +83,7 @@ New parquet files at `logs/annotations/<annotator_id>.parquet`:
 | `SCHWARTZ_VALUE_ORDER` | `src/models/judge.py:36-47` | Canonical value ordering | ✅ Yes |
 | `AlignmentScores` | `src/models/judge.py:50-83` | Score validation model | ❌ No (dict validation in annotation_store) |
 | `_write_registry_locked()` | `src/registry/personas.py:67-86` | File-locking pattern | ✅ Yes (pattern adapted in annotation_store.py) |
-| `parse_synthetic_data_dir()` | `src/wrangling/parse_synthetic_data.py` | Load entries with persona context | ❌ No (custom wrangled parser in data_loader.py) |
+| `parse_synthetic_data_dir()` | `src/wrangling/parse_synthetic_data.py` | Load Journal Entries with persona context | ❌ No (custom wrangled parser in data_loader.py) |
 | `schwartz_values.yaml` | `config/schwartz_values.yaml` | Tooltip definitions | ✅ Yes (CSS tooltips in scoring_grid.py) |
 | `cohen_kappa_score` | `sklearn.metrics` | Cohen's κ calculation | ✅ Yes (agreement_metrics.py) |
 | `fleiss_kappa` | `statsmodels.stats.inter_rater` | Fleiss' κ calculation | ✅ Yes (agreement_metrics.py) |
@@ -92,18 +92,18 @@ New parquet files at `logs/annotations/<annotator_id>.parquet`:
 
 ### Phase 1: Core Loop ✅ COMPLETE
 - [x] Add dependencies to `pyproject.toml`
-- [x] Create `data_loader.py` - load entries from wrangled files
+- [x] Create `data_loader.py` - load Journal Entries from wrangled files
 - [x] Create `annotation_store.py` - save annotations with file locking
 - [x] Create basic `app.py` with Shiny structure
 - [x] Implement header component - annotator input + progress bar
-- [x] Implement entry display - persona context + entry rendering
+- [x] Implement Journal Entry display - persona context + Journal Entry rendering
 - [x] Implement scoring grid - 10-value radio buttons
 - [x] Wire up navigation (prev/next) and save logic
 
 **Phase 1 Testing:** ✅ ALL PASSED
 - [x] Run app: `shiny run src/annotation_tool/app.py`
-- [x] Verify entries load with persona context displayed
-- [x] Create new annotator and annotate 3 entries with various scores
+- [x] Verify Journal Entries load with persona context displayed
+- [x] Create new annotator and annotate 3 Journal Entries with various scores
 - [x] Verify `logs/annotations/<annotator>.parquet` created with correct schema
 - [x] Test prev/next navigation and progress bar updates
 - [x] Close and reopen app — verify progress persists
@@ -123,11 +123,11 @@ New parquet files at `logs/annotations/<annotator_id>.parquet`:
 - [x] Add export functionality (CSV, Parquet, Markdown report)
 
 **Phase 2 Testing:** ✅ ALL PASSED
-- [x] Verify Judge scores hidden during annotation (no anchoring bias)
-- [x] After saving, verify Judge scores revealed for comparison (inline comparison view)
+- [x] Verify LLM-Judge scores hidden during annotation (no anchoring bias)
+- [x] After saving, verify LLM-Judge scores revealed for comparison (inline comparison view)
 - [x] Verify Cohen's κ calculation works with edge cases (empty, no overlap, perfect disagreement)
 - [x] Export markdown report — verify format with annotator summary, Cohen's κ table, Fleiss' κ
-- [x] Test with 2 annotators — verify Fleiss' κ computes on shared entries
+- [x] Test with 2 annotators — verify Fleiss' κ computes on shared Journal Entries
 
 **Phase 2 Implementation Notes:**
 - `agreement_metrics.py` implements Cohen's κ (annotator vs judge) and Fleiss' κ (multi-annotator)
@@ -170,10 +170,10 @@ New parquet files at `logs/annotations/<annotator_id>.parquet`:
 ### Workflow (Hamel's "Minimal Interface" Principle)
 
 ```
-1. Annotator sees: Persona context + Journal entry (NO Judge scores)
+1. Annotator sees: Persona context + Journal Entry (NO LLM-Judge scores)
 2. Annotator provides: Their own -1/0/+1 scores for all 10 values
-3. On save: System stores human scores, reveals Judge scores for comparison
-4. Disagreements: Computed automatically by comparing human vs Judge
+3. On save: System stores human scores, reveals LLM-Judge scores for comparison
+4. Disagreements: Computed automatically by comparing human vs LLM-Judge
 ```
 
 No explicit "agree/disagree" buttons — just independent scoring followed by automatic comparison.
@@ -183,15 +183,15 @@ No explicit "agree/disagree" buttons — just independent scoring followed by au
 | Aspect | Decision | Rationale |
 |--------|----------|-----------|
 | **Annotators** | 3 people | Small team, manageable coordination |
-| **Assignment** | Per-entry (not per-persona) | Matches Judge's atomic input; reduces persona "theory" bias |
-| **Entry order** | Shuffled across personas | Each annotator sees random mix of entries from all personas |
-| **Overlap** | Shared subset (~30-50 entries) | All 3 rate shared set for Fleiss' κ; remaining entries split for coverage |
+| **Assignment** | Per-entry (not per-persona) | Matches LLM-Judge's atomic input; reduces persona "theory" bias |
+| **Entry order** | Shuffled across personas | Each annotator sees random mix of Journal Entries from all personas |
+| **Overlap** | Shared subset (~30-50 Journal Entries) | All 3 rate shared set for Fleiss' κ; remaining Journal Entries split for coverage |
 
 ### Metrics Enabled
 
 | Metric | Requires | What It Measures |
 |--------|----------|------------------|
-| **Cohen's κ** (per annotator) | Any annotation | How well each human agrees with Judge |
+| **Cohen's κ** (per annotator) | Any annotation | How well each human agrees with LLM-Judge |
 | **Fleiss' κ** | Shared subset | Whether humans agree with each other (rubric clarity) |
 | **Per-value breakdown** | Any annotation | Which Schwartz values have lowest agreement |
 
@@ -252,7 +252,7 @@ Based on user preferences, here's the detailed UI design:
 | **Analysis view** | Collapsible accordion | Hidden during annotation, expand to check metrics |
 | **All-neutral warning** | Optional confirmation | Warn but allow saving if all values are 0 |
 | **Annotator count** | 3 users | Support Cohen's κ and Fleiss' κ |
-| **Post-save reveal** | Show Judge comparison | After saving, display human vs Judge scores side-by-side for that entry |
+| **Post-save reveal** | Show LLM-Judge comparison | After saving, display human vs LLM-Judge scores side-by-side for that Journal Entry |
 
 ### Keyboard Shortcuts
 
@@ -261,14 +261,14 @@ Based on user preferences, here's the detailed UI design:
 | `↑` / `↓` | Navigate between value rows |
 | `←` / `→` | Change score (-1 / +1) for selected row |
 | `Enter` | Save & Next |
-| `Backspace` | Previous entry |
+| `Backspace` | Previous Journal Entry |
 
 ## Critical Design Decisions
 
 ### Blind Mode → Reveal Flow
-1. **During annotation**: Judge scores hidden (prevent anchoring bias)
-2. **After saving each entry**: Reveal Judge's scores for that entry alongside human's scores
-3. **Analysis view**: Aggregate comparison across all annotated entries
+1. **During annotation**: LLM-Judge scores hidden (prevent anchoring bias)
+2. **After saving each Journal Entry**: Reveal LLM-Judge's scores for that Journal Entry alongside human's scores
+3. **Analysis view**: Aggregate comparison across all annotated Journal Entries
 
 This gives immediate feedback per-entry while preventing bias during scoring.
 
@@ -292,7 +292,7 @@ with open(lock_path) as lock_file:
 1. **Run the app**: `shiny run src/annotation_tool/app.py`
 2. **Test annotation flow**:
    - Create new annotator
-   - Annotate 5 entries with various scores
+   - Annotate 5 Journal Entries with various scores
    - Verify `logs/annotations/<annotator>.parquet` created correctly
 3. **Test progress tracking**:
    - Close and reopen app
@@ -311,8 +311,8 @@ with open(lock_path) as lock_file:
 
 | annotation_tool.md Question | Answer |
 |----------------------------|--------|
-| Sampling strategy | Start with all entries; can add filtering later |
-| Annotator training | Include tooltips from `schwartz_values.yaml`; consider adding 5 "training" entries with feedback |
+| Sampling strategy | Start with all Journal Entries; can add filtering later |
+| Annotator training | Include tooltips from `schwartz_values.yaml`; consider adding 5 "training" Journal Entries with feedback |
 | Disagreement resolution | Treat each annotator independently; analysis shows agreement metrics |
 | Iteration loop | If κ < 0.60, review confusion matrices to identify problem values |
 

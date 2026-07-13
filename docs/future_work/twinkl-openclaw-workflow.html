@@ -343,7 +343,7 @@
         <div class="arrow-down">↓</div>
         <div class="flow-step" style="border-color:var(--red)33">
           <span class="step-icon">♥️</span>
-          <div><div class="step-label" style="color:var(--red)">Heartbeat Daemon</div><div class="step-sub">Every 30min: check journal cadence, scan calendar for value-relevant events, detect work-life drift. Silent when nothing needs attention (HEARTBEAT_OK).</div></div>
+          <div><div class="step-label" style="color:var(--red)">Heartbeat Daemon</div><div class="step-sub">Every 30min: check journal cadence, scan calendar for value-relevant events, detect possible work-life conflicts. Silent when nothing needs attention (HEARTBEAT_OK).</div></div>
         </div>
         <div class="arrow-down">↓</div>
         <div class="flow-steps" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
@@ -398,7 +398,7 @@
         </div>
         <div class="flow-step">
           <span class="step-icon">📚</span>
-          <div><div class="step-label">Coach RAG</div><div class="step-sub">Evidence-based alignment generation</div></div>
+          <div><div class="step-label">Weekly Coach RAG</div><div class="step-sub">Evidence-based reflection and question generation</div></div>
         </div>
         <div class="flow-step">
           <span class="step-icon">🏪</span>
@@ -413,7 +413,7 @@
       <div class="zone-header">
         <span class="zone-title" style="color:var(--green)">✅ BACK TO PHONE</span>
       </div>
-      <div class="zone-desc">Nudge, digest, or coach message delivered as a plain chat message. User reflects and replies in-chat → fed back into the pipeline as a journal entry.</div>
+      <div class="zone-desc">Nudge, Weekly Digest, or Weekly Coach message delivered as a plain chat message. User reflects and replies in-chat → fed back into the workflow as a Journal Entry.</div>
     </div>
 
     <div class="callout">
@@ -455,12 +455,12 @@
         <span class="compute-zone">☁️ LLM API (External)</span>
         <span class="load-badge load-offload">OFFLOADED ENTIRELY</span>
       </div>
-      <div class="compute-detail">All heavy inference (VIF Critic scoring, Coach RAG generation, nudge phrasing) hits the external API. This is the most expensive compute — but it's someone else's GPU cluster.</div>
+      <div class="compute-detail">All heavy inference (VIF Critic scoring, Weekly Coach generation, nudge phrasing) hits the external API. This is the most expensive compute — but it's someone else's GPU cluster.</div>
     </div>
 
     <div class="compute-card">
       <div class="compute-header">
-        <span class="compute-zone">📐 VIF Critic Model</span>
+        <span class="compute-zone">📐 VIF Critic</span>
         <span class="load-badge load-light">LIGHT (IF LOCAL) / NONE (IF API)</span>
       </div>
       <div class="compute-detail">If hosted locally as a fine-tuned model: moderate GPU spike during scoring. If exposed as API endpoint: zero local compute. For capstone POC, API is the move.</div>

@@ -1,6 +1,6 @@
 # Purpose
 
-Create high-quality data to bootstrap (start from nothing) what Twinkl requires - data that enables value tagging (labeling text with Schwartz's value dimensions) and training a reward model (Critic).
+Create high-quality data to bootstrap (start from nothing) what Twinkl requires - data that enables value tagging (labeling text with Schwartz's value dimensions) and training a reward model (VIF Critic).
 
 Subsequently, an evaluation framework is required to detect bias and toxic content.
 
@@ -10,7 +10,7 @@ Journals should be:
 - Realistic (Genuine personal reflections)
 - Diverse in personas and scenarios
 - Contain ground-truth alignment signals
-- Longitudinal in nature to exhibit value drift, conflicts and ambiguity
+- Longitudinal in nature to exhibit value tensions, conflicts, and ambiguity
 
 # Implementation
 
@@ -30,7 +30,7 @@ Journals should be:
 ### `config/synthetic_data.yaml`
 Defines the parameter space for persona and journal generation:
 - **Personas**: age_ranges, cultures, professions, schwartz_values (1-2 randomly assigned)
-- **Journal entries**: tones, verbosity levels, reflection_mode (Unsettled/Grounded/Neutral)
+- **Journal Entries**: tones, verbosity levels, reflection_mode (Unsettled/Grounded/Neutral)
 
 ### `config/schwartz_values.yaml`
 Rich psychological elaborations for each of the 10 Schwartz values, based on academic literature. Each value includes:
@@ -43,13 +43,13 @@ Rich psychological elaborations for each of the 10 Schwartz values, based on aca
 - Cultural notes
 - Persona narrative guidance
 
-These elaborations are injected into prompts to help the LLM generate psychologically grounded personas and entries.
+These elaborations are injected into prompts to help the LLM generate psychologically grounded personas and Journal Entries.
 
 **Design decision**: We removed explicit "interaction patterns" for value pairs. The individual elaborations (especially `adjacent_compatible_values`, `opposing_tension_values`, and `internal_conflicts`) provide sufficient context for the LLM to infer how multiple values interact in a persona.
 
 ## Data Models
 
-**Persona** (generated once, used for multiple entries):
+**Persona** (generated once, used for multiple Journal Entries):
 - name, age, profession, culture
 - core_values (1-2 Schwartz values)
 - bio (2-4 sentences showing values through concrete life details, not labels)
@@ -59,21 +59,21 @@ These elaborations are injected into prompts to help the LLM generate psychologi
 - content (the journal text)
 
 **JournalEntryResult** (metadata tracked separately):
-- entry, tone, verbosity, reflection_mode (Unsettled/Grounded/Neutral)
+- Journal Entry, tone, verbosity, reflection_mode (Unsettled/Grounded/Neutral)
 
 **PersonaPipelineResult** (complete output from one persona's generation):
-- persona_id, persona, entries (list of JournalEntryResult)
+- persona_id, persona, Journal Entries (list of JournalEntryResult)
 - persona_prompt, entry_prompts (captured for debugging/display)
 - error (if generation failed)
 
-## Generation Pipeline
+## Generation Workflow
 
-The pipeline uses **async/await** for efficient I/O and supports **parallel persona generation**.
+The generation workflow uses **async/await** for efficient I/O and supports **parallel persona generation**.
 
-**Per-persona pipeline** (sequential within each persona):
+**Per-persona workflow** (sequential within each persona):
 1. **Persona creation**: Random sampling from config + LLM generation with value context injection
-2. **Date sequence**: Random intervals (0-7 days) between entries, with 15% same-day probability and random start date in 2025
-3. **Longitudinal entries**: Each entry receives previous entries for continuity
+2. **Date sequence**: Random intervals (0-7 days) between Journal Entries, with 15% same-day probability and random start date in 2025
+3. **Longitudinal Journal Entries**: Each Journal Entry receives previous Journal Entries for continuity
 4. **Validation**: Banned terms check to prevent Schwartz label leakage
 
 **Parallel execution** (across personas):
@@ -128,14 +128,14 @@ the new training data rather than a silent holdout reshuffle or an invalid batch
 
 ## Consensus Re-judging and Stability Diagnostics
 
-The repo also maintains a separate multi-pass Judge diagnostics path for
+The repo also maintains a separate multi-pass LLM-Judge diagnostics path for
 stability-first label analysis.
 
 ### Workflow shape
 
 The operational guide lives in
 [`docs/pipeline/consensus_rejudging_instructions.md`](consensus_rejudging_instructions.md).
-That workflow runs the `profile_only` Judge path five times over the same
+That workflow runs the `profile_only` LLM-Judge path five times over the same
 corpus, validates each shard result, merges pass outputs with provenance, and
 then summarizes repeated-call stability.
 
@@ -163,15 +163,15 @@ The workflow writes:
 
 ### Interpretation
 
-This path is a diagnostics surface for label stability, confidence tiering, and
-retrain gating. It is not the default training-label path for the frontier
-board. The active corrected-split frontier still uses the persisted label
-surface in `logs/judge_labels/judge_labels.parquet`, while
+This workflow produces diagnostic labels for stability analysis, confidence
+tiering, and retrain gating. It is not the default training-label workflow for
+the frontier board. The active corrected-split frontier still uses the labels
+in `logs/judge_labels/judge_labels.parquet`, while
 `consensus_labels.parquet` supports stability analysis and diagnostic retrains.
 
 ## Prompt Design
 
-Note: Synthetic journals read like typed text input, matching the text-only input modality of the production system.
+Note: Synthetic journals read like typed text input, matching the text-only input modality of the production app.
 
 ### Persona Generation Prompt
 - Receives: age, profession, culture, values, value_context (from schwartz_values.yaml)
@@ -179,7 +179,7 @@ Note: Synthetic journals read like typed text input, matching the text-only inpu
 - Banned terms: All Schwartz value names and derivative adjectives
 
 ### Journal Entry Prompt
-Determined before each entry:
+Determined before each Journal Entry:
 - Tone (Self-reflective, Brief and factual, Emotional/Venting, Stream of consciousness, Exhausted, Defensive)
 - Verbosity (Short: 25-80 words, Medium: 90-180 words, Long: 160-260 words)
 - Reflection mode (Unsettled, Grounded, Neutral) — presented as natural "What to write about" guidance, not as a labeled parameter
@@ -195,14 +195,14 @@ Style rules enforced:
 
 ## Design Philosophy: Emergent vs Prescriptive Content
 
-We deliberately avoid prescribing **events** or **purposes** for journal entries. Real journaling rarely starts with a declared intent like "I will now write a gratitude entry." People open their journal and write what's on their mind—the purpose emerges from the content, it's not a precondition.
+We deliberately avoid prescribing **events** or **purposes** for Journal Entries. Real journaling rarely starts with a declared intent like "I will now write a gratitude Journal Entry." People open their journal and write what's on their mind—the purpose emerges from the content, it's not a precondition.
 
 Prescriptive categories create problems:
-1. **Performative structure** - "Goal-setting" entries sound like exercises, not organic reflection
-2. **Category homogeneity** - All "gratitude" entries sound alike, all "venting" entries sound alike
-3. **Forcing retrospective categories prospectively** - A real entry might start as venting and become decision-making midway through
+1. **Performative structure** - "Goal-setting" Journal Entries sound like exercises, not organic reflection
+2. **Category homogeneity** - All "gratitude" Journal Entries sound alike, all "venting" Journal Entries sound alike
+3. **Forcing retrospective categories prospectively** - A real Journal Entry might start as venting and become decision-making midway through
 
-What actually drives journal entries are **states**, not declared purposes:
+What actually drives Journal Entries are **states**, not declared purposes:
 - Something happened they want to process
 - A feeling is weighing on them
 - A thought they don't want to forget
@@ -220,28 +220,28 @@ This leaner approach lets journal content emerge organically from persona contex
 
 ### Why Variable Entry Counts Matter
 
-If all synthetic personas have the same number of entries (e.g., all 5), the VIF may:
-- **Overfit to medium-depth histories** — assumes it always has 3+ prior entries
+If all synthetic personas have the same number of Journal Entries (e.g., all 5), the VIF may:
+- **Overfit to medium-depth histories** — assumes it always has 3+ prior Journal Entries
 - **Fail at cold start** — doesn't learn to handle uncertainty with sparse data
-- **Underutilize long histories** — never sees patterns that emerge over 10+ entries
+- **Underutilize long histories** — never sees patterns that emerge over 10+ Journal Entries
 
 ### Production Reality
 
 | User Type | Typical Entry Count | Prevalence |
 |-----------|---------------------|------------|
-| New users (cold start) | 1-3 entries | High |
-| Active users | 5-10 entries | Medium |
-| Power users | 15-30+ entries | Low |
-| Churned users | 2-5 entries | High |
+| New users (cold start) | 1-3 Journal Entries | High |
+| Active users | 5-10 Journal Entries | Medium |
+| Power users | 15-30+ Journal Entries | Low |
+| Churned users | 2-5 Journal Entries | High |
 
 ### Minimum Entry Requirements
 
 | VIF Capability | Minimum Entries | Rationale |
 |----------------|-----------------|-----------|
-| Sustained-conflict target | 2+ | Requires two adjacent entries that visibly show a behavior or choice against the same declared core value; `twinkl-v8pb` completed its full-runtime-text review, but one unresolved promotion case keeps production blocked |
-| Current Critic state | 1 | Live default uses `window_size: 1`; the rejected `twinkl-749` compact-history diagnostic emits a zero summary at cold start and is not the default |
-| Session cap (nudges) | 4+ | "2 nudges in last 3 entries" needs depth |
-| Weekly delivery analysis | 2+ active weeks | Separates entry-level evidence from weekly Coach cadence |
+| Drift target | 2+ | Requires two consecutive Conflicts for the same Core Value; `twinkl-v8pb` completed its full-runtime-text review, but one unresolved final-test case keeps production blocked |
+| Current VIF Critic state | 1 | Live default uses `window_size: 1`; the rejected `twinkl-749` compact-history diagnostic emits a zero summary at cold start and is not the default |
+| Session cap (nudges) | 4+ | "2 nudges in last 3 Journal Entries" needs depth |
+| Weekly delivery analysis | 2+ active weeks | Separates entry-level evidence from Weekly Coach cadence |
 
 ### Recommended Approach
 
@@ -251,15 +251,15 @@ Use `MIN_ENTRIES=2` and `MAX_ENTRIES=12` with the following configuration:
 |-----------|-------|-----------|
 | `MIN_ENTRIES` | 2 | Include cold-start scenarios; VIF must learn uncertainty with sparse data |
 | `MAX_ENTRIES` | 12 | Supports repeated-conflict, recovery, and weekly-delivery scenarios without forcing long scripted arcs |
-| `MIN_DAYS_BETWEEN_ENTRIES` | 0 | Allow same-day entries (realistic for venting, follow-up thoughts) |
-| `MAX_DAYS_BETWEEN_ENTRIES` | 7 | Ensures at least ~1 entry per week for meaningful aggregation |
-| `SAME_DAY_PROBABILITY` | 0.15 | 15% chance of same-day follow-up entry |
+| `MIN_DAYS_BETWEEN_ENTRIES` | 0 | Allow same-day Journal Entries (realistic for venting, follow-up thoughts) |
+| `MAX_DAYS_BETWEEN_ENTRIES` | 7 | Ensures at least ~1 Journal Entry per week for meaningful aggregation |
+| `SAME_DAY_PROBABILITY` | 0.15 | 15% chance of same-day follow-up Journal Entry |
 | `START_DATE` | Random in 2025 | Avoids seasonal bias; any date from 2025-01-01 to 2025-12-31 |
 
 This ensures:
-- Minimum of 2 entries for cold-start training
+- Minimum of 2 Journal Entries for cold-start training
 - Maximum of 12 covers repeated-conflict, recovery, and weekly-delivery scenarios
-- Same-day entries expose VIF to rapid Δt=0 sequences (realistic ~15% of sessions)
+- Same-day Journal Entries expose VIF to rapid Δt=0 sequences (realistic ~15% of sessions)
 - Random start dates prevent December bias in training data
 - Variable counts train the VIF to handle uncertainty gracefully with sparse data
 
@@ -269,13 +269,13 @@ This ensures:
 
 ## Motivation
 
-The current one-way pipeline (persona generates entries independently) has limitations:
+The current one-way generation workflow (persona generates Journal Entries independently) has limitations:
 
 1. **Unrealistic**: Real journaling apps have back-and-forth interaction
-2. **Signal-poor short entries**: Brief or vague entries lack sufficient signal for VIF alignment scoring
+2. **Signal-poor short Journal Entries**: Brief or vague Journal Entries lack sufficient signal for VIF alignment scoring
 3. **User friction**: People often need gentle prompts to articulate thoughts clearly
 
-The nudging system transforms one-way journaling into a two-way conversational exchange. When an entry is vague or potentially rich with unexplored tension, the system responds with a brief nudge that invites elaboration.
+The nudging workflow transforms one-way journaling into a two-way conversational exchange. When a Journal Entry is vague or potentially rich with unexplored tension, the nudge generator responds with a brief nudge that invites elaboration.
 
 **Design goal**: Nudges should feel like natural curiosity from a thoughtful companion, not interrogation or therapy.
 
@@ -285,8 +285,8 @@ Three categories of nudges, each with a distinct purpose:
 
 | Category | Purpose | Trigger Example | Nudge Example |
 |----------|---------|-----------------|---------------|
-| **Clarification** | Surface specifics from vague entries | "Feeling off today" | "What happened right before that?" |
-| **Elaboration** | Invite depth on surface-level entries | "Stayed late again" | "And how did that land?" |
+| **Clarification** | Surface specifics from vague Journal Entries | "Feeling off today" | "What happened right before that?" |
+| **Elaboration** | Invite depth on surface-level Journal Entries | "Stayed late again" | "And how did that land?" |
 | **Tension-surfacing** | Probe potential value conflicts | "It was fine. Well, sort of." | "What's the 'sort of' part?" |
 
 > **Note**: The original design included additional categories that were removed:
@@ -318,8 +318,8 @@ Would a close friend who genuinely cares (but isn't a therapist) say this?
 **Do:**
 - Use simple curiosity: "What happened next?"
 - Keep it brief: 2-12 words
-- Reference something specific from the entry
-- Match the user's register (casual entry = casual nudge)
+- Reference something specific from the Journal Entry
+- Match the user's register (casual Journal Entry = casual nudge)
 
 **Don't:**
 - Therapy speak: "I'm sensing...", "It sounds like..."
@@ -340,7 +340,7 @@ Rather than using a post-hoc blacklist to reject bad nudges, we bake voice guida
 | Starting with "I" | "I notice...", "I'm sensing...", "I'm curious..." | Performative listening — makes the app feel like it's playing therapist |
 | Reflective statements as questions | "It sounds like you're feeling..." | Creates uneven power dynamic (app as expert, user as patient) |
 | Coaching language | "Have you considered...", "What would it look like if..." | Implies the app *knows better* — shifts from curious companion to prescriptive coach |
-| Generic filler | "Tell me more about..." | Default LLM response that doesn't demonstrate the system actually "read" the entry |
+| Generic filler | "Tell me more about..." | Default LLM response that doesn't demonstrate the nudge generator actually "read" the Journal Entry |
 
 **Why prompt guidance beats blacklists**: A blacklist catches specific strings but misses variants ("I'm noticing..." vs "I notice..."). Prompt guidance teaches the model the *principle*, so it avoids the entire category of performative language.
 
@@ -381,7 +381,7 @@ Entry Received
 
 ### Classification Criteria (LLM-Based)
 
-The LLM evaluates entries against semantic criteria defined in `prompts/nudge_decision.yaml`:
+The LLM evaluates Journal Entries against semantic criteria defined in `prompts/nudge_decision.yaml`:
 
 | Category | Semantic Criteria |
 |----------|-------------------|
@@ -394,15 +394,15 @@ All classification uses **content-only signals** available at inference time. No
 
 ### Anti-Annoyance Rules
 
-1. **Frequency cap**: Maximum 1 nudge per entry (never chain nudges)
-2. **Session cap**: If 2 nudges in last 3 entries, skip (code-based policy applied before LLM classification)
+1. **Frequency cap**: Maximum 1 nudge per Journal Entry (never chain nudges)
+2. **Session cap**: If 2 nudges in last 3 Journal Entries, skip (code-based policy applied before LLM classification)
 
-> **Note**: The original design included "Mood sensitivity" (skip nudging for exhausted/emotional entries based on `tone`) and a 40% random gate. These were removed—`tone` is synthetic metadata unavailable in production, and LLM classification provides more nuanced selection than random sampling. See [Lesson Learned: Metadata Leakage](#lesson-learned-metadata-leakage-in-synthetic-data-generation).
+> **Note**: The original design included "Mood sensitivity" (skip nudging for exhausted/emotional Journal Entries based on `tone`) and a 40% random gate. These were removed—`tone` is synthetic metadata unavailable in production, and LLM classification provides more nuanced selection than random sampling. See [Lesson Learned: Metadata Leakage](#lesson-learned-metadata-leakage-in-synthetic-data-generation).
 
 ## Implementation: LLM-Based Approach
 
-**Code** enforces session cap (2+ nudges in last 3 entries → skip).
-**LLM** classifies entry into `no_nudge`, `clarification`, `elaboration`, or `tension_surfacing` using `prompts/nudge_decision.yaml`.
+**Code** enforces session cap (2+ nudges in last 3 Journal Entries → skip).
+**LLM** classifies Journal Entry into `no_nudge`, `clarification`, `elaboration`, or `tension_surfacing` using `prompts/nudge_decision.yaml`.
 **LLM** generates the *natural language* nudge (with voice guidance baked into `prompts/nudge_generation.yaml`).
 **Code** validates output length (voice quality is handled by prompt guidance).
 
@@ -463,7 +463,7 @@ Return ONLY valid JSON:
 
 ## Data Model Changes
 
-### New Models for Conversational Pipeline
+### New Models for Conversational Workflow
 
 ```python
 class NudgeResult(BaseModel):
@@ -511,12 +511,12 @@ class PersonaPipelineResult(BaseModel):
     error: str | None
 ```
 
-## Pipeline Flow Changes
+## Workflow Changes
 
 ### Before (One-Way)
 
 ```
-Persona → Entry_1 → Entry_2 → Entry_3 → [Judge scores each]
+Persona → Entry_1 → Entry_2 → Entry_3 → [LLM-Judge scores each]
 ```
 
 ### After (Conversational)
@@ -525,7 +525,7 @@ Persona → Entry_1 → Entry_2 → Entry_3 → [Judge scores each]
 Persona → Entry_1 → [Nudge Decision] → Nudge_1? → Response_1? → Entry_2 → ...
                           │                 │            │
                           ▼                 ▼            ▼
-                    [stored]          [stored]    [Judge scores session]
+                    [stored]          [stored]    [LLM-Judge scores session]
 ```
 
 ### Updated Generation Function
@@ -621,11 +621,11 @@ nudge:
 
 > **Design change**: The original `category_weights` and `base_probability` were removed. LLM-based classification now determines nudge category semantically, providing better signal detection than probabilistic selection.
 
-## Judge Scoring Updates
+## LLM-Judge Scoring Updates
 
 ### Combined Signal Approach
 
-The Judge scores the entire conversational session as a single unit, not the initial entry and response separately. This uses a **max-signal** approach: if the initial entry was vague but the response revealed misalignment, the combined score reflects the revealed misalignment.
+The LLM-Judge scores the entire conversational session as a single unit, not the initial Journal Entry and response separately. This uses a **max-signal** approach: if the initial Journal Entry was vague but the response revealed misalignment, the combined score reflects the revealed misalignment.
 
 ```python
 class JudgeLabelConversational(BaseModel):
@@ -644,7 +644,7 @@ class JudgeLabelConversational(BaseModel):
     # Where did the alignment signal primarily come from?
 ```
 
-### Judge Prompt Addition
+### LLM-Judge Prompt Addition
 
 ```
 Score this journaling session as a whole. The user's response to the nudge
@@ -661,7 +661,7 @@ Rate nudge_effectiveness as:
 
 ## VIF State Vector Updates
 
-For entries with nudge-responses, extend the state vector:
+For Journal Entries with nudge-responses, extend the state vector:
 
 ```python
 s_u_t = Concat[
@@ -673,8 +673,8 @@ s_u_t = Concat[
 ]
 ```
 
-This allows the Critic to learn:
-- Whether nudge-augmented entries have different alignment patterns
+This allows the VIF Critic to learn:
+- Whether nudge-augmented Journal Entries have different alignment patterns
 - Which nudge categories are most effective for extracting signal
 - How to weight initial vs response content
 
@@ -689,17 +689,17 @@ This allows the Critic to learn:
 
 ### Key VIF Training Benefits
 
-1. **Better calibration for short entries**: Even brief initial entries can be augmented with nudge-responses
+1. **Better calibration for short Journal Entries**: Even brief initial Journal Entries can be augmented with nudge-responses
 2. **Explicit tension detection training**: Tension-surfacing nudges create labeled examples of tensions being confirmed or denied
-3. **Trajectory continuity**: Continuity nudges create explicit links between entries for sequence learning
-4. **"When to ask" calibration**: High-uncertainty entries that become clear after nudge provide ground truth for active learning
+3. **Trajectory continuity**: Continuity nudges create explicit links between Journal Entries for sequence learning
+4. **"When to ask" calibration**: High-uncertainty Journal Entries that become clear after nudge provide ground truth for active learning
 
 ## Implementation Status
 
 **Current**: Script-first development in `src/synthetic/generation.py` and `src/nudge/`
 
 **Phase 1 (Foundation)**: ✅ Complete
-- [x] Set up output logging system (directory structure, utility functions)
+- [x] Set up output logging (directory structure, utility functions)
 - [x] Add `logs/synthetic_data/` to `.gitignore`
 - [x] Add nudge config to `config/synthetic_data.yaml`
 - [x] Implement nudge decision logic (LLM-based classification)
@@ -711,13 +711,13 @@ This allows the Critic to learn:
 - [x] Update `generate_persona_pipeline()` to use conversational flow
 
 **Phase 3 (Validation)**: 🔄 In Progress
-- [ ] Generate 10-20 personas with conversational entries
+- [ ] Generate 10-20 personas with conversational Journal Entries
 - [ ] Review nudge quality, response variety, signal improvement
 - [ ] Iterate on prompts and parameters
 
 **Phase 4 (Integration)**:
-- [ ] Update Judge prompt for multi-turn scoring
-- [ ] Test end-to-end pipeline
+- [ ] Update LLM-Judge prompt for multi-turn scoring
+- [ ] Test end-to-end workflow
 - [ ] Tune probabilities and voice guidance prompts
 
 **Phase 5 (Productionize)**: ✅ Complete
@@ -727,19 +727,19 @@ This allows the Critic to learn:
 
 ---
 
-## Judge Labeling Pipeline (`/judge` Skill)
+## LLM-Judge Labeling Workflow (`/judge` Skill)
 
-Once synthetic data is generated, the `/judge` skill orchestrates scoring journal entries against Schwartz value dimensions.
+Once synthetic data is generated, the `/judge` skill orchestrates scoring Journal Entries against Schwartz value dimensions.
 
-### Pipeline Overview
+### Workflow Overview
 
 ```
-Synthetic Data → Wrangling → Judge Labeling → Consolidation → Training Data
+Synthetic Data → Wrangling → LLM-Judge Labeling → Consolidation → Training Data
      ↓               ↓              ↓               ↓
 logs/synthetic_data/ → logs/wrangled/ → logs/judge_labels/*.json → judge_labels.parquet
 ```
 
-### Running the Pipeline
+### Running the Workflow
 
 Execute `/judge` in Claude Code. The skill:
 
@@ -752,7 +752,7 @@ Execute `/judge` in Claude Code. The skill:
 ### Subagent Context
 
 Each labeling subagent receives:
-- **Persona file**: `logs/wrangled/persona_{id}.md` — the entries to score
+- **Persona file**: `logs/wrangled/persona_{id}.md` — the Journal Entries to score
 - **Annotation guide**: `.claude/skills/judge/annotation_guide.md` — scorability heuristics
 - **Value rubric**: `.claude/skills/judge/rubric.md` — Schwartz value definitions
 
@@ -780,13 +780,13 @@ Each subagent writes JSON to `logs/judge_labels/persona_{id}_labels.json`:
 
 ### Idempotency
 
-The pipeline is idempotent — re-running `/judge` only processes pending work. The registry (`logs/registry/personas.parquet`) tracks which personas have been wrangled and labeled.
+The LLM-Judge labeling workflow is idempotent — re-running `/judge` only processes pending work. The registry (`logs/registry/personas.parquet`) tracks which personas have been wrangled and labeled.
 
 ### Key Files
 
 | File | Purpose |
 |------|---------|
-| `.claude/commands/judge.md` | Skill entry point |
+| `.claude/commands/judge.md` | Skill Journal Entry point |
 | `.claude/skills/judge/orchestration.md` | Detailed workflow with subagent prompt template |
 | `.claude/skills/judge/annotation_guide.md` | Scorability checklist and calibration examples |
 | `.claude/skills/judge/rubric.md` | 10 Schwartz values with aligned/misaligned behaviors |
@@ -799,7 +799,7 @@ The pipeline is idempotent — re-running `/judge` only processes pending work. 
 
 ### The Problem
 
-During initial implementation, the nudge decision logic used **synthetic generation metadata** that would not be available in a production system. This is a form of "overfitting" to the synthetic data generation process.
+During initial implementation, the nudge decision logic used **synthetic generation metadata** that would not be available in a production app. This is a form of "overfitting" to the synthetic data generation process.
 
 ### What Was Initially Implemented (Incorrect)
 
@@ -820,11 +820,11 @@ def decide_nudge(
     # ... rest of logic
 ```
 
-The `tone` parameter was randomly assigned *before* entry generation as an instruction to the LLM ("write in an exhausted tone"). The nudge decision then checked this label to decide whether to skip nudging.
+The `tone` parameter was randomly assigned *before* Journal Entry generation as an instruction to the LLM ("write in an exhausted tone"). The nudge decision then checked this label to decide whether to skip nudging.
 
 **Why this is wrong**: In production:
-1. A user writes a journal entry
-2. We have the entry **content** only
+1. A user writes a Journal Entry
+2. We have the Journal Entry **content** only
 3. We do NOT have a pre-labeled "tone" - we'd need to **detect** it from content
 4. Using the synthetic label is tantamount to cheating
 
@@ -833,14 +833,14 @@ The `tone` parameter was randomly assigned *before* entry generation as an instr
 | Data Type | Example | Available in Production? | Use in Nudge Decision? |
 |-----------|---------|-------------------------|------------------------|
 | Entry content | "Had a rough day..." | ✅ Yes | ✅ OK |
-| Previous entries | History of entries | ✅ Yes | ✅ OK |
-| Nudge history | Which entries got nudges | ✅ Yes | ✅ OK |
+| Previous Journal Entries | History of Journal Entries | ✅ Yes | ✅ OK |
+| Nudge history | Which Journal Entries got nudges | ✅ Yes | ✅ OK |
 | **Tone** (generation instruction) | "Exhausted" | ❌ No | ❌ Wrong |
 | **Verbosity** (generation instruction) | "Short" | ❌ No | ❌ Wrong |
 
 ### What Was Corrected
 
-1. **Removed tone-based guard**: The 80% skip for exhausted/emotional entries was removed entirely. This guard used data we wouldn't have in production.
+1. **Removed tone-based guard**: The 80% skip for exhausted/emotional Journal Entries was removed entirely. This guard used data we wouldn't have in production.
 
 2. **Removed continuity nudge category**: The continuity detection used fragile word-overlap heuristics that added complexity without clear benefit for POC scope.
 
@@ -882,11 +882,11 @@ When building synthetic data pipelines, be vigilant about the distinction betwee
 - **Generation instructions** (what we tell the LLM to produce)
 - **Observable outputs** (what we'd actually have in production)
 
-Never use generation instructions as inputs to downstream decision logic - this creates a form of data leakage that makes the synthetic pipeline unrealistic.
+Never use generation instructions as inputs to downstream decision logic - this creates a form of data leakage that makes the synthetic workflow unrealistic.
 
 ---
 
-## Output Logging System
+## Output Logging
 
 ### Purpose
 
@@ -918,7 +918,7 @@ Enable iterative development by logging all synthetic data output for inspection
 |--------|----------|-----------|
 | **Format** | Markdown | Human-readable, easy to review in IDE/GitHub |
 | **Contents** | Output + prompts + config | Full reproducibility for debugging |
-| **Organization** | Flat persona files + registry | Matches parser/registry pipeline expectations |
+| **Organization** | Flat persona files + registry | Matches parser and registry expectations |
 | **Summary** | No separate file | Review persona files directly |
 
 ### Log Directory Structure
@@ -988,7 +988,7 @@ Each persona gets its own markdown file with complete output:
 The generation run records metadata through:
 - per-persona markdown profile fields (`Persona ID`, generated timestamp, profile traits),
 - registry state in `logs/registry/personas.parquet`,
-- orchestrator summary output (entry counts, nudge/response counts, registry status).
+- orchestrator summary output (Journal Entry counts, nudge/response counts, registry status).
 
 ### Implementation Notes
 
@@ -1035,8 +1035,8 @@ for result in results:
 
 By systematically varying persona profiles and prompts, we obtain a synthetic dataset that covers a broad spectrum of human experiences, crucial for training alignment models that generalize well.
 
-**Neutral entries** are equally important. In real life, not every journal entry shows clear movement toward or away from one's sense of self. Sometimes a user writes a neutral update or routine reflection. We include entries where the reflection mode is "Neutral"—these provide baseline contrast against unsettled/grounded entries.
+**Neutral Journal Entries** are equally important. In real life, not every Journal Entry shows clear movement toward or away from one's sense of self. Sometimes a user writes a neutral update or routine reflection. We include Journal Entries where the reflection mode is "Neutral"—these provide baseline contrast against unsettled/grounded Journal Entries.
 
 # Stretch Goals
 
-- **Style verifier pass:** After generation, run a second pass that checks if the entry reads like a real journal (not an essay, not performative), and rewrites it into a more natural journaling voice while preserving the underlying event + emotions.
+- **Style verifier pass:** After generation, run a second pass that checks if the Journal Entry reads like a real journal (not an essay, not performative), and rewrites it into a more natural journaling voice while preserving the underlying event + emotions.

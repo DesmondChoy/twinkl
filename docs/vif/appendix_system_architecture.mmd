@@ -25,19 +25,19 @@ flowchart LR
         subgraph prep_lane["Offline Data Preparation"]
             direction LR
             generator["Synthetic persona generation"]
-            wrangled["Processed journal corpus<br/>text + dates + core values"]
-            judge["Judge labeling<br/>{-1, 0, +1} x 10"]
+            wrangled["Processed Journal Entry corpus<br/>text + dates + Core Values"]
+            judge["LLM-Judge labeling<br/>{-1, 0, +1} x 10"]
             labels["Persisted single-pass label table"]
-            consensus["Five-pass Judge consensus<br/>diagnostic provenance"]
+            consensus["Five-pass LLM-Judge consensus<br/>diagnostic provenance"]
             generator --> wrangled --> judge --> labels
             judge --> consensus
         end
 
         merge["Join + integrity checks"]
         encoder_train["Configured frozen encoder"]
-        state_train["State encoder<br/>entry window + time gaps + profile weights"]
+        state_train["State encoder<br/>Journal Entry window + time gaps + profile weights"]
         samples["Training examples"]
-        critic_train["Critic training<br/>MLP / ordinal / BNN"]
+        critic_train["VIF Critic training<br/>MLP / ordinal / BNN"]
         checkpoint["Checkpoint + runtime metadata"]
 
         wrangled --> merge
@@ -45,26 +45,26 @@ flowchart LR
         merge --> encoder_train --> state_train --> samples --> critic_train --> checkpoint
     end
 
-    subgraph product_lane["Runtime + Coach"]
+    subgraph product_lane["Runtime + Weekly Coach"]
         direction TB
         subgraph run_lane["Runtime Scoring"]
             direction LR
             runtime_input["Processed journal timeline"]
             state_runtime["Recreate encoder + state encoder"]
-            critic["Per-entry Critic inference"]
-            timeline["Per-entry VIF timeline"]
+            critic["Per-Journal-Entry<br/>VIF Critic inference"]
+            timeline["Per-Journal-Entry VIF timeline"]
             weekly["Weekly aggregation"]
             drift["Weekly prototype routing<br/>crash / rut / evolution<br/>high uncertainty"]
-            drift_v1["Student-visible v1 target<br/>visible conflict + rolling soft P(-1)"]
+            drift_v1["Student-visible Drift v1 target<br/>Conflict + rolling soft P(-1)<br/>for the same Core Value"]
             runtime_input --> state_runtime --> critic --> timeline --> weekly --> drift
         end
 
-        subgraph coach_lane["Coach Generation"]
+        subgraph coach_lane["Weekly Coach Generation"]
             direction LR
-            digest["Weekly digest builder"]
-            prompt["Full-context Coach prompt"]
-            narrative["Optional Coach narrative"]
-            exports["Reportable artifacts"]
+            digest["Weekly Digest builder"]
+            prompt["Full-context Weekly Coach prompt"]
+            narrative["Optional Weekly Coach reflection"]
+            exports["Reportable output files"]
             digest --> prompt
             prompt -.-> narrative
             prompt --> exports
@@ -82,7 +82,7 @@ flowchart LR
     evolution["Automatic experimental<br/>evolution classifier"]
     weekly --> evolution --> drift
 
-    state_note["Current default state:<br/>current entry embedding + 10-dim value profile"]
+    state_note["Current default state:<br/>current Journal Entry embedding + 10-dim value profile"]
     state_note -.-> state_train
     state_note -.-> state_runtime
 

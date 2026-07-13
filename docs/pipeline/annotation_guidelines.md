@@ -4,29 +4,29 @@
 
 ## ⚠️ Critical: Context-Aware Labeling
 
-> **Read this first if you're validating Judge labels or doing value alignment scoring.**
+> **Read this first if you're validating LLM-Judge labels or doing value alignment scoring.**
 
-When labeling which Schwartz values are expressed in an entry, **you must consider previous entries as context** — just like the LLM Judge does.
+When labeling which Schwartz values are expressed in a Journal Entry, **you must consider previous Journal Entries as context** — just like the LLM-Judge does.
 
 ### Why This Matters
 
-An entry like:
+A Journal Entry like:
 > "Took the smaller investment. Signed papers yesterday. Celebrated with Layla at that new Persian restaurant near the Marina. Felt right."
 
 ...in isolation shows **Hedonism** (celebrating at a nice restaurant) but no clear Self-Direction signal.
 
-However, if a previous entry discussed choosing between a larger investor who wanted control vs. a smaller hands-off investor, then "Took the smaller investment" is a **Self-Direction +1** — following through on prioritizing autonomy.
+However, if a previous Journal Entry discussed choosing between a larger investor who wanted control vs. a smaller hands-off investor, then "Took the smaller investment" is a **Self-Direction +1** — following through on prioritizing autonomy.
 
 ### Labeling Protocol
 
-1. **Read entries chronologically** within each persona
-2. **Accumulate context** — each entry builds on what came before
-3. **Score based on full context**, not the entry in isolation
-4. **Match Judge methodology** — the LLM Judge receives previous entries as context; human annotators should too
+1. **Read Journal Entries chronologically** within each persona
+2. **Accumulate context** — each Journal Entry builds on what came before
+3. **Score based on full context**, not the Journal Entry in isolation
+4. **Match LLM-Judge methodology** — the LLM-Judge receives previous Journal Entries as context; human annotators should too
 
-This ensures human-Judge comparisons are methodologically valid. Systematic disagreements should reflect genuine interpretation differences, not information asymmetry.
+This ensures human-LLM-Judge comparisons are methodologically valid. Systematic disagreements should reflect genuine interpretation differences, not information asymmetry.
 
-See also: [`judge_implementation_spec.md`](judge_implementation_spec.md) for how the LLM Judge works.
+See also: [`judge_implementation_spec.md`](judge_implementation_spec.md) for how the LLM-Judge works.
 
 ---
 
@@ -38,7 +38,7 @@ Entries like "rough day" teach the model nothing. Entries like "stayed late agai
 
 **This study tests whether nudging users extracts more usable signal.**
 
-When someone writes a vague entry, the app can ask a brief follow-up question (a "nudge") like "What made it rough?" If the user responds with specifics, we've transformed an unusable entry into useful training data.
+When someone writes a vague Journal Entry, the app can ask a brief follow-up question (a "nudge") like "What made it rough?" If the user responds with specifics, we've transformed an unusable Journal Entry into useful training data.
 
 Your labels will determine:
 - **If nudges help** → We invest in the nudging feature for production
@@ -49,8 +49,8 @@ Your labels will determine:
 ## What You're Labeling
 
 Each sample is either:
-- **A standalone journal entry** (no nudge)
-- **A journal entry + nudge + response** (nudged session)
+- **A standalone Journal Entry** (no nudge)
+- **A Journal Entry + nudge + response** (nudged session)
 
 Your job: Label each sample's **scorability** — whether it contains enough signal to infer value alignment.
 
@@ -58,14 +58,14 @@ Your job: Label each sample's **scorability** — whether it contains enough sig
 
 ## The Scorability Checklist
 
-An entry is **Scorable** if it contains **AT LEAST ONE** of:
+A Journal Entry is **Scorable** if it contains **AT LEAST ONE** of:
 
 - [ ] A **concrete action** the person took (or deliberately chose not to take)
 - [ ] An **explicit trade-off** or priority decision (chose X over Y)
 - [ ] An **emotional reaction to a specific event** (not abstract mood)
 - [ ] **Reflection that reveals what matters** to them
 
-An entry is **Not Scorable** if **ALL** of these apply:
+A Journal Entry is **Not Scorable** if **ALL** of these apply:
 
 - [ ] No specific event or action mentioned
 - [ ] Pure abstract emotion ("feeling off", "rough day", "meh")
@@ -85,13 +85,13 @@ Use a three-point scale:
 | **Borderline** | Some signal, but you're not confident — partial information |
 | **Not Scorable** | No meaningful signal — you'd be guessing |
 
-For analysis: Borderline entries can be examined separately or merged with Scorable depending on results.
+For analysis: Borderline Journal Entries can be examined separately or merged with Scorable depending on results.
 
 ---
 
 ## Examples: Clearly Scorable
 
-These entries have obvious value signals:
+These Journal Entries have obvious value signals:
 
 | Entry | Why Scorable |
 |-------|--------------|
@@ -105,7 +105,7 @@ These entries have obvious value signals:
 
 ## Examples: Clearly Not Scorable
 
-These entries lack the signal needed for alignment scoring:
+These Journal Entries lack the signal needed for alignment scoring:
 
 | Entry | Why Not Scorable |
 |-------|------------------|
@@ -126,7 +126,7 @@ These are judgment calls. The guidelines show how we lean and why:
 |-------|------|-----------|
 | "Saturday practice got rained out so we just sat in the car for twenty minutes, Jake and me, watching the field turn to mud. He asked if I ever wanted to do something different with my life and I didn't know what to say." | Scorable | There's a moment (son's question), a relationship, and an unresolved internal tension — enough to infer something about what's at stake |
 | "Nothing even happened today and I still feel drained. Woke up, did standup, fixed a bug, sat through a planning meeting. Ate lunch at my desk. The afternoon was just more of the same." | Borderline | The exhaustion might hint at misalignment, but there's no concrete decision or action that reveals priorities — it's describing a state, not a choice |
-| "Called home during the afternoon slump. Amma talked about the jasmine plant flowering. I could hear Appa asking if I'm eating properly. The usual." | Not Scorable | It's a pleasant routine moment with no tension, decision, or trade-off. Neutral entries are valid but not scorable |
+| "Called home during the afternoon slump. Amma talked about the jasmine plant flowering. I could hear Appa asking if I'm eating properly. The usual." | Not Scorable | It's a pleasant routine moment with no tension, decision, or trade-off. Neutral Journal Entries are valid but not scorable |
 | "I don't know why I called if I wasn't going to actually talk." | Borderline | There's self-awareness of a gap between intention and action, but without more context about what they held back, it's thin |
 | "Told him everything was going smoothly with the project. Which is true technically." | Scorable | The qualifier "technically" signals something is being held back — there's an implicit gap between surface and reality |
 
@@ -136,7 +136,7 @@ These are judgment calls. The guidelines show how we lean and why:
 
 When a session includes a nudge and response, **read the entire exchange** before labeling.
 
-**Key insight**: The response can transform a Not Scorable entry into Scorable.
+**Key insight**: The response can transform a Not Scorable Journal Entry into Scorable.
 
 ### Transformation Patterns
 
@@ -155,14 +155,14 @@ When a session includes a nudge and response, **read the entire exchange** befor
 
 **Response**: "I don't know, it's not a big deal really. The meeting was important."
 
-**Label**: **Scorable** — Even though the response deflects, the *original entry* already contained enough signal (concrete action, explicit trade-off, awareness of impact on grandmother). The deflecting response is informative in its own way — it shows minimization of the conflict.
+**Label**: **Scorable** — Even though the response deflects, the *original Journal Entry* already contained enough signal (concrete action, explicit trade-off, awareness of impact on grandmother). The deflecting response is informative in its own way — it shows minimization of the conflict.
 
 ### Decision Rule for Nudged Sessions
 
-1. Could the **entry alone** be scored? If yes → Scorable regardless of response
+1. Could the **Journal Entry alone** be scored? If yes → Scorable regardless of response
 2. Does the **response reveal** new concrete information? If yes → Scorable
-3. Does the response **deflect without adding signal**? If yes → label based on entry alone
-4. Are **both entry and response** vague? → Not Scorable
+3. Does the response **deflect without adding signal**? If yes → label based on Journal Entry alone
+4. Are **both Journal Entry and response** vague? → Not Scorable
 
 ---
 
@@ -195,7 +195,7 @@ When a session includes a nudge and response, **read the entire exchange** befor
 | 5 | **Scorable** | Specific event, response to feedback (nodded/smiled), hints at internal conflict about speaking up |
 | 6 | **Scorable** | Entry alone is vague, but response reveals concrete action (snapped) and emotional aftermath |
 | 7 | **Not Scorable** | Neutral routine description — pleasant but no values at stake, no decisions or tensions |
-| 8 | **Not Scorable** | Both entry and response are vague; deflection adds no signal |
+| 8 | **Not Scorable** | Both Journal Entry and response are vague; deflection adds no signal |
 | 9 | **Scorable** | Clear internal conflict, specific reasoning for inaction (didn't want to hold things up), self-awareness |
 | 10 | **Borderline/Scorable** | Action taken (shuffling schedule for someone), implies sacrifice — leans scorable but less emotional signal than others |
 
@@ -224,7 +224,7 @@ You don't need to label *which* values are present — just whether *any* value 
 
 ## Process
 
-1. Read the entry (and nudge + response if present)
+1. Read the Journal Entry (and nudge + response if present)
 2. Run through the Scorability Checklist
 3. Ask: "Can I identify a concrete action or decision that reveals priorities?"
 4. Apply label: Scorable / Borderline / Not Scorable
@@ -277,9 +277,9 @@ After labeling all samples, compare:
 | % Not Scorable | ? | ? |
 
 **Interpretation**:
-- If nudged entries are **meaningfully more scorable** → nudges improve signal quality → invest in the feature
+- If nudged Journal Entries are **meaningfully more scorable** → nudges improve signal quality → invest in the feature
 - If **similar rates** → nudges add complexity without benefit → reconsider the feature
-- If nudged entries have **more Borderline** → nudges extract partial signal → may need better nudge design
+- If nudged Journal Entries have **more Borderline** → nudges extract partial signal → may need better nudge design
 
 ---
 

@@ -1,39 +1,40 @@
 # VIF – Reward Modeling & Training Strategy
 
 This document describes the current training story for the Value Identity
-Function (VIF): how Judge labels become student targets, what the live student
-families are, and how frontier evaluation is managed.
+Function (VIF): how LLM-Judge labels become VIF Critic targets, which VIF Critic
+families are live, and how frontier evaluation is managed.
 
 The forward capstone policy is defined in
 [VIF Capstone Scope and Evaluation Decision](05_capstone_scope_decision.md):
-the Critic is primarily a conflict screener, entry-level `recall_-1` is the
-primary development metric, and QWK is an ordinal-health diagnostic.
+the VIF Critic is primarily a Conflict screener, per-Journal-Entry
+`recall_-1` is the primary development metric, and QWK is an ordinal-health
+diagnostic.
 
 ---
 
-## 1. Teacher-Student Training Stack
+## 1. LLM-Judge and VIF Critic Training Stack
 
 ### 1.1 Why Reward Modeling Exists
 
-For real users, Twinkl observes journal text and profile context, not an oracle
-alignment score. The project therefore uses an explicit teacher-student setup:
+For real users, Twinkl observes Journal Entry text and profile context, not a
+ground-truth alignment score. The project therefore uses this training setup:
 
-1. **Generator** creates synthetic personas and journal trajectories.
-2. **Judge** labels each entry against the Schwartz dimensions.
-3. **Critic** distills those labels into a fast supervised student.
+1. **Generator** creates synthetic personas and Journal Entry sequences.
+2. **LLM-Judge** labels each Journal Entry against the Schwartz dimensions.
+3. **VIF Critic** learns those labels as a fast supervised model.
 
 This lets the live scoring path stay fast and uncertainty-aware without calling
 an LLM on every runtime inference.
 
-### 1.2 Judge Output Contract
+### 1.2 LLM-Judge Output Contract
 
-The Judge emits a per-dimension categorical label:
+The LLM-Judge emits a categorical label for each value:
 
-- `-1`: misaligned
+- `-1`: Conflict
 - `0`: neutral / not enough evidence
 - `+1`: aligned
 
-These labels are the current student target surface.
+These labels are the current VIF Critic targets.
 
 ---
 
@@ -47,9 +48,9 @@ $$
 \vec{V}_\theta(s_{u,t}) \approx \hat{\vec{a}}_{u,t}
 $$
 
-That means the student predicts the Judge's current-entry alignment labels, and
-longer-horizon drift logic is derived downstream from aggregated outputs rather
-than learned as a discounted-return target.
+That means the VIF Critic predicts the LLM-Judge's labels for the current
+Journal Entry, and longer-horizon Drift logic is derived downstream from
+aggregated outputs rather than learned as a discounted-return target.
 
 ### 2.2 Exploratory Alternatives
 
@@ -63,23 +64,23 @@ These remain future research directions, not the current implementation.
 
 ### 2.3 Scalar Aggregation
 
-When a single summary score is needed, the vector output can be aggregated with
-profile weights:
+When a single summary score is needed, the VIF Critic output can be aggregated
+with profile weights:
 
 $$
 V^{\text{scalar}}_{u,t} = w_u^\top \vec{V}_\theta(s_{u,t})
 $$
 
-This scalar is for summaries and downstream trigger logic. The student itself is
-trained to preserve the vector of trade-offs.
+This scalar is for summaries and the downstream Drift Detector. The VIF Critic
+is trained to preserve the vector of trade-offs.
 
 ---
 
-## 3. Student Model Families
+## 3. VIF Critic Families
 
 ### 3.1 Shared Input Setup
 
-All student variants consume the same state vector described in
+All VIF Critic variants consume the same state vector described in
 [System Architecture, State, and Runtime Flow](02_system_architecture.md):
 
 - frozen sentence embeddings
@@ -90,9 +91,9 @@ All student variants consume the same state vector described in
 The encoder is frozen in the current POC for simplicity, reproducibility, and
 data efficiency.
 
-### 3.2 Active Student Families
+### 3.2 Active VIF Critic Families
 
-The mainline student uses a shared MLP backbone with multiple comparison
+The mainline VIF Critic uses a shared MLP backbone with multiple comparison
 families:
 
 - **Ordinal heads**: CORAL, CORN, EMD, CDW-CE, SoftOrdinal
@@ -102,7 +103,7 @@ families:
 
 The experiment board treats the
 BalancedSoftmax `run_019`-`run_021` family as the default frontier reference.
-The two-stage, consensus-label, recall-aware candidate-retention, soft-label,
+The two-stage, consensus-label, recall-aware checkpoint-retention, soft-label,
 and compact-history branches remain diagnostic challengers rather than the
 mainline default. Compact-history `run_069` stayed under its 5,000-weight
 increment but regressed on QWK, minority recall, Security, hedging, and
@@ -122,16 +123,16 @@ passes. The BNN path provides a separate Bayesian baseline.
 
 Training rows are built by joining:
 
-- wrangled journal entries from `logs/wrangled`
-- consolidated Judge labels from `logs/judge_labels/judge_labels.parquet`
+- wrangled Journal Entries from `logs/wrangled`
+- consolidated LLM-Judge labels from `logs/judge_labels/judge_labels.parquet`
 
-Each labeled entry becomes one `(state_vector, target_vector)` pair.
+Each labeled Journal Entry becomes one `(state_vector, target_vector)` pair.
 
 ### 4.2 Split Policy
 
 The current evaluation regime is persona-level and holdout-aware:
 
-- train/val/test splits are by persona, not by entry
+- train/val/test splits are by persona, not by Journal Entry
 - validation/test are sign-stratified at the persona level
 - optional fixed holdout manifests are used for augmentation and audit rounds
 
@@ -150,8 +151,8 @@ policy, the metric roles are:
 - raw probability/logit exports when needed
 
 No fixed precision floor is active yet. Recall-first development can identify
-candidates, but episode recall plus an adopted false-alert tolerance is required
-before deployment.
+promising VIF Critic checkpoints, but Drift recall plus an adopted false Drift
+alert tolerance is required before deployment.
 
 Implementation caveat: `src/vif/eval.py` still selects mainline checkpoints
 QWK-first. Historical runs and the current board therefore reflect their
@@ -160,16 +161,16 @@ future training run is decision evidence.
 
 ### 4.4 Current Caveat: Reachability Audit
 
-The training pipeline is operational, but the completed `twinkl-747`
+The training workflow is operational, but the completed `twinkl-747`
 reachability audit changed how the historical board should be interpreted. The
 full-corpus `twinkl-a30f` review has now produced a separate, training-ready
 Security target under the exact active `window_size: 1` state contract.
 
 The historical audit established the target-contract risk, but its three prompt
-arms did not exactly match the active `window_size: 1` state. The 14-case
-Security artifact formerly derived from its legacy `student_visible` arm has
-been retired. It is not a retraining source, evaluation lens, or repaired-target
-result. The replacement artifact was written only after a receipt-bound
+setups did not exactly match the active `window_size: 1` state. The 14-case
+Security labels formerly derived from its legacy `student_visible` setup have
+been retired. They are not a retraining source, evaluation lens, or
+repaired-target result. The replacement labels were written only after a receipt-bound
 `active_critic_state_v1` review; the selected frozen-test subset remains
 diagnostic-only. The completed full-corpus review changed 678 of
 1,651 Security labels. Paired BalancedSoftmax runs `run_057`-`run_062` improved
@@ -185,10 +186,10 @@ consensus-relabeled holdout, but it changed labels on the frozen test split and
 did not replace the persisted-label frontier cleanly. The active corrected-split
 default remains `run_019`-`run_021`.
 
-The recall-aware reruns (`run_051`-`run_056`) persist alternate candidate
+The recall-aware reruns (`run_051`-`run_056`) persist alternate
 checkpoints and their validation/test outputs. The wider `0.02` QWK window helps
 the consensus diagnostic regime but does not improve the persisted-label
-frontier. Candidate retention is therefore reproducibility and analysis
+frontier. Checkpoint retention is therefore reproducibility and analysis
 hygiene, not the default checkpoint selector.
 
 The hybrid soft vote-distribution experiment (`run_063`-`run_068`) preserves
@@ -202,42 +203,43 @@ worse NLL and Brier scores. Keep the soft path config-gated and diagnostic; do
 not make it the default target regime. See the
 [experiment review](../../logs/experiments/reports/experiment_review_2026-07-11_twinkl_j0ck_soft_vote_labels.md).
 
-### 4.5 LLM Critic Context Baseline
+### 4.5 LLM Alignment Context Baseline
 
 `scripts/experiments/llm_critic_baseline.py` measures the frozen-holdout ceiling
 under three context contracts:
 
-- `student_visible`: current journal session plus the normalized ten-dimensional
-  value profile
-- `human_context`: student-visible input plus earlier entries from the same
-  persona
+- `student_visible`: current Journal Entry, including its displayed nudge and
+  response when present, plus the normalized ten-dimensional value profile
+- `human_context`: student-visible input plus earlier Journal Entries from the
+  same persona
 - `full_judge_context`: human context plus persona biography and demographics;
   upper-bound diagnostic only
 
-Future entries, target labels, rationales, and generation metadata are excluded
-from every arm.
+Future Journal Entries, target labels, rationales, and generation metadata are
+excluded from every experiment setup.
 
 This script's `student_visible` name refers to its own session-plus-profile
 contract. It must not be confused with the differently scoped legacy
-`twinkl-747` condition of the same name.
+`twinkl-747` experiment setup of the same name.
 
 On the 221-row test split:
 
-| Critic | QWK | `recall_-1` | Minority recall | Hedging |
+| Scoring setup | QWK | `recall_-1` | Minority recall | Hedging |
 |---|---:|---:|---:|---:|
 | `gpt-5.4-mini`, `student_visible` | 0.434 | 0.188 | 0.428 | 0.789 |
 | `gpt-5.4-mini`, `human_context` | 0.450 | 0.302 | 0.534 | 0.707 |
 | `run_020` BalancedSoftmax MLP | 0.378 | 0.342 | 0.449 | 0.621 |
 
-History improves the LLM's misalignment recall and broad minority-class
+History improves the LLM's Conflict recall and broad minority-class
 performance. The MLP still retains higher `recall_-1`, lower hedging, local
-execution, and a fixed cost profile. The retired consensus-derived drift
+execution, and a fixed cost profile. The retired consensus-derived Drift
 benchmark exposed a target-validity mismatch; it does not select among these
-architectures and must not be rerun or used for a promotion decision.
+architectures and must not be rerun or used for deployment approval.
 [`twinkl-v8pb`](../evals/drift_v1_student_visible_target.md) completed a
-student-visible full-runtime-text review before an LLM, MLP, or cascade
-decision. Its weak development recall and unresolved locked promotion case mean
-no scorer can be promoted. The earlier AI audit is diagnostic evidence, not
+student-visible full-runtime-text review before a direct LLM, VIF Critic, or
+cascade decision. Its weak development-set Drift recall and unresolved
+final-test-set case mean no evaluated Journal Entry predictor or Drift Detector
+has deployment approval. The earlier AI audit is diagnostic evidence, not
 human ground truth.
 
 ---
@@ -250,18 +252,18 @@ The VIF training stack lives in `src/vif/`.
 |--------|-------------|
 | `src/vif/encoders.py` | Sentence-encoder wrapper and encoder creation |
 | `src/vif/state_encoder.py` | State-vector construction |
-| `src/vif/critic.py` | Legacy regression-style Critic MLP |
+| `src/vif/critic.py` | Legacy regression-style VIF Critic MLP |
 | `src/vif/critic_ordinal.py` | Active ordinal and long-tail head families |
 | `src/vif/critic_bnn.py` | Bayesian neural baseline |
 | `src/vif/dataset.py` | Data loading, joins, and persona-level splits |
-| `src/vif/drift_target.py` | Student-visible review packets, reconciliation, and target materialization |
+| `src/vif/drift_target.py` | Student-visible review bundles, reconciliation, and target materialization |
 | `src/vif/security_target.py` | Fail-closed exact-state Security target validation and diagnostic materialization |
-| `scripts/experiments/prepare_a30f_security_target_audit.py` | Receipt-bound active-Critic-state Security review bundle |
+| `scripts/experiments/prepare_a30f_security_target_audit.py` | Receipt-bound exact-state Security review bundle |
 | `scripts/experiments/build_a30f_security_target.py` | Diagnostic Security target materialization after exact-state review |
 | `scripts/experiments/run_a30f_security_target_reviews.py` | Full-corpus repeated exact-state review runner with receipts and resume support |
 | `scripts/experiments/materialize_a30f_full_security_target.py` | Training-ready full-corpus Security target materialization |
 | `scripts/experiments/evaluate_a30f_security_comparison.py` | Historical/repaired model × label-lens comparison |
-| `scripts/experiments/build_v8pb_student_visible_target.py` | Development or locked-promotion review packet generation |
+| `scripts/experiments/build_v8pb_student_visible_target.py` | Development-set or final-test-set review bundle generation |
 | `scripts/experiments/materialize_v8pb_student_visible_target.py` | Reviewed student-visible target materialization |
 | `src/vif/eval.py` | Evaluation metrics and uncertainty-aware evaluation |
 | `src/vif/posthoc.py` | Validation-only post-hoc boundary tuning |
@@ -269,8 +271,8 @@ The VIF training stack lives in `src/vif/`.
 | `src/vif/train.py` | General single-model training entrypoint |
 | `src/vif/train_bnn.py` | BNN training entrypoint |
 | `scripts/experiments/critic_training_v4_review.py` | Canonical frontier review driver |
-| `scripts/experiments/llm_critic_baseline.py` | LLM context-arm estimate/run/score/report workflow |
-| `scripts/experiments/replay_recall_aware_checkpoint_selection.py` | Artifact-only replay of candidate checkpoint policies |
+| `scripts/experiments/llm_critic_baseline.py` | LLM context estimate/run/score/report workflow |
+| `scripts/experiments/replay_recall_aware_checkpoint_selection.py` | Checkpoint-only replay of alternate checkpoint-selection policies |
 | `scripts/experiments/no_new_data_vif_policy_search.py` | Validation-selected no-new-data ensemble/routing diagnostic |
 
 ---
@@ -293,10 +295,10 @@ The general training entrypoint includes:
 
 - default LR-finder pass before training
 - gradient clipping and gradient telemetry
-- immediate non-finite loss termination with preserved artifacts
+- immediate non-finite loss termination with preserved training logs
 
-The frontier driver also accepts optional candidate-checkpoint policies in its
-YAML/JSON override surface:
+The frontier driver also accepts optional `candidate_checkpoint_policies` in
+its YAML/JSON overrides:
 
 ```yaml
 candidate_checkpoint_policies:
@@ -310,11 +312,11 @@ candidate_checkpoint_policies:
 
 Each historical policy selected the strongest `recall_-1` checkpoint within the
 configured QWK window, then persisted its checkpoint, validation/test outputs,
-selection summary, and compact metric comparison. These candidates supplemented
+selection summary, and compact metric comparison. These checkpoints supplemented
 the QWK-first mainline checkpoint. They remain reproducibility evidence, not the
 implementation of the adopted recall-first policy.
 
-### 6.3 CLI Override Surface
+### 6.3 CLI Overrides
 
 The mainline training CLI exposes the following commonly used overrides:
 
@@ -363,7 +365,7 @@ uv run python -m src.vif.train --epochs 5 --batch-size 8
 # Encoder ablation
 uv run python -m src.vif.train --encoder-model all-mpnet-base-v2
 
-# Export LR-finder artifacts for review
+# Export the LR-finder plot and history JSON for review
 uv run python -m src.vif.train --lr-find-output-path logs/exports/lr_find.png
 
 # BNN baseline

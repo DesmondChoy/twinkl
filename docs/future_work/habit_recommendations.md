@@ -8,25 +8,25 @@
 
 ## Vision
 
-After N journal entries, the system recommends specific habits or goals to improve value convergence.
+After N Journal Entries, a recommendation engine suggests specific habits or goals to improve value convergence.
 
 ### Example Flow
 1. User journals for 2-4 weeks
-2. VIF detects drift: "You value *achievement* but recent entries show avoidance of challenging projects"
-3. System recommends:
+2. The Drift Detector finds Drift: "Two Journal Entries in a row show choices against your Achievement Core Value"
+3. The recommendation engine suggests:
    - "Set a weekly goal to tackle one uncomfortable task"
    - "Track completion in daily check-ins"
 4. User accepts/modifies the habit
-5. VIF monitors whether behavior shifts toward stated values
+5. Twinkl monitors whether behavior shifts toward stated values
 
 ---
 
 ## Why This Strengthens the Product
 
 ### 1. **Closed-Loop Intelligence**
-- **Current state:** Passive detection ("you drifted")
+- **Current state:** Passive detection ("Twinkl found Drift")
 - **With recommendations:** Active guidance ("here's how to converge")
-- Shows the system can **intervene**, not just observe
+- Shows the recommendation engine can **intervene**, not just observe
 
 ### 2. **Demonstrates End-to-End Thinking**
 - Goes beyond ML model → shows understanding of complete user journey
@@ -38,7 +38,7 @@ After N journal entries, the system recommends specific habits or goals to impro
 
 ### 4. **Differentiation**
 - Most journaling apps stop at reflection
-- Twinkl becomes a **behavior change system**, not just a mirror
+- Twinkl becomes a **behavior-change product**, not just a mirror
 
 ---
 
@@ -68,7 +68,7 @@ After N journal entries, the system recommends specific habits or goals to impro
 ### 4. **Premature Optimization**
 - Don't know yet what recommendations would be most effective
 - Need real usage data to understand:
-  - What types of drift are most common?
+  - Which Core Values and contexts most often produce Drift?
   - Which interventions users actually follow?
   - How to avoid recommendation fatigue?
 
@@ -85,8 +85,8 @@ After N journal entries, the system recommends specific habits or goals to impro
          │
          ▼
 ┌─────────────────┐
-│      VIF        │  ← Core capstone work
-│  (Drift Detection)
+│   VIF Critic    │  ← Core capstone work
+│ + Drift Detector│
 └────────┬────────┘
          │
          ▼
@@ -105,7 +105,7 @@ After N journal entries, the system recommends specific habits or goals to impro
          │
          ▼
 ┌─────────────────┐
-│ VIF monitors    │
+│ Twinkl monitors │
 │ convergence     │
 └─────────────────┘
 ```
@@ -122,9 +122,9 @@ After N journal entries, the system recommends specific habits or goals to impro
 
 **Nudge Integration**
 - Recommendations could surface during conversational nudges:
-  - System: "I notice you've avoided creative projects lately. Would it help to set a recurring goal?"
+- Twinkl: "I notice you've avoided creative projects lately. Would it help to set a recurring goal?"
   - User: "Yes, but I don't know where to start"
-  - System: "How about: 'Every Saturday morning, spend 30min on [X]'?"
+  - Twinkl: "How about: 'Every Saturday morning, spend 30min on [X]'?"
 
 ### Data Requirements
 
@@ -138,7 +138,7 @@ After N journal entries, the system recommends specific habits or goals to impro
 **Personalization Features**
 - User's declared constraints (time availability, energy levels)
 - Historical compliance rate (don't recommend 6am meditation to night owls)
-- Drift severity (minor drift → gentle suggestion, major drift → more assertive)
+- Drift frequency and duration (a new Drift → gentle suggestion, repeated or longer Drift → more assertive)
 
 **Success Metrics**
 - Recommendation acceptance rate
@@ -158,11 +158,11 @@ After N journal entries, the system recommends specific habits or goals to impro
 - Should emerge from **behavioral patterns**, not value categories
 
 ### 3. **Temporal Dynamics**
-- When is drift "real" vs. normal fluctuation?
+- When does the two-consecutive-Conflict rule identify real Drift rather than normal fluctuation?
 - Don't want to recommend habit changes for temporary life events
 
 ### 4. **User Agency**
-- System shouldn't feel prescriptive ("You must do X")
+- The recommendation engine shouldn't feel prescriptive ("You must do X")
 - Frame as **collaborative exploration**: "Would this help?"
 
 ---
@@ -171,7 +171,7 @@ After N journal entries, the system recommends specific habits or goals to impro
 
 ### Synthetic Evaluation (Weak)
 - Generate synthetic users with known value profiles
-- Simulate drift scenarios
+- Simulate Drift scenarios
 - Check if recommendations align with psychology literature
 - **Limitation:** Can't validate whether users would actually follow through
 
@@ -186,7 +186,7 @@ After N journal entries, the system recommends specific habits or goals to impro
 
 ### Expert Review (Moderate)
 - Show recommendations to psychologists/behavior change experts
-- Ask: "Would this plausibly help someone with this drift pattern?"
+- Ask: "Would this plausibly help someone with this Drift pattern?"
 - **Limitation:** Proxy for real user validation
 
 ---
@@ -197,14 +197,14 @@ After N journal entries, the system recommends specific habits or goals to impro
 
 In the Technical Paper "Future Work" section:
 
-> **Habit Recommendation System**
-> While the current VIF implementation focuses on drift detection, a natural extension would be a recommendation engine that suggests specific behavioral interventions when convergence deteriorates. This would require:
+> **Habit Recommendation Engine**
+> While the current implementation focuses on the VIF Critic and Drift Detector, a natural extension would be a recommendation engine that suggests specific behavioral interventions when Drift occurs. This would require:
 >
 > 1. **Habit Library Construction:** Mapping Schwartz values to evidence-based behavioral practices from behavior change literature (Fogg, 2020; Clear, 2018)
-> 2. **Personalization:** Calibrating recommendations based on user constraints, historical compliance, and drift severity
+> 2. **Personalization:** Calibrating recommendations based on user constraints, historical compliance, and Drift frequency or duration
 > 3. **Longitudinal Validation:** Real-world study measuring whether users who follow recommendations exhibit faster convergence than control groups
 >
-> Preliminary design sketches (Appendix X) suggest integrating recommendations into the conversational nudge flow, framed as collaborative exploration rather than prescriptive advice. This would position Twinkl as a **behavior change system** rather than purely a reflective tool.
+> Preliminary design sketches (Appendix X) suggest integrating recommendations into the conversational nudge flow, framed as collaborative exploration rather than prescriptive advice. This would position Twinkl as a **behavior-change product** rather than purely a reflective tool.
 
 This shows:
 - ✅ You've thought through the full product arc
@@ -219,8 +219,8 @@ This shows:
 **Signals that it's time:**
 1. ✅ VIF is validated and performing well
 2. ✅ You have 10+ real users providing feedback
-3. ✅ Users explicitly ask: "Now what? How do I fix this drift?"
-4. ✅ You've observed patterns in what types of drift are most common
+3. ✅ Users explicitly ask: "Now what? How do I respond to this Drift?"
+4. ✅ You've observed which Core Values and contexts most often produce Drift
 
 **Don't build until:**
 - ❌ VIF evaluation is incomplete
