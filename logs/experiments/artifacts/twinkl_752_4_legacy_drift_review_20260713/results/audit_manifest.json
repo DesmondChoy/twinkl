@@ -1,0 +1,22 @@
+{
+  "cohort_sha256": "61e787a17e4bef801ab9a12b1d83e57204b8d8d67e445c3f10ad370fc6e5955c",
+  "cohort_version": "twinkl-752.4-legacy-drift-review-v1",
+  "completed_at": "2026-07-13T14:55:10.658538+00:00",
+  "results": {
+    "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/results/case_outcomes.parquet": "52b70b15dadd0578e4ec94a6d887d4975ef0ef78bf59659ce6582b31f4e852f8",
+    "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/results/drift_episodes.parquet": "d71ff78a057e7407531361b589906779c8a809ab54f1131bebc4ff51f77d4f27",
+    "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/results/entry_target.parquet": "31281ea94c4b290e2de31306b67e01c854f69e123efba780fa51e49927c116c0",
+    "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/results/summary.json": "19b4e5907e8b4f93aeab5f017f3037fc0d389d6b50cd79b7c5075f2cc43f7504"
+  },
+  "review_responses": {
+    "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/reviews/reviewer_a/shard_001.json": "78baeaa7daf7385364fc1822fab14be2668fe6c37f429d92dae0aad7d012b961",
+    "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/reviews/reviewer_a/shard_002.json": "59170a53b9d601bab3884a0db70469650c3307d6aaa4b1eeed94e4266e13f525",
+    "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/reviews/reviewer_a/shard_003.json": "b85107b991cc640a78f1518502c49ecf0368fe48a836a105f6ea30ea27816703",
+    "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/reviews/reviewer_a/shard_004.json": "ff074b202db3a50441abac22c8c09c0ac5023fcf76e4b025b5c57a7bef01cf23",
+    "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/reviews/reviewer_b/shard_001.json": "2d86fc089248033d57290db7f9b54d9720f88019c6eb81d24183fec88e97b053",
+    "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/reviews/reviewer_b/shard_002.json": "5b0503b7f62230915a92ec475e2ca8653aead128e280339eea9c7f12a3154bb5",
+    "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/reviews/reviewer_b/shard_003.json": "9e87b8f5b4ff11fdab48c16428758ad6741dacfb5c3b955084a56db8537382e6",
+    "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/reviews/reviewer_b/shard_004.json": "b5c433f66ba8b900d87a3b9d6026efa1bd78638df4e5f9a8bec833026dd51530"
+  },
+  "schema_version": 1
+}

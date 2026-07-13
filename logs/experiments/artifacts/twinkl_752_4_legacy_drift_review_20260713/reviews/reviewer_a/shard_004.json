@@ -1,0 +1,196 @@
+{
+  "schema_version": "twinkl-752.4-review-v1",
+  "cohort_version": "twinkl-752.4-legacy-drift-review-v1",
+  "reviewer_prompt_version": "twinkl-752.4-packet-only-v1",
+  "shard_id": "shard_004",
+  "reviewer_id": "twinkl-752.4-codex-a",
+  "reviewer_runtime": "codex-gpt-5",
+  "reviewed_at": "2026-07-13T22:51:37+08:00",
+  "packet_sha256": "2574d7336db0ce1d7e94bf52308e521674dde95a87abd17753ff42730e69d3d0",
+  "response_schema_sha256": "90a0c160c77c2975ed61ff1e3b1f6f181bf2dd45ae31049c159d9270ec98d3bf",
+  "cases": [
+    {
+      "review_case_id": "case_001", "sustained_conflict": "no", "delivery_state": "none",
+      "rationale": "The writer consistently preserves independent methods or manually adapts an imposed system; frustration with the mandate is not a contrary choice.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "external_constraint", "confidence": "high"},
+        {"position": 5, "observable_conflict": "no", "reason_code": "external_constraint", "confidence": "medium"}
+      ]
+    },
+    {
+      "review_case_id": "case_002", "sustained_conflict": "no", "delivery_state": "recovered",
+      "rationale": "Deleting the spa commitment directly avoids desired pleasure; sick children are an external constraint and the final entry preserves a pleasurable chai ritual.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "external_constraint", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_003", "sustained_conflict": "no", "delivery_state": "recovered",
+      "rationale": "Avoiding the grandmother's call is a direct retreat from cultural and family tradition; the final visit and rituals restore it.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "medium"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "external_constraint", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_004", "sustained_conflict": "no", "delivery_state": "recovered",
+      "rationale": "Voluntarily staying to help a bereaved family cancels anticipated pleasure, but roster changes are external and the writer arranges a swap to preserve Goa.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "medium"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "external_constraint", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_005", "sustained_conflict": "yes", "delivery_state": "recovered",
+      "rationale": "Silence about refugee housing and knowingly ordering polluting components are adjacent conflicts; later donation work and cancellation of the order recover.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 2, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 5, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_006", "sustained_conflict": "no", "delivery_state": "none",
+      "rationale": "Leading, centralizing decisions, controlling quality, and valuing formal influence are all directly aligned with Power.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 5, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_007", "sustained_conflict": "no", "delivery_state": "none",
+      "rationale": "Careful parent communication, rule enforcement, proper social conduct, and prioritizing family expectations all align with Conformity.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 5, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_008", "sustained_conflict": "no", "delivery_state": "none",
+      "rationale": "The writer seeks and accepts leadership, retains the better proposal, and uses collaboration to improve execution rather than surrendering influence.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "external_constraint", "confidence": "medium"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_009", "sustained_conflict": "no", "delivery_state": "none",
+      "rationale": "The writer independently chooses the research question and method, resists pressure, builds evidence, and wins approval.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_010", "sustained_conflict": "no", "delivery_state": "none",
+      "rationale": "Rest, travel, protected summer time, cooking, and savoring food are consistently and directly pleasure-aligned.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_011", "sustained_conflict": "no", "delivery_state": "none",
+      "rationale": "The writer preserves and experiences food, travel, leisure, and intimacy; work and fertility tensions do not show a direct choice against pleasure.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_012", "sustained_conflict": "yes", "delivery_state": "active",
+      "rationale": "After initially conforming through silence, the writer makes adjacent choices to reject the expected placement and refuse collaborative help.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 3, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "medium"}
+      ]
+    },
+    {
+      "review_case_id": "case_013", "sustained_conflict": "no", "delivery_state": "active",
+      "rationale": "The writer directly goes quiet, folds on a supported proposal, and later lets a subordinate bypass perceived authority, but aligned actions separate each conflict.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "external_constraint", "confidence": "high"},
+        {"position": 3, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 5, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "medium"}
+      ]
+    },
+    {
+      "review_case_id": "case_014", "sustained_conflict": "no", "delivery_state": "none",
+      "rationale": "The entries repeatedly show savoring food, friendship, satisfying work, rest, and deliberately stopping for the day.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 5, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_015", "sustained_conflict": "no", "delivery_state": "none",
+      "rationale": "The writer proposes a self-directed prototype, maintains side projects, explores alternatives, and complies only with an externally imposed review process.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "external_constraint", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "external_constraint", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_016", "sustained_conflict": "no", "delivery_state": "none",
+      "rationale": "Firing a challenger, preserving the CEO role, and later choosing a more effective leadership style all retain authority or self-control.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_017", "sustained_conflict": "no", "delivery_state": "none",
+      "rationale": "The writer exercises visible authority and guards ownership; the co-authorship entries remain deliberation without an observable decision.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_018", "sustained_conflict": "no", "delivery_state": "none",
+      "rationale": "Independent teaching is directly shown; nodding at pressure and considering a strategic response do not establish an actual change in conduct.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "medium"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"}
+      ]
+    }
+  ]
+}

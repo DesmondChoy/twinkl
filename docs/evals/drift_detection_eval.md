@@ -17,9 +17,9 @@ The current layers of the contract are deliberately different:
 
 | Layer | Contract |
 |---|---|
-| Student-visible target | A Journal Entry is a Conflict only when the full displayed text clearly shows a behavior or choice against a Core Value. `twinkl-v8pb` completed the paired review. |
-| Development set | The original fixed validation personas defined the target and selected one fixed `run_020` threshold: probability 0.8 and uncertainty 1.010153. |
-| Final test set | A separate 24-case final test set was locked before review and threshold selection. One 19-entry case remained unresolved, so the deployment-approval score was deliberately not calculated. |
+| Student-visible target | A Journal Entry is a Conflict only when the full displayed text clearly shows a behavior or choice against a Core Value. `twinkl-752.4` reviewed every candidate discoverable from either legacy label source plus matched controls. |
+| Development set | The primary expanded reference contains 27 Drift episodes across 23 resolved trajectories. Four retired-test audit episodes stay separate, and four trajectories remain uncertain. The earlier five-episode `twinkl-v8pb` surface and fixed `run_020` threshold are historical development evidence. |
+| Final test set | None is active. The former 24-person `twinkl-v8pb` final-test cohort became development-only when its cases were opened for the full review. `twinkl-pv6s` owns a fresh final test. |
 | Production runtime | The VIF Critic and Drift Detector are not approved or wired. |
 | User delivery | The Weekly Digest cites the relevant Journal Entries and uses active, recovered, mixed, or uncertain wording without score jargon; exact schema implementation is pending. |
 
@@ -82,6 +82,18 @@ The empirical basis is
   Journal Entry agreement (0.96716). At the fixed threshold, `run_020` found 1/5
   reference Drifts (precision 1.0, recall 0.2, F1 0.3333, false-positive
   rate 0.0).
+- `twinkl-752.4` froze 52 legacy-discoverable candidate trajectories and 52
+  unique-person matched legacy-negative controls: 104 trajectories and 874
+  entry/Core-Value decisions. Two packet-only Codex lanes agreed on 849/874
+  entries (97.1%); a third reviewer resolved 21 of 25 disagreements. The final
+  target resolves 100/104 trajectories and contains 31 maximal Drift episodes.
+  The primary development stratum has 27 episodes across 23 Drift trajectories;
+  four retired-audit episodes stay separate.
+- Among resolved development cases, 22/43 legacy candidates and 1/42 controls
+  contain Drift. This is candidate confirmation and one legacy-miner miss, not
+  prevalence or a Weekly Drift Reviewer false-alert estimate. Controls sample
+  only part of the legacy-negative pool, so other missed Drifts may remain
+  outside the cohort.
 - `twinkl-752.1` compared the Weekly Drift Reviewer without VIF Critic input
   against the Weekly Drift Reviewer with fixed `run_020` predictions across 41
   resolved development trajectories. Without VIF Critic input, median Drift
@@ -97,10 +109,10 @@ The empirical basis is
 - Future AI-reviewed reference-label work must use the same versioned rubric in
   `config/evals/drift_v1_conflict_rubric_v1.yaml`; the completed reference labels
   remain unchanged.
-- The locked final-test review had 24 cases / 191 Journal Entries, with 23/24 case
-  agreement (0.95833) and 180/191 Journal Entry agreement (0.94241). case_023 was
-  unresolved across 19 Journal Entries, so the deployment-approval score was deliberately not
-  performed rather than scoring only the agreed cases.
+- The former locked review had 24 cases / 191 Journal Entries, with 23/24 case
+  agreement (0.95833) and 180/191 Journal Entry agreement (0.94241). Its score
+  was correctly withheld. Because `twinkl-752.4` opened the old population for
+  development reference work, it is no longer eligible as a final test.
 - The retained author-designed trajectories are a capability probe only. They
   are not a target, a threshold-selection input, or a final test set.
 
@@ -124,13 +136,19 @@ dedicated tests are not active repository surfaces. The historical audit is
 useful only for explaining that retirement; it must not be rerun, tuned, scored,
 or used to approve a VIF Critic for deployment. See the [retirement record](../archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md).
 
-The full evidence is in the [student-visible target record](drift_v1_student_visible_target.md), the [development threshold receipt](../../logs/experiments/artifacts/drift_target_twinkl_v8pb_20260711/development/thresholds.json), and the [final test no-score record](../../logs/experiments/artifacts/drift_target_twinkl_v8pb_20260711/promotion/promotion_no_score.json). No fallback score was taken from the retired benchmark.
+The historical `twinkl-v8pb` evidence remains in the [student-visible target
+record](drift_v1_student_visible_target.md), the [development threshold
+receipt](../../logs/experiments/artifacts/drift_target_twinkl_v8pb_20260711/development/thresholds.json),
+and the [final-test no-score
+record](../../logs/experiments/artifacts/drift_target_twinkl_v8pb_20260711/promotion/promotion_no_score.json).
+The active expanded development evidence is in the [`twinkl-752.4`
+report](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md).
+No fallback score was taken from the retired benchmark.
 
 ### Still Missing for Product v1
 
 - Per-entry `P(-1)` persistence in the runtime output
-- A fresh, independently resolved final test set; the reviewed cases
-  cannot be reduced to its agreed cases after disagreement was observed
+- A fresh, independently resolved final test set under `twinkl-pv6s`
 - A VIF Critic and calibrated operating point that pass a future fair
   decision-level deployment-approval check
 - Production integration of the selected soft-evidence detector
@@ -158,6 +176,10 @@ did not declare as important.
 ---
 
 ## Student-Visible Target Outcome (2026-07-11)
+
+This section preserves the historical `twinkl-v8pb` result. Its former final-
+test population is development-only after `twinkl-752.4` and cannot support a
+future deployment claim.
 
 The [student-visible target](drift_v1_student_visible_target.md) labels an
 Journal Entry as a Conflict only when its displayed text clearly shows the writer making a
@@ -243,9 +265,10 @@ Hard argmax predictions are not the runtime contract. Requiring two predicted
 3. Keep author-designed trajectories separate as a capability probe; they can
    never substitute for the locked final test set.
 
-`twinkl-v8pb` completed Phases 1 and 2 under this protocol. Phase 3 stopped
-before scoring: the unresolved final-test case makes the target invalid for a
-fair score, and scoring only the agreed cases would be cherry-picking.
+`twinkl-v8pb` completed Phases 1 and 2 under this historical protocol. Phase 3
+stopped before scoring: the unresolved case made the target invalid for a fair
+score. `twinkl-752.4` later reclassified that population as development-only;
+the next final test must be fresh.
 
 ---
 
@@ -256,12 +279,15 @@ fair score, and scoring only the agreed cases would be cherry-picking.
 | Metric | Status | Meaning |
 |---|---|---|
 | Development Drift recall (`run_020`) | 1/5 (0.2) | The fixed development threshold found one of five reviewed Drifts |
+| Expanded development reference (`twinkl-752.4`) | 27 episodes across 23 resolved Drift trajectories | Reference-label surface for `twinkl-752.5`; no scheduler was scored |
+| Legacy candidate confirmation (`twinkl-752.4`) | 22/43 (51.2%) | Resolved development candidates only; selection-biased diagnostic |
+| Matched-control Drift rate (`twinkl-752.4`) | 1/42 (2.4%) | One legacy-miner miss among resolved development controls; not a false-alert rate |
 | Development precision / false-positive rate (`run_020`) | 1.0 / 0.0 | The single predicted development Drift was correct, but four reference Drifts were missed |
 | Development F1 (`run_020`) | 0.3333 | Balances the perfect precision with low recall |
 | Weekly Drift Reviewer without VIF Critic input (`twinkl-752.1`) | Median Drift recall 0.40 / 1 false Drift alert / coverage 0.756 | Development-only result over three repeats; conditionally favored under the registered recall-first rule |
 | Weekly Drift Reviewer with VIF Critic input (`twinkl-752.1`) | Median Drift recall 0.20 / 0 false Drift alerts / coverage 0.732 | Safer but blinder; the tested raw `run_020` input path is not recommended |
 | Aligned Weekly Drift Reviewer (`twinkl-752.3`) | Median Drift recall 0.20 / 5 false Drift alerts / coverage 0.829 | More complete but less precise; neither cross-week reference Drift was recovered |
-| Final-test Drift metrics | Deliberately not scored | case_023 remained unresolved across 19 Journal Entries; the target is not valid for a fair score |
+| Final-test Drift metrics | No active final test | The old cohort is development-only; `twinkl-pv6s` must build a fresh surface |
 | First-alert latency | Not scored | It requires a resolved final-test target |
 | Author-designed capability recall | Capability-only diagnostic | Whether the VIF Critic can find deliberately clear Drifts; never a deployment-approval gate |
 
@@ -322,8 +348,10 @@ Generated evidence lives under `docs/drift/figures/` and
 These commands reproduce historical EDA only. They must not be used to build a
 Drift target, select a threshold, or approve a VIF Critic for deployment. There is deliberately no
 active command for the retired `twinkl-wq9p` benchmark. The completed
-student-visible review and its blocked final-test result are described in
-[`drift_v1_student_visible_target.md`](drift_v1_student_visible_target.md).
+historical student-visible review is described in
+[`drift_v1_student_visible_target.md`](drift_v1_student_visible_target.md). The
+expanded active development reference is described in the
+[`twinkl-752.4` report](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md).
 
 ---
 
@@ -363,5 +391,9 @@ student-visible review and its blocked final-test result are described in
 | [`../../scripts/experiments/build_v8pb_student_visible_target.py`](../../scripts/experiments/build_v8pb_student_visible_target.py) | Builds the development or final-test review input file |
 | [`../../scripts/experiments/materialize_v8pb_student_visible_target.py`](../../scripts/experiments/materialize_v8pb_student_visible_target.py) | Materializes a reviewed student-visible target variant |
 | [`../../config/evals/drift_v1_author_designed_capability.yaml`](../../config/evals/drift_v1_author_designed_capability.yaml) | Author-designed capability probe; never a final test set |
+| [`../../config/evals/twinkl_752_4_legacy_drift_review_v1.yaml`](../../config/evals/twinkl_752_4_legacy_drift_review_v1.yaml) | Expanded legacy-discoverable candidate and matched-control review contract |
+| [`../../src/vif/drift_candidate_review.py`](../../src/vif/drift_candidate_review.py) | Deterministic selection, blind review, adjudication, and episode derivation |
+| [`../../scripts/experiments/review_twinkl_752_4_legacy_drift_candidates.py`](../../scripts/experiments/review_twinkl_752_4_legacy_drift_candidates.py) | Freezes packets and materializes the expanded development reference |
+| [`../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md`](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md) | Full result, limitations, and `twinkl-752.5` handoff |
 | [`logs/experiments/reports/experiment_review_20260702_twinkl_w2mu_frozen_context_gap.md`](../../logs/experiments/reports/experiment_review_20260702_twinkl_w2mu_frozen_context_gap.md) | Frozen test-split LLM context results |
 | [`../archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md`](../archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md) | Retired benchmark record; do not rerun, score, tune, or promote from it |

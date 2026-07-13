@@ -1,0 +1,51 @@
+{
+  "adjudicator_prompt_version": "twinkl-752.4-disagreement-only-v1",
+  "case_fields": {
+    "adjudication_case_id": "Opaque case ID from the packet.",
+    "entry_adjudications": "One answer for every disputed position only.",
+    "rationale": "Short explanation grounded in displayed evidence."
+  },
+  "cohort_version": "twinkl-752.4-legacy-drift-review-v1",
+  "entry_fields": {
+    "confidence": [
+      "high",
+      "low",
+      "medium"
+    ],
+    "observable_conflict": [
+      "no",
+      "uncertain",
+      "yes"
+    ],
+    "position": "One-based packet position.",
+    "reason_code": [
+      "ambiguous",
+      "direct_aligned_or_neutral_behavior",
+      "direct_behavior_or_choice",
+      "external_constraint",
+      "feeling_or_intent_only",
+      "missing_text",
+      "needs_hidden_context"
+    ]
+  },
+  "purpose": "Resolve only entry-level disagreements from two separate packet-only reviews. Agreed entries are shown for trajectory context but are frozen.",
+  "rules": [
+    "Use only the declared Core Value and displayed Journal Entry text, including any displayed nudge and response.",
+    "Mark yes only when the writer describes their own directly observable behavior or choice against the declared Core Value.",
+    "Mark no for aligned or neutral behavior and when negativity rests only on feelings, wishes, biography, external constraints, or hidden context.",
+    "Mark uncertain when the displayed text cannot support yes or no.",
+    "Decide each disputed position independently. The two prior judgments are anonymous aids, not votes; use the displayed text as authority.",
+    "Do not relabel agreed positions."
+  ],
+  "schema_version": "twinkl-752.4-adjudication-v1",
+  "submission_fields": {
+    "adjudicated_at": "Timezone-aware ISO-8601 timestamp.",
+    "adjudicator_id": "Stable adjudicator identifier.",
+    "adjudicator_prompt_version": "twinkl-752.4-disagreement-only-v1",
+    "adjudicator_runtime": "Model or runtime identifier.",
+    "cohort_version": "twinkl-752.4-legacy-drift-review-v1",
+    "packet_sha256": "SHA-256 of the adjudication packet.",
+    "response_schema_sha256": "SHA-256 of this response schema.",
+    "schema_version": "twinkl-752.4-adjudication-v1"
+  }
+}

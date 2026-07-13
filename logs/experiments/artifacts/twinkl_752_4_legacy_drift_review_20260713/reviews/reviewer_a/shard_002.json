@@ -1,0 +1,478 @@
+{
+  "schema_version": "twinkl-752.4-review-v1",
+  "cohort_version": "twinkl-752.4-legacy-drift-review-v1",
+  "reviewer_prompt_version": "twinkl-752.4-packet-only-v1",
+  "shard_id": "shard_002",
+  "reviewer_id": "twinkl-752.4-codex-a",
+  "reviewer_runtime": "codex-gpt-5",
+  "reviewed_at": "2026-07-13T22:29:29+08:00",
+  "packet_sha256": "729feb76e856b8d3ced02ac5a1ca0da90b61fc6ad75792b58a6f16dcac1f661f",
+  "response_schema_sha256": "90a0c160c77c2975ed61ff1e3b1f6f181bf2dd45ae31049c159d9270ec98d3bf",
+  "cases": [
+    {
+      "review_case_id": "case_001", "sustained_conflict": "no", "delivery_state": "active",
+      "rationale": "The writer yields status in isolated family situations and ends by deliberately loosening control; the conflicts are not adjacent.",
+      "entry_assessments": [
+        {"position":1,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":2,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":3,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":4,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":5,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"medium"},
+        {"position":6,"observable_conflict":"no","reason_code":"external_constraint","confidence":"high"},
+        {"position":7,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":8,"observable_conflict":"no","reason_code":"external_constraint","confidence":"high"},
+        {"position":9,"observable_conflict":"no","reason_code":"feeling_or_intent_only","confidence":"high"},
+        {"position":10,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"medium"}
+      ]
+    },
+    {
+      "review_case_id": "case_002", "sustained_conflict": "no", "delivery_state": "recovered",
+      "rationale": "The writer twice overcommits work at the expense of enjoyment, but later choices protect a pleasurable life.",
+      "entry_assessments": [
+        {"position":1,"observable_conflict":"no","reason_code":"feeling_or_intent_only","confidence":"high"},
+        {"position":2,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":3,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":4,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":5,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":6,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":7,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":8,"observable_conflict":"no","reason_code":"feeling_or_intent_only","confidence":"high"},
+        {"position":9,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"}
+      ]
+    },
+    {
+      "review_case_id": "case_003", "sustained_conflict": "yes", "delivery_state": "recovered",
+      "rationale": "Silence after being overridden and adjacent compliance with imposed policy directly relinquish authority; later entries break the run.",
+      "entry_assessments": [
+        {"position":1,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":2,"observable_conflict":"no","reason_code":"external_constraint","confidence":"high"},
+        {"position":3,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":4,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":5,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":6,"observable_conflict":"no","reason_code":"external_constraint","confidence":"high"},
+        {"position":7,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":8,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":9,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":10,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"}
+      ]
+    },
+    {
+      "review_case_id": "case_004", "sustained_conflict": "no", "delivery_state": "recovered",
+      "rationale": "Most entries include actual enjoyment; refusing rest and later declining a rare social meal are isolated choices against pleasure.",
+      "entry_assessments": [
+        {"position":1,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":2,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":3,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":4,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":5,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":6,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"medium"},
+        {"position":7,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":8,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":9,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"}
+      ]
+    },
+    {
+      "review_case_id": "case_005", "sustained_conflict": "no", "delivery_state": "recovered",
+      "rationale": "Care for family is usually direct and sustained, with isolated failures of patience or presence that are followed by renewed care.",
+      "entry_assessments": [
+        {"position":1,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":2,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":3,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":4,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":5,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":6,"observable_conflict":"no","reason_code":"feeling_or_intent_only","confidence":"high"},
+        {"position":7,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":8,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":9,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":10,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":11,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"}
+      ]
+    },
+    {
+      "review_case_id": "case_006", "sustained_conflict": "no", "delivery_state": "none",
+      "rationale": "The writer consistently preserves independent teaching choices; family and workload entries are neutral to self-direction.",
+      "entry_assessments": [
+        {"position":1,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":2,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":3,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":4,"observable_conflict":"no","reason_code":"external_constraint","confidence":"high"},
+        {"position":5,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":6,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":7,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":8,"observable_conflict":"no","reason_code":"feeling_or_intent_only","confidence":"high"}
+      ]
+    },
+    {
+      "review_case_id": "case_007", "sustained_conflict": "no", "delivery_state": "none",
+      "rationale": "The writer repeatedly creates or protects small pleasures; mandatory work demands are external rather than chosen conflict.",
+      "entry_assessments": [
+        {"position":1,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":2,"observable_conflict":"no","reason_code":"external_constraint","confidence":"high"},
+        {"position":3,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":4,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":5,"observable_conflict":"no","reason_code":"external_constraint","confidence":"high"},
+        {"position":6,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":7,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":8,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":9,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":10,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"}
+      ]
+    },
+    {
+      "review_case_id": "case_008", "sustained_conflict": "no", "delivery_state": "recovered",
+      "rationale": "The opening choice favors another saving cycle over a long-postponed trip; later constraints are external and the writer resumes chosen enjoyment.",
+      "entry_assessments": [
+        {"position":1,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"medium"},
+        {"position":2,"observable_conflict":"no","reason_code":"feeling_or_intent_only","confidence":"high"},
+        {"position":3,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":4,"observable_conflict":"no","reason_code":"feeling_or_intent_only","confidence":"high"},
+        {"position":5,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"medium"},
+        {"position":6,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":7,"observable_conflict":"no","reason_code":"external_constraint","confidence":"high"},
+        {"position":8,"observable_conflict":"no","reason_code":"external_constraint","confidence":"high"},
+        {"position":9,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"}
+      ]
+    },
+    {
+      "review_case_id": "case_009", "sustained_conflict": "no", "delivery_state": "none",
+      "rationale": "Every displayed choice either protects stability or is neutral; worry alone is not observable conflict.",
+      "entry_assessments": [
+        {"position":1,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":2,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":3,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":4,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":5,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":6,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":7,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":8,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":9,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":10,"observable_conflict":"no","reason_code":"feeling_or_intent_only","confidence":"high"}
+      ]
+    },
+    {
+      "review_case_id": "case_010", "sustained_conflict": "no", "delivery_state": "recovered",
+      "rationale": "The writer twice prioritizes others or family over personal status opportunities, while later submitting the prize application.",
+      "entry_assessments": [
+        {"position":1,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":2,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":3,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"medium"},
+        {"position":4,"observable_conflict":"no","reason_code":"feeling_or_intent_only","confidence":"high"},
+        {"position":5,"observable_conflict":"no","reason_code":"feeling_or_intent_only","confidence":"high"},
+        {"position":6,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":7,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":8,"observable_conflict":"no","reason_code":"feeling_or_intent_only","confidence":"high"},
+        {"position":9,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":10,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"medium"}
+      ]
+    },
+    {
+      "review_case_id": "case_011", "sustained_conflict": "yes", "delivery_state": "recovered",
+      "rationale": "The writer repeatedly stays silent or drops an environmental escalation, creating an adjacent run; later reporting the incident breaks it.",
+      "entry_assessments": [
+        {"position":1,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":2,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":3,"observable_conflict":"no","reason_code":"external_constraint","confidence":"high"},
+        {"position":4,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":5,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":6,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":7,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":8,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":9,"observable_conflict":"no","reason_code":"external_constraint","confidence":"high"},
+        {"position":10,"observable_conflict":"no","reason_code":"feeling_or_intent_only","confidence":"high"}
+      ]
+    },
+    {
+      "review_case_id": "case_012", "sustained_conflict": "no", "delivery_state": "none",
+      "rationale": "Food distribution and concern for displaced workers align with universalism; taking stable work rests on explicit school-fee constraints.",
+      "entry_assessments": [
+        {"position":1,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":2,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":3,"observable_conflict":"no","reason_code":"external_constraint","confidence":"high"},
+        {"position":4,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":5,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":6,"observable_conflict":"no","reason_code":"external_constraint","confidence":"high"},
+        {"position":7,"observable_conflict":"no","reason_code":"feeling_or_intent_only","confidence":"high"},
+        {"position":8,"observable_conflict":"no","reason_code":"external_constraint","confidence":"high"},
+        {"position":9,"observable_conflict":"no","reason_code":"external_constraint","confidence":"high"}
+      ]
+    },
+    {
+      "review_case_id": "case_013", "sustained_conflict": "no", "delivery_state": "recovered",
+      "rationale": "The writer initially argues against a desired rewrite, then later attends a conference and directly moves into new technical work.",
+      "entry_assessments": [
+        {"position":1,"observable_conflict":"no","reason_code":"feeling_or_intent_only","confidence":"high"},
+        {"position":2,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":3,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":4,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"medium"},
+        {"position":5,"observable_conflict":"no","reason_code":"external_constraint","confidence":"high"},
+        {"position":6,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":7,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"medium"},
+        {"position":8,"observable_conflict":"no","reason_code":"external_constraint","confidence":"high"},
+        {"position":9,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":10,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"}
+      ]
+    },
+    {
+      "review_case_id": "case_014", "sustained_conflict": "yes", "delivery_state": "active",
+      "rationale": "The writer repeatedly stays silent, backs down, or accepts diminished authority, with adjacent conflicts early and in the middle.",
+      "entry_assessments": [
+        {"position":1,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":2,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"medium"},
+        {"position":3,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":4,"observable_conflict":"no","reason_code":"external_constraint","confidence":"high"},
+        {"position":5,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"medium"},
+        {"position":6,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"medium"},
+        {"position":7,"observable_conflict":"no","reason_code":"feeling_or_intent_only","confidence":"high"},
+        {"position":8,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":9,"observable_conflict":"no","reason_code":"external_constraint","confidence":"high"},
+        {"position":10,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"}
+      ]
+    },
+    {
+      "review_case_id": "case_015", "sustained_conflict": "no", "delivery_state": "none",
+      "rationale": "Travel, research, and repeated pursuit of new settings consistently align with stimulation; doubt is only reflective.",
+      "entry_assessments": [
+        {"position":1,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":2,"observable_conflict":"no","reason_code":"feeling_or_intent_only","confidence":"high"},
+        {"position":3,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":4,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":5,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":6,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":7,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":8,"observable_conflict":"no","reason_code":"feeling_or_intent_only","confidence":"high"}
+      ]
+    },
+    {
+      "review_case_id": "case_016", "sustained_conflict": "no", "delivery_state": "recovered",
+      "rationale": "Missing a promised lesson and snapping at a caring spouse are isolated conflicts; later apology and family care restore benevolent behavior.",
+      "entry_assessments": [
+        {"position":1,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":2,"observable_conflict":"no","reason_code":"external_constraint","confidence":"high"},
+        {"position":3,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":4,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":5,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":6,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":7,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":8,"observable_conflict":"no","reason_code":"feeling_or_intent_only","confidence":"high"},
+        {"position":9,"observable_conflict":"no","reason_code":"external_constraint","confidence":"medium"}
+      ]
+    },
+    {
+      "review_case_id": "case_017", "sustained_conflict": "no", "delivery_state": "recovered",
+      "rationale": "Work intrudes on a chosen sailing trip and later replaces a leisure weekend despite little benefit; pleasure resumes afterward.",
+      "entry_assessments": [
+        {"position":1,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":2,"observable_conflict":"no","reason_code":"feeling_or_intent_only","confidence":"high"},
+        {"position":3,"observable_conflict":"no","reason_code":"external_constraint","confidence":"high"},
+        {"position":4,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":5,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":6,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":7,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":8,"observable_conflict":"no","reason_code":"feeling_or_intent_only","confidence":"high"},
+        {"position":9,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":10,"observable_conflict":"no","reason_code":"feeling_or_intent_only","confidence":"high"}
+      ]
+    },
+    {
+      "review_case_id": "case_018", "sustained_conflict": "no", "delivery_state": "none",
+      "rationale": "The writer manages, mentors, positions himself strategically, confronts the new leader, and preserves organizational influence throughout.",
+      "entry_assessments": [
+        {"position":1,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":2,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":3,"observable_conflict":"no","reason_code":"external_constraint","confidence":"high"},
+        {"position":4,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":5,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":6,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":7,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":8,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":9,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"}
+      ]
+    },
+    {
+      "review_case_id": "case_019", "sustained_conflict": "no", "delivery_state": "recovered",
+      "rationale": "The opening scripted call avoids a mother's repeated request; subsequent calls and financial support are caring and direct.",
+      "entry_assessments": [
+        {"position":1,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":2,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":3,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":4,"observable_conflict":"no","reason_code":"feeling_or_intent_only","confidence":"high"},
+        {"position":5,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":6,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":7,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":8,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":9,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"}
+      ]
+    },
+    {
+      "review_case_id": "case_020", "sustained_conflict": "no", "delivery_state": "none",
+      "rationale": "All business choices are made on the writer's own terms; even overwork is self-directed rather than imposed conformity.",
+      "entry_assessments": [
+        {"position":1,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":2,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":3,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":4,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":5,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":6,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":7,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":8,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"}
+      ]
+    },
+    {
+      "review_case_id": "case_021", "sustained_conflict": "no", "delivery_state": "none",
+      "rationale": "The writer consistently pursues credit, authority, visibility, status, and useful relationships; doubts about that path are reflective only.",
+      "entry_assessments": [
+        {"position":1,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":2,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":3,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":4,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":5,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":6,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":7,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"medium"},
+        {"position":8,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":9,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":10,"observable_conflict":"no","reason_code":"feeling_or_intent_only","confidence":"high"}
+      ]
+    },
+    {
+      "review_case_id": "case_022", "sustained_conflict": "no", "delivery_state": "recovered",
+      "rationale": "The writer takes three isolated financial or physical risks but repeatedly returns to repairs, savings, insurance, and familiar systems.",
+      "entry_assessments": [
+        {"position":1,"observable_conflict":"no","reason_code":"external_constraint","confidence":"high"},
+        {"position":2,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":3,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":4,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":5,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":6,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":7,"observable_conflict":"no","reason_code":"external_constraint","confidence":"high"},
+        {"position":8,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":9,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":10,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"}
+      ]
+    },
+    {
+      "review_case_id": "case_023", "sustained_conflict": "no", "delivery_state": "active",
+      "rationale": "The writer usually controls the department, but twice accepts other people absorbing or co-owning his work without asserting authority.",
+      "entry_assessments": [
+        {"position":1,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":2,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":3,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":4,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":5,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":6,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":7,"observable_conflict":"no","reason_code":"feeling_or_intent_only","confidence":"high"},
+        {"position":8,"observable_conflict":"no","reason_code":"external_constraint","confidence":"high"},
+        {"position":9,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"}
+      ]
+    },
+    {
+      "review_case_id": "case_024", "sustained_conflict": "no", "delivery_state": "recovered",
+      "rationale": "The writer twice accepts exclusion from household decisions, but later directly asserts control over the home, family communication, and spending.",
+      "entry_assessments": [
+        {"position":1,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":2,"observable_conflict":"no","reason_code":"external_constraint","confidence":"high"},
+        {"position":3,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":4,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":5,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":6,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":7,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":8,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":9,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"}
+      ]
+    },
+    {
+      "review_case_id": "case_025", "sustained_conflict": "no", "delivery_state": "none",
+      "rationale": "Exploration, travel, startups, nightlife, and even chosen stillness consistently express stimulation; uncertainty supplies no contrary act.",
+      "entry_assessments": [
+        {"position":1,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":2,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":3,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":4,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":5,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":6,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":7,"observable_conflict":"no","reason_code":"feeling_or_intent_only","confidence":"high"},
+        {"position":8,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":9,"observable_conflict":"no","reason_code":"feeling_or_intent_only","confidence":"high"},
+        {"position":10,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"}
+      ]
+    },
+    {
+      "review_case_id": "case_026", "sustained_conflict": "yes", "delivery_state": "active",
+      "rationale": "The writer repeatedly rejects stable work and benefits for a precarious role, including adjacent choices at the beginning and end.",
+      "entry_assessments": [
+        {"position":1,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"medium"},
+        {"position":2,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":3,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":4,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":5,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":6,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":7,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":8,"observable_conflict":"no","reason_code":"feeling_or_intent_only","confidence":"high"},
+        {"position":9,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":10,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"}
+      ]
+    },
+    {
+      "review_case_id": "case_027", "sustained_conflict": "yes", "delivery_state": "recovered",
+      "rationale": "Minor budget deviation is isolated, but adjacent delay of a compliance review and possible leak creates sustained risk before later stable choices.",
+      "entry_assessments": [
+        {"position":1,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":2,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":3,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":4,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":5,"observable_conflict":"no","reason_code":"external_constraint","confidence":"medium"},
+        {"position":6,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":7,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"medium"},
+        {"position":8,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":9,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":10,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"}
+      ]
+    },
+    {
+      "review_case_id": "case_028", "sustained_conflict": "yes", "delivery_state": "recovered",
+      "rationale": "Adjacent choices cancel pleasure, refuse rest, and ignore bodily relief; later food and reflexology restore direct enjoyment.",
+      "entry_assessments": [
+        {"position":1,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":2,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":3,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":4,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":5,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":6,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":7,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":8,"observable_conflict":"no","reason_code":"feeling_or_intent_only","confidence":"high"},
+        {"position":9,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"}
+      ]
+    },
+    {
+      "review_case_id": "case_029", "sustained_conflict": "no", "delivery_state": "recovered",
+      "rationale": "The writer stays silent after work is taken or authority is overridden in three isolated entries, while other behavior asserts or exercises leadership.",
+      "entry_assessments": [
+        {"position":1,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":2,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":3,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":4,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":5,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":6,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":7,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":8,"observable_conflict":"no","reason_code":"external_constraint","confidence":"high"},
+        {"position":9,"observable_conflict":"no","reason_code":"external_constraint","confidence":"high"},
+        {"position":10,"observable_conflict":"no","reason_code":"feeling_or_intent_only","confidence":"high"}
+      ]
+    },
+    {
+      "review_case_id": "case_030", "sustained_conflict": "yes", "delivery_state": "active",
+      "rationale": "The writer repeatedly accepts being overridden in household decisions, including adjacent dinner and school entries, and ends silent again.",
+      "entry_assessments": [
+        {"position":1,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":2,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":3,"observable_conflict":"no","reason_code":"external_constraint","confidence":"high"},
+        {"position":4,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":5,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":6,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"},
+        {"position":7,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":8,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":9,"observable_conflict":"no","reason_code":"direct_aligned_or_neutral_behavior","confidence":"high"},
+        {"position":10,"observable_conflict":"yes","reason_code":"direct_behavior_or_choice","confidence":"high"}
+      ]
+    }
+  ]
+}

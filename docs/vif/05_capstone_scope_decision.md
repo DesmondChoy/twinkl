@@ -53,8 +53,8 @@ tested change before another training run is treated as decision evidence.
 - Abstention produces no Drift claim. Coverage, abstention count, and true
   Drifts suppressed by uncertainty must be reported.
 
-Because the current final test set is unresolved, this is a development
-contract only. No VIF Critic, cascade, or Drift Detector has deployment approval.
+Because there is no active fresh final test set, this is a development contract
+only. No VIF Critic, cascade, or Drift Detector has deployment approval.
 
 ## Canonical Drift
 
@@ -92,7 +92,7 @@ QWK is retained for historical comparison and ordinal-health monitoring.
 
 ## Architecture Study Result and Boundary
 
-The development-only comparison is complete. The Weekly Drift Reviewer was run
+The first development-only comparison is complete. The Weekly Drift Reviewer was run
 without VIF Critic input and with fixed `run_020` VIF Critic predictions. Adding
 those predictions cut median Drift recall from 0.40 to 0.20, removed the median
 false Drift alert from 1 to 0, and reduced coverage from 0.756 to 0.732. Under
@@ -109,12 +109,31 @@ recovered. Journal Entry `recall_-1` improved slightly, but Conflict precision
 fell and the extra Conflict decisions formed false Drifts. The tested prompt
 differences therefore do not explain the weak Drift result.
 
+`twinkl-752.4` then replaced the five-episode development surface for future
+architecture work. Two separate packet-only Codex lanes and a disagreement-
+only adjudicator reviewed 52 legacy-discoverable candidate trajectories plus 52
+matched controls. The primary development reference now contains 27 Drift
+episodes across 23 resolved trajectories; four retired-test audit episodes stay
+separate, and four trajectories remain uncertain. The reviewed Drift labels
+remain valid development references even when the MLP saw the Journal Entries
+during training, but any VIF Critic scheduler score on those entries is
+in-sample. Candidate mining may also miss Drifts absent from both legacy label
+sources.
+
+The missing architecture evidence is now explicit: `twinkl-752.5` must compare
+weekly-only review, MLP-triggered early review plus the weekly review, and a
+model-free early-review schedule at the same call budget. Only then can
+`twinkl-752.2` decide whether the MLP adds enough recall or latency value to
+justify its runtime cost.
+
 This decision does not adopt a VIF Critic-only, Weekly Drift Reviewer-only,
 ensemble, or cascade architecture. Architecture adoption still requires
 explicit user approval. The full study is recorded in the
 [`twinkl-752.1` report](../../logs/experiments/reports/experiment_review_2026-07-12_twinkl_752_1_weekly_verifier_ablation.md).
 The prompt-alignment result is recorded in the
 [`twinkl-752.3` report](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_3_weekly_drift_reviewer_prompt_alignment.md).
+The expanded reference is recorded in the
+[`twinkl-752.4` report](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md).
 [`twinkl-1r3d`](../../logs/experiments/reports/experiment_review_2026-07-12_twinkl_1r3d_shortcut_audit.md)
 completed the prerequisite Conformity and Self-Direction audit: 3,406
 single-word removals plus 20 repeated-word or phrase removals across 35
@@ -144,8 +163,9 @@ rather than substituted.
   worsened Drift recall, false Drift alerts, and repeat stability. Prompt
   alignment at reasoning effort `none` did not reveal a stronger Weekly Drift
   Reviewer setup.
-- The student-visible Drift review found only one of five development-set
-  Drifts and withheld the final test score after an unresolved case.
+- The expanded student-visible review found 27 development-reference episodes
+  across 23 resolved trajectories, plus four retired-audit episodes. It remains
+  selection-biased AI-reviewed development evidence, not a fresh final test.
 
 The experiment history and numeric evidence remain in
 [`logs/experiments/index.md`](../../logs/experiments/index.md).

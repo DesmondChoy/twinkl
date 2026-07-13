@@ -1,0 +1,469 @@
+{
+  "schema_version": "twinkl-752.4-review-v1",
+  "cohort_version": "twinkl-752.4-legacy-drift-review-v1",
+  "shard_id": "shard_003",
+  "reviewer_prompt_version": "twinkl-752.4-packet-only-v1",
+  "reviewer_id": "twinkl-752.4-codex-b",
+  "reviewer_runtime": "codex-gpt-5",
+  "reviewed_at": "2026-07-13T22:43:17+08:00",
+  "packet_sha256": "8fe81ddddbe344d5b8c881e56bac1fb79821db299e8940c3e76973bec429663b",
+  "response_schema_sha256": "90a0c160c77c2975ed61ff1e3b1f6f181bf2dd45ae31049c159d9270ec98d3bf",
+  "cases": [
+    {
+      "review_case_id": "case_001",
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Work displaced chosen rest twice, but each instance was isolated by entries where pleasure was directly enacted.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 5, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 7, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_002",
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Two isolated concessions reduced authority, while the surrounding entries showed coordination, recognition, and active control.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 5, "observable_conflict": "no", "reason_code": "external_constraint", "confidence": "high"},
+        {"position": 6, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 7, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 8, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_003",
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Concern for displaced people remained observable throughout; one accommodating response to a funder was isolated.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 5, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 7, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "medium"},
+        {"position": 8, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_004",
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The entries repeatedly enact ordinary enjoyment; the only lost leisure is imposed rather than chosen.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 5, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 7, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 8, "observable_conflict": "no", "reason_code": "external_constraint", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_005",
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Most entries show status-seeking or neutral work; only the final fee concession directly trades away income and status.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "external_constraint", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 5, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 6, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 7, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "medium"},
+        {"position": 8, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_006",
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Two work-over-pleasure choices were separated by a non-conflicting entry and followed by enacted rest and enjoyment.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "medium"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 5, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 7, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 8, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_007",
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "One unchallenged interruption was isolated; later entries directly show control, refusal, and institutional influence.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 5, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_conflict": "no", "reason_code": "external_constraint", "confidence": "high"},
+        {"position": 7, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_008",
+      "sustained_conflict": "yes",
+      "delivery_state": "recovered",
+      "rationale": "Silence about a slur, acceptance of exploitative work, and withholding help form a three-entry conflict run that ends before the final entry.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 4, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 5, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 6, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_009",
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Observable actions support close others; unresolved work and family trade-offs remain thoughts rather than conflicting choices.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 5, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 6, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 7, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 8, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_010",
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The sequence repeatedly includes food, rest, social time, and leisure, with no direct choice against enjoyment.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 5, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 7, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_011",
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "A single episode of biting back a response was surrounded by observable independence, pushback, and status-seeking work.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 5, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 7, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 8, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_012",
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Pleasurable food, art, music, sleep, and travel are directly enacted; fatigue and criticism do not establish a conflicting choice.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 5, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 6, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "medium"},
+        {"position": 7, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 8, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_013",
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Following protocol instead of providing available medicine is one direct conflict; later entries are aligned, unrelated, or externally constrained.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "external_constraint", "confidence": "high"},
+        {"position": 5, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_014",
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Failure to claim credit and a later concession are isolated among sustained efforts to gain influence and direct outcomes.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 5, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_conflict": "no", "reason_code": "external_constraint", "confidence": "high"},
+        {"position": 7, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 8, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_015",
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Universal concern is repeatedly enacted through advocacy, volunteering, teaching, and speaking up; one silence at home is isolated.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 5, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 7, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 8, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_016",
+      "sustained_conflict": "yes",
+      "delivery_state": "recovered",
+      "rationale": "Silence over rural cuts, selection of a supplier with questionable labor practices, and silence about fast fashion form a sustained run; later conduct breaks it.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 3, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 4, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 5, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 7, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 8, "observable_conflict": "no", "reason_code": "external_constraint", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_017",
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Silence at a school meeting and one convenience purchase are separated by direct environmental action.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 5, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_018",
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Traditional practice is maintained across the sequence; the final experiment departs from strict form but remains isolated.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 5, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 6, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "medium"}
+      ]
+    },
+    {
+      "review_case_id": "case_019",
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Two isolated concessions are separated by direct efforts to gain authority, recognition, and control.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "external_constraint", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 5, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 6, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 7, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_020",
+      "sustained_conflict": "yes",
+      "delivery_state": "recovered",
+      "rationale": "Conceding the staffing model and then silently accepting a misreading form an adjacent conflict run; a neutral weekend breaks it before the final silence.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "external_constraint", "confidence": "high"},
+        {"position": 5, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 6, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 7, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 8, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_021",
+      "sustained_conflict": "yes",
+      "delivery_state": "recovered",
+      "rationale": "Buying personal brushes over planned center supplies and laughing at harm to animals form an adjacent conflict run; the brushes are then shared with the center.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 5, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 6, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_022",
+      "sustained_conflict": "yes",
+      "delivery_state": "recovered",
+      "rationale": "Silence about disparaged families followed by choosing a chain over a community group creates an adjacent run that ends before the final entry.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 5, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 7, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 8, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_023",
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Low-paid translation, community gardening, and environmental concern consistently enact the declared value; doubts remain internal.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 5, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_024",
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Silence over stolen credit, a supervisory concession, and dropping a budget challenge are separated by neutral or influence-seeking entries.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 5, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "medium"},
+        {"position": 6, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_025",
+      "sustained_conflict": "yes",
+      "delivery_state": "active",
+      "rationale": "Repeated silence and convenience choices culminate in adjacent acceptance of migrant-worker dismissal and a shipping route likely to harm recipients.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 5, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 6, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 7, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_026",
+      "sustained_conflict": "yes",
+      "delivery_state": "active",
+      "rationale": "Staying at work instead of resting and then leaving an anticipated gathering early form an active adjacent conflict run.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 5, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 6, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_027",
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Several authority concessions occur, but each is separated by aligned action, an external dependency, or unacted thoughts.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "external_constraint", "confidence": "high"},
+        {"position": 4, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 5, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 6, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 7, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_028",
+      "sustained_conflict": "yes",
+      "delivery_state": "recovered",
+      "rationale": "Refusing comfort and then skipping a desired social event for work form a sustained run; later entries include direct enjoyment and break the run.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "medium"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 3, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 4, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 5, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 7, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 8, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_029",
+      "sustained_conflict": "yes",
+      "delivery_state": "recovered",
+      "rationale": "Choosing code over tutors and family, then dismissing a close person's concern, creates an early adjacent conflict run; later entries return to helping others.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 2, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "medium"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 5, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 7, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 8, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ]
+    },
+    {
+      "review_case_id": "case_030",
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Silence after being cut off and a later pricing concession are isolated by active leadership, external delay, and feelings without a new choice.",
+      "entry_assessments": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 3, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "external_constraint", "confidence": "high"},
+        {"position": 5, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 6, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"}
+      ]
+    }
+  ]
+}

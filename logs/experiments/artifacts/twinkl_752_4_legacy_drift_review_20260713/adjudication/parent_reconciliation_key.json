@@ -1,0 +1,164 @@
+{
+  "schema_version": "twinkl-752.4-adjudication-v1",
+  "cohort_version": "twinkl-752.4-legacy-drift-review-v1",
+  "warning": "Parent-only identity key; never disclose before adjudication.",
+  "cases": [
+    {
+      "adjudication_case_id": "adjudication_001",
+      "canonical_case_id": "fd063e8d:power",
+      "disputed_positions": [
+        7
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_002",
+      "canonical_case_id": "621be543:power",
+      "disputed_positions": [
+        1,
+        6
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_003",
+      "canonical_case_id": "9510e81a:power",
+      "disputed_positions": [
+        5
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_004",
+      "canonical_case_id": "d7a0683f:universalism",
+      "disputed_positions": [
+        9
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_005",
+      "canonical_case_id": "5943c186:hedonism",
+      "disputed_positions": [
+        4
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_006",
+      "canonical_case_id": "440e5deb:hedonism",
+      "disputed_positions": [
+        1
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_007",
+      "canonical_case_id": "9ca30614:hedonism",
+      "disputed_positions": [
+        1
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_008",
+      "canonical_case_id": "87e92805:security",
+      "disputed_positions": [
+        7
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_009",
+      "canonical_case_id": "3cfa2ebf:universalism",
+      "disputed_positions": [
+        10
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_010",
+      "canonical_case_id": "dbe2c53d:universalism",
+      "disputed_positions": [
+        7
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_011",
+      "canonical_case_id": "11fa5348:achievement",
+      "disputed_positions": [
+        5
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_012",
+      "canonical_case_id": "87b8187f:security",
+      "disputed_positions": [
+        11
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_013",
+      "canonical_case_id": "058722a1:universalism",
+      "disputed_positions": [
+        4
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_014",
+      "canonical_case_id": "709e706c:benevolence",
+      "disputed_positions": [
+        1
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_015",
+      "canonical_case_id": "e6838e16:security",
+      "disputed_positions": [
+        5
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_016",
+      "canonical_case_id": "cd7c2a11:power",
+      "disputed_positions": [
+        5
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_017",
+      "canonical_case_id": "65ed1278:benevolence",
+      "disputed_positions": [
+        1,
+        10
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_018",
+      "canonical_case_id": "236d4507:power",
+      "disputed_positions": [
+        5
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_019",
+      "canonical_case_id": "152df7a4:universalism",
+      "disputed_positions": [
+        8
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_020",
+      "canonical_case_id": "b604addd:power",
+      "disputed_positions": [
+        5
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_021",
+      "canonical_case_id": "799f3751:hedonism",
+      "disputed_positions": [
+        1,
+        3
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_022",
+      "canonical_case_id": "1bcd8599:power",
+      "disputed_positions": [
+        5
+      ]
+    }
+  ]
+}

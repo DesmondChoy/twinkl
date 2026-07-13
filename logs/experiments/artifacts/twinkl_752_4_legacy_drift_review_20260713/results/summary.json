@@ -1,0 +1,68 @@
+{
+  "case_count": 104,
+  "cohort_sha256": "61e787a17e4bef801ab9a12b1d83e57204b8d8d67e445c3f10ad370fc6e5955c",
+  "cohort_version": "twinkl-752.4-legacy-drift-review-v1",
+  "entry_count": 874,
+  "episode_count": 23,
+  "generated_at": "2026-07-13T14:55:10.648331+00:00",
+  "resolved_case_count": 82,
+  "reviewer_ids": {
+    "reviewer_a": [
+      "twinkl-752.4-codex-a"
+    ],
+    "reviewer_b": [
+      "twinkl-752.4-codex-b"
+    ]
+  },
+  "strata": {
+    "all": {
+      "candidate": {
+        "drift_confirmation_rate_among_resolved": 0.5,
+        "drift_count": 20,
+        "resolved": 40,
+        "selected": 52,
+        "unresolved": 12
+      },
+      "control": {
+        "drift_confirmation_rate_among_resolved": 0.0,
+        "drift_count": 0,
+        "resolved": 42,
+        "selected": 52,
+        "unresolved": 10
+      }
+    },
+    "development_reference": {
+      "candidate": {
+        "drift_confirmation_rate_among_resolved": 0.5151515151515151,
+        "drift_count": 17,
+        "resolved": 33,
+        "selected": 44,
+        "unresolved": 11
+      },
+      "control": {
+        "drift_confirmation_rate_among_resolved": 0.0,
+        "drift_count": 0,
+        "resolved": 35,
+        "selected": 44,
+        "unresolved": 9
+      }
+    },
+    "retired_audit_only": {
+      "candidate": {
+        "drift_confirmation_rate_among_resolved": 0.42857142857142855,
+        "drift_count": 3,
+        "resolved": 7,
+        "selected": 8,
+        "unresolved": 1
+      },
+      "control": {
+        "drift_confirmation_rate_among_resolved": 0.0,
+        "drift_count": 0,
+        "resolved": 7,
+        "selected": 8,
+        "unresolved": 1
+      }
+    }
+  },
+  "unresolved_case_count": 22
+}

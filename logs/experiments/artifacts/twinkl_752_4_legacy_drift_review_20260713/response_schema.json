@@ -1,0 +1,52 @@
+{
+  "case_fields": {
+    "delivery_state": "active, recovered, none, or uncertain.",
+    "entry_assessments": "One assessment for every displayed position.",
+    "rationale": "Short explanation grounded only in displayed text.",
+    "review_case_id": "Opaque case ID from the blind packet.",
+    "sustained_conflict": "yes, no, or uncertain."
+  },
+  "cohort_version": "twinkl-752.4-legacy-drift-review-v1",
+  "entry_assessment_fields": {
+    "confidence": [
+      "high",
+      "low",
+      "medium"
+    ],
+    "observable_conflict": [
+      "no",
+      "uncertain",
+      "yes"
+    ],
+    "position": "One-based packet position.",
+    "reason_code": [
+      "ambiguous",
+      "direct_aligned_or_neutral_behavior",
+      "direct_behavior_or_choice",
+      "external_constraint",
+      "feeling_or_intent_only",
+      "missing_text",
+      "needs_hidden_context"
+    ]
+  },
+  "reviewer_prompt_version": "twinkl-752.4-packet-only-v1",
+  "rules": [
+    "Use only the declared Core Value and displayed Journal Entry text, including any displayed nudge and response.",
+    "Mark yes only when the writer describes their own directly observable behavior or choice against the declared Core Value.",
+    "Mark no for aligned or neutral behavior and when negativity rests only on feelings, wishes, biography, external constraints, or hidden context.",
+    "Mark uncertain when the displayed text cannot support yes or no.",
+    "Sustained Conflict is yes exactly when two immediately adjacent entries are both yes; no or uncertain breaks a run."
+  ],
+  "schema_version": "twinkl-752.4-review-v1",
+  "submission_fields": {
+    "cohort_version": "twinkl-752.4-legacy-drift-review-v1",
+    "packet_sha256": "SHA-256 of the exact blind packet reviewed.",
+    "response_schema_sha256": "SHA-256 of this response schema file.",
+    "reviewed_at": "Timezone-aware ISO-8601 timestamp.",
+    "reviewer_id": "Stable identifier distinct from the other reviewer.",
+    "reviewer_prompt_version": "twinkl-752.4-packet-only-v1",
+    "reviewer_runtime": "Model or runtime identifier.",
+    "schema_version": "twinkl-752.4-review-v1",
+    "shard_id": "Exact shard ID from the blind packet."
+  }
+}

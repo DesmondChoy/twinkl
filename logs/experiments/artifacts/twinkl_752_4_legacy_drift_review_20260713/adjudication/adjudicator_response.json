@@ -1,0 +1,294 @@
+{
+  "schema_version": "twinkl-752.4-adjudication-v1",
+  "cohort_version": "twinkl-752.4-legacy-drift-review-v1",
+  "adjudicator_prompt_version": "twinkl-752.4-disagreement-only-v1",
+  "adjudicator_id": "twinkl-752.4-codex-adjudicator",
+  "adjudicator_runtime": "codex-gpt-5",
+  "adjudicated_at": "2026-07-13T23:01:57+08:00",
+  "packet_sha256": "fe8f25b716147a8232daf714d62425d21948ea5c4699e8f6a092c5807961192a",
+  "response_schema_sha256": "c545a5937ddf9e3be33559d9033751529b68fdbe1bf8bd05862154f8c23fd482",
+  "cases": [
+    {
+      "adjudication_case_id": "adjudication_001",
+      "entry_adjudications": [
+        {
+          "position": 7,
+          "observable_conflict": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "medium"
+        }
+      ],
+      "rationale": "Working privately on the commissioned sculpture is observable craft work, but it does not itself surrender status, influence, or resources."
+    },
+    {
+      "adjudication_case_id": "adjudication_002",
+      "entry_adjudications": [
+        {
+          "position": 1,
+          "observable_conflict": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "medium"
+        },
+        {
+          "position": 6,
+          "observable_conflict": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "high"
+        }
+      ],
+      "rationale": "At position 1 she avoids a gallery and its professional visibility; at position 6 she immediately gives family lunch priority over the planned portfolio work needed for a status opportunity."
+    },
+    {
+      "adjudication_case_id": "adjudication_003",
+      "entry_adjudications": [
+        {
+          "position": 5,
+          "observable_conflict": "no",
+          "reason_code": "feeling_or_intent_only",
+          "confidence": "high"
+        }
+      ],
+      "rationale": "Exclusion from the programme is external; she asks her manager about it, while contacting HR remains only a considered future action."
+    },
+    {
+      "adjudication_case_id": "adjudication_004",
+      "entry_adjudications": [
+        {
+          "position": 9,
+          "observable_conflict": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "medium"
+        }
+      ],
+      "rationale": "Writing climate-policy research is compatible with Universalism; the claim that direct activism would be better is self-criticism, not an observable contrary act."
+    },
+    {
+      "adjudication_case_id": "adjudication_005",
+      "entry_adjudications": [
+        {
+          "position": 4,
+          "observable_conflict": "uncertain",
+          "reason_code": "ambiguous",
+          "confidence": "medium"
+        }
+      ],
+      "rationale": "Her silence does not protect the free Saturday, but she has neither accepted nor refused tutoring, so the displayed choice is unresolved."
+    },
+    {
+      "adjudication_case_id": "adjudication_006",
+      "entry_adjudications": [
+        {
+          "position": 1,
+          "observable_conflict": "no",
+          "reason_code": "feeling_or_intent_only",
+          "confidence": "high"
+        }
+      ],
+      "rationale": "She accepts the Korean BBQ plan; thinking about marking does not show that she sacrificed the pleasurable outing."
+    },
+    {
+      "adjudication_case_id": "adjudication_007",
+      "entry_adjudications": [
+        {
+          "position": 1,
+          "observable_conflict": "no",
+          "reason_code": "external_constraint",
+          "confidence": "medium"
+        }
+      ],
+      "rationale": "The trip was postponed around school fees and a relative's needed glasses, while the current entry records comparison shopping rather than a new decision to cancel it."
+    },
+    {
+      "adjudication_case_id": "adjudication_008",
+      "entry_adjudications": [
+        {
+          "position": 7,
+          "observable_conflict": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "high"
+        }
+      ],
+      "rationale": "He rides while severely sleep-deprived and nearly hits a bus mirror, a directly observed safety risk contrary to Security."
+    },
+    {
+      "adjudication_case_id": "adjudication_009",
+      "entry_adjudications": [
+        {
+          "position": 10,
+          "observable_conflict": "uncertain",
+          "reason_code": "ambiguous",
+          "confidence": "medium"
+        }
+      ],
+      "rationale": "He softens his response to a collector, but has not accepted the commission, and making the work more hopeful is not clearly contrary to Universalism."
+    },
+    {
+      "adjudication_case_id": "adjudication_010",
+      "entry_adjudications": [
+        {
+          "position": 7,
+          "observable_conflict": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "medium"
+        }
+      ],
+      "rationale": "Downplaying the mural to reassure her mother does not retract or alter the universalist act of making the political mural."
+    },
+    {
+      "adjudication_case_id": "adjudication_011",
+      "entry_adjudications": [
+        {
+          "position": 5,
+          "observable_conflict": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "high"
+        }
+      ],
+      "rationale": "He directly turns down an industry-board opportunity that he recognizes as a meaningful route for advancement and professional achievement."
+    },
+    {
+      "adjudication_case_id": "adjudication_012",
+      "entry_adjudications": [
+        {
+          "position": 11,
+          "observable_conflict": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "rationale": "She reviews the budget and selects a controlled, owned workshop that still bridges the gap; the finances remain workable though tighter."
+    },
+    {
+      "adjudication_case_id": "adjudication_013",
+      "entry_adjudications": [
+        {
+          "position": 4,
+          "observable_conflict": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "high"
+        }
+      ],
+      "rationale": "She knowingly buys non-fair-trade coffee for convenience after the preferred product is unavailable, a direct purchase against the declared concern."
+    },
+    {
+      "adjudication_case_id": "adjudication_014",
+      "entry_adjudications": [
+        {
+          "position": 1,
+          "observable_conflict": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "medium"
+        }
+      ],
+      "rationale": "She repeatedly defers her mother's request to visit and changes the subject rather than engaging with a close relative's expressed need."
+    },
+    {
+      "adjudication_case_id": "adjudication_015",
+      "entry_adjudications": [
+        {
+          "position": 5,
+          "observable_conflict": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "high"
+        }
+      ],
+      "rationale": "He knowingly postpones review of a flagged compliance risk despite recognizing that such delays can persist."
+    },
+    {
+      "adjudication_case_id": "adjudication_016",
+      "entry_adjudications": [
+        {
+          "position": 5,
+          "observable_conflict": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "rationale": "She directly challenges the access restriction in a professional reply; escalating to the director remains only a hypothetical next step."
+    },
+    {
+      "adjudication_case_id": "adjudication_017",
+      "entry_adjudications": [
+        {
+          "position": 1,
+          "observable_conflict": "uncertain",
+          "reason_code": "ambiguous",
+          "confidence": "medium"
+        },
+        {
+          "position": 10,
+          "observable_conflict": "no",
+          "reason_code": "direct_aligned_or_neutral_behavior",
+          "confidence": "high"
+        }
+      ],
+      "rationale": "Position 1 directly helps a colleague but may also displace care for Brigitte, leaving its net relation to Benevolence unclear. Position 10 sets a short, explicit mentoring boundary without withdrawing care."
+    },
+    {
+      "adjudication_case_id": "adjudication_018",
+      "entry_adjudications": [
+        {
+          "position": 5,
+          "observable_conflict": "no",
+          "reason_code": "external_constraint",
+          "confidence": "high"
+        }
+      ],
+      "rationale": "The faculty controls the budget cut; after asking why, she redirects effort to a proposal rather than describing a contrary exercise of choice."
+    },
+    {
+      "adjudication_case_id": "adjudication_019",
+      "entry_adjudications": [
+        {
+          "position": 8,
+          "observable_conflict": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "high"
+        }
+      ],
+      "rationale": "He knowingly sends a sanitized explanation that conceals the harmful effect of route cuts on rural clinics."
+    },
+    {
+      "adjudication_case_id": "adjudication_020",
+      "entry_adjudications": [
+        {
+          "position": 5,
+          "observable_conflict": "no",
+          "reason_code": "external_constraint",
+          "confidence": "high"
+        }
+      ],
+      "rationale": "He argues for his own protocol and documents it, but the clinical lead imposes the regional template despite that pushback."
+    },
+    {
+      "adjudication_case_id": "adjudication_021",
+      "entry_adjudications": [
+        {
+          "position": 1,
+          "observable_conflict": "uncertain",
+          "reason_code": "ambiguous",
+          "confidence": "medium"
+        },
+        {
+          "position": 3,
+          "observable_conflict": "yes",
+          "reason_code": "direct_behavior_or_choice",
+          "confidence": "medium"
+        }
+      ],
+      "rationale": "At position 1 she repeatedly deletes the spa message but has not yet declined, so the actual outing remains unresolved. At position 3 she describes an ongoing choice to stop asking for personal wants and train herself not to need them."
+    },
+    {
+      "adjudication_case_id": "adjudication_022",
+      "entry_adjudications": [
+        {
+          "position": 5,
+          "observable_conflict": "no",
+          "reason_code": "feeling_or_intent_only",
+          "confidence": "high"
+        }
+      ],
+      "rationale": "The manager's override is external, while teaching the new protocol is stated only as a future intention in this entry."
+    }
+  ]
+}

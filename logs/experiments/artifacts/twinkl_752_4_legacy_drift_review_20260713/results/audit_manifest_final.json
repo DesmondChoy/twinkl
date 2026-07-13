@@ -1,0 +1,15 @@
+{
+  "adjudication_response": {
+    "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/adjudication/adjudicator_response.json": "6454ef7f91ff635912a056a3ac9ac65a6f4e3db65f25de84004043c2f7f603db"
+  },
+  "cohort_sha256": "61e787a17e4bef801ab9a12b1d83e57204b8d8d67e445c3f10ad370fc6e5955c",
+  "cohort_version": "twinkl-752.4-legacy-drift-review-v1",
+  "completed_at": "2026-07-13T15:16:54.368628+00:00",
+  "results": {
+    "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/results/case_outcomes_final.parquet": "ca5eac3e35092251f7dfda80da9a6e620b03e2c1036e86f7109e2e02ced23f3f",
+    "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/results/drift_episodes_final.parquet": "0339762679d862faebdd9663b2f1dae50d40267e316ca1da55c6a7b494922374",
+    "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/results/entry_target_final.parquet": "719829d010936589edd553b3a33d51fb3dafddfe747a48dfa4e609639b3c3272",
+    "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/results/summary_final.json": "613c1373438d10b3ae0cba389278bff1db729bc2475892deb4386205bebe252f"
+  },
+  "schema_version": 1
+}

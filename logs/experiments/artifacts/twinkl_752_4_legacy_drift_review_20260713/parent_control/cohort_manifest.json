@@ -1,0 +1,97 @@
+{
+  "analysis_role": "development_only",
+  "candidate_count": 52,
+  "candidate_discovery_scope": "union of same-source adjacent -1/-1 legacy windows",
+  "case_count": 104,
+  "cohort_sha256": "61e787a17e4bef801ab9a12b1d83e57204b8d8d67e445c3f10ad370fc6e5955c",
+  "cohort_version": "twinkl-752.4-legacy-drift-review-v1",
+  "control_count": 52,
+  "created_at": "2026-07-13T14:16:17.580252+00:00",
+  "entry_count": 874,
+  "manifest_amendments": [
+    {
+      "amended_at": "2026-07-13T22:28:54+08:00",
+      "field": "source_inputs.src/vif/drift_candidate_review.py",
+      "reason": "Validator corrected before reconciliation: an uncertain entry breaks a sustained run instead of making the case-level decision uncertain. Frozen cohort and packet hashes are unchanged."
+    },
+    {
+      "amended_at": "2026-07-13T22:59:23+08:00",
+      "field": "source_inputs review code",
+      "reason": "Added disagreement-only adjudication after paired reconciliation. Frozen cohort, selection, and paired-review packet hashes are unchanged."
+    },
+    {
+      "amended_at": "2026-07-13T23:40:00+08:00",
+      "field": "source_inputs review code and expected matching totals",
+      "reason": "Quality review distinguished initial agreement from adjudicated resolution, verified audit inputs before adjudication, and froze the already-observed matching objective totals. Frozen cohort, selection, reviewer responses, and packet hashes are unchanged."
+    }
+  ],
+  "known_limitations": [
+    "Candidate mining cannot find Drifts missed by both legacy label sources.",
+    "Matched controls are legacy-negative, not known non-Drifts.",
+    "Rates from this selection-biased cohort are development diagnostics, not prevalence estimates.",
+    "VIF Critic scores on training-seen Journal Entries remain in-sample.",
+    "Separate Codex reviews are AI-reviewed evidence, not human ground truth.",
+    "A fresh final test remains required under twinkl-pv6s."
+  ],
+  "parent_outputs": {
+    "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/parent_control/cohort_cases.json": "672cc47f4205e0cf4493ecb45def6d193378d48ef015ef8bf1aeced746dedd7a",
+    "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/parent_control/old_promotion_reclassification.json": "31e7e6958c95952d1cd68adc8b4fe20130175e3a210c3e869d6476621055de38",
+    "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/parent_control/selected_cases.parquet": "824a9729a14b9d58cc0770cedd1ecaeb37aec7103098c6e3b18797256b7847c8",
+    "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/parent_control/selection_pairs.parquet": "c783aab0d929261ad73437a7c42b22d1e46bc814ef5f4c340c06253ceb7f7ca8"
+  },
+  "response_schema_path": "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/response_schema.json",
+  "response_schema_sha256": "90a0c160c77c2975ed61ff1e3b1f6f181bf2dd45ae31049c159d9270ec98d3bf",
+  "schema_version": 1,
+  "shards": [
+    {
+      "case_count": 26,
+      "case_ids_sha256": "aa4f46f15d227fe79ccb5d7381017c930b41b94647162b5f844a300d3a285a87",
+      "entry_count": 298,
+      "key_path": "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/parent_control/shard_001_reconciliation_key.json",
+      "key_sha256": "f77de7aabd959ca518a3a0f3cff7801be80096a8288cc06de6548c92123ac4d5",
+      "packet_path": "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/reviewer_packets/shard_001/blind_packet.json",
+      "packet_sha256": "be5569c46c5fe4c12b16f8a2ea07da1cc2e7902a5c0c7683ab9a2f95f1c4b507",
+      "shard_id": "shard_001"
+    },
+    {
+      "case_count": 30,
+      "case_ids_sha256": "3844dcc6f2a23380586dd30886a3c971b765b72d1ed854c144c3b9fcf1202231",
+      "entry_count": 285,
+      "key_path": "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/parent_control/shard_002_reconciliation_key.json",
+      "key_sha256": "825e868a9b6b66dbcfd2453927509609910d05c859f656434a07c604388cf6c6",
+      "packet_path": "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/reviewer_packets/shard_002/blind_packet.json",
+      "packet_sha256": "729feb76e856b8d3ced02ac5a1ca0da90b61fc6ad75792b58a6f16dcac1f661f",
+      "shard_id": "shard_002"
+    },
+    {
+      "case_count": 30,
+      "case_ids_sha256": "c685aa0c80dc63ab5eaa410521f357a8e23e26d258142fcfa1a2e6705b4194fd",
+      "entry_count": 216,
+      "key_path": "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/parent_control/shard_003_reconciliation_key.json",
+      "key_sha256": "a0469ae4d1d5a43cc8c4d551db9e2075aa4c8fe437c5a9159715374fc9603736",
+      "packet_path": "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/reviewer_packets/shard_003/blind_packet.json",
+      "packet_sha256": "8fe81ddddbe344d5b8c881e56bac1fb79821db299e8940c3e76973bec429663b",
+      "shard_id": "shard_003"
+    },
+    {
+      "case_count": 18,
+      "case_ids_sha256": "3442289757357ee34c56a66cf26221b557c91916b25f08e492179e08a133cea8",
+      "entry_count": 75,
+      "key_path": "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/parent_control/shard_004_reconciliation_key.json",
+      "key_sha256": "fc9dd0218015df389f1ec5ed89b436c19ba5b8bcd9394d02351486d10925d13e",
+      "packet_path": "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/reviewer_packets/shard_004/blind_packet.json",
+      "packet_sha256": "2574d7336db0ce1d7e94bf52308e521674dde95a87abd17753ff42730e69d3d0",
+      "shard_id": "shard_004"
+    }
+  ],
+  "source_inputs": {
+    "config/evals/drift_v1_student_visible_v1.yaml": "633433ad1a65b7180afc70e7634f9314d2a67eab624beee690dec964b43bdd09",
+    "config/evals/twinkl_752_4_legacy_drift_review_v1.yaml": "493f205a41ac957cbeffb6fc1747c23e5b4bbe623887c03798ce324d923f532d",
+    "config/experiments/vif/twinkl_681_5_holdout.yaml": "0e6e6c8e2569df1f1792aede4cb4a9e79a05fe8789e015c2f5ce8bb993fb3065",
+    "logs/judge_labels/consensus_labels.parquet": "b57b03d0cea1885a02d1d9ae7d9246ba029c210768b41cb97b4959ec7b18e112",
+    "logs/judge_labels/judge_labels.parquet": "cbb101a1c05509a8c2105b9ffcfd6cc83e9ddc707256ca6eb63379f384e4770c",
+    "logs/registry/personas.parquet": "c6b975711471140b6cd8faf4d730a3b9b3078c2cc37704d38cdc143526be91fd",
+    "scripts/experiments/review_twinkl_752_4_legacy_drift_candidates.py": "6674f904d38e26b58a7194e0838d9984cce7a9a05df3c8081de05818f77f639b",
+    "src/vif/drift_candidate_review.py": "65e8c117dd60084574793d7520202b0707155d8401df8660729a1e1bff6c4aaa"
+  }
+}

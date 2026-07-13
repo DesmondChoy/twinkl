@@ -1,0 +1,2004 @@
+{
+  "schema_version": "twinkl-752.4-review-v1",
+  "cohort_version": "twinkl-752.4-legacy-drift-review-v1",
+  "shard_id": "shard_001",
+  "warning": "Parent-only identity key; never disclose before review.",
+  "cases": [
+    {
+      "review_case_id": "case_001",
+      "canonical_case_id": "22b117be:power",
+      "persona_id": "22b117be",
+      "dimension": "power",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-04-28",
+          "runtime_text_sha256": "4dbe47cc4da7a1f6b09136a5d9eabcf34310ffcd894aa5f3e751084c9e426c22"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-04-30",
+          "runtime_text_sha256": "baf5b27a5a68aec05b0d767127b783f54720a9a98b632fe00cf1ac5af4070865"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-04-30",
+          "runtime_text_sha256": "d3e87fb9bd857c8404e080d162904ec23186397c9069277ccc20e4ed8719a29b"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-05-01",
+          "runtime_text_sha256": "5acc47629b3e2ef6d12d993968cba77a29f43b9e7e5f0a0db8417126f05136c2"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-05-03",
+          "runtime_text_sha256": "f444207939208ac1e982986dd3c085ac334750f18b3a8bcdbbbd67fc17e1c8a9"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-05-08",
+          "runtime_text_sha256": "146e175cc46143675c7919cc87d399c86f23e398af474e0c6b96bf5b04237077"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-05-14",
+          "runtime_text_sha256": "b6fc3d6b61cd975d86be6356316038f69c3fcb19c0155cf0b01940b11b85af06"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-05-15",
+          "runtime_text_sha256": "97a97020775c74382a1c19f9244562b620559c897a460b15bf2d56bc871652bb"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-05-19",
+          "runtime_text_sha256": "7943e6803fde747c5c9e2b0e8ce49ae1f017bc0bd8dd360ba9626b54107f975d"
+        },
+        {
+          "position": 10,
+          "t_index": 9,
+          "date": "2025-05-25",
+          "runtime_text_sha256": "897fdc7f43477db008d0cff17fc8623b491104826a56e2b4d6aab796d2f827a1"
+        },
+        {
+          "position": 11,
+          "t_index": 10,
+          "date": "2025-05-30",
+          "runtime_text_sha256": "7aa0020a388e96b0fed29a19918443790602eb6d6644e1a68d2a589b55373724"
+        },
+        {
+          "position": 12,
+          "t_index": 11,
+          "date": "2025-05-30",
+          "runtime_text_sha256": "ff9fc8fe4b62532fa5473a585a37d084601491004d93f0567596e5fafb661ba2"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_002",
+      "canonical_case_id": "f990a261:stimulation",
+      "persona_id": "f990a261",
+      "dimension": "stimulation",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-10-07",
+          "runtime_text_sha256": "750739fc42bb6bc3afa2dadbcfa24b0db3fc8656894b97bed8cdb5d27072cc59"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-10-12",
+          "runtime_text_sha256": "87351c969f1ba0bead910ddb388118b501d9f431d357faebc334f7661d97b69d"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-10-18",
+          "runtime_text_sha256": "4dabefdc8add7a085da620db7c2a509130483dd5bc210a1de6bd6c2c6bf6cbcc"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-10-23",
+          "runtime_text_sha256": "d039af5d5f08f66192c643803996af0eb9d6c34d36b5c0ec6bfd3c67ccf389f1"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-10-28",
+          "runtime_text_sha256": "c3a7ae060d23b0da3ece758b7bbac9309ce214d86595361829ea3128dff6b8d2"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-10-28",
+          "runtime_text_sha256": "3714c0ddb88b71846354a4ed9d02b77a1ad1dca5a9ca11bad8f24beea959e8b2"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-11-02",
+          "runtime_text_sha256": "d8c9c57857524ddfb4bdc91c96d673c1dfc069f77bc0f9bc6789958b05ec7d69"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-11-04",
+          "runtime_text_sha256": "cba7f7c2b8d7ec6a4c1d189a0d16b4fdfd751e14a3826d4b56d1348e344b1522"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-11-05",
+          "runtime_text_sha256": "ce07f38171300971a927b40ef0ad1e244cfd3814bc29f566ccf2af795fd7695f"
+        },
+        {
+          "position": 10,
+          "t_index": 9,
+          "date": "2025-11-08",
+          "runtime_text_sha256": "11cb7793f0c6b22dc76793ce1bbd13e96b11f5d560f5e5c5324b7ac067565624"
+        },
+        {
+          "position": 11,
+          "t_index": 10,
+          "date": "2025-11-11",
+          "runtime_text_sha256": "b279712d3922988ffda4e84c309eb3e73f1d686f8e395919a257e9c24787001a"
+        },
+        {
+          "position": 12,
+          "t_index": 11,
+          "date": "2025-11-16",
+          "runtime_text_sha256": "231bafbca9b6cbb7efaea4a8185138edb9fe60dab40ecbfd923c112f891ce7e3"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_003",
+      "canonical_case_id": "1628bd07:power",
+      "persona_id": "1628bd07",
+      "dimension": "power",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-05-15",
+          "runtime_text_sha256": "733361931cd443da5bb879eb821c2bd83eec1a6153acaef9515d207e529ebf52"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-05-20",
+          "runtime_text_sha256": "c5dc82121215d8584aa0506eb22d6e98cf02e79638ee5328f558cb02a3c9e966"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-05-25",
+          "runtime_text_sha256": "60b9108df8a483d3518d29ad30f8ed5d60763c29d241ba481ad6b601a550923f"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-05-25",
+          "runtime_text_sha256": "2f6541276293375b766e14be55c98e3177a5d20bc83cc8201e97c6fb2bcc2410"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-06-01",
+          "runtime_text_sha256": "7e854ead12f2353ad76c9ad808ee2e3caaa02ded66e41033bb9ba84ba39d7f15"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-06-06",
+          "runtime_text_sha256": "f6b490468151ad960dcac7dccd48ffc3ff69924c02d5dba6e8171d3572e9a2e0"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-06-08",
+          "runtime_text_sha256": "effa0c11aa3a9c2b8d012e04c85fa79efe435881a9a237f9f5b5d2a16d342c90"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-06-10",
+          "runtime_text_sha256": "e6f02ebd980e0f5429e759789967f38c8cf1953ff496438f46f6d706ae81ab6e"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-06-13",
+          "runtime_text_sha256": "9e29b8892ff7bea3691a911e830cc89b167fd4a7917a7c31dd6560a179bb88d3"
+        },
+        {
+          "position": 10,
+          "t_index": 9,
+          "date": "2025-06-19",
+          "runtime_text_sha256": "864fa8302becdad8217274053b0ddf7fd6958bc1862ab8143f7c68d97db7c4f9"
+        },
+        {
+          "position": 11,
+          "t_index": 10,
+          "date": "2025-06-20",
+          "runtime_text_sha256": "4c51ca35af1f17fe44d32fd10d4f31186294b7f8ec2985342a98b3022c72fba6"
+        },
+        {
+          "position": 12,
+          "t_index": 11,
+          "date": "2025-06-24",
+          "runtime_text_sha256": "3c8d676c0fc1977f5f504a43fb277240c21254dc1864173b08bf1dbd6b5ad10b"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_004",
+      "canonical_case_id": "d7a0683f:universalism",
+      "persona_id": "d7a0683f",
+      "dimension": "universalism",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-12-31",
+          "runtime_text_sha256": "3c877ab5b98088b485b31b47df42d58b0490a031b47304a9549ae9a0dcc432ab"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2026-01-04",
+          "runtime_text_sha256": "0a5938ccf0212c9c21c7c2ab04b69b253c2ea678cc382c70b51cf3c853bfcb13"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2026-01-08",
+          "runtime_text_sha256": "7b587daf932c8f28f4d6b88f6ebf5e0b1e548c75239657604629d2f705cea1a9"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2026-01-13",
+          "runtime_text_sha256": "f459104108e8f18be774bd023a1158f42ed6700166bbdbc7ce9552e614511f6c"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2026-01-16",
+          "runtime_text_sha256": "1371fd98fb5a06e945c6327bf010d01a9b358e3813a4d61aead27d0a5b3dae9e"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2026-01-16",
+          "runtime_text_sha256": "ffacfba02106aa4de7cdb30eb15892f364c32fa0c0046af8b92e041b5cb39932"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2026-01-23",
+          "runtime_text_sha256": "87b5122fab476028f336b3e18ad143404d64994ca99cd96d54a51e3cd90c7abf"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2026-01-28",
+          "runtime_text_sha256": "2b469fcac8b2f611bf2205005cf4f251250685b41cab153e1845ad25e5049ebf"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2026-02-02",
+          "runtime_text_sha256": "4a99a036b8de04430acd46c992d4669770bc08899094c956503786a66f2c5fdc"
+        },
+        {
+          "position": 10,
+          "t_index": 9,
+          "date": "2026-02-02",
+          "runtime_text_sha256": "cea22cb10960114d469bf9a815cdf92b244ae10a065340441b88cfa56e4b160b"
+        },
+        {
+          "position": 11,
+          "t_index": 10,
+          "date": "2026-02-08",
+          "runtime_text_sha256": "8c01a3dde112548e9996307f96f85db66ded7336769a8bb42423623c17a5a552"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_005",
+      "canonical_case_id": "b63d80df:power",
+      "persona_id": "b63d80df",
+      "dimension": "power",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-03-17",
+          "runtime_text_sha256": "2b910ba9cee0557cd18d2d4406b56ee1ea6e38878a0a54b5a6898da3f38c2df0"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-03-22",
+          "runtime_text_sha256": "1c9ddcdc7137a4200f05fda85d61e1a86b0374c647ac390414bc26f5913ee443"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-03-24",
+          "runtime_text_sha256": "edc531c8f9f96b908bc33fd8c4e90dbe83f3ae9fff4caa8c3bf3bf1b5ecd58a9"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-03-27",
+          "runtime_text_sha256": "bac0ba2479066c7fa9ea7c5f122ae3fde16cd5d95ac066e60c8cac6cc3e24f27"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-04-01",
+          "runtime_text_sha256": "f2943d63746189d06d81bbebb128f6047268b9b786cd42ab00f1cf33a0d4d5ee"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-04-04",
+          "runtime_text_sha256": "aa3443e7fa6362cc84dcd78451c9c1bb5fe6dca7086ee9d3ea9a51cfa1bb1d55"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-04-11",
+          "runtime_text_sha256": "2dfe7e8fd3f0b3902e9a7d28036cf3ce4ce92bb06b1149d2837000829230ae85"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-04-16",
+          "runtime_text_sha256": "7c30d543039ea6ac6670a6151e782febb6ef467971b4e2cd4797341c40b4b363"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-04-16",
+          "runtime_text_sha256": "8ad75e8e3aec2abbb81726520340e57eaf92c2f179e12393a24cf4b23544fd9a"
+        },
+        {
+          "position": 10,
+          "t_index": 9,
+          "date": "2025-04-20",
+          "runtime_text_sha256": "712b3a2c2329e07a8af4abb76f20e43faa0125c9700694ca6c4f9c62ca8a9f80"
+        },
+        {
+          "position": 11,
+          "t_index": 10,
+          "date": "2025-04-24",
+          "runtime_text_sha256": "a8f5865c0d1a58c6ab605b637ae7c7dd74fa0824172e4868e813fe32f24cd3a4"
+        },
+        {
+          "position": 12,
+          "t_index": 11,
+          "date": "2025-04-27",
+          "runtime_text_sha256": "63a9829e422535de9e089341086ee2e5d7d5bbcde4408906cc5d04d8cc7d5caf"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_006",
+      "canonical_case_id": "02fb94f3:self_direction",
+      "persona_id": "02fb94f3",
+      "dimension": "self_direction",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-04-15",
+          "runtime_text_sha256": "b1d240cfb9452d496f62d8c443370162399f48e6791a47521c6cfe017c822d19"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-04-20",
+          "runtime_text_sha256": "5457d6854bec76b4c3667c7c2692c5321e222007b2bc765bf4ea6bc33425ee2c"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-04-21",
+          "runtime_text_sha256": "e5ee8d31127e5a9a7b4391cd0c9c33bdb97139a798cd4bdda890907c416d3236"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-04-27",
+          "runtime_text_sha256": "681f95ddc102a11e956e578c7bc6e3d04b68420c1e59a7094e71649a634df522"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-05-02",
+          "runtime_text_sha256": "de886e9f26003a26afd891d806b9b83b0b5cf31298f61358991996ffb8dcbb49"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-05-02",
+          "runtime_text_sha256": "35938e8eeda116c4821514d0e5280b01b45be9d8e701cc0b272835221c5f6f3f"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-05-05",
+          "runtime_text_sha256": "44dadb7d9cbc54908a7d17ac4d92f71ad37a2f54a7155084f07ec9e307449ffc"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-05-06",
+          "runtime_text_sha256": "719fec4ae5619a0055936ca61e3230555d3c60fa80e7445e3a0157f83af6cfea"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-05-10",
+          "runtime_text_sha256": "45e9918de610105390225098ecb2835c19549beee7c8a8e741befb8360c0510c"
+        },
+        {
+          "position": 10,
+          "t_index": 9,
+          "date": "2025-05-15",
+          "runtime_text_sha256": "7c0a7001885ecc3e5caa8d7356b362781e5e36a511b2eeeb0fd729a2ce1b28d0"
+        },
+        {
+          "position": 11,
+          "t_index": 10,
+          "date": "2025-05-22",
+          "runtime_text_sha256": "c8113afed6b19f0ed70988b69038924ef94eeada7847de74a6e45d4a1bdf8ce2"
+        },
+        {
+          "position": 12,
+          "t_index": 11,
+          "date": "2025-05-22",
+          "runtime_text_sha256": "eb8d8453269daa97462a4d704c0af8dd6d98a7b8114f4a0e8cad16c2d899a02c"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_007",
+      "canonical_case_id": "e5c9d9e5:power",
+      "persona_id": "e5c9d9e5",
+      "dimension": "power",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-03-25",
+          "runtime_text_sha256": "863a938461cb74b0c0461b275b63be9660d7cdeeef684f445e962ad9ac80b325"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-03-25",
+          "runtime_text_sha256": "697061cc25842c9a4c325b1e0feb15a996a601220a77ca04a6192b4f6e2e9cb1"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-04-01",
+          "runtime_text_sha256": "f699ddb248851a59b6a64ada9cb92e9f612adbe93236b96294193dfbe03eda52"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-04-08",
+          "runtime_text_sha256": "135faab0ab90e2cc962dfeb176ae4231f476f8a145173d1564e1dc7f42d75c5a"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-04-08",
+          "runtime_text_sha256": "091212b9645a20616f63ef8409807d44d742e012c0baf29ff8f69b8bd552d56d"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-04-10",
+          "runtime_text_sha256": "32ffd39c2023ceca5332ef97d7d1f24b646d0dbf08850ee4b3cc085931dd4742"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-04-11",
+          "runtime_text_sha256": "7ff9ff8d6c6cced1cede59b2166063cfc25e97e2f4a8a100abc16ff005cfe7ab"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-04-14",
+          "runtime_text_sha256": "dc03121d6fa484513e70c0f79552a75526b6fb3a97322b5d9805e5bd10a56301"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-04-15",
+          "runtime_text_sha256": "a1ad80e3d1744abc3f6ad2b33aa358010fd9d6007389639671fc9ab6ee6cf7bb"
+        },
+        {
+          "position": 10,
+          "t_index": 9,
+          "date": "2025-04-15",
+          "runtime_text_sha256": "683ee1a513ca7c4c304c8d2bb5fcbcf3d82094c60adecf97f61984ecf9d3c33e"
+        },
+        {
+          "position": 11,
+          "t_index": 10,
+          "date": "2025-04-17",
+          "runtime_text_sha256": "567e21b4e62ed1553f3fd8ad0b4e406729687db50b81ec5e9e20f217400884fa"
+        },
+        {
+          "position": 12,
+          "t_index": 11,
+          "date": "2025-04-19",
+          "runtime_text_sha256": "b44ade389609ca2b3056c28c9c149ba314d9e38181616f8757cb22f99094608a"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_008",
+      "canonical_case_id": "11de77e8:self_direction",
+      "persona_id": "11de77e8",
+      "dimension": "self_direction",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-08-23",
+          "runtime_text_sha256": "550cf980780bcff57e86a87d6bd08aa43e2db00b42df46f9cfd7f99028eb5048"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-08-30",
+          "runtime_text_sha256": "c1a21afbff783b9f385aff5ec0e94c0f11940b837221e6535e417302920d8f27"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-09-05",
+          "runtime_text_sha256": "4f1948c33342fcd6ca0d8f425a0d740e00b938f198d1559d06106b619122d6da"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-09-10",
+          "runtime_text_sha256": "41472128dd86f8df6a369a325470cd7f659abc32c6fc3f096b2a308c90031ecf"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-09-12",
+          "runtime_text_sha256": "b1424322abcc15b67bf3ded15195c5a3a04d2236d2179dcfa5208440ffed55d4"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-09-19",
+          "runtime_text_sha256": "43a1de0f4b2c52f325d5e860508e67d49e9776a9495fb432b2bf4453bd781d12"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-09-26",
+          "runtime_text_sha256": "252e5983dfd4ed3232b74f3020561bace0836ffd073aa1f456ee85e399541d4d"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-10-02",
+          "runtime_text_sha256": "f8dc2dd46ee1ba10cb3aa7819ddcd4fc210baf0091587a4fc9239a812a5b0738"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-10-07",
+          "runtime_text_sha256": "51bf9304ccf75ba3d037befa343947b1ad2937d225120e1663adf229187cba25"
+        },
+        {
+          "position": 10,
+          "t_index": 9,
+          "date": "2025-10-11",
+          "runtime_text_sha256": "7c9aa462bc99e063b852e09898ecd3d3c71eae6fac7e27074dbeb7673bbd17af"
+        },
+        {
+          "position": 11,
+          "t_index": 10,
+          "date": "2025-10-14",
+          "runtime_text_sha256": "f518cbee8ba0290bf19115bae203aea14d89e5cfde1c36fe1ee615e1bb5645b5"
+        },
+        {
+          "position": 12,
+          "t_index": 11,
+          "date": "2025-10-14",
+          "runtime_text_sha256": "9f33e02f959d77428d9c5cd5f2971263c08d2ab62b14f298cc370704953fe36c"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_009",
+      "canonical_case_id": "882767c0:power",
+      "persona_id": "882767c0",
+      "dimension": "power",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-02-07",
+          "runtime_text_sha256": "9d59ab3d3d517b0d54277c33ec23ce6507a7fc56cfee56f528dd9db24621b050"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-02-12",
+          "runtime_text_sha256": "a2941e7d49e3d8ec4a3d5755773b10c8fce64a80cd013bbbce6237bc4f22cfeb"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-02-17",
+          "runtime_text_sha256": "8f4fbfef930d0d8985d66506795560be24d7398dce0fb88e009ccd9717a8c675"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-02-22",
+          "runtime_text_sha256": "dc7099aba52aaff97b6c23e5806275ba18a9ccef44b3e051f2afa8ea08e1eee1"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-02-23",
+          "runtime_text_sha256": "1ac81033d0c0df391b9a0b03f3738f84b6a67bc33ec66ca6fe90f37430c5a6ec"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-02-27",
+          "runtime_text_sha256": "328a97814067e992c0abd012d749a17e56d703983a83983d69c77b946c24fbd2"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-03-05",
+          "runtime_text_sha256": "9acfc02f8fc62d5952506919a9b2a351cf1577a433ff2e1663282ccf285b3d36"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-03-11",
+          "runtime_text_sha256": "52c17329e57cff352f56b4eb9a29e4c756ea7b85ae51c6c4619ed66777a3699e"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-03-18",
+          "runtime_text_sha256": "10cb00087bcb3edd32c96ff44254ef18dfbf3b7084e8c10a5baf5e2046ec9d30"
+        },
+        {
+          "position": 10,
+          "t_index": 9,
+          "date": "2025-03-22",
+          "runtime_text_sha256": "462709fe47114830008ff3369bc79d745e65623d3a6ce967e48c0a48803f5973"
+        },
+        {
+          "position": 11,
+          "t_index": 10,
+          "date": "2025-03-25",
+          "runtime_text_sha256": "ecf1498cdc06bdef015ab6122993ac9b44f92c83fdf9e53b55e14a0f362c978c"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_010",
+      "canonical_case_id": "742c98d6:universalism",
+      "persona_id": "742c98d6",
+      "dimension": "universalism",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-09-07",
+          "runtime_text_sha256": "d18e4f810fa64fd990a86fd92b03a048d3b48311d3b9c19945bcd76fbc82a04b"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-09-11",
+          "runtime_text_sha256": "82f1cf93fd07bfa8e618bd2bf5eaab766da9f9fb326e8daee0a0f192e989d900"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-09-13",
+          "runtime_text_sha256": "4c98473f32155ca390e93be32a12006ebd350c63b32193c9e749bc724aa798d0"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-09-19",
+          "runtime_text_sha256": "786cf088d8d4157dcdb4c09e3b8ca0ef78905d1842a65d6baaa57d1864a3ad39"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-09-25",
+          "runtime_text_sha256": "de8000aa50bb440d61b2d60b7f1ebfdf9233438ca89c2513f3913e57d2793a73"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-09-29",
+          "runtime_text_sha256": "3de0bea507a3590ccbae58e86ce0d7ac7b8a8391d57841dbc492f269d67a3cec"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-09-29",
+          "runtime_text_sha256": "bffeb3b5081b8fcaf786e9388505a28d120d227db9d2c582d1ddf24d3ec42cf9"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-10-05",
+          "runtime_text_sha256": "7ca3a4dea7e4d10ffc48d02a7cad13479800103f1a6e7a66eb87f1f670dab1b0"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-10-07",
+          "runtime_text_sha256": "620335c6fc234e773a785e0124de7227354888efece74e7000cf09a656b84866"
+        },
+        {
+          "position": 10,
+          "t_index": 9,
+          "date": "2025-10-08",
+          "runtime_text_sha256": "7eb7412121c79c9a8561c84f7665ed1eedca5a6fbb44b161e6ec3083a90c6964"
+        },
+        {
+          "position": 11,
+          "t_index": 10,
+          "date": "2025-10-14",
+          "runtime_text_sha256": "0f5dd04a95f2e8d2296752e787534ebabb83b43d73b139a25ed07cc70e33b0ef"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_011",
+      "canonical_case_id": "87b8187f:security",
+      "persona_id": "87b8187f",
+      "dimension": "security",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-07-26",
+          "runtime_text_sha256": "a2e89568973a8423e1dcc256060bd2ce196ec43c8670c48e980a5b50583a0384"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-08-01",
+          "runtime_text_sha256": "86d59798278968e950712a1cf97a6985029e665811e8af14a6328943bc906add"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-08-04",
+          "runtime_text_sha256": "fe178f134ccedb441b82f42c881eb2e2d62f06ba564c8661c059a5e9067aa638"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-08-04",
+          "runtime_text_sha256": "1aa8d9b4a70d992eb0dac72231ae575679790476ec4fb5880cbe52626ebdf99e"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-08-05",
+          "runtime_text_sha256": "3edf452ffa78b052f4bccabc0743b4eb485138e2385a0ef924e4a2fa404fe84d"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-08-12",
+          "runtime_text_sha256": "9f47d86bccdef0665a767a32f2c0c043da33415740db8d11b7566b5381ecbbab"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-08-14",
+          "runtime_text_sha256": "aeb781c6effc12f1337188b2a34f2fd99c12a2206b613c06baf613c54d5201c2"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-08-21",
+          "runtime_text_sha256": "92d8c469f6faa18a86f7359641e47169a3d04bea6ac65866a917b4b72895e142"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-08-26",
+          "runtime_text_sha256": "4ff295226f0ca0cd096c7d67b11fcc9dfe6a431f78649ce8759ecddba9b6b86a"
+        },
+        {
+          "position": 10,
+          "t_index": 9,
+          "date": "2025-08-29",
+          "runtime_text_sha256": "dd3933021091b18a7f2943c6feb72dc9eb8e1830b45e8fcba6ed3ed05dca451a"
+        },
+        {
+          "position": 11,
+          "t_index": 10,
+          "date": "2025-09-02",
+          "runtime_text_sha256": "c90174de8cc7dba2b448e045edba2b07aa538fe27cb6d38089b44d39985baf75"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_012",
+      "canonical_case_id": "961a4e3f:self_direction",
+      "persona_id": "961a4e3f",
+      "dimension": "self_direction",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-11-14",
+          "runtime_text_sha256": "6b8bc665ed2057983cdd38c9ec9e589bd93a2c84ba43b21bdb1743bed47cccc8"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-11-15",
+          "runtime_text_sha256": "25d9d095c63542325e0dc46afaff3b452e81310062ade1c2b88e6636a8c2d27c"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-11-20",
+          "runtime_text_sha256": "9d22d899ff0a2db14e1f7ed377531c4f7d7c06ebd2f7580353224dd87a2fad91"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-11-23",
+          "runtime_text_sha256": "9915728044ef0f1cec9a69028dfbdb1398c81dcf866ea1ae256a075fbe334665"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-11-24",
+          "runtime_text_sha256": "59277572ff559b37ad83e12794994f7999e6d8af0240f31bcb8abb420b208016"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-11-30",
+          "runtime_text_sha256": "5a7e44a55e2e2f78242ef66dc5456799098487656cf92d755ae7c26da290616f"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-11-30",
+          "runtime_text_sha256": "834dc771d96cc2b60e96e102a744696419f7e48f760004c059df685d2b14f051"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-12-02",
+          "runtime_text_sha256": "cf3dd1ef9f3bbf80b830ac662a87651ec05b978043a48711ae9948daa2323708"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-12-07",
+          "runtime_text_sha256": "343964f4383f623e9d1840826112c21cb7d6d151cf7d02149b969df2c84eec71"
+        },
+        {
+          "position": 10,
+          "t_index": 9,
+          "date": "2025-12-07",
+          "runtime_text_sha256": "54ffe7003f9484d7227e0f47775c5373ab7a4e350198f93872d037b4bb64ff52"
+        },
+        {
+          "position": 11,
+          "t_index": 10,
+          "date": "2025-12-14",
+          "runtime_text_sha256": "0b36f2322b4d7255b46f3b83f53eabe4a350b30599db664b97ee6a64554e3517"
+        },
+        {
+          "position": 12,
+          "t_index": 11,
+          "date": "2025-12-14",
+          "runtime_text_sha256": "ae6732255ee9c88a232e96ed50f5c4b919eac9d0f5be23b092b577060348be71"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_013",
+      "canonical_case_id": "988d1a65:power",
+      "persona_id": "988d1a65",
+      "dimension": "power",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-02-16",
+          "runtime_text_sha256": "35e1576030184f4a4b9b187d1cee3f7812d96d06d5da111d9525bd651fee19fa"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-02-22",
+          "runtime_text_sha256": "93ea7b63a0c81fa97f5538a9e45cc9945e068e700644895925905110a56032cc"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-02-23",
+          "runtime_text_sha256": "fb96e8b9f4bb1be8a2319ce1310e867237237e96447e7730e0731a64ac4bcc00"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-02-26",
+          "runtime_text_sha256": "c8d016fdb74ddb734bfb13ad62d18aa3a8aaa3a73daae2f80594ad22d80428ee"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-03-03",
+          "runtime_text_sha256": "a6349e9a9b8e4c0c6f309ab47fac7a004c2a380163aae1123dc103e00878a561"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-03-10",
+          "runtime_text_sha256": "e3e52c9f1081d085da11faa2273c09e9fc03d28f250d1115b01bf4aa55936270"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-03-16",
+          "runtime_text_sha256": "4a0d7ccb9c312c4aa2a9f1ec92c938f56903938af1a1b5450725f206ca8a612c"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-03-21",
+          "runtime_text_sha256": "95f0d732b79ffb97e71f00e99f37be3c8483b7a1ab8660752e7e00edeb7dd257"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-03-23",
+          "runtime_text_sha256": "c9d03ab9a892bb48fff39d569d5028aaf254e6d3f0ac9bd1fd6a05ac8f075917"
+        },
+        {
+          "position": 10,
+          "t_index": 9,
+          "date": "2025-03-25",
+          "runtime_text_sha256": "f4cae7979f1383be475178ef3c8509fd47b7221cda328a2465d7281131d258ae"
+        },
+        {
+          "position": 11,
+          "t_index": 10,
+          "date": "2025-03-26",
+          "runtime_text_sha256": "f99a6fda30d339ce013deeff5a5b03c645d9e73c67f5d364b0c8fe3e40bad574"
+        },
+        {
+          "position": 12,
+          "t_index": 11,
+          "date": "2025-03-31",
+          "runtime_text_sha256": "beceb8d2c7c9ad2241b9516b109dbc9f6110440b879896a743d1b67e5bb2519d"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_014",
+      "canonical_case_id": "65ed1278:benevolence",
+      "persona_id": "65ed1278",
+      "dimension": "benevolence",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-02-25",
+          "runtime_text_sha256": "533288efed3492f1b66ab0d1f5320357a47dce4a046fb730ed4d0b6b67a841a7"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-03-04",
+          "runtime_text_sha256": "6670abf3c46de7cc983d6668853c6fb9bf2446c382f685c284a9dfc7fd97b370"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-03-09",
+          "runtime_text_sha256": "5ad959305eee18e025193813c35a1f0a91c35b37fd2893b20bc018fef0fcec55"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-03-13",
+          "runtime_text_sha256": "8fba97cff30de277f6008597c67a725ab471c04c5970212efbfc6eeac667cdc0"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-03-16",
+          "runtime_text_sha256": "ab41b9657a9612dad80304697b119672fcc6e06aaecfb5fdb70509390a92a274"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-03-19",
+          "runtime_text_sha256": "3f067d39010cc36b96114b9dc71ae53b3a4d519aab5eccd979cc08d0cbcd8b69"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-03-20",
+          "runtime_text_sha256": "eb0293c2cc36f1e535d59d62085c2ff9eae4f5d33edbcf885c0393d20e5bb156"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-03-21",
+          "runtime_text_sha256": "1e08d1a37ea502a0b49cc3543e858cfa65d67f30f42506377781699e00f2dc4a"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-03-21",
+          "runtime_text_sha256": "5c6091ef68a8e3ec852aa03374695de154876f68876e33419f71440475af7c84"
+        },
+        {
+          "position": 10,
+          "t_index": 9,
+          "date": "2025-03-23",
+          "runtime_text_sha256": "16974694bcfa092977f74faf7b8921fa38024cb426e1a90a9e238d449a895093"
+        },
+        {
+          "position": 11,
+          "t_index": 10,
+          "date": "2025-03-25",
+          "runtime_text_sha256": "4657078319bfae063a1fe20a53abc6d7f8199a4bab1b66e0143ac3d58144188b"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_015",
+      "canonical_case_id": "7cc5cf92:power",
+      "persona_id": "7cc5cf92",
+      "dimension": "power",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-06-27",
+          "runtime_text_sha256": "5a66496649ad07eccb2ddbbfddc63a9849dd4068674d201fb14f5acc4958c3b3"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-07-02",
+          "runtime_text_sha256": "d4711691911c3858192dd999ff8bbe0d008be6cb848334e70f766a52f8f5a394"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-07-08",
+          "runtime_text_sha256": "e1a5ac658f3aeccb9082ace55a7ad7c201865d24b1dab2b2da1e3e1c053628af"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-07-10",
+          "runtime_text_sha256": "928866dea120dd1de0f9f9beb102e8b48ca87ae50319a6a65fba4c2911895d15"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-07-17",
+          "runtime_text_sha256": "a4ff247e8a1cc0ef865142d3f37354b1fcb6935abae593b9039a394ceff0098a"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-07-21",
+          "runtime_text_sha256": "09e531f43928f24a5de0e073ed36b4fd6c14d249274432073d97c11b7f97964a"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-07-22",
+          "runtime_text_sha256": "da8521e55c5bca0b3c6a8d5eea3b320d9a88f9ace27d2181c1504ce5880a8e8b"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-07-29",
+          "runtime_text_sha256": "89e0d48d2bac42dfe392b18ccc03c0d2197dcdd33caa3ee8c8691fab94a8b5ce"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-07-31",
+          "runtime_text_sha256": "c9de54bf156928c48d106729a9023fb7cdfb77471aac43474e9ef8938a689e58"
+        },
+        {
+          "position": 10,
+          "t_index": 9,
+          "date": "2025-08-03",
+          "runtime_text_sha256": "2e815b396b4dcb95f18ad95f1250d6acc2207ae0840910e91d0169501bc4a624"
+        },
+        {
+          "position": 11,
+          "t_index": 10,
+          "date": "2025-08-03",
+          "runtime_text_sha256": "48ae6fca3092a945643f161a80b91b8c986384e2faa9e9a395310b51bbe00ea7"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_016",
+      "canonical_case_id": "9aec9ae9:self_direction",
+      "persona_id": "9aec9ae9",
+      "dimension": "self_direction",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-09-07",
+          "runtime_text_sha256": "6a0e0715805dac045cf1c1f8c3c843f4d56572849d1d0b5ae8ed1f5cfd7abfb9"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-09-11",
+          "runtime_text_sha256": "9781c438c17fb4b3ad66056c5ca82e3c4bf2dbe7dada1d4a2d4c812d03672fad"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-09-11",
+          "runtime_text_sha256": "46778654600f7dcf9b44a275d624a2a33636b39dceeae85a69634e4193bda3fb"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-09-17",
+          "runtime_text_sha256": "ae0158c9a35ac1107f98a272381ab121d8f9193d22e8586721ba89db49c0982f"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-09-17",
+          "runtime_text_sha256": "dceb66b34e713a6da3af50040f7ffb8261e772d4db297827b877042c65949d7e"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-09-21",
+          "runtime_text_sha256": "223c1f1dda3c711575723ee657364cac31211f55f75b70fe1e13292c5e2c41c2"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-09-24",
+          "runtime_text_sha256": "a98f32ef53f0d43461592ce3d5f1282713080e685b2e5ddd3b8b3238f3e00207"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-09-28",
+          "runtime_text_sha256": "fd6c9e39512b91c12bf22dc7d022dc68bd02d80bca6f4332ab9a4fb5c998ee37"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-10-01",
+          "runtime_text_sha256": "2604db132a84a48c41d490d60cf2233d7311249e5aa17326a82b940831700d22"
+        },
+        {
+          "position": 10,
+          "t_index": 9,
+          "date": "2025-10-03",
+          "runtime_text_sha256": "5d08bbee53b13bc677cf2e6a8c03b93ad95b91b402700b3428bd488efd3eba79"
+        },
+        {
+          "position": 11,
+          "t_index": 10,
+          "date": "2025-10-09",
+          "runtime_text_sha256": "a318892ff17024e35812e4c7c704cda6a7377282ffd2ea16dab77e2f1d1101f9"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_017",
+      "canonical_case_id": "8f83c818:universalism",
+      "persona_id": "8f83c818",
+      "dimension": "universalism",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-05-31",
+          "runtime_text_sha256": "e564c1cb2acd893808d3c0c3124673ba95e5bc140e39762a48859ed73ab31ea4"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-06-07",
+          "runtime_text_sha256": "1a31c793da0d17e9589348608b46886c379b9a845ec223e977583ba6f1ac314a"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-06-09",
+          "runtime_text_sha256": "937c0990d01423e54696802578fed173466ddc81b4961ee4dd82fdf12afc76c0"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-06-09",
+          "runtime_text_sha256": "b4b86215f11e6d10805deddcdacc1627232a1b8c661cb79ad606a8651278a34c"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-06-10",
+          "runtime_text_sha256": "af21cd3ba9c3c60b36b802c1c4726c8bbb4b738cd0361999c4e77926c59e6e33"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-06-13",
+          "runtime_text_sha256": "2c6ecb8639f30a9040173684d7b2cdb97a94214ae21e5360e6c10d06d5eeece2"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-06-16",
+          "runtime_text_sha256": "64f005fb41afe99e6b1f59df61d82bc7dcaa5757d673fbf80dff3086851e309b"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-06-22",
+          "runtime_text_sha256": "9b65c406ab291c765a23863e609dcb65f51267a64258b1dc1677b0b0942b3810"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-06-25",
+          "runtime_text_sha256": "a976c081e950b80dd5a1a39487459b2264a27ecd4bc55f3e67298755d7f51f92"
+        },
+        {
+          "position": 10,
+          "t_index": 9,
+          "date": "2025-07-01",
+          "runtime_text_sha256": "70fd9dec01f920f27508e642950b7ee9af4fdf6b2c40a1e361b99813024fbbfd"
+        },
+        {
+          "position": 11,
+          "t_index": 10,
+          "date": "2025-07-05",
+          "runtime_text_sha256": "1bfd705ff2f5c21384cec64d967bf125d2f67140d51aee5b6f8c5b898db28952"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_018",
+      "canonical_case_id": "f990a261:hedonism",
+      "persona_id": "f990a261",
+      "dimension": "hedonism",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-10-07",
+          "runtime_text_sha256": "750739fc42bb6bc3afa2dadbcfa24b0db3fc8656894b97bed8cdb5d27072cc59"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-10-12",
+          "runtime_text_sha256": "87351c969f1ba0bead910ddb388118b501d9f431d357faebc334f7661d97b69d"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-10-18",
+          "runtime_text_sha256": "4dabefdc8add7a085da620db7c2a509130483dd5bc210a1de6bd6c2c6bf6cbcc"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-10-23",
+          "runtime_text_sha256": "d039af5d5f08f66192c643803996af0eb9d6c34d36b5c0ec6bfd3c67ccf389f1"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-10-28",
+          "runtime_text_sha256": "c3a7ae060d23b0da3ece758b7bbac9309ce214d86595361829ea3128dff6b8d2"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-10-28",
+          "runtime_text_sha256": "3714c0ddb88b71846354a4ed9d02b77a1ad1dca5a9ca11bad8f24beea959e8b2"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-11-02",
+          "runtime_text_sha256": "d8c9c57857524ddfb4bdc91c96d673c1dfc069f77bc0f9bc6789958b05ec7d69"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-11-04",
+          "runtime_text_sha256": "cba7f7c2b8d7ec6a4c1d189a0d16b4fdfd751e14a3826d4b56d1348e344b1522"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-11-05",
+          "runtime_text_sha256": "ce07f38171300971a927b40ef0ad1e244cfd3814bc29f566ccf2af795fd7695f"
+        },
+        {
+          "position": 10,
+          "t_index": 9,
+          "date": "2025-11-08",
+          "runtime_text_sha256": "11cb7793f0c6b22dc76793ce1bbd13e96b11f5d560f5e5c5324b7ac067565624"
+        },
+        {
+          "position": 11,
+          "t_index": 10,
+          "date": "2025-11-11",
+          "runtime_text_sha256": "b279712d3922988ffda4e84c309eb3e73f1d686f8e395919a257e9c24787001a"
+        },
+        {
+          "position": 12,
+          "t_index": 11,
+          "date": "2025-11-16",
+          "runtime_text_sha256": "231bafbca9b6cbb7efaea4a8185138edb9fe60dab40ecbfd923c112f891ce7e3"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_019",
+      "canonical_case_id": "3cfa2ebf:universalism",
+      "persona_id": "3cfa2ebf",
+      "dimension": "universalism",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-01-28",
+          "runtime_text_sha256": "00e64cd6e391d50ae0f8c79e4bca7486c731e97fef09ffe70d6a294e130a8831"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-02-02",
+          "runtime_text_sha256": "1b63086527529c4b5e442f18c0fb98b1269ea00a97b716e22a82dac3e0e9205a"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-02-07",
+          "runtime_text_sha256": "6c3dee35afe7cb1eb74e80ba6ec31bd6dadeb0b4dc748e3560baec4793af97fc"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-02-07",
+          "runtime_text_sha256": "7223e5e99f192bf5ddf9954eb56a0ed8ad01a63d4f08cd84a8173e86f93703ec"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-02-12",
+          "runtime_text_sha256": "e1a24cf3c6fdc0c505cb0e29151228a8b7d04be92244d57dad685da882b80227"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-02-17",
+          "runtime_text_sha256": "6a30456893b4cc17e816a71288f192707a6fa7b453a7a7aa218929d4fccfafcb"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-02-21",
+          "runtime_text_sha256": "77194645cba5aae897336fcef226785f0ccbc29c4ba97d5b5d27de47cfb7b76c"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-02-25",
+          "runtime_text_sha256": "34531616cbb2c846351433713d68f741abfa4b09b36bb5b2ae713a9eb9bbc031"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-02-28",
+          "runtime_text_sha256": "2de4dbc4e754adde9554e0f39be070654619970c502ccccc89d413a8c21205e8"
+        },
+        {
+          "position": 10,
+          "t_index": 9,
+          "date": "2025-02-28",
+          "runtime_text_sha256": "07e4ed4f1733bff82fc1a8eacdfe7715511f73ba11877aad82d73422903d867b"
+        },
+        {
+          "position": 11,
+          "t_index": 10,
+          "date": "2025-03-02",
+          "runtime_text_sha256": "4ab33ad8484e93aa5d146f2dbbf38e70ce8aaff4d11c7114f40df71a9b077ae4"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_020",
+      "canonical_case_id": "87e92805:security",
+      "persona_id": "87e92805",
+      "dimension": "security",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-03-13",
+          "runtime_text_sha256": "c3eed7552b256f66ad5ecb0f99fdd0feb4c257e244e318deed223366705ef17f"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-03-17",
+          "runtime_text_sha256": "2718c787e63b69a76a46179572834377f386e62bc5bda0f6708abb70a795a0c2"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-03-23",
+          "runtime_text_sha256": "243dd82c18951002bebe5cc1b0930ec162e4b3351184947f2c96ddd9c2d39a4e"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-03-24",
+          "runtime_text_sha256": "0e7cfe6c0b1f7e586b54322ebdcb14591a7095364ce5e047839f4e7781372148"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-03-31",
+          "runtime_text_sha256": "59f5670ada42b78529ec1a654e88dcbe019c9513acb38ac557aa095f876a705e"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-03-31",
+          "runtime_text_sha256": "e4d455279d552853e496cf53ad2a808e1050a1a318ebc5e460c52ed0c9f8a862"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-04-01",
+          "runtime_text_sha256": "560037f85e5c6d3080f4571ab1d7584123fdfc6ce7140a2e7bf553d5f9daa891"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-04-03",
+          "runtime_text_sha256": "77e562ce9878e2e258dc20d87b980baee9b86411cad686d472215bac539b1e7f"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-04-10",
+          "runtime_text_sha256": "cd2bd897ee762a1299d5ae5f58087e8e36e55cfea81f02e4ed0574a2fd3ea31a"
+        },
+        {
+          "position": 10,
+          "t_index": 9,
+          "date": "2025-04-11",
+          "runtime_text_sha256": "7f3e76769526c5553fe4fdde98d6d8099de9753266e0be525994f0fcba55a88d"
+        },
+        {
+          "position": 11,
+          "t_index": 10,
+          "date": "2025-04-18",
+          "runtime_text_sha256": "44f36f024e5084f96ee7f3bcaf7bac765f2bb7b2af8a7d1b98f6c861f2fb5756"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_021",
+      "canonical_case_id": "dbe2c53d:universalism",
+      "persona_id": "dbe2c53d",
+      "dimension": "universalism",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-01-30",
+          "runtime_text_sha256": "34cde36b7d9710b4962516c95f1a36445cb4fec5949454a994d95cd7a1a26430"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-02-04",
+          "runtime_text_sha256": "dd21c2020c96ab1a7791007f61e981baf89d51be499862ab3fcd5d396eb46d4b"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-02-05",
+          "runtime_text_sha256": "ec200f49b233f06f5b60c93e1c654ee044285fb6cdd60ebaf845451ea07fbed5"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-02-11",
+          "runtime_text_sha256": "1f647a55c2a48d166dc907025e38e7e7c0f8c9f7431c413d738d23907e6aa53b"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-02-17",
+          "runtime_text_sha256": "e35bfb19be462fdd9b24f3b1ba1666891ae0f677aab74a17d3033ce0e6154f3f"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-02-22",
+          "runtime_text_sha256": "e8b2df0fcc50b19bc829dcd8bf73cdbcc0eb9392fd4aa066d8c4d242dd0c574e"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-02-23",
+          "runtime_text_sha256": "67a04259fb1a1275b9b77457638422b967b32bfb7185a1d4d84c94e82a7a1791"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-02-24",
+          "runtime_text_sha256": "2d2f2db85cb813fa78ad0e7359b64ca9b356b98e58576932a644874e79c6b6f5"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-02-26",
+          "runtime_text_sha256": "4f528b4e9e26848ba72c80ab4cb1b92261827790217c8faa4380d0ba5270c229"
+        },
+        {
+          "position": 10,
+          "t_index": 9,
+          "date": "2025-03-05",
+          "runtime_text_sha256": "1eae168ad418f33a75cdf69f8421131ecbc2cb9dbd9f09262c04555d559b04bd"
+        },
+        {
+          "position": 11,
+          "t_index": 10,
+          "date": "2025-03-05",
+          "runtime_text_sha256": "8528ee77a4c769b0ce0011b3b3610daf88b39b0688430ff329a3b63981911b54"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_022",
+      "canonical_case_id": "4cfc3c8e:hedonism",
+      "persona_id": "4cfc3c8e",
+      "dimension": "hedonism",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-08-31",
+          "runtime_text_sha256": "8d1c341885ece1791e24eb84bc01e9ad4110b3d7f384fc8ca9a84bf5dd7e331e"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-08-31",
+          "runtime_text_sha256": "50795356eed90823ee464e06cf3505c25ce60e2d69352883b0967273285ded76"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-09-04",
+          "runtime_text_sha256": "8c04cc2ba45ff311d564a5b352450f09e69392e2fce3172af56bc439fac95e64"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-09-09",
+          "runtime_text_sha256": "c3223a994166e2c9de365d024b07f851fefbebca1f385e180af11ac2f6d75a79"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-09-12",
+          "runtime_text_sha256": "2cbf3409687e103b4fcb5b0eecaaf1b03eb4f096008e6a0e7b5a13669069f6bb"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-09-16",
+          "runtime_text_sha256": "9d1e9d65f84fcfc19367ab6c124595e410a527b79c613e483568f5203c3f790f"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-09-21",
+          "runtime_text_sha256": "0cffd611f7507287b2662f6e9ba5fc3e6541c5f9eedd62f982a4f0dc69b2fff4"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-09-25",
+          "runtime_text_sha256": "84d589ec506986831a26ae63f592d52a75ae1eac35f91492294410c30cfc8142"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-09-30",
+          "runtime_text_sha256": "b66c5a926fd2481b76a1f0284b0a5fe20ad43ef32958f958e9b317781b583915"
+        },
+        {
+          "position": 10,
+          "t_index": 9,
+          "date": "2025-10-07",
+          "runtime_text_sha256": "31c87ca7a4f7cc8d71c26f979ea519bfdcbb55d77e24b0db882fccbf5968a98b"
+        },
+        {
+          "position": 11,
+          "t_index": 10,
+          "date": "2025-10-12",
+          "runtime_text_sha256": "b4b3a38ee8a89891bcfac4d3824193e897528dca898822a84c4c04b0f4a29cd5"
+        },
+        {
+          "position": 12,
+          "t_index": 11,
+          "date": "2025-10-19",
+          "runtime_text_sha256": "64d1efefad15069bafcd35b3263e156e286690f0ff9e732178c78d6c67fbde40"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_023",
+      "canonical_case_id": "8da1ab6d:universalism",
+      "persona_id": "8da1ab6d",
+      "dimension": "universalism",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-06-23",
+          "runtime_text_sha256": "28698c452b6fbd2d997ce2ff0c413b20e780c0489e3e494addb4f77934929630"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-06-24",
+          "runtime_text_sha256": "678328a229b39ef8583d28743a7724506b33b51ee8c5a762964109979c9eeede"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-06-27",
+          "runtime_text_sha256": "76ed85df9b52019ffe511ab3e5eaf1cd493784bea04d9a341cfb45140a678dad"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-07-03",
+          "runtime_text_sha256": "b90532838223fc8a7bd1b295439b30ae3f71568c5c57524e3403badaaa2e4365"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-07-06",
+          "runtime_text_sha256": "a52e1d5a0de46acafec724872aea7f7c44770b88690496d30b83d04d0fb169c7"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-07-09",
+          "runtime_text_sha256": "95f3d27fbc75bf218a064df3f07513ee344a4c10e7cdf1b0c1780a6201d75602"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-07-11",
+          "runtime_text_sha256": "cc5441dfad17b11ba31fb81a4f678832c5df87e29ec1cb428c82a4831a5e6ce4"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-07-11",
+          "runtime_text_sha256": "841c2369a5372bb9e6c0970b847574efa9edebdc8b787848257d2216709c5c97"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-07-17",
+          "runtime_text_sha256": "15cf9834aa288bcbad4f56f2c045a67059c1191b3ebe1dd3b9e30886d600bb80"
+        },
+        {
+          "position": 10,
+          "t_index": 9,
+          "date": "2025-07-21",
+          "runtime_text_sha256": "dfc0d52ef91028a53ceebf55cb34170c1b9d688c511bebf667f4acb54a142896"
+        },
+        {
+          "position": 11,
+          "t_index": 10,
+          "date": "2025-07-22",
+          "runtime_text_sha256": "e5755e4ba743d3b7c34535812123bb3dff1de0917084d6b2283df5e6d1005f5d"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_024",
+      "canonical_case_id": "11fa5348:achievement",
+      "persona_id": "11fa5348",
+      "dimension": "achievement",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-06-02",
+          "runtime_text_sha256": "497cb2bfaa996548bd7d7741290aa4af221aad539ba052d8f8e3e001eb37e76f"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-06-07",
+          "runtime_text_sha256": "8bfaad96b6a2163d39d6cf1640af29dfb3f5770db0cd5b84ab8136ff6d787808"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-06-12",
+          "runtime_text_sha256": "348a92b7baf2006dbbe02a3d4f42e74237300616dd1877bf88124b1864e57a39"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-06-18",
+          "runtime_text_sha256": "30526d80573fe4d9a877781e41f6952b68de8f8a849c799d528bcdae22834931"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-06-19",
+          "runtime_text_sha256": "cb1b69e53b8c717413a60f4bc89cf8bdfdc007309b0d78929dbc3e4df8beed49"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-06-19",
+          "runtime_text_sha256": "f7d3c69fba8a013b11c91072964be493d955e28838d252698806974b413dabb8"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-06-24",
+          "runtime_text_sha256": "cd31f150e713116a20a0d9940bd6830da01a65182dfd1012ce6742cbb7c75a9c"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-06-25",
+          "runtime_text_sha256": "7914eddec9f0a9c6e393f8bc76405c202f93ea86a7cfdf54fd79f252c5146f98"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-06-27",
+          "runtime_text_sha256": "53a9d0374c81b9f644ea5e5cb26f4fa14507d925cd9c6d854db7b9946c40afd1"
+        },
+        {
+          "position": 10,
+          "t_index": 9,
+          "date": "2025-06-29",
+          "runtime_text_sha256": "eb05b498c1c3353eaa7e3939fceb24d62b73cd7b152f0481222d7ea2daf282a9"
+        },
+        {
+          "position": 11,
+          "t_index": 10,
+          "date": "2025-07-05",
+          "runtime_text_sha256": "bae1c110a569a64f3c39cc9f6c3a0538599fe3233f2bf91287a1ccfdd7e7bafd"
+        },
+        {
+          "position": 12,
+          "t_index": 11,
+          "date": "2025-07-12",
+          "runtime_text_sha256": "881728e8cb46da19bee4bcd129705d32425491a959ed277b61aea5af9056b3a5"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_025",
+      "canonical_case_id": "e809d252:universalism",
+      "persona_id": "e809d252",
+      "dimension": "universalism",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-01-10",
+          "runtime_text_sha256": "2d88c6be5cf132e81ac8bd0449c82d5b03db4e2ed588e0b65dbf81b1bf4d7ba3"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-01-14",
+          "runtime_text_sha256": "17e9daaf3214aef9f2ffed1f5b4f7a1eb0a1af9ba567ca28e5ab6938372f967c"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-01-16",
+          "runtime_text_sha256": "0d6db2c29f864d6bfc89c912368338d5248a2d0bff80de20bd1963ef42f6cffe"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-01-17",
+          "runtime_text_sha256": "3558df3459adaa7ec0dbe4a25c40b817b40f91fb52b0629d08c0ef178efd269f"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-01-17",
+          "runtime_text_sha256": "ab19760cff10243b89cb91710391e39f278adb9ed1b50e5ccb086a7358c6ac2c"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-01-22",
+          "runtime_text_sha256": "880abdc41cf3948a036523921e279303443442d9b42281c2e704b7a7ef31e0ee"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-01-29",
+          "runtime_text_sha256": "9435c1536212ef5a8ee1bf2ade64365612854c8860ce55b3c324ca79004df206"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-02-01",
+          "runtime_text_sha256": "978716e96796b2324d0576a0a512ceda865ba88da39a1428c3a1e7a8838b4ef4"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-02-07",
+          "runtime_text_sha256": "b6f3d5c960e6f0e7d813d60490fbb34652618b37a114b680e1f49fc5c8539424"
+        },
+        {
+          "position": 10,
+          "t_index": 9,
+          "date": "2025-02-12",
+          "runtime_text_sha256": "350210da3b997266bb9bcb8ff34e33a8b55d56949bb81257ed324e51d5eef454"
+        },
+        {
+          "position": 11,
+          "t_index": 10,
+          "date": "2025-02-18",
+          "runtime_text_sha256": "81a99f170183c10a3375e9e3b70712475168648a97e034184f6dbb37b0978518"
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_026",
+      "canonical_case_id": "6608a6f8:achievement",
+      "persona_id": "6608a6f8",
+      "dimension": "achievement",
+      "entries": [
+        {
+          "position": 1,
+          "t_index": 0,
+          "date": "2025-03-10",
+          "runtime_text_sha256": "4c4276f5ba8f56532db61219b87cd398a3d84be4e8c63e2608ce5e075cdb5e13"
+        },
+        {
+          "position": 2,
+          "t_index": 1,
+          "date": "2025-03-12",
+          "runtime_text_sha256": "fb621713add69fa8fb6f6ea7a157480e13176ddb1a83264aece527a8748b830f"
+        },
+        {
+          "position": 3,
+          "t_index": 2,
+          "date": "2025-03-12",
+          "runtime_text_sha256": "b3ce64de42709e239a873fa9f4eb0d62411e9f91a0fd9e830e53756143a5c61d"
+        },
+        {
+          "position": 4,
+          "t_index": 3,
+          "date": "2025-03-14",
+          "runtime_text_sha256": "d3a3342e820e17412d45d42b5e7fb4c4ca94c74d197197d0ad35857285765042"
+        },
+        {
+          "position": 5,
+          "t_index": 4,
+          "date": "2025-03-14",
+          "runtime_text_sha256": "cab9099fa76b7ea2f0d2f04eab20214e1632cb3cf09797264cd5f27e4d45543c"
+        },
+        {
+          "position": 6,
+          "t_index": 5,
+          "date": "2025-03-19",
+          "runtime_text_sha256": "14c251db19e17b597bb9199a5a829d1661ae7b46ae9fa6435099ae92e218d254"
+        },
+        {
+          "position": 7,
+          "t_index": 6,
+          "date": "2025-03-24",
+          "runtime_text_sha256": "8df4e2092a8eeaa5f67115540d154730d0e57d07fa8fa8bca360e9119a09a4cf"
+        },
+        {
+          "position": 8,
+          "t_index": 7,
+          "date": "2025-03-26",
+          "runtime_text_sha256": "da437015ac2ad4415aef3a22de33d2bd3ec80ea4da857bb17c286676241587f4"
+        },
+        {
+          "position": 9,
+          "t_index": 8,
+          "date": "2025-03-27",
+          "runtime_text_sha256": "6a608a13d157f9ad8daf626c558a694152e7e842a84e4fe2a22355280d3a0393"
+        },
+        {
+          "position": 10,
+          "t_index": 9,
+          "date": "2025-03-31",
+          "runtime_text_sha256": "ee9d22389f10662180878dddcafb581c421180507b1ddf20b658a07ca426a689"
+        },
+        {
+          "position": 11,
+          "t_index": 10,
+          "date": "2025-04-05",
+          "runtime_text_sha256": "7dc7c402a80a607264536d0e35c6836f713a0bebaf973f6a1af43795bac89747"
+        }
+      ]
+    }
+  ]
+}

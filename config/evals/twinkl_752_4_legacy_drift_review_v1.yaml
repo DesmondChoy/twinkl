@@ -1,0 +1,41 @@
+schema_version: 1
+cohort_version: twinkl-752.4-legacy-drift-review-v1
+purpose: >-
+  Review every persona/Core-Value trajectory discoverable from either legacy
+  label source, together with one matched legacy-negative control per candidate.
+analysis_role: development_only
+source:
+  registry_path: logs/registry/personas.parquet
+  wrangled_dir: logs/wrangled
+  consensus_labels_path: logs/judge_labels/consensus_labels.parquet
+  persisted_labels_path: logs/judge_labels/judge_labels.parquet
+  original_holdout_manifest: config/experiments/vif/twinkl_681_5_holdout.yaml
+  old_target_manifest: config/evals/drift_v1_student_visible_v1.yaml
+  old_target_artifact_root: logs/experiments/artifacts/drift_target_twinkl_v8pb_20260711
+expected_counts:
+  candidates: 52
+  controls: 52
+  candidate_personas: 51
+  selected_cases: 104
+  selected_entries: 874
+  candidate_source_both: 39
+  candidate_source_persisted_only: 11
+  candidate_source_consensus_only: 2
+  same_split_matches: 46
+  exact_length_matches: 27
+  split_tier_sum: 8
+  total_length_delta: 52
+  retired_candidate_pairs: 8
+review:
+  schema_version: twinkl-752.4-review-v1
+  prompt_version: twinkl-752.4-packet-only-v1
+  max_cases_per_shard: 30
+  max_entries_per_shard: 300
+  required_reviewers: 2
+limitations:
+  - Candidate mining cannot find Drifts missed by both legacy label sources.
+  - Matched controls are legacy-negative, not known non-Drifts.
+  - Rates from this selection-biased cohort are development diagnostics, not prevalence estimates.
+  - VIF Critic scores on training-seen Journal Entries remain in-sample.
+  - Separate Codex reviews are AI-reviewed evidence, not human ground truth.
+  - A fresh final test remains required under twinkl-pv6s.

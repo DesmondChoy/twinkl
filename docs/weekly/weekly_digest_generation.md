@@ -243,11 +243,11 @@ value-specific records. The six-detector comparison's detector-vote count is
 not the five-pass LLM-Judge reference.
 
 The current runtime persists alignment means and uncertainties rather than
-class probabilities. [`twinkl-v8pb`](../evals/drift_v1_student_visible_target.md)
-completed the full-runtime-text target review, but its weak development Drift
-recall and unresolved final test case mean no VIF Critic or Drift Detector has
-deployment approval, and the Drift Detector is not wired into the weekly
-runtime. The former consensus-derived frozen
+class probabilities. [`twinkl-752.4`](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md)
+expanded the development reference to 27 episodes across 23 resolved Drift
+trajectories, but no scheduler has been scored and no fresh final test exists.
+No VIF Critic or Drift Detector has deployment approval, and the Drift Detector
+is not wired into the weekly runtime. The former consensus-derived frozen
 benchmark is retired historical evidence. The crash/rut/evolution output modes
 remain prototype compatibility values, not the accepted v1 definition.
 
@@ -335,17 +335,17 @@ learned routing policies.
 
 ## Remaining Work
 
-1. Review the completed `twinkl-752.1` and `twinkl-752.3` results under
-   `twinkl-752.2`. Raw VIF Critic inputs halved median Drift recall, while the
-   aligned Weekly Drift Reviewer lowered recall and raised false Drift alerts.
-   No architecture or deployment tolerance is adopted yet.
+1. Run `twinkl-752.5` on the expanded reference: compare weekly-only,
+   MLP-triggered early-plus-weekly, and matched-budget model-free schedules.
+   Then review `twinkl-752.1`, `twinkl-752.3`, and `twinkl-752.5` under
+   `twinkl-752.2`. No architecture or deployment tolerance is adopted yet.
 2. If the approved architecture uses the VIF Critic, persist or reconstruct
    per-Journal-Entry ordinal class probabilities, including `P(-1)`.
 3. If approved, implement the rolling soft-evidence Drift Detector.
-4. Calibrate probability-mass and uncertainty thresholds against the active
-   student-visible development set or a fresh resolved final test set. The stored
-   five-pass consensus Drifts are retired historical evidence, not a
-   calibration target.
+4. Calibrate probability-mass and uncertainty thresholds against the expanded
+   development reference, reporting training-seen MLP scores as in-sample.
+   Build a fresh final test separately. The stored five-pass consensus Drifts
+   are candidate provenance, not a calibration target on their own.
 5. Add active, recovered, mixed, and uncertain Weekly Digest delivery wording.
    An abstaining Drift Detector must emit no Drift claim, and coverage must be
    reported.

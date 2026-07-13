@@ -26,9 +26,9 @@ The current VIF implementation is intentionally narrow:
   crash/rut/evolution router, and Weekly Coach inputs
 - **Selected Drift v1 target**: rolling soft `P(-1)` evidence for two
   consecutive Conflicts on the same Core Value. Development-set review tooling
-  is implemented offline, but the final test set remains unresolved, no Drift
-  Detector has deployment approval, and the rule is not wired into the runtime
-  router.
+  is implemented offline and the expanded reference contains 27 primary
+  development episodes. There is no active fresh final test, no Drift Detector
+  has deployment approval, and the rule is not wired into the runtime router.
 
 > **Note:** Specific model names, embedding dimensions, and default window sizes
 > change over time. Treat `config/vif.yaml` as the source of truth for current
@@ -265,11 +265,12 @@ Entries visibly show a Conflict for the same Core Value, with rolling soft
 `P(-1)` runtime evidence. The former
 consensus-derived frozen benchmark is retired historical evidence; it does not
 implement or justify the active target. [`twinkl-v8pb`](../evals/drift_v1_student_visible_target.md)
-completed the separate full-runtime-text review, but `run_020` found only 1/5
-development-set Drifts and the final-test-set review left one case containing
-19 Journal Entries unresolved. The production connection therefore remains
-deliberately absent, and the existing weekly router remains a compatibility
-prototype.
+is historical. [`twinkl-752.4`](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md)
+expanded the development reference to 27 episodes across 23 resolved Drift
+trajectories, with four retired-audit episodes kept separate. `twinkl-752.5`
+must compare MLP-triggered early review with weekly-only and matched-budget
+model-free schedules. The production connection therefore remains deliberately
+absent, and the existing weekly router remains a compatibility prototype.
 See
 [`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md) and
 [`docs/evals/drift_detection_eval.md`](../evals/drift_detection_eval.md).

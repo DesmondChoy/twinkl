@@ -1,0 +1,19 @@
+{
+  "case_count": 22,
+  "cohort_sha256": "61e787a17e4bef801ab9a12b1d83e57204b8d8d67e445c3f10ad370fc6e5955c",
+  "cohort_version": "twinkl-752.4-legacy-drift-review-v1",
+  "controlled_disclosure": "Full displayed text and anonymous prior judgments only; no identity, cohort role, historical split, legacy label, VIF Critic output, or expected outcome.",
+  "created_at": "2026-07-13T14:59:43.188697+00:00",
+  "disputed_entry_count": 25,
+  "key_path": "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/adjudication/parent_reconciliation_key.json",
+  "key_sha256": "a99c52d7d06c9887164cc729bf2313d83eb8d2921a1ee6db7fafb65cb078689d",
+  "packet_path": "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/adjudication/reviewer_packet.json",
+  "packet_sha256": "fe8f25b716147a8232daf714d62425d21948ea5c4699e8f6a092c5807961192a",
+  "response_schema_path": "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/adjudication/response_schema.json",
+  "response_schema_sha256": "c545a5937ddf9e3be33559d9033751529b68fdbe1bf8bd05862154f8c23fd482",
+  "schema_version": 1,
+  "source_results": {
+    "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/results/case_outcomes.parquet": "52b70b15dadd0578e4ec94a6d887d4975ef0ef78bf59659ce6582b31f4e852f8",
+    "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/results/entry_target.parquet": "31281ea94c4b290e2de31306b67e01c854f69e123efba780fa51e49927c116c0"
+  }
+}
