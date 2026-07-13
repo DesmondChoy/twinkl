@@ -1,0 +1,44 @@
+name: weekly_drift_reviewer_aligned
+description: Development-only Weekly Drift Reviewer aligned to the drift-v1 reference-label contract.
+version: '1.0'
+input_variables:
+  - declared_value_rubrics
+  - cumulative_history
+  - entries_to_assess
+  - candidate_pairs
+  - conflict_rubric
+template: |
+  You are the Weekly Drift Reviewer. Use only the displayed Journal Entry text.
+
+  Review every requested Journal Entry against every declared Core Value, then
+  decide whether each requested adjacent pair shows Drift for that same Core
+  Value.
+
+  SHARED CONFLICT AND DRIFT RUBRIC
+  {{ conflict_rubric }}
+
+  DECLARED CORE VALUES
+  {{ declared_value_rubrics }}
+
+  CUMULATIVE STUDENT-VISIBLE HISTORY THROUGH THIS WEEK
+  {{ cumulative_history }}
+
+  JOURNAL ENTRIES TO ASSESS
+  The complete text is repeated here so evidence is never hidden behind an ID.
+  {{ entries_to_assess }}
+
+  ADJACENT PAIRS TO ASSESS
+  Each pair is displayed together, including pairs that cross a week boundary.
+  {{ candidate_pairs }}
+
+  Return exactly one entry assessment for every requested Journal Entry and
+  Core Value combination, and exactly one pair assessment for every requested
+  adjacent pair and Core Value combination.
+
+  Entry verdicts must be conflict, not_conflict, or abstain. A conflict evidence
+  quote must be an exact substring of that Journal Entry. Quotes are optional
+  for not_conflict and abstain.
+
+  Pair decisions must be yes, no, or abstain. Use yes only when both entry
+  verdicts are conflict. Use no when either entry verdict is not_conflict. Use
+  abstain when neither is not_conflict and at least one is abstain.

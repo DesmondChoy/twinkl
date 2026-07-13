@@ -335,17 +335,17 @@ learned routing policies.
 
 ## Remaining Work
 
-1. Persist or reconstruct per-Journal-Entry ordinal class probabilities,
-   including `P(-1)`.
-2. Implement the rolling soft-evidence Drift Detector.
-3. Calibrate probability-mass and uncertainty thresholds against the active
+1. Review the completed `twinkl-752.1` and `twinkl-752.3` results under
+   `twinkl-752.2`. Raw VIF Critic inputs halved median Drift recall, while the
+   aligned Weekly Drift Reviewer lowered recall and raised false Drift alerts.
+   No architecture or deployment tolerance is adopted yet.
+2. If the approved architecture uses the VIF Critic, persist or reconstruct
+   per-Journal-Entry ordinal class probabilities, including `P(-1)`.
+3. If approved, implement the rolling soft-evidence Drift Detector.
+4. Calibrate probability-mass and uncertainty thresholds against the active
    student-visible development set or a fresh resolved final test set. The stored
    five-pass consensus Drifts are retired historical evidence, not a
    calibration target.
-4. Review the completed `twinkl-752.1` result under `twinkl-752.2`. The tested
-   raw VIF Critic inputs halved median Drift recall, so the Weekly Drift Reviewer
-   without VIF Critic input is the conditional choice; no architecture or
-   deployment tolerance is adopted yet.
 5. Add active, recovered, mixed, and uncertain Weekly Digest delivery wording.
    An abstaining Drift Detector must emit no Drift claim, and coverage must be
    reported.

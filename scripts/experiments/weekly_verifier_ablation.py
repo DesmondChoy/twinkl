@@ -33,6 +33,7 @@ DEFAULT_CONFIG_PATH = Path("config/evals/twinkl_752_1_weekly_verifier_ablation_v
 ARMS = ("without_critic", "with_critic")
 TERMINAL_RESPONSE_STATUSES = {"ok", "refusal", "invalid"}
 Verdict = Literal["conflict", "not_conflict", "abstain"]
+PairVerdict = Literal["yes", "no", "abstain"]
 Confidence = Literal["low", "medium", "high"]
 ReasonCode = Literal[
     "ambiguous",
@@ -64,6 +65,27 @@ class WeeklyVerifierResponse(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     assessments: list[VerifierAssessment]
+
+
+class DriftPairAssessment(BaseModel):
+    """One adjacent-pair Drift decision for a Core Value."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    first_t_index: int = Field(ge=0)
+    second_t_index: int = Field(ge=0)
+    dimension: str
+    sustained_conflict: PairVerdict
+
+
+class AlignedWeeklyVerifierResponse(BaseModel):
+    """Strict entry and adjacent-pair response for the aligned prompt."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    rubric_version: Literal["drift_v1_conflict_rubric_v1"]
+    assessments: list[VerifierAssessment]
+    pair_assessments: list[DriftPairAssessment]
 
 
 @dataclass(frozen=True)
@@ -147,9 +169,11 @@ def _approx_tokens(text: str) -> int:
     return max(1, math.ceil(len(text) / 4))
 
 
-def _estimated_output_tokens(expected_assessments: int) -> int:
+def _estimated_output_tokens(
+    expected_assessments: int, expected_pair_assessments: int = 0
+) -> int:
     """Estimate compact structured output, including short evidence quotes."""
-    return 55 + 45 * expected_assessments
+    return 55 + 45 * expected_assessments + 35 * expected_pair_assessments
 
 
 def _request_cost_usd(
@@ -551,7 +575,9 @@ def estimate_plan(
     pricing = config["api"]["pricing_usd_per_million_tokens"]
     input_tokens_one_pass = sum(_approx_tokens(record["prompt"]) for record in records)
     output_tokens_one_pass = sum(
-        _estimated_output_tokens(len(record["expected_coordinates"]))
+        _estimated_output_tokens(
+            len(record["expected_coordinates"]), len(record.get("expected_pairs", []))
+        )
         for record in records
     )
     return {
@@ -566,12 +592,23 @@ def estimate_plan(
             pricing=pricing,
         ),
         "max_budget_usd": float(config["api"]["max_budget_usd"]),
-        "token_estimator": "ceil(utf8_characters/4); output=55+45*assessment_count",
+        "token_estimator": (
+            "ceil(utf8_characters/4); "
+            "output=55+45*assessment_count+35*pair_assessment_count"
+        ),
     }
 
 
+def _response_model(record: dict[str, Any]) -> type[BaseModel]:
+    if record.get("response_schema", "entry_only") == "entry_pair":
+        return AlignedWeeklyVerifierResponse
+    return WeeklyVerifierResponse
+
+
 def validate_parsed_response(
-    *, parsed: WeeklyVerifierResponse, record: dict[str, Any]
+    *,
+    parsed: WeeklyVerifierResponse | AlignedWeeklyVerifierResponse,
+    record: dict[str, Any],
 ) -> None:
     expected = {
         (int(item["t_index"]), str(item["dimension"]))
@@ -585,10 +622,15 @@ def validate_parsed_response(
             f"Response coordinate mismatch: expected={sorted(expected)}, "
             f"observed={sorted(observed)}"
         )
-    entry_text = {
-        int(match.group(1)): match.group(2)
-        for match in _entry_sections(record["prompt"])
-    }
+    recorded_entry_text = record.get("entry_text_by_t_index")
+    entry_text = (
+        {int(index): str(text) for index, text in recorded_entry_text.items()}
+        if recorded_entry_text
+        else {
+            int(match.group(1)): match.group(2)
+            for match in _entry_sections(record["prompt"])
+        }
+    )
     for assessment in parsed.assessments:
         quote = assessment.evidence_quote.strip()
         if assessment.verdict == "conflict" and not quote:
@@ -598,6 +640,48 @@ def validate_parsed_response(
         ):
             raise ValueError(
                 f"Evidence quote is not present in t_index={assessment.t_index}"
+            )
+    if isinstance(parsed, WeeklyVerifierResponse):
+        return
+
+    expected_pairs = {
+        (
+            int(item["first_t_index"]),
+            int(item["second_t_index"]),
+            str(item["dimension"]),
+        )
+        for item in record.get("expected_pairs", [])
+    }
+    observed_pairs = {
+        (pair.first_t_index, pair.second_t_index, pair.dimension)
+        for pair in parsed.pair_assessments
+    }
+    if (
+        len(observed_pairs) != len(parsed.pair_assessments)
+        or observed_pairs != expected_pairs
+    ):
+        raise ValueError(
+            f"Response pair mismatch: expected={sorted(expected_pairs)}, "
+            f"observed={sorted(observed_pairs)}"
+        )
+    entry_verdicts = {
+        (assessment.t_index, assessment.dimension): assessment.verdict
+        for assessment in parsed.assessments
+    }
+    for pair in parsed.pair_assessments:
+        first = entry_verdicts[(pair.first_t_index, pair.dimension)]
+        second = entry_verdicts[(pair.second_t_index, pair.dimension)]
+        expected_pair_verdict: PairVerdict
+        if first == "conflict" and second == "conflict":
+            expected_pair_verdict = "yes"
+        elif "not_conflict" in {first, second}:
+            expected_pair_verdict = "no"
+        else:
+            expected_pair_verdict = "abstain"
+        if pair.sustained_conflict != expected_pair_verdict:
+            raise ValueError(
+                "Pair decision is inconsistent with its entry decisions: "
+                f"{pair.first_t_index}-{pair.second_t_index}:{pair.dimension}"
             )
 
 
@@ -652,7 +736,8 @@ def _completed_keys(
         ):
             raise ValueError(f"Unexpected requested model for response: {base_key}")
         if row["status"] == "ok":
-            parsed = WeeklyVerifierResponse.model_validate(row.get("parsed"))
+            response_model = _response_model(record)
+            parsed = response_model.model_validate(row.get("parsed"))
             validate_parsed_response(parsed=parsed, record=record)
         key = (*base_key, repeat)
         if key in completed:
@@ -696,10 +781,11 @@ async def _call_openai(
     last_error: Exception | None = None
     for attempt in range(1, int(api["max_attempts"]) + 1):
         try:
+            response_model = _response_model(record)
             response = await client.responses.parse(
                 model=api["model"],
                 input=record["prompt"],
-                text_format=WeeklyVerifierResponse,
+                text_format=response_model,
                 reasoning={"effort": api["reasoning_effort"]},
                 max_output_tokens=int(api["max_output_tokens"]),
                 store=bool(api["store"]),
@@ -707,7 +793,7 @@ async def _call_openai(
                 timeout=float(api["timeout_seconds"]),
             )
             parsed = getattr(response, "output_parsed", None)
-            if not isinstance(parsed, WeeklyVerifierResponse):
+            if not isinstance(parsed, response_model):
                 input_tokens, output_tokens = _usage_tokens(response)
                 return {
                     "status": "refusal",

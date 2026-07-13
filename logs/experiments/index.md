@@ -22,9 +22,11 @@ It is not the forward model-development policy after `twinkl-752`.
 
 > **Historical frontier recommendation (2026-03-19):** `run_019`-`run_021` remain the default corrected-split frontier family. The new two-stage reformulation family `run_045`-`run_047` reached comparable median holdout `qwk_mean` (`0.360` vs `0.362`) and the best calibration on the current board (`0.743`), but it gave back too much `recall_-1` (`0.266`) and hedging (`0.708`). `run_034`-`run_036` remain the best tail-sensitive reference branch, and `run_042`-`run_044` remain the strongest encoder-swap challenger.
 >
-> **Adopted VIF scope and metric policy (2026-07-12):** [`twinkl-752`](../../docs/vif/05_capstone_scope_decision.md) defines the Critic primarily as a conflict screener. Entry-level `recall_-1` is the primary model-development metric; episode recall is the future product metric; QWK and `+1` recall are diagnostics. No numerical precision or false-alert tolerance is adopted yet, so recall-focused development cannot support promotion by itself. The ternary ten-value output remains, and no MLP, LLM, verifier, ensemble, or cascade architecture has been adopted. Existing training code is still QWK-first and must be updated and tested before another training run is treated as recall-first decision evidence.
+> **Adopted VIF scope and metric policy (2026-07-12):** [`twinkl-752`](../../docs/vif/05_capstone_scope_decision.md) defines the VIF Critic primarily as a Conflict screener. Per-Journal-Entry `recall_-1` is the primary model-development metric; Drift recall is the future product metric; QWK and `+1` recall are diagnostics. No numerical precision or false-alert tolerance is adopted yet, so recall-focused development cannot support deployment approval by itself. The ternary ten-value output remains, and no VIF Critic, LLM scorer, Weekly Drift Reviewer, ensemble, or cascade architecture has been adopted. Existing training code is still QWK-first and must be updated and tested before another training run is treated as recall-first decision evidence.
 >
-> **Weekly verifier Critic-input decision (2026-07-12):** [`twinkl-752.1`](reports/experiment_review_2026-07-12_twinkl_752_1_weekly_verifier_ablation.md) found that adding fixed `run_020` signals cut median development episode recall from `0.40` to `0.20`, removed the median false episode (`1` to `0`), and slightly reduced coverage (`0.756` to `0.732`). Under the registered recall-first rule, this is negative. Carry the no-Critic verifier as the conditional choice for `twinkl-752.2`, but do not adopt or promote it: its false-alert tolerance remains unresolved.
+> **Weekly Drift Reviewer prompt-alignment decision (2026-07-13):** [`twinkl-752.3`](reports/experiment_review_2026-07-13_twinkl_752_3_weekly_drift_reviewer_prompt_alignment.md) found that repeating complete Journal Entry pairs, including week-boundary pairs, adding a versioned Core Value rubric, and requesting explicit Drift decisions did not reveal hidden capability at reasoning effort `none`. Median Drift recall fell from `0.40` to `0.20`, median false Drift alerts rose from `1` to `5`, and neither cross-week reference Drift was recovered. Journal Entry `recall_-1` improved slightly but Conflict precision fell. Treat the published `0.40` as not materially prompt-limited by the tested differences; no VIF architecture or deployment decision is adopted.
+>
+> **Weekly Drift Reviewer Critic-input decision (2026-07-12):** [`twinkl-752.1`](reports/experiment_review_2026-07-12_twinkl_752_1_weekly_verifier_ablation.md) found that adding fixed `run_020` signals cut median development Drift recall from `0.40` to `0.20`, removed the median false Drift alert (`1` to `0`), and slightly reduced coverage (`0.756` to `0.732`). Under the registered recall-first rule, this is negative. Carry the Weekly Drift Reviewer without VIF Critic input as the conditional choice for `twinkl-752.2`, but do not adopt it or grant deployment approval: its false-alert tolerance remains unresolved.
 >
 > **Conformity / Self-Direction shortcut audit (2026-07-12):** [`twinkl-1r3d`](reports/experiment_review_2026-07-12_twinkl_1r3d_shortcut_audit.md) removed 3,406 individual word occurrences plus 20 repeated-word or phrase cues across 35 polarity-stratified, confident-correct `run_020` validation cases. No removal flipped a class, and no candidate cue was the most influential individual removal in a case. The audit does not support the tested brittle lexical-shortcut explanations, so the MLP may remain a baseline in `twinkl-752.1`; it does not prove construct understanding or replace the required consensus and human-anchor checks.
 >
@@ -246,21 +248,41 @@ It is not the forward model-development policy after `twinkl-752`.
 
 ## Findings
 
-### 2026-07-12 — Raw Critic signals make the weekly verifier safer but blinder (`twinkl-752.1`)
+### 2026-07-13 — Prompt alignment raises Conflict coverage but worsens Drift (`twinkl-752.3`)
+
+The aligned Weekly Drift Reviewer repeated complete adjacent Journal Entry pairs,
+including 152 week-boundary pair/Core Value decisions, added a versioned Core
+Value rubric, returned explicit Drift decisions, and retained exact-quote
+validation. Across three repeats, it reduced median Drift recall from `0.40` to
+`0.20`, raised median false Drift alerts from `1` to `5`, and recovered neither
+cross-week reference Drift. The published `0.40` result is not materially
+prompt-limited by the tested differences.
+
+Per-Journal-Entry results moved differently: median macro `recall_-1` rose from
+`0.306` to `0.353` and coverage rose from `0.804` to `0.918`, but Conflict
+precision fell from `0.583` to `0.423` and the predicted-Conflict rate more than
+doubled. The extra Conflict decisions formed the wrong adjacent pairs. Do not
+grant the aligned prompt deployment approval or infer an intrinsic LLM ceiling;
+reasoning effort, reviewer/model differences, and reference-review hindsight
+remain untested or unresolved. Full details:
+[`reports/experiment_review_2026-07-13_twinkl_752_3_weekly_drift_reviewer_prompt_alignment.md`](reports/experiment_review_2026-07-13_twinkl_752_3_weekly_drift_reviewer_prompt_alignment.md).
+
+### 2026-07-12 — Raw VIF Critic signals make the Weekly Drift Reviewer safer but blinder (`twinkl-752.1`)
 
 The paired development study ran 756 `gpt-5.4-mini` calls over 28 personas and
 41 resolved trajectories. Adding fixed `run_020` probabilities and uncertainty
-cut median episode recall from `0.40` to `0.20`, removed the median false episode
+cut median Drift recall from `0.40` to `0.20`, removed the median false Drift alert
 from `1` to `0`, and reduced coverage from `0.756` to `0.732`. The registered
 recall-first decision is negative.
 
-Entry-level results are more mixed: the Critic arm improves median macro
+Per-Journal-Entry results are more mixed: the VIF Critic setup improves median macro
 `recall_-1` from `0.306` to `0.351`, but those detections do not form the right
-adjacent episodes. The consensus replay shows the same entry-level
+adjacent Drifts. The consensus replay shows the same per-Journal-Entry
 complementarity. The existing three-annotator anchor has no strict overlap with
 this development population, so it is explicitly unavailable rather than
-silently substituted. Carry the no-Critic verifier as the conditional option
-for `twinkl-752.2`; no architecture or scorer is adopted. Full details:
+silently substituted. Carry the Weekly Drift Reviewer without VIF Critic input
+as the conditional option for `twinkl-752.2`; no VIF architecture is adopted.
+Full details:
 [`reports/experiment_review_2026-07-12_twinkl_752_1_weekly_verifier_ablation.md`](reports/experiment_review_2026-07-12_twinkl_752_1_weekly_verifier_ablation.md).
 
 ### 2026-07-12 — Single-word shortcut sensitivity does not explain the MLP's strongest dimensions (`twinkl-1r3d`)

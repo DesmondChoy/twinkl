@@ -1,0 +1,86 @@
+study_id: twinkl_752_3_weekly_drift_reviewer_prompt_alignment_v1
+status: preregistered
+created_at: '2026-07-13'
+
+population:
+  packet_path: logs/experiments/artifacts/drift_target_twinkl_v8pb_20260711/development/reviewer_packet/blind_packet.json
+  reconciliation_key_path: logs/experiments/artifacts/drift_target_twinkl_v8pb_20260711/development/parent_control/reconciliation_key.json
+  reviewer_a_path: logs/experiments/artifacts/drift_target_twinkl_v8pb_20260711/development/reviewer_packet/reviewer_a.json
+  reviewer_b_path: logs/experiments/artifacts/drift_target_twinkl_v8pb_20260711/development/reviewer_packet/reviewer_b.json
+  run_020_evidence_path: logs/experiments/artifacts/drift_target_twinkl_v8pb_20260711/development/run_020_evidence.parquet
+  mlp_run_paths:
+    - logs/experiments/runs/run_019_BalancedSoftmax.yaml
+    - logs/experiments/runs/run_020_BalancedSoftmax.yaml
+    - logs/experiments/runs/run_021_BalancedSoftmax.yaml
+  wrangled_dir: logs/wrangled
+  split: development
+  week_definition: iso_monday_sunday
+  expected_personas: 28
+  expected_persona_weeks: 126
+  expected_cases: 42
+  expected_entries: 217
+  expected_resolved_entry_cells: 316
+  expected_resolved_trajectories: 41
+  expected_reference_episodes: 5
+  unresolved_case_ids:
+    - case_037
+
+study:
+  setups:
+    - current_prompt
+    - aligned_prompt
+  repeats: 3
+  current_prompt_source:
+    config_path: config/evals/twinkl_752_1_weekly_verifier_ablation_v1.yaml
+    prompts_path: logs/experiments/artifacts/twinkl_752_1_weekly_verifier_ablation_20260712/prompts.jsonl
+    responses_path: logs/experiments/artifacts/twinkl_752_1_weekly_verifier_ablation_20260712/responses.jsonl
+    metrics_path: logs/experiments/artifacts/twinkl_752_1_weekly_verifier_ablation_20260712/metrics.json
+    source_setup: without_critic
+  aligned_prompt: prompts/weekly_drift_reviewer_aligned.yaml
+  conflict_rubric_path: config/evals/drift_v1_conflict_rubric_v1.yaml
+  value_definitions_path: config/schwartz_values.yaml
+  assess_current_week_only_for_entry_metrics: true
+  assess_adjacent_pairs_ending_in_current_week: true
+  entry_target_policy: reviewer_agreement_only
+  drift_target_policy: reviewer_agreement_only
+
+api:
+  provider: openai
+  endpoint: responses
+  model: gpt-5.4-mini-2026-03-17
+  reasoning_effort: none
+  max_output_tokens: 3000
+  timeout_seconds: 60
+  max_attempts: 2
+  concurrency: 4
+  service_tier: default
+  store: false
+  max_budget_usd: 3.0
+  pricing_usd_per_million_tokens:
+    input: 0.75
+    output: 4.50
+
+artifacts:
+  output_dir: logs/experiments/artifacts/twinkl_752_3_weekly_drift_reviewer_prompt_alignment_20260713
+  prompts_filename: prompts.jsonl
+  manifest_filename: manifest.json
+  responses_filename: responses.jsonl
+  metrics_filename: metrics.json
+
+decision:
+  prompt_limited: >-
+    Aligned-prompt median Drift recall improves by at least 0.20, recovers a
+    cross-week reference Drift in at least two repeats, median false Drift
+    alerts do not increase, and median coverage does not fall by more than 0.05.
+  unchanged: >-
+    Median Drift recall does not improve and no cross-week reference Drift is
+    recovered in any repeat.
+  inconclusive: >-
+    Any other result, including a recall gain that trades materially against
+    false Drift alerts, coverage, or repeat stability.
+  restrictions:
+    - Development evidence only; no VIF architecture adoption or deployment approval.
+    - Do not score or call the final test set.
+    - Do not use the retired Drift benchmark.
+    - Do not alter the AI-reviewed reference labels.
+    - The result isolates prompt alignment at reasoning effort none, not an intrinsic LLM ceiling.

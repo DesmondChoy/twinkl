@@ -1,0 +1,50 @@
+rubric_id: drift_v1_conflict_rubric_v1
+version: '1.0.0'
+scope: student_visible_development_review
+
+value_context:
+  source_path: config/schwartz_values.yaml
+  fields:
+    - definition
+    - core_motivation
+
+entry_decision:
+  conflict: >-
+    The Journal Entry states directly observable behavior or a choice by the
+    writer that goes against the relevant Core Value.
+  not_conflict: >-
+    The Journal Entry states behavior that supports or does not clearly go
+    against the Core Value.
+  abstain: >-
+    The displayed Journal Entry is missing, broken, or specifically ambiguous
+    about what the writer did or chose in a way that requires hidden context.
+    Complete text with no qualifying behavior or choice is not Conflict, not
+    abstain.
+  exclusions:
+    - A feeling, wish, guilt, or attitude without an observable behavior or choice.
+    - A stated intention without a completed or current choice.
+    - An external constraint that the writer did not choose.
+    - Biography, hidden context, or information absent from the displayed text.
+    - Ambiguous prose that supports more than one reasonable interpretation.
+  clarifications:
+    - An expressed attitude may explain a qualifying behavior or choice, but an attitude alone is not Conflict.
+    - A deliberate omission counts only when the text establishes agency and the choice not to act.
+
+drift_decision:
+  definition: >-
+    Drift requires two immediately adjacent Journal Entries that both show
+    Conflict with the same Core Value.
+  'yes': Both adjacent Journal Entries are Conflict.
+  'no': At least one adjacent Journal Entry is explicitly not Conflict.
+  abstain: >-
+    Neither Journal Entry is explicitly not Conflict and at least one Journal
+    Entry is abstain.
+
+evidence:
+  conflict_requires_exact_quote: true
+  not_conflict_quote_optional: true
+  abstain_quote_optional: true
+
+limitations:
+  - This rubric is narrower than the historical LLM-Judge label contract, which also allowed expressed attitudes.
+  - AI-reviewed reference labels are development evidence, not human ground truth.

@@ -86,9 +86,17 @@ The empirical basis is
   against the Weekly Drift Reviewer with fixed `run_020` predictions across 41
   resolved development trajectories. Without VIF Critic input, median Drift
   recall was 0.40 with one false Drift alert and 0.756 coverage; with VIF
-  VIF Critic input, those results were 0.20, zero, and 0.732. Ten genuinely invalid outputs
+  Critic input, those results were 0.20, zero, and 0.732. Ten genuinely invalid outputs
   remained fail-closed; 69 raw receipts rejected by an over-strict optional-
   quote validator were recovered under the registered prompt contract.
+- `twinkl-752.3` repeated complete adjacent Journal Entry pairs, including
+  week-boundary pairs, supplied a versioned Core Value rubric, and requested
+  explicit Drift decisions. Median Drift recall fell to 0.20, median false Drift
+  alerts rose to 5, and neither cross-week reference Drift was recovered. The
+  tested prompt differences did not materially limit the earlier result.
+- Future AI-reviewed reference-label work must use the same versioned rubric in
+  `config/evals/drift_v1_conflict_rubric_v1.yaml`; the completed reference labels
+  remain unchanged.
 - The locked final-test review had 24 cases / 191 Journal Entries, with 23/24 case
   agreement (0.95833) and 180/191 Journal Entry agreement (0.94241). case_023 was
   unresolved across 19 Journal Entries, so the deployment-approval score was deliberately not
@@ -252,6 +260,7 @@ fair score, and scoring only the agreed cases would be cherry-picking.
 | Development F1 (`run_020`) | 0.3333 | Balances the perfect precision with low recall |
 | Weekly Drift Reviewer without VIF Critic input (`twinkl-752.1`) | Median Drift recall 0.40 / 1 false Drift alert / coverage 0.756 | Development-only result over three repeats; conditionally favored under the registered recall-first rule |
 | Weekly Drift Reviewer with VIF Critic input (`twinkl-752.1`) | Median Drift recall 0.20 / 0 false Drift alerts / coverage 0.732 | Safer but blinder; the tested raw `run_020` input path is not recommended |
+| Aligned Weekly Drift Reviewer (`twinkl-752.3`) | Median Drift recall 0.20 / 5 false Drift alerts / coverage 0.829 | More complete but less precise; neither cross-week reference Drift was recovered |
 | Final-test Drift metrics | Deliberately not scored | case_023 remained unresolved across 19 Journal Entries; the target is not valid for a fair score |
 | First-alert latency | Not scored | It requires a resolved final-test target |
 | Author-designed capability recall | Capability-only diagnostic | Whether the VIF Critic can find deliberately clear Drifts; never a deployment-approval gate |

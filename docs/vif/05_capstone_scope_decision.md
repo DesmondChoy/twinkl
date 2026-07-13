@@ -100,10 +100,21 @@ the registered recall-first rule, the result is negative. The conditional
 recommendation for `twinkl-752.2` is the Weekly Drift Reviewer without VIF Critic
 input rather than the tested raw-prediction setup.
 
+`twinkl-752.3` then tested whether that `0.40` result was limited by prompt
+differences. The aligned Weekly Drift Reviewer repeated complete adjacent Journal
+Entry pairs, including week-boundary pairs, added a versioned Core Value rubric,
+and returned explicit Drift decisions. Median Drift recall fell to `0.20`, median
+false Drift alerts rose to `5`, and neither cross-week reference Drift was
+recovered. Journal Entry `recall_-1` improved slightly, but Conflict precision
+fell and the extra Conflict decisions formed false Drifts. The tested prompt
+differences therefore do not explain the weak Drift result.
+
 This decision does not adopt a VIF Critic-only, Weekly Drift Reviewer-only,
 ensemble, or cascade architecture. Architecture adoption still requires
 explicit user approval. The full study is recorded in the
 [`twinkl-752.1` report](../../logs/experiments/reports/experiment_review_2026-07-12_twinkl_752_1_weekly_verifier_ablation.md).
+The prompt-alignment result is recorded in the
+[`twinkl-752.3` report](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_3_weekly_drift_reviewer_prompt_alignment.md).
 [`twinkl-1r3d`](../../logs/experiments/reports/experiment_review_2026-07-12_twinkl_1r3d_shortcut_audit.md)
 completed the prerequisite Conformity and Self-Direction audit: 3,406
 single-word removals plus 20 repeated-word or phrase removals across 35
@@ -129,6 +140,10 @@ rather than substituted.
 - The Weekly Drift Reviewer and VIF Critic recover different Conflict cases,
   which justifies a bounded comparison but not an architecture decision from
   historical test data.
+- The aligned Weekly Drift Reviewer raised Journal Entry Conflict coverage but
+  worsened Drift recall, false Drift alerts, and repeat stability. Prompt
+  alignment at reasoning effort `none` did not reveal a stronger Weekly Drift
+  Reviewer setup.
 - The student-visible Drift review found only one of five development-set
   Drifts and withheld the final test score after an unresolved case.
 

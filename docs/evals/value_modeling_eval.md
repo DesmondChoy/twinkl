@@ -5,7 +5,7 @@
 The VIF (Value Identity Function) maps Journal Entries to a 10-dimensional
 Schwartz value vector. For the remaining capstone scope, its primary operational
 role is **conflict screening**: recovering Conflict (`-1`) that can support the
-the downstream Drift Detector. The ternary vector remains useful for trade-offs and
+downstream Drift Detector. The ternary vector remains useful for trade-offs and
 positive Weekly Coach context, but broad profile recovery is no
 longer the primary model-development claim. See the adopted
 [VIF scope decision](../vif/05_capstone_scope_decision.md).
@@ -14,7 +14,7 @@ longer the primary model-development claim. See the adopted
 
 ## Implementation Status
 
-**Status:** 🟡 In Progress (as of 2026-07-12)
+**Status:** 🟡 In Progress (as of 2026-07-13)
 
 ### What's Implemented
 - Evaluation specification complete (this document)
@@ -34,6 +34,7 @@ longer the primary model-development claim. See the adopted
 - Compact-history `run_069` stayed within the `<5k` added-weight budget but failed its seed-11 expansion gate versus repaired-target `run_058`: QWK **0.342** vs **0.363**, minority recall **0.400** vs **0.446**, and Security QWK **0.267** vs **0.339**. The path remains diagnostic and the local MLP is not claimed to be trajectory-aware.
 - The [`twinkl-1r3d` shortcut audit](../../logs/experiments/reports/experiment_review_2026-07-12_twinkl_1r3d_shortcut_audit.md) removed 3,406 individual words plus 20 repeated-word or phrase cues across 35 confident-correct active Conformity and Self-Direction validation cases. No removal flipped a class, so the tested brittle lexical-shortcut explanations are not supported. This is a bounded sensitivity result, not evidence that either construct is solved.
 - The [`twinkl-752.1` Weekly Drift Reviewer ablation](../../logs/experiments/reports/experiment_review_2026-07-12_twinkl_752_1_weekly_verifier_ablation.md) is complete. Adding fixed `run_020` signals reduced median development Drift recall from **0.40** to **0.20**, removed the median false Drift alert (**1** to **0**), and reduced coverage from **0.756** to **0.732**. The registered result is negative; no architecture was adopted.
+- The [`twinkl-752.3` prompt-alignment study](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_3_weekly_drift_reviewer_prompt_alignment.md) is also complete. Full adjacent-pair text, a versioned Core Value rubric, and explicit Drift decisions lowered median Drift recall to **0.20** and raised median false Drift alerts to **5**. The earlier **0.40** result was not materially prompt-limited by the tested differences.
 
 ### What's Missing
 - **Recall-first selection is not implemented**: the current experiment code still selects mainline checkpoints QWK-first. Historical run rankings remain valid provenance, but a future training run needs tested recall-first selection behavior before it can count as decision evidence.
@@ -44,11 +45,11 @@ longer the primary model-development claim. See the adopted
 - Gated parameter-efficient encoder adaptation path (`twinkl-750`)
 - Persona-level aggregation protocol (aggregate per-entry scores into persona-level value profile for Top-K accuracy)
 - Formal held-out evaluation against declared value orderings (Spearman ρ > 0.7 target)
-- Final architecture approval under `twinkl-752.2`. The completed ablation conditionally favors the Weekly Drift Reviewer without VIF Critic input, but the conservative precision or false-alert tolerance is deliberately not fixed yet.
+- Final architecture approval under `twinkl-752.2`. The aligned prompt did not improve the conditional Weekly Drift Reviewer without VIF Critic input, and the conservative precision or false-alert tolerance is deliberately not fixed yet.
 
 ### Next Steps
 1. Implement and verify recall-first checkpoint selection before treating another training run as decision evidence
-2. Review the completed bounded Weekly Drift Reviewer result under `twinkl-752.2`; do not adopt the conditional recommendation to omit VIF Critic input without explicit approval
+2. Review the completed `twinkl-752.1` and `twinkl-752.3` results under `twinkl-752.2`; do not adopt a VIF architecture without explicit approval
 3. Report `-1` precision and the precision-recall curve while prioritizing `recall_-1`; do not infer deployment readiness until a false-alert tolerance is adopted
 4. Keep QWK, `+1` recall, calibration, circumplex diagnostics, and persona-level aggregation as secondary health checks
 

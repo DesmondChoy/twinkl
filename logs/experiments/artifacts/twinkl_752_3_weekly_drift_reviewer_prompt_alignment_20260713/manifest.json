@@ -1,0 +1,62 @@
+{
+  "aligned_prompt_template_sha256": "00b984bd7b663ede134249a2f73d1a98c8becc1341e5df5602bc622469ee49f0",
+  "case_count": 42,
+  "config_payload_sha256": "f65aa23f722888343a6c7ca8364917e041fb554cd36b4fe2ad68c7e82fb4d97a",
+  "created_at": "2026-07-13T04:23:41.676345+00:00",
+  "current_prompt_source": {
+    "config_path": {
+      "path": "config/evals/twinkl_752_1_weekly_verifier_ablation_v1.yaml",
+      "sha256": "c76a06df40422197665d0ce2074575715afa697fd64a230918d5b22679978809"
+    },
+    "metrics_path": {
+      "path": "logs/experiments/artifacts/twinkl_752_1_weekly_verifier_ablation_20260712/metrics.json",
+      "sha256": "905908b5736311cd20b30a5c66a10f909806260fabd5cf22b8503c80c147380e"
+    },
+    "prompts_path": {
+      "path": "logs/experiments/artifacts/twinkl_752_1_weekly_verifier_ablation_20260712/prompts.jsonl",
+      "sha256": "e4591f87a48dfa3f2215ba9cc29756ad8d424c98b19f231daa759353cfc16157"
+    },
+    "responses_path": {
+      "path": "logs/experiments/artifacts/twinkl_752_1_weekly_verifier_ablation_20260712/responses.jsonl",
+      "sha256": "250a8873a9a7725d15e83c6a3b4d73839c2f38e6a8ef73f5b25fa406142257f5"
+    }
+  },
+  "entry_count": 217,
+  "estimate": {
+    "estimated_cost_usd": 1.4485905,
+    "estimated_input_tokens": 1227654,
+    "estimated_output_tokens": 117300,
+    "max_budget_usd": 3.0,
+    "repeats": 3,
+    "successful_calls": 378,
+    "token_estimator": "ceil(utf8_characters/4); output=55+45*assessment_count+35*pair_assessment_count",
+    "unique_prompts": 126
+  },
+  "locked_final_test_used": false,
+  "model": "gpt-5.4-mini-2026-03-17",
+  "packet_sha256": "eb206a99cd9d136716a859c43006b555cdfd8e7a6a30110b6ceaa326122507b7",
+  "persona_count": 28,
+  "persona_week_count": 126,
+  "planned_successful_calls": 378,
+  "prompt_count": 126,
+  "prompt_manifest_sha256": "4e621e7cea23cf93c424a77ae29abb20b2c6f05804bdf6422212ce742946908b",
+  "reasoning_effort": "none",
+  "reconciliation_key_sha256": "5bb221b8d611ab98271420b69b743e1b2d627e5fcdddbb5ada198ce40e6eb87d",
+  "repeats": 3,
+  "repo_head": "db945850c39acce0fad99ce33bb6ca3b487748b0",
+  "retired_benchmark_used": false,
+  "reviewer_a_sha256": "fcd3d5c21dec1ef36dc2d826b70cbc230ea92fade6fbd65eaf88725d73155958",
+  "reviewer_b_sha256": "57eeaebdd408f7e1e5b7ae7a9edfcfc9f769b9f69c70ca11330a1c7561d52efd",
+  "rubric_sha256": "6a29e8c366a621325b76c0d8955cb6e86f02ec226ec7b409817e6c6a87592cc1",
+  "runner_sha256": "0eeadee1587da18bcee60b79be25d78cf111987b95128df8aaa39ade126f7c1a",
+  "runtime_contract_sha256": "0c10bf015d0618583fc7b3013fc9ef095e8a36c28dd2ed74a0a43ad86eae0363",
+  "setups": [
+    "current_prompt",
+    "aligned_prompt"
+  ],
+  "shared_validator_sha256": "ec8cdecdd5c5420013c58d33a3f9b8650d4f6df887aa454da0b9f665b055b8be",
+  "store": false,
+  "study_id": "twinkl_752_3_weekly_drift_reviewer_prompt_alignment_v1",
+  "target_split": "development",
+  "value_definitions_sha256": "c81f1cb55aa30f1648db5350364db846e28bd7b31b4b2641b4afc73780b214d9"
+}
