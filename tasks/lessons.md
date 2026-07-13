@@ -183,3 +183,9 @@
   `condition`, name the exact experiment setup being compared, and reserve
   `run` or `repeat` for one execution of that setup. Likewise, do not use a bare `set`;
   say `development set`, `final test set`, or name the exact reviewed cases.
+- Do not call a separately reviewed downstream target "training-contaminated"
+  merely because the same Journal Entries trained an upstream component.
+  Separate label validity from evaluation independence: newly reviewed Drift
+  labels can be valid development references, while VIF Critic trigger scores
+  on Journal Entries seen during training remain in-sample and cannot establish
+  generalization.
