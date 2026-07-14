@@ -46,7 +46,7 @@ flowchart TB
         weekly["Weekly aggregation<br/>per-dimension + profile-weighted signals"]
         evolution["Experimental evolution classifier<br/>automatic in prototype"]
         drift["Weekly prototype routing<br/>stable / crash / rut / evolution / high_uncertainty"]
-        drift_v1["Student-visible Drift v1 target<br/>Conflict + rolling soft P(-1)<br/>for the same Core Value"]
+        drift_v1["Approved target (not wired)<br/>Weekly Drift Reviewer decisions<br/>+ deterministic Drift Detector"]
         digest["Weekly Digest builder"]
         prompt["Full-context Weekly Coach prompt<br/>history capped at week_end"]
         coach["Optional Weekly Coach reflection"]
@@ -79,9 +79,9 @@ flowchart TB
     timeline --> weekly
     weekly --> drift
     weekly --> evolution --> drift
-    timeline -. "P(-1) not persisted" .-> drift_v1
+    wrangled_runtime -. "Journal Entries + Core Values;<br/>no VIF Critic input" .-> drift_v1
     drift --> digest
-    drift_v1 -. "selected replacement path" .-> digest
+    drift_v1 -. "approved target path" .-> digest
     weekly --> digest
     wrangled_runtime --> digest
     digest --> prompt

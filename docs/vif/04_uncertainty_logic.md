@@ -1,8 +1,10 @@
-# VIF – Uncertainty and Drift Detector Logic
+# VIF – Uncertainty and Drift Review Logic
 
-This document describes how VIF outputs become Weekly Coach inputs. It keeps
-the selected Drift contract separate from the weekly
-crash/rut/evolution prototype that is still wired into the offline runtime.
+This document describes how VIF Critic uncertainty supports offline review,
+retraining, and a conditional candidate-generation path. The approved
+user-facing Drift path does not consume VIF Critic outputs. It remains separate
+from the weekly crash/rut/evolution prototype that is still wired into the
+offline runtime.
 
 ---
 
@@ -12,19 +14,22 @@ A VIF Critic trained on synthetic or otherwise limited data can be confidently
 wrong on unfamiliar inputs. In a values-alignment product, a conservative
 deferral is safer than a confident but brittle interpretation.
 
-The VIF runtime therefore separates three questions:
+The architecture therefore separates four questions:
 
 1. What class probabilities or alignment estimate does the VIF Critic produce?
-2. How much should the Drift Detector trust that estimate?
-3. Do the recent Journal Entries meet the Drift definition?
+2. Which predictions warrant offline review or candidate generation?
+3. Does the Weekly Drift Reviewer confirm Conflict from Journal Entry text?
+4. Do two consecutive confirmed Conflicts meet the Drift definition?
 
-Only low-enough uncertainty plus meaningful repeated evidence should reach the
-Weekly Coach as a confident Conflict reflection.
+Uncertainty can prioritize review, but it cannot create or confirm a
+user-facing Drift claim by itself.
 
 Under the adopted [capstone scope decision](05_capstone_scope_decision.md), an
-uncertain VIF Critic prediction produces no Drift claim. Evaluation must report
-coverage, abstention count, and any true Drifts suppressed by uncertainty.
-The conservative precision or false Drift alert tolerance is not fixed yet.
+uncertain VIF Critic prediction remains useful for error analysis and candidate
+review. The Weekly Drift Reviewer owns abstention in the approved user-facing
+path. Evaluation must report coverage, abstention count, and suppressed true
+Drifts. The conservative precision or false Drift alert tolerance is not fixed
+yet.
 
 ---
 
@@ -53,9 +58,10 @@ Ambiguous inputs can average toward neutral while still producing high spread
 across dropout samples. That combination should not be interpreted as a
 confident neutral judgment.
 
-Global calibration is not sufficient for the Drift use case. Uncertainty must
-also be checked on the `-1` class because selective prediction can otherwise
-suppress the exact minority cases Twinkl needs to detect.
+Global calibration is not sufficient for Conflict screening. Any conditional
+candidate-selection rule must check uncertainty on the `-1` class because
+selective prediction can otherwise suppress the exact minority cases the VIF
+Critic is meant to recover.
 
 ---
 
@@ -72,9 +78,9 @@ Journal Entry, including its displayed nudge and response when present, with:
 - Journal Entry metadata.
 
 The current timeline parquet does not persist ordinal class probabilities.
-The selected v1 Drift Detector needs `P(-1)`, so the runtime still requires
-either persisted probabilities or a deterministic reconstruction path from the
-checkpoint output.
+The approved Drift Detector does not need them, but the VIF Critic
+review-and-retrain path requires persisted probabilities, uncertainty,
+checkpoint provenance, and input-contract version.
 
 ### 3.2 Weekly Frame
 
@@ -106,7 +112,9 @@ d_{u,t}^{(j)} = w_{u,j} \cdot \max(0, -\hat{a}_{u,t}^{(j)})
 $$
 
 This conceptual signal is zero for positive or neutral alignment and scales
-negative alignment by declared importance.
+negative alignment by declared importance. It is useful for offline monitoring
+and candidate-selection research, not as direct input to the approved Drift
+Detector.
 
 The profile-weighted scalar summary is:
 
@@ -114,29 +122,31 @@ $$
 V_{u,t}^{\text{scalar}} = w_u^\top \hat{\vec{a}}_{u,t}
 $$
 
-The scalar is useful for monitoring. It does not replace the vector output or
-the named value dimension required for an explainable Weekly Coach reflection.
+The scalar is useful for offline monitoring. It does not replace the vector
+output or the named Core Value needed for candidate-selection research.
 
 ---
 
-## 5. Selected v1 Drift Contract
+## 5. Approved v1 Drift Contract
 
 Drift v1 is:
 
 > Two consecutive Journal Entries each clearly show the writer making a
 > behavior or choice against the same Core Value.
 
-The runtime target accumulates recent soft `P(-1)` evidence for that value while
-uncertainty remains below a calibrated ceiling. Hard argmax sequences are not
-the runtime target because the current VIF Critic frequently hedges true
-Conflict toward neutral.
+The Weekly Drift Reviewer decides whether each relevant Journal Entry shows
+Conflict, non-Conflict, or insufficient evidence without seeing VIF Critic
+predictions. The Drift Detector then applies the deterministic rule. The VIF
+Critic may later propose candidate adjacent pairs, but only after predefined
+criteria and a fresh final test support deployment approval.
 
 | Layer | v1 behavior |
 |---|---|
-| Student-visible target | Two consecutive Journal Entries each visibly show a Conflict for the same Core Value; `twinkl-v8pb` completed its full-runtime-text review, but no final test score was allowed after one case remained unresolved |
+| Student-visible target | Two consecutive Journal Entries each visibly show a Conflict for the same Core Value |
 | Historical consensus table | Retired diagnostic provenance only; not a Drift target, threshold-selection input, or final test set |
-| Runtime | Rolling `P(-1)` evidence with Core Value and uncertainty gates; production integration remains blocked |
-| Delivery | Weekly Digest with cited Journal Entry evidence and active, recovered, mixed, or uncertain wording; abstention emits no Drift claim; exact schema pending |
+| Approved user-facing path | Weekly Drift Reviewer decisions without VIF Critic input, followed by the deterministic Drift Detector; production integration remains pending |
+| VIF Critic path | Store predictions and uncertainty for offline comparison, independent review, retraining, and conditional candidate generation |
+| Delivery | Weekly Digest with cited Journal Entry evidence and active, recovered, mixed, or uncertain wording; Weekly Drift Reviewer abstention emits no Drift claim; exact schema pending |
 
 The EDA supports this definition because most dips spanning one Journal Entry
 recover within two Journal Entries, while three-step and multi-week definitions are too
@@ -157,9 +167,10 @@ Drifts have different delivery states; it is not another state for one Drift.
 active or recovered. Exact schema values and transition rules still require
 implementation and scenario tests.
 
-Abstention is not a correct negative. Coverage and suppressed reference
-Drifts must remain visible in evaluation reports so uncertainty gating cannot
-improve apparent precision merely by hiding hard cases.
+Abstention is not a correct negative. Coverage and suppressed reference Drifts
+must remain visible for both Weekly Drift Reviewer abstention and any
+uncertainty-gated candidate rule, so apparent precision cannot improve merely
+by hiding hard cases.
 
 ---
 
@@ -178,9 +189,9 @@ It then checks a week-over-week profile-weighted drop, consecutive low weekly
 means on important dimensions, and experimental evolution classifications.
 
 This path is wired into `src/coach/runtime.py` and is useful for end-to-end
-schema, output-file, and UI testing. It is not the selected v1 Drift Detector
-because it does not consume rolling `P(-1)` evidence or evaluate the Drift
-definition.
+schema, output-file, and UI testing. It is not the approved v1 Drift Detector
+because it does not consume Weekly Drift Reviewer decisions or apply the
+two-consecutive-Conflict rule.
 
 ---
 
@@ -225,9 +236,9 @@ prompt testing when no upstream Drift result is supplied. Acute grief or
 distress markers can route to `high_uncertainty`, while mixed or burdened weeks
 can use `mixed_state` or `background_strain`.
 
-These lexical/aggregate fallbacks are not substitutes for calibrated VIF Critic
-uncertainty. They are local safety scaffolding around Weekly Digest file
-generation.
+These lexical/aggregate fallbacks are not substitutes for explicit Weekly
+Drift Reviewer abstention. VIF Critic uncertainty remains offline evidence.
+The fallbacks are local safety scaffolding around Weekly Digest file generation.
 
 ---
 
@@ -252,7 +263,7 @@ MC Dropout remains the practical POC default. Later options include deep
 ensembles, evidential methods, conformal wrappers, and explicit embedding-space
 out-of-distribution detection. The retired `twinkl-wq9p` diagnostic showed a
 target-validity problem before it could establish whether uncertainty calibration
-is the binding constraint. `twinkl-v8pb` completed that review and withheld a
-final test score because one case was unresolved; the next step is a
-fresh, independently resolved final test set, not a heavier uncertainty
-method.
+is the binding constraint. `twinkl-v8pb` correctly withheld its former
+final-test score, and that population is now development-only. The next step is
+the bounded candidate-confirmation study followed by a fresh final test, not a
+heavier uncertainty method.

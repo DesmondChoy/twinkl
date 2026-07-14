@@ -34,33 +34,31 @@ This folder contains evaluation specifications for the **Value Identity Function
 |:-----:|-----------|----------------|-------------------|-------------|
 | 1 | [`judge_validation_eval.md`](./judge_validation_eval.md) | Data Preparation | LLM-Judge labels are consistent & agree with humans | Cohen's κ > 0.60 |
 | 2 | [`value_modeling_eval.md`](./value_modeling_eval.md) | Model Training | VIF Critic recovers Conflict | Primary: entry-level `recall_-1`; mandatory precision-recall reporting; QWK and `+1` diagnostic |
-| 3 | [`drift_detection_eval.md`](./drift_detection_eval.md) | Inference | Drift Detector finds Drift without unacceptable false Drift alerts | Primary: Drift recall; precision / false-alert tolerance deferred until VIF Critic development |
+| 3 | [`drift_detection_eval.md`](./drift_detection_eval.md) | Inference | Weekly Drift Reviewer and Drift Detector find Drift without unacceptable false Drift alerts | Primary: Drift recall; predefined false Drift alert, coverage, and abstention limits |
 | 4 | [`explanation_quality_eval.md`](./explanation_quality_eval.md) | User Output | Explanations are grounded and useful | Likert ≥ 3.5/5 |
 
 ---
 
 ## Dependencies
 
-Each eval builds on the previous stage:
+The adopted architecture has a user-facing evaluation path and a VIF Critic
+review-and-retrain path:
 
 ```
-judge_validation_eval  ─┐
-(training data quality) │
-                        ▼
-            value_modeling_eval  ─┐
-            (trained VIF Critic)      │
-                                  ▼
-                      drift_detection_eval  ─┐
-                      (uncertainty-aware     │
-                       triggers)             │
-                                             ▼
-                              explanation_quality_eval
-                              (end-to-end user value)
+Journal Entries + Core Values ──▶ drift_detection_eval ──▶ explanation_quality_eval
+                                  (Weekly Drift Reviewer     (Weekly Digest and
+                                   + Drift Detector)          Weekly Coach)
+
+judge_validation_eval ──▶ value_modeling_eval ──▶ stored VIF Critic predictions
+       ▲                       │                              │
+       └──── independent review and retraining ◀────────────┘
 ```
 
 **Implications:**
-- You cannot evaluate VIF Critic-based Drift detection without a trained VIF Critic
 - You cannot train the VIF Critic without validated LLM-Judge labels
+- The current user-facing Drift evaluation does not require VIF Critic input
+- A future VIF Critic candidate-confirmation path must pass predefined
+  development criteria and a fresh final test before deployment approval
 - Explanation quality can be partially tested at any stage (rationales work independently)
 
 ---
@@ -70,8 +68,8 @@ judge_validation_eval  ─┐
 | Eval | Status | Evidence | Remaining Work |
 |------|--------|----------|----------------|
 | LLM-Judge Validation | 🟢 Operational | 1 651 labels across 204 personas; the shared 115-Journal-Entry / 19-persona benchmark yields Fleiss' κ **0.56** and avg LLM-Judge-human Cohen's κ **0.66** ([report](../../logs/exports/agreement_report_20260318_130642.md)). Follow-up audits include the `twinkl-747` reachability report and the `twinkl-754` 5-pass consensus/self-consistency rerun. | Add automated post-label QA (all-zero rate, sparsity, distribution) and continue hard-dimension target refinement, especially after the `Security` caveat from `twinkl-747` |
-| Value Modeling | 🟡 In Progress | `run_019`-`run_021` remains the historical corrected-split reference. The paired `run_057`-`run_062` experiment shows that active-state Security repair raises median test Security QWK by about **0.17**. `twinkl-j0ck` did not promote soft targets, compact-history `run_069` failed its seed-11 expansion gate, and the Codex-reviewed `twinkl-748` Hedonism hard-set found only 0.05 median `-1` recall and 0.05 strict-pair accuracy for the incumbent. The [`twinkl-752.5` reassessment](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5_reassessment.md) found no reliable benefit from exposing raw `run_020` scores to the Weekly Drift Reviewer and no scheduling recall gain. | Keep QWK and `+1` as diagnostics. Treat scheduling evidence from training-seen Journal Entries as in-sample, and let `twinkl-752.2` decide architecture without promoting a VIF Critic from this development result. |
-| Drift Detection | 🟡 Partial | The 106-trajectory known-development union contains 33 Drifts across 28 Drift trajectories. `twinkl-752.5` found median Drift recall of `0.273` weekly-only, `0.212` with raw VIF Critic input, and `0.273` with VIF-Critic-triggered early-plus-weekly review. The raw-input recall interval crossed zero; scheduling changed median delay but added no Drift hits. The zero-call placement diagnostic found 7/19 Drift-relevant triggers versus a random median of 1/19. This is selection-biased AI-reviewed evidence, not a final test. | `twinkl-752.2` must decide architecture without treating trigger targeting as proof that early review works. Build a fresh final test before any deployment claim. Production `P(-1)` persistence, calibrated Drift detection, and Weekly Coach delivery remain pending. |
+| Value Modeling | 🟡 In Progress | `run_019`-`run_021` remains the historical corrected-split reference. The paired `run_057`-`run_062` experiment shows that active-state Security repair raises median test Security QWK by about **0.17**. `twinkl-j0ck` did not promote soft targets, compact-history `run_069` failed its seed-11 expansion gate, and the Codex-reviewed `twinkl-748` Hedonism hard-set found only 0.05 median `-1` recall and 0.05 strict-pair accuracy for the incumbent. The [`twinkl-752.5` reassessment](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5_reassessment.md) found no reliable benefit from exposing raw `run_020` scores to the Weekly Drift Reviewer and no scheduling recall gain. | Keep the VIF Critic in the required stored-prediction, independent-review, and retraining path. Persist full probabilities and provenance, build reviewed disagreement data, and evaluate any candidate-confirmation path only after predefined criteria are fixed. |
+| Drift Detection | 🟡 Partial | The 106-trajectory known-development union contains 33 Drifts across 28 Drift trajectories. `twinkl-752.5` found median Drift recall of `0.273` weekly-only, `0.212` with raw VIF Critic input, and `0.273` with VIF-Critic-triggered early-plus-weekly review. The raw-input recall interval crossed zero; scheduling changed median delay but added no Drift hits. The zero-call placement diagnostic found 7/19 Drift-relevant triggers versus a random median of 1/19. This is selection-biased AI-reviewed evidence, not a final test. | The staged architecture is selected: Weekly Drift Reviewer decisions without VIF Critic input feed the deterministic Drift Detector. `twinkl-7vam` must define the deployment-approval criteria; `twinkl-pv6s` must provide a fresh final test. Runtime wiring remains pending. |
 | Explanation Quality | 🟡 Partial | 1 594 / 1 651 persisted labels have rationales, the annotation tool can display/compare them, and Weekly Coach Tier 1 narrative checks are implemented in [`src/coach/weekly_digest.py`](../../src/coach/weekly_digest.py) | Batch pass-rate reporting for Weekly Coach narratives, rationale-specific Tier 1 checks in `src/judge/`, and deeper rationale-review LLM / human-calibration work |
 
 See each eval file's **Implementation Status** section for detailed breakdowns.

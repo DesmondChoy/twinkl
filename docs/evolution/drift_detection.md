@@ -26,13 +26,13 @@ One persona may therefore have separate or simultaneous Drifts on several Core
 Values. The reference records them separately by value; it never averages Core
 Values into one profile-wide verdict.
 
-The runtime target is rolling soft `P(-1)` evidence under uncertainty gating,
-and the user sees the result through the Weekly Digest and Weekly Coach. The
-prior consensus-derived frozen benchmark is retired, so there is no active
-final test set. `twinkl-v8pb` completed the student-visible target and locked
-final test review, but one 19-entry case was unresolved, so no VIF Critic and
-Drift Detector setup has deployment approval and the production path remains
-unwired. The intended delivery
+In the approved user-facing path, the Weekly Drift Reviewer decides Conflict
+from Journal Entry text without VIF Critic input. The deterministic Drift
+Detector then applies the two-consecutive-Conflict rule, and the user sees the
+result through the Weekly Digest and Weekly Coach. The prior
+consensus-derived benchmark and former final-test population are development
+evidence only; `twinkl-pv6s` must establish a fresh final test. No setup has
+deployment approval and the production path remains unwired. The intended delivery
 vocabulary is **active**, **recovered**, **mixed**, or **uncertain**; exact
 schema values and state transitions remain implementation work.
 
@@ -50,7 +50,8 @@ The repository also contains two exploratory predecessors:
   `high_uncertainty`, or `stable`; and
 - the demo compares six rule-based detector families and counts their votes.
 
-Neither predecessor implements the selected rolling-`P(-1)` Drift Detector.
+Neither predecessor implements the approved Weekly Drift Reviewer plus
+deterministic Drift Detector path.
 
 > **Historical research boundary:** The remaining sections preserve the
 > pre-canonical detector research catalog and its original terminology for
@@ -73,9 +74,11 @@ True:  +1   +1    0   -1   -1   -1    0   +1    ← conflict entries 4–6
 Pred:   0    0    0    0   -1    0    0    0    ← only week 5 caught
 ```
 
-A hard detector looking for two consecutive predicted `-1` labels fires on the
-reference scores but stays silent on the Critic output. This is why v1 uses a
-strict label reference and a soft runtime evidence target.
+A detector looking for two consecutive predicted `-1` labels fires on the
+reference scores but stays silent on the VIF Critic output. This motivated an
+earlier soft-evidence proposal, but the approved path instead asks the Weekly
+Drift Reviewer to confirm Conflict from text before applying the deterministic
+rule.
 
 **Why reference and runtime are evaluated separately.** The trajectory EDA runs
 on the stored five-pass Judge consensus labels, while the runtime evaluation
@@ -159,10 +162,11 @@ Options B and C move temporal reasoning *into* the Critic. The drift layer can n
 
 ### Definition
 
-Drift v1 is a **sustained conflict episode on a declared core value**. The
-student-visible target applies the per-value rules in the Current v1 Contract
-above; the runtime target is rolling soft evidence; the weekly boundary
-controls delivery only.
+This historical catalog modeled Drift v1 as a **sustained conflict episode on a
+declared core value** and proposed rolling soft evidence at runtime. That
+runtime proposal is not selected. The Current v1 Contract above now governs:
+Weekly Drift Reviewer decisions feed the deterministic Drift Detector, while
+the weekly boundary controls delivery only.
 
 The broader interpretation question—unintended drift, an accepted trade-off, or
 genuine value change—belongs to the Coach conversation. Automatic profile
@@ -760,8 +764,8 @@ and not ground truth. No
 
 The v1 target instead requires two adjacent entries that visibly show a
 behavior or choice against the same declared core value. `twinkl-v8pb`
-completed the student-visible target and locked promotion review, but the
-promotion score was withheld after one case remained unresolved; the former
+completed the historical student-visible review and correctly withheld its
+former final-test score. That population is now development-only, and the
 consensus-derived frozen benchmark is retired. See
 [`docs/evals/drift_detection_eval.md`](../evals/drift_detection_eval.md) for the
 active protocol.
@@ -780,7 +784,7 @@ active protocol.
 
 ## Related documents
 
-- [`docs/vif/04_uncertainty_logic.md`](../vif/04_uncertainty_logic.md) — uncertainty, drift formulas, and trigger logic
+- [`docs/vif/04_uncertainty_logic.md`](../vif/04_uncertainty_logic.md) — VIF Critic uncertainty, offline review, and the approved Drift boundary
 - [`docs/vif/02_system_architecture.md`](../vif/02_system_architecture.md) — state and runtime artifact flow
 - [`docs/evals/drift_detection_eval.md`](../evals/drift_detection_eval.md) — evaluation protocol and success criteria
 - [`docs/evolution/01_value_evolution.md`](01_value_evolution.md) — value evolution detection design

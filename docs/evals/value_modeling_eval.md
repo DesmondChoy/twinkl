@@ -4,17 +4,18 @@
 
 The VIF (Value Identity Function) maps Journal Entries to a 10-dimensional
 Schwartz value vector. For the remaining capstone scope, its primary operational
-role is **conflict screening**: recovering Conflict (`-1`) that can support the
-downstream Drift Detector. The ternary vector remains useful for trade-offs and
-positive Weekly Coach context, but broad profile recovery is no
-longer the primary model-development claim. See the adopted
+role is **Conflict screening**: recovering Conflict (`-1`) for offline review,
+candidate mining, and retraining. The ternary vector remains useful for
+trade-off analysis, but broad profile recovery is no longer the primary
+model-development claim. VIF Critic outputs do not enter the approved
+user-facing Drift path. See the adopted
 [VIF scope decision](../vif/05_capstone_scope_decision.md).
 
 ---
 
 ## Implementation Status
 
-**Status:** 🟡 In Progress (as of 2026-07-13)
+**Status:** 🟡 In Progress (as of 2026-07-14)
 
 ### What's Implemented
 - Evaluation specification complete (this document)
@@ -24,7 +25,7 @@ longer the primary model-development claim. See the adopted
 - Experiment archive spans 69 run IDs / 133 persisted run configs, including CORAL, CORN, EMD, CDW-CE, SoftOrdinal, BalancedSoftmax, LDAM-DRW, TwoStageBalancedSoftmax, SLACE, encoder diagnostics, recall-aware checkpoint retention, target-repair, soft-label, compact-history, and legacy weighted-MSE baselines ([`logs/experiments/index.md`](../../logs/experiments/index.md))
 - Text and state encoders: nomic-embed-text-v1.5, MiniLM ([`src/vif/encoders.py`](../../src/vif/encoders.py))
 - Evaluation metrics: QWK, Spearman ρ, MAE, calibration, per-dimension recall, raw ordinal exports, and compact circumplex diagnostics ([`src/vif/eval.py`](../../src/vif/eval.py))
-- Current corrected-split default: `run_019`-`run_021` BalancedSoftmax — median QWK **0.362**, median `recall_-1` **0.313**, median minority recall **0.448**, median hedging **0.621**, median calibration **0.713**
+- Historical corrected-split reference: `run_019`-`run_021` BalancedSoftmax — median QWK **0.362**, median `recall_-1` **0.313**, median minority recall **0.448**, median hedging **0.621**, median calibration **0.713**
 - Post-lift rebaseline `run_025`-`run_027` is logged and reviewable, but it did not replace the incumbent frontier because `Security` and circumplex structure regressed
 - Controlled Qwen encoder rerun `run_042`-`run_044` is the strongest representation challenger, but it did not replace the default because `hedonism` / `power` remained too weak
 - Two-stage reformulation `run_045`-`run_047` is logged as a structural diagnostic branch, but it did not replace the default because `recall_-1` and hedging regressed
@@ -33,7 +34,7 @@ longer the primary model-development claim. See the adopted
 - The frozen-holdout LLM baseline compares `student_visible`, `human_context`, and upper-bound `full_judge_context` experiment setups. The strongest 221-row `human_context` experiment setup reaches QWK **0.450**, `recall_-1` **0.302**, minority recall **0.534**, and hedging **0.707**; `run_020` reaches QWK **0.378**, `recall_-1` **0.342**, minority recall **0.449**, and hedging **0.621**. The LLM is useful as a reference or fallback diagnostic, not a clean MLP replacement.
 - Compact-history `run_069` stayed within the `<5k` added-weight budget but failed its seed-11 expansion gate versus repaired-target `run_058`: QWK **0.342** vs **0.363**, minority recall **0.400** vs **0.446**, and Security QWK **0.267** vs **0.339**. The path remains diagnostic and the local MLP is not claimed to be trajectory-aware.
 - The [`twinkl-1r3d` shortcut audit](../../logs/experiments/reports/experiment_review_2026-07-12_twinkl_1r3d_shortcut_audit.md) removed 3,406 individual words plus 20 repeated-word or phrase cues across 35 confident-correct active Conformity and Self-Direction validation cases. No removal flipped a class, so the tested brittle lexical-shortcut explanations are not supported. This is a bounded sensitivity result, not evidence that either construct is solved.
-- The [`twinkl-752.1` Weekly Drift Reviewer ablation](../../logs/experiments/reports/experiment_review_2026-07-12_twinkl_752_1_weekly_verifier_ablation.md) is complete. Adding fixed `run_020` signals reduced median development Drift recall from **0.40** to **0.20**, removed the median false Drift alert (**1** to **0**), and reduced coverage from **0.756** to **0.732**. The registered result is negative; no architecture was adopted.
+- The [`twinkl-752.1` Weekly Drift Reviewer ablation](../../logs/experiments/reports/experiment_review_2026-07-12_twinkl_752_1_weekly_verifier_ablation.md) is complete. Adding fixed `run_020` signals reduced median development Drift recall from **0.40** to **0.20**, removed the median false Drift alert (**1** to **0**), and reduced coverage from **0.756** to **0.732**. The later `twinkl-752.5` reassessment made the raw-input recall result inconclusive; the adopted architecture still excludes raw VIF Critic input from the Weekly Drift Reviewer.
 - The [`twinkl-752.3` prompt-alignment study](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_3_weekly_drift_reviewer_prompt_alignment.md) is also complete. Full adjacent-pair text, a versioned Core Value rubric, and explicit Drift decisions lowered median Drift recall to **0.20** and raised median false Drift alerts to **5**. The earlier **0.40** result was not materially prompt-limited by the tested differences.
 
 ### What's Missing
@@ -45,13 +46,15 @@ longer the primary model-development claim. See the adopted
 - Gated parameter-efficient encoder adaptation path (`twinkl-750`)
 - Persona-level aggregation protocol (aggregate per-entry scores into persona-level value profile for Top-K accuracy)
 - Formal held-out evaluation against declared value orderings (Spearman ρ > 0.7 target)
-- Final architecture approval under `twinkl-752.2`. The aligned prompt did not improve the conditional Weekly Drift Reviewer without VIF Critic input, and the conservative precision or false-alert tolerance is deliberately not fixed yet.
+- **Deployment-approval criteria remain open:** `twinkl-7vam` must fix the false Drift alert or precision tolerance, minimum Drift recall, coverage and abstention trade-off, stability requirements, and any claimed efficiency gate.
+- **The VIF Critic review-and-retrain path is not implemented:** predictions, uncertainty, checkpoint provenance, independent review outcomes, and dataset versions must be stored without feeding raw scores into the Weekly Drift Reviewer.
+- **A fresh final test is required:** the former final-test population is development-only; `twinkl-pv6s` owns the replacement.
 
 ### Next Steps
 1. Implement and verify recall-first checkpoint selection before treating another training run as decision evidence
-2. Review the completed `twinkl-752.1` and `twinkl-752.3` results under `twinkl-752.2`; do not adopt a VIF architecture without explicit approval
-3. Report `-1` precision and the precision-recall curve while prioritizing `recall_-1`; do not infer deployment readiness until a false-alert tolerance is adopted
-4. Keep QWK, `+1` recall, calibration, circumplex diagnostics, and persona-level aggregation as secondary health checks
+2. Implement the versioned VIF Critic review-and-retrain path without changing the approved user-facing decision path
+3. Define the candidate adjacent-pair rule and deployment-approval criteria under `twinkl-7vam`, then freeze them before the fresh final test
+4. Report `-1` precision and the precision-recall curve while prioritizing `recall_-1`; keep QWK, `+1` recall, calibration, circumplex diagnostics, and persona-level aggregation as secondary health checks
 
 ---
 
@@ -105,14 +108,17 @@ product direction or defines the deployment gate.
 - QWK 0.2 – 0.4: Fair (better than chance but unreliable)
 - QWK < 0.2: Poor (near-chance or degenerate predictions)
 
-**Current corrected-split default:** median QWK 0.362 for `run_019`-`run_021` BalancedSoftmax. A historical pre-split high of 0.434 (`run_010` CORN) is kept in the experiment index for context only and is not the active evaluation regime.
+**Historical corrected-split reference:** median QWK 0.362 for `run_019`-`run_021` BalancedSoftmax. A pre-split high of 0.434 (`run_010` CORN) is kept in the experiment index for context only and is not the active evaluation regime.
 
 **Latest challengers:** Qwen `run_042`-`run_044` reached a slightly higher median QWK (`0.370`) with lower hedging, but stayed too weak on `hedonism` and `power`. Two-stage `run_045`-`run_047` stayed close on QWK (`0.360`) but gave back too much `recall_-1` and hedged more. Consensus-label retrains `run_048`-`run_050` improved within-regime QWK to `0.372`, but they are not a like-for-like frontier replacement because the evaluation labels changed on the same frozen holdout.
 
 #### Conflict Recall (`recall_-1`) — Primary
 
-`recall_-1` measures how often the VIF Critic recovers Journal Entries with LLM-Judge
-Conflict labels. This is the primary model-development metric because Drift cannot be detected when the VIF Critic misses either component Conflict.
+`recall_-1` measures how often the VIF Critic recovers Journal Entries with
+LLM-Judge Conflict labels. This is the primary model-development metric because
+a conditional candidate-confirmation path cannot propose a Drift pair when the
+VIF Critic misses either component Conflict. The approved weekly-only path does
+not depend on this metric.
 
 
 ```
@@ -129,7 +135,7 @@ Twinkl needs.
 - Recall 10 – 30%: Poor; model catches some signal but misses most
 - Recall < 10%: Model effectively ignores the minority class
 
-**Current corrected-split default:** median `recall_-1` is 31.3% for
+**Historical corrected-split reference:** median `recall_-1` is 31.3% for
 `run_019`-`run_021` BalancedSoftmax. This is materially better than the old
 pre-split baselines, but still not strong enough to treat Drift claims as
 production-ready.
@@ -159,7 +165,7 @@ structure of Schwartz's value circumplex:
 Why this matters: a model can improve QWK or minority recall while still
 producing value combinations that are structurally implausible.
 
-**Current corrected-split default:** the incumbent `run_019`-`run_021`
+**Historical corrected-split reference:** the `run_019`-`run_021`
 BalancedSoftmax family sits at median `opposite_violation_mean = 0.070` and
 median `adjacent_support_mean = 0.077`. The latest post-lift rerun
 `run_025`-`run_027` did not replace it because opposite-pair violation worsened
@@ -233,7 +239,7 @@ mean_rho = np.mean(results)
 
 | Metric | Role | Rationale |
 |--------|------|-----------|
-| `recall_-1` | Primary development metric | Measures recovery of Conflict required by the downstream Drift Detector |
+| `recall_-1` | Primary development metric | Measures Conflict recovery for offline review and the conditional candidate-confirmation path |
 | `-1` precision and precision-recall curve | Mandatory report; threshold deferred | Exposes false-conflict inflation while recall is optimized |
 | QWK | Ordinal-health diagnostic | Detects collapse of the retained ternary output and preserves historical comparability |
 | `+1` recall / minority recall | Non-gating diagnostic | Supports occasional positive context without defining Drift |
@@ -262,7 +268,7 @@ From PRD (Evaluation Strategy, Row 2):
 3. **Value leakage**: If personas explicitly mention values in Journal Entries, the evaluation is trivial
 4. **Reachability ceiling**: `twinkl-747` established a hard-dimension target-contract warning, especially for `security`, but its legacy reduced-context experiment setups did not exactly represent the active session-plus-profile state. It did not create a repaired target or an exact active-state leaderboard.
 5. **Board comparability**: consensus-label retrains are informative diagnostics, but they are not directly comparable to the persisted-label frontier because the holdout labels changed
-6. **Context and decision contract**: the retired consensus-derived Drift benchmark is historical diagnostic evidence, not a valid student-visible final test set. [`twinkl-v8pb`](./drift_v1_student_visible_target.md) completed a separate full-runtime-text target and locked final-test review; low development recall and one unresolved final-test case mean no VIF Critic comparison supports a deployment claim. The earlier AI audit is diagnostic evidence, not human ground truth.
+6. **Context and decision contract**: the retired consensus-derived Drift benchmark is historical diagnostic evidence, not a valid student-visible final test set. [`twinkl-v8pb`](./drift_v1_student_visible_target.md) correctly withheld its former final-test score; that population and the expanded 106-trajectory union are now development-only. No fresh final test supports a VIF Critic deployment claim. The earlier AI audit is diagnostic evidence, not human ground truth.
 
 **Mitigations:**
 - Use banned terms validation to prevent explicit value mentions

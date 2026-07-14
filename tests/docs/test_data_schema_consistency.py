@@ -125,7 +125,7 @@ class TestJudgeLabelsColumnsDocumented:
         actual_columns = set(df.columns)
 
         markdown = DATA_SCHEMA_PATH.read_text()
-        documented = set(_extract_table_columns(markdown, "Judge Labels"))
+        documented = set(_extract_table_columns(markdown, "LLM-Judge Labels"))
 
         missing_from_docs = actual_columns - documented
         extra_in_docs = documented - actual_columns

@@ -4,8 +4,8 @@ This document is the canonical technical overview for the live VIF stack and
 its training/runtime data contracts.
 
 For training details, see [Reward Modeling & Training](03_model_training.md).
-For uncertainty and Drift Detector logic, see
-[Uncertainty and Drift Detector Logic](04_uncertainty_logic.md).
+For uncertainty and Drift review logic, see
+[Uncertainty and Drift Review Logic](04_uncertainty_logic.md).
 For the adopted capstone scope and metric hierarchy, see
 [VIF Capstone Scope and Evaluation Decision](05_capstone_scope_decision.md).
 
@@ -22,28 +22,31 @@ The current VIF implementation is intentionally narrow:
 - **Runtime output**: per-Journal-Entry alignment means and uncertainties, plus weekly aggregates
 - **Primary capstone role**: recover visible Conflict (`-1`) evidence; retain
   ternary outputs for diagnostics and non-gating positive context
-- **Downstream use**: validated weekly signal frames, an experimental
-  crash/rut/evolution router, and Weekly Coach inputs
-- **Selected Drift v1 target**: rolling soft `P(-1)` evidence for two
-  consecutive Conflicts on the same Core Value. Development-set review tooling
-  is implemented offline and the known-development union contains 33 episodes
-  across 28 Drift trajectories. There is no active fresh final test, no Drift
-  Detector has deployment approval, and the rule is not wired into the runtime
-  router.
+- **Current executable downstream use**: validated weekly signal frames, an
+  experimental crash/rut/evolution router, and Weekly Coach inputs
+- **Approved user-facing target**: Weekly Drift Reviewer decisions without VIF
+  Critic input, followed by the deterministic rule that two consecutive
+  Conflicts for the same Core Value form Drift
+- **Approved VIF Critic role**: stored predictions and uncertainty for offline
+  comparison, independent review, candidate mining, and retraining; a later
+  candidate-confirmation path requires predefined criteria and a fresh final
+  test
 
 > **Note:** Specific model names, embedding dimensions, and default window sizes
 > change over time. Treat `config/vif.yaml` as the source of truth for current
 > runtime values.
 
-The metric policy is ahead of implementation: training still selects
-checkpoints QWK-first, the runtime still uses synthetic `core_values` rather
-than persisted `top_values`, and Weekly Drift Reviewer abstention is not wired.
-No VIF Critic-only, Weekly Drift Reviewer-only, ensemble, or cascade
-architecture is adopted yet.
+The architecture and metric policy are ahead of implementation: training still
+selects checkpoints QWK-first, the runtime still uses synthetic `core_values`
+rather than persisted `top_values`, and Weekly Drift Reviewer decisions and
+abstention are not wired. No selected component has deployment approval.
 
 ## Current Diagram
 
-The current architecture diagram is maintained in two synced forms:
+The current implementation diagram is maintained in two synced forms. It shows
+the executable prototype and labels the approved target as unwired; the adopted
+staged architecture is documented in
+[VIF Critic Role in Drift Detection](../architecture/drift_detection.md).
 
 - Mermaid source: [`current_system_architecture.mmd`](current_system_architecture.mmd)
 - Rendered SVG: [`current_system_architecture.svg`](current_system_architecture.svg)
@@ -224,13 +227,13 @@ The runtime path rebuilds the same state definition used in training:
 2. Recreate the text encoder and `StateEncoder`.
 3. Rebuild one state vector per wrangled Journal Entry in a timeline.
 4. Run uncertainty-aware VIF Critic inference.
-5. Persist:
-   - per-Journal-Entry alignment means and uncertainties
-   - weekly aggregated signals for the downstream Drift Detector
+5. Persist the currently implemented per-Journal-Entry alignment means,
+   uncertainties, and weekly aggregates.
 
-The runtime parquet files do not currently persist ordinal class probabilities.
-The selected v1 Drift Detector therefore still needs persisted `P(-1)` values
-or a deterministic way to reconstruct them from checkpoint outputs.
+The runtime parquet files do not currently persist ordinal class probabilities
+or checkpoint provenance sufficient for the approved review-and-retrain path.
+That path needs versioned `P(-1)`, `P(0)`, `P(+1)`, uncertainty, and input-contract
+records before offline comparison and candidate evaluation are reproducible.
 
 The bridge from checkpoint -> timeline parquet -> weekly VIF parquet is
 implemented in `src/vif/runtime.py`.
@@ -253,7 +256,7 @@ generation.
 per-dimension alignment, uncertainty, and profile-weight names and raises a
 `ValueError` naming any required columns missing at the consumer boundary.
 
-### 4.3 Drift Routing: Prototype and v1 Target
+### 4.3 Drift Routing: Prototype and Approved Target
 
 The working runtime prototype in `src/vif/drift.py` consumes weekly means and
 uncertainties and can emit `stable`, `crash`, `rut`, `evolution`, or
@@ -261,9 +264,10 @@ uncertainties and can emit `stable`, `crash`, `rut`, `evolution`, or
 automatically when no precomputed result is supplied. This is the route used by
 the offline Weekly Coach runtime and demo UI.
 
-The selected product contract is narrower: Drift means two consecutive Journal
-Entries visibly show a Conflict for the same Core Value, with rolling soft
-`P(-1)` runtime evidence. The former
+The approved product contract is narrower: the Weekly Drift Reviewer reads
+Journal Entries and Core Values without VIF Critic predictions. The
+deterministic Drift Detector declares Drift after two consecutive Conflicts for
+the same Core Value. The former
 consensus-derived frozen benchmark is retired historical evidence; it does not
 implement or justify the active target. [`twinkl-v8pb`](../evals/drift_v1_student_visible_target.md)
 is historical. [`twinkl-752.4`](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md)
@@ -271,22 +275,22 @@ found 31 episodes across 26 Drift trajectories. Three overlap the earlier five;
 adding the two omitted prior episodes produces the 33-episode /
 28-Drift-trajectory known-development union. Four reviewed episodes came from
 the former final-test split; include them in the primary development analysis
-and report provenance subgroups separately. `twinkl-752.5` must compare weekly
-review without VIF Critic input, weekly review with raw VIF Critic input, and
-VIF-Critic-triggered early-plus-weekly review. A separate offline diagnostic
-compares the realized
-trigger placements with random placements at the same count and makes no Weekly
-Drift Reviewer calls. The production connection therefore remains deliberately
-absent, and the existing weekly router remains a compatibility prototype.
+and report provenance subgroups separately. `twinkl-752.5` found 9/33 median
+Drifts with weekly review without VIF Critic input, 7/33 with raw VIF Critic
+input, and 9/33 with VIF-Critic-triggered early-plus-weekly review. The staged
+architecture therefore keeps raw predictions and scheduling out of the
+user-facing path. The production connection remains absent, and the existing
+weekly router remains a compatibility prototype.
 See
 [`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md) and
 [`docs/evals/drift_detection_eval.md`](../evals/drift_detection_eval.md).
 
 ---
 
-## 5. VIF Critic vs Weekly Coach Separation
+## 5. Decision and Learning Separation
 
-The architecture keeps the VIF Critic and Weekly Coach separate.
+The architecture separates user-facing Drift decisions from VIF Critic
+measurement and improvement.
 
 ### 5.1 VIF Critic
 
@@ -295,17 +299,33 @@ The VIF Critic:
 - reads only the structured state described above
 - uses only the configured state; optional history is strictly prior-only
 - outputs numeric alignment estimates plus uncertainty
+- stores versioned predictions for offline comparison, independent review, and
+  retraining
+- does not send predictions to the Weekly Drift Reviewer or make a user-facing
+  Drift claim
 
-### 5.2 Weekly Coach
+### 5.2 Weekly Drift Reviewer and Drift Detector
+
+The Weekly Drift Reviewer:
+
+- reads Journal Entries and Core Values without VIF Critic predictions
+- decides Conflict, non-Conflict, or abstention
+
+The deterministic Drift Detector declares Drift only after two consecutive
+Weekly Drift Reviewer Conflicts for the same Core Value.
+
+### 5.3 Weekly Coach
 
 The Weekly Coach:
 
-- is activated from Drift Detector output rather than raw text alone
+- receives Drift-specific state from the Drift Detector rather than VIF Critic
+  predictions
 - reads the user's full journal history at current POC scale
-- turns numeric signals into reflective, evidence-based language
+- turns the Weekly Digest into reflective, evidence-based language
 
-This keeps VIF Critic prediction generation auditable while letting the Weekly Coach
-speak in a richer, more contextual way.
+This keeps VIF Critic prediction generation auditable, prevents it from biasing
+the Weekly Drift Reviewer, and lets the Weekly Coach speak in richer,
+evidence-based language.
 
 ---
 

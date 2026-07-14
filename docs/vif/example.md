@@ -6,8 +6,8 @@
 > |---|---|
 > | Stage 0 (Offline Training) | 🧪 Experimental — synthetic generation, LLM-Judge labeling, and VIF Critic training are all implemented; frontier quality is still under active review |
 > | Stage 1 (Onboarding) | 📋 Specified |
-> | Stages 2–4 (Journaling + Weekly Coach) | ⚠️ Partial — runtime bridge, weekly signals, Weekly Digest outputs, and prompt rendering exist; the selected rolling-soft-evidence Drift Detector and recovery wording remain to be implemented |
-> | Stage 5 (High-uncertainty) | ⚠️ Partial — MC Dropout and high-uncertainty routing exist experimentally; sensitive-case behavior should still be treated as target behavior under evaluation |
+> | Stages 2–4 (Journaling + Weekly Coach) | ⚠️ Partial — runtime bridge, weekly signals, Weekly Digest outputs, and prompt rendering exist; the approved Weekly Drift Reviewer and deterministic Drift Detector path remains to be implemented |
+> | Stage 5 (Uncertain delivery) | ⚠️ Partial — MC Dropout exists for offline VIF Critic review; Weekly Drift Reviewer abstention and sensitive-case delivery remain target behavior under evaluation |
 >
 > See the [Implementation Status](../prd.md#implementation-status) table in prd.md for the full breakdown.
 
@@ -19,8 +19,9 @@ This example follows a single user through onboarding and four scenarios, showin
 |-----------|------|-------------|
 | **Generator** | Creates synthetic training data | Offline only (before any user exists) |
 | **LLM-Judge** | Offline LLM that labels Journal Entries against values | Training time |
-| **VIF Critic** | Fast neural net that predicts `-1`, `0`, or `+1` for each Journal Entry and value, plus uncertainty | Every Journal Entry |
-| **Drift Detector** | Reads VIF Critic outputs over time and decides whether Drift occurred | After each scored Journal Entry; delivered through the Weekly Digest |
+| **VIF Critic** | Fast neural net that predicts `-1`, `0`, or `+1` for each Journal Entry and value, plus uncertainty | Every Journal Entry in the offline review-and-retrain path |
+| **Weekly Drift Reviewer** | Decides Conflict, non-Conflict, or abstention from Journal Entry text without VIF Critic input | Weekly review in the approved user-facing path |
+| **Drift Detector** | Applies the deterministic two-consecutive-Conflict rule | After Weekly Drift Reviewer decisions; delivered through the Weekly Digest |
 | **Weekly Coach** | Turns the Weekly Digest into an evidence-based reflection | When the Weekly Digest records a tension, uncertainty, or occasional acknowledgment |
 
 ---
@@ -134,7 +135,8 @@ Sarah has been journaling for a month. Here is this week's Journal Entry:
 |-----------|--------|----------|
 | Generator | N/A | Only used during offline training |
 | LLM-Judge | N/A | Offline labeling is complete |
-| VIF Critic | **ACTIVE** | Scores the Journal Entry across all 10 value dimensions |
+| VIF Critic | **OFFLINE, ESSENTIAL** | Stores scores and uncertainty across all 10 value dimensions for review and retraining |
+| Weekly Drift Reviewer | **APPROVED, NOT WIRED** | Finds no Conflict in the Journal Entry from its text |
 | Weekly Coach | **ACTIVE** (occasional) | Offers evidence-based acknowledgment |
 
 ### VIF Critic Processing
@@ -152,10 +154,10 @@ Sarah has been journaling for a month. Here is this week's Journal Entry:
 
 > _The VIF Critic always outputs all 10 Schwartz dimension scores. Tables in this walkthrough show only Benevolence and Self-Direction — Sarah's Core Values — because only Core Values can produce Drift. The remaining eight dimensions are still scored._
 
-**Trajectory check:**
+**Approved user-facing check:**
 
-- no Drift is active for either Core Value;
-- uncertainty is low enough to retain the evidence; and
+- the Weekly Drift Reviewer finds no Conflict for either Core Value;
+- the deterministic Drift Detector finds no two-Conflict sequence; and
 - the Weekly Digest can support occasional, evidence-based acknowledgment.
 
 **Weekly Coach Decision:** Offer occasional reinforcement because Sarah has shown sustained alignment.
@@ -196,29 +198,29 @@ consecutive Journal Entries are Conflicts for Benevolence.
 |-----------|--------|----------|
 | Generator | N/A | Only used during offline training |
 | LLM-Judge | N/A | Stored five-pass consensus labels are diagnostic provenance, not an active Drift benchmark or live runtime input |
-| VIF Critic | **ACTIVE** | Produces per-Journal-Entry class evidence and uncertainty |
-| Drift Detector | **EXPERIMENTAL, NOT WIRED** | Accumulates rolling soft `P(-1)` evidence on Benevolence; no Drift Detector has deployment approval |
+| VIF Critic | **OFFLINE, ESSENTIAL** | Stores per-Journal-Entry predictions and uncertainty for comparison, review, and retraining |
+| Weekly Drift Reviewer | **APPROVED, NOT WIRED** | Confirms each Benevolence Conflict from Journal Entry text without VIF Critic input |
+| Drift Detector | **APPROVED, NOT WIRED** | Applies the deterministic two-consecutive-Conflict rule; no setup has deployment approval |
 | Weekly Coach | **ACTIVE AT DELIVERY** | Uses the Weekly Digest to surface the repeated Conflict |
 
-### Illustrative Historical Label and Runtime Views
+### Illustrative Historical Label and Decision Views
 
-| Journal Entry | Illustrative historical Benevolence label | Runtime target |
+| Journal Entry | Illustrative historical Benevolence label | Approved decision path |
 |---|---:|---|
-| Week 7 | `-1` | elevated `P(-1)`, low enough uncertainty to retain |
-| Week 8 | `-1` | repeated `P(-1)` evidence crosses the calibrated persistence gate |
+| Week 7 | `-1` | Weekly Drift Reviewer confirms Conflict from text |
+| Week 8 | `-1` | second confirmed Conflict completes the deterministic Drift rule |
 
 This illustration shows how two consecutive Conflicts for the same Core Value
 could form one Drift. It is not an active benchmark target: the
-five-pass consensus table is diagnostic provenance only. The runtime does not
-require two hard argmax `-1` predictions; it estimates Drift from soft
-probability mass under uncertainty gating.
+five-pass consensus table is diagnostic provenance only. VIF Critic
+probabilities support offline review and retraining; they do not directly
+produce the user-facing Drift.
 
 This walkthrough illustrates intended behavior for an explicit Conflict case;
-it is not production-validation evidence. The `gpt-5.4-mini` setup with the
-current Journal Entry and profile, and the setup that also includes prior
-Journal Entries, detect all 10 designed Drifts but miss all five frozen
-consensus Drifts. No Drift Detector has deployment approval until that
-disagreement is reviewed.
+it is not deployment evidence. On the larger known-development union, weekly
+review without VIF Critic input found a median 9/33 Drifts, while raw VIF Critic
+input found 7/33 and early-plus-weekly scheduling found 9/33. No Drift Detector
+has deployment approval without predefined criteria and a fresh final test.
 
 **Weekly Digest content:** Record the Drift and cite both Journal Entries as
 evidence.
@@ -252,14 +254,14 @@ changes what the Weekly Coach should say:
 - Week 11: "The client work is still intense, but I stopped treating every request like an emergency."
 - Week 12: "I made a full weekend free before anyone asked me to."
 
-### VIF Critic and Delivery Views
+### Review and Delivery Views
 
-| Week | Benevolence reference | Delivery interpretation |
+| Week | Weekly Drift Reviewer decision | Delivery interpretation |
 |---|---:|---|
-| 7 | `-1` | Conflict evidence begins |
-| 8 | `-1` | Drift confirmed |
-| 9 | `0` | Conflict is no longer accumulating |
-| 10–12 | `+1` | recovery is sustained |
+| 7 | Conflict | Conflict evidence begins |
+| 8 | Conflict | Drift confirmed |
+| 9 | non-Conflict | Conflict is no longer accumulating |
+| 10–12 | non-Conflict | recovery is sustained |
 
 The v1 benchmark still counts the Weeks 7–8 Drift. At Week 12, the Weekly Coach
 should not say Sarah is in ongoing Drift. It can acknowledge the
@@ -268,12 +270,12 @@ recovery with evidence and remain alert to recurrence.
 The intended delivery-time vocabulary is **active**, **recovered**, **mixed**,
 or **uncertain**. The exact response-mode schema and transition rules remain
 implementation work. See
-[Uncertainty and Drift Detector Logic](04_uncertainty_logic.md).
+[Uncertainty and Drift Review Logic](04_uncertainty_logic.md).
 
 ### Weekly Coach Response
 
-> "A few weeks ago, work repeatedly displaced time with Emma. Your more recent
-> what you wrote more recently shows a different pattern: dinner together, a laptop-free Friday, and
+> "A few weeks ago, work repeatedly displaced time with Emma. What you wrote
+> more recently shows a different pattern: dinner together, a laptop-free Friday, and
 > a weekend you protected before anyone asked.
 >
 > What helped you stop treating every request as an emergency?"
@@ -282,7 +284,8 @@ implementation work. See
 
 ## Stage 5: Week 14 — Uncertain Delivery (Novel Situation)
 
-Something happens outside the VIF Critic's training distribution.
+Something happens outside the VIF Critic's training distribution and does not
+support an ordinary value judgment from text.
 
 ### Sarah's Journal Entry
 
@@ -294,7 +297,8 @@ Something happens outside the VIF Critic's training distribution.
 |-----------|--------|----------|
 | Generator | N/A | Only used during offline training |
 | LLM-Judge | N/A | Offline labels do not decide the response to acute grief |
-| VIF Critic | **ACTIVE** | Runs inference but uncertainty is high |
+| VIF Critic | **OFFLINE, ESSENTIAL** | Stores a high-uncertainty prediction for later review |
+| Weekly Drift Reviewer | **APPROVED, NOT WIRED** | Abstains because the text does not support a responsible Conflict decision |
 | Weekly Coach | **ACTIVE** | Responds with presence, not analysis |
 
 ### VIF Critic Processing
@@ -312,8 +316,10 @@ Something happens outside the VIF Critic's training distribution.
 - Parental terminal illness is therefore out-of-distribution
 - MC Dropout reveals the VIF Critic does not know how to score this — predictions scatter widely across forward passes
 
-**Weekly Digest content:** Record high uncertainty and no Conflict claim. The
-Weekly Coach responds with presence.
+**Weekly Digest content:** Record the Weekly Drift Reviewer abstention and no
+Conflict claim. The offline VIF Critic uncertainty can prioritize the case for
+review but does not decide the user-facing response. The Weekly Coach responds
+with presence.
 
 ### Weekly Coach Response
 
@@ -330,13 +336,17 @@ Weekly Coach responds with presence.
 
 ## Summary: Component Activity by Stage
 
-| Stage | Generator | LLM-Judge | VIF Critic | Weekly Coach |
-|-------|-----------|-------|--------|-------|
-| Offline Training | ✅ Creates data | ✅ Labels data | ✅ Trains | — |
-| Onboarding | — | — | — | — |
-| Stable Alignment | — | — | ✅ Scores | ✅ Occasional acknowledgment |
-| Drift | — | Reference only | ✅ Produces soft evidence | ✅ Surfaces repeated Conflict |
-| Recovery at Delivery | — | Reference only | ✅ Continues scoring | ✅ Describes recovery rather than ongoing Drift |
-| Uncertain Delivery | — | — | ✅ Admits uncertainty | ✅ Offers presence |
+| Stage | Generator | LLM-Judge | VIF Critic | Weekly Drift Reviewer | Weekly Coach |
+|-------|-----------|-----------|------------|-----------------------|--------------|
+| Offline Training | ✅ Creates data | ✅ Labels data | ✅ Trains | — | — |
+| Onboarding | — | — | — | — | — |
+| Stable Alignment | — | — | ✅ Stores offline evidence | ✅ Finds no Conflict | ✅ Occasional acknowledgment |
+| Drift | — | Reference only | ✅ Stores offline evidence | ✅ Confirms Conflicts | ✅ Surfaces confirmed Drift |
+| Recovery at Delivery | — | Reference only | ✅ Continues offline scoring | ✅ Finds later non-Conflict | ✅ Describes recovery rather than ongoing Drift |
+| Uncertain Delivery | — | — | ✅ Stores uncertainty | ✅ Abstains | ✅ Offers presence |
 
-Key insight: The Generator and LLM-Judge do their work *before* any user arrives. The VIF Critic handles real-time evaluation. The Weekly Coach speaks when the Weekly Digest contains something worth saying, including occasional evidence-based acknowledgment when users sustain alignment, but never through gamification or generic praise.
+Key insight: The Generator and LLM-Judge create and label training data before
+any user arrives. The VIF Critic remains a continuous offline measurement and
+learning component. The Weekly Drift Reviewer and deterministic Drift Detector
+own the user-facing Drift decision; the Weekly Coach speaks from the resulting
+Weekly Digest.

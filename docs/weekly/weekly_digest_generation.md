@@ -2,10 +2,12 @@
 
 ## Purpose
 
-The Weekly Digest is the structured bridge between VIF Critic predictions or
-LLM-Judge labels and the Weekly Coach. It does not produce a generic summary. It
-organizes the week against Core Values, selects evidence, records the routing
-rationale, and renders the prompt that the Weekly Coach can consume.
+The Weekly Digest is the structured bridge between Drift Detector output and
+the Weekly Coach. It does not produce a generic summary. It organizes the week
+against Core Values, selects evidence, records the decision rationale, and
+renders the prompt that the Weekly Coach can consume. The executable prototype
+can still build a Weekly Digest from VIF Critic predictions or LLM-Judge labels;
+that compatibility path is not the approved user-facing architecture.
 
 Read this document with:
 
@@ -13,7 +15,7 @@ Read this document with:
 - [`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md) for the selected
   Drift definition;
 - [`docs/evals/drift_detection_eval.md`](../evals/drift_detection_eval.md) for
-  the benchmark contract;
+  the evaluation contract;
 - [`docs/vif/example.md`](../vif/example.md) for target Weekly Coach tone; and
 - [`docs/evals/explanation_quality_eval.md`](../evals/explanation_quality_eval.md)
   for narrative checks.
@@ -86,8 +88,10 @@ response mode wins and upstream Drift reasons are not carried into the Weekly Di
 
 ### End-to-End Checkpoint Runtime
 
-The full offline runtime predicts a VIF Critic timeline, aggregates weekly
-signals, runs the existing prototype router, and builds the Weekly Digest:
+The full offline runtime currently predicts a VIF Critic timeline, aggregates
+weekly signals, runs the existing prototype router, and builds the Weekly
+Digest. This demonstrates the implemented prototype, not the approved Weekly
+Drift Reviewer and Drift Detector path:
 
 ```sh
 uv run python -m src.coach.runtime \
@@ -218,7 +222,7 @@ The sources differ:
   `mixed_state`, and `background_strain`.
 - Manual overrides can exercise any schema mode.
 
-The schema is intentionally wider than the selected product contract so the
+The schema is intentionally wider than the approved product contract so the
 current prototype and prompt experiments remain inspectable.
 
 These literal prototype modes are not the adopted v1 delivery vocabulary. The
@@ -228,13 +232,14 @@ from the current compatibility modes remain implementation work.
 
 ---
 
-## Drift v1 Versus the Prototype Router
+## Approved Drift Path Versus the Prototype Router
 
-Drift v1 is two consecutive Conflicts on the same Core Value:
+Drift is two consecutive Conflicts on the same Core Value:
 
 - student-visible target: two adjacent Journal Entries visibly show a behavior
   or choice against the same Core Value;
-- runtime target: rolling soft `P(-1)` predictions under uncertainty gating; and
+- approved user-facing input: Weekly Drift Reviewer decisions made without VIF
+  Critic predictions; and
 - delivery: the Weekly Digest cites the supporting Journal Entries.
 
 Each Core Value is evaluated independently. An aligned label for another Core
@@ -242,8 +247,9 @@ Value cannot cancel Drift, and simultaneous Drifts remain separate
 value-specific records. The six-detector comparison's detector-vote count is
 not the five-pass LLM-Judge reference.
 
-The current runtime persists alignment means and uncertainties rather than
-class probabilities. The [`twinkl-752.5`
+The current runtime persists VIF Critic alignment means and uncertainties rather
+than Weekly Drift Reviewer decisions or full class probabilities. The
+[`twinkl-752.5`
 reassessment](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5_reassessment.md)
 used the 33-Drift known-development union and found no reliable benefit from
 showing raw VIF Critic scores to the Weekly Drift Reviewer. VIF-Critic-triggered
@@ -252,10 +258,14 @@ timing benefit disappeared on the non-training subgroup. The offline VIF
 Critic triggers targeted Drift-relevant opportunities better than random, but
 that diagnostic made no reviewer calls and does not show that early review
 works. No fresh final test exists.
-No VIF Critic or Drift Detector has deployment approval, and the Drift Detector
-is not wired into the weekly runtime. The former consensus-derived frozen
-benchmark is retired historical evidence. The crash/rut/evolution output modes
-remain prototype compatibility values, not the accepted v1 definition.
+The adopted architecture keeps VIF Critic predictions in offline comparison,
+independent review, and retraining. The VIF Critic may later propose candidate
+adjacent Conflict pairs only after predefined criteria and a fresh final test
+support deployment approval. No VIF Critic or Drift Detector has deployment
+approval, and the approved Drift Detector is not wired into the weekly runtime.
+The former consensus-derived frozen benchmark is retired historical evidence.
+The crash/rut/evolution output modes remain prototype compatibility values, not
+the accepted v1 definition.
 
 ### Delivery-Time Recovery
 
@@ -265,9 +275,9 @@ wording reflects the state when the Weekly Coach is delivered.
 For each value-specific Drift:
 
 - **active**: its conflict run reaches the digest cutoff;
-- **recovered**: a later resolved `0` or `+1` closes the run before the cutoff;
-- **uncertain**: missing, no-majority, or unreliable later evidence prevents a
-  confident active-versus-recovered claim; and
+- **recovered**: a later non-Conflict decision closes the run before the cutoff;
+- **uncertain**: a later Weekly Drift Reviewer abstention prevents a confident
+  active-versus-recovered claim; and
 - **mixed**: a Weekly Digest summary when relevant value-specific Drifts have
   different delivery states. It is not a fourth Drift type.
 
@@ -341,27 +351,27 @@ learned routing policies.
 
 ## Remaining Work
 
-1. Review `twinkl-752.1`, `twinkl-752.3`, and the completed `twinkl-752.5`
-   reassessment under `twinkl-752.2`. The reassessment leaves raw input
-   inconclusive and finds no scheduling recall gain. No architecture or
-   deployment tolerance is adopted yet.
-2. If the approved architecture uses the VIF Critic, persist or reconstruct
-   per-Journal-Entry ordinal class probabilities, including `P(-1)`.
-3. If approved, implement the rolling soft-evidence Drift Detector.
-4. Calibrate probability-mass and uncertainty thresholds against the
-   known-development union, reporting training-seen VIF Critic scores as
-   in-sample.
-   Build a fresh final test separately. The stored five-pass consensus Drifts
-   are candidate provenance, not a calibration target on their own.
-5. Add active, recovered, mixed, and uncertain Weekly Digest delivery wording.
-   An abstaining Drift Detector must emit no Drift claim, and coverage must be
-   reported.
-6. Add a production-facing Weekly Coach service entrypoint that injects the
+1. Persist Weekly Drift Reviewer decisions and wire the deterministic
+   two-Conflict Drift Detector into the Weekly Digest path.
+2. Persist full VIF Critic class probabilities, uncertainty, checkpoint
+   provenance, and input-contract version for offline comparison.
+3. Add independent disagreement review, versioned retraining data, and
+   model-blind controls. Weekly Drift Reviewer outputs must not automatically
+   become LLM-Judge reference labels.
+4. Under `twinkl-7vam`, predefine Drift recall, false Drift alert, coverage,
+   abstention, stability, and any efficiency criteria. Select and freeze any
+   VIF Critic candidate rule on development evidence only.
+5. Build a fresh final test under `twinkl-pv6s`. Keep retraining cases out of it
+   and score only after the checkpoint, rule, prompt, and criteria are frozen.
+6. Add active, recovered, mixed, and uncertain Weekly Digest delivery wording.
+   A Weekly Drift Reviewer abstention must emit no Drift claim, and coverage
+   must be reported.
+7. Add a production-facing Weekly Coach service entrypoint that injects the
    live LLM,
    validates the narrative, and persists the result.
-7. Report Tier 1 pass rates over a batch and add Tier 2 meta-judge plus Tier 3
+8. Report Tier 1 pass rates over a batch and add Tier 2 meta-judge plus Tier 3
    human calibration.
-8. Capture the user's perceived-accuracy rating and make it queryable.
+9. Capture the user's perceived-accuracy rating and make it queryable.
 
 ---
 

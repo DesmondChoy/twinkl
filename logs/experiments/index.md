@@ -46,6 +46,8 @@ It is not the forward model-development policy after `twinkl-752`.
 >
 > **Current drift-target status (2026-07-14):** The 106-trajectory known-development union contains 33 Drifts across 28 Drift trajectories. The `twinkl-752.5` reassessment found median Drift recall of `0.273` for weekly review without VIF Critic input, `0.212` with raw VIF Critic input, and `0.273` for VIF-Critic-triggered early-plus-weekly review. The raw-input recall interval crossed zero, so the old rejection is inconclusive; scheduling changed delay but added no Drift hits. Trigger placement beat random on this development union, but the timing benefit disappeared on the non-training subgroup. The former 24-person `twinkl-v8pb` final-test population is development-only; `twinkl-pv6s` must build a fresh final test. No scheduler, scorer, or architecture has deployment approval, and the active entry-level frontier stays unchanged.
 >
+> **Staged VIF architecture decision (2026-07-14):** Under `twinkl-752.2`, the user approved Weekly Drift Reviewer decisions without VIF Critic input followed by the deterministic two-Conflict Drift Detector as the current user-facing path. The VIF Critic remains required for stored prediction, uncertainty, independent disagreement review, candidate mining, and retraining. It may later propose candidate adjacent Conflict pairs only after `twinkl-7vam` fixes the deployment-approval criteria and candidate-selection rule, the checkpoint and rules are frozen, and a fresh final test supports deployment approval. Raw prompt input, direct VIF Critic Drift decisions, and early-plus-weekly scheduling are not selected. This is an architecture decision, not deployment approval.
+>
 > **Retired decision-level drift benchmark:** The former `twinkl-wq9p` consensus-derived frozen benchmark is [historical evidence only](../../docs/archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md). Do not rerun, score, tune, or promote from it; its former report and artifacts are not active repository surfaces.
 >
 > **Previous strategic review (2026-07-02):** [`reports/experiment_review_2026-07-02_strategy.md`](reports/experiment_review_2026-07-02_strategy.md) kept the frontier unchanged and proposed decision-level metrics plus `recall_-1` at a precision floor. The adopted 2026-07-12 scope above supersedes that floor: recall-focused candidate development comes first, while the precision or false-alert tolerance remains deliberately deferred.
@@ -346,7 +348,10 @@ adjacent Drifts. The consensus replay shows the same per-Journal-Entry
 complementarity. The existing three-annotator anchor has no strict overlap with
 this development population, so it is explicitly unavailable rather than
 silently substituted. The larger `twinkl-752.5` reassessment above later marked
-the raw-input result inconclusive; no VIF architecture is adopted.
+the raw-input result inconclusive. That experiment alone adopted no
+architecture; the later `twinkl-752.2` decision excludes raw VIF Critic input
+from the Weekly Drift Reviewer while retaining the VIF Critic for offline
+review, retraining, and conditional candidate generation.
 Full details:
 [`reports/experiment_review_2026-07-12_twinkl_752_1_weekly_verifier_ablation.md`](reports/experiment_review_2026-07-12_twinkl_752_1_weekly_verifier_ablation.md).
 

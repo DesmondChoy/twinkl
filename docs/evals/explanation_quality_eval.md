@@ -33,7 +33,11 @@ This evaluation validates that explanations feel accurate and actionable to user
 - **Tier 3:** Human calibration protocol and κ calculation
 
 ### Blocking Dependencies
-Tier 1 Weekly Coach checks are unblocked and implemented. Deeper end-to-end explanation evaluation still depends on stable upstream Drift signals plus explicit explainability hooks from VIF Critic outputs into Weekly Coach evidence selection (`twinkl-3sg`).
+Tier 1 Weekly Coach checks are unblocked and implemented. Deeper end-to-end
+explanation evaluation still depends on stable Weekly Drift Reviewer decisions,
+deterministic Drift Detector output, and cited Journal Entry evidence
+(`twinkl-3sg`). VIF Critic outputs belong to offline review unless the
+candidate-confirmation path later receives deployment approval.
 
 ### Implementation Scope
 
@@ -46,7 +50,7 @@ later validation phases.
 ### Next Steps
 1. Add a batch Tier 1 checker for LLM-Judge rationales in `src/judge/` and run it over the existing 1,594 rationale-bearing rows
 2. Run the existing Weekly Coach Tier 1 validation over a real Weekly Digest set and publish pass-rate summaries
-3. Add explainability hooks from VIF Critic outputs to Weekly Coach evidence selection (`twinkl-3sg`) so explanation evaluation can inspect why a dimension was surfaced
+3. Add provenance hooks from Weekly Drift Reviewer decisions and Drift Detector output to Weekly Coach evidence selection (`twinkl-3sg`)
 4. *(Future phase)* Design a rationale-review LLM prompt for Tier 2 evaluation
 5. *(Future phase)* Sample 20-30 explanations for Tier 3 human calibration
 

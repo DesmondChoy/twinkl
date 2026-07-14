@@ -149,14 +149,15 @@ Full list: [`tables/conflict_heavy_week_candidates.csv`](tables/conflict_heavy_w
 2. **Not supportable for v1:** single-entry dip alerts, fade/dormancy, peripheral
    value rise, value evolution, and multi-week chronic low periods. The current data
    does not contain clean long arcs.
-3. **Architecture choice:** the label benchmark can be hard and strict, but the
-   runtime detector should consume soft evidence. Two hard argmax -1 predictions
-   would be too brittle under current Critic recall.
+3. **Architecture choice:** the Weekly Drift Reviewer supplies explicit
+   Conflict decisions from Journal Entry text, and the Drift Detector applies
+   the strict two-consecutive-Conflict rule. VIF Critic probabilities remain
+   offline review and candidate-mining evidence, not direct detector input.
 4. **Label-regime caveat:** current Critic checkpoints were trained on persisted
    single-pass labels. Consensus labels are now historical diagnostic provenance,
    not a development target. `twinkl-v8pb` completed its student-visible review,
-   but weak development recall and an unresolved promotion case prevent any
-   scorer claim.
+   but weak development recall and the absence of a fresh final test prevent any
+   VIF Critic deployment claim.
 
 ## Candidate definitions considered
 
@@ -179,13 +180,15 @@ change the ranking. Prevalence is not the deciding factor; architecture is.
 
 **Drift v1 is a sustained conflict episode: two adjacent journal entries must
 each clearly show a behavior or choice against the same declared core value.
-Other value dimensions are ignored for this per-value test. At runtime, the
-detector will estimate the construct from rolling soft `P(-1)` evidence under
-uncertainty gating, and the Coach will surface it in the weekly digest.
+Other value dimensions are ignored for this per-value test. In the approved
+user-facing path, the Weekly Drift Reviewer decides Conflict from text without
+VIF Critic input, the deterministic Drift Detector applies the rule, and the
+Weekly Coach surfaces confirmed Drift through the Weekly Digest.
 [`twinkl-v8pb`](../evals/drift_v1_student_visible_target.md) completed the
-student-visible target and locked promotion review. The former consensus-derived
-frozen benchmark is retired and cannot be used to tune, score, or promote a
-scorer; the unresolved promotion case means no new scorer score exists.**
+student-visible target and withheld its former final-test score. The former
+final-test population is now development-only. The consensus-derived frozen
+benchmark is retired and cannot be used to tune, score, or grant deployment
+approval; no fresh final test exists.**
 
 Layer split:
 
@@ -193,20 +196,19 @@ Layer split:
 |---|---|
 | Student-visible target | 2 adjacent entries visibly show a behavior or choice against the same declared core value; full-runtime-text review completed |
 | Historical consensus labels | Diagnostic provenance only; not a target, threshold-selection input, or promotion surface |
-| Runtime detector | rolling soft P(-1) evidence mass, not two hard argmax -1 predictions |
+| Drift Detector | deterministic rule over Weekly Drift Reviewer decisions: two consecutive Conflicts for the same Core Value |
 | Delivery | weekly Coach digest with cited entries |
 | Parked scope | single-entry dip alerts, fade/dormancy, peripheral-value rise, onboarding-gap messaging, evolution gating, multi-week low-mean definitions |
-| Implementation status | development review completed, but one locked promotion case is unresolved; no scorer is promoted and production `P(-1)` wiring remains blocked |
+| Implementation status | architecture adopted; runtime wiring, deployment-approval criteria, and a fresh final test remain pending |
 
 Why this is the right v1:
 
 - **One definition, not a taxonomy.** Sustained conflict is the thing Twinkl can
   explain cleanly: "you keep saying this matters, but recent entries repeatedly
   conflict with it."
-- **Visible evidence, forgiving detector.** The target requires displayed
-  behavior or choices rather than inferred context. The historical consensus
-  surface is retired, while the runtime detector still uses probability mass so
-  current Critic recall does not turn the trigger into a coin slot.
+- **Visible evidence, explicit confirmation.** The Weekly Drift Reviewer must
+  decide each Conflict from displayed Journal Entry text. The deterministic
+  Drift Detector receives those decisions, not VIF Critic probability mass.
 - **Weekly product stays intact.** Detection can be rolling-entry evidence while
   the user sees it in the weekly Coach digest.
 - **Noise is named.** Consensus changes the R1 set from 49 to 40 personas:
@@ -218,9 +220,9 @@ The completed `twinkl-wq9p` benchmark is historical evidence only. Its audit
 showed that the frozen consensus surface was not a fair student-visible
 promotion target. The benchmark, its artifacts, and its report are retired;
 see the [retirement record](../archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md).
-`twinkl-v8pb` completed the new target and locked promotion review, but the
-unresolved promotion case prevents production wiring. The historical AI audit
-is not human ground truth.
+`twinkl-v8pb` completed the new target and correctly withheld its former
+final-test score. That population is now development-only, and a fresh final
+test is still required. The historical AI audit is not human ground truth.
 
 ### Weekly delivery and recovery
 
@@ -244,9 +246,9 @@ the consensus re-judging bundle.
 - Consensus labels remain reproducible historical Judge provenance, but the
   final Codex audit found the frozen episode surface unsuitable as a
   student-visible promotion target. Treat those results as diagnostic
-  target-mismatch evidence, not as a basis for scorer promotion. `twinkl-v8pb`'s
-  completed review remains a no-go result because the locked promotion case was
-  unresolved.
+  target-mismatch evidence, not as a basis for deployment approval.
+  `twinkl-v8pb`'s no-score result remains historical evidence; its former
+  final-test population is now development-only.
 - Consensus-vs-human agreement is still advisory in the existing reports; this
   is judge-label reference data, not a final human-labeled benchmark.
 - Core-gated denominators per dimension are small (24-37); per-dimension

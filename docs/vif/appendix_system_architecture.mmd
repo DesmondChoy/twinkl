@@ -55,7 +55,7 @@ flowchart LR
             timeline["Per-Journal-Entry VIF timeline"]
             weekly["Weekly aggregation"]
             drift["Weekly prototype routing<br/>crash / rut / evolution<br/>high uncertainty"]
-            drift_v1["Student-visible Drift v1 target<br/>Conflict + rolling soft P(-1)<br/>for the same Core Value"]
+            drift_v1["Approved target (not wired)<br/>Weekly Drift Reviewer decisions<br/>+ deterministic Drift Detector"]
             runtime_input --> state_runtime --> critic --> timeline --> weekly --> drift
         end
 
@@ -76,8 +76,8 @@ flowchart LR
     runtime_input --> digest
     weekly --> digest
     drift --> digest
-    timeline -. "P(-1) not persisted" .-> drift_v1
-    drift_v1 -. "selected replacement" .-> digest
+    runtime_input -. "Journal Entries + Core Values;<br/>no VIF Critic input" .-> drift_v1
+    drift_v1 -. "approved target" .-> digest
 
     evolution["Automatic experimental<br/>evolution classifier"]
     weekly --> evolution --> drift

@@ -49,8 +49,9 @@ $$
 $$
 
 That means the VIF Critic predicts the LLM-Judge's labels for the current
-Journal Entry, and longer-horizon Drift logic is derived downstream from
-aggregated outputs rather than learned as a discounted-return target.
+Journal Entry. Its outputs support offline review and a possible future
+candidate-confirmation path rather than a learned discounted-return target.
+The approved user-facing Drift path uses Weekly Drift Reviewer decisions.
 
 ### 2.2 Exploratory Alternatives
 
@@ -71,8 +72,9 @@ $$
 V^{\text{scalar}}_{u,t} = w_u^\top \vec{V}_\theta(s_{u,t})
 $$
 
-This scalar is for summaries and the downstream Drift Detector. The VIF Critic
-is trained to preserve the vector of trade-offs.
+This scalar is for offline summaries and monitoring. The approved Drift
+Detector consumes Weekly Drift Reviewer decisions instead. The VIF Critic is
+trained to preserve the vector of trade-offs.
 
 ---
 
@@ -102,7 +104,8 @@ families:
 - **Baselines retained for comparison**: legacy MSE MLP and Bayesian neural net
 
 The experiment board treats the
-BalancedSoftmax `run_019`-`run_021` family as the default frontier reference.
+BalancedSoftmax `run_019`-`run_021` family as the historical corrected-split
+reference.
 The two-stage, consensus-label, recall-aware checkpoint-retention, soft-label,
 and compact-history branches remain diagnostic challengers rather than the
 mainline default. Compact-history `run_069` stayed under its 5,000-weight
@@ -151,8 +154,9 @@ policy, the metric roles are:
 - raw probability/logit exports when needed
 
 No fixed precision floor is active yet. Recall-first development can identify
-promising VIF Critic checkpoints, but Drift recall plus an adopted false Drift
-alert tolerance is required before deployment.
+promising VIF Critic checkpoints, but a conditional candidate-confirmation
+path requires sufficient Drift recall plus an adopted false Drift alert
+tolerance before deployment approval.
 
 Implementation caveat: `src/vif/eval.py` still selects mainline checkpoints
 QWK-first. Historical runs and the current board therefore reflect their
@@ -183,8 +187,8 @@ and [experiment review](../../logs/experiments/reports/experiment_review_2026-07
 The consensus-label diagnostic branch (`run_048`-`run_050`) reinforces
 that framing. It improved within-regime QWK and calibration on the
 consensus-relabeled holdout, but it changed labels on the frozen test split and
-did not replace the persisted-label frontier cleanly. The active corrected-split
-default remains `run_019`-`run_021`.
+did not replace the persisted-label frontier cleanly. The historical
+corrected-split reference remains `run_019`-`run_021`.
 
 The recall-aware reruns (`run_051`-`run_056`) persist alternate
 checkpoints and their validation/test outputs. The wider `0.02` QWK window helps
@@ -236,11 +240,11 @@ execution, and a fixed cost profile. The retired consensus-derived Drift
 benchmark exposed a target-validity mismatch; it does not select among these
 architectures and must not be rerun or used for deployment approval.
 [`twinkl-v8pb`](../evals/drift_v1_student_visible_target.md) completed a
-student-visible full-runtime-text review before a direct LLM, VIF Critic, or
-cascade decision. Its weak development-set Drift recall and unresolved
-final-test-set case mean no evaluated Journal Entry predictor or Drift Detector
-has deployment approval. The earlier AI audit is diagnostic evidence, not
-human ground truth.
+student-visible full-runtime-text review and correctly withheld its former
+final-test score. That population and the expanded 106-trajectory union are
+now development-only. No evaluated Journal Entry predictor or Drift Detector
+has deployment approval without a fresh final test. The earlier AI audit is
+diagnostic evidence, not human ground truth.
 
 ---
 

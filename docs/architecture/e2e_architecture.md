@@ -10,7 +10,7 @@ Status legend (node colors):
 - **Implemented** (green): working repo capability
 - **Partial / experimental** (amber): working slice, not ready to claim as product behavior
 - **Specified** (blue): documented, not wired into the active runtime
-- **??? Decision** (dashed grey): team decision or ambiguity to resolve
+- **??? Decision** (dashed grey): downstream operating or deployment decision
 
 Solid arrows are paths that are wired in the repo today. Dashed arrows are
 benchmark, intended, or undecided connections.
@@ -40,6 +40,7 @@ flowchart TB
         critic_train["VIF Critic training +<br/>experiment archive"]
         checkpoint["Selected VIF Critic checkpoint"]
         llm_baseline["Frozen-holdout LLM<br/>context baseline"]
+        offline_review["Offline prediction comparison<br/>+ independent review"]
     end
 
     subgraph product["Product shell"]
@@ -55,9 +56,11 @@ flowchart TB
         scores["VIF Critic scores<br/>+ uncertainty"]
         weekly["Weekly aggregation"]
         drift["Weekly crash / rut / evolution<br/>prototype router"]
-        drift_v1["Drift v1<br/>rolling soft P(-1) target"]
+        reviewer["Weekly Drift Reviewer<br/>without VIF Critic input"]
+        drift_v1["Deterministic Drift Detector<br/>two consecutive Conflicts"]
+        candidate["Conditional VIF Critic<br/>candidate selection"]
         evolution["Evolution classifier<br/>automatic in prototype"]
-        d_trigger["??? When to trust<br/>Drift alerts?"]
+        d_trigger["??? Deployment-approval<br/>criteria and candidate rule"]
         d_evolution["Value evolution<br/>parked for v1"]
     end
 
@@ -76,6 +79,9 @@ flowchart TB
     consensus -. "diagnostic retraining" .-> critic_train
     personas --> llm_baseline
     llm_baseline -. "benchmark comparison" .-> review
+    scores -. "stored predictions" .-> offline_review
+    reviewer -. "decision comparison" .-> offline_review
+    offline_review -. "independently reviewed cases" .-> critic_train
 
     %% Human benchmark, not label production
     annotation -. "benchmark comparison" .-> review
@@ -84,7 +90,9 @@ flowchart TB
     onboarding -.-> profile
     journaling <-.-> nudges
     journaling -.-> state
+    journaling -.-> reviewer
     profile -. "??? How onboarding scores<br/>become the runtime profile" .-> state
+    profile -. "Core Values" .-> reviewer
 
     %% What actually feeds the runtime today
     personas -->|"synthetic journals stand in<br/>for real users today"| state
@@ -93,27 +101,29 @@ flowchart TB
     checkpoint --> scores
     state --> scores --> weekly --> drift
     weekly --> evolution --> drift
-    scores -. "P(-1) file not persisted" .-> drift_v1
+    reviewer -. "approved path; not wired" .-> drift_v1
+    scores -. "future candidate only;<br/>predictions hidden from reviewer" .-> candidate
+    candidate -.-> reviewer
 
     %% Weekly Coach + review (wired, experimental)
     drift --> digest
     weekly --> digest
-    drift_v1 -. "selected v1 path" .-> digest
+    drift_v1 -. "approved path; not wired" .-> digest
     digest --> prompt
     prompt -. "programmatic LLM injection" .-> narrative
     digest --> review
 
     %% Open decisions attached to where they bite
     journaling -.- d_surface
-    drift -.- d_trigger
+    candidate -.- d_trigger
     evolution -.- d_evolution
     narrative -.- d_boundary
     narrative -.- d_feedback
 
     class personas,judge,consensus,annotation,critic_train,checkpoint,llm_baseline implemented;
     class state,scores,weekly,drift,evolution,digest,prompt,narrative,review,nudges partial;
-    class onboarding,profile,journaling,drift_v1,d_evolution specified;
-    class d_surface,d_trigger,d_boundary,d_feedback decision;
+    class onboarding,profile,journaling,reviewer,drift_v1,offline_review,d_evolution specified;
+    class candidate,d_surface,d_trigger,d_boundary,d_feedback decision;
 ```
 
 ## Read This As
@@ -122,15 +132,13 @@ The dashed grey `???` nodes and edge labels mark team decisions that still
 need calls. Read this as a product and component map, not a literal runtime
 sequence.
 
-Twinkl's working spine runs top to bottom: generated data and LLM-Judge labels
-train the VIF Critic. A trained checkpoint then scores each Journal Entry,
-rolls the predictions up into validated weekly signals, runs the weekly
-prototype router, and packages everything into a Weekly Digest plus Weekly Coach
-prompt text. The CLI
-and review app do not call a live Weekly Coach; output generation requires an
-injected callable. The spine runs on synthetic persona journals, which stand in
-for real user journals — that is the solid edge from the training core into the
-runtime.
+Twinkl's executable spine runs top to bottom: generated data and LLM-Judge labels
+train the VIF Critic. A trained checkpoint scores each Journal Entry, rolls the
+predictions up into validated weekly signals, runs the weekly prototype router,
+and packages everything into a Weekly Digest plus Weekly Coach prompt text. The
+CLI and review app do not call a live Weekly Coach; output generation requires
+an injected callable. This is implementation truth, not the approved
+user-facing Drift path.
 
 Two evaluation paths sit beside that spine. The five-pass LLM-Judge consensus
 table is historical diagnostic label provenance, not the active Drift target.
@@ -146,19 +154,28 @@ onboarding answers get turned into the value profile the runtime reads. One
 exception inside it: the conversational nudging engine already exists as an
 experimental slice, even though the journaling UI it would attach to does not.
 
-Drift v1 is two consecutive Conflicts on the same Core Value: two adjacent
-Journal Entries must each visibly show a behavior or choice against that value.
-[`twinkl-v8pb` completed the student-visible review](../evals/drift_v1_student_visible_target.md)
-and locked final test review. The existing crash/rut/evolution router remains a
-prototype; class probabilities and the selected Drift Detector are not yet wired.
-The development score found only 1/5 known Drifts, and the final test review
-left one case spanning 19 Journal Entries unresolved, so there is no active
-deployment benchmark and the production edge remains deliberately blocked. The prior
-consensus-derived benchmark is [retired historical evidence](../archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md), and its AI audit is not human ground truth. Value evolution is parked for v1 even though the prototype invokes its classifier automatically.
+Drift is two consecutive Conflicts on the same Core Value. Under the approved
+architecture, the Weekly Drift Reviewer makes those Conflict decisions without
+VIF Critic input, and the deterministic Drift Detector combines them. The VIF
+Critic remains essential to stored prediction, independent review, candidate
+mining, and retraining.
+[`twinkl-v8pb` completed the historical five-Drift development review](../evals/drift_v1_student_visible_target.md)
+and withheld its former final-test score. The former final-test population is
+now development-only, and the expanded known-development union is fully
+resolved. The existing crash/rut/evolution router remains a prototype; class
+probabilities and the approved Drift Detector are not yet wired. No fresh final
+test exists, so the production edge remains deliberately blocked.
+`twinkl-752.5` found no Drift recall gain from raw VIF Critic input or
+early-plus-weekly scheduling. A future candidate-confirmation path must meet
+predefined development criteria and a fresh final test before deployment
+approval. The prior consensus-derived benchmark is [retired historical
+evidence](../archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md), and its AI
+audit is not human ground truth. Value evolution is parked for v1 even though
+the prototype invokes its classifier automatically.
 
-The remaining open decisions are when alerts are reliable enough to act on,
-what the Weekly Coach is allowed to do or say, and whether user feedback should
-update the profile over time. See
+The remaining open decisions are the numerical deployment-approval criteria,
+the VIF Critic candidate-selection rule, what the Weekly Coach may say, and
+whether user feedback should update the profile over time. See
 [`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md),
 [`docs/vif/03_model_training.md`](../vif/03_model_training.md),
 [`docs/weekly/weekly_digest_generation.md`](../weekly/weekly_digest_generation.md),

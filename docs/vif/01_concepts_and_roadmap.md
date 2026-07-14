@@ -5,7 +5,7 @@ This document outlines the high-level objectives, core concepts, and implementat
 For technical details, see:
 *   [System Architecture, State, and Runtime Flow](02_system_architecture.md)
 *   [Reward Modeling & Training](03_model_training.md)
-*   [Uncertainty and Drift Detector Logic](04_uncertainty_logic.md)
+*   [Uncertainty and Drift Review Logic](04_uncertainty_logic.md)
 *   [Capstone Scope and Evaluation Decision](05_capstone_scope_decision.md)
 
 ---
@@ -23,7 +23,10 @@ Crucially, the VIF is designed to be:
 *   **Cautious:** It knows when it's unsure. If the user's situation is complex or new, the VIF holds back its judgment rather than giving bad advice.
 *   **Time-Aware:** The downstream timeline looks for repeated evidence rather than reacting to one Journal Entry. Drift v1 requires two consecutive Conflicts for the same Core Value.
 
-This engine supports Twinkl's feedback: the Drift Detector flags Drift so the Weekly Coach can gently surface tensions, while sustained alignment can support occasional evidence-based acknowledgment.
+This engine supports Twinkl's learning loop. In the approved user-facing path,
+the Weekly Drift Reviewer and Drift Detector decide Drift so the Weekly Coach
+can gently surface tensions; VIF Critic outputs remain offline unless a later
+candidate-confirmation path receives deployment approval.
 
 ---
 
@@ -53,13 +56,14 @@ The VIF is designed to:
    QWK and positive alignment remain diagnostics and non-gating Weekly Coach
    context.
 
-3. **Uncertainty-aware feedback**
-   The VIF Critic estimates **epistemic uncertainty** in its predictions, and Twinkl only issues feedback when the prediction is both:
-   * Confident in its judgment, and
-   * Detecting a significant pattern (negative or positive).
+3. **Uncertainty-aware review**
+   The VIF Critic estimates **epistemic uncertainty** in its predictions.
+   Twinkl stores that uncertainty for offline comparison, independent review,
+   retraining, and conditional candidate generation. It does not directly
+   authorize user-facing feedback.
 
 4. **Trajectory-aware downstream evaluation**
-   The live VIF Critic default uses `window_size: 1`, so each prediction sees the current Journal Entry, including its displayed nudge and response when present, plus the normalized value profile. Runtime timeline reconstruction and the Drift Detector provide the temporal layer. `twinkl-749` tested a small prior-Journal-Entry mean summary, but its seed-11 results regressed and did not receive deployment approval. History support therefore remains diagnostic rather than an assumed property of the default VIF Critic.
+   The live VIF Critic default uses `window_size: 1`, so each prediction sees the current Journal Entry, including its displayed nudge and response when present, plus the normalized value profile. The Weekly Drift Reviewer and deterministic Drift Detector provide the approved temporal decision layer. `twinkl-749` tested a small prior-Journal-Entry mean summary, but its seed-11 results regressed and did not receive deployment approval. History support therefore remains diagnostic rather than an assumed property of the default VIF Critic.
 
 5. **Separation of concerns: VIF Critic vs Weekly Coach**
    The VIF Critic produces numeric per-Journal-Entry alignment evidence and
@@ -68,7 +72,8 @@ The VIF is designed to:
    temporal evaluation. A separate **Weekly Coach** reads the
    user's full journal history via **full-context prompting** (at POC scale, all
    Journal Entries fit in the LLM context window) to surface thematic evidence
-   after the VIF Critic and Drift Detector produce structured signals. At
+   after the Weekly Drift Reviewer and Drift Detector produce structured
+   signals. The VIF Critic remains in the offline review-and-retrain path. At
    production scale
    with longer histories, this would transition to retrieval-augmented
    generation (RAG) — see [Section 4](#4-extensions-and-future-work).
@@ -129,13 +134,11 @@ To make this design capstone-friendly, we summarise a recommended tiered approac
   * Drift target: two consecutive Journal Entries that each show a Conflict
     for the same Core Value.
   * Student-visible Drift target: [`twinkl-v8pb`](../evals/drift_v1_student_visible_target.md)
-    completed a full-runtime-text development-set review and final-test-set
-    review. `run_020` found 1/5 development-set Drifts, and one final-test-set
-    case containing 19 Journal Entries remained unresolved, so no final test
-    score was run.
-    The old
-    consensus-derived frozen benchmark is retired historical evidence, not a
-    runnable benchmark or final test set.
+    completed a full-runtime-text development review and correctly withheld its
+    former final-test score. That population is now development-only. The
+    known-development union contains 33 Drifts across 28 Drift trajectories,
+    but no fresh final test exists. The old consensus-derived frozen benchmark
+    is retired historical evidence, not a runnable benchmark or final test set.
 
 * **Tier 2 (Optional capstone extension)**
   * Evaluated diagnostics: compact mean history (`twinkl-749`) and soft
@@ -144,11 +147,14 @@ To make this design capstone-friendly, we summarise a recommended tiered approac
     Neither changes the Tier 1 state or target default.
   * State or target extensions should reopen only with a materially different,
     evidence-backed mechanism and a matching student-visible target contract.
-  * VIF Critic: calibrated local MLP, `gpt-5.4-mini` per-Journal-Entry
-    fallback, or an MLP-to-LLM cascade.
-  * Drift rule: the same Drift definition with calibrated
-    thresholds for Core Values and active, recovered, mixed, or
-    uncertain weekly wording.
+  * VIF Critic: calibrated local MLP with versioned prediction, uncertainty,
+    independent review, and retraining.
+  * Conditional path: the VIF Critic may propose candidate adjacent Conflict
+    pairs for Weekly Drift Reviewer confirmation with predictions hidden. Raw
+    prompt input, confidence-only fallback, and direct MLP Drift decisions are
+    not selected.
+  * Drift rule: the same deterministic definition for Core Values, with active,
+    recovered, mixed, or uncertain weekly wording.
 
 * **Tier 3 (Out of Scope for Capstone)**
   * State: multimodal, sliding-window state with audio/physio.

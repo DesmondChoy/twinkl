@@ -27,7 +27,7 @@ fields, file paths, or historical records.
 | **Conflict (`-1`)** | One Journal Entry that clearly shows behavior or a choice against one value. State whether it is an LLM-Judge reference label or a VIF Critic prediction when the source matters. | negative evidence, misalignment signal |
 | **Drift** | Two consecutive Conflicts for the same Core Value. A longer uninterrupted run is still one Drift. | sustained-conflict episode, meaningful two-entry pattern, reference event |
 | **Weekly Drift Reviewer** | The LLM that reviews weekly Journal Entries for Conflict. An experiment may run it with or without VIF Critic predictions. It is not the VIF Critic. | weekly verifier, LLM arm, system |
-| **Drift Detector** | The rule or component that decides whether Drift occurred. The final implementation has not been selected. | trigger layer, episode engine |
+| **Drift Detector** | The deterministic rule that decides whether two consecutive Weekly Drift Reviewer Conflicts for the same Core Value form Drift. The approved rule is not wired or deployment-approved yet. | trigger layer, episode engine |
 | **Weekly Digest** | The structured weekly record containing values, evidence, Drift state, and inputs for the Weekly Coach. | artifact, payload, packet |
 | **Weekly Coach** | The component that turns the Weekly Digest into the user-facing reflection and question. | narrative layer, delivery engine |
 
