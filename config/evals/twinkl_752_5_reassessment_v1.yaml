@@ -1,0 +1,149 @@
+study_id: twinkl_752_5_reassessment_v1
+status: preregistered
+created_at: '2026-07-14'
+
+sources:
+  cohort_cases_path: logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/parent_control/cohort_cases.json
+  selected_cases_path: logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/parent_control/selected_cases.parquet
+  opus_entry_target_path: logs/experiments/artifacts/twinkl_752_5_opus_null_resolution_20260714/results/entry_target_opus_resolved.parquet
+  opus_case_outcomes_path: logs/experiments/artifacts/twinkl_752_5_opus_null_resolution_20260714/results/case_outcomes_opus_resolved.parquet
+  opus_drift_episodes_path: logs/experiments/artifacts/twinkl_752_5_opus_null_resolution_20260714/results/drift_episodes_opus_resolved.parquet
+  opus_labels_path: logs/experiments/artifacts/twinkl_752_5_opus_null_resolution_20260714/results/opus_labels.json
+  opus_raw_response_path: logs/experiments/artifacts/twinkl_752_5_opus_null_resolution_20260714/opus_claude_output.json
+  opus_audit_manifest_path: logs/experiments/artifacts/twinkl_752_5_opus_null_resolution_20260714/audit_manifest.json
+  omitted_packet_path: logs/experiments/artifacts/drift_target_twinkl_v8pb_20260711/development/reviewer_packet/blind_packet.json
+  omitted_reconciliation_key_path: logs/experiments/artifacts/drift_target_twinkl_v8pb_20260711/development/parent_control/reconciliation_key.json
+  omitted_reviewer_a_path: logs/experiments/artifacts/drift_target_twinkl_v8pb_20260711/development/reviewer_packet/reviewer_a.json
+  omitted_reviewer_b_path: logs/experiments/artifacts/drift_target_twinkl_v8pb_20260711/development/reviewer_packet/reviewer_b.json
+  omitted_reference_episodes_path: logs/experiments/artifacts/drift_target_twinkl_v8pb_20260711/development/reference_episodes.parquet
+  historical_run_020_evidence_path: logs/experiments/artifacts/drift_target_twinkl_v8pb_20260711/development/run_020_evidence.parquet
+  trigger_threshold_receipt_path: logs/experiments/artifacts/drift_target_twinkl_v8pb_20260711/development/thresholds.json
+  run_020_yaml_path: logs/experiments/runs/run_020_BalancedSoftmax.yaml
+  holdout_manifest_path: config/experiments/vif/twinkl_681_5_holdout.yaml
+  wrangled_dir: logs/wrangled
+
+union:
+  omitted_case_ids:
+    - 3a3b15e4:tradition
+    - 7adc5866:benevolence
+  expected_trajectories: 106
+  expected_personas: 105
+  expected_unique_entries: 882
+  expected_entry_value_cells: 894
+  expected_resolved_entry_value_cells: 892
+  expected_drifts: 33
+  expected_drift_trajectories: 28
+  expected_persona_weeks: 510
+
+study:
+  setups:
+    - weekly_without_critic
+    - weekly_with_raw_critic
+    - critic_scheduled_early_plus_weekly
+  repeats: 3
+  prompt_path: prompts/weekly_vif_verifier.yaml
+  prompt_name: weekly_vif_verifier
+  prompt_rationale: >-
+    Reuse the exact twinkl-752.1 prompt so the raw-input comparison reassesses
+    the original rejection. The twinkl-752.3 aligned prompt was a separate,
+    weaker setup and is not silently substituted.
+  weekly_receipt_reuse: >-
+    critic_scheduled_early_plus_weekly reuses weekly_without_critic end-of-week
+    receipts and adds only the triggered early calls. Early calls cannot erase
+    an end-of-week Drift alert.
+  max_confirmation_lag_entries: 2
+  fail_closed_statuses:
+    - refusal
+    - invalid
+    - error
+
+critic:
+  source: run_020
+  checkpoint_path: logs/experiments/artifacts/ordinal_v4_s2025_m22_20260307_152002/BalancedSoftmax/selected_checkpoint.pt
+  mc_seed: 7525001
+  mc_samples: 50
+  probability_threshold: 0.8
+  uncertainty_threshold: 1.010153
+  threshold_source: frozen historical development receipt
+  threshold_scope: study-only scheduling rule; not a deployment threshold
+  qualifying_rule: >-
+    The mean P(-1) across two consecutive Journal Entries for the same reviewed
+    Core Value must be at or above the probability threshold, and their maximum
+    uncertainty must be at or below the uncertainty threshold. This preserves
+    the historical frozen detector rule exactly.
+  debounce: first qualifying trigger per persona-week only
+  eligible_early_days: monday_through_saturday
+
+offline_trigger_placement:
+  weekly_reviewer_calls: 0
+  eligible_opportunity: >-
+    A Monday-through-Saturday Journal Entry with a consecutive prior Journal
+    Entry for at least one reviewed Core Value.
+  drift_hit_window: >-
+    A placement hits when it occurs on or after a known Drift confirmation in
+    the same persona-week and before the end-of-week review.
+  redistribution: >-
+    Preserve the realized trigger count and at most one placement per
+    persona-week. Sample persona-weeks uniformly without replacement, then one
+    eligible Journal Entry uniformly within each selected week.
+  random_seed_start: 752510000
+  random_repeats: 10000
+
+bootstrap:
+  unit: trajectory
+  random_seed: 752520000
+  repeats: 10000
+  interval: 0.95
+
+api:
+  provider: openai
+  endpoint: responses
+  model: gpt-5.4-mini-2026-03-17
+  reasoning_effort: none
+  max_output_tokens: 2000
+  timeout_seconds: 60
+  max_attempts: 2
+  concurrency: 4
+  service_tier: default
+  store: false
+  max_budget_usd: 15.0
+  pricing_usd_per_million_tokens:
+    input: 0.75
+    output: 4.50
+
+artifacts:
+  output_dir: logs/experiments/artifacts/twinkl_752_5_reassessment_20260714
+  union_cases_filename: union_cases.json
+  union_case_summary_filename: union_case_summary.parquet
+  union_entry_target_filename: union_entry_target.parquet
+  union_drift_episodes_filename: union_drift_episodes.parquet
+  union_receipt_filename: union_receipt.json
+  run_020_full_evidence_filename: run_020_full_profile_evidence.parquet
+  run_020_target_evidence_filename: run_020_target_evidence.parquet
+  eligible_opportunities_filename: eligible_early_review_opportunities.json
+  trigger_schedule_filename: trigger_schedule.json
+  prompts_filename: prompts.jsonl
+  manifest_filename: manifest.json
+  responses_filename: responses.jsonl
+  metrics_filename: metrics.json
+
+decision:
+  raw_input_reverses: >-
+    Median paired Drift-recall delta is positive, its 95% trajectory-bootstrap
+    interval excludes zero, median false Drift alerts do not increase, and
+    median coverage does not fall by more than 0.05.
+  raw_input_survives: >-
+    Median paired Drift-recall delta is negative and its 95%
+    trajectory-bootstrap interval excludes zero.
+  raw_input_inconclusive: Any other result.
+  scheduling_interpretation: >-
+    Report added Drift hits, added false Drift alerts, detection-delay change,
+    trigger rate, and cost without turning them into architecture approval.
+  restrictions:
+    - The union is selection-biased development evidence, not a prevalence sample or final test set.
+    - run_020 scores on training-seen Journal Entries are in-sample.
+    - Exclude the four Opus-resolved trajectories as a required sensitivity check.
+    - Report historical split provenance and the non-training subgroup.
+    - The offline trigger-placement diagnostic tests targeting against chance, not the effect of early review.
+    - Review-again is tested; review-early is not tested.
+    - No threshold, deployment approval, false-alert tolerance, or runtime architecture is adopted.

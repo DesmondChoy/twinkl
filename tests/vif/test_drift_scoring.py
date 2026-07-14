@@ -6,8 +6,13 @@ import json
 from pathlib import Path
 
 import polars as pl
+import pytest
 
-from src.vif.drift_scoring import _cached_evidence_is_valid, _sha256_file
+from src.vif.drift_scoring import (
+    _cached_evidence_is_valid,
+    _sha256_file,
+    score_mlp_cases,
+)
 
 
 def _write_cache(
@@ -88,3 +93,26 @@ def test_cached_evidence_requires_an_untampered_complete_parquet(tmp_path: Path)
         provenance,
         expected_metadata,
     )
+
+
+def test_score_mlp_cases_rejects_non_positive_mc_sample_count(tmp_path: Path):
+    with pytest.raises(ValueError, match="mc_samples must be positive"):
+        score_mlp_cases(
+            cases=[
+                {
+                    "persona_id": "p1",
+                    "core_values": ["security"],
+                    "entries": [
+                        {
+                            "t_index": 0,
+                            "date": "2026-01-01",
+                            "initial_entry": "Entry",
+                        }
+                    ],
+                }
+            ],
+            checkpoint_path=tmp_path / "missing.pt",
+            arm_id="run_020",
+            output_path=tmp_path / "evidence.parquet",
+            mc_samples=0,
+        )

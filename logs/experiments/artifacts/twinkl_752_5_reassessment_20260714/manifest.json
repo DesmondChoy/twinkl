@@ -1,0 +1,111 @@
+{
+  "api": {
+    "concurrency": 4,
+    "endpoint": "responses",
+    "max_attempts": 2,
+    "max_budget_usd": 15.0,
+    "max_output_tokens": 2000,
+    "model": "gpt-5.4-mini-2026-03-17",
+    "provider": "openai",
+    "reasoning_effort": "none",
+    "store": false
+  },
+  "bootstrap": {
+    "interval": 0.95,
+    "random_seed": 752520000,
+    "repeats": 10000,
+    "unit": "trajectory"
+  },
+  "config_sha256": "571ea67683b7cf41f00f9943a948d969ec1e9c1fac8725b4088c11ecfbe5f988",
+  "decision_rules": {
+    "raw_input_inconclusive": "Any other result.",
+    "raw_input_reverses": "Median paired Drift-recall delta is positive, its 95% trajectory-bootstrap interval excludes zero, median false Drift alerts do not increase, and median coverage does not fall by more than 0.05.",
+    "raw_input_survives": "Median paired Drift-recall delta is negative and its 95% trajectory-bootstrap interval excludes zero.",
+    "restrictions": [
+      "The union is selection-biased development evidence, not a prevalence sample or final test set.",
+      "run_020 scores on training-seen Journal Entries are in-sample.",
+      "Exclude the four Opus-resolved trajectories as a required sensitivity check.",
+      "Report historical split provenance and the non-training subgroup.",
+      "The offline trigger-placement diagnostic tests targeting against chance, not the effect of early review.",
+      "Review-again is tested; review-early is not tested.",
+      "No threshold, deployment approval, false-alert tolerance, or runtime architecture is adopted."
+    ],
+    "scheduling_interpretation": "Report added Drift hits, added false Drift alerts, detection-delay change, trigger rate, and cost without turning them into architecture approval."
+  },
+  "eligible_opportunities_sha256": "3b44cd5714af37b8ac497abbe68685b9cc93e6c0dae3dc9ff06c9e5e9d89ec3e",
+  "eligible_opportunity_count": 671,
+  "estimate": {
+    "estimated_cost_usd": 5.24306025,
+    "estimated_input_tokens": 4493607,
+    "estimated_output_tokens": 416190,
+    "max_budget_usd": 15.0,
+    "repeats": 3,
+    "successful_calls": 3117,
+    "token_estimator": "ceil(utf8_characters/4); output=55+45*assessment_count+35*pair_assessment_count",
+    "unique_prompts": 1039
+  },
+  "offline_diagnostic_scored": false,
+  "offline_trigger_placement": {
+    "drift_hit_window": "A placement hits when it occurs on or after a known Drift confirmation in the same persona-week and before the end-of-week review.",
+    "eligible_opportunity": "A Monday-through-Saturday Journal Entry with a consecutive prior Journal Entry for at least one reviewed Core Value.",
+    "random_repeats": 10000,
+    "random_seed_start": 752510000,
+    "redistribution": "Preserve the realized trigger count and at most one placement per persona-week. Sample persona-weeks uniformly without replacement, then one eligible Journal Entry uniformly within each selected week.",
+    "weekly_reviewer_calls": 0
+  },
+  "outcomes_inspected": false,
+  "prepared_at": "2026-07-14T02:07:44.541958+00:00",
+  "prompt_counts": {
+    "early_without_critic": 19,
+    "weekly_with_raw_critic": 510,
+    "weekly_without_critic": 510
+  },
+  "prompt_manifest_sha256": "09f7b8f88b209db59a8978e94005ff779add0ce6e1917a68366d70158994c37c",
+  "prompt_template_sha256": "c64b5cf8f0a8bcb0fb5472c7c8082541c696a861efd1e034b0f7b2f0b3ca42a1",
+  "prompts_sha256": "dd3843f5bff91efe0e50a79309e15751864a837340306693c860dd9c369de502",
+  "repo_head_before_preregistration_commit": "e7272be7f0328ddade00a601212e7b7774219efa",
+  "run_020_checkpoint_sha256": "a061287cc23ea8e04bb4f423542afb945ce7a339e284bf1c9ad267777591e2d2",
+  "run_020_full_evidence_sha256": "1b06a436ddfc11e53d88fbf33f666fd07880730161c79ce3c363b755e1431acb",
+  "run_020_parity": {
+    "max_p_minus1_absolute_delta": 6.854534149169922e-07,
+    "mean_uncertainty_absolute_delta": 0.0848211803857018,
+    "overlap_cells": 85,
+    "uncertainty_note": "P(-1) parity is exact. Uncertainty was regenerated with the newly frozen MC-dropout seed because the historical scorer was unseeded."
+  },
+  "run_020_target_evidence_sha256": "bc4b3b73e7f910fc4e3209d5738b86f6366a00149b414ac4509a5f1e4b7879e2",
+  "run_020_yaml_sha256": "20c09e9a61ace7a150db91fc65336b6a5aa41e7b1bd327b727cd97d5fd189054",
+  "runner_sha256": "60ef090738b4acba8476251cf44c2db0b5dd356dd08c6ee6e2a4963516a08053",
+  "schema_version": "twinkl-752.5-protocol-v1",
+  "scorer_sha256": "5191f67e905bed160258273f85b01cd79593900d5b625a504a6b3105f05f3506",
+  "setups": [
+    "weekly_without_critic",
+    "weekly_with_raw_critic",
+    "critic_scheduled_early_plus_weekly"
+  ],
+  "shared_api_runner_sha256": "ec8cdecdd5c5420013c58d33a3f9b8650d4f6df887aa454da0b9f665b055b8be",
+  "study_id": "twinkl_752_5_reassessment_v1",
+  "trigger_count": 19,
+  "trigger_rule": {
+    "checkpoint_path": "logs/experiments/artifacts/ordinal_v4_s2025_m22_20260307_152002/BalancedSoftmax/selected_checkpoint.pt",
+    "debounce": "first qualifying trigger per persona-week only",
+    "eligible_early_days": "monday_through_saturday",
+    "mc_samples": 50,
+    "mc_seed": 7525001,
+    "probability_threshold": 0.8,
+    "qualifying_rule": "The mean P(-1) across two consecutive Journal Entries for the same reviewed Core Value must be at or above the probability threshold, and their maximum uncertainty must be at or below the uncertainty threshold. This preserves the historical frozen detector rule exactly.",
+    "source": "run_020",
+    "threshold_scope": "study-only scheduling rule; not a deployment threshold",
+    "threshold_source": "frozen historical development receipt",
+    "uncertainty_threshold": 1.010153
+  },
+  "trigger_schedule_sha256": "29defdac4a43e5f623e4dff1eecdbae908cdd870f9461dc12cd9262fe816a706",
+  "trigger_threshold_receipt_sha256": "ec8c746b87cdf7f8893e562b0fb440bccf16b7750e0993446ebd7f168bd77446",
+  "union_output_hashes": {
+    "union_case_summary": "5748b0c6961bc7cd406f331c4b29459d715407e0b096019256a0bf596bd95d10",
+    "union_cases": "d7cf88f938e9d014dc520b3c772c86f47556379b75f1695a521b57b69f29080e",
+    "union_drift_episodes": "0c99934f2111c0d398abf934b9b1e395821a06edc78ba2bb7bd19195a6568ba6",
+    "union_entry_target": "e939e3da2338287a986f3978fdf73f3df31f9ec909952eec42a57e4bc5af6c73"
+  },
+  "union_receipt_sha256": "a845ea7b9d49b1f722c98ae033b0ea93e750e1ced1a4b0a503c843ba02c4d368",
+  "weekly_receipt_reuse": "critic_scheduled_early_plus_weekly reuses weekly_without_critic end-of-week receipts and adds only the triggered early calls. Early calls cannot erase an end-of-week Drift alert."
+}

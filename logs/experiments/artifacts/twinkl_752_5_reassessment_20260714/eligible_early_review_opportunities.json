@@ -1,0 +1,6720 @@
+[
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "01b6f22a:2025-03-17:1",
+    "persona_id": "01b6f22a",
+    "review_at_date": "2025-03-20",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-17"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "01b6f22a:2025-03-17:2",
+    "persona_id": "01b6f22a",
+    "review_at_date": "2025-03-20",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-17"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "01b6f22a:2025-03-24:3",
+    "persona_id": "01b6f22a",
+    "review_at_date": "2025-03-26",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-24"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "01b6f22a:2025-03-31:5",
+    "persona_id": "01b6f22a",
+    "review_at_date": "2025-04-04",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-31"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "01b6f22a:2025-03-31:6",
+    "persona_id": "01b6f22a",
+    "review_at_date": "2025-04-05",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-31"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "01b6f22a:2025-04-07:7",
+    "persona_id": "01b6f22a",
+    "review_at_date": "2025-04-07",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-04-07"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "02fb94f3:2025-04-21:2",
+    "persona_id": "02fb94f3",
+    "review_at_date": "2025-04-21",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-04-21"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "02fb94f3:2025-04-28:4",
+    "persona_id": "02fb94f3",
+    "review_at_date": "2025-05-02",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-04-28"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "02fb94f3:2025-04-28:5",
+    "persona_id": "02fb94f3",
+    "review_at_date": "2025-05-02",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-04-28"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "02fb94f3:2025-05-05:6",
+    "persona_id": "02fb94f3",
+    "review_at_date": "2025-05-05",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-05-05"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "02fb94f3:2025-05-05:7",
+    "persona_id": "02fb94f3",
+    "review_at_date": "2025-05-06",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-05-05"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "02fb94f3:2025-05-05:8",
+    "persona_id": "02fb94f3",
+    "review_at_date": "2025-05-10",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-05-05"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "02fb94f3:2025-05-12:9",
+    "persona_id": "02fb94f3",
+    "review_at_date": "2025-05-15",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-05-12"
+  },
+  {
+    "cutoff_t_index": 10,
+    "opportunity_id": "02fb94f3:2025-05-19:10",
+    "persona_id": "02fb94f3",
+    "review_at_date": "2025-05-22",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-05-19"
+  },
+  {
+    "cutoff_t_index": 11,
+    "opportunity_id": "02fb94f3:2025-05-19:11",
+    "persona_id": "02fb94f3",
+    "review_at_date": "2025-05-22",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-05-19"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "056f46ad:2025-12-08:1",
+    "persona_id": "056f46ad",
+    "review_at_date": "2025-12-09",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-12-08"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "056f46ad:2025-12-15:2",
+    "persona_id": "056f46ad",
+    "review_at_date": "2025-12-18",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-12-15"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "058722a1:2025-10-13:1",
+    "persona_id": "058722a1",
+    "review_at_date": "2025-10-15",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-10-13"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "058722a1:2025-10-13:2",
+    "persona_id": "058722a1",
+    "review_at_date": "2025-10-18",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-10-13"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "058722a1:2025-10-20:3",
+    "persona_id": "058722a1",
+    "review_at_date": "2025-10-25",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-10-20"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "058722a1:2025-10-27:4",
+    "persona_id": "058722a1",
+    "review_at_date": "2025-11-01",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-10-27"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "058722a1:2025-11-03:5",
+    "persona_id": "058722a1",
+    "review_at_date": "2025-11-06",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-11-03"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "075f8fdb:2025-01-06:1",
+    "persona_id": "075f8fdb",
+    "review_at_date": "2025-01-10",
+    "reviewed_values": [
+      "stimulation"
+    ],
+    "week_start": "2025-01-06"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "075f8fdb:2025-01-13:2",
+    "persona_id": "075f8fdb",
+    "review_at_date": "2025-01-13",
+    "reviewed_values": [
+      "stimulation"
+    ],
+    "week_start": "2025-01-13"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "075f8fdb:2025-01-20:4",
+    "persona_id": "075f8fdb",
+    "review_at_date": "2025-01-23",
+    "reviewed_values": [
+      "stimulation"
+    ],
+    "week_start": "2025-01-20"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "075f8fdb:2025-01-20:5",
+    "persona_id": "075f8fdb",
+    "review_at_date": "2025-01-24",
+    "reviewed_values": [
+      "stimulation"
+    ],
+    "week_start": "2025-01-20"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "075f8fdb:2025-01-20:6",
+    "persona_id": "075f8fdb",
+    "review_at_date": "2025-01-25",
+    "reviewed_values": [
+      "stimulation"
+    ],
+    "week_start": "2025-01-20"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "075f8fdb:2025-01-27:7",
+    "persona_id": "075f8fdb",
+    "review_at_date": "2025-01-29",
+    "reviewed_values": [
+      "stimulation"
+    ],
+    "week_start": "2025-01-27"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "0d272008:2025-12-08:2",
+    "persona_id": "0d272008",
+    "review_at_date": "2025-12-09",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-12-08"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "0d272008:2025-12-15:4",
+    "persona_id": "0d272008",
+    "review_at_date": "2025-12-16",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-12-15"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "0d272008:2025-12-15:5",
+    "persona_id": "0d272008",
+    "review_at_date": "2025-12-19",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-12-15"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "0d272008:2025-12-22:6",
+    "persona_id": "0d272008",
+    "review_at_date": "2025-12-22",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-12-22"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "0d272008:2025-12-29:7",
+    "persona_id": "0d272008",
+    "review_at_date": "2025-12-30",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-12-29"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "0d42f985:2025-08-18:1",
+    "persona_id": "0d42f985",
+    "review_at_date": "2025-08-18",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-08-18"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "0d42f985:2025-08-18:2",
+    "persona_id": "0d42f985",
+    "review_at_date": "2025-08-18",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-08-18"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "0d42f985:2025-08-25:3",
+    "persona_id": "0d42f985",
+    "review_at_date": "2025-08-25",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-08-25"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "0d42f985:2025-08-25:4",
+    "persona_id": "0d42f985",
+    "review_at_date": "2025-08-26",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-08-25"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "0d42f985:2025-09-01:5",
+    "persona_id": "0d42f985",
+    "review_at_date": "2025-09-01",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-09-01"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "0d42f985:2025-09-01:6",
+    "persona_id": "0d42f985",
+    "review_at_date": "2025-09-05",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-09-01"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "0d42f985:2025-09-08:7",
+    "persona_id": "0d42f985",
+    "review_at_date": "2025-09-08",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-09-08"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "0d42f985:2025-09-15:8",
+    "persona_id": "0d42f985",
+    "review_at_date": "2025-09-15",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-09-15"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "0e9a45e9:2025-12-08:1",
+    "persona_id": "0e9a45e9",
+    "review_at_date": "2025-12-10",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-12-08"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "0e9a45e9:2025-12-15:2",
+    "persona_id": "0e9a45e9",
+    "review_at_date": "2025-12-16",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-12-15"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "0e9a45e9:2025-12-22:3",
+    "persona_id": "0e9a45e9",
+    "review_at_date": "2025-12-23",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-12-22"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "0e9a45e9:2026-01-05:5",
+    "persona_id": "0e9a45e9",
+    "review_at_date": "2026-01-07",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2026-01-05"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "0e9a45e9:2026-01-12:6",
+    "persona_id": "0e9a45e9",
+    "review_at_date": "2026-01-17",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2026-01-12"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "0e9a45e9:2026-01-26:8",
+    "persona_id": "0e9a45e9",
+    "review_at_date": "2026-01-31",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2026-01-26"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "110fcd4f:2025-06-23:1",
+    "persona_id": "110fcd4f",
+    "review_at_date": "2025-06-25",
+    "reviewed_values": [
+      "conformity"
+    ],
+    "week_start": "2025-06-23"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "110fcd4f:2025-06-23:2",
+    "persona_id": "110fcd4f",
+    "review_at_date": "2025-06-28",
+    "reviewed_values": [
+      "conformity"
+    ],
+    "week_start": "2025-06-23"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "114c62d8:2025-12-08:1",
+    "persona_id": "114c62d8",
+    "review_at_date": "2025-12-11",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-12-08"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "114c62d8:2025-12-08:2",
+    "persona_id": "114c62d8",
+    "review_at_date": "2025-12-13",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-12-08"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "11a31f12:2025-07-28:1",
+    "persona_id": "11a31f12",
+    "review_at_date": "2025-07-31",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-07-28"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "11a31f12:2025-08-04:2",
+    "persona_id": "11a31f12",
+    "review_at_date": "2025-08-04",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-08-04"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "11a31f12:2025-08-04:3",
+    "persona_id": "11a31f12",
+    "review_at_date": "2025-08-06",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-08-04"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "11a31f12:2025-08-11:4",
+    "persona_id": "11a31f12",
+    "review_at_date": "2025-08-13",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-08-11"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "11a31f12:2025-08-11:5",
+    "persona_id": "11a31f12",
+    "review_at_date": "2025-08-13",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-08-11"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "11a31f12:2025-08-11:6",
+    "persona_id": "11a31f12",
+    "review_at_date": "2025-08-14",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-08-11"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "11a31f12:2025-08-11:7",
+    "persona_id": "11a31f12",
+    "review_at_date": "2025-08-14",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-08-11"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "11de77e8:2025-08-25:1",
+    "persona_id": "11de77e8",
+    "review_at_date": "2025-08-30",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-08-25"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "11de77e8:2025-09-01:2",
+    "persona_id": "11de77e8",
+    "review_at_date": "2025-09-05",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-09-01"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "11de77e8:2025-09-08:3",
+    "persona_id": "11de77e8",
+    "review_at_date": "2025-09-10",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-09-08"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "11de77e8:2025-09-08:4",
+    "persona_id": "11de77e8",
+    "review_at_date": "2025-09-12",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-09-08"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "11de77e8:2025-09-15:5",
+    "persona_id": "11de77e8",
+    "review_at_date": "2025-09-19",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-09-15"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "11de77e8:2025-09-22:6",
+    "persona_id": "11de77e8",
+    "review_at_date": "2025-09-26",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-09-22"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "11de77e8:2025-09-29:7",
+    "persona_id": "11de77e8",
+    "review_at_date": "2025-10-02",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-09-29"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "11de77e8:2025-10-06:8",
+    "persona_id": "11de77e8",
+    "review_at_date": "2025-10-07",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-10-06"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "11de77e8:2025-10-06:9",
+    "persona_id": "11de77e8",
+    "review_at_date": "2025-10-11",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-10-06"
+  },
+  {
+    "cutoff_t_index": 10,
+    "opportunity_id": "11de77e8:2025-10-13:10",
+    "persona_id": "11de77e8",
+    "review_at_date": "2025-10-14",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-10-13"
+  },
+  {
+    "cutoff_t_index": 11,
+    "opportunity_id": "11de77e8:2025-10-13:11",
+    "persona_id": "11de77e8",
+    "review_at_date": "2025-10-14",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-10-13"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "11fa5348:2025-06-02:1",
+    "persona_id": "11fa5348",
+    "review_at_date": "2025-06-07",
+    "reviewed_values": [
+      "achievement"
+    ],
+    "week_start": "2025-06-02"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "11fa5348:2025-06-09:2",
+    "persona_id": "11fa5348",
+    "review_at_date": "2025-06-12",
+    "reviewed_values": [
+      "achievement"
+    ],
+    "week_start": "2025-06-09"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "11fa5348:2025-06-16:3",
+    "persona_id": "11fa5348",
+    "review_at_date": "2025-06-18",
+    "reviewed_values": [
+      "achievement"
+    ],
+    "week_start": "2025-06-16"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "11fa5348:2025-06-16:4",
+    "persona_id": "11fa5348",
+    "review_at_date": "2025-06-19",
+    "reviewed_values": [
+      "achievement"
+    ],
+    "week_start": "2025-06-16"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "11fa5348:2025-06-16:5",
+    "persona_id": "11fa5348",
+    "review_at_date": "2025-06-19",
+    "reviewed_values": [
+      "achievement"
+    ],
+    "week_start": "2025-06-16"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "11fa5348:2025-06-23:6",
+    "persona_id": "11fa5348",
+    "review_at_date": "2025-06-24",
+    "reviewed_values": [
+      "achievement"
+    ],
+    "week_start": "2025-06-23"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "11fa5348:2025-06-23:7",
+    "persona_id": "11fa5348",
+    "review_at_date": "2025-06-25",
+    "reviewed_values": [
+      "achievement"
+    ],
+    "week_start": "2025-06-23"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "11fa5348:2025-06-23:8",
+    "persona_id": "11fa5348",
+    "review_at_date": "2025-06-27",
+    "reviewed_values": [
+      "achievement"
+    ],
+    "week_start": "2025-06-23"
+  },
+  {
+    "cutoff_t_index": 10,
+    "opportunity_id": "11fa5348:2025-06-30:10",
+    "persona_id": "11fa5348",
+    "review_at_date": "2025-07-05",
+    "reviewed_values": [
+      "achievement"
+    ],
+    "week_start": "2025-06-30"
+  },
+  {
+    "cutoff_t_index": 11,
+    "opportunity_id": "11fa5348:2025-07-07:11",
+    "persona_id": "11fa5348",
+    "review_at_date": "2025-07-12",
+    "reviewed_values": [
+      "achievement"
+    ],
+    "week_start": "2025-07-07"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "1496159d:2025-07-07:1",
+    "persona_id": "1496159d",
+    "review_at_date": "2025-07-11",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-07-07"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "1496159d:2025-07-14:2",
+    "persona_id": "1496159d",
+    "review_at_date": "2025-07-16",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-07-14"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "1496159d:2025-07-21:3",
+    "persona_id": "1496159d",
+    "review_at_date": "2025-07-21",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-07-21"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "1496159d:2025-07-21:4",
+    "persona_id": "1496159d",
+    "review_at_date": "2025-07-22",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-07-21"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "1496159d:2025-07-21:5",
+    "persona_id": "1496159d",
+    "review_at_date": "2025-07-22",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-07-21"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "152df7a4:2025-02-17:1",
+    "persona_id": "152df7a4",
+    "review_at_date": "2025-02-18",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-02-17"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "152df7a4:2025-02-24:2",
+    "persona_id": "152df7a4",
+    "review_at_date": "2025-02-24",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-02-24"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "152df7a4:2025-03-03:3",
+    "persona_id": "152df7a4",
+    "review_at_date": "2025-03-03",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-03-03"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "152df7a4:2025-03-03:4",
+    "persona_id": "152df7a4",
+    "review_at_date": "2025-03-08",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-03-03"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "152df7a4:2025-03-10:5",
+    "persona_id": "152df7a4",
+    "review_at_date": "2025-03-14",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-03-10"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "152df7a4:2025-03-17:7",
+    "persona_id": "152df7a4",
+    "review_at_date": "2025-03-21",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-03-17"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "1628bd07:2025-05-19:1",
+    "persona_id": "1628bd07",
+    "review_at_date": "2025-05-20",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-05-19"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "1628bd07:2025-06-02:5",
+    "persona_id": "1628bd07",
+    "review_at_date": "2025-06-06",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-06-02"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "1628bd07:2025-06-09:7",
+    "persona_id": "1628bd07",
+    "review_at_date": "2025-06-10",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-06-09"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "1628bd07:2025-06-09:8",
+    "persona_id": "1628bd07",
+    "review_at_date": "2025-06-13",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-06-09"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "1628bd07:2025-06-16:9",
+    "persona_id": "1628bd07",
+    "review_at_date": "2025-06-19",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-06-16"
+  },
+  {
+    "cutoff_t_index": 10,
+    "opportunity_id": "1628bd07:2025-06-16:10",
+    "persona_id": "1628bd07",
+    "review_at_date": "2025-06-20",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-06-16"
+  },
+  {
+    "cutoff_t_index": 11,
+    "opportunity_id": "1628bd07:2025-06-23:11",
+    "persona_id": "1628bd07",
+    "review_at_date": "2025-06-24",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-06-23"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "1bcd8599:2025-02-10:1",
+    "persona_id": "1bcd8599",
+    "review_at_date": "2025-02-11",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-02-10"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "1bcd8599:2025-02-10:2",
+    "persona_id": "1bcd8599",
+    "review_at_date": "2025-02-15",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-02-10"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "1bcd8599:2025-02-17:3",
+    "persona_id": "1bcd8599",
+    "review_at_date": "2025-02-22",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-02-17"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "1bcd8599:2025-02-17:4",
+    "persona_id": "1bcd8599",
+    "review_at_date": "2025-02-22",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-02-17"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "1bcd8599:2025-02-24:5",
+    "persona_id": "1bcd8599",
+    "review_at_date": "2025-02-28",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-02-24"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "1bcd8599:2025-03-03:6",
+    "persona_id": "1bcd8599",
+    "review_at_date": "2025-03-06",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-03"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "1bcd8599:2025-03-10:7",
+    "persona_id": "1bcd8599",
+    "review_at_date": "2025-03-10",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-10"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "1bcd8599:2025-03-10:8",
+    "persona_id": "1bcd8599",
+    "review_at_date": "2025-03-11",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-10"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "1bcd8599:2025-03-10:9",
+    "persona_id": "1bcd8599",
+    "review_at_date": "2025-03-12",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-10"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "1f86f569:2025-12-01:1",
+    "persona_id": "1f86f569",
+    "review_at_date": "2025-12-01",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-12-01"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "1f86f569:2025-12-01:2",
+    "persona_id": "1f86f569",
+    "review_at_date": "2025-12-06",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-12-01"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "1f86f569:2025-12-08:3",
+    "persona_id": "1f86f569",
+    "review_at_date": "2025-12-09",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-12-08"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "20730018:2025-06-09:1",
+    "persona_id": "20730018",
+    "review_at_date": "2025-06-09",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-06-09"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "20730018:2025-06-16:3",
+    "persona_id": "20730018",
+    "review_at_date": "2025-06-20",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-06-16"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "20730018:2025-06-23:4",
+    "persona_id": "20730018",
+    "review_at_date": "2025-06-26",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-06-23"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "20730018:2025-06-30:5",
+    "persona_id": "20730018",
+    "review_at_date": "2025-07-03",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-06-30"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "20730018:2025-06-30:6",
+    "persona_id": "20730018",
+    "review_at_date": "2025-07-04",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-06-30"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "22b117be:2025-04-28:1",
+    "persona_id": "22b117be",
+    "review_at_date": "2025-04-30",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-04-28"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "22b117be:2025-04-28:2",
+    "persona_id": "22b117be",
+    "review_at_date": "2025-04-30",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-04-28"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "22b117be:2025-04-28:3",
+    "persona_id": "22b117be",
+    "review_at_date": "2025-05-01",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-04-28"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "22b117be:2025-04-28:4",
+    "persona_id": "22b117be",
+    "review_at_date": "2025-05-03",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-04-28"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "22b117be:2025-05-05:5",
+    "persona_id": "22b117be",
+    "review_at_date": "2025-05-08",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-05-05"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "22b117be:2025-05-12:6",
+    "persona_id": "22b117be",
+    "review_at_date": "2025-05-14",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-05-12"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "22b117be:2025-05-12:7",
+    "persona_id": "22b117be",
+    "review_at_date": "2025-05-15",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-05-12"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "22b117be:2025-05-19:8",
+    "persona_id": "22b117be",
+    "review_at_date": "2025-05-19",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-05-19"
+  },
+  {
+    "cutoff_t_index": 10,
+    "opportunity_id": "22b117be:2025-05-26:10",
+    "persona_id": "22b117be",
+    "review_at_date": "2025-05-30",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-05-26"
+  },
+  {
+    "cutoff_t_index": 11,
+    "opportunity_id": "22b117be:2025-05-26:11",
+    "persona_id": "22b117be",
+    "review_at_date": "2025-05-30",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-05-26"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "236d4507:2025-02-10:1",
+    "persona_id": "236d4507",
+    "review_at_date": "2025-02-15",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-02-10"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "236d4507:2025-02-17:2",
+    "persona_id": "236d4507",
+    "review_at_date": "2025-02-22",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-02-17"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "236d4507:2025-02-24:3",
+    "persona_id": "236d4507",
+    "review_at_date": "2025-02-28",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-02-24"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "236d4507:2025-02-24:4",
+    "persona_id": "236d4507",
+    "review_at_date": "2025-03-01",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-02-24"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "236d4507:2025-03-03:5",
+    "persona_id": "236d4507",
+    "review_at_date": "2025-03-04",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-03"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "344ea8f7:2025-11-10:1",
+    "persona_id": "344ea8f7",
+    "review_at_date": "2025-11-11",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-11-10"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "344ea8f7:2025-11-10:2",
+    "persona_id": "344ea8f7",
+    "review_at_date": "2025-11-13",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-11-10"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "344ea8f7:2025-11-10:3",
+    "persona_id": "344ea8f7",
+    "review_at_date": "2025-11-13",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-11-10"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "344ea8f7:2025-11-17:4",
+    "persona_id": "344ea8f7",
+    "review_at_date": "2025-11-20",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-11-17"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "344ea8f7:2025-11-17:5",
+    "persona_id": "344ea8f7",
+    "review_at_date": "2025-11-20",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-11-17"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "344ea8f7:2025-11-24:7",
+    "persona_id": "344ea8f7",
+    "review_at_date": "2025-11-27",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-11-24"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "344ea8f7:2025-12-01:8",
+    "persona_id": "344ea8f7",
+    "review_at_date": "2025-12-02",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-12-01"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "3a3b15e4:2025-06-02:1",
+    "persona_id": "3a3b15e4",
+    "review_at_date": "2025-06-03",
+    "reviewed_values": [
+      "tradition"
+    ],
+    "week_start": "2025-06-02"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "3a3b15e4:2025-06-09:2",
+    "persona_id": "3a3b15e4",
+    "review_at_date": "2025-06-10",
+    "reviewed_values": [
+      "tradition"
+    ],
+    "week_start": "2025-06-09"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "3a3b15e4:2025-06-09:3",
+    "persona_id": "3a3b15e4",
+    "review_at_date": "2025-06-10",
+    "reviewed_values": [
+      "tradition"
+    ],
+    "week_start": "2025-06-09"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "3a3b15e4:2025-06-09:4",
+    "persona_id": "3a3b15e4",
+    "review_at_date": "2025-06-12",
+    "reviewed_values": [
+      "tradition"
+    ],
+    "week_start": "2025-06-09"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "3a3b15e4:2025-06-16:6",
+    "persona_id": "3a3b15e4",
+    "review_at_date": "2025-06-17",
+    "reviewed_values": [
+      "tradition"
+    ],
+    "week_start": "2025-06-16"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "3a3b15e4:2025-06-16:7",
+    "persona_id": "3a3b15e4",
+    "review_at_date": "2025-06-18",
+    "reviewed_values": [
+      "tradition"
+    ],
+    "week_start": "2025-06-16"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "3a3b15e4:2025-06-16:8",
+    "persona_id": "3a3b15e4",
+    "review_at_date": "2025-06-19",
+    "reviewed_values": [
+      "tradition"
+    ],
+    "week_start": "2025-06-16"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "3a3b15e4:2025-06-16:9",
+    "persona_id": "3a3b15e4",
+    "review_at_date": "2025-06-19",
+    "reviewed_values": [
+      "tradition"
+    ],
+    "week_start": "2025-06-16"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "3b836198:2025-07-21:1",
+    "persona_id": "3b836198",
+    "review_at_date": "2025-07-21",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-07-21"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "3b836198:2025-07-28:3",
+    "persona_id": "3b836198",
+    "review_at_date": "2025-08-02",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-07-28"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "3b836198:2025-07-28:4",
+    "persona_id": "3b836198",
+    "review_at_date": "2025-08-02",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-07-28"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "3b836198:2025-08-04:5",
+    "persona_id": "3b836198",
+    "review_at_date": "2025-08-04",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-08-04"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "3b836198:2025-08-04:6",
+    "persona_id": "3b836198",
+    "review_at_date": "2025-08-08",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-08-04"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "3cfa2ebf:2025-02-03:2",
+    "persona_id": "3cfa2ebf",
+    "review_at_date": "2025-02-07",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-02-03"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "3cfa2ebf:2025-02-03:3",
+    "persona_id": "3cfa2ebf",
+    "review_at_date": "2025-02-07",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-02-03"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "3cfa2ebf:2025-02-10:4",
+    "persona_id": "3cfa2ebf",
+    "review_at_date": "2025-02-12",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-02-10"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "3cfa2ebf:2025-02-17:5",
+    "persona_id": "3cfa2ebf",
+    "review_at_date": "2025-02-17",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-02-17"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "3cfa2ebf:2025-02-17:6",
+    "persona_id": "3cfa2ebf",
+    "review_at_date": "2025-02-21",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-02-17"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "3cfa2ebf:2025-02-24:7",
+    "persona_id": "3cfa2ebf",
+    "review_at_date": "2025-02-25",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-02-24"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "3cfa2ebf:2025-02-24:8",
+    "persona_id": "3cfa2ebf",
+    "review_at_date": "2025-02-28",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-02-24"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "3cfa2ebf:2025-02-24:9",
+    "persona_id": "3cfa2ebf",
+    "review_at_date": "2025-02-28",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-02-24"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "3dfe4749:2025-12-08:1",
+    "persona_id": "3dfe4749",
+    "review_at_date": "2025-12-08",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-12-08"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "3dfe4749:2025-12-15:2",
+    "persona_id": "3dfe4749",
+    "review_at_date": "2025-12-16",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-12-15"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "3dfe4749:2025-12-15:3",
+    "persona_id": "3dfe4749",
+    "review_at_date": "2025-12-19",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-12-15"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "3dfe4749:2025-12-22:4",
+    "persona_id": "3dfe4749",
+    "review_at_date": "2025-12-25",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-12-22"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "3dfe4749:2025-12-29:5",
+    "persona_id": "3dfe4749",
+    "review_at_date": "2025-12-31",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-12-29"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "3ec38c16:2025-12-08:2",
+    "persona_id": "3ec38c16",
+    "review_at_date": "2025-12-11",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-12-08"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "3ec38c16:2025-12-15:3",
+    "persona_id": "3ec38c16",
+    "review_at_date": "2025-12-17",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-12-15"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "440e5deb:2025-12-08:1",
+    "persona_id": "440e5deb",
+    "review_at_date": "2025-12-10",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-12-08"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "440e5deb:2025-12-15:2",
+    "persona_id": "440e5deb",
+    "review_at_date": "2025-12-20",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-12-15"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "440e5deb:2025-12-22:3",
+    "persona_id": "440e5deb",
+    "review_at_date": "2025-12-24",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-12-22"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "440e5deb:2025-12-22:4",
+    "persona_id": "440e5deb",
+    "review_at_date": "2025-12-27",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-12-22"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "440e5deb:2025-12-29:5",
+    "persona_id": "440e5deb",
+    "review_at_date": "2026-01-03",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-12-29"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "440e5deb:2026-01-05:6",
+    "persona_id": "440e5deb",
+    "review_at_date": "2026-01-06",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2026-01-05"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "440e5deb:2026-01-12:7",
+    "persona_id": "440e5deb",
+    "review_at_date": "2026-01-12",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2026-01-12"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "4cfc3c8e:2025-09-01:2",
+    "persona_id": "4cfc3c8e",
+    "review_at_date": "2025-09-04",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-09-01"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "4cfc3c8e:2025-09-08:3",
+    "persona_id": "4cfc3c8e",
+    "review_at_date": "2025-09-09",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-09-08"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "4cfc3c8e:2025-09-08:4",
+    "persona_id": "4cfc3c8e",
+    "review_at_date": "2025-09-12",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-09-08"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "4cfc3c8e:2025-09-15:5",
+    "persona_id": "4cfc3c8e",
+    "review_at_date": "2025-09-16",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-09-15"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "4cfc3c8e:2025-09-22:7",
+    "persona_id": "4cfc3c8e",
+    "review_at_date": "2025-09-25",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-09-22"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "4cfc3c8e:2025-09-29:8",
+    "persona_id": "4cfc3c8e",
+    "review_at_date": "2025-09-30",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-09-29"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "4cfc3c8e:2025-10-06:9",
+    "persona_id": "4cfc3c8e",
+    "review_at_date": "2025-10-07",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-10-06"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "54fbe6b5:2025-08-04:1",
+    "persona_id": "54fbe6b5",
+    "review_at_date": "2025-08-07",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-08-04"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "54fbe6b5:2025-08-04:2",
+    "persona_id": "54fbe6b5",
+    "review_at_date": "2025-08-07",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-08-04"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "54fbe6b5:2025-08-04:3",
+    "persona_id": "54fbe6b5",
+    "review_at_date": "2025-08-09",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-08-04"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "54fbe6b5:2025-08-04:4",
+    "persona_id": "54fbe6b5",
+    "review_at_date": "2025-08-09",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-08-04"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "54fbe6b5:2025-08-11:5",
+    "persona_id": "54fbe6b5",
+    "review_at_date": "2025-08-12",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-08-11"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "54fbe6b5:2025-08-11:6",
+    "persona_id": "54fbe6b5",
+    "review_at_date": "2025-08-12",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-08-11"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "54fbe6b5:2025-08-11:7",
+    "persona_id": "54fbe6b5",
+    "review_at_date": "2025-08-12",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-08-11"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "5943c186:2025-09-01:1",
+    "persona_id": "5943c186",
+    "review_at_date": "2025-09-02",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-09-01"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "5943c186:2025-09-01:2",
+    "persona_id": "5943c186",
+    "review_at_date": "2025-09-03",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-09-01"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "5943c186:2025-09-08:3",
+    "persona_id": "5943c186",
+    "review_at_date": "2025-09-10",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-09-08"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "5943c186:2025-09-08:4",
+    "persona_id": "5943c186",
+    "review_at_date": "2025-09-13",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-09-08"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "5943c186:2025-09-15:5",
+    "persona_id": "5943c186",
+    "review_at_date": "2025-09-15",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-09-15"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "5943c186:2025-09-15:6",
+    "persona_id": "5943c186",
+    "review_at_date": "2025-09-20",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-09-15"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "5943c186:2025-09-22:7",
+    "persona_id": "5943c186",
+    "review_at_date": "2025-09-24",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-09-22"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "5adacfb2:2025-01-06:1",
+    "persona_id": "5adacfb2",
+    "review_at_date": "2025-01-07",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-01-06"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "5adacfb2:2025-01-13:2",
+    "persona_id": "5adacfb2",
+    "review_at_date": "2025-01-13",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-01-13"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "5adacfb2:2025-01-13:3",
+    "persona_id": "5adacfb2",
+    "review_at_date": "2025-01-17",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-01-13"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "5adacfb2:2025-01-13:4",
+    "persona_id": "5adacfb2",
+    "review_at_date": "2025-01-17",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-01-13"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "5adacfb2:2025-01-20:5",
+    "persona_id": "5adacfb2",
+    "review_at_date": "2025-01-20",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-01-20"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "5adacfb2:2025-01-20:6",
+    "persona_id": "5adacfb2",
+    "review_at_date": "2025-01-23",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-01-20"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "5adacfb2:2025-01-20:7",
+    "persona_id": "5adacfb2",
+    "review_at_date": "2025-01-25",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-01-20"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "5adacfb2:2025-01-20:8",
+    "persona_id": "5adacfb2",
+    "review_at_date": "2025-01-25",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-01-20"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "5adacfb2:2025-01-27:9",
+    "persona_id": "5adacfb2",
+    "review_at_date": "2025-01-31",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-01-27"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "5b45e4a8:2025-11-03:1",
+    "persona_id": "5b45e4a8",
+    "review_at_date": "2025-11-08",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-11-03"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "5b45e4a8:2025-11-10:2",
+    "persona_id": "5b45e4a8",
+    "review_at_date": "2025-11-13",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-11-10"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "5b45e4a8:2025-11-17:3",
+    "persona_id": "5b45e4a8",
+    "review_at_date": "2025-11-20",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-11-17"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "5b45e4a8:2025-11-17:4",
+    "persona_id": "5b45e4a8",
+    "review_at_date": "2025-11-21",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-11-17"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "5b45e4a8:2025-11-24:5",
+    "persona_id": "5b45e4a8",
+    "review_at_date": "2025-11-24",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-11-24"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "5b45e4a8:2025-11-24:6",
+    "persona_id": "5b45e4a8",
+    "review_at_date": "2025-11-29",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-11-24"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "5b45e4a8:2025-12-01:7",
+    "persona_id": "5b45e4a8",
+    "review_at_date": "2025-12-03",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-12-01"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "5c8ad0db:2025-05-19:1",
+    "persona_id": "5c8ad0db",
+    "review_at_date": "2025-05-19",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-05-19"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "5c8ad0db:2025-05-19:2",
+    "persona_id": "5c8ad0db",
+    "review_at_date": "2025-05-19",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-05-19"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "5c8ad0db:2025-05-26:3",
+    "persona_id": "5c8ad0db",
+    "review_at_date": "2025-05-26",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-05-26"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "5c8ad0db:2025-06-02:5",
+    "persona_id": "5c8ad0db",
+    "review_at_date": "2025-06-07",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-06-02"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "5fa8b540:2025-03-03:4",
+    "persona_id": "5fa8b540",
+    "review_at_date": "2025-03-07",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-03-03"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "5fa8b540:2025-03-03:5",
+    "persona_id": "5fa8b540",
+    "review_at_date": "2025-03-08",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-03-03"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "5fcf93f5:2025-01-20:1",
+    "persona_id": "5fcf93f5",
+    "review_at_date": "2025-01-23",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-01-20"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "5fcf93f5:2025-01-27:2",
+    "persona_id": "5fcf93f5",
+    "review_at_date": "2025-01-30",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-01-27"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "611c5ef3:2025-06-02:2",
+    "persona_id": "611c5ef3",
+    "review_at_date": "2025-06-07",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-06-02"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "611c5ef3:2025-06-09:3",
+    "persona_id": "611c5ef3",
+    "review_at_date": "2025-06-09",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-06-09"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "611c5ef3:2025-06-09:4",
+    "persona_id": "611c5ef3",
+    "review_at_date": "2025-06-14",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-06-09"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "611c5ef3:2025-06-16:5",
+    "persona_id": "611c5ef3",
+    "review_at_date": "2025-06-19",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-06-16"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "611c5ef3:2025-06-23:7",
+    "persona_id": "611c5ef3",
+    "review_at_date": "2025-06-27",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-06-23"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "611c5ef3:2025-06-30:8",
+    "persona_id": "611c5ef3",
+    "review_at_date": "2025-07-02",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-06-30"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "611c5ef3:2025-06-30:9",
+    "persona_id": "611c5ef3",
+    "review_at_date": "2025-07-03",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-06-30"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "621be543:2025-09-22:1",
+    "persona_id": "621be543",
+    "review_at_date": "2025-09-26",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-09-22"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "621be543:2025-09-22:2",
+    "persona_id": "621be543",
+    "review_at_date": "2025-09-27",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-09-22"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "621be543:2025-09-22:3",
+    "persona_id": "621be543",
+    "review_at_date": "2025-09-27",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-09-22"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "621be543:2025-09-22:4",
+    "persona_id": "621be543",
+    "review_at_date": "2025-09-27",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-09-22"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "621be543:2025-09-29:6",
+    "persona_id": "621be543",
+    "review_at_date": "2025-09-29",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-09-29"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "621be543:2025-09-29:7",
+    "persona_id": "621be543",
+    "review_at_date": "2025-09-29",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-09-29"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "621be543:2025-09-29:8",
+    "persona_id": "621be543",
+    "review_at_date": "2025-10-04",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-09-29"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "621be543:2025-10-06:9",
+    "persona_id": "621be543",
+    "review_at_date": "2025-10-10",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-10-06"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "65ed1278:2025-03-03:1",
+    "persona_id": "65ed1278",
+    "review_at_date": "2025-03-04",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-03-03"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "65ed1278:2025-03-10:3",
+    "persona_id": "65ed1278",
+    "review_at_date": "2025-03-13",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-03-10"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "65ed1278:2025-03-17:5",
+    "persona_id": "65ed1278",
+    "review_at_date": "2025-03-19",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-03-17"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "65ed1278:2025-03-17:6",
+    "persona_id": "65ed1278",
+    "review_at_date": "2025-03-20",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-03-17"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "65ed1278:2025-03-17:7",
+    "persona_id": "65ed1278",
+    "review_at_date": "2025-03-21",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-03-17"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "65ed1278:2025-03-17:8",
+    "persona_id": "65ed1278",
+    "review_at_date": "2025-03-21",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-03-17"
+  },
+  {
+    "cutoff_t_index": 10,
+    "opportunity_id": "65ed1278:2025-03-24:10",
+    "persona_id": "65ed1278",
+    "review_at_date": "2025-03-25",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-03-24"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "6608a6f8:2025-03-10:1",
+    "persona_id": "6608a6f8",
+    "review_at_date": "2025-03-12",
+    "reviewed_values": [
+      "achievement"
+    ],
+    "week_start": "2025-03-10"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "6608a6f8:2025-03-10:2",
+    "persona_id": "6608a6f8",
+    "review_at_date": "2025-03-12",
+    "reviewed_values": [
+      "achievement"
+    ],
+    "week_start": "2025-03-10"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "6608a6f8:2025-03-10:3",
+    "persona_id": "6608a6f8",
+    "review_at_date": "2025-03-14",
+    "reviewed_values": [
+      "achievement"
+    ],
+    "week_start": "2025-03-10"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "6608a6f8:2025-03-10:4",
+    "persona_id": "6608a6f8",
+    "review_at_date": "2025-03-14",
+    "reviewed_values": [
+      "achievement"
+    ],
+    "week_start": "2025-03-10"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "6608a6f8:2025-03-17:5",
+    "persona_id": "6608a6f8",
+    "review_at_date": "2025-03-19",
+    "reviewed_values": [
+      "achievement"
+    ],
+    "week_start": "2025-03-17"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "6608a6f8:2025-03-24:6",
+    "persona_id": "6608a6f8",
+    "review_at_date": "2025-03-24",
+    "reviewed_values": [
+      "achievement"
+    ],
+    "week_start": "2025-03-24"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "6608a6f8:2025-03-24:7",
+    "persona_id": "6608a6f8",
+    "review_at_date": "2025-03-26",
+    "reviewed_values": [
+      "achievement"
+    ],
+    "week_start": "2025-03-24"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "6608a6f8:2025-03-24:8",
+    "persona_id": "6608a6f8",
+    "review_at_date": "2025-03-27",
+    "reviewed_values": [
+      "achievement"
+    ],
+    "week_start": "2025-03-24"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "6608a6f8:2025-03-31:9",
+    "persona_id": "6608a6f8",
+    "review_at_date": "2025-03-31",
+    "reviewed_values": [
+      "achievement"
+    ],
+    "week_start": "2025-03-31"
+  },
+  {
+    "cutoff_t_index": 10,
+    "opportunity_id": "6608a6f8:2025-03-31:10",
+    "persona_id": "6608a6f8",
+    "review_at_date": "2025-04-05",
+    "reviewed_values": [
+      "achievement"
+    ],
+    "week_start": "2025-03-31"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "66ced716:2025-05-05:1",
+    "persona_id": "66ced716",
+    "review_at_date": "2025-05-06",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-05-05"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "66ced716:2025-05-12:4",
+    "persona_id": "66ced716",
+    "review_at_date": "2025-05-12",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-05-12"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "66ced716:2025-05-12:5",
+    "persona_id": "66ced716",
+    "review_at_date": "2025-05-16",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-05-12"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "694bb341:2025-03-03:1",
+    "persona_id": "694bb341",
+    "review_at_date": "2025-03-03",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-03"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "694bb341:2025-03-03:2",
+    "persona_id": "694bb341",
+    "review_at_date": "2025-03-08",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-03"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "694bb341:2025-03-03:3",
+    "persona_id": "694bb341",
+    "review_at_date": "2025-03-08",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-03"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "694bb341:2025-03-10:4",
+    "persona_id": "694bb341",
+    "review_at_date": "2025-03-13",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-10"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "709e706c:2025-06-02:1",
+    "persona_id": "709e706c",
+    "review_at_date": "2025-06-02",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-06-02"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "709e706c:2025-06-02:2",
+    "persona_id": "709e706c",
+    "review_at_date": "2025-06-05",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-06-02"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "709e706c:2025-06-09:3",
+    "persona_id": "709e706c",
+    "review_at_date": "2025-06-10",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-06-09"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "709e706c:2025-06-16:4",
+    "persona_id": "709e706c",
+    "review_at_date": "2025-06-16",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-06-16"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "709e706c:2025-06-23:6",
+    "persona_id": "709e706c",
+    "review_at_date": "2025-06-25",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-06-23"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "709e706c:2025-06-23:7",
+    "persona_id": "709e706c",
+    "review_at_date": "2025-06-27",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-06-23"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "709e706c:2025-06-23:8",
+    "persona_id": "709e706c",
+    "review_at_date": "2025-06-27",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-06-23"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "70b51a5b:2025-09-29:1",
+    "persona_id": "70b51a5b",
+    "review_at_date": "2025-09-29",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-09-29"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "70b51a5b:2025-09-29:2",
+    "persona_id": "70b51a5b",
+    "review_at_date": "2025-10-04",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-09-29"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "70b51a5b:2025-10-06:3",
+    "persona_id": "70b51a5b",
+    "review_at_date": "2025-10-08",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-10-06"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "70b51a5b:2025-10-06:4",
+    "persona_id": "70b51a5b",
+    "review_at_date": "2025-10-08",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-10-06"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "70b51a5b:2025-10-13:5",
+    "persona_id": "70b51a5b",
+    "review_at_date": "2025-10-13",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-10-13"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "70b51a5b:2025-10-20:6",
+    "persona_id": "70b51a5b",
+    "review_at_date": "2025-10-20",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-10-20"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "70b51a5b:2025-10-20:7",
+    "persona_id": "70b51a5b",
+    "review_at_date": "2025-10-25",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-10-20"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "70b51a5b:2025-10-27:8",
+    "persona_id": "70b51a5b",
+    "review_at_date": "2025-10-28",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-10-27"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "7227db82:2025-04-28:4",
+    "persona_id": "7227db82",
+    "review_at_date": "2025-05-02",
+    "reviewed_values": [
+      "stimulation"
+    ],
+    "week_start": "2025-04-28"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "7227db82:2025-04-28:5",
+    "persona_id": "7227db82",
+    "review_at_date": "2025-05-03",
+    "reviewed_values": [
+      "stimulation"
+    ],
+    "week_start": "2025-04-28"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "7227db82:2025-05-05:6",
+    "persona_id": "7227db82",
+    "review_at_date": "2025-05-09",
+    "reviewed_values": [
+      "stimulation"
+    ],
+    "week_start": "2025-05-05"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "7227db82:2025-05-05:7",
+    "persona_id": "7227db82",
+    "review_at_date": "2025-05-10",
+    "reviewed_values": [
+      "stimulation"
+    ],
+    "week_start": "2025-05-05"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "7227db82:2025-05-12:8",
+    "persona_id": "7227db82",
+    "review_at_date": "2025-05-15",
+    "reviewed_values": [
+      "stimulation"
+    ],
+    "week_start": "2025-05-12"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "7227db82:2025-05-19:9",
+    "persona_id": "7227db82",
+    "review_at_date": "2025-05-22",
+    "reviewed_values": [
+      "stimulation"
+    ],
+    "week_start": "2025-05-19"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "742c98d6:2025-09-08:1",
+    "persona_id": "742c98d6",
+    "review_at_date": "2025-09-11",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-09-08"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "742c98d6:2025-09-08:2",
+    "persona_id": "742c98d6",
+    "review_at_date": "2025-09-13",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-09-08"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "742c98d6:2025-09-15:3",
+    "persona_id": "742c98d6",
+    "review_at_date": "2025-09-19",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-09-15"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "742c98d6:2025-09-22:4",
+    "persona_id": "742c98d6",
+    "review_at_date": "2025-09-25",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-09-22"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "742c98d6:2025-09-29:5",
+    "persona_id": "742c98d6",
+    "review_at_date": "2025-09-29",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-09-29"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "742c98d6:2025-09-29:6",
+    "persona_id": "742c98d6",
+    "review_at_date": "2025-09-29",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-09-29"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "742c98d6:2025-10-06:8",
+    "persona_id": "742c98d6",
+    "review_at_date": "2025-10-07",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-10-06"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "742c98d6:2025-10-06:9",
+    "persona_id": "742c98d6",
+    "review_at_date": "2025-10-08",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-10-06"
+  },
+  {
+    "cutoff_t_index": 10,
+    "opportunity_id": "742c98d6:2025-10-13:10",
+    "persona_id": "742c98d6",
+    "review_at_date": "2025-10-14",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-10-13"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "775c7d71:2025-05-12:1",
+    "persona_id": "775c7d71",
+    "review_at_date": "2025-05-12",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-05-12"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "775c7d71:2025-05-12:2",
+    "persona_id": "775c7d71",
+    "review_at_date": "2025-05-16",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-05-12"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "775c7d71:2025-05-12:3",
+    "persona_id": "775c7d71",
+    "review_at_date": "2025-05-16",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-05-12"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "775c7d71:2025-05-19:4",
+    "persona_id": "775c7d71",
+    "review_at_date": "2025-05-22",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-05-19"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "775c7d71:2025-05-26:5",
+    "persona_id": "775c7d71",
+    "review_at_date": "2025-05-27",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-05-26"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "775c7d71:2025-05-26:6",
+    "persona_id": "775c7d71",
+    "review_at_date": "2025-05-30",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-05-26"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "799f3751:2025-05-19:1",
+    "persona_id": "799f3751",
+    "review_at_date": "2025-05-20",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-05-19"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "799f3751:2025-05-19:2",
+    "persona_id": "799f3751",
+    "review_at_date": "2025-05-22",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-05-19"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "7a086972:2025-07-28:1",
+    "persona_id": "7a086972",
+    "review_at_date": "2025-08-02",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-07-28"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "7a086972:2025-08-04:2",
+    "persona_id": "7a086972",
+    "review_at_date": "2025-08-05",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-08-04"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "7a086972:2025-08-04:3",
+    "persona_id": "7a086972",
+    "review_at_date": "2025-08-06",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-08-04"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "7a086972:2025-08-04:4",
+    "persona_id": "7a086972",
+    "review_at_date": "2025-08-07",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-08-04"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "7a086972:2025-08-04:5",
+    "persona_id": "7a086972",
+    "review_at_date": "2025-08-08",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-08-04"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "7a086972:2025-08-11:6",
+    "persona_id": "7a086972",
+    "review_at_date": "2025-08-14",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-08-11"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "7adc5866:2025-05-26:1",
+    "persona_id": "7adc5866",
+    "review_at_date": "2025-05-27",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-05-26"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "7adc5866:2025-05-26:2",
+    "persona_id": "7adc5866",
+    "review_at_date": "2025-05-27",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-05-26"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "7adc5866:2025-05-26:3",
+    "persona_id": "7adc5866",
+    "review_at_date": "2025-05-28",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-05-26"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "7adc5866:2025-05-26:4",
+    "persona_id": "7adc5866",
+    "review_at_date": "2025-05-31",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-05-26"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "7adc5866:2025-06-02:5",
+    "persona_id": "7adc5866",
+    "review_at_date": "2025-06-06",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-06-02"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "7adc5866:2025-06-09:7",
+    "persona_id": "7adc5866",
+    "review_at_date": "2025-06-14",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-06-09"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "7adc5866:2025-06-16:8",
+    "persona_id": "7adc5866",
+    "review_at_date": "2025-06-18",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-06-16"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "7c712a0a:2025-11-10:1",
+    "persona_id": "7c712a0a",
+    "review_at_date": "2025-11-11",
+    "reviewed_values": [
+      "stimulation"
+    ],
+    "week_start": "2025-11-10"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "7c712a0a:2025-11-10:2",
+    "persona_id": "7c712a0a",
+    "review_at_date": "2025-11-14",
+    "reviewed_values": [
+      "stimulation"
+    ],
+    "week_start": "2025-11-10"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "7c712a0a:2025-11-17:3",
+    "persona_id": "7c712a0a",
+    "review_at_date": "2025-11-17",
+    "reviewed_values": [
+      "stimulation"
+    ],
+    "week_start": "2025-11-17"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "7c712a0a:2025-11-17:4",
+    "persona_id": "7c712a0a",
+    "review_at_date": "2025-11-18",
+    "reviewed_values": [
+      "stimulation"
+    ],
+    "week_start": "2025-11-17"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "7c712a0a:2025-11-17:5",
+    "persona_id": "7c712a0a",
+    "review_at_date": "2025-11-22",
+    "reviewed_values": [
+      "stimulation"
+    ],
+    "week_start": "2025-11-17"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "7c712a0a:2025-11-24:6",
+    "persona_id": "7c712a0a",
+    "review_at_date": "2025-11-28",
+    "reviewed_values": [
+      "stimulation"
+    ],
+    "week_start": "2025-11-24"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "7c712a0a:2025-12-01:7",
+    "persona_id": "7c712a0a",
+    "review_at_date": "2025-12-04",
+    "reviewed_values": [
+      "stimulation"
+    ],
+    "week_start": "2025-12-01"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "7c712a0a:2025-12-08:8",
+    "persona_id": "7c712a0a",
+    "review_at_date": "2025-12-11",
+    "reviewed_values": [
+      "stimulation"
+    ],
+    "week_start": "2025-12-08"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "7c712a0a:2025-12-15:9",
+    "persona_id": "7c712a0a",
+    "review_at_date": "2025-12-16",
+    "reviewed_values": [
+      "stimulation"
+    ],
+    "week_start": "2025-12-15"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "7cc5cf92:2025-06-30:1",
+    "persona_id": "7cc5cf92",
+    "review_at_date": "2025-07-02",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-06-30"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "7cc5cf92:2025-07-07:2",
+    "persona_id": "7cc5cf92",
+    "review_at_date": "2025-07-08",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-07-07"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "7cc5cf92:2025-07-07:3",
+    "persona_id": "7cc5cf92",
+    "review_at_date": "2025-07-10",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-07-07"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "7cc5cf92:2025-07-14:4",
+    "persona_id": "7cc5cf92",
+    "review_at_date": "2025-07-17",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-07-14"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "7cc5cf92:2025-07-21:5",
+    "persona_id": "7cc5cf92",
+    "review_at_date": "2025-07-21",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-07-21"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "7cc5cf92:2025-07-21:6",
+    "persona_id": "7cc5cf92",
+    "review_at_date": "2025-07-22",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-07-21"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "7cc5cf92:2025-07-28:7",
+    "persona_id": "7cc5cf92",
+    "review_at_date": "2025-07-29",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-07-28"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "7cc5cf92:2025-07-28:8",
+    "persona_id": "7cc5cf92",
+    "review_at_date": "2025-07-31",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-07-28"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "806f76a7:2025-12-08:1",
+    "persona_id": "806f76a7",
+    "review_at_date": "2025-12-10",
+    "reviewed_values": [
+      "tradition"
+    ],
+    "week_start": "2025-12-08"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "806f76a7:2025-12-15:2",
+    "persona_id": "806f76a7",
+    "review_at_date": "2025-12-15",
+    "reviewed_values": [
+      "tradition"
+    ],
+    "week_start": "2025-12-15"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "81e96381:2025-03-10:1",
+    "persona_id": "81e96381",
+    "review_at_date": "2025-03-12",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-10"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "81e96381:2025-03-17:2",
+    "persona_id": "81e96381",
+    "review_at_date": "2025-03-18",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-17"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "81e96381:2025-03-17:3",
+    "persona_id": "81e96381",
+    "review_at_date": "2025-03-18",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-17"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "81e96381:2025-03-17:4",
+    "persona_id": "81e96381",
+    "review_at_date": "2025-03-21",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-17"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "81e96381:2025-03-17:5",
+    "persona_id": "81e96381",
+    "review_at_date": "2025-03-22",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-17"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "81e96381:2025-03-24:6",
+    "persona_id": "81e96381",
+    "review_at_date": "2025-03-24",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-24"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "81e96381:2025-03-24:7",
+    "persona_id": "81e96381",
+    "review_at_date": "2025-03-24",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-24"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "849a9d72:2025-06-09:1",
+    "persona_id": "849a9d72",
+    "review_at_date": "2025-06-14",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-06-09"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "849a9d72:2025-06-16:2",
+    "persona_id": "849a9d72",
+    "review_at_date": "2025-06-21",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-06-16"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "849a9d72:2025-06-23:3",
+    "persona_id": "849a9d72",
+    "review_at_date": "2025-06-26",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-06-23"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "849a9d72:2025-06-30:4",
+    "persona_id": "849a9d72",
+    "review_at_date": "2025-07-02",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-06-30"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "849a9d72:2025-07-07:5",
+    "persona_id": "849a9d72",
+    "review_at_date": "2025-07-07",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-07-07"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "849a9d72:2025-07-07:6",
+    "persona_id": "849a9d72",
+    "review_at_date": "2025-07-07",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-07-07"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "849a9d72:2025-07-07:7",
+    "persona_id": "849a9d72",
+    "review_at_date": "2025-07-07",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-07-07"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "849a9d72:2025-07-07:8",
+    "persona_id": "849a9d72",
+    "review_at_date": "2025-07-10",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-07-07"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "849a9d72:2025-07-07:9",
+    "persona_id": "849a9d72",
+    "review_at_date": "2025-07-10",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-07-07"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "8594a3ef:2025-11-10:1",
+    "persona_id": "8594a3ef",
+    "review_at_date": "2025-11-15",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-11-10"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "8594a3ef:2025-11-17:2",
+    "persona_id": "8594a3ef",
+    "review_at_date": "2025-11-17",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-11-17"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "87b8187f:2025-07-28:1",
+    "persona_id": "87b8187f",
+    "review_at_date": "2025-08-01",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-07-28"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "87b8187f:2025-08-04:2",
+    "persona_id": "87b8187f",
+    "review_at_date": "2025-08-04",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-08-04"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "87b8187f:2025-08-04:3",
+    "persona_id": "87b8187f",
+    "review_at_date": "2025-08-04",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-08-04"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "87b8187f:2025-08-04:4",
+    "persona_id": "87b8187f",
+    "review_at_date": "2025-08-05",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-08-04"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "87b8187f:2025-08-11:5",
+    "persona_id": "87b8187f",
+    "review_at_date": "2025-08-12",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-08-11"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "87b8187f:2025-08-11:6",
+    "persona_id": "87b8187f",
+    "review_at_date": "2025-08-14",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-08-11"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "87b8187f:2025-08-18:7",
+    "persona_id": "87b8187f",
+    "review_at_date": "2025-08-21",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-08-18"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "87b8187f:2025-08-25:8",
+    "persona_id": "87b8187f",
+    "review_at_date": "2025-08-26",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-08-25"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "87b8187f:2025-08-25:9",
+    "persona_id": "87b8187f",
+    "review_at_date": "2025-08-29",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-08-25"
+  },
+  {
+    "cutoff_t_index": 10,
+    "opportunity_id": "87b8187f:2025-09-01:10",
+    "persona_id": "87b8187f",
+    "review_at_date": "2025-09-02",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-09-01"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "87e92805:2025-03-17:1",
+    "persona_id": "87e92805",
+    "review_at_date": "2025-03-17",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-03-17"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "87e92805:2025-03-24:3",
+    "persona_id": "87e92805",
+    "review_at_date": "2025-03-24",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-03-24"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "87e92805:2025-03-31:4",
+    "persona_id": "87e92805",
+    "review_at_date": "2025-03-31",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-03-31"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "87e92805:2025-03-31:5",
+    "persona_id": "87e92805",
+    "review_at_date": "2025-03-31",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-03-31"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "87e92805:2025-03-31:6",
+    "persona_id": "87e92805",
+    "review_at_date": "2025-04-01",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-03-31"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "87e92805:2025-03-31:7",
+    "persona_id": "87e92805",
+    "review_at_date": "2025-04-03",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-03-31"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "87e92805:2025-04-07:8",
+    "persona_id": "87e92805",
+    "review_at_date": "2025-04-10",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-04-07"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "87e92805:2025-04-07:9",
+    "persona_id": "87e92805",
+    "review_at_date": "2025-04-11",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-04-07"
+  },
+  {
+    "cutoff_t_index": 10,
+    "opportunity_id": "87e92805:2025-04-14:10",
+    "persona_id": "87e92805",
+    "review_at_date": "2025-04-18",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-04-14"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "882767c0:2025-02-10:1",
+    "persona_id": "882767c0",
+    "review_at_date": "2025-02-12",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-02-10"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "882767c0:2025-02-17:2",
+    "persona_id": "882767c0",
+    "review_at_date": "2025-02-17",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-02-17"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "882767c0:2025-02-17:3",
+    "persona_id": "882767c0",
+    "review_at_date": "2025-02-22",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-02-17"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "882767c0:2025-02-24:5",
+    "persona_id": "882767c0",
+    "review_at_date": "2025-02-27",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-02-24"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "882767c0:2025-03-03:6",
+    "persona_id": "882767c0",
+    "review_at_date": "2025-03-05",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-03"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "882767c0:2025-03-10:7",
+    "persona_id": "882767c0",
+    "review_at_date": "2025-03-11",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-10"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "882767c0:2025-03-17:8",
+    "persona_id": "882767c0",
+    "review_at_date": "2025-03-18",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-17"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "882767c0:2025-03-17:9",
+    "persona_id": "882767c0",
+    "review_at_date": "2025-03-22",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-17"
+  },
+  {
+    "cutoff_t_index": 10,
+    "opportunity_id": "882767c0:2025-03-24:10",
+    "persona_id": "882767c0",
+    "review_at_date": "2025-03-25",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-24"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "8da1ab6d:2025-06-23:1",
+    "persona_id": "8da1ab6d",
+    "review_at_date": "2025-06-24",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-06-23"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "8da1ab6d:2025-06-23:2",
+    "persona_id": "8da1ab6d",
+    "review_at_date": "2025-06-27",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-06-23"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "8da1ab6d:2025-06-30:3",
+    "persona_id": "8da1ab6d",
+    "review_at_date": "2025-07-03",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-06-30"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "8da1ab6d:2025-07-07:5",
+    "persona_id": "8da1ab6d",
+    "review_at_date": "2025-07-09",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-07-07"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "8da1ab6d:2025-07-07:6",
+    "persona_id": "8da1ab6d",
+    "review_at_date": "2025-07-11",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-07-07"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "8da1ab6d:2025-07-07:7",
+    "persona_id": "8da1ab6d",
+    "review_at_date": "2025-07-11",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-07-07"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "8da1ab6d:2025-07-14:8",
+    "persona_id": "8da1ab6d",
+    "review_at_date": "2025-07-17",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-07-14"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "8da1ab6d:2025-07-21:9",
+    "persona_id": "8da1ab6d",
+    "review_at_date": "2025-07-21",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-07-21"
+  },
+  {
+    "cutoff_t_index": 10,
+    "opportunity_id": "8da1ab6d:2025-07-21:10",
+    "persona_id": "8da1ab6d",
+    "review_at_date": "2025-07-22",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-07-21"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "8da4834c:2025-02-10:1",
+    "persona_id": "8da4834c",
+    "review_at_date": "2025-02-10",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-02-10"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "8da4834c:2025-02-17:2",
+    "persona_id": "8da4834c",
+    "review_at_date": "2025-02-17",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-02-17"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "8da4834c:2025-02-17:3",
+    "persona_id": "8da4834c",
+    "review_at_date": "2025-02-20",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-02-17"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "8da4834c:2025-02-17:4",
+    "persona_id": "8da4834c",
+    "review_at_date": "2025-02-20",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-02-17"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "8da4834c:2025-02-24:5",
+    "persona_id": "8da4834c",
+    "review_at_date": "2025-02-24",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-02-24"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "8e3b4017:2025-04-28:1",
+    "persona_id": "8e3b4017",
+    "review_at_date": "2025-04-30",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-04-28"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "8e3b4017:2025-04-28:2",
+    "persona_id": "8e3b4017",
+    "review_at_date": "2025-05-01",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-04-28"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "8e3b4017:2025-04-28:3",
+    "persona_id": "8e3b4017",
+    "review_at_date": "2025-05-02",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-04-28"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "8e3b4017:2025-05-05:4",
+    "persona_id": "8e3b4017",
+    "review_at_date": "2025-05-07",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-05-05"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "8e3b4017:2025-05-05:5",
+    "persona_id": "8e3b4017",
+    "review_at_date": "2025-05-07",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-05-05"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "8e3b4017:2025-05-05:6",
+    "persona_id": "8e3b4017",
+    "review_at_date": "2025-05-07",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-05-05"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "8e3b4017:2025-05-05:7",
+    "persona_id": "8e3b4017",
+    "review_at_date": "2025-05-08",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-05-05"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "8e3b4017:2025-05-05:8",
+    "persona_id": "8e3b4017",
+    "review_at_date": "2025-05-08",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-05-05"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "8f83c818:2025-06-02:1",
+    "persona_id": "8f83c818",
+    "review_at_date": "2025-06-07",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-06-02"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "8f83c818:2025-06-09:2",
+    "persona_id": "8f83c818",
+    "review_at_date": "2025-06-09",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-06-09"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "8f83c818:2025-06-09:3",
+    "persona_id": "8f83c818",
+    "review_at_date": "2025-06-09",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-06-09"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "8f83c818:2025-06-09:4",
+    "persona_id": "8f83c818",
+    "review_at_date": "2025-06-10",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-06-09"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "8f83c818:2025-06-09:5",
+    "persona_id": "8f83c818",
+    "review_at_date": "2025-06-13",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-06-09"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "8f83c818:2025-06-16:6",
+    "persona_id": "8f83c818",
+    "review_at_date": "2025-06-16",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-06-16"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "8f83c818:2025-06-23:8",
+    "persona_id": "8f83c818",
+    "review_at_date": "2025-06-25",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-06-23"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "8f83c818:2025-06-30:9",
+    "persona_id": "8f83c818",
+    "review_at_date": "2025-07-01",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-06-30"
+  },
+  {
+    "cutoff_t_index": 10,
+    "opportunity_id": "8f83c818:2025-06-30:10",
+    "persona_id": "8f83c818",
+    "review_at_date": "2025-07-05",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-06-30"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "911ca77a:2025-06-16:2",
+    "persona_id": "911ca77a",
+    "review_at_date": "2025-06-17",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-06-16"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "911ca77a:2025-06-16:3",
+    "persona_id": "911ca77a",
+    "review_at_date": "2025-06-19",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-06-16"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "911ca77a:2025-06-23:4",
+    "persona_id": "911ca77a",
+    "review_at_date": "2025-06-25",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-06-23"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "911ca77a:2025-06-30:5",
+    "persona_id": "911ca77a",
+    "review_at_date": "2025-06-30",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-06-30"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "911ca77a:2025-06-30:6",
+    "persona_id": "911ca77a",
+    "review_at_date": "2025-07-05",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-06-30"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "911ca77a:2025-07-07:7",
+    "persona_id": "911ca77a",
+    "review_at_date": "2025-07-08",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-07-07"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "911ca77a:2025-07-14:8",
+    "persona_id": "911ca77a",
+    "review_at_date": "2025-07-15",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-07-14"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "911ca77a:2025-07-14:9",
+    "persona_id": "911ca77a",
+    "review_at_date": "2025-07-18",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-07-14"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "9510e81a:2025-11-10:1",
+    "persona_id": "9510e81a",
+    "review_at_date": "2025-11-15",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-11-10"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "9510e81a:2025-11-17:2",
+    "persona_id": "9510e81a",
+    "review_at_date": "2025-11-22",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-11-17"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "9510e81a:2025-11-24:3",
+    "persona_id": "9510e81a",
+    "review_at_date": "2025-11-25",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-11-24"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "9510e81a:2025-11-24:4",
+    "persona_id": "9510e81a",
+    "review_at_date": "2025-11-26",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-11-24"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "9510e81a:2025-11-24:5",
+    "persona_id": "9510e81a",
+    "review_at_date": "2025-11-29",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-11-24"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "9510e81a:2025-12-01:6",
+    "persona_id": "9510e81a",
+    "review_at_date": "2025-12-01",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-12-01"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "961a4e3f:2025-11-10:1",
+    "persona_id": "961a4e3f",
+    "review_at_date": "2025-11-15",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-11-10"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "961a4e3f:2025-11-17:2",
+    "persona_id": "961a4e3f",
+    "review_at_date": "2025-11-20",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-11-17"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "961a4e3f:2025-11-24:4",
+    "persona_id": "961a4e3f",
+    "review_at_date": "2025-11-24",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-11-24"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "961a4e3f:2025-12-01:7",
+    "persona_id": "961a4e3f",
+    "review_at_date": "2025-12-02",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-12-01"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "988d1a65:2025-02-17:1",
+    "persona_id": "988d1a65",
+    "review_at_date": "2025-02-22",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-02-17"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "988d1a65:2025-02-24:3",
+    "persona_id": "988d1a65",
+    "review_at_date": "2025-02-26",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-02-24"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "988d1a65:2025-03-03:4",
+    "persona_id": "988d1a65",
+    "review_at_date": "2025-03-03",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-03"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "988d1a65:2025-03-10:5",
+    "persona_id": "988d1a65",
+    "review_at_date": "2025-03-10",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-10"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "988d1a65:2025-03-17:7",
+    "persona_id": "988d1a65",
+    "review_at_date": "2025-03-21",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-17"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "988d1a65:2025-03-24:9",
+    "persona_id": "988d1a65",
+    "review_at_date": "2025-03-25",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-24"
+  },
+  {
+    "cutoff_t_index": 10,
+    "opportunity_id": "988d1a65:2025-03-24:10",
+    "persona_id": "988d1a65",
+    "review_at_date": "2025-03-26",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-24"
+  },
+  {
+    "cutoff_t_index": 11,
+    "opportunity_id": "988d1a65:2025-03-31:11",
+    "persona_id": "988d1a65",
+    "review_at_date": "2025-03-31",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-31"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "9aec9ae9:2025-09-08:1",
+    "persona_id": "9aec9ae9",
+    "review_at_date": "2025-09-11",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-09-08"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "9aec9ae9:2025-09-08:2",
+    "persona_id": "9aec9ae9",
+    "review_at_date": "2025-09-11",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-09-08"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "9aec9ae9:2025-09-15:3",
+    "persona_id": "9aec9ae9",
+    "review_at_date": "2025-09-17",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-09-15"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "9aec9ae9:2025-09-15:4",
+    "persona_id": "9aec9ae9",
+    "review_at_date": "2025-09-17",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-09-15"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "9aec9ae9:2025-09-22:6",
+    "persona_id": "9aec9ae9",
+    "review_at_date": "2025-09-24",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-09-22"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "9aec9ae9:2025-09-29:8",
+    "persona_id": "9aec9ae9",
+    "review_at_date": "2025-10-01",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-09-29"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "9aec9ae9:2025-09-29:9",
+    "persona_id": "9aec9ae9",
+    "review_at_date": "2025-10-03",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-09-29"
+  },
+  {
+    "cutoff_t_index": 10,
+    "opportunity_id": "9aec9ae9:2025-10-06:10",
+    "persona_id": "9aec9ae9",
+    "review_at_date": "2025-10-09",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-10-06"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "9ca30614:2025-10-27:1",
+    "persona_id": "9ca30614",
+    "review_at_date": "2025-10-28",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-10-27"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "9ca30614:2025-10-27:2",
+    "persona_id": "9ca30614",
+    "review_at_date": "2025-10-30",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-10-27"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "9ca30614:2025-11-03:3",
+    "persona_id": "9ca30614",
+    "review_at_date": "2025-11-03",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-11-03"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "9ca30614:2025-11-10:4",
+    "persona_id": "9ca30614",
+    "review_at_date": "2025-11-10",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-11-10"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "9ca30614:2025-11-17:6",
+    "persona_id": "9ca30614",
+    "review_at_date": "2025-11-22",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-11-17"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "9ca30614:2025-11-24:8",
+    "persona_id": "9ca30614",
+    "review_at_date": "2025-11-29",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-11-24"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "9d126412:2025-09-29:1",
+    "persona_id": "9d126412",
+    "review_at_date": "2025-09-29",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-09-29"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "9d126412:2025-09-29:2",
+    "persona_id": "9d126412",
+    "review_at_date": "2025-10-02",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-09-29"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "9d126412:2025-10-06:3",
+    "persona_id": "9d126412",
+    "review_at_date": "2025-10-09",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-10-06"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "9d126412:2025-10-13:4",
+    "persona_id": "9d126412",
+    "review_at_date": "2025-10-16",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-10-13"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "9d126412:2025-10-20:5",
+    "persona_id": "9d126412",
+    "review_at_date": "2025-10-20",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-10-20"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "9d126412:2025-10-27:7",
+    "persona_id": "9d126412",
+    "review_at_date": "2025-11-01",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-10-27"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "a13aa34b:2025-10-06:1",
+    "persona_id": "a13aa34b",
+    "review_at_date": "2025-10-10",
+    "reviewed_values": [
+      "tradition"
+    ],
+    "week_start": "2025-10-06"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "a13aa34b:2025-10-13:2",
+    "persona_id": "a13aa34b",
+    "review_at_date": "2025-10-14",
+    "reviewed_values": [
+      "tradition"
+    ],
+    "week_start": "2025-10-13"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "a13aa34b:2025-10-13:3",
+    "persona_id": "a13aa34b",
+    "review_at_date": "2025-10-14",
+    "reviewed_values": [
+      "tradition"
+    ],
+    "week_start": "2025-10-13"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "a13aa34b:2025-10-13:4",
+    "persona_id": "a13aa34b",
+    "review_at_date": "2025-10-15",
+    "reviewed_values": [
+      "tradition"
+    ],
+    "week_start": "2025-10-13"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "a13aa34b:2025-10-20:5",
+    "persona_id": "a13aa34b",
+    "review_at_date": "2025-10-20",
+    "reviewed_values": [
+      "tradition"
+    ],
+    "week_start": "2025-10-20"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "a1c52200:2025-12-08:1",
+    "persona_id": "a1c52200",
+    "review_at_date": "2025-12-08",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-12-08"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "a1c52200:2025-12-15:2",
+    "persona_id": "a1c52200",
+    "review_at_date": "2025-12-18",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-12-15"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "a1c52200:2025-12-22:3",
+    "persona_id": "a1c52200",
+    "review_at_date": "2025-12-25",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-12-22"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "a1c52200:2025-12-29:4",
+    "persona_id": "a1c52200",
+    "review_at_date": "2026-01-03",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-12-29"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "a1c52200:2026-01-12:5",
+    "persona_id": "a1c52200",
+    "review_at_date": "2026-01-12",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2026-01-12"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "a1c52200:2026-01-19:6",
+    "persona_id": "a1c52200",
+    "review_at_date": "2026-01-21",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2026-01-19"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "a1c52200:2026-01-26:7",
+    "persona_id": "a1c52200",
+    "review_at_date": "2026-01-31",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2026-01-26"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "a1c52200:2026-02-09:9",
+    "persona_id": "a1c52200",
+    "review_at_date": "2026-02-14",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2026-02-09"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "a24b8d8f:2025-06-09:1",
+    "persona_id": "a24b8d8f",
+    "review_at_date": "2025-06-11",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-06-09"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "a24b8d8f:2025-06-09:2",
+    "persona_id": "a24b8d8f",
+    "review_at_date": "2025-06-14",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-06-09"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "a24b8d8f:2025-06-16:3",
+    "persona_id": "a24b8d8f",
+    "review_at_date": "2025-06-19",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-06-16"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "a24b8d8f:2025-06-23:4",
+    "persona_id": "a24b8d8f",
+    "review_at_date": "2025-06-25",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-06-23"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "a24b8d8f:2025-06-30:5",
+    "persona_id": "a24b8d8f",
+    "review_at_date": "2025-07-01",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-06-30"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "a24b8d8f:2025-07-07:6",
+    "persona_id": "a24b8d8f",
+    "review_at_date": "2025-07-07",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-07-07"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "a24b8d8f:2025-07-07:7",
+    "persona_id": "a24b8d8f",
+    "review_at_date": "2025-07-11",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-07-07"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "a24b8d8f:2025-07-07:8",
+    "persona_id": "a24b8d8f",
+    "review_at_date": "2025-07-12",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-07-07"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "a24b8d8f:2025-07-07:9",
+    "persona_id": "a24b8d8f",
+    "review_at_date": "2025-07-12",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-07-07"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "abefb352:2025-05-05:1",
+    "persona_id": "abefb352",
+    "review_at_date": "2025-05-05",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-05-05"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "abefb352:2025-05-12:3",
+    "persona_id": "abefb352",
+    "review_at_date": "2025-05-17",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-05-12"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "abefb352:2025-05-12:4",
+    "persona_id": "abefb352",
+    "review_at_date": "2025-05-17",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-05-12"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "abefb352:2025-05-12:5",
+    "persona_id": "abefb352",
+    "review_at_date": "2025-05-17",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-05-12"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "abf1ce49:2025-09-08:1",
+    "persona_id": "abf1ce49",
+    "review_at_date": "2025-09-13",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-09-08"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "abf1ce49:2025-09-22:4",
+    "persona_id": "abf1ce49",
+    "review_at_date": "2025-09-24",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-09-22"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "abf1ce49:2025-09-29:5",
+    "persona_id": "abf1ce49",
+    "review_at_date": "2025-09-29",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-09-29"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "abf1ce49:2025-09-29:6",
+    "persona_id": "abf1ce49",
+    "review_at_date": "2025-10-04",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-09-29"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "abf1ce49:2025-10-06:7",
+    "persona_id": "abf1ce49",
+    "review_at_date": "2025-10-06",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-10-06"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "abf1ce49:2025-10-06:8",
+    "persona_id": "abf1ce49",
+    "review_at_date": "2025-10-10",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-10-06"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "abf1ce49:2025-10-13:9",
+    "persona_id": "abf1ce49",
+    "review_at_date": "2025-10-14",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-10-13"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "ad378991:2025-04-21:1",
+    "persona_id": "ad378991",
+    "review_at_date": "2025-04-22",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-04-21"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "ad378991:2025-04-21:2",
+    "persona_id": "ad378991",
+    "review_at_date": "2025-04-24",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-04-21"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "ad378991:2025-04-28:4",
+    "persona_id": "ad378991",
+    "review_at_date": "2025-05-03",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-04-28"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "ad378991:2025-05-05:5",
+    "persona_id": "ad378991",
+    "review_at_date": "2025-05-05",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-05-05"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "ad378991:2025-05-05:6",
+    "persona_id": "ad378991",
+    "review_at_date": "2025-05-06",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-05-05"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "b2720706:2025-10-20:2",
+    "persona_id": "b2720706",
+    "review_at_date": "2025-10-23",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-10-20"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "b2720706:2025-10-20:3",
+    "persona_id": "b2720706",
+    "review_at_date": "2025-10-23",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-10-20"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "b604addd:2025-10-20:1",
+    "persona_id": "b604addd",
+    "review_at_date": "2025-10-20",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-10-20"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "b604addd:2025-10-20:2",
+    "persona_id": "b604addd",
+    "review_at_date": "2025-10-25",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-10-20"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "b604addd:2025-10-27:3",
+    "persona_id": "b604addd",
+    "review_at_date": "2025-10-29",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-10-27"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "b604addd:2025-11-03:4",
+    "persona_id": "b604addd",
+    "review_at_date": "2025-11-05",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-11-03"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "b604addd:2025-11-10:5",
+    "persona_id": "b604addd",
+    "review_at_date": "2025-11-10",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-11-10"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "b604addd:2025-11-17:7",
+    "persona_id": "b604addd",
+    "review_at_date": "2025-11-19",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-11-17"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "b604addd:2025-11-17:8",
+    "persona_id": "b604addd",
+    "review_at_date": "2025-11-22",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-11-17"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "b604addd:2025-11-17:9",
+    "persona_id": "b604addd",
+    "review_at_date": "2025-11-22",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-11-17"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "b63d80df:2025-03-17:1",
+    "persona_id": "b63d80df",
+    "review_at_date": "2025-03-22",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-17"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "b63d80df:2025-03-24:2",
+    "persona_id": "b63d80df",
+    "review_at_date": "2025-03-24",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-24"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "b63d80df:2025-03-24:3",
+    "persona_id": "b63d80df",
+    "review_at_date": "2025-03-27",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-24"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "b63d80df:2025-03-31:4",
+    "persona_id": "b63d80df",
+    "review_at_date": "2025-04-01",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-31"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "b63d80df:2025-03-31:5",
+    "persona_id": "b63d80df",
+    "review_at_date": "2025-04-04",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-31"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "b63d80df:2025-04-07:6",
+    "persona_id": "b63d80df",
+    "review_at_date": "2025-04-11",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-04-07"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "b63d80df:2025-04-14:7",
+    "persona_id": "b63d80df",
+    "review_at_date": "2025-04-16",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-04-14"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "b63d80df:2025-04-14:8",
+    "persona_id": "b63d80df",
+    "review_at_date": "2025-04-16",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-04-14"
+  },
+  {
+    "cutoff_t_index": 10,
+    "opportunity_id": "b63d80df:2025-04-21:10",
+    "persona_id": "b63d80df",
+    "review_at_date": "2025-04-24",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-04-21"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "b8a23604:2025-10-27:1",
+    "persona_id": "b8a23604",
+    "review_at_date": "2025-11-01",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-10-27"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "b8a23604:2025-11-03:3",
+    "persona_id": "b8a23604",
+    "review_at_date": "2025-11-06",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-11-03"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "b8a23604:2025-11-10:4",
+    "persona_id": "b8a23604",
+    "review_at_date": "2025-11-10",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-11-10"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "b8a23604:2025-11-10:5",
+    "persona_id": "b8a23604",
+    "review_at_date": "2025-11-12",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-11-10"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "b8a23604:2025-11-10:6",
+    "persona_id": "b8a23604",
+    "review_at_date": "2025-11-14",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-11-10"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "b963f9bc:2025-12-08:1",
+    "persona_id": "b963f9bc",
+    "review_at_date": "2025-12-08",
+    "reviewed_values": [
+      "conformity"
+    ],
+    "week_start": "2025-12-08"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "b963f9bc:2025-12-08:2",
+    "persona_id": "b963f9bc",
+    "review_at_date": "2025-12-10",
+    "reviewed_values": [
+      "conformity"
+    ],
+    "week_start": "2025-12-08"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "b963f9bc:2025-12-08:3",
+    "persona_id": "b963f9bc",
+    "review_at_date": "2025-12-13",
+    "reviewed_values": [
+      "conformity"
+    ],
+    "week_start": "2025-12-08"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "b963f9bc:2025-12-15:4",
+    "persona_id": "b963f9bc",
+    "review_at_date": "2025-12-18",
+    "reviewed_values": [
+      "conformity"
+    ],
+    "week_start": "2025-12-15"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "bcfa309d:2025-09-15:1",
+    "persona_id": "bcfa309d",
+    "review_at_date": "2025-09-18",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-09-15"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "bcfa309d:2025-09-22:2",
+    "persona_id": "bcfa309d",
+    "review_at_date": "2025-09-25",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-09-22"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "bcfa309d:2025-09-22:3",
+    "persona_id": "bcfa309d",
+    "review_at_date": "2025-09-25",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-09-22"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "bcfa309d:2025-09-29:4",
+    "persona_id": "bcfa309d",
+    "review_at_date": "2025-09-29",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-09-29"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "bcfa309d:2025-09-29:5",
+    "persona_id": "bcfa309d",
+    "review_at_date": "2025-10-01",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-09-29"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "bcfa309d:2025-09-29:6",
+    "persona_id": "bcfa309d",
+    "review_at_date": "2025-10-02",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-09-29"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "bcfa309d:2025-10-06:7",
+    "persona_id": "bcfa309d",
+    "review_at_date": "2025-10-07",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-10-06"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "bf44e50f:2025-11-17:1",
+    "persona_id": "bf44e50f",
+    "review_at_date": "2025-11-20",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-11-17"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "bf44e50f:2025-11-17:2",
+    "persona_id": "bf44e50f",
+    "review_at_date": "2025-11-20",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-11-17"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "bf44e50f:2025-11-17:3",
+    "persona_id": "bf44e50f",
+    "review_at_date": "2025-11-22",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-11-17"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "bf44e50f:2025-11-24:4",
+    "persona_id": "bf44e50f",
+    "review_at_date": "2025-11-25",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-11-24"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "bf44e50f:2025-12-01:5",
+    "persona_id": "bf44e50f",
+    "review_at_date": "2025-12-01",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-12-01"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "c876219a:2025-04-07:1",
+    "persona_id": "c876219a",
+    "review_at_date": "2025-04-08",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-04-07"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "c876219a:2025-04-07:2",
+    "persona_id": "c876219a",
+    "review_at_date": "2025-04-10",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-04-07"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "c876219a:2025-04-14:3",
+    "persona_id": "c876219a",
+    "review_at_date": "2025-04-17",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-04-14"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "c876219a:2025-04-21:4",
+    "persona_id": "c876219a",
+    "review_at_date": "2025-04-24",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-04-21"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "c876219a:2025-04-28:5",
+    "persona_id": "c876219a",
+    "review_at_date": "2025-05-01",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-04-28"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "c876219a:2025-05-05:6",
+    "persona_id": "c876219a",
+    "review_at_date": "2025-05-08",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-05-05"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "c876219a:2025-05-12:7",
+    "persona_id": "c876219a",
+    "review_at_date": "2025-05-12",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-05-12"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "c876219a:2025-05-12:8",
+    "persona_id": "c876219a",
+    "review_at_date": "2025-05-14",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-05-12"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "c876219a:2025-05-19:9",
+    "persona_id": "c876219a",
+    "review_at_date": "2025-05-20",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-05-19"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "cd0d027f:2025-07-07:1",
+    "persona_id": "cd0d027f",
+    "review_at_date": "2025-07-11",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-07-07"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "cd7c2a11:2025-09-01:1",
+    "persona_id": "cd7c2a11",
+    "review_at_date": "2025-09-04",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-09-01"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "cd7c2a11:2025-09-01:2",
+    "persona_id": "cd7c2a11",
+    "review_at_date": "2025-09-05",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-09-01"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "cd7c2a11:2025-09-08:3",
+    "persona_id": "cd7c2a11",
+    "review_at_date": "2025-09-08",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-09-08"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "cd7c2a11:2025-09-08:4",
+    "persona_id": "cd7c2a11",
+    "review_at_date": "2025-09-11",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-09-08"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "cd7c2a11:2025-09-08:5",
+    "persona_id": "cd7c2a11",
+    "review_at_date": "2025-09-12",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-09-08"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "cd7c2a11:2025-09-08:6",
+    "persona_id": "cd7c2a11",
+    "review_at_date": "2025-09-13",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-09-08"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "cd7c2a11:2025-09-15:7",
+    "persona_id": "cd7c2a11",
+    "review_at_date": "2025-09-19",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-09-15"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "cd7c2a11:2025-09-22:8",
+    "persona_id": "cd7c2a11",
+    "review_at_date": "2025-09-26",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-09-22"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "d056ba20:2025-07-21:1",
+    "persona_id": "d056ba20",
+    "review_at_date": "2025-07-26",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-07-21"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "d056ba20:2025-07-21:2",
+    "persona_id": "d056ba20",
+    "review_at_date": "2025-07-26",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-07-21"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "d056ba20:2025-07-28:3",
+    "persona_id": "d056ba20",
+    "review_at_date": "2025-08-02",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-07-28"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "d1243cd1:2025-01-27:1",
+    "persona_id": "d1243cd1",
+    "review_at_date": "2025-01-27",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-01-27"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "d1243cd1:2025-02-03:2",
+    "persona_id": "d1243cd1",
+    "review_at_date": "2025-02-03",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-02-03"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "d1243cd1:2025-02-03:3",
+    "persona_id": "d1243cd1",
+    "review_at_date": "2025-02-05",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-02-03"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "d1243cd1:2025-02-10:5",
+    "persona_id": "d1243cd1",
+    "review_at_date": "2025-02-15",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-02-10"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "d1243cd1:2025-02-17:6",
+    "persona_id": "d1243cd1",
+    "review_at_date": "2025-02-20",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-02-17"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "d1243cd1:2025-02-24:7",
+    "persona_id": "d1243cd1",
+    "review_at_date": "2025-02-26",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-02-24"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "d262771c:2025-12-29:1",
+    "persona_id": "d262771c",
+    "review_at_date": "2025-12-30",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2025-12-29"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "d262771c:2026-01-05:2",
+    "persona_id": "d262771c",
+    "review_at_date": "2026-01-06",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2026-01-05"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "d262771c:2026-01-05:3",
+    "persona_id": "d262771c",
+    "review_at_date": "2026-01-10",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2026-01-05"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "d262771c:2026-01-12:4",
+    "persona_id": "d262771c",
+    "review_at_date": "2026-01-17",
+    "reviewed_values": [
+      "self_direction"
+    ],
+    "week_start": "2026-01-12"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "d7a0683f:2026-01-05:2",
+    "persona_id": "d7a0683f",
+    "review_at_date": "2026-01-08",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2026-01-05"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "d7a0683f:2026-01-12:3",
+    "persona_id": "d7a0683f",
+    "review_at_date": "2026-01-13",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2026-01-12"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "d7a0683f:2026-01-12:4",
+    "persona_id": "d7a0683f",
+    "review_at_date": "2026-01-16",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2026-01-12"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "d7a0683f:2026-01-12:5",
+    "persona_id": "d7a0683f",
+    "review_at_date": "2026-01-16",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2026-01-12"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "d7a0683f:2026-01-19:6",
+    "persona_id": "d7a0683f",
+    "review_at_date": "2026-01-23",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2026-01-19"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "d7a0683f:2026-01-26:7",
+    "persona_id": "d7a0683f",
+    "review_at_date": "2026-01-28",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2026-01-26"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "d7a0683f:2026-02-02:8",
+    "persona_id": "d7a0683f",
+    "review_at_date": "2026-02-02",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2026-02-02"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "d7a0683f:2026-02-02:9",
+    "persona_id": "d7a0683f",
+    "review_at_date": "2026-02-02",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2026-02-02"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "d9bf06c1:2025-12-15:1",
+    "persona_id": "d9bf06c1",
+    "review_at_date": "2025-12-16",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-12-15"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "d9bf06c1:2025-12-15:2",
+    "persona_id": "d9bf06c1",
+    "review_at_date": "2025-12-20",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-12-15"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "d9bf06c1:2025-12-22:4",
+    "persona_id": "d9bf06c1",
+    "review_at_date": "2025-12-24",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-12-22"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "d9bf06c1:2025-12-22:5",
+    "persona_id": "d9bf06c1",
+    "review_at_date": "2025-12-26",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-12-22"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "d9bf06c1:2025-12-29:7",
+    "persona_id": "d9bf06c1",
+    "review_at_date": "2026-01-03",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-12-29"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "dab3e9b9:2025-12-29:1",
+    "persona_id": "dab3e9b9",
+    "review_at_date": "2025-12-31",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-12-29"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "dab3e9b9:2025-12-29:2",
+    "persona_id": "dab3e9b9",
+    "review_at_date": "2026-01-03",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-12-29"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "dab3e9b9:2026-01-05:3",
+    "persona_id": "dab3e9b9",
+    "review_at_date": "2026-01-08",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2026-01-05"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "dab3e9b9:2026-01-12:4",
+    "persona_id": "dab3e9b9",
+    "review_at_date": "2026-01-12",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2026-01-12"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "dab3e9b9:2026-01-12:5",
+    "persona_id": "dab3e9b9",
+    "review_at_date": "2026-01-13",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2026-01-12"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "daee11de:2025-12-08:1",
+    "persona_id": "daee11de",
+    "review_at_date": "2025-12-08",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-12-08"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "daee11de:2025-12-15:2",
+    "persona_id": "daee11de",
+    "review_at_date": "2025-12-17",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-12-15"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "daee11de:2025-12-15:3",
+    "persona_id": "daee11de",
+    "review_at_date": "2025-12-19",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-12-15"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "daee11de:2025-12-22:4",
+    "persona_id": "daee11de",
+    "review_at_date": "2025-12-23",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-12-22"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "daee11de:2025-12-29:5",
+    "persona_id": "daee11de",
+    "review_at_date": "2025-12-30",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-12-29"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "daee11de:2026-01-05:6",
+    "persona_id": "daee11de",
+    "review_at_date": "2026-01-06",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2026-01-05"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "daee11de:2026-01-12:7",
+    "persona_id": "daee11de",
+    "review_at_date": "2026-01-14",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2026-01-12"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "dbe2c53d:2025-02-03:1",
+    "persona_id": "dbe2c53d",
+    "review_at_date": "2025-02-04",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-02-03"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "dbe2c53d:2025-02-03:2",
+    "persona_id": "dbe2c53d",
+    "review_at_date": "2025-02-05",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-02-03"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "dbe2c53d:2025-02-10:3",
+    "persona_id": "dbe2c53d",
+    "review_at_date": "2025-02-11",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-02-10"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "dbe2c53d:2025-02-17:4",
+    "persona_id": "dbe2c53d",
+    "review_at_date": "2025-02-17",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-02-17"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "dbe2c53d:2025-02-17:5",
+    "persona_id": "dbe2c53d",
+    "review_at_date": "2025-02-22",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-02-17"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "dbe2c53d:2025-02-24:7",
+    "persona_id": "dbe2c53d",
+    "review_at_date": "2025-02-24",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-02-24"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "dbe2c53d:2025-02-24:8",
+    "persona_id": "dbe2c53d",
+    "review_at_date": "2025-02-26",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-02-24"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "dbe2c53d:2025-03-03:9",
+    "persona_id": "dbe2c53d",
+    "review_at_date": "2025-03-05",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-03-03"
+  },
+  {
+    "cutoff_t_index": 10,
+    "opportunity_id": "dbe2c53d:2025-03-03:10",
+    "persona_id": "dbe2c53d",
+    "review_at_date": "2025-03-05",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-03-03"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "e209b4cd:2025-10-20:1",
+    "persona_id": "e209b4cd",
+    "review_at_date": "2025-10-24",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-10-20"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "e209b4cd:2025-10-27:2",
+    "persona_id": "e209b4cd",
+    "review_at_date": "2025-10-30",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-10-27"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "e209b4cd:2025-11-03:3",
+    "persona_id": "e209b4cd",
+    "review_at_date": "2025-11-04",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-11-03"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "e209b4cd:2025-11-03:4",
+    "persona_id": "e209b4cd",
+    "review_at_date": "2025-11-05",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-11-03"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "e209b4cd:2025-11-03:5",
+    "persona_id": "e209b4cd",
+    "review_at_date": "2025-11-05",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-11-03"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "e448979e:2025-03-17:1",
+    "persona_id": "e448979e",
+    "review_at_date": "2025-03-22",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-17"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "e448979e:2025-03-24:2",
+    "persona_id": "e448979e",
+    "review_at_date": "2025-03-29",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-24"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "e448979e:2025-03-31:3",
+    "persona_id": "e448979e",
+    "review_at_date": "2025-04-03",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-31"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "e448979e:2025-03-31:4",
+    "persona_id": "e448979e",
+    "review_at_date": "2025-04-04",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-31"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "e448979e:2025-04-07:6",
+    "persona_id": "e448979e",
+    "review_at_date": "2025-04-12",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-04-07"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "e448979e:2025-04-07:7",
+    "persona_id": "e448979e",
+    "review_at_date": "2025-04-12",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-04-07"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "e448979e:2025-04-14:8",
+    "persona_id": "e448979e",
+    "review_at_date": "2025-04-15",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-04-14"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "e448979e:2025-04-21:9",
+    "persona_id": "e448979e",
+    "review_at_date": "2025-04-21",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-04-21"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "e5c9d9e5:2025-03-24:1",
+    "persona_id": "e5c9d9e5",
+    "review_at_date": "2025-03-25",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-24"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "e5c9d9e5:2025-03-31:2",
+    "persona_id": "e5c9d9e5",
+    "review_at_date": "2025-04-01",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-31"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "e5c9d9e5:2025-04-07:3",
+    "persona_id": "e5c9d9e5",
+    "review_at_date": "2025-04-08",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-04-07"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "e5c9d9e5:2025-04-07:4",
+    "persona_id": "e5c9d9e5",
+    "review_at_date": "2025-04-08",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-04-07"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "e5c9d9e5:2025-04-07:5",
+    "persona_id": "e5c9d9e5",
+    "review_at_date": "2025-04-10",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-04-07"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "e5c9d9e5:2025-04-07:6",
+    "persona_id": "e5c9d9e5",
+    "review_at_date": "2025-04-11",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-04-07"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "e5c9d9e5:2025-04-14:7",
+    "persona_id": "e5c9d9e5",
+    "review_at_date": "2025-04-14",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-04-14"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "e5c9d9e5:2025-04-14:8",
+    "persona_id": "e5c9d9e5",
+    "review_at_date": "2025-04-15",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-04-14"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "e5c9d9e5:2025-04-14:9",
+    "persona_id": "e5c9d9e5",
+    "review_at_date": "2025-04-15",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-04-14"
+  },
+  {
+    "cutoff_t_index": 10,
+    "opportunity_id": "e5c9d9e5:2025-04-14:10",
+    "persona_id": "e5c9d9e5",
+    "review_at_date": "2025-04-17",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-04-14"
+  },
+  {
+    "cutoff_t_index": 11,
+    "opportunity_id": "e5c9d9e5:2025-04-14:11",
+    "persona_id": "e5c9d9e5",
+    "review_at_date": "2025-04-19",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-04-14"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "e6838e16:2025-02-17:1",
+    "persona_id": "e6838e16",
+    "review_at_date": "2025-02-22",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-02-17"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "e6838e16:2025-02-24:2",
+    "persona_id": "e6838e16",
+    "review_at_date": "2025-02-28",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-02-24"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "e6838e16:2025-03-03:4",
+    "persona_id": "e6838e16",
+    "review_at_date": "2025-03-04",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-03-03"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "e6838e16:2025-03-03:5",
+    "persona_id": "e6838e16",
+    "review_at_date": "2025-03-08",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-03-03"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "e6838e16:2025-03-10:6",
+    "persona_id": "e6838e16",
+    "review_at_date": "2025-03-10",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-03-10"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "e6838e16:2025-03-10:7",
+    "persona_id": "e6838e16",
+    "review_at_date": "2025-03-13",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-03-10"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "e6838e16:2025-03-17:8",
+    "persona_id": "e6838e16",
+    "review_at_date": "2025-03-19",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-03-17"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "e6838e16:2025-03-24:9",
+    "persona_id": "e6838e16",
+    "review_at_date": "2025-03-25",
+    "reviewed_values": [
+      "security"
+    ],
+    "week_start": "2025-03-24"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "e809d252:2025-01-13:1",
+    "persona_id": "e809d252",
+    "review_at_date": "2025-01-14",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-01-13"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "e809d252:2025-01-13:2",
+    "persona_id": "e809d252",
+    "review_at_date": "2025-01-16",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-01-13"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "e809d252:2025-01-13:3",
+    "persona_id": "e809d252",
+    "review_at_date": "2025-01-17",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-01-13"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "e809d252:2025-01-13:4",
+    "persona_id": "e809d252",
+    "review_at_date": "2025-01-17",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-01-13"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "e809d252:2025-01-20:5",
+    "persona_id": "e809d252",
+    "review_at_date": "2025-01-22",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-01-20"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "e809d252:2025-01-27:6",
+    "persona_id": "e809d252",
+    "review_at_date": "2025-01-29",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-01-27"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "e809d252:2025-01-27:7",
+    "persona_id": "e809d252",
+    "review_at_date": "2025-02-01",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-01-27"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "e809d252:2025-02-03:8",
+    "persona_id": "e809d252",
+    "review_at_date": "2025-02-07",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-02-03"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "e809d252:2025-02-10:9",
+    "persona_id": "e809d252",
+    "review_at_date": "2025-02-12",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-02-10"
+  },
+  {
+    "cutoff_t_index": 10,
+    "opportunity_id": "e809d252:2025-02-17:10",
+    "persona_id": "e809d252",
+    "review_at_date": "2025-02-18",
+    "reviewed_values": [
+      "universalism"
+    ],
+    "week_start": "2025-02-17"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "ed67c9cc:2025-02-03:2",
+    "persona_id": "ed67c9cc",
+    "review_at_date": "2025-02-08",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-02-03"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "ed67c9cc:2025-02-10:4",
+    "persona_id": "ed67c9cc",
+    "review_at_date": "2025-02-11",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-02-10"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "ed67c9cc:2025-02-10:5",
+    "persona_id": "ed67c9cc",
+    "review_at_date": "2025-02-14",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-02-10"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "ed67c9cc:2025-02-17:7",
+    "persona_id": "ed67c9cc",
+    "review_at_date": "2025-02-19",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-02-17"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "ed67c9cc:2025-02-17:8",
+    "persona_id": "ed67c9cc",
+    "review_at_date": "2025-02-21",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-02-17"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "f418b74b:2025-09-08:1",
+    "persona_id": "f418b74b",
+    "review_at_date": "2025-09-10",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-09-08"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "f418b74b:2025-09-08:2",
+    "persona_id": "f418b74b",
+    "review_at_date": "2025-09-11",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-09-08"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "f418b74b:2025-09-15:4",
+    "persona_id": "f418b74b",
+    "review_at_date": "2025-09-16",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-09-15"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "f418b74b:2025-09-15:5",
+    "persona_id": "f418b74b",
+    "review_at_date": "2025-09-16",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-09-15"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "f418b74b:2025-09-15:6",
+    "persona_id": "f418b74b",
+    "review_at_date": "2025-09-16",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-09-15"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "f418b74b:2025-09-15:7",
+    "persona_id": "f418b74b",
+    "review_at_date": "2025-09-17",
+    "reviewed_values": [
+      "hedonism"
+    ],
+    "week_start": "2025-09-15"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "f6180c27:2025-07-07:1",
+    "persona_id": "f6180c27",
+    "review_at_date": "2025-07-07",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-07-07"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "f6180c27:2025-07-14:3",
+    "persona_id": "f6180c27",
+    "review_at_date": "2025-07-19",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-07-14"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "f6180c27:2025-07-21:4",
+    "persona_id": "f6180c27",
+    "review_at_date": "2025-07-23",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-07-21"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "f6180c27:2025-07-21:5",
+    "persona_id": "f6180c27",
+    "review_at_date": "2025-07-23",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-07-21"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "f6180c27:2025-07-28:6",
+    "persona_id": "f6180c27",
+    "review_at_date": "2025-07-29",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-07-28"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "f6180c27:2025-08-04:7",
+    "persona_id": "f6180c27",
+    "review_at_date": "2025-08-04",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-08-04"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "f6180c27:2025-08-04:8",
+    "persona_id": "f6180c27",
+    "review_at_date": "2025-08-05",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-08-04"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "f6180c27:2025-08-04:9",
+    "persona_id": "f6180c27",
+    "review_at_date": "2025-08-07",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-08-04"
+  },
+  {
+    "cutoff_t_index": 10,
+    "opportunity_id": "f6180c27:2025-08-11:10",
+    "persona_id": "f6180c27",
+    "review_at_date": "2025-08-14",
+    "reviewed_values": [
+      "benevolence"
+    ],
+    "week_start": "2025-08-11"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "f990a261:2025-10-13:2",
+    "persona_id": "f990a261",
+    "review_at_date": "2025-10-18",
+    "reviewed_values": [
+      "hedonism",
+      "stimulation"
+    ],
+    "week_start": "2025-10-13"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "f990a261:2025-10-20:3",
+    "persona_id": "f990a261",
+    "review_at_date": "2025-10-23",
+    "reviewed_values": [
+      "hedonism",
+      "stimulation"
+    ],
+    "week_start": "2025-10-20"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "f990a261:2025-10-27:4",
+    "persona_id": "f990a261",
+    "review_at_date": "2025-10-28",
+    "reviewed_values": [
+      "hedonism",
+      "stimulation"
+    ],
+    "week_start": "2025-10-27"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "f990a261:2025-10-27:5",
+    "persona_id": "f990a261",
+    "review_at_date": "2025-10-28",
+    "reviewed_values": [
+      "hedonism",
+      "stimulation"
+    ],
+    "week_start": "2025-10-27"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "f990a261:2025-11-03:7",
+    "persona_id": "f990a261",
+    "review_at_date": "2025-11-04",
+    "reviewed_values": [
+      "hedonism",
+      "stimulation"
+    ],
+    "week_start": "2025-11-03"
+  },
+  {
+    "cutoff_t_index": 8,
+    "opportunity_id": "f990a261:2025-11-03:8",
+    "persona_id": "f990a261",
+    "review_at_date": "2025-11-05",
+    "reviewed_values": [
+      "hedonism",
+      "stimulation"
+    ],
+    "week_start": "2025-11-03"
+  },
+  {
+    "cutoff_t_index": 9,
+    "opportunity_id": "f990a261:2025-11-03:9",
+    "persona_id": "f990a261",
+    "review_at_date": "2025-11-08",
+    "reviewed_values": [
+      "hedonism",
+      "stimulation"
+    ],
+    "week_start": "2025-11-03"
+  },
+  {
+    "cutoff_t_index": 10,
+    "opportunity_id": "f990a261:2025-11-10:10",
+    "persona_id": "f990a261",
+    "review_at_date": "2025-11-11",
+    "reviewed_values": [
+      "hedonism",
+      "stimulation"
+    ],
+    "week_start": "2025-11-10"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "fd063e8d:2025-12-15:1",
+    "persona_id": "fd063e8d",
+    "review_at_date": "2025-12-18",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-12-15"
+  },
+  {
+    "cutoff_t_index": 2,
+    "opportunity_id": "fd063e8d:2025-12-22:2",
+    "persona_id": "fd063e8d",
+    "review_at_date": "2025-12-25",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-12-22"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "fd063e8d:2025-12-29:4",
+    "persona_id": "fd063e8d",
+    "review_at_date": "2025-12-30",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-12-29"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "fd063e8d:2025-12-29:5",
+    "persona_id": "fd063e8d",
+    "review_at_date": "2025-12-31",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-12-29"
+  },
+  {
+    "cutoff_t_index": 6,
+    "opportunity_id": "fd063e8d:2026-01-05:6",
+    "persona_id": "fd063e8d",
+    "review_at_date": "2026-01-05",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2026-01-05"
+  },
+  {
+    "cutoff_t_index": 7,
+    "opportunity_id": "fd063e8d:2026-01-12:7",
+    "persona_id": "fd063e8d",
+    "review_at_date": "2026-01-12",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2026-01-12"
+  },
+  {
+    "cutoff_t_index": 1,
+    "opportunity_id": "fec355ea:2025-03-03:1",
+    "persona_id": "fec355ea",
+    "review_at_date": "2025-03-04",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-03"
+  },
+  {
+    "cutoff_t_index": 3,
+    "opportunity_id": "fec355ea:2025-03-10:3",
+    "persona_id": "fec355ea",
+    "review_at_date": "2025-03-15",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-10"
+  },
+  {
+    "cutoff_t_index": 4,
+    "opportunity_id": "fec355ea:2025-03-17:4",
+    "persona_id": "fec355ea",
+    "review_at_date": "2025-03-22",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-17"
+  },
+  {
+    "cutoff_t_index": 5,
+    "opportunity_id": "fec355ea:2025-03-24:5",
+    "persona_id": "fec355ea",
+    "review_at_date": "2025-03-26",
+    "reviewed_values": [
+      "power"
+    ],
+    "week_start": "2025-03-24"
+  }
+]

@@ -1,0 +1,61 @@
+{
+  "counts": {
+    "drift_trajectories": 28,
+    "drifts": 33,
+    "entry_value_cells": 894,
+    "persona_weeks": 510,
+    "personas": 105,
+    "resolved_entry_value_cells": 892,
+    "trajectories": 106,
+    "unique_entries": 882
+  },
+  "frozen_at": "2026-07-14T02:05:42.635748+00:00",
+  "omitted_case_payload_hashes": {
+    "3a3b15e4:tradition": "f4a964276be03ef0fbec459c058d3fa56dd1150f9f90c1673c8d67e7f986b396",
+    "7adc5866:benevolence": "f159fae1b8ff0970ac097cd070721c68112bc623b775b83569acaadebc8af7a4"
+  },
+  "opus_model_proof": {
+    "note": "The raw CLI JSON model field is null; the frozen command and labels receipt record the requested Opus model.",
+    "raw_response_model_field": null,
+    "recorded_runtime_models": [
+      "claude-opus-4-8"
+    ]
+  },
+  "output_hashes": {
+    "union_case_summary": "5748b0c6961bc7cd406f331c4b29459d715407e0b096019256a0bf596bd95d10",
+    "union_cases": "d7cf88f938e9d014dc520b3c772c86f47556379b75f1695a521b57b69f29080e",
+    "union_drift_episodes": "0c99934f2111c0d398abf934b9b1e395821a06edc78ba2bb7bd19195a6568ba6",
+    "union_entry_target": "e939e3da2338287a986f3978fdf73f3df31f9ec909952eec42a57e4bc5af6c73"
+  },
+  "repo_head_before_freeze": "e7272be7f0328ddade00a601212e7b7774219efa",
+  "restrictions": [
+    "The union is selection-biased development evidence, not a prevalence sample or final test set.",
+    "run_020 scores on training-seen Journal Entries are in-sample.",
+    "Exclude the four Opus-resolved trajectories as a required sensitivity check.",
+    "Report historical split provenance and the non-training subgroup.",
+    "The offline trigger-placement diagnostic tests targeting against chance, not the effect of early review.",
+    "Review-again is tested; review-early is not tested.",
+    "No threshold, deployment approval, false-alert tolerance, or runtime architecture is adopted."
+  ],
+  "schema_version": "twinkl-752.5-union-v1",
+  "source_hashes": {
+    "cohort_cases_path": "672cc47f4205e0cf4493ecb45def6d193378d48ef015ef8bf1aeced746dedd7a",
+    "historical_run_020_evidence_path": "34148b0f9f3afc24e3ce1d68e88d3c20ad9e9c295a5da954e4c7983b6a7e69f9",
+    "holdout_manifest_path": "0e6e6c8e2569df1f1792aede4cb4a9e79a05fe8789e015c2f5ce8bb993fb3065",
+    "omitted_packet_path": "eb206a99cd9d136716a859c43006b555cdfd8e7a6a30110b6ceaa326122507b7",
+    "omitted_reconciliation_key_path": "5bb221b8d611ab98271420b69b743e1b2d627e5fcdddbb5ada198ce40e6eb87d",
+    "omitted_reference_episodes_path": "59610e772bb91317b0fd9c481293d15667aabc7998686d4ae7939ccb36c45518",
+    "omitted_reviewer_a_path": "fcd3d5c21dec1ef36dc2d826b70cbc230ea92fade6fbd65eaf88725d73155958",
+    "omitted_reviewer_b_path": "57eeaebdd408f7e1e5b7ae7a9edfcfc9f769b9f69c70ca11330a1c7561d52efd",
+    "opus_audit_manifest_path": "95cfaba63718b4245eb063df0df31f68649971e9cf6628fb7f76e80f6b6cb65c",
+    "opus_case_outcomes_path": "ced2bd2535082d33965f41366201deb263e23520bf4179d1e444459fc28750a4",
+    "opus_drift_episodes_path": "0339762679d862faebdd9663b2f1dae50d40267e316ca1da55c6a7b494922374",
+    "opus_entry_target_path": "5b0f6f1f85282d3d80043022f02f348aabe9d8629525b2bf266a9f1722737bcf",
+    "opus_labels_path": "4d0b120c38a16f52069db1c242e27d9102c0d1344e143564179a52069f45ede3",
+    "opus_raw_response_path": "13a042198ab18ca5a9de6afc2dbd49dcbb9cf69ad9559567fb606920fa0cadec",
+    "run_020_yaml_path": "20c09e9a61ace7a150db91fc65336b6a5aa41e7b1bd327b727cd97d5fd189054",
+    "selected_cases_path": "824a9729a14b9d58cc0770cedd1ecaeb37aec7103098c6e3b18797256b7847c8",
+    "trigger_threshold_receipt_path": "ec8c746b87cdf7f8893e562b0fb440bccf16b7750e0993446ebd7f168bd77446"
+  },
+  "study_id": "twinkl_752_5_reassessment_v1"
+}

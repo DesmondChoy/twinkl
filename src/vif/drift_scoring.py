@@ -121,6 +121,8 @@ def score_mlp_cases(
     checkpoint_path: str | Path,
     arm_id: str,
     output_path: str | Path,
+    mc_seed: int | None = None,
+    mc_samples: int = 50,
 ) -> pl.DataFrame:
     """Score full trajectories with the production-style VIF state encoder.
 
@@ -130,6 +132,8 @@ def score_mlp_cases(
     output = Path(output_path)
     if not cases:
         raise ValueError("Cannot score an empty case list")
+    if mc_samples <= 0:
+        raise ValueError("mc_samples must be positive")
     checkpoint = Path(checkpoint_path)
     provenance_path = output.with_suffix(".provenance.json")
     digest_path = output.with_suffix(".sha256")
@@ -140,6 +144,8 @@ def score_mlp_cases(
         "checkpoint_sha256": _sha256_file(checkpoint),
         "cases_sha256": _cases_sha256(cases),
         "expected_coordinate_count": len(expected_metadata),
+        "mc_seed": mc_seed,
+        "mc_samples": mc_samples,
     }
     if _cached_evidence_is_valid(
         output,
@@ -208,13 +214,21 @@ def score_mlp_cases(
         )
 
     state_tensor = torch.from_numpy(np.stack(states).astype(np.float32)).to(device)
-    with torch.no_grad():
-        _means, uncertainties = model.predict_with_uncertainty(
-            state_tensor, n_samples=50
+    fork_devices = []
+    if device.type == "cuda":
+        fork_devices.append(
+            device.index if device.index is not None else torch.cuda.current_device()
         )
-        if not hasattr(model, "predict_probabilities"):
-            raise ValueError(f"{arm_id} is not an ordinal probability model")
-        probabilities = model.predict_probabilities(state_tensor)
+    with torch.random.fork_rng(devices=fork_devices):
+        if mc_seed is not None:
+            torch.manual_seed(mc_seed)
+        with torch.no_grad():
+            _means, uncertainties = model.predict_with_uncertainty(
+                state_tensor, n_samples=mc_samples
+            )
+            if not hasattr(model, "predict_probabilities"):
+                raise ValueError(f"{arm_id} is not an ordinal probability model")
+            probabilities = model.predict_probabilities(state_tensor)
     probabilities_np = probabilities.detach().cpu().numpy()
     uncertainties_np = uncertainties.detach().cpu().numpy()
     predicted_classes = probabilities_np.argmax(axis=-1) - 1
