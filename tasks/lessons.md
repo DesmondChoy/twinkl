@@ -9,6 +9,11 @@
   mining can miss known Drifts. Report cohort-only, overlap, net-new, and union
   counts separately.
 
+- **2026-07-14 — Reuse canonical diagrams directly:** When a team update needs
+  an existing architecture diagram, copy the Mermaid block from its source
+  document. Verify the cross-path links, not only the node labels, before
+  publishing it.
+
 ## 2026-03-11
 
 - When promoting a script out of a notebook path, avoid carrying forward
