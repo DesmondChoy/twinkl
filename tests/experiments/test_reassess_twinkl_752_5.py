@@ -141,6 +141,35 @@ def test_scoring_rejects_an_incomplete_response_set() -> None:
         )
 
 
+def test_completed_study_receipts_and_conclusions_are_frozen() -> None:
+    config = _config()
+    paths = study._artifact_paths(config, ROOT)
+    responses = baseline._load_jsonl(paths["responses"])
+    metrics = baseline._read_json(paths["metrics"])
+
+    assert len(responses) == 3117
+    assert sum(row["status"] == "ok" for row in responses) == 3077
+    assert sum(row["status"] == "invalid" for row in responses) == 40
+    assert baseline._sha256_file(paths["responses"]) == (
+        "8c6a5127f14fb32a3ab1c3f465c44cce72cd6fc3051fb9e0778e0096d8111659"
+    )
+    assert baseline._sha256_file(paths["metrics"]) == (
+        "b368c1ddd47e711700c6224f02bf1580c10e2d5a799f34e6e03d0bb990ed8f6b"
+    )
+    assert (
+        metrics["architecture_questions"]["raw_score_value"][
+            "old_conditional_rejection"
+        ]
+        == "inconclusive"
+    )
+    assert metrics["paired_trajectory_bootstrap"]["scheduling"]["deltas"]["recall"] == {
+        "interval": [0.0, 0.0],
+        "observed_median": 0.0,
+    }
+    assert metrics["offline_trigger_placement"]["observed_trigger_hits"] == 7
+    assert metrics["actual_api_spend_usd"] == pytest.approx(4.887963)
+
+
 def test_scheduled_review_adds_early_alerts_without_erasing_weekly_alerts() -> None:
     case = {
         "canonical_case_id": "p1:security",

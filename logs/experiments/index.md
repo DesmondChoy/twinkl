@@ -32,7 +32,7 @@ It is not the forward model-development policy after `twinkl-752`.
 >
 > **Expanded Drift-reference decision (2026-07-13; corrected 2026-07-14):** [`twinkl-752.4`](reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md) reviewed every trajectory discoverable from either legacy Drift-label source plus one unique-person matched control per candidate: 52 candidates, 52 controls, and 874 entry/Core-Value decisions. Two packet-only Codex lanes agreed on 849/874 entries; disagreement-only adjudication initially left four entries and four trajectories unresolved. The Opus follow-up resolved all four without adding Drift. The review found 31 episodes across 26 Drift trajectories, including three of the earlier five. Adding the two omitted prior episodes produces the 33-episode / 28-Drift-trajectory known-development union for `twinkl-752.5`. Four reviewed episodes came from the former final-test split; include them in the primary development analysis and report provenance subgroups separately. The revised development-reference rates are 22/44 candidates and 1/44 controls. This is selection-biased AI-reviewed development evidence, not prevalence or a fresh final test. It unblocks `twinkl-752.5`; it does not score the MLP or adopt an architecture.
 >
-> **Weekly Drift Reviewer Critic-input decision (2026-07-12; reassessment pending):** [`twinkl-752.1`](reports/experiment_review_2026-07-12_twinkl_752_1_weekly_verifier_ablation.md) found that adding fixed `run_020` signals cut median development Drift recall from `0.40` to `0.20`, removed the median false Drift alert (`1` to `0`), and slightly reduced coverage (`0.756` to `0.732`). The recall comparison contained only five episodes, so the difference was one detected episode. `twinkl-752.5` must rerun the raw-input comparison on the 33-episode known-development union before `twinkl-752.2` treats the conditional rejection as durable.
+> **Weekly Drift Reviewer Critic-input decision (2026-07-12; reassessed 2026-07-14):** [`twinkl-752.1`](reports/experiment_review_2026-07-12_twinkl_752_1_weekly_verifier_ablation.md) found that adding fixed `run_020` signals cut median development Drift recall from `0.40` to `0.20`, but only five episodes supported the comparison. The larger [`twinkl-752.5` reassessment](reports/experiment_review_2026-07-14_twinkl_752_5_reassessment.md) found a recall delta of `-0.061` with interval `[-0.158, 0.033]`; the old conditional rejection is inconclusive.
 >
 > **Conformity / Self-Direction shortcut audit (2026-07-12):** [`twinkl-1r3d`](reports/experiment_review_2026-07-12_twinkl_1r3d_shortcut_audit.md) removed 3,406 individual word occurrences plus 20 repeated-word or phrase cues across 35 polarity-stratified, confident-correct `run_020` validation cases. No removal flipped a class, and no candidate cue was the most influential individual removal in a case. The audit does not support the tested brittle lexical-shortcut explanations, so the MLP may remain a baseline in `twinkl-752.1`; it does not prove construct understanding or replace the required consensus and human-anchor checks.
 >
@@ -44,7 +44,7 @@ It is not the forward model-development policy after `twinkl-752`.
 >
 > **Security target decision (2026-07-11):** [`twinkl-a30f`](reports/experiment_review_2026-07-11_twinkl_a30f_security_target.md) completed a receipt-bound, full-corpus active-state Security review and the paired `run_057`-`run_062` comparison. Repaired-target training raises median test Security QWK from `0.156` to `0.328` under repaired labels and from `0.205` to `0.372` under historical labels. Future `window_size: 1` training should use `security_active_critic_state_v1`, but the repaired runs stay off the historical frontier table because 678 Security labels changed. Absolute Security QWK and disagreement-case accuracy still leave representation and semantic work open.
 >
-> **Current drift-target status (2026-07-14):** `twinkl-752.4` supplies 31 episodes across 26 Drift trajectories. Three overlap the earlier five; adding the two omitted prior episodes produces the 33-episode / 28-Drift-trajectory known-development union for `twinkl-752.5`. The Opus follow-up makes the reviewed cohort 104/104 resolved and the union 106/106 resolved without adding Drift. Four reviewed episodes came from the former final-test split; include them in the primary development analysis and report provenance subgroups separately. The former 24-person `twinkl-v8pb` final-test population is now development-only; `twinkl-pv6s` must build a fresh final test. No scheduler, scorer, or architecture has deployment approval, and the active entry-level frontier stays unchanged.
+> **Current drift-target status (2026-07-14):** The 106-trajectory known-development union contains 33 Drifts across 28 Drift trajectories. The `twinkl-752.5` reassessment found median Drift recall of `0.273` for weekly review without VIF Critic input, `0.212` with raw VIF Critic input, and `0.273` for VIF-Critic-triggered early-plus-weekly review. The raw-input recall interval crossed zero, so the old rejection is inconclusive; scheduling changed delay but added no Drift hits. Trigger placement beat random on this development union, but the timing benefit disappeared on the non-training subgroup. The former 24-person `twinkl-v8pb` final-test population is development-only; `twinkl-pv6s` must build a fresh final test. No scheduler, scorer, or architecture has deployment approval, and the active entry-level frontier stays unchanged.
 >
 > **Retired decision-level drift benchmark:** The former `twinkl-wq9p` consensus-derived frozen benchmark is [historical evidence only](../../docs/archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md). Do not rerun, score, tune, or promote from it; its former report and artifacts are not active repository surfaces.
 >
@@ -254,6 +254,24 @@ It is not the forward model-development policy after `twinkl-752`.
 
 ## Findings
 
+### 2026-07-14 — Raw VIF Critic input remains unresolved; scheduling adds no Drift hits (`twinkl-752.5`)
+
+The preregistered reassessment ran 3,117 `gpt-5.4-mini` calls on the
+106-trajectory, 33-Drift known-development union. Weekly review without VIF
+Critic input found a median 9/33 Drifts (`0.273` recall); raw input found 7/33
+(`0.212`). The paired recall delta was `-0.061` with 95% trajectory-bootstrap
+interval `[-0.158, 0.033]`. Raw input also reduced median coverage from `0.670`
+to `0.594` and raised median false Drift alerts from 0 to 3. The earlier
+conditional raw-input rejection is therefore inconclusive, not reversed.
+
+VIF-Critic-triggered early-plus-weekly review also found 9/33 Drifts. It moved
+median delay from 5 to 1 day but added one median false Drift alert and 57
+reviewer calls. The zero-call placement diagnostic found 7/19 Drift-relevant
+triggers versus a random median of 1/19, but scheduling matched weekly-only on
+the 42-trajectory non-training subgroup. This tests review-again, not
+review-early, and adopts no architecture. Full details:
+[`reports/experiment_review_2026-07-14_twinkl_752_5_reassessment.md`](reports/experiment_review_2026-07-14_twinkl_752_5_reassessment.md).
+
 ### 2026-07-14 — Opus resolves the four remaining development labels (`twinkl-752.5`)
 
 A blind packet gave Opus the four complete trajectories and only their disputed
@@ -289,12 +307,10 @@ follow-up, 22/44 development-reference candidates and 1/44 controls contain
 Drift. These are selection-biased AI-reviewed rates, not prevalence or model
 false-alert rates.
 
-This result adds 28 net-new episodes but does not evaluate raw VIF Critic input
-or the proposed scheduler. `twinkl-752.5` must compare weekly review without VIF
-Critic input, weekly review with raw VIF Critic input, and VIF-Critic-triggered
-early-plus-weekly review on the 33-episode union. Its offline trigger-placement
-diagnostic makes no Weekly Drift Reviewer calls. VIF Critic results on
-training-seen Journal Entries are in-sample. Full details:
+This result added 28 net-new episodes but did not evaluate raw VIF Critic input
+or the proposed scheduler. The later `twinkl-752.5` reassessment above completed
+that comparison. VIF Critic results on training-seen Journal Entries remain
+in-sample. Full details:
 [`reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md`](reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md).
 
 ### 2026-07-13 — Prompt alignment raises Conflict coverage but worsens Drift (`twinkl-752.3`)
@@ -329,9 +345,8 @@ Per-Journal-Entry results are more mixed: the VIF Critic setup improves median m
 adjacent Drifts. The consensus replay shows the same per-Journal-Entry
 complementarity. The existing three-annotator anchor has no strict overlap with
 this development population, so it is explicitly unavailable rather than
-silently substituted. `twinkl-752.5` must rerun the raw-input comparison on the
-33-episode known-development union before `twinkl-752.2` treats the no-Critic
-option as durable; no VIF architecture is adopted.
+silently substituted. The larger `twinkl-752.5` reassessment above later marked
+the raw-input result inconclusive; no VIF architecture is adopted.
 Full details:
 [`reports/experiment_review_2026-07-12_twinkl_752_1_weekly_verifier_ablation.md`](reports/experiment_review_2026-07-12_twinkl_752_1_weekly_verifier_ablation.md).
 

@@ -243,14 +243,15 @@ value-specific records. The six-detector comparison's detector-vote count is
 not the five-pass LLM-Judge reference.
 
 The current runtime persists alignment means and uncertainties rather than
-class probabilities. [`twinkl-752.4`](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md)
-found 31 episodes across 26 Drift trajectories. Three overlap the earlier five;
-adding the two omitted prior episodes produces the 33-episode /
-28-Drift-trajectory known-development union. Four reviewed episodes came from
-the former final-test split; include them in the primary development analysis
-and report provenance subgroups separately. The old raw-MLP-input rejection
-rests on only five episodes, no scheduler has been scored, and no fresh final
-test exists.
+class probabilities. The [`twinkl-752.5`
+reassessment](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5_reassessment.md)
+used the 33-Drift known-development union and found no reliable benefit from
+showing raw VIF Critic scores to the Weekly Drift Reviewer. VIF-Critic-triggered
+early-plus-weekly review changed median delay but did not add Drift hits; its
+timing benefit disappeared on the non-training subgroup. The offline VIF
+Critic triggers targeted Drift-relevant opportunities better than random, but
+that diagnostic made no reviewer calls and does not show that early review
+works. No fresh final test exists.
 No VIF Critic or Drift Detector has deployment approval, and the Drift Detector
 is not wired into the weekly runtime. The former consensus-derived frozen
 benchmark is retired historical evidence. The crash/rut/evolution output modes
@@ -340,13 +341,10 @@ learned routing policies.
 
 ## Remaining Work
 
-1. Run `twinkl-752.5` on the 33-episode known-development union: compare
-   weekly review without VIF Critic input, weekly review with raw VIF Critic
-   input, and VIF-Critic-triggered early-plus-weekly review. Separately run the
-   offline trigger-placement diagnostic, which makes no Weekly Drift Reviewer
-   calls.
-   Then review `twinkl-752.1`, `twinkl-752.3`, and `twinkl-752.5` under
-   `twinkl-752.2`. No architecture or deployment tolerance is adopted yet.
+1. Review `twinkl-752.1`, `twinkl-752.3`, and the completed `twinkl-752.5`
+   reassessment under `twinkl-752.2`. The reassessment leaves raw input
+   inconclusive and finds no scheduling recall gain. No architecture or
+   deployment tolerance is adopted yet.
 2. If the approved architecture uses the VIF Critic, persist or reconstruct
    per-Journal-Entry ordinal class probabilities, including `P(-1)`.
 3. If approved, implement the rolling soft-evidence Drift Detector.

@@ -112,10 +112,19 @@ The empirical basis is
   Critic input, those results were 0.20, zero, and 0.732. Ten genuinely invalid outputs
   remained fail-closed; 69 raw receipts rejected by an over-strict optional-
   quote validator were recovered under the registered prompt contract.
-- The `twinkl-752.1` Drift-recall comparison contained only five episodes:
-  median recall 0.20 versus 0.40 represents one versus two detected episodes.
-  Its conditional rejection of raw VIF Critic input must be reassessed on the
-  33-episode union in `twinkl-752.5`.
+- `twinkl-752.5` reassessed the exact raw-input comparison on the 33-Drift
+  union. Weekly review without VIF Critic input found a median 9/33 Drifts;
+  raw input found 7/33. The paired recall delta was `-0.061` with 95%
+  trajectory-bootstrap interval `[-0.158, 0.033]`, so the earlier conditional
+  rejection is inconclusive. Raw input also lowered median coverage from
+  `0.670` to `0.594` and raised median false Drift alerts from 0 to 3.
+- VIF-Critic-triggered early-plus-weekly review found the same median 9/33
+  Drifts as weekly-only review. Median delay moved from 5 to 1 day, with one
+  added median false Drift alert and 57 added reviewer calls. The apparent
+  timing benefit disappeared on the non-training subgroup. The zero-call
+  placement diagnostic found 7/19 Drift-relevant triggers versus a random
+  median of 1/19, which is targeting evidence rather than evidence that early
+  review improves Drift detection.
 - `twinkl-752.3` repeated complete adjacent Journal Entry pairs, including
   week-boundary pairs, supplied a versioned Core Value rubric, and requested
   explicit Drift decisions. Median Drift recall fell to 0.20, median false Drift
@@ -163,6 +172,9 @@ report](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_4
 The four-label Opus follow-up is in the
 [`twinkl-752.5` resolution
 report](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5_opus_null_resolution.md).
+The raw-input and scheduling results are in the
+[`twinkl-752.5` reassessment
+report](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5_reassessment.md).
 No fallback score was taken from the retired benchmark.
 
 ### Still Missing for Product v1
@@ -305,11 +317,14 @@ the next final test must be fresh.
 | Matched-control Drift rate (`twinkl-752.4`) | 1/44 (2.3%) | One legacy-miner miss among resolved development controls; not a false-alert rate |
 | Development precision / false-positive rate (`run_020`) | 1.0 / 0.0 | The single predicted development Drift was correct, but four reference Drifts were missed |
 | Development F1 (`run_020`) | 0.3333 | Balances the perfect precision with low recall |
-| Weekly Drift Reviewer without VIF Critic input (`twinkl-752.1`) | Median Drift recall 0.40 / 1 false Drift alert / coverage 0.756 | Historical five-episode result over three repeats; raw-input reassessment pending |
-| Weekly Drift Reviewer with VIF Critic input (`twinkl-752.1`) | Median Drift recall 0.20 / 0 false Drift alerts / coverage 0.732 | Historical five-episode result; one detected episode versus two without the input |
+| Weekly review without VIF Critic input (`twinkl-752.5`) | 9/33 median Drift hits / recall 0.273 / precision 1.0 / 0 false Drift alerts / coverage 0.670 | Current 106-trajectory development-union result over three repeats |
+| Weekly review with raw VIF Critic input (`twinkl-752.5`) | 7/33 median Drift hits / recall 0.212 / precision 0.70 / 3 false Drift alerts / coverage 0.594 | Paired recall interval crosses zero; old rejection is inconclusive |
+| VIF-Critic-triggered early-plus-weekly review (`twinkl-752.5`) | 9/33 median Drift hits / recall 0.273 / precision 0.90 / 1 false Drift alert / coverage 0.670 | No recall gain; median delay 1 versus 5 days; review-again only |
+| Weekly Drift Reviewer without VIF Critic input (`twinkl-752.1`) | Median Drift recall 0.40 / 1 false Drift alert / coverage 0.756 | Superseded five-episode comparison |
+| Weekly Drift Reviewer with VIF Critic input (`twinkl-752.1`) | Median Drift recall 0.20 / 0 false Drift alerts / coverage 0.732 | Superseded five-episode comparison |
 | Aligned Weekly Drift Reviewer (`twinkl-752.3`) | Median Drift recall 0.20 / 5 false Drift alerts / coverage 0.829 | More complete but less precise; neither cross-week reference Drift was recovered |
 | Final-test Drift metrics | No active final test | The old cohort is development-only; `twinkl-pv6s` must build a fresh surface |
-| First-alert latency | Not scored | It requires a resolved final-test target |
+| Development first-alert latency (`twinkl-752.5`) | Median 5 days weekly-only / 3 days raw-input / 1 day scheduled | Selection-biased development timing; no final-test latency is available |
 | Author-designed capability recall | Capability-only diagnostic | Whether the VIF Critic can find deliberately clear Drifts; never a deployment-approval gate |
 
 A historical development-only operating point exists (probability 0.8,
@@ -377,6 +392,9 @@ report](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_4
 The blind fourth-review labels are described in the
 [`twinkl-752.5` resolution
 report](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5_opus_null_resolution.md).
+The raw-input, scheduling, and trigger-placement results are described in the
+[`twinkl-752.5` reassessment
+report](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5_reassessment.md).
 
 ---
 
@@ -410,6 +428,8 @@ report](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5
 | [`src/coach/runtime.py`](../../src/coach/runtime.py) | Offline checkpoint-to-digest orchestration |
 | [`src/demo_tool/multi_drift.py`](../../src/demo_tool/multi_drift.py) | Six-detector exploratory comparison |
 | [`scripts/experiments/llm_critic_baseline.py`](../../scripts/experiments/llm_critic_baseline.py) | Student-visible and history-context comparison arms |
+| [`scripts/experiments/reassess_twinkl_752_5.py`](../../scripts/experiments/reassess_twinkl_752_5.py) | Frozen union, raw-input, scheduling, and placement reassessment |
+| [`config/evals/twinkl_752_5_reassessment_v1.yaml`](../../config/evals/twinkl_752_5_reassessment_v1.yaml) | Preregistered setup, trigger, bootstrap, and API contract |
 | [`drift_v1_student_visible_target.md`](drift_v1_student_visible_target.md) | Completed target rule, review boundary, development result, and blocked final-test result |
 | [`../../config/evals/drift_v1_student_visible_v1.yaml`](../../config/evals/drift_v1_student_visible_v1.yaml) | Locks the development and final-test sets before review or threshold selection |
 | [`../../src/vif/drift_target.py`](../../src/vif/drift_target.py) | Student-visible review packets, reconciliation, and target materialization |
