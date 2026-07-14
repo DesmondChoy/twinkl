@@ -22,6 +22,8 @@ It is not the forward model-development policy after `twinkl-752`.
 
 > **Historical frontier recommendation (2026-03-19):** `run_019`-`run_021` remain the default corrected-split frontier family. The new two-stage reformulation family `run_045`-`run_047` reached comparable median holdout `qwk_mean` (`0.360` vs `0.362`) and the best calibration on the current board (`0.743`), but it gave back too much `recall_-1` (`0.266`) and hedging (`0.708`). `run_034`-`run_036` remain the best tail-sensitive reference branch, and `run_042`-`run_044` remain the strongest encoder-swap challenger.
 >
+> **Weekly Drift Reviewer model comparison (2026-07-14):** [`twinkl-52zz`](reports/experiment_review_2026-07-14_twinkl_52zz_model_comparison.md) compared `gpt-5.4-mini-2026-03-17` with `gpt-5.6-luna`, both at reasoning effort `none`, on all 951 persona-weeks in the complete 204-persona development data. Luna raised median Drift recall from `0.167` to `0.476`; the paired delta was `+0.286` with 95% trajectory-bootstrap interval `[+0.158, +0.425]`. It also raised median false Drift alerts from 5 to 13; the paired delta was `+9` with interval `[+2, +17]`. Median Drift precision stayed similar (`0.583` vs `0.606`) and coverage rose (`0.740` vs `0.777`). The preregistered no-added-false-alert rule mechanically retained mini, but the user explicitly accepted the trade-off and selected Luna at reasoning effort `none` as the current development Weekly Drift Reviewer. This setup remains the frozen baseline for a bounded reasoning-effort follow-up. The [OpenAI cost receipt](artifacts/twinkl_52zz_model_comparison_20260714/receipts/README.md) records `$12.01916515` for the whole OpenAI project-day, below the `$15` cap; it does not isolate the comparison's billed cost. This is development evidence, not deployment approval.
+>
 > **Adopted VIF scope and metric policy (2026-07-12):** [`twinkl-752`](../../docs/vif/05_capstone_scope_decision.md) defines the VIF Critic primarily as a Conflict screener. Per-Journal-Entry `recall_-1` is the primary model-development metric; Drift recall is the future product metric; QWK and `+1` recall are diagnostics. No numerical precision or false-alert tolerance is adopted yet, so recall-focused development cannot support deployment approval by itself. The ternary ten-value output remains, and no VIF Critic, LLM scorer, Weekly Drift Reviewer, ensemble, or cascade architecture has been adopted. Existing training code is still QWK-first and must be updated and tested before another training run is treated as recall-first decision evidence.
 >
 > **Weekly Drift Reviewer prompt-alignment decision (2026-07-13):** [`twinkl-752.3`](reports/experiment_review_2026-07-13_twinkl_752_3_weekly_drift_reviewer_prompt_alignment.md) found that repeating complete Journal Entry pairs, including week-boundary pairs, adding a versioned Core Value rubric, and requesting explicit Drift decisions did not reveal hidden capability at reasoning effort `none`. Median Drift recall fell from `0.40` to `0.20`, median false Drift alerts rose from `1` to `5`, and neither cross-week reference Drift was recovered. Journal Entry `recall_-1` improved slightly but Conflict precision fell. Treat the published `0.40` as not materially prompt-limited by the tested differences; no VIF architecture or deployment decision is adopted.
@@ -46,7 +48,7 @@ It is not the forward model-development policy after `twinkl-752`.
 >
 > **Security target decision (2026-07-11):** [`twinkl-a30f`](reports/experiment_review_2026-07-11_twinkl_a30f_security_target.md) completed a receipt-bound, full-corpus active-state Security review and the paired `run_057`-`run_062` comparison. Repaired-target training raises median test Security QWK from `0.156` to `0.328` under repaired labels and from `0.205` to `0.372` under historical labels. Future `window_size: 1` training should use `security_active_critic_state_v1`, but the repaired runs stay off the historical frontier table because 678 Security labels changed. Absolute Security QWK and disagreement-case accuracy still leave representation and semantic work open.
 >
-> **Current drift-target status (2026-07-14):** The complete 292-case development analysis contains 42 Drifts across 36 Drift trajectories. The earlier `twinkl-752.5` reassessment remains a 106-case, 33-Drift result: median Drift recall was `0.273` for weekly review without VIF Critic input, `0.212` with raw VIF Critic input, and `0.273` for VIF-Critic-triggered early-plus-weekly review. Its raw-input recall interval crossed zero, so the old rejection is inconclusive; scheduling changed delay but added no Drift hits. `twinkl-52zz` must use the expanded frozen development data. The former 24-person `twinkl-v8pb` final-test data is development-only; `twinkl-pv6s` must build a fresh final test. No Weekly Drift Reviewer, VIF Critic, scheduler, or architecture has deployment approval, and the active entry-level frontier stays unchanged.
+> **Current drift-target status (2026-07-14):** The complete 292-case development analysis contains 42 Drifts across 36 Drift trajectories. The earlier `twinkl-752.5` reassessment remains a 106-case, 33-Drift result: median Drift recall was `0.273` for weekly review without VIF Critic input, `0.212` with raw VIF Critic input, and `0.273` for VIF-Critic-triggered early-plus-weekly review. Its raw-input recall interval crossed zero, so the old rejection is inconclusive; scheduling changed delay but added no Drift hits. On the complete data, `twinkl-52zz` found median Drift recall of `0.167` for `gpt-5.4-mini` and `0.476` for `gpt-5.6-luna`, with median false Drift alerts of 5 and 13 respectively. The user accepted that trade-off and selected Luna at reasoning effort `none` as the current development Weekly Drift Reviewer. The former 24-person `twinkl-v8pb` final-test data is development-only; `twinkl-pv6s` must build a fresh final test. No Weekly Drift Reviewer, VIF Critic, scheduler, or architecture has deployment approval, and the active entry-level frontier stays unchanged.
 >
 > **Staged VIF architecture decision (2026-07-14):** Under `twinkl-752.2`, the user approved Weekly Drift Reviewer decisions without VIF Critic input followed by the deterministic two-Conflict Drift Detector as the current user-facing path. The VIF Critic remains required for stored prediction, uncertainty, independent disagreement review, candidate mining, and retraining. It may later propose candidate adjacent Conflict pairs only after `twinkl-7vam` fixes the deployment-approval criteria and candidate-selection rule, the checkpoint and rules are frozen, and a fresh final test supports deployment approval. Raw prompt input, direct VIF Critic Drift decisions, and early-plus-weekly scheduling are not selected. This is an architecture decision, not deployment approval.
 >
@@ -257,6 +259,26 @@ It is not the forward model-development policy after `twinkl-752`.
 > **Contributor note:** Keep this section in **newest-first** chronological order (most recent date at top).
 
 ## Findings
+
+### 2026-07-14 — Luna more than doubles Drift recall but adds false Drift alerts (`twinkl-52zz`)
+
+The preregistered comparison ran 5,706 Responses API calls over all 951
+persona-weeks in the complete 204-persona development data. Both models used
+the same Weekly Drift Reviewer prompt without VIF Critic input, reasoning effort
+`none`, structured output, fail-closed validation, and three repeats.
+
+`gpt-5.6-luna` found a median 20/42 known Drifts (`0.476` recall), versus 7/42
+(`0.167`) for `gpt-5.4-mini-2026-03-17`. The paired Drift-recall delta was
+`+0.286` with 95% trajectory-bootstrap interval `[+0.158, +0.425]`. Luna also
+raised median false Drift alerts from 5 to 13; the paired delta was `+9` with
+interval `[+2, +17]`. Median Drift precision remained similar (`0.606` versus
+`0.583`), coverage improved, invalid responses fell, and Luna was faster but
+its standard-rate token calculation was `$1.16` higher. The preregistered
+no-added-false-alert rule keeps mini as the mechanical baseline. The user later
+accepted the recall/false-alert trade-off and selected Luna at reasoning effort
+`none` as the current development Weekly Drift Reviewer. The exact setup remains
+the frozen baseline for a bounded reasoning-effort follow-up. Full details:
+[`reports/experiment_review_2026-07-14_twinkl_52zz_model_comparison.md`](reports/experiment_review_2026-07-14_twinkl_52zz_model_comparison.md).
 
 ### 2026-07-14 — Complete development review finds nine missed Drifts (`twinkl-qtwz`)
 

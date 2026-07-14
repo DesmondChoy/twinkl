@@ -1,0 +1,84 @@
+study_id: twinkl_52zz_model_comparison_v1
+status: preregistered
+created_at: '2026-07-14'
+
+sources:
+  complete_entry_target_path: logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/results/complete_development_entry_target.parquet
+  complete_case_outcomes_path: logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/results/complete_development_case_outcomes.parquet
+  complete_drift_episodes_path: logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/results/complete_development_drift_episodes.parquet
+  complete_review_report_path: logs/experiments/reports/experiment_review_2026-07-14_twinkl_qtwz_complete_development_review.md
+  wrangled_dir: logs/wrangled
+
+study:
+  setup: weekly_without_critic
+  repeats: 3
+  prompt_path: prompts/weekly_vif_verifier.yaml
+  prompt_name: weekly_vif_verifier
+  prompt_rationale: >-
+    Reuse the exact twinkl-752.5 Weekly Drift Reviewer prompt without VIF
+    Critic input so the model is the only changed variable.
+  max_confirmation_lag_entries: 2
+  expected_personas: 204
+  expected_cases: 292
+  expected_entries: 1651
+  expected_entry_value_cells: 2377
+  expected_resolved_entry_value_cells: 2375
+  expected_drifts: 42
+  expected_drift_trajectories: 36
+  expected_persona_weeks: 951
+
+models:
+  - key: gpt_5_4_mini
+    model: gpt-5.4-mini-2026-03-17
+    reasoning_effort: none
+    max_budget_usd: 7.0
+    pricing_usd_per_million_tokens:
+      input: 0.75
+      output: 4.50
+  - key: gpt_5_6_luna
+    model: gpt-5.6-luna
+    reasoning_effort: none
+    max_budget_usd: 8.0
+    pricing_usd_per_million_tokens:
+      input: 1.00
+      output: 6.00
+
+api:
+  provider: openai
+  endpoint: responses
+  max_output_tokens: 2000
+  timeout_seconds: 60
+  max_attempts: 2
+  concurrency: 4
+  service_tier: default
+  store: false
+  total_max_budget_usd: 15.0
+
+bootstrap:
+  unit: trajectory
+  random_seed: 5256000
+  repeats: 10000
+  interval: 0.95
+
+decision:
+  select_luna: >-
+    The median paired Drift-recall delta is positive, its 95% trajectory
+    bootstrap interval excludes zero, median false Drift alerts do not
+    increase, and median coverage does not fall by more than 0.05.
+  otherwise: >-
+    Keep gpt-5.4-mini as the frozen baseline and report whether the evidence
+    favors either model without treating an inconclusive comparison as a win.
+  restrictions:
+    - Development-only AI-reviewed synthetic evidence; no human validation.
+    - The complete development data is not a fresh final test.
+    - The Weekly Drift Reviewer receives no VIF Critic input.
+    - No prompt variant, higher reasoning effort, deployment approval, or runtime architecture change is tested.
+
+artifacts:
+  output_dir: logs/experiments/artifacts/twinkl_52zz_model_comparison_20260714
+  prompts_filename: prompts.jsonl
+  manifest_filename: manifest.json
+  metrics_filename: metrics.json
+  response_filenames:
+    gpt_5_4_mini: responses_gpt_5_4_mini.jsonl
+    gpt_5_6_luna: responses_gpt_5_6_luna.jsonl

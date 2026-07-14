@@ -373,7 +373,9 @@ above.
 | Development Drift recall (`run_020`) | 1/5 (0.2) | The fixed development threshold found one of five reviewed Drifts |
 | Reviewed cohort (`twinkl-752.4`) | 31 episodes across 26 Drift trajectories; 104/104 resolved | All cases are development-only; four episodes retain former-final-test provenance for subgroup reporting |
 | Known-development union (`twinkl-752.5` input) | 33 episodes across 28 Drift trajectories; 106/106 resolved | Primary reassessment set; adds two prior episodes omitted by candidate mining |
-| Complete development review (`twinkl-qtwz`) | 42 Drifts across 36 Drift trajectories; 292/292 case-level outcomes resolved | Frozen input for `twinkl-52zz`; the nine newly found Drifts all have historical training provenance |
+| Complete development review (`twinkl-qtwz`) | 42 Drifts across 36 Drift trajectories; 292/292 case-level outcomes resolved | Frozen input used by `twinkl-52zz`; the nine newly found Drifts all have historical training provenance |
+| `gpt-5.4-mini` Weekly Drift Reviewer (`twinkl-52zz`) | 7/42 median Drift hits / recall 0.167 / precision 0.583 / 5 false Drift alerts / coverage 0.740 | Complete-development baseline over three repeats |
+| `gpt-5.6-luna` Weekly Drift Reviewer (`twinkl-52zz`) | 20/42 median Drift hits / recall 0.476 / precision 0.606 / 13 false Drift alerts / coverage 0.777 | Selected at reasoning effort `none` as the current development Weekly Drift Reviewer with explicit acceptance of the false Drift alert trade-off; no deployment approval |
 | Legacy candidate confirmation (`twinkl-752.4`) | 22/44 (50.0%) | Resolved development candidates only; selection-biased diagnostic |
 | Matched-control Drift rate (`twinkl-752.4`) | 1/44 (2.3%) | One legacy-miner miss among resolved development controls; not a false-alert rate |
 | Development precision / false-positive rate (`run_020`) | 1.0 / 0.0 | The single predicted development Drift was correct, but four reference Drifts were missed |

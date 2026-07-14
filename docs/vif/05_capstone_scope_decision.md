@@ -202,8 +202,15 @@ rather than substituted.
   AI-reviewed development evidence, not a fresh final test.
 - The later complete review adds nine Drifts across eight Drift trajectories,
   producing a 292-case development analysis with 42 Drifts across 36 Drift
-  trajectories. It changes the input for `twinkl-52zz`, not this architecture
-  decision.
+  trajectories. It supplied the frozen input for `twinkl-52zz`, not a reason to
+  reopen this architecture decision.
+- On that complete data, `twinkl-52zz` found median Drift recall of `0.167` for
+  `gpt-5.4-mini` and `0.476` for `gpt-5.6-luna`, while median false Drift alerts
+  rose from 5 to 13. The user accepted that trade-off and selected Luna at
+  reasoning effort `none` as the current development Weekly Drift Reviewer.
+  The exact setup remains the frozen baseline for a bounded reasoning-effort
+  follow-up. This choice does not change the approved component boundaries or
+  grant deployment approval.
 
 The experiment history and numeric evidence remain in
 [`logs/experiments/index.md`](../../logs/experiments/index.md).
