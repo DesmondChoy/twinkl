@@ -18,7 +18,7 @@ The current layers of the contract are deliberately different:
 | Layer | Contract |
 |---|---|
 | Student-visible target | A Journal Entry is a Conflict only when the full displayed text clearly shows a behavior or choice against a Core Value. `twinkl-752.4` reviewed every candidate discoverable from either legacy label source plus matched controls. |
-| Development set | The known-development union contains 29 Drift episodes across 25 Drift trajectories: 27 episodes from the `twinkl-752.4` cohort plus two prior episodes omitted by its candidate mining. Four retired-test audit episodes stay separate, and four `twinkl-752.4` trajectories remain uncertain. The fixed `run_020` threshold is historical development evidence. |
+| Development set | The known-development union contains 33 Drift episodes across 28 Drift trajectories: all 31 episodes from the `twinkl-752.4` cohort plus two prior episodes omitted by its candidate mining. Four reviewed episodes came from the former final-test split; include them in the primary development analysis and report provenance subgroups separately. Four `twinkl-752.4` trajectories remain uncertain. The fixed `run_020` threshold is historical development evidence. |
 | Final test set | None is active. The former 24-person `twinkl-v8pb` final-test cohort became development-only when its cases were opened for the full review. `twinkl-pv6s` owns a fresh final test. |
 | Production runtime | The VIF Critic and Drift Detector are not approved or wired. |
 | User delivery | The Weekly Digest cites the relevant Journal Entries and uses active, recovered, mixed, or uncertain wording without score jargon; exact schema implementation is pending. |
@@ -86,12 +86,13 @@ The empirical basis is
   unique-person matched legacy-negative controls: 104 trajectories and 874
   entry/Core-Value decisions. Two packet-only Codex lanes agreed on 849/874
   entries (97.1%); a third reviewer resolved 21 of 25 disagreements. The final
-  target resolves 100/104 trajectories and contains 31 maximal Drift episodes.
-  The primary development stratum has 27 episodes across 23 Drift trajectories;
-  four retired-audit episodes stay separate.
+  target resolves 100/104 trajectories and contains 31 maximal Drift episodes
+  across 26 Drift trajectories. Four of those episodes came from the former
+  final-test split, which is a provenance subgroup rather than an evaluation
+  exclusion.
 - Only three of the earlier five development episodes occur in the
   `twinkl-752.4` cohort. Adding the omitted `3a3b15e4:tradition` and
-  `7adc5866:benevolence` episodes produces the 29-episode / 25-Drift-trajectory
+  `7adc5866:benevolence` episodes produces the 33-episode / 28-Drift-trajectory
   known-development union for `twinkl-752.5`. The frozen `twinkl-752.4`
   artifacts remain a correct cohort receipt.
 - Among resolved development cases, 22/43 legacy candidates and 1/42 controls
@@ -109,7 +110,7 @@ The empirical basis is
 - The `twinkl-752.1` Drift-recall comparison contained only five episodes:
   median recall 0.20 versus 0.40 represents one versus two detected episodes.
   Its conditional rejection of raw VIF Critic input must be reassessed on the
-  29-episode union in `twinkl-752.5`.
+  33-episode union in `twinkl-752.5`.
 - `twinkl-752.3` repeated complete adjacent Journal Entry pairs, including
   week-boundary pairs, supplied a versioned Core Value rubric, and requested
   explicit Drift decisions. Median Drift recall fell to 0.20, median false Drift
@@ -289,8 +290,8 @@ the next final test must be fresh.
 | Metric | Status | Meaning |
 |---|---|---|
 | Development Drift recall (`run_020`) | 1/5 (0.2) | The fixed development threshold found one of five reviewed Drifts |
-| Reviewed development cohort (`twinkl-752.4`) | 27 episodes across 23 resolved Drift trajectories | Correct cohort result; includes three of the earlier five episodes |
-| Known-development union (`twinkl-752.5` input) | 29 episodes across 25 Drift trajectories | Primary reassessment surface; adds two prior episodes omitted by candidate mining |
+| Reviewed cohort (`twinkl-752.4`) | 31 episodes across 26 resolved Drift trajectories | All cases are development-only; four episodes retain former-final-test provenance for subgroup reporting |
+| Known-development union (`twinkl-752.5` input) | 33 episodes across 28 Drift trajectories | Primary reassessment surface; adds two prior episodes omitted by candidate mining |
 | Legacy candidate confirmation (`twinkl-752.4`) | 22/43 (51.2%) | Resolved development candidates only; selection-biased diagnostic |
 | Matched-control Drift rate (`twinkl-752.4`) | 1/42 (2.4%) | One legacy-miner miss among resolved development controls; not a false-alert rate |
 | Development precision / false-positive rate (`run_020`) | 1.0 / 0.0 | The single predicted development Drift was correct, but four reference Drifts were missed |
@@ -361,7 +362,7 @@ Drift target, select a threshold, or approve a VIF Critic for deployment. There 
 active command for the retired `twinkl-wq9p` benchmark. The completed
 historical student-visible review is described in
 [`drift_v1_student_visible_target.md`](drift_v1_student_visible_target.md). The
-reviewed cohort and the correction that forms the 29-episode known-development
+reviewed cohort and the correction that forms the 33-episode known-development
 union are described in the [`twinkl-752.4`
 report](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md).
 

@@ -26,8 +26,8 @@ The current VIF implementation is intentionally narrow:
   crash/rut/evolution router, and Weekly Coach inputs
 - **Selected Drift v1 target**: rolling soft `P(-1)` evidence for two
   consecutive Conflicts on the same Core Value. Development-set review tooling
-  is implemented offline and the known-development union contains 29 episodes
-  across 25 Drift trajectories. There is no active fresh final test, no Drift
+  is implemented offline and the known-development union contains 33 episodes
+  across 28 Drift trajectories. There is no active fresh final test, no Drift
   Detector has deployment approval, and the rule is not wired into the runtime
   router.
 
@@ -267,10 +267,12 @@ Entries visibly show a Conflict for the same Core Value, with rolling soft
 consensus-derived frozen benchmark is retired historical evidence; it does not
 implement or justify the active target. [`twinkl-v8pb`](../evals/drift_v1_student_visible_target.md)
 is historical. [`twinkl-752.4`](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md)
-found 27 development episodes across 23 Drift trajectories. Three overlap the
-earlier five; adding the two omitted prior episodes produces the 29-episode /
-25-Drift-trajectory known-development union. Four retired-audit episodes stay
-separate. `twinkl-752.5` must compare weekly-only, weekly-with-raw-MLP-input,
+found 31 episodes across 26 Drift trajectories. Three overlap the earlier five;
+adding the two omitted prior episodes produces the 33-episode /
+28-Drift-trajectory known-development union. Four reviewed episodes came from
+the former final-test split; include them in the primary development analysis
+and report provenance subgroups separately. `twinkl-752.5` must compare
+weekly-only, weekly-with-raw-MLP-input,
 MLP-triggered early-plus-weekly, and budget-matched model-free schedules. The
 production connection therefore remains deliberately
 absent, and the existing weekly router remains a compatibility prototype.

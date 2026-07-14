@@ -244,9 +244,11 @@ not the five-pass LLM-Judge reference.
 
 The current runtime persists alignment means and uncertainties rather than
 class probabilities. [`twinkl-752.4`](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md)
-found 27 development episodes across 23 Drift trajectories. Three overlap the
-earlier five; adding the two omitted prior episodes produces the 29-episode /
-25-Drift-trajectory known-development union. The old raw-MLP-input rejection
+found 31 episodes across 26 Drift trajectories. Three overlap the earlier five;
+adding the two omitted prior episodes produces the 33-episode /
+28-Drift-trajectory known-development union. Four reviewed episodes came from
+the former final-test split; include them in the primary development analysis
+and report provenance subgroups separately. The old raw-MLP-input rejection
 rests on only five episodes, no scheduler has been scored, and no fresh final
 test exists.
 No VIF Critic or Drift Detector has deployment approval, and the Drift Detector
@@ -338,7 +340,7 @@ learned routing policies.
 
 ## Remaining Work
 
-1. Run `twinkl-752.5` on the 29-episode known-development union: compare
+1. Run `twinkl-752.5` on the 33-episode known-development union: compare
    weekly-only, weekly-with-raw-MLP-input, MLP-triggered early-plus-weekly, and
    matched-budget model-free schedules.
    Then review `twinkl-752.1`, `twinkl-752.3`, and `twinkl-752.5` under

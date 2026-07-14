@@ -3,20 +3,22 @@
 **Date:** 2026-07-13
 **Disposition:** Complete cohort review; no architecture or deployment decision
 
-> **2026-07-14 correction:** The 27 episodes below are the result of this
-> legacy-candidate-plus-control cohort, not a strict replacement for the five
-> earlier development episodes. Three of the earlier five overlap this cohort;
-> `3a3b15e4:tradition` and `7adc5866:benevolence` do not. The known-development
-> union for `twinkl-752.5` therefore contains 29 episodes across 25 Drift
-> trajectories. The frozen `twinkl-752.4` artifacts remain unchanged.
+> **2026-07-14 correction:** The full reviewed cohort contains 31 episodes
+> across 26 Drift trajectories. Its 27/4 internal split records historical
+> evaluation provenance, not label validity or current evaluation status. All
+> 31 are development evidence. Three of the earlier five overlap this cohort;
+> adding the omitted `3a3b15e4:tradition` and `7adc5866:benevolence` episodes
+> produces the 33-episode / 28-Drift-trajectory known-development union for
+> `twinkl-752.5`. The frozen `twinkl-752.4` artifacts remain unchanged.
 
 ## Result
 
-The review found **27 development-reference episodes across 23 resolved
-trajectories**. Of these, 24 are net-new relative to the earlier five. The
-known-development union therefore contains 29 episodes across 25 Drift
-trajectories. A separate retired-test audit contains another four episodes
-across three trajectories. This is enough to run the bounded comparison in
+The review found **31 episodes across 26 resolved Drift trajectories**. Of
+these, 28 are net-new relative to the earlier five. Adding the two omitted
+earlier episodes produces a known-development union of 33 episodes across 28
+Drift trajectories. Four reviewed episodes came from the former final-test
+split; they remain in the primary development analysis, with provenance
+reported as a subgroup. This is enough to run the bounded comparison in
 `twinkl-752.5`; it is still not a fresh final test.
 
 | Stratum | Legacy candidates | Matched controls | Resolved | Drift trajectories | Drift episodes |
@@ -45,9 +47,11 @@ be negative under the same source; mixed-source pairs did not qualify.
 - 104 trajectories and 874 entry/Core-Value review decisions in total
 
 The deterministic assignment produced 46 same-historical-split pairs, minimum
-total absolute trajectory-length gap 52, and 27 exact-length matches. Eight
-retired-test candidates and their controls were quarantined as
-`retired_audit_only`; they do not enter the primary development rates.
+total absolute trajectory-length gap 52, and 27 exact-length matches. The
+artifacts name eight former-final-test candidates and their controls
+`retired_audit_only`. That name records historical provenance only: all
+reviewed cases are now development-only and enter `twinkl-752.5`'s primary
+analysis.
 
 The former 24-person `twinkl-v8pb` final-test cohort is now development-only.
 The immutable old artifacts remain historical, and `twinkl-pv6s` still owns a
@@ -73,8 +77,8 @@ runs were derived mechanically: a length-three run is one episode, not two.
 
 ## Findings
 
-1. **The five-case reference was too small.** This review contributes 24
-   net-new episodes. The known-development union now has 29 episodes, 5.8
+1. **The five-case reference was too small.** This review contributes 28
+   net-new episodes. The known-development union now has 33 episodes, 6.6
    times the earlier five-episode surface.
 2. **Legacy labels were useful candidate miners, not current Drift truth.** Only
    half of resolved legacy candidates confirmed as Drift under the displayed-
@@ -96,7 +100,7 @@ Four trajectories retain one uncertain entry each and therefore have no case-
 level Drift outcome:
 
 - development candidate `5943c186:hedonism`
-- retired-audit candidate `799f3751:hedonism`
+- former-final-test-provenance candidate `799f3751:hedonism`
 - development controls `3cfa2ebf:universalism` and `65ed1278:benevolence`
 
 They should remain null unless human review supplies genuinely new evidence.
@@ -114,9 +118,10 @@ Proceed to `twinkl-752.5`. Compare:
 
 Report raw hits and denominators, Drift recall and precision, additional Drift
 alerts, detection delay, cross-week recovery, trigger rate, coverage,
-abstention, paired uncertainty, and review cost. Use the 29-episode
-known-development union for primary analysis, keep the four retired-audit
-episodes separate, and make no out-of-sample or deployment claim.
+abstention, paired uncertainty, and review cost. Use the 33-episode
+known-development union for primary analysis, report the former-final-test
+provenance subgroup separately as a sensitivity check, and make no
+out-of-sample or deployment claim.
 
 The architecture decision remains in `twinkl-752.2` after that comparison. The
 user still has to decide whether any measured latency/recall benefit justifies

@@ -14,7 +14,7 @@ false-alert tolerance has been adopted.
 > **2026-07-14 reassessment note:** This comparison contained only five Drift
 > episodes, so median recall 0.20 versus 0.40 represents one versus two detected
 > episodes. `twinkl-752.5` must rerun the exact raw-input comparison on the
-> 29-episode known-development union before this rejection is treated as a
+> 33-episode known-development union before this rejection is treated as a
 > durable architecture conclusion.
 
 ## Why this study exists

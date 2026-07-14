@@ -98,7 +98,7 @@ those predictions cut median Drift recall from 0.40 to 0.20, removed the median
 false Drift alert from 1 to 0, and reduced coverage from 0.756 to 0.732. However,
 the recall comparison contained only five episodes, so the difference was one
 detected episode. The no-Critic recommendation is provisional until
-`twinkl-752.5` reruns the exact raw-input comparison on the 29-episode union.
+`twinkl-752.5` reruns the exact raw-input comparison on the 33-episode union.
 
 `twinkl-752.3` then tested whether that `0.40` result was limited by prompt
 differences. The aligned Weekly Drift Reviewer repeated complete adjacent Journal
@@ -112,15 +112,15 @@ differences therefore do not explain the weak Drift result.
 `twinkl-752.4` then added a much larger reviewed cohort for future architecture
 work. Two separate packet-only Codex lanes and a disagreement-only adjudicator
 reviewed 52 legacy-discoverable candidate trajectories plus 52 matched controls
-and found 27 Drift episodes across 23 resolved trajectories. Three overlap the
+and found 31 Drift episodes across 26 resolved trajectories. Three overlap the
 earlier five; adding the two prior episodes missed by candidate mining produces
-the 29-episode / 25-Drift-trajectory known-development union. Four retired-test
-audit episodes stay separate, and four `twinkl-752.4` trajectories remain
-uncertain. The reviewed Drift labels remain valid development references even
-when the MLP saw the Journal Entries
-during training, but any VIF Critic scheduler score on those entries is
-in-sample. Candidate mining may also miss Drifts absent from both legacy label
-sources.
+the 33-episode / 28-Drift-trajectory known-development union. Four reviewed
+episodes came from the former final-test split; include them in the primary
+development analysis and report provenance subgroups separately. Four
+`twinkl-752.4` trajectories remain uncertain. The reviewed Drift labels remain
+valid development references even when the MLP saw the Journal Entries during
+training, but any VIF Critic scheduler score on those entries is in-sample.
+Candidate mining may also miss Drifts absent from both legacy label sources.
 
 The missing architecture evidence is now explicit: `twinkl-752.5` must compare
 weekly-only review, weekly review with raw MLP scores, MLP-triggered early
@@ -167,10 +167,11 @@ rather than substituted.
   worsened Drift recall, false Drift alerts, and repeat stability. Prompt
   alignment at reasoning effort `none` did not reveal a stronger Weekly Drift
   Reviewer setup.
-- The expanded student-visible review found 27 development-reference episodes
-  across 23 resolved trajectories, including three of the earlier five. The
-  known-development union contains 29 episodes across 25 Drift trajectories;
-  four retired-audit episodes stay separate. This remains selection-biased
+- The expanded student-visible review found 31 episodes across 26 resolved
+  trajectories, including three of the earlier five. The known-development
+  union contains 33 episodes across 28 Drift trajectories. Four reviewed
+  episodes retain former-final-test provenance for subgroup reporting, but
+  remain in the primary development analysis. This is selection-biased
   AI-reviewed development evidence, not a fresh final test.
 
 The experiment history and numeric evidence remain in

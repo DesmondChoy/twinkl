@@ -1,5 +1,7 @@
 # Lessons
 
+- **2026-07-14 — Historical split provenance is not an exclusion rule:** When a task explicitly makes every historical split development-only, include every valid label in the primary development dataset. Report former split membership as a subgroup or sensitivity check; do not silently turn names such as `retired_audit_only` into eligibility criteria.
+
 - 2026-07-14: Before claiming a candidate-mined benchmark replaces an earlier
   reference, explicitly compare and union the prior confirmed cases. Candidate
   mining can miss known Drifts. Report cohort-only, overlap, net-new, and union

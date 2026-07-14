@@ -26,9 +26,9 @@ It is not the forward model-development policy after `twinkl-752`.
 >
 > **Weekly Drift Reviewer prompt-alignment decision (2026-07-13):** [`twinkl-752.3`](reports/experiment_review_2026-07-13_twinkl_752_3_weekly_drift_reviewer_prompt_alignment.md) found that repeating complete Journal Entry pairs, including week-boundary pairs, adding a versioned Core Value rubric, and requesting explicit Drift decisions did not reveal hidden capability at reasoning effort `none`. Median Drift recall fell from `0.40` to `0.20`, median false Drift alerts rose from `1` to `5`, and neither cross-week reference Drift was recovered. Journal Entry `recall_-1` improved slightly but Conflict precision fell. Treat the published `0.40` as not materially prompt-limited by the tested differences; no VIF architecture or deployment decision is adopted.
 >
-> **Expanded Drift-reference decision (2026-07-13; corrected 2026-07-14):** [`twinkl-752.4`](reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md) reviewed every trajectory discoverable from either legacy Drift-label source plus one unique-person matched control per candidate: 52 candidates, 52 controls, and 874 entry/Core-Value decisions. Two packet-only Codex lanes agreed on 849/874 entries; disagreement-only adjudication left four entries and four trajectories unresolved. The review found 27 episodes across 23 resolved Drift trajectories, including three of the earlier five. Adding the two omitted prior episodes produces the 29-episode / 25-Drift-trajectory known-development union for `twinkl-752.5`; a retired-test audit adds four separate episodes. Among resolved development cases, 22/43 candidates and 1/42 controls contain Drift. This is selection-biased AI-reviewed development evidence, not prevalence or a fresh final test. It unblocks `twinkl-752.5`; it does not score the MLP or adopt an architecture.
+> **Expanded Drift-reference decision (2026-07-13; corrected 2026-07-14):** [`twinkl-752.4`](reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md) reviewed every trajectory discoverable from either legacy Drift-label source plus one unique-person matched control per candidate: 52 candidates, 52 controls, and 874 entry/Core-Value decisions. Two packet-only Codex lanes agreed on 849/874 entries; disagreement-only adjudication left four entries and four trajectories unresolved. The review found 31 episodes across 26 resolved Drift trajectories, including three of the earlier five. Adding the two omitted prior episodes produces the 33-episode / 28-Drift-trajectory known-development union for `twinkl-752.5`. Four reviewed episodes came from the former final-test split; include them in the primary development analysis and report provenance subgroups separately. The 22/43 candidate and 1/42 control rates describe the original development-reference stratum only. This is selection-biased AI-reviewed development evidence, not prevalence or a fresh final test. It unblocks `twinkl-752.5`; it does not score the MLP or adopt an architecture.
 >
-> **Weekly Drift Reviewer Critic-input decision (2026-07-12; reassessment pending):** [`twinkl-752.1`](reports/experiment_review_2026-07-12_twinkl_752_1_weekly_verifier_ablation.md) found that adding fixed `run_020` signals cut median development Drift recall from `0.40` to `0.20`, removed the median false Drift alert (`1` to `0`), and slightly reduced coverage (`0.756` to `0.732`). The recall comparison contained only five episodes, so the difference was one detected episode. `twinkl-752.5` must rerun the raw-input comparison on the 29-episode known-development union before `twinkl-752.2` treats the conditional rejection as durable.
+> **Weekly Drift Reviewer Critic-input decision (2026-07-12; reassessment pending):** [`twinkl-752.1`](reports/experiment_review_2026-07-12_twinkl_752_1_weekly_verifier_ablation.md) found that adding fixed `run_020` signals cut median development Drift recall from `0.40` to `0.20`, removed the median false Drift alert (`1` to `0`), and slightly reduced coverage (`0.756` to `0.732`). The recall comparison contained only five episodes, so the difference was one detected episode. `twinkl-752.5` must rerun the raw-input comparison on the 33-episode known-development union before `twinkl-752.2` treats the conditional rejection as durable.
 >
 > **Conformity / Self-Direction shortcut audit (2026-07-12):** [`twinkl-1r3d`](reports/experiment_review_2026-07-12_twinkl_1r3d_shortcut_audit.md) removed 3,406 individual word occurrences plus 20 repeated-word or phrase cues across 35 polarity-stratified, confident-correct `run_020` validation cases. No removal flipped a class, and no candidate cue was the most influential individual removal in a case. The audit does not support the tested brittle lexical-shortcut explanations, so the MLP may remain a baseline in `twinkl-752.1`; it does not prove construct understanding or replace the required consensus and human-anchor checks.
 >
@@ -40,7 +40,7 @@ It is not the forward model-development policy after `twinkl-752`.
 >
 > **Security target decision (2026-07-11):** [`twinkl-a30f`](reports/experiment_review_2026-07-11_twinkl_a30f_security_target.md) completed a receipt-bound, full-corpus active-state Security review and the paired `run_057`-`run_062` comparison. Repaired-target training raises median test Security QWK from `0.156` to `0.328` under repaired labels and from `0.205` to `0.372` under historical labels. Future `window_size: 1` training should use `security_active_critic_state_v1`, but the repaired runs stay off the historical frontier table because 678 Security labels changed. Absolute Security QWK and disagreement-case accuracy still leave representation and semantic work open.
 >
-> **Current drift-target status (2026-07-14):** `twinkl-752.4` supplies 27 development-reference episodes across 23 resolved Drift trajectories. Three overlap the earlier five; adding the two omitted prior episodes produces the 29-episode / 25-Drift-trajectory known-development union for `twinkl-752.5`. Four retired-audit episodes stay separate and four `twinkl-752.4` trajectories remain uncertain. The former 24-person `twinkl-v8pb` final-test population is now development-only; `twinkl-pv6s` must build a fresh final test. No scheduler, scorer, or architecture is promotion-ready, and the active entry-level frontier stays unchanged.
+> **Current drift-target status (2026-07-14):** `twinkl-752.4` supplies 31 episodes across 26 resolved Drift trajectories. Three overlap the earlier five; adding the two omitted prior episodes produces the 33-episode / 28-Drift-trajectory known-development union for `twinkl-752.5`. Four reviewed episodes came from the former final-test split; include them in the primary development analysis and report provenance subgroups separately. Four `twinkl-752.4` trajectories remain uncertain. The former 24-person `twinkl-v8pb` final-test population is now development-only; `twinkl-pv6s` must build a fresh final test. No scheduler, scorer, or architecture has deployment approval, and the active entry-level frontier stays unchanged.
 >
 > **Retired decision-level drift benchmark:** The former `twinkl-wq9p` consensus-derived frozen benchmark is [historical evidence only](../../docs/archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md). Do not rerun, score, tune, or promote from it; its former report and artifacts are not active repository surfaces.
 >
@@ -258,18 +258,19 @@ lanes reviewed all 874 entries and agreed on 849 (97.1%). A third blinded
 adjudicator resolved 21 of 25 disagreements; four entries and their four
 trajectories remain uncertain.
 
-The review found 27 maximal Drift episodes across 23 resolved trajectories.
+The review found 31 maximal Drift episodes across 26 resolved trajectories.
 Three overlap the earlier five; adding the two omitted prior episodes produces
-the 29-episode / 25-Drift-trajectory known-development union. A separate
-retired-test audit contains four episodes across three trajectories. Among
-resolved development cases, 22/43 candidates confirm as Drift and 1/42
-controls contains a Drift missed by both legacy candidate labels. These are
-selection-biased AI-reviewed rates, not prevalence or model false-alert rates.
+the 33-episode / 28-Drift-trajectory known-development union. Four reviewed
+episodes came from the former final-test split; they belong in the primary
+development analysis, with provenance reported as a subgroup. The 22/43
+candidate and 1/42 control rates describe the original development-reference
+stratum. These are selection-biased AI-reviewed rates, not prevalence or model
+false-alert rates.
 
-This result adds 24 net-new episodes but does not evaluate raw MLP input or the
+This result adds 28 net-new episodes but does not evaluate raw MLP input or the
 proposed scheduler. `twinkl-752.5` must compare weekly-only,
 weekly-with-raw-MLP-input, MLP-triggered early-plus-weekly, and matched-budget
-model-free schedules on the 29-episode union. VIF Critic results on
+model-free schedules on the 33-episode union. VIF Critic results on
 training-seen Journal Entries are in-sample. Full details:
 [`reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md`](reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md).
 
@@ -306,7 +307,7 @@ adjacent Drifts. The consensus replay shows the same per-Journal-Entry
 complementarity. The existing three-annotator anchor has no strict overlap with
 this development population, so it is explicitly unavailable rather than
 silently substituted. `twinkl-752.5` must rerun the raw-input comparison on the
-29-episode known-development union before `twinkl-752.2` treats the no-Critic
+33-episode known-development union before `twinkl-752.2` treats the no-Critic
 option as durable; no VIF architecture is adopted.
 Full details:
 [`reports/experiment_review_2026-07-12_twinkl_752_1_weekly_verifier_ablation.md`](reports/experiment_review_2026-07-12_twinkl_752_1_weekly_verifier_ablation.md).
