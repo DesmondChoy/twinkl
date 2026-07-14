@@ -1,47 +1,62 @@
 # AGENTS.md
 
-## Project Overview
+## Project Intent
 
-Twinkl is an "inner compass" that helps users align daily behavior with
-long-term values. Unlike traditional journaling apps that summarize
-moods, Twinkl maintains a dynamic self-model of the user's declared
-priorities and surfaces tensions when behavior drifts from intent.
+Twinkl is an academic capstone and time-boxed proof of concept. It helps users
+compare daily behavior with their declared priorities through an evolving
+self-model, the VIF Critic, the Weekly Drift Reviewer, and explainable Weekly
+Coach reflections.
 
-The core component is the **Value Identity Function (VIF)**: an
-evaluative engine that compares what users *do* (journal entries)
-against what they *value* (declared priorities) across Schwartz value
-dimensions. The intended behavior is vector-valued, uncertainty-aware,
-and trajectory-aware.
+For product, architecture, or evaluation decisions:
 
-This is an academic capstone project for the NUS Master of Technology
-in Intelligent Systems program, so favor clear, practical
-implementations over heavy architecture.
+1. Read the relevant section of `docs/prd.md`; it is authoritative for product
+   intent.
+2. Follow any detailed specification that the PRD explicitly delegates to.
+3. Use current code, tests, experiment reports, and Beads for implementation
+   status. Do not infer current status from old planning prose.
 
-## Operational Defaults
+Keep work practical: prefer the smallest complete, testable change over a broad
+rewrite or speculative architecture.
 
-1. Read `docs/prd.md` first for product intent. It is the source of truth.
-2. Treat other `docs/` files as supporting context unless they contradict
-   `docs/prd.md`.
-3. Keep solutions scoped to a time-boxed POC. Avoid over-engineering.
-4. Prefer small, testable increments over broad rewrites.
-5. Preserve existing project conventions unless there is a concrete reason
-   to change them.
+## Product and Data Invariants
+
+- Async persona generation is parallel between personas and sequential within
+  each persona so Journal Entries remain coherent.
+- Journal content should emerge from persona context, not rigid value labels.
+- Preserve banned-term and value-leakage protections when changing prompts or
+  generation logic.
+- Do not expose generation or labeling metadata to logic intended to represent
+  production behavior.
+- Do not treat AI review as human validation. State the label or review source
+  whenever it affects the conclusion.
+
+## Repository Map
+
+- `docs/prd.md` — product intent and current scope
+- `docs/canonical_nouns.md` — required product terminology for maintained prose
+- `src/vif/` — VIF Critic models, encoders, training, metrics, and run logging
+- `src/{synthetic,judge,wrangling,registry}/` — data generation and labeling
+- `src/{coach,nudge,evals}/` — downstream reasoning and evaluation components
+- `scripts/{experiments,journalling,drift}/` — executable research workflows
+- `tests/` — tests organized by the corresponding source area
+- `logs/experiments/` — run records, reports, and the experiment index
+- `docs/archive/` is historical; `docs/future_work/` is non-committed scope.
+
+Inspect the live tree instead of relying on this map for exhaustive inventory.
 
 ## Environment and Commands
 
-Do NOT use git worktrees. Work only in the main working directory.
-Stay on the current branch by default. Do NOT create or switch to a new
-branch unless the user explicitly tells you to. If branch isolation seems
-safer, ask first instead of deciding unilaterally.
+Do not use Git worktrees. Work in the main working directory and stay on the
+current branch unless the user explicitly asks for another branch.
 
 Activate the virtual environment before Python commands:
 
 ```sh
-source .venv/bin/activate.fish   # Preferred in this repo
-source .venv/bin/activate        # Bash/Zsh fallback
+source .venv/bin/activate.fish   # Fish
+source .venv/bin/activate        # Bash/Zsh
 ```
 
-Use `uv` for package/dependency actions:
+Use `uv` for dependency actions:
 
 ```sh
 uv sync
@@ -49,226 +64,115 @@ uv add <package>
 uv pip install <package>
 ```
 
-Script-based generation/judging helpers live in `src/synthetic/`,
-`src/judge/`, and `scripts/journalling/`.
+Common checks:
 
-## Commit Messages
+```sh
+uv run pytest <target>
+uv run ruff check <target>
+uv run mypy <target>             # When type behavior changed
+```
 
-- Write every commit as: `<type>: <summary>`
-- Prefer conventional types: `feat`, `fix`, `refactor`, `chore`, `docs`, `test`
-- When a commit is scoped to a single beads issue, the issue ID may be
-  used as the type prefix: `twinkl-4b3s: consolidate and archive VIF docs`
-- For conventional-type commits tied to issues, reference them in
-  parentheses: `docs: refresh eval scope (twinkl-3cb)`
-- Use `chore:` for tracker-only or maintenance-only commits
-- Keep the summary short, specific, and descriptive
+Follow `pyproject.toml` for machine-enforced style. Keep comments concise and
+only where they reduce cognitive load.
 
-## Architecture Snapshot
+## Scope and Authorization
 
-### Source Code (`src/`)
+- A request to explain, inspect, diagnose, or review is read-only unless the
+  user also asks for changes.
+- A request to implement or fix authorizes the smallest necessary repository
+  edits and proportionate verification, not unrelated cleanup.
+- Do not create or switch branches, commit, pull/rebase, sync Beads remotely,
+  push, open a PR, or change external state unless the user explicitly requests
+  it or it is already part of the agreed task scope.
+- Preserve unrelated working-tree changes. If they overlap the requested work
+  and cannot be handled safely, stop and ask one concise question.
 
-- `src/vif/` — VIF critic models (MLP ordinal, BNN), text/state encoders, dataset loading, training loops, evaluation metrics, and experiment logging
-- `src/registry/` — Persona registry with pipeline stages (`stage_synthetic`, `stage_wrangled`, `stage_labeled`)
-- `src/judge/` — Judge labeling consolidation
-- `src/wrangling/` — Parsers for synthetic and wrangled persona data
-- `src/models/` — Pydantic models (judge label schema)
-- `src/annotation_tool/` — Shiny for Python app for human annotation with inter-rater agreement metrics
+If ambiguity does not affect correctness or design direction, proceed with an
+explicit assumption. Ask only when the answer would materially change the
+result or authorize a meaningful external action.
 
-### Configuration and Prompts
+## Planning and Delegation
 
-- `config/` — `synthetic_data.yaml`, `schwartz_values.yaml`, `vif.yaml`
-- `prompts/` — Prompt templates (`*.yaml`) exposed via `prompts/__init__.py`
+- For non-trivial implementation or architecture choices, write a proportional
+  plan in the active Beads issue before editing.
+- Re-plan when evidence invalidates the approach. Skip formal planning for
+  small edits and read-only questions.
+- Use subagents only for bounded, independent work where parallelism materially
+  improves speed or confidence. Give each one clear ownership and avoid
+  concurrent edits to the same files.
+- For architecture or capstone-scope decisions, present options and trade-offs.
+  Do not silently commit the project to a major modeling or architecture choice.
 
-### Data and Artifacts (`logs/`)
+## Issue Tracking with Beads
 
-- `logs/registry/` — `personas.parquet` (central persona registry)
-- `logs/synthetic_data/` — Raw LLM-generated persona markdown files
-- `logs/wrangled/` — Parsed/cleaned persona markdown files
-- `logs/judge_labels/` — Per-persona JSON labels + consolidated `judge_labels.parquet`
-- `logs/annotations/` — Human annotator parquet files (per-annotator)
-- `logs/experiments/` — VIF training run logs (`runs/*.yaml`) and `index.md`
-- `logs/exports/` — Agreement reports and other exports
+Use `bd` for implementation, durable research, and documentation work. Run
+`bd prime` for current workflow instructions.
 
-### Scripted Workflows
+- Read-only analysis may inspect Beads when relevant but must not claim, create,
+  update, or close issues unless tracker changes are requested.
+- Before material repository edits, search for a matching issue. Claim it if it
+  exists; otherwise create a focused issue.
+- Capture a non-trivial plan, important decisions, and validation evidence in
+  the active issue at meaningful milestones.
+- Close an issue only after its acceptance criteria and relevant checks pass.
+  Use a commit or PR reference only when one actually exists.
+- Use `bd remember` for durable project knowledge. Do not create ad hoc memory
+  files or automatically log every conversational correction.
 
-- `src/vif/train.py` and `src/vif/train_bnn.py` — Critic training CLIs
-- `scripts/experiments/critic_training_v4_review.py` — Canonical frontier experiment driver for multi-model VIF review runs
-- `src/synthetic/generation.py` — Synthetic generation primitives and safeguards
-- `src/judge/labeling.py` — Judge rubric + scoring helpers
-- `scripts/journalling/` — Lightweight sanity-check scripts for generation/judge flows
+## Verification
 
-### Tests (`tests/`)
+Verify in proportion to risk before describing work as complete:
 
-- `tests/vif/` — Eval metrics, loss functions, ordinal base tests
-- `tests/wrangling/` — Wrangled data parser tests
+1. Read the complete changed files, not only the diff.
+2. Run targeted tests and Ruff checks for touched code; run broader checks when
+   shared contracts or critical paths changed.
+3. Run MyPy when type behavior or typed interfaces changed.
+4. For documentation, verify links, canonical nouns, and claims against current
+   behavior or source reports.
+5. For data or experiments, preserve provenance and record the exact inputs,
+   commands, seeds, outputs, and limitations needed to reproduce the result.
+6. Remove dead code, debug remnants, and accidental generated files.
+7. Inspect `git diff` and `git status`, then report what was and was not tested.
 
-### Documentation (`docs/`)
+Before an authorized commit, use `.claude/skills/quality/SKILL.md` as the
+fresh-eyes review checklist (`/quality` where that alias is supported).
 
-- `docs/canonical_nouns.md` — Canonical product terms for explanations and documentation
-- `docs/prd.md` — Product requirements (authoritative)
-- `docs/vif/` — VIF concepts, architecture, training, uncertainty, state pipeline
-- `docs/pipeline/` — Pipeline specs, annotation guidelines, judge instructions, data schema
-- `docs/evals/` — Evaluation specs (drift detection, explanation quality, judge validation, value modeling)
-- `docs/onboarding/` — Onboarding flow spec
-- `docs/capstone_report/` — Report sections
-- `docs/archive/` — Historical only
-- `docs/future_work/` — Non-committed ideas
+When asked to fix a bug or failing CI, reproduce it, identify the root cause,
+implement the smallest complete fix, and verify it without unnecessary
+questions. A diagnostic or status request alone does not authorize edits.
 
-## Implementation Principles
+Update affected documentation when behavior, contracts, commands, or adopted
+decisions change. Do not perform a generic documentation sweep by default.
 
-- Async persona generation is parallel per persona and sequential within a
-  persona for continuity.
-- Journal content should stay emergent from persona context, not rigid value
-  labels.
-- Keep banned-term/value leakage protections intact when touching prompts or
-  generation logic.
-- Avoid metadata leakage in any logic intended to mirror production behavior.
+## Communication
 
-## Code Style
+- All Codex prose on every surface, including Codex app commentary, plans,
+  Beads issue text, reviews, handoffs, and maintained documentation, must
+  strictly follow `docs/canonical_nouns.md`.
+- Write in plain English for immediate understanding. Use technical jargon only
+  when a real distinction requires it, and define it on first use.
+- Do not invent synonyms for canonical product terms. This prose rule does not
+  require renaming code identifiers, data fields, file paths, or historical
+  records.
+- Name the exact component, data, experiment setup, or output instead of vague
+  words such as “system,” “surface,” “condition,” or “artifact.”
+- In non-trivial handoffs, summarize material assumptions, the chosen approach,
+  verification performed, and remaining risks.
 
-- Imports: standard library first, then third-party, then local.
-- Naming: `snake_case` for functions/variables, `PascalCase` for classes.
-- Keep comments concise and only where they reduce cognitive load.
+## Git and Completion
 
-## Communication Clarity
+Commit messages use `<type>: <summary>`. Prefer `feat`, `fix`, `refactor`,
+`chore`, `docs`, and `test`. Reference the Beads issue in parentheses when
+useful, for example:
 
-- **General clarity rule**: Write for immediate understanding on first read. Prefer plain, everyday language, short sentences, and concrete wording over dense or abstract phrasing.
-- **Anti-jargon rule**: Do not make the user decode internal shorthand, umbrella terms, or technical jargon when a direct phrase would work. If a technical term is necessary, define it in plain English the first time you use it.
-- **Canonical nouns**: For product concepts in explanations and documentation, use `docs/canonical_nouns.md`. Avoid synonyms or extra jargon unless a real distinction requires them; define any necessary new term in plain English.
+```text
+docs: refresh eval scope (twinkl-3cb)
+```
 
-## Collaboration Signals
+An issue ID may be the prefix when the commit concerns only that issue. Use
+`chore:` for tracker-only or maintenance-only commits.
 
-- Include a short summary of assumptions, chosen approach, and risk areas in handoff notes.
-- Keep documentation updates aligned with behavioral changes where appropriate.
-
-## Quality Gate Before Commit
-
-Before creating a commit:
-
-1. Run `/quality` (repo alias for `.claude/skills/quality/SKILL.md`) before committing to review changes with fresh eyes.
-2. Review complete changed files, not only diffs.
-3. Run targeted tests/linting for touched modules.
-4. Remove obvious dead code and debug remnants.
-5. Confirm no behavior regressions in critical paths.
-
-If there is ambiguity and no blocking risk, proceed with explicit
-assumptions and note them. If ambiguity affects correctness or design
-direction, ask one concise clarifying question.
-
-## Issue Tracking with Beads (`bd`)
-
-Use `bd` (beads) for all issue tracking. This is mandatory, not optional.
-Run `bd prime` for the full command reference and workflow context.
-
-### Rules
-
-- Use `bd` for ALL task tracking — do NOT use TodoWrite, TaskCreate, or markdown TODO lists.
-- Use `bd remember` for persistent knowledge — do NOT use MEMORY.md files.
-
-### Before starting work
-- Run `bd ready` to find available work, or `bd list` to see all open issues.
-- If the work maps to an existing issue, claim it: `bd update <id> --claim`
-- If no issue exists, create one: `bd create "title" -d "description"`
-
-### During implementation
-- Reference the issue ID in commit messages when relevant.
-
-### After completing work
-- Close the issue: `bd close <id> -r "Implemented in <commit or PR ref>"`
-- Use `--suggest-next` to see newly unblocked issues.
-
-### Key commands
-| Action | Command |
-|---|---|
-| Find available work | `bd ready` |
-| List open issues | `bd list` |
-| Show issue details | `bd show <id>` |
-| Claim work | `bd update <id> --claim` |
-| Create issue | `bd create "title" -d "description"` |
-| Close issue | `bd close <id> -r "reason"` |
-| Search issues | `bd search "query"` |
-| Full command reference | `bd prime` |
-
-### Session completion
-
-**When ending a work session**, you MUST complete ALL steps below. Work is NOT complete until `git push` succeeds.
-
-1. **File issues** for remaining work.
-2. **Run quality gates** if code changed.
-3. **Update issue status** — close finished work, update in-progress items.
-4. **Push to remote** — this is MANDATORY:
-   ```bash
-   git pull --rebase
-   bd dolt push
-   git push
-   git status  # MUST show "up to date with origin"
-   ```
-5. **Verify** all changes committed and pushed.
-
-**CRITICAL RULES:**
-- Work is NOT complete until `git push` succeeds.
-- NEVER stop before pushing — that leaves work stranded locally.
-- NEVER say "ready to push when you are" — YOU must push.
-- If push fails, resolve and retry until it succeeds.
-
-## Workflow Orchestration
-
-### 1. Plan Node Default
-- Enter plan mode for ANY non-trivial task (3+ steps or architectural decisions)
-- If something goes sideways, STOP and re-plan immediately - don't keep pushing
-- Use plan mode for verification steps, not just building
-- Write detailed specs upfront to reduce ambiguity
-
-### 2. Subagent Strategy
-- Use subagents liberally to keep main context window clean
-- Offload research, exploration, and parallel analysis to subagents
-- For complex problems, throw more compute at it via subagents
-- One task per subagent for focused execution
-
-### 3. Self-Improvement Loop
-- After ANY correction from the user: update `tasks/lessons.md` with the pattern
-- Write rules for yourself that prevent the same mistake
-- Ruthlessly iterate on these lessons until mistake rate drops
-- Review lessons at session start for relevant project
-
-### 4. Verification Before Done
-- Never mark a task complete without proving it works
-- Diff behavior between main and your changes when relevant
-- Ask yourself: "Would a staff engineer approve this?"
-- Run tests, check logs, demonstrate correctness
-
-### 5. Demand Elegance (Balanced)
-- For non-trivial changes: pause and ask "is there a more elegant way?"
-- If a fix feels hacky: "Knowing everything I know now, implement the elegant solution"
-- Skip this for simple, obvious fixes - don't over-engineer
-- Challenge your own work before presenting it
-
-### 6. Autonomous Bug Fixing
-- When given a bug report: just fix it. Don't ask for hand-holding
-- Point at logs, errors, failing tests - then resolve them
-- Zero context switching required from the user
-- Go fix failing CI tests without being told how
-
----
-
-## Task Management
-
-1. **Plan First**: Capture plans in the active `bd` issue description, notes, or design fields. Do not create markdown TODO trackers.
-2. **Verify Plan**: Use the `AskUserQuestion` tool to check in with the user
-   before starting implementation. Present structured, multiple-choice questions
-   to resolve ambiguity quickly and keep the workflow moving. (Unavailable in
-   non-interactive mode / `codex exec`.)
-3. **Track Progress**: Update the relevant `bd` issue status or notes as you go.
-4. **Explain Changes**: High-level summary at each step.
-5. **Document Results**: Record the outcome in the `bd` issue and in the final handoff.
-6. **Capture Lessons**: Update `tasks/lessons.md` after corrections.
-7. **Update Documentation**: Run parallel sub-agents to scan potentially
-   affected documentation and update where needed.
-
----
-
-## Core Principles
-
-- **Simplicity First**: Make every change as simple as possible. Impact minimal code.
-- **No Laziness**: Find root causes. No temporary fixes. Senior developer standards.
-- **Minimal Impact**: Changes should only touch what's necessary. Avoid introducing bugs.
+Commit, pull/rebase, `bd dolt push`, and `git push` only when publishing was
+explicitly requested or agreed. If publishing is in scope, verify both Git and
+Beads remote state before claiming completion. Otherwise leave changes
+uncommitted and report the working-tree state.
