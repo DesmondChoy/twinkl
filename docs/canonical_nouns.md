@@ -23,13 +23,22 @@ fields, file paths, or historical records.
 | **Journal Entry** | One chronological journal entry written by the user. When the evaluated text also contains a displayed nudge and response, say so explicitly. | runtime state, trajectory cell |
 | **Core Value** | A value explicitly selected by the user. Only Core Values can produce Drift. | `top_values` or declared-core set outside code-level discussion |
 | **LLM-Judge** | The offline LLM that creates training or reference labels. It is not the VIF Critic, Weekly Drift Reviewer, or a human reviewer. | Judge, teacher, oracle, labeling system |
+| **LLM-Judge VIF Label** | An LLM-Judge label of `-1`, `0`, or `+1` for one Journal Entry and value, created to train or evaluate the VIF Critic. | older label, legacy label, LLM-Judge output |
+| **LLM-Judge Conflict Label** | An LLM-Judge reference label of **Conflict**, **Not Conflict**, or **Uncertain** for one Journal Entry and Core Value under the current displayed-behavior definition. A resolved label is **Conflict** or **Not Conflict**; **Uncertain** remains unresolved. | newer label, resolved judge label when resolution is not the distinction, LLM-Judge output |
 | **VIF Critic** | The trained model, currently an MLP, that predicts `-1`, `0`, or `+1` for each Journal Entry and value, plus uncertainty. | system, scorer, or model when the VIF Critic is specifically meant |
-| **Conflict (`-1`)** | One Journal Entry that clearly shows behavior or a choice against one value. State whether it is an LLM-Judge reference label or a VIF Critic prediction when the source matters. | negative evidence, misalignment signal |
+| **VIF Critic Prediction** | The VIF Critic's predicted `-1`, `0`, or `+1` for one Journal Entry and value, plus uncertainty. | VIF Critic output, score when prediction is meant |
+| **Conflict (`-1`)** | One Journal Entry that clearly shows behavior or a choice against one value. When the source matters, name the LLM-Judge VIF Label, LLM-Judge Conflict Label, VIF Critic Prediction, or Weekly Drift Reviewer Decision. | negative evidence, misalignment signal |
 | **Drift** | Two consecutive Conflicts for the same Core Value. A longer uninterrupted run is still one Drift. | sustained-conflict episode, meaningful two-entry pattern, reference event |
 | **Weekly Drift Reviewer** | The LLM that reviews weekly Journal Entries for Conflict. An experiment may run it with or without VIF Critic predictions. It is not the VIF Critic. | weekly verifier, LLM arm, system |
+| **Weekly Drift Reviewer Decision** | The Weekly Drift Reviewer's decision of **Conflict**, **Not Conflict**, or **Abstain** for one Journal Entry and Core Value. | reviewer output, weekly label |
 | **Drift Detector** | The deterministic rule that decides whether two consecutive Weekly Drift Reviewer Conflicts for the same Core Value form Drift. The approved rule is not wired or deployment-approved yet. | trigger layer, episode engine |
 | **Weekly Digest** | The structured weekly record containing values, evidence, Drift state, and inputs for the Weekly Coach. | artifact, payload, packet |
 | **Weekly Coach** | The component that turns the Weekly Digest into the user-facing reflection and question. | narrative layer, delivery engine |
+
+Use **resolved** only when distinguishing a **Conflict** or **Not Conflict**
+LLM-Judge Conflict Label from an **Uncertain** one. Use **consecutive** to
+describe the relationship between two labels; it is not part of either label's
+name.
 
 ## Use Concrete Experiment and Data Names
 

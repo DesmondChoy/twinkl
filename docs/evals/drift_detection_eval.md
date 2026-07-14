@@ -58,6 +58,39 @@ rules are outside the v1 evaluation contract.
 The empirical basis is
 [`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md).
 
+### Why the VIF Critic does not directly define Drift
+
+A natural alternative is to skip the Weekly Drift Reviewer and treat two
+consecutive VIF Critic `-1` Predictions as a Drift, since a VIF Critic
+Prediction of `-1` and a Weekly Drift Reviewer Conflict describe the same
+event. That is not adopted. The reason is not a competing definition of
+Conflict; it is label precision, auditability, and evaluation independence.
+
+- **Precision.** On the matched `twinkl-752.1` Journal Entries, the
+  `run_019`-`run_021` family reached macro `recall_-1` of `0.530` to `0.607`
+  but `-1` precision of only `0.262` to `0.327`
+  ([architecture/drift_detection.md](../architecture/drift_detection.md)). Raw
+  VIF Critic Predictions recover candidate Conflicts well but are not a safe
+  standalone Drift rule.
+- **Measured, not assumed.** Supplying VIF Critic Predictions to the Weekly
+  Drift Reviewer was tested and did not help. See the `twinkl-752.1` and
+  `twinkl-752.5` rows in [Metrics and Targets](#metrics-and-targets): raw input
+  left Drift recall inconclusive, lowered coverage, and raised median false
+  Drift alerts.
+- **Evaluation independence.** The VIF Critic is trained on LLM-Judge VIF
+  Labels. Deriving the Drift target from VIF Critic Predictions would create a
+  self-confirming loop, so the Weekly Drift Reviewer decides Conflict, Not
+  Conflict, or Abstain without seeing VIF Critic Predictions.
+
+The rejected direct-authority options — no raw VIF Critic Predictions in the
+Weekly Drift Reviewer prompt, and no VIF Critic veto, confirmation, or direct
+Drift decision — are recorded in
+[architecture/drift_detection.md](../architecture/drift_detection.md). The
+conditional exception remains candidate confirmation: VIF Critic Predictions may
+later propose adjacent pairs for the Weekly Drift Reviewer to confirm, but they
+cannot produce or suppress a user-facing Drift claim without separate deployment
+approval.
+
 ---
 
 ## Implementation Status

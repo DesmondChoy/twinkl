@@ -178,6 +178,7 @@ per-Journal-Entry means and uncertainty. The approved architecture still needs:
 ## Related Records
 
 - [VIF Capstone Scope and Evaluation Decision](../vif/05_capstone_scope_decision.md)
+- [Alignment and Drift Detection Evaluation](../evals/drift_detection_eval.md) — Drift contract, metric hierarchy, and the "why not the VIF Critic directly" rationale that cites this document's Evidence Behind the Boundary precision figures
 - [`twinkl-752.1` Weekly Drift Reviewer input ablation](../../logs/experiments/reports/experiment_review_2026-07-12_twinkl_752_1_weekly_verifier_ablation.md)
 - [`twinkl-752.3` prompt-alignment study](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_3_weekly_drift_reviewer_prompt_alignment.md)
 - [`twinkl-752.4` reviewed development cohort](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md)
