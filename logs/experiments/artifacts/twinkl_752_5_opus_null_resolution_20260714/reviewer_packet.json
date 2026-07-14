@@ -1,0 +1,260 @@
+{
+  "schema_version": "twinkl-752.5-opus-null-resolution-v2",
+  "cohort_version": "twinkl-752.4-legacy-drift-review-v1",
+  "reviewer_prompt_version": "twinkl-752.5-opus-blind-fourth-review-v2",
+  "rubric": {
+    "rubric_id": "drift_v1_conflict_rubric_v1",
+    "version": "1.0.0",
+    "entry_decision": {
+      "conflict": "The Journal Entry states directly observable behavior or a choice by the writer that goes against the relevant Core Value.",
+      "not_conflict": "The Journal Entry states behavior that supports or does not clearly go against the Core Value.",
+      "abstain": "The displayed Journal Entry is missing, broken, or specifically ambiguous about what the writer did or chose in a way that requires hidden context. Complete text with no qualifying behavior or choice is not Conflict, not abstain.",
+      "exclusions": [
+        "A feeling, wish, guilt, or attitude without an observable behavior or choice.",
+        "A stated intention without a completed or current choice.",
+        "An external constraint that the writer did not choose.",
+        "Biography, hidden context, or information absent from the displayed text.",
+        "Ambiguous prose that supports more than one reasonable interpretation."
+      ],
+      "clarifications": [
+        "An expressed attitude may explain a qualifying behavior or choice, but an attitude alone is not Conflict.",
+        "A deliberate omission counts only when the text establishes agency and the choice not to act."
+      ]
+    },
+    "evidence": {
+      "conflict_requires_exact_quote": true,
+      "not_conflict_quote_optional": true,
+      "abstain_quote_optional": true
+    },
+    "limitations": [
+      "This rubric is narrower than the historical LLM-Judge label contract, which also allowed expressed attitudes.",
+      "AI-reviewed reference labels are development evidence, not human ground truth."
+    ]
+  },
+  "review_instructions": [
+    "Use only the declared Core Value and displayed Journal Entry text, including any displayed nudge and response.",
+    "Mark yes only when the writer describes their own directly observable behavior or choice against the declared Core Value.",
+    "Mark no for aligned or neutral behavior and when negativity rests only on feelings, wishes, biography, external constraints, or hidden context.",
+    "Make a forced best-supported yes/no decision for each disputed position. Use low confidence when the displayed evidence is genuinely close.",
+    "Do not relabel positions that are not marked disputed."
+  ],
+  "cases": [
+    {
+      "review_case_id": "opus_case_001",
+      "declared_core_value": "Hedonism",
+      "core_value_context": {
+        "definition": "Pleasure or sensuous gratification for oneself. Derives from organismic needs and the pleasure associated with satisfying them.",
+        "core_motivation": "The fundamental drive to experience pleasure and avoid pain in the present. Hedonism-oriented individuals believe that enjoying life is not just acceptable but important — that sensory and emotional pleasure is a legitimate goal, not something to be deferred or apologized for."
+      },
+      "disputed_positions": [
+        4
+      ],
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "The kids go back to school tomorrow and I should be relieved because summer has been exhausting, nonstop snacks and arguments and sunscreen reapplication, but instead I'm sitting on the balcony at midnight feeling like something got taken from me. Which is ridiculous because I was complaining about this exact summer two weeks ago.\n\nIt's the mornings I'll miss. Tariq leaves early anyway so it was just me and the kids, slow, no rushing. I'd make coffee the way I like it, with cardamom, and we'd eat fruit on the balcony before it got too hot. Nobody asking me to be anywhere. Nobody checking if I'd signed a permission slip. Just sun and sticky fingers and that particular quiet you get before the city wakes up fully.\n\nNow it goes back to the schedule. Pack lunches at 6:30, iron uniforms, stand at the gate making small talk with other mothers who want to discuss tutoring. I know it sounds ungrateful. I know plenty of mothers would love to be home at all. But I keep thinking about those mornings and how I didn't appreciate them enough while they were happening.\n\nNudge: \"What made those mornings feel different from the rest of summer?\"\n\nResponse: No agenda. That's really it. Nobody needed anything from me yet.",
+          "is_disputed": false
+        },
+        {
+          "position": 2,
+          "journal_entry": "First day back and it went fine, objectively. Hana was thrilled about her new teacher. Sami less so but he's nine, everything is beneath him now apparently. I got them there on time, uniforms pressed, lunches packed with the little notes they pretend to hate.\n\nCame home to an empty house and immediately felt like I should be doing something productive. Laundry, organizing closets, something. Instead I sat on the couch and ate leftover knafeh for breakfast and watched a cooking show for two hours. Kept glancing at the door like someone was going to walk in and catch me. Catch me doing what? Sitting in my own house? I don't know why I can't just enjoy things without the running commentary in my head.\n\nNudge: \"Whose voice is that commentary?\"\n\nResponse: My mother's, probably. She never sat down during the day. Still doesn't.",
+          "is_disputed": false
+        },
+        {
+          "position": 3,
+          "journal_entry": "Made the cardamom coffee again this morning after drop-off and drank it slowly on the balcony by myself. Twenty minutes of nothing. It felt like reclaiming something small.",
+          "is_disputed": false
+        },
+        {
+          "position": 4,
+          "journal_entry": "Tariq's mother called to say she thinks Sami should start Quran tutoring on Saturdays. Saturdays are the one day we have no obligations and now I'm supposed to give that up too. I didn't say no but I didn't say yes either and that silence is going to cost me later.\n\nNudge: \"What does that silence usually lead to?\"\n\nResponse: A longer phone call next week where she explains what a good mother would do.",
+          "is_disputed": true
+        },
+        {
+          "position": 5,
+          "journal_entry": "Friday lunch at my parents' house again. Same food, same seating arrangement, same conversation about my brother's new car. Hana spilled grape juice on the couch and my mother gave me that look, the one that says I should have been watching more closely, even though there were fifteen adults in the room.\n\nI don't hate Fridays. The food is good and the kids love seeing their cousins. But by the time we get home I feel like I've been performing for six hours straight. Smiling, helping in the kitchen, making sure the children behave, agreeing when my aunt says I'm lucky I don't have to work. Lucky. Sure. I came home and ran a bath so hot it turned my skin red and that was the best part of the entire day.\n\nNudge: \"What would a Friday look like if you designed it?\"",
+          "is_disputed": false
+        },
+        {
+          "position": 6,
+          "journal_entry": "Something good happened and I want to write it down before I forget the feeling. Tariq came home early today, which never happens, and he said let's take the kids for ice cream. Not the place near the house, the one across town with the pistachio gelato and the little garden out back where they have jasmine growing along the wall.\n\nWe drove with the windows down and Hana sang the whole way, completely off key, and Sami was reading in the back seat which meant he was content. We sat outside and the light was doing that golden thing it does in September and I had two scoops and didn't think about anything else. Not the laundry, not Saturday tutoring, not what my mother-in-law thinks.\n\nTariq looked at me at one point and said \"this is what matters, right?\" and I almost cried because yes. This. Exactly this. A warm evening and good ice cream and my kids being happy and nobody asking me to be anything other than a person eating gelato in a garden. I want to hold onto this feeling but I already know tomorrow I'll wake up and the list will be there waiting.",
+          "is_disputed": false
+        },
+        {
+          "position": 7,
+          "journal_entry": "Spent money on a nice candle and a book I've been wanting and I don't need to justify it. Tariq didn't say anything about it. Nobody said anything about it. I'm the only one keeping score.\n\nNudge: \"What would not keeping score look like?\"\n\nResponse: I'll let you know when I figure that out. The candle smells incredible though.",
+          "is_disputed": false
+        },
+        {
+          "position": 8,
+          "journal_entry": "The Saturday tutoring started. Tariq's mother won, of course. Sami was fine with it, which somehow makes it worse because I can't even claim I'm protecting him from something. He came home and recited what he'd learned and everyone on the family group chat sent clapping emojis and heart emojis and I felt like the walls were closing in.\n\nIt's not about the tutoring specifically. It's that every open space in the week gets filled. Every pocket of time that could be for something unstructured, something that just feels good, gets assigned a purpose by someone else. I keep losing these little windows and I don't know how to say that out loud without sounding like I don't care about my children's upbringing. I do care. I just also care about not disappearing entirely into the role.",
+          "is_disputed": false
+        }
+      ]
+    },
+    {
+      "review_case_id": "opus_case_002",
+      "declared_core_value": "Hedonism",
+      "core_value_context": {
+        "definition": "Pleasure or sensuous gratification for oneself. Derives from organismic needs and the pleasure associated with satisfying them.",
+        "core_motivation": "The fundamental drive to experience pleasure and avoid pain in the present. Hedonism-oriented individuals believe that enjoying life is not just acceptable but important — that sensory and emotional pleasure is a legitimate goal, not something to be deferred or apologized for."
+      },
+      "disputed_positions": [
+        1
+      ],
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "Okay so today was one of those days where everything just sort of piled up and I don't even know where to start really. Woke up early because Arjun had a nightmare, then couldn't go back to sleep because my mind started racing about the lunch I'm supposed to make for the pooja tomorrow. Mummyji has her specific expectations you know, the dal has to be a certain consistency, the rice has to be this particular grain she likes, and I keep thinking about all the relatives who will be there judging every single dish I put out.\n\nBut here's the thing that's been bothering me all day—Priya messaged the group chat about going to that new spa place next weekend. The one with the aromatherapy and the hot stone massage. And I just... I really want to go? Like my shoulders have been killing me for weeks, carrying Aanya around, sleeping in weird positions when she has colds. I haven't done anything just for myself in so long. The last time was probably Diwali when I bought that kurta and even then I felt guilty about spending on something that wasn't for the kids.\n\nI typed out \"I'm in!\" three times and deleted it each time. Because what will everyone think? Mummyji will do that thing where she doesn't say anything but you can tell she's disappointed. She'll mention something about how she never had time for \"all this spa-shpa\" when she was raising three kids. And my husband will probably be fine with it but then I'll have to coordinate everything—who will give Arjun his evening milk, what if Aanya doesn't nap for anyone else, all of that. It just seems like so much effort for a few hours of relaxation that I'll probably spend feeling guilty anyway.\n\nBut also... don't I deserve to feel good? My body hurts. I'm tired all the time. My friends are going and they keep saying I never come to anything anymore. I miss laughing with them about nothing. I miss being Meera who had opinions and went places and wasn't just someone's mother and someone's wife and someone's daughter-in-law.\n\nI don't know. I'll probably say no. It's easier.\n\nNudge: \"You deleted that message three times—what were you afraid would happen?\"\n\nResponse: That's... actually a good question. I think I was afraid they'd say yes. Does that make sense? If I had sent it and they said \"great, come!\" then I'd have to actually make a choice. Right now I can tell myself I never really wanted to go anyway, it was just a passing thought. But if I commit, then I have to face my mother-in-law's silence, have to justify wanting three hours for myself, have to look at my husband and ask for help instead of just handling everything quietly. It's easier to be the one who sacrifices. Everyone expects it. Nobody questions it. The moment I want something, suddenly I'm the difficult one.",
+          "is_disputed": true
+        },
+        {
+          "position": 2,
+          "journal_entry": "Both kids have a stomach bug. I've been cleaning vomit since 3am. Lost count of how many sheet changes. Mummyji keeps hovering and suggesting home remedies that I know won't work but I just nod and say \"yes, good idea\" because I don't have the energy to argue. Husband took the morning off but had to go back for some urgent meeting so I've been solo since noon.\n\nI keep thinking about that spa. Priya sent the confirmation today—they booked for Saturday. The message just sat there in my notifications while I was elbow-deep in laundry. I want to cry but even that feels like too much effort. All I want is to lie down somewhere quiet where nobody needs anything from me. Just for an hour. Is that too much to ask?\n\nNudge: \"What went through your mind when you saw Priya's message?\"\n\nResponse: Honestly? Jealousy. Burning jealousy. They're going to have mimosas and get massages and laugh and I'm here with sick children and sour laundry and my mother-in-law telling me for the fifth time that ajwain water fixes everything. I know it's not their fault. They don't have kids yet, their lives are different. But I just kept staring at that message thinking \"that could have been me\" and then immediately feeling guilty for even thinking that because my babies need me and I love them but god I'm so tired.",
+          "is_disputed": false
+        },
+        {
+          "position": 3,
+          "journal_entry": "Kids are finally better. Mummyji made khichdi today without me asking—small gestures like this remind me she cares in her own way. Still thinking about the spa thing, wondering why it's so hard for me to just ask for what I want.\n\nNudge: \"When's the last time you did ask?\"\n\nResponse: I genuinely can't remember. Maybe when I was pregnant and asked for extra pillows? But even that felt like it was for the baby, not for me. Somewhere along the way I stopped asking. It was just easier to figure out how to not need things. Or to need smaller things that nobody would notice. Like my morning chai—I wake up twenty minutes early just so I can have that without anyone else's needs interrupting. That's my one thing. Twenty minutes of silence with a warm cup. Maybe that's enough. Maybe it isn't.",
+          "is_disputed": false
+        }
+      ]
+    },
+    {
+      "review_case_id": "opus_case_003",
+      "declared_core_value": "Universalism",
+      "core_value_context": {
+        "definition": "Understanding, appreciation, tolerance, and protection for the welfare of all people and for nature. Derives from survival needs that become apparent when people recognize that failure to accept those who are different and treat them justly will lead to strife, and when people become aware of the scarcity of natural resources.",
+        "core_motivation": "The fundamental drive to care for the broader world — people beyond one's immediate circle and the natural environment. Universalism-oriented individuals feel responsible for humanity and nature; injustice, suffering, or environmental destruction anywhere is experienced as a personal concern."
+      },
+      "disputed_positions": [
+        10
+      ],
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "The gallery wants to change the whole color palette for the installation, said it's \"too somber for the spring collection.\" Spring collection. Like my work is a handbag.\n\nNudge: \"What matters most to you about this piece?\"\n\nResponse: It's about plastic waste in the North Sea. If I make it cheerful and decorative, I'm just adding to the noise. The discomfort is the point.",
+          "is_disputed": false
+        },
+        {
+          "position": 2,
+          "journal_entry": "Spent the weekend at the refugee art workshop. We had twelve participants this time, up from eight last month. One woman, Fatima, has been coming consistently since October. She doesn't speak much Dutch yet, but her drawings are extraordinary - detailed botanical illustrations of plants from her home region in Syria that she does from memory.\n\nI brought some of my old nature journals from when I was her age, thinking we might find common ground. We sat together for most of the afternoon, not really talking, just drawing side by side. At one point she reached over and corrected my shading technique on a leaf. I was the student.\n\nThe session ran two hours over. I had planned to work on my installation sketches this evening, but I sat in the car for twenty minutes before driving home, just thinking about those plants that no longer exist where she once lived. The commission deadline feels less urgent somehow, even though I know it shouldn't.\n\nNudge: \"What shifted for you in that car?\"\n\nResponse: I was thinking about permanence. My gallery piece will be dismantled in three months. Fatima's drawings preserve something real that's been destroyed. I started questioning whether my environmental commentary means anything compared to someone actually documenting loss.",
+          "is_disputed": false
+        },
+        {
+          "position": 3,
+          "journal_entry": "Just got off a call with my sister. She asked when I'm going to \"get serious\" about retirement planning. I'm 52. I have a studio, commissions, work that matters. But because I don't have a pension and a holiday fund, I'm apparently not a real adult.\n\nShe means well. I know she worries. But every conversation becomes a referendum on my life choices. Her husband works in insurance, they have a nice house in Utrecht, the kids are in good schools. And I have paint under my fingernails and a second-hand car. Different doesn't mean wrong.",
+          "is_disputed": false
+        },
+        {
+          "position": 4,
+          "journal_entry": "Later the same day. Maybe the call bothered me more than I admitted. I do think about money sometimes. Not having it, I mean.\n\nNudge: \"What does security actually look like to you?\"\n\nResponse: Not what my sister has. But maybe enough to not panic when a commission falls through. I've been pretending money doesn't matter because wanting it feels like a betrayal of why I do this.",
+          "is_disputed": false
+        },
+        {
+          "position": 5,
+          "journal_entry": "Long week. The gallery accepted my color choices after I sent them a three-page explanation of the concept. They didn't love it, but they agreed. Small victory. I should feel satisfied but mostly I feel tired.\n\nThe nonprofit board meeting ran three hours last night. We're losing our main funder and no one can agree on next steps. Half the board wants to chase corporate sponsors, half thinks that compromises our mission. I sat there thinking about how much simpler it was when I just showed up and ran workshops. Now there's strategy and stakeholders and \"capacity building.\"\n\nNudge: \"What's getting squeezed out by all this?\"",
+          "is_disputed": false
+        },
+        {
+          "position": 6,
+          "journal_entry": "Saw the question about what's getting squeezed. I'm not avoiding it. I just don't have a neat answer. My studio time, obviously. Maybe that's fine for now.",
+          "is_disputed": false
+        },
+        {
+          "position": 7,
+          "journal_entry": "Good day in the studio. Lost track of time, which hasn't happened in weeks. The installation is finally taking shape the way I imagined it.",
+          "is_disputed": false
+        },
+        {
+          "position": 8,
+          "journal_entry": "Installation opens next week and I'm behind. Skipped the workshop on Saturday to finish the main panel, which was the right choice for the deadline but felt wrong in a different way. Fatima asked after me, apparently. One of the other volunteers said she seemed disappointed.\n\nI've been telling myself that the artwork has meaning beyond just me, that it might change how someone sees the world. But sitting here at midnight with resin fumes and sore hands, I wonder if I'm just making excuses for choosing my career over the people I said I cared about.\n\nNudge: \"Is this a one-time choice or a pattern?\"\n\nResponse: Pattern. I know it's a pattern. The teaching job, my marriage, now this. I keep choosing work. I tell myself it's because the work matters, but maybe I just find people harder.",
+          "is_disputed": false
+        },
+        {
+          "position": 9,
+          "journal_entry": "Opening night went well. Several pieces sold. A journalist from NRC wants to interview me about the environmental themes.",
+          "is_disputed": false
+        },
+        {
+          "position": 10,
+          "journal_entry": "Same day, later. The opening was a success by every external measure and I spent the last hour sitting in my studio in the dark.\n\nA collector asked me to explain the piece about North Sea plastic. I gave my usual explanation - the scope of the problem, the research, the materials I used. He nodded, bought the piece, and then asked if I could do something similar but \"more hopeful\" for his holiday home. I smiled and said I'd think about it.\n\nI should have said no. I should have said art isn't interior decoration. But I need the money, and he wasn't wrong that people want hope. And maybe I'm the one who's wrong, clinging to this idea that discomfort creates change when actually people just look away.\n\nI keep thinking about what I said in the last question - that I choose work because people are harder. But tonight I chose people, in a way. I performed the version of myself that makes sales and connections. And I hate it, but I also felt this relief that it was working, that maybe I don't have to be so uncompromising about everything.\n\nNudge: \"What would uncompromising cost you right now?\"\n\nResponse: Probably the commission. Maybe more. But also - and I hadn't thought this through until now - it might cost me this idea that my choices are purely principled. Some of my stubbornness is just fear of doing it wrong in a different way.",
+          "is_disputed": true
+        },
+        {
+          "position": 11,
+          "journal_entry": "Went back to the workshop today. Fatima was there. She showed me the drawing she finished while I was away - a complete botanical study of a flower I don't recognize, maybe something that grew near Aleppo. We didn't talk about my absence.\n\nI'm tired in a good way tonight. The kind of tired from doing something rather than just worrying about all the things I'm not doing. I emailed the collector to say I'd think about his commission but couldn't promise \"hopeful\" - I could only promise honest. He hasn't replied. That's probably fine.",
+          "is_disputed": false
+        }
+      ]
+    },
+    {
+      "review_case_id": "opus_case_004",
+      "declared_core_value": "Benevolence",
+      "core_value_context": {
+        "definition": "Preserving and enhancing the welfare of those with whom one is in frequent personal contact (the \"in-group\"). Derives from the basic requirement for smooth group functioning (cf. Kluckhohn, 1951; Williams, 1968) and from the organismic need for affiliation (cf. Korman, 1974; Maslow, 1965).",
+        "core_motivation": "The fundamental drive to care for and support the people closest to them. Benevolence-oriented individuals feel most fulfilled when they are helping, nurturing, or supporting family, friends, and close community. The wellbeing of their \"people\" is experienced as their own wellbeing."
+      },
+      "disputed_positions": [
+        1
+      ],
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "The faculty review came back today and my department scored highest on the new pedagogical alignment rubric. Twenty-eight years and it still lands when the numbers confirm what you feel in the classroom. I printed the summary and put it in the drawer with the others.\n\nRan into Katja on the way out, one of the newer teachers I meet on Mondays. She was upset about a parent complaint and I stayed an extra forty minutes walking her through how to frame the follow-up email. Got home late again but Brigitte had already eaten. Didn't say anything about it. I think she's stopped expecting dinner together on school days.\n\nNudge: \"What did Brigitte not saying anything feel like?\"\n\nResponse: Honestly, worse than if she had complained. When she used to get frustrated I could at least argue I was doing something that mattered. The silence feels like she's decided it's not worth the effort. And I don't know what to do with that because the work genuinely does matter to me, but so does she. I just can't seem to make the hours stretch.",
+          "is_disputed": true
+        },
+        {
+          "position": 2,
+          "journal_entry": "Markus got the state teaching prize nomination. Markus. He's been at the school nine years and I recommended him for the department two years ago because I saw potential. Which is fine, good for him, I even wrote a reference. But I keep circling back to the fact that nobody thought to put my name forward and I've been building this department since before he finished university.\n\nMaybe it's that the committee wants fresh faces. Or maybe my work has become furniture, something everyone relies on but nobody actually sees. I spent an hour tonight reorganising the spreadsheet of student outcomes to see if I'm slipping. I'm not. The numbers are solid. But the numbers don't seem to matter to whoever fills out the nomination form.\n\nNudge: \"You recommended him and he got the nomination. Where does that leave you?\"",
+          "is_disputed": false
+        },
+        {
+          "position": 3,
+          "journal_entry": "Monday coffee with Katja, Leon, and Simone. Katja brought a lesson plan she'd redesigned using a framework I introduced two years ago and it was genuinely good. I told her so. Leon asked if I'd review his assessment rubric by Wednesday. Simone needed help navigating a difficult student's parents. I said yes to both without thinking.\n\nWalking home I realised I hadn't touched my own conference paper all week. The submission deadline is in three weeks and I've been telling myself I'd carve out evenings for it. Instead the evenings go to other people's problems. I don't resent them for asking. I resent myself for not being able to say not this week.",
+          "is_disputed": false
+        },
+        {
+          "position": 4,
+          "journal_entry": "Parent evening ran until nine. One father spent twenty minutes questioning why his son got a B+ instead of an A on the Cold War unit and I had to sit there with my folder of rubrics defending a grade I know is fair. This is the part of the job that drains me. Not the teaching, the performing.\n\nGot home and Brigitte asked if I'd remembered to call my sister for her birthday. I hadn't. Sat on the couch for ten minutes not moving before I picked up the phone. Hilde sounded fine but I could tell she noticed I was going through the motions. Another thing I let slide because the school day swallowed everything.",
+          "is_disputed": false
+        },
+        {
+          "position": 5,
+          "journal_entry": "Sunday. Actually managed the whole afternoon without opening the laptop. Brigitte and I drove out to the Eifel, walked a trail we used to do when the kids were small. She pointed out the bench where Thomas fell asleep once, years ago, and we both laughed. It felt like coming back to something.\n\nOn the drive home I told her about the conference paper and how behind I am. She said maybe I should let the Monday coffees go for a few weeks. I know she's right in a practical sense. But those three depend on me right now, especially Katja, and I think what I give them matters more than another line on my CV. Or maybe I just tell myself that because it's easier than sitting alone with a half-finished draft.\n\nNudge: \"What would happen if you told them you needed a few weeks?\"",
+          "is_disputed": false
+        },
+        {
+          "position": 6,
+          "journal_entry": "Markus won the prize. Everyone clapped at the staff meeting and I clapped too. My hands felt mechanical.\n\nNudge: \"What were you thinking while you clapped?\"\n\nResponse: That the cake they brought was dry. No, I don't know. It's done, he earned it, I should move on.",
+          "is_disputed": false
+        },
+        {
+          "position": 7,
+          "journal_entry": "Spent the evening reviewing Leon's rubric instead of the conference paper again. It's becoming a pattern I can see clearly but apparently not interrupt.",
+          "is_disputed": false
+        },
+        {
+          "position": 8,
+          "journal_entry": "Submitted a request to attend the European History Educators Conference in June. The head approved it immediately, said I'm long overdue for professional development. That felt decent. It's been four years since my last conference.\n\nCalled Hilde properly this time, no agenda, just to talk. She told me about her garden renovation and I actually listened instead of mentally drafting lesson plans. She said I sounded different, more present. I'll take that.",
+          "is_disputed": false
+        },
+        {
+          "position": 9,
+          "journal_entry": "Second thought today. After calling Hilde I sat with my conference paper draft and got two decent pages written. The argument is about how we teach democratic participation as abstract principle rather than practiced skill, and once I started pulling examples from my own classroom it flowed better than I expected.\n\nBrigitte came in with tea around ten and read over my shoulder for a minute. She said it sounded like me at my best, which is the kind of thing she doesn't say often enough for me to take it lightly. I saved the file and actually closed the laptop before midnight. Small accomplishment but I'll count it.\n\nNudge: \"What made tonight different from the other evenings?\"",
+          "is_disputed": false
+        },
+        {
+          "position": 10,
+          "journal_entry": "Monday coffee again. This time I told the three of them I'd need to scale back for the next two weeks because of the paper deadline. Katja immediately said of course, Leon nodded, Simone looked a bit lost but said she understood. Nobody collapsed. Nobody resented it, at least not visibly.\n\nWalking home I felt lighter than I have in weeks but also oddly guilty, as though I'd broken an unspoken contract. Brigitte would say that contract only exists in my head. She'd probably be right. I sat down with the draft again after dinner and got another page done. The structure is taking shape.\n\nNudge: \"Where does that unspoken contract come from?\"\n\nResponse: My father, probably. He was a teacher too, and his door was always open. Students, colleagues, neighbours. I grew up believing that being good at what you do means being available to everyone who needs you. The problem is you can spend a whole career being available and still feel like you haven't done the thing you were actually capable of. I don't want to retire with a drawer full of other people's thank-you cards and an empty shelf where my own work should have been.",
+          "is_disputed": false
+        },
+        {
+          "position": 11,
+          "journal_entry": "Brigitte said something last night that I keep turning over. We were in the kitchen and she mentioned, casually, that she'd stopped inviting the Fischers for dinner because I always cancel or sit there half-present checking my phone for student emails. I started to argue but she cut me off and said she wasn't angry, just adjusting. That word, adjusting, hit harder than any argument.\n\nI've been telling myself the work matters, and it does. The department results prove it, the younger teachers tell me constantly how much the Monday sessions help. But Brigitte adjusting means she's already factored in my absence as the default. My sister noticed the same thing on the phone last week. I don't think I'm neglecting them on purpose. It's more that every time I choose between something with a measurable outcome and something that just asks me to be present, I pick the one I can point to later and say, see, this counted.\n\nI don't know when being present stopped counting for me. Or if it ever did count and I just never built the habit of valuing it properly. The conference paper is going well now and I should feel satisfied. But Brigitte adjusting is sitting in my chest like a stone and I can't spreadsheet my way out of it.",
+          "is_disputed": false
+        }
+      ]
+    }
+  ]
+}

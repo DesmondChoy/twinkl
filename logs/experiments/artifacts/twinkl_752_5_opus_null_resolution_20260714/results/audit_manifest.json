@@ -1,0 +1,15 @@
+{
+  "claude_output": {
+    "logs/experiments/artifacts/twinkl_752_5_opus_null_resolution_20260714/opus_claude_output.json": "13a042198ab18ca5a9de6afc2dbd49dcbb9cf69ad9559567fb606920fa0cadec"
+  },
+  "completed_at": "2026-07-14T01:10:23.679063+00:00",
+  "results": {
+    "logs/experiments/artifacts/twinkl_752_5_opus_null_resolution_20260714/results/case_outcomes_opus_resolved.parquet": "ced2bd2535082d33965f41366201deb263e23520bf4179d1e444459fc28750a4",
+    "logs/experiments/artifacts/twinkl_752_5_opus_null_resolution_20260714/results/drift_episodes_opus_resolved.parquet": "0339762679d862faebdd9663b2f1dae50d40267e316ca1da55c6a7b494922374",
+    "logs/experiments/artifacts/twinkl_752_5_opus_null_resolution_20260714/results/entry_target_opus_resolved.parquet": "5b0f6f1f85282d3d80043022f02f348aabe9d8629525b2bf266a9f1722737bcf",
+    "logs/experiments/artifacts/twinkl_752_5_opus_null_resolution_20260714/results/opus_labels.json": "4d0b120c38a16f52069db1c242e27d9102c0d1344e143564179a52069f45ede3",
+    "logs/experiments/artifacts/twinkl_752_5_opus_null_resolution_20260714/results/summary.json": "eeeaaeb0fd584e6a6ac668a724e4082c8dd40d19cba1081efce0d4d55dd47ef1"
+  },
+  "review_schema_version": "twinkl-752.5-opus-null-resolution-v2",
+  "schema_version": 1
+}

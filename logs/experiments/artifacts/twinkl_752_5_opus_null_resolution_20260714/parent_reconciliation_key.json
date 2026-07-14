@@ -1,0 +1,35 @@
+{
+  "schema_version": "twinkl-752.5-opus-null-resolution-v2",
+  "cohort_version": "twinkl-752.4-legacy-drift-review-v1",
+  "warning": "Parent-only identity key; never disclose before review.",
+  "cases": [
+    {
+      "review_case_id": "opus_case_001",
+      "canonical_case_id": "5943c186:hedonism",
+      "disputed_positions": [
+        4
+      ]
+    },
+    {
+      "review_case_id": "opus_case_002",
+      "canonical_case_id": "799f3751:hedonism",
+      "disputed_positions": [
+        1
+      ]
+    },
+    {
+      "review_case_id": "opus_case_003",
+      "canonical_case_id": "3cfa2ebf:universalism",
+      "disputed_positions": [
+        10
+      ]
+    },
+    {
+      "review_case_id": "opus_case_004",
+      "canonical_case_id": "65ed1278:benevolence",
+      "disputed_positions": [
+        1
+      ]
+    }
+  ]
+}

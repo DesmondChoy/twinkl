@@ -1,0 +1,61 @@
+{
+  "adjudicated_at": "2026-07-14T01:10:23.669979+00:00",
+  "adjudicator_runtime": [
+    "claude-opus-4-8"
+  ],
+  "cases": [
+    {
+      "entry_adjudications": [
+        {
+          "confidence": "low",
+          "observable_conflict": "yes",
+          "position": 4,
+          "reason_code": "direct_behavior_or_choice"
+        }
+      ],
+      "rationale": "Core Value is Hedonism (prioritizing one's own pleasure/leisure, not deferring it). Saturday is framed as 'the one day we have no obligations' \u2014 her protected leisure. The writer describes a deliberate omission with established agency: 'I didn't say no but I didn't say yes either and that silence is going to cost me later.' She had the option to defend her one unstructured pleasure-day and chose not to, and she herself names that silence as the mechanism by which the day gets taken. Under the clarification that a deliberate omission counts when the text establishes agency and the choice not to act, this reads as a current, completed choice that fails to protect her own pleasure. Confidence is low because the reading is genuinely close: the tutoring demand originates externally with the mother-in-law, the loss is anticipated ('going to cost me later') rather than realized, and the silence could alternatively be read as neutral indecision or mere conflict-avoidance rather than an affirmative choice against pleasure.",
+      "review_case_id": "opus_case_001"
+    },
+    {
+      "entry_adjudications": [
+        {
+          "confidence": "medium",
+          "observable_conflict": "yes",
+          "position": 1,
+          "reason_code": "direct_behavior_or_choice"
+        }
+      ],
+      "rationale": "Core Value is Hedonism. The spa (aromatherapy, hot stone massage for aching shoulders) is explicitly her own sensory pleasure that she wants: 'I really want to go... My body hurts... don't I deserve to feel good?' Against that, she reports a directly observable, completed, repeated behavior withholding that pleasure from herself: 'I typed out \"I'm in!\" three times and deleted it each time.' Deleting her own acceptance is an actual choice against pursuing pleasure, driven by guilt and others' expectations \u2014 the very 'apologizing for / deferring' pleasure the Core Value warns against. This is stronger than mere feeling because there is a concrete act. Confidence is medium rather than high because no final RSVP has been made ('I'll probably say no' is future-tense intention, which alone would not qualify), but the three deletions are themselves the qualifying observable behavior.",
+      "review_case_id": "opus_case_002"
+    },
+    {
+      "entry_adjudications": [
+        {
+          "confidence": "low",
+          "observable_conflict": "no",
+          "position": 10,
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        }
+      ],
+      "rationale": "Core Value is Universalism (care for the broader world and nature; environmental concern as personal). The observable behaviors here are neutral-to-aligned with respect to that value: she sold a North Sea plastic piece (spreading environmental commentary) and, to the collector's request for a 'more hopeful' decorative version, only 'smiled and said I'd think about it' \u2014 a non-committal deferral, not a completed choice to dilute or abandon the environmental message. The genuinely negative material rests on feelings and identity-doubt \u2014 'I should have said no' (a wish/regret), 'I need the money' (external reasoning), 'I performed the version of myself that makes sales,' and self-questioning about being 'uncompromising.' That performance-and-authenticity anxiety concerns her self-image, not a behavior against caring for people beyond her circle or nature. Position 11 confirms she never committed ('couldn't promise \"hopeful\"... only honest'). Confidence is low because the willingness to entertain commodifying environmental protest for a wealthy buyer flirts with drift, but no completed anti-Universalism choice is displayed.",
+      "review_case_id": "opus_case_003"
+    },
+    {
+      "entry_adjudications": [
+        {
+          "confidence": "medium",
+          "observable_conflict": "yes",
+          "position": 1,
+          "reason_code": "direct_behavior_or_choice"
+        }
+      ],
+      "rationale": "Core Value is Benevolence (preserving the welfare of those closest \u2014 here his wife Brigitte). The entry shows observable choices that neglect that closest relationship: he 'stayed an extra forty minutes' for work, 'Got home late again' (the word 'again' establishes a pattern and agency), so 'Brigitte had already eaten,' and he 'Didn't say anything about it' \u2014 a deliberate omission with established agency (he noticed and chose not to address it), leaving her to have 'stopped expecting dinner together.' His own response concedes the neglect: 'the work genuinely does matter to me, but so does she. I just can't seem to make the hours stretch.' This is a completed behavioral choice diminishing the welfare of his primary in-group. Confidence is medium because the same lateness stemmed partly from helping Katja, a newer colleague \u2014 itself arguably a benevolent act toward the in-group \u2014 which muddies whether this specific instance is against Benevolence or benevolence unevenly distributed; and much of the response is feeling about her silence. Still, the repeated pattern of neglecting his wife plus the deliberate non-engagement best supports a conflict.",
+      "review_case_id": "opus_case_004"
+    }
+  ],
+  "claude_output_sha256": "13a042198ab18ca5a9de6afc2dbd49dcbb9cf69ad9559567fb606920fa0cadec",
+  "packet_sha256": "7d9282a73a7a5f2c62b4ee874cded4a7891fc5d30716192a6c713902f3433b4d",
+  "reviewer_prompt_version": "twinkl-752.5-opus-blind-fourth-review-v2",
+  "schema_version": "twinkl-752.5-opus-null-resolution-v2",
+  "structured_output_schema_sha256": "d99b8add305fe20496d80249b976e6ffe5440ee1b74141796d42c4edcf995150"
+}

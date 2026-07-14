@@ -10,6 +10,14 @@
 > adding the omitted `3a3b15e4:tradition` and `7adc5866:benevolence` episodes
 > produces the 33-episode / 28-Drift-trajectory known-development union for
 > `twinkl-752.5`. The frozen `twinkl-752.4` artifacts remain unchanged.
+>
+> **2026-07-14 Opus follow-up:** A blind fourth review resolved the four
+> remaining Conflict labels: `yes` for `799f3751:hedonism`,
+> `65ed1278:benevolence`, and `5943c186:hedonism`; `no` for
+> `3cfa2ebf:universalism`. None creates a new Drift. The revised cohort is
+> 104/104 resolved, and the union is 106/106 resolved with the same 33 episodes
+> across 28 Drift trajectories. See the [follow-up
+> report](experiment_review_2026-07-14_twinkl_752_5_opus_null_resolution.md).
 
 ## Result
 
@@ -21,15 +29,18 @@ split; they remain in the primary development analysis, with provenance
 reported as a subgroup. This is enough to run the bounded comparison in
 `twinkl-752.5`; it is still not a fresh final test.
 
+The table below preserves the original `twinkl-752.4` closeout before the Opus
+follow-up.
+
 | Stratum | Legacy candidates | Matched controls | Resolved | Drift trajectories | Drift episodes |
 |---|---:|---:|---:|---:|---:|
 | Development reference | 44 | 44 | 85 / 88 | 23 | 27 |
 | Retired audit only | 8 | 8 | 15 / 16 | 3 | 4 |
 | **All reviewed** | **52** | **52** | **100 / 104** | **26** | **31** |
 
-Among resolved development-reference cases, 22/43 legacy candidates (51.2%)
-and 1/42 matched legacy-negative controls (2.4%) contain Drift. The control is
-a legacy-miner miss, not a reviewer false positive.
+At original closeout, 22/43 resolved development-reference candidates (51.2%)
+and 1/42 resolved matched controls (2.4%) contained Drift. The control was a
+legacy-miner miss, not a reviewer false positive.
 
 ## What was reviewed
 
@@ -69,8 +80,8 @@ displayed runtime text.
 - 25 disagreements across 22 trajectories
 - a third packet-only adjudicator saw only full displayed text and anonymized
   prior judgments for those positions
-- 21 disagreements resolved; four remain explicitly uncertain
-- final resolution: 870/874 entries and 100/104 trajectories
+- 21 disagreements resolved; four remained explicitly uncertain at closeout
+- original resolution: 870/874 entries and 100/104 trajectories
 
 Agreed entries were immutable during adjudication. Maximal consecutive Conflict
 runs were derived mechanically: a length-three run is one episode, not two.
@@ -94,17 +105,21 @@ runs were derived mechanically: a length-three run is one episode, not two.
 5. **No MLP conclusion follows yet.** This task created reference episodes; it
    did not score an MLP scheduler, select a threshold, or compare review cost.
 
-## Remaining uncertainty
+## Subsequent Opus resolution
 
-Four trajectories retain one uncertain entry each and therefore have no case-
-level Drift outcome:
+The original task correctly left four trajectories null after its third review.
+The user later authorized a blind fourth review through `claude -p --model
+opus`, with a forced best-supported `yes` or `no` and confidence marking close
+calls. Opus returned:
 
-- development candidate `5943c186:hedonism`
-- former-final-test-provenance candidate `799f3751:hedonism`
-- development controls `3cfa2ebf:universalism` and `65ed1278:benevolence`
+- `yes`, medium confidence: `799f3751:hedonism`
+- `yes`, medium confidence: `65ed1278:benevolence`
+- `yes`, low confidence: `5943c186:hedonism`
+- `no`, low confidence: `3cfa2ebf:universalism`
 
-They should remain null unless human review supplies genuinely new evidence.
-Excluding them from rate denominators is fail-closed, not selective cleanup.
+All four trajectories resolve as non-Drift. The revised development-reference
+rates are 22/44 legacy candidates and 1/44 matched controls. This removes null
+outcomes but is still AI-reviewed development evidence, not human ground truth.
 
 ## Decision and next task
 
@@ -137,6 +152,7 @@ keeping the MLP, and what false-alert and review-cost tolerance is acceptable.
 - Final episodes: [`results/drift_episodes_final.parquet`](../artifacts/twinkl_752_4_legacy_drift_review_20260713/results/drift_episodes_final.parquet)
 - Final summary: [`results/summary_final.json`](../artifacts/twinkl_752_4_legacy_drift_review_20260713/results/summary_final.json)
 - Final audit: [`results/audit_manifest_final.json`](../artifacts/twinkl_752_4_legacy_drift_review_20260713/results/audit_manifest_final.json)
+- Opus follow-up: [`twinkl_752_5_opus_null_resolution_20260714/`](../artifacts/twinkl_752_5_opus_null_resolution_20260714/)
 
 All rates are selection-biased AI-reviewed development evidence, not human
 ground truth or population prevalence.

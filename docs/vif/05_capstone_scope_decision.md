@@ -116,9 +116,10 @@ and found 31 Drift episodes across 26 resolved trajectories. Three overlap the
 earlier five; adding the two prior episodes missed by candidate mining produces
 the 33-episode / 28-Drift-trajectory known-development union. Four reviewed
 episodes came from the former final-test split; include them in the primary
-development analysis and report provenance subgroups separately. Four
-`twinkl-752.4` trajectories remain uncertain. The reviewed Drift labels remain
-valid development references even when the MLP saw the Journal Entries during
+development analysis and report provenance subgroups separately. A blind Opus
+follow-up resolved the four remaining trajectories without adding Drift, so all
+106 union trajectories are resolved. The reviewed Drift labels remain valid
+development references even when the MLP saw the Journal Entries during
 training, but any VIF Critic scheduler score on those entries is in-sample.
 Candidate mining may also miss Drifts absent from both legacy label sources.
 
@@ -138,6 +139,8 @@ The prompt-alignment result is recorded in the
 [`twinkl-752.3` report](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_3_weekly_drift_reviewer_prompt_alignment.md).
 The reviewed cohort and union correction are recorded in the
 [`twinkl-752.4` report](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md).
+The fourth-review labels are recorded in the
+[`twinkl-752.5` resolution report](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5_opus_null_resolution.md).
 [`twinkl-1r3d`](../../logs/experiments/reports/experiment_review_2026-07-12_twinkl_1r3d_shortcut_audit.md)
 completed the prerequisite Conformity and Self-Direction audit: 3,406
 single-word removals plus 20 repeated-word or phrase removals across 35
@@ -169,7 +172,8 @@ rather than substituted.
   Reviewer setup.
 - The expanded student-visible review found 31 episodes across 26 resolved
   trajectories, including three of the earlier five. The known-development
-  union contains 33 episodes across 28 Drift trajectories. Four reviewed
+  union contains 33 episodes across 28 Drift trajectories and is 106/106
+  resolved after the blind Opus follow-up. Four reviewed
   episodes retain former-final-test provenance for subgroup reporting, but
   remain in the primary development analysis. This is selection-biased
   AI-reviewed development evidence, not a fresh final test.

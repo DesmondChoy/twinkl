@@ -1,0 +1,67 @@
+{
+  "all_known_development_union": {
+    "drift_count": 33,
+    "drift_trajectory_count": 28,
+    "resolved_trajectory_count": 106,
+    "trajectory_count": 106
+  },
+  "case_count": 104,
+  "cohort_sha256": "61e787a17e4bef801ab9a12b1d83e57204b8d8d67e445c3f10ad370fc6e5955c",
+  "cohort_version": "twinkl-752.4-legacy-drift-review-v1",
+  "entry_count": 874,
+  "generated_at": "2026-07-14T01:10:23.652008+00:00",
+  "resolved_case_count": 104,
+  "reviewed_drift_count": 31,
+  "reviewed_drift_trajectory_count": 26,
+  "strata": {
+    "all": {
+      "candidate": {
+        "drift_confirmation_rate_among_resolved": 0.4807692307692308,
+        "drift_count": 25,
+        "resolved": 52,
+        "selected": 52,
+        "unresolved": 0
+      },
+      "control": {
+        "drift_confirmation_rate_among_resolved": 0.019230769230769232,
+        "drift_count": 1,
+        "resolved": 52,
+        "selected": 52,
+        "unresolved": 0
+      }
+    },
+    "development_reference": {
+      "candidate": {
+        "drift_confirmation_rate_among_resolved": 0.5,
+        "drift_count": 22,
+        "resolved": 44,
+        "selected": 44,
+        "unresolved": 0
+      },
+      "control": {
+        "drift_confirmation_rate_among_resolved": 0.022727272727272728,
+        "drift_count": 1,
+        "resolved": 44,
+        "selected": 44,
+        "unresolved": 0
+      }
+    },
+    "retired_audit_only": {
+      "candidate": {
+        "drift_confirmation_rate_among_resolved": 0.375,
+        "drift_count": 3,
+        "resolved": 8,
+        "selected": 8,
+        "unresolved": 0
+      },
+      "control": {
+        "drift_confirmation_rate_among_resolved": 0.0,
+        "drift_count": 0,
+        "resolved": 8,
+        "selected": 8,
+        "unresolved": 0
+      }
+    }
+  },
+  "unresolved_case_count": 0
+}

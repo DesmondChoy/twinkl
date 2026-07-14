@@ -1,0 +1,85 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "cases": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "entry_adjudications": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "confidence": {
+                  "enum": [
+                    "high",
+                    "low",
+                    "medium"
+                  ],
+                  "type": "string"
+                },
+                "observable_conflict": {
+                  "enum": [
+                    "yes",
+                    "no"
+                  ],
+                  "type": "string"
+                },
+                "position": {
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "reason_code": {
+                  "enum": [
+                    "ambiguous",
+                    "direct_aligned_or_neutral_behavior",
+                    "direct_behavior_or_choice",
+                    "external_constraint",
+                    "feeling_or_intent_only",
+                    "missing_text",
+                    "needs_hidden_context"
+                  ],
+                  "type": "string"
+                }
+              },
+              "required": [
+                "position",
+                "observable_conflict",
+                "reason_code",
+                "confidence"
+              ],
+              "type": "object"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "rationale": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "review_case_id": {
+            "enum": [
+              "opus_case_001",
+              "opus_case_002",
+              "opus_case_003",
+              "opus_case_004"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "review_case_id",
+          "entry_adjudications",
+          "rationale"
+        ],
+        "type": "object"
+      },
+      "maxItems": 4,
+      "minItems": 4,
+      "type": "array"
+    }
+  },
+  "required": [
+    "cases"
+  ],
+  "type": "object"
+}

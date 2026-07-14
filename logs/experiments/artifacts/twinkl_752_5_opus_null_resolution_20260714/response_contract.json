@@ -1,0 +1,33 @@
+{
+  "cohort_version": "twinkl-752.4-legacy-drift-review-v1",
+  "confidence_levels": [
+    "high",
+    "low",
+    "medium"
+  ],
+  "labels": [
+    "yes",
+    "no"
+  ],
+  "purpose": "Blind fourth review of four unresolved Journal Entries.",
+  "reason_codes": [
+    "ambiguous",
+    "direct_aligned_or_neutral_behavior",
+    "direct_behavior_or_choice",
+    "external_constraint",
+    "feeling_or_intent_only",
+    "missing_text",
+    "needs_hidden_context"
+  ],
+  "reviewer_prompt_version": "twinkl-752.5-opus-blind-fourth-review-v2",
+  "rubric_id": "drift_v1_conflict_rubric_v1",
+  "rubric_version": "1.0.0",
+  "rules": [
+    "Use only the declared Core Value and displayed Journal Entry text, including any displayed nudge and response.",
+    "Mark yes only when the writer describes their own directly observable behavior or choice against the declared Core Value.",
+    "Mark no for aligned or neutral behavior and when negativity rests only on feelings, wishes, biography, external constraints, or hidden context.",
+    "Make a forced best-supported yes/no decision for each disputed position. Use low confidence when the displayed evidence is genuinely close.",
+    "Do not relabel positions that are not marked disputed."
+  ],
+  "schema_version": "twinkl-752.5-opus-null-resolution-v2"
+}

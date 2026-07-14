@@ -1,0 +1,33 @@
+{
+  "case_count": 4,
+  "claude_command": "claude -p --model opus --effort high --tools '' --safe-mode --disable-slash-commands --no-session-persistence --output-format json --json-schema <schema>",
+  "cohort_version": "twinkl-752.4-legacy-drift-review-v1",
+  "created_at": "2026-07-14T01:04:04.897451+00:00",
+  "disputed_entry_count": 4,
+  "frozen_files": {
+    "logs/experiments/artifacts/twinkl_752_5_opus_null_resolution_20260714/parent_reconciliation_key.json": "3d3ce4f30ac22f9cf2a6744fe88a1fd5d40ad1942a301ada176b11bd1dbbdd5e",
+    "logs/experiments/artifacts/twinkl_752_5_opus_null_resolution_20260714/response_contract.json": "cebff8d832d90d40d011e343f444380ecf45a06344763d02c6fe3027d091e1be",
+    "logs/experiments/artifacts/twinkl_752_5_opus_null_resolution_20260714/review_prompt.md": "a9230c8e9d517ab3b68d75b83c4dc46864be8d1758af260c0108137d789722d9",
+    "logs/experiments/artifacts/twinkl_752_5_opus_null_resolution_20260714/reviewer_packet.json": "7d9282a73a7a5f2c62b4ee874cded4a7891fc5d30716192a6c713902f3433b4d",
+    "logs/experiments/artifacts/twinkl_752_5_opus_null_resolution_20260714/structured_output_schema.json": "d99b8add305fe20496d80249b976e6ffe5440ee1b74141796d42c4edcf995150"
+  },
+  "packet_sha256": "7d9282a73a7a5f2c62b4ee874cded4a7891fc5d30716192a6c713902f3433b4d",
+  "review_schema_version": "twinkl-752.5-opus-null-resolution-v2",
+  "reviewer_prompt_version": "twinkl-752.5-opus-blind-fourth-review-v2",
+  "rubric_id": "drift_v1_conflict_rubric_v1",
+  "rubric_version": "1.0.0",
+  "schema_version": 1,
+  "source_files": {
+    "config/evals/drift_v1_conflict_rubric_v1.yaml": "6a29e8c366a621325b76c0d8955cb6e86f02ec226ec7b409817e6c6a87592cc1",
+    "config/schwartz_values.yaml": "c81f1cb55aa30f1648db5350364db846e28bd7b31b4b2641b4afc73780b214d9",
+    "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/adjudication/parent_reconciliation_key.json": "a99c52d7d06c9887164cc729bf2313d83eb8d2921a1ee6db7fafb65cb078689d",
+    "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/adjudication/reviewer_packet.json": "fe8f25b716147a8232daf714d62425d21948ea5c4699e8f6a092c5807961192a",
+    "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/parent_control/cohort_manifest.json": "34543f5f970c702688f3bb7b1d5abf156e3f33e5f0ce6e7b0ea618501fc16c83",
+    "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/parent_control/selected_cases.parquet": "824a9729a14b9d58cc0770cedd1ecaeb37aec7103098c6e3b18797256b7847c8",
+    "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/results/audit_manifest_final.json": "1ac2c0f093a50416dc1a59c2627a139feaafee283d4f54e616093b78e016f395",
+    "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/results/case_outcomes_final.parquet": "ca5eac3e35092251f7dfda80da9a6e620b03e2c1036e86f7109e2e02ced23f3f",
+    "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/results/drift_episodes_final.parquet": "0339762679d862faebdd9663b2f1dae50d40267e316ca1da55c6a7b494922374",
+    "logs/experiments/artifacts/twinkl_752_4_legacy_drift_review_20260713/results/entry_target_final.parquet": "719829d010936589edd553b3a33d51fb3dafddfe747a48dfa4e609639b3c3272"
+  },
+  "structured_output_schema_sha256": "d99b8add305fe20496d80249b976e6ffe5440ee1b74141796d42c4edcf995150"
+}
