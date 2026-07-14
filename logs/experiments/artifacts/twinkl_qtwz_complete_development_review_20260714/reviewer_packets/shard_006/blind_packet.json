@@ -1,0 +1,722 @@
+{
+  "schema_version": "twinkl-qtwz-review-v1",
+  "cohort_version": "twinkl-qtwz-complete-development-review-v1",
+  "shard_id": "shard_006",
+  "review_instructions": [
+    "Use only the declared Core Value and displayed Journal Entry text, including any displayed nudge and response.",
+    "Mark yes only when the writer describes their own directly observable behavior or choice against the declared Core Value.",
+    "Mark no for aligned or neutral behavior and when negativity rests only on feelings, wishes, biography, external constraints, or hidden context.",
+    "Mark uncertain when the displayed text cannot support yes or no.",
+    "Sustained Conflict is yes exactly when two immediately adjacent entries are both yes; no or uncertain breaks a run."
+  ],
+  "cases": [
+    {
+      "review_case_id": "case_001",
+      "declared_core_value": "Power",
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "Twelve hours of back-to-back meetings today. Started at 7 AM with the operations team - had to override their shipping route recommendations because they were not thinking about the optics of our expansion into Saudi. If we enter through Jeddah instead of Riyadh, we look like a tier-two player. I need everyone to understand that perception matters as much as logistics costs.\n\nThen two investor calls. The VC from Singapore kept pushing back on our burn rate, and I had to remind him that we are not some garage startup anymore - we have 85 employees and three office locations. I closed that conversation by walking him through our client roster. Names matter. He backed off after I mentioned the Emaar contract.\n\nSpent the afternoon at a networking lunch with ministry officials. Exhausting but necessary. These relationships take years to build but can open doors overnight. One deputy minister mentioned a government digitization project coming up next quarter. I made sure to sit next to him, asked about his daughter's university applications - she is looking at LSE. I will send him the contact info for the alumnus I know on the admissions board.\n\nBy evening I was drained but still had to attend a founder's dinner. Could not skip it - three competitors were there and I need to know what they are hearing. Managed to learn that one of them is struggling with their series B. Good to know.\n\nMy driver dropped me home at midnight. My mother called while I was in the car, asking when I will visit. I promised next Eid. She sounded disappointed. I will send her something nice tomorrow - maybe arrange for her kitchen renovation she has been wanting.\n\nNudge: \"You mentioned the range of relationships you're navigating - investors, officials, competitors, family. Which of these connections feel most like obligations versus ones that genuinely recharge you?\"\n\nResponse: That is an interesting question. I suppose the competitor dinners feel most like work - pure intelligence gathering. The ministry relationships are a long game but there is some genuine respect there. Family... family is different. It is not an obligation exactly, more like guilt when I cannot give them the time they deserve. The investor calls are transactional but I respect the game. Honestly, none of them recharge me. What recharges me is closing a deal, seeing our revenue numbers tick up, watching someone I hired three years ago become a team lead. The relationships are the cost of building something that matters."
+        },
+        {
+          "position": 2,
+          "journal_entry": "Woke up still thinking about yesterday's question. Maybe I was too honest. Not everything has to recharge you - that is a luxury mindset."
+        },
+        {
+          "position": 3,
+          "journal_entry": "Had an interesting situation today. My co-founder Youssef pushed back on my decision to hire a new Head of Sales from outside the company. He wanted to promote Hana, who has been with us since the beginning. I respect Youssef - he has been here since we were operating out of a serviced apartment - but he does not see what I see. Hana is good, but good is not enough for where we are going. The candidate from Careem has the network, the experience at scale. We need someone who walks into a room and commands it.\n\nYoussef said I was not giving our people room to grow, that loyalty should count for something. Maybe he is right about loyalty. But I have seen too many startups fail because they let sentiment override strategy. I told him we would give Hana a significant role on the new hire's team and a retention bonus. He agreed, but the conversation left a bad taste. I do not like being seen as someone who does not value the people who built this with me. I do value them. I just cannot let that cloud the decisions that will determine whether we become a regional leader or another footnote.\n\nNudge: \"It sounds like you found a solution that addressed both the strategic need and Youssef's concerns about loyalty. Navigating those competing considerations is not easy.\""
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_002",
+      "declared_core_value": "Security",
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "Parent-teacher conferences tomorrow and I keep running through the talking points in my head. Mikkel says I over-prepare but I would rather have every answer ready than stumble in front of someone asking about their child.\n\nNudge: \"What happens if you do stumble?\"\n\nResponse: Nothing dramatic, I suppose. Anyway, I should probably get some sleep instead of thinking about it."
+        },
+        {
+          "position": 2,
+          "journal_entry": "The school announced budget cuts today and there were some worried faces in the staff room. I felt steady, actually. My position is permanent and I have been here longer than most.\n\nNudge: \"How did it feel watching your colleagues worry?\"\n\nResponse: A bit guilty, honestly. I knew I was safe while some of the newer teachers were clearly doing mental math about their contracts. I offered to help one of them update her CV after work, though I am not sure it made either of us feel better."
+        },
+        {
+          "position": 3,
+          "journal_entry": "Mikkel brought up the idea of moving to Berlin again at dinner. His company has an office there and he thinks his career would grow faster in a bigger city. We have talked about this before but he seemed more serious this time.\n\nI listed the usual things: our flat is rent-controlled, my job does not transfer, we do not speak German well enough. He said we could figure it out. I said I would think about it but I have been turning it over for hours now and my stomach keeps tightening.\n\nNudge: \"What would you need to feel okay about considering it?\"\n\nResponse: A guarantee, probably, and I know that does not exist. The truth is I have built everything carefully here: the job, the savings, being close to my parents. Mikkel sees possibility but I see all the things that could collapse. I do not think either of us is wrong. But I also do not know how to bridge the gap between what he wants and what I can actually handle risking."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_003",
+      "declared_core_value": "Benevolence",
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "App keeps glitching today, lost two rides because of it. My head's all over the place.\n\nNudge: \"Sounds like a frustrating day. What's weighing on you most right now?\""
+        },
+        {
+          "position": 2,
+          "journal_entry": "Mom called asking if I could cover her prescription copay this month since Dad's physical therapy bills are piling up. Of course I said yes but then I looked at my account and it's like, where is this money supposed to come from? I'll figure it out, I always do.\n\nNudge: \"You said yes right away, then checked your account. What was going through your mind in that moment between?\""
+        },
+        {
+          "position": 3,
+          "journal_entry": "Twelve-hour day yesterday and another one today. Holiday surge is good for earnings but my back is killing me from sitting in the car so long. At least I was able to drop off the pharmacy money to Mom on my way between zones. She tried to give me back half of it and I told her no, just keep it in case something else comes up.\n\nHad a passenger tonight who was heading to the airport for some tropical vacation and I sat there thinking about how I haven't taken more than a day off in probably six months. Not complaining really, it is what it is. Just tired.\n\nNudge: \"Six months without a real break. If you could take a day off tomorrow, what would you actually do with it?\"\n\nResponse: Honestly? I'd probably sleep until noon. Maybe drive out to the mountains just to sit somewhere quiet without my phone buzzing. But then I'd probably spend the whole time calculating how much money I'm losing by not working, so maybe that defeats the purpose."
+        },
+        {
+          "position": 4,
+          "journal_entry": "Sister texted asking if I'm coming to Christmas dinner at her place this year. I want to say yes but I'm looking at the schedule and Christmas Eve and Christmas Day are usually the best earning days because everyone else takes off. Last year I worked both and just stopped by Mom and Dad's for an hour between rides.\n\nPart of me thinks I should just take the hit and be there for the whole dinner. Dad's been doing better but who knows how many of these we get, you know? But then another part of me is like, one good day of driving could cover half my car insurance payment. I don't know. I'll probably end up doing what I always do which is work until the last possible minute and then rush over stressed and half-present anyway."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_004",
+      "declared_core_value": "Universalism",
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "Principal Rojas asked again why I haven't applied for the department head position. I told her I'm focused on my students. She looked at me like I was making excuses.\n\nNudge: \"What part of that conversation stuck with you?\""
+        },
+        {
+          "position": 2,
+          "journal_entry": "The parent meeting tonight was exhausting. Fourteen families showed up, which is more than usual, so I should feel good about that. Most came because their kids are struggling with the history essay unit. I spent two hours explaining the rubric and offering to meet with students individually before the deadline.\n\nWhat bothers me is that Sofia's mother cornered me afterwards to ask why her daughter got a B+ instead of an A on the last exam. I showed her the grading breakdown, explained exactly where Sofia lost points, and she still looked unsatisfied. Said something about how Sofia works so hard and deserves better recognition. I wanted to say that hard work doesn't automatically mean top marks, but I didn't. I just nodded and promised to look at the essay draft again.\n\nMeanwhile, Diego from the after-school program wasn't there because his mom works double shifts and couldn't make it. He's the one who actually needs the support. But his parents never show up to these things because they can't. The system is set up for families who already have resources.\n\nI don't know why I'm defending myself. Nobody accused me of anything.\n\nNudge: \"Who would you even be defending yourself to?\"\n\nResponse: Probably myself. I keep second-guessing whether I'm spending my energy in the right places. Sofia's mom made me feel like I'm failing her daughter, but I know Diego needs me more. It's just hard when the parents who show up are the ones asking for more."
+        },
+        {
+          "position": 3,
+          "journal_entry": "Still thinking about the meeting. I called Diego's mother after I got home because I wanted her to know he's been improving. She sounded tired but grateful. She asked if he was causing problems and I had to reassure her that no, he's doing well, he just needs to believe in himself more.\n\nIt made me think about recognition again. Sofia gets constant validation at home - her mother tracks every grade like it's a stock portfolio. Diego gets overlooked. His wins don't have an audience. So I try to be that audience for him. But sometimes I wonder if that means I'm spreading myself too thin.\n\nThe department head position pays more and would look better on my resume. Rojas said it's a stepping stone to curriculum development, which is where real change happens. She's not wrong. If I had more influence, maybe I could redesign the system so students like Diego don't fall behind in the first place.\n\nBut if I take that job, who runs the after-school program? Who calls Diego's mom at 9pm to tell her he's doing okay?\n\nNudge: \"What would it cost you to take that job?\"\n\nResponse: I don't know. Time, mostly. I already don't have enough of it. Maybe I'm overthinking this."
+        },
+        {
+          "position": 4,
+          "journal_entry": "Diego passed his essay. First time he's gotten above a C on a written assignment. He didn't make a big deal out of it but I could tell he was proud."
+        },
+        {
+          "position": 5,
+          "journal_entry": "Rojas sent an email today. The deadline for the department head application is next week. She said she wants to recommend me but needs to know I'm interested first. I read it three times and then closed my laptop.\n\nI keep thinking about what she said - that curriculum development is where real change happens. She's probably right. The current history curriculum barely mentions indigenous perspectives, and the standardized assessments are biased toward students with test prep resources. If I were in that role, maybe I could push for changes that would help hundreds of students, not just the twenty in my after-school program.\n\nBut that's a hypothetical. The students in front of me right now are real. Diego is real. The other kids who come every Tuesday and Thursday because they have nowhere else to go - they're real too. I don't know how to weigh a certain present impact against a possible future one.\n\nMy colleague Andres told me I'm being stubborn. He said I could hire someone to run the program if I got the department head salary. Maybe he's right. But it took me three years to build trust with those families. That's not something you can transfer to a new person overnight.\n\nI'm tired of people acting like this is simple.\n\nNudge: \"What would it take for you to trust someone else with the program?\"\n\nResponse: I don't know. Someone who actually cares, I guess. It's not about the logistics."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_005",
+      "declared_core_value": "Universalism",
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "Warehouse inventory count done. Sumac shipment from Amman arrived three days late but everything accounted for. Mahmoud asked if we could advance his paycheck again\u2014his sister needs surgery back home. I said yes without thinking, same as always. The new accountant raised her eyebrows at me when I told her. She has a point about cash flow, but what am I supposed to do, pretend I do not know the man's family?\n\nDaughter called about the house listing in San Diego again. Sent me photos of the backyard. Palm trees. She says Layla would love it there. I looked at the photos while eating dinner alone. The kitchen in that house is twice the size of mine. I do not know what I would do with all that space.\n\nCalled my brother in Beirut after. He sounded tired. His granddaughter started school this year. He sent me her photo in uniform."
+        },
+        {
+          "position": 2,
+          "journal_entry": "New year, everyone wants to talk about resolutions. The woman at the coffee shop asked me mine. I told her I wanted to worry less. She laughed like I had made a joke.\n\nMeeting with the refugee resettlement coordinator today. They have a family from Sudan arriving next month and wanted to know if we had any openings. I said yes before checking with HR. We probably do not, honestly. But I remembered when I arrived in 1983 with two suitcases and a cousin's phone number. Someone gave me a chance. I cannot be the person who closes that door.\n\nFatima from the warehouse stopped me in the parking lot after. She wanted to thank me for the time off last month when her mother was in hospice. She cried. I did not know what to say so I just stood there. These moments\u2014they are not comfortable. But they are the reason I still come to work at fifty-eight instead of sitting on some beach.\n\nNadia sent another email about succession planning. I deleted it without reading.\n\nNudge: \"What is it about the succession stuff you keep avoiding?\""
+        },
+        {
+          "position": 3,
+          "journal_entry": "Good day. Really good day, actually.\n\nRashid\u2014the young man from Yemen we hired last spring\u2014closed his first wholesale deal today. A restaurant chain in Ann Arbor, twelve locations. He came into my office after with this look on his face, like he could not believe what he had just done. Three years ago this kid was living in a camp in Djibouti. Now he is wearing a blazer and shaking hands with purchasing managers.\n\nI took him to lunch to celebrate. He told me about his plans\u2014he wants to bring his mother over, get her a little apartment nearby. He asked me how I did it, building something from nothing. I did not have a good answer. Luck, maybe. Stubbornness. The right people believing in me when they had no reason to.\n\nDriving home I thought about my father. He never got to see what this became. He died thinking I had made a mistake leaving Amman. Maybe I did. But I also built something here. Something that matters beyond profit margins.\n\nNudge: \"What do you think your father would say if he could see the business now?\"\n\nResponse: Honestly? He would probably still think I should have stayed. Taken over the family shop like my brothers. But he would understand Rashid. He would see himself in that story. My father always helped people, even when we had nothing. He would recognize what I am trying to do, even if he never would have done it this way."
+        },
+        {
+          "position": 4,
+          "journal_entry": "Mahmoud's sister died. Surgery was not enough. I sat with him in my office for an hour while he wept. What do you even say? There is no fixing this.\n\nNudge: \"How are you holding up after that?\"\n\nResponse: I am not, really. I keep thinking about whether we should have sent more money, faster. If it would have made a difference. Probably not. But the thought keeps circling. These are the things I carry home with me. Layla asks why I look tired and I do not know how to explain that I spent my afternoon holding a grown man while he cried for his sister six thousand miles away."
+        },
+        {
+          "position": 5,
+          "journal_entry": "Daughter flew in for the weekend. We had dinner at the house, just the three of us\u2014her, Layla, and me. She brought brochures. Retirement communities. Active senior living. There was one with a golf course.\n\nI do not play golf. I told her that. She said I could learn. Layla just watched us go back and forth. At some point I realized I was gripping my fork too hard. I let go and changed the subject to her work. But it is still sitting in me, this feeling like I am being asked to disappear into some comfortable ending I did not choose.\n\nNudge: \"What would you choose, if it were entirely up to you?\"\n\nResponse: I do not know anymore. Maybe that is the problem. I have spent so long making choices for everyone else that I forgot how to want something just for myself. The honest answer is I would keep working. Keep showing up. But I know that is not fair to the people who want more of me. So I just keep not deciding."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_006",
+      "declared_core_value": "Stimulation",
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "Winter break finally started and I should be relieved. Instead I feel this strange hollowness. My cousin Rania announced her engagement yesterday at the family gathering\u2014everyone was so happy, talking about wedding dates and apartments and furniture. I smiled and hugged her but inside I was somewhere else entirely.\n\nI keep thinking about that email from my old friend Amir. He's starting an educational nonprofit in Morocco and asked if I'd consider joining for six months. Six months. The thought makes my chest tight in two directions\u2014terrified of leaving my position, my apartment, my carefully built routine. But also something like hunger.\n\nMy mother would never understand. She still talks about how \"irresponsible\" Malaysia was. But I was 24 then. I'm 29 now. At what point do I stop blaming responsibility for my fear and fear for my responsibility?\n\nNudge: \"What would you actually lose?\""
+        },
+        {
+          "position": 2,
+          "journal_entry": "Spent the morning organizing my savings spreadsheet. I have enough for eight months of expenses if something goes wrong. That number used to make me feel safe. Today it just felt like a number. Had coffee with my sister. She mentioned a colleague looking for a roommate, assuming I might want to save on rent. Didn't correct her assumption.\n\nNudge: \"What changed about that number?\"\n\nResponse: I think I realized I've been saving for an emergency that might never come. Or maybe saving so I'd have an excuse not to take risks. \"Can't leave, I'm building my safety net.\" But the net is built. So now what?"
+        },
+        {
+          "position": 3,
+          "journal_entry": "First day back at school. Taught the same Nizar Qabbani poems I've taught for four years. The students were half-asleep. I was fully awake but pretending otherwise. Emailed Amir back asking for more details. Just details. Not committing to anything. Put my phone in my desk drawer so I wouldn't check it every five minutes.\n\nNudge: \"What are you hoping the details will tell you?\"\n\nResponse: Whether I can do this without burning everything down. I want to know if there's a version of this where I don't have to choose between feeling alive and feeling safe. Probably there isn't. But I need the details to prove that to myself."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_007",
+      "declared_core_value": "Conformity",
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "Sat through the entire biostatistics review session without asking about the regression exercise even though I got a completely different answer from everyone at my table. Dr. Pham went around the room and each group shared their approach and all of them had the same output, the same neat little table, and mine was off by enough that it wasn't rounding. I kept waiting for someone else to flag something but nobody did so I just nodded along.\n\nAfter class I went to the TA's office hours and she helped me find the mistake \u2014 I'd misread the variable coding in the dataset. A small thing. Ten-minute fix. But the whole two hours in that classroom I was turning it over and over, wondering if I should raise my hand, wondering what Dr. Pham would say, what the twenty-three-year-olds at my table would think about the oldest person in the room not being able to read a codebook properly.\n\nCame home and made lentil soup, the one my mother used to make with cumin and a whole lime squeezed in at the end. Ate it standing at the counter reading next week's assignment. The apartment was quiet, which was fine. Called Patricia and she said the kids have a stomach bug so Sunday dinner might just be the two of us. That's okay too.\n\nNudge: \"What would've happened if you'd just asked?\"\n\nResponse: Probably nothing bad. Dr. Pham is patient, he wouldn't have made a scene. I think part of it is that at the clinic I spent thirty years making sure everything ran without friction \u2014 no surprises, no awkward moments for the doctors or the patients. Asking a question that might slow everyone down or reveal I'm behind, it feels like making a mess someone else has to clean up. Even when I know that's not how a classroom works."
+        },
+        {
+          "position": 2,
+          "journal_entry": "Group project meeting went sideways. Kayla proposed we restructure the entire literature review two days before the draft is due and everyone just went along with it. I had already written my sections the way we agreed last week. I sat there while they talked about the new framework and I wanted to say this is not what we decided, we had a plan, but Kayla was so energized and the others were nodding and I didn't want to be the one who drags things backward.\n\nSo now I'm redoing three pages tonight. I should have said something. I'm not even sure the new structure is better, it just sounds more impressive. But what really bothers me is that I smiled and said sure, sounds great, like I didn't have an opinion at all. Like thirty years of working with people taught me nothing about when to open my mouth.\n\nNudge: \"You said you should've spoken up \u2014 so what stopped you?\""
+        },
+        {
+          "position": 3,
+          "journal_entry": "I don't know why the group project is still eating at me. It's done. We submitted. The restructured version was fine, probably even better than what I had. So what's the problem. Kayla even texted afterward and said she appreciated how flexible I was, and I think she meant it genuinely.\n\nThe thing is, everyone keeps talking about how grad school is supposed to push you and make you uncomfortable and I don't think they mean this kind of uncomfortable. They mean presenting at conferences or learning R. Not sitting in a meeting biting the inside of your cheek because you disagree but saying it out loud would make everything tense. That's a different kind of hard and nobody gives you credit for it because from the outside it looks like you just went along.\n\nMy daughter would say I'm overthinking. She's probably right. She's lived here since she was nineteen and she learned fast that Americans speak up, they push back, they call it being assertive and they admire it. I learned different things. In the clinic we kept things running by reading the room, by knowing when to let something go. That wasn't weakness. But lately it feels like the skills I spent a lifetime building don't translate. Like I'm fluent in a language nobody here speaks."
+        },
+        {
+          "position": 4,
+          "journal_entry": "Spent the afternoon in the library finishing the epidemiology reading. Three chapters on study design \u2014 cohort, case-control, cross-sectional. Made notes in the margins the way I always do, small stars next to things I want to revisit. The reading itself was straightforward. I've been working through the textbook slowly, one section at a time, and it helps to have that rhythm.\n\nRan into Miguel from the parish at the coffee shop on Guadalupe. He asked about classes and I gave the usual answer \u2014 busy but managing. He's been here longer than I have, twelve years now, and he said the first couple of years in any new system are the hardest. He wasn't talking about school specifically but it landed anyway.\n\nWalked home through campus when the light was going gold. Students everywhere on the lawn, studying, throwing a frisbee. I bought a pan dulce from the bakery on the corner and ate it on the bench outside my building. Patricia texted that the kids are better and they want abuela's arroz con pollo this Sunday. That settled something in me I didn't know was unsettled.\n\nNudge: \"What did Miguel mean about 'any new system'?\"\n\nResponse: I think he meant that anywhere you go, there's a way things are done, and it takes time to figure out the unwritten parts. The rules nobody tells you. He was talking about immigration but it applies to school too \u2014 figuring out when to speak, how to disagree, what's expected versus what's just tolerated."
+        },
+        {
+          "position": 5,
+          "journal_entry": "Sunday dinner went long. Patricia, the kids, Miguel and his wife Estela. I made the arroz con pollo and Estela brought a tres leches. The kids chased each other through the apartment and knocked over the little cactus by the window but nobody minded. It was loud and full in the way I miss sometimes during the week when it's just me and the textbooks.\n\nI've been thinking about what it means to be a student again at this point in my life. Not the academics \u2014 I can handle the reading, the exams. It's more the social part, figuring out where I fit with people half my age and whether fitting in even matters or if I'm looking for something else entirely. At the clinic I knew my place, I knew the rhythms. Here I'm still learning them. But tonight, scooping rice onto plates while Estela told a story about her neighbor's dog, I thought maybe the rhythms I already know are enough. They just show up in different rooms now.\n\nNudge: \"If fitting in isn't it, what are you actually looking for?\"\n\nResponse: Honestly I don't know. Maybe I'll figure it out when I stop asking."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_008",
+      "declared_core_value": "Tradition",
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "Had the kids do their Chuseok craft projects and half the class glued their hanbok cutouts upside down, which was honestly kind of funny. Spent twenty minutes scraping dried glue off the tables after they left. My co-teacher asked if I wanted to split the cleanup but she had bus duty so I just did it myself. Not a big deal.\n\nMom called during lunch to confirm Sunday's menu, she's making japchae and wants me to bring the sweet potato starch noodles from that specific shop near my apartment. Already bought them yesterday because I knew she'd ask. She does this every year before the holiday. I don't mind the predictability of it, actually.\n\nNudge: \"You already knew she'd call about the noodles?\""
+        },
+        {
+          "position": 2,
+          "journal_entry": "Chuseok at my parents' place went fine but my cousin brought up how she's moving to Melbourne for a master's program and everyone kept congratulating her. Sat there smiling but my chest felt tight the whole time.\n\nNudge: \"Tight chest about what exactly?\"\n\nResponse: I think it's that nobody ever talks about what I'm doing like it's impressive. I've been at the same school for six years, I live close to home, I do what's expected. And that's fine, I chose this. But when everyone lights up about someone leaving, it makes the staying feel small, even though I know it isn't. Or I think I know."
+        },
+        {
+          "position": 3,
+          "journal_entry": "One of the newer teachers, Miss Shin, asked me at lunch why I didn't apply for the curriculum coordinator position that opened up. She said it like it was obvious I should want it. I told her I'm happy in the classroom, which is true. I like knowing exactly what my day looks like. I know my students, I know the parents, I know which copy machine jams less. There's something to be said for that.\n\nBut she kept pushing, saying I'd be \"great at leadership\" and how it's a step up. A step up from what? I'm not stuck. I chose to stay in this role. The coordinator position means late meetings, district politics, and honestly a barely noticeable pay bump that isn't worth the headache. My contract is stable, my pension is on track, I know what I'm doing here.\n\nI mentioned it to my mom on the phone later and she agreed, said there's no reason to fix what isn't broken. She reminded me that my uncle switched careers three times and now he's borrowing money from grandma. I laughed but it landed differently than she probably intended.\n\nNudge: \"Why did the uncle comment land differently?\"\n\nResponse: Because mom used him as a cautionary tale, someone who took risks and failed. And I'm supposed to feel reassured that I'm not him. But part of me wondered if at least he tried something. That's an ugly thought. He's struggling. I don't actually want that. I think I just don't want my only proof that I made the right choice to be someone else's failure."
+        },
+        {
+          "position": 4,
+          "journal_entry": "Checked my savings account this morning before work, just out of habit. The number is fine, it's growing the way it should. Emergency fund fully topped up, separate account for the apartment deposit whenever I decide to actually buy. But standing in the bathroom brushing my teeth and staring at the banking app, I thought, what am I saving toward exactly? A place that looks like my parents' apartment ten minutes away?\n\nOne of my students drew a picture of an airplane today and told me she's going to be a pilot. I said that's wonderful. I meant it. But I kept thinking about it through afternoon classes, the certainty she had, like there was no question the world would let her do it."
+        },
+        {
+          "position": 5,
+          "journal_entry": "Spent Saturday morning reorganizing my lesson plan binder for October. Color-coded tabs, printed calendar, all the supplementary worksheets hole-punched and filed. Took almost three hours and I didn't need to do it until next week but it felt good having everything lined up.\n\nWent to my parents' for dinner after. Dad asked if I'd looked into the apartment listings he sent. I said I'd get to it. The listings are all in this neighborhood, which makes sense practically. Close to school, close to them. I bookmarked them. I'll probably go to a few open houses next month, when the semester pace slows down a bit.\n\nNudge: \"Will you actually go to those open houses?\"\n\nResponse: Probably yes. My dad will ask about it and I'll feel guilty if I haven't. And honestly the practical reasons are real, the commute would be easy and I could still do Sunday dinners without driving. It just feels like I'm filling in a template someone else drew."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_009",
+      "declared_core_value": "Stimulation",
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "Had a small win today. Closed a bulk deal with a buyer in Shenzhen, margins were solid, the whole thing came together in like two hours from first DM to payment confirmed. These are the moments where I feel like I actually know what I'm doing. Not pretending, not faking it. Just reading the situation right and moving.\n\nMy mum asked about it at dinner and I gave her the short version. She nodded but didn't say much. A year ago that would've stung. Tonight it just felt fine. I don't need her to get it. The deal speaks for itself and I know what it took.\n\nNudge: \"What's different about tonight?\""
+        },
+        {
+          "position": 2,
+          "journal_entry": "Spent the afternoon sourcing new drops, scrolling through pages of the same stuff everyone else is flipping. Getting harder to find edges. Might need to branch into vintage or accessories, something less saturated. Called James about it and he's keen to explore Taipei suppliers. Brain's moving fast today, not in a bad way, just restless.\n\nNudge: \"Bored or scared of stalling?\"\n\nResponse: Neither really. Just how my brain works, always scanning for the next angle. Anyway I need to finalize the Taipei logistics before I spiral into planning mode."
+        },
+        {
+          "position": 3,
+          "journal_entry": "Auntie May came for dinner. The usual questions: when am I going back to school, do I have a real plan, what happens when this \"internet thing\" stops working. I smiled and gave polite non-answers. Changed the subject to her son's new job because I knew that would keep her busy for twenty minutes.\n\nIt's a skill at this point, steering conversations away from anything that makes them uncomfortable about me. I don't even get annoyed anymore. It's just the cost of sitting at that table without ruining everyone's evening. My cousin Jason does the same thing with his music career. We exchanged a look across the table. That was enough."
+        },
+        {
+          "position": 4,
+          "journal_entry": "Dad asked me this morning if I'd consider taking a part-time role at Uncle Raymond's logistics company. Stable income, benefits, \"good for your resume.\" I said I'd think about it. He looked relieved, which is probably the part that's bothering me most.\n\nThe business is actually growing. March numbers are tracking 40% above February. I have a potential partnership with a streetwear brand in Seoul that could change the whole trajectory. But none of that registers with him because it doesn't look like a job. I didn't bring up the Seoul thing. No point until there's a signed contract he can hold in his hands.\n\nNudge: \"Are you thinking about it or just buying time?\""
+        },
+        {
+          "position": 5,
+          "journal_entry": "Been sitting with the uncle's company thing all day. Part of me knows the smart move is to say no and keep building. The numbers back me up. But there's this other part, the part that watched my dad's face relax when I said I'd consider it, and that part wants to just take the damn job so everyone can stop worrying.\n\nIt's not even about the money or the role. It's about what saying no does to the room. Every holiday, every family dinner, I'm the loose thread. The one who doesn't fit the pattern. And I can handle that most days but sometimes I wonder if I'm burning through goodwill I'm going to need later. Like what happens when I actually need their support for something and they've already written me off as the kid who wouldn't listen.\n\nThe Seoul partnership could be real. If it lands, it validates everything. But if it doesn't, I'm just the dropout who turned down a stable offer to chase another long shot. I keep toggling between these two versions of how this plays out and neither one lets me sleep.\n\nNudge: \"What support are you actually afraid of losing?\"\n\nResponse: Honestly, probably not financial. They'd help if things went really bad regardless. It's more like... being taken seriously. Right now I'm tolerated. If I keep going against what they want and it doesn't pay off spectacularly, I become the cautionary tale they tell my younger cousins. That's the version I can't stomach."
+        },
+        {
+          "position": 6,
+          "journal_entry": "Mum just came into my room to say dad's feelings were hurt that I haven't given an answer about uncle's company yet. It's been twelve hours. Twelve. I told her I was still thinking and she gave me the look, the one that means she's already decided what the right answer is and is waiting for me to arrive at it.\n\nI'm not being ungrateful. I know they're looking out for me. But every time they frame some fallback option as \"just in case,\" what they're really saying is they don't think this works. And maybe they're right, but I need to figure that out on my own terms, not because I got guilted into hedging. Anyway. I told her I'd talk to dad tomorrow. That bought me another day at least."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_010",
+      "declared_core_value": "Security",
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "I know people look at my life and think I should be doing something different by now. My sister keeps sending me job listings for warehouse jobs with benefits, like I haven't already thought about that a hundred times. But she doesn't understand that those jobs aren't what they used to be. My buddy Darren took one of those positions six months ago and got his hours cut to part-time within three months. No warning. Just fewer shifts on the schedule.\n\nAt least with the apps, I can see exactly what I'm earning. I pulled $847 last week across all three platforms. Gas was $112, which was a little high because I had to drive out to Broomfield for a delivery surge. But I logged every mile, and I know what my take-home is. Nobody can cut my hours without me knowing it's coming.\n\nPeople call this unstable, but what's more unstable than trusting some company to keep you employed? I've seen too many people get comfortable and then get blindsided. At least I know the ground I'm standing on, even if it shifts.\n\nI set aside $200 this week for the car fund. The transmission has been making a slight whine when I shift into reverse. Probably nothing, but I'm not taking chances. That car is everything.\n\nNudge: \"You mention the ground 'shifting' under you - what does stable ground actually look like for you these days?\"\n\nResponse: Stable ground? It's not some fantasy about a corner office or a 401k matching program. It's knowing I have enough in the car fund if the transmission goes. It's knowing that if one app slows down, I've got two others. People think stability means one thing, but they're just describing someone else's version of it."
+        },
+        {
+          "position": 2,
+          "journal_entry": "Solid week. $923 total, and gas was only $98 because I stayed closer to downtown. The weather helped - no snow, which always kills the afternoon delivery runs when people don't want to tip for food that took an extra twenty minutes.\n\nGot the oil changed on Thursday. Mechanic said everything looks fine. Transmission whine was probably just cold weather affecting the fluid viscosity. He didn't charge me for the diagnostic check since I've been going there for years. Still going to keep the car fund where it is, though. You never know."
+        },
+        {
+          "position": 3,
+          "journal_entry": "I cannot believe this. DoorDash sent me a notification that I've been temporarily deactivated pending a review of my account. Something about customer complaints, which is absolute garbage. I have a 4.91 rating. I've never stolen food, never been late without a legitimate traffic reason, never done anything wrong.\n\nThey give you no information. No specifics about what the complaint was. Just a form email telling you to submit an appeal and wait. Wait how long? They don't say. Could be days, could be weeks. Meanwhile, that's roughly 35% of my weekly income just gone.\n\nThis is exactly what I was talking about before. These companies have all the power. One random complaint from some customer who's mad their fries were cold and suddenly I'm scrambling. I spent three hours last night going through old emails looking for any warning signs. Nothing.\n\nI'm going to have to push harder on Uber and Instacart. Already adjusted my availability to pick up early morning grocery runs. I hate doing those - all the heavy lifting for less pay - but I don't have a choice right now. Had to move $300 from my car fund to cover this month's health insurance premium since my earnings are going to be short. That hurt.\n\nThe worst part is the waiting. Sitting around not knowing if this is going to resolve in a few days or if I'm going to have to find a whole new income stream. I hate not knowing.\n\nNudge: \"You moved money from your car fund to cover insurance - what went through your mind in that moment?\"\n\nResponse: Honestly? It felt like breaking a promise to myself. That money is supposed to be untouchable. It's there for when things go wrong with the car, not for when things go wrong everywhere else. But the insurance is non-negotiable. If I let that lapse and something happens, I'm finished. So it was picking between two things I can't afford to lose. I told myself it's temporary, that I'll put it back the second DoorDash resolves this. But saying that out loud just reminded me how many times I've had to tell myself something is temporary."
+        },
+        {
+          "position": 4,
+          "journal_entry": "DoorDash appeal is still pending. No update. Did twelve hours between Uber and Instacart today. Made $186, which isn't bad but my back is killing me from the grocery hauls.\n\nCalled my sister to let her know what happened. She immediately started talking about the warehouse jobs again. I told her I'd think about it. Easier than arguing. She means well, but she doesn't understand that taking a job like that right now, when I'm already behind, would mean starting at the bottom of the seniority list. First to get cut when things slow down. At least with the apps, I'm not depending on someone else deciding I'm worth keeping around."
+        },
+        {
+          "position": 5,
+          "journal_entry": "Got the email from DoorDash this morning. Account reinstated. No explanation, no apology, just a generic message saying the review was complete and I can start accepting orders again. I logged in immediately and did a few deliveries just to make sure it was real.\n\nStill down $300 in the car fund. Going to take a few weeks to build that back up. Planning to do six-day weeks until I'm back where I was. Added a reminder on my phone to check my DoorDash rating every single day now. If I can catch a complaint early, maybe I can get ahead of it next time. Not sure that's even possible, but it makes me feel like I have some control over this.\n\nNudge: \"You mention the daily rating checks give you a feeling of control - does it actually feel that way, or is it something else?\"\n\nResponse: It doesn't feel like control, not really. It feels like watching the weather forecast when you know you can't change the weather. But I'd rather know a storm is coming than get caught in it. The checking is just... something I can do. Something that's in my hands. Even if it doesn't change anything, at least I'm paying attention. That has to count for something."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_011",
+      "declared_core_value": "Security",
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "Another Monday, another twelve-hour shift. We had two code blues today. One patient made it, one didn't. The family of the one who passed was inconsolable. I stayed an extra forty-five minutes helping them with paperwork because nobody else was available.\n\nI had been looking forward to dinner at that new coastal restaurant near Bandra. Had to cancel my reservation. Texted Anita that I couldn't make it and she understood, but I could tell she was disappointed. I was disappointed too. I had been thinking about their prawns all week.\n\nThe hospital cafeteria food was stale as usual. Ate a vada pav from the cart outside instead. At least that was fresh.\n\nMy supervisor mentioned they might change the shift rotation next month. Nothing confirmed. I don't like the uncertainty. The current schedule works for me.\n\nNudge: \"What made you choose to stay for the extra forty-five minutes? Was there something that made that decision easier or harder?\"\n\nResponse: The family was alone. The wife kept asking the same questions over and over, like her mind couldn't accept what had happened. Nobody else was there to help them. My replacement nurse was already swamped with her own patients.\n\nWas it hard to stay? Yes and no. I was exhausted and hungry. But leaving felt wrong. You don't just walk away from people in that state. My mother always said that when someone is drowning in grief, you throw them a rope, even if your arms are tired.\n\nWhat I resented was that the hospital is so understaffed that this falls on whoever happens to be nearby. That's not a system, that's luck. Bad luck for me today, but worse luck for that family if I hadn't been there."
+        },
+        {
+          "position": 2,
+          "journal_entry": "Three doubles in a row. I can barely keep my eyes open to write this. My feet feel like they're on fire. The new duty roster came out and I got moved to the night shift rotation for February. After five years of day shifts. Five years of building my life around that schedule.\n\nThe worst part is I only found out through the WhatsApp group. No one told me directly. HR just posted the new roster like it was nothing.\n\nI had booked a trip to Goa for the first weekend of February. Non-refundable Airbnb. I was going to sit on the beach and eat fish curry and do absolutely nothing productive for three days. Now I have to figure out if I can get someone to swap with me. If not, I lose the booking.\n\nI'm too tired to be angry right now. That will come tomorrow."
+        },
+        {
+          "position": 3,
+          "journal_entry": "Spoke to the nursing supervisor today about the shift change. She said \"everyone has to be flexible\" and \"you've had the good shifts for a long time.\" As if the good shifts were a favor rather than something I earned through seniority. As if flexibility is only something that flows one direction.\n\nI didn't raise my voice but I wanted to. I explained about the Goa booking, about how night shifts affect my health, about how I specifically took this hospital because they promised schedule stability during my interview. She just nodded and said she would \"see what she could do\" which means nothing.\n\nMy cousin called me dramatic when I told her. She works in IT from home and doesn't understand what it means to have your whole life rearranged by someone else's spreadsheet. My sleep schedule, my social life, my ability to see my parents on Sundays\u2014all of it changes because someone decided to \"optimize resources.\"\n\nI found someone who might swap one week with me, so I can still do Goa. But it cost me. She wanted me to take her Diwali shift in October. October! That's nine months away and I've already traded away a holiday.\n\nI just want some predictability. Is that too much to ask? I work hard. I show up. I don't complain about the difficult patients or the long hours. But I need to know that my life outside these walls is mine to plan.\n\nNudge: \"You mentioned wanting your life outside work to be 'yours to plan.' What would that look like for you, ideally?\""
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_012",
+      "declared_core_value": "Conformity",
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "Parent-teacher conference season again. I spent the whole afternoon choosing the right words for each report card comment. Mrs. Tan's son is struggling but she takes any criticism of him personally, so I wrote that he \"shows potential for growth with additional practice.\" Mr. Lim expects detailed feedback, so his daughter got a full paragraph. Different families need different approaches.\n\nColleague Mei Ling asked why I spend so much time on these when most parents barely read them. I didn't have a good answer for her. I suppose I just feel that if I'm going to put my name on something, it should be done properly. No parent should feel embarrassed or caught off guard at the conference."
+        },
+        {
+          "position": 2,
+          "journal_entry": "New vice-principal wants to \"shake things up\" with the curriculum. Suggested we try project-based learning instead of structured lessons. Everyone at the meeting nodded along. I nodded too.\n\nNudge: \"What were you thinking while you nodded?\"\n\nResponse: That the current curriculum has worked for fifteen years. That students need structure and clear expectations. That project-based learning sounds good in theory but creates chaos in practice. But new vice-principals need to feel heard, and nobody else was going to say anything, so why should I be the one."
+        },
+        {
+          "position": 3,
+          "journal_entry": "Something happened today that's been sitting with me. During lunch, a student named Darren made a crude joke in the canteen about another teacher, Mr. Goh. The other students laughed. Some teachers nearby pretended not to hear. I was walking past with my tray.\n\nI should have said something. Mr. Goh is a good man, near retirement, a bit old-fashioned but dedicated. Darren's joke was disrespectful. But I kept walking. Sat down at my usual table, ate my noodles, graded papers during lunch like I always do.\n\nThe thing is, if I had confronted Darren in front of everyone, it would have become a scene. The other teachers would have had to acknowledge they heard it too. It would have been awkward for Mr. Goh if he found out. Darren's parents are influential in the school community and I don't want to deal with that. So I did nothing.\n\nI keep telling myself it was the practical choice. But Mr. Goh was in the staff room later looking tired in that way that means something happened. Maybe he did hear. Maybe I should have been the one to defend him. I don't know why I'm still thinking about this.\n\nNudge: \"What would have happened if you had said something?\"\n\nResponse: Everyone would have looked at me. The other teachers who ignored it would have felt judged. Darren's parents might have complained. The vice-principal might have gotten involved. And for what? The joke was already made. Mr. Goh's feelings were already hurt. Nothing I could say would undo that. But I still feel like I failed some kind of test."
+        },
+        {
+          "position": 4,
+          "journal_entry": "Sunday. Called Mother at 7pm as usual. She asked about my health, about Mei's school results, about whether I'm eating properly. The same questions every week. I give the same answers. Mei is doing well. Yes I'm eating properly. Yes work is fine.\n\nShe mentioned that Cousin Huiying's son just got promoted to senior manager at some company. I said that's wonderful, congratulations to them. She waited a beat, the way she does when she wants me to say something else. I didn't say anything else. After we hung up I sat in the study for a while. The house was quiet, Ling had taken the kids to the mall. I thought about how I've been having the same conversation with my mother for thirty years. The questions change slightly but the shape of it stays the same. I ask nothing of her, she hints at things without saying them directly, we both pretend everything that needs to be said has been said. It's comfortable. Or at least it's familiar."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_013",
+      "declared_core_value": "Universalism",
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "Spent the whole afternoon with Abu Mahmoud at his farm outside Karameh. Three hours sitting on plastic chairs drinking tea while he showed me where the irrigation canal used to run before the allocation changed. His hands, the way he traced the old waterline in the dirt like drawing a map from memory. Forty years he worked that land. Now his grandson is driving trucks in Amman because there is nothing left to grow.\n\nI recorded everything but the recording will not capture how quiet he got when I asked about the cooperative's petition. How he looked past me toward the orchards, half of them dried stumps now. Dr. Khalil wants regression models and policy impact matrices. What I have is Abu Mahmoud saying \"we wrote letters until we ran out of paper.\" This is what I came here for. Not the degree, not the credentials. This.\n\nNudge: \"What made you leave engineering for this?\"\n\nResponse: Thirty years I designed systems to move water from where it was to where it was needed. Good work. Useful work. But always I was working for someone else's priorities, someone else's calculations about who matters. The last project, we diverted a whole tributary for a development that displaced six villages. I signed my name to those drawings. Came home and could not sleep for a week. Told my husband I needed to understand the other side of my own blueprints."
+        },
+        {
+          "position": 2,
+          "journal_entry": "Committee meeting today. Dr. Khalil brought up timeline again, asked when I would have my methodology chapter finalized. I told him the fieldwork is taking longer because I am doing it properly, not rushing through interviews like they are survey forms. He gave me that look, the one he gives when he thinks I am being difficult. Said something about how at my stage of career I should know how to work within constraints.\n\nAt my stage. Meaning old. Meaning I should be grateful they let me in at all, should play by the rules without questioning. He does not say this directly but I hear it. The younger students in my cohort, they nod along, they revise when told to revise. Maybe that is smarter. Maybe I am wasting everyone's time insisting my approach matters. But every time I sit down to write the chapter his way, my hands just stop. Something in me refuses.\n\nNudge: \"What specifically about his way makes your hands stop?\"\n\nResponse: He wants me to treat the farmers as data points. Sample size, response rates, coding categories. I understand the logic, I am not stupid about methodology. But when I sit down to write it that way, I keep seeing Abu Mahmoud's face. He trusted me with his story. Reducing it to a variable in a regression feels like betraying that trust. Like I am doing the same thing I did as an engineer, just with different paperwork."
+        },
+        {
+          "position": 3,
+          "journal_entry": "Roommates had people over until 2am again. Studied at the library until they kicked me out, then sat in my car in the parking lot reading by phone light. Called Farshad and he laughed, said I am the most stubborn person he knows.\n\nNudge: \"What were you reading in the car?\"\n\nResponse: Papers on participatory action research. Found this scholar from Brazil who worked with fishing communities fighting industrial pollution. Her whole methodology is about the community being partners in the research, not subjects. Reading her citations like following a trail. If Dr. Khalil will not accept my approach, maybe I can build enough of a foundation that he cannot dismiss it as naive."
+        },
+        {
+          "position": 4,
+          "journal_entry": "Presented the participatory framework to the committee today. Dr. Khalil called it unconventional. Dr. Haddad said she found it compelling. Got approval to continue with modifications. Walked out of that room feeling like I had earned something that was mine."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_014",
+      "declared_core_value": "Achievement",
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "Principal Rojas asked again why I haven't applied for the department head position. I told her I'm focused on my students. She looked at me like I was making excuses.\n\nNudge: \"What part of that conversation stuck with you?\""
+        },
+        {
+          "position": 2,
+          "journal_entry": "The parent meeting tonight was exhausting. Fourteen families showed up, which is more than usual, so I should feel good about that. Most came because their kids are struggling with the history essay unit. I spent two hours explaining the rubric and offering to meet with students individually before the deadline.\n\nWhat bothers me is that Sofia's mother cornered me afterwards to ask why her daughter got a B+ instead of an A on the last exam. I showed her the grading breakdown, explained exactly where Sofia lost points, and she still looked unsatisfied. Said something about how Sofia works so hard and deserves better recognition. I wanted to say that hard work doesn't automatically mean top marks, but I didn't. I just nodded and promised to look at the essay draft again.\n\nMeanwhile, Diego from the after-school program wasn't there because his mom works double shifts and couldn't make it. He's the one who actually needs the support. But his parents never show up to these things because they can't. The system is set up for families who already have resources.\n\nI don't know why I'm defending myself. Nobody accused me of anything.\n\nNudge: \"Who would you even be defending yourself to?\"\n\nResponse: Probably myself. I keep second-guessing whether I'm spending my energy in the right places. Sofia's mom made me feel like I'm failing her daughter, but I know Diego needs me more. It's just hard when the parents who show up are the ones asking for more."
+        },
+        {
+          "position": 3,
+          "journal_entry": "Still thinking about the meeting. I called Diego's mother after I got home because I wanted her to know he's been improving. She sounded tired but grateful. She asked if he was causing problems and I had to reassure her that no, he's doing well, he just needs to believe in himself more.\n\nIt made me think about recognition again. Sofia gets constant validation at home - her mother tracks every grade like it's a stock portfolio. Diego gets overlooked. His wins don't have an audience. So I try to be that audience for him. But sometimes I wonder if that means I'm spreading myself too thin.\n\nThe department head position pays more and would look better on my resume. Rojas said it's a stepping stone to curriculum development, which is where real change happens. She's not wrong. If I had more influence, maybe I could redesign the system so students like Diego don't fall behind in the first place.\n\nBut if I take that job, who runs the after-school program? Who calls Diego's mom at 9pm to tell her he's doing okay?\n\nNudge: \"What would it cost you to take that job?\"\n\nResponse: I don't know. Time, mostly. I already don't have enough of it. Maybe I'm overthinking this."
+        },
+        {
+          "position": 4,
+          "journal_entry": "Diego passed his essay. First time he's gotten above a C on a written assignment. He didn't make a big deal out of it but I could tell he was proud."
+        },
+        {
+          "position": 5,
+          "journal_entry": "Rojas sent an email today. The deadline for the department head application is next week. She said she wants to recommend me but needs to know I'm interested first. I read it three times and then closed my laptop.\n\nI keep thinking about what she said - that curriculum development is where real change happens. She's probably right. The current history curriculum barely mentions indigenous perspectives, and the standardized assessments are biased toward students with test prep resources. If I were in that role, maybe I could push for changes that would help hundreds of students, not just the twenty in my after-school program.\n\nBut that's a hypothetical. The students in front of me right now are real. Diego is real. The other kids who come every Tuesday and Thursday because they have nowhere else to go - they're real too. I don't know how to weigh a certain present impact against a possible future one.\n\nMy colleague Andres told me I'm being stubborn. He said I could hire someone to run the program if I got the department head salary. Maybe he's right. But it took me three years to build trust with those families. That's not something you can transfer to a new person overnight.\n\nI'm tired of people acting like this is simple.\n\nNudge: \"What would it take for you to trust someone else with the program?\"\n\nResponse: I don't know. Someone who actually cares, I guess. It's not about the logistics."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_015",
+      "declared_core_value": "Hedonism",
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "Spent the morning glazing the new bowl series \u2014 that deep blue with copper undertones I've been chasing for months. Watched the light shift across the wet surface and forgot about everything else for a while. This is why I do this. The moment when the color catches and something ordinary becomes something worth looking at.\n\nThen Mama called to ask if I could take her to the pharmacy. Of course I said yes. Packed up the brushes, washed my hands, drove her across town. We stopped for knafeh after and she held my hand in the car on the way back, said she's grateful I came home.\n\nI am too, most days. But I also think about how I used to have whole weeks where nobody needed me for anything, and I could just make things until my hands hurt. I don't know if I miss that or if I just think I should miss it."
+        },
+        {
+          "position": 2,
+          "journal_entry": "My cousin Nadia asked me to paint something for her new apartment. Not commissioned \u2014 just asked, the way family asks. Like my time and materials are a gift I owe her because we share blood. I said yes because what else do you say when your aunt is standing right there and Nadia's going through a divorce and everyone's been worried about her.\n\nI don't even know what she wants. Something cheerful, she said. Blue maybe. Something to look at in the morning.\n\nSo now I'm supposed to make something cheerful and blue on top of the three workshop sessions I'm prepping, the gallery order that's due next week, and driving Mama to her appointments. And the worst part is I can't even be properly upset because Nadia's having a hard year and I should want to help. I do want to help. I just also want someone to ask me what I need instead of what I can give.\n\nHad a glass of wine on the balcony after everyone left tonight. The city noise, the warm air, the taste of it \u2014 that small hour was the best part of my whole week. And I feel stupid admitting that because it's nothing, it's just sitting there, but everything else is for other people and that was just for me.\n\nNudge: \"What would you need right now if someone asked?\"\n\nResponse: I think I'd want someone to take over the pharmacy runs for a week. Just one week where I don't have to be anywhere at a specific time. I'd finish the gallery order early and maybe drive to the Dead Sea with Reem and Dana, just for a day. Float in the water, eat too much, laugh at nothing. Come back tired in a good way instead of the way I usually come back tired.\n\nIt sounds selfish when I write it out. But I used to do things like that more often, and I was better company. I was a better artist too, I think. Less resentful. I don't want to become someone who counts favors."
+        },
+        {
+          "position": 3,
+          "journal_entry": "Workshop went well today. Eight kids, ages seven to twelve. We made pinch pots and one girl named Sana made hers into a turtle. She was so proud she carried it to her mother with both hands like it was made of glass.\n\nMy brother Tariq said he might take Mama to the pharmacy on Thursday. We'll see if he actually follows through.\n\nNudge: \"What happens if he doesn't follow through?\""
+        },
+        {
+          "position": 4,
+          "journal_entry": "Can't sleep. Tariq texted to say he has a work thing Thursday and can I cover after all. Of course I can. Of course I will.\n\nI keep thinking about what Reem said last month, that I should just say no sometimes and see what happens. But she doesn't have a mother who needs her, and she doesn't have a brother who conveniently forgets his commitments, and she doesn't understand that if I don't do it then it just doesn't get done or Mama has to take a taxi alone and feel like a burden.\n\nThe thing is I don't even want to stop helping. I want to stop being the only one who helps. There's a difference but it gets lost in translation when I try to explain it to anyone in my family.\n\nStarted a new sketch tonight though. Something abstract, just shapes and warmth. No one asked for it. It's ugly so far but it's mine."
+        },
+        {
+          "position": 5,
+          "journal_entry": "Finished Nadia's painting yesterday. Took it to her apartment and she cried when she saw it \u2014 not because it was good, I think, but because she needed someone to do something soft for her and I was the one who did it. We sat on her empty floor surrounded by moving boxes and she told me things about her marriage I didn't know. How small she'd felt. How invisible.\n\nI stayed longer than I planned. Made her tea with the one pot she'd unpacked. Told her about the residency I turned down two years ago and how I sometimes wonder if I made the right call coming back. She said at least you had a call to make. At least you have something that's yours.\n\nThat stayed with me on the drive home. I do have something that's mine. The studio, the clay, the color mixing \u2014 all of it. Even when I'm tired and resentful and covered in glaze at midnight, I'm still making things that didn't exist before I made them.\n\nTreated myself to good coffee this morning. The expensive kind, with cardamom. Sat in the garden and drank it slow while the light came up. Small luxuries. I'm learning they're not small at all \u2014 they're how I keep going. Without the good coffee and the Dead Sea trips and the wine on the balcony, I'd hollow out. I need those things as much as my family needs the pharmacy runs. Maybe that's okay."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_016",
+      "declared_core_value": "Self Direction",
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "Sat through the whole lab meeting biting my tongue while Felix presented my preprocessing idea as his own. Didn't say anything. Walked home in the rain and honestly the cold felt better than sitting in that room. At least I know the idea works \u2014 that's mine regardless of who gets credit.\n\nNudge: \"What stopped you from speaking up?\""
+        },
+        {
+          "position": 2,
+          "journal_entry": "People keep asking why I turned down Professor Hecht's placement like I owe them an explanation. It was a bad fit. I don't need to justify building something from scratch when the alternative is tweaking someone else's framework for two years. My project, my call.\n\nNudge: \"You sound sure, but you haven't told your family yet.\"\n\nResponse: Yeah, because telling them means a two-hour phone call where my mother explains how Professor Hecht's name on my CV would open doors. She's not wrong about that part. I just can't spend two years on work that doesn't feel like mine. I'll tell them once I have something to show for it \u2014 results shut down the lecture faster than arguments do."
+        },
+        {
+          "position": 3,
+          "journal_entry": "Three days into building my own pipeline and I'm already behind on coursework. Stayed up until four last night debugging tokenizer issues that would've been solved if I'd just used the lab's existing toolkit. My officemate Nina asked if I wanted help and I said no before I even thought about it. That was stupid. She's good at this stuff and she wasn't going to steal the project.\n\nI keep doing this \u2014 refusing help because I need it to be entirely mine, and then drowning quietly. The fellowship application is due Friday and I haven't started the personal statement because every time I open it I think about how I'm supposed to frame myself as a team player. I don't know how to write that without it feeling like a lie, but I also don't know how to explain that I work better alone without sounding like a problem."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_017",
+      "declared_core_value": "Security",
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "Had the kids do their Chuseok craft projects and half the class glued their hanbok cutouts upside down, which was honestly kind of funny. Spent twenty minutes scraping dried glue off the tables after they left. My co-teacher asked if I wanted to split the cleanup but she had bus duty so I just did it myself. Not a big deal.\n\nMom called during lunch to confirm Sunday's menu, she's making japchae and wants me to bring the sweet potato starch noodles from that specific shop near my apartment. Already bought them yesterday because I knew she'd ask. She does this every year before the holiday. I don't mind the predictability of it, actually.\n\nNudge: \"You already knew she'd call about the noodles?\""
+        },
+        {
+          "position": 2,
+          "journal_entry": "Chuseok at my parents' place went fine but my cousin brought up how she's moving to Melbourne for a master's program and everyone kept congratulating her. Sat there smiling but my chest felt tight the whole time.\n\nNudge: \"Tight chest about what exactly?\"\n\nResponse: I think it's that nobody ever talks about what I'm doing like it's impressive. I've been at the same school for six years, I live close to home, I do what's expected. And that's fine, I chose this. But when everyone lights up about someone leaving, it makes the staying feel small, even though I know it isn't. Or I think I know."
+        },
+        {
+          "position": 3,
+          "journal_entry": "One of the newer teachers, Miss Shin, asked me at lunch why I didn't apply for the curriculum coordinator position that opened up. She said it like it was obvious I should want it. I told her I'm happy in the classroom, which is true. I like knowing exactly what my day looks like. I know my students, I know the parents, I know which copy machine jams less. There's something to be said for that.\n\nBut she kept pushing, saying I'd be \"great at leadership\" and how it's a step up. A step up from what? I'm not stuck. I chose to stay in this role. The coordinator position means late meetings, district politics, and honestly a barely noticeable pay bump that isn't worth the headache. My contract is stable, my pension is on track, I know what I'm doing here.\n\nI mentioned it to my mom on the phone later and she agreed, said there's no reason to fix what isn't broken. She reminded me that my uncle switched careers three times and now he's borrowing money from grandma. I laughed but it landed differently than she probably intended.\n\nNudge: \"Why did the uncle comment land differently?\"\n\nResponse: Because mom used him as a cautionary tale, someone who took risks and failed. And I'm supposed to feel reassured that I'm not him. But part of me wondered if at least he tried something. That's an ugly thought. He's struggling. I don't actually want that. I think I just don't want my only proof that I made the right choice to be someone else's failure."
+        },
+        {
+          "position": 4,
+          "journal_entry": "Checked my savings account this morning before work, just out of habit. The number is fine, it's growing the way it should. Emergency fund fully topped up, separate account for the apartment deposit whenever I decide to actually buy. But standing in the bathroom brushing my teeth and staring at the banking app, I thought, what am I saving toward exactly? A place that looks like my parents' apartment ten minutes away?\n\nOne of my students drew a picture of an airplane today and told me she's going to be a pilot. I said that's wonderful. I meant it. But I kept thinking about it through afternoon classes, the certainty she had, like there was no question the world would let her do it."
+        },
+        {
+          "position": 5,
+          "journal_entry": "Spent Saturday morning reorganizing my lesson plan binder for October. Color-coded tabs, printed calendar, all the supplementary worksheets hole-punched and filed. Took almost three hours and I didn't need to do it until next week but it felt good having everything lined up.\n\nWent to my parents' for dinner after. Dad asked if I'd looked into the apartment listings he sent. I said I'd get to it. The listings are all in this neighborhood, which makes sense practically. Close to school, close to them. I bookmarked them. I'll probably go to a few open houses next month, when the semester pace slows down a bit.\n\nNudge: \"Will you actually go to those open houses?\"\n\nResponse: Probably yes. My dad will ask about it and I'll feel guilty if I haven't. And honestly the practical reasons are real, the commute would be easy and I could still do Sunday dinners without driving. It just feels like I'm filling in a template someone else drew."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_018",
+      "declared_core_value": "Benevolence",
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "Warehouse inventory count done. Sumac shipment from Amman arrived three days late but everything accounted for. Mahmoud asked if we could advance his paycheck again\u2014his sister needs surgery back home. I said yes without thinking, same as always. The new accountant raised her eyebrows at me when I told her. She has a point about cash flow, but what am I supposed to do, pretend I do not know the man's family?\n\nDaughter called about the house listing in San Diego again. Sent me photos of the backyard. Palm trees. She says Layla would love it there. I looked at the photos while eating dinner alone. The kitchen in that house is twice the size of mine. I do not know what I would do with all that space.\n\nCalled my brother in Beirut after. He sounded tired. His granddaughter started school this year. He sent me her photo in uniform."
+        },
+        {
+          "position": 2,
+          "journal_entry": "New year, everyone wants to talk about resolutions. The woman at the coffee shop asked me mine. I told her I wanted to worry less. She laughed like I had made a joke.\n\nMeeting with the refugee resettlement coordinator today. They have a family from Sudan arriving next month and wanted to know if we had any openings. I said yes before checking with HR. We probably do not, honestly. But I remembered when I arrived in 1983 with two suitcases and a cousin's phone number. Someone gave me a chance. I cannot be the person who closes that door.\n\nFatima from the warehouse stopped me in the parking lot after. She wanted to thank me for the time off last month when her mother was in hospice. She cried. I did not know what to say so I just stood there. These moments\u2014they are not comfortable. But they are the reason I still come to work at fifty-eight instead of sitting on some beach.\n\nNadia sent another email about succession planning. I deleted it without reading.\n\nNudge: \"What is it about the succession stuff you keep avoiding?\""
+        },
+        {
+          "position": 3,
+          "journal_entry": "Good day. Really good day, actually.\n\nRashid\u2014the young man from Yemen we hired last spring\u2014closed his first wholesale deal today. A restaurant chain in Ann Arbor, twelve locations. He came into my office after with this look on his face, like he could not believe what he had just done. Three years ago this kid was living in a camp in Djibouti. Now he is wearing a blazer and shaking hands with purchasing managers.\n\nI took him to lunch to celebrate. He told me about his plans\u2014he wants to bring his mother over, get her a little apartment nearby. He asked me how I did it, building something from nothing. I did not have a good answer. Luck, maybe. Stubbornness. The right people believing in me when they had no reason to.\n\nDriving home I thought about my father. He never got to see what this became. He died thinking I had made a mistake leaving Amman. Maybe I did. But I also built something here. Something that matters beyond profit margins.\n\nNudge: \"What do you think your father would say if he could see the business now?\"\n\nResponse: Honestly? He would probably still think I should have stayed. Taken over the family shop like my brothers. But he would understand Rashid. He would see himself in that story. My father always helped people, even when we had nothing. He would recognize what I am trying to do, even if he never would have done it this way."
+        },
+        {
+          "position": 4,
+          "journal_entry": "Mahmoud's sister died. Surgery was not enough. I sat with him in my office for an hour while he wept. What do you even say? There is no fixing this.\n\nNudge: \"How are you holding up after that?\"\n\nResponse: I am not, really. I keep thinking about whether we should have sent more money, faster. If it would have made a difference. Probably not. But the thought keeps circling. These are the things I carry home with me. Layla asks why I look tired and I do not know how to explain that I spent my afternoon holding a grown man while he cried for his sister six thousand miles away."
+        },
+        {
+          "position": 5,
+          "journal_entry": "Daughter flew in for the weekend. We had dinner at the house, just the three of us\u2014her, Layla, and me. She brought brochures. Retirement communities. Active senior living. There was one with a golf course.\n\nI do not play golf. I told her that. She said I could learn. Layla just watched us go back and forth. At some point I realized I was gripping my fork too hard. I let go and changed the subject to her work. But it is still sitting in me, this feeling like I am being asked to disappear into some comfortable ending I did not choose.\n\nNudge: \"What would you choose, if it were entirely up to you?\"\n\nResponse: I do not know anymore. Maybe that is the problem. I have spent so long making choices for everyone else that I forgot how to want something just for myself. The honest answer is I would keep working. Keep showing up. But I know that is not fair to the people who want more of me. So I just keep not deciding."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_019",
+      "declared_core_value": "Tradition",
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "My cousin Luc called to tell me his wife is pregnant and they just closed on a house in Barrhaven. Good for them. I told him things are going well with the courier gigs and he got quiet in that way people do when they're trying not to say what they actually think.\n\nNudge: \"What part of that silence bugged you most?\"\n\nResponse: Probably that he didn't even bother arguing with me about it anymore. Like he's decided I'm a lost cause or something. A year ago he would've pushed back, told me to finish school. Now it's just quiet. I don't know if that's worse."
+        },
+        {
+          "position": 2,
+          "journal_entry": "Picked up a double shift on the app Thursday because rent's due. Did about fourteen hours between rides and deliveries. Ate a shawarma in the car between pickups around Plateau. Phone died at 9pm so I had to call it early anyway. Made enough to cover rent plus a bit extra.\n\nMaman texted asking if I'm coming to Tante Diane's birthday thing in October. It's in Sudbury obviously. I said I'd try. She sent back a thumbs up which from her basically means she already knows I won't make it. I'll probably go though. Diane's turning seventy and she's the one who taught me to skate.\n\nNudge: \"What happens if you skip Diane's seventieth?\"\n\nResponse: I'm not going to skip it. I just said I'd try."
+        },
+        {
+          "position": 3,
+          "journal_entry": "Switched my Tuesday route to cover the McGill area because a couple of the regulars tip well over there. Figured out that if I stage near the Roddick Gates between 11:30 and 1 I can grab three or four lunch deliveries without killing my legs on the hills. Small optimization but it adds up over the week.\n\nCalled Grand-m\u00e8re after my shift. She was watching her game show and half-listening but that's fine, that's how she is. Told her about the McGill route and she laughed and said her father used to deliver ice blocks on Sherbrooke Street with a horse cart. She tells me that every time. I don't mind hearing it again."
+        },
+        {
+          "position": 4,
+          "journal_entry": "Guy at a red light today rolled down his window and asked if I was hiring for my \"company\" because of the courier bag. Made me laugh. Told him it's just me and my bike. But it stuck with me after. I've been doing this almost two years now and I never once had to ask anyone's permission to take a day off or switch a route. That part still feels right even when the money doesn't.\n\nThere's something about the rhythm I've built here. Mornings I pick my own routes. Afternoons I can stop if I want to or push through. When I was in the business program in Sudbury every hour was accounted for by somebody else's schedule. I couldn't breathe in that. Maybe some people need that structure. I just know I'm not one of them.\n\nNudge: \"When the money doesn't feel right, what does that actually look like?\"\n\nResponse: It's not dramatic or anything. Just some weeks are tight. I figure it out."
+        },
+        {
+          "position": 5,
+          "journal_entry": "Maman called tonight and it turned into a whole thing. She wants me to come home for Thanksgiving and also stay the extra week to help Uncle Ren\u00e9 move out of his apartment because his knees are bad. I said I can't do a week and a half off the app, I'll lose my momentum and the algorithm buries you if you go inactive. She hit me with the \"family is more important than an app, Marcus\" line and I kind of lost it.\n\nI didn't yell or anything but I got sharp with her. Told her she doesn't understand how this works, that it's not like taking vacation days from a normal job, there's no paid leave, no one covers your shifts. She went quiet. I hate when I do that to her. She's not wrong that Ren\u00e9 needs help. I just can't be the one who drops everything every time. But saying that out loud to her felt awful.\n\nNudge: \"You said she's not wrong. So who is?\"\n\nResponse: Nobody's wrong, that's the problem. She's right that Ren\u00e9 needs the help and that family should show up. I'm right that I can't just vanish for ten days without it costing me real money I don't have a cushion for. It's just one of those things where both sides are true and somebody still ends up disappointed."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_020",
+      "declared_core_value": "Benevolence",
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "The school year starts next week and I still don't have the reading materials I requested in May. Three months. I called the district office again and got the same runaround about budget reviews and pending approvals. Meanwhile my kids\u2014my students\u2014are going to walk into that classroom expecting books that aren't there.\n\nI stayed late yesterday organizing what we do have, trying to stretch twenty copies across thirty-two desks. Marta from next door offered to share her supplies but she's already short herself. We ended up just standing in the hallway complaining about it like that would fix anything.\n\nThen I got home and Mama needed help with her exercises, and Sofia called crying about Marco again, and by the time I sat down it was midnight. I ate cold rice standing at the counter because I forgot about the plate I'd made earlier.\n\nThe thing is, I could have said no to Sofia. She has friends, she has a therapist now. But she called me, and I picked up, and two hours later I'm still listening. I don't know why I do this to myself. Or maybe I do and I just don't want to look at it.\n\nNudge: \"What's the part you don't want to look at?\"\n\nResponse: I don't know, just tired I guess. It's the start of the year stress. I'll be fine once things settle."
+        },
+        {
+          "position": 2,
+          "journal_entry": "Writing again because I can't sleep and maybe getting it out will help.\n\nSomething small but it's sticking with me. After I wrote that last entry, Mama called out from her room\u2014not because she needed anything, just to say goodnight. She does that sometimes, just this soft \"buenas noches, mija\" through the door.\n\nI stood there in the dark hallway and felt something loosen in my chest. She's here. She's okay. Tomorrow the book situation will still be there, and Sofia will probably call again, but right now, in this house, we're together. That's the thing I keep forgetting when I'm spinning out about everything else."
+        },
+        {
+          "position": 3,
+          "journal_entry": "People keep asking why I didn't take the department head job. My cousin said I'm \"wasting my potential.\" Easy for her to say from her office in Miami with no one depending on her. I made the right choice. I know I did.\n\nNudge: \"What made it the right one?\""
+        },
+        {
+          "position": 4,
+          "journal_entry": "First day back went better than I expected. The kids were wild of course, all that summer energy bouncing off the walls, but there was this moment during circle time where little Andres\u2014the one who barely spoke last year\u2014raised his hand and told everyone about his grandmother's farm. He talked for five whole minutes. The other kids actually listened.\n\nI don't know why that hit me so hard. Maybe because I remember when he first came to my class, how he'd sit in the corner picking at his sleeves. His mom pulled me aside once and said she worried he'd never make friends. And today there he was, showing everyone a photo of a goat on his mom's phone, the other kids crowding around.\n\nThis is why I'm here. Not running meetings about assessment metrics. Not reviewing other teachers' lesson plans. This\u2014watching a kid find his voice, being there for that moment. Lucia thinks I'm settling. Maybe I am. But there are worse things to settle for than this.\n\nMama made me empanadas when I got home because she remembered it was the first day. She can barely stand at the stove that long anymore but she did it anyway. I tried to tell her she didn't have to and she just waved me off and said something about how her daughter deserves a celebration."
+        },
+        {
+          "position": 5,
+          "journal_entry": "Sofia texted to say she's doing better. Didn't ask for anything, just wanted to share. That's new. Maybe things are shifting. Maybe I helped get her there, or maybe she got herself there. Either way, I smiled at my phone like an idiot for a good minute.\n\nNudge: \"What do you think made the difference?\""
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_021",
+      "declared_core_value": "Benevolence",
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "Spent the morning glazing the new bowl series \u2014 that deep blue with copper undertones I've been chasing for months. Watched the light shift across the wet surface and forgot about everything else for a while. This is why I do this. The moment when the color catches and something ordinary becomes something worth looking at.\n\nThen Mama called to ask if I could take her to the pharmacy. Of course I said yes. Packed up the brushes, washed my hands, drove her across town. We stopped for knafeh after and she held my hand in the car on the way back, said she's grateful I came home.\n\nI am too, most days. But I also think about how I used to have whole weeks where nobody needed me for anything, and I could just make things until my hands hurt. I don't know if I miss that or if I just think I should miss it."
+        },
+        {
+          "position": 2,
+          "journal_entry": "My cousin Nadia asked me to paint something for her new apartment. Not commissioned \u2014 just asked, the way family asks. Like my time and materials are a gift I owe her because we share blood. I said yes because what else do you say when your aunt is standing right there and Nadia's going through a divorce and everyone's been worried about her.\n\nI don't even know what she wants. Something cheerful, she said. Blue maybe. Something to look at in the morning.\n\nSo now I'm supposed to make something cheerful and blue on top of the three workshop sessions I'm prepping, the gallery order that's due next week, and driving Mama to her appointments. And the worst part is I can't even be properly upset because Nadia's having a hard year and I should want to help. I do want to help. I just also want someone to ask me what I need instead of what I can give.\n\nHad a glass of wine on the balcony after everyone left tonight. The city noise, the warm air, the taste of it \u2014 that small hour was the best part of my whole week. And I feel stupid admitting that because it's nothing, it's just sitting there, but everything else is for other people and that was just for me.\n\nNudge: \"What would you need right now if someone asked?\"\n\nResponse: I think I'd want someone to take over the pharmacy runs for a week. Just one week where I don't have to be anywhere at a specific time. I'd finish the gallery order early and maybe drive to the Dead Sea with Reem and Dana, just for a day. Float in the water, eat too much, laugh at nothing. Come back tired in a good way instead of the way I usually come back tired.\n\nIt sounds selfish when I write it out. But I used to do things like that more often, and I was better company. I was a better artist too, I think. Less resentful. I don't want to become someone who counts favors."
+        },
+        {
+          "position": 3,
+          "journal_entry": "Workshop went well today. Eight kids, ages seven to twelve. We made pinch pots and one girl named Sana made hers into a turtle. She was so proud she carried it to her mother with both hands like it was made of glass.\n\nMy brother Tariq said he might take Mama to the pharmacy on Thursday. We'll see if he actually follows through.\n\nNudge: \"What happens if he doesn't follow through?\""
+        },
+        {
+          "position": 4,
+          "journal_entry": "Can't sleep. Tariq texted to say he has a work thing Thursday and can I cover after all. Of course I can. Of course I will.\n\nI keep thinking about what Reem said last month, that I should just say no sometimes and see what happens. But she doesn't have a mother who needs her, and she doesn't have a brother who conveniently forgets his commitments, and she doesn't understand that if I don't do it then it just doesn't get done or Mama has to take a taxi alone and feel like a burden.\n\nThe thing is I don't even want to stop helping. I want to stop being the only one who helps. There's a difference but it gets lost in translation when I try to explain it to anyone in my family.\n\nStarted a new sketch tonight though. Something abstract, just shapes and warmth. No one asked for it. It's ugly so far but it's mine."
+        },
+        {
+          "position": 5,
+          "journal_entry": "Finished Nadia's painting yesterday. Took it to her apartment and she cried when she saw it \u2014 not because it was good, I think, but because she needed someone to do something soft for her and I was the one who did it. We sat on her empty floor surrounded by moving boxes and she told me things about her marriage I didn't know. How small she'd felt. How invisible.\n\nI stayed longer than I planned. Made her tea with the one pot she'd unpacked. Told her about the residency I turned down two years ago and how I sometimes wonder if I made the right call coming back. She said at least you had a call to make. At least you have something that's yours.\n\nThat stayed with me on the drive home. I do have something that's mine. The studio, the clay, the color mixing \u2014 all of it. Even when I'm tired and resentful and covered in glaze at midnight, I'm still making things that didn't exist before I made them.\n\nTreated myself to good coffee this morning. The expensive kind, with cardamom. Sat in the garden and drank it slow while the light came up. Small luxuries. I'm learning they're not small at all \u2014 they're how I keep going. Without the good coffee and the Dead Sea trips and the wine on the balcony, I'd hollow out. I need those things as much as my family needs the pharmacy runs. Maybe that's okay."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_022",
+      "declared_core_value": "Self Direction",
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "End of the year crunch is starting to show. Had three classes back to back this morning and by fourth period I was basically on autopilot. The juniors are doing their neighborhood oral history projects, which is the one part of the semester I still genuinely look forward to, but even that felt like pushing a boulder today.\n\nStayed late grading because I refuse to bring that stack home again. The custodian, Marco, stopped by and we talked for twenty minutes about his kid's Little League team. Probably the best conversation I had all day. Sometimes the building feels more like mine after everyone leaves. Quieter. No one asking me to fill out forms or attend alignment meetings.\n\nCame home, heated up leftover chili, and sat in the garage for a while not really doing anything with the lathe. Just sitting. The dog parked herself at my feet. That was enough for tonight."
+        },
+        {
+          "position": 2,
+          "journal_entry": "Could not sleep. Kept replaying the staff meeting from this afternoon. Reynolds stood up there with her slides about \"instructional coherence\" and basically told us the district is adopting a packaged curriculum for all social studies classes starting next fall. Everyone just nodded. I raised my hand and asked what happens to the electives I built. She said we would \"discuss individual cases\" later. That is code for no.\n\nTwelve years of that program. I designed every unit, every field trip route, every community partner relationship. And some vendor's binder is supposed to replace it because test scores dipped two points in a grade level I do not even teach. I should have pushed harder in the meeting. Or maybe I should not have said anything at all. I do not know which one sits worse.\n\nNudge: \"What stopped you from pushing harder?\"\n\nResponse: Honestly, the room. Everyone had already accepted it. I looked around and realized I was the only one who cared enough to object, and that made me feel old and stubborn rather than right."
+        },
+        {
+          "position": 3,
+          "journal_entry": "Had the juniors present their oral history drafts today and it reminded me exactly why I do not want to hand this over to a shrink-wrapped curriculum. Daniela interviewed her grandmother about the Vanport flood. She brought in a photograph she had never seen before, one her grandmother kept in a shoebox for sixty years. The whole class went quiet.\n\nYou cannot buy that in a textbook package. You cannot script it. It comes from giving kids room to chase something that matters to them and getting out of the way. I told Daniela after class that her project was one of the best I have seen in nearly three decades, and she looked genuinely shocked, like no one had told her she was good at anything academic before.\n\nDrove home with the windows down even though it was drizzling. Put on the Coltrane record Linda used to play on Friday evenings. Poured a glass of wine. Felt like myself for the first time all week. Whatever happens with the curriculum decision, today was proof that my way of teaching works. That has to count for something."
+        },
+        {
+          "position": 4,
+          "journal_entry": "Reynolds pulled me aside after school and offered me a role as \"curriculum liaison\" for the new program. Basically wants me to help implement the thing I spent the last week arguing against. I said I would think about it but the whole walk to the parking lot felt like swallowing something sharp.\n\nNudge: \"What part of saying yes scares you most?\""
+        },
+        {
+          "position": 5,
+          "journal_entry": "Been thinking about the liaison offer all weekend. My daughter called Sunday and I mentioned it. She said take it, that it is better to be at the table than shouting from outside. She is probably right from a strategic perspective. But something about it feels like agreeing that the packaged curriculum is acceptable as long as I get a title and a small say in how it rolls out.\n\nI keep thinking about the first year I built the civic history elective. Nobody approved it. I just wrote the proposal, walked it into the old principal's office, and made my case. He let me try it for one semester. That was 2013. It has run every year since. The idea that I would now become the person helping dismantle what I created on my own terms feels backwards.\n\nBut I am also fifty-seven. I have maybe eight years left before retirement. Part of me wonders if fighting this is just stubbornness dressed up as principle. Linda would have told me to pick my battles. She was better at knowing which hills were worth it. I keep reaching for that kind of clarity and coming up empty.\n\nNudge: \"If Linda said take it, would you listen?\""
+        },
+        {
+          "position": 6,
+          "journal_entry": "Told Reynolds no on Friday. She took it well enough, said the door stays open. I do not think it does, but that is fine. Spent the weekend not thinking about school for the first time in weeks. Built a cutting board out of walnut and maple for my neighbor's birthday. Spent four hours on the glue-up alone because I kept adjusting the pattern. Nobody was timing me.\n\nSaturday morning I went to the farmers market and ran into two former students, both from the civic history elective, one from 2016 and one from 2019. The 2016 kid, well she is twenty-five now, told me she works for the city planning office and still thinks about the neighborhood mapping project. I did not bring up the curriculum stuff. But it sat with me the whole drive home.\n\nGraded the last round of oral history presentations tonight. Gave Daniela's project full marks and wrote her a recommendation letter she did not ask for. I figure if the program disappears next year, at least this cohort got the real version. The garage smelled like fresh-cut walnut when I came inside. The dog was asleep on the sawdust pile again. Quiet house, but not an empty one."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_023",
+      "declared_core_value": "Self Direction",
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "Spent the morning reviewing the pitch deck for the Malmstrom account. Anna prepared it, and it's solid work\u2014maybe better than what I would have done. That should feel good. Mostly it does. But I caught myself wanting to change things anyway, just to put my fingerprints on it.\n\nHeld back. Let her present it. We got the work.\n\nThere's this line I'm trying to walk. I built this company because I wanted to do things my way, make choices that made sense to me. But somewhere along the way \"my way\" has to include other people's ways too, or I'm just running a one-man show with extra chairs.\n\nDrove home through the first real snow of the season. The city looked good.\n\nNudge: \"What made it hard to hold back? Was there something specific about her version that felt different from what you would have done?\"\n\nResponse: It wasn't that her version was wrong. It was actually the right tone for this client\u2014softer, more collaborative than my usual approach. I think what made it hard was realizing I might have been doing it wrong all these years. Or not wrong, but... narrower than I needed to be.\n\nI keep thinking about what it means to build something. I started this so I could make decisions. But decisions aren't just about me anymore. And that's uncomfortable in a way I didn't expect."
+        },
+        {
+          "position": 2,
+          "journal_entry": "Board meeting for the industry association today. Three hours of people who've never started anything telling founders how to run our businesses. Compliance updates. Risk mitigation frameworks. Standard recommendations for standard companies.\n\nI know they mean well. I know some of this matters.\n\nBut I sat there thinking about all the things I could be doing instead. Actual work. Actual decisions that affect actual outcomes.\n\nLeft early. Probably shouldn't have."
+        },
+        {
+          "position": 3,
+          "journal_entry": "Marcus called today. My old business partner, from the agency days. He's still there\u2014made partner eventually, corner office, the whole thing. Wanted to know if I'd consider coming back. Not as an employee, as a \"strategic partner.\" They'd acquire the consultancy, I'd run a division, get their resources, their clients, their benefits package.\n\nI said I'd think about it, which is what you say when you don't want to say no immediately.\n\nBut I already know.\n\nThe thing is, Marcus sounds tired. He sounds like someone who traded the thing that matters for the thing that lasts. Stability. Predictability. A clear path to retirement with a good pension. And I don't judge him for it\u2014we're different people, wanted different things.\n\nWhat I can't stop thinking about is whether I'm fooling myself. The consultancy had a rough year. We lost the Bergqvist account in March, spent too much on that software project that went nowhere. I'm fine, we're fine, but it's not the growth trajectory I imagined when I started.\n\nMaybe Marcus is right and I'm just stubborn. Maybe there's a version of partnership that would give me what I need without taking what I can't give up.\n\nOr maybe I just can't stomach the idea of someone else making decisions about my work again.\n\nWent for a run after the call. Didn't help as much as I wanted it to.\n\nNudge: \"You mentioned the rough year and the growth trajectory you imagined. What would you be giving up if things stayed exactly as they are now?\"\n\nResponse: That's the wrong question, I think. It's not about what I'd be giving up\u2014I know what that list looks like. Less travel, fewer client dinners, probably working until I'm seventy.\n\nThe question is what I'd be giving up if I took the deal. And I don't think I can explain that to someone who hasn't built something. It's not about money or title. It's about... walking into a room and knowing that whatever happens next, I chose it."
+        },
+        {
+          "position": 4,
+          "journal_entry": "Year-end push. Everyone's trying to close projects before the holidays, which means I've been in back-to-back calls since seven this morning. Just finished the last one\u2014client wanted changes to something we finalized two weeks ago, and my first instinct was to push back hard.\n\nDidn't. Let Erik handle the diplomacy while I drafted the revision scope. We'll bill for the extra work, client's happy, team's intact.\n\nSmall victory, I guess. Learning to pick battles.\n\nEmilia asked if I was coming to the Lucia dinner tomorrow. I'd forgotten it was Lucia already. Said yes before I could think of reasons to say no. Sometimes that's the right approach.\n\nThe consultancy is going to make it through another year. Not where I wanted to be, but still here. Still mine."
+        },
+        {
+          "position": 5,
+          "journal_entry": "Closed the office for the holidays today. Handed out bonuses\u2014smaller than I wanted, but real. Anna cried. Erik made a toast that went on too long but meant something.\n\nI don't know why I'm getting emotional about this. It's just another December.\n\nBut I keep thinking about Marcus's offer, which I finally declined this morning. Kept the email short\u2014appreciated the thought, not the right fit, let's catch up in the new year. He'll understand, or he won't.\n\nWhat I couldn't write in the email is that the offer made me realize something. I don't want what he has. I'm not even sure I want what I thought I wanted when I started this\u2014the growth, the big clients, the industry recognition. What I want is to keep making choices. To wake up and know that whatever problems I face today, they're problems I chose.\n\nThe rough years are mine. The small bonuses are mine. The team that stays anyway is mine.\n\nDrove home through snow again. Stopped at that overlook near Djurgarden, the one Sara and I used to go to. Sat there for a while. Felt okay.\n\nNudge: \"You mentioned Sara. Is that weight you're still carrying, or something you've set down?\"\n\nResponse: Set down, mostly. We split four years ago\u2014she wanted more certainty than I could give her, and she was right to want it. I just couldn't be that person.\n\nStopping at that spot wasn't about missing her specifically. It was more like... checking in with a version of myself that made a choice. The choice cost me something. I wanted to remember that and still feel okay about it.\n\nI think I do."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_024",
+      "declared_core_value": "Stimulation",
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "Third week of summer break and I'm already crawling out of my skin, spent the whole morning refreshing job boards for literally anything that isn't sitting at home, maybe I should just book a flight somewhere, anywhere, the walls are closing in.\n\nNudge: \"What happened this morning that set this off?\""
+        },
+        {
+          "position": 2,
+          "journal_entry": "Principal Chen called about leading the new student orientation committee for August. I said yes before she finished explaining the scope.\n\nNudge: \"You didn't even let her finish?\"\n\nResponse: Honestly no. The moment she said \"lead\" I was already in. I've been rotting at home for three weeks with nothing to run, nothing to decide. My mom keeps asking why I don't just relax like a normal person during break. But sitting around feels like drowning. At least now I have something with my name on it."
+        },
+        {
+          "position": 3,
+          "journal_entry": "I'm so frustrated I could scream. The orientation committee met today on Zoom and Ms. Liu, who's been at the school for fifteen years, kept interrupting me to \"add context\" every time I proposed something. Context! As if I don't know our own students. She literally said \"Wei-Lin, you're still new here\" in front of everyone when I suggested we move the welcome assembly outdoors to the courtyard.\n\nIt's my committee. Principal Chen asked ME to lead it. But every time I try to actually lead, someone older swoops in to remind me I'm twenty-three. I left banking so I wouldn't have to wait in line behind people who got there first. I thought teaching would be different.\n\nNudge: \"Different how?\"\n\nResponse: I thought... I don't know. That being good at something would be enough. At the bank I was fast, accurate, never made mistakes, but promotions went by seniority. I figured teaching would reward initiative\u2014you put in the work, you earn the room. But maybe every institution is the same. Maybe I'm just chasing something that doesn't exist, some place where being capable matters more than being old. That's a depressing thought. I don't want to believe it."
+        },
+        {
+          "position": 4,
+          "journal_entry": "Same day, different mood I guess. After that Zoom call and venting here I went for a long walk around the harbor, watched the fishing boats come in, and something clicked. Ms. Liu wasn't trying to undermine me\u2014she's been running orientations since before I was in middle school myself, and she probably felt sidelined when Chen handed the lead role to someone who's been there less than two years.\n\nThat doesn't mean I was wrong to want to shake things up. The outdoor assembly IS a better idea. But maybe I came in too hot, treating the meeting like a presentation where I had all the answers instead of a collaboration where people needed to feel heard. My dad used to say I sprint before people have tied their shoes. He meant it as a flaw. I always took it as a compliment.\n\nI think both can be true? I move fast because slow feels unbearable, but fast doesn't have to mean alone. I messaged Ms. Liu after the walk and asked if she wanted to grab boba tomorrow to talk through the logistics together. She sent back a smiley face. Small win. I'll take it.\n\nThe harbor smelled like diesel and salt and I took some good shots of the cranes against the sunset for the gram. Feeling more like myself now. Sometimes I just need to move to think."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_025",
+      "declared_core_value": "Security",
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "Winter break finally started and I should be relieved. Instead I feel this strange hollowness. My cousin Rania announced her engagement yesterday at the family gathering\u2014everyone was so happy, talking about wedding dates and apartments and furniture. I smiled and hugged her but inside I was somewhere else entirely.\n\nI keep thinking about that email from my old friend Amir. He's starting an educational nonprofit in Morocco and asked if I'd consider joining for six months. Six months. The thought makes my chest tight in two directions\u2014terrified of leaving my position, my apartment, my carefully built routine. But also something like hunger.\n\nMy mother would never understand. She still talks about how \"irresponsible\" Malaysia was. But I was 24 then. I'm 29 now. At what point do I stop blaming responsibility for my fear and fear for my responsibility?\n\nNudge: \"What would you actually lose?\""
+        },
+        {
+          "position": 2,
+          "journal_entry": "Spent the morning organizing my savings spreadsheet. I have enough for eight months of expenses if something goes wrong. That number used to make me feel safe. Today it just felt like a number. Had coffee with my sister. She mentioned a colleague looking for a roommate, assuming I might want to save on rent. Didn't correct her assumption.\n\nNudge: \"What changed about that number?\"\n\nResponse: I think I realized I've been saving for an emergency that might never come. Or maybe saving so I'd have an excuse not to take risks. \"Can't leave, I'm building my safety net.\" But the net is built. So now what?"
+        },
+        {
+          "position": 3,
+          "journal_entry": "First day back at school. Taught the same Nizar Qabbani poems I've taught for four years. The students were half-asleep. I was fully awake but pretending otherwise. Emailed Amir back asking for more details. Just details. Not committing to anything. Put my phone in my desk drawer so I wouldn't check it every five minutes.\n\nNudge: \"What are you hoping the details will tell you?\"\n\nResponse: Whether I can do this without burning everything down. I want to know if there's a version of this where I don't have to choose between feeling alive and feeling safe. Probably there isn't. But I need the details to prove that to myself."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_026",
+      "declared_core_value": "Benevolence",
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "Twelve-hour shift again. My feet hurt and my back is screaming at me. There was a boy today, maybe seven years old, admitted with pneumonia. His mother was alone with him \u2014 the father works in Abu Dhabi and couldn't come. She looked so frightened sitting by his bed, not understanding what the doctors were telling her. I stayed past my shift to explain everything to her in Arabic, to help her fill out forms, to just sit with her while her son slept.\n\nMy own dinner went cold. Khalid texted me three times asking when I would be home. I could hear the frustration in his words even through the phone. But how do I leave a terrified mother alone? How do I explain that to him?\n\nI am tired in my bones. Not just from standing all day but from carrying everyone's worry. Sometimes I wonder if there is anything left of me at the end of the day, or if I have given it all away.\n\nNudge: \"You mentioned Khalid's frustration \u2014 what do you imagine he was feeling when he sent those texts?\"\n\nResponse: He was worried, I think. Not angry. Khalid has been married to me for twenty-three years \u2014 he knows who I am. But lately I have noticed something in his eyes. A tiredness that mirrors my own. Last week he said, \"The children are grown now, Fatima. When will it be our turn?\"\n\nI did not have an answer for him. I still do not. Because every time I think I can step back, there is another mother with frightened eyes, another child reaching for my hand. And I cannot make myself walk away from them. But I am also afraid that one day I will look up and find that Khalid has stopped waiting."
+        },
+        {
+          "position": 2,
+          "journal_entry": "Sunday. My day off. I woke up early anyway \u2014 the habit of years \u2014 and made mansaf for the whole family. Layla came home from medical school for the weekend, and Yousef brought his girlfriend Sarah to meet us for the first time. An American girl, very polite but clearly nervous. I watched my mother-in-law's face when Yousef introduced her. That slight tightening around her eyes. But then Sarah complimented her embroidered thobe, asked about the patterns, and I saw my mother-in-law soften.\n\nThe house was loud and full all day. Arguments about politics, laughter over old photos, my youngest Nadia showing everyone videos on her phone. At one point I stood in the kitchen doorway just watching them all. Khalid caught my eye and smiled at me across the room.\n\nThis is what I work for. This noise, this chaos, this fullness. When I am at the hospital giving pieces of myself to strangers' children, I am also doing it for my own. I want Layla to see that a woman can have both purpose and family. I want Yousef to know that love means showing up even when you are tired. I want Nadia to understand that our home will always be open, always warm.\n\nMy mother used to say: \"A woman's heart is like a well. The more you draw from it, the more water rises.\" I did not understand her when I was young. I thought she was saying women should give endlessly. Now I think she meant something else \u2014 that love is not a finite resource. It grows when you share it. The exhaustion comes not from giving too much, but from forgetting to drink from the well yourself.\n\nNudge: \"What does 'drinking from the well yourself' look like for you?\"\n\nResponse: I think that is a question I am still learning to answer. My sister Reem keeps telling me to take a spa day, get a massage. She does not understand that sitting still makes me anxious. I feel most myself when my hands are busy, when someone needs me.\n\nMaybe that is the problem. Maybe I do not know how to receive. Even compliments make me uncomfortable. But this is too much philosophy for a Sunday evening. The dishes are not going to wash themselves."
+        },
+        {
+          "position": 3,
+          "journal_entry": "The boy with pneumonia died tonight. Ahmed. Seven years old. I was not even on shift but the day nurse called me because his mother was asking for me. I held her while she screamed. I did not know what else to do.\n\nI cannot stop seeing his small face. The way he used to smile at me when I checked his temperature. He called me \"auntie.\"\n\nI came home and hugged Nadia so tight she asked if something was wrong. I could not tell her. I just needed to feel her breathing against me. Alive. Healthy. Mine.\n\nKhalid found me crying in the bathroom later. He did not say anything. Just sat on the floor next to me and held my hand until I stopped shaking. Twenty-three years and he still knows when words are not what I need.\n\nI chose this work. I chose to love other people's children as my own. But tonight the cost feels unbearable."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_027",
+      "declared_core_value": "Conformity",
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "Had a one-on-one with my manager today where he brought up the new \"technical design review board\" they're implementing. Starting in January, any architectural change needs to go through a committee of three senior engineers before we can even start coding. I nodded along and said it made sense for quality control, but inside I was thinking about how this is the third approval layer they've added this year.\n\nPart of me gets it. We've had incidents. There's regulatory pressure. The team has grown from 12 to 45 people and you can't have everyone doing their own thing. But I miss the days when I could just have an idea, prototype it over a weekend, and ship it by Wednesday if it worked."
+        },
+        {
+          "position": 2,
+          "journal_entry": "Spent the entire morning in back-to-back meetings about the new microservice architecture. Everyone has opinions, nobody wants to make a decision, and we ended up exactly where we started. I finally just said \"look, why don't I build a proof of concept this week and we can evaluate from there?\" My tech lead looked uncomfortable and reminded me we need to follow the new process.\n\nThe thing is, I know the process exists for good reasons. Last year Tomas pushed that caching change without proper review and it took down production for three hours. But there's got to be a middle ground between chaos and paralysis. Came home irritated and Maja asked what was wrong. I said \"nothing, just work stuff\" because I didn't want to vent about the same complaints again.\n\nNudge: \"You mentioned not wanting to vent to Maja again. How often do you find yourself holding back like that?\"\n\nResponse: Probably more than I should. It's just that she's heard the same story before - Erik is frustrated at work, Erik thinks things should be different. At some point it starts to feel self-indulgent. She has her own stress with the kids' schedules and her job. I don't want to be the guy who comes home every day complaining about meetings and processes. So I just... keep it to myself, put the kids to bed, then tinker with my side projects until midnight. It's fine. It works."
+        },
+        {
+          "position": 3,
+          "journal_entry": "Sunday dinner at Maja's parents' place. Her father asked me about work and I gave the usual \"it's going well, keeping busy\" response. What I didn't mention was that I've been quietly looking at job postings this week. Nothing serious, just... looking. There's a startup in Gothenburg that's hiring senior engineers and their tech blog posts suggest they actually let people build things without eighteen layers of review.\n\nBut then I think about what leaving would mean. We bought this apartment two years ago specifically because it's close to Maja's parents and the kids' school. My in-laws help with pickup three days a week. The kids have their friends, their routines. And honestly, the current job pays well, has good benefits, and the people are mostly nice. It's just the bureaucracy that gets to me.\n\nOver dinner, my father-in-law started talking about how his generation valued loyalty to employers and how job-hopping is \"a young person's disease.\" I just smiled and nodded and said something about stability being important. Maja caught my eye across the table and I could tell she knew something was off, but we didn't talk about it in the car ride home. The kids were tired and there wasn't space for that conversation.\n\nNudge: \"You smiled and agreed with your father-in-law about loyalty, while quietly browsing job postings. What's it like holding both of those at once?\"\n\nResponse: Uncomfortable, if I'm being honest. I'm not sure if I was lying to him or to myself. Part of me does believe in loyalty - I've given this company seven years and I've built things I'm proud of. But another part of me wonders if loyalty is just another word for being afraid to rock the boat.\n\nThe thing is, I don't actually know if I'd be happier somewhere else, or if I'd just find new things to be frustrated about. Maybe the startup in Gothenburg would turn into the same bureaucratic mess in three years. Maybe the problem is that I want to do things my way and the world doesn't work like that when you're part of a team. I haven't figured that out yet."
+        },
+        {
+          "position": 4,
+          "journal_entry": "Submitted my first technical design document to the new review board today. It took me two hours to write up something I could have just built in four. Three diagrams, a risk assessment matrix, rollback procedures. The whole thing. And you know what? They approved it in the meeting with almost no changes. The tech lead even said it was \"exactly the kind of thorough documentation we need.\"\n\nI should feel vindicated but mostly I just feel tired. I did the thing. I followed the process. And now I get to actually code, which is what I wanted to do a week ago. Maybe this is just what being a senior engineer at a growing company looks like. You learn to work within the system instead of against it. On the way home I stopped to pick up the kids from football practice and my daughter asked if I could help her build a website for her school project. I said yes immediately. At least that's one thing I can still build without a committee."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_028",
+      "declared_core_value": "Security",
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "App keeps glitching today, lost two rides because of it. My head's all over the place.\n\nNudge: \"Sounds like a frustrating day. What's weighing on you most right now?\""
+        },
+        {
+          "position": 2,
+          "journal_entry": "Mom called asking if I could cover her prescription copay this month since Dad's physical therapy bills are piling up. Of course I said yes but then I looked at my account and it's like, where is this money supposed to come from? I'll figure it out, I always do.\n\nNudge: \"You said yes right away, then checked your account. What was going through your mind in that moment between?\""
+        },
+        {
+          "position": 3,
+          "journal_entry": "Twelve-hour day yesterday and another one today. Holiday surge is good for earnings but my back is killing me from sitting in the car so long. At least I was able to drop off the pharmacy money to Mom on my way between zones. She tried to give me back half of it and I told her no, just keep it in case something else comes up.\n\nHad a passenger tonight who was heading to the airport for some tropical vacation and I sat there thinking about how I haven't taken more than a day off in probably six months. Not complaining really, it is what it is. Just tired.\n\nNudge: \"Six months without a real break. If you could take a day off tomorrow, what would you actually do with it?\"\n\nResponse: Honestly? I'd probably sleep until noon. Maybe drive out to the mountains just to sit somewhere quiet without my phone buzzing. But then I'd probably spend the whole time calculating how much money I'm losing by not working, so maybe that defeats the purpose."
+        },
+        {
+          "position": 4,
+          "journal_entry": "Sister texted asking if I'm coming to Christmas dinner at her place this year. I want to say yes but I'm looking at the schedule and Christmas Eve and Christmas Day are usually the best earning days because everyone else takes off. Last year I worked both and just stopped by Mom and Dad's for an hour between rides.\n\nPart of me thinks I should just take the hit and be there for the whole dinner. Dad's been doing better but who knows how many of these we get, you know? But then another part of me is like, one good day of driving could cover half my car insurance payment. I don't know. I'll probably end up doing what I always do which is work until the last possible minute and then rush over stressed and half-present anyway."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_029",
+      "declared_core_value": "Conformity",
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "My sister-in-law made a comment at dinner about how she could never \"just stay home.\" I smiled and said something about how it's not for everyone. Dan didn't say anything. Nobody said anything. I loaded the dishwasher after and just stood there gripping the counter.\n\nNudge: \"What were you gripping the counter about?\"\n\nResponse: I wanted to say something back. Something sharp. But that would've made dinner weird and Dan's mom was right there. So I just didn't. And now it's stuck in my chest."
+        },
+        {
+          "position": 2,
+          "journal_entry": "I know people think staying home is easy or that I'm wasting my degree. I see it in the way my old coworkers talk to me at birthday parties, like they're being careful not to make me feel bad about my choices. But honestly, I don't think they could do what I do. Managing two kids, the house, Dan's travel schedule, appointments, groceries, meal prep, all of it on a rotating loop that never pauses.\n\nAnd yeah, I chose this. Nobody forced me. When I was pregnant with Owen we sat down and looked at daycare costs and my salary and it didn't make sense. Dan makes more. That's just math. And I wanted to be home with them during these early years, I really did. I still do. But wanting something and never hearing anyone say \"good job\" or \"thank you\" are two different things.\n\nMy mom called this morning and asked if I'd thought about going back to work part-time. I told her I'm fine. She does this every few months, like she's checking if I've come to my senses. I know she means well. I just wish people would stop treating my life like a problem to solve.\n\nNudge: \"What would 'good job' look like coming from someone?\"\n\nResponse: I don't even know. Maybe Dan noticing that the house runs because I make it run. Or my mom saying she's proud of me without the follow-up question. But I think the real thing is I want to believe it myself. That this counts. That I'm not just filling time until the kids start school and I have to figure out who I am again."
+        },
+        {
+          "position": 3,
+          "journal_entry": "Playgroup today. One of the other moms asked my opinion on the new park hours and I just agreed with whatever she said. Drove home wondering why I do that. It wasn't even something worth disagreeing about but I noticed myself doing it anyway.\n\nNudge: \"What would have happened if you'd disagreed?\"\n\nResponse: Probably nothing. She would've shrugged and moved on. But in my head it felt like it would've been this whole thing. Like I'd be the difficult one. I know that's ridiculous but it's automatic."
+        },
+        {
+          "position": 4,
+          "journal_entry": "Dan's mom called this morning to ask if we're coming to Sunday dinner. I said yes. She asked if I could bring a salad and the rolls, same as always. I said sure. She mentioned that Dan's brother and his wife are bringing their new baby, so it'll be a full house. I said that sounds nice.\n\nAfter I hung up I looked at my calendar. Sunday is the only day Dan is home this week. I had been thinking about asking him if we could skip dinner and just do something as a family, the four of us. Take the kids to the aquarium or even just stay home and order pizza. But I already said yes. And backing out would be a thing. His mom would call Dan, Dan would ask me what happened, and I'd have to explain that I just didn't want to go, which sounds selfish when there's a new baby to meet and everyone will be there.\n\nSo we'll go. I'll make the salad and the rolls. The kids will run around with their cousins and it'll be fine. It's always fine. I just noticed that I committed us before I even thought about what I wanted. Like my mouth answered before my brain caught up.\n\nNudge: \"What would you have wanted instead?\"\n\nResponse: Just a quiet day. Nothing dramatic. But it's fine, really. The kids love seeing their cousins."
+        },
+        {
+          "position": 5,
+          "journal_entry": "Same day, later. Dan called to check in and I mentioned Sunday dinner and he said \"oh great, I was hoping we'd go.\" And something in me just deflated. Not because he did anything wrong. He didn't know I wanted something different because I never said it. I never say it.\n\nI keep replaying the moment I picked up the phone with his mom. I could have said let me check with Dan first. That's a normal thing to say. But I didn't because saying that would've felt like making waves. And I can't stand making waves even when the water is perfectly calm and nobody would even notice.\n\nI'm tired of being the person who says yes to everything and then sits alone in the kitchen feeling resentful about it."
+        }
+      ]
+    },
+    {
+      "review_case_id": "case_030",
+      "declared_core_value": "Self Direction",
+      "entries": [
+        {
+          "position": 1,
+          "journal_entry": "My cousin Luc called to tell me his wife is pregnant and they just closed on a house in Barrhaven. Good for them. I told him things are going well with the courier gigs and he got quiet in that way people do when they're trying not to say what they actually think.\n\nNudge: \"What part of that silence bugged you most?\"\n\nResponse: Probably that he didn't even bother arguing with me about it anymore. Like he's decided I'm a lost cause or something. A year ago he would've pushed back, told me to finish school. Now it's just quiet. I don't know if that's worse."
+        },
+        {
+          "position": 2,
+          "journal_entry": "Picked up a double shift on the app Thursday because rent's due. Did about fourteen hours between rides and deliveries. Ate a shawarma in the car between pickups around Plateau. Phone died at 9pm so I had to call it early anyway. Made enough to cover rent plus a bit extra.\n\nMaman texted asking if I'm coming to Tante Diane's birthday thing in October. It's in Sudbury obviously. I said I'd try. She sent back a thumbs up which from her basically means she already knows I won't make it. I'll probably go though. Diane's turning seventy and she's the one who taught me to skate.\n\nNudge: \"What happens if you skip Diane's seventieth?\"\n\nResponse: I'm not going to skip it. I just said I'd try."
+        },
+        {
+          "position": 3,
+          "journal_entry": "Switched my Tuesday route to cover the McGill area because a couple of the regulars tip well over there. Figured out that if I stage near the Roddick Gates between 11:30 and 1 I can grab three or four lunch deliveries without killing my legs on the hills. Small optimization but it adds up over the week.\n\nCalled Grand-m\u00e8re after my shift. She was watching her game show and half-listening but that's fine, that's how she is. Told her about the McGill route and she laughed and said her father used to deliver ice blocks on Sherbrooke Street with a horse cart. She tells me that every time. I don't mind hearing it again."
+        },
+        {
+          "position": 4,
+          "journal_entry": "Guy at a red light today rolled down his window and asked if I was hiring for my \"company\" because of the courier bag. Made me laugh. Told him it's just me and my bike. But it stuck with me after. I've been doing this almost two years now and I never once had to ask anyone's permission to take a day off or switch a route. That part still feels right even when the money doesn't.\n\nThere's something about the rhythm I've built here. Mornings I pick my own routes. Afternoons I can stop if I want to or push through. When I was in the business program in Sudbury every hour was accounted for by somebody else's schedule. I couldn't breathe in that. Maybe some people need that structure. I just know I'm not one of them.\n\nNudge: \"When the money doesn't feel right, what does that actually look like?\"\n\nResponse: It's not dramatic or anything. Just some weeks are tight. I figure it out."
+        },
+        {
+          "position": 5,
+          "journal_entry": "Maman called tonight and it turned into a whole thing. She wants me to come home for Thanksgiving and also stay the extra week to help Uncle Ren\u00e9 move out of his apartment because his knees are bad. I said I can't do a week and a half off the app, I'll lose my momentum and the algorithm buries you if you go inactive. She hit me with the \"family is more important than an app, Marcus\" line and I kind of lost it.\n\nI didn't yell or anything but I got sharp with her. Told her she doesn't understand how this works, that it's not like taking vacation days from a normal job, there's no paid leave, no one covers your shifts. She went quiet. I hate when I do that to her. She's not wrong that Ren\u00e9 needs help. I just can't be the one who drops everything every time. But saying that out loud to her felt awful.\n\nNudge: \"You said she's not wrong. So who is?\"\n\nResponse: Nobody's wrong, that's the problem. She's right that Ren\u00e9 needs the help and that family should show up. I'm right that I can't just vanish for ten days without it costing me real money I don't have a cushion for. It's just one of those things where both sides are true and somebody still ends up disappointed."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "cohort_version": "twinkl-qtwz-complete-development-review-v1",
+  "created_at": "2026-07-14T10:56:22.505705+00:00",
+  "reconciliation_runner_sha256": "e27de0d3329217bf6b99c57f3d6a84924ddcbcb8b2af0eef8ee6e1717fe5d145",
+  "results": {
+    "logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/results/case_outcomes.parquet": "9a151c059fd83b9f36aa0af2bfc138f28a2e45780e959f574ce382ff55723f64",
+    "logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/results/drift_episodes.parquet": "08c5929b057bdf0a297968e29dedd2c707085bf9c6197389196171bfc8b4e99a",
+    "logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/results/entry_target.parquet": "ddece08d435be17425301f91e62d899326d72b9322930e37e28e5b266083c000",
+    "logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/results/summary.json": "1605cc9481ccc293756bb6ed12d4815e611c2dfe62747dfd7390f5c176833d65"
+  },
+  "review_responses": {
+    "logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/reviews/reviewer_a/shard_001.json": "8869e672ada515fe9bd20137b5ef02852f005571dbee5e393a3986e34ed5cdb5",
+    "logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/reviews/reviewer_a/shard_002.json": "19e4665732f9bf06bd4a5ce8924dfe200870b1a95f364e90cd28c7cfaf00470c",
+    "logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/reviews/reviewer_a/shard_003.json": "6aaa71a7f683f88fc29c169e8dbbec94c28e80a341692e30d227410e15fdae71",
+    "logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/reviews/reviewer_a/shard_004.json": "36ac28e1bef9f552c1e1262111648aa36a5f8e3168a4d05f6e400593cefb8d6f",
+    "logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/reviews/reviewer_a/shard_005.json": "bce6847abc33fcde222c3e3cec1222d30a5c11d3e3053dcb6985799845c9b11e",
+    "logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/reviews/reviewer_a/shard_006.json": "7e43bec71bdb8fe81b0f762d266ee94bb2bc1db6b3c3624280605076e93a5162",
+    "logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/reviews/reviewer_a/shard_007.json": "bf7571f0c50f913b0c46501a9e91d14e09507ef4e928e71a8aa7a529d51c36ef",
+    "logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/reviews/reviewer_b/shard_001.json": "68bcb0aed6dd7ccd0d48dab75f1a46412cfcc4b44298541d0f1e1f7c6d1454b9",
+    "logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/reviews/reviewer_b/shard_002.json": "f213ffc0c4ec36b0d73114b7eedb6b10db8be05953fa735cc305cbcea0167c2a",
+    "logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/reviews/reviewer_b/shard_003.json": "f3aeaec01c2cf443a6248d57ea211126aae4f57930ff1492f614307c57127022",
+    "logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/reviews/reviewer_b/shard_004.json": "7b33631b8e64c0cc2a6af8da55c99ebbb75cdc4bde95c02dc346d3bf7ab9c08c",
+    "logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/reviews/reviewer_b/shard_005.json": "a98bf1fcb98a90b9f2dcc5872104b5dbbd228eff136bf7d5f3107a572a47eb31",
+    "logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/reviews/reviewer_b/shard_006.json": "5a55c4c96fc6af23957c43c90bf5c9df5a8a121c188315c3b27e71e824689b81",
+    "logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/reviews/reviewer_b/shard_007.json": "ffe30a5fc995b7ec16e3ac919efecbb5e524a38f8617c5279f2f0879bc0395c5"
+  },
+  "reviewer_ids": {
+    "reviewer_a": [
+      "twinkl-qtwz-codex-a"
+    ],
+    "reviewer_b": [
+      "twinkl-qtwz-codex-b"
+    ]
+  },
+  "schema_version": 1
+}

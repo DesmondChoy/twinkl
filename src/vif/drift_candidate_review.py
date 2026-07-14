@@ -9,6 +9,7 @@ VIF training target.
 from __future__ import annotations
 
 import hashlib
+from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -35,6 +36,26 @@ ADJUDICATION_SCHEMA_VERSION = "twinkl-752.4-adjudication-v1"
 ADJUDICATION_PROMPT_VERSION = "twinkl-752.4-disagreement-only-v1"
 ENTRY_DECISIONS = frozenset({"yes", "no", "uncertain"})
 
+
+@dataclass(frozen=True)
+class ReviewProtocol:
+    """Version identifiers for one blinded Conflict review cohort."""
+
+    cohort_version: str
+    review_schema_version: str
+    review_prompt_version: str
+    adjudication_schema_version: str
+    adjudication_prompt_version: str
+
+
+LEGACY_REVIEW_PROTOCOL = ReviewProtocol(
+    cohort_version=COHORT_VERSION,
+    review_schema_version=REVIEW_SCHEMA_VERSION,
+    review_prompt_version=REVIEW_PROMPT_VERSION,
+    adjudication_schema_version=ADJUDICATION_SCHEMA_VERSION,
+    adjudication_prompt_version=ADJUDICATION_PROMPT_VERSION,
+)
+
 REVIEW_RULES = [
     (
         "Use only the declared Core Value and displayed Journal Entry text, "
@@ -55,75 +76,89 @@ REVIEW_RULES = [
     ),
 ]
 
-REVIEW_RESPONSE_SCHEMA = {
-    "schema_version": REVIEW_SCHEMA_VERSION,
-    "cohort_version": COHORT_VERSION,
-    "reviewer_prompt_version": REVIEW_PROMPT_VERSION,
-    "submission_fields": {
-        "schema_version": REVIEW_SCHEMA_VERSION,
-        "cohort_version": COHORT_VERSION,
-        "shard_id": "Exact shard ID from the blind packet.",
-        "packet_sha256": "SHA-256 of the exact blind packet reviewed.",
-        "response_schema_sha256": "SHA-256 of this response schema file.",
-        "reviewer_prompt_version": REVIEW_PROMPT_VERSION,
-        "reviewer_id": "Stable identifier distinct from the other reviewer.",
-        "reviewer_runtime": "Model or runtime identifier.",
-        "reviewed_at": "Timezone-aware ISO-8601 timestamp.",
-    },
-    "case_fields": {
-        "review_case_id": "Opaque case ID from the blind packet.",
-        "entry_assessments": "One assessment for every displayed position.",
-        "sustained_conflict": "yes, no, or uncertain.",
-        "delivery_state": "active, recovered, none, or uncertain.",
-        "rationale": "Short explanation grounded only in displayed text.",
-    },
-    "entry_assessment_fields": {
-        "position": "One-based packet position.",
-        "observable_conflict": sorted(ENTRY_DECISIONS),
-        "reason_code": sorted(REASON_CODES),
-        "confidence": sorted(CONFIDENCE_LEVELS),
-    },
-    "rules": REVIEW_RULES,
-}
 
-ADJUDICATION_RESPONSE_SCHEMA = {
-    "schema_version": ADJUDICATION_SCHEMA_VERSION,
-    "cohort_version": COHORT_VERSION,
-    "adjudicator_prompt_version": ADJUDICATION_PROMPT_VERSION,
-    "purpose": (
-        "Resolve only entry-level disagreements from two separate packet-only "
-        "reviews. Agreed entries are shown for trajectory context but are frozen."
-    ),
-    "submission_fields": {
-        "schema_version": ADJUDICATION_SCHEMA_VERSION,
-        "cohort_version": COHORT_VERSION,
-        "packet_sha256": "SHA-256 of the adjudication packet.",
-        "response_schema_sha256": "SHA-256 of this response schema.",
-        "adjudicator_prompt_version": ADJUDICATION_PROMPT_VERSION,
-        "adjudicator_id": "Stable adjudicator identifier.",
-        "adjudicator_runtime": "Model or runtime identifier.",
-        "adjudicated_at": "Timezone-aware ISO-8601 timestamp.",
-    },
-    "case_fields": {
-        "adjudication_case_id": "Opaque case ID from the packet.",
-        "entry_adjudications": "One answer for every disputed position only.",
-        "rationale": "Short explanation grounded in displayed evidence.",
-    },
-    "entry_fields": {
-        "position": "One-based packet position.",
-        "observable_conflict": sorted(ENTRY_DECISIONS),
-        "reason_code": sorted(REASON_CODES),
-        "confidence": sorted(CONFIDENCE_LEVELS),
-    },
-    "rules": [
-        *REVIEW_RULES[:4],
-        (
-            "Decide each disputed position independently. The two prior judgments "
-            "are anonymous aids, not votes; use the displayed text as authority."
+def build_review_response_schema(
+    protocol: ReviewProtocol = LEGACY_REVIEW_PROTOCOL,
+) -> dict[str, Any]:
+    """Build the receipt-bound response schema for a review protocol."""
+    return {
+        "schema_version": protocol.review_schema_version,
+        "cohort_version": protocol.cohort_version,
+        "reviewer_prompt_version": protocol.review_prompt_version,
+        "submission_fields": {
+            "schema_version": protocol.review_schema_version,
+            "cohort_version": protocol.cohort_version,
+            "shard_id": "Exact shard ID from the blind packet.",
+            "packet_sha256": "SHA-256 of the exact blind packet reviewed.",
+            "response_schema_sha256": "SHA-256 of this response schema file.",
+            "reviewer_prompt_version": protocol.review_prompt_version,
+            "reviewer_id": "Stable identifier distinct from the other reviewer.",
+            "reviewer_runtime": "Model or runtime identifier.",
+            "reviewed_at": "Timezone-aware ISO-8601 timestamp.",
+        },
+        "case_fields": {
+            "review_case_id": "Opaque case ID from the blind packet.",
+            "entry_assessments": "One assessment for every displayed position.",
+            "sustained_conflict": "yes, no, or uncertain.",
+            "delivery_state": "active, recovered, none, or uncertain.",
+            "rationale": "Short explanation grounded only in displayed text.",
+        },
+        "entry_assessment_fields": {
+            "position": "One-based packet position.",
+            "observable_conflict": sorted(ENTRY_DECISIONS),
+            "reason_code": sorted(REASON_CODES),
+            "confidence": sorted(CONFIDENCE_LEVELS),
+        },
+        "rules": REVIEW_RULES,
+    }
+
+
+def build_adjudication_response_schema(
+    protocol: ReviewProtocol = LEGACY_REVIEW_PROTOCOL,
+) -> dict[str, Any]:
+    """Build the disagreement-only response schema for a review protocol."""
+    return {
+        "schema_version": protocol.adjudication_schema_version,
+        "cohort_version": protocol.cohort_version,
+        "adjudicator_prompt_version": protocol.adjudication_prompt_version,
+        "purpose": (
+            "Resolve only entry-level disagreements from two separate packet-only "
+            "reviews. Agreed entries are shown for trajectory context but are frozen."
         ),
-        "Do not relabel agreed positions.",
-    ],
-}
+        "submission_fields": {
+            "schema_version": protocol.adjudication_schema_version,
+            "cohort_version": protocol.cohort_version,
+            "packet_sha256": "SHA-256 of the adjudication packet.",
+            "response_schema_sha256": "SHA-256 of this response schema.",
+            "adjudicator_prompt_version": protocol.adjudication_prompt_version,
+            "adjudicator_id": "Stable adjudicator identifier.",
+            "adjudicator_runtime": "Model or runtime identifier.",
+            "adjudicated_at": "Timezone-aware ISO-8601 timestamp.",
+        },
+        "case_fields": {
+            "adjudication_case_id": "Opaque case ID from the packet.",
+            "entry_adjudications": "One answer for every disputed position only.",
+            "rationale": "Short explanation grounded in displayed evidence.",
+        },
+        "entry_fields": {
+            "position": "One-based packet position.",
+            "observable_conflict": sorted(ENTRY_DECISIONS),
+            "reason_code": sorted(REASON_CODES),
+            "confidence": sorted(CONFIDENCE_LEVELS),
+        },
+        "rules": [
+            *REVIEW_RULES[:4],
+            (
+                "Decide each disputed position independently. The two prior judgments "
+                "are anonymous aids, not votes; use the displayed text as authority."
+            ),
+            "Do not relabel agreed positions.",
+        ],
+    }
+
+
+REVIEW_RESPONSE_SCHEMA = build_review_response_schema()
+ADJUDICATION_RESPONSE_SCHEMA = build_adjudication_response_schema()
 
 
 def _stable_digest(*parts: object) -> str:
@@ -293,8 +328,7 @@ def match_legacy_negative_controls(inventory: pl.DataFrame) -> pl.DataFrame:
                 str(control["historical_split"]),
             )
             delta = abs(
-                int(candidate["trajectory_length"])
-                - int(control["trajectory_length"])
+                int(candidate["trajectory_length"]) - int(control["trajectory_length"])
             )
             digest = _stable_digest(
                 candidate["canonical_case_id"], control["canonical_case_id"]
@@ -315,18 +349,14 @@ def match_legacy_negative_controls(inventory: pl.DataFrame) -> pl.DataFrame:
     )
     costs = []
     for edge_index, (candidate, control, tier, delta, digest) in enumerate(edges):
-        constraint[
-            candidate_index[str(candidate["canonical_case_id"])], edge_index
-        ] = 1
+        constraint[candidate_index[str(candidate["canonical_case_id"])], edge_index] = 1
         constraint[
             len(candidate_ids) + persona_index[str(control["persona_id"])], edge_index
         ] = 1
         tie = int(digest[:12], 16) / float(16**12)
         costs.append(tier * tier_weight + delta * length_weight + tie)
 
-    lower = np.concatenate(
-        [np.ones(len(candidate_ids)), np.zeros(len(personas))]
-    )
+    lower = np.concatenate([np.ones(len(candidate_ids)), np.zeros(len(personas))])
     upper = np.ones(len(candidate_ids) + len(personas))
     result = milp(
         c=np.asarray(costs),
@@ -429,9 +459,11 @@ def shard_review_cases(
                 f"Case exceeds shard entry cap: {row['canonical_case_id']}"
             )
         for shard in shards:
-            if len(shard) < max_cases and sum(
-                int(item["trajectory_length"]) for item in shard
-            ) + length <= max_entries:
+            if (
+                len(shard) < max_cases
+                and sum(int(item["trajectory_length"]) for item in shard) + length
+                <= max_entries
+            ):
                 shard.append(row)
                 break
         else:
@@ -460,11 +492,12 @@ def build_blind_shard(
     shard_id: str,
     case_ids: list[str],
     cases_by_id: dict[str, dict[str, Any]],
+    protocol: ReviewProtocol = LEGACY_REVIEW_PROTOCOL,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     """Build one reviewer packet and its parent-only identity key."""
     ordered = sorted(
         case_ids,
-        key=lambda case_id: _stable_digest(COHORT_VERSION, shard_id, case_id),
+        key=lambda case_id: _stable_digest(protocol.cohort_version, shard_id, case_id),
     )
     packet_cases = []
     key_cases = []
@@ -474,9 +507,7 @@ def build_blind_shard(
         packet_cases.append(
             {
                 "review_case_id": review_case_id,
-                "declared_core_value": str(case["dimension"])
-                .replace("_", " ")
-                .title(),
+                "declared_core_value": str(case["dimension"]).replace("_", " ").title(),
                 "entries": [
                     {
                         "position": position,
@@ -514,15 +545,15 @@ def build_blind_shard(
             }
         )
     packet = {
-        "schema_version": REVIEW_SCHEMA_VERSION,
-        "cohort_version": COHORT_VERSION,
+        "schema_version": protocol.review_schema_version,
+        "cohort_version": protocol.cohort_version,
         "shard_id": shard_id,
         "review_instructions": REVIEW_RULES,
         "cases": packet_cases,
     }
     key = {
-        "schema_version": REVIEW_SCHEMA_VERSION,
-        "cohort_version": COHORT_VERSION,
+        "schema_version": protocol.review_schema_version,
+        "cohort_version": protocol.cohort_version,
         "shard_id": shard_id,
         "warning": "Parent-only identity key; never disclose before review.",
         "cases": key_cases,
@@ -536,24 +567,26 @@ def validate_review_response(
     packet: dict[str, Any],
     packet_sha256: str,
     response_schema_sha256: str,
+    protocol: ReviewProtocol = LEGACY_REVIEW_PROTOCOL,
 ) -> dict[str, dict[str, Any]]:
     """Validate a complete packet-bound reviewer response."""
     expected = {
-        "schema_version": REVIEW_SCHEMA_VERSION,
-        "cohort_version": COHORT_VERSION,
+        "schema_version": protocol.review_schema_version,
+        "cohort_version": protocol.cohort_version,
         "shard_id": packet["shard_id"],
         "packet_sha256": packet_sha256,
         "response_schema_sha256": response_schema_sha256,
-        "reviewer_prompt_version": REVIEW_PROMPT_VERSION,
+        "reviewer_prompt_version": protocol.review_prompt_version,
     }
     for field, value in expected.items():
         if response.get(field) != value:
             raise ValueError(f"Review response has invalid {field}")
     if not isinstance(response.get("reviewer_id"), str) or not response["reviewer_id"]:
         raise ValueError("Review response must name reviewer_id")
-    if not isinstance(response.get("reviewer_runtime"), str) or not response[
-        "reviewer_runtime"
-    ]:
+    if (
+        not isinstance(response.get("reviewer_runtime"), str)
+        or not response["reviewer_runtime"]
+    ):
         raise ValueError("Review response must name reviewer_runtime")
     parse_aware_timestamp(response.get("reviewed_at"), field_name="reviewed_at")
     cases = response.get("cases")
@@ -624,6 +657,7 @@ def reconcile_reviews(
     response_schema_sha256: str,
     reviewer_a_sha256: str,
     reviewer_b_sha256: str,
+    protocol: ReviewProtocol = LEGACY_REVIEW_PROTOCOL,
 ) -> list[dict[str, Any]]:
     """Return one entry-level row per reviewed position, preserving disagreement."""
     if reviewer_a.get("reviewer_id") == reviewer_b.get("reviewer_id"):
@@ -633,12 +667,14 @@ def reconcile_reviews(
         packet=packet,
         packet_sha256=packet_sha256,
         response_schema_sha256=response_schema_sha256,
+        protocol=protocol,
     )
     second = validate_review_response(
         reviewer_b,
         packet=packet,
         packet_sha256=packet_sha256,
         response_schema_sha256=response_schema_sha256,
+        protocol=protocol,
     )
     key_map = {case["review_case_id"]: case for case in key["cases"]}
     if set(key_map) != {case["review_case_id"] for case in packet["cases"]}:
@@ -665,7 +701,7 @@ def reconcile_reviews(
             }
             rows.append(
                 {
-                    "cohort_version": COHORT_VERSION,
+                    "cohort_version": protocol.cohort_version,
                     "shard_id": packet["shard_id"],
                     "review_case_id": review_case_id,
                     "canonical_case_id": key_case["canonical_case_id"],
@@ -683,9 +719,7 @@ def reconcile_reviews(
                     "reviewer_b_reason": second_entry["reason_code"],
                     "reviewer_b_confidence": second_entry["confidence"],
                     "reviewer_b_response_sha256": reviewer_b_sha256,
-                    "final_conflict": (
-                        first_decision == "yes" if agreed else None
-                    ),
+                    "final_conflict": (first_decision == "yes" if agreed else None),
                     "resolution_method": "agreement" if agreed else "unresolved",
                     "resolution_status": "resolved" if agreed else "unresolved",
                 }
@@ -695,6 +729,8 @@ def reconcile_reviews(
 
 def build_adjudication_packet(
     cases: list[dict[str, Any]],
+    *,
+    protocol: ReviewProtocol = LEGACY_REVIEW_PROTOCOL,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     """Blind identities and lane ordering for disagreement-only adjudication."""
     if not cases:
@@ -702,16 +738,21 @@ def build_adjudication_packet(
     ordered = sorted(
         cases,
         key=lambda case: _stable_digest(
-            COHORT_VERSION, "adjudication", case["canonical_case_id"]
+            protocol.cohort_version, "adjudication", case["canonical_case_id"]
         ),
     )
     packet_cases = []
     key_cases = []
     for index, case in enumerate(ordered, start=1):
         adjudication_case_id = f"adjudication_{index:03d}"
-        swap_lanes = int(
-            _stable_digest(COHORT_VERSION, case["canonical_case_id"])[0], 16
-        ) % 2 == 1
+        swap_lanes = (
+            int(
+                _stable_digest(protocol.cohort_version, case["canonical_case_id"])[0],
+                16,
+            )
+            % 2
+            == 1
+        )
         disputed_positions = []
         entries = []
         for entry in case["entries"]:
@@ -761,14 +802,16 @@ def build_adjudication_packet(
             }
         )
     packet = {
-        "schema_version": ADJUDICATION_SCHEMA_VERSION,
-        "cohort_version": COHORT_VERSION,
-        "adjudication_instructions": ADJUDICATION_RESPONSE_SCHEMA["rules"],
+        "schema_version": protocol.adjudication_schema_version,
+        "cohort_version": protocol.cohort_version,
+        "adjudication_instructions": build_adjudication_response_schema(protocol)[
+            "rules"
+        ],
         "cases": packet_cases,
     }
     key = {
-        "schema_version": ADJUDICATION_SCHEMA_VERSION,
-        "cohort_version": COHORT_VERSION,
+        "schema_version": protocol.adjudication_schema_version,
+        "cohort_version": protocol.cohort_version,
         "warning": "Parent-only identity key; never disclose before adjudication.",
         "cases": key_cases,
     }
@@ -781,14 +824,15 @@ def validate_adjudication_response(
     packet: dict[str, Any],
     packet_sha256: str,
     response_schema_sha256: str,
+    protocol: ReviewProtocol = LEGACY_REVIEW_PROTOCOL,
 ) -> dict[str, dict[str, Any]]:
     """Validate complete, receipt-bound decisions for disputed positions."""
     expected = {
-        "schema_version": ADJUDICATION_SCHEMA_VERSION,
-        "cohort_version": COHORT_VERSION,
+        "schema_version": protocol.adjudication_schema_version,
+        "cohort_version": protocol.cohort_version,
         "packet_sha256": packet_sha256,
         "response_schema_sha256": response_schema_sha256,
-        "adjudicator_prompt_version": ADJUDICATION_PROMPT_VERSION,
+        "adjudicator_prompt_version": protocol.adjudication_prompt_version,
     }
     for field, value in expected.items():
         if response.get(field) != value:
@@ -796,12 +840,8 @@ def validate_adjudication_response(
     for field in ("adjudicator_id", "adjudicator_runtime"):
         if not isinstance(response.get(field), str) or not response[field]:
             raise ValueError(f"Adjudication response must name {field}")
-    parse_aware_timestamp(
-        response.get("adjudicated_at"), field_name="adjudicated_at"
-    )
-    packet_map = {
-        case["adjudication_case_id"]: case for case in packet["cases"]
-    }
+    parse_aware_timestamp(response.get("adjudicated_at"), field_name="adjudicated_at")
+    packet_map = {case["adjudication_case_id"]: case for case in packet["cases"]}
     cases = response.get("cases")
     if not isinstance(cases, list):
         raise ValueError("Adjudication response cases must be a list")
@@ -810,9 +850,7 @@ def validate_adjudication_response(
         case_id = case.get("adjudication_case_id")
         if case_id not in packet_map or case_id in result:
             raise ValueError(f"Invalid or duplicate adjudication case {case_id}")
-        if not isinstance(case.get("rationale"), str) or not case[
-            "rationale"
-        ].strip():
+        if not isinstance(case.get("rationale"), str) or not case["rationale"].strip():
             raise ValueError(f"Missing adjudication rationale for {case_id}")
         decisions = case.get("entry_adjudications")
         if not isinstance(decisions, list):
@@ -857,6 +895,7 @@ def apply_adjudication(
     packet_sha256: str,
     response_schema_sha256: str,
     response_sha256: str,
+    protocol: ReviewProtocol = LEGACY_REVIEW_PROTOCOL,
 ) -> pl.DataFrame:
     """Apply adjudication only to unresolved entries; agreed entries stay frozen."""
     response_cases = validate_adjudication_response(
@@ -864,6 +903,7 @@ def apply_adjudication(
         packet=packet,
         packet_sha256=packet_sha256,
         response_schema_sha256=response_schema_sha256,
+        protocol=protocol,
     )
     key_map = {case["adjudication_case_id"]: case for case in key["cases"]}
     if set(key_map) != set(response_cases):
@@ -903,12 +943,8 @@ def apply_adjudication(
                     "adjudicator_reason": decision["reason_code"],
                     "adjudicator_confidence": decision["confidence"],
                     "adjudicator_response_sha256": response_sha256,
-                    "final_conflict": (
-                        disposition == "yes" if resolved else None
-                    ),
-                    "resolution_method": (
-                        "adjudication" if resolved else "unresolved"
-                    ),
+                    "final_conflict": (disposition == "yes" if resolved else None),
+                    "resolution_method": ("adjudication" if resolved else "unresolved"),
                     "resolution_status": "resolved" if resolved else "unresolved",
                 }
             )
@@ -922,14 +958,14 @@ def derive_review_outcomes(
     entry_target: pl.DataFrame, selected: pl.DataFrame, *, cohort_sha256: str
 ) -> tuple[pl.DataFrame, pl.DataFrame]:
     """Derive case outcomes and maximal consecutive Conflict episodes."""
-    metadata = {
-        str(row["canonical_case_id"]): row for row in selected.to_dicts()
-    }
+    metadata = {str(row["canonical_case_id"]): row for row in selected.to_dicts()}
     outcomes = []
     episodes = []
-    for case_key, frame in entry_target.sort("position").partition_by(
-        "canonical_case_id", as_dict=True
-    ).items():
+    for case_key, frame in (
+        entry_target.sort("position")
+        .partition_by("canonical_case_id", as_dict=True)
+        .items()
+    ):
         case_id = str(case_key[0] if isinstance(case_key, tuple) else case_key)
         rows = frame.to_dicts()
         meta = metadata[case_id]
@@ -978,9 +1014,7 @@ def derive_review_outcomes(
                     "termination_position": (
                         next_row["position"] if next_row is not None else None
                     ),
-                    "termination_disposition": (
-                        "no" if next_row is not None else None
-                    ),
+                    "termination_disposition": ("no" if next_row is not None else None),
                 }
             )
         outcomes.append(

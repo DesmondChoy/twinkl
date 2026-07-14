@@ -1,0 +1,348 @@
+{
+  "schema_version": "twinkl-qtwz-adjudication-v1",
+  "cohort_version": "twinkl-qtwz-complete-development-review-v1",
+  "warning": "Parent-only identity key; never disclose before adjudication.",
+  "cases": [
+    {
+      "adjudication_case_id": "adjudication_001",
+      "canonical_case_id": "81e96381:self_direction",
+      "disputed_positions": [
+        2
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_002",
+      "canonical_case_id": "127aefff:conformity",
+      "disputed_positions": [
+        9
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_003",
+      "canonical_case_id": "87e92805:hedonism",
+      "disputed_positions": [
+        6
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_004",
+      "canonical_case_id": "58d843b6:tradition",
+      "disputed_positions": [
+        8,
+        12
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_005",
+      "canonical_case_id": "bf10d976:universalism",
+      "disputed_positions": [
+        6
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_006",
+      "canonical_case_id": "019235dc:benevolence",
+      "disputed_positions": [
+        3,
+        5
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_007",
+      "canonical_case_id": "7c712a0a:conformity",
+      "disputed_positions": [
+        3,
+        6,
+        9,
+        10
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_008",
+      "canonical_case_id": "127aefff:stimulation",
+      "disputed_positions": [
+        1,
+        3
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_009",
+      "canonical_case_id": "f2a0de6f:benevolence",
+      "disputed_positions": [
+        3
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_010",
+      "canonical_case_id": "9ca30614:security",
+      "disputed_positions": [
+        5
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_011",
+      "canonical_case_id": "3dfb718b:self_direction",
+      "disputed_positions": [
+        7
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_012",
+      "canonical_case_id": "7ff1d0fb:security",
+      "disputed_positions": [
+        1,
+        3,
+        6
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_013",
+      "canonical_case_id": "3dfe4749:tradition",
+      "disputed_positions": [
+        6
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_014",
+      "canonical_case_id": "3ec38c16:universalism",
+      "disputed_positions": [
+        1
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_015",
+      "canonical_case_id": "611c5ef3:hedonism",
+      "disputed_positions": [
+        6
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_016",
+      "canonical_case_id": "cac7b9ce:tradition",
+      "disputed_positions": [
+        6,
+        7
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_017",
+      "canonical_case_id": "df9720d1:conformity",
+      "disputed_positions": [
+        1,
+        2
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_018",
+      "canonical_case_id": "c130f2e3:conformity",
+      "disputed_positions": [
+        10
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_019",
+      "canonical_case_id": "a532dde6:conformity",
+      "disputed_positions": [
+        7
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_020",
+      "canonical_case_id": "8fcd7947:benevolence",
+      "disputed_positions": [
+        4
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_021",
+      "canonical_case_id": "11de77e8:conformity",
+      "disputed_positions": [
+        5
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_022",
+      "canonical_case_id": "43f4507b:security",
+      "disputed_positions": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_023",
+      "canonical_case_id": "a13aa34b:conformity",
+      "disputed_positions": [
+        6
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_024",
+      "canonical_case_id": "02fb94f3:tradition",
+      "disputed_positions": [
+        5,
+        6,
+        7,
+        10,
+        11
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_025",
+      "canonical_case_id": "2541429a:tradition",
+      "disputed_positions": [
+        8,
+        9
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_026",
+      "canonical_case_id": "961a4e3f:tradition",
+      "disputed_positions": [
+        12
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_027",
+      "canonical_case_id": "e57a8664:hedonism",
+      "disputed_positions": [
+        1
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_028",
+      "canonical_case_id": "755c4960:tradition",
+      "disputed_positions": [
+        11
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_029",
+      "canonical_case_id": "b12682c6:tradition",
+      "disputed_positions": [
+        1
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_030",
+      "canonical_case_id": "4a061287:tradition",
+      "disputed_positions": [
+        9,
+        10
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_031",
+      "canonical_case_id": "e5cea325:benevolence",
+      "disputed_positions": [
+        3
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_032",
+      "canonical_case_id": "a5f7ed3a:tradition",
+      "disputed_positions": [
+        4,
+        5
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_033",
+      "canonical_case_id": "606f182e:power",
+      "disputed_positions": [
+        1
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_034",
+      "canonical_case_id": "0465b7ad:tradition",
+      "disputed_positions": [
+        11
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_035",
+      "canonical_case_id": "1f86f569:conformity",
+      "disputed_positions": [
+        2,
+        3
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_036",
+      "canonical_case_id": "998d7090:hedonism",
+      "disputed_positions": [
+        3
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_037",
+      "canonical_case_id": "8fcd7947:security",
+      "disputed_positions": [
+        2,
+        3
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_038",
+      "canonical_case_id": "b1a2bf43:tradition",
+      "disputed_positions": [
+        8
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_039",
+      "canonical_case_id": "b63d80df:benevolence",
+      "disputed_positions": [
+        12
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_040",
+      "canonical_case_id": "22b117be:conformity",
+      "disputed_positions": [
+        4
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_041",
+      "canonical_case_id": "de68f949:hedonism",
+      "disputed_positions": [
+        2,
+        4
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_042",
+      "canonical_case_id": "fa7d280a:conformity",
+      "disputed_positions": [
+        11
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_043",
+      "canonical_case_id": "2d928d8a:stimulation",
+      "disputed_positions": [
+        10
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_044",
+      "canonical_case_id": "eb969aef:security",
+      "disputed_positions": [
+        4
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_045",
+      "canonical_case_id": "7cc5cf92:tradition",
+      "disputed_positions": [
+        2,
+        11
+      ]
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "case_count": 186,
+  "cohort_version": "twinkl-qtwz-complete-development-review-v1",
+  "cost": {
+    "codex_usage_note": "Codex usage is not metered as repository API spend.",
+    "direct_api_calls": 0,
+    "direct_api_cost_usd": 0.0,
+    "reviewer_runtime": "codex-gpt-5"
+  },
+  "dimensions": {
+    "achievement": {
+      "cases": 23,
+      "drift_cases": 0,
+      "resolved_cases": 23
+    },
+    "benevolence": {
+      "cases": 18,
+      "drift_cases": 0,
+      "resolved_cases": 18
+    },
+    "conformity": {
+      "cases": 26,
+      "drift_cases": 3,
+      "resolved_cases": 26
+    },
+    "hedonism": {
+      "cases": 13,
+      "drift_cases": 0,
+      "resolved_cases": 13
+    },
+    "power": {
+      "cases": 5,
+      "drift_cases": 0,
+      "resolved_cases": 5
+    },
+    "security": {
+      "cases": 30,
+      "drift_cases": 2,
+      "resolved_cases": 30
+    },
+    "self_direction": {
+      "cases": 14,
+      "drift_cases": 0,
+      "resolved_cases": 14
+    },
+    "stimulation": {
+      "cases": 20,
+      "drift_cases": 1,
+      "resolved_cases": 20
+    },
+    "tradition": {
+      "cases": 25,
+      "drift_cases": 2,
+      "resolved_cases": 25
+    },
+    "universalism": {
+      "cases": 12,
+      "drift_cases": 0,
+      "resolved_cases": 12
+    }
+  },
+  "drift_case_count": 8,
+  "drift_episode_count": 9,
+  "entry_count": 1483,
+  "generated_at": "2026-07-14T10:56:25.849758+00:00",
+  "initial_agreement_count": 1412,
+  "initial_disagreement_count": 71,
+  "resolved_case_count": 186,
+  "schema_version": 1,
+  "unresolved_case_count": 0
+}

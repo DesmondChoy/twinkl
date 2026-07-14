@@ -279,8 +279,12 @@ and report provenance subgroups separately. `twinkl-752.5` found 9/33 median
 Drifts with weekly review without VIF Critic input, 7/33 with raw VIF Critic
 input, and 9/33 with VIF-Critic-triggered early-plus-weekly review. The staged
 architecture therefore keeps raw predictions and scheduling out of the
-user-facing path. The production connection remains absent, and the existing
-weekly router remains a compatibility prototype.
+user-facing path. The later [`twinkl-qtwz` complete
+review](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_qtwz_complete_development_review.md)
+expanded the development data to 292 resolved cases with 42 Drifts across 36
+Drift trajectories; it did not rerun or change the `twinkl-752.5` results. The
+production connection remains absent, and the existing weekly router remains a
+compatibility prototype.
 See
 [`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md) and
 [`docs/evals/drift_detection_eval.md`](../evals/drift_detection_eval.md).

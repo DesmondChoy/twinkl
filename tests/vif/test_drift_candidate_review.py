@@ -11,10 +11,13 @@ from src.vif.drift_candidate_review import (
     COHORT_VERSION,
     REVIEW_PROMPT_VERSION,
     REVIEW_SCHEMA_VERSION,
+    ReviewProtocol,
     apply_adjudication,
     build_adjudication_packet,
+    build_adjudication_response_schema,
     build_blind_shard,
     build_legacy_trajectory_inventory,
+    build_review_response_schema,
     derive_review_outcomes,
     match_legacy_negative_controls,
     reconcile_reviews,
@@ -101,9 +104,7 @@ def test_control_matching_is_deterministic_and_never_reuses_a_persona():
     )
     persisted = consensus.clone()
     split = _split(*(case["persona_id"] for case in cases))
-    inventory = build_legacy_trajectory_inventory(
-        cases, consensus, persisted, split
-    )
+    inventory = build_legacy_trajectory_inventory(cases, consensus, persisted, split)
 
     first = match_legacy_negative_controls(inventory)
     second = match_legacy_negative_controls(inventory)
@@ -149,6 +150,32 @@ def test_shards_cover_every_selected_case_once():
     validate_shard_coverage(shards, ["a", "b", "c"])
     with pytest.raises(ValueError, match="overlap"):
         validate_shard_coverage({"one": ["a"], "two": ["a", "b", "c"]}, ["a", "b", "c"])
+
+
+def test_custom_review_protocol_versions_packets_and_schemas():
+    protocol = ReviewProtocol(
+        cohort_version="custom-cohort-v1",
+        review_schema_version="custom-review-v1",
+        review_prompt_version="custom-prompt-v1",
+        adjudication_schema_version="custom-adjudication-v1",
+        adjudication_prompt_version="custom-adjudication-prompt-v1",
+    )
+    case = _case("p1", "security")
+
+    packet, key = build_blind_shard(
+        shard_id="shard_001",
+        case_ids=["p1:security"],
+        cases_by_id={"p1:security": case},
+        protocol=protocol,
+    )
+    review_schema = build_review_response_schema(protocol)
+    adjudication_schema = build_adjudication_response_schema(protocol)
+
+    assert packet["schema_version"] == "custom-review-v1"
+    assert packet["cohort_version"] == "custom-cohort-v1"
+    assert key["cohort_version"] == "custom-cohort-v1"
+    assert review_schema["reviewer_prompt_version"] == "custom-prompt-v1"
+    assert adjudication_schema["schema_version"] == "custom-adjudication-v1"
 
 
 def _response(

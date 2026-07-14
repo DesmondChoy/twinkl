@@ -77,10 +77,13 @@ direct authority over Drift:
   opportunities, versus a random median of 1/19. This supports continued
   candidate-mining research on the development set. It does not show that early
   review improves Drift detection.
+- The later `twinkl-qtwz` review expanded the development data from 106 to 292
+  resolved cases and from 33 to 42 Drifts. It did not rerun the Weekly Drift
+  Reviewer or provide evidence for changing this boundary.
 
-The reviewed development set is selection-biased, 64 trajectories contain
-training-seen Journal Entries, and no fresh final test exists. These limits are
-why the VIF Critic remains essential to measurement and improvement while its
+The complete development data is synthetic, 185/292 cases have historical
+training provenance, and no fresh final test exists. These limits are why the
+VIF Critic remains essential to measurement and improvement while its
 user-facing role stays conditional.
 
 ## Review-and-Retrain Loop

@@ -143,6 +143,14 @@ non-training subgroup. This is evidence that the in-sample scores target
 relevant development opportunities, not evidence that early review improves
 Drift detection.
 
+After this architecture decision, `twinkl-qtwz` reviewed the 186 cases outside
+the earlier union and found nine additional Drifts across eight Drift
+trajectories. The complete development analysis is now 292/292 resolved cases
+with 42 Drifts across 36 Drift trajectories. All nine new Drifts have
+historical training provenance. This expands the input for future development
+studies; it does not alter the `twinkl-752.5` results or reopen the approved
+architecture.
+
 These results led to the explicit architecture decision below. The full study
 is recorded in the
 [`twinkl-752.1` report](../../logs/experiments/reports/experiment_review_2026-07-12_twinkl_752_1_weekly_verifier_ablation.md).
@@ -154,6 +162,8 @@ The fourth-review labels are recorded in the
 [`twinkl-752.5` resolution report](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5_opus_null_resolution.md).
 The raw-input and scheduling reassessment is recorded in the
 [`twinkl-752.5` reassessment report](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5_reassessment.md).
+The post-decision complete review is recorded in the
+[`twinkl-qtwz` report](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_qtwz_complete_development_review.md).
 [`twinkl-1r3d`](../../logs/experiments/reports/experiment_review_2026-07-12_twinkl_1r3d_shortcut_audit.md)
 completed the prerequisite Conformity and Self-Direction audit: 3,406
 single-word removals plus 20 repeated-word or phrase removals across 35
@@ -190,6 +200,10 @@ rather than substituted.
   episodes retain former-final-test provenance for subgroup reporting, but
   remain in the primary development analysis. This is selection-biased
   AI-reviewed development evidence, not a fresh final test.
+- The later complete review adds nine Drifts across eight Drift trajectories,
+  producing a 292-case development analysis with 42 Drifts across 36 Drift
+  trajectories. It changes the input for `twinkl-52zz`, not this architecture
+  decision.
 
 The experiment history and numeric evidence remain in
 [`logs/experiments/index.md`](../../logs/experiments/index.md).

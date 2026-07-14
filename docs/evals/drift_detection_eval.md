@@ -18,7 +18,7 @@ The current layers of the contract are deliberately different:
 | Layer | Contract |
 |---|---|
 | Student-visible target | A Journal Entry is a Conflict only when the full displayed text clearly shows a behavior or choice against a Core Value. `twinkl-752.4` reviewed every candidate discoverable from either legacy label source plus matched controls. |
-| Development set | The known-development union contains 33 Drift episodes across 28 Drift trajectories: all 31 episodes from the `twinkl-752.4` cohort plus two prior episodes omitted by its candidate mining. A blind Opus follow-up resolved the four remaining trajectories without adding Drift, so all 106 union trajectories are resolved. Four reviewed episodes came from the former final-test split; include them in the primary development analysis and report provenance subgroups separately. The fixed `run_020` threshold is historical development evidence. |
+| Development set | The complete development review contains 42 Drifts across 36 Drift trajectories in 292 resolved cases. `twinkl-qtwz` added nine Drifts across eight Drift trajectories from the 186 cases outside the earlier 106-case union. The earlier `twinkl-752.5` study used 33 Drifts across 28 Drift trajectories; keep its reported metrics bound to that input. Historical provenance must be reported as a subgroup because all nine newly found Drifts came from training-seen Journal Entries. The fixed `run_020` threshold is historical development evidence. |
 | Final test set | None is active. The former 24-person `twinkl-v8pb` final-test cohort became development-only when its cases were opened for the full review. `twinkl-pv6s` owns a fresh final test. |
 | Approved architecture | Weekly Drift Reviewer decisions without VIF Critic input feed the deterministic two-Conflict Drift Detector. The VIF Critic supplies stored predictions for independent review and retraining; a candidate-confirmation path remains conditional. |
 | Production runtime | The executable runtime still uses the crash/rut/evolution prototype. The approved Weekly Drift Reviewer and Drift Detector path is not wired or deployment-approved. |
@@ -139,6 +139,16 @@ approval.
   `7adc5866:benevolence` episodes produces the 33-episode / 28-Drift-trajectory
   known-development union for `twinkl-752.5`. The frozen `twinkl-752.4`
   artifacts remain a correct cohort receipt.
+- `twinkl-qtwz` reviewed the exact 186-case complement with two independent
+  LLM-Judge lanes and disagreement-only adjudication. It found nine additional
+  Drifts across eight Drift trajectories. The complete development analysis is
+  292/292 resolved case-level outcomes, 2,377 Journal Entry/Core Value
+  combinations, and 42 Drifts across 36 Drift trajectories. Two immutable
+  historical LLM-Judge Conflict Labels remain null inside a case with a frozen
+  resolved Drift outcome.
+- All nine newly found Drifts have historical training provenance. This does
+  not invalidate their LLM-Judge Conflict Labels, but VIF Critic results on
+  those Journal Entries are in-sample and must be reported separately.
 - Among resolved development cases, 22/44 legacy candidates and 1/44 controls
   contain Drift. This is candidate confirmation and one legacy-miner miss, not
   prevalence or a Weekly Drift Reviewer false-alert estimate. Controls sample
@@ -363,6 +373,7 @@ above.
 | Development Drift recall (`run_020`) | 1/5 (0.2) | The fixed development threshold found one of five reviewed Drifts |
 | Reviewed cohort (`twinkl-752.4`) | 31 episodes across 26 Drift trajectories; 104/104 resolved | All cases are development-only; four episodes retain former-final-test provenance for subgroup reporting |
 | Known-development union (`twinkl-752.5` input) | 33 episodes across 28 Drift trajectories; 106/106 resolved | Primary reassessment set; adds two prior episodes omitted by candidate mining |
+| Complete development review (`twinkl-qtwz`) | 42 Drifts across 36 Drift trajectories; 292/292 case-level outcomes resolved | Frozen input for `twinkl-52zz`; the nine newly found Drifts all have historical training provenance |
 | Legacy candidate confirmation (`twinkl-752.4`) | 22/44 (50.0%) | Resolved development candidates only; selection-biased diagnostic |
 | Matched-control Drift rate (`twinkl-752.4`) | 1/44 (2.3%) | One legacy-miner miss among resolved development controls; not a false-alert rate |
 | Development precision / false-positive rate (`run_020`) | 1.0 / 0.0 | The single predicted development Drift was correct, but four reference Drifts were missed |
@@ -446,6 +457,9 @@ report](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5
 The raw-input, scheduling, and trigger-placement results are described in the
 [`twinkl-752.5` reassessment
 report](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5_reassessment.md).
+The complete 292-case development-data contract is described in the
+[`twinkl-qtwz` review
+report](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_qtwz_complete_development_review.md).
 
 ---
 
@@ -454,15 +468,18 @@ report](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5
 1. Consensus labels are stored LLM-Judge provenance, not human ground truth. The
    former frozen consensus benchmark is retired and cannot support a target,
    threshold, or deployment claim.
-2. The incumbent `run_020` checkpoint predates the student-visible target. It
-   was evaluated only on the completed development target; the unresolved
-   final-test target deliberately received no score.
-3. Core-gated per-dimension denominators are small and uneven.
-4. Five personas have only two Journal Entries, so their temporal evidence is limited
+2. The `twinkl-qtwz` reviews used separate contexts but the same model. They
+   are AI-reviewed evidence, not human validation, and correlated errors may
+   remain.
+3. The incumbent `run_020` checkpoint predates the student-visible target. The
+   former final-test data is now development-only, and no active final test has
+   been opened.
+4. Core-gated per-dimension denominators are small and uneven.
+5. Five personas have only two Journal Entries, so their temporal evidence is limited
    to one possible adjacent pair.
-5. The current synthetic corpus contains volatility more readily than clean,
+6. The current synthetic corpus contains volatility more readily than clean,
    gradual arcs; it cannot validate fade or value-evolution claims.
-6. Weekly Coach delivery can lag reference confirmation, so Drift matching must
+7. Weekly Coach delivery can lag reference confirmation, so Drift matching must
    distinguish detector latency from delivery cadence.
 
 ---
@@ -491,6 +508,10 @@ report](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5
 | [`../../src/vif/drift_candidate_review.py`](../../src/vif/drift_candidate_review.py) | Deterministic selection, blind review, adjudication, and episode derivation |
 | [`../../scripts/experiments/review_twinkl_752_4_legacy_drift_candidates.py`](../../scripts/experiments/review_twinkl_752_4_legacy_drift_candidates.py) | Freezes packets and materializes the reviewed cohort |
 | [`../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md`](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md) | Full result, limitations, and `twinkl-752.5` handoff |
+| [`../../config/evals/twinkl_qtwz_complete_development_review_v1.yaml`](../../config/evals/twinkl_qtwz_complete_development_review_v1.yaml) | Complete development review contract |
+| [`../../scripts/experiments/review_twinkl_qtwz_remaining_development.py`](../../scripts/experiments/review_twinkl_qtwz_remaining_development.py) | Freezes and validates the 186-case complement |
+| [`../../scripts/experiments/reconcile_twinkl_qtwz_review.py`](../../scripts/experiments/reconcile_twinkl_qtwz_review.py) | Reconciles labels and derives the complete development analysis |
+| [`../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_qtwz_complete_development_review.md`](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_qtwz_complete_development_review.md) | Complete 292-case result, provenance, cost, and limitations |
 | [`../../scripts/experiments/resolve_twinkl_752_5_null_cases.py`](../../scripts/experiments/resolve_twinkl_752_5_null_cases.py) | Freezes and materializes the blind Opus follow-up |
 | [`../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5_opus_null_resolution.md`](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5_opus_null_resolution.md) | Four resolved Conflict labels, revised counts, and limits |
 | [`logs/experiments/reports/experiment_review_20260702_twinkl_w2mu_frozen_context_gap.md`](../../logs/experiments/reports/experiment_review_20260702_twinkl_w2mu_frozen_context_gap.md) | Frozen test-split LLM context results |

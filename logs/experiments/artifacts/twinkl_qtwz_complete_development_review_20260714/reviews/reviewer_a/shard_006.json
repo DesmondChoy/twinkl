@@ -1,0 +1,1045 @@
+{
+  "schema_version": "twinkl-qtwz-review-v1",
+  "cohort_version": "twinkl-qtwz-complete-development-review-v1",
+  "reviewer_prompt_version": "twinkl-qtwz-packet-only-v1",
+  "shard_id": "shard_006",
+  "packet_sha256": "a19291ac4b414e40a5a0ff85de718a6ae6d1ea2ffe23908bad1ba570cc94f125",
+  "response_schema_sha256": "b6022694cfd58476798943bbc9a73a74bfe84d711daf6d07d86a7d68a989f9dc",
+  "reviewer_id": "twinkl-qtwz-codex-a",
+  "reviewer_runtime": "codex-gpt-5",
+  "reviewed_at": "2026-07-14T18:39:02+08:00",
+  "cases": [
+    {
+      "review_case_id": "case_001",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 2,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 3,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The displayed choices are aligned with or do not directly oppose Power."
+    },
+    {
+      "review_case_id": "case_002",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 2,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 3,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The displayed choices are aligned with or do not directly oppose Security."
+    },
+    {
+      "review_case_id": "case_003",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 2,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 3,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 4,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The displayed choices are aligned with or do not directly oppose Benevolence."
+    },
+    {
+      "review_case_id": "case_004",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 2,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 3,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 4,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 5,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The displayed choices are aligned with or do not directly oppose Universalism."
+    },
+    {
+      "review_case_id": "case_005",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 2,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 3,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 4,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 5,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The displayed choices are aligned with or do not directly oppose Universalism."
+    },
+    {
+      "review_case_id": "case_006",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 2,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 3,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The displayed choices are aligned with or do not directly oppose Stimulation."
+    },
+    {
+      "review_case_id": "case_007",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 2,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 3,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 4,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 5,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The displayed choices are aligned with or do not directly oppose Conformity."
+    },
+    {
+      "review_case_id": "case_008",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 2,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 3,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 4,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 5,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The displayed choices are aligned with or do not directly oppose Tradition."
+    },
+    {
+      "review_case_id": "case_009",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 2,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 3,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 4,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 5,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 6,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The displayed choices are aligned with or do not directly oppose Stimulation."
+    },
+    {
+      "review_case_id": "case_010",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 2,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 3,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 4,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 5,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The displayed choices are aligned with or do not directly oppose Security."
+    },
+    {
+      "review_case_id": "case_011",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 2,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 3,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The displayed choices are aligned with or do not directly oppose Security."
+    },
+    {
+      "review_case_id": "case_012",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 2,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 3,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 4,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The displayed choices are aligned with or do not directly oppose Conformity."
+    },
+    {
+      "review_case_id": "case_013",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_conflict": "yes",
+          "confidence": "high",
+          "reason_code": "direct_behavior_or_choice"
+        },
+        {
+          "position": 2,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 3,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 4,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Entry 1 describes signing engineering drawings for a tributary diversion that displaced six villages, a direct past choice against Universalism."
+    },
+    {
+      "review_case_id": "case_014",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 2,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 3,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 4,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 5,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The displayed choices are aligned with or do not directly oppose Achievement."
+    },
+    {
+      "review_case_id": "case_015",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 2,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 3,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 4,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 5,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The displayed choices are aligned with or do not directly oppose Hedonism."
+    },
+    {
+      "review_case_id": "case_016",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_conflict": "yes",
+          "confidence": "high",
+          "reason_code": "direct_behavior_or_choice"
+        },
+        {
+          "position": 2,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 3,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "Entry 1 describes staying silent while a colleague presented the writer's idea as his own, a direct choice against Self Direction."
+    },
+    {
+      "review_case_id": "case_017",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 2,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 3,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 4,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 5,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The displayed choices are aligned with or do not directly oppose Security."
+    },
+    {
+      "review_case_id": "case_018",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 2,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 3,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 4,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 5,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The displayed choices are aligned with or do not directly oppose Benevolence."
+    },
+    {
+      "review_case_id": "case_019",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 2,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 3,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 4,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 5,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The displayed choices are aligned with or do not directly oppose Tradition."
+    },
+    {
+      "review_case_id": "case_020",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 2,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 3,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 4,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 5,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The displayed choices are aligned with or do not directly oppose Benevolence."
+    },
+    {
+      "review_case_id": "case_021",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 2,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 3,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 4,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 5,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The displayed choices are aligned with or do not directly oppose Benevolence."
+    },
+    {
+      "review_case_id": "case_022",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 2,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 3,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 4,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 5,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 6,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The displayed choices are aligned with or do not directly oppose Self Direction."
+    },
+    {
+      "review_case_id": "case_023",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 2,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 3,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 4,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 5,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The displayed choices are aligned with or do not directly oppose Self Direction."
+    },
+    {
+      "review_case_id": "case_024",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 2,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 3,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 4,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The displayed choices are aligned with or do not directly oppose Stimulation."
+    },
+    {
+      "review_case_id": "case_025",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 2,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 3,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The displayed choices are aligned with or do not directly oppose Security."
+    },
+    {
+      "review_case_id": "case_026",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 2,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 3,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The displayed choices are aligned with or do not directly oppose Benevolence."
+    },
+    {
+      "review_case_id": "case_027",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 2,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 3,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 4,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The displayed choices are aligned with or do not directly oppose Conformity."
+    },
+    {
+      "review_case_id": "case_028",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 2,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 3,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 4,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The displayed choices are aligned with or do not directly oppose Security."
+    },
+    {
+      "review_case_id": "case_029",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 2,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 3,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 4,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 5,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The displayed choices are aligned with or do not directly oppose Conformity."
+    },
+    {
+      "review_case_id": "case_030",
+      "entry_assessments": [
+        {
+          "position": 1,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 2,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 3,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 4,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        },
+        {
+          "position": 5,
+          "observable_conflict": "no",
+          "confidence": "high",
+          "reason_code": "direct_aligned_or_neutral_behavior"
+        }
+      ],
+      "sustained_conflict": "no",
+      "delivery_state": "none",
+      "rationale": "The displayed choices are aligned with or do not directly oppose Self Direction."
+    }
+  ]
+}

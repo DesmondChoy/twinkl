@@ -1,0 +1,13 @@
+{
+  "adjudication_response_sha256": "97bec23bd556a0a3ba17429740070e6c53764ce64bed52cc70f636ba5ac80015",
+  "cohort_version": "twinkl-qtwz-complete-development-review-v1",
+  "created_at": "2026-07-14T10:56:25.850854+00:00",
+  "results": {
+    "logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/results/case_outcomes_final.parquet": "e2e86989aa5070d501991b8848b85c25179d504d35e9805751161310d7e63447",
+    "logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/results/drift_episodes_final.parquet": "6a0641b60692ec43ab463fc399c4c9e99cf5d4d77a7ece7b5e162067b33307a4",
+    "logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/results/entry_target_final.parquet": "719a341cd0be40914622d38c9750d46237e10bd317303d3154a1b6e15cc43efd",
+    "logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/results/summary_final.json": "3a229cb8d7db6bd7aea7e10220dbab14eb17d50b382629194421cfe0fad2a4de"
+  },
+  "runner_sha256": "e27de0d3329217bf6b99c57f3d6a84924ddcbcb8b2af0eef8ee6e1717fe5d145",
+  "schema_version": 1
+}

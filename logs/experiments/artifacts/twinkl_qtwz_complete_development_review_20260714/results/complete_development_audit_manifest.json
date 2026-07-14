@@ -1,0 +1,20 @@
+{
+  "cohort_version": "twinkl-qtwz-complete-development-review-v1",
+  "created_at": "2026-07-14T10:56:27.507947+00:00",
+  "inputs": {
+    "logs/experiments/artifacts/twinkl_752_5_reassessment_20260714/union_case_summary.parquet": "5748b0c6961bc7cd406f331c4b29459d715407e0b096019256a0bf596bd95d10",
+    "logs/experiments/artifacts/twinkl_752_5_reassessment_20260714/union_drift_episodes.parquet": "0c99934f2111c0d398abf934b9b1e395821a06edc78ba2bb7bd19195a6568ba6",
+    "logs/experiments/artifacts/twinkl_752_5_reassessment_20260714/union_entry_target.parquet": "e939e3da2338287a986f3978fdf73f3df31f9ec909952eec42a57e4bc5af6c73",
+    "logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/results/case_outcomes_final.parquet": "e2e86989aa5070d501991b8848b85c25179d504d35e9805751161310d7e63447",
+    "logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/results/drift_episodes_final.parquet": "6a0641b60692ec43ab463fc399c4c9e99cf5d4d77a7ece7b5e162067b33307a4",
+    "logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/results/entry_target_final.parquet": "719a341cd0be40914622d38c9750d46237e10bd317303d3154a1b6e15cc43efd"
+  },
+  "outputs": {
+    "logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/results/complete_development_case_outcomes.parquet": "d5a75c6e0c0dbcc4e65e6654ab25cd4bc56c1f23c56b818f2dab921be995c961",
+    "logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/results/complete_development_drift_episodes.parquet": "a2065c1217776071a5ce4f317b4a7afd21d0f0b08644ceebd38dbdafc7cb1c22",
+    "logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/results/complete_development_entry_target.parquet": "6380966ae3d5536ff92efc7fa66121a8c7591802463d31b4734a14ba2cd70676",
+    "logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/results/complete_development_summary.json": "2891a45c8642a7584731ef498c4a27e5e27bfa6549139004a39c19004c365d81"
+  },
+  "runner_sha256": "e27de0d3329217bf6b99c57f3d6a84924ddcbcb8b2af0eef8ee6e1717fe5d145",
+  "schema_version": 1
+}

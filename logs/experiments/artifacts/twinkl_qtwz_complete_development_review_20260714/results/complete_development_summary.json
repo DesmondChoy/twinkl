@@ -1,0 +1,23 @@
+{
+  "cohort_version": "twinkl-qtwz-complete-development-review-v1",
+  "complete_case_count": 292,
+  "complete_drift_case_count": 36,
+  "complete_drift_episode_count": 42,
+  "complete_entry_count": 2377,
+  "complete_resolved_case_count": 292,
+  "complete_resolved_entry_count": 2375,
+  "complete_unresolved_entry_count": 2,
+  "generated_at": "2026-07-14T10:56:27.506897+00:00",
+  "limitations": [
+    "This is AI-reviewed synthetic development evidence, not human validation.",
+    "The complete synthetic development data is not a prevalence estimate.",
+    "Two immutable historical LLM-Judge Conflict Labels remain unresolved inside a case with a frozen resolved Drift outcome.",
+    "The fresh final test remains unopened and no deployment approval follows."
+  ],
+  "newly_found_drift_case_count": 8,
+  "newly_found_drift_episode_count": 9,
+  "newly_reviewed_case_count": 186,
+  "previously_known_drift_episode_count": 33,
+  "previously_reviewed_case_count": 106,
+  "schema_version": 1
+}

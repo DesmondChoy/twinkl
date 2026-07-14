@@ -1,0 +1,353 @@
+{
+  "schema_version": "twinkl-qtwz-adjudication-v1",
+  "cohort_version": "twinkl-qtwz-complete-development-review-v1",
+  "adjudicator_prompt_version": "twinkl-qtwz-disagreement-only-v1",
+  "adjudicator_id": "twinkl-qtwz-codex-adjudicator",
+  "adjudicator_runtime": "codex-gpt-5",
+  "adjudicated_at": "2026-07-14T18:42:27+08:00",
+  "packet_sha256": "3a466decb43a2be5d827ca12a69027b0045e5a72eed9b0e56d3ba6bf7acdd7ab",
+  "response_schema_sha256": "da41ab38db1706cebfc4b6337dd13b572d82e0a4a18bdc34b1a20bab1c66d87e",
+  "cases": [
+    {
+      "adjudication_case_id": "adjudication_001",
+      "rationale": "Sitting silent despite a stated objection was a directly observable choice against Self Direction.",
+      "entry_adjudications": [
+        {"position": 2, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_002",
+      "rationale": "Requesting a meeting and carrying a proposal did not itself oppose Conformity.",
+      "entry_adjudications": [
+        {"position": 9, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_003",
+      "rationale": "Taking two overnight delivery runs despite exhaustion directly displaced rest and enjoyment.",
+      "entry_adjudications": [
+        {"position": 6, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_004",
+      "rationale": "Approving departures from inherited business and family expectations was directly observable at both positions.",
+      "entry_adjudications": [
+        {"position": 8, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "medium"},
+        {"position": 12, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_005",
+      "rationale": "Accepting promotional treatment of camp residents despite recognizing the harm was a direct choice against Universalism.",
+      "entry_adjudications": [
+        {"position": 6, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_006",
+      "rationale": "Delaying a call after three long shifts was neutral, while overcommitting and missing a parent's appointment directly failed a close other.",
+      "entry_adjudications": [
+        {"position": 3, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 5, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "medium"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_007",
+      "rationale": "Attending the conference did not violate an expectation, but requesting and taking an unconventional role change directly opposed Conformity.",
+      "entry_adjudications": [
+        {"position": 3, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 6, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 9, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 10, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_008",
+      "rationale": "Declining social novelty and working on the deliberately narrowed thesis were direct choices against Stimulation.",
+      "entry_adjudications": [
+        {"position": 1, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 3, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_009",
+      "rationale": "Creating unnecessary work for a well-served pupil at the expense of pupils needing support directly opposed Benevolence.",
+      "entry_adjudications": [
+        {"position": 3, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_010",
+      "rationale": "Committing to the doubled expense without checking the household directly weakened financial Security.",
+      "entry_adjudications": [
+        {"position": 5, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "medium"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_011",
+      "rationale": "Copying a manager's style to gain approval was a direct, though corrected, departure from Self Direction.",
+      "entry_adjudications": [
+        {"position": 7, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "medium"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_012",
+      "rationale": "The first two positions show avoidance or emotion rather than a choice against Security; accepting a reduced payment without challenge directly weakened the emergency cushion.",
+      "entry_adjudications": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "medium"},
+        {"position": 3, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 6, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_013",
+      "rationale": "Choosing continued distance from family and religious expectations directly opposed Tradition.",
+      "entry_adjudications": [
+        {"position": 6, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_014",
+      "rationale": "Signing drawings for a diversion known to displace villages was a directly observable past choice against Universalism.",
+      "entry_adjudications": [
+        {"position": 1, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_015",
+      "rationale": "The late office work responded to an urgent client problem rather than a freely described choice against Hedonism.",
+      "entry_adjudications": [
+        {"position": 6, "observable_conflict": "no", "reason_code": "external_constraint", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_016",
+      "rationale": "Skipping the temple to avoid family questions opposed Tradition; compassionate patient care did not.",
+      "entry_adjudications": [
+        {"position": 6, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 7, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_017",
+      "rationale": "Closing a deal and exploring suppliers did not directly violate a social expectation or rule.",
+      "entry_adjudications": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_018",
+      "rationale": "Showing deliberately hidden, unconventional work was a direct step against Conformity.",
+      "entry_adjudications": [
+        {"position": 10, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_019",
+      "rationale": "Replacing the requested formal note with a direct parent conversation was a direct departure from the expected process.",
+      "entry_adjudications": [
+        {"position": 7, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_020",
+      "rationale": "The entry weighs a future Christmas choice but does not describe a current directly observable choice against Benevolence.",
+      "entry_adjudications": [
+        {"position": 4, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_021",
+      "rationale": "Building an unsanctioned tool outside the approved work directly departed from the expected process.",
+      "entry_adjudications": [
+        {"position": 5, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_022",
+      "rationale": "Rejecting concrete secure alternatives and recommitting without a timeline opposed Security; routine research work and equipment failure did not.",
+      "entry_adjudications": [
+        {"position": 1, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 2, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 4, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 5, "observable_conflict": "no", "reason_code": "external_constraint", "confidence": "high"},
+        {"position": 6, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "medium"},
+        {"position": 7, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_023",
+      "rationale": "Deliberately loosening prescribed sacred calligraphy forms was a directly observable departure from Conformity.",
+      "entry_adjudications": [
+        {"position": 6, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_024",
+      "rationale": "The dress, private earnings, freelance work, and insistence on handling the work independently all directly departed from inherited household expectations.",
+      "entry_adjudications": [
+        {"position": 5, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 6, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 7, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 10, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 11, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "medium"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_025",
+      "rationale": "Encouraging the daughter to leave without obligation and helping plan the move directly relaxed inherited family expectations.",
+      "entry_adjudications": [
+        {"position": 8, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 9, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_026",
+      "rationale": "Taking a family-supported order in a traditional craft did not clearly oppose Tradition.",
+      "entry_adjudications": [
+        {"position": 12, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "medium"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_027",
+      "rationale": "Hospital care for a parent was imposed by a health need rather than a choice against Hedonism.",
+      "entry_adjudications": [
+        {"position": 1, "observable_conflict": "no", "reason_code": "external_constraint", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_028",
+      "rationale": "Missing dinner followed an active client outage, an external constraint rather than a free choice against Tradition.",
+      "entry_adjudications": [
+        {"position": 11, "observable_conflict": "no", "reason_code": "external_constraint", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_029",
+      "rationale": "Keeping a booking instead of the expected Sunday family visit was a directly observable choice against Tradition.",
+      "entry_adjudications": [
+        {"position": 1, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "medium"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_030",
+      "rationale": "Thinking about disclosure did not oppose Tradition, while bringing the divorced partner to family lunch directly did.",
+      "entry_adjudications": [
+        {"position": 9, "observable_conflict": "no", "reason_code": "feeling_or_intent_only", "confidence": "high"},
+        {"position": 10, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_031",
+      "rationale": "Snapping at a parent receiving care was directly observable behavior against Benevolence, though mitigated by exhaustion.",
+      "entry_adjudications": [
+        {"position": 3, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "medium"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_032",
+      "rationale": "Independent courier work did not itself oppose Tradition, and declining a long family trip was driven by an explicit financial constraint.",
+      "entry_adjudications": [
+        {"position": 4, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 5, "observable_conflict": "no", "reason_code": "external_constraint", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_033",
+      "rationale": "Nodding through a public challenge instead of asserting authority was directly observable behavior against Power.",
+      "entry_adjudications": [
+        {"position": 1, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_034",
+      "rationale": "Skipping the established choir coffee hour in reaction to the repertoire dispute directly broke a customary practice.",
+      "entry_adjudications": [
+        {"position": 11, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "medium"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_035",
+      "rationale": "Proposing work outside the new process and privately exploring departure from an expected loyalty norm directly opposed Conformity.",
+      "entry_adjudications": [
+        {"position": 2, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 3, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "medium"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_036",
+      "rationale": "Accepting every ride through physical pain was a direct choice against Hedonism.",
+      "entry_adjudications": [
+        {"position": 3, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_037",
+      "rationale": "Giving money before checking the balance and continuing prolonged work without rest directly weakened financial and physical Security.",
+      "entry_adjudications": [
+        {"position": 2, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 3, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_038",
+      "rationale": "Helping a son pursue film directly departed from the inherited occupational path described in the family.",
+      "entry_adjudications": [
+        {"position": 8, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_039",
+      "rationale": "The sharp dismissal of a parent directly opposed Benevolence, though it also set a legitimate boundary.",
+      "entry_adjudications": [
+        {"position": 12, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "medium"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_040",
+      "rationale": "Discussing an academic disagreement after class was normal participation, not a choice against Conformity.",
+      "entry_adjudications": [
+        {"position": 4, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_041",
+      "rationale": "Accepting an unpaid family painting directly displaced personal enjoyment; covering necessary family care followed an external constraint.",
+      "entry_adjudications": [
+        {"position": 2, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"},
+        {"position": 4, "observable_conflict": "no", "reason_code": "external_constraint", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_042",
+      "rationale": "Refusing to absorb a sister's criticism and speaking sharply directly broke the established family restraint.",
+      "entry_adjudications": [
+        {"position": 11, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_043",
+      "rationale": "Closing an exciting opportunity to preserve reserves was a direct choice of stability over Stimulation.",
+      "entry_adjudications": [
+        {"position": 10, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_044",
+      "rationale": "Allowing a known higher insurance charge to renew despite its budget impact directly weakened financial Security.",
+      "entry_adjudications": [
+        {"position": 4, "observable_conflict": "yes", "reason_code": "direct_behavior_or_choice", "confidence": "high"}
+      ]
+    },
+    {
+      "adjudication_case_id": "adjudication_045",
+      "rationale": "Delaying an introduction and promising the customary festival visit maintained or deferred family expectations rather than directly opposing Tradition.",
+      "entry_adjudications": [
+        {"position": 2, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"},
+        {"position": 11, "observable_conflict": "no", "reason_code": "direct_aligned_or_neutral_behavior", "confidence": "high"}
+      ]
+    }
+  ]
+}

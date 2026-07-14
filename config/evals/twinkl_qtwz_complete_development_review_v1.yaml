@@ -1,0 +1,51 @@
+schema_version: 1
+cohort_version: twinkl-qtwz-complete-development-review-v1
+purpose: >-
+  Review the exact complement of the immutable 106-case known-development
+  union so every persona-by-Core-Value case in the 292-case synthetic
+  development data has an LLM-Judge Conflict Label review.
+analysis_role: development_only
+source:
+  registry_path: logs/registry/personas.parquet
+  wrangled_dir: logs/wrangled
+  original_holdout_manifest: config/experiments/vif/twinkl_681_5_holdout.yaml
+  reviewed_union_path: logs/experiments/artifacts/twinkl_752_5_reassessment_20260714/union_cases.json
+  reviewed_union_sha256: d7cf88f938e9d014dc520b3c772c86f47556379b75f1695a521b57b69f29080e
+expected_counts:
+  reviewed_union_cases: 106
+  remaining_cases: 186
+  remaining_personas: 146
+  remaining_entry_core_value_combinations: 1483
+  shards: 7
+  historical_splits:
+    training: 121
+    development: 30
+    retired: 27
+    former_promotion: 8
+  dimensions:
+    achievement: 23
+    benevolence: 18
+    conformity: 26
+    hedonism: 13
+    power: 5
+    security: 30
+    self_direction: 14
+    stimulation: 20
+    tradition: 25
+    universalism: 12
+review:
+  review_schema_version: twinkl-qtwz-review-v1
+  reviewer_prompt_version: twinkl-qtwz-packet-only-v1
+  adjudication_schema_version: twinkl-qtwz-adjudication-v1
+  adjudication_prompt_version: twinkl-qtwz-disagreement-only-v1
+  max_cases_per_shard: 30
+  max_entries_per_shard: 300
+  required_reviewers: 2
+  reviewer_runtime: codex-gpt-5
+  direct_api_calls: false
+limitations:
+  - The LLM-Judge Conflict Labels are AI-reviewed development evidence, not human validation.
+  - The 292 cases come from synthetic personas and do not estimate real-user prevalence.
+  - Historical split names are provenance only; every case is development-only for this review.
+  - The fresh final test remains unopened under twinkl-pv6s.
+  - No result from this review grants deployment approval.
