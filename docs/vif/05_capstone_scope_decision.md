@@ -124,12 +124,18 @@ training, but any VIF Critic scheduler score on those entries is in-sample.
 Candidate mining may also miss Drifts absent from both legacy label sources.
 
 The missing architecture evidence is now explicit: `twinkl-752.5` must compare
-weekly-only review, weekly review with raw MLP scores, MLP-triggered early
-review plus weekly review with the scores hidden from the LLM, and a model-free
-early-review schedule at the same call budget. The first pair reassesses the
-underpowered five-episode raw-input rejection; the other three isolate whether
-the MLP adds scheduling value. Only then can `twinkl-752.2` decide whether the
-MLP adds enough recall or latency value to justify its runtime cost.
+weekly review without VIF Critic input, weekly review with raw VIF Critic
+scores, and
+VIF-Critic-triggered early review plus weekly review with the scores hidden from
+the Weekly Drift Reviewer. The first pair reassesses the underpowered
+five-episode raw-input rejection; weekly review without VIF Critic input versus
+early-plus-weekly review
+tests the complete scheduling setup. A separate zero-call diagnostic compares
+the realized VIF Critic trigger placements with random placements at the same
+count. That diagnostic tests whether the VIF Critic aims reviews better than
+chance; it does not test whether an early review improves Drift detection. Only
+then can `twinkl-752.2` decide whether the VIF Critic adds enough recall or
+latency value to justify its runtime cost.
 
 This decision does not adopt a VIF Critic-only, Weekly Drift Reviewer-only,
 ensemble, or cascade architecture. Architecture adoption still requires

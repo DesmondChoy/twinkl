@@ -28,6 +28,8 @@ It is not the forward model-development policy after `twinkl-752`.
 >
 > **Opus null-resolution decision (2026-07-14):** A [blind fourth review](reports/experiment_review_2026-07-14_twinkl_752_5_opus_null_resolution.md) through `claude -p --model opus` with the versioned Conflict rubric returned `yes` for `799f3751:hedonism` and `65ed1278:benevolence` (medium confidence) and `5943c186:hedonism` (low); it returned `no` for `3cfa2ebf:universalism` (low). None creates a new Drift. The reviewed cohort is now 104/104 resolved and the known-development union is 106/106 resolved, with the same 33 episodes across 28 Drift trajectories. This completes labels; it does not choose an architecture.
 >
+> **`twinkl-752.5` scheduling protocol decision (2026-07-14):** The user dropped the model-free early-review setup because it had no defined product trigger and added an artificial LLM-calling comparison. The study now has three LLM-calling setups: weekly review without VIF Critic input, weekly review with raw VIF Critic input, and VIF-Critic-triggered early-plus-weekly review with scores hidden. A separate offline diagnostic redistributes the same realized trigger count across eligible review opportunities and makes no Weekly Drift Reviewer calls. It tests trigger placement against chance, not whether early review improves Drift detection.
+>
 > **Expanded Drift-reference decision (2026-07-13; corrected 2026-07-14):** [`twinkl-752.4`](reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md) reviewed every trajectory discoverable from either legacy Drift-label source plus one unique-person matched control per candidate: 52 candidates, 52 controls, and 874 entry/Core-Value decisions. Two packet-only Codex lanes agreed on 849/874 entries; disagreement-only adjudication initially left four entries and four trajectories unresolved. The Opus follow-up resolved all four without adding Drift. The review found 31 episodes across 26 Drift trajectories, including three of the earlier five. Adding the two omitted prior episodes produces the 33-episode / 28-Drift-trajectory known-development union for `twinkl-752.5`. Four reviewed episodes came from the former final-test split; include them in the primary development analysis and report provenance subgroups separately. The revised development-reference rates are 22/44 candidates and 1/44 controls. This is selection-biased AI-reviewed development evidence, not prevalence or a fresh final test. It unblocks `twinkl-752.5`; it does not score the MLP or adopt an architecture.
 >
 > **Weekly Drift Reviewer Critic-input decision (2026-07-12; reassessment pending):** [`twinkl-752.1`](reports/experiment_review_2026-07-12_twinkl_752_1_weekly_verifier_ablation.md) found that adding fixed `run_020` signals cut median development Drift recall from `0.40` to `0.20`, removed the median false Drift alert (`1` to `0`), and slightly reduced coverage (`0.756` to `0.732`). The recall comparison contained only five episodes, so the difference was one detected episode. `twinkl-752.5` must rerun the raw-input comparison on the 33-episode known-development union before `twinkl-752.2` treats the conditional rejection as durable.
@@ -287,10 +289,11 @@ follow-up, 22/44 development-reference candidates and 1/44 controls contain
 Drift. These are selection-biased AI-reviewed rates, not prevalence or model
 false-alert rates.
 
-This result adds 28 net-new episodes but does not evaluate raw MLP input or the
-proposed scheduler. `twinkl-752.5` must compare weekly-only,
-weekly-with-raw-MLP-input, MLP-triggered early-plus-weekly, and matched-budget
-model-free schedules on the 33-episode union. VIF Critic results on
+This result adds 28 net-new episodes but does not evaluate raw VIF Critic input
+or the proposed scheduler. `twinkl-752.5` must compare weekly review without VIF
+Critic input, weekly review with raw VIF Critic input, and VIF-Critic-triggered
+early-plus-weekly review on the 33-episode union. Its offline trigger-placement
+diagnostic makes no Weekly Drift Reviewer calls. VIF Critic results on
 training-seen Journal Entries are in-sample. Full details:
 [`reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md`](reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md).
 

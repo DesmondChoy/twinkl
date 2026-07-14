@@ -341,15 +341,18 @@ learned routing policies.
 ## Remaining Work
 
 1. Run `twinkl-752.5` on the 33-episode known-development union: compare
-   weekly-only, weekly-with-raw-MLP-input, MLP-triggered early-plus-weekly, and
-   matched-budget model-free schedules.
+   weekly review without VIF Critic input, weekly review with raw VIF Critic
+   input, and VIF-Critic-triggered early-plus-weekly review. Separately run the
+   offline trigger-placement diagnostic, which makes no Weekly Drift Reviewer
+   calls.
    Then review `twinkl-752.1`, `twinkl-752.3`, and `twinkl-752.5` under
    `twinkl-752.2`. No architecture or deployment tolerance is adopted yet.
 2. If the approved architecture uses the VIF Critic, persist or reconstruct
    per-Journal-Entry ordinal class probabilities, including `P(-1)`.
 3. If approved, implement the rolling soft-evidence Drift Detector.
 4. Calibrate probability-mass and uncertainty thresholds against the
-   known-development union, reporting training-seen MLP scores as in-sample.
+   known-development union, reporting training-seen VIF Critic scores as
+   in-sample.
    Build a fresh final test separately. The stored five-pass consensus Drifts
    are candidate provenance, not a calibration target on their own.
 5. Add active, recovered, mixed, and uncertain Weekly Digest delivery wording.

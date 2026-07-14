@@ -1,5 +1,7 @@
 # Lessons
 
+- **2026-07-14 — Keep artificial schedulers offline:** Do not preregister a model-free LLM-calling setup until its trigger policy and product meaning are explicit. When the question is only whether VIF Critic triggers target relevant weeks better than chance, use an offline random-placement diagnostic at the same trigger count and keep its conclusion separate from the effect of early review.
+
 - **2026-07-14 — Historical split provenance is not an exclusion rule:** When a task explicitly makes every historical split development-only, include every valid label in the primary development dataset. Report former split membership as a subgroup or sensitivity check; do not silently turn names such as `retired_audit_only` into eligibility criteria.
 
 - 2026-07-14: Before claiming a candidate-mined benchmark replaces an earlier

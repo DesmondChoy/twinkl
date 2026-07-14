@@ -271,10 +271,12 @@ found 31 episodes across 26 Drift trajectories. Three overlap the earlier five;
 adding the two omitted prior episodes produces the 33-episode /
 28-Drift-trajectory known-development union. Four reviewed episodes came from
 the former final-test split; include them in the primary development analysis
-and report provenance subgroups separately. `twinkl-752.5` must compare
-weekly-only, weekly-with-raw-MLP-input,
-MLP-triggered early-plus-weekly, and budget-matched model-free schedules. The
-production connection therefore remains deliberately
+and report provenance subgroups separately. `twinkl-752.5` must compare weekly
+review without VIF Critic input, weekly review with raw VIF Critic input, and
+VIF-Critic-triggered early-plus-weekly review. A separate offline diagnostic
+compares the realized
+trigger placements with random placements at the same count and makes no Weekly
+Drift Reviewer calls. The production connection therefore remains deliberately
 absent, and the existing weekly router remains a compatibility prototype.
 See
 [`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md) and
