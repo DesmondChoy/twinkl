@@ -2,14 +2,20 @@
 
 **Date:** 2026-07-12
 
-**Decision:** negative. Supplying `run_020` Critic probabilities and uncertainty
+**Historical decision:** negative. Supplying `run_020` Critic probabilities and uncertainty
 made the weekly verifier more conservative, but it halved median episode recall.
 
-**Conditional recommendation:** reject the tested raw Critic-input path. If the
+**Historical conditional recommendation:** reject the tested raw Critic-input path. If the
 choice is limited to these two development arms, carry the no-Critic verifier
 into `twinkl-752.2` for approval. This is not a production or promotion decision:
 the no-Critic arm still produced a median one false episode, and no acceptable
 false-alert tolerance has been adopted.
+
+> **2026-07-14 reassessment note:** This comparison contained only five Drift
+> episodes, so median recall 0.20 versus 0.40 represents one versus two detected
+> episodes. `twinkl-752.5` must rerun the exact raw-input comparison on the
+> 29-episode known-development union before this rejection is treated as a
+> durable architecture conclusion.
 
 ## Why this study exists
 
@@ -136,11 +142,13 @@ no-Critic weekly arm is the causal LLM baseline for this study.
 
 Twinkl needs a trustworthy weekly mirror, not merely a model that emits more
 negative labels. The raw Critic numbers made the verifier cautious, but caused
-it to miss more sustained conflict. The tested integration should therefore
-not be adopted. `twinkl-752.2` should decide whether to approve the no-Critic
-verifier as the capstone architecture, request a narrower Critic handoff, or
-defer architecture adoption. A fresh resolved promotion surface and an adopted
-false-alert tolerance remain necessary before any deployment claim.
+it to miss more sustained conflict. The tested integration should not be
+adopted from this evidence alone. `twinkl-752.5` must first reassess raw Critic
+input and separately test its use for review timing. `twinkl-752.2` should then
+decide whether to approve the no-Critic verifier as the capstone architecture,
+retain a narrower Critic role, or defer architecture adoption. A fresh final
+test and an adopted false-alert tolerance remain necessary before any
+deployment claim.
 
 ## Reproduction and artifacts
 

@@ -1,5 +1,10 @@
 # Lessons
 
+- 2026-07-14: Before claiming a candidate-mined benchmark replaces an earlier
+  reference, explicitly compare and union the prior confirmed cases. Candidate
+  mining can miss known Drifts. Report cohort-only, overlap, net-new, and union
+  counts separately.
+
 ## 2026-03-11
 
 - When promoting a script out of a notebook path, avoid carrying forward

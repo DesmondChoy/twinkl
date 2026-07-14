@@ -244,8 +244,11 @@ not the five-pass LLM-Judge reference.
 
 The current runtime persists alignment means and uncertainties rather than
 class probabilities. [`twinkl-752.4`](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md)
-expanded the development reference to 27 episodes across 23 resolved Drift
-trajectories, but no scheduler has been scored and no fresh final test exists.
+found 27 development episodes across 23 Drift trajectories. Three overlap the
+earlier five; adding the two omitted prior episodes produces the 29-episode /
+25-Drift-trajectory known-development union. The old raw-MLP-input rejection
+rests on only five episodes, no scheduler has been scored, and no fresh final
+test exists.
 No VIF Critic or Drift Detector has deployment approval, and the Drift Detector
 is not wired into the weekly runtime. The former consensus-derived frozen
 benchmark is retired historical evidence. The crash/rut/evolution output modes
@@ -335,15 +338,16 @@ learned routing policies.
 
 ## Remaining Work
 
-1. Run `twinkl-752.5` on the expanded reference: compare weekly-only,
-   MLP-triggered early-plus-weekly, and matched-budget model-free schedules.
+1. Run `twinkl-752.5` on the 29-episode known-development union: compare
+   weekly-only, weekly-with-raw-MLP-input, MLP-triggered early-plus-weekly, and
+   matched-budget model-free schedules.
    Then review `twinkl-752.1`, `twinkl-752.3`, and `twinkl-752.5` under
    `twinkl-752.2`. No architecture or deployment tolerance is adopted yet.
 2. If the approved architecture uses the VIF Critic, persist or reconstruct
    per-Journal-Entry ordinal class probabilities, including `P(-1)`.
 3. If approved, implement the rolling soft-evidence Drift Detector.
-4. Calibrate probability-mass and uncertainty thresholds against the expanded
-   development reference, reporting training-seen MLP scores as in-sample.
+4. Calibrate probability-mass and uncertainty thresholds against the
+   known-development union, reporting training-seen MLP scores as in-sample.
    Build a fresh final test separately. The stored five-pass consensus Drifts
    are candidate provenance, not a calibration target on their own.
 5. Add active, recovered, mixed, and uncertain Weekly Digest delivery wording.

@@ -1,14 +1,22 @@
 # Full Legacy-Discoverable Drift Review (`twinkl-752.4`)
 
 **Date:** 2026-07-13
-**Disposition:** Complete development reference; no architecture or deployment decision
+**Disposition:** Complete cohort review; no architecture or deployment decision
+
+> **2026-07-14 correction:** The 27 episodes below are the result of this
+> legacy-candidate-plus-control cohort, not a strict replacement for the five
+> earlier development episodes. Three of the earlier five overlap this cohort;
+> `3a3b15e4:tradition` and `7adc5866:benevolence` do not. The known-development
+> union for `twinkl-752.5` therefore contains 29 episodes across 25 Drift
+> trajectories. The frozen `twinkl-752.4` artifacts remain unchanged.
 
 ## Result
 
-The review expands the usable Drift evidence from five development episodes to
-**27 development-reference episodes across 23 resolved trajectories**. A
-separate retired-test audit contains another four episodes across three
-trajectories. This is enough to run the bounded scheduler comparison in
+The review found **27 development-reference episodes across 23 resolved
+trajectories**. Of these, 24 are net-new relative to the earlier five. The
+known-development union therefore contains 29 episodes across 25 Drift
+trajectories. A separate retired-test audit contains another four episodes
+across three trajectories. This is enough to run the bounded comparison in
 `twinkl-752.5`; it is still not a fresh final test.
 
 | Stratum | Legacy candidates | Matched controls | Resolved | Drift trajectories | Drift episodes |
@@ -65,8 +73,9 @@ runs were derived mechanically: a length-three run is one episode, not two.
 
 ## Findings
 
-1. **The five-case reference was too small.** The primary development surface
-   now has 27 episodes, 5.4 times the earlier five-episode surface.
+1. **The five-case reference was too small.** This review contributes 24
+   net-new episodes. The known-development union now has 29 episodes, 5.8
+   times the earlier five-episode surface.
 2. **Legacy labels were useful candidate miners, not current Drift truth.** Only
    half of resolved legacy candidates confirmed as Drift under the displayed-
    behavior rule.
@@ -98,13 +107,16 @@ Excluding them from rate denominators is fail-closed, not selective cleanup.
 Proceed to `twinkl-752.5`. Compare:
 
 1. end-of-week review only;
-2. MLP-triggered early review plus the end-of-week review; and
-3. a model-free early-review schedule at the same review-call budget.
+2. end-of-week review with raw `run_020` `P(-1)` and uncertainty inputs;
+3. MLP-triggered early review plus the end-of-week review, with numeric MLP
+   scores hidden from the LLM; and
+4. a model-free early-review schedule at the same review-call budget.
 
-Report Drift recall, additional Drift alerts, detection delay, cross-week
-recovery, trigger rate, and review cost. Use the 27 development-reference
-episodes for development analysis, keep the four retired-audit episodes
-separate, and make no out-of-sample or deployment claim.
+Report raw hits and denominators, Drift recall and precision, additional Drift
+alerts, detection delay, cross-week recovery, trigger rate, coverage,
+abstention, paired uncertainty, and review cost. Use the 29-episode
+known-development union for primary analysis, keep the four retired-audit
+episodes separate, and make no out-of-sample or deployment claim.
 
 The architecture decision remains in `twinkl-752.2` after that comparison. The
 user still has to decide whether any measured latency/recall benefit justifies
