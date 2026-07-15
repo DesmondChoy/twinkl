@@ -19,15 +19,27 @@ wide. Narrower screens use horizontal scrolling.
 The corpus overview reports known Drift hits, false Drift alerts, and coverage
 for all three Weekly Drift Reviewer setups and Runs before any persona is
 opened. The persona scoreboard then states which Runs found or missed known
-Drift and names the exact known and predicted Drift spans. The Journal Entry
+Drift and names the exact known Drift and Drift alert spans. The Journal Entry
 table keeps the LLM-Judge Conflict Label in a dedicated column so the label and
 each Weekly Drift Reviewer Decision can be compared directly. Biographies
 remain collapsed because they were not Weekly Drift Reviewer input.
+
+The Filter screen defines what does and does not count as Conflict before it
+states the two-consecutive-Conflict Drift rule. Journal Entry comparisons show
+Weekly Drift Reviewer Decisions and cited evidence without uncalibrated
+confidence tiers or raw reason codes. Abstain receives a plain-English
+explanation.
 
 Runs 1–3 repeat the same frozen setup on the same input and are never merged;
 their disagreement is shown as Run variability. Luna at reasoning low is
 identified as the current development selection, with its revised selection
 hierarchy and uncertainty disclosed beside the corpus overview.
+
+A Drift alert counts as a hit when it is confirmed between the known Drift's
+first Journal Entry and two Journal Entries after its end. This affects
+scoring, not the Drift definition. The Journal Entry comparison initially
+shows the first known Drift, or the first Drift alert when no known Drift
+exists; Full timeline remains available.
 
 A cross-week Drift spans two review weeks, so its second Conflict is not
 assessed until the next weekly review. Across these development Runs,

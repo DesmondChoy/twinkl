@@ -4,9 +4,11 @@ from html import unescape
 from pathlib import Path
 
 from src.drift_review_app.app import (
+    ABSTAIN_EXPLANATIONS,
     ALL_CASES_FOCUS,
     _aggregate_overview,
     _decision_cell,
+    _default_period,
     _detail_screen,
     _dimension_choices,
     _filter_screen,
@@ -37,6 +39,25 @@ def test_reference_and_predicted_periods_show_the_selected_span() -> None:
     assert [entry.t_index for entry in _visible_entries(case, predicted)] == [4, 5]
 
 
+def test_relevant_drift_period_is_selected_before_full_timeline() -> None:
+    data = load_review_data(ROOT)
+    known_drift_case = data.cases["02fb94f3:tradition"]
+    false_alert_case = data.cases["f6180c27:benevolence"]
+    quiet_case = next(
+        case
+        for case in data.cases.values()
+        if not data.reference_drifts[case.case_id]
+        and all(
+            not data.predicted_drifts[("luna_low", run, case.case_id)]
+            for run in (1, 2, 3)
+        )
+    )
+
+    assert _default_period(data, known_drift_case, "luna_low").startswith("ref|")
+    assert _default_period(data, false_alert_case, "luna_low").startswith("pred|")
+    assert _default_period(data, quiet_case, "luna_low") == "full"
+
+
 def test_main_page_opens_on_two_filters_without_password_gate() -> None:
     data = load_review_data(ROOT)
     html = str(app_ui) + str(_filter_screen(data))
@@ -57,7 +78,10 @@ def test_main_page_opens_on_two_filters_without_password_gate() -> None:
     assert "Known Drift status" in html
     assert "Achievement (0)" in html
     assert "Advanced review focus" in html
-    assert "The Drift Detector requires two consecutive" in html
+    assert "WHAT COUNTS AS CONFLICT" in html
+    assert "A Journal Entry is a Conflict when the displayed text clearly" in html
+    assert "WHAT DOES NOT COUNT" in html
+    assert "Two consecutive Conflicts for the same Core Value form one Drift" in html
     assert "about four days slower" in html
     assert "MutationObserver" in html
     assert "heading === window.__twinklPreviousStageHeading" in html
@@ -156,7 +180,7 @@ def test_contract_dividers_stay_aligned() -> None:
     assert "grid-template-columns: repeat(2, minmax(0, 1fr))" in styles
 
 
-def test_timeline_uses_semantic_roles_and_collapses_reasoning() -> None:
+def test_timeline_uses_semantic_roles_and_collapses_decision_evidence() -> None:
     data = load_review_data(ROOT)
     case = data.cases["02fb94f3:tradition"]
     timeline_html = str(_timeline(data, case, "luna_low", "full"))
@@ -172,12 +196,27 @@ def test_timeline_uses_semantic_roles_and_collapses_reasoning() -> None:
         for entry in case.entries
         if data.decision("luna_low", 1, case.case_id, entry.t_index).response_status
         == "ok"
-        and not data.decision("luna_low", 1, case.case_id, entry.t_index).evidence_quote
+        and data.decision("luna_low", 1, case.case_id, entry.t_index).verdict
+        != "abstain"
+        and data.decision("luna_low", 1, case.case_id, entry.t_index).evidence_quote
     )
     decision_html = str(_decision_cell(data, case, entry, "luna_low", 1))
     assert "decision-details" in decision_html
-    assert "View reasoning" in decision_html
-    assert "No evidence quote returned." not in decision_html
+    assert "View evidence" in decision_html
+    assert "Evidence from the Journal Entry" in decision_html
+    assert "Reason code" not in decision_html
+    assert 'class="confidence"' not in decision_html
+
+    abstain_entry = next(
+        entry
+        for entry in case.entries
+        if data.decision("luna_low", 1, case.case_id, entry.t_index).verdict
+        == "abstain"
+    )
+    abstain_decision = data.decision("luna_low", 1, case.case_id, abstain_entry.t_index)
+    abstain_html = str(_decision_cell(data, case, abstain_entry, "luna_low", 1))
+    assert "Why the Weekly Drift Reviewer abstained" in abstain_html
+    assert abstain_decision.reason_code not in abstain_html
 
     routine_entry = next(
         entry
@@ -187,6 +226,22 @@ def test_timeline_uses_semantic_roles_and_collapses_reasoning() -> None:
     )
     reference_html = str(_reference_cell(data, case, routine_entry))
     assert "resolved · agreement" not in reference_html
+
+
+def test_every_abstain_reason_has_a_plain_english_explanation() -> None:
+    data = load_review_data(ROOT)
+    reason_codes = {
+        decision.reason_code
+        for decision in data.decisions.values()
+        if decision.verdict == "abstain" and decision.reason_code
+    }
+
+    assert reason_codes <= ABSTAIN_EXPLANATIONS.keys()
+    assert "direct_behavior_or_choice" in reason_codes
+    assert (
+        "direct_behavior_or_choice"
+        not in ABSTAIN_EXPLANATIONS["direct_behavior_or_choice"]
+    )
 
 
 def test_invalid_response_always_explains_fail_closed_behavior() -> None:
@@ -227,7 +282,9 @@ def test_scoreboard_preserves_partial_drift_hits() -> None:
 
     assert "2 known Drifts" in html
     assert "Found 1/2 · missed 1" in html
-    assert "t4–t5 · hit" in html
+    assert "t4–t5 · matched known Drift" in html
+    assert "How hits are counted" in html
+    assert "This affects scoring, not the Drift definition" in html
 
 
 def test_persona_provenance_and_detection_delay_are_explained() -> None:
@@ -270,9 +327,10 @@ def test_no_drift_scoreboard_distinguishes_resolved_from_unresolved() -> None:
     )
     unresolved = unescape(str(_scoreboard_cell(data, unresolved_case, "luna_low", 1)))
     resolved = unescape(str(_scoreboard_cell(data, resolved_case, "luna_low", 1)))
-    assert "No Drift alert · trajectory unresolved" in unresolved
+    assert "No Drift alert · review incomplete" in unresolved
+    assert "At least one adjacent pair remains unresolved" in unresolved
     assert "is-abstain" in unresolved
-    assert "No Drift alert · matches known outcome" in resolved
+    assert "No Drift alert · all adjacent pairs ruled out" in resolved
     assert "is-hit" in resolved
 
 

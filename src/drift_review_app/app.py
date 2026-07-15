@@ -65,6 +65,31 @@ REVIEW_FOCUS_LABELS = {
     "Invalid response": "Invalid Weekly Drift Reviewer response",
     "Uncertain LLM-Judge Conflict Label": "Uncertain LLM-Judge Conflict Label",
 }
+ABSTAIN_EXPLANATIONS = {
+    "ambiguous": (
+        "The displayed text supports more than one reasonable interpretation."
+    ),
+    "direct_aligned_or_neutral_behavior": (
+        "The Weekly Drift Reviewer identified aligned or neutral behavior but "
+        "returned Abstain instead of a Not Conflict Decision."
+    ),
+    "direct_behavior_or_choice": (
+        "The Journal Entry shows a behavior or choice, but the Weekly Drift "
+        "Reviewer did not decide whether it conflicts with the Core Value."
+    ),
+    "external_constraint": (
+        "The Journal Entry describes an external constraint, not a choice made "
+        "by the writer."
+    ),
+    "feeling_or_intent_only": (
+        "The Journal Entry describes a feeling or intention, not a completed "
+        "behavior or choice."
+    ),
+    "missing_text": "The displayed Journal Entry is missing or incomplete.",
+    "needs_hidden_context": (
+        "A decision would require information not shown to the Weekly Drift Reviewer."
+    ),
+}
 
 
 def _get_review_data() -> ReviewData:
@@ -189,13 +214,29 @@ def _period_choices(
             choices[
                 f"pred|{run}|{row.onset_t_index}|{row.end_t_index}|{row.detection_date}"
             ] = (
-                f"Run {run} predicted Drift · "
+                f"Run {run} Drift alert · "
                 f"{_format_span(row.onset_t_index, row.end_t_index)} · "
                 f"detected {row.detection_date}"
             )
     for week in sorted({_week_key(entry.date) for entry in case.entries}):
         choices[f"week|{week}"] = f"Assessed in week of {week}"
     return choices
+
+
+def _default_period(data: ReviewData, case: CaseRecord, setup_key: str) -> str:
+    """Return the first known Drift or Drift alert available for review."""
+    references = data.reference_drifts[case.case_id]
+    if references:
+        row = references[0]
+        return f"ref|{row.drift_id}|{row.onset_t_index}|{row.end_t_index}"
+    for run in (1, 2, 3):
+        predictions = data.predicted_drifts[(setup_key, run, case.case_id)]
+        if predictions:
+            row = predictions[0]
+            return (
+                f"pred|{run}|{row.onset_t_index}|{row.end_t_index}|{row.detection_date}"
+            )
+    return "full"
 
 
 def _visible_entries(case: CaseRecord, period: str) -> tuple[EntryRecord, ...]:
@@ -349,33 +390,50 @@ def _decision_cell(
         entry.t_index in pair
         for pair in data.unresolved_pairs(setup_key, run, case.case_id)
     )
+    abstain_explanation = ABSTAIN_EXPLANATIONS.get(
+        decision.reason_code or "",
+        "The displayed Journal Entry does not support a reliable Weekly Drift "
+        "Reviewer Decision.",
+    )
     return ui.div(
         ui.div(
             _pill(_verdict_label(decision), _verdict_class(decision)),
-            ui.span(
-                decision.confidence.title() if decision.confidence else "No confidence",
-                class_="confidence",
-            ),
             class_="decision-heading",
         ),
-        ui.tags.details(
-            ui.tags.summary("View reasoning"),
-            ui.div(
-                ui.div(
-                    ui.span("Reason code", class_="field-name"),
-                    ui.code(decision.reason_code or "unavailable"),
-                    class_="decision-field",
+        (
+            ui.tags.details(
+                ui.tags.summary(
+                    "Why the Weekly Drift Reviewer abstained"
+                    if decision.verdict == "abstain"
+                    else "View evidence"
                 ),
                 ui.div(
-                    ui.span("Evidence quote", class_="field-name"),
-                    ui.tags.blockquote(decision.evidence_quote),
-                    class_="decision-field",
-                )
-                if decision.evidence_quote
-                else None,
-                class_="decision-details-body",
-            ),
-            class_="decision-details",
+                    ui.div(
+                        ui.span(
+                            "Why the Weekly Drift Reviewer abstained",
+                            class_="field-name",
+                        ),
+                        ui.p(abstain_explanation),
+                        class_="decision-field",
+                    )
+                    if decision.verdict == "abstain"
+                    else None,
+                    ui.div(
+                        ui.span(
+                            "Evidence from the Journal Entry",
+                            class_="field-name",
+                        ),
+                        ui.tags.blockquote(decision.evidence_quote),
+                        class_="decision-field",
+                    )
+                    if decision.evidence_quote
+                    else None,
+                    class_="decision-details-body",
+                ),
+                class_="decision-details",
+            )
+            if decision.verdict == "abstain" or decision.evidence_quote
+            else None
         )
         if decision.response_status == "ok"
         else ui.div(
@@ -393,13 +451,17 @@ def _decision_cell(
         ui.div(
             *[
                 _pill(
-                    "Predicted Drift · "
-                    + ("hit" if row.result == "hit" else "false Drift alert"),
+                    "Drift alert · "
+                    + (
+                        "matched known Drift"
+                        if row.result == "hit"
+                        else "false Drift alert"
+                    ),
                     "is-hit" if row.result == "hit" else "is-false",
                 )
                 for row in predictions
             ],
-            _pill("Pair unresolved because of Abstain", "is-abstain")
+            _pill("Adjacent pair unresolved because of Abstain", "is-abstain")
             if unresolved
             else None,
             class_="decision-flags",
@@ -751,7 +813,36 @@ def _how_it_works_panel() -> ui.Tag:
         ),
         ui.div(
             ui.div(
-                ui.span("KNOWN DRIFT LABELS", class_="field-name"),
+                ui.span("WHAT COUNTS AS CONFLICT", class_="field-name"),
+                ui.p(
+                    "A Journal Entry is a Conflict when the displayed text clearly "
+                    "shows the writer making a behavior or choice against a Core "
+                    "Value."
+                ),
+                class_="contract-note",
+            ),
+            ui.div(
+                ui.span("WHAT DOES NOT COUNT", class_="field-name"),
+                ui.p(
+                    "Feelings, guilt, wishes, intentions, external constraints, "
+                    "biography, and ambiguous prose do not count as Conflict on "
+                    "their own."
+                ),
+                class_="contract-note",
+            ),
+            class_="contract-notes",
+        ),
+        ui.div(
+            ui.span("DRIFT RULE", class_="field-name"),
+            ui.p(
+                "Two consecutive Conflicts for the same Core Value form one Drift. "
+                "A longer uninterrupted run is still one Drift."
+            ),
+            class_="drift-rule-note",
+        ),
+        ui.tags.details(
+            ui.tags.summary("Known Drift labels and review timing"),
+            ui.div(
                 ui.p(
                     "LLM-Judge Conflict Labels were AI-reviewed with two isolated "
                     "gpt-5.6-sol lanes at reasoning xhigh and disagreement-only "
@@ -760,23 +851,16 @@ def _how_it_works_panel() -> ui.Tag:
                     "labels are derived from these labels; they are not ground truth "
                     "or human validation."
                 ),
-                class_="contract-note",
-            ),
-            ui.div(
-                ui.span("DRIFT RULE", class_="field-name"),
                 ui.p(
-                    "The Drift Detector requires two consecutive Weekly Drift "
-                    "Reviewer Conflicts for the same Core Value. Abstain produces no "
-                    "Drift claim. t0 is the first Journal Entry in a trajectory. A "
-                    "cross-week Drift spans two review weeks, so its second Conflict "
-                    "is not assessed until the next weekly review; in these "
-                    "development Runs, detection was about four days slower than "
-                    "for same-week Drift. A pair unresolved because of Abstain has "
-                    "neither produced a Drift alert nor been ruled out."
+                    "Abstain produces no Drift claim. t0 is the first Journal Entry. "
+                    "A cross-week Drift spans two review weeks, so its second "
+                    "Conflict is not assessed until the next weekly review. In "
+                    "these development Runs, detection was about four days slower "
+                    "than for same-week Drift."
                 ),
-                class_="contract-note",
+                class_="contract-disclosure-body",
             ),
-            class_="contract-notes",
+            class_="contract-disclosure",
         ),
         class_="how-it-works",
     )
@@ -859,10 +943,10 @@ def _scoreboard_cell(
         outcome = f"{false_alerts} false {_plural(false_alerts, 'Drift alert')}"
         outcome_class = "is-false"
     elif covered:
-        outcome = "No Drift alert · matches known outcome"
+        outcome = "No Drift alert · all adjacent pairs ruled out"
         outcome_class = "is-hit"
     else:
-        outcome = "No Drift alert · trajectory unresolved"
+        outcome = "No Drift alert · review incomplete"
         outcome_class = "is-abstain"
 
     return ui.tags.td(
@@ -871,7 +955,11 @@ def _scoreboard_cell(
             *[
                 ui.span(
                     f"{_format_span(row.onset_t_index, row.end_t_index)} · "
-                    f"{row.result}",
+                    + (
+                        "matched known Drift"
+                        if row.result == "hit"
+                        else "false Drift alert"
+                    ),
                     class_=(
                         "score-span is-hit"
                         if row.result == "hit"
@@ -888,13 +976,21 @@ def _scoreboard_cell(
             if false_alerts and reference_count
             else None,
             (
-                f"{invalid} invalid weekly {_plural(invalid, 'response')}"
+                f"{invalid} invalid Weekly Drift Reviewer "
+                f"{_plural(invalid, 'response')}"
                 if invalid
                 else None
             ),
             class_="score-caveat",
         )
         if (false_alerts and reference_count) or invalid
+        else None,
+        ui.p(
+            "At least one adjacent pair remains unresolved because the Weekly Drift "
+            "Reviewer returned Abstain or no valid Weekly Drift Reviewer Decision.",
+            class_="score-incomplete-note",
+        )
+        if not covered and not predictions
         else None,
         class_="scoreboard-cell",
     )
@@ -984,6 +1080,17 @@ def _scoreboard(data: ReviewData, case: CaseRecord) -> ui.Tag:
             ),
             class_="table-scroll",
         ),
+        ui.tags.details(
+            ui.tags.summary("How hits are counted"),
+            ui.p(
+                "A Drift alert counts as a hit if confirmed between the known "
+                "Drift's first Journal Entry and two Journal Entries after its end. "
+                "This affects scoring, not the Drift definition."
+            ),
+            class_="matching-disclosure",
+        )
+        if reference_count
+        else None,
         class_="scoreboard-panel",
         aria_labelledby="scoreboard-heading",
     )
@@ -992,6 +1099,8 @@ def _scoreboard(data: ReviewData, case: CaseRecord) -> ui.Tag:
 def _detail_screen(data: ReviewData, case: CaseRecord) -> ui.Tag:
     profile = data.profiles[case.persona_id]
     training_provenance, evidence_role = _provenance_summary(case)
+    period_choices = _period_choices(data, case, CURRENT_SETUP_KEY)
+    default_period = _default_period(data, case, CURRENT_SETUP_KEY)
     return ui.tags.main(
         _stage_trail("detail"),
         ui.div(
@@ -1049,8 +1158,8 @@ def _detail_screen(data: ReviewData, case: CaseRecord) -> ui.Tag:
                     ui.input_select(
                         "period",
                         "Journal Entries shown",
-                        choices={"full": "Full timeline"},
-                        selected="full",
+                        choices=period_choices,
+                        selected=default_period,
                     ),
                     class_="review-control period-control",
                 ),
@@ -1058,7 +1167,9 @@ def _detail_screen(data: ReviewData, case: CaseRecord) -> ui.Tag:
             ),
             ui.p(
                 "Choose one setup for the Journal Entry comparison below; the "
-                "scoreboard always compares all setups.",
+                "scoreboard always compares all setups. The relevant Drift span "
+                "is shown first. Choose Full timeline to inspect the complete "
+                "history.",
                 class_="controls-note",
             ),
             class_="controls-panel",
@@ -1211,12 +1322,16 @@ def _supporting_results(data: ReviewData, case: CaseRecord, setup_key: str) -> u
                     *[
                         _pill(
                             f"{_format_span(row.onset_t_index, row.end_t_index)} · "
-                            f"{row.result}",
+                            + (
+                                "matched known Drift"
+                                if row.result == "hit"
+                                else "false Drift alert"
+                            ),
                             "is-hit" if row.result == "hit" else "is-false",
                         )
                         for row in rows
                     ],
-                    ui.span("No predicted Drift alert") if not rows else None,
+                    ui.span("No Drift alert") if not rows else None,
                     class_="track-spans",
                 ),
                 class_="drift-track",
@@ -1412,7 +1527,11 @@ def _server(input: Inputs, output: Outputs, session: Session) -> None:
         ui.update_select(
             "period",
             choices=choices,
-            selected=current if current in choices else "full",
+            selected=(
+                current
+                if current in choices
+                else _default_period(data, case, str(input.setup()))
+            ),
         )
 
     @render.ui

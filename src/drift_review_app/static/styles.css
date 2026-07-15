@@ -695,6 +695,13 @@ input {
     font-size: 0.72rem;
 }
 
+.score-incomplete-note {
+    margin-top: var(--space-sm);
+    color: #74500f;
+    font-size: 0.72rem;
+    line-height: 1.4;
+}
+
 .how-it-works {
     border-top: 1px solid var(--line-strong);
     padding: 2.5rem 0 var(--space-xl);
@@ -774,6 +781,47 @@ input {
 .contract-note p {
     max-width: 68ch;
     margin-top: var(--space-sm);
+    color: var(--ink-soft);
+    font-size: 0.8rem;
+}
+
+.drift-rule-note {
+    border-bottom: 1px solid var(--line);
+    padding: var(--space-xl);
+}
+
+.drift-rule-note p {
+    margin-top: var(--space-sm);
+    color: var(--ink-soft);
+    font-size: 0.86rem;
+}
+
+.contract-disclosure,
+.matching-disclosure {
+    border-bottom: 1px solid var(--line);
+}
+
+.contract-disclosure summary,
+.matching-disclosure summary {
+    cursor: pointer;
+    color: var(--navy);
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: var(--space-md) 0;
+}
+
+.contract-disclosure-body {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2xl);
+    padding: 0 0 var(--space-lg);
+    color: var(--ink-soft);
+    font-size: 0.8rem;
+}
+
+.matching-disclosure p {
+    max-width: 68ch;
+    padding: 0 0 var(--space-lg);
     color: var(--ink-soft);
     font-size: 0.8rem;
 }
@@ -968,13 +1016,6 @@ input {
 .reference-reviewer {
     margin-top: var(--space-lg);
     overflow-wrap: anywhere;
-}
-
-.confidence {
-    color: var(--ink-soft);
-    font-family: var(--font-data);
-    font-size: 0.75rem;
-    text-transform: uppercase;
 }
 
 .decision-details {
