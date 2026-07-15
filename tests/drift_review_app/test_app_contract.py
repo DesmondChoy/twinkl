@@ -6,7 +6,7 @@ from pathlib import Path
 from src.drift_review_app.app import (
     ABSTAIN_EXPLANATIONS,
     ALL_CASES_FOCUS,
-    _aggregate_overview,
+    _at_a_glance,
     _decision_cell,
     _default_period,
     _detail_screen,
@@ -60,8 +60,10 @@ def test_relevant_drift_period_is_selected_before_full_timeline() -> None:
 
 def test_main_page_opens_on_two_filters_without_password_gate() -> None:
     data = load_review_data(ROOT)
-    html = str(app_ui) + str(_filter_screen(data))
+    shell_html = str(app_ui)
+    html = shell_html + str(_filter_screen(data))
     assert "Drift inspection app" in html
+    assert "204 synthetic personas" not in shell_html
     for input_id in (
         "reference_drift_filter",
         "core_value_filter",
@@ -78,6 +80,8 @@ def test_main_page_opens_on_two_filters_without_password_gate() -> None:
     assert "Known Drift status" in html
     assert "Achievement (0)" in html
     assert "Advanced review focus" in html
+    assert "At a glance" in html
+    assert html.index("At a glance") < html.index("How it works")
     assert "WHAT COUNTS AS CONFLICT" in html
     assert "A Journal Entry is a Conflict when the displayed text clearly" in html
     assert "WHAT DOES NOT COUNT" in html
@@ -120,10 +124,37 @@ def test_core_value_counts_and_review_focus_are_applied() -> None:
     )
 
 
-def test_corpus_overview_precedes_persona_drill_down() -> None:
+def test_at_a_glance_combines_dataset_llms_and_results() -> None:
     data = load_review_data(ROOT)
-    html = unescape(str(_aggregate_overview(data)))
-    assert "Development results at a glance" in html
+    html = unescape(str(_at_a_glance(data)))
+
+    assert "Dataset" in html
+    assert "204 synthetic personas" in html
+    assert "35 with at least one known Drift" in html
+    assert "169 with none" in html
+    assert "292 persona/Core Value cases" in html
+    assert "36 with known Drift" in html
+    assert "256 with no known Drift" in html
+    assert "42 known Drifts across the 36 cases" in html
+    assert "1,651" in html
+    assert "2,377" in html
+    assert "269 Conflict" in html
+    assert "2,106 Not Conflict" in html
+    assert "28 cross-week · 14 same-week" in html
+
+    assert "LLMs used" in html
+    for model_url in (
+        "https://developers.openai.com/api/docs/models/gpt-5.4-mini",
+        "https://developers.openai.com/api/docs/models/gpt-5.6-luna",
+        "https://developers.openai.com/api/docs/models/gpt-5.6-sol",
+        "https://platform.claude.com/docs/en/about-claude/models/overview",
+    ):
+        assert model_url in html
+    assert html.count('target="_blank"') == 4
+    assert html.count('rel="noopener noreferrer"') == 4
+
+    assert "Results" in html
+    assert "No Core Value or known Drift filter has been applied" in html
     assert "24/42 hits" in html
     assert "23/42 hits" in html
     assert "Current development selection" in html
@@ -137,6 +168,8 @@ def test_persona_results_use_one_list_heading() -> None:
     cases = _matching_cases(data, "has", "conformity")
     html = str(_personas_screen(data, cases, "has", "conformity"))
     assert html.count("MATCHING PERSONAS") == 1
+    assert "At a glance" not in html
+    assert "24/42 hits" not in html
 
 
 def test_detail_controls_have_overflow_safe_desktop_structure() -> None:

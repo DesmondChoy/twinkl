@@ -5,24 +5,30 @@ Reviewer setups without merging Runs or calculating a majority vote.
 
 The desktop review flow has three stages:
 
-1. Read the shared How it works contract, then filter persona/Core Value cases
-   by known Drift status and Core Value. Optional review focus remains
-   collapsed until needed.
-2. Read corpus-level results for all three setups and Runs, then choose a
-   matching persona from the summary list.
+1. Read the first-page At a glance section and shared How it works contract,
+   then filter persona/Core Value cases by known Drift status and Core Value.
+   Optional review focus remains collapsed until needed.
+2. Choose a matching persona from the filtered summary list.
 3. Read the persona scoreboard, then inspect that persona's Journal Entries,
    LLM-Judge Conflict Labels, and preserved Runs.
 
 The interface is desktop-only and requires a viewport at least 1120 pixels
 wide. Narrower screens use horizontal scrolling.
 
-The corpus overview reports known Drift hits, false Drift alerts, and coverage
-for all three Weekly Drift Reviewer setups and Runs before any persona is
-opened. The persona scoreboard then states which Runs found or missed known
-Drift and names the exact known Drift and Drift alert spans. The Journal Entry
-table keeps the LLM-Judge Conflict Label in a dedicated column so the label and
-each Weekly Drift Reviewer Decision can be compared directly. Biographies
-remain collapsed because they were not Weekly Drift Reviewer input.
+At a glance appears on the first page before any filter is applied. Dataset
+shows how 204 synthetic personas become 292 persona/Core Value cases, including
+the 36 cases with known Drift, 256 with no known Drift, and 42 known Drifts.
+Its collapsed detail adds Journal Entry, persona-week, label, timing, historical
+VIF Critic training provenance, and Core Value counts. LLMs used briefly names
+the role of each Weekly Drift Reviewer and LLM-Judge model and links to its
+official model page. Results reports known Drift hits, false Drift alerts, and
+coverage for all three Weekly Drift Reviewer setups and Runs.
+
+The persona scoreboard then states which Runs found or missed known Drift and
+names the exact known Drift and Drift alert spans. The Journal Entry table keeps
+the LLM-Judge Conflict Label in a dedicated column so the label and each Weekly
+Drift Reviewer Decision can be compared directly. Biographies remain collapsed
+because they were not Weekly Drift Reviewer input.
 
 The Filter screen defines what does and does not count as Conflict before it
 states the two-consecutive-Conflict Drift rule. Journal Entry comparisons show

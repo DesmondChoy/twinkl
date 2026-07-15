@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import sys
+from collections import Counter
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -88,6 +89,14 @@ ABSTAIN_EXPLANATIONS = {
     "missing_text": "The displayed Journal Entry is missing or incomplete.",
     "needs_hidden_context": (
         "A decision would require information not shown to the Weekly Drift Reviewer."
+    ),
+}
+MODEL_LINKS = {
+    "gpt-5.4-mini": "https://developers.openai.com/api/docs/models/gpt-5.4-mini",
+    "gpt-5.6-luna": "https://developers.openai.com/api/docs/models/gpt-5.6-luna",
+    "gpt-5.6-sol": "https://developers.openai.com/api/docs/models/gpt-5.6-sol",
+    "claude-opus-4-8": (
+        "https://platform.claude.com/docs/en/about-claude/models/overview"
     ),
 }
 
@@ -576,6 +585,7 @@ def _filter_screen(
             ),
             class_="filter-panel",
         ),
+        _at_a_glance(data),
         _how_it_works_panel(),
         class_="stage-main filter-stage",
         id="main-content",
@@ -586,19 +596,263 @@ def _inspect_id(case_id: str) -> str:
     return "inspect_" + case_id.replace(":", "__")
 
 
-def _aggregate_overview(data: ReviewData) -> ui.Tag:
-    return ui.tags.section(
+def _glance_heading(title: str, note: str) -> ui.Tag:
+    return ui.div(
+        ui.h3(title),
+        ui.p(note),
+        class_="glance-block-heading",
+    )
+
+
+def _core_value_breakdown(data: ReviewData) -> ui.Tag:
+    dimensions = sorted(
+        {case.dimension for case in data.cases.values()}, key=value_label
+    )
+    return ui.div(
+        ui.tags.table(
+            ui.tags.caption("Development data by Core Value"),
+            ui.tags.thead(
+                ui.tags.tr(
+                    ui.tags.th("Core Value", scope="col"),
+                    ui.tags.th("Cases", scope="col"),
+                    ui.tags.th("With known Drift", scope="col"),
+                    ui.tags.th("With no known Drift", scope="col"),
+                    ui.tags.th("Known Drifts", scope="col"),
+                )
+            ),
+            ui.tags.tbody(
+                *[
+                    ui.tags.tr(
+                        ui.tags.th(value_label(dimension), scope="row"),
+                        ui.tags.td(
+                            str(
+                                sum(
+                                    case.dimension == dimension
+                                    for case in data.cases.values()
+                                )
+                            )
+                        ),
+                        ui.tags.td(
+                            str(
+                                sum(
+                                    case.dimension == dimension
+                                    and bool(data.reference_drifts[case.case_id])
+                                    for case in data.cases.values()
+                                )
+                            )
+                        ),
+                        ui.tags.td(
+                            str(
+                                sum(
+                                    case.dimension == dimension
+                                    and not data.reference_drifts[case.case_id]
+                                    for case in data.cases.values()
+                                )
+                            )
+                        ),
+                        ui.tags.td(
+                            str(
+                                sum(
+                                    len(data.reference_drifts[case.case_id])
+                                    for case in data.cases.values()
+                                    if case.dimension == dimension
+                                )
+                            )
+                        ),
+                    )
+                    for dimension in dimensions
+                ]
+            ),
+            class_="core-value-breakdown-table",
+        ),
+        class_="table-scroll",
+    )
+
+
+def _dataset_overview(data: ReviewData) -> ui.Tag:
+    cases = tuple(data.cases.values())
+    cases_with_drift = tuple(
+        case for case in cases if data.reference_drifts[case.case_id]
+    )
+    personas_with_drift = {case.persona_id for case in cases_with_drift}
+    reference_drifts = tuple(
+        row for case in cases for row in data.reference_drifts[case.case_id]
+    )
+    label_counts = Counter(
+        entry.final_conflict for case in cases for entry in case.entries
+    )
+    historical_training_drifts = sum(
+        data.cases[row.case_id].historical_split == "training"
+        for row in reference_drifts
+    )
+    cross_week_drifts = sum(row.crosses_week for row in reference_drifts)
+
+    return ui.div(
+        _glance_heading(
+            "Dataset",
+            "The same complete synthetic development data underlies every filter.",
+        ),
         ui.div(
             ui.div(
-                ui.p("ALL 292 PERSONA/CORE VALUE CASES", class_="eyebrow"),
-                ui.h2("Development results at a glance"),
+                ui.span("PERSONAS", class_="field-name"),
+                ui.strong(f"{len(data.profiles)} synthetic personas"),
+                ui.div(
+                    ui.span(
+                        f"{len(personas_with_drift)} with at least one known Drift"
+                    ),
+                    ui.span(
+                        f"{len(data.profiles) - len(personas_with_drift)} with none"
+                    ),
+                    class_="dataset-split",
+                ),
+                class_="dataset-stage",
             ),
-            ui.p(
-                "Read this corpus-level context before treating one persona as the "
-                "overall result.",
-                class_="section-note",
+            ui.div(
+                "evaluated across their Core Values",
+                class_="dataset-connector",
             ),
-            class_="section-heading",
+            ui.div(
+                ui.span("REVIEW UNIT", class_="field-name"),
+                ui.strong(f"{len(cases)} persona/Core Value cases"),
+                ui.div(
+                    ui.span(f"{len(cases_with_drift)} with known Drift"),
+                    ui.span(
+                        f"{len(cases) - len(cases_with_drift)} with no known Drift"
+                    ),
+                    class_="dataset-split",
+                ),
+                ui.p(
+                    f"{len(reference_drifts)} known Drifts across the "
+                    f"{len(cases_with_drift)} cases",
+                    class_="dataset-drift-total",
+                ),
+                class_="dataset-stage",
+            ),
+            class_="dataset-map",
+        ),
+        ui.p(
+            "Known Drift is derived from AI-reviewed LLM-Judge Conflict Labels. "
+            "These counts are development evidence, not human validation or "
+            "real-user prevalence.",
+            class_="dataset-provenance",
+        ),
+        ui.tags.details(
+            ui.tags.summary("More about the development data"),
+            ui.div(
+                ui.tags.dl(
+                    ui.div(
+                        ui.tags.dt("Journal Entries"),
+                        ui.tags.dd(f"{int(data.integrity['entries']):,}"),
+                    ),
+                    ui.div(
+                        ui.tags.dt("Persona-weeks"),
+                        ui.tags.dd(f"{int(data.integrity['persona_weeks']):,}"),
+                    ),
+                    ui.div(
+                        ui.tags.dt("Journal Entry/Core Value combinations"),
+                        ui.tags.dd(f"{int(data.integrity['entry_value_cells']):,}"),
+                    ),
+                    ui.div(
+                        ui.tags.dt("Known Drift timing"),
+                        ui.tags.dd(
+                            f"{cross_week_drifts} cross-week · "
+                            f"{len(reference_drifts) - cross_week_drifts} same-week"
+                        ),
+                    ),
+                    class_="dataset-facts",
+                ),
+                ui.p(
+                    f"Across {int(data.integrity['entry_value_cells']):,} Journal "
+                    f"Entry/Core Value combinations: {label_counts[True]:,} "
+                    f"Conflict, {label_counts[False]:,} Not Conflict, and "
+                    f"{label_counts[None]:,} Uncertain. All {len(cases)} case-level "
+                    "Drift outcomes are resolved.",
+                    class_="dataset-method-note",
+                ),
+                ui.p(
+                    f"{historical_training_drifts} of {len(reference_drifts)} known "
+                    "Drifts have historical VIF Critic training provenance. This "
+                    "matters when interpreting VIF Critic results; the Weekly Drift "
+                    "Reviewers shown here received no VIF Critic predictions.",
+                    class_="dataset-method-note",
+                ),
+                _core_value_breakdown(data),
+                class_="dataset-disclosure-body",
+            ),
+            class_="dataset-disclosure",
+        ),
+        class_="glance-block dataset-overview",
+    )
+
+
+def _model_link(name: str, model_key: str, description: str) -> ui.Tag:
+    return ui.div(
+        ui.a(
+            name,
+            ui.span(" ↗", aria_hidden="true"),
+            href=MODEL_LINKS[model_key],
+            target="_blank",
+            rel="noopener noreferrer",
+            aria_label=f"{name} official model page",
+        ),
+        ui.p(description),
+        class_="model-entry",
+    )
+
+
+def _llm_overview() -> ui.Tag:
+    return ui.div(
+        _glance_heading(
+            "LLMs used",
+            "The Weekly Drift Reviewers and LLM-Judge review had separate roles.",
+        ),
+        ui.div(
+            ui.div(
+                ui.p("WEEKLY DRIFT REVIEWER", class_="model-role-title"),
+                _model_link(
+                    "GPT-5.4 mini",
+                    "gpt-5.4-mini",
+                    "Frozen baseline at reasoning none; a faster, efficient "
+                    "OpenAI model for high-volume work.",
+                ),
+                _model_link(
+                    "GPT-5.6 Luna",
+                    "gpt-5.6-luna",
+                    "Compared at reasoning none and low; an OpenAI model designed "
+                    "for cost-sensitive, high-volume work.",
+                ),
+                class_="model-role",
+            ),
+            ui.div(
+                ui.p("LLM-JUDGE CONFLICT LABEL REVIEW", class_="model-role-title"),
+                _model_link(
+                    "GPT-5.6 Sol",
+                    "gpt-5.6-sol",
+                    "Used in two isolated review lanes and disagreement-only "
+                    "adjudication at reasoning xhigh; OpenAI's frontier GPT-5.6 "
+                    "model.",
+                ),
+                _model_link(
+                    "Claude Opus 4.8",
+                    "claude-opus-4-8",
+                    "Separately reviewed four earlier Uncertain LLM-Judge Conflict "
+                    "Labels at reasoning high; Anthropic's model for complex "
+                    "agentic and enterprise work.",
+                ),
+                class_="model-role",
+            ),
+            class_="model-roster",
+        ),
+        class_="glance-block llm-overview",
+    )
+
+
+def _aggregate_overview(data: ReviewData) -> ui.Tag:
+    return ui.div(
+        _glance_heading(
+            "Results",
+            "All three preserved Runs across the complete development data. No "
+            "Core Value or known Drift filter has been applied.",
         ),
         ui.div(
             ui.tags.table(
@@ -680,8 +934,31 @@ def _aggregate_overview(data: ReviewData) -> ui.Tag:
             ),
             class_="selection-disclosure",
         ),
-        class_="aggregate-overview",
-        aria_label="Corpus-level development results",
+        class_="glance-block aggregate-overview",
+        role="region",
+        aria_label="Complete development results",
+    )
+
+
+def _at_a_glance(data: ReviewData) -> ui.Tag:
+    return ui.tags.section(
+        ui.div(
+            ui.div(
+                ui.p("COMPLETE SYNTHETIC DEVELOPMENT DATA", class_="eyebrow"),
+                ui.h2("At a glance", id="at-a-glance-heading"),
+            ),
+            ui.p(
+                "Dataset, LLM roles, and complete development results before any "
+                "filter is applied.",
+                class_="section-note",
+            ),
+            class_="section-heading at-a-glance-heading",
+        ),
+        _dataset_overview(data),
+        _llm_overview(),
+        _aggregate_overview(data),
+        class_="at-a-glance",
+        aria_labelledby="at-a-glance-heading",
     )
 
 
@@ -719,7 +996,6 @@ def _personas_screen(
             else None,
             class_="results-heading",
         ),
-        _aggregate_overview(data),
         ui.div(
             ui.p("MATCHING PERSONAS", class_="eyebrow"),
             ui.h2("Choose a persona to inspect"),
@@ -1396,7 +1672,6 @@ def _app_shell() -> ui.Tag:
                 ui.h1("Drift inspection app"),
             ),
             ui.div(
-                _pill("204 synthetic personas"),
                 _pill("Read only"),
                 _pill("No provider calls"),
                 class_="header-facts",
