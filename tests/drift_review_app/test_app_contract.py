@@ -6,6 +6,7 @@ from pathlib import Path
 
 from src.drift_review_app.app import (
     ABSTAIN_EXPLANATIONS,
+    EXPLAINER_SCRIPT_VERSION,
     INSPECTION_BADGE_SPECS,
     STYLESHEET_VERSION,
     _at_a_glance,
@@ -14,6 +15,7 @@ from src.drift_review_app.app import (
     _detail_screen,
     _dimension_choices,
     _filter_screen,
+    _how_it_works_panel,
     _inspection_badges,
     _matching_cases,
     _period_choices,
@@ -70,10 +72,17 @@ def test_main_page_opens_on_two_filters_without_password_gate() -> None:
     html = shell_html + str(_filter_screen(data))
     assert "Drift inspection app" in html
     assert f'href="styles.css?v={STYLESHEET_VERSION}"' in dependency_html
+    assert f'src="drift_explainer.js?v={EXPLAINER_SCRIPT_VERSION}"' in dependency_html
     assert (
         STYLESHEET_VERSION
         == sha256(
             (ROOT / "src/drift_review_app/static/styles.css").read_bytes()
+        ).hexdigest()[:12]
+    )
+    assert (
+        EXPLAINER_SCRIPT_VERSION
+        == sha256(
+            (ROOT / "src/drift_review_app/static/drift_explainer.js").read_bytes()
         ).hexdigest()[:12]
     )
     assert "204 synthetic personas" not in shell_html
@@ -94,7 +103,10 @@ def test_main_page_opens_on_two_filters_without_password_gate() -> None:
     assert "WHAT COUNTS AS CONFLICT" in html
     assert "A Journal Entry is a Conflict when the displayed text clearly" in html
     assert "WHAT DOES NOT COUNT" in html
-    assert "Two consecutive Conflicts for the same Core Value form one Drift" in html
+    assert (
+        "Two consecutive Weekly Drift Reviewer Conflict decisions for the same "
+        "Core Value form one Drift" in html
+    )
     assert "about four days slower" in html
     assert "MutationObserver" in html
     assert "heading === window.__twinklPreviousStageHeading" in html
@@ -102,6 +114,37 @@ def test_main_page_opens_on_two_filters_without_password_gate() -> None:
     assert "setTimeout" not in html
     assert "review_password" not in html
     assert "sign_in" not in html
+
+
+def test_how_it_works_animation_preserves_the_input_contract() -> None:
+    html = unescape(str(_how_it_works_panel()))
+    script = (ROOT / "src/drift_review_app/static/drift_explainer.js").read_text()
+    styles = (ROOT / "src/drift_review_app/static/styles.css").read_text()
+
+    assert html.count('class="explainer-step"') == 8
+    assert html.count('role="tab"') == 2
+    assert 'data-part-target="development"' in html
+    assert 'data-part-target="deployment"' in html
+    assert "Synthetic development" in html
+    assert "Intended deployed flow" in html
+    assert "not yet deployment-approved" in html
+    assert "The Drift Detector—not the Weekly Drift Reviewer—marks Drift" in html
+    assert "LLM-Judge Conflict Labels or known Drift" in html
+    assert "Never enters the prompt" in html
+    assert "LLM-Judge Conflict Labels · known Drift · VIF Critic Predictions" in html
+    assert "Create LLM-Judge Conflict Labels separately" in html
+    assert "Compare only after decisions are complete" in html
+    assert "Read the complete input contract" in html
+    assert 'aria-live="polite"' in html
+    assert html.count('data-step-target="') == 8
+
+    assert "IntersectionObserver" in script
+    assert "prefers-reduced-motion: reduce" in script
+    assert 'event.key !== "ArrowLeft"' in script
+    assert 'button.setAttribute("aria-current", "step")' in script
+    assert "STEP_DELAY_MS" in script
+    assert "@media (prefers-reduced-motion: reduce)" in styles
+    assert "animation-duration: 0.01ms" in styles
 
 
 def test_reference_drift_and_core_value_filter_cases() -> None:

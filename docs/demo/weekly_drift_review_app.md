@@ -57,9 +57,19 @@ A cross-week Drift spans two review weeks, so its second Conflict is not
 assessed until the next weekly review. Across these development Runs,
 cross-week detection was about four days slower than same-week detection.
 
-The universal Weekly Drift Reviewer input contract, LLM-Judge Conflict Label
-provenance, and Drift rule appear once on Filter. Journal Entries keeps only
-persona-specific verified weekly cutoffs in a collapsed evidence drawer.
+The universal Weekly Drift Reviewer input contract appears once on Filter as a
+two-part, step-controlled animation. Synthetic development first shows the
+isolated LLM-Judge Conflict Label lane, the Weekly Drift Reviewer input
+boundary, and the later development comparison. Intended deployed flow shows new
+Journal Entries, the verified weekly cutoff, Weekly Drift Reviewer Decisions,
+and the deterministic Drift Detector rule. It is explicitly marked as not yet
+deployment-approved. The complete static contract and LLM-Judge Conflict Label
+provenance remain available below the animation, while Journal Entries keeps
+only persona-specific verified weekly cutoffs in a collapsed evidence drawer.
+
+The sequence plays once when it enters the viewport. Previous, next, direct-step,
+pause, replay, and two-part controls remain available. Reduced-motion
+preferences disable autoplay and spatial motion without hiding any explanation.
 
 The app makes no model or provider API calls. It reads committed research files
 only and keeps invalid responses fail-closed.

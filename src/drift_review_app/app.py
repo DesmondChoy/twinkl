@@ -15,6 +15,9 @@ from shiny import App, Inputs, Outputs, Session, reactive, render, req, ui
 ROOT = Path(__file__).resolve().parents[2]
 STATIC_DIR = Path(__file__).parent / "static"
 STYLESHEET_VERSION = sha256((STATIC_DIR / "styles.css").read_bytes()).hexdigest()[:12]
+EXPLAINER_SCRIPT_VERSION = sha256(
+    (STATIC_DIR / "drift_explainer.js").read_bytes()
+).hexdigest()[:12]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
@@ -1087,6 +1090,360 @@ def _personas_screen(
 
 
 def _how_it_works_panel() -> ui.Tag:
+    def chip(text: str, class_name: str = "", sequence: int = 0) -> ui.Tag:
+        return ui.span(
+            text,
+            class_=f"flow-chip {class_name}".strip(),
+            style=f"--sequence: {sequence}",
+        )
+
+    def column(label: str, *items: ui.Tag, class_name: str = "") -> ui.Tag:
+        return ui.div(
+            ui.span(label, class_="flow-label"),
+            ui.div(*items, class_="flow-items"),
+            class_=f"flow-column {class_name}".strip(),
+        )
+
+    def step(
+        part: str,
+        number: int,
+        kicker: str,
+        title: str,
+        body: str,
+        visual: ui.Tag,
+        *,
+        active: bool = False,
+    ) -> ui.Tag:
+        return ui.tags.article(
+            ui.div(
+                ui.p(kicker, class_="explainer-kicker"),
+                ui.h3(title, id=f"explainer-step-{number}-heading", tabindex="-1"),
+                ui.p(body, class_="explainer-description"),
+                class_="explainer-copy",
+            ),
+            ui.div(visual, class_="explainer-canvas", aria_hidden="true"),
+            class_="explainer-step",
+            data_part=part,
+            data_step=str(number),
+            aria_labelledby=f"explainer-step-{number}-heading",
+            hidden=None if active else "hidden",
+        )
+
+    development_steps = (
+        step(
+            "development",
+            1,
+            "Development · Prepare",
+            "Create review cases from synthetic data",
+            "Each review case pairs one synthetic persona with one Core Value and "
+            "its chronological Journal Entries.",
+            ui.div(
+                column(
+                    "Synthetic development data",
+                    chip("Synthetic persona", sequence=0),
+                    chip("Declared Core Values", sequence=1),
+                    chip("Journal Entries", sequence=2),
+                    class_name="is-source",
+                ),
+                ui.span("becomes", class_="flow-link"),
+                column(
+                    "Review case",
+                    chip("One persona × one Core Value", "is-output", sequence=3),
+                    chip("Chronological Journal Entries", "is-output", sequence=4),
+                    class_name="is-destination",
+                ),
+                class_="explainer-flow",
+            ),
+            active=True,
+        ),
+        step(
+            "development",
+            2,
+            "Development · Reference lane",
+            "Create LLM-Judge Conflict Labels separately",
+            "The LLM-Judge creates LLM-Judge Conflict Labels and known Drift for "
+            "evaluation. This is a separate lane from the Weekly Drift Reviewer.",
+            ui.div(
+                column(
+                    "Reference inputs",
+                    chip("Journal Entry", sequence=0),
+                    chip("Core Value", sequence=1),
+                    class_name="is-source",
+                ),
+                ui.span("reviewed by", class_="flow-link"),
+                column(
+                    "LLM-Judge",
+                    chip("Isolated AI review", "is-reference", sequence=2),
+                    class_name="is-component",
+                ),
+                ui.span("creates", class_="flow-link"),
+                column(
+                    "Evaluation only",
+                    chip("LLM-Judge Conflict Labels", "is-reference", sequence=3),
+                    chip("Known Drift", "is-reference", sequence=4),
+                    class_name="is-destination",
+                ),
+                class_="explainer-flow is-wide",
+            ),
+        ),
+        step(
+            "development",
+            3,
+            "Development · Input boundary",
+            "Keep evaluation evidence out of the review",
+            "Only information available at the verified weekly cutoff reaches the "
+            "Weekly Drift Reviewer.",
+            ui.div(
+                ui.div(
+                    column(
+                        "Shown",
+                        chip("All declared Core Values", "is-allowed", sequence=0),
+                        chip(
+                            "Journal Entries through the cutoff",
+                            "is-allowed",
+                            sequence=1,
+                        ),
+                        chip("Current-week markers", "is-allowed", sequence=2),
+                    ),
+                    ui.div(
+                        ui.span("Input gate", class_="gate-label"),
+                        ui.span("Pass", class_="gate-status"),
+                        class_="flow-gate is-open",
+                    ),
+                    column(
+                        "Weekly Drift Reviewer",
+                        chip("Visible inputs only", "is-component", sequence=3),
+                    ),
+                    class_="boundary-route is-allowed-route",
+                ),
+                ui.div(
+                    column(
+                        "Not shown",
+                        chip("Persona biography", "is-blocked", sequence=0),
+                        chip("Future Journal Entries", "is-blocked", sequence=1),
+                        chip(
+                            "LLM-Judge Conflict Labels or known Drift",
+                            "is-blocked",
+                            sequence=2,
+                        ),
+                        chip("VIF Critic Predictions", "is-blocked", sequence=3),
+                    ),
+                    ui.div(
+                        ui.span("Input gate", class_="gate-label"),
+                        ui.span("Stopped", class_="gate-status"),
+                        class_="flow-gate is-closed",
+                    ),
+                    column(
+                        "Outside the review",
+                        chip("Never enters the prompt", "is-blocked", sequence=4),
+                    ),
+                    class_="boundary-route is-blocked-route",
+                ),
+                class_="boundary-demo",
+            ),
+        ),
+        step(
+            "development",
+            4,
+            "Development · Evaluation",
+            "Compare only after decisions are complete",
+            "Weekly Drift Reviewer Decisions meet the isolated LLM-Judge Conflict "
+            "Labels only afterward, when development performance is calculated.",
+            ui.div(
+                column(
+                    "Weekly Drift Reviewer Decisions",
+                    chip("Conflict", "is-conflict", sequence=0),
+                    chip("Not Conflict", "is-not-conflict", sequence=1),
+                    chip("Abstain", "is-abstain", sequence=2),
+                    class_name="is-source",
+                ),
+                ui.span("compared after review", class_="flow-link is-join"),
+                column(
+                    "Development comparison",
+                    chip("Drift recall", "is-output", sequence=4),
+                    chip("False Drift alerts", "is-output", sequence=5),
+                    class_name="is-component",
+                ),
+                ui.span("against", class_="flow-link is-join"),
+                column(
+                    "Isolated LLM-Judge Conflict Labels",
+                    chip("Known Drift", "is-reference", sequence=3),
+                    class_name="is-destination",
+                ),
+                class_="explainer-flow is-wide is-comparison",
+            ),
+        ),
+    )
+
+    deployment_steps = (
+        step(
+            "deployment",
+            5,
+            "Intended deployed flow · New evidence",
+            "Add new Journal Entries chronologically",
+            "The user's declared Core Values stay available while each new Journal "
+            "Entry extends the timeline.",
+            ui.div(
+                ui.div(
+                    ui.div(
+                        ui.span("t0", class_="timeline-index"),
+                        ui.span("Earlier Journal Entry", class_="timeline-copy"),
+                        class_="mini-entry",
+                    ),
+                    ui.div(
+                        ui.span("t1", class_="timeline-index"),
+                        ui.span("New Journal Entry", class_="timeline-copy"),
+                        class_="mini-entry is-new",
+                    ),
+                    ui.div(
+                        ui.span("t2", class_="timeline-index"),
+                        ui.span("New Journal Entry", class_="timeline-copy"),
+                        class_="mini-entry is-new",
+                    ),
+                    class_="mini-timeline",
+                ),
+                ui.div(
+                    ui.span("Declared Core Values", class_="flow-label"),
+                    chip("Benevolence", "is-allowed", sequence=3),
+                    chip("Achievement", "is-allowed", sequence=4),
+                    class_="value-rail",
+                ),
+                class_="timeline-stage",
+            ),
+        ),
+        step(
+            "deployment",
+            6,
+            "Intended deployed flow · Weekly cutoff",
+            "Freeze exactly what can be reviewed",
+            "Journal Entries through the weekly cutoff can enter the review. Later "
+            "Journal Entries remain locked for a future review.",
+            ui.div(
+                ui.div(
+                    ui.div(
+                        chip("t0", "is-allowed", sequence=0),
+                        chip("t1", "is-allowed", sequence=1),
+                        chip("t2", "is-allowed", sequence=2),
+                        class_="cutoff-entries is-visible",
+                    ),
+                    ui.div(
+                        ui.span("Verified weekly cutoff", class_="cutoff-label"),
+                        class_="cutoff-marker",
+                    ),
+                    ui.div(
+                        chip("t3 · future", "is-blocked", sequence=3),
+                        class_="cutoff-entries is-future",
+                    ),
+                    class_="cutoff-track",
+                ),
+                ui.div(
+                    ui.span("Review input", class_="flow-label"),
+                    ui.span(
+                        "Core Values + Journal Entries through t2 + "
+                        "current-week markers",
+                        class_="cutoff-receipt",
+                    ),
+                    class_="cutoff-summary",
+                ),
+                ui.div(
+                    ui.span("Not in the input", class_="flow-label"),
+                    ui.span(
+                        "LLM-Judge Conflict Labels · known Drift · "
+                        "VIF Critic Predictions",
+                        class_="cutoff-exclusion-copy",
+                    ),
+                    class_="cutoff-exclusions",
+                ),
+                class_="cutoff-stage",
+            ),
+        ),
+        step(
+            "deployment",
+            7,
+            "Intended deployed flow · Review",
+            "Decide Conflict one Journal Entry at a time",
+            "For each Journal Entry and Core Value, the Weekly Drift Reviewer decides "
+            "Conflict, Not Conflict, or Abstain from the displayed text.",
+            ui.div(
+                column(
+                    "Eligible Journal Entries",
+                    chip("t0 + Benevolence", sequence=0),
+                    chip("t1 + Benevolence", sequence=1),
+                    chip("t2 + Benevolence", sequence=2),
+                    class_name="is-source",
+                ),
+                ui.span("reviewed by", class_="flow-link"),
+                column(
+                    "Weekly Drift Reviewer",
+                    chip("Displayed behavior or choice", "is-component", sequence=3),
+                    class_name="is-component",
+                ),
+                ui.span("decides", class_="flow-link"),
+                column(
+                    "Weekly Drift Reviewer Decisions",
+                    chip("t0 · Not Conflict", "is-not-conflict", sequence=4),
+                    chip("t1 · Conflict", "is-conflict", sequence=5),
+                    chip("t2 · Conflict", "is-conflict", sequence=6),
+                    class_name="is-destination",
+                ),
+                class_="explainer-flow is-wide",
+            ),
+        ),
+        step(
+            "deployment",
+            8,
+            "Intended deployed flow · Deterministic rule",
+            "Two consecutive Conflicts form one Drift",
+            "The Drift Detector—not the Weekly Drift Reviewer—marks Drift when two "
+            "consecutive Weekly Drift Reviewer Conflict decisions concern the same "
+            "Core Value.",
+            ui.div(
+                ui.div(
+                    ui.span("Same Core Value", class_="decision-sequence-label"),
+                    ui.div(
+                        chip("t0 · Not Conflict", "is-not-conflict", sequence=0),
+                        chip("t1 · Conflict", "is-conflict", sequence=1),
+                        chip("t2 · Conflict", "is-conflict", sequence=2),
+                        class_="decision-sequence",
+                    ),
+                    ui.div(
+                        ui.span("consecutive pair", class_="pair-label"),
+                        class_="pair-bracket",
+                    ),
+                    class_="decision-track",
+                ),
+                ui.span("applies", class_="flow-link"),
+                column(
+                    "Drift Detector",
+                    chip("Exact two-Conflict rule", "is-component", sequence=3),
+                    class_name="is-component",
+                ),
+                ui.span("marks", class_="flow-link"),
+                column(
+                    "Result",
+                    chip("One Drift", "is-drift", sequence=4),
+                    class_name="is-destination",
+                ),
+                ui.p(
+                    "Intended deployed flow · not yet deployment-approved",
+                    class_="deployment-caveat",
+                ),
+                class_="detector-stage",
+            ),
+        ),
+    )
+
+    step_titles = (
+        "Create synthetic review cases",
+        "Create LLM-Judge Conflict Labels separately",
+        "Keep evaluation evidence out",
+        "Compare after review",
+        "Add new Journal Entries",
+        "Freeze the weekly cutoff",
+        "Make Weekly Drift Reviewer Decisions",
+        "Apply the Drift Detector rule",
+    )
+
     return ui.tags.section(
         ui.div(
             ui.div(
@@ -1094,65 +1451,189 @@ def _how_it_works_panel() -> ui.Tag:
                 ui.h2("How it works"),
             ),
             ui.p(
-                "This contract applies to every persona and review week. The exact "
-                "Journal Entries change with each verified weekly cutoff.",
+                "Follow the same input boundary during synthetic development and "
+                "the intended deployed flow.",
                 class_="section-note",
             ),
             class_="section-heading how-it-works-heading",
         ),
         ui.div(
             ui.div(
-                ui.h3("Shown to the Weekly Drift Reviewer"),
-                ui.tags.ul(
-                    ui.tags.li("All declared Core Values"),
-                    ui.tags.li(
-                        "Displayed Journal Entries through the review week, including "
-                        "any nudge and response"
+                ui.tags.button(
+                    ui.span("1", class_="part-number"),
+                    ui.span(
+                        ui.strong("Synthetic development"),
+                        ui.tags.small(
+                            "Why LLM-Judge Conflict Labels never enter the review"
+                        ),
                     ),
-                    ui.tags.li("Which Journal Entries belong to the current week"),
+                    id="explainer-development-tab",
+                    type="button",
+                    role="tab",
+                    aria_selected="true",
+                    aria_controls="explainer-development-panel",
+                    tabindex="0",
+                    class_="explainer-part-tab is-active",
+                    data_part_target="development",
                 ),
-                class_="boundary-column is-shown",
+                ui.tags.button(
+                    ui.span("2", class_="part-number"),
+                    ui.span(
+                        ui.strong("Intended deployed flow"),
+                        ui.tags.small("What happens when new Journal Entries arrive"),
+                    ),
+                    id="explainer-deployment-tab",
+                    type="button",
+                    role="tab",
+                    aria_selected="false",
+                    aria_controls="explainer-deployment-panel",
+                    tabindex="-1",
+                    class_="explainer-part-tab",
+                    data_part_target="deployment",
+                ),
+                class_="explainer-part-tabs",
+                role="tablist",
+                aria_label="How Drift detection works",
             ),
             ui.div(
-                ui.h3("Not shown"),
-                ui.tags.ul(
-                    ui.tags.li("Persona biography or demographics"),
-                    ui.tags.li("Journal Entries after the review week"),
-                    ui.tags.li("AI-reviewed LLM-Judge Conflict Labels or known Drift"),
-                    ui.tags.li("VIF Critic predictions or other setup/Run decisions"),
+                ui.div(
+                    *development_steps,
+                    id="explainer-development-panel",
+                    role="tabpanel",
+                    aria_labelledby="explainer-development-tab",
+                    class_="explainer-part-panel",
+                    data_part_panel="development",
                 ),
-                class_="boundary-column is-hidden",
+                ui.div(
+                    *deployment_steps,
+                    id="explainer-deployment-panel",
+                    role="tabpanel",
+                    aria_labelledby="explainer-deployment-tab",
+                    class_="explainer-part-panel",
+                    data_part_panel="deployment",
+                    hidden="hidden",
+                ),
+                class_="explainer-stage",
             ),
-            class_="boundary-grid",
-        ),
-        ui.div(
             ui.div(
-                ui.span("WHAT COUNTS AS CONFLICT", class_="field-name"),
+                ui.div(
+                    ui.tags.button(
+                        "Previous",
+                        type="button",
+                        class_="explainer-control",
+                        data_explainer_action="previous",
+                        disabled="disabled",
+                    ),
+                    ui.tags.button(
+                        "Play sequence",
+                        type="button",
+                        class_="explainer-control is-primary",
+                        data_explainer_action="toggle",
+                        aria_pressed="false",
+                    ),
+                    ui.tags.button(
+                        "Next",
+                        type="button",
+                        class_="explainer-control",
+                        data_explainer_action="next",
+                    ),
+                    class_="explainer-playback",
+                    aria_label="Animation controls",
+                ),
+                ui.div(
+                    *[
+                        ui.tags.button(
+                            str(index),
+                            type="button",
+                            class_=(
+                                "explainer-step-button is-active"
+                                if index == 1
+                                else "explainer-step-button"
+                            ),
+                            data_step_target=str(index),
+                            aria_label=f"Step {index}: {title}",
+                            aria_current="step" if index == 1 else None,
+                        )
+                        for index, title in enumerate(step_titles, start=1)
+                    ],
+                    class_="explainer-step-nav",
+                    aria_label="Choose an animation step",
+                ),
                 ui.p(
-                    "A Journal Entry is a Conflict when the displayed text clearly "
-                    "shows the writer making a behavior or choice against a Core "
-                    "Value."
+                    "Step 1 of 8",
+                    class_="explainer-progress",
+                    aria_live="polite",
+                    aria_atomic="true",
+                    data_explainer_progress="true",
                 ),
-                class_="contract-note",
+                class_="explainer-footer",
+            ),
+            class_="drift-explainer",
+            data_drift_explainer="true",
+        ),
+        ui.tags.details(
+            ui.tags.summary("Read the complete input contract"),
+            ui.div(
+                ui.div(
+                    ui.h3("Shown to the Weekly Drift Reviewer"),
+                    ui.tags.ul(
+                        ui.tags.li("All declared Core Values"),
+                        ui.tags.li(
+                            "Displayed Journal Entries through the review week, "
+                            "including any nudge and response"
+                        ),
+                        ui.tags.li("Which Journal Entries belong to the current week"),
+                    ),
+                    class_="boundary-column is-shown",
+                ),
+                ui.div(
+                    ui.h3("Not shown"),
+                    ui.tags.ul(
+                        ui.tags.li("Persona biography or demographics"),
+                        ui.tags.li("Journal Entries after the review week"),
+                        ui.tags.li(
+                            "AI-reviewed LLM-Judge Conflict Labels or known Drift"
+                        ),
+                        ui.tags.li(
+                            "VIF Critic Predictions or other experiment setup or Run "
+                            "decisions"
+                        ),
+                    ),
+                    class_="boundary-column is-hidden",
+                ),
+                class_="boundary-grid",
             ),
             ui.div(
-                ui.span("WHAT DOES NOT COUNT", class_="field-name"),
-                ui.p(
-                    "Feelings, guilt, wishes, intentions, external constraints, "
-                    "biography, and ambiguous prose do not count as Conflict on "
-                    "their own."
+                ui.div(
+                    ui.span("WHAT COUNTS AS CONFLICT", class_="field-name"),
+                    ui.p(
+                        "A Journal Entry is a Conflict when the displayed text clearly "
+                        "shows the writer making a behavior or choice against a Core "
+                        "Value."
+                    ),
+                    class_="contract-note",
                 ),
-                class_="contract-note",
+                ui.div(
+                    ui.span("WHAT DOES NOT COUNT", class_="field-name"),
+                    ui.p(
+                        "Feelings, guilt, wishes, intentions, external constraints, "
+                        "biography, and ambiguous prose do not count as Conflict on "
+                        "their own."
+                    ),
+                    class_="contract-note",
+                ),
+                class_="contract-notes",
             ),
-            class_="contract-notes",
-        ),
-        ui.div(
-            ui.span("DRIFT RULE", class_="field-name"),
-            ui.p(
-                "Two consecutive Conflicts for the same Core Value form one Drift. "
-                "A longer uninterrupted run is still one Drift."
+            ui.div(
+                ui.span("DRIFT RULE", class_="field-name"),
+                ui.p(
+                    "Two consecutive Weekly Drift Reviewer Conflict decisions for "
+                    "the same Core Value form one Drift. A longer uninterrupted run "
+                    "is still one Drift."
+                ),
+                class_="drift-rule-note",
             ),
-            class_="drift-rule-note",
+            class_="full-contract",
         ),
         ui.tags.details(
             ui.tags.summary("Known Drift labels and review timing"),
@@ -1732,7 +2213,11 @@ app_ui = ui.page_fluid(
         ui.tags.link(
             rel="stylesheet",
             href=f"styles.css?v={STYLESHEET_VERSION}",
-        )
+        ),
+        ui.tags.script(
+            src=f"drift_explainer.js?v={EXPLAINER_SCRIPT_VERSION}",
+            defer="defer",
+        ),
     ),
     _app_shell(),
     title="Drift inspection app",
