@@ -1,0 +1,106 @@
+# Drift Inspection App
+
+This read-only Python Shiny app compares Runs 1–3 for three frozen Weekly Drift
+Reviewer setups without merging Runs or calculating a majority vote.
+
+The desktop review flow has three stages:
+
+1. Read the shared How it works contract, then filter persona/Core Value cases
+   by known Drift status and Core Value. Optional review focus remains
+   collapsed until needed.
+2. Read corpus-level results for all three setups and Runs, then choose a
+   matching persona from the summary list.
+3. Read the persona scoreboard, then inspect that persona's Journal Entries,
+   LLM-Judge Conflict Labels, and preserved Runs.
+
+The interface is desktop-only and requires a viewport at least 1120 pixels
+wide. Narrower screens use horizontal scrolling.
+
+The corpus overview reports known Drift hits, false Drift alerts, and coverage
+for all three Weekly Drift Reviewer setups and Runs before any persona is
+opened. The persona scoreboard then states which Runs found or missed known
+Drift and names the exact known and predicted Drift spans. The Journal Entry
+table keeps the LLM-Judge Conflict Label in a dedicated column so the label and
+each Weekly Drift Reviewer Decision can be compared directly. Biographies
+remain collapsed because they were not Weekly Drift Reviewer input.
+
+Runs 1–3 repeat the same frozen setup on the same input and are never merged;
+their disagreement is shown as Run variability. Luna at reasoning low is
+identified as the current development selection, with its revised selection
+hierarchy and uncertainty disclosed beside the corpus overview.
+
+A cross-week Drift spans two review weeks, so its second Conflict is not
+assessed until the next weekly review. Across these development Runs,
+cross-week detection was about four days slower than same-week detection.
+
+The universal Weekly Drift Reviewer input contract, LLM-Judge Conflict Label
+provenance, and Drift rule appear once on Filter. Journal Entries keeps only
+persona-specific verified weekly cutoffs in a collapsed evidence drawer.
+
+The app makes no model or provider API calls. It reads committed research files
+only and keeps invalid responses fail-closed.
+
+## Local launch
+
+```sh
+uv run shiny run --host 127.0.0.1 --port 8000 --no-dev-mode \
+  src/drift_review_app/app.py
+```
+
+Open `http://127.0.0.1:8000`; the main review page opens immediately.
+
+## Weekly Drift Reviewer input boundary
+
+The app reconstructs the exact boundary recorded in each frozen weekly prompt:
+
+- The Weekly Drift Reviewer receives all declared Core Values and cumulative
+  displayed Journal Entries through the review week. The current week's Journal
+  Entries are marked for assessment.
+- Displayed nudge and response text is included when present.
+- The Weekly Drift Reviewer does not receive the persona biography, later
+  Journal Entries, AI-reviewed LLM-Judge Conflict Labels, known Drift, VIF
+  Critic predictions, or another setup's decisions.
+
+The loader verifies prompt hashes, weekly cutoffs, Journal Entry text, declared
+Core Values, and the empty VIF Critic input block before the page renders. The
+Journal Entries screen exposes each persona-specific cutoff in a collapsed
+evidence drawer. This demonstrates the intended inference-time boundary; it is
+not deployment approval.
+
+## Railway launch
+
+`railway.json` selects `Dockerfile.review_app`. The image installs only Shiny,
+Polars, and PyYAML, then copies the app plus the frozen review inputs. It needs
+no database or persistent volume.
+
+1. Create a Railway service from this repository.
+2. Deploy from the connected branch or run `railway up`.
+3. Generate a public domain in Railway after the deployment becomes healthy.
+
+Railway supplies `PORT`; the container binds Shiny to `0.0.0.0:$PORT`.
+
+## Frozen inputs
+
+The app also verifies joins, setup identities, requested and resolved model
+identifiers, counts, and per-Run aggregate parity before rendering research
+data. Reasoning effort is verified from each frozen manifest and registered
+configuration because individual response receipts do not record it.
+
+Inputs are read from:
+
+- `logs/wrangled/persona_*.md`
+- `logs/experiments/artifacts/twinkl_52zz_model_comparison_20260714/`
+- `logs/experiments/artifacts/twinkl_52zz_luna_low_20260714/`
+- `logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/results/`
+- `config/evals/twinkl_52zz_model_comparison_v1.yaml`
+- `config/evals/twinkl_52zz_luna_low_v1.yaml`
+
+These are AI-reviewed synthetic development inputs, not human validation or a
+fresh final test. The app does not provide deployment approval or product
+runtime wiring.
+
+The LLM-Judge Conflict Labels were produced by two isolated `gpt-5.6-sol`
+lanes at reasoning effort `xhigh`, with disagreement-only adjudication. Four
+earlier Uncertain labels were separately reviewed with `claude-opus-4-8` at
+reasoning effort `high`. Known Drift is derived from these AI-reviewed labels;
+it is not ground truth or human validation.

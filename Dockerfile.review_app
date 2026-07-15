@@ -1,0 +1,38 @@
+FROM python:3.12-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+WORKDIR /app
+
+COPY requirements-review-app.txt ./
+RUN pip install --no-cache-dir -r requirements-review-app.txt
+
+COPY src/__init__.py src/drift_rules.py ./src/
+COPY src/drift_review_app ./src/drift_review_app
+COPY src/wrangling/parse_wrangled_data.py ./src/wrangling/
+
+COPY config/evals/twinkl_52zz_model_comparison_v1.yaml \
+     config/evals/twinkl_52zz_luna_low_v1.yaml \
+     ./config/evals/
+COPY logs/wrangled ./logs/wrangled
+
+COPY logs/experiments/artifacts/twinkl_52zz_model_comparison_20260714/prompts.jsonl \
+     logs/experiments/artifacts/twinkl_52zz_model_comparison_20260714/manifest.json \
+     logs/experiments/artifacts/twinkl_52zz_model_comparison_20260714/metrics.json \
+     logs/experiments/artifacts/twinkl_52zz_model_comparison_20260714/responses_gpt_5_4_mini.jsonl \
+     logs/experiments/artifacts/twinkl_52zz_model_comparison_20260714/responses_gpt_5_6_luna.jsonl \
+     ./logs/experiments/artifacts/twinkl_52zz_model_comparison_20260714/
+
+COPY logs/experiments/artifacts/twinkl_52zz_luna_low_20260714/manifest.json \
+     logs/experiments/artifacts/twinkl_52zz_luna_low_20260714/metrics.json \
+     logs/experiments/artifacts/twinkl_52zz_luna_low_20260714/responses_gpt_5_6_luna_low.jsonl \
+     ./logs/experiments/artifacts/twinkl_52zz_luna_low_20260714/
+
+COPY logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/results/complete_development_entry_target.parquet \
+     logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/results/complete_development_drift_episodes.parquet \
+     logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/results/complete_development_case_outcomes.parquet \
+     ./logs/experiments/artifacts/twinkl_qtwz_complete_development_review_20260714/results/
+
+CMD ["sh", "-c", "exec shiny run --host 0.0.0.0 --port \"${PORT:-8000}\" --no-dev-mode src/drift_review_app/app.py"]
