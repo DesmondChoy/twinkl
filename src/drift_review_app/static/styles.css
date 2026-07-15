@@ -312,26 +312,6 @@ input {
     margin: 0.15rem 0 0;
 }
 
-.filter-advanced {
-    border-top: 1px solid var(--line);
-    padding-top: var(--space-md);
-}
-
-.filter-advanced summary {
-    cursor: pointer;
-    color: var(--navy);
-    font-size: 0.82rem;
-    font-weight: 700;
-}
-
-.filter-advanced[open] summary {
-    margin-bottom: var(--space-lg);
-}
-
-.filter-advanced .controls-note {
-    margin-top: var(--space-sm);
-}
-
 .filter-form select,
 .review-controls select {
     width: 100%;
@@ -419,15 +399,10 @@ input {
 }
 
 .result-count,
-.result-focus,
 .persona-id {
     color: var(--ink-faint);
     font-family: var(--font-data);
     font-size: 0.8rem;
-}
-
-.result-focus {
-    margin-top: var(--space-xs);
 }
 
 .at-a-glance {
@@ -807,6 +782,28 @@ input {
     gap: var(--space-2xl);
     color: var(--ink-soft);
     font-size: 0.85rem;
+}
+
+.persona-summary {
+    min-width: 0;
+}
+
+.inspection-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
+}
+
+.inspection-badge {
+    font-size: 0.68rem;
+}
+
+.inspection-badge.is-variability,
+.inspection-badge.is-disagreement {
+    border-color: var(--navy);
+    background: var(--navy-soft);
+    color: var(--navy);
 }
 
 .detail-title-row,

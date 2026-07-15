@@ -60,16 +60,20 @@ _STAGE_FOCUS_SCRIPT = """
 })();
 """
 CURRENT_SETUP_KEY = "luna_low"
-ALL_CASES_FOCUS = "All persona/Core Value cases"
-REVIEW_FOCUS_LABELS = {
-    ALL_CASES_FOCUS: "All matching cases",
-    "Missed Drift": "Missed known Drift",
-    "False Drift alert": "False Drift alert",
-    "Run disagreement": "Run variability",
-    "Model disagreement": "Experiment setup disagreement",
-    "Unresolved because of Abstain": "Unresolved because of Abstain",
-    "Invalid response": "Invalid Weekly Drift Reviewer response",
-    "Uncertain LLM-Judge Conflict Label": "Uncertain LLM-Judge Conflict Label",
+INSPECTION_BADGE_SPECS = {
+    "Missed Drift": ("Missed known Drift", "is-missed"),
+    "False Drift alert": ("False Drift alert", "is-false"),
+    "Run disagreement": ("Run variability", "is-variability"),
+    "Model disagreement": ("Experiment setup disagreement", "is-disagreement"),
+    "Unresolved because of Abstain": (
+        "Unresolved because of Abstain",
+        "is-abstain",
+    ),
+    "Invalid response": ("Invalid Weekly Drift Reviewer response", "is-invalid"),
+    "Uncertain LLM-Judge Conflict Label": (
+        "Uncertain LLM-Judge Conflict Label",
+        "is-uncertain",
+    ),
 }
 ABSTAIN_EXPLANATIONS = {
     "ambiguous": (
@@ -166,11 +170,9 @@ def _matching_cases(
     data: ReviewData,
     drift_status: str,
     dimension: str,
-    review_focus: str = ALL_CASES_FOCUS,
 ) -> tuple[CaseRecord, ...]:
-    """Return cases for one Core Value, known Drift status, and review focus."""
+    """Return cases for one Core Value and known Drift status."""
     has_drift = drift_status == "has"
-    focused_case_ids = data.queue_case_ids(review_focus, CURRENT_SETUP_KEY)
     return tuple(
         sorted(
             (
@@ -178,7 +180,6 @@ def _matching_cases(
                 for case in data.cases.values()
                 if case.dimension == dimension
                 and bool(data.reference_drifts[case.case_id]) is has_drift
-                and case.case_id in focused_case_ids
             ),
             key=lambda case: (
                 str(data.profiles[case.persona_id]["name"]),
@@ -202,15 +203,14 @@ def _dimension_choices(data: ReviewData, drift_status: str) -> dict[str, str]:
     return choices
 
 
-def _review_focus_choices(data: ReviewData) -> dict[str, str]:
-    return {
-        queue: (
-            f"{label} ({len(data.queue_case_ids(queue, CURRENT_SETUP_KEY))})"
-            if queue != ALL_CASES_FOCUS
-            else label
-        )
-        for queue, label in REVIEW_FOCUS_LABELS.items()
-    }
+def _inspection_badges(
+    data: ReviewData,
+) -> dict[str, tuple[tuple[str, str], ...]]:
+    badges: dict[str, list[tuple[str, str]]] = {case_id: [] for case_id in data.cases}
+    for queue, badge in INSPECTION_BADGE_SPECS.items():
+        for case_id in data.queue_case_ids(queue, CURRENT_SETUP_KEY):
+            badges[case_id].append(badge)
+    return {case_id: tuple(case_badges) for case_id, case_badges in badges.items()}
 
 
 def _period_choices(
@@ -525,7 +525,6 @@ def _filter_screen(
     *,
     selected_drift: str = "has",
     selected_dimension: str = "",
-    selected_focus: str = ALL_CASES_FOCUS,
     error: str | None = None,
 ) -> ui.Tag:
     dimensions = _dimension_choices(data, selected_drift)
@@ -561,23 +560,6 @@ def _filter_screen(
                     "2. Core Value",
                     choices={"": "Choose a Core Value", **dimensions},
                     selected=selected_dimension,
-                ),
-                ui.tags.details(
-                    ui.tags.summary("Advanced review focus"),
-                    ui.input_select(
-                        "review_focus_filter",
-                        "Show cases with",
-                        choices=_review_focus_choices(data),
-                        selected=selected_focus,
-                    ),
-                    ui.p(
-                        "Review focus uses the current development Weekly Drift "
-                        "Reviewer: Luna at reasoning low. Counts cover all 292 cases; "
-                        "the selected focus is then combined with the two filters "
-                        "above.",
-                        class_="controls-note",
-                    ),
-                    class_="filter-advanced",
                 ),
                 ui.p(error, class_="form-error", role="alert") if error else None,
                 ui.input_action_button(
@@ -1005,9 +987,9 @@ def _personas_screen(
     cases: tuple[CaseRecord, ...],
     drift_status: str,
     dimension: str,
-    review_focus: str = ALL_CASES_FOCUS,
 ) -> ui.Tag:
     status_label = "Has known Drift" if drift_status == "has" else "Has no known Drift"
+    inspection_badges = _inspection_badges(data)
     return ui.tags.main(
         _stage_trail("personas"),
         ui.div(
@@ -1026,18 +1008,20 @@ def _personas_screen(
                 f"{len(cases)} matching {'persona' if len(cases) == 1 else 'personas'}",
                 class_="result-count",
             ),
-            ui.p(
-                f"Review focus: {REVIEW_FOCUS_LABELS[review_focus]}",
-                class_="result-focus",
-            )
-            if review_focus != ALL_CASES_FOCUS
-            else None,
             class_="results-heading",
         ),
         ui.div(
-            ui.p("MATCHING PERSONAS", class_="eyebrow"),
-            ui.h2("Choose a persona to inspect"),
-            class_="persona-list-heading",
+            ui.div(
+                ui.p("MATCHING PERSONAS", class_="eyebrow"),
+                ui.h2("Choose a persona to inspect"),
+            ),
+            ui.p(
+                "Badges use all three Runs of Luna at reasoning low; experiment "
+                "setup disagreement compares the frozen setups. One case can "
+                "have several.",
+                class_="section-note",
+            ),
+            class_="section-heading persona-list-heading",
         ),
         ui.div(
             *[
@@ -1047,16 +1031,32 @@ def _personas_screen(
                         ui.p(case.persona_id, class_="persona-id"),
                     ),
                     ui.div(
-                        ui.span(f"{len(case.entries)} Journal Entries"),
-                        ui.span(
-                            f"{len(data.reference_drifts[case.case_id])} known "
-                            + (
-                                "Drift"
-                                if len(data.reference_drifts[case.case_id]) == 1
-                                else "Drifts"
-                            )
+                        ui.div(
+                            ui.span(f"{len(case.entries)} Journal Entries"),
+                            ui.span(
+                                f"{len(data.reference_drifts[case.case_id])} known "
+                                + (
+                                    "Drift"
+                                    if len(data.reference_drifts[case.case_id]) == 1
+                                    else "Drifts"
+                                )
+                            ),
+                            class_="result-facts",
                         ),
-                        class_="result-facts",
+                        ui.div(
+                            *[
+                                _pill(label, f"inspection-badge {class_name}")
+                                for label, class_name in inspection_badges[case.case_id]
+                            ],
+                            class_="inspection-badges",
+                            aria_label=(
+                                "Inspection badges for "
+                                f"{data.profiles[case.persona_id]['name']}"
+                            ),
+                        )
+                        if inspection_badges[case.case_id]
+                        else None,
+                        class_="persona-summary",
                     ),
                     ui.input_action_button(
                         _inspect_id(case.case_id),
@@ -1074,7 +1074,7 @@ def _personas_screen(
             ],
             ui.div(
                 ui.h3("No matching personas"),
-                ui.p("Change the known Drift status, Core Value, or review focus."),
+                ui.p("Change the known Drift status or Core Value."),
                 class_="empty-state",
             )
             if not cases
@@ -1745,19 +1745,13 @@ def _server(input: Inputs, output: Outputs, session: Session) -> None:
     selected_case_id: reactive.Value[str | None] = reactive.value(None)
     selected_drift: reactive.Value[str] = reactive.value("has")
     selected_dimension: reactive.Value[str] = reactive.value("")
-    selected_focus: reactive.Value[str] = reactive.value(ALL_CASES_FOCUS)
     filter_error: reactive.Value[str | None] = reactive.value(None)
 
     def matching_cases() -> tuple[CaseRecord, ...]:
         dimension = selected_dimension.get()
         if not dimension:
             return ()
-        return _matching_cases(
-            data,
-            selected_drift.get(),
-            dimension,
-            selected_focus.get(),
-        )
+        return _matching_cases(data, selected_drift.get(), dimension)
 
     @render.ui
     def screen() -> ui.Tag:
@@ -1767,7 +1761,6 @@ def _server(input: Inputs, output: Outputs, session: Session) -> None:
                 data,
                 selected_drift=selected_drift.get(),
                 selected_dimension=selected_dimension.get(),
-                selected_focus=selected_focus.get(),
                 error=filter_error.get(),
             )
         if current == "personas":
@@ -1776,7 +1769,6 @@ def _server(input: Inputs, output: Outputs, session: Session) -> None:
                 matching_cases(),
                 selected_drift.get(),
                 selected_dimension.get(),
-                selected_focus.get(),
             )
         case_id = selected_case_id.get()
         req(case_id)
@@ -1788,7 +1780,6 @@ def _server(input: Inputs, output: Outputs, session: Session) -> None:
     def _show_personas() -> None:
         dimension = str(input.core_value_filter() or "")
         selected_drift.set(str(input.reference_drift_filter() or "has"))
-        selected_focus.set(str(input.review_focus_filter() or ALL_CASES_FOCUS))
         if not dimension:
             filter_error.set("Choose a Core Value to continue.")
             return

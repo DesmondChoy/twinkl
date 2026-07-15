@@ -7,8 +7,11 @@ The desktop review flow has three stages:
 
 1. Read the first-page At a glance section and shared How it works contract,
    then filter persona/Core Value cases by known Drift status and Core Value.
-   Optional review focus remains collapsed until needed.
-2. Choose a matching persona from the filtered summary list.
+2. Choose a matching persona from the filtered summary list. Inspection badges
+   use all three Runs of Luna at reasoning low. They identify missed known Drift,
+   false Drift alerts, Run variability, experiment setup disagreement, unresolved
+   because of Abstain, invalid Weekly Drift Reviewer responses, and Uncertain
+   LLM-Judge Conflict Labels; one case can have several badges.
 3. Read the persona scoreboard, then inspect that persona's Journal Entries,
    LLM-Judge Conflict Labels, and preserved Runs.
 

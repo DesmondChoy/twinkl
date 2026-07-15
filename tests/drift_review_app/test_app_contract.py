@@ -6,7 +6,7 @@ from pathlib import Path
 
 from src.drift_review_app.app import (
     ABSTAIN_EXPLANATIONS,
-    ALL_CASES_FOCUS,
+    INSPECTION_BADGE_SPECS,
     STYLESHEET_VERSION,
     _at_a_glance,
     _decision_cell,
@@ -14,6 +14,7 @@ from src.drift_review_app.app import (
     _detail_screen,
     _dimension_choices,
     _filter_screen,
+    _inspection_badges,
     _matching_cases,
     _period_choices,
     _personas_screen,
@@ -76,13 +77,9 @@ def test_main_page_opens_on_two_filters_without_password_gate() -> None:
         ).hexdigest()[:12]
     )
     assert "204 synthetic personas" not in shell_html
-    for input_id in (
-        "reference_drift_filter",
-        "core_value_filter",
-        "review_focus_filter",
-        "show_personas",
-    ):
+    for input_id in ("reference_drift_filter", "core_value_filter", "show_personas"):
         assert f'id="{input_id}"' in html
+    assert 'id="review_focus_filter"' not in html
     for input_id in ("persona_id", "period", "setup"):
         assert f'id="{input_id}"' not in html
     assert "Journal Entries stay hidden until you choose a persona" in html
@@ -91,7 +88,7 @@ def test_main_page_opens_on_two_filters_without_password_gate() -> None:
     assert "gpt-5.6-sol lanes at reasoning xhigh" in html
     assert "Known Drift status" in html
     assert "Achievement (0)" in html
-    assert "Advanced review focus" in html
+    assert "Advanced review focus" not in html
     assert "At a glance" in html
     assert html.index("At a glance") < html.index("How it works")
     assert "WHAT COUNTS AS CONFLICT" in html
@@ -118,7 +115,7 @@ def test_reference_drift_and_core_value_filter_cases() -> None:
     assert all(case.dimension == "universalism" for case in with_drift + without_drift)
 
 
-def test_core_value_counts_and_review_focus_are_applied() -> None:
+def test_core_value_counts_are_scoped_to_known_drift_status() -> None:
     data = load_review_data(ROOT)
     with_drift = _dimension_choices(data, "has")
     without_drift = _dimension_choices(data, "none")
@@ -126,14 +123,18 @@ def test_core_value_counts_and_review_focus_are_applied() -> None:
     assert with_drift["universalism"] == "Universalism (11)"
     assert without_drift["universalism"] == "Universalism (21)"
 
-    missed = _matching_cases(data, "has", "universalism", "Missed Drift")
-    all_cases = _matching_cases(data, "has", "universalism", ALL_CASES_FOCUS)
-    assert missed
-    assert set(missed) < set(all_cases)
-    assert all(
-        case.case_id in data.queue_case_ids("Missed Drift", "luna_low")
-        for case in missed
-    )
+
+def test_inspection_badges_match_each_diagnostic_queue() -> None:
+    data = load_review_data(ROOT)
+    badges = _inspection_badges(data)
+
+    for queue, badge in INSPECTION_BADGE_SPECS.items():
+        actual = {
+            case_id for case_id, case_badges in badges.items() if badge in case_badges
+        }
+        assert actual == data.queue_case_ids(queue, "luna_low")
+
+    assert any(len(case_badges) > 1 for case_badges in badges.values())
 
 
 def test_at_a_glance_combines_dataset_llms_and_results() -> None:
@@ -191,6 +192,10 @@ def test_persona_results_use_one_list_heading() -> None:
     cases = _matching_cases(data, "has", "conformity")
     html = str(_personas_screen(data, cases, "has", "conformity"))
     assert html.count("MATCHING PERSONAS") == 1
+    assert "Badges use all three Runs of Luna at reasoning low" in html
+    assert "Run variability" in html
+    assert "Experiment setup disagreement" in html
+    assert 'aria-label="Inspection badges for ' in html
     assert "At a glance" not in html
     assert "24/42 hits" not in html
 
