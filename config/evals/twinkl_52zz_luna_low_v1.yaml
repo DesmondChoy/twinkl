@@ -1,0 +1,78 @@
+study_id: twinkl_52zz_luna_low_v1
+status: preregistered
+created_at: '2026-07-14'
+
+baseline:
+  config_path: config/evals/twinkl_52zz_model_comparison_v1.yaml
+  manifest_path: logs/experiments/artifacts/twinkl_52zz_model_comparison_20260714/manifest.json
+  prompts_path: logs/experiments/artifacts/twinkl_52zz_model_comparison_20260714/prompts.jsonl
+  metrics_path: logs/experiments/artifacts/twinkl_52zz_model_comparison_20260714/metrics.json
+  luna_none_responses_path: logs/experiments/artifacts/twinkl_52zz_model_comparison_20260714/responses_gpt_5_6_luna.jsonl
+  published_commit: 1fd816a36f8d15b3eb7220cd3367a22455553c82
+  expected_sha256:
+    manifest: 5e99c77064f6566e3f7ffb691bca16e9983f78be6762350f9f1a63c8bcf98fb5
+    prompts: f0c7e68b5906c3ceeaf27dfc5d5b305252ee2298d688193363d79f6ac370c539
+    metrics: 3c404fc717300f84393bf2230ab8f6dbf5d7df043af26160ddac79b0b4b8bcc9
+    luna_none_responses: 77f3491e9e7ee4ae99d8d36b8b00fe52719c4086ebf74338132ae5f4de7dd005
+
+study:
+  setup: weekly_without_critic
+  repeats: 3
+  expected_personas: 204
+  expected_persona_weeks: 951
+  expected_calls: 2853
+
+model:
+  key: gpt_5_6_luna_low
+  model: gpt-5.6-luna
+  reasoning_effort: low
+
+api:
+  provider: openai
+  endpoint: responses
+  max_output_tokens: 2000
+  timeout_seconds: 60
+  max_attempts: 2
+  concurrency: 4
+  service_tier: default
+  store: false
+  max_budget_usd: 15.0
+  pricing_usd_per_million_tokens:
+    input: 1.00
+    cached_input: 0.10
+    cache_write: 1.25
+    output: 6.00
+
+smoke:
+  prompt_count: 24
+  repeats: 1
+  max_budget_usd: 0.30
+  full_run_contingency: 1.20
+
+bootstrap:
+  unit: trajectory
+  random_seed: 5256000
+  repeats: 10000
+  interval: 0.95
+
+decision:
+  select_low: >-
+    Coverage falls by no more than 0.05 and the paired trajectory bootstrap
+    shows either higher Drift recall without a median increase in false Drift
+    alerts, or fewer false Drift alerts without lower median Drift recall.
+  otherwise: >-
+    Keep gpt-5.6-luna at reasoning effort none as the development Weekly Drift
+    Reviewer.
+  restrictions:
+    - Development-only AI-reviewed synthetic evidence; no human validation.
+    - The complete development data is not a fresh final test.
+    - The Weekly Drift Reviewer receives no VIF Critic input.
+    - The smoke test checks execution and cost only; it is not selection evidence.
+    - No prompt variant, final test, deployment approval, or runtime architecture change is tested.
+
+artifacts:
+  output_dir: logs/experiments/artifacts/twinkl_52zz_luna_low_20260714
+  manifest_filename: manifest.json
+  smoke_responses_filename: smoke_responses.jsonl
+  responses_filename: responses_gpt_5_6_luna_low.jsonl
+  metrics_filename: metrics.json

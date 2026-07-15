@@ -1,7 +1,8 @@
 # VIF Capstone Scope and Evaluation Decision
 
 **Status:** Scope adopted on 2026-07-12 under `twinkl-752`; staged architecture
-adopted on 2026-07-14 under `twinkl-752.2`.
+adopted on 2026-07-14 under `twinkl-752.2`; Weekly Drift Reviewer configuration
+and metric hierarchy updated on 2026-07-15 under `twinkl-52zz`.
 
 This document records the detailed Value Identity Function (VIF) scope decision
 for the remaining capstone period. The [PRD](../prd.md) remains authoritative for
@@ -43,16 +44,16 @@ rankings therefore remain valid records of the policy used at the time, not the
 forward selection policy. Implementing recall-first selection needs a separate,
 tested change before another training run is treated as decision evidence.
 
-### Product and deployment evaluation
+### Weekly Drift Reviewer development and deployment evaluation
 
-- Primary future deployment metric: Drift recall.
-- A deployment operating point must also satisfy a conservative Drift-level
-  precision or user-facing false Drift alert constraint.
-- `twinkl-7vam` must define the acceptable false Drift alert tolerance, minimum
-  Drift recall, coverage, abstention, stability, and any efficiency requirement
-  before a fresh final test is scored.
-- Abstention produces no Drift claim. Coverage, abstention count, and true
-  Drifts suppressed by abstention or uncertainty must be reported.
+- Development selection prioritizes Drift recall first and false Drift alerts
+  second.
+- Coverage and abstention are diagnostic metrics, not development-selection
+  gates. They must still be reported because abstention produces no Drift claim.
+- `twinkl-7vam` must define the minimum Drift recall, acceptable false Drift
+  alert tolerance, stability, and any efficiency requirement before a fresh
+  final test is scored. It must also predefine reporting for coverage,
+  abstention, and Drifts suppressed by abstention or uncertainty.
 
 Because there is no active fresh final test set, this is a development contract
 only. The staged architecture is selected, but no VIF Critic,
@@ -207,10 +208,14 @@ rather than substituted.
 - On that complete data, `twinkl-52zz` found median Drift recall of `0.167` for
   `gpt-5.4-mini` and `0.476` for `gpt-5.6-luna`, while median false Drift alerts
   rose from 5 to 13. The user accepted that trade-off and selected Luna at
-  reasoning effort `none` as the current development Weekly Drift Reviewer.
-  The exact setup remains the frozen baseline for a bounded reasoning-effort
-  follow-up. This choice does not change the approved component boundaries or
-  grant deployment approval.
+  reasoning effort `none` for the next development comparison. The
+  reasoning-effort-`low` follow-up raised median Drift recall to `0.548` and cut
+  false Drift alerts to 4, while coverage fell from `0.777` to `0.637`. `low`
+  mechanically failed the preregistered coverage gate, but the approved metric
+  hierarchy treats coverage as diagnostic. Luna at reasoning effort `low` is
+  therefore the current development Weekly Drift Reviewer, and the study stops
+  before `medium`. This choice does not change the approved component
+  boundaries or grant deployment approval.
 
 The experiment history and numeric evidence remain in
 [`logs/experiments/index.md`](../../logs/experiments/index.md).

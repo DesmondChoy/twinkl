@@ -24,16 +24,17 @@ The current layers of the contract are deliberately different:
 | Production runtime | The executable runtime still uses the crash/rut/evolution prototype. The approved Weekly Drift Reviewer and Drift Detector path is not wired or deployment-approved. |
 | User delivery | The Weekly Digest cites the relevant Journal Entries and uses active, recovered, mixed, or uncertain wording without score jargon; exact schema implementation is pending. |
 
-### Adopted metric hierarchy (`twinkl-752`)
+### Adopted metric hierarchy (`twinkl-752`, updated under `twinkl-52zz`)
 
 - The product decision unit is **Drift**, not an
   isolated Journal Entry or aggregate QWK.
-- Future product evaluation prioritizes Drift recall. Before deployment, its
-  operating point must also satisfy conservative Drift precision or a
-  user-facing false Drift alert constraint.
-- `twinkl-7vam` must fix the minimum Drift recall, false Drift alert tolerance,
-  coverage, abstention, stability, and any efficiency requirement before the
-  fresh final test is scored.
+- Weekly Drift Reviewer development selection prioritizes Drift recall first
+  and false Drift alerts second.
+- Coverage and abstention are diagnostic metrics. They must be reported because
+  they expose fail-closed behavior, but they do not gate development selection.
+- `twinkl-7vam` must fix the minimum Drift recall, acceptable false Drift alert
+  tolerance, stability, and any efficiency requirement before the fresh final
+  test is scored. It must also predefine coverage and abstention reporting.
 - Entry-level `recall_-1` is the primary development proxy because Drift
   cannot be recovered when either component Conflict is missed.
 - QWK and `+1` recall are diagnostics. Positive evidence cannot trigger or
@@ -375,7 +376,8 @@ above.
 | Known-development union (`twinkl-752.5` input) | 33 episodes across 28 Drift trajectories; 106/106 resolved | Primary reassessment set; adds two prior episodes omitted by candidate mining |
 | Complete development review (`twinkl-qtwz`) | 42 Drifts across 36 Drift trajectories; 292/292 case-level outcomes resolved | Frozen input used by `twinkl-52zz`; the nine newly found Drifts all have historical training provenance |
 | `gpt-5.4-mini` Weekly Drift Reviewer (`twinkl-52zz`) | 7/42 median Drift hits / recall 0.167 / precision 0.583 / 5 false Drift alerts / coverage 0.740 | Complete-development baseline over three repeats |
-| `gpt-5.6-luna` Weekly Drift Reviewer (`twinkl-52zz`) | 20/42 median Drift hits / recall 0.476 / precision 0.606 / 13 false Drift alerts / coverage 0.777 | Selected at reasoning effort `none` as the current development Weekly Drift Reviewer with explicit acceptance of the false Drift alert trade-off; no deployment approval |
+| `gpt-5.6-luna` Weekly Drift Reviewer (`twinkl-52zz`) | 20/42 median Drift hits / recall 0.476 / precision 0.606 / 13 false Drift alerts / coverage 0.777 | Frozen reasoning-effort-`none` baseline for the follow-up; superseded as the development selection by `low` |
+| `gpt-5.6-luna` reasoning-effort-`low` follow-up (`twinkl-52zz`) | 23/42 median Drift hits / recall 0.548 / precision 0.852 / 4 false Drift alerts / coverage 0.637 | Selected as the current development Weekly Drift Reviewer under the approved hierarchy: Drift recall first, false Drift alerts second, and coverage diagnostic; stop before `medium`; no deployment approval |
 | Legacy candidate confirmation (`twinkl-752.4`) | 22/44 (50.0%) | Resolved development candidates only; selection-biased diagnostic |
 | Matched-control Drift rate (`twinkl-752.4`) | 1/44 (2.3%) | One legacy-miner miss among resolved development controls; not a false-alert rate |
 | Development precision / false-positive rate (`run_020`) | 1.0 / 0.0 | The single predicted development Drift was correct, but four reference Drifts were missed |
@@ -514,6 +516,9 @@ report](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_qtwz_
 | [`../../scripts/experiments/review_twinkl_qtwz_remaining_development.py`](../../scripts/experiments/review_twinkl_qtwz_remaining_development.py) | Freezes and validates the 186-case complement |
 | [`../../scripts/experiments/reconcile_twinkl_qtwz_review.py`](../../scripts/experiments/reconcile_twinkl_qtwz_review.py) | Reconciles labels and derives the complete development analysis |
 | [`../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_qtwz_complete_development_review.md`](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_qtwz_complete_development_review.md) | Complete 292-case result, provenance, cost, and limitations |
+| [`../../config/evals/twinkl_52zz_luna_low_v1.yaml`](../../config/evals/twinkl_52zz_luna_low_v1.yaml) | Preregistered Luna reasoning-effort-`low` protocol and historical selection gate |
+| [`../../scripts/experiments/compare_twinkl_52zz_luna_reasoning.py`](../../scripts/experiments/compare_twinkl_52zz_luna_reasoning.py) | Luna reasoning-effort execution, receipt, and scoring workflow |
+| [`../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_52zz_luna_low.md`](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_52zz_luna_low.md) | Complete Luna reasoning-effort result and approved development selection |
 | [`../../scripts/experiments/resolve_twinkl_752_5_null_cases.py`](../../scripts/experiments/resolve_twinkl_752_5_null_cases.py) | Freezes and materializes the blind Opus follow-up |
 | [`../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5_opus_null_resolution.md`](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5_opus_null_resolution.md) | Four resolved Conflict labels, revised counts, and limits |
 | [`logs/experiments/reports/experiment_review_20260702_twinkl_w2mu_frozen_context_gap.md`](../../logs/experiments/reports/experiment_review_20260702_twinkl_w2mu_frozen_context_gap.md) | Frozen test-split LLM context results |
