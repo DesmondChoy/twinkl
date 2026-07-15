@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+from hashlib import sha256
 from html import unescape
 from pathlib import Path
 
 from src.drift_review_app.app import (
     ABSTAIN_EXPLANATIONS,
     ALL_CASES_FOCUS,
+    STYLESHEET_VERSION,
     _at_a_glance,
     _decision_cell,
     _default_period,
@@ -61,8 +63,18 @@ def test_relevant_drift_period_is_selected_before_full_timeline() -> None:
 def test_main_page_opens_on_two_filters_without_password_gate() -> None:
     data = load_review_data(ROOT)
     shell_html = str(app_ui)
+    dependency_html = "".join(
+        str(dependency.head or "") for dependency in app_ui.get_dependencies()
+    )
     html = shell_html + str(_filter_screen(data))
     assert "Drift inspection app" in html
+    assert f'href="styles.css?v={STYLESHEET_VERSION}"' in dependency_html
+    assert (
+        STYLESHEET_VERSION
+        == sha256(
+            (ROOT / "src/drift_review_app/static/styles.css").read_bytes()
+        ).hexdigest()[:12]
+    )
     assert "204 synthetic personas" not in shell_html
     for input_id in (
         "reference_drift_filter",

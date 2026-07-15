@@ -5,11 +5,14 @@ from __future__ import annotations
 import sys
 from collections import Counter
 from datetime import date, timedelta
+from hashlib import sha256
 from pathlib import Path
 
 from shiny import App, Inputs, Outputs, Session, reactive, render, req, ui
 
 ROOT = Path(__file__).resolve().parents[2]
+STATIC_DIR = Path(__file__).parent / "static"
+STYLESHEET_VERSION = sha256((STATIC_DIR / "styles.css").read_bytes()).hexdigest()[:12]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
@@ -1690,7 +1693,12 @@ def _app_shell() -> ui.Tag:
 
 
 app_ui = ui.page_fluid(
-    ui.head_content(ui.tags.link(rel="stylesheet", href="styles.css")),
+    ui.head_content(
+        ui.tags.link(
+            rel="stylesheet",
+            href=f"styles.css?v={STYLESHEET_VERSION}",
+        )
+    ),
     _app_shell(),
     title="Drift inspection app",
 )
@@ -1825,4 +1833,4 @@ def _server(input: Inputs, output: Outputs, session: Session) -> None:
         return _supporting_results(data, selected_case(), str(input.setup()))
 
 
-app = App(app_ui, _server, static_assets=Path(__file__).parent / "static")
+app = App(app_ui, _server, static_assets=STATIC_DIR)
