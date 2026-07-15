@@ -2,6 +2,12 @@
   "version": "0.0.1",
   "configurations": [
     {
+      "name": "drift-review-app",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": ["run", "shiny", "run", "--host", "127.0.0.1", "--port", "8000", "--no-dev-mode", "src/drift_review_app/app.py"],
+      "port": 8000
+    },
+    {
       "name": "mockups",
       "runtimeExecutable": "python3",
       "runtimeArgs": ["-m", "http.server", "8734", "--directory", "docs/future_work/viz"],
