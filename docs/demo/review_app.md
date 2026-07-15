@@ -1,8 +1,13 @@
-# Demo Review App
+# Runtime Demo Review App
 
 This document describes the Shiny review app used to inspect Twinkl's local
 end-to-end runtime on top of existing wrangled personas and saved VIF Critic
 checkpoints.
+
+This app executes the experimental VIF Critic-to-Weekly-Digest path. The
+separate [Drift Inspection App](weekly_drift_review_app.md) is read-only and
+compares frozen Weekly Drift Reviewer Runs without executing the VIF Critic
+runtime or making model or provider API calls.
 
 The app is a review and debugging interface for the current POC. It does not
 change product scope. It makes the existing runtime files easier to inspect

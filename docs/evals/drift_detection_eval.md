@@ -147,6 +147,14 @@ approval.
   combinations, and 42 Drifts across 36 Drift trajectories. Two immutable
   historical LLM-Judge Conflict Labels remain null inside a case with a frozen
   resolved Drift outcome.
+- `twinkl-52zz` compares three frozen Runs for each Weekly Drift Reviewer setup
+  on the complete development data. The current development selection,
+  `gpt-5.6-luna` at reasoning effort `low`, found a median 23/42 known Drifts,
+  produced 4 false Drift alerts, and had `0.637` coverage. The read-only
+  [Drift Inspection App](../demo/weekly_drift_review_app.md) exposes the complete
+  results, persona-level outcomes, Journal Entries, AI-reviewed LLM-Judge
+  Conflict Labels, Weekly Drift Reviewer Decisions, cited evidence, and
+  verified weekly cutoffs without making model or provider API calls.
 - All nine newly found Drifts have historical training provenance. This does
   not invalidate their LLM-Judge Conflict Labels, but VIF Critic results on
   those Journal Entries are in-sample and must be reported separately.
@@ -465,6 +473,21 @@ The complete 292-case development-data contract is described in the
 [`twinkl-qtwz` review
 report](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_qtwz_complete_development_review.md).
 
+Re-score the committed Weekly Drift Reviewer responses without API calls:
+
+```sh
+uv run python -m scripts.experiments.compare_twinkl_52zz_models score
+uv run python -m scripts.experiments.compare_twinkl_52zz_luna_reasoning score
+```
+
+The model-comparison runner exposes `prepare`, `estimate`, `run`, and `score`;
+`run` requires `--execute` and accepts
+`--model-key {all,gpt_5_4_mini,gpt_5_6_luna}`. The Luna reasoning-effort runner
+exposes `prepare`, `smoke`, `run`, and `score`; `smoke` and `run` require
+`--execute`. Both runners accept `--root` and `--config`. The experiment reports
+record the frozen commands and inputs; paid execution is unnecessary for
+re-scoring the committed responses.
+
 ---
 
 ## Limitations
@@ -516,9 +539,13 @@ report](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_qtwz_
 | [`../../scripts/experiments/review_twinkl_qtwz_remaining_development.py`](../../scripts/experiments/review_twinkl_qtwz_remaining_development.py) | Freezes and validates the 186-case complement |
 | [`../../scripts/experiments/reconcile_twinkl_qtwz_review.py`](../../scripts/experiments/reconcile_twinkl_qtwz_review.py) | Reconciles labels and derives the complete development analysis |
 | [`../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_qtwz_complete_development_review.md`](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_qtwz_complete_development_review.md) | Complete 292-case result, provenance, cost, and limitations |
+| [`../../config/evals/twinkl_52zz_model_comparison_v1.yaml`](../../config/evals/twinkl_52zz_model_comparison_v1.yaml) | Frozen `gpt-5.4-mini` and Luna reasoning-effort-`none` comparison contract |
+| [`../../scripts/experiments/compare_twinkl_52zz_models.py`](../../scripts/experiments/compare_twinkl_52zz_models.py) | Model-comparison preparation, estimate, execution, and scoring workflow |
 | [`../../config/evals/twinkl_52zz_luna_low_v1.yaml`](../../config/evals/twinkl_52zz_luna_low_v1.yaml) | Preregistered Luna reasoning-effort-`low` protocol and historical selection gate |
 | [`../../scripts/experiments/compare_twinkl_52zz_luna_reasoning.py`](../../scripts/experiments/compare_twinkl_52zz_luna_reasoning.py) | Luna reasoning-effort execution, receipt, and scoring workflow |
 | [`../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_52zz_luna_low.md`](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_52zz_luna_low.md) | Complete Luna reasoning-effort result and approved development selection |
+| [`../../src/drift_review_app/data.py`](../../src/drift_review_app/data.py) | Frozen-input verification and result loading for the Drift Inspection App |
+| [`../demo/weekly_drift_review_app.md`](../demo/weekly_drift_review_app.md) | Drift Inspection App contract, launch commands, and input boundary |
 | [`../../scripts/experiments/resolve_twinkl_752_5_null_cases.py`](../../scripts/experiments/resolve_twinkl_752_5_null_cases.py) | Freezes and materializes the blind Opus follow-up |
 | [`../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5_opus_null_resolution.md`](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5_opus_null_resolution.md) | Four resolved Conflict labels, revised counts, and limits |
 | [`logs/experiments/reports/experiment_review_20260702_twinkl_w2mu_frozen_context_gap.md`](../../logs/experiments/reports/experiment_review_20260702_twinkl_w2mu_frozen_context_gap.md) | Frozen test-split LLM context results |

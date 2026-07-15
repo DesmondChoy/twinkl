@@ -1,9 +1,9 @@
 # Weekly Drift Reviewer Model Comparison (`twinkl-52zz`)
 
 **Date:** 2026-07-14
-**Disposition:** `gpt-5.6-luna` at reasoning effort `none` selected as the
-current development Weekly Drift Reviewer with explicit acceptance of the
-higher false Drift alert count; no deployment approval
+**Disposition:** `gpt-5.6-luna` at reasoning effort `none` is the frozen
+baseline for the reasoning-effort comparison; `low` is the current development
+Weekly Drift Reviewer; no deployment approval
 
 ## Result
 
@@ -52,11 +52,13 @@ better reviewer. It records that Luna did not pass the preregistered
 no-added-false-alert rule; the later development decision below explicitly
 accepts that trade-off rather than rewriting the rule after seeing the result.
 
-On 2026-07-14, the user approved `gpt-5.6-luna` at reasoning effort `none` as
-the current development Weekly Drift Reviewer, explicitly accepting the median
-increase from five to thirteen false Drift alerts. The exact prompt, model, and
-reasoning-effort-`none` setup are frozen as the baseline for any reasoning-effort
-follow-up. This development selection does not grant deployment approval.
+`gpt-5.6-luna` at reasoning effort `none` is the frozen baseline for the
+reasoning-effort comparison, with explicit acceptance of the median increase
+from five to thirteen false Drift alerts. The exact prompt, model, and
+reasoning-effort-`none` setup remain fixed. The
+[`low` comparison](experiment_review_2026-07-14_twinkl_52zz_luna_low.md) records
+the current development Weekly Drift Reviewer. Neither result grants deployment
+approval.
 
 ## Protocol
 
@@ -102,10 +104,35 @@ guidance are preserved in
   development configuration but cannot support deployment approval.
 - The false Drift alert tolerance is deliberately unresolved under
   `twinkl-7vam`; this report does not invent one after seeing the results.
-- Only the requested reasoning-effort-`none` comparison was run. No prompt
-  variant or higher reasoning effort was tested.
+- This comparison holds reasoning effort at `none`. The separate
+  [`low` comparison](experiment_review_2026-07-14_twinkl_52zz_luna_low.md)
+  covers the current development selection; no prompt variant or reasoning
+  effort above `low` is part of the decision record.
 
 ## Reproducibility
+
+Prepare the frozen prompt contract, verify its estimate, or re-score the
+committed responses without API calls:
+
+```sh
+uv run python -m scripts.experiments.compare_twinkl_52zz_models prepare
+uv run python -m scripts.experiments.compare_twinkl_52zz_models estimate
+uv run python -m scripts.experiments.compare_twinkl_52zz_models score
+```
+
+The paid execution command requires an explicit guard and can limit execution
+to one registered model:
+
+```sh
+uv run python -m scripts.experiments.compare_twinkl_52zz_models run \
+  --model-key all \
+  --execute
+```
+
+`--model-key` accepts `all`, `gpt_5_4_mini`, or `gpt_5_6_luna`. Global
+`--root` and `--config` options override the repository root and registered
+configuration path and must precede the subcommand. Paid execution is
+unnecessary for re-scoring the committed responses.
 
 - Config: [`twinkl_52zz_model_comparison_v1.yaml`](../../../config/evals/twinkl_52zz_model_comparison_v1.yaml)
 - Runner: [`compare_twinkl_52zz_models.py`](../../../scripts/experiments/compare_twinkl_52zz_models.py)

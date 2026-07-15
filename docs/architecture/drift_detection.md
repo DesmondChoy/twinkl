@@ -77,9 +77,12 @@ direct authority over Drift:
   opportunities, versus a random median of 1/19. This supports continued
   candidate-mining research on the development set. It does not show that early
   review improves Drift detection.
-- The later `twinkl-qtwz` review expanded the development data from 106 to 292
-  resolved cases and from 33 to 42 Drifts. It did not rerun the Weekly Drift
-  Reviewer or provide evidence for changing this boundary.
+- The complete `twinkl-qtwz` review contains 292 resolved cases and 42 Drifts.
+  On that frozen development data, `twinkl-52zz` selected `gpt-5.6-luna` at
+  reasoning effort `low` as the development Weekly Drift Reviewer. Across three
+  Runs it found a median 23/42 known Drifts, produced 4 false Drift alerts, and
+  had `0.637` coverage. The selection leaves this component boundary intact and
+  does not provide deployment approval.
 
 The complete development data is synthetic, 185/292 cases have historical
 training provenance, and no fresh final test exists. These limits are why the
@@ -166,11 +169,16 @@ must be frozen before the fresh final test under `twinkl-pv6s`.
 
 ## Implementation Boundary
 
-The repository can already run a VIF Critic checkpoint and export
-per-Journal-Entry means and uncertainty. The approved architecture still needs:
+The repository can run a VIF Critic checkpoint and export per-Journal-Entry
+means and uncertainty. The read-only
+[Drift Inspection App](../demo/weekly_drift_review_app.md) also compares Runs
+1–3 for the three frozen Weekly Drift Reviewer setups, verifies their input and
+result contracts, and makes no model or provider API calls. The approved
+architecture still needs:
 
 - persisted `P(-1)`, `P(0)`, and `P(+1)` with checkpoint provenance;
-- stored Weekly Drift Reviewer decisions and offline comparison records;
+- versioned storage for future Weekly Drift Reviewer decisions and offline
+  comparison records beyond the frozen development study files;
 - a review queue with independent labels and model-blind controls;
 - versioned retraining datasets and evaluation receipts;
 - the deterministic two-Conflict Drift Detector wired after Weekly Drift
@@ -186,6 +194,8 @@ per-Journal-Entry means and uncertainty. The approved architecture still needs:
 - [`twinkl-752.3` prompt-alignment study](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_3_weekly_drift_reviewer_prompt_alignment.md)
 - [`twinkl-752.4` reviewed development cohort](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md)
 - [`twinkl-752.5` raw-input and scheduling reassessment](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5_reassessment.md)
+- [`twinkl-52zz` Luna reasoning-effort comparison](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_52zz_luna_low.md)
+- [Drift Inspection App](../demo/weekly_drift_review_app.md)
 - Beads: `twinkl-60l5` (review-and-retrain implementation), `twinkl-olen`
   (candidate-confirmation study), `twinkl-7vam` (operating and
   deployment-approval criteria), `twinkl-pv6s` (fresh final test), and

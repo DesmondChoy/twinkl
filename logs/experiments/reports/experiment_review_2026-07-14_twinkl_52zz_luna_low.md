@@ -1,18 +1,18 @@
 # Luna Reasoning-Effort Comparison (`twinkl-52zz`)
 
 **Date:** 2026-07-14
-**Decision updated:** 2026-07-15
+**Decision date:** 2026-07-15
 **Disposition:** select `gpt-5.6-luna` at reasoning effort `low` as the current
 development Weekly Drift Reviewer; stop before `medium`; no deployment approval
 
 ## Result
 
 Reasoning effort `low` did not pass the preregistered selection rule against
-the frozen reasoning-effort-`none` baseline. It nevertheless becomes the
-development selection under the approved metric hierarchy: Drift recall first,
-false Drift alerts second, and coverage as a diagnostic. It found three more
-known Drifts at the median and cut false Drift alerts from 13 to 4, while median
-coverage fell from `0.777` to `0.637` and median delay rose from 2.5 to 5.0 days.
+the frozen reasoning-effort-`none` baseline. It is the development selection
+under the approved metric hierarchy: Drift recall first, false Drift alerts
+second, and coverage as a diagnostic. It found three more known Drifts at the
+median and cut false Drift alerts from 13 to 4, while median coverage fell from
+`0.777` to `0.637` and median delay rose from 2.5 to 5.0 days.
 
 | Luna reasoning effort | Median Drift hits | Median Drift recall | Median false Drift alerts | Median Drift precision | Median coverage | Median abstention | Median delay | Invalid responses | Median latency | Full-input token calculation |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
@@ -52,7 +52,8 @@ lower. The user chose to stop at `low`, so `medium` will not be tested.
 
 The configuration and `development_selection` field in `metrics.json` preserve
 the preregistered rule and its mechanical `keep_luna_none` result. This report,
-the PRD, and the evaluation specifications record the later approved decision.
+the PRD, and the evaluation specifications record the approved development
+selection.
 
 For the academic proof of concept, the trade-off is useful. It shows that more
 reasoning changes the Weekly Drift Reviewer's operating point, latency, and
@@ -114,6 +115,28 @@ full-input calculation is available for the matched comparison.
   architecture change, or deployment decision was tested.
 
 ## Reproducibility
+
+Prepare the frozen reasoning-effort contract or re-score the committed
+responses without API calls:
+
+```sh
+uv run python -m scripts.experiments.compare_twinkl_52zz_luna_reasoning prepare
+uv run python -m scripts.experiments.compare_twinkl_52zz_luna_reasoning score
+```
+
+Paid execution requires a budget-checking smoke test before the full Run:
+
+```sh
+uv run python -m scripts.experiments.compare_twinkl_52zz_luna_reasoning smoke \
+  --execute
+uv run python -m scripts.experiments.compare_twinkl_52zz_luna_reasoning run \
+  --execute
+```
+
+Global `--root` and `--config` options override the repository root and
+registered configuration path and must precede the subcommand. Both paid
+commands refuse API calls without `--execute`. Paid execution is unnecessary
+for re-scoring the committed responses.
 
 - Config: [`twinkl_52zz_luna_low_v1.yaml`](../../../config/evals/twinkl_52zz_luna_low_v1.yaml)
 - Runner: [`compare_twinkl_52zz_luna_reasoning.py`](../../../scripts/experiments/compare_twinkl_52zz_luna_reasoning.py)

@@ -16,7 +16,8 @@ Twinkl is an "inner compass" that helps users align their daily behavior with th
 - [`docs/drift/trajectory_eda.md`](docs/drift/trajectory_eda.md) — historical Drift-definition analysis comparing five-pass LLM-Judge consensus with persisted labels
 - [`docs/evals/drift_v1_student_visible_target.md`](docs/evals/drift_v1_student_visible_target.md) — historical five-Drift development result and withheld former final-test score
 - [`docs/weekly/weekly_digest_generation.md`](docs/weekly/weekly_digest_generation.md) — Weekly Digest contract and runtime CLI
-- [`docs/demo/review_app.md`](docs/demo/review_app.md) — Shiny review UI for the local end-to-end runtime
+- [`docs/demo/weekly_drift_review_app.md`](docs/demo/weekly_drift_review_app.md) — read-only Drift inspection of the frozen Weekly Drift Reviewer development Runs
+- [`docs/demo/review_app.md`](docs/demo/review_app.md) — Runtime Demo Review App for the local VIF Critic-to-Weekly-Digest path
 - [`docs/future_work/README.md`](docs/future_work/README.md) — exploratory directions, including OpenClaw integration research
 
 ## Value Identity Function (VIF) — 🧪 Experimental
@@ -30,7 +31,7 @@ Key properties:
 
 These are implemented properties of the current stack, not target-only aspirations. The VIF Critic path includes ordinal MLP heads with MC Dropout, a BNN baseline, config-driven frozen encoders with `nomic-embed-text-v1.5` as the active default, corrected-split experiment logging, alternate-checkpoint retention, checkpoint discovery, runtime timeline reconstruction, weekly aggregation, and Weekly Coach-facing Drift routing. The 69-run / 133-config archive keeps `run_019`-`run_021` BalancedSoftmax as the historical corrected-split reference. The consensus-label branch `run_048`-`run_050` and recall-aware alternate-checkpoint reruns `run_051`-`run_056` remain diagnostic rather than reference replacements. See [`logs/experiments/index.md`](logs/experiments/index.md) for the live board.
 
-**Current Drift contract:** Drift is two consecutive Conflicts for the same Core Value. The [`twinkl-qtwz` complete development review](logs/experiments/reports/experiment_review_2026-07-14_twinkl_qtwz_complete_development_review.md) contains 42 Drifts across 36 Drift trajectories in 292 resolved cases. The earlier [`twinkl-752.5` reassessment](logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5_reassessment.md) remains a 106-case, 33-Drift result: it found 9/33 median Drifts with weekly review without VIF Critic input, 7/33 with raw VIF Critic input, and 9/33 with VIF-Critic-triggered early-plus-weekly review. The approved staged architecture uses the Weekly Drift Reviewer without VIF Critic input followed by the deterministic Drift Detector. The VIF Critic remains essential to offline comparison, independent review, and retraining; it may later propose candidate adjacent Conflict pairs only after predefined criteria and a fresh final test support deployment approval. The current runtime remains an experimental predecessor that emits `stable`, `crash`, `rut`, `evolution`, and `high_uncertainty`. See [`docs/architecture/drift_detection.md`](docs/architecture/drift_detection.md) and [`docs/evals/drift_detection_eval.md`](docs/evals/drift_detection_eval.md).
+**Current Drift contract:** Drift is two consecutive Conflicts for the same Core Value. The [`twinkl-qtwz` complete development review](logs/experiments/reports/experiment_review_2026-07-14_twinkl_qtwz_complete_development_review.md) contains 42 Drifts across 36 Drift trajectories in 292 resolved cases. The current development Weekly Drift Reviewer is `gpt-5.6-luna` at reasoning effort `low`; across three frozen Runs it found a median 23/42 known Drifts, produced 4 false Drift alerts, and had `0.637` coverage. These are AI-reviewed synthetic development results, not human validation, a fresh final test, or deployment approval. The approved staged architecture uses the Weekly Drift Reviewer without VIF Critic input followed by the deterministic Drift Detector. The VIF Critic remains essential to offline comparison, independent review, and retraining; it may later propose candidate adjacent Conflict pairs only after predefined criteria and a fresh final test support deployment approval. The current runtime remains an experimental predecessor that emits `stable`, `crash`, `rut`, `evolution`, and `high_uncertainty`. See the [`twinkl-52zz` report](logs/experiments/reports/experiment_review_2026-07-14_twinkl_52zz_luna_low.md), [`docs/architecture/drift_detection.md`](docs/architecture/drift_detection.md), and [`docs/evals/drift_detection_eval.md`](docs/evals/drift_detection_eval.md).
 
 **Current runtime behavior:** A local VIF Critic checkpoint can drive the full offline path from per-Journal Entry predictions to validated weekly aggregates, structured prototype-router JSON, and a Weekly Digest. A shared schema in `src/vif/weekly_schema.py` defines the producer/consumer column contract and fails early when a required weekly column is missing. See `docs/vif/`, [`docs/weekly/weekly_digest_generation.md`](docs/weekly/weekly_digest_generation.md), and [`docs/demo/review_app.md`](docs/demo/review_app.md).
 
@@ -174,7 +175,53 @@ Open `http://127.0.0.1:8000` in your browser.
 - `src/annotation_tool/state.py` — Centralized state management
 - `docs/pipeline/annotation_tool_plan.md` — Full implementation plan
 
-## Demo Review App — 🧪 Experimental
+## Drift Inspection App — ✅ Complete
+
+The read-only Python Shiny app compares Runs 1–3 for three frozen Weekly Drift
+Reviewer setups: `gpt-5.4-mini` at reasoning effort `none`, `gpt-5.6-luna` at
+reasoning effort `none`, and `gpt-5.6-luna` at reasoning effort `low`. It shows
+complete development results, persona-level outcomes, Journal Entries,
+AI-reviewed LLM-Judge Conflict Labels, Weekly Drift Reviewer Decisions, and Run
+variability without merging Runs or calculating a majority vote.
+
+**Run the app:**
+
+```sh
+uv run shiny run --host 127.0.0.1 --port 8000 --no-dev-mode \
+  src/drift_review_app/app.py
+```
+
+Open `http://127.0.0.1:8000`. The `drift-review-app` entry in
+`.claude/launch.json` runs the same command.
+
+**Features:**
+
+- filters for known Drift status and Core Value before persona selection
+- complete development summaries for known Drift hits, false Drift alerts,
+  coverage, and all preserved Runs
+- persona scoreboards with exact known Drift and Drift alert spans
+- side-by-side Journal Entries, LLM-Judge Conflict Labels, Weekly Drift
+  Reviewer Decisions, cited evidence, and verified weekly cutoffs
+- fail-closed checks for prompt hashes, setup identities, model identifiers,
+  reasoning effort, joins, counts, and aggregate parity
+- no model or provider API calls; all inputs are committed research files
+
+`railway.json` deploys the app with `Dockerfile.review_app`; `railway up` starts
+a Railway deployment from the repository. The container uses Railway's `PORT`
+and needs no database or persistent volume.
+
+See [`docs/demo/weekly_drift_review_app.md`](docs/demo/weekly_drift_review_app.md)
+for the review contract, input boundary, launch options, and frozen files.
+
+**Key files:**
+
+- `src/drift_review_app/app.py` — Shiny interface
+- `src/drift_review_app/data.py` — frozen-input loading and validation
+- `src/drift_rules.py` — shared deterministic Drift rules
+- `Dockerfile.review_app`, `requirements-review-app.txt`, and `railway.json` —
+  deployment boundary
+
+## Runtime Demo Review App — 🧪 Experimental
 
 A sibling Shiny app for showcasing the end-to-end runtime flow on top of existing wrangled personas and local VIF Critic checkpoints. It lets you browse persona details, read the full Journal Entry timeline, choose a checkpoint, run the live VIF Critic → prototype router → Weekly Digest cycle, and inspect the resulting files in one place.
 
@@ -203,7 +250,10 @@ Open `http://127.0.0.1:8001` when running the file directly.
 
 **Generated files:** The app writes persona/checkpoint-specific runtime bundles under `logs/exports/demo_tool_runs/<persona_id>/<checkpoint-stem>-<hash>/`.
 
-See [`docs/demo/review_app.md`](docs/demo/review_app.md) for the full workflow and file layout.
+See [`docs/demo/review_app.md`](docs/demo/review_app.md) for the full workflow
+and file layout. This app is distinct from the read-only
+[`Drift Inspection App`](docs/demo/weekly_drift_review_app.md), which compares
+frozen Weekly Drift Reviewer Runs and does not execute the VIF Critic runtime.
 
 **Key files:**
 - `src/demo_tool/app.py` — Main Shiny demo application
@@ -271,8 +321,10 @@ For the full breakdown, see the [Implementation Status](docs/prd.md#implementati
 Examples below use `uv run` so they pick up the project environment directly. Activating `.venv` manually also works.
 
 - Launch the annotation tool: `uv run shiny run src/annotation_tool/app.py`
-- Launch the demo review UI: `uv run shiny run src/demo_tool/app.py`
-- Run the demo review UI directly on port `8001`: `uv run python src/demo_tool/app.py`
+- Launch the Drift Inspection App: `uv run shiny run --host 127.0.0.1 --port 8000 --no-dev-mode src/drift_review_app/app.py`
+- Deploy the Drift Inspection App to Railway: `railway up`
+- Launch the Runtime Demo Review App: `uv run shiny run src/demo_tool/app.py`
+- Run the Runtime Demo Review App directly on port `8001`: `uv run python src/demo_tool/app.py`
 - Run a local VIF Critic checkpoint through the full Weekly Coach path: `uv run python -m src.coach.runtime --persona-id 0a2fe15c --checkpoint-path logs/experiments/artifacts/.../selected_checkpoint.pt`
 - Build a Weekly Digest from the default persisted LLM-Judge labels: `uv run python -m src.coach.weekly_digest --persona-id 0a2fe15c`
 - Build a Weekly Digest from saved VIF Critic predictions: `uv run python -m src.coach.weekly_digest --persona-id 0a2fe15c --signals-path logs/exports/weekly_coach/0a2fe15c_vif_timeline.parquet`
@@ -283,9 +335,18 @@ Examples below use `uv run` so they pick up the project environment directly. Ac
 - Reproduce the default consensus-label Drift EDA with runtime-compatible week bins: `uv run python scripts/drift/trajectory_eda.py`
 - Compare persisted LLM-Judge labels with week bins anchored to the first Journal Entry: `uv run python scripts/drift/trajectory_eda.py --labels judge --week-mode persona_anchor`
 - Estimate the LLM context baseline cost without making API calls: `uv run python scripts/experiments/llm_critic_baseline.py estimate --split test --context-arms student_visible human_context`
+- Re-score the frozen Weekly Drift Reviewer model comparison: `uv run python -m scripts.experiments.compare_twinkl_52zz_models score`
+- Re-score the frozen Luna reasoning-effort comparison: `uv run python -m scripts.experiments.compare_twinkl_52zz_luna_reasoning score`
 - Replay recall-aware checkpoint selection from saved traces without retraining: `uv run python scripts/experiments/replay_recall_aware_checkpoint_selection.py`
 
 The Drift EDA accepts `--labels {consensus,judge}` (default: `consensus`) and `--week-mode {runtime,persona_anchor}` (default: `runtime`). The LLM baseline exposes `estimate`, `run`, `score`, and `report`; `run` writes dry-run records unless `--execute` is supplied.
+
+The `twinkl-52zz` model-comparison runner exposes `prepare`, `estimate`, `run`,
+and `score`; `run` requires `--execute` and accepts
+`--model-key {all,gpt_5_4_mini,gpt_5_6_luna}`. The Luna reasoning-effort runner
+exposes `prepare`, `smoke`, `run`, and `score`; its paid `smoke` and `run`
+commands require `--execute`. Both runners accept `--root` and `--config`.
+Those global options must precede the subcommand.
 
 # Setup
 
@@ -309,10 +370,14 @@ This repo uses `uv` and `pyproject.toml` for dependency management.
    ```sh
    source .venv/bin/activate
    ```
-4. Create a `.env` file in the project root with your OpenAI API key:
+4. For commands that call OpenAI, create a `.env` file in the project root with
+   your OpenAI API key:
    ```sh
    OPENAI_API_KEY=your-api-key-here
    ```
+
+   The Drift Inspection App reads committed files and does not require an API
+   key.
 
 ## Installing dependencies
 

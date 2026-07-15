@@ -61,6 +61,20 @@ uv run shiny run --host 127.0.0.1 --port 8000 --no-dev-mode \
 
 Open `http://127.0.0.1:8000`; the main review page opens immediately.
 
+`--host` sets the bind address, `--port` sets the local port, and
+`--no-dev-mode` disables development reload behavior. The `drift-review-app`
+entry in `.claude/launch.json` runs this exact command.
+
+## Local Docker launch
+
+```sh
+docker build -f Dockerfile.review_app -t twinkl-drift-review .
+docker run --rm -p 8000:8000 -e PORT=8000 twinkl-drift-review
+```
+
+Open `http://127.0.0.1:8000`. The container includes only the app code,
+required parsers, registered configurations, and frozen review inputs.
+
 ## Weekly Drift Reviewer input boundary
 
 The app reconstructs the exact boundary recorded in each frozen weekly prompt:

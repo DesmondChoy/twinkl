@@ -68,7 +68,9 @@ flowchart TB
         digest["Weekly Digest"]
         prompt["Weekly Coach prompt text"]
         narrative["Optional live Weekly Coach output<br/>(injected callable only)"]
-        review["Internal review app +<br/>evaluation reports"]
+        runtime_review["Runtime Demo Review App"]
+        drift_review["Drift Inspection App<br/>frozen development Runs"]
+        reports["Evaluation reports"]
         d_boundary["??? What is the Weekly Coach<br/>allowed to do?"]
         d_feedback["??? Does user feedback<br/>update the profile?"]
     end
@@ -78,13 +80,15 @@ flowchart TB
     judge --> consensus
     consensus -. "diagnostic retraining" .-> critic_train
     personas --> llm_baseline
-    llm_baseline -. "benchmark comparison" .-> review
+    llm_baseline -. "benchmark comparison" .-> reports
     scores -. "stored predictions" .-> offline_review
     reviewer -. "decision comparison" .-> offline_review
     offline_review -. "independently reviewed cases" .-> critic_train
+    offline_review --> drift_review
+    offline_review --> reports
 
     %% Human benchmark, not label production
-    annotation -. "benchmark comparison" .-> review
+    annotation -. "benchmark comparison" .-> reports
 
     %% Product shell (specified, not wired to real users yet)
     onboarding -.-> profile
@@ -111,7 +115,7 @@ flowchart TB
     drift_v1 -. "approved path; not wired" .-> digest
     digest --> prompt
     prompt -. "programmatic LLM injection" .-> narrative
-    digest --> review
+    digest --> runtime_review
 
     %% Open decisions attached to where they bite
     journaling -.- d_surface
@@ -120,9 +124,9 @@ flowchart TB
     narrative -.- d_boundary
     narrative -.- d_feedback
 
-    class personas,judge,consensus,annotation,critic_train,checkpoint,llm_baseline implemented;
-    class state,scores,weekly,drift,evolution,digest,prompt,narrative,review,nudges partial;
-    class onboarding,profile,journaling,reviewer,drift_v1,offline_review,d_evolution specified;
+    class personas,judge,consensus,annotation,critic_train,checkpoint,llm_baseline,drift_review,reports implemented;
+    class state,scores,weekly,drift,evolution,digest,prompt,narrative,runtime_review,offline_review,nudges partial;
+    class onboarding,profile,journaling,reviewer,drift_v1,d_evolution specified;
     class candidate,d_surface,d_trigger,d_boundary,d_feedback decision;
 ```
 
@@ -136,9 +140,17 @@ Twinkl's executable spine runs top to bottom: generated data and LLM-Judge label
 train the VIF Critic. A trained checkpoint scores each Journal Entry, rolls the
 predictions up into validated weekly signals, runs the weekly prototype router,
 and packages everything into a Weekly Digest plus Weekly Coach prompt text. The
-CLI and review app do not call a live Weekly Coach; output generation requires
-an injected callable. This is implementation truth, not the approved
-user-facing Drift path.
+Weekly Coach CLI and Runtime Demo Review App do not call a live Weekly Coach;
+output generation requires an injected callable. This is implementation truth,
+not the approved user-facing Drift path.
+
+The Drift Inspection App is a separate read-only evaluation interface. It
+compares Runs 1–3 for three frozen Weekly Drift Reviewer setups:
+`gpt-5.4-mini` at reasoning effort `none`, `gpt-5.6-luna` at reasoning effort
+`none`, and `gpt-5.6-luna` at reasoning effort `low`. It reads committed
+development files, verifies their input and result contracts, and makes no
+model or provider API calls. It is not product runtime wiring or deployment
+approval.
 
 Two evaluation paths sit beside that spine. The five-pass LLM-Judge consensus
 table is historical diagnostic label provenance, not the active Drift target.
@@ -158,7 +170,9 @@ Drift is two consecutive Conflicts on the same Core Value. Under the approved
 architecture, the Weekly Drift Reviewer makes those Conflict decisions without
 VIF Critic input, and the deterministic Drift Detector combines them. The VIF
 Critic remains essential to stored prediction, independent review, candidate
-mining, and retraining.
+mining, and retraining. `gpt-5.6-luna` at reasoning effort `low` is the current
+development Weekly Drift Reviewer; its median result across three frozen Runs
+was 23/42 known Drifts, 4 false Drift alerts, and `0.637` coverage.
 [`twinkl-v8pb` completed the historical five-Drift development review](../evals/drift_v1_student_visible_target.md)
 and withheld its former final-test score. The former final-test population is
 now development-only, and the expanded known-development union is fully
@@ -179,4 +193,5 @@ whether user feedback should update the profile over time. See
 [`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md),
 [`docs/vif/03_model_training.md`](../vif/03_model_training.md),
 [`docs/weekly/weekly_digest_generation.md`](../weekly/weekly_digest_generation.md),
+[`docs/demo/weekly_drift_review_app.md`](../demo/weekly_drift_review_app.md),
 and [`docs/demo/review_app.md`](../demo/review_app.md).
