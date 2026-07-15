@@ -144,7 +144,8 @@ def test_at_a_glance_combines_dataset_llms_and_results() -> None:
     assert "204 synthetic personas" in html
     assert "35 with at least one known Drift" in html
     assert "169 with none" in html
-    assert "292 persona/Core Value cases" in html
+    assert "292 review cases" in html
+    assert "one persona × one Core Value" in html
     assert "36 with known Drift" in html
     assert "256 with no known Drift" in html
     assert "42 known Drifts across the 36 cases" in html
@@ -167,10 +168,20 @@ def test_at_a_glance_combines_dataset_llms_and_results() -> None:
 
     assert "Results" in html
     assert "No Core Value or known Drift filter has been applied" in html
-    assert "24/42 hits" in html
-    assert "23/42 hits" in html
+    assert "24/42 known Drifts found" in html
+    assert "57% Drift recall" in html
+    assert "5 false Drift alerts · 83% Drift precision" in html
+    assert "23/42 known Drifts found" in html
+    assert "Median Drift recall" in html
+    assert "55%" in html
+    table_start = html.index('class="aggregate-table"')
+    table_html = html[table_start : html.index("</table>", table_start)]
+    assert "coverage" not in table_html.lower()
     assert "Current development selection" in html
     assert "Why Luna at reasoning low is selected for development" in html
+    assert "coverage as a diagnostic" in html
+    assert "65%, 63%, and 64% coverage" in html
+    assert "Abstain left more adjacent pairs unresolved" in html
     assert "95% interval from −0.071 to +0.205" in html
     assert "observed Drift recall gain is not statistically clear" in html
 
@@ -200,7 +211,9 @@ def test_detail_controls_have_overflow_safe_desktop_structure() -> None:
     assert 'aria-current="step"' in html
     assert '"setup"' in styles
     assert "grid-template-columns: repeat(3, minmax(0, 1fr))" in styles
-    assert "white-space: nowrap" not in styles
+    radio_start = styles.index(".review-controls .radio-inline {")
+    radio_end = styles.index("}", radio_start)
+    assert "white-space: normal" in styles[radio_start:radio_end]
 
 
 def test_filter_spacing_overrides_bootstrap_generated_rules() -> None:
@@ -223,6 +236,17 @@ def test_contract_dividers_stay_aligned() -> None:
 
     assert ".boundary-grid,\n.contract-notes" in styles
     assert "grid-template-columns: repeat(2, minmax(0, 1fr))" in styles
+    assert (
+        ".dataset-map {\n"
+        "    display: grid;\n"
+        "    grid-template-columns: minmax(0, 1fr) 13rem minmax(0, 1fr);\n"
+        "    gap: var(--space-xl);\n"
+        "    align-items: start;" in styles
+    )
+    assert (
+        ".dataset-connector {\n    position: relative;\n    align-self: center;"
+        in styles
+    )
 
 
 def test_timeline_uses_semantic_roles_and_collapses_decision_evidence() -> None:

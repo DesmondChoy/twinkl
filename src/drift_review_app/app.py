@@ -7,6 +7,8 @@ from collections import Counter
 from datetime import date, timedelta
 from hashlib import sha256
 from pathlib import Path
+from statistics import median
+from typing import Any
 
 from shiny import App, Inputs, Outputs, Session, reactive, render, req, ui
 
@@ -711,12 +713,12 @@ def _dataset_overview(data: ReviewData) -> ui.Tag:
                 class_="dataset-stage",
             ),
             ui.div(
-                "evaluated across their Core Values",
+                "one persona × one Core Value",
                 class_="dataset-connector",
             ),
             ui.div(
                 ui.span("REVIEW UNIT", class_="field-name"),
-                ui.strong(f"{len(cases)} persona/Core Value cases"),
+                ui.strong(f"{len(cases)} review cases"),
                 ui.div(
                     ui.span(f"{len(cases_with_drift)} with known Drift"),
                     ui.span(
@@ -803,6 +805,16 @@ def _model_link(name: str, model_key: str, description: str) -> ui.Tag:
     )
 
 
+def _aggregate_recall(row: dict[str, Any]) -> float:
+    known_drifts = int(row["known_drifts"])
+    return int(row["drift_hits"]) / known_drifts if known_drifts else 0.0
+
+
+def _aggregate_precision(row: dict[str, Any]) -> float:
+    predicted_alerts = int(row["predicted_drift_alerts"])
+    return int(row["drift_hits"]) / predicted_alerts if predicted_alerts else 0.0
+
+
 def _llm_overview() -> ui.Tag:
     return ui.div(
         _glance_heading(
@@ -860,8 +872,9 @@ def _aggregate_overview(data: ReviewData) -> ui.Tag:
         ui.div(
             ui.tags.table(
                 ui.tags.caption(
-                    "Known Drift hits, false Drift alerts, and coverage for all "
-                    "three preserved Runs"
+                    "Known Drifts found, Drift recall, false Drift alerts, and "
+                    "Drift precision for all three preserved Runs, with median "
+                    "Drift recall by Weekly Drift Reviewer setup"
                 ),
                 ui.tags.thead(
                     ui.tags.tr(
@@ -869,6 +882,7 @@ def _aggregate_overview(data: ReviewData) -> ui.Tag:
                         ui.tags.th("Run 1", scope="col"),
                         ui.tags.th("Run 2", scope="col"),
                         ui.tags.th("Run 3", scope="col"),
+                        ui.tags.th("Median Drift recall", scope="col"),
                     )
                 ),
                 ui.tags.tbody(
@@ -891,18 +905,34 @@ def _aggregate_overview(data: ReviewData) -> ui.Tag:
                                 ui.tags.td(
                                     ui.strong(
                                         f"{int(row['drift_hits'])}/"
-                                        f"{int(row['known_drifts'])} hits"
+                                        f"{int(row['known_drifts'])} known Drifts "
+                                        "found"
                                     ),
                                     ui.span(
-                                        str(int(row["false_drift_alerts"]))
-                                        + " false alerts",
+                                        f"{_format_percent(_aggregate_recall(row))} "
+                                        "Drift recall",
+                                        class_="aggregate-recall",
                                     ),
                                     ui.span(
-                                        f"{_format_percent(row['coverage'])} coverage"
+                                        f"{int(row['false_drift_alerts'])} false Drift "
+                                        "alerts · "
+                                        f"{_format_percent(_aggregate_precision(row))} "
+                                        "Drift precision"
                                     ),
                                 )
                                 for row in data.aggregate_results[setup_key]
                             ],
+                            ui.tags.td(
+                                ui.strong(
+                                    _format_percent(
+                                        median(
+                                            _aggregate_recall(row)
+                                            for row in data.aggregate_results[setup_key]
+                                        )
+                                    )
+                                ),
+                                class_="aggregate-median",
+                            ),
                         )
                         for setup_key, spec in data.setup_specs.items()
                     ]
@@ -912,8 +942,7 @@ def _aggregate_overview(data: ReviewData) -> ui.Tag:
             class_="table-scroll",
         ),
         ui.p(
-            "Coverage is the share of cases where a Run either produced a Drift "
-            "alert or actively ruled out every adjacent pair.",
+            "Drift precision is the share of Drift alerts that matched known Drift.",
             class_="overview-note",
         ),
         ui.tags.details(
@@ -923,7 +952,13 @@ def _aggregate_overview(data: ReviewData) -> ui.Tag:
                     "It did not pass the earlier preregistered gate that allowed at "
                     "most 0.05 coverage loss. It was later selected under the "
                     "approved hierarchy: known Drift recall first, false Drift "
-                    "alerts second, and coverage as a diagnostic."
+                    "alerts second, and coverage as a diagnostic. Coverage is the "
+                    "share of review cases where a Run either produced a Drift "
+                    "alert or actively ruled out every adjacent pair. Across Runs "
+                    "1–3, Luna at reasoning low had 65%, 63%, and 64% coverage, "
+                    "versus 77%, 80%, and 78% at reasoning none. Lower coverage "
+                    "means Abstain left more adjacent pairs unresolved, which can "
+                    "reduce both Drift recall and false Drift alerts."
                 ),
                 ui.p(
                     "Against Luna at reasoning none, the paired recall difference "

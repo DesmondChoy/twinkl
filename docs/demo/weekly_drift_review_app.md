@@ -16,13 +16,16 @@ The interface is desktop-only and requires a viewport at least 1120 pixels
 wide. Narrower screens use horizontal scrolling.
 
 At a glance appears on the first page before any filter is applied. Dataset
-shows how 204 synthetic personas become 292 persona/Core Value cases, including
-the 36 cases with known Drift, 256 with no known Drift, and 42 known Drifts.
+shows how 204 synthetic personas become 292 review cases, each pairing one
+persona with one Core Value. The data includes 36 cases with known Drift, 256
+with no known Drift, and 42 known Drifts.
 Its collapsed detail adds Journal Entry, persona-week, label, timing, historical
 VIF Critic training provenance, and Core Value counts. LLMs used briefly names
 the role of each Weekly Drift Reviewer and LLM-Judge model and links to its
-official model page. Results reports known Drift hits, false Drift alerts, and
-coverage for all three Weekly Drift Reviewer setups and Runs.
+official model page. Results reports known Drifts found, Drift recall, false
+Drift alerts, and Drift precision for all three Weekly Drift Reviewer setups
+and Runs, plus median Drift recall for each setup. Coverage remains in the
+development-selection disclosure rather than the summary table.
 
 The persona scoreboard then states which Runs found or missed known Drift and
 names the exact known Drift and Drift alert spans. The Journal Entry table keeps

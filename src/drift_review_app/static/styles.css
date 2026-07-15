@@ -468,9 +468,9 @@ input {
 
 .dataset-map {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 10rem minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) 13rem minmax(0, 1fr);
     gap: var(--space-xl);
-    align-items: center;
+    align-items: start;
     border: 1px solid var(--line-strong);
     background: var(--paper-raised);
     padding: var(--space-xl);
@@ -507,6 +507,7 @@ input {
 
 .dataset-connector {
     position: relative;
+    align-self: center;
     color: var(--terracotta);
     font-family: var(--font-data);
     font-size: 0.68rem;
@@ -514,6 +515,7 @@ input {
     line-height: 1.4;
     text-align: center;
     text-transform: uppercase;
+    white-space: nowrap;
 }
 
 .dataset-connector::before,
@@ -670,7 +672,7 @@ input {
 }
 
 .aggregate-table {
-    min-width: 1000px;
+    min-width: 1080px;
     border: 1px solid var(--line-strong);
 }
 
@@ -709,6 +711,23 @@ input {
 .aggregate-table td span {
     color: var(--ink-faint);
     font-size: 0.76rem;
+}
+
+.aggregate-table td .aggregate-recall {
+    color: var(--navy);
+    font-weight: 700;
+}
+
+.aggregate-table td.aggregate-median {
+    background: var(--navy-soft);
+    color: var(--navy);
+    text-align: center;
+}
+
+.aggregate-table td.aggregate-median strong {
+    color: var(--navy);
+    font-family: var(--font-display);
+    font-size: 1.05rem;
 }
 
 .aggregate-setup-name,
