@@ -37,8 +37,8 @@ packets showed only displayed Journal Entry text and the Core Value. They
 excluded identities, historical provenance, LLM-Judge VIF Labels, VIF Critic
 Predictions, selection roles, expected outcomes, and prior review results.
 
-Two isolated `codex-gpt-5` LLM-Judge lanes reviewed all 1,483 Journal
-Entry/Core Value combinations:
+Two isolated Codex Desktop LLM-Judge lanes using `gpt-5.6-sol` at reasoning
+effort `xhigh` reviewed all 1,483 Journal Entry/Core Value combinations:
 
 - 1,412/1,483 initial agreements (`95.2%`)
 - 71 disagreements across 45 cases
@@ -52,9 +52,19 @@ mechanically: each maximal run of at least two consecutive Conflicts for one
 Core Value is one Drift.
 
 No direct API calls were made. Repository API spend was `$0.00`; Codex usage is
-not metered as repository API spend. The two independent lanes and adjudicator
-used the same model, so correlated model error remains possible. These
-are AI-reviewed LLM-Judge Conflict Labels, not human validation.
+not metered as repository API spend. Codex session metadata confirms that both
+review lanes and the disagreement adjudicator used `gpt-5.6-sol` at reasoning
+effort `xhigh`. The earlier `twinkl-752.4` Codex review used the same setup.
+The lanes were context-isolated but not model-independent, so correlated model
+error remains possible. The four `twinkl-752.4` LLM-Judge Conflict Labels that
+remained Uncertain were later reviewed separately using `claude-opus-4-8` at
+reasoning effort `high`.
+
+The frozen reviewer JSON files record `reviewer_runtime: "codex-gpt-5"`. That
+was a manually entered runtime label, not a real model identifier. The frozen
+JSON files and their hashes remain unchanged; use the session-metadata
+provenance above when citing the reviewer models. These are AI-reviewed
+LLM-Judge Conflict Labels, not human validation.
 
 ## Newly found Drifts
 

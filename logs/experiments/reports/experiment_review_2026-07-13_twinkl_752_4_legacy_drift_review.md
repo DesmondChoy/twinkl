@@ -72,8 +72,8 @@ fresh final test.
 
 Four hash-bound packets omitted persona IDs, dates, cohort roles, historical
 splits, legacy labels, VIF Critic outputs, expected outcomes, and author notes.
-Two separate packet-only Codex lanes reviewed all 874 entries from the full
-displayed runtime text.
+Two separate packet-only Codex Desktop lanes using `gpt-5.6-sol` at reasoning
+effort `xhigh` reviewed all 874 entries from the full displayed runtime text.
 
 - 1,748 paired entry judgments
 - 849/874 initial entry agreements (97.1%)
@@ -85,6 +85,15 @@ displayed runtime text.
 
 Agreed entries were immutable during adjudication. Maximal consecutive Conflict
 runs were derived mechanically: a length-three run is one episode, not two.
+
+Codex session metadata confirms that the two review lanes and the disagreement
+adjudicator used the same `gpt-5.6-sol` and `xhigh` setup. The lanes were
+context-isolated but not model-independent, so correlated model error remains
+possible. The frozen reviewer JSON field `reviewer_runtime: "codex-gpt-5"` was
+a manually entered runtime label, not a real model identifier; the frozen JSON
+files and hashes remain unchanged. The four LLM-Judge Conflict Labels that
+remained Uncertain were later reviewed separately using `claude-opus-4-8` at
+reasoning effort `high`.
 
 ## Findings
 
