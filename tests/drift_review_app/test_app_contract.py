@@ -6,17 +6,17 @@ from pathlib import Path
 
 from src.drift_review_app.app import (
     ABSTAIN_EXPLANATIONS,
+    DATA_QUALITY_BADGE_SPECS,
     EXPLAINER_SCRIPT_VERSION,
-    INSPECTION_BADGE_SPECS,
     STYLESHEET_VERSION,
     _at_a_glance,
+    _data_quality_badges,
     _decision_cell,
     _default_period,
     _detail_screen,
     _dimension_choices,
     _filter_screen,
     _how_it_works_panel,
-    _inspection_badges,
     _matching_cases,
     _period_choices,
     _personas_screen,
@@ -100,6 +100,10 @@ def test_main_page_opens_on_two_filters_without_password_gate() -> None:
     assert "Advanced review focus" not in html
     assert "At a glance" in html
     assert html.index("At a glance") < html.index("How it works")
+    assert "Development evidence and review method" in html
+    assert "Dataset, LLM roles, complete results, and input boundary" in html
+    assert 'class="evidence-library"' in html
+    assert 'open="open"' in html
     assert "WHAT COUNTS AS CONFLICT" in html
     assert "A Journal Entry is a Conflict when the displayed text clearly" in html
     assert "WHAT DOES NOT COUNT" in html
@@ -167,17 +171,21 @@ def test_core_value_counts_are_scoped_to_known_drift_status() -> None:
     assert without_drift["universalism"] == "Universalism (21)"
 
 
-def test_inspection_badges_match_each_diagnostic_queue() -> None:
+def test_data_quality_badges_match_only_the_rare_diagnostic_queues() -> None:
     data = load_review_data(ROOT)
-    badges = _inspection_badges(data)
+    badges = _data_quality_badges(data)
 
-    for queue, badge in INSPECTION_BADGE_SPECS.items():
+    assert set(DATA_QUALITY_BADGE_SPECS) == {
+        "False Drift alert",
+        "Invalid response",
+        "Uncertain LLM-Judge Conflict Label",
+    }
+    for queue, (label, class_name, _) in DATA_QUALITY_BADGE_SPECS.items():
+        badge = (label, class_name)
         actual = {
             case_id for case_id, case_badges in badges.items() if badge in case_badges
         }
         assert actual == data.queue_case_ids(queue, "luna_low")
-
-    assert any(len(case_badges) > 1 for case_badges in badges.values())
 
 
 def test_at_a_glance_combines_dataset_llms_and_results() -> None:
@@ -235,12 +243,40 @@ def test_persona_results_use_one_list_heading() -> None:
     cases = _matching_cases(data, "has", "conformity")
     html = str(_personas_screen(data, cases, "has", "conformity"))
     assert html.count("MATCHING PERSONAS") == 1
-    assert "Badges use all three Runs of Luna at reasoning low" in html
-    assert "Run variability" in html
-    assert "Experiment setup disagreement" in html
-    assert 'aria-label="Inspection badges for ' in html
+    assert "Badges use all three Runs of Luna at reasoning low" not in html
+    assert "One case can have several" not in html
+    assert "Missed known Drift" not in html
+    assert "Run variability" not in html
+    assert "Experiment setup disagreement" not in html
+    assert "Unresolved because of Abstain" not in html
+    assert "Data-quality badge legend" not in html
+    assert 'aria-label="Data-quality badges for ' not in html
     assert "At a glance" not in html
     assert "24/42 hits" not in html
+
+
+def test_persona_results_explain_each_visible_data_quality_badge() -> None:
+    data = load_review_data(ROOT)
+    badges = _data_quality_badges(data)
+    case_ids = tuple(case_id for case_id, case_badges in badges.items() if case_badges)
+    cases = tuple(data.cases[case_id] for case_id in case_ids)
+    html = str(_personas_screen(data, cases, "none", cases[0].dimension))
+
+    assert 'aria-label="Data-quality badge legend"' in html
+    assert (
+        "These badges flag review evidence to check; they are not persona traits."
+        in html
+    )
+    assert "A Drift alert did not match a known Drift in the frozen reference." in html
+    assert (
+        "A Weekly Drift Reviewer response could not be validated, so it was ignored."
+        in html
+    )
+    assert (
+        "The LLM-Judge could not resolve Conflict versus Not Conflict for a "
+        "Journal Entry." in html
+    )
+    assert 'aria-label="Data-quality badges for ' in html
 
 
 def test_detail_controls_have_overflow_safe_desktop_structure() -> None:
@@ -252,6 +288,8 @@ def test_detail_controls_have_overflow_safe_desktop_structure() -> None:
         assert class_name in html
     assert "show_reference_labels" not in html
     assert "What each Weekly Drift Reviewer found" in html
+    assert "Compare all setups and Runs" in html
+    assert 'class="scoreboard-comparison"' in html
     assert "How it works" not in html
     assert "FROZEN WEEKLY DRIFT REVIEWER INPUT CONTRACT" not in html
     assert "Verified Weekly Drift Reviewer input cutoffs" in html
@@ -277,6 +315,19 @@ def test_filter_spacing_overrides_bootstrap_generated_rules() -> None:
         "    margin-top: 0;\n"
         "}" in styles
     )
+
+
+def test_visual_direction_keeps_bokeh_behind_crisp_evidence_panels() -> None:
+    styles = (ROOT / "src/drift_review_app/static/styles.css").read_text()
+
+    assert '--font-display: "Avenir Next"' in styles
+    assert ".app-shell::before" in styles
+    assert styles.count("radial-gradient(") >= 6
+    assert "filter: blur(42px)" in styles
+    assert ".filter-panel::before" in styles
+    assert ".evidence-library" in styles
+    assert ".scoreboard-comparison" in styles
+    assert ".timeline-row" in styles
 
 
 def test_contract_dividers_stay_aligned() -> None:

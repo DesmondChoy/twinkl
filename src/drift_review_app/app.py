@@ -63,19 +63,22 @@ _STAGE_FOCUS_SCRIPT = """
 })();
 """
 CURRENT_SETUP_KEY = "luna_low"
-INSPECTION_BADGE_SPECS = {
-    "Missed Drift": ("Missed known Drift", "is-missed"),
-    "False Drift alert": ("False Drift alert", "is-false"),
-    "Run disagreement": ("Run variability", "is-variability"),
-    "Model disagreement": ("Experiment setup disagreement", "is-disagreement"),
-    "Unresolved because of Abstain": (
-        "Unresolved because of Abstain",
-        "is-abstain",
+DATA_QUALITY_BADGE_SPECS = {
+    "False Drift alert": (
+        "False Drift alert",
+        "is-false",
+        "A Drift alert did not match a known Drift in the frozen reference.",
     ),
-    "Invalid response": ("Invalid Weekly Drift Reviewer response", "is-invalid"),
+    "Invalid response": (
+        "Invalid Weekly Drift Reviewer response",
+        "is-invalid",
+        "A Weekly Drift Reviewer response could not be validated, so it was ignored.",
+    ),
     "Uncertain LLM-Judge Conflict Label": (
         "Uncertain LLM-Judge Conflict Label",
         "is-uncertain",
+        "The LLM-Judge could not resolve Conflict versus Not Conflict for a "
+        "Journal Entry.",
     ),
 }
 ABSTAIN_EXPLANATIONS = {
@@ -206,14 +209,44 @@ def _dimension_choices(data: ReviewData, drift_status: str) -> dict[str, str]:
     return choices
 
 
-def _inspection_badges(
+def _data_quality_badges(
     data: ReviewData,
 ) -> dict[str, tuple[tuple[str, str], ...]]:
     badges: dict[str, list[tuple[str, str]]] = {case_id: [] for case_id in data.cases}
-    for queue, badge in INSPECTION_BADGE_SPECS.items():
+    for queue, (label, class_name, _) in DATA_QUALITY_BADGE_SPECS.items():
         for case_id in data.queue_case_ids(queue, CURRENT_SETUP_KEY):
-            badges[case_id].append(badge)
+            badges[case_id].append((label, class_name))
     return {case_id: tuple(case_badges) for case_id, case_badges in badges.items()}
+
+
+def _data_quality_badge_legend(
+    entries: tuple[tuple[str, str, str], ...],
+) -> ui.Tag | None:
+    if not entries:
+        return None
+    return ui.tags.aside(
+        ui.div(
+            ui.p("DATA-QUALITY FLAGS", class_="eyebrow"),
+            ui.p(
+                "These badges flag review evidence to check; they are not persona "
+                "traits.",
+                class_="data-quality-legend-intro",
+            ),
+        ),
+        ui.div(
+            *[
+                ui.div(
+                    _pill(label, f"data-quality-badge {class_name}"),
+                    ui.p(explanation),
+                    class_="data-quality-legend-item",
+                )
+                for label, class_name, explanation in entries
+            ],
+            class_="data-quality-legend-list",
+        ),
+        class_="data-quality-legend",
+        aria_label="Data-quality badge legend",
+    )
 
 
 def _period_choices(
@@ -575,8 +608,25 @@ def _filter_screen(
             ),
             class_="filter-panel",
         ),
-        _at_a_glance(data),
-        _how_it_works_panel(),
+        ui.tags.details(
+            ui.tags.summary(
+                ui.span(
+                    "Development evidence and review method",
+                    class_="evidence-library-title",
+                ),
+                ui.span(
+                    "Dataset, LLM roles, complete results, and input boundary",
+                    class_="evidence-library-note",
+                ),
+            ),
+            ui.div(
+                _at_a_glance(data),
+                _how_it_works_panel(),
+                class_="evidence-library-body",
+            ),
+            class_="evidence-library",
+            open="open",
+        ),
         class_="stage-main filter-stage",
         id="main-content",
     )
@@ -992,40 +1042,41 @@ def _personas_screen(
     dimension: str,
 ) -> ui.Tag:
     status_label = "Has known Drift" if drift_status == "has" else "Has no known Drift"
-    inspection_badges = _inspection_badges(data)
+    data_quality_badges = _data_quality_badges(data)
+    visible_badges = {
+        badge for case in cases for badge in data_quality_badges[case.case_id]
+    }
+    legend_entries = tuple(
+        (label, class_name, explanation)
+        for label, class_name, explanation in DATA_QUALITY_BADGE_SPECS.values()
+        if (label, class_name) in visible_badges
+    )
     return ui.tags.main(
         _stage_trail("personas"),
         ui.div(
-            ui.input_action_button(
-                "change_filters",
-                "← Change filters",
-                class_="text-action",
-                onclick=_RESET_VIEW_ONCLICK,
-            ),
-            ui.h2(
-                f"{value_label(dimension)} · {status_label}",
-                id="stage-heading",
-                tabindex="-1",
-            ),
-            ui.p(
-                f"{len(cases)} matching {'persona' if len(cases) == 1 else 'personas'}",
-                class_="result-count",
-            ),
-            class_="results-heading",
-        ),
-        ui.div(
             ui.div(
+                ui.input_action_button(
+                    "change_filters",
+                    "← Change filters",
+                    class_="text-action",
+                    onclick=_RESET_VIEW_ONCLICK,
+                ),
                 ui.p("MATCHING PERSONAS", class_="eyebrow"),
-                ui.h2("Choose a persona to inspect"),
+                ui.h2(
+                    "Choose a persona to inspect",
+                    id="stage-heading",
+                    tabindex="-1",
+                ),
+                ui.p(
+                    f"{value_label(dimension)} · {status_label} · "
+                    f"{len(cases)} matching "
+                    f"{'persona' if len(cases) == 1 else 'personas'}",
+                    class_="result-count",
+                ),
             ),
-            ui.p(
-                "Badges use all three Runs of Luna at reasoning low; experiment "
-                "setup disagreement compares the frozen setups. One case can "
-                "have several.",
-                class_="section-note",
-            ),
-            class_="section-heading persona-list-heading",
+            class_="results-heading persona-list-heading",
         ),
+        _data_quality_badge_legend(legend_entries),
         ui.div(
             *[
                 ui.tags.article(
@@ -1048,16 +1099,18 @@ def _personas_screen(
                         ),
                         ui.div(
                             *[
-                                _pill(label, f"inspection-badge {class_name}")
-                                for label, class_name in inspection_badges[case.case_id]
+                                _pill(label, f"data-quality-badge {class_name}")
+                                for label, class_name in data_quality_badges[
+                                    case.case_id
+                                ]
                             ],
-                            class_="inspection-badges",
+                            class_="data-quality-badges",
                             aria_label=(
-                                "Inspection badges for "
+                                "Data-quality badges for "
                                 f"{data.profiles[case.persona_id]['name']}"
                             ),
                         )
-                        if inspection_badges[case.case_id]
+                        if data_quality_badges[case.case_id]
                         else None,
                         class_="persona-summary",
                     ),
@@ -1833,47 +1886,55 @@ def _scoreboard(data: ReviewData, case: CaseRecord) -> ui.Tag:
             ),
             class_="reference-outcome",
         ),
-        ui.div(
-            ui.tags.table(
-                ui.tags.caption(
-                    "Persona-level Drift outcome by Weekly Drift Reviewer setup and Run"
-                ),
-                ui.tags.thead(
-                    ui.tags.tr(
-                        ui.tags.th("Weekly Drift Reviewer setup", scope="col"),
-                        ui.tags.th("Run 1", scope="col"),
-                        ui.tags.th("Run 2", scope="col"),
-                        ui.tags.th("Run 3", scope="col"),
-                    )
-                ),
-                ui.tags.tbody(
-                    *[
-                        ui.tags.tr(
-                            ui.tags.th(
-                                ui.div(
-                                    ui.strong(spec.label),
-                                    _pill(
-                                        "Current development selection",
-                                        "is-selected-value",
-                                    )
-                                    if setup_key == CURRENT_SETUP_KEY
-                                    else None,
-                                    class_="score-setup-name",
-                                ),
-                                ui.span(spec.model, class_="score-model"),
-                                scope="row",
-                            ),
-                            *[
-                                _scoreboard_cell(data, case, setup_key, run)
-                                for run in (1, 2, 3)
-                            ],
-                        )
-                        for setup_key, spec in data.setup_specs.items()
-                    ]
-                ),
-                class_="scoreboard-table",
+        ui.tags.details(
+            ui.tags.summary(
+                ui.span("Compare all setups and Runs"),
+                ui.span("3 setups · 9 frozen Runs", class_="comparison-note"),
             ),
-            class_="table-scroll",
+            ui.div(
+                ui.tags.table(
+                    ui.tags.caption(
+                        "Persona-level Drift outcome by Weekly Drift Reviewer "
+                        "setup and Run"
+                    ),
+                    ui.tags.thead(
+                        ui.tags.tr(
+                            ui.tags.th("Weekly Drift Reviewer setup", scope="col"),
+                            ui.tags.th("Run 1", scope="col"),
+                            ui.tags.th("Run 2", scope="col"),
+                            ui.tags.th("Run 3", scope="col"),
+                        )
+                    ),
+                    ui.tags.tbody(
+                        *[
+                            ui.tags.tr(
+                                ui.tags.th(
+                                    ui.div(
+                                        ui.strong(spec.label),
+                                        _pill(
+                                            "Current development selection",
+                                            "is-selected-value",
+                                        )
+                                        if setup_key == CURRENT_SETUP_KEY
+                                        else None,
+                                        class_="score-setup-name",
+                                    ),
+                                    ui.span(spec.model, class_="score-model"),
+                                    scope="row",
+                                ),
+                                *[
+                                    _scoreboard_cell(data, case, setup_key, run)
+                                    for run in (1, 2, 3)
+                                ],
+                            )
+                            for setup_key, spec in data.setup_specs.items()
+                        ]
+                    ),
+                    class_="scoreboard-table",
+                ),
+                class_="table-scroll",
+            ),
+            class_="scoreboard-comparison",
         ),
         ui.tags.details(
             ui.tags.summary("How hits are counted"),
