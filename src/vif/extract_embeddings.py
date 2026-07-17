@@ -32,7 +32,7 @@ from src.vif.state_encoder import StateEncoder
 
 def _load_model(checkpoint_path: str | Path) -> tuple[OrdinalCriticBase, dict]:
     """Load a trained ordinal critic from checkpoint."""
-    cp = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
+    cp = torch.load(checkpoint_path, map_location="cpu", weights_only=True)
     model = OrdinalCriticBase.from_config(cp["model_config"])
     model.load_state_dict(cp["model_state_dict"])
     model.eval()

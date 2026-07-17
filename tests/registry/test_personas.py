@@ -150,6 +150,21 @@ class TestUpdateStage:
 class TestGetPending:
     """Stage-aware filtering."""
 
+    def test_pending_synthetic_returns_only_unfinished(self, monkeypatch, tmp_path):
+        registry_path = _patch_registry(monkeypatch, tmp_path)
+        _register_sample(persona_id="aaaa0001")
+        _register_sample(persona_id="aaaa0002")
+        get_registry().with_columns(
+            pl.when(pl.col("persona_id") == "aaaa0002")
+            .then(False)
+            .otherwise(pl.col("stage_synthetic"))
+            .alias("stage_synthetic")
+        ).write_parquet(registry_path)
+
+        pending = get_pending("synthetic")
+
+        assert pending["persona_id"].to_list() == ["aaaa0002"]
+
     def test_pending_wrangled_returns_unsynthetic_only(self, monkeypatch, tmp_path):
         _patch_registry(monkeypatch, tmp_path)
         _register_sample(persona_id="aaaa0001")

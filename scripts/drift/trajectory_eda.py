@@ -177,7 +177,7 @@ def build_sequences(lab: pl.DataFrame, *, week_mode: str):
         for d in DIMS:
             sums = defaultdict(float)
             negs = defaultdict(int)
-            for w, s in zip(week_idx, entry[d]):
+            for w, s in zip(week_idx, entry[d], strict=True):
                 sums[w] += s
                 negs[w] += s == -1
             weekly[d] = {
@@ -308,7 +308,10 @@ def single_definition_impact(personas, core):
             if max_run(seq, -1) >= 2:
                 r1.add(p)
             wk = data["weekly"][d]
-            if any(dens * n >= 2 for dens, n in zip(wk["neg_density"], wk["n"])):
+            if any(
+                dens * n >= 2
+                for dens, n in zip(wk["neg_density"], wk["n"], strict=True)
+            ):
                 r2.add(p)
             if any(seq[i - 2] >= 0 and seq[i - 1] == -1 and seq[i] == -1
                    for i in range(2, len(seq))):
@@ -374,7 +377,7 @@ def fig_structure(personas):
         (n_entries, "Entries per persona", np.arange(1.5, 13.5)),
         (spans, "Span (days)", np.arange(0, 80, 7)),
         (n_weeks, "Active weeks per persona", np.arange(0.5, 12.5)),
-    ]):
+    ], strict=True):
         ax.hist(vals, bins=bins, color=BLUE, edgecolor=SURFACE, linewidth=1.5)
         ax.set_title(title, fontsize=10, loc="left")
         ax.set_axisbelow(True)
@@ -447,14 +450,14 @@ def fig_prevalence(grid: pl.DataFrame):
 
     fig, axes = plt.subplots(1, 4, figsize=(12.5, 3.6), sharey=True)
     ypos = np.arange(len(dim_order))
-    for ax, (pattern, param, title) in zip(axes, panels):
+    for ax, (pattern, param, title) in zip(axes, panels, strict=True):
         sub = grid.filter(
             (pl.col("pattern") == pattern) & (pl.col("param") == param)
         )
         by_dim = {r["dim"]: r for r in sub.iter_rows(named=True)}
         pcts = [100 * by_dim[d]["core_hits"] / by_dim[d]["core_n"] for d in dim_order]
         ax.barh(ypos, pcts, color=BLUE, height=0.62)
-        for y, d, pct in zip(ypos, dim_order, pcts):
+        for y, d, pct in zip(ypos, dim_order, pcts, strict=True):
             ax.text(pct + 1.5, y, f'{by_dim[d]["core_hits"]}/{by_dim[d]["core_n"]}',
                     va="center", fontsize=7.5, color=MUTED)
         ax.set_title(title, fontsize=9.5, loc="left")
@@ -506,7 +509,7 @@ def fig_cliffs(grid: pl.DataFrame):
     ax.set_ylim(0, max(pct) * 1.18)
     ax.set_xlabel("δ (weekly-mean drop)")
     ax.set_title("Weekly-mean drop vs δ", fontsize=10, loc="left")
-    for x, y in zip(deltas, pct):
+    for x, y in zip(deltas, pct, strict=True):
         ax.annotate(f"{y:.0f}%", (x, y), textcoords="offset points",
                     xytext=(0, 7), fontsize=8, color=INK2, ha="center")
 
@@ -532,7 +535,7 @@ def fig_conflict_heavy_weeks(cand: pl.DataFrame):
         ]
         ax.plot(thresholds, counts, color=color, marker="o", markersize=5, linewidth=2)
         dy = 7 if is_core is False else -14
-        for x, y in zip(thresholds, counts):
+        for x, y in zip(thresholds, counts, strict=True):
             ax.annotate(str(y), (x, y), textcoords="offset points",
                         xytext=(0, dy), fontsize=8.5, color=color, ha="center")
         ax.annotate(label, (thresholds[-1], counts[-1]),

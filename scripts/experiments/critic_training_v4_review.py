@@ -306,10 +306,11 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
 # Ensure inline plotting in notebooks (prevents stale non-inline backend state)
-try:
-    get_ipython().run_line_magic("matplotlib", "inline")
-except Exception:
-    pass
+if _ipython is not None:
+    try:
+        _ipython.run_line_magic("matplotlib", "inline")
+    except Exception:
+        pass
 
 from src.vif.dataset import (
     load_all_data,

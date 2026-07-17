@@ -1256,12 +1256,12 @@ def _render_detector_table(bundle: Any | None) -> ui.Tag:
 
     # Step × detector table
     columns = [("step", "Step"), ("date", "Date")]
-    for key, name in zip(DETECTOR_KEYS, DETECTOR_NAMES):
+    for key, name in zip(DETECTOR_KEYS, DETECTOR_NAMES, strict=True):
         columns.append((key, name))
     columns.append(("consensus", "Votes"))
 
     records = []
-    for t, date in zip(bundle.t_indices, bundle.dates):
+    for t, date in zip(bundle.t_indices, bundle.dates, strict=True):
         row: dict[str, Any] = {"step": f"E{t + 1}", "date": date}
         for detector in bundle.detectors:
             row[detector.key] = "●" if t in detector.alert_steps else "–"
@@ -1287,25 +1287,7 @@ app = App(
 )
 
 
-def _free_port(port: int = 8001) -> None:
-    """Kill any process using the specified port before starting the app directly."""
-    import subprocess
-
-    try:
-        result = subprocess.run(
-            ["lsof", "-ti", f":{port}"],
-            capture_output=True,
-            text=True,
-        )
-        pids = [pid for pid in result.stdout.strip().split("\n") if pid]
-        for pid in pids:
-            subprocess.run(["kill", pid], capture_output=True)
-    except Exception:
-        pass
-
-
 if __name__ == "__main__":
     from shiny import run_app
 
-    _free_port(8001)
     run_app(app, port=8001)

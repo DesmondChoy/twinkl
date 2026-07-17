@@ -203,7 +203,7 @@ class TestSplitByPersona:
         split_a = split_by_persona(labels_df, entries_df, seed=99)
         split_b = split_by_persona(labels_df, entries_df, seed=99)
 
-        for df_a, df_b in zip(split_a, split_b):
+        for df_a, df_b in zip(split_a, split_b, strict=True):
             assert df_a.equals(df_b)
 
     def test_different_seeds_differ(self):

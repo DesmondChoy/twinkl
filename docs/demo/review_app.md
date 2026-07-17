@@ -43,9 +43,9 @@ uv run python src/demo_tool/app.py
 
 Open `http://127.0.0.1:8001`.
 
-The direct Python launcher frees port `8001` before starting and can terminate
-another process already bound to that port. Use the Shiny runner or choose a
-different workflow when the port is in use by unrelated work.
+If another process already uses port `8001`, the direct Python launcher exits
+instead of terminating that process. Use the Shiny runner or free the port
+before retrying.
 
 ## Inputs
 

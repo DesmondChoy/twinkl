@@ -8,6 +8,7 @@ drift/coach modules can consume.
 
 from __future__ import annotations
 
+from copy import deepcopy
 from datetime import timedelta
 from pathlib import Path
 from typing import Any
@@ -33,12 +34,12 @@ from src.wrangling.parse_wrangled_data import parse_wrangled_file
 
 
 def _deep_update(base: dict[str, Any], update: dict[str, Any]) -> dict[str, Any]:
-    """Recursively update nested dicts without mutating the caller's inputs."""
+    """Update ``base`` recursively without aliasing values from ``update``."""
     for key, value in update.items():
         if key in base and isinstance(base[key], dict) and isinstance(value, dict):
             _deep_update(base[key], value)
         else:
-            base[key] = value
+            base[key] = deepcopy(value)
     return base
 
 
@@ -51,14 +52,6 @@ def _checkpoint_to_runtime_overrides(checkpoint: dict[str, Any]) -> dict[str, An
         _deep_update(overrides, training_config)
         # Canonical V4 experiment checkpoints store a flat config. Translate
         # its runtime-relevant fields into the nested training config contract.
-        flat_encoder = {
-            "model_name": training_config.get("encoder_model"),
-            "trust_remote_code": training_config.get("trust_remote_code"),
-            "truncate_dim": training_config.get("truncate_dim"),
-            "text_prefix": training_config.get("text_prefix"),
-            "prompt_name": training_config.get("prompt_name"),
-            "prompt": training_config.get("prompt"),
-        }
         flat_state = {
             "window_size": training_config.get("window_size"),
             "history_pooling": training_config.get("history_pooling"),
@@ -161,7 +154,11 @@ def load_runtime_bundle(
 ) -> tuple[torch.nn.Module, StateEncoder, dict[str, Any], dict[str, Any], str]:
     """Load a trained Critic plus the encoder/state config needed for runtime."""
     resolved_device = device or ("cuda" if torch.cuda.is_available() else "cpu")
-    checkpoint = torch.load(checkpoint_path, map_location=resolved_device, weights_only=False)
+    checkpoint = torch.load(
+        checkpoint_path,
+        map_location=resolved_device,
+        weights_only=True,
+    )
     model = _instantiate_model(checkpoint["model_config"])
     model.load_state_dict(checkpoint["model_state_dict"])
     model.to(resolved_device)
@@ -269,7 +266,12 @@ def predict_persona_timeline(
     profile_weights = state_encoder.parse_core_values_to_weights(profile.get("core_values") or [])
 
     rows: list[dict[str, Any]] = []
-    for entry, mean_row, std_row in zip(entries, mean_array, std_array):
+    for entry, mean_row, std_row in zip(
+        entries,
+        mean_array,
+        std_array,
+        strict=True,
+    ):
         row: dict[str, Any] = {
             "persona_id": persona_id,
             "persona_name": profile.get("name"),
@@ -291,6 +293,7 @@ def predict_persona_timeline(
             mean_row.tolist(),
             std_row.tolist(),
             profile_weights.tolist(),
+            strict=True,
         ):
             row[f"alignment_{dim}"] = float(mean_value)
             row[f"uncertainty_{dim}"] = float(std_value)

@@ -758,7 +758,7 @@ def load_checkpoint(
     Returns:
         Tuple of (model, checkpoint_dict)
     """
-    checkpoint = torch.load(checkpoint_path, map_location=device)
+    checkpoint = torch.load(checkpoint_path, map_location=device, weights_only=True)
 
     model = CriticMLP.from_config(checkpoint["model_config"])
     model.load_state_dict(checkpoint["model_state_dict"])

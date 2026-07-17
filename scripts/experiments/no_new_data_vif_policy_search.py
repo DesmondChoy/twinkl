@@ -314,7 +314,12 @@ def _simplex_weights(families: list[str], step: float) -> list[dict[str, float]]
     for combo in itertools.product(range(units + 1), repeat=len(families)):
         if sum(combo) != units:
             continue
-        weights.append({family: value / units for family, value in zip(families, combo)})
+        weights.append(
+            {
+                family: value / units
+                for family, value in zip(families, combo, strict=True)
+            }
+        )
     return weights
 
 

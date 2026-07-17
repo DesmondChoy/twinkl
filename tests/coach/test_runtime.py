@@ -1,9 +1,12 @@
 """Tests for the weekly VIF-to-Coach runtime bridge."""
 
+import asyncio
 import json
+import logging
 from pathlib import Path
 
 import polars as pl
+import pytest
 
 from src.coach.runtime import run_weekly_coach_cycle
 from src.coach.schemas import DriftDetectionResult
@@ -270,6 +273,49 @@ def test_build_llm_complete_selects_provider_by_env(monkeypatch):
     monkeypatch.delenv("TWINKL_COACH_PROVIDER", raising=False)
     assert build_llm_complete() is not None
     assert build_llm_complete(provider="not-a-provider") is None
+
+
+@pytest.mark.asyncio
+async def test_openai_failure_logs_warning(monkeypatch, caplog):
+    from src.coach.llm_client import build_llm_complete
+
+    class FailingResponses:
+        async def create(self, **_kwargs):
+            raise RuntimeError("provider unavailable")
+
+    class FailingClient:
+        def __init__(self):
+            self.responses = FailingResponses()
+
+    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+    monkeypatch.setattr("openai.AsyncOpenAI", FailingClient)
+    llm_complete = build_llm_complete(provider="openai", model="test-model")
+    assert llm_complete is not None
+
+    with caplog.at_level(logging.WARNING, logger="src.coach.llm_client"):
+        result = await llm_complete("prompt", None)
+
+    assert result is None
+    assert "Weekly Coach OpenAI request failed for model test-model" in caplog.text
+
+
+@pytest.mark.asyncio
+async def test_gemini_failure_logs_warning(monkeypatch, caplog):
+    from src.coach.llm_client import build_llm_complete
+
+    async def fail_to_thread(*_args, **_kwargs):
+        raise RuntimeError("provider unavailable")
+
+    monkeypatch.setenv("GEMINI_API_KEY", "test-key")
+    monkeypatch.setattr(asyncio, "to_thread", fail_to_thread)
+    llm_complete = build_llm_complete(provider="gemini", model="test-model")
+    assert llm_complete is not None
+
+    with caplog.at_level(logging.WARNING, logger="src.coach.llm_client"):
+        result = await llm_complete("prompt", None)
+
+    assert result is None
+    assert "Weekly Coach Gemini request failed for model test-model" in caplog.text
 
 
 def test_unwrap_json_schema_extracts_inner_schema():

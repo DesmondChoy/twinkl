@@ -342,7 +342,9 @@ def get_per_value_agreement(
         judge_scores = merged[judge_col].to_list()
 
         # Calculate exact match count
-        match_count = sum(h == j for h, j in zip(human_scores, judge_scores))
+        match_count = sum(
+            h == j for h, j in zip(human_scores, judge_scores, strict=True)
+        )
 
         # Calculate kappa
         try:

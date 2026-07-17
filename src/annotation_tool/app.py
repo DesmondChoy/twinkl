@@ -691,7 +691,7 @@ def server(input, output, session):
                 duration=5,
             )
             return
-        except PermissionError as e:
+        except PermissionError:
             # File access error
             ui.notification_show(
                 f"Could not save: Permission denied. Check that logs/annotations/ is writable.",
@@ -894,29 +894,7 @@ app = App(
 )
 
 
-def _free_port(port: int = 8000) -> None:
-    """Kill any process using the specified port before starting the server."""
-    import subprocess
-
-    try:
-        result = subprocess.run(
-            ["lsof", "-ti", f":{port}"],
-            capture_output=True,
-            text=True,
-        )
-        pids = result.stdout.strip().split("\n")
-        pids = [p for p in pids if p]
-
-        if pids:
-            for pid in pids:
-                subprocess.run(["kill", pid], capture_output=True)
-            print(f"Killed process(es) on port {port}: {', '.join(pids)}")
-    except Exception:
-        pass
-
-
 if __name__ == "__main__":
     from shiny import run_app
 
-    _free_port(8000)
     run_app(app)

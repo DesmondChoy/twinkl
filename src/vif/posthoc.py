@@ -573,7 +573,6 @@ def _pick_best_candidate(
 
 
 def _policy_family_for_model(model_name: str, config: dict) -> str:
-    softmax_config = config["softmax_logit_adjustment"]
     corn_config = config["corn_threshold_policy"]
 
     if _softmax_branch_specs_for_model(model_name, config):

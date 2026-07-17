@@ -10,6 +10,7 @@ from src.vif.critic import CriticMLP
 from src.vif.dataset import VIFDataset
 from src.vif.runtime import (
     _build_state_matrix,
+    _checkpoint_to_runtime_overrides,
     _resolve_runtime_config,
     aggregate_timeline_by_week,
     persist_runtime_artifacts,
@@ -202,6 +203,19 @@ def test_flat_runtime_config_preserves_explicit_null_encoder_fields():
     assert config["encoder"]["truncate_dim"] is None
     assert config["encoder"]["prompt_name"] is None
     assert config["encoder"]["prompt"] is None
+
+
+def test_runtime_overrides_do_not_mutate_checkpoint_metadata():
+    training_config = {"state_encoder": {"window_size": 1}}
+    checkpoint = {"training_config": training_config}
+
+    overrides = _checkpoint_to_runtime_overrides(checkpoint)
+
+    assert training_config == {"state_encoder": {"window_size": 1}}
+    assert overrides["state_encoder"] == {
+        "window_size": 1,
+        "history_pooling": "none",
+    }
 
 
 def test_legacy_checkpoint_disables_new_history_default(tmp_path):

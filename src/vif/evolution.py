@@ -97,10 +97,20 @@ def _build_profile_suggestion(
     return ProfileUpdateSuggestion(
         blend_rate=blend_rate,
         original_profile={
-            dim: float(value) for dim, value in zip(SCHWARTZ_VALUE_ORDER, original.tolist())
+            dim: float(value)
+            for dim, value in zip(
+                SCHWARTZ_VALUE_ORDER,
+                original.tolist(),
+                strict=True,
+            )
         },
         suggested_profile={
-            dim: float(value) for dim, value in zip(SCHWARTZ_VALUE_ORDER, suggested.tolist())
+            dim: float(value)
+            for dim, value in zip(
+                SCHWARTZ_VALUE_ORDER,
+                suggested.tolist(),
+                strict=True,
+            )
         },
         evolved_dimensions=[row.dimension for row in evolved],
     )

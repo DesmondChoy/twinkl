@@ -10,7 +10,6 @@ from src.vif.state_encoder import StateEncoder
 
 from .conftest import ContentAwareMockTextEncoder, MockTextEncoder
 
-
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
 
@@ -307,11 +306,35 @@ class TestEmbeddingCaching:
         assert hasattr(ds, "embedding_cache")
         assert len(ds.embedding_cache) == 3
 
+    def test_cache_rejects_missing_batch_embedding(self, monkeypatch):
+        df = _make_merged_df(n_personas=1, entries_per_persona=2)
+        state_encoder = _make_encoder()
+        embedding_dim = state_encoder.text_encoder.embedding_dim
+
+        def incomplete_encode(texts, *_args, **_kwargs):
+            return np.zeros((len(texts) - 1, embedding_dim), dtype=np.float32)
+
+        monkeypatch.setattr(
+            state_encoder.text_encoder,
+            "encode_batch",
+            incomplete_encode,
+        )
+
+        with pytest.raises(ValueError, match="shorter than argument 1"):
+            VIFDataset(df, state_encoder, cache_embeddings=True)
+
     def test_no_cache_when_disabled(self):
         """cache_embeddings=False does not create embedding_cache."""
         df = _make_merged_df(n_personas=1, entries_per_persona=3)
         ds = VIFDataset(df, _make_encoder(), cache_embeddings=False)
         assert not hasattr(ds, "embedding_cache")
+
+    def test_missing_embedding_source_raises(self):
+        df = _make_merged_df(n_personas=1, entries_per_persona=1)
+        ds = VIFDataset(df, _make_encoder(), cache_embeddings=False)
+
+        with pytest.raises(KeyError, match="No Journal Entry found for embedding"):
+            ds._get_embedding("missing", 99)
 
     def test_cached_and_uncached_produce_same_output(self):
         """Both modes produce identical __getitem__ output."""

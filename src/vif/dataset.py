@@ -507,7 +507,7 @@ class VIFDataset(Dataset):
         # Batch encode all texts
         if texts:
             embeddings = self.state_encoder.text_encoder.encode_batch(texts)
-            for key, emb in zip(text_keys, embeddings):
+            for key, emb in zip(text_keys, embeddings, strict=True):
                 self.embedding_cache[key] = emb
 
     def _get_entry_text(self, row: dict) -> str:
@@ -527,7 +527,10 @@ class VIFDataset(Dataset):
         # Fallback: encode on-the-fly if not cached
         row = self.entry_lookup.get(key)
         if row is None:
-            return np.zeros(self.state_encoder.text_encoder.embedding_dim, dtype=np.float32)
+            raise KeyError(
+                "No Journal Entry found for embedding: "
+                f"persona_id={persona_id!r}, t_index={t_index}"
+            )
 
         text = self._get_entry_text(row)
         return self.state_encoder.text_encoder.encode_batch([text])[0]

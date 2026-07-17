@@ -157,7 +157,7 @@ def detect_weekly_drift(
             recent_uncertainty = recent[uncertainty_col(dim)].to_list()
             if all(
                 float(score) < rut_threshold and float(sig) < uncertainty_threshold
-                for score, sig in zip(recent_scores, recent_uncertainty)
+                for score, sig in zip(recent_scores, recent_uncertainty, strict=True)
             ):
                 rut_dims.add(dim)
 

@@ -10,9 +10,12 @@ builder returns ``None`` and callers fall back to a numeric-only digest.
 
 from __future__ import annotations
 
+import logging
 import os
 
 from src.coach.weekly_digest import LLMCompleteFn
+
+logger = logging.getLogger(__name__)
 
 DEFAULT_OPENAI_MODEL = "gpt-5.4-mini"
 DEFAULT_GEMINI_MODEL = "gemini-2.5-flash"
@@ -61,7 +64,12 @@ def _build_openai_llm_complete(
             response = await client.responses.create(**kwargs)
             return getattr(response, "output_text", None) or None
         except Exception:
-            # Any failure (auth, network, parse) degrades to a numeric-only digest.
+            logger.warning(
+                "Weekly Coach OpenAI request failed for model %s; "
+                "returning the Weekly Digest without a Weekly Coach reflection",
+                resolved_model,
+                exc_info=True,
+            )
             return None
 
     return llm_complete
@@ -112,7 +120,12 @@ def _build_gemini_llm_complete(
 
             return await asyncio.to_thread(_generate, prompt, response_format)
         except Exception:
-            # Any failure (auth, network, parse) degrades to a numeric-only digest.
+            logger.warning(
+                "Weekly Coach Gemini request failed for model %s; "
+                "returning the Weekly Digest without a Weekly Coach reflection",
+                resolved_model,
+                exc_info=True,
+            )
             return None
 
     return llm_complete

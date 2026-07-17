@@ -105,7 +105,7 @@ def load_checkpoint(
     device: str = "cpu",
 ) -> tuple[CriticBNN, dict]:
     """Load CriticBNN from checkpoint."""
-    checkpoint = torch.load(checkpoint_path, map_location=device)
+    checkpoint = torch.load(checkpoint_path, map_location=device, weights_only=True)
 
     model = CriticBNN.from_config(checkpoint["model_config"])
     model.load_state_dict(checkpoint["model_state_dict"])

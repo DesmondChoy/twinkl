@@ -209,7 +209,7 @@ def load_checkpoint_model(
 ) -> tuple[torch.nn.Module, dict[str, Any]]:
     """Load a later model without reloading the shared text encoder."""
     checkpoint = torch.load(
-        run["checkpoint_path"], map_location=device, weights_only=False
+        run["checkpoint_path"], map_location=device, weights_only=True
     )
     model_config = checkpoint.get("model_config")
     if not isinstance(model_config, dict) or "variant" not in model_config:

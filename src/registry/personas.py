@@ -226,16 +226,16 @@ def get_pending(stage: str) -> pl.DataFrame:
 
     if stage == "synthetic":
         # Shouldn't really happen, but return any not generated
-        return df.filter(pl.col("stage_synthetic") == False)
+        return df.filter(~pl.col("stage_synthetic"))
     elif stage == "wrangled":
         # Ready to wrangle: synthetic=True, wrangled=False
         return df.filter(
-            (pl.col("stage_synthetic") == True) & (pl.col("stage_wrangled") == False)
+            pl.col("stage_synthetic") & ~pl.col("stage_wrangled")
         )
     else:  # labeled
         # Ready to label: wrangled=True, labeled=False
         return df.filter(
-            (pl.col("stage_wrangled") == True) & (pl.col("stage_labeled") == False)
+            pl.col("stage_wrangled") & ~pl.col("stage_labeled")
         )
 
 
@@ -262,13 +262,12 @@ def get_status() -> dict:
         "labeled": df["stage_labeled"].sum(),
         "pending_wrangling": len(
             df.filter(
-                (pl.col("stage_synthetic") == True)
-                & (pl.col("stage_wrangled") == False)
+                pl.col("stage_synthetic") & ~pl.col("stage_wrangled")
             )
         ),
         "pending_labeling": len(
             df.filter(
-                (pl.col("stage_wrangled") == True) & (pl.col("stage_labeled") == False)
+                pl.col("stage_wrangled") & ~pl.col("stage_labeled")
             )
         ),
     }

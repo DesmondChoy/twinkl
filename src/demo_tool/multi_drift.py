@@ -258,7 +258,12 @@ def _run_detectors(scores: np.ndarray, weights: np.ndarray, T: int) -> list[Dete
     ]
 
     detector_results = []
-    for key, name, raw in zip(DETECTOR_KEYS, DETECTOR_NAMES, raw_results):
+    for key, name, raw in zip(
+        DETECTOR_KEYS,
+        DETECTOR_NAMES,
+        raw_results,
+        strict=True,
+    ):
         alert_tuples = raw["alerts"]
         # Normalise: cosine returns bare ints, others return (t, j, ...) tuples
         if key == "cosine":

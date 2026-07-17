@@ -400,7 +400,7 @@ def build_weekly_digest(
     dim_means: list[tuple[str, float]] = []
     n_rows = labels.height
 
-    for dim, col in zip(SCHWARTZ_VALUE_ORDER, ALIGNMENT_COLUMNS):
+    for dim, col in zip(SCHWARTZ_VALUE_ORDER, ALIGNMENT_COLUMNS, strict=True):
         mean_score = float(labels[col].mean())
         neg_count = int((labels[col] == -1).sum())
         neutral_count = int((labels[col] == 0).sum())
