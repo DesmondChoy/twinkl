@@ -42,8 +42,6 @@ user-facing Drift path. See the adopted
 - **Hard dimensions remain unresolved**: `Hedonism` and especially `Security` still lag, and the latest regenerated targeted batch improved some local behavior without producing a cleaner overall frontier.
 - **Circumplex structure is measured but not optimized**: reruns can improve one metric family while worsening opposite-pair violations or adjacent-pair support.
 - Codex-reviewed matched Hedonism diagnostic (`twinkl-748`): 20 frozen pairs show that the incumbent recognizes nearly every `+1` case but recovers only 5% of matched self-denial `-1` cases; the tail-sensitive reference reaches 20% `-1` recall and 15% strict-pair accuracy. This is AI diagnostic evidence, not human validation, and remains evaluation-only pending `twinkl-kof2`.
-- Epoch-level training-signal analysis to test whether validation loss is steering checkpoints away from frontier metrics (`twinkl-751`)
-- Gated parameter-efficient encoder adaptation path (`twinkl-750`)
 - Persona-level aggregation protocol (aggregate per-entry scores into persona-level value profile for Top-K accuracy)
 - Formal held-out evaluation against declared value orderings (Spearman ρ > 0.7 target)
 - **Deployment-approval criteria remain open:** `twinkl-7vam` must fix the false Drift alert or precision tolerance, minimum Drift recall, coverage and abstention trade-off, stability requirements, and any claimed efficiency gate.
@@ -53,7 +51,7 @@ user-facing Drift path. See the adopted
 ### Next Steps
 1. Implement and verify recall-first checkpoint selection before treating another training run as decision evidence
 2. Implement the versioned VIF Critic review-and-retrain path without changing the approved user-facing decision path
-3. Define the candidate adjacent-pair rule and deployment-approval criteria under `twinkl-7vam`, then freeze them before the fresh final test
+3. Define the weekly-only deployment-approval criteria under `twinkl-7vam`, then freeze them before the fresh final test
 4. Report `-1` precision and the precision-recall curve while prioritizing `recall_-1`; keep QWK, `+1` recall, calibration, circumplex diagnostics, and persona-level aggregation as secondary health checks
 
 ---
@@ -115,10 +113,9 @@ product direction or defines the deployment gate.
 #### Conflict Recall (`recall_-1`) — Primary
 
 `recall_-1` measures how often the VIF Critic recovers Journal Entries with
-LLM-Judge Conflict labels. This is the primary model-development metric because
-a conditional candidate-confirmation path cannot propose a Drift pair when the
-VIF Critic misses either component Conflict. The approved weekly-only path does
-not depend on this metric.
+LLM-Judge Conflict Labels. This is the primary model-development metric because
+the VIF Critic supports offline disagreement review and retraining. The approved
+weekly-only path does not depend on this metric.
 
 
 ```
@@ -239,7 +236,7 @@ mean_rho = np.mean(results)
 
 | Metric | Role | Rationale |
 |--------|------|-----------|
-| `recall_-1` | Primary development metric | Measures Conflict recovery for offline review and the conditional candidate-confirmation path |
+| `recall_-1` | Primary development metric | Measures Conflict recovery for offline review and retraining |
 | `-1` precision and precision-recall curve | Mandatory report; threshold deferred | Exposes false-conflict inflation while recall is optimized |
 | QWK | Ordinal-health diagnostic | Detects collapse of the retained ternary output and preserves historical comparability |
 | `+1` recall / minority recall | Non-gating diagnostic | Supports occasional positive context without defining Drift |

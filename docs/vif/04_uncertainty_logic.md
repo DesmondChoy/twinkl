@@ -1,10 +1,9 @@
 # VIF – Uncertainty and Drift Review Logic
 
 This document describes how VIF Critic uncertainty supports offline review,
-retraining, and a conditional candidate-generation path. The approved
-user-facing Drift path does not consume VIF Critic outputs. It remains separate
-from the weekly crash/rut/evolution prototype that is still wired into the
-offline runtime.
+case selection, and retraining. The approved user-facing Drift path does not
+consume VIF Critic outputs. It remains separate from the weekly
+crash/rut/evolution prototype that is still wired into the offline runtime.
 
 ---
 
@@ -17,7 +16,7 @@ deferral is safer than a confident but brittle interpretation.
 The architecture therefore separates four questions:
 
 1. What class probabilities or alignment estimate does the VIF Critic produce?
-2. Which predictions warrant offline review or candidate generation?
+2. Which predictions warrant offline review?
 3. Does the Weekly Drift Reviewer confirm Conflict from Journal Entry text?
 4. Do two consecutive confirmed Conflicts meet the Drift definition?
 
@@ -58,10 +57,9 @@ Ambiguous inputs can average toward neutral while still producing high spread
 across dropout samples. That combination should not be interpreted as a
 confident neutral judgment.
 
-Global calibration is not sufficient for Conflict screening. Any conditional
-candidate-selection rule must check uncertainty on the `-1` class because
-selective prediction can otherwise suppress the exact minority cases the VIF
-Critic is meant to recover.
+Global calibration is not sufficient for Conflict screening. Offline case
+selection must check uncertainty on the `-1` class because aggregate metrics
+can hide failures on the minority cases the VIF Critic is meant to recover.
 
 ---
 
@@ -136,16 +134,15 @@ Drift v1 is:
 
 The Weekly Drift Reviewer decides whether each relevant Journal Entry shows
 Conflict, non-Conflict, or insufficient evidence without seeing VIF Critic
-predictions. The Drift Detector then applies the deterministic rule. The VIF
-Critic may later propose candidate adjacent pairs, but only after predefined
-criteria and a fresh final test support deployment approval.
+predictions. The Drift Detector then applies the deterministic rule. VIF Critic
+candidate confirmation is outside the remaining capstone scope.
 
 | Layer | v1 behavior |
 |---|---|
 | Student-visible target | Two consecutive Journal Entries each visibly show a Conflict for the same Core Value |
 | Historical consensus table | Retired diagnostic provenance only; not a Drift target, threshold-selection input, or final test set |
 | Approved user-facing path | Weekly Drift Reviewer decisions without VIF Critic input, followed by the deterministic Drift Detector; production integration remains pending |
-| VIF Critic path | Store predictions and uncertainty for offline comparison, independent review, retraining, and conditional candidate generation |
+| VIF Critic path | Store predictions and uncertainty for offline comparison, independent review, case selection, and retraining |
 | Delivery | Weekly Digest with cited Journal Entry evidence and active, recovered, mixed, or uncertain wording; Weekly Drift Reviewer abstention emits no Drift claim; exact schema pending |
 
 The EDA supports this definition because most dips spanning one Journal Entry
@@ -167,10 +164,9 @@ Drifts have different delivery states; it is not another state for one Drift.
 active or recovered. Exact schema values and transition rules still require
 implementation and scenario tests.
 
-Abstention is not a correct negative. Coverage and suppressed reference Drifts
-must remain visible for both Weekly Drift Reviewer abstention and any
-uncertainty-gated candidate rule, so apparent precision cannot improve merely
-by hiding hard cases.
+Abstention is not a correct negative. Coverage and reference Drifts suppressed
+by Weekly Drift Reviewer abstention must remain visible, so apparent precision
+cannot improve merely by hiding hard cases.
 
 ---
 
@@ -265,5 +261,5 @@ out-of-distribution detection. The retired `twinkl-wq9p` diagnostic showed a
 target-validity problem before it could establish whether uncertainty calibration
 is the binding constraint. `twinkl-v8pb` correctly withheld its former
 final-test score, and that population is now development-only. The next step is
-the bounded candidate-confirmation study followed by a fresh final test, not a
-heavier uncertainty method.
+the weekly-only fresh final test after runtime wiring, not a heavier uncertainty
+method.

@@ -28,9 +28,8 @@ The current VIF implementation is intentionally narrow:
   Critic input, followed by the deterministic rule that two consecutive
   Conflicts for the same Core Value form Drift
 - **Approved VIF Critic role**: stored predictions and uncertainty for offline
-  comparison, independent review, candidate mining, and retraining; a later
-  candidate-confirmation path requires predefined criteria and a fresh final
-  test
+  comparison, independent review, candidate mining, and retraining; candidate
+  confirmation is outside the remaining capstone scope
 
 > **Note:** Specific model names, embedding dimensions, and default window sizes
 > change over time. Treat `config/vif.yaml` as the source of truth for current

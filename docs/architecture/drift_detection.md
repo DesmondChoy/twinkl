@@ -1,8 +1,9 @@
 # VIF Critic Role in Drift Detection
 
-**Status:** Architecture adopted on 2026-07-14 under `twinkl-752.2`.
-This is not deployment approval. Runtime implementation, operating limits, and
-a fresh final test remain pending.
+**Status:** Architecture adopted on 2026-07-14 under `twinkl-752.2`; the
+optional VIF Critic candidate-confirmation path was removed from the remaining
+capstone scope on 2026-07-17. This is not deployment approval. Runtime
+implementation, operating limits, and a fresh final test remain pending.
 
 This document records how the VIF Critic remains an essential part of Twinkl
 without giving it user-facing authority that the evidence does not support. The
@@ -87,7 +88,7 @@ direct authority over Drift:
 The complete development data is synthetic, 185/292 cases have historical
 training provenance, and no fresh final test exists. These limits are why the
 VIF Critic remains essential to measurement and improvement while its
-user-facing role stays conditional.
+user-facing role stays outside the remaining capstone scope.
 
 ## Review-and-Retrain Loop
 
@@ -104,54 +105,22 @@ The offline loop is deliberately auditable:
 4. Add only independently reviewed cases to development or training data, with
    provenance and dataset versions.
 5. Retrain the VIF Critic and evaluate it on held-out development data.
-6. Freeze the checkpoint, candidate-selection rule, deployment-approval
-   criteria, and prompt before opening a fresh final test.
+6. Freeze the VIF Critic checkpoint and reviewed training-data version before
+   opening a fresh final test for the separate user-facing path.
 
 Real user Journal Entries must not enter training automatically. Any future
 live-data loop requires explicit consent, access controls, retention rules, and
 de-identification. The capstone POC may demonstrate the loop using synthetic and
 reviewed development data.
 
-## Conditional User-Facing Role
+## Deferred Candidate-Confirmation Idea
 
-The only selected path by which the VIF Critic may later affect a user-facing
-Drift claim is candidate generation followed by independent confirmation:
-
-```mermaid
-flowchart TB
-  subgraph PROPOSE["Candidate confirmation on development data"]
-    direction LR
-    JE["Journal Entries"] --> VIF["VIF Critic<br/>Conflict screening + uncertainty"]
-    CV["Core Values"] --> VIF
-    VIF --> PAIR{"Candidate adjacent pair?<br/>Rule not selected"}
-    PAIR -- "Yes" --> WDR["Weekly Drift Reviewer<br/>reviews the Journal Entries<br/>VIF Critic predictions hidden"]
-    PAIR -- "No or uncertain" --> NONE["No Drift claim"]
-    NONE -.-> AUDIT["Model-blind audit sample<br/>evaluation only"]
-    WDR --> DD["Drift Detector<br/>two confirmed Conflicts"]
-  end
-
-  subgraph DEVELOP["Predefined development gate"]
-    direction LR
-    DD --> DEV["Development comparison<br/>against weekly-only review"]
-    BASE["Weekly-only baseline"] --> DEV
-    DEV --> PASS{"Meets Drift recall, false Drift alert,<br/>coverage, abstention, and<br/>efficiency criteria?"}
-  end
-
-  subgraph TEST["Frozen final test and deployment approval"]
-    direction LR
-    PASS -- "Yes" --> FINAL["Frozen checkpoint and rules<br/>on a fresh final test"]
-    FINAL --> APPROVAL{"Deployment approval?"}
-    APPROVAL -- "Yes" --> ADOPT["Enable candidate-confirmation path"]
-  end
-
-  PASS -- "No" --> OFF["Keep VIF Critic outside<br/>user-facing decisions"]
-  APPROVAL -- "No" --> OFF
-```
-
-The exact candidate-selection rule is not adopted here. `twinkl-7vam` owns the
-predefined Drift recall, false Drift alert, coverage, abstention, stability, and
-efficiency criteria. Thresholds may be selected on development data only and
-must be frozen before the fresh final test under `twinkl-pv6s`.
+VIF Critic candidate confirmation is outside the remaining capstone scope. The
+development evidence remains useful historical context, but no candidate rule,
+runtime branch, or deployment gate will be implemented in the current work.
+Revisiting the idea requires a new scope decision and fresh evaluation. Any
+future Weekly Drift Reviewer must still see Journal Entry text and Core Values,
+not VIF Critic predictions.
 
 ## Explicitly Rejected or Unapproved
 
@@ -184,7 +153,7 @@ architecture still needs:
 - the deterministic two-Conflict Drift Detector wired after Weekly Drift
   Reviewer decisions;
 - predefined deployment-approval criteria and a fresh final test; and
-- a feature-gated candidate-confirmation path that remains off until approved.
+- the approved Weekly Digest and Weekly Coach handoff.
 
 ## Related Records
 
@@ -196,7 +165,6 @@ architecture still needs:
 - [`twinkl-752.5` raw-input and scheduling reassessment](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5_reassessment.md)
 - [`twinkl-52zz` Luna reasoning-effort comparison](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_52zz_luna_low.md)
 - [Drift Inspection App](../demo/weekly_drift_review_app.md)
-- Beads: `twinkl-60l5` (review-and-retrain implementation), `twinkl-olen`
-  (candidate-confirmation study), `twinkl-7vam` (operating and
-  deployment-approval criteria), `twinkl-pv6s` (fresh final test), and
-  `twinkl-a2w` (approved runtime implementation)
+- Beads: `twinkl-60l5` (review-and-retrain implementation), `twinkl-7vam`
+  (weekly-only operating and deployment-approval criteria), `twinkl-pv6s`
+  (fresh final test), and `twinkl-a2w` (approved runtime implementation)

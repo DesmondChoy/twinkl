@@ -259,9 +259,8 @@ Critic triggers targeted Drift-relevant opportunities better than random, but
 that diagnostic made no reviewer calls and does not show that early review
 works. No fresh final test exists.
 The adopted architecture keeps VIF Critic predictions in offline comparison,
-independent review, and retraining. The VIF Critic may later propose candidate
-adjacent Conflict pairs only after predefined criteria and a fresh final test
-support deployment approval. No VIF Critic or Drift Detector has deployment
+independent review, and retraining. VIF Critic candidate confirmation is outside
+the remaining capstone scope. No VIF Critic or Drift Detector has deployment
 approval, and the approved Drift Detector is not wired into the weekly runtime.
 The former consensus-derived frozen benchmark is retired historical evidence.
 The crash/rut/evolution output modes remain prototype compatibility values, not
@@ -359,19 +358,16 @@ learned routing policies.
    model-blind controls. Weekly Drift Reviewer outputs must not automatically
    become LLM-Judge reference labels.
 4. Under `twinkl-7vam`, predefine Drift recall, false Drift alert, coverage,
-   abstention, stability, and any efficiency criteria. Select and freeze any
-   VIF Critic candidate rule on development evidence only.
+   abstention, stability, and any efficiency criteria. Freeze the Luna-low
+   Weekly Drift Reviewer contract and deterministic Drift rule.
 5. Build a fresh final test under `twinkl-pv6s`. Keep retraining cases out of it
    and score only after the checkpoint, rule, prompt, and criteria are frozen.
 6. Add active, recovered, mixed, and uncertain Weekly Digest delivery wording.
    A Weekly Drift Reviewer abstention must emit no Drift claim, and coverage
    must be reported.
-7. Add a production-facing Weekly Coach service entrypoint that injects the
-   live LLM,
-   validates the narrative, and persists the result.
-8. Report Tier 1 pass rates over a batch and add Tier 2 meta-judge plus Tier 3
+7. Report Tier 1 pass rates over a batch and add Tier 2 meta-judge plus Tier 3
    human calibration.
-9. Capture the user's perceived-accuracy rating and make it queryable.
+8. Capture the user's perceived-accuracy rating and make it queryable.
 
 ---
 

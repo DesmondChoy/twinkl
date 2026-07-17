@@ -25,8 +25,8 @@ Crucially, the VIF is designed to be:
 
 This engine supports Twinkl's learning loop. In the approved user-facing path,
 the Weekly Drift Reviewer and Drift Detector decide Drift so the Weekly Coach
-can gently surface tensions; VIF Critic outputs remain offline unless a later
-candidate-confirmation path receives deployment approval.
+can gently surface tensions; VIF Critic outputs remain in offline review and
+retraining for the remaining capstone scope.
 
 ---
 
@@ -59,8 +59,8 @@ The VIF is designed to:
 3. **Uncertainty-aware review**
    The VIF Critic estimates **epistemic uncertainty** in its predictions.
    Twinkl stores that uncertainty for offline comparison, independent review,
-   retraining, and conditional candidate generation. It does not directly
-   authorize user-facing feedback.
+   case selection, and retraining. It does not directly authorize user-facing
+   feedback.
 
 4. **Trajectory-aware downstream evaluation**
    The live VIF Critic default uses `window_size: 1`, so each prediction sees the current Journal Entry, including its displayed nudge and response when present, plus the normalized value profile. The Weekly Drift Reviewer and deterministic Drift Detector provide the approved temporal decision layer. `twinkl-749` tested a small prior-Journal-Entry mean summary, but its seed-11 results regressed and did not receive deployment approval. History support therefore remains diagnostic rather than an assumed property of the default VIF Critic.
@@ -149,10 +149,9 @@ To make this design capstone-friendly, we summarise a recommended tiered approac
     evidence-backed mechanism and a matching student-visible target contract.
   * VIF Critic: calibrated local MLP with versioned prediction, uncertainty,
     independent review, and retraining.
-  * Conditional path: the VIF Critic may propose candidate adjacent Conflict
-    pairs for Weekly Drift Reviewer confirmation with predictions hidden. Raw
-    prompt input, confidence-only fallback, and direct MLP Drift decisions are
-    not selected.
+  * VIF Critic candidate confirmation is outside the remaining capstone scope.
+    Raw prompt input, confidence-only fallback, and direct VIF Critic Drift
+    decisions remain unapproved.
   * Drift rule: the same deterministic definition for Core Values, with active,
     recovered, mixed, or uncertain weekly wording.
 

@@ -2,7 +2,9 @@
 
 **Status:** Scope adopted on 2026-07-12 under `twinkl-752`; staged architecture
 adopted on 2026-07-14 under `twinkl-752.2`; Weekly Drift Reviewer configuration
-and metric hierarchy updated on 2026-07-15 under `twinkl-52zz`.
+and metric hierarchy updated on 2026-07-15 under `twinkl-52zz`; the optional
+VIF Critic candidate-confirmation path was removed from the remaining capstone
+scope on 2026-07-17.
 
 This document records the detailed Value Identity Function (VIF) scope decision
 for the remaining capstone period. The [PRD](../prd.md) remains authoritative for
@@ -56,8 +58,9 @@ tested change before another training run is treated as decision evidence.
   abstention, and Drifts suppressed by abstention or uncertainty.
 
 Because there is no active fresh final test set, this is a development contract
-only. The staged architecture is selected, but no VIF Critic,
-candidate-confirmation path, or Drift Detector has deployment approval.
+only. The staged architecture is selected, but the Drift Detector does not have
+deployment approval. The VIF Critic candidate-confirmation path is outside the
+remaining capstone scope.
 
 ## Canonical Drift
 
@@ -77,10 +80,8 @@ writer making a behavior or choice against the same Core Value.
 
 The current user-facing path uses Weekly Drift Reviewer decisions without VIF
 Critic input. The deterministic Drift Detector then requires two consecutive
-Conflicts for the same Core Value. Soft `P(-1)` evidence and uncertainty apply
-only to the conditional VIF Critic candidate-selection path. Its exact rule must
-preserve adequate evidence from each Journal Entry and remains a downstream
-decision under `twinkl-7vam`.
+Conflicts for the same Core Value. VIF Critic probabilities and uncertainty
+remain inputs to offline review and retraining, not the user-facing Drift path.
 
 ## Role of `+1` and QWK
 
@@ -224,7 +225,7 @@ The experiment history and numeric evidence remain in
 
 The user approved the following architecture under `twinkl-752.2`:
 
-1. **Current user-facing path:** Journal Entries and Core Values go to the
+1. **Approved user-facing path:** Journal Entries and Core Values go to the
    Weekly Drift Reviewer without VIF Critic input. The deterministic Drift
    Detector declares Drift only after two consecutive Weekly Drift Reviewer
    Conflicts for the same Core Value. Confirmed Drift then flows into the Weekly
@@ -234,22 +235,23 @@ The user approved the following architecture under `twinkl-752.2`:
    mining, error analysis, and retraining. Weekly Drift Reviewer outputs do not
    automatically become LLM-Judge reference labels, and retraining cases cannot
    double as final-test evidence.
-3. **Conditional user-facing path:** after predefined development criteria are
-   fixed and met, the VIF Critic may propose candidate adjacent Conflict pairs.
-   The Weekly Drift Reviewer must confirm them from Journal Entry text without
-   seeing VIF Critic predictions. The candidate-selection rule, checkpoint,
-   prompt, and criteria must be frozen before a fresh final test. Only a passing
-   final test can support deployment approval.
+3. **Out-of-scope idea:** VIF Critic candidate confirmation is not part of the
+   remaining capstone work. Revisiting it requires a new scope decision and a
+   fresh evaluation that keeps VIF Critic predictions hidden from the Weekly
+   Drift Reviewer.
 
 Raw VIF Critic prompt input, direct VIF Critic Drift decisions,
 confidence-only fallback, and early-plus-weekly scheduling are not selected.
 See [VIF Critic Role in Drift Detection](../architecture/drift_detection.md).
 
-## Explicitly Deferred
+## Remaining Work and Out-of-Scope Ideas
 
-- the acceptable Drift precision or false Drift alert tolerance;
-- the exact Core Value-gated VIF Critic candidate-selection rule;
-- recall-first checkpoint-selection implementation;
-- a fresh independently resolved final test set;
-- production Drift Detector and Weekly Coach wiring; and
-- any conversion from the ternary VIF Critic to a binary Conflict model.
+Remaining work:
+
+- define the acceptable false Drift alert tolerance and minimum Drift recall;
+- implement recall-first checkpoint selection;
+- build a fresh, independently resolved final test set; and
+- wire the approved Drift Detector into the Weekly Digest and Weekly Coach.
+
+VIF Critic candidate confirmation and conversion of the ternary VIF Critic to
+a binary Conflict model are outside the remaining capstone scope.

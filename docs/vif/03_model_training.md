@@ -49,8 +49,8 @@ $$
 $$
 
 That means the VIF Critic predicts the LLM-Judge's labels for the current
-Journal Entry. Its outputs support offline review and a possible future
-candidate-confirmation path rather than a learned discounted-return target.
+Journal Entry. Its outputs support offline review and retraining rather than a
+learned discounted-return target.
 The approved user-facing Drift path uses Weekly Drift Reviewer decisions.
 
 ### 2.2 Exploratory Alternatives
@@ -154,9 +154,8 @@ policy, the metric roles are:
 - raw probability/logit exports when needed
 
 No fixed precision floor is active yet. Recall-first development can identify
-promising VIF Critic checkpoints, but a conditional candidate-confirmation
-path requires sufficient Drift recall plus an adopted false Drift alert
-tolerance before deployment approval.
+promising VIF Critic checkpoints for offline review and retraining, but it does
+not grant user-facing Drift authority.
 
 Implementation caveat: `src/vif/eval.py` still selects mainline checkpoints
 QWK-first. Historical runs and the current board therefore reflect their

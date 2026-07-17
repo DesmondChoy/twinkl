@@ -20,7 +20,7 @@ The current layers of the contract are deliberately different:
 | Student-visible target | A Journal Entry is a Conflict only when the full displayed text clearly shows a behavior or choice against a Core Value. `twinkl-752.4` reviewed every candidate discoverable from either legacy label source plus matched controls. |
 | Development set | The complete development review contains 42 Drifts across 36 Drift trajectories in 292 resolved cases. `twinkl-qtwz` added nine Drifts across eight Drift trajectories from the 186 cases outside the earlier 106-case union. The earlier `twinkl-752.5` study used 33 Drifts across 28 Drift trajectories; keep its reported metrics bound to that input. Historical provenance must be reported as a subgroup because all nine newly found Drifts came from training-seen Journal Entries. The fixed `run_020` threshold is historical development evidence. |
 | Final test set | None is active. The former 24-person `twinkl-v8pb` final-test cohort became development-only when its cases were opened for the full review. `twinkl-pv6s` owns a fresh final test. |
-| Approved architecture | Weekly Drift Reviewer decisions without VIF Critic input feed the deterministic two-Conflict Drift Detector. The VIF Critic supplies stored predictions for independent review and retraining; a candidate-confirmation path remains conditional. |
+| Approved architecture | Weekly Drift Reviewer decisions without VIF Critic input feed the deterministic two-Conflict Drift Detector. The VIF Critic supplies stored predictions for independent review and retraining; candidate confirmation is outside the remaining capstone scope. |
 | Production runtime | The executable runtime still uses the crash/rut/evolution prototype. The approved Weekly Drift Reviewer and Drift Detector path is not wired or deployment-approved. |
 | User delivery | The Weekly Digest cites the relevant Journal Entries and uses active, recovered, mixed, or uncertain wording without score jargon; exact schema implementation is pending. |
 
@@ -41,16 +41,14 @@ The current layers of the contract are deliberately different:
   cancel Drift.
 - An uncertain or abstaining Weekly Drift Reviewer produces no Drift claim.
   Coverage, abstention, and true Drifts suppressed by abstention must be
-  reported. The same accounting applies to any future VIF Critic
-  candidate-selection path.
+  reported.
 
 See the adopted [VIF scope decision](../vif/05_capstone_scope_decision.md).
 
 The approved Drift Detector uses two consecutive Weekly Drift Reviewer
-Conflicts for the same Core Value. VIF Critic soft probabilities and uncertainty
-may later select candidate adjacent pairs for confirmation, but they cannot
-produce or suppress a user-facing Drift claim without separate deployment
-approval.
+Conflicts for the same Core Value. VIF Critic probabilities and uncertainty
+remain in the offline review-and-retrain path and cannot produce or suppress a
+user-facing Drift claim.
 
 Single-entry dip alerts, crash/rut taxonomies, fade/dormancy, peripheral-value
 rise, onboarding-gap messaging, value-evolution gating, and multi-week low-mean
@@ -86,11 +84,8 @@ Conflict; it is label precision, auditability, and evaluation independence.
 The rejected direct-authority options — no raw VIF Critic Predictions in the
 Weekly Drift Reviewer prompt, and no VIF Critic veto, confirmation, or direct
 Drift decision — are recorded in
-[architecture/drift_detection.md](../architecture/drift_detection.md). The
-conditional exception remains candidate confirmation: VIF Critic Predictions may
-later propose adjacent pairs for the Weekly Drift Reviewer to confirm, but they
-cannot produce or suppress a user-facing Drift claim without separate deployment
-approval.
+[architecture/drift_detection.md](../architecture/drift_detection.md). No
+candidate-confirmation exception is included in the remaining capstone scope.
 
 ---
 
@@ -243,8 +238,6 @@ No fallback score was taken from the retired benchmark.
 - Independent disagreement review and versioned retraining data
 - Predefined deployment-approval criteria under `twinkl-7vam`
 - A fresh, independently resolved final test set under `twinkl-pv6s`
-- A feature-gated VIF Critic candidate-confirmation path that remains off until
-  it passes development criteria and the fresh final test
 - Weekly Coach language checks for active, recovered, mixed, and uncertain states at
   digest time
 
@@ -302,7 +295,7 @@ set.
 
 ---
 
-## Approved Detector and Conditional VIF Critic Path
+## Approved Detector and Deferred VIF Critic Idea
 
 The current user-facing target is deterministic:
 
@@ -319,16 +312,11 @@ Reviewer decisions. Disagreement and uncertain cases may receive independent
 LLM-Judge or human review, but Weekly Drift Reviewer outputs must not
 automatically become training labels.
 
-A conditional candidate-confirmation path may later use the VIF Critic to
-propose adjacent Journal Entry pairs for Weekly Drift Reviewer confirmation.
-The reviewer must see Journal Entry text and Core Values, not VIF Critic
-predictions. Profile weights may calibrate candidate selection among Core
-Values, but they do not make another value eligible for Drift.
-
-The candidate-selection rule must preserve adequate evidence from each Journal
-Entry. It is an evaluation parameter under `twinkl-7vam`, not part of the Drift
-definition. The exact probability and uncertainty rule is selected on
-development data and frozen before the fresh final test.
+VIF Critic candidate confirmation is outside the remaining capstone scope. Its
+development evidence remains historical context, not an active implementation
+or evaluation branch. Revisiting it requires a new scope decision and fresh
+evaluation; any future Weekly Drift Reviewer must still see Journal Entry text
+and Core Values rather than VIF Critic Predictions.
 
 ---
 
@@ -340,17 +328,15 @@ development data and frozen before the fresh final test.
    and displayed journal trajectory.
 2. Reconcile the paired reviews into a versioned target while preserving the
    original LLM-Judge labels as provenance rather than overwriting them.
-3. Evaluate the weekly-only path and, if ready, one VIF Critic
-   candidate-confirmation rule against the predefined deployment-approval
+3. Evaluate the weekly-only path against the predefined deployment-approval
    criteria.
 4. Record uncertainty, rationale, and unresolved-case handling separately from
    the main Drift decision.
 
 ### Phase 2: Freeze Before Final Test
 
-1. Freeze the VIF Critic checkpoint, candidate-selection rule, Weekly Drift
-   Reviewer prompt, deterministic Drift Detector, and deployment-approval
-   criteria.
+1. Freeze the Weekly Drift Reviewer model, reasoning effort, prompt, response
+   schema, deterministic Drift Detector, and deployment-approval criteria.
 2. Keep the fresh final test locked and unscored while those choices are made.
 3. Keep retraining and development cases out of the final test.
 
@@ -358,8 +344,7 @@ development data and frozen before the fresh final test.
 
 1. Resolve every final-test label independently without VIF Critic predictions
    or expected outcomes.
-2. Score the frozen weekly-only baseline and conditional candidate-confirmation
-   path once.
+2. Score the frozen weekly-only path once.
 3. Report Drift recall, false Drift alerts, coverage, abstention, stability,
    hard Core Value slices, and any claimed LLM-call or cost reduction without
    changing the criteria.
@@ -414,22 +399,6 @@ substitute for a fresh, resolved locked final test set.
 - Review confidence and disagreement state
 - Active, recovered, mixed, and uncertain digest-time cases
 - VIF Critic checkpoint and input-contract version
-
-### Conditional VIF Critic Candidate-Selection Validation
-
-If the conditional candidate-confirmation path is evaluated, uncertainty
-gating must be checked on the `-1` class specifically. Global calibration can
-look acceptable while the minority class is poorly calibrated. Weekly Drift
-Reviewer abstention remains a separate user-facing measure. Report:
-
-- error rate by uncertainty decile;
-- retained Drift recall at each uncertainty ceiling;
-- false-positive reduction from gating; and
-- the number of true Drifts suppressed by high uncertainty;
-- abstention count and coverage; and
-- the number of false user-facing claims per trajectory or week without Drift.
-
----
 
 ## Reproduction
 

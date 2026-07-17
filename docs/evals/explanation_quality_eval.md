@@ -36,8 +36,7 @@ This evaluation validates that explanations feel accurate and actionable to user
 Tier 1 Weekly Coach checks are unblocked and implemented. Deeper end-to-end
 explanation evaluation still depends on stable Weekly Drift Reviewer decisions,
 deterministic Drift Detector output, and cited Journal Entry evidence
-(`twinkl-3sg`). VIF Critic outputs belong to offline review unless the
-candidate-confirmation path later receives deployment approval.
+(`twinkl-3sg`). VIF Critic outputs belong to offline review and retraining.
 
 ### Implementation Scope
 

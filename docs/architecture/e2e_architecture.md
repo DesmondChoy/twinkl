@@ -58,9 +58,8 @@ flowchart TB
         drift["Weekly crash / rut / evolution<br/>prototype router"]
         reviewer["Weekly Drift Reviewer<br/>without VIF Critic input"]
         drift_v1["Deterministic Drift Detector<br/>two consecutive Conflicts"]
-        candidate["Conditional VIF Critic<br/>candidate selection"]
         evolution["Evolution classifier<br/>automatic in prototype"]
-        d_trigger["??? Deployment-approval<br/>criteria and candidate rule"]
+        d_trigger["??? Deployment-approval<br/>criteria"]
         d_evolution["Value evolution<br/>parked for v1"]
     end
 
@@ -106,8 +105,6 @@ flowchart TB
     state --> scores --> weekly --> drift
     weekly --> evolution --> drift
     reviewer -. "approved path; not wired" .-> drift_v1
-    scores -. "future candidate only;<br/>predictions hidden from reviewer" .-> candidate
-    candidate -.-> reviewer
 
     %% Weekly Coach + review (wired, experimental)
     drift --> digest
@@ -119,7 +116,7 @@ flowchart TB
 
     %% Open decisions attached to where they bite
     journaling -.- d_surface
-    candidate -.- d_trigger
+    drift_v1 -.- d_trigger
     evolution -.- d_evolution
     narrative -.- d_boundary
     narrative -.- d_feedback
@@ -127,7 +124,7 @@ flowchart TB
     class personas,judge,consensus,annotation,critic_train,checkpoint,llm_baseline,drift_review,reports implemented;
     class state,scores,weekly,drift,evolution,digest,prompt,narrative,runtime_review,offline_review,nudges partial;
     class onboarding,profile,journaling,reviewer,drift_v1,d_evolution specified;
-    class candidate,d_surface,d_trigger,d_boundary,d_feedback decision;
+    class d_surface,d_trigger,d_boundary,d_feedback decision;
 ```
 
 ## Read This As
@@ -180,16 +177,15 @@ resolved. The existing crash/rut/evolution router remains a prototype; class
 probabilities and the approved Drift Detector are not yet wired. No fresh final
 test exists, so the production edge remains deliberately blocked.
 `twinkl-752.5` found no Drift recall gain from raw VIF Critic input or
-early-plus-weekly scheduling. A future candidate-confirmation path must meet
-predefined development criteria and a fresh final test before deployment
-approval. The prior consensus-derived benchmark is [retired historical
+early-plus-weekly scheduling. VIF Critic candidate confirmation is outside the
+remaining capstone scope. The prior consensus-derived benchmark is [retired historical
 evidence](../archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md), and its AI
 audit is not human ground truth. Value evolution is parked for v1 even though
 the prototype invokes its classifier automatically.
 
 The remaining open decisions are the numerical deployment-approval criteria,
-the VIF Critic candidate-selection rule, what the Weekly Coach may say, and
-whether user feedback should update the profile over time. See
+what the Weekly Coach may say, and whether user feedback should update the
+profile over time. See
 [`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md),
 [`docs/vif/03_model_training.md`](../vif/03_model_training.md),
 [`docs/weekly/weekly_digest_generation.md`](../weekly/weekly_digest_generation.md),
