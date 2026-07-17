@@ -56,7 +56,7 @@ flowchart TB
         scores["VIF Critic scores<br/>+ uncertainty"]
         weekly["Weekly aggregation"]
         drift["Weekly crash / rut / evolution<br/>prototype router"]
-        reviewer["Weekly Drift Reviewer<br/>without VIF Critic input"]
+        reviewer["Weekly Drift Reviewer<br/>gpt-5.6-luna · low<br/>without VIF Critic input"]
         drift_v1["Deterministic Drift Detector<br/>two consecutive Conflicts"]
         evolution["Evolution classifier<br/>automatic in prototype"]
         d_trigger["??? Deployment-approval<br/>criteria"]
@@ -167,9 +167,10 @@ Drift is two consecutive Conflicts on the same Core Value. Under the approved
 architecture, the Weekly Drift Reviewer makes those Conflict decisions without
 VIF Critic input, and the deterministic Drift Detector combines them. The VIF
 Critic remains essential to stored prediction, independent review, candidate
-mining, and retraining. `gpt-5.6-luna` at reasoning effort `low` is the current
-development Weekly Drift Reviewer; its median result across three frozen Runs
-was 23/42 known Drifts, 4 false Drift alerts, and `0.637` coverage.
+mining, and retraining. The Weekly Drift Reviewer model contract is fixed at
+`gpt-5.6-luna` with reasoning effort `low`; its median result across three
+frozen development Runs was 23/42 known Drifts, 4 false Drift alerts, and
+`0.637` coverage.
 [`twinkl-v8pb` completed the historical five-Drift development review](../evals/drift_v1_student_visible_target.md)
 and withheld its former final-test score. The former final-test population is
 now development-only, and the expanded known-development union is fully

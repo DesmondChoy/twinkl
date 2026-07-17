@@ -26,10 +26,11 @@ One persona may therefore have separate or simultaneous Drifts on several Core
 Values. The reference records them separately by value; it never averages Core
 Values into one profile-wide verdict.
 
-In the approved user-facing path, the Weekly Drift Reviewer decides Conflict
-from Journal Entry text without VIF Critic input. The deterministic Drift
-Detector then applies the two-consecutive-Conflict rule, and the user sees the
-result through the Weekly Digest and Weekly Coach. The prior
+In the approved user-facing path, the Weekly Drift Reviewer is fixed at
+`gpt-5.6-luna` with reasoning effort `low` and decides Conflict from Journal
+Entry text without VIF Critic input. The deterministic Drift Detector then
+applies the two-consecutive-Conflict rule, and the user sees the result through
+the Weekly Digest and Weekly Coach. The prior
 consensus-derived benchmark and former final-test population are development
 evidence only; `twinkl-pv6s` must establish a fresh final test. No setup has
 deployment approval and the production path remains unwired. The intended delivery

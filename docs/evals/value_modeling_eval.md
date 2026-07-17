@@ -36,6 +36,9 @@ user-facing Drift path. See the adopted
 - The [`twinkl-1r3d` shortcut audit](../../logs/experiments/reports/experiment_review_2026-07-12_twinkl_1r3d_shortcut_audit.md) removed 3,406 individual words plus 20 repeated-word or phrase cues across 35 confident-correct active Conformity and Self-Direction validation cases. No removal flipped a class, so the tested brittle lexical-shortcut explanations are not supported. This is a bounded sensitivity result, not evidence that either construct is solved.
 - The [`twinkl-752.1` Weekly Drift Reviewer ablation](../../logs/experiments/reports/experiment_review_2026-07-12_twinkl_752_1_weekly_verifier_ablation.md) is complete. Adding fixed `run_020` signals reduced median development Drift recall from **0.40** to **0.20**, removed the median false Drift alert (**1** to **0**), and reduced coverage from **0.756** to **0.732**. The later `twinkl-752.5` reassessment made the raw-input recall result inconclusive; the adopted architecture still excludes raw VIF Critic input from the Weekly Drift Reviewer.
 - The [`twinkl-752.3` prompt-alignment study](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_3_weekly_drift_reviewer_prompt_alignment.md) is also complete. Full adjacent-pair text, a versioned Core Value rubric, and explicit Drift decisions lowered median Drift recall to **0.20** and raised median false Drift alerts to **5**. The earlier **0.40** result was not materially prompt-limited by the tested differences.
+- The Weekly Drift Reviewer model contract is fixed at `gpt-5.6-luna` with
+  reasoning effort `low`. That choice does not give the VIF Critic user-facing
+  Drift authority or complete final-test validation.
 
 ### What's Missing
 - **Recall-first selection is not implemented**: the current experiment code still selects mainline checkpoints QWK-first. Historical run rankings remain valid provenance, but a future training run needs tested recall-first selection behavior before it can count as decision evidence.
@@ -51,7 +54,7 @@ user-facing Drift path. See the adopted
 ### Next Steps
 1. Implement and verify recall-first checkpoint selection before treating another training run as decision evidence
 2. Implement the versioned VIF Critic review-and-retrain path without changing the approved user-facing decision path
-3. Define the weekly-only deployment-approval criteria under `twinkl-7vam`, then freeze them before the fresh final test
+3. Define the remaining weekly-only deployment-approval criteria under `twinkl-7vam`, then freeze the prompt, response schema, Drift rule, and criteria before the fresh final test without changing the fixed Luna-low model contract
 4. Report `-1` precision and the precision-recall curve while prioritizing `recall_-1`; keep QWK, `+1` recall, calibration, circumplex diagnostics, and persona-level aggregation as secondary health checks
 
 ---

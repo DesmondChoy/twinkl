@@ -24,9 +24,10 @@ Crucially, the VIF is designed to be:
 *   **Time-Aware:** The downstream timeline looks for repeated evidence rather than reacting to one Journal Entry. Drift v1 requires two consecutive Conflicts for the same Core Value.
 
 This engine supports Twinkl's learning loop. In the approved user-facing path,
-the Weekly Drift Reviewer and Drift Detector decide Drift so the Weekly Coach
-can gently surface tensions; VIF Critic outputs remain in offline review and
-retraining for the remaining capstone scope.
+the Weekly Drift Reviewer is fixed at `gpt-5.6-luna` with reasoning effort
+`low`. It and the Drift Detector decide Drift so the Weekly Coach can gently
+surface tensions; VIF Critic outputs remain in offline review and retraining
+for the remaining capstone scope.
 
 ---
 
@@ -63,7 +64,7 @@ The VIF is designed to:
    feedback.
 
 4. **Trajectory-aware downstream evaluation**
-   The live VIF Critic default uses `window_size: 1`, so each prediction sees the current Journal Entry, including its displayed nudge and response when present, plus the normalized value profile. The Weekly Drift Reviewer and deterministic Drift Detector provide the approved temporal decision layer. `twinkl-749` tested a small prior-Journal-Entry mean summary, but its seed-11 results regressed and did not receive deployment approval. History support therefore remains diagnostic rather than an assumed property of the default VIF Critic.
+   The live VIF Critic default uses `window_size: 1`, so each prediction sees the current Journal Entry, including its displayed nudge and response when present, plus the normalized value profile. The fixed Luna-low Weekly Drift Reviewer and deterministic Drift Detector provide the approved temporal decision layer. `twinkl-749` tested a small prior-Journal-Entry mean summary, but its seed-11 results regressed and did not receive deployment approval. History support therefore remains diagnostic rather than an assumed property of the default VIF Critic.
 
 5. **Separation of concerns: VIF Critic vs Weekly Coach**
    The VIF Critic produces numeric per-Journal-Entry alignment evidence and

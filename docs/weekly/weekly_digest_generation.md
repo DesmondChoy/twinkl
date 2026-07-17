@@ -238,8 +238,9 @@ Drift is two consecutive Conflicts on the same Core Value:
 
 - student-visible target: two adjacent Journal Entries visibly show a behavior
   or choice against the same Core Value;
-- approved user-facing input: Weekly Drift Reviewer decisions made without VIF
-  Critic predictions; and
+- approved user-facing input: decisions from `gpt-5.6-luna` at reasoning effort
+  `low`, the fixed Weekly Drift Reviewer model contract, made without VIF Critic
+  predictions; and
 - delivery: the Weekly Digest cites the supporting Journal Entries.
 
 Each Core Value is evaluated independently. An aligned label for another Core
@@ -260,8 +261,9 @@ that diagnostic made no reviewer calls and does not show that early review
 works. No fresh final test exists.
 The adopted architecture keeps VIF Critic predictions in offline comparison,
 independent review, and retraining. VIF Critic candidate confirmation is outside
-the remaining capstone scope. No VIF Critic or Drift Detector has deployment
-approval, and the approved Drift Detector is not wired into the weekly runtime.
+the remaining capstone scope. The Weekly Drift Reviewer model choice is fixed,
+but the Drift Detector does not have deployment approval and is not wired into
+the weekly runtime.
 The former consensus-derived frozen benchmark is retired historical evidence.
 The crash/rut/evolution output modes remain prototype compatibility values, not
 the accepted v1 definition.
@@ -357,9 +359,10 @@ learned routing policies.
 3. Add independent disagreement review, versioned retraining data, and
    model-blind controls. Weekly Drift Reviewer outputs must not automatically
    become LLM-Judge reference labels.
-4. Under `twinkl-7vam`, predefine Drift recall, false Drift alert, coverage,
-   abstention, stability, and any efficiency criteria. Freeze the Luna-low
-   Weekly Drift Reviewer contract and deterministic Drift rule.
+4. Keep the fixed Luna-low Weekly Drift Reviewer model contract unchanged.
+   Under `twinkl-7vam`, predefine Drift recall, false Drift alert, coverage,
+   abstention, stability, and any efficiency criteria, then freeze the prompt,
+   response schema, and deterministic Drift rule.
 5. Build a fresh final test under `twinkl-pv6s`. Keep retraining cases out of it
    and score only after the checkpoint, rule, prompt, and criteria are frozen.
 6. Add active, recovered, mixed, and uncertain Weekly Digest delivery wording.

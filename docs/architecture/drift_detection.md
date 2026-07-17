@@ -2,8 +2,10 @@
 
 **Status:** Architecture adopted on 2026-07-14 under `twinkl-752.2`; the
 optional VIF Critic candidate-confirmation path was removed from the remaining
-capstone scope on 2026-07-17. This is not deployment approval. Runtime
-implementation, operating limits, and a fresh final test remain pending.
+capstone scope on 2026-07-17. The Weekly Drift Reviewer model contract is fixed
+at `gpt-5.6-luna` with reasoning effort `low`. This is not deployment approval.
+Runtime implementation, operating limits, and a fresh final test remain
+pending.
 
 This document records how the VIF Critic remains an essential part of Twinkl
 without giving it user-facing authority that the evidence does not support. The
@@ -15,12 +17,12 @@ metric hierarchy live in the
 
 Twinkl uses two connected paths:
 
-1. **User-facing decision path.** The Weekly Drift Reviewer reads Journal
-   Entries and Core Values without VIF Critic predictions. It decides Conflict,
-   non-Conflict, or abstention for each relevant Journal Entry. The Drift
-   Detector then applies the deterministic rule: two consecutive Conflicts for
-   the same Core Value form one Drift. Confirmed Drift flows into the Weekly
-   Digest and Weekly Coach.
+1. **User-facing decision path.** The Weekly Drift Reviewer is fixed at
+   `gpt-5.6-luna` with reasoning effort `low`. It reads Journal Entries and Core
+   Values without VIF Critic predictions and decides Conflict, Not Conflict, or
+   Abstain for each relevant Journal Entry. The Drift Detector then applies the
+   deterministic rule: two consecutive Conflicts for the same Core Value form
+   one Drift. Confirmed Drift flows into the Weekly Digest and Weekly Coach.
 2. **VIF Critic review-and-retrain path.** The VIF Critic predicts `-1`, `0`, or
    `+1` plus uncertainty for every Journal Entry and value. Versioned predictions
    are stored for offline comparison, disagreement review, candidate mining,
@@ -31,7 +33,7 @@ Twinkl uses two connected paths:
 flowchart TB
   subgraph USER["User-facing decision path"]
     direction LR
-    JE["Journal Entries"] --> WDR["Weekly Drift Reviewer<br/>without VIF Critic input"]
+    JE["Journal Entries"] --> WDR["Weekly Drift Reviewer<br/>gpt-5.6-luna · low<br/>without VIF Critic input"]
     CV["Core Values"] --> WDR
     WDR --> DD["Drift Detector<br/>two consecutive Conflicts<br/>for the same Core Value"]
     DD --> WD["Weekly Digest"] --> WC["Weekly Coach"]
@@ -80,10 +82,11 @@ direct authority over Drift:
   review improves Drift detection.
 - The complete `twinkl-qtwz` review contains 292 resolved cases and 42 Drifts.
   On that frozen development data, `twinkl-52zz` selected `gpt-5.6-luna` at
-  reasoning effort `low` as the development Weekly Drift Reviewer. Across three
-  Runs it found a median 23/42 known Drifts, produced 4 false Drift alerts, and
-  had `0.637` coverage. The selection leaves this component boundary intact and
-  does not provide deployment approval.
+  reasoning effort `low`; that is now the fixed Weekly Drift Reviewer model
+  contract. Across three Runs it found a median 23/42 known Drifts, produced 4
+  false Drift alerts, and had `0.637` coverage. This evidence leaves the
+  component boundary intact and does not provide final-test validation or
+  deployment approval.
 
 The complete development data is synthetic, 185/292 cases have historical
 training provenance, and no fresh final test exists. These limits are why the
@@ -118,9 +121,9 @@ reviewed development data.
 VIF Critic candidate confirmation is outside the remaining capstone scope. The
 development evidence remains useful historical context, but no candidate rule,
 runtime branch, or deployment gate will be implemented in the current work.
-Revisiting the idea requires a new scope decision and fresh evaluation. Any
-future Weekly Drift Reviewer must still see Journal Entry text and Core Values,
-not VIF Critic predictions.
+Revisiting the idea requires a new scope decision and fresh evaluation. The
+fixed Weekly Drift Reviewer still sees Journal Entry text and Core Values, not
+VIF Critic predictions.
 
 ## Explicitly Rejected or Unapproved
 
@@ -146,7 +149,7 @@ result contracts, and makes no model or provider API calls. The approved
 architecture still needs:
 
 - persisted `P(-1)`, `P(0)`, and `P(+1)` with checkpoint provenance;
-- versioned storage for future Weekly Drift Reviewer decisions and offline
+- versioned storage for production Weekly Drift Reviewer decisions and offline
   comparison records beyond the frozen development study files;
 - a review queue with independent labels and model-blind controls;
 - versioned retraining datasets and evaluation receipts;

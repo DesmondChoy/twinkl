@@ -20,7 +20,8 @@ The current layers of the contract are deliberately different:
 | Student-visible target | A Journal Entry is a Conflict only when the full displayed text clearly shows a behavior or choice against a Core Value. `twinkl-752.4` reviewed every candidate discoverable from either legacy label source plus matched controls. |
 | Development set | The complete development review contains 42 Drifts across 36 Drift trajectories in 292 resolved cases. `twinkl-qtwz` added nine Drifts across eight Drift trajectories from the 186 cases outside the earlier 106-case union. The earlier `twinkl-752.5` study used 33 Drifts across 28 Drift trajectories; keep its reported metrics bound to that input. Historical provenance must be reported as a subgroup because all nine newly found Drifts came from training-seen Journal Entries. The fixed `run_020` threshold is historical development evidence. |
 | Final test set | None is active. The former 24-person `twinkl-v8pb` final-test cohort became development-only when its cases were opened for the full review. `twinkl-pv6s` owns a fresh final test. |
-| Approved architecture | Weekly Drift Reviewer decisions without VIF Critic input feed the deterministic two-Conflict Drift Detector. The VIF Critic supplies stored predictions for independent review and retraining; candidate confirmation is outside the remaining capstone scope. |
+| Weekly Drift Reviewer | The model contract is fixed at `gpt-5.6-luna` with reasoning effort `low`, without VIF Critic input. The fixed model choice is distinct from final-test validation and deployment approval. |
+| Approved architecture | Weekly Drift Reviewer decisions feed the deterministic two-Conflict Drift Detector. The VIF Critic supplies stored predictions for independent review and retraining; candidate confirmation is outside the remaining capstone scope. |
 | Production runtime | The executable runtime still uses the crash/rut/evolution prototype. The approved Weekly Drift Reviewer and Drift Detector path is not wired or deployment-approved. |
 | User delivery | The Weekly Digest cites the relevant Journal Entries and uses active, recovered, mixed, or uncertain wording without score jargon; exact schema implementation is pending. |
 
@@ -28,8 +29,8 @@ The current layers of the contract are deliberately different:
 
 - The product decision unit is **Drift**, not an
   isolated Journal Entry or aggregate QWK.
-- Weekly Drift Reviewer development selection prioritizes Drift recall first
-  and false Drift alerts second.
+- The fixed Luna-low model contract was selected by prioritizing Drift recall
+  first and false Drift alerts second.
 - Coverage and abstention are diagnostic metrics. They must be reported because
   they expose fail-closed behavior, but they do not gate development selection.
 - `twinkl-7vam` must fix the minimum Drift recall, acceptable false Drift alert
@@ -143,9 +144,9 @@ candidate-confirmation exception is included in the remaining capstone scope.
   historical LLM-Judge Conflict Labels remain null inside a case with a frozen
   resolved Drift outcome.
 - `twinkl-52zz` compares three frozen Runs for each Weekly Drift Reviewer setup
-  on the complete development data. The current development selection,
-  `gpt-5.6-luna` at reasoning effort `low`, found a median 23/42 known Drifts,
-  produced 4 false Drift alerts, and had `0.637` coverage. The read-only
+  on the complete development data. The fixed model contract, `gpt-5.6-luna`
+  at reasoning effort `low`, found a median 23/42 known Drifts, produced 4 false
+  Drift alerts, and had `0.637` coverage. The read-only
   [Drift Inspection App](../demo/weekly_drift_review_app.md) exposes the complete
   results, persona-level outcomes, Journal Entries, AI-reviewed LLM-Judge
   Conflict Labels, Weekly Drift Reviewer Decisions, cited evidence, and
@@ -315,7 +316,7 @@ automatically become training labels.
 VIF Critic candidate confirmation is outside the remaining capstone scope. Its
 development evidence remains historical context, not an active implementation
 or evaluation branch. Revisiting it requires a new scope decision and fresh
-evaluation; any future Weekly Drift Reviewer must still see Journal Entry text
+evaluation; the fixed Weekly Drift Reviewer must still see Journal Entry text
 and Core Values rather than VIF Critic Predictions.
 
 ---
@@ -335,8 +336,9 @@ and Core Values rather than VIF Critic Predictions.
 
 ### Phase 2: Freeze Before Final Test
 
-1. Freeze the Weekly Drift Reviewer model, reasoning effort, prompt, response
-   schema, deterministic Drift Detector, and deployment-approval criteria.
+1. Keep `gpt-5.6-luna` and reasoning effort `low` fixed, then freeze the Weekly
+   Drift Reviewer prompt, response schema, deterministic Drift Detector, and
+   deployment-approval criteria.
 2. Keep the fresh final test locked and unscored while those choices are made.
 3. Keep retraining and development cases out of the final test.
 
@@ -369,8 +371,8 @@ above.
 | Known-development union (`twinkl-752.5` input) | 33 episodes across 28 Drift trajectories; 106/106 resolved | Primary reassessment set; adds two prior episodes omitted by candidate mining |
 | Complete development review (`twinkl-qtwz`) | 42 Drifts across 36 Drift trajectories; 292/292 case-level outcomes resolved | Frozen input used by `twinkl-52zz`; the nine newly found Drifts all have historical training provenance |
 | `gpt-5.4-mini` Weekly Drift Reviewer (`twinkl-52zz`) | 7/42 median Drift hits / recall 0.167 / precision 0.583 / 5 false Drift alerts / coverage 0.740 | Complete-development baseline over three repeats |
-| `gpt-5.6-luna` Weekly Drift Reviewer (`twinkl-52zz`) | 20/42 median Drift hits / recall 0.476 / precision 0.606 / 13 false Drift alerts / coverage 0.777 | Frozen reasoning-effort-`none` baseline for the follow-up; superseded as the development selection by `low` |
-| `gpt-5.6-luna` reasoning-effort-`low` follow-up (`twinkl-52zz`) | 23/42 median Drift hits / recall 0.548 / precision 0.852 / 4 false Drift alerts / coverage 0.637 | Selected as the current development Weekly Drift Reviewer under the approved hierarchy: Drift recall first, false Drift alerts second, and coverage diagnostic; stop before `medium`; no deployment approval |
+| `gpt-5.6-luna` Weekly Drift Reviewer (`twinkl-52zz`) | 20/42 median Drift hits / recall 0.476 / precision 0.606 / 13 false Drift alerts / coverage 0.777 | Frozen reasoning-effort-`none` baseline for the follow-up; superseded by the fixed reasoning-effort-`low` contract |
+| `gpt-5.6-luna` reasoning-effort-`low` follow-up (`twinkl-52zz`) | 23/42 median Drift hits / recall 0.548 / precision 0.852 / 4 false Drift alerts / coverage 0.637 | Fixed Weekly Drift Reviewer model contract under the approved hierarchy: Drift recall first, false Drift alerts second, and coverage diagnostic; the study stopped before `medium`; final-test validation and deployment approval remain pending |
 | Legacy candidate confirmation (`twinkl-752.4`) | 22/44 (50.0%) | Resolved development candidates only; selection-biased diagnostic |
 | Matched-control Drift rate (`twinkl-752.4`) | 1/44 (2.3%) | One legacy-miner miss among resolved development controls; not a false-alert rate |
 | Development precision / false-positive rate (`run_020`) | 1.0 / 0.0 | The single predicted development Drift was correct, but four reference Drifts were missed |
@@ -512,7 +514,7 @@ re-scoring the committed responses.
 | [`../../scripts/experiments/compare_twinkl_52zz_models.py`](../../scripts/experiments/compare_twinkl_52zz_models.py) | Model-comparison preparation, estimate, execution, and scoring workflow |
 | [`../../config/evals/twinkl_52zz_luna_low_v1.yaml`](../../config/evals/twinkl_52zz_luna_low_v1.yaml) | Preregistered Luna reasoning-effort-`low` protocol and historical selection gate |
 | [`../../scripts/experiments/compare_twinkl_52zz_luna_reasoning.py`](../../scripts/experiments/compare_twinkl_52zz_luna_reasoning.py) | Luna reasoning-effort execution, receipt, and scoring workflow |
-| [`../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_52zz_luna_low.md`](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_52zz_luna_low.md) | Complete Luna reasoning-effort result and approved development selection |
+| [`../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_52zz_luna_low.md`](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_52zz_luna_low.md) | Complete Luna reasoning-effort result and evidence behind the fixed model contract |
 | [`../../src/drift_review_app/data.py`](../../src/drift_review_app/data.py) | Frozen-input verification and result loading for the Drift Inspection App |
 | [`../demo/weekly_drift_review_app.md`](../demo/weekly_drift_review_app.md) | Drift Inspection App contract, launch commands, and input boundary |
 | [`../../scripts/experiments/resolve_twinkl_752_5_null_cases.py`](../../scripts/experiments/resolve_twinkl_752_5_null_cases.py) | Freezes and materializes the blind Opus follow-up |

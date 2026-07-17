@@ -20,7 +20,7 @@ This example follows a single user through onboarding and four scenarios, showin
 | **Generator** | Creates synthetic training data | Offline only (before any user exists) |
 | **LLM-Judge** | Offline LLM that labels Journal Entries against values | Training time |
 | **VIF Critic** | Fast neural net that predicts `-1`, `0`, or `+1` for each Journal Entry and value, plus uncertainty | Every Journal Entry in the offline review-and-retrain path |
-| **Weekly Drift Reviewer** | Decides Conflict, non-Conflict, or abstention from Journal Entry text without VIF Critic input | Weekly review in the approved user-facing path |
+| **Weekly Drift Reviewer** | Fixed `gpt-5.6-luna` reasoning-effort-`low` LLM that decides Conflict, Not Conflict, or Abstain from Journal Entry text without VIF Critic input | Weekly review in the approved user-facing path |
 | **Drift Detector** | Applies the deterministic two-consecutive-Conflict rule | After Weekly Drift Reviewer decisions; delivered through the Weekly Digest |
 | **Weekly Coach** | Turns the Weekly Digest into an evidence-based reflection | When the Weekly Digest records a tension, uncertainty, or occasional acknowledgment |
 

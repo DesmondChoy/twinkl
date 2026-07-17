@@ -46,7 +46,7 @@ flowchart LR
         subgraph coach_lane["Weekly Coach"]
             direction LR
             drift["Weekly prototype router<br/>crash / rut / evolution<br/>high uncertainty"]
-            drift_v1["Approved target (not wired)<br/>Weekly Drift Reviewer decisions<br/>+ deterministic Drift Detector"]
+            drift_v1["Approved target (not wired)<br/>gpt-5.6-luna · low<br/>Weekly Drift Reviewer decisions<br/>+ deterministic Drift Detector"]
             digest["Weekly Digest"]
             coach["Weekly Coach prompt<br/>optional reflection"]
             drift --> digest -.-> coach

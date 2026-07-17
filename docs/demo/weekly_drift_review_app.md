@@ -28,7 +28,7 @@ the role of each Weekly Drift Reviewer and LLM-Judge model and links to its
 official model page. Results reports known Drifts found, Drift recall, false
 Drift alerts, and Drift precision for all three Weekly Drift Reviewer setups
 and Runs, plus median Drift recall for each setup. Coverage remains in the
-development-selection disclosure rather than the summary table.
+model-selection disclosure rather than the summary table.
 
 The persona scoreboard then states which Runs found or missed known Drift and
 names the exact known Drift and Drift alert spans. The Journal Entry table keeps
@@ -44,8 +44,9 @@ explanation.
 
 Runs 1–3 repeat the same frozen setup on the same input and are never merged;
 their disagreement is shown as Run variability. Luna at reasoning low is
-identified as the current development selection, with its revised selection
-hierarchy and uncertainty disclosed beside the corpus overview.
+identified as the fixed Weekly Drift Reviewer model contract, with its
+selection hierarchy and development uncertainty disclosed beside the corpus
+overview.
 
 A Drift alert counts as a hit when it is confirmed between the known Drift's
 first Journal Entry and two Journal Entries after its end. This affects
@@ -145,7 +146,7 @@ Inputs are read from:
 
 These are AI-reviewed synthetic development inputs, not human validation or a
 fresh final test. The app does not provide deployment approval or product
-runtime wiring.
+runtime wiring. Those limits do not reopen the fixed Luna-low model choice.
 
 The LLM-Judge Conflict Labels were produced by two isolated `gpt-5.6-sol`
 lanes at reasoning effort `xhigh`, with disagreement-only adjudication. Four

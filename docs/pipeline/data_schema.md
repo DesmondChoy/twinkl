@@ -188,7 +188,8 @@ the required producer/consumer boundary used by `src/vif/runtime.py` and
 alignment means and uncertainties; they do not yet persist the ordinal class
 probabilities and checkpoint provenance required by the approved VIF Critic
 review-and-retrain path. The deterministic Drift Detector itself consumes
-Weekly Drift Reviewer decisions, not these probabilities.
+decisions from the fixed `gpt-5.6-luna` reasoning-effort-`low` Weekly Drift
+Reviewer, not these probabilities.
 
 The demo review UI stores those bundles under:
 

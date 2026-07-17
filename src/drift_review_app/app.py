@@ -927,7 +927,7 @@ def _aggregate_overview(data: ReviewData) -> ui.Tag:
                                 ui.div(
                                     ui.strong(spec.label),
                                     _pill(
-                                        "Current development selection",
+                                        "Fixed model contract",
                                         "is-selected-value",
                                     )
                                     if setup_key == CURRENT_SETUP_KEY
@@ -981,13 +981,14 @@ def _aggregate_overview(data: ReviewData) -> ui.Tag:
             class_="overview-note",
         ),
         ui.tags.details(
-            ui.tags.summary("Why Luna at reasoning low is selected for development"),
+            ui.tags.summary("Why Luna at reasoning low is the fixed model contract"),
             ui.div(
                 ui.p(
                     "It did not pass the earlier preregistered gate that allowed at "
                     "most 0.05 coverage loss. It was later selected under the "
                     "approved hierarchy: known Drift recall first, false Drift "
-                    "alerts second, and coverage as a diagnostic. Coverage is the "
+                    "alerts second, and coverage as a diagnostic, and is now the "
+                    "fixed Weekly Drift Reviewer model contract. Coverage is the "
                     "share of review cases where a Run either produced a Drift "
                     "alert or actively ruled out every adjacent pair. Across Runs "
                     "1–3, Luna at reasoning low had 65%, 63%, and 64% coverage, "
@@ -1912,7 +1913,7 @@ def _scoreboard(data: ReviewData, case: CaseRecord) -> ui.Tag:
                                     ui.div(
                                         ui.strong(spec.label),
                                         _pill(
-                                            "Current development selection",
+                                            "Fixed model contract",
                                             "is-selected-value",
                                         )
                                         if setup_key == CURRENT_SETUP_KEY
@@ -1999,7 +2000,7 @@ def _detail_screen(data: ReviewData, case: CaseRecord) -> ui.Tag:
                         "Weekly Drift Reviewer setup",
                         choices={
                             key: (
-                                f"{spec.label} · current development selection"
+                                f"{spec.label} · fixed model contract"
                                 if key == CURRENT_SETUP_KEY
                                 else spec.label
                             )

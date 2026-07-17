@@ -229,8 +229,8 @@ def test_at_a_glance_combines_dataset_llms_and_results() -> None:
     table_start = html.index('class="aggregate-table"')
     table_html = html[table_start : html.index("</table>", table_start)]
     assert "coverage" not in table_html.lower()
-    assert "Current development selection" in html
-    assert "Why Luna at reasoning low is selected for development" in html
+    assert "Fixed model contract" in html
+    assert "Why Luna at reasoning low is the fixed model contract" in html
     assert "coverage as a diagnostic" in html
     assert "65%, 63%, and 64% coverage" in html
     assert "Abstain left more adjacent pairs unresolved" in html

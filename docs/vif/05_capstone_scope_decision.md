@@ -2,9 +2,10 @@
 
 **Status:** Scope adopted on 2026-07-12 under `twinkl-752`; staged architecture
 adopted on 2026-07-14 under `twinkl-752.2`; Weekly Drift Reviewer configuration
-and metric hierarchy updated on 2026-07-15 under `twinkl-52zz`; the optional
-VIF Critic candidate-confirmation path was removed from the remaining capstone
-scope on 2026-07-17.
+and metric hierarchy updated on 2026-07-15 under `twinkl-52zz`; the Weekly Drift
+Reviewer model contract was fixed at `gpt-5.6-luna` with reasoning effort `low`
+on 2026-07-17; and the optional VIF Critic candidate-confirmation path was
+removed from the remaining capstone scope on 2026-07-17.
 
 This document records the detailed Value Identity Function (VIF) scope decision
 for the remaining capstone period. The [PRD](../prd.md) remains authoritative for
@@ -46,21 +47,22 @@ rankings therefore remain valid records of the policy used at the time, not the
 forward selection policy. Implementing recall-first selection needs a separate,
 tested change before another training run is treated as decision evidence.
 
-### Weekly Drift Reviewer development and deployment evaluation
+### Weekly Drift Reviewer contract and deployment evaluation
 
-- Development selection prioritizes Drift recall first and false Drift alerts
-  second.
-- Coverage and abstention are diagnostic metrics, not development-selection
-  gates. They must still be reported because abstention produces no Drift claim.
+- The model contract is fixed at `gpt-5.6-luna` with reasoning effort `low`.
+- Its development selection prioritized Drift recall first and false Drift
+  alerts second.
+- Coverage and abstention are diagnostic metrics, not selection gates. They
+  must still be reported because Abstain produces no Drift claim.
 - `twinkl-7vam` must define the minimum Drift recall, acceptable false Drift
   alert tolerance, stability, and any efficiency requirement before a fresh
   final test is scored. It must also predefine reporting for coverage,
   abstention, and Drifts suppressed by abstention or uncertainty.
 
-Because there is no active fresh final test set, this is a development contract
-only. The staged architecture is selected, but the Drift Detector does not have
-deployment approval. The VIF Critic candidate-confirmation path is outside the
-remaining capstone scope.
+The model choice is settled. Because there is no active fresh final test set,
+its measured performance is still development evidence only. The Drift Detector
+does not have deployment approval. The VIF Critic candidate-confirmation path is
+outside the remaining capstone scope.
 
 ## Canonical Drift
 
@@ -78,10 +80,11 @@ writer making a behavior or choice against the same Core Value.
 - Later recovery changes Weekly Coach wording to recovered or mixed; it does
   not erase the earlier Drift.
 
-The current user-facing path uses Weekly Drift Reviewer decisions without VIF
-Critic input. The deterministic Drift Detector then requires two consecutive
-Conflicts for the same Core Value. VIF Critic probabilities and uncertainty
-remain inputs to offline review and retraining, not the user-facing Drift path.
+The current user-facing path uses decisions from `gpt-5.6-luna` at reasoning
+effort `low`, without VIF Critic input. The deterministic Drift Detector then
+requires two consecutive Conflicts for the same Core Value. VIF Critic
+probabilities and uncertainty remain inputs to offline review and retraining,
+not the user-facing Drift path.
 
 ## Role of `+1` and QWK
 
@@ -213,10 +216,11 @@ rather than substituted.
   reasoning-effort-`low` follow-up raised median Drift recall to `0.548` and cut
   false Drift alerts to 4, while coverage fell from `0.777` to `0.637`. `low`
   mechanically failed the preregistered coverage gate, but the approved metric
-  hierarchy treats coverage as diagnostic. Luna at reasoning effort `low` is
-  therefore the current development Weekly Drift Reviewer, and the study stops
-  before `medium`. This choice does not change the approved component
-  boundaries or grant deployment approval.
+  hierarchy treats coverage as diagnostic. The comparison selected Luna at
+  reasoning effort `low`, the model contract is now fixed on that setup, and
+  the study stopped before `medium`. This choice does not change the approved
+  component boundaries, validate the fixed setup on a fresh final test, or
+  grant deployment approval.
 
 The experiment history and numeric evidence remain in
 [`logs/experiments/index.md`](../../logs/experiments/index.md).
@@ -226,10 +230,10 @@ The experiment history and numeric evidence remain in
 The user approved the following architecture under `twinkl-752.2`:
 
 1. **Approved user-facing path:** Journal Entries and Core Values go to the
-   Weekly Drift Reviewer without VIF Critic input. The deterministic Drift
-   Detector declares Drift only after two consecutive Weekly Drift Reviewer
-   Conflicts for the same Core Value. Confirmed Drift then flows into the Weekly
-   Digest and Weekly Coach.
+   fixed `gpt-5.6-luna` reasoning-effort-`low` Weekly Drift Reviewer without VIF
+   Critic input. The deterministic Drift Detector declares Drift only after two
+   consecutive Weekly Drift Reviewer Conflicts for the same Core Value.
+   Confirmed Drift then flows into the Weekly Digest and Weekly Coach.
 2. **Required VIF Critic path:** the VIF Critic produces versioned predictions
    and uncertainty for offline comparison, disagreement review, candidate
    mining, error analysis, and retraining. Weekly Drift Reviewer outputs do not

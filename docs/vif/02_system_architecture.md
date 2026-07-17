@@ -24,21 +24,25 @@ The current VIF implementation is intentionally narrow:
   ternary outputs for diagnostics and non-gating positive context
 - **Current executable downstream use**: validated weekly signal frames, an
   experimental crash/rut/evolution router, and Weekly Coach inputs
-- **Approved user-facing target**: Weekly Drift Reviewer decisions without VIF
-  Critic input, followed by the deterministic rule that two consecutive
-  Conflicts for the same Core Value form Drift
+- **Fixed Weekly Drift Reviewer**: `gpt-5.6-luna` with reasoning effort `low`,
+  without VIF Critic input
+- **Approved user-facing target**: Weekly Drift Reviewer decisions followed by
+  the deterministic rule that two consecutive Conflicts for the same Core
+  Value form Drift
 - **Approved VIF Critic role**: stored predictions and uncertainty for offline
   comparison, independent review, candidate mining, and retraining; candidate
   confirmation is outside the remaining capstone scope
 
-> **Note:** Specific model names, embedding dimensions, and default window sizes
-> change over time. Treat `config/vif.yaml` as the source of truth for current
-> runtime values.
+> **Note:** VIF Critic encoder names, embedding dimensions, and default window
+> sizes change over time. Treat `config/vif.yaml` as the source of truth for
+> those runtime values. The fixed Weekly Drift Reviewer contract is a separate
+> product decision.
 
 The architecture and metric policy are ahead of implementation: training still
 selects checkpoints QWK-first, the runtime still uses synthetic `core_values`
-rather than persisted `top_values`, and Weekly Drift Reviewer decisions and
-abstention are not wired. No selected component has deployment approval.
+rather than persisted `top_values`, and Weekly Drift Reviewer decision
+persistence and Abstain handling are not wired. The fixed model choice does not
+by itself grant deployment approval.
 
 ## Current Diagram
 
@@ -263,10 +267,10 @@ uncertainties and can emit `stable`, `crash`, `rut`, `evolution`, or
 automatically when no precomputed result is supplied. This is the route used by
 the offline Weekly Coach runtime and demo UI.
 
-The approved product contract is narrower: the Weekly Drift Reviewer reads
-Journal Entries and Core Values without VIF Critic predictions. The
-deterministic Drift Detector declares Drift after two consecutive Conflicts for
-the same Core Value. The former
+The approved product contract is narrower: the Weekly Drift Reviewer is fixed
+at `gpt-5.6-luna` with reasoning effort `low` and reads Journal Entries and Core
+Values without VIF Critic predictions. The deterministic Drift Detector
+declares Drift after two consecutive Conflicts for the same Core Value. The former
 consensus-derived frozen benchmark is retired historical evidence; it does not
 implement or justify the active target. [`twinkl-v8pb`](../evals/drift_v1_student_visible_target.md)
 is historical. [`twinkl-752.4`](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md)
@@ -311,8 +315,9 @@ The VIF Critic:
 
 The Weekly Drift Reviewer:
 
+- uses `gpt-5.6-luna` with reasoning effort `low`
 - reads Journal Entries and Core Values without VIF Critic predictions
-- decides Conflict, non-Conflict, or abstention
+- decides Conflict, Not Conflict, or Abstain
 
 The deterministic Drift Detector declares Drift only after two consecutive
 Weekly Drift Reviewer Conflicts for the same Core Value.

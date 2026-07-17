@@ -34,9 +34,10 @@ This evaluation validates that explanations feel accurate and actionable to user
 
 ### Blocking Dependencies
 Tier 1 Weekly Coach checks are unblocked and implemented. Deeper end-to-end
-explanation evaluation still depends on stable Weekly Drift Reviewer decisions,
-deterministic Drift Detector output, and cited Journal Entry evidence
-(`twinkl-3sg`). VIF Critic outputs belong to offline review and retraining.
+explanation evaluation still depends on persisted decisions from the fixed
+`gpt-5.6-luna` reasoning-effort-`low` Weekly Drift Reviewer, deterministic Drift
+Detector output, and cited Journal Entry evidence (`twinkl-3sg`). VIF Critic
+outputs belong to offline review and retraining.
 
 ### Implementation Scope
 

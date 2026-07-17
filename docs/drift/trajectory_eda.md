@@ -149,10 +149,11 @@ Full list: [`tables/conflict_heavy_week_candidates.csv`](tables/conflict_heavy_w
 2. **Not supportable for v1:** single-entry dip alerts, fade/dormancy, peripheral
    value rise, value evolution, and multi-week chronic low periods. The current data
    does not contain clean long arcs.
-3. **Architecture choice:** the Weekly Drift Reviewer supplies explicit
-   Conflict decisions from Journal Entry text, and the Drift Detector applies
-   the strict two-consecutive-Conflict rule. VIF Critic probabilities remain
-   offline review and candidate-mining evidence, not direct detector input.
+3. **Architecture choice:** the fixed `gpt-5.6-luna` reasoning-effort-`low`
+   Weekly Drift Reviewer supplies explicit Conflict decisions from Journal
+   Entry text, and the Drift Detector applies the strict
+   two-consecutive-Conflict rule. VIF Critic probabilities remain offline review
+   and candidate-mining evidence, not direct detector input.
 4. **Label-regime caveat:** current Critic checkpoints were trained on persisted
    single-pass labels. Consensus labels are now historical diagnostic provenance,
    not a development target. `twinkl-v8pb` completed its student-visible review,
@@ -181,9 +182,10 @@ change the ranking. Prevalence is not the deciding factor; architecture is.
 **Drift v1 is a sustained conflict episode: two adjacent journal entries must
 each clearly show a behavior or choice against the same declared core value.
 Other value dimensions are ignored for this per-value test. In the approved
-user-facing path, the Weekly Drift Reviewer decides Conflict from text without
-VIF Critic input, the deterministic Drift Detector applies the rule, and the
-Weekly Coach surfaces confirmed Drift through the Weekly Digest.
+user-facing path, the fixed `gpt-5.6-luna` reasoning-effort-`low` Weekly Drift
+Reviewer decides Conflict from text without VIF Critic input, the deterministic
+Drift Detector applies the rule, and the Weekly Coach surfaces confirmed Drift
+through the Weekly Digest.
 [`twinkl-v8pb`](../evals/drift_v1_student_visible_target.md) completed the
 student-visible target and withheld its former final-test score. The former
 final-test population is now development-only. The consensus-derived frozen

@@ -2,8 +2,10 @@
 
 This document describes how VIF Critic uncertainty supports offline review,
 case selection, and retraining. The approved user-facing Drift path does not
-consume VIF Critic outputs. It remains separate from the weekly
-crash/rut/evolution prototype that is still wired into the offline runtime.
+consume VIF Critic outputs. Its Weekly Drift Reviewer model contract is fixed
+at `gpt-5.6-luna` with reasoning effort `low`. It remains separate from the
+weekly crash/rut/evolution prototype that is still wired into the offline
+runtime.
 
 ---
 
@@ -132,8 +134,8 @@ Drift v1 is:
 > Two consecutive Journal Entries each clearly show the writer making a
 > behavior or choice against the same Core Value.
 
-The Weekly Drift Reviewer decides whether each relevant Journal Entry shows
-Conflict, non-Conflict, or insufficient evidence without seeing VIF Critic
+The fixed Luna-low Weekly Drift Reviewer decides whether each relevant Journal
+Entry shows Conflict, Not Conflict, or Abstain without seeing VIF Critic
 predictions. The Drift Detector then applies the deterministic rule. VIF Critic
 candidate confirmation is outside the remaining capstone scope.
 
@@ -141,7 +143,7 @@ candidate confirmation is outside the remaining capstone scope.
 |---|---|
 | Student-visible target | Two consecutive Journal Entries each visibly show a Conflict for the same Core Value |
 | Historical consensus table | Retired diagnostic provenance only; not a Drift target, threshold-selection input, or final test set |
-| Approved user-facing path | Weekly Drift Reviewer decisions without VIF Critic input, followed by the deterministic Drift Detector; production integration remains pending |
+| Approved user-facing path | Fixed `gpt-5.6-luna` reasoning-effort-`low` Weekly Drift Reviewer decisions without VIF Critic input, followed by the deterministic Drift Detector; production integration remains pending |
 | VIF Critic path | Store predictions and uncertainty for offline comparison, independent review, case selection, and retraining |
 | Delivery | Weekly Digest with cited Journal Entry evidence and active, recovered, mixed, or uncertain wording; Weekly Drift Reviewer abstention emits no Drift claim; exact schema pending |
 
