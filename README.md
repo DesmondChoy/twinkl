@@ -225,7 +225,7 @@ for the review contract, input boundary, launch options, and frozen files.
 
 ## Runtime Demo Review App — 🧪 Experimental
 
-A sibling Shiny app for showcasing the end-to-end runtime flow on top of existing wrangled personas and local VIF Critic checkpoints. It lets you browse persona details, read the full Journal Entry timeline, choose a checkpoint, run the live VIF Critic → prototype router → Weekly Digest cycle, and inspect the resulting files in one place.
+A sibling Shiny app for showcasing the end-to-end runtime flow on top of existing wrangled personas and local VIF Critic checkpoints. It lets you browse persona details, read the full Journal Entry timeline, choose a checkpoint, run the live VIF Critic → prototype router → Weekly Digest cycle, and inspect the resulting files in one place. This app also generates a live Weekly Coach reflection when a provider API key is available.
 
 **Run the app:**
 ```sh
@@ -248,7 +248,18 @@ Open `http://127.0.0.1:8001` when running the file directly.
 - End-to-end runtime execution via `src.coach.runtime.run_weekly_coach_cycle`
 - Detector input source toggle between **LLM-Judge labels** and **VIF Critic predictions**
 - Detector comparison across **Baseline**, **EMA**, **CUSUM**, **Cosine**, **Control Chart**, and **KL Div**, with per-Journal Entry detector-vote counts (not the five-pass LLM-Judge reference)
-- A six-tab result canvas with Overview, per-Journal Entry VIF Critic outputs, weekly signals, prototype-router JSON, Weekly Digest markdown, and detector comparison
+- A six-tab result canvas: Overview, per-Journal Entry VIF Critic outputs, weekly signals, Drift, Weekly Digest, and detector comparison
+- Live Weekly Coach reflection rendered in the Weekly Digest tab, with `weekly_mirror`, `tension_explanation`, and `reflective_question` sections
+
+**Weekly Coach reflection:** `src/coach/llm_client.py` builds the provider-backed
+callable that `src/demo_tool/runtime_bridge.py` injects into
+`run_weekly_coach_cycle`. `TWINKL_COACH_PROVIDER` selects `openai` (default) or
+`gemini`; `TWINKL_COACH_MODEL` overrides the per-provider default model
+(`gpt-5.4-mini` or `gemini-2.5-flash`). When the selected provider's API key is
+absent, the provider is unrecognised, or the request fails, the app degrades to a
+numeric-only Weekly Digest instead of erroring, so it stays runnable offline. The
+`src.coach.runtime` and `src.coach.weekly_digest` CLIs do not call a live Weekly
+Coach LLM; they render and persist the prompt only.
 
 **Generated files:** The app writes persona/checkpoint-specific runtime bundles under `logs/exports/demo_tool_runs/<persona_id>/<checkpoint-stem>-<hash>/`.
 
@@ -261,6 +272,7 @@ frozen Weekly Drift Reviewer Runs and does not execute the VIF Critic runtime.
 - `src/demo_tool/app.py` — Main Shiny demo application
 - `src/demo_tool/data_loader.py` — Persona catalog and chronological timeline loading
 - `src/demo_tool/runtime_bridge.py` — Checkpoint discovery and Weekly Coach runtime wrapper
+- `src/coach/llm_client.py` — Provider-backed Weekly Coach reflection adapters (Gemini, OpenAI)
 - `src/demo_tool/multi_drift.py` — Multi-detector comparison bundle for LLM-Judge-label and VIF Critic-prediction views
 - `src/demo_tool/state.py` — Centralized reactive UI state
 

@@ -269,10 +269,15 @@ def test_build_llm_complete_selects_provider_by_env(monkeypatch):
     assert build_llm_complete() is not None
     assert build_llm_complete(provider="openai") is None
 
-    # Provider defaults to gemini and unknown providers yield None.
+    # Provider defaults to openai: with only a Gemini key present, the default
+    # build yields None. Unknown providers also yield None.
     monkeypatch.delenv("TWINKL_COACH_PROVIDER", raising=False)
-    assert build_llm_complete() is not None
+    assert build_llm_complete() is None
     assert build_llm_complete(provider="not-a-provider") is None
+
+    # With an OpenAI key present, the default provider builds.
+    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+    assert build_llm_complete() is not None
 
 
 @pytest.mark.asyncio

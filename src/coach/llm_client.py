@@ -2,7 +2,8 @@
 
 The coach layer accepts an injected ``LLMCompleteFn`` so it stays testable and
 provider-agnostic. This module provides concrete OpenAI and Gemini
-implementations for the demo path, selected via ``TWINKL_COACH_PROVIDER``.
+implementations for the demo path, selected via ``TWINKL_COACH_PROVIDER``
+(defaults to ``openai``).
 
 All adapters degrade gracefully: when the provider's API key is absent the
 builder returns ``None`` and callers fall back to a numeric-only digest.
@@ -140,12 +141,12 @@ def build_llm_complete(
 ) -> LLMCompleteFn | None:
     """Build an ``llm_complete`` callable for the configured provider.
 
-    Provider is chosen by ``TWINKL_COACH_PROVIDER`` (``gemini`` or ``openai``),
-    defaulting to ``gemini``. Returns ``None`` when the provider's API key is
+    Provider is chosen by ``TWINKL_COACH_PROVIDER`` (``openai`` or ``gemini``),
+    defaulting to ``openai``. Returns ``None`` when the provider's API key is
     missing or the provider is unrecognised, so the demo stays runnable offline.
     """
     resolved_provider = (
-        provider or os.environ.get("TWINKL_COACH_PROVIDER", "gemini")
+        provider or os.environ.get("TWINKL_COACH_PROVIDER", "openai")
     ).strip().lower()
     resolved_timeout = timeout if timeout is not None else DEFAULT_TIMEOUT_SECONDS
     resolved_max_tokens = (
