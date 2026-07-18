@@ -2,7 +2,8 @@
 
 The coach layer accepts an injected ``LLMCompleteFn`` so it stays testable and
 provider-agnostic. This module provides concrete OpenAI and Gemini
-implementations for the demo path, selected via ``TWINKL_COACH_PROVIDER``.
+implementations for the demo path, selected via ``TWINKL_COACH_PROVIDER``
+(defaults to ``openai``).
 
 All adapters degrade gracefully: when the provider's API key is absent the
 builder returns ``None`` and callers fall back to a numeric-only digest.
@@ -18,7 +19,7 @@ from src.coach.weekly_digest import LLMCompleteFn
 logger = logging.getLogger(__name__)
 
 DEFAULT_OPENAI_MODEL = "gpt-5.4-mini"
-DEFAULT_GEMINI_MODEL = "gemini-2.5-flash"
+DEFAULT_GEMINI_MODEL = "gemini-3.5-flash"
 DEFAULT_TIMEOUT_SECONDS = 60.0
 DEFAULT_MAX_OUTPUT_TOKENS = 2048
 
@@ -96,7 +97,7 @@ def _build_gemini_llm_complete(
             "max_output_tokens": max_output_tokens,
             # google-genai expects milliseconds for the request timeout.
             "http_options": types.HttpOptions(timeout=int(timeout * 1000)),
-            # Gemini 2.5 models "think" by default, consuming the output budget
+            # Gemini flash models "think" by default, consuming the output budget
             # before emitting JSON and truncating it. Disable for this short task.
             "thinking_config": types.ThinkingConfig(thinking_budget=0),
         }
@@ -140,12 +141,12 @@ def build_llm_complete(
 ) -> LLMCompleteFn | None:
     """Build an ``llm_complete`` callable for the configured provider.
 
-    Provider is chosen by ``TWINKL_COACH_PROVIDER`` (``gemini`` or ``openai``),
-    defaulting to ``gemini``. Returns ``None`` when the provider's API key is
+    Provider is chosen by ``TWINKL_COACH_PROVIDER`` (``openai`` or ``gemini``),
+    defaulting to ``openai``. Returns ``None`` when the provider's API key is
     missing or the provider is unrecognised, so the demo stays runnable offline.
     """
     resolved_provider = (
-        provider or os.environ.get("TWINKL_COACH_PROVIDER", "gemini")
+        provider or os.environ.get("TWINKL_COACH_PROVIDER", "openai")
     ).strip().lower()
     resolved_timeout = timeout if timeout is not None else DEFAULT_TIMEOUT_SECONDS
     resolved_max_tokens = (

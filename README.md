@@ -33,7 +33,7 @@ These are implemented properties of the current stack, not target-only aspiratio
 
 **Current Drift contract:** Drift is two consecutive Conflicts for the same Core Value. The Weekly Drift Reviewer model contract is fixed at `gpt-5.6-luna` with reasoning effort `low`. Across three frozen development Runs, that setup found a median 23/42 known Drifts, produced 4 false Drift alerts, and had `0.637` coverage on the 42 Drifts across 36 Drift trajectories in the 292 resolved cases from the [`twinkl-qtwz` complete development review](logs/experiments/reports/experiment_review_2026-07-14_twinkl_qtwz_complete_development_review.md). These are AI-reviewed synthetic development results, not human validation, a fresh final test, or deployment approval. The approved staged architecture uses the Weekly Drift Reviewer without VIF Critic input followed by the deterministic Drift Detector. The VIF Critic remains essential to offline comparison, independent review, and retraining; its predictions do not enter the Weekly Drift Reviewer or user-facing Drift decision. The current runtime remains an experimental predecessor that emits `stable`, `crash`, `rut`, `evolution`, and `high_uncertainty`. See the [`twinkl-52zz` report](logs/experiments/reports/experiment_review_2026-07-14_twinkl_52zz_luna_low.md), [`docs/architecture/drift_detection.md`](docs/architecture/drift_detection.md), and [`docs/evals/drift_detection_eval.md`](docs/evals/drift_detection_eval.md).
 
-**Current runtime behavior:** A local VIF Critic checkpoint can drive the full offline path from per-Journal Entry predictions to validated weekly aggregates, structured prototype-router JSON, and a Weekly Digest. A shared schema in `src/vif/weekly_schema.py` defines the producer/consumer column contract and fails early when a required weekly column is missing. See `docs/vif/`, [`docs/weekly/weekly_digest_generation.md`](docs/weekly/weekly_digest_generation.md), and [`docs/demo/review_app.md`](docs/demo/review_app.md).
+**Current runtime behavior:** A local VIF Critic checkpoint can drive the full offline path from per-Journal Entry predictions to validated weekly aggregates, structured prototype-router JSON, and a Weekly Digest. Callers that inject an `llm_complete` callable also get a Weekly Coach reflection and its Tier 1 validation; the Runtime Demo Review App does this, while the CLIs render the prompt without calling a live model. A shared schema in `src/vif/weekly_schema.py` defines the producer/consumer column contract and fails early when a required weekly column is missing. See `docs/vif/`, [`docs/weekly/weekly_digest_generation.md`](docs/weekly/weekly_digest_generation.md), and [`docs/demo/review_app.md`](docs/demo/review_app.md).
 
 ### Automated Experiment Logging & Review
 
@@ -225,7 +225,7 @@ for the review contract, input boundary, launch options, and frozen files.
 
 ## Runtime Demo Review App — 🧪 Experimental
 
-A sibling Shiny app for showcasing the end-to-end runtime flow on top of existing wrangled personas and local VIF Critic checkpoints. It lets you browse persona details, read the full Journal Entry timeline, choose a checkpoint, run the live VIF Critic → prototype router → Weekly Digest cycle, and inspect the resulting files in one place.
+A sibling Shiny app for showcasing the end-to-end runtime flow on top of existing wrangled personas and local VIF Critic checkpoints. It lets you browse persona details, read the full Journal Entry timeline, choose a checkpoint, run the live VIF Critic → prototype router → Weekly Digest cycle, and inspect the resulting files in one place. This app also generates a live Weekly Coach reflection when a provider API key is available.
 
 **Run the app:**
 ```sh
@@ -248,7 +248,18 @@ Open `http://127.0.0.1:8001` when running the file directly.
 - End-to-end runtime execution via `src.coach.runtime.run_weekly_coach_cycle`
 - Detector input source toggle between **LLM-Judge labels** and **VIF Critic predictions**
 - Detector comparison across **Baseline**, **EMA**, **CUSUM**, **Cosine**, **Control Chart**, and **KL Div**, with per-Journal Entry detector-vote counts (not the five-pass LLM-Judge reference)
-- A six-tab result canvas with Overview, per-Journal Entry VIF Critic outputs, weekly signals, prototype-router JSON, Weekly Digest markdown, and detector comparison
+- A six-tab result canvas: Overview, per-Journal Entry VIF Critic outputs, weekly signals, Drift, Weekly Digest, and detector comparison
+- Live Weekly Coach reflection rendered in the Weekly Digest tab, with `weekly_mirror`, `tension_explanation`, and `reflective_question` sections
+
+**Weekly Coach reflection:** `src/coach/llm_client.py` builds the provider-backed
+callable that `src/demo_tool/runtime_bridge.py` injects into
+`run_weekly_coach_cycle`. `TWINKL_COACH_PROVIDER` selects `openai` (default) or
+`gemini`; `TWINKL_COACH_MODEL` overrides the per-provider default model
+(`gpt-5.4-mini` or `gemini-2.5-flash`). When the selected provider's API key is
+absent, the provider is unrecognised, or the request fails, the app degrades to a
+numeric-only Weekly Digest instead of erroring, so it stays runnable offline. The
+`src.coach.runtime` and `src.coach.weekly_digest` CLIs do not call a live Weekly
+Coach LLM; they render and persist the prompt only.
 
 **Generated files:** The app writes persona/checkpoint-specific runtime bundles under `logs/exports/demo_tool_runs/<persona_id>/<checkpoint-stem>-<hash>/`.
 
@@ -261,6 +272,7 @@ frozen Weekly Drift Reviewer Runs and does not execute the VIF Critic runtime.
 - `src/demo_tool/app.py` — Main Shiny demo application
 - `src/demo_tool/data_loader.py` — Persona catalog and chronological timeline loading
 - `src/demo_tool/runtime_bridge.py` — Checkpoint discovery and Weekly Coach runtime wrapper
+- `src/coach/llm_client.py` — Provider-backed Weekly Coach reflection adapters (Gemini, OpenAI)
 - `src/demo_tool/multi_drift.py` — Multi-detector comparison bundle for LLM-Judge-label and VIF Critic-prediction views
 - `src/demo_tool/state.py` — Centralized reactive UI state
 
@@ -309,7 +321,7 @@ opening.
 | Capability | Status | Note |
 |---|---|---|
 | Onboarding (BWS Values Assessment) | 📋 Specified | Flow designed; not yet implemented |
-| Weekly Coach validation depth | ⚠️ Partial | Weekly Digest generation, runtime files, and demo review flow exist; the approved Weekly Drift Reviewer and Drift Detector path is not wired, a fresh final test is missing, and Weekly Coach evaluation remains incomplete |
+| Weekly Coach validation depth | ⚠️ Partial | Weekly Digest generation, runtime files, demo review flow, and provider-backed Weekly Coach reflection with Tier 1 narrative checks exist; the approved Weekly Drift Reviewer and Drift Detector path is not wired, a fresh final test is missing, and Tier 1 pass rates over a batch plus Tier 2 and Tier 3 evaluation remain incomplete |
 | Nudge signal quality validation | 🧪 Experimental | Annotation study and downstream usefulness checks remain in progress |
 | Embedding Explorer | ✅ Complete | Interactive 3D visualization of VIF Critic embeddings |
 | Drift Detector validity and production wiring | 🧪 Experimental | The Weekly Drift Reviewer model contract is fixed at `gpt-5.6-luna` with reasoning effort `low`, and its decisions without VIF Critic input feed the deterministic Drift Detector. Predefined operating criteria, a fresh final test, deployment approval, and production wiring remain pending. |
