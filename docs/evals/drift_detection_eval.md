@@ -377,7 +377,7 @@ above.
 | Matched-control Drift rate (`twinkl-752.4`) | 1/44 (2.3%) | One legacy-miner miss among resolved development controls; not a false-alert rate |
 | Development precision / false-positive rate (`run_020`) | 1.0 / 0.0 | The single predicted development Drift was correct, but four reference Drifts were missed |
 | Development F1 (`run_020`) | 0.3333 | Balances the perfect precision with low recall |
-| Weekly review without VIF Critic input (`twinkl-752.5`) | 9/33 median Drift hits / recall 0.273 / precision 1.0 / 0 false Drift alerts / coverage 0.670 | Current 106-trajectory development-union result over three repeats |
+| Weekly review without VIF Critic input (`twinkl-752.5`) | 9/33 median Drift hits / recall 0.273 / precision 1.0 / 0 false Drift alerts / coverage 0.670 | Historical 106-case development-union result over three repeats; superseded by the complete development review for `twinkl-52zz` |
 | Weekly review with raw VIF Critic input (`twinkl-752.5`) | 7/33 median Drift hits / recall 0.212 / precision 0.70 / 3 false Drift alerts / coverage 0.594 | Paired recall interval crosses zero; old rejection is inconclusive |
 | VIF-Critic-triggered early-plus-weekly review (`twinkl-752.5`) | 9/33 median Drift hits / recall 0.273 / precision 0.90 / 1 false Drift alert / coverage 0.670 | No recall gain; median delay 1 versus 5 days; review-again only |
 | Weekly Drift Reviewer without VIF Critic input (`twinkl-752.1`) | Median Drift recall 0.40 / 1 false Drift alert / coverage 0.756 | Superseded five-episode comparison |
