@@ -19,7 +19,7 @@ from src.coach.weekly_digest import LLMCompleteFn
 logger = logging.getLogger(__name__)
 
 DEFAULT_OPENAI_MODEL = "gpt-5.4-mini"
-DEFAULT_GEMINI_MODEL = "gemini-2.5-flash"
+DEFAULT_GEMINI_MODEL = "gemini-3.5-flash"
 DEFAULT_TIMEOUT_SECONDS = 60.0
 DEFAULT_MAX_OUTPUT_TOKENS = 2048
 
@@ -97,7 +97,7 @@ def _build_gemini_llm_complete(
             "max_output_tokens": max_output_tokens,
             # google-genai expects milliseconds for the request timeout.
             "http_options": types.HttpOptions(timeout=int(timeout * 1000)),
-            # Gemini 2.5 models "think" by default, consuming the output budget
+            # Gemini flash models "think" by default, consuming the output budget
             # before emitting JSON and truncating it. Disable for this short task.
             "thinking_config": types.ThinkingConfig(thinking_budget=0),
         }
