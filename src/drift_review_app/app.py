@@ -10,6 +10,7 @@ from pathlib import Path
 from statistics import median
 from typing import Any
 
+from htmltools import Tag
 from shiny import App, Inputs, Outputs, Session, reactive, render, req, ui
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -273,19 +274,10 @@ def _period_choices(
     return choices
 
 
-def _default_period(data: ReviewData, case: CaseRecord, setup_key: str) -> str:
-    """Return the first known Drift or Drift alert available for review."""
-    references = data.reference_drifts[case.case_id]
-    if references:
-        row = references[0]
-        return f"ref|{row.drift_id}|{row.onset_t_index}|{row.end_t_index}"
-    for run in (1, 2, 3):
-        predictions = data.predicted_drifts[(setup_key, run, case.case_id)]
-        if predictions:
-            row = predictions[0]
-            return (
-                f"pred|{run}|{row.onset_t_index}|{row.end_t_index}|{row.detection_date}"
-            )
+def _default_period(
+    _data: ReviewData, _case: CaseRecord, _setup_key: str
+) -> str:
+    """Open on the complete chronology; narrower evidence periods remain available."""
     return "full"
 
 
@@ -2024,9 +2016,9 @@ def _detail_screen(data: ReviewData, case: CaseRecord) -> ui.Tag:
             ),
             ui.p(
                 "Choose one setup for the Journal Entry comparison below; the "
-                "scoreboard always compares all setups. The relevant Drift span "
-                "is shown first. Choose Full timeline to inspect the complete "
-                "history.",
+                "scoreboard always compares all setups. Full timeline opens first; "
+                "use the period control to isolate a known Drift, Drift alert, or "
+                "review week.",
                 class_="controls-note",
             ),
             class_="controls-panel",
@@ -2035,13 +2027,12 @@ def _detail_screen(data: ReviewData, case: CaseRecord) -> ui.Tag:
             ui.div(
                 ui.div(
                     ui.p("PRIMARY REVIEW", class_="eyebrow"),
-                    ui.h2("Journal Entries and three Runs"),
+                    ui.h2("Journal Entry trajectory and evidence"),
                 ),
                 ui.p(
-                    "The LLM-Judge Conflict Label stays visible beside the same "
-                    "Journal Entry. Runs 1–3 repeat the same frozen setup on the "
-                    "same input and are never merged; disagreement shows Run "
-                    "variability, not a data error.",
+                    "Each line is one Run of the selected setup. Select a point to "
+                    "inspect its Journal Entry, Weekly Drift Reviewer Decision, and "
+                    "LLM-Judge Conflict Label; Runs are never merged.",
                     class_="section-note",
                 ),
                 class_="section-heading",
@@ -2147,6 +2138,803 @@ def _timeline(
             "Journal Entry, LLM-Judge Conflict Label, and Weekly Drift Reviewer "
             "Run comparison"
         ),
+    )
+
+
+_TRAJECTORY_CATEGORY_LABELS = {
+    "not_conflict": "Not Conflict",
+    "abstain": "Abstain",
+    "conflict": "Conflict",
+    "invalid": "Invalid response",
+}
+
+
+def _trajectory_category(decision: Decision) -> str:
+    if decision.response_status != "ok":
+        return "invalid"
+    if decision.verdict in {"not_conflict", "abstain", "conflict"}:
+        return decision.verdict
+    return "invalid"
+
+
+def _trajectory_comparison(
+    entry: EntryRecord, decision: Decision
+) -> tuple[str, str]:
+    if decision.response_status != "ok":
+        return (
+            "neutral",
+            "Invalid Weekly Drift Reviewer response; no label comparison.",
+        )
+    if entry.final_conflict is None:
+        return (
+            "neutral",
+            "Uncertain LLM-Judge Conflict Label; no resolved comparison.",
+        )
+    if decision.verdict == "abstain":
+        reference_label = "Conflict" if entry.final_conflict else "Not Conflict"
+        return (
+            "mismatch",
+            "Weekly Drift Reviewer Decision Abstain differs from the resolved "
+            f"{reference_label} LLM-Judge Conflict Label.",
+        )
+    if decision.verdict not in {"conflict", "not_conflict"}:
+        return (
+            "neutral",
+            "No valid Weekly Drift Reviewer Decision to compare.",
+        )
+    decision_conflict = decision.verdict == "conflict"
+    if decision_conflict == entry.final_conflict:
+        return "match", "Matches the resolved LLM-Judge Conflict Label."
+    return "mismatch", "Differs from the resolved LLM-Judge Conflict Label."
+
+
+def _trajectory_annotation_tags(
+    data: ReviewData,
+    case: CaseRecord,
+    setup_key: str,
+    run: int,
+    entries: tuple[EntryRecord, ...],
+    x_positions: dict[int, float],
+    category_index: dict[str, int],
+) -> tuple[ui.Tag, ...]:
+    visible = {entry.t_index: entry for entry in entries}
+    predictions = data.predicted_drifts[(setup_key, run, case.case_id)]
+    annotations: list[ui.Tag] = []
+    label_specs: list[tuple[str, str, float, float, str, bool, str]] = []
+
+    def add_pair_annotation(
+        onset_t_index: int,
+        confirmation_t_index: int,
+        label: str,
+        class_name: str,
+    ) -> None:
+        confirmation_entry = visible.get(confirmation_t_index)
+        if confirmation_entry is None:
+            return
+        confirmation_decision = data.decision(
+            setup_key, run, case.case_id, confirmation_t_index
+        )
+        category = _trajectory_category(confirmation_decision)
+        y_percent = (
+            (category_index[category] + 0.5) / len(category_index)
+        ) * 100
+        confirmation_x = x_positions[confirmation_t_index]
+        onset_x = x_positions.get(onset_t_index)
+        if onset_x is not None:
+            left = min(onset_x, confirmation_x)
+            width = max(2.2, abs(confirmation_x - onset_x))
+            annotations.append(
+                ui.span(
+                    class_=f"trajectory-alert-bracket {class_name}",
+                    style=(
+                        f"left: {left:.3f}%; width: {width:.3f}%; "
+                        f"top: {y_percent:.3f}%;"
+                    ),
+                    aria_hidden="true",
+                )
+            )
+        description = (
+            f"Run {run} · {label} · "
+            f"{_format_span(onset_t_index, confirmation_t_index)}"
+        )
+        label_specs.append(
+            (
+                label,
+                class_name,
+                confirmation_x,
+                y_percent,
+                description,
+                False,
+                "below" if category == "not_conflict" else "above",
+            )
+        )
+
+    for span in predictions:
+        if span.result == "false Drift alert":
+            add_pair_annotation(
+                span.onset_t_index,
+                span.confirmation_t_index,
+                "False Drift alert",
+                "is-false",
+            )
+
+    matched_reference_ids = {
+        span.matched_reference_id
+        for span in predictions
+        if span.result == "hit" and span.matched_reference_id
+    }
+    for span in data.reference_drifts[case.case_id]:
+        if span.drift_id not in matched_reference_ids:
+            add_pair_annotation(
+                span.onset_t_index,
+                span.confirmation_t_index,
+                "Missed known Drift",
+                "is-missed",
+            )
+
+    for entry in entries:
+        decision = data.decision(setup_key, run, case.case_id, entry.t_index)
+        if decision.response_status == "ok":
+            continue
+        category = _trajectory_category(decision)
+        y_percent = (
+            (category_index[category] + 0.5) / len(category_index)
+        ) * 100
+        x_percent = x_positions[entry.t_index]
+        description = f"Run {run} · Invalid response · t{entry.t_index}"
+        label_specs.append(
+            (
+                "Invalid response",
+                "is-invalid",
+                x_percent,
+                y_percent,
+                description,
+                True,
+                "above",
+            )
+        )
+
+    occupied_rects: list[tuple[float, float, float, float]] = []
+    for label, class_name, x_percent, y_percent, description, is_point, side in (
+        sorted(label_specs, key=lambda spec: spec[2])
+    ):
+        leading = x_percent < 24
+        estimated_width = min(42.0, max(24.0, 10.0 + len(label) * 1.2))
+        interval = (
+            (x_percent, min(100.0, x_percent + estimated_width))
+            if leading
+            else (max(0.0, x_percent - estimated_width), x_percent)
+        )
+        base_y_px = y_percent * 1.04
+        lane = 0
+        while True:
+            top_px = (
+                base_y_px - 31.2 - lane * 19.2
+                if side == "above"
+                else base_y_px + 10.4 + lane * 19.2
+            )
+            candidate = (
+                interval[0],
+                interval[1],
+                top_px,
+                top_px + 16.0,
+            )
+            if all(
+                candidate[1] + 2.0 < used[0]
+                or candidate[0] - 2.0 > used[1]
+                or candidate[3] + 3.0 < used[2]
+                or candidate[2] - 3.0 > used[3]
+                for used in occupied_rects
+            ):
+                break
+            lane += 1
+        occupied_rects.append(candidate)
+        annotations.append(
+            ui.span(
+                label,
+                class_=(
+                    f"trajectory-alert-label {class_name}"
+                    + (" is-point" if is_point else "")
+                    + (" is-leading" if leading else "")
+                    + (" is-below" if side == "below" else "")
+                ),
+                style=(
+                    f"left: {x_percent:.3f}%; top: {y_percent:.3f}%; "
+                    f"--annotation-lane: {lane};"
+                ),
+                title=description,
+                role="note",
+                aria_label=description,
+            )
+        )
+
+    return tuple(annotations)
+
+
+def _date_x_percent(value: date, start: date, end: date) -> float:
+    if start == end:
+        return 50.0
+    elapsed = (value - start).days
+    duration = (end - start).days
+    return 7.0 + (elapsed / duration) * 86.0
+
+
+def _reference_window_positions(
+    data: ReviewData,
+    case: CaseRecord,
+    entries: tuple[EntryRecord, ...],
+) -> tuple[tuple[DriftSpan, float, float], ...]:
+    if not entries:
+        return ()
+    start = date.fromisoformat(entries[0].date)
+    end = date.fromisoformat(entries[-1].date)
+    positions: list[tuple[DriftSpan, float, float]] = []
+    for span in data.reference_drifts[case.case_id]:
+        span_start = max(start, date.fromisoformat(span.onset_date))
+        span_end = min(end, date.fromisoformat(span.end_date))
+        if span_start > span_end:
+            continue
+        left = max(2.0, _date_x_percent(span_start, start, end) - 1.25)
+        right = min(98.0, _date_x_percent(span_end, start, end) + 1.25)
+        positions.append((span, left, max(2.5, right - left)))
+    return tuple(positions)
+
+
+def _default_inspection_point(
+    data: ReviewData,
+    case: CaseRecord,
+    setup_key: str,
+    period: str,
+) -> tuple[int | None, int]:
+    entries = _visible_entries(case, period)
+    if not entries:
+        return None, 1
+    visible = {entry.t_index for entry in entries}
+    for span in data.reference_drifts[case.case_id]:
+        if span.confirmation_t_index not in visible:
+            continue
+        for run in (1, 2, 3):
+            decision = data.decision(
+                setup_key, run, case.case_id, span.confirmation_t_index
+            )
+            if _trajectory_category(decision) == "conflict":
+                return span.confirmation_t_index, run
+        return span.confirmation_t_index, 1
+    for run in (1, 2, 3):
+        for span in data.predicted_drifts[(setup_key, run, case.case_id)]:
+            if span.confirmation_t_index in visible:
+                return span.confirmation_t_index, run
+    for entry in entries:
+        for run in (1, 2, 3):
+            decision = data.decision(
+                setup_key, run, case.case_id, entry.t_index
+            )
+            if _trajectory_category(decision) == "conflict":
+                return entry.t_index, run
+    return entries[0].t_index, 1
+
+
+def _trajectory_step_path(points: list[tuple[float, float]]) -> str:
+    if not points:
+        return ""
+    commands = [f"M {points[0][0]:.2f} {points[0][1]:.2f}"]
+    previous_x = points[0][0]
+    for x, y in points[1:]:
+        midpoint = (previous_x + x) / 2
+        commands.extend(
+            (f"H {midpoint:.2f}", f"V {y:.2f}", f"H {x:.2f}")
+        )
+        previous_x = x
+    return " ".join(commands)
+
+
+def _trajectory_onclick(t_index: int, run: int) -> str:
+    return (
+        "Shiny.setInputValue('trajectory_point', "
+        f"'{t_index}|{run}', {{priority: 'event'}});"
+    )
+
+
+def _trajectory_plot(
+    data: ReviewData,
+    case: CaseRecord,
+    setup_key: str,
+    period: str,
+    selected_t_index: int,
+    selected_run: int,
+) -> ui.Tag:
+    entries = _visible_entries(case, period)
+    all_decisions = [
+        data.decision(setup_key, run, case.case_id, entry.t_index)
+        for entry in entries
+        for run in (1, 2, 3)
+    ]
+    category_keys = ["not_conflict", "abstain", "conflict"]
+    if any(_trajectory_category(decision) == "invalid" for decision in all_decisions):
+        category_keys.append("invalid")
+    category_index = {key: index for index, key in enumerate(category_keys)}
+    chart_height = len(category_keys) * 100.0
+    start = date.fromisoformat(entries[0].date)
+    end = date.fromisoformat(entries[-1].date)
+    x_positions = {
+        entry.t_index: _date_x_percent(date.fromisoformat(entry.date), start, end)
+        for entry in entries
+    }
+
+    reference_positions = _reference_window_positions(data, case, entries)
+    run_plots: list[ui.Tag] = []
+    for run in (1, 2, 3):
+        points: list[tuple[float, float]] = []
+        point_buttons: list[ui.Tag] = []
+        for entry in entries:
+            decision = data.decision(setup_key, run, case.case_id, entry.t_index)
+            category = _trajectory_category(decision)
+            comparison, comparison_note = _trajectory_comparison(entry, decision)
+            reference_label, _reference_class = _reference_label(entry)
+            y_units = category_index[category] * 100 + 50
+            points.append((x_positions[entry.t_index] * 10, y_units))
+            selected = entry.t_index == selected_t_index and run == selected_run
+            parsed_date = date.fromisoformat(entry.date)
+            point_buttons.append(
+                ui.tags.button(
+                    type="button",
+                    class_=(
+                        f"trajectory-point comparison-{comparison} is-{category}"
+                        + (" is-selected" if selected else "")
+                    ),
+                    style=(
+                        f"left: {x_positions[entry.t_index]:.3f}%; "
+                        f"top: {(y_units / chart_height) * 100:.3f}%;"
+                    ),
+                    onclick=_trajectory_onclick(entry.t_index, run),
+                    aria_label=(
+                        f"Run {run}, Journal Entry {entry.t_index}, "
+                        f"{parsed_date.strftime('%d %B %Y')}, "
+                        f"Weekly Drift Reviewer Decision "
+                        f"{_verdict_label(decision)}, "
+                        f"LLM-Judge Conflict Label {reference_label}. "
+                        f"{comparison_note} Select evidence."
+                    ),
+                    aria_pressed="true" if selected else "false",
+                    title=(
+                        f"Run {run} · Journal Entry {entry.t_index} · "
+                        f"Decision: {_verdict_label(decision)} · "
+                        f"LLM-Judge: {reference_label} · {comparison_note}"
+                    ),
+                )
+            )
+        line_path = Tag(
+            "path",
+            d=_trajectory_step_path(points),
+            class_="trajectory-run-line",
+            fill="none",
+            vector_effect="non-scaling-stroke",
+            _add_ws=False,
+        )
+        alert_annotations = _trajectory_annotation_tags(
+            data,
+            case,
+            setup_key,
+            run,
+            entries,
+            x_positions,
+            category_index,
+        )
+        run_plots.append(
+            ui.div(
+                ui.div(
+                    ui.span(class_="trajectory-legend-mark"),
+                    ui.strong(f"Run {run}"),
+                    ui.span(
+                        "Selected Run" if run == selected_run else None,
+                        class_="trajectory-run-selected",
+                    ),
+                    class_="trajectory-run-heading",
+                ),
+                ui.div(
+                    ui.div(
+                        *[
+                            ui.span(
+                                _TRAJECTORY_CATEGORY_LABELS[key],
+                                class_=(
+                                    f"trajectory-category-label is-{key}"
+                                ),
+                            )
+                            for key in category_keys
+                        ],
+                        class_="trajectory-y-axis",
+                        style=(
+                            f"--trajectory-row-count: {len(category_keys)};"
+                        ),
+                        aria_hidden="true",
+                    ),
+                    ui.div(
+                        *[
+                            ui.span(
+                                class_="known-drift-window",
+                                style=(
+                                    f"left: {left:.3f}%; "
+                                    f"width: {width:.3f}%;"
+                                ),
+                            )
+                            for _span, left, width in reference_positions
+                        ],
+                        *[
+                            ui.span(
+                                class_=f"trajectory-band is-{key}",
+                                style=(
+                                    f"top: "
+                                    f"{(index / len(category_keys)) * 100:.3f}%; "
+                                    f"height: "
+                                    f"{100 / len(category_keys):.3f}%;"
+                                ),
+                            )
+                            for index, key in enumerate(category_keys)
+                        ],
+                        ui.tags.svg(
+                            line_path,
+                            class_="trajectory-lines",
+                            viewBox=f"0 0 1000 {chart_height:.0f}",
+                            preserveAspectRatio="none",
+                            aria_hidden="true",
+                            focusable="false",
+                        ),
+                        *point_buttons,
+                        *alert_annotations,
+                        class_="trajectory-canvas",
+                        style=(
+                            f"--trajectory-row-count: {len(category_keys)};"
+                        ),
+                    ),
+                    class_="trajectory-chart",
+                ),
+                class_=(
+                    f"trajectory-run-plot run-{run}"
+                    + (" is-selected" if run == selected_run else "")
+                ),
+                role="group",
+                aria_label=f"Run {run} Weekly Drift Reviewer Decisions",
+            )
+        )
+
+    return ui.div(
+        ui.div(
+            ui.div(
+                ui.p("DECISION COMPARISON", class_="eyebrow"),
+                ui.h3("Weekly Drift Reviewer Decisions"),
+            ),
+            ui.span("3 aligned Runs", class_="trajectory-plot-count"),
+            class_="trajectory-plot-heading",
+        ),
+        ui.div(
+            ui.span(
+                ui.span(class_="trajectory-status-mark is-match"),
+                "Matches resolved LLM-Judge Conflict Label",
+                class_="trajectory-status-key",
+            ),
+            ui.span(
+                ui.span(class_="trajectory-status-mark is-mismatch"),
+                "Differs from resolved label, including Abstain",
+                class_="trajectory-status-key",
+            ),
+            ui.span(
+                ui.span(class_="trajectory-status-mark is-neutral"),
+                "Invalid response or unresolved label",
+                class_="trajectory-status-key",
+            ),
+            class_="trajectory-comparison-legend",
+            aria_label=(
+                "Circle colour compares each Weekly Drift Reviewer Decision "
+                "with its LLM-Judge Conflict Label"
+            ),
+        ),
+        ui.div(
+            ui.span("Known Drift", class_="trajectory-reference-label"),
+            ui.div(
+                *[
+                    ui.span(
+                        _format_span(span.onset_t_index, span.end_t_index),
+                        class_="trajectory-reference-span",
+                        style=f"left: {left:.3f}%; width: {width:.3f}%;",
+                        title=(
+                            "Known Drift · "
+                            f"{_format_span(span.onset_t_index, span.end_t_index)}"
+                        ),
+                    )
+                    for span, left, width in reference_positions
+                ],
+                ui.span("None in this view", class_="trajectory-reference-empty")
+                if not reference_positions
+                else None,
+                class_="trajectory-reference-track",
+            ),
+            class_="trajectory-reference-row",
+        ),
+        ui.div(
+            *run_plots,
+            class_="trajectory-run-stack",
+            role="group",
+            aria_label=(
+                "Three date-aligned Weekly Drift Reviewer Run plots"
+            ),
+        ),
+        ui.div(
+            ui.span("Journal date", class_="trajectory-axis-label"),
+            ui.div(
+                *[
+                    ui.tags.time(
+                        ui.span(str(date.fromisoformat(entry.date).day)),
+                        ui.span(date.fromisoformat(entry.date).strftime("%b")),
+                        datetime=entry.date,
+                        class_=(
+                            "trajectory-date"
+                            f" lane-{entry.position % 2}"
+                            + (
+                                " is-selected"
+                                if entry.t_index == selected_t_index
+                                else ""
+                            )
+                        ),
+                        style=f"left: {x_positions[entry.t_index]:.3f}%;",
+                        title=f"Journal Entry {entry.t_index} · {entry.date}",
+                    )
+                    for entry in entries
+                ],
+                class_="trajectory-x-axis",
+                aria_hidden="true",
+            ),
+            class_="trajectory-shared-x-axis",
+        ),
+        ui.p(
+            "Point position is the Weekly Drift Reviewer Decision; circle colour "
+            "shows its comparison with the LLM-Judge Conflict Label. Rows are "
+            "categories, not a numeric scale.",
+            class_="trajectory-note",
+        ),
+        class_="trajectory-plot-panel",
+    )
+
+
+def _trajectory_inspector(
+    data: ReviewData,
+    case: CaseRecord,
+    setup_key: str,
+    entry: EntryRecord,
+    selected_run: int,
+) -> ui.Tag:
+    reference_label, reference_class = _reference_label(entry)
+    references = _reference_membership(data, case.case_id, entry.t_index)
+    selected_decision = data.decision(
+        setup_key, selected_run, case.case_id, entry.t_index
+    )
+    comparison, comparison_note = _trajectory_comparison(entry, selected_decision)
+    comparison_label = {
+        "match": "Matches label",
+        "mismatch": "Mismatch",
+        "neutral": "Not compared",
+    }[comparison]
+    comparison_class = {
+        "match": "is-hit",
+        "mismatch": "is-false",
+        "neutral": "is-abstain",
+    }[comparison]
+    predictions = _predicted_membership(
+        data, setup_key, selected_run, case.case_id, entry.t_index
+    )
+    unresolved = any(
+        entry.t_index in pair
+        for pair in data.unresolved_pairs(
+            setup_key, selected_run, case.case_id
+        )
+    )
+    abstain_explanation = ABSTAIN_EXPLANATIONS.get(
+        selected_decision.reason_code or "",
+        "The displayed Journal Entry does not support a reliable Weekly Drift "
+        "Reviewer Decision.",
+    )
+    reviewer = (
+        "claude-opus-4-8 · reasoning high"
+        if entry.opus_resolved
+        else "gpt-5.6-sol · reasoning xhigh"
+    )
+    return ui.tags.article(
+        ui.div(
+            ui.div(
+                ui.p("SELECTED EVIDENCE", class_="eyebrow"),
+                ui.h3(f"Journal Entry {entry.t_index}"),
+                ui.tags.time(entry.date, datetime=entry.date),
+            ),
+            ui.div(
+                _pill(f"LLM-Judge · {reference_label}", reference_class),
+                _pill(
+                    f"Run {selected_run} · {_verdict_label(selected_decision)}",
+                    _verdict_class(selected_decision),
+                ),
+                ui.span(
+                    comparison_label,
+                    class_=f"pill {comparison_class}",
+                    title=comparison_note,
+                ),
+                class_="inspector-heading-pills",
+            ),
+            class_="trajectory-inspector-heading",
+        ),
+        ui.div(
+            ui.p(entry.initial_entry, class_="inspector-entry-copy"),
+            ui.div(
+                ui.div(
+                    ui.span("Displayed nudge", class_="thread-label"),
+                    ui.p(entry.nudge_text or "No displayed nudge"),
+                    class_="thread-part",
+                ),
+                ui.div(
+                    ui.span("Response", class_="thread-label"),
+                    ui.p(entry.response_text or "No response"),
+                    class_="thread-part",
+                ),
+                class_="inspector-entry-thread",
+            ),
+            class_="inspector-entry",
+        ),
+        ui.div(
+            ui.div(
+                ui.span("LLM-Judge Conflict Label", class_="field-name"),
+                ui.div(
+                    _pill(reference_label, reference_class),
+                    ui.span(f"t{entry.t_index}", class_="reference-index"),
+                    class_="inspector-reference-heading",
+                ),
+            ),
+            ui.div(
+                *[
+                    _pill(
+                        "Known Drift · "
+                        f"{_format_span(span.onset_t_index, span.end_t_index)}"
+                        + (" · cross-week" if span.crosses_week else ""),
+                        "is-reference",
+                    )
+                    for span in references
+                ],
+                ui.span("Not inside known Drift", class_="reference-membership")
+                if not references
+                else None,
+                class_="inspector-reference-membership",
+            ),
+            ui.p(reviewer, class_="reference-reviewer"),
+            class_="inspector-reference",
+        ),
+        ui.div(
+            ui.div(
+                ui.p("WEEKLY DRIFT REVIEWER DECISION", class_="eyebrow"),
+                ui.h3(
+                    f"Run {selected_run} · {_verdict_label(selected_decision)}"
+                ),
+                class_="inspector-decision-title",
+            ),
+            (
+                ui.div(
+                    ui.strong("Invalid or missing response"),
+                    ui.p(
+                        "The weekly receipt failed validation; parsed decisions "
+                        "were ignored."
+                    ),
+                    ui.tags.details(
+                        ui.tags.summary("Technical validation error"),
+                        ui.code(
+                            selected_decision.validation_error
+                            or "No validation detail recorded."
+                        ),
+                    ),
+                    class_="invalid-warning",
+                    role="alert",
+                )
+                if selected_decision.response_status != "ok"
+                else ui.div(
+                    ui.div(
+                        ui.span(
+                            "Why the Weekly Drift Reviewer abstained",
+                            class_="field-name",
+                        ),
+                        ui.p(abstain_explanation),
+                        class_="inspector-decision-field",
+                    )
+                    if selected_decision.verdict == "abstain"
+                    else None,
+                    ui.div(
+                        ui.span(
+                            "Evidence from the Journal Entry",
+                            class_="field-name",
+                        ),
+                        ui.tags.blockquote(selected_decision.evidence_quote),
+                        class_="inspector-decision-field",
+                    )
+                    if selected_decision.evidence_quote
+                    else ui.p(
+                        "No evidence quote was recorded for this Decision.",
+                        class_="inspector-empty-evidence",
+                    ),
+                )
+            ),
+            ui.div(
+                *[
+                    _pill(
+                        "Drift alert · "
+                        + (
+                            "matched known Drift"
+                            if span.result == "hit"
+                            else "false Drift alert"
+                        ),
+                        "is-hit" if span.result == "hit" else "is-false",
+                    )
+                    for span in predictions
+                ],
+                _pill("Adjacent pair unresolved because of Abstain", "is-abstain")
+                if unresolved
+                else None,
+                class_="decision-flags",
+            ),
+            class_="inspector-decision",
+        ),
+        class_="trajectory-inspector",
+        aria_label=(
+            f"Journal Entry {entry.t_index} and Run {selected_run} evidence"
+        ),
+    )
+
+
+def _trajectory_review(
+    data: ReviewData,
+    case: CaseRecord,
+    setup_key: str,
+    period: str,
+    selected_t_index: int | None,
+    selected_run: int,
+) -> ui.Tag:
+    entries = _visible_entries(case, period)
+    if not entries:
+        return ui.div(
+            ui.h3("No Journal Entries in this period"),
+            ui.p("Choose Full timeline or another Journal Entry period."),
+            class_="empty-state",
+        )
+    visible_indices = {entry.t_index for entry in entries}
+    if selected_t_index not in visible_indices or selected_run not in {1, 2, 3}:
+        selected_t_index, selected_run = _default_inspection_point(
+            data, case, setup_key, period
+        )
+    assert selected_t_index is not None
+    selected_entry = next(
+        entry for entry in entries if entry.t_index == selected_t_index
+    )
+    return ui.div(
+        ui.div(
+            _trajectory_plot(
+                data,
+                case,
+                setup_key,
+                period,
+                selected_t_index,
+                selected_run,
+            ),
+            _trajectory_inspector(
+                data,
+                case,
+                setup_key,
+                selected_entry,
+                selected_run,
+            ),
+            class_="trajectory-review-grid",
+        ),
+        ui.tags.details(
+            ui.tags.summary("Full Journal Entry and Run comparison"),
+            ui.p(
+                "Use the complete table for exhaustive side-by-side comparison.",
+                class_="full-comparison-note",
+            ),
+            _timeline(data, case, setup_key, period),
+            class_="drawer full-comparison-drawer",
+        ),
+        class_="trajectory-review",
     )
 
 
@@ -2292,6 +3080,8 @@ def _server(input: Inputs, output: Outputs, session: Session) -> None:
     selected_case_id: reactive.Value[str | None] = reactive.value(None)
     selected_drift: reactive.Value[str] = reactive.value("has")
     selected_dimension: reactive.Value[str] = reactive.value("")
+    selected_t_index: reactive.Value[int | None] = reactive.value(None)
+    selected_run: reactive.Value[int] = reactive.value(1)
     filter_error: reactive.Value[str | None] = reactive.value(None)
 
     def matching_cases() -> tuple[CaseRecord, ...]:
@@ -2351,12 +3141,14 @@ def _server(input: Inputs, output: Outputs, session: Session) -> None:
     @reactive.event(input.change_filters)
     def _change_filters() -> None:
         selected_case_id.set(None)
+        selected_t_index.set(None)
         stage.set("filters")
 
     @reactive.effect
     @reactive.event(input.back_to_personas)
     def _back_to_personas() -> None:
         selected_case_id.set(None)
+        selected_t_index.set(None)
         stage.set("personas")
 
     for case_id in sorted(data.cases):
@@ -2365,6 +3157,12 @@ def _server(input: Inputs, output: Outputs, session: Session) -> None:
         @reactive.event(getattr(input, _inspect_id(case_id)))
         def _inspect(case_id: str = case_id) -> None:
             selected_case_id.set(case_id)
+            case = data.cases[case_id]
+            t_index, run = _default_inspection_point(
+                data, case, CURRENT_SETUP_KEY, "full"
+            )
+            selected_t_index.set(t_index)
+            selected_run.set(run)
             stage.set("detail")
 
     @reactive.calc
@@ -2390,14 +3188,52 @@ def _server(input: Inputs, output: Outputs, session: Session) -> None:
             ),
         )
 
+    @reactive.effect
+    @reactive.event(input.trajectory_point)
+    def _select_trajectory_point() -> None:
+        raw = str(input.trajectory_point() or "")
+        parts = raw.split("|")
+        if len(parts) != 2:
+            return
+        try:
+            t_index, run = (int(value) for value in parts)
+        except ValueError:
+            return
+        case = selected_case()
+        if run not in {1, 2, 3} or t_index not in {
+            entry.t_index for entry in case.entries
+        }:
+            return
+        selected_t_index.set(t_index)
+        selected_run.set(run)
+
+    @reactive.effect
+    def _sync_trajectory_selection() -> None:
+        req(stage.get() == "detail")
+        case = selected_case()
+        setup_key = str(input.setup() or CURRENT_SETUP_KEY)
+        period = str(input.period() or "full")
+        visible_indices = {
+            entry.t_index for entry in _visible_entries(case, period)
+        }
+        if selected_t_index.get() in visible_indices:
+            return
+        t_index, run = _default_inspection_point(
+            data, case, setup_key, period
+        )
+        selected_t_index.set(t_index)
+        selected_run.set(run)
+
     @render.ui
     def timeline() -> ui.Tag:
         req(stage.get() == "detail", input.setup())
-        return _timeline(
+        return _trajectory_review(
             data,
             selected_case(),
             str(input.setup()),
             str(input.period() or "full"),
+            selected_t_index.get(),
+            selected_run.get(),
         )
 
     @render.ui

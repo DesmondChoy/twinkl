@@ -8,10 +8,9 @@ The desktop review flow has three stages:
 1. Read the first-page At a glance section and shared How it works contract,
    then filter persona/Core Value cases by known Drift status and Core Value.
 2. Choose a matching persona from the filtered summary list. Inspection badges
-   use all three Runs of Luna at reasoning low. They identify missed known Drift,
-   false Drift alerts, Run variability, experiment setup disagreement, unresolved
-   because of Abstain, invalid Weekly Drift Reviewer responses, and Uncertain
-   LLM-Judge Conflict Labels; one case can have several badges.
+   identify false Drift alerts across Runs 1–3 of Luna at reasoning low, invalid
+   Weekly Drift Reviewer responses, and Uncertain LLM-Judge Conflict Labels; one
+   case can have several badges.
 3. Read the persona scoreboard, then inspect that persona's Journal Entries,
    LLM-Judge Conflict Labels, and preserved Runs.
 
@@ -31,10 +30,19 @@ and Runs, plus median Drift recall for each setup. Coverage remains in the
 model-selection disclosure rather than the summary table.
 
 The persona scoreboard then states which Runs found or missed known Drift and
-names the exact known Drift and Drift alert spans. The Journal Entry table keeps
-the LLM-Judge Conflict Label in a dedicated column so the label and each Weekly
-Drift Reviewer Decision can be compared directly. Biographies remain collapsed
-because they were not Weekly Drift Reviewer input.
+names the exact known Drift and Drift alert spans. The Journal Entry trajectory
+stacks one date-aligned plot per Run and uses the same circular point shape in
+all three plots. Green points match a resolved LLM-Judge Conflict Label; red
+pulsing points mark any different Weekly Drift Reviewer Decision, including
+Abstain; amber hollow points mark invalid responses or unresolved LLM-Judge
+Conflict Labels that cannot be compared. Reduced-motion preferences replace the
+pulse with a strong static red halo. False Drift alerts, missed known Drift, and
+invalid responses are annotated at the relevant Journal Entry, with Drift-level
+annotations spanning the applicable pair. The inspector opens the selected
+Journal Entry, LLM-Judge Conflict Label, and Weekly Drift Reviewer Decision;
+selecting another plot point changes the Run. The exhaustive comparison table
+remains available in a collapsed disclosure.
+Biographies remain collapsed because they were not Weekly Drift Reviewer input.
 
 The Filter screen defines what does and does not count as Conflict before it
 states the two-consecutive-Conflict Drift rule. Journal Entry comparisons show
@@ -50,9 +58,9 @@ overview.
 
 A Drift alert counts as a hit when it is confirmed between the known Drift's
 first Journal Entry and two Journal Entries after its end. This affects
-scoring, not the Drift definition. The Journal Entry comparison initially
-shows the first known Drift, or the first Drift alert when no known Drift
-exists; Full timeline remains available.
+scoring, not the Drift definition. The Journal Entry trajectory opens on Full
+timeline so its chronology is visible; the period control can isolate a known
+Drift, Drift alert, or review week.
 
 A cross-week Drift spans two review weeks, so its second Conflict is not
 assessed until the next weekly review. Across these development Runs,

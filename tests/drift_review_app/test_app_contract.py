@@ -12,6 +12,7 @@ from src.drift_review_app.app import (
     _at_a_glance,
     _data_quality_badges,
     _decision_cell,
+    _default_inspection_point,
     _default_period,
     _detail_screen,
     _dimension_choices,
@@ -26,6 +27,8 @@ from src.drift_review_app.app import (
     _scoreboard_cell,
     _supporting_results,
     _timeline,
+    _trajectory_comparison,
+    _trajectory_review,
     _visible_entries,
     app_ui,
 )
@@ -44,7 +47,7 @@ def test_reference_and_predicted_periods_show_the_selected_span() -> None:
     assert [entry.t_index for entry in _visible_entries(case, predicted)] == [4, 5]
 
 
-def test_relevant_drift_period_is_selected_before_full_timeline() -> None:
+def test_full_timeline_is_selected_before_narrower_evidence_periods() -> None:
     data = load_review_data(ROOT)
     known_drift_case = data.cases["02fb94f3:tradition"]
     false_alert_case = data.cases["f6180c27:benevolence"]
@@ -58,8 +61,8 @@ def test_relevant_drift_period_is_selected_before_full_timeline() -> None:
         )
     )
 
-    assert _default_period(data, known_drift_case, "luna_low").startswith("ref|")
-    assert _default_period(data, false_alert_case, "luna_low").startswith("pred|")
+    assert _default_period(data, known_drift_case, "luna_low") == "full"
+    assert _default_period(data, false_alert_case, "luna_low") == "full"
     assert _default_period(data, quiet_case, "luna_low") == "full"
 
 
@@ -293,10 +296,14 @@ def test_detail_controls_have_overflow_safe_desktop_structure() -> None:
     assert "How it works" not in html
     assert "FROZEN WEEKLY DRIFT REVIEWER INPUT CONTRACT" not in html
     assert "Verified Weekly Drift Reviewer input cutoffs" in html
-    assert "Journal Entries and three Runs" in html
+    assert "Journal Entry trajectory and evidence" in html
     assert 'aria-current="step"' in html
     assert '"setup"' in styles
     assert "grid-template-columns: repeat(3, minmax(0, 1fr))" in styles
+    assert (
+        "grid-template-columns: minmax(23rem, 0.38fr) minmax(0, 0.62fr)"
+        in styles
+    )
     radio_start = styles.index(".review-controls .radio-inline {")
     radio_end = styles.index("}", radio_start)
     assert "white-space: normal" in styles[radio_start:radio_end]
@@ -394,6 +401,188 @@ def test_timeline_uses_semantic_roles_and_collapses_decision_evidence() -> None:
     )
     reference_html = str(_reference_cell(data, case, routine_entry))
     assert "resolved · agreement" not in reference_html
+
+
+def test_trajectory_review_links_the_plot_to_selected_evidence() -> None:
+    data = load_review_data(ROOT)
+    styles = (ROOT / "src/drift_review_app/static/styles.css").read_text()
+    case = data.cases["02fb94f3:tradition"]
+    t_index, run = _default_inspection_point(data, case, "luna_low", "full")
+    html = unescape(
+        str(
+            _trajectory_review(
+                data,
+                case,
+                "luna_low",
+                "full",
+                t_index,
+                run,
+            )
+        )
+    )
+
+    assert 'class="trajectory-review-grid"' in html
+    assert html.count('class="trajectory-run-plot ') == 3
+    assert html.count('class="trajectory-point comparison-') == len(case.entries) * 3
+    assert html.count("trajectory-run-line") == 3
+    assert "Three date-aligned Weekly Drift Reviewer Run plots" in html
+    assert "Rows are categories, not a numeric scale" in html
+    assert "Matches resolved LLM-Judge Conflict Label" in html
+    assert "Differs from resolved label, including Abstain" in html
+    assert "Invalid response or unresolved label" in html
+    assert "Known Drift" in html
+    assert "LLM-Judge Conflict Label" in html
+    assert f"Journal Entry {t_index}" in html
+    assert f"Run {run}" in html
+    assert 'aria-pressed="true"' in html
+    assert "Compare Runs" not in html
+    assert "run-switcher" not in html
+    assert ".trajectory-point.run-2" not in styles
+    assert ".trajectory-point.run-3" not in styles
+    assert ".trajectory-point.comparison-mismatch::after" in styles
+    assert "animation: trajectory-mismatch-pulse" in styles
+    assert ".trajectory-point.comparison-neutral" in styles
+    assert ".run-switcher" not in styles
+    assert "Full Journal Entry and Run comparison" in html
+    assert 'role="table"' in html
+
+
+def test_trajectory_scores_resolved_label_abstains_as_mismatches() -> None:
+    data = load_review_data(ROOT)
+    lukas = data.cases["d7a0683f:universalism"]
+    conflict_entry = next(entry for entry in lukas.entries if entry.t_index == 1)
+    abstain = data.decision("luna_low", 1, lukas.case_id, 1)
+
+    comparison, note = _trajectory_comparison(conflict_entry, abstain)
+
+    assert conflict_entry.final_conflict is True
+    assert abstain.verdict == "abstain"
+    assert comparison == "mismatch"
+    assert "Abstain differs from the resolved Conflict" in note
+
+
+def test_trajectory_keeps_unscorable_comparisons_neutral() -> None:
+    data = load_review_data(ROOT)
+    invalid = next(
+        decision
+        for decision in data.decisions.values()
+        if decision.response_status != "ok"
+    )
+    invalid_case = data.cases[invalid.case_id]
+    invalid_entry = next(
+        entry for entry in invalid_case.entries if entry.t_index == invalid.t_index
+    )
+    unresolved_case = next(
+        case
+        for case in data.cases.values()
+        if any(entry.final_conflict is None for entry in case.entries)
+    )
+    unresolved_entry = next(
+        entry for entry in unresolved_case.entries if entry.final_conflict is None
+    )
+    resolved_decision = next(
+        data.decision(setup_key, run, unresolved_case.case_id, unresolved_entry.t_index)
+        for setup_key in data.setup_specs
+        for run in (1, 2, 3)
+        if data.decision(
+            setup_key, run, unresolved_case.case_id, unresolved_entry.t_index
+        ).response_status
+        == "ok"
+    )
+
+    assert _trajectory_comparison(invalid_entry, invalid)[0] == "neutral"
+    assert _trajectory_comparison(unresolved_entry, resolved_decision)[0] == "neutral"
+
+
+def test_trajectory_marks_false_missed_and_invalid_outcomes() -> None:
+    data = load_review_data(ROOT)
+    lukas = data.cases["d7a0683f:universalism"]
+    t_index, run = _default_inspection_point(data, lukas, "luna_low", "full")
+    lukas_html = unescape(
+        str(
+            _trajectory_review(
+                data,
+                lukas,
+                "luna_low",
+                "full",
+                t_index,
+                run,
+            )
+        )
+    )
+
+    assert 'class="trajectory-alert-bracket is-false"' in lukas_html
+    assert 'class="trajectory-alert-label is-false"' in lukas_html
+    assert "Run 1 · False Drift alert · t9–t10" in lukas_html
+    assert (
+        "Run 1 · Journal Entry 10 · Decision: Conflict · "
+        "LLM-Judge: Not Conflict"
+    ) in lukas_html
+
+    mini_html = unescape(
+        str(
+            _trajectory_review(
+                data,
+                lukas,
+                "mini_none",
+                "full",
+                t_index,
+                run,
+            )
+        )
+    )
+    assert mini_html.count('class="trajectory-alert-label is-missed') == 3
+    assert "Missed known Drift" in mini_html
+
+    invalid = next(
+        decision
+        for decision in data.decisions.values()
+        if decision.response_status != "ok"
+    )
+    invalid_case = data.cases[invalid.case_id]
+    invalid_html = unescape(
+        str(
+            _trajectory_review(
+                data,
+                invalid_case,
+                invalid.setup_key,
+                "full",
+                invalid.t_index,
+                invalid.run,
+            )
+        )
+    )
+    assert "trajectory-alert-label is-invalid is-point" in invalid_html
+    assert (
+        f"Run {invalid.run} · Invalid response · t{invalid.t_index}"
+        in invalid_html
+    )
+
+
+def test_trajectory_separates_nearby_rare_annotation_labels() -> None:
+    data = load_review_data(ROOT)
+    lukas_vetter = data.cases["a24b8d8f:universalism"]
+    t_index, run = _default_inspection_point(
+        data, lukas_vetter, "luna_low", "full"
+    )
+    html = unescape(
+        str(
+            _trajectory_review(
+                data,
+                lukas_vetter,
+                "luna_low",
+                "full",
+                t_index,
+                run,
+            )
+        )
+    )
+
+    assert html.count("--annotation-lane: 0;") == 3
+    assert html.count("--annotation-lane: 1;") == 3
+    for run_number in (1, 2, 3):
+        assert f"Run {run_number} · False Drift alert · t1–t2" in html
+        assert f"Run {run_number} · Missed known Drift · t3–t4" in html
 
 
 def test_every_abstain_reason_has_a_plain_english_explanation() -> None:
