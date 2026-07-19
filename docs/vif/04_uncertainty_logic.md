@@ -1,7 +1,7 @@
 # VIF – Uncertainty and Drift Review Logic
 
-This document describes VIF Critic uncertainty and how it could support
-optional offline review, case selection, and retraining. The approved
+This document describes VIF Critic uncertainty and records how it could support
+an unplanned offline review, case-selection, and retraining loop. The approved
 user-facing Drift path does not run the VIF Critic or consume VIF Critic
 Predictions. Its Weekly Drift Reviewer model contract is fixed
 at `gpt-5.6-luna` with reasoning effort `low`. It is wired into the approved
@@ -19,7 +19,7 @@ deferral is safer than a confident but brittle interpretation.
 The architecture therefore separates four questions:
 
 1. What class probabilities or alignment estimate does the VIF Critic produce?
-2. Which predictions could warrant optional offline review?
+2. Which predictions would warrant offline review if that unplanned idea were revisited?
 3. Does the Weekly Drift Reviewer confirm Conflict from Journal Entry text?
 4. Do two consecutive confirmed Conflicts meet the Drift definition?
 
@@ -79,8 +79,8 @@ Journal Entry, including its displayed nudge and response when present, with:
 - Journal Entry metadata.
 
 The current timeline parquet does not persist ordinal class probabilities.
-The approved Drift Detector does not need them. An optional future VIF Critic
-review-and-retrain loop would require persisted probabilities, uncertainty,
+The approved Drift Detector does not need them. The unplanned VIF Critic
+review-and-retrain idea would require persisted probabilities, uncertainty,
 checkpoint provenance, and input-contract version.
 
 ### 3.2 Weekly Frame
@@ -145,7 +145,7 @@ candidate confirmation is outside the remaining capstone scope.
 | Student-visible target | Two consecutive Journal Entries each visibly show a Conflict for the same Core Value |
 | Historical consensus table | Retired diagnostic provenance only; not a Drift target, threshold-selection input, or final test set |
 | Approved user-facing path | Fixed `gpt-5.6-luna` reasoning-effort-`low` Weekly Drift Reviewer Decisions without VIF Critic input, followed by the implemented deterministic Drift Detector; no fresh final test or deployment approval is claimed |
-| VIF Critic path | Store predictions and uncertainty for offline comparison, independent review, case selection, and retraining |
+| VIF Critic path | Persist means and uncertainty for offline diagnostics; generalized independent review and retraining are not planned |
 | Delivery | Weekly Digest with cited Journal Entry evidence and active, recovered, mixed, or uncertain wording; Weekly Drift Reviewer Abstain emits no Drift claim |
 
 The EDA supports this definition because most dips spanning one Journal Entry
@@ -260,7 +260,7 @@ The fallbacks are local safety scaffolding around Weekly Digest file generation.
 
 ---
 
-## 11. Later Uncertainty Extensions
+## 11. Unplanned Uncertainty Extensions
 
 MC Dropout remains the practical POC default. Later options include deep
 ensembles, evidential methods, conformal wrappers, and explicit embedding-space
@@ -269,4 +269,4 @@ target-validity problem before it could establish whether uncertainty calibratio
 is the binding constraint. `twinkl-v8pb` correctly withheld its former
 final-test score, and that population is now development-only. The time-boxed
 capstone stops without a replacement final test; heavier uncertainty methods
-remain optional research.
+are not planned for the time-boxed capstone.

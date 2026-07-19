@@ -153,7 +153,7 @@ Full list: [`tables/conflict_heavy_week_candidates.csv`](tables/conflict_heavy_w
    Weekly Drift Reviewer supplies explicit Conflict decisions from Journal
    Entry text, and the Drift Detector applies the strict
    two-consecutive-Conflict rule. Historical VIF Critic probabilities remain
-   optional research evidence, not direct detector input.
+   completed offline research evidence, not direct detector input.
 4. **Label-regime caveat:** current Critic checkpoints were trained on persisted
    single-pass labels. Consensus labels are now historical diagnostic provenance,
    not a development target. `twinkl-v8pb` completed its student-visible review,
@@ -201,7 +201,7 @@ Layer split:
 | Drift Detector | Deterministic rule over Weekly Drift Reviewer Decisions: two consecutive Conflicts for the same Core Value |
 | Delivery | Weekly Digest with cited Journal Entries |
 | Parked scope | single-entry dip alerts, fade/dormancy, peripheral-value rise, onboarding-gap messaging, evolution gating, multi-week low-mean definitions |
-| Implementation status | Capstone POC runtime wired; no fresh final test or deployment approval is claimed |
+| Implementation status | Complete and wired for the capstone POC; the evidence is AI-reviewed synthetic development evidence, and no fresh final test or deployment approval is claimed |
 
 Why this is the right v1:
 

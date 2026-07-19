@@ -1,9 +1,10 @@
 # Value Identity Function (VIF) – Concepts & Roadmap
 
 This document preserves the high-level objectives, concepts, and research
-roadmap for Twinkl's **Value Identity Function (VIF)**. The trained VIF Critic
-is optional experimental research. The current user-facing decision path uses
-the Weekly Drift Reviewer and Drift Detector without VIF Critic Predictions.
+roadmap for Twinkl's **Value Identity Function (VIF)**. The VIF Critic research
+is complete for the time-boxed capstone and remains offline. The current
+user-facing decision path uses the Weekly Drift Reviewer and Drift Detector
+without VIF Critic Predictions.
 
 For technical details, see:
 *   [System Architecture, State, and Runtime Flow](02_system_architecture.md)
@@ -31,8 +32,8 @@ Crucially, the VIF is designed to be:
 
 In the approved user-facing path, the Weekly Drift Reviewer is fixed at
 `gpt-5.6-luna` with reasoning effort `low`. It and the Drift Detector decide
-Drift so the Weekly Coach can surface tensions. The trained VIF Critic is an
-optional experimental model, not a dependency of that path.
+Drift so the Weekly Coach can surface tensions. The completed VIF Critic is an
+offline research model, not a dependency of that path.
 
 ---
 
@@ -57,16 +58,16 @@ The VIF is designed to:
 2. **Vector-valued evaluation**
    Alignment is evaluated across all ten Schwartz value dimensions. The value function remains **vector-valued** to preserve tensions and trade-offs, and is only aggregated when needed.
 
-   If optional VIF Critic research resumes, its primary evaluation role is
-   Conflict screening. Per-Journal-Entry `recall_-1` drives model development;
-   QWK and positive alignment remain diagnostics. VIF Critic results are not
-   Weekly Coach inputs.
+   The completed VIF Critic research used Conflict screening as its primary
+   evaluation role. Per-Journal-Entry `recall_-1` drove model development; QWK
+   and positive alignment remain diagnostics. VIF Critic results are not Weekly
+   Coach inputs.
 
 3. **Uncertainty-aware review**
    The VIF Critic estimates **epistemic uncertainty** in its predictions.
    Existing experiment outputs store uncertainty for analysis. A generalized
-   independent-review and retraining loop is optional P3 work. Uncertainty does
-   not authorize user-facing feedback.
+   independent-review and retraining loop is not implemented or planned for the
+   time-boxed capstone. Uncertainty does not authorize user-facing feedback.
 
 4. **Trajectory-aware downstream evaluation**
    The live VIF Critic default uses `window_size: 1`, so each prediction sees the current Journal Entry, including its displayed nudge and response when present, plus the normalized value profile. The fixed Luna-low Weekly Drift Reviewer and deterministic Drift Detector provide the approved temporal decision layer. `twinkl-749` tested a small prior-Journal-Entry mean summary, but its seed-11 results regressed and did not receive deployment approval. History support therefore remains diagnostic rather than an assumed property of the default VIF Critic.
@@ -145,7 +146,7 @@ To make this design capstone-friendly, we summarise a recommended tiered approac
     but no fresh final test exists. The old consensus-derived frozen benchmark
     is retired historical evidence, not a runnable benchmark or final test set.
 
-* **Tier 2 (Optional capstone extension)**
+* **Tier 2 (Unplanned for the time-boxed capstone)**
   * Evaluated diagnostics: compact mean history (`twinkl-749`) and soft
     vote-distribution labels (`twinkl-j0ck`) both completed without deployment
     approval.

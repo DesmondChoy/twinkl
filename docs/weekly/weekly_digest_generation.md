@@ -306,11 +306,11 @@ timing benefit disappeared on the non-training subgroup. The offline VIF
 Critic triggers targeted Drift-relevant opportunities better than random, but
 that diagnostic made no reviewer calls and does not show that early review
 works. No fresh final test exists.
-The adopted architecture keeps VIF Critic predictions in offline comparison,
-independent review, and retraining. VIF Critic candidate confirmation is outside
-the remaining capstone scope. The Weekly Drift Reviewer model choice is fixed
-and the Drift Detector is wired for the capstone POC, but neither has deployment
-approval.
+The completed VIF Critic Predictions remain available for offline
+reproduction. Independent review, retraining, and VIF Critic candidate
+confirmation are not planned for the time-boxed capstone. The Weekly Drift
+Reviewer model choice is fixed, and the Drift Detector is complete and wired
+for the capstone POC, but neither has deployment approval.
 The former consensus-derived frozen benchmark is retired historical evidence.
 The crash/rut/evolution output modes are explicitly deprecated compatibility
 values, not the accepted v1 definition.
@@ -405,9 +405,9 @@ learned routing policies.
    human calibration.
 3. Capture the user's perceived-accuracy rating and make it queryable.
 
-Persisting full VIF Critic predictions and adding independent disagreement
-review remain optional P3 research. A fresh final test and deployment approval
-are outside the time-boxed capstone scope.
+Persisting full VIF Critic Predictions and adding independent disagreement
+review are not planned for the time-boxed capstone. A fresh final test and
+deployment approval are also outside its scope.
 
 ---
 

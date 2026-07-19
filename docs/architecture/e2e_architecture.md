@@ -42,7 +42,7 @@ flowchart TB
         critic_train["VIF Critic training +<br/>experiment archive"]
         checkpoint["Selected VIF Critic checkpoint"]
         llm_baseline["Frozen-holdout LLM<br/>context baseline"]
-        offline_review["Optional prediction comparison<br/>+ independent review"]
+        offline_review["OUT OF SCOPE<br/>Prediction comparison<br/>+ independent review"]
     end
 
     subgraph product["Product shell"]
@@ -103,7 +103,7 @@ flowchart TB
     personas -->|"synthetic journals stand in<br/>for real users today"| state
     personas -->|"synthetic Journal Entries<br/>+ Core Values"| reviewer
 
-    %% Scoring runtime (wired, experimental)
+    %% Scoring runtime (wired, mixed maturity)
     checkpoint --> scores
     state --> scores --> weekly --> drift
     weekly --> evolution --> drift
@@ -124,11 +124,11 @@ flowchart TB
     narrative -.- d_boundary
     narrative -.- d_feedback
 
-    class personas,judge,consensus,annotation,critic_train,checkpoint,llm_baseline,drift_review,reports implemented;
-    class state,scores,weekly,drift,evolution,reviewer,drift_v1,digest,prompt,narrative,runtime_review,offline_review,nudges partial;
+    class personas,judge,consensus,annotation,critic_train,checkpoint,llm_baseline,drift_v1,drift_review,reports implemented;
+    class state,scores,weekly,drift,evolution,reviewer,digest,prompt,narrative,runtime_review,nudges partial;
     class onboarding,profile,journaling,d_evolution specified;
     class d_surface,d_boundary,d_feedback decision;
-    class d_trigger scope;
+    class d_trigger,offline_review scope;
 ```
 
 ## Read This As
@@ -168,19 +168,20 @@ experimental slice, even though the journaling UI it would attach to does not.
 
 Drift is two consecutive Conflicts on the same Core Value. Under the approved
 architecture, the Weekly Drift Reviewer makes those Conflict decisions without
-VIF Critic input, and the deterministic Drift Detector combines them. The VIF
-Critic is optional experimental research and is not a runtime dependency. The
-Weekly Drift Reviewer model contract is fixed at
+VIF Critic input, and the deterministic Drift Detector combines them. The
+completed VIF Critic remains an offline research component and is not a runtime
+dependency. The Weekly Drift Reviewer model contract is fixed at
 `gpt-5.6-luna` with reasoning effort `low`; its median result across three
 frozen development Runs was 23/42 known Drifts, 4 false Drift alerts, and
 `0.637` coverage.
 [`twinkl-v8pb` completed the historical five-Drift development review](../evals/drift_v1_student_visible_target.md)
 and withheld its former final-test score. The former final-test population is
 now development-only, and the expanded known-development union is fully
-resolved. The crash/rut/evolution router is explicitly deprecated. The approved
-Drift Detector is wired. Full VIF Critic class-probability persistence belongs
-to optional P3 research. The time-boxed capstone stops without a fresh final
-test or deployment approval.
+resolved. The crash/rut/evolution router is explicitly deprecated. The Drift
+Detector implementation is complete and wired for the capstone POC. The VIF
+Critic training and evaluation stack is also complete for the capstone POC; no
+further VIF Critic work is planned. The time-boxed capstone stops without a
+fresh final test or deployment approval.
 `twinkl-752.5` found no Drift recall gain from raw VIF Critic input or
 early-plus-weekly scheduling. VIF Critic candidate confirmation is outside the
 remaining capstone scope. The prior consensus-derived benchmark is [retired historical

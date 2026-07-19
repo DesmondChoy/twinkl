@@ -10,7 +10,9 @@ Reviewer evaluation and deployment policy was fixed under `twinkl-7vam` on
 2026-07-19. On 2026-07-19, the user clarified that the VIF Critic is optional
 research rather than an essential architecture dependency. The user later
 closed the fresh final test as not planned and chose to end the time-boxed
-capstone without deployment approval.
+capstone without deployment approval. The user then marked VIF Critic Training
+complete for the time-boxed capstone and closed further VIF Critic research as
+not planned.
 
 This document records the detailed Value Identity Function (VIF) scope decision
 for the remaining capstone period. The [PRD](../prd.md) remains authoritative for
@@ -21,9 +23,9 @@ Drift definition and deployment-approval protocol live in
 
 ## Decision
 
-> Twinkl's VIF Critic is an optional experimental Conflict-screening component.
-> If research resumes, per-Journal-Entry `recall_-1` is the main
-> model-development metric and QWK remains an ordinal-health diagnostic. The
+> Twinkl's VIF Critic is a completed capstone research component for offline
+> Conflict screening. Per-Journal-Entry `recall_-1` was the main
+> model-development metric, and QWK remains an ordinal-health diagnostic. The
 > approved user-facing Drift path does not run the VIF Critic or consume VIF
 > Critic Predictions.
 
@@ -44,7 +46,7 @@ architecture recorded below.
 - QWK, `+1` recall, minority recall, and circumplex metrics remain diagnostics.
   They show whether a recall gain destroyed useful ordinal structure, but they
   do not outrank `recall_-1`.
-- No fixed precision floor is adopted yet. Recall-first development cannot by
+- No fixed precision floor was adopted. Recall-first development cannot by
   itself support a deployment-approval claim.
 
 Mainline training now uses the versioned `recall_first_qwk_guarded_v1` policy:
@@ -98,7 +100,7 @@ writer making a behavior or choice against the same Core Value.
 The current user-facing path uses decisions from `gpt-5.6-luna` at reasoning
 effort `low`, without VIF Critic input. The deterministic Drift Detector then
 requires two consecutive Conflicts for the same Core Value. VIF Critic
-probabilities and uncertainty remain optional research outputs, not inputs to
+probabilities and uncertainty remain offline research outputs, not inputs to
 the user-facing Drift path.
 
 ## Role of `+1` and QWK
@@ -167,8 +169,8 @@ After this architecture decision, `twinkl-qtwz` reviewed the 186 cases outside
 the earlier union and found nine additional Drifts across eight Drift
 trajectories. The complete development analysis is now 292/292 resolved cases
 with 42 Drifts across 36 Drift trajectories. All nine new Drifts have
-historical training provenance. This expands the input for future development
-studies; it does not alter the `twinkl-752.5` results or reopen the approved
+historical training provenance. This completed the historical development
+record; it does not alter the `twinkl-752.5` results or reopen the approved
 architecture.
 
 These results led to the explicit architecture decision below. The full study
@@ -207,8 +209,8 @@ rather than substituted.
 - The Hedonism matched hard-set found very low `-1` recall, including confident
   errors, so confidence-only escalation is unsafe.
 - The Weekly Drift Reviewer and VIF Critic recover different Conflict cases,
-  which justifies a bounded comparison but not an architecture decision from
-  historical test data.
+  which justified the completed bounded comparison but not an architecture
+  decision from historical test data.
 - The aligned Weekly Drift Reviewer raised Journal Entry Conflict coverage but
   worsened Drift recall, false Drift alerts, and repeat stability. Prompt
   alignment at reasoning effort `none` did not reveal a stronger Weekly Drift
@@ -222,8 +224,8 @@ rather than substituted.
   AI-reviewed development evidence, not a fresh final test.
 - The later complete review adds nine Drifts across eight Drift trajectories,
   producing a 292-case development analysis with 42 Drifts across 36 Drift
-  trajectories. It supplied the frozen input for `twinkl-52zz`, not a reason to
-  reopen this architecture decision.
+  trajectories. It supplied the frozen input for `twinkl-52zz` and completed
+  the historical development record.
 - On that complete data, `twinkl-52zz` found median Drift recall of `0.167` for
   `gpt-5.4-mini` and `0.476` for `gpt-5.6-luna`, while median false Drift alerts
   rose from 5 to 13. The user accepted that trade-off and selected Luna at
@@ -249,11 +251,11 @@ The user approved the following architecture under `twinkl-752.2`:
    Critic input. The deterministic Drift Detector declares Drift only after two
    consecutive Weekly Drift Reviewer Conflicts for the same Core Value.
    Confirmed Drift then flows into the Weekly Digest and Weekly Coach.
-2. **Optional VIF Critic research:** training, evaluation, raw output export,
-   and timeline inference remain available. A generalized review-and-retrain
-   loop is optional P3 work rather than an architecture dependency. If it is
-   revisited, Weekly Drift Reviewer Decisions must not automatically become
-   LLM-Judge labels, and retraining cases cannot double as final-test evidence.
+2. **Completed VIF Critic research:** training, evaluation, raw output export,
+   and timeline inference remain available for offline reproduction. A
+   generalized review-and-retrain loop is not implemented or planned for the
+   time-boxed capstone. Weekly Drift Reviewer Decisions must not automatically
+   become LLM-Judge labels.
 3. **Out-of-scope idea:** VIF Critic candidate confirmation is not part of the
    remaining capstone work. Revisiting it requires a new scope decision and a
    fresh evaluation that keeps VIF Critic predictions hidden from the Weekly
@@ -270,5 +272,5 @@ user-facing runtime. A fresh, independently resolved final test and deployment
 approval are outside the time-boxed capstone scope.
 
 The VIF Critic review-and-retrain demonstration, data-scaling curve, candidate
-confirmation, and conversion to a binary Conflict model are optional or outside
-the remaining critical capstone scope.
+confirmation, and conversion to a binary Conflict model are not planned for
+the time-boxed capstone.

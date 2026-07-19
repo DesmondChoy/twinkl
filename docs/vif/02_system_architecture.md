@@ -30,10 +30,10 @@ The current VIF implementation is intentionally narrow:
 - **Approved user-facing runtime**: Weekly Drift Reviewer Decisions followed by
   the deterministic rule that two consecutive Conflicts for the same Core
   Value form Drift
-- **Optional VIF Critic research**: training, evaluation, raw output export,
-  and timeline inference are implemented; a generalized review-and-retrain
-  loop is unimplemented P3 work, and candidate confirmation is outside the
-  remaining capstone scope
+- **Completed VIF Critic research**: training, evaluation, raw output export,
+  and timeline inference are implemented for offline reproduction; a
+  generalized review-and-retrain loop and candidate confirmation are not
+  planned for the time-boxed capstone
 
 > **Note:** VIF Critic encoder names, embedding dimensions, and default window
 > sizes change over time. Treat `config/vif.yaml` as the source of truth for
@@ -42,10 +42,10 @@ The current VIF implementation is intentionally narrow:
 
 The approved capstone POC runtime persists versioned Weekly Drift Reviewer
 Decisions, fails closed to Abstain, applies the Drift Detector across week
-boundaries, and feeds the Weekly Digest. Training still selects checkpoints
-QWK-first, and the runtime still uses synthetic `core_values` rather than
-persisted onboarding `top_values`. The fixed model choice and implementation do
-not grant deployment approval.
+boundaries, and feeds the Weekly Digest. VIF Critic training supports the
+versioned recall-first checkpoint-selection policy, and the runtime still uses
+synthetic `core_values` rather than persisted onboarding `top_values`. The fixed
+model choice and implementation do not grant deployment approval.
 
 ## Current Diagram
 
@@ -238,9 +238,9 @@ The runtime path rebuilds the same state definition used in training:
 
 The runtime parquet files do not currently persist ordinal class probabilities
 or checkpoint provenance sufficient for a generalized review-and-retrain loop.
-This does not block the user-facing path. Optional future research would need
-versioned `P(-1)`, `P(0)`, `P(+1)`, uncertainty, and input-contract records
-before offline comparison and candidate evaluation are reproducible.
+This does not block the user-facing path. The unplanned review-and-retrain idea
+would need versioned `P(-1)`, `P(0)`, `P(+1)`, uncertainty, and input-contract
+records before offline comparison and candidate evaluation were reproducible.
 
 The bridge from checkpoint -> timeline parquet -> weekly VIF parquet is
 implemented in `src/vif/runtime.py`.
@@ -311,8 +311,9 @@ The VIF Critic:
 - reads only the structured state described above
 - uses only the configured state; optional history is strictly prior-only
 - outputs numeric alignment estimates plus uncertainty
-- stores versioned predictions for offline comparison, independent review, and
-  retraining
+- exports VIF Critic Predictions and uncertainty for offline diagnostics
+- does not implement the unplanned generalized independent-review and
+  retraining loop
 - does not send predictions to the Weekly Drift Reviewer or make a user-facing
   Drift claim
 

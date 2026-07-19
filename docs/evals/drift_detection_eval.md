@@ -21,7 +21,7 @@ The current layers of the contract are deliberately different:
 | Development set | The complete development review contains 42 Drifts across 36 Drift trajectories in 292 resolved cases. `twinkl-qtwz` added nine Drifts across eight Drift trajectories from the 186 cases outside the earlier 106-case union. The earlier `twinkl-752.5` study used 33 Drifts across 28 Drift trajectories; keep its reported metrics bound to that input. Historical provenance must be reported as a subgroup because all nine newly found Drifts came from training-seen Journal Entries. The fixed `run_020` threshold is historical development evidence. |
 | Final test set | None is active or planned for the time-boxed capstone. The former 24-person `twinkl-v8pb` final-test cohort became development-only when its cases were opened for the full review. `twinkl-pv6s` was closed as not planned. |
 | Weekly Drift Reviewer | The model contract is fixed at `gpt-5.6-luna` with reasoning effort `low`, without VIF Critic input. The fixed model choice is distinct from final-test validation and deployment approval. |
-| Approved architecture | Weekly Drift Reviewer Decisions feed the deterministic two-Conflict Drift Detector. The VIF Critic is optional experimental research and is not a runtime or deployment-approval dependency. |
+| Approved architecture | Weekly Drift Reviewer Decisions feed the deterministic two-Conflict Drift Detector. The completed VIF Critic remains an offline research component and is not a runtime or deployment-approval dependency. |
 | Capstone POC runtime | The approved runtime persists versioned Luna-low Weekly Drift Reviewer Decisions without VIF Critic input, applies the deterministic Drift Detector, and feeds the Weekly Digest. The deprecated crash/rut/evolution runtime remains only for compatibility. |
 | User delivery | The Weekly Digest cites the relevant Journal Entries and uses active, recovered, mixed, or uncertain wording without score jargon. No fresh final test or deployment approval is claimed. |
 
@@ -123,7 +123,11 @@ candidate-confirmation exception is included in the remaining capstone scope.
 
 ## Implementation Status
 
-**Status:** 🟡 Partial
+**Implementation:** ✅ Complete for the capstone POC
+
+**Evaluation:** 🟡 Development-only. The evidence is AI-reviewed synthetic
+development evidence, not human validation, a fresh final test, or deployment
+approval.
 
 ### Implemented and Measured
 
@@ -338,10 +342,9 @@ The current user-facing target is deterministic:
 3. The Drift Detector declares one Drift when two consecutive Weekly Drift
    Reviewer Conflicts concern the same Core Value.
 
-The VIF Critic is optional experimental research. If a bounded
-review-and-retrain demonstration is revisited, Weekly Drift Reviewer Decisions
-may help select comparison cases, but they must not automatically become
-LLM-Judge labels.
+The VIF Critic research is complete for the time-boxed capstone. A bounded
+review-and-retrain demonstration is not planned; Weekly Drift Reviewer
+Decisions must not automatically become LLM-Judge labels.
 
 VIF Critic candidate confirmation is outside the remaining capstone scope. Its
 development evidence remains historical context, not an active implementation

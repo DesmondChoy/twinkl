@@ -20,11 +20,13 @@ Twinkl is an "inner compass" that helps users align their daily behavior with th
 - [`docs/demo/review_app.md`](docs/demo/review_app.md) — deprecated Runtime Demo Review App for the VIF Critic compatibility path
 - [`docs/future_work/README.md`](docs/future_work/README.md) — exploratory directions, including OpenClaw integration research
 
-## VIF Critic — 🧪 Optional Research
+## VIF Critic — ✅ Complete Capstone Research
 
-The VIF Critic is Twinkl's experimental local model for comparing Journal
-Entries with a ten-dimensional value profile. The current user-facing path uses
-the Weekly Drift Reviewer and Drift Detector instead.
+The VIF Critic training and evaluation stack is complete for the time-boxed
+capstone. The VIF Critic remains an offline research model for comparing
+Journal Entries with a ten-dimensional value profile; the current user-facing
+path uses the Weekly Drift Reviewer and Drift Detector instead. No further VIF
+Critic work is planned.
 
 Key properties:
 - **Vector-valued**: Tracks multiple life dimensions simultaneously, preserving trade-offs (e.g., "work goals crushed, but sleep suffered")
@@ -33,7 +35,7 @@ Key properties:
 
 The VIF Critic research stack includes ordinal MLP heads with MC Dropout, a BNN baseline, config-driven frozen encoders with `nomic-embed-text-v1.5` as the active default, corrected-split experiment logging, checkpoint discovery, recall-first checkpoint selection, raw output export, runtime timeline reconstruction, and weekly aggregation. Its former Weekly Coach-facing crash/rut/evolution routing is deprecated compatibility code. The 69-run / 133-config archive keeps `run_019`-`run_021` BalancedSoftmax as the historical corrected-split reference. See [`logs/experiments/index.md`](logs/experiments/index.md) for the live board.
 
-**Current Drift contract:** Drift is two consecutive Conflicts for the same Core Value. The Weekly Drift Reviewer model contract is fixed at `gpt-5.6-luna` with reasoning effort `low`. The approved runtime persists versioned Weekly Drift Reviewer Decisions without VIF Critic input, applies the deterministic Drift Detector, and sends active, recovered, uncertain, or mixed state to the Weekly Digest. The frozen development Runs are AI-reviewed synthetic evidence, not human validation, a fresh final test, or deployment approval. The time-boxed capstone stops at this implemented POC; no fresh final test or deployment approval is claimed. The VIF Critic is optional experimental research: Twinkl's user-facing path does not run it or depend on its predictions. See the [`twinkl-52zz` report](logs/experiments/reports/experiment_review_2026-07-14_twinkl_52zz_luna_low.md), [`docs/architecture/drift_detection.md`](docs/architecture/drift_detection.md), and [`docs/evals/drift_detection_eval.md`](docs/evals/drift_detection_eval.md).
+**Current Drift contract:** Drift is two consecutive Conflicts for the same Core Value. The Weekly Drift Reviewer model contract is fixed at `gpt-5.6-luna` with reasoning effort `low`. The approved runtime persists versioned Weekly Drift Reviewer Decisions without VIF Critic input, applies the deterministic Drift Detector, and sends active, recovered, uncertain, or mixed state to the Weekly Digest. The frozen development Runs are AI-reviewed synthetic evidence, not human validation, a fresh final test, or deployment approval. The time-boxed capstone stops at this implemented POC; no fresh final test or deployment approval is claimed. The completed VIF Critic remains outside the user-facing path, which does not run it or depend on its predictions. See the [`twinkl-52zz` report](logs/experiments/reports/experiment_review_2026-07-14_twinkl_52zz_luna_low.md), [`docs/architecture/drift_detection.md`](docs/architecture/drift_detection.md), and [`docs/evals/drift_detection_eval.md`](docs/evals/drift_detection_eval.md).
 
 **Current runtime behavior:** `src.coach.weekly_drift_runtime` is the approved capstone POC path. It reads Journal Entries and Core Values, calls the fixed Weekly Drift Reviewer, persists versioned JSON receipts, applies the Drift Detector across week boundaries, and exports the Weekly Digest and Weekly Coach prompt. `src.coach.runtime` and `src.vif.drift` are explicitly deprecated experimental compatibility paths for the former VIF Critic crash/rut/evolution runtime. The approved runtime still uses synthetic persona `core_values` until `twinkl-1m8` supplies persisted `top_values`. See `docs/vif/`, [`docs/weekly/weekly_digest_generation.md`](docs/weekly/weekly_digest_generation.md), and [`docs/demo/review_app.md`](docs/demo/review_app.md).
 
@@ -326,7 +328,7 @@ opening.
 | Weekly Coach validation depth | ⚠️ Partial | The approved Weekly Drift Reviewer and Drift Detector runtime now feeds the Weekly Digest and optional Weekly Coach reflection; batch Tier 1 pass rates and Tier 2 and Tier 3 evaluation remain incomplete |
 | Nudge signal quality validation | 🧪 Experimental | Annotation study and downstream usefulness checks remain in progress |
 | Embedding Explorer | ✅ Complete | Interactive 3D visualization of VIF Critic embeddings |
-| Drift Detector validity and deployment approval | 🧪 Experimental | The Luna-low Weekly Drift Reviewer and deterministic Drift Detector are wired as a capstone POC with versioned receipts and fail-closed abstention. No fresh final test was run, so no deployment approval is claimed. |
+| Drift Detector validation and deployment approval | ⚠️ Not claimed | The deterministic Drift Detector and Luna-low Weekly Drift Reviewer runtime are complete and wired for the capstone POC, with versioned receipts and fail-closed abstention. The evidence is AI-reviewed synthetic development evidence; no fresh final test was run, so no deployment approval is claimed. |
 | Journaling anomaly radar | ❌ Not Started | Cadence/gap detection beyond the current prototype-router tooling |
 | Goal-aligned inspiration feed | ❌ Not Started | External API integration |
 

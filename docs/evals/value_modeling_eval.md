@@ -3,18 +3,17 @@
 ## What We're Evaluating
 
 The VIF Critic maps Journal Entries to a 10-dimensional Schwartz value vector.
-It is now optional experimental research rather than a component of the
-remaining critical capstone path. If research resumes, its primary evaluation
-role is **Conflict screening**: recovering Conflict (`-1`) without collapsing
-the ternary output. VIF Critic Predictions do not enter the approved
-user-facing Drift path. See the adopted
+Its training and evaluation stack is complete for the time-boxed capstone. Its
+primary evaluation role was **Conflict screening**: recovering Conflict (`-1`)
+without collapsing the ternary output. VIF Critic Predictions do not enter the
+approved user-facing Drift path. See the adopted
 [VIF scope decision](../vif/05_capstone_scope_decision.md).
 
 ---
 
 ## Implementation Status
 
-**Status:** 🧪 Optional research (as of 2026-07-19)
+**Status:** ✅ Complete for the capstone POC (as of 2026-07-19)
 
 ### What's Implemented
 - Evaluation specification complete (this document)
@@ -39,28 +38,24 @@ user-facing Drift path. See the adopted
   reasoning effort `low`. That choice does not give the VIF Critic user-facing
   Drift authority or complete final-test validation.
 
-### What's Missing
+### Known Limits
 - **Hard dimensions remain unresolved**: `Hedonism` and especially `Security` still lag, and the latest regenerated targeted batch improved some local behavior without producing a cleaner overall frontier.
 - **Circumplex structure is measured but not optimized**: reruns can improve one metric family while worsening opposite-pair violations or adjacent-pair support.
-- Codex-reviewed matched Hedonism diagnostic (`twinkl-748`): 20 frozen pairs show that the incumbent recognizes nearly every `+1` case but recovers only 5% of matched self-denial `-1` cases; the tail-sensitive reference reaches 20% `-1` recall and 15% strict-pair accuracy. This is AI diagnostic evidence, not human validation, and remains evaluation-only pending `twinkl-kof2`.
+- Codex-reviewed matched Hedonism diagnostic (`twinkl-748`): 20 frozen pairs show that the incumbent recognizes nearly every `+1` case but recovers only 5% of matched self-denial `-1` cases; the tail-sensitive reference reaches 20% `-1` recall and 15% strict-pair accuracy. This is AI diagnostic evidence, not human validation. The follow-up `twinkl-kof2` scaling study was closed as not planned.
 - Persona-level aggregation protocol (aggregate per-entry scores into persona-level value profile for Top-K accuracy)
 - Formal held-out evaluation against declared value orderings (Spearman ρ > 0.7 target)
-- **A generalized VIF Critic review-and-retrain loop is not implemented.** This
-  is optional P3 research, not a Product v1 or deployment-approval blocker.
+- **A generalized VIF Critic review-and-retrain loop is not implemented or
+  planned for the time-boxed capstone.**
 - **No fresh final test or deployment approval is claimed:** the former
   final-test population is development-only, and its replacement is outside
   the time-boxed capstone scope.
 
-### Next Steps
+### Closed Scope
 
-There is no critical-path VIF Critic work. If optional research resumes after
-the user-facing runtime work is complete:
-
-1. Demonstrate one bounded, versioned review-and-retrain loop by reusing the
-   existing prediction export, review, label, and training components.
-2. Measure the data-scaling curve before generating more synthetic data.
-3. Continue reporting `-1` precision and the precision-recall curve alongside
-   `recall_-1`, QWK, calibration, and per-dimension diagnostics.
+No further VIF Critic work is planned for the time-boxed capstone. The missing
+items above record known limits rather than planned work. The VIF Critic remains
+available for offline reproduction and does not enter the user-facing Drift
+path.
 
 ---
 
@@ -83,9 +78,9 @@ the user-facing runtime work is complete:
 
 ## Metrics
 
-Evaluation operates at two levels: **entry-level** metrics assess whether the VIF Critic can correctly classify individual Journal Entries, while **persona-level** metrics assess whether aggregated entry scores recover the persona's declared value profile. These metrics govern optional VIF Critic research, not the current product-critical path.
+Evaluation operates at two levels: **entry-level** metrics assess whether the VIF Critic can correctly classify individual Journal Entries, while **persona-level** metrics assess whether aggregated entry scores recover the persona's declared value profile. These metrics record the completed capstone VIF Critic research; they do not govern the user-facing Drift path.
 
-### Entry-Level Metrics (Optional Research Contract)
+### Entry-Level Metrics (Completed Research Contract)
 
 The adopted hierarchy is:
 
@@ -94,8 +89,9 @@ The adopted hierarchy is:
    calibration, per-dimension results, and seed spread are mandatory reports;
 3. QWK, `+1` recall, minority recall, and circumplex metrics are diagnostics.
 
-No fixed entry-level precision floor is active yet. Recall-focused development
-can generate checkpoints, but recall alone cannot support a deployment claim.
+No fixed entry-level precision floor was adopted. The completed research
+reported precision alongside recall, and recall alone does not support a
+deployment claim.
 
 #### Quadratic Weighted Kappa (QWK) — Diagnostic
 
@@ -145,10 +141,10 @@ Twinkl needs.
 pre-split baselines, but still not strong enough to treat Drift claims as
 production-ready.
 
-Every recall result must also report `-1` precision, its precision-recall
-curve, and predicted-negative rate. Otherwise a model can raise recall simply
-by over-predicting conflict. The acceptable deployment trade-off remains a
-later product decision.
+Every recall result also reports `-1` precision, its precision-recall curve,
+and predicted-negative rate. Otherwise a model can raise recall simply by
+over-predicting Conflict. The capstone did not select a VIF Critic deployment
+trade-off.
 
 #### `+1` and Minority Recall — Diagnostic
 
@@ -244,16 +240,15 @@ mean_rho = np.mean(results)
 
 | Metric | Role | Rationale |
 |--------|------|-----------|
-| `recall_-1` | Primary optional-research metric | Measures VIF Critic Conflict recovery |
-| `-1` precision and precision-recall curve | Mandatory report; threshold deferred | Exposes false-conflict inflation while recall is optimized |
+| `recall_-1` | Historical primary research metric | Measures VIF Critic Conflict recovery |
+| `-1` precision and precision-recall curve | Mandatory historical report; no deployment threshold | Exposes false-Conflict inflation alongside recall |
 | QWK | Ordinal-health diagnostic | Detects collapse of the retained ternary output and preserves historical comparability |
 | `+1` recall / minority recall | Non-gating diagnostic | Supports occasional positive context without defining Drift |
-| Drift recall | Future product metric | Measures the actual two-Conflict decision consumed by the Weekly Coach |
-| Drift precision / false-alert burden | Required before deployment; no threshold yet | Prevents a high-recall Drift Detector from producing unacceptable false accountability |
+| Drift recall | Separate user-facing metric | Measures the actual two-Conflict decision consumed by the Weekly Coach |
+| Drift precision / false-alert burden | No deployment threshold adopted | Exposes whether a high-recall Drift Detector produces unacceptable false accountability |
 
-There is no active numerical deployment gate. The study may prioritize
-`recall_-1`, but no VIF Critic can receive deployment approval until an untouched, resolved
-final test set and an approved false-alert tolerance exist.
+No numerical VIF Critic deployment gate was adopted. The completed study
+prioritized `recall_-1`, but the VIF Critic has no deployment approval.
 
 ### Persona-Level (secondary aggregated profile recovery)
 
