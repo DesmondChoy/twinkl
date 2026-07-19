@@ -2,7 +2,7 @@
 
 > **Scope:** Value evolution is a future product concept, not part of the
 > selected Drift v1 contract. An experimental classifier is
-> invoked automatically by the current weekly prototype router, but onboarding
+> invoked automatically by the deprecated weekly compatibility router, but onboarding
 > profile updates, user confirmation, and production Weekly Coach messaging
 > are not implemented. Current Drift scope is defined in
 > [`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md).
@@ -46,14 +46,13 @@ differently depending on which dimensions the user cares about.
 
 ### 1.3 Drift Detector
 
-The repository contains an experimental weekly crash/rut/evolution router and a
+The repository contains a deprecated weekly crash/rut/evolution router and a
 six-detector comparison interface. The selected v1 product target is different:
 Drift is two consecutive Conflicts for the same Core Value. Other value
-dimensions do not offset the Drift. The intended runtime estimates Drift from
-rolling soft `P(-1)` evidence under uncertainty
-gating. [`twinkl-v8pb`](../evals/drift_v1_student_visible_target.md) completed
-the full-runtime-text review, but weak development recall and an unresolved
-final test case keep the Drift Detector unwired in production. The former
+dimensions do not offset the Drift. The implemented capstone POC runtime uses
+the fixed Luna-low Weekly Drift Reviewer without VIF Critic input followed by
+the deterministic Drift Detector. A fresh final test and deployment approval
+remain pending. The former
 consensus-derived frozen benchmark is retired historical evidence, and the
 six-detector comparison's vote count is not the LLM-Judge reference.
 

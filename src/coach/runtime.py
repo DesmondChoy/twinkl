@@ -1,10 +1,16 @@
-"""Runtime orchestration for the weekly VIF -> drift -> Coach flow."""
+"""Deprecated experimental VIF Critic crash/rut/evolution runtime.
+
+Use :mod:`src.coach.weekly_drift_runtime` for the approved Weekly Drift
+Reviewer and Drift Detector path. This module remains only for historical
+reproduction and compatibility.
+"""
 
 from __future__ import annotations
 
 import argparse
 import asyncio
 import json
+import warnings
 from pathlib import Path
 
 from src.coach.weekly_digest import (
@@ -40,7 +46,13 @@ def run_weekly_coach_cycle(
     device: str | None = None,
     llm_complete=None,
 ) -> tuple[object, dict[str, str]]:
-    """Run the full weekly Coach path from VIF checkpoint to digest artifacts."""
+    """Run the deprecated experimental VIF Critic compatibility path."""
+    warnings.warn(
+        "run_weekly_coach_cycle is deprecated; use "
+        "run_weekly_drift_coach_cycle from src.coach.weekly_drift_runtime",
+        DeprecationWarning,
+        stacklevel=2,
+    )
     timeline_df, _metadata = predict_persona_timeline(
         persona_id=persona_id,
         checkpoint_path=checkpoint_path,
@@ -67,7 +79,9 @@ def run_weekly_coach_cycle(
     )
 
     if llm_complete is not None:
-        narrative, _prompt = asyncio.run(generate_weekly_digest_coach(digest, llm_complete))
+        narrative, _prompt = asyncio.run(
+            generate_weekly_digest_coach(digest, llm_complete)
+        )
         validation = (
             validate_weekly_digest_narrative(digest, narrative)
             if narrative is not None
@@ -109,9 +123,17 @@ def run_weekly_coach_cycle(
 
 
 def _build_cli_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Run the weekly VIF-to-Coach pipeline.")
-    parser.add_argument("--persona-id", required=True, help="Persona ID (without prefix).")
-    parser.add_argument("--checkpoint-path", required=True, help="Path to trained Critic checkpoint.")
+    parser = argparse.ArgumentParser(
+        description=(
+            "Run the deprecated experimental VIF Critic-to-Weekly-Digest path."
+        )
+    )
+    parser.add_argument(
+        "--persona-id", required=True, help="Persona ID (without prefix)."
+    )
+    parser.add_argument(
+        "--checkpoint-path", required=True, help="Path to trained Critic checkpoint."
+    )
     parser.add_argument("--wrangled-dir", default="logs/wrangled")
     parser.add_argument("--config-path", default="config/vif.yaml")
     parser.add_argument("--output-dir", default="logs/exports/weekly_coach")
@@ -146,7 +168,7 @@ def main() -> None:
         device=args.device,
     )
     print(
-        f"Built weekly coach digest for {digest.persona_id} "
+        f"Built deprecated Weekly Digest for {digest.persona_id} "
         f"({digest.week_start} -> {digest.week_end})"
     )
     for name, path in artifact_paths.items():

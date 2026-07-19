@@ -4,15 +4,17 @@ This document describes the Shiny review app used to inspect Twinkl's local
 end-to-end runtime on top of existing wrangled personas and saved VIF Critic
 checkpoints.
 
-This app executes the experimental VIF Critic-to-Weekly-Digest path. The
+This app executes the explicitly deprecated experimental VIF
+Critic-to-Weekly-Digest compatibility path. It remains available for historical
+inspection but does not represent approved product behavior. The
 separate [Drift Inspection App](weekly_drift_review_app.md) is read-only and
 compares frozen Weekly Drift Reviewer Runs without executing the VIF Critic
 runtime or making model or provider API calls. The current Weekly Drift Reviewer
 model contract is fixed at `gpt-5.6-luna` with reasoning effort `low`.
 
-The app is a review and debugging interface for the current POC. It does not
-change product scope. It makes the existing runtime files easier to inspect
-and compare.
+The app is a review and debugging interface for the deprecated compatibility
+path. The approved capstone POC runtime is
+`src.coach.weekly_drift_runtime`; it does not yet have a dedicated UI.
 
 ## What It Does
 
@@ -121,11 +123,11 @@ five-pass LLM-Judge consensus parquet and is not benchmark ground truth.
 
 The comparison remains a diagnostic view. Drift requires two adjacent Journal
 Entries that visibly show a behavior or choice against the same Core Value.
-[`twinkl-v8pb`](../evals/drift_v1_student_visible_target.md) completed
-the student-visible target and locked final test review. It is not wired into
-this review app or the Weekly Coach runtime because the development score was
-weak and one final test case remained unresolved; the old consensus-derived frozen
-benchmark is retired historical evidence.
+[`twinkl-v8pb`](../evals/drift_v1_student_visible_target.md) is historical
+development evidence. The approved Weekly Drift Reviewer and Drift Detector
+path is wired into the Weekly Digest runtime but intentionally not retrofitted
+into this deprecated app. A fresh final test remains pending; the old
+consensus-derived frozen benchmark is retired historical evidence.
 
 ## Generated Outputs
 
@@ -157,7 +159,6 @@ Key modules:
 - `src/demo_tool/multi_drift.py`
 - `src/demo_tool/state.py`
 
-The app uses `src.coach.runtime.run_weekly_coach_cycle()` for live execution,
-then reads the persisted files back into the UI. It renders the Weekly Digest
-and Weekly Coach prompt but does not inject a live Weekly Coach LLM or generate
-a live Weekly Coach output.
+The app uses the deprecated `src.coach.runtime.run_weekly_coach_cycle()` for
+live execution, then reads the persisted files back into the UI. New runtime
+work must use `src.coach.weekly_drift_runtime.run_weekly_drift_coach_cycle()`.

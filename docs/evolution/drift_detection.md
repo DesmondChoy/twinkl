@@ -32,10 +32,10 @@ Entry text without VIF Critic input. The deterministic Drift Detector then
 applies the two-consecutive-Conflict rule, and the user sees the result through
 the Weekly Digest and Weekly Coach. The prior
 consensus-derived benchmark and former final-test population are development
-evidence only; `twinkl-pv6s` must establish a fresh final test. No setup has
-deployment approval and the production path remains unwired. The intended delivery
-vocabulary is **active**, **recovered**, **mixed**, or **uncertain**; exact
-schema values and state transitions remain implementation work.
+evidence only; `twinkl-pv6s` must establish a fresh final test. The approved
+capstone POC path is wired but has no deployment approval. Its delivery
+vocabulary is **active**, **recovered**, **mixed**, or **uncertain**, with
+implemented and tested state transitions.
 
 The team recorded this adoption on 2026-07-10 in
 [GitHub issue #49](https://github.com/DesmondChoy/twinkl/issues/49).
@@ -45,13 +45,14 @@ The historical consensus EDA and empirical rationale live in
 student-visible target and evaluation contract live in
 [`docs/evals/drift_detection_eval.md`](../evals/drift_detection_eval.md).
 
-The repository also contains two exploratory predecessors:
+The repository also contains two explicitly deprecated exploratory
+predecessors:
 
 - `src/vif/drift.py` routes weekly means into `crash`, `rut`, `evolution`,
   `high_uncertainty`, or `stable`; and
 - the demo compares six rule-based detector families and counts their votes.
 
-Neither predecessor implements the approved Weekly Drift Reviewer plus
+Neither predecessor is part of the approved Weekly Drift Reviewer plus
 deterministic Drift Detector path.
 
 > **Historical research boundary:** The remaining sections preserve the
@@ -166,7 +167,7 @@ Options B and C move temporal reasoning *into* the Critic. The drift layer can n
 This historical catalog modeled Drift v1 as a **sustained conflict episode on a
 declared core value** and proposed rolling soft evidence at runtime. That
 runtime proposal is not selected. The Current v1 Contract above now governs:
-Weekly Drift Reviewer decisions feed the deterministic Drift Detector, while
+Weekly Drift Reviewer Decisions feed the deterministic Drift Detector, while
 the weekly boundary controls delivery only.
 
 The broader interpretation question—unintended drift, an accepted trade-off, or

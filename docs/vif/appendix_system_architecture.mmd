@@ -54,8 +54,8 @@ flowchart LR
             critic["Per-Journal-Entry<br/>VIF Critic inference"]
             timeline["Per-Journal-Entry VIF timeline"]
             weekly["Weekly aggregation"]
-            drift["Weekly prototype routing<br/>crash / rut / evolution<br/>high uncertainty"]
-            drift_v1["Approved target (not wired)<br/>gpt-5.6-luna · low<br/>Weekly Drift Reviewer decisions<br/>+ deterministic Drift Detector"]
+            drift["Deprecated compatibility routing<br/>crash / rut / evolution<br/>high uncertainty"]
+            drift_v1["Approved POC runtime<br/>gpt-5.6-luna · low<br/>Weekly Drift Reviewer Decisions<br/>+ deterministic Drift Detector"]
             runtime_input --> state_runtime --> critic --> timeline --> weekly --> drift
         end
 
@@ -76,8 +76,8 @@ flowchart LR
     runtime_input --> digest
     weekly --> digest
     drift --> digest
-    runtime_input -. "Journal Entries + Core Values;<br/>no VIF Critic input" .-> drift_v1
-    drift_v1 -. "approved target" .-> digest
+    runtime_input -->|"Journal Entries + Core Values;<br/>no VIF Critic input"| drift_v1
+    drift_v1 --> digest
 
     evolution["Automatic experimental<br/>evolution classifier"]
     weekly --> evolution --> drift
@@ -89,7 +89,7 @@ flowchart LR
     class generator,wrangled,judge,labels,consensus,merge prep;
     class encoder_train,state_train,samples,critic_train,checkpoint train;
     class runtime_input,state_runtime,critic,timeline,weekly,drift run;
-    class digest,prompt,narrative coach;
+    class drift_v1,digest,prompt,narrative coach;
     class evolution optional;
     class exports artifact;
-    class state_note,drift_v1 note;
+    class state_note note;

@@ -22,11 +22,12 @@ The current VIF implementation is intentionally narrow:
 - **Runtime output**: per-Journal-Entry alignment means and uncertainties, plus weekly aggregates
 - **Primary capstone role**: recover visible Conflict (`-1`) evidence; retain
   ternary outputs for diagnostics and non-gating positive context
-- **Current executable downstream use**: validated weekly signal frames, an
-  experimental crash/rut/evolution router, and Weekly Coach inputs
+- **Current executable downstream use**: the approved Weekly Drift Reviewer and
+  Drift Detector path into the Weekly Digest, plus a deprecated VIF Critic
+  crash/rut/evolution compatibility path
 - **Fixed Weekly Drift Reviewer**: `gpt-5.6-luna` with reasoning effort `low`,
   without VIF Critic input
-- **Approved user-facing target**: Weekly Drift Reviewer decisions followed by
+- **Approved user-facing runtime**: Weekly Drift Reviewer Decisions followed by
   the deterministic rule that two consecutive Conflicts for the same Core
   Value form Drift
 - **Approved VIF Critic role**: stored predictions and uncertainty for offline
@@ -38,17 +39,18 @@ The current VIF implementation is intentionally narrow:
 > those runtime values. The fixed Weekly Drift Reviewer contract is a separate
 > product decision.
 
-The architecture and metric policy are ahead of implementation: training still
-selects checkpoints QWK-first, the runtime still uses synthetic `core_values`
-rather than persisted `top_values`, and Weekly Drift Reviewer decision
-persistence and Abstain handling are not wired. The fixed model choice does not
-by itself grant deployment approval.
+The approved capstone POC runtime persists versioned Weekly Drift Reviewer
+Decisions, fails closed to Abstain, applies the Drift Detector across week
+boundaries, and feeds the Weekly Digest. Training still selects checkpoints
+QWK-first, and the runtime still uses synthetic `core_values` rather than
+persisted onboarding `top_values`. The fixed model choice and implementation do
+not grant deployment approval.
 
 ## Current Diagram
 
 The current implementation diagram is maintained in two synced forms. It shows
-the executable prototype and labels the approved target as unwired; the adopted
-staged architecture is documented in
+the approved capstone POC path beside the deprecated compatibility path; the
+adopted staged architecture is documented in
 [VIF Critic Role in Drift Detection](../architecture/drift_detection.md).
 
 - Mermaid source: [`current_system_architecture.mmd`](current_system_architecture.mmd)
@@ -259,18 +261,19 @@ generation.
 per-dimension alignment, uncertainty, and profile-weight names and raises a
 `ValueError` naming any required columns missing at the consumer boundary.
 
-### 4.3 Drift Routing: Prototype and Approved Target
+### 4.3 Drift Routing: Deprecated Compatibility and Approved Runtime
 
-The working runtime prototype in `src/vif/drift.py` consumes weekly means and
+The deprecated compatibility router in `src/vif/drift.py` consumes weekly means and
 uncertainties and can emit `stable`, `crash`, `rut`, `evolution`, or
 `high_uncertainty`. It invokes the experimental evolution classifier
 automatically when no precomputed result is supplied. This is the route used by
-the offline Weekly Coach runtime and demo UI.
+the deprecated `src.coach.runtime` entry point and Runtime Demo Review App.
 
-The approved product contract is narrower: the Weekly Drift Reviewer is fixed
+The approved capstone POC runtime is narrower: the Weekly Drift Reviewer is fixed
 at `gpt-5.6-luna` with reasoning effort `low` and reads Journal Entries and Core
 Values without VIF Critic predictions. The deterministic Drift Detector
-declares Drift after two consecutive Conflicts for the same Core Value. The former
+declares Drift after two consecutive Conflicts for the same Core Value and
+feeds its delivery state to the Weekly Digest. The former
 consensus-derived frozen benchmark is retired historical evidence; it does not
 implement or justify the active target. [`twinkl-v8pb`](../evals/drift_v1_student_visible_target.md)
 is historical. [`twinkl-752.4`](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md)
@@ -348,10 +351,13 @@ Key files for the architecture described here:
 | `src/vif/encoders.py` | Creates the configured sentence encoder |
 | `src/vif/runtime.py` | Rebuilds states from history and emits runtime parquet files |
 | `src/vif/weekly_schema.py` | Defines and validates the weekly signal-frame contract |
-| `src/vif/drift.py` | Implements the existing weekly crash/rut/evolution prototype router |
+| `src/weekly_drift_reviewer.py` | Implements the frozen Weekly Drift Reviewer contract, caller, validation, and receipts |
+| `src/drift_detector.py` | Implements the deterministic Drift Detector and delivery states |
+| `src/coach/weekly_drift_runtime.py` | Orchestrates the approved Weekly Drift Reviewer to Weekly Digest path |
+| `src/vif/drift.py` | Implements the deprecated weekly crash/rut/evolution compatibility router |
 | `src/vif/evolution.py` | Supplies the prototype's automatic evolution classification |
 | `src/vif/holdout.py` | Loads fixed holdout manifests for experiment reruns |
-| `src/coach/runtime.py` | Orchestrates checkpoint inference, routing, Weekly Digest building, and exports |
+| `src/coach/runtime.py` | Orchestrates the deprecated VIF Critic compatibility path |
 | `src/demo_tool/multi_drift.py` | Compares six exploratory detector families |
 
 ---

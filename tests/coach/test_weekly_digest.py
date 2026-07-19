@@ -1,4 +1,4 @@
-"""Tests for weekly digest Coach vertical slice."""
+"""Tests for the Weekly Digest and Weekly Coach vertical slice."""
 
 import asyncio
 import json
@@ -6,6 +6,7 @@ from pathlib import Path
 
 import polars as pl
 
+from src.coach.schemas import DriftDetectionResult
 from src.coach.weekly_digest import (
     attach_coach_artifacts,
     build_weekly_digest,
@@ -15,7 +16,6 @@ from src.coach.weekly_digest import (
     render_digest_prompt,
     validate_weekly_digest_narrative,
 )
-from src.coach.schemas import DriftDetectionResult
 
 
 def _write_test_wrangled(path: Path) -> None:
@@ -141,7 +141,7 @@ def test_build_weekly_digest_and_render(tmp_path: Path):
     assert "Evidence Snippets" in md
     assert "dims=" in md
     assert "Persona: Casey (deadbeef)" in prompt
-    assert "Declared core values: Self Direction, Benevolence" in prompt
+    assert "Declared Core Values: Self Direction, Benevolence" in prompt
     assert "Full journal history:" not in prompt
     assert "Primary tensions:" in prompt
 
@@ -200,13 +200,25 @@ def test_generate_validate_and_persist_weekly_digest(tmp_path: Path):
         assert response_format is not None
         return json.dumps(
             {
-                "weekly_mirror": 'This week felt split between "Skipped gym and doomscrolled after work" and moments of care for other people.',
-                "tension_explanation": 'The pull seems to be between depleted self-direction and the parts of the week where you still showed up, especially when you wrote "Called my mom and helped a colleague debug."',
-                "reflective_question": "What felt different between the moments when you drifted and the moments when you showed up with intention?",
+                "weekly_mirror": (
+                    'This week felt split between "Skipped gym and doomscrolled '
+                    'after work" and moments of care for other people.'
+                ),
+                "tension_explanation": (
+                    "The pull seems to be between depleted self-direction and the "
+                    "parts of the week where you still showed up, especially when "
+                    'you wrote "Called my mom and helped a colleague debug."'
+                ),
+                "reflective_question": (
+                    "What felt different between the moments when you drifted and "
+                    "the moments when you showed up with intention?"
+                ),
             }
         )
 
-    narrative, _prompt = asyncio.run(generate_weekly_digest_coach(digest, fake_llm_complete))
+    narrative, _prompt = asyncio.run(
+        generate_weekly_digest_coach(digest, fake_llm_complete)
+    )
     assert narrative is not None
 
     validation = validate_weekly_digest_narrative(digest, narrative)
@@ -220,7 +232,9 @@ def test_generate_validate_and_persist_weekly_digest(tmp_path: Path):
 
     assert parquet_path.exists()
     assert df.height == 1
-    assert json.loads(df["coach_narrative_json"][0])["weekly_mirror"].startswith("This week")
+    assert json.loads(df["coach_narrative_json"][0])["weekly_mirror"].startswith(
+        "This week"
+    )
     assert json.loads(df["drift_reasons_json"][0]) == []
 
 
@@ -247,7 +261,8 @@ def test_build_weekly_digest_truncates_future_history_and_handles_acute_distress
 
 ## Entry 0 - 2025-01-01
 
-The child died tonight and I held his mother while she screamed. I came home crying and could not stop shaking.
+The child died tonight and I held his mother while she screamed. \
+I came home crying and could not stop shaking.
 
 ---
 
@@ -333,13 +348,15 @@ def test_build_weekly_digest_detects_background_strain(tmp_path: Path):
 
 ## Entry 0 - 2025-01-01
 
-Held the family together through dinner, but I am tired in a way that has nothing to do with sleep.
+Held the family together through dinner, but I am tired in a way that has \
+nothing to do with sleep.
 
 ---
 
 ## Entry 1 - 2025-01-03
 
-Everyone just stepped in without me asking, but I have been holding all the pieces so tightly.
+Everyone just stepped in without me asking, but I have been holding all the \
+pieces so tightly.
 
 ---
 """

@@ -45,8 +45,8 @@ flowchart TB
         timeline["Per-Journal-Entry VIF timeline"]
         weekly["Weekly aggregation<br/>per-dimension + profile-weighted signals"]
         evolution["Experimental evolution classifier<br/>automatic in prototype"]
-        drift["Weekly prototype routing<br/>stable / crash / rut / evolution / high_uncertainty"]
-        drift_v1["Approved target (not wired)<br/>gpt-5.6-luna · low<br/>Weekly Drift Reviewer decisions<br/>+ deterministic Drift Detector"]
+        drift["Deprecated compatibility routing<br/>stable / crash / rut / evolution / high_uncertainty"]
+        drift_v1["Approved POC runtime<br/>gpt-5.6-luna · low<br/>Weekly Drift Reviewer Decisions<br/>+ deterministic Drift Detector"]
         digest["Weekly Digest builder"]
         prompt["Full-context Weekly Coach prompt<br/>history capped at week_end"]
         coach["Optional Weekly Coach reflection"]
@@ -79,9 +79,9 @@ flowchart TB
     timeline --> weekly
     weekly --> drift
     weekly --> evolution --> drift
-    wrangled_runtime -. "Journal Entries + Core Values;<br/>no VIF Critic input" .-> drift_v1
+    wrangled_runtime -->|"Journal Entries + Core Values;<br/>no VIF Critic input"| drift_v1
     drift --> digest
-    drift_v1 -. "approved target path" .-> digest
+    drift_v1 --> digest
     weekly --> digest
     wrangled_runtime --> digest
     digest --> prompt
@@ -95,7 +95,7 @@ flowchart TB
     default_note -.-> state_runtime
 
     class generator,wrangled_train,labels,consensus,wrangled_runtime data;
-    class merge,state_train,state_runtime,weekly,drift,digest,prompt process;
+    class merge,state_train,state_runtime,weekly,drift,drift_v1,digest,prompt process;
     class judge,encoder_train,encoder_runtime,critic_train,checkpoint,critic,coach,evolution model;
     class dataset,exports artifact;
-    class default_note,drift_v1 note;
+    class default_note note;

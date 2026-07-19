@@ -21,9 +21,10 @@ This evaluation validates that explanations feel accurate and actionable to user
 - LLM-Judge comparison view ([`src/annotation_tool/components/comparison_view.py`](../../src/annotation_tool/components/comparison_view.py))
 - Weekly Coach prompt rendering plus programmatic narrative generation,
   validation, and persistence support in
-  [`src/coach/weekly_digest.py`](../../src/coach/weekly_digest.py) and
-  [`src/coach/runtime.py`](../../src/coach/runtime.py); the CLIs do not inject a
-  live Weekly Coach LLM
+  [`src/coach/weekly_digest.py`](../../src/coach/weekly_digest.py)
+- The approved Weekly Drift Reviewer and Drift Detector runtime selects cited
+  Journal Entry evidence for the Weekly Digest in
+  [`src/coach/weekly_drift_runtime.py`](../../src/coach/weekly_drift_runtime.py)
 - Tier 1 Weekly Coach narrative checks are implemented: groundedness via quoted substring matches, non-circularity via score-jargon avoidance, and length bounds via [`validate_weekly_digest_narrative()`](../../src/coach/weekly_digest.py)
 
 ### What's Missing
@@ -33,11 +34,10 @@ This evaluation validates that explanations feel accurate and actionable to user
 - **Tier 3:** Human calibration protocol and κ calculation
 
 ### Blocking Dependencies
-Tier 1 Weekly Coach checks are unblocked and implemented. Deeper end-to-end
-explanation evaluation still depends on persisted decisions from the fixed
-`gpt-5.6-luna` reasoning-effort-`low` Weekly Drift Reviewer, deterministic Drift
-Detector output, and cited Journal Entry evidence (`twinkl-3sg`). VIF Critic
-outputs belong to offline review and retraining.
+Tier 1 Weekly Coach checks and approved-path evidence provenance are
+implemented. Deeper end-to-end explanation evaluation still requires a fresh
+final test and committed batch results. VIF Critic outputs belong to offline
+review and retraining.
 
 ### Implementation Scope
 
@@ -50,9 +50,8 @@ later validation phases.
 ### Next Steps
 1. Add a batch Tier 1 checker for LLM-Judge rationales in `src/judge/` and run it over the existing 1,594 rationale-bearing rows
 2. Run the existing Weekly Coach Tier 1 validation over a real Weekly Digest set and publish pass-rate summaries
-3. Add provenance hooks from Weekly Drift Reviewer decisions and Drift Detector output to Weekly Coach evidence selection (`twinkl-3sg`)
-4. *(Future phase)* Design a rationale-review LLM prompt for Tier 2 evaluation
-5. *(Future phase)* Sample 20-30 explanations for Tier 3 human calibration
+3. *(Future phase)* Design a rationale-review LLM prompt for Tier 2 evaluation
+4. *(Future phase)* Sample 20-30 explanations for Tier 3 human calibration
 
 ---
 
@@ -89,10 +88,10 @@ different from the plan you had in mind?"
 - Identifies patterns over time (not just one Journal Entry)
 - Avoids prescriptive or judgmental language
 
-The offline runtime path lives in `src/coach/weekly_digest.py` and
-`src/coach/runtime.py`. The evaluation layer remains incomplete: Tier 1 checks
-are implemented, while benchmark pass-rate reporting and user-study calibration
-are pending.
+The approved path lives in `src/coach/weekly_drift_runtime.py` and
+`src/coach/weekly_digest.py`. The evaluation layer remains incomplete: Tier 1
+checks are implemented, while benchmark pass-rate reporting and user-study
+calibration are pending.
 
 ---
 

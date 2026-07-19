@@ -1,6 +1,12 @@
-"""Uncertainty-gated drift detection on top of weekly VIF signals."""
+"""Deprecated experimental crash/rut/evolution routing over VIF Critic signals.
+
+Use :mod:`src.drift_detector` for the approved deterministic Drift Detector.
+This module remains only for historical reproduction and compatibility.
+"""
 
 from __future__ import annotations
+
+import warnings
 
 import polars as pl
 
@@ -74,7 +80,12 @@ def detect_weekly_drift(
     blend_rate: float = 0.3,
     importance_floor: float = 0.15,
 ) -> DriftDetectionResult:
-    """Resolve weekly coach mode from aggregated VIF signals."""
+    """Resolve the deprecated experimental weekly response mode."""
+    warnings.warn(
+        "detect_weekly_drift is deprecated; use detect_drift from src.drift_detector",
+        DeprecationWarning,
+        stacklevel=2,
+    )
     if weekly_df.is_empty():
         raise ValueError("weekly_df must contain at least one weekly signal row")
 
@@ -82,7 +93,9 @@ def detect_weekly_drift(
 
     persona_ids = weekly_df["persona_id"].unique().to_list()
     if len(persona_ids) != 1:
-        raise ValueError(f"detect_weekly_drift expects one persona, found {len(persona_ids)}")
+        raise ValueError(
+            f"detect_weekly_drift expects one persona, found {len(persona_ids)}"
+        )
 
     ordered = weekly_df.sort(WEEK_END)
     if target_week_end is not None:
@@ -120,8 +133,8 @@ def detect_weekly_drift(
         return DriftDetectionResult(
             response_mode="high_uncertainty",
             rationale=(
-                "The target week carries elevated model uncertainty, so the Coach "
-                "should avoid a confident drift critique."
+                "The target week carries elevated model uncertainty, so the Weekly "
+                "Coach should avoid a confident Drift critique."
             ),
             reasons=["overall_uncertainty_above_threshold"],
             source="drift_detector",
@@ -168,7 +181,9 @@ def detect_weekly_drift(
             for dim in SCHWARTZ_VALUE_ORDER:
                 if profile_weights[dim] < min_profile_weight or dim in evolution_dims:
                     continue
-                dim_drop = float(previous_row[alignment_col(dim)]) - float(target_row[alignment_col(dim)])
+                dim_drop = float(previous_row[alignment_col(dim)]) - float(
+                    target_row[alignment_col(dim)]
+                )
                 if dim_drop > 0:
                     crash_dims.add(dim)
 
@@ -185,8 +200,8 @@ def detect_weekly_drift(
         return DriftDetectionResult(
             response_mode="crash",
             rationale=(
-                "The profile-weighted weekly alignment dropped sharply compared with the "
-                "previous week on important dimensions."
+                "The profile-weighted weekly alignment dropped sharply compared "
+                "with the previous week on important dimensions."
             ),
             reasons=["weekly_scalar_drop_above_threshold", *sorted(crash_dims)],
             source="drift_detector",
@@ -203,7 +218,7 @@ def detect_weekly_drift(
         return DriftDetectionResult(
             response_mode="rut",
             rationale=(
-                "A declared core value stayed below the rut threshold for multiple "
+                "A Core Value stayed below the rut threshold for multiple "
                 "low-uncertainty weeks."
             ),
             reasons=["consecutive_low_core_value_weeks", *sorted(rut_dims)],
@@ -241,7 +256,10 @@ def detect_weekly_drift(
 
     strongest_dims = sorted(
         SCHWARTZ_VALUE_ORDER,
-        key=lambda dim: (abs(float(target_row[alignment_col(dim)])), profile_weights[dim]),
+        key=lambda dim: (
+            abs(float(target_row[alignment_col(dim)])),
+            profile_weights[dim],
+        ),
         reverse=True,
     )
     return DriftDetectionResult(

@@ -9,7 +9,7 @@ Status legend (node colors):
 
 - **Implemented** (green): working repo capability
 - **Partial / experimental** (amber): working slice, not ready to claim as product behavior
-- **Specified** (blue): documented, not wired into the active runtime
+- **Specified** (blue): documented, not implemented
 - **??? Decision** (dashed grey): downstream operating or deployment decision
 
 Solid arrows are paths that are wired in the repo today. Dashed arrows are
@@ -55,11 +55,11 @@ flowchart TB
         state["VIF Critic input builder<br/>(Journal Entry + profile)"]
         scores["VIF Critic scores<br/>+ uncertainty"]
         weekly["Weekly aggregation"]
-        drift["Weekly crash / rut / evolution<br/>prototype router"]
+        drift["Deprecated crash / rut / evolution<br/>compatibility router"]
         reviewer["Weekly Drift Reviewer<br/>gpt-5.6-luna · low<br/>without VIF Critic input"]
         drift_v1["Deterministic Drift Detector<br/>two consecutive Conflicts"]
         evolution["Evolution classifier<br/>automatic in prototype"]
-        d_trigger["??? Deployment-approval<br/>criteria"]
+        d_trigger["??? Deployment approval after<br/>the fresh final test"]
         d_evolution["Value evolution<br/>parked for v1"]
     end
 
@@ -99,17 +99,18 @@ flowchart TB
 
     %% What actually feeds the runtime today
     personas -->|"synthetic journals stand in<br/>for real users today"| state
+    personas -->|"synthetic Journal Entries<br/>+ Core Values"| reviewer
 
     %% Scoring runtime (wired, experimental)
     checkpoint --> scores
     state --> scores --> weekly --> drift
     weekly --> evolution --> drift
-    reviewer -. "approved path; not wired" .-> drift_v1
+    reviewer --> drift_v1
 
     %% Weekly Coach + review (wired, experimental)
     drift --> digest
     weekly --> digest
-    drift_v1 -. "approved path; not wired" .-> digest
+    drift_v1 --> digest
     digest --> prompt
     prompt -. "programmatic LLM injection" .-> narrative
     digest --> runtime_review
@@ -122,8 +123,8 @@ flowchart TB
     narrative -.- d_feedback
 
     class personas,judge,consensus,annotation,critic_train,checkpoint,llm_baseline,drift_review,reports implemented;
-    class state,scores,weekly,drift,evolution,digest,prompt,narrative,runtime_review,offline_review,nudges partial;
-    class onboarding,profile,journaling,reviewer,drift_v1,d_evolution specified;
+    class state,scores,weekly,drift,evolution,reviewer,drift_v1,digest,prompt,narrative,runtime_review,offline_review,nudges partial;
+    class onboarding,profile,journaling,d_evolution specified;
     class d_surface,d_trigger,d_boundary,d_feedback decision;
 ```
 
@@ -133,13 +134,12 @@ The dashed grey `???` nodes and edge labels mark team decisions that still
 need calls. Read this as a product and component map, not a literal runtime
 sequence.
 
-Twinkl's executable spine runs top to bottom: generated data and LLM-Judge labels
-train the VIF Critic. A trained checkpoint scores each Journal Entry, rolls the
-predictions up into validated weekly signals, runs the weekly prototype router,
-and packages everything into a Weekly Digest plus Weekly Coach prompt text. The
-Weekly Coach CLI and Runtime Demo Review App do not call a live Weekly Coach;
-output generation requires an injected callable. This is implementation truth,
-not the approved user-facing Drift path.
+Twinkl now has two executable paths. The approved capstone POC path reviews
+Journal Entries and Core Values with the fixed Luna-low Weekly Drift Reviewer,
+persists versioned Weekly Drift Reviewer Decisions, applies the deterministic
+Drift Detector, and packages the result into a Weekly Digest plus Weekly Coach
+prompt. The deprecated compatibility path runs a VIF Critic checkpoint through
+weekly signals and the crash/rut/evolution router for historical demonstrations.
 
 The Drift Inspection App is a separate read-only evaluation interface. It
 compares Runs 1–3 for three frozen Weekly Drift Reviewer setups:
@@ -174,9 +174,10 @@ frozen development Runs was 23/42 known Drifts, 4 false Drift alerts, and
 [`twinkl-v8pb` completed the historical five-Drift development review](../evals/drift_v1_student_visible_target.md)
 and withheld its former final-test score. The former final-test population is
 now development-only, and the expanded known-development union is fully
-resolved. The existing crash/rut/evolution router remains a prototype; class
-probabilities and the approved Drift Detector are not yet wired. No fresh final
-test exists, so the production edge remains deliberately blocked.
+resolved. The crash/rut/evolution router is explicitly deprecated. The approved
+Drift Detector is wired, but full VIF Critic class-probability persistence
+belongs to the separate review-and-retrain path. No fresh final test exists, so
+deployment approval remains deliberately blocked.
 `twinkl-752.5` found no Drift recall gain from raw VIF Critic input or
 early-plus-weekly scheduling. VIF Critic candidate confirmation is outside the
 remaining capstone scope. The prior consensus-derived benchmark is [retired historical
@@ -184,7 +185,7 @@ evidence](../archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md), and its 
 audit is not human ground truth. Value evolution is parked for v1 even though
 the prototype invokes its classifier automatically.
 
-The remaining open decisions are the numerical deployment-approval criteria,
+The remaining decisions are deployment approval after the fresh final test,
 what the Weekly Coach may say, and whether user feedback should update the
 profile over time. See
 [`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md),

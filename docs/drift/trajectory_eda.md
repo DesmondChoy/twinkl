@@ -44,11 +44,11 @@ The runtime-compatible weekly bins give a median of **5 active weeks** per
 persona. A 3-week low period is still most of the observed life for the median persona,
 and a baseline-vs-recent comparison has little room to breathe.
 
-The practical answer is not to abandon the weekly Coach. It is to separate the
+The practical answer is not to abandon the Weekly Coach. It is to separate the
 two layers:
 
 - **Detection evidence:** rolling entry-level evidence over recent entries.
-- **Delivery cadence:** weekly Coach digest.
+- **Delivery cadence:** Weekly Digest.
 
 That keeps the product cadence while avoiding fragile multi-week low-mean definitions.
 
@@ -170,7 +170,7 @@ the end-to-end path first; expand only if time remains.
 | # | Label-side reference definition | Consensus impact | Persisted-label comparison | One-line case |
 |---|---|---:|---:|---|
 | **R1 — Sustained conflict** (historical candidate) | the same declared core value has **2 adjacent consensus -1 labels** | **40/204 = 19.6%** | 49/204 = 24.0% | historical prevalence comparison; not an active target |
-| R2 — Conflict week | a runtime week contains **>=2 consensus -1 entries** on a core value | 32/204 = 15.7% | 39/204 = 19.1% | aligns with weekly digest bins, but misses cross-week runs |
+| R2 — Conflict week | a runtime week contains **>=2 consensus -1 Journal Entries** on a Core Value | 32/204 = 15.7% | 39/204 = 19.1% | aligns with Weekly Digest bins, but misses cross-week runs |
 | R3 — Unrecovered departure | core value goes **>=0 -> -1 -> -1** | 30/204 = 14.7% | 35/204 = 17.2% | purest "drift from alignment" shape, but excludes already-low onboarding-gap cases |
 
 The consensus-reference union is 41 personas (20.1%); the persisted-label union
@@ -196,12 +196,12 @@ Layer split:
 
 | Layer | v1 choice |
 |---|---|
-| Student-visible target | 2 adjacent entries visibly show a behavior or choice against the same declared core value; full-runtime-text review completed |
-| Historical consensus labels | Diagnostic provenance only; not a target, threshold-selection input, or promotion surface |
-| Drift Detector | deterministic rule over Weekly Drift Reviewer decisions: two consecutive Conflicts for the same Core Value |
-| Delivery | weekly Coach digest with cited entries |
+| Student-visible target | Two consecutive Journal Entries visibly show a behavior or choice against the same Core Value; full displayed-text review completed |
+| Historical consensus labels | Diagnostic provenance only; not a target, threshold-selection input, or final test set |
+| Drift Detector | Deterministic rule over Weekly Drift Reviewer Decisions: two consecutive Conflicts for the same Core Value |
+| Delivery | Weekly Digest with cited Journal Entries |
 | Parked scope | single-entry dip alerts, fade/dormancy, peripheral-value rise, onboarding-gap messaging, evolution gating, multi-week low-mean definitions |
-| Implementation status | architecture adopted; runtime wiring, deployment-approval criteria, and a fresh final test remain pending |
+| Implementation status | Capstone POC runtime wired; fresh final test and deployment approval remain pending |
 
 Why this is the right v1:
 
@@ -212,7 +212,7 @@ Why this is the right v1:
   decide each Conflict from displayed Journal Entry text. The deterministic
   Drift Detector receives those decisions, not VIF Critic probability mass.
 - **Weekly product stays intact.** Detection can be rolling-entry evidence while
-  the user sees it in the weekly Coach digest.
+  the user sees it in the Weekly Digest.
 - **Noise is named.** Consensus changes the R1 set from 49 to 40 personas:
   11 persisted-only flags disappear and 2 consensus-only flags appear.
 
@@ -228,13 +228,12 @@ test is still required. The historical AI audit is not human ground truth.
 
 ### Weekly delivery and recovery
 
-The benchmark records whether a sustained-conflict episode occurred. The
-weekly Coach describes the state at delivery time using the intended product
-vocabulary: **active**, **recovered**, **mixed**, or **uncertain**. A sequence
-such as `-1, -1, +1, +1, +1` remains a true reference episode, but the digest
-should describe it as recovered rather than active. The exact schema values,
-state-transition rules, and mapping from current prototype modes remain
-implementation work.
+The benchmark records whether a sustained-conflict episode occurred. The Weekly
+Coach describes the state at delivery time using **active**, **recovered**,
+**mixed**, or **uncertain**. A sequence such as `-1, -1, +1, +1, +1` remains a
+true reference episode, but the Weekly Digest describes it as recovered rather
+than active. The implemented Drift Detector keeps Core Values independent and
+does not map deprecated compatibility modes into these delivery states.
 
 ## Soft-label note
 

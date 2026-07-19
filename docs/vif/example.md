@@ -21,7 +21,7 @@ This example follows a single user through onboarding and four scenarios, showin
 | **LLM-Judge** | Offline LLM that labels Journal Entries against values | Training time |
 | **VIF Critic** | Fast neural net that predicts `-1`, `0`, or `+1` for each Journal Entry and value, plus uncertainty | Every Journal Entry in the offline review-and-retrain path |
 | **Weekly Drift Reviewer** | Fixed `gpt-5.6-luna` reasoning-effort-`low` LLM that decides Conflict, Not Conflict, or Abstain from Journal Entry text without VIF Critic input | Weekly review in the approved user-facing path |
-| **Drift Detector** | Applies the deterministic two-consecutive-Conflict rule | After Weekly Drift Reviewer decisions; delivered through the Weekly Digest |
+| **Drift Detector** | Applies the deterministic two-consecutive-Conflict rule | After Weekly Drift Reviewer Decisions; delivered through the Weekly Digest |
 | **Weekly Coach** | Turns the Weekly Digest into an evidence-based reflection | When the Weekly Digest records a tension, uncertainty, or occasional acknowledgment |
 
 ---
@@ -267,9 +267,8 @@ The v1 benchmark still counts the Weeks 7–8 Drift. At Week 12, the Weekly Coac
 should not say Sarah is in ongoing Drift. It can acknowledge the
 recovery with evidence and remain alert to recurrence.
 
-The intended delivery-time vocabulary is **active**, **recovered**, **mixed**,
-or **uncertain**. The exact response-mode schema and transition rules remain
-implementation work. See
+The implemented delivery-time vocabulary is **active**, **recovered**,
+**mixed**, or **uncertain**. See
 [Uncertainty and Drift Review Logic](04_uncertainty_logic.md).
 
 ### Weekly Coach Response

@@ -21,9 +21,9 @@ The current layers of the contract are deliberately different:
 | Development set | The complete development review contains 42 Drifts across 36 Drift trajectories in 292 resolved cases. `twinkl-qtwz` added nine Drifts across eight Drift trajectories from the 186 cases outside the earlier 106-case union. The earlier `twinkl-752.5` study used 33 Drifts across 28 Drift trajectories; keep its reported metrics bound to that input. Historical provenance must be reported as a subgroup because all nine newly found Drifts came from training-seen Journal Entries. The fixed `run_020` threshold is historical development evidence. |
 | Final test set | None is active. The former 24-person `twinkl-v8pb` final-test cohort became development-only when its cases were opened for the full review. `twinkl-pv6s` owns a fresh final test. |
 | Weekly Drift Reviewer | The model contract is fixed at `gpt-5.6-luna` with reasoning effort `low`, without VIF Critic input. The fixed model choice is distinct from final-test validation and deployment approval. |
-| Approved architecture | Weekly Drift Reviewer decisions feed the deterministic two-Conflict Drift Detector. The VIF Critic supplies stored predictions for independent review and retraining; candidate confirmation is outside the remaining capstone scope. |
-| Production runtime | The executable runtime still uses the crash/rut/evolution prototype. The approved Weekly Drift Reviewer and Drift Detector path is not wired or deployment-approved. |
-| User delivery | The Weekly Digest cites the relevant Journal Entries and uses active, recovered, mixed, or uncertain wording without score jargon; exact schema implementation is pending. |
+| Approved architecture | Weekly Drift Reviewer Decisions feed the deterministic two-Conflict Drift Detector. The VIF Critic supplies stored predictions for independent review and retraining; candidate confirmation is outside the remaining capstone scope. |
+| Capstone POC runtime | The approved runtime persists versioned Luna-low Weekly Drift Reviewer Decisions without VIF Critic input, applies the deterministic Drift Detector, and feeds the Weekly Digest. The deprecated crash/rut/evolution runtime remains only for compatibility. |
+| User delivery | The Weekly Digest cites the relevant Journal Entries and uses active, recovered, mixed, or uncertain wording without score jargon. A fresh final test and deployment approval remain pending. |
 
 ### Adopted metric hierarchy (`twinkl-752`, updated under `twinkl-52zz`)
 
@@ -139,8 +139,10 @@ candidate-confirmation exception is included in the remaining capstone scope.
   runtime.
 - `src/vif/weekly_schema.py` defines and validates the weekly-frame contract
   shared by `aggregate_timeline_by_week()` and `detect_weekly_drift()`.
-- `src/coach/runtime.py` runs the offline checkpoint-to-digest path and writes
-  timeline, weekly, Drift, Weekly Digest, markdown, and prompt files.
+- `src/coach/weekly_drift_runtime.py` runs the approved path and writes
+  versioned Weekly Drift Reviewer receipts, Drift Detector, Weekly Digest,
+  markdown, and prompt files.
+- `src/coach/runtime.py` retains the deprecated VIF Critic compatibility path.
 - The demo review app compares six exploratory rule-based detector families
   against LLM-Judge labels or VIF Critic means.
 - `twinkl-v8pb` completed its full-runtime-text review. Development had 42
@@ -225,12 +227,12 @@ candidate-confirmation exception is included in the remaining capstone scope.
 - The retained author-designed trajectories are a capability probe only. They
   are not a target, a threshold-selection input, or a final test set.
 
-### Current Prototype Boundary
+### Deprecated Compatibility Boundary
 
-`src/vif/drift.py` implements an experimental weekly router with literal output
+`src/vif/drift.py` implements a deprecated experimental weekly router with literal output
 modes `stable`, `crash`, `rut`, `evolution`, and `high_uncertainty`. It also
 invokes the experimental evolution classifier automatically. That router is a
-working prototype and remains useful for end-to-end UI and schema testing, but
+compatibility path and remains useful for historical UI and schema testing, but
 it is not the approved Drift Detector.
 
 The six-detector comparison in `src/demo_tool/multi_drift.py` is another
@@ -263,13 +265,11 @@ No fallback score was taken from the retired benchmark.
 
 ### Still Missing for Product v1
 
-- Weekly Drift Reviewer decision persistence and deterministic Drift Detector
-  wiring
 - Full VIF Critic probability, uncertainty, and checkpoint-provenance storage
 - Independent disagreement review and versioned retraining data
 - A fresh, independently resolved final test set under `twinkl-pv6s`
-- Weekly Coach language checks for active, recovered, mixed, and uncertain states at
-  digest time
+- Batch Weekly Coach language checks for active, recovered, mixed, and uncertain
+  states
 
 ---
 
@@ -518,8 +518,11 @@ re-scoring the committed responses.
 | [`scripts/drift/trajectory_eda.py`](../../scripts/drift/trajectory_eda.py) | Reproducible trajectory analysis |
 | [`src/vif/runtime.py`](../../src/vif/runtime.py) | Per-entry inference and weekly aggregation |
 | [`src/vif/weekly_schema.py`](../../src/vif/weekly_schema.py) | Weekly producer/consumer column contract |
-| [`src/vif/drift.py`](../../src/vif/drift.py) | Existing experimental weekly router |
-| [`src/coach/runtime.py`](../../src/coach/runtime.py) | Offline checkpoint-to-digest orchestration |
+| [`src/weekly_drift_reviewer.py`](../../src/weekly_drift_reviewer.py) | Frozen Weekly Drift Reviewer contract, caller, validation, and receipts |
+| [`src/drift_detector.py`](../../src/drift_detector.py) | Deterministic Drift Detector and delivery states |
+| [`src/coach/weekly_drift_runtime.py`](../../src/coach/weekly_drift_runtime.py) | Approved Weekly Drift Reviewer to Weekly Digest orchestration |
+| [`src/vif/drift.py`](../../src/vif/drift.py) | Deprecated experimental weekly router |
+| [`src/coach/runtime.py`](../../src/coach/runtime.py) | Deprecated VIF Critic compatibility orchestration |
 | [`src/demo_tool/multi_drift.py`](../../src/demo_tool/multi_drift.py) | Six-detector exploratory comparison |
 | [`scripts/experiments/llm_critic_baseline.py`](../../scripts/experiments/llm_critic_baseline.py) | Student-visible and history-context comparison arms |
 | [`scripts/experiments/reassess_twinkl_752_5.py`](../../scripts/experiments/reassess_twinkl_752_5.py) | Frozen union, raw-input, scheduling, and placement reassessment |

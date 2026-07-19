@@ -31,7 +31,7 @@ fields, file paths, or historical records.
 | **Drift** | Two consecutive Conflicts for the same Core Value. A longer uninterrupted run is still one Drift. | sustained-conflict episode, meaningful two-entry pattern, reference event |
 | **Weekly Drift Reviewer** | The LLM that reviews weekly Journal Entries for Conflict. The fixed model contract is `gpt-5.6-luna` with reasoning effort `low`, without VIF Critic predictions. Historical experiments used other setups. It is not the VIF Critic. | weekly verifier, LLM arm, system |
 | **Weekly Drift Reviewer Decision** | The Weekly Drift Reviewer's decision of **Conflict**, **Not Conflict**, or **Abstain** for one Journal Entry and Core Value. | reviewer output, weekly label |
-| **Drift Detector** | The deterministic rule that decides whether two consecutive Weekly Drift Reviewer Conflicts for the same Core Value form Drift. The approved rule is not wired or deployment-approved yet. | trigger layer, episode engine |
+| **Drift Detector** | The deterministic rule that decides whether two consecutive Weekly Drift Reviewer Conflicts for the same Core Value form Drift. The rule is implemented for the capstone POC but is not deployment-approved. | trigger layer, episode engine |
 | **Weekly Digest** | The structured weekly record containing values, evidence, Drift state, and inputs for the Weekly Coach. | artifact, payload, packet |
 | **Weekly Coach** | The component that turns the Weekly Digest into the user-facing reflection and question. | narrative layer, delivery engine |
 

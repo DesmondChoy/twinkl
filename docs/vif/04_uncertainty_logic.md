@@ -3,9 +3,9 @@
 This document describes how VIF Critic uncertainty supports offline review,
 case selection, and retraining. The approved user-facing Drift path does not
 consume VIF Critic outputs. Its Weekly Drift Reviewer model contract is fixed
-at `gpt-5.6-luna` with reasoning effort `low`. It remains separate from the
-weekly crash/rut/evolution prototype that is still wired into the offline
-runtime.
+at `gpt-5.6-luna` with reasoning effort `low`. It is wired into the approved
+capstone POC runtime and remains separate from the explicitly deprecated
+crash/rut/evolution compatibility path.
 
 ---
 
@@ -143,9 +143,9 @@ candidate confirmation is outside the remaining capstone scope.
 |---|---|
 | Student-visible target | Two consecutive Journal Entries each visibly show a Conflict for the same Core Value |
 | Historical consensus table | Retired diagnostic provenance only; not a Drift target, threshold-selection input, or final test set |
-| Approved user-facing path | Fixed `gpt-5.6-luna` reasoning-effort-`low` Weekly Drift Reviewer decisions without VIF Critic input, followed by the deterministic Drift Detector; production integration remains pending |
+| Approved user-facing path | Fixed `gpt-5.6-luna` reasoning-effort-`low` Weekly Drift Reviewer Decisions without VIF Critic input, followed by the implemented deterministic Drift Detector; fresh final-test validation and deployment approval remain pending |
 | VIF Critic path | Store predictions and uncertainty for offline comparison, independent review, case selection, and retraining |
-| Delivery | Weekly Digest with cited Journal Entry evidence and active, recovered, mixed, or uncertain wording; Weekly Drift Reviewer abstention emits no Drift claim; schema implementation pending |
+| Delivery | Weekly Digest with cited Journal Entry evidence and active, recovered, mixed, or uncertain wording; Weekly Drift Reviewer Abstain emits no Drift claim |
 
 The EDA supports this definition because most dips spanning one Journal Entry
 recover within two Journal Entries, while three-step and multi-week definitions are too
@@ -162,9 +162,9 @@ For example, `-1, -1, +1, +1, +1` remains a true benchmark Drift, but the
 Weekly Coach should describe it as **recovered** rather than **active**.
 **Mixed** is a Weekly Digest summary used only when relevant value-specific
 Drifts have different delivery states; it is not another state for one Drift.
-**Uncertain** applies when evidence reliability is too low to call a Drift
-active or recovered. Exact schema values and transition rules still require
-implementation and scenario tests.
+**Uncertain** applies when a later Weekly Drift Reviewer Abstain prevents a
+confident active-versus-recovered decision. These transition rules are
+implemented and covered by scenario tests.
 
 Abstention is not a correct negative. Coverage and reference Drifts suppressed
 by Weekly Drift Reviewer abstention must remain visible, so apparent precision
@@ -172,7 +172,7 @@ cannot improve merely by hiding hard cases.
 
 ---
 
-## 6. Existing Weekly Runtime Prototype
+## 6. Deprecated Weekly Runtime Compatibility Path
 
 `src/vif/drift.py` consumes the weekly mean/uncertainty frame and can emit:
 
@@ -186,10 +186,11 @@ Its first gate routes high overall uncertainty away from a confident critique.
 It then checks a week-over-week profile-weighted drop, consecutive low weekly
 means on important dimensions, and experimental evolution classifications.
 
-This path is wired into `src/coach/runtime.py` and is useful for end-to-end
-schema, output-file, and UI testing. It is not the approved v1 Drift Detector
-because it does not consume Weekly Drift Reviewer decisions or apply the
-two-consecutive-Conflict rule.
+This path remains wired into `src/coach/runtime.py` for historical reproduction
+and the Runtime Demo Review App. Both `src/coach/runtime.py` and
+`src/vif/drift.py` emit deprecation warnings. This path is not the approved v1
+Drift Detector because it does not consume Weekly Drift Reviewer Decisions or
+apply the two-consecutive-Conflict rule.
 
 ---
 
@@ -247,9 +248,12 @@ The fallbacks are local safety scaffolding around Weekly Digest file generation.
 | `src/vif/eval.py` | Metrics for individual Journal Entries and uncertainty-aware evaluation |
 | `src/vif/runtime.py` | Per-Journal-Entry and weekly VIF parquet generation |
 | `src/vif/weekly_schema.py` | Shared weekly frame names and required-column validation |
-| `src/vif/drift.py` | Existing weekly crash/rut/evolution/high-uncertainty router |
+| `src/weekly_drift_reviewer.py` | Frozen Weekly Drift Reviewer contract, caller, validation, and receipts |
+| `src/drift_detector.py` | Deterministic Drift Detector and delivery states |
+| `src/coach/weekly_drift_runtime.py` | Approved Weekly Drift Reviewer to Weekly Digest orchestration |
+| `src/vif/drift.py` | Deprecated weekly crash/rut/evolution/high-uncertainty router |
 | `src/vif/evolution.py` | Experimental `stable`/`evolution`/`drift` classifier |
-| `src/coach/runtime.py` | Offline checkpoint-to-Weekly-Digest orchestration |
+| `src/coach/runtime.py` | Deprecated VIF Critic compatibility orchestration |
 | `src/demo_tool/multi_drift.py` | Six-detector exploratory comparison |
 | `scripts/drift/trajectory_eda.py` | Drift-definition analysis |
 

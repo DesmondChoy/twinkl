@@ -1,11 +1,11 @@
 # VIF Critic Role in Drift Detection
 
-**Status:** Architecture adopted on 2026-07-14 under `twinkl-752.2`; the
-optional VIF Critic candidate-confirmation path was removed from the remaining
-capstone scope on 2026-07-17. The Weekly Drift Reviewer model contract is fixed
-at `gpt-5.6-luna` with reasoning effort `low`. This is not deployment approval.
-Runtime implementation, operating limits, and a fresh final test remain
-pending.
+**Status:** Architecture adopted on 2026-07-14 under `twinkl-752.2` and wired
+as a capstone POC under `twinkl-a2w`. The Weekly Drift Reviewer model contract
+is fixed at `gpt-5.6-luna` with reasoning effort `low`. The runtime persists
+versioned Weekly Drift Reviewer Decisions, applies the deterministic Drift
+Detector, and hands its delivery state to the Weekly Digest. This is not
+deployment approval; a fresh final test remains pending.
 
 This document records how the VIF Critic remains an essential part of Twinkl
 without giving it user-facing authority that the evidence does not support. The
@@ -43,7 +43,7 @@ flowchart TB
     direction LR
     PROFILE["Ten-value profile"] --> VIF["VIF Critic<br/>predictions + uncertainty"]
     VIF --> STORE["Stored predictions<br/>and checkpoint provenance"]
-    STORE --> COMPARE["Offline comparison with<br/>Weekly Drift Reviewer decisions"]
+    STORE --> COMPARE["Offline comparison with<br/>Weekly Drift Reviewer Decisions"]
     COMPARE --> CASES["Disagreement and uncertain cases"]
     CASES --> REVIEW["Independent LLM-Judge<br/>or human review"]
     REVIEW --> TRAIN["Reviewed training data<br/>and VIF Critic retraining"]
@@ -100,7 +100,7 @@ The offline loop is deliberately auditable:
 1. Run the frozen VIF Critic on Journal Entries and store full class
    probabilities, uncertainty, checkpoint identity, input-contract version, and
    Core Values.
-2. Compare those predictions with Weekly Drift Reviewer decisions without
+2. Compare those predictions with Weekly Drift Reviewer Decisions without
    exposing VIF Critic predictions to that reviewer.
 3. Select disagreement, high-uncertainty, and candidate adjacent-Conflict cases
    for independent LLM-Judge or human review. Include model-blind controls so
@@ -141,22 +141,26 @@ VIF Critic predictions.
 
 ## Implementation Boundary
 
-The repository can run a VIF Critic checkpoint and export per-Journal-Entry
-means and uncertainty. The read-only
-[Drift Inspection App](../demo/weekly_drift_review_app.md) also compares Runs
-1–3 for the three frozen Weekly Drift Reviewer setups, verifies their input and
-result contracts, and makes no model or provider API calls. The approved
-architecture still needs:
+`src.coach.weekly_drift_runtime` implements the approved capstone POC path. It
+uses the frozen prompt and response schema, makes Luna-low Weekly Drift Reviewer
+calls without VIF Critic input, persists one versioned JSON receipt per week,
+fails closed to Abstain, applies the Drift Detector across week boundaries, and
+exports the Weekly Digest and Weekly Coach prompt. The Drift Detector records
+onset, confirmation, extension, recovery, uncertainty, and per-Core-Value
+state; mixed is derived only at the Weekly Digest level.
 
-- persisted `P(-1)`, `P(0)`, and `P(+1)` with checkpoint provenance;
-- versioned storage for production Weekly Drift Reviewer decisions and offline
-  comparison records beyond the frozen development study files;
-- a review queue with independent labels and model-blind controls;
-- versioned retraining datasets and evaluation receipts;
-- the deterministic two-Conflict Drift Detector wired after Weekly Drift
-  Reviewer decisions;
-- predefined deployment-approval criteria and a fresh final test; and
-- the approved Weekly Digest and Weekly Coach handoff.
+`src.coach.runtime` and `src.vif.drift` are explicitly deprecated. They retain
+the former VIF Critic crash/rut/evolution behavior only for historical
+reproduction and the existing Runtime Demo Review App.
+
+Remaining work is separate:
+
+- `twinkl-1m8` must replace the synthetic `core_values` fallback with persisted
+  `top_values` from onboarding;
+- `twinkl-60l5` must implement stored VIF Critic predictions, independent
+  review, versioned retraining data, and model-blind controls; and
+- `twinkl-pv6s` must run the frozen implementation once on a fresh independently
+  resolved final test before `twinkl-ixq4` can decide deployment approval.
 
 ## Related Records
 
