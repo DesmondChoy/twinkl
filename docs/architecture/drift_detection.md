@@ -4,8 +4,8 @@
 as a capstone POC under `twinkl-a2w`. The Weekly Drift Reviewer model contract
 is fixed at `gpt-5.6-luna` with reasoning effort `low`. The runtime persists
 versioned Weekly Drift Reviewer Decisions, applies the deterministic Drift
-Detector, and hands its delivery state to the Weekly Digest. This is not
-deployment approval; a fresh final test remains pending.
+Detector, and hands its delivery state to the Weekly Digest. The time-boxed
+capstone stops without a fresh final test or deployment approval.
 
 This document records the VIF Critic's optional experimental role without
 giving it user-facing authority that the evidence does not support. The
@@ -27,8 +27,8 @@ Twinkl has one required user-facing path and one optional research path:
    or `+1` plus uncertainty for Journal Entries and values, export raw outputs,
    and train checkpoints. A generalized review-and-retrain loop is not
    implemented. This research is not required for the Weekly Drift Reviewer,
-   Drift Detector, Weekly Digest, Weekly Coach, fresh final test, or deployment
-   approval.
+   Drift Detector, Weekly Digest, or Weekly Coach. A fresh final test and
+   deployment approval are outside the time-boxed capstone scope.
 
 ```mermaid
 flowchart TB
@@ -58,7 +58,7 @@ flowchart TB
 The Weekly Drift Reviewer can identify cases worth comparing, but its outputs
 must not automatically become LLM-Judge reference labels. A separate review
 must resolve training labels. Cases used for retraining cannot also serve as
-the fresh final test that grants deployment approval.
+any future fresh final test.
 
 ## Evidence Behind the Boundary
 
@@ -90,9 +90,10 @@ direct authority over Drift:
   deployment approval.
 
 The complete development data is synthetic, 185/292 cases have historical
-training provenance, and no fresh final test exists. These limits are why the
-VIF Critic remains experimental while its user-facing role stays outside the
-remaining capstone scope.
+training provenance, and no fresh final test exists. The capstone therefore
+makes no deployment-approval claim. These limits are why the VIF Critic remains
+experimental while its user-facing role stays outside the remaining capstone
+scope.
 
 ## Optional Review-and-Retrain Idea
 
@@ -109,8 +110,9 @@ If optional VIF Critic research resumes, a bounded loop should be auditable:
 4. Add only independently reviewed cases to development or training data, with
    provenance and dataset versions.
 5. Retrain the VIF Critic and evaluate it on held-out development data.
-6. Freeze the VIF Critic checkpoint and reviewed training-data version before
-   opening a fresh final test for the separate user-facing path.
+6. If deployment evaluation resumes, freeze the VIF Critic checkpoint and
+   reviewed training-data version before opening a fresh final test for the
+   separate user-facing path.
 
 Real user Journal Entries must not enter training automatically. Any future
 live-data loop requires explicit consent, access controls, retention rules, and
@@ -137,8 +139,7 @@ VIF Critic predictions.
   tested.
 - No arbitrary post-result threshold and no reuse of retraining cases as the
   fresh final test.
-- No deployment-approval claim before the operating criteria and fresh final
-  test are complete.
+- No deployment-approval claim without a fresh final test.
 
 ## Implementation Boundary
 
@@ -154,12 +155,10 @@ state; mixed is derived only at the Weekly Digest level.
 the former VIF Critic crash/rut/evolution behavior only for historical
 reproduction and the existing Runtime Demo Review App.
 
-Remaining critical work is separate:
-
-- `twinkl-1m8` must replace the synthetic `core_values` fallback with persisted
-  `top_values` from onboarding;
-- `twinkl-pv6s` must run the frozen implementation once on a fresh independently
-  resolved final test before `twinkl-ixq4` can decide deployment approval.
+Remaining critical work is separate: `twinkl-1m8` must replace the synthetic
+`core_values` fallback with persisted `top_values` from onboarding. The fresh
+final test (`twinkl-pv6s`) and deployment decision (`twinkl-ixq4`) were closed
+as not planned for the time-boxed capstone.
 
 `twinkl-60l5` is optional P3 research. It may later demonstrate stored VIF
 Critic Predictions, independent review, versioned training data, and blinded
@@ -176,5 +175,5 @@ controls without changing the user-facing path.
 - [`twinkl-52zz` Luna reasoning-effort comparison](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_52zz_luna_low.md)
 - [Drift Inspection App](../demo/weekly_drift_review_app.md)
 - Beads: `twinkl-60l5` (optional review-and-retrain research), `twinkl-7vam`
-  (weekly-only operating and deployment-approval criteria), `twinkl-pv6s`
-  (fresh final test), and `twinkl-a2w` (approved runtime implementation)
+  (weekly-only operating and deployment-approval criteria), `twinkl-a2w`
+  (approved runtime implementation), and `twinkl-1m8` (persisted Core Values)

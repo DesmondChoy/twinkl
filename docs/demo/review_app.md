@@ -126,8 +126,9 @@ Entries that visibly show a behavior or choice against the same Core Value.
 [`twinkl-v8pb`](../evals/drift_v1_student_visible_target.md) is historical
 development evidence. The approved Weekly Drift Reviewer and Drift Detector
 path is wired into the Weekly Digest runtime but intentionally not retrofitted
-into this deprecated app. A fresh final test remains pending; the old
-consensus-derived frozen benchmark is retired historical evidence.
+into this deprecated app. The capstone stops without a fresh final test or
+deployment approval; the old consensus-derived frozen benchmark is retired
+historical evidence.
 
 ## Generated Outputs
 

@@ -201,7 +201,7 @@ Layer split:
 | Drift Detector | Deterministic rule over Weekly Drift Reviewer Decisions: two consecutive Conflicts for the same Core Value |
 | Delivery | Weekly Digest with cited Journal Entries |
 | Parked scope | single-entry dip alerts, fade/dormancy, peripheral-value rise, onboarding-gap messaging, evolution gating, multi-week low-mean definitions |
-| Implementation status | Capstone POC runtime wired; fresh final test and deployment approval remain pending |
+| Implementation status | Capstone POC runtime wired; no fresh final test or deployment approval is claimed |
 
 Why this is the right v1:
 
@@ -223,8 +223,9 @@ showed that the frozen consensus surface was not a fair student-visible
 promotion target. The benchmark, its artifacts, and its report are retired;
 see the [retirement record](../archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md).
 `twinkl-v8pb` completed the new target and correctly withheld its former
-final-test score. That population is now development-only, and a fresh final
-test is still required. The historical AI audit is not human ground truth.
+final-test score. That population is now development-only. The time-boxed
+capstone stops without a replacement final test or deployment approval. The
+historical AI audit is not human ground truth.
 
 ### Weekly delivery and recovery
 

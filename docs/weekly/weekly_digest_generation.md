@@ -399,18 +399,15 @@ learned routing policies.
 
 ## Remaining Work
 
-1. Persist full VIF Critic class probabilities, uncertainty, checkpoint
-   provenance, and input-contract version for offline comparison.
-2. Add independent disagreement review, versioned retraining data, and
-   model-blind controls. Weekly Drift Reviewer Decisions must not automatically
-   become LLM-Judge reference labels.
-3. Build a fresh final test under `twinkl-pv6s`. Keep retraining cases out of it
-   and score only after the checkpoint, rule, prompt, and criteria are frozen.
-4. Replace the synthetic `core_values` fallback with persisted onboarding
+1. Replace the synthetic `core_values` fallback with persisted onboarding
    `top_values` under `twinkl-1m8`.
-5. Report Tier 1 pass rates over a batch and add Tier 2 meta-judge plus Tier 3
+2. Report Tier 1 pass rates over a batch and add Tier 2 meta-judge plus Tier 3
    human calibration.
-6. Capture the user's perceived-accuracy rating and make it queryable.
+3. Capture the user's perceived-accuracy rating and make it queryable.
+
+Persisting full VIF Critic predictions and adding independent disagreement
+review remain optional P3 research. A fresh final test and deployment approval
+are outside the time-boxed capstone scope.
 
 ---
 

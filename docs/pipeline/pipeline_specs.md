@@ -238,7 +238,7 @@ If all synthetic personas have the same number of Journal Entries (e.g., all 5),
 
 | VIF Capability | Minimum Entries | Rationale |
 |----------------|-----------------|-----------|
-| Drift target | 2+ | Requires two consecutive Conflicts for the same Core Value; `twinkl-v8pb` completed its full-runtime-text review, but one unresolved final-test case keeps production blocked |
+| Drift target | 2+ | Requires two consecutive Conflicts for the same Core Value; `twinkl-v8pb` completed its full-runtime-text review, but the former final-test population is development-only and no deployment approval is claimed |
 | Current VIF Critic state | 1 | Live default uses `window_size: 1`; the rejected `twinkl-749` compact-history diagnostic emits a zero summary at cold start and is not the default |
 | Session cap (nudges) | 4+ | "2 nudges in last 3 Journal Entries" needs depth |
 | Weekly delivery analysis | 2+ active weeks | Separates entry-level evidence from Weekly Coach cadence |

@@ -144,7 +144,7 @@ candidate confirmation is outside the remaining capstone scope.
 |---|---|
 | Student-visible target | Two consecutive Journal Entries each visibly show a Conflict for the same Core Value |
 | Historical consensus table | Retired diagnostic provenance only; not a Drift target, threshold-selection input, or final test set |
-| Approved user-facing path | Fixed `gpt-5.6-luna` reasoning-effort-`low` Weekly Drift Reviewer Decisions without VIF Critic input, followed by the implemented deterministic Drift Detector; fresh final-test validation and deployment approval remain pending |
+| Approved user-facing path | Fixed `gpt-5.6-luna` reasoning-effort-`low` Weekly Drift Reviewer Decisions without VIF Critic input, followed by the implemented deterministic Drift Detector; no fresh final test or deployment approval is claimed |
 | VIF Critic path | Store predictions and uncertainty for offline comparison, independent review, case selection, and retraining |
 | Delivery | Weekly Digest with cited Journal Entry evidence and active, recovered, mixed, or uncertain wording; Weekly Drift Reviewer Abstain emits no Drift claim |
 
@@ -267,6 +267,6 @@ ensembles, evidential methods, conformal wrappers, and explicit embedding-space
 out-of-distribution detection. The retired `twinkl-wq9p` diagnostic showed a
 target-validity problem before it could establish whether uncertainty calibration
 is the binding constraint. `twinkl-v8pb` correctly withheld its former
-final-test score, and that population is now development-only. The next step is
-the weekly-only fresh final test after runtime wiring, not a heavier uncertainty
-method.
+final-test score, and that population is now development-only. The time-boxed
+capstone stops without a replacement final test; heavier uncertainty methods
+remain optional research.

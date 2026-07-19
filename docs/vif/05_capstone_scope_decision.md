@@ -8,8 +8,9 @@ on 2026-07-17; and the optional VIF Critic candidate-confirmation path was
 removed from the remaining capstone scope on 2026-07-17. The Weekly Drift
 Reviewer evaluation and deployment policy was fixed under `twinkl-7vam` on
 2026-07-19. On 2026-07-19, the user clarified that the VIF Critic is optional
-research rather than an essential architecture dependency; VIF-only follow-up
-work moved behind the remaining user-facing runtime and final-test work.
+research rather than an essential architecture dependency. The user later
+closed the fresh final test as not planned and chose to end the time-boxed
+capstone without deployment approval.
 
 This document records the detailed Value Identity Function (VIF) scope decision
 for the remaining capstone period. The [PRD](../prd.md) remains authoritative for
@@ -63,19 +64,20 @@ named `qwk_then_recall_guarded` option.
 - The three complete Luna-low development Runs provide sufficient evidence to
   freeze the contract. Drift recall was `0.571`, `0.548`, and `0.548`; false
   Drift alerts were 5, 4, and 4 across 256 non-Drift Core Value trajectories.
-- The fresh final test reuses the Luna-low response schema, fail-closed request
-  handling, one-to-one Drift scoring with a two-Entry confirmation allowance,
-  three-Run protocol, and reported metrics. No separate efficiency gate is
-  adopted.
-- Deployment approval is withheld if final-test references are unresolved, a
-  Run is incomplete, any Run has Drift recall below `0.50`, or any Run exceeds
-  a `2%` false-alert burden on resolved non-Drift Core Value trajectories.
+- Any future fresh final test should reuse the Luna-low response schema,
+  fail-closed request handling, one-to-one Drift scoring with a two-Entry
+  confirmation allowance, three-Run protocol, and reported metrics. No
+  separate efficiency gate is adopted.
+- The frozen policy would withhold deployment approval if final-test references
+  were unresolved, a Run were incomplete, any Run had Drift recall below
+  `0.50`, or any Run exceeded a `2%` false-alert burden on resolved non-Drift
+  Core Value trajectories.
 
 The model choice and development evidence are settled. No development rerun is
-required for the cleaned prompt; the fresh final test will be its first scored
-use. Because there is no active fresh final test set, the Drift Detector does
-not have deployment approval. The VIF Critic candidate-confirmation path is
-outside the remaining capstone scope.
+required for the cleaned prompt. The capstone ends without a fresh final test,
+so the cleaned prompt has no final-test score and the Drift Detector has no
+deployment approval. The VIF Critic candidate-confirmation path is outside the
+remaining capstone scope.
 
 ## Canonical Drift
 
@@ -263,10 +265,9 @@ See [VIF Critic Role in Drift Detection](../architecture/drift_detection.md).
 
 ## Remaining Work and Out-of-Scope Ideas
 
-Remaining critical work:
-
-- persist onboarding Core Values for the user-facing runtime; and
-- build a fresh, independently resolved final test set.
+Remaining critical work is to persist onboarding Core Values for the
+user-facing runtime. A fresh, independently resolved final test and deployment
+approval are outside the time-boxed capstone scope.
 
 The VIF Critic review-and-retrain demonstration, data-scaling curve, candidate
 confirmation, and conversion to a binary Conflict model are optional or outside

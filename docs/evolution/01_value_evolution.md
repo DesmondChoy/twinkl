@@ -51,8 +51,8 @@ six-detector comparison interface. The selected v1 product target is different:
 Drift is two consecutive Conflicts for the same Core Value. Other value
 dimensions do not offset the Drift. The implemented capstone POC runtime uses
 the fixed Luna-low Weekly Drift Reviewer without VIF Critic input followed by
-the deterministic Drift Detector. A fresh final test and deployment approval
-remain pending. The former
+the deterministic Drift Detector. The time-boxed capstone stops without a
+fresh final test or deployment approval. The former
 consensus-derived frozen benchmark is retired historical evidence, and the
 six-detector comparison's vote count is not the LLM-Judge reference.
 

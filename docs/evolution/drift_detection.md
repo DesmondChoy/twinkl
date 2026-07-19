@@ -32,8 +32,8 @@ Entry text without VIF Critic input. The deterministic Drift Detector then
 applies the two-consecutive-Conflict rule, and the user sees the result through
 the Weekly Digest and Weekly Coach. The prior
 consensus-derived benchmark and former final-test population are development
-evidence only; `twinkl-pv6s` must establish a fresh final test. The approved
-capstone POC path is wired but has no deployment approval. Its delivery
+evidence only. The approved capstone POC path is wired, but the time-boxed
+capstone stops without a fresh final test or deployment approval. Its delivery
 vocabulary is **active**, **recovered**, **mixed**, or **uncertain**, with
 implemented and tested state transitions.
 

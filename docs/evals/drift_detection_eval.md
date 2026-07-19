@@ -19,11 +19,11 @@ The current layers of the contract are deliberately different:
 |---|---|
 | Student-visible target | A Journal Entry is a Conflict only when the full displayed text clearly shows a behavior or choice against a Core Value. `twinkl-752.4` reviewed every candidate discoverable from either legacy label source plus matched controls. |
 | Development set | The complete development review contains 42 Drifts across 36 Drift trajectories in 292 resolved cases. `twinkl-qtwz` added nine Drifts across eight Drift trajectories from the 186 cases outside the earlier 106-case union. The earlier `twinkl-752.5` study used 33 Drifts across 28 Drift trajectories; keep its reported metrics bound to that input. Historical provenance must be reported as a subgroup because all nine newly found Drifts came from training-seen Journal Entries. The fixed `run_020` threshold is historical development evidence. |
-| Final test set | None is active. The former 24-person `twinkl-v8pb` final-test cohort became development-only when its cases were opened for the full review. `twinkl-pv6s` owns a fresh final test. |
+| Final test set | None is active or planned for the time-boxed capstone. The former 24-person `twinkl-v8pb` final-test cohort became development-only when its cases were opened for the full review. `twinkl-pv6s` was closed as not planned. |
 | Weekly Drift Reviewer | The model contract is fixed at `gpt-5.6-luna` with reasoning effort `low`, without VIF Critic input. The fixed model choice is distinct from final-test validation and deployment approval. |
 | Approved architecture | Weekly Drift Reviewer Decisions feed the deterministic two-Conflict Drift Detector. The VIF Critic is optional experimental research and is not a runtime or deployment-approval dependency. |
 | Capstone POC runtime | The approved runtime persists versioned Luna-low Weekly Drift Reviewer Decisions without VIF Critic input, applies the deterministic Drift Detector, and feeds the Weekly Digest. The deprecated crash/rut/evolution runtime remains only for compatibility. |
-| User delivery | The Weekly Digest cites the relevant Journal Entries and uses active, recovered, mixed, or uncertain wording without score jargon. A fresh final test and deployment approval remain pending. |
+| User delivery | The Weekly Digest cites the relevant Journal Entries and uses active, recovered, mixed, or uncertain wording without score jargon. No fresh final test or deployment approval is claimed. |
 
 ### Adopted metric hierarchy (`twinkl-752`, updated under `twinkl-52zz`)
 
@@ -38,9 +38,9 @@ The current layers of the contract are deliberately different:
   counts were 5, 4, and 4 across 256 non-Drift Core Value trajectories. Each
   Run therefore exceeded `0.50` Drift recall and stayed at or below a `2%`
   false-alert burden. These are development results, not deployment approval.
-- The fresh final test uses the same response schema, fail-closed request
-  handling, scoring, three-Run protocol, and reported metrics as the Luna-low
-  development study. There is no separate efficiency gate.
+- Any future fresh final test should use the same response schema, fail-closed
+  request handling, scoring, three-Run protocol, and reported metrics as the
+  Luna-low development study. There is no separate efficiency gate.
 - Entry-level `recall_-1` is the primary development proxy because Drift
   cannot be recovered when either component Conflict is missed.
 - QWK and `+1` recall are diagnostics. Positive evidence cannot trigger or
@@ -73,8 +73,9 @@ See the adopted [VIF scope decision](../vif/05_capstone_scope_decision.md).
   per-Core-Value metrics, response status, latency, token use, and cost.
 
 The cleaned prompt is version `2.0`. The user explicitly accepted no
-development rerun, so the fresh final test will be its first scored use. Frozen
-historical prompts and results remain bound to their original hashes.
+development rerun, and the capstone stops without scoring this prompt on a
+fresh final test. Frozen historical prompts and results remain bound to their
+original hashes.
 
 The approved Drift Detector uses two consecutive Weekly Drift Reviewer
 Conflicts for the same Core Value. The user-facing path does not run the VIF
@@ -266,9 +267,11 @@ No fallback score was taken from the retired benchmark.
 ### Still Missing for Product v1
 
 - Persisted onboarding Core Values for the user-facing runtime
-- A fresh, independently resolved final test set under `twinkl-pv6s`
 - Batch Weekly Coach language checks for active, recovered, mixed, and uncertain
   states
+
+A fresh, independently resolved final test and deployment approval are outside
+the time-boxed capstone scope.
 
 ---
 
@@ -365,10 +368,14 @@ and Core Values rather than VIF Critic Predictions.
 1. Keep `gpt-5.6-luna` and reasoning effort `low` fixed, then freeze the Weekly
    Drift Reviewer prompt, response schema, deterministic Drift Detector, and
    evaluation contract.
-2. Keep the fresh final test locked and unscored while those choices are made.
+2. Keep any future fresh final test locked and unscored while those choices are
+   made.
 3. Keep retraining and development cases out of the final test.
 
-### Phase 3: Fresh Final Test and Deployment Approval
+### Unexecuted Future Phase: Fresh Final Test and Deployment Approval
+
+This phase is retained as the preregistered protocol if work resumes. It is not
+part of the time-boxed capstone scope.
 
 1. Resolve every final-test label independently without VIF Critic predictions
    or expected outcomes.
@@ -400,7 +407,7 @@ above.
 | Complete development review (`twinkl-qtwz`) | 42 Drifts across 36 Drift trajectories; 292/292 case-level outcomes resolved | Frozen input used by `twinkl-52zz`; the nine newly found Drifts all have historical training provenance |
 | `gpt-5.4-mini` Weekly Drift Reviewer (`twinkl-52zz`) | 7/42 median Drift hits / recall 0.167 / precision 0.583 / 5 false Drift alerts / coverage 0.740 | Complete-development baseline over three repeats |
 | `gpt-5.6-luna` Weekly Drift Reviewer (`twinkl-52zz`) | 20/42 median Drift hits / recall 0.476 / precision 0.606 / 13 false Drift alerts / coverage 0.777 | Frozen reasoning-effort-`none` baseline for the follow-up; superseded by the fixed reasoning-effort-`low` contract |
-| `gpt-5.6-luna` reasoning-effort-`low` follow-up (`twinkl-52zz`) | 23/42 median Drift hits / recall 0.548 / precision 0.852 / 4 false Drift alerts / coverage 0.637 | Fixed Weekly Drift Reviewer model contract under the approved hierarchy: Drift recall first, false Drift alerts second, and coverage diagnostic; the study stopped before `medium`; final-test validation and deployment approval remain pending |
+| `gpt-5.6-luna` reasoning-effort-`low` follow-up (`twinkl-52zz`) | 23/42 median Drift hits / recall 0.548 / precision 0.852 / 4 false Drift alerts / coverage 0.637 | Fixed Weekly Drift Reviewer model contract under the approved hierarchy: Drift recall first, false Drift alerts second, and coverage diagnostic; the study stopped before `medium`; no final-test validation or deployment approval is claimed |
 | Legacy candidate confirmation (`twinkl-752.4`) | 22/44 (50.0%) | Resolved development candidates only; selection-biased diagnostic |
 | Matched-control Drift rate (`twinkl-752.4`) | 1/44 (2.3%) | One legacy-miner miss among resolved development controls; not a false-alert rate |
 | Development precision / false-positive rate (`run_020`) | 1.0 / 0.0 | The single predicted development Drift was correct, but four reference Drifts were missed |
@@ -411,7 +418,7 @@ above.
 | Weekly Drift Reviewer without VIF Critic input (`twinkl-752.1`) | Median Drift recall 0.40 / 1 false Drift alert / coverage 0.756 | Superseded five-episode comparison |
 | Weekly Drift Reviewer with VIF Critic input (`twinkl-752.1`) | Median Drift recall 0.20 / 0 false Drift alerts / coverage 0.732 | Superseded five-episode comparison |
 | Aligned Weekly Drift Reviewer (`twinkl-752.3`) | Median Drift recall 0.20 / 5 false Drift alerts / coverage 0.829 | More complete but less precise; neither cross-week reference Drift was recovered |
-| Final-test Drift metrics | No active final test | The old cohort is development-only; `twinkl-pv6s` must build a fresh final test set |
+| Final-test Drift metrics | No active final test | The old cohort is development-only; the time-boxed capstone stops without a replacement final test |
 | Development first-alert latency (`twinkl-752.5`) | Median 5 days weekly-only / 3 days raw-input / 1 day scheduled | Selection-biased development timing; no final-test latency is available |
 | Author-designed capability recall | Capability-only diagnostic | Whether the VIF Critic can find deliberately clear Drifts; never a deployment-approval gate |
 
@@ -422,11 +429,11 @@ cannot substitute for a fresh, resolved locked final test set.
 
 ### Reported Diagnostics
 
-The final test reuses the Luna-low reporting fields listed in the frozen
-contract above, including entry-level results by Schwartz value dimension.
-Deployment criteria do not add further required slices. Active, recovered,
-mixed, and uncertain Weekly Digest behavior is verified separately through
-runtime scenario tests.
+Any future final test should reuse the Luna-low reporting fields listed in the
+frozen contract above, including entry-level results by Schwartz value
+dimension. Deployment criteria do not add further required slices. Active,
+recovered, mixed, and uncertain Weekly Digest behavior is verified separately
+through runtime scenario tests.
 
 ## Reproduction
 
@@ -496,8 +503,8 @@ re-scoring the committed responses.
    are AI-reviewed evidence, not human validation, and correlated errors may
    remain.
 3. The incumbent `run_020` checkpoint predates the student-visible target. The
-   former final-test data is now development-only, and no active final test has
-   been opened.
+   former final-test data is now development-only, and the capstone closes
+   without an active final test or deployment approval.
 4. Core-gated per-dimension denominators are small and uneven.
 5. Five personas have only two Journal Entries, so their temporal evidence is limited
    to one possible adjacent pair.

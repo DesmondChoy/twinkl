@@ -47,13 +47,14 @@ user-facing Drift path. See the adopted
 - Formal held-out evaluation against declared value orderings (Spearman ρ > 0.7 target)
 - **A generalized VIF Critic review-and-retrain loop is not implemented.** This
   is optional P3 research, not a Product v1 or deployment-approval blocker.
-- **The user-facing path still needs a fresh final test:** the former final-test
-  population is development-only; `twinkl-pv6s` owns the replacement.
+- **No fresh final test or deployment approval is claimed:** the former
+  final-test population is development-only, and its replacement is outside
+  the time-boxed capstone scope.
 
 ### Next Steps
 
 There is no critical-path VIF Critic work. If optional research resumes after
-the user-facing runtime and fresh final test are complete:
+the user-facing runtime work is complete:
 
 1. Demonstrate one bounded, versioned review-and-retrain loop by reusing the
    existing prediction export, review, label, and training components.

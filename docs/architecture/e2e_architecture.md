@@ -11,6 +11,7 @@ Status legend (node colors):
 - **Partial / experimental** (amber): working slice, not ready to claim as product behavior
 - **Specified** (blue): documented, not implemented
 - **??? Decision** (dashed grey): downstream operating or deployment decision
+- **Out of scope** (dashed grey): explicitly excluded from the time-boxed capstone
 
 Solid arrows are paths that are wired in the repo today. Dashed arrows are
 benchmark, intended, or undecided connections.
@@ -31,6 +32,7 @@ flowchart TB
     classDef partial fill:#FFF4D9,stroke:#B38600,color:#3B2C00;
     classDef specified fill:#EAF0FF,stroke:#4767B3,color:#15223E;
     classDef decision fill:#F8F8F6,stroke:#9CA39A,color:#36413B,stroke-dasharray: 4 4;
+    classDef scope fill:#F8F8F6,stroke:#9CA39A,color:#36413B,stroke-dasharray: 4 4;
 
     subgraph training["Training core"]
         personas["Synthetic personas"]
@@ -59,7 +61,7 @@ flowchart TB
         reviewer["Weekly Drift Reviewer<br/>gpt-5.6-luna · low<br/>without VIF Critic input"]
         drift_v1["Deterministic Drift Detector<br/>two consecutive Conflicts"]
         evolution["Evolution classifier<br/>automatic in prototype"]
-        d_trigger["??? Deployment approval after<br/>the fresh final test"]
+        d_trigger["OUT OF SCOPE<br/>No fresh final test or<br/>deployment approval"]
         d_evolution["Value evolution<br/>parked for v1"]
     end
 
@@ -115,7 +117,7 @@ flowchart TB
     prompt -. "programmatic LLM injection" .-> narrative
     digest --> runtime_review
 
-    %% Open decisions attached to where they bite
+    %% Open decisions and scope boundaries attached to where they bite
     journaling -.- d_surface
     drift_v1 -.- d_trigger
     evolution -.- d_evolution
@@ -125,14 +127,15 @@ flowchart TB
     class personas,judge,consensus,annotation,critic_train,checkpoint,llm_baseline,drift_review,reports implemented;
     class state,scores,weekly,drift,evolution,reviewer,drift_v1,digest,prompt,narrative,runtime_review,offline_review,nudges partial;
     class onboarding,profile,journaling,d_evolution specified;
-    class d_surface,d_trigger,d_boundary,d_feedback decision;
+    class d_surface,d_boundary,d_feedback decision;
+    class d_trigger scope;
 ```
 
 ## Read This As
 
 The dashed grey `???` nodes and edge labels mark team decisions that still
-need calls. Read this as a product and component map, not a literal runtime
-sequence.
+need calls. The dashed out-of-scope node marks a closed capstone boundary.
+Read this as a product and component map, not a literal runtime sequence.
 
 Twinkl now has two executable paths. The approved capstone POC path reviews
 Journal Entries and Core Values with the fixed Luna-low Weekly Drift Reviewer,
@@ -176,8 +179,8 @@ and withheld its former final-test score. The former final-test population is
 now development-only, and the expanded known-development union is fully
 resolved. The crash/rut/evolution router is explicitly deprecated. The approved
 Drift Detector is wired. Full VIF Critic class-probability persistence belongs
-to optional P3 research. No fresh final test exists, so
-deployment approval remains deliberately blocked.
+to optional P3 research. The time-boxed capstone stops without a fresh final
+test or deployment approval.
 `twinkl-752.5` found no Drift recall gain from raw VIF Critic input or
 early-plus-weekly scheduling. VIF Critic candidate confirmation is outside the
 remaining capstone scope. The prior consensus-derived benchmark is [retired historical
@@ -185,9 +188,8 @@ evidence](../archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md), and its 
 audit is not human ground truth. Value evolution is parked for v1 even though
 the prototype invokes its classifier automatically.
 
-The remaining decisions are deployment approval after the fresh final test,
-what the Weekly Coach may say, and whether user feedback should update the
-profile over time. See
+The remaining decisions are what the Weekly Coach may say and whether user
+feedback should update the profile over time. See
 [`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md),
 [`docs/vif/03_model_training.md`](../vif/03_model_training.md),
 [`docs/weekly/weekly_digest_generation.md`](../weekly/weekly_digest_generation.md),
