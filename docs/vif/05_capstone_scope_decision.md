@@ -7,7 +7,9 @@ Reviewer model contract was fixed at `gpt-5.6-luna` with reasoning effort `low`
 on 2026-07-17; and the optional VIF Critic candidate-confirmation path was
 removed from the remaining capstone scope on 2026-07-17. The Weekly Drift
 Reviewer evaluation and deployment policy was fixed under `twinkl-7vam` on
-2026-07-19.
+2026-07-19. On 2026-07-19, the user clarified that the VIF Critic is optional
+research rather than an essential architecture dependency; VIF-only follow-up
+work moved behind the remaining user-facing runtime and final-test work.
 
 This document records the detailed Value Identity Function (VIF) scope decision
 for the remaining capstone period. The [PRD](../prd.md) remains authoritative for
@@ -18,11 +20,11 @@ Drift definition and deployment-approval protocol live in
 
 ## Decision
 
-> Twinkl's VIF Critic is primarily a Conflict-screening component. Its current
-> job is to recover `-1` evidence for offline review, candidate mining, and
-> retraining. Per-Journal-Entry `recall_-1` is the main model-development
-> metric; QWK is retained only as an ordinal-health diagnostic. The approved
-> user-facing Drift path does not consume VIF Critic predictions.
+> Twinkl's VIF Critic is an optional experimental Conflict-screening component.
+> If research resumes, per-Journal-Entry `recall_-1` is the main
+> model-development metric and QWK remains an ordinal-health diagnostic. The
+> approved user-facing Drift path does not run the VIF Critic or consume VIF
+> Critic Predictions.
 
 The ten-value Schwartz ontology and ternary `{-1, 0, +1}` output remain. The
 scope decision changed what the capstone optimizes and claims without converting
@@ -94,8 +96,8 @@ writer making a behavior or choice against the same Core Value.
 The current user-facing path uses decisions from `gpt-5.6-luna` at reasoning
 effort `low`, without VIF Critic input. The deterministic Drift Detector then
 requires two consecutive Conflicts for the same Core Value. VIF Critic
-probabilities and uncertainty remain inputs to offline review and retraining,
-not the user-facing Drift path.
+probabilities and uncertainty remain optional research outputs, not inputs to
+the user-facing Drift path.
 
 ## Role of `+1` and QWK
 
@@ -245,11 +247,11 @@ The user approved the following architecture under `twinkl-752.2`:
    Critic input. The deterministic Drift Detector declares Drift only after two
    consecutive Weekly Drift Reviewer Conflicts for the same Core Value.
    Confirmed Drift then flows into the Weekly Digest and Weekly Coach.
-2. **Required VIF Critic path:** the VIF Critic produces versioned predictions
-   and uncertainty for offline comparison, disagreement review, candidate
-   mining, error analysis, and retraining. Weekly Drift Reviewer outputs do not
-   automatically become LLM-Judge reference labels, and retraining cases cannot
-   double as final-test evidence.
+2. **Optional VIF Critic research:** training, evaluation, raw output export,
+   and timeline inference remain available. A generalized review-and-retrain
+   loop is optional P3 work rather than an architecture dependency. If it is
+   revisited, Weekly Drift Reviewer Decisions must not automatically become
+   LLM-Judge labels, and retraining cases cannot double as final-test evidence.
 3. **Out-of-scope idea:** VIF Critic candidate confirmation is not part of the
    remaining capstone work. Revisiting it requires a new scope decision and a
    fresh evaluation that keeps VIF Critic predictions hidden from the Weekly
@@ -261,10 +263,11 @@ See [VIF Critic Role in Drift Detection](../architecture/drift_detection.md).
 
 ## Remaining Work and Out-of-Scope Ideas
 
-Remaining work:
+Remaining critical work:
 
-- build a fresh, independently resolved final test set; and
-- connect the implemented Drift Detector to the Weekly Digest and Weekly Coach.
+- persist onboarding Core Values for the user-facing runtime; and
+- build a fresh, independently resolved final test set.
 
-VIF Critic candidate confirmation and conversion of the ternary VIF Critic to
-a binary Conflict model are outside the remaining capstone scope.
+The VIF Critic review-and-retrain demonstration, data-scaling curve, candidate
+confirmation, and conversion to a binary Conflict model are optional or outside
+the remaining critical capstone scope.

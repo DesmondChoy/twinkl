@@ -21,7 +21,7 @@ The current layers of the contract are deliberately different:
 | Development set | The complete development review contains 42 Drifts across 36 Drift trajectories in 292 resolved cases. `twinkl-qtwz` added nine Drifts across eight Drift trajectories from the 186 cases outside the earlier 106-case union. The earlier `twinkl-752.5` study used 33 Drifts across 28 Drift trajectories; keep its reported metrics bound to that input. Historical provenance must be reported as a subgroup because all nine newly found Drifts came from training-seen Journal Entries. The fixed `run_020` threshold is historical development evidence. |
 | Final test set | None is active. The former 24-person `twinkl-v8pb` final-test cohort became development-only when its cases were opened for the full review. `twinkl-pv6s` owns a fresh final test. |
 | Weekly Drift Reviewer | The model contract is fixed at `gpt-5.6-luna` with reasoning effort `low`, without VIF Critic input. The fixed model choice is distinct from final-test validation and deployment approval. |
-| Approved architecture | Weekly Drift Reviewer Decisions feed the deterministic two-Conflict Drift Detector. The VIF Critic supplies stored predictions for independent review and retraining; candidate confirmation is outside the remaining capstone scope. |
+| Approved architecture | Weekly Drift Reviewer Decisions feed the deterministic two-Conflict Drift Detector. The VIF Critic is optional experimental research and is not a runtime or deployment-approval dependency. |
 | Capstone POC runtime | The approved runtime persists versioned Luna-low Weekly Drift Reviewer Decisions without VIF Critic input, applies the deterministic Drift Detector, and feeds the Weekly Digest. The deprecated crash/rut/evolution runtime remains only for compatibility. |
 | User delivery | The Weekly Digest cites the relevant Journal Entries and uses active, recovered, mixed, or uncertain wording without score jargon. A fresh final test and deployment approval remain pending. |
 
@@ -77,9 +77,9 @@ development rerun, so the fresh final test will be its first scored use. Frozen
 historical prompts and results remain bound to their original hashes.
 
 The approved Drift Detector uses two consecutive Weekly Drift Reviewer
-Conflicts for the same Core Value. VIF Critic probabilities and uncertainty
-remain in the offline review-and-retrain path and cannot produce or suppress a
-user-facing Drift claim.
+Conflicts for the same Core Value. The user-facing path does not run the VIF
+Critic. Optional VIF Critic probabilities and uncertainty cannot produce or
+suppress a user-facing Drift claim.
 
 Single-entry dip alerts, crash/rut taxonomies, fade/dormancy, peripheral-value
 rise, onboarding-gap messaging, value-evolution gating, and multi-week low-mean
@@ -265,8 +265,7 @@ No fallback score was taken from the retired benchmark.
 
 ### Still Missing for Product v1
 
-- Full VIF Critic probability, uncertainty, and checkpoint-provenance storage
-- Independent disagreement review and versioned retraining data
+- Persisted onboarding Core Values for the user-facing runtime
 - A fresh, independently resolved final test set under `twinkl-pv6s`
 - Batch Weekly Coach language checks for active, recovered, mixed, and uncertain
   states
@@ -336,11 +335,10 @@ The current user-facing target is deterministic:
 3. The Drift Detector declares one Drift when two consecutive Weekly Drift
    Reviewer Conflicts concern the same Core Value.
 
-The VIF Critic remains required in a separate review-and-retrain path. Its
-versioned probabilities and uncertainty are compared offline with Weekly Drift
-Reviewer decisions. Disagreement and uncertain cases may receive independent
-LLM-Judge or human review, but Weekly Drift Reviewer outputs must not
-automatically become training labels.
+The VIF Critic is optional experimental research. If a bounded
+review-and-retrain demonstration is revisited, Weekly Drift Reviewer Decisions
+may help select comparison cases, but they must not automatically become
+LLM-Judge labels.
 
 VIF Critic candidate confirmation is outside the remaining capstone scope. Its
 development evidence remains historical context, not an active implementation

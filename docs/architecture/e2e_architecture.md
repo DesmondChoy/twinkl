@@ -40,7 +40,7 @@ flowchart TB
         critic_train["VIF Critic training +<br/>experiment archive"]
         checkpoint["Selected VIF Critic checkpoint"]
         llm_baseline["Frozen-holdout LLM<br/>context baseline"]
-        offline_review["Offline prediction comparison<br/>+ independent review"]
+        offline_review["Optional prediction comparison<br/>+ independent review"]
     end
 
     subgraph product["Product shell"]
@@ -80,11 +80,11 @@ flowchart TB
     consensus -. "diagnostic retraining" .-> critic_train
     personas --> llm_baseline
     llm_baseline -. "benchmark comparison" .-> reports
-    scores -. "stored predictions" .-> offline_review
-    reviewer -. "decision comparison" .-> offline_review
-    offline_review -. "independently reviewed cases" .-> critic_train
-    offline_review --> drift_review
-    offline_review --> reports
+    scores -. "optional stored predictions" .-> offline_review
+    reviewer -. "optional decision comparison" .-> offline_review
+    offline_review -. "optional reviewed cases" .-> critic_train
+    offline_review -. "optional inspection" .-> drift_review
+    offline_review -. "optional reporting" .-> reports
 
     %% Human benchmark, not label production
     annotation -. "benchmark comparison" .-> reports
@@ -166,8 +166,8 @@ experimental slice, even though the journaling UI it would attach to does not.
 Drift is two consecutive Conflicts on the same Core Value. Under the approved
 architecture, the Weekly Drift Reviewer makes those Conflict decisions without
 VIF Critic input, and the deterministic Drift Detector combines them. The VIF
-Critic remains essential to stored prediction, independent review, candidate
-mining, and retraining. The Weekly Drift Reviewer model contract is fixed at
+Critic is optional experimental research and is not a runtime dependency. The
+Weekly Drift Reviewer model contract is fixed at
 `gpt-5.6-luna` with reasoning effort `low`; its median result across three
 frozen development Runs was 23/42 known Drifts, 4 false Drift alerts, and
 `0.637` coverage.
@@ -175,8 +175,8 @@ frozen development Runs was 23/42 known Drifts, 4 false Drift alerts, and
 and withheld its former final-test score. The former final-test population is
 now development-only, and the expanded known-development union is fully
 resolved. The crash/rut/evolution router is explicitly deprecated. The approved
-Drift Detector is wired, but full VIF Critic class-probability persistence
-belongs to the separate review-and-retrain path. No fresh final test exists, so
+Drift Detector is wired. Full VIF Critic class-probability persistence belongs
+to optional P3 research. No fresh final test exists, so
 deployment approval remains deliberately blocked.
 `twinkl-752.5` found no Drift recall gain from raw VIF Critic input or
 early-plus-weekly scheduling. VIF Critic candidate confirmation is outside the

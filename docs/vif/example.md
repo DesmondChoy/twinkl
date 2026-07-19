@@ -19,7 +19,7 @@ This example follows a single user through onboarding and four scenarios, showin
 |-----------|------|-------------|
 | **Generator** | Creates synthetic training data | Offline only (before any user exists) |
 | **LLM-Judge** | Offline LLM that labels Journal Entries against values | Training time |
-| **VIF Critic** | Fast neural net that predicts `-1`, `0`, or `+1` for each Journal Entry and value, plus uncertainty | Every Journal Entry in the offline review-and-retrain path |
+| **VIF Critic** | Optional experimental neural net that predicts `-1`, `0`, or `+1` for each Journal Entry and value, plus uncertainty | Offline experiments only |
 | **Weekly Drift Reviewer** | Fixed `gpt-5.6-luna` reasoning-effort-`low` LLM that decides Conflict, Not Conflict, or Abstain from Journal Entry text without VIF Critic input | Weekly review in the approved user-facing path |
 | **Drift Detector** | Applies the deterministic two-consecutive-Conflict rule | After Weekly Drift Reviewer Decisions; delivered through the Weekly Digest |
 | **Weekly Coach** | Turns the Weekly Digest into an evidence-based reflection | When the Weekly Digest records a tension, uncertainty, or occasional acknowledgment |
@@ -135,8 +135,8 @@ Sarah has been journaling for a month. Here is this week's Journal Entry:
 |-----------|--------|----------|
 | Generator | N/A | Only used during offline training |
 | LLM-Judge | N/A | Offline labeling is complete |
-| VIF Critic | **OFFLINE, ESSENTIAL** | Stores scores and uncertainty across all 10 value dimensions for review and retraining |
-| Weekly Drift Reviewer | **APPROVED, NOT WIRED** | Finds no Conflict in the Journal Entry from its text |
+| VIF Critic | **OFFLINE, OPTIONAL** | May produce scores and uncertainty for experimental analysis |
+| Weekly Drift Reviewer | **IMPLEMENTED POC** | Finds no Conflict in the Journal Entry from its text |
 | Weekly Coach | **ACTIVE** (occasional) | Offers evidence-based acknowledgment |
 
 ### VIF Critic Processing
@@ -198,9 +198,9 @@ consecutive Journal Entries are Conflicts for Benevolence.
 |-----------|--------|----------|
 | Generator | N/A | Only used during offline training |
 | LLM-Judge | N/A | Stored five-pass consensus labels are diagnostic provenance, not an active Drift benchmark or live runtime input |
-| VIF Critic | **OFFLINE, ESSENTIAL** | Stores per-Journal-Entry predictions and uncertainty for comparison, review, and retraining |
-| Weekly Drift Reviewer | **APPROVED, NOT WIRED** | Confirms each Benevolence Conflict from Journal Entry text without VIF Critic input |
-| Drift Detector | **APPROVED, NOT WIRED** | Applies the deterministic two-consecutive-Conflict rule; no setup has deployment approval |
+| VIF Critic | **OFFLINE, OPTIONAL** | May produce VIF Critic Predictions for experimental analysis |
+| Weekly Drift Reviewer | **IMPLEMENTED POC** | Confirms each Benevolence Conflict from Journal Entry text without VIF Critic input |
+| Drift Detector | **IMPLEMENTED POC** | Applies the deterministic two-consecutive-Conflict rule; no setup has deployment approval |
 | Weekly Coach | **ACTIVE AT DELIVERY** | Uses the Weekly Digest to surface the repeated Conflict |
 
 ### Illustrative Historical Label and Decision Views
@@ -212,9 +212,8 @@ consecutive Journal Entries are Conflicts for Benevolence.
 
 This illustration shows how two consecutive Conflicts for the same Core Value
 could form one Drift. It is not an active benchmark target: the
-five-pass consensus table is diagnostic provenance only. VIF Critic
-probabilities support offline review and retraining; they do not directly
-produce the user-facing Drift.
+five-pass consensus table is diagnostic provenance only. Optional VIF Critic
+Predictions do not produce the user-facing Drift.
 
 This walkthrough illustrates intended behavior for an explicit Conflict case;
 it is not deployment evidence. On the larger known-development union, weekly
@@ -296,8 +295,8 @@ support an ordinary value judgment from text.
 |-----------|--------|----------|
 | Generator | N/A | Only used during offline training |
 | LLM-Judge | N/A | Offline labels do not decide the response to acute grief |
-| VIF Critic | **OFFLINE, ESSENTIAL** | Stores a high-uncertainty prediction for later review |
-| Weekly Drift Reviewer | **APPROVED, NOT WIRED** | Abstains because the text does not support a responsible Conflict decision |
+| VIF Critic | **OFFLINE, OPTIONAL** | May record a high-uncertainty prediction in an experiment |
+| Weekly Drift Reviewer | **IMPLEMENTED POC** | Abstains because the text does not support a responsible Conflict decision |
 | Weekly Coach | **ACTIVE** | Responds with presence, not analysis |
 
 ### VIF Critic Processing

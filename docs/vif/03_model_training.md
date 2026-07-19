@@ -49,7 +49,7 @@ $$
 $$
 
 That means the VIF Critic predicts the LLM-Judge's labels for the current
-Journal Entry. Its outputs support offline review and retraining rather than a
+Journal Entry. Its outputs can support optional offline analysis rather than a
 learned discounted-return target.
 The approved user-facing Drift path uses decisions from the fixed
 `gpt-5.6-luna` reasoning-effort-`low` Weekly Drift Reviewer.
@@ -165,8 +165,9 @@ The floor is configurable and recorded in checkpoint and Run metadata.
 
 Historical Runs retain their original QWK-first selections. The named
 `qwk_then_recall_guarded` policy remains available for exact reproduction.
-Recall-first development can identify VIF Critic checkpoints for offline review
-and retraining; it does not grant user-facing Drift authority.
+Recall-first development can identify VIF Critic checkpoints for optional
+research; it does not grant user-facing Drift authority or block the current
+capstone path.
 
 ### 4.4 Current Caveat: Reachability Audit
 

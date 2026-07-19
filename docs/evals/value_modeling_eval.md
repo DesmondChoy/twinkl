@@ -2,12 +2,11 @@
 
 ## What We're Evaluating
 
-The VIF (Value Identity Function) maps Journal Entries to a 10-dimensional
-Schwartz value vector. For the remaining capstone scope, its primary operational
-role is **Conflict screening**: recovering Conflict (`-1`) for offline review,
-candidate mining, and retraining. The ternary vector remains useful for
-trade-off analysis, but broad profile recovery is no longer the primary
-model-development claim. VIF Critic outputs do not enter the approved
+The VIF Critic maps Journal Entries to a 10-dimensional Schwartz value vector.
+It is now optional experimental research rather than a component of the
+remaining critical capstone path. If research resumes, its primary evaluation
+role is **Conflict screening**: recovering Conflict (`-1`) without collapsing
+the ternary output. VIF Critic Predictions do not enter the approved
 user-facing Drift path. See the adopted
 [VIF scope decision](../vif/05_capstone_scope_decision.md).
 
@@ -15,7 +14,7 @@ user-facing Drift path. See the adopted
 
 ## Implementation Status
 
-**Status:** 🟡 In Progress (as of 2026-07-14)
+**Status:** 🧪 Optional research (as of 2026-07-19)
 
 ### What's Implemented
 - Evaluation specification complete (this document)
@@ -41,21 +40,26 @@ user-facing Drift path. See the adopted
   Drift authority or complete final-test validation.
 
 ### What's Missing
-- **Recall-first selection is not implemented**: the current experiment code still selects mainline checkpoints QWK-first. Historical run rankings remain valid provenance, but a future training run needs tested recall-first selection behavior before it can count as decision evidence.
 - **Hard dimensions remain unresolved**: `Hedonism` and especially `Security` still lag, and the latest regenerated targeted batch improved some local behavior without producing a cleaner overall frontier.
 - **Circumplex structure is measured but not optimized**: reruns can improve one metric family while worsening opposite-pair violations or adjacent-pair support.
 - Codex-reviewed matched Hedonism diagnostic (`twinkl-748`): 20 frozen pairs show that the incumbent recognizes nearly every `+1` case but recovers only 5% of matched self-denial `-1` cases; the tail-sensitive reference reaches 20% `-1` recall and 15% strict-pair accuracy. This is AI diagnostic evidence, not human validation, and remains evaluation-only pending `twinkl-kof2`.
 - Persona-level aggregation protocol (aggregate per-entry scores into persona-level value profile for Top-K accuracy)
 - Formal held-out evaluation against declared value orderings (Spearman ρ > 0.7 target)
-- **Deployment-approval criteria remain open:** `twinkl-7vam` must fix the false Drift alert or precision tolerance, minimum Drift recall, coverage and abstention trade-off, stability requirements, and any claimed efficiency gate.
-- **The VIF Critic review-and-retrain path is not implemented:** predictions, uncertainty, checkpoint provenance, independent review outcomes, and dataset versions must be stored without feeding raw scores into the Weekly Drift Reviewer.
-- **A fresh final test is required:** the former final-test population is development-only; `twinkl-pv6s` owns the replacement.
+- **A generalized VIF Critic review-and-retrain loop is not implemented.** This
+  is optional P3 research, not a Product v1 or deployment-approval blocker.
+- **The user-facing path still needs a fresh final test:** the former final-test
+  population is development-only; `twinkl-pv6s` owns the replacement.
 
 ### Next Steps
-1. Implement and verify recall-first checkpoint selection before treating another training run as decision evidence
-2. Implement the versioned VIF Critic review-and-retrain path without changing the approved user-facing decision path
-3. Define the remaining weekly-only deployment-approval criteria under `twinkl-7vam`, then freeze the prompt, response schema, Drift rule, and criteria before the fresh final test without changing the fixed Luna-low model contract
-4. Report `-1` precision and the precision-recall curve while prioritizing `recall_-1`; keep QWK, `+1` recall, calibration, circumplex diagnostics, and persona-level aggregation as secondary health checks
+
+There is no critical-path VIF Critic work. If optional research resumes after
+the user-facing runtime and fresh final test are complete:
+
+1. Demonstrate one bounded, versioned review-and-retrain loop by reusing the
+   existing prediction export, review, label, and training components.
+2. Measure the data-scaling curve before generating more synthetic data.
+3. Continue reporting `-1` precision and the precision-recall curve alongside
+   `recall_-1`, QWK, calibration, and per-dimension diagnostics.
 
 ---
 
@@ -78,9 +82,9 @@ user-facing Drift path. See the adopted
 
 ## Metrics
 
-Evaluation operates at two levels: **entry-level** metrics assess whether the VIF Critic can correctly classify individual Journal Entries, while **persona-level** metrics assess whether aggregated entry scores recover the persona's declared value profile. Entry-level metrics are the current training bottleneck and the focus of ongoing experimentation.
+Evaluation operates at two levels: **entry-level** metrics assess whether the VIF Critic can correctly classify individual Journal Entries, while **persona-level** metrics assess whether aggregated entry scores recover the persona's declared value profile. These metrics govern optional VIF Critic research, not the current product-critical path.
 
-### Entry-Level Metrics (Current Training Focus)
+### Entry-Level Metrics (Optional Research Contract)
 
 The adopted hierarchy is:
 
@@ -117,7 +121,7 @@ product direction or defines the deployment gate.
 
 `recall_-1` measures how often the VIF Critic recovers Journal Entries with
 LLM-Judge Conflict Labels. This is the primary model-development metric because
-the VIF Critic supports offline disagreement review and retraining. The approved
+it measures the VIF Critic's intended Conflict-screening behavior. The approved
 weekly-only path does not depend on this metric.
 
 
@@ -239,7 +243,7 @@ mean_rho = np.mean(results)
 
 | Metric | Role | Rationale |
 |--------|------|-----------|
-| `recall_-1` | Primary development metric | Measures Conflict recovery for offline review and retraining |
+| `recall_-1` | Primary optional-research metric | Measures VIF Critic Conflict recovery |
 | `-1` precision and precision-recall curve | Mandatory report; threshold deferred | Exposes false-conflict inflation while recall is optimized |
 | QWK | Ordinal-health diagnostic | Detects collapse of the retained ternary output and preserves historical comparability |
 | `+1` recall / minority recall | Non-gating diagnostic | Supports occasional positive context without defining Drift |

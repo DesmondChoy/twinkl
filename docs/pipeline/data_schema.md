@@ -186,9 +186,10 @@ the required producer/consumer boundary used by `src/vif/runtime.py` and the
 deprecated `src/vif/drift.py` compatibility router. Consumers validate the
 frame before routing and raise a
 `ValueError` that names any missing columns. These compatibility files store
-alignment means and uncertainties; they do not yet persist the ordinal class
-probabilities and checkpoint provenance required by the approved VIF Critic
-review-and-retrain path. The deterministic Drift Detector itself consumes
+alignment means and uncertainties; they do not persist the ordinal class
+probabilities and checkpoint provenance that an optional VIF Critic
+review-and-retrain demonstration would need. The deterministic Drift Detector
+consumes
 decisions from the fixed `gpt-5.6-luna` reasoning-effort-`low` Weekly Drift
 Reviewer, not these probabilities.
 

@@ -1,8 +1,9 @@
 # VIF – Uncertainty and Drift Review Logic
 
-This document describes how VIF Critic uncertainty supports offline review,
-case selection, and retraining. The approved user-facing Drift path does not
-consume VIF Critic outputs. Its Weekly Drift Reviewer model contract is fixed
+This document describes VIF Critic uncertainty and how it could support
+optional offline review, case selection, and retraining. The approved
+user-facing Drift path does not run the VIF Critic or consume VIF Critic
+Predictions. Its Weekly Drift Reviewer model contract is fixed
 at `gpt-5.6-luna` with reasoning effort `low`. It is wired into the approved
 capstone POC runtime and remains separate from the explicitly deprecated
 crash/rut/evolution compatibility path.
@@ -18,7 +19,7 @@ deferral is safer than a confident but brittle interpretation.
 The architecture therefore separates four questions:
 
 1. What class probabilities or alignment estimate does the VIF Critic produce?
-2. Which predictions warrant offline review?
+2. Which predictions could warrant optional offline review?
 3. Does the Weekly Drift Reviewer confirm Conflict from Journal Entry text?
 4. Do two consecutive confirmed Conflicts meet the Drift definition?
 
@@ -78,8 +79,8 @@ Journal Entry, including its displayed nudge and response when present, with:
 - Journal Entry metadata.
 
 The current timeline parquet does not persist ordinal class probabilities.
-The approved Drift Detector does not need them, but the VIF Critic
-review-and-retrain path requires persisted probabilities, uncertainty,
+The approved Drift Detector does not need them. An optional future VIF Critic
+review-and-retrain loop would require persisted probabilities, uncertainty,
 checkpoint provenance, and input-contract version.
 
 ### 3.2 Weekly Frame

@@ -152,8 +152,8 @@ Full list: [`tables/conflict_heavy_week_candidates.csv`](tables/conflict_heavy_w
 3. **Architecture choice:** the fixed `gpt-5.6-luna` reasoning-effort-`low`
    Weekly Drift Reviewer supplies explicit Conflict decisions from Journal
    Entry text, and the Drift Detector applies the strict
-   two-consecutive-Conflict rule. VIF Critic probabilities remain offline review
-   and candidate-mining evidence, not direct detector input.
+   two-consecutive-Conflict rule. Historical VIF Critic probabilities remain
+   optional research evidence, not direct detector input.
 4. **Label-regime caveat:** current Critic checkpoints were trained on persisted
    single-pass labels. Consensus labels are now historical diagnostic provenance,
    not a development target. `twinkl-v8pb` completed its student-visible review,

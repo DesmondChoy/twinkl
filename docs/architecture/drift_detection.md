@@ -7,15 +7,15 @@ versioned Weekly Drift Reviewer Decisions, applies the deterministic Drift
 Detector, and hands its delivery state to the Weekly Digest. This is not
 deployment approval; a fresh final test remains pending.
 
-This document records how the VIF Critic remains an essential part of Twinkl
-without giving it user-facing authority that the evidence does not support. The
+This document records the VIF Critic's optional experimental role without
+giving it user-facing authority that the evidence does not support. The
 [PRD](../prd.md) remains authoritative for product intent. The adopted scope and
 metric hierarchy live in the
 [VIF Capstone Scope and Evaluation Decision](../vif/05_capstone_scope_decision.md).
 
 ## Architecture Decision
 
-Twinkl uses two connected paths:
+Twinkl has one required user-facing path and one optional research path:
 
 1. **User-facing decision path.** The Weekly Drift Reviewer is fixed at
    `gpt-5.6-luna` with reasoning effort `low`. It reads Journal Entries and Core
@@ -23,11 +23,12 @@ Twinkl uses two connected paths:
    Abstain for each relevant Journal Entry. The Drift Detector then applies the
    deterministic rule: two consecutive Conflicts for the same Core Value form
    one Drift. Confirmed Drift flows into the Weekly Digest and Weekly Coach.
-2. **VIF Critic review-and-retrain path.** The VIF Critic predicts `-1`, `0`, or
-   `+1` plus uncertainty for every Journal Entry and value. Versioned predictions
-   are stored for offline comparison, disagreement review, candidate mining,
-   error analysis, and retraining. These predictions do not enter the Weekly
-   Drift Reviewer prompt and do not produce a user-facing Drift claim.
+2. **Optional VIF Critic research path.** Existing code can predict `-1`, `0`,
+   or `+1` plus uncertainty for Journal Entries and values, export raw outputs,
+   and train checkpoints. A generalized review-and-retrain loop is not
+   implemented. This research is not required for the Weekly Drift Reviewer,
+   Drift Detector, Weekly Digest, Weekly Coach, fresh final test, or deployment
+   approval.
 
 ```mermaid
 flowchart TB
@@ -39,7 +40,7 @@ flowchart TB
     DD --> WD["Weekly Digest"] --> WC["Weekly Coach"]
   end
 
-  subgraph LEARN["VIF Critic review-and-retrain path"]
+  subgraph LEARN["Optional VIF Critic research"]
     direction LR
     PROFILE["Ten-value profile"] --> VIF["VIF Critic<br/>predictions + uncertainty"]
     VIF --> STORE["Stored predictions<br/>and checkpoint provenance"]
@@ -90,12 +91,12 @@ direct authority over Drift:
 
 The complete development data is synthetic, 185/292 cases have historical
 training provenance, and no fresh final test exists. These limits are why the
-VIF Critic remains essential to measurement and improvement while its
-user-facing role stays outside the remaining capstone scope.
+VIF Critic remains experimental while its user-facing role stays outside the
+remaining capstone scope.
 
-## Review-and-Retrain Loop
+## Optional Review-and-Retrain Idea
 
-The offline loop is deliberately auditable:
+If optional VIF Critic research resumes, a bounded loop should be auditable:
 
 1. Run the frozen VIF Critic on Journal Entries and store full class
    probabilities, uncertainty, checkpoint identity, input-contract version, and
@@ -153,14 +154,16 @@ state; mixed is derived only at the Weekly Digest level.
 the former VIF Critic crash/rut/evolution behavior only for historical
 reproduction and the existing Runtime Demo Review App.
 
-Remaining work is separate:
+Remaining critical work is separate:
 
 - `twinkl-1m8` must replace the synthetic `core_values` fallback with persisted
   `top_values` from onboarding;
-- `twinkl-60l5` must implement stored VIF Critic predictions, independent
-  review, versioned retraining data, and model-blind controls; and
 - `twinkl-pv6s` must run the frozen implementation once on a fresh independently
   resolved final test before `twinkl-ixq4` can decide deployment approval.
+
+`twinkl-60l5` is optional P3 research. It may later demonstrate stored VIF
+Critic Predictions, independent review, versioned training data, and blinded
+controls without changing the user-facing path.
 
 ## Related Records
 
@@ -172,6 +175,6 @@ Remaining work is separate:
 - [`twinkl-752.5` raw-input and scheduling reassessment](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5_reassessment.md)
 - [`twinkl-52zz` Luna reasoning-effort comparison](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_52zz_luna_low.md)
 - [Drift Inspection App](../demo/weekly_drift_review_app.md)
-- Beads: `twinkl-60l5` (review-and-retrain implementation), `twinkl-7vam`
+- Beads: `twinkl-60l5` (optional review-and-retrain research), `twinkl-7vam`
   (weekly-only operating and deployment-approval criteria), `twinkl-pv6s`
   (fresh final test), and `twinkl-a2w` (approved runtime implementation)
