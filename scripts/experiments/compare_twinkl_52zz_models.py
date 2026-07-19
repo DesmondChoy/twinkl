@@ -199,7 +199,6 @@ def _build_prompt_records(
                     ),
                     cumulative_history=baseline._format_history(history),
                     current_week_entries=baseline._format_current_entries(current),
-                    critic_block="",
                 ).strip()
                 + "\n"
             )
@@ -236,7 +235,6 @@ def _build_prompt_records(
                         str(row["t_index"]): row["text"] for row in history
                     },
                     "runtime_text_sha256": runtime_text_sha256,
-                    "critic_block_sha256": baseline._sha256_text(""),
                     "prompt": prompt,
                     "prompt_sha256": baseline._sha256_text(prompt),
                 }

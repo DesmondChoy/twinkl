@@ -6,6 +6,7 @@ from pathlib import Path
 
 import pytest
 
+from prompts import get_prompt_metadata
 from scripts.experiments import compare_twinkl_52zz_models as study
 from scripts.experiments import weekly_verifier_ablation as baseline
 
@@ -42,6 +43,18 @@ def test_complete_development_population_and_prompt_counts() -> None:
     }
     assert all(record["arm"] == study.WEEKLY_WITHOUT for record in records)
     assert all("CRITIC SIGNALS" not in record["prompt"] for record in records)
+    assert all("critic_block_sha256" not in record for record in records)
+
+
+def test_canonical_prompt_metadata_rejects_vif_critic_input() -> None:
+    metadata = get_prompt_metadata("weekly_vif_verifier")
+
+    assert metadata["version"] == "2.0"
+    assert metadata["input_variables"] == [
+        "declared_values",
+        "cumulative_history",
+        "current_week_entries",
+    ]
 
 
 def test_models_change_only_api_identity_and_share_one_prompt_file() -> None:

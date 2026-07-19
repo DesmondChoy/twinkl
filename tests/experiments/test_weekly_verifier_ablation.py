@@ -6,6 +6,8 @@ from pathlib import Path
 
 import pytest
 
+from prompts import get_prompt_metadata, load_prompt
+
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 MODULE_PATH = ROOT / "scripts/experiments/weekly_verifier_ablation.py"
@@ -19,7 +21,35 @@ CONFIG = ablation._read_yaml(ROOT / ablation.DEFAULT_CONFIG_PATH)
 
 @pytest.fixture(scope="module")
 def prepared() -> tuple[list[dict], dict]:
-    return ablation.build_prompt_records(CONFIG, ROOT)
+    paths = ablation._artifact_paths(CONFIG, ROOT)
+    return ablation._load_jsonl(paths["prompts"]), ablation._read_json(
+        paths["manifest"]
+    )
+
+
+def test_canonical_prompt_has_no_vif_critic_input() -> None:
+    metadata = get_prompt_metadata("weekly_vif_verifier")
+    prompt = load_prompt("weekly_vif_verifier").render(
+        declared_values="- Security",
+        cumulative_history="[ENTRY t_index=0]\nI stayed home.",
+        current_week_entries="- t_index=0",
+    )
+
+    assert metadata == {
+        "name": "weekly_vif_verifier",
+        "description": (
+            "Canonical Weekly Drift Reviewer prompt for Journal Entry Conflict "
+            "decisions."
+        ),
+        "version": "2.0",
+        "input_variables": [
+            "declared_values",
+            "cumulative_history",
+            "current_week_entries",
+        ],
+    }
+    assert "critic" not in prompt.lower()
+    assert "P(-1)" not in prompt
 
 
 def test_live_population_and_call_surface_are_frozen(prepared) -> None:
@@ -358,7 +388,8 @@ def test_terminal_receipt_provenance_is_validated(
 
 
 def test_saved_result_is_complete_and_reproducible() -> None:
-    records, paths = ablation._load_prepared(CONFIG, ROOT)
+    paths = ablation._artifact_paths(CONFIG, ROOT)
+    records = ablation._load_jsonl(paths["prompts"])
     responses = ablation._load_jsonl(paths["responses"])
     saved = ablation._read_json(paths["metrics"])
     rescored = ablation.score_responses(

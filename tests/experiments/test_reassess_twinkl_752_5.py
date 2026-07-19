@@ -69,7 +69,9 @@ def test_run_020_evidence_uses_full_profiles_and_matches_frozen_probabilities() 
 
 def test_prompt_protocol_is_paired_and_trigger_schedule_is_frozen() -> None:
     config = _config()
-    records, paths, manifest = study._load_prepared(config, ROOT)
+    paths = study._artifact_paths(config, ROOT)
+    records = baseline._load_jsonl(paths["prompts"])
+    manifest = baseline._read_json(paths["manifest"])
     triggers = json.loads(paths["trigger_schedule"].read_text(encoding="utf-8"))
     opportunities = json.loads(
         paths["eligible_opportunities"].read_text(encoding="utf-8")
@@ -83,6 +85,7 @@ def test_prompt_protocol_is_paired_and_trigger_schedule_is_frozen() -> None:
         study.EARLY_WITHOUT: 19,
     }
     assert len(records) == 1039
+    assert baseline._sha256_file(paths["prompts"]) == manifest["prompts_sha256"]
     assert len(opportunities) == 671
     assert len(triggers) == 19
     assert len({(row["persona_id"], row["week_start"]) for row in triggers}) == 19
@@ -130,7 +133,8 @@ def test_scheduler_recomputes_without_reference_labels() -> None:
 
 def test_scoring_rejects_an_incomplete_response_set() -> None:
     config = _config()
-    records, _paths, _manifest = study._load_prepared(config, ROOT)
+    paths = study._artifact_paths(config, ROOT)
+    records = baseline._load_jsonl(paths["prompts"])
 
     with pytest.raises(ValueError, match="Response set is incomplete"):
         study._assessment_map(

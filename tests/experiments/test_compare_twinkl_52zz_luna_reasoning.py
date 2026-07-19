@@ -40,17 +40,12 @@ def _comparison(
 
 def test_frozen_prompts_cover_all_personas_and_repeats() -> None:
     config = _config()
-    (
-        _base_config,
-        records,
-        cases,
-        _outcomes,
-        _targets,
-        _episodes,
-        none_responses,
-        _base_metrics,
-        paths,
-    ) = study._load_frozen(config, ROOT)
+    paths = study._baseline_paths(config, ROOT)
+    study._validate_hashes(config, paths)
+    base_config = baseline._read_yaml(paths["config"])
+    records = baseline._load_jsonl(paths["prompts"])
+    cases = study.model_study._load_complete_development(base_config, ROOT)[0]
+    none_responses = baseline._load_jsonl(paths["luna_none_responses"])
 
     assert len({case["persona_id"] for case in cases}) == 204
     assert len(records) == 951
@@ -63,7 +58,9 @@ def test_frozen_prompts_cover_all_personas_and_repeats() -> None:
 
 def test_smoke_selection_is_deterministic_and_spans_prompt_lengths() -> None:
     config = _config()
-    records = study._load_frozen(config, ROOT)[1]
+    paths = study._baseline_paths(config, ROOT)
+    study._validate_hashes(config, paths)
+    records = baseline._load_jsonl(paths["prompts"])
     first = study._smoke_records(records, 24)
     second = study._smoke_records(records, 24)
 

@@ -29,8 +29,8 @@ Under the adopted [capstone scope decision](05_capstone_scope_decision.md), an
 uncertain VIF Critic prediction remains useful for error analysis and candidate
 review. The Weekly Drift Reviewer owns abstention in the approved user-facing
 path. Evaluation must report coverage, abstention count, and suppressed true
-Drifts. The conservative precision or false Drift alert tolerance is not fixed
-yet.
+Drifts. The Weekly Drift Reviewer deployment policy caps false Drift alerts at
+`2%` of resolved non-Drift Core Value trajectories in every final-test Run.
 
 ---
 
@@ -145,7 +145,7 @@ candidate confirmation is outside the remaining capstone scope.
 | Historical consensus table | Retired diagnostic provenance only; not a Drift target, threshold-selection input, or final test set |
 | Approved user-facing path | Fixed `gpt-5.6-luna` reasoning-effort-`low` Weekly Drift Reviewer decisions without VIF Critic input, followed by the deterministic Drift Detector; production integration remains pending |
 | VIF Critic path | Store predictions and uncertainty for offline comparison, independent review, case selection, and retraining |
-| Delivery | Weekly Digest with cited Journal Entry evidence and active, recovered, mixed, or uncertain wording; Weekly Drift Reviewer abstention emits no Drift claim; exact schema pending |
+| Delivery | Weekly Digest with cited Journal Entry evidence and active, recovered, mixed, or uncertain wording; Weekly Drift Reviewer abstention emits no Drift claim; schema implementation pending |
 
 The EDA supports this definition because most dips spanning one Journal Entry
 recover within two Journal Entries, while three-step and multi-week definitions are too

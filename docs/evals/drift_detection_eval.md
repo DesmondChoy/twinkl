@@ -33,9 +33,14 @@ The current layers of the contract are deliberately different:
   first and false Drift alerts second.
 - Coverage and abstention are diagnostic metrics. They must be reported because
   they expose fail-closed behavior, but they do not gate development selection.
-- `twinkl-7vam` must fix the minimum Drift recall, acceptable false Drift alert
-  tolerance, stability, and any efficiency requirement before the fresh final
-  test is scored. It must also predefine coverage and abstention reporting.
+- The three Luna-low development Runs are sufficient to freeze the contract:
+  their Drift recall was `0.571`, `0.548`, and `0.548`; their false Drift alert
+  counts were 5, 4, and 4 across 256 non-Drift Core Value trajectories. Each
+  Run therefore exceeded `0.50` Drift recall and stayed at or below a `2%`
+  false-alert burden. These are development results, not deployment approval.
+- The fresh final test uses the same response schema, fail-closed request
+  handling, scoring, three-Run protocol, and reported metrics as the Luna-low
+  development study. There is no separate efficiency gate.
 - Entry-level `recall_-1` is the primary development proxy because Drift
   cannot be recovered when either component Conflict is missed.
 - QWK and `+1` recall are diagnostics. Positive evidence cannot trigger or
@@ -45,6 +50,31 @@ The current layers of the contract are deliberately different:
   reported.
 
 See the adopted [VIF scope decision](../vif/05_capstone_scope_decision.md).
+
+### Frozen Weekly Drift Reviewer evaluation contract (`twinkl-7vam`)
+
+- The canonical prompt receives declared Core Values, cumulative
+  student-visible history, and current-week Journal Entries. It receives no VIF
+  Critic input.
+- The strict response contains one assessment for every requested Journal
+  Entry/Core Value coordinate: Conflict, Not Conflict, or Abstain, with
+  confidence, reason code, and an optional evidence quote. Unexpected fields,
+  missing or duplicate coordinates, or a Conflict quote that is not an exact
+  Journal Entry substring are invalid.
+- Transient API failures are retried up to two total attempts. Refusal or an
+  invalid structured response is terminal and is scored as Abstain; a Run with
+  missing terminal receipts is incomplete.
+- Scoring reuses the Luna-low implementation: two adjacent Conflicts for one
+  Core Value create a Drift, reference and predicted Drift episodes are matched
+  one-to-one, and a prediction may confirm within two later Journal Entries.
+- Each of three complete Runs reports the existing Luna fields: Drift hits,
+  known Drifts, predicted and false Drift alerts, Drift recall and precision,
+  coverage and abstention, cross-week hits, detection delay, entry-level and
+  per-Core-Value metrics, response status, latency, token use, and cost.
+
+The cleaned prompt is version `2.0`. The user explicitly accepted no
+development rerun, so the fresh final test will be its first scored use. Frozen
+historical prompts and results remain bound to their original hashes.
 
 The approved Drift Detector uses two consecutive Weekly Drift Reviewer
 Conflicts for the same Core Value. VIF Critic probabilities and uncertainty
@@ -237,7 +267,6 @@ No fallback score was taken from the retired benchmark.
   wiring
 - Full VIF Critic probability, uncertainty, and checkpoint-provenance storage
 - Independent disagreement review and versioned retraining data
-- Predefined deployment-approval criteria under `twinkl-7vam`
 - A fresh, independently resolved final test set under `twinkl-pv6s`
 - Weekly Coach language checks for active, recovered, mixed, and uncertain states at
   digest time
@@ -329,8 +358,7 @@ and Core Values rather than VIF Critic Predictions.
    and displayed journal trajectory.
 2. Reconcile the paired reviews into a versioned target while preserving the
    original LLM-Judge labels as provenance rather than overwriting them.
-3. Evaluate the weekly-only path against the predefined deployment-approval
-   criteria.
+3. Confirm the fixed weekly-only contract on three complete Runs.
 4. Record uncertainty, rationale, and unresolved-case handling separately from
    the main Drift decision.
 
@@ -338,7 +366,7 @@ and Core Values rather than VIF Critic Predictions.
 
 1. Keep `gpt-5.6-luna` and reasoning effort `low` fixed, then freeze the Weekly
    Drift Reviewer prompt, response schema, deterministic Drift Detector, and
-   deployment-approval criteria.
+   evaluation contract.
 2. Keep the fresh final test locked and unscored while those choices are made.
 3. Keep retraining and development cases out of the final test.
 
@@ -346,12 +374,14 @@ and Core Values rather than VIF Critic Predictions.
 
 1. Resolve every final-test label independently without VIF Critic predictions
    or expected outcomes.
-2. Score the frozen weekly-only path once.
-3. Report Drift recall, false Drift alerts, coverage, abstention, stability,
-   hard Core Value slices, and any claimed LLM-call or cost reduction without
-   changing the criteria.
-4. Treat an unresolved case or failed criterion as a block on deployment
-   approval. Author-designed trajectories remain capability probes only.
+2. Execute three complete Runs using the frozen Luna-low failure, schema, and
+   scoring policy.
+3. Report the same fields as the Luna-low development study without adding a
+   new reporting-only acceptance criterion.
+4. Withhold deployment approval if the final-test references are unresolved,
+   any Run is incomplete, any Run has Drift recall below `0.50`, or any Run has
+   false Drift alerts above `2%` of resolved non-Drift Core Value trajectories.
+   Author-designed trajectories remain capability probes only.
 
 Historically, `twinkl-v8pb` locked and reviewed a proposed final test but stopped
 before scoring because one case remained unresolved. `twinkl-752.4` later made
@@ -387,20 +417,18 @@ above.
 | Development first-alert latency (`twinkl-752.5`) | Median 5 days weekly-only / 3 days raw-input / 1 day scheduled | Selection-biased development timing; no final-test latency is available |
 | Author-designed capability recall | Capability-only diagnostic | Whether the VIF Critic can find deliberately clear Drifts; never a deployment-approval gate |
 
-A historical development-only operating point exists (probability 0.8,
-uncertainty 1.010153), but it is not the newly adopted recall-first policy and
-no numerical deployment threshold is active. The retained
-author-designed controls remain capability-only diagnostics and cannot
-substitute for a fresh, resolved locked final test set.
+A historical VIF Critic development-only operating point exists (probability
+0.8, uncertainty 1.010153), but it is not the Weekly Drift Reviewer policy.
+The retained author-designed controls remain capability-only diagnostics and
+cannot substitute for a fresh, resolved locked final test set.
 
-### Required Slices
+### Reported Diagnostics
 
-- Per Schwartz value dimension
-- Core-Value rank or profile-weight band
-- Drift length and severity
-- Review confidence and disagreement state
-- Active, recovered, mixed, and uncertain digest-time cases
-- VIF Critic checkpoint and input-contract version
+The final test reuses the Luna-low reporting fields listed in the frozen
+contract above, including entry-level results by Schwartz value dimension.
+Deployment criteria do not add further required slices. Active, recovered,
+mixed, and uncertain Weekly Digest behavior is verified separately through
+runtime scenario tests.
 
 ## Reproduction
 

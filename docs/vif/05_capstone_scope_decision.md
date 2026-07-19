@@ -5,7 +5,9 @@ adopted on 2026-07-14 under `twinkl-752.2`; Weekly Drift Reviewer configuration
 and metric hierarchy updated on 2026-07-15 under `twinkl-52zz`; the Weekly Drift
 Reviewer model contract was fixed at `gpt-5.6-luna` with reasoning effort `low`
 on 2026-07-17; and the optional VIF Critic candidate-confirmation path was
-removed from the remaining capstone scope on 2026-07-17.
+removed from the remaining capstone scope on 2026-07-17. The Weekly Drift
+Reviewer evaluation and deployment policy was fixed under `twinkl-7vam` on
+2026-07-19.
 
 This document records the detailed Value Identity Function (VIF) scope decision
 for the remaining capstone period. The [PRD](../prd.md) remains authoritative for
@@ -54,14 +56,21 @@ tested change before another training run is treated as decision evidence.
   alerts second.
 - Coverage and abstention are diagnostic metrics, not selection gates. They
   must still be reported because Abstain produces no Drift claim.
-- `twinkl-7vam` must define the minimum Drift recall, acceptable false Drift
-  alert tolerance, stability, and any efficiency requirement before a fresh
-  final test is scored. It must also predefine reporting for coverage,
-  abstention, and Drifts suppressed by abstention or uncertainty.
+- The three complete Luna-low development Runs provide sufficient evidence to
+  freeze the contract. Drift recall was `0.571`, `0.548`, and `0.548`; false
+  Drift alerts were 5, 4, and 4 across 256 non-Drift Core Value trajectories.
+- The fresh final test reuses the Luna-low response schema, fail-closed request
+  handling, one-to-one Drift scoring with a two-Entry confirmation allowance,
+  three-Run protocol, and reported metrics. No separate efficiency gate is
+  adopted.
+- Deployment approval is withheld if final-test references are unresolved, a
+  Run is incomplete, any Run has Drift recall below `0.50`, or any Run exceeds
+  a `2%` false-alert burden on resolved non-Drift Core Value trajectories.
 
-The model choice is settled. Because there is no active fresh final test set,
-its measured performance is still development evidence only. The Drift Detector
-does not have deployment approval. The VIF Critic candidate-confirmation path is
+The model choice and development evidence are settled. No development rerun is
+required for the cleaned prompt; the fresh final test will be its first scored
+use. Because there is no active fresh final test set, the Drift Detector does
+not have deployment approval. The VIF Critic candidate-confirmation path is
 outside the remaining capstone scope.
 
 ## Canonical Drift
@@ -252,7 +261,6 @@ See [VIF Critic Role in Drift Detection](../architecture/drift_detection.md).
 
 Remaining work:
 
-- define the acceptable false Drift alert tolerance and minimum Drift recall;
 - implement recall-first checkpoint selection;
 - build a fresh, independently resolved final test set; and
 - wire the approved Drift Detector into the Weekly Digest and Weekly Coach.

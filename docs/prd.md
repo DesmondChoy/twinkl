@@ -6,7 +6,7 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 
 ## Implementation Status
 
-*Last updated: 2026-07-17*
+*Last updated: 2026-07-19*
 
 | Feature | Status | Details |
 |---------|--------|---------|
@@ -111,14 +111,20 @@ same Core Value.
   reasoning effort `low`. Its development evaluation prioritized Drift recall
   first and false Drift alerts second. Coverage and abstention are diagnostic
   metrics, not selection gates.
-- A minimum Drift recall and acceptable false Drift alert tolerance must be
-  chosen before deployment, but no numerical thresholds are adopted yet.
+- The three complete Luna-low development Runs satisfy the evidence needed to
+  freeze this contract: each achieved Drift recall above `0.50`, with 5, 4,
+  and 4 false Drift alerts across 256 non-Drift Core Value trajectories. No
+  development rerun is required after the prompt cleanup. A fresh final test
+  remains required for deployment approval.
 - QWK, `+1` recall, calibration, and circumplex metrics remain diagnostics.
 - Only Core Values, stored in `top_values`, can produce Drift. `+1` evidence is
   non-gating and may support occasional positive Weekly Coach acknowledgment.
 - An uncertain or abstaining Weekly Drift Reviewer produces no Drift claim;
   coverage, abstention, and suppressed known Drifts must still be reported even
   though they do not outrank Drift recall or false Drift alerts.
+- The fresh final test reuses the Luna-low response schema, fail-closed request
+  handling, scoring, three-Run protocol, and reported metrics. It adds no
+  separate efficiency gate or reporting-only acceptance criteria.
 - The ternary ten-value output remains. The adopted staged architecture keeps
   the VIF Critic in the offline review-and-retrain path, uses Weekly Drift
   Reviewer decisions for the current user-facing path. VIF-Critic-proposed

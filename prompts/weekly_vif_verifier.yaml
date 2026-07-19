@@ -1,11 +1,10 @@
 name: weekly_vif_verifier
-description: Development-only weekly conflict verifier for the twinkl-752.1 paired Critic-input ablation.
-version: '1.0'
+description: Canonical Weekly Drift Reviewer prompt for Journal Entry Conflict decisions.
+version: '2.0'
 input_variables:
   - declared_values
   - cumulative_history
   - current_week_entries
-  - critic_block
 template: |
   You are evaluating whether the writer made a clear behavior or choice against
   each declared core value. Use only the displayed journal text below.
@@ -28,7 +27,3 @@ template: |
 
   CURRENT-WEEK ENTRIES TO ASSESS
   {{ current_week_entries }}
-  {{ critic_block }}
-
-  The Critic, when present, is a fallible hint rather than a target or rule.
-  Journal text remains authoritative. Do not mention model scores in the output.
