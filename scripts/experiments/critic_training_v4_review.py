@@ -1458,7 +1458,11 @@ def train_model(
                 }
             )
         selected_this_epoch = False
-        if candidate["eligible"] and is_better_ordinal_candidate(candidate, best_candidate):
+        if candidate["eligible"] and is_better_ordinal_candidate(
+            candidate,
+            best_candidate,
+            selection_policy,
+        ):
             best_candidate = dict(candidate)
             best_model_state = current_state
             selected_this_epoch = True
@@ -1466,6 +1470,7 @@ def train_model(
         if np.isfinite(candidate["qwk_mean"]) and is_better_ordinal_candidate(
             candidate,
             fallback_candidate,
+            {"name": "qwk_then_recall_guarded"},
         ):
             fallback_candidate = dict(candidate)
             fallback_model_state = current_state
@@ -1726,7 +1731,7 @@ for name, cfg in active_models.items():
         print(f"  Fallback trigger: {fallback_reasons or 'none'}")
     if not result.get("promotion_eligible", True):
         print(
-            "  No recall-eligible checkpoint; excluding this run from ranking and experiment logging."
+            "  No policy-eligible checkpoint; excluding this run from ranking and experiment logging."
         )
         print(
             f"  Debug checkpoint: {result['artifact_paths'].get('checkpoint')}"
@@ -2470,7 +2475,12 @@ for name in all_results:
     hedge = all_hedging[name].mean() * 100
     qwk_nan_dims = all_results[name].get("qwk_nan_dims_count", 0)
     qwk_str = f"{qwk:.3f}" if np.isfinite(qwk) else "N/A"
-    status = "EXCLUDED" if name in excluded_models else "OK"
+    if name in non_promotable_models:
+        status = "DEBUG_ONLY"
+    elif name in excluded_models:
+        status = "EXCLUDED"
+    else:
+        status = "OK"
     print(
         f"  {name:<15s} {qwk_str:>8s} {hedge:>9.1f}% {qwk_nan_dims:>10d} {status:>12s}"
     )

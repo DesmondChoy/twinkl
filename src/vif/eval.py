@@ -22,6 +22,7 @@ Usage:
 """
 
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 import polars as pl
@@ -565,7 +566,26 @@ def compute_qwk_nan_dims_count(qwk_per_dim: dict[str, float]) -> int:
     return int(sum(np.isnan(value) for value in qwk_per_dim.values()))
 
 
-DEFAULT_ORDINAL_SELECTION_POLICY = {
+RECALL_FIRST_ORDINAL_SELECTION_POLICY: dict[str, Any] = {
+    "name": "recall_first_qwk_guarded_v1",
+    "rank_order": [
+        "recall_minus1",
+        "qwk_mean",
+        "calibration_global",
+        "hedging_mean",
+        "val_loss",
+    ],
+    "guardrails": {
+        "qwk_mean_must_be_finite": True,
+        "qwk_mean_floor": 0.3712,
+        "qwk_nan_dims_count_must_equal_zero": True,
+        "calibration_global_must_be_non_negative": True,
+        "recall_minus1_floor": None,
+    },
+    "fallback": "debug_best_finite_qwk_only",
+}
+
+QWK_FIRST_ORDINAL_SELECTION_POLICY: dict[str, Any] = {
     "name": "qwk_then_recall_guarded",
     "rank_order": [
         "qwk_mean",
@@ -576,6 +596,7 @@ DEFAULT_ORDINAL_SELECTION_POLICY = {
     ],
     "guardrails": {
         "qwk_mean_must_be_finite": True,
+        "qwk_mean_floor": None,
         "qwk_nan_dims_count_must_equal_zero": True,
         "calibration_global_must_be_non_negative": True,
         "recall_minus1_floor": None,
@@ -583,14 +604,32 @@ DEFAULT_ORDINAL_SELECTION_POLICY = {
     "fallback": "best_finite_qwk",
 }
 
+DEFAULT_ORDINAL_SELECTION_POLICY = RECALL_FIRST_ORDINAL_SELECTION_POLICY
+ORDINAL_SELECTION_POLICY_PRESETS: dict[str, dict[str, Any]] = {
+    "recall_first_qwk_guarded_v1": RECALL_FIRST_ORDINAL_SELECTION_POLICY,
+    QWK_FIRST_ORDINAL_SELECTION_POLICY["name"]: QWK_FIRST_ORDINAL_SELECTION_POLICY,
+}
+
 
 def ordinal_selection_policy_summary(overrides: dict | None = None) -> dict:
     """Return the default ordinal checkpoint selection policy with overrides applied."""
+    requested_name = (overrides or {}).get(
+        "name",
+        DEFAULT_ORDINAL_SELECTION_POLICY["name"],
+    )
+    preset = ORDINAL_SELECTION_POLICY_PRESETS.get(requested_name)
+    if preset is None:
+        if not overrides or "rank_order" not in overrides:
+            raise ValueError(
+                f"Unknown ordinal checkpoint selection policy: {requested_name}"
+            )
+        preset = DEFAULT_ORDINAL_SELECTION_POLICY
+
     policy = {
-        "name": DEFAULT_ORDINAL_SELECTION_POLICY["name"],
-        "rank_order": list(DEFAULT_ORDINAL_SELECTION_POLICY["rank_order"]),
-        "guardrails": dict(DEFAULT_ORDINAL_SELECTION_POLICY["guardrails"]),
-        "fallback": DEFAULT_ORDINAL_SELECTION_POLICY["fallback"],
+        "name": requested_name,
+        "rank_order": list(preset["rank_order"]),
+        "guardrails": dict(preset["guardrails"]),
+        "fallback": preset["fallback"],
     }
     if not overrides:
         return policy
@@ -620,7 +659,10 @@ def build_ordinal_selection_candidate(
     qwk_mean = float(eval_result.get("qwk_mean", float("nan")))
     recall_minus1 = float(eval_result.get("recall_minus1", float("nan")))
     calibration_global = float(
-        eval_result.get("calibration", {}).get("error_uncertainty_correlation", float("nan"))
+        eval_result.get("calibration", {}).get(
+            "error_uncertainty_correlation",
+            float("nan"),
+        )
     )
     hedging_mean = float(eval_result.get("hedging_mean", float("nan")))
     qwk_nan_dims_count = int(eval_result.get("qwk_nan_dims_count", 0))
@@ -628,7 +670,15 @@ def build_ordinal_selection_candidate(
     ineligible_reasons = []
     if guardrails.get("qwk_mean_must_be_finite", True) and not np.isfinite(qwk_mean):
         ineligible_reasons.append("qwk_mean_non_finite")
-    if guardrails.get("qwk_nan_dims_count_must_equal_zero", True) and qwk_nan_dims_count > 0:
+    qwk_mean_floor = guardrails.get("qwk_mean_floor")
+    if qwk_mean_floor is not None:
+        qwk_mean_floor = float(qwk_mean_floor)
+        if not np.isfinite(qwk_mean) or qwk_mean < qwk_mean_floor:
+            ineligible_reasons.append("qwk_mean_below_floor")
+    if (
+        guardrails.get("qwk_nan_dims_count_must_equal_zero", True)
+        and qwk_nan_dims_count > 0
+    ):
         ineligible_reasons.append("qwk_nan_dims_present")
     if (
         guardrails.get("calibration_global_must_be_non_negative", True)
@@ -655,15 +705,34 @@ def build_ordinal_selection_candidate(
     }
 
 
-def ordinal_candidate_sort_key(candidate: dict) -> tuple[float, float, float, float, float]:
-    """Return the descending sort key for ordinal checkpoint candidates."""
-    return (
-        _metric_sort_value(candidate.get("qwk_mean", float("nan")), higher_is_better=True),
-        _metric_sort_value(candidate.get("recall_minus1", float("nan")), higher_is_better=True),
-        _metric_sort_value(candidate.get("calibration_global", float("nan")), higher_is_better=True),
-        _metric_sort_value(candidate.get("hedging_mean", float("nan")), higher_is_better=False),
-        _metric_sort_value(candidate.get("val_loss", float("nan")), higher_is_better=False),
+def ordinal_candidate_sort_key(
+    candidate: dict,
+    selection_policy: dict | None = None,
+) -> tuple[float, ...]:
+    """Return the policy-ranked, deterministic key for an ordinal checkpoint."""
+    resolved_policy = ordinal_selection_policy_summary(selection_policy)
+    metric_directions = {
+        "qwk_mean": True,
+        "recall_minus1": True,
+        "calibration_global": True,
+        "hedging_mean": False,
+        "val_loss": False,
+    }
+    rank_order = resolved_policy["rank_order"]
+    unknown_metrics = sorted(set(rank_order) - set(metric_directions))
+    if unknown_metrics:
+        raise ValueError(
+            "Unsupported ordinal checkpoint selection metrics: "
+            + ", ".join(unknown_metrics)
+        )
+    ranked_metrics = tuple(
+        _metric_sort_value(
+            candidate.get(metric, float("nan")),
+            higher_is_better=metric_directions[metric],
+        )
+        for metric in rank_order
     )
+    return (*ranked_metrics, -float(candidate.get("epoch", float("inf"))))
 
 
 def select_recall_window_candidate(
@@ -714,11 +783,18 @@ def select_recall_window_candidate(
     return dict(max(window_candidates, key=recall_window_sort_key))
 
 
-def is_better_ordinal_candidate(candidate: dict, incumbent: dict | None) -> bool:
+def is_better_ordinal_candidate(
+    candidate: dict,
+    incumbent: dict | None,
+    selection_policy: dict | None = None,
+) -> bool:
     """Return True when the candidate outranks the current incumbent."""
     if incumbent is None:
         return True
-    return ordinal_candidate_sort_key(candidate) > ordinal_candidate_sort_key(incumbent)
+    return ordinal_candidate_sort_key(
+        candidate,
+        selection_policy,
+    ) > ordinal_candidate_sort_key(incumbent, selection_policy)
 
 
 def finalize_ordinal_checkpoint_selection(

@@ -44,10 +44,12 @@ architecture recorded below.
 - No fixed precision floor is adopted yet. Recall-first development cannot by
   itself support a deployment-approval claim.
 
-The existing code still selects mainline checkpoints QWK-first. Historical run
-rankings therefore remain valid records of the policy used at the time, not the
-forward selection policy. Implementing recall-first selection needs a separate,
-tested change before another training run is treated as decision evidence.
+Mainline training now uses the versioned `recall_first_qwk_guarded_v1` policy:
+validation QWK must be at least `0.3712`, after which `recall_-1` ranks eligible
+checkpoints first. The floor is the repaired-Security family median selected
+validation QWK (`0.3912`) minus `0.02`. Historical Run rankings remain valid
+records of their original QWK-first policy, which remains available as the
+named `qwk_then_recall_guarded` option.
 
 ### Weekly Drift Reviewer contract and deployment evaluation
 
@@ -261,9 +263,8 @@ See [VIF Critic Role in Drift Detection](../architecture/drift_detection.md).
 
 Remaining work:
 
-- implement recall-first checkpoint selection;
 - build a fresh, independently resolved final test set; and
-- wire the approved Drift Detector into the Weekly Digest and Weekly Coach.
+- connect the implemented Drift Detector to the Weekly Digest and Weekly Coach.
 
 VIF Critic candidate confirmation and conversion of the ternary VIF Critic to
 a binary Conflict model are outside the remaining capstone scope.

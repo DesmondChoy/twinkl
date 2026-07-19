@@ -154,14 +154,19 @@ policy, the metric roles are:
   calibration, and circumplex behavior;
 - raw probability/logit exports when needed
 
-No fixed precision floor is active yet. Recall-first development can identify
-promising VIF Critic checkpoints for offline review and retraining, but it does
-not grant user-facing Drift authority.
+No fixed Conflict precision floor is active. The versioned
+`recall_first_qwk_guarded_v1` policy first rejects validation checkpoints below
+QWK `0.3712`, then ranks eligible checkpoints by `recall_-1`, QWK, calibration,
+lower hedging, lower validation loss, and earlier epoch. The QWK floor is the
+median selected validation QWK for repaired-Security `run_058`, `run_060`, and
+`run_062` (`0.3912`) minus the approved `0.02` tolerance. It prevents an early
+high-recall checkpoint with severely degraded ordinal structure from winning.
+The floor is configurable and recorded in checkpoint and Run metadata.
 
-Implementation caveat: `src/vif/eval.py` still selects mainline checkpoints
-QWK-first. Historical runs and the current board therefore reflect their
-original policy. Recall-first selection needs a tested implementation before a
-future training run is decision evidence.
+Historical Runs retain their original QWK-first selections. The named
+`qwk_then_recall_guarded` policy remains available for exact reproduction.
+Recall-first development can identify VIF Critic checkpoints for offline review
+and retraining; it does not grant user-facing Drift authority.
 
 ### 4.4 Current Caveat: Reachability Audit
 
@@ -301,6 +306,19 @@ The general training entrypoint includes:
 - gradient clipping and gradient telemetry
 - immediate non-finite loss termination with preserved training logs
 
+The frontier driver defaults to the following mainline policy:
+
+```yaml
+selection_policy:
+  name: recall_first_qwk_guarded_v1
+  guardrails:
+    qwk_mean_floor: 0.3712
+```
+
+Use `selection_policy: {name: qwk_then_recall_guarded}` only to reproduce the
+historical QWK-first behavior. If no checkpoint clears the QWK floor, the best
+finite-QWK checkpoint is saved for debugging but is not eligible for promotion.
+
 The frontier driver also accepts optional `candidate_checkpoint_policies` in
 its YAML/JSON overrides:
 
@@ -314,11 +332,11 @@ candidate_checkpoint_policies:
     qwk_window: 0.02
 ```
 
-Each historical policy selected the strongest `recall_-1` checkpoint within the
-configured QWK window, then persisted its checkpoint, validation/test outputs,
-selection summary, and compact metric comparison. These checkpoints supplemented
-the QWK-first mainline checkpoint. They remain reproducibility evidence, not the
-implementation of the adopted recall-first policy.
+Each historical candidate policy selected the strongest `recall_-1` checkpoint
+within the configured QWK window, then persisted its checkpoint,
+validation/test outputs, selection summary, and compact metric comparison.
+These checkpoints supplemented the QWK-first mainline checkpoint. They remain
+reproducibility evidence and do not replace `recall_first_qwk_guarded_v1`.
 
 ### 6.3 CLI Overrides
 

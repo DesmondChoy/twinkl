@@ -1146,14 +1146,17 @@ class TestCalibrationGuard:
 class TestOrdinalSelectionHelpers:
     """Tests for metric-aligned ordinal checkpoint selection."""
 
-    def test_higher_qwk_beats_lower_val_loss(self):
-        from src.vif.eval import build_ordinal_selection_candidate, is_better_ordinal_candidate
+    def test_recall_first_default_beats_higher_qwk(self):
+        from src.vif.eval import (
+            build_ordinal_selection_candidate,
+            is_better_ordinal_candidate,
+        )
 
         lower_qwk = build_ordinal_selection_candidate(
             epoch=0,
             val_loss=0.10,
             eval_result={
-                "qwk_mean": 0.30,
+                "qwk_mean": 0.38,
                 "recall_minus1": 0.20,
                 "hedging_mean": 0.80,
                 "qwk_nan_dims_count": 0,
@@ -1164,7 +1167,7 @@ class TestOrdinalSelectionHelpers:
             epoch=1,
             val_loss=0.40,
             eval_result={
-                "qwk_mean": 0.35,
+                "qwk_mean": 0.40,
                 "recall_minus1": 0.10,
                 "hedging_mean": 0.90,
                 "qwk_nan_dims_count": 0,
@@ -1172,16 +1175,56 @@ class TestOrdinalSelectionHelpers:
             },
         )
 
-        assert is_better_ordinal_candidate(higher_qwk, lower_qwk)
+        assert is_better_ordinal_candidate(lower_qwk, higher_qwk)
+
+    def test_named_qwk_first_policy_preserves_historical_behavior(self):
+        from src.vif.eval import (
+            build_ordinal_selection_candidate,
+            is_better_ordinal_candidate,
+        )
+
+        higher_recall = build_ordinal_selection_candidate(
+            epoch=0,
+            val_loss=0.10,
+            eval_result={
+                "qwk_mean": 0.30,
+                "recall_minus1": 0.20,
+                "hedging_mean": 0.80,
+                "qwk_nan_dims_count": 0,
+                "calibration": {"error_uncertainty_correlation": 0.4},
+            },
+            selection_policy={"name": "qwk_then_recall_guarded"},
+        )
+        higher_qwk = build_ordinal_selection_candidate(
+            epoch=1,
+            val_loss=0.40,
+            eval_result={
+                "qwk_mean": 0.40,
+                "recall_minus1": 0.10,
+                "hedging_mean": 0.90,
+                "qwk_nan_dims_count": 0,
+                "calibration": {"error_uncertainty_correlation": 0.2},
+            },
+            selection_policy={"name": "qwk_then_recall_guarded"},
+        )
+
+        assert is_better_ordinal_candidate(
+            higher_qwk,
+            higher_recall,
+            {"name": "qwk_then_recall_guarded"},
+        )
 
     def test_recall_breaks_qwk_tie(self):
-        from src.vif.eval import build_ordinal_selection_candidate, is_better_ordinal_candidate
+        from src.vif.eval import (
+            build_ordinal_selection_candidate,
+            is_better_ordinal_candidate,
+        )
 
         weaker_recall = build_ordinal_selection_candidate(
             epoch=0,
             val_loss=0.20,
             eval_result={
-                "qwk_mean": 0.35,
+                "qwk_mean": 0.40,
                 "recall_minus1": 0.05,
                 "hedging_mean": 0.80,
                 "qwk_nan_dims_count": 0,
@@ -1192,7 +1235,7 @@ class TestOrdinalSelectionHelpers:
             epoch=1,
             val_loss=0.30,
             eval_result={
-                "qwk_mean": 0.35,
+                "qwk_mean": 0.40,
                 "recall_minus1": 0.07,
                 "hedging_mean": 0.85,
                 "qwk_nan_dims_count": 0,
@@ -1202,6 +1245,85 @@ class TestOrdinalSelectionHelpers:
 
         assert is_better_ordinal_candidate(stronger_recall, weaker_recall)
 
+    def test_exact_metric_tie_selects_earlier_epoch(self):
+        from src.vif.eval import is_better_ordinal_candidate
+
+        earlier = {
+            "epoch": 2,
+            "qwk_mean": 0.40,
+            "recall_minus1": 0.40,
+            "calibration_global": 0.2,
+            "hedging_mean": 0.8,
+            "val_loss": 0.3,
+        }
+        later = {**earlier, "epoch": 3}
+
+        assert is_better_ordinal_candidate(earlier, later)
+        assert not is_better_ordinal_candidate(later, earlier)
+
+    def test_default_policy_metadata_is_versioned_recall_first(self):
+        from src.vif.eval import ordinal_selection_policy_summary
+
+        policy = ordinal_selection_policy_summary()
+
+        assert policy["name"] == "recall_first_qwk_guarded_v1"
+        assert policy["rank_order"][:2] == ["recall_minus1", "qwk_mean"]
+        assert policy["guardrails"]["qwk_mean_floor"] == pytest.approx(0.3712)
+        assert policy["fallback"] == "debug_best_finite_qwk_only"
+
+    def test_default_qwk_floor_rejects_degenerate_high_recall_checkpoint(self):
+        from src.vif.eval import build_ordinal_selection_candidate
+
+        candidate = build_ordinal_selection_candidate(
+            epoch=0,
+            val_loss=0.60,
+            eval_result={
+                "qwk_mean": 0.1556,
+                "recall_minus1": 0.5930,
+                "hedging_mean": 0.4180,
+                "qwk_nan_dims_count": 0,
+                "calibration": {"error_uncertainty_correlation": 0.2990},
+            },
+        )
+
+        assert candidate["eligible"] is False
+        assert "qwk_mean_below_floor" in candidate["ineligible_reasons"]
+
+    def test_default_qwk_floor_is_inclusive(self):
+        from src.vif.eval import build_ordinal_selection_candidate
+
+        candidate = build_ordinal_selection_candidate(
+            epoch=0,
+            val_loss=0.40,
+            eval_result={
+                "qwk_mean": 0.3712,
+                "recall_minus1": 0.40,
+                "hedging_mean": 0.70,
+                "qwk_nan_dims_count": 0,
+                "calibration": {"error_uncertainty_correlation": 0.10},
+            },
+        )
+
+        assert candidate["eligible"] is True
+
+    def test_named_qwk_first_policy_has_no_new_qwk_floor(self):
+        from src.vif.eval import build_ordinal_selection_candidate
+
+        candidate = build_ordinal_selection_candidate(
+            epoch=0,
+            val_loss=0.60,
+            eval_result={
+                "qwk_mean": 0.1556,
+                "recall_minus1": 0.5930,
+                "hedging_mean": 0.4180,
+                "qwk_nan_dims_count": 0,
+                "calibration": {"error_uncertainty_correlation": 0.2990},
+            },
+            selection_policy={"name": "qwk_then_recall_guarded"},
+        )
+
+        assert candidate["eligible"] is True
+
     def test_negative_calibration_is_ineligible(self):
         from src.vif.eval import build_ordinal_selection_candidate
 
@@ -1209,7 +1331,7 @@ class TestOrdinalSelectionHelpers:
             epoch=0,
             val_loss=0.2,
             eval_result={
-                "qwk_mean": 0.35,
+                "qwk_mean": 0.40,
                 "recall_minus1": 0.07,
                 "hedging_mean": 0.8,
                 "qwk_nan_dims_count": 0,
@@ -1227,7 +1349,7 @@ class TestOrdinalSelectionHelpers:
             epoch=0,
             val_loss=0.2,
             eval_result={
-                "qwk_mean": 0.35,
+                "qwk_mean": 0.40,
                 "recall_minus1": 0.07,
                 "hedging_mean": 0.8,
                 "qwk_nan_dims_count": 2,
@@ -1245,7 +1367,7 @@ class TestOrdinalSelectionHelpers:
             epoch=0,
             val_loss=0.2,
             eval_result={
-                "qwk_mean": 0.35,
+                "qwk_mean": 0.40,
                 "recall_minus1": 0.39,
                 "hedging_mean": 0.8,
                 "qwk_nan_dims_count": 0,
@@ -1266,7 +1388,7 @@ class TestOrdinalSelectionHelpers:
             epoch=0,
             val_loss=0.2,
             eval_result={
-                "qwk_mean": 0.35,
+                "qwk_mean": 0.40,
                 "recall_minus1": 0.4032,
                 "hedging_mean": 0.8,
                 "qwk_nan_dims_count": 0,
@@ -1286,7 +1408,7 @@ class TestOrdinalSelectionHelpers:
             epoch=0,
             val_loss=0.2,
             eval_result={
-                "qwk_mean": 0.35,
+                "qwk_mean": 0.40,
                 "recall_minus1": float("nan"),
                 "hedging_mean": 0.8,
                 "qwk_nan_dims_count": 0,
@@ -1300,7 +1422,7 @@ class TestOrdinalSelectionHelpers:
         assert candidate["eligible"] is False
         assert candidate["ineligible_reasons"] == ["recall_minus1_below_floor"]
 
-    def test_finalize_selection_uses_debug_only_fallback(self):
+    def test_default_policy_uses_debug_only_fallback(self):
         from src.vif.eval import finalize_ordinal_checkpoint_selection
 
         fallback_candidate = {
@@ -1315,7 +1437,6 @@ class TestOrdinalSelectionHelpers:
         selection = finalize_ordinal_checkpoint_selection(
             best_candidate=None,
             fallback_candidate=fallback_candidate,
-            selection_policy={"fallback": "debug_best_finite_qwk_only"},
         )
 
         assert selection["promotion_eligible"] is False
@@ -1338,7 +1459,7 @@ class TestOrdinalSelectionHelpers:
         selection = finalize_ordinal_checkpoint_selection(
             best_candidate=None,
             fallback_candidate=fallback_candidate,
-            selection_policy={"fallback": "best_finite_qwk"},
+            selection_policy={"name": "qwk_then_recall_guarded"},
         )
 
         assert selection["promotion_eligible"] is True
