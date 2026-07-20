@@ -124,13 +124,9 @@ are protected by a focused test. Twinkl changes only value-neutral framing:
   principle can matter;
 - instructions retain the published comparison frame: Most and Least
   important as a guiding principle in the user's life; and
-- prompts use conversational language for choosing, placing, and reconsidering
-  a card.
-
-The first task states that the standalone prototype saves choices only in the
-current browser so the user can resume. This describes the current storage
-boundary; it is not a confidentiality, encryption, or deployed-product privacy
-guarantee.
+- the changing instruction appears in a visually distinct `Next step` callout
+  and uses conversational language for choosing, placing, and reconsidering a
+  card.
 
 ### 3.3 Project-report rationale
 
@@ -207,8 +203,8 @@ confirmed Profile through:
 - the `twinkl:start-first-journal` browser event.
 
 The standalone React POC stores its resumable session and confirmed Profile in
-browser `localStorage`. The UI describes that current storage boundary without
-presenting it as a privacy guarantee.
+browser `localStorage`. This implementation boundary is documented here and in
+the onboarding README; it is not presented as task guidance in the user flow.
 
 ## 5. Scoring and Product Transformation
 

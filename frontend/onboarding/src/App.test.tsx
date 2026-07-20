@@ -20,7 +20,9 @@ describe("onboarding app", () => {
     render(<App />);
     expect(screen.getByLabelText("Values · 1 of 11")).toBeTruthy();
     expect(screen.getAllByTestId("value-card")).toHaveLength(6);
+    expect(screen.getByText("Next step")).toBeTruthy();
     expect(screen.getByText(/across 11 groups/i)).toBeTruthy();
+    expect(screen.queryByText(/saved only in this browser/i)).toBeNull();
     expect(screen.queryByText("Hedonism")).toBeNull();
     expect(screen.queryByText("Universalism")).toBeNull();
   });

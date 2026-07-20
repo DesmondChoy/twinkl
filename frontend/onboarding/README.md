@@ -49,6 +49,6 @@ container exposes `/health` for Railway and falls back to `index.html` for SPA
 routes. No service variables or persistent volume are required.
 
 This standalone POC stores unfinished progress and its confirmed Profile in
-browser `localStorage` and makes no model or provider calls itself. The UI does
-not present that implementation detail as a product privacy guarantee: deployed
-Twinkl is expected to hand user data to LLM-backed services.
+browser `localStorage` and makes no model or provider calls itself. This storage
+boundary is documented here rather than shown as task guidance; deployed Twinkl
+is expected to hand user data to LLM-backed services.

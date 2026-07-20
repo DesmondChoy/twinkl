@@ -439,13 +439,11 @@ export default function App({ onStartJournal }: AppProps = {}) {
               <p className="card-reassurance">
                 There are no right answers here. More than one principle can matter.
               </p>
-              {session.set_index === 0 ? (
-                <p className="browser-note">
-                  For this prototype, your choices are saved only in this browser so you can pick up where you left off.
-                </p>
-              ) : null}
-              <p className="card-prompt" aria-live="polite">
-                {cardPrompt}
+              <p className="card-prompt" aria-atomic="true" aria-live="polite">
+                <span className="card-prompt__label" aria-hidden="true">
+                  Next step
+                </span>
+                <span>{cardPrompt}</span>
               </p>
               <div className="choice-board">
                 <section
