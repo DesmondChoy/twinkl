@@ -15,11 +15,14 @@
 		format json
 	}
 
-	@health path /health
-	respond @health "ok" 200
+	handle /health {
+		respond "ok" 200
+	}
 
-	root * /app/dist
-	encode gzip
-	try_files {path} /index.html
-	file_server
+	handle {
+		root * /app/dist
+		encode gzip
+		try_files {path} /index.html
+		file_server
+	}
 }
