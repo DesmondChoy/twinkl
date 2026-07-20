@@ -41,9 +41,22 @@ describe("onboarding app", () => {
     const second = screen.getAllByTestId("value-card").find((card) => card.dataset.location === "pool")!;
     const secondPhrase = second.querySelector(".value-card__phrase")!.textContent!;
     await user.click(second);
+    expect(screen.getByTestId("drop-most").textContent).toContain(firstPhrase);
+    expect(screen.queryByRole("button", { name: `Place ${secondPhrase} in Most` })).toBeNull();
     await user.click(screen.getByRole("button", { name: `Place ${secondPhrase} in Least` }));
     expect(screen.getByTestId("drop-least").querySelector('[data-location="least"]')).toBeTruthy();
     expect(screen.getByRole("button", { name: "Continue" }).hasAttribute("disabled")).toBe(false);
+
+    const third = screen.getAllByTestId("value-card").find((card) => card.dataset.location === "pool")!;
+    const thirdPhrase = third.querySelector(".value-card__phrase")!.textContent!;
+    await user.click(third);
+    expect(screen.getByTestId("drop-most").textContent).toContain(firstPhrase);
+    expect(screen.getByTestId("drop-least").textContent).toContain(secondPhrase);
+    expect(screen.queryByRole("button", { name: `Place ${thirdPhrase} in Most` })).toBeNull();
+    expect(screen.queryByRole("button", { name: `Place ${thirdPhrase} in Least` })).toBeNull();
+    await user.click(screen.getByRole("button", { name: "Choose Most for selected principle" }));
+    expect(screen.getByTestId("drop-most").textContent).toContain(thirdPhrase);
+    expect(screen.getByTestId("selection-area").textContent).toContain(firstPhrase);
 
     const placedMost = screen.getByTestId("drop-most").querySelector<HTMLElement>('[data-location="most"]')!;
     await user.click(placedMost);

@@ -471,7 +471,7 @@ export default function App({ onStartJournal }: AppProps = {}) {
                   ) : (
                     <p>Drop a card here</p>
                   )}
-                  {pickedValue ? (
+                  {pickedValue && !session.draft_best ? (
                     <button
                       className="drop-box__tap-target"
                       type="button"
@@ -534,7 +534,7 @@ export default function App({ onStartJournal }: AppProps = {}) {
                   ) : (
                     <p>Drop a card here</p>
                   )}
-                  {pickedValue ? (
+                  {pickedValue && !session.draft_worst ? (
                     <button
                       className="drop-box__tap-target"
                       type="button"
