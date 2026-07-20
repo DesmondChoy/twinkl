@@ -36,6 +36,18 @@ npm test
 npm run build
 ```
 
+## Railway deployment
+
+Create a Railway service from this repository with:
+
+- root directory: `/frontend/onboarding`
+- config file path: `/frontend/onboarding/railway.json`
+- branch: `main`
+
+The service builds the Vite app in Node and serves `dist` through Caddy. The
+container exposes `/health` for Railway and falls back to `index.html` for SPA
+routes. No service variables or persistent volume are required.
+
 This standalone POC stores unfinished progress and its confirmed Profile in
 browser `localStorage` and makes no model or provider calls itself. The UI does
 not present that implementation detail as a product privacy guarantee: deployed
