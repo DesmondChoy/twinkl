@@ -211,6 +211,10 @@ __marimo__/
 
 .playwright-mcp/
 
+# Node / React
+node_modules/
+.vite/
+
 # Generated visualizations (large embedded data)
 viz/*.html
 

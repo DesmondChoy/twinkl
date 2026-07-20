@@ -20,6 +20,18 @@ Twinkl is an "inner compass" that helps users align their daily behavior with th
 - [`docs/demo/review_app.md`](docs/demo/review_app.md) — deprecated Runtime Demo Review App for the VIF Critic compatibility path
 - [`docs/future_work/README.md`](docs/future_work/README.md) — exploratory directions, including OpenClaw integration research
 
+## Onboarding — 🧪 Experimental React POC
+
+The standalone React app in [`frontend/onboarding/`](frontend/onboarding/) opens directly on six animated forced-choice card decks. People tap or drag cards with distinct value-specific artwork into Most and Least boxes. The flow then shows an informational mid-flow mirror, structured goal selection, a neutral end summary, and a first Journal Entry handoff. It applies exposure-normalized scoring and local resume without asking users to rank or correct inferred values directly. Visible progress moves from `Values · n of 6` to `Your focus` and `Your compass`; the mirror is an interstitial.
+
+```sh
+cd frontend/onboarding
+npm install
+npm run dev
+```
+
+The POC stores progress and its confirmed Profile only in the browser. Durable user storage and the handoff of `top_values` into the Weekly Drift Reviewer remain under `twinkl-1m8`.
+
 ## VIF Critic — ✅ Complete Capstone Research
 
 The VIF Critic training and evaluation stack is complete for the time-boxed
@@ -324,7 +336,7 @@ opening.
 
 | Capability | Status | Note |
 |---|---|---|
-| Onboarding (BWS Values Assessment) | 📋 Specified | Flow designed; not yet implemented |
+| Onboarding (BWS Values Assessment) | 🧪 Experimental | Standalone React POC implements the complete local, user-facing flow and an internal Profile; durable storage and Weekly Drift Reviewer handoff remain pending under `twinkl-1m8` |
 | Weekly Coach validation depth | ⚠️ Partial | The approved Weekly Drift Reviewer and Drift Detector runtime now feeds the Weekly Digest and optional Weekly Coach reflection; batch Tier 1 pass rates and Tier 2 and Tier 3 evaluation remain incomplete |
 | Nudge signal quality validation | 🧪 Experimental | Annotation study and downstream usefulness checks remain in progress |
 | Embedding Explorer | ✅ Complete | Interactive 3D visualization of VIF Critic embeddings |

@@ -5,7 +5,7 @@
 > | Stage | Status |
 > |---|---|
 > | Stage 0 (Offline Training) | ✅ Complete for the capstone POC — synthetic generation, LLM-Judge labeling, and VIF Critic training are implemented; known model limits remain documented |
-> | Stage 1 (Onboarding) | 📋 Specified |
+> | Stage 1 (Onboarding) | 🧪 Experimental — the standalone React POC implements the complete local, user-facing flow and internal Profile; durable storage and runtime handoff remain incomplete |
 > | Stages 2–4 (Journaling + Weekly Coach) | ⚠️ Partial — the Weekly Drift Reviewer and deterministic Drift Detector runtime, Weekly Digest, and prompt rendering are implemented; the Journaling UI, persisted onboarding Core Values, and product-facing orchestration remain incomplete |
 > | Stage 5 (Uncertain delivery) | ✅ Complete for the capstone POC — Weekly Drift Reviewer Abstain fails closed, and the Weekly Digest handles uncertain delivery; no deployment approval is claimed |
 >
@@ -61,9 +61,9 @@ Sarah downloads Twinkl and completes the BWS-based values assessment. Rather tha
 
 **Mid-flow mirror (after Set 3):**
 
-> "It sounds like you care a lot about **being there for the people closest to you** and **having the freedom to choose your own path**, and less about **having influence over how things go**. Does this feel roughly right?"
+> "A pattern is beginning to appear: **being there for the people closest to you** and **having the freedom to choose your own path** are pulling you forward, while **having influence over how things go** is quieter for now."
 
-Sarah taps **"Yes, that's me"** — the onboarding flow is reading her well so far.
+The mirror is informational. Sarah continues; Twinkl does not ask her which values to move higher or lower.
 
 **Goal selection:**
 
@@ -74,7 +74,7 @@ Sarah picks **"I'm stretched too thin between work and everything else"** — th
 > Your Core Values: **Benevolence**, **Self-Direction**
 > Your focus: "I'm stretched too thin between work and everything else"
 
-Sarah confirms. Twinkl now has a graded value profile — not just her top 2, but a full 10-dimensional weight vector showing *how much* each value matters relative to others.
+Sarah confirms. Twinkl now has a graded Profile — not just her top 2, but a full 10-dimensional weight vector showing *how much* each value matters relative to others.
 
 ### Component Involvement
 
@@ -83,41 +83,43 @@ Sarah confirms. Twinkl now has a graded value profile — not just her top 2, bu
 | Generator | N/A | Only used during offline training |
 | LLM-Judge | N/A | No Journal Entry to label yet |
 | VIF Critic | N/A | No Journal Entry to score yet |
-| Onboarding flow | **ACTIVE** | Guides Sarah through the BWS assessment and stores her profile |
+| Onboarding flow | **ACTIVE** | Guides Sarah through the BWS assessment and creates her local Profile |
 | Weekly Coach | N/A | No Weekly Digest exists yet |
 
-**Output:** Sarah's value profile is saved:
+**Abridged internal output:** Sarah's Profile is generated in the browser. It is not exposed as technical output to Sarah and is not yet persisted to the Weekly Drift Reviewer runtime:
 
 ```json
 {
+  "schema_version": 1,
   "user_id": "sarah",
+  "session_id": "example-session",
   "onboarding_version": "1.0.0",
+  "scoring_method": "exposure_normalized_best_worst_v1",
   "value_scores": {
     "weights": {
-      "Self-Direction": 0.167,
-      "Stimulation": 0.067,
-      "Hedonism": 0.100,
-      "Achievement": 0.100,
-      "Power": 0.033,
-      "Security": 0.067,
-      "Conformity": 0.100,
-      "Tradition": 0.067,
-      "Benevolence": 0.167,
-      "Universalism": 0.132
+      "self_direction": 0.167,
+      "stimulation": 0.067,
+      "hedonism": 0.100,
+      "achievement": 0.100,
+      "power": 0.033,
+      "security": 0.067,
+      "conformity": 0.100,
+      "tradition": 0.067,
+      "benevolence": 0.167,
+      "universalism": 0.132
     }
   },
-  "top_values": ["Benevolence", "Self-Direction"],
+  "top_values": ["self_direction", "benevolence"],
   "goal_category": "work_life_balance",
   "user_confirmed": true,
   "confidence": {
     "consistent": true,
-    "spread": 1.35,
-    "refinements": 0
+    "spread": 0.55
   }
 }
 ```
 
-Note the difference from a simple "pick 2" approach: Sarah's profile now captures that Achievement and Universalism have moderate weight, Hedonism and Conformity are middling, and Power is her lowest priority. The VIF Critic uses the full weight vector, not just the two Core Values.
+Note the difference from a simple "pick 2" approach: Sarah's Profile now captures that Achievement and Universalism have moderate weight, Hedonism and Conformity are middling, and Power is her lowest priority. The full weight vector remains available for offline VIF Critic analysis; the approved user-facing Drift path uses Core Values after the Profile handoff in `twinkl-1m8` is implemented.
 
 ---
 

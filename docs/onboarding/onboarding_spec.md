@@ -4,12 +4,12 @@
 
 ### What Onboarding Achieves
 
-The onboarding flow solves Twinkl's **cold-start problem**: before a user has written any Journal Entries, Twinkl needs an initial value profile to power the VIF Critic and Weekly Coach. Without it, the alignment engine has nothing to align *against*.
+The onboarding flow solves Twinkl's **cold-start problem**: before a user has written any Journal Entries, Twinkl needs an initial Profile containing declared Core Values and value weights. Without it, later Journal Entries have no declared priorities to compare against.
 
 The onboarding uses **Best-Worst Scaling (BWS)** — a forced-choice psychometric technique — to elicit a user's value priorities across the 10 Schwartz value dimensions. Combined with a structured goal selection, this produces:
 
 1. A **value weight vector** (`w_u ∈ ℝ^10`) that initializes the user's VIF profile
-2. A discrete set of **Core Values** (`top_values`) containing every value tied for the highest adjusted BWS score
+2. A discrete set of **Core Values** (`top_values`) containing every value tied for the highest exposure-normalized BWS score
 3. A **primary goal/tension** that focuses the Weekly Coach's initial monitoring
 4. A **confidence baseline** that signals how much to trust explicit vs. behavioral data
 
@@ -60,7 +60,7 @@ BWS addresses both:
 The Portrait Values Questionnaire (PVQ21; Schwartz et al., 2001) is the standard instrument for measuring Schwartz values. However, its items are designed for survey research, not mobile UX:
 
 - **Original PVQ21 format**: "He/she thinks it is important to be rich. He/she wants to have a lot of money and expensive things." (Third-person, long, two sentences)
-- **BWS card format needed**: First-person, single phrase, tappable on mobile
+- **BWS card format needed**: First-person, single phrase, selectable by tap or drag on mobile
 
 We preserve the **conceptual content** of PVQ21 items while rewriting for:
 - First-person voice ("Having the freedom to choose my own path")
@@ -87,102 +87,53 @@ The Balanced Incomplete Block Design (BIBD) for BWS requires each item to appear
 
 ## 3. User Flow
 
-### 3.1 Welcome Screen
+### 3.1 Direct Entry
 
-```
-┌─────────────────────────────────┐
-│                                 │
-│   Build Your Inner Compass      │
-│                                 │
-│   We'll show you 6 quick        │
-│   screens. On each one, pick    │
-│   what feels MOST like you      │
-│   and LEAST like you.           │
-│                                 │
-│   There are no right answers    │
-│   — just honest ones.           │
-│                                 │
-│        [ Let's go → ]           │
-│                                 │
-│   ○ ○ ○ ○ ○ ○ ○ ○  (progress)  │
-└─────────────────────────────────┘
-```
-
-**Key UX notes:**
-- Progress indicator shows 8 total steps (6 BWS sets + mid-flow mirror + goal/summary)
-- Framing as "inner compass" connects to the product metaphor
-- "No right answers" reduces performance anxiety
+The user lands directly on Set 1. There is no welcome screen, implementation
+status, storage claim, or developer-facing preamble. One short sentence explains
+the immediate action and why the choices matter. The single progress label changes
+with the phase: `Values · n of 6`, `Your focus`, then `Your compass`. The mid-flow
+mirror is an interstitial after Set 3 and keeps the label `Values · 3 of 6`.
 
 ### 3.2 BWS Sets 1–3
 
-Each set displays 4 cards. The user taps one as "Most like me" and one as "Least like me." The remaining 2 are implicitly neutral.
+Each set is a literal deck of four animated cards. The cards have physical
+proportions, subtle fan angles, and a distinct code-native illustration for each
+Schwartz value. They show only the first-person phrase, never a numbered card
+header. Desktop keeps all four choices in one horizontal row. Mobile uses a
+readable 2×2 grid without horizontal page scrolling.
 
-```
-┌─────────────────────────────────┐
-│   Which feels MOST like you?    │
-│   Which feels LEAST like you?   │
-│                                 │
-│   ┌───────────────────────┐     │
-│   │ Feeling calm and      │ ◀── tap for Most/Least
-│   │ secure in my life     │     │
-│   └───────────────────────┘     │
-│   ┌───────────────────────┐     │
-│   │ Having the freedom to │     │
-│   │ choose my own path    │     │
-│   └───────────────────────┘     │
-│   ┌───────────────────────┐     │
-│   │ Making progress       │     │
-│   │ toward something      │     │
-│   │ meaningful            │     │
-│   └───────────────────────┘     │
-│   ┌───────────────────────┐     │
-│   │ Being there for the   │     │
-│   │ people closest to me  │     │
-│   └───────────────────────┘     │
-│                                 │
-│        [ Next → ]               │
-│   ● ● ● ○ ○ ○ ○ ○  (progress)  │
-└─────────────────────────────────┘
-```
+The four cards begin in the selection area. The user moves one card into a
+centered `Most` box above the choices, then a different card into a centered
+`Least` box below them. The remaining two cards stay in the selection area.
 
 **Interaction model:**
-- First tap on a card marks it as "Most like me" (highlighted green/primary)
-- Second tap on a different card marks it as "Least like me" (highlighted red/muted)
-- Tapping a selected card deselects it (allows correction)
-- "Next" button activates only when both selections are made
-- Card order within each set is randomized per user to prevent position bias
+- The `Most` and `Least` boxes are visible before any card is moved
+- Pointer and touch dragging move cards between the selection area and either box
+- Tapping a card selects it and activates explicit `Most` and `Least` placement targets
+- Tapping either placement target moves the selected card; tapping a placed card returns it to the selection area
+- A placed card can be dragged back to the selection area or directly to the other box
+- Moving a card into an occupied box returns the previous card to the selection area
+- Cards keep the same portrait dimensions, illustration scale, and caption treatment after placement
+- Placement triggers a short directional settle before a clear, color-matched pulse makes each active choice apparent
+- `Continue` activates only after both selections exist
+- Card order is randomized once per user session to reduce position bias
+- `M` and `L` move a focused card into either box; Backspace, Delete, or Arrow Down returns it
+- Keyboard focus is visible, and reduced-motion preferences disable decorative movement
+
+When a phrase first repeats in Set 3, the instruction briefly explains that some
+cards return and asks the user to choose what feels true in the current group.
+Later repeated phrases need no additional explanation.
 
 ### 3.3 Mid-flow Mirror (After Set 3)
 
-After the first 3 sets, the onboarding scoring logic computes a preliminary profile and reflects it back:
+After Set 3, Twinkl computes a preliminary result and shows the current
+highest- and lowest-scoring phrases. The mirror is informational: it says a
+pattern is beginning to appear and offers one `Keep going` action.
 
-```
-┌─────────────────────────────────┐
-│                                 │
-│   Here's what I'm hearing       │
-│   so far...                     │
-│                                 │
-│   It sounds like you care a     │
-│   lot about [top value phrase]  │
-│   and [second value phrase],    │
-│   and less about                │
-│   [bottom value phrase].        │
-│                                 │
-│   Does this feel roughly right? │
-│                                 │
-│   [ Yes, that's me ]            │
-│   [ Not quite — let me adjust ] │
-│                                 │
-│   ○ ○ ○ ● ○ ○ ○ ○  (progress)  │
-└─────────────────────────────────┘
-```
-
-**Purpose:**
-- **Validation**: Lets users catch obvious misreadings early
-- **Agency**: Users feel heard, not categorized
-- **Data quality**: "Not quite" responses are logged and used to adjust final weights (see [Section 5: Scoring Logic](#5-scoring-logic))
-
-**"Not quite" flow:** If the user taps "Not quite," they see a simplified correction screen showing the highest- and lowest-scoring value groups, including ties, with the ability to promote/demote one value. This correction is recorded as a `refinement` in the output schema.
+Twinkl does **not** ask whether it placed a value too high or low. There is no
+promote/demote correction screen, approval gate, or user-authored score override.
+The six forced-choice card responses are the sole value-ranking input.
 
 ### 3.4 BWS Sets 4–6
 
@@ -237,16 +188,16 @@ After all BWS sets, the user selects their primary tension/goal from structured 
 
 Single selection. See [Section 6: Goal Categories](#6-goal-categories) for how each goal maps to Weekly Coach monitoring priorities.
 
-### 3.6 End Summary + Refinement
+### 3.6 End Summary
 
 ```
 ┌─────────────────────────────────┐
 │                                 │
-│   Your Inner Compass            │
+│   What sits at the center.      │
 │                                 │
-│   Your Core Values:             │
+│   Core Values:                  │
 │   [Every value tied for the     │
-│    highest adjusted score]      │
+│    highest score]               │
 │                                 │
 │   Your focus:                   │
 │   "[Goal display text]"         │
@@ -255,20 +206,27 @@ Single selection. See [Section 6: Goal Categories](#6-goal-categories) for how e
 │   point — your compass will     │
 │   keep learning as you journal. │
 │                                 │
-│   [ Looks right → Start ]       │
-│   [ Let me adjust something ]   │
+│   [ Set my compass ]            │
 │                                 │
 │   ○ ○ ○ ○ ○ ○ ○ ●  (progress)  │
 └─────────────────────────────────┘
 ```
 
-**"Let me adjust" flow:** Same promote/demote interface as the mid-flow mirror. Refinements are recorded in the output schema with `stage: "end_summary"`.
+The summary presents Twinkl's inferred Core Values and the selected goal under
+the progress label `Your compass`. Every tied Core Value has equal visual weight;
+there are no ordinal numbers that imply a ranking among ties. It has one
+confirmation action and does not ask the user to rank, promote, or demote values
+directly.
 
 ### 3.7 Transition to First Guided Journal Prompt
 
-After confirming the summary, the user transitions directly to their first guided journal prompt. The prompt is tailored based on:
-- Their top value(s) from BWS
-- Their selected goal category
+After confirming the summary, onboarding presents a clear handoff to the first
+guided Journal Entry. Activating it opens the first writing prompt, not another
+onboarding explanation or a restart control. The standalone React POC also
+exposes the confirmed Profile through an `onStartJournal` callback and a
+`twinkl:start-first-journal` browser event so the host application can perform
+the transition. The POC currently opens one generic prompt. A future Journaling
+UI may tailor that prompt using the user's Core Values and selected goal.
 
 Example transition:
 
@@ -292,7 +250,17 @@ Example transition:
 └─────────────────────────────────┘
 ```
 
-This is **not** part of the onboarding spec — it belongs to the journaling module. The onboarding spec's responsibility ends at producing the data output described in [Section 7](#7-data-output-schema).
+The Journal Entry editor is **not** part of the onboarding spec; it belongs to the
+journaling module. Onboarding owns the visible handoff and the confirmed Profile
+output described in [Section 7](#7-data-output-schema).
+
+### 3.8 Privacy Language
+
+The onboarding UI makes no `on-device` or `private on this device` claim. The
+standalone POC does not call a model provider, but deployed Twinkl is expected to
+send user data to LLM-backed services. A future product privacy notice must
+describe the deployed data path accurately rather than inherit the POC's local
+storage behavior.
 
 ---
 
@@ -363,24 +331,27 @@ Each phrase is adapted from PVQ21 concepts, rewritten for first-person voice and
 For each value *v*, across all sets where it appears:
 
 ```
-raw_score(v) = best_count(v) − worst_count(v)
+net_count(v) = best_count(v) − worst_count(v)
+score(v) = net_count(v) / appearances(v)
 ```
 
 Where:
 - `best_count(v)` = number of times the user selected *v* as "Most like me"
 - `worst_count(v)` = number of times the user selected *v* as "Least like me"
 
-**Range:** For a value appearing in *n* sets: score ∈ [-n, +n]
-- Self-Direction, Stimulation, Security, Universalism (3 appearances): score ∈ [-3, +3]
-- Remaining 6 values (2 appearances): score ∈ [-2, +2]
+The exposure-normalized `score` has range `[-1, +1]` for every value.
+This keeps the six fixed sets while making values shown twice comparable with
+values shown three times. `net_count` and `appearances` remain in the output for
+reproducibility.
 
 ### Normalization to Weight Vector
 
-Raw scores are normalized to produce a weight vector `w_u ∈ ℝ^10` where all weights are non-negative:
+Exposure-normalized scores are converted to a weight vector
+`w_u ∈ ℝ^10` where all weights are positive:
 
 ```
 # Step 1: Shift to non-negative
-shifted(v) = raw_score(v) − min(raw_scores) + 1
+shifted(v) = score(v) − min(scores) + 1
 
 # Step 2: Normalize to sum to 1
 w_u(v) = shifted(v) / Σ shifted(all values)
@@ -388,41 +359,45 @@ w_u(v) = shifted(v) / Σ shifted(all values)
 
 The +1 in the shift ensures no value has zero weight (even the least-preferred value has a small positive weight, reflecting that all Schwartz values are present in all people to some degree).
 
+Weights are stored to 8 decimal places. The final canonical value receives the
+rounding residual so the serialized weights sum to `1.0` within normal
+floating-point tolerance.
+
 ### Tie Handling
 
-If multiple values have the same raw score:
+If multiple values have the same exposure-normalized score:
 - They receive the same weight after normalization (no arbitrary tie-breaking)
 - If the highest score is tied, every tied value is shown in the summary
 - The Weekly Coach treats tied values as genuinely co-important
 
 The final `top_values` field is the complete set of values tied for the highest
-adjusted score after refinements. It is not a fixed top-two or top-three list. A
+score. It is not a fixed top-two or top-three list. A
 single highest-scoring value produces a one-value Core Value set; a tie
 produces a larger set with every tied value retained.
+
+Core Values are emitted in the canonical Schwartz order used by
+`src/models/judge.py`, regardless of the order in which the user saw or chose
+the cards. A flat result intentionally makes all ten values Core Values; the
+flow records low differentiation in confidence metadata rather than silently
+truncating the set.
 
 ### Confidence Estimation
 
 The onboarding scoring logic estimates confidence in the BWS-derived profile based on:
 
 1. **Response consistency**: If a user selects a value as "Most" in one set and "Least" in another, this signals low confidence in that value's placement
-2. **Score spread**: A flat profile (all scores near 0) suggests the BWS didn't differentiate well — Twinkl should weight behavioral data more heavily once available
-3. **Refinement count**: If the user corrected the profile at mid-flow mirror and/or end summary, this indicates the BWS alone didn't capture their self-model — log this for future analysis
+2. **Score spread**: Population standard deviation across the ten exposure-normalized scores. A flat profile suggests the BWS did not differentiate priorities well.
 
 ```
 confidence = {
-  "consistent": true/false,     # No contradictions across sets
-  "spread": float,              # Std dev of raw scores (higher = more differentiated)
-  "refinements": int            # Number of user corrections
+  "consistent": true/false,     # No value selected as both Most and Least
+  "spread": float,              # Population std dev of scores
+  "method": "response_consistency_population_spread_v1"
 }
 ```
 
-### Applying User Refinements
-
-When a user adjusts the profile at mid-flow mirror or end summary:
-1. The promoted value receives a bonus of +1 to its raw score
-2. The demoted value receives a penalty of -1 to its raw score
-3. Normalization is recomputed
-4. The refinement is logged in the output schema for analysis
+Confidence is descriptive metadata, not a calibrated probability or a runtime
+gate. No user correction is applied to the scoring result.
 
 ---
 
@@ -441,11 +416,12 @@ When a user adjusts the profile at mid-flow mirror or end summary:
 
 ### How Goals Map to Weekly Coach Behavior
 
-The selected goal does **not** override BWS-derived values. Instead, it:
+The selected goal does **not** override BWS-derived values. Once the Profile is
+wired into the product runtime, the goal is intended to:
 
-1. **Focuses initial attention** — The Weekly Coach prioritizes Journal Entries related to the goal tension in its first 2–3 weeks of monitoring
-2. **Chooses starter prompts** — The first guided journal prompt is tailored to the goal category
-3. **Sets expectation** — The user understands *why* they're journaling (not just "reflect on your day" but "let's explore this tension")
+1. **Focus initial attention** — The Weekly Coach can prioritize Journal Entries related to the goal tension in its first 2–3 weeks of monitoring
+2. **Choose starter prompts** — The Journaling UI can tailor its first prompt to the goal category
+3. **Set expectation** — The user understands *why* they're journaling (not just "reflect on your day" but "let's explore this tension")
 
 Over time, behavioral data from Journal Entries should supersede the initial goal selection as the primary driver of Weekly Coach focus.
 
@@ -457,63 +433,90 @@ Over time, behavioral data from Journal Entries should supersede the initial goa
 
 ```json
 {
+  "schema_version": 1,
   "user_id": "uuid",
+  "session_id": "uuid",
   "onboarding_version": "1.0.0",
+  "scoring_method": "exposure_normalized_best_worst_v1",
+  "started_at": "2025-01-15T10:28:00Z",
   "timestamp": "2025-01-15T10:30:00Z",
   "bws_responses": [
     {
       "set_number": 1,
-      "items": ["Security", "Self-Direction", "Achievement", "Benevolence"],
-      "item_order_shown": ["Self-Direction", "Benevolence", "Security", "Achievement"],
-      "selected_best": "Benevolence",
-      "selected_worst": "Security",
+      "items": ["security", "self_direction", "achievement", "benevolence"],
+      "item_order_shown": ["self_direction", "benevolence", "security", "achievement"],
+      "selected_best": "benevolence",
+      "selected_worst": "security",
       "response_time_ms": 4200
     }
   ],
   "value_scores": {
-    "raw": {
-      "Self-Direction": 2,
-      "Stimulation": -1,
-      "Hedonism": 0,
-      "Achievement": 0,
-      "Power": -2,
-      "Security": -1,
-      "Conformity": 0,
-      "Tradition": -1,
-      "Benevolence": 2,
-      "Universalism": 1
+    "appearances": {
+      "self_direction": 3, "stimulation": 3, "hedonism": 2,
+      "achievement": 2, "power": 2, "security": 3,
+      "conformity": 2, "tradition": 2, "benevolence": 2,
+      "universalism": 3
+    },
+    "best_counts": {
+      "self_direction": 2, "stimulation": 0, "hedonism": 1,
+      "achievement": 0, "power": 0, "security": 0,
+      "conformity": 0, "tradition": 0, "benevolence": 2,
+      "universalism": 1
+    },
+    "worst_counts": {
+      "self_direction": 0, "stimulation": 1, "hedonism": 1,
+      "achievement": 0, "power": 2, "security": 1,
+      "conformity": 0, "tradition": 1, "benevolence": 0,
+      "universalism": 0
+    },
+    "net_counts": {
+      "self_direction": 2,
+      "stimulation": -1,
+      "hedonism": 0,
+      "achievement": 0,
+      "power": -2,
+      "security": -1,
+      "conformity": 0,
+      "tradition": -1,
+      "benevolence": 2,
+      "universalism": 1
+    },
+    "scores": {
+      "self_direction": 0.66666667,
+      "stimulation": -0.33333333,
+      "hedonism": 0.0,
+      "achievement": 0.0,
+      "power": -1.0,
+      "security": -0.33333333,
+      "conformity": 0.0,
+      "tradition": -0.5,
+      "benevolence": 1.0,
+      "universalism": 0.33333333
     },
     "weights": {
-      "Self-Direction": 0.167,
-      "Stimulation": 0.067,
-      "Hedonism": 0.100,
-      "Achievement": 0.100,
-      "Power": 0.033,
-      "Security": 0.067,
-      "Conformity": 0.100,
-      "Tradition": 0.067,
-      "Benevolence": 0.167,
-      "Universalism": 0.132
+      "self_direction": 0.13445378,
+      "stimulation": 0.08403361,
+      "hedonism": 0.10084034,
+      "achievement": 0.10084034,
+      "power": 0.05042017,
+      "security": 0.08403361,
+      "conformity": 0.10084034,
+      "tradition": 0.07563025,
+      "benevolence": 0.1512605,
+      "universalism": 0.11764706
     }
   },
   "confidence": {
     "consistent": true,
-    "spread": 1.35,
-    "refinements": 0
+    "spread": 0.55,
+    "method": "response_consistency_population_spread_v1"
   },
-  "top_values": ["Self-Direction", "Benevolence"],
+  "top_values": ["benevolence"],
   "goal_category": "work_life_balance",
   "user_confirmed": true,
-  "refinements": [],
-  "mirror_responses": {
-    "mid_flow": {
-      "accepted": true,
-      "adjustment": null
-    },
-    "end_summary": {
-      "accepted": true,
-      "adjustment": null
-    }
+  "provenance": {
+    "source": "react_onboarding_poc",
+    "card_order_randomized": true
   }
 }
 ```
@@ -522,8 +525,12 @@ Over time, behavioral data from Journal Entries should supersede the initial goa
 
 | Field | Type | Description |
 |-------|------|-------------|
+| `schema_version` | int | Version of the persisted profile schema |
 | `user_id` | string (UUID) | Unique user identifier |
+| `session_id` | string (UUID) | Identifier for one resumable onboarding session |
 | `onboarding_version` | string (semver) | Version of the onboarding flow for A/B testing and data lineage |
+| `scoring_method` | string | Versioned scoring contract |
+| `started_at` | string (ISO 8601) | When the session began |
 | `timestamp` | string (ISO 8601) | When onboarding was completed |
 | `bws_responses` | array[6] | Raw response data for each BWS set |
 | `bws_responses[].set_number` | int | Set identifier (1–6) |
@@ -531,15 +538,18 @@ Over time, behavioral data from Journal Entries should supersede the initial goa
 | `bws_responses[].item_order_shown` | array[4] | Actual display order (randomized) |
 | `bws_responses[].selected_best` | string | Value chosen as "Most like me" |
 | `bws_responses[].selected_worst` | string | Value chosen as "Least like me" |
-| `bws_responses[].response_time_ms` | int | Time from set display to "Next" tap |
-| `value_scores.raw` | object | Raw BWS scores (best_count − worst_count) per value |
+| `bws_responses[].response_time_ms` | int | Time from set display to `Continue` |
+| `value_scores.appearances` | object | Number of times each value appeared |
+| `value_scores.best_counts` | object | Most selections per value |
+| `value_scores.worst_counts` | object | Least selections per value |
+| `value_scores.net_counts` | object | Best count minus worst count per value |
+| `value_scores.scores` | object | Exposure-normalized BWS scores |
 | `value_scores.weights` | object | Normalized weight vector (sums to 1.0) |
-| `confidence` | object | Confidence metadata (consistency, spread, refinement count) |
-| `top_values` | array | Core Values: every value tied for the highest adjusted BWS score; never truncated to a fixed count |
+| `confidence` | object | Confidence metadata (consistency and score spread) |
+| `top_values` | array | Core Values: every value tied for the highest exposure-normalized BWS score; never truncated to a fixed count |
 | `goal_category` | string | Selected tension category key |
-| `user_confirmed` | boolean | Whether user accepted the end summary |
-| `refinements` | array | User corrections at mirror/summary stages |
-| `mirror_responses` | object | User response at mid-flow and end-summary mirrors |
+| `user_confirmed` | boolean | Whether the user confirmed the end summary |
+| `provenance` | object | Source and randomized-card-order metadata |
 
 ### How This Initializes the VIF User Profile
 

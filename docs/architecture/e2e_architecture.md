@@ -46,8 +46,8 @@ flowchart TB
     end
 
     subgraph product["Product shell"]
-        onboarding["Values onboarding survey<br/>(BWS)"]
-        profile["Value profile<br/>(self-model)"]
+        onboarding["React onboarding POC<br/>(BWS)"]
+        profile["Local Profile<br/>(browser session)"]
         journaling["Journaling UI"]
         nudges["Conversational nudging"]
         d_surface["??? Where does the<br/>product ship?"]
@@ -91,12 +91,12 @@ flowchart TB
     %% Human benchmark, not label production
     annotation -. "benchmark comparison" .-> reports
 
-    %% Product shell (specified, not wired to real users yet)
-    onboarding -.-> profile
+    %% Product shell (onboarding works locally; runtime handoff is not wired)
+    onboarding --> profile
     journaling <-.-> nudges
     journaling -.-> state
     journaling -.-> reviewer
-    profile -. "??? How onboarding scores<br/>become the runtime profile" .-> state
+    profile -. "??? How onboarding scores<br/>become the runtime Profile" .-> state
     profile -. "Core Values" .-> reviewer
 
     %% What actually feeds the runtime today
@@ -125,8 +125,8 @@ flowchart TB
     narrative -.- d_feedback
 
     class personas,judge,consensus,annotation,critic_train,checkpoint,llm_baseline,drift_v1,drift_review,reports implemented;
-    class state,scores,weekly,drift,evolution,reviewer,digest,prompt,narrative,runtime_review,nudges partial;
-    class onboarding,profile,journaling,d_evolution specified;
+    class state,scores,weekly,drift,evolution,reviewer,digest,prompt,narrative,runtime_review,nudges,onboarding,profile partial;
+    class journaling,d_evolution specified;
     class d_surface,d_boundary,d_feedback decision;
     class d_trigger,offline_review scope;
 ```
@@ -160,11 +160,11 @@ from the six-detector comparison's detector vote. The LLM context baseline
 compares student-visible, historical, and upper-bound context setups against
 the local MLP without feeding production runtime scores.
 
-The product shell is designed on paper but not built: where the product ships
-(app, web, something else), the journaling UI itself, and how a user's
-onboarding answers get turned into the value profile the runtime reads. One
-exception inside it: the conversational nudging engine already exists as an
-experimental slice, even though the journaling UI it would attach to does not.
+The product shell is partial. A standalone React POC now runs the complete local
+onboarding flow and produces a resumable Profile in the browser. Durable
+user storage, the handoff into the Weekly Drift Reviewer, the surrounding React
+app, and the Journaling UI remain unbuilt. The conversational nudging engine is
+another experimental slice without the Journaling UI it would attach to.
 
 Drift is two consecutive Conflicts on the same Core Value. Under the approved
 architecture, the Weekly Drift Reviewer makes those Conflict decisions without
