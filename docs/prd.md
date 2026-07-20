@@ -6,7 +6,7 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 
 ## Implementation Status
 
-*Last updated: 2026-07-19*
+*Last updated: 2026-07-20*
 
 | Feature | Status | Details |
 |---------|--------|---------|
@@ -18,7 +18,7 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 | **Conversational Nudging** | 🧪 Experimental | 3-category LLM classification (clarification/elaboration/tension-surfacing); pending validation that nudging improves VIF signal quality |
 | **Drift Detector** | ✅ Complete | The capstone POC implementation is complete and wired. It persists versioned Weekly Drift Reviewer Decisions without VIF Critic input, applies the deterministic two-consecutive-Conflict rule across week boundaries, and handles extension, recovery, abstention, deduplication, and active, recovered, uncertain, or mixed delivery. The fixed Luna-low model contract retains AI-reviewed synthetic development evidence; no fresh final test or deployment approval is claimed. The former VIF Critic crash/rut/evolution runtime is explicitly deprecated and retained only for historical compatibility. |
 | **Weekly Coach** | 🧪 Experimental | The approved runtime sends deterministic Drift Detector output based on Weekly Drift Reviewer Decisions into the Weekly Digest and optional Weekly Coach reflection. The Weekly Digest cites supporting Journal Entries without VIF Critic or LLM-Judge numeric summaries. Explanation validation depth and product-facing orchestration remain incomplete; no fresh final test or deployment approval is claimed. |
-| **Onboarding (BWS Values Assessment)** | 🧪 Experimental | Standalone React POC opens directly on six animated card decks over 10 Schwartz dimensions, then shows an informational mid-flow mirror, structured goal selection, a neutral end summary, and a first Journal Entry handoff contract. It supports tap, drag, and keyboard placement, exposure-normalized scoring, and local resume without direct value-ranking corrections, misleading on-device claims, or developer-facing Profile output. Durable storage and the handoff of Core Values in `top_values` to the Weekly Drift Reviewer remain under `twinkl-1m8`; [full spec](onboarding/onboarding_spec.md) |
+| **Onboarding (SVBWS Values Assessment)** | 🧪 Experimental | Standalone React POC implements the published 11-group, six-object balanced SVBWS design, then presents structured goal selection, a label-free Core Value summary, and a first Journal Entry handoff. It randomizes group and card order, stores raw 11-object BWS results separately from the ten-value Profile transformation, and omits midpoint feedback and unsupported confidence claims. It is a research-grounded pilot instrument, not a validated Twinkl instrument. Durable storage and the Core Value handoff to the Weekly Drift Reviewer remain under `twinkl-1m8`; [full spec](onboarding/onboarding_spec.md) |
 | **Embedding Explorer** | ✅ Complete | Interactive 3D visualization of VIF hidden-layer and SBERT embedding spaces; self-contained HTML with Three.js |
 | **Journaling Anomaly Radar** | ❌ Not Started | Cadence/gap detection |
 | **Goal-aligned Inspiration Feed** | ❌ Not Started | External API integration |
@@ -155,11 +155,15 @@ Value context is injected from `config/schwartz_values.yaml`, which contains ric
 * Low-friction journaling: prompts reduce blank-page paralysis and encourage regular reflection.
 * Evidence-based reinforcement, not gamification: when users sustain alignment with their values, the system acknowledges it by citing specific behaviors and connecting them to the user's own words — never through streaks, points, leaderboards, or generic praise. Positive feedback is infrequent (only when patterns emerge) and grounded in what the user actually wrote.
 
-## **Onboarding (BWS Values Assessment)** 🧪
+## **Onboarding (SVBWS Values Assessment)** 🧪
 
-The onboarding flow uses **Best-Worst Scaling (BWS)** — a forced-choice psychometric technique — to elicit value priorities across 10 Schwartz dimensions. The standalone React POC opens directly on six animated card decks, then shows an informational mid-flow mirror, structured goal selection, a neutral end summary, and a first Journal Entry handoff. It applies exposure-normalized scoring and local resume; Twinkl infers the ranking from the cards and does not ask users which values were placed too high or low. One phase-aware progress label moves from `Values · n of 6` to `Your focus` and `Your compass`; the mirror is an interstitial. The **[Onboarding Spec](onboarding/onboarding_spec.md)** remains the source of truth for the interaction, scoring, and data contracts.
+The onboarding flow uses the published **Schwartz Values Best-Worst Survey (SVBWS)** design to elicit relative priorities. The standalone React POC presents 11 randomized groups of six neutral cards, followed by structured goal selection, a label-free Core Value summary, and a first Journal Entry handoff. Universalism–Nature and Universalism–Social remain distinct in the raw BWS result and are merged only in the separately named ten-value Profile transformation. The flow has no midpoint result or confidence proxy. It is a research-grounded pilot instrument, not a psychometrically validated Twinkl instrument. The **[Onboarding Spec](onboarding/onboarding_spec.md)** is authoritative for the interaction, scoring, and Profile contracts.
 
-The internal Profile includes a graded 10-dimensional value weight vector for VIF Critic conditioning, Core Values stored in `top_values` for Drift gating, and an initial Weekly Coach monitoring focus. The React POC keeps that Profile in the browser without exposing technical JSON to the user. Durable storage and runtime consumption remain under `twinkl-1m8`.
+The internal Profile includes a graded 10-dimensional product weight vector,
+Core Values stored in `top_values` for Drift gating, and a goal category
+intended to focus the Weekly Coach. The React POC keeps that Profile in the
+browser without exposing technical JSON to the user. Durable storage and
+runtime consumption remain under `twinkl-1m8`.
 
 This onboarding directly anchors the capstone submodules: the latent dimensions form named slots in the knowledge base and rule layer (**Intelligent Reasoning Systems**), the mapping from card responses to those dimensions is a compact modelling task (**Pattern Recognition Systems**), entry content analysis and temporal patterns feed the sensing layer (**Intelligent Sensing Systems**), and treating the assessment as one input stream into a shared user-state vector `z` illustrates end-to-end orchestration and state management across Perception → Memory → Reasoning → Action (**Architecting AI Systems**).
 
@@ -179,7 +183,7 @@ This onboarding directly anchors the capstone submodules: the latent dimensions 
 **Implementation path**
 
 1. Frame the research question (“How do we sustain a dynamic model of values/identity and reflect alignment?”) and map subsystems to submodules.
-2. Define the MVP loop: onboarding (BWS-based values assessment — see [spec](onboarding/onboarding_spec.md))
+2. Define the MVP loop: onboarding (SVBWS values assessment — see [spec](onboarding/onboarding_spec.md))
 3. **Scoping Strategy:** Adopt a **Hybrid Approach** (simple journaling loop + Weekly Digest + lightweight trajectory visualization). Build small slices of each feature to demonstrate breadth without over-building.
 4. Specify the profile schema:
    * **Value dimensions** anchored in [Schwartz's theory of basic human values](https://en.wikipedia.org/wiki/Theory_of_basic_human_values) (e.g., Self-Direction, Benevolence, Achievement, Security) with definitions, rubrics, and examples.

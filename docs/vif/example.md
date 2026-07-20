@@ -45,25 +45,32 @@ Before any user signs up, the VIF Critic must be trained.
 
 > For the full onboarding specification, see [Onboarding Spec](../onboarding/onboarding_spec.md).
 
-Sarah downloads Twinkl and completes the BWS-based values assessment. Rather than simply picking her top 2 values, she works through 6 forced-choice screens that reveal her value priorities through trade-offs.
+Sarah downloads Twinkl and completes the research-grounded SVBWS onboarding
+assessment. Rather than picking two labels, she works through 11 randomized
+groups from the published balanced design. Each group contains six descriptor
+cards and requires one Most and one Least choice.
 
 ### What Sarah Sees
 
-**BWS Sets (showing 2 of 6):**
+**BWS groups (showing 2 of 11):**
 
-> **Set 1:** Security · Self-Direction · Achievement · Benevolence
+> **One group:** Successful, capable, ambitious · Protecting the environment,
+> a world of beauty, unity with nature · Helpful, honest, forgiving · Devout,
+> accepting portion in life, humble · Clean, national & family security,
+> social order · Equality, world at peace, social justice
 >
-> Sarah taps **"Being there for the people closest to me"** as Most like me (Benevolence) and **"Feeling calm and secure in my life"** as Least like me (Security). She cares about safety, but it's not what *drives* her.
+> Sarah selects **"Helpful, honest, forgiving"** as Most important and
+> **"Devout, accepting portion in life, humble"** as Least important.
 
-> **Set 3:** Hedonism · Tradition · Self-Direction · Power
+> **Another group:** Social power, authority, wealth · Successful, capable,
+> ambitious · Pleasure, enjoying life, self-indulgent · Creativity, curious,
+> freedom · Protecting the environment, a world of beauty, unity with nature ·
+> Devout, accepting portion in life, humble
 >
-> Sarah taps **"Having the freedom to choose my own path"** as Most like me (Self-Direction) and **"Having influence over how things go"** as Least like me (Power). Creative freedom over control.
+> Sarah selects **"Creativity, curious, freedom"** as Most important and
+> **"Social power, authority, wealth"** as Least important.
 
-**Mid-flow mirror (after Set 3):**
-
-> "A pattern is beginning to appear: **being there for the people closest to you** and **having the freedom to choose your own path** are pulling you forward, while **having influence over how things go** is quieter for now."
-
-The mirror is informational. Sarah continues; Twinkl does not ask her which values to move higher or lower.
+Twinkl shows no preliminary result between groups.
 
 **Goal selection:**
 
@@ -71,10 +78,14 @@ Sarah picks **"I'm stretched too thin between work and everything else"** — th
 
 **End summary:**
 
-> Your Core Values: **Benevolence**, **Self-Direction**
+> What sits at the center: **Being there for the people closest to me** and
+> **Having the freedom to choose my own path**
 > Your focus: "I'm stretched too thin between work and everything else"
 
-Sarah confirms. Twinkl now has a graded Profile — not just her top 2, but a full 10-dimensional weight vector showing *how much* each value matters relative to others.
+The summary never reveals the Schwartz labels. Sarah selects `Set my compass`,
+which confirms the displayed descriptions as her Core Values. Twinkl retains
+the raw 11-object BWS result and a separately named ten-value product
+transformation.
 
 ### Component Involvement
 
@@ -86,16 +97,26 @@ Sarah confirms. Twinkl now has a graded Profile — not just her top 2, but a fu
 | Onboarding flow | **ACTIVE** | Guides Sarah through the BWS assessment and creates her local Profile |
 | Weekly Coach | N/A | No Weekly Digest exists yet |
 
-**Abridged internal output:** Sarah's Profile is generated in the browser. It is not exposed as technical output to Sarah and is not yet persisted to the Weekly Drift Reviewer runtime:
+**Abridged internal output:** Sarah's Profile is generated in the browser. It
+is not exposed as technical output to Sarah and is not yet persisted to the
+Weekly Drift Reviewer runtime:
 
 ```json
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "user_id": "sarah",
   "session_id": "example-session",
-  "onboarding_version": "1.0.0",
-  "scoring_method": "exposure_normalized_best_worst_v1",
-  "value_scores": {
+  "onboarding_version": "2.1.0",
+  "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
+  "scoring_method": "best_minus_worst_divided_by_appearances_v1",
+  "bws_results": {
+    "scores": {
+      "universalism_nature": 0.167,
+      "universalism_social": 0.0
+    }
+  },
+  "value_profile": {
+    "method": "mean_universalism_facets_then_shift_normalize_v1",
     "weights": {
       "self_direction": 0.167,
       "stimulation": 0.067,
@@ -107,19 +128,19 @@ Sarah confirms. Twinkl now has a graded Profile — not just her top 2, but a fu
       "tradition": 0.067,
       "benevolence": 0.167,
       "universalism": 0.132
-    }
+    },
+    "top_values": ["self_direction", "benevolence"]
   },
   "top_values": ["self_direction", "benevolence"],
   "goal_category": "work_life_balance",
-  "user_confirmed": true,
-  "confidence": {
-    "consistent": true,
-    "spread": 0.55
-  }
+  "user_confirmed": true
 }
 ```
 
-Note the difference from a simple "pick 2" approach: Sarah's Profile now captures that Achievement and Universalism have moderate weight, Hedonism and Conformity are middling, and Power is her lowest priority. The full weight vector remains available for offline VIF Critic analysis; the approved user-facing Drift path uses Core Values after the Profile handoff in `twinkl-1m8` is implemented.
+The weights preserve the order of the ten-value scores but are product features,
+not psychometric preference shares. The full vector remains available for
+offline VIF Critic analysis; the approved user-facing Drift path uses Core
+Values after the Profile handoff in `twinkl-1m8` is implemented.
 
 ---
 

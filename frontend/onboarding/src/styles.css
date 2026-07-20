@@ -369,7 +369,6 @@ h2 {
   justify-content: flex-end;
 }
 
-.mirror-card small,
 .focus-line small {
   display: block;
   margin-bottom: 6px;
@@ -387,27 +386,51 @@ h2 {
 
 .stage--cards h1 {
   max-width: 680px;
-  font-size: clamp(2.5rem, 4.6vw, 4.8rem);
+  font-size: clamp(2.35rem, 4vw, 4.25rem);
 }
 
 .card-prompt {
   margin: 0 0 22px;
   color: rgba(20, 34, 59, 0.65);
+  font-family: "Source Serif 4 Variable", Georgia, serif;
   font-size: 0.96rem;
   font-weight: 650;
+}
+
+.card-reassurance {
+  max-width: 650px;
+  margin: 8px 0 5px;
+  color: rgba(20, 34, 59, 0.72);
+  font-family: "Source Serif 4 Variable", Georgia, serif;
+  font-size: 1.08rem;
+  line-height: 1.45;
+}
+
+.browser-note {
+  width: fit-content;
+  max-width: 650px;
+  margin: 10px 0 13px;
+  border: 1px solid rgba(46, 140, 130, 0.2);
+  border-radius: 999px;
+  padding: 7px 12px;
+  color: rgba(20, 34, 59, 0.66);
+  background: rgba(46, 140, 130, 0.07);
+  font-size: 0.74rem;
+  font-weight: 680;
+  line-height: 1.35;
 }
 
 .choice-board {
   --deck-gap: clamp(9px, 1vw, 16px);
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 15px var(--deck-gap);
 }
 
 .drop-box {
   position: relative;
   display: grid;
-  grid-column: 2 / 4;
+  grid-column: 3 / 5;
   min-height: 108px;
   grid-template-rows: auto 1fr;
   width: auto;
@@ -528,22 +551,25 @@ h2 {
 }
 
 .card-deck {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--deck-gap);
-  justify-content: center;
+  width: min(100%, 740px);
+  margin: 0 auto;
   perspective: 1200px;
 }
 
 .card-deck > .value-card {
-  width: calc((100% - 3 * var(--deck-gap)) / 4);
-  flex: 0 1 calc((100% - 3 * var(--deck-gap)) / 4);
+  width: 100%;
 }
 
 .value-card {
   --card-accent: var(--blue);
   --card-angle: 0deg;
   --card-delay: 0ms;
+  --card-background-image: none;
   position: relative;
+  isolation: isolate;
   display: flex;
   min-width: 0;
   aspect-ratio: 3 / 4;
@@ -554,9 +580,7 @@ h2 {
   border-radius: 22px;
   padding: clamp(14px, 1.5vw, 20px);
   color: var(--ink);
-  background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(239, 244, 247, 0.96)),
-    var(--paper);
+  background: var(--paper);
   box-shadow: 0 15px 35px rgba(20, 34, 59, 0.1);
   cursor: grab;
   text-align: left;
@@ -567,6 +591,32 @@ h2 {
   animation: deal-card 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
   animation-delay: var(--card-delay);
   transition: border-color 180ms ease, box-shadow 180ms ease, transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.value-card::before,
+.value-card::after {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  content: "";
+  pointer-events: none;
+}
+
+.value-card::before {
+  background-image: var(--card-background-image);
+  background-position: center;
+  background-size: cover;
+  filter: saturate(0.78) contrast(0.84) brightness(1.04);
+}
+
+.value-card::after {
+  background: linear-gradient(
+    180deg,
+    rgba(246, 248, 248, 0.04) 0%,
+    rgba(246, 248, 248, 0.12) 42%,
+    rgba(246, 248, 248, 0.82) 72%,
+    rgba(246, 248, 248, 0.98) 100%
+  );
 }
 
 .value-card:focus-visible {
@@ -592,47 +642,17 @@ h2 {
   animation: picked-card 900ms ease-in-out infinite alternate;
 }
 
-.value-card__art {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  height: auto;
-  margin: 0 0 auto;
-  color: var(--card-accent);
-  fill: none;
-  stroke: currentColor;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 2.2;
-  filter: drop-shadow(0 10px 13px color-mix(in srgb, var(--card-accent) 17%, transparent));
-  animation: art-float 5s ease-in-out infinite alternate;
-  animation-delay: var(--card-delay);
-}
-
-.value-card__art .art-fill {
-  fill: currentColor;
-  fill-opacity: 0.13;
-}
-
-.value-card__art--stimulation {
-  animation-duration: 2.8s;
-}
-
-.value-card__art--power,
-.value-card__art--universalism {
-  animation-name: art-turn;
-  transform-origin: center;
-}
-
 .value-card__phrase {
   position: relative;
   z-index: 1;
   min-height: 4.4em;
+  margin-top: auto;
   font-family: "Source Serif 4 Variable", Georgia, serif;
   font-size: clamp(0.96rem, 1.35vw, 1.22rem);
   font-weight: 540;
   line-height: 1.16;
   letter-spacing: -0.02em;
+  text-shadow: 0 1px 10px rgba(246, 248, 248, 0.92);
 }
 
 .value-card--most {
@@ -653,7 +673,7 @@ h2 {
 
 .drop-box .value-card {
   display: flex;
-  width: calc((100% - var(--deck-gap) + 3px) / 2);
+  width: min(calc(100% - 24px), 230px);
   height: auto;
   gap: 0;
   align-items: stretch;
@@ -691,60 +711,6 @@ h2 {
   box-shadow: 0 28px 60px rgba(20, 34, 59, 0.28);
   opacity: 0.94;
   transition: none;
-}
-
-.mirror-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  grid-auto-rows: 1fr;
-  gap: 14px;
-  margin: 34px 0;
-}
-
-.mirror-card {
-  min-height: 190px;
-  border-radius: 20px;
-  padding: 25px;
-}
-
-.mirror-card--high {
-  color: #fff;
-  background: var(--ink);
-}
-
-.mirror-card--high small {
-  color: var(--apricot);
-}
-
-.mirror-card--low {
-  border: 1px solid var(--line);
-  background: rgba(231, 237, 242, 0.55);
-}
-
-.phrase-list {
-  display: grid;
-  gap: 12px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.phrase-list li {
-  position: relative;
-  padding-left: 20px;
-  font-weight: 640;
-  line-height: 1.5;
-}
-
-.phrase-list li::before {
-  position: absolute;
-  top: 0.56em;
-  left: 0;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--apricot);
-  content: "";
 }
 
 .goal-list {
@@ -887,18 +853,6 @@ h2 {
   from {
     transform: translateY(32px) rotate(calc(var(--card-angle) * 2));
     opacity: 0;
-  }
-}
-
-@keyframes art-float {
-  to {
-    transform: translateY(-4px);
-  }
-}
-
-@keyframes art-turn {
-  to {
-    transform: rotate(4deg) scale(1.02);
   }
 }
 
@@ -1066,11 +1020,6 @@ h2 {
     justify-self: center;
   }
 
-  .card-deck .value-card__art,
-  .drop-box .value-card__art {
-    max-height: 105px;
-  }
-
   .card-deck .value-card__phrase,
   .drop-box .value-card__phrase {
     min-height: 0;
@@ -1089,7 +1038,6 @@ h2 {
     display: none;
   }
 
-  .mirror-grid,
   .goal-list {
     grid-template-columns: 1fr;
   }

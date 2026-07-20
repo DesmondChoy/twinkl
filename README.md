@@ -22,7 +22,7 @@ Twinkl is an "inner compass" that helps users align their daily behavior with th
 
 ## Onboarding — 🧪 Experimental React POC
 
-The standalone React app in [`frontend/onboarding/`](frontend/onboarding/) opens directly on six animated forced-choice card decks. People tap or drag cards with distinct value-specific artwork into Most and Least boxes. The flow then shows an informational mid-flow mirror, structured goal selection, a neutral end summary, and a first Journal Entry handoff. It applies exposure-normalized scoring and local resume without asking users to rank or correct inferred values directly. Visible progress moves from `Values · n of 6` to `Your focus` and `Your compass`; the mirror is an interstitial.
+The standalone React app in [`frontend/onboarding/`](frontend/onboarding/) implements the published 11-group, six-object balanced SVBWS design. People tap or drag visually neutral cards into Most and Least boxes before structured goal selection, a label-free Core Value summary, and a first Journal Entry handoff. Group and card order are randomized, raw BWS results remain separate from the ten-value Profile transformation, and there is no midpoint result or unsupported confidence field. This is a research-grounded pilot instrument, not a validated Twinkl instrument.
 
 ```sh
 cd frontend/onboarding
@@ -336,7 +336,7 @@ opening.
 
 | Capability | Status | Note |
 |---|---|---|
-| Onboarding (BWS Values Assessment) | 🧪 Experimental | Standalone React POC implements the complete local, user-facing flow and an internal Profile; durable storage and Weekly Drift Reviewer handoff remain pending under `twinkl-1m8` |
+| Onboarding (SVBWS Values Assessment) | 🧪 Experimental | Standalone React POC implements the complete local, user-facing flow and an internal Profile; durable storage and Weekly Drift Reviewer handoff remain pending under `twinkl-1m8` |
 | Weekly Coach validation depth | ⚠️ Partial | The approved Weekly Drift Reviewer and Drift Detector runtime now feeds the Weekly Digest and optional Weekly Coach reflection; batch Tier 1 pass rates and Tier 2 and Tier 3 evaluation remain incomplete |
 | Nudge signal quality validation | 🧪 Experimental | Annotation study and downstream usefulness checks remain in progress |
 | Embedding Explorer | ✅ Complete | Interactive 3D visualization of VIF Critic embeddings |

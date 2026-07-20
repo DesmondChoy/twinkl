@@ -11,17 +11,18 @@
 
 ### 1.1 Onboarding: Declaring Values
 
-The specified onboarding flow uses a 6-set **Best-Worst Scaling (BWS)**
-assessment. Each set presents 4 cards; the user selects "Most like me" and
-"Least like me." Raw scores are computed as
-`raw_score(v) = best_count(v) - worst_count(v)` per value, then normalized to
-produce a **value profile** `w_u` — a 10-dimensional weight vector covering
-the Schwartz value dimensions (Security, Self-Direction, Achievement,
-Benevolence, etc.) that sums to 1.0.
+The implemented onboarding flow uses the published 11-group **Schwartz Values
+Best-Worst Survey (SVBWS)** balanced design. Each group presents six neutral
+descriptor cards; the user selects the Most and Least important guiding
+principles. The raw Profile keeps 11 object scores, including separate
+Universalism–Nature and Universalism–Social scores. A separately named product
+transformation averages those facets and creates the ten-dimensional weight
+vector `w_u`.
 
-A mid-flow mirror (after set 3) and end-of-flow mirror allow users to refine
-the profile before it is finalized. This flow is specified but not wired into
-the runtime.
+The flow has no midpoint result or value-specific card art. The end summary
+uses friendly descriptions instead of Schwartz labels; `Set my compass`
+confirms those descriptions as Core Values. The Profile is still not wired
+into the runtime.
 
 The synthetic runtime assigns equal mass to Core Values, with a
 uniform fallback. The graded BWS profile remains an integration gap. Once a

@@ -16,14 +16,13 @@ async function answerSet(user: ReturnType<typeof userEvent.setup>) {
 }
 
 describe("onboarding app", () => {
-  it("opens directly on the first four-card set without developer preamble", () => {
+  it("opens directly on the first six-card set without Schwartz labels", () => {
     render(<App />);
-    expect(screen.getByLabelText("Values · 1 of 6")).toBeTruthy();
-    expect(screen.getAllByTestId("value-card")).toHaveLength(4);
-    expect(screen.queryByText(/step 1 of 8/i)).toBeNull();
-    expect(screen.queryByText(/private on this device/i)).toBeNull();
-    expect(screen.queryByRole("button", { name: "Begin the assessment" })).toBeNull();
-    expect(screen.queryByText(/six small trade-offs/i)).toBeNull();
+    expect(screen.getByLabelText("Values · 1 of 11")).toBeTruthy();
+    expect(screen.getAllByTestId("value-card")).toHaveLength(6);
+    expect(screen.getByText(/across 11 groups/i)).toBeTruthy();
+    expect(screen.queryByText("Hedonism")).toBeNull();
+    expect(screen.queryByText("Universalism")).toBeNull();
   });
 
   it("lets touch users tap a card, choose a box, and reconsider", async () => {
@@ -33,7 +32,7 @@ describe("onboarding app", () => {
     const firstPhrase = first.querySelector(".value-card__phrase")!.textContent!;
     await user.click(first);
     expect(first.getAttribute("aria-pressed")).toBe("true");
-    expect(screen.getByText("Now tap Most or Least.")).toBeTruthy();
+    expect(screen.getByText(/where does this principle sit/i)).toBeTruthy();
     await user.click(screen.getByRole("button", { name: `Place ${firstPhrase} in Most` }));
     expect(screen.getByTestId("drop-most").querySelector('[data-location="most"]')).toBeTruthy();
 
@@ -54,19 +53,27 @@ describe("onboarding app", () => {
     const user = userEvent.setup();
     render(<App />);
     const first = screen.getAllByTestId("value-card")[0];
+    const firstValue = first.dataset.value;
     first.focus();
     await user.keyboard("m");
-    expect(screen.getByTestId("drop-most").querySelector('[data-location="most"]')).toBeTruthy();
+    const mostCard = screen.getByTestId("drop-most").querySelector<HTMLElement>('[data-location="most"]')!;
+    expect(mostCard).toBeTruthy();
+    expect(document.activeElement).toBe(mostCard);
     const poolCard = screen.getAllByTestId("value-card").find((card) => card.dataset.location === "pool")!;
     poolCard.focus();
     await user.keyboard("l");
-    expect(screen.getByTestId("drop-least").querySelector('[data-location="least"]')).toBeTruthy();
+    const leastCard = screen.getByTestId("drop-least").querySelector<HTMLElement>('[data-location="least"]')!;
+    expect(leastCard).toBeTruthy();
+    expect(document.activeElement).toBe(leastCard);
     expect(screen.getByRole("button", { name: "Continue" }).hasAttribute("disabled")).toBe(false);
-    const mostCard = screen.getByTestId("drop-most").querySelector<HTMLElement>('[data-location="most"]')!;
     mostCard.focus();
     await user.keyboard("{Backspace}");
     expect(screen.getByTestId("drop-most").textContent).toContain("Drop a card here");
     expect(screen.getByRole("button", { name: "Continue" }).hasAttribute("disabled")).toBe(true);
+    const returnedCard = screen.getByTestId("selection-area").querySelector<HTMLElement>(
+      `[data-value="${firstValue}"][data-location="pool"]`,
+    );
+    expect(document.activeElement).toBe(returnedCard);
   });
 
   it("moves cards into both boxes and back with pointer dragging", () => {
@@ -117,7 +124,7 @@ describe("onboarding app", () => {
     fireEvent.pointerMove(placed, { pointerId: 2, clientX: 100, clientY: 300 });
     fireEvent.pointerUp(placed, { pointerId: 2, clientX: 100, clientY: 300 });
     expect(most.querySelector('[data-location="most"]')).toBeNull();
-    expect(screen.getAllByTestId("value-card")).toHaveLength(4);
+    expect(screen.getAllByTestId("value-card")).toHaveLength(6);
     const nextCard = screen.getAllByTestId("value-card")[1];
     fireEvent.pointerDown(nextCard, { pointerId: 3, clientX: 100, clientY: 300 });
     fireEvent.pointerMove(nextCard, { pointerId: 3, clientX: 100, clientY: 560 });
@@ -125,32 +132,30 @@ describe("onboarding app", () => {
     expect(least.querySelector('[data-location="least"]')).toBeTruthy();
   });
 
-  it("removes numbered headers and gives every displayed card unique art", () => {
+  it("uses six distinct position-bound backgrounds with the same accent", () => {
     render(<App />);
-    expect(screen.queryByText(/card 0[1-4]/i)).toBeNull();
-    const artClasses = screen
-      .getAllByTestId("value-card")
-      .map((card) => card.querySelector("svg")?.getAttribute("class"));
-    expect(new Set(artClasses).size).toBe(4);
+    expect(screen.queryByText(/card 0[1-6]/i)).toBeNull();
+    const cards = screen.getAllByTestId("value-card");
+    const backgrounds = cards.map((card) =>
+      card.style.getPropertyValue("--card-background-image"),
+    );
+    const positions = cards.map((card) => card.dataset.backgroundPosition).sort();
+    expect(new Set(backgrounds).size).toBe(6);
+    expect(positions).toEqual(["0", "1", "2", "3", "4", "5"]);
+    const accents = cards
+      .map((card) => card.getAttribute("style")?.match(/--card-accent:\s*([^;]+)/)?.[1]);
+    expect(new Set(accents).size).toBe(1);
   });
 
   it("completes the phase-aware flow and hands the Profile to the first Journal Entry", async () => {
     const user = userEvent.setup();
     const onStartJournal = vi.fn();
     render(<App onStartJournal={onStartJournal} />);
-    await answerSet(user);
-    await answerSet(user);
-    expect(screen.getByText(/some cards return/i)).toBeTruthy();
-    await answerSet(user);
-    expect(screen.getByRole("heading", { name: "A pattern is beginning to appear." })).toBeTruthy();
-    expect(screen.queryByText("A first glimpse")).toBeNull();
-    expect(screen.queryByText(/keep choosing by instinct/i)).toBeNull();
-    expect(screen.getByLabelText("Values · 3 of 6")).toBeTruthy();
-    expect(screen.queryByText(/too low or too high/i)).toBeNull();
-    await user.click(screen.getByRole("button", { name: "Keep going" }));
-    await answerSet(user);
-    await answerSet(user);
-    await answerSet(user);
+    for (let setNumber = 1; setNumber <= 11; setNumber += 1) {
+      expect(screen.getByLabelText(`Values · ${setNumber} of 11`)).toBeTruthy();
+      await answerSet(user);
+      expect(screen.queryByRole("heading", { name: "A pattern is beginning to appear." })).toBeNull();
+    }
     const goal = screen.getByRole("radio", {
       name: "I feel stuck or unclear about my direction",
     });
@@ -171,9 +176,16 @@ describe("onboarding app", () => {
     expect(screen.getByRole("textbox", { name: "First Journal Entry" })).toBeTruthy();
     expect(screen.queryByLabelText("Your compass")).toBeNull();
     await waitFor(() => {
-      const stored = JSON.parse(localStorage.getItem("twinkl.onboarding.session.v2")!);
+      const stored = JSON.parse(localStorage.getItem("twinkl.onboarding.session.v4")!);
       expect(stored.confirmed_profile.user_confirmed).toBe(true);
-      expect(stored.confirmed_profile.bws_responses).toHaveLength(6);
+      expect(stored.confirmed_profile.bws_responses).toHaveLength(11);
+      expect(stored.confirmed_profile.bws_results.scores).toHaveProperty(
+        "universalism_nature",
+      );
+      expect(stored.confirmed_profile.value_profile.scores).toHaveProperty(
+        "universalism",
+      );
+      expect(stored.confirmed_profile).not.toHaveProperty("confidence");
     });
   });
 });

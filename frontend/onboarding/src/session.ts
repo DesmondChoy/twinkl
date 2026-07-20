@@ -1,36 +1,32 @@
 import {
   BWS_SETS,
   GOALS,
+  type BwsObjectKey,
   type BwsResponse,
   type GoalCategory,
   type OnboardingProfile,
-  type ValueKey,
-  isValueKey,
+  isBwsObjectKey,
   scoreResponses,
   validateProfile,
 } from "./domain";
 
-export const SESSION_STORAGE_KEY = "twinkl.onboarding.session.v2";
+export const SESSION_STORAGE_KEY = "twinkl.onboarding.session.v4";
 
-export type OnboardingStage =
-  | "set"
-  | "mirror"
-  | "goal"
-  | "summary"
-  | "complete";
+export type OnboardingStage = "set" | "goal" | "summary" | "complete";
 
 export interface OnboardingSession {
-  schema_version: 2;
+  schema_version: 4;
   user_id: string;
   session_id: string;
   started_at: string;
   stage: OnboardingStage;
   set_index: number;
+  set_order: number[];
   stage_started_at_ms: number;
-  displayed_orders: ValueKey[][];
+  displayed_orders: BwsObjectKey[][];
   responses: BwsResponse[];
-  draft_best: ValueKey | null;
-  draft_worst: ValueKey | null;
+  draft_best: BwsObjectKey | null;
+  draft_worst: BwsObjectKey | null;
   goal_category: GoalCategory | null;
   confirmed_profile: OnboardingProfile | null;
 }
@@ -50,12 +46,13 @@ export function createSession(
   makeId: () => string = () => crypto.randomUUID(),
 ): OnboardingSession {
   return {
-    schema_version: 2,
+    schema_version: 4,
     user_id: makeId(),
     session_id: makeId(),
     started_at: now.toISOString(),
     stage: "set",
     set_index: 0,
+    set_order: shuffled(BWS_SETS.map((_, index) => index), random),
     stage_started_at_ms: now.getTime(),
     displayed_orders: BWS_SETS.map((set) => shuffled(set.items, random)),
     responses: [],
@@ -66,17 +63,28 @@ export function createSession(
   };
 }
 
-function isDisplayedOrders(value: unknown): value is ValueKey[][] {
+function isSetOrder(value: unknown): value is number[] {
+  return (
+    Array.isArray(value) &&
+    value.length === BWS_SETS.length &&
+    new Set(value).size === BWS_SETS.length &&
+    value.every(
+      (index) => Number.isInteger(index) && index >= 0 && index < BWS_SETS.length,
+    )
+  );
+}
+
+function isDisplayedOrders(value: unknown): value is BwsObjectKey[][] {
   return (
     Array.isArray(value) &&
     value.length === BWS_SETS.length &&
     value.every(
       (order, index) =>
         Array.isArray(order) &&
-        order.length === 4 &&
-        new Set(order).size === 4 &&
+        order.length === 6 &&
+        new Set(order).size === 6 &&
         order.every(
-          (item) => isValueKey(item) && BWS_SETS[index].items.includes(item),
+          (item) => isBwsObjectKey(item) && BWS_SETS[index].items.includes(item),
         ),
     )
   );
@@ -87,21 +95,20 @@ export function parseSession(raw: string | null): OnboardingSession | null {
   try {
     const session = JSON.parse(raw) as Partial<OnboardingSession>;
     if (
-      session.schema_version !== 2 ||
+      session.schema_version !== 4 ||
       typeof session.user_id !== "string" ||
       typeof session.session_id !== "string" ||
       typeof session.started_at !== "string" ||
-      !["set", "mirror", "goal", "summary", "complete"].includes(
-        session.stage ?? "",
-      ) ||
+      !["set", "goal", "summary", "complete"].includes(session.stage ?? "") ||
       !Number.isInteger(session.set_index) ||
       session.set_index! < 0 ||
       session.set_index! >= BWS_SETS.length ||
+      !isSetOrder(session.set_order) ||
       typeof session.stage_started_at_ms !== "number" ||
       !isDisplayedOrders(session.displayed_orders) ||
       !Array.isArray(session.responses) ||
-      !(session.draft_best === null || isValueKey(session.draft_best)) ||
-      !(session.draft_worst === null || isValueKey(session.draft_worst)) ||
+      !(session.draft_best === null || isBwsObjectKey(session.draft_best)) ||
+      !(session.draft_worst === null || isBwsObjectKey(session.draft_worst)) ||
       !(
         session.confirmed_profile === null ||
         (typeof session.confirmed_profile === "object" && session.confirmed_profile !== undefined)
@@ -113,8 +120,38 @@ export function parseSession(raw: string | null): OnboardingSession | null {
     ) {
       return null;
     }
+    const setIndex = session.set_index as number;
+    const setOrder = session.set_order as number[];
+    const currentItems = new Set(BWS_SETS[setOrder[setIndex]].items);
+    if (
+      (session.draft_best !== null && !currentItems.has(session.draft_best)) ||
+      (session.draft_worst !== null && !currentItems.has(session.draft_worst)) ||
+      (session.draft_best !== null && session.draft_best === session.draft_worst)
+    ) {
+      return null;
+    }
     if (session.responses.length > 0) {
       scoreResponses(session.responses);
+    }
+    if (
+      (session.stage === "set" && session.responses.length !== setIndex) ||
+      (session.stage !== "set" && session.responses.length !== BWS_SETS.length)
+    ) {
+      return null;
+    }
+    if (session.stage === "set") {
+      const expectedCompletedSets = new Set(
+        setOrder
+          .slice(0, setIndex)
+          .map((canonicalIndex) => BWS_SETS[canonicalIndex].setNumber),
+      );
+      if (
+        session.responses.some(
+          (response) => !expectedCompletedSets.has(response.set_number),
+        )
+      ) {
+        return null;
+      }
     }
     if (session.stage === "complete") {
       validateProfile(session.confirmed_profile);
@@ -140,7 +177,7 @@ export function clearSession(): void {
 export function setChoice(
   session: OnboardingSession,
   choice: "most" | "least",
-  value: ValueKey,
+  value: BwsObjectKey,
 ): OnboardingSession {
   if (choice === "most") {
     return {
