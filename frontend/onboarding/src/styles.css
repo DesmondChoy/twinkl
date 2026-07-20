@@ -553,6 +553,11 @@ h2 {
   font-weight: 830;
 }
 
+.selection-area__touch-hint,
+.touch-choice-bar {
+  display: none;
+}
+
 .card-deck {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -587,7 +592,7 @@ h2 {
   box-shadow: 0 15px 35px rgba(20, 34, 59, 0.1);
   cursor: grab;
   text-align: left;
-  touch-action: none;
+  touch-action: pan-y;
   transform: rotate(var(--card-angle));
   transform-origin: 50% 90%;
   user-select: none;
@@ -991,9 +996,19 @@ h2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .selection-area,
-  .drop-box {
+  .selection-area {
     grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .drop-box--most {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .drop-box--least {
+    grid-column: 2;
+    grid-row: 1;
   }
 
   .card-deck {
@@ -1020,7 +1035,7 @@ h2 {
   }
 
   .drop-box .value-card {
-    width: calc((100% - var(--deck-gap) + 3px) / 2);
+    width: calc(100% - 12px);
   }
 
   .card-deck > .value-card:last-child:nth-child(odd) {
@@ -1037,9 +1052,23 @@ h2 {
   }
 
   .drop-box {
-    min-height: 124px;
+    min-height: 116px;
     width: auto;
     padding: 9px 0;
+  }
+
+  .drop-box > p {
+    padding: 0 8px;
+    font-size: 0.9rem;
+  }
+
+  .drop-box__label {
+    padding: 0 8px;
+  }
+
+  .drop-box__tap-target {
+    inset: 32px 6px 6px;
+    font-size: 0.66rem;
   }
 
   .drop-box__label span,
@@ -1058,7 +1087,74 @@ h2 {
   .button {
     width: 100%;
   }
+}
 
+@media (max-width: 620px), (hover: none) and (pointer: coarse) {
+  .value-card {
+    cursor: pointer;
+  }
+
+  .value-card--picked,
+  .value-card--picked:hover {
+    transform: translateY(-5px) rotate(0deg) scale(1.012);
+    animation: none;
+  }
+
+  .selection-area__label > span:not(.selection-area__touch-hint) {
+    display: none;
+  }
+
+  .selection-area__label .selection-area__touch-hint {
+    display: inline;
+  }
+
+  .touch-choice-bar {
+    position: fixed;
+    z-index: 100;
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    left: 50%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: min(420px, calc(100vw - 24px));
+    gap: 8px;
+    transform: translateX(-50%);
+    border: 1px solid rgba(255, 255, 255, 0.72);
+    border-radius: 18px;
+    padding: 10px;
+    background: rgba(247, 250, 249, 0.96);
+    box-shadow: 0 18px 48px rgba(20, 34, 59, 0.24);
+    backdrop-filter: blur(14px);
+  }
+
+  .touch-choice-bar > span {
+    grid-column: 1 / -1;
+    color: rgba(20, 34, 59, 0.58);
+    font-size: 0.62rem;
+    font-weight: 820;
+    letter-spacing: 0.1em;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .touch-choice-bar button {
+    min-height: 48px;
+    border: 0;
+    border-radius: 12px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-weight: 830;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .touch-choice-bar__most {
+    background: #26766e;
+  }
+
+  .touch-choice-bar__least {
+    background: #a94d2f;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

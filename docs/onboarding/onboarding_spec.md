@@ -158,8 +158,11 @@ instruction.
 Six cards begin in the selection area. The user places one card in `Most` and a
 different card in `Least`.
 
-- Pointer and touch dragging work between the selection area and both boxes.
-- Tapping a card activates explicit Most and Least placement targets.
+- Mouse dragging works between the selection area and both boxes.
+- On touch-first devices, vertical swipes over cards scroll the page rather
+  than moving a card. Tapping a card opens thumb-reachable Most and Least
+  placement controls at the bottom of the viewport.
+- On narrow screens, Most and Least appear together before the card grid.
 - A placed card can return to the selection area or move to the other box.
 - Moving a card into an occupied box replaces the prior choice.
 - `M` and `L` place a focused card; Backspace, Delete, or Arrow Down returns it.

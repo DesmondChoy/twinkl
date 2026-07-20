@@ -134,6 +134,38 @@ describe("onboarding app", () => {
     expect(least.querySelector('[data-location="least"]')).toBeTruthy();
   });
 
+  it("keeps touch scrolling separate from card placement", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    const card = screen.getAllByTestId("value-card")[0];
+    fireEvent.pointerDown(card, {
+      pointerId: 4,
+      pointerType: "touch",
+      clientX: 120,
+      clientY: 300,
+    });
+    expect(card.classList.contains("value-card--dragging")).toBe(false);
+    fireEvent.pointerMove(card, {
+      pointerId: 4,
+      pointerType: "touch",
+      clientX: 120,
+      clientY: 120,
+    });
+    fireEvent.pointerUp(card, {
+      pointerId: 4,
+      pointerType: "touch",
+      clientX: 120,
+      clientY: 120,
+    });
+    expect(screen.getByTestId("drop-most").querySelector('[data-location="most"]')).toBeNull();
+    expect(screen.getByTestId("drop-least").querySelector('[data-location="least"]')).toBeNull();
+
+    await user.click(card);
+    expect(screen.getByRole("group", { name: "Place selected principle" })).toBeTruthy();
+    await user.click(screen.getByRole("button", { name: "Choose Least for selected principle" }));
+    expect(screen.getByTestId("drop-least").querySelector('[data-location="least"]')).toBeTruthy();
+  });
+
   it("uses six distinct position-bound backgrounds with the same accent", () => {
     render(<App />);
     expect(screen.queryByText(/card 0[1-6]/i)).toBeNull();

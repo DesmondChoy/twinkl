@@ -169,6 +169,7 @@ function DraggableCard({
         onTap(value, location);
       }}
       onPointerDown={(event) => {
+        if (event.pointerType === "touch") return;
         if (event.pointerType === "mouse" && event.button !== 0) return;
         dragRef.current = { pointerId: event.pointerId, x: event.clientX, y: event.clientY, moved: false };
         event.currentTarget.setPointerCapture?.(event.pointerId);
@@ -489,6 +490,9 @@ export default function App({ onStartJournal }: AppProps = {}) {
                   <div className="selection-area__label">
                     <strong>{pickedValue ? "Principle selected" : "Take a look"}</strong>
                     <span>{pickedValue ? "Choose Most or Least" : "Choose one for each place"}</span>
+                    <span className="selection-area__touch-hint">
+                      {pickedValue ? "Choose Most or Least below" : "Tap to choose · Scroll to explore"}
+                    </span>
                   </div>
                   <div className="card-deck">
                     {availableValues.map((value) => (
@@ -552,6 +556,28 @@ export default function App({ onStartJournal }: AppProps = {}) {
                   Continue
                 </button>
               </div>
+            </div>
+          ) : null}
+
+          {session.stage === "set" && pickedValue ? (
+            <div className="touch-choice-bar" role="group" aria-label="Place selected principle">
+              <span>Place selected card</span>
+              <button
+                className="touch-choice-bar__most"
+                type="button"
+                aria-label="Choose Most for selected principle"
+                onClick={() => placePicked("most")}
+              >
+                Most
+              </button>
+              <button
+                className="touch-choice-bar__least"
+                type="button"
+                aria-label="Choose Least for selected principle"
+                onClick={() => placePicked("least")}
+              >
+                Least
+              </button>
             </div>
           ) : null}
 
