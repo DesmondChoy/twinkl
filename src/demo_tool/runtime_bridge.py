@@ -1,385 +1,298 @@
-"""Checkpoint discovery and demo-friendly runtime wrappers."""
+"""Bridge between the demo app and the approved Weekly Drift Reviewer path.
+
+The demo runs the approved user-facing architecture: Weekly Drift Reviewer
+Decisions per Journal Entry and Core Value, then the deterministic Drift
+Detector (two consecutive Conflicts for the same Core Value). There is no VIF
+Critic input on this path.
+
+Input comes from the app session (onboarding Core Values plus typed Journal
+Entries, or a preloaded demo persona), so nothing here reads persona files.
+Weekly receipts are cached in the session keyed by prompt hash, so re-running
+after new entries only pays for new or changed weeks.
+"""
 
 from __future__ import annotations
 
-import hashlib
+import asyncio
 import json
-import re
+from collections import defaultdict
 from dataclasses import dataclass
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
-import polars as pl
-import yaml
-
-from src.coach.llm_client import build_llm_complete
-from src.coach.runtime import run_weekly_coach_cycle
-
-DEFAULT_CHECKPOINT_ROOTS = (
-    Path("logs/experiments/artifacts"),
-    Path("models/vif"),
-    Path("logs/experiments"),
+from src.drift_detector import DriftDetectorResult, detect_drift
+from src.vif.state_encoder import concatenate_entry_text
+from src.weekly_drift_reviewer import (
+    OpenAIWeeklyDriftReviewer,
+    VerifierAssessment,
+    WeeklyDriftReviewerDecision,
+    WeeklyDriftReviewerEntry,
+    WeeklyDriftReviewerFn,
+    WeeklyDriftReviewerReceipt,
+    WeeklyDriftReviewerRequest,
+    WeeklyVerifierResponse,
+    _receipt,  # reused so replayed receipts share the exact live-call schema
+    build_weekly_drift_reviewer_request,
+    validate_weekly_drift_reviewer_response,
 )
-EXACT_CHECKPOINT_FILENAMES = ("selected_checkpoint.pt", "best_model.pt")
+
+MAX_CORE_VALUES = 2
+
+# Frozen research run under the exact approved contract (gpt-5.6-luna,
+# reasoning effort low, arm weekly_without_critic) covering all synthetic demo
+# personas' full journals. Reused so loading a demo persona doesn't repeat
+# paid calls for weeks that were already reviewed under this contract.
+FROZEN_LUNA_LOW_PATH = Path(
+    "logs/experiments/artifacts/twinkl_52zz_luna_low_20260714/"
+    "responses_gpt_5_6_luna_low.jsonl"
+)
+_FROZEN_ARM = "weekly_without_critic"
+
+
+def _parse_date(raw: str) -> date:
+    return datetime.strptime(raw, "%Y-%m-%d").date()
+
+
+def _week_bounds(raw: str) -> tuple[date, date]:
+    entry_date = _parse_date(raw)
+    start = entry_date - timedelta(days=entry_date.weekday())
+    return start, start + timedelta(days=6)
+
+
+def normalize_core_value(value: str) -> str:
+    return value.strip().lower().replace("-", "_").replace(" ", "_")
+
+
+def demo_journal_from_persona(
+    persona: dict[str, Any],
+) -> tuple[list[str], list[dict[str, Any]]]:
+    """Convert one catalog persona into (core_values, entries) session input.
+
+    Core Values are normalized and capped at MAX_CORE_VALUES to match the
+    onboarding contract. Entries keep initial_entry/nudge_text/response_text
+    separate (the same shape a live composer entry uses) rather than
+    pre-joining them, so the journal UI can render the nudge thread and
+    entry_display_text() can build the reviewer/digest text on demand.
+    """
+    core_values = list(
+        dict.fromkeys(
+            normalize_core_value(value)
+            for value in persona.get("persona_core_values") or []
+            if isinstance(value, str) and value.strip()
+        )
+    )[:MAX_CORE_VALUES]
+
+    entries = [
+        {
+            "t_index": index,
+            "date": str(entry["date"]),
+            "initial_entry": entry.get("initial_entry") or "",
+            "nudge_text": entry.get("nudge_text"),
+            "response_text": entry.get("response_text"),
+        }
+        for index, entry in enumerate(persona["entries"])
+    ]
+    return core_values, entries
+
+
+def entry_display_text(entry: dict[str, Any]) -> str:
+    """The full displayed text for one Journal Entry: entry, nudge, response."""
+    return concatenate_entry_text(
+        entry.get("initial_entry"),
+        entry.get("nudge_text"),
+        entry.get("response_text"),
+    )
 
 
 @dataclass(frozen=True)
-class CheckpointOption:
-    """One selectable runtime checkpoint for the demo UI."""
+class _FrozenWeeklyRecord:
+    """One frozen response row, reduced to what a replayed receipt needs."""
 
-    path: str
-    label: str
-    source: str
-    run_id: str | None = None
-    model_name: str | None = None
-    metrics_summary: dict[str, float] | None = None
-
-
-def _relative_label(path: Path) -> str:
-    """Render a readable repo-relative path when possible."""
-    try:
-        return str(path.resolve().relative_to(Path.cwd().resolve()))
-    except ValueError:
-        return str(path.resolve())
+    status: str
+    assessments: list[VerifierAssessment]
+    resolved_model: str | None
+    response_id: str | None
+    usage: dict[str, int]
 
 
-def _extract_run_id(path: Path) -> str | None:
-    """Extract run_id from a checkpoint path if present."""
-    for part in reversed(path.parts):
-        match = re.search(r"(run_\d+)", part)
-        if match:
-            return match.group(1)
-    return None
+_FrozenIndex = dict[tuple[str, str, str], list[_FrozenWeeklyRecord]]
 
 
-def _extract_model_name(path: Path) -> str | None:
-    """Guess the model family from nearby directories."""
-    for part in reversed(path.parts[:-1]):
-        if part in {"artifacts", "models", "logs", "experiments"}:
-            continue
-        if part.startswith("run_"):
-            continue
-        if any(char.isupper() for char in part):
-            return part
-    return None
-
-
-def _load_yaml(path: Path) -> dict[str, Any] | None:
-    """Read a YAML sidecar file if it exists and is well-formed."""
+def _load_frozen_luna_low(path: Path = FROZEN_LUNA_LOW_PATH) -> _FrozenIndex:
+    """Index frozen weekly_without_critic responses by (persona_id, week_start,
+    week_end), records ordered by repeat. Callers use the first "ok" record."""
+    index: _FrozenIndex = defaultdict(list)
     if not path.exists():
-        return None
-    with path.open("r") as handle:
-        payload = yaml.safe_load(handle) or {}
-    if isinstance(payload, dict):
-        return payload
-    return None
+        return index
 
+    rows = []
+    with path.open() as handle:
+        for line in handle:
+            stripped = line.strip()
+            if stripped:
+                rows.append(json.loads(stripped))
+    rows.sort(key=lambda row: row.get("repeat", 0))
 
-def _load_metrics_summary(path: Path) -> dict[str, float] | None:
-    """Extract a compact metric summary from nearby experiment sidecars."""
-    candidates = (
-        path.with_suffix(".yaml"),
-        path.parent / "metrics_summary.yaml",
-        path.parent / "selected_policy.yaml",
-        path.parent / "selection_summary.yaml",
-    )
-    for candidate in candidates:
-        payload = _load_yaml(candidate)
-        if not payload:
+    for row in rows:
+        if row.get("arm") != _FROZEN_ARM:
             continue
-
-        selected_metrics = payload.get("selected_validation_metrics") or payload.get(
-            "selected_test_metrics"
-        )
-        if isinstance(selected_metrics, dict):
-            summary: dict[str, float] = {}
-            for key in ("qwk_mean", "recall_minus1", "calibration_global"):
-                value = selected_metrics.get(key)
-                if isinstance(value, (int, float)):
-                    summary[key] = float(value)
-            if summary:
-                return summary
-
-        candidate_block = payload.get("selected_candidate")
-        if isinstance(candidate_block, dict):
-            summary = {}
-            for key in ("qwk_mean", "recall_minus1", "calibration_global"):
-                value = candidate_block.get(key)
-                if isinstance(value, (int, float)):
-                    summary[key] = float(value)
-            if summary:
-                return summary
-
-    return None
-
-
-def _format_metrics(metrics_summary: dict[str, float] | None) -> str:
-    """Render a short metric tail for a checkpoint label."""
-    if not metrics_summary:
-        return ""
-
-    pieces = []
-    if "qwk_mean" in metrics_summary:
-        pieces.append(f"QWK {metrics_summary['qwk_mean']:.3f}")
-    if "recall_minus1" in metrics_summary:
-        pieces.append(f"R-1 {metrics_summary['recall_minus1']:.3f}")
-    return " · " + " · ".join(pieces) if pieces else ""
-
-
-def _build_checkpoint_option(path: Path) -> CheckpointOption:
-    """Create a UI-friendly checkpoint option from a path."""
-    run_id = _extract_run_id(path)
-    model_name = _extract_model_name(path)
-    metrics_summary = _load_metrics_summary(path)
-    source = path.parts[0] if path.parts else "local"
-
-    label_parts = []
-    if run_id:
-        label_parts.append(run_id)
-    if model_name and model_name not in label_parts:
-        label_parts.append(model_name)
-    if not label_parts:
-        label_parts.append(path.stem)
-    label = " · ".join(label_parts)
-    label += _format_metrics(metrics_summary)
-    label += f" · {_relative_label(path)}"
-
-    return CheckpointOption(
-        path=str(path.resolve()),
-        label=label,
-        source=source,
-        run_id=run_id,
-        model_name=model_name,
-        metrics_summary=metrics_summary,
-    )
-
-
-def discover_checkpoints(
-    search_roots: tuple[Path, ...] = DEFAULT_CHECKPOINT_ROOTS,
-) -> list[CheckpointOption]:
-    """Discover locally available checkpoints for the demo selector."""
-    discovered: dict[str, Path] = {}
-
-    for root in search_roots:
-        if not root.exists():
-            continue
-
-        for filename in EXACT_CHECKPOINT_FILENAMES:
-            for path in root.rglob(filename):
-                discovered[str(path.resolve())] = path
-
-        for path in root.rglob("*.pt"):
-            normalized = str(path.resolve())
-            if normalized in discovered:
-                continue
-            lower_name = path.name.lower()
-            if "checkpoint" in lower_name or "model" in lower_name:
-                discovered[normalized] = path
-
-    options = [_build_checkpoint_option(path) for path in discovered.values()]
-    options.sort(key=lambda option: option.label.lower())
-    return options
-
-
-def build_checkpoint_choices(options: list[CheckpointOption]) -> dict[str, str]:
-    """Build select input choices for the checkpoint dropdown."""
-    return {option.path: option.label for option in options}
-
-
-def get_checkpoint_option(
-    options: list[CheckpointOption], checkpoint_path: str | None
-) -> CheckpointOption | None:
-    """Look up a discovered checkpoint option by its absolute path."""
-    if not checkpoint_path:
-        return None
-    for option in options:
-        if option.path == checkpoint_path:
-            return option
-    return None
-
-
-def _slugify(value: str) -> str:
-    """Convert a string into a filesystem-safe slug."""
-    lowered = value.lower()
-    cleaned = re.sub(r"[^a-z0-9]+", "-", lowered)
-    return cleaned.strip("-") or "artifact"
-
-
-def build_output_dir(
-    persona_id: str,
-    checkpoint_path: str | Path,
-    output_root: str | Path = "logs/exports/demo_tool_runs",
-) -> Path:
-    """Create a stable output directory for a persona/checkpoint pair."""
-    checkpoint = Path(checkpoint_path)
-    digest = hashlib.sha1(str(checkpoint.resolve()).encode("utf-8")).hexdigest()[:10]
-    checkpoint_slug = _slugify(checkpoint.stem)
-    return Path(output_root) / persona_id / f"{checkpoint_slug}-{digest}"
-
-
-def discover_cached_artifacts(
-    persona_id: str,
-    checkpoint_path: str | Path,
-    output_root: str | Path = "logs/exports/demo_tool_runs",
-    parquet_path: str | Path = "logs/exports/weekly_digests/weekly_digests.parquet",
-) -> dict[str, str] | None:
-    """Locate the latest persisted artifact bundle for a persona/checkpoint pair."""
-    output_dir = build_output_dir(
-        persona_id=persona_id,
-        checkpoint_path=checkpoint_path,
-        output_root=output_root,
-    )
-    if not output_dir.exists():
-        return None
-
-    timeline_path = output_dir / f"{persona_id}_vif_timeline.parquet"
-    weekly_path = output_dir / f"{persona_id}_vif_weekly.parquet"
-    drift_files = sorted(output_dir.glob("*.drift.json"), key=lambda path: path.stat().st_mtime)
-    digest_json_files = sorted(
-        (
-            path
-            for path in output_dir.glob("*.json")
-            if not path.name.endswith(".drift.json")
-        ),
-        key=lambda path: path.stat().st_mtime,
-    )
-    digest_md_files = sorted(output_dir.glob("*.md"), key=lambda path: path.stat().st_mtime)
-    prompt_files = sorted(output_dir.glob("*.prompt.txt"), key=lambda path: path.stat().st_mtime)
-
-    required = [timeline_path, weekly_path]
-    if not all(path.exists() for path in required):
-        return None
-    if not drift_files or not digest_json_files or not digest_md_files:
-        return None
-
-    bundle = {
-        "timeline_path": str(timeline_path),
-        "weekly_path": str(weekly_path),
-        "drift_json_path": str(drift_files[-1]),
-        "digest_json_path": str(digest_json_files[-1]),
-        "digest_md_path": str(digest_md_files[-1]),
-        "parquet_path": str(parquet_path),
-    }
-    if prompt_files:
-        bundle["prompt_path"] = str(prompt_files[-1])
-    return bundle
-
-
-def load_artifact_bundle(artifact_paths: dict[str, str]) -> dict[str, Any]:
-    """Read persisted runtime artifacts into memory for UI rendering."""
-    timeline_df = pl.read_parquet(artifact_paths["timeline_path"])
-    weekly_df = pl.read_parquet(artifact_paths["weekly_path"])
-    drift_payload = json.loads(Path(artifact_paths["drift_json_path"]).read_text())
-    digest_payload = json.loads(Path(artifact_paths["digest_json_path"]).read_text())
-    digest_markdown = Path(artifact_paths["digest_md_path"]).read_text()
-    prompt_text = None
-    prompt_path = artifact_paths.get("prompt_path")
-    if prompt_path and Path(prompt_path).exists():
-        prompt_text = Path(prompt_path).read_text()
-
-    return {
-        "timeline_df": timeline_df,
-        "weekly_df": weekly_df,
-        "drift_payload": drift_payload,
-        "digest_payload": digest_payload,
-        "digest_markdown": digest_markdown,
-        "prompt_text": prompt_text,
-    }
-
-
-def load_cached_run(
-    persona_id: str,
-    checkpoint_path: str | Path,
-    *,
-    output_root: str | Path = "logs/exports/demo_tool_runs",
-    parquet_path: str | Path = "logs/exports/weekly_digests/weekly_digests.parquet",
-) -> dict[str, Any] | None:
-    """Load the most recent cached run for a persona/checkpoint pair, if present."""
-    artifact_paths = discover_cached_artifacts(
-        persona_id=persona_id,
-        checkpoint_path=checkpoint_path,
-        output_root=output_root,
-        parquet_path=parquet_path,
-    )
-    if artifact_paths is None:
-        return None
-
-    return {
-        "persona_id": persona_id,
-        "checkpoint_path": str(Path(checkpoint_path).resolve()),
-        "output_dir": str(
-            build_output_dir(
-                persona_id=persona_id,
-                checkpoint_path=checkpoint_path,
-                output_root=output_root,
+        parsed = row.get("parsed") or {}
+        assessments = [
+            VerifierAssessment.model_validate(item)
+            for item in parsed.get("assessments", [])
+        ]
+        key = (row["persona_id"], row["week_start"], row["week_end"])
+        usage = {
+            field: value
+            for field, value in (row.get("usage") or {}).items()
+            if isinstance(value, int)
+        }
+        index[key].append(
+            _FrozenWeeklyRecord(
+                status=row["status"],
+                assessments=assessments,
+                resolved_model=row.get("resolved_model"),
+                response_id=row.get("response_id"),
+                usage=usage,
             )
-        ),
-        "artifact_paths": artifact_paths,
-        "artifacts": load_artifact_bundle(artifact_paths),
-    }
+        )
+    return index
 
 
-def load_multi_drift_bundle(
+_frozen_luna_low_index: _FrozenIndex | None = None
+
+
+def _get_frozen_luna_low_index() -> _FrozenIndex:
+    global _frozen_luna_low_index
+    if _frozen_luna_low_index is None:
+        _frozen_luna_low_index = _load_frozen_luna_low()
+    return _frozen_luna_low_index
+
+
+def build_demo_reviewer(
     persona_id: str,
-    source: str = "judge",
-    timeline_df: Any | None = None,
-    judge_labels_path: str | Path = "logs/judge_labels/judge_labels.parquet",
-    registry_path: str | Path = "logs/registry/personas.parquet",
-) -> Any | None:
-    """Run all 6 drift detectors for a persona and return a MultiDriftBundle.
-
-    source: "judge" uses judge_labels.parquet; "critic" uses the provided timeline_df.
-    Returns None if insufficient data or source files are missing.
+    live_reviewer: WeeklyDriftReviewerFn | None = None,
+) -> WeeklyDriftReviewerFn:
+    """Reviewer for a demo persona: replays the frozen Luna-low run for any
+    persona-week it covers, and falls back to a live call otherwise (e.g. a
+    week where the user added entries beyond the persona's original journal,
+    or the rare frozen record marked invalid).
     """
-    from src.demo_tool.multi_drift import (
-        run_multi_drift_from_critic,
-        run_multi_drift_from_judge,
-    )
+    index = _get_frozen_luna_low_index()
+    live_reviewer = live_reviewer or OpenAIWeeklyDriftReviewer()
 
-    if source == "critic":
-        if timeline_df is None:
-            return None
-        return run_multi_drift_from_critic(
-            persona_id=persona_id,
-            timeline_df=timeline_df,
-            registry_path=Path(registry_path),
+    async def _reviewer(
+        request: WeeklyDriftReviewerRequest,
+    ) -> WeeklyDriftReviewerReceipt:
+        records = index.get((persona_id, request.week_start, request.week_end), [])
+        record = next((r for r in records if r.status == "ok"), None)
+        if record is None:
+            return await live_reviewer(request)
+
+        response = WeeklyVerifierResponse(assessments=record.assessments)
+        try:
+            validate_weekly_drift_reviewer_response(response, request)
+        except ValueError:
+            # Frozen coordinates or evidence text no longer match this
+            # request (e.g. wrangled data changed since the frozen run) —
+            # fall back rather than serve a stale, mismatched receipt.
+            return await live_reviewer(request)
+
+        return _receipt(
+            request,
+            status="ok",
+            attempts=1,
+            latency_seconds=0.0,
+            response=response,
+            resolved_model=f"{record.resolved_model or 'gpt-5.6-luna'} (frozen run)",
+            response_id=record.response_id,
+            usage=record.usage,
         )
 
-    return run_multi_drift_from_judge(
-        persona_id=persona_id,
-        judge_labels_path=Path(judge_labels_path),
-        registry_path=Path(registry_path),
-    )
+    return _reviewer
 
 
-def run_demo_pipeline(
+async def _review_journal_async(
     *,
-    persona_id: str,
-    checkpoint_path: str | Path,
-    wrangled_dir: str | Path = "logs/wrangled",
-    output_root: str | Path = "logs/exports/demo_tool_runs",
-    parquet_path: str | Path = "logs/exports/weekly_digests/weekly_digests.parquet",
+    user_id: str,
+    core_values: list[str],
+    entries: list[dict[str, Any]],
+    reviewer: WeeklyDriftReviewerFn,
+    receipt_cache: dict[str, WeeklyDriftReviewerReceipt],
+) -> list[WeeklyDriftReviewerReceipt]:
+    entries_by_week: dict[tuple[date, date], list[dict[str, Any]]] = {}
+    for entry in sorted(entries, key=lambda row: int(row["t_index"])):
+        entries_by_week.setdefault(_week_bounds(str(entry["date"])), []).append(entry)
+
+    receipts: list[WeeklyDriftReviewerReceipt] = []
+    for week_start, week_end in sorted(entries_by_week):
+        history = [
+            WeeklyDriftReviewerEntry(
+                t_index=int(entry["t_index"]),
+                date=str(entry["date"]),
+                text=entry_display_text(entry),
+            )
+            for entry in entries
+            if _parse_date(str(entry["date"])) <= week_end
+        ]
+        request = build_weekly_drift_reviewer_request(
+            persona_id=user_id,
+            week_start=week_start.isoformat(),
+            week_end=week_end.isoformat(),
+            core_values=core_values,
+            history=history,
+            current_t_indices=[
+                int(entry["t_index"])
+                for entry in entries_by_week[(week_start, week_end)]
+            ],
+        )
+        cache_key = f"{request.prompt_sha256}:{request.week_end}"
+        receipt = receipt_cache.get(cache_key)
+        if receipt is None:
+            receipt = await reviewer(request)
+            if receipt.status == "ok":
+                receipt_cache[cache_key] = receipt
+        receipts.append(receipt)
+    return receipts
+
+
+def review_journal(
+    *,
+    user_id: str,
+    core_values: list[str],
+    entries: list[dict[str, Any]],
+    reviewer: WeeklyDriftReviewerFn | None = None,
+    receipt_cache: dict[str, WeeklyDriftReviewerReceipt] | None = None,
 ) -> dict[str, Any]:
-    """Run the full weekly demo pipeline and return UI-ready outputs."""
-    resolved_checkpoint = Path(checkpoint_path).resolve()
-    output_dir = build_output_dir(
-        persona_id=persona_id,
-        checkpoint_path=resolved_checkpoint,
-        output_root=output_root,
+    """Review the journal week by week, then apply the Drift Detector.
+
+    Makes one paid Weekly Drift Reviewer call per uncached persona-week.
+    Returns receipts, the flat Weekly Drift Reviewer Decisions, and the
+    Drift Detector result.
+    """
+    if not core_values:
+        raise ValueError("At least one Core Value is required")
+    if len(core_values) > MAX_CORE_VALUES:
+        raise ValueError(f"At most {MAX_CORE_VALUES} Core Values are supported")
+    if not entries:
+        raise ValueError("At least one Journal Entry is required")
+
+    receipts = asyncio.run(
+        _review_journal_async(
+            user_id=user_id,
+            core_values=core_values,
+            entries=entries,
+            reviewer=reviewer or OpenAIWeeklyDriftReviewer(),
+            receipt_cache=receipt_cache if receipt_cache is not None else {},
+        )
     )
-    digest, artifact_paths = run_weekly_coach_cycle(
-        persona_id=persona_id,
-        checkpoint_path=resolved_checkpoint,
-        wrangled_dir=wrangled_dir,
-        output_dir=output_dir,
-        parquet_path=parquet_path,
-        llm_complete=build_llm_complete(),
-    )
+    decisions: list[WeeklyDriftReviewerDecision] = [
+        decision for receipt in receipts for decision in receipt.decisions
+    ]
+    drift: DriftDetectorResult = detect_drift(decisions, persona_id=user_id)
     return {
-        "persona_id": persona_id,
-        "checkpoint_path": str(resolved_checkpoint),
-        "output_dir": str(output_dir),
-        "digest": digest.model_dump(),
-        "artifact_paths": artifact_paths,
-        "artifacts": load_artifact_bundle(artifact_paths),
+        "receipts": receipts,
+        "decisions": decisions,
+        "drift": drift,
     }
