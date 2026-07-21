@@ -34,6 +34,7 @@ Detector, and builds the Weekly Digest:
 ```sh
 uv run python -m src.coach.weekly_drift_runtime \
   --persona-id 0a2fe15c \
+  --profile-path path/to/confirmed-profile.json \
   --execute
 ```
 
@@ -44,8 +45,10 @@ The runtime writes one Weekly Drift Reviewer JSON receipt per reviewed week,
 plus the Drift Detector result, Weekly Digest JSON and markdown, Weekly Coach
 prompt, and consolidated Weekly Digest parquet.
 
-The synthetic persona `core_values` field supplies Core Values until
-`twinkl-1m8` wires persisted onboarding `top_values`.
+When `--profile-path` is supplied, the runtime validates the confirmed,
+versioned onboarding Profile and uses its `top_values` as Core Values. Without
+that option, synthetic persona `core_values` remains the deterministic
+compatibility path.
 
 ### Standalone Compatibility Digest CLI
 
@@ -179,8 +182,9 @@ not the approved Weekly Drift Reviewer and Drift Detector runtime. See
 
 ### Approved Path
 
-1. Load Journal Entries and Core Values, using synthetic `core_values` as the
-   temporary equivalent of onboarding `top_values`.
+1. Load Journal Entries and Core Values from a confirmed onboarding Profile
+   when supplied; otherwise use synthetic `core_values` as the compatibility
+   path.
 2. Review each persona-week sequentially with cumulative student-visible
    history and no VIF Critic input.
 3. Persist request hashes, the fixed model contract, provider receipts, raw
@@ -399,11 +403,9 @@ learned routing policies.
 
 ## Remaining Work
 
-1. Replace the synthetic `core_values` fallback with persisted onboarding
-   `top_values` under `twinkl-1m8`.
-2. Report Tier 1 pass rates over a batch and add Tier 2 meta-judge plus Tier 3
+1. Report Tier 1 pass rates over a batch and add Tier 2 meta-judge plus Tier 3
    human calibration.
-3. Capture the user's perceived-accuracy rating and make it queryable.
+2. Capture the user's perceived-accuracy rating and make it queryable.
 
 Persisting full VIF Critic Predictions and adding independent disagreement
 review are not planned for the time-boxed capstone. A fresh final test and

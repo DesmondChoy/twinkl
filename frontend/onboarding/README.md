@@ -3,8 +3,8 @@
 Standalone React proof of concept for the published Schwartz Values Best-Worst
 Survey (SVBWS) onboarding flow. This is a research-grounded pilot instrument,
 not a psychometrically validated Twinkl instrument. It produces a confirmed,
-versioned Profile; `twinkl-1m8` owns durable persistence and the Core Value
-handoff to the Weekly Drift Reviewer.
+versioned Profile. A host can persist the Profile exposed by the handoff, and
+the approved runtime imports its Core Values from saved JSON.
 
 The assessment contains 11 randomized groups of six neutral cards from the
 published balanced design. Each group uses six abstract backgrounds assigned
@@ -49,6 +49,8 @@ container exposes `/health` for Railway and falls back to `index.html` for SPA
 routes. No service variables or persistent volume are required.
 
 This standalone POC stores unfinished progress and its confirmed Profile in
-browser `localStorage` and makes no model or provider calls itself. This storage
-boundary is documented here rather than shown as task guidance; deployed Twinkl
-is expected to hand user data to LLM-backed services.
+browser `localStorage` and makes no model or provider calls itself. A host can
+persist the Profile supplied through `onStartJournal` or the
+`twinkl:start-first-journal` event. The approved Python runtime accepts that
+saved JSON through `--profile-path`; automatic browser-to-service storage is
+outside the time-boxed capstone.

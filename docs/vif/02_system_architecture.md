@@ -43,9 +43,10 @@ The current VIF implementation is intentionally narrow:
 The approved capstone POC runtime persists versioned Weekly Drift Reviewer
 Decisions, fails closed to Abstain, applies the Drift Detector across week
 boundaries, and feeds the Weekly Digest. VIF Critic training supports the
-versioned recall-first checkpoint-selection policy, and the runtime still uses
-synthetic `core_values` rather than persisted onboarding `top_values`. The fixed
-model choice and implementation do not grant deployment approval.
+versioned recall-first checkpoint-selection policy. The runtime imports
+`top_values` from a confirmed onboarding Profile when supplied and retains
+synthetic `core_values` as a compatibility path. The fixed model choice and
+implementation do not grant deployment approval.
 
 ## Current Diagram
 

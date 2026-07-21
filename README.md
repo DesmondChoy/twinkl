@@ -30,7 +30,10 @@ npm install
 npm run dev
 ```
 
-The POC stores progress and its confirmed Profile only in the browser. Durable user storage and the handoff of `top_values` into the Weekly Drift Reviewer remain under `twinkl-1m8`.
+The POC stores progress and its confirmed Profile in the browser. A host can
+persist the Profile exposed by the callback or browser event, and the approved
+runtime accepts that saved JSON with `--profile-path`. Automated
+browser-to-service storage is outside the time-boxed capstone.
 
 ## VIF Critic — ✅ Complete Capstone Research
 
@@ -49,7 +52,7 @@ The VIF Critic research stack includes ordinal MLP heads with MC Dropout, a BNN 
 
 **Current Drift contract:** Drift is two consecutive Conflicts for the same Core Value. The Weekly Drift Reviewer model contract is fixed at `gpt-5.6-luna` with reasoning effort `low`. The approved runtime persists versioned Weekly Drift Reviewer Decisions without VIF Critic input, applies the deterministic Drift Detector, and sends active, recovered, uncertain, or mixed state to the Weekly Digest. The frozen development Runs are AI-reviewed synthetic evidence, not human validation, a fresh final test, or deployment approval. The time-boxed capstone stops at this implemented POC; no fresh final test or deployment approval is claimed. The completed VIF Critic remains outside the user-facing path, which does not run it or depend on its predictions. See the [`twinkl-52zz` report](logs/experiments/reports/experiment_review_2026-07-14_twinkl_52zz_luna_low.md), [`docs/architecture/drift_detection.md`](docs/architecture/drift_detection.md), and [`docs/evals/drift_detection_eval.md`](docs/evals/drift_detection_eval.md).
 
-**Current runtime behavior:** `src.coach.weekly_drift_runtime` is the approved capstone POC path. It reads Journal Entries and Core Values, calls the fixed Weekly Drift Reviewer, persists versioned JSON receipts, applies the Drift Detector across week boundaries, and exports the Weekly Digest and Weekly Coach prompt. `src.coach.runtime` and `src.vif.drift` are explicitly deprecated experimental compatibility paths for the former VIF Critic crash/rut/evolution runtime. The approved runtime still uses synthetic persona `core_values` until `twinkl-1m8` supplies persisted `top_values`. See `docs/vif/`, [`docs/weekly/weekly_digest_generation.md`](docs/weekly/weekly_digest_generation.md), and [`docs/demo/review_app.md`](docs/demo/review_app.md).
+**Current runtime behavior:** `src.coach.weekly_drift_runtime` is the approved capstone POC path. It reads Journal Entries, imports Core Values from a confirmed onboarding Profile when `--profile-path` is supplied, calls the fixed Weekly Drift Reviewer, persists versioned JSON receipts, applies the Drift Detector across week boundaries, and exports the Weekly Digest and Weekly Coach prompt. When no Profile is supplied, synthetic personas retain their deterministic `core_values` compatibility path. `src.coach.runtime` and `src.vif.drift` are explicitly deprecated experimental compatibility paths for the former VIF Critic crash/rut/evolution runtime. See `docs/vif/`, [`docs/weekly/weekly_digest_generation.md`](docs/weekly/weekly_digest_generation.md), and [`docs/demo/review_app.md`](docs/demo/review_app.md).
 
 ### Automated Experiment Logging & Review
 
@@ -336,7 +339,7 @@ opening.
 
 | Capability | Status | Note |
 |---|---|---|
-| Onboarding (SVBWS Values Assessment) | 🧪 Experimental | Standalone React POC implements the complete local, user-facing flow and an internal Profile; durable storage and Weekly Drift Reviewer handoff remain pending under `twinkl-1m8` |
+| Onboarding (SVBWS Values Assessment) | 🧪 Experimental | Standalone React POC implements the complete local, user-facing flow and a versioned Profile. The approved runtime can import its Core Values from saved Profile JSON; automated browser-to-service storage remains outside the capstone. |
 | Weekly Coach validation depth | ⚠️ Partial | The approved Weekly Drift Reviewer and Drift Detector runtime now feeds the Weekly Digest and optional Weekly Coach reflection; batch Tier 1 pass rates and Tier 2 and Tier 3 evaluation remain incomplete |
 | Nudge signal quality validation | 🧪 Experimental | Annotation study and downstream usefulness checks remain in progress |
 | Embedding Explorer | ✅ Complete | Interactive 3D visualization of VIF Critic embeddings |

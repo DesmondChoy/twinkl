@@ -22,6 +22,7 @@ from src.coach.weekly_digest import (
     validate_weekly_digest_narrative,
 )
 from src.drift_detector import detect_drift
+from src.models.judge import SCHWARTZ_VALUE_ORDER
 from src.vif.state_encoder import concatenate_entry_text
 from src.weekly_drift_reviewer import (
     OpenAIWeeklyDriftReviewer,
@@ -45,6 +46,60 @@ def _week_bounds(raw: str) -> tuple[date, date]:
 
 def _normalize_core_value(value: str) -> str:
     return value.strip().lower().replace("-", "_").replace(" ", "_")
+
+
+def load_onboarding_core_values(
+    profile_path: str | Path,
+    *,
+    persona_id: str,
+) -> list[str]:
+    """Load confirmed Core Values from the current onboarding Profile contract."""
+    path = Path(profile_path)
+    try:
+        payload = json.loads(path.read_text())
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ValueError(f"Could not read onboarding Profile JSON: {path}") from exc
+
+    if not isinstance(payload, dict):
+        raise ValueError("Onboarding Profile must be a JSON object")
+    if payload.get("schema_version") != 2:
+        raise ValueError("Onboarding Profile schema_version must be 2")
+    if payload.get("onboarding_version") != "2.1.0":
+        raise ValueError("Onboarding Profile onboarding_version must be 2.1.0")
+    if payload.get("user_confirmed") is not True:
+        raise ValueError("Onboarding Profile must be confirmed")
+    if payload.get("user_id") != persona_id:
+        raise ValueError("Onboarding Profile user_id must match persona_id")
+
+    top_values = payload.get("top_values")
+    if not isinstance(top_values, list) or not top_values:
+        raise ValueError("Onboarding Profile top_values must be a non-empty list")
+    if any(not isinstance(value, str) for value in top_values):
+        raise ValueError("Onboarding Profile top_values must contain strings")
+    if len(set(top_values)) != len(top_values):
+        raise ValueError("Onboarding Profile top_values must not contain duplicates")
+    invalid_values = [
+        value for value in top_values if value not in SCHWARTZ_VALUE_ORDER
+    ]
+    if invalid_values:
+        raise ValueError(
+            "Onboarding Profile contains invalid Core Values: "
+            + ", ".join(invalid_values)
+        )
+    canonical_values = [
+        value for value in SCHWARTZ_VALUE_ORDER if value in top_values
+    ]
+    if top_values != canonical_values:
+        raise ValueError("Onboarding Profile top_values must use canonical ordering")
+
+    value_profile = payload.get("value_profile")
+    if not isinstance(value_profile, dict):
+        raise ValueError("Onboarding Profile value_profile must be an object")
+    if value_profile.get("top_values") != top_values:
+        raise ValueError(
+            "Onboarding Profile top_values must match value_profile.top_values"
+        )
+    return top_values
 
 
 def _load_runtime_input(
@@ -72,6 +127,7 @@ async def run_weekly_drift_coach_cycle(
     wrangled_dir: str | Path = "logs/wrangled",
     output_dir: str | Path = "logs/exports/weekly_drift_coach",
     parquet_path: str | Path = "logs/exports/weekly_digests/weekly_digests.parquet",
+    profile_path: str | Path | None = None,
     end_date: str | None = None,
     reviewer: WeeklyDriftReviewerFn | None = None,
     coach_llm_complete=None,
@@ -79,18 +135,24 @@ async def run_weekly_drift_coach_cycle(
     """Run the approved weekly-only path through the Weekly Digest."""
     wrangled_path = Path(wrangled_dir)
     output_path = Path(output_dir)
-    profile, entries = _load_runtime_input(
+    synthetic_profile, entries = _load_runtime_input(
         persona_id=persona_id,
         wrangled_dir=wrangled_path,
         end_date=end_date,
     )
-    core_values = list(
-        dict.fromkeys(
-            _normalize_core_value(value)
-            for value in profile.get("core_values") or []
-            if isinstance(value, str) and value.strip()
+    if profile_path is not None:
+        core_values = load_onboarding_core_values(
+            profile_path,
+            persona_id=persona_id,
         )
-    )
+    else:
+        core_values = list(
+            dict.fromkeys(
+                _normalize_core_value(value)
+                for value in synthetic_profile.get("core_values") or []
+                if isinstance(value, str) and value.strip()
+            )
+        )
     if not core_values:
         raise ValueError(f"No Core Values available for persona_id={persona_id}")
 
@@ -193,6 +255,14 @@ def _build_cli_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--persona-id", required=True)
     parser.add_argument("--wrangled-dir", default="logs/wrangled")
+    parser.add_argument(
+        "--profile-path",
+        default=None,
+        help=(
+            "Confirmed onboarding Profile JSON. When omitted, use synthetic "
+            "persona Core Values from the wrangled file."
+        ),
+    )
     parser.add_argument("--output-dir", default="logs/exports/weekly_drift_coach")
     parser.add_argument(
         "--parquet-path",
@@ -220,6 +290,7 @@ def main() -> None:
             wrangled_dir=args.wrangled_dir,
             output_dir=args.output_dir,
             parquet_path=args.parquet_path,
+            profile_path=args.profile_path,
             end_date=args.end_date,
         )
     )

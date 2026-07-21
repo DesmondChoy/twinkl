@@ -7,7 +7,10 @@ from types import SimpleNamespace
 import pytest
 
 from src.coach.weekly_digest import build_weekly_drift_reviewer_digest
-from src.coach.weekly_drift_runtime import run_weekly_drift_coach_cycle
+from src.coach.weekly_drift_runtime import (
+    load_onboarding_core_values,
+    run_weekly_drift_coach_cycle,
+)
 from src.drift_detector import detect_drift
 from src.weekly_drift_reviewer import (
     OpenAIWeeklyDriftReviewer,
@@ -17,9 +20,9 @@ from src.weekly_drift_reviewer import (
 )
 
 
-def _write_wrangled(path: Path) -> None:
+def _write_wrangled(path: Path, *, core_values: str = "Benevolence") -> None:
     path.write_text(
-        """# Persona deadbeef: Casey
+        f"""# Persona deadbeef: Casey
 
 ## Profile
 - **Persona ID:** deadbeef
@@ -27,7 +30,7 @@ def _write_wrangled(path: Path) -> None:
 - **Age:** 25-34
 - **Profession:** Engineer
 - **Culture:** Singaporean
-- **Core Values:** Benevolence
+- **Core Values:** {core_values}
 - **Bio:** Runtime test persona.
 
 ---
@@ -54,8 +57,9 @@ Called my sister and protected the evening for family.
 
 
 class _SequencedResponses:
-    def __init__(self):
+    def __init__(self, dimension: str = "benevolence"):
         self.call_count = 0
+        self.dimension = dimension
 
     async def parse(self, **_kwargs):
         t_index = self.call_count
@@ -76,7 +80,7 @@ class _SequencedResponses:
             assessments=[
                 VerifierAssessment(
                     t_index=t_index,
-                    dimension="benevolence",
+                    dimension=self.dimension,
                     verdict=verdict,
                     confidence="high",
                     reason_code=reason,
@@ -125,6 +129,97 @@ async def test_approved_runtime_persists_reviews_drift_and_digest(tmp_path: Path
     prompt = Path(artifact_paths["prompt_path"]).read_text()
     assert "Drift states: Benevolence: recovered" in prompt
     assert "Overall mean alignment: N/A" in prompt
+
+
+def _write_onboarding_profile(path: Path, **overrides) -> None:
+    payload = {
+        "schema_version": 2,
+        "onboarding_version": "2.1.0",
+        "user_id": "deadbeef",
+        "user_confirmed": True,
+        "top_values": ["self_direction"],
+        "value_profile": {"top_values": ["self_direction"]},
+    }
+    payload.update(overrides)
+    path.write_text(json.dumps(payload))
+
+
+@pytest.mark.asyncio
+async def test_onboarding_profile_supplies_runtime_core_values(tmp_path: Path):
+    wrangled_dir = tmp_path / "wrangled"
+    wrangled_dir.mkdir()
+    _write_wrangled(
+        wrangled_dir / "persona_deadbeef.md",
+        core_values="Security",
+    )
+    profile_path = tmp_path / "profile.json"
+    _write_onboarding_profile(profile_path)
+    responses = _SequencedResponses(dimension="self_direction")
+    reviewer = OpenAIWeeklyDriftReviewer(client=SimpleNamespace(responses=responses))
+
+    digest, _artifact_paths = await run_weekly_drift_coach_cycle(
+        persona_id="deadbeef",
+        wrangled_dir=wrangled_dir,
+        output_dir=tmp_path / "exports",
+        parquet_path=tmp_path / "weekly_digests.parquet",
+        profile_path=profile_path,
+        reviewer=reviewer,
+    )
+
+    assert digest.core_values == ["self_direction"]
+    assert digest.drift_states == {"self_direction": "recovered"}
+
+
+@pytest.mark.parametrize(
+    ("overrides", "match"),
+    [
+        ({"schema_version": 1}, "schema_version"),
+        ({"user_confirmed": False}, "confirmed"),
+        ({"user_id": "someone-else"}, "user_id"),
+        (
+            {"top_values": [], "value_profile": {"top_values": []}},
+            "non-empty",
+        ),
+        (
+            {
+                "top_values": ["not_a_value"],
+                "value_profile": {"top_values": ["not_a_value"]},
+            },
+            "invalid Core Values",
+        ),
+        (
+            {
+                "top_values": ["benevolence", "self_direction"],
+                "value_profile": {
+                    "top_values": ["benevolence", "self_direction"]
+                },
+            },
+            "canonical ordering",
+        ),
+        (
+            {"value_profile": {"top_values": ["security"]}},
+            "must match",
+        ),
+    ],
+)
+def test_onboarding_profile_rejects_invalid_contract(
+    tmp_path: Path,
+    overrides: dict,
+    match: str,
+):
+    profile_path = tmp_path / "profile.json"
+    _write_onboarding_profile(profile_path, **overrides)
+
+    with pytest.raises(ValueError, match=match):
+        load_onboarding_core_values(profile_path, persona_id="deadbeef")
+
+
+def test_onboarding_profile_rejects_malformed_json(tmp_path: Path):
+    profile_path = tmp_path / "profile.json"
+    profile_path.write_text("not JSON")
+
+    with pytest.raises(ValueError, match="Could not read onboarding Profile JSON"):
+        load_onboarding_core_values(profile_path, persona_id="deadbeef")
 
 
 def test_weekly_digest_keeps_simultaneous_core_value_evidence(tmp_path: Path):

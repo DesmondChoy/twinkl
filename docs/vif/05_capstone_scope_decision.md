@@ -88,8 +88,8 @@ writer making a behavior or choice against the same Core Value.
 
 - Only the user's Core Values, stored in the discrete `top_values` set, are
   eligible to trigger Drift.
-  Existing synthetic personas temporarily use `core_values` as the equivalent
-  Core Values until `twinkl-1m8` wires the onboarding profile contract.
+  The runtime imports them from a confirmed onboarding Profile when supplied;
+  existing synthetic personas retain `core_values` as a compatibility path.
 - Values are evaluated independently; aligned evidence on another value cannot
   cancel a Conflict or Drift.
 - A longer uninterrupted Conflict run is one Drift, not repeated alerts.
@@ -267,9 +267,9 @@ See [VIF Critic Role in Drift Detection](../architecture/drift_detection.md).
 
 ## Remaining Work and Out-of-Scope Ideas
 
-Remaining critical work is to persist onboarding Core Values for the
-user-facing runtime. A fresh, independently resolved final test and deployment
-approval are outside the time-boxed capstone scope.
+The user-facing runtime can import Core Values from a confirmed onboarding
+Profile. Automatic browser-to-service storage, a fresh independently resolved
+final test, and deployment approval are outside the time-boxed capstone scope.
 
 The VIF Critic review-and-retrain demonstration, data-scaling curve, candidate
 confirmation, and conversion to a binary Conflict model are not planned for

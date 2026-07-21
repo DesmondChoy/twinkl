@@ -24,8 +24,9 @@ BWS preference shares.
 
 - Onboarding owns the 11 SVBWS tasks, goal selection, Profile confirmation,
   local resume, and first Journal Entry handoff.
-- `twinkl-1m8` owns durable Profile storage and the Core Value handoff to the
-  Weekly Drift Reviewer.
+- A host may persist the confirmed Profile exposed by the callback or browser
+  event. The approved runtime imports saved Profile JSON through
+  `--profile-path`.
 - The first Journal Entry editor and later Profile evolution are outside this
   specification.
 
@@ -334,14 +335,15 @@ canonical group's randomized card order.
 ## 7. Integration Status
 
 - The React POC creates and validates the Profile locally.
-- Durable Profile storage is not implemented.
-- `top_values` is not yet supplied to the Weekly Drift Reviewer or Drift
-  Detector.
+- A host can persist the Profile exposed by the callback or browser event;
+  automatic browser-to-service storage is outside the capstone.
+- The approved runtime validates saved Profile JSON and supplies `top_values`
+  as Core Values to the Weekly Drift Reviewer and Drift Detector.
 - `value_profile.weights` is not yet supplied to the VIF Critic.
 - `goal_category` does not yet focus the Weekly Coach.
 
-The current synthetic personas retain their explicit `core_values` until
-`twinkl-1m8` implements the Profile handoff.
+When no onboarding Profile is supplied, current synthetic personas retain
+their explicit `core_values` compatibility path.
 
 ## 8. References
 

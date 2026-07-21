@@ -5,8 +5,8 @@
 > | Stage | Status |
 > |---|---|
 > | Stage 0 (Offline Training) | ✅ Complete for the capstone POC — synthetic generation, LLM-Judge labeling, and VIF Critic training are implemented; known model limits remain documented |
-> | Stage 1 (Onboarding) | 🧪 Experimental — the standalone React POC implements the complete local, user-facing flow and internal Profile; durable storage and runtime handoff remain incomplete |
-> | Stages 2–4 (Journaling + Weekly Coach) | ⚠️ Partial — the Weekly Drift Reviewer and deterministic Drift Detector runtime, Weekly Digest, and prompt rendering are implemented; the Journaling UI, persisted onboarding Core Values, and product-facing orchestration remain incomplete |
+> | Stage 1 (Onboarding) | 🧪 Experimental — the standalone React POC implements the complete local, user-facing flow and internal Profile; automatic browser-to-service storage remains outside the capstone |
+> | Stages 2–4 (Journaling + Weekly Coach) | ⚠️ Partial — the Weekly Drift Reviewer and deterministic Drift Detector runtime, onboarding Profile import, Weekly Digest, and prompt rendering are implemented; the Journaling UI and product-facing orchestration remain incomplete |
 > | Stage 5 (Uncertain delivery) | ✅ Complete for the capstone POC — Weekly Drift Reviewer Abstain fails closed, and the Weekly Digest handles uncertain delivery; no deployment approval is claimed |
 >
 > See the [Implementation Status](../prd.md#implementation-status) table in prd.md for the full breakdown.
@@ -97,9 +97,9 @@ transformation.
 | Onboarding flow | **ACTIVE** | Guides Sarah through the BWS assessment and creates her local Profile |
 | Weekly Coach | N/A | No Weekly Digest exists yet |
 
-**Abridged internal output:** Sarah's Profile is generated in the browser. It
-is not exposed as technical output to Sarah and is not yet persisted to the
-Weekly Drift Reviewer runtime:
+**Abridged internal output:** Sarah's Profile is generated in the browser and
+is not exposed as technical output to Sarah. A host can persist it, and the
+approved runtime can import the saved JSON:
 
 ```json
 {
@@ -140,7 +140,8 @@ Weekly Drift Reviewer runtime:
 The weights preserve the order of the ten-value scores but are product features,
 not psychometric preference shares. The full vector remains available for
 offline VIF Critic analysis; the approved user-facing Drift path uses Core
-Values after the Profile handoff in `twinkl-1m8` is implemented.
+Values imported from a confirmed onboarding Profile. Synthetic personas retain
+their explicit `core_values` compatibility path.
 
 ---
 

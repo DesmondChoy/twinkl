@@ -153,10 +153,12 @@ state; mixed is derived only at the Weekly Digest level.
 the former VIF Critic crash/rut/evolution behavior only for historical
 reproduction and the existing Runtime Demo Review App.
 
-Remaining critical work is separate: `twinkl-1m8` must replace the synthetic
-`core_values` fallback with persisted `top_values` from onboarding. The fresh
-final test (`twinkl-pv6s`) and deployment decision (`twinkl-ixq4`) were closed
-as not planned for the time-boxed capstone.
+The runtime accepts a confirmed onboarding Profile JSON and uses its
+`top_values` as Core Values. When no Profile is supplied, synthetic personas
+retain their explicit `core_values` compatibility path. Automated
+browser-to-service storage is outside the time-boxed capstone. The fresh final
+test (`twinkl-pv6s`) and deployment decision (`twinkl-ixq4`) were closed as not
+planned.
 
 `twinkl-60l5` was closed as not planned. The time-boxed capstone does not add a
 VIF Critic review-and-retrain demonstration.
@@ -173,4 +175,5 @@ VIF Critic review-and-retrain demonstration.
 - [Drift Inspection App](../demo/weekly_drift_review_app.md)
 - Beads: `twinkl-60l5` (review-and-retrain research closed as not planned), `twinkl-7vam`
   (weekly-only operating and deployment-approval criteria), `twinkl-a2w`
-  (approved runtime implementation), and `twinkl-1m8` (persisted Core Values)
+  (approved runtime implementation), and `twinkl-1m8` (onboarding Profile Core
+  Value import)
