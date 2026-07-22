@@ -22,6 +22,9 @@ BWS preference shares.
 
 ### Scope
 
+- The React onboarding flow is mobile-first: narrow-screen phones are the
+  primary design and verification target, and wider layouts are progressive
+  enhancements.
 - Onboarding owns the 11 SVBWS tasks, goal selection, Profile confirmation,
   local resume, and first Journal Entry handoff.
 - A host may persist the confirmed Profile exposed by the callback or browser

@@ -33,6 +33,11 @@ week, selected Journal Entry, and selected backend event.
 This design lets a professor assess both user value and Architecting AI Systems
 work without waiting for a real week of journaling.
 
+The React app is mobile-first. Design and verify the complete Experience and
+Inspect walkthrough for narrow-screen phones first, then progressively enhance
+the same views for wider screens. Desktop convenience must not determine the
+information hierarchy, interaction order, or acceptance of the mobile flow.
+
 ## 2. Product and Evidence Boundaries
 
 - The React implementation in `frontend/onboarding/` remains the single
@@ -382,10 +387,16 @@ If a scenario is AI-reviewed synthetic development evidence, say so.
 
 ## 11. Responsive and Accessible Behavior
 
+- Narrow-screen phones are the primary design and verification target. Start
+  layout, interaction, and content decisions at the narrow viewport; treat
+  wider layouts as progressive enhancements.
 - The Experience/Inspect selector remains reachable at the top of every
   post-onboarding screen.
 - On narrow screens, each view occupies the full screen; do not force a
   side-by-side debugger.
+- Primary actions, Journal Entry composition, persona replay, Weekly Digest
+  reading, and event inspection remain usable without hover or precision
+  pointer input.
 - Persona replay controls remain operable with touch and keyboard input.
 - Focus moves to the selected Inspect event when using **Inspect this run**.
 - Status changes and nudge availability use appropriate live-region behavior.
@@ -475,6 +486,7 @@ saved, deterministic replay must remain sufficient for the complete demo.
   preservation.
 - Accessibility checks cover keyboard operation, focus, names, status updates,
   and reduced motion.
-- Responsive checks cover representative narrow and desktop viewports.
+- Responsive checks treat representative narrow-screen phone viewports as the
+  primary acceptance target and also cover representative desktop viewports.
 - Saved scenario manifests are reproducible from their recorded inputs and
   reject mismatched hashes or model contracts.
