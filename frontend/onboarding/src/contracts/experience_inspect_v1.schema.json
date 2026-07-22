@@ -1,0 +1,4695 @@
+{
+  "$defs": {
+    "ApiErrorResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "error": {
+          "$ref": "#/$defs/SafeError"
+        },
+        "operation": {
+          "const": "error",
+          "title": "Operation",
+          "type": "string"
+        },
+        "request_id": {
+          "title": "Request Id",
+          "type": "string"
+        },
+        "requested_operation": {
+          "enum": [
+            "create_session",
+            "submit_journal_entry",
+            "load_scenario",
+            "read_trace"
+          ],
+          "title": "Requested Operation",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "experience-inspect-v1",
+          "default": "experience-inspect-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "status": {
+          "const": "error",
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "operation",
+        "requested_operation",
+        "request_id",
+        "status",
+        "error"
+      ],
+      "title": "ApiErrorResponse",
+      "type": "object"
+    },
+    "BwsResponse": {
+      "additionalProperties": false,
+      "description": "One response in the canonical 11-group SVBWS design.",
+      "properties": {
+        "item_order_shown": {
+          "items": {
+            "enum": [
+              "power",
+              "achievement",
+              "hedonism",
+              "stimulation",
+              "self_direction",
+              "universalism_nature",
+              "benevolence",
+              "tradition",
+              "conformity",
+              "security",
+              "universalism_social"
+            ],
+            "type": "string"
+          },
+          "maxItems": 6,
+          "minItems": 6,
+          "title": "Item Order Shown",
+          "type": "array"
+        },
+        "items": {
+          "items": {
+            "enum": [
+              "power",
+              "achievement",
+              "hedonism",
+              "stimulation",
+              "self_direction",
+              "universalism_nature",
+              "benevolence",
+              "tradition",
+              "conformity",
+              "security",
+              "universalism_social"
+            ],
+            "type": "string"
+          },
+          "maxItems": 6,
+          "minItems": 6,
+          "title": "Items",
+          "type": "array"
+        },
+        "response_time_ms": {
+          "minimum": 0,
+          "title": "Response Time Ms",
+          "type": "integer"
+        },
+        "selected_best": {
+          "enum": [
+            "power",
+            "achievement",
+            "hedonism",
+            "stimulation",
+            "self_direction",
+            "universalism_nature",
+            "benevolence",
+            "tradition",
+            "conformity",
+            "security",
+            "universalism_social"
+          ],
+          "title": "Selected Best",
+          "type": "string"
+        },
+        "selected_worst": {
+          "enum": [
+            "power",
+            "achievement",
+            "hedonism",
+            "stimulation",
+            "self_direction",
+            "universalism_nature",
+            "benevolence",
+            "tradition",
+            "conformity",
+            "security",
+            "universalism_social"
+          ],
+          "title": "Selected Worst",
+          "type": "string"
+        },
+        "set_number": {
+          "maximum": 11,
+          "minimum": 1,
+          "title": "Set Number",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "set_number",
+        "items",
+        "item_order_shown",
+        "selected_best",
+        "selected_worst",
+        "response_time_ms"
+      ],
+      "title": "BwsResponse",
+      "type": "object"
+    },
+    "BwsResults": {
+      "additionalProperties": false,
+      "description": "Raw 11-object SVBWS scores kept separate from the Profile transform.",
+      "properties": {
+        "appearances": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "propertyNames": {
+            "enum": [
+              "power",
+              "achievement",
+              "hedonism",
+              "stimulation",
+              "self_direction",
+              "universalism_nature",
+              "benevolence",
+              "tradition",
+              "conformity",
+              "security",
+              "universalism_social"
+            ]
+          },
+          "title": "Appearances",
+          "type": "object"
+        },
+        "best_counts": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "propertyNames": {
+            "enum": [
+              "power",
+              "achievement",
+              "hedonism",
+              "stimulation",
+              "self_direction",
+              "universalism_nature",
+              "benevolence",
+              "tradition",
+              "conformity",
+              "security",
+              "universalism_social"
+            ]
+          },
+          "title": "Best Counts",
+          "type": "object"
+        },
+        "net_counts": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "propertyNames": {
+            "enum": [
+              "power",
+              "achievement",
+              "hedonism",
+              "stimulation",
+              "self_direction",
+              "universalism_nature",
+              "benevolence",
+              "tradition",
+              "conformity",
+              "security",
+              "universalism_social"
+            ]
+          },
+          "title": "Net Counts",
+          "type": "object"
+        },
+        "scores": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "propertyNames": {
+            "enum": [
+              "power",
+              "achievement",
+              "hedonism",
+              "stimulation",
+              "self_direction",
+              "universalism_nature",
+              "benevolence",
+              "tradition",
+              "conformity",
+              "security",
+              "universalism_social"
+            ]
+          },
+          "title": "Scores",
+          "type": "object"
+        },
+        "worst_counts": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "propertyNames": {
+            "enum": [
+              "power",
+              "achievement",
+              "hedonism",
+              "stimulation",
+              "self_direction",
+              "universalism_nature",
+              "benevolence",
+              "tradition",
+              "conformity",
+              "security",
+              "universalism_social"
+            ]
+          },
+          "title": "Worst Counts",
+          "type": "object"
+        }
+      },
+      "required": [
+        "appearances",
+        "best_counts",
+        "worst_counts",
+        "net_counts",
+        "scores"
+      ],
+      "title": "BwsResults",
+      "type": "object"
+    },
+    "CoachNarrative": {
+      "description": "Structured Weekly Coach reflection.",
+      "properties": {
+        "reflective_question": {
+          "title": "Reflective Question",
+          "type": "string"
+        },
+        "tension_explanation": {
+          "title": "Tension Explanation",
+          "type": "string"
+        },
+        "weekly_mirror": {
+          "title": "Weekly Mirror",
+          "type": "string"
+        }
+      },
+      "required": [
+        "weekly_mirror",
+        "tension_explanation",
+        "reflective_question"
+      ],
+      "title": "CoachNarrative",
+      "type": "object"
+    },
+    "DigestValidation": {
+      "description": "Tier 1 automated checks for a Weekly Coach reflection.",
+      "properties": {
+        "checks": {
+          "items": {
+            "$ref": "#/$defs/ValidationCheck"
+          },
+          "title": "Checks",
+          "type": "array"
+        },
+        "grounded_quotes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Grounded Quotes",
+          "type": "array"
+        },
+        "word_count": {
+          "minimum": 0,
+          "title": "Word Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "word_count"
+      ],
+      "title": "DigestValidation",
+      "type": "object"
+    },
+    "DimensionDigest": {
+      "description": "Per-dimension summary over one Weekly Digest window.",
+      "properties": {
+        "dimension": {
+          "description": "Schwartz value dimension in snake_case",
+          "title": "Dimension",
+          "type": "string"
+        },
+        "mean_score": {
+          "description": "Mean alignment score in [-1, 1]",
+          "title": "Mean Score",
+          "type": "number"
+        },
+        "pct_neg": {
+          "description": "Percentage of -1 labels in [0, 1]",
+          "title": "Pct Neg",
+          "type": "number"
+        },
+        "pct_neutral": {
+          "description": "Percentage of 0 labels in [0, 1]",
+          "title": "Pct Neutral",
+          "type": "number"
+        },
+        "pct_pos": {
+          "description": "Percentage of +1 labels in [0, 1]",
+          "title": "Pct Pos",
+          "type": "number"
+        }
+      },
+      "required": [
+        "dimension",
+        "mean_score",
+        "pct_neg",
+        "pct_neutral",
+        "pct_pos"
+      ],
+      "title": "DimensionDigest",
+      "type": "object"
+    },
+    "DriftDetectedDetails": {
+      "additionalProperties": false,
+      "properties": {
+        "decisions": {
+          "items": {
+            "$ref": "#/$defs/WeeklyDriftReviewerDecisionContract"
+          },
+          "minItems": 1,
+          "title": "Decisions",
+          "type": "array"
+        },
+        "result": {
+          "$ref": "#/$defs/DriftDetectorResult"
+        },
+        "steps": {
+          "items": {
+            "$ref": "#/$defs/DriftRuleStep"
+          },
+          "minItems": 1,
+          "title": "Steps",
+          "type": "array"
+        }
+      },
+      "required": [
+        "decisions",
+        "steps",
+        "result"
+      ],
+      "title": "DriftDetectedDetails",
+      "type": "object"
+    },
+    "DriftDetectedEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "completed_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Completed At"
+        },
+        "details": {
+          "$ref": "#/$defs/DriftDetectedDetails"
+        },
+        "duration_ms": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Duration Ms"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SafeError"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event_id": {
+          "minLength": 1,
+          "title": "Event Id",
+          "type": "string"
+        },
+        "event_type": {
+          "const": "drift_detected",
+          "title": "Event Type",
+          "type": "string"
+        },
+        "input_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Input Hash",
+          "type": "string"
+        },
+        "input_refs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "title": "Input Refs",
+          "type": "array"
+        },
+        "model_contract": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ModelContract"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "parent_event_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parent Event Id"
+        },
+        "prompt": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Prompt"
+        },
+        "raw_response": {
+          "anyOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Raw Response"
+        },
+        "result_refs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "title": "Result Refs",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "experience-inspect-v1",
+          "default": "experience-inspect-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "session_id": {
+          "minLength": 1,
+          "title": "Session Id",
+          "type": "string"
+        },
+        "source": {
+          "enum": [
+            "saved_replay",
+            "live_run"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "started_at": {
+          "title": "Started At",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "queued",
+            "running",
+            "complete",
+            "reused",
+            "refused",
+            "invalid",
+            "failed"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "validation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EventValidation"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "event_id",
+        "session_id",
+        "event_type",
+        "status",
+        "source",
+        "started_at",
+        "input_hash",
+        "details"
+      ],
+      "title": "DriftDetectedEvent",
+      "type": "object"
+    },
+    "DriftDetectorResult": {
+      "description": "Auditable Drift Detector result at one delivery cutoff.",
+      "properties": {
+        "core_value_states": {
+          "additionalProperties": {
+            "enum": [
+              "active",
+              "recovered",
+              "uncertain"
+            ],
+            "type": "string"
+          },
+          "title": "Core Value States",
+          "type": "object"
+        },
+        "cutoff_date": {
+          "title": "Cutoff Date",
+          "type": "string"
+        },
+        "cutoff_t_index": {
+          "minimum": 0,
+          "title": "Cutoff T Index",
+          "type": "integer"
+        },
+        "delivery_state": {
+          "enum": [
+            "stable",
+            "active",
+            "recovered",
+            "uncertain",
+            "mixed"
+          ],
+          "title": "Delivery State",
+          "type": "string"
+        },
+        "drifts": {
+          "items": {
+            "$ref": "#/$defs/DriftRecord"
+          },
+          "title": "Drifts",
+          "type": "array"
+        },
+        "persona_id": {
+          "title": "Persona Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "drift-detector-result-v1",
+          "default": "drift-detector-result-v1",
+          "title": "Schema Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "persona_id",
+        "cutoff_t_index",
+        "cutoff_date",
+        "delivery_state"
+      ],
+      "title": "DriftDetectorResult",
+      "type": "object"
+    },
+    "DriftRecord": {
+      "description": "One confirmed Drift for one Core Value.",
+      "properties": {
+        "confirmation_date": {
+          "title": "Confirmation Date",
+          "type": "string"
+        },
+        "confirmation_t_index": {
+          "minimum": 0,
+          "title": "Confirmation T Index",
+          "type": "integer"
+        },
+        "core_value": {
+          "title": "Core Value",
+          "type": "string"
+        },
+        "delivery_state": {
+          "enum": [
+            "active",
+            "recovered",
+            "uncertain"
+          ],
+          "title": "Delivery State",
+          "type": "string"
+        },
+        "drift_id": {
+          "title": "Drift Id",
+          "type": "string"
+        },
+        "end_date": {
+          "title": "End Date",
+          "type": "string"
+        },
+        "end_t_index": {
+          "minimum": 0,
+          "title": "End T Index",
+          "type": "integer"
+        },
+        "evidence_quotes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Quotes",
+          "type": "array"
+        },
+        "onset_date": {
+          "title": "Onset Date",
+          "type": "string"
+        },
+        "onset_t_index": {
+          "minimum": 0,
+          "title": "Onset T Index",
+          "type": "integer"
+        },
+        "persona_id": {
+          "title": "Persona Id",
+          "type": "string"
+        },
+        "supporting_t_indices": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Supporting T Indices",
+          "type": "array"
+        },
+        "termination_date": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Termination Date"
+        },
+        "termination_t_index": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Termination T Index"
+        },
+        "termination_verdict": {
+          "anyOf": [
+            {
+              "enum": [
+                "not_conflict",
+                "abstain"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Termination Verdict"
+        }
+      },
+      "required": [
+        "drift_id",
+        "persona_id",
+        "core_value",
+        "onset_t_index",
+        "confirmation_t_index",
+        "end_t_index",
+        "onset_date",
+        "confirmation_date",
+        "end_date",
+        "supporting_t_indices",
+        "evidence_quotes",
+        "delivery_state"
+      ],
+      "title": "DriftRecord",
+      "type": "object"
+    },
+    "DriftRuleStep": {
+      "additionalProperties": false,
+      "properties": {
+        "core_value": {
+          "enum": [
+            "self_direction",
+            "stimulation",
+            "hedonism",
+            "achievement",
+            "power",
+            "security",
+            "conformity",
+            "tradition",
+            "benevolence",
+            "universalism"
+          ],
+          "title": "Core Value",
+          "type": "string"
+        },
+        "effect": {
+          "enum": [
+            "start",
+            "confirm",
+            "extend",
+            "recover",
+            "uncertain",
+            "break"
+          ],
+          "title": "Effect",
+          "type": "string"
+        },
+        "pending_run_length": {
+          "minimum": 0,
+          "title": "Pending Run Length",
+          "type": "integer"
+        },
+        "t_index": {
+          "minimum": 0,
+          "title": "T Index",
+          "type": "integer"
+        },
+        "verdict": {
+          "enum": [
+            "conflict",
+            "not_conflict",
+            "abstain"
+          ],
+          "title": "Verdict",
+          "type": "string"
+        }
+      },
+      "required": [
+        "t_index",
+        "core_value",
+        "verdict",
+        "pending_run_length",
+        "effect"
+      ],
+      "title": "DriftRuleStep",
+      "type": "object"
+    },
+    "EventValidation": {
+      "additionalProperties": false,
+      "properties": {
+        "errors": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Errors",
+          "type": "array"
+        },
+        "schema_name": {
+          "minLength": 1,
+          "title": "Schema Name",
+          "type": "string"
+        },
+        "valid": {
+          "title": "Valid",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "valid",
+        "schema_name"
+      ],
+      "title": "EventValidation",
+      "type": "object"
+    },
+    "EvidenceSnippet": {
+      "description": "Representative evidence excerpt for a Weekly Digest.",
+      "properties": {
+        "date": {
+          "title": "Date",
+          "type": "string"
+        },
+        "dimensions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Dimensions",
+          "type": "array"
+        },
+        "direction": {
+          "enum": [
+            "misaligned",
+            "aligned",
+            "strain"
+          ],
+          "title": "Direction",
+          "type": "string"
+        },
+        "excerpt": {
+          "title": "Excerpt",
+          "type": "string"
+        },
+        "score_mean": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Score Mean"
+        },
+        "t_index": {
+          "minimum": 0,
+          "title": "T Index",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "date",
+        "t_index",
+        "direction",
+        "dimensions",
+        "excerpt"
+      ],
+      "title": "EvidenceSnippet",
+      "type": "object"
+    },
+    "ExperienceSession": {
+      "additionalProperties": false,
+      "description": "Serializable state shared by Experience and Inspect.",
+      "properties": {
+        "drift_result": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DriftDetectorResult"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "journal_entries": {
+          "items": {
+            "$ref": "#/$defs/JournalEntry"
+          },
+          "title": "Journal Entries",
+          "type": "array"
+        },
+        "nudges": {
+          "items": {
+            "$ref": "#/$defs/NudgeInteraction"
+          },
+          "title": "Nudges",
+          "type": "array"
+        },
+        "profile": {
+          "$ref": "#/$defs/OnboardingProfile"
+        },
+        "revision": {
+          "minimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "schema_version": {
+          "const": "experience-inspect-v1",
+          "default": "experience-inspect-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "selection": {
+          "$ref": "#/$defs/SessionSelection"
+        },
+        "session_id": {
+          "minLength": 1,
+          "title": "Session Id",
+          "type": "string"
+        },
+        "trace_event_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Trace Event Ids",
+          "type": "array"
+        },
+        "updated_at": {
+          "title": "Updated At",
+          "type": "string"
+        },
+        "weekly_digest": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WeeklyDigest"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "weekly_reviewer_decisions": {
+          "items": {
+            "$ref": "#/$defs/WeeklyDriftReviewerDecisionContract"
+          },
+          "title": "Weekly Reviewer Decisions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "session_id",
+        "revision",
+        "profile",
+        "selection",
+        "updated_at"
+      ],
+      "title": "ExperienceSession",
+      "type": "object"
+    },
+    "JournalEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "content": {
+          "minLength": 1,
+          "title": "Content",
+          "type": "string"
+        },
+        "date": {
+          "title": "Date",
+          "type": "string"
+        },
+        "journal_entry_id": {
+          "minLength": 1,
+          "title": "Journal Entry Id",
+          "type": "string"
+        },
+        "nudge_response": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Nudge Response"
+        },
+        "t_index": {
+          "minimum": 0,
+          "title": "T Index",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "journal_entry_id",
+        "t_index",
+        "date",
+        "content"
+      ],
+      "title": "JournalEntry",
+      "type": "object"
+    },
+    "JournalEntrySubmitRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "expected_revision": {
+          "minimum": 0,
+          "title": "Expected Revision",
+          "type": "integer"
+        },
+        "idempotency_key": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Idempotency Key",
+          "type": "string"
+        },
+        "journal_entry": {
+          "$ref": "#/$defs/JournalEntry"
+        },
+        "operation": {
+          "const": "submit_journal_entry",
+          "title": "Operation",
+          "type": "string"
+        },
+        "request_id": {
+          "title": "Request Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "experience-inspect-v1",
+          "default": "experience-inspect-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "operation",
+        "request_id",
+        "idempotency_key",
+        "session_id",
+        "expected_revision",
+        "journal_entry"
+      ],
+      "title": "JournalEntrySubmitRequest",
+      "type": "object"
+    },
+    "JournalEntrySubmittedDetails": {
+      "additionalProperties": false,
+      "properties": {
+        "journal_entry": {
+          "$ref": "#/$defs/JournalEntry"
+        },
+        "ordering_valid": {
+          "title": "Ordering Valid",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "journal_entry",
+        "ordering_valid"
+      ],
+      "title": "JournalEntrySubmittedDetails",
+      "type": "object"
+    },
+    "JournalEntrySubmittedEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "completed_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Completed At"
+        },
+        "details": {
+          "$ref": "#/$defs/JournalEntrySubmittedDetails"
+        },
+        "duration_ms": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Duration Ms"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SafeError"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event_id": {
+          "minLength": 1,
+          "title": "Event Id",
+          "type": "string"
+        },
+        "event_type": {
+          "const": "journal_entry_submitted",
+          "title": "Event Type",
+          "type": "string"
+        },
+        "input_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Input Hash",
+          "type": "string"
+        },
+        "input_refs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "title": "Input Refs",
+          "type": "array"
+        },
+        "model_contract": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ModelContract"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "parent_event_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parent Event Id"
+        },
+        "prompt": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Prompt"
+        },
+        "raw_response": {
+          "anyOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Raw Response"
+        },
+        "result_refs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "title": "Result Refs",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "experience-inspect-v1",
+          "default": "experience-inspect-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "session_id": {
+          "minLength": 1,
+          "title": "Session Id",
+          "type": "string"
+        },
+        "source": {
+          "enum": [
+            "saved_replay",
+            "live_run"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "started_at": {
+          "title": "Started At",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "queued",
+            "running",
+            "complete",
+            "reused",
+            "refused",
+            "invalid",
+            "failed"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "validation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EventValidation"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "event_id",
+        "session_id",
+        "event_type",
+        "status",
+        "source",
+        "started_at",
+        "input_hash",
+        "details"
+      ],
+      "title": "JournalEntrySubmittedEvent",
+      "type": "object"
+    },
+    "JournalEntrySubmittedResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "event_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Event Ids",
+          "type": "array"
+        },
+        "operation": {
+          "const": "submit_journal_entry",
+          "title": "Operation",
+          "type": "string"
+        },
+        "request_id": {
+          "title": "Request Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "experience-inspect-v1",
+          "default": "experience-inspect-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "session": {
+          "$ref": "#/$defs/ExperienceSession"
+        },
+        "status": {
+          "const": "ok",
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "operation",
+        "request_id",
+        "status",
+        "session",
+        "event_ids"
+      ],
+      "title": "JournalEntrySubmittedResponse",
+      "type": "object"
+    },
+    "ModelContract": {
+      "additionalProperties": false,
+      "properties": {
+        "model": {
+          "minLength": 1,
+          "title": "Model",
+          "type": "string"
+        },
+        "provider": {
+          "minLength": 1,
+          "title": "Provider",
+          "type": "string"
+        },
+        "reasoning_effort": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reasoning Effort"
+        }
+      },
+      "required": [
+        "provider",
+        "model"
+      ],
+      "title": "ModelContract",
+      "type": "object"
+    },
+    "NudgeDecidedEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "completed_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Completed At"
+        },
+        "details": {
+          "$ref": "#/$defs/NudgeDecisionDetails"
+        },
+        "duration_ms": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Duration Ms"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SafeError"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event_id": {
+          "minLength": 1,
+          "title": "Event Id",
+          "type": "string"
+        },
+        "event_type": {
+          "const": "nudge_decided",
+          "title": "Event Type",
+          "type": "string"
+        },
+        "input_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Input Hash",
+          "type": "string"
+        },
+        "input_refs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "title": "Input Refs",
+          "type": "array"
+        },
+        "model_contract": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ModelContract"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "parent_event_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parent Event Id"
+        },
+        "prompt": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Prompt"
+        },
+        "raw_response": {
+          "anyOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Raw Response"
+        },
+        "result_refs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "title": "Result Refs",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "experience-inspect-v1",
+          "default": "experience-inspect-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "session_id": {
+          "minLength": 1,
+          "title": "Session Id",
+          "type": "string"
+        },
+        "source": {
+          "enum": [
+            "saved_replay",
+            "live_run"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "started_at": {
+          "title": "Started At",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "queued",
+            "running",
+            "complete",
+            "reused",
+            "refused",
+            "invalid",
+            "failed"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "validation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EventValidation"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "event_id",
+        "session_id",
+        "event_type",
+        "status",
+        "source",
+        "started_at",
+        "input_hash",
+        "details"
+      ],
+      "title": "NudgeDecidedEvent",
+      "type": "object"
+    },
+    "NudgeDecisionDetails": {
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "anyOf": [
+            {
+              "enum": [
+                "clarification",
+                "elaboration",
+                "tension_surfacing"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Category"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reason"
+        },
+        "should_nudge": {
+          "title": "Should Nudge",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "should_nudge"
+      ],
+      "title": "NudgeDecisionDetails",
+      "type": "object"
+    },
+    "NudgeGeneratedDetails": {
+      "additionalProperties": false,
+      "properties": {
+        "attempts": {
+          "minimum": 1,
+          "title": "Attempts",
+          "type": "integer"
+        },
+        "nudge": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/NudgeInteraction"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "word_count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Word Count"
+        }
+      },
+      "required": [
+        "attempts"
+      ],
+      "title": "NudgeGeneratedDetails",
+      "type": "object"
+    },
+    "NudgeGeneratedEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "completed_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Completed At"
+        },
+        "details": {
+          "$ref": "#/$defs/NudgeGeneratedDetails"
+        },
+        "duration_ms": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Duration Ms"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SafeError"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event_id": {
+          "minLength": 1,
+          "title": "Event Id",
+          "type": "string"
+        },
+        "event_type": {
+          "const": "nudge_generated",
+          "title": "Event Type",
+          "type": "string"
+        },
+        "input_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Input Hash",
+          "type": "string"
+        },
+        "input_refs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "title": "Input Refs",
+          "type": "array"
+        },
+        "model_contract": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ModelContract"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "parent_event_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parent Event Id"
+        },
+        "prompt": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Prompt"
+        },
+        "raw_response": {
+          "anyOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Raw Response"
+        },
+        "result_refs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "title": "Result Refs",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "experience-inspect-v1",
+          "default": "experience-inspect-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "session_id": {
+          "minLength": 1,
+          "title": "Session Id",
+          "type": "string"
+        },
+        "source": {
+          "enum": [
+            "saved_replay",
+            "live_run"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "started_at": {
+          "title": "Started At",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "queued",
+            "running",
+            "complete",
+            "reused",
+            "refused",
+            "invalid",
+            "failed"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "validation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EventValidation"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "event_id",
+        "session_id",
+        "event_type",
+        "status",
+        "source",
+        "started_at",
+        "input_hash",
+        "details"
+      ],
+      "title": "NudgeGeneratedEvent",
+      "type": "object"
+    },
+    "NudgeInteraction": {
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "anyOf": [
+            {
+              "enum": [
+                "clarification",
+                "elaboration",
+                "tension_surfacing"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Category"
+        },
+        "journal_entry_id": {
+          "minLength": 1,
+          "title": "Journal Entry Id",
+          "type": "string"
+        },
+        "nudge_id": {
+          "minLength": 1,
+          "title": "Nudge Id",
+          "type": "string"
+        },
+        "outcome": {
+          "enum": [
+            "suppressed",
+            "no_nudge",
+            "displayed",
+            "skipped",
+            "answered"
+          ],
+          "title": "Outcome",
+          "type": "string"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reason"
+        },
+        "response": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Response"
+        },
+        "text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Text"
+        }
+      },
+      "required": [
+        "nudge_id",
+        "journal_entry_id",
+        "outcome"
+      ],
+      "title": "NudgeInteraction",
+      "type": "object"
+    },
+    "NudgeSuppressionCheckedEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "completed_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Completed At"
+        },
+        "details": {
+          "$ref": "#/$defs/NudgeSuppressionDetails"
+        },
+        "duration_ms": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Duration Ms"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SafeError"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event_id": {
+          "minLength": 1,
+          "title": "Event Id",
+          "type": "string"
+        },
+        "event_type": {
+          "const": "nudge_suppression_checked",
+          "title": "Event Type",
+          "type": "string"
+        },
+        "input_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Input Hash",
+          "type": "string"
+        },
+        "input_refs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "title": "Input Refs",
+          "type": "array"
+        },
+        "model_contract": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ModelContract"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "parent_event_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parent Event Id"
+        },
+        "prompt": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Prompt"
+        },
+        "raw_response": {
+          "anyOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Raw Response"
+        },
+        "result_refs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "title": "Result Refs",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "experience-inspect-v1",
+          "default": "experience-inspect-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "session_id": {
+          "minLength": 1,
+          "title": "Session Id",
+          "type": "string"
+        },
+        "source": {
+          "enum": [
+            "saved_replay",
+            "live_run"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "started_at": {
+          "title": "Started At",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "queued",
+            "running",
+            "complete",
+            "reused",
+            "refused",
+            "invalid",
+            "failed"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "validation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EventValidation"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "event_id",
+        "session_id",
+        "event_type",
+        "status",
+        "source",
+        "started_at",
+        "input_hash",
+        "details"
+      ],
+      "title": "NudgeSuppressionCheckedEvent",
+      "type": "object"
+    },
+    "NudgeSuppressionDetails": {
+      "additionalProperties": false,
+      "properties": {
+        "max_nudges": {
+          "const": 2,
+          "default": 2,
+          "title": "Max Nudges",
+          "type": "integer"
+        },
+        "previous_entry_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Previous Entry Ids",
+          "type": "array"
+        },
+        "suppressed": {
+          "title": "Suppressed",
+          "type": "boolean"
+        },
+        "window_size": {
+          "const": 3,
+          "default": 3,
+          "title": "Window Size",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "previous_entry_ids",
+        "suppressed"
+      ],
+      "title": "NudgeSuppressionDetails",
+      "type": "object"
+    },
+    "OnboardingProfile": {
+      "additionalProperties": false,
+      "description": "Authoritative confirmed Profile shape emitted by React onboarding.",
+      "properties": {
+        "bws_responses": {
+          "items": {
+            "$ref": "#/$defs/BwsResponse"
+          },
+          "maxItems": 11,
+          "minItems": 11,
+          "title": "Bws Responses",
+          "type": "array"
+        },
+        "bws_results": {
+          "$ref": "#/$defs/BwsResults"
+        },
+        "goal_category": {
+          "enum": [
+            "work_life_balance",
+            "life_transition",
+            "relationships",
+            "health_wellbeing",
+            "direction",
+            "meaningful_work"
+          ],
+          "title": "Goal Category",
+          "type": "string"
+        },
+        "instrument": {
+          "const": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
+          "title": "Instrument",
+          "type": "string"
+        },
+        "onboarding_version": {
+          "const": "2.1.0",
+          "title": "Onboarding Version",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/ProfileProvenance"
+        },
+        "schema_version": {
+          "const": 2,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "scoring_method": {
+          "const": "best_minus_worst_divided_by_appearances_v1",
+          "title": "Scoring Method",
+          "type": "string"
+        },
+        "session_id": {
+          "minLength": 1,
+          "title": "Session Id",
+          "type": "string"
+        },
+        "started_at": {
+          "title": "Started At",
+          "type": "string"
+        },
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string"
+        },
+        "top_values": {
+          "items": {
+            "enum": [
+              "self_direction",
+              "stimulation",
+              "hedonism",
+              "achievement",
+              "power",
+              "security",
+              "conformity",
+              "tradition",
+              "benevolence",
+              "universalism"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Top Values",
+          "type": "array"
+        },
+        "user_confirmed": {
+          "const": true,
+          "title": "User Confirmed",
+          "type": "boolean"
+        },
+        "user_id": {
+          "minLength": 1,
+          "title": "User Id",
+          "type": "string"
+        },
+        "value_profile": {
+          "$ref": "#/$defs/ProfileTransform"
+        }
+      },
+      "required": [
+        "schema_version",
+        "onboarding_version",
+        "instrument",
+        "scoring_method",
+        "user_id",
+        "session_id",
+        "started_at",
+        "timestamp",
+        "bws_responses",
+        "bws_results",
+        "value_profile",
+        "top_values",
+        "goal_category",
+        "user_confirmed",
+        "provenance"
+      ],
+      "title": "OnboardingProfile",
+      "type": "object"
+    },
+    "ProfileConfirmedDetails": {
+      "additionalProperties": false,
+      "properties": {
+        "profile": {
+          "$ref": "#/$defs/OnboardingProfile"
+        }
+      },
+      "required": [
+        "profile"
+      ],
+      "title": "ProfileConfirmedDetails",
+      "type": "object"
+    },
+    "ProfileConfirmedEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "completed_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Completed At"
+        },
+        "details": {
+          "$ref": "#/$defs/ProfileConfirmedDetails"
+        },
+        "duration_ms": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Duration Ms"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SafeError"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event_id": {
+          "minLength": 1,
+          "title": "Event Id",
+          "type": "string"
+        },
+        "event_type": {
+          "const": "profile_confirmed",
+          "title": "Event Type",
+          "type": "string"
+        },
+        "input_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Input Hash",
+          "type": "string"
+        },
+        "input_refs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "title": "Input Refs",
+          "type": "array"
+        },
+        "model_contract": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ModelContract"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "parent_event_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parent Event Id"
+        },
+        "prompt": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Prompt"
+        },
+        "raw_response": {
+          "anyOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Raw Response"
+        },
+        "result_refs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "title": "Result Refs",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "experience-inspect-v1",
+          "default": "experience-inspect-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "session_id": {
+          "minLength": 1,
+          "title": "Session Id",
+          "type": "string"
+        },
+        "source": {
+          "enum": [
+            "saved_replay",
+            "live_run"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "started_at": {
+          "title": "Started At",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "queued",
+            "running",
+            "complete",
+            "reused",
+            "refused",
+            "invalid",
+            "failed"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "validation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EventValidation"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "event_id",
+        "session_id",
+        "event_type",
+        "status",
+        "source",
+        "started_at",
+        "input_hash",
+        "details"
+      ],
+      "title": "ProfileConfirmedEvent",
+      "type": "object"
+    },
+    "ProfileProvenance": {
+      "additionalProperties": false,
+      "properties": {
+        "card_order_randomized": {
+          "const": true,
+          "title": "Card Order Randomized",
+          "type": "boolean"
+        },
+        "set_order_randomized": {
+          "const": true,
+          "title": "Set Order Randomized",
+          "type": "boolean"
+        },
+        "source": {
+          "const": "react_onboarding_poc",
+          "title": "Source",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source",
+        "set_order_randomized",
+        "card_order_randomized"
+      ],
+      "title": "ProfileProvenance",
+      "type": "object"
+    },
+    "ProfileTransform": {
+      "additionalProperties": false,
+      "description": "Ten-value product transform derived from the raw SVBWS result.",
+      "properties": {
+        "bottom_values": {
+          "items": {
+            "enum": [
+              "self_direction",
+              "stimulation",
+              "hedonism",
+              "achievement",
+              "power",
+              "security",
+              "conformity",
+              "tradition",
+              "benevolence",
+              "universalism"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Bottom Values",
+          "type": "array"
+        },
+        "method": {
+          "const": "mean_universalism_facets_then_shift_normalize_v1",
+          "title": "Method",
+          "type": "string"
+        },
+        "scores": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "propertyNames": {
+            "enum": [
+              "self_direction",
+              "stimulation",
+              "hedonism",
+              "achievement",
+              "power",
+              "security",
+              "conformity",
+              "tradition",
+              "benevolence",
+              "universalism"
+            ]
+          },
+          "title": "Scores",
+          "type": "object"
+        },
+        "top_values": {
+          "items": {
+            "enum": [
+              "self_direction",
+              "stimulation",
+              "hedonism",
+              "achievement",
+              "power",
+              "security",
+              "conformity",
+              "tradition",
+              "benevolence",
+              "universalism"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Top Values",
+          "type": "array"
+        },
+        "weights": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "propertyNames": {
+            "enum": [
+              "self_direction",
+              "stimulation",
+              "hedonism",
+              "achievement",
+              "power",
+              "security",
+              "conformity",
+              "tradition",
+              "benevolence",
+              "universalism"
+            ]
+          },
+          "title": "Weights",
+          "type": "object"
+        }
+      },
+      "required": [
+        "method",
+        "scores",
+        "weights",
+        "top_values",
+        "bottom_values"
+      ],
+      "title": "ProfileTransform",
+      "type": "object"
+    },
+    "ResourceRef": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "profile",
+            "journal_entry",
+            "week",
+            "nudge",
+            "weekly_review",
+            "drift",
+            "weekly_digest",
+            "weekly_coach",
+            "event"
+          ],
+          "title": "Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "id"
+      ],
+      "title": "ResourceRef",
+      "type": "object"
+    },
+    "SafeError": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "message": {
+          "minLength": 1,
+          "title": "Message",
+          "type": "string"
+        },
+        "retryable": {
+          "title": "Retryable",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "retryable"
+      ],
+      "title": "SafeError",
+      "type": "object"
+    },
+    "ScenarioBundle": {
+      "additionalProperties": false,
+      "description": "Deterministic saved replay consumed by Experience and Inspect.",
+      "properties": {
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "drift_result": {
+          "$ref": "#/$defs/DriftDetectorResult"
+        },
+        "journal_entries": {
+          "items": {
+            "$ref": "#/$defs/JournalEntry"
+          },
+          "minItems": 1,
+          "title": "Journal Entries",
+          "type": "array"
+        },
+        "manifest": {
+          "$ref": "#/$defs/ScenarioManifest"
+        },
+        "persona_id": {
+          "title": "Persona Id",
+          "type": "string"
+        },
+        "profile": {
+          "$ref": "#/$defs/OnboardingProfile"
+        },
+        "scenario_id": {
+          "title": "Scenario Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "experience-inspect-v1",
+          "default": "experience-inspect-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source": {
+          "const": "saved_replay",
+          "title": "Source",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "trace_event_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Trace Event Ids",
+          "type": "array"
+        },
+        "weekly_digest": {
+          "$ref": "#/$defs/WeeklyDigest"
+        },
+        "weekly_reviewer_decisions": {
+          "items": {
+            "$ref": "#/$defs/WeeklyDriftReviewerDecisionContract"
+          },
+          "minItems": 1,
+          "title": "Weekly Reviewer Decisions",
+          "type": "array"
+        },
+        "weeks": {
+          "items": {
+            "$ref": "#/$defs/ScenarioWeek"
+          },
+          "minItems": 1,
+          "title": "Weeks",
+          "type": "array"
+        }
+      },
+      "required": [
+        "scenario_id",
+        "title",
+        "description",
+        "source",
+        "persona_id",
+        "profile",
+        "journal_entries",
+        "weekly_reviewer_decisions",
+        "drift_result",
+        "weekly_digest",
+        "weeks",
+        "trace_event_ids",
+        "manifest"
+      ],
+      "title": "ScenarioBundle",
+      "type": "object"
+    },
+    "ScenarioLoadRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "operation": {
+          "const": "load_scenario",
+          "title": "Operation",
+          "type": "string"
+        },
+        "request_id": {
+          "title": "Request Id",
+          "type": "string"
+        },
+        "scenario_id": {
+          "title": "Scenario Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "experience-inspect-v1",
+          "default": "experience-inspect-v1",
+          "title": "Schema Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "operation",
+        "request_id",
+        "scenario_id"
+      ],
+      "title": "ScenarioLoadRequest",
+      "type": "object"
+    },
+    "ScenarioLoadedResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "event_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Event Ids",
+          "type": "array"
+        },
+        "operation": {
+          "const": "load_scenario",
+          "title": "Operation",
+          "type": "string"
+        },
+        "request_id": {
+          "title": "Request Id",
+          "type": "string"
+        },
+        "scenario": {
+          "$ref": "#/$defs/ScenarioBundle"
+        },
+        "schema_version": {
+          "const": "experience-inspect-v1",
+          "default": "experience-inspect-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "session": {
+          "$ref": "#/$defs/ExperienceSession"
+        },
+        "status": {
+          "const": "ok",
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "operation",
+        "request_id",
+        "status",
+        "session",
+        "scenario",
+        "event_ids"
+      ],
+      "title": "ScenarioLoadedResponse",
+      "type": "object"
+    },
+    "ScenarioManifest": {
+      "additionalProperties": false,
+      "properties": {
+        "bundle_version": {
+          "const": "scenario-bundle-v1",
+          "title": "Bundle Version",
+          "type": "string"
+        },
+        "created_at": {
+          "title": "Created At",
+          "type": "string"
+        },
+        "input_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Input Hash",
+          "type": "string"
+        },
+        "model_contract": {
+          "$ref": "#/$defs/ModelContract"
+        },
+        "prompt_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Prompt Sha256",
+          "type": "string"
+        },
+        "source_files": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Source Files",
+          "type": "array"
+        }
+      },
+      "required": [
+        "bundle_version",
+        "created_at",
+        "input_hash",
+        "source_files",
+        "model_contract",
+        "prompt_sha256"
+      ],
+      "title": "ScenarioManifest",
+      "type": "object"
+    },
+    "ScenarioWeek": {
+      "additionalProperties": false,
+      "properties": {
+        "event_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Event Ids",
+          "type": "array"
+        },
+        "expected_delivery_state": {
+          "enum": [
+            "stable",
+            "active",
+            "recovered",
+            "uncertain",
+            "mixed"
+          ],
+          "title": "Expected Delivery State",
+          "type": "string"
+        },
+        "journal_entry_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Journal Entry Ids",
+          "type": "array"
+        },
+        "week_end": {
+          "title": "Week End",
+          "type": "string"
+        },
+        "week_id": {
+          "title": "Week Id",
+          "type": "string"
+        },
+        "week_start": {
+          "title": "Week Start",
+          "type": "string"
+        }
+      },
+      "required": [
+        "week_id",
+        "week_start",
+        "week_end",
+        "journal_entry_ids",
+        "event_ids",
+        "expected_delivery_state"
+      ],
+      "title": "ScenarioWeek",
+      "type": "object"
+    },
+    "SessionCreateRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "idempotency_key": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Idempotency Key",
+          "type": "string"
+        },
+        "operation": {
+          "const": "create_session",
+          "title": "Operation",
+          "type": "string"
+        },
+        "profile": {
+          "$ref": "#/$defs/OnboardingProfile"
+        },
+        "request_id": {
+          "title": "Request Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "experience-inspect-v1",
+          "default": "experience-inspect-v1",
+          "title": "Schema Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "operation",
+        "request_id",
+        "idempotency_key",
+        "profile"
+      ],
+      "title": "SessionCreateRequest",
+      "type": "object"
+    },
+    "SessionCreatedResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "operation": {
+          "const": "create_session",
+          "title": "Operation",
+          "type": "string"
+        },
+        "request_id": {
+          "title": "Request Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "experience-inspect-v1",
+          "default": "experience-inspect-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "session": {
+          "$ref": "#/$defs/ExperienceSession"
+        },
+        "status": {
+          "const": "ok",
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "operation",
+        "request_id",
+        "status",
+        "session"
+      ],
+      "title": "SessionCreatedResponse",
+      "type": "object"
+    },
+    "SessionSelection": {
+      "additionalProperties": false,
+      "properties": {
+        "selected_event_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Selected Event Id"
+        },
+        "selected_journal_entry_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Selected Journal Entry Id"
+        },
+        "selected_week": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Selected Week"
+        },
+        "view": {
+          "enum": [
+            "experience",
+            "inspect"
+          ],
+          "title": "View",
+          "type": "string"
+        }
+      },
+      "required": [
+        "view"
+      ],
+      "title": "SessionSelection",
+      "type": "object"
+    },
+    "TraceReadRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "after_event_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "After Event Id"
+        },
+        "operation": {
+          "const": "read_trace",
+          "title": "Operation",
+          "type": "string"
+        },
+        "request_id": {
+          "title": "Request Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "experience-inspect-v1",
+          "default": "experience-inspect-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "operation",
+        "request_id",
+        "session_id"
+      ],
+      "title": "TraceReadRequest",
+      "type": "object"
+    },
+    "TraceReadResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "events": {
+          "items": {
+            "discriminator": {
+              "mapping": {
+                "drift_detected": "#/$defs/DriftDetectedEvent",
+                "journal_entry_submitted": "#/$defs/JournalEntrySubmittedEvent",
+                "nudge_decided": "#/$defs/NudgeDecidedEvent",
+                "nudge_generated": "#/$defs/NudgeGeneratedEvent",
+                "nudge_suppression_checked": "#/$defs/NudgeSuppressionCheckedEvent",
+                "profile_confirmed": "#/$defs/ProfileConfirmedEvent",
+                "weekly_coach_generated": "#/$defs/WeeklyCoachGeneratedEvent",
+                "weekly_digest_built": "#/$defs/WeeklyDigestBuiltEvent",
+                "weekly_review_completed": "#/$defs/WeeklyReviewCompletedEvent",
+                "weekly_review_requested": "#/$defs/WeeklyReviewRequestedEvent"
+              },
+              "propertyName": "event_type"
+            },
+            "oneOf": [
+              {
+                "$ref": "#/$defs/ProfileConfirmedEvent"
+              },
+              {
+                "$ref": "#/$defs/JournalEntrySubmittedEvent"
+              },
+              {
+                "$ref": "#/$defs/NudgeSuppressionCheckedEvent"
+              },
+              {
+                "$ref": "#/$defs/NudgeDecidedEvent"
+              },
+              {
+                "$ref": "#/$defs/NudgeGeneratedEvent"
+              },
+              {
+                "$ref": "#/$defs/WeeklyReviewRequestedEvent"
+              },
+              {
+                "$ref": "#/$defs/WeeklyReviewCompletedEvent"
+              },
+              {
+                "$ref": "#/$defs/DriftDetectedEvent"
+              },
+              {
+                "$ref": "#/$defs/WeeklyDigestBuiltEvent"
+              },
+              {
+                "$ref": "#/$defs/WeeklyCoachGeneratedEvent"
+              }
+            ]
+          },
+          "title": "Events",
+          "type": "array"
+        },
+        "operation": {
+          "const": "read_trace",
+          "title": "Operation",
+          "type": "string"
+        },
+        "request_id": {
+          "title": "Request Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "experience-inspect-v1",
+          "default": "experience-inspect-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        },
+        "status": {
+          "const": "ok",
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "operation",
+        "request_id",
+        "status",
+        "session_id",
+        "events"
+      ],
+      "title": "TraceReadResponse",
+      "type": "object"
+    },
+    "ValidationCheck": {
+      "description": "Single automated check for Weekly Coach reflection quality.",
+      "properties": {
+        "details": {
+          "title": "Details",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "passed": {
+          "title": "Passed",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "name",
+        "passed",
+        "details"
+      ],
+      "title": "ValidationCheck",
+      "type": "object"
+    },
+    "VerifierAssessment": {
+      "additionalProperties": false,
+      "description": "One current-week Journal Entry and Core Value decision.",
+      "properties": {
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "title": "Confidence",
+          "type": "string"
+        },
+        "dimension": {
+          "title": "Dimension",
+          "type": "string"
+        },
+        "evidence_quote": {
+          "default": "",
+          "title": "Evidence Quote",
+          "type": "string"
+        },
+        "reason_code": {
+          "enum": [
+            "ambiguous",
+            "direct_aligned_or_neutral_behavior",
+            "direct_behavior_or_choice",
+            "external_constraint",
+            "feeling_or_intent_only",
+            "missing_text",
+            "needs_hidden_context"
+          ],
+          "title": "Reason Code",
+          "type": "string"
+        },
+        "t_index": {
+          "minimum": 0,
+          "title": "T Index",
+          "type": "integer"
+        },
+        "verdict": {
+          "enum": [
+            "conflict",
+            "not_conflict",
+            "abstain"
+          ],
+          "title": "Verdict",
+          "type": "string"
+        }
+      },
+      "required": [
+        "t_index",
+        "dimension",
+        "verdict",
+        "confidence",
+        "reason_code"
+      ],
+      "title": "VerifierAssessment",
+      "type": "object"
+    },
+    "WeeklyCoachGeneratedDetails": {
+      "additionalProperties": false,
+      "properties": {
+        "narrative": {
+          "$ref": "#/$defs/CoachNarrative"
+        },
+        "validation": {
+          "$ref": "#/$defs/DigestValidation"
+        }
+      },
+      "required": [
+        "narrative",
+        "validation"
+      ],
+      "title": "WeeklyCoachGeneratedDetails",
+      "type": "object"
+    },
+    "WeeklyCoachGeneratedEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "completed_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Completed At"
+        },
+        "details": {
+          "$ref": "#/$defs/WeeklyCoachGeneratedDetails"
+        },
+        "duration_ms": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Duration Ms"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SafeError"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event_id": {
+          "minLength": 1,
+          "title": "Event Id",
+          "type": "string"
+        },
+        "event_type": {
+          "const": "weekly_coach_generated",
+          "title": "Event Type",
+          "type": "string"
+        },
+        "input_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Input Hash",
+          "type": "string"
+        },
+        "input_refs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "title": "Input Refs",
+          "type": "array"
+        },
+        "model_contract": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ModelContract"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "parent_event_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parent Event Id"
+        },
+        "prompt": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Prompt"
+        },
+        "raw_response": {
+          "anyOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Raw Response"
+        },
+        "result_refs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "title": "Result Refs",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "experience-inspect-v1",
+          "default": "experience-inspect-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "session_id": {
+          "minLength": 1,
+          "title": "Session Id",
+          "type": "string"
+        },
+        "source": {
+          "enum": [
+            "saved_replay",
+            "live_run"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "started_at": {
+          "title": "Started At",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "queued",
+            "running",
+            "complete",
+            "reused",
+            "refused",
+            "invalid",
+            "failed"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "validation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EventValidation"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "event_id",
+        "session_id",
+        "event_type",
+        "status",
+        "source",
+        "started_at",
+        "input_hash",
+        "details"
+      ],
+      "title": "WeeklyCoachGeneratedEvent",
+      "type": "object"
+    },
+    "WeeklyDigest": {
+      "description": "Structured Weekly Digest for downstream Weekly Coach generation.",
+      "properties": {
+        "coach_narrative": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CoachNarrative"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "core_values": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Core Values",
+          "type": "array"
+        },
+        "dimensions": {
+          "items": {
+            "$ref": "#/$defs/DimensionDigest"
+          },
+          "title": "Dimensions",
+          "type": "array"
+        },
+        "drift_reasons": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Drift Reasons",
+          "type": "array"
+        },
+        "drift_states": {
+          "additionalProperties": {
+            "enum": [
+              "active",
+              "recovered",
+              "uncertain"
+            ],
+            "type": "string"
+          },
+          "title": "Drift States",
+          "type": "object"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/EvidenceSnippet"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "mode_rationale": {
+          "description": "Short explanation for why this response mode was selected.",
+          "title": "Mode Rationale",
+          "type": "string"
+        },
+        "mode_source": {
+          "description": "How the response mode was assigned, such as fallback_heuristic or drift_detector.",
+          "title": "Mode Source",
+          "type": "string"
+        },
+        "n_entries": {
+          "minimum": 1,
+          "title": "N Entries",
+          "type": "integer"
+        },
+        "overall_mean": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Overall Mean"
+        },
+        "overall_uncertainty": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Overall Uncertainty"
+        },
+        "persona_id": {
+          "title": "Persona Id",
+          "type": "string"
+        },
+        "persona_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Persona Name"
+        },
+        "response_mode": {
+          "enum": [
+            "active",
+            "recovered",
+            "uncertain",
+            "mixed",
+            "stable",
+            "rut",
+            "crash",
+            "evolution",
+            "high_uncertainty",
+            "mixed_state",
+            "background_strain"
+          ],
+          "title": "Response Mode",
+          "type": "string"
+        },
+        "signal_source": {
+          "default": "judge_labels",
+          "description": "Origin of the numeric signals used to build this digest.",
+          "title": "Signal Source",
+          "type": "string"
+        },
+        "top_strengths": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Top Strengths",
+          "type": "array"
+        },
+        "top_tensions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Top Tensions",
+          "type": "array"
+        },
+        "validation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DigestValidation"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "week_end": {
+          "title": "Week End",
+          "type": "string"
+        },
+        "week_start": {
+          "title": "Week Start",
+          "type": "string"
+        }
+      },
+      "required": [
+        "persona_id",
+        "week_start",
+        "week_end",
+        "response_mode",
+        "mode_source",
+        "mode_rationale",
+        "n_entries",
+        "overall_mean",
+        "top_tensions",
+        "top_strengths",
+        "dimensions",
+        "evidence"
+      ],
+      "title": "WeeklyDigest",
+      "type": "object"
+    },
+    "WeeklyDigestBuiltDetails": {
+      "additionalProperties": false,
+      "properties": {
+        "cited_journal_entry_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Cited Journal Entry Ids",
+          "type": "array"
+        },
+        "digest": {
+          "$ref": "#/$defs/WeeklyDigest"
+        }
+      },
+      "required": [
+        "digest",
+        "cited_journal_entry_ids"
+      ],
+      "title": "WeeklyDigestBuiltDetails",
+      "type": "object"
+    },
+    "WeeklyDigestBuiltEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "completed_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Completed At"
+        },
+        "details": {
+          "$ref": "#/$defs/WeeklyDigestBuiltDetails"
+        },
+        "duration_ms": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Duration Ms"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SafeError"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event_id": {
+          "minLength": 1,
+          "title": "Event Id",
+          "type": "string"
+        },
+        "event_type": {
+          "const": "weekly_digest_built",
+          "title": "Event Type",
+          "type": "string"
+        },
+        "input_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Input Hash",
+          "type": "string"
+        },
+        "input_refs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "title": "Input Refs",
+          "type": "array"
+        },
+        "model_contract": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ModelContract"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "parent_event_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parent Event Id"
+        },
+        "prompt": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Prompt"
+        },
+        "raw_response": {
+          "anyOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Raw Response"
+        },
+        "result_refs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "title": "Result Refs",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "experience-inspect-v1",
+          "default": "experience-inspect-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "session_id": {
+          "minLength": 1,
+          "title": "Session Id",
+          "type": "string"
+        },
+        "source": {
+          "enum": [
+            "saved_replay",
+            "live_run"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "started_at": {
+          "title": "Started At",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "queued",
+            "running",
+            "complete",
+            "reused",
+            "refused",
+            "invalid",
+            "failed"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "validation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EventValidation"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "event_id",
+        "session_id",
+        "event_type",
+        "status",
+        "source",
+        "started_at",
+        "input_hash",
+        "details"
+      ],
+      "title": "WeeklyDigestBuiltEvent",
+      "type": "object"
+    },
+    "WeeklyDriftReviewerDecisionContract": {
+      "additionalProperties": false,
+      "description": "Strict wire form of the existing Weekly Drift Reviewer Decision.",
+      "properties": {
+        "confidence": {
+          "anyOf": [
+            {
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        },
+        "core_value": {
+          "title": "Core Value",
+          "type": "string"
+        },
+        "date": {
+          "title": "Date",
+          "type": "string"
+        },
+        "evidence_quote": {
+          "default": "",
+          "title": "Evidence Quote",
+          "type": "string"
+        },
+        "persona_id": {
+          "title": "Persona Id",
+          "type": "string"
+        },
+        "reason_code": {
+          "anyOf": [
+            {
+              "enum": [
+                "ambiguous",
+                "direct_aligned_or_neutral_behavior",
+                "direct_behavior_or_choice",
+                "external_constraint",
+                "feeling_or_intent_only",
+                "missing_text",
+                "needs_hidden_context"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reason Code"
+        },
+        "review_status": {
+          "enum": [
+            "ok",
+            "refusal",
+            "invalid",
+            "error"
+          ],
+          "title": "Review Status",
+          "type": "string"
+        },
+        "t_index": {
+          "minimum": 0,
+          "title": "T Index",
+          "type": "integer"
+        },
+        "verdict": {
+          "enum": [
+            "conflict",
+            "not_conflict",
+            "abstain"
+          ],
+          "title": "Verdict",
+          "type": "string"
+        },
+        "week_end": {
+          "title": "Week End",
+          "type": "string"
+        },
+        "week_start": {
+          "title": "Week Start",
+          "type": "string"
+        }
+      },
+      "required": [
+        "persona_id",
+        "week_start",
+        "week_end",
+        "t_index",
+        "date",
+        "core_value",
+        "verdict",
+        "review_status"
+      ],
+      "title": "WeeklyDriftReviewerDecisionContract",
+      "type": "object"
+    },
+    "WeeklyDriftReviewerEntry": {
+      "description": "Displayed Journal Entry text supplied to the Weekly Drift Reviewer.",
+      "properties": {
+        "date": {
+          "title": "Date",
+          "type": "string"
+        },
+        "t_index": {
+          "minimum": 0,
+          "title": "T Index",
+          "type": "integer"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "t_index",
+        "date",
+        "text"
+      ],
+      "title": "WeeklyDriftReviewerEntry",
+      "type": "object"
+    },
+    "WeeklyDriftReviewerReceiptContract": {
+      "additionalProperties": false,
+      "description": "Strict wire form of the existing persisted receipt.",
+      "properties": {
+        "assessments": {
+          "items": {
+            "$ref": "#/$defs/VerifierAssessment"
+          },
+          "title": "Assessments",
+          "type": "array"
+        },
+        "attempts": {
+          "minimum": 1,
+          "title": "Attempts",
+          "type": "integer"
+        },
+        "core_values": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Core Values",
+          "type": "array"
+        },
+        "created_at": {
+          "title": "Created At",
+          "type": "string"
+        },
+        "current_t_indices": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Current T Indices",
+          "type": "array"
+        },
+        "decisions": {
+          "items": {
+            "$ref": "#/$defs/WeeklyDriftReviewerDecisionContract"
+          },
+          "title": "Decisions",
+          "type": "array"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error"
+        },
+        "error_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error Type"
+        },
+        "latency_seconds": {
+          "minimum": 0.0,
+          "title": "Latency Seconds",
+          "type": "number"
+        },
+        "persona_id": {
+          "title": "Persona Id",
+          "type": "string"
+        },
+        "prompt_name": {
+          "title": "Prompt Name",
+          "type": "string"
+        },
+        "prompt_sha256": {
+          "title": "Prompt Sha256",
+          "type": "string"
+        },
+        "prompt_version": {
+          "title": "Prompt Version",
+          "type": "string"
+        },
+        "reasoning_effort": {
+          "title": "Reasoning Effort",
+          "type": "string"
+        },
+        "refusal": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Refusal"
+        },
+        "requested_model": {
+          "title": "Requested Model",
+          "type": "string"
+        },
+        "resolved_model": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Resolved Model"
+        },
+        "response_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Response Id"
+        },
+        "runtime_text_sha256": {
+          "title": "Runtime Text Sha256",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "weekly-drift-reviewer-receipt-v1",
+          "default": "weekly-drift-reviewer-receipt-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "ok",
+            "refusal",
+            "invalid",
+            "error"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "usage": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Usage",
+          "type": "object"
+        },
+        "validation_error": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Validation Error"
+        },
+        "week_end": {
+          "title": "Week End",
+          "type": "string"
+        },
+        "week_start": {
+          "title": "Week Start",
+          "type": "string"
+        }
+      },
+      "required": [
+        "created_at",
+        "persona_id",
+        "week_start",
+        "week_end",
+        "core_values",
+        "current_t_indices",
+        "prompt_name",
+        "prompt_version",
+        "prompt_sha256",
+        "runtime_text_sha256",
+        "requested_model",
+        "reasoning_effort",
+        "status",
+        "attempts",
+        "latency_seconds",
+        "decisions"
+      ],
+      "title": "WeeklyDriftReviewerReceiptContract",
+      "type": "object"
+    },
+    "WeeklyDriftReviewerRequestContract": {
+      "additionalProperties": false,
+      "description": "Strict wire form of the existing Weekly Drift Reviewer request.",
+      "properties": {
+        "core_values": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Core Values",
+          "type": "array"
+        },
+        "current_t_indices": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Current T Indices",
+          "type": "array"
+        },
+        "history": {
+          "items": {
+            "$ref": "#/$defs/WeeklyDriftReviewerEntry"
+          },
+          "title": "History",
+          "type": "array"
+        },
+        "persona_id": {
+          "title": "Persona Id",
+          "type": "string"
+        },
+        "prompt": {
+          "title": "Prompt",
+          "type": "string"
+        },
+        "prompt_sha256": {
+          "title": "Prompt Sha256",
+          "type": "string"
+        },
+        "runtime_text_sha256": {
+          "title": "Runtime Text Sha256",
+          "type": "string"
+        },
+        "week_end": {
+          "title": "Week End",
+          "type": "string"
+        },
+        "week_start": {
+          "title": "Week Start",
+          "type": "string"
+        }
+      },
+      "required": [
+        "persona_id",
+        "week_start",
+        "week_end",
+        "core_values",
+        "history",
+        "current_t_indices",
+        "prompt",
+        "prompt_sha256",
+        "runtime_text_sha256"
+      ],
+      "title": "WeeklyDriftReviewerRequestContract",
+      "type": "object"
+    },
+    "WeeklyReviewCompletedDetails": {
+      "additionalProperties": false,
+      "properties": {
+        "receipt": {
+          "$ref": "#/$defs/WeeklyDriftReviewerReceiptContract"
+        }
+      },
+      "required": [
+        "receipt"
+      ],
+      "title": "WeeklyReviewCompletedDetails",
+      "type": "object"
+    },
+    "WeeklyReviewCompletedEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "completed_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Completed At"
+        },
+        "details": {
+          "$ref": "#/$defs/WeeklyReviewCompletedDetails"
+        },
+        "duration_ms": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Duration Ms"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SafeError"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event_id": {
+          "minLength": 1,
+          "title": "Event Id",
+          "type": "string"
+        },
+        "event_type": {
+          "const": "weekly_review_completed",
+          "title": "Event Type",
+          "type": "string"
+        },
+        "input_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Input Hash",
+          "type": "string"
+        },
+        "input_refs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "title": "Input Refs",
+          "type": "array"
+        },
+        "model_contract": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ModelContract"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "parent_event_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parent Event Id"
+        },
+        "prompt": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Prompt"
+        },
+        "raw_response": {
+          "anyOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Raw Response"
+        },
+        "result_refs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "title": "Result Refs",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "experience-inspect-v1",
+          "default": "experience-inspect-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "session_id": {
+          "minLength": 1,
+          "title": "Session Id",
+          "type": "string"
+        },
+        "source": {
+          "enum": [
+            "saved_replay",
+            "live_run"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "started_at": {
+          "title": "Started At",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "queued",
+            "running",
+            "complete",
+            "reused",
+            "refused",
+            "invalid",
+            "failed"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "validation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EventValidation"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "event_id",
+        "session_id",
+        "event_type",
+        "status",
+        "source",
+        "started_at",
+        "input_hash",
+        "details"
+      ],
+      "title": "WeeklyReviewCompletedEvent",
+      "type": "object"
+    },
+    "WeeklyReviewRequestedDetails": {
+      "additionalProperties": false,
+      "properties": {
+        "request": {
+          "$ref": "#/$defs/WeeklyDriftReviewerRequestContract"
+        }
+      },
+      "required": [
+        "request"
+      ],
+      "title": "WeeklyReviewRequestedDetails",
+      "type": "object"
+    },
+    "WeeklyReviewRequestedEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "completed_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Completed At"
+        },
+        "details": {
+          "$ref": "#/$defs/WeeklyReviewRequestedDetails"
+        },
+        "duration_ms": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Duration Ms"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SafeError"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event_id": {
+          "minLength": 1,
+          "title": "Event Id",
+          "type": "string"
+        },
+        "event_type": {
+          "const": "weekly_review_requested",
+          "title": "Event Type",
+          "type": "string"
+        },
+        "input_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Input Hash",
+          "type": "string"
+        },
+        "input_refs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "title": "Input Refs",
+          "type": "array"
+        },
+        "model_contract": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ModelContract"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "parent_event_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parent Event Id"
+        },
+        "prompt": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Prompt"
+        },
+        "raw_response": {
+          "anyOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Raw Response"
+        },
+        "result_refs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "title": "Result Refs",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "experience-inspect-v1",
+          "default": "experience-inspect-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "session_id": {
+          "minLength": 1,
+          "title": "Session Id",
+          "type": "string"
+        },
+        "source": {
+          "enum": [
+            "saved_replay",
+            "live_run"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "started_at": {
+          "title": "Started At",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "queued",
+            "running",
+            "complete",
+            "reused",
+            "refused",
+            "invalid",
+            "failed"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "validation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EventValidation"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "event_id",
+        "session_id",
+        "event_type",
+        "status",
+        "source",
+        "started_at",
+        "input_hash",
+        "details"
+      ],
+      "title": "WeeklyReviewRequestedEvent",
+      "type": "object"
+    }
+  },
+  "$id": "https://twinkl.local/contracts/experience-inspect-v1.schema.json",
+  "additionalProperties": false,
+  "description": "Canonical examples consumed by Python and React contract tests.",
+  "properties": {
+    "requests": {
+      "items": {
+        "discriminator": {
+          "mapping": {
+            "create_session": "#/$defs/SessionCreateRequest",
+            "load_scenario": "#/$defs/ScenarioLoadRequest",
+            "read_trace": "#/$defs/TraceReadRequest",
+            "submit_journal_entry": "#/$defs/JournalEntrySubmitRequest"
+          },
+          "propertyName": "operation"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/SessionCreateRequest"
+          },
+          {
+            "$ref": "#/$defs/JournalEntrySubmitRequest"
+          },
+          {
+            "$ref": "#/$defs/ScenarioLoadRequest"
+          },
+          {
+            "$ref": "#/$defs/TraceReadRequest"
+          }
+        ]
+      },
+      "title": "Requests",
+      "type": "array"
+    },
+    "responses": {
+      "items": {
+        "discriminator": {
+          "mapping": {
+            "create_session": "#/$defs/SessionCreatedResponse",
+            "error": "#/$defs/ApiErrorResponse",
+            "load_scenario": "#/$defs/ScenarioLoadedResponse",
+            "read_trace": "#/$defs/TraceReadResponse",
+            "submit_journal_entry": "#/$defs/JournalEntrySubmittedResponse"
+          },
+          "propertyName": "operation"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/SessionCreatedResponse"
+          },
+          {
+            "$ref": "#/$defs/JournalEntrySubmittedResponse"
+          },
+          {
+            "$ref": "#/$defs/ScenarioLoadedResponse"
+          },
+          {
+            "$ref": "#/$defs/TraceReadResponse"
+          },
+          {
+            "$ref": "#/$defs/ApiErrorResponse"
+          }
+        ]
+      },
+      "title": "Responses",
+      "type": "array"
+    },
+    "scenario": {
+      "$ref": "#/$defs/ScenarioBundle"
+    },
+    "schema_version": {
+      "const": "experience-inspect-v1",
+      "default": "experience-inspect-v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "session": {
+      "$ref": "#/$defs/ExperienceSession"
+    },
+    "trace_events": {
+      "items": {
+        "discriminator": {
+          "mapping": {
+            "drift_detected": "#/$defs/DriftDetectedEvent",
+            "journal_entry_submitted": "#/$defs/JournalEntrySubmittedEvent",
+            "nudge_decided": "#/$defs/NudgeDecidedEvent",
+            "nudge_generated": "#/$defs/NudgeGeneratedEvent",
+            "nudge_suppression_checked": "#/$defs/NudgeSuppressionCheckedEvent",
+            "profile_confirmed": "#/$defs/ProfileConfirmedEvent",
+            "weekly_coach_generated": "#/$defs/WeeklyCoachGeneratedEvent",
+            "weekly_digest_built": "#/$defs/WeeklyDigestBuiltEvent",
+            "weekly_review_completed": "#/$defs/WeeklyReviewCompletedEvent",
+            "weekly_review_requested": "#/$defs/WeeklyReviewRequestedEvent"
+          },
+          "propertyName": "event_type"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/ProfileConfirmedEvent"
+          },
+          {
+            "$ref": "#/$defs/JournalEntrySubmittedEvent"
+          },
+          {
+            "$ref": "#/$defs/NudgeSuppressionCheckedEvent"
+          },
+          {
+            "$ref": "#/$defs/NudgeDecidedEvent"
+          },
+          {
+            "$ref": "#/$defs/NudgeGeneratedEvent"
+          },
+          {
+            "$ref": "#/$defs/WeeklyReviewRequestedEvent"
+          },
+          {
+            "$ref": "#/$defs/WeeklyReviewCompletedEvent"
+          },
+          {
+            "$ref": "#/$defs/DriftDetectedEvent"
+          },
+          {
+            "$ref": "#/$defs/WeeklyDigestBuiltEvent"
+          },
+          {
+            "$ref": "#/$defs/WeeklyCoachGeneratedEvent"
+          }
+        ]
+      },
+      "title": "Trace Events",
+      "type": "array"
+    }
+  },
+  "required": [
+    "session",
+    "scenario",
+    "requests",
+    "responses",
+    "trace_events"
+  ],
+  "title": "ContractFixtureSet",
+  "type": "object"
+}

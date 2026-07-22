@@ -1,0 +1,3480 @@
+{
+  "schema_version": "experience-inspect-v1",
+  "session": {
+    "schema_version": "experience-inspect-v1",
+    "session_id": "session-demo",
+    "revision": 3,
+    "profile": {
+      "schema_version": 2,
+      "onboarding_version": "2.1.0",
+      "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
+      "scoring_method": "best_minus_worst_divided_by_appearances_v1",
+      "user_id": "persona-demo",
+      "session_id": "session-demo",
+      "started_at": "2026-07-22T10:00:00.000Z",
+      "timestamp": "2026-07-22T10:05:00.000Z",
+      "bws_responses": [
+        {
+          "set_number": 1,
+          "items": [
+            "achievement",
+            "universalism_nature",
+            "benevolence",
+            "tradition",
+            "security",
+            "universalism_social"
+          ],
+          "item_order_shown": [
+            "universalism_social",
+            "security",
+            "tradition",
+            "benevolence",
+            "universalism_nature",
+            "achievement"
+          ],
+          "selected_best": "benevolence",
+          "selected_worst": "tradition",
+          "response_time_ms": 1000
+        },
+        {
+          "set_number": 2,
+          "items": [
+            "power",
+            "hedonism",
+            "benevolence",
+            "tradition",
+            "conformity",
+            "universalism_social"
+          ],
+          "item_order_shown": [
+            "universalism_social",
+            "conformity",
+            "tradition",
+            "benevolence",
+            "hedonism",
+            "power"
+          ],
+          "selected_best": "benevolence",
+          "selected_worst": "power",
+          "response_time_ms": 1001
+        },
+        {
+          "set_number": 3,
+          "items": [
+            "power",
+            "achievement",
+            "stimulation",
+            "tradition",
+            "conformity",
+            "security"
+          ],
+          "item_order_shown": [
+            "security",
+            "conformity",
+            "tradition",
+            "stimulation",
+            "achievement",
+            "power"
+          ],
+          "selected_best": "achievement",
+          "selected_worst": "power",
+          "response_time_ms": 1002
+        },
+        {
+          "set_number": 4,
+          "items": [
+            "achievement",
+            "hedonism",
+            "self_direction",
+            "conformity",
+            "security",
+            "universalism_social"
+          ],
+          "item_order_shown": [
+            "universalism_social",
+            "security",
+            "conformity",
+            "self_direction",
+            "hedonism",
+            "achievement"
+          ],
+          "selected_best": "self_direction",
+          "selected_worst": "conformity",
+          "response_time_ms": 1003
+        },
+        {
+          "set_number": 5,
+          "items": [
+            "power",
+            "hedonism",
+            "stimulation",
+            "universalism_nature",
+            "security",
+            "universalism_social"
+          ],
+          "item_order_shown": [
+            "universalism_social",
+            "security",
+            "universalism_nature",
+            "stimulation",
+            "hedonism",
+            "power"
+          ],
+          "selected_best": "universalism_nature",
+          "selected_worst": "hedonism",
+          "response_time_ms": 1004
+        },
+        {
+          "set_number": 6,
+          "items": [
+            "power",
+            "achievement",
+            "stimulation",
+            "self_direction",
+            "benevolence",
+            "universalism_social"
+          ],
+          "item_order_shown": [
+            "universalism_social",
+            "benevolence",
+            "self_direction",
+            "stimulation",
+            "achievement",
+            "power"
+          ],
+          "selected_best": "benevolence",
+          "selected_worst": "universalism_social",
+          "response_time_ms": 1005
+        },
+        {
+          "set_number": 7,
+          "items": [
+            "power",
+            "achievement",
+            "hedonism",
+            "self_direction",
+            "universalism_nature",
+            "tradition"
+          ],
+          "item_order_shown": [
+            "tradition",
+            "universalism_nature",
+            "self_direction",
+            "hedonism",
+            "achievement",
+            "power"
+          ],
+          "selected_best": "tradition",
+          "selected_worst": "achievement",
+          "response_time_ms": 1006
+        },
+        {
+          "set_number": 8,
+          "items": [
+            "achievement",
+            "hedonism",
+            "stimulation",
+            "universalism_nature",
+            "benevolence",
+            "conformity"
+          ],
+          "item_order_shown": [
+            "conformity",
+            "benevolence",
+            "universalism_nature",
+            "stimulation",
+            "hedonism",
+            "achievement"
+          ],
+          "selected_best": "benevolence",
+          "selected_worst": "stimulation",
+          "response_time_ms": 1007
+        },
+        {
+          "set_number": 9,
+          "items": [
+            "hedonism",
+            "stimulation",
+            "self_direction",
+            "benevolence",
+            "tradition",
+            "security"
+          ],
+          "item_order_shown": [
+            "security",
+            "tradition",
+            "benevolence",
+            "self_direction",
+            "stimulation",
+            "hedonism"
+          ],
+          "selected_best": "benevolence",
+          "selected_worst": "security",
+          "response_time_ms": 1008
+        },
+        {
+          "set_number": 10,
+          "items": [
+            "stimulation",
+            "self_direction",
+            "universalism_nature",
+            "tradition",
+            "conformity",
+            "universalism_social"
+          ],
+          "item_order_shown": [
+            "universalism_social",
+            "conformity",
+            "tradition",
+            "universalism_nature",
+            "self_direction",
+            "stimulation"
+          ],
+          "selected_best": "universalism_social",
+          "selected_worst": "self_direction",
+          "response_time_ms": 1009
+        },
+        {
+          "set_number": 11,
+          "items": [
+            "power",
+            "self_direction",
+            "universalism_nature",
+            "benevolence",
+            "conformity",
+            "security"
+          ],
+          "item_order_shown": [
+            "security",
+            "conformity",
+            "benevolence",
+            "universalism_nature",
+            "self_direction",
+            "power"
+          ],
+          "selected_best": "benevolence",
+          "selected_worst": "power",
+          "response_time_ms": 1010
+        }
+      ],
+      "bws_results": {
+        "appearances": {
+          "power": 6,
+          "achievement": 6,
+          "hedonism": 6,
+          "stimulation": 6,
+          "self_direction": 6,
+          "universalism_nature": 6,
+          "benevolence": 6,
+          "tradition": 6,
+          "conformity": 6,
+          "security": 6,
+          "universalism_social": 6
+        },
+        "best_counts": {
+          "power": 0,
+          "achievement": 1,
+          "hedonism": 0,
+          "stimulation": 0,
+          "self_direction": 1,
+          "universalism_nature": 1,
+          "benevolence": 6,
+          "tradition": 1,
+          "conformity": 0,
+          "security": 0,
+          "universalism_social": 1
+        },
+        "worst_counts": {
+          "power": 3,
+          "achievement": 1,
+          "hedonism": 1,
+          "stimulation": 1,
+          "self_direction": 1,
+          "universalism_nature": 0,
+          "benevolence": 0,
+          "tradition": 1,
+          "conformity": 1,
+          "security": 1,
+          "universalism_social": 1
+        },
+        "net_counts": {
+          "power": -3,
+          "achievement": 0,
+          "hedonism": -1,
+          "stimulation": -1,
+          "self_direction": 0,
+          "universalism_nature": 1,
+          "benevolence": 6,
+          "tradition": 0,
+          "conformity": -1,
+          "security": -1,
+          "universalism_social": 0
+        },
+        "scores": {
+          "power": -0.5,
+          "achievement": 0.0,
+          "hedonism": -0.16666667,
+          "stimulation": -0.16666667,
+          "self_direction": 0.0,
+          "universalism_nature": 0.16666667,
+          "benevolence": 1.0,
+          "tradition": 0.0,
+          "conformity": -0.16666667,
+          "security": -0.16666667,
+          "universalism_social": 0.0
+        }
+      },
+      "value_profile": {
+        "method": "mean_universalism_facets_then_shift_normalize_v1",
+        "scores": {
+          "self_direction": 0.0,
+          "stimulation": -0.16666667,
+          "hedonism": -0.16666667,
+          "achievement": 0.0,
+          "power": -0.5,
+          "security": -0.16666667,
+          "conformity": -0.16666667,
+          "tradition": 0.0,
+          "benevolence": 1.0,
+          "universalism": 0.08333334
+        },
+        "weights": {
+          "self_direction": 0.10055866,
+          "stimulation": 0.08938547,
+          "hedonism": 0.08938547,
+          "achievement": 0.10055866,
+          "power": 0.06703911,
+          "security": 0.08938547,
+          "conformity": 0.08938547,
+          "tradition": 0.10055866,
+          "benevolence": 0.16759777,
+          "universalism": 0.10614526
+        },
+        "top_values": [
+          "benevolence"
+        ],
+        "bottom_values": [
+          "power"
+        ]
+      },
+      "top_values": [
+        "benevolence"
+      ],
+      "goal_category": "relationships",
+      "user_confirmed": true,
+      "provenance": {
+        "source": "react_onboarding_poc",
+        "set_order_randomized": true,
+        "card_order_randomized": true
+      }
+    },
+    "journal_entries": [
+      {
+        "journal_entry_id": "entry-0",
+        "t_index": 0,
+        "date": "2026-07-06",
+        "content": "Cancelled dinner with my sister to stay at work.",
+        "nudge_response": null
+      },
+      {
+        "journal_entry_id": "entry-1",
+        "t_index": 1,
+        "date": "2026-07-13",
+        "content": "Ignored my sister's call to finish another deadline.",
+        "nudge_response": "I keep assuming work cannot wait."
+      }
+    ],
+    "nudges": [
+      {
+        "nudge_id": "nudge-1",
+        "journal_entry_id": "entry-1",
+        "outcome": "answered",
+        "category": "tension_surfacing",
+        "reason": "The Journal Entry describes a repeated choice against a Core Value.",
+        "text": "What made work feel less movable than time with your sister?",
+        "response": "I keep assuming work cannot wait."
+      }
+    ],
+    "weekly_reviewer_decisions": [
+      {
+        "persona_id": "persona-demo",
+        "week_start": "2026-07-06",
+        "week_end": "2026-07-06",
+        "t_index": 0,
+        "date": "2026-07-06",
+        "core_value": "benevolence",
+        "verdict": "conflict",
+        "confidence": "high",
+        "reason_code": "direct_behavior_or_choice",
+        "evidence_quote": "Cancelled dinner with my sister to stay at work.",
+        "review_status": "ok"
+      },
+      {
+        "persona_id": "persona-demo",
+        "week_start": "2026-07-13",
+        "week_end": "2026-07-13",
+        "t_index": 1,
+        "date": "2026-07-13",
+        "core_value": "benevolence",
+        "verdict": "conflict",
+        "confidence": "high",
+        "reason_code": "direct_behavior_or_choice",
+        "evidence_quote": "Ignored my sister's call to finish another deadline.",
+        "review_status": "ok"
+      }
+    ],
+    "drift_result": {
+      "schema_version": "drift-detector-result-v1",
+      "persona_id": "persona-demo",
+      "cutoff_t_index": 1,
+      "cutoff_date": "2026-07-13",
+      "delivery_state": "active",
+      "core_value_states": {
+        "benevolence": "active"
+      },
+      "drifts": [
+        {
+          "drift_id": "persona-demo:benevolence:0",
+          "persona_id": "persona-demo",
+          "core_value": "benevolence",
+          "onset_t_index": 0,
+          "confirmation_t_index": 1,
+          "end_t_index": 1,
+          "onset_date": "2026-07-06",
+          "confirmation_date": "2026-07-13",
+          "end_date": "2026-07-13",
+          "supporting_t_indices": [
+            0,
+            1
+          ],
+          "evidence_quotes": [
+            "Cancelled dinner with my sister to stay at work.",
+            "Ignored my sister's call to finish another deadline."
+          ],
+          "delivery_state": "active",
+          "termination_t_index": null,
+          "termination_date": null,
+          "termination_verdict": null
+        }
+      ]
+    },
+    "weekly_digest": {
+      "persona_id": "persona-demo",
+      "persona_name": "Casey",
+      "week_start": "2026-07-06",
+      "week_end": "2026-07-13",
+      "response_mode": "active",
+      "mode_source": "drift_detector",
+      "mode_rationale": "Two consecutive Conflicts for Benevolence formed Drift.",
+      "signal_source": "weekly_drift_reviewer",
+      "n_entries": 2,
+      "overall_mean": null,
+      "overall_uncertainty": null,
+      "core_values": [
+        "benevolence"
+      ],
+      "drift_states": {
+        "benevolence": "active"
+      },
+      "drift_reasons": [
+        "Benevolence: Journal Entries 0 and 1 were Conflicts."
+      ],
+      "top_tensions": [
+        "Work repeatedly displaced time with a close relationship."
+      ],
+      "top_strengths": [],
+      "dimensions": [],
+      "evidence": [
+        {
+          "date": "2026-07-06",
+          "t_index": 0,
+          "direction": "misaligned",
+          "dimensions": [
+            "benevolence"
+          ],
+          "score_mean": null,
+          "excerpt": "Cancelled dinner with my sister to stay at work."
+        },
+        {
+          "date": "2026-07-13",
+          "t_index": 1,
+          "direction": "misaligned",
+          "dimensions": [
+            "benevolence"
+          ],
+          "score_mean": null,
+          "excerpt": "Ignored my sister's call to finish another deadline."
+        }
+      ],
+      "coach_narrative": {
+        "weekly_mirror": "You wrote twice about choosing work over time with your sister.",
+        "tension_explanation": "Those choices conflict with the importance you placed on being present for people close to you.",
+        "reflective_question": "What boundary could protect one evening next week?"
+      },
+      "validation": {
+        "grounded_quotes": [
+          "Cancelled dinner with my sister",
+          "Ignored my sister's call"
+        ],
+        "word_count": 38,
+        "checks": [
+          {
+            "name": "groundedness",
+            "passed": true,
+            "details": "Two citations"
+          },
+          {
+            "name": "non_circularity",
+            "passed": true,
+            "details": "Specific"
+          },
+          {
+            "name": "length",
+            "passed": true,
+            "details": "Within limit"
+          }
+        ]
+      }
+    },
+    "trace_event_ids": [
+      "event-01",
+      "event-02",
+      "event-03",
+      "event-04",
+      "event-05",
+      "event-06",
+      "event-07",
+      "event-08",
+      "event-09",
+      "event-10",
+      "event-11"
+    ],
+    "selection": {
+      "view": "inspect",
+      "selected_week": "2026-07-13",
+      "selected_journal_entry_id": "entry-1",
+      "selected_event_id": "event-09"
+    },
+    "updated_at": "2026-07-22T10:11:00.120Z"
+  },
+  "scenario": {
+    "schema_version": "experience-inspect-v1",
+    "scenario_id": "active-drift-demo-v1",
+    "title": "Work repeatedly displaces a close relationship",
+    "description": "Two saved Conflicts for Benevolence form active Drift.",
+    "source": "saved_replay",
+    "persona_id": "persona-demo",
+    "profile": {
+      "schema_version": 2,
+      "onboarding_version": "2.1.0",
+      "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
+      "scoring_method": "best_minus_worst_divided_by_appearances_v1",
+      "user_id": "persona-demo",
+      "session_id": "session-demo",
+      "started_at": "2026-07-22T10:00:00.000Z",
+      "timestamp": "2026-07-22T10:05:00.000Z",
+      "bws_responses": [
+        {
+          "set_number": 1,
+          "items": [
+            "achievement",
+            "universalism_nature",
+            "benevolence",
+            "tradition",
+            "security",
+            "universalism_social"
+          ],
+          "item_order_shown": [
+            "universalism_social",
+            "security",
+            "tradition",
+            "benevolence",
+            "universalism_nature",
+            "achievement"
+          ],
+          "selected_best": "benevolence",
+          "selected_worst": "tradition",
+          "response_time_ms": 1000
+        },
+        {
+          "set_number": 2,
+          "items": [
+            "power",
+            "hedonism",
+            "benevolence",
+            "tradition",
+            "conformity",
+            "universalism_social"
+          ],
+          "item_order_shown": [
+            "universalism_social",
+            "conformity",
+            "tradition",
+            "benevolence",
+            "hedonism",
+            "power"
+          ],
+          "selected_best": "benevolence",
+          "selected_worst": "power",
+          "response_time_ms": 1001
+        },
+        {
+          "set_number": 3,
+          "items": [
+            "power",
+            "achievement",
+            "stimulation",
+            "tradition",
+            "conformity",
+            "security"
+          ],
+          "item_order_shown": [
+            "security",
+            "conformity",
+            "tradition",
+            "stimulation",
+            "achievement",
+            "power"
+          ],
+          "selected_best": "achievement",
+          "selected_worst": "power",
+          "response_time_ms": 1002
+        },
+        {
+          "set_number": 4,
+          "items": [
+            "achievement",
+            "hedonism",
+            "self_direction",
+            "conformity",
+            "security",
+            "universalism_social"
+          ],
+          "item_order_shown": [
+            "universalism_social",
+            "security",
+            "conformity",
+            "self_direction",
+            "hedonism",
+            "achievement"
+          ],
+          "selected_best": "self_direction",
+          "selected_worst": "conformity",
+          "response_time_ms": 1003
+        },
+        {
+          "set_number": 5,
+          "items": [
+            "power",
+            "hedonism",
+            "stimulation",
+            "universalism_nature",
+            "security",
+            "universalism_social"
+          ],
+          "item_order_shown": [
+            "universalism_social",
+            "security",
+            "universalism_nature",
+            "stimulation",
+            "hedonism",
+            "power"
+          ],
+          "selected_best": "universalism_nature",
+          "selected_worst": "hedonism",
+          "response_time_ms": 1004
+        },
+        {
+          "set_number": 6,
+          "items": [
+            "power",
+            "achievement",
+            "stimulation",
+            "self_direction",
+            "benevolence",
+            "universalism_social"
+          ],
+          "item_order_shown": [
+            "universalism_social",
+            "benevolence",
+            "self_direction",
+            "stimulation",
+            "achievement",
+            "power"
+          ],
+          "selected_best": "benevolence",
+          "selected_worst": "universalism_social",
+          "response_time_ms": 1005
+        },
+        {
+          "set_number": 7,
+          "items": [
+            "power",
+            "achievement",
+            "hedonism",
+            "self_direction",
+            "universalism_nature",
+            "tradition"
+          ],
+          "item_order_shown": [
+            "tradition",
+            "universalism_nature",
+            "self_direction",
+            "hedonism",
+            "achievement",
+            "power"
+          ],
+          "selected_best": "tradition",
+          "selected_worst": "achievement",
+          "response_time_ms": 1006
+        },
+        {
+          "set_number": 8,
+          "items": [
+            "achievement",
+            "hedonism",
+            "stimulation",
+            "universalism_nature",
+            "benevolence",
+            "conformity"
+          ],
+          "item_order_shown": [
+            "conformity",
+            "benevolence",
+            "universalism_nature",
+            "stimulation",
+            "hedonism",
+            "achievement"
+          ],
+          "selected_best": "benevolence",
+          "selected_worst": "stimulation",
+          "response_time_ms": 1007
+        },
+        {
+          "set_number": 9,
+          "items": [
+            "hedonism",
+            "stimulation",
+            "self_direction",
+            "benevolence",
+            "tradition",
+            "security"
+          ],
+          "item_order_shown": [
+            "security",
+            "tradition",
+            "benevolence",
+            "self_direction",
+            "stimulation",
+            "hedonism"
+          ],
+          "selected_best": "benevolence",
+          "selected_worst": "security",
+          "response_time_ms": 1008
+        },
+        {
+          "set_number": 10,
+          "items": [
+            "stimulation",
+            "self_direction",
+            "universalism_nature",
+            "tradition",
+            "conformity",
+            "universalism_social"
+          ],
+          "item_order_shown": [
+            "universalism_social",
+            "conformity",
+            "tradition",
+            "universalism_nature",
+            "self_direction",
+            "stimulation"
+          ],
+          "selected_best": "universalism_social",
+          "selected_worst": "self_direction",
+          "response_time_ms": 1009
+        },
+        {
+          "set_number": 11,
+          "items": [
+            "power",
+            "self_direction",
+            "universalism_nature",
+            "benevolence",
+            "conformity",
+            "security"
+          ],
+          "item_order_shown": [
+            "security",
+            "conformity",
+            "benevolence",
+            "universalism_nature",
+            "self_direction",
+            "power"
+          ],
+          "selected_best": "benevolence",
+          "selected_worst": "power",
+          "response_time_ms": 1010
+        }
+      ],
+      "bws_results": {
+        "appearances": {
+          "power": 6,
+          "achievement": 6,
+          "hedonism": 6,
+          "stimulation": 6,
+          "self_direction": 6,
+          "universalism_nature": 6,
+          "benevolence": 6,
+          "tradition": 6,
+          "conformity": 6,
+          "security": 6,
+          "universalism_social": 6
+        },
+        "best_counts": {
+          "power": 0,
+          "achievement": 1,
+          "hedonism": 0,
+          "stimulation": 0,
+          "self_direction": 1,
+          "universalism_nature": 1,
+          "benevolence": 6,
+          "tradition": 1,
+          "conformity": 0,
+          "security": 0,
+          "universalism_social": 1
+        },
+        "worst_counts": {
+          "power": 3,
+          "achievement": 1,
+          "hedonism": 1,
+          "stimulation": 1,
+          "self_direction": 1,
+          "universalism_nature": 0,
+          "benevolence": 0,
+          "tradition": 1,
+          "conformity": 1,
+          "security": 1,
+          "universalism_social": 1
+        },
+        "net_counts": {
+          "power": -3,
+          "achievement": 0,
+          "hedonism": -1,
+          "stimulation": -1,
+          "self_direction": 0,
+          "universalism_nature": 1,
+          "benevolence": 6,
+          "tradition": 0,
+          "conformity": -1,
+          "security": -1,
+          "universalism_social": 0
+        },
+        "scores": {
+          "power": -0.5,
+          "achievement": 0.0,
+          "hedonism": -0.16666667,
+          "stimulation": -0.16666667,
+          "self_direction": 0.0,
+          "universalism_nature": 0.16666667,
+          "benevolence": 1.0,
+          "tradition": 0.0,
+          "conformity": -0.16666667,
+          "security": -0.16666667,
+          "universalism_social": 0.0
+        }
+      },
+      "value_profile": {
+        "method": "mean_universalism_facets_then_shift_normalize_v1",
+        "scores": {
+          "self_direction": 0.0,
+          "stimulation": -0.16666667,
+          "hedonism": -0.16666667,
+          "achievement": 0.0,
+          "power": -0.5,
+          "security": -0.16666667,
+          "conformity": -0.16666667,
+          "tradition": 0.0,
+          "benevolence": 1.0,
+          "universalism": 0.08333334
+        },
+        "weights": {
+          "self_direction": 0.10055866,
+          "stimulation": 0.08938547,
+          "hedonism": 0.08938547,
+          "achievement": 0.10055866,
+          "power": 0.06703911,
+          "security": 0.08938547,
+          "conformity": 0.08938547,
+          "tradition": 0.10055866,
+          "benevolence": 0.16759777,
+          "universalism": 0.10614526
+        },
+        "top_values": [
+          "benevolence"
+        ],
+        "bottom_values": [
+          "power"
+        ]
+      },
+      "top_values": [
+        "benevolence"
+      ],
+      "goal_category": "relationships",
+      "user_confirmed": true,
+      "provenance": {
+        "source": "react_onboarding_poc",
+        "set_order_randomized": true,
+        "card_order_randomized": true
+      }
+    },
+    "journal_entries": [
+      {
+        "journal_entry_id": "entry-0",
+        "t_index": 0,
+        "date": "2026-07-06",
+        "content": "Cancelled dinner with my sister to stay at work.",
+        "nudge_response": null
+      },
+      {
+        "journal_entry_id": "entry-1",
+        "t_index": 1,
+        "date": "2026-07-13",
+        "content": "Ignored my sister's call to finish another deadline.",
+        "nudge_response": "I keep assuming work cannot wait."
+      }
+    ],
+    "weekly_reviewer_decisions": [
+      {
+        "persona_id": "persona-demo",
+        "week_start": "2026-07-06",
+        "week_end": "2026-07-06",
+        "t_index": 0,
+        "date": "2026-07-06",
+        "core_value": "benevolence",
+        "verdict": "conflict",
+        "confidence": "high",
+        "reason_code": "direct_behavior_or_choice",
+        "evidence_quote": "Cancelled dinner with my sister to stay at work.",
+        "review_status": "ok"
+      },
+      {
+        "persona_id": "persona-demo",
+        "week_start": "2026-07-13",
+        "week_end": "2026-07-13",
+        "t_index": 1,
+        "date": "2026-07-13",
+        "core_value": "benevolence",
+        "verdict": "conflict",
+        "confidence": "high",
+        "reason_code": "direct_behavior_or_choice",
+        "evidence_quote": "Ignored my sister's call to finish another deadline.",
+        "review_status": "ok"
+      }
+    ],
+    "drift_result": {
+      "schema_version": "drift-detector-result-v1",
+      "persona_id": "persona-demo",
+      "cutoff_t_index": 1,
+      "cutoff_date": "2026-07-13",
+      "delivery_state": "active",
+      "core_value_states": {
+        "benevolence": "active"
+      },
+      "drifts": [
+        {
+          "drift_id": "persona-demo:benevolence:0",
+          "persona_id": "persona-demo",
+          "core_value": "benevolence",
+          "onset_t_index": 0,
+          "confirmation_t_index": 1,
+          "end_t_index": 1,
+          "onset_date": "2026-07-06",
+          "confirmation_date": "2026-07-13",
+          "end_date": "2026-07-13",
+          "supporting_t_indices": [
+            0,
+            1
+          ],
+          "evidence_quotes": [
+            "Cancelled dinner with my sister to stay at work.",
+            "Ignored my sister's call to finish another deadline."
+          ],
+          "delivery_state": "active",
+          "termination_t_index": null,
+          "termination_date": null,
+          "termination_verdict": null
+        }
+      ]
+    },
+    "weekly_digest": {
+      "persona_id": "persona-demo",
+      "persona_name": "Casey",
+      "week_start": "2026-07-06",
+      "week_end": "2026-07-13",
+      "response_mode": "active",
+      "mode_source": "drift_detector",
+      "mode_rationale": "Two consecutive Conflicts for Benevolence formed Drift.",
+      "signal_source": "weekly_drift_reviewer",
+      "n_entries": 2,
+      "overall_mean": null,
+      "overall_uncertainty": null,
+      "core_values": [
+        "benevolence"
+      ],
+      "drift_states": {
+        "benevolence": "active"
+      },
+      "drift_reasons": [
+        "Benevolence: Journal Entries 0 and 1 were Conflicts."
+      ],
+      "top_tensions": [
+        "Work repeatedly displaced time with a close relationship."
+      ],
+      "top_strengths": [],
+      "dimensions": [],
+      "evidence": [
+        {
+          "date": "2026-07-06",
+          "t_index": 0,
+          "direction": "misaligned",
+          "dimensions": [
+            "benevolence"
+          ],
+          "score_mean": null,
+          "excerpt": "Cancelled dinner with my sister to stay at work."
+        },
+        {
+          "date": "2026-07-13",
+          "t_index": 1,
+          "direction": "misaligned",
+          "dimensions": [
+            "benevolence"
+          ],
+          "score_mean": null,
+          "excerpt": "Ignored my sister's call to finish another deadline."
+        }
+      ],
+      "coach_narrative": {
+        "weekly_mirror": "You wrote twice about choosing work over time with your sister.",
+        "tension_explanation": "Those choices conflict with the importance you placed on being present for people close to you.",
+        "reflective_question": "What boundary could protect one evening next week?"
+      },
+      "validation": {
+        "grounded_quotes": [
+          "Cancelled dinner with my sister",
+          "Ignored my sister's call"
+        ],
+        "word_count": 38,
+        "checks": [
+          {
+            "name": "groundedness",
+            "passed": true,
+            "details": "Two citations"
+          },
+          {
+            "name": "non_circularity",
+            "passed": true,
+            "details": "Specific"
+          },
+          {
+            "name": "length",
+            "passed": true,
+            "details": "Within limit"
+          }
+        ]
+      }
+    },
+    "weeks": [
+      {
+        "week_id": "2026-07-06",
+        "week_start": "2026-07-06",
+        "week_end": "2026-07-12",
+        "journal_entry_ids": [
+          "entry-0"
+        ],
+        "event_ids": [
+          "event-02",
+          "event-07",
+          "event-08"
+        ],
+        "expected_delivery_state": "stable"
+      },
+      {
+        "week_id": "2026-07-13",
+        "week_start": "2026-07-13",
+        "week_end": "2026-07-19",
+        "journal_entry_ids": [
+          "entry-1"
+        ],
+        "event_ids": [
+          "event-03",
+          "event-09",
+          "event-10",
+          "event-11"
+        ],
+        "expected_delivery_state": "active"
+      }
+    ],
+    "trace_event_ids": [
+      "event-01",
+      "event-02",
+      "event-03",
+      "event-04",
+      "event-05",
+      "event-06",
+      "event-07",
+      "event-08",
+      "event-09",
+      "event-10",
+      "event-11"
+    ],
+    "manifest": {
+      "bundle_version": "scenario-bundle-v1",
+      "created_at": "2026-07-22T10:12:00.000Z",
+      "input_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "source_files": [
+        "logs/wrangled/persona_demo.md",
+        "logs/experiments/artifacts/demo/weekly_review.json"
+      ],
+      "model_contract": {
+        "provider": "openai",
+        "model": "gpt-5.6-luna",
+        "reasoning_effort": "low"
+      },
+      "prompt_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  },
+  "requests": [
+    {
+      "schema_version": "experience-inspect-v1",
+      "operation": "create_session",
+      "request_id": "request-create",
+      "idempotency_key": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "profile": {
+        "schema_version": 2,
+        "onboarding_version": "2.1.0",
+        "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
+        "scoring_method": "best_minus_worst_divided_by_appearances_v1",
+        "user_id": "persona-demo",
+        "session_id": "session-demo",
+        "started_at": "2026-07-22T10:00:00.000Z",
+        "timestamp": "2026-07-22T10:05:00.000Z",
+        "bws_responses": [
+          {
+            "set_number": 1,
+            "items": [
+              "achievement",
+              "universalism_nature",
+              "benevolence",
+              "tradition",
+              "security",
+              "universalism_social"
+            ],
+            "item_order_shown": [
+              "universalism_social",
+              "security",
+              "tradition",
+              "benevolence",
+              "universalism_nature",
+              "achievement"
+            ],
+            "selected_best": "benevolence",
+            "selected_worst": "tradition",
+            "response_time_ms": 1000
+          },
+          {
+            "set_number": 2,
+            "items": [
+              "power",
+              "hedonism",
+              "benevolence",
+              "tradition",
+              "conformity",
+              "universalism_social"
+            ],
+            "item_order_shown": [
+              "universalism_social",
+              "conformity",
+              "tradition",
+              "benevolence",
+              "hedonism",
+              "power"
+            ],
+            "selected_best": "benevolence",
+            "selected_worst": "power",
+            "response_time_ms": 1001
+          },
+          {
+            "set_number": 3,
+            "items": [
+              "power",
+              "achievement",
+              "stimulation",
+              "tradition",
+              "conformity",
+              "security"
+            ],
+            "item_order_shown": [
+              "security",
+              "conformity",
+              "tradition",
+              "stimulation",
+              "achievement",
+              "power"
+            ],
+            "selected_best": "achievement",
+            "selected_worst": "power",
+            "response_time_ms": 1002
+          },
+          {
+            "set_number": 4,
+            "items": [
+              "achievement",
+              "hedonism",
+              "self_direction",
+              "conformity",
+              "security",
+              "universalism_social"
+            ],
+            "item_order_shown": [
+              "universalism_social",
+              "security",
+              "conformity",
+              "self_direction",
+              "hedonism",
+              "achievement"
+            ],
+            "selected_best": "self_direction",
+            "selected_worst": "conformity",
+            "response_time_ms": 1003
+          },
+          {
+            "set_number": 5,
+            "items": [
+              "power",
+              "hedonism",
+              "stimulation",
+              "universalism_nature",
+              "security",
+              "universalism_social"
+            ],
+            "item_order_shown": [
+              "universalism_social",
+              "security",
+              "universalism_nature",
+              "stimulation",
+              "hedonism",
+              "power"
+            ],
+            "selected_best": "universalism_nature",
+            "selected_worst": "hedonism",
+            "response_time_ms": 1004
+          },
+          {
+            "set_number": 6,
+            "items": [
+              "power",
+              "achievement",
+              "stimulation",
+              "self_direction",
+              "benevolence",
+              "universalism_social"
+            ],
+            "item_order_shown": [
+              "universalism_social",
+              "benevolence",
+              "self_direction",
+              "stimulation",
+              "achievement",
+              "power"
+            ],
+            "selected_best": "benevolence",
+            "selected_worst": "universalism_social",
+            "response_time_ms": 1005
+          },
+          {
+            "set_number": 7,
+            "items": [
+              "power",
+              "achievement",
+              "hedonism",
+              "self_direction",
+              "universalism_nature",
+              "tradition"
+            ],
+            "item_order_shown": [
+              "tradition",
+              "universalism_nature",
+              "self_direction",
+              "hedonism",
+              "achievement",
+              "power"
+            ],
+            "selected_best": "tradition",
+            "selected_worst": "achievement",
+            "response_time_ms": 1006
+          },
+          {
+            "set_number": 8,
+            "items": [
+              "achievement",
+              "hedonism",
+              "stimulation",
+              "universalism_nature",
+              "benevolence",
+              "conformity"
+            ],
+            "item_order_shown": [
+              "conformity",
+              "benevolence",
+              "universalism_nature",
+              "stimulation",
+              "hedonism",
+              "achievement"
+            ],
+            "selected_best": "benevolence",
+            "selected_worst": "stimulation",
+            "response_time_ms": 1007
+          },
+          {
+            "set_number": 9,
+            "items": [
+              "hedonism",
+              "stimulation",
+              "self_direction",
+              "benevolence",
+              "tradition",
+              "security"
+            ],
+            "item_order_shown": [
+              "security",
+              "tradition",
+              "benevolence",
+              "self_direction",
+              "stimulation",
+              "hedonism"
+            ],
+            "selected_best": "benevolence",
+            "selected_worst": "security",
+            "response_time_ms": 1008
+          },
+          {
+            "set_number": 10,
+            "items": [
+              "stimulation",
+              "self_direction",
+              "universalism_nature",
+              "tradition",
+              "conformity",
+              "universalism_social"
+            ],
+            "item_order_shown": [
+              "universalism_social",
+              "conformity",
+              "tradition",
+              "universalism_nature",
+              "self_direction",
+              "stimulation"
+            ],
+            "selected_best": "universalism_social",
+            "selected_worst": "self_direction",
+            "response_time_ms": 1009
+          },
+          {
+            "set_number": 11,
+            "items": [
+              "power",
+              "self_direction",
+              "universalism_nature",
+              "benevolence",
+              "conformity",
+              "security"
+            ],
+            "item_order_shown": [
+              "security",
+              "conformity",
+              "benevolence",
+              "universalism_nature",
+              "self_direction",
+              "power"
+            ],
+            "selected_best": "benevolence",
+            "selected_worst": "power",
+            "response_time_ms": 1010
+          }
+        ],
+        "bws_results": {
+          "appearances": {
+            "power": 6,
+            "achievement": 6,
+            "hedonism": 6,
+            "stimulation": 6,
+            "self_direction": 6,
+            "universalism_nature": 6,
+            "benevolence": 6,
+            "tradition": 6,
+            "conformity": 6,
+            "security": 6,
+            "universalism_social": 6
+          },
+          "best_counts": {
+            "power": 0,
+            "achievement": 1,
+            "hedonism": 0,
+            "stimulation": 0,
+            "self_direction": 1,
+            "universalism_nature": 1,
+            "benevolence": 6,
+            "tradition": 1,
+            "conformity": 0,
+            "security": 0,
+            "universalism_social": 1
+          },
+          "worst_counts": {
+            "power": 3,
+            "achievement": 1,
+            "hedonism": 1,
+            "stimulation": 1,
+            "self_direction": 1,
+            "universalism_nature": 0,
+            "benevolence": 0,
+            "tradition": 1,
+            "conformity": 1,
+            "security": 1,
+            "universalism_social": 1
+          },
+          "net_counts": {
+            "power": -3,
+            "achievement": 0,
+            "hedonism": -1,
+            "stimulation": -1,
+            "self_direction": 0,
+            "universalism_nature": 1,
+            "benevolence": 6,
+            "tradition": 0,
+            "conformity": -1,
+            "security": -1,
+            "universalism_social": 0
+          },
+          "scores": {
+            "power": -0.5,
+            "achievement": 0.0,
+            "hedonism": -0.16666667,
+            "stimulation": -0.16666667,
+            "self_direction": 0.0,
+            "universalism_nature": 0.16666667,
+            "benevolence": 1.0,
+            "tradition": 0.0,
+            "conformity": -0.16666667,
+            "security": -0.16666667,
+            "universalism_social": 0.0
+          }
+        },
+        "value_profile": {
+          "method": "mean_universalism_facets_then_shift_normalize_v1",
+          "scores": {
+            "self_direction": 0.0,
+            "stimulation": -0.16666667,
+            "hedonism": -0.16666667,
+            "achievement": 0.0,
+            "power": -0.5,
+            "security": -0.16666667,
+            "conformity": -0.16666667,
+            "tradition": 0.0,
+            "benevolence": 1.0,
+            "universalism": 0.08333334
+          },
+          "weights": {
+            "self_direction": 0.10055866,
+            "stimulation": 0.08938547,
+            "hedonism": 0.08938547,
+            "achievement": 0.10055866,
+            "power": 0.06703911,
+            "security": 0.08938547,
+            "conformity": 0.08938547,
+            "tradition": 0.10055866,
+            "benevolence": 0.16759777,
+            "universalism": 0.10614526
+          },
+          "top_values": [
+            "benevolence"
+          ],
+          "bottom_values": [
+            "power"
+          ]
+        },
+        "top_values": [
+          "benevolence"
+        ],
+        "goal_category": "relationships",
+        "user_confirmed": true,
+        "provenance": {
+          "source": "react_onboarding_poc",
+          "set_order_randomized": true,
+          "card_order_randomized": true
+        }
+      }
+    },
+    {
+      "schema_version": "experience-inspect-v1",
+      "operation": "submit_journal_entry",
+      "request_id": "request-entry",
+      "idempotency_key": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "session_id": "session-demo",
+      "expected_revision": 2,
+      "journal_entry": {
+        "journal_entry_id": "entry-1",
+        "t_index": 1,
+        "date": "2026-07-13",
+        "content": "Ignored my sister's call to finish another deadline.",
+        "nudge_response": "I keep assuming work cannot wait."
+      }
+    },
+    {
+      "schema_version": "experience-inspect-v1",
+      "operation": "load_scenario",
+      "request_id": "request-scenario",
+      "scenario_id": "active-drift-demo-v1"
+    },
+    {
+      "schema_version": "experience-inspect-v1",
+      "operation": "read_trace",
+      "request_id": "request-trace",
+      "session_id": "session-demo",
+      "after_event_id": "event-06"
+    }
+  ],
+  "responses": [
+    {
+      "schema_version": "experience-inspect-v1",
+      "operation": "create_session",
+      "request_id": "request-create",
+      "status": "ok",
+      "session": {
+        "schema_version": "experience-inspect-v1",
+        "session_id": "session-demo",
+        "revision": 3,
+        "profile": {
+          "schema_version": 2,
+          "onboarding_version": "2.1.0",
+          "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
+          "scoring_method": "best_minus_worst_divided_by_appearances_v1",
+          "user_id": "persona-demo",
+          "session_id": "session-demo",
+          "started_at": "2026-07-22T10:00:00.000Z",
+          "timestamp": "2026-07-22T10:05:00.000Z",
+          "bws_responses": [
+            {
+              "set_number": 1,
+              "items": [
+                "achievement",
+                "universalism_nature",
+                "benevolence",
+                "tradition",
+                "security",
+                "universalism_social"
+              ],
+              "item_order_shown": [
+                "universalism_social",
+                "security",
+                "tradition",
+                "benevolence",
+                "universalism_nature",
+                "achievement"
+              ],
+              "selected_best": "benevolence",
+              "selected_worst": "tradition",
+              "response_time_ms": 1000
+            },
+            {
+              "set_number": 2,
+              "items": [
+                "power",
+                "hedonism",
+                "benevolence",
+                "tradition",
+                "conformity",
+                "universalism_social"
+              ],
+              "item_order_shown": [
+                "universalism_social",
+                "conformity",
+                "tradition",
+                "benevolence",
+                "hedonism",
+                "power"
+              ],
+              "selected_best": "benevolence",
+              "selected_worst": "power",
+              "response_time_ms": 1001
+            },
+            {
+              "set_number": 3,
+              "items": [
+                "power",
+                "achievement",
+                "stimulation",
+                "tradition",
+                "conformity",
+                "security"
+              ],
+              "item_order_shown": [
+                "security",
+                "conformity",
+                "tradition",
+                "stimulation",
+                "achievement",
+                "power"
+              ],
+              "selected_best": "achievement",
+              "selected_worst": "power",
+              "response_time_ms": 1002
+            },
+            {
+              "set_number": 4,
+              "items": [
+                "achievement",
+                "hedonism",
+                "self_direction",
+                "conformity",
+                "security",
+                "universalism_social"
+              ],
+              "item_order_shown": [
+                "universalism_social",
+                "security",
+                "conformity",
+                "self_direction",
+                "hedonism",
+                "achievement"
+              ],
+              "selected_best": "self_direction",
+              "selected_worst": "conformity",
+              "response_time_ms": 1003
+            },
+            {
+              "set_number": 5,
+              "items": [
+                "power",
+                "hedonism",
+                "stimulation",
+                "universalism_nature",
+                "security",
+                "universalism_social"
+              ],
+              "item_order_shown": [
+                "universalism_social",
+                "security",
+                "universalism_nature",
+                "stimulation",
+                "hedonism",
+                "power"
+              ],
+              "selected_best": "universalism_nature",
+              "selected_worst": "hedonism",
+              "response_time_ms": 1004
+            },
+            {
+              "set_number": 6,
+              "items": [
+                "power",
+                "achievement",
+                "stimulation",
+                "self_direction",
+                "benevolence",
+                "universalism_social"
+              ],
+              "item_order_shown": [
+                "universalism_social",
+                "benevolence",
+                "self_direction",
+                "stimulation",
+                "achievement",
+                "power"
+              ],
+              "selected_best": "benevolence",
+              "selected_worst": "universalism_social",
+              "response_time_ms": 1005
+            },
+            {
+              "set_number": 7,
+              "items": [
+                "power",
+                "achievement",
+                "hedonism",
+                "self_direction",
+                "universalism_nature",
+                "tradition"
+              ],
+              "item_order_shown": [
+                "tradition",
+                "universalism_nature",
+                "self_direction",
+                "hedonism",
+                "achievement",
+                "power"
+              ],
+              "selected_best": "tradition",
+              "selected_worst": "achievement",
+              "response_time_ms": 1006
+            },
+            {
+              "set_number": 8,
+              "items": [
+                "achievement",
+                "hedonism",
+                "stimulation",
+                "universalism_nature",
+                "benevolence",
+                "conformity"
+              ],
+              "item_order_shown": [
+                "conformity",
+                "benevolence",
+                "universalism_nature",
+                "stimulation",
+                "hedonism",
+                "achievement"
+              ],
+              "selected_best": "benevolence",
+              "selected_worst": "stimulation",
+              "response_time_ms": 1007
+            },
+            {
+              "set_number": 9,
+              "items": [
+                "hedonism",
+                "stimulation",
+                "self_direction",
+                "benevolence",
+                "tradition",
+                "security"
+              ],
+              "item_order_shown": [
+                "security",
+                "tradition",
+                "benevolence",
+                "self_direction",
+                "stimulation",
+                "hedonism"
+              ],
+              "selected_best": "benevolence",
+              "selected_worst": "security",
+              "response_time_ms": 1008
+            },
+            {
+              "set_number": 10,
+              "items": [
+                "stimulation",
+                "self_direction",
+                "universalism_nature",
+                "tradition",
+                "conformity",
+                "universalism_social"
+              ],
+              "item_order_shown": [
+                "universalism_social",
+                "conformity",
+                "tradition",
+                "universalism_nature",
+                "self_direction",
+                "stimulation"
+              ],
+              "selected_best": "universalism_social",
+              "selected_worst": "self_direction",
+              "response_time_ms": 1009
+            },
+            {
+              "set_number": 11,
+              "items": [
+                "power",
+                "self_direction",
+                "universalism_nature",
+                "benevolence",
+                "conformity",
+                "security"
+              ],
+              "item_order_shown": [
+                "security",
+                "conformity",
+                "benevolence",
+                "universalism_nature",
+                "self_direction",
+                "power"
+              ],
+              "selected_best": "benevolence",
+              "selected_worst": "power",
+              "response_time_ms": 1010
+            }
+          ],
+          "bws_results": {
+            "appearances": {
+              "power": 6,
+              "achievement": 6,
+              "hedonism": 6,
+              "stimulation": 6,
+              "self_direction": 6,
+              "universalism_nature": 6,
+              "benevolence": 6,
+              "tradition": 6,
+              "conformity": 6,
+              "security": 6,
+              "universalism_social": 6
+            },
+            "best_counts": {
+              "power": 0,
+              "achievement": 1,
+              "hedonism": 0,
+              "stimulation": 0,
+              "self_direction": 1,
+              "universalism_nature": 1,
+              "benevolence": 6,
+              "tradition": 1,
+              "conformity": 0,
+              "security": 0,
+              "universalism_social": 1
+            },
+            "worst_counts": {
+              "power": 3,
+              "achievement": 1,
+              "hedonism": 1,
+              "stimulation": 1,
+              "self_direction": 1,
+              "universalism_nature": 0,
+              "benevolence": 0,
+              "tradition": 1,
+              "conformity": 1,
+              "security": 1,
+              "universalism_social": 1
+            },
+            "net_counts": {
+              "power": -3,
+              "achievement": 0,
+              "hedonism": -1,
+              "stimulation": -1,
+              "self_direction": 0,
+              "universalism_nature": 1,
+              "benevolence": 6,
+              "tradition": 0,
+              "conformity": -1,
+              "security": -1,
+              "universalism_social": 0
+            },
+            "scores": {
+              "power": -0.5,
+              "achievement": 0.0,
+              "hedonism": -0.16666667,
+              "stimulation": -0.16666667,
+              "self_direction": 0.0,
+              "universalism_nature": 0.16666667,
+              "benevolence": 1.0,
+              "tradition": 0.0,
+              "conformity": -0.16666667,
+              "security": -0.16666667,
+              "universalism_social": 0.0
+            }
+          },
+          "value_profile": {
+            "method": "mean_universalism_facets_then_shift_normalize_v1",
+            "scores": {
+              "self_direction": 0.0,
+              "stimulation": -0.16666667,
+              "hedonism": -0.16666667,
+              "achievement": 0.0,
+              "power": -0.5,
+              "security": -0.16666667,
+              "conformity": -0.16666667,
+              "tradition": 0.0,
+              "benevolence": 1.0,
+              "universalism": 0.08333334
+            },
+            "weights": {
+              "self_direction": 0.10055866,
+              "stimulation": 0.08938547,
+              "hedonism": 0.08938547,
+              "achievement": 0.10055866,
+              "power": 0.06703911,
+              "security": 0.08938547,
+              "conformity": 0.08938547,
+              "tradition": 0.10055866,
+              "benevolence": 0.16759777,
+              "universalism": 0.10614526
+            },
+            "top_values": [
+              "benevolence"
+            ],
+            "bottom_values": [
+              "power"
+            ]
+          },
+          "top_values": [
+            "benevolence"
+          ],
+          "goal_category": "relationships",
+          "user_confirmed": true,
+          "provenance": {
+            "source": "react_onboarding_poc",
+            "set_order_randomized": true,
+            "card_order_randomized": true
+          }
+        },
+        "journal_entries": [
+          {
+            "journal_entry_id": "entry-0",
+            "t_index": 0,
+            "date": "2026-07-06",
+            "content": "Cancelled dinner with my sister to stay at work.",
+            "nudge_response": null
+          },
+          {
+            "journal_entry_id": "entry-1",
+            "t_index": 1,
+            "date": "2026-07-13",
+            "content": "Ignored my sister's call to finish another deadline.",
+            "nudge_response": "I keep assuming work cannot wait."
+          }
+        ],
+        "nudges": [
+          {
+            "nudge_id": "nudge-1",
+            "journal_entry_id": "entry-1",
+            "outcome": "answered",
+            "category": "tension_surfacing",
+            "reason": "The Journal Entry describes a repeated choice against a Core Value.",
+            "text": "What made work feel less movable than time with your sister?",
+            "response": "I keep assuming work cannot wait."
+          }
+        ],
+        "weekly_reviewer_decisions": [
+          {
+            "persona_id": "persona-demo",
+            "week_start": "2026-07-06",
+            "week_end": "2026-07-06",
+            "t_index": 0,
+            "date": "2026-07-06",
+            "core_value": "benevolence",
+            "verdict": "conflict",
+            "confidence": "high",
+            "reason_code": "direct_behavior_or_choice",
+            "evidence_quote": "Cancelled dinner with my sister to stay at work.",
+            "review_status": "ok"
+          },
+          {
+            "persona_id": "persona-demo",
+            "week_start": "2026-07-13",
+            "week_end": "2026-07-13",
+            "t_index": 1,
+            "date": "2026-07-13",
+            "core_value": "benevolence",
+            "verdict": "conflict",
+            "confidence": "high",
+            "reason_code": "direct_behavior_or_choice",
+            "evidence_quote": "Ignored my sister's call to finish another deadline.",
+            "review_status": "ok"
+          }
+        ],
+        "drift_result": {
+          "schema_version": "drift-detector-result-v1",
+          "persona_id": "persona-demo",
+          "cutoff_t_index": 1,
+          "cutoff_date": "2026-07-13",
+          "delivery_state": "active",
+          "core_value_states": {
+            "benevolence": "active"
+          },
+          "drifts": [
+            {
+              "drift_id": "persona-demo:benevolence:0",
+              "persona_id": "persona-demo",
+              "core_value": "benevolence",
+              "onset_t_index": 0,
+              "confirmation_t_index": 1,
+              "end_t_index": 1,
+              "onset_date": "2026-07-06",
+              "confirmation_date": "2026-07-13",
+              "end_date": "2026-07-13",
+              "supporting_t_indices": [
+                0,
+                1
+              ],
+              "evidence_quotes": [
+                "Cancelled dinner with my sister to stay at work.",
+                "Ignored my sister's call to finish another deadline."
+              ],
+              "delivery_state": "active",
+              "termination_t_index": null,
+              "termination_date": null,
+              "termination_verdict": null
+            }
+          ]
+        },
+        "weekly_digest": {
+          "persona_id": "persona-demo",
+          "persona_name": "Casey",
+          "week_start": "2026-07-06",
+          "week_end": "2026-07-13",
+          "response_mode": "active",
+          "mode_source": "drift_detector",
+          "mode_rationale": "Two consecutive Conflicts for Benevolence formed Drift.",
+          "signal_source": "weekly_drift_reviewer",
+          "n_entries": 2,
+          "overall_mean": null,
+          "overall_uncertainty": null,
+          "core_values": [
+            "benevolence"
+          ],
+          "drift_states": {
+            "benevolence": "active"
+          },
+          "drift_reasons": [
+            "Benevolence: Journal Entries 0 and 1 were Conflicts."
+          ],
+          "top_tensions": [
+            "Work repeatedly displaced time with a close relationship."
+          ],
+          "top_strengths": [],
+          "dimensions": [],
+          "evidence": [
+            {
+              "date": "2026-07-06",
+              "t_index": 0,
+              "direction": "misaligned",
+              "dimensions": [
+                "benevolence"
+              ],
+              "score_mean": null,
+              "excerpt": "Cancelled dinner with my sister to stay at work."
+            },
+            {
+              "date": "2026-07-13",
+              "t_index": 1,
+              "direction": "misaligned",
+              "dimensions": [
+                "benevolence"
+              ],
+              "score_mean": null,
+              "excerpt": "Ignored my sister's call to finish another deadline."
+            }
+          ],
+          "coach_narrative": {
+            "weekly_mirror": "You wrote twice about choosing work over time with your sister.",
+            "tension_explanation": "Those choices conflict with the importance you placed on being present for people close to you.",
+            "reflective_question": "What boundary could protect one evening next week?"
+          },
+          "validation": {
+            "grounded_quotes": [
+              "Cancelled dinner with my sister",
+              "Ignored my sister's call"
+            ],
+            "word_count": 38,
+            "checks": [
+              {
+                "name": "groundedness",
+                "passed": true,
+                "details": "Two citations"
+              },
+              {
+                "name": "non_circularity",
+                "passed": true,
+                "details": "Specific"
+              },
+              {
+                "name": "length",
+                "passed": true,
+                "details": "Within limit"
+              }
+            ]
+          }
+        },
+        "trace_event_ids": [
+          "event-01",
+          "event-02",
+          "event-03",
+          "event-04",
+          "event-05",
+          "event-06",
+          "event-07",
+          "event-08",
+          "event-09",
+          "event-10",
+          "event-11"
+        ],
+        "selection": {
+          "view": "inspect",
+          "selected_week": "2026-07-13",
+          "selected_journal_entry_id": "entry-1",
+          "selected_event_id": "event-09"
+        },
+        "updated_at": "2026-07-22T10:11:00.120Z"
+      }
+    },
+    {
+      "schema_version": "experience-inspect-v1",
+      "operation": "error",
+      "requested_operation": "submit_journal_entry",
+      "request_id": "request-conflict",
+      "status": "error",
+      "error": {
+        "code": "revision_conflict",
+        "message": "The session changed after this request was prepared.",
+        "retryable": true
+      }
+    }
+  ],
+  "trace_events": [
+    {
+      "schema_version": "experience-inspect-v1",
+      "event_id": "event-01",
+      "session_id": "session-demo",
+      "parent_event_id": null,
+      "event_type": "profile_confirmed",
+      "status": "complete",
+      "source": "live_run",
+      "started_at": "2026-07-22T10:01:00.000Z",
+      "completed_at": "2026-07-22T10:01:00.120Z",
+      "duration_ms": 120,
+      "input_refs": [],
+      "model_contract": null,
+      "prompt": null,
+      "raw_response": null,
+      "validation": {
+        "valid": true,
+        "schema_name": "profile_confirmed-v1",
+        "errors": []
+      },
+      "result_refs": [
+        {
+          "kind": "profile",
+          "id": "session-demo"
+        }
+      ],
+      "input_hash": "0000000000000000000000000000000000000000000000000000000000000001",
+      "error": null,
+      "details": {
+        "profile": {
+          "schema_version": 2,
+          "onboarding_version": "2.1.0",
+          "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
+          "scoring_method": "best_minus_worst_divided_by_appearances_v1",
+          "user_id": "persona-demo",
+          "session_id": "session-demo",
+          "started_at": "2026-07-22T10:00:00.000Z",
+          "timestamp": "2026-07-22T10:05:00.000Z",
+          "bws_responses": [
+            {
+              "set_number": 1,
+              "items": [
+                "achievement",
+                "universalism_nature",
+                "benevolence",
+                "tradition",
+                "security",
+                "universalism_social"
+              ],
+              "item_order_shown": [
+                "universalism_social",
+                "security",
+                "tradition",
+                "benevolence",
+                "universalism_nature",
+                "achievement"
+              ],
+              "selected_best": "benevolence",
+              "selected_worst": "tradition",
+              "response_time_ms": 1000
+            },
+            {
+              "set_number": 2,
+              "items": [
+                "power",
+                "hedonism",
+                "benevolence",
+                "tradition",
+                "conformity",
+                "universalism_social"
+              ],
+              "item_order_shown": [
+                "universalism_social",
+                "conformity",
+                "tradition",
+                "benevolence",
+                "hedonism",
+                "power"
+              ],
+              "selected_best": "benevolence",
+              "selected_worst": "power",
+              "response_time_ms": 1001
+            },
+            {
+              "set_number": 3,
+              "items": [
+                "power",
+                "achievement",
+                "stimulation",
+                "tradition",
+                "conformity",
+                "security"
+              ],
+              "item_order_shown": [
+                "security",
+                "conformity",
+                "tradition",
+                "stimulation",
+                "achievement",
+                "power"
+              ],
+              "selected_best": "achievement",
+              "selected_worst": "power",
+              "response_time_ms": 1002
+            },
+            {
+              "set_number": 4,
+              "items": [
+                "achievement",
+                "hedonism",
+                "self_direction",
+                "conformity",
+                "security",
+                "universalism_social"
+              ],
+              "item_order_shown": [
+                "universalism_social",
+                "security",
+                "conformity",
+                "self_direction",
+                "hedonism",
+                "achievement"
+              ],
+              "selected_best": "self_direction",
+              "selected_worst": "conformity",
+              "response_time_ms": 1003
+            },
+            {
+              "set_number": 5,
+              "items": [
+                "power",
+                "hedonism",
+                "stimulation",
+                "universalism_nature",
+                "security",
+                "universalism_social"
+              ],
+              "item_order_shown": [
+                "universalism_social",
+                "security",
+                "universalism_nature",
+                "stimulation",
+                "hedonism",
+                "power"
+              ],
+              "selected_best": "universalism_nature",
+              "selected_worst": "hedonism",
+              "response_time_ms": 1004
+            },
+            {
+              "set_number": 6,
+              "items": [
+                "power",
+                "achievement",
+                "stimulation",
+                "self_direction",
+                "benevolence",
+                "universalism_social"
+              ],
+              "item_order_shown": [
+                "universalism_social",
+                "benevolence",
+                "self_direction",
+                "stimulation",
+                "achievement",
+                "power"
+              ],
+              "selected_best": "benevolence",
+              "selected_worst": "universalism_social",
+              "response_time_ms": 1005
+            },
+            {
+              "set_number": 7,
+              "items": [
+                "power",
+                "achievement",
+                "hedonism",
+                "self_direction",
+                "universalism_nature",
+                "tradition"
+              ],
+              "item_order_shown": [
+                "tradition",
+                "universalism_nature",
+                "self_direction",
+                "hedonism",
+                "achievement",
+                "power"
+              ],
+              "selected_best": "tradition",
+              "selected_worst": "achievement",
+              "response_time_ms": 1006
+            },
+            {
+              "set_number": 8,
+              "items": [
+                "achievement",
+                "hedonism",
+                "stimulation",
+                "universalism_nature",
+                "benevolence",
+                "conformity"
+              ],
+              "item_order_shown": [
+                "conformity",
+                "benevolence",
+                "universalism_nature",
+                "stimulation",
+                "hedonism",
+                "achievement"
+              ],
+              "selected_best": "benevolence",
+              "selected_worst": "stimulation",
+              "response_time_ms": 1007
+            },
+            {
+              "set_number": 9,
+              "items": [
+                "hedonism",
+                "stimulation",
+                "self_direction",
+                "benevolence",
+                "tradition",
+                "security"
+              ],
+              "item_order_shown": [
+                "security",
+                "tradition",
+                "benevolence",
+                "self_direction",
+                "stimulation",
+                "hedonism"
+              ],
+              "selected_best": "benevolence",
+              "selected_worst": "security",
+              "response_time_ms": 1008
+            },
+            {
+              "set_number": 10,
+              "items": [
+                "stimulation",
+                "self_direction",
+                "universalism_nature",
+                "tradition",
+                "conformity",
+                "universalism_social"
+              ],
+              "item_order_shown": [
+                "universalism_social",
+                "conformity",
+                "tradition",
+                "universalism_nature",
+                "self_direction",
+                "stimulation"
+              ],
+              "selected_best": "universalism_social",
+              "selected_worst": "self_direction",
+              "response_time_ms": 1009
+            },
+            {
+              "set_number": 11,
+              "items": [
+                "power",
+                "self_direction",
+                "universalism_nature",
+                "benevolence",
+                "conformity",
+                "security"
+              ],
+              "item_order_shown": [
+                "security",
+                "conformity",
+                "benevolence",
+                "universalism_nature",
+                "self_direction",
+                "power"
+              ],
+              "selected_best": "benevolence",
+              "selected_worst": "power",
+              "response_time_ms": 1010
+            }
+          ],
+          "bws_results": {
+            "appearances": {
+              "power": 6,
+              "achievement": 6,
+              "hedonism": 6,
+              "stimulation": 6,
+              "self_direction": 6,
+              "universalism_nature": 6,
+              "benevolence": 6,
+              "tradition": 6,
+              "conformity": 6,
+              "security": 6,
+              "universalism_social": 6
+            },
+            "best_counts": {
+              "power": 0,
+              "achievement": 1,
+              "hedonism": 0,
+              "stimulation": 0,
+              "self_direction": 1,
+              "universalism_nature": 1,
+              "benevolence": 6,
+              "tradition": 1,
+              "conformity": 0,
+              "security": 0,
+              "universalism_social": 1
+            },
+            "worst_counts": {
+              "power": 3,
+              "achievement": 1,
+              "hedonism": 1,
+              "stimulation": 1,
+              "self_direction": 1,
+              "universalism_nature": 0,
+              "benevolence": 0,
+              "tradition": 1,
+              "conformity": 1,
+              "security": 1,
+              "universalism_social": 1
+            },
+            "net_counts": {
+              "power": -3,
+              "achievement": 0,
+              "hedonism": -1,
+              "stimulation": -1,
+              "self_direction": 0,
+              "universalism_nature": 1,
+              "benevolence": 6,
+              "tradition": 0,
+              "conformity": -1,
+              "security": -1,
+              "universalism_social": 0
+            },
+            "scores": {
+              "power": -0.5,
+              "achievement": 0.0,
+              "hedonism": -0.16666667,
+              "stimulation": -0.16666667,
+              "self_direction": 0.0,
+              "universalism_nature": 0.16666667,
+              "benevolence": 1.0,
+              "tradition": 0.0,
+              "conformity": -0.16666667,
+              "security": -0.16666667,
+              "universalism_social": 0.0
+            }
+          },
+          "value_profile": {
+            "method": "mean_universalism_facets_then_shift_normalize_v1",
+            "scores": {
+              "self_direction": 0.0,
+              "stimulation": -0.16666667,
+              "hedonism": -0.16666667,
+              "achievement": 0.0,
+              "power": -0.5,
+              "security": -0.16666667,
+              "conformity": -0.16666667,
+              "tradition": 0.0,
+              "benevolence": 1.0,
+              "universalism": 0.08333334
+            },
+            "weights": {
+              "self_direction": 0.10055866,
+              "stimulation": 0.08938547,
+              "hedonism": 0.08938547,
+              "achievement": 0.10055866,
+              "power": 0.06703911,
+              "security": 0.08938547,
+              "conformity": 0.08938547,
+              "tradition": 0.10055866,
+              "benevolence": 0.16759777,
+              "universalism": 0.10614526
+            },
+            "top_values": [
+              "benevolence"
+            ],
+            "bottom_values": [
+              "power"
+            ]
+          },
+          "top_values": [
+            "benevolence"
+          ],
+          "goal_category": "relationships",
+          "user_confirmed": true,
+          "provenance": {
+            "source": "react_onboarding_poc",
+            "set_order_randomized": true,
+            "card_order_randomized": true
+          }
+        }
+      }
+    },
+    {
+      "schema_version": "experience-inspect-v1",
+      "event_id": "event-02",
+      "session_id": "session-demo",
+      "parent_event_id": "event-01",
+      "event_type": "journal_entry_submitted",
+      "status": "complete",
+      "source": "live_run",
+      "started_at": "2026-07-22T10:02:00.000Z",
+      "completed_at": "2026-07-22T10:02:00.120Z",
+      "duration_ms": 120,
+      "input_refs": [
+        {
+          "kind": "profile",
+          "id": "session-demo"
+        }
+      ],
+      "model_contract": null,
+      "prompt": null,
+      "raw_response": null,
+      "validation": {
+        "valid": true,
+        "schema_name": "journal_entry_submitted-v1",
+        "errors": []
+      },
+      "result_refs": [
+        {
+          "kind": "journal_entry",
+          "id": "entry-0"
+        }
+      ],
+      "input_hash": "0000000000000000000000000000000000000000000000000000000000000002",
+      "error": null,
+      "details": {
+        "journal_entry": {
+          "journal_entry_id": "entry-0",
+          "t_index": 0,
+          "date": "2026-07-06",
+          "content": "Cancelled dinner with my sister to stay at work.",
+          "nudge_response": null
+        },
+        "ordering_valid": true
+      }
+    },
+    {
+      "schema_version": "experience-inspect-v1",
+      "event_id": "event-03",
+      "session_id": "session-demo",
+      "parent_event_id": "event-02",
+      "event_type": "journal_entry_submitted",
+      "status": "complete",
+      "source": "live_run",
+      "started_at": "2026-07-22T10:03:00.000Z",
+      "completed_at": "2026-07-22T10:03:00.120Z",
+      "duration_ms": 120,
+      "input_refs": [
+        {
+          "kind": "profile",
+          "id": "session-demo"
+        }
+      ],
+      "model_contract": null,
+      "prompt": null,
+      "raw_response": null,
+      "validation": {
+        "valid": true,
+        "schema_name": "journal_entry_submitted-v1",
+        "errors": []
+      },
+      "result_refs": [
+        {
+          "kind": "journal_entry",
+          "id": "entry-1"
+        }
+      ],
+      "input_hash": "0000000000000000000000000000000000000000000000000000000000000003",
+      "error": null,
+      "details": {
+        "journal_entry": {
+          "journal_entry_id": "entry-1",
+          "t_index": 1,
+          "date": "2026-07-13",
+          "content": "Ignored my sister's call to finish another deadline.",
+          "nudge_response": "I keep assuming work cannot wait."
+        },
+        "ordering_valid": true
+      }
+    },
+    {
+      "schema_version": "experience-inspect-v1",
+      "event_id": "event-04",
+      "session_id": "session-demo",
+      "parent_event_id": "event-03",
+      "event_type": "nudge_suppression_checked",
+      "status": "complete",
+      "source": "live_run",
+      "started_at": "2026-07-22T10:04:00.000Z",
+      "completed_at": "2026-07-22T10:04:00.120Z",
+      "duration_ms": 120,
+      "input_refs": [
+        {
+          "kind": "journal_entry",
+          "id": "entry-0"
+        },
+        {
+          "kind": "journal_entry",
+          "id": "entry-1"
+        }
+      ],
+      "model_contract": null,
+      "prompt": null,
+      "raw_response": null,
+      "validation": {
+        "valid": true,
+        "schema_name": "nudge_suppression_checked-v1",
+        "errors": []
+      },
+      "result_refs": [],
+      "input_hash": "0000000000000000000000000000000000000000000000000000000000000004",
+      "error": null,
+      "details": {
+        "previous_entry_ids": [
+          "entry-0"
+        ],
+        "window_size": 3,
+        "max_nudges": 2,
+        "suppressed": false
+      }
+    },
+    {
+      "schema_version": "experience-inspect-v1",
+      "event_id": "event-05",
+      "session_id": "session-demo",
+      "parent_event_id": "event-04",
+      "event_type": "nudge_decided",
+      "status": "complete",
+      "source": "live_run",
+      "started_at": "2026-07-22T10:05:00.000Z",
+      "completed_at": "2026-07-22T10:05:00.120Z",
+      "duration_ms": 120,
+      "input_refs": [
+        {
+          "kind": "journal_entry",
+          "id": "entry-1"
+        }
+      ],
+      "model_contract": {
+        "provider": "openai",
+        "model": "gpt-5.4-mini",
+        "reasoning_effort": "none"
+      },
+      "prompt": "Decide whether this Journal Entry needs a nudge.",
+      "raw_response": {
+        "decision": "tension_surfacing",
+        "reason": "The Journal Entry describes a repeated choice against a Core Value."
+      },
+      "validation": {
+        "valid": true,
+        "schema_name": "nudge_decided-v1",
+        "errors": []
+      },
+      "result_refs": [
+        {
+          "kind": "event",
+          "id": "event-05"
+        }
+      ],
+      "input_hash": "0000000000000000000000000000000000000000000000000000000000000005",
+      "error": null,
+      "details": {
+        "should_nudge": true,
+        "category": "tension_surfacing",
+        "reason": "The Journal Entry describes a repeated choice against a Core Value."
+      }
+    },
+    {
+      "schema_version": "experience-inspect-v1",
+      "event_id": "event-06",
+      "session_id": "session-demo",
+      "parent_event_id": "event-05",
+      "event_type": "nudge_generated",
+      "status": "complete",
+      "source": "live_run",
+      "started_at": "2026-07-22T10:06:00.000Z",
+      "completed_at": "2026-07-22T10:06:00.120Z",
+      "duration_ms": 120,
+      "input_refs": [
+        {
+          "kind": "journal_entry",
+          "id": "entry-1"
+        },
+        {
+          "kind": "event",
+          "id": "event-05"
+        }
+      ],
+      "model_contract": {
+        "provider": "openai",
+        "model": "gpt-5.4-mini",
+        "reasoning_effort": "none"
+      },
+      "prompt": "Write one brief reflective question.",
+      "raw_response": {
+        "nudge_text": "What made work feel less movable than time with your sister?"
+      },
+      "validation": {
+        "valid": true,
+        "schema_name": "nudge_generated-v1",
+        "errors": []
+      },
+      "result_refs": [
+        {
+          "kind": "nudge",
+          "id": "nudge-1"
+        }
+      ],
+      "input_hash": "0000000000000000000000000000000000000000000000000000000000000006",
+      "error": null,
+      "details": {
+        "nudge": {
+          "nudge_id": "nudge-1",
+          "journal_entry_id": "entry-1",
+          "outcome": "answered",
+          "category": "tension_surfacing",
+          "reason": "The Journal Entry describes a repeated choice against a Core Value.",
+          "text": "What made work feel less movable than time with your sister?",
+          "response": "I keep assuming work cannot wait."
+        },
+        "word_count": 10,
+        "attempts": 1
+      }
+    },
+    {
+      "schema_version": "experience-inspect-v1",
+      "event_id": "event-07",
+      "session_id": "session-demo",
+      "parent_event_id": "event-06",
+      "event_type": "weekly_review_requested",
+      "status": "complete",
+      "source": "saved_replay",
+      "started_at": "2026-07-22T10:07:00.000Z",
+      "completed_at": "2026-07-22T10:07:00.120Z",
+      "duration_ms": 120,
+      "input_refs": [
+        {
+          "kind": "profile",
+          "id": "session-demo"
+        },
+        {
+          "kind": "journal_entry",
+          "id": "entry-0"
+        },
+        {
+          "kind": "journal_entry",
+          "id": "entry-1"
+        },
+        {
+          "kind": "week",
+          "id": "2026-07-13"
+        }
+      ],
+      "model_contract": {
+        "provider": "openai",
+        "model": "gpt-5.6-luna",
+        "reasoning_effort": "low"
+      },
+      "prompt": "Review the two displayed Journal Entries for Benevolence Conflict.",
+      "raw_response": null,
+      "validation": {
+        "valid": true,
+        "schema_name": "weekly_review_requested-v1",
+        "errors": []
+      },
+      "result_refs": [
+        {
+          "kind": "event",
+          "id": "event-07"
+        }
+      ],
+      "input_hash": "0000000000000000000000000000000000000000000000000000000000000007",
+      "error": null,
+      "details": {
+        "request": {
+          "persona_id": "persona-demo",
+          "week_start": "2026-07-06",
+          "week_end": "2026-07-19",
+          "core_values": [
+            "benevolence"
+          ],
+          "history": [
+            {
+              "t_index": 0,
+              "date": "2026-07-06",
+              "text": "Cancelled dinner with my sister to stay at work."
+            },
+            {
+              "t_index": 1,
+              "date": "2026-07-13",
+              "text": "Ignored my sister's call to finish another deadline."
+            }
+          ],
+          "current_t_indices": [
+            0,
+            1
+          ],
+          "prompt": "Review the two displayed Journal Entries for Benevolence Conflict.",
+          "prompt_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "runtime_text_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        }
+      }
+    },
+    {
+      "schema_version": "experience-inspect-v1",
+      "event_id": "event-08",
+      "session_id": "session-demo",
+      "parent_event_id": "event-07",
+      "event_type": "weekly_review_completed",
+      "status": "reused",
+      "source": "saved_replay",
+      "started_at": "2026-07-22T10:08:00.000Z",
+      "completed_at": "2026-07-22T10:08:00.120Z",
+      "duration_ms": 120,
+      "input_refs": [
+        {
+          "kind": "event",
+          "id": "event-07"
+        }
+      ],
+      "model_contract": {
+        "provider": "openai",
+        "model": "gpt-5.6-luna",
+        "reasoning_effort": "low"
+      },
+      "prompt": "Review the two displayed Journal Entries for Benevolence Conflict.",
+      "raw_response": {
+        "assessments": [
+          {
+            "t_index": 0,
+            "dimension": "benevolence",
+            "verdict": "conflict",
+            "confidence": "high",
+            "reason_code": "direct_behavior_or_choice",
+            "evidence_quote": "Cancelled dinner with my sister to stay at work."
+          },
+          {
+            "t_index": 1,
+            "dimension": "benevolence",
+            "verdict": "conflict",
+            "confidence": "high",
+            "reason_code": "direct_behavior_or_choice",
+            "evidence_quote": "Ignored my sister's call to finish another deadline."
+          }
+        ]
+      },
+      "validation": {
+        "valid": true,
+        "schema_name": "weekly_review_completed-v1",
+        "errors": []
+      },
+      "result_refs": [
+        {
+          "kind": "weekly_review",
+          "id": "response-demo"
+        }
+      ],
+      "input_hash": "0000000000000000000000000000000000000000000000000000000000000008",
+      "error": null,
+      "details": {
+        "receipt": {
+          "schema_version": "weekly-drift-reviewer-receipt-v1",
+          "created_at": "2026-07-22T10:07:00.000Z",
+          "persona_id": "persona-demo",
+          "week_start": "2026-07-06",
+          "week_end": "2026-07-19",
+          "core_values": [
+            "benevolence"
+          ],
+          "current_t_indices": [
+            0,
+            1
+          ],
+          "prompt_name": "weekly_vif_verifier",
+          "prompt_version": "2.0",
+          "prompt_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "runtime_text_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "requested_model": "gpt-5.6-luna",
+          "reasoning_effort": "low",
+          "status": "ok",
+          "attempts": 1,
+          "latency_seconds": 1.25,
+          "resolved_model": "gpt-5.6-luna",
+          "response_id": "response-demo",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 90
+          },
+          "refusal": null,
+          "validation_error": null,
+          "error_type": null,
+          "error": null,
+          "assessments": [
+            {
+              "t_index": 0,
+              "dimension": "benevolence",
+              "verdict": "conflict",
+              "confidence": "high",
+              "reason_code": "direct_behavior_or_choice",
+              "evidence_quote": "Cancelled dinner with my sister to stay at work."
+            },
+            {
+              "t_index": 1,
+              "dimension": "benevolence",
+              "verdict": "conflict",
+              "confidence": "high",
+              "reason_code": "direct_behavior_or_choice",
+              "evidence_quote": "Ignored my sister's call to finish another deadline."
+            }
+          ],
+          "decisions": [
+            {
+              "persona_id": "persona-demo",
+              "week_start": "2026-07-06",
+              "week_end": "2026-07-06",
+              "t_index": 0,
+              "date": "2026-07-06",
+              "core_value": "benevolence",
+              "verdict": "conflict",
+              "confidence": "high",
+              "reason_code": "direct_behavior_or_choice",
+              "evidence_quote": "Cancelled dinner with my sister to stay at work.",
+              "review_status": "ok"
+            },
+            {
+              "persona_id": "persona-demo",
+              "week_start": "2026-07-13",
+              "week_end": "2026-07-13",
+              "t_index": 1,
+              "date": "2026-07-13",
+              "core_value": "benevolence",
+              "verdict": "conflict",
+              "confidence": "high",
+              "reason_code": "direct_behavior_or_choice",
+              "evidence_quote": "Ignored my sister's call to finish another deadline.",
+              "review_status": "ok"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "schema_version": "experience-inspect-v1",
+      "event_id": "event-09",
+      "session_id": "session-demo",
+      "parent_event_id": "event-08",
+      "event_type": "drift_detected",
+      "status": "complete",
+      "source": "saved_replay",
+      "started_at": "2026-07-22T10:09:00.000Z",
+      "completed_at": "2026-07-22T10:09:00.120Z",
+      "duration_ms": 120,
+      "input_refs": [
+        {
+          "kind": "weekly_review",
+          "id": "response-demo"
+        }
+      ],
+      "model_contract": null,
+      "prompt": null,
+      "raw_response": null,
+      "validation": {
+        "valid": true,
+        "schema_name": "drift_detected-v1",
+        "errors": []
+      },
+      "result_refs": [
+        {
+          "kind": "drift",
+          "id": "persona-demo:benevolence:0"
+        }
+      ],
+      "input_hash": "0000000000000000000000000000000000000000000000000000000000000009",
+      "error": null,
+      "details": {
+        "decisions": [
+          {
+            "persona_id": "persona-demo",
+            "week_start": "2026-07-06",
+            "week_end": "2026-07-06",
+            "t_index": 0,
+            "date": "2026-07-06",
+            "core_value": "benevolence",
+            "verdict": "conflict",
+            "confidence": "high",
+            "reason_code": "direct_behavior_or_choice",
+            "evidence_quote": "Cancelled dinner with my sister to stay at work.",
+            "review_status": "ok"
+          },
+          {
+            "persona_id": "persona-demo",
+            "week_start": "2026-07-13",
+            "week_end": "2026-07-13",
+            "t_index": 1,
+            "date": "2026-07-13",
+            "core_value": "benevolence",
+            "verdict": "conflict",
+            "confidence": "high",
+            "reason_code": "direct_behavior_or_choice",
+            "evidence_quote": "Ignored my sister's call to finish another deadline.",
+            "review_status": "ok"
+          }
+        ],
+        "steps": [
+          {
+            "t_index": 0,
+            "core_value": "benevolence",
+            "verdict": "conflict",
+            "pending_run_length": 1,
+            "effect": "start"
+          },
+          {
+            "t_index": 1,
+            "core_value": "benevolence",
+            "verdict": "conflict",
+            "pending_run_length": 2,
+            "effect": "confirm"
+          }
+        ],
+        "result": {
+          "schema_version": "drift-detector-result-v1",
+          "persona_id": "persona-demo",
+          "cutoff_t_index": 1,
+          "cutoff_date": "2026-07-13",
+          "delivery_state": "active",
+          "core_value_states": {
+            "benevolence": "active"
+          },
+          "drifts": [
+            {
+              "drift_id": "persona-demo:benevolence:0",
+              "persona_id": "persona-demo",
+              "core_value": "benevolence",
+              "onset_t_index": 0,
+              "confirmation_t_index": 1,
+              "end_t_index": 1,
+              "onset_date": "2026-07-06",
+              "confirmation_date": "2026-07-13",
+              "end_date": "2026-07-13",
+              "supporting_t_indices": [
+                0,
+                1
+              ],
+              "evidence_quotes": [
+                "Cancelled dinner with my sister to stay at work.",
+                "Ignored my sister's call to finish another deadline."
+              ],
+              "delivery_state": "active",
+              "termination_t_index": null,
+              "termination_date": null,
+              "termination_verdict": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "schema_version": "experience-inspect-v1",
+      "event_id": "event-10",
+      "session_id": "session-demo",
+      "parent_event_id": "event-09",
+      "event_type": "weekly_digest_built",
+      "status": "complete",
+      "source": "saved_replay",
+      "started_at": "2026-07-22T10:10:00.000Z",
+      "completed_at": "2026-07-22T10:10:00.120Z",
+      "duration_ms": 120,
+      "input_refs": [
+        {
+          "kind": "drift",
+          "id": "persona-demo:benevolence:0"
+        },
+        {
+          "kind": "journal_entry",
+          "id": "entry-0"
+        },
+        {
+          "kind": "journal_entry",
+          "id": "entry-1"
+        }
+      ],
+      "model_contract": null,
+      "prompt": null,
+      "raw_response": null,
+      "validation": {
+        "valid": true,
+        "schema_name": "weekly_digest_built-v1",
+        "errors": []
+      },
+      "result_refs": [
+        {
+          "kind": "weekly_digest",
+          "id": "digest-demo"
+        }
+      ],
+      "input_hash": "000000000000000000000000000000000000000000000000000000000000000a",
+      "error": null,
+      "details": {
+        "digest": {
+          "persona_id": "persona-demo",
+          "persona_name": "Casey",
+          "week_start": "2026-07-06",
+          "week_end": "2026-07-13",
+          "response_mode": "active",
+          "mode_source": "drift_detector",
+          "mode_rationale": "Two consecutive Conflicts for Benevolence formed Drift.",
+          "signal_source": "weekly_drift_reviewer",
+          "n_entries": 2,
+          "overall_mean": null,
+          "overall_uncertainty": null,
+          "core_values": [
+            "benevolence"
+          ],
+          "drift_states": {
+            "benevolence": "active"
+          },
+          "drift_reasons": [
+            "Benevolence: Journal Entries 0 and 1 were Conflicts."
+          ],
+          "top_tensions": [
+            "Work repeatedly displaced time with a close relationship."
+          ],
+          "top_strengths": [],
+          "dimensions": [],
+          "evidence": [
+            {
+              "date": "2026-07-06",
+              "t_index": 0,
+              "direction": "misaligned",
+              "dimensions": [
+                "benevolence"
+              ],
+              "score_mean": null,
+              "excerpt": "Cancelled dinner with my sister to stay at work."
+            },
+            {
+              "date": "2026-07-13",
+              "t_index": 1,
+              "direction": "misaligned",
+              "dimensions": [
+                "benevolence"
+              ],
+              "score_mean": null,
+              "excerpt": "Ignored my sister's call to finish another deadline."
+            }
+          ],
+          "coach_narrative": {
+            "weekly_mirror": "You wrote twice about choosing work over time with your sister.",
+            "tension_explanation": "Those choices conflict with the importance you placed on being present for people close to you.",
+            "reflective_question": "What boundary could protect one evening next week?"
+          },
+          "validation": {
+            "grounded_quotes": [
+              "Cancelled dinner with my sister",
+              "Ignored my sister's call"
+            ],
+            "word_count": 38,
+            "checks": [
+              {
+                "name": "groundedness",
+                "passed": true,
+                "details": "Two citations"
+              },
+              {
+                "name": "non_circularity",
+                "passed": true,
+                "details": "Specific"
+              },
+              {
+                "name": "length",
+                "passed": true,
+                "details": "Within limit"
+              }
+            ]
+          }
+        },
+        "cited_journal_entry_ids": [
+          "entry-0",
+          "entry-1"
+        ]
+      }
+    },
+    {
+      "schema_version": "experience-inspect-v1",
+      "event_id": "event-11",
+      "session_id": "session-demo",
+      "parent_event_id": "event-10",
+      "event_type": "weekly_coach_generated",
+      "status": "complete",
+      "source": "saved_replay",
+      "started_at": "2026-07-22T10:11:00.000Z",
+      "completed_at": "2026-07-22T10:11:00.120Z",
+      "duration_ms": 120,
+      "input_refs": [
+        {
+          "kind": "weekly_digest",
+          "id": "digest-demo"
+        }
+      ],
+      "model_contract": {
+        "provider": "openai",
+        "model": "gpt-5.4-mini",
+        "reasoning_effort": "none"
+      },
+      "prompt": "Turn the Weekly Digest into a reflection and one question.",
+      "raw_response": {
+        "weekly_mirror": "You wrote twice about choosing work over time with your sister.",
+        "tension_explanation": "Those choices conflict with the importance you placed on being present for people close to you.",
+        "reflective_question": "What boundary could protect one evening next week?"
+      },
+      "validation": {
+        "valid": true,
+        "schema_name": "weekly_coach_generated-v1",
+        "errors": []
+      },
+      "result_refs": [
+        {
+          "kind": "weekly_coach",
+          "id": "coach-demo"
+        }
+      ],
+      "input_hash": "000000000000000000000000000000000000000000000000000000000000000b",
+      "error": null,
+      "details": {
+        "narrative": {
+          "weekly_mirror": "You wrote twice about choosing work over time with your sister.",
+          "tension_explanation": "Those choices conflict with the importance you placed on being present for people close to you.",
+          "reflective_question": "What boundary could protect one evening next week?"
+        },
+        "validation": {
+          "grounded_quotes": [
+            "Cancelled dinner with my sister",
+            "Ignored my sister's call"
+          ],
+          "word_count": 38,
+          "checks": [
+            {
+              "name": "groundedness",
+              "passed": true,
+              "details": "Two citations"
+            },
+            {
+              "name": "non_circularity",
+              "passed": true,
+              "details": "Specific"
+            },
+            {
+              "name": "length",
+              "passed": true,
+              "details": "Within limit"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "schema_version": "experience-inspect-v1",
+      "event_id": "event-12",
+      "session_id": "session-demo",
+      "parent_event_id": "event-04",
+      "event_type": "nudge_decided",
+      "status": "refused",
+      "source": "live_run",
+      "started_at": "2026-07-22T10:12:00.000Z",
+      "completed_at": "2026-07-22T10:12:00.120Z",
+      "duration_ms": 120,
+      "input_refs": [
+        {
+          "kind": "journal_entry",
+          "id": "entry-1"
+        }
+      ],
+      "model_contract": {
+        "provider": "openai",
+        "model": "gpt-5.4-mini",
+        "reasoning_effort": "none"
+      },
+      "prompt": "Decide whether this Journal Entry needs a nudge.",
+      "raw_response": null,
+      "validation": {
+        "valid": false,
+        "schema_name": "nudge_decided-v1",
+        "errors": []
+      },
+      "result_refs": [],
+      "input_hash": "000000000000000000000000000000000000000000000000000000000000000c",
+      "error": {
+        "code": "provider_refusal",
+        "message": "The provider refused the request.",
+        "retryable": false
+      },
+      "details": {
+        "should_nudge": false,
+        "category": null,
+        "reason": null
+      }
+    },
+    {
+      "schema_version": "experience-inspect-v1",
+      "event_id": "event-13",
+      "session_id": "session-demo",
+      "parent_event_id": "event-07",
+      "event_type": "weekly_review_completed",
+      "status": "invalid",
+      "source": "live_run",
+      "started_at": "2026-07-22T10:13:00.000Z",
+      "completed_at": "2026-07-22T10:13:00.120Z",
+      "duration_ms": 120,
+      "input_refs": [
+        {
+          "kind": "event",
+          "id": "event-07"
+        }
+      ],
+      "model_contract": {
+        "provider": "openai",
+        "model": "gpt-5.6-luna",
+        "reasoning_effort": "low"
+      },
+      "prompt": "Review the two displayed Journal Entries for Benevolence Conflict.",
+      "raw_response": {
+        "unexpected": true
+      },
+      "validation": {
+        "valid": false,
+        "schema_name": "WeeklyVerifierResponse",
+        "errors": [
+          "assessments is required"
+        ]
+      },
+      "result_refs": [],
+      "input_hash": "000000000000000000000000000000000000000000000000000000000000000d",
+      "error": {
+        "code": "invalid_response",
+        "message": "The provider response did not match the response schema.",
+        "retryable": false
+      },
+      "details": {
+        "receipt": {
+          "schema_version": "weekly-drift-reviewer-receipt-v1",
+          "created_at": "2026-07-22T10:07:00.000Z",
+          "persona_id": "persona-demo",
+          "week_start": "2026-07-06",
+          "week_end": "2026-07-19",
+          "core_values": [
+            "benevolence"
+          ],
+          "current_t_indices": [
+            0,
+            1
+          ],
+          "prompt_name": "weekly_vif_verifier",
+          "prompt_version": "2.0",
+          "prompt_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "runtime_text_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "requested_model": "gpt-5.6-luna",
+          "reasoning_effort": "low",
+          "status": "invalid",
+          "attempts": 1,
+          "latency_seconds": 1.25,
+          "resolved_model": "gpt-5.6-luna",
+          "response_id": "response-demo",
+          "usage": {
+            "input_tokens": 420,
+            "output_tokens": 90
+          },
+          "refusal": null,
+          "validation_error": "Provider response did not match the schema.",
+          "error_type": null,
+          "error": null,
+          "assessments": [],
+          "decisions": [
+            {
+              "persona_id": "persona-demo",
+              "week_start": "2026-07-06",
+              "week_end": "2026-07-06",
+              "t_index": 0,
+              "date": "2026-07-06",
+              "core_value": "benevolence",
+              "verdict": "abstain",
+              "confidence": null,
+              "reason_code": null,
+              "evidence_quote": "",
+              "review_status": "invalid"
+            },
+            {
+              "persona_id": "persona-demo",
+              "week_start": "2026-07-13",
+              "week_end": "2026-07-13",
+              "t_index": 1,
+              "date": "2026-07-13",
+              "core_value": "benevolence",
+              "verdict": "abstain",
+              "confidence": null,
+              "reason_code": null,
+              "evidence_quote": "",
+              "review_status": "invalid"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "schema_version": "experience-inspect-v1",
+      "event_id": "event-14",
+      "session_id": "session-demo",
+      "parent_event_id": "event-05",
+      "event_type": "nudge_generated",
+      "status": "failed",
+      "source": "live_run",
+      "started_at": "2026-07-22T10:14:00.000Z",
+      "completed_at": "2026-07-22T10:14:00.120Z",
+      "duration_ms": 120,
+      "input_refs": [
+        {
+          "kind": "journal_entry",
+          "id": "entry-1"
+        },
+        {
+          "kind": "event",
+          "id": "event-05"
+        }
+      ],
+      "model_contract": {
+        "provider": "openai",
+        "model": "gpt-5.4-mini",
+        "reasoning_effort": "none"
+      },
+      "prompt": "Write one brief reflective question.",
+      "raw_response": null,
+      "validation": {
+        "valid": false,
+        "schema_name": "Nudge",
+        "errors": [
+          "No valid response after two attempts"
+        ]
+      },
+      "result_refs": [],
+      "input_hash": "000000000000000000000000000000000000000000000000000000000000000e",
+      "error": {
+        "code": "provider_timeout",
+        "message": "The nudge request timed out after two attempts.",
+        "retryable": true
+      },
+      "details": {
+        "nudge": null,
+        "word_count": null,
+        "attempts": 2
+      }
+    }
+  ]
+}
