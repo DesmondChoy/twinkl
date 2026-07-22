@@ -1,19 +1,19 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import App from "./App";
 
 vi.stubGlobal("confirm", () => true);
 
-async function answerSet(user: ReturnType<typeof userEvent.setup>) {
+function answerSet() {
   const first = screen.getAllByTestId("value-card").find((card) => card.dataset.location === "pool")!;
-  first.focus();
-  await user.keyboard("m");
+  fireEvent.click(first);
   const second = screen.getAllByTestId("value-card").find((card) => card.dataset.location === "pool")!;
-  second.focus();
-  await user.keyboard("l");
-  await user.click(screen.getByRole("button", { name: "Continue" }));
+  fireEvent.click(second);
+  act(() => vi.advanceTimersByTime(1_000));
 }
+
+afterEach(() => vi.useRealTimers());
 
 describe("onboarding app", () => {
   it("opens directly on the first six-card set without Schwartz labels", () => {
@@ -25,43 +25,41 @@ describe("onboarding app", () => {
     expect(screen.queryByText(/saved only in this browser/i)).toBeNull();
     expect(screen.queryByText("Hedonism")).toBeNull();
     expect(screen.queryByText("Universalism")).toBeNull();
+    expect(screen.getByTestId("drop-most").classList.contains("drop-box--guided")).toBe(true);
+    expect(screen.getByTestId("drop-least").classList.contains("drop-box--guided")).toBe(false);
   });
 
-  it("lets touch users tap a card, choose a box, and reconsider", async () => {
-    const user = userEvent.setup();
+  it("places two taps in Most then Least and advances after a one-second review", () => {
+    vi.useFakeTimers();
     render(<App />);
+    act(() => vi.advanceTimersByTime(400));
     const first = screen.getAllByTestId("value-card")[0];
     const firstPhrase = first.querySelector(".value-card__phrase")!.textContent!;
-    await user.click(first);
-    expect(first.getAttribute("aria-pressed")).toBe("true");
-    expect(screen.getByText(/where does this principle sit/i)).toBeTruthy();
-    await user.click(screen.getByRole("button", { name: `Place ${firstPhrase} in Most` }));
+    fireEvent.click(first);
     expect(screen.getByTestId("drop-most").querySelector('[data-location="most"]')).toBeTruthy();
+    expect(screen.getByTestId("drop-most").textContent).toContain(firstPhrase);
+    expect(screen.getByTestId("drop-least").classList.contains("drop-box--guided")).toBe(true);
+    expect(screen.getByText(/now choose least/i)).toBeTruthy();
+    expect(screen.getByTestId("selection-area").querySelectorAll('[data-location="pool"]')).toHaveLength(5);
 
+    act(() => vi.advanceTimersByTime(350));
     const second = screen.getAllByTestId("value-card").find((card) => card.dataset.location === "pool")!;
     const secondPhrase = second.querySelector(".value-card__phrase")!.textContent!;
-    await user.click(second);
-    expect(screen.getByTestId("drop-most").textContent).toContain(firstPhrase);
-    expect(screen.queryByRole("button", { name: `Place ${secondPhrase} in Most` })).toBeNull();
-    await user.click(screen.getByRole("button", { name: `Place ${secondPhrase} in Least` }));
-    expect(screen.getByTestId("drop-least").querySelector('[data-location="least"]')).toBeTruthy();
-    expect(screen.getByRole("button", { name: "Continue" }).hasAttribute("disabled")).toBe(false);
-
-    const third = screen.getAllByTestId("value-card").find((card) => card.dataset.location === "pool")!;
-    const thirdPhrase = third.querySelector(".value-card__phrase")!.textContent!;
-    await user.click(third);
+    fireEvent.click(second);
     expect(screen.getByTestId("drop-most").textContent).toContain(firstPhrase);
     expect(screen.getByTestId("drop-least").textContent).toContain(secondPhrase);
-    expect(screen.queryByRole("button", { name: `Place ${thirdPhrase} in Most` })).toBeNull();
-    expect(screen.queryByRole("button", { name: `Place ${thirdPhrase} in Least` })).toBeNull();
-    await user.click(screen.getByRole("button", { name: "Choose Most for selected principle" }));
-    expect(screen.getByTestId("drop-most").textContent).toContain(thirdPhrase);
-    expect(screen.getByTestId("selection-area").textContent).toContain(firstPhrase);
+    expect(screen.getByTestId("drop-least").querySelector('[data-location="least"]')).toBeTruthy();
+    expect(screen.getByText(/take a moment to review/i)).toBeTruthy();
+    expect(screen.queryByRole("button", { name: "Continue" })).toBeNull();
+    expect(screen.getAllByTestId("value-card").every((card) => card.getAttribute("aria-disabled") === "true")).toBe(true);
 
-    const placedMost = screen.getByTestId("drop-most").querySelector<HTMLElement>('[data-location="most"]')!;
-    await user.click(placedMost);
-    expect(screen.getByTestId("drop-most").textContent).toContain("Drop a card here");
-    expect(screen.getByRole("button", { name: "Continue" }).hasAttribute("disabled")).toBe(true);
+    act(() => vi.advanceTimersByTime(999));
+    expect(screen.getByLabelText("Values · 1 of 11")).toBeTruthy();
+    act(() => vi.advanceTimersByTime(1));
+    expect(screen.getByLabelText("Values · 2 of 11")).toBeTruthy();
+    expect(screen.getAllByTestId("value-card")).toHaveLength(6);
+    const stored = JSON.parse(localStorage.getItem("twinkl.onboarding.session.v4")!);
+    expect(stored.responses[0].response_time_ms).toBe(750);
   });
 
   it("moves cards into both boxes and back with the keyboard", async () => {
@@ -74,21 +72,23 @@ describe("onboarding app", () => {
     const mostCard = screen.getByTestId("drop-most").querySelector<HTMLElement>('[data-location="most"]')!;
     expect(mostCard).toBeTruthy();
     expect(document.activeElement).toBe(mostCard);
+    mostCard.focus();
+    await user.keyboard("{Backspace}");
+    expect(screen.getByTestId("drop-most").textContent).toContain("Tap a card first");
+    const returnedCard = screen.getByTestId("selection-area").querySelector<HTMLElement>(
+      `[data-value="${firstValue}"][data-location="pool"]`,
+    );
+    expect(document.activeElement).toBe(returnedCard);
+
+    returnedCard!.focus();
+    await user.keyboard("m");
     const poolCard = screen.getAllByTestId("value-card").find((card) => card.dataset.location === "pool")!;
     poolCard.focus();
     await user.keyboard("l");
     const leastCard = screen.getByTestId("drop-least").querySelector<HTMLElement>('[data-location="least"]')!;
     expect(leastCard).toBeTruthy();
     expect(document.activeElement).toBe(leastCard);
-    expect(screen.getByRole("button", { name: "Continue" }).hasAttribute("disabled")).toBe(false);
-    mostCard.focus();
-    await user.keyboard("{Backspace}");
-    expect(screen.getByTestId("drop-most").textContent).toContain("Drop a card here");
-    expect(screen.getByRole("button", { name: "Continue" }).hasAttribute("disabled")).toBe(true);
-    const returnedCard = screen.getByTestId("selection-area").querySelector<HTMLElement>(
-      `[data-value="${firstValue}"][data-location="pool"]`,
-    );
-    expect(document.activeElement).toBe(returnedCard);
+    expect(screen.getByText(/take a moment to review/i)).toBeTruthy();
   });
 
   it("moves cards into both boxes and back with pointer dragging", () => {
@@ -147,8 +147,7 @@ describe("onboarding app", () => {
     expect(least.querySelector('[data-location="least"]')).toBeTruthy();
   });
 
-  it("keeps touch scrolling separate from card placement", async () => {
-    const user = userEvent.setup();
+  it("keeps touch movement separate from direct tap placement", () => {
     render(<App />);
     const card = screen.getAllByTestId("value-card")[0];
     fireEvent.pointerDown(card, {
@@ -173,10 +172,9 @@ describe("onboarding app", () => {
     expect(screen.getByTestId("drop-most").querySelector('[data-location="most"]')).toBeNull();
     expect(screen.getByTestId("drop-least").querySelector('[data-location="least"]')).toBeNull();
 
-    await user.click(card);
-    expect(screen.getByRole("group", { name: "Place selected principle" })).toBeTruthy();
-    await user.click(screen.getByRole("button", { name: "Choose Least for selected principle" }));
-    expect(screen.getByTestId("drop-least").querySelector('[data-location="least"]')).toBeTruthy();
+    fireEvent.click(card);
+    expect(screen.getByTestId("drop-most").querySelector('[data-location="most"]')).toBeTruthy();
+    expect(screen.getByTestId("drop-least").querySelector('[data-location="least"]')).toBeNull();
   });
 
   it("uses six distinct position-bound backgrounds with the same accent", () => {
@@ -194,13 +192,13 @@ describe("onboarding app", () => {
     expect(new Set(accents).size).toBe(1);
   });
 
-  it("completes the phase-aware flow and hands the Profile to the first Journal Entry", async () => {
-    const user = userEvent.setup();
+  it("completes the phase-aware flow and hands the Profile to the first Journal Entry", () => {
+    vi.useFakeTimers();
     const onStartJournal = vi.fn();
     render(<App onStartJournal={onStartJournal} />);
     for (let setNumber = 1; setNumber <= 11; setNumber += 1) {
       expect(screen.getByLabelText(`Values · ${setNumber} of 11`)).toBeTruthy();
-      await answerSet(user);
+      answerSet();
       expect(screen.queryByRole("heading", { name: "A pattern is beginning to appear." })).toBeNull();
     }
     const goal = screen.getByRole("radio", {
@@ -208,31 +206,29 @@ describe("onboarding app", () => {
     });
     expect(screen.getByLabelText("Your focus")).toBeTruthy();
     fireEvent.click(goal);
-    await user.click(screen.getByRole("button", { name: "See my compass" }));
+    fireEvent.click(screen.getByRole("button", { name: "See my compass" }));
     expect(screen.getByLabelText("Your compass")).toBeTruthy();
     expect(screen.getByRole("heading", { name: "What sits at the center." })).toBeTruthy();
     expect(screen.queryByText(/^0[1-9]$/)).toBeNull();
-    await user.click(screen.getByRole("button", { name: "Set my compass" }));
+    fireEvent.click(screen.getByRole("button", { name: "Set my compass" }));
     expect(screen.getByRole("heading", { name: "Your compass is ready." })).toBeTruthy();
     expect(screen.queryByRole("button", { name: /start again/i })).toBeNull();
     expect(screen.queryByText(/profile JSON/i)).toBeNull();
-    await user.click(screen.getByRole("button", { name: "Start my first Journal Entry" }));
+    fireEvent.click(screen.getByRole("button", { name: "Start my first Journal Entry" }));
     expect(onStartJournal).toHaveBeenCalledTimes(1);
     expect(onStartJournal.mock.calls[0][0].user_confirmed).toBe(true);
     expect(screen.getByRole("heading", { name: "When did you feel most like yourself?" })).toBeTruthy();
     expect(screen.getByRole("textbox", { name: "First Journal Entry" })).toBeTruthy();
     expect(screen.queryByLabelText("Your compass")).toBeNull();
-    await waitFor(() => {
-      const stored = JSON.parse(localStorage.getItem("twinkl.onboarding.session.v4")!);
-      expect(stored.confirmed_profile.user_confirmed).toBe(true);
-      expect(stored.confirmed_profile.bws_responses).toHaveLength(11);
-      expect(stored.confirmed_profile.bws_results.scores).toHaveProperty(
-        "universalism_nature",
-      );
-      expect(stored.confirmed_profile.value_profile.scores).toHaveProperty(
-        "universalism",
-      );
-      expect(stored.confirmed_profile).not.toHaveProperty("confidence");
-    });
+    const stored = JSON.parse(localStorage.getItem("twinkl.onboarding.session.v4")!);
+    expect(stored.confirmed_profile.user_confirmed).toBe(true);
+    expect(stored.confirmed_profile.bws_responses).toHaveLength(11);
+    expect(stored.confirmed_profile.bws_results.scores).toHaveProperty(
+      "universalism_nature",
+    );
+    expect(stored.confirmed_profile.value_profile.scores).toHaveProperty(
+      "universalism",
+    );
+    expect(stored.confirmed_profile).not.toHaveProperty("confidence");
   });
 });

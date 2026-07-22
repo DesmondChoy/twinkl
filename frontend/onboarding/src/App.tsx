@@ -21,6 +21,7 @@ import {
 } from "./session";
 
 const MILESTONE_COUNT = BWS_SETS.length + 2;
+const AUTO_ADVANCE_DELAY_MS = 1_000;
 const CARD_BACKGROUNDS = [
   "/card-backgrounds/memory-atlas-01.jpg",
   "/card-backgrounds/memory-atlas-02.jpg",
@@ -91,7 +92,8 @@ interface DraggableCardProps {
   location: CardLocation;
   index: number;
   locateTarget: (clientX: number, clientY: number) => DropTarget;
-  picked: boolean;
+  locked: boolean;
+  nextChoice: "most" | "least" | null;
   onDragTarget: (target: DropTarget) => void;
   onMove: (
     value: BwsObjectKey,
@@ -107,7 +109,8 @@ function DraggableCard({
   location,
   index,
   locateTarget,
-  picked,
+  locked,
+  nextChoice,
   onDragTarget,
   onMove,
   onTap,
@@ -125,6 +128,7 @@ function DraggableCard({
   };
 
   const keyboardMove = (event: React.KeyboardEvent<HTMLElement>) => {
+    if (locked) return;
     const key = event.key.toLowerCase();
     if (key === "enter" || key === " ") {
       event.preventDefault();
@@ -144,24 +148,27 @@ function DraggableCard({
   };
 
   const keyboardHint =
-    location === "pool"
-      ? "Tap to choose this card, or press M for Most and L for Least."
-      : `Selected as ${location}. Tap, press Backspace, or press Arrow Down to return it.`;
+    locked
+      ? "Selections saved. Moving to the next group."
+      : location === "pool"
+        ? `Tap to choose this card as ${nextChoice === "least" ? "Least" : "Most"}, or press M for Most and L for Least.`
+        : `Selected as ${location}. Tap, press Backspace, or press Arrow Down to return it.`;
 
   return (
     <article
-      className={`value-card${location === "pool" ? "" : ` value-card--${location} value-card--placed`}${picked ? " value-card--picked" : ""}${dragging ? " value-card--dragging" : ""}`}
+      className={`value-card${location === "pool" ? "" : ` value-card--${location} value-card--placed`}${locked ? " value-card--locked" : ""}${dragging ? " value-card--dragging" : ""}`}
       data-testid="value-card"
       data-value={value}
       data-location={location}
       data-background-position={index}
       role="button"
-      tabIndex={0}
-      aria-pressed={location === "pool" ? picked : undefined}
+      tabIndex={locked ? -1 : 0}
+      aria-disabled={locked || undefined}
       aria-label={`${phrase}. ${keyboardHint}`}
       onKeyDown={keyboardMove}
       onClick={(event) => {
         event.stopPropagation();
+        if (locked) return;
         if (suppressClickRef.current) {
           suppressClickRef.current = false;
           return;
@@ -169,6 +176,7 @@ function DraggableCard({
         onTap(value, location);
       }}
       onPointerDown={(event) => {
+        if (locked) return;
         if (event.pointerType === "touch") return;
         if (event.pointerType === "mouse" && event.button !== 0) return;
         dragRef.current = { pointerId: event.pointerId, x: event.clientX, y: event.clientY, moved: false };
@@ -234,7 +242,6 @@ interface AppProps {
 export default function App({ onStartJournal }: AppProps = {}) {
   const [session, setSession] = useState<OnboardingSession>(() => loadOrCreateSession());
   const [activeDrop, setActiveDrop] = useState<DropTarget>(null);
-  const [pickedValue, setPickedValue] = useState<BwsObjectKey | null>(null);
   const [journalStarted, setJournalStarted] = useState(false);
   const [journalDraft, setJournalDraft] = useState("");
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -242,6 +249,7 @@ export default function App({ onStartJournal }: AppProps = {}) {
   const leastDropRef = useRef<HTMLElement>(null);
   const selectionRef = useRef<HTMLDivElement>(null);
   const pendingCardFocusRef = useRef<{ value: BwsObjectKey; location: CardLocation } | null>(null);
+  const choicesCompletedAtRef = useRef<number | null>(null);
   const milestone = milestoneFor(session);
   const currentSetIndex = session.set_order[session.set_index];
   const currentSet = BWS_SETS[currentSetIndex];
@@ -249,6 +257,8 @@ export default function App({ onStartJournal }: AppProps = {}) {
   const availableValues = currentOrder.filter(
     (value) => value !== session.draft_best && value !== session.draft_worst,
   );
+  const isReviewing = session.stage === "set" && Boolean(session.draft_best && session.draft_worst);
+  const nextChoice: "most" | "least" = session.draft_best ? "least" : "most";
 
   const update = (patch: Partial<OnboardingSession>) => {
     setSession((current) => ({ ...current, ...patch }));
@@ -286,6 +296,7 @@ export default function App({ onStartJournal }: AppProps = {}) {
   const restart = () => {
     if (!window.confirm("Start over and clear these onboarding choices?")) return;
     clearSession();
+    choicesCompletedAtRef.current = null;
     setJournalStarted(false);
     setJournalDraft("");
     setSession(createSession());
@@ -318,11 +329,15 @@ export default function App({ onStartJournal }: AppProps = {}) {
     to: CardLocation,
     focusAfterMove = false,
   ) => {
-    if (from === to) return;
+    if (from === to || isReviewing) return;
+    const otherChoice = to === "most" ? session.draft_worst : session.draft_best;
+    choicesCompletedAtRef.current = to !== "pool" && otherChoice !== null && otherChoice !== value
+      ? Date.now()
+      : null;
     if (focusAfterMove) {
       pendingCardFocusRef.current = { value, location: to };
     }
-    setPickedValue(null);
+    setActiveDrop(null);
     setSession((current) => {
       if (to === "pool") {
         return from === "pool" ? current : clearChoice(current, from);
@@ -333,19 +348,20 @@ export default function App({ onStartJournal }: AppProps = {}) {
 
   const submitSet = () => {
     if (!session.draft_best || !session.draft_worst) return;
-    setPickedValue(null);
+    const choicesCompletedAt = choicesCompletedAtRef.current ?? Date.now();
     const response = {
       set_number: currentSet.setNumber,
       items: [...currentSet.items],
       item_order_shown: [...currentOrder],
       selected_best: session.draft_best,
       selected_worst: session.draft_worst,
-      response_time_ms: Math.max(0, Math.round(Date.now() - session.stage_started_at_ms)),
+      response_time_ms: Math.max(0, Math.round(choicesCompletedAt - session.stage_started_at_ms)),
     };
     const responses = [...session.responses.filter((item) => item.set_number !== currentSet.setNumber), response].sort(
       (left, right) => left.set_number - right.set_number,
     );
     const isLastSet = session.set_index === BWS_SETS.length - 1;
+    choicesCompletedAtRef.current = null;
     update({
       responses,
       stage: isLastSet ? "goal" : "set",
@@ -355,6 +371,12 @@ export default function App({ onStartJournal }: AppProps = {}) {
       stage_started_at_ms: Date.now(),
     });
   };
+
+  useEffect(() => {
+    if (!isReviewing) return;
+    const timer = window.setTimeout(submitSet, AUTO_ADVANCE_DELAY_MS);
+    return () => window.clearTimeout(timer);
+  }, [isReviewing, session.set_index, session.draft_best, session.draft_worst]);
 
   const confirm = () => {
     if (!session.goal_category) return;
@@ -375,16 +397,12 @@ export default function App({ onStartJournal }: AppProps = {}) {
   };
 
   const tapCard = (value: BwsObjectKey, location: CardLocation) => {
+    if (isReviewing) return;
     if (location === "pool") {
-      setPickedValue((current) => current === value ? null : value);
+      moveValue(value, "pool", nextChoice, true);
       return;
     }
-    moveValue(value, location, "pool");
-  };
-
-  const placePicked = (target: "most" | "least") => {
-    if (!pickedValue) return;
-    moveValue(pickedValue, "pool", target);
+    moveValue(value, location, "pool", true);
   };
 
   const startFirstJournal = () => {
@@ -398,20 +416,16 @@ export default function App({ onStartJournal }: AppProps = {}) {
     setJournalStarted(true);
   };
 
-  const cardPrompt = pickedValue
-    ? "Where does this principle sit for you in this group? Choose Most or Least."
-    : !session.draft_best && !session.draft_worst
+  const cardPrompt = isReviewing
+    ? "Choices set. Take a moment to review them—we’ll continue automatically."
+    : !session.draft_best
       ? session.set_index === 0
-        ? "Across 11 groups, choose what matters most and least as a guide for your life. Some cards will return."
-        : "Take your time. Choose what matters most and least as a guide for your life in this group."
-      : !session.draft_best
-        ? "Choose the principle that matters most to you in this group."
-        : !session.draft_worst
-          ? "Now choose the principle that matters least to you in this group."
-          : "Both choices are set. You can move either card if you want to reconsider.";
+        ? "Start with Most. Across 11 groups, tap what matters most, then least, as a guide for your life. Some cards will return."
+        : "Start with Most. Tap the principle that matters most to you in this group."
+      : "Now choose Least. Tap the principle that matters least to you in this group.";
 
   return (
-    <div className="app-shell">
+    <div className={`app-shell app-shell--${journalStarted ? "journal" : session.stage}`}>
       <header className="topbar">
         <a className="wordmark" href="#main">
           twinkl<span>·</span>
@@ -446,12 +460,12 @@ export default function App({ onStartJournal }: AppProps = {}) {
                 </span>
                 <span>{cardPrompt}</span>
               </p>
-              <div className="choice-board">
+              <div className={`choice-board${isReviewing ? " choice-board--reviewing" : ""}`}>
                 <section
                   ref={mostDropRef}
-                  className={`drop-box drop-box--most${activeDrop === "most" ? " drop-box--active" : ""}${pickedValue ? " drop-box--ready" : ""}`}
+                  className={`drop-box drop-box--most${activeDrop === "most" ? " drop-box--active" : ""}${!session.draft_best ? " drop-box--guided" : ""}`}
                   data-testid="drop-most"
-                  aria-label="Most"
+                  aria-label={`Most${!session.draft_best ? ", choose this first" : ", selected"}`}
                 >
                   <div className="drop-box__label">
                     <strong>Most</strong>
@@ -463,24 +477,15 @@ export default function App({ onStartJournal }: AppProps = {}) {
                       location="most"
                       index={currentOrder.indexOf(session.draft_best)}
                       locateTarget={locateTarget}
-                      picked={false}
+                      locked={isReviewing}
+                      nextChoice={null}
                       onDragTarget={setActiveDrop}
                       onMove={moveValue}
                       onTap={tapCard}
                     />
                   ) : (
-                    <p>Drop a card here</p>
+                    <p>Tap a card first</p>
                   )}
-                  {pickedValue && !session.draft_best ? (
-                    <button
-                      className="drop-box__tap-target"
-                      type="button"
-                      aria-label={`Place ${BWS_OBJECTS[pickedValue].descriptor} in Most`}
-                      onClick={() => placePicked("most")}
-                    >
-                      Tap to place
-                    </button>
-                  ) : null}
                 </section>
                 <div
                   ref={selectionRef}
@@ -488,11 +493,8 @@ export default function App({ onStartJournal }: AppProps = {}) {
                   data-testid="selection-area"
                 >
                   <div className="selection-area__label">
-                    <strong>{pickedValue ? "Principle selected" : "Take a look"}</strong>
-                    <span>{pickedValue ? "Choose Most or Least" : "Choose one for each place"}</span>
-                    <span className="selection-area__touch-hint">
-                      {pickedValue ? "Choose Most or Least below" : "Tap to choose · Scroll to explore"}
-                    </span>
+                    <strong>{isReviewing ? "Choices set" : nextChoice === "most" ? "Choose Most" : "Choose Least"}</strong>
+                    <span>{isReviewing ? "Next group in a moment" : "Tap one card"}</span>
                   </div>
                   <div className="card-deck">
                     {availableValues.map((value) => (
@@ -502,7 +504,8 @@ export default function App({ onStartJournal }: AppProps = {}) {
                         index={currentOrder.indexOf(value)}
                         key={value}
                         locateTarget={locateTarget}
-                        picked={pickedValue === value}
+                        locked={isReviewing}
+                        nextChoice={nextChoice}
                         onDragTarget={setActiveDrop}
                         onMove={moveValue}
                         onTap={tapCard}
@@ -512,9 +515,9 @@ export default function App({ onStartJournal }: AppProps = {}) {
                 </div>
                 <section
                   ref={leastDropRef}
-                  className={`drop-box drop-box--least${activeDrop === "least" ? " drop-box--active" : ""}${pickedValue ? " drop-box--ready" : ""}`}
+                  className={`drop-box drop-box--least${activeDrop === "least" ? " drop-box--active" : ""}${session.draft_best && !session.draft_worst ? " drop-box--guided" : ""}`}
                   data-testid="drop-least"
-                  aria-label="Least"
+                  aria-label={`Least${session.draft_worst ? ", selected" : session.draft_best ? ", choose this next" : ", choose this second"}`}
                 >
                   <div className="drop-box__label">
                     <strong>Least</strong>
@@ -526,58 +529,17 @@ export default function App({ onStartJournal }: AppProps = {}) {
                       location="least"
                       index={currentOrder.indexOf(session.draft_worst)}
                       locateTarget={locateTarget}
-                      picked={false}
+                      locked={isReviewing}
+                      nextChoice={null}
                       onDragTarget={setActiveDrop}
                       onMove={moveValue}
                       onTap={tapCard}
                     />
                   ) : (
-                    <p>Drop a card here</p>
+                    <p>{session.draft_best ? "Tap a card next" : "Then choose here"}</p>
                   )}
-                  {pickedValue && !session.draft_worst ? (
-                    <button
-                      className="drop-box__tap-target"
-                      type="button"
-                      aria-label={`Place ${BWS_OBJECTS[pickedValue].descriptor} in Least`}
-                      onClick={() => placePicked("least")}
-                    >
-                      Tap to place
-                    </button>
-                  ) : null}
                 </section>
               </div>
-              <div className="actions actions--end">
-                <button
-                  className="button button--primary"
-                  type="button"
-                  disabled={!session.draft_best || !session.draft_worst}
-                  onClick={submitSet}
-                >
-                  Continue
-                </button>
-              </div>
-            </div>
-          ) : null}
-
-          {session.stage === "set" && pickedValue ? (
-            <div className="touch-choice-bar" role="group" aria-label="Place selected principle">
-              <span>Place selected card</span>
-              <button
-                className="touch-choice-bar__most"
-                type="button"
-                aria-label="Choose Most for selected principle"
-                onClick={() => placePicked("most")}
-              >
-                Most
-              </button>
-              <button
-                className="touch-choice-bar__least"
-                type="button"
-                aria-label="Choose Least for selected principle"
-                onClick={() => placePicked("least")}
-              >
-                Least
-              </button>
             </div>
           ) : null}
 

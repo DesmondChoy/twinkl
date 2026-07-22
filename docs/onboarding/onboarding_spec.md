@@ -126,8 +126,7 @@ are protected by a focused test. Twinkl changes only value-neutral framing:
 - instructions retain the published comparison frame: Most and Least
   important as a guiding principle in the user's life; and
 - the changing instruction appears in a visually distinct `Next step` callout
-  and uses conversational language for choosing, placing, and reconsidering a
-  card.
+  and names the required Most-then-Least tap.
 
 ### 3.3 Project-report rationale
 
@@ -160,14 +159,21 @@ Six cards begin in the selection area. The user places one card in `Most` and a
 different card in `Least`.
 
 - Mouse dragging works between the selection area and both boxes.
-- On touch-first devices, vertical swipes over cards scroll the page rather
-  than moving a card. Tapping a card opens thumb-reachable Most and Least
-  placement controls at the bottom of the viewport.
-- On narrow screens, Most and Least appear together before the card grid.
-- A placed card can return to the selection area or move to the other box.
+- Tapping a card places the first choice in Most and the second choice in
+  Least, without a separate placement or Continue control.
+- On narrow screens, Most and Least appear together before a compact two-column
+  card grid. Both boxes and all six initial cards fit within the viewport, so
+  the 11 assessment groups do not require vertical scrolling.
+- The active empty box glows: Most before the first choice, then Least before
+  the second choice.
+- Before both choices are set, a placed card can return to the selection area
+  or move to the other box.
 - Moving a card into an occupied box replaces the prior choice.
 - `M` and `L` place a focused card; Backspace, Delete, or Arrow Down returns it.
-- `Continue` is disabled until both distinct choices exist.
+- Once both distinct choices exist, the cards remain visible and locked for one
+  second before the next randomized group appears automatically.
+- `response_time_ms` is captured when the second choice is made; the fixed
+  one-second review is excluded.
 - Keyboard focus is visible and reduced-motion preferences are respected.
 
 The app does not show preliminary results between groups. This avoids making
