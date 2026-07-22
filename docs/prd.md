@@ -6,7 +6,7 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 
 ## Implementation Status
 
-*Last updated: 2026-07-20*
+*Last updated: 2026-07-22*
 
 | Feature | Status | Details |
 |---------|--------|---------|
@@ -19,6 +19,7 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 | **Drift Detector** | ✅ Complete | The capstone POC implementation is complete and wired. It persists versioned Weekly Drift Reviewer Decisions without VIF Critic input, applies the deterministic two-consecutive-Conflict rule across week boundaries, and handles extension, recovery, abstention, deduplication, and active, recovered, uncertain, or mixed delivery. The fixed Luna-low model contract retains AI-reviewed synthetic development evidence; no fresh final test or deployment approval is claimed. The former VIF Critic crash/rut/evolution runtime is explicitly deprecated and retained only for historical compatibility. |
 | **Weekly Coach** | 🧪 Experimental | The approved runtime sends deterministic Drift Detector output based on Weekly Drift Reviewer Decisions into the Weekly Digest and optional Weekly Coach reflection. The Weekly Digest cites supporting Journal Entries without VIF Critic or LLM-Judge numeric summaries. Explanation validation depth and product-facing orchestration remain incomplete; no fresh final test or deployment approval is claimed. |
 | **Onboarding (SVBWS Values Assessment)** | 🧪 Experimental | Standalone React POC implements the published 11-group, six-object balanced SVBWS design, then presents structured goal selection, a label-free Core Value summary, and a first Journal Entry handoff. It randomizes group and card order, stores raw 11-object BWS results separately from the ten-value Profile transformation, and omits midpoint feedback and unsupported confidence claims. The approved runtime can import Core Values from a saved confirmed Profile; automated browser-to-service storage is outside the capstone. It is a research-grounded pilot instrument, not a validated Twinkl instrument. [Full spec](onboarding/onboarding_spec.md) |
+| **Experience and Inspect React Demo** | 📘 Specified | One React capstone demo will present the product experience and the AI architecture from the same session. Experience covers onboarding, Journal Entries, persona replay, displayed nudges and responses, Drift, and the Weekly Digest. Inspect exposes event-linked prompts, validated Weekly Drift Reviewer Decisions, Drift Detector steps, provenance, latency, and errors without adding VIF Critic input to the user-facing path. [Design](demo/experience_inspect_app.md) |
 | **Embedding Explorer** | ✅ Complete | Interactive 3D visualization of VIF hidden-layer and SBERT embedding spaces; self-contained HTML with Three.js |
 | **Journaling Anomaly Radar** | ❌ Not Started | Cadence/gap detection |
 | **Goal-aligned Inspiration Feed** | ❌ Not Started | External API integration |
@@ -339,6 +340,7 @@ listed here is planned.
 | [weekly/weekly_digest_generation.md](weekly/weekly_digest_generation.md) | Weekly Digest contract, runtime commands, and generated files |
 | [demo/weekly_drift_review_app.md](demo/weekly_drift_review_app.md) | Read-only comparison of frozen Weekly Drift Reviewer development Runs, including the fixed Luna-low setup |
 | [demo/review_app.md](demo/review_app.md) | Runtime Demo Review App for the local VIF Critic-to-Weekly-Digest path |
+| [demo/experience_inspect_app.md](demo/experience_inspect_app.md) | Specified React capstone demo with synchronized Experience and Inspect views |
 | [01_value_evolution.md](evolution/01_value_evolution.md) | Concept note for a possible future filter distinguishing value evolution from Drift |
 | [onboarding_spec.md](onboarding/onboarding_spec.md) | BWS-based onboarding flow, item design, and data output schema |
 | [capstone_report/](capstone_report/) | Current capstone report work and guidance for new reports |

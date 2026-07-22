@@ -161,10 +161,15 @@ compares student-visible, historical, and upper-bound context setups against
 the local MLP without feeding production runtime scores.
 
 The product shell is partial. A standalone React POC now runs the complete local
-onboarding flow and produces a resumable Profile in the browser. Durable
-user storage, the handoff into the Weekly Drift Reviewer, the surrounding React
-app, and the Journaling UI remain unbuilt. The conversational nudging engine is
-another experimental slice without the Journaling UI it would attach to.
+onboarding flow and produces a resumable Profile in the browser. The specified
+[Experience and Inspect React Demo](../demo/experience_inspect_app.md) extends
+that implementation into one shared session: Experience presents onboarding,
+Journal Entries, persona replay, displayed nudges and responses, Drift, and the
+Weekly Digest, while Inspect presents the event-linked backend work that
+produced the selected result. Durable user storage, the Python API, the
+surrounding React app, and the Journaling UI remain unbuilt. The conversational
+nudging engine is another experimental slice without the Journaling UI it would
+attach to.
 
 Drift is two consecutive Conflicts on the same Core Value. Under the approved
 architecture, the Weekly Drift Reviewer makes those Conflict decisions without
@@ -194,5 +199,6 @@ feedback should update the profile over time. See
 [`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md),
 [`docs/vif/03_model_training.md`](../vif/03_model_training.md),
 [`docs/weekly/weekly_digest_generation.md`](../weekly/weekly_digest_generation.md),
+[`docs/demo/experience_inspect_app.md`](../demo/experience_inspect_app.md),
 [`docs/demo/weekly_drift_review_app.md`](../demo/weekly_drift_review_app.md),
 and [`docs/demo/review_app.md`](../demo/review_app.md).
