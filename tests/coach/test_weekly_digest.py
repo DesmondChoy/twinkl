@@ -6,7 +6,7 @@ from pathlib import Path
 
 import polars as pl
 
-from src.coach.schemas import DriftDetectionResult
+from src.coach.schemas import CoachNarrative, DriftDetectionResult, WeeklyDigest
 from src.coach.weekly_digest import (
     attach_coach_artifacts,
     build_weekly_digest,
@@ -531,3 +531,58 @@ def test_build_weekly_digest_prefers_upstream_drift_result(tmp_path: Path):
     assert digest.mode_source == "drift_detector"
     assert digest.mode_rationale.startswith("Upstream detector")
     assert digest.drift_reasons == ["delta_breach", "low_uncertainty"]
+
+
+def _minimal_digest() -> WeeklyDigest:
+    return WeeklyDigest(
+        persona_id="deadbeef",
+        week_start="2025-01-01",
+        week_end="2025-01-07",
+        response_mode="stable",
+        mode_source="fallback_heuristic",
+        mode_rationale="No confirmed Drift this week.",
+        n_entries=3,
+        overall_mean=0.4,
+        top_tensions=[],
+        top_strengths=["benevolence"],
+        dimensions=[],
+        evidence=[],
+    )
+
+
+def test_validation_flags_raw_schwartz_value_labels():
+    digest = _minimal_digest()
+    leaking = CoachNarrative(
+        weekly_mirror="A steady week of showing up for other people.",
+        tension_explanation=(
+            "Your care for family resonates with Benevolence and the steady "
+            "rituals reflect Tradition."
+        ),
+        reflective_question="What made showing up feel natural this week?",
+    )
+
+    validation = validate_weekly_digest_narrative(digest, leaking)
+
+    assert not validation.value_leakage_passed
+    leak_check = next(c for c in validation.checks if c.name == "value_leakage")
+    assert "Benevolence" in leak_check.details
+    assert "Tradition" in leak_check.details
+
+
+def test_validation_passes_when_narrative_uses_lived_language():
+    digest = _minimal_digest()
+    clean = CoachNarrative(
+        weekly_mirror=(
+            'This week held steady around caring for others, like when you '
+            '"called my mom and helped a colleague debug."'
+        ),
+        tension_explanation=(
+            "Nothing pulled against what matters to you this week; the pattern "
+            'was showing up for people, as when you "helped a colleague debug."'
+        ),
+        reflective_question="What let you keep showing up with intention?",
+    )
+
+    validation = validate_weekly_digest_narrative(digest, clean)
+
+    assert validation.value_leakage_passed
