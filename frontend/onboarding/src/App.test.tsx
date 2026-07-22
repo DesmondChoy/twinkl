@@ -2,6 +2,7 @@ import { act, fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import App from "./App";
+import { SESSION_STORAGE_KEY } from "./session";
 
 vi.stubGlobal("confirm", () => true);
 
@@ -25,6 +26,11 @@ describe("onboarding app", () => {
     expect(screen.queryByText(/saved only in this browser/i)).toBeNull();
     expect(screen.queryByText("Hedonism")).toBeNull();
     expect(screen.queryByText("Universalism")).toBeNull();
+    const inspect = screen.getByRole("button", { name: /inspect/i });
+    expect(inspect.getAttribute("aria-disabled")).toBe("true");
+    expect(screen.getByText("Available after Profile confirmation")).toBeTruthy();
+    fireEvent.click(inspect);
+    expect(screen.queryByRole("heading", { name: "The trail starts here." })).toBeNull();
     expect(screen.getByTestId("drop-most").classList.contains("drop-box--guided")).toBe(true);
     expect(screen.getByTestId("drop-least").classList.contains("drop-box--guided")).toBe(false);
   });
@@ -58,7 +64,7 @@ describe("onboarding app", () => {
     act(() => vi.advanceTimersByTime(1));
     expect(screen.getByLabelText("Values · 2 of 11")).toBeTruthy();
     expect(screen.getAllByTestId("value-card")).toHaveLength(6);
-    const stored = JSON.parse(localStorage.getItem("twinkl.onboarding.session.v4")!);
+    const stored = JSON.parse(localStorage.getItem(SESSION_STORAGE_KEY)!);
     expect(stored.responses[0].response_time_ms).toBe(750);
   });
 
@@ -192,10 +198,10 @@ describe("onboarding app", () => {
     expect(new Set(accents).size).toBe(1);
   });
 
-  it("completes the phase-aware flow and hands the Profile to the first Journal Entry", () => {
+  it("completes the phase-aware flow and hands the Profile to the first Journal Entry", async () => {
     vi.useFakeTimers();
     const onStartJournal = vi.fn();
-    render(<App onStartJournal={onStartJournal} />);
+    const { unmount } = render(<App onStartJournal={onStartJournal} />);
     for (let setNumber = 1; setNumber <= 11; setNumber += 1) {
       expect(screen.getByLabelText(`Values · ${setNumber} of 11`)).toBeTruthy();
       answerSet();
@@ -212,16 +218,32 @@ describe("onboarding app", () => {
     expect(screen.queryByText(/^0[1-9]$/)).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: "Set my compass" }));
     expect(screen.getByRole("heading", { name: "Your compass is ready." })).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Inspect" }).getAttribute("aria-disabled")).toBe("false");
     expect(screen.queryByRole("button", { name: /start again/i })).toBeNull();
     expect(screen.queryByText(/profile JSON/i)).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: "Start my first Journal Entry" }));
     expect(onStartJournal).toHaveBeenCalledTimes(1);
     expect(onStartJournal.mock.calls[0][0].user_confirmed).toBe(true);
     expect(screen.getByRole("heading", { name: "When did you feel most like yourself?" })).toBeTruthy();
-    expect(screen.getByRole("textbox", { name: "First Journal Entry" })).toBeTruthy();
+    const journal = screen.getByRole("textbox", { name: "First Journal Entry" });
+    fireEvent.change(journal, { target: { value: "A quiet walk helped me think clearly." } });
     expect(screen.queryByLabelText("Your compass")).toBeNull();
-    const stored = JSON.parse(localStorage.getItem("twinkl.onboarding.session.v4")!);
+    const inspect = screen.getByRole("button", { name: "Inspect" });
+    inspect.focus();
+    vi.useRealTimers();
+    const user = userEvent.setup();
+    await user.keyboard("{Enter}");
+    expect(screen.getByRole("heading", { name: "The trail starts here." })).toBeTruthy();
+    expect(document.activeElement).toBe(screen.getByRole("heading", { name: "The trail starts here." }));
+    expect(onStartJournal).toHaveBeenCalledTimes(1);
+    fireEvent.click(screen.getByRole("button", { name: "Experience" }));
+    expect((screen.getByRole("textbox", { name: "First Journal Entry" }) as HTMLTextAreaElement).value)
+      .toBe("A quiet walk helped me think clearly.");
+    const stored = JSON.parse(localStorage.getItem(SESSION_STORAGE_KEY)!);
     expect(stored.confirmed_profile.user_confirmed).toBe(true);
+    expect(stored.experience.active_view).toBe("experience");
+    expect(stored.experience.journal_started).toBe(true);
+    expect(stored.experience.journal_draft).toBe("A quiet walk helped me think clearly.");
     expect(stored.confirmed_profile.bws_responses).toHaveLength(11);
     expect(stored.confirmed_profile.bws_results.scores).toHaveProperty(
       "universalism_nature",
@@ -230,5 +252,14 @@ describe("onboarding app", () => {
       "universalism",
     );
     expect(stored.confirmed_profile).not.toHaveProperty("confidence");
+
+    fireEvent.click(screen.getByRole("button", { name: "Inspect" }));
+    unmount();
+    render(<App onStartJournal={onStartJournal} />);
+    expect(screen.getByRole("heading", { name: "The trail starts here." })).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: "Experience" }));
+    expect((screen.getByRole("textbox", { name: "First Journal Entry" }) as HTMLTextAreaElement).value)
+      .toBe("A quiet walk helped me think clearly.");
+    expect(onStartJournal).toHaveBeenCalledTimes(1);
   });
 });

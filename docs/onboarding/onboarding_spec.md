@@ -334,9 +334,10 @@ objects per response, distinct valid Most and Least choices, non-negative
 integer response time, a valid goal, and explicit summary confirmation.
 Validation rebuilds the Profile deterministically and rejects any mismatch.
 
-The resumable browser session uses schema version `4` and storage key
-`twinkl.onboarding.session.v4`. It stores the randomized group order and each
-canonical group's randomized card order.
+The resumable browser session uses schema version `5` and storage key
+`twinkl.onboarding.session.v5`. It stores the randomized group order, each
+canonical group's randomized card order, and the shared Experience and Inspect
+view state. Version `4` onboarding sessions migrate without losing responses.
 
 ## 7. Integration Status
 

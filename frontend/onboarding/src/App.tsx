@@ -12,13 +12,10 @@ import {
 } from "./domain";
 import {
   clearChoice,
-  clearSession,
-  createSession,
-  loadOrCreateSession,
-  persistSession,
   setChoice,
   type OnboardingSession,
 } from "./session";
+import { SharedSessionProvider, useSharedSession } from "./sharedSession";
 
 const MILESTONE_COUNT = BWS_SETS.length + 2;
 const AUTO_ADVANCE_DELAY_MS = 1_000;
@@ -239,11 +236,15 @@ interface AppProps {
   onStartJournal?: (profile: NonNullable<OnboardingSession["confirmed_profile"]>) => void;
 }
 
-export default function App({ onStartJournal }: AppProps = {}) {
-  const [session, setSession] = useState<OnboardingSession>(() => loadOrCreateSession());
+function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
+  const {
+    session,
+    updateSession,
+    updateExperience,
+    showView,
+    restart: restartSession,
+  } = useSharedSession();
   const [activeDrop, setActiveDrop] = useState<DropTarget>(null);
-  const [journalStarted, setJournalStarted] = useState(false);
-  const [journalDraft, setJournalDraft] = useState("");
   const headingRef = useRef<HTMLHeadingElement>(null);
   const mostDropRef = useRef<HTMLElement>(null);
   const leastDropRef = useRef<HTMLElement>(null);
@@ -251,6 +252,10 @@ export default function App({ onStartJournal }: AppProps = {}) {
   const pendingCardFocusRef = useRef<{ value: BwsObjectKey; location: CardLocation } | null>(null);
   const choicesCompletedAtRef = useRef<number | null>(null);
   const milestone = milestoneFor(session);
+  const journalStarted = session.experience.journal_started;
+  const journalDraft = session.experience.journal_draft;
+  const activeView = session.experience.active_view;
+  const inspectAvailable = session.confirmed_profile !== null;
   const currentSetIndex = session.set_order[session.set_index];
   const currentSet = BWS_SETS[currentSetIndex];
   const currentOrder = session.displayed_orders[currentSetIndex];
@@ -261,16 +266,12 @@ export default function App({ onStartJournal }: AppProps = {}) {
   const nextChoice: "most" | "least" = session.draft_best ? "least" : "most";
 
   const update = (patch: Partial<OnboardingSession>) => {
-    setSession((current) => ({ ...current, ...patch }));
+    updateSession(patch);
   };
 
   useEffect(() => {
-    persistSession(session);
-  }, [session]);
-
-  useEffect(() => {
     headingRef.current?.focus({ preventScroll: true });
-  }, [session.stage, session.set_index, journalStarted]);
+  }, [session.stage, session.set_index, journalStarted, activeView]);
 
   useLayoutEffect(() => {
     const target = pendingCardFocusRef.current;
@@ -295,11 +296,8 @@ export default function App({ onStartJournal }: AppProps = {}) {
 
   const restart = () => {
     if (!window.confirm("Start over and clear these onboarding choices?")) return;
-    clearSession();
     choicesCompletedAtRef.current = null;
-    setJournalStarted(false);
-    setJournalDraft("");
-    setSession(createSession());
+    restartSession();
   };
 
   const locateTarget = (clientX: number, clientY: number): DropTarget => {
@@ -338,12 +336,10 @@ export default function App({ onStartJournal }: AppProps = {}) {
       pendingCardFocusRef.current = { value, location: to };
     }
     setActiveDrop(null);
-    setSession((current) => {
-      if (to === "pool") {
-        return from === "pool" ? current : clearChoice(current, from);
-      }
-      return setChoice(current, to, value);
-    });
+    const nextSession = to === "pool"
+      ? from === "pool" ? session : clearChoice(session, from)
+      : setChoice(session, to, value);
+    updateSession(nextSession);
   };
 
   const submitSet = () => {
@@ -413,7 +409,7 @@ export default function App({ onStartJournal }: AppProps = {}) {
         detail: session.confirmed_profile,
       }),
     );
-    setJournalStarted(true);
+    updateExperience({ journal_started: true });
   };
 
   const cardPrompt = isReviewing
@@ -425,17 +421,44 @@ export default function App({ onStartJournal }: AppProps = {}) {
       : "Now choose Least. Tap the principle that matters least to you in this group.";
 
   return (
-    <div className={`app-shell app-shell--${journalStarted ? "journal" : session.stage}`}>
+    <div className={`app-shell app-shell--${activeView === "inspect" ? "inspect" : journalStarted ? "journal" : session.stage}`}>
       <header className="topbar">
         <a className="wordmark" href="#main">
           twinkl<span>·</span>
         </a>
+        <nav className="view-switcher" aria-label="Demo view">
+          <button
+            className={activeView === "experience" ? "view-switcher__option view-switcher__option--active" : "view-switcher__option"}
+            type="button"
+            aria-pressed={activeView === "experience"}
+            onClick={() => showView("experience")}
+          >
+            Experience
+          </button>
+          <button
+            className={activeView === "inspect" ? "view-switcher__option view-switcher__option--active" : "view-switcher__option"}
+            type="button"
+            aria-pressed={activeView === "inspect"}
+            aria-disabled={!inspectAvailable}
+            aria-describedby={!inspectAvailable ? "inspect-availability" : undefined}
+            title={!inspectAvailable ? "Available after Profile confirmation" : undefined}
+            onClick={() => showView("inspect")}
+          >
+            <span>Inspect</span>
+            {!inspectAvailable ? <small>After Profile</small> : null}
+          </button>
+          {!inspectAvailable ? (
+            <span className="sr-only" id="inspect-availability">
+              Available after Profile confirmation
+            </span>
+          ) : null}
+        </nav>
         <button className="restart" type="button" onClick={restart}>
           Start over
         </button>
       </header>
 
-      <main id="main" className="layout">
+      {activeView === "experience" ? <main id="main" className="layout">
         <aside className="instrument-panel">
           <Compass milestone={milestone} />
           <div className="instrument-copy">
@@ -633,12 +656,57 @@ export default function App({ onStartJournal }: AppProps = {}) {
                 aria-describedby="first-journal-help"
                 placeholder="Start with the moment…"
                 value={journalDraft}
-                onChange={(event) => setJournalDraft(event.target.value)}
+                onChange={(event) => updateExperience({ journal_draft: event.target.value })}
               />
             </div>
           ) : null}
         </section>
-      </main>
+      </main> : (
+        <main id="main" className="layout layout--inspect">
+          <aside className="instrument-panel instrument-panel--inspect">
+            <div className="inspect-lens" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </div>
+            <div className="instrument-copy">
+              <p className="eyebrow">Same session</p>
+              <h2>Behind this moment.</h2>
+              <p>Inspect follows the exact work connected to what you see in Experience.</p>
+            </div>
+          </aside>
+          <section className="flow-panel flow-panel--inspect">
+            <div className="stage stage--inspect">
+              <p className="eyebrow">Inspect</p>
+              <h1 ref={headingRef} tabIndex={-1}>The trail starts here.</h1>
+              {session.experience.selected_event_id ? (
+                <div className="inspect-selection" data-testid="inspect-selection">
+                  <small>Selected event</small>
+                  <code>{session.experience.selected_event_id}</code>
+                  <p>Its event details will appear here when the Inspect timeline is connected.</p>
+                </div>
+              ) : (
+                <p className="lede">
+                  Profile validation is ready to inspect. Event details will appear as Journal Entries and saved persona runs are connected.
+                </p>
+              )}
+              <div className="actions">
+                <button className="button button--primary" type="button" onClick={() => showView("experience")}>
+                  Return to Experience
+                </button>
+              </div>
+            </div>
+          </section>
+        </main>
+      )}
     </div>
+  );
+}
+
+export default function App(props: AppProps = {}) {
+  return (
+    <SharedSessionProvider>
+      <ExperienceInspectApp {...props} />
+    </SharedSessionProvider>
   );
 }

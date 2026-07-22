@@ -2,10 +2,14 @@
 
 ## Status
 
-This document specifies the capstone demo experience. The React demo is not yet
-implemented. Its versioned React-Python boundary, JSON Schema, and canonical
-fixtures are implemented in [`src/demo/contracts.py`](../../src/demo/contracts.py)
-and [`frontend/onboarding/src/contracts/`](../../frontend/onboarding/src/contracts/).
+This document specifies the capstone demo experience. The shared React
+Experience and Inspect shell, resumable client session, view selector, and
+focused Inspect navigation are implemented. Journal Entry processing, persona
+replay, weekly review, and the event-linked Inspect timeline remain tracked
+implementation work. The versioned React-Python boundary, JSON Schema, and
+canonical fixtures are implemented in
+[`src/demo/contracts.py`](../../src/demo/contracts.py) and
+[`frontend/onboarding/src/contracts/`](../../frontend/onboarding/src/contracts/).
 The existing React onboarding implementation and the
 [Onboarding Specification](../onboarding/onboarding_spec.md) remain
 authoritative for the Schwartz Values Best-Worst Survey (SVBWS), Profile, and
