@@ -2,12 +2,19 @@
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, field
 from itertools import groupby
 from pathlib import Path
 from typing import Any
 
-from src.annotation_tool.data_loader import get_ordered_entries, load_entries_with_warnings
+import polars as pl
+
+from src.annotation_tool.data_loader import (
+    get_ordered_entries,
+    load_entries_with_warnings,
+)
+from src.models.judge import SCHWARTZ_VALUE_ORDER
 from src.wrangling.parse_wrangled_data import ParseWarning
 
 
@@ -127,3 +134,34 @@ def summarize_warnings(warnings: list[ParseWarning], limit: int = 3) -> str | No
     if len(warnings) > limit:
         summary += " | ..."
     return summary
+
+
+def load_judge_labels_for_persona(
+    persona_id: str,
+    path: str | Path = "logs/judge_labels/judge_labels.parquet",
+) -> dict[int, dict[str, tuple[int, str]]]:
+    """Historical LLM-Judge VIF Labels for one persona, keyed by t_index.
+
+    Each inner dict maps Schwartz dimension -> (score, rationale) for the
+    dimensions that were labeled non-neutral. This is the deprecated VIF
+    Critic training/reference signal (LLM-Judge VIF Label) — display it as
+    historical only, never as the Weekly Drift Reviewer Decision.
+    """
+    labels_path = Path(path)
+    if not labels_path.exists():
+        return {}
+
+    frame = pl.read_parquet(labels_path).filter(pl.col("persona_id") == persona_id)
+    if frame.is_empty():
+        return {}
+
+    labels_by_entry: dict[int, dict[str, tuple[int, str]]] = {}
+    for row in frame.iter_rows(named=True):
+        rationales = json.loads(row.get("rationales_json") or "{}")
+        dims: dict[str, tuple[int, str]] = {}
+        for dimension in SCHWARTZ_VALUE_ORDER:
+            score = row.get(f"alignment_{dimension}")
+            if score:
+                dims[dimension] = (int(score), rationales.get(dimension, ""))
+        labels_by_entry[int(row["t_index"])] = dims
+    return labels_by_entry

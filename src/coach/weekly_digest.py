@@ -14,6 +14,7 @@ import re
 from collections.abc import Awaitable, Callable
 from datetime import date, datetime, timedelta
 from pathlib import Path
+from typing import Any
 
 import polars as pl
 import yaml
@@ -115,18 +116,18 @@ def _summarize_value_context(
     return lines
 
 
-def _load_persona_context(
-    persona_id: str,
-    wrangled_dir: Path,
+def _build_persona_context(
+    profile: dict[str, Any],
+    entries: list[dict[str, Any]],
     history_end: date | None = None,
 ) -> tuple[dict, list[JournalHistoryEntry], dict[tuple[str, int], str]]:
-    """Load profile, full journal history, and entry texts for one persona."""
-    wrangled_file = wrangled_dir / f"persona_{persona_id}.md"
-    if not wrangled_file.exists():
-        raise FileNotFoundError(f"Wrangled file not found: {wrangled_file}")
+    """Build journal history and entry texts from an already-loaded profile.
 
-    profile, entries, _warnings = parse_wrangled_file(wrangled_file)
-
+    Shared by the wrangled-file path (`_load_persona_context`) and any caller
+    holding entries in memory instead (e.g. a live, not-yet-persisted session).
+    ``entries`` rows need ``date``, ``t_index``, ``initial_entry``, and
+    optionally ``has_response``/``response_text``.
+    """
     text_by_key: dict[tuple[str, int], str] = {}
     journal_history: list[JournalHistoryEntry] = []
     for entry in entries:
@@ -150,12 +151,27 @@ def _load_persona_context(
             )
         )
 
-    profile["core_values"] = [
+    normalized_profile = dict(profile)
+    normalized_profile["core_values"] = [
         _to_snake_case(value_name)
         for value_name in (profile.get("core_values") or [])
         if isinstance(value_name, str)
     ]
-    return profile, journal_history, text_by_key
+    return normalized_profile, journal_history, text_by_key
+
+
+def _load_persona_context(
+    persona_id: str,
+    wrangled_dir: Path,
+    history_end: date | None = None,
+) -> tuple[dict, list[JournalHistoryEntry], dict[tuple[str, int], str]]:
+    """Load profile, full journal history, and entry texts for one persona."""
+    wrangled_file = wrangled_dir / f"persona_{persona_id}.md"
+    if not wrangled_file.exists():
+        raise FileNotFoundError(f"Wrangled file not found: {wrangled_file}")
+
+    profile, entries, _warnings = parse_wrangled_file(wrangled_file)
+    return _build_persona_context(profile, entries, history_end=history_end)
 
 
 def _resolve_week_window(
@@ -624,14 +640,22 @@ def build_weekly_digest(
 def build_weekly_drift_reviewer_digest(
     *,
     persona_id: str,
-    wrangled_dir: Path,
     week_start: str,
     week_end: str,
     core_values: list[str],
     decisions: list[WeeklyDriftReviewerDecision],
     drift_result: DriftDetectorResult,
+    wrangled_dir: Path | None = None,
+    profile: dict[str, Any] | None = None,
+    journal_entries: list[dict[str, Any]] | None = None,
 ) -> WeeklyDigest:
-    """Build the approved Weekly Digest without VIF Critic or LLM-Judge signals."""
+    """Build the approved Weekly Digest without VIF Critic or LLM-Judge signals.
+
+    Journal context comes from either a wrangled persona file (``wrangled_dir``,
+    the file-based runtime) or an in-memory ``profile`` + ``journal_entries``
+    pair (a live session with no wrangled file, e.g. a hand-typed journal in
+    the demo app). Exactly one of the two must be provided.
+    """
     resolved_start = _parse_iso_date(week_start)
     resolved_end = _parse_iso_date(week_end)
     if resolved_start > resolved_end:
@@ -639,11 +663,23 @@ def build_weekly_drift_reviewer_digest(
     if drift_result.persona_id != persona_id:
         raise ValueError("Drift Detector result does not match persona_id")
 
-    profile, history, entry_texts = _load_persona_context(
-        persona_id,
-        wrangled_dir,
-        history_end=resolved_end,
-    )
+    if wrangled_dir is not None:
+        profile_ctx, history, entry_texts = _load_persona_context(
+            persona_id,
+            wrangled_dir,
+            history_end=resolved_end,
+        )
+    elif profile is not None and journal_entries is not None:
+        profile_ctx, history, entry_texts = _build_persona_context(
+            profile,
+            journal_entries,
+            history_end=resolved_end,
+        )
+    else:
+        raise ValueError(
+            "Either wrangled_dir or both profile and journal_entries must be "
+            "provided"
+        )
     window_entries = [
         entry
         for entry in history
@@ -696,7 +732,7 @@ def build_weekly_drift_reviewer_digest(
     ]
     return WeeklyDigest(
         persona_id=persona_id,
-        persona_name=profile.get("name"),
+        persona_name=profile_ctx.get("name"),
         week_start=week_start,
         week_end=week_end,
         response_mode=state,
