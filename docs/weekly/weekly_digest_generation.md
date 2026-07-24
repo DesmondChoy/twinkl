@@ -377,8 +377,15 @@ Tier 1 narrative validation checks:
 
 - `groundedness`: at least one quoted phrase appears in journal history or
   selected evidence;
-- `non_circularity`: the narrative avoids score/alignment jargon; and
+- `non_circularity`: the narrative avoids score/alignment jargon;
+- `value_leakage`: the narrative does not name raw Schwartz value labels
+  (for example Benevolence or Self-Direction) sourced from
+  `config/schwartz_values.yaml`; and
 - `length`: total narrative length remains within configured bounds.
+
+The `tension_explanation` field is conditional: when the primary tensions are
+`None clear this week` and no Drift is confirmed, the Weekly Coach describes the
+steady pattern in evidence instead of manufacturing a tension.
 
 These checks are narrow guardrails, not a complete explanation-quality claim.
 

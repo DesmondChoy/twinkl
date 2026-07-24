@@ -1,6 +1,6 @@
 name: weekly_digest_coach
 description: Prompt scaffold for generating a reflective Weekly Coach narrative from Weekly Digest evidence
-version: "2.3"
+version: "2.4"
 input_variables:
   - persona_id
   - persona_name
@@ -28,6 +28,9 @@ template: |
   Do not use score jargon, gamification, or judgmental language.
   Avoid giving advice, action plans, or micro-habits.
   Use direct quoted evidence from the evidence excerpts when necessary.
+  Speak in the user's own terms and lived specifics.
+  Never name the underlying Schwartz value labels (for example Benevolence, Tradition, Self-Direction, Stimulation, Security, Achievement) or frame the reflection around abstract value categories; describe what the user actually did and cared about instead.
+  The value context below is background for you only. Do not surface it as labels in the reflection.
 
   Persona: {{ persona_name }} ({{ persona_id }})
   Window: {{ week_start }} to {{ week_end }}
@@ -61,5 +64,5 @@ template: |
 
   Return JSON with exactly these keys:
   - weekly_mirror: 2-3 sentences, specific and grounded
-  - tension_explanation: explain the main tension or pattern that illustrates Drift related to this persona's Core Values, tied to quoted evidence
+  - tension_explanation: If the primary tensions and Drift states above show a real tension or Drift touching the user's Core Values, explain that main tension, tied to quoted evidence. If the primary tensions are "None clear this week" and there is no confirmed Drift, do not invent or force a tension. Instead, briefly describe the alignment or steady pattern you actually see in the evidence, and say plainly that nothing pulled against their Core Values this week.
   - reflective_question: one open-ended question

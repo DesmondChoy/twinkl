@@ -914,11 +914,30 @@ def _extract_quoted_phrases(text: str) -> list[str]:
     return [match.strip() for match in re.findall(r'"([^"]+)"', text) if match.strip()]
 
 
+def _detect_value_label_leakage(
+    text: str,
+    config_path: Path = SCHWARTZ_CONFIG_PATH,
+) -> list[str]:
+    """Return Schwartz value labels surfaced verbatim in a reflection."""
+    with open(config_path) as f:
+        raw = yaml.safe_load(f) or {}
+    labels = list((raw.get("values") or {}).keys())
+
+    lowered = text.lower()
+    leaked: list[str] = []
+    for label in labels:
+        pattern = rf"\b{re.escape(label.lower())}\b"
+        if re.search(pattern, lowered):
+            leaked.append(label)
+    return leaked
+
+
 def validate_weekly_digest_narrative(
     digest: WeeklyDigest,
     narrative: CoachNarrative,
     min_words: int = 25,
     max_words: int = 180,
+    config_path: Path = SCHWARTZ_CONFIG_PATH,
 ) -> DigestValidation:
     """Run Tier 1 automated checks on a Weekly Coach reflection."""
     combined_text = " ".join(
@@ -950,6 +969,9 @@ def validate_weekly_digest_narrative(
         term in combined_text.lower() for term in score_language
     )
 
+    leaked_values = _detect_value_label_leakage(combined_text, config_path)
+    value_leakage_passed = not leaked_values
+
     checks = [
         ValidationCheck(
             name="groundedness",
@@ -970,6 +992,18 @@ def validate_weekly_digest_narrative(
                 else (
                     "Narrative uses raw scoring or alignment terminology instead of "
                     "reflective language."
+                )
+            ),
+        ),
+        ValidationCheck(
+            name="value_leakage",
+            passed=value_leakage_passed,
+            details=(
+                "Narrative avoids naming raw Schwartz value labels."
+                if value_leakage_passed
+                else (
+                    "Narrative names raw Schwartz value labels: "
+                    f"{', '.join(leaked_values)}."
                 )
             ),
         ),

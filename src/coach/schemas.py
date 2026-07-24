@@ -97,6 +97,12 @@ class DigestValidation(BaseModel):
         )
 
     @property
+    def value_leakage_passed(self) -> bool:
+        return any(
+            check.name == "value_leakage" and check.passed for check in self.checks
+        )
+
+    @property
     def length_passed(self) -> bool:
         return any(check.name == "length" and check.passed for check in self.checks)
 
