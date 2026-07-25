@@ -6,7 +6,7 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 
 ## Implementation Status
 
-*Last updated: 2026-07-22*
+*Last updated: 2026-07-25*
 
 | Feature | Status | Details |
 |---------|--------|---------|
@@ -19,7 +19,7 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 | **Drift Detector** | ✅ Complete | The capstone POC implementation is complete and wired. It persists versioned Weekly Drift Reviewer Decisions without VIF Critic input, applies the deterministic two-consecutive-Conflict rule across week boundaries, and handles extension, recovery, abstention, deduplication, and active, recovered, uncertain, or mixed delivery. The fixed Luna-low model contract retains AI-reviewed synthetic development evidence; no fresh final test or deployment approval is claimed. The former VIF Critic crash/rut/evolution runtime is explicitly deprecated and retained only for historical compatibility. |
 | **Weekly Coach** | 🧪 Experimental | The approved runtime sends deterministic Drift Detector output based on Weekly Drift Reviewer Decisions into the Weekly Digest and optional Weekly Coach reflection. The Weekly Digest cites supporting Journal Entries without VIF Critic or LLM-Judge numeric summaries. Explanation validation depth and product-facing orchestration remain incomplete; no fresh final test or deployment approval is claimed. |
 | **Onboarding (SVBWS Values Assessment)** | 🧪 Experimental | Standalone React POC implements the published 11-group, six-object balanced SVBWS design, then presents structured goal selection, a label-free Core Value summary, and a first Journal Entry handoff. It randomizes group and card order, stores raw 11-object BWS results separately from the ten-value Profile transformation, and omits midpoint feedback and unsupported confidence claims. The approved runtime can import Core Values from a saved confirmed Profile; automated browser-to-service storage is outside the capstone. It is a research-grounded pilot instrument, not a validated Twinkl instrument. [Full spec](onboarding/onboarding_spec.md) |
-| **Experience and Inspect React Demo** | 📘 Specified | One mobile-first React capstone demo will present the product experience and the AI architecture from the same session. Narrow-screen phones are the primary design and verification target; wider layouts progressively enhance the same flow. Experience covers onboarding, Journal Entries, persona replay, displayed nudges and responses, Drift, and the Weekly Digest. Inspect exposes event-linked prompts, validated Weekly Drift Reviewer Decisions, Drift Detector steps, provenance, latency, and errors without adding VIF Critic input to the user-facing path. [Design](demo/experience_inspect_app.md) |
+| **Experience and Inspect React Demo** | 🚧 In Progress | The shared contracts and five deterministic persona replays are implemented. One mobile-first React capstone demo will present the product experience and the AI architecture from the same session. Narrow-screen phones are the primary design and verification target; wider layouts progressively enhance the same flow. Experience covers onboarding, Journal Entries, persona replay, displayed nudges and responses, Drift, and the Weekly Digest. Inspect exposes event-linked prompts, validated Weekly Drift Reviewer Decisions, Drift Detector steps, provenance, latency, and errors without adding VIF Critic input to the user-facing path. [Design](demo/experience_inspect_app.md) |
 | **Embedding Explorer** | ✅ Complete | Interactive 3D visualization of VIF hidden-layer and SBERT embedding spaces; self-contained HTML with Three.js |
 | **Journaling Anomaly Radar** | ❌ Not Started | Cadence/gap detection |
 | **Goal-aligned Inspiration Feed** | ❌ Not Started | External API integration |
@@ -65,7 +65,7 @@ models/
     * Users crave kind accountability—context-aware reflections that cite evidence—while commercial products optimise for dopamine loops, not truth.
 * **Target users / addressable market**
     * Knowledge workers in transition (grad students, new managers, founders) and high-agency professionals managing career-family-growth trade-offs—large cohorts already paying for journaling + coaching, yet underserved by static apps.
-    * Pick 1–2 personas for the capstone run; each provides rich, recurring scenarios to evaluate alignment/misalignment feedback.
+    * Use five curated personas for the capstone menu, with one recommended walkthrough. Together they cover seven Schwartz Core Values plus stable, active, recovered, uncertain, and mixed Drift behavior.
 
 # Difference vs commercial peers
 

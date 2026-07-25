@@ -274,11 +274,17 @@ export interface OnboardingProfile {
   top_values: ValueKey[];
   goal_category: GoalCategory;
   user_confirmed: true;
-  provenance: {
-    source: "react_onboarding_poc";
-    set_order_randomized: true;
-    card_order_randomized: true;
-  };
+  provenance:
+    | {
+        source: "react_onboarding_poc";
+        set_order_randomized: true;
+        card_order_randomized: true;
+      }
+    | {
+        source: "synthetic_persona_projection";
+        set_order_randomized: false;
+        card_order_randomized: false;
+      };
 }
 
 const BWS_OBJECT_SET = new Set<string>(BWS_OBJECT_ORDER);
@@ -491,6 +497,14 @@ export function validateProfile(value: unknown): OnboardingProfile {
     goalCategory: profile.goal_category as GoalCategory,
     userConfirmed: true,
   });
+  const provenance = profile.provenance;
+  if (
+    provenance?.source === "synthetic_persona_projection" &&
+    provenance.set_order_randomized === false &&
+    provenance.card_order_randomized === false
+  ) {
+    rebuilt.provenance = provenance;
+  }
   if (JSON.stringify(rebuilt) !== JSON.stringify(profile)) {
     throw new Error("Profile contents do not match the deterministic scoring contract");
   }

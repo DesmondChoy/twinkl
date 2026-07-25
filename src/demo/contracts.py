@@ -278,10 +278,22 @@ class ProfileTransform(ContractModel):
         return self
 
 
-class ProfileProvenance(ContractModel):
+class ReactProfileProvenance(ContractModel):
     source: Literal["react_onboarding_poc"]
     set_order_randomized: Literal[True]
     card_order_randomized: Literal[True]
+
+
+class SyntheticPersonaProfileProvenance(ContractModel):
+    source: Literal["synthetic_persona_projection"]
+    set_order_randomized: Literal[False]
+    card_order_randomized: Literal[False]
+
+
+ProfileProvenance = Annotated[
+    ReactProfileProvenance | SyntheticPersonaProfileProvenance,
+    Field(discriminator="source"),
+]
 
 
 class OnboardingProfile(ContractModel):

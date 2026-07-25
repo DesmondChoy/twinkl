@@ -350,15 +350,25 @@ itself.
 
 ## 9. Persona Scenario Bundles
 
-The capstone demo requires at least these curated scenarios:
+The capstone demo uses these five curated scenarios:
 
-| Scenario | Required progression |
-|---|---|
-| Stable | No confirmed Drift across the replay |
-| Active Drift | Two consecutive Conflicts for one Core Value |
-| Recovered Drift | Active Drift followed by recovery |
-| Uncertain | At least one effective Abstain affecting the displayed state |
-| Two Core Values | Independent decisions and Drift state per Core Value |
+| Scenario | Persona | Core Values | Saved progression |
+|---|---|---|---|
+| Stable | Meera Krishnamurthy, South Asian teacher, 45–54 | Achievement, Security | Stable throughout |
+| Active Drift | Wei Jun Chen, East Asian software engineer, 35–44 | Universalism | Stable → active |
+| Recovered Drift | Marc Vandenberghe, Western European manager, 45–54 | Power | Stable → active → recovered |
+| Uncertain | Noor Haddad, Middle Eastern stay-at-home parent, 18–24 | Self-Direction, Tradition | Stable → active → uncertain |
+| Two Core Values | Lukas Vermeer, Western European software engineer, 25–34 | Self-Direction, Conformity | Conformity recovers while Self-Direction becomes uncertain, producing a mixed state |
+
+Lukas is the recommended professor walkthrough because his nine-week replay
+shows displayed nudges and responses, two independent Core Value histories,
+recovery, Abstain, mixed Drift state, and the corresponding Weekly Digests.
+The other four personas make each individual state easy to demonstrate.
+
+This menu covers seven Schwartz Core Values, four cultural backgrounds, four
+age bands, and several work and family contexts. Selection favored coherent
+week-by-week behavior over maximizing Core Value count: the reviewed
+eight-value alternative began Uncertain without a useful stable progression.
 
 Each saved scenario bundle contains or references:
 
@@ -372,11 +382,25 @@ Each saved scenario bundle contains or references:
 - Weekly Digests and optional Weekly Coach reflections;
 - model contract, timestamps, response IDs when available, and input hashes;
   and
-- a manifest version and content hash.
+- a bundle manifest version, plus a content hash in the scenario catalog.
 
 Scenario selection must be based on reviewed, reproducible behavior. Do not
 rewrite Journal Entries or decisions merely to make the demonstration cleaner.
 If a scenario is AI-reviewed synthetic development evidence, say so.
+
+The checked-in files use Run 1 of the frozen `gpt-5.6-luna` reasoning-effort
+`low` Weekly Drift Reviewer setup. Each onboarding Profile is a deterministic
+projection from the synthetic persona's declared Core Values, not a claim that
+the persona completed onboarding. Its provenance is
+`synthetic_persona_projection`; the original React onboarding provenance
+remains distinct. Generation metadata is retained only for Inspect nudge
+provenance and is never supplied to the Weekly Drift Reviewer, Drift Detector,
+Weekly Digest, or Weekly Coach.
+
+The historical persona files preserve each displayed nudge's category, trigger,
+text, and response, but not the original nudge provider prompt or raw response.
+Saved nudge trace events therefore retain the available fields and leave the
+unavailable provider fields null; they do not invent a receipt.
 
 ## 10. Privacy and Safety
 

@@ -2133,7 +2133,22 @@
           "type": "string"
         },
         "provenance": {
-          "$ref": "#/$defs/ProfileProvenance"
+          "discriminator": {
+            "mapping": {
+              "react_onboarding_poc": "#/$defs/ReactProfileProvenance",
+              "synthetic_persona_projection": "#/$defs/SyntheticPersonaProfileProvenance"
+            },
+            "propertyName": "source"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/ReactProfileProvenance"
+            },
+            {
+              "$ref": "#/$defs/SyntheticPersonaProfileProvenance"
+            }
+          ],
+          "title": "Provenance"
         },
         "schema_version": {
           "const": 2,
@@ -2402,33 +2417,6 @@
       "title": "ProfileConfirmedEvent",
       "type": "object"
     },
-    "ProfileProvenance": {
-      "additionalProperties": false,
-      "properties": {
-        "card_order_randomized": {
-          "const": true,
-          "title": "Card Order Randomized",
-          "type": "boolean"
-        },
-        "set_order_randomized": {
-          "const": true,
-          "title": "Set Order Randomized",
-          "type": "boolean"
-        },
-        "source": {
-          "const": "react_onboarding_poc",
-          "title": "Source",
-          "type": "string"
-        }
-      },
-      "required": [
-        "source",
-        "set_order_randomized",
-        "card_order_randomized"
-      ],
-      "title": "ProfileProvenance",
-      "type": "object"
-    },
     "ProfileTransform": {
       "additionalProperties": false,
       "description": "Ten-value product transform derived from the raw SVBWS result.",
@@ -2529,6 +2517,33 @@
         "bottom_values"
       ],
       "title": "ProfileTransform",
+      "type": "object"
+    },
+    "ReactProfileProvenance": {
+      "additionalProperties": false,
+      "properties": {
+        "card_order_randomized": {
+          "const": true,
+          "title": "Card Order Randomized",
+          "type": "boolean"
+        },
+        "set_order_randomized": {
+          "const": true,
+          "title": "Set Order Randomized",
+          "type": "boolean"
+        },
+        "source": {
+          "const": "react_onboarding_poc",
+          "title": "Source",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source",
+        "set_order_randomized",
+        "card_order_randomized"
+      ],
+      "title": "ReactProfileProvenance",
       "type": "object"
     },
     "ResourceRef": {
@@ -2983,6 +2998,33 @@
         "view"
       ],
       "title": "SessionSelection",
+      "type": "object"
+    },
+    "SyntheticPersonaProfileProvenance": {
+      "additionalProperties": false,
+      "properties": {
+        "card_order_randomized": {
+          "const": false,
+          "title": "Card Order Randomized",
+          "type": "boolean"
+        },
+        "set_order_randomized": {
+          "const": false,
+          "title": "Set Order Randomized",
+          "type": "boolean"
+        },
+        "source": {
+          "const": "synthetic_persona_projection",
+          "title": "Source",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source",
+        "set_order_randomized",
+        "card_order_randomized"
+      ],
+      "title": "SyntheticPersonaProfileProvenance",
       "type": "object"
     },
     "TraceReadRequest": {

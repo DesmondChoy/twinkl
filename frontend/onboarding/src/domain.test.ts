@@ -144,4 +144,31 @@ describe("versioned Profile", () => {
     expect(profile).not.toHaveProperty("confidence");
     expect(validateProfile(JSON.parse(JSON.stringify(profile)))).toEqual(profile);
   });
+
+  it("accepts an explicitly synthetic Profile projection for saved replay", () => {
+    const profile = createProfile({
+      userId: "persona-1",
+      sessionId: "scenario-session",
+      startedAt: "2026-07-19T00:00:00.000Z",
+      completedAt: "2026-07-19T00:02:00.000Z",
+      responses: completeResponses(),
+      goalCategory: "direction",
+      userConfirmed: true,
+    });
+    profile.provenance = {
+      source: "synthetic_persona_projection",
+      set_order_randomized: false,
+      card_order_randomized: false,
+    };
+
+    expect(validateProfile(structuredClone(profile))).toEqual(profile);
+
+    const dishonest = structuredClone(profile) as unknown as {
+      provenance: { set_order_randomized: boolean };
+    };
+    dishonest.provenance.set_order_randomized = true;
+    expect(() => validateProfile(dishonest)).toThrow(
+      "deterministic scoring contract",
+    );
+  });
 });

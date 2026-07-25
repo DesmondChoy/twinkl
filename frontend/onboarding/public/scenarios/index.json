@@ -1,0 +1,135 @@
+{
+  "schema_version": "scenario-catalog-v1",
+  "evidence_source": "ai_reviewed_synthetic_development",
+  "scenarios": [
+    {
+      "scenario_id": "stable-meera",
+      "file": "stable-meera.json",
+      "content_sha256": "a2c3aaeb00142b7de8e366b684d92e7eede80d2a9da31d79a6650cedba8a4aed",
+      "persona_id": "23d101f8",
+      "persona_name": "Meera Krishnamurthy",
+      "age": "45-54",
+      "profession": "Teacher",
+      "culture": "South Asian",
+      "core_values": [
+        "achievement",
+        "security"
+      ],
+      "role": "stable",
+      "progression": [
+        "stable",
+        "stable",
+        "stable",
+        "stable",
+        "stable",
+        "stable",
+        "stable"
+      ],
+      "summary": "A calm baseline with meaningful nudges and no confirmed Drift.",
+      "recommended": false
+    },
+    {
+      "scenario_id": "active-wei-jun",
+      "file": "active-wei-jun.json",
+      "content_sha256": "dfd7d5f7fb14b32b562993477ff9cc1cbb296c7681f6406c0af79b790c97c51c",
+      "persona_id": "8f83c818",
+      "persona_name": "Wei Jun Chen",
+      "age": "35-44",
+      "profession": "Software Engineer",
+      "culture": "East Asian",
+      "core_values": [
+        "universalism"
+      ],
+      "role": "active_drift",
+      "progression": [
+        "stable",
+        "stable",
+        "stable",
+        "stable",
+        "stable",
+        "active"
+      ],
+      "summary": "The clearest two-consecutive-Conflict path into active Drift.",
+      "recommended": false
+    },
+    {
+      "scenario_id": "recovered-marc",
+      "file": "recovered-marc.json",
+      "content_sha256": "998e8a77485ed60606f5a921487f0197eeccfb311d7f8b6f27b34b350b868a1e",
+      "persona_id": "988d1a65",
+      "persona_name": "Marc Vandenberghe",
+      "age": "45-54",
+      "profession": "Manager",
+      "culture": "Western European",
+      "core_values": [
+        "power"
+      ],
+      "role": "recovered_drift",
+      "progression": [
+        "stable",
+        "stable",
+        "stable",
+        "stable",
+        "active",
+        "recovered",
+        "recovered",
+        "recovered"
+      ],
+      "summary": "A compact active-to-recovered Drift progression.",
+      "recommended": false
+    },
+    {
+      "scenario_id": "uncertain-noor",
+      "file": "uncertain-noor.json",
+      "content_sha256": "38263356ea23a09c690e03bdf40c0376db45d8e3c9ab9bfead72bba560729f3b",
+      "persona_id": "02fb94f3",
+      "persona_name": "Noor Haddad",
+      "age": "18-24",
+      "profession": "Parent (Stay-at-home)",
+      "culture": "Middle Eastern",
+      "core_values": [
+        "self_direction",
+        "tradition"
+      ],
+      "role": "uncertain",
+      "progression": [
+        "stable",
+        "stable",
+        "active",
+        "uncertain",
+        "uncertain",
+        "uncertain"
+      ],
+      "summary": "A nuanced case where the Weekly Drift Reviewer does not overclaim.",
+      "recommended": false
+    },
+    {
+      "scenario_id": "two-values-lukas",
+      "file": "two-values-lukas.json",
+      "content_sha256": "844d848342bf6c7a9b50295d81f289a33376166fe130906657b69841d55a6f76",
+      "persona_id": "11de77e8",
+      "persona_name": "Lukas Vermeer",
+      "age": "25-34",
+      "profession": "Software Engineer",
+      "culture": "Western European",
+      "core_values": [
+        "self_direction",
+        "conformity"
+      ],
+      "role": "two_core_values",
+      "progression": [
+        "stable",
+        "stable",
+        "stable",
+        "stable",
+        "active",
+        "recovered",
+        "recovered",
+        "recovered",
+        "mixed"
+      ],
+      "summary": "Recommended: the fullest walkthrough and clearest state independence.",
+      "recommended": true
+    }
+  ]
+}
