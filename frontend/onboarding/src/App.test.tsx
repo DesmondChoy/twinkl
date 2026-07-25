@@ -30,7 +30,7 @@ describe("onboarding app", () => {
     expect(inspect.getAttribute("aria-disabled")).toBe("true");
     expect(screen.getByText("Available after Profile confirmation")).toBeTruthy();
     fireEvent.click(inspect);
-    expect(screen.queryByRole("heading", { name: "The trail starts here." })).toBeNull();
+    expect(screen.queryByRole("heading", { name: "Follow the work, event by event." })).toBeNull();
     expect(screen.getByTestId("drop-most").classList.contains("drop-box--guided")).toBe(true);
     expect(screen.getByTestId("drop-least").classList.contains("drop-box--guided")).toBe(false);
   });
@@ -233,8 +233,8 @@ describe("onboarding app", () => {
     vi.useRealTimers();
     const user = userEvent.setup();
     await user.keyboard("{Enter}");
-    expect(screen.getByRole("heading", { name: "The trail starts here." })).toBeTruthy();
-    expect(document.activeElement).toBe(screen.getByRole("heading", { name: "The trail starts here." }));
+    expect(screen.getByRole("heading", { name: "Follow the work, event by event." })).toBeTruthy();
+    expect(document.activeElement).toBe(screen.getByRole("heading", { name: "Follow the work, event by event." }));
     expect(onStartJournal).toHaveBeenCalledTimes(1);
     fireEvent.click(screen.getByRole("button", { name: "Experience" }));
     expect((screen.getByRole("textbox", { name: "First Journal Entry" }) as HTMLTextAreaElement).value)
@@ -256,7 +256,7 @@ describe("onboarding app", () => {
     fireEvent.click(screen.getByRole("button", { name: "Inspect" }));
     unmount();
     render(<App onStartJournal={onStartJournal} />);
-    expect(screen.getByRole("heading", { name: "The trail starts here." })).toBeTruthy();
+    expect(screen.getByRole("heading", { name: "Follow the work, event by event." })).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: "Experience" }));
     expect((screen.getByRole("textbox", { name: "First Journal Entry" }) as HTMLTextAreaElement).value)
       .toBe("A quiet walk helped me think clearly.");

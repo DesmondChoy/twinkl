@@ -15,6 +15,8 @@ import {
   setChoice,
   type OnboardingSession,
 } from "./session";
+import InspectView from "./InspectView";
+import { canonicalInspectFixture } from "./inspectFixture";
 import { SharedSessionProvider, useSharedSession } from "./sharedSession";
 
 const MILESTONE_COUNT = BWS_SETS.length + 2;
@@ -270,7 +272,9 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
   };
 
   useEffect(() => {
-    headingRef.current?.focus({ preventScroll: true });
+    if (activeView === "experience") {
+      headingRef.current?.focus({ preventScroll: true });
+    }
   }, [session.stage, session.set_index, journalStarted, activeView]);
 
   useLayoutEffect(() => {
@@ -670,32 +674,18 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
               <span />
             </div>
             <div className="instrument-copy">
-              <p className="eyebrow">Same session</p>
-              <h2>Behind this moment.</h2>
-              <p>Inspect follows the exact work connected to what you see in Experience.</p>
+              <p className="eyebrow">Contract trace</p>
+              <h2>Behind each result.</h2>
+              <p>Inspect reads validated trace contracts. This view currently uses the canonical contract fixture.</p>
             </div>
           </aside>
           <section className="flow-panel flow-panel--inspect">
-            <div className="stage stage--inspect">
-              <p className="eyebrow">Inspect</p>
-              <h1 ref={headingRef} tabIndex={-1}>The trail starts here.</h1>
-              {session.experience.selected_event_id ? (
-                <div className="inspect-selection" data-testid="inspect-selection">
-                  <small>Selected event</small>
-                  <code>{session.experience.selected_event_id}</code>
-                  <p>Its event details will appear here when the Inspect timeline is connected.</p>
-                </div>
-              ) : (
-                <p className="lede">
-                  Profile validation is ready to inspect. Event details will appear as Journal Entries and saved persona runs are connected.
-                </p>
-              )}
-              <div className="actions">
-                <button className="button button--primary" type="button" onClick={() => showView("experience")}>
-                  Return to Experience
-                </button>
-              </div>
-            </div>
+            <InspectView
+              events={canonicalInspectFixture.trace_events}
+              selectedEventId={session.experience.selected_event_id}
+              traceLabel="Canonical contract fixture"
+              onReturn={() => showView("experience")}
+            />
           </section>
         </main>
       )}
