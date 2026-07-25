@@ -1,4 +1,8 @@
 import type { OnboardingProfile } from "./domain";
+import {
+  displayCoreValue,
+  displayWeekRange,
+} from "./displayFormatters";
 import type {
   JournalEntryContract,
   TraceEventContract,
@@ -17,6 +21,7 @@ interface WeeklyExperienceProps {
   weeklyDigest: JsonObject | null;
   traceEvents: TraceEventContract[];
   inspectRun: (eventId: string) => void;
+  selectJournalEntry?: (journalEntryId: string) => void;
 }
 
 interface DigestEvidence {
@@ -29,13 +34,6 @@ function object(value: unknown): JsonObject | null {
   return value !== null && typeof value === "object" && !Array.isArray(value)
     ? value as JsonObject
     : null;
-}
-
-function titleCase(value: string): string {
-  return value
-    .split("_")
-    .map((word) => `${word.charAt(0).toUpperCase()}${word.slice(1)}`)
-    .join(" ");
 }
 
 function stateLabel(state: DeliveryState): string {
@@ -96,6 +94,7 @@ export default function WeeklyExperience({
   weeklyDigest,
   traceEvents,
   inspectRun,
+  selectJournalEntry,
 }: WeeklyExperienceProps) {
   if (driftResult === null || weeklyDigest === null) return null;
 
@@ -146,9 +145,7 @@ export default function WeeklyExperience({
 
       {weekStart && weekEnd ? (
         <p className="weekly-experience__dates">
-          <time dateTime={weekStart}>{weekStart}</time>
-          {" – "}
-          <time dateTime={weekEnd}>{weekEnd}</time>
+          {displayWeekRange(weekStart, weekEnd)}
         </p>
       ) : null}
 
@@ -157,7 +154,7 @@ export default function WeeklyExperience({
           const state = deliveryState(rawStates[coreValue]);
           return (
             <li key={coreValue}>
-              <span>{titleCase(coreValue)}</span>
+              <span>{displayCoreValue(coreValue)}</span>
               <strong>
                 {reviewUnavailable ? "Review unavailable" : stateLabel(state)}
               </strong>
@@ -178,7 +175,12 @@ export default function WeeklyExperience({
                 <li key={`${row.date}-${row.tIndex}`}>
                   <blockquote>{row.excerpt}</blockquote>
                   {entry ? (
-                    <a href={`#${journalEntryAnchorId(entry.journal_entry_id)}`}>
+                    <a
+                      href={`#${journalEntryAnchorId(entry.journal_entry_id)}`}
+                      onClick={() =>
+                        selectJournalEntry?.(entry.journal_entry_id)
+                      }
+                    >
                       Open Journal Entry from {row.date}
                     </a>
                   ) : null}

@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+import shutil
 from collections.abc import Iterator
 from datetime import UTC, datetime
+from pathlib import Path
 
 import pytest
 from starlette.testclient import TestClient
@@ -13,6 +15,7 @@ from src.demo.canonical_fixture import build_canonical_fixture
 from src.demo.contracts import (
     JournalEntry,
     JournalEntrySubmitRequest,
+    ScenarioLoadRequest,
     SessionCreateRequest,
     SessionResumeState,
     TraceReadRequest,
@@ -25,6 +28,8 @@ from src.weekly_drift_reviewer import (
     WeeklyDriftReviewerReceipt,
     WeeklyDriftReviewerRequest,
 )
+
+ROOT = Path(__file__).resolve().parents[2]
 
 
 class QueueNudgeRuntime:
@@ -170,13 +175,14 @@ def _receipt(
     validation_error = None
     error_type = None
     error = None
-    reason = "The entry names a moment but leaves its meaning unexplored."
+    reason_text = "The entry names a moment but leaves its meaning unexplored."
+    reason: str | None = reason_text
     if status == "ok":
         raw_response = (
             '{"decision":"'
             + str(decision)
             + '","reason":"'
-            + reason
+            + reason_text
             + '","nudge_text":'
             + (f'"{nudge_text}"' if nudge_text is not None else "null")
             + "}"
@@ -698,3 +704,86 @@ def test_http_adapter_validates_and_serves_contract_responses() -> None:
         "drift_detected",
         "weekly_digest_built",
     ]
+
+
+def test_http_adapter_loads_each_saved_persona_at_its_first_week() -> None:
+    service, _, _ = _service([])
+    scenario_ids = [
+        "stable-meera",
+        "active-wei-jun",
+        "recovered-marc",
+        "uncertain-noor",
+        "two-values-lukas",
+    ]
+
+    with TestClient(create_app(service, scenario_root=ROOT)) as client:
+        for scenario_id in scenario_ids:
+            loaded = client.post(
+                "/api/experience",
+                json=ScenarioLoadRequest(
+                    operation="load_scenario",
+                    request_id=f"load-{scenario_id}",
+                    scenario_id=scenario_id,
+                ).model_dump(mode="json"),
+            )
+
+            assert loaded.status_code == 200
+            payload = loaded.json()
+            first_week = payload["scenario"]["weeks"][0]
+            visible_ids = set(first_week["journal_entry_ids"])
+            assert payload["operation"] == "load_scenario"
+            assert payload["scenario"]["source"] == "saved_replay"
+            assert (
+                payload["session"]["selection"]["selected_week"]
+                == first_week["week_id"]
+            )
+            assert {
+                entry["journal_entry_id"]
+                for entry in payload["session"]["journal_entries"]
+            } == visible_ids
+            assert set(payload["session"]["trace_event_ids"]) == set(
+                first_week["event_ids"]
+            )
+
+        missing = client.post(
+            "/api/experience",
+            json=ScenarioLoadRequest(
+                operation="load_scenario",
+                request_id="load-missing",
+                scenario_id="missing-persona",
+            ).model_dump(mode="json"),
+        )
+
+    assert missing.status_code == 404
+    assert missing.json()["error"]["code"] == "scenario_not_found"
+
+
+def test_http_adapter_returns_a_safe_scenario_integrity_error(
+    tmp_path: Path,
+) -> None:
+    scenario_directory = tmp_path / "frontend/onboarding/public/scenarios"
+    shutil.copytree(
+        ROOT / "frontend/onboarding/public/scenarios",
+        scenario_directory,
+    )
+    changed = scenario_directory / "stable-meera.json"
+    changed.write_bytes(changed.read_bytes() + b" ")
+
+    service, _, _ = _service([])
+    with TestClient(create_app(service, scenario_root=tmp_path)) as client:
+        response = client.post(
+            "/api/experience",
+            json=ScenarioLoadRequest(
+                operation="load_scenario",
+                request_id="load-tampered",
+                scenario_id="stable-meera",
+            ).model_dump(mode="json"),
+        )
+
+    assert response.status_code == 500
+    assert response.json()["error"] == {
+        "code": "scenario_integrity_error",
+        "message": "The saved persona catalog failed its integrity check.",
+        "retryable": False,
+    }
+    assert str(tmp_path) not in response.text

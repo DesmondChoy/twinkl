@@ -16,6 +16,7 @@ from src.coach.weekly_digest import build_weekly_drift_reviewer_digest_from_entr
 from src.demo.contracts import (
     ApiErrorResponse,
     ApiResponse,
+    ContractFixtureSet,
     DriftDetectedDetails,
     DriftDetectedEvent,
     EventStatus,
@@ -37,6 +38,8 @@ from src.demo.contracts import (
     ProfileConfirmedEvent,
     ResourceRef,
     SafeError,
+    ScenarioLoadedResponse,
+    ScenarioLoadRequest,
     SessionCreatedResponse,
     SessionCreateRequest,
     SessionSelection,
@@ -72,7 +75,12 @@ from src.weekly_drift_reviewer import (
 )
 
 NudgeRuntime = Callable[[NudgeRuntimeRequest], Awaitable[NudgeRuntimeReceipt]]
-Operation = Literal["create_session", "submit_journal_entry", "read_trace"]
+Operation = Literal[
+    "create_session",
+    "submit_journal_entry",
+    "load_scenario",
+    "read_trace",
+]
 
 
 def _hash_payload(payload: Any) -> str:
@@ -337,6 +345,28 @@ class InMemoryExperienceService:
                 response=response,
             )
             return response
+
+    async def load_saved_scenario(
+        self,
+        request: ScenarioLoadRequest,
+        fixture: ContractFixtureSet,
+    ) -> ScenarioLoadedResponse:
+        """Load the first deterministic week without provider work."""
+        from src.demo.scenarios import project_scenario_week
+
+        first_week = fixture.scenario.weeks[0]
+        session, events = project_scenario_week(fixture, first_week.week_id)
+        async with self._lock:
+            self._sessions[session.session_id] = session
+            self._events[session.session_id] = list(events)
+        return ScenarioLoadedResponse(
+            operation="load_scenario",
+            request_id=request.request_id,
+            status="ok",
+            session=session,
+            scenario=fixture.scenario,
+            event_ids=list(session.trace_event_ids),
+        )
 
     @staticmethod
     def _ordering_error(

@@ -1,7 +1,7 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import App from "./App";
+import App, { AppErrorBoundary } from "./App";
 import { SESSION_STORAGE_KEY } from "./session";
 
 vi.stubGlobal("confirm", () => true);
@@ -17,6 +17,46 @@ function answerSet() {
 afterEach(() => vi.useRealTimers());
 
 describe("onboarding app", () => {
+  it("keeps Start over reachable after an unexpected render failure", () => {
+    const consoleError = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => undefined);
+    const Broken = () => {
+      throw new Error("render failed");
+    };
+
+    render(
+      <AppErrorBoundary>
+        <Broken />
+      </AppErrorBoundary>,
+    );
+
+    expect(
+      screen.getByRole("heading", {
+        name: "This saved view could not be restored.",
+      }),
+    ).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Start over" })).toBeTruthy();
+    consoleError.mockRestore();
+  });
+
+  it("keeps Experience usable when browser storage rejects a write", async () => {
+    const storageWrite = vi
+      .spyOn(Storage.prototype, "setItem")
+      .mockImplementation(() => {
+        throw new DOMException("Storage full", "QuotaExceededError");
+      });
+
+    render(<App />);
+
+    expect(await screen.findByRole("alert")).toHaveProperty(
+      "textContent",
+      expect.stringContaining("Progress could not be saved"),
+    );
+    expect(screen.getByLabelText("Values · 1 of 11")).toBeTruthy();
+    storageWrite.mockRestore();
+  });
+
   it("opens directly on the first six-card set without Schwartz labels", () => {
     render(<App />);
     expect(screen.getByLabelText("Values · 1 of 11")).toBeTruthy();

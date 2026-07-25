@@ -8,9 +8,12 @@ focused Inspect navigation are implemented. Manual Journal Entry processing,
 displayed nudges with reply and skip actions, safe retry, and linked nudge
 events in Inspect are also implemented. Manual weekly review now populates
 Weekly Drift Reviewer Decisions, the Drift Detector result, a cited Weekly
-Digest, and linked Inspect events. Persona replay controls and release
-hardening remain tracked work. The versioned React-Python boundary, JSON
-Schema, and canonical fixtures are implemented in
+Digest, and linked Inspect events. The five deterministic persona replays now
+load into the shared React session with previous, next, play or pause, restart,
+reduced-motion behavior, no-future-data projection, and browser-side scenario
+hash verification. Release hardening remains tracked work. The versioned
+React-Python boundary, JSON Schema, and
+canonical fixtures are implemented in
 [`src/demo/contracts.py`](../../src/demo/contracts.py) and
 [`frontend/onboarding/src/contracts/`](../../frontend/onboarding/src/contracts/).
 The existing React onboarding implementation and the
@@ -472,8 +475,8 @@ A release is demo-ready when one uninterrupted walkthrough can:
    Reviewer Conflicts produce Drift;
 6. inspect the exact weekly request, validated decisions, and deterministic
    Drift Detector steps;
-7. return to Experience and read the corresponding Weekly Digest and Weekly
-   Coach question;
+7. return to Experience and read the corresponding Weekly Digest and, when the
+   saved result includes one, the optional Weekly Coach question;
 8. demonstrate one recovered or uncertain scenario; and
 9. distinguish saved replay from an optional live run.
 

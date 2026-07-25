@@ -25,6 +25,7 @@ interface JournalExperienceProps {
   updateExperience: (patch: Partial<ExperienceState>) => void;
   inspectRun: (eventId: string) => void;
   headingRef?: RefObject<HTMLHeadingElement | null>;
+  mode?: "manual" | "saved_replay";
 }
 
 function localDate(): string {
@@ -117,6 +118,7 @@ export default function JournalExperience({
   updateExperience,
   inspectRun,
   headingRef,
+  mode = "manual",
 }: JournalExperienceProps) {
   const submissionLockRef = useRef(false);
   const nudgeHeadingRef = useRef<HTMLHeadingElement>(null);
@@ -304,7 +306,7 @@ export default function JournalExperience({
 
   return (
     <div className="journal-experience">
-      <header className="journal-experience__header">
+      {mode === "manual" ? <header className="journal-experience__header">
         <p className="eyebrow">
           {experience.journal_entries.length === 0
             ? "First Journal Entry"
@@ -319,9 +321,9 @@ export default function JournalExperience({
           Write one real moment. Twinkl may ask one brief question if there is
           a useful thread to follow.
         </p>
-      </header>
+      </header> : null}
 
-      {!isAwaitingResponse ? (
+      {mode === "manual" && !isAwaitingResponse ? (
         <form
           className="journal-composer"
           onSubmit={(event) => {
@@ -361,7 +363,7 @@ export default function JournalExperience({
         </form>
       ) : null}
 
-      {activeNudge && isAwaitingResponse ? (
+      {mode === "manual" && activeNudge && isAwaitingResponse ? (
         <section className="nudge-reply" aria-labelledby="nudge-question">
           <p className="eyebrow">One question</p>
           <h2 id="nudge-question" ref={nudgeHeadingRef} tabIndex={-1}>
@@ -396,15 +398,17 @@ export default function JournalExperience({
         </section>
       ) : null}
 
-      <div
+      {mode === "manual" ? <div
         className={`journal-status journal-status--${experience.run_state}`}
         id="journal-status"
         role="status"
         aria-live="polite"
       >
         {copy ? <p>{copy}</p> : null}
-      </div>
-      <div className="journal-status-actions">
+      </div> : null}
+      <div className={`journal-status-actions${
+        mode === "saved_replay" ? " journal-status-actions--replay" : ""
+      }`}>
         {experience.run_state === "failed" && experience.retryable &&
         experience.pending_submission ? (
           <button
@@ -444,13 +448,22 @@ export default function JournalExperience({
                 <li
                   id={journalEntryAnchorId(entry.journal_entry_id)}
                   key={entry.journal_entry_id}
+                  aria-current={
+                    experience.selected_entry_id === entry.journal_entry_id
+                      ? "true"
+                      : undefined
+                  }
                 >
                   <time dateTime={entry.date}>{displayDate(entry.date)}</time>
                   <p className="journal-thread__entry">{entry.content}</p>
-                  {nudge?.outcome === "answered" ? (
+                  {nudge?.text && ["displayed", "answered", "skipped"].includes(
+                    nudge.outcome,
+                  ) ? (
                     <div className="journal-thread__exchange">
                       <p>{nudge.text}</p>
-                      <p>{nudge.response}</p>
+                      {nudge.outcome === "answered" && nudge.response ? (
+                        <p>{nudge.response}</p>
+                      ) : null}
                     </div>
                   ) : null}
                   {nudge?.outcome === "skipped" ? (
@@ -473,6 +486,9 @@ export default function JournalExperience({
         weeklyDigest={experience.weekly_digest}
         traceEvents={experience.trace_events}
         inspectRun={inspectRun}
+        selectJournalEntry={(journalEntryId) =>
+          updateExperience({ selected_entry_id: journalEntryId })
+        }
       />
     </div>
   );

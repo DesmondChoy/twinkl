@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any
 
 from pydantic import TypeAdapter, ValidationError
@@ -17,6 +18,7 @@ from src.demo.contracts import (
     ScenarioLoadRequest,
 )
 from src.demo.experience_service import InMemoryExperienceService
+from src.demo.scenarios import load_scenario_catalog
 
 REQUEST_ADAPTER: TypeAdapter[ApiRequest] = TypeAdapter(ApiRequest)
 RESPONSE_ADAPTER: TypeAdapter[ApiResponse] = TypeAdapter(ApiResponse)
@@ -31,8 +33,14 @@ def _status_code(response: ApiResponse) -> int:
         "session_conflict",
     }:
         return 409
-    if response.error.code in {"session_not_found", "trace_cursor_not_found"}:
+    if response.error.code in {
+        "scenario_not_found",
+        "session_not_found",
+        "trace_cursor_not_found",
+    }:
         return 404
+    if response.error.code == "scenario_integrity_error":
+        return 500
     return 400
 
 
@@ -70,13 +78,18 @@ def _validation_error(payload: Any) -> JSONResponse:
 
 def create_app(
     service: InMemoryExperienceService | None = None,
+    *,
+    scenario_root: Path | None = None,
 ) -> Starlette:
     experience_service = service or InMemoryExperienceService()
+    root = scenario_root or Path(__file__).resolve().parents[2]
+    scenario_fixtures = None
 
     async def health(_: Request) -> JSONResponse:
         return JSONResponse({"status": "ok"})
 
     async def experience(request: Request) -> JSONResponse:
+        nonlocal scenario_fixtures
         try:
             payload = await request.json()
             parsed = REQUEST_ADAPTER.validate_python(payload)
@@ -84,22 +97,46 @@ def create_app(
             return _validation_error(payload if "payload" in locals() else None)
 
         if isinstance(parsed, ScenarioLoadRequest):
-            response_payload = {
-                "schema_version": "experience-inspect-v1",
-                "operation": "error",
-                "requested_operation": "load_scenario",
-                "request_id": parsed.request_id,
-                "status": "error",
-                "error": SafeError(
-                    code="operation_not_ready",
-                    message=(
-                        "Saved persona loading is implemented in the next "
-                        "Experience slice."
-                    ),
-                    retryable=False,
-                ).model_dump(mode="json"),
-            }
-            response = RESPONSE_ADAPTER.validate_python(response_payload)
+            try:
+                if scenario_fixtures is None:
+                    _, scenario_fixtures = load_scenario_catalog(root)
+            except (OSError, ValidationError, ValueError):
+                response_payload = {
+                    "schema_version": "experience-inspect-v1",
+                    "operation": "error",
+                    "requested_operation": "load_scenario",
+                    "request_id": parsed.request_id,
+                    "status": "error",
+                    "error": SafeError(
+                        code="scenario_integrity_error",
+                        message=(
+                            "The saved persona catalog failed its integrity check."
+                        ),
+                        retryable=False,
+                    ).model_dump(mode="json"),
+                }
+                response = RESPONSE_ADAPTER.validate_python(response_payload)
+            else:
+                fixture = scenario_fixtures.get(parsed.scenario_id)
+                if fixture is None:
+                    response_payload = {
+                        "schema_version": "experience-inspect-v1",
+                        "operation": "error",
+                        "requested_operation": "load_scenario",
+                        "request_id": parsed.request_id,
+                        "status": "error",
+                        "error": SafeError(
+                            code="scenario_not_found",
+                            message="The selected saved persona is unavailable.",
+                            retryable=False,
+                        ).model_dump(mode="json"),
+                    }
+                    response = RESPONSE_ADAPTER.validate_python(response_payload)
+                else:
+                    response = await experience_service.load_saved_scenario(
+                        parsed,
+                        fixture,
+                    )
         else:
             response = await experience_service.handle(parsed)
 

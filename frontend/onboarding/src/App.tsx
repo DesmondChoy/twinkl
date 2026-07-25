@@ -1,4 +1,13 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import {
+  Component,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ErrorInfo,
+  type ReactNode,
+} from "react";
 import {
   BWS_OBJECTS,
   BWS_SETS,
@@ -11,13 +20,23 @@ import {
   type GoalCategory,
 } from "./domain";
 import {
+  clearSession,
   clearChoice,
   setChoice,
   type OnboardingSession,
 } from "./session";
 import InspectView from "./InspectView";
 import JournalExperience from "./JournalExperience";
+import {
+  PersonaReplayExperience,
+  PersonaReplayPicker,
+} from "./PersonaReplay";
 import { canonicalInspectFixture } from "./inspectFixture";
+import {
+  loadSavedScenarioById,
+  projectScenarioWeek,
+  type LoadedScenario,
+} from "./scenarioReplay";
 import { SharedSessionProvider, useSharedSession } from "./sharedSession";
 
 const MILESTONE_COUNT = BWS_SETS.length + 2;
@@ -30,6 +49,51 @@ const CARD_BACKGROUNDS = [
   "/card-backgrounds/memory-atlas-05.jpg",
   "/card-backgrounds/memory-atlas-06.jpg",
 ] as const;
+
+export class AppErrorBoundary extends Component<
+  { children: ReactNode },
+  { failed: boolean }
+> {
+  state = { failed: false };
+
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    console.error("Experience recovery boundary", error, info);
+  }
+
+  private restart = () => {
+    clearSession();
+    window.location.reload();
+  };
+
+  render() {
+    if (!this.state.failed) return this.props.children;
+    return (
+      <div className="app-shell">
+        <header className="topbar">
+          <a className="wordmark" href="/">
+            twinkl<span>·</span>
+          </a>
+        </header>
+        <main className="app-recovery" id="main">
+          <p className="eyebrow">Experience recovery</p>
+          <h1>This saved view could not be restored.</h1>
+          <p>Your browser data can be cleared without changing project files.</p>
+          <button
+            className="button button--primary"
+            type="button"
+            onClick={this.restart}
+          >
+            Start over
+          </button>
+        </main>
+      </div>
+    );
+  }
+}
 
 function milestoneFor(session: OnboardingSession): number {
   if (session.stage === "set") {
@@ -242,6 +306,7 @@ interface AppProps {
 function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
   const {
     session,
+    persistenceError,
     updateSession,
     updateExperience,
     showView,
@@ -249,6 +314,14 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
     restart: restartSession,
   } = useSharedSession();
   const [activeDrop, setActiveDrop] = useState<DropTarget>(null);
+  const [personaPickerOpen, setPersonaPickerOpen] = useState(false);
+  const [loadedScenario, setLoadedScenario] = useState<LoadedScenario | null>(
+    null,
+  );
+  const [scenarioLoadError, setScenarioLoadError] = useState<string | null>(
+    null,
+  );
+  const [scenarioLoadAttempt, setScenarioLoadAttempt] = useState(0);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const mostDropRef = useRef<HTMLElement>(null);
   const leastDropRef = useRef<HTMLElement>(null);
@@ -258,6 +331,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
   const milestone = milestoneFor(session);
   const journalStarted = session.experience.journal_started;
   const activeView = session.experience.active_view;
+  const selectedPersonaId = session.experience.selected_persona_id;
   const inspectAvailable = session.confirmed_profile !== null;
   const currentSetIndex = session.set_order[session.set_index];
   const currentSet = BWS_SETS[currentSetIndex];
@@ -300,10 +374,137 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
   }, [session.responses]);
 
   const restart = () => {
-    if (!window.confirm("Start over and clear these onboarding choices?")) return;
+    if (!window.confirm("Start over and clear this progress?")) return;
     choicesCompletedAtRef.current = null;
+    setPersonaPickerOpen(false);
+    setLoadedScenario(null);
+    setScenarioLoadError(null);
     restartSession();
   };
+
+  const applyScenarioWeek = (
+    loaded: LoadedScenario,
+    weekIndex: number,
+  ) => {
+    const projection = projectScenarioWeek(loaded.fixture, weekIndex);
+    const profile = projection.session.profile;
+    const visibleEntryIds = new Set(
+      projection.session.journal_entries.map(
+        (entry) => entry.journal_entry_id,
+      ),
+    );
+    const visibleEventIds = new Set(projection.session.trace_event_ids);
+    const previousEntryId = session.experience.selected_entry_id;
+    const previousEventId = session.experience.selected_event_id;
+    update({
+      user_id: profile.user_id,
+      session_id: profile.session_id,
+      started_at: profile.started_at,
+      stage: "complete",
+      set_index: BWS_SETS.length - 1,
+      set_order: BWS_SETS.map((_, index) => index),
+      displayed_orders: BWS_SETS.map((set) => {
+        const response = profile.bws_responses.find(
+          (item) => item.set_number === set.setNumber,
+        );
+        return response ? [...response.item_order_shown] : [...set.items];
+      }),
+      responses: profile.bws_responses,
+      draft_best: null,
+      draft_worst: null,
+      goal_category: profile.goal_category,
+      confirmed_profile: profile,
+    });
+    updateExperience({
+      journal_started: true,
+      journal_draft: "",
+      revision: projection.session.revision,
+      journal_entries: projection.session.journal_entries,
+      nudges: projection.session.nudges,
+      pending_submission: null,
+      nudge_response_draft: "",
+      error_message: null,
+      selected_persona_id: loaded.catalogItem.persona_id,
+      selected_week: weekIndex,
+      selected_entry_id:
+        previousEntryId && visibleEntryIds.has(previousEntryId)
+          ? previousEntryId
+          : null,
+      selected_event_id:
+        previousEventId && visibleEventIds.has(previousEventId)
+          ? previousEventId
+          : null,
+      weekly_reviewer_decisions:
+        projection.session.weekly_reviewer_decisions,
+      drift_result: projection.session.drift_result,
+      weekly_digest: projection.session.weekly_digest,
+      weekly_coach: null,
+      run_state: "complete",
+      retryable: false,
+      trace_event_ids: projection.session.trace_event_ids,
+      trace_events: projection.events,
+    });
+  };
+
+  const activateScenario = (loaded: LoadedScenario) => {
+    const hasManualProgress =
+      selectedPersonaId === null &&
+      (
+        session.responses.length > 0 ||
+        session.confirmed_profile !== null ||
+        session.experience.journal_entries.length > 0 ||
+        session.experience.journal_draft.trim().length > 0
+      );
+    if (
+      hasManualProgress &&
+      !window.confirm(
+        "Load this saved persona and replace your current progress?",
+      )
+    ) {
+      return false;
+    }
+    setLoadedScenario(loaded);
+    setScenarioLoadError(null);
+    setPersonaPickerOpen(false);
+    applyScenarioWeek(loaded, 0);
+    return true;
+  };
+
+  useEffect(() => {
+    if (
+      !selectedPersonaId ||
+      loadedScenario?.catalogItem.persona_id === selectedPersonaId
+    ) {
+      return;
+    }
+    let cancelled = false;
+    setScenarioLoadError(null);
+    void loadSavedScenarioById(selectedPersonaId)
+      .then((loaded) => {
+        if (cancelled) return;
+        const requestedWeek = session.experience.selected_week ?? 0;
+        const safeWeek = Math.min(
+          requestedWeek,
+          loaded.fixture.scenario.weeks.length - 1,
+        );
+        setLoadedScenario(loaded);
+        applyScenarioWeek(loaded, safeWeek);
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setScenarioLoadError(
+            "The saved persona replay could not be restored.",
+          );
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [
+    loadedScenario?.catalogItem.persona_id,
+    scenarioLoadAttempt,
+    selectedPersonaId,
+  ]);
 
   const locateTarget = (clientX: number, clientY: number): DropTarget => {
     const targets: [CardLocation, HTMLElement | null][] = [
@@ -426,7 +627,15 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
       : "Now choose Least. Tap the principle that matters least to you in this group.";
 
   return (
-    <div className={`app-shell app-shell--${activeView === "inspect" ? "inspect" : journalStarted ? "journal" : session.stage}`}>
+    <div className={`app-shell app-shell--${
+      activeView === "inspect"
+        ? "inspect"
+        : personaPickerOpen
+          ? "persona"
+          : journalStarted
+            ? "journal"
+            : session.stage
+    }`}>
       <header className="topbar">
         <a className="wordmark" href="#main">
           twinkl<span>·</span>
@@ -458,10 +667,31 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
             </span>
           ) : null}
         </nav>
-        <button className="restart" type="button" onClick={restart}>
-          Start over
-        </button>
+        <div className="topbar-actions">
+          {!personaPickerOpen ? (
+            <button
+              className="restart"
+              type="button"
+              onClick={() => {
+                setPersonaPickerOpen(true);
+                showView("experience");
+              }}
+            >
+              Try demo
+            </button>
+          ) : null}
+          <button className="restart" type="button" onClick={restart}>
+            Start over
+          </button>
+        </div>
       </header>
+
+      {persistenceError ? (
+        <p className="storage-warning" role="alert">
+          Progress could not be saved in this browser. Keep this tab open while
+          you continue.
+        </p>
+      ) : null}
 
       {activeView === "experience" ? <main id="main" className="layout">
         <aside className="instrument-panel">
@@ -472,9 +702,63 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
         </aside>
 
         <section className="flow-panel">
-          {!journalStarted ? <Progress session={session} milestone={milestone} /> : null}
+          {!personaPickerOpen && !selectedPersonaId && !journalStarted ? (
+            <Progress session={session} milestone={milestone} />
+          ) : null}
 
-          {session.stage === "set" ? (
+          {personaPickerOpen ? (
+            <PersonaReplayPicker
+              currentPersonaId={selectedPersonaId}
+              onBack={() => setPersonaPickerOpen(false)}
+              onLoad={activateScenario}
+            />
+          ) : null}
+
+          {!personaPickerOpen && selectedPersonaId &&
+          loadedScenario?.catalogItem.persona_id === selectedPersonaId &&
+          session.confirmed_profile ? (
+            <div className="stage stage--journal">
+              <PersonaReplayExperience
+                loaded={loadedScenario}
+                weekIndex={session.experience.selected_week ?? 0}
+                profile={session.confirmed_profile}
+                experience={session.experience}
+                updateExperience={updateExperience}
+                inspectRun={inspectRun}
+                onChoosePersona={() => setPersonaPickerOpen(true)}
+                onWeekChange={(weekIndex) =>
+                  applyScenarioWeek(loadedScenario, weekIndex)
+                }
+                headingRef={headingRef}
+              />
+            </div>
+          ) : null}
+
+          {!personaPickerOpen && selectedPersonaId &&
+          loadedScenario?.catalogItem.persona_id !== selectedPersonaId ? (
+            <div className="stage stage--journal replay-loading" aria-live="polite">
+              <p className="eyebrow">Saved persona replay</p>
+              <h1 ref={headingRef} tabIndex={-1}>
+                {scenarioLoadError
+                  ? "The replay needs another try."
+                  : "Restoring the replay…"}
+              </h1>
+              {scenarioLoadError ? (
+                <>
+                  <p className="lede">{scenarioLoadError}</p>
+                  <button
+                    className="button button--primary"
+                    type="button"
+                    onClick={() => setScenarioLoadAttempt((value) => value + 1)}
+                  >
+                    Try loading again
+                  </button>
+                </>
+              ) : null}
+            </div>
+          ) : null}
+
+          {!personaPickerOpen && !selectedPersonaId && session.stage === "set" ? (
             <div className="stage stage--cards">
               <h1 ref={headingRef} tabIndex={-1}>
                 What matters most as you find your way?
@@ -571,7 +855,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
             </div>
           ) : null}
 
-          {session.stage === "goal" ? (
+          {!personaPickerOpen && !selectedPersonaId && session.stage === "goal" ? (
             <div className="stage">
               <h1 ref={headingRef} tabIndex={-1}>
                 What brought you here right now?
@@ -604,7 +888,8 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
             </div>
           ) : null}
 
-          {session.stage === "summary" && scores && session.goal_category ? (
+          {!personaPickerOpen && !selectedPersonaId &&
+          session.stage === "summary" && scores && session.goal_category ? (
             <div className="stage stage--summary">
               <h1 ref={headingRef} tabIndex={-1}>
                 What sits at the center.
@@ -629,7 +914,9 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
             </div>
           ) : null}
 
-          {session.stage === "complete" && session.confirmed_profile && !journalStarted ? (
+          {!personaPickerOpen && !selectedPersonaId &&
+          session.stage === "complete" && session.confirmed_profile &&
+          !journalStarted ? (
             <div className="stage stage--complete">
               <h1 ref={headingRef} tabIndex={-1}>
                 Your compass is ready.
@@ -647,7 +934,9 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
             </div>
           ) : null}
 
-          {session.stage === "complete" && session.confirmed_profile && journalStarted ? (
+          {!personaPickerOpen && !selectedPersonaId &&
+          session.stage === "complete" && session.confirmed_profile &&
+          journalStarted ? (
             <div className="stage stage--journal">
               <JournalExperience
                 profile={session.confirmed_profile}
@@ -701,8 +990,10 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
 
 export default function App(props: AppProps = {}) {
   return (
-    <SharedSessionProvider>
-      <ExperienceInspectApp {...props} />
-    </SharedSessionProvider>
+    <AppErrorBoundary>
+      <SharedSessionProvider>
+        <ExperienceInspectApp {...props} />
+      </SharedSessionProvider>
+    </AppErrorBoundary>
   );
 }

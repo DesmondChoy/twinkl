@@ -21,6 +21,7 @@ import {
 
 interface SharedSessionValue {
   session: OnboardingSession;
+  persistenceError: boolean;
   updateSession: (patch: Partial<OnboardingSession>) => void;
   updateExperience: (patch: Partial<ExperienceState>) => void;
   showView: (view: DemoView) => void;
@@ -32,9 +33,10 @@ const SharedSessionContext = createContext<SharedSessionValue | null>(null);
 
 export function SharedSessionProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<OnboardingSession>(() => loadOrCreateSession());
+  const [persistenceError, setPersistenceError] = useState(false);
 
   useEffect(() => {
-    persistSession(session);
+    setPersistenceError(!persistSession(session));
   }, [session]);
 
   const updateSession = useCallback((patch: Partial<OnboardingSession>) => {
@@ -67,13 +69,22 @@ export function SharedSessionProvider({ children }: { children: ReactNode }) {
   const value = useMemo(
     () => ({
       session,
+      persistenceError,
       updateSession,
       updateExperience,
       showView,
       inspectRun,
       restart,
     }),
-    [session, updateSession, updateExperience, showView, inspectRun, restart],
+    [
+      session,
+      persistenceError,
+      updateSession,
+      updateExperience,
+      showView,
+      inspectRun,
+      restart,
+    ],
   );
 
   return <SharedSessionContext.Provider value={value}>{children}</SharedSessionContext.Provider>;

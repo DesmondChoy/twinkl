@@ -108,6 +108,39 @@ export interface ExperienceSessionContract extends JsonObject {
   updated_at: string;
 }
 
+export type ScenarioDeliveryState =
+  | "stable"
+  | "active"
+  | "recovered"
+  | "uncertain"
+  | "mixed";
+
+export interface ScenarioWeekContract extends JsonObject {
+  week_id: string;
+  week_start: string;
+  week_end: string;
+  journal_entry_ids: string[];
+  event_ids: string[];
+  expected_delivery_state: ScenarioDeliveryState;
+}
+
+export interface ScenarioBundleContract extends JsonObject {
+  schema_version: typeof EXPERIENCE_INSPECT_CONTRACT_VERSION;
+  scenario_id: string;
+  title: string;
+  description: string;
+  source: "saved_replay";
+  persona_id: string;
+  profile: OnboardingProfile;
+  journal_entries: JournalEntryContract[];
+  weekly_reviewer_decisions: WeeklyDriftReviewerDecisionContract[];
+  drift_result: JsonObject;
+  weekly_digest: JsonObject;
+  weeks: ScenarioWeekContract[];
+  trace_event_ids: string[];
+  manifest: JsonObject;
+}
+
 export interface ExperienceResumeStateContract extends JsonObject {
   session_id: string;
   revision: number;
@@ -155,16 +188,27 @@ export interface TraceReadResponseContract extends JsonObject {
   events: TraceEventContract[];
 }
 
+export interface ScenarioLoadedResponseContract extends JsonObject {
+  schema_version: typeof EXPERIENCE_INSPECT_CONTRACT_VERSION;
+  operation: "load_scenario";
+  request_id: string;
+  status: "ok";
+  session: ExperienceSessionContract;
+  scenario: ScenarioBundleContract;
+  event_ids: string[];
+}
+
 export type ExperienceApiResponseContract =
   | ApiErrorContract
   | SessionCreatedResponseContract
   | JournalEntrySubmittedResponseContract
+  | ScenarioLoadedResponseContract
   | TraceReadResponseContract;
 
 export interface ExperienceInspectFixtureContract extends JsonObject {
   schema_version: typeof EXPERIENCE_INSPECT_CONTRACT_VERSION;
   session: ExperienceSessionContract;
-  scenario: JsonObject;
+  scenario: ScenarioBundleContract;
   requests: JsonObject[];
   responses: JsonObject[];
   trace_events: TraceEventContract[];
@@ -587,7 +631,34 @@ function validateTraceEvent(value: unknown, name: string): TraceEventContract {
   return event as TraceEventContract;
 }
 
-function validateScenario(value: unknown, name: string): JsonObject {
+function validateScenarioWeek(value: unknown, name: string): ScenarioWeekContract {
+  const week = object(value, name);
+  exactKeys(
+    week,
+    [
+      "week_id",
+      "week_start",
+      "week_end",
+      "journal_entry_ids",
+      "event_ids",
+      "expected_delivery_state",
+    ],
+    name,
+  );
+  string(week.week_id, `${name}.week_id`);
+  string(week.week_start, `${name}.week_start`);
+  string(week.week_end, `${name}.week_end`);
+  stringArray(week.journal_entry_ids, `${name}.journal_entry_ids`);
+  stringArray(week.event_ids, `${name}.event_ids`);
+  if (!["stable", "active", "recovered", "uncertain", "mixed"].includes(
+    String(week.expected_delivery_state),
+  )) {
+    throw new Error(`${name}.expected_delivery_state is incompatible`);
+  }
+  return week as ScenarioWeekContract;
+}
+
+function validateScenario(value: unknown, name: string): ScenarioBundleContract {
   const scenario = object(value, name);
   exactKeys(
     scenario,
@@ -612,17 +683,51 @@ function validateScenario(value: unknown, name: string): JsonObject {
   version(scenario, name);
   if (scenario.source !== "saved_replay") throw new Error(`${name}.source must be saved_replay`);
   validateProfile(scenario.profile);
-  array(scenario.journal_entries, `${name}.journal_entries`).forEach((entry, index) =>
+  const journalEntries = array(
+    scenario.journal_entries,
+    `${name}.journal_entries`,
+  ).map((entry, index) =>
     validateJournalEntry(entry, `${name}.journal_entries[${index}]`),
   );
-  array(scenario.weekly_reviewer_decisions, `${name}.weekly_reviewer_decisions`).forEach(
-    (decision, index) => validateDecision(decision, `${name}.weekly_reviewer_decisions[${index}]`),
+  array(
+    scenario.weekly_reviewer_decisions,
+    `${name}.weekly_reviewer_decisions`,
+  ).forEach((decision, index) =>
+    validateDecision(
+      decision,
+      `${name}.weekly_reviewer_decisions[${index}]`,
+    ),
   );
   if (object(scenario.drift_result, `${name}.drift_result`).schema_version !== "drift-detector-result-v1") {
     throw new Error(`${name}.drift_result has an incompatible schema_version`);
   }
   object(scenario.weekly_digest, `${name}.weekly_digest`);
-  array(scenario.weeks, `${name}.weeks`);
+  const weeks = array(scenario.weeks, `${name}.weeks`).map((week, index) =>
+    validateScenarioWeek(week, `${name}.weeks[${index}]`),
+  );
+  if (weeks.length === 0) throw new Error(`${name}.weeks must not be empty`);
+  const journalEntryIds = new Set(
+    journalEntries.map((entry) => entry.journal_entry_id),
+  );
+  const seenJournalEntryIds = new Set<string>();
+  const seenEventIds = new Set<string>();
+  for (const week of weeks) {
+    for (const journalEntryId of week.journal_entry_ids) {
+      if (!journalEntryIds.has(journalEntryId)) {
+        throw new Error(`${name}.weeks references an unknown Journal Entry`);
+      }
+      if (seenJournalEntryIds.has(journalEntryId)) {
+        throw new Error(`${name}.weeks repeats a Journal Entry`);
+      }
+      seenJournalEntryIds.add(journalEntryId);
+    }
+    for (const eventId of week.event_ids) {
+      if (seenEventIds.has(eventId)) {
+        throw new Error(`${name}.weeks repeats an Inspect event`);
+      }
+      seenEventIds.add(eventId);
+    }
+  }
   const manifest = object(scenario.manifest, `${name}.manifest`);
   exactKeys(
     manifest,
@@ -638,7 +743,7 @@ function validateScenario(value: unknown, name: string): JsonObject {
   stringArray(manifest.source_files, `${name}.manifest.source_files`);
   validateLunaLow(manifest.model_contract, `${name}.manifest.model_contract`);
   stringArray(scenario.trace_event_ids, `${name}.trace_event_ids`);
-  return scenario;
+  return scenario as ScenarioBundleContract;
 }
 
 function validateRequest(value: unknown, name: string): JsonObject {

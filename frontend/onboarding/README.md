@@ -18,8 +18,14 @@ ordered Journal Entries through the versioned Python boundary, applies the
 anti-annoyance rule, and shows the resulting displayed nudge with reply or
 skip actions. The same submission runs the fixed Weekly Drift Reviewer,
 applies the Drift Detector, and shows a cited Weekly Digest. Inspect reads the
-linked live trace events. The Profile remains available through the
-`onStartJournal` callback and
+linked live trace events. **Try demo** loads one of five saved synthetic
+personas into the same React session and replays Journal Entries, displayed
+nudges and responses, Drift, Weekly Digests, and Inspect events one week at a
+time. Previous, next, play or pause, and restart controls preserve the selected
+week across Experience and Inspect; reduced-motion preferences disable
+automatic advancement. The browser verifies each scenario against the
+catalogued SHA-256 hash before displaying it. The Profile remains available
+through the `onStartJournal` callback and
 `twinkl:start-first-journal` browser event.
 
 [`docs/onboarding/onboarding_spec.md`](../../docs/onboarding/onboarding_spec.md)

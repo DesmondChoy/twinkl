@@ -446,6 +446,9 @@ describe("manual Journal Entry Experience", () => {
       name: "Open Journal Entry from 2026-07-06",
     });
     expect(citation.getAttribute("href")).toContain("journal-entry-");
+    await user.click(citation);
+    const journalEntry = document.querySelector(citation.getAttribute("href")!);
+    expect(journalEntry?.getAttribute("aria-current")).toBe("true");
     expect(screen.queryByText("Raw provider response")).toBeNull();
     expect(screen.queryByText("Validation result")).toBeNull();
 

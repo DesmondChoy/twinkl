@@ -349,16 +349,26 @@ export function loadOrCreateSession(): OnboardingSession {
   );
 }
 
-export function persistSession(session: OnboardingSession): void {
-  localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
-  localStorage.removeItem(LEGACY_SESSION_STORAGE_KEY);
-  localStorage.removeItem(OLDEST_SESSION_STORAGE_KEY);
+export function persistSession(session: OnboardingSession): boolean {
+  try {
+    localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
+    localStorage.removeItem(LEGACY_SESSION_STORAGE_KEY);
+    localStorage.removeItem(OLDEST_SESSION_STORAGE_KEY);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
-export function clearSession(): void {
-  localStorage.removeItem(SESSION_STORAGE_KEY);
-  localStorage.removeItem(LEGACY_SESSION_STORAGE_KEY);
-  localStorage.removeItem(OLDEST_SESSION_STORAGE_KEY);
+export function clearSession(): boolean {
+  try {
+    localStorage.removeItem(SESSION_STORAGE_KEY);
+    localStorage.removeItem(LEGACY_SESSION_STORAGE_KEY);
+    localStorage.removeItem(OLDEST_SESSION_STORAGE_KEY);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 export function showView(session: OnboardingSession, view: DemoView): OnboardingSession {
