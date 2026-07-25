@@ -12,9 +12,13 @@ by randomized display position rather than value identity. People can tap,
 drag, or use the keyboard to make Most and Least choices. Schwartz labels
 remain internal. The Profile keeps raw
 11-object BWS results separate from the ten-value product transformation, with
-no midpoint result or confidence proxy. The final action opens the first
-Journal Entry prompt and exposes the confirmed Profile through an
-`onStartJournal` callback and a `twinkl:start-first-journal` browser event.
+no midpoint result or confidence proxy. The final action opens the manual
+Journal Entry flow. The React Experience passes the confirmed Profile and
+ordered Journal Entries through the versioned Python boundary, applies the
+anti-annoyance rule, and shows the resulting displayed nudge with reply or
+skip actions. Inspect reads the linked live trace events. The Profile remains
+available through the `onStartJournal` callback and
+`twinkl:start-first-journal` browser event.
 
 [`docs/onboarding/onboarding_spec.md`](../../docs/onboarding/onboarding_spec.md)
 is the canonical workflow and evidence-boundary documentation. Background
@@ -22,6 +26,13 @@ generation provenance is in
 [`public/card-backgrounds/README.md`](public/card-backgrounds/README.md).
 
 ## Run locally
+
+```sh
+source .venv/bin/activate
+uv run uvicorn src.demo.api:app --port 8000
+```
+
+In a second terminal:
 
 ```sh
 cd frontend/onboarding
@@ -44,13 +55,18 @@ Create a Railway service from this repository with:
 - config file path: `/frontend/onboarding/railway.json`
 - branch: `main`
 
-The service builds the Vite app in Node and serves `dist` through Caddy. The
-container exposes `/health` for Railway and falls back to `index.html` for SPA
-routes. No service variables or persistent volume are required.
+The existing service builds the Vite app in Node and serves `dist` through
+Caddy. The container exposes `/health` for Railway and falls back to
+`index.html` for SPA routes. That static deployment preserves onboarding and
+local resumability; deploying the Python boundary with provider configuration
+belongs to the later demo hardening task.
 
-This standalone POC stores unfinished progress and its confirmed Profile in
-browser `localStorage` and makes no model or provider calls itself. A host can
-persist the Profile supplied through `onStartJournal` or the
-`twinkl:start-first-journal` event. The approved Python runtime accepts that
-saved JSON through `--profile-path`; automatic browser-to-service storage is
-outside the time-boxed capstone.
+The React Experience stores unfinished progress in the browser. The local
+Python boundary keeps the active session and idempotency receipts in memory,
+so restarting it clears backend state. Before the next Journal Entry, React
+restores the confirmed browser-held Journal Entries, nudges, and trace events
+through the validated session request. Provider keys stay on the Python side.
+Nudge reply and skip outcomes remain in the resumable browser session, while
+the Python boundary records nudge generation events for Inspect.
+Production authentication, multi-tenant storage, and generalized persistence
+remain outside the time-boxed capstone.

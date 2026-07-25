@@ -2894,6 +2894,17 @@
           "title": "Request Id",
           "type": "string"
         },
+        "resume_state": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SessionResumeState"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
         "schema_version": {
           "const": "experience-inspect-v1",
           "default": "experience-inspect-v1",
@@ -2944,6 +2955,97 @@
         "session"
       ],
       "title": "SessionCreatedResponse",
+      "type": "object"
+    },
+    "SessionResumeState": {
+      "additionalProperties": false,
+      "description": "Browser-held state used to restore the in-memory Experience boundary.",
+      "properties": {
+        "journal_entries": {
+          "items": {
+            "$ref": "#/$defs/JournalEntry"
+          },
+          "title": "Journal Entries",
+          "type": "array"
+        },
+        "nudges": {
+          "items": {
+            "$ref": "#/$defs/NudgeInteraction"
+          },
+          "title": "Nudges",
+          "type": "array"
+        },
+        "revision": {
+          "minimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "session_id": {
+          "minLength": 1,
+          "title": "Session Id",
+          "type": "string"
+        },
+        "trace_events": {
+          "items": {
+            "discriminator": {
+              "mapping": {
+                "drift_detected": "#/$defs/DriftDetectedEvent",
+                "journal_entry_submitted": "#/$defs/JournalEntrySubmittedEvent",
+                "nudge_decided": "#/$defs/NudgeDecidedEvent",
+                "nudge_generated": "#/$defs/NudgeGeneratedEvent",
+                "nudge_suppression_checked": "#/$defs/NudgeSuppressionCheckedEvent",
+                "profile_confirmed": "#/$defs/ProfileConfirmedEvent",
+                "weekly_coach_generated": "#/$defs/WeeklyCoachGeneratedEvent",
+                "weekly_digest_built": "#/$defs/WeeklyDigestBuiltEvent",
+                "weekly_review_completed": "#/$defs/WeeklyReviewCompletedEvent",
+                "weekly_review_requested": "#/$defs/WeeklyReviewRequestedEvent"
+              },
+              "propertyName": "event_type"
+            },
+            "oneOf": [
+              {
+                "$ref": "#/$defs/ProfileConfirmedEvent"
+              },
+              {
+                "$ref": "#/$defs/JournalEntrySubmittedEvent"
+              },
+              {
+                "$ref": "#/$defs/NudgeSuppressionCheckedEvent"
+              },
+              {
+                "$ref": "#/$defs/NudgeDecidedEvent"
+              },
+              {
+                "$ref": "#/$defs/NudgeGeneratedEvent"
+              },
+              {
+                "$ref": "#/$defs/WeeklyReviewRequestedEvent"
+              },
+              {
+                "$ref": "#/$defs/WeeklyReviewCompletedEvent"
+              },
+              {
+                "$ref": "#/$defs/DriftDetectedEvent"
+              },
+              {
+                "$ref": "#/$defs/WeeklyDigestBuiltEvent"
+              },
+              {
+                "$ref": "#/$defs/WeeklyCoachGeneratedEvent"
+              }
+            ]
+          },
+          "minItems": 1,
+          "title": "Trace Events",
+          "type": "array"
+        }
+      },
+      "required": [
+        "session_id",
+        "revision",
+        "trace_events"
+      ],
+      "title": "SessionResumeState",
       "type": "object"
     },
     "SessionSelection": {

@@ -9,15 +9,24 @@ import {
   scoreResponses,
   validateProfile,
 } from "./domain";
+import type {
+  JournalEntryContract,
+  NudgeInteractionContract,
+  TraceEventContract,
+} from "./demoContracts";
 
-export const SESSION_STORAGE_KEY = "twinkl.onboarding.session.v5";
-export const LEGACY_SESSION_STORAGE_KEY = "twinkl.onboarding.session.v4";
+export const SESSION_STORAGE_KEY = "twinkl.onboarding.session.v6";
+export const LEGACY_SESSION_STORAGE_KEY = "twinkl.onboarding.session.v5";
+export const OLDEST_SESSION_STORAGE_KEY = "twinkl.onboarding.session.v4";
 
 export type DemoView = "experience" | "inspect";
 export type DemoRunState =
   | "idle"
   | "queued"
   | "running"
+  | "saving"
+  | "checking_nudge"
+  | "awaiting_response"
   | "complete"
   | "reused"
   | "refused"
@@ -26,11 +35,22 @@ export type DemoRunState =
 
 type SessionRecord = Record<string, unknown>;
 
+export interface PendingJournalSubmission {
+  entry: JournalEntryContract;
+  expected_revision: number;
+  idempotency_key: string;
+}
+
 export interface ExperienceState {
   active_view: DemoView;
   journal_started: boolean;
   journal_draft: string;
-  journal_entries: SessionRecord[];
+  revision: number;
+  journal_entries: JournalEntryContract[];
+  nudges: NudgeInteractionContract[];
+  pending_submission: PendingJournalSubmission | null;
+  nudge_response_draft: string;
+  error_message: string | null;
   selected_persona_id: string | null;
   selected_week: number | null;
   selected_entry_id: string | null;
@@ -42,12 +62,13 @@ export interface ExperienceState {
   run_state: DemoRunState;
   retryable: boolean;
   trace_event_ids: string[];
+  trace_events: TraceEventContract[];
 }
 
 export type OnboardingStage = "set" | "goal" | "summary" | "complete";
 
 export interface OnboardingSession {
-  schema_version: 5;
+  schema_version: 6;
   user_id: string;
   session_id: string;
   started_at: string;
@@ -69,7 +90,12 @@ export function createExperienceState(): ExperienceState {
     active_view: "experience",
     journal_started: false,
     journal_draft: "",
+    revision: 0,
     journal_entries: [],
+    nudges: [],
+    pending_submission: null,
+    nudge_response_draft: "",
+    error_message: null,
     selected_persona_id: null,
     selected_week: null,
     selected_entry_id: null,
@@ -81,6 +107,7 @@ export function createExperienceState(): ExperienceState {
     run_state: "idle",
     retryable: false,
     trace_event_ids: [],
+    trace_events: [],
   };
 }
 
@@ -99,7 +126,7 @@ export function createSession(
   makeId: () => string = () => crypto.randomUUID(),
 ): OnboardingSession {
   return {
-    schema_version: 5,
+    schema_version: 6,
     user_id: makeId(),
     session_id: makeId(),
     started_at: now.toISOString(),
@@ -152,14 +179,32 @@ function isSessionRecord(value: unknown): value is SessionRecord {
   return value !== null && typeof value === "object" && !Array.isArray(value);
 }
 
+function isPendingSubmission(value: unknown): boolean {
+  if (value === null) return true;
+  if (!isSessionRecord(value) || !isSessionRecord(value.entry)) return false;
+  return (
+    typeof value.idempotency_key === "string" &&
+    /^[0-9a-f]{64}$/.test(value.idempotency_key) &&
+    Number.isInteger(value.expected_revision) &&
+    Number(value.expected_revision) >= 0
+  );
+}
+
 function isExperienceState(value: unknown): value is ExperienceState {
   if (!isSessionRecord(value)) return false;
   return (
     ["experience", "inspect"].includes(String(value.active_view)) &&
     typeof value.journal_started === "boolean" &&
     typeof value.journal_draft === "string" &&
+    Number.isInteger(value.revision) &&
+    Number(value.revision) >= 0 &&
     Array.isArray(value.journal_entries) &&
     value.journal_entries.every(isSessionRecord) &&
+    Array.isArray(value.nudges) &&
+    value.nudges.every(isSessionRecord) &&
+    isPendingSubmission(value.pending_submission) &&
+    typeof value.nudge_response_draft === "string" &&
+    isNullableString(value.error_message) &&
     isNullableString(value.selected_persona_id) &&
     (value.selected_week === null || (Number.isInteger(value.selected_week) && Number(value.selected_week) >= 0)) &&
     isNullableString(value.selected_entry_id) &&
@@ -168,11 +213,25 @@ function isExperienceState(value: unknown): value is ExperienceState {
     (value.drift_result === null || isSessionRecord(value.drift_result)) &&
     (value.weekly_digest === null || isSessionRecord(value.weekly_digest)) &&
     (value.weekly_coach === null || isSessionRecord(value.weekly_coach)) &&
-    ["idle", "queued", "running", "complete", "reused", "refused", "invalid", "failed"].includes(String(value.run_state)) &&
+    [
+      "idle",
+      "queued",
+      "running",
+      "saving",
+      "checking_nudge",
+      "awaiting_response",
+      "complete",
+      "reused",
+      "refused",
+      "invalid",
+      "failed",
+    ].includes(String(value.run_state)) &&
     typeof value.retryable === "boolean" &&
     Array.isArray(value.trace_event_ids) &&
     value.trace_event_ids.every((eventId) => typeof eventId === "string") &&
     new Set(value.trace_event_ids).size === value.trace_event_ids.length &&
+    Array.isArray(value.trace_events) &&
+    value.trace_events.every(isSessionRecord) &&
     isNullableString(value.selected_event_id) &&
     (value.selected_event_id === null || value.trace_event_ids.includes(value.selected_event_id))
   );
@@ -187,12 +246,29 @@ export function parseSession(raw: string | null): OnboardingSession | null {
     const session = parsed.schema_version === 4
       ? {
           ...parsed,
-          schema_version: 5 as const,
+          schema_version: 6 as const,
           experience: createExperienceState(),
         }
+      : parsed.schema_version === 5
+        ? {
+            ...parsed,
+            schema_version: 6 as const,
+            experience: {
+              ...createExperienceState(),
+              ...(isSessionRecord(parsed.experience) ? parsed.experience : {}),
+              revision: 0,
+              nudges: [],
+              pending_submission: null,
+              nudge_response_draft: "",
+              error_message: null,
+              selected_event_id: null,
+              trace_event_ids: [],
+              trace_events: [],
+            },
+          }
       : parsed;
     if (
-      session.schema_version !== 5 ||
+      session.schema_version !== 6 ||
       typeof session.user_id !== "string" ||
       typeof session.session_id !== "string" ||
       typeof session.started_at !== "string" ||
@@ -267,6 +343,7 @@ export function loadOrCreateSession(): OnboardingSession {
   return (
     parseSession(localStorage.getItem(SESSION_STORAGE_KEY)) ??
     parseSession(localStorage.getItem(LEGACY_SESSION_STORAGE_KEY)) ??
+    parseSession(localStorage.getItem(OLDEST_SESSION_STORAGE_KEY)) ??
     createSession()
   );
 }
@@ -274,11 +351,13 @@ export function loadOrCreateSession(): OnboardingSession {
 export function persistSession(session: OnboardingSession): void {
   localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
   localStorage.removeItem(LEGACY_SESSION_STORAGE_KEY);
+  localStorage.removeItem(OLDEST_SESSION_STORAGE_KEY);
 }
 
 export function clearSession(): void {
   localStorage.removeItem(SESSION_STORAGE_KEY);
   localStorage.removeItem(LEGACY_SESSION_STORAGE_KEY);
+  localStorage.removeItem(OLDEST_SESSION_STORAGE_KEY);
 }
 
 export function showView(session: OnboardingSession, view: DemoView): OnboardingSession {

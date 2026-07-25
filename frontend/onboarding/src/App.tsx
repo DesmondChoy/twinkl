@@ -16,6 +16,7 @@ import {
   type OnboardingSession,
 } from "./session";
 import InspectView from "./InspectView";
+import JournalExperience from "./JournalExperience";
 import { canonicalInspectFixture } from "./inspectFixture";
 import { SharedSessionProvider, useSharedSession } from "./sharedSession";
 
@@ -244,6 +245,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
     updateSession,
     updateExperience,
     showView,
+    inspectRun,
     restart: restartSession,
   } = useSharedSession();
   const [activeDrop, setActiveDrop] = useState<DropTarget>(null);
@@ -255,7 +257,6 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
   const choicesCompletedAtRef = useRef<number | null>(null);
   const milestone = milestoneFor(session);
   const journalStarted = session.experience.journal_started;
-  const journalDraft = session.experience.journal_draft;
   const activeView = session.experience.active_view;
   const inspectAvailable = session.confirmed_profile !== null;
   const currentSetIndex = session.set_order[session.set_index];
@@ -648,19 +649,12 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
 
           {session.stage === "complete" && session.confirmed_profile && journalStarted ? (
             <div className="stage stage--journal">
-              <p className="eyebrow">First Journal Entry</p>
-              <h1 ref={headingRef} tabIndex={-1}>
-                When did you feel most like yourself?
-              </h1>
-              <p className="lede" id="first-journal-help">
-                Think of one moment from the past week. What was happening, and what felt true about it?
-              </p>
-              <textarea
-                aria-label="First Journal Entry"
-                aria-describedby="first-journal-help"
-                placeholder="Start with the moment…"
-                value={journalDraft}
-                onChange={(event) => updateExperience({ journal_draft: event.target.value })}
+              <JournalExperience
+                profile={session.confirmed_profile}
+                experience={session.experience}
+                updateExperience={updateExperience}
+                inspectRun={inspectRun}
+                headingRef={headingRef}
               />
             </div>
           ) : null}
@@ -676,14 +670,26 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
             <div className="instrument-copy">
               <p className="eyebrow">Contract trace</p>
               <h2>Behind each result.</h2>
-              <p>Inspect reads validated trace contracts. This view currently uses the canonical contract fixture.</p>
+              <p>
+                {session.experience.trace_events.length > 0
+                  ? "Inspect shows the Python work behind this Journal Entry."
+                  : "Inspect reads validated trace contracts. This view currently uses the canonical contract fixture."}
+              </p>
             </div>
           </aside>
           <section className="flow-panel flow-panel--inspect">
             <InspectView
-              events={canonicalInspectFixture.trace_events}
+              events={
+                session.experience.trace_events.length > 0
+                  ? session.experience.trace_events
+                  : canonicalInspectFixture.trace_events
+              }
               selectedEventId={session.experience.selected_event_id}
-              traceLabel="Canonical contract fixture"
+              traceLabel={
+                session.experience.trace_events.length > 0
+                  ? "Current Experience session"
+                  : "Canonical contract fixture"
+              }
               onReturn={() => showView("experience")}
             />
           </section>

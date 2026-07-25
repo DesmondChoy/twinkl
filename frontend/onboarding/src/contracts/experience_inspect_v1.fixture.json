@@ -1514,7 +1514,8 @@
           "set_order_randomized": true,
           "card_order_randomized": true
         }
-      }
+      },
+      "resume_state": null
     },
     {
       "schema_version": "experience-inspect-v1",

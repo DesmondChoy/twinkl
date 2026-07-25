@@ -13,7 +13,7 @@ describe("onboarding session", () => {
   it("randomizes set order and every prescribed card order once, then round-trips", () => {
     const ids = ["user-1", "session-1"];
     const session = createSession(() => 0, new Date("2026-07-19T00:00:00.000Z"), () => ids.shift()!);
-    expect(session.schema_version).toBe(5);
+    expect(session.schema_version).toBe(6);
     expect(session.stage).toBe("set");
     expect(session.experience).toMatchObject({
       active_view: "experience",
@@ -57,9 +57,25 @@ describe("onboarding session", () => {
     legacy.schema_version = 4;
     delete legacy.experience;
     const migrated = parseSession(JSON.stringify(legacy));
-    expect(migrated?.schema_version).toBe(5);
+    expect(migrated?.schema_version).toBe(6);
     expect(migrated?.experience.active_view).toBe("experience");
     expect(migrated?.responses).toEqual(legacy.responses);
+  });
+
+  it("migrates version 5 drafts without carrying fixture trace state forward", () => {
+    const legacy = JSON.parse(JSON.stringify(createSession(() => 0.5)));
+    legacy.schema_version = 5;
+    legacy.experience.journal_draft = "A draft worth keeping.";
+    legacy.experience.trace_event_ids = ["fixture-event"];
+    legacy.experience.selected_event_id = "fixture-event";
+
+    const migrated = parseSession(JSON.stringify(legacy));
+
+    expect(migrated?.schema_version).toBe(6);
+    expect(migrated?.experience.journal_draft).toBe("A draft worth keeping.");
+    expect(migrated?.experience.trace_event_ids).toEqual([]);
+    expect(migrated?.experience.trace_events).toEqual([]);
+    expect(migrated?.experience.selected_event_id).toBeNull();
   });
 
   it("keeps Inspect unavailable before Profile confirmation and preserves event selection", () => {

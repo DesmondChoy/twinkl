@@ -4,10 +4,11 @@
 
 This document specifies the capstone demo experience. The shared React
 Experience and Inspect shell, resumable client session, view selector, and
-focused Inspect navigation are implemented. Journal Entry processing, persona
-replay, weekly review, and the event-linked Inspect timeline remain tracked
-implementation work. The versioned React-Python boundary, JSON Schema, and
-canonical fixtures are implemented in
+focused Inspect navigation are implemented. Manual Journal Entry processing,
+displayed nudges with reply and skip actions, safe retry, and linked nudge
+events in Inspect are also implemented. Persona replay, weekly review, Drift,
+and Weekly Digest integration remain tracked work. The versioned React-Python
+boundary, JSON Schema, and canonical fixtures are implemented in
 [`src/demo/contracts.py`](../../src/demo/contracts.py) and
 [`frontend/onboarding/src/contracts/`](../../frontend/onboarding/src/contracts/).
 The existing React onboarding implementation and the
@@ -118,11 +119,12 @@ After Profile confirmation, Experience provides:
   requests it;
 - the anti-annoyance rule of no more than two displayed nudges in the previous
   three Journal Entries;
-- a chronological journal timeline containing the user's words plus any
-  displayed nudge and response;
-- safe Journal Entry removal for the POC, followed by automatic recomputation;
-  and
+- a chronological thread containing each Journal Entry plus any displayed
+  nudge and response;
 - a contextual retry action only after a failed backend operation.
+
+Journal Entry removal and downstream recomputation are deferred to demo
+hardening; the manual journaling scope does not expose removal.
 
 A Journal Entry must be held safely while the nudge check runs. A missing key,
 refusal, invalid response, or request failure must not discard the Journal
@@ -267,7 +269,7 @@ The React side owns:
 - onboarding interaction and local resumability;
 - Experience and Inspect presentation;
 - persona replay controls;
-- optimistic but recoverable Journal Entry state;
+- failure-safe pending Journal Entry state;
 - view selection and focused trace navigation; and
 - accessible, responsive status and error presentation.
 
@@ -279,7 +281,7 @@ Provider keys and unredacted provider configuration stay on the Python side.
 
 | Operation | Purpose |
 |---|---|
-| `create_session` | Validate a confirmed Profile and establish shared session state |
+| `create_session` | Validate a confirmed Profile and establish or resume in-memory shared session state |
 | `submit_journal_entry` | Append one ordered Journal Entry using an expected session revision |
 | `load_scenario` | Load one deterministic saved persona scenario |
 | `read_trace` | Retrieve typed trace events, optionally after a known event |

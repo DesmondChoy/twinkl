@@ -1323,6 +1323,234 @@ h2 {
   color: rgba(20, 34, 59, 0.42);
 }
 
+.stage--journal {
+  width: 100%;
+  margin: 0;
+}
+
+.journal-experience {
+  width: min(100%, 860px);
+}
+
+.journal-experience__header h1 {
+  max-width: 720px;
+  font-size: clamp(2.65rem, 5.5vw, 5.2rem);
+}
+
+.journal-composer {
+  margin-top: 34px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 24px 0;
+}
+
+.journal-composer label,
+.nudge-reply label {
+  display: block;
+  margin-bottom: 10px;
+  color: rgba(20, 34, 59, 0.68);
+  font-size: 0.72rem;
+  font-weight: 820;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.stage--journal .journal-composer textarea,
+.stage--journal .nudge-reply textarea {
+  min-height: 180px;
+  margin-top: 0;
+}
+
+.journal-composer__actions,
+.nudge-reply__actions,
+.journal-status-actions {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.journal-composer__actions > span {
+  color: rgba(20, 34, 59, 0.48);
+  font-size: 0.72rem;
+  font-weight: 680;
+}
+
+.nudge-reply {
+  position: relative;
+  overflow: hidden;
+  margin-top: 34px;
+  border: 1px solid color-mix(in srgb, var(--blue) 30%, transparent);
+  border-radius: 24px;
+  padding: clamp(24px, 4vw, 38px);
+  background:
+    linear-gradient(120deg, rgba(85, 118, 217, 0.1), transparent 58%),
+    rgba(255, 255, 255, 0.76);
+}
+
+.nudge-reply::before {
+  position: absolute;
+  top: 27px;
+  right: 28px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--apricot);
+  box-shadow:
+    0 0 0 8px rgba(255, 138, 91, 0.1),
+    0 0 0 18px rgba(255, 138, 91, 0.05);
+  content: "";
+}
+
+.nudge-reply h2 {
+  max-width: 670px;
+  padding-right: 38px;
+  font-size: clamp(2rem, 4.2vw, 3.5rem);
+  line-height: 1.06;
+}
+
+.nudge-reply textarea {
+  background: rgba(247, 250, 249, 0.94);
+}
+
+.journal-status {
+  min-height: 52px;
+  margin-top: 14px;
+}
+
+.journal-status-actions {
+  justify-content: flex-start;
+  margin-top: 8px;
+}
+
+.journal-status p {
+  margin: 0;
+  color: rgba(20, 34, 59, 0.68);
+  line-height: 1.5;
+}
+
+.journal-status--failed p {
+  color: #8b3d2f;
+}
+
+.inspect-run-link {
+  display: inline-flex;
+  min-height: 44px;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  align-items: center;
+  padding: 10px 0;
+  color: var(--verdigris);
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.76rem;
+  font-weight: 780;
+}
+
+.journal-thread {
+  margin-top: 52px;
+}
+
+.journal-thread__heading {
+  display: flex;
+  gap: 28px;
+  align-items: baseline;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+}
+
+.journal-thread__heading h2 {
+  margin-bottom: 18px;
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.journal-thread__heading .eyebrow {
+  margin-bottom: 18px;
+}
+
+.journal-thread ol {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.journal-thread ol::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 15px;
+  width: 1px;
+  background: linear-gradient(var(--blue), rgba(85, 118, 217, 0.08));
+  content: "";
+}
+
+.journal-thread li {
+  position: relative;
+  padding: 30px 0 30px 52px;
+}
+
+.journal-thread li::before {
+  position: absolute;
+  top: 35px;
+  left: 10px;
+  width: 11px;
+  height: 11px;
+  border: 3px solid var(--paper);
+  border-radius: 50%;
+  background: var(--blue);
+  box-shadow: 0 0 0 1px rgba(85, 118, 217, 0.3);
+  content: "";
+}
+
+.journal-thread time {
+  display: block;
+  margin-bottom: 10px;
+  color: rgba(20, 34, 59, 0.48);
+  font-size: 0.7rem;
+  font-weight: 780;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.journal-thread__entry {
+  max-width: 720px;
+  margin: 0;
+  color: var(--ink);
+  font-family: "Source Serif 4 Variable", Georgia, serif;
+  font-size: clamp(1.2rem, 2.3vw, 1.6rem);
+  line-height: 1.55;
+}
+
+.journal-thread__exchange {
+  max-width: 650px;
+  margin-top: 20px;
+  border-left: 3px solid var(--apricot);
+  padding: 2px 0 2px 20px;
+}
+
+.journal-thread__exchange p {
+  margin: 0;
+  line-height: 1.55;
+}
+
+.journal-thread__exchange p:first-child {
+  color: rgba(20, 34, 59, 0.58);
+  font-style: italic;
+}
+
+.journal-thread__exchange p + p {
+  margin-top: 8px;
+  font-weight: 650;
+}
+
+.journal-thread__skipped {
+  margin: 12px 0 0;
+  color: rgba(20, 34, 59, 0.48);
+  font-size: 0.78rem;
+}
+
 @keyframes stage-in {
   from {
     transform: translateY(18px);
@@ -1471,6 +1699,99 @@ h2 {
   .flow-panel {
     min-height: 720px;
     padding: 30px 19px 42px;
+  }
+
+  .app-shell--journal .instrument-panel {
+    min-height: 154px;
+  }
+
+  .app-shell--journal .flow-panel {
+    min-height: calc(100vh - 222px);
+    min-height: calc(100dvh - 222px);
+  }
+
+  .journal-experience__header h1 {
+    margin-bottom: 16px;
+    font-size: clamp(2.25rem, 11vw, 3.15rem);
+  }
+
+  .journal-experience__header .lede {
+    font-size: 0.95rem;
+    line-height: 1.58;
+  }
+
+  .journal-composer {
+    margin-top: 24px;
+    padding: 18px 0;
+  }
+
+  .stage--journal .journal-composer textarea,
+  .stage--journal .nudge-reply textarea {
+    min-height: 150px;
+    border-radius: 16px;
+    padding: 16px;
+  }
+
+  .journal-composer__actions,
+  .nudge-reply__actions,
+  .journal-status-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .journal-composer__actions .button,
+  .nudge-reply__actions .button,
+  .journal-status-actions .button,
+  .journal-status-actions .inspect-run-link {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .nudge-reply {
+    border-radius: 18px;
+    padding: 22px 18px;
+  }
+
+  .nudge-reply::before {
+    top: 23px;
+    right: 21px;
+  }
+
+  .nudge-reply h2 {
+    font-size: clamp(1.85rem, 9vw, 2.55rem);
+  }
+
+  .journal-status-actions {
+    gap: 10px;
+  }
+
+  .journal-thread {
+    margin-top: 38px;
+  }
+
+  .journal-thread__heading {
+    display: block;
+  }
+
+  .journal-thread__heading h2 {
+    margin-bottom: 14px;
+  }
+
+  .journal-thread__heading .eyebrow {
+    margin-bottom: 8px;
+  }
+
+  .journal-thread li {
+    padding: 24px 0 24px 38px;
+  }
+
+  .journal-thread ol::before {
+    left: 9px;
+  }
+
+  .journal-thread li::before {
+    top: 29px;
+    left: 4px;
   }
 
   .progress {

@@ -224,7 +224,11 @@ describe("onboarding app", () => {
     fireEvent.click(screen.getByRole("button", { name: "Start my first Journal Entry" }));
     expect(onStartJournal).toHaveBeenCalledTimes(1);
     expect(onStartJournal.mock.calls[0][0].user_confirmed).toBe(true);
-    expect(screen.getByRole("heading", { name: "When did you feel most like yourself?" })).toBeTruthy();
+    const journalHeading = screen.getByRole("heading", {
+      name: "When did you feel most like yourself?",
+    });
+    expect(journalHeading).toBeTruthy();
+    expect(document.activeElement).toBe(journalHeading);
     const journal = screen.getByRole("textbox", { name: "First Journal Entry" });
     fireEvent.change(journal, { target: { value: "A quiet walk helped me think clearly." } });
     expect(screen.queryByLabelText("Your compass")).toBeNull();
