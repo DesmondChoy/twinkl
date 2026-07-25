@@ -15,7 +15,7 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 | **VIF Critic Training** | ✅ Complete | The capstone training and evaluation stack is complete, with ordinal MLP heads, a BNN baseline, configurable sentence encoders, uncertainty estimates, raw output export, experiment logging, and recall-first checkpoint selection. `run_019`-`run_021` remains the historical corrected-split reference, while repaired-Security `run_060` is the nominated offline checkpoint. Repaired Security supervision raises median test Security QWK by about 0.17 without regressing aggregate QWK. Compact-history and matched Hedonism diagnostics did not establish a stronger product role. This is AI diagnostic evidence, not human validation. The VIF Critic is not part of the user-facing Drift path, and no further VIF Critic work is planned for the time-boxed capstone. |
 | **Human Annotation Tool** | ✅ Complete | ~4,200 LOC Shiny app; 380 saved annotations across 24 personas, with a 115-entry shared subset across 19 personas used for the current inter-rater agreement benchmark; Cohen's κ / Fleiss' κ metrics; modular components with analysis view; annotation ordering for persona prioritization |
 | **Drift Inspection App** | ✅ Complete | Read-only desktop Shiny app for comparing Runs 1–3 across three frozen Weekly Drift Reviewer setups: `gpt-5.4-mini` at reasoning effort `none`, `gpt-5.6-luna` at reasoning effort `none`, and `gpt-5.6-luna` at reasoning effort `low`. It shows complete development and persona-level results, Journal Entries, AI-reviewed LLM-Judge Conflict Labels, Weekly Drift Reviewer Decisions, cited evidence, and verified input cutoffs without model or provider API calls. Local and Railway launch paths are documented in the [app guide](demo/weekly_drift_review_app.md). |
-| **Conversational Nudging** | 🧪 Experimental | 3-category LLM classification (clarification/elaboration/tension-surfacing); pending validation that nudging improves VIF signal quality |
+| **Conversational Nudging** | 🧪 Experimental | Runtime implemented and tested; pending Experience integration and validation that nudging improves VIF signal quality |
 | **Drift Detector** | ✅ Complete | The capstone POC implementation is complete and wired. It persists versioned Weekly Drift Reviewer Decisions without VIF Critic input, applies the deterministic two-consecutive-Conflict rule across week boundaries, and handles extension, recovery, abstention, deduplication, and active, recovered, uncertain, or mixed delivery. The fixed Luna-low model contract retains AI-reviewed synthetic development evidence; no fresh final test or deployment approval is claimed. The former VIF Critic crash/rut/evolution runtime is explicitly deprecated and retained only for historical compatibility. |
 | **Weekly Coach** | 🧪 Experimental | The approved runtime sends deterministic Drift Detector output based on Weekly Drift Reviewer Decisions into the Weekly Digest and optional Weekly Coach reflection. The Weekly Digest cites supporting Journal Entries without VIF Critic or LLM-Judge numeric summaries. Explanation validation depth and product-facing orchestration remain incomplete; no fresh final test or deployment approval is claimed. |
 | **Onboarding (SVBWS Values Assessment)** | 🧪 Experimental | Standalone React POC implements the published 11-group, six-object balanced SVBWS design, then presents structured goal selection, a label-free Core Value summary, and a first Journal Entry handoff. It randomizes group and card order, stores raw 11-object BWS results separately from the ten-value Profile transformation, and omits midpoint feedback and unsupported confidence claims. The approved runtime can import Core Values from a saved confirmed Profile; automated browser-to-service storage is outside the capstone. It is a research-grounded pilot instrument, not a validated Twinkl instrument. [Full spec](onboarding/onboarding_spec.md) |
@@ -143,6 +143,8 @@ LLM prompts are stored as YAML files with Jinja2 templating in `prompts/`:
 - `journal_entry.yaml` — Generate entries from persona perspective
 - `nudge_decision.yaml` — Classify entries for nudge appropriateness
 - `nudge_generation.yaml` — Generate contextual follow-up nudges
+- `nudge_decision_and_generation.yaml` — Make the Experience nudge decision
+  and optionally generate its question in one call
 - `nudge_response.yaml` — Generate persona responses to nudges
 - `judge_alignment.yaml` — Score entries against Schwartz value dimensions
 
@@ -181,7 +183,13 @@ This onboarding directly anchors the capstone submodules: the latent dimensions 
   - **Elaboration** — for surface-level entries with unexplored depth
   - **Tension-surfacing** — for hedging language or conflicted statements
 
-  Nudge decisions use **LLM-based semantic classification** (not regex/heuristics) to detect when deeper reflection would yield VIF signal. Anti-annoyance logic caps nudges at 2 per 3-entry window. See [pipeline_specs.md](pipeline/pipeline_specs.md) for implementation details.
+  After the deterministic anti-annoyance check, the Experience runtime uses
+  one `gpt-5.6-luna` reasoning-effort-`none` structured call to return
+  `no_nudge`, clarification, elaboration, or tension-surfacing plus one
+  contextual question when applicable. The historical synthetic workflow
+  retains its separate decision and generation calls for reproducibility.
+  Anti-annoyance logic caps nudges at 2 per 3-entry window. See
+  [pipeline_specs.md](pipeline/pipeline_specs.md) for implementation details.
 * **”Map of Me”** ❌: Embed each entry, visualise trajectories, overlay alignment scores (Pattern Recognition + Intelligent Sensing).
 * **Journaling anomaly radar** ❌: After 2–3 weeks of entries establish cadence baselines, a lightweight time-series/anomaly detector tracks check-in gaps, flags “silent weeks,” cites evidence windows, and triggers empathetic nudges (Pattern Recognition + Architecting).
 * **Goal-aligned inspiration feed** ❌: When the profile shows intent (e.g., “pick up Japanese”) but no supporting activities, call a real-time search API (SerpAPI/Tavily) constrained by what the user enjoys (e.g., highly rated anime) and reason over the results before surfacing next-step suggestions (Intelligent Reasoning + Intelligent Sensing). Each curated option is presented as an explicit choice; the user’s accept/decline actions feed back into the values/identity graph so future nudges learn which media or effort types actually motivate them.

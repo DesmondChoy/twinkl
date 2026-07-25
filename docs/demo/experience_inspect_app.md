@@ -335,6 +335,14 @@ Journal Entry submitted
 → optional Weekly Coach reflection is generated
 ```
 
+The nudge decision and question come from one structured
+`gpt-5.6-luna` reasoning-effort-`none` call after the deterministic suppression
+check. Inspect still records separate linked `nudge_decided` and
+`nudge_generated` events: the provider prompt, raw response, model contract,
+and latency belong to `nudge_decided`; question-length validation and the
+effective displayed nudge belong to `nudge_generated`. A `no_nudge` decision
+has no `nudge_generated` event.
+
 The backend may reuse an unchanged weekly result by input hash. Reuse must be
 visible in Inspect and must return the same saved decisions and provenance. A
 cache is an optimization, not a user-facing feature or a capstone result by
