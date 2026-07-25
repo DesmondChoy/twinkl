@@ -12,6 +12,8 @@ import {
   readExperienceTrace,
   submitJournalEntry,
 } from "./experienceApi";
+import { journalEntryAnchorId } from "./journalEntryAnchor";
+import WeeklyExperience from "./WeeklyExperience";
 import type {
   ExperienceState,
   PendingJournalSubmission,
@@ -191,6 +193,10 @@ export default function JournalExperience({
           experience.journal_entries,
         ),
         nudges: mergeNudges(response.session.nudges, experience.nudges),
+        weekly_reviewer_decisions:
+          response.session.weekly_reviewer_decisions,
+        drift_result: response.session.drift_result,
+        weekly_digest: response.session.weekly_digest,
         pending_submission: failed ? pending : null,
         run_state: runState,
         retryable: failed,
@@ -435,7 +441,10 @@ export default function JournalExperience({
                   (item) => item.journal_entry_id === entry.journal_entry_id,
                 ) ?? null;
               return (
-                <li key={entry.journal_entry_id}>
+                <li
+                  id={journalEntryAnchorId(entry.journal_entry_id)}
+                  key={entry.journal_entry_id}
+                >
                   <time dateTime={entry.date}>{displayDate(entry.date)}</time>
                   <p className="journal-thread__entry">{entry.content}</p>
                   {nudge?.outcome === "answered" ? (
@@ -455,6 +464,16 @@ export default function JournalExperience({
           </ol>
         </section>
       ) : null}
+
+      <WeeklyExperience
+        profile={profile}
+        journalEntries={experience.journal_entries}
+        weeklyReviewerDecisions={experience.weekly_reviewer_decisions}
+        driftResult={experience.drift_result}
+        weeklyDigest={experience.weekly_digest}
+        traceEvents={experience.trace_events}
+        inspectRun={inspectRun}
+      />
     </div>
   );
 }

@@ -19,6 +19,12 @@ from src.demo.contracts import (
 )
 from src.demo.experience_service import InMemoryExperienceService
 from src.nudge.runtime import NudgeRuntimeReceipt, NudgeRuntimeRequest
+from src.weekly_drift_reviewer import (
+    VerifierAssessment,
+    WeeklyDriftReviewerDecision,
+    WeeklyDriftReviewerReceipt,
+    WeeklyDriftReviewerRequest,
+)
 
 
 class QueueNudgeRuntime:
@@ -31,21 +37,126 @@ class QueueNudgeRuntime:
         return next(self.receipts)
 
 
+class DeterministicWeeklyReviewer:
+    def __init__(
+        self,
+        *,
+        verdict: str = "not_conflict",
+        statuses: list[str] | None = None,
+    ) -> None:
+        self.verdict = verdict
+        self.statuses = list(statuses or [])
+        self.requests: list[WeeklyDriftReviewerRequest] = []
+
+    async def __call__(
+        self,
+        request: WeeklyDriftReviewerRequest,
+    ) -> WeeklyDriftReviewerReceipt:
+        self.requests.append(request)
+        status = self.statuses.pop(0) if self.statuses else "ok"
+        history = {entry.t_index: entry for entry in request.history}
+        assessments = []
+        decisions = []
+        for t_index in request.current_t_indices:
+            for core_value in request.core_values:
+                verdict = self.verdict if status == "ok" else "abstain"
+                evidence_quote = (
+                    history[t_index].text.split("\n\n", 1)[0]
+                    if verdict == "conflict"
+                    else ""
+                )
+                if status == "ok":
+                    assessments.append(
+                        VerifierAssessment(
+                            t_index=t_index,
+                            dimension=core_value,
+                            verdict=verdict,  # type: ignore[arg-type]
+                            confidence="high",
+                            reason_code=(
+                                "direct_behavior_or_choice"
+                                if verdict == "conflict"
+                                else "direct_aligned_or_neutral_behavior"
+                            ),
+                            evidence_quote=evidence_quote,
+                        )
+                    )
+                decisions.append(
+                    WeeklyDriftReviewerDecision(
+                        persona_id=request.persona_id,
+                        week_start=request.week_start,
+                        week_end=request.week_end,
+                        t_index=t_index,
+                        date=history[t_index].date,
+                        core_value=core_value,
+                        verdict=verdict,  # type: ignore[arg-type]
+                        confidence="high" if status == "ok" else None,
+                        reason_code=(
+                            "direct_behavior_or_choice"
+                            if status == "ok" and verdict == "conflict"
+                            else "direct_aligned_or_neutral_behavior"
+                            if status == "ok"
+                            else None
+                        ),
+                        evidence_quote=evidence_quote,
+                        review_status=status,  # type: ignore[arg-type]
+                    )
+                )
+        return WeeklyDriftReviewerReceipt(
+            created_at="2026-07-25T08:30:00+00:00",
+            persona_id=request.persona_id,
+            week_start=request.week_start,
+            week_end=request.week_end,
+            core_values=request.core_values,
+            current_t_indices=request.current_t_indices,
+            prompt_name="weekly_vif_verifier",
+            prompt_version="2.0",
+            prompt_sha256=request.prompt_sha256,
+            runtime_text_sha256=request.runtime_text_sha256,
+            requested_model="gpt-5.6-luna",
+            reasoning_effort="low",
+            status=status,  # type: ignore[arg-type]
+            attempts=1,
+            latency_seconds=0.25,
+            resolved_model="gpt-5.6-luna",
+            response_id="weekly-response-1",
+            refusal="Unable to answer." if status == "refusal" else None,
+            validation_error=(
+                "Response coordinate mismatch." if status == "invalid" else None
+            ),
+            error_type="TimeoutError" if status == "error" else None,
+            error="Provider timed out." if status == "error" else None,
+            assessments=assessments,
+            decisions=decisions,
+        )
+
+
 def _ids() -> Iterator[int]:
     yield from range(1, 100)
 
 
 def _service(
     receipts: list[NudgeRuntimeReceipt],
-) -> tuple[InMemoryExperienceService, QueueNudgeRuntime]:
+    *,
+    weekly_verdict: str = "not_conflict",
+    weekly_statuses: list[str] | None = None,
+) -> tuple[
+    InMemoryExperienceService,
+    QueueNudgeRuntime,
+    DeterministicWeeklyReviewer,
+]:
     sequence = _ids()
     runtime = QueueNudgeRuntime(receipts)
+    weekly_reviewer = DeterministicWeeklyReviewer(
+        verdict=weekly_verdict,
+        statuses=weekly_statuses,
+    )
     service = InMemoryExperienceService(
         nudge_runtime=runtime,
+        weekly_reviewer=weekly_reviewer,
         now=lambda: datetime(2026, 7, 25, 8, 30, tzinfo=UTC),
         make_id=lambda prefix: f"{prefix}-{next(sequence)}",
     )
-    return service, runtime
+    return service, runtime, weekly_reviewer
 
 
 def _receipt(
@@ -147,7 +258,7 @@ def _submit_request(
 
 @pytest.mark.asyncio
 async def test_submission_is_idempotent_and_emits_real_nudge_events() -> None:
-    service, runtime = _service([_receipt()])
+    service, runtime, weekly_reviewer = _service([_receipt()])
     create_request = await _create(service)
     request = _submit_request(create_request, index=0, expected_revision=0)
 
@@ -170,6 +281,10 @@ async def test_submission_is_idempotent_and_emits_real_nudge_events() -> None:
     assert response.session.revision == 1
     assert response.session.nudges[0].outcome == "displayed"
     assert len(runtime.requests) == 1
+    assert len(weekly_reviewer.requests) == 1
+    assert response.session.drift_result is not None
+    assert response.session.weekly_digest is not None
+    assert response.session.weekly_reviewer_decisions
     assert trace.operation == "read_trace"
     assert [event.event_type for event in trace.events] == [
         "profile_confirmed",
@@ -177,16 +292,141 @@ async def test_submission_is_idempotent_and_emits_real_nudge_events() -> None:
         "nudge_suppression_checked",
         "nudge_decided",
         "nudge_generated",
+        "weekly_review_requested",
+        "weekly_review_completed",
+        "drift_detected",
+        "weekly_digest_built",
     ]
-    decision = trace.events[-2]
+    decision = next(
+        event for event in trace.events if event.event_type == "nudge_decided"
+    )
     assert decision.model_contract is not None
     assert decision.model_contract.model == "gpt-5.6-luna"
     assert decision.model_contract.reasoning_effort == "none"
+    weekly_request = weekly_reviewer.requests[0]
+    assert weekly_request.core_values == ["benevolence"]
+    assert "VIF Critic" not in weekly_request.prompt
+    weekly_event = next(
+        event for event in trace.events if event.event_type == "weekly_review_completed"
+    )
+    assert weekly_event.model_contract is not None
+    assert weekly_event.model_contract.model == "gpt-5.6-luna"
+    assert weekly_event.model_contract.reasoning_effort == "low"
+
+
+@pytest.mark.asyncio
+async def test_weekly_integration_forms_drift_and_cites_visible_entries() -> None:
+    service, _, weekly_reviewer = _service(
+        [
+            _receipt(decision="no_nudge", nudge_text=None),
+            _receipt(decision="no_nudge", nudge_text=None),
+        ],
+        weekly_verdict="conflict",
+    )
+    create_request = await _create(service)
+
+    first = await service.submit_journal_entry(
+        _submit_request(create_request, index=0, expected_revision=0)
+    )
+    second = await service.submit_journal_entry(
+        _submit_request(create_request, index=1, expected_revision=1)
+    )
+    trace = await service.read_trace(
+        TraceReadRequest(
+            operation="read_trace",
+            request_id="trace-weekly-success",
+            session_id=create_request.profile.session_id,
+        )
+    )
+
+    assert first.operation == "submit_journal_entry"
+    assert first.session.drift_result is not None
+    assert first.session.drift_result.delivery_state == "stable"
+    assert second.operation == "submit_journal_entry"
+    assert second.session.drift_result is not None
+    assert second.session.drift_result.delivery_state == "active"
+    assert len(second.session.weekly_reviewer_decisions) == 2
+    assert second.session.weekly_digest is not None
+    assert [row.t_index for row in second.session.weekly_digest.evidence] == [0, 1]
+    assert weekly_reviewer.requests[1].current_t_indices == [0, 1]
+    assert all(
+        "VIF Critic" not in request.prompt for request in weekly_reviewer.requests
+    )
+
+    assert trace.operation == "read_trace"
+    latest_events = trace.events[-4:]
+    assert [event.event_type for event in latest_events] == [
+        "weekly_review_requested",
+        "weekly_review_completed",
+        "drift_detected",
+        "weekly_digest_built",
+    ]
+    assert [event.parent_event_id for event in latest_events[1:]] == [
+        event.event_id for event in latest_events[:-1]
+    ]
+    digest_event = latest_events[-1]
+    assert digest_event.event_type == "weekly_digest_built"
+    assert digest_event.details.cited_journal_entry_ids == [
+        "manual-entry-0",
+        "manual-entry-1",
+    ]
+
+
+@pytest.mark.parametrize(
+    ("status", "event_status"),
+    [
+        ("refusal", "refused"),
+        ("invalid", "invalid"),
+        ("error", "failed"),
+    ],
+)
+@pytest.mark.asyncio
+async def test_weekly_integration_fails_closed_to_abstain(
+    status: str,
+    event_status: str,
+) -> None:
+    service, _, _ = _service(
+        [_receipt(decision="no_nudge", nudge_text=None)],
+        weekly_statuses=[status],
+    )
+    create_request = await _create(service)
+
+    response = await service.submit_journal_entry(
+        _submit_request(create_request, index=0, expected_revision=0)
+    )
+    trace = await service.read_trace(
+        TraceReadRequest(
+            operation="read_trace",
+            request_id=f"trace-weekly-{status}",
+            session_id=create_request.profile.session_id,
+        )
+    )
+
+    assert response.operation == "submit_journal_entry"
+    assert {
+        decision.verdict for decision in response.session.weekly_reviewer_decisions
+    } == {"abstain"}
+    assert response.session.drift_result is not None
+    assert response.session.drift_result.delivery_state == "stable"
+    assert response.session.weekly_digest is not None
+    assert response.session.weekly_digest.response_mode == "high_uncertainty"
+    assert response.session.weekly_digest.mode_rationale == (
+        "The Weekly Drift Reviewer could not return usable evidence for this week."
+    )
+    assert trace.operation == "read_trace"
+    completed = next(
+        event for event in trace.events if event.event_type == "weekly_review_completed"
+    )
+    assert completed.status == event_status
+    assert completed.error is not None
+    assert completed.details.receipt.error is None
+    assert trace.events[-2].event_type == "drift_detected"
+    assert trace.events[-1].event_type == "weekly_digest_built"
 
 
 @pytest.mark.asyncio
 async def test_third_entry_is_suppressed_after_two_displayed_nudges() -> None:
-    service, runtime = _service([_receipt(), _receipt()])
+    service, runtime, _ = _service([_receipt(), _receipt()])
     create_request = await _create(service)
 
     for index in range(3):
@@ -220,7 +460,7 @@ async def test_third_entry_is_suppressed_after_two_displayed_nudges() -> None:
 
 @pytest.mark.asyncio
 async def test_rejects_conflicting_retries_and_invalid_journal_order() -> None:
-    service, runtime = _service([_receipt(decision="no_nudge", nudge_text=None)])
+    service, runtime, _ = _service([_receipt(decision="no_nudge", nudge_text=None)])
     create_request = await _create(service)
     first_request = _submit_request(
         create_request,
@@ -272,7 +512,7 @@ async def test_rejects_conflicting_retries_and_invalid_journal_order() -> None:
 
 @pytest.mark.asyncio
 async def test_browser_state_restores_after_in_memory_service_restart() -> None:
-    first_service, _ = _service([_receipt(decision="no_nudge", nudge_text=None)])
+    first_service, _, _ = _service([_receipt(decision="no_nudge", nudge_text=None)])
     create_request = await _create(first_service)
     first = await first_service.submit_journal_entry(
         _submit_request(
@@ -291,7 +531,7 @@ async def test_browser_state_restores_after_in_memory_service_restart() -> None:
     assert first.operation == "submit_journal_entry"
     assert first_trace.operation == "read_trace"
 
-    restarted_service, restarted_runtime = _service(
+    restarted_service, restarted_runtime, _ = _service(
         [_receipt(decision="no_nudge", nudge_text=None)]
     )
     restored = await restarted_service.create_session(
@@ -319,6 +559,12 @@ async def test_browser_state_restores_after_in_memory_service_restart() -> None:
 
     assert restored.operation == "create_session"
     assert restored.session.revision == 1
+    assert (
+        restored.session.weekly_reviewer_decisions
+        == first.session.weekly_reviewer_decisions
+    )
+    assert restored.session.drift_result == first.session.drift_result
+    assert restored.session.weekly_digest == first.session.weekly_digest
     assert second.operation == "submit_journal_entry"
     assert second.session.revision == 2
     assert [entry.t_index for entry in second.session.journal_entries] == [0, 1]
@@ -330,7 +576,7 @@ async def test_browser_state_restores_after_in_memory_service_restart() -> None:
 async def test_non_retryable_nudge_failures_keep_the_journal_entry(
     status: str,
 ) -> None:
-    service, runtime = _service([_receipt(status)])
+    service, runtime, _ = _service([_receipt(status)])
     create_request = await _create(service)
     request = _submit_request(create_request, index=0, expected_revision=0)
 
@@ -350,12 +596,15 @@ async def test_non_retryable_nudge_failures_keep_the_journal_entry(
         )
     )
     assert trace.operation == "read_trace"
-    assert trace.events[-1].status == status.replace("refusal", "refused")
+    nudge_event = next(
+        event for event in trace.events if event.event_type == "nudge_decided"
+    )
+    assert nudge_event.status == status.replace("refusal", "refused")
 
 
 @pytest.mark.asyncio
 async def test_explicit_retry_reruns_only_failed_nudge_step() -> None:
-    service, runtime = _service([_receipt("error"), _receipt()])
+    service, runtime, _ = _service([_receipt("error"), _receipt()])
     create_request = await _create(service)
     request = _submit_request(create_request, index=0, expected_revision=0)
 
@@ -391,7 +640,7 @@ async def test_explicit_retry_reruns_only_failed_nudge_step() -> None:
 
 
 def test_http_adapter_validates_and_serves_contract_responses() -> None:
-    service, _ = _service([_receipt(decision="no_nudge", nudge_text=None)])
+    service, _, _ = _service([_receipt(decision="no_nudge", nudge_text=None)])
     profile = build_canonical_fixture().session.profile
 
     with TestClient(create_app(service)) as client:
@@ -444,4 +693,8 @@ def test_http_adapter_validates_and_serves_contract_responses() -> None:
         "journal_entry_submitted",
         "nudge_suppression_checked",
         "nudge_decided",
+        "weekly_review_requested",
+        "weekly_review_completed",
+        "drift_detected",
+        "weekly_digest_built",
     ]

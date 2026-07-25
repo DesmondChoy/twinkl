@@ -6,9 +6,11 @@ This document specifies the capstone demo experience. The shared React
 Experience and Inspect shell, resumable client session, view selector, and
 focused Inspect navigation are implemented. Manual Journal Entry processing,
 displayed nudges with reply and skip actions, safe retry, and linked nudge
-events in Inspect are also implemented. Persona replay, weekly review, Drift,
-and Weekly Digest integration remain tracked work. The versioned React-Python
-boundary, JSON Schema, and canonical fixtures are implemented in
+events in Inspect are also implemented. Manual weekly review now populates
+Weekly Drift Reviewer Decisions, the Drift Detector result, a cited Weekly
+Digest, and linked Inspect events. Persona replay controls and release
+hardening remain tracked work. The versioned React-Python boundary, JSON
+Schema, and canonical fixtures are implemented in
 [`src/demo/contracts.py`](../../src/demo/contracts.py) and
 [`frontend/onboarding/src/contracts/`](../../frontend/onboarding/src/contracts/).
 The existing React onboarding implementation and the
@@ -125,6 +127,11 @@ After Profile confirmation, Experience provides:
 
 Journal Entry removal and downstream recomputation are deferred to demo
 hardening; the manual journaling scope does not expose removal.
+
+The current manual integration reviews the displayed Journal Entry text held
+by Python when submission finishes. A nudge reply or skip added afterward
+remains resumable in the browser but does not trigger weekly recomputation;
+that follow-up belongs to demo hardening.
 
 A Journal Entry must be held safely while the nudge check runs. A missing key,
 refusal, invalid response, or request failure must not discard the Journal

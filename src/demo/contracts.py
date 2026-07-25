@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from datetime import datetime
-from typing import Annotated, Any, Literal
+from typing import Annotated, Any, Literal, cast
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
@@ -491,6 +492,43 @@ class DriftRuleStep(ContractModel):
     verdict: Literal["conflict", "not_conflict", "abstain"]
     pending_run_length: int = Field(ge=0)
     effect: Literal["start", "confirm", "extend", "recover", "uncertain", "break"]
+
+
+def build_drift_rule_steps(
+    decisions: Sequence[WeeklyDriftReviewerDecision],
+) -> list[DriftRuleStep]:
+    """Explain the deterministic Drift Detector transitions for Inspect."""
+    state: dict[str, tuple[int, bool]] = {}
+    steps: list[DriftRuleStep] = []
+    for decision in sorted(decisions, key=lambda row: (row.t_index, row.core_value)):
+        run_length, confirmed = state.get(decision.core_value, (0, False))
+        effect: Literal["start", "confirm", "extend", "recover", "uncertain", "break"]
+        if decision.verdict == "conflict":
+            if run_length == 0:
+                effect = "start"
+            elif run_length == 1:
+                effect = "confirm"
+                confirmed = True
+            else:
+                effect = "extend"
+            run_length += 1
+        elif decision.verdict == "not_conflict":
+            effect = "recover" if confirmed else "break"
+            run_length, confirmed = 0, False
+        else:
+            effect = "uncertain"
+            run_length, confirmed = 0, False
+        state[decision.core_value] = (run_length, confirmed)
+        steps.append(
+            DriftRuleStep(
+                t_index=decision.t_index,
+                core_value=cast(CoreValue, decision.core_value),
+                verdict=decision.verdict,
+                pending_run_length=run_length,
+                effect=effect,
+            )
+        )
+    return steps
 
 
 class DriftDetectedDetails(ContractModel):

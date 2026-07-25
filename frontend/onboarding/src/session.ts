@@ -13,6 +13,7 @@ import type {
   JournalEntryContract,
   NudgeInteractionContract,
   TraceEventContract,
+  WeeklyDriftReviewerDecisionContract,
 } from "./demoContracts";
 
 export const SESSION_STORAGE_KEY = "twinkl.onboarding.session.v6";
@@ -55,7 +56,7 @@ export interface ExperienceState {
   selected_week: number | null;
   selected_entry_id: string | null;
   selected_event_id: string | null;
-  weekly_reviewer_decisions: SessionRecord[];
+  weekly_reviewer_decisions: WeeklyDriftReviewerDecisionContract[];
   drift_result: SessionRecord | null;
   weekly_digest: SessionRecord | null;
   weekly_coach: SessionRecord | null;

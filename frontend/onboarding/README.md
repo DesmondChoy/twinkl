@@ -16,8 +16,10 @@ no midpoint result or confidence proxy. The final action opens the manual
 Journal Entry flow. The React Experience passes the confirmed Profile and
 ordered Journal Entries through the versioned Python boundary, applies the
 anti-annoyance rule, and shows the resulting displayed nudge with reply or
-skip actions. Inspect reads the linked live trace events. The Profile remains
-available through the `onStartJournal` callback and
+skip actions. The same submission runs the fixed Weekly Drift Reviewer,
+applies the Drift Detector, and shows a cited Weekly Digest. Inspect reads the
+linked live trace events. The Profile remains available through the
+`onStartJournal` callback and
 `twinkl:start-first-journal` browser event.
 
 [`docs/onboarding/onboarding_spec.md`](../../docs/onboarding/onboarding_spec.md)
@@ -67,6 +69,8 @@ so restarting it clears backend state. Before the next Journal Entry, React
 restores the confirmed browser-held Journal Entries, nudges, and trace events
 through the validated session request. Provider keys stay on the Python side.
 Nudge reply and skip outcomes remain in the resumable browser session, while
-the Python boundary records nudge generation events for Inspect.
+the Python boundary records nudge generation events for Inspect. They do not
+yet trigger weekly recomputation; the current Weekly Drift Reviewer request
+uses the displayed text held by Python when submission finishes.
 Production authentication, multi-tenant storage, and generalized persistence
 remain outside the time-boxed capstone.

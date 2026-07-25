@@ -20,6 +20,7 @@ from src.demo.contracts import (
     ModelContract,
     TraceEvent,
     WeeklyDriftReviewerDecisionContract,
+    build_drift_rule_steps,
 )
 from src.demo.profile_projection import build_projected_profile
 from src.drift_detector import detect_drift
@@ -334,41 +335,6 @@ def _reviewer_decisions(
                 )
             )
     return sorted(rows, key=lambda row: (row.t_index, row.core_value))
-
-
-def _drift_steps(
-    decisions: list[WeeklyDriftReviewerDecisionContract],
-) -> list[dict[str, Any]]:
-    state: dict[str, tuple[int, bool]] = {}
-    steps: list[dict[str, Any]] = []
-    for decision in sorted(decisions, key=lambda row: (row.t_index, row.core_value)):
-        run_length, confirmed = state.get(decision.core_value, (0, False))
-        if decision.verdict == "conflict":
-            if run_length == 0:
-                effect = "start"
-            elif run_length == 1:
-                effect = "confirm"
-                confirmed = True
-            else:
-                effect = "extend"
-            run_length += 1
-        elif decision.verdict == "not_conflict":
-            effect = "recover" if confirmed else "break"
-            run_length, confirmed = 0, False
-        else:
-            effect = "uncertain"
-            run_length, confirmed = 0, False
-        state[decision.core_value] = (run_length, confirmed)
-        steps.append(
-            {
-                "t_index": decision.t_index,
-                "core_value": decision.core_value,
-                "verdict": decision.verdict,
-                "pending_run_length": run_length,
-                "effect": effect,
-            }
-        )
-    return steps
 
 
 def _event(
@@ -870,7 +836,10 @@ def build_scenario_fixture(
                     "decisions": [
                         row.model_dump(mode="json") for row in cumulative_decisions
                     ],
-                    "steps": _drift_steps(cumulative_decisions),
+                    "steps": [
+                        step.model_dump(mode="json")
+                        for step in build_drift_rule_steps(cumulative_decisions)
+                    ],
                     "result": final_drift,
                 },
             )

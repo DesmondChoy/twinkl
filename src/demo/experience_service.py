@@ -7,13 +7,17 @@ import hashlib
 import json
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
-from datetime import UTC, date, datetime
+from datetime import UTC, date, datetime, timedelta
 from typing import Any, Literal, cast
 from uuid import uuid4
 
+from src.coach.schemas import WeeklyDigest
+from src.coach.weekly_digest import build_weekly_drift_reviewer_digest_from_entries
 from src.demo.contracts import (
     ApiErrorResponse,
     ApiResponse,
+    DriftDetectedDetails,
+    DriftDetectedEvent,
     EventStatus,
     EventValidation,
     ExperienceSession,
@@ -39,7 +43,18 @@ from src.demo.contracts import (
     TraceEvent,
     TraceReadRequest,
     TraceReadResponse,
+    WeeklyDigestBuiltDetails,
+    WeeklyDigestBuiltEvent,
+    WeeklyDriftReviewerDecisionContract,
+    WeeklyDriftReviewerReceiptContract,
+    WeeklyDriftReviewerRequestContract,
+    WeeklyReviewCompletedDetails,
+    WeeklyReviewCompletedEvent,
+    WeeklyReviewRequestedDetails,
+    WeeklyReviewRequestedEvent,
+    build_drift_rule_steps,
 )
+from src.drift_detector import DriftDetectorResult, detect_drift
 from src.models.nudge import NUDGE_CATEGORIES, NudgeCategory
 from src.nudge.decision import should_suppress_nudge
 from src.nudge.runtime import (
@@ -47,6 +62,13 @@ from src.nudge.runtime import (
     NudgeRuntimeRequest,
     OpenAINudgeRuntime,
     build_nudge_runtime_request,
+)
+from src.weekly_drift_reviewer import (
+    OpenAIWeeklyDriftReviewer,
+    WeeklyDriftReviewerEntry,
+    WeeklyDriftReviewerFn,
+    WeeklyDriftReviewerReceipt,
+    build_weekly_drift_reviewer_request,
 )
 
 NudgeRuntime = Callable[[NudgeRuntimeRequest], Awaitable[NudgeRuntimeReceipt]]
@@ -87,10 +109,12 @@ class InMemoryExperienceService:
         self,
         *,
         nudge_runtime: NudgeRuntime | None = None,
+        weekly_reviewer: WeeklyDriftReviewerFn | None = None,
         now: Callable[[], datetime] | None = None,
         make_id: Callable[[str], str] | None = None,
     ) -> None:
         self._nudge_runtime = nudge_runtime or OpenAINudgeRuntime()
+        self._weekly_reviewer = weekly_reviewer or OpenAIWeeklyDriftReviewer()
         self._now = now or (lambda: datetime.now(UTC))
         self._make_id = make_id or (lambda prefix: f"{prefix}-{uuid4()}")
         self._sessions: dict[str, ExperienceSession] = {}
@@ -134,7 +158,10 @@ class InMemoryExperienceService:
         response: SessionCreatedResponse | JournalEntrySubmittedResponse,
         request_id: str,
     ) -> SessionCreatedResponse | JournalEntrySubmittedResponse:
-        return response.model_copy(update={"request_id": request_id})
+        return cast(
+            SessionCreatedResponse | JournalEntrySubmittedResponse,
+            response.model_copy(update={"request_id": request_id}),
+        )
 
     def _terminal_event_fields(self, *, duration_ms: int = 0) -> dict[str, Any]:
         timestamp = self._timestamp()
@@ -143,6 +170,69 @@ class InMemoryExperienceService:
             "completed_at": timestamp,
             "duration_ms": duration_ms,
         }
+
+    @staticmethod
+    def _week_bounds(raw: str) -> tuple[date, date]:
+        entry_date = date.fromisoformat(raw)
+        week_start = entry_date - timedelta(days=entry_date.weekday())
+        return week_start, week_start + timedelta(days=6)
+
+    @staticmethod
+    def _displayed_entry_text(
+        session: ExperienceSession,
+        *,
+        journal_entry_id: str,
+    ) -> str:
+        entry = next(
+            row
+            for row in session.journal_entries
+            if row.journal_entry_id == journal_entry_id
+        )
+        nudge = next(
+            (row for row in session.nudges if row.journal_entry_id == journal_entry_id),
+            None,
+        )
+        parts = [entry.content]
+        if nudge is not None and nudge.text:
+            parts.append(f'Nudge: "{nudge.text}"')
+        response = (
+            nudge.response
+            if nudge is not None and nudge.response
+            else entry.nudge_response
+        )
+        if response:
+            parts.append(f"Response: {response}")
+        return "\n\n".join(parts)
+
+    @staticmethod
+    def _restored_weekly_state(
+        events: list[TraceEvent],
+    ) -> tuple[
+        list[WeeklyDriftReviewerDecisionContract],
+        DriftDetectorResult | None,
+        WeeklyDigest | None,
+    ]:
+        drift_event = next(
+            (
+                event
+                for event in reversed(events)
+                if isinstance(event, DriftDetectedEvent)
+            ),
+            None,
+        )
+        digest_event = next(
+            (
+                event
+                for event in reversed(events)
+                if isinstance(event, WeeklyDigestBuiltEvent)
+            ),
+            None,
+        )
+        return (
+            list(drift_event.details.decisions) if drift_event is not None else [],
+            drift_event.details.result if drift_event is not None else None,
+            digest_event.details.digest if digest_event is not None else None,
+        )
 
     async def create_session(
         self,
@@ -193,12 +283,18 @@ class InMemoryExperienceService:
             if request.resume_state is not None:
                 resume_state = request.resume_state
                 events = list(resume_state.trace_events)
+                decisions, drift_result, weekly_digest = self._restored_weekly_state(
+                    events
+                )
                 session = ExperienceSession(
                     session_id=request.profile.session_id,
                     revision=resume_state.revision,
                     profile=request.profile,
                     journal_entries=resume_state.journal_entries,
                     nudges=resume_state.nudges,
+                    weekly_reviewer_decisions=decisions,
+                    drift_result=drift_result,
+                    weekly_digest=weekly_digest,
                     trace_event_ids=[event.event_id for event in events],
                     selection=SessionSelection(view="experience"),
                     updated_at=self._timestamp(),
@@ -294,6 +390,11 @@ class InMemoryExperienceService:
         *,
         journal_entries: list[Any] | None = None,
         nudges: list[NudgeInteraction] | None = None,
+        weekly_reviewer_decisions: (
+            list[WeeklyDriftReviewerDecisionContract] | None
+        ) = None,
+        drift_result: DriftDetectorResult | None = None,
+        weekly_digest: WeeklyDigest | None = None,
         event_ids: list[str] | None = None,
         increment_revision: bool = False,
     ) -> ExperienceSession:
@@ -305,6 +406,19 @@ class InMemoryExperienceService:
                 if journal_entries is not None
                 else session.journal_entries,
                 "nudges": nudges if nudges is not None else session.nudges,
+                "weekly_reviewer_decisions": (
+                    weekly_reviewer_decisions
+                    if weekly_reviewer_decisions is not None
+                    else session.weekly_reviewer_decisions
+                ),
+                "drift_result": (
+                    drift_result if drift_result is not None else session.drift_result
+                ),
+                "weekly_digest": (
+                    weekly_digest
+                    if weekly_digest is not None
+                    else session.weekly_digest
+                ),
                 "trace_event_ids": [
                     *session.trace_event_ids,
                     *(event_ids or []),
@@ -314,7 +428,7 @@ class InMemoryExperienceService:
         )
         updated = ExperienceSession.model_validate(payload)
         self._sessions[updated.session_id] = updated
-        return updated
+        return cast(ExperienceSession, updated)
 
     async def _run_nudge(
         self,
@@ -335,12 +449,15 @@ class InMemoryExperienceService:
             previous_entries=previous_entries,
         )
         receipt = await self._nudge_runtime(runtime_request)
-        event_status: EventStatus = {
-            "ok": "complete",
-            "refusal": "refused",
-            "invalid": "invalid",
-            "error": "failed",
-        }[receipt.status]
+        event_status = cast(
+            EventStatus,
+            {
+                "ok": "complete",
+                "refusal": "refused",
+                "invalid": "invalid",
+                "error": "failed",
+            }[receipt.status],
+        )
         should_nudge = receipt.status == "ok" and receipt.decision != "no_nudge"
         category: NudgeCategory | None = None
         if should_nudge and receipt.decision in NUDGE_CATEGORIES:
@@ -463,6 +580,249 @@ class InMemoryExperienceService:
         self._events[session.session_id].extend(events)
         return updated, events, retryable
 
+    @staticmethod
+    def _weekly_error(receipt: WeeklyDriftReviewerReceipt) -> SafeError | None:
+        if receipt.status == "refusal":
+            return SafeError(
+                code="weekly_review_refused",
+                message="The weekly review could not return a usable result.",
+                retryable=False,
+            )
+        if receipt.status == "invalid":
+            return SafeError(
+                code="weekly_review_invalid",
+                message="The weekly review returned an invalid result.",
+                retryable=False,
+            )
+        if receipt.status == "error":
+            return SafeError(
+                code="weekly_review_failed",
+                message="The weekly review could not finish.",
+                retryable=False,
+            )
+        return None
+
+    async def _run_weekly_review(
+        self,
+        *,
+        session: ExperienceSession,
+        parent_event_id: str,
+    ) -> tuple[ExperienceSession, list[TraceEvent]]:
+        latest_entry = session.journal_entries[-1]
+        week_start, week_end = self._week_bounds(latest_entry.date)
+        current_entries = [
+            entry
+            for entry in session.journal_entries
+            if week_start <= date.fromisoformat(entry.date) <= week_end
+        ]
+        history_entries = [
+            entry
+            for entry in session.journal_entries
+            if date.fromisoformat(entry.date) <= week_end
+        ]
+        reviewer_history = [
+            WeeklyDriftReviewerEntry(
+                t_index=entry.t_index,
+                date=entry.date,
+                text=self._displayed_entry_text(
+                    session,
+                    journal_entry_id=entry.journal_entry_id,
+                ),
+            )
+            for entry in history_entries
+        ]
+        reviewer_request = build_weekly_drift_reviewer_request(
+            persona_id=session.profile.user_id,
+            week_start=week_start.isoformat(),
+            week_end=week_end.isoformat(),
+            core_values=session.profile.top_values,
+            history=reviewer_history,
+            current_t_indices=[entry.t_index for entry in current_entries],
+        )
+        week_id = f"{session.session_id}:{week_start.isoformat()}"
+        model_contract = ModelContract(
+            provider="openai",
+            model="gpt-5.6-luna",
+            reasoning_effort="low",
+        )
+        requested_event_id = self._make_id("weekly-review-requested")
+        requested_event = WeeklyReviewRequestedEvent(
+            event_id=requested_event_id,
+            session_id=session.session_id,
+            parent_event_id=parent_event_id,
+            event_type="weekly_review_requested",
+            status="complete",
+            source="live_run",
+            input_refs=[
+                ResourceRef(kind="week", id=week_id),
+                *[
+                    ResourceRef(
+                        kind="journal_entry",
+                        id=entry.journal_entry_id,
+                    )
+                    for entry in history_entries
+                ],
+            ],
+            model_contract=model_contract,
+            prompt=reviewer_request.prompt,
+            result_refs=[ResourceRef(kind="weekly_review", id=week_id)],
+            input_hash=reviewer_request.runtime_text_sha256,
+            details=WeeklyReviewRequestedDetails(
+                request=WeeklyDriftReviewerRequestContract.model_validate(
+                    reviewer_request.model_dump(mode="json")
+                )
+            ),
+            **self._terminal_event_fields(),
+        )
+
+        receipt = await self._weekly_reviewer(reviewer_request)
+        completed_status = cast(
+            EventStatus,
+            {
+                "ok": "complete",
+                "refusal": "refused",
+                "invalid": "invalid",
+                "error": "failed",
+            }[receipt.status],
+        )
+        validation_errors = (
+            [receipt.validation_error] if receipt.validation_error is not None else []
+        )
+        if receipt.assessments:
+            raw_response: Any | None = {
+                "assessments": [
+                    assessment.model_dump(mode="json")
+                    for assessment in receipt.assessments
+                ]
+            }
+        elif receipt.refusal is not None:
+            raw_response = {"refusal": receipt.refusal}
+        else:
+            raw_response = None
+        receipt_payload = receipt.model_dump(mode="json")
+        receipt_payload["error"] = None
+        completed_event_id = self._make_id("weekly-review-completed")
+        completed_event = WeeklyReviewCompletedEvent(
+            event_id=completed_event_id,
+            session_id=session.session_id,
+            parent_event_id=requested_event_id,
+            event_type="weekly_review_completed",
+            status=completed_status,
+            source="live_run",
+            input_refs=[
+                ResourceRef(kind="weekly_review", id=week_id),
+                ResourceRef(kind="event", id=requested_event_id),
+            ],
+            model_contract=model_contract,
+            prompt=reviewer_request.prompt,
+            raw_response=raw_response,
+            validation=EventValidation(
+                valid=receipt.status == "ok",
+                schema_name="WeeklyVerifierResponse",
+                errors=validation_errors,
+            ),
+            result_refs=[ResourceRef(kind="weekly_review", id=week_id)],
+            input_hash=reviewer_request.runtime_text_sha256,
+            error=self._weekly_error(receipt),
+            details=WeeklyReviewCompletedDetails(
+                receipt=WeeklyDriftReviewerReceiptContract.model_validate(
+                    receipt_payload
+                )
+            ),
+            **self._terminal_event_fields(
+                duration_ms=max(0, round(receipt.latency_seconds * 1000))
+            ),
+        )
+
+        decisions = [
+            decision
+            for decision in session.weekly_reviewer_decisions
+            if decision.week_start != reviewer_request.week_start
+        ]
+        decisions.extend(
+            WeeklyDriftReviewerDecisionContract.model_validate(
+                decision.model_dump(mode="json")
+            )
+            for decision in receipt.decisions
+        )
+        decisions.sort(key=lambda row: (row.t_index, row.core_value))
+        drift_result = detect_drift(
+            decisions,
+            persona_id=session.profile.user_id,
+        )
+        drift_event_id = self._make_id("drift-detected")
+        drift_event = DriftDetectedEvent(
+            event_id=drift_event_id,
+            session_id=session.session_id,
+            parent_event_id=completed_event_id,
+            event_type="drift_detected",
+            status="complete",
+            source="live_run",
+            input_refs=[ResourceRef(kind="weekly_review", id=week_id)],
+            result_refs=[ResourceRef(kind="drift", id=week_id)],
+            input_hash=_hash_payload(
+                [decision.model_dump(mode="json") for decision in decisions]
+            ),
+            details=DriftDetectedDetails(
+                decisions=decisions,
+                steps=build_drift_rule_steps(decisions),
+                result=drift_result,
+            ),
+            **self._terminal_event_fields(),
+        )
+
+        weekly_digest = build_weekly_drift_reviewer_digest_from_entries(
+            persona_id=session.profile.user_id,
+            persona_name=None,
+            week_start=reviewer_request.week_start,
+            week_end=reviewer_request.week_end,
+            core_values=list(session.profile.top_values),
+            entries=reviewer_history,
+            decisions=decisions,
+            drift_result=drift_result,
+        )
+        journal_id_by_index = {
+            entry.t_index: entry.journal_entry_id for entry in session.journal_entries
+        }
+        cited_journal_entry_ids = [
+            journal_id_by_index[evidence.t_index] for evidence in weekly_digest.evidence
+        ]
+        digest_event_id = self._make_id("weekly-digest-built")
+        digest_event = WeeklyDigestBuiltEvent(
+            event_id=digest_event_id,
+            session_id=session.session_id,
+            parent_event_id=drift_event_id,
+            event_type="weekly_digest_built",
+            status="complete",
+            source="live_run",
+            input_refs=[
+                ResourceRef(kind="week", id=week_id),
+                ResourceRef(kind="drift", id=week_id),
+            ],
+            result_refs=[ResourceRef(kind="weekly_digest", id=week_id)],
+            input_hash=_hash_payload(weekly_digest.model_dump(mode="json")),
+            details=WeeklyDigestBuiltDetails(
+                digest=weekly_digest,
+                cited_journal_entry_ids=cited_journal_entry_ids,
+            ),
+            **self._terminal_event_fields(),
+        )
+        events: list[TraceEvent] = [
+            requested_event,
+            completed_event,
+            drift_event,
+            digest_event,
+        ]
+        updated = self._append_session(
+            session,
+            weekly_reviewer_decisions=decisions,
+            drift_result=drift_result,
+            weekly_digest=weekly_digest,
+            event_ids=[event.event_id for event in events],
+        )
+        self._events[session.session_id].extend(events)
+        return updated, events
+
     async def submit_journal_entry(
         self,
         request: JournalEntrySubmitRequest,
@@ -489,11 +849,19 @@ class InMemoryExperienceService:
                         self._with_request_id(response, request.request_id),
                     )
                 cached_session = self._sessions[request.session_id]
-                updated, retry_events, retryable = await self._run_nudge(
+                updated, nudge_retry_events, retryable = await self._run_nudge(
                     session=cached_session,
                     request=request,
                     parent_event_id=cast(str, cached.retry_parent_event_id),
                 )
+                cached_retry_parent_event_id = (
+                    nudge_retry_events[-1].event_id if retryable else None
+                )
+                updated, weekly_events = await self._run_weekly_review(
+                    session=updated,
+                    parent_event_id=nudge_retry_events[-1].event_id,
+                )
+                retry_events = [*nudge_retry_events, *weekly_events]
                 response = JournalEntrySubmittedResponse(
                     operation="submit_journal_entry",
                     request_id=request.request_id,
@@ -505,9 +873,7 @@ class InMemoryExperienceService:
                     fingerprint=fingerprint,
                     response=response,
                     retryable=retryable,
-                    retry_parent_event_id=(
-                        retry_events[-1].event_id if retryable else None
-                    ),
+                    retry_parent_event_id=cached_retry_parent_event_id,
                 )
                 return response
 
@@ -596,6 +962,7 @@ class InMemoryExperienceService:
             self._events[session.session_id].extend([entry_event, suppression_event])
             events: list[TraceEvent] = [entry_event, suppression_event]
             retryable = False
+            retry_parent_event_id: str | None = None
 
             if suppressed:
                 suppressed_nudge = NudgeInteraction(
@@ -614,6 +981,13 @@ class InMemoryExperienceService:
                     parent_event_id=suppression_event_id,
                 )
                 events.extend(nudge_events)
+                retry_parent_event_id = nudge_events[-1].event_id if retryable else None
+
+            session, weekly_events = await self._run_weekly_review(
+                session=session,
+                parent_event_id=events[-1].event_id,
+            )
+            events.extend(weekly_events)
 
             response = JournalEntrySubmittedResponse(
                 operation="submit_journal_entry",
@@ -626,7 +1000,7 @@ class InMemoryExperienceService:
                 fingerprint=fingerprint,
                 response=response,
                 retryable=retryable,
-                retry_parent_event_id=events[-1].event_id if retryable else None,
+                retry_parent_event_id=retry_parent_event_id,
             )
             return response
 

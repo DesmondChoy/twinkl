@@ -107,8 +107,10 @@ function trace(events: TraceEventContract[]) {
 
 function Harness({
   initial = createExperienceState(),
+  inspectRun = vi.fn(),
 }: {
   initial?: ExperienceState;
+  inspectRun?: (eventId: string) => void;
 }) {
   const [experience, setExperience] = useState(initial);
   return (
@@ -118,7 +120,7 @@ function Harness({
       updateExperience={(patch) =>
         setExperience((current) => ({ ...current, ...patch }))
       }
-      inspectRun={vi.fn()}
+      inspectRun={inspectRun}
     />
   );
 }
@@ -409,5 +411,89 @@ describe("manual Journal Entry Experience", () => {
     expect(api.journalIdempotencyKey).toHaveBeenCalledTimes(1);
     resolveKey("a".repeat(64));
     await waitFor(() => expect(api.submitJournalEntry).toHaveBeenCalledTimes(1));
+  });
+
+  it("shows ambient Drift and cited Weekly Digest evidence", async () => {
+    const inspectRun = vi.fn();
+    const initial: ExperienceState = {
+      ...createExperienceState(),
+      journal_started: true,
+      revision: canonicalInspectFixture.session.revision,
+      journal_entries: canonicalInspectFixture.session.journal_entries,
+      nudges: canonicalInspectFixture.session.nudges,
+      weekly_reviewer_decisions:
+        canonicalInspectFixture.session.weekly_reviewer_decisions,
+      drift_result: canonicalInspectFixture.session.drift_result,
+      weekly_digest: canonicalInspectFixture.session.weekly_digest,
+      run_state: "complete",
+      trace_event_ids: canonicalInspectFixture.session.trace_event_ids,
+      trace_events: canonicalInspectFixture.trace_events,
+    };
+    const user = userEvent.setup();
+    render(<Harness initial={initial} inspectRun={inspectRun} />);
+
+    expect(
+      screen.getByRole("heading", { name: "Your week in view." }),
+    ).toBeTruthy();
+    expect(screen.getByText("Benevolence")).toBeTruthy();
+    expect(screen.getAllByText("Active Drift").length).toBeGreaterThan(0);
+    expect(
+      screen.getAllByText(
+        "Cancelled dinner with my sister to stay at work.",
+      ).length,
+    ).toBeGreaterThan(1);
+    const citation = screen.getByRole("link", {
+      name: "Open Journal Entry from 2026-07-06",
+    });
+    expect(citation.getAttribute("href")).toContain("journal-entry-");
+    expect(screen.queryByText("Raw provider response")).toBeNull();
+    expect(screen.queryByText("Validation result")).toBeNull();
+
+    await user.click(screen.getByRole("button", { name: "Inspect Drift run" }));
+    expect(inspectRun).toHaveBeenLastCalledWith("event-09");
+    await user.click(
+      screen.getByRole("button", { name: "Inspect Weekly Digest run" }),
+    );
+    expect(inspectRun).toHaveBeenLastCalledWith("event-10");
+  });
+
+  it("does not call an unavailable weekly review No Drift", () => {
+    const savedEntry = entry();
+    const initial: ExperienceState = {
+      ...createExperienceState(),
+      journal_started: true,
+      journal_entries: [savedEntry],
+      weekly_reviewer_decisions: [{
+        persona_id: "persona-1",
+        week_start: "2026-07-20",
+        week_end: "2026-07-26",
+        t_index: savedEntry.t_index,
+        date: savedEntry.date,
+        core_value: profile.top_values[0],
+        verdict: "abstain",
+        confidence: null,
+        reason_code: "provider_error",
+        evidence_quote: "",
+        review_status: "error",
+      }],
+      drift_result: {
+        persona_id: "persona-1",
+        delivery_state: "stable",
+        core_value_states: { [profile.top_values[0]]: "stable" },
+      },
+      weekly_digest: {
+        week_start: "2026-07-20",
+        week_end: "2026-07-26",
+        mode_rationale:
+          "The Weekly Drift Reviewer could not return usable evidence for this week.",
+        evidence: [],
+      },
+    };
+    render(<Harness initial={initial} />);
+
+    expect(screen.getAllByText("Review unavailable")).toHaveLength(
+      profile.top_values.length + 1,
+    );
+    expect(screen.queryByText("No Drift")).toBeNull();
   });
 });
