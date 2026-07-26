@@ -998,10 +998,14 @@ h2 {
 
 .drop-box--most {
   --drop-color: var(--verdigris);
+  grid-column: 2 / 4;
+  grid-row: 1;
 }
 
 .drop-box--least {
   --drop-color: #bf5b38;
+  grid-column: 4 / 6;
+  grid-row: 1;
 }
 
 .drop-box--active {
@@ -1052,6 +1056,7 @@ h2 {
 
 .selection-area {
   grid-column: 1 / -1;
+  grid-row: 2;
   min-height: 225px;
   border: 1px solid transparent;
   border-radius: 21px;
