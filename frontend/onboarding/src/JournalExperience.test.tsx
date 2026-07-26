@@ -624,6 +624,65 @@ describe("manual Journal Entry Experience", () => {
     expect(screen.queryByRole("button", {
       name: "Try the follow-up check again",
     })).toBeNull();
+    expect(
+      screen.queryByRole("button", { name: "Edit Journal Entry" }),
+    ).toBeNull();
+  });
+
+  it("keeps an accepted Journal Entry when the Inspect trace refresh fails", async () => {
+    const savedEntry = entry();
+    let submittedEntry: JournalEntryContract | null = null;
+    api.submitJournalEntry.mockImplementation(async (
+      args: { entry: JournalEntryContract },
+    ) => {
+      submittedEntry = args.entry;
+      return {
+        operation: "submit_journal_entry",
+        session: session(
+          [args.entry],
+          [nudge("no_nudge", args.entry.journal_entry_id)],
+        ),
+      };
+    });
+    api.readExperienceTrace
+      .mockRejectedValueOnce(new Error("Inspect is briefly unavailable"))
+      .mockImplementationOnce(async () =>
+        trace([decisionEvent("complete", submittedEntry!.journal_entry_id)]),
+      );
+    const user = userEvent.setup();
+    render(<Harness />);
+
+    await user.type(
+      screen.getByRole("textbox", { name: "First Journal Entry" }),
+      savedEntry.content,
+    );
+    await user.click(screen.getByRole("button", { name: "Save Journal Entry" }));
+
+    expect(
+      await screen.findByRole("button", {
+        name: "Try loading Inspect again",
+      }),
+    ).toBeTruthy();
+    expect(screen.getByRole("status").textContent).toContain(
+      "Your Journal Entry is saved.",
+    );
+    expect(screen.getAllByText(savedEntry.content)).toHaveLength(1);
+    expect(
+      screen.queryByRole("button", { name: "Edit Journal Entry" }),
+    ).toBeNull();
+
+    await user.click(
+      screen.getByRole("button", {
+        name: "Try loading Inspect again",
+      }),
+    );
+
+    await waitFor(() => expect(api.readExperienceTrace).toHaveBeenCalledTimes(2));
+    expect(api.createExperienceSession.mock.calls[1]?.[1]).toBeNull();
+    expect(screen.queryByRole("button", {
+      name: "Try loading Inspect again",
+    })).toBeNull();
+    expect(screen.getAllByText(savedEntry.content)).toHaveLength(1);
   });
 
   it("keeps transport-failed text only in the composer until retry succeeds", async () => {
@@ -655,7 +714,7 @@ describe("manual Journal Entry Experience", () => {
 
     expect(
       await screen.findByRole("button", {
-        name: "Try the follow-up check again",
+        name: "Try saving again",
       }),
     ).toBeTruthy();
     expect(screen.getByDisplayValue(savedEntry.content)).toBeTruthy();
@@ -663,12 +722,75 @@ describe("manual Journal Entry Experience", () => {
     expect(screen.getByRole("status").querySelector("button")).toBeNull();
 
     await user.click(
-      screen.getByRole("button", { name: "Try the follow-up check again" }),
+      screen.getByRole("button", { name: "Try saving again" }),
     );
 
     await waitFor(() => expect(api.submitJournalEntry).toHaveBeenCalledTimes(2));
     expect(screen.getAllByText(savedEntry.content)).toHaveLength(1);
     expect(screen.queryByDisplayValue(savedEntry.content)).toBeNull();
+  });
+
+  it("lets a non-retryable failed Journal Entry return to editing", async () => {
+    const pendingEntry = entry("This text must remain editable after failure.");
+    const initial: ExperienceState = {
+      ...createExperienceState(),
+      journal_started: true,
+      journal_draft: pendingEntry.content,
+      pending_submission: {
+        entry: pendingEntry,
+        expected_revision: 0,
+        idempotency_key: "a".repeat(64),
+      },
+      run_state: "failed",
+      retryable: false,
+      error_message:
+        "Your Journal Entry is still in this editor, but the Experience service could not process it.",
+    };
+    const user = userEvent.setup();
+    render(<Harness initial={initial} />);
+
+    const journal = screen.getByRole("textbox", {
+      name: "First Journal Entry",
+    }) as HTMLTextAreaElement;
+    expect(journal.disabled).toBe(true);
+    expect(journal.value).toBe(pendingEntry.content);
+    expect(screen.queryByRole("button", { name: "Try saving again" })).toBeNull();
+    expect(screen.getByRole("status").textContent).toContain(
+      "still in this editor",
+    );
+    expect(
+      screen.getByRole("region", { name: "Your Core Values" }),
+    ).toBeTruthy();
+
+    await user.click(
+      screen.getByRole("button", { name: "Edit Journal Entry" }),
+    );
+
+    expect(journal.disabled).toBe(false);
+    expect(journal.value).toBe(pendingEntry.content);
+    expect(
+      (screen.getByRole("button", {
+        name: "Save Journal Entry",
+      }) as HTMLButtonElement).disabled,
+    ).toBe(false);
+    expect(screen.getByRole("status").textContent).toBe("");
+  });
+
+  it("uses singular grammar for one Journal Entry character", async () => {
+    const user = userEvent.setup();
+    render(<Harness />);
+
+    await user.type(
+      screen.getByRole("textbox", { name: "First Journal Entry" }),
+      "x",
+    );
+
+    expect(screen.getByText("1 character")).toBeTruthy();
+    expect(
+      (screen.getByRole("button", {
+        name: "Save Journal Entry",
+      }) as HTMLButtonElement).disabled,
+    ).toBe(false);
   });
 
   it("locks synchronously before hashing to prevent double submission", async () => {

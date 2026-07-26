@@ -126,7 +126,10 @@ After Profile confirmation, Experience provides:
   three Journal Entries;
 - a chronological thread containing each Journal Entry plus any displayed
   nudge and response;
-- a contextual retry action only after a failed backend operation.
+- a contextual retry action after a retryable backend failure; and
+- an edit action when no accepted submission response has returned, so a
+  pending Journal Entry never leaves Experience without an enabled recovery
+  control.
 
 Manual Experience allows explicit Journal Entry removal after confirmation.
 Removing a Journal Entry or saving a nudge reply or skip advances the session
@@ -138,7 +141,9 @@ removed from the current Experience.
 
 A Journal Entry must be held safely while the nudge check runs. A missing key,
 refusal, invalid response, or request failure must not discard the Journal
-Entry.
+Entry. Failure copy distinguishes text retained in the browser editor from a
+Journal Entry accepted by the Python boundary and names the Experience service
+rather than attributing transport or routing failures to a product component.
 
 ### 5.3 Persona simulation
 

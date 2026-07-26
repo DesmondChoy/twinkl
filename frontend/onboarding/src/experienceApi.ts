@@ -48,7 +48,7 @@ async function postExperience(
     });
   } catch {
     throw new ExperienceApiError(
-      "The Journal Entry is safe here, but the nudge check could not start.",
+      "The Experience service could not be reached.",
     );
   }
 
@@ -56,8 +56,19 @@ async function postExperience(
   try {
     parsed = validateExperienceApiResponse(await response.json());
   } catch {
+    if (!response.ok) {
+      const retryable =
+        response.status === 408
+        || response.status === 429
+        || response.status >= 500;
+      throw new ExperienceApiError(
+        "The Experience service did not accept this request.",
+        `http_${response.status}`,
+        retryable,
+      );
+    }
     throw new ExperienceApiError(
-      "The Journal Entry is safe here, but the nudge check returned an unreadable result.",
+      "The Experience service returned an unreadable response.",
       "invalid_response",
       false,
     );

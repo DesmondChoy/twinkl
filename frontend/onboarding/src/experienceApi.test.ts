@@ -11,8 +11,10 @@ const profile = canonicalInspectFixture.session.profile;
 const entry = canonicalInspectFixture.session.journal_entries[0];
 const fetchMock = vi.fn();
 
-function jsonResponse(value: unknown): Response {
+function jsonResponse(value: unknown, status = 200): Response {
   return {
+    ok: status >= 200 && status < 300,
+    status,
     json: async () => value,
   } as Response;
 }
@@ -81,6 +83,20 @@ describe("Experience API client", () => {
     ).rejects.toEqual(
       expect.objectContaining<Partial<ExperienceApiError>>({
         code: "journal_order_conflict",
+        retryable: false,
+      }),
+    );
+  });
+
+  it("reports an HTTP routing failure without blaming the nudge check", async () => {
+    fetchMock.mockResolvedValueOnce(jsonResponse({}, 405));
+
+    await expect(
+      createExperienceSession(profile),
+    ).rejects.toEqual(
+      expect.objectContaining<Partial<ExperienceApiError>>({
+        code: "http_405",
+        message: "The Experience service did not accept this request.",
         retryable: false,
       }),
     );

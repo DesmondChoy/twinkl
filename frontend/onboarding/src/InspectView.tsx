@@ -11,6 +11,9 @@ interface EventPresentation {
 interface InspectViewProps {
   events: TraceEventContract[];
   currentJournalEntryIds?: string[];
+  emptyActionLabel?: string;
+  emptyMessage?: string;
+  onEmptyAction?: () => void;
   selectedEventId: string | null;
   traceLabel: string;
   onReturn: () => void;
@@ -319,6 +322,9 @@ function EventDetails({ event }: { event: TraceEventContract }) {
 export default function InspectView({
   events,
   currentJournalEntryIds,
+  emptyActionLabel,
+  emptyMessage = "No backend work has been recorded for this Experience yet.",
+  onEmptyAction,
   selectedEventId,
   traceLabel,
   onReturn,
@@ -386,7 +392,11 @@ export default function InspectView({
       <div className="inspect-overview" aria-label="Trace summary">
         <span>{traceLabel}</span>
         <span>{countLabel(events.length, "trace event")}</span>
-        <span>{sourceLabels.join(" + ")}</span>
+        <span>
+          {sourceLabels.length > 0
+            ? sourceLabels.join(" + ")
+            : "No backend events yet"}
+        </span>
       </div>
 
       {selectedEvent ? (
@@ -404,69 +414,84 @@ export default function InspectView({
         </div>
       ) : null}
 
-      <ol className="inspect-timeline" aria-label="Trace events">
-        {events.map((event, index) => {
-          const presentation = eventPresentation(event.event_type);
-          const status = STATUS_LABELS[event.status] ?? titleCase(event.status);
-          const source = SOURCE_LABELS[event.source] ?? titleCase(event.source);
-          const parentNumber = event.parent_event_id
-            ? eventNumbers.get(event.parent_event_id)
-            : null;
-          const isSelected = event.event_id === selectedEventId;
-          const isExpanded = expandedEvents.has(event.event_id);
-          return (
-            <li className="trace-event" key={event.event_id}>
-              <span className="trace-event__node" aria-hidden="true">
-                {String(index + 1).padStart(2, "0")}
-              </span>
-              <details
-                className="trace-event__card"
-                data-selected={isSelected ? "true" : undefined}
-                open={isExpanded}
-                onToggle={(toggleEvent) =>
-                  setEventExpanded(event.event_id, toggleEvent.currentTarget.open)}
-              >
-                <summary
-                  ref={(node) => {
-                    if (node) eventRefs.current.set(event.event_id, node);
-                    else eventRefs.current.delete(event.event_id);
-                  }}
-                  aria-current={isSelected ? "true" : undefined}
-                  aria-label={`Event ${index + 1}: ${presentation.label}, ${status}, ${source}`}
+      {events.length === 0 ? (
+        <div className="inspect-empty">
+          <p role="status">{emptyMessage}</p>
+          {emptyActionLabel && onEmptyAction ? (
+            <button
+              className="button button--quiet"
+              type="button"
+              onClick={onEmptyAction}
+            >
+              {emptyActionLabel}
+            </button>
+          ) : null}
+        </div>
+      ) : (
+        <ol className="inspect-timeline" aria-label="Trace events">
+          {events.map((event, index) => {
+            const presentation = eventPresentation(event.event_type);
+            const status = STATUS_LABELS[event.status] ?? titleCase(event.status);
+            const source = SOURCE_LABELS[event.source] ?? titleCase(event.source);
+            const parentNumber = event.parent_event_id
+              ? eventNumbers.get(event.parent_event_id)
+              : null;
+            const isSelected = event.event_id === selectedEventId;
+            const isExpanded = expandedEvents.has(event.event_id);
+            return (
+              <li className="trace-event" key={event.event_id}>
+                <span className="trace-event__node" aria-hidden="true">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <details
+                  className="trace-event__card"
+                  data-selected={isSelected ? "true" : undefined}
+                  open={isExpanded}
+                  onToggle={(toggleEvent) =>
+                    setEventExpanded(event.event_id, toggleEvent.currentTarget.open)}
                 >
-                  <span className="trace-event__copy">
-                    <span className="trace-event__component">
-                      {presentation.component}
+                  <summary
+                    ref={(node) => {
+                      if (node) eventRefs.current.set(event.event_id, node);
+                      else eventRefs.current.delete(event.event_id);
+                    }}
+                    aria-current={isSelected ? "true" : undefined}
+                    aria-label={`Event ${index + 1}: ${presentation.label}, ${status}, ${source}`}
+                  >
+                    <span className="trace-event__copy">
+                      <span className="trace-event__component">
+                        {presentation.component}
+                      </span>
+                      <span className="trace-event__name">{presentation.label}</span>
+                      <span className="trace-event__result">
+                        {eventSummary(event, currentJournalEntryIdSet)}
+                      </span>
                     </span>
-                    <span className="trace-event__name">{presentation.label}</span>
-                    <span className="trace-event__result">
-                      {eventSummary(event, currentJournalEntryIdSet)}
+                    <span className="trace-event__aside">
+                      <span className={`trace-chip trace-chip--status-${event.status}`}>
+                        {status}
+                      </span>
+                      <span className={`trace-chip trace-chip--source-${event.source}`}>
+                        {source}
+                      </span>
+                      <span className="trace-event__duration">
+                        {formatDuration(event.duration_ms)}
+                      </span>
+                      <span className="trace-event__disclosure" aria-hidden="true">+</span>
                     </span>
-                  </span>
-                  <span className="trace-event__aside">
-                    <span className={`trace-chip trace-chip--status-${event.status}`}>
-                      {status}
+                    <span className="trace-event__parent">
+                      {parentNumber
+                        ? `After event ${String(parentNumber).padStart(2, "0")}`
+                        : "Trace root"}
                     </span>
-                    <span className={`trace-chip trace-chip--source-${event.source}`}>
-                      {source}
-                    </span>
-                    <span className="trace-event__duration">
-                      {formatDuration(event.duration_ms)}
-                    </span>
-                    <span className="trace-event__disclosure" aria-hidden="true">+</span>
-                  </span>
-                  <span className="trace-event__parent">
-                    {parentNumber
-                      ? `After event ${String(parentNumber).padStart(2, "0")}`
-                      : "Trace root"}
-                  </span>
-                </summary>
-                {isExpanded ? <EventDetails event={event} /> : null}
-              </details>
-            </li>
-          );
-        })}
-      </ol>
+                  </summary>
+                  {isExpanded ? <EventDetails event={event} /> : null}
+                </details>
+              </li>
+            );
+          })}
+        </ol>
+      )}
     </div>
   );
 }

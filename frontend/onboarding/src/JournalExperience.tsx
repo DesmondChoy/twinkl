@@ -5,6 +5,7 @@ import {
   useState,
   type RefObject,
 } from "react";
+import CoreValueReminder from "./CoreValueReminder";
 import type { OnboardingProfile } from "./domain";
 import type {
   JournalEntryContract,
@@ -33,6 +34,11 @@ interface JournalExperienceProps {
   headingRef?: RefObject<HTMLHeadingElement | null>;
   mode?: "manual" | "saved_replay";
 }
+
+const UNSAVED_JOURNAL_ERROR =
+  "Your Journal Entry is still in this editor, but the Experience service could not process it.";
+const INSPECT_TRACE_ERROR =
+  "Your Journal Entry is saved. Its Inspect trace could not be loaded.";
 
 function localDate(): string {
   const now = new Date();
@@ -130,8 +136,7 @@ function statusCopy(experience: ExperienceState): string | null {
     case "invalid":
       return "Saved. No follow-up question this time.";
     case "failed":
-      return experience.error_message ??
-        "Your Journal Entry is safe here, but the follow-up check could not finish.";
+      return experience.error_message ?? UNSAVED_JOURNAL_ERROR;
     default:
       return null;
   }
@@ -161,6 +166,13 @@ export default function JournalExperience({
   );
   const isAwaitingResponse =
     experience.run_state === "awaiting_response" && activeNudge !== null;
+  const pendingJournalEntrySaved =
+    experience.pending_submission !== null
+    && experience.journal_entries.some(
+      (entry) =>
+        entry.journal_entry_id
+        === experience.pending_submission?.entry.journal_entry_id,
+    );
   const copy = statusCopy(experience);
 
   useEffect(() => {
@@ -170,6 +182,20 @@ export default function JournalExperience({
   }, [isAwaitingResponse]);
 
   const runSubmission = async (pending: PendingJournalSubmission) => {
+    const traceEventIds = new Set(
+      experience.trace_events.map((event) => event.event_id),
+    );
+    const hasCompleteTrace =
+      experience.trace_event_ids.length === experience.trace_events.length
+      && experience.trace_event_ids.every((eventId) =>
+        traceEventIds.has(eventId));
+    const canResumeSession =
+      experience.revision > 0
+      && experience.trace_events.length > 0
+      && hasCompleteTrace;
+    let acceptedResponse: Awaited<
+      ReturnType<typeof submitJournalEntry>
+    > | null = null;
     updateExperience({
       run_state: "saving",
       retryable: false,
@@ -178,7 +204,7 @@ export default function JournalExperience({
     try {
       await createExperienceSession(
         profile,
-        experience.revision > 0 && experience.trace_events.length > 0
+        canResumeSession
           ? {
               session_id: profile.session_id,
               revision: experience.revision,
@@ -189,7 +215,7 @@ export default function JournalExperience({
           : null,
       );
       updateExperience({ run_state: "checking_nudge" });
-      const response = await submitJournalEntry({
+      acceptedResponse = await submitJournalEntry({
         sessionId: profile.session_id,
         expectedRevision: pending.expected_revision,
         entry: pending.entry,
@@ -197,7 +223,7 @@ export default function JournalExperience({
       });
       const trace = await readExperienceTrace(profile.session_id);
       const nudge =
-        response.session.nudges.find(
+        acceptedResponse.session.nudges.find(
           (item) => item.journal_entry_id === pending.entry.journal_entry_id,
         ) ?? null;
       const decision = latestDecisionFor(
@@ -217,24 +243,27 @@ export default function JournalExperience({
                 : "complete";
 
       updateExperience({
-        revision: response.session.revision,
+        revision: acceptedResponse.session.revision,
         journal_draft: "",
         journal_entries: mergeJournalEntries(
-          response.session.journal_entries,
+          acceptedResponse.session.journal_entries,
           experience.journal_entries,
         ),
-        nudges: mergeNudges(response.session.nudges, experience.nudges),
+        nudges: mergeNudges(
+          acceptedResponse.session.nudges,
+          experience.nudges,
+        ),
         weekly_reviewer_decisions:
-          response.session.weekly_reviewer_decisions,
-        drift_result: response.session.drift_result,
-        weekly_digest: response.session.weekly_digest,
+          acceptedResponse.session.weekly_reviewer_decisions,
+        drift_result: acceptedResponse.session.drift_result,
+        weekly_digest: acceptedResponse.session.weekly_digest,
         pending_submission: failed ? pending : null,
         run_state: runState,
         retryable: failed,
         error_message: failed
           ? "Your Journal Entry is saved. The follow-up check could not finish."
           : null,
-        trace_event_ids: response.session.trace_event_ids,
+        trace_event_ids: acceptedResponse.session.trace_event_ids,
         trace_events: trace.events,
       });
     } catch (error) {
@@ -242,12 +271,37 @@ export default function JournalExperience({
         error instanceof ExperienceApiError
           ? error
           : new ExperienceApiError(
-              "Your Journal Entry is safe here, but the follow-up check could not finish.",
+              "The Experience service could not process this request.",
             );
+      if (acceptedResponse) {
+        updateExperience({
+          revision: acceptedResponse.session.revision,
+          journal_draft: "",
+          journal_entries: mergeJournalEntries(
+            acceptedResponse.session.journal_entries,
+            experience.journal_entries,
+          ),
+          nudges: mergeNudges(
+            acceptedResponse.session.nudges,
+            experience.nudges,
+          ),
+          weekly_reviewer_decisions:
+            acceptedResponse.session.weekly_reviewer_decisions,
+          drift_result: acceptedResponse.session.drift_result,
+          weekly_digest: acceptedResponse.session.weekly_digest,
+          pending_submission: apiError.retryable ? pending : null,
+          run_state: "failed",
+          retryable: apiError.retryable,
+          error_message:
+            INSPECT_TRACE_ERROR,
+          trace_event_ids: acceptedResponse.session.trace_event_ids,
+        });
+        return;
+      }
       updateExperience({
         run_state: "failed",
         retryable: apiError.retryable,
-        error_message: apiError.message,
+        error_message: UNSAVED_JOURNAL_ERROR,
         pending_submission: pending,
       });
     }
@@ -299,6 +353,15 @@ export default function JournalExperience({
     } finally {
       submissionLockRef.current = false;
     }
+  };
+
+  const editPendingSubmission = () => {
+    updateExperience({
+      pending_submission: null,
+      run_state: "idle",
+      retryable: false,
+      error_message: null,
+    });
   };
 
   const synchronizeBrowserState = async (
@@ -467,6 +530,7 @@ export default function JournalExperience({
           Write one real moment. Twinkl may ask one brief question if there is
           a useful thread to follow.
         </p>
+        <CoreValueReminder profile={profile} />
       </header> : null}
 
       {mode === "manual" && !isAwaitingResponse ? (
@@ -493,7 +557,12 @@ export default function JournalExperience({
             }
           />
           <div className="journal-composer__actions">
-            <span>{experience.journal_draft.trim().length} characters</span>
+            <span>
+              {experience.journal_draft.trim().length}{" "}
+              {experience.journal_draft.trim().length === 1
+                ? "character"
+                : "characters"}
+            </span>
             <button
               className="button button--primary"
               type="submit"
@@ -562,7 +631,22 @@ export default function JournalExperience({
             type="button"
             onClick={() => void retrySubmission()}
           >
-            Try the follow-up check again
+            {pendingJournalEntrySaved
+              ? experience.error_message === INSPECT_TRACE_ERROR
+                ? "Try loading Inspect again"
+                : "Try the follow-up check again"
+              : "Try saving again"}
+          </button>
+        ) : null}
+        {experience.run_state === "failed" &&
+        experience.pending_submission &&
+        !pendingJournalEntrySaved ? (
+          <button
+            className="button button--quiet"
+            type="button"
+            onClick={editPendingSubmission}
+          >
+            Edit Journal Entry
           </button>
         ) : null}
         {experience.trace_event_ids.length > 0 &&

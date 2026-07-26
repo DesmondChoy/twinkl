@@ -1,5 +1,6 @@
 import {
   Component,
+  useCallback,
   useEffect,
   useLayoutEffect,
   useMemo,
@@ -16,7 +17,14 @@ import {
   createProfile,
   scoreResponses,
   type BwsObjectKey,
+  type OnboardingProfile,
 } from "./domain";
+import CoreValueReminder from "./CoreValueReminder";
+import {
+  createExperienceSession,
+  ExperienceApiError,
+  readExperienceTrace,
+} from "./experienceApi";
 import {
   clearSession,
   clearChoice,
@@ -29,7 +37,6 @@ import {
   PersonaReplayExperience,
   PersonaReplayPicker,
 } from "./PersonaReplay";
-import { canonicalInspectFixture } from "./inspectFixture";
 import {
   loadSavedScenarioById,
   projectScenarioWeek,
@@ -126,18 +133,29 @@ function Compass({ milestone }: { milestone: number }) {
   );
 }
 
-function Progress({ session, milestone }: { session: OnboardingSession; milestone: number }) {
-  if (milestone === 0) return null;
+function Progress({ session }: { session: OnboardingSession }) {
   const label = session.stage === "set"
     ? `Values · ${session.set_index + 1} of ${BWS_SETS.length}`
     : "Your compass";
+  const completedSets = session.stage === "set"
+    ? session.set_index + 1
+    : BWS_SETS.length;
   return (
-    <div className="progress" aria-label={label}>
+    <div
+      className="progress"
+      id="assessment-progress"
+      role="progressbar"
+      aria-label={label}
+      aria-valuemin={0}
+      aria-valuemax={BWS_SETS.length}
+      aria-valuenow={completedSets}
+      aria-valuetext={label}
+    >
       <div className="progress__label">
         <span>{label}</span>
       </div>
       <div className="progress__track">
-        <span style={{ width: `${(milestone / MILESTONE_COUNT) * 100}%` }} />
+        <span style={{ width: `${(completedSets / BWS_SETS.length) * 100}%` }} />
       </div>
     </div>
   );
@@ -323,11 +341,26 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
   const selectionRef = useRef<HTMLDivElement>(null);
   const pendingCardFocusRef = useRef<{ value: BwsObjectKey; location: CardLocation } | null>(null);
   const choicesCompletedAtRef = useRef<number | null>(null);
+  const profileSyncGenerationRef = useRef(0);
+  const profileSyncInFlightRef = useRef<{
+    generation: number;
+    sessionId: string;
+  } | null>(null);
   const milestone = milestoneFor(session);
   const journalStarted = session.experience.journal_started;
   const activeView = session.experience.active_view;
   const selectedPersonaId = session.experience.selected_persona_id;
   const inspectAvailable = session.confirmed_profile !== null;
+  const profileTraceReady = session.confirmed_profile !== null
+    && session.experience.trace_events.some(
+      (event) =>
+        event.event_type === "profile_confirmed"
+        && event.session_id === session.confirmed_profile?.session_id,
+    );
+  const profileTracePending = !profileTraceReady
+    && session.experience.run_state === "running";
+  const profileTraceFailed = !profileTraceReady
+    && session.experience.run_state === "failed";
   const currentSetIndex = session.set_order[session.set_index];
   const currentSet = BWS_SETS[currentSetIndex];
   const currentOrder = session.displayed_orders[currentSetIndex];
@@ -341,11 +374,103 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
     updateSession(patch);
   };
 
+  const synchronizeProfileTrace = useCallback(async (
+    profile: OnboardingProfile,
+  ): Promise<boolean> => {
+    if (profileSyncInFlightRef.current?.sessionId === profile.session_id) {
+      return false;
+    }
+    const generation = ++profileSyncGenerationRef.current;
+    profileSyncInFlightRef.current = {
+      generation,
+      sessionId: profile.session_id,
+    };
+    updateExperience({
+      run_state: "running",
+      retryable: false,
+      error_message: null,
+    });
+    try {
+      const response = await createExperienceSession(profile);
+      const trace = await readExperienceTrace(profile.session_id);
+      if (
+        !trace.events.some(
+          (event) =>
+            event.event_type === "profile_confirmed"
+            && event.session_id === profile.session_id,
+        )
+      ) {
+        throw new ExperienceApiError(
+          "The Profile trace did not include Profile confirmation.",
+          "missing_profile_trace",
+        );
+      }
+      if (profileSyncGenerationRef.current !== generation) return false;
+      updateExperience({
+        revision: response.session.revision,
+        journal_entries: response.session.journal_entries,
+        nudges: response.session.nudges,
+        weekly_reviewer_decisions:
+          response.session.weekly_reviewer_decisions,
+        drift_result: response.session.drift_result,
+        weekly_digest: response.session.weekly_digest,
+        weekly_coach: null,
+        run_state: "idle",
+        retryable: false,
+        error_message: null,
+        trace_event_ids: response.session.trace_event_ids,
+        trace_events: trace.events,
+      });
+      return true;
+    } catch (error) {
+      if (profileSyncGenerationRef.current !== generation) return false;
+      updateExperience({
+        run_state: "failed",
+        retryable:
+          error instanceof ExperienceApiError ? error.retryable : true,
+        error_message:
+          "Your Profile is saved in this browser, but its Inspect trace could not be loaded.",
+      });
+      return false;
+    } finally {
+      if (profileSyncInFlightRef.current?.generation === generation) {
+        profileSyncInFlightRef.current = null;
+      }
+    }
+  }, [updateExperience]);
+
   useEffect(() => {
     if (activeView === "experience") {
-      headingRef.current?.focus({ preventScroll: true });
+      headingRef.current?.focus();
     }
   }, [session.stage, session.set_index, journalStarted, activeView]);
+
+  useEffect(() => {
+    const profile = session.confirmed_profile;
+    if (
+      !profile
+      || selectedPersonaId !== null
+      || journalStarted
+      || session.stage !== "complete"
+      || profileTraceReady
+      || session.experience.journal_entries.length > 0
+      || session.experience.nudges.length > 0
+      || session.experience.run_state !== "idle"
+    ) {
+      return;
+    }
+    void synchronizeProfileTrace(profile);
+  }, [
+    profileTraceReady,
+    journalStarted,
+    selectedPersonaId,
+    session.confirmed_profile,
+    session.experience.journal_entries.length,
+    session.experience.nudges.length,
+    session.experience.run_state,
+    session.stage,
+    synchronizeProfileTrace,
+  ]);
 
   useLayoutEffect(() => {
     const target = pendingCardFocusRef.current;
@@ -370,6 +495,8 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
 
   const restart = () => {
     if (!window.confirm("Start over and clear this progress?")) return;
+    profileSyncGenerationRef.current += 1;
+    profileSyncInFlightRef.current = null;
     choicesCompletedAtRef.current = null;
     setPersonaPickerOpen(false);
     setLoadedScenario(null);
@@ -457,6 +584,8 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
     ) {
       return false;
     }
+    profileSyncGenerationRef.current += 1;
+    profileSyncInFlightRef.current = null;
     setLoadedScenario(loaded);
     setScenarioLoadError(null);
     setPersonaPickerOpen(false);
@@ -601,13 +730,26 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
 
   const startFirstJournal = () => {
     if (!session.confirmed_profile) return;
+    if (!profileTraceReady) {
+      profileSyncGenerationRef.current += 1;
+      profileSyncInFlightRef.current = null;
+    }
     onStartJournal?.(session.confirmed_profile);
     window.dispatchEvent(
       new CustomEvent("twinkl:start-first-journal", {
         detail: session.confirmed_profile,
       }),
     );
-    updateExperience({ journal_started: true });
+    updateExperience({
+      journal_started: true,
+      ...(!profileTraceReady
+        ? {
+            run_state: "idle" as const,
+            retryable: false,
+            error_message: null,
+          }
+        : {}),
+    });
   };
 
   const cardPrompt = isReviewing
@@ -695,7 +837,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
 
         <section className="flow-panel">
           {!personaPickerOpen && !selectedPersonaId && !journalStarted ? (
-            <Progress session={session} milestone={milestone} />
+            <Progress session={session} />
           ) : null}
 
           {personaPickerOpen ? (
@@ -752,7 +894,11 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
 
           {!personaPickerOpen && !selectedPersonaId && session.stage === "set" ? (
             <div className="stage stage--cards">
-              <h1 ref={headingRef} tabIndex={-1}>
+              <h1
+                ref={headingRef}
+                tabIndex={-1}
+                aria-describedby="assessment-progress"
+              >
                 What matters most as you find your way?
               </h1>
               <p className="card-reassurance">
@@ -877,12 +1023,17 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
                 Your compass is ready.
               </h1>
               <p className="lede">Start with one moment from the past week. Twinkl will build from what you notice.</p>
+              <CoreValueReminder profile={session.confirmed_profile} />
               <div className="journal-handoff">
                 <small>First Journal Entry</small>
                 <p>When did you feel most like yourself?</p>
               </div>
               <div className="actions actions--end">
-                <button className="button button--primary" type="button" onClick={startFirstJournal}>
+                <button
+                  className="button button--primary"
+                  type="button"
+                  onClick={startFirstJournal}
+                >
                   Start my first Journal Entry
                 </button>
               </div>
@@ -916,18 +1067,14 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
               <h2>Behind each result.</h2>
               <p>
                 {session.experience.trace_events.length > 0
-                  ? "Inspect shows the Python work behind this Journal Entry."
-                  : "Inspect reads validated trace contracts. This view currently uses the canonical contract fixture."}
+                  ? "Inspect shows the Python work behind the current Experience."
+                  : "Inspect is waiting for backend work from the current Experience."}
               </p>
             </div>
           </aside>
           <section className="flow-panel flow-panel--inspect">
             <InspectView
-              events={
-                session.experience.trace_events.length > 0
-                  ? session.experience.trace_events
-                  : canonicalInspectFixture.trace_events
-              }
+              events={session.experience.trace_events}
               currentJournalEntryIds={
                 session.experience.trace_events.length > 0
                   ? session.experience.journal_entries.map(
@@ -936,10 +1083,28 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
                   : undefined
               }
               selectedEventId={session.experience.selected_event_id}
-              traceLabel={
-                session.experience.trace_events.length > 0
-                  ? "Current Experience session"
-                  : "Canonical contract fixture"
+              traceLabel="Current Experience session"
+              emptyMessage={
+                profileTracePending
+                  ? "Profile validation is in progress. No later work has happened."
+                  : profileTraceFailed
+                    ? session.experience.error_message
+                      ?? "The Profile trace could not be loaded."
+                    : "No backend work has been recorded for this Experience yet."
+              }
+              emptyActionLabel={
+                profileTraceFailed && session.experience.retryable
+                  ? "Retry Profile validation"
+                  : undefined
+              }
+              onEmptyAction={
+                profileTraceFailed && session.experience.retryable
+                  ? () => {
+                    if (session.confirmed_profile) {
+                      void synchronizeProfileTrace(session.confirmed_profile);
+                    }
+                  }
+                  : undefined
               }
               onReturn={() => showView("experience")}
             />

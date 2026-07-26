@@ -29,6 +29,9 @@ BWS preference shares.
 - A host may persist the confirmed Profile exposed by the callback or browser
   event. The approved runtime imports saved Profile JSON through
   `--profile-path`.
+- In the shared Experience and Inspect app, Profile confirmation also starts
+  the in-memory Python session when that boundary is available. Inspect then
+  shows the resulting Profile trace event and no later events.
 - The first Journal Entry editor and later Profile evolution are outside this
   specification.
 
@@ -146,7 +149,9 @@ Twinkl-specific presentation adaptation requiring empirical validation.
 
 The user enters the first randomized group directly. Progress reads
 `Values · n of 11`, followed by `Your compass`. There is no welcome screen or
-midpoint result.
+midpoint result. The values progress bar represents the 11 assessment groups,
+reaches completion on group 11, and exposes its current and maximum values to
+assistive technology.
 
 The heading reads `What matters most as you find your way?` The introduction
 says there are no right answers and that more than one principle can matter.
@@ -190,7 +195,8 @@ description has equal visual weight.
 
 `Set my compass` confirms the displayed descriptions as the user's Core Values
 and emits the Profile. The user is not asked to rank, promote, or demote the
-internal Schwartz categories.
+internal Schwartz categories. The confirmed Core Value descriptions remain
+visible through the first Journal Entry handoff and manual editor.
 
 ### 4.4 First Journal Entry handoff
 
@@ -331,8 +337,13 @@ version `2` Profile migrates to version `3` without `goal_category`.
 ## 7. Integration Status
 
 - The React POC creates and validates the Profile locally.
-- A host can persist the Profile exposed by the callback or browser event;
-  automatic browser-to-service storage is outside the capstone.
+- A host can persist the Profile exposed by the callback or browser event.
+- The shared Experience and Inspect app synchronizes the confirmed Profile with
+  the in-memory Python boundary and reads its live trace. If that boundary is
+  unavailable, Experience remains usable and Inspect shows no fabricated
+  events. Inspect offers a retry action when the failure is retryable.
+- Persistent automatic browser-to-service Profile storage remains outside the
+  capstone.
 - The approved runtime validates saved Profile JSON and supplies `top_values`
   as Core Values to the Weekly Drift Reviewer and Drift Detector.
 - `value_profile.weights` is not yet supplied to the VIF Critic.

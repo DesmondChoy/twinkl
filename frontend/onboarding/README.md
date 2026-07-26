@@ -19,14 +19,17 @@ ordered Journal Entries through the versioned Python boundary, applies the
 anti-annoyance rule, and shows the resulting displayed nudge with reply or
 skip actions. The same submission runs the fixed Weekly Drift Reviewer,
 applies the Drift Detector, and shows a cited Weekly Digest. Inspect reads the
-linked live trace events. **Try demo** loads one of five saved synthetic
-personas into the same React session and replays Journal Entries, displayed
-nudges and responses, Drift, Weekly Digests, and Inspect events one week at a
-time. Previous, next, play or pause, and restart controls preserve the selected
-week across Experience and Inspect; reduced-motion preferences disable
-automatic advancement. The browser verifies each scenario against the
-catalogued SHA-256 hash before displaying it. The Profile remains available
-through the `onStartJournal` callback and
+linked live trace events. Profile confirmation starts this trace when the
+Python boundary is available; without it, Experience stays usable and Inspect
+shows zero events instead of fixture events. Retryable failures include a retry
+action. **Try demo** loads one of five saved synthetic personas into the same
+React session and replays Journal Entries, displayed nudges and responses,
+Drift, Weekly Digests, and Inspect events one week at a time. Previous, next,
+play or pause, and restart controls preserve the selected week across
+Experience and Inspect; reduced-motion preferences disable automatic
+advancement. The browser verifies each scenario against the catalogued SHA-256
+hash before displaying it. The Profile remains available through the
+`onStartJournal` callback and
 `twinkl:start-first-journal` browser event.
 
 [`docs/onboarding/onboarding_spec.md`](../../docs/onboarding/onboarding_spec.md)
@@ -67,8 +70,12 @@ Create a Railway service from this repository with:
 The existing service builds the Vite app in Node and serves `dist` through
 Caddy. The container exposes `/health` for Railway and falls back to
 `index.html` for SPA routes. That static deployment preserves onboarding and
-local resumability; deploying the Python boundary with provider configuration
-belongs to the later demo hardening task.
+local resumability, but it does not serve the Python API. Inspect therefore
+shows only events loaded by **Try demo** until the Python boundary is deployed
+with provider configuration. Live Profile and Journal Entry trace events
+belong to that later demo hardening task. When no accepted Journal Entry
+response returns, the text remains in the editor with an edit action;
+retryable failures also offer idempotent retry.
 
 The React Experience stores unfinished progress in the browser. The local
 Python boundary keeps the active session and idempotency receipts in memory,

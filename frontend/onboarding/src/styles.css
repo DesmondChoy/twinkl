@@ -529,6 +529,28 @@ h2 {
   line-height: 1.45;
 }
 
+.inspect-empty {
+  max-width: 760px;
+  margin: 30px 0 0;
+  border: 1px solid rgba(20, 34, 59, 0.1);
+  border-radius: 16px;
+  padding: 18px;
+  color: rgba(20, 34, 59, 0.72);
+  background: rgba(247, 250, 249, 0.78);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.inspect-empty p {
+  margin: 0;
+}
+
+.inspect-empty .button {
+  width: auto;
+  min-height: 44px;
+  margin-top: 14px;
+}
+
 .inspect-timeline {
   position: relative;
   display: grid;
@@ -1254,6 +1276,41 @@ h2 {
   margin: 0;
   font-size: clamp(1.1rem, 2vw, 1.45rem);
   font-weight: 650;
+}
+
+.core-value-reminder {
+  max-width: 680px;
+  margin: 24px 0 0;
+  border-left: 3px solid var(--verdigris);
+  border-radius: 0 14px 14px 0;
+  padding: 14px 18px;
+  background: rgba(46, 140, 130, 0.07);
+}
+
+.core-value-reminder > p {
+  margin: 0 0 8px;
+  color: var(--verdigris);
+  font-size: 0.62rem;
+  font-weight: 820;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.core-value-reminder ul {
+  display: flex;
+  gap: 6px 16px;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.core-value-reminder li {
+  color: var(--ink);
+  font-family: "Source Serif 4 Variable", Georgia, serif;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.35;
 }
 
 .journal-handoff {

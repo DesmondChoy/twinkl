@@ -7,6 +7,27 @@ import styles from "./styles.css?raw";
 const events = canonicalInspectFixture.trace_events;
 
 describe("Inspect view", () => {
+  it("shows an honest empty state without rendering fixture events", () => {
+    render(
+      <InspectView
+        events={[]}
+        emptyMessage="Profile validation is still in progress."
+        selectedEventId={null}
+        traceLabel="Current Experience session"
+        onReturn={() => undefined}
+      />,
+    );
+
+    expect(screen.getByText("0 trace events")).toBeTruthy();
+    expect(screen.getByText("No backend events yet")).toBeTruthy();
+    expect(screen.getByRole("status")).toHaveProperty(
+      "textContent",
+      "Profile validation is still in progress.",
+    );
+    expect(screen.queryByRole("list")).toBeNull();
+    expect(screen.queryByText("Journal Entry submitted")).toBeNull();
+  });
+
   it("renders every trace event type and terminal state from the contract fixture", () => {
     render(
       <InspectView
