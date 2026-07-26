@@ -42,6 +42,7 @@ from src.demo.contracts import (
     ScenarioLoadRequest,
     SessionCreatedResponse,
     SessionCreateRequest,
+    SessionResumeState,
     SessionSelection,
     TraceEvent,
     TraceReadRequest,
@@ -64,6 +65,7 @@ from src.nudge.runtime import (
     NudgeRuntimeReceipt,
     NudgeRuntimeRequest,
     OpenAINudgeRuntime,
+    build_failed_nudge_runtime_receipt,
     build_nudge_runtime_request,
 )
 from src.weekly_drift_reviewer import (
@@ -242,6 +244,176 @@ class InMemoryExperienceService:
             digest_event.details.digest if digest_event is not None else None,
         )
 
+    @staticmethod
+    def _resume_update_date(
+        existing: ExperienceSession,
+        resume_state: SessionResumeState,
+    ) -> date | None:
+        if resume_state.revision != existing.revision + 1:
+            return None
+
+        previous_entries = existing.journal_entries
+        next_entries = resume_state.journal_entries
+        previous_ids = [entry.journal_entry_id for entry in previous_entries]
+        next_ids = [entry.journal_entry_id for entry in next_entries]
+
+        removed_ids = set(previous_ids) - set(next_ids)
+        if len(removed_ids) == 1 and not (set(next_ids) - set(previous_ids)):
+            removed_id = removed_ids.pop()
+            if next_entries != [
+                entry
+                for entry in previous_entries
+                if entry.journal_entry_id != removed_id
+            ]:
+                return None
+            if resume_state.nudges != [
+                nudge
+                for nudge in existing.nudges
+                if nudge.journal_entry_id != removed_id
+            ]:
+                return None
+            removed_entry = next(
+                entry
+                for entry in previous_entries
+                if entry.journal_entry_id == removed_id
+            )
+            return date.fromisoformat(removed_entry.date)
+
+        if previous_ids != next_ids or len(existing.nudges) != len(resume_state.nudges):
+            return None
+        changed_entries = [
+            (previous, updated)
+            for previous, updated in zip(
+                previous_entries,
+                next_entries,
+                strict=True,
+            )
+            if previous != updated
+        ]
+        changed_nudges = [
+            (previous, updated)
+            for previous, updated in zip(
+                existing.nudges,
+                resume_state.nudges,
+                strict=True,
+            )
+            if previous != updated
+        ]
+        if len(changed_nudges) != 1:
+            return None
+
+        previous_nudge, updated_nudge = changed_nudges[0]
+        previous_entry = next(
+            (
+                entry
+                for entry in previous_entries
+                if entry.journal_entry_id == previous_nudge.journal_entry_id
+            ),
+            None,
+        )
+        updated_entry = next(
+            (
+                entry
+                for entry in next_entries
+                if entry.journal_entry_id == updated_nudge.journal_entry_id
+            ),
+            None,
+        )
+        if (
+            previous_entry is None
+            or updated_entry is None
+            or previous_entry.model_copy(update={"nudge_response": None})
+            != updated_entry.model_copy(update={"nudge_response": None})
+            or previous_nudge.nudge_id != updated_nudge.nudge_id
+            or previous_nudge.outcome != "displayed"
+            or updated_nudge.outcome not in {"answered", "skipped"}
+            or previous_nudge.model_copy(
+                update={
+                    "outcome": updated_nudge.outcome,
+                    "response": updated_nudge.response,
+                }
+            )
+            != updated_nudge
+        ):
+            return None
+        if updated_nudge.outcome == "answered":
+            if (
+                len(changed_entries) != 1
+                or changed_entries[0] != (previous_entry, updated_entry)
+                or not updated_nudge.response
+                or updated_entry.nudge_response != updated_nudge.response
+            ):
+                return None
+        elif (
+            changed_entries
+            or updated_nudge.response is not None
+            or updated_entry.nudge_response is not None
+        ):
+            return None
+        return date.fromisoformat(updated_entry.date)
+
+    async def _apply_resume_update(
+        self,
+        *,
+        existing: ExperienceSession,
+        resume_state: SessionResumeState,
+        affected_date: date,
+    ) -> ExperienceSession:
+        events = list(resume_state.trace_events)
+        affected_week, _ = self._week_bounds(affected_date.isoformat())
+        decisions = [
+            decision
+            for decision in existing.weekly_reviewer_decisions
+            if date.fromisoformat(decision.week_start) < affected_week
+        ]
+        prior_digest = next(
+            (
+                event.details.digest
+                for event in reversed(events)
+                if isinstance(event, WeeklyDigestBuiltEvent)
+                and date.fromisoformat(event.details.digest.week_start) < affected_week
+            ),
+            None,
+        )
+        base_payload = existing.model_dump(mode="json")
+        base_payload.update(
+            {
+                "revision": resume_state.revision,
+                "journal_entries": resume_state.journal_entries,
+                "nudges": resume_state.nudges,
+                "weekly_reviewer_decisions": decisions,
+                "drift_result": (
+                    detect_drift(
+                        decisions,
+                        persona_id=existing.profile.user_id,
+                    )
+                    if decisions
+                    else None
+                ),
+                "weekly_digest": prior_digest,
+                "trace_event_ids": [event.event_id for event in events],
+                "updated_at": self._timestamp(),
+            }
+        )
+        updated = ExperienceSession.model_validate(base_payload)
+        self._sessions[updated.session_id] = updated
+        self._events[updated.session_id] = events
+
+        weeks_to_recompute = sorted(
+            {
+                self._week_bounds(entry.date)[0]
+                for entry in updated.journal_entries
+                if self._week_bounds(entry.date)[0] >= affected_week
+            }
+        )
+        for week_start in weeks_to_recompute:
+            updated, _ = await self._run_weekly_review(
+                session=updated,
+                parent_event_id=updated.trace_event_ids[-1],
+                week_start_override=week_start,
+            )
+        return updated
+
     async def create_session(
         self,
         request: SessionCreateRequest,
@@ -276,6 +448,53 @@ class InMemoryExperienceService:
                         code="session_conflict",
                         message="This session already belongs to a different Profile.",
                     )
+                if request.resume_state is not None:
+                    affected_date = self._resume_update_date(
+                        existing,
+                        request.resume_state,
+                    )
+                    if affected_date is not None:
+                        if (
+                            request.resume_state.trace_events
+                            != self._events[existing.session_id]
+                        ):
+                            return self._error(
+                                requested_operation=request.operation,
+                                request_id=request.request_id,
+                                code="session_conflict",
+                                message=(
+                                    "The browser-held Experience trace is not current."
+                                ),
+                            )
+                        existing = await self._apply_resume_update(
+                            existing=existing,
+                            resume_state=request.resume_state,
+                            affected_date=affected_date,
+                        )
+                    elif request.resume_state.revision != existing.revision:
+                        return self._error(
+                            requested_operation=request.operation,
+                            request_id=request.request_id,
+                            code="session_conflict",
+                            message=(
+                                "The browser-held Experience update is not based "
+                                "on the current session."
+                            ),
+                        )
+                    elif (
+                        request.resume_state.journal_entries != existing.journal_entries
+                        or request.resume_state.nudges != existing.nudges
+                        or request.resume_state.trace_events
+                        != self._events[existing.session_id]
+                    ):
+                        return self._error(
+                            requested_operation=request.operation,
+                            request_id=request.request_id,
+                            code="session_conflict",
+                            message=(
+                                "The browser-held Experience state is not current."
+                            ),
+                        )
                 response = SessionCreatedResponse(
                     operation="create_session",
                     request_id=request.request_id,
@@ -291,8 +510,35 @@ class InMemoryExperienceService:
             if request.resume_state is not None:
                 resume_state = request.resume_state
                 events = list(resume_state.trace_events)
-                decisions, drift_result, weekly_digest = self._restored_weekly_state(
-                    events
+                decisions, _, _ = self._restored_weekly_state(events)
+                entry_indices = {
+                    entry.t_index for entry in resume_state.journal_entries
+                }
+                decisions = [
+                    decision
+                    for decision in decisions
+                    if decision.t_index in entry_indices
+                ]
+                drift_result = (
+                    detect_drift(
+                        decisions,
+                        persona_id=request.profile.user_id,
+                    )
+                    if decisions
+                    else None
+                )
+                populated_weeks = {
+                    self._week_bounds(entry.date)[0].isoformat()
+                    for entry in resume_state.journal_entries
+                }
+                weekly_digest = next(
+                    (
+                        event.details.digest
+                        for event in reversed(events)
+                        if isinstance(event, WeeklyDigestBuiltEvent)
+                        and event.details.digest.week_start in populated_weeks
+                    ),
+                    None,
                 )
                 session = ExperienceSession(
                     session_id=request.profile.session_id,
@@ -368,8 +614,8 @@ class InMemoryExperienceService:
             event_ids=list(session.trace_event_ids),
         )
 
-    @staticmethod
     def _ordering_error(
+        self,
         session: ExperienceSession,
         request: JournalEntrySubmitRequest,
     ) -> str | None:
@@ -385,6 +631,12 @@ class InMemoryExperienceService:
             existing.t_index == entry.t_index for existing in session.journal_entries
         ):
             return "This Journal Entry position is already in use."
+        if any(
+            isinstance(event, JournalEntrySubmittedEvent)
+            and event.details.journal_entry.t_index == entry.t_index
+            for event in self._events[session.session_id]
+        ):
+            return "This Journal Entry position was already used."
         if (
             session.journal_entries
             and entry.t_index <= session.journal_entries[-1].t_index
@@ -478,7 +730,10 @@ class InMemoryExperienceService:
             entry_date=entry.date,
             previous_entries=previous_entries,
         )
-        receipt = await self._nudge_runtime(runtime_request)
+        try:
+            receipt = await self._nudge_runtime(runtime_request)
+        except Exception as error:  # noqa: BLE001 - injected runtime boundary
+            receipt = build_failed_nudge_runtime_receipt(runtime_request, error)
         event_status = cast(
             EventStatus,
             {
@@ -637,9 +892,14 @@ class InMemoryExperienceService:
         *,
         session: ExperienceSession,
         parent_event_id: str,
+        week_start_override: date | None = None,
     ) -> tuple[ExperienceSession, list[TraceEvent]]:
-        latest_entry = session.journal_entries[-1]
-        week_start, week_end = self._week_bounds(latest_entry.date)
+        if week_start_override is None:
+            latest_entry = session.journal_entries[-1]
+            week_start, week_end = self._week_bounds(latest_entry.date)
+        else:
+            week_start = week_start_override
+            week_end = week_start + timedelta(days=6)
         current_entries = [
             entry
             for entry in session.journal_entries

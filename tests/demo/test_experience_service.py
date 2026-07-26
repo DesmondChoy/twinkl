@@ -33,13 +33,19 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class QueueNudgeRuntime:
-    def __init__(self, receipts: list[NudgeRuntimeReceipt]) -> None:
+    def __init__(
+        self,
+        receipts: list[NudgeRuntimeReceipt | Exception],
+    ) -> None:
         self.receipts = iter(receipts)
         self.requests: list[NudgeRuntimeRequest] = []
 
     async def __call__(self, request: NudgeRuntimeRequest) -> NudgeRuntimeReceipt:
         self.requests.append(request)
-        return next(self.receipts)
+        result = next(self.receipts)
+        if isinstance(result, Exception):
+            raise result
+        return result
 
 
 class DeterministicWeeklyReviewer:
@@ -140,7 +146,7 @@ def _ids() -> Iterator[int]:
 
 
 def _service(
-    receipts: list[NudgeRuntimeReceipt],
+    receipts: list[NudgeRuntimeReceipt | Exception],
     *,
     weekly_verdict: str = "not_conflict",
     weekly_statuses: list[str] | None = None,
@@ -577,6 +583,402 @@ async def test_browser_state_restores_after_in_memory_service_restart() -> None:
     assert len(restarted_runtime.requests) == 1
 
 
+@pytest.mark.asyncio
+async def test_browser_nudge_response_recomputes_affected_week() -> None:
+    service, runtime, weekly_reviewer = _service([_receipt()])
+    create_request = await _create(service)
+    first = await service.submit_journal_entry(
+        _submit_request(create_request, index=0, expected_revision=0)
+    )
+    before = await service.read_trace(
+        TraceReadRequest(
+            operation="read_trace",
+            request_id="trace-before-response",
+            session_id=create_request.profile.session_id,
+        )
+    )
+    assert first.operation == "submit_journal_entry"
+    assert before.operation == "read_trace"
+
+    response_text = "I chose the challenge because it felt more honest."
+    updated_entry = first.session.journal_entries[0].model_copy(
+        update={"nudge_response": response_text}
+    )
+    updated_nudge = first.session.nudges[0].model_copy(
+        update={"outcome": "answered", "response": response_text}
+    )
+    synchronized = await service.create_session(
+        create_request.model_copy(
+            update={
+                "request_id": "sync-response",
+                "idempotency_key": "b" * 64,
+                "resume_state": SessionResumeState(
+                    session_id=create_request.profile.session_id,
+                    revision=2,
+                    journal_entries=[updated_entry],
+                    nudges=[updated_nudge],
+                    trace_events=before.events,
+                ),
+            }
+        )
+    )
+
+    assert synchronized.operation == "create_session"
+    assert synchronized.session.revision == 2
+    assert synchronized.session.journal_entries[0].nudge_response == response_text
+    assert synchronized.session.nudges[0].outcome == "answered"
+    assert len(runtime.requests) == 1
+    assert len(weekly_reviewer.requests) == 2
+    assert response_text in weekly_reviewer.requests[-1].history[0].text
+
+
+@pytest.mark.asyncio
+async def test_browser_nudge_skip_recomputes_without_changing_entry() -> None:
+    service, runtime, weekly_reviewer = _service([_receipt()])
+    create_request = await _create(service)
+    first = await service.submit_journal_entry(
+        _submit_request(create_request, index=0, expected_revision=0)
+    )
+    before = await service.read_trace(
+        TraceReadRequest(
+            operation="read_trace",
+            request_id="trace-before-skip",
+            session_id=create_request.profile.session_id,
+        )
+    )
+    assert first.operation == "submit_journal_entry"
+    assert before.operation == "read_trace"
+
+    synchronized = await service.create_session(
+        create_request.model_copy(
+            update={
+                "request_id": "sync-skip",
+                "idempotency_key": "8" * 64,
+                "resume_state": SessionResumeState(
+                    session_id=create_request.profile.session_id,
+                    revision=2,
+                    journal_entries=first.session.journal_entries,
+                    nudges=[
+                        first.session.nudges[0].model_copy(
+                            update={"outcome": "skipped"}
+                        )
+                    ],
+                    trace_events=before.events,
+                ),
+            }
+        )
+    )
+
+    assert synchronized.operation == "create_session"
+    assert synchronized.session.revision == 2
+    assert synchronized.session.journal_entries == first.session.journal_entries
+    assert synchronized.session.nudges[0].outcome == "skipped"
+    assert len(runtime.requests) == 1
+    assert len(weekly_reviewer.requests) == 2
+
+
+@pytest.mark.asyncio
+async def test_browser_update_rejects_a_stale_trace() -> None:
+    service, _, weekly_reviewer = _service([_receipt()])
+    create_request = await _create(service)
+    first = await service.submit_journal_entry(
+        _submit_request(create_request, index=0, expected_revision=0)
+    )
+    before = await service.read_trace(
+        TraceReadRequest(
+            operation="read_trace",
+            request_id="trace-before-stale-update",
+            session_id=create_request.profile.session_id,
+        )
+    )
+    assert first.operation == "submit_journal_entry"
+    assert before.operation == "read_trace"
+
+    response_text = "Keep this answer attached to the current trace."
+    stale = await service.create_session(
+        create_request.model_copy(
+            update={
+                "request_id": "sync-stale-trace",
+                "idempotency_key": "9" * 64,
+                "resume_state": SessionResumeState(
+                    session_id=create_request.profile.session_id,
+                    revision=2,
+                    journal_entries=[
+                        first.session.journal_entries[0].model_copy(
+                            update={"nudge_response": response_text}
+                        )
+                    ],
+                    nudges=[
+                        first.session.nudges[0].model_copy(
+                            update={
+                                "outcome": "answered",
+                                "response": response_text,
+                            }
+                        )
+                    ],
+                    trace_events=before.events[:-1],
+                ),
+            }
+        )
+    )
+
+    assert stale.operation == "error"
+    assert stale.error.code == "session_conflict"
+    assert len(weekly_reviewer.requests) == 1
+
+
+@pytest.mark.asyncio
+async def test_equal_revision_browser_mismatch_is_not_a_successful_no_op() -> None:
+    service, _, _ = _service(
+        [
+            _receipt(decision="no_nudge", nudge_text=None),
+            _receipt(decision="no_nudge", nudge_text=None),
+            _receipt(decision="no_nudge", nudge_text=None),
+        ]
+    )
+    create_request = await _create(service)
+    first = await service.submit_journal_entry(
+        _submit_request(create_request, index=0, expected_revision=0)
+    )
+    second = await service.submit_journal_entry(
+        _submit_request(create_request, index=1, expected_revision=1)
+    )
+    browser_trace = await service.read_trace(
+        TraceReadRequest(
+            operation="read_trace",
+            request_id="trace-before-divergence",
+            session_id=create_request.profile.session_id,
+        )
+    )
+    third = await service.submit_journal_entry(
+        _submit_request(create_request, index=2, expected_revision=2)
+    )
+    assert first.operation == "submit_journal_entry"
+    assert second.operation == "submit_journal_entry"
+    assert browser_trace.operation == "read_trace"
+    assert third.operation == "submit_journal_entry"
+
+    removed_id = second.session.journal_entries[0].journal_entry_id
+    mismatch = await service.create_session(
+        create_request.model_copy(
+            update={
+                "request_id": "equal-revision-mismatch",
+                "idempotency_key": "7" * 64,
+                "resume_state": SessionResumeState(
+                    session_id=create_request.profile.session_id,
+                    revision=third.session.revision,
+                    journal_entries=second.session.journal_entries[1:],
+                    nudges=[
+                        nudge
+                        for nudge in second.session.nudges
+                        if nudge.journal_entry_id != removed_id
+                    ],
+                    trace_events=browser_trace.events,
+                ),
+            }
+        )
+    )
+
+    assert mismatch.operation == "error"
+    assert mismatch.error.code == "session_conflict"
+
+
+@pytest.mark.asyncio
+async def test_browser_removal_recomputes_without_removed_journal_entry() -> None:
+    service, runtime, weekly_reviewer = _service(
+        [
+            _receipt(decision="no_nudge", nudge_text=None),
+            _receipt(decision="no_nudge", nudge_text=None),
+        ]
+    )
+    create_request = await _create(service)
+    first = await service.submit_journal_entry(
+        _submit_request(create_request, index=0, expected_revision=0)
+    )
+    second = await service.submit_journal_entry(
+        _submit_request(create_request, index=1, expected_revision=1)
+    )
+    before = await service.read_trace(
+        TraceReadRequest(
+            operation="read_trace",
+            request_id="trace-before-removal",
+            session_id=create_request.profile.session_id,
+        )
+    )
+    assert first.operation == "submit_journal_entry"
+    assert second.operation == "submit_journal_entry"
+    assert before.operation == "read_trace"
+
+    removed_id = second.session.journal_entries[0].journal_entry_id
+    synchronized = await service.create_session(
+        create_request.model_copy(
+            update={
+                "request_id": "sync-removal",
+                "idempotency_key": "c" * 64,
+                "resume_state": SessionResumeState(
+                    session_id=create_request.profile.session_id,
+                    revision=3,
+                    journal_entries=second.session.journal_entries[1:],
+                    nudges=[
+                        nudge
+                        for nudge in second.session.nudges
+                        if nudge.journal_entry_id != removed_id
+                    ],
+                    trace_events=before.events,
+                ),
+            }
+        )
+    )
+
+    assert synchronized.operation == "create_session"
+    assert synchronized.session.revision == 3
+    assert [
+        entry.journal_entry_id for entry in synchronized.session.journal_entries
+    ] == ["manual-entry-1"]
+    assert {
+        decision.t_index for decision in synchronized.session.weekly_reviewer_decisions
+    } == {1}
+    assert synchronized.session.weekly_digest is not None
+    assert synchronized.session.weekly_digest.n_entries == 1
+    assert len(runtime.requests) == 2
+    assert len(weekly_reviewer.requests) == 3
+    assert [entry.t_index for entry in weekly_reviewer.requests[-1].history] == [1]
+
+
+@pytest.mark.asyncio
+async def test_removed_journal_entry_index_cannot_be_reused() -> None:
+    service, _, _ = _service(
+        [
+            _receipt(decision="no_nudge", nudge_text=None),
+            _receipt(decision="no_nudge", nudge_text=None),
+        ]
+    )
+    create_request = await _create(service)
+    first = await service.submit_journal_entry(
+        _submit_request(create_request, index=0, expected_revision=0)
+    )
+    second = await service.submit_journal_entry(
+        _submit_request(create_request, index=1, expected_revision=1)
+    )
+    before = await service.read_trace(
+        TraceReadRequest(
+            operation="read_trace",
+            request_id="trace-before-index-removal",
+            session_id=create_request.profile.session_id,
+        )
+    )
+    assert first.operation == "submit_journal_entry"
+    assert second.operation == "submit_journal_entry"
+    assert before.operation == "read_trace"
+    removed = second.session.journal_entries[-1]
+    synchronized = await service.create_session(
+        create_request.model_copy(
+            update={
+                "request_id": "sync-index-removal",
+                "idempotency_key": "6" * 64,
+                "resume_state": SessionResumeState(
+                    session_id=create_request.profile.session_id,
+                    revision=3,
+                    journal_entries=second.session.journal_entries[:-1],
+                    nudges=[
+                        nudge
+                        for nudge in second.session.nudges
+                        if nudge.journal_entry_id != removed.journal_entry_id
+                    ],
+                    trace_events=before.events,
+                ),
+            }
+        )
+    )
+    assert synchronized.operation == "create_session"
+
+    reused_request = _submit_request(
+        create_request,
+        index=1,
+        expected_revision=3,
+    )
+    reused = await service.submit_journal_entry(
+        reused_request.model_copy(
+            update={
+                "idempotency_key": "5" * 64,
+                "journal_entry": reused_request.journal_entry.model_copy(
+                    update={"journal_entry_id": "replacement-entry"}
+                ),
+            }
+        )
+    )
+
+    assert reused.operation == "error"
+    assert reused.error.code == "journal_order_conflict"
+    assert reused.error.message == "This Journal Entry position was already used."
+
+
+@pytest.mark.asyncio
+async def test_removed_only_entry_stays_removed_after_service_restart() -> None:
+    service, _, _ = _service([_receipt(decision="no_nudge", nudge_text=None)])
+    create_request = await _create(service)
+    first = await service.submit_journal_entry(
+        _submit_request(create_request, index=0, expected_revision=0)
+    )
+    before = await service.read_trace(
+        TraceReadRequest(
+            operation="read_trace",
+            request_id="trace-before-empty-removal",
+            session_id=create_request.profile.session_id,
+        )
+    )
+    assert first.operation == "submit_journal_entry"
+    assert before.operation == "read_trace"
+
+    synchronized = await service.create_session(
+        create_request.model_copy(
+            update={
+                "request_id": "sync-empty-removal",
+                "idempotency_key": "d" * 64,
+                "resume_state": SessionResumeState(
+                    session_id=create_request.profile.session_id,
+                    revision=2,
+                    journal_entries=[],
+                    nudges=[],
+                    trace_events=before.events,
+                ),
+            }
+        )
+    )
+    after = await service.read_trace(
+        TraceReadRequest(
+            operation="read_trace",
+            request_id="trace-after-empty-removal",
+            session_id=create_request.profile.session_id,
+        )
+    )
+    assert synchronized.operation == "create_session"
+    assert after.operation == "read_trace"
+
+    restarted, _, _ = _service([])
+    restored = await restarted.create_session(
+        create_request.model_copy(
+            update={
+                "request_id": "restore-empty-removal",
+                "idempotency_key": "e" * 64,
+                "resume_state": SessionResumeState(
+                    session_id=create_request.profile.session_id,
+                    revision=synchronized.session.revision,
+                    journal_entries=[],
+                    nudges=[],
+                    trace_events=after.events,
+                ),
+            }
+        )
+    )
+
+    assert restored.operation == "create_session"
+    assert restored.session.journal_entries == []
+    assert restored.session.weekly_reviewer_decisions == []
+    assert restored.session.drift_result is None
+    assert restored.session.weekly_digest is None
+
+
 @pytest.mark.parametrize("status", ["refusal", "invalid"])
 @pytest.mark.asyncio
 async def test_non_retryable_nudge_failures_keep_the_journal_entry(
@@ -643,6 +1045,40 @@ async def test_explicit_retry_reruns_only_failed_nudge_step() -> None:
         )
         == 1
     )
+
+
+@pytest.mark.asyncio
+async def test_unexpected_injected_nudge_failure_uses_retryable_receipt_path() -> None:
+    service, runtime, _ = _service(
+        [
+            RuntimeError("Injected nudge runtime failed."),
+            _receipt(decision="no_nudge", nudge_text=None),
+        ]
+    )
+    create_request = await _create(service)
+    request = _submit_request(create_request, index=0, expected_revision=0)
+
+    failed = await service.submit_journal_entry(request)
+    recovered = await service.submit_journal_entry(
+        request.model_copy(update={"request_id": "retry-injected-failure"})
+    )
+
+    assert failed.operation == "submit_journal_entry"
+    assert recovered.operation == "submit_journal_entry"
+    assert len(runtime.requests) == 2
+    assert len(recovered.session.journal_entries) == 1
+    trace = await service.read_trace(
+        TraceReadRequest(
+            operation="read_trace",
+            request_id="trace-injected-failure",
+            session_id=create_request.profile.session_id,
+        )
+    )
+    assert trace.operation == "read_trace"
+    nudge_events = [
+        event for event in trace.events if event.event_type == "nudge_decided"
+    ]
+    assert [event.status for event in nudge_events] == ["failed", "complete"]
 
 
 def test_http_adapter_validates_and_serves_contract_responses() -> None:

@@ -1,4 +1,10 @@
-import { useEffect, useMemo, useRef, type RefObject } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type RefObject,
+} from "react";
 import type { OnboardingProfile } from "./domain";
 import type {
   JournalEntryContract,
@@ -91,14 +97,33 @@ function mergeNudges(
   });
 }
 
+function nextJournalTIndex(
+  journalEntries: JournalEntryContract[],
+  traceEvents: TraceEventContract[],
+): number {
+  const indices = journalEntries.map((entry) => entry.t_index);
+  traceEvents.forEach((event) => {
+    if (event.event_type !== "journal_entry_submitted") return;
+    const candidate = event.details.journal_entry;
+    if (candidate === null || typeof candidate !== "object") return;
+    const tIndex = (candidate as Record<string, unknown>).t_index;
+    if (typeof tIndex === "number" && Number.isInteger(tIndex)) {
+      indices.push(tIndex);
+    }
+  });
+  return Math.max(-1, ...indices) + 1;
+}
+
 function statusCopy(experience: ExperienceState): string | null {
   switch (experience.run_state) {
     case "saving":
       return "Saving your Journal Entry…";
     case "checking_nudge":
       return "Saved. Looking for one useful follow-up…";
+    case "running":
+      return "Updating your week…";
     case "awaiting_response":
-      return "A follow-up question is ready.";
+      return experience.error_message ?? "A follow-up question is ready.";
     case "complete":
       return "Saved.";
     case "refused":
@@ -122,6 +147,8 @@ export default function JournalExperience({
 }: JournalExperienceProps) {
   const submissionLockRef = useRef(false);
   const nudgeHeadingRef = useRef<HTMLHeadingElement>(null);
+  const threadHeadingRef = useRef<HTMLHeadingElement>(null);
+  const [removingEntryId, setRemovingEntryId] = useState<string | null>(null);
   const activeNudge = useMemo(
     () =>
       [...experience.nudges]
@@ -129,7 +156,9 @@ export default function JournalExperience({
         .find((nudge) => nudge.outcome === "displayed") ?? null,
     [experience.nudges],
   );
-  const isBusy = ["saving", "checking_nudge"].includes(experience.run_state);
+  const isBusy = ["saving", "checking_nudge", "running"].includes(
+    experience.run_state,
+  );
   const isAwaitingResponse =
     experience.run_state === "awaiting_response" && activeNudge !== null;
   const copy = statusCopy(experience);
@@ -239,10 +268,10 @@ export default function JournalExperience({
     try {
       const entry: JournalEntryContract = {
         journal_entry_id: crypto.randomUUID(),
-        t_index:
-          experience.journal_entries.length === 0
-            ? 0
-            : experience.journal_entries.at(-1)!.t_index + 1,
+        t_index: nextJournalTIndex(
+          experience.journal_entries,
+          experience.trace_events,
+        ),
         date: localDate(),
         content,
         nudge_response: null,
@@ -272,7 +301,54 @@ export default function JournalExperience({
     }
   };
 
-  const finishNudge = (outcome: "skipped" | "answered") => {
+  const synchronizeBrowserState = async (
+    journalEntries: JournalEntryContract[],
+    nudges: NudgeInteractionContract[],
+  ) => {
+    const currentState = {
+      session_id: profile.session_id,
+      revision: experience.revision,
+      journal_entries: experience.journal_entries,
+      nudges: experience.nudges,
+      trace_events: experience.trace_events,
+    };
+    const updatedState = {
+      session_id: profile.session_id,
+      revision: experience.revision + 1,
+      journal_entries: journalEntries,
+      nudges,
+      trace_events: experience.trace_events,
+    };
+    let restoreError: unknown = null;
+    try {
+      await createExperienceSession(profile, currentState);
+    } catch (error) {
+      restoreError = error;
+    }
+    let response;
+    try {
+      response = await createExperienceSession(profile, updatedState);
+    } catch (error) {
+      throw restoreError ?? error;
+    }
+    if (
+      response.session.revision !== updatedState.revision
+      || JSON.stringify(response.session.journal_entries)
+        !== JSON.stringify(updatedState.journal_entries)
+      || JSON.stringify(response.session.nudges)
+        !== JSON.stringify(updatedState.nudges)
+    ) {
+      throw new ExperienceApiError(
+        "The Experience update did not match the requested Journal Entry state.",
+        "session_conflict",
+        false,
+      );
+    }
+    const trace = await readExperienceTrace(profile.session_id);
+    return { response, trace };
+  };
+
+  const finishNudge = async (outcome: "skipped" | "answered") => {
     if (!activeNudge) return;
     const response =
       outcome === "answered"
@@ -289,14 +365,84 @@ export default function JournalExperience({
         ? { ...entry, nudge_response: response }
         : entry,
     );
-    updateExperience({
-      journal_entries: entries,
-      nudges,
-      nudge_response_draft: "",
-      run_state: "complete",
-      retryable: false,
-      error_message: null,
-    });
+    updateExperience({ run_state: "running", error_message: null });
+    try {
+      const synchronized = await synchronizeBrowserState(entries, nudges);
+      updateExperience({
+        revision: synchronized.response.session.revision,
+        journal_entries: synchronized.response.session.journal_entries,
+        nudges: synchronized.response.session.nudges,
+        weekly_reviewer_decisions:
+          synchronized.response.session.weekly_reviewer_decisions,
+        drift_result: synchronized.response.session.drift_result,
+        weekly_digest: synchronized.response.session.weekly_digest,
+        nudge_response_draft: "",
+        run_state: "complete",
+        retryable: false,
+        error_message: null,
+        trace_event_ids: synchronized.response.session.trace_event_ids,
+        trace_events: synchronized.trace.events,
+      });
+    } catch {
+      updateExperience({
+        run_state: "awaiting_response",
+        retryable: false,
+        error_message:
+          "Your response is still here, but this week could not update. Try again.",
+      });
+    }
+  };
+
+  const removeJournalEntry = async (journalEntryId: string) => {
+    if (
+      isBusy ||
+      isAwaitingResponse ||
+      removingEntryId !== null ||
+      !window.confirm(
+        "Remove this Journal Entry and update the affected weekly results?",
+      )
+    ) {
+      return;
+    }
+    const journalEntries = experience.journal_entries.filter(
+      (entry) => entry.journal_entry_id !== journalEntryId,
+    );
+    const nudges = experience.nudges.filter(
+      (nudge) => nudge.journal_entry_id !== journalEntryId,
+    );
+    setRemovingEntryId(journalEntryId);
+    updateExperience({ run_state: "running", error_message: null });
+    try {
+      const synchronized = await synchronizeBrowserState(journalEntries, nudges);
+      updateExperience({
+        revision: synchronized.response.session.revision,
+        journal_entries: synchronized.response.session.journal_entries,
+        nudges: synchronized.response.session.nudges,
+        weekly_reviewer_decisions:
+          synchronized.response.session.weekly_reviewer_decisions,
+        drift_result: synchronized.response.session.drift_result,
+        weekly_digest: synchronized.response.session.weekly_digest,
+        selected_entry_id:
+          experience.selected_entry_id === journalEntryId
+            ? null
+            : experience.selected_entry_id,
+        run_state: "complete",
+        retryable: false,
+        error_message: null,
+        trace_event_ids: synchronized.response.session.trace_event_ids,
+        trace_events: synchronized.trace.events,
+      });
+      threadHeadingRef.current?.focus({ preventScroll: true });
+    } catch {
+      updateExperience({
+        run_state: "failed",
+        retryable: false,
+        error_message:
+          "That Journal Entry is still here. Removing it could not finish.",
+      });
+    } finally {
+      setRemovingEntryId(null);
+    }
   };
 
   const inspectLatest = () => {
@@ -382,7 +528,7 @@ export default function JournalExperience({
             <button
               className="button button--quiet"
               type="button"
-              onClick={() => finishNudge("skipped")}
+              onClick={() => void finishNudge("skipped")}
             >
               Skip for now
             </button>
@@ -390,7 +536,7 @@ export default function JournalExperience({
               className="button button--primary"
               type="button"
               disabled={!experience.nudge_response_draft.trim()}
-              onClick={() => finishNudge("answered")}
+              onClick={() => void finishNudge("answered")}
             >
               Save response
             </button>
@@ -436,10 +582,16 @@ export default function JournalExperience({
         <section className="journal-thread" aria-labelledby="journal-thread-title">
           <div className="journal-thread__heading">
             <p className="eyebrow">Your thread</p>
-            <h2 id="journal-thread-title">Moment by moment.</h2>
+            <h2
+              id="journal-thread-title"
+              ref={threadHeadingRef}
+              tabIndex={-1}
+            >
+              Moment by moment.
+            </h2>
           </div>
           <ol>
-            {experience.journal_entries.map((entry) => {
+            {experience.journal_entries.map((entry, position) => {
               const nudge: NudgeInteractionContract | null =
                 experience.nudges.find(
                   (item) => item.journal_entry_id === entry.journal_entry_id,
@@ -454,7 +606,23 @@ export default function JournalExperience({
                       : undefined
                   }
                 >
-                  <time dateTime={entry.date}>{displayDate(entry.date)}</time>
+                  <div className="journal-thread__meta">
+                    <time dateTime={entry.date}>{displayDate(entry.date)}</time>
+                    {mode === "manual" ? (
+                      <button
+                        className="journal-thread__remove"
+                        type="button"
+                        aria-label={`Remove Journal Entry ${position + 1} of ${experience.journal_entries.length} from ${displayDate(entry.date)}`}
+                        disabled={isBusy || isAwaitingResponse}
+                        onClick={() =>
+                          void removeJournalEntry(entry.journal_entry_id)}
+                      >
+                        {removingEntryId === entry.journal_entry_id
+                          ? "Removing…"
+                          : "Remove"}
+                      </button>
+                    ) : null}
+                  </div>
                   <p className="journal-thread__entry">{entry.content}</p>
                   {nudge?.text && ["displayed", "answered", "skipped"].includes(
                     nudge.outcome,

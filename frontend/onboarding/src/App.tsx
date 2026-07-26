@@ -973,6 +973,13 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
                   ? session.experience.trace_events
                   : canonicalInspectFixture.trace_events
               }
+              currentJournalEntryIds={
+                session.experience.trace_events.length > 0
+                  ? session.experience.journal_entries.map(
+                      (entry) => entry.journal_entry_id,
+                    )
+                  : undefined
+              }
               selectedEventId={session.experience.selected_event_id}
               traceLabel={
                 session.experience.trace_events.length > 0

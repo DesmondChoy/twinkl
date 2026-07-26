@@ -75,8 +75,11 @@ so restarting it clears backend state. Before the next Journal Entry, React
 restores the confirmed browser-held Journal Entries, nudges, and trace events
 through the validated session request. Provider keys stay on the Python side.
 Nudge reply and skip outcomes remain in the resumable browser session, while
-the Python boundary records nudge generation events for Inspect. They do not
-yet trigger weekly recomputation; the current Weekly Drift Reviewer request
-uses the displayed text held by Python when submission finishes.
+the Python boundary records nudge generation events for Inspect. Saving either
+outcome, or confirming Journal Entry removal, advances the session revision and
+recomputes the affected week plus any later weeks. A failed synchronization
+keeps the Journal Entry or response in the browser for a contextual retry.
+Removed Journal Entry positions are not reused, and Inspect marks their
+immutable submission events as removed from the current Experience.
 Production authentication, multi-tenant storage, and generalized persistence
 remain outside the time-boxed capstone.

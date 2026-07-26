@@ -11,7 +11,8 @@ Weekly Drift Reviewer Decisions, the Drift Detector result, a cited Weekly
 Digest, and linked Inspect events. The five deterministic persona replays now
 load into the shared React session with previous, next, play or pause, restart,
 reduced-motion behavior, no-future-data projection, and browser-side scenario
-hash verification. Release hardening remains tracked work. The versioned
+hash verification. The release quality gate is implemented; professor
+walkthrough and capstone evidence remain tracked work. The versioned
 React-Python boundary, JSON Schema, and
 canonical fixtures are implemented in
 [`src/demo/contracts.py`](../../src/demo/contracts.py) and
@@ -128,13 +129,13 @@ After Profile confirmation, Experience provides:
   nudge and response;
 - a contextual retry action only after a failed backend operation.
 
-Journal Entry removal and downstream recomputation are deferred to demo
-hardening; the manual journaling scope does not expose removal.
-
-The current manual integration reviews the displayed Journal Entry text held
-by Python when submission finishes. A nudge reply or skip added afterward
-remains resumable in the browser but does not trigger weekly recomputation;
-that follow-up belongs to demo hardening.
+Manual Experience allows explicit Journal Entry removal after confirmation.
+Removing a Journal Entry or saving a nudge reply or skip advances the session
+revision and recomputes the affected week plus any later weeks. The saved
+browser state remains unchanged if synchronization fails, so the action can be
+retried without losing user text. Removed Journal Entry `t_index` values are
+not reused. Inspect retains their immutable submission events and marks them as
+removed from the current Experience.
 
 A Journal Entry must be held safely while the nudge check runs. A missing key,
 refusal, invalid response, or request failure must not discard the Journal
@@ -291,7 +292,7 @@ Provider keys and unredacted provider configuration stay on the Python side.
 
 | Operation | Purpose |
 |---|---|
-| `create_session` | Validate a confirmed Profile and establish or resume in-memory shared session state |
+| `create_session` | Validate a confirmed Profile, establish or resume in-memory shared session state, and synchronize one browser-held interaction or removal |
 | `submit_journal_entry` | Append one ordered Journal Entry using an expected session revision |
 | `load_scenario` | Load one deterministic saved persona scenario |
 | `read_trace` | Retrieve typed trace events, optionally after a known event |
@@ -309,6 +310,12 @@ framework:
   as an idempotency key. Repeating the same key and input returns the stored
   result with `reused`; reusing the key for different input returns a safe
   conflict error before any model call.
+- An existing session accepts only a one-revision browser update that either
+  records one displayed nudge as answered or skipped, or removes one Journal
+  Entry and its linked nudge. Python recomputes that week and every later week;
+  broader state replacement is rejected. A same-revision resume must exactly
+  match the current Journal Entries, nudges, and trace; it cannot silently
+  replace or ignore divergent browser state.
 - `submit_journal_entry` carries `expected_revision`. Python rejects a stale
   revision, duplicate Journal Entry identifier, duplicate `t_index`, or
   non-chronological Journal Entry before nudge or weekly review work begins.

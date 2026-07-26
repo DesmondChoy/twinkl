@@ -1832,9 +1832,17 @@ h2 {
   content: "";
 }
 
+.journal-thread__meta {
+  display: flex;
+  max-width: 720px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
 .journal-thread time {
   display: block;
-  margin-bottom: 10px;
   color: rgba(20, 34, 59, 0.48);
   font-size: 0.7rem;
   font-weight: 780;
@@ -1842,9 +1850,29 @@ h2 {
   text-transform: uppercase;
 }
 
+.journal-thread__remove {
+  min-width: 44px;
+  min-height: 44px;
+  border: 0;
+  padding: 0 4px;
+  color: rgba(20, 34, 59, 0.58);
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.74rem;
+  font-weight: 760;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.journal-thread__remove:disabled {
+  cursor: wait;
+  opacity: 0.5;
+}
+
 .journal-thread__entry {
   max-width: 720px;
   margin: 0;
+  overflow-wrap: anywhere;
   color: var(--ink);
   font-family: "Source Serif 4 Variable", Georgia, serif;
   font-size: clamp(1.2rem, 2.3vw, 1.6rem);
@@ -1860,6 +1888,7 @@ h2 {
 
 .journal-thread__exchange p {
   margin: 0;
+  overflow-wrap: anywhere;
   line-height: 1.55;
 }
 
@@ -1991,6 +2020,7 @@ h2 {
 
 .weekly-evidence blockquote {
   margin: 0;
+  overflow-wrap: anywhere;
   color: rgba(20, 34, 59, 0.78);
   line-height: 1.5;
 }

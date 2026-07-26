@@ -10,6 +10,7 @@ interface EventPresentation {
 
 interface InspectViewProps {
   events: TraceEventContract[];
+  currentJournalEntryIds?: string[];
   selectedEventId: string | null;
   traceLabel: string;
   onReturn: () => void;
@@ -138,7 +139,10 @@ function countLabel(
   return `${count} ${count === 1 ? singular : plural}`;
 }
 
-function eventSummary(event: TraceEventContract): string {
+function eventSummary(
+  event: TraceEventContract,
+  currentJournalEntryIds: Set<string> | null,
+): string {
   const details = record(event.details) ?? {};
   const safeError = record(event.error);
   const errorMessage = string(safeError?.message);
@@ -153,9 +157,15 @@ function eventSummary(event: TraceEventContract): string {
     case "journal_entry_submitted": {
       const entry = record(details.journal_entry);
       const tIndex = typeof entry?.t_index === "number" ? entry.t_index : null;
-      return tIndex === null
+      const journalEntryId = string(entry?.journal_entry_id);
+      const savedLabel = tIndex === null
         ? "Journal Entry saved"
         : `Journal Entry ${tIndex + 1} saved`;
+      return journalEntryId
+        && currentJournalEntryIds
+        && !currentJournalEntryIds.has(journalEntryId)
+        ? `${savedLabel} · Removed from current Experience`
+        : savedLabel;
     }
     case "nudge_suppression_checked":
       return details.suppressed === true
@@ -308,6 +318,7 @@ function EventDetails({ event }: { event: TraceEventContract }) {
 
 export default function InspectView({
   events,
+  currentJournalEntryIds,
   selectedEventId,
   traceLabel,
   onReturn,
@@ -320,6 +331,12 @@ export default function InspectView({
   const eventNumbers = useMemo(
     () => new Map(events.map((event, index) => [event.event_id, index + 1])),
     [events],
+  );
+  const currentJournalEntryIdSet = useMemo(
+    () => currentJournalEntryIds
+      ? new Set(currentJournalEntryIds)
+      : null,
+    [currentJournalEntryIds],
   );
   const selectedEvent = selectedEventId
     ? events.find((event) => event.event_id === selectedEventId) ?? null
@@ -422,7 +439,9 @@ export default function InspectView({
                       {presentation.component}
                     </span>
                     <span className="trace-event__name">{presentation.label}</span>
-                    <span className="trace-event__result">{eventSummary(event)}</span>
+                    <span className="trace-event__result">
+                      {eventSummary(event, currentJournalEntryIdSet)}
+                    </span>
                   </span>
                   <span className="trace-event__aside">
                     <span className={`trace-chip trace-chip--status-${event.status}`}>

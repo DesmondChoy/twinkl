@@ -127,9 +127,24 @@ function Harness({
 
 beforeEach(() => {
   vi.clearAllMocks();
-  api.createExperienceSession.mockResolvedValue({
+  api.createExperienceSession.mockImplementation(async (
+    _profile: unknown,
+    resumeState: {
+      revision: number;
+      journal_entries: JournalEntryContract[];
+      nudges: NudgeInteractionContract[];
+    } | null,
+  ) => ({
     operation: "create_session",
-  });
+    ...(resumeState === null
+      ? {}
+      : {
+          session: {
+            ...session(resumeState.journal_entries, resumeState.nudges),
+            revision: resumeState.revision,
+          },
+        }),
+  }));
   api.journalIdempotencyKey.mockResolvedValue("a".repeat(64));
 });
 
@@ -176,6 +191,23 @@ describe("manual Journal Entry Experience", () => {
     expect(screen.getByText("I stopped performing for anyone else.")).toBeTruthy();
     expect(screen.getAllByText(savedEntry.content)).toHaveLength(1);
     expect(api.submitJournalEntry).toHaveBeenCalledTimes(1);
+    expect(api.createExperienceSession).toHaveBeenLastCalledWith(
+      profile,
+      expect.objectContaining({
+        revision: 2,
+        journal_entries: [
+          expect.objectContaining({
+            nudge_response: "I stopped performing for anyone else.",
+          }),
+        ],
+        nudges: [
+          expect.objectContaining({
+            outcome: "answered",
+            response: "I stopped performing for anyone else.",
+          }),
+        ],
+      }),
+    );
   });
 
   it("allows the displayed nudge to be skipped", async () => {
@@ -205,6 +237,270 @@ describe("manual Journal Entry Experience", () => {
 
     expect(screen.getByText("Follow-up skipped.")).toBeTruthy();
     expect(screen.getByRole("textbox", { name: "Journal Entry" })).toBeTruthy();
+    expect(api.createExperienceSession).toHaveBeenLastCalledWith(
+      profile,
+      expect.objectContaining({
+        revision: 2,
+        nudges: [expect.objectContaining({ outcome: "skipped" })],
+      }),
+    );
+  });
+
+  it("keeps a nudge response available when weekly recomputation fails", async () => {
+    const savedEntry = entry();
+    const initial: ExperienceState = {
+      ...createExperienceState(),
+      journal_started: true,
+      revision: 1,
+      journal_entries: [savedEntry],
+      nudges: [nudge()],
+      run_state: "awaiting_response",
+      trace_event_ids: canonicalInspectFixture.session.trace_event_ids,
+      trace_events: canonicalInspectFixture.trace_events,
+    };
+    api.createExperienceSession
+      .mockImplementationOnce(async () => ({
+        operation: "create_session",
+        session: session([savedEntry], [nudge()]),
+      }))
+      .mockRejectedValueOnce(new Error("Connection lost"));
+    const user = userEvent.setup();
+    render(<Harness initial={initial} />);
+
+    await user.type(
+      screen.getByRole("textbox", { name: "Your response" }),
+      "This answer should remain here.",
+    );
+    await user.click(screen.getByRole("button", { name: "Save response" }));
+
+    expect(
+      await screen.findByDisplayValue("This answer should remain here."),
+    ).toBeTruthy();
+    expect(screen.getByRole("status").textContent).toContain(
+      "Your response is still here, but this week could not update. Try again.",
+    );
+    expect(screen.getByRole("button", { name: "Save response" })).toBeTruthy();
+  });
+
+  it("recovers when the update succeeds before the Inspect trace refresh fails", async () => {
+    const savedEntry = entry();
+    const initial: ExperienceState = {
+      ...createExperienceState(),
+      journal_started: true,
+      revision: 1,
+      journal_entries: [savedEntry],
+      nudges: [nudge()],
+      run_state: "awaiting_response",
+      trace_event_ids: canonicalInspectFixture.session.trace_event_ids,
+      trace_events: canonicalInspectFixture.trace_events,
+    };
+    const answeredEntry = {
+      ...savedEntry,
+      nudge_response: "This answer should survive the partial failure.",
+    };
+    const answeredNudge = {
+      ...nudge(),
+      outcome: "answered" as const,
+      response: answeredEntry.nudge_response,
+    };
+    const synchronizedSession = {
+      ...session([answeredEntry], [answeredNudge]),
+      revision: 2,
+    };
+    api.createExperienceSession
+      .mockResolvedValueOnce({
+        operation: "create_session",
+        session: session([savedEntry], [nudge()]),
+      })
+      .mockResolvedValueOnce({
+        operation: "create_session",
+        session: synchronizedSession,
+      })
+      .mockRejectedValueOnce(new Error("The browser state is now stale"))
+      .mockResolvedValueOnce({
+        operation: "create_session",
+        session: synchronizedSession,
+      });
+    api.readExperienceTrace
+      .mockRejectedValueOnce(new Error("Inspect is briefly unavailable"))
+      .mockResolvedValueOnce(trace(canonicalInspectFixture.trace_events));
+    const user = userEvent.setup();
+    render(<Harness initial={initial} />);
+
+    await user.type(
+      screen.getByRole("textbox", { name: "Your response" }),
+      answeredEntry.nudge_response,
+    );
+    await user.click(screen.getByRole("button", { name: "Save response" }));
+    await screen.findByDisplayValue(answeredEntry.nudge_response);
+    await user.click(screen.getByRole("button", { name: "Save response" }));
+
+    await waitFor(() =>
+      expect(screen.queryByRole("textbox", { name: "Your response" })).toBeNull(),
+    );
+    expect(screen.getByText(answeredEntry.nudge_response)).toBeTruthy();
+    expect(api.createExperienceSession).toHaveBeenCalledTimes(4);
+    expect(api.readExperienceTrace).toHaveBeenCalledTimes(2);
+  });
+
+  it("removes a Journal Entry and requests affected-week recomputation", async () => {
+    const first = entry("A quiet walk helped me hear my own thoughts.");
+    const second = {
+      ...entry("Planning a small project made the afternoon disappear."),
+      journal_entry_id: "manual-entry-2",
+      t_index: 1,
+    };
+    const initial: ExperienceState = {
+      ...createExperienceState(),
+      journal_started: true,
+      revision: 2,
+      journal_entries: [first, second],
+      nudges: [nudge("no_nudge"), nudge("no_nudge", second.journal_entry_id)],
+      run_state: "complete",
+      trace_event_ids: canonicalInspectFixture.session.trace_event_ids,
+      trace_events: canonicalInspectFixture.trace_events,
+    };
+    api.readExperienceTrace.mockResolvedValue(
+      trace(canonicalInspectFixture.trace_events),
+    );
+    const confirm = vi.spyOn(window, "confirm").mockReturnValue(true);
+    const user = userEvent.setup();
+    render(<Harness initial={initial} />);
+
+    await user.click(
+      screen.getByRole("button", {
+        name: "Remove Journal Entry 1 of 2 from Jul 25, 2026",
+      }),
+    );
+
+    await waitFor(() =>
+      expect(
+        screen.queryByText("A quiet walk helped me hear my own thoughts."),
+      ).toBeNull(),
+    );
+    expect(
+      screen.getByText("Planning a small project made the afternoon disappear."),
+    ).toBeTruthy();
+    expect(api.createExperienceSession).toHaveBeenLastCalledWith(
+      profile,
+      expect.objectContaining({
+        revision: 3,
+        journal_entries: [second],
+        nudges: [
+          expect.objectContaining({
+            journal_entry_id: second.journal_entry_id,
+          }),
+        ],
+      }),
+    );
+    expect(document.activeElement).toBe(
+      screen.getByRole("heading", { name: "Moment by moment." }),
+    );
+    confirm.mockRestore();
+  });
+
+  it("does not accept a successful response that failed to remove the entry", async () => {
+    const first = entry("This Journal Entry must remain after a stale response.");
+    const second = {
+      ...entry("This is the other current Journal Entry."),
+      journal_entry_id: "manual-entry-2",
+      t_index: 1,
+    };
+    const initial: ExperienceState = {
+      ...createExperienceState(),
+      journal_started: true,
+      revision: 2,
+      journal_entries: [first, second],
+      nudges: [nudge("no_nudge"), nudge("no_nudge", second.journal_entry_id)],
+      run_state: "complete",
+      trace_event_ids: canonicalInspectFixture.session.trace_event_ids,
+      trace_events: canonicalInspectFixture.trace_events,
+    };
+    api.createExperienceSession
+      .mockRejectedValueOnce(new Error("Browser state is stale"))
+      .mockResolvedValueOnce({
+        operation: "create_session",
+        session: {
+          ...session([first, second], initial.nudges),
+          revision: 3,
+        },
+      });
+    const confirm = vi.spyOn(window, "confirm").mockReturnValue(true);
+    const user = userEvent.setup();
+    render(<Harness initial={initial} />);
+
+    await user.click(
+      screen.getByRole("button", {
+        name: "Remove Journal Entry 1 of 2 from Jul 25, 2026",
+      }),
+    );
+
+    expect(
+      await screen.findByText(
+        "That Journal Entry is still here. Removing it could not finish.",
+      ),
+    ).toBeTruthy();
+    expect(screen.getByText(first.content)).toBeTruthy();
+    expect(screen.getByText(second.content)).toBeTruthy();
+    expect(api.readExperienceTrace).not.toHaveBeenCalled();
+    confirm.mockRestore();
+  });
+
+  it("allocates the next Journal Entry index from immutable trace history", async () => {
+    const savedEntry = entry();
+    const submittedEvent = canonicalInspectFixture.trace_events.find(
+      (event) => event.event_type === "journal_entry_submitted",
+    )!;
+    const historicalEvent: TraceEventContract = {
+      ...submittedEvent,
+      event_id: "historical-entry-5",
+      session_id: profile.session_id,
+      details: {
+        journal_entry: {
+          ...savedEntry,
+          journal_entry_id: "removed-entry-5",
+          t_index: 4,
+        },
+        ordering_valid: true,
+      },
+    };
+    const initial: ExperienceState = {
+      ...createExperienceState(),
+      journal_started: true,
+      revision: 5,
+      journal_entries: [savedEntry],
+      nudges: [nudge("no_nudge")],
+      run_state: "complete",
+      trace_event_ids: [historicalEvent.event_id],
+      trace_events: [historicalEvent],
+    };
+    api.submitJournalEntry.mockImplementation(async (
+      args: { entry: JournalEntryContract },
+    ) => ({
+      operation: "submit_journal_entry",
+      session: session(
+        [savedEntry, args.entry],
+        [nudge("no_nudge"), nudge("no_nudge", args.entry.journal_entry_id)],
+      ),
+    }));
+    api.readExperienceTrace.mockResolvedValue(
+      trace([historicalEvent, decisionEvent("complete")]),
+    );
+    const user = userEvent.setup();
+    render(<Harness initial={initial} />);
+
+    await user.type(
+      screen.getByRole("textbox", { name: "Journal Entry" }),
+      "A replacement keeps a new immutable Journal Entry index.",
+    );
+    await user.click(screen.getByRole("button", { name: "Save Journal Entry" }));
+
+    await waitFor(() => expect(api.submitJournalEntry).toHaveBeenCalledOnce());
+    expect(api.submitJournalEntry).toHaveBeenCalledWith(
+      expect.objectContaining({
+        entry: expect.objectContaining({ t_index: 5 }),
+      }),
+    );
   });
 
   it("retains earlier nudge replies after later Journal Entries", async () => {

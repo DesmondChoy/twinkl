@@ -119,6 +119,25 @@ describe("Inspect view", () => {
     expect(response).not.toContain("visible-cookie");
   });
 
+  it("marks submitted Journal Entries removed from the current Experience", () => {
+    const submitted = events.find(
+      (event) => event.event_type === "journal_entry_submitted",
+    )!;
+    render(
+      <InspectView
+        events={[submitted]}
+        currentJournalEntryIds={[]}
+        selectedEventId={null}
+        traceLabel="Current Experience session"
+        onReturn={() => undefined}
+      />,
+    );
+
+    expect(
+      screen.getByText(/Removed from current Experience/),
+    ).toBeTruthy();
+  });
+
   it("keeps the phone layout single-column and wraps long trace content", () => {
     expect(styles).toContain("@media (max-width: 620px)");
     expect(styles).toMatch(
@@ -126,6 +145,9 @@ describe("Inspect view", () => {
     );
     expect(styles).toMatch(
       /\.inspect-detail pre\s*\{[\s\S]*?white-space:\s*pre-wrap;[\s\S]*?overflow-wrap:\s*anywhere;/,
+    );
+    expect(styles).toMatch(
+      /\.journal-thread__entry\s*\{[\s\S]*?overflow-wrap:\s*anywhere;/,
     );
   });
 });

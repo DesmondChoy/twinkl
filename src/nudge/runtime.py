@@ -167,6 +167,19 @@ def _receipt(
     )
 
 
+def build_failed_nudge_runtime_receipt(
+    request: NudgeRuntimeRequest,
+    error: Exception,
+) -> NudgeRuntimeReceipt:
+    """Convert an unexpected runtime failure into the normal retryable path."""
+    return _receipt(
+        request,
+        status="error",
+        latency_seconds=0.0,
+        error=error,
+    )
+
+
 class OpenAINudgeRuntime:
     """One-attempt GPT-5.6 Luna caller with reasoning disabled."""
 
