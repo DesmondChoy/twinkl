@@ -1,9 +1,7 @@
 import {
   BWS_SETS,
-  GOALS,
   type BwsObjectKey,
   type BwsResponse,
-  type GoalCategory,
   type OnboardingProfile,
   isBwsObjectKey,
   scoreResponses,
@@ -16,8 +14,9 @@ import type {
   WeeklyDriftReviewerDecisionContract,
 } from "./demoContracts";
 
-export const SESSION_STORAGE_KEY = "twinkl.onboarding.session.v6";
-export const LEGACY_SESSION_STORAGE_KEY = "twinkl.onboarding.session.v5";
+export const SESSION_STORAGE_KEY = "twinkl.onboarding.session.v7";
+export const LEGACY_SESSION_STORAGE_KEY = "twinkl.onboarding.session.v6";
+export const OLDER_SESSION_STORAGE_KEY = "twinkl.onboarding.session.v5";
 export const OLDEST_SESSION_STORAGE_KEY = "twinkl.onboarding.session.v4";
 
 export type DemoView = "experience" | "inspect";
@@ -66,10 +65,10 @@ export interface ExperienceState {
   trace_events: TraceEventContract[];
 }
 
-export type OnboardingStage = "set" | "goal" | "summary" | "complete";
+export type OnboardingStage = "set" | "summary" | "complete";
 
 export interface OnboardingSession {
-  schema_version: 6;
+  schema_version: 7;
   user_id: string;
   session_id: string;
   started_at: string;
@@ -81,7 +80,6 @@ export interface OnboardingSession {
   responses: BwsResponse[];
   draft_best: BwsObjectKey | null;
   draft_worst: BwsObjectKey | null;
-  goal_category: GoalCategory | null;
   confirmed_profile: OnboardingProfile | null;
   experience: ExperienceState;
 }
@@ -127,7 +125,7 @@ export function createSession(
   makeId: () => string = () => crypto.randomUUID(),
 ): OnboardingSession {
   return {
-    schema_version: 6,
+    schema_version: 7,
     user_id: makeId(),
     session_id: makeId(),
     started_at: now.toISOString(),
@@ -139,7 +137,6 @@ export function createSession(
     responses: [],
     draft_best: null,
     draft_worst: null,
-    goal_category: null,
     confirmed_profile: null,
     experience: createExperienceState(),
   };
@@ -241,39 +238,62 @@ function isExperienceState(value: unknown): value is ExperienceState {
 export function parseSession(raw: string | null): OnboardingSession | null {
   if (!raw) return null;
   try {
-    const parsed = JSON.parse(raw) as Partial<Omit<OnboardingSession, "schema_version">> & {
+    const parsed = JSON.parse(raw) as Partial<Omit<
+      OnboardingSession,
+      "schema_version" | "stage" | "confirmed_profile"
+    >> & {
       schema_version?: number;
+      stage?: OnboardingStage | "goal";
+      goal_category?: unknown;
+      confirmed_profile?: unknown;
     };
-    const session = parsed.schema_version === 4
-      ? {
-          ...parsed,
-          schema_version: 6 as const,
-          experience: createExperienceState(),
-        }
-      : parsed.schema_version === 5
-        ? {
-            ...parsed,
-            schema_version: 6 as const,
-            experience: {
-              ...createExperienceState(),
-              ...(isSessionRecord(parsed.experience) ? parsed.experience : {}),
-              revision: 0,
-              nudges: [],
-              pending_submission: null,
-              nudge_response_draft: "",
-              error_message: null,
-              selected_event_id: null,
-              trace_event_ids: [],
-              trace_events: [],
-            },
-          }
-      : parsed;
+    let session = parsed;
+    if ([4, 5, 6].includes(parsed.schema_version ?? -1)) {
+      const { goal_category: _goalCategory, ...withoutGoal } = parsed;
+      let experience = parsed.experience;
+      if (parsed.schema_version === 4) {
+        experience = createExperienceState();
+      } else if (parsed.schema_version === 5) {
+        experience = {
+          ...createExperienceState(),
+          ...(isSessionRecord(parsed.experience) ? parsed.experience : {}),
+          revision: 0,
+          nudges: [],
+          pending_submission: null,
+          nudge_response_draft: "",
+          error_message: null,
+          selected_event_id: null,
+          trace_event_ids: [],
+          trace_events: [],
+        };
+      }
+      let confirmedProfile = parsed.confirmed_profile;
+      if (
+        isSessionRecord(confirmedProfile) &&
+        confirmedProfile.schema_version === 2 &&
+        confirmedProfile.onboarding_version === "2.1.0"
+      ) {
+        const { goal_category: _legacyGoal, ...profileWithoutGoal } = confirmedProfile;
+        confirmedProfile = {
+          ...profileWithoutGoal,
+          schema_version: 3,
+          onboarding_version: "2.2.0",
+        };
+      }
+      session = {
+        ...withoutGoal,
+        schema_version: 7,
+        stage: parsed.stage === "goal" ? "summary" : parsed.stage,
+        confirmed_profile: confirmedProfile,
+        experience,
+      };
+    }
     if (
-      session.schema_version !== 6 ||
+      session.schema_version !== 7 ||
       typeof session.user_id !== "string" ||
       typeof session.session_id !== "string" ||
       typeof session.started_at !== "string" ||
-      !["set", "goal", "summary", "complete"].includes(session.stage ?? "") ||
+      !["set", "summary", "complete"].includes(session.stage ?? "") ||
       !Number.isInteger(session.set_index) ||
       session.set_index! < 0 ||
       session.set_index! >= BWS_SETS.length ||
@@ -286,10 +306,6 @@ export function parseSession(raw: string | null): OnboardingSession | null {
       !(
         session.confirmed_profile === null ||
         (typeof session.confirmed_profile === "object" && session.confirmed_profile !== undefined)
-      ) ||
-      !(
-        session.goal_category === null ||
-        (typeof session.goal_category === "string" && session.goal_category in GOALS)
       ) ||
       !isExperienceState(session.experience)
     ) {
@@ -344,6 +360,7 @@ export function loadOrCreateSession(): OnboardingSession {
   return (
     parseSession(localStorage.getItem(SESSION_STORAGE_KEY)) ??
     parseSession(localStorage.getItem(LEGACY_SESSION_STORAGE_KEY)) ??
+    parseSession(localStorage.getItem(OLDER_SESSION_STORAGE_KEY)) ??
     parseSession(localStorage.getItem(OLDEST_SESSION_STORAGE_KEY)) ??
     createSession()
   );
@@ -353,6 +370,7 @@ export function persistSession(session: OnboardingSession): boolean {
   try {
     localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
     localStorage.removeItem(LEGACY_SESSION_STORAGE_KEY);
+    localStorage.removeItem(OLDER_SESSION_STORAGE_KEY);
     localStorage.removeItem(OLDEST_SESSION_STORAGE_KEY);
     return true;
   } catch {
@@ -364,6 +382,7 @@ export function clearSession(): boolean {
   try {
     localStorage.removeItem(SESSION_STORAGE_KEY);
     localStorage.removeItem(LEGACY_SESSION_STORAGE_KEY);
+    localStorage.removeItem(OLDER_SESSION_STORAGE_KEY);
     localStorage.removeItem(OLDEST_SESSION_STORAGE_KEY);
     return true;
   } catch {

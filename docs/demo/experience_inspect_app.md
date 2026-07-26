@@ -107,9 +107,8 @@ the same screen position and selection where practical.
 Preserve the complete React onboarding flow:
 
 1. 11 randomized SVBWS groups with one Most and one Least choice;
-2. structured goal selection;
-3. label-free Core Value confirmation; and
-4. first Journal Entry handoff.
+2. label-free Core Value confirmation; and
+3. first Journal Entry handoff.
 
 Do not add backend telemetry to the SVBWS card screens. Profile JSON, raw
 scores, Schwartz labels, and developer terminology remain hidden in
@@ -200,7 +199,7 @@ Detailed inputs, prompts, responses, and validation expand on demand.
 Inspect represents these events when applicable:
 
 1. `profile_confirmed`
-   - Profile validation, Core Values, goal category, and Profile provenance.
+   - Profile validation, Core Values, and Profile provenance.
 2. `journal_entry_submitted`
    - Journal Entry date, text reference, ordering validation, and session ID.
 3. `nudge_suppression_checked`

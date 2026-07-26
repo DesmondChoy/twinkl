@@ -133,8 +133,8 @@ async def test_approved_runtime_persists_reviews_drift_and_digest(tmp_path: Path
 
 def _write_onboarding_profile(path: Path, **overrides) -> None:
     payload = {
-        "schema_version": 2,
-        "onboarding_version": "2.1.0",
+        "schema_version": 3,
+        "onboarding_version": "2.2.0",
         "user_id": "deadbeef",
         "user_confirmed": True,
         "top_values": ["self_direction"],
@@ -168,6 +168,21 @@ async def test_onboarding_profile_supplies_runtime_core_values(tmp_path: Path):
 
     assert digest.core_values == ["self_direction"]
     assert digest.drift_states == {"self_direction": "recovered"}
+
+
+def test_onboarding_profile_accepts_legacy_version(tmp_path: Path):
+    profile_path = tmp_path / "profile.json"
+    _write_onboarding_profile(
+        profile_path,
+        schema_version=2,
+        onboarding_version="2.1.0",
+        goal_category="direction",
+    )
+
+    assert load_onboarding_core_values(
+        profile_path,
+        persona_id="deadbeef",
+    ) == ["self_direction"]
 
 
 @pytest.mark.parametrize(

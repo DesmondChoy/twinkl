@@ -9,7 +9,6 @@ from src.demo.contracts import (
     BWS_OBJECT_ORDER,
     BWS_SETS,
     CORE_VALUE_ORDER,
-    GoalCategory,
     OnboardingProfile,
 )
 
@@ -104,7 +103,6 @@ def build_projected_profile(
     persona_id: str,
     session_id: str,
     core_values: Sequence[str],
-    goal_category: GoalCategory,
     started_at: str,
     completed_at: str,
 ) -> OnboardingProfile:
@@ -186,8 +184,8 @@ def build_projected_profile(
         OnboardingProfile,
         OnboardingProfile.model_validate(
             {
-                "schema_version": 2,
-                "onboarding_version": "2.1.0",
+                "schema_version": 3,
+                "onboarding_version": "2.2.0",
                 "instrument": ("svbws_lee_soutar_louviere_2008_ui_adaptation_v2"),
                 "scoring_method": ("best_minus_worst_divided_by_appearances_v1"),
                 "user_id": persona_id,
@@ -210,7 +208,6 @@ def build_projected_profile(
                     "bottom_values": bottom_values,
                 },
                 "top_values": top_values,
-                "goal_category": goal_category,
                 "user_confirmed": True,
                 "provenance": {
                     "source": "synthetic_persona_projection",

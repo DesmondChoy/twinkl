@@ -22,7 +22,7 @@ Twinkl is an "inner compass" that helps users align their daily behavior with th
 
 ## Onboarding — 🧪 Experimental React POC
 
-The standalone React app in [`frontend/onboarding/`](frontend/onboarding/) implements the published 11-group, six-object balanced SVBWS design. People tap or drag visually neutral cards into Most and Least boxes before structured goal selection, a label-free Core Value summary, and a first Journal Entry handoff. Group and card order are randomized, raw BWS results remain separate from the ten-value Profile transformation, and there is no midpoint result or unsupported confidence field. This is a research-grounded pilot instrument, not a validated Twinkl instrument.
+The standalone React app in [`frontend/onboarding/`](frontend/onboarding/) implements the published 11-group, six-object balanced SVBWS design. People tap or drag visually neutral cards into Most and Least boxes before a label-free Core Value summary and first Journal Entry handoff. Group and card order are randomized, raw BWS results remain separate from the ten-value Profile transformation, and there is no midpoint result or unsupported confidence field. This is a research-grounded pilot instrument, not a validated Twinkl instrument.
 
 ```sh
 cd frontend/onboarding

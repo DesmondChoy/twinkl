@@ -45,14 +45,6 @@ BwsObjectKey = Literal[
     "security",
     "universalism_social",
 ]
-GoalCategory = Literal[
-    "work_life_balance",
-    "life_transition",
-    "relationships",
-    "health_wellbeing",
-    "direction",
-    "meaningful_work",
-]
 EventStatus = Literal[
     "queued",
     "running",
@@ -300,8 +292,8 @@ ProfileProvenance = Annotated[
 class OnboardingProfile(ContractModel):
     """Authoritative confirmed Profile shape emitted by React onboarding."""
 
-    schema_version: Literal[2]
-    onboarding_version: Literal["2.1.0"]
+    schema_version: Literal[3]
+    onboarding_version: Literal["2.2.0"]
     instrument: Literal["svbws_lee_soutar_louviere_2008_ui_adaptation_v2"]
     scoring_method: Literal["best_minus_worst_divided_by_appearances_v1"]
     user_id: str = Field(min_length=1)
@@ -312,7 +304,6 @@ class OnboardingProfile(ContractModel):
     bws_results: BwsResults
     value_profile: ProfileTransform
     top_values: list[CoreValue] = Field(min_length=1)
-    goal_category: GoalCategory
     user_confirmed: Literal[True]
     provenance: ProfileProvenance
 

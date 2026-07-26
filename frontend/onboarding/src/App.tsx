@@ -11,13 +11,11 @@ import {
 import {
   BWS_OBJECTS,
   BWS_SETS,
-  GOALS,
   VALUE_ORDER,
   VALUES,
   createProfile,
   scoreResponses,
   type BwsObjectKey,
-  type GoalCategory,
 } from "./domain";
 import {
   clearSession,
@@ -39,7 +37,7 @@ import {
 } from "./scenarioReplay";
 import { SharedSessionProvider, useSharedSession } from "./sharedSession";
 
-const MILESTONE_COUNT = BWS_SETS.length + 2;
+const MILESTONE_COUNT = BWS_SETS.length + 1;
 const AUTO_ADVANCE_DELAY_MS = 1_000;
 const CARD_BACKGROUNDS = [
   "/card-backgrounds/memory-atlas-01.jpg",
@@ -99,8 +97,7 @@ function milestoneFor(session: OnboardingSession): number {
   if (session.stage === "set") {
     return Math.min(session.set_index + 1, BWS_SETS.length);
   }
-  if (session.stage === "goal") return BWS_SETS.length + 1;
-  return BWS_SETS.length + 2;
+  return BWS_SETS.length + 1;
 }
 
 function Compass({ milestone }: { milestone: number }) {
@@ -133,9 +130,7 @@ function Progress({ session, milestone }: { session: OnboardingSession; mileston
   if (milestone === 0) return null;
   const label = session.stage === "set"
     ? `Values · ${session.set_index + 1} of ${BWS_SETS.length}`
-    : session.stage === "goal"
-      ? "Your focus"
-      : "Your compass";
+    : "Your compass";
   return (
     <div className="progress" aria-label={label}>
       <div className="progress__label">
@@ -412,7 +407,6 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
       responses: profile.bws_responses,
       draft_best: null,
       draft_worst: null,
-      goal_category: profile.goal_category,
       confirmed_profile: profile,
     });
     updateExperience({
@@ -566,7 +560,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
     choicesCompletedAtRef.current = null;
     update({
       responses,
-      stage: isLastSet ? "goal" : "set",
+      stage: isLastSet ? "summary" : "set",
       set_index: isLastSet ? session.set_index : session.set_index + 1,
       draft_best: null,
       draft_worst: null,
@@ -581,7 +575,6 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
   }, [isReviewing, session.set_index, session.draft_best, session.draft_worst]);
 
   const confirm = () => {
-    if (!session.goal_category) return;
     const completedAt = new Date().toISOString();
     const profile = createProfile({
       userId: session.user_id,
@@ -589,7 +582,6 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
       startedAt: session.started_at,
       completedAt,
       responses: session.responses,
-      goalCategory: session.goal_category,
       userConfirmed: true,
     });
     update({
@@ -855,41 +847,8 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
             </div>
           ) : null}
 
-          {!personaPickerOpen && !selectedPersonaId && session.stage === "goal" ? (
-            <div className="stage">
-              <h1 ref={headingRef} tabIndex={-1}>
-                What brought you here right now?
-              </h1>
-              <p className="stage-note">Choose the one closest to what brought you here.</p>
-              <div className="goal-list">
-                {(Object.entries(GOALS) as [GoalCategory, string][]).map(([key, text]) => (
-                  <label className={`goal-card${session.goal_category === key ? " goal-card--selected" : ""}`} key={key}>
-                    <input
-                      type="radio"
-                      name="goal"
-                      value={key}
-                      checked={session.goal_category === key}
-                      onChange={() => update({ goal_category: key })}
-                    />
-                    <span>{text}</span>
-                  </label>
-                ))}
-              </div>
-              <div className="actions actions--end">
-                <button
-                  className="button button--primary"
-                  type="button"
-                  disabled={!session.goal_category}
-                  onClick={() => update({ stage: "summary" })}
-                >
-                  See my compass
-                </button>
-              </div>
-            </div>
-          ) : null}
-
           {!personaPickerOpen && !selectedPersonaId &&
-          session.stage === "summary" && scores && session.goal_category ? (
+          session.stage === "summary" && scores ? (
             <div className="stage stage--summary">
               <h1 ref={headingRef} tabIndex={-1}>
                 What sits at the center.
@@ -901,10 +860,6 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
                     <p>{VALUES[value].phrase}</p>
                   </article>
                 ))}
-              </div>
-              <div className="focus-line">
-                <small>What brought you here</small>
-                <p>{GOALS[session.goal_category]}</p>
               </div>
               <div className="actions actions--end">
                 <button className="button button--primary" type="button" onClick={confirm}>

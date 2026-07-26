@@ -919,16 +919,6 @@ h2 {
   justify-content: flex-end;
 }
 
-.focus-line small {
-  display: block;
-  margin-bottom: 6px;
-  color: var(--verdigris);
-  font-size: 0.64rem;
-  font-weight: 820;
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
-}
-
 .stage--cards {
   width: 100%;
   max-width: 940px;
@@ -1239,41 +1229,6 @@ h2 {
   transition: none;
 }
 
-.goal-list {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-  margin-top: 30px;
-}
-
-.goal-card {
-  display: flex;
-  min-height: 94px;
-  gap: 13px;
-  align-items: flex-start;
-  border: 1px solid var(--line);
-  border-radius: 15px;
-  padding: 18px;
-  background: rgba(255, 255, 255, 0.72);
-  cursor: pointer;
-  font-size: 0.9rem;
-  font-weight: 620;
-  line-height: 1.45;
-}
-
-.goal-card--selected {
-  border-color: var(--verdigris);
-  background: rgba(46, 140, 130, 0.08);
-}
-
-.goal-card input {
-  width: 18px;
-  height: 18px;
-  flex: 0 0 auto;
-  margin: 2px 0 0;
-  accent-color: var(--verdigris);
-}
-
 .core-values {
   display: grid;
   gap: 10px;
@@ -1299,19 +1254,6 @@ h2 {
   margin: 0;
   font-size: clamp(1.1rem, 2vw, 1.45rem);
   font-weight: 650;
-}
-
-.focus-line {
-  max-width: 650px;
-  border-radius: 16px;
-  padding: 20px 22px;
-  background: rgba(85, 118, 217, 0.08);
-}
-
-.focus-line p {
-  margin: 0;
-  font-weight: 650;
-  line-height: 1.5;
 }
 
 .journal-handoff {
@@ -2746,10 +2688,6 @@ h2 {
 
   .app-shell--set .drop-box .value-card__phrase {
     font-size: clamp(0.68rem, 3vw, 0.8rem);
-  }
-
-  .goal-list {
-    grid-template-columns: 1fr;
   }
 
   .actions {

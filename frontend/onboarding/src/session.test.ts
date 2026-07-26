@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { BWS_SETS } from "./domain";
+import { BWS_SETS, createProfile, type BwsResponse } from "./domain";
 import {
   clearChoice,
   createSession,
@@ -10,10 +10,20 @@ import {
 } from "./session";
 
 describe("onboarding session", () => {
+  const completeResponses = (): BwsResponse[] =>
+    BWS_SETS.map((set) => ({
+      set_number: set.setNumber,
+      items: [...set.items],
+      item_order_shown: [...set.items],
+      selected_best: set.items[0],
+      selected_worst: set.items[1],
+      response_time_ms: 1_000,
+    }));
+
   it("randomizes set order and every prescribed card order once, then round-trips", () => {
     const ids = ["user-1", "session-1"];
     const session = createSession(() => 0, new Date("2026-07-19T00:00:00.000Z"), () => ids.shift()!);
-    expect(session.schema_version).toBe(6);
+    expect(session.schema_version).toBe(7);
     expect(session.stage).toBe("set");
     expect(session.experience).toMatchObject({
       active_view: "experience",
@@ -57,7 +67,7 @@ describe("onboarding session", () => {
     legacy.schema_version = 4;
     delete legacy.experience;
     const migrated = parseSession(JSON.stringify(legacy));
-    expect(migrated?.schema_version).toBe(6);
+    expect(migrated?.schema_version).toBe(7);
     expect(migrated?.experience.active_view).toBe("experience");
     expect(migrated?.responses).toEqual(legacy.responses);
   });
@@ -71,11 +81,55 @@ describe("onboarding session", () => {
 
     const migrated = parseSession(JSON.stringify(legacy));
 
-    expect(migrated?.schema_version).toBe(6);
+    expect(migrated?.schema_version).toBe(7);
     expect(migrated?.experience.journal_draft).toBe("A draft worth keeping.");
     expect(migrated?.experience.trace_event_ids).toEqual([]);
     expect(migrated?.experience.trace_events).toEqual([]);
     expect(migrated?.experience.selected_event_id).toBeNull();
+  });
+
+  it("migrates version 6 goal and confirmed Profile state", () => {
+    const legacy = JSON.parse(JSON.stringify(createSession(() => 0.5)));
+    const responses = completeResponses();
+    const profile = createProfile({
+      userId: legacy.user_id,
+      sessionId: legacy.session_id,
+      startedAt: legacy.started_at,
+      completedAt: "2026-07-19T00:02:00.000Z",
+      responses,
+      userConfirmed: true,
+    });
+    legacy.schema_version = 6;
+    legacy.stage = "complete";
+    legacy.set_index = 10;
+    legacy.responses = responses;
+    legacy.goal_category = "direction";
+    legacy.confirmed_profile = {
+      ...profile,
+      schema_version: 2,
+      onboarding_version: "2.1.0",
+      goal_category: "direction",
+    };
+
+    const migrated = parseSession(JSON.stringify(legacy));
+
+    expect(migrated?.schema_version).toBe(7);
+    expect(migrated?.confirmed_profile?.schema_version).toBe(3);
+    expect(migrated?.confirmed_profile).not.toHaveProperty("goal_category");
+  });
+
+  it("routes a version 6 goal stage to the Core Value summary", () => {
+    const legacy = JSON.parse(JSON.stringify(createSession(() => 0.5)));
+    legacy.schema_version = 6;
+    legacy.stage = "goal";
+    legacy.set_index = 10;
+    legacy.responses = completeResponses();
+    legacy.goal_category = null;
+
+    const migrated = parseSession(JSON.stringify(legacy));
+
+    expect(migrated?.stage).toBe("summary");
+    expect(migrated).not.toHaveProperty("goal_category");
   });
 
   it("keeps Inspect unavailable before Profile confirmation and preserves event selection", () => {

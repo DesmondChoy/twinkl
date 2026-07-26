@@ -5,8 +5,8 @@
     "session_id": "scenario-session:recovered-marc",
     "revision": 1,
     "profile": {
-      "schema_version": 2,
-      "onboarding_version": "2.1.0",
+      "schema_version": 3,
+      "onboarding_version": "2.2.0",
       "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
       "scoring_method": "best_minus_worst_divided_by_appearances_v1",
       "user_id": "988d1a65",
@@ -361,7 +361,6 @@
       "top_values": [
         "power"
       ],
-      "goal_category": "meaningful_work",
       "user_confirmed": true,
       "provenance": {
         "source": "synthetic_persona_projection",
@@ -464,8 +463,8 @@
     "source": "saved_replay",
     "persona_id": "988d1a65",
     "profile": {
-      "schema_version": 2,
-      "onboarding_version": "2.1.0",
+      "schema_version": 3,
+      "onboarding_version": "2.2.0",
       "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
       "scoring_method": "best_minus_worst_divided_by_appearances_v1",
       "user_id": "988d1a65",
@@ -820,7 +819,6 @@
       "top_values": [
         "power"
       ],
-      "goal_category": "meaningful_work",
       "user_confirmed": true,
       "provenance": {
         "source": "synthetic_persona_projection",
@@ -1443,8 +1441,8 @@
         "session_id": "scenario-session:recovered-marc",
         "revision": 1,
         "profile": {
-          "schema_version": 2,
-          "onboarding_version": "2.1.0",
+          "schema_version": 3,
+          "onboarding_version": "2.2.0",
           "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
           "scoring_method": "best_minus_worst_divided_by_appearances_v1",
           "user_id": "988d1a65",
@@ -1799,7 +1797,6 @@
           "top_values": [
             "power"
           ],
-          "goal_category": "meaningful_work",
           "user_confirmed": true,
           "provenance": {
             "source": "synthetic_persona_projection",
@@ -1902,8 +1899,8 @@
         "source": "saved_replay",
         "persona_id": "988d1a65",
         "profile": {
-          "schema_version": 2,
-          "onboarding_version": "2.1.0",
+          "schema_version": 3,
+          "onboarding_version": "2.2.0",
           "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
           "scoring_method": "best_minus_worst_divided_by_appearances_v1",
           "user_id": "988d1a65",
@@ -2258,7 +2255,6 @@
           "top_values": [
             "power"
           ],
-          "goal_category": "meaningful_work",
           "user_confirmed": true,
           "provenance": {
             "source": "synthetic_persona_projection",
@@ -2902,12 +2898,12 @@
           "id": "988d1a65"
         }
       ],
-      "input_hash": "e09c1eacbcc11b96fb7cfd3c391230daba93f1e860f4ba19428a49d16e07642f",
+      "input_hash": "bc2d6dd7f021baf3e3d3dcbb2fde98a74f57076cce064e67e868b2efcb5f2af1",
       "error": null,
       "details": {
         "profile": {
-          "schema_version": 2,
-          "onboarding_version": "2.1.0",
+          "schema_version": 3,
+          "onboarding_version": "2.2.0",
           "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
           "scoring_method": "best_minus_worst_divided_by_appearances_v1",
           "user_id": "988d1a65",
@@ -3262,7 +3258,6 @@
           "top_values": [
             "power"
           ],
-          "goal_category": "meaningful_work",
           "user_confirmed": true,
           "provenance": {
             "source": "synthetic_persona_projection",

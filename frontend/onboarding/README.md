@@ -12,7 +12,8 @@ by randomized display position rather than value identity. People can tap,
 drag, or use the keyboard to make Most and Least choices. Schwartz labels
 remain internal. The Profile keeps raw
 11-object BWS results separate from the ten-value product transformation, with
-no midpoint result or confidence proxy. The final action opens the manual
+no midpoint result or confidence proxy. The 11th group advances directly to
+the label-free Core Value summary. The final action opens the manual
 Journal Entry flow. The React Experience passes the confirmed Profile and
 ordered Journal Entries through the versioned Python boundary, applies the
 anti-annoyance rule, and shows the resulting displayed nudge with reply or

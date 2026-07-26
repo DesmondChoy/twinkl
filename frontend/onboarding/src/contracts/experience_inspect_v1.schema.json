@@ -2110,25 +2110,13 @@
         "bws_results": {
           "$ref": "#/$defs/BwsResults"
         },
-        "goal_category": {
-          "enum": [
-            "work_life_balance",
-            "life_transition",
-            "relationships",
-            "health_wellbeing",
-            "direction",
-            "meaningful_work"
-          ],
-          "title": "Goal Category",
-          "type": "string"
-        },
         "instrument": {
           "const": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
           "title": "Instrument",
           "type": "string"
         },
         "onboarding_version": {
-          "const": "2.1.0",
+          "const": "2.2.0",
           "title": "Onboarding Version",
           "type": "string"
         },
@@ -2151,7 +2139,7 @@
           "title": "Provenance"
         },
         "schema_version": {
-          "const": 2,
+          "const": 3,
           "title": "Schema Version",
           "type": "integer"
         },
@@ -2220,7 +2208,6 @@
         "bws_results",
         "value_profile",
         "top_values",
-        "goal_category",
         "user_confirmed",
         "provenance"
       ],

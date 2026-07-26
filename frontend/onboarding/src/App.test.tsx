@@ -247,14 +247,9 @@ describe("onboarding app", () => {
       answerSet();
       expect(screen.queryByRole("heading", { name: "A pattern is beginning to appear." })).toBeNull();
     }
-    const goal = screen.getByRole("radio", {
-      name: "I feel stuck or unclear about my direction",
-    });
-    expect(screen.getByLabelText("Your focus")).toBeTruthy();
-    fireEvent.click(goal);
-    fireEvent.click(screen.getByRole("button", { name: "See my compass" }));
     expect(screen.getByLabelText("Your compass")).toBeTruthy();
     expect(screen.getByRole("heading", { name: "What sits at the center." })).toBeTruthy();
+    expect(screen.queryByText("What brought you here right now?")).toBeNull();
     expect(screen.queryByText(/^0[1-9]$/)).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: "Set my compass" }));
     expect(screen.getByRole("heading", { name: "Your compass is ready." })).toBeTruthy();
@@ -295,6 +290,7 @@ describe("onboarding app", () => {
     expect(stored.confirmed_profile.value_profile.scores).toHaveProperty(
       "universalism",
     );
+    expect(stored.confirmed_profile).not.toHaveProperty("goal_category");
     expect(stored.confirmed_profile).not.toHaveProperty("confidence");
 
     fireEvent.click(screen.getByRole("button", { name: "Inspect" }));

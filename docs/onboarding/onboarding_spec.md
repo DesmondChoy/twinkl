@@ -7,8 +7,7 @@ Journal Entries. The Profile contains:
 
 1. raw Schwartz Values Best-Worst Survey (SVBWS) responses and scores;
 2. a separately named ten-value product transformation;
-3. Core Value descriptions confirmed by the user; and
-4. one structured goal category.
+3. Core Value descriptions confirmed by the user.
 
 The assessment implements the Case 1, or object-case, SVBWS design published by
 Lee, Soutar, and Louviere (2008). It is a **research-grounded pilot
@@ -25,8 +24,8 @@ BWS preference shares.
 - The React onboarding flow is mobile-first: narrow-screen phones are the
   primary design and verification target, and wider layouts are progressive
   enhancements.
-- Onboarding owns the 11 SVBWS tasks, goal selection, Profile confirmation,
-  local resume, and first Journal Entry handoff.
+- Onboarding owns the 11 SVBWS tasks, Profile confirmation, local resume, and
+  first Journal Entry handoff.
 - A host may persist the confirmed Profile exposed by the callback or browser
   event. The approved runtime imports saved Profile JSON through
   `--profile-path`.
@@ -146,8 +145,8 @@ Twinkl-specific presentation adaptation requiring empirical validation.
 ### 4.1 Direct entry and progress
 
 The user enters the first randomized group directly. Progress reads
-`Values · n of 11`, followed by `Your focus` and `Your compass`. There is no
-welcome screen and no midpoint result.
+`Values · n of 11`, followed by `Your compass`. There is no welcome screen or
+midpoint result.
 
 The heading reads `What matters most as you find your way?` The introduction
 says there are no right answers and that more than one principle can matter.
@@ -182,32 +181,18 @@ different card in `Least`.
 The app does not show preliminary results between groups. This avoids making
 later answers contingent on an inferred ranking displayed earlier.
 
-### 4.3 Goal selection
+### 4.3 Profile confirmation
 
-After all 11 groups, the user chooses one goal category:
-
-| Key | Display text |
-|---|---|
-| `work_life_balance` | I'm stretched too thin between work and everything else |
-| `life_transition` | I'm going through a career or life transition |
-| `relationships` | I want to be more present for people I care about |
-| `health_wellbeing` | I'm neglecting my health or wellbeing |
-| `direction` | I feel stuck or unclear about my direction |
-| `meaningful_work` | I want to make more room for what matters to me |
-
-The goal does not change BWS scoring.
-
-### 4.4 Profile confirmation
-
-The summary shows friendly descriptions for every ten-value score tied for
-highest, plus the chosen goal. It does not reveal Schwartz labels or numerical
-scores. Every tied description has equal visual weight.
+After the one-second review of the 11th group, the app opens the summary
+directly. It shows friendly descriptions for every ten-value score tied for
+highest without revealing Schwartz labels or numerical scores. Every tied
+description has equal visual weight.
 
 `Set my compass` confirms the displayed descriptions as the user's Core Values
 and emits the Profile. The user is not asked to rank, promote, or demote the
 internal Schwartz categories.
 
-### 4.5 First Journal Entry handoff
+### 4.4 First Journal Entry handoff
 
 The completed flow opens the generic first Journal Entry prompt and exposes the
 confirmed Profile through:
@@ -282,8 +267,8 @@ The abbreviated shape is:
 
 ```json
 {
-  "schema_version": 2,
-  "onboarding_version": "2.1.0",
+  "schema_version": 3,
+  "onboarding_version": "2.2.0",
   "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
   "scoring_method": "best_minus_worst_divided_by_appearances_v1",
   "user_id": "uuid",
@@ -322,7 +307,6 @@ The abbreviated shape is:
     "bottom_values": ["power"]
   },
   "top_values": ["benevolence"],
-  "goal_category": "work_life_balance",
   "user_confirmed": true,
   "provenance": {
     "source": "react_onboarding_poc",
@@ -334,13 +318,15 @@ The abbreviated shape is:
 
 A confirmed Profile requires all 11 canonical groups exactly once, six valid
 objects per response, distinct valid Most and Least choices, non-negative
-integer response time, a valid goal, and explicit summary confirmation.
-Validation rebuilds the Profile deterministically and rejects any mismatch.
+integer response time, and explicit summary confirmation. Validation rebuilds
+the Profile deterministically and rejects any mismatch.
 
-The resumable browser session uses schema version `5` and storage key
-`twinkl.onboarding.session.v5`. It stores the randomized group order, each
+The resumable browser session uses schema version `7` and storage key
+`twinkl.onboarding.session.v7`. It stores the randomized group order, each
 canonical group's randomized card order, and the shared Experience and Inspect
-view state. Version `4` onboarding sessions migrate without losing responses.
+view state. Versions `4` through `6` migrate without losing responses; a
+version `6` goal stage resumes at the Core Value summary, and a confirmed
+version `2` Profile migrates to version `3` without `goal_category`.
 
 ## 7. Integration Status
 
@@ -350,7 +336,6 @@ view state. Version `4` onboarding sessions migrate without losing responses.
 - The approved runtime validates saved Profile JSON and supplies `top_values`
   as Core Values to the Weekly Drift Reviewer and Drift Detector.
 - `value_profile.weights` is not yet supplied to the VIF Critic.
-- `goal_category` does not yet focus the Weekly Coach.
 
 When no onboarding Profile is supplied, current synthetic personas retain
 their explicit `core_values` compatibility path.

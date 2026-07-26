@@ -70,17 +70,13 @@ cards and requires one Most and one Least choice.
 > Sarah selects **"Creativity, curious, freedom"** as Most important and
 > **"Social power, authority, wealth"** as Least important.
 
-Twinkl shows no preliminary result between groups.
-
-**Goal selection:**
-
-Sarah picks **"I'm stretched too thin between work and everything else"** — the tension that brought her to Twinkl.
+Twinkl shows no preliminary result between groups. After the 11th group, it
+opens the Core Value summary directly.
 
 **End summary:**
 
 > What sits at the center: **Being there for the people closest to me** and
 > **Having the freedom to choose my own path**
-> Your focus: "I'm stretched too thin between work and everything else"
 
 The summary never reveals the Schwartz labels. Sarah selects `Set my compass`,
 which confirms the displayed descriptions as her Core Values. Twinkl retains
@@ -103,10 +99,10 @@ approved runtime can import the saved JSON:
 
 ```json
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "user_id": "sarah",
   "session_id": "example-session",
-  "onboarding_version": "2.1.0",
+  "onboarding_version": "2.2.0",
   "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
   "scoring_method": "best_minus_worst_divided_by_appearances_v1",
   "bws_results": {
@@ -132,7 +128,6 @@ approved runtime can import the saved JSON:
     "top_values": ["self_direction", "benevolence"]
   },
   "top_values": ["self_direction", "benevolence"],
-  "goal_category": "work_life_balance",
   "user_confirmed": true
 }
 ```

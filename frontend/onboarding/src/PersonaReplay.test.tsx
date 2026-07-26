@@ -417,7 +417,6 @@ describe("persona replay", () => {
         )!.item_order_shown,
     );
     saved.responses = profile.bws_responses;
-    saved.goal_category = profile.goal_category;
     saved.confirmed_profile = profile;
     saved.experience = {
       ...experienceForWeek(0),

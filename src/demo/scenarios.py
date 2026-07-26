@@ -16,7 +16,6 @@ from src.coach.weekly_digest import build_weekly_drift_reviewer_digest
 from src.demo.contracts import (
     ContractFixtureSet,
     ExperienceSession,
-    GoalCategory,
     ModelContract,
     TraceEvent,
     WeeklyDriftReviewerDecisionContract,
@@ -78,7 +77,6 @@ class ScenarioSelection:
     title: str
     description: str
     summary: str
-    goal_category: GoalCategory
     recommended: bool = False
     run: int = 1
 
@@ -94,7 +92,6 @@ SELECTIONS = (
             "Achievement and Security remain stable."
         ),
         summary="A calm baseline with meaningful nudges and no confirmed Drift.",
-        goal_category="work_life_balance",
     ),
     ScenarioSelection(
         scenario_id="active-wei-jun",
@@ -106,7 +103,6 @@ SELECTIONS = (
             "forming active Universalism Drift."
         ),
         summary="The clearest two-consecutive-Conflict path into active Drift.",
-        goal_category="meaningful_work",
     ),
     ScenarioSelection(
         scenario_id="recovered-marc",
@@ -118,7 +114,6 @@ SELECTIONS = (
             "clear corrective action that recovers Power Drift."
         ),
         summary="A compact active-to-recovered Drift progression.",
-        goal_category="meaningful_work",
     ),
     ScenarioSelection(
         scenario_id="uncertain-noor",
@@ -130,7 +125,6 @@ SELECTIONS = (
             "Abstain leaves the latest Drift state uncertain."
         ),
         summary="A nuanced case where the Weekly Drift Reviewer does not overclaim.",
-        goal_category="life_transition",
     ),
     ScenarioSelection(
         scenario_id="two-values-lukas",
@@ -142,7 +136,6 @@ SELECTIONS = (
             "uncertain Self-Direction Drift as independent Core Value histories."
         ),
         summary="Recommended: the fullest walkthrough and clearest state independence.",
-        goal_category="direction",
         recommended=True,
     ),
 )
@@ -554,7 +547,6 @@ def build_scenario_fixture(
         persona_id=selection.persona_id,
         session_id=session_id,
         core_values=core_values,
-        goal_category=selection.goal_category,
         started_at=_simulated_at(profile_day, hour=9),
         completed_at=_simulated_at(profile_day, hour=9, sequence=300_000),
     )

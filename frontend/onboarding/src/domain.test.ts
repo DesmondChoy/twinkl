@@ -129,13 +129,13 @@ describe("versioned Profile", () => {
       startedAt: "2026-07-19T00:00:00.000Z",
       completedAt: "2026-07-19T00:02:00.000Z",
       responses: completeResponses(),
-      goalCategory: "direction" as const,
     };
     expect(() => createProfile({ ...input, userConfirmed: false })).toThrow(
       "before confirmation",
     );
     const profile = createProfile({ ...input, userConfirmed: true });
-    expect(profile.onboarding_version).toBe("2.1.0");
+    expect(profile.schema_version).toBe(3);
+    expect(profile.onboarding_version).toBe("2.2.0");
     expect(profile.instrument).toBe(
       "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
     );
@@ -152,7 +152,6 @@ describe("versioned Profile", () => {
       startedAt: "2026-07-19T00:00:00.000Z",
       completedAt: "2026-07-19T00:02:00.000Z",
       responses: completeResponses(),
-      goalCategory: "direction",
       userConfirmed: true,
     });
     profile.provenance = {

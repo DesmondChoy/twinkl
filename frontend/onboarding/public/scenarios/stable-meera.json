@@ -5,8 +5,8 @@
     "session_id": "scenario-session:stable-meera",
     "revision": 3,
     "profile": {
-      "schema_version": 2,
-      "onboarding_version": "2.1.0",
+      "schema_version": 3,
+      "onboarding_version": "2.2.0",
       "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
       "scoring_method": "best_minus_worst_divided_by_appearances_v1",
       "user_id": "23d101f8",
@@ -368,7 +368,6 @@
         "achievement",
         "security"
       ],
-      "goal_category": "work_life_balance",
       "user_confirmed": true,
       "provenance": {
         "source": "synthetic_persona_projection",
@@ -567,8 +566,8 @@
     "source": "saved_replay",
     "persona_id": "23d101f8",
     "profile": {
-      "schema_version": 2,
-      "onboarding_version": "2.1.0",
+      "schema_version": 3,
+      "onboarding_version": "2.2.0",
       "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
       "scoring_method": "best_minus_worst_divided_by_appearances_v1",
       "user_id": "23d101f8",
@@ -930,7 +929,6 @@
         "achievement",
         "security"
       ],
-      "goal_category": "work_life_balance",
       "user_confirmed": true,
       "provenance": {
         "source": "synthetic_persona_projection",
@@ -1601,8 +1599,8 @@
         "session_id": "scenario-session:stable-meera",
         "revision": 3,
         "profile": {
-          "schema_version": 2,
-          "onboarding_version": "2.1.0",
+          "schema_version": 3,
+          "onboarding_version": "2.2.0",
           "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
           "scoring_method": "best_minus_worst_divided_by_appearances_v1",
           "user_id": "23d101f8",
@@ -1964,7 +1962,6 @@
             "achievement",
             "security"
           ],
-          "goal_category": "work_life_balance",
           "user_confirmed": true,
           "provenance": {
             "source": "synthetic_persona_projection",
@@ -2163,8 +2160,8 @@
         "source": "saved_replay",
         "persona_id": "23d101f8",
         "profile": {
-          "schema_version": 2,
-          "onboarding_version": "2.1.0",
+          "schema_version": 3,
+          "onboarding_version": "2.2.0",
           "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
           "scoring_method": "best_minus_worst_divided_by_appearances_v1",
           "user_id": "23d101f8",
@@ -2526,7 +2523,6 @@
             "achievement",
             "security"
           ],
-          "goal_category": "work_life_balance",
           "user_confirmed": true,
           "provenance": {
             "source": "synthetic_persona_projection",
@@ -3225,12 +3221,12 @@
           "id": "23d101f8"
         }
       ],
-      "input_hash": "54914ecbe467c972badcf98af0b588559683a98c3ac8c42115ea159991354278",
+      "input_hash": "bf577eef01d53dc0b741ee9bb1b134443e54ccbcbe19757bd16cda7af0f12854",
       "error": null,
       "details": {
         "profile": {
-          "schema_version": 2,
-          "onboarding_version": "2.1.0",
+          "schema_version": 3,
+          "onboarding_version": "2.2.0",
           "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
           "scoring_method": "best_minus_worst_divided_by_appearances_v1",
           "user_id": "23d101f8",
@@ -3592,7 +3588,6 @@
             "achievement",
             "security"
           ],
-          "goal_category": "work_life_balance",
           "user_confirmed": true,
           "provenance": {
             "source": "synthetic_persona_projection",
