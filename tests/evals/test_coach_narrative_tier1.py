@@ -16,6 +16,7 @@ def _row(
     week_end: str,
     narrative: dict[str, str] | None,
     evidence_excerpt: str = "called my mom and helped a colleague debug",
+    signal_source: str = "weekly_drift_reviewer",
 ) -> dict[str, object]:
     """Build a parquet-shaped digest row for the evaluator."""
     return {
@@ -26,7 +27,7 @@ def _row(
         "response_mode": "stable",
         "mode_source": "fallback_heuristic",
         "mode_rationale": "No confirmed Drift this week.",
-        "signal_source": "weekly_drift_reviewer",
+        "signal_source": signal_source,
         "n_entries": 3,
         "overall_mean": 0.4,
         "overall_uncertainty": None,
@@ -122,3 +123,53 @@ def test_render_markdown_contains_source_disclaimer():
 
     assert "not human validation" in markdown
     assert "groundedness" in markdown
+
+
+def test_evaluate_rows_defaults_to_approved_path_only():
+    rows = [
+        _row(persona_id="aaaa", week_end="2025-01-07", narrative=_CLEAN),
+        _row(
+            persona_id="bbbb",
+            week_end="2025-01-07",
+            narrative=_JARGON,
+            signal_source="vif_runtime",
+        ),
+    ]
+
+    report = evaluate_rows(rows, parquet_source="in-memory")
+
+    # Default filter keeps only the approved weekly_drift_reviewer row.
+    assert report.n_rows == 2
+    assert report.n_rows_after_filter == 1
+    assert report.signal_source_filter == "weekly_drift_reviewer"
+    assert report.n_evaluated == 1
+    # The excluded vif_runtime jargon row must not affect non_circularity.
+    assert report.checks["non_circularity"].total == 1
+    assert report.checks["non_circularity"].passed == 1
+
+
+def test_evaluate_rows_all_sources_includes_vif_runtime():
+    rows = [
+        _row(persona_id="aaaa", week_end="2025-01-07", narrative=_CLEAN),
+        _row(
+            persona_id="bbbb",
+            week_end="2025-01-07",
+            narrative=_JARGON,
+            signal_source="vif_runtime",
+        ),
+    ]
+
+    report = evaluate_rows(rows, parquet_source="in-memory", signal_source=None)
+
+    assert report.n_rows_after_filter == 2
+    assert report.signal_source_filter is None
+    assert report.n_evaluated == 2
+
+
+def test_render_markdown_reports_filter_line():
+    rows = [_row(persona_id="aaaa", week_end="2025-01-07", narrative=_CLEAN)]
+    report = evaluate_rows(rows, parquet_source="in-memory")
+
+    markdown = render_markdown(report)
+
+    assert "Signal source filter: `weekly_drift_reviewer`" in markdown

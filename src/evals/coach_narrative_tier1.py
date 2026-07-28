@@ -30,6 +30,10 @@ from src.coach.weekly_digest import validate_weekly_digest_narrative
 
 DEFAULT_PARQUET = Path("logs/exports/weekly_digests/weekly_digests.parquet")
 
+# The approved runtime tags its digests with this signal_source. By default the
+# report measures only these rows, excluding deprecated vif_runtime leftovers.
+APPROVED_SIGNAL_SOURCE = "weekly_drift_reviewer"
+
 # Pass-rate targets from docs/evals/explanation_quality_eval.md (Tier 1 table).
 # value_leakage has no published target; treated as informational (target None).
 CHECK_TARGETS: dict[str, float | None] = {
@@ -77,6 +81,8 @@ class Tier1Report:
     n_rows: int
     n_with_narrative: int
     n_evaluated: int
+    signal_source_filter: str | None = None
+    n_rows_after_filter: int = 0
     checks: dict[str, CheckSummary] = field(default_factory=dict)
     skipped: list[str] = field(default_factory=list)
 
@@ -89,7 +95,9 @@ class Tier1Report:
                 "properties only; correctness/tone are out of scope."
             ),
             "parquet_source": self.parquet_source,
+            "signal_source_filter": self.signal_source_filter,
             "n_rows": self.n_rows,
+            "n_rows_after_filter": self.n_rows_after_filter,
             "n_with_narrative": self.n_with_narrative,
             "n_evaluated": self.n_evaluated,
             "checks": {
@@ -130,12 +138,25 @@ def _reconstruct_digest(row: dict[str, object]) -> WeeklyDigest:
     )
 
 
-def evaluate_rows(rows: list[dict[str, object]], parquet_source: str) -> Tier1Report:
-    """Run Tier-1 validation over parquet-shaped digest rows."""
+def evaluate_rows(
+    rows: list[dict[str, object]],
+    parquet_source: str,
+    signal_source: str | None = APPROVED_SIGNAL_SOURCE,
+) -> Tier1Report:
+    """Run Tier-1 validation over parquet-shaped digest rows.
+
+    By default only rows whose ``signal_source`` matches the approved runtime
+    (``weekly_drift_reviewer``) are evaluated. Pass ``signal_source=None`` to
+    include every row regardless of source.
+    """
     counts: dict[str, list[int]] = {name: [0, 0] for name in CHECK_TARGETS}
     n_with_narrative = 0
     n_evaluated = 0
     skipped: list[str] = []
+
+    total_rows = len(rows)
+    if signal_source is not None:
+        rows = [row for row in rows if row.get("signal_source") == signal_source]
 
     for row in rows:
         narrative_json = row.get("coach_narrative_json")
@@ -169,7 +190,9 @@ def evaluate_rows(rows: list[dict[str, object]], parquet_source: str) -> Tier1Re
     }
     return Tier1Report(
         parquet_source=parquet_source,
-        n_rows=len(rows),
+        n_rows=total_rows,
+        n_rows_after_filter=len(rows),
+        signal_source_filter=signal_source,
         n_with_narrative=n_with_narrative,
         n_evaluated=n_evaluated,
         checks=checks,
@@ -177,11 +200,16 @@ def evaluate_rows(rows: list[dict[str, object]], parquet_source: str) -> Tier1Re
     )
 
 
-def evaluate_parquet(parquet_path: Path) -> Tier1Report:
+def evaluate_parquet(
+    parquet_path: Path,
+    signal_source: str | None = APPROVED_SIGNAL_SOURCE,
+) -> Tier1Report:
     """Load a persisted Weekly Digest parquet and run Tier-1 evaluation."""
     frame = pl.read_parquet(parquet_path)
     rows = frame.to_dicts()
-    return evaluate_rows(rows, parquet_source=str(parquet_path))
+    return evaluate_rows(
+        rows, parquet_source=str(parquet_path), signal_source=signal_source
+    )
 
 
 def render_markdown(report: Tier1Report) -> str:
@@ -193,7 +221,12 @@ def render_markdown(report: Tier1Report) -> str:
         "properties only.",
         "",
         f"- Parquet: `{report.parquet_source}`",
-        f"- Rows: {report.n_rows}",
+        (
+            f"- Signal source filter: `{report.signal_source_filter}` "
+            f"({report.n_rows_after_filter} of {report.n_rows} rows)"
+            if report.signal_source_filter is not None
+            else f"- Signal source filter: none (all {report.n_rows} rows)"
+        ),
         f"- With narrative: {report.n_with_narrative}",
         f"- Evaluated: {report.n_evaluated}",
     ]
@@ -229,12 +262,26 @@ def _build_parser() -> argparse.ArgumentParser:
         default=None,
         help="Directory to write metrics.json and report.md.",
     )
+    parser.add_argument(
+        "--signal-source",
+        default=APPROVED_SIGNAL_SOURCE,
+        help=(
+            "Only evaluate rows with this signal_source "
+            f"(default: {APPROVED_SIGNAL_SOURCE}, the approved runtime)."
+        ),
+    )
+    parser.add_argument(
+        "--all-sources",
+        action="store_true",
+        help="Evaluate every row regardless of signal_source.",
+    )
     return parser
 
 
 def main(argv: list[str] | None = None) -> int:
     args = _build_parser().parse_args(argv)
-    report = evaluate_parquet(args.parquet)
+    signal_source = None if args.all_sources else args.signal_source
+    report = evaluate_parquet(args.parquet, signal_source=signal_source)
 
     if args.out is not None:
         args.out.mkdir(parents=True, exist_ok=True)
