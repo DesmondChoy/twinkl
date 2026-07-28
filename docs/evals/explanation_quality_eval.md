@@ -8,6 +8,10 @@ Twinkl generates explanations at two levels:
 
 This evaluation validates that explanations feel accurate and actionable to users.
 
+> **Runbook:** for the exact commands to run every Weekly Coach narrative and
+> Weekly Digest test and eval, see
+> [`coach_narrative_test_and_eval_guide.md`](./coach_narrative_test_and_eval_guide.md).
+
 ---
 
 ## Implementation Status
@@ -26,12 +30,22 @@ This evaluation validates that explanations feel accurate and actionable to user
   Journal Entry evidence for the Weekly Digest in
   [`src/coach/weekly_drift_runtime.py`](../../src/coach/weekly_drift_runtime.py)
 - Tier 1 Weekly Coach narrative checks are implemented: groundedness via quoted substring matches, non-circularity via score-jargon avoidance, and length bounds via [`validate_weekly_digest_narrative()`](../../src/coach/weekly_digest.py)
+- Tier 1 reporting for Weekly Coach narratives: A batch runner
+  ([`src/evals/coach_narrative_tier1.py`](../../src/evals/coach_narrative_tier1.py))
+  runs `validate_weekly_digest_narrative()` over the persisted Weekly Digest
+  parquet and reports per-check pass rates against targets. First committed run:
+  [`logs/experiments/reports/coach_narrative_tier1_20260727/`](../../logs/experiments/reports/coach_narrative_tier1_20260727/).
+- Tier 2 (LLM-as-judge) for Weekly Coach narratives: An LLM-as-judge eval
+  ([`src/evals/coach_narrative_judge.py`](../../src/evals/coach_narrative_judge.py),
+  prompt [`prompts/coach_narrative_judge.yaml`](../../prompts/coach_narrative_judge.yaml))
+  scores correctness, specificity, non-prescriptive tone, and tension honesty.
+  Scores are **LLM-as-judge, not human validation**; Tier 3 human calibration
+  remains future work.
 
 ### What's Missing
 - **Tier 1 for LLM-Judge rationales:** No batch checker/report yet in `src/judge/`
-- **Tier 1 reporting for Weekly Coach narratives:** Validation code exists, but there is no committed benchmark summary with pass rates across a Weekly Digest set
-- **Tier 2:** Rationale-review LLM evaluation
-- **Tier 3:** Human calibration protocol and κ calculation
+- **Tier 2 for LLM-Judge rationales:** Rationale-review LLM evaluation
+- **Tier 3:** Human calibration protocol and κ calculation (both explanation types)
 
 ### Blocking Dependencies
 Tier 1 Weekly Coach checks and approved-path evidence provenance are
@@ -49,8 +63,8 @@ later validation phases.
 
 ### Next Steps
 1. Add a batch Tier 1 checker for LLM-Judge rationales in `src/judge/` and run it over the existing 1,594 rationale-bearing rows
-2. Run the existing Weekly Coach Tier 1 validation over a real Weekly Digest set and publish pass-rate summaries
-3. *(Future phase)* Design a rationale-review LLM prompt for Tier 2 evaluation
+2. ✅ Done — Weekly Coach Tier 1 validation now runs as a batch with a committed pass-rate report (`src/evals/coach_narrative_tier1.py`)
+3. ✅ Done (Weekly Coach) — Tier 2 LLM-as-judge eval implemented in `src/evals/coach_narrative_judge.py`; a rationale-review LLM for LLM-Judge rationales is still future work
 4. *(Future phase)* Sample 20-30 explanations for Tier 3 human calibration
 
 ---
@@ -133,7 +147,7 @@ Fast, objective checks that don't require LLM calls:
 |-------|-------------|--------|
 | **Groundedness** | % of rationales with verifiable quotes (substring match in Journal Entry) | > 70% |
 | **Non-circularity** | % that don't contain the value name itself | > 95% |
-| **Length** | Flag too-short (<10 words) or too-long (>50 words) | 90% in range |
+| **Length** | Flag too-short (<25 words) or too-long (>180 words) | 90% in range |
 
 **Current code status:**
 - Weekly Coach narratives: validated by `validate_weekly_digest_narrative()` inside [`src/coach/weekly_digest.py`](../../src/coach/weekly_digest.py)
@@ -207,7 +221,7 @@ LLM-Judge produces rationales for N Journal Entries
 │  Tier 1: Automated Code Checks      │
 │  - Groundedness (verifiable quotes) │
 │  - Non-circularity (no value name)  │
-│  - Length (10-50 words)             │
+│  - Length (25-180 words)            │
 │  Output: Pass/Fail + metrics        │
 └─────────────────────────────────────┘
               ↓
@@ -250,7 +264,7 @@ LLM-Judge produces rationales for N Journal Entries
 |--------|--------|------|-------|-----------|
 | Groundedness (code) | > 70% | 1 | **Initial** | Rationales should quote or reference Journal Entry content |
 | Non-circularity (code) | > 95% | 1 | **Initial** | Rationales shouldn't just restate value name |
-| Length compliance | > 90% | 1 | **Initial** | Most rationales should be 10-50 words |
+| Length compliance | > 90% | 1 | **Initial** | Most narratives should be 25-180 words |
 | Correctness (rationale-review LLM) | Mean > 3.5/5 | 2 | Future | Rationales should be factually accurate |
 | Specificity (rationale-review LLM) | Mean > 3.5/5 | 2 | Future | Rationales should cite concrete details |
 | Human-LLM agreement | κ > 0.6 | 3 | Future | The rationale-review LLM should align with human judgment |
