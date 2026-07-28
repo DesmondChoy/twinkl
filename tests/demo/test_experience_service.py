@@ -10,7 +10,7 @@ from pathlib import Path
 import pytest
 from starlette.testclient import TestClient
 
-from src.demo.api import create_app
+from src.demo.api import create_app, create_deployment_app
 from src.demo.canonical_fixture import build_canonical_fixture
 from src.demo.contracts import (
     JournalEntry,
@@ -1140,6 +1140,92 @@ def test_http_adapter_validates_and_serves_contract_responses() -> None:
         "drift_detected",
         "weekly_digest_built",
     ]
+
+
+def test_http_adapter_serves_the_built_experience_and_public_health(
+    tmp_path: Path,
+) -> None:
+    static_root = tmp_path / "dist"
+    static_root.mkdir()
+    (static_root / "index.html").write_text("<h1>Twinkl Experience</h1>")
+    (static_root / "scenario.json").write_text('{"source":"saved_replay"}')
+
+    with TestClient(create_app(static_root=static_root)) as client:
+        railway_health = client.get("/health")
+        api_health = client.get("/api/health")
+        index = client.get("/")
+        client_route = client.get("/journal/history")
+        scenario = client.get("/scenario.json")
+        missing_asset = client.get("/missing.js")
+
+    assert railway_health.status_code == 200
+    assert railway_health.text == "ok"
+    assert api_health.json() == {"status": "ok"}
+    assert "Twinkl Experience" in index.text
+    assert "Twinkl Experience" in client_route.text
+    assert scenario.json() == {"source": "saved_replay"}
+    assert missing_asset.status_code == 404
+
+
+def test_demo_credentials_protect_static_files_and_api_but_not_health(
+    tmp_path: Path,
+) -> None:
+    static_root = tmp_path / "dist"
+    static_root.mkdir()
+    (static_root / "index.html").write_text("<h1>Protected demo</h1>")
+
+    with TestClient(
+        create_app(
+            static_root=static_root,
+            demo_credentials=("professor", "bounded-demo"),
+        )
+    ) as client:
+        health = client.get("/health")
+        anonymous_index = client.get("/")
+        anonymous_api = client.get("/api/health")
+        authorized_index = client.get(
+            "/",
+            auth=("professor", "bounded-demo"),
+        )
+        authorized_api = client.get(
+            "/api/health",
+            auth=("professor", "bounded-demo"),
+        )
+
+    assert health.status_code == 200
+    assert anonymous_index.status_code == 401
+    assert anonymous_api.status_code == 401
+    assert anonymous_api.headers["www-authenticate"].startswith("Basic ")
+    assert "professor" not in anonymous_api.text
+    assert "bounded-demo" not in anonymous_api.text
+    assert "Protected demo" in authorized_index.text
+    assert authorized_api.json() == {"status": "ok"}
+
+
+def test_provider_enabled_public_demo_requires_access_credentials(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("TWINKL_PUBLIC_DEMO", "1")
+    monkeypatch.setenv("OPENAI_API_KEY", "not-a-real-provider-key")
+    monkeypatch.delenv("TWINKL_DEMO_USERNAME", raising=False)
+    monkeypatch.delenv("TWINKL_DEMO_PASSWORD", raising=False)
+
+    with pytest.raises(
+        RuntimeError,
+        match="Provider-enabled public demos require",
+    ):
+        create_deployment_app()
+
+
+def test_public_demo_credentials_must_be_configured_together(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    monkeypatch.setenv("TWINKL_DEMO_USERNAME", "professor")
+    monkeypatch.delenv("TWINKL_DEMO_PASSWORD", raising=False)
+
+    with pytest.raises(RuntimeError, match="must be set together"):
+        create_deployment_app()
 
 
 def test_http_adapter_loads_each_saved_persona_at_its_first_week() -> None:

@@ -63,19 +63,32 @@ npm run build
 
 Create a Railway service from this repository with:
 
-- root directory: `/frontend/onboarding`
+- root directory: `/`
 - config file path: `/frontend/onboarding/railway.json`
 - branch: `main`
 
-The existing service builds the Vite app in Node and serves `dist` through
-Caddy. The container exposes `/health` for Railway and falls back to
-`index.html` for SPA routes. That static deployment preserves onboarding and
-local resumability, but it does not serve the Python API. Inspect therefore
-shows only events loaded by **Try demo** until the Python boundary is deployed
-with provider configuration. Live Profile and Journal Entry trace events
-belong to that later demo hardening task. When no accepted Journal Entry
-response returns, the text remains in the editor with an edit action;
-retryable failures also offer idempotent retry.
+The repository root is required because the image builds React and includes
+the existing `src.demo.api` Python boundary. Uvicorn serves the built React
+files, the public `/health` route, and same-origin `/api/experience` requests
+from one Railway process. The Docker build context excludes `.env`, Git data,
+development caches, and unrelated experiment outputs.
+
+Set `OPENAI_API_KEY` only for a supervised live demonstration. A
+provider-enabled public deployment also requires both
+`TWINKL_DEMO_USERNAME` and `TWINKL_DEMO_PASSWORD`; otherwise the container
+fails closed at startup. These credentials protect Experience, Inspect, and
+the API with browser HTTP Basic Auth, while `/health` remains available to
+Railway. They are deployment credentials, not production authentication.
+Without `OPENAI_API_KEY`, onboarding and saved persona replay remain complete;
+manual provider work fails safely and retains the Journal Entry for editing or
+retry.
+
+Build the same image locally from the repository root:
+
+```sh
+docker build -f frontend/onboarding/Dockerfile -t twinkl-experience .
+docker run --rm -p 3000:3000 twinkl-experience
+```
 
 The React Experience stores unfinished progress in the browser. The local
 Python boundary keeps the active session and idempotency receipts in memory,

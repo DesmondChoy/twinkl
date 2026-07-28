@@ -2,14 +2,21 @@
 
 from __future__ import annotations
 
+import base64
+import os
+import secrets
 from pathlib import Path
 from typing import Any
 
 from pydantic import TypeAdapter, ValidationError
 from starlette.applications import Starlette
+from starlette.exceptions import HTTPException
+from starlette.middleware import Middleware
 from starlette.requests import Request
-from starlette.responses import JSONResponse
-from starlette.routing import Route
+from starlette.responses import JSONResponse, PlainTextResponse, Response
+from starlette.routing import BaseRoute, Mount, Route
+from starlette.staticfiles import StaticFiles
+from starlette.types import ASGIApp, Receive, Scope, Send
 
 from src.demo.contracts import (
     ApiRequest,
@@ -22,6 +29,73 @@ from src.demo.scenarios import load_scenario_catalog
 
 REQUEST_ADAPTER: TypeAdapter[ApiRequest] = TypeAdapter(ApiRequest)
 RESPONSE_ADAPTER: TypeAdapter[ApiResponse] = TypeAdapter(ApiResponse)
+
+
+class DemoBasicAuthMiddleware:
+    """Protect a provider-enabled public demo without adding product auth."""
+
+    def __init__(self, app: ASGIApp, *, username: str, password: str) -> None:
+        self.app = app
+        credential = base64.b64encode(f"{username}:{password}".encode()).decode("ascii")
+        self._expected = f"Basic {credential}"
+
+    async def __call__(
+        self,
+        scope: Scope,
+        receive: Receive,
+        send: Send,
+    ) -> None:
+        if scope["type"] != "http" or scope.get("path") == "/health":
+            await self.app(scope, receive, send)
+            return
+        authorization = next(
+            (
+                value.decode("latin-1")
+                for key, value in scope.get("headers", [])
+                if key.lower() == b"authorization"
+            ),
+            "",
+        )
+        if secrets.compare_digest(authorization, self._expected):
+            await self.app(scope, receive, send)
+            return
+        response = PlainTextResponse(
+            "Demo access is required.",
+            status_code=401,
+            headers={"WWW-Authenticate": 'Basic realm="Twinkl demo", charset="UTF-8"'},
+        )
+        await response(scope, receive, send)
+
+
+class ExperienceStaticFiles(StaticFiles):
+    """Serve the built Experience and preserve client-side route fallback."""
+
+    async def get_response(self, path: str, scope: Scope) -> Response:
+        try:
+            return await super().get_response(path, scope)
+        except HTTPException as error:
+            if error.status_code != 404 or Path(path).suffix:
+                raise
+            return await super().get_response("index.html", scope)
+
+
+def _deployment_credentials() -> tuple[str, str] | None:
+    username = os.getenv("TWINKL_DEMO_USERNAME")
+    password = os.getenv("TWINKL_DEMO_PASSWORD")
+    if bool(username) != bool(password):
+        raise RuntimeError(
+            "TWINKL_DEMO_USERNAME and TWINKL_DEMO_PASSWORD must be set together."
+        )
+    credentials = (username, password) if username and password else None
+    if (
+        os.getenv("TWINKL_PUBLIC_DEMO") == "1"
+        and os.getenv("OPENAI_API_KEY")
+        and credentials is None
+    ):
+        raise RuntimeError(
+            "Provider-enabled public demos require Twinkl demo credentials."
+        )
+    return credentials
 
 
 def _status_code(response: ApiResponse) -> int:
@@ -80,6 +154,8 @@ def create_app(
     service: InMemoryExperienceService | None = None,
     *,
     scenario_root: Path | None = None,
+    static_root: Path | None = None,
+    demo_credentials: tuple[str, str] | None = None,
 ) -> Starlette:
     experience_service = service or InMemoryExperienceService()
     root = scenario_root or Path(__file__).resolve().parents[2]
@@ -145,12 +221,42 @@ def create_app(
             status_code=_status_code(response),
         )
 
-    return Starlette(
-        routes=[
-            Route("/api/health", health, methods=["GET"]),
-            Route("/api/experience", experience, methods=["POST"]),
+    routes: list[BaseRoute] = [
+        Route("/health", lambda _: PlainTextResponse("ok"), methods=["GET"]),
+        Route("/api/health", health, methods=["GET"]),
+        Route("/api/experience", experience, methods=["POST"]),
+    ]
+    if static_root is not None:
+        routes.append(
+            Mount(
+                "/",
+                app=ExperienceStaticFiles(directory=static_root, html=True),
+                name="experience",
+            )
+        )
+    middleware = (
+        [
+            Middleware(
+                DemoBasicAuthMiddleware,
+                username=demo_credentials[0],
+                password=demo_credentials[1],
+            )
         ]
+        if demo_credentials is not None
+        else None
+    )
+    return Starlette(
+        routes=routes,
+        middleware=middleware,
     )
 
 
-app = create_app()
+def create_deployment_app() -> Starlette:
+    static_root = os.getenv("TWINKL_STATIC_ROOT")
+    return create_app(
+        static_root=Path(static_root) if static_root else None,
+        demo_credentials=_deployment_credentials(),
+    )
+
+
+app = create_deployment_app()

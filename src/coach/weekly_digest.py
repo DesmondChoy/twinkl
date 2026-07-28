@@ -40,14 +40,14 @@ from src.coach.schemas import (
 )
 from src.drift_detector import DriftDetectorResult
 from src.models.judge import SCHWARTZ_VALUE_ORDER
-from src.vif.weekly_schema import (
-    ALIGNMENT_COLUMNS,
-    UNCERTAINTY_COLUMNS,
-    alignment_col,
-)
 from src.weekly_drift_reviewer import (
     WeeklyDriftReviewerDecision,
     WeeklyDriftReviewerEntry,
+)
+from src.weekly_signal_schema import (
+    ALIGNMENT_COLUMNS,
+    UNCERTAINTY_COLUMNS,
+    alignment_col,
 )
 from src.wrangling.parse_wrangled_data import parse_wrangled_file
 
