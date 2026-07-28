@@ -380,8 +380,8 @@ export default function InspectView({
           <p className="eyebrow">Inspect</p>
           <h1 ref={headingRef} tabIndex={-1}>Follow the work, event by event.</h1>
           <p className="lede">
-            Each row is one trace event. Open it to see the inputs, exact prompt,
-            validation, and effective result.
+            Each row is one trace event. Open it to see the inputs, exact prompt
+            when applicable, validation, and effective result.
           </p>
         </div>
         <button className="button button--quiet" type="button" onClick={onReturn}>

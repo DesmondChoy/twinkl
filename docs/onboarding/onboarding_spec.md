@@ -193,10 +193,12 @@ directly. It shows friendly descriptions for every ten-value score tied for
 highest without revealing Schwartz labels or numerical scores. Every tied
 description has equal visual weight.
 
-`Set my compass` confirms the displayed descriptions as the user's Core Values
-and emits the Profile. The user is not asked to rank, promote, or demote the
-internal Schwartz categories. The confirmed Core Value descriptions remain
-visible through the first Journal Entry handoff and manual editor.
+The summary explains that the result reflects the Most and Least choices made
+most consistently across all 11 groups. `Confirm my compass` confirms the
+displayed descriptions as the user's Core Values and emits the Profile. The
+user is not asked to rank, promote, or demote the internal Schwartz categories.
+The confirmed Core Value descriptions remain visible through the first Journal
+Entry handoff and manual editor.
 
 ### 4.4 First Journal Entry handoff
 

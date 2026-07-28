@@ -78,7 +78,7 @@ opens the Core Value summary directly.
 > What sits at the center: **Being there for the people closest to me** and
 > **Having the freedom to choose my own path**
 
-The summary never reveals the Schwartz labels. Sarah selects `Set my compass`,
+The summary never reveals the Schwartz labels. Sarah selects `Confirm my compass`,
 which confirms the displayed descriptions as her Core Values. Twinkl retains
 the raw 11-object BWS result and a separately named ten-value product
 transformation.

@@ -1007,9 +1007,13 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
                   </article>
                 ))}
               </div>
+              <p className="summary-explainer">
+                This result reflects the Most and Least choices you made most
+                consistently across all 11 groups.
+              </p>
               <div className="actions actions--end">
                 <button className="button button--primary" type="button" onClick={confirm}>
-                  Set my compass
+                  Confirm my compass
                 </button>
               </div>
             </div>

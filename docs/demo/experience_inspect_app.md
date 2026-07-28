@@ -95,10 +95,11 @@ Changing views changes presentation only. It must not repeat a model call,
 reset onboarding, alter replay progress, or create a second copy of the
 session.
 
-Every generated nudge, Weekly Drift Reviewer Decision, Drift state, and Weekly
-Digest has an **Inspect this run** action. It switches to Inspect and focuses
-the event that produced the selected result. Returning to Experience restores
-the same screen position and selection where practical.
+Saved replay Drift states and Weekly Digests have context-specific Inspect
+actions. The live Journal Entry path retains one latest-run Inspect action.
+Each action switches to Inspect and focuses the event that produced the
+selected result. Returning to Experience restores the same screen position and
+selection where practical.
 
 ## 5. Experience View
 
@@ -157,7 +158,8 @@ the final state. Controls provide:
 
 - previous week;
 - next week;
-- play or pause; and
+- play or pause;
+- direct selection of any already revealed week; and
 - restart scenario.
 
 Advancing a week reveals only the Journal Entries and results available by that
@@ -452,8 +454,10 @@ unavailable provider fields null; they do not invent a receipt.
 - Primary actions, Journal Entry composition, persona replay, Weekly Digest
   reading, and event inspection remain usable without hover or precision
   pointer input.
-- Persona replay controls remain operable with touch and keyboard input.
-- Focus moves to the selected Inspect event when using **Inspect this run**.
+- Persona replay controls and revealed week markers remain operable with touch
+  and keyboard input; unrevealed weeks remain inert.
+- Focus moves to the selected Inspect event when using a context-specific
+  Inspect action.
 - Status changes and nudge availability use appropriate live-region behavior.
 - Long prompts and responses wrap, preserve whitespace, and expand without
   horizontal page scrolling.

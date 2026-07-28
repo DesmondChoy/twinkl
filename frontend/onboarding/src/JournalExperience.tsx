@@ -649,7 +649,8 @@ export default function JournalExperience({
             Edit Journal Entry
           </button>
         ) : null}
-        {experience.trace_event_ids.length > 0 &&
+        {mode === "manual" &&
+        experience.trace_event_ids.length > 0 &&
         !isBusy &&
         !isAwaitingResponse ? (
           <button

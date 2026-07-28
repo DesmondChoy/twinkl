@@ -244,11 +244,21 @@ describe("persona replay", () => {
     expect(screen.getByText("Week 2 of 6")).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: "Play" }));
     expect(screen.getByRole("button", { name: "Pause" })).toBeTruthy();
-    act(() => vi.advanceTimersByTime(2_400));
+    act(() => vi.advanceTimersByTime(3_999));
+    expect(screen.getByText("Week 2 of 6")).toBeTruthy();
+    act(() => vi.advanceTimersByTime(1));
     expect(screen.getByText("Week 3 of 6")).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: "Pause" }));
     fireEvent.click(screen.getByRole("button", { name: "Restart scenario" }));
     expect(screen.getByText("Week 1 of 6")).toBeTruthy();
+    expect(
+      screen.queryByRole("button", { name: "Show week 3: no drift" }),
+    ).toBeNull();
+    expect(
+      screen.getByRole("listitem", {
+        name: "Week 3, not yet replayed",
+      }),
+    ).toBeTruthy();
     expect(
       (screen.getByRole("button", { name: "Previous" }) as HTMLButtonElement)
         .disabled,
@@ -288,6 +298,38 @@ describe("persona replay", () => {
     expect(
       screen.queryByRole("listitem", {
         name: "Week 6: Active Drift",
+      }),
+    ).toBeNull();
+  });
+
+  it("lets people revisit revealed weeks while future weeks stay inert", async () => {
+    matchMedia(false);
+    const user = userEvent.setup();
+    render(<ReplayHarness />);
+
+    await user.click(screen.getByRole("button", { name: "Next" }));
+    await user.click(screen.getByRole("button", { name: "Next" }));
+    await user.click(
+      screen.getByRole("button", {
+        name: "Show week 1: no drift",
+      }),
+    );
+
+    expect(screen.getByText("Week 1 of 6")).toBeTruthy();
+    expect(
+      (screen.getByRole("button", {
+        name: "Restart scenario",
+      }) as HTMLButtonElement).disabled,
+    ).toBe(false);
+    await user.click(
+      screen.getByRole("button", {
+        name: "Show week 3: no drift",
+      }),
+    );
+    expect(screen.getByText("Week 3 of 6")).toBeTruthy();
+    expect(
+      screen.queryByRole("button", {
+        name: /show week 6/i,
       }),
     ).toBeNull();
   });
@@ -341,6 +383,35 @@ describe("persona replay", () => {
     expect(screen.getAllByText(label).length).toBeGreaterThan(0);
     expect(screen.queryByText("Raw provider response")).toBeNull();
     expect(screen.queryByText("Validation result")).toBeNull();
+  });
+
+  it("names the Core Value states behind a Mixed week", () => {
+    matchMedia(false);
+    const scenarioFixture =
+      validateExperienceInspectFixture(twoValuesReplayJson);
+    const item = catalog.scenarios.find(
+      (candidate) => candidate.scenario_id === "two-values-lukas",
+    )!;
+    const weekIndex = scenarioFixture.scenario.weeks.length - 1;
+
+    render(
+      <PersonaReplayExperience
+        loaded={{ catalogItem: item, fixture: scenarioFixture }}
+        weekIndex={weekIndex}
+        profile={scenarioFixture.scenario.profile}
+        experience={experienceForWeek(weekIndex, scenarioFixture, item)}
+        updateExperience={() => undefined}
+        inspectRun={() => undefined}
+        onChoosePersona={() => undefined}
+        onWeekChange={() => undefined}
+      />,
+    );
+
+    expect(
+      screen.getByText(
+        "Self-Direction is Uncertain; Conformity shows Recovered Drift.",
+      ),
+    ).toBeTruthy();
   });
 
   it("confirms before a saved persona replaces manual progress", async () => {
@@ -493,7 +564,12 @@ describe("persona replay", () => {
     const selectedEntryId = citation.getAttribute("href")!.slice(1);
     expect(document.getElementById(selectedEntryId)?.getAttribute("aria-current"))
       .toBe("true");
-    await user.click(screen.getByRole("button", { name: "Inspect this run" }));
+    expect(
+      screen.queryByRole("button", { name: "Inspect this run" }),
+    ).toBeNull();
+    await user.click(
+      screen.getByRole("button", { name: "Inspect Weekly Digest run" }),
+    );
     expect(
       screen.getByRole("heading", {
         name: "Follow the work, event by event.",

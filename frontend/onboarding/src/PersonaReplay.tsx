@@ -18,7 +18,7 @@ import {
   type ScenarioCatalog,
 } from "./scenarioReplay";
 
-const PLAYBACK_DELAY_MS = 2_400;
+const PLAYBACK_DELAY_MS = 4_000;
 
 function stateLabel(value: string): string {
   switch (value) {
@@ -239,9 +239,21 @@ export function PersonaReplayExperience({
   const [playing, setPlaying] = useState(false);
   const weeks = loaded.fixture.scenario.weeks;
   const safeWeekIndex = Math.min(Math.max(weekIndex, 0), weeks.length - 1);
+  const [furthestRevealedWeek, setFurthestRevealedWeek] =
+    useState(safeWeekIndex);
   const currentWeek = weeks[safeWeekIndex];
   const isFirst = safeWeekIndex === 0;
   const isLast = safeWeekIndex === weeks.length - 1;
+
+  useEffect(() => {
+    setFurthestRevealedWeek(safeWeekIndex);
+  }, [loaded.catalogItem.scenario_id]);
+
+  useEffect(() => {
+    setFurthestRevealedWeek((current) =>
+      Math.max(current, safeWeekIndex),
+    );
+  }, [safeWeekIndex]);
 
   useEffect(() => {
     if (reducedMotion && playing) setPlaying(false);
@@ -310,26 +322,43 @@ export function PersonaReplayExperience({
         </div>
 
         <ol className="week-rail" aria-label="Saved replay weeks">
-          {weeks.map((week, index) => (
-            <li
-              className={`week-rail__week week-rail__week--${
-                week.expected_delivery_state
-              }${
-                index <= safeWeekIndex ? " week-rail__week--revealed" : ""
-              }`}
-              aria-current={index === safeWeekIndex ? "step" : undefined}
-              aria-label={
-                index <= safeWeekIndex
-                  ? `Week ${index + 1}: ${
-                    stateLabel(week.expected_delivery_state)
-                  }`
-                  : `Week ${index + 1}, not yet replayed`
-              }
-              key={week.week_id}
-            >
-              <span>{index + 1}</span>
-            </li>
-          ))}
+          {weeks.map((week, index) => {
+            const revealed = index <= furthestRevealedWeek;
+            const label = revealed
+              ? `Week ${index + 1}: ${
+                stateLabel(week.expected_delivery_state)
+              }`
+              : `Week ${index + 1}, not yet replayed`;
+            return (
+              <li
+                className={`week-rail__week week-rail__week--${
+                  week.expected_delivery_state
+                }${revealed ? " week-rail__week--revealed" : ""}`}
+                aria-current={index === safeWeekIndex ? "step" : undefined}
+                aria-label={label}
+                key={week.week_id}
+              >
+                {revealed ? (
+                  <button
+                    type="button"
+                    className="week-rail__button"
+                    aria-current={
+                      index === safeWeekIndex ? "step" : undefined
+                    }
+                    aria-label={`Show ${label.toLowerCase()}`}
+                    onClick={() => {
+                      setPlaying(false);
+                      onWeekChange(index);
+                    }}
+                  >
+                    {index + 1}
+                  </button>
+                ) : (
+                  <span aria-hidden="true">{index + 1}</span>
+                )}
+              </li>
+            );
+          })}
         </ol>
 
         <div className="replay-controls__buttons">
@@ -377,9 +406,10 @@ export function PersonaReplayExperience({
           <button
             className="inspect-run-link"
             type="button"
-            disabled={isFirst}
+            disabled={isFirst && furthestRevealedWeek === 0}
             onClick={() => {
               setPlaying(false);
+              setFurthestRevealedWeek(0);
               onWeekChange(0);
             }}
           >

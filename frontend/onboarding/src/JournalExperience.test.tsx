@@ -861,7 +861,7 @@ describe("manual Journal Entry Experience", () => {
       ).length,
     ).toBeGreaterThan(1);
     const citation = screen.getByRole("link", {
-      name: "Open Journal Entry from 2026-07-06",
+      name: "Open Journal Entry “Cancelled dinner with my sister to stay at work.” from 2026-07-06",
     });
     expect(citation.getAttribute("href")).toContain("journal-entry-");
     await user.click(citation);

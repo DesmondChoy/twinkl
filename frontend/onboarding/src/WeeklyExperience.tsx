@@ -57,6 +57,27 @@ function deliveryState(value: unknown): DeliveryState {
     : "stable";
 }
 
+function coreValueStateSummary(coreValue: string, state: DeliveryState): string {
+  const label = displayCoreValue(coreValue);
+  switch (state) {
+    case "active":
+      return `${label} has Active Drift`;
+    case "recovered":
+      return `${label} shows Recovered Drift`;
+    case "uncertain":
+      return `${label} is Uncertain`;
+    case "mixed":
+      return `${label} has Mixed Drift states`;
+    default:
+      return `${label} has No Drift`;
+  }
+}
+
+function citationExcerpt(excerpt: string): string {
+  const compact = excerpt.replace(/\s+/g, " ").trim();
+  return compact.length > 56 ? `${compact.slice(0, 55).trimEnd()}…` : compact;
+}
+
 function latestEventId(
   events: TraceEventContract[],
   eventType: string,
@@ -129,7 +150,16 @@ export default function WeeklyExperience({
       : null;
   const summary = reviewUnavailable
     ? "The Weekly Drift Reviewer could not return usable evidence for this week."
-    : rationale;
+    : aggregateState === "mixed"
+      ? `${profile.top_values
+          .map((coreValue) =>
+            coreValueStateSummary(
+              coreValue,
+              deliveryState(rawStates[coreValue]),
+            ),
+          )
+          .join("; ")}.`
+      : rationale;
 
   return (
     <section className="weekly-experience" aria-labelledby="weekly-digest-title">
@@ -181,7 +211,8 @@ export default function WeeklyExperience({
                         selectJournalEntry?.(entry.journal_entry_id)
                       }
                     >
-                      Open Journal Entry from {row.date}
+                      Open Journal Entry “{citationExcerpt(row.excerpt)}” from{" "}
+                      {row.date}
                     </a>
                   ) : null}
                 </li>

@@ -20,7 +20,7 @@ transformation averages those facets and creates the ten-dimensional weight
 vector `w_u`.
 
 The flow has no midpoint result or value-specific card art. The end summary
-uses friendly descriptions instead of Schwartz labels; `Set my compass`
+uses friendly descriptions instead of Schwartz labels; `Confirm my compass`
 confirms those descriptions as Core Values. The Profile is still not wired
 into the runtime.
 

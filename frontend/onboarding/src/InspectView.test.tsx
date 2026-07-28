@@ -20,6 +20,9 @@ describe("Inspect view", () => {
 
     expect(screen.getByText("0 trace events")).toBeTruthy();
     expect(screen.getByText("No backend events yet")).toBeTruthy();
+    expect(
+      screen.getByText(/exact prompt when applicable/i),
+    ).toBeTruthy();
     expect(screen.getByRole("status")).toHaveProperty(
       "textContent",
       "Profile validation is still in progress.",

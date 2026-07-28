@@ -347,7 +347,12 @@ describe("onboarding app", () => {
     expect(screen.getByRole("heading", { name: "What sits at the center." })).toBeTruthy();
     expect(screen.queryByText("What brought you here right now?")).toBeNull();
     expect(screen.queryByText(/^0[1-9]$/)).toBeNull();
-    fireEvent.click(screen.getByRole("button", { name: "Set my compass" }));
+    expect(
+      screen.getByText(
+        "This result reflects the Most and Least choices you made most consistently across all 11 groups.",
+      ),
+    ).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: "Confirm my compass" }));
     expect(screen.getByRole("heading", { name: "Your compass is ready." })).toBeTruthy();
     expect(
       screen.getByRole("region", { name: "Your Core Values" }),
@@ -428,7 +433,7 @@ describe("onboarding app", () => {
       answerSet();
     }
 
-    fireEvent.click(screen.getByRole("button", { name: "Set my compass" }));
+    fireEvent.click(screen.getByRole("button", { name: "Confirm my compass" }));
     await act(async () => undefined);
     expect(
       screen.getByRole("button", { name: "Start my first Journal Entry" }),
@@ -462,7 +467,7 @@ describe("onboarding app", () => {
       answerSet();
     }
 
-    fireEvent.click(screen.getByRole("button", { name: "Set my compass" }));
+    fireEvent.click(screen.getByRole("button", { name: "Confirm my compass" }));
     await act(async () => undefined);
     fireEvent.click(
       screen.getByRole("button", { name: "Start my first Journal Entry" }),
@@ -485,7 +490,7 @@ describe("onboarding app", () => {
       answerSet();
     }
 
-    fireEvent.click(screen.getByRole("button", { name: "Set my compass" }));
+    fireEvent.click(screen.getByRole("button", { name: "Confirm my compass" }));
     await act(async () => undefined);
     expect(createExperienceSession).toHaveBeenCalledTimes(1);
     fireEvent.click(
