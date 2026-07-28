@@ -1178,7 +1178,8 @@ def test_demo_credentials_protect_static_files_and_api_but_not_health(
         create_app(
             static_root=static_root,
             demo_credentials=("professor", "bounded-demo"),
-        )
+        ),
+        base_url="https://testserver",
     ) as client:
         health = client.get("/health")
         anonymous_index = client.get("/")
@@ -1187,10 +1188,7 @@ def test_demo_credentials_protect_static_files_and_api_but_not_health(
             "/",
             auth=("professor", "bounded-demo"),
         )
-        authorized_api = client.get(
-            "/api/health",
-            auth=("professor", "bounded-demo"),
-        )
+        authorized_api = client.get("/api/health")
 
     assert health.status_code == 200
     assert anonymous_index.status_code == 401
@@ -1199,6 +1197,11 @@ def test_demo_credentials_protect_static_files_and_api_but_not_health(
     assert "professor" not in anonymous_api.text
     assert "bounded-demo" not in anonymous_api.text
     assert "Protected demo" in authorized_index.text
+    assert "twinkl_demo_access=" in authorized_index.headers["set-cookie"]
+    assert "HttpOnly" in authorized_index.headers["set-cookie"]
+    assert "Secure" in authorized_index.headers["set-cookie"]
+    assert "professor" not in authorized_index.headers["set-cookie"]
+    assert "bounded-demo" not in authorized_index.headers["set-cookie"]
     assert authorized_api.json() == {"status": "ok"}
 
 

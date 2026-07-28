@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import base64
+import hashlib
 import os
 import secrets
+from http.cookies import CookieError, SimpleCookie
 from pathlib import Path
 from typing import Any
 
@@ -16,7 +18,7 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse, PlainTextResponse, Response
 from starlette.routing import BaseRoute, Mount, Route
 from starlette.staticfiles import StaticFiles
-from starlette.types import ASGIApp, Receive, Scope, Send
+from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 from src.demo.contracts import (
     ApiRequest,
@@ -34,10 +36,35 @@ RESPONSE_ADAPTER: TypeAdapter[ApiResponse] = TypeAdapter(ApiResponse)
 class DemoBasicAuthMiddleware:
     """Protect a provider-enabled public demo without adding product auth."""
 
+    COOKIE_NAME = "twinkl_demo_access"
+
     def __init__(self, app: ASGIApp, *, username: str, password: str) -> None:
         self.app = app
         credential = base64.b64encode(f"{username}:{password}".encode()).decode("ascii")
         self._expected = f"Basic {credential}"
+        self._cookie_token = hashlib.sha256(
+            f"{username}\0{password}".encode()
+        ).hexdigest()
+
+    def _has_valid_cookie(self, scope: Scope) -> bool:
+        raw_cookie = next(
+            (
+                value.decode("latin-1")
+                for key, value in scope.get("headers", [])
+                if key.lower() == b"cookie"
+            ),
+            "",
+        )
+        cookies = SimpleCookie()
+        try:
+            cookies.load(raw_cookie)
+        except CookieError:
+            return False
+        morsel = cookies.get(self.COOKIE_NAME)
+        return bool(
+            morsel
+            and secrets.compare_digest(morsel.value, self._cookie_token)
+        )
 
     async def __call__(
         self,
@@ -57,6 +84,22 @@ class DemoBasicAuthMiddleware:
             "",
         )
         if secrets.compare_digest(authorization, self._expected):
+            async def send_with_cookie(message: Message) -> None:
+                if message["type"] == "http.response.start":
+                    message.setdefault("headers", []).append(
+                        (
+                            b"set-cookie",
+                            (
+                                f"{self.COOKIE_NAME}={self._cookie_token}; "
+                                "Path=/; Max-Age=14400; HttpOnly; Secure; SameSite=Lax"
+                            ).encode("latin-1"),
+                        )
+                    )
+                await send(message)
+
+            await self.app(scope, receive, send_with_cookie)
+            return
+        if self._has_valid_cookie(scope):
             await self.app(scope, receive, send)
             return
         response = PlainTextResponse(

@@ -79,6 +79,9 @@ provider-enabled public deployment also requires both
 fails closed at startup. These credentials protect Experience, Inspect, and
 the API with browser HTTP Basic Auth, while `/health` remains available to
 Railway. They are deployment credentials, not production authentication.
+After successful HTTP Basic Auth, the server issues a secure, HTTP-only demo
+cookie for four hours so same-origin API requests remain authenticated without
+putting credentials in React.
 Without `OPENAI_API_KEY`, onboarding and saved persona replay remain complete;
 manual provider work fails safely and retains the Journal Entry for editing or
 retry.
