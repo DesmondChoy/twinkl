@@ -2,23 +2,18 @@
 
 from __future__ import annotations
 
-import base64
-import hashlib
 import os
-import secrets
-from http.cookies import CookieError, SimpleCookie
 from pathlib import Path
 from typing import Any
 
 from pydantic import TypeAdapter, ValidationError
 from starlette.applications import Starlette
 from starlette.exceptions import HTTPException
-from starlette.middleware import Middleware
 from starlette.requests import Request
 from starlette.responses import JSONResponse, PlainTextResponse, Response
 from starlette.routing import BaseRoute, Mount, Route
 from starlette.staticfiles import StaticFiles
-from starlette.types import ASGIApp, Message, Receive, Scope, Send
+from starlette.types import Scope
 
 from src.demo.contracts import (
     ApiRequest,
@@ -33,83 +28,6 @@ REQUEST_ADAPTER: TypeAdapter[ApiRequest] = TypeAdapter(ApiRequest)
 RESPONSE_ADAPTER: TypeAdapter[ApiResponse] = TypeAdapter(ApiResponse)
 
 
-class DemoBasicAuthMiddleware:
-    """Protect a provider-enabled public demo without adding product auth."""
-
-    COOKIE_NAME = "twinkl_demo_access"
-
-    def __init__(self, app: ASGIApp, *, username: str, password: str) -> None:
-        self.app = app
-        credential = base64.b64encode(f"{username}:{password}".encode()).decode("ascii")
-        self._expected = f"Basic {credential}"
-        self._cookie_token = hashlib.sha256(
-            f"{username}\0{password}".encode()
-        ).hexdigest()
-
-    def _has_valid_cookie(self, scope: Scope) -> bool:
-        raw_cookie = next(
-            (
-                value.decode("latin-1")
-                for key, value in scope.get("headers", [])
-                if key.lower() == b"cookie"
-            ),
-            "",
-        )
-        cookies = SimpleCookie()
-        try:
-            cookies.load(raw_cookie)
-        except CookieError:
-            return False
-        morsel = cookies.get(self.COOKIE_NAME)
-        return bool(
-            morsel
-            and secrets.compare_digest(morsel.value, self._cookie_token)
-        )
-
-    async def __call__(
-        self,
-        scope: Scope,
-        receive: Receive,
-        send: Send,
-    ) -> None:
-        if scope["type"] != "http" or scope.get("path") == "/health":
-            await self.app(scope, receive, send)
-            return
-        authorization = next(
-            (
-                value.decode("latin-1")
-                for key, value in scope.get("headers", [])
-                if key.lower() == b"authorization"
-            ),
-            "",
-        )
-        if secrets.compare_digest(authorization, self._expected):
-            async def send_with_cookie(message: Message) -> None:
-                if message["type"] == "http.response.start":
-                    message.setdefault("headers", []).append(
-                        (
-                            b"set-cookie",
-                            (
-                                f"{self.COOKIE_NAME}={self._cookie_token}; "
-                                "Path=/; Max-Age=14400; HttpOnly; Secure; SameSite=Lax"
-                            ).encode("latin-1"),
-                        )
-                    )
-                await send(message)
-
-            await self.app(scope, receive, send_with_cookie)
-            return
-        if self._has_valid_cookie(scope):
-            await self.app(scope, receive, send)
-            return
-        response = PlainTextResponse(
-            "Demo access is required.",
-            status_code=401,
-            headers={"WWW-Authenticate": 'Basic realm="Twinkl demo", charset="UTF-8"'},
-        )
-        await response(scope, receive, send)
-
-
 class ExperienceStaticFiles(StaticFiles):
     """Serve the built Experience and preserve client-side route fallback."""
 
@@ -120,25 +38,6 @@ class ExperienceStaticFiles(StaticFiles):
             if error.status_code != 404 or Path(path).suffix:
                 raise
             return await super().get_response("index.html", scope)
-
-
-def _deployment_credentials() -> tuple[str, str] | None:
-    username = os.getenv("TWINKL_DEMO_USERNAME")
-    password = os.getenv("TWINKL_DEMO_PASSWORD")
-    if bool(username) != bool(password):
-        raise RuntimeError(
-            "TWINKL_DEMO_USERNAME and TWINKL_DEMO_PASSWORD must be set together."
-        )
-    credentials = (username, password) if username and password else None
-    if (
-        os.getenv("TWINKL_PUBLIC_DEMO") == "1"
-        and os.getenv("OPENAI_API_KEY")
-        and credentials is None
-    ):
-        raise RuntimeError(
-            "Provider-enabled public demos require Twinkl demo credentials."
-        )
-    return credentials
 
 
 def _status_code(response: ApiResponse) -> int:
@@ -198,7 +97,6 @@ def create_app(
     *,
     scenario_root: Path | None = None,
     static_root: Path | None = None,
-    demo_credentials: tuple[str, str] | None = None,
 ) -> Starlette:
     experience_service = service or InMemoryExperienceService()
     root = scenario_root or Path(__file__).resolve().parents[2]
@@ -277,28 +175,13 @@ def create_app(
                 name="experience",
             )
         )
-    middleware = (
-        [
-            Middleware(
-                DemoBasicAuthMiddleware,
-                username=demo_credentials[0],
-                password=demo_credentials[1],
-            )
-        ]
-        if demo_credentials is not None
-        else None
-    )
-    return Starlette(
-        routes=routes,
-        middleware=middleware,
-    )
+    return Starlette(routes=routes)
 
 
 def create_deployment_app() -> Starlette:
     static_root = os.getenv("TWINKL_STATIC_ROOT")
     return create_app(
         static_root=Path(static_root) if static_root else None,
-        demo_credentials=_deployment_credentials(),
     )
 
 

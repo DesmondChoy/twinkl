@@ -21,8 +21,10 @@ def test_railway_builds_the_combined_experience_image_from_the_repository() -> N
     assert config["deploy"]["healthcheckPath"] == "/health"
     assert "FROM node:22-alpine AS frontend-build" in dockerfile
     assert "FROM python:3.12-slim" in dockerfile
-    assert "TWINKL_PUBLIC_DEMO=1" in dockerfile
     assert "TWINKL_STATIC_ROOT=/app/frontend/onboarding/dist" in dockerfile
+    assert "TWINKL_PUBLIC_DEMO" not in dockerfile
+    assert "TWINKL_DEMO_USERNAME" not in dockerfile
+    assert "TWINKL_DEMO_PASSWORD" not in dockerfile
     assert "uvicorn src.demo.api:app" in dockerfile
     assert "OPENAI_API_KEY" not in dockerfile
     assert "GEMINI_API_KEY" not in dockerfile

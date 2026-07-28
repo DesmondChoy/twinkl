@@ -14,7 +14,6 @@ WORKDIR /app
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    TWINKL_PUBLIC_DEMO=1 \
     TWINKL_STATIC_ROOT=/app/frontend/onboarding/dist
 
 COPY requirements-experience.txt ./

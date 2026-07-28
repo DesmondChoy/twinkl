@@ -1167,68 +1167,28 @@ def test_http_adapter_serves_the_built_experience_and_public_health(
     assert missing_asset.status_code == 404
 
 
-def test_demo_credentials_protect_static_files_and_api_but_not_health(
+def test_deployment_ignores_legacy_demo_credentials(
     tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     static_root = tmp_path / "dist"
     static_root.mkdir()
-    (static_root / "index.html").write_text("<h1>Protected demo</h1>")
+    (static_root / "index.html").write_text("<h1>Public demo</h1>")
+    monkeypatch.setenv("TWINKL_STATIC_ROOT", str(static_root))
+    monkeypatch.setenv("OPENAI_API_KEY", "not-a-real-provider-key")
+    monkeypatch.setenv("TWINKL_DEMO_USERNAME", "professor")
+    monkeypatch.setenv("TWINKL_DEMO_PASSWORD", "bounded-demo")
 
-    with TestClient(
-        create_app(
-            static_root=static_root,
-            demo_credentials=("professor", "bounded-demo"),
-        ),
-        base_url="https://testserver",
-    ) as client:
+    with TestClient(create_deployment_app(), base_url="https://testserver") as client:
         health = client.get("/health")
         anonymous_index = client.get("/")
         anonymous_api = client.get("/api/health")
-        authorized_index = client.get(
-            "/",
-            auth=("professor", "bounded-demo"),
-        )
-        authorized_api = client.get("/api/health")
 
     assert health.status_code == 200
-    assert anonymous_index.status_code == 401
-    assert anonymous_api.status_code == 401
-    assert anonymous_api.headers["www-authenticate"].startswith("Basic ")
-    assert "professor" not in anonymous_api.text
-    assert "bounded-demo" not in anonymous_api.text
-    assert "Protected demo" in authorized_index.text
-    assert "twinkl_demo_access=" in authorized_index.headers["set-cookie"]
-    assert "HttpOnly" in authorized_index.headers["set-cookie"]
-    assert "Secure" in authorized_index.headers["set-cookie"]
-    assert "professor" not in authorized_index.headers["set-cookie"]
-    assert "bounded-demo" not in authorized_index.headers["set-cookie"]
-    assert authorized_api.json() == {"status": "ok"}
-
-
-def test_provider_enabled_public_demo_requires_access_credentials(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    monkeypatch.setenv("TWINKL_PUBLIC_DEMO", "1")
-    monkeypatch.setenv("OPENAI_API_KEY", "not-a-real-provider-key")
-    monkeypatch.delenv("TWINKL_DEMO_USERNAME", raising=False)
-    monkeypatch.delenv("TWINKL_DEMO_PASSWORD", raising=False)
-
-    with pytest.raises(
-        RuntimeError,
-        match="Provider-enabled public demos require",
-    ):
-        create_deployment_app()
-
-
-def test_public_demo_credentials_must_be_configured_together(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
-    monkeypatch.setenv("TWINKL_DEMO_USERNAME", "professor")
-    monkeypatch.delenv("TWINKL_DEMO_PASSWORD", raising=False)
-
-    with pytest.raises(RuntimeError, match="must be set together"):
-        create_deployment_app()
+    assert anonymous_index.status_code == 200
+    assert "Public demo" in anonymous_index.text
+    assert "www-authenticate" not in anonymous_index.headers
+    assert anonymous_api.json() == {"status": "ok"}
 
 
 def test_http_adapter_loads_each_saved_persona_at_its_first_week() -> None:
