@@ -171,6 +171,9 @@ different card in `Least`.
 - On narrow screens, Most and Least appear together before a compact two-column
   card grid. Both boxes and all six initial cards fit within the viewport, so
   the 11 assessment groups do not require vertical scrolling.
+- On wide screens, Most and Least appear together before a compact one-row card
+  grid. Both boxes and all six initial cards fit within the viewport, so the 11
+  assessment groups do not require vertical scrolling.
 - The active empty box glows: Most before the first choice, then Least before
   the second choice.
 - Before both choices are set, a placed card can return to the selection area
