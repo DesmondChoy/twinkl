@@ -1,8 +1,9 @@
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import App, { AppErrorBoundary } from "./App";
 import type {
+  JournalEntrySubmittedResponseContract,
   SessionCreatedResponseContract,
   TraceEventContract,
   TraceReadResponseContract,
@@ -11,6 +12,7 @@ import {
   createExperienceSession,
   ExperienceApiError,
   readExperienceTrace,
+  submitJournalEntry,
 } from "./experienceApi";
 import { canonicalInspectFixture } from "./inspectFixture";
 import { SESSION_STORAGE_KEY } from "./session";
@@ -21,6 +23,7 @@ vi.mock("./experienceApi", async (importOriginal) => {
     ...actual,
     createExperienceSession: vi.fn(),
     readExperienceTrace: vi.fn(),
+    submitJournalEntry: vi.fn(),
   };
 });
 
@@ -41,6 +44,7 @@ beforeEach(() => {
   profileEvents.clear();
   vi.mocked(createExperienceSession).mockReset();
   vi.mocked(readExperienceTrace).mockReset();
+  vi.mocked(submitJournalEntry).mockReset();
   vi.mocked(createExperienceSession).mockImplementation(async (profile) => {
     const fixtureEvent = canonicalInspectFixture.trace_events.find(
       (event) => event.event_type === "profile_confirmed",
@@ -456,6 +460,155 @@ describe("onboarding app", () => {
     expect((screen.getByRole("textbox", { name: "First Journal Entry" }) as HTMLTextAreaElement).value)
       .toBe("A quiet walk helped me think clearly.");
     expect(onStartJournal).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps an open-week Journal Entry and Inspect at the same event boundary", async () => {
+    vi.useFakeTimers();
+    let openWeekEvents: TraceEventContract[] = [];
+    vi.mocked(readExperienceTrace).mockImplementation(async (sessionId) => ({
+      schema_version: canonicalInspectFixture.schema_version,
+      operation: "read_trace",
+      request_id: "read-open-week",
+      status: "ok",
+      session_id: sessionId,
+      events: openWeekEvents.length > 0
+        ? openWeekEvents
+        : profileEvents.has(sessionId)
+          ? [profileEvents.get(sessionId)!]
+          : [],
+    }));
+    vi.mocked(submitJournalEntry).mockImplementation(async ({
+      sessionId,
+      entry,
+    }) => {
+      const profileEvent = profileEvents.get(sessionId)!;
+      const journalTemplate = canonicalInspectFixture.trace_events.find(
+        (event) => event.event_type === "journal_entry_submitted",
+      )!;
+      const suppressionTemplate = canonicalInspectFixture.trace_events.find(
+        (event) => event.event_type === "nudge_suppression_checked",
+      )!;
+      const decisionTemplate = canonicalInspectFixture.trace_events.find(
+        (event) => event.event_type === "nudge_decided",
+      )!;
+      const journalEvent: TraceEventContract = {
+        ...journalTemplate,
+        event_id: "journal-open-week",
+        session_id: sessionId,
+        parent_event_id: profileEvent.event_id,
+        input_refs: [{ kind: "profile", id: sessionId }],
+        result_refs: [{ kind: "journal_entry", id: entry.journal_entry_id }],
+        details: { journal_entry: entry, ordering_valid: true },
+      };
+      const suppressionEvent: TraceEventContract = {
+        ...suppressionTemplate,
+        event_id: "suppression-open-week",
+        session_id: sessionId,
+        parent_event_id: journalEvent.event_id,
+        input_refs: [{
+          kind: "journal_entry",
+          id: entry.journal_entry_id,
+        }],
+        details: {
+          previous_entry_ids: [],
+          window_size: 3,
+          max_nudges: 2,
+          suppressed: false,
+        },
+      };
+      const decisionEvent: TraceEventContract = {
+        ...decisionTemplate,
+        event_id: "decision-open-week",
+        session_id: sessionId,
+        parent_event_id: suppressionEvent.event_id,
+        input_refs: [{
+          kind: "journal_entry",
+          id: entry.journal_entry_id,
+        }],
+        details: {
+          should_nudge: false,
+          category: null,
+          reason: "No follow-up question was useful.",
+        },
+      };
+      openWeekEvents = [
+        profileEvent,
+        journalEvent,
+        suppressionEvent,
+        decisionEvent,
+      ];
+      return {
+        schema_version: canonicalInspectFixture.schema_version,
+        operation: "submit_journal_entry",
+        request_id: "submit-open-week",
+        status: "ok",
+        session: {
+          ...canonicalInspectFixture.session,
+          session_id: sessionId,
+          revision: 1,
+          profile: profileEvent.details.profile,
+          journal_entries: [entry],
+          nudges: [{
+            nudge_id: "nudge-open-week",
+            journal_entry_id: entry.journal_entry_id,
+            outcome: "no_nudge",
+            category: null,
+            reason: null,
+            text: null,
+            response: null,
+          }],
+          weekly_reviewer_decisions: [],
+          drift_result: null,
+          weekly_digest: null,
+          trace_event_ids: openWeekEvents.map((event) => event.event_id),
+          selection: { view: "experience" },
+        },
+        event_ids: openWeekEvents.slice(1).map((event) => event.event_id),
+      } as JournalEntrySubmittedResponseContract;
+    });
+
+    render(<App />);
+    for (let setNumber = 1; setNumber <= 11; setNumber += 1) {
+      answerSet();
+    }
+    fireEvent.click(screen.getByRole("button", { name: "Confirm my compass" }));
+    await act(async () => undefined);
+    fireEvent.click(
+      screen.getByRole("button", { name: "Start my first Journal Entry" }),
+    );
+
+    vi.useRealTimers();
+    const user = userEvent.setup();
+    const content = "I took a quiet walk and left my phone behind.";
+    await user.type(
+      screen.getByRole("textbox", { name: "First Journal Entry" }),
+      content,
+    );
+    await user.click(
+      screen.getByRole("button", { name: "Save Journal Entry" }),
+    );
+
+    expect(await screen.findByText(content)).toBeTruthy();
+    expect(
+      screen.queryByRole("heading", { name: "Your week in view." }),
+    ).toBeNull();
+
+    await user.click(screen.getByRole("button", { name: "Inspect" }));
+
+    const trace = screen.getByRole("list", { name: "Trace events" });
+    expect(within(trace).getAllByRole("listitem")).toHaveLength(4);
+    [
+      "Profile confirmed",
+      "Journal Entry submitted",
+      "Nudge suppression checked",
+      "Nudge decided",
+    ].forEach((label) => expect(screen.getByText(label)).toBeTruthy());
+    [
+      "Weekly review requested",
+      "Weekly review completed",
+      "Drift checked",
+      "Weekly Digest built",
+    ].forEach((label) => expect(screen.queryByText(label)).toBeNull());
   });
 
   it("never substitutes fixture events when Profile trace loading fails", async () => {

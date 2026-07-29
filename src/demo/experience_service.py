@@ -245,6 +245,55 @@ class InMemoryExperienceService:
         )
 
     @staticmethod
+    def _reviewed_week_starts(events: list[TraceEvent]) -> set[date]:
+        return {
+            date.fromisoformat(event.details.receipt.week_start)
+            for event in events
+            if isinstance(event, WeeklyReviewCompletedEvent)
+        }
+
+    def _week_is_finalized(
+        self,
+        session: ExperienceSession,
+        *,
+        week_start: date,
+    ) -> bool:
+        week_end = week_start + timedelta(days=6)
+        current_entry_ids = {
+            entry.journal_entry_id
+            for entry in session.journal_entries
+            if week_start <= date.fromisoformat(entry.date) <= week_end
+        }
+        nudges = {
+            nudge.journal_entry_id: nudge
+            for nudge in session.nudges
+            if nudge.journal_entry_id in current_entry_ids
+        }
+        if any(nudge.outcome == "displayed" for nudge in nudges.values()):
+            return False
+
+        latest_decision_status: dict[str, EventStatus] = {}
+        for event in self._events[session.session_id]:
+            if not isinstance(event, NudgeDecidedEvent):
+                continue
+            journal_entry_id = next(
+                (
+                    reference.id
+                    for reference in event.input_refs
+                    if reference.kind == "journal_entry"
+                ),
+                None,
+            )
+            if journal_entry_id in current_entry_ids:
+                latest_decision_status[cast(str, journal_entry_id)] = event.status
+        return all(
+            entry_id in nudges
+            or latest_decision_status.get(entry_id)
+            in {"complete", "refused", "invalid"}
+            for entry_id in current_entry_ids
+        )
+
+    @staticmethod
     def _resume_update_date(
         existing: ExperienceSession,
         resume_state: SessionResumeState,
@@ -359,6 +408,9 @@ class InMemoryExperienceService:
         resume_state: SessionResumeState,
         affected_date: date,
     ) -> ExperienceSession:
+        reviewed_weeks = self._reviewed_week_starts(
+            self._events[existing.session_id]
+        )
         events = list(resume_state.trace_events)
         affected_week, _ = self._week_bounds(affected_date.isoformat())
         decisions = [
@@ -404,6 +456,7 @@ class InMemoryExperienceService:
                 self._week_bounds(entry.date)[0]
                 for entry in updated.journal_entries
                 if self._week_bounds(entry.date)[0] >= affected_week
+                and self._week_bounds(entry.date)[0] in reviewed_weeks
             }
         )
         for week_start in weeks_to_recompute:
@@ -1113,6 +1166,53 @@ class InMemoryExperienceService:
         self._events[session.session_id].extend(events)
         return updated, events
 
+    async def _run_due_weekly_reviews(
+        self,
+        *,
+        session: ExperienceSession,
+        as_of: date,
+        parent_event_id: str,
+    ) -> tuple[ExperienceSession, list[TraceEvent]]:
+        reviewed_weeks = self._reviewed_week_starts(
+            self._events[session.session_id]
+        )
+        due_weeks = sorted(
+            {
+                week_start
+                for entry in session.journal_entries
+                for week_start, week_end in [self._week_bounds(entry.date)]
+                if week_end < as_of
+                and week_start not in reviewed_weeks
+                and self._week_is_finalized(session, week_start=week_start)
+            }
+        )
+        events: list[TraceEvent] = []
+        updated = session
+        for week_start in due_weeks:
+            updated, weekly_events = await self._run_weekly_review(
+                session=updated,
+                parent_event_id=parent_event_id,
+                week_start_override=week_start,
+            )
+            events.extend(weekly_events)
+            parent_event_id = weekly_events[-1].event_id
+        return updated, events
+
+    async def run_due_weekly_reviews(
+        self,
+        *,
+        session_id: str,
+        as_of: date,
+    ) -> tuple[ExperienceSession, list[TraceEvent]]:
+        """Review finalized Monday-Sunday weeks closed before local ``as_of``."""
+        async with self._lock:
+            session = self._sessions[session_id]
+            return await self._run_due_weekly_reviews(
+                session=session,
+                as_of=as_of,
+                parent_event_id=session.trace_event_ids[-1],
+            )
+
     async def submit_journal_entry(
         self,
         request: JournalEntrySubmitRequest,
@@ -1147,8 +1247,9 @@ class InMemoryExperienceService:
                 cached_retry_parent_event_id = (
                     nudge_retry_events[-1].event_id if retryable else None
                 )
-                updated, weekly_events = await self._run_weekly_review(
+                updated, weekly_events = await self._run_due_weekly_reviews(
                     session=updated,
+                    as_of=date.fromisoformat(request.journal_entry.date),
                     parent_event_id=nudge_retry_events[-1].event_id,
                 )
                 retry_events = [*nudge_retry_events, *weekly_events]
@@ -1273,8 +1374,9 @@ class InMemoryExperienceService:
                 events.extend(nudge_events)
                 retry_parent_event_id = nudge_events[-1].event_id if retryable else None
 
-            session, weekly_events = await self._run_weekly_review(
+            session, weekly_events = await self._run_due_weekly_reviews(
                 session=session,
+                as_of=date.fromisoformat(request.journal_entry.date),
                 parent_event_id=events[-1].event_id,
             )
             events.extend(weekly_events)

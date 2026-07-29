@@ -190,6 +190,9 @@ describe("manual Journal Entry Experience", () => {
 
     expect(screen.getByText("I stopped performing for anyone else.")).toBeTruthy();
     expect(screen.getAllByText(savedEntry.content)).toHaveLength(1);
+    expect(
+      screen.queryByRole("heading", { name: "Your week in view." }),
+    ).toBeNull();
     expect(api.submitJournalEntry).toHaveBeenCalledTimes(1);
     expect(api.createExperienceSession).toHaveBeenLastCalledWith(
       profile,
@@ -246,7 +249,7 @@ describe("manual Journal Entry Experience", () => {
     );
   });
 
-  it("keeps a nudge response available when weekly recomputation fails", async () => {
+  it("keeps a nudge response available when browser synchronization fails", async () => {
     const savedEntry = entry();
     const initial: ExperienceState = {
       ...createExperienceState(),
@@ -277,7 +280,7 @@ describe("manual Journal Entry Experience", () => {
       await screen.findByDisplayValue("This answer should remain here."),
     ).toBeTruthy();
     expect(screen.getByRole("status").textContent).toContain(
-      "Your response is still here, but this week could not update. Try again.",
+      "Your response is still here, but the saved Journal Entry could not update. Try again.",
     );
     expect(screen.getByRole("button", { name: "Save response" })).toBeTruthy();
   });

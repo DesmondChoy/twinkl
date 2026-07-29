@@ -6,9 +6,10 @@ This document specifies the capstone demo experience. The shared React
 Experience and Inspect shell, resumable client session, view selector, and
 focused Inspect navigation are implemented. Manual Journal Entry processing,
 displayed nudges with reply and skip actions, safe retry, and linked nudge
-events in Inspect are also implemented. Manual weekly review now populates
-Weekly Drift Reviewer Decisions, the Drift Detector result, a cited Weekly
-Digest, and linked Inspect events. The five deterministic persona replays now
+events in Inspect are also implemented. Closed-week review populates Weekly
+Drift Reviewer Decisions, the Drift Detector result, a cited Weekly Digest,
+and linked Inspect events only after the Monday-through-Sunday week closes.
+The five deterministic persona replays now
 load into the shared React session with previous, next, play or pause, restart,
 reduced-motion behavior, no-future-data projection, and browser-side scenario
 hash verification. The release quality gate is implemented; professor
@@ -54,6 +55,9 @@ information hierarchy, interaction order, or acceptance of the mobile flow.
   the `gpt-5.6-luna` reasoning-effort-`low` Weekly Drift Reviewer without VIF
   Critic input, then the Drift Detector applies the two-consecutive-Conflict
   rule.
+- Saving a Journal Entry never reviews its open calendar week. Review cadence
+  is Monday through Sunday, and the first partial week becomes eligible after
+  its first Sunday.
 - The VIF Critic remains offline research. Inspect may link to separate
   research reports, but it must not imply that VIF Critic Predictions produce
   user-facing Drift.
@@ -134,11 +138,12 @@ After Profile confirmation, Experience provides:
 
 Manual Experience allows explicit Journal Entry removal after confirmation.
 Removing a Journal Entry or saving a nudge reply or skip advances the session
-revision and recomputes the affected week plus any later weeks. The saved
-browser state remains unchanged if synchronization fails, so the action can be
-retried without losing user text. Removed Journal Entry `t_index` values are
-not reused. Inspect retains their immutable submission events and marks them as
-removed from the current Experience.
+revision. Python recomputes the affected week plus any later weeks only when
+those closed weeks were already reviewed. An open week remains unreviewed. The
+saved browser state remains unchanged if synchronization fails, so the action
+can be retried without losing user text. Removed Journal Entry `t_index` values
+are not reused. Inspect retains their immutable submission events and marks
+them as removed from the current Experience.
 
 A Journal Entry must be held safely while the nudge check runs. A missing key,
 refusal, invalid response, or request failure must not discard the Journal
@@ -298,7 +303,7 @@ The Python side owns:
 
 - Profile validation and session creation;
 - nudge decision and generation;
-- weekly grouping and affected-week selection;
+- calendar-week grouping, closed-week eligibility, and affected-week selection;
 - Weekly Drift Reviewer calls and response validation;
 - Drift Detector execution;
 - Weekly Digest construction;
@@ -343,10 +348,10 @@ framework:
   conflict error before any model call.
 - An existing session accepts only a one-revision browser update that either
   records one displayed nudge as answered or skipped, or removes one Journal
-  Entry and its linked nudge. Python recomputes that week and every later week;
-  broader state replacement is rejected. A same-revision resume must exactly
-  match the current Journal Entries, nudges, and trace; it cannot silently
-  replace or ignore divergent browser state.
+  Entry and its linked nudge. Python recomputes affected closed weeks that were
+  already reviewed; broader state replacement is rejected. A same-revision
+  resume must exactly match the current Journal Entries, nudges, and trace; it
+  cannot silently replace or ignore divergent browser state.
 - `submit_journal_entry` carries `expected_revision`. Python rejects a stale
   revision, duplicate Journal Entry identifier, duplicate `t_index`, or
   non-chronological Journal Entry before nudge or weekly review work begins.
@@ -369,7 +374,8 @@ framework:
 
 ## 8. Review Orchestration
 
-For one manually submitted Journal Entry, the observable sequence is:
+For one manually submitted Journal Entry in the open week, the observable
+sequence is:
 
 ```text
 Journal Entry submitted
@@ -377,7 +383,14 @@ Journal Entry submitted
 → optional nudge decision and generation
 → optional user response or skip
 → Journal Entry finalized
-→ affected calendar weeks selected
+→ wait for the calendar week to close
+```
+
+No Weekly Drift Reviewer, Drift Detector, or Weekly Digest event is created for
+the open week. When a finalized calendar week is due, the separate sequence is:
+
+```text
+closed Monday-through-Sunday week selected
 → Weekly Drift Reviewer runs with cumulative displayed history
 → response validated into Weekly Drift Reviewer Decisions
 → Drift Detector applies the deterministic rule
@@ -392,6 +405,19 @@ check. Inspect still records separate linked `nudge_decided` and
 and latency belong to `nudge_decided`; question-length validation and the
 effective displayed nudge belong to `nudge_generated`. A `no_nudge` decision
 has no `nudge_generated` event.
+
+The due-review caller supplies an `as_of` date already resolved in the user's
+IANA timezone. A week is eligible only when its Sunday `week_end` is earlier
+than `as_of`. Thus a first Journal Entry on Thursday is reviewed after Sunday,
+not seven days later on the following Thursday. The first partial week is
+eligible even when it contains only that Journal Entry. A displayed nudge must
+be answered or skipped before its week is eligible.
+
+The version 1 JSON contract remains unchanged. The Python Experience service
+provides a due-review method for a scheduler or host. The React POC also uses
+the browser-local date of a later Journal Entry to catch up closed, unreviewed
+weeks. A production background scheduler and durable timezone storage remain
+outside the capstone.
 
 The backend may reuse an unchanged weekly result by input hash. Reuse must be
 visible in Inspect and must return the same saved decisions and provenance. A
@@ -560,14 +586,15 @@ saved, deterministic replay must remain sufficient for the complete demo.
 ## 16. Verification Requirements
 
 - Unit tests protect onboarding contracts, client state transitions, trace
-  serialization, affected-week selection, and deterministic replay.
+  serialization, closed-week eligibility, affected-week selection, and
+  deterministic replay.
 - Contract tests verify React fixtures against Python request and response
   schemas.
 - Integration tests cover successful, reused, refused, invalid, and failed
   model outcomes.
-- End-to-end browser tests cover the professor walkthrough, reply and skip,
-  Journal Entry removal, active and recovered Drift, and view-state
-  preservation.
+- End-to-end browser tests cover the professor walkthrough, open-week Journal
+  Entries without weekly events, reply and skip, Journal Entry removal, active
+  and recovered Drift, and view-state preservation.
 - Accessibility checks cover keyboard operation, focus, names, status updates,
   and reduced motion.
 - Responsive checks treat representative narrow-screen phone viewports as the

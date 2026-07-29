@@ -362,6 +362,9 @@ version `2` Profile migrates to version `3` without `goal_category`.
   capstone.
 - The approved runtime validates saved Profile JSON and supplies `top_values`
   as Core Values to the Weekly Drift Reviewer and Drift Detector.
+- The first Journal Entry starts a partial Monday-through-Sunday calendar week.
+  Saving it does not run the Weekly Drift Reviewer; the partial week becomes
+  eligible after Sunday according to the Experience scheduling contract.
 - `value_profile.weights` is not yet supplied to the VIF Critic.
 
 When no onboarding Profile is supplied, current synthetic personas retain

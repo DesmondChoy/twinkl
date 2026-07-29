@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import shutil
 from collections.abc import Iterator
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime
 from pathlib import Path
 
 import pytest
@@ -269,7 +269,7 @@ def _submit_request(
 
 
 @pytest.mark.asyncio
-async def test_submission_is_idempotent_and_emits_real_nudge_events() -> None:
+async def test_submission_is_idempotent_and_stops_before_weekly_review() -> None:
     service, runtime, weekly_reviewer = _service([_receipt()])
     create_request = await _create(service)
     request = _submit_request(create_request, index=0, expected_revision=0)
@@ -293,10 +293,10 @@ async def test_submission_is_idempotent_and_emits_real_nudge_events() -> None:
     assert response.session.revision == 1
     assert response.session.nudges[0].outcome == "displayed"
     assert len(runtime.requests) == 1
-    assert len(weekly_reviewer.requests) == 1
-    assert response.session.drift_result is not None
-    assert response.session.weekly_digest is not None
-    assert response.session.weekly_reviewer_decisions
+    assert weekly_reviewer.requests == []
+    assert response.session.drift_result is None
+    assert response.session.weekly_digest is None
+    assert response.session.weekly_reviewer_decisions == []
     assert trace.operation == "read_trace"
     assert [event.event_type for event in trace.events] == [
         "profile_confirmed",
@@ -304,10 +304,6 @@ async def test_submission_is_idempotent_and_emits_real_nudge_events() -> None:
         "nudge_suppression_checked",
         "nudge_decided",
         "nudge_generated",
-        "weekly_review_requested",
-        "weekly_review_completed",
-        "drift_detected",
-        "weekly_digest_built",
     ]
     decision = next(
         event for event in trace.events if event.event_type == "nudge_decided"
@@ -315,19 +311,105 @@ async def test_submission_is_idempotent_and_emits_real_nudge_events() -> None:
     assert decision.model_contract is not None
     assert decision.model_contract.model == "gpt-5.6-luna"
     assert decision.model_contract.reasoning_effort == "none"
-    weekly_request = weekly_reviewer.requests[0]
-    assert weekly_request.core_values == ["benevolence"]
-    assert "VIF Critic" not in weekly_request.prompt
-    weekly_event = next(
-        event for event in trace.events if event.event_type == "weekly_review_completed"
-    )
-    assert weekly_event.model_contract is not None
-    assert weekly_event.model_contract.model == "gpt-5.6-luna"
-    assert weekly_event.model_contract.reasoning_effort == "low"
 
 
 @pytest.mark.asyncio
-async def test_weekly_integration_forms_drift_and_cites_visible_entries() -> None:
+async def test_first_partial_week_becomes_due_after_sunday() -> None:
+    service, _, weekly_reviewer = _service(
+        [_receipt(decision="no_nudge", nudge_text=None)]
+    )
+    create_request = await _create(service)
+    request = _submit_request(create_request, index=0, expected_revision=0)
+    thursday_request = request.model_copy(
+        update={
+            "journal_entry": request.journal_entry.model_copy(
+                update={"date": "2026-07-23"}
+            )
+        }
+    )
+
+    response = await service.submit_journal_entry(thursday_request)
+    sunday, sunday_events = await service.run_due_weekly_reviews(
+        session_id=create_request.profile.session_id,
+        as_of=date(2026, 7, 26),
+    )
+    monday, monday_events = await service.run_due_weekly_reviews(
+        session_id=create_request.profile.session_id,
+        as_of=date(2026, 7, 27),
+    )
+    repeated, repeated_events = await service.run_due_weekly_reviews(
+        session_id=create_request.profile.session_id,
+        as_of=date(2026, 7, 28),
+    )
+
+    assert response.operation == "submit_journal_entry"
+    assert sunday.weekly_digest is None
+    assert sunday_events == []
+    assert len(weekly_reviewer.requests) == 1
+    assert weekly_reviewer.requests[0].week_start == "2026-07-20"
+    assert weekly_reviewer.requests[0].week_end == "2026-07-26"
+    assert monday.weekly_digest is not None
+    assert len(monday_events) == 4
+    assert repeated.weekly_digest == monday.weekly_digest
+    assert repeated_events == []
+
+
+@pytest.mark.asyncio
+async def test_due_review_waits_for_displayed_nudge_finalization() -> None:
+    service, _, weekly_reviewer = _service([_receipt()])
+    create_request = await _create(service)
+    first = await service.submit_journal_entry(
+        _submit_request(create_request, index=0, expected_revision=0)
+    )
+    before = await service.read_trace(
+        TraceReadRequest(
+            operation="read_trace",
+            request_id="trace-before-finalization",
+            session_id=create_request.profile.session_id,
+        )
+    )
+    assert first.operation == "submit_journal_entry"
+    assert before.operation == "read_trace"
+
+    waiting, waiting_events = await service.run_due_weekly_reviews(
+        session_id=create_request.profile.session_id,
+        as_of=date(2026, 7, 27),
+    )
+    synchronized = await service.create_session(
+        create_request.model_copy(
+            update={
+                "request_id": "sync-finalized-skip",
+                "idempotency_key": "a" * 64,
+                "resume_state": SessionResumeState(
+                    session_id=create_request.profile.session_id,
+                    revision=2,
+                    journal_entries=first.session.journal_entries,
+                    nudges=[
+                        first.session.nudges[0].model_copy(
+                            update={"outcome": "skipped"}
+                        )
+                    ],
+                    trace_events=before.events,
+                ),
+            }
+        )
+    )
+    reviewed, review_events = await service.run_due_weekly_reviews(
+        session_id=create_request.profile.session_id,
+        as_of=date(2026, 7, 27),
+    )
+
+    assert waiting.weekly_digest is None
+    assert waiting_events == []
+    assert synchronized.operation == "create_session"
+    assert synchronized.session.weekly_digest is None
+    assert reviewed.weekly_digest is not None
+    assert len(review_events) == 4
+    assert len(weekly_reviewer.requests) == 1
+
+
+@pytest.mark.asyncio
+async def test_closed_week_review_forms_drift_and_cites_visible_entries() -> None:
     service, _, weekly_reviewer = _service(
         [
             _receipt(decision="no_nudge", nudge_text=None),
@@ -343,6 +425,10 @@ async def test_weekly_integration_forms_drift_and_cites_visible_entries() -> Non
     second = await service.submit_journal_entry(
         _submit_request(create_request, index=1, expected_revision=1)
     )
+    reviewed, review_events = await service.run_due_weekly_reviews(
+        session_id=create_request.profile.session_id,
+        as_of=date(2026, 7, 27),
+    )
     trace = await service.read_trace(
         TraceReadRequest(
             operation="read_trace",
@@ -352,18 +438,24 @@ async def test_weekly_integration_forms_drift_and_cites_visible_entries() -> Non
     )
 
     assert first.operation == "submit_journal_entry"
-    assert first.session.drift_result is not None
-    assert first.session.drift_result.delivery_state == "stable"
+    assert first.session.drift_result is None
     assert second.operation == "submit_journal_entry"
-    assert second.session.drift_result is not None
-    assert second.session.drift_result.delivery_state == "active"
-    assert len(second.session.weekly_reviewer_decisions) == 2
-    assert second.session.weekly_digest is not None
-    assert [row.t_index for row in second.session.weekly_digest.evidence] == [0, 1]
-    assert weekly_reviewer.requests[1].current_t_indices == [0, 1]
+    assert second.session.drift_result is None
+    assert reviewed.drift_result is not None
+    assert reviewed.drift_result.delivery_state == "active"
+    assert len(reviewed.weekly_reviewer_decisions) == 2
+    assert reviewed.weekly_digest is not None
+    assert [row.t_index for row in reviewed.weekly_digest.evidence] == [0, 1]
+    assert weekly_reviewer.requests[0].current_t_indices == [0, 1]
     assert all(
         "VIF Critic" not in request.prompt for request in weekly_reviewer.requests
     )
+    assert [event.event_type for event in review_events] == [
+        "weekly_review_requested",
+        "weekly_review_completed",
+        "drift_detected",
+        "weekly_digest_built",
+    ]
 
     assert trace.operation == "read_trace"
     latest_events = trace.events[-4:]
@@ -406,6 +498,10 @@ async def test_weekly_integration_fails_closed_to_abstain(
     response = await service.submit_journal_entry(
         _submit_request(create_request, index=0, expected_revision=0)
     )
+    reviewed, _ = await service.run_due_weekly_reviews(
+        session_id=create_request.profile.session_id,
+        as_of=date(2026, 7, 27),
+    )
     trace = await service.read_trace(
         TraceReadRequest(
             operation="read_trace",
@@ -416,13 +512,13 @@ async def test_weekly_integration_fails_closed_to_abstain(
 
     assert response.operation == "submit_journal_entry"
     assert {
-        decision.verdict for decision in response.session.weekly_reviewer_decisions
+        decision.verdict for decision in reviewed.weekly_reviewer_decisions
     } == {"abstain"}
-    assert response.session.drift_result is not None
-    assert response.session.drift_result.delivery_state == "stable"
-    assert response.session.weekly_digest is not None
-    assert response.session.weekly_digest.response_mode == "high_uncertainty"
-    assert response.session.weekly_digest.mode_rationale == (
+    assert reviewed.drift_result is not None
+    assert reviewed.drift_result.delivery_state == "stable"
+    assert reviewed.weekly_digest is not None
+    assert reviewed.weekly_digest.response_mode == "high_uncertainty"
+    assert reviewed.weekly_digest.mode_rationale == (
         "The Weekly Drift Reviewer could not return usable evidence for this week."
     )
     assert trace.operation == "read_trace"
@@ -584,7 +680,7 @@ async def test_browser_state_restores_after_in_memory_service_restart() -> None:
 
 
 @pytest.mark.asyncio
-async def test_browser_nudge_response_recomputes_affected_week() -> None:
+async def test_browser_nudge_response_does_not_review_open_week() -> None:
     service, runtime, weekly_reviewer = _service([_receipt()])
     create_request = await _create(service)
     first = await service.submit_journal_entry(
@@ -628,12 +724,11 @@ async def test_browser_nudge_response_recomputes_affected_week() -> None:
     assert synchronized.session.journal_entries[0].nudge_response == response_text
     assert synchronized.session.nudges[0].outcome == "answered"
     assert len(runtime.requests) == 1
-    assert len(weekly_reviewer.requests) == 2
-    assert response_text in weekly_reviewer.requests[-1].history[0].text
+    assert weekly_reviewer.requests == []
 
 
 @pytest.mark.asyncio
-async def test_browser_nudge_skip_recomputes_without_changing_entry() -> None:
+async def test_browser_nudge_skip_does_not_review_open_week() -> None:
     service, runtime, weekly_reviewer = _service([_receipt()])
     create_request = await _create(service)
     first = await service.submit_journal_entry(
@@ -674,7 +769,7 @@ async def test_browser_nudge_skip_recomputes_without_changing_entry() -> None:
     assert synchronized.session.journal_entries == first.session.journal_entries
     assert synchronized.session.nudges[0].outcome == "skipped"
     assert len(runtime.requests) == 1
-    assert len(weekly_reviewer.requests) == 2
+    assert weekly_reviewer.requests == []
 
 
 @pytest.mark.asyncio
@@ -724,7 +819,7 @@ async def test_browser_update_rejects_a_stale_trace() -> None:
 
     assert stale.operation == "error"
     assert stale.error.code == "session_conflict"
-    assert len(weekly_reviewer.requests) == 1
+    assert weekly_reviewer.requests == []
 
 
 @pytest.mark.asyncio
@@ -798,6 +893,10 @@ async def test_browser_removal_recomputes_without_removed_journal_entry() -> Non
     second = await service.submit_journal_entry(
         _submit_request(create_request, index=1, expected_revision=1)
     )
+    _, _ = await service.run_due_weekly_reviews(
+        session_id=create_request.profile.session_id,
+        as_of=date(2026, 7, 27),
+    )
     before = await service.read_trace(
         TraceReadRequest(
             operation="read_trace",
@@ -841,7 +940,7 @@ async def test_browser_removal_recomputes_without_removed_journal_entry() -> Non
     assert synchronized.session.weekly_digest is not None
     assert synchronized.session.weekly_digest.n_entries == 1
     assert len(runtime.requests) == 2
-    assert len(weekly_reviewer.requests) == 3
+    assert len(weekly_reviewer.requests) == 2
     assert [entry.t_index for entry in weekly_reviewer.requests[-1].history] == [1]
 
 
@@ -1135,10 +1234,6 @@ def test_http_adapter_validates_and_serves_contract_responses() -> None:
         "journal_entry_submitted",
         "nudge_suppression_checked",
         "nudge_decided",
-        "weekly_review_requested",
-        "weekly_review_completed",
-        "drift_detected",
-        "weekly_digest_built",
     ]
 
 

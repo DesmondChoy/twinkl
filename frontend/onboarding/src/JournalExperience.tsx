@@ -127,7 +127,7 @@ function statusCopy(experience: ExperienceState): string | null {
     case "checking_nudge":
       return "Saved. Looking for one useful follow-up…";
     case "running":
-      return "Updating your week…";
+      return "Updating saved details…";
     case "awaiting_response":
       return experience.error_message ?? "A follow-up question is ready.";
     case "complete":
@@ -451,7 +451,7 @@ export default function JournalExperience({
         run_state: "awaiting_response",
         retryable: false,
         error_message:
-          "Your response is still here, but this week could not update. Try again.",
+          "Your response is still here, but the saved Journal Entry could not update. Try again.",
       });
     }
   };
@@ -462,7 +462,7 @@ export default function JournalExperience({
       isAwaitingResponse ||
       removingEntryId !== null ||
       !window.confirm(
-        "Remove this Journal Entry and update the affected weekly results?",
+        "Remove this Journal Entry? Any reviewed later weeks will update.",
       )
     ) {
       return;

@@ -17,11 +17,13 @@ the label-free Core Value summary. The final action opens the manual
 Journal Entry flow. The React Experience passes the confirmed Profile and
 ordered Journal Entries through the versioned Python boundary, applies the
 anti-annoyance rule, and shows the resulting displayed nudge with reply or
-skip actions. The same submission runs the fixed Weekly Drift Reviewer,
-applies the Drift Detector, and shows a cited Weekly Digest. Inspect reads the
-linked live trace events. Profile confirmation starts this trace when the
-Python boundary is available; without it, Experience stays usable and Inspect
-shows zero events instead of fixture events. Retryable failures include a retry
+skip actions. Saving a Journal Entry does not review its open
+Monday-through-Sunday week. After Sunday, a due-review caller runs the fixed
+Weekly Drift Reviewer, applies the Drift Detector, and shows a cited Weekly
+Digest. The first partial week follows the same rule. Inspect reads the linked
+live trace events. Profile confirmation starts this trace when the Python
+boundary is available; without it, Experience stays usable and Inspect shows
+zero events instead of fixture events. Retryable failures include a retry
 action. **Try demo** loads one of five saved synthetic personas into the same
 React session and replays Journal Entries, displayed nudges and responses,
 Drift, Weekly Digests, and Inspect events one week at a time. Previous, next,
@@ -98,9 +100,13 @@ through the validated session request. Provider keys stay on the Python side.
 Nudge reply and skip outcomes remain in the resumable browser session, while
 the Python boundary records nudge generation events for Inspect. Saving either
 outcome, or confirming Journal Entry removal, advances the session revision and
-recomputes the affected week plus any later weeks. A failed synchronization
+recomputes affected closed weeks that were already reviewed; an open week
+remains unreviewed. The due-review method accepts an `as_of` date resolved in
+the user's IANA timezone. The React POC uses the browser-local date of a later
+Journal Entry to catch up closed weeks; a production background scheduler and
+durable timezone storage remain outside the capstone. A failed synchronization
 keeps the Journal Entry or response in the browser for a contextual retry.
 Removed Journal Entry positions are not reused, and Inspect marks their
-immutable submission events as removed from the current Experience.
-Production authentication, multi-tenant storage, and generalized persistence
-remain outside the time-boxed capstone.
+immutable submission events as removed from the current Experience. Production
+authentication, multi-tenant storage, and generalized persistence remain
+outside the time-boxed capstone.
