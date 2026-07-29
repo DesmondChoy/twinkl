@@ -171,9 +171,9 @@ different card in `Least`.
 - On narrow screens, Most and Least appear together before a compact two-column
   card grid. Both boxes and all six initial cards fit within the viewport, so
   the 11 assessment groups do not require vertical scrolling.
-- On wide screens, Most and Least appear together before a compact one-row card
-  grid. Both boxes and all six initial cards fit within the viewport, so the 11
-  assessment groups do not require vertical scrolling.
+- On wide screens, Most and Least appear together before a compact two-row,
+  three-column card grid. Both boxes and all six initial cards fit within the
+  viewport, so the 11 assessment groups do not require vertical scrolling.
 - The active empty box glows: Most before the first choice, then Least before
   the second choice.
 - Before both choices are set, a placed card can return to the selection area
@@ -203,6 +203,10 @@ user is not asked to rank, promote, or demote the internal Schwartz categories.
 The confirmed Core Value descriptions remain visible through the first Journal
 Entry handoff and manual editor.
 
+On wide screens, the summary and Profile confirmation handoff compact their
+spacing so the primary action remains in view for typical results. Longer
+exact-tie lists scroll rather than clip a Core Value.
+
 ### 4.4 First Journal Entry handoff
 
 The completed flow opens the generic first Journal Entry prompt and exposes the
@@ -214,6 +218,10 @@ confirmed Profile through:
 The standalone React POC stores its resumable session and confirmed Profile in
 browser `localStorage`. This implementation boundary is documented here and in
 the onboarding README; it is not presented as task guidance in the user flow.
+
+The initial wide-screen editor keeps its prompt, Core Values, composer, and
+primary action together; later Journal Entry history scrolls normally as it
+grows.
 
 ## 5. Scoring and Product Transformation
 

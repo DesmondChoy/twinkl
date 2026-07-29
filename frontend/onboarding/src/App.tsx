@@ -439,11 +439,20 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
     }
   }, [updateExperience]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
     if (activeView === "experience") {
-      headingRef.current?.focus();
+      headingRef.current?.focus({ preventScroll: true });
     }
-  }, [session.stage, session.set_index, journalStarted, activeView]);
+  }, [
+    session.stage,
+    session.set_index,
+    journalStarted,
+    activeView,
+    selectedPersonaId,
+    personaPickerOpen,
+  ]);
 
   useEffect(() => {
     const profile = session.confirmed_profile;

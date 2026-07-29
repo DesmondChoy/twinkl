@@ -545,6 +545,8 @@ describe("persona replay", () => {
     await user.click(
       await screen.findByRole("radio", { name: /Wei Jun Chen/i }),
     );
+    document.documentElement.scrollTop = 640;
+    document.body.scrollTop = 640;
     await user.click(
       screen.getByRole("button", { name: "Replay Wei Jun Chen" }),
     );
@@ -553,6 +555,8 @@ describe("persona replay", () => {
         name: "Wei Jun Chen, week by week.",
       }),
     ).toBeTruthy();
+    expect(document.documentElement.scrollTop).toBe(0);
+    expect(document.body.scrollTop).toBe(0);
     for (let week = 1; week < 6; week += 1) {
       await user.click(screen.getByRole("button", { name: "Next" }));
     }
