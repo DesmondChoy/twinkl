@@ -30,8 +30,11 @@ BWS preference shares.
   event. The approved runtime imports saved Profile JSON through
   `--profile-path`.
 - In the shared Experience and Inspect app, Profile confirmation also starts
-  the in-memory Python session when that boundary is available. Inspect then
-  shows the resulting Profile trace event and no later events.
+  the in-memory Python session when that boundary is available. After all 11
+  groups and before confirmation, Inspect shows the 11 recorded Most
+  selections, 11 recorded Least selections, and completed Profile
+  transformation without presenting them as backend work. After confirmation,
+  Inspect also shows the resulting Profile trace event and no later events.
 - The first Journal Entry editor and later Profile evolution are outside this
   specification.
 

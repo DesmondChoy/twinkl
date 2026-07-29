@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { TraceEventContract } from "./demoContracts";
+import type { BwsResponse, ScoreBundle } from "./domain";
+import OnboardingScoreInspection from "./OnboardingScoreInspection";
 
 type JsonRecord = Record<string, unknown>;
 
@@ -13,6 +15,12 @@ interface InspectViewProps {
   currentJournalEntryIds?: string[];
   emptyActionLabel?: string;
   emptyMessage?: string;
+  onboarding?: {
+    confirmed: boolean;
+    responses: BwsResponse[];
+    scores: ScoreBundle;
+    setOrder: number[];
+  };
   onEmptyAction?: () => void;
   selectedEventId: string | null;
   traceLabel: string;
@@ -324,6 +332,7 @@ export default function InspectView({
   currentJournalEntryIds,
   emptyActionLabel,
   emptyMessage = "No backend work has been recorded for this Experience yet.",
+  onboarding,
   onEmptyAction,
   selectedEventId,
   traceLabel,
@@ -377,11 +386,18 @@ export default function InspectView({
     <div className="stage stage--inspect">
       <div className="inspect-intro">
         <div>
-          <p className="eyebrow">Inspect</p>
-          <h1 ref={headingRef} tabIndex={-1}>Follow the work, event by event.</h1>
+          <p className="eyebrow">
+            {onboarding ? "Assessment evidence" : "Inspect"}
+          </p>
+          <h1 ref={headingRef} tabIndex={-1}>
+            {onboarding
+              ? "See how each trade-off shaped this Profile."
+              : "Follow the work, step by step."}
+          </h1>
           <p className="lede">
-            Each row is one trace event. Open it to see the inputs, exact prompt
-            when applicable, validation, and effective result.
+            {onboarding
+              ? "The assessment recorded one Most and one Least card in each question. Below, those 22 choices are followed into Schwartz scores, the ten-value Profile, and the exact phrases shown in Experience."
+              : "Each row is one trace event. Open it to see the inputs, exact prompt when applicable, validation, and effective result."}
           </p>
         </div>
         <button className="button button--quiet" type="button" onClick={onReturn}>
@@ -389,15 +405,43 @@ export default function InspectView({
         </button>
       </div>
 
-      <div className="inspect-overview" aria-label="Trace summary">
-        <span>{traceLabel}</span>
-        <span>{countLabel(events.length, "trace event")}</span>
-        <span>
-          {sourceLabels.length > 0
-            ? sourceLabels.join(" + ")
-            : "No backend events yet"}
-        </span>
+      <div
+        className="inspect-overview"
+        aria-label={onboarding ? "Assessment summary" : "Trace summary"}
+      >
+        {onboarding ? (
+          <>
+            <span>{onboarding.responses.length} of 11 questions complete</span>
+            <span>{onboarding.responses.length * 2} recorded selections</span>
+            <span>
+              {events.length > 0
+                ? "Python validation recorded"
+                : onboarding.confirmed
+                  ? "Python validation unavailable"
+                  : "Python validation follows confirmation"}
+            </span>
+          </>
+        ) : (
+          <>
+            <span>{traceLabel}</span>
+            <span>{countLabel(events.length, "trace event")}</span>
+            <span>
+              {sourceLabels.length > 0
+                ? sourceLabels.join(" + ")
+                : "No backend events yet"}
+            </span>
+          </>
+        )}
       </div>
+
+      {onboarding ? (
+        <OnboardingScoreInspection
+          confirmed={onboarding.confirmed}
+          responses={onboarding.responses}
+          scores={onboarding.scores}
+          setOrder={onboarding.setOrder}
+        />
+      ) : null}
 
       {selectedEvent ? (
         <div className="inspect-selection" data-testid="inspect-selection">
@@ -414,84 +458,103 @@ export default function InspectView({
         </div>
       ) : null}
 
-      {events.length === 0 ? (
-        <div className="inspect-empty">
-          <p role="status">{emptyMessage}</p>
-          {emptyActionLabel && onEmptyAction ? (
-            <button
-              className="button button--quiet"
-              type="button"
-              onClick={onEmptyAction}
-            >
-              {emptyActionLabel}
-            </button>
-          ) : null}
-        </div>
-      ) : (
-        <ol className="inspect-timeline" aria-label="Trace events">
-          {events.map((event, index) => {
-            const presentation = eventPresentation(event.event_type);
-            const status = STATUS_LABELS[event.status] ?? titleCase(event.status);
-            const source = SOURCE_LABELS[event.source] ?? titleCase(event.source);
-            const parentNumber = event.parent_event_id
-              ? eventNumbers.get(event.parent_event_id)
-              : null;
-            const isSelected = event.event_id === selectedEventId;
-            const isExpanded = expandedEvents.has(event.event_id);
-            return (
-              <li className="trace-event" key={event.event_id}>
-                <span className="trace-event__node" aria-hidden="true">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <details
-                  className="trace-event__card"
-                  data-selected={isSelected ? "true" : undefined}
-                  open={isExpanded}
-                  onToggle={(toggleEvent) =>
-                    setEventExpanded(event.event_id, toggleEvent.currentTarget.open)}
-                >
-                  <summary
-                    ref={(node) => {
-                      if (node) eventRefs.current.set(event.event_id, node);
-                      else eventRefs.current.delete(event.event_id);
-                    }}
-                    aria-current={isSelected ? "true" : undefined}
-                    aria-label={`Event ${index + 1}: ${presentation.label}, ${status}, ${source}`}
+      <section
+        className="backend-trace"
+        aria-labelledby={onboarding ? "backend-trace-title" : undefined}
+      >
+        {onboarding ? (
+          <header className="backend-trace__heading">
+            <div>
+              <p className="eyebrow">Python boundary</p>
+              <h2 id="backend-trace-title">Validation and later work.</h2>
+            </div>
+            <p>
+              Profile confirmation starts the Python Experience session. Later
+              trace events show model calls, validation, and deterministic
+              product logic.
+            </p>
+          </header>
+        ) : null}
+
+        {events.length === 0 ? (
+          <div className="inspect-empty">
+            <p role="status">{emptyMessage}</p>
+            {emptyActionLabel && onEmptyAction ? (
+              <button
+                className="button button--quiet"
+                type="button"
+                onClick={onEmptyAction}
+              >
+                {emptyActionLabel}
+              </button>
+            ) : null}
+          </div>
+        ) : (
+          <ol className="inspect-timeline" aria-label="Trace events">
+            {events.map((event, index) => {
+              const presentation = eventPresentation(event.event_type);
+              const status = STATUS_LABELS[event.status] ?? titleCase(event.status);
+              const source = SOURCE_LABELS[event.source] ?? titleCase(event.source);
+              const parentNumber = event.parent_event_id
+                ? eventNumbers.get(event.parent_event_id)
+                : null;
+              const isSelected = event.event_id === selectedEventId;
+              const isExpanded = expandedEvents.has(event.event_id);
+              return (
+                <li className="trace-event" key={event.event_id}>
+                  <span className="trace-event__node" aria-hidden="true">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <details
+                    className="trace-event__card"
+                    data-selected={isSelected ? "true" : undefined}
+                    open={isExpanded}
+                    onToggle={(toggleEvent) =>
+                      setEventExpanded(event.event_id, toggleEvent.currentTarget.open)}
                   >
-                    <span className="trace-event__copy">
-                      <span className="trace-event__component">
-                        {presentation.component}
+                    <summary
+                      ref={(node) => {
+                        if (node) eventRefs.current.set(event.event_id, node);
+                        else eventRefs.current.delete(event.event_id);
+                      }}
+                      aria-current={isSelected ? "true" : undefined}
+                      aria-label={`Event ${index + 1}: ${presentation.label}, ${status}, ${source}`}
+                    >
+                      <span className="trace-event__copy">
+                        <span className="trace-event__component">
+                          {presentation.component}
+                        </span>
+                        <span className="trace-event__name">{presentation.label}</span>
+                        <span className="trace-event__result">
+                          {eventSummary(event, currentJournalEntryIdSet)}
+                        </span>
                       </span>
-                      <span className="trace-event__name">{presentation.label}</span>
-                      <span className="trace-event__result">
-                        {eventSummary(event, currentJournalEntryIdSet)}
+                      <span className="trace-event__aside">
+                        <span className={`trace-chip trace-chip--status-${event.status}`}>
+                          {status}
+                        </span>
+                        <span className={`trace-chip trace-chip--source-${event.source}`}>
+                          {source}
+                        </span>
+                        <span className="trace-event__duration">
+                          {formatDuration(event.duration_ms)}
+                        </span>
+                        <span className="trace-event__disclosure" aria-hidden="true">+</span>
                       </span>
-                    </span>
-                    <span className="trace-event__aside">
-                      <span className={`trace-chip trace-chip--status-${event.status}`}>
-                        {status}
+                      <span className="trace-event__parent">
+                        {parentNumber
+                          ? `After event ${String(parentNumber).padStart(2, "0")}`
+                          : "Trace root"}
                       </span>
-                      <span className={`trace-chip trace-chip--source-${event.source}`}>
-                        {source}
-                      </span>
-                      <span className="trace-event__duration">
-                        {formatDuration(event.duration_ms)}
-                      </span>
-                      <span className="trace-event__disclosure" aria-hidden="true">+</span>
-                    </span>
-                    <span className="trace-event__parent">
-                      {parentNumber
-                        ? `After event ${String(parentNumber).padStart(2, "0")}`
-                        : "Trace root"}
-                    </span>
-                  </summary>
-                  {isExpanded ? <EventDetails event={event} /> : null}
-                </details>
-              </li>
-            );
-          })}
-        </ol>
-      )}
+                    </summary>
+                    {isExpanded ? <EventDetails event={event} /> : null}
+                  </details>
+                </li>
+              );
+            })}
+          </ol>
+        )}
+      </section>
     </div>
   );
 }

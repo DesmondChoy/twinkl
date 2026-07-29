@@ -29,8 +29,8 @@ session. A persistent two-option control switches between:
 
 - **Experience** — the user-facing journey through onboarding, Journal Entries,
   displayed nudges and responses, Drift, and the Weekly Digest.
-- **Inspect** — the developer-facing explanation of the exact backend work that
-  produced the currently selected result.
+- **Inspect** — the professor-facing explanation of the exact browser
+  calculation and backend work that produced the currently selected result.
 
 The two views are not separate demonstrations. They read the same Profile,
 Journal Entries, Weekly Drift Reviewer Decisions, Drift state, Weekly Digest,
@@ -68,8 +68,8 @@ information hierarchy, interaction order, or acceptance of the mobile flow.
 
 | Session stage | Experience | Inspect |
 |---|---|---|
-| Active SVBWS card selection | Enabled | Disabled with “Available after Profile confirmation” |
-| Goal and Core Value confirmation | Enabled | Disabled |
+| Active SVBWS card selection | Enabled | Disabled with “Available after all 11 questions” |
+| Value summary before confirmation | Enabled | Enabled; shows the complete browser calculation and highest-scoring values |
 | Confirmed Profile handoff | Enabled | Enabled; shows the Profile handoff and validation |
 | Journal Entry draft or nudge check | Enabled | Enabled; follows the active Journal Entry event |
 | Weekly review or Weekly Coach work | Enabled | Enabled; follows the active run |
@@ -190,8 +190,8 @@ exposing internal reasoning text.
 
 ### 6.1 Information hierarchy
 
-Inspect opens on a readable event timeline, not a telemetry dump. The first
-level answers:
+Inspect opens on a readable calculation and event timeline, not a telemetry
+dump. The first level answers:
 
 1. What happened?
 2. What component did it?
@@ -200,6 +200,31 @@ level answers:
 5. Was it replayed, generated live, reused, refused, invalid, or failed?
 
 Detailed inputs, prompts, responses, and validation expand on demand.
+
+Before the backend event timeline, Inspect presents the completed browser-side
+SVBWS calculation as a professor-facing explanation rather than developer
+documentation. It shows:
+
+- two aligned evidence columns containing the 11 recorded Most selections and
+  11 recorded Least selections in presentation order;
+- the repeated card names and overall selection counts before any
+  transformation;
+- the exact Most-minus-Least calculation beside each score in the ten-value
+  Profile table;
+- the two-facet Universalism mean and the ten-value Profile transformation;
+- the exact Schwartz value-to-Experience phrase mapping;
+- every highest-score tie before confirmation and the resulting Core Values
+  after confirmation;
+- completeness, balanced-exposure, distinct-choice, and weight-total checks;
+  and
+- the explicit boundary that the deterministic calculation makes no model,
+  reliability, confidence, diagnostic, or clinical claim.
+
+This calculation is labelled **Calculation method** and **Deterministic · no
+model**.
+It is not fabricated as a Python trace event. Profile confirmation remains the
+first Python event, preserving the React ownership of onboarding scoring and
+the Python ownership of confirmed Profile validation.
 
 ### 6.2 Trace event types
 

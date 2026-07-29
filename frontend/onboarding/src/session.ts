@@ -347,7 +347,7 @@ export function parseSession(raw: string | null): OnboardingSession | null {
     if (session.stage === "complete") {
       validateProfile(session.confirmed_profile);
     }
-    if (session.experience.active_view === "inspect" && !session.confirmed_profile) {
+    if (session.experience.active_view === "inspect" && session.stage === "set") {
       return null;
     }
     return session as OnboardingSession;
@@ -391,7 +391,7 @@ export function clearSession(): boolean {
 }
 
 export function showView(session: OnboardingSession, view: DemoView): OnboardingSession {
-  if (view === "inspect" && !session.confirmed_profile) return session;
+  if (view === "inspect" && session.stage === "set") return session;
   if (session.experience.active_view === view) return session;
   return {
     ...session,

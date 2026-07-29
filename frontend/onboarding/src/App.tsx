@@ -350,7 +350,9 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
   const journalStarted = session.experience.journal_started;
   const activeView = session.experience.active_view;
   const selectedPersonaId = session.experience.selected_persona_id;
-  const inspectAvailable = session.confirmed_profile !== null;
+  const inspectAvailable = session.stage !== "set"
+    && session.responses.length === BWS_SETS.length;
+  const profileAwaitingConfirmation = session.stage === "summary";
   const profileTraceReady = session.confirmed_profile !== null
     && session.experience.trace_events.some(
       (event) =>
@@ -798,15 +800,15 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
             aria-pressed={activeView === "inspect"}
             aria-disabled={!inspectAvailable}
             aria-describedby={!inspectAvailable ? "inspect-availability" : undefined}
-            title={!inspectAvailable ? "Available after Profile confirmation" : undefined}
+            title={!inspectAvailable ? "Available after all 11 questions" : undefined}
             onClick={() => showView("inspect")}
           >
             <span>Inspect</span>
-            {!inspectAvailable ? <small>After Profile</small> : null}
+            {!inspectAvailable ? <small>After questions</small> : null}
           </button>
           {!inspectAvailable ? (
             <span className="sr-only" id="inspect-availability">
-              Available after Profile confirmation
+              Available after all 11 questions
             </span>
           ) : null}
         </nav>
@@ -1076,12 +1078,12 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
               <span />
             </div>
             <div className="instrument-copy">
-              <p className="eyebrow">Contract trace</p>
-              <h2>Behind each result.</h2>
+              <p className="eyebrow">Assessment evidence</p>
+              <h2>Every result has a trail.</h2>
               <p>
                 {session.experience.trace_events.length > 0
-                  ? "Inspect shows the Python work behind the current Experience."
-                  : "Inspect is waiting for backend work from the current Experience."}
+                  ? "The selections, scoring steps, Profile mapping, and Python validation are shown in the order they occurred."
+                  : "The selections, scoring steps, and Profile mapping are shown exactly as they occurred. Python validation appears after confirmation."}
               </p>
             </div>
           </aside>
@@ -1095,10 +1097,18 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
                     )
                   : undefined
               }
+              onboarding={scores ? {
+                confirmed: session.confirmed_profile !== null,
+                responses: session.responses,
+                scores,
+                setOrder: session.set_order,
+              } : undefined}
               selectedEventId={session.experience.selected_event_id}
               traceLabel="Current Experience session"
               emptyMessage={
-                profileTracePending
+                profileAwaitingConfirmation
+                  ? "The browser calculation is complete. Confirm the result in Experience to send the Profile to Python validation."
+                  : profileTracePending
                   ? "Profile validation is in progress. No later work has happened."
                   : profileTraceFailed
                     ? session.experience.error_message

@@ -132,10 +132,17 @@ describe("onboarding session", () => {
     expect(migrated).not.toHaveProperty("goal_category");
   });
 
-  it("keeps Inspect unavailable before Profile confirmation and preserves event selection", () => {
+  it("unlocks Inspect after all 11 questions and preserves event selection", () => {
     const session = createSession(() => 0.5);
     expect(showView(session, "inspect")).toBe(session);
     expect(inspectRun(session, "event-09")).toBe(session);
+
+    session.stage = "summary";
+    session.set_index = 10;
+    session.responses = completeResponses();
+    const scoreInspection = showView(session, "inspect");
+    expect(scoreInspection.experience.active_view).toBe("inspect");
+    expect(parseSession(JSON.stringify(scoreInspection))).toEqual(scoreInspection);
 
     session.confirmed_profile = {} as NonNullable<typeof session.confirmed_profile>;
     session.experience.trace_event_ids = ["event-09"];

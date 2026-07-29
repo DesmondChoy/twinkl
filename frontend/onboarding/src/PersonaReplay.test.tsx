@@ -576,7 +576,7 @@ describe("persona replay", () => {
     );
     expect(
       screen.getByRole("heading", {
-        name: "Follow the work, event by event.",
+        name: "See how each trade-off shaped this Profile.",
       }),
     ).toBeTruthy();
     expect(screen.getAllByText("Saved replay").length).toBeGreaterThan(0);

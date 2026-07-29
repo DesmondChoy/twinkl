@@ -154,9 +154,13 @@ describe("onboarding app", () => {
     expect(screen.queryByText("Universalism")).toBeNull();
     const inspect = screen.getByRole("button", { name: /inspect/i });
     expect(inspect.getAttribute("aria-disabled")).toBe("true");
-    expect(screen.getByText("Available after Profile confirmation")).toBeTruthy();
+    expect(screen.getByText("Available after all 11 questions")).toBeTruthy();
     fireEvent.click(inspect);
-    expect(screen.queryByRole("heading", { name: "Follow the work, event by event." })).toBeNull();
+    expect(
+      screen.queryByRole("heading", {
+        name: "See how each trade-off shaped this Profile.",
+      }),
+    ).toBeNull();
     expect(screen.getByTestId("drop-most").classList.contains("drop-box--guided")).toBe(true);
     expect(screen.getByTestId("drop-least").classList.contains("drop-box--guided")).toBe(false);
   });
@@ -352,6 +356,24 @@ describe("onboarding app", () => {
         "This result reflects the Most and Least choices you made most consistently across all 11 groups.",
       ),
     ).toBeTruthy();
+    const summaryInspect = screen.getByRole("button", { name: "Inspect" });
+    expect(summaryInspect.getAttribute("aria-disabled")).toBe("false");
+    fireEvent.click(summaryInspect);
+    expect(
+      screen.getByRole("heading", {
+        name: "Begin with the recorded choices.",
+      }),
+    ).toBeTruthy();
+    expect(screen.getByText("Calculation method")).toBeTruthy();
+    expect(screen.getByText("Deterministic · no model")).toBeTruthy();
+    expect(
+      screen.getByRole("region", {
+        name: "Recorded Most and Least selections",
+      }),
+    ).toBeTruthy();
+    expect(screen.getByText(/Confirm the result in Experience/)).toBeTruthy();
+    expect(screen.queryByText("Profile confirmed")).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "Return to Experience" }));
     fireEvent.click(screen.getByRole("button", { name: "Confirm my compass" }));
     expect(screen.getByRole("heading", { name: "Your compass is ready." })).toBeTruthy();
     expect(
@@ -363,8 +385,9 @@ describe("onboarding app", () => {
     await act(async () => undefined);
     expect(createExperienceSession).toHaveBeenCalledTimes(1);
     fireEvent.click(screen.getByRole("button", { name: "Inspect" }));
-    expect(screen.getByText("Current Experience session")).toBeTruthy();
-    expect(screen.getByText("1 trace event")).toBeTruthy();
+    expect(screen.getByText("11 of 11 questions complete")).toBeTruthy();
+    expect(screen.getByText("22 recorded selections")).toBeTruthy();
+    expect(screen.getByText("Python validation recorded")).toBeTruthy();
     expect(screen.getByText("Profile confirmed")).toBeTruthy();
     expect(screen.queryByText("Canonical contract fixture")).toBeNull();
     expect(screen.queryByText("Journal Entry submitted")).toBeNull();
@@ -389,9 +412,17 @@ describe("onboarding app", () => {
     vi.useRealTimers();
     const user = userEvent.setup();
     await user.keyboard("{Enter}");
-    expect(screen.getByRole("heading", { name: "Follow the work, event by event." })).toBeTruthy();
-    expect(document.activeElement).toBe(screen.getByRole("heading", { name: "Follow the work, event by event." }));
-    expect(screen.getByText("1 trace event")).toBeTruthy();
+    expect(
+      screen.getByRole("heading", {
+        name: "See how each trade-off shaped this Profile.",
+      }),
+    ).toBeTruthy();
+    expect(document.activeElement).toBe(
+      screen.getByRole("heading", {
+        name: "See how each trade-off shaped this Profile.",
+      }),
+    );
+    expect(screen.getByText("Python validation recorded")).toBeTruthy();
     expect(screen.queryByText("Journal Entry submitted")).toBeNull();
     expect(screen.queryByText("Nudge decided")).toBeNull();
     expect(onStartJournal).toHaveBeenCalledTimes(1);
@@ -416,7 +447,11 @@ describe("onboarding app", () => {
     fireEvent.click(screen.getByRole("button", { name: "Inspect" }));
     unmount();
     render(<App onStartJournal={onStartJournal} />);
-    expect(screen.getByRole("heading", { name: "Follow the work, event by event." })).toBeTruthy();
+    expect(
+      screen.getByRole("heading", {
+        name: "See how each trade-off shaped this Profile.",
+      }),
+    ).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: "Experience" }));
     expect((screen.getByRole("textbox", { name: "First Journal Entry" }) as HTMLTextAreaElement).value)
       .toBe("A quiet walk helped me think clearly.");
@@ -440,8 +475,7 @@ describe("onboarding app", () => {
     ).toBeTruthy();
 
     fireEvent.click(screen.getByRole("button", { name: "Inspect" }));
-    expect(screen.getByText("0 trace events")).toBeTruthy();
-    expect(screen.getByText("No backend events yet")).toBeTruthy();
+    expect(screen.getByText("Python validation unavailable")).toBeTruthy();
     expect(screen.queryByText("Canonical contract fixture")).toBeNull();
     expect(screen.queryByText("Journal Entry submitted")).toBeNull();
     expect(screen.queryByText("Nudge decided")).toBeNull();
@@ -453,7 +487,7 @@ describe("onboarding app", () => {
       screen.getByRole("button", { name: "Retry Profile validation" }),
     );
     await act(async () => undefined);
-    expect(screen.getByText("1 trace event")).toBeTruthy();
+    expect(screen.getByText("Python validation recorded")).toBeTruthy();
     expect(screen.getByText("Profile confirmed")).toBeTruthy();
   });
 
