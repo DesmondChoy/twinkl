@@ -1,4 +1,4 @@
-"""Tests for the Weekly Digest and Weekly Coach vertical slice."""
+"""Tests for the Weekly Drift Detection output and Coach Digest vertical slice."""
 
 import asyncio
 import json
@@ -140,7 +140,7 @@ def test_build_weekly_digest_and_render(tmp_path: Path):
     md = render_digest_markdown(digest)
     prompt = render_digest_prompt(digest)
 
-    assert "Weekly Alignment Digest: Casey" in md
+    assert "Weekly Drift Detection: Casey" in md
     assert "Response mode" in md
     assert "Full Journal History" not in md
     assert "Evidence Snippets" in md
@@ -649,7 +649,7 @@ def test_validation_flags_ungrounded_quotes():
     assert not validation.groundedness_passed
     assert validation.grounded_quotes == []
     ground_check = next(c for c in validation.checks if c.name == "groundedness")
-    assert "No quoted evidence" in ground_check.details
+    assert "No quoted phrase from selected evidence" in ground_check.details
 
 
 def test_validation_passes_grounded_quotes():

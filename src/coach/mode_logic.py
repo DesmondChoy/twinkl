@@ -1,4 +1,4 @@
-"""Fallback mode logic for weekly Coach digests.
+"""Fallback mode logic for Coach Digest compatibility.
 
 This module keeps weekly response-mode heuristics isolated from the main
 digest-building code so they can be evolved independently as the Coach
@@ -43,7 +43,7 @@ BACKGROUND_STRAIN_PATTERNS = (
 
 @dataclass(frozen=True)
 class WeeklyModeDecision:
-    """Resolved weekly Coach mode plus short provenance metadata."""
+    """Resolved Coach Digest mode plus short provenance metadata."""
 
     response_mode: CoachResponseMode
     mode_source: str
@@ -98,7 +98,9 @@ def infer_response_mode(signals: WeeklyModeSignals) -> WeeklyModeDecision:
             ),
         )
 
-    critical_core_tensions = [dim for dim in signals.top_tensions if dim in signals.core_values]
+    critical_core_tensions = [
+        dim for dim in signals.top_tensions if dim in signals.core_values
+    ]
     if signals.overall_mean < -0.15 and critical_core_tensions:
         return WeeklyModeDecision(
             response_mode="rut",
@@ -119,7 +121,8 @@ def infer_response_mode(signals: WeeklyModeSignals) -> WeeklyModeDecision:
             mode_source="fallback_heuristic",
             mode_rationale=(
                 "The week contains genuinely mixed signals, including both supportive "
-                "and straining evidence, without collapsing into a single dominant direction."
+                "and straining evidence, without collapsing into a single dominant "
+                "direction."
             ),
         )
 

@@ -3230,7 +3230,7 @@
         "model": "gpt-5.4-mini",
         "reasoning_effort": "none"
       },
-      "prompt": "Turn the Weekly Digest into a reflection and one question.",
+      "prompt": "Use Weekly Drift Detection output to produce a Coach Digest response.",
       "raw_response": {
         "weekly_mirror": "You wrote twice about choosing work over time with your sister.",
         "tension_explanation": "Those choices conflict with the importance you placed on being present for people close to you.",

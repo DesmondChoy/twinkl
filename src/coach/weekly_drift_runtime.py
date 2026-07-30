@@ -1,4 +1,4 @@
-"""Approved Weekly Drift Reviewer to Weekly Coach runtime."""
+"""Weekly Drift Detection and Coach Digest runtime."""
 
 from __future__ import annotations
 
@@ -132,7 +132,7 @@ async def run_weekly_drift_coach_cycle(
     reviewer: WeeklyDriftReviewerFn | None = None,
     coach_llm_complete=None,
 ) -> tuple[WeeklyDigest, dict[str, str]]:
-    """Run the approved weekly-only path through the Weekly Digest."""
+    """Run Weekly Drift Detection and optionally produce a Coach Digest response."""
     wrangled_path = Path(wrangled_dir)
     output_path = Path(output_dir)
     synthetic_profile, entries = _load_runtime_input(
@@ -295,7 +295,7 @@ def main() -> None:
         )
     )
     print(
-        f"Built approved Weekly Digest for {digest.persona_id} "
+        f"Built approved Weekly Drift Detection output for {digest.persona_id} "
         f"({digest.week_start} -> {digest.week_end})"
     )
     for name, path in artifact_paths.items():

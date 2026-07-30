@@ -582,7 +582,7 @@ def build_canonical_fixture() -> ContractFixtureSet:
             "model": "gpt-5.4-mini",
             "reasoning_effort": "none",
         },
-        prompt="Turn the Weekly Digest into a reflection and one question.",
+        prompt="Use Weekly Drift Detection output to produce a Coach Digest response.",
         raw_response=narrative.model_dump(),
         input_refs=[{"kind": "weekly_digest", "id": "digest-demo"}],
         result_refs=[{"kind": "weekly_coach", "id": "coach-demo"}],

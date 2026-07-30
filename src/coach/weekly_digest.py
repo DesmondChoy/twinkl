@@ -1,8 +1,8 @@
-"""Weekly Digest helpers for the Weekly Coach.
+"""Weekly Drift Detection output helpers for the Coach Digest.
 
-This module builds a structured Weekly Digest from offline files, renders a
-full-context Weekly Coach prompt, validates generated reflections, and persists
-Weekly Digest records for later analysis.
+This module builds structured Weekly Drift Detection output from offline files.
+It renders the Coach Digest prompt, validates generated responses, and persists
+the output for later analysis.
 """
 
 from __future__ import annotations
@@ -405,7 +405,7 @@ def build_weekly_digest(
     drift_result: DriftDetectionResult | None = None,
     response_mode: CoachResponseMode | None = None,
 ) -> WeeklyDigest:
-    """Build a structured Weekly Digest for one persona."""
+    """Build a structured Weekly Drift Detection output for one persona."""
     labels, signal_source = _load_signal_frame(
         persona_id=persona_id,
         labels_path=labels_path,
@@ -631,7 +631,7 @@ def build_weekly_drift_reviewer_digest(
     decisions: list[WeeklyDriftReviewerDecision],
     drift_result: DriftDetectorResult,
 ) -> WeeklyDigest:
-    """Build the approved Weekly Digest without VIF Critic or LLM-Judge signals."""
+    """Build approved output without VIF Critic or LLM-Judge signals."""
     resolved_start = _parse_iso_date(week_start)
     resolved_end = _parse_iso_date(week_end)
     if resolved_start > resolved_end:
@@ -720,7 +720,7 @@ def _build_prompt_inputs(
     digest: WeeklyDigest,
     config_path: Path = SCHWARTZ_CONFIG_PATH,
 ) -> dict[str, object]:
-    """Build template inputs for the Weekly Coach prompt."""
+    """Build template inputs for the Coach Digest prompt."""
     value_map = _load_schwartz_value_map(config_path)
     focus_dimensions = list(
         dict.fromkeys(digest.core_values + digest.top_tensions + digest.top_strengths)
@@ -782,7 +782,7 @@ def _build_prompt_inputs(
 
 
 def render_digest_prompt(digest: WeeklyDigest) -> str:
-    """Render the Weekly Coach prompt using full Weekly Digest context."""
+    """Render the Coach Digest prompt from Weekly Drift Detection output."""
     prompt = load_prompt("weekly_digest_coach")
     return prompt.render(**_build_prompt_inputs(digest))
 
@@ -802,7 +802,7 @@ def render_digest_markdown(digest: WeeklyDigest) -> str:
         or "No confirmed Drift"
     )
     lines = [
-        f"# Weekly Alignment Digest: {persona_label}",
+        f"# Weekly Drift Detection: {persona_label}",
         "",
         f"- Persona ID: `{digest.persona_id}`",
         f"- Window: `{digest.week_start}` to `{digest.week_end}`",
@@ -857,7 +857,7 @@ def render_digest_markdown(digest: WeeklyDigest) -> str:
         lines.extend(
             [
                 "",
-                "## Weekly Coach Reflection",
+                "## Coach Digest Response",
                 "",
                 f"### Weekly Mirror\n{digest.coach_narrative.weekly_mirror}",
                 "",
@@ -891,7 +891,7 @@ async def generate_weekly_digest_coach(
     digest: WeeklyDigest,
     llm_complete: LLMCompleteFn,
 ) -> tuple[CoachNarrative | None, str]:
-    """Generate a structured Weekly Coach reflection from a Weekly Digest."""
+    """Generate a Coach Digest response from Weekly Drift Detection output."""
     prompt = render_digest_prompt(digest)
     raw_json = await llm_complete(prompt, WEEKLY_DIGEST_COACH_RESPONSE_FORMAT)
     if not raw_json:
@@ -918,7 +918,7 @@ def _detect_value_label_leakage(
     text: str,
     config_path: Path = SCHWARTZ_CONFIG_PATH,
 ) -> list[str]:
-    """Return Schwartz value labels surfaced verbatim in a reflection."""
+    """Return Schwartz value labels surfaced verbatim in a Coach Digest response."""
     with open(config_path) as f:
         raw = yaml.safe_load(f) or {}
     labels = list((raw.get("values") or {}).keys())
@@ -939,7 +939,7 @@ def validate_weekly_digest_narrative(
     max_words: int = 180,
     config_path: Path = SCHWARTZ_CONFIG_PATH,
 ) -> DigestValidation:
-    """Run Tier 1 automated checks on a Weekly Coach reflection."""
+    """Run Tier 1 automated checks on a Coach Digest response."""
     combined_text = " ".join(
         [
             narrative.weekly_mirror.strip(),
@@ -978,19 +978,19 @@ def validate_weekly_digest_narrative(
             passed=bool(grounded_quotes),
             details=(
                 f"Found {len(grounded_quotes)} quoted phrase(s) that match "
-                "journal history."
+                "selected evidence."
                 if grounded_quotes
-                else "No quoted evidence from journal history was detected."
+                else "No quoted phrase from selected evidence was detected."
             ),
         ),
         ValidationCheck(
             name="non_circularity",
             passed=non_circularity_passed,
             details=(
-                "Narrative avoids raw scoring and alignment terminology."
+                "Response avoids raw scoring and alignment terminology."
                 if non_circularity_passed
                 else (
-                    "Narrative uses raw scoring or alignment terminology instead of "
+                    "Response uses raw scoring or alignment terminology instead of "
                     "reflective language."
                 )
             ),
@@ -999,10 +999,10 @@ def validate_weekly_digest_narrative(
             name="value_leakage",
             passed=value_leakage_passed,
             details=(
-                "Narrative avoids naming raw Schwartz value labels."
+                "Response avoids naming raw Schwartz value labels."
                 if value_leakage_passed
                 else (
-                    "Narrative names raw Schwartz value labels: "
+                    "Response names raw Schwartz value labels: "
                     f"{', '.join(leaked_values)}."
                 )
             ),
@@ -1011,7 +1011,7 @@ def validate_weekly_digest_narrative(
             name="length",
             passed=min_words <= word_count <= max_words,
             details=(
-                f"Combined narrative length is {word_count} words "
+                f"Combined response length is {word_count} words "
                 f"(target {min_words}-{max_words})."
             ),
         ),
@@ -1029,7 +1029,7 @@ def attach_coach_artifacts(
     coach_narrative: CoachNarrative | None,
     validation: DigestValidation | None = None,
 ) -> WeeklyDigest:
-    """Return a Weekly Digest with its Weekly Coach reflection attached."""
+    """Attach a Coach Digest response to Weekly Drift Detection output."""
     return digest.model_copy(
         update={
             "coach_narrative": coach_narrative,
@@ -1122,7 +1122,9 @@ def _default_output_stem(digest: WeeklyDigest) -> str:
 
 
 def _build_cli_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Generate a Weekly Digest.")
+    parser = argparse.ArgumentParser(
+        description="Generate Weekly Drift Detection output."
+    )
     parser.add_argument(
         "--persona-id", required=True, help="Persona ID (without prefix)."
     )
@@ -1170,7 +1172,7 @@ def _build_cli_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--parquet-path",
         default="logs/exports/weekly_digests/weekly_digests.parquet",
-        help="Path to consolidated Weekly Digest parquet.",
+        help="Path to consolidated Weekly Drift Detection output parquet.",
     )
     return parser
 

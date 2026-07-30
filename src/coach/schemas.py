@@ -1,4 +1,4 @@
-"""Pydantic schemas for Weekly Digest records."""
+"""Pydantic schemas for Weekly Drift Detection output records."""
 
 from typing import Literal
 
@@ -32,7 +32,7 @@ DriftTriggerType = Literal[
 
 
 class DimensionDigest(BaseModel):
-    """Per-dimension summary over one Weekly Digest window."""
+    """Per-dimension summary over one Weekly Drift Detection output window."""
 
     dimension: str = Field(description="Schwartz value dimension in snake_case")
     mean_score: float = Field(description="Mean alignment score in [-1, 1]")
@@ -42,7 +42,7 @@ class DimensionDigest(BaseModel):
 
 
 class EvidenceSnippet(BaseModel):
-    """Representative evidence excerpt for a Weekly Digest."""
+    """Representative evidence excerpt for a Weekly Drift Detection output."""
 
     date: str
     t_index: int = Field(ge=0)
@@ -53,7 +53,7 @@ class EvidenceSnippet(BaseModel):
 
 
 class JournalHistoryEntry(BaseModel):
-    """Sanitized Journal Entry included in Weekly Coach prompting."""
+    """Sanitized Journal Entry used to build Weekly Drift Detection output."""
 
     date: str
     t_index: int = Field(ge=0)
@@ -62,7 +62,7 @@ class JournalHistoryEntry(BaseModel):
 
 
 class CoachNarrative(BaseModel):
-    """Structured Weekly Coach reflection."""
+    """Structured Coach Digest response."""
 
     weekly_mirror: str
     tension_explanation: str
@@ -70,7 +70,7 @@ class CoachNarrative(BaseModel):
 
 
 class ValidationCheck(BaseModel):
-    """Single automated check for Weekly Coach reflection quality."""
+    """Single automated check for Coach Digest response quality."""
 
     name: str
     passed: bool
@@ -78,7 +78,7 @@ class ValidationCheck(BaseModel):
 
 
 class DigestValidation(BaseModel):
-    """Tier 1 automated checks for a Weekly Coach reflection."""
+    """Tier 1 automated checks for a Coach Digest response."""
 
     grounded_quotes: list[str] = Field(default_factory=list)
     word_count: int = Field(ge=0)
@@ -108,7 +108,7 @@ class DigestValidation(BaseModel):
 
 
 class DriftDetectionResult(BaseModel):
-    """Deprecated compatibility result consumed by the Weekly Digest builder."""
+    """Deprecated compatibility result used to build structured output."""
 
     class DimensionSignal(BaseModel):
         """Per-dimension drift/evolution summary for one weekly decision."""
@@ -155,7 +155,7 @@ class DriftDetectionResult(BaseModel):
 
 
 class WeeklyDigest(BaseModel):
-    """Structured Weekly Digest for downstream Weekly Coach generation."""
+    """Structured Weekly Drift Detection output used by the Coach Digest."""
 
     persona_id: str
     persona_name: str | None = None

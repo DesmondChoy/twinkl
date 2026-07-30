@@ -278,7 +278,7 @@
       "type": "object"
     },
     "CoachNarrative": {
-      "description": "Structured Weekly Coach reflection.",
+      "description": "Structured Coach Digest response.",
       "properties": {
         "reflective_question": {
           "title": "Reflective Question",
@@ -302,7 +302,7 @@
       "type": "object"
     },
     "DigestValidation": {
-      "description": "Tier 1 automated checks for a Weekly Coach reflection.",
+      "description": "Tier 1 automated checks for a Coach Digest response.",
       "properties": {
         "checks": {
           "items": {
@@ -331,7 +331,7 @@
       "type": "object"
     },
     "DimensionDigest": {
-      "description": "Per-dimension summary over one Weekly Digest window.",
+      "description": "Per-dimension summary over one Weekly Drift Detection output window.",
       "properties": {
         "dimension": {
           "description": "Schwartz value dimension in snake_case",
@@ -852,7 +852,7 @@
       "type": "object"
     },
     "EvidenceSnippet": {
-      "description": "Representative evidence excerpt for a Weekly Digest.",
+      "description": "Representative evidence excerpt for a Weekly Drift Detection output.",
       "properties": {
         "date": {
           "title": "Date",
@@ -3120,7 +3120,7 @@
       "type": "object"
     },
     "ValidationCheck": {
-      "description": "Single automated check for Weekly Coach reflection quality.",
+      "description": "Single automated check for Coach Digest response quality.",
       "properties": {
         "details": {
           "title": "Details",
@@ -3398,7 +3398,7 @@
       "type": "object"
     },
     "WeeklyDigest": {
-      "description": "Structured Weekly Digest for downstream Weekly Coach generation.",
+      "description": "Structured Weekly Drift Detection output used by the Coach Digest.",
       "properties": {
         "coach_narrative": {
           "anyOf": [

@@ -124,9 +124,7 @@ def run_weekly_coach_cycle(
 
 def _build_cli_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description=(
-            "Run the deprecated experimental VIF Critic-to-Weekly-Digest path."
-        )
+        description="Run the deprecated experimental VIF Critic compatibility path."
     )
     parser.add_argument(
         "--persona-id", required=True, help="Persona ID (without prefix)."
@@ -168,7 +166,7 @@ def main() -> None:
         device=args.device,
     )
     print(
-        f"Built deprecated Weekly Digest for {digest.persona_id} "
+        f"Built deprecated Weekly Drift Detection output for {digest.persona_id} "
         f"({digest.week_start} -> {digest.week_end})"
     )
     for name, path in artifact_paths.items():
