@@ -1,9 +1,9 @@
 name: coach_narrative_judge
 description: >-
-  LLM-as-judge rubric for Weekly Coach narratives. Scores correctness,
-  specificity, non-prescriptive tone, and tension honesty against the Weekly
-  Digest evidence. Not a substitute for human validation.
-version: '1.0'
+  LLM-as-judge rubric for Coach Digest responses. Scores correctness,
+  specificity, non-prescriptive tone, and tension honesty against Weekly Drift
+  Detection output. Not a substitute for human validation.
+version: '1.1'
 input_variables:
   - core_values
   - drift_states
@@ -13,7 +13,7 @@ input_variables:
   - tension_explanation
   - reflective_question
 template: |
-  You are an evaluator scoring a Weekly Coach reflection against the evidence it
+  You are an evaluator scoring a Coach Digest response against the evidence it
   was built from. Judge only what the evidence supports. You are an automated
   reviewer, not a human rater; be strict and literal.
 

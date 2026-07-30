@@ -1,4 +1,4 @@
-"""Tests for the Weekly Coach narrative Tier-2 LLM-as-judge eval."""
+"""Tests for the Coach Digest response Tier-2 LLM-as-judge eval."""
 
 from __future__ import annotations
 

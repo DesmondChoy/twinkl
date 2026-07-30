@@ -1,16 +1,16 @@
-"""Tier-2 LLM-as-judge evaluation for Weekly Coach narratives.
+"""Tier-2 LLM-as-judge evaluation for Coach Digest responses.
 
-Scores a Weekly Coach reflection against the Weekly Digest evidence it was built
-from, on four dimensions: correctness, specificity, non-prescriptive tone, and
-tension honesty (does the reflection invent a tension when none exists?). Also
-flags whether the reflective question is open-ended and relevant.
+Scores a Coach Digest response against its Weekly Drift Detection evidence.
+The four dimensions are correctness, specificity, non-prescriptive tone, and
+tension honesty. It also checks whether the reflective question is open-ended
+and relevant.
 
 These are **LLM-as-judge scores, not human validation**. They are a cheap,
 repeatable proxy for narrative quality; Tier-3 human calibration (Cohen's κ vs
 human raters) remains future work and is required before treating these scores
 as ground truth.
 
-The judge LLM is an injected ``LLMCompleteFn`` (same contract the Weekly Coach
+The judge LLM is an injected ``LLMCompleteFn`` (same contract the Coach Digest
 generation uses), so this module stays provider-agnostic and testable. It
 degrades gracefully: an empty, malformed, or invalid judge response yields a
 ``None`` verdict that is skipped in aggregation.
@@ -70,7 +70,7 @@ SCORE_DIMENSIONS = (
 
 
 class JudgeVerdict(BaseModel):
-    """One LLM-as-judge verdict for a single Weekly Coach narrative."""
+    """One LLM-as-judge verdict for a single Coach Digest response."""
 
     correctness: int = Field(ge=1, le=5)
     specificity: int = Field(ge=1, le=5)
@@ -128,7 +128,7 @@ async def judge_narrative(
 
 @dataclass
 class JudgeReport:
-    """Aggregated LLM-as-judge results across a Weekly Coach narrative sample."""
+    """Aggregated LLM-as-judge results across a Coach Digest response sample."""
 
     judge_model: str
     n_scored: int
@@ -191,7 +191,7 @@ def aggregate_verdicts(
 def render_markdown(report: JudgeReport) -> str:
     """Render a short markdown summary of an LLM-as-judge report."""
     lines = [
-        "# Weekly Coach Narrative — Tier-2 LLM-as-Judge Report",
+        "# Coach Digest Response — Tier-2 LLM-as-Judge Report",
         "",
         "**Source:** LLM-as-judge scores, NOT human validation. Tier-3 human "
         "calibration is future work.",
@@ -240,7 +240,7 @@ def _load_manifest(manifest_path: Path) -> list[tuple[WeeklyDigest, CoachNarrati
 
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Score Weekly Coach narratives with an LLM-as-judge (Tier 2)."
+        description="Score Coach Digest responses with an LLM-as-judge (Tier 2)."
     )
     parser.add_argument(
         "--manifest",
@@ -264,7 +264,7 @@ def main(argv: list[str] | None = None) -> int:
 
     if not args.execute:
         print(
-            f"[dry run] Would judge {len(pairs)} Weekly Coach narrative(s) with the "
+            f"[dry run] Would judge {len(pairs)} Coach Digest response(s) with the "
             "configured provider. Re-run with --execute to make paid calls."
         )
         return 0

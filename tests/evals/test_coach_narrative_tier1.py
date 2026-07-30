@@ -1,4 +1,4 @@
-"""Tests for the Weekly Coach narrative Tier-1 batch evaluator."""
+"""Tests for the Coach Digest response Tier-1 batch evaluator."""
 
 from __future__ import annotations
 

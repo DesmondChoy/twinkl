@@ -4,12 +4,13 @@
 
 Twinkl generates explanations at two levels:
 1. **LLM-Judge rationales**: Per-Journal-Entry explanations for alignment scores
-2. **Weekly Coach narratives**: Weekly Digest summaries with evidence from Journal Entry history
+2. **Coach Digest responses**: User-facing responses based on structured Weekly
+   Drift Detection output
 
 This evaluation validates that explanations feel accurate and actionable to users.
 
-> **Runbook:** for the exact commands to run every Weekly Coach narrative and
-> Weekly Digest test and eval, see
+> **Runbook:** for the exact commands to run every Coach Digest response and
+> Weekly Drift Detection output test and eval, see
 > [`coach_narrative_test_and_eval_guide.md`](./coach_narrative_test_and_eval_guide.md).
 
 ---
@@ -23,19 +24,19 @@ This evaluation validates that explanations feel accurate and actionable to user
 - Rationale storage in [`logs/judge_labels/judge_labels.parquet`](../../logs/judge_labels/judge_labels.parquet)
 - Rationale display UI in annotation tool ([`src/annotation_tool/components/modals.py`](../../src/annotation_tool/components/modals.py))
 - LLM-Judge comparison view ([`src/annotation_tool/components/comparison_view.py`](../../src/annotation_tool/components/comparison_view.py))
-- Weekly Coach prompt rendering plus programmatic narrative generation,
+- Coach Digest prompt rendering plus programmatic response generation,
   validation, and persistence support in
   [`src/coach/weekly_digest.py`](../../src/coach/weekly_digest.py)
 - The approved Weekly Drift Reviewer and Drift Detector runtime selects cited
-  Journal Entry evidence for the Weekly Digest in
+  Journal Entry evidence for the Weekly Drift Detection output in
   [`src/coach/weekly_drift_runtime.py`](../../src/coach/weekly_drift_runtime.py)
-- Tier 1 Weekly Coach narrative checks are implemented: groundedness via quoted substring matches, non-circularity via score-jargon avoidance, and length bounds via [`validate_weekly_digest_narrative()`](../../src/coach/weekly_digest.py)
-- Tier 1 reporting for Weekly Coach narratives: A batch runner
+- Tier 1 Coach Digest response checks are implemented: groundedness via quoted substring matches, non-circularity via score-jargon avoidance, and length bounds via [`validate_weekly_digest_narrative()`](../../src/coach/weekly_digest.py)
+- Tier 1 reporting for Coach Digest responses: A batch runner
   ([`src/evals/coach_narrative_tier1.py`](../../src/evals/coach_narrative_tier1.py))
-  runs `validate_weekly_digest_narrative()` over the persisted Weekly Digest
+  runs `validate_weekly_digest_narrative()` over the persisted Weekly Drift Detection output
   parquet and reports per-check pass rates against targets. First committed run:
   [`logs/experiments/reports/coach_narrative_tier1_20260727/`](../../logs/experiments/reports/coach_narrative_tier1_20260727/).
-- Tier 2 (LLM-as-judge) for Weekly Coach narratives: An LLM-as-judge eval
+- Tier 2 (LLM-as-judge) for Coach Digest responses: An LLM-as-judge eval
   ([`src/evals/coach_narrative_judge.py`](../../src/evals/coach_narrative_judge.py),
   prompt [`prompts/coach_narrative_judge.yaml`](../../prompts/coach_narrative_judge.yaml))
   scores correctness, specificity, non-prescriptive tone, and tension honesty.
@@ -48,23 +49,23 @@ This evaluation validates that explanations feel accurate and actionable to user
 - **Tier 3:** Human calibration protocol and κ calculation (both explanation types)
 
 ### Blocking Dependencies
-Tier 1 Weekly Coach checks and approved-path evidence provenance are
+Tier 1 Coach Digest checks and approved-path evidence provenance are
 implemented. Deeper end-to-end explanation evaluation still requires a fresh
 final test and committed batch results. VIF Critic outputs belong to offline
 review and retraining.
 
 ### Implementation Scope
 
-The implemented slice covers Weekly Digest construction, Weekly Coach prompt
-rendering, programmatic narrative generation with an injected callable, and
-Tier 1 narrative validation. The analogous batch checker for LLM-Judge rationales
+The implemented slice covers Weekly Drift Detection output storage, Coach
+Digest prompt rendering, programmatic response generation with an injected
+callable, and Tier 1 response validation. The analogous batch checker for LLM-Judge rationales
 remains planned, while Tier 2 (rationale-review LLM) and Tier 3 (human calibration) are
 later validation phases.
 
 ### Next Steps
 1. Add a batch Tier 1 checker for LLM-Judge rationales in `src/judge/` and run it over the existing 1,594 rationale-bearing rows
-2. ✅ Done — Weekly Coach Tier 1 validation now runs as a batch with a committed pass-rate report (`src/evals/coach_narrative_tier1.py`)
-3. ✅ Done (Weekly Coach) — Tier 2 LLM-as-judge eval implemented in `src/evals/coach_narrative_judge.py`; a rationale-review LLM for LLM-Judge rationales is still future work
+2. ✅ Done — Coach Digest Tier 1 validation now runs as a batch with a committed pass-rate report (`src/evals/coach_narrative_tier1.py`)
+3. ✅ Done (Coach Digest) — Tier 2 LLM-as-judge eval implemented in `src/evals/coach_narrative_judge.py`; a rationale-review LLM for LLM-Judge rationales is still future work
 4. *(Future phase)* Sample 20-30 explanations for Tier 3 human calibration
 
 ---
@@ -87,9 +88,9 @@ For each alignment score, the LLM-Judge provides a rationale:
 - Explains *why* the score was assigned
 - Ties behavior to the value dimension
 
-### Weekly Coach Narratives (Implemented, Experimental)
+### Coach Digest Responses (Implemented, Experimental)
 
-Weekly summaries that synthesize patterns:
+User responses that synthesize patterns:
 
 ```
 "You wrote about cancelling on your friend after two weeks of saying you wanted
@@ -97,7 +98,7 @@ to make more room for the people close to you. What made this Saturday feel
 different from the plan you had in mind?"
 ```
 
-**Criteria for good narratives:**
+**Criteria for good responses:**
 - Cites specific evidence from Journal Entries
 - Identifies patterns over time (not just one Journal Entry)
 - Avoids prescriptive or judgmental language
@@ -113,7 +114,7 @@ calibration are pending.
 
 ### Primary: Likert Ratings (from PRD)
 
-Show users their Weekly Digest and ask: **"Did this feel accurate?"**
+Show users their Coach Digest response and ask: **"Did this feel accurate?"**
 
 | Rating | Meaning |
 |--------|---------|
@@ -150,7 +151,7 @@ Fast, objective checks that don't require LLM calls:
 | **Length** | Flag too-short (<25 words) or too-long (>180 words) | 90% in range |
 
 **Current code status:**
-- Weekly Coach narratives: validated by `validate_weekly_digest_narrative()` inside [`src/coach/weekly_digest.py`](../../src/coach/weekly_digest.py)
+- Coach Digest responses: validated by `validate_weekly_digest_narrative()` inside [`src/coach/weekly_digest.py`](../../src/coach/weekly_digest.py)
 - LLM-Judge rationales: still planned as a batch checker in `src/judge/`
 
 **Reference implementation shape:**
@@ -161,7 +162,8 @@ results = {check.name: check.passed for check in validation.checks}
 
 #### Tier 2: Rationale-Review LLM Evaluation
 
-> **Implementation phase:** Future — not required for the initial Weekly Digest release.
+> **Implementation phase:** Future — not required for the initial Coach Digest
+> response evaluation.
 
 For rationales that pass Tier 1, evaluate with LLM:
 
@@ -196,17 +198,18 @@ Validate the rationale-review LLM against human judgment:
 1. **Sample size**: 5-10 users (from PRD)
 2. **Duration**: 1-2 weeks of journaling
 3. **Measurement points**:
-   - After each Weekly Digest: "Did this feel accurate?" (5-point Likert)
+   - After each Coach Digest response: "Did this feel accurate?" (5-point Likert)
    - Exit interview: Open-ended feedback on explanation quality
 
 ### Procedure
 
 ```
 Day 1-7:     User journals normally
-Day 7:       Weekly Coach generates Weekly Digest with explanations
+Day 7:       Weekly Drift Detection stores structured output
+             Coach Digest generates the user response
              User rates: "Did this feel accurate?" [1-5]
 Day 8-14:    Continue journaling
-Day 14:      Second digest + rating
+Day 14:      Second Coach Digest response + rating
              Exit interview
 ```
 
@@ -282,7 +285,7 @@ LLM-Judge produces rationales for N Journal Entries
 **Mitigations:**
 - Use consistent Likert anchors with behavioral definitions
 - Collect qualitative feedback to contextualize ratings
-- Compare ratings across different explanation types (LLM-Judge vs. Weekly Coach)
+- Compare ratings across different explanation types (LLM-Judge vs. Coach Digest)
 
 ---
 

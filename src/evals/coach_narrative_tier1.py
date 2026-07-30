@@ -1,9 +1,9 @@
-"""Tier-1 batch evaluation for Weekly Coach narratives.
+"""Tier-1 batch evaluation for Coach Digest responses.
 
 Runs the existing ``validate_weekly_digest_narrative`` Tier-1 checks
 (groundedness, non_circularity, value_leakage, length) over a set of persisted
-Weekly Digest records and reports per-check pass rates against the targets in
-``docs/evals/explanation_quality_eval.md``.
+Weekly Drift Detection output records and reports per-check pass rates against
+the targets in ``docs/evals/explanation_quality_eval.md``.
 
 These are mechanical code checks, not human validation. They verify surface
 properties (quotes trace to evidence, no raw scoring or Schwartz-label
@@ -75,7 +75,7 @@ class CheckSummary:
 
 @dataclass
 class Tier1Report:
-    """Full Tier-1 batch report over a Weekly Digest set."""
+    """Full Tier-1 batch report over a Weekly Drift Detection output set."""
 
     parquet_source: str
     n_rows: int
@@ -204,7 +204,7 @@ def evaluate_parquet(
     parquet_path: Path,
     signal_source: str | None = APPROVED_SIGNAL_SOURCE,
 ) -> Tier1Report:
-    """Load a persisted Weekly Digest parquet and run Tier-1 evaluation."""
+    """Run Tier-1 evaluation on persisted Weekly Drift Detection output."""
     frame = pl.read_parquet(parquet_path)
     rows = frame.to_dicts()
     return evaluate_rows(
@@ -215,7 +215,7 @@ def evaluate_parquet(
 def render_markdown(report: Tier1Report) -> str:
     """Render a short markdown summary of a Tier-1 batch report."""
     lines = [
-        "# Weekly Coach Narrative — Tier-1 Batch Report",
+        "# Coach Digest Response — Tier-1 Batch Report",
         "",
         "**Source:** mechanical code checks (not human validation). Surface "
         "properties only.",
@@ -253,7 +253,7 @@ def render_markdown(report: Tier1Report) -> str:
 
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Run Tier-1 batch checks over Weekly Coach narratives."
+        description="Run Tier-1 batch checks over Coach Digest responses."
     )
     parser.add_argument("--parquet", type=Path, default=DEFAULT_PARQUET)
     parser.add_argument(
