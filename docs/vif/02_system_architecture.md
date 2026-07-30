@@ -22,14 +22,12 @@ The current VIF implementation is intentionally narrow:
 - **Runtime output**: per-Journal-Entry alignment means and uncertainties, plus weekly aggregates
 - **Primary capstone role**: recover visible Conflict (`-1`) evidence; retain
   ternary outputs for diagnostics and non-gating positive context
-- **Current executable downstream use**: the approved Weekly Drift Reviewer and
-  Drift Detector path into the Weekly Digest, plus a deprecated VIF Critic
-  crash/rut/evolution compatibility path
+- **Current executable downstream use**: Weekly Drift Detection and the Coach
+  Digest, plus a deprecated VIF Critic crash/rut/evolution compatibility path
 - **Fixed Weekly Drift Reviewer**: `gpt-5.6-luna` with reasoning effort `low`,
   without VIF Critic input
-- **Approved user-facing runtime**: Weekly Drift Reviewer Decisions followed by
-  the deterministic rule that two consecutive Conflicts for the same Core
-  Value form Drift
+- **Approved user-facing runtime**: Weekly Drift Detection followed by the
+  Coach Digest
 - **Completed VIF Critic research**: training, evaluation, raw output export,
   and timeline inference are implemented for offline reproduction; a
   generalized review-and-retrain loop and candidate confirmation are not
@@ -40,9 +38,9 @@ The current VIF implementation is intentionally narrow:
 > those runtime values. The fixed Weekly Drift Reviewer contract is a separate
 > product decision.
 
-The approved capstone POC runtime persists versioned Weekly Drift Reviewer
-Decisions, fails closed to Abstain, applies the Drift Detector across week
-boundaries, and feeds the Weekly Digest. VIF Critic training supports the
+Weekly Drift Detection persists versioned Weekly Drift Reviewer Decisions,
+fails closed to Abstain, applies the Drift Detector across week boundaries, and
+stores structured output. VIF Critic training supports the
 versioned recall-first checkpoint-selection policy. The runtime imports
 `top_values` from a confirmed onboarding Profile when supplied and retains
 synthetic `core_values` as a compatibility path. The fixed model choice and
@@ -256,7 +254,7 @@ Per-Journal-Entry outputs are aggregated into weekly tables containing:
 - profile-weighted overall mean alignment
 - profile-weighted overall uncertainty
 
-These weekly parquet files are the inputs for Drift experiments and Weekly Coach
+These weekly parquet files are the inputs for Drift experiments and Coach Digest
 generation.
 
 `src/vif/weekly_schema.py` owns the ordered column contract between
@@ -272,11 +270,11 @@ uncertainties and can emit `stable`, `crash`, `rut`, `evolution`, or
 automatically when no precomputed result is supplied. This is the route used by
 the deprecated `src.coach.runtime` entry point and Runtime Demo Review App.
 
-The approved capstone POC runtime is narrower: the Weekly Drift Reviewer is fixed
+Weekly Drift Detection is narrower: the internal Weekly Drift Reviewer is fixed
 at `gpt-5.6-luna` with reasoning effort `low` and reads Journal Entries and Core
-Values without VIF Critic predictions. The deterministic Drift Detector
-declares Drift after two consecutive Conflicts for the same Core Value and
-feeds its delivery state to the Weekly Digest. The former
+Values without VIF Critic predictions. The internal Drift Detector declares
+Drift after two consecutive Conflicts for the same Core Value. The workflow
+stores its delivery state as structured output. The former
 consensus-derived frozen benchmark is retired historical evidence; it does not
 implement or justify the active target. [`twinkl-v8pb`](../evals/drift_v1_student_visible_target.md)
 is historical. [`twinkl-752.4`](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md)
@@ -318,28 +316,26 @@ The VIF Critic:
 - does not send predictions to the Weekly Drift Reviewer or make a user-facing
   Drift claim
 
-### 5.2 Weekly Drift Reviewer and Drift Detector
+### 5.2 Weekly Drift Detection
 
-The Weekly Drift Reviewer:
+Weekly Drift Detection:
 
-- uses `gpt-5.6-luna` with reasoning effort `low`
-- reads Journal Entries and Core Values without VIF Critic predictions
-- decides Conflict, Not Conflict, or Abstain
+- uses an internal Weekly Drift Reviewer with `gpt-5.6-luna` and reasoning
+  effort `low`
+- reads Journal Entries and Core Values without VIF Critic Predictions
+- applies the internal Drift Detector after the reviewer decides Conflict, Not
+  Conflict, or Abstain
+- stores structured output with Core Values, cited evidence, and Drift state
 
-The deterministic Drift Detector declares Drift only after two consecutive
-Weekly Drift Reviewer Conflicts for the same Core Value.
+### 5.3 Coach Digest
 
-### 5.3 Weekly Coach
+The Coach Digest:
 
-The Weekly Coach:
-
-- receives Drift-specific state from the Drift Detector rather than VIF Critic
-  predictions
-- reads the user's full journal history at current POC scale
-- turns the Weekly Digest into reflective, evidence-based language
+- receives the structured Weekly Drift Detection output
+- turns its cited evidence into reflective, evidence-based language
 
 This keeps VIF Critic prediction generation auditable, prevents it from biasing
-the Weekly Drift Reviewer, and lets the Weekly Coach speak in richer,
+the Weekly Drift Reviewer, and lets the Coach Digest speak in richer,
 evidence-based language.
 
 ---
@@ -357,7 +353,7 @@ Key files for the architecture described here:
 | `src/vif/weekly_schema.py` | Defines and validates the weekly signal-frame contract |
 | `src/weekly_drift_reviewer.py` | Implements the frozen Weekly Drift Reviewer contract, caller, validation, and receipts |
 | `src/drift_detector.py` | Implements the deterministic Drift Detector and delivery states |
-| `src/coach/weekly_drift_runtime.py` | Orchestrates the approved Weekly Drift Reviewer to Weekly Digest path |
+| `src/coach/weekly_drift_runtime.py` | Orchestrates Weekly Drift Detection and the Coach Digest |
 | `src/vif/drift.py` | Implements the deprecated weekly crash/rut/evolution compatibility router |
 | `src/vif/evolution.py` | Supplies the prototype's automatic evolution classification |
 | `src/vif/holdout.py` | Loads fixed holdout manifests for experiment reruns |

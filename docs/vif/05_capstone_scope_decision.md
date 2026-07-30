@@ -94,7 +94,7 @@ writer making a behavior or choice against the same Core Value.
   cancel a Conflict or Drift.
 - A longer uninterrupted Conflict run is one Drift, not repeated alerts.
 - A non-Conflict or uncertain Journal Entry breaks the run.
-- Later recovery changes Weekly Coach wording to recovered or mixed; it does
+- Later recovery changes Coach Digest wording to recovered or mixed; it does
   not erase the earlier Drift.
 
 The current user-facing path uses decisions from `gpt-5.6-luna` at reasoning
@@ -108,7 +108,7 @@ the user-facing Drift path.
 Positive alignment remains useful, but it is non-gating:
 
 - `+1` cannot trigger or cancel Drift.
-- It may support occasional evidence-based acknowledgment by the Weekly Coach.
+- It may support occasional evidence-based acknowledgment by the Coach Digest.
 - It remains part of the ternary output and QWK diagnostic so recall-focused
   development cannot silently collapse the rest of the model.
 
@@ -250,7 +250,8 @@ The user approved the following architecture under `twinkl-752.2`:
    fixed `gpt-5.6-luna` reasoning-effort-`low` Weekly Drift Reviewer without VIF
    Critic input. The deterministic Drift Detector declares Drift only after two
    consecutive Weekly Drift Reviewer Conflicts for the same Core Value.
-   Confirmed Drift then flows into the Weekly Digest and Weekly Coach.
+   Weekly Drift Detection stores confirmed Drift in its structured output. The
+   Coach Digest consumes that output.
 2. **Completed VIF Critic research:** training, evaluation, raw output export,
    and timeline inference remain available for offline reproduction. A
    generalized review-and-retrain loop is not implemented or planned for the

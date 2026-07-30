@@ -15,7 +15,7 @@ Twinkl is an "inner compass" that helps users align their daily behavior with th
 - [`docs/pipeline/pipeline_specs.md`](docs/pipeline/pipeline_specs.md), [`docs/pipeline/data_schema.md`](docs/pipeline/data_schema.md), [`docs/pipeline/consensus_rejudging_instructions.md`](docs/pipeline/consensus_rejudging_instructions.md) — data generation, label datasets, and consensus diagnostics
 - [`docs/drift/trajectory_eda.md`](docs/drift/trajectory_eda.md) — historical Drift-definition analysis comparing five-pass LLM-Judge consensus with persisted labels
 - [`docs/evals/drift_v1_student_visible_target.md`](docs/evals/drift_v1_student_visible_target.md) — historical five-Drift development result and withheld former final-test score
-- [`docs/weekly/weekly_digest_generation.md`](docs/weekly/weekly_digest_generation.md) — Weekly Digest contract and runtime CLI
+- [`docs/weekly/weekly_drift_detection.md`](docs/weekly/weekly_drift_detection.md) — Weekly Drift Detection and Coach Digest contracts and runtime CLI
 - [`docs/demo/weekly_drift_review_app.md`](docs/demo/weekly_drift_review_app.md) — read-only Drift inspection of the frozen Weekly Drift Reviewer comparison Runs
 - [`docs/demo/review_app.md`](docs/demo/review_app.md) — deprecated Runtime Demo Review App for the VIF Critic compatibility path
 - [`docs/future_work/README.md`](docs/future_work/README.md) — exploratory directions, including OpenClaw integration research
@@ -39,20 +39,20 @@ browser-to-service storage is outside the time-boxed capstone.
 
 The VIF Critic training and evaluation stack is complete for the time-boxed
 capstone. The VIF Critic remains an offline research model for comparing
-Journal Entries with a ten-dimensional value profile; the current user-facing
-path uses the Weekly Drift Reviewer and Drift Detector instead. No further VIF
-Critic work is planned.
+Journal Entries with a ten-dimensional value profile. The current user-facing
+path uses Weekly Drift Detection instead. No further VIF Critic work is
+planned.
 
 Key properties:
 - **Vector-valued**: Tracks multiple life dimensions simultaneously, preserving trade-offs (e.g., "work goals crushed, but sleep suffered")
 - **Uncertainty-aware**: Reports MC Dropout uncertainty for offline analysis
 - **Current-entry by default**: The active VIF Critic configuration uses `window_size: 1`; trajectory experiments remain diagnostic
 
-The VIF Critic research stack includes ordinal MLP heads with MC Dropout, a BNN baseline, config-driven frozen encoders with `nomic-embed-text-v1.5` as the active default, corrected-split experiment logging, checkpoint discovery, recall-first checkpoint selection, raw output export, runtime timeline reconstruction, and weekly aggregation. Its former Weekly Coach-facing crash/rut/evolution routing is deprecated compatibility code. The 69-run / 133-config archive keeps `run_019`-`run_021` BalancedSoftmax as the historical corrected-split reference. See [`logs/experiments/index.md`](logs/experiments/index.md) for the live board.
+The VIF Critic research stack includes ordinal MLP heads with MC Dropout, a BNN baseline, config-driven frozen encoders with `nomic-embed-text-v1.5` as the active default, corrected-split experiment logging, checkpoint discovery, recall-first checkpoint selection, raw output export, runtime timeline reconstruction, and weekly aggregation. Its former crash/rut/evolution response routing is deprecated compatibility code. The 69-run / 133-config archive keeps `run_019`-`run_021` BalancedSoftmax as the historical corrected-split reference. See [`logs/experiments/index.md`](logs/experiments/index.md) for the live board.
 
-**Current Drift contract:** Drift is two consecutive Conflicts for the same Core Value. The Weekly Drift Reviewer model contract is fixed at `gpt-5.6-luna` with reasoning effort `low`. The approved runtime persists versioned Weekly Drift Reviewer Decisions without VIF Critic input, applies the deterministic Drift Detector, and sends active, recovered, uncertain, or mixed state to the Weekly Digest. The frozen development Runs are AI-reviewed synthetic evidence, not human validation, a fresh final test, or deployment approval. The time-boxed capstone stops at this implemented POC; no fresh final test or deployment approval is claimed. The completed VIF Critic remains outside the user-facing path, which does not run it or depend on its predictions. See the [`twinkl-52zz` report](logs/experiments/reports/experiment_review_2026-07-14_twinkl_52zz_luna_low.md), [`docs/architecture/drift_detection.md`](docs/architecture/drift_detection.md), and [`docs/evals/drift_detection_eval.md`](docs/evals/drift_detection_eval.md).
+**Current Drift contract:** Drift is two consecutive Conflicts for the same Core Value. Weekly Drift Detection uses the internal Weekly Drift Reviewer and Drift Detector. It stores structured output with Core Values, cited Journal Entries, and Drift state. The fixed model contract is `gpt-5.6-luna` with reasoning effort `low`. The frozen development Runs are AI-reviewed synthetic evidence. They are not human validation, a fresh final test, or deployment approval. The completed VIF Critic remains outside this path. See the [`twinkl-52zz` report](logs/experiments/reports/experiment_review_2026-07-14_twinkl_52zz_luna_low.md), [`docs/architecture/drift_detection.md`](docs/architecture/drift_detection.md), and [`docs/evals/drift_detection_eval.md`](docs/evals/drift_detection_eval.md).
 
-**Current runtime behavior:** `src.coach.weekly_drift_runtime` is the approved capstone POC path. It reads Journal Entries, imports Core Values from a confirmed onboarding Profile when `--profile-path` is supplied, calls the fixed Weekly Drift Reviewer, persists versioned JSON receipts, applies the Drift Detector across week boundaries, and exports the Weekly Digest and Weekly Coach prompt. When no Profile is supplied, synthetic personas retain their deterministic `core_values` compatibility path. `src.coach.runtime` and `src.vif.drift` are explicitly deprecated experimental compatibility paths for the former VIF Critic crash/rut/evolution runtime. See `docs/vif/`, [`docs/weekly/weekly_digest_generation.md`](docs/weekly/weekly_digest_generation.md), and [`docs/demo/review_app.md`](docs/demo/review_app.md).
+**Current runtime behavior:** `src.coach.weekly_drift_runtime` runs Weekly Drift Detection. It reads Journal Entries, imports Core Values from a confirmed Profile when supplied, calls the internal Weekly Drift Reviewer, persists versioned JSON receipts, and applies the internal Drift Detector across week boundaries. It stores structured output and renders the Coach Digest prompt. When no Profile is supplied, synthetic personas retain their deterministic `core_values` compatibility path. `src.coach.runtime` and `src.vif.drift` are deprecated compatibility paths for the former VIF Critic crash/rut/evolution runtime. See `docs/vif/`, [`docs/weekly/weekly_drift_detection.md`](docs/weekly/weekly_drift_detection.md), and [`docs/demo/review_app.md`](docs/demo/review_app.md).
 
 ### Automated Experiment Logging & Review
 
@@ -267,18 +267,18 @@ Open `http://127.0.0.1:8001` when running the file directly.
 - End-to-end runtime execution via `src.coach.runtime.run_weekly_coach_cycle`
 - Detector input source toggle between **LLM-Judge labels** and **VIF Critic predictions**
 - Detector comparison across **Baseline**, **EMA**, **CUSUM**, **Cosine**, **Control Chart**, and **KL Div**, with per-Journal Entry detector-vote counts (not the five-pass LLM-Judge reference)
-- A six-tab result canvas: Overview, per-Journal Entry VIF Critic outputs, weekly signals, Drift, Weekly Digest, and detector comparison
-- Live Weekly Coach reflection rendered in the Weekly Digest tab, with `weekly_mirror`, `tension_explanation`, and `reflective_question` sections
+- A six-tab result canvas. Its old `Weekly Digest` tab name is a compatibility label.
+- A live Coach Digest response with `weekly_mirror`, `tension_explanation`, and `reflective_question` sections
 
-**Weekly Coach reflection:** `src/coach/llm_client.py` builds the provider-backed
+**Coach Digest response:** `src/coach/llm_client.py` builds the provider-backed
 callable that `src/demo_tool/runtime_bridge.py` injects into
 `run_weekly_coach_cycle`. `TWINKL_COACH_PROVIDER` selects `openai` (default) or
 `gemini`; `TWINKL_COACH_MODEL` overrides the per-provider default model
 (`gpt-5.4-mini` or `gemini-2.5-flash`). When the selected provider's API key is
-absent, the provider is unrecognised, or the request fails, the app degrades to a
-numeric-only Weekly Digest instead of erroring, so it stays runnable offline. The
-`src.coach.runtime` and `src.coach.weekly_digest` CLIs do not call a live Weekly
-Coach LLM; they render and persist the prompt only.
+absent, the provider is unrecognised, or the request fails, the app keeps its
+structured output without a response. The app stays runnable offline. The
+`src.coach.runtime` and `src.coach.weekly_digest` CLIs do not call a live Coach
+Digest LLM. They render and persist the prompt only.
 
 **Generated files:** The app writes persona/checkpoint-specific runtime bundles under `logs/exports/demo_tool_runs/<persona_id>/<checkpoint-stem>-<hash>/`.
 
@@ -290,8 +290,8 @@ frozen Weekly Drift Reviewer Runs and does not execute the VIF Critic runtime.
 **Key files:**
 - `src/demo_tool/app.py` — Main Shiny demo application
 - `src/demo_tool/data_loader.py` — Persona catalog and chronological timeline loading
-- `src/demo_tool/runtime_bridge.py` — Checkpoint discovery and Weekly Coach runtime wrapper
-- `src/coach/llm_client.py` — Provider-backed Weekly Coach reflection adapters (Gemini, OpenAI)
+- `src/demo_tool/runtime_bridge.py` — Checkpoint discovery and Coach Digest runtime wrapper
+- `src/coach/llm_client.py` — Provider-backed Coach Digest response adapters (Gemini, OpenAI)
 - `src/demo_tool/multi_drift.py` — Multi-detector comparison bundle for LLM-Judge-label and VIF Critic-prediction views
 - `src/demo_tool/state.py` — Centralized reactive UI state
 
@@ -300,8 +300,8 @@ frozen Weekly Drift Reviewer Runs and does not execute the VIF Critic runtime.
 Sequential validation workflow for the VIF with four stages:
 1. **LLM-Judge Validation** — Training data quality (Cohen's κ > 0.60)
 2. **Value Modeling** — VIF Critic learns value hierarchies correctly
-3. **Drift Detection** — Drift Detector finds Drift without unacceptable false alerts
-4. **Explanation Quality** — Explanations are grounded and useful
+3. **Weekly Drift Detection** — The workflow finds Drift without unacceptable false alerts
+4. **Coach Digest Explanation Quality** — Responses are grounded and useful
 
 See [`docs/evals/overview.md`](docs/evals/overview.md) for the full evaluation workflow and current status.
 
@@ -340,7 +340,7 @@ opening.
 | Capability | Status | Note |
 |---|---|---|
 | Onboarding (SVBWS Values Assessment) | 🧪 Experimental | Standalone React POC implements the complete local, user-facing flow and a versioned Profile. The approved runtime can import its Core Values from saved Profile JSON; automated browser-to-service storage remains outside the capstone. |
-| Weekly Coach validation depth | ⚠️ Partial | The approved Weekly Drift Reviewer and Drift Detector runtime now feeds the Weekly Digest and optional Weekly Coach reflection; batch Tier 1 pass rates and Tier 2 and Tier 3 evaluation remain incomplete |
+| Coach Digest validation depth | ⚠️ Partial | The Coach Digest consumes structured Weekly Drift Detection output. Batch Tier 1 pass rates and Tier 2 and Tier 3 evaluation remain incomplete. |
 | Nudge signal quality validation | 🧪 Experimental | Annotation study and downstream usefulness checks remain in progress |
 | Embedding Explorer | ✅ Complete | Interactive 3D visualization of VIF Critic embeddings |
 | Drift Detector validation and deployment approval | ⚠️ Not claimed | The deterministic Drift Detector and Luna-low Weekly Drift Reviewer runtime are complete and wired for the capstone POC, with versioned receipts and fail-closed abstention. The evidence is AI-reviewed synthetic development evidence; no fresh final test was run, so no deployment approval is claimed. |
@@ -358,10 +358,10 @@ Examples below use `uv run` so they pick up the project environment directly. Ac
 - Deploy the Drift Inspection App to Railway: `railway up`
 - Launch the Runtime Demo Review App: `uv run shiny run src/demo_tool/app.py`
 - Run the Runtime Demo Review App directly on port `8001`: `uv run python src/demo_tool/app.py`
-- Run the approved paid Weekly Drift Reviewer and Drift Detector path: `uv run python -m src.coach.weekly_drift_runtime --persona-id 0a2fe15c --execute`
+- Run the paid Weekly Drift Detection path: `uv run python -m src.coach.weekly_drift_runtime --persona-id 0a2fe15c --execute`
 - Reproduce the deprecated VIF Critic compatibility path: `uv run python -m src.coach.runtime --persona-id 0a2fe15c --checkpoint-path logs/experiments/artifacts/.../selected_checkpoint.pt`
-- Build a Weekly Digest from the default persisted LLM-Judge labels: `uv run python -m src.coach.weekly_digest --persona-id 0a2fe15c`
-- Build a Weekly Digest from saved VIF Critic predictions: `uv run python -m src.coach.weekly_digest --persona-id 0a2fe15c --signals-path logs/exports/weekly_coach/0a2fe15c_vif_timeline.parquet`
+- Build compatibility Weekly Drift Detection output from persisted LLM-Judge Labels: `uv run python -m src.coach.weekly_digest --persona-id 0a2fe15c`
+- Build compatibility Weekly Drift Detection output from saved VIF Critic Predictions: `uv run python -m src.coach.weekly_digest --persona-id 0a2fe15c --signals-path logs/exports/weekly_coach/0a2fe15c_vif_timeline.parquet`
 - Train the mainline VIF Critic with CLI overrides and LR-finder export: `uv run python -m src.vif.train --grad-clip 1.0 --lr-find-output-path logs/exports/lr_find.png`
 - Run the BNN baseline: `uv run python -m src.vif.train_bnn --epochs 10 --batch-size 16`
 - Generate the embedding explorer without auto-opening a browser: `uv run python -m src.vif.extract_embeddings --checkpoint logs/experiments/artifacts/.../selected_checkpoint.pt --no-browser`

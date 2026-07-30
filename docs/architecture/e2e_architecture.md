@@ -60,19 +60,19 @@ flowchart TB
         drift["Deprecated crash / rut / evolution<br/>compatibility router"]
         reviewer["Weekly Drift Reviewer<br/>gpt-5.6-luna · low<br/>without VIF Critic input"]
         drift_v1["Deterministic Drift Detector<br/>two consecutive Conflicts"]
+        digest["Weekly Drift Detection<br/>structured output"]
         evolution["Evolution classifier<br/>automatic in prototype"]
         d_trigger["OUT OF SCOPE<br/>No fresh final test or<br/>deployment approval"]
         d_evolution["Value evolution<br/>parked for v1"]
     end
 
-    subgraph coach["Weekly Coach + review"]
-        digest["Weekly Digest"]
-        prompt["Weekly Coach prompt text"]
-        narrative["Optional live Weekly Coach output<br/>(injected callable only)"]
+    subgraph coach["Coach Digest + review"]
+        prompt["Coach Digest prompt text"]
+        narrative["Optional live Coach Digest response<br/>(injected callable only)"]
         runtime_review["Runtime Demo Review App"]
         drift_review["Drift Inspection App<br/>frozen development Runs"]
         reports["Evaluation reports"]
-        d_boundary["??? What is the Weekly Coach<br/>allowed to do?"]
+        d_boundary["??? What is the Coach Digest<br/>allowed to do?"]
         d_feedback["??? Does user feedback<br/>update the profile?"]
     end
 
@@ -109,7 +109,7 @@ flowchart TB
     weekly --> evolution --> drift
     reviewer --> drift_v1
 
-    %% Weekly Coach + review (wired, experimental)
+    %% Weekly Drift Detection and Coach Digest (wired, experimental)
     drift --> digest
     weekly --> digest
     drift_v1 --> digest
@@ -137,12 +137,12 @@ The dashed grey `???` nodes and edge labels mark team decisions that still
 need calls. The dashed out-of-scope node marks a closed capstone boundary.
 Read this as a product and component map, not a literal runtime sequence.
 
-Twinkl now has two executable paths. The approved capstone POC path reviews
-Journal Entries and Core Values with the fixed Luna-low Weekly Drift Reviewer,
-persists versioned Weekly Drift Reviewer Decisions, applies the deterministic
-Drift Detector, and packages the result into a Weekly Digest plus Weekly Coach
-prompt. The deprecated compatibility path runs a VIF Critic checkpoint through
-weekly signals and the crash/rut/evolution router for historical demonstrations.
+Twinkl now has two executable paths. The approved capstone POC path runs Weekly
+Drift Detection. It uses the fixed Luna-low Weekly Drift Reviewer, persists its
+decisions, applies the internal Drift Detector, and stores structured output.
+The Coach Digest supplies this output as prompt input. The deprecated
+compatibility path runs a VIF Critic checkpoint through weekly signals and the
+crash/rut/evolution router for historical demonstrations.
 
 The Drift Inspection App is a separate read-only evaluation interface. It
 compares Runs 1–3 for three frozen Weekly Drift Reviewer setups:
@@ -164,8 +164,8 @@ The product shell is partial. A standalone React POC now runs the complete local
 onboarding flow and produces a resumable Profile in the browser. The specified
 [Experience and Inspect React Demo](../demo/experience_inspect_app.md) extends
 that implementation into one shared session: Experience presents onboarding,
-Journal Entries, persona replay, displayed nudges and responses, Drift, and the
-Weekly Digest, while Inspect presents the event-linked backend work that
+Journal Entries, persona replay, displayed nudges and responses, Weekly Drift
+Detection, and the Coach Digest. Inspect presents the event-linked work that
 produced the selected result. Durable user storage, the Python API, the
 surrounding React app, and the Journaling UI remain unbuilt. The conversational
 nudging engine is another experimental slice without the Journaling UI it would
@@ -194,11 +194,11 @@ evidence](../archive/evals/retired_wq9p_drift_benchmark_2026-07-11.md), and its 
 audit is not human ground truth. Value evolution is parked for v1 even though
 the prototype invokes its classifier automatically.
 
-The remaining decisions are what the Weekly Coach may say and whether user
+The remaining decisions are what the Coach Digest may say and whether user
 feedback should update the profile over time. See
 [`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md),
 [`docs/vif/03_model_training.md`](../vif/03_model_training.md),
-[`docs/weekly/weekly_digest_generation.md`](../weekly/weekly_digest_generation.md),
+[`docs/weekly/weekly_drift_detection.md`](../weekly/weekly_drift_detection.md),
 [`docs/demo/experience_inspect_app.md`](../demo/experience_inspect_app.md),
 [`docs/demo/weekly_drift_review_app.md`](../demo/weekly_drift_review_app.md),
 and [`docs/demo/review_app.md`](../demo/review_app.md).

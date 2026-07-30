@@ -144,9 +144,9 @@ candidate confirmation is outside the remaining capstone scope.
 |---|---|
 | Student-visible target | Two consecutive Journal Entries each visibly show a Conflict for the same Core Value |
 | Historical consensus table | Retired diagnostic provenance only; not a Drift target, threshold-selection input, or final test set |
-| Approved user-facing path | Fixed `gpt-5.6-luna` reasoning-effort-`low` Weekly Drift Reviewer Decisions without VIF Critic input, followed by the implemented deterministic Drift Detector; no fresh final test or deployment approval is claimed |
+| Weekly Drift Detection | Fixed `gpt-5.6-luna` reasoning-effort-`low` Weekly Drift Reviewer Decisions without VIF Critic input, followed by the internal deterministic Drift Detector and structured output storage |
 | VIF Critic path | Persist means and uncertainty for offline diagnostics; generalized independent review and retraining are not planned |
-| Delivery | Weekly Digest with cited Journal Entry evidence and active, recovered, mixed, or uncertain wording; Weekly Drift Reviewer Abstain emits no Drift claim |
+| Coach Digest | Uses the structured output to produce an evidence-based user response; no fresh final test or deployment approval is claimed |
 
 The EDA supports this definition because most dips spanning one Journal Entry
 recover within two Journal Entries, while three-step and multi-week definitions are too
@@ -155,14 +155,14 @@ sparse for the short observed trajectories. See
 
 ### 5.1 Delivery-Time Recovery
 
-Drift detection and Weekly Coach wording answer different questions. The
-student-visible target records whether Drift occurred. The Weekly Digest should
-describe the state at delivery time.
+Weekly Drift Detection and Coach Digest wording answer different questions.
+The student-visible target records whether Drift occurred. Weekly Drift
+Detection stores the state at delivery time.
 
 For example, `-1, -1, +1, +1, +1` remains a true benchmark Drift, but the
-Weekly Coach should describe it as **recovered** rather than **active**.
-**Mixed** is a Weekly Digest summary used only when relevant value-specific
-Drifts have different delivery states; it is not another state for one Drift.
+Coach Digest should describe it as **recovered** rather than **active**.
+**Mixed** is a stored summary used only when relevant value-specific Drifts
+have different delivery states. It is not another state for one Drift.
 **Uncertain** applies when a later Weekly Drift Reviewer Abstain prevents a
 confident active-versus-recovered decision. These transition rules are
 implemented and covered by scenario tests.
@@ -229,16 +229,16 @@ selected runtime rule.
 
 ---
 
-## 9. Weekly Coach Safety Behavior
+## 9. Coach Digest Safety Behavior
 
-The standalone Weekly Digest also has conservative fallback modes for offline
+The standalone Weekly Drift Detection output also has conservative fallback modes for offline
 prompt testing when no upstream Drift result is supplied. Acute grief or
 distress markers can route to `high_uncertainty`, while mixed or burdened weeks
 can use `mixed_state` or `background_strain`.
 
 These lexical/aggregate fallbacks are not substitutes for explicit Weekly
 Drift Reviewer abstention. VIF Critic uncertainty remains offline evidence.
-The fallbacks are local safety scaffolding around Weekly Digest file generation.
+The fallbacks are local safety scaffolding around Weekly Drift Detection output file generation.
 
 ---
 
@@ -251,7 +251,7 @@ The fallbacks are local safety scaffolding around Weekly Digest file generation.
 | `src/vif/weekly_schema.py` | Shared weekly frame names and required-column validation |
 | `src/weekly_drift_reviewer.py` | Frozen Weekly Drift Reviewer contract, caller, validation, and receipts |
 | `src/drift_detector.py` | Deterministic Drift Detector and delivery states |
-| `src/coach/weekly_drift_runtime.py` | Approved Weekly Drift Reviewer to Weekly Digest orchestration |
+| `src/coach/weekly_drift_runtime.py` | Weekly Drift Detection and Coach Digest orchestration |
 | `src/vif/drift.py` | Deprecated weekly crash/rut/evolution/high-uncertainty router |
 | `src/vif/evolution.py` | Experimental `stable`/`evolution`/`drift` classifier |
 | `src/coach/runtime.py` | Deprecated VIF Critic compatibility orchestration |

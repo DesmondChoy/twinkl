@@ -37,7 +37,7 @@ flowchart TB
         checkpoint["Checkpoint<br/>weights + runtime metadata"]
     end
 
-    subgraph runtime["Runtime: VIF -> Weekly Coach cycle"]
+    subgraph runtime["Runtime: weekly workflows"]
         wrangled_runtime["Wrangled Journal Entry timeline<br/>text + dates + Core Values"]
         encoder_runtime["Configured frozen sentence encoder<br/>resolved from config + checkpoint"]
         state_runtime["State encoder<br/>current default: window_size = 1"]
@@ -46,10 +46,10 @@ flowchart TB
         weekly["Weekly aggregation<br/>per-dimension + profile-weighted signals"]
         evolution["Experimental evolution classifier<br/>automatic in prototype"]
         drift["Deprecated compatibility routing<br/>stable / crash / rut / evolution / high_uncertainty"]
-        drift_v1["Approved POC runtime<br/>gpt-5.6-luna · low<br/>Weekly Drift Reviewer Decisions<br/>+ deterministic Drift Detector"]
-        digest["Weekly Digest builder"]
-        prompt["Full-context Weekly Coach prompt<br/>history capped at week_end"]
-        coach["Optional Weekly Coach reflection"]
+        drift_v1["Weekly Drift Detection<br/>gpt-5.6-luna · low<br/>internal Weekly Drift Reviewer<br/>+ Drift Detector"]
+        digest["Structured output storage"]
+        prompt["Coach Digest prompt"]
+        coach["Optional Coach Digest response"]
         exports["Exported files<br/>timeline.parquet + weekly.parquet<br/>drift.json + digest.json/md + prompt.txt"]
     end
 

@@ -1,13 +1,19 @@
-# Weekly Digest Generation
+# Weekly Drift Detection and Coach Digest
 
 ## Purpose
 
-The Weekly Digest is the structured bridge between Drift Detector output and
-the Weekly Coach. It does not produce a generic summary. It organizes the week
-against Core Values, selects evidence, records the decision rationale, and
-renders the prompt that the Weekly Coach can consume. The executable prototype
-can still build a Weekly Digest from VIF Critic predictions or LLM-Judge labels;
-that compatibility path is not the approved user-facing architecture.
+Weekly Drift Detection is the end-of-week workflow. It reviews Journal Entries,
+applies the Drift rule, and stores structured output. The output contains Core
+Values, cited evidence, and Drift state.
+
+The Coach Digest is a separate workflow. It supplies the structured Weekly
+Drift Detection output to a prompt. It then produces the user response. It does
+not decide whether Drift exists.
+
+Code and stored data still use `WeeklyDigest` and `weekly_digest`. These are
+compatibility identifiers. The executable prototype can also build this
+structured output from VIF Critic Predictions or LLM-Judge Labels. That path is
+not the approved user-facing architecture.
 
 Read this document with:
 
@@ -16,20 +22,20 @@ Read this document with:
   Drift definition;
 - [`docs/evals/drift_detection_eval.md`](../evals/drift_detection_eval.md) for
   the evaluation contract;
-- [`docs/vif/example.md`](../vif/example.md) for target Weekly Coach tone; and
+- [`docs/vif/example.md`](../vif/example.md) for target Coach Digest tone; and
 - [`docs/evals/explanation_quality_eval.md`](../evals/explanation_quality_eval.md)
-  for narrative checks.
+  for Coach Digest response checks.
 
 ---
 
 ## Executable Paths
 
-### Approved Weekly Drift Runtime
+### Approved Weekly Drift Detection Runtime
 
 The approved capstone POC path reads Journal Entries and Core Values, calls the
 fixed Luna-low Weekly Drift Reviewer without VIF Critic input, persists
-versioned Weekly Drift Reviewer Decisions, applies the deterministic Drift
-Detector, and builds the Weekly Digest:
+versioned Weekly Drift Reviewer Decisions, applies the internal Drift Detector,
+and stores structured Weekly Drift Detection output:
 
 ```sh
 uv run python -m src.coach.weekly_drift_runtime \
@@ -41,16 +47,16 @@ uv run python -m src.coach.weekly_drift_runtime \
 `--execute` is required because this command makes paid model calls. The model,
 reasoning effort, prompt, response schema, two-attempt transient retry policy,
 and fail-closed Abstain behavior are fixed rather than exposed as CLI options.
-The runtime writes one Weekly Drift Reviewer JSON receipt per reviewed week,
-plus the Drift Detector result, Weekly Digest JSON and markdown, Weekly Coach
-prompt, and consolidated Weekly Digest parquet.
+The runtime writes one Weekly Drift Reviewer JSON receipt per reviewed week.
+It also writes the Drift Detector result and structured Weekly Drift Detection
+output as JSON, markdown, and parquet. It renders the Coach Digest prompt.
 
 When `--profile-path` is supplied, the runtime validates the confirmed,
 versioned onboarding Profile and uses its `top_values` as Core Values. Without
 that option, synthetic persona `core_values` remains the deterministic
 compatibility path.
 
-### Standalone Compatibility Digest CLI
+### Standalone Compatibility Output CLI
 
 The standalone command defaults to persisted single-pass LLM-Judge labels:
 
@@ -95,7 +101,8 @@ uv run python -m src.coach.weekly_digest \
 ```
 
 If both `--response-mode` and `--drift-result-json` are present, the manual
-response mode wins and upstream Drift reasons are not carried into the Weekly Digest.
+response mode wins. Upstream Drift reasons are not carried into the structured
+output.
 
 #### Standalone Options
 
@@ -115,7 +122,7 @@ response mode wins and upstream Drift reasons are not carried into the Weekly Di
 ### Deprecated VIF Critic Compatibility Runtime
 
 `src.coach.runtime` predicts a VIF Critic timeline, aggregates weekly signals,
-runs the crash/rut/evolution router, and builds a Weekly Digest. It is explicitly
+runs the crash/rut/evolution router, and builds structured output. It is explicitly
 deprecated and retained only for historical reproduction and the existing
 Runtime Demo Review App:
 
@@ -157,8 +164,8 @@ logs/exports/weekly_coach/
 
 It also upserts the consolidated parquet at `--parquet-path`.
 
-All three CLIs render and persist the Weekly Coach prompt. They do not call a
-live Weekly Coach LLM. Programmatic callers can inject an asynchronous callable
+All three CLIs render and persist the Coach Digest prompt. They do not call a
+live Coach Digest LLM. Programmatic callers can inject an asynchronous callable
 into `run_weekly_drift_coach_cycle()`, the deprecated
 `run_weekly_coach_cycle()`, or the lower-level generation functions to populate
 `CoachNarrative` and `DigestValidation`.
@@ -172,8 +179,8 @@ uv run shiny run src/demo_tool/app.py
 ```
 
 The Shiny app uses the deprecated VIF Critic compatibility path, reuses cached
-persona/checkpoint bundles, and exposes the structured digest and prompt. It is
-not the approved Weekly Drift Reviewer and Drift Detector runtime. See
+persona/checkpoint bundles, and exposes structured output and its prompt. It is
+not the Weekly Drift Detection runtime. See
 [`docs/demo/review_app.md`](../demo/review_app.md).
 
 ---
@@ -193,10 +200,11 @@ not the approved Weekly Drift Reviewer and Drift Detector runtime. See
    expected Journal Entry and Core Value coordinate.
 5. Apply the two-consecutive-Conflict Drift Detector independently per Core
    Value, including across week boundaries.
-6. Record active, recovered, or uncertain state per Core Value and derive mixed
-   only when the Weekly Digest combines different states.
-7. Build the Weekly Digest from cited Journal Entry evidence in Weekly Drift
-   Reviewer Decisions without VIF Critic or LLM-Judge numeric summaries.
+6. Record active, recovered, or uncertain state per Core Value. Derive mixed
+   only when the structured output combines different states.
+7. Store Weekly Drift Detection output from cited Journal Entry evidence in
+   Weekly Drift Reviewer Decisions. Do not include VIF Critic or LLM-Judge
+   numeric summaries.
 
 ### Standalone Path
 
@@ -219,7 +227,7 @@ not the approved Weekly Drift Reviewer and Drift Detector runtime. See
 4. Aggregate the timeline into a validated weekly frame.
 5. Run the deprecated weekly crash/rut/evolution compatibility router.
 6. Pass the live VIF Critic predictions and structured routing result into the
-   Weekly Digest builder.
+   compatibility output builder.
 7. Render and persist the runtime bundle.
 
 `src/vif/weekly_schema.py` owns the weekly column contract between the runtime
@@ -228,9 +236,9 @@ early with a descriptive `ValueError`.
 
 ---
 
-## Digest Contract
+## Weekly Drift Detection Output Contract
 
-`WeeklyDigest` stores:
+The `WeeklyDigest` compatibility schema stores:
 
 - persona ID, name, and date-window metadata;
 - response mode, source, rationale, and optional upstream reasons;
@@ -240,11 +248,11 @@ early with a descriptive `ValueError`.
 - per-dimension summaries;
 - representative evidence snippets;
 - evidence selected from Journal Entries no later than `week_end`;
-- an optional `CoachNarrative`; and
+- an optional `CoachNarrative` from the Coach Digest; and
 - an optional `DigestValidation`.
 
-The Weekly Digest is the canonical record passed to the Weekly Coach rather
-than a transient prompt intermediary.
+This record is the stored Weekly Drift Detection output. The Coach Digest
+consumes it as a prompt input.
 
 ### Delivery and Compatibility Modes
 
@@ -291,7 +299,7 @@ Drift is two consecutive Conflicts on the same Core Value:
 - approved user-facing input: decisions from `gpt-5.6-luna` at reasoning effort
   `low`, the fixed Weekly Drift Reviewer model contract, made without VIF Critic
   predictions; and
-- delivery: the Weekly Digest cites the supporting Journal Entries.
+- stored output: Weekly Drift Detection cites the supporting Journal Entries.
 
 Each Core Value is evaluated independently. An aligned label for another Core
 Value cannot cancel Drift, and simultaneous Drifts remain separate
@@ -321,8 +329,8 @@ values, not the accepted v1 definition.
 
 ### Delivery-Time Recovery
 
-The student-visible target records whether Drift occurred. Weekly Digest
-wording reflects the state when the Weekly Coach is delivered.
+The student-visible target records whether Drift occurred. The Coach Digest
+wording reflects the state when its response is delivered.
 
 For each value-specific Drift:
 
@@ -330,7 +338,7 @@ For each value-specific Drift:
 - **recovered**: a later non-Conflict decision closes the run before the cutoff;
 - **uncertain**: a later Weekly Drift Reviewer abstention prevents a confident
   active-versus-recovered claim; and
-- **mixed**: a Weekly Digest summary when relevant value-specific Drifts have
+- **mixed**: a structured output state when relevant value-specific Drifts have
   different delivery states. It is not a fourth Drift type.
 
 A sequence such as `-1, -1, +1, +1, +1` therefore remains a true Drift but is
@@ -355,14 +363,14 @@ conservative local heuristics for offline development:
 - `stable`: none of the preceding conditions apply.
 
 These heuristics do not implement calibrated VIF Critic uncertainty or the
-selected Drift Detector. They keep prompt and Weekly Digest work usable when
-upstream results are absent.
+selected Drift Detector. They keep prompt and structured-output work usable
+when upstream results are absent.
 
 ---
 
-## Prompt and Narrative Contract
+## Coach Digest Prompt and Response Contract
 
-The Weekly Coach prompt requires:
+The Coach Digest prompt requires:
 
 - reflective rather than prescriptive language;
 - no score jargon, gamification, or judgmental framing;
@@ -373,19 +381,18 @@ The Weekly Coach prompt requires:
   - `tension_explanation`
   - `reflective_question`
 
-Tier 1 narrative validation checks:
+Tier 1 Coach Digest response checks:
 
-- `groundedness`: at least one quoted phrase appears in journal history or
-  selected evidence;
-- `non_circularity`: the narrative avoids score/alignment jargon;
-- `value_leakage`: the narrative does not name raw Schwartz value labels
+- `groundedness`: at least one quoted phrase appears in selected evidence;
+- `non_circularity`: the response avoids score or alignment jargon;
+- `value_leakage`: the response does not name raw Schwartz value labels
   (for example Benevolence or Self-Direction) sourced from
   `config/schwartz_values.yaml`; and
-- `length`: total narrative length remains within configured bounds.
+- `length`: total response length remains within configured bounds.
 
-The `tension_explanation` field is conditional: when the primary tensions are
-`None clear this week` and no Drift is confirmed, the Weekly Coach describes the
-steady pattern in evidence instead of manufacturing a tension.
+The `tension_explanation` field is conditional. When the primary tensions are
+`None clear this week` and no Drift is confirmed, the Coach Digest describes
+the steady pattern in evidence. It does not invent a tension.
 
 These checks are narrow guardrails, not a complete explanation-quality claim.
 
@@ -396,7 +403,8 @@ These checks are narrow guardrails, not a complete explanation-quality claim.
 - Core Values receive priority when dimension summaries are equally
   informative.
 - A dimension does not appear in both tension and strength sections by default.
-- Backfilled Weekly Digests cannot read Journal Entries after `week_end`.
+- Backfilled Weekly Drift Detection outputs cannot read Journal Entries after
+  `week_end`.
 - Empty sections render `None clear this week` rather than inventing a tension.
 - Acute grief/distress fallback favors presence over brittle value scoring.
 - Mixed-state and background-strain fallbacks preserve nuance that a weekly
@@ -426,15 +434,15 @@ deployment approval are also outside its scope.
 |---|---|
 | `src/weekly_drift_reviewer.py` | Frozen Weekly Drift Reviewer schema, validation, Luna-low caller, fail-closed Weekly Drift Reviewer Decisions, and JSON persistence |
 | `src/drift_detector.py` | Deterministic two-Conflict Drift Detector and delivery states |
-| `src/coach/weekly_drift_runtime.py` | Approved Weekly Drift Reviewer to Weekly Digest orchestration |
-| `src/coach/weekly_digest.py` | Digest construction, fallback routing, prompt rendering, validation, and persistence |
+| `src/coach/weekly_drift_runtime.py` | Approved Weekly Drift Detection and Coach Digest orchestration |
+| `src/coach/weekly_digest.py` | Compatibility output construction, fallback routing, prompt rendering, validation, and persistence |
 | `src/coach/runtime.py` | Deprecated VIF Critic checkpoint-to-digest compatibility orchestration |
 | `src/coach/mode_logic.py` | Standalone fallback response-mode logic |
 | `src/coach/schemas.py` | Drift, digest, narrative, and validation schemas |
 | `src/vif/runtime.py` | Per-Journal-Entry inference and weekly aggregation |
 | `src/vif/weekly_schema.py` | Weekly frame column contract and validation |
 | `src/vif/drift.py` | Deprecated weekly crash/rut/evolution compatibility router |
-| `prompts/weekly_digest_coach.yaml` | Weekly Coach prompt template |
+| `prompts/weekly_digest_coach.yaml` | Coach Digest prompt template |
 
 ---
 
@@ -447,7 +455,7 @@ uv run pytest tests/test_weekly_drift_reviewer.py tests/test_drift_detector.py \
   tests/coach/test_weekly_drift_runtime.py tests/coach/test_weekly_digest.py -q
 ```
 
-The tests cover Weekly Digest construction, future-Journal-Entry isolation,
+The tests cover structured-output construction, future-Journal-Entry isolation,
 upstream/manual mode handling, safety fallbacks, prompt rendering, structured
 generation with a fake LLM, persistence, weekly schema validation, and
 deprecated compatibility router behavior.

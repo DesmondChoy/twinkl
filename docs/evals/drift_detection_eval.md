@@ -1,4 +1,4 @@
-# Alignment and Drift Detection Evaluation
+# Weekly Drift Detection Evaluation
 
 ## Evaluation Contract
 
@@ -21,9 +21,9 @@ The current layers of the contract are deliberately different:
 | Development set | The complete development review contains 42 Drifts across 36 Drift trajectories in 292 resolved cases. `twinkl-qtwz` added nine Drifts across eight Drift trajectories from the 186 cases outside the earlier 106-case union. The earlier `twinkl-752.5` study used 33 Drifts across 28 Drift trajectories; keep its reported metrics bound to that input. Historical provenance must be reported as a subgroup because all nine newly found Drifts came from training-seen Journal Entries. The fixed `run_020` threshold is historical development evidence. |
 | Final test set | None is active or planned for the time-boxed capstone. The former 24-person `twinkl-v8pb` final-test cohort became development-only when its cases were opened for the full review. `twinkl-pv6s` was closed as not planned. |
 | Weekly Drift Reviewer | The model contract is fixed at `gpt-5.6-luna` with reasoning effort `low`, without VIF Critic input. The fixed model choice is distinct from final-test validation and deployment approval. |
-| Approved architecture | Weekly Drift Reviewer Decisions feed the deterministic two-Conflict Drift Detector. The completed VIF Critic remains an offline research component and is not a runtime or deployment-approval dependency. |
-| Capstone POC runtime | The approved runtime persists versioned Luna-low Weekly Drift Reviewer Decisions without VIF Critic input, applies the deterministic Drift Detector, and feeds the Weekly Digest. The deprecated crash/rut/evolution runtime remains only for compatibility. |
-| User delivery | The Weekly Digest cites the relevant Journal Entries and uses active, recovered, mixed, or uncertain wording without score jargon. No fresh final test or deployment approval is claimed. |
+| Approved architecture | Weekly Drift Detection uses the internal Weekly Drift Reviewer and Drift Detector. The completed VIF Critic remains an offline research component. |
+| Capstone POC runtime | Weekly Drift Detection persists versioned Luna-low Weekly Drift Reviewer Decisions without VIF Critic input. It applies the deterministic Drift Detector and stores structured output. The deprecated crash/rut/evolution runtime remains only for compatibility. |
+| User delivery | The Coach Digest consumes the structured output. Its response cites relevant evidence without score jargon. No fresh final test or deployment approval is claimed. |
 
 ### Adopted metric hierarchy (`twinkl-752`, updated under `twinkl-52zz`)
 
@@ -145,7 +145,7 @@ approval.
 - `src/vif/weekly_schema.py` defines and validates the weekly-frame contract
   shared by `aggregate_timeline_by_week()` and `detect_weekly_drift()`.
 - `src/coach/weekly_drift_runtime.py` runs the approved path and writes
-  versioned Weekly Drift Reviewer receipts, Drift Detector, Weekly Digest,
+  versioned Weekly Drift Reviewer receipts, Drift Detector, Weekly Drift Detection output,
   markdown, and prompt files.
 - `src/coach/runtime.py` retains the deprecated VIF Critic compatibility path.
 - The demo review app compares six exploratory rule-based detector families
@@ -271,7 +271,7 @@ No fallback score was taken from the retired benchmark.
 ### Still Missing for Product v1
 
 - Persisted onboarding Core Values for the user-facing runtime
-- Batch Weekly Coach language checks for active, recovered, mixed, and uncertain
+- Batch Coach Digest response checks for active, recovered, mixed, and uncertain
   states
 
 A fresh, independently resolved final test and deployment approval are outside
@@ -435,7 +435,7 @@ cannot substitute for a fresh, resolved locked final test set.
 Any future final test should reuse the Luna-low reporting fields listed in the
 frozen contract above, including entry-level results by Schwartz value
 dimension. Deployment criteria do not add further required slices. Active,
-recovered, mixed, and uncertain Weekly Digest behavior is verified separately
+recovered, mixed, and uncertain Weekly Drift Detection output behavior is verified separately
 through runtime scenario tests.
 
 ## Reproduction
@@ -513,7 +513,7 @@ re-scoring the committed responses.
    to one possible adjacent pair.
 6. The current synthetic corpus contains volatility more readily than clean,
    gradual arcs; it cannot validate fade or value-evolution claims.
-7. Weekly Coach delivery can lag reference confirmation, so Drift matching must
+7. Coach Digest delivery can lag Drift confirmation, so Drift matching must
    distinguish detector latency from delivery cadence.
 
 ---
@@ -528,7 +528,7 @@ re-scoring the committed responses.
 | [`src/vif/weekly_schema.py`](../../src/vif/weekly_schema.py) | Weekly producer/consumer column contract |
 | [`src/weekly_drift_reviewer.py`](../../src/weekly_drift_reviewer.py) | Frozen Weekly Drift Reviewer contract, caller, validation, and receipts |
 | [`src/drift_detector.py`](../../src/drift_detector.py) | Deterministic Drift Detector and delivery states |
-| [`src/coach/weekly_drift_runtime.py`](../../src/coach/weekly_drift_runtime.py) | Approved Weekly Drift Reviewer to Weekly Digest orchestration |
+| [`src/coach/weekly_drift_runtime.py`](../../src/coach/weekly_drift_runtime.py) | Weekly Drift Detection and Coach Digest orchestration |
 | [`src/vif/drift.py`](../../src/vif/drift.py) | Deprecated experimental weekly router |
 | [`src/coach/runtime.py`](../../src/coach/runtime.py) | Deprecated VIF Critic compatibility orchestration |
 | [`src/demo_tool/multi_drift.py`](../../src/demo_tool/multi_drift.py) | Six-detector exploratory comparison |

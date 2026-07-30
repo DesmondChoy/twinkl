@@ -148,7 +148,7 @@ trade-off.
 
 #### `+1` and Minority Recall — Diagnostic
 
-`+1` recall remains useful for occasional evidence-based Weekly Coach acknowledgment,
+`+1` recall remains useful for occasional evidence-based Coach Digest acknowledgment,
 and minority recall still summarizes both non-neutral classes. Neither is a
 Drift input or a primary selection metric. Positive evidence on one value
 cannot cancel Conflict on another.
@@ -244,7 +244,7 @@ mean_rho = np.mean(results)
 | `-1` precision and precision-recall curve | Mandatory historical report; no deployment threshold | Exposes false-Conflict inflation alongside recall |
 | QWK | Ordinal-health diagnostic | Detects collapse of the retained ternary output and preserves historical comparability |
 | `+1` recall / minority recall | Non-gating diagnostic | Supports occasional positive context without defining Drift |
-| Drift recall | Separate user-facing metric | Measures the actual two-Conflict decision consumed by the Weekly Coach |
+| Drift recall | Separate user-facing metric | Measures the two-Conflict decision made by Weekly Drift Detection |
 | Drift precision / false-alert burden | No deployment threshold adopted | Exposes whether a high-recall Drift Detector produces unacceptable false accountability |
 
 No numerical VIF Critic deployment gate was adopted. The completed study

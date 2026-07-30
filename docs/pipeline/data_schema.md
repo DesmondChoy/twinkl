@@ -1,7 +1,7 @@
 # Data Schema Reference
 
 This document describes the parquet files produced by the synthetic-data,
-LLM-Judge labeling, and Weekly Coach runtime paths, including schemas,
+LLM-Judge labeling, and weekly runtime paths, including schemas,
 relationships, and example queries.
 
 ## File Locations
@@ -11,7 +11,7 @@ relationships, and example queries.
 | `logs/registry/personas.parquet` | Central registry tracking personas through workflow stages |
 | `logs/judge_labels/judge_labels.parquet` | Training labels for the VIF (all Journal Entries, all personas) |
 | `logs/judge_labels/consensus_labels.parquet` | Confidence-tiered 5-pass consensus label file for stability analysis and diagnostic retrains |
-| `logs/exports/weekly_digests/weekly_digests.parquet` | Consolidated Weekly Digest records (created on first runtime/digest run) |
+| `logs/exports/weekly_digests/weekly_digests.parquet` | Consolidated Weekly Drift Detection output records (created on first runtime/digest run) |
 
 ---
 
@@ -136,13 +136,12 @@ consensus parquet is a diagnostic and audit file.
 
 ---
 
-## Weekly Digest Records
+## Weekly Drift Detection Output Records
 
 **Path:** `logs/exports/weekly_digests/weekly_digests.parquet`
 
-This file is created by `src.coach.weekly_digest` and `src.coach.runtime` when
-you run the Weekly Coach workflow. Each row is one `(persona_id, week_start,
-week_end)` digest record.
+This file is created by `src.coach.weekly_digest` and the weekly runtime paths.
+Each row is one `(persona_id, week_start, week_end)` structured-output record.
 
 ### Schema
 
@@ -152,7 +151,7 @@ week_end)` digest record.
 | `week_start` | `str` | Inclusive week start in `YYYY-MM-DD` |
 | `week_end` | `str` | Inclusive week end in `YYYY-MM-DD` |
 | `persona_name` | `str` | Persona display name |
-| `response_mode` | `str` | Weekly Coach response mode used for the Weekly Digest |
+| `response_mode` | `str` | Coach Digest response mode used for the Weekly Drift Detection output |
 | `mode_source` | `str` | Whether the mode came from upstream Drift output or local fallback logic |
 | `mode_rationale` | `str` | Short rationale for the selected mode |
 | `signal_source` | `str` | Numeric source for the digest (`judge_labels` or `vif_runtime`) |
@@ -165,13 +164,12 @@ week_end)` digest record.
 | `top_strengths_json` | `str` | JSON array of ranked strength dimensions |
 | `dimensions_json` | `str` | JSON array of per-dimension weekly summaries |
 | `evidence_json` | `str` | JSON array of representative evidence snippets |
-| `journal_history_json` | `str` | JSON array of history Journal Entries capped at `week_end` |
-| `coach_narrative_json` | `str \| null` | Weekly Coach narrative JSON if generation ran |
-| `validation_json` | `str \| null` | narrative-validation JSON if validation ran |
+| `coach_narrative_json` | `str \| null` | Coach Digest response JSON if generation ran |
+| `validation_json` | `str \| null` | Coach Digest response validation JSON if validation ran |
 
 ### Related Runtime Files
 
-The Weekly Coach workflow and demo review UI also write per-run files beside the
+The weekly runtime and demo review UI also write per-run files beside the
 consolidated parquet:
 
 - `vif_timeline.parquet` or `<persona_id>_vif_timeline.parquet`

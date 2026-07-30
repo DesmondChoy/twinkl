@@ -350,7 +350,7 @@ view state. Version `4` onboarding sessions migrate without losing responses.
 - The approved runtime validates saved Profile JSON and supplies `top_values`
   as Core Values to the Weekly Drift Reviewer and Drift Detector.
 - `value_profile.weights` is not yet supplied to the VIF Critic.
-- `goal_category` does not yet focus the Weekly Coach.
+- `goal_category` does not yet focus the Coach Digest.
 
 When no onboarding Profile is supplied, current synthetic personas retain
 their explicit `core_values` compatibility path.

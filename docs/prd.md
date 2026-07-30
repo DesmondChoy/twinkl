@@ -6,7 +6,7 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 
 ## Implementation Status
 
-*Last updated: 2026-07-22*
+*Last updated: 2026-07-30*
 
 | Feature | Status | Details |
 |---------|--------|---------|
@@ -16,10 +16,10 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 | **Human Annotation Tool** | ✅ Complete | ~4,200 LOC Shiny app; 380 saved annotations across 24 personas, with a 115-entry shared subset across 19 personas used for the current inter-rater agreement benchmark; Cohen's κ / Fleiss' κ metrics; modular components with analysis view; annotation ordering for persona prioritization |
 | **Drift Inspection App** | ✅ Complete | Read-only desktop Shiny app for comparing Runs 1–3 across three frozen Weekly Drift Reviewer setups: `gpt-5.4-mini` at reasoning effort `none`, `gpt-5.6-luna` at reasoning effort `none`, and `gpt-5.6-luna` at reasoning effort `low`. It shows complete development and persona-level results, Journal Entries, AI-reviewed LLM-Judge Conflict Labels, Weekly Drift Reviewer Decisions, cited evidence, and verified input cutoffs without model or provider API calls. Local and Railway launch paths are documented in the [app guide](demo/weekly_drift_review_app.md). |
 | **Conversational Nudging** | 🧪 Experimental | 3-category LLM classification (clarification/elaboration/tension-surfacing); pending validation that nudging improves VIF signal quality |
-| **Drift Detector** | ✅ Complete | The capstone POC implementation is complete and wired. It persists versioned Weekly Drift Reviewer Decisions without VIF Critic input, applies the deterministic two-consecutive-Conflict rule across week boundaries, and handles extension, recovery, abstention, deduplication, and active, recovered, uncertain, or mixed delivery. The fixed Luna-low model contract retains AI-reviewed synthetic development evidence; no fresh final test or deployment approval is claimed. The former VIF Critic crash/rut/evolution runtime is explicitly deprecated and retained only for historical compatibility. |
-| **Weekly Coach** | 🧪 Experimental | The approved runtime sends deterministic Drift Detector output based on Weekly Drift Reviewer Decisions into the Weekly Digest and optional Weekly Coach reflection. The Weekly Digest cites supporting Journal Entries without VIF Critic or LLM-Judge numeric summaries. Explanation validation depth and product-facing orchestration remain incomplete; no fresh final test or deployment approval is claimed. |
+| **Weekly Drift Detection** | ✅ Complete | The end-of-week workflow persists versioned Weekly Drift Reviewer Decisions without VIF Critic input. It applies the internal Drift Detector across week boundaries. It then stores structured output with Core Values, cited Journal Entries, and Drift state. The fixed Luna-low contract has AI-reviewed synthetic development evidence. It has no fresh final test or deployment approval. The former VIF Critic crash/rut/evolution runtime remains only for historical compatibility. |
+| **Coach Digest** | 🧪 Experimental | The workflow supplies structured Weekly Drift Detection output to a prompt. It then produces an optional user response. It does not decide whether Drift exists. Explanation validation and product orchestration remain incomplete. |
 | **Onboarding (SVBWS Values Assessment)** | 🧪 Experimental | Standalone React POC implements the published 11-group, six-object balanced SVBWS design, then presents structured goal selection, a label-free Core Value summary, and a first Journal Entry handoff. It randomizes group and card order, stores raw 11-object BWS results separately from the ten-value Profile transformation, and omits midpoint feedback and unsupported confidence claims. The approved runtime can import Core Values from a saved confirmed Profile; automated browser-to-service storage is outside the capstone. It is a research-grounded pilot instrument, not a validated Twinkl instrument. [Full spec](onboarding/onboarding_spec.md) |
-| **Experience and Inspect React Demo** | 📘 Specified | One mobile-first React capstone demo will present the product experience and the AI architecture from the same session. Narrow-screen phones are the primary design and verification target; wider layouts progressively enhance the same flow. Experience covers onboarding, Journal Entries, persona replay, displayed nudges and responses, Drift, and the Weekly Digest. Inspect exposes event-linked prompts, validated Weekly Drift Reviewer Decisions, Drift Detector steps, provenance, latency, and errors without adding VIF Critic input to the user-facing path. [Design](demo/experience_inspect_app.md) |
+| **Experience and Inspect React Demo** | 📘 Specified | One mobile-first React capstone demo will present the product experience and the AI architecture from the same session. Narrow-screen phones are the primary design and verification target. Wider layouts enhance the same flow. Experience covers onboarding, Journal Entries, persona replay, displayed nudges and responses, Weekly Drift Detection, and the Coach Digest. Inspect exposes event-linked prompts, internal Weekly Drift Reviewer Decisions, Drift Detector steps, provenance, latency, and errors without VIF Critic input. [Design](demo/experience_inspect_app.md) |
 | **Embedding Explorer** | ✅ Complete | Interactive 3D visualization of VIF hidden-layer and SBERT embedding spaces; self-contained HTML with Three.js |
 | **Journaling Anomaly Radar** | ❌ Not Started | Cadence/gap detection |
 | **Goal-aligned Inspiration Feed** | ❌ Not Started | External API integration |
@@ -80,7 +80,7 @@ AI journaling apps (Reflection, Mindsera, Insight Journal, Day One, Pixel Journa
 * **Alignment engine:** Weekly reasoning compares lived behaviour vs. declared priorities, surfaces tensions, and cites evidence snippets—turning “you said X but did Y” into actionable prompts.
 * **Explainable accountability:** Every nudge shows why (phrases, time windows, rules), plus contextual quotes/interventions tuned to the conflict at hand.
 * **Capstone-ready architecture:** synthetic-data generation, LLM-Judge
-  labeling, an uncertainty-aware MLP, independent weekly review, and a
+  labeling, an uncertainty-aware MLP, Weekly Drift Detection, and a
   deterministic two-Conflict rule provide concrete work across Intelligent
   Sensing, Pattern Recognition, Reasoning, and Architecting AI Systems.
 
@@ -90,11 +90,11 @@ AI journaling apps (Reflection, Mindsera, Insight Journal, Day One, Pixel Journa
 
 1. **Perception:** Typed Journal Entries flow through an LLM that tags values, identity claims, sentiment, intent, and direction-of-travel.
 2. **Memory:** Tags incrementally update a decay-aware user profile/knowledge base (value weights, goals, tensions, evidence snippets) instead of resetting each week.
-3. **Reasoning + action:** The required user-facing path uses independent weekly review; the completed **[VIF Critic](vif/01_concepts_and_roadmap.md)** remains an offline research component:
+3. **Reasoning + action:** The required user-facing path uses Weekly Drift Detection; the completed **[VIF Critic](vif/01_concepts_and_roadmap.md)** remains an offline research component:
    * **VIF Critic:** A numeric, uncertainty-aware model that predicts `-1`, `0`, or `+1` for each value from the current Journal Entry plus the normalized 10-dimensional value profile. It uses [LLM-Judge labels for reward modeling](vif/03_model_training.md) and [MC Dropout for epistemic uncertainty](vif/04_uncertainty_logic.md). At `window_size: 1`, it has no date/time-gap feature, prior Journal Entries, demographics, or biography; larger legal-history windows remain diagnostic experiments. Existing code supports training, evaluation, raw output export, and timeline inference. A generalized review-and-retrain loop is not implemented or planned for the time-boxed capstone. The exact relabeling invariant is defined in the [Security target contract](vif/security_target_contract.md).
-   * **Drift Detector:** Receives Weekly Drift Reviewer Decisions made without VIF Critic input. Drift is two consecutive Conflicts for the same Core Value; other values do not cancel it. The Weekly Drift Reviewer model contract is fixed at `gpt-5.6-luna` with reasoning effort `low`. The implemented capstone POC persists versioned decisions, fails closed to Abstain on invalid or refused responses, and applies the deterministic rule across week boundaries. The complete development analysis contains 42 Drifts across 36 Drift trajectories in 292 resolved cases. The fixed Luna-low setup had median Drift recall of `0.548`, 4 false Drift alerts, and `0.637` coverage. These are AI-reviewed synthetic development results. The capstone stops without a fresh final test and therefore makes no deployment-approval claim. The optional VIF Critic candidate-confirmation path is outside the remaining capstone scope. The crash/rut/evolution router is explicitly deprecated and retained only for historical compatibility.
-   * **Weekly Coach:** Receives the Weekly Digest and reads the user's full Journal Entry history via **full-context prompting** (at POC scale, all Journal Entries fit in the LLM context window) to surface thematic evidence, explain *why* Conflict occurred, and offer reflective prompts. For positive patterns, it provides occasional evidence-based acknowledgment without gamification. At production scale with longer histories, this would transition to retrieval-augmented generation (RAG). (See [System Architecture](vif/02_system_architecture.md)). For a concrete scenario, see [Worked Example: Sarah's Journey](vif/example.md). The Drift Detector implementation is complete for the capstone POC; its evaluation evidence remains AI-reviewed synthetic development evidence and grants no deployment approval.
-   * A **possible future idea** is a **[Value Evolution Detection](evolution/01_value_evolution.md)** layer between VIF Critic predictions and the Drift Detector. If revisited later, it would aim to distinguish genuine value shifts from behavioral Drift. It is not part of the current committed system scope.
+   * **Weekly Drift Detection:** At the end of each week, the internal Weekly Drift Reviewer reviews Journal Entries without VIF Critic input. Its fixed model contract is `gpt-5.6-luna` with reasoning effort `low`. The internal Drift Detector then applies the rule that two consecutive Conflicts for the same Core Value form Drift. The workflow persists the decisions and stores structured output with Core Values, cited Journal Entries, and Drift state. It fails closed to Abstain on invalid or refused responses. The complete development analysis contains 42 Drifts across 36 Drift trajectories in 292 resolved cases. The fixed Luna-low setup had median Drift recall of `0.548`, 4 false Drift alerts, and `0.637` coverage. These are AI-reviewed synthetic development results. The capstone has no fresh final test or deployment approval. The crash/rut/evolution router remains only for historical compatibility.
+   * **Coach Digest:** Supplies the structured Weekly Drift Detection output to a prompt. The output contains cited Journal Entry evidence. The prompt asks for an evidence-based user response and a reflective question. A response can also give occasional evidence-based acknowledgment when the output has no Drift. The Coach Digest does not decide whether Drift exists. See [System Architecture](vif/02_system_architecture.md) and [Worked Example: Sarah's Journey](vif/example.md).
+   * A **possible future idea** is **[Value Evolution Detection](evolution/01_value_evolution.md)** inside Weekly Drift Detection. It would try to separate a real value change from behavioral Drift. It is not in the current scope.
 
 ### Canonical VIF scope and evaluation contract
 
@@ -120,7 +120,7 @@ same Core Value.
   The capstone does not proceed to a fresh final test or deployment approval.
 - QWK, `+1` recall, calibration, and circumplex metrics remain diagnostics.
 - Only Core Values, stored in `top_values`, can produce Drift. `+1` evidence is
-  non-gating and may support occasional positive Weekly Coach acknowledgment.
+  non-gating and may support occasional positive Coach Digest acknowledgment.
 - An uncertain or abstaining Weekly Drift Reviewer produces no Drift claim;
   coverage, abstention, and suppressed known Drifts must still be reported even
   though they do not outrank Drift recall or false Drift alerts.
@@ -165,7 +165,7 @@ The onboarding flow uses the published **Schwartz Values Best-Worst Survey (SVBW
 
 The internal Profile includes a graded 10-dimensional product weight vector,
 Core Values stored in `top_values` for Drift gating, and a goal category
-intended to focus the Weekly Coach. The React POC keeps that Profile in the
+intended to focus the Coach Digest. The React POC keeps that Profile in the
 browser without exposing technical JSON to the user. A host can persist the
 Profile exposed by the callback or browser event. The approved runtime imports
 saved Profile JSON with `--profile-path` and uses `top_values` as Core Values;
@@ -175,7 +175,8 @@ This onboarding directly anchors the capstone submodules: the latent dimensions 
 
 ## **Core Feature Modules**
 
-* **Weekly Coach** ⚠️: Batch Journal Entries, run the reasoning components, and produce a one-page Weekly Digest (Pattern Recognition + Reasoning).
+* **Weekly Drift Detection** ✅: Review end-of-week Journal Entries, apply the Drift rule, and store structured output with cited evidence (Pattern Recognition + Reasoning).
+* **Coach Digest** ⚠️: Supply Weekly Drift Detection output to a prompt, then produce the user response (Reasoning).
 * **Conversational introspection agent** 🧪: Live mirroring via agent loop (Perception → Cognition → Action) to highlight contradictions mid-conversation. The system uses a three-category **nudge taxonomy**:
   - **Clarification** — for vague entries lacking concrete details
   - **Elaboration** — for surface-level entries with unexplored depth
@@ -190,7 +191,7 @@ This onboarding directly anchors the capstone submodules: the latent dimensions 
 
 1. Frame the research question (“How do we sustain a dynamic model of values/identity and reflect alignment?”) and map subsystems to submodules.
 2. Define the MVP loop: onboarding (SVBWS values assessment — see [spec](onboarding/onboarding_spec.md))
-3. **Scoping Strategy:** Adopt a **Hybrid Approach** (simple journaling loop + Weekly Digest + lightweight trajectory visualization). Build small slices of each feature to demonstrate breadth without over-building.
+3. **Scoping Strategy:** Adopt a **Hybrid Approach** (simple journaling loop + Weekly Drift Detection + Coach Digest + lightweight trajectory visualization). Build small slices of each feature to demonstrate breadth without over-building.
 4. Specify the profile schema:
    * **Value dimensions** anchored in [Schwartz's theory of basic human values](https://en.wikipedia.org/wiki/Theory_of_basic_human_values) (e.g., Self-Direction, Benevolence, Achievement, Security) with definitions, rubrics, and examples.
    * **User value profile:** vector of value weights `w_u ∈ ℝ^K` (normalized, sum to 1), Core Values stored in `top_values`, plus narrative descriptions and constraints. The full vector conditions the VIF Critic; `top_values` gates Drift v1.
@@ -219,7 +220,7 @@ This onboarding directly anchors the capstone submodules: the latent dimensions 
 * **Alignment engine:** Weekly reasoning compares lived behaviour vs. declared priorities, surfaces tensions, and cites evidence snippets—turning “you said X but did Y” into actionable prompts.
 * **Explainable accountability:** Every nudge shows why (phrases, time windows, rules), plus contextual quotes/interventions tuned to the conflict at hand.
 * **Capstone-ready architecture:** Synthetic-data generation, LLM-Judge
-  labeling, an uncertainty-aware MLP, independent weekly review, and a
+  labeling, an uncertainty-aware MLP, Weekly Drift Detection, and a
   deterministic two-Conflict rule provide concrete work across Intelligent
   Sensing, Pattern Recognition, Reasoning, and Architecting AI Systems.
 
@@ -293,8 +294,8 @@ listed here is planned.
 | :--- | :--- | :--- | :--- | :--- |
 | 1 | **Value-mention tagging** | Verify LLM correctly identifies which Schwartz values a Journal Entry touches | Hand-label 50 Journal Entries with Schwartz value dimensions. Measure **Cohen's κ** between LLM and human labels. | Journal Entry: *"Dropped everything to help my sister move."* Human tags: `Benevolence`. LLM tags: `Benevolence`. → Agreement ✓ |
 | 2 | **VIF Critic Conflict screening** | Record the completed local-model research without collapsing into neutral predictions | Report historical entry-level `recall_-1`, `-1` precision and precision-recall behavior alongside QWK, calibration, `+1` recall, and per-dimension diagnostics. | The completed research documents Conflict-recovery limits; it does not receive user-facing Drift authority, and no further VIF Critic work is planned. |
-| 3 | **Drift detection** | Confirm the Drift Detector finds Drift for a Core Value | Evaluate the fixed `gpt-5.6-luna` reasoning-effort-`low` Weekly Drift Reviewer with the displayed-behavior target: each of two consecutive Journal Entries must clearly show Conflict against the same Core Value. The complete development analysis contains 42 Drifts across 36 Drift trajectories in 292 resolved cases; report historical provenance subgroups rather than treating them as separate evaluation sets. The earlier 106-case `twinkl-752.5` result leaves the raw-input comparison inconclusive and finds no scheduling recall gain. Prioritize Drift recall first and false Drift alerts second; report coverage as a diagnostic. No fresh final test or deployment approval is claimed. | Drift: two consecutive Journal Entries both visibly show Conflict against Benevolence. An uncertain Weekly Drift Reviewer decision produces no Drift. `+1` on another value cannot cancel the Drift. |
-| 4 | **Explanation quality** | Ensure explanations feel accurate and actionable | Show 5–10 users their Weekly Digest and ask "Did this feel accurate?" on a **5-point Likert scale**. | User sees: *"You wrote twice about wanting to make room for people close to you, then cancelled on a friend."* Rates it 4/5 for accuracy. |
+| 3 | **Weekly Drift Detection** | Confirm that Weekly Drift Detection finds Drift for a Core Value | Evaluate the fixed `gpt-5.6-luna` reasoning-effort-`low` Weekly Drift Reviewer with the displayed-behavior target. Each of two consecutive Journal Entries must clearly show Conflict against the same Core Value. Apply the internal Drift Detector and assess the stored structured output. Prioritize Drift recall first and false Drift alerts second. Report coverage as a diagnostic. No fresh final test or deployment approval is claimed. | Drift: two consecutive Journal Entries both visibly show Conflict against Benevolence. An uncertain Weekly Drift Reviewer Decision produces no Drift. `+1` on another value cannot cancel the Drift. |
+| 4 | **Coach Digest explanation quality** | Ensure that Coach Digest responses feel accurate and actionable | Show 5–10 users their Coach Digest response and ask "Did this feel accurate?" on a **5-point Likert scale**. | User sees: *"You wrote twice about wanting to make room for people close to you, then cancelled on a friend."* Rates it 4/5 for accuracy. |
 | 5 | **Nudge relevance** | Verify the top prompt is contextually appropriate | A/B test: random prompt vs. model-selected prompt. Measure **engagement rate** (did user respond?). | Model picks *"What held you back from helping?"* after detecting a Benevolence Conflict. User responds → engagement ✓ |
 | 6 | **Nudge signal quality** | Validate that nudging improves VIF Critic training data | Compare LLM-Judge alignment scores for nudged vs. non-nudged Journal Entries from the same personas. Measure **mean alignment confidence** and **value dimension coverage**. | Hypothesis: Nudged Journal Entries yield higher-confidence scores and more explicit value signals due to increased expressiveness. |
 
@@ -340,9 +341,9 @@ listed here is planned.
 | [twinkl-52zz Luna reasoning-effort comparison](../logs/experiments/reports/experiment_review_2026-07-14_twinkl_52zz_luna_low.md) | Evidence behind the fixed Luna-low model contract, metric hierarchy, cost, and limitations |
 | **Other** | |
 | [architecture/e2e_architecture.md](architecture/e2e_architecture.md) | High-level product and system map |
-| [weekly/weekly_digest_generation.md](weekly/weekly_digest_generation.md) | Weekly Digest contract, runtime commands, and generated files |
+| [weekly/weekly_drift_detection.md](weekly/weekly_drift_detection.md) | Weekly Drift Detection and Coach Digest contracts, runtime commands, and generated files |
 | [demo/weekly_drift_review_app.md](demo/weekly_drift_review_app.md) | Read-only comparison of frozen Weekly Drift Reviewer development Runs, including the fixed Luna-low setup |
-| [demo/review_app.md](demo/review_app.md) | Runtime Demo Review App for the local VIF Critic-to-Weekly-Digest path |
+| [demo/review_app.md](demo/review_app.md) | Historical Runtime Demo Review App for the local VIF Critic compatibility path |
 | [demo/experience_inspect_app.md](demo/experience_inspect_app.md) | Specified React capstone demo with synchronized Experience and Inspect views |
 | [01_value_evolution.md](evolution/01_value_evolution.md) | Concept note for a possible future filter distinguishing value evolution from Drift |
 | [onboarding_spec.md](onboarding/onboarding_spec.md) | BWS-based onboarding flow, item design, and data output schema |

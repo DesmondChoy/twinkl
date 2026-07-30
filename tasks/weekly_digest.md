@@ -8,7 +8,7 @@
 - [x] Add structured Coach narrative generation helpers and Tier 1 validation checks.
 - [x] Persist weekly digests to a consolidated parquet artifact in addition to per-run exports.
 - [x] Add or update targeted tests for the weekly Coach slice.
-- [x] Update `docs/weekly/weekly_digest_generation.md` with current implementation and remaining gaps.
+- [x] Update `docs/weekly/weekly_drift_detection.md` with current implementation and remaining gaps.
 - [x] Stop overlapping tension/strength dimensions in the same digest by default.
 - [x] Truncate journal history to entries on or before the digest end date.
 - [x] Add a conservative acute-distress heuristic so grief-heavy weeks route to `high_uncertainty` instead of surfacing misleading tensions like `Hedonism`.

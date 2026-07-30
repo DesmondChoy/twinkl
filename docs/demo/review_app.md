@@ -23,10 +23,10 @@ The app lets you:
 - browse a persona's profile, Core Values, and full Journal Entry timeline
 - inspect nudges and follow-up responses inline with the originating Journal Entry
 - choose a local VIF Critic checkpoint from the experiment archive or `models/vif/`
-- run the full local checkpoint -> weekly signals -> Drift -> Weekly Digest path
+- run the full local checkpoint -> weekly signals -> Drift -> Weekly Drift Detection output path
 - reload cached results for a previously-run persona/checkpoint pair
 - compare six rule-based detectors against either LLM-Judge labels or VIF Critic predictions
-- inspect an Overview plus the resulting per-Journal-Entry signals, weekly aggregates, Drift JSON, Weekly Digest, and detector comparison in one place
+- inspect an Overview plus the resulting per-Journal-Entry signals, weekly aggregates, Drift JSON, Weekly Drift Detection output, and detector comparison in one place
 
 ## How To Run
 
@@ -101,7 +101,7 @@ The main canvas shows:
   - `Per-entry critic` — per-Journal-Entry alignment means, uncertainties, strongest alignments, and detector badges
   - `Weekly signals` — weekly aggregate table from the runtime timeline
   - `Drift` — structured Drift JSON plus triggered dimensions
-  - `Weekly digest` — rendered Weekly Digest markdown and summary badges
+  - `Weekly digest` — rendered Weekly Drift Detection output markdown and summary badges
   - `Detector comparison` — chart, table, and fired/silent chips for all six detector families
 
 
@@ -125,7 +125,7 @@ The comparison remains a diagnostic view. Drift requires two adjacent Journal
 Entries that visibly show a behavior or choice against the same Core Value.
 [`twinkl-v8pb`](../evals/drift_v1_student_visible_target.md) is historical
 development evidence. The approved Weekly Drift Reviewer and Drift Detector
-path is wired into the Weekly Digest runtime but intentionally not retrofitted
+path is wired into the Weekly Drift Detection output runtime but intentionally not retrofitted
 into this deprecated app. The capstone stops without a fresh final test or
 deployment approval; the old consensus-derived frozen benchmark is retired
 historical evidence.
@@ -147,7 +147,7 @@ That directory stores:
 - `<persona_id>_<week_end>.md`
 - `<persona_id>_<week_end>.prompt.txt`
 
-The consolidated Weekly Digest parquet remains separate at the configured
+The consolidated Weekly Drift Detection output parquet remains separate at the configured
 `parquet_path` (default: `logs/exports/weekly_digests/weekly_digests.parquet`).
 
 ## Implementation Reference
