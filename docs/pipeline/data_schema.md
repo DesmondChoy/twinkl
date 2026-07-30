@@ -150,15 +150,17 @@ Each row is one `(persona_id, week_start, week_end)` structured-output record.
 | `persona_id` | `str` | Persona ID |
 | `week_start` | `str` | Inclusive week start in `YYYY-MM-DD` |
 | `week_end` | `str` | Inclusive week end in `YYYY-MM-DD` |
-| `persona_name` | `str` | Persona display name |
-| `response_mode` | `str` | Coach Digest response mode used for the Weekly Drift Detection output |
+| `persona_name` | `str \| null` | Preferred name supplied to the Coach Digest |
+| `response_mode` | `str` | Stored Weekly Drift Detection or compatibility mode; the Coach Digest derives one of three policies |
 | `mode_source` | `str` | Whether the mode came from upstream Drift output or local fallback logic |
 | `mode_rationale` | `str` | Short rationale for the selected mode |
-| `signal_source` | `str` | Numeric source for the digest (`judge_labels` or `vif_runtime`) |
+| `signal_source` | `str` | Weekly Drift Detection evidence source; compatibility rows may use `judge_labels` or `vif_runtime` |
 | `n_entries` | `i64` | Number of Journal Entries included in the week |
-| `overall_mean` | `f64` | Profile-weighted overall weekly alignment |
-| `overall_uncertainty` | `f64` | Profile-weighted weekly uncertainty |
+| `overall_mean` | `f64 \| null` | Compatibility-only overall weekly alignment |
+| `overall_uncertainty` | `f64 \| null` | Compatibility-only weekly uncertainty |
 | `core_values_json` | `str` | JSON array of Core Values |
+| `goal_context` | `str \| null` | User-confirmed onboarding focus supplied to the Coach Digest |
+| `drift_states_json` | `str` | JSON mapping of Core Values to auditable Drift states |
 | `drift_reasons_json` | `str` | JSON array of Drift-routing reasons |
 | `top_tensions_json` | `str` | JSON array of ranked tension dimensions |
 | `top_strengths_json` | `str` | JSON array of ranked strength dimensions |

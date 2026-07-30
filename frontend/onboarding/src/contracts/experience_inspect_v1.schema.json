@@ -869,7 +869,9 @@
           "enum": [
             "misaligned",
             "aligned",
-            "strain"
+            "strain",
+            "recovery",
+            "context"
           ],
           "title": "Direction",
           "type": "string"
@@ -2131,6 +2133,20 @@
           "const": "2.1.0",
           "title": "Onboarding Version",
           "type": "string"
+        },
+        "preferred_name": {
+          "anyOf": [
+            {
+              "maxLength": 80,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Preferred Name"
         },
         "provenance": {
           "$ref": "#/$defs/ProfileProvenance"
@@ -3450,6 +3466,18 @@
           },
           "title": "Evidence",
           "type": "array"
+        },
+        "goal_context": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Goal Context"
         },
         "mode_rationale": {
           "description": "Short explanation for why this response mode was selected.",

@@ -6,11 +6,12 @@ not a psychometrically validated Twinkl instrument. It produces a confirmed,
 versioned Profile. A host can persist the Profile exposed by the handoff, and
 the approved runtime imports its Core Values from saved JSON.
 
-The assessment contains 11 randomized groups of six neutral cards from the
-published balanced design. Each group uses six abstract backgrounds assigned
-by randomized display position rather than value identity. People can tap,
-drag, or use the keyboard to make Most and Least choices. Schwartz labels
-remain internal. The Profile keeps raw
+The flow first asks what Twinkl should call the user, then presents 11
+randomized groups of six neutral cards from the published balanced design.
+Each group uses six abstract backgrounds assigned by randomized display
+position rather than value identity. People can tap, drag, or use the keyboard
+to make Most and Least choices. Schwartz labels remain internal. The Profile
+stores the preferred name and keeps raw
 11-object BWS results separate from the ten-value product transformation, with
 no midpoint result or confidence proxy. The final action opens the first
 Journal Entry prompt and exposes the confirmed Profile through an
@@ -52,5 +53,6 @@ This standalone POC stores unfinished progress and its confirmed Profile in
 browser `localStorage` and makes no model or provider calls itself. A host can
 persist the Profile supplied through `onStartJournal` or the
 `twinkl:start-first-journal` event. The approved Python runtime accepts that
-saved JSON through `--profile-path`; automatic browser-to-service storage is
-outside the time-boxed capstone.
+saved JSON through `--profile-path` and uses the preferred name and confirmed
+goal to focus the Coach Digest; automatic browser-to-service storage is outside
+the time-boxed capstone.

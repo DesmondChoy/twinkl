@@ -125,6 +125,7 @@ describe("versioned Profile", () => {
   it("requires confirmation and round-trips through deterministic validation", () => {
     const input = {
       userId: "user-1",
+      preferredName: "  Casey   Lee  ",
       sessionId: "session-1",
       startedAt: "2026-07-19T00:00:00.000Z",
       completedAt: "2026-07-19T00:02:00.000Z",
@@ -135,6 +136,7 @@ describe("versioned Profile", () => {
       "before confirmation",
     );
     const profile = createProfile({ ...input, userConfirmed: true });
+    expect(profile.preferred_name).toBe("Casey Lee");
     expect(profile.onboarding_version).toBe("2.1.0");
     expect(profile.instrument).toBe(
       "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",

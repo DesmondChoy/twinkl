@@ -6,8 +6,12 @@ from types import SimpleNamespace
 
 import pytest
 
-from src.coach.weekly_digest import build_weekly_drift_reviewer_digest
+from src.coach.weekly_digest import (
+    build_weekly_drift_reviewer_digest,
+    render_digest_prompt,
+)
 from src.coach.weekly_drift_runtime import (
+    load_onboarding_coach_context,
     load_onboarding_core_values,
     run_weekly_drift_coach_cycle,
 )
@@ -118,7 +122,8 @@ async def test_approved_runtime_persists_reviews_drift_and_digest(tmp_path: Path
     assert digest.signal_source == "weekly_drift_reviewer"
     assert digest.overall_mean is None
     assert digest.drift_states == {"benevolence": "recovered"}
-    assert len(digest.evidence) == 2
+    assert len(digest.evidence) == 3
+    assert digest.evidence[-1].direction == "recovery"
     assert Path(artifact_paths["review_receipt_1_path"]).exists()
     assert Path(artifact_paths["drift_json_path"]).exists()
     assert Path(artifact_paths["digest_json_path"]).exists()
@@ -127,8 +132,9 @@ async def test_approved_runtime_persists_reviews_drift_and_digest(tmp_path: Path
     payload = json.loads(Path(artifact_paths["drift_json_path"]).read_text())
     assert payload["delivery_state"] == "recovered"
     prompt = Path(artifact_paths["prompt_path"]).read_text()
-    assert "Drift states: Benevolence: recovered" in prompt
-    assert "Overall mean alignment: N/A" in prompt
+    assert "Selected policy: no_current_drift" in prompt
+    assert "Drift is recovered" in prompt
+    assert "Overall mean alignment" not in prompt
 
 
 def _write_onboarding_profile(path: Path, **overrides) -> None:
@@ -136,9 +142,11 @@ def _write_onboarding_profile(path: Path, **overrides) -> None:
         "schema_version": 2,
         "onboarding_version": "2.1.0",
         "user_id": "deadbeef",
+        "preferred_name": "Desmond",
         "user_confirmed": True,
         "top_values": ["self_direction"],
         "value_profile": {"top_values": ["self_direction"]},
+        "goal_category": "direction",
     }
     payload.update(overrides)
     path.write_text(json.dumps(payload))
@@ -168,6 +176,13 @@ async def test_onboarding_profile_supplies_runtime_core_values(tmp_path: Path):
 
     assert digest.core_values == ["self_direction"]
     assert digest.drift_states == {"self_direction": "recovered"}
+    assert digest.persona_name == "Desmond"
+    assert digest.goal_context == "I feel stuck or unclear about my direction"
+
+    prompt = _artifact_paths["prompt_path"]
+    prompt_text = Path(prompt).read_text()
+    assert "Preferred name: Desmond" in prompt_text
+    assert 'User-confirmed current focus: "I feel stuck or unclear' in prompt_text
 
 
 @pytest.mark.parametrize(
@@ -200,6 +215,8 @@ async def test_onboarding_profile_supplies_runtime_core_values(tmp_path: Path):
             {"value_profile": {"top_values": ["security"]}},
             "must match",
         ),
+        ({"preferred_name": "   "}, "preferred_name"),
+        ({"goal_category": "not_a_goal"}, "goal_category"),
     ],
 )
 def test_onboarding_profile_rejects_invalid_contract(
@@ -220,6 +237,22 @@ def test_onboarding_profile_rejects_malformed_json(tmp_path: Path):
 
     with pytest.raises(ValueError, match="Could not read onboarding Profile JSON"):
         load_onboarding_core_values(profile_path, persona_id="deadbeef")
+
+
+def test_onboarding_profile_loads_coach_context(tmp_path: Path):
+    profile_path = tmp_path / "profile.json"
+    _write_onboarding_profile(
+        profile_path,
+        preferred_name="  Desmond   Choy  ",
+    )
+
+    context = load_onboarding_coach_context(
+        profile_path,
+        persona_id="deadbeef",
+    )
+
+    assert context.preferred_name == "Desmond Choy"
+    assert context.goal_context == "I feel stuck or unclear about my direction"
 
 
 def test_weekly_digest_keeps_simultaneous_core_value_evidence(tmp_path: Path):
@@ -267,3 +300,46 @@ def test_weekly_digest_keeps_simultaneous_core_value_evidence(tmp_path: Path):
         (1, ("benevolence",)),
         (1, ("self_direction",)),
     }
+
+
+def test_no_drift_digest_includes_recent_journal_context(tmp_path: Path):
+    wrangled_dir = tmp_path / "wrangled"
+    wrangled_dir.mkdir()
+    _write_wrangled(wrangled_dir / "persona_deadbeef.md")
+    decisions = [
+        WeeklyDriftReviewerDecision(
+            persona_id="deadbeef",
+            week_start="2025-01-06",
+            week_end="2025-01-19",
+            t_index=t_index,
+            date=date,
+            core_value="benevolence",
+            verdict="not_conflict",
+            confidence="high",
+            reason_code="direct_aligned_or_neutral_behavior",
+            evidence_quote="",
+            review_status="ok",
+        )
+        for t_index, date in ((0, "2025-01-06"), (1, "2025-01-13"))
+    ]
+    drift_result = detect_drift(decisions, persona_id="deadbeef")
+
+    digest = build_weekly_drift_reviewer_digest(
+        persona_id="deadbeef",
+        wrangled_dir=wrangled_dir,
+        week_start="2025-01-06",
+        week_end="2025-01-19",
+        core_values=["benevolence"],
+        decisions=decisions,
+        drift_result=drift_result,
+    )
+
+    assert digest.response_mode == "stable"
+    assert [snippet.direction for snippet in digest.evidence] == [
+        "context",
+        "context",
+    ]
+    prompt = render_digest_prompt(digest)
+    assert "Selected policy: no_current_drift" in prompt
+    assert "Cancelled dinner with my family" in prompt
+    assert "does not by itself prove positive behavior" in prompt

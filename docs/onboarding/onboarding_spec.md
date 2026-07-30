@@ -8,7 +8,8 @@ Journal Entries. The Profile contains:
 1. raw Schwartz Values Best-Worst Survey (SVBWS) responses and scores;
 2. a separately named ten-value product transformation;
 3. Core Value descriptions confirmed by the user; and
-4. one structured goal category.
+4. one structured goal category; and
+5. the user's preferred name.
 
 The assessment implements the Case 1, or object-case, SVBWS design published by
 Lee, Soutar, and Louviere (2008). It is a **research-grounded pilot
@@ -25,8 +26,8 @@ BWS preference shares.
 - The React onboarding flow is mobile-first: narrow-screen phones are the
   primary design and verification target, and wider layouts are progressive
   enhancements.
-- Onboarding owns the 11 SVBWS tasks, goal selection, Profile confirmation,
-  local resume, and first Journal Entry handoff.
+- Onboarding owns preferred-name capture, the 11 SVBWS tasks, goal selection,
+  Profile confirmation, local resume, and first Journal Entry handoff.
 - A host may persist the confirmed Profile exposed by the callback or browser
   event. The approved runtime imports saved Profile JSON through
   `--profile-path`.
@@ -143,11 +144,16 @@ Twinkl-specific presentation adaptation requiring empirical validation.
 
 ## 4. User Flow
 
-### 4.1 Direct entry and progress
+### 4.1 Preferred name and progress
 
-The user enters the first randomized group directly. Progress reads
-`Values · n of 11`, followed by `Your focus` and `Your compass`. There is no
-welcome screen and no midpoint result.
+The flow first asks `What should Twinkl call you?` and stores a trimmed
+`preferred_name` of at most 80 characters. It explains that the name is used
+sparingly to make reflections personal. This is a functional identity step,
+not a marketing welcome screen.
+
+After the name step, the user enters the first randomized group directly.
+Progress reads `Values · n of 11`, followed by `Your focus` and `Your compass`.
+There is no midpoint result.
 
 The heading reads `What matters most as you find your way?` The introduction
 says there are no right answers and that more than one principle can matter.
@@ -287,6 +293,7 @@ The abbreviated shape is:
   "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
   "scoring_method": "best_minus_worst_divided_by_appearances_v1",
   "user_id": "uuid",
+  "preferred_name": "Casey",
   "session_id": "uuid",
   "started_at": "2026-07-20T05:00:00.000Z",
   "timestamp": "2026-07-20T05:04:00.000Z",
@@ -332,15 +339,18 @@ The abbreviated shape is:
 }
 ```
 
-A confirmed Profile requires all 11 canonical groups exactly once, six valid
-objects per response, distinct valid Most and Least choices, non-negative
-integer response time, a valid goal, and explicit summary confirmation.
-Validation rebuilds the Profile deterministically and rejects any mismatch.
+A newly confirmed Profile requires a non-empty preferred name, all 11 canonical
+groups exactly once, six valid objects per response, distinct valid Most and
+Least choices, non-negative integer response time, a valid goal, and explicit
+summary confirmation. `preferred_name` remains optional when reading older
+Profile JSON. Validation rebuilds the Profile deterministically and rejects any
+mismatch.
 
-The resumable browser session uses schema version `5` and storage key
-`twinkl.onboarding.session.v5`. It stores the randomized group order, each
-canonical group's randomized card order, and the shared Experience and Inspect
-view state. Version `4` onboarding sessions migrate without losing responses.
+The resumable browser session uses schema version `6` and storage key
+`twinkl.onboarding.session.v6`. It stores the preferred name, randomized group
+order, each canonical group's randomized card order, and the shared Experience
+and Inspect view state. Version `4` and `5` onboarding sessions migrate without
+losing responses.
 
 ## 7. Integration Status
 
@@ -349,8 +359,10 @@ view state. Version `4` onboarding sessions migrate without losing responses.
   automatic browser-to-service storage is outside the capstone.
 - The approved runtime validates saved Profile JSON and supplies `top_values`
   as Core Values to the Weekly Drift Reviewer and Drift Detector.
+- The approved runtime supplies `preferred_name`, the friendly Core Value
+  phrases, and `goal_category` context to the Coach Digest while keeping
+  internal Schwartz labels out of the user-facing response.
 - `value_profile.weights` is not yet supplied to the VIF Critic.
-- `goal_category` does not yet focus the Coach Digest.
 
 When no onboarding Profile is supplied, current synthetic personas retain
 their explicit `core_values` compatibility path.

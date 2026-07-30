@@ -6,12 +6,14 @@ import {
   type GoalCategory,
   type OnboardingProfile,
   isBwsObjectKey,
+  normalizePreferredName,
   scoreResponses,
   validateProfile,
 } from "./domain";
 
-export const SESSION_STORAGE_KEY = "twinkl.onboarding.session.v5";
-export const LEGACY_SESSION_STORAGE_KEY = "twinkl.onboarding.session.v4";
+export const SESSION_STORAGE_KEY = "twinkl.onboarding.session.v6";
+export const LEGACY_SESSION_STORAGE_KEY = "twinkl.onboarding.session.v5";
+export const OLDEST_SESSION_STORAGE_KEY = "twinkl.onboarding.session.v4";
 
 export type DemoView = "experience" | "inspect";
 export type DemoRunState =
@@ -44,11 +46,12 @@ export interface ExperienceState {
   trace_event_ids: string[];
 }
 
-export type OnboardingStage = "set" | "goal" | "summary" | "complete";
+export type OnboardingStage = "name" | "set" | "goal" | "summary" | "complete";
 
 export interface OnboardingSession {
-  schema_version: 5;
+  schema_version: 6;
   user_id: string;
+  preferred_name: string;
   session_id: string;
   started_at: string;
   stage: OnboardingStage;
@@ -99,11 +102,12 @@ export function createSession(
   makeId: () => string = () => crypto.randomUUID(),
 ): OnboardingSession {
   return {
-    schema_version: 5,
+    schema_version: 6,
     user_id: makeId(),
+    preferred_name: "",
     session_id: makeId(),
     started_at: now.toISOString(),
-    stage: "set",
+    stage: "name",
     set_index: 0,
     set_order: shuffled(BWS_SETS.map((_, index) => index), random),
     stage_started_at_ms: now.getTime(),
@@ -184,19 +188,28 @@ export function parseSession(raw: string | null): OnboardingSession | null {
     const parsed = JSON.parse(raw) as Partial<Omit<OnboardingSession, "schema_version">> & {
       schema_version?: number;
     };
-    const session = parsed.schema_version === 4
+    const versionFive = parsed.schema_version === 4
       ? {
           ...parsed,
           schema_version: 5 as const,
           experience: createExperienceState(),
         }
       : parsed;
+    const session = versionFive.schema_version === 5
+      ? {
+          ...versionFive,
+          schema_version: 6 as const,
+          preferred_name: "Friend",
+          confirmed_profile: versionFive.confirmed_profile ?? null,
+        }
+      : versionFive;
     if (
-      session.schema_version !== 5 ||
+      session.schema_version !== 6 ||
       typeof session.user_id !== "string" ||
+      typeof session.preferred_name !== "string" ||
       typeof session.session_id !== "string" ||
       typeof session.started_at !== "string" ||
-      !["set", "goal", "summary", "complete"].includes(session.stage ?? "") ||
+      !["name", "set", "goal", "summary", "complete"].includes(session.stage ?? "") ||
       !Number.isInteger(session.set_index) ||
       session.set_index! < 0 ||
       session.set_index! >= BWS_SETS.length ||
@@ -218,6 +231,12 @@ export function parseSession(raw: string | null): OnboardingSession | null {
     ) {
       return null;
     }
+    if (
+      session.stage !== "name" &&
+      normalizePreferredName(session.preferred_name) !== session.preferred_name
+    ) {
+      return null;
+    }
     const setIndex = session.set_index as number;
     const setOrder = session.set_order as number[];
     const currentItems = new Set(BWS_SETS[setOrder[setIndex]].items);
@@ -231,9 +250,16 @@ export function parseSession(raw: string | null): OnboardingSession | null {
     if (session.responses.length > 0) {
       scoreResponses(session.responses);
     }
+    if (session.stage === "name" && (session.responses.length !== 0 || setIndex !== 0)) {
+      return null;
+    }
+    if (session.stage === "set" && session.responses.length !== setIndex) {
+      return null;
+    }
     if (
-      (session.stage === "set" && session.responses.length !== setIndex) ||
-      (session.stage !== "set" && session.responses.length !== BWS_SETS.length)
+      session.stage !== "name" &&
+      session.stage !== "set" &&
+      session.responses.length !== BWS_SETS.length
     ) {
       return null;
     }
@@ -252,7 +278,13 @@ export function parseSession(raw: string | null): OnboardingSession | null {
       }
     }
     if (session.stage === "complete") {
-      validateProfile(session.confirmed_profile);
+      const profile = validateProfile(session.confirmed_profile);
+      if (
+        profile.preferred_name !== undefined &&
+        profile.preferred_name !== session.preferred_name
+      ) {
+        return null;
+      }
     }
     if (session.experience.active_view === "inspect" && !session.confirmed_profile) {
       return null;
@@ -267,6 +299,7 @@ export function loadOrCreateSession(): OnboardingSession {
   return (
     parseSession(localStorage.getItem(SESSION_STORAGE_KEY)) ??
     parseSession(localStorage.getItem(LEGACY_SESSION_STORAGE_KEY)) ??
+    parseSession(localStorage.getItem(OLDEST_SESSION_STORAGE_KEY)) ??
     createSession()
   );
 }
@@ -274,11 +307,13 @@ export function loadOrCreateSession(): OnboardingSession {
 export function persistSession(session: OnboardingSession): void {
   localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
   localStorage.removeItem(LEGACY_SESSION_STORAGE_KEY);
+  localStorage.removeItem(OLDEST_SESSION_STORAGE_KEY);
 }
 
 export function clearSession(): void {
   localStorage.removeItem(SESSION_STORAGE_KEY);
   localStorage.removeItem(LEGACY_SESSION_STORAGE_KEY);
+  localStorage.removeItem(OLDEST_SESSION_STORAGE_KEY);
 }
 
 export function showView(session: OnboardingSession, view: DemoView): OnboardingSession {

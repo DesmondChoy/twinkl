@@ -6,6 +6,7 @@ from pathlib import Path
 
 import polars as pl
 
+from prompts import get_prompt_metadata
 from src.coach.schemas import (
     CoachNarrative,
     DriftDetectionResult,
@@ -13,6 +14,7 @@ from src.coach.schemas import (
     WeeklyDigest,
 )
 from src.coach.weekly_digest import (
+    _build_prompt_inputs,
     attach_coach_artifacts,
     build_weekly_digest,
     generate_weekly_digest_coach,
@@ -145,10 +147,17 @@ def test_build_weekly_digest_and_render(tmp_path: Path):
     assert "Full Journal History" not in md
     assert "Evidence Snippets" in md
     assert "dims=" in md
-    assert "Persona: Casey (deadbeef)" in prompt
-    assert "Declared Core Values: Self Direction, Benevolence" in prompt
+    assert "Preferred name: Casey" in prompt
+    assert "deadbeef" not in prompt
+    assert "Internal Schwartz label: Self Direction" in prompt
+    assert (
+        'user-facing compass phrase: "Having the freedom to choose my own path"'
+        in prompt
+    )
     assert "Full journal history:" not in prompt
-    assert "Primary tensions:" in prompt
+    assert "Primary tensions:" not in prompt
+    assert "Overall mean alignment:" not in prompt
+    assert "common tensions:" not in prompt
 
 
 def test_generate_validate_and_persist_weekly_digest(tmp_path: Path):
@@ -553,6 +562,55 @@ def _minimal_digest() -> WeeklyDigest:
         dimensions=[],
         evidence=[],
     )
+
+
+def test_prompt_reduces_drift_states_to_three_delivery_policies():
+    active = _minimal_digest().model_copy(
+        update={
+            "response_mode": "mixed",
+            "drift_states": {
+                "benevolence": "active",
+                "self_direction": "recovered",
+            },
+        }
+    )
+    recovered = _minimal_digest().model_copy(
+        update={
+            "response_mode": "recovered",
+            "drift_states": {"benevolence": "recovered"},
+        }
+    )
+    uncertain = _minimal_digest().model_copy(
+        update={
+            "response_mode": "uncertain",
+            "drift_states": {"benevolence": "uncertain"},
+        }
+    )
+
+    assert "Selected policy: drift_detected" in render_digest_prompt(active)
+    assert "Selected policy: no_current_drift" in render_digest_prompt(recovered)
+    assert "Selected policy: more_reflection_needed" in render_digest_prompt(
+        uncertain
+    )
+    assert "Selected policy: no_current_drift" in render_digest_prompt(
+        _minimal_digest()
+    )
+
+
+def test_coach_prompt_declares_only_the_six_projected_inputs():
+    metadata = get_prompt_metadata("weekly_digest_coach")
+    prompt_inputs = _build_prompt_inputs(_minimal_digest())
+
+    expected_inputs = [
+        "persona_name",
+        "week_window",
+        "response_policy",
+        "compass_context_lines",
+        "drift_summary_lines",
+        "evidence_lines",
+    ]
+    assert metadata["input_variables"] == expected_inputs
+    assert list(prompt_inputs) == expected_inputs
 
 
 def test_validation_flags_raw_schwartz_value_labels():

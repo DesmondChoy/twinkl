@@ -17,6 +17,11 @@ CoachResponseMode = Literal[
     "mixed_state",
     "background_strain",
 ]
+CoachDigestPolicy = Literal[
+    "drift_detected",
+    "no_current_drift",
+    "more_reflection_needed",
+]
 
 DriftDimensionClassification = Literal["stable", "evolution", "drift"]
 DriftTriggerType = Literal[
@@ -46,7 +51,13 @@ class EvidenceSnippet(BaseModel):
 
     date: str
     t_index: int = Field(ge=0)
-    direction: Literal["misaligned", "aligned", "strain"]
+    direction: Literal[
+        "misaligned",
+        "aligned",
+        "strain",
+        "recovery",
+        "context",
+    ]
     dimensions: list[str]
     score_mean: float | None = None
     excerpt: str
@@ -179,6 +190,7 @@ class WeeklyDigest(BaseModel):
     overall_mean: float | None
     overall_uncertainty: float | None = None
     core_values: list[str] = Field(default_factory=list)
+    goal_context: str | None = None
     drift_states: dict[str, Literal["active", "recovered", "uncertain"]] = Field(
         default_factory=dict
     )

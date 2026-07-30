@@ -244,6 +244,7 @@ The `WeeklyDigest` compatibility schema stores:
 - response mode, source, rationale, and optional upstream reasons;
 - optional weekly aggregate metrics used only by compatibility paths;
 - Core Values;
+- optional user-confirmed goal context;
 - per-Core-Value Drift states;
 - per-dimension summaries;
 - representative evidence snippets;
@@ -252,9 +253,9 @@ The `WeeklyDigest` compatibility schema stores:
 - an optional `DigestValidation`.
 
 This record is the stored Weekly Drift Detection output. The Coach Digest
-consumes it as a prompt input.
+receives a smaller projection of it rather than the entire record.
 
-### Delivery and Compatibility Modes
+### Drift States, Coach Digest Policies, and Compatibility Modes
 
 The approved runtime uses five delivery modes:
 
@@ -264,9 +265,21 @@ The approved runtime uses five delivery modes:
 - `uncertain`
 - `mixed`
 
-The schema also retains seven compatibility modes:
+The Coach Digest reduces those auditable states to three delivery policies:
 
-- `stable`
+- `drift_detected`: at least one Core Value has active Drift;
+- `no_current_drift`: no Core Value has active or uncertain Drift, including
+  stable and recovered results; and
+- `more_reflection_needed`: evidence remains uncertain and no active Drift
+  finding takes priority.
+
+An aggregate `mixed` result is routed from its individual Core Value states. An
+active Drift therefore remains visible even when another Core Value is
+recovered. Evaluation is offline and is not a Coach Digest policy.
+
+The compatibility path shares `stable` and can also emit six legacy-only
+modes:
+
 - `rut`
 - `crash`
 - `evolution`
@@ -284,9 +297,10 @@ The sources differ:
   `mixed_state`, and `background_strain`.
 - Manual overrides can exercise any schema mode.
 
-The schema remains wider than the approved product contract so historical
-outputs and prompt experiments stay readable. Compatibility modes do not map
-automatically into approved Drift states.
+The stored schema remains wider than the approved product contract so
+historical outputs and prompt experiments stay readable. Legacy-only modes are
+conservatively routed to `more_reflection_needed`; they do not become approved
+Drift findings.
 
 ---
 
@@ -372,6 +386,13 @@ when upstream results are absent.
 
 The Coach Digest prompt requires:
 
+- preferred name;
+- one week window;
+- one of three Coach Digest policies;
+- internal Schwartz labels paired with the user-facing compass phrases and
+  optional confirmed goal context;
+- explicit Weekly Drift Detection findings with plain-English state meanings;
+- cited Journal Entries;
 - reflective rather than prescriptive language;
 - no score jargon, gamification, or judgmental framing;
 - no micro-habit or action-plan output;
@@ -390,9 +411,11 @@ Tier 1 Coach Digest response checks:
   `config/schwartz_values.yaml`; and
 - `length`: total response length remains within configured bounds.
 
-The `tension_explanation` field is conditional. When the primary tensions are
-`None clear this week` and no Drift is confirmed, the Coach Digest describes
-the steady pattern in evidence. It does not invent a tension.
+The `tension_explanation` field follows the selected policy. Active Drift may
+be explained only when Weekly Drift Detection supplies it. No-current-Drift
+responses offer warm, evidence-based encouragement without treating absence of
+Drift as proof of success. More-reflection-needed responses state ambiguity
+gently and ask for useful context without deciding whether Drift exists.
 
 These checks are narrow guardrails, not a complete explanation-quality claim.
 
@@ -400,12 +423,12 @@ These checks are narrow guardrails, not a complete explanation-quality claim.
 
 ## Safety and Selection Behavior
 
-- Core Values receive priority when dimension summaries are equally
-  informative.
-- A dimension does not appear in both tension and strength sections by default.
 - Backfilled Weekly Drift Detection outputs cannot read Journal Entries after
   `week_end`.
-- Empty sections render `None clear this week` rather than inventing a tension.
+- A no-current-Drift prompt receives recent Journal Entry context so grounded
+  encouragement does not require invented praise.
+- Recovered Drift includes recovery context when the terminating Journal Entry
+  is available.
 - Acute grief/distress fallback favors presence over brittle value scoring.
 - Mixed-state and background-strain fallbacks preserve nuance that a weekly
   mean can hide.

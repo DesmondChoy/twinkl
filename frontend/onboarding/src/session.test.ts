@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { BWS_SETS } from "./domain";
+import { BWS_SETS, createProfile } from "./domain";
 import {
   clearChoice,
   createSession,
@@ -13,8 +13,9 @@ describe("onboarding session", () => {
   it("randomizes set order and every prescribed card order once, then round-trips", () => {
     const ids = ["user-1", "session-1"];
     const session = createSession(() => 0, new Date("2026-07-19T00:00:00.000Z"), () => ids.shift()!);
-    expect(session.schema_version).toBe(5);
-    expect(session.stage).toBe("set");
+    expect(session.schema_version).toBe(6);
+    expect(session.stage).toBe("name");
+    expect(session.preferred_name).toBe("");
     expect(session.experience).toMatchObject({
       active_view: "experience",
       journal_started: false,
@@ -57,9 +58,47 @@ describe("onboarding session", () => {
     legacy.schema_version = 4;
     delete legacy.experience;
     const migrated = parseSession(JSON.stringify(legacy));
-    expect(migrated?.schema_version).toBe(5);
+    expect(migrated?.schema_version).toBe(6);
+    expect(migrated?.preferred_name).toBe("Friend");
     expect(migrated?.experience.active_view).toBe("experience");
     expect(migrated?.responses).toEqual(legacy.responses);
+  });
+
+  it("preserves a confirmed legacy Profile without inventing a stored name", () => {
+    const session = createSession(() => 0.5);
+    const responses = BWS_SETS.map((set, index) => ({
+      set_number: set.setNumber,
+      items: [...set.items],
+      item_order_shown: [...set.items],
+      selected_best: set.items[0],
+      selected_worst: set.items[1],
+      response_time_ms: 1_000 + index,
+    }));
+    session.schema_version = 6;
+    session.stage = "complete";
+    session.preferred_name = "Casey";
+    session.responses = responses;
+    session.goal_category = "direction";
+    session.confirmed_profile = createProfile({
+      userId: session.user_id,
+      preferredName: session.preferred_name,
+      sessionId: session.session_id,
+      startedAt: session.started_at,
+      completedAt: "2026-07-19T00:02:00.000Z",
+      responses,
+      goalCategory: session.goal_category,
+      userConfirmed: true,
+    });
+
+    const legacy = JSON.parse(JSON.stringify(session));
+    legacy.schema_version = 5;
+    delete legacy.preferred_name;
+    delete legacy.confirmed_profile.preferred_name;
+
+    const migrated = parseSession(JSON.stringify(legacy));
+
+    expect(migrated?.preferred_name).toBe("Friend");
+    expect(migrated?.confirmed_profile?.preferred_name).toBeUndefined();
   });
 
   it("keeps Inspect unavailable before Profile confirmation and preserves event selection", () => {
@@ -78,6 +117,8 @@ describe("onboarding session", () => {
 
   it("rejects a response that does not match the randomized progress order", () => {
     const session = createSession(() => 0.5);
+    session.stage = "set";
+    session.preferred_name = "Casey";
     session.set_index = 1;
     const wrongSet = BWS_SETS[session.set_order[1]];
     session.responses = [{

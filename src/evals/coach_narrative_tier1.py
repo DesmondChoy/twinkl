@@ -129,6 +129,11 @@ def _reconstruct_digest(row: dict[str, object]) -> WeeklyDigest:
             None if overall_uncertainty is None else float(str(overall_uncertainty))
         ),
         core_values=json.loads(str(row.get("core_values_json") or "[]")),
+        goal_context=(
+            None
+            if row.get("goal_context") is None
+            else str(row["goal_context"])
+        ),
         drift_states=json.loads(str(row.get("drift_states_json") or "{}")),
         drift_reasons=json.loads(str(row.get("drift_reasons_json") or "[]")),
         top_tensions=json.loads(str(row.get("top_tensions_json") or "[]")),
