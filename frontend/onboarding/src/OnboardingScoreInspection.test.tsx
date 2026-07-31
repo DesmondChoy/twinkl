@@ -41,6 +41,23 @@ describe("onboarding score inspection", () => {
     });
     expect(within(mostSelections).getAllByRole("listitem")).toHaveLength(11);
     expect(within(leastSelections).getAllByRole("listitem")).toHaveLength(11);
+    expect(within(mostSelections).queryByText(/× overall/)).toBeNull();
+    expect(within(leastSelections).queryByText(/× overall/)).toBeNull();
+
+    const selectionTotals = screen.getByRole("table", {
+      name: "Most and Least totals by value",
+    });
+    expect(selectionTotals.querySelectorAll("tbody tr")).toHaveLength(11);
+    expect(
+      within(selectionTotals).getByRole("row", {
+        name: "Benevolence 6 0",
+      }),
+    ).toBeTruthy();
+    expect(
+      within(selectionTotals).getByRole("row", {
+        name: "Total choices 11 11",
+      }),
+    ).toBeTruthy();
 
     const profileMapping = screen.getByRole("region", {
       name: "Ten-value Profile scores and Experience mapping",

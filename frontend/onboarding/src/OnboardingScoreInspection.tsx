@@ -88,6 +88,14 @@ export default function OnboardingScoreInspection({
   const choicesAreDistinct = responses.every(
     (response) => response.selected_best !== response.selected_worst,
   );
+  const mostTotal = BWS_OBJECT_ORDER.reduce(
+    (total, value) => total + scores.bws.best_counts[value],
+    0,
+  );
+  const leastTotal = BWS_OBJECT_ORDER.reduce(
+    (total, value) => total + scores.bws.worst_counts[value],
+    0,
+  );
 
   return (
     <section
@@ -208,7 +216,6 @@ export default function OnboardingScoreInspection({
                       <strong>{OBJECT_NAMES[value]}</strong>
                       <p>{BWS_OBJECTS[value].descriptor}</p>
                     </div>
-                    <small>{scores.bws.best_counts[value]}× overall</small>
                   </li>
                 );
               })}
@@ -238,13 +245,57 @@ export default function OnboardingScoreInspection({
                       <strong>{OBJECT_NAMES[value]}</strong>
                       <p>{BWS_OBJECTS[value].descriptor}</p>
                     </div>
-                    <small>{scores.bws.worst_counts[value]}× overall</small>
                   </li>
                 );
               })}
             </ol>
           </section>
         </div>
+        <section
+          className="selection-totals"
+          aria-labelledby="selection-totals-title"
+        >
+          <div className="selection-totals__heading">
+            <div>
+              <p className="eyebrow">Counted once</p>
+              <h4 id="selection-totals-title">Totals by value</h4>
+            </div>
+            <p>
+              Each value appears once here. The Most and Least columns each
+              total 11 recorded choices.
+            </p>
+          </div>
+          <div className="selection-totals__table-wrap" tabIndex={0}>
+            <table
+              className="selection-totals__table"
+              aria-label="Most and Least totals by value"
+            >
+              <thead>
+                <tr>
+                  <th scope="col">Value</th>
+                  <th scope="col">Most</th>
+                  <th scope="col">Least</th>
+                </tr>
+              </thead>
+              <tbody>
+                {BWS_OBJECT_ORDER.map((value) => (
+                  <tr key={value}>
+                    <th scope="row">{OBJECT_NAMES[value]}</th>
+                    <td>{scores.bws.best_counts[value]}</td>
+                    <td>{scores.bws.worst_counts[value]}</td>
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th scope="row">Total choices</th>
+                  <td>{mostTotal}</td>
+                  <td>{leastTotal}</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </section>
       </section>
 
       <aside className="universalism-bridge">
