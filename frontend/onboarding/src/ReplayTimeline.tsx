@@ -5,6 +5,7 @@ import {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
+import DriftStateExplanation from "./DriftStateExplanation";
 import {
   VALUES,
   type OnboardingProfile,
@@ -14,6 +15,7 @@ import type {
   JournalEntryContract,
   ScenarioDeliveryState,
   ScenarioWeekContract,
+  WeeklyDriftReviewerDecisionContract,
 } from "./demoContracts";
 
 type JsonObject = Record<string, unknown>;
@@ -22,6 +24,9 @@ interface ReplayTimelineProps {
   profile: OnboardingProfile;
   week: ScenarioWeekContract;
   journalEntries: JournalEntryContract[];
+  reviewedJournalEntries: JournalEntryContract[];
+  weeklyReviewerDecisions: WeeklyDriftReviewerDecisionContract[];
+  selectedJournalEntryId: string | null;
   cumulativeEntryCount: number;
   visibleEntryCount: number;
   resultVisible: boolean;
@@ -30,7 +35,7 @@ interface ReplayTimelineProps {
   weeklyDigest: JsonObject | null;
   inspectRun: (eventId: string) => void;
   inspectEventId: string | null;
-  onOpenDetails: () => void;
+  onSelectJournalEntry: (journalEntryId: string) => void;
 }
 
 function object(value: unknown): JsonObject | null {
@@ -168,6 +173,9 @@ export default function ReplayTimeline({
   profile,
   week,
   journalEntries,
+  reviewedJournalEntries,
+  weeklyReviewerDecisions,
+  selectedJournalEntryId,
   cumulativeEntryCount,
   visibleEntryCount,
   resultVisible,
@@ -176,9 +184,12 @@ export default function ReplayTimeline({
   weeklyDigest,
   inspectRun,
   inspectEventId,
-  onOpenDetails,
+  onSelectJournalEntry,
 }: ReplayTimelineProps) {
   const [openEntry, setOpenEntry] = useState<JournalEntryContract | null>(null);
+  const [mobilePanel, setMobilePanel] = useState<"entries" | "result">(
+    "entries",
+  );
   const visibleEntries = journalEntries.slice(0, visibleEntryCount);
   const rawStates = object(driftResult?.core_value_states) ?? {};
   const state =
@@ -213,111 +224,189 @@ export default function ReplayTimeline({
 
   useEffect(() => {
     setOpenEntry(null);
+    setMobilePanel("entries");
   }, [week.week_id]);
+
+  useEffect(() => {
+    if (resultVisible) setMobilePanel("result");
+  }, [resultVisible]);
+
+  const openJournalEntry = (entry: JournalEntryContract) => {
+    onSelectJournalEntry(entry.journal_entry_id);
+    setOpenEntry(entry);
+  };
 
   return (
     <>
       <section
-        className="replay-timeline"
-        aria-label={`Week timeline with ${journalEntries.length} Journal Entries`}
+        className="replay-workspace"
+        aria-label={`Week workspace with ${journalEntries.length} Journal Entries`}
       >
-        <div className="replay-timeline__status" role="status" aria-live="polite">
-          <span aria-hidden="true" />
-          {status}
+        <div className="replay-workspace__mobile-controls">
+          <div className="replay-workspace__mobile-result">
+            <span>Weekly Drift Detection</span>
+            <strong className={`replay-state replay-state--${state}`}>
+              {resultVisible ? replayStateLabel(state) : "Not reviewed"}
+            </strong>
+          </div>
+          <div
+            className="replay-workspace__switch"
+            role="group"
+            aria-label="Weekly workspace view"
+          >
+            <button
+              type="button"
+              aria-pressed={mobilePanel === "entries"}
+              onClick={() => setMobilePanel("entries")}
+            >
+              Journal Entries
+            </button>
+            <button
+              type="button"
+              aria-pressed={mobilePanel === "result"}
+              onClick={() => setMobilePanel("result")}
+            >
+              Weekly Drift
+            </button>
+          </div>
         </div>
 
-        <ol className="replay-entry-list">
-          {visibleEntries.map((entry, index) => (
-            <li className="replay-entry replay-entry--arriving" key={entry.journal_entry_id}>
-              <span className="replay-entry__number" aria-hidden="true">
-                {index + 1}
-              </span>
-              <button
-                id={`replay-entry-button-${entry.journal_entry_id}`}
-                type="button"
-                onClick={() => setOpenEntry(entry)}
-                aria-label={`Open Journal Entry ${index + 1} from ${displayEntryDate(entry.date)}`}
-              >
-                <span className="replay-entry__meta">
-                  Journal Entry {index + 1}
-                  <time dateTime={entry.date}>{displayEntryDate(entry.date)}</time>
-                </span>
-                <span className="replay-entry__excerpt">
-                  {excerpt(entry.content)}
-                </span>
-                <span className="replay-entry__open" aria-hidden="true">
-                  Read
-                </span>
-              </button>
-            </li>
-          ))}
-        </ol>
-
-        {journalEntries.length === 0 && resultVisible ? (
-          <p className="replay-timeline__empty">No Journal Entries this week.</p>
-        ) : null}
-
-        {resultVisible ? (
-          <article
-            className={`replay-result replay-result--${state}`}
-            aria-labelledby="replay-result-title"
-          >
-            <span className="replay-result__node" aria-hidden="true">✓</span>
-            <div className="replay-result__body">
-              <header>
-                <div>
-                  <p className="eyebrow">Weekly Drift Detection</p>
-                  <h2 id="replay-result-title">{replayStateLabel(state)}</h2>
-                </div>
-                <span className={`replay-state replay-state--${state}`}>
-                  {replayStateLabel(state)}
-                </span>
-              </header>
-              <p>{stateExplanation(state)}</p>
-              <ul aria-label="Weekly Drift Detection by Core Value">
-                {profile.top_values.map((value) => {
-                  const valueState =
-                    (rawStates[value] as ScenarioDeliveryState | undefined)
-                    ?? "stable";
-                  return (
-                    <li key={value}>
-                      <span>{coreValuePhrase(value)}</span>
-                      <strong>{replayStateLabel(valueState)}</strong>
-                    </li>
-                  );
-                })}
-              </ul>
-              <p className="replay-result__basis">
-                Based on {cumulativeEntryCount} Journal{" "}
-                {cumulativeEntryCount === 1 ? "Entry" : "Entries"} through{" "}
-                {displayEntryDate(week.week_end)}.
-                {hasEarlierEvidence ? " Includes evidence from earlier weeks." : ""}
-              </p>
-              <div className="replay-result__actions">
-                <button
-                  className="inspect-run-link"
-                  type="button"
-                  onClick={onOpenDetails}
-                >
-                  Open detailed evidence
-                </button>
-                {inspectEventId ? (
-                  <button
-                    className="inspect-run-link"
-                    type="button"
-                    onClick={() => inspectRun(inspectEventId)}
-                  >
-                    Inspect decision
-                  </button>
-                ) : null}
-              </div>
+        <section
+          className="replay-column replay-column--entries"
+          data-mobile-visible={mobilePanel === "entries" ? "true" : "false"}
+          aria-labelledby="replay-entries-title"
+        >
+          <header className="replay-column__header">
+            <div>
+              <p className="eyebrow">This week</p>
+              <h2 id="replay-entries-title">Journal Entries</h2>
             </div>
-          </article>
-        ) : (
-          <div className="replay-result-placeholder" aria-hidden="true">
-            Weekly Drift Detection appears after the final Journal Entry.
+            <span>
+              {visibleEntries.length} of {journalEntries.length}
+            </span>
+          </header>
+          <div
+            className="replay-timeline__status"
+            role="status"
+            aria-live="polite"
+          >
+            <span aria-hidden="true" />
+            {status}
           </div>
-        )}
+          <div className="replay-column__scroll">
+            <ol className="replay-entry-list">
+              {visibleEntries.map((entry, index) => (
+                <li className="replay-entry replay-entry--arriving" key={entry.journal_entry_id}>
+                  <span className="replay-entry__number" aria-hidden="true">
+                    {index + 1}
+                  </span>
+                  <button
+                    id={`replay-entry-button-${entry.journal_entry_id}`}
+                    type="button"
+                    onClick={() => openJournalEntry(entry)}
+                    aria-current={
+                      selectedJournalEntryId === entry.journal_entry_id
+                        ? "true"
+                        : undefined
+                    }
+                    aria-label={`Open Journal Entry ${index + 1} from ${displayEntryDate(entry.date)}`}
+                  >
+                    <span className="replay-entry__meta">
+                      Journal Entry {index + 1}
+                      <time dateTime={entry.date}>{displayEntryDate(entry.date)}</time>
+                    </span>
+                    <span className="replay-entry__excerpt">
+                      {excerpt(entry.content)}
+                    </span>
+                    <span className="replay-entry__open" aria-hidden="true">
+                      Read
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ol>
+
+            {journalEntries.length === 0 && resultVisible ? (
+              <p className="replay-timeline__empty">No Journal Entries this week.</p>
+            ) : null}
+          </div>
+        </section>
+
+        <aside
+          className="replay-column replay-column--result"
+          data-mobile-visible={mobilePanel === "result" ? "true" : "false"}
+          aria-labelledby="replay-result-column-title"
+        >
+          <header className="replay-column__header">
+            <div>
+              <p className="eyebrow">This week</p>
+              <h2 id="replay-result-column-title">Weekly Drift Detection</h2>
+            </div>
+          </header>
+          <div className="replay-column__scroll replay-column__scroll--result">
+            {resultVisible ? (
+              <article
+                className={`replay-result replay-result--${state}`}
+                aria-labelledby="replay-result-title"
+              >
+                <div className="replay-result__body">
+                  <header>
+                    <h3 id="replay-result-title">{replayStateLabel(state)}</h3>
+                    <span className={`replay-state replay-state--${state}`}>
+                      {replayStateLabel(state)}
+                    </span>
+                  </header>
+                  <p>{stateExplanation(state)}</p>
+                  <ul aria-label="Weekly Drift Detection by Core Value">
+                    {profile.top_values.map((value) => {
+                      const valueState =
+                        (rawStates[value] as ScenarioDeliveryState | undefined)
+                        ?? "stable";
+                      return (
+                        <li key={value}>
+                          <span>{coreValuePhrase(value)}</span>
+                          <strong>{replayStateLabel(valueState)}</strong>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                  <p className="replay-result__basis">
+                    Based on {cumulativeEntryCount} Journal{" "}
+                    {cumulativeEntryCount === 1 ? "Entry" : "Entries"} through{" "}
+                    {displayEntryDate(week.week_end)}.
+                    {hasEarlierEvidence ? " Includes evidence from earlier weeks." : ""}
+                  </p>
+                  <section
+                    className="replay-result__details"
+                    aria-labelledby="state-change-title"
+                  >
+                    <h4 id="state-change-title">Why this state changed</h4>
+                    <DriftStateExplanation
+                      profile={profile}
+                      journalEntries={reviewedJournalEntries}
+                      weeklyReviewerDecisions={weeklyReviewerDecisions}
+                      driftResult={driftResult}
+                      onOpenEntry={openJournalEntry}
+                    />
+                  </section>
+                  {inspectEventId ? (
+                    <button
+                      className="inspect-run-link"
+                      type="button"
+                      onClick={() => inspectRun(inspectEventId)}
+                    >
+                      Inspect decision
+                    </button>
+                  ) : null}
+                </div>
+              </article>
+            ) : (
+              <div className="replay-result-placeholder" aria-live="polite">
+                Weekly Drift Detection appears after the final Journal Entry.
+              </div>
+            )}
+          </div>
+        </aside>
       </section>
 
       <JournalEntryDrawer

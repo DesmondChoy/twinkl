@@ -161,24 +161,40 @@ Digests.
 Persona simulation is a week-by-week replay rather than an immediate dump of
 the final state. Controls provide:
 
+- manual next-step movement as the default;
 - previous week;
-- next week;
-- play or pause;
+- optional automatic replay and pause;
 - direct selection of any already revealed week; and
 - restart scenario.
 
 Advancing a week reveals only the Journal Entries and results available by that
 week. This preserves the temporal meaning of Drift and lets the professor see
 the user experience change from stable to active, recovered, uncertain, or
-mixed.
+mixed. Future weeks remain disabled. A separate **Jump to key moment** action
+provides explicit fast navigation without making future results look available.
 
-Play stages each saved week in chronological order: its Journal Entries appear
-one at a time as compact excerpts, the Weekly Drift Detection result appears
-only after the final Journal Entry, and the next week then starts empty. Opening
-a Journal Entry uses a desktop side panel or mobile bottom sheet so the timeline
-does not reflow. Persona background and detailed evidence remain collapsed by
-default. The replay identifies itself as saved synthetic evidence throughout;
-the staged reveal must not imply live model inference.
+Manual next-step movement and automatic replay use the same sequence. Journal
+Entries appear one at a time as compact excerpts. The Weekly Drift Detection
+result appears only after the final Journal Entry. The next week then starts
+empty. Automatic replay leaves enough time to read each step. Opening a Journal
+Entry uses a desktop side panel or mobile bottom sheet so the timeline does not
+reflow.
+
+The desktop Experience uses a fixed weekly workspace. The Journal Entry column
+and Weekly Drift Detection column stay in the same viewport. Each column scrolls
+internally when necessary. The phone Experience uses a Journal Entries and
+Weekly Drift view control instead of two narrow columns. The current result
+stays visible above that control. The active week stays centered in the week
+rail.
+
+Profile details remain collapsed by default and include a short Persona context.
+State-change evidence appears with the Weekly Drift Detection result. The first
+two Conflicts show where Drift started. Later Conflicts show that Drift
+continued. Recovered Drift cites the recovery Journal Entry and its Not Conflict
+Weekly Drift Reviewer Decision. Uncertain cites the Journal Entry, its Abstain
+Weekly Drift Reviewer Decision, and the reason. The replay identifies itself as
+saved synthetic evidence throughout. The staged reveal must not imply live
+model inference.
 
 Saved replay is the default because it is fast, deterministic, and free of
 provider availability. A separate, clearly labelled **Re-run live** action may
@@ -213,6 +229,13 @@ dump. The first level answers:
 5. Was it replayed, generated live, reused, refused, invalid, or failed?
 
 Detailed inputs, prompts, responses, and validation expand on demand.
+
+For Persona replay, Inspect shows the selected week first. Filters select
+Journal Entry events, Weekly Drift Reviewer events, or Drift Detector events.
+The complete earlier Inspect history stays collapsed by default. Repeated
+saved-run labels, reused-result labels, and zero-duration labels do not appear
+on each event. Model details, run source, reasoning effort, identifiers, hashes,
+and exact inputs remain under **Technical details**.
 
 Before the backend event timeline, Inspect presents the completed browser-side
 SVBWS calculation as a professor-facing explanation rather than developer

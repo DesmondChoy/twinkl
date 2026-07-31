@@ -10,10 +10,8 @@ import {
   type OnboardingProfile,
 } from "./domain";
 import { displayWeekRange } from "./displayFormatters";
-import JournalExperience from "./JournalExperience";
 import ReplayTimeline from "./ReplayTimeline";
 import type { ExperienceState } from "./session";
-import WeeklyExperience from "./WeeklyExperience";
 import {
   loadSavedScenario,
   loadScenarioCatalog,
@@ -21,10 +19,11 @@ import {
   type ScenarioCatalog,
   type ScenarioCatalogItem,
 } from "./scenarioReplay";
+import type { ScenarioDeliveryState } from "./demoContracts";
 
-const ENTRY_REVEAL_DELAY_MS = 900;
-const RESULT_REVEAL_DELAY_MS = 1_050;
-const NEXT_WEEK_DELAY_MS = 2_800;
+const ENTRY_REVEAL_DELAY_MS = 3_600;
+const RESULT_REVEAL_DELAY_MS = 3_200;
+const NEXT_WEEK_DELAY_MS = 6_000;
 
 function replayStateLabel(state: string): string {
   switch (state) {
@@ -71,6 +70,23 @@ function personaLesson(item: ScenarioCatalogItem): {
         label: "Steady",
         copy: `See ${item.progression.length} weeks with No Drift.`,
       };
+  }
+}
+
+function keyMomentState(
+  role: ScenarioCatalogItem["role"],
+): ScenarioDeliveryState | null {
+  switch (role) {
+    case "active_drift":
+      return "active";
+    case "recovered_drift":
+      return "recovered";
+    case "uncertain":
+      return "uncertain";
+    case "two_core_values":
+      return "mixed";
+    default:
+      return null;
   }
 }
 
@@ -156,7 +172,9 @@ export function PersonaReplayPicker({
 
       {catalog ? (
         <div className="persona-menu" aria-label="Choose a demo Persona">
-          {catalog.scenarios.map((item) => {
+          {[...catalog.scenarios]
+            .sort((left, right) => Number(right.recommended) - Number(left.recommended))
+            .map((item) => {
             const lesson = personaLesson(item);
             const current = item.persona_id === currentPersonaId;
             return (
@@ -198,7 +216,7 @@ export function PersonaReplayPicker({
                 </button>
               </article>
             );
-          })}
+            })}
         </div>
       ) : null}
 
@@ -250,7 +268,6 @@ export function PersonaReplayExperience({
 }: PersonaReplayExperienceProps) {
   const reducedMotion = usePrefersReducedMotion();
   const weekRailRef = useRef<HTMLOListElement>(null);
-  const detailsRef = useRef<HTMLDetailsElement>(null);
   const [playing, setPlaying] = useState(false);
   const weeks = loaded.fixture.scenario.weeks;
   const safeWeekIndex = Math.min(Math.max(weekIndex, 0), weeks.length - 1);
@@ -263,14 +280,23 @@ export function PersonaReplayExperience({
   }, [currentWeek.journal_entry_ids, experience.journal_entries]);
   const completedStage = currentWeekEntries.length + 1;
   const [revealStage, setRevealStage] = useState(() =>
-    safeWeekIndex === 0 && !reducedMotion ? 0 : completedStage
+    safeWeekIndex === 0 ? 0 : completedStage
   );
   const [furthestCompletedWeek, setFurthestCompletedWeek] = useState(
-    safeWeekIndex === 0 && !reducedMotion ? -1 : safeWeekIndex,
+    safeWeekIndex === 0 ? -1 : safeWeekIndex,
   );
   const resultVisible = revealStage > currentWeekEntries.length;
   const isFirst = safeWeekIndex === 0;
   const isLast = safeWeekIndex === weeks.length - 1;
+  const preferredKeyState = keyMomentState(loaded.catalogItem.role);
+  const preferredKeyIndex = preferredKeyState === null
+    ? weeks.length - 1
+    : weeks.findIndex(
+        (week) => week.expected_delivery_state === preferredKeyState,
+      );
+  const keyMomentIndex = preferredKeyIndex >= 0
+    ? preferredKeyIndex
+    : weeks.length - 1;
   const inspectEventId =
     [...experience.trace_events]
       .reverse()
@@ -281,21 +307,27 @@ export function PersonaReplayExperience({
     ?? null;
 
   useEffect(() => {
-    const restored = safeWeekIndex > 0 || reducedMotion;
+    const restored = safeWeekIndex > 0;
     setPlaying(false);
     setRevealStage(restored ? currentWeek.journal_entry_ids.length + 1 : 0);
     setFurthestCompletedWeek(restored ? safeWeekIndex : -1);
-  }, [loaded.catalogItem.scenario_id, reducedMotion]);
+  }, [loaded.catalogItem.scenario_id]);
 
   useEffect(() => {
     const activeWeek = weekRailRef.current?.querySelector<HTMLButtonElement>(
       '.week-rail__button[aria-current="step"]',
     );
     if (activeWeek && weekRailRef.current) {
+      const railBounds = weekRailRef.current.getBoundingClientRect();
+      const activeBounds = activeWeek.getBoundingClientRect();
+      const activeCenter =
+        activeBounds.left
+        - railBounds.left
+        + weekRailRef.current.scrollLeft
+        + activeBounds.width / 2;
       weekRailRef.current.scrollLeft = Math.max(
         0,
-        activeWeek.offsetLeft
-          - (weekRailRef.current.clientWidth - activeWeek.offsetWidth) / 2,
+        activeCenter - weekRailRef.current.clientWidth / 2,
       );
     }
   }, [safeWeekIndex]);
@@ -346,19 +378,28 @@ export function PersonaReplayExperience({
   }, [headingRef, loaded.catalogItem.scenario_id]);
 
   const showCompletedWeek = (index: number) => {
+    if (index < 0 || index >= weeks.length) return;
     setPlaying(false);
     setRevealStage(weeks[index].journal_entry_ids.length + 1);
     setFurthestCompletedWeek((current) => Math.max(current, index));
     onWeekChange(index);
   };
 
-  const openDetailedAnalysis = () => {
-    if (!detailsRef.current) return;
-    detailsRef.current.open = true;
-    detailsRef.current.scrollIntoView?.({
-      behavior: reducedMotion ? "auto" : "smooth",
-      block: "start",
-    });
+  const advanceOneStep = () => {
+    setPlaying(false);
+    if (revealStage < currentWeekEntries.length) {
+      setRevealStage((current) => current + 1);
+      return;
+    }
+    if (!resultVisible) {
+      setRevealStage(completedStage);
+      setFurthestCompletedWeek((current) => Math.max(current, safeWeekIndex));
+      return;
+    }
+    if (!isLast) {
+      setRevealStage(0);
+      onWeekChange(safeWeekIndex + 1);
+    }
   };
 
   return (
@@ -375,9 +416,12 @@ export function PersonaReplayExperience({
           <span className="replay-persona__value">
             {profile.top_values.map((value) => VALUES[value].phrase).join(" · ")}
           </span>
-          <span className="replay-persona__expand">Background</span>
+          <span className="replay-persona__expand">Profile details</span>
         </summary>
         <div className="replay-persona__details">
+          <p className="replay-persona__context">
+            {loaded.catalogItem.summary}
+          </p>
           <p>
             {loaded.catalogItem.profession} · {loaded.catalogItem.culture} ·{" "}
             age {loaded.catalogItem.age}
@@ -466,7 +510,7 @@ export function PersonaReplayExperience({
                 <button
                   type="button"
                   className="week-rail__button"
-                  disabled={index === safeWeekIndex && !resultVisible}
+                  disabled={!revealed || (index === safeWeekIndex && !resultVisible)}
                   aria-current={
                     index === safeWeekIndex ? "step" : undefined
                   }
@@ -476,7 +520,9 @@ export function PersonaReplayExperience({
                       : `Show week ${index + 1}, outcome hidden`
                   }
                   onClick={() => {
-                    if (index === safeWeekIndex && !resultVisible) return;
+                    if (!revealed || (index === safeWeekIndex && !resultVisible)) {
+                      return;
+                    }
                     showCompletedWeek(index);
                   }}
                 >
@@ -521,24 +567,30 @@ export function PersonaReplayExperience({
             aria-describedby={reducedMotion ? "reduced-motion-note" : undefined}
             onClick={() => setPlaying((current) => !current)}
           >
-            {playing ? "Pause" : "Play"}
+            {playing ? "Pause replay" : "Auto replay"}
           </button>
           <button
             className="button button--primary"
             type="button"
-            disabled={isLast}
-            onClick={() => {
-              showCompletedWeek(safeWeekIndex + 1);
-            }}
+            disabled={isLast && resultVisible}
+            onClick={advanceOneStep}
           >
-            Next
+            Next step
+          </button>
+          <button
+            className="button button--quiet replay-controls__jump"
+            type="button"
+            disabled={safeWeekIndex === keyMomentIndex && resultVisible}
+            onClick={() => showCompletedWeek(keyMomentIndex)}
+          >
+            Jump to key moment
           </button>
         </div>
 
         {reducedMotion ? (
           <p className="replay-controls__motion-note" id="reduced-motion-note">
             Automatic replay is off because reduced motion is enabled. Previous
-            and Next show complete weeks.
+            and Next step remain available.
           </p>
         ) : null}
       </section>
@@ -547,6 +599,9 @@ export function PersonaReplayExperience({
         profile={profile}
         week={currentWeek}
         journalEntries={currentWeekEntries}
+        reviewedJournalEntries={experience.journal_entries}
+        weeklyReviewerDecisions={experience.weekly_reviewer_decisions}
+        selectedJournalEntryId={experience.selected_entry_id}
         cumulativeEntryCount={experience.journal_entries.length}
         visibleEntryCount={Math.min(revealStage, currentWeekEntries.length)}
         resultVisible={resultVisible}
@@ -555,39 +610,10 @@ export function PersonaReplayExperience({
         weeklyDigest={experience.weekly_digest}
         inspectRun={inspectRun}
         inspectEventId={inspectEventId}
-        onOpenDetails={openDetailedAnalysis}
+        onSelectJournalEntry={(journalEntryId) =>
+          updateExperience({ selected_entry_id: journalEntryId })
+        }
       />
-
-      <details className="replay-analysis" ref={detailsRef}>
-        <summary>
-          <span>
-            <strong>Detailed analysis and Journal Entry history</strong>
-            <small>Evidence, Coach Digest, and earlier weeks</small>
-          </span>
-        </summary>
-        <div className="replay-analysis__body">
-          <WeeklyExperience
-            profile={profile}
-            journalEntries={experience.journal_entries}
-            weeklyReviewerDecisions={experience.weekly_reviewer_decisions}
-            driftResult={experience.drift_result}
-            weeklyDigest={experience.weekly_digest}
-            traceEvents={experience.trace_events}
-            inspectRun={inspectRun}
-            selectJournalEntry={(journalEntryId) =>
-              updateExperience({ selected_entry_id: journalEntryId })
-            }
-          />
-          <JournalExperience
-            profile={profile}
-            experience={experience}
-            updateExperience={updateExperience}
-            inspectRun={inspectRun}
-            mode="saved_replay"
-            showWeeklySummary={false}
-          />
-        </div>
-      </details>
     </div>
   );
 }

@@ -289,25 +289,16 @@ export default function WeeklyExperience({
         ) : null}
       </div>
 
-      <aside className="coach-digest" aria-labelledby="coach-digest-title">
-        <p className="eyebrow">Coach Digest</p>
-        <h2 id="coach-digest-title">
-          {weeklyMirror ?? "No response was saved for this week."}
-        </h2>
-        {tensionExplanation ? <p>{tensionExplanation}</p> : (
-          <p>
-            This saved replay contains Weekly Drift Detection output, but no
-            generated Coach Digest response.
-          </p>
-        )}
-        {reflectiveQuestion ? (
-          <p className="coach-digest__question">{reflectiveQuestion}</p>
-        ) : (
-          <p className="coach-digest__availability">
-            Coach Digest generation is optional in this capstone replay.
-          </p>
-        )}
-      </aside>
+      {weeklyMirror || tensionExplanation || reflectiveQuestion ? (
+        <aside className="coach-digest" aria-labelledby="weekly-coach-title">
+          <p className="eyebrow">Weekly Coach</p>
+          <h2 id="weekly-coach-title">{weeklyMirror}</h2>
+          {tensionExplanation ? <p>{tensionExplanation}</p> : null}
+          {reflectiveQuestion ? (
+            <p className="coach-digest__question">{reflectiveQuestion}</p>
+          ) : null}
+        </aside>
+      ) : null}
 
       {showInspectAction && inspectEventId ? (
         <button

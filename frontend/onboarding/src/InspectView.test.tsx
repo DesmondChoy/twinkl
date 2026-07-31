@@ -1,4 +1,5 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import InspectView from "./InspectView";
 import { canonicalInspectFixture } from "./inspectFixture";
@@ -18,10 +19,10 @@ describe("Inspect view", () => {
       />,
     );
 
-    expect(screen.getByText("0 trace events")).toBeTruthy();
-    expect(screen.getByText("No backend events yet")).toBeTruthy();
+    expect(screen.getByText("0 recorded events")).toBeTruthy();
+    expect(screen.getByText("Recorded work")).toBeTruthy();
     expect(
-      screen.getByText(/exact prompt when applicable/i),
+      screen.getByText(/Open Technical details/i),
     ).toBeTruthy();
     expect(screen.getByRole("status")).toHaveProperty(
       "textContent",
@@ -52,12 +53,14 @@ describe("Inspect view", () => {
       "Weekly review completed",
       "Drift checked",
       "Weekly Drift Detection output stored",
-      "Coach Digest generated",
+      "Weekly Coach response generated",
     ].forEach((label) => expect(screen.getAllByText(label).length).toBeGreaterThan(0));
-    ["Complete", "Reused", "Refused", "Invalid", "Failed"].forEach((status) =>
+    ["Refused", "Invalid", "Failed"].forEach((status) =>
       expect(screen.getAllByText(status).length).toBeGreaterThan(0));
-    expect(screen.getAllByText("Saved replay").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("Live run").length).toBeGreaterThan(0);
+    expect(screen.queryByText("Reused")).toBeNull();
+    expect(screen.queryByText("Saved replay")).toBeNull();
+    expect(screen.queryByText("0 ms")).toBeNull();
+    expect(screen.queryByText("Live run")).toBeNull();
     expect(screen.getByText("Canonical contract fixture")).toBeTruthy();
   });
 
@@ -65,6 +68,7 @@ describe("Inspect view", () => {
     render(
       <InspectView
         events={events}
+        currentWeekEventIds={events.slice(6, 11).map((event) => event.event_id)}
         selectedEventId="event-09"
         traceLabel="Canonical contract fixture"
         onReturn={() => undefined}
@@ -72,7 +76,7 @@ describe("Inspect view", () => {
     );
 
     const selectedSummary = screen.getByLabelText(
-      "Event 9: Drift checked, Complete, Saved replay",
+      "Event 9: Drift checked",
     );
     expect(screen.getByRole("heading", {
       name: "How Twinkl reached this result.",
@@ -81,10 +85,13 @@ describe("Inspect view", () => {
     expect(screen.getAllByText("Weekly Drift Reviewer").length)
       .toBeGreaterThan(0);
     expect(screen.getAllByText("Drift Detector").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("Coach Digest").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Weekly Coach").length).toBeGreaterThan(0);
     expect(selectedSummary.getAttribute("aria-current")).toBe("true");
     expect(selectedSummary.closest("details")?.open).toBe(true);
     expect(screen.getByText(/Event 09 · Drift Detector/)).toBeTruthy();
+    expect(
+      screen.getByText("Complete Inspect history").closest("details")?.open,
+    ).toBe(false);
   });
 
   it("shows exact model evidence on demand and keeps source labels explicit", () => {
@@ -99,7 +106,7 @@ describe("Inspect view", () => {
 
     expect(
       screen.getByLabelText(
-        "Event 8: Weekly review completed, Reused, Saved replay",
+        "Event 8: Weekly review completed",
       ).closest("details")?.open,
     ).toBe(true);
     expect(screen.getByLabelText("Model contract").textContent).toContain(
@@ -117,6 +124,32 @@ describe("Inspect view", () => {
     expect(screen.getByLabelText("Effective result").textContent).toContain(
       "response-demo",
     );
+  });
+
+  it("filters the current week by component", async () => {
+    const user = userEvent.setup();
+    render(
+      <InspectView
+        events={events}
+        currentWeekEventIds={events.slice(6, 11).map((event) => event.event_id)}
+        selectedEventId={null}
+        traceLabel="Canonical contract fixture"
+        onReturn={() => undefined}
+      />,
+    );
+
+    await user.click(screen.getByRole("button", {
+      name: "Weekly Drift Reviewer",
+    }));
+
+    expect(
+      within(screen.getByRole("list", { name: "Current week events" }))
+        .getAllByRole("listitem"),
+    ).toHaveLength(2);
+    expect(
+      screen.getByRole("button", { name: "Weekly Drift Reviewer" })
+        .getAttribute("aria-pressed"),
+    ).toBe("true");
   });
 
   it("redacts sensitive fields before rendering provider data", () => {

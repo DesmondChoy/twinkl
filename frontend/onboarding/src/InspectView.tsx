@@ -18,6 +18,7 @@ interface EventPresentation {
 
 interface InspectViewProps {
   events: TraceEventContract[];
+  currentWeekEventIds?: string[];
   currentJournalEntryIds?: string[];
   emptyActionLabel?: string;
   emptyMessage?: string;
@@ -71,8 +72,8 @@ const EVENT_PRESENTATION: Record<string, EventPresentation> = {
     component: "Weekly Drift Detection",
   },
   weekly_coach_generated: {
-    label: "Coach Digest generated",
-    component: "Coach Digest",
+    label: "Weekly Coach response generated",
+    component: "Weekly Coach",
   },
 };
 
@@ -90,6 +91,40 @@ const SOURCE_LABELS: Record<string, string> = {
   saved_replay: "Saved replay",
   live_run: "Live run",
 };
+
+type InspectFilter = "all" | "journal" | "reviewer" | "detector";
+
+const FILTER_LABELS: Record<InspectFilter, string> = {
+  all: "All steps",
+  journal: "Journal Entries",
+  reviewer: "Weekly Drift Reviewer",
+  detector: "Drift Detector",
+};
+
+function eventMatchesFilter(
+  event: TraceEventContract,
+  filter: InspectFilter,
+): boolean {
+  if (filter === "all") return true;
+  if (filter === "journal") {
+    return [
+      "journal_entry_submitted",
+      "nudge_suppression_checked",
+      "nudge_decided",
+      "nudge_generated",
+    ].includes(event.event_type);
+  }
+  if (filter === "reviewer") {
+    return [
+      "weekly_review_requested",
+      "weekly_review_completed",
+    ].includes(event.event_type);
+  }
+  return [
+    "drift_detected",
+    "weekly_digest_built",
+  ].includes(event.event_type);
+}
 
 const SENSITIVE_KEYS = new Set([
   "access_token",
@@ -225,7 +260,7 @@ function eventSummary(
         : "Weekly Drift Detection output ready";
     }
     case "weekly_coach_generated":
-      return "Coach Digest response and question ready";
+      return "Weekly Coach reflection and question ready";
     default:
       return STATUS_LABELS[event.status] ?? titleCase(event.status);
   }
@@ -286,6 +321,10 @@ function TraceFacts({ event }: { event: TraceEventContract }) {
         <dd><code>{event.completed_at ?? "Pending"}</code></dd>
       </div>
       <div>
+        <dt>Duration</dt>
+        <dd><code>{formatDuration(event.duration_ms)}</code></dd>
+      </div>
+      <div>
         <dt>Session ID</dt>
         <dd><code>{event.session_id}</code></dd>
       </div>
@@ -319,53 +358,60 @@ function EventDetails({ event }: { event: TraceEventContract }) {
       {event.error !== null ? (
         <JsonBlock label="Safe error" value={event.error} />
       ) : null}
-      <TraceFacts event={event} />
-      {event.input_refs.length > 0 ? (
-        disclosure(
-          "Input references",
-          <JsonBlock label="Input references" value={event.input_refs} />,
-        )
-      ) : null}
-      {event.model_contract !== null ? (
-        disclosure(
-          "Model contract",
-          <JsonBlock label="Model contract" value={event.model_contract} />,
-        )
-      ) : null}
-      {event.prompt !== null ? (
-        disclosure(
-          "Prompt",
-          <TextBlock label="Exact rendered prompt" value={event.prompt} />,
-        )
-      ) : null}
-      {event.raw_response !== null ? (
-        disclosure(
-          "Raw response",
-          <JsonBlock label="Raw provider response" value={event.raw_response} />,
-        )
-      ) : null}
-      {event.validation !== null ? (
-        disclosure(
-          "Validation",
-          <JsonBlock label="Validation" value={event.validation} />,
-        )
-      ) : null}
-      {disclosure(
-        "Effective result",
-        <JsonBlock label="Effective result" value={event.details} />,
-      )}
-      {event.result_refs.length > 0 ? (
-        disclosure(
-          "Result references",
-          <JsonBlock label="Result references" value={event.result_refs} />,
-        )
-      ) : null}
+      <details className="inspect-technical inspect-technical--group">
+        <summary>Technical details</summary>
+        <p className="inspect-technical__help">
+          These fields identify the recorded run and support reproduction.
+        </p>
+        <TraceFacts event={event} />
+        {event.input_refs.length > 0 ? (
+          disclosure(
+            "Input references",
+            <JsonBlock label="Input references" value={event.input_refs} />,
+          )
+        ) : null}
+        {event.model_contract !== null ? (
+          disclosure(
+            "Model contract",
+            <JsonBlock label="Model contract" value={event.model_contract} />,
+          )
+        ) : null}
+        {event.prompt !== null ? (
+          disclosure(
+            "Prompt",
+            <TextBlock label="Exact rendered prompt" value={event.prompt} />,
+          )
+        ) : null}
+        {event.raw_response !== null ? (
+          disclosure(
+            "Raw response",
+            <JsonBlock label="Raw provider response" value={event.raw_response} />,
+          )
+        ) : null}
+        {event.validation !== null ? (
+          disclosure(
+            "Validation",
+            <JsonBlock label="Validation" value={event.validation} />,
+          )
+        ) : null}
+        {disclosure(
+          "Effective result",
+          <JsonBlock label="Effective result" value={event.details} />,
+        )}
+        {event.result_refs.length > 0 ? (
+          disclosure(
+            "Result references",
+            <JsonBlock label="Result references" value={event.result_refs} />,
+          )
+        ) : null}
+      </details>
     </div>
   );
 }
 
 export default function InspectView({
   events,
+  currentWeekEventIds,
   currentJournalEntryIds,
   emptyActionLabel,
   emptyMessage = "No backend work has been recorded for this Experience yet.",
@@ -380,6 +426,7 @@ export default function InspectView({
   const [expandedEvents, setExpandedEvents] = useState<Set<string>>(
     () => new Set(selectedEventId ? [selectedEventId] : []),
   );
+  const [activeFilter, setActiveFilter] = useState<InspectFilter>("all");
   const eventNumbers = useMemo(
     () => new Map(events.map((event, index) => [event.event_id, index + 1])),
     [events],
@@ -393,13 +440,36 @@ export default function InspectView({
   const selectedEvent = selectedEventId
     ? events.find((event) => event.event_id === selectedEventId) ?? null
     : null;
-  const sourceLabels = [...new Set(events.map((event) => SOURCE_LABELS[event.source]))];
+  const currentWeekEventIdSet = useMemo(
+    () => currentWeekEventIds ? new Set(currentWeekEventIds) : null,
+    [currentWeekEventIds],
+  );
+  const currentEvents = useMemo(
+    () => currentWeekEventIdSet
+      ? events.filter((event) => currentWeekEventIdSet.has(event.event_id))
+      : events,
+    [currentWeekEventIdSet, events],
+  );
+  const historyEvents = useMemo(
+    () => currentWeekEventIdSet
+      ? events.filter((event) => !currentWeekEventIdSet.has(event.event_id))
+      : [],
+    [currentWeekEventIdSet, events],
+  );
+  const filteredCurrentEvents = currentEvents.filter((event) =>
+    eventMatchesFilter(event, activeFilter)
+  );
+  const filteredHistoryEvents = historyEvents.filter((event) =>
+    eventMatchesFilter(event, activeFilter)
+  );
   const weeklyFocus =
+    currentWeekEventIdSet !== null
+    ||
     selectedEvent?.event_type === "drift_detected"
     || selectedEvent?.event_type === "weekly_digest_built"
     || selectedEvent?.event_type === "weekly_coach_generated";
   const latestWeeklyEvent = (eventType: string) =>
-    [...events].reverse().find((event) => event.event_type === eventType)
+    [...currentEvents].reverse().find((event) => event.event_type === eventType)
     ?? null;
   const reviewerEvent = latestWeeklyEvent("weekly_review_completed");
   const driftEvent = latestWeeklyEvent("drift_detected");
@@ -436,6 +506,72 @@ export default function InspectView({
     });
   };
 
+  const renderTimeline = (
+    displayedEvents: TraceEventContract[],
+    label: string,
+  ) => (
+    <ol className="inspect-timeline" aria-label={label}>
+      {displayedEvents.map((event) => {
+        const index = (eventNumbers.get(event.event_id) ?? 1) - 1;
+        const presentation = eventPresentation(event.event_type);
+        const status = STATUS_LABELS[event.status] ?? titleCase(event.status);
+        const parentNumber = event.parent_event_id
+          ? eventNumbers.get(event.parent_event_id)
+          : null;
+        const isSelected = event.event_id === selectedEventId;
+        const isExpanded = expandedEvents.has(event.event_id);
+        const showStatus = !["complete", "reused"].includes(event.status);
+        return (
+          <li className="trace-event" key={event.event_id}>
+            <span className="trace-event__node" aria-hidden="true">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <details
+              className="trace-event__card"
+              data-selected={isSelected ? "true" : undefined}
+              open={isExpanded}
+              onToggle={(toggleEvent) =>
+                setEventExpanded(event.event_id, toggleEvent.currentTarget.open)}
+            >
+              <summary
+                ref={(node) => {
+                  if (node) eventRefs.current.set(event.event_id, node);
+                  else eventRefs.current.delete(event.event_id);
+                }}
+                aria-current={isSelected ? "true" : undefined}
+                aria-label={`Event ${index + 1}: ${presentation.label}`}
+              >
+                <span className="trace-event__copy">
+                  <span className="trace-event__component">
+                    {presentation.component}
+                  </span>
+                  <span className="trace-event__name">{presentation.label}</span>
+                  <span className="trace-event__result">
+                    {eventSummary(event, currentJournalEntryIdSet)}
+                  </span>
+                </span>
+                <span className="trace-event__aside">
+                  {showStatus ? (
+                    <span className={`trace-chip trace-chip--status-${event.status}`}>
+                      {status}
+                    </span>
+                  ) : null}
+                  <span className="trace-event__disclosure" aria-hidden="true">+</span>
+                </span>
+                <span className="trace-event__parent">
+                  {parentNumber
+                    ? `After event ${String(parentNumber).padStart(2, "0")}`
+                    : "First recorded step"}
+                </span>
+              </summary>
+              {isExpanded ? <EventDetails event={event} /> : null}
+            </details>
+          </li>
+        );
+      })}
+    </ol>
+  );
+
   return (
     <div
       className={`stage stage--inspect${
@@ -457,7 +593,7 @@ export default function InspectView({
               ? "The assessment recorded one Most and one Least card in each question. Below, those 22 choices are followed into Schwartz scores, the ten-value Profile, and the exact phrases shown in Experience."
               : weeklyFocus
                 ? "The focused result comes first. The complete event history follows."
-                : "Each row is one trace event. Open it to see the inputs, exact prompt when applicable, validation, and effective result."}
+                : "Each row is one recorded step. Open Technical details for exact inputs, prompts, and validation."}
           </p>
         </div>
         <button className="button button--quiet" type="button" onClick={onReturn}>
@@ -467,7 +603,7 @@ export default function InspectView({
 
       <div
         className="inspect-overview"
-        aria-label={onboarding ? "Assessment summary" : "Trace summary"}
+        aria-label={onboarding ? "Assessment summary" : "Inspect summary"}
       >
         {onboarding ? (
           <>
@@ -484,15 +620,26 @@ export default function InspectView({
         ) : (
           <>
             <span>{traceLabel}</span>
-            <span>{countLabel(events.length, "trace event")}</span>
-            <span>
-              {sourceLabels.length > 0
-                ? sourceLabels.join(" + ")
-                : "No backend events yet"}
-            </span>
+            <span>{countLabel(events.length, "recorded event")}</span>
+            <span>{currentWeekEventIdSet ? "Current week first" : "Recorded work"}</span>
           </>
         )}
       </div>
+
+      {!onboarding && events.length > 0 ? (
+        <nav className="inspect-filters" aria-label="Filter Inspect events">
+          {(Object.keys(FILTER_LABELS) as InspectFilter[]).map((filter) => (
+            <button
+              type="button"
+              aria-pressed={activeFilter === filter}
+              onClick={() => setActiveFilter(filter)}
+              key={filter}
+            >
+              {FILTER_LABELS[filter]}
+            </button>
+          ))}
+        </nav>
+      ) : null}
 
       {weeklyFocus ? (
         <section className="inspect-focus" aria-labelledby="inspect-focus-title">
@@ -503,16 +650,19 @@ export default function InspectView({
                 How Twinkl reached this result.
               </h2>
             </div>
-            <div className="inspect-focus__provenance" aria-label="Run provenance">
-              <span>
-                {SOURCE_LABELS[selectedEvent?.source ?? ""] ?? "Recorded run"}
-              </span>
-              {reviewerModelName ? <span>{reviewerModelName}</span> : null}
-              {reviewerEffort ? <span>Reasoning {reviewerEffort}</span> : null}
-              {reviewerEvent ? (
-                <span>{formatDuration(reviewerEvent.duration_ms)}</span>
-              ) : null}
-            </div>
+            <details className="inspect-focus__technical">
+              <summary>Technical details</summary>
+              <p>
+                {SOURCE_LABELS[
+                  selectedEvent?.source ?? reviewerEvent?.source ?? ""
+                ] ?? "Recorded run"}
+                {reviewerModelName ? ` · ${reviewerModelName}` : ""}
+                {reviewerEffort ? ` · reasoning effort ${reviewerEffort}` : ""}
+                {reviewerEvent
+                  ? ` · ${formatDuration(reviewerEvent.duration_ms)}`
+                  : ""}
+              </p>
+            </details>
           </div>
           <p className="inspect-focus__evidence">
             AI-reviewed synthetic development evidence · not human validation
@@ -542,20 +692,18 @@ export default function InspectView({
                 <small>Applied each Core Value rule independently.</small>
               </div>
             </li>
-            <li>
-              <span aria-hidden="true">3</span>
-              <div>
-                <strong>Coach Digest</strong>
-                <p>
-                  {coachEvent
-                    ? eventSummary(coachEvent, currentJournalEntryIdSet)
-                    : "No Coach Digest response was generated for this saved replay."}
-                </p>
-                <small>
-                  Produces the optional user-facing response when available.
-                </small>
-              </div>
-            </li>
+            {coachEvent ? (
+              <li>
+                <span aria-hidden="true">3</span>
+                <div>
+                  <strong>Weekly Coach</strong>
+                  <p>{eventSummary(coachEvent, currentJournalEntryIdSet)}</p>
+                  <small>
+                    Turns the Weekly Digest into a reflection and question.
+                  </small>
+                </div>
+              </li>
+            ) : null}
           </ol>
           <p className="inspect-focus__more">
             The complete event history remains available below.
@@ -589,7 +737,7 @@ export default function InspectView({
 
       <section
         className="backend-trace"
-        aria-labelledby={onboarding ? "backend-trace-title" : undefined}
+        aria-labelledby="backend-trace-title"
       >
         {onboarding ? (
           <header className="backend-trace__heading">
@@ -599,11 +747,26 @@ export default function InspectView({
             </div>
             <p>
               Profile confirmation starts the Python Experience session. Later
-              trace events show model calls, validation, and deterministic
+              events show model calls, validation, and deterministic
               product logic.
             </p>
           </header>
-        ) : null}
+        ) : currentWeekEventIdSet ? (
+          <header className="backend-trace__heading">
+            <div>
+              <p className="eyebrow">Selected week</p>
+              <h2 id="backend-trace-title">Current week first.</h2>
+            </div>
+            <p>
+              Use the filters to follow Journal Entries, the Weekly Drift
+              Reviewer, or the Drift Detector.
+            </p>
+          </header>
+        ) : (
+          <h2 className="sr-only" id="backend-trace-title">
+            Recorded events
+          </h2>
+        )}
 
         {events.length === 0 ? (
           <div className="inspect-empty">
@@ -619,69 +782,33 @@ export default function InspectView({
             ) : null}
           </div>
         ) : (
-          <ol className="inspect-timeline" aria-label="Trace events">
-            {events.map((event, index) => {
-              const presentation = eventPresentation(event.event_type);
-              const status = STATUS_LABELS[event.status] ?? titleCase(event.status);
-              const source = SOURCE_LABELS[event.source] ?? titleCase(event.source);
-              const parentNumber = event.parent_event_id
-                ? eventNumbers.get(event.parent_event_id)
-                : null;
-              const isSelected = event.event_id === selectedEventId;
-              const isExpanded = expandedEvents.has(event.event_id);
-              return (
-                <li className="trace-event" key={event.event_id}>
-                  <span className="trace-event__node" aria-hidden="true">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <details
-                    className="trace-event__card"
-                    data-selected={isSelected ? "true" : undefined}
-                    open={isExpanded}
-                    onToggle={(toggleEvent) =>
-                      setEventExpanded(event.event_id, toggleEvent.currentTarget.open)}
-                  >
-                    <summary
-                      ref={(node) => {
-                        if (node) eventRefs.current.set(event.event_id, node);
-                        else eventRefs.current.delete(event.event_id);
-                      }}
-                      aria-current={isSelected ? "true" : undefined}
-                      aria-label={`Event ${index + 1}: ${presentation.label}, ${status}, ${source}`}
-                    >
-                      <span className="trace-event__copy">
-                        <span className="trace-event__component">
-                          {presentation.component}
-                        </span>
-                        <span className="trace-event__name">{presentation.label}</span>
-                        <span className="trace-event__result">
-                          {eventSummary(event, currentJournalEntryIdSet)}
-                        </span>
-                      </span>
-                      <span className="trace-event__aside">
-                        <span className={`trace-chip trace-chip--status-${event.status}`}>
-                          {status}
-                        </span>
-                        <span className={`trace-chip trace-chip--source-${event.source}`}>
-                          {source}
-                        </span>
-                        <span className="trace-event__duration">
-                          {formatDuration(event.duration_ms)}
-                        </span>
-                        <span className="trace-event__disclosure" aria-hidden="true">+</span>
-                      </span>
-                      <span className="trace-event__parent">
-                        {parentNumber
-                          ? `After event ${String(parentNumber).padStart(2, "0")}`
-                          : "Trace root"}
-                      </span>
-                    </summary>
-                    {isExpanded ? <EventDetails event={event} /> : null}
-                  </details>
-                </li>
-              );
-            })}
-          </ol>
+          <>
+            {filteredCurrentEvents.length > 0 ? (
+              renderTimeline(
+                filteredCurrentEvents,
+                currentWeekEventIdSet ? "Current week events" : "Recorded events",
+              )
+            ) : (
+              <p className="inspect-filter-empty" role="status">
+                This week has no {FILTER_LABELS[activeFilter]} events.
+              </p>
+            )}
+            {historyEvents.length > 0 ? (
+              <details className="inspect-history">
+                <summary>
+                  <span>Complete Inspect history</span>
+                  <small>{countLabel(filteredHistoryEvents.length, "event")}</small>
+                </summary>
+                {filteredHistoryEvents.length > 0 ? (
+                  renderTimeline(filteredHistoryEvents, "Earlier events")
+                ) : (
+                  <p className="inspect-filter-empty">
+                    Earlier weeks have no {FILTER_LABELS[activeFilter]} events.
+                  </p>
+                )}
+              </details>
+            ) : null}
+          </>
         )}
       </section>
     </div>

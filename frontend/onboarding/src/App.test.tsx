@@ -595,8 +595,8 @@ describe("onboarding app", () => {
 
     await user.click(screen.getByRole("button", { name: "Inspect" }));
 
-    const trace = screen.getByRole("list", { name: "Trace events" });
-    expect(within(trace).getAllByRole("listitem")).toHaveLength(4);
+    const recordedEvents = screen.getByRole("list", { name: "Recorded events" });
+    expect(within(recordedEvents).getAllByRole("listitem")).toHaveLength(4);
     [
       "Profile confirmed",
       "Journal Entry submitted",

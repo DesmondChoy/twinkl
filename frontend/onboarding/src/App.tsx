@@ -1099,6 +1099,16 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
           <section className="flow-panel flow-panel--inspect">
             <InspectView
               events={session.experience.trace_events}
+              currentWeekEventIds={
+                loadedScenario && selectedPersonaId
+                  ? loadedScenario.fixture.scenario.weeks[
+                      Math.min(
+                        session.experience.selected_week ?? 0,
+                        loadedScenario.fixture.scenario.weeks.length - 1,
+                      )
+                    ]?.event_ids
+                  : undefined
+              }
               currentJournalEntryIds={
                 session.experience.trace_events.length > 0
                   ? session.experience.journal_entries.map(
