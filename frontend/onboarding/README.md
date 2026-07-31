@@ -26,11 +26,13 @@ boundary is available; without it, Experience stays usable and Inspect shows
 zero events instead of fixture events. Retryable failures include a retry
 action. **Try demo** loads one of five saved synthetic personas into the same
 React session and replays Journal Entries, displayed nudges and responses,
-Drift, Weekly Digests, and Inspect events one week at a time. Previous, next,
-play or pause, and restart controls preserve the selected week across
-Experience and Inspect; reduced-motion preferences disable automatic
-advancement. The browser verifies each scenario against the catalogued SHA-256
-hash before displaying it. The Profile remains available through the
+Drift, Weekly Digests, and Inspect events one week at a time. **Next step** is
+the default. **Previous** returns to an earlier week. **Auto replay** and
+**Pause replay** provide optional automatic replay. **Restart** and **Jump to
+key moment** provide quick navigation. These controls preserve the selected
+week across Experience and Inspect. Reduced-motion preferences disable Auto
+replay. The browser verifies each scenario against the catalogued SHA-256 hash
+before displaying it. The Profile remains available through the
 `onStartJournal` callback and
 `twinkl:start-first-journal` browser event.
 

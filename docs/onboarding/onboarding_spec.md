@@ -32,9 +32,11 @@ BWS preference shares.
 - In the shared Experience and Inspect app, Profile confirmation also starts
   the in-memory Python session when that boundary is available. After all 11
   groups and before confirmation, Inspect shows the 11 recorded Most
-  selections, 11 recorded Least selections, and completed Profile
-  transformation without presenting them as backend work. After confirmation,
-  Inspect also shows the resulting Profile trace event and no later events.
+  selections, 11 recorded Least selections, one totals row for each of the 11
+  SVBWS objects, and Most and Least column totals of 11. Inspect then shows the
+  completed Profile transformation without presenting it as backend work.
+  After confirmation, Inspect also shows the resulting Profile trace event and
+  no later events.
 - The first Journal Entry editor and later Profile evolution are outside this
   specification.
 
