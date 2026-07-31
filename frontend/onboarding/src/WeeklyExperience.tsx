@@ -1,6 +1,9 @@
-import type { OnboardingProfile } from "./domain";
 import {
-  displayCoreValue,
+  VALUES,
+  type OnboardingProfile,
+  type ValueKey,
+} from "./domain";
+import {
   displayWeekRange,
 } from "./displayFormatters";
 import type {
@@ -22,12 +25,14 @@ interface WeeklyExperienceProps {
   traceEvents: TraceEventContract[];
   inspectRun: (eventId: string) => void;
   selectJournalEntry?: (journalEntryId: string) => void;
+  showInspectAction?: boolean;
 }
 
 interface DigestEvidence {
   date: string;
   tIndex: number;
   excerpt: string;
+  dimensions: string[];
 }
 
 function object(value: unknown): JsonObject | null {
@@ -57,25 +62,52 @@ function deliveryState(value: unknown): DeliveryState {
     : "stable";
 }
 
-function coreValueStateSummary(coreValue: string, state: DeliveryState): string {
-  const label = displayCoreValue(coreValue);
+function stateExplanation(state: DeliveryState): string {
   switch (state) {
     case "active":
-      return `${label} has Active Drift`;
+      return "Two consecutive Journal Entries went against this priority.";
     case "recovered":
-      return `${label} shows Recovered Drift`;
+      return "A later Journal Entry ended the earlier pattern.";
     case "uncertain":
-      return `${label} is Uncertain`;
+      return "The latest Journal Entry was unclear, so Twinkl did not claim a current pattern.";
     case "mixed":
-      return `${label} has Mixed Drift states`;
+      return "The Core Values have different current states.";
     default:
-      return `${label} has No Drift`;
+      return "No repeated conflict was found this week.";
   }
 }
 
-function citationExcerpt(excerpt: string): string {
+function stateHeading(state: DeliveryState): string {
+  switch (state) {
+    case "active":
+      return "A repeated conflict surfaced.";
+    case "recovered":
+      return "The earlier pattern eased.";
+    case "uncertain":
+      return "Not enough evidence yet.";
+    case "mixed":
+      return "Two priorities moved differently.";
+    default:
+      return "No repeated conflict this week.";
+  }
+}
+
+function coreValuePhrase(coreValue: string): string {
+  return VALUES[coreValue as ValueKey]?.phrase ?? coreValue;
+}
+
+function citationExcerpt(excerpt: string, limit = 96): string {
   const compact = excerpt.replace(/\s+/g, " ").trim();
-  return compact.length > 56 ? `${compact.slice(0, 55).trimEnd()}…` : compact;
+  return compact.length > limit
+    ? `${compact.slice(0, limit - 1).trimEnd()}…`
+    : compact;
+}
+
+function displayEvidenceDate(value: string): string {
+  return new Intl.DateTimeFormat(undefined, {
+    day: "numeric",
+    month: "short",
+  }).format(new Date(`${value}T00:00:00`));
 }
 
 function latestEventId(
@@ -103,6 +135,11 @@ function digestEvidence(digest: JsonObject): DigestEvidence[] {
       date: row.date,
       tIndex: Number(row.t_index),
       excerpt: row.excerpt,
+      dimensions: Array.isArray(row.dimensions)
+        ? row.dimensions.filter(
+            (dimension): dimension is string => typeof dimension === "string",
+          )
+        : [],
     }];
   });
 }
@@ -116,6 +153,7 @@ export default function WeeklyExperience({
   traceEvents,
   inspectRun,
   selectJournalEntry,
+  showInspectAction = true,
 }: WeeklyExperienceProps) {
   if (driftResult === null || weeklyDigest === null) return null;
 
@@ -127,6 +165,7 @@ export default function WeeklyExperience({
   );
   const driftEventId = latestEventId(traceEvents, "drift_detected");
   const digestEventId = latestEventId(traceEvents, "weekly_digest_built");
+  const inspectEventId = driftEventId ?? digestEventId;
   const weekStart =
     typeof weeklyDigest.week_start === "string" ? weeklyDigest.week_start : null;
   const weekEnd =
@@ -144,104 +183,141 @@ export default function WeeklyExperience({
           decision.week_start === weekStart && decision.week_end === weekEnd,
       )
       .every((decision) => decision.review_status !== "ok");
-  const rationale =
-    typeof weeklyDigest.mode_rationale === "string"
-      ? weeklyDigest.mode_rationale
+  const coachNarrative = object(weeklyDigest.coach_narrative);
+  const weeklyMirror =
+    typeof coachNarrative?.weekly_mirror === "string"
+      ? coachNarrative.weekly_mirror
       : null;
-  const summary = reviewUnavailable
-    ? "The Weekly Drift Reviewer could not return usable evidence for this week."
-    : aggregateState === "mixed"
-      ? `${profile.top_values
-          .map((coreValue) =>
-            coreValueStateSummary(
-              coreValue,
-              deliveryState(rawStates[coreValue]),
-            ),
-          )
-          .join("; ")}.`
-      : rationale;
+  const tensionExplanation =
+    typeof coachNarrative?.tension_explanation === "string"
+      ? coachNarrative.tension_explanation
+      : null;
+  const reflectiveQuestion =
+    typeof coachNarrative?.reflective_question === "string"
+      ? coachNarrative.reflective_question
+      : null;
 
   return (
-    <section className="weekly-experience" aria-labelledby="weekly-digest-title">
-      <header className="weekly-experience__header">
-        <div>
-          <p className="eyebrow">Weekly Digest</p>
-          <h2 id="weekly-digest-title">Your week in view.</h2>
-        </div>
-        <span className={`weekly-experience__state weekly-experience__state--${aggregateState}`}>
-          {reviewUnavailable ? "Review unavailable" : stateLabel(aggregateState)}
-        </span>
-      </header>
+    <section className="weekly-workspace" aria-labelledby="weekly-view-title">
+      <div
+        className={`weekly-experience weekly-experience--${aggregateState}`}
+      >
+        <header className="weekly-experience__header">
+          <div>
+            <p className="eyebrow">What Twinkl noticed</p>
+            <h2 id="weekly-view-title">{stateHeading(aggregateState)}</h2>
+          </div>
+          <span
+            className={`weekly-experience__state weekly-experience__state--${aggregateState}`}
+          >
+            {reviewUnavailable
+              ? "Review unavailable"
+              : stateLabel(aggregateState)}
+          </span>
+        </header>
 
-      {weekStart && weekEnd ? (
-        <p className="weekly-experience__dates">
-          {displayWeekRange(weekStart, weekEnd)}
-        </p>
-      ) : null}
+        {weekStart && weekEnd ? (
+          <p className="weekly-experience__dates">
+            {displayWeekRange(weekStart, weekEnd)}
+          </p>
+        ) : null}
 
-      <ul className="weekly-experience__values" aria-label="Core Value Drift">
-        {profile.top_values.map((coreValue) => {
-          const state = deliveryState(rawStates[coreValue]);
-          return (
-            <li key={coreValue}>
-              <span>{displayCoreValue(coreValue)}</span>
-              <strong>
-                {reviewUnavailable ? "Review unavailable" : stateLabel(state)}
-              </strong>
-            </li>
-          );
-        })}
-      </ul>
-
-      {summary ? <p className="weekly-experience__summary">{summary}</p> : null}
-
-      {evidence.length > 0 ? (
-        <div className="weekly-evidence">
-          <h3>Journal Entries behind this view</h3>
-          <ol>
-            {evidence.map((row) => {
-              const entry = entriesByIndex.get(row.tIndex);
+        {reviewUnavailable ? (
+          <p className="weekly-experience__summary">
+            The Weekly Drift Reviewer could not return usable evidence for this
+            week.
+          </p>
+        ) : (
+          <ul
+            className="weekly-experience__values"
+            aria-label="Current Drift by Core Value"
+          >
+            {profile.top_values.map((coreValue) => {
+              const state = deliveryState(rawStates[coreValue]);
+              const stateEvidence = evidence.filter((row) =>
+                row.dimensions.length === 0
+                  ? profile.top_values.length === 1
+                  : row.dimensions.includes(coreValue),
+              );
               return (
-                <li key={`${row.date}-${row.tIndex}`}>
-                  <blockquote>{row.excerpt}</blockquote>
-                  {entry ? (
-                    <a
-                      href={`#${journalEntryAnchorId(entry.journal_entry_id)}`}
-                      onClick={() =>
-                        selectJournalEntry?.(entry.journal_entry_id)
-                      }
-                    >
-                      Open Journal Entry “{citationExcerpt(row.excerpt)}” from{" "}
-                      {row.date}
-                    </a>
+                <li
+                  className={`weekly-value weekly-value--${state}`}
+                  key={coreValue}
+                >
+                  <div className="weekly-value__heading">
+                    <span>{coreValuePhrase(coreValue)}</span>
+                    <strong>{stateLabel(state)}</strong>
+                  </div>
+                  <p>{stateExplanation(state)}</p>
+                  {stateEvidence.length > 0 ? (
+                    <ol className="weekly-evidence">
+                      {stateEvidence.map((row) => {
+                        const entry = entriesByIndex.get(row.tIndex);
+                        const earlierWeek =
+                          weekStart !== null && row.date < weekStart;
+                        return (
+                          <li key={`${coreValue}-${row.date}-${row.tIndex}`}>
+                            {earlierWeek ? <small>Earlier week</small> : null}
+                            {entry ? (
+                              <a
+                                href={`#${journalEntryAnchorId(entry.journal_entry_id)}`}
+                                onClick={() =>
+                                  selectJournalEntry?.(entry.journal_entry_id)
+                                }
+                              >
+                                <span>{displayEvidenceDate(row.date)}</span>
+                                <q>{citationExcerpt(row.excerpt)}</q>
+                              </a>
+                            ) : (
+                              <blockquote>{row.excerpt}</blockquote>
+                            )}
+                          </li>
+                        );
+                      })}
+                    </ol>
                   ) : null}
                 </li>
               );
             })}
-          </ol>
-        </div>
-      ) : null}
+          </ul>
+        )}
 
-      <div className="weekly-experience__actions">
-        {driftEventId ? (
-          <button
-            className="inspect-run-link"
-            type="button"
-            onClick={() => inspectRun(driftEventId)}
-          >
-            Inspect Drift run
-          </button>
-        ) : null}
-        {digestEventId ? (
-          <button
-            className="inspect-run-link"
-            type="button"
-            onClick={() => inspectRun(digestEventId)}
-          >
-            Inspect Weekly Digest run
-          </button>
+        {evidence.length > 0 ? (
+          <p className="weekly-experience__evidence-note">
+            Selecting evidence opens and focuses that Journal Entry below.
+          </p>
         ) : null}
       </div>
+
+      <aside className="coach-digest" aria-labelledby="coach-digest-title">
+        <p className="eyebrow">Coach Digest</p>
+        <h2 id="coach-digest-title">
+          {weeklyMirror ?? "No response was saved for this week."}
+        </h2>
+        {tensionExplanation ? <p>{tensionExplanation}</p> : (
+          <p>
+            This saved replay contains Weekly Drift Detection output, but no
+            generated Coach Digest response.
+          </p>
+        )}
+        {reflectiveQuestion ? (
+          <p className="coach-digest__question">{reflectiveQuestion}</p>
+        ) : (
+          <p className="coach-digest__availability">
+            Coach Digest generation is optional in this capstone replay.
+          </p>
+        )}
+      </aside>
+
+      {showInspectAction && inspectEventId ? (
+        <button
+          className="button button--primary weekly-workspace__inspect"
+          type="button"
+          onClick={() => inspectRun(inspectEventId)}
+        >
+          See how this was decided
+        </button>
+      ) : null}
     </section>
   );
 }

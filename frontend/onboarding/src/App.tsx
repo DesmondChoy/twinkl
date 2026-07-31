@@ -529,6 +529,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
     const visibleEventIds = new Set(projection.session.trace_event_ids);
     const previousEntryId = session.experience.selected_entry_id;
     const previousEventId = session.experience.selected_event_id;
+    const sameWeek = session.experience.selected_week === weekIndex;
     update({
       user_id: profile.user_id,
       session_id: profile.session_id,
@@ -559,11 +560,11 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
       selected_persona_id: loaded.catalogItem.persona_id,
       selected_week: weekIndex,
       selected_entry_id:
-        previousEntryId && visibleEntryIds.has(previousEntryId)
+        sameWeek && previousEntryId && visibleEntryIds.has(previousEntryId)
           ? previousEntryId
           : null,
       selected_event_id:
-        previousEventId && visibleEventIds.has(previousEventId)
+        sameWeek && previousEventId && visibleEventIds.has(previousEventId)
           ? previousEventId
           : null,
       weekly_reviewer_decisions:
@@ -590,7 +591,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
     if (
       hasManualProgress &&
       !window.confirm(
-        "Load this saved persona and replace your current progress?",
+        "Load this saved Persona and replace your current progress?",
       )
     ) {
       return false;
@@ -627,7 +628,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
       .catch(() => {
         if (!cancelled) {
           setScenarioLoadError(
-            "The saved persona replay could not be restored.",
+            "The saved Persona replay could not be restored.",
           );
         }
       });
@@ -780,7 +781,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
           : journalStarted
             ? "journal"
             : session.stage
-    }`}>
+    }${selectedPersonaId ? " app-shell--saved-persona" : ""}`}>
       <header className="topbar">
         <a className="wordmark" href="#main">
           twinkl<span>·</span>
@@ -822,7 +823,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
                 showView("experience");
               }}
             >
-              Try demo
+              {selectedPersonaId ? "Change Persona" : "Try demo"}
             </button>
           ) : null}
           <button className="restart" type="button" onClick={restart}>
@@ -882,7 +883,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
           {!personaPickerOpen && selectedPersonaId &&
           loadedScenario?.catalogItem.persona_id !== selectedPersonaId ? (
             <div className="stage stage--journal replay-loading" aria-live="polite">
-              <p className="eyebrow">Saved persona replay</p>
+              <p className="eyebrow">Saved Persona replay</p>
               <h1 ref={headingRef} tabIndex={-1}>
                 {scenarioLoadError
                   ? "The replay needs another try."
@@ -1078,10 +1079,18 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
               <span />
             </div>
             <div className="instrument-copy">
-              <p className="eyebrow">Assessment evidence</p>
-              <h2>Every result has a trail.</h2>
+              <p className="eyebrow">
+                {selectedPersonaId ? "Same saved replay" : "Assessment evidence"}
+              </p>
+              <h2>
+                {selectedPersonaId
+                  ? "How Twinkl reached this moment."
+                  : "Every result has a trail."}
+              </h2>
               <p>
-                {session.experience.trace_events.length > 0
+                {selectedPersonaId
+                  ? "Inspect follows the exact week and Persona selected in Experience."
+                  : session.experience.trace_events.length > 0
                   ? "The selections, scoring steps, Profile mapping, and Python validation are shown in the order they occurred."
                   : "The selections, scoring steps, and Profile mapping are shown exactly as they occurred. Python validation appears after confirmation."}
               </p>
@@ -1097,14 +1106,18 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
                     )
                   : undefined
               }
-              onboarding={scores ? {
+              onboarding={!selectedPersonaId && scores ? {
                 confirmed: session.confirmed_profile !== null,
                 responses: session.responses,
                 scores,
                 setOrder: session.set_order,
               } : undefined}
               selectedEventId={session.experience.selected_event_id}
-              traceLabel="Current Experience session"
+              traceLabel={
+                loadedScenario
+                  ? `${loadedScenario.catalogItem.persona_name} · saved replay`
+                  : "Current Experience session"
+              }
               emptyMessage={
                 profileAwaitingConfirmation
                   ? "The browser calculation is complete. Confirm the result in Experience to send the Profile to Python validation."

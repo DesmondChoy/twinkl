@@ -71,6 +71,15 @@ function latestDecisionFor(
   );
 }
 
+function latestEventId(
+  events: TraceEventContract[],
+  eventType: string,
+): string | null {
+  return [...events]
+    .reverse()
+    .find((event) => event.event_type === eventType)?.event_id ?? null;
+}
+
 function mergeJournalEntries(
   remote: JournalEntryContract[],
   local: JournalEntryContract[],
@@ -154,6 +163,42 @@ export default function JournalExperience({
   const nudgeHeadingRef = useRef<HTMLHeadingElement>(null);
   const threadHeadingRef = useRef<HTMLHeadingElement>(null);
   const [removingEntryId, setRemovingEntryId] = useState<string | null>(null);
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const replayWeekStart =
+    typeof experience.weekly_digest?.week_start === "string"
+      ? experience.weekly_digest.week_start
+      : null;
+  const replayWeekEnd =
+    typeof experience.weekly_digest?.week_end === "string"
+      ? experience.weekly_digest.week_end
+      : null;
+  const currentWeekEntries = useMemo(
+    () =>
+      mode === "saved_replay" && replayWeekStart && replayWeekEnd
+        ? experience.journal_entries.filter(
+            (entry) =>
+              entry.date >= replayWeekStart && entry.date <= replayWeekEnd,
+          )
+        : experience.journal_entries,
+    [
+      experience.journal_entries,
+      mode,
+      replayWeekEnd,
+      replayWeekStart,
+    ],
+  );
+  const earlierEntries = useMemo(
+    () =>
+      mode === "saved_replay"
+        ? experience.journal_entries.filter(
+            (entry) => !currentWeekEntries.includes(entry),
+          )
+        : [],
+    [currentWeekEntries, experience.journal_entries, mode],
+  );
+  const replayInspectEventId =
+    latestEventId(experience.trace_events, "drift_detected")
+    ?? latestEventId(experience.trace_events, "weekly_digest_built");
   const activeNudge = useMemo(
     () =>
       [...experience.nudges]
@@ -180,6 +225,40 @@ export default function JournalExperience({
       nudgeHeadingRef.current?.focus({ preventScroll: true });
     }
   }, [isAwaitingResponse]);
+
+  useEffect(() => {
+    if (mode === "saved_replay") setHistoryOpen(false);
+  }, [mode, replayWeekEnd, replayWeekStart]);
+
+  useEffect(() => {
+    if (
+      mode !== "saved_replay"
+      || !experience.selected_entry_id
+      || !earlierEntries.some(
+        (entry) =>
+          entry.journal_entry_id === experience.selected_entry_id,
+      )
+    ) {
+      return;
+    }
+    setHistoryOpen(true);
+    const focusSelectedEntry = () => {
+      const target = document.getElementById(
+        journalEntryAnchorId(experience.selected_entry_id!),
+      );
+      target?.focus({ preventScroll: true });
+      target?.scrollIntoView?.({ block: "center" });
+    };
+    if (window.requestAnimationFrame) {
+      window.requestAnimationFrame(focusSelectedEntry);
+    } else {
+      focusSelectedEntry();
+    }
+  }, [
+    earlierEntries,
+    experience.selected_entry_id,
+    mode,
+  ]);
 
   const runSubmission = async (pending: PendingJournalSubmission) => {
     const traceEventIds = new Set(
@@ -513,6 +592,101 @@ export default function JournalExperience({
     if (eventId) inspectRun(eventId);
   };
 
+  const renderJournalThread = (
+    entries: JournalEntryContract[],
+    id: string,
+    eyebrow: string,
+    title: string,
+    focusHeading = false,
+  ) => (
+    <section className="journal-thread" aria-labelledby={id}>
+      <div className="journal-thread__heading">
+        <p className="eyebrow">{eyebrow}</p>
+        <h2
+          id={id}
+          ref={focusHeading ? threadHeadingRef : undefined}
+          tabIndex={focusHeading ? -1 : undefined}
+        >
+          {title}
+        </h2>
+      </div>
+      <ol>
+        {entries.map((entry) => {
+          const position = experience.journal_entries.findIndex(
+            (candidate) =>
+              candidate.journal_entry_id === entry.journal_entry_id,
+          );
+          const nudge: NudgeInteractionContract | null =
+            experience.nudges.find(
+              (item) => item.journal_entry_id === entry.journal_entry_id,
+            ) ?? null;
+          return (
+            <li
+              id={journalEntryAnchorId(entry.journal_entry_id)}
+              key={entry.journal_entry_id}
+              tabIndex={-1}
+              aria-current={
+                experience.selected_entry_id === entry.journal_entry_id
+                  ? "true"
+                  : undefined
+              }
+            >
+              <div className="journal-thread__meta">
+                <time dateTime={entry.date}>{displayDate(entry.date)}</time>
+                {mode === "manual" ? (
+                  <button
+                    className="journal-thread__remove"
+                    type="button"
+                    aria-label={`Remove Journal Entry ${position + 1} of ${experience.journal_entries.length} from ${displayDate(entry.date)}`}
+                    disabled={isBusy || isAwaitingResponse}
+                    onClick={() =>
+                      void removeJournalEntry(entry.journal_entry_id)}
+                  >
+                    {removingEntryId === entry.journal_entry_id
+                      ? "Removing…"
+                      : "Remove"}
+                  </button>
+                ) : null}
+              </div>
+              <p className="journal-thread__entry">{entry.content}</p>
+              {nudge?.text && ["displayed", "answered", "skipped"].includes(
+                nudge.outcome,
+              ) ? (
+                <div className="journal-thread__exchange">
+                  <p>{nudge.text}</p>
+                  {nudge.outcome === "answered" && nudge.response ? (
+                    <p>{nudge.response}</p>
+                  ) : null}
+                </div>
+              ) : null}
+              {nudge?.outcome === "skipped" ? (
+                <p className="journal-thread__skipped">
+                  Follow-up skipped.
+                </p>
+              ) : null}
+            </li>
+          );
+        })}
+      </ol>
+    </section>
+  );
+
+  const weeklyExperience = (
+    <WeeklyExperience
+      profile={profile}
+      journalEntries={experience.journal_entries}
+      weeklyReviewerDecisions={experience.weekly_reviewer_decisions}
+      driftResult={experience.drift_result}
+      weeklyDigest={experience.weekly_digest}
+      traceEvents={experience.trace_events}
+      inspectRun={inspectRun}
+      selectJournalEntry={(journalEntryId) =>
+        updateExperience({ selected_entry_id: journalEntryId })
+      }
+      showInspectAction={mode === "manual"}
+    />
+  );
+
   return (
     <div className="journal-experience">
       {mode === "manual" ? <header className="journal-experience__header">
@@ -663,86 +837,47 @@ export default function JournalExperience({
         ) : null}
       </div>
 
-      {experience.journal_entries.length > 0 ? (
-        <section className="journal-thread" aria-labelledby="journal-thread-title">
-          <div className="journal-thread__heading">
-            <p className="eyebrow">Your thread</p>
-            <h2
-              id="journal-thread-title"
-              ref={threadHeadingRef}
-              tabIndex={-1}
-            >
-              Moment by moment.
-            </h2>
-          </div>
-          <ol>
-            {experience.journal_entries.map((entry, position) => {
-              const nudge: NudgeInteractionContract | null =
-                experience.nudges.find(
-                  (item) => item.journal_entry_id === entry.journal_entry_id,
-                ) ?? null;
-              return (
-                <li
-                  id={journalEntryAnchorId(entry.journal_entry_id)}
-                  key={entry.journal_entry_id}
-                  aria-current={
-                    experience.selected_entry_id === entry.journal_entry_id
-                      ? "true"
-                      : undefined
-                  }
-                >
-                  <div className="journal-thread__meta">
-                    <time dateTime={entry.date}>{displayDate(entry.date)}</time>
-                    {mode === "manual" ? (
-                      <button
-                        className="journal-thread__remove"
-                        type="button"
-                        aria-label={`Remove Journal Entry ${position + 1} of ${experience.journal_entries.length} from ${displayDate(entry.date)}`}
-                        disabled={isBusy || isAwaitingResponse}
-                        onClick={() =>
-                          void removeJournalEntry(entry.journal_entry_id)}
-                      >
-                        {removingEntryId === entry.journal_entry_id
-                          ? "Removing…"
-                          : "Remove"}
-                      </button>
-                    ) : null}
-                  </div>
-                  <p className="journal-thread__entry">{entry.content}</p>
-                  {nudge?.text && ["displayed", "answered", "skipped"].includes(
-                    nudge.outcome,
-                  ) ? (
-                    <div className="journal-thread__exchange">
-                      <p>{nudge.text}</p>
-                      {nudge.outcome === "answered" && nudge.response ? (
-                        <p>{nudge.response}</p>
-                      ) : null}
-                    </div>
-                  ) : null}
-                  {nudge?.outcome === "skipped" ? (
-                    <p className="journal-thread__skipped">
-                      Follow-up skipped.
-                    </p>
-                  ) : null}
-                </li>
-              );
-            })}
-          </ol>
-        </section>
+      {mode === "saved_replay" ? weeklyExperience : null}
+
+      {currentWeekEntries.length > 0
+        ? renderJournalThread(
+            currentWeekEntries,
+            "journal-thread-title",
+            mode === "saved_replay" ? "Current week" : "Your thread",
+            mode === "saved_replay"
+              ? "This week’s Journal Entries"
+              : "Moment by moment.",
+            mode === "manual",
+          )
+        : null}
+
+      {mode === "saved_replay" && earlierEntries.length > 0 ? (
+        <details
+          className="journal-history"
+          open={historyOpen}
+          onToggle={(event) => setHistoryOpen(event.currentTarget.open)}
+        >
+          <summary>Earlier Journal Entries · {earlierEntries.length}</summary>
+          {renderJournalThread(
+            earlierEntries,
+            "earlier-journal-thread-title",
+            "Earlier history",
+            "Earlier Journal Entries",
+          )}
+        </details>
       ) : null}
 
-      <WeeklyExperience
-        profile={profile}
-        journalEntries={experience.journal_entries}
-        weeklyReviewerDecisions={experience.weekly_reviewer_decisions}
-        driftResult={experience.drift_result}
-        weeklyDigest={experience.weekly_digest}
-        traceEvents={experience.trace_events}
-        inspectRun={inspectRun}
-        selectJournalEntry={(journalEntryId) =>
-          updateExperience({ selected_entry_id: journalEntryId })
-        }
-      />
+      {mode === "saved_replay" && replayInspectEventId ? (
+        <button
+          className="button button--primary replay-inspect-action"
+          type="button"
+          onClick={() => inspectRun(replayInspectEventId)}
+        >
+          See how this was decided
+        </button>
+      ) : null}
+
+      {mode === "manual" ? weeklyExperience : null}
     </div>
   );
 }

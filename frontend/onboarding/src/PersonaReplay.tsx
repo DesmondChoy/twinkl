@@ -4,11 +4,11 @@ import {
   useState,
   type RefObject,
 } from "react";
-import type { OnboardingProfile } from "./domain";
 import {
-  displayCoreValue,
-  displayWeekRange,
-} from "./displayFormatters";
+  VALUES,
+  type OnboardingProfile,
+} from "./domain";
+import { displayWeekRange } from "./displayFormatters";
 import JournalExperience from "./JournalExperience";
 import type { ExperienceState } from "./session";
 import {
@@ -16,6 +16,7 @@ import {
   loadScenarioCatalog,
   type LoadedScenario,
   type ScenarioCatalog,
+  type ScenarioCatalogItem,
 } from "./scenarioReplay";
 
 const PLAYBACK_DELAY_MS = 4_000;
@@ -32,6 +33,39 @@ function stateLabel(value: string): string {
       return "Mixed";
     default:
       return "No Drift";
+  }
+}
+
+function personaLesson(item: ScenarioCatalogItem): {
+  label: string;
+  copy: string;
+} {
+  switch (item.role) {
+    case "active_drift":
+      return {
+        label: "Emergence",
+        copy: "Watch a pattern become Active Drift.",
+      };
+    case "recovered_drift":
+      return {
+        label: "Recovery",
+        copy: "See what ends an Active Drift run.",
+      };
+    case "uncertain":
+      return {
+        label: "Uncertainty",
+        copy: "See Twinkl pause when evidence is unclear.",
+      };
+    case "two_core_values":
+      return {
+        label: "Two Core Values",
+        copy: "See two priorities move independently.",
+      };
+    default:
+      return {
+        label: "Steady",
+        copy: `See ${item.progression.length} weeks with No Drift.`,
+      };
   }
 }
 
@@ -66,8 +100,7 @@ export function PersonaReplayPicker({
 }: PersonaReplayPickerProps) {
   const headingRef = useRef<HTMLHeadingElement>(null);
   const [catalog, setCatalog] = useState<ScenarioCatalog | null>(null);
-  const [selectedId, setSelectedId] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loadingId, setLoadingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [catalogAttempt, setCatalogAttempt] = useState(0);
 
@@ -78,18 +111,10 @@ export function PersonaReplayPicker({
       .then((loadedCatalog) => {
         if (cancelled) return;
         setCatalog(loadedCatalog);
-        setSelectedId(
-          loadedCatalog.scenarios.find(
-            (item) => item.persona_id === currentPersonaId,
-          )?.scenario_id ??
-            loadedCatalog.scenarios.find((item) => item.recommended)
-              ?.scenario_id ??
-            loadedCatalog.scenarios[0].scenario_id,
-        );
       })
       .catch(() => {
         if (!cancelled) {
-          setError("The saved persona menu could not be loaded.");
+          setError("The saved Persona menu could not be loaded.");
         }
       });
     headingRef.current?.focus({ preventScroll: true });
@@ -98,81 +123,83 @@ export function PersonaReplayPicker({
     };
   }, [catalogAttempt, currentPersonaId]);
 
-  const selected = catalog?.scenarios.find(
-    (item) => item.scenario_id === selectedId,
-  ) ?? null;
-
-  const startReplay = async () => {
-    if (!selected || loading) return;
-    setLoading(true);
+  const startReplay = async (selected: ScenarioCatalogItem) => {
+    if (loadingId !== null || selected.persona_id === currentPersonaId) return;
+    setLoadingId(selected.scenario_id);
     setError(null);
     try {
       if (!onLoad(await loadSavedScenario(selected))) {
-        setLoading(false);
+        setLoadingId(null);
       }
     } catch {
-      setError("This saved persona replay could not be loaded.");
-      setLoading(false);
+      setError("This saved Persona replay could not be loaded.");
+      setLoadingId(null);
     }
   };
 
   return (
     <section className="persona-picker" aria-labelledby="persona-picker-title">
       <header className="persona-picker__header">
-        <p className="eyebrow">Saved persona replay</p>
+        <p className="eyebrow">Saved Persona replay</p>
         <h1 id="persona-picker-title" ref={headingRef} tabIndex={-1}>
-          Follow a life week by week.
+          Choose what you want to observe.
         </h1>
         <p className="lede">
-          Choose one synthetic persona to see how Journal Entries become Drift
-          and a Weekly Digest over time.
+          Five saved stories show different ways Drift can unfold.
         </p>
       </header>
 
       {catalog ? (
-        <fieldset className="persona-menu" disabled={loading}>
-          <legend>Choose a demo persona</legend>
-          {catalog.scenarios.map((item) => (
-            <label
-              className={`persona-option${
-                item.scenario_id === selectedId
-                  ? " persona-option--selected"
-                  : ""
-              }`}
-              key={item.scenario_id}
-            >
-              <input
-                type="radio"
-                name="persona"
-                value={item.scenario_id}
-                checked={item.scenario_id === selectedId}
-                onChange={() => setSelectedId(item.scenario_id)}
-              />
-              <span className="persona-option__copy">
-                <span className="persona-option__identity">
-                  <strong>{item.persona_name}</strong>
-                  {item.persona_id === currentPersonaId ? (
-                    <em>Current</em>
-                  ) : item.recommended ? (
-                    <em>Recommended</em>
-                  ) : null}
+        <div className="persona-menu" aria-label="Choose a demo Persona">
+          {catalog.scenarios.map((item) => {
+            const lesson = personaLesson(item);
+            const current = item.persona_id === currentPersonaId;
+            return (
+              <article
+                className={`persona-option persona-option--${item.role}${
+                  current ? " persona-option--current" : ""
+                }`}
+                key={item.scenario_id}
+              >
+                <span className="persona-option__thread" aria-hidden="true" />
+                <span className="persona-option__copy">
+                  <span className="persona-option__identity">
+                    <strong>{item.persona_name}</strong>
+                    {current ? (
+                      <em>Current</em>
+                    ) : item.recommended ? (
+                      <em>Recommended</em>
+                    ) : null}
+                  </span>
+                  <span>
+                    {item.profession} · {item.culture} · {item.age}
+                  </span>
+                  <span className="persona-option__lesson">
+                    <small>{lesson.label}</small>
+                    <span>{lesson.copy}</span>
+                  </span>
                 </span>
-                <span>
-                  {item.profession} · {item.culture} · {item.age}
-                </span>
-                <span>{item.summary}</span>
-                <small>
-                  {item.core_values.map(displayCoreValue).join(" · ")} ·{" "}
-                  {item.progression.length} weeks
-                </small>
-              </span>
-            </label>
-          ))}
-        </fieldset>
+                <button
+                  className="button button--primary persona-option__action"
+                  type="button"
+                  disabled={current || loadingId !== null}
+                  onClick={() => void startReplay(item)}
+                >
+                  {current
+                    ? "Current replay"
+                    : loadingId === item.scenario_id
+                      ? "Loading saved replay…"
+                      : "Start at week 1"}
+                </button>
+              </article>
+            );
+          })}
+        </div>
       ) : null}
 
       <p className="persona-picker__source">
-        Saved replay · AI-reviewed synthetic development evidence
+        Saved replay · AI-reviewed synthetic development evidence · not human
+        validation
       </p>
       {error ? <p className="persona-picker__error" role="alert">{error}</p> : null}
       <div className="persona-picker__actions">
@@ -187,26 +214,7 @@ export function PersonaReplayPicker({
           >
             Try loading again
           </button>
-        ) : (
-          <button
-            className="button button--primary"
-            type="button"
-            disabled={
-              !selected ||
-              loading ||
-              selected.persona_id === currentPersonaId
-            }
-            onClick={() => void startReplay()}
-          >
-            {loading
-              ? "Loading saved replay…"
-              : selected?.persona_id === currentPersonaId
-                ? "Current replay"
-                : selected
-                  ? `Replay ${selected.persona_name}`
-                  : "Load persona"}
-          </button>
-        )}
+        ) : null}
       </div>
     </section>
   );
@@ -236,6 +244,7 @@ export function PersonaReplayExperience({
   headingRef,
 }: PersonaReplayExperienceProps) {
   const reducedMotion = usePrefersReducedMotion();
+  const weekRailRef = useRef<HTMLOListElement>(null);
   const [playing, setPlaying] = useState(false);
   const weeks = loaded.fixture.scenario.weeks;
   const safeWeekIndex = Math.min(Math.max(weekIndex, 0), weeks.length - 1);
@@ -253,6 +262,16 @@ export function PersonaReplayExperience({
     setFurthestRevealedWeek((current) =>
       Math.max(current, safeWeekIndex),
     );
+  }, [safeWeekIndex]);
+
+  useEffect(() => {
+    const activeWeek = weekRailRef.current?.querySelector<HTMLButtonElement>(
+      '.week-rail__button[aria-current="step"]',
+    );
+    activeWeek?.scrollIntoView?.({
+      block: "nearest",
+      inline: "center",
+    });
   }, [safeWeekIndex]);
 
   useEffect(() => {
@@ -280,16 +299,20 @@ export function PersonaReplayExperience({
     <div className="persona-replay">
       <header className="persona-replay__header">
         <div className="persona-replay__source-line">
-          <span>Saved replay</span>
-          <span>AI-reviewed synthetic development evidence</span>
+          <span>Synthetic demo · saved replay</span>
+          <span>Not human validation</span>
         </div>
         <p className="eyebrow">
-          {loaded.catalogItem.profession} · {loaded.catalogItem.culture}
+          {loaded.catalogItem.profession} · {loaded.catalogItem.culture} ·{" "}
+          {loaded.catalogItem.age}
         </p>
         <h1 ref={headingRef} tabIndex={-1}>
-          {loaded.catalogItem.persona_name}, week by week.
+          {loaded.catalogItem.persona_name}
         </h1>
-        <p className="lede">{loaded.catalogItem.summary}</p>
+        <p className="persona-replay__values">
+          <strong>What matters to them:</strong>{" "}
+          {profile.top_values.map((value) => VALUES[value].phrase).join(" · ")}
+        </p>
       </header>
 
       <section
@@ -321,7 +344,11 @@ export function PersonaReplayExperience({
           </strong>
         </div>
 
-        <ol className="week-rail" aria-label="Saved replay weeks">
+        <ol
+          className="week-rail"
+          aria-label="Saved replay weeks"
+          ref={weekRailRef}
+        >
           {weeks.map((week, index) => {
             const revealed = index <= furthestRevealedWeek;
             const label = revealed
@@ -331,37 +358,54 @@ export function PersonaReplayExperience({
               : `Week ${index + 1}, not yet replayed`;
             return (
               <li
-                className={`week-rail__week week-rail__week--${
-                  week.expected_delivery_state
-                }${revealed ? " week-rail__week--revealed" : ""}`}
+                className={`week-rail__week${
+                  revealed
+                    ? ` week-rail__week--revealed week-rail__week--${week.expected_delivery_state}`
+                    : ""
+                }`}
                 aria-current={index === safeWeekIndex ? "step" : undefined}
                 aria-label={label}
                 key={week.week_id}
               >
-                {revealed ? (
-                  <button
-                    type="button"
-                    className="week-rail__button"
-                    aria-current={
-                      index === safeWeekIndex ? "step" : undefined
-                    }
-                    aria-label={`Show ${label.toLowerCase()}`}
-                    onClick={() => {
-                      setPlaying(false);
-                      onWeekChange(index);
-                    }}
-                  >
-                    {index + 1}
-                  </button>
-                ) : (
-                  <span aria-hidden="true">{index + 1}</span>
-                )}
+                <button
+                  type="button"
+                  className="week-rail__button"
+                  aria-current={
+                    index === safeWeekIndex ? "step" : undefined
+                  }
+                  aria-label={
+                    revealed
+                      ? `Show ${label.toLowerCase()}`
+                      : `Show week ${index + 1}, outcome hidden`
+                  }
+                  onClick={() => {
+                    setPlaying(false);
+                    onWeekChange(index);
+                  }}
+                >
+                  <span>W{index + 1}</span>
+                  {revealed ? (
+                    <small>{stateLabel(week.expected_delivery_state)}</small>
+                  ) : null}
+                </button>
               </li>
             );
           })}
         </ol>
 
         <div className="replay-controls__buttons">
+          <button
+            className="button button--quiet"
+            type="button"
+            disabled={isFirst && furthestRevealedWeek === 0}
+            onClick={() => {
+              setPlaying(false);
+              setFurthestRevealedWeek(0);
+              onWeekChange(0);
+            }}
+          >
+            Restart
+          </button>
           <button
             className="button button--quiet"
             type="button"
@@ -406,24 +450,12 @@ export function PersonaReplayExperience({
           <button
             className="inspect-run-link"
             type="button"
-            disabled={isFirst && furthestRevealedWeek === 0}
-            onClick={() => {
-              setPlaying(false);
-              setFurthestRevealedWeek(0);
-              onWeekChange(0);
-            }}
-          >
-            Restart scenario
-          </button>
-          <button
-            className="inspect-run-link"
-            type="button"
             onClick={() => {
               setPlaying(false);
               onChoosePersona();
             }}
           >
-            Choose another persona
+            Choose another Persona
           </button>
         </div>
       </section>

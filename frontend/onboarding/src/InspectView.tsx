@@ -1,4 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import type { TraceEventContract } from "./demoContracts";
 import type { BwsResponse, ScoreBundle } from "./domain";
 import OnboardingScoreInspection from "./OnboardingScoreInspection";
@@ -61,12 +67,12 @@ const EVENT_PRESENTATION: Record<string, EventPresentation> = {
     component: "Drift Detector",
   },
   weekly_digest_built: {
-    label: "Weekly Digest built",
-    component: "Weekly Digest",
+    label: "Weekly Drift Detection output stored",
+    component: "Weekly Drift Detection",
   },
   weekly_coach_generated: {
-    label: "Weekly Coach generated",
-    component: "Weekly Coach",
+    label: "Coach Digest generated",
+    component: "Coach Digest",
   },
 };
 
@@ -215,11 +221,11 @@ function eventSummary(
       const digest = record(details.digest);
       const responseMode = string(digest?.response_mode);
       return responseMode
-        ? `Weekly Digest ready · ${titleCase(responseMode)}`
-        : "Weekly Digest ready";
+        ? `Weekly Drift Detection output ready · ${titleCase(responseMode)}`
+        : "Weekly Drift Detection output ready";
     }
     case "weekly_coach_generated":
-      return "Weekly Coach reflection and question ready";
+      return "Coach Digest response and question ready";
     default:
       return STATUS_LABELS[event.status] ?? titleCase(event.status);
   }
@@ -292,6 +298,16 @@ function TraceFacts({ event }: { event: TraceEventContract }) {
 }
 
 function EventDetails({ event }: { event: TraceEventContract }) {
+  const disclosure = (
+    label: string,
+    content: ReactNode,
+  ) => (
+    <details className="inspect-technical">
+      <summary>{label}</summary>
+      {content}
+    </details>
+  );
+
   return (
     <div
       className="trace-event__details"
@@ -305,23 +321,44 @@ function EventDetails({ event }: { event: TraceEventContract }) {
       ) : null}
       <TraceFacts event={event} />
       {event.input_refs.length > 0 ? (
-        <JsonBlock label="Input references" value={event.input_refs} />
+        disclosure(
+          "Input references",
+          <JsonBlock label="Input references" value={event.input_refs} />,
+        )
       ) : null}
       {event.model_contract !== null ? (
-        <JsonBlock label="Model contract" value={event.model_contract} />
+        disclosure(
+          "Model contract",
+          <JsonBlock label="Model contract" value={event.model_contract} />,
+        )
       ) : null}
       {event.prompt !== null ? (
-        <TextBlock label="Exact rendered prompt" value={event.prompt} />
+        disclosure(
+          "Prompt",
+          <TextBlock label="Exact rendered prompt" value={event.prompt} />,
+        )
       ) : null}
       {event.raw_response !== null ? (
-        <JsonBlock label="Raw provider response" value={event.raw_response} />
+        disclosure(
+          "Raw response",
+          <JsonBlock label="Raw provider response" value={event.raw_response} />,
+        )
       ) : null}
       {event.validation !== null ? (
-        <JsonBlock label="Validation" value={event.validation} />
+        disclosure(
+          "Validation",
+          <JsonBlock label="Validation" value={event.validation} />,
+        )
       ) : null}
-      <JsonBlock label="Effective result" value={event.details} />
+      {disclosure(
+        "Effective result",
+        <JsonBlock label="Effective result" value={event.details} />,
+      )}
       {event.result_refs.length > 0 ? (
-        <JsonBlock label="Result references" value={event.result_refs} />
+        disclosure(
+          "Result references",
+          <JsonBlock label="Result references" value={event.result_refs} />,
+        )
       ) : null}
     </div>
   );
@@ -357,9 +394,26 @@ export default function InspectView({
     ? events.find((event) => event.event_id === selectedEventId) ?? null
     : null;
   const sourceLabels = [...new Set(events.map((event) => SOURCE_LABELS[event.source]))];
+  const weeklyFocus =
+    selectedEvent?.event_type === "drift_detected"
+    || selectedEvent?.event_type === "weekly_digest_built"
+    || selectedEvent?.event_type === "weekly_coach_generated";
+  const latestWeeklyEvent = (eventType: string) =>
+    [...events].reverse().find((event) => event.event_type === eventType)
+    ?? null;
+  const reviewerEvent = latestWeeklyEvent("weekly_review_completed");
+  const driftEvent = latestWeeklyEvent("drift_detected");
+  const coachEvent = latestWeeklyEvent("weekly_coach_generated");
+  const reviewerModel = record(reviewerEvent?.model_contract);
+  const reviewerModelName = string(reviewerModel?.model);
+  const reviewerEffort = string(reviewerModel?.reasoning_effort);
 
   useEffect(() => {
     if (!selectedEventId || !eventRefs.current.has(selectedEventId)) {
+      headingRef.current?.focus({ preventScroll: true });
+      return;
+    }
+    if (weeklyFocus) {
       headingRef.current?.focus({ preventScroll: true });
       return;
     }
@@ -370,7 +424,7 @@ export default function InspectView({
     const target = eventRefs.current.get(selectedEventId);
     target?.focus({ preventScroll: true });
     target?.scrollIntoView?.({ block: "center" });
-  }, [selectedEventId]);
+  }, [selectedEventId, weeklyFocus]);
 
   const setEventExpanded = (eventId: string, open: boolean) => {
     setExpandedEvents((current) => {
@@ -383,7 +437,11 @@ export default function InspectView({
   };
 
   return (
-    <div className="stage stage--inspect">
+    <div
+      className={`stage stage--inspect${
+        weeklyFocus ? " stage--inspect-weekly" : ""
+      }`}
+    >
       <div className="inspect-intro">
         <div>
           <p className="eyebrow">
@@ -397,7 +455,9 @@ export default function InspectView({
           <p className="lede">
             {onboarding
               ? "The assessment recorded one Most and one Least card in each question. Below, those 22 choices are followed into Schwartz scores, the ten-value Profile, and the exact phrases shown in Experience."
-              : "Each row is one trace event. Open it to see the inputs, exact prompt when applicable, validation, and effective result."}
+              : weeklyFocus
+                ? "The focused result comes first. The complete event history follows."
+                : "Each row is one trace event. Open it to see the inputs, exact prompt when applicable, validation, and effective result."}
           </p>
         </div>
         <button className="button button--quiet" type="button" onClick={onReturn}>
@@ -433,6 +493,75 @@ export default function InspectView({
           </>
         )}
       </div>
+
+      {weeklyFocus ? (
+        <section className="inspect-focus" aria-labelledby="inspect-focus-title">
+          <div className="inspect-focus__heading">
+            <div>
+              <p className="eyebrow">Focused Inspect</p>
+              <h2 id="inspect-focus-title">
+                How Twinkl reached this result.
+              </h2>
+            </div>
+            <div className="inspect-focus__provenance" aria-label="Run provenance">
+              <span>
+                {SOURCE_LABELS[selectedEvent?.source ?? ""] ?? "Recorded run"}
+              </span>
+              {reviewerModelName ? <span>{reviewerModelName}</span> : null}
+              {reviewerEffort ? <span>Reasoning {reviewerEffort}</span> : null}
+              {reviewerEvent ? (
+                <span>{formatDuration(reviewerEvent.duration_ms)}</span>
+              ) : null}
+            </div>
+          </div>
+          <p className="inspect-focus__evidence">
+            AI-reviewed synthetic development evidence · not human validation
+          </p>
+          <ol className="inspect-focus__steps">
+            <li>
+              <span aria-hidden="true">1</span>
+              <div>
+                <strong>Weekly Drift Reviewer</strong>
+                <p>
+                  {reviewerEvent
+                    ? eventSummary(reviewerEvent, currentJournalEntryIdSet)
+                    : "No Weekly Drift Reviewer result is available."}
+                </p>
+                <small>Reviewed cumulative Journal Entry history.</small>
+              </div>
+            </li>
+            <li>
+              <span aria-hidden="true">2</span>
+              <div>
+                <strong>Drift Detector</strong>
+                <p>
+                  {driftEvent
+                    ? eventSummary(driftEvent, currentJournalEntryIdSet)
+                    : "No Drift Detector result is available."}
+                </p>
+                <small>Applied each Core Value rule independently.</small>
+              </div>
+            </li>
+            <li>
+              <span aria-hidden="true">3</span>
+              <div>
+                <strong>Coach Digest</strong>
+                <p>
+                  {coachEvent
+                    ? eventSummary(coachEvent, currentJournalEntryIdSet)
+                    : "No Coach Digest response was generated for this saved replay."}
+                </p>
+                <small>
+                  Produces the optional user-facing response when available.
+                </small>
+              </div>
+            </li>
+          </ol>
+          <p className="inspect-focus__more">
+            The complete event history remains available below.
+          </p>
+        </section>
+      ) : null}
 
       {onboarding ? (
         <OnboardingScoreInspection

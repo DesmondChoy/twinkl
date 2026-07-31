@@ -854,9 +854,11 @@ describe("manual Journal Entry Experience", () => {
     render(<Harness initial={initial} inspectRun={inspectRun} />);
 
     expect(
-      screen.getByRole("heading", { name: "Your week in view." }),
+      screen.getByRole("heading", { name: "A repeated conflict surfaced." }),
     ).toBeTruthy();
-    expect(screen.getByText("Benevolence")).toBeTruthy();
+    expect(
+      screen.getAllByText("Being there for the people closest to me").length,
+    ).toBeGreaterThan(0);
     expect(screen.getAllByText("Active Drift").length).toBeGreaterThan(0);
     expect(
       screen.getAllByText(
@@ -864,7 +866,7 @@ describe("manual Journal Entry Experience", () => {
       ).length,
     ).toBeGreaterThan(1);
     const citation = screen.getByRole("link", {
-      name: "Open Journal Entry “Cancelled dinner with my sister to stay at work.” from 2026-07-06",
+      name: /Jul 6.*Cancelled dinner with my sister/i,
     });
     expect(citation.getAttribute("href")).toContain("journal-entry-");
     await user.click(citation);
@@ -873,12 +875,10 @@ describe("manual Journal Entry Experience", () => {
     expect(screen.queryByText("Raw provider response")).toBeNull();
     expect(screen.queryByText("Validation result")).toBeNull();
 
-    await user.click(screen.getByRole("button", { name: "Inspect Drift run" }));
-    expect(inspectRun).toHaveBeenLastCalledWith("event-09");
     await user.click(
-      screen.getByRole("button", { name: "Inspect Weekly Digest run" }),
+      screen.getByRole("button", { name: "See how this was decided" }),
     );
-    expect(inspectRun).toHaveBeenLastCalledWith("event-10");
+    expect(inspectRun).toHaveBeenLastCalledWith("event-09");
   });
 
   it("does not call an unavailable weekly review No Drift", () => {
@@ -915,9 +915,7 @@ describe("manual Journal Entry Experience", () => {
     };
     render(<Harness initial={initial} />);
 
-    expect(screen.getAllByText("Review unavailable")).toHaveLength(
-      profile.top_values.length + 1,
-    );
+    expect(screen.getAllByText("Review unavailable")).toHaveLength(1);
     expect(screen.queryByText("No Drift")).toBeNull();
   });
 });

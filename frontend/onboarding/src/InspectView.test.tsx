@@ -51,8 +51,8 @@ describe("Inspect view", () => {
       "Weekly review requested",
       "Weekly review completed",
       "Drift checked",
-      "Weekly Digest built",
-      "Weekly Coach generated",
+      "Weekly Drift Detection output stored",
+      "Coach Digest generated",
     ].forEach((label) => expect(screen.getAllByText(label).length).toBeGreaterThan(0));
     ["Complete", "Reused", "Refused", "Invalid", "Failed"].forEach((status) =>
       expect(screen.getAllByText(status).length).toBeGreaterThan(0));
@@ -61,7 +61,7 @@ describe("Inspect view", () => {
     expect(screen.getByText("Canonical contract fixture")).toBeTruthy();
   });
 
-  it("opens and focuses the event linked from Experience", () => {
+  it("shows a focused weekly explanation before the complete event history", () => {
     render(
       <InspectView
         events={events}
@@ -74,11 +74,16 @@ describe("Inspect view", () => {
     const selectedSummary = screen.getByLabelText(
       "Event 9: Drift checked, Complete, Saved replay",
     );
-    expect(document.activeElement).toBe(selectedSummary);
+    expect(screen.getByRole("heading", {
+      name: "How Twinkl reached this result.",
+    })).toBeTruthy();
+    expect(screen.getByText(/not human validation/i)).toBeTruthy();
+    expect(screen.getAllByText("Weekly Drift Reviewer").length)
+      .toBeGreaterThan(0);
+    expect(screen.getAllByText("Drift Detector").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Coach Digest").length).toBeGreaterThan(0);
     expect(selectedSummary.getAttribute("aria-current")).toBe("true");
     expect(selectedSummary.closest("details")?.open).toBe(true);
-    expect(screen.getByTestId("trace-details-event-09")).toBeTruthy();
-    expect(screen.getByText("After event 08")).toBeTruthy();
     expect(screen.getByText(/Event 09 · Drift Detector/)).toBeTruthy();
   });
 

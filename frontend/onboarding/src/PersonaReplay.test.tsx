@@ -4,6 +4,7 @@ import {
   render,
   screen,
   waitFor,
+  within,
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
@@ -116,6 +117,12 @@ function matchMedia(matches: boolean) {
   );
 }
 
+function personaCard(name: string): HTMLElement {
+  const card = screen.getByText(name).closest("article");
+  if (!card) throw new Error(`Persona card not found: ${name}`);
+  return card;
+}
+
 afterEach(() => {
   vi.useRealTimers();
   vi.unstubAllGlobals();
@@ -141,7 +148,7 @@ describe("persona replay", () => {
 
     render(<PersonaReplayPicker onBack={() => undefined} onLoad={onLoad} />);
     await user.click(
-      await screen.findByRole("button", { name: "Replay Wei Jun Chen" }),
+      await screen.findByRole("button", { name: "Start at week 1" }),
     );
 
     await waitFor(() => expect(onLoad).toHaveBeenCalledTimes(1));
@@ -173,7 +180,7 @@ describe("persona replay", () => {
 
     render(<PersonaReplayPicker onBack={() => undefined} onLoad={onLoad} />);
     await user.click(
-      await screen.findByRole("button", { name: "Replay Wei Jun Chen" }),
+      await screen.findByRole("button", { name: "Start at week 1" }),
     );
 
     expect((await screen.findByRole("alert")).textContent).toContain(
@@ -199,12 +206,11 @@ describe("persona replay", () => {
       />,
     );
 
-    const current = await screen.findByRole("radio", {
-      name: /Wei Jun Chen.*Current/i,
-    });
-    expect((current as HTMLInputElement).checked).toBe(true);
+    await screen.findByText("Wei Jun Chen");
+    const current = personaCard("Wei Jun Chen");
+    expect(within(current).getByText("Current")).toBeTruthy();
     expect(
-      (screen.getByRole("button", {
+      (within(current).getByRole("button", {
         name: "Current replay",
       }) as HTMLButtonElement).disabled,
     ).toBe(true);
@@ -225,7 +231,7 @@ describe("persona replay", () => {
       await screen.findByRole("button", { name: "Try loading again" }),
     );
 
-    expect(await screen.findByRole("radio", { name: /Lukas Vermeer/i }))
+    expect(await screen.findByText("Lukas Vermeer"))
       .toBeTruthy();
     expect(fetchMock).toHaveBeenCalledTimes(2);
   });
@@ -249,7 +255,7 @@ describe("persona replay", () => {
     act(() => vi.advanceTimersByTime(1));
     expect(screen.getByText("Week 3 of 6")).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: "Pause" }));
-    fireEvent.click(screen.getByRole("button", { name: "Restart scenario" }));
+    fireEvent.click(screen.getByRole("button", { name: "Restart" }));
     expect(screen.getByText("Week 1 of 6")).toBeTruthy();
     expect(
       screen.queryByRole("button", { name: "Show week 3: no drift" }),
@@ -302,7 +308,7 @@ describe("persona replay", () => {
     ).toBeNull();
   });
 
-  it("lets people revisit revealed weeks while future weeks stay inert", async () => {
+  it("lets people revisit weeks without revealing future outcomes first", async () => {
     matchMedia(false);
     const user = userEvent.setup();
     render(<ReplayHarness />);
@@ -318,7 +324,7 @@ describe("persona replay", () => {
     expect(screen.getByText("Week 1 of 6")).toBeTruthy();
     expect(
       (screen.getByRole("button", {
-        name: "Restart scenario",
+        name: "Restart",
       }) as HTMLButtonElement).disabled,
     ).toBe(false);
     await user.click(
@@ -327,11 +333,9 @@ describe("persona replay", () => {
       }),
     );
     expect(screen.getByText("Week 3 of 6")).toBeTruthy();
-    expect(
-      screen.queryByRole("button", {
-        name: /show week 6/i,
-      }),
-    ).toBeNull();
+    expect(screen.getByRole("button", {
+      name: "Show week 6, outcome hidden",
+    })).toBeTruthy();
   });
 
   it("clamps an out-of-range restored week to the final week", () => {
@@ -407,11 +411,13 @@ describe("persona replay", () => {
       />,
     );
 
-    expect(
-      screen.getByText(
-        "Self-Direction is Uncertain; Conformity shows Recovered Drift.",
-      ),
-    ).toBeTruthy();
+    expect(screen.getByText("Having the freedom to choose my own path"))
+      .toBeTruthy();
+    expect(screen.getByText(
+      "Being someone others can count on to do the right thing",
+    )).toBeTruthy();
+    expect(screen.getAllByText("Uncertain").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Recovered Drift").length).toBeGreaterThan(0);
   });
 
   it("confirms before a saved persona replaces manual progress", async () => {
@@ -445,24 +451,24 @@ describe("persona replay", () => {
     const user = userEvent.setup();
 
     await user.click(screen.getByRole("button", { name: "Try demo" }));
+    await screen.findByText("Wei Jun Chen");
     await user.click(
-      await screen.findByRole("radio", { name: /Wei Jun Chen/i }),
-    );
-    await user.click(
-      screen.getByRole("button", { name: "Replay Wei Jun Chen" }),
+      within(personaCard("Wei Jun Chen")).getByRole("button", {
+        name: "Start at week 1",
+      }),
     );
 
     expect(confirm).toHaveBeenCalledWith(
-      "Load this saved persona and replace your current progress?",
+      "Load this saved Persona and replace your current progress?",
     );
     expect(
       screen.getByRole("heading", {
-        name: "Follow a life week by week.",
+        name: "Choose what you want to observe.",
       }),
     ).toBeTruthy();
     expect(
-      (screen.getByRole("button", {
-        name: "Replay Wei Jun Chen",
+      (within(personaCard("Wei Jun Chen")).getByRole("button", {
+        name: "Start at week 1",
       }) as HTMLButtonElement).disabled,
     ).toBe(false);
     const stored = JSON.parse(localStorage.getItem(SESSION_STORAGE_KEY)!);
@@ -542,17 +548,18 @@ describe("persona replay", () => {
     render(<App />);
 
     await user.click(screen.getByRole("button", { name: "Try demo" }));
-    await user.click(
-      await screen.findByRole("radio", { name: /Wei Jun Chen/i }),
-    );
+    await screen.findByText("Wei Jun Chen");
     document.documentElement.scrollTop = 640;
     document.body.scrollTop = 640;
     await user.click(
-      screen.getByRole("button", { name: "Replay Wei Jun Chen" }),
+      within(personaCard("Wei Jun Chen")).getByRole("button", {
+        name: "Start at week 1",
+      }),
     );
     expect(
       await screen.findByRole("heading", {
-        name: "Wei Jun Chen, week by week.",
+        name: "Wei Jun Chen",
+        level: 1,
       }),
     ).toBeTruthy();
     expect(document.documentElement.scrollTop).toBe(0);
@@ -561,9 +568,9 @@ describe("persona replay", () => {
       await user.click(screen.getByRole("button", { name: "Next" }));
     }
     expect(screen.getByText("Week 6 of 6")).toBeTruthy();
-    const citation = screen.getAllByRole("link", {
-      name: /Open Journal Entry/,
-    })[0];
+    const citation = screen.getAllByRole("link").find(
+      (link) => link.getAttribute("href")?.startsWith("#journal-entry-"),
+    )!;
     await user.click(citation);
     const selectedEntryId = citation.getAttribute("href")!.slice(1);
     expect(document.getElementById(selectedEntryId)?.getAttribute("aria-current"))
@@ -572,11 +579,11 @@ describe("persona replay", () => {
       screen.queryByRole("button", { name: "Inspect this run" }),
     ).toBeNull();
     await user.click(
-      screen.getByRole("button", { name: "Inspect Weekly Digest run" }),
+      screen.getByRole("button", { name: "See how this was decided" }),
     );
     expect(
       screen.getByRole("heading", {
-        name: "See how each trade-off shaped this Profile.",
+        name: "How Twinkl reached this result.",
       }),
     ).toBeTruthy();
     expect(screen.getAllByText("Saved replay").length).toBeGreaterThan(0);
@@ -595,5 +602,15 @@ describe("persona replay", () => {
     );
     expect(stored.experience.selected_event_id).not.toBeNull();
     expect(parseSession(JSON.stringify(stored))).not.toBeNull();
+
+    await user.click(screen.getByRole("button", { name: "Previous" }));
+    expect(screen.getByText("Week 5 of 6")).toBeTruthy();
+    await waitFor(() => {
+      const changedWeek = JSON.parse(
+        localStorage.getItem(SESSION_STORAGE_KEY)!,
+      );
+      expect(changedWeek.experience.selected_entry_id).toBeNull();
+      expect(changedWeek.experience.selected_event_id).toBeNull();
+    });
   });
 });
