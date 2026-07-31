@@ -172,6 +172,14 @@ week. This preserves the temporal meaning of Drift and lets the professor see
 the user experience change from stable to active, recovered, uncertain, or
 mixed.
 
+Play stages each saved week in chronological order: its Journal Entries appear
+one at a time as compact excerpts, the Weekly Drift Detection result appears
+only after the final Journal Entry, and the next week then starts empty. Opening
+a Journal Entry uses a desktop side panel or mobile bottom sheet so the timeline
+does not reflow. Persona background and detailed evidence remain collapsed by
+default. The replay identifies itself as saved synthetic evidence throughout;
+the staged reveal must not imply live model inference.
+
 Saved replay is the default because it is fast, deterministic, and free of
 provider availability. A separate, clearly labelled **Re-run live** action may
 exist in Inspect. Live results must never silently replace the saved reference

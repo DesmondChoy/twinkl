@@ -236,33 +236,44 @@ describe("persona replay", () => {
     expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 
-  it("supports explicit boundaries, restart, and automatic playback", () => {
+  it("reveals Journal Entries, then Weekly Drift Detection, then advances", () => {
     matchMedia(false);
     vi.useFakeTimers();
     render(<ReplayHarness />);
 
     expect(screen.getByText("Week 1 of 6")).toBeTruthy();
+    expect(screen.queryByText("Weekly Drift Detection")).toBeNull();
+    expect(screen.queryByRole("button", {
+      name: /Open Journal Entry 1/,
+    })).toBeNull();
     expect(
       (screen.getByRole("button", { name: "Previous" }) as HTMLButtonElement)
         .disabled,
     ).toBe(true);
-    fireEvent.click(screen.getByRole("button", { name: "Next" }));
-    expect(screen.getByText("Week 2 of 6")).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: "Play" }));
     expect(screen.getByRole("button", { name: "Pause" })).toBeTruthy();
-    act(() => vi.advanceTimersByTime(3_999));
-    expect(screen.getByText("Week 2 of 6")).toBeTruthy();
+    act(() => vi.advanceTimersByTime(900));
+    expect(screen.getByRole("button", {
+      name: /Open Journal Entry 1/,
+    })).toBeTruthy();
+    expect(screen.queryByText("Weekly Drift Detection")).toBeNull();
+    act(() => vi.advanceTimersByTime(1_050));
+    expect(screen.getByText("Weekly Drift Detection")).toBeTruthy();
+    expect(screen.getByText("Based on 1 Journal Entry through Jun 1."))
+      .toBeTruthy();
+    act(() => vi.advanceTimersByTime(2_799));
+    expect(screen.getByText("Week 1 of 6")).toBeTruthy();
     act(() => vi.advanceTimersByTime(1));
-    expect(screen.getByText("Week 3 of 6")).toBeTruthy();
+    expect(screen.getByText("Week 2 of 6")).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: "Pause" }));
     fireEvent.click(screen.getByRole("button", { name: "Restart" }));
     expect(screen.getByText("Week 1 of 6")).toBeTruthy();
     expect(
-      screen.queryByRole("button", { name: "Show week 3: no drift" }),
+      screen.queryByRole("button", { name: "Show week 1: no drift" }),
     ).toBeNull();
     expect(
       screen.getByRole("listitem", {
-        name: "Week 3, not yet replayed",
+        name: "Week 1, not yet replayed",
       }),
     ).toBeTruthy();
     expect(
@@ -306,6 +317,36 @@ describe("persona replay", () => {
         name: "Week 6: Active Drift",
       }),
     ).toBeNull();
+  });
+
+  it("keeps Journal Entries compact and opens the full text in a dialog", async () => {
+    matchMedia(false);
+    const user = userEvent.setup();
+    render(<ReplayHarness />);
+
+    await user.click(screen.getByRole("button", { name: "Next" }));
+    const entry = experienceForWeek(1).journal_entries.at(-1)!;
+    const entryButton = screen.getByRole("button", {
+      name: /Open Journal Entry 1/,
+    });
+    expect(entryButton.textContent).not.toContain(entry.content);
+
+    await user.click(entryButton);
+    const dialog = screen.getByRole("dialog");
+    expect(
+      dialog.querySelector(".replay-entry-drawer__content")?.textContent,
+    ).toBe(entry.content);
+    expect(document.body.style.overflow).toBe("hidden");
+    expect(document.activeElement).toBe(
+      within(dialog).getByRole("button", { name: "Close Journal Entry" }),
+    );
+
+    await user.click(
+      within(dialog).getByRole("button", { name: "Close Journal Entry" }),
+    );
+    expect(screen.queryByRole("dialog")).toBeNull();
+    expect(document.body.style.overflow).toBe("");
+    await waitFor(() => expect(document.activeElement).toBe(entryButton));
   });
 
   it("lets people revisit weeks without revealing future outcomes first", async () => {
@@ -411,11 +452,11 @@ describe("persona replay", () => {
       />,
     );
 
-    expect(screen.getByText("Having the freedom to choose my own path"))
-      .toBeTruthy();
-    expect(screen.getByText(
+    expect(screen.getAllByText("Having the freedom to choose my own path")
+      .length).toBeGreaterThan(0);
+    expect(screen.getAllByText(
       "Being someone others can count on to do the right thing",
-    )).toBeTruthy();
+    ).length).toBeGreaterThan(0);
     expect(screen.getAllByText("Uncertain").length).toBeGreaterThan(0);
     expect(screen.getAllByText("Recovered Drift").length).toBeGreaterThan(0);
   });
@@ -579,7 +620,7 @@ describe("persona replay", () => {
       screen.queryByRole("button", { name: "Inspect this run" }),
     ).toBeNull();
     await user.click(
-      screen.getByRole("button", { name: "See how this was decided" }),
+      screen.getByRole("button", { name: "Inspect decision" }),
     );
     expect(
       screen.getByRole("heading", {

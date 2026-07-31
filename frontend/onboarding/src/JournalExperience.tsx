@@ -33,6 +33,7 @@ interface JournalExperienceProps {
   inspectRun: (eventId: string) => void;
   headingRef?: RefObject<HTMLHeadingElement | null>;
   mode?: "manual" | "saved_replay";
+  showWeeklySummary?: boolean;
 }
 
 const UNSAVED_JOURNAL_ERROR =
@@ -158,6 +159,7 @@ export default function JournalExperience({
   inspectRun,
   headingRef,
   mode = "manual",
+  showWeeklySummary = true,
 }: JournalExperienceProps) {
   const submissionLockRef = useRef(false);
   const nudgeHeadingRef = useRef<HTMLHeadingElement>(null);
@@ -837,7 +839,7 @@ export default function JournalExperience({
         ) : null}
       </div>
 
-      {mode === "saved_replay" ? weeklyExperience : null}
+      {mode === "saved_replay" && showWeeklySummary ? weeklyExperience : null}
 
       {currentWeekEntries.length > 0
         ? renderJournalThread(
@@ -867,7 +869,7 @@ export default function JournalExperience({
         </details>
       ) : null}
 
-      {mode === "saved_replay" && replayInspectEventId ? (
+      {mode === "saved_replay" && showWeeklySummary && replayInspectEventId ? (
         <button
           className="button button--primary replay-inspect-action"
           type="button"
