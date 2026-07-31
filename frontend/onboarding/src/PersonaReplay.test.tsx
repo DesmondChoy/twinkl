@@ -262,8 +262,9 @@ describe("persona replay", () => {
 
     await user.click(screen.getByRole("button", { name: "Next step" }));
     expect(screen.getByRole("heading", { name: "No Drift" })).toBeTruthy();
-    expect(screen.getByText("Based on 1 Journal Entry through Jun 1."))
-      .toBeTruthy();
+    expect(screen.getByRole("heading", {
+      name: "Weekly Drift Detection (based on 1 Journal Entry through Jun 1)",
+    })).toBeTruthy();
 
     await user.click(screen.getByRole("button", { name: "Next step" }));
     expect(screen.getByText("Week 2 of 6")).toBeTruthy();
@@ -461,11 +462,13 @@ describe("persona replay", () => {
     );
 
     expect(screen.getAllByText(label).length).toBeGreaterThan(0);
+    expect(screen.getAllByRole("button", { name: "AI review" }).length)
+      .toBeGreaterThan(0);
     expect(screen.queryByText("Raw provider response")).toBeNull();
     expect(screen.queryByText("Validation result")).toBeNull();
   });
 
-  it("names the Core Value states behind a Mixed week", () => {
+  it("shows Schwartz Core Value names without repeating value phrases", () => {
     matchMedia(false);
     const scenarioFixture =
       validateExperienceInspectFixture(twoValuesReplayJson);
@@ -487,13 +490,61 @@ describe("persona replay", () => {
       />,
     );
 
-    expect(screen.getAllByText("Having the freedom to choose my own path")
-      .length).toBeGreaterThan(0);
-    expect(screen.getAllByText(
+    const values = document.querySelector(".replay-persona__value");
+    expect(values?.textContent).toContain("Schwartz Core Values");
+    expect(values?.textContent).toContain("Self-Direction · Conformity");
+    expect(screen.queryByText("Having the freedom to choose my own path"))
+      .toBeNull();
+    expect(screen.queryByText(
       "Being someone others can count on to do the right thing",
-    ).length).toBeGreaterThan(0);
-    expect(screen.getAllByText("Uncertain").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("Recovered Drift").length).toBeGreaterThan(0);
+    )).toBeNull();
+  });
+
+  it("shows one result state and keeps AI review evidence beside each decision", async () => {
+    matchMedia(false);
+    const user = userEvent.setup();
+    const weekIndex = fixture.scenario.weeks.length - 1;
+
+    render(
+      <PersonaReplayExperience
+        loaded={loaded}
+        weekIndex={weekIndex}
+        profile={fixture.scenario.profile}
+        experience={experienceForWeek(weekIndex)}
+        updateExperience={() => undefined}
+        inspectRun={() => undefined}
+        onChoosePersona={() => undefined}
+        onWeekChange={() => undefined}
+      />,
+    );
+
+    const result = screen.getByRole("article", { name: "Active Drift" });
+    expect(within(result).getAllByText("Active Drift")).toHaveLength(1);
+    expect(within(result).queryByText(
+      "Making the world a fairer, better place",
+    )).toBeNull();
+
+    const reviewButton = within(result).getAllByRole("button", {
+      name: "AI review",
+    })[0];
+    fireEvent.mouseEnter(reviewButton.closest(".state-change__evidence")!);
+    expect(screen.getByRole("tooltip").textContent).toContain("gpt-5.6-luna");
+    fireEvent.mouseLeave(reviewButton.closest(".state-change__evidence")!);
+    expect(screen.queryByRole("tooltip")).toBeNull();
+
+    await user.click(reviewButton);
+
+    const dialog = screen.getByRole("dialog", { name: "AI review details" });
+    expect(within(dialog).getByText("gpt-5.6-luna")).toBeTruthy();
+    expect(within(dialog).getByText("low")).toBeTruthy();
+    expect(within(dialog).getByText("Recorded model output")).toBeTruthy();
+    expect(within(dialog).getByText("Recorded justification")).toBeTruthy();
+    expect(dialog.textContent).toContain("direct_behavior_or_choice");
+
+    await user.click(within(dialog).getByRole("button", { name: "Close" }));
+    expect(screen.queryByRole("dialog", { name: "AI review details" }))
+      .toBeNull();
+    await waitFor(() => expect(document.activeElement).toBe(reviewButton));
   });
 
   it.each([

@@ -414,7 +414,12 @@ export function PersonaReplayExperience({
             <strong>{loaded.catalogItem.persona_name}</strong>
           </span>
           <span className="replay-persona__value">
-            {profile.top_values.map((value) => VALUES[value].phrase).join(" · ")}
+            <small>
+              Schwartz Core {profile.top_values.length === 1 ? "Value" : "Values"}
+            </small>
+            <span>
+              {profile.top_values.map((value) => VALUES[value].name).join(" · ")}
+            </span>
           </span>
           <span className="replay-persona__expand">Profile details</span>
         </summary>
@@ -428,7 +433,7 @@ export function PersonaReplayExperience({
           </p>
           <p>
             <strong>Core Values:</strong>{" "}
-            {profile.top_values.map((value) => VALUES[value].phrase).join(" · ")}
+            {profile.top_values.map((value) => VALUES[value].name).join(" · ")}
           </p>
           <div className="persona-replay__source-line">
             <span>Synthetic demo · saved replay</span>
@@ -601,6 +606,7 @@ export function PersonaReplayExperience({
         journalEntries={currentWeekEntries}
         reviewedJournalEntries={experience.journal_entries}
         weeklyReviewerDecisions={experience.weekly_reviewer_decisions}
+        reviewTraceEvents={experience.trace_events}
         selectedJournalEntryId={experience.selected_entry_id}
         cumulativeEntryCount={experience.journal_entries.length}
         visibleEntryCount={Math.min(revealStage, currentWeekEntries.length)}

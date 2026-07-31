@@ -188,11 +188,19 @@ stays visible above that control. The active week stays centered in the week
 rail.
 
 Profile details remain collapsed by default and include a short Persona context.
-State-change evidence appears with the Weekly Drift Detection result. The first
-two Conflicts show where Drift started. Later Conflicts show that Drift
-continued. Recovered Drift cites the recovery Journal Entry and its Not Conflict
-Weekly Drift Reviewer Decision. Uncertain cites the Journal Entry, its Abstain
-Weekly Drift Reviewer Decision, and the reason. The replay identifies itself as
+The Persona header always names the selected Schwartz Core Values. State-change
+evidence appears with the Weekly Drift Detection result. The first two Conflicts
+show where Drift started. Later Conflicts show that Drift continued. Recovered
+Drift cites the recovery Journal Entry and its Not Conflict Weekly Drift
+Reviewer Decision. Uncertain cites the Journal Entry, its Abstain Weekly Drift
+Reviewer Decision, and the reason.
+
+Each cited Weekly Drift Reviewer Decision provides its saved model name,
+reasoning effort, parsed model output, and recorded justification. Desktop
+shows these details when the evidence card is hovered or receives keyboard
+focus. An **AI review** action opens the same details. On a phone, that action
+opens a bottom sheet. The details are available for No Drift, Active Drift,
+Recovered Drift, Uncertain, and Mixed results. The replay identifies itself as
 saved synthetic evidence throughout. The staged reveal must not imply live
 model inference.
 
@@ -210,10 +218,11 @@ Experience shows:
 - the Weekly Digest; and
 - the optional Weekly Coach reflection and question.
 
-Experience does not show raw Weekly Drift Reviewer prompts, validation
-details, run records, or per-entry `Conflict` badges. Those belong in Inspect.
-When Experience explains Drift, it cites the relevant Journal Entries without
-exposing internal reasoning text.
+Experience does not show the full Weekly Drift Reviewer prompt, provider
+payload, validation record, identifiers, or hashes. Those belong in Inspect.
+Experience does show the Weekly Drift Reviewer Decision, saved model contract,
+parsed model output, and recorded justification beside each cited Journal
+Entry. It does not claim that reasoning effort is a readable chain of thought.
 
 ## 6. Inspect View
 

@@ -6,15 +6,12 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import DriftStateExplanation from "./DriftStateExplanation";
-import {
-  VALUES,
-  type OnboardingProfile,
-  type ValueKey,
-} from "./domain";
+import type { OnboardingProfile } from "./domain";
 import type {
   JournalEntryContract,
   ScenarioDeliveryState,
   ScenarioWeekContract,
+  TraceEventContract,
   WeeklyDriftReviewerDecisionContract,
 } from "./demoContracts";
 
@@ -26,6 +23,7 @@ interface ReplayTimelineProps {
   journalEntries: JournalEntryContract[];
   reviewedJournalEntries: JournalEntryContract[];
   weeklyReviewerDecisions: WeeklyDriftReviewerDecisionContract[];
+  reviewTraceEvents: TraceEventContract[];
   selectedJournalEntryId: string | null;
   cumulativeEntryCount: number;
   visibleEntryCount: number;
@@ -72,10 +70,6 @@ function stateExplanation(state: ScenarioDeliveryState): string {
     default:
       return "No repeated conflict with a Core Value was found.";
   }
-}
-
-function coreValuePhrase(value: string): string {
-  return VALUES[value as ValueKey]?.phrase ?? value;
 }
 
 function excerpt(content: string, wordLimit = 20): string {
@@ -175,6 +169,7 @@ export default function ReplayTimeline({
   journalEntries,
   reviewedJournalEntries,
   weeklyReviewerDecisions,
+  reviewTraceEvents,
   selectedJournalEntryId,
   cumulativeEntryCount,
   visibleEntryCount,
@@ -191,7 +186,6 @@ export default function ReplayTimeline({
     "entries",
   );
   const visibleEntries = journalEntries.slice(0, visibleEntryCount);
-  const rawStates = object(driftResult?.core_value_states) ?? {};
   const state =
     (driftResult?.delivery_state as ScenarioDeliveryState | undefined)
     ?? week.expected_delivery_state;
@@ -340,7 +334,15 @@ export default function ReplayTimeline({
           <header className="replay-column__header">
             <div>
               <p className="eyebrow">This week</p>
-              <h2 id="replay-result-column-title">Weekly Drift Detection</h2>
+              <h2 id="replay-result-column-title">
+                Weekly Drift Detection{" "}
+                <span className="replay-column__basis">
+                  (based on {cumulativeEntryCount} Journal{" "}
+                  {cumulativeEntryCount === 1 ? "Entry" : "Entries"} through{" "}
+                  {displayEntryDate(week.week_end)}
+                  {hasEarlierEvidence ? "; includes earlier weeks" : ""})
+                </span>
+              </h2>
             </div>
           </header>
           <div className="replay-column__scroll replay-column__scroll--result">
@@ -352,30 +354,8 @@ export default function ReplayTimeline({
                 <div className="replay-result__body">
                   <header>
                     <h3 id="replay-result-title">{replayStateLabel(state)}</h3>
-                    <span className={`replay-state replay-state--${state}`}>
-                      {replayStateLabel(state)}
-                    </span>
                   </header>
                   <p>{stateExplanation(state)}</p>
-                  <ul aria-label="Weekly Drift Detection by Core Value">
-                    {profile.top_values.map((value) => {
-                      const valueState =
-                        (rawStates[value] as ScenarioDeliveryState | undefined)
-                        ?? "stable";
-                      return (
-                        <li key={value}>
-                          <span>{coreValuePhrase(value)}</span>
-                          <strong>{replayStateLabel(valueState)}</strong>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                  <p className="replay-result__basis">
-                    Based on {cumulativeEntryCount} Journal{" "}
-                    {cumulativeEntryCount === 1 ? "Entry" : "Entries"} through{" "}
-                    {displayEntryDate(week.week_end)}.
-                    {hasEarlierEvidence ? " Includes evidence from earlier weeks." : ""}
-                  </p>
                   <section
                     className="replay-result__details"
                     aria-labelledby="state-change-title"
@@ -385,6 +365,9 @@ export default function ReplayTimeline({
                       profile={profile}
                       journalEntries={reviewedJournalEntries}
                       weeklyReviewerDecisions={weeklyReviewerDecisions}
+                      reviewTraceEvents={reviewTraceEvents}
+                      weekStart={week.week_start}
+                      weekEnd={week.week_end}
                       driftResult={driftResult}
                       onOpenEntry={openJournalEntry}
                     />
