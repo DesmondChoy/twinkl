@@ -24,13 +24,8 @@ BWS preference shares.
 - The React onboarding flow is mobile-first: narrow-screen phones are the
   primary design and verification target, and wider layouts are progressive
   enhancements.
-<<<<<<< HEAD
-- Onboarding owns preferred-name capture, the 11 SVBWS tasks, goal selection,
-  Profile confirmation, local resume, and first Journal Entry handoff.
-=======
 - Onboarding owns the 11 SVBWS tasks, Profile confirmation, local resume, and
   first Journal Entry handoff.
->>>>>>> main
 - A host may persist the confirmed Profile exposed by the callback or browser
   event. The approved runtime imports saved Profile JSON through
   `--profile-path`.
@@ -157,22 +152,11 @@ Twinkl-specific presentation adaptation requiring empirical validation.
 
 ### 4.1 Preferred name and progress
 
-<<<<<<< HEAD
-The flow first asks `What should Twinkl call you?` and stores a trimmed
-`preferred_name` of at most 80 characters. It explains that the name is used
-sparingly to make reflections personal. This is a functional identity step,
-not a marketing welcome screen.
-
-After the name step, the user enters the first randomized group directly.
-Progress reads `Values · n of 11`, followed by `Your focus` and `Your compass`.
-There is no midpoint result.
-=======
 The user enters the first randomized group directly. Progress reads
 `Values · n of 11`, followed by `Your compass`. There is no welcome screen or
 midpoint result. The values progress bar represents the 11 assessment groups,
 reaches completion on group 11, and exposes its current and maximum values to
 assistive technology.
->>>>>>> main
 
 The heading reads `What matters most as you find your way?` The introduction
 says there are no right answers and that more than one principle can matter.
@@ -357,20 +341,6 @@ The abbreviated shape is:
 }
 ```
 
-<<<<<<< HEAD
-A newly confirmed Profile requires a non-empty preferred name, all 11 canonical
-groups exactly once, six valid objects per response, distinct valid Most and
-Least choices, non-negative integer response time, a valid goal, and explicit
-summary confirmation. `preferred_name` remains optional when reading older
-Profile JSON. Validation rebuilds the Profile deterministically and rejects any
-mismatch.
-
-The resumable browser session uses schema version `6` and storage key
-`twinkl.onboarding.session.v6`. It stores the preferred name, randomized group
-order, each canonical group's randomized card order, and the shared Experience
-and Inspect view state. Version `4` and `5` onboarding sessions migrate without
-losing responses.
-=======
 A confirmed Profile requires all 11 canonical groups exactly once, six valid
 objects per response, distinct valid Most and Least choices, non-negative
 integer response time, and explicit summary confirmation. Validation rebuilds
@@ -382,7 +352,6 @@ canonical group's randomized card order, and the shared Experience and Inspect
 view state. Versions `4` through `6` migrate without losing responses; a
 version `6` goal stage resumes at the Core Value summary, and a confirmed
 version `2` Profile migrates to version `3` without `goal_category`.
->>>>>>> main
 
 ## 7. Integration Status
 
@@ -396,15 +365,9 @@ version `2` Profile migrates to version `3` without `goal_category`.
   capstone.
 - The approved runtime validates saved Profile JSON and supplies `top_values`
   as Core Values to the Weekly Drift Reviewer and Drift Detector.
-<<<<<<< HEAD
-- The approved runtime supplies `preferred_name`, the friendly Core Value
-  phrases, and `goal_category` context to the Coach Digest while keeping
-  internal Schwartz labels out of the user-facing response.
-=======
 - The first Journal Entry starts a partial Monday-through-Sunday calendar week.
   Saving it does not run the Weekly Drift Reviewer; the partial week becomes
   eligible after Sunday according to the Experience scheduling contract.
->>>>>>> main
 - `value_profile.weights` is not yet supplied to the VIF Critic.
 
 When no onboarding Profile is supplied, current synthetic personas retain

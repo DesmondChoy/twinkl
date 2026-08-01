@@ -78,15 +78,6 @@ files, the public `/health` route, and same-origin `/api/experience` requests
 from one Railway process. The Docker build context excludes `.env`, Git data,
 development caches, and unrelated experiment outputs.
 
-<<<<<<< HEAD
-This standalone POC stores unfinished progress and its confirmed Profile in
-browser `localStorage` and makes no model or provider calls itself. A host can
-persist the Profile supplied through `onStartJournal` or the
-`twinkl:start-first-journal` event. The approved Python runtime accepts that
-saved JSON through `--profile-path` and uses the preferred name and confirmed
-goal to focus the Coach Digest; automatic browser-to-service storage is outside
-the time-boxed capstone.
-=======
 Set `OPENAI_API_KEY` to enable live provider-backed Journal Entry work.
 Onboarding and saved persona replay remain available without it; manual
 provider work fails safely and retains the Journal Entry for editing or retry.
@@ -122,4 +113,3 @@ Removed Journal Entry positions are not reused, and Inspect marks their
 immutable submission events as removed from the current Experience. Production
 authentication, multi-tenant storage, and generalized persistence remain
 outside the time-boxed capstone.
->>>>>>> main

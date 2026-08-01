@@ -46,15 +46,9 @@ The demo presents the product experience and the AI architecture from the same
 session. A persistent two-option control switches between:
 
 - **Experience** — the user-facing journey through onboarding, Journal Entries,
-<<<<<<< HEAD
-  displayed nudges and responses, Drift, and Coach Digest responses.
-- **Inspect** — the developer-facing explanation of the exact backend work that
-  produced the currently selected result.
-=======
   displayed nudges and responses, Drift, and the Weekly Digest.
 - **Inspect** — the professor-facing explanation of the exact browser
   calculation and backend work that produced the currently selected result.
->>>>>>> main
 
 The two views are not separate demonstrations. They read the same Profile,
 Journal Entries, Weekly Drift Reviewer Decisions, Drift state, Weekly Drift
@@ -606,12 +600,8 @@ A release is demo-ready when one uninterrupted walkthrough can:
    Reviewer Conflicts produce Drift;
 6. inspect the exact weekly request, validated decisions, and deterministic
    Drift Detector steps;
-<<<<<<< HEAD
-7. return to Experience and read the corresponding Coach Digest response;
-=======
 7. return to Experience and read the corresponding Weekly Digest and, when the
    saved result includes one, the optional Weekly Coach question;
->>>>>>> main
 8. demonstrate one recovered or uncertain scenario; and
 9. distinguish saved replay from an optional live run.
 
