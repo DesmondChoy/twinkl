@@ -297,8 +297,10 @@ single-column Inspect layout and do not show the rail.
 The same 240-pixel section rail supports Profile confirmation, the first
 Journal Entry handoff, manual Journal Entry work, saved Persona selection,
 saved Persona replay, and saved-run Inspect. Each map links only to sections in
-the current view. The active values questions retain the compass because it
-shows assessment progress. Narrow screens do not show a section rail.
+the current view. Content with a maximum width stays centered between the
+section rail and the outer page edge. The active values questions retain the
+compass because it shows assessment progress. Narrow screens do not show a
+section rail.
 
 This calculation is labelled **Calculation method** and **Deterministic · no
 model**.

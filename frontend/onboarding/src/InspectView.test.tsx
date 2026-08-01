@@ -212,4 +212,20 @@ describe("Inspect view", () => {
       /\.journal-thread__entry\s*\{[\s\S]*?overflow-wrap:\s*anywhere;/,
     );
   });
+
+  it("centers bounded content in the right column", () => {
+    expect(styles).toMatch(
+      /\.stage--inspect\s*\{[\s\S]*?margin:\s*0 auto;/,
+    );
+    expect(styles).toMatch(/\.stage\s*\{[\s\S]*?margin:\s*auto;/);
+    expect(styles).toMatch(
+      /\.persona-picker\s*\{[\s\S]*?margin-inline:\s*auto;/,
+    );
+    expect(styles).toMatch(
+      /\.persona-replay\s*\{[\s\S]*?margin-inline:\s*auto;/,
+    );
+    expect(styles).toMatch(
+      /\.journal-experience\s*\{[\s\S]*?margin-inline:\s*auto;/,
+    );
+  });
 });

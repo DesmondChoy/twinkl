@@ -583,7 +583,7 @@ h2 {
 
 .stage--inspect {
   width: min(100%, 920px);
-  margin: 0;
+  margin: 0 auto;
 }
 
 .inspect-intro {
@@ -1855,7 +1855,7 @@ h2 {
 
 .stage {
   width: min(100%, 860px);
-  margin: auto 0;
+  margin: auto;
   animation: stage-in 500ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
@@ -2337,6 +2337,7 @@ h2 {
 
 .persona-picker {
   width: min(100%, 860px);
+  margin-inline: auto;
 }
 
 .persona-picker__header h1,
@@ -2464,6 +2465,7 @@ h2 {
 
 .persona-replay {
   width: min(100%, 860px);
+  margin-inline: auto;
 }
 
 .persona-replay__source-line {
@@ -2675,11 +2677,12 @@ h2 {
 
 .stage--journal {
   width: 100%;
-  margin: 0;
+  margin: 0 auto;
 }
 
 .journal-experience {
   width: min(100%, 860px);
+  margin-inline: auto;
 }
 
 .journal-experience__header h1 {
@@ -3171,7 +3174,7 @@ h2 {
 
   .app-shell--summary .stage,
   .app-shell--complete .stage {
-    margin: auto 0;
+    margin: auto;
   }
 
   .app-shell--summary .stage h1,
@@ -3261,7 +3264,7 @@ h2 {
   }
 
   .app-shell--journal .stage--journal {
-    margin: auto 0;
+    margin: auto;
   }
 
   .app-shell--journal .journal-experience__header h1 {
@@ -3308,7 +3311,7 @@ h2 {
   }
 
   .app-shell--inspect .stage--inspect {
-    margin: auto 0;
+    margin: auto;
   }
 
   .app-shell--inspect .inspect-lens {
@@ -6221,7 +6224,7 @@ h2 {
   display: flex;
   min-height: 0;
   flex: 1;
-  margin: 0;
+  margin: 0 auto;
 }
 
 .app-shell--journal.app-shell--saved-persona .persona-replay {
