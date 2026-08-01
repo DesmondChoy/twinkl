@@ -475,6 +475,62 @@ describe("persona replay", () => {
     expect(screen.queryByText("Validation result")).toBeNull();
   });
 
+  it("shows the saved nudge beneath its Journal Entry", () => {
+    matchMedia(false);
+    const scenarioFixture =
+      validateExperienceInspectFixture(twoValuesReplayJson);
+    const item = catalog.scenarios.find(
+      (candidate) => candidate.scenario_id === "two-values-lukas",
+    )!;
+
+    render(
+      <PersonaReplayExperience
+        loaded={{ catalogItem: item, fixture: scenarioFixture }}
+        weekIndex={1}
+        profile={scenarioFixture.scenario.profile}
+        experience={experienceForWeek(1, scenarioFixture, item)}
+        updateExperience={() => undefined}
+        inspectRun={() => undefined}
+        onChoosePersona={() => undefined}
+        onWeekChange={() => undefined}
+      />,
+    );
+
+    const nudge = screen.getByLabelText("Nudge for Journal Entry 1");
+    const entry = screen.getByRole("button", {
+      name: "Open Journal Entry 1 from Aug 30",
+    });
+
+    expect(nudge.textContent).toContain(
+      "Was it worth not having your own time?",
+    );
+    expect(entry.closest("li")?.contains(nudge)).toBe(true);
+  });
+
+  it("does not show a nudge when the selected week has none", () => {
+    matchMedia(false);
+    const scenarioFixture =
+      validateExperienceInspectFixture(twoValuesReplayJson);
+    const item = catalog.scenarios.find(
+      (candidate) => candidate.scenario_id === "two-values-lukas",
+    )!;
+
+    render(
+      <PersonaReplayExperience
+        loaded={{ catalogItem: item, fixture: scenarioFixture }}
+        weekIndex={2}
+        profile={scenarioFixture.scenario.profile}
+        experience={experienceForWeek(2, scenarioFixture, item)}
+        updateExperience={() => undefined}
+        inspectRun={() => undefined}
+        onChoosePersona={() => undefined}
+        onWeekChange={() => undefined}
+      />,
+    );
+
+    expect(screen.queryByLabelText(/Nudge for Journal Entry/)).toBeNull();
+  });
+
   it("shows Schwartz Core Value names without repeating value phrases", () => {
     matchMedia(false);
     const scenarioFixture =

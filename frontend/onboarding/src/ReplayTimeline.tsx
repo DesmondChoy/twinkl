@@ -10,6 +10,7 @@ import DriftStateExplanation from "./DriftStateExplanation";
 import type { OnboardingProfile } from "./domain";
 import type {
   JournalEntryContract,
+  NudgeInteractionContract,
   ScenarioDeliveryState,
   ScenarioWeekContract,
   TraceEventContract,
@@ -22,6 +23,7 @@ interface ReplayTimelineProps {
   profile: OnboardingProfile;
   week: ScenarioWeekContract;
   journalEntries: JournalEntryContract[];
+  nudges: NudgeInteractionContract[];
   reviewedJournalEntries: JournalEntryContract[];
   weeklyReviewerDecisions: WeeklyDriftReviewerDecisionContract[];
   reviewTraceEvents: TraceEventContract[];
@@ -168,6 +170,7 @@ export default function ReplayTimeline({
   profile,
   week,
   journalEntries,
+  nudges,
   reviewedJournalEntries,
   weeklyReviewerDecisions,
   reviewTraceEvents,
@@ -187,6 +190,17 @@ export default function ReplayTimeline({
     "entries",
   );
   const visibleEntries = journalEntries.slice(0, visibleEntryCount);
+  const nudgeByEntryId = useMemo(
+    () => new Map(
+      nudges
+        .filter((nudge) =>
+          nudge.text
+          && ["displayed", "answered", "skipped"].includes(nudge.outcome)
+        )
+        .map((nudge) => [nudge.journal_entry_id, nudge]),
+    ),
+    [nudges],
+  );
   const state =
     (driftResult?.delivery_state as ScenarioDeliveryState | undefined)
     ?? week.expected_delivery_state;
@@ -290,35 +304,59 @@ export default function ReplayTimeline({
           </div>
           <div className="replay-column__scroll">
             <ol className="replay-entry-list">
-              {visibleEntries.map((entry, index) => (
-                <li className="replay-entry replay-entry--arriving" key={entry.journal_entry_id}>
-                  <span className="replay-entry__number" aria-hidden="true">
-                    {index + 1}
-                  </span>
-                  <button
-                    id={`replay-entry-button-${entry.journal_entry_id}`}
-                    type="button"
-                    onClick={() => openJournalEntry(entry)}
-                    aria-current={
-                      selectedJournalEntryId === entry.journal_entry_id
-                        ? "true"
-                        : undefined
-                    }
-                    aria-label={`Open Journal Entry ${index + 1} from ${displayEntryDate(entry.date)}`}
+              {visibleEntries.map((entry, index) => {
+                const nudge = nudgeByEntryId.get(entry.journal_entry_id);
+                return (
+                  <li
+                    className="replay-entry replay-entry--arriving"
+                    key={entry.journal_entry_id}
                   >
-                    <span className="replay-entry__meta">
-                      Journal Entry {index + 1}
-                      <time dateTime={entry.date}>{displayEntryDate(entry.date)}</time>
+                    <span className="replay-entry__number" aria-hidden="true">
+                      {index + 1}
                     </span>
-                    <span className="replay-entry__excerpt">
-                      {excerpt(entry.content)}
-                    </span>
-                    <span className="replay-entry__open" aria-hidden="true">
-                      Read
-                    </span>
-                  </button>
-                </li>
-              ))}
+                    <button
+                      id={`replay-entry-button-${entry.journal_entry_id}`}
+                      type="button"
+                      onClick={() => openJournalEntry(entry)}
+                      aria-current={
+                        selectedJournalEntryId === entry.journal_entry_id
+                          ? "true"
+                          : undefined
+                      }
+                      aria-label={`Open Journal Entry ${index + 1} from ${displayEntryDate(entry.date)}`}
+                    >
+                      <span className="replay-entry__meta">
+                        Journal Entry {index + 1}
+                        <time dateTime={entry.date}>{displayEntryDate(entry.date)}</time>
+                      </span>
+                      <span className="replay-entry__excerpt">
+                        {excerpt(entry.content)}
+                      </span>
+                      <span className="replay-entry__open" aria-hidden="true">
+                        Read
+                      </span>
+                    </button>
+                    {nudge?.text ? (
+                      <aside
+                        className="replay-entry__nudge"
+                        aria-label={`Nudge for Journal Entry ${index + 1}`}
+                      >
+                        <span className="replay-entry__nudge-label">Nudge</span>
+                        <p>{nudge.text}</p>
+                        {nudge.outcome === "answered" && nudge.response ? (
+                          <div className="replay-entry__response">
+                            <span>Response</span>
+                            <p>{nudge.response}</p>
+                          </div>
+                        ) : null}
+                        {nudge.outcome === "skipped" ? (
+                          <small>Follow-up skipped.</small>
+                        ) : null}
+                      </aside>
+                    ) : null}
+                  </li>
+                );
+              })}
             </ol>
 
             {journalEntries.length === 0 && resultVisible ? (

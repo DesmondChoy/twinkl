@@ -618,6 +618,7 @@ export function PersonaReplayExperience({
         profile={profile}
         week={currentWeek}
         journalEntries={currentWeekEntries}
+        nudges={experience.nudges}
         reviewedJournalEntries={experience.journal_entries}
         weeklyReviewerDecisions={experience.weekly_reviewer_decisions}
         reviewTraceEvents={experience.trace_events}
