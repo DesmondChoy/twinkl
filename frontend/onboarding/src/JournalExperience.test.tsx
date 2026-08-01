@@ -834,7 +834,7 @@ describe("manual Journal Entry Experience", () => {
     await waitFor(() => expect(api.submitJournalEntry).toHaveBeenCalledTimes(1));
   });
 
-  it("shows ambient Drift and cited Weekly Digest evidence", async () => {
+  it("shows ambient Drift and cited Coach Digest evidence", async () => {
     const inspectRun = vi.fn();
     const initial: ExperienceState = {
       ...createExperienceState(),

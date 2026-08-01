@@ -29,11 +29,19 @@ fields, file paths, or historical records.
 | **VIF Critic Prediction** | The VIF Critic's predicted `-1`, `0`, or `+1` for one Journal Entry and value, plus uncertainty. | VIF Critic output, score when prediction is meant |
 | **Conflict (`-1`)** | One Journal Entry that clearly shows behavior or a choice against one value. When the source matters, name the LLM-Judge VIF Label, LLM-Judge Conflict Label, VIF Critic Prediction, or Weekly Drift Reviewer Decision. | negative evidence, misalignment signal |
 | **Drift** | Two consecutive Conflicts for the same Core Value. A longer uninterrupted run is still one Drift. | sustained-conflict episode, meaningful two-entry pattern, reference event |
-| **Weekly Drift Reviewer** | The LLM that reviews weekly Journal Entries for Conflict. The fixed model contract is `gpt-5.6-luna` with reasoning effort `low`, without VIF Critic predictions. Historical experiments used other setups. It is not the VIF Critic. | weekly verifier, LLM arm, system |
+| **Weekly Drift Detection** | The end-of-week workflow that reviews Journal Entries, applies the Drift rule, and stores structured output with Core Values, evidence, and Drift state. Its structured output is the input to the Coach Digest. The workflow contains the Weekly Drift Reviewer and Drift Detector as internal components. | weekly review, Weekly Digest, detection pipeline |
+| **Weekly Drift Reviewer** | The internal LLM in Weekly Drift Detection that reviews Journal Entries for Conflict. The fixed model contract is `gpt-5.6-luna` with reasoning effort `low`, without VIF Critic predictions. Historical experiments used other setups. It is not the VIF Critic. | weekly verifier, LLM arm, system |
 | **Weekly Drift Reviewer Decision** | The Weekly Drift Reviewer's decision of **Conflict**, **Not Conflict**, or **Abstain** for one Journal Entry and Core Value. | reviewer output, weekly label |
-| **Drift Detector** | The deterministic rule that decides whether two consecutive Weekly Drift Reviewer Conflicts for the same Core Value form Drift. The rule is implemented for the capstone POC but is not deployment-approved. | trigger layer, episode engine |
-| **Weekly Digest** | The structured weekly record containing values, evidence, Drift state, and inputs for the Weekly Coach. | artifact, payload, packet |
-| **Weekly Coach** | The component that turns the Weekly Digest into the user-facing reflection and question. | narrative layer, delivery engine |
+| **Drift Detector** | The internal deterministic rule in Weekly Drift Detection that decides whether two consecutive Weekly Drift Reviewer Conflicts for the same Core Value form Drift. The rule is implemented for the capstone POC but is not deployment-approved. | trigger layer, episode engine |
+| **Coach Digest** | The workflow that supplies structured Weekly Drift Detection output to a prompt, then produces the user-facing response. It does not decide whether Drift exists. | Weekly Coach, narrative layer, delivery engine |
+
+## Compatibility Identifiers
+
+Code and stored data still use identifiers such as `WeeklyDigest`,
+`weekly_digest`, `CoachNarrative`, and `weekly_digest_coach`. Keep these
+identifiers until a separate compatibility-safe code migration is approved.
+In current product prose, use **Weekly Drift Detection output** and
+**Coach Digest**.
 
 Use **resolved** only when distinguishing a **Conflict** or **Not Conflict**
 LLM-Judge Conflict Label from an **Uncertain** one. Use **consecutive** to

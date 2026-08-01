@@ -54,6 +54,13 @@ function scenarioResponse(raw = activeReplayRaw) {
   };
 }
 
+function enterPreferredName(name = "Casey") {
+  fireEvent.change(screen.getByRole("textbox", { name: "Preferred name" }), {
+    target: { value: name },
+  });
+  fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+}
+
 function experienceForWeek(
   weekIndex: number,
   scenarioFixture: ExperienceInspectFixtureContract = fixture,
@@ -611,6 +618,7 @@ describe("persona replay", () => {
     matchMedia(false);
     vi.useFakeTimers();
     render(<App />);
+    enterPreferredName();
     const first = screen.getAllByTestId("value-card")[0];
     fireEvent.click(first);
     fireEvent.click(
@@ -676,6 +684,7 @@ describe("persona replay", () => {
     const profile = fixture.scenario.profile;
     const saved = createSession(() => 0.5);
     saved.user_id = profile.user_id;
+    saved.preferred_name = profile.preferred_name ?? "Friend";
     saved.session_id = profile.session_id;
     saved.started_at = profile.started_at;
     saved.stage = "complete";

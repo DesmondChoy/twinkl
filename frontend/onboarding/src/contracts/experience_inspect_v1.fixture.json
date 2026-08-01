@@ -10,6 +10,7 @@
       "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
       "scoring_method": "best_minus_worst_divided_by_appearances_v1",
       "user_id": "persona-demo",
+      "preferred_name": "Casey",
       "session_id": "session-demo",
       "started_at": "2026-07-22T10:00:00.000Z",
       "timestamp": "2026-07-22T10:05:00.000Z",
@@ -472,6 +473,7 @@
       "core_values": [
         "benevolence"
       ],
+      "goal_context": "I want to be more present for people I care about",
       "drift_states": {
         "benevolence": "active"
       },
@@ -569,6 +571,7 @@
       "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
       "scoring_method": "best_minus_worst_divided_by_appearances_v1",
       "user_id": "persona-demo",
+      "preferred_name": "Casey",
       "session_id": "session-demo",
       "started_at": "2026-07-22T10:00:00.000Z",
       "timestamp": "2026-07-22T10:05:00.000Z",
@@ -1020,6 +1023,7 @@
       "core_values": [
         "benevolence"
       ],
+      "goal_context": "I want to be more present for people I care about",
       "drift_states": {
         "benevolence": "active"
       },
@@ -1155,6 +1159,7 @@
         "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
         "scoring_method": "best_minus_worst_divided_by_appearances_v1",
         "user_id": "persona-demo",
+        "preferred_name": "Casey",
         "session_id": "session-demo",
         "started_at": "2026-07-22T10:00:00.000Z",
         "timestamp": "2026-07-22T10:05:00.000Z",
@@ -1559,6 +1564,7 @@
           "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
           "scoring_method": "best_minus_worst_divided_by_appearances_v1",
           "user_id": "persona-demo",
+          "preferred_name": "Casey",
           "session_id": "session-demo",
           "started_at": "2026-07-22T10:00:00.000Z",
           "timestamp": "2026-07-22T10:05:00.000Z",
@@ -2021,6 +2027,7 @@
           "core_values": [
             "benevolence"
           ],
+          "goal_context": "I want to be more present for people I care about",
           "drift_states": {
             "benevolence": "active"
           },
@@ -2155,6 +2162,7 @@
           "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
           "scoring_method": "best_minus_worst_divided_by_appearances_v1",
           "user_id": "persona-demo",
+          "preferred_name": "Casey",
           "session_id": "session-demo",
           "started_at": "2026-07-22T10:00:00.000Z",
           "timestamp": "2026-07-22T10:05:00.000Z",
@@ -3135,6 +3143,7 @@
           "core_values": [
             "benevolence"
           ],
+          "goal_context": "I want to be more present for people I care about",
           "drift_states": {
             "benevolence": "active"
           },
@@ -3226,7 +3235,7 @@
         "model": "gpt-5.4-mini",
         "reasoning_effort": "none"
       },
-      "prompt": "Turn the Weekly Digest into a reflection and one question.",
+      "prompt": "Use Weekly Drift Detection output to produce a Coach Digest response.",
       "raw_response": {
         "weekly_mirror": "You wrote twice about choosing work over time with your sister.",
         "tension_explanation": "Those choices conflict with the importance you placed on being present for people close to you.",

@@ -1,0 +1,57 @@
+name: coach_narrative_judge
+description: >-
+  LLM-as-judge rubric for Coach Digest responses. Scores correctness,
+  specificity, non-prescriptive tone, and tension honesty against Weekly Drift
+  Detection output. Not a substitute for human validation.
+version: '1.1'
+input_variables:
+  - core_values
+  - drift_states
+  - top_tensions
+  - evidence
+  - weekly_mirror
+  - tension_explanation
+  - reflective_question
+template: |
+  You are an evaluator scoring a Coach Digest response against the evidence it
+  was built from. Judge only what the evidence supports. You are an automated
+  reviewer, not a human rater; be strict and literal.
+
+  The reflection has three parts: a weekly mirror, a tension explanation, and a
+  reflective question. It was generated from the digest facts below.
+
+  DIGEST FACTS
+  Core Values: {{ core_values }}
+  Confirmed Drift states (empty means no confirmed Drift): {{ drift_states }}
+  Primary tensions surfaced to the writer: {{ top_tensions }}
+  Cited evidence excerpts from the writer's Journal Entries:
+  {{ evidence }}
+
+  REFLECTION TO SCORE
+  Weekly mirror: {{ weekly_mirror }}
+  Tension explanation: {{ tension_explanation }}
+  Reflective question: {{ reflective_question }}
+
+  Score each dimension from 1 (poor) to 5 (excellent):
+
+  - correctness: Does the reflection accurately reflect the cited evidence and
+    the week's actual pattern, without inventing events or misreading them?
+  - specificity: Does it reference concrete details from the evidence rather
+    than vague generalities?
+  - non_prescriptive_tone: Does it avoid advice, action plans, and judgment,
+    staying reflective rather than directive? (5 = fully reflective, 1 = openly
+    prescriptive.)
+  - tension_honesty: When there is no confirmed Drift and no real tension in the
+    evidence, does the tension explanation refrain from inventing one? If a real
+    tension exists, does it describe that tension faithfully? (5 = honest about
+    what is or is not there, 1 = manufactures a tension that the evidence and
+    Drift states do not support.)
+
+  Also judge the reflective question with a boolean:
+  - question_is_open_and_relevant: true if the question is open-ended, relevant
+    to the evidence, and non-leading; false otherwise.
+
+  Return JSON with exactly these keys: correctness, specificity,
+  non_prescriptive_tone, tension_honesty (each an integer 1-5),
+  question_is_open_and_relevant (boolean), and justification (one short sentence
+  citing the evidence for your scores).

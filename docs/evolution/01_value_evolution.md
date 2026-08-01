@@ -3,7 +3,7 @@
 > **Scope:** Value evolution is a future product concept, not part of the
 > selected Drift v1 contract. An experimental classifier is
 > invoked automatically by the deprecated weekly compatibility router, but onboarding
-> profile updates, user confirmation, and production Weekly Coach messaging
+> profile updates, user confirmation, and production Coach Digest messaging
 > are not implemented. Current Drift scope is defined in
 > [`docs/drift/trajectory_eda.md`](../drift/trajectory_eda.md).
 
@@ -74,11 +74,12 @@ The exploratory detectors smooth or threshold these metrics in different ways:
 - **Identity divergence**: Cosine similarity falls below a threshold and decreases
   from baseline; this remains an exploratory comparison, not v1 scope.
 
-### 1.4 The Weekly Coach
+### 1.4 The Coach Digest
 
-The intended Weekly Coach response:
+The intended Coach Digest response:
 
-- At POC scale, reads the user's full Journal Entry history via full-context prompting to surface thematic evidence. (At production scale, this would transition to RAG — see [`docs/vif/01_concepts_and_roadmap.md` Section 4](../vif/01_concepts_and_roadmap.md#4-extensions-and-future-work).)
+- Uses structured Weekly Drift Detection output with cited Journal Entry
+  evidence.
 - Explains *why* Conflict occurred, citing specific Journal Entry snippets.
 - Offers reflective prompts and micro-anchors (personalized nudges), never
   prescriptive advice.
@@ -90,7 +91,7 @@ The intended Weekly Coach response:
 ## 2. What Is Potentially Lacking
 
 The current prototype workflow — divergence metrics, triggers, and Weekly
-Coach messaging — treats `w_u` as ground truth. Every comparison asks: *"Is
+Coach Digest messaging — treats `w_u` as ground truth. Every comparison asks: *"Is
 the user's behavior consistent with what they declared at onboarding?"*
 
 This creates a fundamental problem: **when values genuinely evolve, the prototype
@@ -111,7 +112,7 @@ Under the older crash/rut research path, without an adopted evolution layer:
   Core Value.
 - The prototype per-dimension rut trigger fires: weekly EMA < -0.4 for multiple
   consecutive weeks.
-- The Weekly Coach surfaces: *"You seem to be losing track of Achievement."*
+- The Coach Digest surfaces: *"You seem to be losing track of Achievement."*
 
 This is the wrong message. The user hasn't lost track of anything — their
 priorities changed. Calling this pattern Drift without checking the canonical
@@ -237,7 +238,7 @@ Journal Entry → Text Encoder → State Encoder → VIF Critic → Predictions
                                                       Drift Detector
                                                               |
                                                               v
-                                                      Weekly Coach
+                                                      Coach Digest
 
 
                     Workflow with Evolution Detection
@@ -253,12 +254,12 @@ Journal Entry → Text Encoder → State Encoder → VIF Critic → Predictions
                                                                   divergence
                                                  |           |           |
                                                  v           v           v
-                                       Weekly Coach:    Drift         Drift
+                                       Coach Digest:    Drift         Drift
                                        "priorities      Detector      Detector
                                        shifting?"       (normal)      (normal)
                                                  |                       |
                                                  v                       v
-                                           Suggest            Weekly Coach:
+                                           Suggest            Coach Digest:
                                            profile           "losing track?"
                                            update
 ```
@@ -276,10 +277,10 @@ Value before claiming Drift.
 | **VIF Critic** | Produces alignment predictions and uncertainty | Unchanged |
 | **Evolution Detection** | Outside committed scope | Classifies per-dimension patterns |
 | **Drift Detector** | Detects Drift | Skips user-confirmed evolution classifications |
-| **Weekly Coach** | Reflects active, recovered, mixed, or uncertain states | Asks whether priorities are shifting |
+| **Coach Digest** | Reflects active, recovered, mixed, or uncertain states | Asks whether priorities are shifting |
 | **Profile `w_u`** | Fixed runtime input | Updates only after explicit user confirmation |
 
-### 4.3 Weekly Coach Messaging Differences
+### 4.3 Coach Digest Messaging Differences
 
 **For volatile divergence:**
 

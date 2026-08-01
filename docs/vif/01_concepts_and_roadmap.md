@@ -32,7 +32,7 @@ Crucially, the VIF is designed to be:
 
 In the approved user-facing path, the Weekly Drift Reviewer is fixed at
 `gpt-5.6-luna` with reasoning effort `low`. It and the Drift Detector decide
-Drift so the Weekly Coach can surface tensions. The completed VIF Critic is an
+Drift so the Coach Digest can surface tensions. The completed VIF Critic is an
 offline research model, not a dependency of that path.
 
 ---
@@ -60,8 +60,8 @@ The VIF is designed to:
 
    The completed VIF Critic research used Conflict screening as its primary
    evaluation role. Per-Journal-Entry `recall_-1` drove model development; QWK
-   and positive alignment remain diagnostics. VIF Critic results are not Weekly
-   Coach inputs.
+   and positive alignment remain diagnostics. VIF Critic results are not Coach
+   Digest inputs.
 
 3. **Uncertainty-aware review**
    The VIF Critic estimates **epistemic uncertainty** in its predictions.
@@ -72,17 +72,14 @@ The VIF is designed to:
 4. **Trajectory-aware downstream evaluation**
    The live VIF Critic default uses `window_size: 1`, so each prediction sees the current Journal Entry, including its displayed nudge and response when present, plus the normalized value profile. The fixed Luna-low Weekly Drift Reviewer and deterministic Drift Detector provide the approved temporal decision layer. `twinkl-749` tested a small prior-Journal-Entry mean summary, but its seed-11 results regressed and did not receive deployment approval. History support therefore remains diagnostic rather than an assumed property of the default VIF Critic.
 
-5. **Separation of concerns: VIF Critic vs Weekly Coach**
+5. **Separation of concerns: VIF Critic vs Coach Digest**
    The VIF Critic produces numeric per-Journal-Entry alignment evidence and
    uncertainty
    from the configured student-visible state. The downstream timeline supplies
-   temporal evaluation. A separate **Weekly Coach** reads the
-   user's full journal history via **full-context prompting** (at POC scale, all
-   Journal Entries fit in the LLM context window) to surface thematic evidence
-   after the Weekly Drift Reviewer and Drift Detector produce structured
-   signals. The VIF Critic is not required in this path. At production scale
-   with longer histories, this would transition to retrieval-augmented
-   generation (RAG) — see [Section 4](#4-extensions-and-future-work).
+   temporal evaluation. Weekly Drift Detection uses the internal Weekly Drift
+   Reviewer and Drift Detector to store structured output with cited evidence.
+   The separate **Coach Digest** supplies that output to a prompt and produces
+   the user response. The VIF Critic is not required in this path.
 
 ---
 
@@ -184,5 +181,8 @@ Potential extensions beyond the POC:
 * **Value Evolution Detection**: Possible statistical filter for user-confirmed profile updates after the Drift path is validated. See [Value Evolution Detection](../evolution/01_value_evolution.md).
 * **Personalisation Layers**:
   * Explore global VIF plus lightweight per-user adapters for users whose trajectories systematically diverge from other users.
-* **Retrieval-Augmented Weekly Coach (scaling)**:
-  * At POC scale (8–12 Journal Entries per persona), all Journal Entries fit in the LLM context window, so the Weekly Coach uses full-context prompting. For production deployment with longer user histories (50+ Journal Entries), the Weekly Coach would transition to RAG with a vector store for semantic similarity retrieval over the journal corpus. This is a scaling concern, not a capability gap at current data volumes.
+* **Long-history evidence selection**:
+  * The current Coach Digest prompt receives only structured Weekly Drift
+    Detection output. If longer histories require retrieval, Weekly Drift
+    Detection can select relevant evidence before it stores that output. This
+    keeps the workflow boundary unchanged.

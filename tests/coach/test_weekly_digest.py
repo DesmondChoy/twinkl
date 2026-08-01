@@ -1,4 +1,4 @@
-"""Tests for the Weekly Digest and Weekly Coach vertical slice."""
+"""Tests for the Weekly Drift Detection output and Coach Digest vertical slice."""
 
 import asyncio
 import json
@@ -6,8 +6,15 @@ from pathlib import Path
 
 import polars as pl
 
-from src.coach.schemas import CoachNarrative, DriftDetectionResult, WeeklyDigest
+from prompts import get_prompt_metadata
+from src.coach.schemas import (
+    CoachNarrative,
+    DriftDetectionResult,
+    EvidenceSnippet,
+    WeeklyDigest,
+)
 from src.coach.weekly_digest import (
+    _build_prompt_inputs,
     attach_coach_artifacts,
     build_weekly_digest,
     generate_weekly_digest_coach,
@@ -135,15 +142,22 @@ def test_build_weekly_digest_and_render(tmp_path: Path):
     md = render_digest_markdown(digest)
     prompt = render_digest_prompt(digest)
 
-    assert "Weekly Alignment Digest: Casey" in md
+    assert "Weekly Drift Detection: Casey" in md
     assert "Response mode" in md
     assert "Full Journal History" not in md
     assert "Evidence Snippets" in md
     assert "dims=" in md
-    assert "Persona: Casey (deadbeef)" in prompt
-    assert "Declared Core Values: Self Direction, Benevolence" in prompt
+    assert "Preferred name: Casey" in prompt
+    assert "deadbeef" not in prompt
+    assert "Internal Schwartz label: Self Direction" in prompt
+    assert (
+        'user-facing compass phrase: "Having the freedom to choose my own path"'
+        in prompt
+    )
     assert "Full journal history:" not in prompt
-    assert "Primary tensions:" in prompt
+    assert "Primary tensions:" not in prompt
+    assert "Overall mean alignment:" not in prompt
+    assert "common tensions:" not in prompt
 
 
 def test_generate_validate_and_persist_weekly_digest(tmp_path: Path):
@@ -550,6 +564,55 @@ def _minimal_digest() -> WeeklyDigest:
     )
 
 
+def test_prompt_reduces_drift_states_to_three_delivery_policies():
+    active = _minimal_digest().model_copy(
+        update={
+            "response_mode": "mixed",
+            "drift_states": {
+                "benevolence": "active",
+                "self_direction": "recovered",
+            },
+        }
+    )
+    recovered = _minimal_digest().model_copy(
+        update={
+            "response_mode": "recovered",
+            "drift_states": {"benevolence": "recovered"},
+        }
+    )
+    uncertain = _minimal_digest().model_copy(
+        update={
+            "response_mode": "uncertain",
+            "drift_states": {"benevolence": "uncertain"},
+        }
+    )
+
+    assert "Selected policy: drift_detected" in render_digest_prompt(active)
+    assert "Selected policy: no_current_drift" in render_digest_prompt(recovered)
+    assert "Selected policy: more_reflection_needed" in render_digest_prompt(
+        uncertain
+    )
+    assert "Selected policy: no_current_drift" in render_digest_prompt(
+        _minimal_digest()
+    )
+
+
+def test_coach_prompt_declares_only_the_six_projected_inputs():
+    metadata = get_prompt_metadata("weekly_digest_coach")
+    prompt_inputs = _build_prompt_inputs(_minimal_digest())
+
+    expected_inputs = [
+        "persona_name",
+        "week_window",
+        "response_policy",
+        "compass_context_lines",
+        "drift_summary_lines",
+        "evidence_lines",
+    ]
+    assert metadata["input_variables"] == expected_inputs
+    assert list(prompt_inputs) == expected_inputs
+
+
 def test_validation_flags_raw_schwartz_value_labels():
     digest = _minimal_digest()
     leaking = CoachNarrative(
@@ -586,3 +649,151 @@ def test_validation_passes_when_narrative_uses_lived_language():
     validation = validate_weekly_digest_narrative(digest, clean)
 
     assert validation.value_leakage_passed
+
+
+def _digest_with_evidence() -> WeeklyDigest:
+    """A digest carrying one evidence excerpt for groundedness checks."""
+    return WeeklyDigest(
+        persona_id="deadbeef",
+        week_start="2025-01-01",
+        week_end="2025-01-07",
+        response_mode="stable",
+        mode_source="fallback_heuristic",
+        mode_rationale="No confirmed Drift this week.",
+        n_entries=3,
+        overall_mean=0.4,
+        top_tensions=[],
+        top_strengths=["benevolence"],
+        dimensions=[],
+        evidence=[
+            EvidenceSnippet(
+                date="2025-01-03",
+                t_index=1,
+                direction="aligned",
+                dimensions=["benevolence"],
+                excerpt="called my mom and helped a colleague debug",
+            )
+        ],
+    )
+
+
+def _pad_to_word_count(text: str, target: int) -> str:
+    """Grow text to exactly `target` words by appending filler words."""
+    words = text.split()
+    if len(words) >= target:
+        return " ".join(words[:target])
+    filler = ["and", "then", "again", "quietly", "today"]
+    while len(words) < target:
+        words.append(filler[len(words) % len(filler)])
+    return " ".join(words)
+
+
+def test_validation_flags_ungrounded_quotes():
+    digest = _digest_with_evidence()
+    ungrounded = CoachNarrative(
+        weekly_mirror=(
+            'This week you wrote about "training for a marathon at dawn," a '
+            "phrase that never appears in your Journal Entries."
+        ),
+        tension_explanation=(
+            "Nothing pulled against what matters to you; the steady pattern was "
+            "showing up for the people around you."
+        ),
+        reflective_question="What kept that steadiness feeling natural this week?",
+    )
+
+    validation = validate_weekly_digest_narrative(digest, ungrounded)
+
+    assert not validation.groundedness_passed
+    assert validation.grounded_quotes == []
+    ground_check = next(c for c in validation.checks if c.name == "groundedness")
+    assert "No quoted phrase from selected evidence" in ground_check.details
+
+
+def test_validation_passes_grounded_quotes():
+    digest = _digest_with_evidence()
+    grounded = CoachNarrative(
+        weekly_mirror=(
+            'A steady week of showing up for people, like when you "helped a '
+            'colleague debug" without being asked.'
+        ),
+        tension_explanation=(
+            "Nothing pulled against what matters to you; the steady pattern held "
+            "across the week and felt unforced."
+        ),
+        reflective_question="What let you keep showing up with intention?",
+    )
+
+    validation = validate_weekly_digest_narrative(digest, grounded)
+
+    assert validation.groundedness_passed
+    assert "helped a colleague debug" in validation.grounded_quotes
+
+
+def test_validation_flags_score_jargon():
+    digest = _minimal_digest()
+    jargon = CoachNarrative(
+        weekly_mirror=(
+            "Your alignment score dipped midweek before recovering by the "
+            "weekend, and the mean= reading stayed low throughout."
+        ),
+        tension_explanation=(
+            "The misaligned days pulled your weekly scores down before things "
+            "steadied again toward the end of the week."
+        ),
+        reflective_question="What shifted between the low and the recovery here?",
+    )
+
+    validation = validate_weekly_digest_narrative(digest, jargon)
+
+    assert not validation.non_circularity_passed
+    circ_check = next(c for c in validation.checks if c.name == "non_circularity")
+    assert "raw scoring" in circ_check.details
+
+
+def test_validation_flags_too_short_length():
+    digest = _minimal_digest()
+    too_short = CoachNarrative(
+        weekly_mirror="A steady, quiet week.",
+        tension_explanation="Nothing pulled against you.",
+        reflective_question="What kept it steady?",
+    )
+
+    validation = validate_weekly_digest_narrative(digest, too_short)
+
+    assert validation.word_count < 25
+    assert not validation.length_passed
+
+
+def test_validation_flags_too_long_length():
+    digest = _minimal_digest()
+    long_mirror = _pad_to_word_count(
+        "This week held steady around caring for the people close to you", 200
+    )
+    too_long = CoachNarrative(
+        weekly_mirror=long_mirror,
+        tension_explanation="Nothing pulled against what matters to you this week.",
+        reflective_question="What let you keep showing up with intention here?",
+    )
+
+    validation = validate_weekly_digest_narrative(digest, too_long)
+
+    assert validation.word_count > 180
+    assert not validation.length_passed
+
+
+def test_validation_passes_in_range_length():
+    digest = _minimal_digest()
+    mirror = _pad_to_word_count(
+        "This week held steady around caring for the people close to you", 60
+    )
+    in_range = CoachNarrative(
+        weekly_mirror=mirror,
+        tension_explanation="Nothing pulled against what matters to you this week.",
+        reflective_question="What let you keep showing up with intention here?",
+    )
+
+    validation = validate_weekly_digest_narrative(digest, in_range)
+
+    assert 25 <= validation.word_count <= 180
+    assert validation.length_passed

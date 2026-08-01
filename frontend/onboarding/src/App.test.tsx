@@ -39,6 +39,13 @@ function answerSet() {
   act(() => vi.advanceTimersByTime(1_000));
 }
 
+function enterPreferredName(name = "Casey") {
+  fireEvent.change(screen.getByRole("textbox", { name: "Preferred name" }), {
+    target: { value: name },
+  });
+  fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+}
+
 beforeEach(() => {
   localStorage.clear();
   profileEvents.clear();
@@ -128,6 +135,7 @@ describe("onboarding app", () => {
       });
 
     render(<App />);
+    enterPreferredName();
 
     expect(await screen.findByRole("alert")).toHaveProperty(
       "textContent",
@@ -137,8 +145,12 @@ describe("onboarding app", () => {
     storageWrite.mockRestore();
   });
 
-  it("opens directly on the first six-card set without Schwartz labels", () => {
+  it("asks for a preferred name before the first set", () => {
     render(<App />);
+    expect(
+      screen.getByRole("heading", { name: "What should Twinkl call you?" }),
+    ).toBeTruthy();
+    enterPreferredName();
     const progress = screen.getByRole("progressbar", {
       name: "Values · 1 of 11",
     });
@@ -172,6 +184,7 @@ describe("onboarding app", () => {
   it("places two taps in Most then Least and advances after a one-second review", () => {
     vi.useFakeTimers();
     render(<App />);
+    enterPreferredName();
     act(() => vi.advanceTimersByTime(400));
     const first = screen.getAllByTestId("value-card")[0];
     const firstPhrase = first.querySelector(".value-card__phrase")!.textContent!;
@@ -205,6 +218,7 @@ describe("onboarding app", () => {
   it("moves cards into both boxes and back with the keyboard", async () => {
     const user = userEvent.setup();
     render(<App />);
+    enterPreferredName();
     const first = screen.getAllByTestId("value-card")[0];
     const firstValue = first.dataset.value;
     first.focus();
@@ -233,6 +247,7 @@ describe("onboarding app", () => {
 
   it("moves cards into both boxes and back with pointer dragging", () => {
     render(<App />);
+    enterPreferredName();
     const most = screen.getByTestId("drop-most");
     const least = screen.getByTestId("drop-least");
     const selection = screen.getByTestId("selection-area");
@@ -289,6 +304,7 @@ describe("onboarding app", () => {
 
   it("keeps touch movement separate from direct tap placement", () => {
     render(<App />);
+    enterPreferredName();
     const card = screen.getAllByTestId("value-card")[0];
     fireEvent.pointerDown(card, {
       pointerId: 4,
@@ -319,6 +335,7 @@ describe("onboarding app", () => {
 
   it("uses six distinct position-bound backgrounds with the same accent", () => {
     render(<App />);
+    enterPreferredName();
     expect(screen.queryByText(/card 0[1-6]/i)).toBeNull();
     const cards = screen.getAllByTestId("value-card");
     const backgrounds = cards.map((card) =>
@@ -336,6 +353,7 @@ describe("onboarding app", () => {
     vi.useFakeTimers();
     const onStartJournal = vi.fn();
     const { unmount } = render(<App onStartJournal={onStartJournal} />);
+    enterPreferredName("Desmond");
     for (let setNumber = 1; setNumber <= 11; setNumber += 1) {
       const progress = screen.getByRole("progressbar", {
         name: `Values · ${setNumber} of 11`,
@@ -395,7 +413,11 @@ describe("onboarding app", () => {
     expect(screen.queryByText("Profile confirmed")).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: "Return to Experience" }));
     fireEvent.click(screen.getByRole("button", { name: "Confirm my compass" }));
-    expect(screen.getByRole("heading", { name: "Your compass is ready." })).toBeTruthy();
+    expect(
+      screen.getByRole("heading", {
+        name: "Your compass is ready, Desmond.",
+      }),
+    ).toBeTruthy();
     expect(
       within(screen.getByRole("navigation", { name: "Experience sections" }))
         .getByRole("link", { name: "Journal Entry" }),
@@ -420,6 +442,7 @@ describe("onboarding app", () => {
     fireEvent.click(screen.getByRole("button", { name: "Start my first Journal Entry" }));
     expect(onStartJournal).toHaveBeenCalledTimes(1);
     expect(onStartJournal.mock.calls[0][0].user_confirmed).toBe(true);
+    expect(onStartJournal.mock.calls[0][0].preferred_name).toBe("Desmond");
     const journalHeading = screen.getByRole("heading", {
       name: "When did you feel most like yourself?",
     });
@@ -466,6 +489,7 @@ describe("onboarding app", () => {
       .toBe("A quiet walk helped me think clearly.");
     const stored = JSON.parse(localStorage.getItem(SESSION_STORAGE_KEY)!);
     expect(stored.confirmed_profile.user_confirmed).toBe(true);
+    expect(stored.confirmed_profile.preferred_name).toBe("Desmond");
     expect(stored.experience.active_view).toBe("experience");
     expect(stored.experience.journal_started).toBe(true);
     expect(stored.experience.journal_draft).toBe("A quiet walk helped me think clearly.");
@@ -599,6 +623,7 @@ describe("onboarding app", () => {
     });
 
     render(<App />);
+    enterPreferredName();
     for (let setNumber = 1; setNumber <= 11; setNumber += 1) {
       answerSet();
     }
@@ -638,7 +663,8 @@ describe("onboarding app", () => {
       "Weekly review requested",
       "Weekly review completed",
       "Drift checked",
-      "Weekly Digest built",
+      "Weekly Drift Detection output stored",
+      "Coach Digest response generated",
     ].forEach((label) => expect(screen.queryByText(label)).toBeNull());
   });
 
@@ -648,6 +674,7 @@ describe("onboarding app", () => {
       new ExperienceApiError("Profile trace unavailable."),
     );
     render(<App />);
+    enterPreferredName();
     for (let setNumber = 1; setNumber <= 11; setNumber += 1) {
       answerSet();
     }
@@ -681,6 +708,7 @@ describe("onboarding app", () => {
       new ExperienceApiError("Profile trace unavailable."),
     );
     render(<App />);
+    enterPreferredName();
     for (let setNumber = 1; setNumber <= 11; setNumber += 1) {
       answerSet();
     }
@@ -704,6 +732,7 @@ describe("onboarding app", () => {
       () => new Promise(() => undefined),
     );
     render(<App />);
+    enterPreferredName();
     for (let setNumber = 1; setNumber <= 11; setNumber += 1) {
       answerSet();
     }

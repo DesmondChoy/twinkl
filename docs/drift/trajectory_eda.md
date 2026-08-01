@@ -44,11 +44,12 @@ The runtime-compatible weekly bins give a median of **5 active weeks** per
 persona. A 3-week low period is still most of the observed life for the median persona,
 and a baseline-vs-recent comparison has little room to breathe.
 
-The practical answer is not to abandon the Weekly Coach. It is to separate the
+The practical answer is not to abandon the Coach Digest. It is to separate the
 two layers:
 
 - **Detection evidence:** rolling entry-level evidence over recent entries.
-- **Delivery cadence:** Weekly Digest.
+- **Detection cadence:** Weekly Drift Detection runs at the end of the week.
+- **Delivery cadence:** The Coach Digest produces the user response.
 
 That keeps the product cadence while avoiding fragile multi-week low-mean definitions.
 
@@ -170,7 +171,7 @@ the end-to-end path first; expand only if time remains.
 | # | Label-side reference definition | Consensus impact | Persisted-label comparison | One-line case |
 |---|---|---:|---:|---|
 | **R1 — Sustained conflict** (historical candidate) | the same declared core value has **2 adjacent consensus -1 labels** | **40/204 = 19.6%** | 49/204 = 24.0% | historical prevalence comparison; not an active target |
-| R2 — Conflict week | a runtime week contains **>=2 consensus -1 Journal Entries** on a Core Value | 32/204 = 15.7% | 39/204 = 19.1% | aligns with Weekly Digest bins, but misses cross-week runs |
+| R2 — Conflict week | a runtime week contains **>=2 consensus -1 Journal Entries** on a Core Value | 32/204 = 15.7% | 39/204 = 19.1% | aligns with Weekly Drift Detection output bins, but misses cross-week runs |
 | R3 — Unrecovered departure | core value goes **>=0 -> -1 -> -1** | 30/204 = 14.7% | 35/204 = 17.2% | purest "drift from alignment" shape, but excludes already-low onboarding-gap cases |
 
 The consensus-reference union is 41 personas (20.1%); the persisted-label union
@@ -184,8 +185,8 @@ each clearly show a behavior or choice against the same declared core value.
 Other value dimensions are ignored for this per-value test. In the approved
 user-facing path, the fixed `gpt-5.6-luna` reasoning-effort-`low` Weekly Drift
 Reviewer decides Conflict from text without VIF Critic input, the deterministic
-Drift Detector applies the rule, and the Weekly Coach surfaces confirmed Drift
-through the Weekly Digest.
+Drift Detector applies the rule and stores structured output. The Coach Digest
+uses that output to surface confirmed Drift.
 [`twinkl-v8pb`](../evals/drift_v1_student_visible_target.md) completed the
 student-visible target and withheld its former final-test score. The former
 final-test population is now development-only. The consensus-derived frozen
@@ -199,7 +200,8 @@ Layer split:
 | Student-visible target | Two consecutive Journal Entries visibly show a behavior or choice against the same Core Value; full displayed-text review completed |
 | Historical consensus labels | Diagnostic provenance only; not a target, threshold-selection input, or final test set |
 | Drift Detector | Deterministic rule over Weekly Drift Reviewer Decisions: two consecutive Conflicts for the same Core Value |
-| Delivery | Weekly Digest with cited Journal Entries |
+| Stored result | Weekly Drift Detection output with cited Journal Entries |
+| Delivery | Coach Digest response |
 | Parked scope | single-entry dip alerts, fade/dormancy, peripheral-value rise, onboarding-gap messaging, evolution gating, multi-week low-mean definitions |
 | Implementation status | Complete and wired for the capstone POC; the evidence is AI-reviewed synthetic development evidence, and no fresh final test or deployment approval is claimed |
 
@@ -211,8 +213,8 @@ Why this is the right v1:
 - **Visible evidence, explicit confirmation.** The Weekly Drift Reviewer must
   decide each Conflict from displayed Journal Entry text. The deterministic
   Drift Detector receives those decisions, not VIF Critic probability mass.
-- **Weekly product stays intact.** Detection can be rolling-entry evidence while
-  the user sees it in the Weekly Digest.
+- **Weekly product stays intact.** Weekly Drift Detection stores the result at
+  the end of the week. The user receives the Coach Digest response.
 - **Noise is named.** Consensus changes the R1 set from 49 to 40 personas:
   11 persisted-only flags disappear and 2 consensus-only flags appear.
 
@@ -232,8 +234,9 @@ historical AI audit is not human ground truth.
 The benchmark records whether a sustained-conflict episode occurred. The Weekly
 Coach describes the state at delivery time using **active**, **recovered**,
 **mixed**, or **uncertain**. A sequence such as `-1, -1, +1, +1, +1` remains a
-true reference episode, but the Weekly Digest describes it as recovered rather
-than active. The implemented Drift Detector keeps Core Values independent and
+true reference episode, but the Weekly Drift Detection output stores it as
+recovered rather than active. The Coach Digest uses that state in its response.
+The implemented Drift Detector keeps Core Values independent and
 does not map deprecated compatibility modes into these delivery states.
 
 ## Soft-label note
@@ -290,5 +293,5 @@ Generated outputs:
 
 - [`docs/prd.md`](../prd.md) — authoritative product scope
 - [`docs/evals/drift_detection_eval.md`](../evals/drift_detection_eval.md) — v1 benchmark protocol
-- [`docs/weekly/weekly_digest_generation.md`](../weekly/weekly_digest_generation.md) — delivery and runtime artifacts
+- [`docs/weekly/weekly_drift_detection.md`](../weekly/weekly_drift_detection.md) — Weekly Drift Detection and Coach Digest runtime
 - [`docs/demo/review_app.md`](../demo/review_app.md) — exploratory runtime and detector review surface

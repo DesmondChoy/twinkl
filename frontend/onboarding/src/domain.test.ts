@@ -125,6 +125,7 @@ describe("versioned Profile", () => {
   it("requires confirmation and round-trips through deterministic validation", () => {
     const input = {
       userId: "user-1",
+      preferredName: "  Casey   Lee  ",
       sessionId: "session-1",
       startedAt: "2026-07-19T00:00:00.000Z",
       completedAt: "2026-07-19T00:02:00.000Z",
@@ -148,6 +149,7 @@ describe("versioned Profile", () => {
   it("accepts an explicitly synthetic Profile projection for saved replay", () => {
     const profile = createProfile({
       userId: "persona-1",
+      preferredName: "Casey",
       sessionId: "scenario-session",
       startedAt: "2026-07-19T00:00:00.000Z",
       completedAt: "2026-07-19T00:02:00.000Z",

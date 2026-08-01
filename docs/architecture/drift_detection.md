@@ -3,9 +3,9 @@
 **Status:** Architecture adopted on 2026-07-14 under `twinkl-752.2` and wired
 as a capstone POC under `twinkl-a2w`. The Weekly Drift Reviewer model contract
 is fixed at `gpt-5.6-luna` with reasoning effort `low`. The runtime persists
-versioned Weekly Drift Reviewer Decisions, applies the deterministic Drift
-Detector, and hands its delivery state to the Weekly Digest. The time-boxed
-capstone stops without a fresh final test or deployment approval.
+versioned Weekly Drift Reviewer Decisions, applies the internal Drift Detector,
+and stores structured Weekly Drift Detection output. The time-boxed capstone
+stops without a fresh final test or deployment approval.
 
 This document records the completed VIF Critic's offline research role without
 giving it user-facing authority that the evidence does not support. The
@@ -15,31 +15,39 @@ metric hierarchy live in the
 
 ## Architecture Decision
 
-Twinkl has one required user-facing path and one completed offline research
-path:
+Twinkl has two user-facing workflows and one completed offline research path:
 
-1. **User-facing decision path.** The Weekly Drift Reviewer is fixed at
+1. **Weekly Drift Detection.** The internal Weekly Drift Reviewer is fixed at
    `gpt-5.6-luna` with reasoning effort `low`. It reads Journal Entries and Core
    Values without VIF Critic predictions and decides Conflict, Not Conflict, or
-   Abstain for each relevant Journal Entry. The Drift Detector then applies the
+   Abstain for each relevant Journal Entry. The internal Drift Detector applies the
    deterministic rule: two consecutive Conflicts for the same Core Value form
-   one Drift. Confirmed Drift flows into the Weekly Digest and Weekly Coach.
-2. **Completed VIF Critic research path.** Existing code can predict `-1`, `0`,
+   one Drift. The workflow stores Core Values, cited Journal Entries, and Drift
+   state as structured output.
+2. **Coach Digest.** This workflow supplies the structured Weekly Drift
+   Detection output to a prompt. It then produces the user response. It does
+   not decide whether Drift exists.
+3. **Completed VIF Critic research path.** Existing code can predict `-1`, `0`,
    or `+1` plus uncertainty for Journal Entries and values, export raw outputs,
    and train checkpoints. A generalized review-and-retrain loop is not
    implemented or planned for the time-boxed capstone. This research is not
-   required for the Weekly Drift Reviewer, Drift Detector, Weekly Digest, or
-   Weekly Coach. A fresh final test and deployment approval are outside the
-   time-boxed capstone scope.
+   required for Weekly Drift Detection or the Coach Digest. A fresh final test
+   and deployment approval are outside the time-boxed capstone scope.
 
 ```mermaid
 flowchart TB
-  subgraph USER["User-facing decision path"]
+  subgraph USER["Weekly Drift Detection"]
     direction LR
     JE["Journal Entries"] --> WDR["Weekly Drift Reviewer<br/>gpt-5.6-luna · low<br/>without VIF Critic input"]
     CV["Core Values"] --> WDR
     WDR --> DD["Drift Detector<br/>two consecutive Conflicts<br/>for the same Core Value"]
-    DD --> WD["Weekly Digest"] --> WC["Weekly Coach"]
+    DD --> WD["Stored structured output"]
+  end
+
+  subgraph COACH["Coach Digest"]
+    direction LR
+    WD --> PROMPT["Prompt"]
+    PROMPT --> RESPONSE["User response"]
   end
 
   subgraph LEARN["Completed VIF Critic research"]
@@ -144,10 +152,11 @@ VIF Critic predictions.
 `src.coach.weekly_drift_runtime` implements the approved capstone POC path. It
 uses the frozen prompt and response schema, makes Luna-low Weekly Drift Reviewer
 calls without VIF Critic input, persists one versioned JSON receipt per week,
-fails closed to Abstain, applies the Drift Detector across week boundaries, and
-exports the Weekly Digest and Weekly Coach prompt. The Drift Detector records
-onset, confirmation, extension, recovery, uncertainty, and per-Core-Value
-state; mixed is derived only at the Weekly Digest level.
+fails closed to Abstain, and applies the Drift Detector across week boundaries.
+It stores structured Weekly Drift Detection output and renders the Coach Digest
+prompt. The Drift Detector records onset, confirmation, extension, recovery,
+uncertainty, and per-Core-Value state. Mixed is derived only in the stored
+structured output.
 
 `src.coach.runtime` and `src.vif.drift` are explicitly deprecated. They retain
 the former VIF Critic crash/rut/evolution behavior only for historical

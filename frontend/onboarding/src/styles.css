@@ -1927,6 +1927,49 @@ h2 {
   justify-content: flex-end;
 }
 
+.stage--name {
+  max-width: 720px;
+}
+
+.name-field {
+  display: grid;
+  gap: 10px;
+  max-width: 560px;
+  margin-top: 38px;
+}
+
+.name-field span {
+  color: var(--verdigris);
+  font-size: 0.67rem;
+  font-weight: 820;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.name-field input {
+  width: 100%;
+  border: 0;
+  border-bottom: 2px solid rgba(20, 34, 59, 0.2);
+  border-radius: 0;
+  padding: 10px 2px 14px;
+  color: var(--ink);
+  background: transparent;
+  font-family: "Source Serif 4 Variable", Georgia, serif;
+  font-size: clamp(1.8rem, 4vw, 3.25rem);
+  line-height: 1.1;
+  outline: 0;
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.name-field input::placeholder {
+  color: rgba(20, 34, 59, 0.25);
+}
+
+.name-field input:focus-visible {
+  border-color: var(--blue);
+  box-shadow: 0 5px 0 -3px rgba(85, 118, 217, 0.28);
+}
+
 .stage--cards {
   width: 100%;
   max-width: 940px;

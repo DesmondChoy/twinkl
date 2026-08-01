@@ -26,11 +26,11 @@ One persona may therefore have separate or simultaneous Drifts on several Core
 Values. The reference records them separately by value; it never averages Core
 Values into one profile-wide verdict.
 
-In the approved user-facing path, the Weekly Drift Reviewer is fixed at
+In Weekly Drift Detection, the internal Weekly Drift Reviewer is fixed at
 `gpt-5.6-luna` with reasoning effort `low` and decides Conflict from Journal
-Entry text without VIF Critic input. The deterministic Drift Detector then
-applies the two-consecutive-Conflict rule, and the user sees the result through
-the Weekly Digest and Weekly Coach. The prior
+Entry text without VIF Critic input. The internal Drift Detector then applies
+the two-consecutive-Conflict rule. The workflow stores structured output. The
+Coach Digest uses that output to produce the user response. The prior
 consensus-derived benchmark and former final-test population are development
 evidence only. The approved capstone POC path is wired, but the time-boxed
 capstone stops without a fresh final test or deployment approval. Its delivery
@@ -57,7 +57,7 @@ deterministic Drift Detector path.
 
 > **Historical research boundary:** The remaining sections preserve the
 > pre-canonical detector research catalog and its original terminology for
-> provenance. Terms such as “drift,” “episode,” “Critic,” and “Coach” below are
+> provenance. Terms such as “drift,” “episode,” “Critic,” and “Coach Digest” below are
 > legacy research labels, not current product nouns or behavior. They must not
 > override the Current v1 Contract above.
 
@@ -100,23 +100,22 @@ The **Critic** (also called the VIF — Value Identity Function) and the **drift
 ```
 Journal Entry
       ↓
-Configured frozen sentence encoder
+Weekly Drift Reviewer
       ↓
-State Encoder (assembles text window + time gaps + w_u)
+Drift Detector
       ↓
-Critic / VIF  ← produces â_t and σ_t per entry
+Weekly Drift Detection output
       ↓
-Drift Detector  ← reads the sequence of â_t scores over time
-      ↓
-Coach / Weekly Digest
+Coach Digest response
 ```
 
 | Stage | Question it answers | Temporal scope |
 |---|---|---|
-| **Critic / VIF** | "For this entry, is Maya aligned with her values?" | Single entry |
-| **Drift detector** | "Across entries over time, is there a pattern worth surfacing?" | All entries so far |
+| **Weekly Drift Detection** | "Across entries over time, is there Drift for a Core Value?" | All Journal Entries available at the end of the week |
+| **Coach Digest** | "How can Twinkl explain this result with evidence?" | Stored Weekly Drift Detection output |
 
-The Critic produces scores. The drift detector reads the history of those scores.
+The Weekly Drift Reviewer produces entry-level decisions. The Drift Detector
+reads those decisions.
 
 ### Why the Critic has a temporal window
 
@@ -171,7 +170,7 @@ Weekly Drift Reviewer Decisions feed the deterministic Drift Detector, while
 the weekly boundary controls delivery only.
 
 The broader interpretation question—unintended drift, an accepted trade-off, or
-genuine value change—belongs to the Coach conversation. Automatic profile
+genuine value change—belongs to the Coach Digest conversation. Automatic profile
 updates are not part of the committed POC.
 
 ### Two independent axes
@@ -182,7 +181,7 @@ Drift detection involves two questions that must not be conflated:
 measures it. Drift detection cares about a **pattern across entries**, not an
 isolated score.
 
-**Question B — What does it mean?** This requires user input. The Coach resolves it.
+**Question B — What does it mean?** This requires user input. The Coach Digest resolves it.
 
 | Interpretation | Description | Example |
 |---|---|---|
@@ -200,8 +199,8 @@ Values are central schemas resistant to change — people remember value-congrue
 | Orientation | Question the user asks | What Twinkl provides |
 |---|---|---|
 | **Past** | "Did I really used to care about that?" | Evidence-based recall. Alignment scores over time are more reliable than user memory, which is biased toward value-congruent events. |
-| **Present** | "How can I get what matters to me now?" | Tension surfacing. The Coach uses drift alerts to show the gap between declared values and current behavior. |
-| **Future** | "Where do I see my life heading?" | The Coach asks: "Is this something you want to address, or has your thinking shifted?" — the user's answer reveals whether aspirational trajectory still matches the profile. |
+| **Present** | "How can I get what matters to me now?" | Tension surfacing. The Coach Digest uses drift alerts to show the gap between declared values and current behavior. |
+| **Future** | "Where do I see my life heading?" | The Coach Digest asks: "Is this something you want to address, or has your thinking shifted?" — the user's answer reveals whether aspirational trajectory still matches the profile. |
 
 ### Absence as signal
 
@@ -232,7 +231,7 @@ Regardless of detection approach, every signal passes through the same four conc
 | **Confidence** | Whether the Critic's score is trustworthy at all | MC Dropout uncertainty (σ < ε_j) |
 | **Size** | Whether the signal is worth noticing | Magnitude of change × profile weight |
 | **Duration** | Whether it's a pattern or a blip | Detector state (varies by approach) |
-| **Awareness** | Whether it's drift, tradeoff, or evolution | The user, via the Coach conversation |
+| **Awareness** | Whether it's drift, tradeoff, or evolution | The user, via the Coach Digest conversation |
 
 Confidence comes first. An uncertain score must not enter the size or duration evaluation — it pollutes detector state with noise.
 
@@ -242,17 +241,19 @@ Uncertain entries are **invisible to drift detectors** regardless of which appro
 
 A Critic that is frequently uncertain effectively slows down drift detection — which is the correct behavior. If the model can't confidently score an entry, the system should wait rather than act on a guess.
 
-If a pattern of high uncertainty persists, the Coach asks a clarifying question rather than claiming misalignment.
+If a pattern of high uncertainty persists, the Coach Digest asks a clarifying
+question rather than claiming misalignment.
 
 ### The awareness gate (applies to all approaches)
 
-Once any approach fires an alert, the resolution pathway is the same. The Coach:
+Once any approach fires an alert, the resolution pathway is the same. The
+Coach Digest:
 
-1. Reads the user's journal history to surface thematic evidence
-2. Explains *why* misalignment occurred, citing specific entry snippets
-3. Asks whether the gap is drift, a tradeoff, or evolution — never prescribes
+1. Reads structured Weekly Drift Detection output with cited evidence.
+2. Explains why Conflict occurred.
+3. Asks whether the gap is Drift, a tradeoff, or evolution. It never prescribes.
 
-The profile `w_u` is **not** automatically updated by any detection approach. It changes only when the user explicitly endorses a value shift in the Coach conversation, edits it directly in settings, or confirms a re-assessment result.
+The profile `w_u` is **not** automatically updated by any detection approach. It changes only when the user explicitly endorses a value shift in the Coach Digest conversation, edits it directly in settings, or confirms a re-assessment result.
 
 ### Evolution gating in the prototype research path
 
@@ -262,7 +263,7 @@ checks:
 | Classification | Pattern | Volatility | Routing |
 |---|---|---|---|
 | **Stable** | Behavior matches declared values | Any | No action |
-| **Evolution** | Sustained, directional divergence | Low | Coach: "priorities shifting?" → suggest profile update |
+| **Evolution** | Sustained, directional divergence | Low | Coach Digest: "priorities shifting?" → suggest profile update |
 | **Drift** | Volatile, inconsistent divergence | High | Drift triggers evaluate normally |
 
 Dimensions classified as EVOLUTION are excluded from the prototype's crash/rut
@@ -272,7 +273,7 @@ checks. The code path is automatic, but product adoption remains outside v1.
 
 ```
 ┌─────────────┐     ┌──────────────┐     ┌───────────────┐     ┌──────────────┐
-│  Onboarding │     │  Journal     │     │  Drift        │     │  Coach       │
+│  Onboarding │     │  Journal     │     │  Drift        │     │  Coach Digest       │
 │  (BWS)      │────▶│  Entry       │────▶│  Detection    │────▶│  Conversation│
 │             │     │  + Critic    │     │  Layer        │     │              │
 └─────────────┘     └──────────────┘     └───────────────┘     └──────┬───────┘
@@ -294,7 +295,7 @@ checks. The code path is automatic, but product adoption remains outside v1.
 | **Onboarding BWS** | `w_u` (initial weight vector) | Once, at registration |
 | **Critic** | `â_t` (alignment vector), `σ_t` (uncertainty vector) | Every journal entry |
 | **Drift detectors** | Internal state (approach-specific) | Every confident entry, updated incrementally |
-| **Coach** | Profile update flag + optional `w_u` revision | Only when user endorses a value shift |
+| **Coach Digest** | Profile update flag + optional `w_u` revision | Only when user endorses a value shift |
 
 ---
 
@@ -332,7 +333,7 @@ The signal taxonomy is **specific to the rule-based approach.** BOCPD and other 
 
 **Core value patterns (`w_j ≥ w_min`):**
 
-| Signal | What happened | Numbers | Coach framing |
+| Signal | What happened | Numbers | Coach Digest framing |
 |---|---|---|---|
 | **Crash** | Sharp transition to misalignment in one step | `+1 → -1` or `0 → -1` | "Something shifted this week" |
 | **Fade** | Gradual decline to dormancy over multiple steps | `+1 → +1 → 0 → 0 → 0` | "This value has been quietly fading" |
@@ -342,7 +343,7 @@ The signal taxonomy is **specific to the rule-based approach.** BOCPD and other 
 
 **Peripheral value patterns (`w_j < w_min`):**
 
-| Signal | What happened | Numbers | Coach framing |
+| Signal | What happened | Numbers | Coach Digest framing |
 |---|---|---|---|
 | **Rise** | Sustained positive alignment on a non-core dimension | `0 → 0 → +1 → +1 → +1 → +1` | "Achievement has been a consistent theme — has something changed?" |
 
@@ -410,7 +411,7 @@ Journal entry → Critic runs 50 forward passes (MC Dropout)
 DEFER                            GATE 2–4 below
 - Do NOT update EMA/CUSUM/jars
 - Do NOT fire alerts
-- Coach asks clarifying question
+- Coach Digest asks clarifying question
   if high uncertainty persists
       │
       ├─── Core values (w_j ≥ w_min): watch for DECLINE
@@ -422,7 +423,7 @@ DEFER                            GATE 2–4 below
       │           │
       │       no / EVOLUTION ──┘      yes (DRIFT or crash)
       │       (ignore / route to          │
-      │        Coach profile msg)         ▼
+      │        Coach Digest profile msg)         ▼
       │                            GATE 3: Is it sustained?
       │                            (EMA / CUSUM / consecutive counter)
       │                                   │
@@ -430,7 +431,7 @@ DEFER                            GATE 2–4 below
       │                           (spike → noise)      │
       │                                                ▼
       │                                          GATE 4: Does the user know?
-      │                                          (Coach asks)
+      │                                          (Coach Digest asks)
       │                                                │
       │                                       ┌────────┴────────┐
       │                                       no                yes
@@ -459,7 +460,7 @@ DEFER                            GATE 2–4 below
               (ignore)        │
                               ▼
                         PROFILE DIVERGENCE
-                        Coach asks: "Achievement has been a consistent
+                        Coach Digest asks: "Achievement has been a consistent
                         theme — has something changed?"
 ```
 
@@ -486,11 +487,11 @@ Evolution detection runs before all signal types, including crashes. Every confi
 
 ```
 Confident score → Evolution detection (all signal types) →
-  If EVOLUTION: route to Coach ("priorities shifting?") — skip drift triggers
+  If EVOLUTION: route to Coach Digest ("priorities shifting?") — skip drift triggers
   If STABLE or DRIFT: → Size → Duration → Awareness
 ```
 
-*Consequence for crashes:* A `+1 → -1` crash on a dimension that has been trending negative for several weeks might already satisfy the evolution classifier (low volatility, high residual). Under this option, that crash is classified as EVOLUTION and never reaches the drift alert. The Coach asks whether priorities shifted, not whether the user is struggling.
+*Consequence for crashes:* A `+1 → -1` crash on a dimension that has been trending negative for several weeks might already satisfy the evolution classifier (low volatility, high residual). Under this option, that crash is classified as EVOLUTION and never reaches the drift alert. The Coach Digest asks whether priorities shifted, not whether the user is struggling.
 
 *Consequence for early entries:* The evolution classifier requires `min_entries ≥ 6` to compute a stable residual and volatility estimate. Before that window is full, the classifier defaults to STABLE — meaning crashes in the first ~3 weeks are silently suppressed rather than alerting. This is the "blind early-week" problem in the table above.
 
@@ -512,7 +513,7 @@ Confident score → Classify signal pattern (crash/fade/rise/spike) →
 
 *Consequence for fades:* Evolution check runs where it is most meaningful — on gradual, multi-step patterns where volatility statistics are stable and the classifier has signal to work with.
 
-*When to prefer this:* If crashes should always be surfaced to the user, letting the Coach conversation (Gate 4) resolve whether it is drift, tradeoff, or evolution. Prioritizes false-positive drift over silent suppression of sudden events.
+*When to prefer this:* If crashes should always be surfaced to the user, letting the Coach Digest conversation (Gate 4) resolve whether it is drift, tradeoff, or evolution. Prioritizes false-positive drift over silent suppression of sudden events.
 
 ---
 
@@ -522,15 +523,15 @@ Confident score → Classify signal pattern (crash/fade/rise/spike) →
 
 If the answer is "yes, a crash can be evolution" → Option 1. The evolution pre-filter intercepts it before the drift trigger fires.
 
-If the answer is "a crash should always alert, and the user resolves the meaning" → Option 2. The Coach conversation handles the ambiguity at Gate 4.
+If the answer is "a crash should always alert, and the user resolves the meaning" → Option 2. The Coach Digest conversation handles the ambiguity at Gate 4.
 
-**Current recommendation: Option 2 (Order B).** Crashes are fast-pathed — no unnecessary evolution check on single-step events. Works from week 1 without a ramp-up period. The Coach's Gate 4 conversation is the correct place to distinguish a genuine crash from a trend reversal the user was already aware of.
+**Current recommendation: Option 2 (Order B).** Crashes are fast-pathed — no unnecessary evolution check on single-step events. Works from week 1 without a ramp-up period. The Coach Digest's Gate 4 conversation is the correct place to distinguish a genuine crash from a trend reversal the user was already aware of.
 
 #### Uncertainty gating per signal type
 
 | Signal | Low uncertainty (σ < ε) | High uncertainty (σ ≥ ε) |
 |---|---|---|
-| **Crash** | Trust it. Update detector state. | Suppress. Coach asks a clarifying question. |
+| **Crash** | Trust it. Update detector state. | Suppress. Coach Digest asks a clarifying question. |
 | **Rut** (sustained 0s or -1s) | Trust it. Each step accumulates. | Do NOT accumulate. Wait for confident data. |
 | **Spike** (-1 then recovery) | Trust both dip and recovery. Confirmed noise. | Ignore the entire episode. |
 | **Fade** (+1 → 0 → 0) | Trust the trend. Real decline entering detectors. | Exclude uncertain entries — only count confident 0s. |
@@ -573,7 +574,7 @@ Score:      +1   +1   +1   +1   +1   +1   -1
 
 Baseline fires immediately (drop of 2.0 > δ=0.5). EMA jumps to 0.45×1.0=0.45. CUSUM jar fills by 0.45. All three agree: crash.
 
-If σ=0.55 instead: Gate 1 blocks the score. Coach asks: "This week's entry sent mixed signals about how you're relating to people close to you. Could you tell me more?"
+If σ=0.55 instead: Gate 1 blocks the score. Coach Digest asks: "This week's entry sent mixed signals about how you're relating to people close to you. Could you tell me more?"
 
 **Spike — Benevolence recovers (weeks 8-9):**
 
@@ -626,7 +627,7 @@ Score:       0    0    0   +1   +1   +1   +1   +1   +1   +1   +1   +1
                               sustained +1 on peripheral value → rise
 ```
 
-Crash/fade detectors ignore this (w=0.05 < w_min). Rise detector catches it at C_min steps. Coach surfaces it alongside the Self-Direction fade: "Self-Direction has been absent from your entries for 8 weeks, while Achievement has been a consistent theme. Has something changed?"
+Crash/fade detectors ignore this (w=0.05 < w_min). Rise detector catches it at C_min steps. Coach Digest surfaces it alongside the Self-Direction fade: "Self-Direction has been absent from your entries for 8 weeks, while Achievement has been a consistent theme. Has something changed?"
 
 #### Threshold grid for experiment
 
@@ -664,7 +665,7 @@ The signal taxonomy (crash, fade, no-recovery) is **not an input**. Crash, fade,
 
 **Con:**
 - With 10-15 data points per user per dimension, the posterior will be wide.
-- Less interpretable for the Coach: "P(changepoint) = 0.87" needs translation to user-facing language.
+- Less interpretable for the Coach Digest: "P(changepoint) = 0.87" needs translation to user-facing language.
 - Incorporating profile weights `w_u` requires a wrapper layer (BOCPD operates per-dimension independently).
 
 **Data requirement:** Moderate (~50 personas). Works with conjugate priors so can start with informative priors and update per-user.
@@ -721,7 +722,7 @@ The signal taxonomy **emerges from the learned transition patterns** rather than
 **Con:**
 - With 10 entries per user, per-user EM will overfit. Requires a hierarchical Bayesian HMM across all users.
 - K must be specified. K=3 mirrors the rule-based taxonomy but the right K is not obvious.
-- "The Viterbi path switched to state 2" needs translation for the Coach.
+- "The Viterbi path switched to state 2" needs translation for the Coach Digest.
 
 **Data requirement:** High (~30+ entries/user for per-user fitting, or pooled across ~100+ users for a hierarchical model).
 
@@ -747,7 +748,7 @@ The signal taxonomy is **not an input** — any deviation from learned normal be
 **Con:**
 - **Data is the fundamental bottleneck.** With 24 personas × ~10 entries = ~240 windows, an autoencoder will memorize rather than generalize.
 - The {-1, 0, +1} discrete score space has only 3^10 = 59,049 possible alignment vectors — simpler distance metrics (like cosine similarity) capture the same information.
-- Least interpretable of all options: "reconstruction error = 0.73" tells the Coach nothing about *what* changed.
+- Least interpretable of all options: "reconstruction error = 0.73" tells the Coach Digest nothing about *what* changed.
 
 **Data requirement:** Very high (~500+ diverse trajectory windows). Viable only when Twinkl scales to hundreds of real users with months of journaling history.
 

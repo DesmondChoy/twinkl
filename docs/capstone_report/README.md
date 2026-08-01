@@ -28,7 +28,7 @@ a submitted milestone file.
 ## Pre-submission checklist
 
 - Add final figures and tables.
-- Complete the Weekly Coach Tier 1 batch report.
+- Complete the Coach Digest Tier 1 and Tier 2 batch reports.
 - Complete the citation-to-claim audit.
 - Add exact reproduction commands, environment versions, configurations, seeds,
   input versions, and output paths.
@@ -38,11 +38,8 @@ a submitted milestone file.
 - Record the [public Railway assessment
   URL](https://onboarding-production-1dd2.up.railway.app/), browser-session reset
   behavior, possible provider cost, and assessment-only scope.
-- Reconcile report terms and Weekly Coach evidence with [PR
-  61](https://github.com/DesmondChoy/twinkl/pull/61) only after it merges into
-  `main`.
-- If `twinkl-rklc.12` closes before submission, decide whether the saved Weekly
-  Coach replay belongs in Section 5.4.
+- If `twinkl-rklc.12` closes before submission, decide whether the saved Coach
+  Digest replay belongs in Section 5.4.
 - Confirm the final paper format and page limit with the advisor.
 - Confirm whether the advisor requires a short team-contribution statement in
   the paper.

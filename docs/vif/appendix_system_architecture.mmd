@@ -45,7 +45,7 @@ flowchart LR
         merge --> encoder_train --> state_train --> samples --> critic_train --> checkpoint
     end
 
-    subgraph product_lane["Runtime + Weekly Coach"]
+    subgraph product_lane["Runtime + weekly workflows"]
         direction TB
         subgraph run_lane["Runtime Scoring"]
             direction LR
@@ -55,15 +55,15 @@ flowchart LR
             timeline["Per-Journal-Entry VIF timeline"]
             weekly["Weekly aggregation"]
             drift["Deprecated compatibility routing<br/>crash / rut / evolution<br/>high uncertainty"]
-            drift_v1["Approved POC runtime<br/>gpt-5.6-luna · low<br/>Weekly Drift Reviewer Decisions<br/>+ deterministic Drift Detector"]
+            drift_v1["Weekly Drift Detection<br/>gpt-5.6-luna · low<br/>internal reviewer + rule"]
             runtime_input --> state_runtime --> critic --> timeline --> weekly --> drift
         end
 
-        subgraph coach_lane["Weekly Coach Generation"]
+        subgraph coach_lane["Coach Digest"]
             direction LR
-            digest["Weekly Digest builder"]
-            prompt["Full-context Weekly Coach prompt"]
-            narrative["Optional Weekly Coach reflection"]
+            digest["Weekly Drift Detection output"]
+            prompt["Coach Digest prompt"]
+            narrative["Optional Coach Digest response"]
             exports["Reportable output files"]
             digest --> prompt
             prompt -.-> narrative

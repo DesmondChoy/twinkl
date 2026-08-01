@@ -15,6 +15,7 @@ import {
   VALUE_ORDER,
   VALUES,
   createProfile,
+  normalizePreferredName,
   scoreResponses,
   type BwsObjectKey,
   type OnboardingProfile,
@@ -105,6 +106,7 @@ export class AppErrorBoundary extends Component<
 }
 
 function milestoneFor(session: OnboardingSession): number {
+  if (session.stage === "name") return 0;
   if (session.stage === "set") {
     return Math.min(session.set_index + 1, BWS_SETS.length);
   }
@@ -138,12 +140,16 @@ function Compass({ milestone }: { milestone: number }) {
 }
 
 function Progress({ session }: { session: OnboardingSession }) {
-  const label = session.stage === "set"
-    ? `Values · ${session.set_index + 1} of ${BWS_SETS.length}`
-    : "Your compass";
-  const completedSets = session.stage === "set"
-    ? session.set_index + 1
-    : BWS_SETS.length;
+  const label =
+    session.stage === "set"
+      ? `Values · ${session.set_index + 1} of ${BWS_SETS.length}`
+      : "Your compass";
+  const completedSets =
+    session.stage === "name"
+      ? 0
+      : session.stage === "set"
+        ? session.set_index + 1
+        : BWS_SETS.length;
   return (
     <div
       className="progress"
@@ -552,6 +558,8 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
     const sameWeek = session.experience.selected_week === weekIndex;
     update({
       user_id: profile.user_id,
+      preferred_name:
+        profile.preferred_name ?? loaded.catalogItem.persona_name,
       session_id: profile.session_id,
       started_at: profile.started_at,
       stage: "complete",
@@ -739,6 +747,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
     const completedAt = new Date().toISOString();
     const profile = createProfile({
       userId: session.user_id,
+      preferredName: session.preferred_name,
       sessionId: session.session_id,
       startedAt: session.started_at,
       completedAt,
@@ -748,6 +757,16 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
     update({
       stage: "complete",
       confirmed_profile: profile,
+    });
+  };
+
+  const savePreferredName = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const preferredName = normalizePreferredName(session.preferred_name);
+    update({
+      preferred_name: preferredName,
+      stage: "set",
+      stage_started_at_ms: Date.now(),
     });
   };
 
@@ -945,6 +964,42 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
             </div>
           ) : null}
 
+          {!personaPickerOpen && !selectedPersonaId &&
+          session.stage === "name" ? (
+            <form className="stage stage--name" onSubmit={savePreferredName}>
+              <p className="eyebrow">Before we begin</p>
+              <h1 ref={headingRef} tabIndex={-1}>
+                What should Twinkl call you?
+              </h1>
+              <p className="stage-note">
+                We’ll use your name sparingly, when it makes a reflection feel
+                more personal.
+              </p>
+              <label className="name-field">
+                <span>Preferred name</span>
+                <input
+                  autoComplete="name"
+                  maxLength={80}
+                  name="preferred-name"
+                  placeholder="Your name"
+                  value={session.preferred_name}
+                  onChange={(event) =>
+                    update({ preferred_name: event.target.value })
+                  }
+                />
+              </label>
+              <div className="actions actions--end">
+                <button
+                  className="button button--primary"
+                  type="submit"
+                  disabled={!session.preferred_name.trim()}
+                >
+                  Continue
+                </button>
+              </div>
+            </form>
+          ) : null}
+
           {!personaPickerOpen && !selectedPersonaId && session.stage === "set" ? (
             <div className="stage stage--cards">
               <h1
@@ -1080,7 +1135,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
           !journalStarted ? (
             <div className="stage stage--complete" id="experience-ready">
               <h1 ref={headingRef} tabIndex={-1}>
-                Your compass is ready.
+                Your compass is ready, {session.preferred_name}.
               </h1>
               <p className="lede">Start with one moment from the past week. Twinkl will build from what you notice.</p>
               <CoreValueReminder profile={session.confirmed_profile} />

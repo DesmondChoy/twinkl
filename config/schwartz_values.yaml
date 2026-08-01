@@ -29,6 +29,7 @@
 
 values:
   Self-Direction:
+    user_phrase: Having the freedom to choose my own path
     higher_order_dimension: Openness to Change
 
     definition: >
@@ -111,6 +112,7 @@ values:
       or intellectual freedom, not external validation.
 
   Stimulation:
+    user_phrase: Seeking new experiences and challenges
     higher_order_dimension: Openness to Change
 
     definition: >
@@ -197,6 +199,7 @@ values:
       a genuine need, not a character flaw.
 
   Hedonism:
+    user_phrase: Enjoying life and having fun
     higher_order_dimension: Openness to Change / Self-Enhancement (bridges both)
 
     definition: >
@@ -284,6 +287,7 @@ values:
       and immediate, not abstract.
 
   Achievement:
+    user_phrase: Making progress toward something meaningful
     higher_order_dimension: Self-Enhancement
 
     definition: >
@@ -374,6 +378,7 @@ values:
       doubt about whether the achievements are worth the costs.
 
   Power:
+    user_phrase: Having influence over how things go
     higher_order_dimension: Self-Enhancement
 
     definition: >
@@ -465,6 +470,7 @@ values:
       strain) as well as the rewards.
 
   Security:
+    user_phrase: Feeling calm and secure in my life
     higher_order_dimension: Conservation
 
     definition: >
@@ -558,6 +564,7 @@ values:
       their background includes instability.
 
   Conformity:
+    user_phrase: Being someone others can count on to do the right thing
     higher_order_dimension: Conservation
 
     definition: >
@@ -649,6 +656,7 @@ values:
       a social skill and genuine care for others' comfort.
 
   Tradition:
+    user_phrase: Honoring the customs and practices I was raised with
     higher_order_dimension: Conservation
 
     definition: >
@@ -742,6 +750,7 @@ values:
       (not generic "tradition") and show the meaning they hold.
 
   Benevolence:
+    user_phrase: Being there for the people closest to me
     higher_order_dimension: Self-Transcendence
 
     definition: >
@@ -832,6 +841,7 @@ values:
       is about close others, not humanity in general.
 
   Universalism:
+    user_phrase: Making the world a fairer, better place
     higher_order_dimension: Self-Transcendence
 
     definition: >
@@ -922,4 +932,3 @@ values:
       living ethically and contributing to causes. Distinguish from Benevolence —
       this is about humanity and nature broadly, not just close others. Show the
       tension between idealism and pragmatism.
-

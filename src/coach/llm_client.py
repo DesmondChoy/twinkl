@@ -1,12 +1,13 @@
-"""Provider-backed ``llm_complete`` adapters for the weekly Coach narrative.
+"""Provider-backed ``llm_complete`` adapters for Coach Digest responses.
 
-The coach layer accepts an injected ``LLMCompleteFn`` so it stays testable and
-provider-agnostic. This module provides concrete OpenAI and Gemini
+The Coach Digest accepts an injected ``LLMCompleteFn`` so it stays testable and
+provider-agnostic. This module provides OpenAI and Gemini
 implementations for the demo path, selected via ``TWINKL_COACH_PROVIDER``
 (defaults to ``openai``).
 
 All adapters degrade gracefully: when the provider's API key is absent the
-builder returns ``None`` and callers fall back to a numeric-only digest.
+builder returns ``None`` and callers keep Weekly Drift Detection output without
+a Coach Digest response.
 """
 
 from __future__ import annotations
@@ -66,8 +67,9 @@ def _build_openai_llm_complete(
             return getattr(response, "output_text", None) or None
         except Exception:
             logger.warning(
-                "Weekly Coach OpenAI request failed for model %s; "
-                "returning the Weekly Digest without a Weekly Coach reflection",
+                "Coach Digest OpenAI request failed for model %s; "
+                "returning Weekly Drift Detection output without a "
+                "Coach Digest response",
                 resolved_model,
                 exc_info=True,
             )
@@ -122,8 +124,9 @@ def _build_gemini_llm_complete(
             return await asyncio.to_thread(_generate, prompt, response_format)
         except Exception:
             logger.warning(
-                "Weekly Coach Gemini request failed for model %s; "
-                "returning the Weekly Digest without a Weekly Coach reflection",
+                "Coach Digest Gemini request failed for model %s; "
+                "returning Weekly Drift Detection output without a "
+                "Coach Digest response",
                 resolved_model,
                 exc_info=True,
             )

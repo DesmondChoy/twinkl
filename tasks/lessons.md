@@ -148,7 +148,7 @@
   a feature being adopted. Before recommending an issue be closed as
   "implemented", check the product-facing docs for adoption/decision status —
   e.g. `src/vif/evolution.py` exists with tests, but
-  `docs/weekly/weekly_digest_generation.md` explicitly marks evolution gating
+  `docs/weekly/weekly_drift_detection.md` explicitly marks evolution gating
   as undecided and outside the committed Coach flow. Issues about product
   capabilities track the decision, not just the code.
 

@@ -72,8 +72,8 @@ const EVENT_PRESENTATION: Record<string, EventPresentation> = {
     component: "Weekly Drift Detection",
   },
   weekly_coach_generated: {
-    label: "Weekly Coach response generated",
-    component: "Weekly Coach",
+    label: "Coach Digest response generated",
+    component: "Coach Digest",
   },
 };
 
@@ -260,7 +260,7 @@ function eventSummary(
         : "Weekly Drift Detection output ready";
     }
     case "weekly_coach_generated":
-      return "Weekly Coach reflection and question ready";
+      return "Coach Digest response and question ready";
     default:
       return STATUS_LABELS[event.status] ?? titleCase(event.status);
   }
@@ -696,10 +696,11 @@ export default function InspectView({
               <li>
                 <span aria-hidden="true">3</span>
                 <div>
-                  <strong>Weekly Coach</strong>
+                  <strong>Coach Digest</strong>
                   <p>{eventSummary(coachEvent, currentJournalEntryIdSet)}</p>
                   <small>
-                    Turns the Weekly Digest into a reflection and question.
+                    Uses Weekly Drift Detection output to create a response and
+                    question.
                   </small>
                 </div>
               </li>

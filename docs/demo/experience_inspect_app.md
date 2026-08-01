@@ -7,8 +7,9 @@ Experience and Inspect shell, resumable client session, view selector, and
 focused Inspect navigation are implemented. Manual Journal Entry processing,
 displayed nudges with reply and skip actions, safe retry, and linked nudge
 events in Inspect are also implemented. Closed-week review populates Weekly
-Drift Reviewer Decisions, the Drift Detector result, a cited Weekly Digest,
-and linked Inspect events only after the Monday-through-Sunday week closes.
+Drift Reviewer Decisions, the Drift Detector result, cited Weekly Drift
+Detection output, an optional Coach Digest response, and linked Inspect events
+only after the Monday-through-Sunday week closes.
 The five deterministic persona replays now load into the shared React session
 with manual next-step replay, previous-week navigation, optional automatic
 replay and pause, restart, Jump to key moment, reduced-motion behavior,
@@ -46,14 +47,14 @@ The demo presents the product experience and the AI architecture from the same
 session. A persistent two-option control switches between:
 
 - **Experience** — the user-facing journey through onboarding, Journal Entries,
-  displayed nudges and responses, Drift, and the Weekly Digest.
+  displayed nudges and responses, Drift, and the Coach Digest response.
 - **Inspect** — the professor-facing explanation of the exact browser
   calculation and backend work that produced the currently selected result.
 
 The two views are not separate demonstrations. They read the same Profile,
-Journal Entries, Weekly Drift Reviewer Decisions, Drift state, Weekly Digest,
-and run trace. Switching views must preserve the current session, selected
-week, selected Journal Entry, and selected backend event.
+Journal Entries, Weekly Drift Reviewer Decisions, Drift state, Weekly Drift
+Detection output, and run trace. Switching views must preserve the current
+session, selected week, selected Journal Entry, and selected backend event.
 
 This design lets a professor assess both user value and Architecting AI Systems
 work without waiting for a real week of journaling.
@@ -93,7 +94,7 @@ information hierarchy, interaction order, or acceptance of the mobile flow.
 | Value summary before confirmation | Enabled | Enabled; shows the complete browser calculation and highest-scoring values |
 | Confirmed Profile handoff | Enabled | Enabled; shows the Profile handoff and validation |
 | Journal Entry draft or nudge check | Enabled | Enabled; follows the active Journal Entry event |
-| Weekly review or Weekly Coach work | Enabled | Enabled; follows the active run |
+| Weekly Drift Detection or Coach Digest work | Enabled | Enabled; follows the active run |
 | Persona replay | Enabled | Enabled; follows the selected saved run |
 
 The disabled state must explain why it is unavailable. It must not look like a
@@ -108,7 +109,7 @@ One client-side session store owns:
 - the selected persona scenario, week, Journal Entry, and trace event;
 - Weekly Drift Reviewer Decisions grouped by calendar week;
 - the current Drift Detector result;
-- the Weekly Digest and optional Weekly Coach reflection;
+- the Weekly Drift Detection output and optional Coach Digest response;
 - run status and retry state; and
 - references to backend trace events.
 
@@ -116,8 +117,8 @@ Changing views changes presentation only. It must not repeat a model call,
 reset onboarding, alter replay progress, or create a second copy of the
 session.
 
-Saved replay Drift states and Weekly Digests have context-specific Inspect
-actions. The live Journal Entry path retains one latest-run Inspect action.
+Saved replay Drift states and Coach Digest responses have context-specific
+Inspect actions. The live Journal Entry path retains one latest-run Inspect action.
 A weekly result action switches to Inspect and focuses the weekly explanation.
 It also selects and expands the event that produced the result. Other Inspect
 actions focus the selected event. Returning to Experience restores the same
@@ -173,8 +174,8 @@ rather than attributing transport or routing failures to a product component.
 
 Experience offers a curated **Try a demo persona** shortcut. Selecting a
 persona loads its Profile, Core Values, Journal Entries, displayed nudges and
-responses, saved Weekly Drift Reviewer Decisions, Drift states, and Weekly
-Digests.
+responses, saved Weekly Drift Reviewer Decisions, Drift states, and Coach
+Digest responses.
 
 Persona simulation is a week-by-week replay rather than an immediate dump of
 the final state. Controls provide:
@@ -232,9 +233,8 @@ run.
 Experience shows:
 
 - the user's own Journal Entries, displayed nudges, and responses;
-- an ambient per-Core-Value Drift state;
-- the Weekly Digest; and
-- the optional Weekly Coach reflection and question.
+- an ambient per-Core-Value Drift state; and
+- the optional Coach Digest response and question.
 
 Experience does not show the full Weekly Drift Reviewer prompt, provider
 payload, validation record, identifiers, or hashes. Those belong in Inspect.
@@ -335,7 +335,7 @@ Inspect represents these events when applicable:
    - the ordered Weekly Drift Reviewer Decisions considered, the deterministic
      rule steps, and resulting Drift state.
 9. `weekly_digest_built`
-   - structured Weekly Digest fields, cited Journal Entries, and source Drift
+   - structured Weekly Drift Detection output fields, cited Journal Entries, and source Drift
      state.
 10. `weekly_coach_generated`
     - exact prompt, model, response, narrative validation, and latency.
@@ -362,7 +362,7 @@ Each trace event contains:
 | `prompt` | Exact rendered prompt when applicable |
 | `raw_response` | Provider response before product transformation |
 | `validation` | Schema and content validation result |
-| `result_refs` | Resulting nudge, decisions, Drift, or Weekly Digest |
+| `result_refs` | Resulting nudge, decisions, Drift, or Weekly Drift Detection output |
 | `input_hash` | Idempotency and replay identity |
 | `error` | Safe error class and message without secrets |
 
@@ -383,8 +383,8 @@ The Python side owns:
 - calendar-week grouping, closed-week eligibility, and affected-week selection;
 - Weekly Drift Reviewer calls and response validation;
 - Drift Detector execution;
-- Weekly Digest construction;
-- optional Weekly Coach generation;
+- Weekly Drift Detection output storage;
+- optional Coach Digest response generation;
 - idempotent retry behavior; and
 - trace creation and retrieval.
 
@@ -431,7 +431,7 @@ framework:
   cannot silently replace or ignore divergent browser state.
 - `submit_journal_entry` carries `expected_revision`. Python rejects a stale
   revision, duplicate Journal Entry identifier, duplicate `t_index`, or
-  non-chronological Journal Entry before nudge or weekly review work begins.
+  non-chronological Journal Entry before nudge or Weekly Drift Detection begins.
 - Event order is represented by timestamps plus `parent_event_id`. Journal
   Entry order is represented by `t_index`; callers must not infer it from
   response array order alone.
@@ -439,9 +439,9 @@ framework:
   configuration never cross the boundary. Exact prompts and raw model
   responses may cross only after secret redaction. Errors expose a stable code,
   safe message, and retryable flag.
-- Weekly review events require `gpt-5.6-luna` with reasoning effort `low` and
-  contain Weekly Drift Reviewer Decisions. VIF Critic Predictions and their
-  uncertainty fields are rejected by this contract.
+- Weekly Drift Detection events require `gpt-5.6-luna` with reasoning effort
+  `low`. They contain Weekly Drift Reviewer Decisions. VIF Critic Predictions
+  and their uncertainty fields are rejected by this contract.
 - Saved replay and live results use the same payload shapes and differ through
   `source`. A saved result may use `reused`; caching remains optional.
 - Version 1 is strict: unknown fields or incompatible values are rejected. Any
@@ -463,16 +463,17 @@ Journal Entry submitted
 → wait for the calendar week to close
 ```
 
-No Weekly Drift Reviewer, Drift Detector, or Weekly Digest event is created for
-the open week. When a finalized calendar week is due, the separate sequence is:
+No Weekly Drift Reviewer, Drift Detector, Weekly Drift Detection output, or
+Coach Digest response event is created for the open week. When a finalized
+calendar week is due, the separate sequence is:
 
 ```text
 closed Monday-through-Sunday week selected
 → Weekly Drift Reviewer runs with cumulative displayed history
 → response validated into Weekly Drift Reviewer Decisions
 → Drift Detector applies the deterministic rule
-→ Weekly Digest is built
-→ optional Weekly Coach reflection is generated
+→ Weekly Drift Detection output is stored
+→ optional Coach Digest response is generated
 ```
 
 The nudge decision and question come from one structured
@@ -515,8 +516,9 @@ The capstone demo uses these five curated scenarios:
 
 Lukas is the recommended professor walkthrough because his nine-week replay
 shows displayed nudges and responses, two independent Core Value histories,
-recovery, Abstain, mixed Drift state, and the corresponding Weekly Digests.
-The other four personas make each individual state easy to demonstrate.
+recovery, Abstain, mixed Drift state, and the corresponding Coach Digest
+responses. The other four personas make each individual state easy to
+demonstrate.
 
 This menu covers seven Schwartz Core Values, four cultural backgrounds, four
 age bands, and several work and family contexts. Selection favored coherent
@@ -532,7 +534,7 @@ Each saved scenario bundle contains or references:
 - raw responses and validation results;
 - effective Weekly Drift Reviewer Decisions;
 - Drift Detector results;
-- Weekly Digests and optional Weekly Coach reflections;
+- Weekly Drift Detection outputs and optional Coach Digest responses;
 - model contract, timestamps, response IDs when available, and input hashes;
   and
 - a bundle manifest version, plus a content hash in the scenario catalog.
@@ -548,7 +550,7 @@ the persona completed onboarding. Its provenance is
 `synthetic_persona_projection`; the original React onboarding provenance
 remains distinct. Generation metadata is retained only for Inspect nudge
 provenance and is never supplied to the Weekly Drift Reviewer, Drift Detector,
-Weekly Digest, or Weekly Coach.
+Weekly Drift Detection, or Coach Digest.
 
 The historical persona files preserve each displayed nudge's category, trigger,
 text, and response, but not the original nudge provider prompt or raw response.
@@ -566,7 +568,7 @@ unavailable provider fields null; they do not invent a receipt.
 - Preserve the banned-term and value-leakage protections in generation and
   labeling work.
 - Do not expose synthetic generation metadata to the Weekly Drift Reviewer,
-  Drift Detector, Weekly Digest, or Weekly Coach.
+  Drift Detector, Weekly Drift Detection output, or Coach Digest.
 - Raw provider responses are visible only in Inspect and must be clearly
   separated from validated product results.
 
@@ -579,7 +581,7 @@ unavailable provider fields null; they do not invent a receipt.
   post-onboarding screen.
 - On narrow screens, each view occupies the full screen; do not force a
   side-by-side debugger.
-- Primary actions, Journal Entry composition, persona replay, Weekly Digest
+- Primary actions, Journal Entry composition, persona replay, Coach Digest
   reading, and event inspection remain usable without hover or precision
   pointer input.
 - Persona replay controls and revealed week markers remain operable with touch
@@ -619,8 +621,8 @@ A release is demo-ready when one uninterrupted walkthrough can:
    Reviewer Conflicts produce Drift;
 6. inspect the exact weekly request, validated decisions, and deterministic
    Drift Detector steps;
-7. return to Experience and read the corresponding Weekly Digest and, when the
-   saved result includes one, the optional Weekly Coach question;
+7. return to Experience and read the Coach Digest response and its optional
+   reflective question;
 8. demonstrate one recovered or uncertain scenario; and
 9. distinguish saved replay from an optional live run.
 
@@ -630,7 +632,7 @@ A release is demo-ready when one uninterrupted walkthrough can:
 2. Build deterministic scenario bundles with provenance checks.
 3. Extend the React app with the shared Experience/Inspect shell.
 4. Implement manual Journal Entry and nudge behavior through the Python API.
-5. Integrate weekly review, Drift, and Weekly Digest behavior.
+5. Integrate Weekly Drift Detection and Coach Digest behavior.
 6. Implement persona replay in Experience.
 7. Implement event-linked Inspect timelines and details.
 8. Add end-to-end, accessibility, responsive, failure, and replay tests.
@@ -651,7 +653,7 @@ professor demo; P1 items add optional live execution or presentation material.
 | `twinkl-rklc.2` | P0 | Deterministic persona scenario bundles | `.1` |
 | `twinkl-rklc.3` | P0 | Shared React Experience/Inspect shell | `.1` |
 | `twinkl-rklc.4` | P0 | Experience journaling and nudges | `.1`, `.3` |
-| `twinkl-rklc.5` | P0 | Weekly review, Drift, and Weekly Digest | `.1`, `.4` |
+| `twinkl-rklc.5` | P0 | Weekly Drift Detection and Coach Digest | `.1`, `.4` |
 | `twinkl-rklc.6` | P0 | Week-by-week persona replay | `.2`, `.3`, `.5` |
 | `twinkl-rklc.7` | P0 | Event-linked Inspect view | `.1`, `.3` |
 | `twinkl-rklc.8` | P1 | Optional live rerun and visible reuse | `.5`, `.7` |

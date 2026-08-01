@@ -297,6 +297,7 @@ class OnboardingProfile(ContractModel):
     instrument: Literal["svbws_lee_soutar_louviere_2008_ui_adaptation_v2"]
     scoring_method: Literal["best_minus_worst_divided_by_appearances_v1"]
     user_id: str = Field(min_length=1)
+    preferred_name: str | None = Field(default=None, min_length=1, max_length=80)
     session_id: str = Field(min_length=1)
     started_at: str
     timestamp: str
@@ -312,6 +313,16 @@ class OnboardingProfile(ContractModel):
     def validate_timestamp(cls, value: str) -> str:
         _parse_timestamp(value)
         return value
+
+    @field_validator("preferred_name")
+    @classmethod
+    def validate_preferred_name(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        normalized = " ".join(value.split())
+        if not normalized:
+            raise ValueError("preferred_name must not be blank")
+        return normalized
 
     @model_validator(mode="after")
     def validate_profile(self) -> OnboardingProfile:

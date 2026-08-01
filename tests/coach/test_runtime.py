@@ -301,7 +301,7 @@ async def test_openai_failure_logs_warning(monkeypatch, caplog):
         result = await llm_complete("prompt", None)
 
     assert result is None
-    assert "Weekly Coach OpenAI request failed for model test-model" in caplog.text
+    assert "Coach Digest OpenAI request failed for model test-model" in caplog.text
 
 
 @pytest.mark.asyncio
@@ -320,7 +320,7 @@ async def test_gemini_failure_logs_warning(monkeypatch, caplog):
         result = await llm_complete("prompt", None)
 
     assert result is None
-    assert "Weekly Coach Gemini request failed for model test-model" in caplog.text
+    assert "Coach Digest Gemini request failed for model test-model" in caplog.text
 
 
 def test_unwrap_json_schema_extracts_inner_schema():

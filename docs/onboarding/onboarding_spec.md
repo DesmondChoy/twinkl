@@ -150,7 +150,7 @@ Twinkl-specific presentation adaptation requiring empirical validation.
 
 ## 4. User Flow
 
-### 4.1 Direct entry and progress
+### 4.1 Preferred name and progress
 
 The user enters the first randomized group directly. Progress reads
 `Values · n of 11`, followed by `Your compass`. There is no welcome screen or
@@ -296,6 +296,7 @@ The abbreviated shape is:
   "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
   "scoring_method": "best_minus_worst_divided_by_appearances_v1",
   "user_id": "uuid",
+  "preferred_name": "Casey",
   "session_id": "uuid",
   "started_at": "2026-07-20T05:00:00.000Z",
   "timestamp": "2026-07-20T05:04:00.000Z",

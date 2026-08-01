@@ -7,8 +7,8 @@ only Gemini-specific interface wording should differ.
 
 Twinkl is an academic capstone and time-boxed proof of concept. It helps users
 compare daily behavior with their declared priorities through an evolving
-self-model, the VIF Critic, the Weekly Drift Reviewer, and explainable Weekly
-Coach reflections.
+self-model, the VIF Critic research component, Weekly Drift Detection, and
+Coach Digest responses.
 
 For product, architecture, or evaluation decisions:
 

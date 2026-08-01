@@ -4,6 +4,7 @@ import {
   type BwsResponse,
   type OnboardingProfile,
   isBwsObjectKey,
+  normalizePreferredName,
   scoreResponses,
   validateProfile,
 } from "./domain";
@@ -65,11 +66,12 @@ export interface ExperienceState {
   trace_events: TraceEventContract[];
 }
 
-export type OnboardingStage = "set" | "summary" | "complete";
+export type OnboardingStage = "name" | "set" | "summary" | "complete";
 
 export interface OnboardingSession {
   schema_version: 7;
   user_id: string;
+  preferred_name: string;
   session_id: string;
   started_at: string;
   stage: OnboardingStage;
@@ -127,9 +129,10 @@ export function createSession(
   return {
     schema_version: 7,
     user_id: makeId(),
+    preferred_name: "",
     session_id: makeId(),
     started_at: now.toISOString(),
-    stage: "set",
+    stage: "name",
     set_index: 0,
     set_order: shuffled(BWS_SETS.map((_, index) => index), random),
     stage_started_at_ms: now.getTime(),
@@ -283,6 +286,10 @@ export function parseSession(raw: string | null): OnboardingSession | null {
       session = {
         ...withoutGoal,
         schema_version: 7,
+        preferred_name:
+          typeof parsed.preferred_name === "string"
+            ? parsed.preferred_name
+            : "Friend",
         stage: parsed.stage === "goal" ? "summary" : parsed.stage,
         confirmed_profile: confirmedProfile,
         experience,
@@ -291,9 +298,10 @@ export function parseSession(raw: string | null): OnboardingSession | null {
     if (
       session.schema_version !== 7 ||
       typeof session.user_id !== "string" ||
+      typeof session.preferred_name !== "string" ||
       typeof session.session_id !== "string" ||
       typeof session.started_at !== "string" ||
-      !["set", "summary", "complete"].includes(session.stage ?? "") ||
+      !["name", "set", "summary", "complete"].includes(session.stage ?? "") ||
       !Number.isInteger(session.set_index) ||
       session.set_index! < 0 ||
       session.set_index! >= BWS_SETS.length ||
@@ -311,6 +319,12 @@ export function parseSession(raw: string | null): OnboardingSession | null {
     ) {
       return null;
     }
+    if (
+      session.stage !== "name" &&
+      normalizePreferredName(session.preferred_name) !== session.preferred_name
+    ) {
+      return null;
+    }
     const setIndex = session.set_index as number;
     const setOrder = session.set_order as number[];
     const currentItems = new Set(BWS_SETS[setOrder[setIndex]].items);
@@ -324,9 +338,16 @@ export function parseSession(raw: string | null): OnboardingSession | null {
     if (session.responses.length > 0) {
       scoreResponses(session.responses);
     }
+    if (session.stage === "name" && (session.responses.length !== 0 || setIndex !== 0)) {
+      return null;
+    }
+    if (session.stage === "set" && session.responses.length !== setIndex) {
+      return null;
+    }
     if (
-      (session.stage === "set" && session.responses.length !== setIndex) ||
-      (session.stage !== "set" && session.responses.length !== BWS_SETS.length)
+      session.stage !== "name" &&
+      session.stage !== "set" &&
+      session.responses.length !== BWS_SETS.length
     ) {
       return null;
     }
@@ -345,9 +366,18 @@ export function parseSession(raw: string | null): OnboardingSession | null {
       }
     }
     if (session.stage === "complete") {
-      validateProfile(session.confirmed_profile);
+      const profile = validateProfile(session.confirmed_profile);
+      if (
+        profile.preferred_name !== undefined &&
+        profile.preferred_name !== session.preferred_name
+      ) {
+        return null;
+      }
     }
-    if (session.experience.active_view === "inspect" && session.stage === "set") {
+    if (
+      session.experience.active_view === "inspect" &&
+      (session.stage === "name" || session.stage === "set")
+    ) {
       return null;
     }
     return session as OnboardingSession;
@@ -391,7 +421,9 @@ export function clearSession(): boolean {
 }
 
 export function showView(session: OnboardingSession, view: DemoView): OnboardingSession {
-  if (view === "inspect" && session.stage === "set") return session;
+  if (view === "inspect" && ["name", "set"].includes(session.stage)) {
+    return session;
+  }
   if (session.experience.active_view === view) return session;
   return {
     ...session,

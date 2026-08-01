@@ -254,6 +254,7 @@ export interface OnboardingProfile {
   instrument: "svbws_lee_soutar_louviere_2008_ui_adaptation_v2";
   scoring_method: "best_minus_worst_divided_by_appearances_v1";
   user_id: string;
+  preferred_name?: string;
   session_id: string;
   started_at: string;
   timestamp: string;
@@ -417,11 +418,23 @@ export function scoreResponses(
 
 export interface CreateProfileInput {
   userId: string;
+  preferredName: string;
   sessionId: string;
   startedAt: string;
   completedAt: string;
   responses: BwsResponse[];
   userConfirmed: boolean;
+}
+
+export function normalizePreferredName(value: string): string {
+  const normalized = value.trim().replace(/\s+/g, " ");
+  if (!normalized) {
+    throw new Error("A preferred name is required");
+  }
+  if (normalized.length > 80) {
+    throw new Error("A preferred name must be at most 80 characters");
+  }
+  return normalized;
 }
 
 export function createProfile(input: CreateProfileInput): OnboardingProfile {
@@ -435,6 +448,7 @@ export function createProfile(input: CreateProfileInput): OnboardingProfile {
     instrument: "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
     scoring_method: "best_minus_worst_divided_by_appearances_v1",
     user_id: input.userId,
+    preferred_name: normalizePreferredName(input.preferredName),
     session_id: input.sessionId,
     started_at: input.startedAt,
     timestamp: input.completedAt,
@@ -464,6 +478,10 @@ export function validateProfile(value: unknown): OnboardingProfile {
     profile.user_confirmed !== true ||
     !Array.isArray(profile.bws_responses) ||
     typeof profile.user_id !== "string" ||
+    !(
+      profile.preferred_name === undefined ||
+      typeof profile.preferred_name === "string"
+    ) ||
     typeof profile.session_id !== "string" ||
     typeof profile.started_at !== "string" ||
     typeof profile.timestamp !== "string"
@@ -472,12 +490,16 @@ export function validateProfile(value: unknown): OnboardingProfile {
   }
   const rebuilt = createProfile({
     userId: profile.user_id,
+    preferredName: profile.preferred_name ?? "Friend",
     sessionId: profile.session_id,
     startedAt: profile.started_at,
     completedAt: profile.timestamp,
     responses: profile.bws_responses,
     userConfirmed: true,
   });
+  if (profile.preferred_name === undefined) {
+    delete rebuilt.preferred_name;
+  }
   const provenance = profile.provenance;
   if (
     provenance?.source === "synthetic_persona_projection" &&

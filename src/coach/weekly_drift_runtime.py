@@ -1,4 +1,4 @@
-"""Approved Weekly Drift Reviewer to Weekly Coach runtime."""
+"""Weekly Drift Detection and Coach Digest runtime."""
 
 from __future__ import annotations
 
@@ -6,6 +6,7 @@ import argparse
 import asyncio
 import json
 from collections import defaultdict
+from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any
@@ -33,6 +34,24 @@ from src.weekly_drift_reviewer import (
 )
 from src.wrangling.parse_wrangled_data import parse_wrangled_file
 
+GOAL_CONTEXT = {
+    "work_life_balance": "I'm stretched too thin between work and everything else",
+    "life_transition": "I'm going through a career or life transition",
+    "relationships": "I want to be more present for people I care about",
+    "health_wellbeing": "I'm neglecting my health or wellbeing",
+    "direction": "I feel stuck or unclear about my direction",
+    "meaningful_work": "I want to make more room for what matters to me",
+}
+
+
+@dataclass(frozen=True)
+class OnboardingCoachContext:
+    """Confirmed context needed by Weekly Drift Detection and Coach Digest."""
+
+    core_values: list[str]
+    preferred_name: str | None
+    goal_context: str | None
+
 
 def _parse_date(raw: str) -> date:
     return datetime.strptime(raw, "%Y-%m-%d").date()
@@ -48,12 +67,12 @@ def _normalize_core_value(value: str) -> str:
     return value.strip().lower().replace("-", "_").replace(" ", "_")
 
 
-def load_onboarding_core_values(
+def load_onboarding_coach_context(
     profile_path: str | Path,
     *,
     persona_id: str,
-) -> list[str]:
-    """Load confirmed Core Values from the current onboarding Profile contract."""
+) -> OnboardingCoachContext:
+    """Load confirmed Core Values and Coach Digest context from onboarding."""
     path = Path(profile_path)
     try:
         payload = json.loads(path.read_text())
@@ -101,7 +120,42 @@ def load_onboarding_core_values(
         raise ValueError(
             "Onboarding Profile top_values must match value_profile.top_values"
         )
-    return top_values
+
+    preferred_name = payload.get("preferred_name")
+    if preferred_name is not None:
+        if not isinstance(preferred_name, str) or not preferred_name.strip():
+            raise ValueError("Onboarding Profile preferred_name must be non-empty")
+        preferred_name = " ".join(preferred_name.split())
+        if len(preferred_name) > 80:
+            raise ValueError(
+                "Onboarding Profile preferred_name must be at most 80 characters"
+            )
+
+    goal_category = payload.get("goal_category")
+    if goal_category is not None:
+        if not isinstance(goal_category, str) or goal_category not in GOAL_CONTEXT:
+            raise ValueError("Onboarding Profile goal_category is invalid")
+        goal_context = GOAL_CONTEXT[goal_category]
+    else:
+        goal_context = None
+
+    return OnboardingCoachContext(
+        core_values=top_values,
+        preferred_name=preferred_name,
+        goal_context=goal_context,
+    )
+
+
+def load_onboarding_core_values(
+    profile_path: str | Path,
+    *,
+    persona_id: str,
+) -> list[str]:
+    """Load confirmed Core Values while preserving the compatibility API."""
+    return load_onboarding_coach_context(
+        profile_path,
+        persona_id=persona_id,
+    ).core_values
 
 
 def _load_runtime_input(
@@ -134,7 +188,7 @@ async def run_weekly_drift_coach_cycle(
     reviewer: WeeklyDriftReviewerFn | None = None,
     coach_llm_complete=None,
 ) -> tuple[WeeklyDigest, dict[str, str]]:
-    """Run the approved weekly-only path through the Weekly Digest."""
+    """Run Weekly Drift Detection and optionally produce a Coach Digest response."""
     wrangled_path = Path(wrangled_dir)
     output_path = Path(output_dir)
     synthetic_profile, entries = _load_runtime_input(
@@ -142,11 +196,13 @@ async def run_weekly_drift_coach_cycle(
         wrangled_dir=wrangled_path,
         end_date=end_date,
     )
+    onboarding_context: OnboardingCoachContext | None = None
     if profile_path is not None:
-        core_values = load_onboarding_core_values(
+        onboarding_context = load_onboarding_coach_context(
             profile_path,
             persona_id=persona_id,
         )
+        core_values = onboarding_context.core_values
     else:
         core_values = list(
             dict.fromkeys(
@@ -212,6 +268,14 @@ async def run_weekly_drift_coach_cycle(
         decisions=decisions,
         drift_result=drift_result,
     )
+    if onboarding_context is not None:
+        digest = digest.model_copy(
+            update={
+                "persona_name": onboarding_context.preferred_name
+                or digest.persona_name,
+                "goal_context": onboarding_context.goal_context,
+            }
+        )
 
     if coach_llm_complete is not None:
         narrative, _prompt = await generate_weekly_digest_coach(
@@ -297,7 +361,7 @@ def main() -> None:
         )
     )
     print(
-        f"Built approved Weekly Digest for {digest.persona_id} "
+        f"Built approved Weekly Drift Detection output for {digest.persona_id} "
         f"({digest.week_start} -> {digest.week_end})"
     )
     for name, path in artifact_paths.items():

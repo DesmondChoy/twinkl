@@ -53,7 +53,7 @@ describe("Inspect view", () => {
       "Weekly review completed",
       "Drift checked",
       "Weekly Drift Detection output stored",
-      "Weekly Coach response generated",
+      "Coach Digest response generated",
     ].forEach((label) => expect(screen.getAllByText(label).length).toBeGreaterThan(0));
     ["Refused", "Invalid", "Failed"].forEach((status) =>
       expect(screen.getAllByText(status).length).toBeGreaterThan(0));
@@ -85,7 +85,7 @@ describe("Inspect view", () => {
     expect(screen.getAllByText("Weekly Drift Reviewer").length)
       .toBeGreaterThan(0);
     expect(screen.getAllByText("Drift Detector").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("Weekly Coach").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Coach Digest").length).toBeGreaterThan(0);
     expect(selectedSummary.getAttribute("aria-current")).toBe("true");
     expect(selectedSummary.closest("details")?.open).toBe(true);
     expect(screen.getByText(/Event 09 · Drift Detector/)).toBeTruthy();

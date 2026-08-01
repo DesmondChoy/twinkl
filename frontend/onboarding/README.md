@@ -6,11 +6,12 @@ not a psychometrically validated Twinkl instrument. It produces a confirmed,
 versioned Profile. A host can persist the Profile exposed by the handoff, and
 the approved runtime imports its Core Values from saved JSON.
 
-The assessment contains 11 randomized groups of six neutral cards from the
-published balanced design. Each group uses six abstract backgrounds assigned
-by randomized display position rather than value identity. People can tap,
-drag, or use the keyboard to make Most and Least choices. Schwartz labels
-remain internal. The Profile keeps raw
+The flow first asks what Twinkl should call the user, then presents 11
+randomized groups of six neutral cards from the published balanced design.
+Each group uses six abstract backgrounds assigned by randomized display
+position rather than value identity. People can tap, drag, or use the keyboard
+to make Most and Least choices. Schwartz labels remain internal. The Profile
+stores the preferred name and keeps raw
 11-object BWS results separate from the ten-value product transformation, with
 no midpoint result or confidence proxy. The 11th group advances directly to
 the label-free Core Value summary. The final action opens the manual
@@ -19,14 +20,14 @@ ordered Journal Entries through the versioned Python boundary, applies the
 anti-annoyance rule, and shows the resulting displayed nudge with reply or
 skip actions. Saving a Journal Entry does not review its open
 Monday-through-Sunday week. After Sunday, a due-review caller runs the fixed
-Weekly Drift Reviewer, applies the Drift Detector, and shows a cited Weekly
-Digest. The first partial week follows the same rule. Inspect reads the linked
+Weekly Drift Reviewer, applies the Drift Detector, and shows a cited Coach
+Digest. The first partial week follows the same rule. Inspect reads the
 live trace events. Profile confirmation starts this trace when the Python
 boundary is available; without it, Experience stays usable and Inspect shows
 zero events instead of fixture events. Retryable failures include a retry
 action. **Try demo** loads one of five saved synthetic personas into the same
 React session and replays Journal Entries, displayed nudges and responses,
-Drift, Weekly Digests, and Inspect events one week at a time. **Next step** is
+Drift, Coach Digest responses, and Inspect events one week at a time. **Next step** is
 the default. **Previous** returns to an earlier week. **Auto replay** and
 **Pause replay** provide optional automatic replay. **Restart** and **Jump to
 key moment** provide quick navigation. These controls preserve the selected

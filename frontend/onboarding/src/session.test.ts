@@ -24,7 +24,8 @@ describe("onboarding session", () => {
     const ids = ["user-1", "session-1"];
     const session = createSession(() => 0, new Date("2026-07-19T00:00:00.000Z"), () => ids.shift()!);
     expect(session.schema_version).toBe(7);
-    expect(session.stage).toBe("set");
+    expect(session.stage).toBe("name");
+    expect(session.preferred_name).toBe("");
     expect(session.experience).toMatchObject({
       active_view: "experience",
       journal_started: false,
@@ -65,9 +66,12 @@ describe("onboarding session", () => {
   it("migrates a version 4 onboarding session into the shared session", () => {
     const legacy = JSON.parse(JSON.stringify(createSession(() => 0.5)));
     legacy.schema_version = 4;
+    legacy.stage = "set";
+    delete legacy.preferred_name;
     delete legacy.experience;
     const migrated = parseSession(JSON.stringify(legacy));
     expect(migrated?.schema_version).toBe(7);
+    expect(migrated?.preferred_name).toBe("Friend");
     expect(migrated?.experience.active_view).toBe("experience");
     expect(migrated?.responses).toEqual(legacy.responses);
   });
@@ -75,6 +79,8 @@ describe("onboarding session", () => {
   it("migrates version 5 drafts without carrying fixture trace state forward", () => {
     const legacy = JSON.parse(JSON.stringify(createSession(() => 0.5)));
     legacy.schema_version = 5;
+    legacy.stage = "set";
+    delete legacy.preferred_name;
     legacy.experience.journal_draft = "A draft worth keeping.";
     legacy.experience.trace_event_ids = ["fixture-event"];
     legacy.experience.selected_event_id = "fixture-event";
@@ -90,9 +96,11 @@ describe("onboarding session", () => {
 
   it("migrates version 6 goal and confirmed Profile state", () => {
     const legacy = JSON.parse(JSON.stringify(createSession(() => 0.5)));
+    legacy.preferred_name = "Casey";
     const responses = completeResponses();
     const profile = createProfile({
       userId: legacy.user_id,
+      preferredName: legacy.preferred_name,
       sessionId: legacy.session_id,
       startedAt: legacy.started_at,
       completedAt: "2026-07-19T00:02:00.000Z",
@@ -118,10 +126,37 @@ describe("onboarding session", () => {
     expect(migrated?.confirmed_profile).not.toHaveProperty("goal_category");
   });
 
+  it("preserves a legacy Profile without a stored preferred name", () => {
+    const legacy = JSON.parse(JSON.stringify(createSession(() => 0.5)));
+    legacy.preferred_name = "Casey";
+    const responses = completeResponses();
+    legacy.schema_version = 6;
+    legacy.stage = "complete";
+    legacy.set_index = 10;
+    legacy.responses = responses;
+    legacy.confirmed_profile = createProfile({
+      userId: legacy.user_id,
+      preferredName: legacy.preferred_name,
+      sessionId: legacy.session_id,
+      startedAt: legacy.started_at,
+      completedAt: "2026-07-19T00:02:00.000Z",
+      responses,
+      userConfirmed: true,
+    });
+    delete legacy.preferred_name;
+    delete legacy.confirmed_profile.preferred_name;
+
+    const migrated = parseSession(JSON.stringify(legacy));
+
+    expect(migrated?.preferred_name).toBe("Friend");
+    expect(migrated?.confirmed_profile?.preferred_name).toBeUndefined();
+  });
+
   it("routes a version 6 goal stage to the Core Value summary", () => {
     const legacy = JSON.parse(JSON.stringify(createSession(() => 0.5)));
     legacy.schema_version = 6;
     legacy.stage = "goal";
+    delete legacy.preferred_name;
     legacy.set_index = 10;
     legacy.responses = completeResponses();
     legacy.goal_category = null;
@@ -138,6 +173,7 @@ describe("onboarding session", () => {
     expect(inspectRun(session, "event-09")).toBe(session);
 
     session.stage = "summary";
+    session.preferred_name = "Casey";
     session.set_index = 10;
     session.responses = completeResponses();
     const scoreInspection = showView(session, "inspect");
@@ -155,6 +191,8 @@ describe("onboarding session", () => {
 
   it("rejects a response that does not match the randomized progress order", () => {
     const session = createSession(() => 0.5);
+    session.stage = "set";
+    session.preferred_name = "Casey";
     session.set_index = 1;
     const wrongSet = BWS_SETS[session.set_order[1]];
     session.responses = [{
