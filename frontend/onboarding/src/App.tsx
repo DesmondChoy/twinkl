@@ -20,7 +20,11 @@ import {
   type BwsObjectKey,
   type OnboardingProfile,
 } from "./domain";
+import AssessmentSectionMap from "./AssessmentSectionMap";
 import CoreValueReminder from "./CoreValueReminder";
+import ExperienceSectionMap, {
+  type ExperienceSectionMapView,
+} from "./ExperienceSectionMap";
 import {
   createExperienceSession,
   ExperienceApiError,
@@ -136,12 +140,16 @@ function Compass({ milestone }: { milestone: number }) {
 }
 
 function Progress({ session }: { session: OnboardingSession }) {
-  const label = session.stage === "set"
-    ? `Values · ${session.set_index + 1} of ${BWS_SETS.length}`
-    : "Your compass";
-  const completedSets = session.stage === "set"
-    ? session.set_index + 1
-    : BWS_SETS.length;
+  const label =
+    session.stage === "set"
+      ? `Values · ${session.set_index + 1} of ${BWS_SETS.length}`
+      : "Your compass";
+  const completedSets =
+    session.stage === "name"
+      ? 0
+      : session.stage === "set"
+        ? session.set_index + 1
+        : BWS_SETS.length;
   return (
     <div
       className="progress"
@@ -373,6 +381,22 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
   );
   const isReviewing = session.stage === "set" && Boolean(session.draft_best && session.draft_worst);
   const nextChoice: "most" | "least" = session.draft_best ? "least" : "most";
+  const personaReplayReady = Boolean(
+    selectedPersonaId
+    && loadedScenario?.catalogItem.persona_id === selectedPersonaId,
+  );
+  const experienceSectionView: ExperienceSectionMapView | null =
+    personaPickerOpen
+      ? "persona-picker"
+      : personaReplayReady
+        ? "persona-replay"
+        : !selectedPersonaId && session.stage === "summary"
+          ? "summary"
+          : !selectedPersonaId && session.stage === "complete" && !journalStarted
+            ? "complete"
+            : !selectedPersonaId && journalStarted
+              ? "journal"
+              : null;
 
   const update = (patch: Partial<OnboardingSession>) => {
     updateSession(patch);
@@ -534,6 +558,8 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
     const sameWeek = session.experience.selected_week === weekIndex;
     update({
       user_id: profile.user_id,
+      preferred_name:
+        profile.preferred_name ?? loaded.catalogItem.persona_name,
       session_id: profile.session_id,
       started_at: profile.started_at,
       stage: "complete",
@@ -852,15 +878,36 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
         </p>
       ) : null}
 
-      {activeView === "experience" ? <main id="main" className="layout">
-        <aside className="instrument-panel">
-          <Compass milestone={milestone} />
-          <div className="instrument-copy">
-            <p className="eyebrow">Your inner compass</p>
-          </div>
-        </aside>
+      {activeView === "experience" ? (
+        <main
+          id="main"
+          className={`layout${
+            experienceSectionView ? " layout--section-rail" : ""
+          }`}
+        >
+          <aside className="instrument-panel">
+            {experienceSectionView ? (
+              <ExperienceSectionMap
+                hasJournalEntries={
+                  session.experience.journal_entries.length > 0
+                }
+                hasWeeklyResult={
+                  session.experience.drift_result !== null
+                  && session.experience.weekly_digest !== null
+                }
+                view={experienceSectionView}
+              />
+            ) : (
+              <>
+                <Compass milestone={milestone} />
+                <div className="instrument-copy">
+                  <p className="eyebrow">Your inner compass</p>
+                </div>
+              </>
+            )}
+          </aside>
 
-        <section className="flow-panel">
+          <section className="flow-panel">
           {!personaPickerOpen && !selectedPersonaId && !journalStarted ? (
             <Progress session={session} />
           ) : null}
@@ -915,6 +962,42 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
                 </>
               ) : null}
             </div>
+          ) : null}
+
+          {!personaPickerOpen && !selectedPersonaId &&
+          session.stage === "name" ? (
+            <form className="stage stage--name" onSubmit={savePreferredName}>
+              <p className="eyebrow">Before we begin</p>
+              <h1 ref={headingRef} tabIndex={-1}>
+                What should Twinkl call you?
+              </h1>
+              <p className="stage-note">
+                We’ll use your name sparingly, when it makes a reflection feel
+                more personal.
+              </p>
+              <label className="name-field">
+                <span>Preferred name</span>
+                <input
+                  autoComplete="name"
+                  maxLength={80}
+                  name="preferred-name"
+                  placeholder="Your name"
+                  value={session.preferred_name}
+                  onChange={(event) =>
+                    update({ preferred_name: event.target.value })
+                  }
+                />
+              </label>
+              <div className="actions actions--end">
+                <button
+                  className="button button--primary"
+                  type="submit"
+                  disabled={!session.preferred_name.trim()}
+                >
+                  Continue
+                </button>
+              </div>
+            </form>
           ) : null}
 
           {!personaPickerOpen && !selectedPersonaId && session.stage === "set" ? (
@@ -1020,7 +1103,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
 
           {!personaPickerOpen && !selectedPersonaId &&
           session.stage === "summary" && scores ? (
-            <div className="stage stage--summary">
+            <div className="stage stage--summary" id="experience-profile">
               <h1 ref={headingRef} tabIndex={-1}>
                 What sits at the center.
               </h1>
@@ -1036,7 +1119,10 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
                 This result reflects the Most and Least choices you made most
                 consistently across all 11 groups.
               </p>
-              <div className="actions actions--end">
+              <div
+                className="actions actions--end"
+                id="experience-confirm"
+              >
                 <button className="button button--primary" type="button" onClick={confirm}>
                   Confirm my compass
                 </button>
@@ -1047,13 +1133,16 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
           {!personaPickerOpen && !selectedPersonaId &&
           session.stage === "complete" && session.confirmed_profile &&
           !journalStarted ? (
-            <div className="stage stage--complete">
+            <div className="stage stage--complete" id="experience-ready">
               <h1 ref={headingRef} tabIndex={-1}>
                 Your compass is ready, {session.preferred_name}.
               </h1>
               <p className="lede">Start with one moment from the past week. Twinkl will build from what you notice.</p>
               <CoreValueReminder profile={session.confirmed_profile} />
-              <div className="journal-handoff">
+              <div
+                className="journal-handoff"
+                id="experience-journal-handoff"
+              >
                 <small>First Journal Entry</small>
                 <p>When did you feel most like yourself?</p>
               </div>
@@ -1082,32 +1171,37 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
               />
             </div>
           ) : null}
-        </section>
-      </main> : (
-        <main id="main" className="layout layout--inspect">
+          </section>
+        </main>
+      ) : (
+        <main
+          id="main"
+          className={`layout layout--inspect layout--section-rail${
+            !selectedPersonaId && scores ? " layout--assessment-inspect" : ""
+          }`}
+        >
           <aside className="instrument-panel instrument-panel--inspect">
-            <div className="inspect-lens" aria-hidden="true">
-              <span />
-              <span />
-              <span />
-            </div>
-            <div className="instrument-copy">
-              <p className="eyebrow">
-                {selectedPersonaId ? "Same saved replay" : "Assessment evidence"}
-              </p>
-              <h2>
-                {selectedPersonaId
-                  ? "How Twinkl reached this moment."
-                  : "Every result has a trail."}
-              </h2>
-              <p>
-                {selectedPersonaId
-                  ? "Inspect follows the exact week and Persona selected in Experience."
-                  : session.experience.trace_events.length > 0
-                  ? "The selections, scoring steps, Profile mapping, and Python validation are shown in the order they occurred."
-                  : "The selections, scoring steps, and Profile mapping are shown exactly as they occurred. Python validation appears after confirmation."}
-              </p>
-            </div>
+            {!selectedPersonaId && scores ? (
+              <AssessmentSectionMap />
+            ) : selectedPersonaId ? (
+              <ExperienceSectionMap view="inspect" />
+            ) : (
+              <>
+                <div className="inspect-lens" aria-hidden="true">
+                  <span />
+                  <span />
+                  <span />
+                </div>
+                <div className="instrument-copy">
+                  <p className="eyebrow">Same saved replay</p>
+                  <h2>How Twinkl reached this moment.</h2>
+                  <p>
+                    Inspect follows the exact week and Persona selected in
+                    Experience.
+                  </p>
+                </div>
+              </>
+            )}
           </aside>
           <section className="flow-panel flow-panel--inspect">
             <InspectView

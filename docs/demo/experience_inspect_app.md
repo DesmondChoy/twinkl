@@ -7,8 +7,9 @@ Experience and Inspect shell, resumable client session, view selector, and
 focused Inspect navigation are implemented. Manual Journal Entry processing,
 displayed nudges with reply and skip actions, safe retry, and linked nudge
 events in Inspect are also implemented. Closed-week review populates Weekly
-Drift Reviewer Decisions, the Drift Detector result, a cited Weekly Digest,
-and linked Inspect events only after the Monday-through-Sunday week closes.
+Drift Reviewer Decisions, the Drift Detector result, cited Weekly Drift
+Detection output, an optional Coach Digest response, and linked Inspect events
+only after the Monday-through-Sunday week closes.
 The five deterministic persona replays now load into the shared React session
 with manual next-step replay, previous-week navigation, optional automatic
 replay and pause, restart, Jump to key moment, reduced-motion behavior,
@@ -46,7 +47,7 @@ The demo presents the product experience and the AI architecture from the same
 session. A persistent two-option control switches between:
 
 - **Experience** — the user-facing journey through onboarding, Journal Entries,
-  displayed nudges and responses, Drift, and the Weekly Digest.
+  displayed nudges and responses, Drift, and the Coach Digest response.
 - **Inspect** — the professor-facing explanation of the exact browser
   calculation and backend work that produced the currently selected result.
 
@@ -116,8 +117,8 @@ Changing views changes presentation only. It must not repeat a model call,
 reset onboarding, alter replay progress, or create a second copy of the
 session.
 
-Saved replay Drift states and Weekly Digests have context-specific Inspect
-actions. The live Journal Entry path retains one latest-run Inspect action.
+Saved replay Drift states and Coach Digest responses have context-specific
+Inspect actions. The live Journal Entry path retains one latest-run Inspect action.
 A weekly result action switches to Inspect and focuses the weekly explanation.
 It also selects and expands the event that produced the result. Other Inspect
 actions focus the selected event. Returning to Experience restores the same
@@ -173,8 +174,8 @@ rather than attributing transport or routing failures to a product component.
 
 Experience offers a curated **Try a demo persona** shortcut. Selecting a
 persona loads its Profile, Core Values, Journal Entries, displayed nudges and
-responses, saved Weekly Drift Reviewer Decisions, Drift states, and Weekly
-Digests.
+responses, saved Weekly Drift Reviewer Decisions, Drift states, and Coach
+Digest responses.
 
 Persona simulation is a week-by-week replay rather than an immediate dump of
 the final state. Controls provide:
@@ -272,9 +273,14 @@ documentation. It shows:
   11 recorded Least selections in presentation order;
 - a separate totals table that lists each of the 11 SVBWS objects once and
   shows Most and Least totals of 11 recorded choices;
+- a note after the totals table that explains why the published SVBWS keeps
+  Universalism–Nature and Universalism–Social separate, and that the Profile
+  merges them into one Universalism score;
 - the exact Most-minus-Least calculation beside each score in the ten-value
   Profile table;
 - the two-facet Universalism mean and the ten-value Profile transformation;
+- the ten-value Profile rows in descending weight order, with canonical order
+  retained for equal weights;
 - the exact Schwartz value-to-Experience phrase mapping;
 - every highest-score tie before confirmation and the resulting Core Values
   after confirmation;
@@ -282,6 +288,19 @@ documentation. It shows:
   and
 - the explicit boundary that the deterministic calculation makes no model,
   reliability, confidence, diagnostic, or clinical claim.
+
+On desktop, assessment Inspect uses a 240-pixel left rail. A sticky section map
+links to Choices, Counts, the Universalism merge, the Profile, and Checks. The
+map highlights the section at the reading position. Narrow screens keep the
+single-column Inspect layout and do not show the rail.
+
+The same 240-pixel section rail supports Profile confirmation, the first
+Journal Entry handoff, manual Journal Entry work, saved Persona selection,
+saved Persona replay, and saved-run Inspect. Each map links only to sections in
+the current view. Content with a maximum width stays centered between the
+section rail and the outer page edge. The active values questions retain the
+compass because it shows assessment progress. Narrow screens do not show a
+section rail.
 
 This calculation is labelled **Calculation method** and **Deterministic · no
 model**.
@@ -444,8 +463,9 @@ Journal Entry submitted
 → wait for the calendar week to close
 ```
 
-No Weekly Drift Reviewer, Drift Detector, or Weekly Digest event is created for
-the open week. When a finalized calendar week is due, the separate sequence is:
+No Weekly Drift Reviewer, Drift Detector, Weekly Drift Detection output, or
+Coach Digest response event is created for the open week. When a finalized
+calendar week is due, the separate sequence is:
 
 ```text
 closed Monday-through-Sunday week selected
@@ -496,8 +516,9 @@ The capstone demo uses these five curated scenarios:
 
 Lukas is the recommended professor walkthrough because his nine-week replay
 shows displayed nudges and responses, two independent Core Value histories,
-recovery, Abstain, mixed Drift state, and the corresponding Weekly Digests.
-The other four personas make each individual state easy to demonstrate.
+recovery, Abstain, mixed Drift state, and the corresponding Coach Digest
+responses. The other four personas make each individual state easy to
+demonstrate.
 
 This menu covers seven Schwartz Core Values, four cultural backgrounds, four
 age bands, and several work and family contexts. Selection favored coherent
@@ -529,7 +550,7 @@ the persona completed onboarding. Its provenance is
 `synthetic_persona_projection`; the original React onboarding provenance
 remains distinct. Generation metadata is retained only for Inspect nudge
 provenance and is never supplied to the Weekly Drift Reviewer, Drift Detector,
-Weekly Digest, or Weekly Coach.
+Weekly Drift Detection, or Coach Digest.
 
 The historical persona files preserve each displayed nudge's category, trigger,
 text, and response, but not the original nudge provider prompt or raw response.
@@ -600,8 +621,8 @@ A release is demo-ready when one uninterrupted walkthrough can:
    Reviewer Conflicts produce Drift;
 6. inspect the exact weekly request, validated decisions, and deterministic
    Drift Detector steps;
-7. return to Experience and read the corresponding Weekly Digest and, when the
-   saved result includes one, the optional Weekly Coach question;
+7. return to Experience and read the Coach Digest response and its optional
+   reflective question;
 8. demonstrate one recovered or uncertain scenario; and
 9. distinguish saved replay from an optional live run.
 

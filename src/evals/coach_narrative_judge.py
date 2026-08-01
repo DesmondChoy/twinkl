@@ -23,6 +23,7 @@ import asyncio
 import json
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import cast
 
 from pydantic import BaseModel, Field, ValidationError
 
@@ -93,14 +94,19 @@ def _evidence_lines(digest: WeeklyDigest) -> str:
 def render_judge_prompt(digest: WeeklyDigest, narrative: CoachNarrative) -> str:
     """Render the LLM-as-judge prompt for one digest + narrative pair."""
     template = load_prompt("coach_narrative_judge")
-    return template.render(
-        core_values=", ".join(digest.core_values) or "(none)",
-        drift_states=json.dumps(digest.drift_states) if digest.drift_states else "{}",
-        top_tensions=", ".join(digest.top_tensions) or "None clear this week",
-        evidence=_evidence_lines(digest),
-        weekly_mirror=narrative.weekly_mirror,
-        tension_explanation=narrative.tension_explanation,
-        reflective_question=narrative.reflective_question,
+    return cast(
+        str,
+        template.render(
+            core_values=", ".join(digest.core_values) or "(none)",
+            drift_states=(
+                json.dumps(digest.drift_states) if digest.drift_states else "{}"
+            ),
+            top_tensions=", ".join(digest.top_tensions) or "None clear this week",
+            evidence=_evidence_lines(digest),
+            weekly_mirror=narrative.weekly_mirror,
+            tension_explanation=narrative.tension_explanation,
+            reflective_question=narrative.reflective_question,
+        ),
     )
 
 
@@ -121,7 +127,7 @@ async def judge_narrative(
     if not isinstance(payload, dict):
         return None
     try:
-        return JudgeVerdict.model_validate(payload)
+        return cast(JudgeVerdict, JudgeVerdict.model_validate(payload))
     except ValidationError:
         return None
 

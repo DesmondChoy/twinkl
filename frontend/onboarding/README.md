@@ -20,14 +20,14 @@ ordered Journal Entries through the versioned Python boundary, applies the
 anti-annoyance rule, and shows the resulting displayed nudge with reply or
 skip actions. Saving a Journal Entry does not review its open
 Monday-through-Sunday week. After Sunday, a due-review caller runs the fixed
-Weekly Drift Reviewer, applies the Drift Detector, and shows a cited Weekly
-Digest. The first partial week follows the same rule. Inspect reads the linked
+Weekly Drift Reviewer, applies the Drift Detector, and shows a cited Coach
+Digest. The first partial week follows the same rule. Inspect reads the
 live trace events. Profile confirmation starts this trace when the Python
 boundary is available; without it, Experience stays usable and Inspect shows
 zero events instead of fixture events. Retryable failures include a retry
 action. **Try demo** loads one of five saved synthetic personas into the same
 React session and replays Journal Entries, displayed nudges and responses,
-Drift, Weekly Digests, and Inspect events one week at a time. **Next step** is
+Drift, Coach Digest responses, and Inspect events one week at a time. **Next step** is
 the default. **Previous** returns to an earlier week. **Auto replay** and
 **Pause replay** provide optional automatic replay. **Restart** and **Jump to
 key moment** provide quick navigation. These controls preserve the selected

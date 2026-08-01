@@ -39,6 +39,13 @@ function answerSet() {
   act(() => vi.advanceTimersByTime(1_000));
 }
 
+function enterPreferredName(name = "Casey") {
+  fireEvent.change(screen.getByRole("textbox", { name: "Preferred name" }), {
+    target: { value: name },
+  });
+  fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+}
+
 beforeEach(() => {
   localStorage.clear();
   profileEvents.clear();
@@ -128,6 +135,7 @@ describe("onboarding app", () => {
       });
 
     render(<App />);
+    enterPreferredName();
 
     expect(await screen.findByRole("alert")).toHaveProperty(
       "textContent",
@@ -137,8 +145,12 @@ describe("onboarding app", () => {
     storageWrite.mockRestore();
   });
 
-  it("opens directly on the first six-card set without Schwartz labels", () => {
+  it("asks for a preferred name before the first set", () => {
     render(<App />);
+    expect(
+      screen.getByRole("heading", { name: "What should Twinkl call you?" }),
+    ).toBeTruthy();
+    enterPreferredName();
     const progress = screen.getByRole("progressbar", {
       name: "Values · 1 of 11",
     });
@@ -359,8 +371,15 @@ describe("onboarding app", () => {
     }
     expect(screen.getByLabelText("Your compass")).toBeTruthy();
     expect(screen.getByRole("heading", { name: "What sits at the center." })).toBeTruthy();
+    expect(
+      within(screen.getByRole("navigation", { name: "Experience sections" }))
+        .getByRole("link", { name: "Confirm" }),
+    ).toBeTruthy();
     expect(screen.queryByText("What brought you here right now?")).toBeNull();
-    expect(screen.queryByText(/^0[1-9]$/)).toBeNull();
+    expect(
+      within(document.querySelector(".stage--summary") as HTMLElement)
+        .queryByText(/^0[1-9]$/),
+    ).toBeNull();
     expect(
       screen.getByText(
         "This result reflects the Most and Least choices you made most consistently across all 11 groups.",
@@ -376,6 +395,15 @@ describe("onboarding app", () => {
     ).toBeTruthy();
     expect(screen.getByText("Calculation method")).toBeTruthy();
     expect(screen.getByText("Deterministic · no model")).toBeTruthy();
+    const assessmentSections = screen.getByRole("navigation", {
+      name: "Assessment sections",
+    });
+    ["Choices", "Counts", "Universalism merge", "Profile", "Checks"]
+      .forEach((label) => {
+        expect(
+          within(assessmentSections).getByRole("link", { name: label }),
+        ).toBeTruthy();
+      });
     expect(
       screen.getByRole("region", {
         name: "Recorded Most and Least selections",
@@ -385,7 +413,15 @@ describe("onboarding app", () => {
     expect(screen.queryByText("Profile confirmed")).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: "Return to Experience" }));
     fireEvent.click(screen.getByRole("button", { name: "Confirm my compass" }));
-    expect(screen.getByRole("heading", { name: "Your compass is ready." })).toBeTruthy();
+    expect(
+      screen.getByRole("heading", {
+        name: "Your compass is ready, Desmond.",
+      }),
+    ).toBeTruthy();
+    expect(
+      within(screen.getByRole("navigation", { name: "Experience sections" }))
+        .getByRole("link", { name: "Journal Entry" }),
+    ).toBeTruthy();
     expect(
       screen.getByRole("region", { name: "Your Core Values" }),
     ).toBeTruthy();
@@ -406,10 +442,22 @@ describe("onboarding app", () => {
     fireEvent.click(screen.getByRole("button", { name: "Start my first Journal Entry" }));
     expect(onStartJournal).toHaveBeenCalledTimes(1);
     expect(onStartJournal.mock.calls[0][0].user_confirmed).toBe(true);
+    expect(onStartJournal.mock.calls[0][0].preferred_name).toBe("Desmond");
     const journalHeading = screen.getByRole("heading", {
       name: "When did you feel most like yourself?",
     });
     expect(journalHeading).toBeTruthy();
+    const journalSections = screen.getByRole("navigation", {
+      name: "Experience sections",
+    });
+    ["Prompt", "Write"].forEach((label) => {
+      expect(
+        within(journalSections).getByRole("link", { name: label }),
+      ).toBeTruthy();
+    });
+    expect(
+      within(journalSections).queryByRole("link", { name: "Weekly Drift" }),
+    ).toBeNull();
     expect(
       screen.getByRole("region", { name: "Your Core Values" }),
     ).toBeTruthy();
@@ -575,6 +623,7 @@ describe("onboarding app", () => {
     });
 
     render(<App />);
+    enterPreferredName();
     for (let setNumber = 1; setNumber <= 11; setNumber += 1) {
       answerSet();
     }
@@ -614,7 +663,8 @@ describe("onboarding app", () => {
       "Weekly review requested",
       "Weekly review completed",
       "Drift checked",
-      "Weekly Digest built",
+      "Weekly Drift Detection output stored",
+      "Coach Digest response generated",
     ].forEach((label) => expect(screen.queryByText(label)).toBeNull());
   });
 
@@ -624,6 +674,7 @@ describe("onboarding app", () => {
       new ExperienceApiError("Profile trace unavailable."),
     );
     render(<App />);
+    enterPreferredName();
     for (let setNumber = 1; setNumber <= 11; setNumber += 1) {
       answerSet();
     }
@@ -657,6 +708,7 @@ describe("onboarding app", () => {
       new ExperienceApiError("Profile trace unavailable."),
     );
     render(<App />);
+    enterPreferredName();
     for (let setNumber = 1; setNumber <= 11; setNumber += 1) {
       answerSet();
     }
@@ -680,6 +732,7 @@ describe("onboarding app", () => {
       () => new Promise(() => undefined),
     );
     render(<App />);
+    enterPreferredName();
     for (let setNumber = 1; setNumber <= 11; setNumber += 1) {
       answerSet();
     }

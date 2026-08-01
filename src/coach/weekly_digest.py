@@ -777,7 +777,7 @@ def build_weekly_drift_reviewer_digest_from_entries(
                     t_index=entry.t_index,
                     direction="context",
                     dimensions=[],
-                    excerpt=_truncate_excerpt(entry.content),
+                    excerpt=_truncate_excerpt(entry.text),
                 )
             )
 

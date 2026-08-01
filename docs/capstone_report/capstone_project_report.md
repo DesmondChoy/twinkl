@@ -14,7 +14,7 @@
 - Evidence for the architecture change
 - Weekly Drift Reviewer and deterministic Drift Detector
 - Main quantitative results
-- Weekly Digest, Weekly Coach, and capstone POC limits
+- Weekly Drift Detection, Coach Digest, and capstone POC limits
 
 ## Keywords
 
@@ -33,7 +33,7 @@
 - Need for evidence-based weekly reflection
 - Longitudinal comparison of Journal Entries with Core Values
 - Explainable identification of Conflict and Drift
-- Evidence-grounded Weekly Digest and Weekly Coach question
+- Evidence-grounded Coach Digest response and reflective question
 - Time-boxed academic POC
 - Product intent in the [Product Requirements Document](../prd.md)
 
@@ -43,21 +43,21 @@
 - VIF Critic Conflict and Drift performance against user-facing requirements
 - Evidence that led from the VIF Critic to the Weekly Drift Reviewer
 - Weekly Drift Reviewer and Drift Detector recovery of known Drifts
-- Weekly Digest evidence grounding and validation
+- Coach Digest evidence grounding and validation
 - Longitudinal synthetic data and provenance-aware label workflow
 - 69 Runs and 133 VIF Critic experiment configurations
 - Small-model-first evaluation and evidence-led architecture decision
 - Fixed Weekly Drift Reviewer and deterministic Drift Detector
-- Versioned Weekly Digest and Experience and Inspect demo
+- Versioned Weekly Drift Detection output and Experience and Inspect demo
 
 ### 1.3 Scope and Implementation Status
 
 - **Complete offline research:** synthetic data, LLM-Judge VIF Labels, VIF Critic, and experiment record
-- **Complete capstone POC:** Weekly Drift Reviewer contract and Drift Detector
+- **Complete capstone POC:** Weekly Drift Detection with the fixed Weekly Drift
+  Reviewer contract and Drift Detector
 - **Limited benchmark:** human annotation
 - **Development evidence only:** Weekly Drift Reviewer and Drift Detector evaluation
-- **Partial product integration:** Weekly Digest
-- **Experimental:** Weekly Coach
+- **Experimental:** Coach Digest
 - **Supporting POCs:** Onboarding and Conversational Nudge
 - **Assessment-only deployment:** public Experience and Inspect demo on Railway
 - **In progress:** professor walkthrough evidence
@@ -98,8 +98,8 @@
 - Weekly review starts only after the Monday-to-Sunday week closes
 - Weekly Drift Reviewer without VIF Critic input
 - Drift Detector across week boundaries
-- Weekly Digest with cited Journal Entries
-- Optional Weekly Coach reflection and question
+- Weekly Drift Detection output with cited Journal Entries
+- Optional Coach Digest response and reflective question
 - Core Values as the only values eligible for Drift
 - No future-Journal-Entry or generation-metadata leakage
 - Versioned receipts, prompts, schemas, and request hashes
@@ -136,14 +136,14 @@
 - Active, recovered, uncertain, and mixed delivery states
 - Detailed design in [Drift Detection Architecture](../architecture/drift_detection.md)
 
-### 3.4 Weekly Reflection and Demo
+### 3.4 Coach Digest and Demo
 
-- Weekly Digest as the structured input to the Weekly Coach
+- Weekly Drift Detection output as the structured input to the Coach Digest
 - Core Values, Drift state, cited evidence, and date-window metadata
-- Weekly Coach reflection and one reflective question
+- Coach Digest response and one reflective question
 - Groundedness, jargon, and length checks
-- Partial Weekly Digest product integration
-- Experimental Weekly Coach evaluation
+- Complete Weekly Drift Detection integration for the capstone POC
+- Experimental Coach Digest evaluation
 - Supporting Onboarding and Conversational Nudge POCs
 - Shared Experience and Inspect React session
 - Five deterministic persona replays
@@ -287,13 +287,13 @@
 - Reproducibility tooling: read-only [Drift Inspection App](../demo/weekly_drift_review_app.md) for development and persona-level result review without provider calls
 - Full results in the [Complete Development Review](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_qtwz_complete_development_review.md)
 
-### 5.4 Weekly Reflection and Demo Results
+### 5.4 Coach Digest and Demo Results
 
-- Weekly Digest schema and cited Journal Entry evidence
+- Weekly Drift Detection output schema and cited Journal Entry evidence
 - Active, recovered, uncertain, and mixed examples
 - Tier 1 groundedness, jargon, and length checks
-- Missing Weekly Coach batch, rationale-review, and human-calibration results
-- No Weekly Coach usefulness claim without batch and human results
+- No current Coach Digest Tier 1 or Tier 2 batch results
+- No Coach Digest usefulness claim without batch results and human validation
 - Brief Experience and Inspect example of end-to-end POC behavior
 - Evaluation boundary in [Explanation Quality Evaluation](../evals/explanation_quality_eval.md)
 
@@ -321,7 +321,7 @@
 - VIF Critic hard dimensions and weak Conflict precision
 - Incorrect adjacent Conflict pairs
 - Weekly Drift Reviewer missed Drifts and false Drift alerts
-- Weekly Coach generic or weakly grounded text
+- Coach Digest generic or weakly grounded text
 - Synthetic development data
 - Historical training provenance in part of the Drift development set
 - Limited human annotation and no completed user study
@@ -332,7 +332,7 @@
 - Sensitive Journal Entry data
 - Consent, retention, access, export, and deletion
 - Non-therapy boundary
-- Non-prescriptive and non-judgmental Weekly Coach language
+- Non-prescriptive and non-judgmental Coach Digest language
 - Fail-closed Abstain behavior
 - Synthetic bias and demographic stereotype risks
 - Provider data exposure
@@ -347,13 +347,13 @@
 - Main VIF Critic findings and limits
 - Evidence for the Weekly Drift Reviewer architecture
 - Deterministic Drift Detector contribution
-- Weekly Digest and Weekly Coach scope
+- Weekly Drift Detection and Coach Digest scope
 - Main evaluation results and capstone POC limits
 
 ### 7.2 Focused Future Work
 
 - Fresh final test excluded from model and prompt development
-- Weekly Coach rationale review and human calibration
+- Coach Digest batch evaluation and human validation
 - Real-user pilot with explicit consent and privacy controls
 - Final runtime cost, latency, and provider-use measurement
 - Conditions for reconsideration of a cheaper local model

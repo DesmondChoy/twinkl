@@ -497,6 +497,9 @@ export function validateProfile(value: unknown): OnboardingProfile {
     responses: profile.bws_responses,
     userConfirmed: true,
   });
+  if (profile.preferred_name === undefined) {
+    delete rebuilt.preferred_name;
+  }
   const provenance = profile.provenance;
   if (
     provenance?.source === "synthetic_persona_projection" &&

@@ -66,7 +66,7 @@ export interface ExperienceState {
   trace_events: TraceEventContract[];
 }
 
-export type OnboardingStage = "set" | "summary" | "complete";
+export type OnboardingStage = "name" | "set" | "summary" | "complete";
 
 export interface OnboardingSession {
   schema_version: 7;
@@ -286,6 +286,10 @@ export function parseSession(raw: string | null): OnboardingSession | null {
       session = {
         ...withoutGoal,
         schema_version: 7,
+        preferred_name:
+          typeof parsed.preferred_name === "string"
+            ? parsed.preferred_name
+            : "Friend",
         stage: parsed.stage === "goal" ? "summary" : parsed.stage,
         confirmed_profile: confirmedProfile,
         experience,
@@ -297,7 +301,7 @@ export function parseSession(raw: string | null): OnboardingSession | null {
       typeof session.preferred_name !== "string" ||
       typeof session.session_id !== "string" ||
       typeof session.started_at !== "string" ||
-      !["set", "summary", "complete"].includes(session.stage ?? "") ||
+      !["name", "set", "summary", "complete"].includes(session.stage ?? "") ||
       !Number.isInteger(session.set_index) ||
       session.set_index! < 0 ||
       session.set_index! >= BWS_SETS.length ||
@@ -370,7 +374,10 @@ export function parseSession(raw: string | null): OnboardingSession | null {
         return null;
       }
     }
-    if (session.experience.active_view === "inspect" && session.stage === "set") {
+    if (
+      session.experience.active_view === "inspect" &&
+      (session.stage === "name" || session.stage === "set")
+    ) {
       return null;
     }
     return session as OnboardingSession;
@@ -414,7 +421,9 @@ export function clearSession(): boolean {
 }
 
 export function showView(session: OnboardingSession, view: DemoView): OnboardingSession {
-  if (view === "inspect" && session.stage === "set") return session;
+  if (view === "inspect" && ["name", "set"].includes(session.stage)) {
+    return session;
+  }
   if (session.experience.active_view === view) return session;
   return {
     ...session,

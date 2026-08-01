@@ -170,57 +170,68 @@ export function PersonaReplayPicker({
         </p>
       </header>
 
-      {catalog ? (
-        <div className="persona-menu" aria-label="Choose a demo Persona">
-          {[...catalog.scenarios]
-            .sort((left, right) => Number(right.recommended) - Number(left.recommended))
-            .map((item) => {
-            const lesson = personaLesson(item);
-            const current = item.persona_id === currentPersonaId;
-            return (
-              <article
-                className={`persona-option persona-option--${item.role}${
-                  current ? " persona-option--current" : ""
-                }`}
-                key={item.scenario_id}
-              >
-                <span className="persona-option__thread" aria-hidden="true" />
-                <span className="persona-option__copy">
-                  <span className="persona-option__identity">
-                    <strong>{item.persona_name}</strong>
-                    {current ? (
-                      <em>Current</em>
-                    ) : item.recommended ? (
-                      <em>Recommended</em>
-                    ) : null}
-                  </span>
-                  <span>
-                    {item.profession} · {item.culture} · {item.age}
-                  </span>
-                  <span className="persona-option__lesson">
-                    <small>{lesson.label}</small>
-                    <span>{lesson.copy}</span>
-                  </span>
-                </span>
-                <button
-                  className="button button--primary persona-option__action"
-                  type="button"
-                  disabled={current || loadingId !== null}
-                  onClick={() => void startReplay(item)}
-                >
-                  {current
-                    ? "Current replay"
-                    : loadingId === item.scenario_id
-                      ? "Loading saved replay…"
-                      : "Start at week 1"}
-                </button>
-              </article>
-            );
-            })}
-        </div>
-      ) : null}
+      <div id="experience-persona-options">
+        {catalog ? (
+          <div
+            className="persona-menu"
+            aria-label="Choose a demo Persona"
+          >
+            {[...catalog.scenarios]
+              .sort(
+                (left, right) =>
+                  Number(right.recommended) - Number(left.recommended),
+              )
+              .map((item) => {
+                const lesson = personaLesson(item);
+                const current = item.persona_id === currentPersonaId;
+                return (
+                  <article
+                    className={`persona-option persona-option--${item.role}${
+                      current ? " persona-option--current" : ""
+                    }`}
+                    key={item.scenario_id}
+                  >
+                    <span
+                      className="persona-option__thread"
+                      aria-hidden="true"
+                    />
+                    <span className="persona-option__copy">
+                      <span className="persona-option__identity">
+                        <strong>{item.persona_name}</strong>
+                        {current ? (
+                          <em>Current</em>
+                        ) : item.recommended ? (
+                          <em>Recommended</em>
+                        ) : null}
+                      </span>
+                      <span>
+                        {item.profession} · {item.culture} · {item.age}
+                      </span>
+                      <span className="persona-option__lesson">
+                        <small>{lesson.label}</small>
+                        <span>{lesson.copy}</span>
+                      </span>
+                    </span>
+                    <button
+                      className="button button--primary persona-option__action"
+                      type="button"
+                      disabled={current || loadingId !== null}
+                      onClick={() => void startReplay(item)}
+                    >
+                      {current
+                        ? "Current replay"
+                        : loadingId === item.scenario_id
+                          ? "Loading saved replay…"
+                          : "Start at week 1"}
+                    </button>
+                  </article>
+                );
+              })}
+          </div>
+        ) : null}
+      </div>
 
-      <p className="persona-picker__source">
+      <p className="persona-picker__source" id="experience-persona-source">
         Saved replay · AI-reviewed synthetic development evidence · not human
         validation
       </p>
@@ -407,7 +418,7 @@ export function PersonaReplayExperience({
       <h1 className="visually-hidden" ref={headingRef} tabIndex={-1}>
         {loaded.catalogItem.persona_name}
       </h1>
-      <details className="replay-persona">
+      <details className="replay-persona" id="experience-persona-profile">
         <summary>
           <span>
             <small>Persona · saved replay</small>

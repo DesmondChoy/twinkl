@@ -198,7 +198,11 @@ export default function WeeklyExperience({
       : null;
 
   return (
-    <section className="weekly-workspace" aria-labelledby="weekly-view-title">
+    <section
+      className="weekly-workspace"
+      id="experience-weekly"
+      aria-labelledby="weekly-view-title"
+    >
       <div
         className={`weekly-experience weekly-experience--${aggregateState}`}
       >
@@ -291,7 +295,7 @@ export default function WeeklyExperience({
 
       {weeklyMirror || tensionExplanation || reflectiveQuestion ? (
         <aside className="coach-digest" aria-labelledby="weekly-coach-title">
-          <p className="eyebrow">Weekly Coach</p>
+          <p className="eyebrow">Coach Digest</p>
           <h2 id="weekly-coach-title">{weeklyMirror}</h2>
           {tensionExplanation ? <p>{tensionExplanation}</p> : null}
           {reflectiveQuestion ? (

@@ -34,8 +34,8 @@ This evaluation validates that explanations feel accurate and actionable to user
 - Tier 1 reporting for Coach Digest responses: A batch runner
   ([`src/evals/coach_narrative_tier1.py`](../../src/evals/coach_narrative_tier1.py))
   runs `validate_weekly_digest_narrative()` over the persisted Weekly Drift Detection output
-  parquet and reports per-check pass rates against targets. First committed run:
-  [`logs/experiments/reports/coach_narrative_tier1_20260727/`](../../logs/experiments/reports/coach_narrative_tier1_20260727/).
+  parquet and reports per-check pass rates against targets. No current batch
+  result is committed.
 - Tier 2 (LLM-as-judge) for Coach Digest responses: An LLM-as-judge eval
   ([`src/evals/coach_narrative_judge.py`](../../src/evals/coach_narrative_judge.py),
   prompt [`prompts/coach_narrative_judge.yaml`](../../prompts/coach_narrative_judge.yaml))
@@ -44,6 +44,8 @@ This evaluation validates that explanations feel accurate and actionable to user
   remains future work.
 
 ### What's Missing
+- **Coach Digest batch results:** No current Tier 1 or Tier 2 batch result is
+  committed
 - **Tier 1 for LLM-Judge rationales:** No batch checker/report yet in `src/judge/`
 - **Tier 2 for LLM-Judge rationales:** Rationale-review LLM evaluation
 - **Tier 3:** Human calibration protocol and κ calculation (both explanation types)
@@ -64,8 +66,8 @@ later validation phases.
 
 ### Next Steps
 1. Add a batch Tier 1 checker for LLM-Judge rationales in `src/judge/` and run it over the existing 1,594 rationale-bearing rows
-2. ✅ Done — Coach Digest Tier 1 validation now runs as a batch with a committed pass-rate report (`src/evals/coach_narrative_tier1.py`)
-3. ✅ Done (Coach Digest) — Tier 2 LLM-as-judge eval implemented in `src/evals/coach_narrative_judge.py`; a rationale-review LLM for LLM-Judge rationales is still future work
+2. Run the Coach Digest Tier 1 batch evaluator and record its pass rates
+3. Run the Coach Digest Tier 2 evaluator and identify its scores as LLM-as-judge review
 4. *(Future phase)* Sample 20-30 explanations for Tier 3 human calibration
 
 ---

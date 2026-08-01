@@ -54,6 +54,13 @@ function scenarioResponse(raw = activeReplayRaw) {
   };
 }
 
+function enterPreferredName(name = "Casey") {
+  fireEvent.change(screen.getByRole("textbox", { name: "Preferred name" }), {
+    target: { value: name },
+  });
+  fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+}
+
 function experienceForWeek(
   weekIndex: number,
   scenarioFixture: ExperienceInspectFixtureContract = fixture,
@@ -611,6 +618,7 @@ describe("persona replay", () => {
     matchMedia(false);
     vi.useFakeTimers();
     render(<App />);
+    enterPreferredName();
     const first = screen.getAllByTestId("value-card")[0];
     fireEvent.click(first);
     fireEvent.click(
@@ -639,6 +647,14 @@ describe("persona replay", () => {
 
     await user.click(screen.getByRole("button", { name: "Try demo" }));
     await screen.findByText("Wei Jun Chen");
+    const pickerSections = screen.getByRole("navigation", {
+      name: "Experience sections",
+    });
+    ["Introduction", "Personas", "Evidence"].forEach((label) => {
+      expect(
+        within(pickerSections).getByRole("link", { name: label }),
+      ).toBeTruthy();
+    });
     await user.click(
       within(personaCard("Wei Jun Chen")).getByRole("button", {
         name: "Start at week 1",
@@ -668,6 +684,7 @@ describe("persona replay", () => {
     const profile = fixture.scenario.profile;
     const saved = createSession(() => 0.5);
     saved.user_id = profile.user_id;
+    saved.preferred_name = profile.preferred_name ?? "Friend";
     saved.session_id = profile.session_id;
     saved.started_at = profile.started_at;
     saved.stage = "complete";
@@ -749,6 +766,16 @@ describe("persona replay", () => {
         level: 1,
       }),
     ).toBeTruthy();
+    const replaySections = screen.getByRole("navigation", {
+      name: "Experience sections",
+    });
+    ["Persona", "Week", "Journal Entries", "Weekly Drift"].forEach(
+      (label) => {
+        expect(
+          within(replaySections).getByRole("link", { name: label }),
+        ).toBeTruthy();
+      },
+    );
     expect(document.documentElement.scrollTop).toBe(0);
     expect(document.body.scrollTop).toBe(0);
     await user.click(screen.getByRole("button", {
@@ -778,6 +805,14 @@ describe("persona replay", () => {
         name: "How Twinkl reached this result.",
       }),
     ).toBeTruthy();
+    const inspectSections = screen.getByRole("navigation", {
+      name: "Experience sections",
+    });
+    ["Summary", "Recorded work"].forEach((label) => {
+      expect(
+        within(inspectSections).getByRole("link", { name: label }),
+      ).toBeTruthy();
+    });
     expect(screen.getAllByText("Technical details").length).toBeGreaterThan(0);
     await user.click(screen.getByRole("button", { name: "Experience" }));
     expect(screen.getByText("Week 6 of 6")).toBeTruthy();

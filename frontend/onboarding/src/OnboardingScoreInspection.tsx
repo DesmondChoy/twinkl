@@ -9,6 +9,7 @@ import {
   type ScoreBundle,
   type ValueKey,
 } from "./domain";
+import { ASSESSMENT_SECTIONS } from "./AssessmentSectionMap";
 
 interface OnboardingScoreInspectionProps {
   confirmed: boolean;
@@ -96,6 +97,13 @@ export default function OnboardingScoreInspection({
     (total, value) => total + scores.bws.worst_counts[value],
     0,
   );
+  const rankedValues = [...VALUE_ORDER].sort((left, right) => {
+    const weightDifference =
+      scores.profile.weights[right] - scores.profile.weights[left];
+    return (
+      weightDifference || VALUE_ORDER.indexOf(left) - VALUE_ORDER.indexOf(right)
+    );
+  });
 
   return (
     <section
@@ -172,6 +180,7 @@ export default function OnboardingScoreInspection({
       </ol>
 
       <section
+        id={ASSESSMENT_SECTIONS[0].id}
         className="score-section"
         aria-labelledby="recorded-choices-title"
       >
@@ -252,6 +261,7 @@ export default function OnboardingScoreInspection({
           </section>
         </div>
         <section
+          id={ASSESSMENT_SECTIONS[1].id}
           className="selection-totals"
           aria-labelledby="selection-totals-title"
         >
@@ -295,10 +305,22 @@ export default function OnboardingScoreInspection({
               </tfoot>
             </table>
           </div>
+          <aside className="universalism-explanation">
+            <strong>Why two Universalism objects?</strong>
+            <p>
+              Schwartz&apos;s theory has ten values. The published SVBWS
+              separates Universalism&apos;s nature and social concerns so each
+              can be ranked on its own in the balanced 11-object design. The
+              Profile averages them back into one Universalism score.
+            </p>
+          </aside>
         </section>
       </section>
 
-      <aside className="universalism-bridge">
+      <aside
+        id={ASSESSMENT_SECTIONS[2].id}
+        className="universalism-bridge"
+      >
         <div className="universalism-bridge__facets">
           <span>
             Nature
@@ -318,7 +340,11 @@ export default function OnboardingScoreInspection({
         </div>
       </aside>
 
-      <section className="score-section" aria-labelledby="profile-score-title">
+      <section
+        id={ASSESSMENT_SECTIONS[3].id}
+        className="score-section"
+        aria-labelledby="profile-score-title"
+      >
         <div className="score-section__heading">
           <div>
             <p className="eyebrow">Profile transformation</p>
@@ -346,7 +372,7 @@ export default function OnboardingScoreInspection({
               </tr>
             </thead>
             <tbody>
-              {VALUE_ORDER.map((value) => {
+              {rankedValues.map((value) => {
                 const isHighest = highestValues.includes(value);
                 return (
                   <tr
@@ -389,7 +415,11 @@ export default function OnboardingScoreInspection({
         </div>
       </section>
 
-      <section className="score-checks" aria-labelledby="score-checks-title">
+      <section
+        id={ASSESSMENT_SECTIONS[4].id}
+        className="score-checks"
+        aria-labelledby="score-checks-title"
+      >
         <div>
           <p className="eyebrow">Contract checks</p>
           <h3 id="score-checks-title">The calculation passes its invariants.</h3>
