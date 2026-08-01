@@ -578,7 +578,7 @@ export default function InspectView({
         weeklyFocus ? " stage--inspect-weekly" : ""
       }`}
     >
-      <div className="inspect-intro">
+      <div className="inspect-intro" id="inspect-overview-section">
         <div>
           <p className="eyebrow">
             {onboarding ? "Assessment evidence" : "Inspect"}
@@ -737,6 +737,7 @@ export default function InspectView({
 
       <section
         className="backend-trace"
+        id="inspect-events-section"
         aria-labelledby="backend-trace-title"
       >
         {onboarding ? (

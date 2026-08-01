@@ -691,27 +691,33 @@ export default function JournalExperience({
 
   return (
     <div className="journal-experience">
-      {mode === "manual" ? <header className="journal-experience__header">
-        <p className="eyebrow">
-          {experience.journal_entries.length === 0
-            ? "First Journal Entry"
-            : "Journal Entries"}
-        </p>
-        <h1 ref={headingRef} tabIndex={-1}>
-          {experience.journal_entries.length === 0
-            ? "When did you feel most like yourself?"
-            : "What has been taking up space today?"}
-        </h1>
-        <p className="lede" id="journal-entry-help">
-          Write one real moment. Twinkl may ask one brief question if there is
-          a useful thread to follow.
-        </p>
-        <CoreValueReminder profile={profile} />
-      </header> : null}
+      {mode === "manual" ? (
+        <header
+          className="journal-experience__header"
+          id="experience-journal-prompt"
+        >
+          <p className="eyebrow">
+            {experience.journal_entries.length === 0
+              ? "First Journal Entry"
+              : "Journal Entries"}
+          </p>
+          <h1 ref={headingRef} tabIndex={-1}>
+            {experience.journal_entries.length === 0
+              ? "When did you feel most like yourself?"
+              : "What has been taking up space today?"}
+          </h1>
+          <p className="lede" id="journal-entry-help">
+            Write one real moment. Twinkl may ask one brief question if there
+            is a useful thread to follow.
+          </p>
+          <CoreValueReminder profile={profile} />
+        </header>
+      ) : null}
 
       {mode === "manual" && !isAwaitingResponse ? (
         <form
           className="journal-composer"
+          id="experience-journal-compose"
           onSubmit={(event) => {
             event.preventDefault();
             void saveJournalEntry();
@@ -755,7 +761,11 @@ export default function JournalExperience({
       ) : null}
 
       {mode === "manual" && activeNudge && isAwaitingResponse ? (
-        <section className="nudge-reply" aria-labelledby="nudge-question">
+        <section
+          className="nudge-reply"
+          id="experience-journal-compose"
+          aria-labelledby="nudge-question"
+        >
           <p className="eyebrow">One question</p>
           <h2 id="nudge-question" ref={nudgeHeadingRef} tabIndex={-1}>
             {activeNudge.text}

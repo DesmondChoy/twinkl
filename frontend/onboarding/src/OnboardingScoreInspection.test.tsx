@@ -1,7 +1,7 @@
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import OnboardingScoreInspection from "./OnboardingScoreInspection";
-import { VALUES, type ScoreBundle } from "./domain";
+import { VALUES, VALUE_ORDER, type ScoreBundle } from "./domain";
 import { canonicalInspectFixture } from "./inspectFixture";
 
 const profile = canonicalInspectFixture.session.profile;
@@ -58,6 +58,12 @@ describe("onboarding score inspection", () => {
         name: "Total choices 11 11",
       }),
     ).toBeTruthy();
+    expect(screen.getByText("Why two Universalism objects?")).toBeTruthy();
+    expect(
+      screen.getByText(
+        /The Profile averages them back into one Universalism score/,
+      ),
+    ).toBeTruthy();
 
     const profileMapping = screen.getByRole("region", {
       name: "Ten-value Profile scores and Experience mapping",
@@ -70,6 +76,21 @@ describe("onboarding score inspection", () => {
         within(profileMapping).getByText(VALUES[value].phrase),
       ).toBeTruthy();
     });
+    const expectedValueOrder = [...VALUE_ORDER]
+      .sort((left, right) => {
+        const weightDifference =
+          scores.profile.weights[right] - scores.profile.weights[left];
+        return (
+          weightDifference ||
+          VALUE_ORDER.indexOf(left) - VALUE_ORDER.indexOf(right)
+        );
+      })
+      .map((value) => VALUES[value].name);
+    const displayedValueOrder = within(profileMapping)
+      .getAllByRole("row")
+      .slice(1)
+      .map((row) => within(row).getByRole("rowheader").textContent);
+    expect(displayedValueOrder).toEqual(expectedValueOrder);
     expect(screen.getByText("No confidence score is inferred.")).toBeTruthy();
     expect(screen.queryByText("bws_results")).toBeNull();
   });

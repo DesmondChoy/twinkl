@@ -198,7 +198,11 @@ export default function WeeklyExperience({
       : null;
 
   return (
-    <section className="weekly-workspace" aria-labelledby="weekly-view-title">
+    <section
+      className="weekly-workspace"
+      id="experience-weekly"
+      aria-labelledby="weekly-view-title"
+    >
       <div
         className={`weekly-experience weekly-experience--${aggregateState}`}
       >

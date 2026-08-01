@@ -273,9 +273,14 @@ documentation. It shows:
   11 recorded Least selections in presentation order;
 - a separate totals table that lists each of the 11 SVBWS objects once and
   shows Most and Least totals of 11 recorded choices;
+- a note after the totals table that explains why the published SVBWS keeps
+  Universalism–Nature and Universalism–Social separate, and that the Profile
+  merges them into one Universalism score;
 - the exact Most-minus-Least calculation beside each score in the ten-value
   Profile table;
 - the two-facet Universalism mean and the ten-value Profile transformation;
+- the ten-value Profile rows in descending weight order, with canonical order
+  retained for equal weights;
 - the exact Schwartz value-to-Experience phrase mapping;
 - every highest-score tie before confirmation and the resulting Core Values
   after confirmation;
@@ -283,6 +288,17 @@ documentation. It shows:
   and
 - the explicit boundary that the deterministic calculation makes no model,
   reliability, confidence, diagnostic, or clinical claim.
+
+On desktop, assessment Inspect uses a 240-pixel left rail. A sticky section map
+links to Choices, Counts, the Universalism merge, the Profile, and Checks. The
+map highlights the section at the reading position. Narrow screens keep the
+single-column Inspect layout and do not show the rail.
+
+The same 240-pixel section rail supports Profile confirmation, the first
+Journal Entry handoff, manual Journal Entry work, saved Persona selection,
+saved Persona replay, and saved-run Inspect. Each map links only to sections in
+the current view. The active values questions retain the compass because it
+shows assessment progress. Narrow screens do not show a section rail.
 
 This calculation is labelled **Calculation method** and **Deterministic · no
 model**.

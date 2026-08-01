@@ -639,6 +639,14 @@ describe("persona replay", () => {
 
     await user.click(screen.getByRole("button", { name: "Try demo" }));
     await screen.findByText("Wei Jun Chen");
+    const pickerSections = screen.getByRole("navigation", {
+      name: "Experience sections",
+    });
+    ["Introduction", "Personas", "Evidence"].forEach((label) => {
+      expect(
+        within(pickerSections).getByRole("link", { name: label }),
+      ).toBeTruthy();
+    });
     await user.click(
       within(personaCard("Wei Jun Chen")).getByRole("button", {
         name: "Start at week 1",
@@ -749,6 +757,16 @@ describe("persona replay", () => {
         level: 1,
       }),
     ).toBeTruthy();
+    const replaySections = screen.getByRole("navigation", {
+      name: "Experience sections",
+    });
+    ["Persona", "Week", "Journal Entries", "Weekly Drift"].forEach(
+      (label) => {
+        expect(
+          within(replaySections).getByRole("link", { name: label }),
+        ).toBeTruthy();
+      },
+    );
     expect(document.documentElement.scrollTop).toBe(0);
     expect(document.body.scrollTop).toBe(0);
     await user.click(screen.getByRole("button", {
@@ -778,6 +796,14 @@ describe("persona replay", () => {
         name: "How Twinkl reached this result.",
       }),
     ).toBeTruthy();
+    const inspectSections = screen.getByRole("navigation", {
+      name: "Experience sections",
+    });
+    ["Summary", "Recorded work"].forEach((label) => {
+      expect(
+        within(inspectSections).getByRole("link", { name: label }),
+      ).toBeTruthy();
+    });
     expect(screen.getAllByText("Technical details").length).toBeGreaterThan(0);
     await user.click(screen.getByRole("button", { name: "Experience" }));
     expect(screen.getByText("Week 6 of 6")).toBeTruthy();
