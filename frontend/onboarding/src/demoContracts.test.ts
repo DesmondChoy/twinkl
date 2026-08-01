@@ -17,7 +17,7 @@ describe("Experience and Inspect v1 contract", () => {
 
     expect(fixture.schema_version).toBe(EXPERIENCE_INSPECT_CONTRACT_VERSION);
     expect(validateProfile(fixture.session.profile)).toEqual(fixture.session.profile);
-    expect(new Set(fixture.trace_events.map((event) => event.event_type)).size).toBe(10);
+    expect(new Set(fixture.trace_events.map((event) => event.event_type)).size).toBe(11);
     expect(new Set(fixture.trace_events.map((event) => event.status))).toEqual(
       new Set(["complete", "reused", "refused", "invalid", "failed"]),
     );

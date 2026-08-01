@@ -447,6 +447,7 @@
       "coach_narrative": null,
       "validation": null
     },
+    "assessment_clock": null,
     "trace_event_ids": [
       "recovered-marc:event:001",
       "recovered-marc:event:002",
@@ -1906,6 +1907,7 @@
           "coach_narrative": null,
           "validation": null
         },
+        "assessment_clock": null,
         "trace_event_ids": [
           "recovered-marc:event:001",
           "recovered-marc:event:002",

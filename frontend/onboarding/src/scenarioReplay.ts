@@ -302,6 +302,7 @@ export function projectScenarioWeek(
         ),
       drift_result: driftResult,
       weekly_digest: weeklyDigest,
+      assessment_clock: null,
       trace_event_ids: traceEventIds,
       selection: {
         view: "experience",

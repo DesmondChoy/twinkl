@@ -7,6 +7,7 @@ export const EXPERIENCE_INSPECT_CONTRACT_VERSION = "experience-inspect-v1" as co
 
 const EVENT_TYPES = new Set([
   "profile_confirmed",
+  "assessment_time_advanced",
   "journal_entry_submitted",
   "nudge_suppression_checked",
   "nudge_decided",
@@ -32,6 +33,7 @@ const REVIEW_STATUSES = new Set(["ok", "refusal", "invalid", "error"]);
 const OPERATIONS = new Set([
   "create_session",
   "submit_journal_entry",
+  "advance_assessment_time",
   "load_scenario",
   "read_trace",
 ]);
@@ -55,6 +57,12 @@ export interface NudgeInteractionContract extends JsonObject {
   reason: string | null;
   text: string | null;
   response: string | null;
+}
+
+export interface AssessmentClockContract extends JsonObject {
+  mode: "simulated_assessment";
+  current_date: string;
+  timezone: string;
 }
 
 export interface WeeklyDriftReviewerDecisionContract {
@@ -103,6 +111,7 @@ export interface ExperienceSessionContract extends JsonObject {
   weekly_reviewer_decisions: WeeklyDriftReviewerDecisionContract[];
   drift_result: JsonObject | null;
   weekly_digest: JsonObject | null;
+  assessment_clock: AssessmentClockContract | null;
   trace_event_ids: string[];
   selection: JsonObject;
   updated_at: string;
@@ -146,6 +155,7 @@ export interface ExperienceResumeStateContract extends JsonObject {
   revision: number;
   journal_entries: JournalEntryContract[];
   nudges: NudgeInteractionContract[];
+  assessment_clock: AssessmentClockContract | null;
   trace_events: TraceEventContract[];
 }
 
@@ -179,6 +189,15 @@ export interface JournalEntrySubmittedResponseContract extends JsonObject {
   event_ids: string[];
 }
 
+export interface AssessmentTimeAdvancedResponseContract extends JsonObject {
+  schema_version: typeof EXPERIENCE_INSPECT_CONTRACT_VERSION;
+  operation: "advance_assessment_time";
+  request_id: string;
+  status: "ok";
+  session: ExperienceSessionContract;
+  event_ids: string[];
+}
+
 export interface TraceReadResponseContract extends JsonObject {
   schema_version: typeof EXPERIENCE_INSPECT_CONTRACT_VERSION;
   operation: "read_trace";
@@ -202,6 +221,7 @@ export type ExperienceApiResponseContract =
   | ApiErrorContract
   | SessionCreatedResponseContract
   | JournalEntrySubmittedResponseContract
+  | AssessmentTimeAdvancedResponseContract
   | ScenarioLoadedResponseContract
   | TraceReadResponseContract;
 
@@ -368,6 +388,20 @@ function validateNudge(value: unknown, name: string): NudgeInteractionContract {
   return nudge as NudgeInteractionContract;
 }
 
+function validateAssessmentClock(
+  value: unknown,
+  name: string,
+): AssessmentClockContract {
+  const clock = object(value, name);
+  exactKeys(clock, ["mode", "current_date", "timezone"], name);
+  if (clock.mode !== "simulated_assessment") {
+    throw new Error(`${name}.mode is incompatible`);
+  }
+  string(clock.current_date, `${name}.current_date`);
+  string(clock.timezone, `${name}.timezone`);
+  return clock as AssessmentClockContract;
+}
+
 function validateResumeState(
   value: unknown,
   name: string,
@@ -375,7 +409,14 @@ function validateResumeState(
   const resume = object(value, name);
   exactKeys(
     resume,
-    ["session_id", "revision", "journal_entries", "nudges", "trace_events"],
+    [
+      "session_id",
+      "revision",
+      "journal_entries",
+      "nudges",
+      "assessment_clock",
+      "trace_events",
+    ],
     name,
   );
   string(resume.session_id, `${name}.session_id`);
@@ -387,6 +428,12 @@ function validateResumeState(
   array(resume.nudges, `${name}.nudges`).forEach((nudge, index) =>
     validateNudge(nudge, `${name}.nudges[${index}]`),
   );
+  if (resume.assessment_clock !== null) {
+    validateAssessmentClock(
+      resume.assessment_clock,
+      `${name}.assessment_clock`,
+    );
+  }
   array(resume.trace_events, `${name}.trace_events`).forEach((event, index) =>
     validateTraceEvent(event, `${name}.trace_events[${index}]`),
   );
@@ -407,6 +454,7 @@ function validateSession(value: unknown, name: string): ExperienceSessionContrac
       "weekly_reviewer_decisions",
       "drift_result",
       "weekly_digest",
+      "assessment_clock",
       "trace_event_ids",
       "selection",
       "updated_at",
@@ -438,6 +486,12 @@ function validateSession(value: unknown, name: string): ExperienceSessionContrac
     }
   }
   if (session.weekly_digest !== null) object(session.weekly_digest, `${name}.weekly_digest`);
+  if (session.assessment_clock !== null) {
+    validateAssessmentClock(
+      session.assessment_clock,
+      `${name}.assessment_clock`,
+    );
+  }
   const eventIds = stringArray(session.trace_event_ids, `${name}.trace_event_ids`);
   if (new Set(eventIds).size !== eventIds.length) throw new Error(`${name}.trace_event_ids repeat`);
   object(session.selection, `${name}.selection`);
@@ -562,8 +616,27 @@ function validateEventDetails(event: JsonObject, name: string): void {
       break;
     case "weekly_coach_generated":
       exactKeys(details, ["narrative", "validation"], `${name}.details`);
-      object(details.narrative, `${name}.details.narrative`);
-      object(details.validation, `${name}.details.validation`);
+      if (details.narrative !== null) {
+        object(details.narrative, `${name}.details.narrative`);
+      }
+      if (details.validation !== null) {
+        object(details.validation, `${name}.details.validation`);
+      }
+      if ((details.narrative === null) !== (details.validation === null)) {
+        throw new Error(`${name}.details Coach Digest fields must be paired`);
+      }
+      break;
+    case "assessment_time_advanced":
+      exactKeys(
+        details,
+        ["action", "previous_date", "current_date"],
+        `${name}.details`,
+      );
+      if (!["next_day", "close_week"].includes(String(details.action))) {
+        throw new Error(`${name}.details.action is incompatible`);
+      }
+      string(details.previous_date, `${name}.details.previous_date`);
+      string(details.current_date, `${name}.details.current_date`);
       break;
     default:
       throw new Error(`${name}.event_type is incompatible`);
@@ -752,7 +825,13 @@ function validateRequest(value: unknown, name: string): JsonObject {
   if (!OPERATIONS.has(String(request.operation))) throw new Error(`${name}.operation is incompatible`);
   string(request.request_id, `${name}.request_id`);
   const requestKeys: Record<string, string[]> = {
-    create_session: ["schema_version", "operation", "request_id", "idempotency_key", "profile"],
+    create_session: [
+      "schema_version",
+      "operation",
+      "request_id",
+      "idempotency_key",
+      "profile",
+    ],
     submit_journal_entry: [
       "schema_version",
       "operation",
@@ -762,6 +841,15 @@ function validateRequest(value: unknown, name: string): JsonObject {
       "expected_revision",
       "journal_entry",
     ],
+    advance_assessment_time: [
+      "schema_version",
+      "operation",
+      "request_id",
+      "idempotency_key",
+      "session_id",
+      "expected_revision",
+      "action",
+    ],
     load_scenario: ["schema_version", "operation", "request_id", "scenario_id"],
     read_trace: ["schema_version", "operation", "request_id", "session_id", "after_event_id"],
   };
@@ -769,14 +857,24 @@ function validateRequest(value: unknown, name: string): JsonObject {
   if (request.operation === "create_session" && "resume_state" in request) {
     expectedKeys.push("resume_state");
   }
+  if (request.operation === "create_session" && "assessment_timezone" in request) {
+    expectedKeys.push("assessment_timezone");
+  }
   exactKeys(request, expectedKeys, name);
-  if (["create_session", "submit_journal_entry"].includes(String(request.operation))) {
+  if ([
+    "create_session",
+    "submit_journal_entry",
+    "advance_assessment_time",
+  ].includes(String(request.operation))) {
     if (!HASH_PATTERN.test(String(request.idempotency_key))) {
       throw new Error(`${name}.idempotency_key is incompatible`);
     }
   }
   if (request.operation === "create_session") {
     validateProfile(request.profile);
+    if (request.assessment_timezone !== undefined && request.assessment_timezone !== null) {
+      string(request.assessment_timezone, `${name}.assessment_timezone`);
+    }
     if (request.resume_state !== undefined && request.resume_state !== null) {
       validateResumeState(request.resume_state, `${name}.resume_state`);
     }
@@ -785,6 +883,13 @@ function validateRequest(value: unknown, name: string): JsonObject {
     string(request.session_id, `${name}.session_id`);
     integer(request.expected_revision, `${name}.expected_revision`);
     validateJournalEntry(request.journal_entry, `${name}.journal_entry`);
+  }
+  if (request.operation === "advance_assessment_time") {
+    string(request.session_id, `${name}.session_id`);
+    integer(request.expected_revision, `${name}.expected_revision`);
+    if (!["next_day", "close_week"].includes(String(request.action))) {
+      throw new Error(`${name}.action is incompatible`);
+    }
   }
   return request;
 }
@@ -818,6 +923,14 @@ function validateResponse(value: unknown, name: string): JsonObject {
       "session",
       "event_ids",
     ],
+    advance_assessment_time: [
+      "schema_version",
+      "operation",
+      "request_id",
+      "status",
+      "session",
+      "event_ids",
+    ],
     load_scenario: [
       "schema_version",
       "operation",
@@ -830,11 +943,20 @@ function validateResponse(value: unknown, name: string): JsonObject {
     read_trace: ["schema_version", "operation", "request_id", "status", "session_id", "events"],
   };
   exactKeys(response, responseKeys[String(response.operation)], name);
-  if (["create_session", "submit_journal_entry", "load_scenario"].includes(String(response.operation))) {
+  if ([
+    "create_session",
+    "submit_journal_entry",
+    "advance_assessment_time",
+    "load_scenario",
+  ].includes(String(response.operation))) {
     validateSession(response.session, `${name}.session`);
   }
   if (response.operation === "load_scenario") validateScenario(response.scenario, `${name}.scenario`);
-  if (["submit_journal_entry", "load_scenario"].includes(String(response.operation))) {
+  if ([
+    "submit_journal_entry",
+    "advance_assessment_time",
+    "load_scenario",
+  ].includes(String(response.operation))) {
     stringArray(response.event_ids, `${name}.event_ids`);
   }
   if (response.operation === "read_trace") {

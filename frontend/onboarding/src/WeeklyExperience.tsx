@@ -165,6 +165,12 @@ export default function WeeklyExperience({
     journalEntries.map((entry) => [entry.t_index, entry]),
   );
   const coachEventId = latestEventId(traceEvents, "weekly_coach_generated");
+  const coachEvent = [...traceEvents]
+    .reverse()
+    .find((event) => event.event_type === "weekly_coach_generated") ?? null;
+  const coachUnavailable = coachEvent !== null
+    && coachEvent.status !== "complete"
+    && object(weeklyDigest.coach_narrative) === null;
   const driftEventId = latestEventId(traceEvents, "drift_detected");
   const digestEventId = latestEventId(traceEvents, "weekly_digest_built");
   const inspectEventId = coachEventId ?? driftEventId ?? digestEventId;
@@ -197,7 +203,9 @@ export default function WeeklyExperience({
         <header className="weekly-experience__header">
           <div>
             <p className="eyebrow">What Twinkl noticed</p>
-            <h2 id="weekly-view-title">{stateHeading(aggregateState)}</h2>
+            <h2 id="weekly-view-title" tabIndex={-1}>
+              {stateHeading(aggregateState)}
+            </h2>
           </div>
           <span
             className={`weekly-experience__state weekly-experience__state--${aggregateState}`}
@@ -285,6 +293,21 @@ export default function WeeklyExperience({
         weeklyDigest={weeklyDigest}
         headingId="weekly-coach-title"
       />
+
+      {coachUnavailable ? (
+        <aside
+          className="coach-digest coach-digest--unavailable"
+          aria-labelledby="weekly-coach-unavailable-title"
+        >
+          <p className="eyebrow">Coach Digest</p>
+          <h2 id="weekly-coach-unavailable-title">
+            Your weekly response could not be prepared.
+          </h2>
+          <p>
+            The Weekly Drift Detection result above remains available.
+          </p>
+        </aside>
+      ) : null}
 
       {showInspectAction && inspectEventId ? (
         <button

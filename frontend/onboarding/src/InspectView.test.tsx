@@ -42,7 +42,7 @@ describe("Inspect view", () => {
       />,
     );
 
-    expect(screen.getAllByRole("listitem")).toHaveLength(14);
+    expect(screen.getAllByRole("listitem")).toHaveLength(15);
     [
       "Profile confirmed",
       "Journal Entry submitted",
@@ -54,6 +54,7 @@ describe("Inspect view", () => {
       "Drift checked",
       "Weekly Drift Detection output stored",
       "Coach Digest response generated",
+      "Simulated time changed",
     ].forEach((label) => expect(screen.getAllByText(label).length).toBeGreaterThan(0));
     ["Refused", "Invalid", "Failed"].forEach((status) =>
       expect(screen.getAllByText(status).length).toBeGreaterThan(0));

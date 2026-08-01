@@ -13,6 +13,7 @@ import type {
   TraceEventContract,
 } from "./demoContracts";
 import {
+  advanceAssessmentTime,
   createExperienceSession,
   ExperienceApiError,
   journalIdempotencyKey,
@@ -46,6 +47,28 @@ function localDate(): string {
   const month = String(now.getMonth() + 1).padStart(2, "0");
   const day = String(now.getDate()).padStart(2, "0");
   return `${now.getFullYear()}-${month}-${day}`;
+}
+
+function isoDate(value: Date): string {
+  return value.toISOString().slice(0, 10);
+}
+
+function addDays(value: string, days: number): string {
+  const parsed = new Date(`${value}T00:00:00Z`);
+  parsed.setUTCDate(parsed.getUTCDate() + days);
+  return isoDate(parsed);
+}
+
+function mondayFor(value: string): string {
+  const parsed = new Date(`${value}T00:00:00Z`);
+  const offset = (parsed.getUTCDay() + 6) % 7;
+  return addDays(value, -offset);
+}
+
+function nextMonday(value: string): string {
+  const parsed = new Date(`${value}T00:00:00Z`);
+  const weekday = (parsed.getUTCDay() + 6) % 7;
+  return addDays(value, 7 - weekday);
 }
 
 function displayDate(value: string): string {
@@ -164,7 +187,15 @@ export default function JournalExperience({
   const submissionLockRef = useRef(false);
   const nudgeHeadingRef = useRef<HTMLHeadingElement>(null);
   const threadHeadingRef = useRef<HTMLHeadingElement>(null);
+  const latestEntryRef = useRef<HTMLLIElement>(null);
+  const composerRef = useRef<HTMLTextAreaElement>(null);
+  const previousLatestEntryIdRef = useRef(
+    experience.journal_entries.at(-1)?.journal_entry_id ?? null,
+  );
   const [removingEntryId, setRemovingEntryId] = useState<string | null>(null);
+  const [timeAction, setTimeAction] = useState<
+    "next_day" | "close_week" | null
+  >(null);
   const [historyOpen, setHistoryOpen] = useState(false);
   const replayWeekStart =
     typeof experience.weekly_digest?.week_start === "string"
@@ -198,6 +229,13 @@ export default function JournalExperience({
         : [],
     [currentWeekEntries, experience.journal_entries, mode],
   );
+  const displayedCurrentWeekEntries = useMemo(
+    () =>
+      mode === "manual"
+        ? [...currentWeekEntries].reverse()
+        : currentWeekEntries,
+    [currentWeekEntries, mode],
+  );
   const replayInspectEventId =
     latestEventId(experience.trace_events, "drift_detected")
     ?? latestEventId(experience.trace_events, "weekly_digest_built");
@@ -208,6 +246,28 @@ export default function JournalExperience({
         .find((nudge) => nudge.outcome === "displayed") ?? null,
     [experience.nudges],
   );
+  const assessmentDate = experience.assessment_clock?.current_date ?? null;
+  const assessmentWeekStart = assessmentDate
+    ? mondayFor(assessmentDate)
+    : null;
+  const assessmentWeekEnd = assessmentWeekStart
+    ? addDays(assessmentWeekStart, 6)
+    : null;
+  const assessmentWeekEntries = useMemo(
+    () => assessmentWeekStart && assessmentWeekEnd
+      ? experience.journal_entries.filter(
+          (entry) =>
+            entry.date >= assessmentWeekStart
+            && entry.date <= assessmentWeekEnd,
+        )
+      : [],
+    [
+      assessmentWeekEnd,
+      assessmentWeekStart,
+      experience.journal_entries,
+    ],
+  );
+  const latestEntry = experience.journal_entries.at(-1) ?? null;
   const isBusy = ["saving", "checking_nudge", "running"].includes(
     experience.run_state,
   );
@@ -220,13 +280,32 @@ export default function JournalExperience({
         entry.journal_entry_id
         === experience.pending_submission?.entry.journal_entry_id,
     );
-  const copy = statusCopy(experience);
+  const copy = timeAction === "next_day"
+    ? "Moving to the next day…"
+    : timeAction === "close_week"
+      ? "Closing the week and preparing its review…"
+      : statusCopy(experience);
 
   useEffect(() => {
     if (isAwaitingResponse) {
       nudgeHeadingRef.current?.focus({ preventScroll: true });
     }
   }, [isAwaitingResponse]);
+
+  useEffect(() => {
+    if (mode !== "manual") return;
+    const latestEntryId =
+      experience.journal_entries.at(-1)?.journal_entry_id ?? null;
+    if (
+      latestEntryId !== null
+      && latestEntryId !== previousLatestEntryIdRef.current
+      && !isAwaitingResponse
+    ) {
+      latestEntryRef.current?.focus({ preventScroll: true });
+      latestEntryRef.current?.scrollIntoView?.({ block: "center" });
+    }
+    previousLatestEntryIdRef.current = latestEntryId;
+  }, [experience.journal_entries, isAwaitingResponse, mode]);
 
   useEffect(() => {
     if (mode === "saved_replay") setHistoryOpen(false);
@@ -291,6 +370,7 @@ export default function JournalExperience({
               revision: experience.revision,
               journal_entries: experience.journal_entries,
               nudges: experience.nudges,
+              assessment_clock: experience.assessment_clock,
               trace_events: experience.trace_events,
             }
           : null,
@@ -338,6 +418,7 @@ export default function JournalExperience({
           acceptedResponse.session.weekly_reviewer_decisions,
         drift_result: acceptedResponse.session.drift_result,
         weekly_digest: acceptedResponse.session.weekly_digest,
+        assessment_clock: acceptedResponse.session.assessment_clock,
         pending_submission: failed ? pending : null,
         run_state: runState,
         retryable: failed,
@@ -370,6 +451,7 @@ export default function JournalExperience({
             acceptedResponse.session.weekly_reviewer_decisions,
           drift_result: acceptedResponse.session.drift_result,
           weekly_digest: acceptedResponse.session.weekly_digest,
+          assessment_clock: acceptedResponse.session.assessment_clock,
           pending_submission: apiError.retryable ? pending : null,
           run_state: "failed",
           retryable: apiError.retryable,
@@ -407,7 +489,7 @@ export default function JournalExperience({
           experience.journal_entries,
           experience.trace_events,
         ),
-        date: localDate(),
+        date: experience.assessment_clock?.current_date ?? localDate(),
         content,
         nudge_response: null,
       };
@@ -454,6 +536,7 @@ export default function JournalExperience({
       revision: experience.revision,
       journal_entries: experience.journal_entries,
       nudges: experience.nudges,
+      assessment_clock: experience.assessment_clock,
       trace_events: experience.trace_events,
     };
     const updatedState = {
@@ -461,6 +544,7 @@ export default function JournalExperience({
       revision: experience.revision + 1,
       journal_entries: journalEntries,
       nudges,
+      assessment_clock: experience.assessment_clock,
       trace_events: experience.trace_events,
     };
     let restoreError: unknown = null;
@@ -520,6 +604,7 @@ export default function JournalExperience({
           synchronized.response.session.weekly_reviewer_decisions,
         drift_result: synchronized.response.session.drift_result,
         weekly_digest: synchronized.response.session.weekly_digest,
+        assessment_clock: synchronized.response.session.assessment_clock,
         nudge_response_draft: "",
         run_state: "complete",
         retryable: false,
@@ -534,6 +619,95 @@ export default function JournalExperience({
         error_message:
           "Your response is still here, but the saved Journal Entry could not update. Try again.",
       });
+    }
+  };
+
+  const changeAssessmentTime = async (
+    action: "next_day" | "close_week",
+  ) => {
+    if (
+      experience.assessment_clock === null
+      || isBusy
+      || isAwaitingResponse
+      || timeAction !== null
+    ) {
+      return;
+    }
+    let acceptedResponse: Awaited<
+      ReturnType<typeof advanceAssessmentTime>
+    > | null = null;
+    setTimeAction(action);
+    updateExperience({
+      run_state: "running",
+      retryable: false,
+      error_message: null,
+    });
+    try {
+      acceptedResponse = await advanceAssessmentTime({
+        sessionId: profile.session_id,
+        expectedRevision: experience.revision,
+        action,
+      });
+      const trace = await readExperienceTrace(profile.session_id);
+      updateExperience({
+        revision: acceptedResponse.session.revision,
+        journal_entries: acceptedResponse.session.journal_entries,
+        nudges: acceptedResponse.session.nudges,
+        weekly_reviewer_decisions:
+          acceptedResponse.session.weekly_reviewer_decisions,
+        drift_result: acceptedResponse.session.drift_result,
+        weekly_digest: acceptedResponse.session.weekly_digest,
+        assessment_clock: acceptedResponse.session.assessment_clock,
+        run_state: "complete",
+        retryable: false,
+        error_message: null,
+        trace_event_ids: acceptedResponse.session.trace_event_ids,
+        trace_events: trace.events,
+      });
+      const focusTarget = () => {
+        if (action === "next_day") {
+          composerRef.current?.focus({ preventScroll: true });
+          composerRef.current?.scrollIntoView?.({ block: "center" });
+          return;
+        }
+        const weeklyHeading = document.getElementById("weekly-view-title");
+        weeklyHeading?.focus({ preventScroll: true });
+        weeklyHeading?.scrollIntoView?.({ block: "start" });
+      };
+      window.requestAnimationFrame?.(focusTarget);
+    } catch (error) {
+      const apiError = error instanceof ExperienceApiError
+        ? error
+        : new ExperienceApiError(
+            "Simulated time could not change.",
+            "assessment_time_failed",
+            true,
+          );
+      if (acceptedResponse !== null) {
+        updateExperience({
+          revision: acceptedResponse.session.revision,
+          journal_entries: acceptedResponse.session.journal_entries,
+          nudges: acceptedResponse.session.nudges,
+          weekly_reviewer_decisions:
+            acceptedResponse.session.weekly_reviewer_decisions,
+          drift_result: acceptedResponse.session.drift_result,
+          weekly_digest: acceptedResponse.session.weekly_digest,
+          assessment_clock: acceptedResponse.session.assessment_clock,
+          run_state: "failed",
+          retryable: apiError.retryable,
+          error_message:
+            "The date changed, but its Inspect details could not be loaded.",
+          trace_event_ids: acceptedResponse.session.trace_event_ids,
+        });
+      } else {
+        updateExperience({
+          run_state: "failed",
+          retryable: apiError.retryable,
+          error_message: apiError.message,
+        });
+      }
+    } finally {
+      setTimeAction(null);
     }
   };
 
@@ -566,6 +740,7 @@ export default function JournalExperience({
           synchronized.response.session.weekly_reviewer_decisions,
         drift_result: synchronized.response.session.drift_result,
         weekly_digest: synchronized.response.session.weekly_digest,
+        assessment_clock: synchronized.response.session.assessment_clock,
         selected_entry_id:
           experience.selected_entry_id === journalEntryId
             ? null
@@ -622,10 +797,33 @@ export default function JournalExperience({
             experience.nudges.find(
               (item) => item.journal_entry_id === entry.journal_entry_id,
             ) ?? null;
+          const decision = latestDecisionFor(
+            experience.trace_events,
+            entry.journal_entry_id,
+          );
+          const entryFinalized = nudge !== null
+            ? nudge.outcome !== "displayed"
+            : ["complete", "refused", "invalid"].includes(
+                decision?.status ?? "",
+              );
+          const isLatestEntry =
+            entry.journal_entry_id === latestEntry?.journal_entry_id;
+          const showTimeActions =
+            mode === "manual"
+            && assessmentDate !== null
+            && entry.date === assessmentDate
+            && isLatestEntry
+            && entryFinalized
+            && !isBusy
+            && !isAwaitingResponse;
+          const assessmentWeekday = assessmentDate
+            ? (new Date(`${assessmentDate}T00:00:00Z`).getUTCDay() + 6) % 7
+            : null;
           return (
             <li
               id={journalEntryAnchorId(entry.journal_entry_id)}
               key={entry.journal_entry_id}
+              ref={mode === "manual" && isLatestEntry ? latestEntryRef : undefined}
               tabIndex={-1}
               aria-current={
                 experience.selected_entry_id === entry.journal_entry_id
@@ -665,6 +863,40 @@ export default function JournalExperience({
                 <p className="journal-thread__skipped">
                   Follow-up skipped.
                 </p>
+              ) : null}
+              {showTimeActions && assessmentWeekStart && assessmentWeekEnd ? (
+                <div className="simulated-time-actions">
+                  <p>
+                    Choose when you want to write again, or close this week and
+                    review {assessmentWeekEntries.length} finalized {assessmentWeekEntries.length === 1
+                      ? "Journal Entry"
+                      : "Journal Entries"}.
+                  </p>
+                  <div>
+                    {assessmentWeekday !== 6 ? (
+                      <button
+                        className="button button--quiet"
+                        type="button"
+                        onClick={() => void changeAssessmentTime("next_day")}
+                      >
+                        Write on the next day
+                      </button>
+                    ) : null}
+                    <button
+                      className="button button--primary"
+                      type="button"
+                      aria-describedby="close-week-effect"
+                      onClick={() => void changeAssessmentTime("close_week")}
+                    >
+                      Close week and review
+                    </button>
+                  </div>
+                  <small id="close-week-effect">
+                    Moves to {displayDate(nextMonday(assessmentDate))}. Weekly
+                    Drift Detection will review {displayDate(assessmentWeekStart)}–{displayDate(assessmentWeekEnd)},
+                    then Coach Digest will run.
+                  </small>
+                </div>
               ) : null}
             </li>
           );
@@ -714,6 +946,18 @@ export default function JournalExperience({
         </header>
       ) : null}
 
+      {mode === "manual" && experience.assessment_clock ? (
+        <aside className="simulated-time" aria-label="Simulated time">
+          <div>
+            <p className="eyebrow">Simulated time</p>
+            <time dateTime={experience.assessment_clock.current_date}>
+              {displayDate(experience.assessment_clock.current_date)}
+            </time>
+          </div>
+          <p>New Journal Entries use this date in the current session.</p>
+        </aside>
+      ) : null}
+
       {mode === "manual" && !isAwaitingResponse ? (
         <form
           className="journal-composer"
@@ -729,6 +973,7 @@ export default function JournalExperience({
               : "Journal Entry"}
           </label>
           <textarea
+            ref={composerRef}
             id="journal-entry"
             aria-describedby="journal-entry-help journal-status"
             placeholder="Start with the moment…"
@@ -851,9 +1096,9 @@ export default function JournalExperience({
 
       {mode === "saved_replay" && showWeeklySummary ? weeklyExperience : null}
 
-      {currentWeekEntries.length > 0
+      {displayedCurrentWeekEntries.length > 0
         ? renderJournalThread(
-            currentWeekEntries,
+            displayedCurrentWeekEntries,
             "journal-thread-title",
             mode === "saved_replay" ? "Current week" : "Your thread",
             mode === "saved_replay"

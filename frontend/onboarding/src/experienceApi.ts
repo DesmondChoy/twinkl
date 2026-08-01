@@ -1,6 +1,7 @@
 import type { OnboardingProfile } from "./domain";
 import {
   EXPERIENCE_INSPECT_CONTRACT_VERSION,
+  type AssessmentTimeAdvancedResponseContract,
   type ExperienceApiResponseContract,
   type ExperienceResumeStateContract,
   type JournalEntryContract,
@@ -26,6 +27,10 @@ export class ExperienceApiError extends Error {
 
 function requestId(): string {
   return crypto.randomUUID();
+}
+
+function browserTimeZone(): string {
+  return Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
 }
 
 async function sha256(value: unknown): Promise<string> {
@@ -86,10 +91,12 @@ async function postExperience(
 export async function createExperienceSession(
   profile: OnboardingProfile,
   resumeState: ExperienceResumeStateContract | null = null,
+  assessmentTimezone: string | null = browserTimeZone(),
 ): Promise<SessionCreatedResponseContract> {
   const idempotencyKey = await sha256({
     operation: "create_session",
     profile,
+    assessment_timezone: assessmentTimezone,
     resume_state: resumeState,
   });
   const response = await postExperience({
@@ -98,11 +105,50 @@ export async function createExperienceSession(
     request_id: requestId(),
     idempotency_key: idempotencyKey,
     profile,
+    ...(assessmentTimezone === null
+      ? {}
+      : { assessment_timezone: assessmentTimezone }),
     ...(resumeState === null ? {} : { resume_state: resumeState }),
   });
   if (response.operation !== "create_session") {
     throw new ExperienceApiError(
       "The Experience session returned the wrong result.",
+      "unexpected_operation",
+      false,
+    );
+  }
+  return response;
+}
+
+export async function advanceAssessmentTime(
+  {
+    sessionId,
+    expectedRevision,
+    action,
+  }: {
+    sessionId: string;
+    expectedRevision: number;
+    action: "next_day" | "close_week";
+  },
+): Promise<AssessmentTimeAdvancedResponseContract> {
+  const idempotencyKey = await sha256({
+    operation: "advance_assessment_time",
+    session_id: sessionId,
+    expected_revision: expectedRevision,
+    action,
+  });
+  const response = await postExperience({
+    schema_version: EXPERIENCE_INSPECT_CONTRACT_VERSION,
+    operation: "advance_assessment_time",
+    request_id: requestId(),
+    idempotency_key: idempotencyKey,
+    session_id: sessionId,
+    expected_revision: expectedRevision,
+    action,
+  });
+  if (response.operation !== "advance_assessment_time") {
+    throw new ExperienceApiError(
+      "Changing simulated time returned the wrong result.",
       "unexpected_operation",
       false,
     );

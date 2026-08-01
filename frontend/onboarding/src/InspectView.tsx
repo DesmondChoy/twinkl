@@ -39,6 +39,10 @@ const EVENT_PRESENTATION: Record<string, EventPresentation> = {
     label: "Profile confirmed",
     component: "Profile validation",
   },
+  assessment_time_advanced: {
+    label: "Simulated time changed",
+    component: "Experience session clock",
+  },
   journal_entry_submitted: {
     label: "Journal Entry submitted",
     component: "Journal Entry intake",
@@ -109,6 +113,7 @@ function eventMatchesFilter(
   if (filter === "journal") {
     return [
       "journal_entry_submitted",
+      "assessment_time_advanced",
       "nudge_suppression_checked",
       "nudge_decided",
       "nudge_generated",
@@ -261,7 +266,16 @@ function eventSummary(
         : "Weekly Drift Detection output ready";
     }
     case "weekly_coach_generated":
-      return "Coach Digest response and question ready";
+      return event.status === "complete"
+        ? "Coach Digest response and question ready"
+        : "Coach Digest response unavailable";
+    case "assessment_time_advanced": {
+      const action = string(details.action);
+      const currentDate = string(details.current_date);
+      return action === "close_week"
+        ? `Week closed · moved to ${currentDate ?? "the next Monday"}`
+        : `Moved to ${currentDate ?? "the next day"}`;
+    }
     default:
       return STATUS_LABELS[event.status] ?? titleCase(event.status);
   }

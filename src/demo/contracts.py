@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Sequence
-from datetime import datetime
+from datetime import date, datetime
 from typing import Annotated, Any, Literal, cast
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
@@ -58,6 +58,7 @@ EventSource = Literal["saved_replay", "live_run"]
 Operation = Literal[
     "create_session",
     "submit_journal_entry",
+    "advance_assessment_time",
     "load_scenario",
     "read_trace",
 ]
@@ -360,6 +361,20 @@ class ModelContract(ContractModel):
     reasoning_effort: str | None = None
 
 
+class AssessmentClock(ContractModel):
+    """Forward-only date used only by the manual assessment flow."""
+
+    mode: Literal["simulated_assessment"] = "simulated_assessment"
+    current_date: str
+    timezone: str = Field(min_length=1)
+
+    @field_validator("current_date")
+    @classmethod
+    def validate_current_date(cls, value: str) -> str:
+        date.fromisoformat(value)
+        return value
+
+
 class ResourceRef(ContractModel):
     kind: Literal[
         "profile",
@@ -370,6 +385,7 @@ class ResourceRef(ContractModel):
         "drift",
         "weekly_digest",
         "weekly_coach",
+        "assessment_time",
         "event",
     ]
     id: str = Field(min_length=1)
@@ -545,8 +561,28 @@ class WeeklyDigestBuiltDetails(ContractModel):
 
 
 class WeeklyCoachGeneratedDetails(ContractModel):
-    narrative: CoachNarrative
-    validation: DigestValidation
+    narrative: CoachNarrative | None = None
+    validation: DigestValidation | None = None
+
+    @model_validator(mode="after")
+    def validate_result(self) -> WeeklyCoachGeneratedDetails:
+        if (self.narrative is None) != (self.validation is None):
+            raise ValueError("Coach Digest narrative and validation must be paired")
+        return self
+
+
+class AssessmentTimeAdvancedDetails(ContractModel):
+    action: Literal["next_day", "close_week"]
+    previous_date: str
+    current_date: str
+
+    @model_validator(mode="after")
+    def validate_forward_change(self) -> AssessmentTimeAdvancedDetails:
+        previous = date.fromisoformat(self.previous_date)
+        current = date.fromisoformat(self.current_date)
+        if current <= previous:
+            raise ValueError("Simulated assessment time must move forward")
+        return self
 
 
 class ProfileConfirmedEvent(TraceEventBase):
@@ -617,6 +653,11 @@ class WeeklyCoachGeneratedEvent(TraceEventBase):
     details: WeeklyCoachGeneratedDetails
 
 
+class AssessmentTimeAdvancedEvent(TraceEventBase):
+    event_type: Literal["assessment_time_advanced"]
+    details: AssessmentTimeAdvancedDetails
+
+
 TraceEvent = Annotated[
     ProfileConfirmedEvent
     | JournalEntrySubmittedEvent
@@ -627,7 +668,8 @@ TraceEvent = Annotated[
     | WeeklyReviewCompletedEvent
     | DriftDetectedEvent
     | WeeklyDigestBuiltEvent
-    | WeeklyCoachGeneratedEvent,
+    | WeeklyCoachGeneratedEvent
+    | AssessmentTimeAdvancedEvent,
     Field(discriminator="event_type"),
 ]
 
@@ -653,6 +695,7 @@ class ExperienceSession(ContractModel):
     )
     drift_result: DriftDetectorResult | None = None
     weekly_digest: WeeklyDigest | None = None
+    assessment_clock: AssessmentClock | None = None
     trace_event_ids: list[str] = Field(default_factory=list)
     selection: SessionSelection
     updated_at: str
@@ -670,6 +713,13 @@ class ExperienceSession(ContractModel):
         indices = [entry.t_index for entry in self.journal_entries]
         if indices != sorted(indices) or len(indices) != len(set(indices)):
             raise ValueError("Journal Entries must have unique chronological t_index")
+        if (
+            self.assessment_clock is not None
+            and self.journal_entries
+            and date.fromisoformat(self.assessment_clock.current_date)
+            < date.fromisoformat(self.journal_entries[-1].date)
+        ):
+            raise ValueError("Simulated assessment time cannot precede Journal Entries")
         if len(self.trace_event_ids) != len(set(self.trace_event_ids)):
             raise ValueError("Session trace_event_ids must be unique")
         return self
@@ -682,6 +732,7 @@ class SessionResumeState(ContractModel):
     revision: int = Field(ge=0)
     journal_entries: list[JournalEntry] = Field(default_factory=list)
     nudges: list[NudgeInteraction] = Field(default_factory=list)
+    assessment_clock: AssessmentClock | None = None
     trace_events: list[TraceEvent] = Field(min_length=1)
 
     @model_validator(mode="after")
@@ -689,6 +740,13 @@ class SessionResumeState(ContractModel):
         if self.revision < len(self.journal_entries):
             raise ValueError("Resume revision cannot precede saved Journal Entries")
         entry_ids = {entry.journal_entry_id for entry in self.journal_entries}
+        if (
+            self.assessment_clock is not None
+            and self.journal_entries
+            and date.fromisoformat(self.assessment_clock.current_date)
+            < date.fromisoformat(self.journal_entries[-1].date)
+        ):
+            raise ValueError("Resume time cannot precede saved Journal Entries")
         if any(nudge.journal_entry_id not in entry_ids for nudge in self.nudges):
             raise ValueError("Resume nudges must reference saved Journal Entries")
         event_ids = [event.event_id for event in self.trace_events]
@@ -761,6 +819,7 @@ class SessionCreateRequest(ContractModel):
     request_id: str
     idempotency_key: str = Field(pattern=r"^[0-9a-f]{64}$")
     profile: OnboardingProfile
+    assessment_timezone: str | None = None
     resume_state: SessionResumeState | None = None
 
     @model_validator(mode="after")
@@ -789,6 +848,16 @@ class JournalEntrySubmitRequest(ContractModel):
     journal_entry: JournalEntry
 
 
+class AssessmentTimeAdvanceRequest(ContractModel):
+    schema_version: Literal["experience-inspect-v1"] = CONTRACT_VERSION
+    operation: Literal["advance_assessment_time"]
+    request_id: str
+    idempotency_key: str = Field(pattern=r"^[0-9a-f]{64}$")
+    session_id: str
+    expected_revision: int = Field(ge=0)
+    action: Literal["next_day", "close_week"]
+
+
 class ScenarioLoadRequest(ContractModel):
     schema_version: Literal["experience-inspect-v1"] = CONTRACT_VERSION
     operation: Literal["load_scenario"]
@@ -807,6 +876,7 @@ class TraceReadRequest(ContractModel):
 ApiRequest = Annotated[
     SessionCreateRequest
     | JournalEntrySubmitRequest
+    | AssessmentTimeAdvanceRequest
     | ScenarioLoadRequest
     | TraceReadRequest,
     Field(discriminator="operation"),
@@ -824,6 +894,15 @@ class SessionCreatedResponse(ContractModel):
 class JournalEntrySubmittedResponse(ContractModel):
     schema_version: Literal["experience-inspect-v1"] = CONTRACT_VERSION
     operation: Literal["submit_journal_entry"]
+    request_id: str
+    status: Literal["ok"]
+    session: ExperienceSession
+    event_ids: list[str] = Field(min_length=1)
+
+
+class AssessmentTimeAdvancedResponse(ContractModel):
+    schema_version: Literal["experience-inspect-v1"] = CONTRACT_VERSION
+    operation: Literal["advance_assessment_time"]
     request_id: str
     status: Literal["ok"]
     session: ExperienceSession
@@ -861,6 +940,7 @@ class ApiErrorResponse(ContractModel):
 ApiResponse = Annotated[
     SessionCreatedResponse
     | JournalEntrySubmittedResponse
+    | AssessmentTimeAdvancedResponse
     | ScenarioLoadedResponse
     | TraceReadResponse
     | ApiErrorResponse,

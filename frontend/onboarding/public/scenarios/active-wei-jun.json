@@ -454,6 +454,7 @@
       "coach_narrative": null,
       "validation": null
     },
+    "assessment_clock": null,
     "trace_event_ids": [
       "active-wei-jun:event:001",
       "active-wei-jun:event:002",
@@ -1868,6 +1869,7 @@
           "coach_narrative": null,
           "validation": null
         },
+        "assessment_clock": null,
         "trace_event_ids": [
           "active-wei-jun:event:001",
           "active-wei-jun:event:002",

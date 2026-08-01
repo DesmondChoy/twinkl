@@ -19,13 +19,18 @@ Journal Entry flow. The React Experience passes the confirmed Profile and
 ordered Journal Entries through the versioned Python boundary, applies the
 anti-annoyance rule, and shows the resulting displayed nudge with reply or
 skip actions. Saving a Journal Entry does not review its open
-Monday-through-Sunday week. After Sunday, a due-review caller runs the fixed
-Weekly Drift Reviewer, applies the Drift Detector, and shows a cited Coach
-Digest. The first partial week follows the same rule. Inspect reads the
-live trace events. Profile confirmation starts this trace when the Python
-boundary is available; without it, Experience stays usable and Inspect shows
-zero events instead of fixture events. Retryable failures include a retry
-action. **Try demo** loads one of five saved synthetic personas into the same
+Monday-through-Sunday week. Manual Experience starts one Simulated time date
+from the browser timezone. After the newest Journal Entry is final, the user
+can move to the next day or close the week. Closing the week moves to the next
+Monday. It runs the fixed Weekly Drift Reviewer and applies the Drift Detector.
+Coach Digest then runs for every Weekly Drift Detection result, including No
+Drift. If Coach Digest cannot return a valid response, the Weekly Drift
+Detection result remains available. The first partial week follows the same
+rule. Inspect reads the live trace events. Profile confirmation starts this
+trace when the Python boundary is available. Without it, Experience stays
+usable and Inspect shows zero events instead of fixture events. Retryable
+failures include a retry action. **Try demo** loads one of five saved synthetic
+personas into the same
 React session and replays Journal Entries, displayed nudges and responses,
 Drift, Coach Digest responses, and Inspect events one week at a time. **Next step** is
 the default. **Previous** returns to an earlier week. **Auto replay** and
@@ -104,11 +109,13 @@ Nudge reply and skip outcomes remain in the resumable browser session, while
 the Python boundary records nudge generation events for Inspect. Saving either
 outcome, or confirming Journal Entry removal, advances the session revision and
 recomputes affected closed weeks that were already reviewed; an open week
-remains unreviewed. The due-review method accepts an `as_of` date resolved in
-the user's IANA timezone. The React POC uses the browser-local date of a later
-Journal Entry to catch up closed weeks; a production background scheduler and
-durable timezone storage remain outside the capstone. A failed synchronization
-keeps the Journal Entry or response in the browser for a contextual retry.
+remains unreviewed. The Python boundary owns forward-only Simulated time
+changes. It stores the user's IANA timezone with the assessment clock. The
+manual Experience shows Journal Entry cards newest first. Stored Journal
+Entries, Weekly Drift Detection input, and Inspect events stay in chronological
+order. A production background scheduler remains outside the capstone. A
+failed synchronization keeps the Journal Entry or response in the browser for
+a contextual retry.
 Removed Journal Entry positions are not reused, and Inspect marks their
 immutable submission events as removed from the current Experience. Production
 authentication, multi-tenant storage, and generalized persistence remain

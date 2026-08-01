@@ -5,17 +5,36 @@ from __future__ import annotations
 import asyncio
 import hashlib
 import json
+import os
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 from datetime import UTC, date, datetime, timedelta
 from typing import Any, Literal, cast
 from uuid import uuid4
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
+from src.coach.llm_client import (
+    DEFAULT_GEMINI_MODEL,
+    DEFAULT_OPENAI_MODEL,
+    build_llm_complete,
+)
 from src.coach.schemas import WeeklyDigest
-from src.coach.weekly_digest import build_weekly_drift_reviewer_digest_from_entries
+from src.coach.weekly_digest import (
+    LLMCompleteFn,
+    attach_coach_artifacts,
+    build_weekly_drift_reviewer_digest_from_entries,
+    generate_weekly_digest_coach,
+    render_digest_prompt,
+    validate_weekly_digest_narrative,
+)
 from src.demo.contracts import (
     ApiErrorResponse,
     ApiResponse,
+    AssessmentClock,
+    AssessmentTimeAdvancedDetails,
+    AssessmentTimeAdvancedEvent,
+    AssessmentTimeAdvancedResponse,
+    AssessmentTimeAdvanceRequest,
     ContractFixtureSet,
     DriftDetectedDetails,
     DriftDetectedEvent,
@@ -47,6 +66,8 @@ from src.demo.contracts import (
     TraceEvent,
     TraceReadRequest,
     TraceReadResponse,
+    WeeklyCoachGeneratedDetails,
+    WeeklyCoachGeneratedEvent,
     WeeklyDigestBuiltDetails,
     WeeklyDigestBuiltEvent,
     WeeklyDriftReviewerDecisionContract,
@@ -80,9 +101,12 @@ NudgeRuntime = Callable[[NudgeRuntimeRequest], Awaitable[NudgeRuntimeReceipt]]
 Operation = Literal[
     "create_session",
     "submit_journal_entry",
+    "advance_assessment_time",
     "load_scenario",
     "read_trace",
 ]
+
+_DEFAULT_COACH = object()
 
 
 def _hash_payload(payload: Any) -> str:
@@ -107,7 +131,11 @@ def _safe_raw_response(value: str | None) -> Any | None:
 @dataclass
 class _IdempotentResult:
     fingerprint: str
-    response: SessionCreatedResponse | JournalEntrySubmittedResponse
+    response: (
+        SessionCreatedResponse
+        | JournalEntrySubmittedResponse
+        | AssessmentTimeAdvancedResponse
+    )
     retryable: bool = False
     retry_parent_event_id: str | None = None
 
@@ -120,11 +148,27 @@ class InMemoryExperienceService:
         *,
         nudge_runtime: NudgeRuntime | None = None,
         weekly_reviewer: WeeklyDriftReviewerFn | None = None,
+        coach_llm_complete: LLMCompleteFn | None | object = _DEFAULT_COACH,
+        coach_model_contract: ModelContract | None = None,
         now: Callable[[], datetime] | None = None,
         make_id: Callable[[str], str] | None = None,
     ) -> None:
         self._nudge_runtime = nudge_runtime or OpenAINudgeRuntime()
         self._weekly_reviewer = weekly_reviewer or OpenAIWeeklyDriftReviewer()
+        self._coach_llm_complete = (
+            build_llm_complete()
+            if coach_llm_complete is _DEFAULT_COACH
+            else cast(LLMCompleteFn | None, coach_llm_complete)
+        )
+        provider = os.environ.get("TWINKL_COACH_PROVIDER", "openai").strip().lower()
+        default_model = (
+            DEFAULT_GEMINI_MODEL if provider == "gemini" else DEFAULT_OPENAI_MODEL
+        )
+        self._coach_model_contract = coach_model_contract or ModelContract(
+            provider=provider,
+            model=os.environ.get("TWINKL_COACH_MODEL", default_model),
+            reasoning_effort="none",
+        )
         self._now = now or (lambda: datetime.now(UTC))
         self._make_id = make_id or (lambda prefix: f"{prefix}-{uuid4()}")
         self._sessions: dict[str, ExperienceSession] = {}
@@ -137,7 +181,11 @@ class InMemoryExperienceService:
 
     @staticmethod
     def _fingerprint(
-        request: SessionCreateRequest | JournalEntrySubmitRequest,
+        request: (
+            SessionCreateRequest
+            | JournalEntrySubmitRequest
+            | AssessmentTimeAdvanceRequest
+        ),
     ) -> str:
         return _hash_payload(
             request.model_dump(
@@ -165,11 +213,21 @@ class InMemoryExperienceService:
 
     @staticmethod
     def _with_request_id(
-        response: SessionCreatedResponse | JournalEntrySubmittedResponse,
+        response: (
+            SessionCreatedResponse
+            | JournalEntrySubmittedResponse
+            | AssessmentTimeAdvancedResponse
+        ),
         request_id: str,
-    ) -> SessionCreatedResponse | JournalEntrySubmittedResponse:
+    ) -> (
+        SessionCreatedResponse
+        | JournalEntrySubmittedResponse
+        | AssessmentTimeAdvancedResponse
+    ):
         return cast(
-            SessionCreatedResponse | JournalEntrySubmittedResponse,
+            SessionCreatedResponse
+            | JournalEntrySubmittedResponse
+            | AssessmentTimeAdvancedResponse,
             response.model_copy(update={"request_id": request_id}),
         )
 
@@ -186,6 +244,29 @@ class InMemoryExperienceService:
         entry_date = date.fromisoformat(raw)
         week_start = entry_date - timedelta(days=entry_date.weekday())
         return week_start, week_start + timedelta(days=6)
+
+    def _initial_assessment_clock(
+        self,
+        *,
+        timezone: str | None,
+        journal_entries: list[Any],
+    ) -> AssessmentClock | None:
+        if timezone is None:
+            return None
+        try:
+            zone = ZoneInfo(timezone)
+        except ZoneInfoNotFoundError as error:
+            raise ValueError("The assessment timezone is not supported.") from error
+        current = self._now().astimezone(zone).date()
+        if journal_entries:
+            current = max(
+                current,
+                date.fromisoformat(journal_entries[-1].date),
+            )
+        return AssessmentClock(
+            current_date=current.isoformat(),
+            timezone=timezone,
+        )
 
     @staticmethod
     def _displayed_entry_text(
@@ -238,10 +319,30 @@ class InMemoryExperienceService:
             ),
             None,
         )
+        digest = digest_event.details.digest if digest_event is not None else None
+        coach_event = next(
+            (
+                event
+                for event in reversed(events)
+                if isinstance(event, WeeklyCoachGeneratedEvent)
+                and event.status == "complete"
+                and event.details.narrative is not None
+                and event.details.validation is not None
+                and digest_event is not None
+                and event.parent_event_id == digest_event.event_id
+            ),
+            None,
+        )
+        if digest is not None and coach_event is not None:
+            digest = attach_coach_artifacts(
+                digest,
+                coach_event.details.narrative,
+                coach_event.details.validation,
+            )
         return (
             list(drift_event.details.decisions) if drift_event is not None else [],
             drift_event.details.result if drift_event is not None else None,
-            digest_event.details.digest if digest_event is not None else None,
+            digest,
         )
 
     @staticmethod
@@ -298,6 +399,8 @@ class InMemoryExperienceService:
         existing: ExperienceSession,
         resume_state: SessionResumeState,
     ) -> date | None:
+        if resume_state.assessment_clock != existing.assessment_clock:
+            return None
         if resume_state.revision != existing.revision + 1:
             return None
 
@@ -492,6 +595,17 @@ class InMemoryExperienceService:
                     self._with_request_id(response, request.request_id),
                 )
 
+            if request.assessment_timezone is not None:
+                try:
+                    ZoneInfo(request.assessment_timezone)
+                except ZoneInfoNotFoundError:
+                    return self._error(
+                        requested_operation=request.operation,
+                        request_id=request.request_id,
+                        code="invalid_assessment_timezone",
+                        message="The assessment timezone is not supported.",
+                    )
+
             existing = self._sessions.get(request.profile.session_id)
             if existing is not None:
                 if existing.profile != request.profile:
@@ -537,6 +651,8 @@ class InMemoryExperienceService:
                     elif (
                         request.resume_state.journal_entries != existing.journal_entries
                         or request.resume_state.nudges != existing.nudges
+                        or request.resume_state.assessment_clock
+                        != existing.assessment_clock
                         or request.resume_state.trace_events
                         != self._events[existing.session_id]
                     ):
@@ -546,8 +662,25 @@ class InMemoryExperienceService:
                             code="session_conflict",
                             message=(
                                 "The browser-held Experience state is not current."
-                            ),
+                                ),
+                            )
+                if existing.assessment_clock is None and request.assessment_timezone:
+                    try:
+                        assessment_clock = self._initial_assessment_clock(
+                            timezone=request.assessment_timezone,
+                            journal_entries=existing.journal_entries,
                         )
+                    except ValueError as error:
+                        return self._error(
+                            requested_operation=request.operation,
+                            request_id=request.request_id,
+                            code="invalid_assessment_timezone",
+                            message=str(error),
+                        )
+                    existing = self._append_session(
+                        existing,
+                        assessment_clock=assessment_clock,
+                    )
                 response = SessionCreatedResponse(
                     operation="create_session",
                     request_id=request.request_id,
@@ -563,7 +696,7 @@ class InMemoryExperienceService:
             if request.resume_state is not None:
                 resume_state = request.resume_state
                 events = list(resume_state.trace_events)
-                decisions, _, _ = self._restored_weekly_state(events)
+                decisions, _, restored_digest = self._restored_weekly_state(events)
                 entry_indices = {
                     entry.t_index for entry in resume_state.journal_entries
                 }
@@ -586,10 +719,11 @@ class InMemoryExperienceService:
                 }
                 weekly_digest = next(
                     (
-                        event.details.digest
+                        restored_digest
                         for event in reversed(events)
                         if isinstance(event, WeeklyDigestBuiltEvent)
                         and event.details.digest.week_start in populated_weeks
+                        and restored_digest is not None
                     ),
                     None,
                 )
@@ -602,11 +736,30 @@ class InMemoryExperienceService:
                     weekly_reviewer_decisions=decisions,
                     drift_result=drift_result,
                     weekly_digest=weekly_digest,
+                    assessment_clock=(
+                        resume_state.assessment_clock
+                        or self._initial_assessment_clock(
+                            timezone=request.assessment_timezone,
+                            journal_entries=resume_state.journal_entries,
+                        )
+                    ),
                     trace_event_ids=[event.event_id for event in events],
                     selection=SessionSelection(view="experience"),
                     updated_at=self._timestamp(),
                 )
             else:
+                try:
+                    assessment_clock = self._initial_assessment_clock(
+                        timezone=request.assessment_timezone,
+                        journal_entries=[],
+                    )
+                except ValueError as error:
+                    return self._error(
+                        requested_operation=request.operation,
+                        request_id=request.request_id,
+                        code="invalid_assessment_timezone",
+                        message=str(error),
+                    )
                 event_id = self._make_id("profile")
                 event = ProfileConfirmedEvent(
                     event_id=event_id,
@@ -627,6 +780,7 @@ class InMemoryExperienceService:
                     session_id=request.profile.session_id,
                     revision=0,
                     profile=request.profile,
+                    assessment_clock=assessment_clock,
                     trace_event_ids=[event_id],
                     selection=SessionSelection(view="experience"),
                     updated_at=self._timestamp(),
@@ -704,6 +858,11 @@ class InMemoryExperienceService:
             )
         except ValueError:
             return "Journal Entry dates must use YYYY-MM-DD."
+        if (
+            session.assessment_clock is not None
+            and entry.date != session.assessment_clock.current_date
+        ):
+            return "Journal Entries must use the current simulated date."
         if previous_date is not None and entry_date < previous_date:
             return "Journal Entries must be saved in chronological order."
         return None
@@ -730,6 +889,7 @@ class InMemoryExperienceService:
         ) = None,
         drift_result: DriftDetectorResult | None = None,
         weekly_digest: WeeklyDigest | None = None,
+        assessment_clock: AssessmentClock | None = None,
         event_ids: list[str] | None = None,
         increment_revision: bool = False,
     ) -> ExperienceSession:
@@ -753,6 +913,11 @@ class InMemoryExperienceService:
                     weekly_digest
                     if weekly_digest is not None
                     else session.weekly_digest
+                ),
+                "assessment_clock": (
+                    assessment_clock
+                    if assessment_clock is not None
+                    else session.assessment_clock
                 ),
                 "trace_event_ids": [
                     *session.trace_event_ids,
@@ -939,6 +1104,96 @@ class InMemoryExperienceService:
                 retryable=False,
             )
         return None
+
+    async def _run_coach_digest(
+        self,
+        *,
+        digest: WeeklyDigest,
+        session_id: str,
+        parent_event_id: str,
+        week_id: str,
+    ) -> tuple[WeeklyDigest, WeeklyCoachGeneratedEvent]:
+        prompt = render_digest_prompt(digest)
+        narrative = None
+        validation = None
+        generation_failed = self._coach_llm_complete is None
+        if self._coach_llm_complete is not None:
+            try:
+                narrative, prompt = await generate_weekly_digest_coach(
+                    digest,
+                    self._coach_llm_complete,
+                )
+            except Exception:
+                generation_failed = True
+            else:
+                generation_failed = narrative is None
+
+        if narrative is not None:
+            validation = validate_weekly_digest_narrative(digest, narrative)
+        validation_errors = (
+            [check.details for check in validation.checks if not check.passed]
+            if validation is not None
+            else ["No valid Coach Digest response was available."]
+        )
+        valid = validation is not None and not validation_errors
+        status: EventStatus = (
+            "complete" if valid else "failed" if generation_failed else "invalid"
+        )
+        error = None
+        if status == "failed":
+            error = SafeError(
+                code=(
+                    "coach_provider_unavailable"
+                    if self._coach_llm_complete is None
+                    else "coach_response_unavailable"
+                ),
+                message="The Coach Digest could not return a valid response.",
+                retryable=self._coach_llm_complete is not None,
+            )
+        elif status == "invalid":
+            error = SafeError(
+                code="coach_response_invalid",
+                message="The Coach Digest response did not pass validation.",
+                retryable=False,
+            )
+
+        event = WeeklyCoachGeneratedEvent(
+            event_id=self._make_id("weekly-coach-generated"),
+            session_id=session_id,
+            parent_event_id=parent_event_id,
+            event_type="weekly_coach_generated",
+            status=status,
+            source="live_run",
+            input_refs=[ResourceRef(kind="weekly_digest", id=week_id)],
+            model_contract=self._coach_model_contract,
+            prompt=prompt,
+            raw_response=(
+                narrative.model_dump(mode="json")
+                if narrative is not None
+                else None
+            ),
+            validation=EventValidation(
+                valid=valid,
+                schema_name="WeeklyDigestCoachNarrative",
+                errors=validation_errors,
+            ),
+            result_refs=(
+                [ResourceRef(kind="weekly_coach", id=week_id)] if valid else []
+            ),
+            input_hash=_hash_payload(digest.model_dump(mode="json")),
+            error=error,
+            details=WeeklyCoachGeneratedDetails(
+                narrative=narrative,
+                validation=validation,
+            ),
+            **self._terminal_event_fields(),
+        )
+        return (
+            attach_coach_artifacts(digest, narrative, validation)
+            if valid
+            else digest,
+            event,
+        )
 
     async def _run_weekly_review(
         self,
@@ -1150,11 +1405,18 @@ class InMemoryExperienceService:
             ),
             **self._terminal_event_fields(),
         )
+        weekly_digest, coach_event = await self._run_coach_digest(
+            digest=weekly_digest,
+            session_id=session.session_id,
+            parent_event_id=digest_event_id,
+            week_id=week_id,
+        )
         events: list[TraceEvent] = [
             requested_event,
             completed_event,
             drift_event,
             digest_event,
+            coach_event,
         ]
         updated = self._append_session(
             session,
@@ -1212,6 +1474,149 @@ class InMemoryExperienceService:
                 as_of=as_of,
                 parent_event_id=session.trace_event_ids[-1],
             )
+
+    async def advance_assessment_time(
+        self,
+        request: AssessmentTimeAdvanceRequest,
+    ) -> AssessmentTimeAdvancedResponse | ApiErrorResponse:
+        async with self._lock:
+            key = (request.operation, request.idempotency_key)
+            fingerprint = self._fingerprint(request)
+            cached = self._idempotency.get(key)
+            if cached is not None:
+                if cached.fingerprint != fingerprint:
+                    return self._error(
+                        requested_operation=request.operation,
+                        request_id=request.request_id,
+                        code="idempotency_conflict",
+                        message=(
+                            "This retry key was already used for another time "
+                            "change."
+                        ),
+                    )
+                response = cast(AssessmentTimeAdvancedResponse, cached.response)
+                return cast(
+                    AssessmentTimeAdvancedResponse,
+                    self._with_request_id(response, request.request_id),
+                )
+
+            session = self._sessions.get(request.session_id)
+            if session is None:
+                return self._error(
+                    requested_operation=request.operation,
+                    request_id=request.request_id,
+                    code="session_not_found",
+                    message="No Experience session exists for this time change.",
+                )
+            if session.assessment_clock is None:
+                return self._error(
+                    requested_operation=request.operation,
+                    request_id=request.request_id,
+                    code="assessment_time_unavailable",
+                    message="Simulated time is not available for this session.",
+                )
+            if request.expected_revision != session.revision:
+                return self._error(
+                    requested_operation=request.operation,
+                    request_id=request.request_id,
+                    code="session_conflict",
+                    message="The simulated date is based on an older session revision.",
+                )
+            if any(nudge.outcome == "displayed" for nudge in session.nudges):
+                return self._error(
+                    requested_operation=request.operation,
+                    request_id=request.request_id,
+                    code="assessment_time_not_ready",
+                    message="Answer or skip the current follow-up before time moves.",
+                )
+
+            previous = date.fromisoformat(session.assessment_clock.current_date)
+            current_week, _ = self._week_bounds(previous.isoformat())
+            if request.action == "close_week":
+                current_entries = [
+                    entry
+                    for entry in session.journal_entries
+                    if self._week_bounds(entry.date)[0] == current_week
+                ]
+                if not current_entries:
+                    return self._error(
+                        requested_operation=request.operation,
+                        request_id=request.request_id,
+                        code="assessment_time_not_ready",
+                        message="Write a Journal Entry before closing this week.",
+                    )
+                if not self._week_is_finalized(session, week_start=current_week):
+                    return self._error(
+                        requested_operation=request.operation,
+                        request_id=request.request_id,
+                        code="assessment_time_not_ready",
+                        message=(
+                            "Finish the current Journal Entry before closing "
+                            "this week."
+                        ),
+                    )
+                current = previous + timedelta(days=7 - previous.weekday())
+            else:
+                current = previous + timedelta(days=1)
+
+            clock = session.assessment_clock.model_copy(
+                update={"current_date": current.isoformat()}
+            )
+            event = AssessmentTimeAdvancedEvent(
+                event_id=self._make_id("assessment-time-advanced"),
+                session_id=session.session_id,
+                parent_event_id=session.trace_event_ids[-1],
+                event_type="assessment_time_advanced",
+                status="complete",
+                source="live_run",
+                input_refs=[
+                    ResourceRef(kind="assessment_time", id=session.session_id)
+                ],
+                result_refs=[
+                    ResourceRef(kind="assessment_time", id=session.session_id)
+                ],
+                input_hash=_hash_payload(
+                    {
+                        "action": request.action,
+                        "current_date": previous.isoformat(),
+                        "revision": session.revision,
+                    }
+                ),
+                details=AssessmentTimeAdvancedDetails(
+                    action=request.action,
+                    previous_date=previous.isoformat(),
+                    current_date=current.isoformat(),
+                ),
+                **self._terminal_event_fields(),
+            )
+            session = self._append_session(
+                session,
+                assessment_clock=clock,
+                event_ids=[event.event_id],
+                increment_revision=True,
+            )
+            self._events[session.session_id].append(event)
+            events: list[TraceEvent] = [event]
+            if request.action == "close_week":
+                session, weekly_events = await self._run_due_weekly_reviews(
+                    session=session,
+                    as_of=current,
+                    parent_event_id=event.event_id,
+                )
+                events.extend(weekly_events)
+
+            response = AssessmentTimeAdvancedResponse(
+                operation="advance_assessment_time",
+                request_id=request.request_id,
+                status="ok",
+                session=session,
+                event_ids=[event.event_id for event in events],
+            )
+            self._idempotency[key] = _IdempotentResult(
+                fingerprint=fingerprint,
+                response=response,
+            )
+            return response
 
     async def submit_journal_entry(
         self,
@@ -1429,10 +1834,17 @@ class InMemoryExperienceService:
 
     async def handle(
         self,
-        request: SessionCreateRequest | JournalEntrySubmitRequest | TraceReadRequest,
+        request: (
+            SessionCreateRequest
+            | JournalEntrySubmitRequest
+            | AssessmentTimeAdvanceRequest
+            | TraceReadRequest
+        ),
     ) -> ApiResponse:
         if isinstance(request, SessionCreateRequest):
             return await self.create_session(request)
         if isinstance(request, JournalEntrySubmitRequest):
             return await self.submit_journal_entry(request)
+        if isinstance(request, AssessmentTimeAdvanceRequest):
+            return await self.advance_assessment_time(request)
         return await self.read_trace(request)

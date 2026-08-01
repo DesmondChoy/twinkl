@@ -2733,6 +2733,40 @@ h2 {
   font-size: clamp(2.65rem, 5.5vw, 5.2rem);
 }
 
+.simulated-time {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 26px;
+  border-left: 4px solid var(--apricot);
+  border-radius: 0 16px 16px 0;
+  padding: 15px 18px;
+  background: color-mix(in srgb, var(--mist) 72%, white);
+}
+
+.simulated-time .eyebrow,
+.simulated-time p {
+  margin: 0;
+}
+
+.simulated-time time {
+  display: block;
+  margin-top: 3px;
+  color: var(--ink);
+  font-family: "Source Serif 4 Variable", Georgia, serif;
+  font-size: 1.2rem;
+  font-weight: 650;
+}
+
+.simulated-time > p {
+  max-width: 300px;
+  color: rgba(20, 34, 59, 0.58);
+  font-size: 0.76rem;
+  line-height: 1.45;
+  text-align: right;
+}
+
 .journal-composer {
   margin-top: 34px;
   border-top: 1px solid var(--line);
@@ -2991,6 +3025,37 @@ h2 {
   margin: 12px 0 0;
   color: rgba(20, 34, 59, 0.48);
   font-size: 0.78rem;
+}
+
+.simulated-time-actions {
+  max-width: 720px;
+  margin-top: 22px;
+  border-top: 1px solid color-mix(in srgb, var(--blue) 24%, var(--line));
+  padding-top: 18px;
+}
+
+.simulated-time-actions > p,
+.simulated-time-actions small {
+  color: rgba(20, 34, 59, 0.62);
+  line-height: 1.5;
+}
+
+.simulated-time-actions > p {
+  margin: 0;
+  font-size: 0.84rem;
+}
+
+.simulated-time-actions > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.simulated-time-actions small {
+  display: block;
+  margin-top: 12px;
+  font-size: 0.7rem;
 }
 
 .weekly-experience {
@@ -3741,6 +3806,18 @@ h2 {
     line-height: 1.58;
   }
 
+  .simulated-time {
+    display: block;
+    margin-top: 20px;
+    padding: 14px 15px;
+  }
+
+  .simulated-time > p {
+    max-width: none;
+    margin-top: 8px;
+    text-align: left;
+  }
+
   .journal-composer {
     margin-top: 24px;
     padding: 18px 0;
@@ -3813,6 +3890,15 @@ h2 {
   .journal-thread li::before {
     top: 29px;
     left: 4px;
+  }
+
+  .simulated-time-actions > div {
+    display: grid;
+  }
+
+  .simulated-time-actions .button {
+    width: 100%;
+    justify-content: center;
   }
 
   .weekly-experience {
@@ -5013,6 +5099,11 @@ h2 {
 .coach-digest__availability {
   margin-bottom: 0;
   font-size: 0.72rem;
+}
+
+.coach-digest--unavailable {
+  border-style: dashed;
+  background: #fffdf8;
 }
 
 .persona-replay .journal-thread {

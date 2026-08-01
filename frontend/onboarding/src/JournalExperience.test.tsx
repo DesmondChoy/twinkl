@@ -13,6 +13,7 @@ import { canonicalInspectFixture } from "./inspectFixture";
 import { createExperienceState, type ExperienceState } from "./session";
 
 const api = vi.hoisted(() => ({
+  advanceAssessmentTime: vi.fn(),
   createExperienceSession: vi.fn(),
   journalIdempotencyKey: vi.fn(),
   readExperienceTrace: vi.fn(),
@@ -555,6 +556,100 @@ describe("manual Journal Entry Experience", () => {
     expect(screen.getByText("Follow-up skipped.")).toBeTruthy();
   });
 
+  it("shows the newest manual Journal Entry first", () => {
+    const first = {
+      ...entry("The first moment from this day."),
+      date: "2026-07-20",
+    };
+    const second = {
+      ...entry("The newest moment from this day."),
+      journal_entry_id: "manual-entry-2",
+      t_index: 1,
+      date: "2026-07-20",
+    };
+    const initial: ExperienceState = {
+      ...createExperienceState(),
+      journal_started: true,
+      revision: 2,
+      journal_entries: [first, second],
+      nudges: [
+        nudge("no_nudge", first.journal_entry_id),
+        nudge("no_nudge", second.journal_entry_id),
+      ],
+      assessment_clock: canonicalInspectFixture.session.assessment_clock,
+      run_state: "complete",
+    };
+
+    render(<Harness initial={initial} />);
+
+    const thread = screen.getByRole("region", { name: "Moment by moment." });
+    const displayedEntries = Array.from(
+      thread.querySelectorAll(".journal-thread__entry"),
+      (node) => node.textContent,
+    );
+    expect(displayedEntries).toEqual([second.content, first.content]);
+  });
+
+  it("advances Simulated time from the newest finalized Journal Entry", async () => {
+    const savedEntry = {
+      ...entry(),
+      date: "2026-07-20",
+    };
+    const initial: ExperienceState = {
+      ...createExperienceState(),
+      journal_started: true,
+      revision: 1,
+      journal_entries: [savedEntry],
+      nudges: [nudge("no_nudge")],
+      assessment_clock: canonicalInspectFixture.session.assessment_clock,
+      run_state: "complete",
+    };
+    api.advanceAssessmentTime.mockResolvedValueOnce({
+      operation: "advance_assessment_time",
+      session: {
+        ...session([savedEntry], [nudge("no_nudge")]),
+        revision: 2,
+        assessment_clock: {
+          mode: "simulated_assessment",
+          current_date: "2026-07-21",
+          timezone: "Asia/Singapore",
+        },
+      },
+    });
+    api.readExperienceTrace.mockResolvedValueOnce(trace([]));
+    const user = userEvent.setup();
+    render(<Harness initial={initial} />);
+
+    expect(
+      screen.getByRole("complementary", { name: "Simulated time" }).textContent,
+    ).toContain("Jul 20, 2026");
+    expect(screen.getByRole("button", { name: "Close week and review" }))
+      .toBeTruthy();
+    await user.click(
+      screen.getByRole("button", { name: "Write on the next day" }),
+    );
+
+    await waitFor(() =>
+      expect(
+        screen.getByRole("complementary", { name: "Simulated time" })
+          .textContent,
+      ).toContain("Jul 21, 2026"),
+    );
+    expect(api.advanceAssessmentTime).toHaveBeenCalledWith({
+      sessionId: profile.session_id,
+      expectedRevision: 1,
+      action: "next_day",
+    });
+    await waitFor(() =>
+      expect(document.activeElement).toBe(
+        screen.getByRole("textbox", { name: "Journal Entry" }),
+      ),
+    );
+    expect(
+      screen.queryByRole("button", { name: "Write on the next day" }),
+    ).toBeNull();
+  });
+
   it("shows no question when the anti-annoyance rule suppresses it", async () => {
     const savedEntry = entry();
     api.submitJournalEntry.mockImplementation(async (
@@ -917,5 +1012,58 @@ describe("manual Journal Entry Experience", () => {
 
     expect(screen.getAllByText("Review unavailable")).toHaveLength(1);
     expect(screen.queryByText("No Drift")).toBeNull();
+  });
+
+  it("keeps Weekly Drift Detection when Coach Digest is unavailable", () => {
+    const coachEvent = canonicalInspectFixture.trace_events.find(
+      (event) => event.event_type === "weekly_coach_generated",
+    )!;
+    const initial: ExperienceState = {
+      ...createExperienceState(),
+      journal_started: true,
+      journal_entries: canonicalInspectFixture.session.journal_entries,
+      nudges: canonicalInspectFixture.session.nudges,
+      weekly_reviewer_decisions:
+        canonicalInspectFixture.session.weekly_reviewer_decisions,
+      drift_result: canonicalInspectFixture.session.drift_result,
+      weekly_digest: {
+        ...canonicalInspectFixture.session.weekly_digest,
+        coach_narrative: null,
+        validation: null,
+      },
+      trace_events: [{
+        ...coachEvent,
+        status: "failed",
+        details: { narrative: null, validation: null },
+        result_refs: [],
+        validation: {
+          valid: false,
+          schema_name: "WeeklyDigestCoachNarrative",
+          errors: ["No valid response was available."],
+        },
+        error: {
+          code: "coach_response_unavailable",
+          message: "The Coach Digest could not return a valid response.",
+          retryable: true,
+        },
+      }],
+      run_state: "complete",
+    };
+
+    render(<Harness initial={initial} />);
+
+    expect(
+      screen.getByRole("heading", { name: "A repeated conflict surfaced." }),
+    ).toBeTruthy();
+    expect(
+      screen.getByRole("heading", {
+        name: "Your weekly response could not be prepared.",
+      }),
+    ).toBeTruthy();
+    expect(
+      screen.getByText(
+        "The Weekly Drift Detection result above remains available.",
+      ),
+    ).toBeTruthy();
   });
 });

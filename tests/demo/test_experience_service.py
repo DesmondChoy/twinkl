@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import shutil
 from collections.abc import Iterator
 from datetime import UTC, date, datetime
@@ -13,6 +14,7 @@ from starlette.testclient import TestClient
 from src.demo.api import create_app, create_deployment_app
 from src.demo.canonical_fixture import build_canonical_fixture
 from src.demo.contracts import (
+    AssessmentTimeAdvanceRequest,
     JournalEntry,
     JournalEntrySubmitRequest,
     ScenarioLoadRequest,
@@ -150,6 +152,7 @@ def _service(
     *,
     weekly_verdict: str = "not_conflict",
     weekly_statuses: list[str] | None = None,
+    coach_response: str | None = None,
 ) -> tuple[
     InMemoryExperienceService,
     QueueNudgeRuntime,
@@ -161,9 +164,15 @@ def _service(
         verdict=weekly_verdict,
         statuses=weekly_statuses,
     )
+    async def coach_llm_complete(_: str, __: dict | None) -> str | None:
+        return coach_response
+
     service = InMemoryExperienceService(
         nudge_runtime=runtime,
         weekly_reviewer=weekly_reviewer,
+        coach_llm_complete=(
+            coach_llm_complete if coach_response is not None else None
+        ),
         now=lambda: datetime(2026, 7, 25, 8, 30, tzinfo=UTC),
         make_id=lambda prefix: f"{prefix}-{next(sequence)}",
     )
@@ -247,6 +256,42 @@ async def _create(
     return request
 
 
+async def _create_assessment(
+    service: InMemoryExperienceService,
+) -> SessionCreateRequest:
+    profile = build_canonical_fixture().session.profile
+    request = SessionCreateRequest(
+        operation="create_session",
+        request_id="create-assessment",
+        idempotency_key="9" * 64,
+        profile=profile,
+        assessment_timezone="Asia/Singapore",
+    )
+    response = await service.create_session(request)
+    assert response.operation == "create_session"
+    assert response.session.assessment_clock is not None
+    assert response.session.assessment_clock.current_date == "2026-07-25"
+    return request
+
+
+def _valid_coach_response() -> str:
+    return json.dumps(
+        {
+            "weekly_mirror": (
+                'You wrote, "Journal Entry 0 says enough to invite reflection." '
+                "That detail gives us a clear place to pause this week."
+            ),
+            "tension_explanation": (
+                "The week does not show a repeated pattern, but the moment you "
+                "noticed can help you decide what deserves attention next."
+            ),
+            "reflective_question": (
+                "What would you want to notice if a similar moment happens again?"
+            ),
+        }
+    )
+
+
 def _submit_request(
     create_request: SessionCreateRequest,
     *,
@@ -297,6 +342,7 @@ async def test_submission_is_idempotent_and_stops_before_weekly_review() -> None
     assert response.session.drift_result is None
     assert response.session.weekly_digest is None
     assert response.session.weekly_reviewer_decisions == []
+    assert response.session.assessment_clock is None
     assert trace.operation == "read_trace"
     assert [event.event_type for event in trace.events] == [
         "profile_confirmed",
@@ -349,7 +395,7 @@ async def test_first_partial_week_becomes_due_after_sunday() -> None:
     assert weekly_reviewer.requests[0].week_start == "2026-07-20"
     assert weekly_reviewer.requests[0].week_end == "2026-07-26"
     assert monday.weekly_digest is not None
-    assert len(monday_events) == 4
+    assert len(monday_events) == 5
     assert repeated.weekly_digest == monday.weekly_digest
     assert repeated_events == []
 
@@ -404,7 +450,7 @@ async def test_due_review_waits_for_displayed_nudge_finalization() -> None:
     assert synchronized.operation == "create_session"
     assert synchronized.session.weekly_digest is None
     assert reviewed.weekly_digest is not None
-    assert len(review_events) == 4
+    assert len(review_events) == 5
     assert len(weekly_reviewer.requests) == 1
 
 
@@ -455,25 +501,210 @@ async def test_closed_week_review_forms_drift_and_cites_visible_entries() -> Non
         "weekly_review_completed",
         "drift_detected",
         "weekly_digest_built",
+        "weekly_coach_generated",
     ]
 
     assert trace.operation == "read_trace"
-    latest_events = trace.events[-4:]
+    latest_events = trace.events[-5:]
     assert [event.event_type for event in latest_events] == [
         "weekly_review_requested",
         "weekly_review_completed",
         "drift_detected",
         "weekly_digest_built",
+        "weekly_coach_generated",
     ]
     assert [event.parent_event_id for event in latest_events[1:]] == [
         event.event_id for event in latest_events[:-1]
     ]
-    digest_event = latest_events[-1]
+    digest_event = latest_events[-2]
     assert digest_event.event_type == "weekly_digest_built"
     assert digest_event.details.cited_journal_entry_ids == [
         "manual-entry-0",
         "manual-entry-1",
     ]
+
+
+@pytest.mark.asyncio
+async def test_simulated_time_advances_and_close_week_runs_coach_digest() -> None:
+    service, _, weekly_reviewer = _service(
+        [
+            _receipt(decision="no_nudge", nudge_text=None),
+            _receipt(decision="no_nudge", nudge_text=None),
+        ],
+        coach_response=_valid_coach_response(),
+    )
+    create_request = await _create_assessment(service)
+
+    first = await service.submit_journal_entry(
+        _submit_request(create_request, index=0, expected_revision=0)
+    )
+    assert first.operation == "submit_journal_entry"
+    next_day_request = AssessmentTimeAdvanceRequest(
+        operation="advance_assessment_time",
+        request_id="next-day",
+        idempotency_key="a" * 64,
+        session_id=create_request.profile.session_id,
+        expected_revision=1,
+        action="next_day",
+    )
+    next_day = await service.advance_assessment_time(next_day_request)
+    assert next_day.operation == "advance_assessment_time"
+    assert next_day.session.assessment_clock is not None
+    assert next_day.session.assessment_clock.current_date == "2026-07-26"
+
+    second = await service.submit_journal_entry(
+        _submit_request(create_request, index=1, expected_revision=2)
+    )
+    assert second.operation == "submit_journal_entry"
+    close_request = AssessmentTimeAdvanceRequest(
+        operation="advance_assessment_time",
+        request_id="close-week",
+        idempotency_key="b" * 64,
+        session_id=create_request.profile.session_id,
+        expected_revision=3,
+        action="close_week",
+    )
+    closed = await service.advance_assessment_time(close_request)
+    repeated = await service.advance_assessment_time(
+        close_request.model_copy(update={"request_id": "close-week-retry"})
+    )
+
+    assert closed.operation == "advance_assessment_time"
+    assert repeated.operation == "advance_assessment_time"
+    assert repeated.event_ids == closed.event_ids
+    assert closed.session.assessment_clock is not None
+    assert closed.session.assessment_clock.current_date == "2026-07-27"
+    assert closed.session.weekly_digest is not None
+    assert closed.session.weekly_digest.coach_narrative is not None
+    assert weekly_reviewer.requests[0].current_t_indices == [0, 1]
+    assert [
+        event.event_type
+        for event in (
+            await service.read_trace(
+                TraceReadRequest(
+                    operation="read_trace",
+                    request_id="assessment-trace",
+                    session_id=create_request.profile.session_id,
+                )
+            )
+        ).events[-6:]
+    ] == [
+        "assessment_time_advanced",
+        "weekly_review_requested",
+        "weekly_review_completed",
+        "drift_detected",
+        "weekly_digest_built",
+        "weekly_coach_generated",
+    ]
+
+
+@pytest.mark.asyncio
+async def test_simulated_time_waits_for_displayed_nudge() -> None:
+    service, _, _ = _service([_receipt()])
+    create_request = await _create_assessment(service)
+    submitted = await service.submit_journal_entry(
+        _submit_request(create_request, index=0, expected_revision=0)
+    )
+    assert submitted.operation == "submit_journal_entry"
+
+    response = await service.advance_assessment_time(
+        AssessmentTimeAdvanceRequest(
+            operation="advance_assessment_time",
+            request_id="blocked-time",
+            idempotency_key="c" * 64,
+            session_id=create_request.profile.session_id,
+            expected_revision=1,
+            action="next_day",
+        )
+    )
+
+    assert response.operation == "error"
+    assert response.error.code == "assessment_time_not_ready"
+
+
+@pytest.mark.asyncio
+async def test_coach_digest_failure_keeps_weekly_drift_detection_result() -> None:
+    service, _, _ = _service(
+        [_receipt(decision="no_nudge", nudge_text=None)],
+        coach_response=None,
+    )
+    create_request = await _create_assessment(service)
+    submitted = await service.submit_journal_entry(
+        _submit_request(create_request, index=0, expected_revision=0)
+    )
+    assert submitted.operation == "submit_journal_entry"
+
+    closed = await service.advance_assessment_time(
+        AssessmentTimeAdvanceRequest(
+            operation="advance_assessment_time",
+            request_id="close-without-coach",
+            idempotency_key="d" * 64,
+            session_id=create_request.profile.session_id,
+            expected_revision=1,
+            action="close_week",
+        )
+    )
+
+    assert closed.operation == "advance_assessment_time"
+    assert closed.session.weekly_digest is not None
+    assert closed.session.weekly_digest.coach_narrative is None
+    trace = await service.read_trace(
+        TraceReadRequest(
+            operation="read_trace",
+            request_id="coach-failure-trace",
+            session_id=create_request.profile.session_id,
+        )
+    )
+    assert trace.operation == "read_trace"
+    assert trace.events[-2].event_type == "weekly_digest_built"
+    assert trace.events[-1].event_type == "weekly_coach_generated"
+    assert trace.events[-1].status == "failed"
+
+
+@pytest.mark.asyncio
+async def test_invalid_coach_digest_keeps_weekly_drift_detection_result() -> None:
+    invalid_response = json.dumps(
+        {
+            "weekly_mirror": "This has no cited evidence.",
+            "tension_explanation": "It is also too short.",
+            "reflective_question": "What happens next?",
+        }
+    )
+    service, _, _ = _service(
+        [_receipt(decision="no_nudge", nudge_text=None)],
+        coach_response=invalid_response,
+    )
+    create_request = await _create_assessment(service)
+    submitted = await service.submit_journal_entry(
+        _submit_request(create_request, index=0, expected_revision=0)
+    )
+    assert submitted.operation == "submit_journal_entry"
+
+    closed = await service.advance_assessment_time(
+        AssessmentTimeAdvanceRequest(
+            operation="advance_assessment_time",
+            request_id="close-with-invalid-coach",
+            idempotency_key="e" * 64,
+            session_id=create_request.profile.session_id,
+            expected_revision=1,
+            action="close_week",
+        )
+    )
+
+    assert closed.operation == "advance_assessment_time"
+    assert closed.session.weekly_digest is not None
+    assert closed.session.weekly_digest.coach_narrative is None
+    trace = await service.read_trace(
+        TraceReadRequest(
+            operation="read_trace",
+            request_id="invalid-coach-trace",
+            session_id=create_request.profile.session_id,
+        )
+    )
+    assert trace.operation == "read_trace"
+    assert trace.events[-2].event_type == "weekly_digest_built"
+    assert trace.events[-1].event_type == "weekly_coach_generated"
+    assert trace.events[-1].status == "invalid"
 
 
 @pytest.mark.parametrize(
@@ -528,8 +759,9 @@ async def test_weekly_integration_fails_closed_to_abstain(
     assert completed.status == event_status
     assert completed.error is not None
     assert completed.details.receipt.error is None
-    assert trace.events[-2].event_type == "drift_detected"
-    assert trace.events[-1].event_type == "weekly_digest_built"
+    assert trace.events[-3].event_type == "drift_detected"
+    assert trace.events[-2].event_type == "weekly_digest_built"
+    assert trace.events[-1].event_type == "weekly_coach_generated"
 
 
 @pytest.mark.asyncio

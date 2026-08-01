@@ -7,8 +7,10 @@ applies the Drift rule, and stores structured output. The output contains Core
 Values, cited evidence, and Drift state.
 
 The Coach Digest is a separate workflow. It supplies the structured Weekly
-Drift Detection output to a prompt. It then produces the user response. It does
-not decide whether Drift exists.
+Drift Detection output to a prompt. It runs after each Weekly Drift Detection
+result, including No Drift. It then tries to produce the user response. If it
+cannot return a valid response, the Weekly Drift Detection result remains
+available. It does not decide whether Drift exists.
 
 Code and stored data still use `WeeklyDigest` and `weekly_digest`. These are
 compatibility identifiers. The executable prototype can also build this
@@ -262,7 +264,10 @@ The `WeeklyDigest` compatibility schema stores:
 - an optional `DigestValidation`.
 
 This record is the stored Weekly Drift Detection output. The Coach Digest
-receives a smaller projection of it rather than the entire record.
+receives a smaller projection of it rather than the entire record. The fields
+are optional because a missing or invalid Coach Digest response must not remove
+the Weekly Drift Detection output. The Coach Digest run is not optional in the
+manual Experience sequence.
 
 ### Drift States, Coach Digest Policies, and Compatibility Modes
 

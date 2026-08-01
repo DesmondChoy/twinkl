@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { canonicalInspectFixture } from "./inspectFixture";
 import {
+  advanceAssessmentTime,
   createExperienceSession,
   ExperienceApiError,
   readExperienceTrace,
@@ -44,6 +45,7 @@ describe("Experience API client", () => {
       revision: canonicalInspectFixture.session.revision,
       journal_entries: canonicalInspectFixture.session.journal_entries,
       nudges: canonicalInspectFixture.session.nudges,
+      assessment_clock: canonicalInspectFixture.session.assessment_clock,
       trace_events: canonicalInspectFixture.trace_events,
     };
 
@@ -53,7 +55,40 @@ describe("Experience API client", () => {
 
     expect(response.operation).toBe("create_session");
     expect(request.operation).toBe("create_session");
+    expect(request.assessment_timezone).toBe(
+      Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC",
+    );
     expect(request.resume_state).toEqual(resumeState);
+    expect(request.idempotency_key).toMatch(/^[0-9a-f]{64}$/);
+  });
+
+  it("advances Simulated time with a stable retry key", async () => {
+    fetchMock.mockResolvedValueOnce(
+      jsonResponse({
+        schema_version: "experience-inspect-v1",
+        operation: "advance_assessment_time",
+        request_id: "advance-response",
+        status: "ok",
+        session: canonicalInspectFixture.session,
+        event_ids: ["event-15"],
+      }),
+    );
+
+    const response = await advanceAssessmentTime({
+      sessionId: profile.session_id,
+      expectedRevision: canonicalInspectFixture.session.revision,
+      action: "next_day",
+    });
+    const [, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+    const request = JSON.parse(String(init.body));
+
+    expect(response.operation).toBe("advance_assessment_time");
+    expect(request).toMatchObject({
+      operation: "advance_assessment_time",
+      session_id: profile.session_id,
+      expected_revision: canonicalInspectFixture.session.revision,
+      action: "next_day",
+    });
     expect(request.idempotency_key).toMatch(/^[0-9a-f]{64}$/);
   });
 

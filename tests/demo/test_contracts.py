@@ -37,6 +37,7 @@ def test_canonical_fixture_matches_python_models_and_generator() -> None:
     assert payload == generated
     assert {event.event_type for event in parsed.trace_events} == {
         "profile_confirmed",
+        "assessment_time_advanced",
         "journal_entry_submitted",
         "nudge_suppression_checked",
         "nudge_decided",

@@ -468,6 +468,7 @@
       "coach_narrative": null,
       "validation": null
     },
+    "assessment_clock": null,
     "trace_event_ids": [
       "two-values-lukas:event:001",
       "two-values-lukas:event:002",
@@ -2212,6 +2213,7 @@
           "coach_narrative": null,
           "validation": null
         },
+        "assessment_clock": null,
         "trace_event_ids": [
           "two-values-lukas:event:001",
           "two-values-lukas:event:002",

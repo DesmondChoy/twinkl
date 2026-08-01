@@ -23,7 +23,7 @@ describe("onboarding session", () => {
   it("randomizes set order and every prescribed card order once, then round-trips", () => {
     const ids = ["user-1", "session-1"];
     const session = createSession(() => 0, new Date("2026-07-19T00:00:00.000Z"), () => ids.shift()!);
-    expect(session.schema_version).toBe(7);
+    expect(session.schema_version).toBe(8);
     expect(session.stage).toBe("name");
     expect(session.preferred_name).toBe("");
     expect(session.experience).toMatchObject({
@@ -70,7 +70,7 @@ describe("onboarding session", () => {
     delete legacy.preferred_name;
     delete legacy.experience;
     const migrated = parseSession(JSON.stringify(legacy));
-    expect(migrated?.schema_version).toBe(7);
+    expect(migrated?.schema_version).toBe(8);
     expect(migrated?.preferred_name).toBe("Friend");
     expect(migrated?.experience.active_view).toBe("experience");
     expect(migrated?.responses).toEqual(legacy.responses);
@@ -87,7 +87,7 @@ describe("onboarding session", () => {
 
     const migrated = parseSession(JSON.stringify(legacy));
 
-    expect(migrated?.schema_version).toBe(7);
+    expect(migrated?.schema_version).toBe(8);
     expect(migrated?.experience.journal_draft).toBe("A draft worth keeping.");
     expect(migrated?.experience.trace_event_ids).toEqual([]);
     expect(migrated?.experience.trace_events).toEqual([]);
@@ -121,9 +121,20 @@ describe("onboarding session", () => {
 
     const migrated = parseSession(JSON.stringify(legacy));
 
-    expect(migrated?.schema_version).toBe(7);
+    expect(migrated?.schema_version).toBe(8);
     expect(migrated?.confirmed_profile?.schema_version).toBe(3);
     expect(migrated?.confirmed_profile).not.toHaveProperty("goal_category");
+  });
+
+  it("migrates version 7 sessions without an assessment clock", () => {
+    const legacy = JSON.parse(JSON.stringify(createSession(() => 0.5)));
+    legacy.schema_version = 7;
+    delete legacy.experience.assessment_clock;
+
+    const migrated = parseSession(JSON.stringify(legacy));
+
+    expect(migrated?.schema_version).toBe(8);
+    expect(migrated?.experience.assessment_clock).toBeNull();
   });
 
   it("preserves a legacy Profile without a stored preferred name", () => {

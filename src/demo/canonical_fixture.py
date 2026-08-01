@@ -17,6 +17,9 @@ from src.demo.contracts import (
     CONTRACT_VERSION,
     CORE_VALUE_ORDER,
     ApiErrorResponse,
+    AssessmentClock,
+    AssessmentTimeAdvancedResponse,
+    AssessmentTimeAdvanceRequest,
     ContractFixtureSet,
     ExperienceSession,
     JournalEntry,
@@ -655,6 +658,18 @@ def build_canonical_fixture() -> ContractFixtureSet:
             {"kind": "event", "id": "event-05"},
         ],
     )
+    assessment_event = _event(
+        event_id="event-15",
+        event_type="assessment_time_advanced",
+        parent_event_id="event-11",
+        details={
+            "action": "next_day",
+            "previous_date": "2026-07-20",
+            "current_date": "2026-07-21",
+        },
+        input_refs=[{"kind": "assessment_time", "id": SESSION_ID}],
+        result_refs=[{"kind": "assessment_time", "id": SESSION_ID}],
+    )
     event_payloads = [
         profile_event,
         entry_zero_event,
@@ -670,6 +685,7 @@ def build_canonical_fixture() -> ContractFixtureSet:
         refused_event,
         invalid_event,
         failed_event,
+        assessment_event,
     ]
     main_event_ids = [f"event-{index:02d}" for index in range(1, 12)]
     session = ExperienceSession(
@@ -681,6 +697,10 @@ def build_canonical_fixture() -> ContractFixtureSet:
         weekly_reviewer_decisions=decisions,
         drift_result=drift_result,
         weekly_digest=digest,
+        assessment_clock=AssessmentClock(
+            current_date="2026-07-20",
+            timezone="Asia/Singapore",
+        ),
         trace_event_ids=main_event_ids,
         selection=SessionSelection(
             view="inspect",
@@ -758,6 +778,14 @@ def build_canonical_fixture() -> ContractFixtureSet:
             session_id=SESSION_ID,
             after_event_id="event-06",
         ),
+        AssessmentTimeAdvanceRequest(
+            operation="advance_assessment_time",
+            request_id="request-time",
+            idempotency_key="f" * 64,
+            session_id=SESSION_ID,
+            expected_revision=3,
+            action="next_day",
+        ),
     ]
     responses = [
         SessionCreatedResponse(
@@ -776,6 +804,23 @@ def build_canonical_fixture() -> ContractFixtureSet:
                 message="The session changed after this request was prepared.",
                 retryable=True,
             ),
+        ),
+        AssessmentTimeAdvancedResponse(
+            operation="advance_assessment_time",
+            request_id="request-time",
+            status="ok",
+            session=session.model_copy(
+                update={
+                    "revision": 4,
+                    "assessment_clock": session.assessment_clock.model_copy(
+                        update={"current_date": "2026-07-21"}
+                    )
+                    if session.assessment_clock is not None
+                    else None,
+                    "trace_event_ids": [*session.trace_event_ids, "event-15"],
+                }
+            ),
+            event_ids=["event-15"],
         ),
     ]
     return ContractFixtureSet.model_validate(

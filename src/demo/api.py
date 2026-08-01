@@ -72,6 +72,7 @@ def _validation_error(payload: Any) -> JSONResponse:
     if operation not in {
         "create_session",
         "submit_journal_entry",
+        "advance_assessment_time",
         "load_scenario",
         "read_trace",
     }:

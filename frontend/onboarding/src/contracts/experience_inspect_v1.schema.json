@@ -19,6 +19,7 @@
           "enum": [
             "create_session",
             "submit_journal_entry",
+            "advance_assessment_time",
             "load_scenario",
             "read_trace"
           ],
@@ -45,6 +46,335 @@
         "error"
       ],
       "title": "ApiErrorResponse",
+      "type": "object"
+    },
+    "AssessmentClock": {
+      "additionalProperties": false,
+      "description": "Forward-only date used only by the manual assessment flow.",
+      "properties": {
+        "current_date": {
+          "title": "Current Date",
+          "type": "string"
+        },
+        "mode": {
+          "const": "simulated_assessment",
+          "default": "simulated_assessment",
+          "title": "Mode",
+          "type": "string"
+        },
+        "timezone": {
+          "minLength": 1,
+          "title": "Timezone",
+          "type": "string"
+        }
+      },
+      "required": [
+        "current_date",
+        "timezone"
+      ],
+      "title": "AssessmentClock",
+      "type": "object"
+    },
+    "AssessmentTimeAdvanceRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "enum": [
+            "next_day",
+            "close_week"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "expected_revision": {
+          "minimum": 0,
+          "title": "Expected Revision",
+          "type": "integer"
+        },
+        "idempotency_key": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Idempotency Key",
+          "type": "string"
+        },
+        "operation": {
+          "const": "advance_assessment_time",
+          "title": "Operation",
+          "type": "string"
+        },
+        "request_id": {
+          "title": "Request Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "experience-inspect-v1",
+          "default": "experience-inspect-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "operation",
+        "request_id",
+        "idempotency_key",
+        "session_id",
+        "expected_revision",
+        "action"
+      ],
+      "title": "AssessmentTimeAdvanceRequest",
+      "type": "object"
+    },
+    "AssessmentTimeAdvancedDetails": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "enum": [
+            "next_day",
+            "close_week"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "current_date": {
+          "title": "Current Date",
+          "type": "string"
+        },
+        "previous_date": {
+          "title": "Previous Date",
+          "type": "string"
+        }
+      },
+      "required": [
+        "action",
+        "previous_date",
+        "current_date"
+      ],
+      "title": "AssessmentTimeAdvancedDetails",
+      "type": "object"
+    },
+    "AssessmentTimeAdvancedEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "completed_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Completed At"
+        },
+        "details": {
+          "$ref": "#/$defs/AssessmentTimeAdvancedDetails"
+        },
+        "duration_ms": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Duration Ms"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SafeError"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event_id": {
+          "minLength": 1,
+          "title": "Event Id",
+          "type": "string"
+        },
+        "event_type": {
+          "const": "assessment_time_advanced",
+          "title": "Event Type",
+          "type": "string"
+        },
+        "input_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Input Hash",
+          "type": "string"
+        },
+        "input_refs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "title": "Input Refs",
+          "type": "array"
+        },
+        "model_contract": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ModelContract"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "parent_event_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parent Event Id"
+        },
+        "prompt": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Prompt"
+        },
+        "raw_response": {
+          "anyOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Raw Response"
+        },
+        "result_refs": {
+          "items": {
+            "$ref": "#/$defs/ResourceRef"
+          },
+          "title": "Result Refs",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "experience-inspect-v1",
+          "default": "experience-inspect-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "session_id": {
+          "minLength": 1,
+          "title": "Session Id",
+          "type": "string"
+        },
+        "source": {
+          "enum": [
+            "saved_replay",
+            "live_run"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "started_at": {
+          "title": "Started At",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "queued",
+            "running",
+            "complete",
+            "reused",
+            "refused",
+            "invalid",
+            "failed"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "validation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EventValidation"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "event_id",
+        "session_id",
+        "event_type",
+        "status",
+        "source",
+        "started_at",
+        "input_hash",
+        "details"
+      ],
+      "title": "AssessmentTimeAdvancedEvent",
+      "type": "object"
+    },
+    "AssessmentTimeAdvancedResponse": {
+      "additionalProperties": false,
+      "properties": {
+        "event_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Event Ids",
+          "type": "array"
+        },
+        "operation": {
+          "const": "advance_assessment_time",
+          "title": "Operation",
+          "type": "string"
+        },
+        "request_id": {
+          "title": "Request Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "experience-inspect-v1",
+          "default": "experience-inspect-v1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "session": {
+          "$ref": "#/$defs/ExperienceSession"
+        },
+        "status": {
+          "const": "ok",
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "operation",
+        "request_id",
+        "status",
+        "session",
+        "event_ids"
+      ],
+      "title": "AssessmentTimeAdvancedResponse",
       "type": "object"
     },
     "BwsResponse": {
@@ -912,6 +1242,17 @@
       "additionalProperties": false,
       "description": "Serializable state shared by Experience and Inspect.",
       "properties": {
+        "assessment_clock": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AssessmentClock"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
         "drift_result": {
           "anyOf": [
             {
@@ -2567,6 +2908,7 @@
             "drift",
             "weekly_digest",
             "weekly_coach",
+            "assessment_time",
             "event"
           ],
           "title": "Kind",
@@ -2880,6 +3222,18 @@
     "SessionCreateRequest": {
       "additionalProperties": false,
       "properties": {
+        "assessment_timezone": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Assessment Timezone"
+        },
         "idempotency_key": {
           "pattern": "^[0-9a-f]{64}$",
           "title": "Idempotency Key",
@@ -2964,6 +3318,17 @@
       "additionalProperties": false,
       "description": "Browser-held state used to restore the in-memory Experience boundary.",
       "properties": {
+        "assessment_clock": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AssessmentClock"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
         "journal_entries": {
           "items": {
             "$ref": "#/$defs/JournalEntry"
@@ -2992,6 +3357,7 @@
           "items": {
             "discriminator": {
               "mapping": {
+                "assessment_time_advanced": "#/$defs/AssessmentTimeAdvancedEvent",
                 "drift_detected": "#/$defs/DriftDetectedEvent",
                 "journal_entry_submitted": "#/$defs/JournalEntrySubmittedEvent",
                 "nudge_decided": "#/$defs/NudgeDecidedEvent",
@@ -3035,6 +3401,9 @@
               },
               {
                 "$ref": "#/$defs/WeeklyCoachGeneratedEvent"
+              },
+              {
+                "$ref": "#/$defs/AssessmentTimeAdvancedEvent"
               }
             ]
           },
@@ -3182,6 +3551,7 @@
           "items": {
             "discriminator": {
               "mapping": {
+                "assessment_time_advanced": "#/$defs/AssessmentTimeAdvancedEvent",
                 "drift_detected": "#/$defs/DriftDetectedEvent",
                 "journal_entry_submitted": "#/$defs/JournalEntrySubmittedEvent",
                 "nudge_decided": "#/$defs/NudgeDecidedEvent",
@@ -3225,6 +3595,9 @@
               },
               {
                 "$ref": "#/$defs/WeeklyCoachGeneratedEvent"
+              },
+              {
+                "$ref": "#/$defs/AssessmentTimeAdvancedEvent"
               }
             ]
           },
@@ -3354,16 +3727,28 @@
       "additionalProperties": false,
       "properties": {
         "narrative": {
-          "$ref": "#/$defs/CoachNarrative"
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CoachNarrative"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
         },
         "validation": {
-          "$ref": "#/$defs/DigestValidation"
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DigestValidation"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
         }
       },
-      "required": [
-        "narrative",
-        "validation"
-      ],
       "title": "WeeklyCoachGeneratedDetails",
       "type": "object"
     },
@@ -4718,6 +5103,7 @@
       "items": {
         "discriminator": {
           "mapping": {
+            "advance_assessment_time": "#/$defs/AssessmentTimeAdvanceRequest",
             "create_session": "#/$defs/SessionCreateRequest",
             "load_scenario": "#/$defs/ScenarioLoadRequest",
             "read_trace": "#/$defs/TraceReadRequest",
@@ -4731,6 +5117,9 @@
           },
           {
             "$ref": "#/$defs/JournalEntrySubmitRequest"
+          },
+          {
+            "$ref": "#/$defs/AssessmentTimeAdvanceRequest"
           },
           {
             "$ref": "#/$defs/ScenarioLoadRequest"
@@ -4747,6 +5136,7 @@
       "items": {
         "discriminator": {
           "mapping": {
+            "advance_assessment_time": "#/$defs/AssessmentTimeAdvancedResponse",
             "create_session": "#/$defs/SessionCreatedResponse",
             "error": "#/$defs/ApiErrorResponse",
             "load_scenario": "#/$defs/ScenarioLoadedResponse",
@@ -4761,6 +5151,9 @@
           },
           {
             "$ref": "#/$defs/JournalEntrySubmittedResponse"
+          },
+          {
+            "$ref": "#/$defs/AssessmentTimeAdvancedResponse"
           },
           {
             "$ref": "#/$defs/ScenarioLoadedResponse"
@@ -4792,6 +5185,7 @@
       "items": {
         "discriminator": {
           "mapping": {
+            "assessment_time_advanced": "#/$defs/AssessmentTimeAdvancedEvent",
             "drift_detected": "#/$defs/DriftDetectedEvent",
             "journal_entry_submitted": "#/$defs/JournalEntrySubmittedEvent",
             "nudge_decided": "#/$defs/NudgeDecidedEvent",
@@ -4835,6 +5229,9 @@
           },
           {
             "$ref": "#/$defs/WeeklyCoachGeneratedEvent"
+          },
+          {
+            "$ref": "#/$defs/AssessmentTimeAdvancedEvent"
           }
         ]
       },

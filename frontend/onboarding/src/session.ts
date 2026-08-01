@@ -9,16 +9,18 @@ import {
   validateProfile,
 } from "./domain";
 import type {
+  AssessmentClockContract,
   JournalEntryContract,
   NudgeInteractionContract,
   TraceEventContract,
   WeeklyDriftReviewerDecisionContract,
 } from "./demoContracts";
 
-export const SESSION_STORAGE_KEY = "twinkl.onboarding.session.v7";
-export const LEGACY_SESSION_STORAGE_KEY = "twinkl.onboarding.session.v6";
-export const OLDER_SESSION_STORAGE_KEY = "twinkl.onboarding.session.v5";
-export const OLDEST_SESSION_STORAGE_KEY = "twinkl.onboarding.session.v4";
+export const SESSION_STORAGE_KEY = "twinkl.onboarding.session.v8";
+export const LEGACY_SESSION_STORAGE_KEY = "twinkl.onboarding.session.v7";
+export const OLDER_SESSION_STORAGE_KEY = "twinkl.onboarding.session.v6";
+export const OLDEST_SESSION_STORAGE_KEY = "twinkl.onboarding.session.v5";
+export const FIRST_SESSION_STORAGE_KEY = "twinkl.onboarding.session.v4";
 
 export type DemoView = "experience" | "inspect";
 export type DemoRunState =
@@ -60,6 +62,7 @@ export interface ExperienceState {
   drift_result: SessionRecord | null;
   weekly_digest: SessionRecord | null;
   weekly_coach: SessionRecord | null;
+  assessment_clock: AssessmentClockContract | null;
   run_state: DemoRunState;
   retryable: boolean;
   trace_event_ids: string[];
@@ -69,7 +72,7 @@ export interface ExperienceState {
 export type OnboardingStage = "name" | "set" | "summary" | "complete";
 
 export interface OnboardingSession {
-  schema_version: 7;
+  schema_version: 8;
   user_id: string;
   preferred_name: string;
   session_id: string;
@@ -105,6 +108,7 @@ export function createExperienceState(): ExperienceState {
     drift_result: null,
     weekly_digest: null,
     weekly_coach: null,
+    assessment_clock: null,
     run_state: "idle",
     retryable: false,
     trace_event_ids: [],
@@ -127,7 +131,7 @@ export function createSession(
   makeId: () => string = () => crypto.randomUUID(),
 ): OnboardingSession {
   return {
-    schema_version: 7,
+    schema_version: 8,
     user_id: makeId(),
     preferred_name: "",
     session_id: makeId(),
@@ -214,6 +218,15 @@ function isExperienceState(value: unknown): value is ExperienceState {
     (value.drift_result === null || isSessionRecord(value.drift_result)) &&
     (value.weekly_digest === null || isSessionRecord(value.weekly_digest)) &&
     (value.weekly_coach === null || isSessionRecord(value.weekly_coach)) &&
+    (
+      value.assessment_clock === null
+      || (
+        isSessionRecord(value.assessment_clock)
+        && value.assessment_clock.mode === "simulated_assessment"
+        && typeof value.assessment_clock.current_date === "string"
+        && typeof value.assessment_clock.timezone === "string"
+      )
+    ) &&
     [
       "idle",
       "queued",
@@ -251,7 +264,7 @@ export function parseSession(raw: string | null): OnboardingSession | null {
       confirmed_profile?: unknown;
     };
     let session = parsed;
-    if ([4, 5, 6].includes(parsed.schema_version ?? -1)) {
+    if ([4, 5, 6, 7].includes(parsed.schema_version ?? -1)) {
       const { goal_category: _goalCategory, ...withoutGoal } = parsed;
       let experience = parsed.experience;
       if (parsed.schema_version === 4) {
@@ -269,6 +282,12 @@ export function parseSession(raw: string | null): OnboardingSession | null {
           trace_event_ids: [],
           trace_events: [],
         };
+      } else {
+        experience = {
+          ...createExperienceState(),
+          ...(isSessionRecord(parsed.experience) ? parsed.experience : {}),
+          assessment_clock: null,
+        };
       }
       let confirmedProfile = parsed.confirmed_profile;
       if (
@@ -285,7 +304,7 @@ export function parseSession(raw: string | null): OnboardingSession | null {
       }
       session = {
         ...withoutGoal,
-        schema_version: 7,
+        schema_version: 8,
         preferred_name:
           typeof parsed.preferred_name === "string"
             ? parsed.preferred_name
@@ -296,7 +315,7 @@ export function parseSession(raw: string | null): OnboardingSession | null {
       };
     }
     if (
-      session.schema_version !== 7 ||
+      session.schema_version !== 8 ||
       typeof session.user_id !== "string" ||
       typeof session.preferred_name !== "string" ||
       typeof session.session_id !== "string" ||
@@ -392,6 +411,7 @@ export function loadOrCreateSession(): OnboardingSession {
     parseSession(localStorage.getItem(LEGACY_SESSION_STORAGE_KEY)) ??
     parseSession(localStorage.getItem(OLDER_SESSION_STORAGE_KEY)) ??
     parseSession(localStorage.getItem(OLDEST_SESSION_STORAGE_KEY)) ??
+    parseSession(localStorage.getItem(FIRST_SESSION_STORAGE_KEY)) ??
     createSession()
   );
 }
@@ -402,6 +422,7 @@ export function persistSession(session: OnboardingSession): boolean {
     localStorage.removeItem(LEGACY_SESSION_STORAGE_KEY);
     localStorage.removeItem(OLDER_SESSION_STORAGE_KEY);
     localStorage.removeItem(OLDEST_SESSION_STORAGE_KEY);
+    localStorage.removeItem(FIRST_SESSION_STORAGE_KEY);
     return true;
   } catch {
     return false;
@@ -414,6 +435,7 @@ export function clearSession(): boolean {
     localStorage.removeItem(LEGACY_SESSION_STORAGE_KEY);
     localStorage.removeItem(OLDER_SESSION_STORAGE_KEY);
     localStorage.removeItem(OLDEST_SESSION_STORAGE_KEY);
+    localStorage.removeItem(FIRST_SESSION_STORAGE_KEY);
     return true;
   } catch {
     return false;

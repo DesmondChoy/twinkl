@@ -1,15 +1,18 @@
-# Experience and Inspect React Demo
+# Experience and Inspect React App
 
 ## Status
 
-This document specifies the capstone demo experience. The shared React
+This document specifies the capstone assessment experience. The shared React
 Experience and Inspect shell, resumable client session, view selector, and
 focused Inspect navigation are implemented. Manual Journal Entry processing,
 displayed nudges with reply and skip actions, safe retry, and linked nudge
 events in Inspect are also implemented. Closed-week review populates Weekly
 Drift Reviewer Decisions, the Drift Detector result, cited Weekly Drift
-Detection output, an optional Coach Digest response, and linked Inspect events
-only after the Monday-through-Sunday week closes.
+Detection output, a Coach Digest run, and linked Inspect events only after the
+Monday-through-Sunday week closes. A valid Coach Digest response appears when
+available. A missing or invalid response does not remove the Weekly Drift
+Detection result.
+
 The five deterministic persona replays now load into the shared React session
 with manual next-step replay, previous-week navigation, optional automatic
 replay and pause, restart, Jump to key moment, reduced-motion behavior,
@@ -43,7 +46,7 @@ Core Value contracts.
 
 ## 1. Purpose
 
-The demo presents the product experience and the AI architecture from the same
+The app presents the product experience and the AI architecture from the same
 session. A persistent two-option control switches between:
 
 - **Experience** — the user-facing journey through onboarding, Journal Entries,
@@ -51,7 +54,7 @@ session. A persistent two-option control switches between:
 - **Inspect** — the professor-facing explanation of the exact browser
   calculation and backend work that produced the currently selected result.
 
-The two views are not separate demonstrations. They read the same Profile,
+The two views are not separate flows. They read the same Profile,
 Journal Entries, Weekly Drift Reviewer Decisions, Drift state, Weekly Drift
 Detection output, and run trace. Switching views must preserve the current
 session, selected week, selected Journal Entry, and selected backend event.
@@ -106,10 +109,12 @@ One client-side session store owns:
 
 - the confirmed Profile and Core Values;
 - ordered Journal Entries, including displayed nudges and responses;
+- the assessment clock for manual Experience, when active;
 - the selected persona scenario, week, Journal Entry, and trace event;
 - Weekly Drift Reviewer Decisions grouped by calendar week;
 - the current Drift Detector result;
-- the Weekly Drift Detection output and optional Coach Digest response;
+- the Weekly Drift Detection output, Coach Digest status, and valid Coach
+  Digest response when available;
 - run status and retry state; and
 - references to backend trace events.
 
@@ -142,18 +147,31 @@ Experience.
 
 After Profile confirmation, Experience provides:
 
-- an ordered Journal Entry composer;
+- a Journal Entry composer with the current Simulated time date;
 - clear saving, nudge-checking, reviewing, complete, and failed states;
 - one contextual nudge with reply and skip actions when the nudge decision
   requests it;
 - the anti-annoyance rule of no more than two displayed nudges in the previous
   three Journal Entries;
-- a chronological thread containing each Journal Entry plus any displayed
-  nudge and response;
+- a newest-first thread containing each Journal Entry plus any displayed nudge
+  and response;
+- guided **Write on the next day** and **Close week and review** actions after
+  the newest Journal Entry is final;
 - a contextual retry action after a retryable backend failure; and
 - an edit action when no accepted submission response has returned, so a
   pending Journal Entry never leaves Experience without an enabled recovery
   control.
+
+Manual Experience starts one assessment clock from the browser IANA timezone.
+Python owns all later date changes. **Write on the next day** moves the date
+forward by one day. **Close week and review** moves the date to the next Monday
+and runs all due finalized weeks. Simulated dates never move backward. The
+action is blocked while a displayed nudge needs a response or skip.
+
+The newest Journal Entry card appears first in manual Experience. The stored
+Journal Entries remain chronological by `t_index`. The Weekly Drift Reviewer,
+Drift Detector, Coach Digest, and Inspect use that chronological order. Persona
+replay keeps its existing chronological presentation.
 
 Manual Experience allows explicit Journal Entry removal after confirmation.
 Removing a Journal Entry or saving a nudge reply or skip advances the session
@@ -238,7 +256,8 @@ Experience shows:
 
 - the user's own Journal Entries, displayed nudges, and responses;
 - an ambient per-Core-Value Drift state; and
-- the optional Coach Digest response and question.
+- the Coach Digest response and question when valid, or a Coach Digest
+  unavailable state.
 
 Experience does not show the full Weekly Drift Reviewer prompt, provider
 payload, validation record, identifiers, or hashes. Those belong in Inspect.
@@ -388,7 +407,8 @@ The Python side owns:
 - Weekly Drift Reviewer calls and response validation;
 - Drift Detector execution;
 - Weekly Drift Detection output storage;
-- optional Coach Digest response generation;
+- Coach Digest generation after every Weekly Drift Detection result;
+- forward-only assessment clock changes;
 - idempotent retry behavior; and
 - trace creation and retrieval.
 
@@ -405,12 +425,13 @@ Provider keys and unredacted provider configuration stay on the Python side.
 
 ### 7.1 Version 1 contract
 
-`experience-inspect-v1` defines four framework-neutral operations:
+`experience-inspect-v1` defines five framework-neutral operations:
 
 | Operation | Purpose |
 |---|---|
 | `create_session` | Validate a confirmed Profile, establish or resume in-memory shared session state, and synchronize one browser-held interaction or removal |
 | `submit_journal_entry` | Append one ordered Journal Entry using an expected session revision |
+| `advance_assessment_time` | Move an assessment-only clock forward by one day or to the next Monday |
 | `load_scenario` | Load one deterministic saved persona scenario |
 | `read_trace` | Retrieve typed trace events, optionally after a known event |
 
@@ -418,12 +439,13 @@ Python Pydantic models are the schema source. The checked-in JSON Schema and
 canonical fixture are generated by
 `uv run python -m src.demo.export_contract_schema`. React validates the same
 fixture through `frontend/onboarding/src/demoContracts.ts`. The fixture covers
-all ten event types and complete, reused, refused, invalid, and failed results.
+all 11 event types and complete, reused, refused, invalid, and failed results.
 
 The following rules are part of the contract rather than a chosen HTTP
 framework:
 
-- `create_session` and `submit_journal_entry` carry a 64-character input hash
+- `create_session`, `submit_journal_entry`, and `advance_assessment_time` carry
+  a 64-character input hash
   as an idempotency key. Repeating the same key and input returns the stored
   result with `reused`; reusing the key for different input returns a safe
   conflict error before any model call.
@@ -436,6 +458,9 @@ framework:
 - `submit_journal_entry` carries `expected_revision`. Python rejects a stale
   revision, duplicate Journal Entry identifier, duplicate `t_index`, or
   non-chronological Journal Entry before nudge or Weekly Drift Detection begins.
+- `advance_assessment_time` carries `expected_revision`. Python rejects a
+  backward date, an unanswered displayed nudge, or a close-week request without
+  a finalized Journal Entry in the current week.
 - Event order is represented by timestamps plus `parent_event_id`. Journal
   Entry order is represented by `t_index`; callers must not infer it from
   response array order alone.
@@ -448,10 +473,12 @@ framework:
   and their uncertainty fields are rejected by this contract.
 - Saved replay and live results use the same payload shapes and differ through
   `source`. A saved result may use `reused`; caching remains optional.
-- Version 1 is strict: unknown fields or incompatible values are rejected. Any
-  field or semantic change requires a new contract version and explicit React
-  and Python compatibility handling. Existing version 1 fixtures remain valid
-  and immutable.
+- Version 1 is strict: unknown fields or incompatible values are rejected. The
+  assessment clock is an optional, assessment-only extension. Browser sessions
+  without it migrate with no assessment controls. Saved Persona bundles use a
+  null clock and keep their existing behavior. A later incompatible change
+  requires a new contract version and explicit React and Python compatibility
+  handling.
 
 ## 8. Review Orchestration
 
@@ -477,7 +504,8 @@ closed Monday-through-Sunday week selected
 → response validated into Weekly Drift Reviewer Decisions
 → Drift Detector applies the deterministic rule
 → Weekly Drift Detection output is stored
-→ optional Coach Digest response is generated
+→ Coach Digest runs for the stored result
+→ a valid Coach Digest response is attached, or the result remains available
 ```
 
 The nudge decision and question come from one structured
@@ -495,11 +523,10 @@ not seven days later on the following Thursday. The first partial week is
 eligible even when it contains only that Journal Entry. A displayed nudge must
 be answered or skipped before its week is eligible.
 
-The version 1 JSON contract remains unchanged. The Python Experience service
-provides a due-review method for a scheduler or host. The React POC also uses
-the browser-local date of a later Journal Entry to catch up closed, unreviewed
-weeks. A production background scheduler and durable timezone storage remain
-outside the capstone.
+The Python Experience service provides a due-review method for a scheduler or
+host. The React POC uses the assessment clock and explicit close-week action.
+It does not need a later Journal Entry to start due work. A production
+background scheduler remains outside the capstone.
 
 The backend may reuse an unchanged weekly result by input hash. Reuse must be
 visible in Inspect and must return the same saved decisions and provenance. A
@@ -538,7 +565,8 @@ Each saved scenario bundle contains or references:
 - raw responses and validation results;
 - effective Weekly Drift Reviewer Decisions;
 - Drift Detector results;
-- Weekly Drift Detection outputs and optional Coach Digest responses;
+- Weekly Drift Detection outputs, Coach Digest event status, and valid Coach
+  Digest responses when available;
 - model contract, timestamps, response IDs when available, and input hashes;
   and
 - a bundle manifest version, plus a content hash in the scenario catalog.
@@ -564,8 +592,9 @@ unavailable provider fields null; they do not invent a receipt.
 ## 10. Privacy and Safety
 
 - Inspect is a capstone and developer view, not a normal user destination.
-- The default demo uses synthetic personas. If manual user text is inspected,
-  it remains within the current local demo session unless persistence is
+- The default Persona replay uses synthetic personas. If manual user text is
+  inspected, it remains within the current local app session unless
+  persistence is
   explicitly enabled.
 - Never display API keys, authorization headers, hidden environment values, or
   unrelated logs.
@@ -611,9 +640,9 @@ unavailable provider fields null; they do not invent a receipt.
   native mobile packaging in the first capstone demo slice.
 - Turning every backend log line into Inspect content.
 
-## 13. Professor Demo Acceptance Walkthrough
+## 13. Professor Assessment Walkthrough
 
-A release is demo-ready when one uninterrupted walkthrough can:
+A release is assessment-ready when one uninterrupted walkthrough can:
 
 1. complete or resume React onboarding and confirm Core Values;
 2. submit a Journal Entry and observe a relevant nudge or a documented no-nudge
@@ -625,8 +654,8 @@ A release is demo-ready when one uninterrupted walkthrough can:
    Reviewer Conflicts produce Drift;
 6. inspect the exact weekly request, validated decisions, and deterministic
    Drift Detector steps;
-7. return to Experience and read the Coach Digest response and its optional
-   reflective question;
+7. return to Experience and read the Coach Digest response and reflective
+   question;
 8. demonstrate one recovered or uncertain scenario; and
 9. distinguish saved replay from an optional live run.
 
@@ -649,7 +678,8 @@ real trace events rather than reconstructing backend behavior in the browser.
 ## 15. Tracked Implementation Work
 
 The parent Beads epic is `twinkl-rklc`. P0 items form the smallest complete
-professor demo; P1 items add optional live execution or presentation material.
+professor assessment; P1 items add optional live execution or presentation
+material.
 
 | Beads issue | Priority | Scope | Blocked by |
 |---|---:|---|---|
@@ -665,7 +695,8 @@ professor demo; P1 items add optional live execution or presentation material.
 | `twinkl-rklc.10` | P1 | Professor walkthrough and capstone evidence | `.9` |
 
 The P0 quality gate intentionally does not depend on optional live reruns. A
-saved, deterministic replay must remain sufficient for the complete demo.
+saved, deterministic replay must remain sufficient for the complete Persona
+walkthrough.
 
 ## 16. Verification Requirements
 
