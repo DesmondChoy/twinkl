@@ -24,6 +24,22 @@ The existing React onboarding implementation and the
 authoritative for the Schwartz Values Best-Worst Survey (SVBWS), Profile, and
 Core Value contracts.
 
+## Public Assessment Deployment
+
+- **URL:** [Twinkl Experience and
+  Inspect](https://onboarding-production-1dd2.up.railway.app/)
+- **Hosting:** Railway serves the React app and the same-origin Python
+  boundary.
+- **Access:** The assessment URL allows anonymous browser access.
+- **Provider boundary:** Provider credentials remain on the server.
+- **Provider cost:** Live Journal Entry work can make paid provider calls.
+- **Reset behavior:** Restart clears the saved browser session and starts a new
+  session.
+- **Scope:** The deployment is for capstone assessment only. It is not
+  deployment approval.
+- **Excluded production controls:** Production authentication, multi-tenant
+  persistence, and service-level commitments.
+
 ## 1. Purpose
 
 The demo presents the product experience and the AI architecture from the same

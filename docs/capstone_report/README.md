@@ -9,6 +9,44 @@ a submitted milestone file.
   Project Report scaffold, including the VIF Critic experiment program and the
   architecture decision.
 
+## Draft controls
+
+- **Document status:** Capstone Project Report scaffold
+- **NUS deliverable:** Phase 2 Technical Paper formatted as a publishable paper
+- **Product source:** [`../prd.md`](../prd.md)
+- **Required terms:** [`../canonical_nouns.md`](../canonical_nouns.md)
+- **Prior submission:** [April 2026 Project
+  Proposal](../archive/capstone/2026-04-proposal-submission/April_Project_Proposal.md)
+- **Status date:** 2026-08-01
+- **Status key:** complete, partial, development-only, experimental, in progress,
+  or outside the time-boxed capstone
+- Identify AI-reviewed synthetic evidence as AI-reviewed synthetic evidence.
+- Identify human annotation as human annotation.
+- Do not claim a fresh final test or deployment approval.
+- Keep the user-facing Drift path separate from offline VIF Critic research.
+
+## Pre-submission checklist
+
+- Add final figures and tables.
+- Complete the Weekly Coach Tier 1 batch report.
+- Complete the citation-to-claim audit.
+- Add exact reproduction commands, environment versions, configurations, seeds,
+  input versions, and output paths.
+- Replace repository-relative links with a repository URL, commit hash, and
+  durable file links.
+- Complete the professor walkthrough evidence for the separate demo assessment.
+- Record the [public Railway assessment
+  URL](https://onboarding-production-1dd2.up.railway.app/), browser-session reset
+  behavior, possible provider cost, and assessment-only scope.
+- Reconcile report terms and Weekly Coach evidence with [PR
+  61](https://github.com/DesmondChoy/twinkl/pull/61) only after it merges into
+  `main`.
+- If `twinkl-rklc.12` closes before submission, decide whether the saved Weekly
+  Coach replay belongs in Section 5.4.
+- Confirm the final paper format and page limit with the advisor.
+- Confirm whether the advisor requires a short team-contribution statement in
+  the paper.
+
 ## Submitted material
 
 The April 2026 proposal has already been submitted and is preserved unchanged
