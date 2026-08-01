@@ -23,14 +23,8 @@ describe("onboarding session", () => {
   it("randomizes set order and every prescribed card order once, then round-trips", () => {
     const ids = ["user-1", "session-1"];
     const session = createSession(() => 0, new Date("2026-07-19T00:00:00.000Z"), () => ids.shift()!);
-<<<<<<< HEAD
-    expect(session.schema_version).toBe(6);
-    expect(session.stage).toBe("name");
-    expect(session.preferred_name).toBe("");
-=======
     expect(session.schema_version).toBe(7);
     expect(session.stage).toBe("set");
->>>>>>> main
     expect(session.experience).toMatchObject({
       active_view: "experience",
       journal_started: false,
