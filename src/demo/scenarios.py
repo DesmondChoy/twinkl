@@ -12,7 +12,12 @@ from typing import Any, Literal, cast
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
-from src.coach.weekly_digest import build_weekly_drift_reviewer_digest
+from src.coach.schemas import CoachNarrative
+from src.coach.weekly_digest import (
+    attach_coach_artifacts,
+    build_weekly_drift_reviewer_digest,
+    validate_weekly_digest_narrative,
+)
 from src.demo.contracts import (
     ContractFixtureSet,
     ExperienceSession,
@@ -56,6 +61,23 @@ LUNA_LOW = ModelContract(
     provider="openai",
     model="gpt-5.6-luna",
     reasoning_effort="low",
+)
+
+SAVED_COACH_SCENARIO_ID = "two-values-lukas"
+SAVED_COACH_WEEK_START = "2025-10-13"
+SAVED_COACH_NARRATIVE = CoachNarrative(
+    weekly_mirror=(
+        'You wrote that you "Accepted on the spot because that\'s what you do", '
+        "then noticed that relief came before excitement."
+    ),
+    tension_explanation=(
+        "An earlier pattern ended before this week, but your reason for accepting "
+        "the new role still feels unclear."
+    ),
+    reflective_question=(
+        "When you separate relief from expectation, what do you want this new role "
+        "to mean for you?"
+    ),
 )
 
 ScenarioRole = Literal[
@@ -845,6 +867,31 @@ def build_scenario_fixture(
             decisions=base_cumulative_decisions,
             drift_result=drift_result,
         )
+        coach_narrative = (
+            SAVED_COACH_NARRATIVE
+            if selection.scenario_id == SAVED_COACH_SCENARIO_ID
+            and boundary.week_start == SAVED_COACH_WEEK_START
+            else None
+        )
+        coach_validation = None
+        if coach_narrative is not None:
+            coach_validation = validate_weekly_digest_narrative(
+                digest,
+                coach_narrative,
+            )
+            failed_checks = [
+                check.name for check in coach_validation.checks if not check.passed
+            ]
+            if failed_checks:
+                raise ValueError(
+                    "Saved Coach Digest response failed checks: "
+                    f"{', '.join(failed_checks)}"
+                )
+            digest = attach_coach_artifacts(
+                digest,
+                coach_narrative,
+                coach_validation,
+            )
         final_digest = digest.model_dump(mode="json")
         cited_ids = [
             journal_id_by_index[evidence.t_index] for evidence in digest.evidence
@@ -867,6 +914,22 @@ def build_scenario_fixture(
                 },
             )
         )
+        if coach_narrative is not None and coach_validation is not None:
+            week_event_ids.append(
+                append_event(
+                    event_type="weekly_coach_generated",
+                    started_at=_simulated_at(
+                        str(prompt_row["review_at_date"]), hour=21, sequence=200
+                    ),
+                    duration_ms=0,
+                    input_refs=[{"kind": "weekly_digest", "id": week_id}],
+                    result_refs=[{"kind": "weekly_coach", "id": week_id}],
+                    details={
+                        "narrative": coach_narrative.model_dump(mode="json"),
+                        "validation": coach_validation.model_dump(mode="json"),
+                    },
+                )
+            )
         week_rows.append(
             {
                 "week_id": week_id,

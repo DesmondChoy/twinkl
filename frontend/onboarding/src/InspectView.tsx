@@ -123,6 +123,7 @@ function eventMatchesFilter(
   return [
     "drift_detected",
     "weekly_digest_built",
+    "weekly_coach_generated",
   ].includes(event.event_type);
 }
 

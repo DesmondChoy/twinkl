@@ -10,6 +10,7 @@
       "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
       "scoring_method": "best_minus_worst_divided_by_appearances_v1",
       "user_id": "988d1a65",
+      "preferred_name": null,
       "session_id": "scenario-session:recovered-marc",
       "started_at": "2025-02-15T09:00:00Z",
       "timestamp": "2025-02-15T09:05:00Z",
@@ -427,12 +428,22 @@
       "core_values": [
         "power"
       ],
+      "goal_context": null,
       "drift_states": {},
       "drift_reasons": [],
       "top_tensions": [],
       "top_strengths": [],
       "dimensions": [],
-      "evidence": [],
+      "evidence": [
+        {
+          "date": "2025-02-16",
+          "t_index": 0,
+          "direction": "context",
+          "dimensions": [],
+          "score_mean": null,
+          "excerpt": "Pieter talked right over me in the steering committee today, mid-sentence, and presented the container routing proposal like it was his. I just sat there. Too tired to fight it, too angry to let it go, and now it's midnight..."
+        }
+      ],
       "coach_narrative": null,
       "validation": null
     },
@@ -468,6 +479,7 @@
       "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
       "scoring_method": "best_minus_worst_divided_by_appearances_v1",
       "user_id": "988d1a65",
+      "preferred_name": null,
       "session_id": "scenario-session:recovered-marc",
       "started_at": "2025-02-15T09:00:00Z",
       "timestamp": "2025-02-15T09:05:00Z",
@@ -1120,6 +1132,7 @@
       "core_values": [
         "power"
       ],
+      "goal_context": null,
       "drift_states": {
         "power": "recovered"
       },
@@ -1151,6 +1164,16 @@
           ],
           "score_mean": null,
           "excerpt": "I just sat there and let him reframe my own analysis back to me. I should have shut it down. I should have said, \"Jeroen, I've been doing this since before you started your bachelor's.\" But I didn't. I smiled..."
+        },
+        {
+          "date": "2025-03-21",
+          "t_index": 7,
+          "direction": "recovery",
+          "dimensions": [
+            "power"
+          ],
+          "score_mean": null,
+          "excerpt": "Pieter did it again in the client call. Spoke over me, redirected the conversation to his numbers. I corrected him this time but it came out sharper than I meant and the client noticed."
         }
       ],
       "coach_narrative": null,
@@ -1446,6 +1469,7 @@
           "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
           "scoring_method": "best_minus_worst_divided_by_appearances_v1",
           "user_id": "988d1a65",
+          "preferred_name": null,
           "session_id": "scenario-session:recovered-marc",
           "started_at": "2025-02-15T09:00:00Z",
           "timestamp": "2025-02-15T09:05:00Z",
@@ -1863,12 +1887,22 @@
           "core_values": [
             "power"
           ],
+          "goal_context": null,
           "drift_states": {},
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
-          "evidence": [],
+          "evidence": [
+            {
+              "date": "2025-02-16",
+              "t_index": 0,
+              "direction": "context",
+              "dimensions": [],
+              "score_mean": null,
+              "excerpt": "Pieter talked right over me in the steering committee today, mid-sentence, and presented the container routing proposal like it was his. I just sat there. Too tired to fight it, too angry to let it go, and now it's midnight..."
+            }
+          ],
           "coach_narrative": null,
           "validation": null
         },
@@ -1904,6 +1938,7 @@
           "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
           "scoring_method": "best_minus_worst_divided_by_appearances_v1",
           "user_id": "988d1a65",
+          "preferred_name": null,
           "session_id": "scenario-session:recovered-marc",
           "started_at": "2025-02-15T09:00:00Z",
           "timestamp": "2025-02-15T09:05:00Z",
@@ -2556,6 +2591,7 @@
           "core_values": [
             "power"
           ],
+          "goal_context": null,
           "drift_states": {
             "power": "recovered"
           },
@@ -2587,6 +2623,16 @@
               ],
               "score_mean": null,
               "excerpt": "I just sat there and let him reframe my own analysis back to me. I should have shut it down. I should have said, \"Jeroen, I've been doing this since before you started your bachelor's.\" But I didn't. I smiled..."
+            },
+            {
+              "date": "2025-03-21",
+              "t_index": 7,
+              "direction": "recovery",
+              "dimensions": [
+                "power"
+              ],
+              "score_mean": null,
+              "excerpt": "Pieter did it again in the client call. Spoke over me, redirected the conversation to his numbers. I corrected him this time but it came out sharper than I meant and the client noticed."
             }
           ],
           "coach_narrative": null,
@@ -2898,7 +2944,7 @@
           "id": "988d1a65"
         }
       ],
-      "input_hash": "bc2d6dd7f021baf3e3d3dcbb2fde98a74f57076cce064e67e868b2efcb5f2af1",
+      "input_hash": "1361f339c1e7ff0d784e0a2e32a36e579c3ce65d470e635c9fa8e625b2b4555d",
       "error": null,
       "details": {
         "profile": {
@@ -2907,6 +2953,7 @@
           "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
           "scoring_method": "best_minus_worst_divided_by_appearances_v1",
           "user_id": "988d1a65",
+          "preferred_name": null,
           "session_id": "scenario-session:recovered-marc",
           "started_at": "2025-02-15T09:00:00Z",
           "timestamp": "2025-02-15T09:05:00Z",
@@ -3734,7 +3781,7 @@
           "id": "recovered-marc:week:1"
         }
       ],
-      "input_hash": "765eb6709ba8ee2668ee60ce05c37b08ebbfb73711d53c930ca4bf1087a8ac18",
+      "input_hash": "1a609626563768bd5a4bcf0697abc97c5ec4535d6f41498d8f882f1930934148",
       "error": null,
       "details": {
         "digest": {
@@ -3752,16 +3799,28 @@
           "core_values": [
             "power"
           ],
+          "goal_context": null,
           "drift_states": {},
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
-          "evidence": [],
+          "evidence": [
+            {
+              "date": "2025-02-16",
+              "t_index": 0,
+              "direction": "context",
+              "dimensions": [],
+              "score_mean": null,
+              "excerpt": "Pieter talked right over me in the steering committee today, mid-sentence, and presented the container routing proposal like it was his. I just sat there. Too tired to fight it, too angry to let it go, and now it's midnight..."
+            }
+          ],
           "coach_narrative": null,
           "validation": null
         },
-        "cited_journal_entry_ids": []
+        "cited_journal_entry_ids": [
+          "988d1a65:entry:0"
+        ]
       }
     },
     {
@@ -4442,7 +4501,7 @@
           "id": "recovered-marc:week:2"
         }
       ],
-      "input_hash": "94af566e8b71345f862f3c291c7fe83490fd35c2305975bfb7abcda64b5a01ab",
+      "input_hash": "ecb987b9df8d80661c0e47d0267ddfc68f40e23e92ba6f70a65cc1c2e764b879",
       "error": null,
       "details": {
         "digest": {
@@ -4460,16 +4519,37 @@
           "core_values": [
             "power"
           ],
+          "goal_context": null,
           "drift_states": {},
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
-          "evidence": [],
+          "evidence": [
+            {
+              "date": "2025-02-22",
+              "t_index": 1,
+              "direction": "context",
+              "dimensions": [],
+              "score_mean": null,
+              "excerpt": "Ran the quarterly review myself today, no slides from anyone else, just my numbers, my narrative. The room was quiet in that good way where people are actually listening. Felt like the division is finally mine in the way I..."
+            },
+            {
+              "date": "2025-02-23",
+              "t_index": 2,
+              "direction": "context",
+              "dimensions": [],
+              "score_mean": null,
+              "excerpt": "Needed sign-off from Legal on the new supplier contract. Straightforward, or so I thought. Sent it Thursday, followed up Friday morning, got told Anke was \"reviewing priorities\" and would get to it when she could. Meanwhile the supplier's deadline is..."
+            }
+          ],
           "coach_narrative": null,
           "validation": null
         },
-        "cited_journal_entry_ids": []
+        "cited_journal_entry_ids": [
+          "988d1a65:entry:1",
+          "988d1a65:entry:2"
+        ]
       }
     },
     {
@@ -4983,7 +5063,7 @@
           "id": "recovered-marc:week:3"
         }
       ],
-      "input_hash": "a242677c469a5b00d9a94ba69df07d2d3c48e784de0ef0943342450a5a9f2ee5",
+      "input_hash": "16e7110bd8d5a216c44ccc03482a43473c127ded56b33cd605bdb2cc0e6e2410",
       "error": null,
       "details": {
         "digest": {
@@ -5001,16 +5081,28 @@
           "core_values": [
             "power"
           ],
+          "goal_context": null,
           "drift_states": {},
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
-          "evidence": [],
+          "evidence": [
+            {
+              "date": "2025-02-26",
+              "t_index": 3,
+              "direction": "context",
+              "dimensions": [],
+              "score_mean": null,
+              "excerpt": "Routine day. Back-to-back calls, budget reconciliation, nothing unusual. Grabbed a broodje kroket from the canteen and ate it at my desk between meetings."
+            }
+          ],
           "coach_narrative": null,
           "validation": null
         },
-        "cited_journal_entry_ids": []
+        "cited_journal_entry_ids": [
+          "988d1a65:entry:3"
+        ]
       }
     },
     {
@@ -5553,7 +5645,7 @@
           "id": "recovered-marc:week:4"
         }
       ],
-      "input_hash": "73abe96ebb38e347f68158177745903f8099af64d39e062d1d4137a72abfd18d",
+      "input_hash": "da6d72377550bb7eab8d4cfb1ac242c11f5d90806899fa311f201b7776603d25",
       "error": null,
       "details": {
         "digest": {
@@ -5571,16 +5663,28 @@
           "core_values": [
             "power"
           ],
+          "goal_context": null,
           "drift_states": {},
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
-          "evidence": [],
+          "evidence": [
+            {
+              "date": "2025-03-03",
+              "t_index": 4,
+              "direction": "context",
+              "dimensions": [],
+              "score_mean": null,
+              "excerpt": "Monday. Staff meeting went long because Thomas wanted to discuss the new reporting structure again. I'd already decided on it two weeks ago and communicated it clearly, but apparently some people need to re-litigate everything. Let them talk for ten..."
+            }
+          ],
           "coach_narrative": null,
           "validation": null
         },
-        "cited_journal_entry_ids": []
+        "cited_journal_entry_ids": [
+          "988d1a65:entry:4"
+        ]
       }
     },
     {
@@ -6453,7 +6557,7 @@
           "id": "recovered-marc:week:5"
         }
       ],
-      "input_hash": "bf03ef7e787ffa337d8c1899eb4ecba095144d5dfbb2224f3177363e99142566",
+      "input_hash": "505056dd0b90ae1f49e6fe4a4a8c3e501ecbc40ff42752c457ed28876b291763",
       "error": null,
       "details": {
         "digest": {
@@ -6471,6 +6575,7 @@
           "core_values": [
             "power"
           ],
+          "goal_context": null,
           "drift_states": {
             "power": "active"
           },
@@ -7347,7 +7452,7 @@
           "id": "recovered-marc:week:6"
         }
       ],
-      "input_hash": "e8d173e3bef044c7ecbb148cbd118907f1ab87aa39fe60a626dd72da595e23c2",
+      "input_hash": "f0afed540aa5939f3b10965db47369641c52d35c38852bad706d1b8d9316cf62",
       "error": null,
       "details": {
         "digest": {
@@ -7365,6 +7470,7 @@
           "core_values": [
             "power"
           ],
+          "goal_context": null,
           "drift_states": {
             "power": "recovered"
           },
@@ -7396,6 +7502,16 @@
               ],
               "score_mean": null,
               "excerpt": "I just sat there and let him reframe my own analysis back to me. I should have shut it down. I should have said, \"Jeroen, I've been doing this since before you started your bachelor's.\" But I didn't. I smiled..."
+            },
+            {
+              "date": "2025-03-21",
+              "t_index": 7,
+              "direction": "recovery",
+              "dimensions": [
+                "power"
+              ],
+              "score_mean": null,
+              "excerpt": "Pieter did it again in the client call. Spoke over me, redirected the conversation to his numbers. I corrected him this time but it came out sharper than I meant and the client noticed."
             }
           ],
           "coach_narrative": null,
@@ -7403,7 +7519,8 @@
         },
         "cited_journal_entry_ids": [
           "988d1a65:entry:5",
-          "988d1a65:entry:6"
+          "988d1a65:entry:6",
+          "988d1a65:entry:7"
         ]
       }
     },
@@ -8346,7 +8463,7 @@
           "id": "recovered-marc:week:7"
         }
       ],
-      "input_hash": "070d16a3b5d307f18bfdf987115144e4e1bdd00ae0000edc6eb4d2977d40313f",
+      "input_hash": "5865d0b8b8225950145d95ccbc40f9da9701830adfefc04eee77a5d380687601",
       "error": null,
       "details": {
         "digest": {
@@ -8364,6 +8481,7 @@
           "core_values": [
             "power"
           ],
+          "goal_context": null,
           "drift_states": {
             "power": "recovered"
           },
@@ -8395,6 +8513,16 @@
               ],
               "score_mean": null,
               "excerpt": "I just sat there and let him reframe my own analysis back to me. I should have shut it down. I should have said, \"Jeroen, I've been doing this since before you started your bachelor's.\" But I didn't. I smiled..."
+            },
+            {
+              "date": "2025-03-21",
+              "t_index": 7,
+              "direction": "recovery",
+              "dimensions": [
+                "power"
+              ],
+              "score_mean": null,
+              "excerpt": "Pieter did it again in the client call. Spoke over me, redirected the conversation to his numbers. I corrected him this time but it came out sharper than I meant and the client noticed."
             }
           ],
           "coach_narrative": null,
@@ -8402,7 +8530,8 @@
         },
         "cited_journal_entry_ids": [
           "988d1a65:entry:5",
-          "988d1a65:entry:6"
+          "988d1a65:entry:6",
+          "988d1a65:entry:7"
         ]
       }
     },
@@ -9175,7 +9304,7 @@
           "id": "recovered-marc:week:8"
         }
       ],
-      "input_hash": "4a8e7e4b5d8207623dba9f3340a320342f9c6c3548a07ff444ef9936c2039e3a",
+      "input_hash": "fb6821df4208cacab940c10935c2ce2bc6cb8714087cc8ba3d932ce8f162c92d",
       "error": null,
       "details": {
         "digest": {
@@ -9193,6 +9322,7 @@
           "core_values": [
             "power"
           ],
+          "goal_context": null,
           "drift_states": {
             "power": "recovered"
           },
@@ -9224,6 +9354,16 @@
               ],
               "score_mean": null,
               "excerpt": "I just sat there and let him reframe my own analysis back to me. I should have shut it down. I should have said, \"Jeroen, I've been doing this since before you started your bachelor's.\" But I didn't. I smiled..."
+            },
+            {
+              "date": "2025-03-21",
+              "t_index": 7,
+              "direction": "recovery",
+              "dimensions": [
+                "power"
+              ],
+              "score_mean": null,
+              "excerpt": "Pieter did it again in the client call. Spoke over me, redirected the conversation to his numbers. I corrected him this time but it came out sharper than I meant and the client noticed."
             }
           ],
           "coach_narrative": null,
@@ -9231,7 +9371,8 @@
         },
         "cited_journal_entry_ids": [
           "988d1a65:entry:5",
-          "988d1a65:entry:6"
+          "988d1a65:entry:6",
+          "988d1a65:entry:7"
         ]
       }
     }

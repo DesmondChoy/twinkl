@@ -878,7 +878,7 @@ describe("manual Journal Entry Experience", () => {
     await user.click(
       screen.getByRole("button", { name: "See how this was decided" }),
     );
-    expect(inspectRun).toHaveBeenLastCalledWith("event-09");
+    expect(inspectRun).toHaveBeenLastCalledWith("event-11");
   });
 
   it("does not call an unavailable weekly review No Drift", () => {

@@ -3,6 +3,7 @@ import {
   type OnboardingProfile,
   type ValueKey,
 } from "./domain";
+import CoachDigestCard from "./CoachDigestCard";
 import {
   displayWeekRange,
 } from "./displayFormatters";
@@ -163,9 +164,10 @@ export default function WeeklyExperience({
   const entriesByIndex = new Map(
     journalEntries.map((entry) => [entry.t_index, entry]),
   );
+  const coachEventId = latestEventId(traceEvents, "weekly_coach_generated");
   const driftEventId = latestEventId(traceEvents, "drift_detected");
   const digestEventId = latestEventId(traceEvents, "weekly_digest_built");
-  const inspectEventId = driftEventId ?? digestEventId;
+  const inspectEventId = coachEventId ?? driftEventId ?? digestEventId;
   const weekStart =
     typeof weeklyDigest.week_start === "string" ? weeklyDigest.week_start : null;
   const weekEnd =
@@ -183,20 +185,6 @@ export default function WeeklyExperience({
           decision.week_start === weekStart && decision.week_end === weekEnd,
       )
       .every((decision) => decision.review_status !== "ok");
-  const coachNarrative = object(weeklyDigest.coach_narrative);
-  const weeklyMirror =
-    typeof coachNarrative?.weekly_mirror === "string"
-      ? coachNarrative.weekly_mirror
-      : null;
-  const tensionExplanation =
-    typeof coachNarrative?.tension_explanation === "string"
-      ? coachNarrative.tension_explanation
-      : null;
-  const reflectiveQuestion =
-    typeof coachNarrative?.reflective_question === "string"
-      ? coachNarrative.reflective_question
-      : null;
-
   return (
     <section
       className="weekly-workspace"
@@ -293,16 +281,10 @@ export default function WeeklyExperience({
         ) : null}
       </div>
 
-      {weeklyMirror || tensionExplanation || reflectiveQuestion ? (
-        <aside className="coach-digest" aria-labelledby="weekly-coach-title">
-          <p className="eyebrow">Coach Digest</p>
-          <h2 id="weekly-coach-title">{weeklyMirror}</h2>
-          {tensionExplanation ? <p>{tensionExplanation}</p> : null}
-          {reflectiveQuestion ? (
-            <p className="coach-digest__question">{reflectiveQuestion}</p>
-          ) : null}
-        </aside>
-      ) : null}
+      <CoachDigestCard
+        weeklyDigest={weeklyDigest}
+        headingId="weekly-coach-title"
+      />
 
       {showInspectAction && inspectEventId ? (
         <button

@@ -311,6 +311,9 @@ export function PersonaReplayExperience({
   const inspectEventId =
     [...experience.trace_events]
       .reverse()
+      .find((event) => event.event_type === "weekly_coach_generated")?.event_id
+    ?? [...experience.trace_events]
+      .reverse()
       .find((event) => event.event_type === "drift_detected")?.event_id
     ?? [...experience.trace_events]
       .reverse()

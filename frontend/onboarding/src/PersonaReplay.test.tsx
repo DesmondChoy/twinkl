@@ -507,6 +507,53 @@ describe("persona replay", () => {
     )).toBeNull();
   });
 
+  it("keeps Weekly Drift Detection and the Coach Digest together", async () => {
+    matchMedia(false);
+    const user = userEvent.setup();
+    const inspectRun = vi.fn();
+    const scenarioFixture =
+      validateExperienceInspectFixture(twoValuesReplayJson);
+    const item = catalog.scenarios.find(
+      (candidate) => candidate.scenario_id === "two-values-lukas",
+    )!;
+    const weekIndex = scenarioFixture.scenario.weeks.length - 1;
+    const experience = experienceForWeek(weekIndex, scenarioFixture, item);
+
+    render(
+      <PersonaReplayExperience
+        loaded={{ catalogItem: item, fixture: scenarioFixture }}
+        weekIndex={weekIndex}
+        profile={scenarioFixture.scenario.profile}
+        experience={experience}
+        updateExperience={() => undefined}
+        inspectRun={inspectRun}
+        onChoosePersona={() => undefined}
+        onWeekChange={() => undefined}
+      />,
+    );
+
+    const result = screen.getByRole("article", { name: "Mixed" });
+    const coachHeading = screen.getByRole("heading", {
+      name: /You wrote that you "Accepted on the spot/,
+    });
+    const coachCard = coachHeading.closest(".coach-digest--replay");
+    const resultScroll = result.closest(".replay-column__scroll--result");
+
+    expect(coachCard).not.toBeNull();
+    expect(resultScroll?.contains(coachCard)).toBe(true);
+    expect(
+      result.compareDocumentPosition(coachCard!)
+      & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(within(result).getByText("Why this state changed")).toBeTruthy();
+
+    await user.click(screen.getByRole("button", { name: "Inspect decision" }));
+    const coachEvent = [...experience.trace_events]
+      .reverse()
+      .find((event) => event.event_type === "weekly_coach_generated");
+    expect(inspectRun).toHaveBeenCalledWith(coachEvent?.event_id);
+  });
+
   it("shows one result state and keeps AI review evidence beside each decision", async () => {
     matchMedia(false);
     const user = userEvent.setup();

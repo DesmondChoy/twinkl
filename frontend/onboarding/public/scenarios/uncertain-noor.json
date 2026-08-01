@@ -10,6 +10,7 @@
       "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
       "scoring_method": "best_minus_worst_divided_by_appearances_v1",
       "user_id": "02fb94f3",
+      "preferred_name": null,
       "session_id": "scenario-session:uncertain-noor",
       "started_at": "2025-04-14T09:00:00Z",
       "timestamp": "2025-04-14T09:05:00Z",
@@ -490,12 +491,30 @@
         "self_direction",
         "tradition"
       ],
+      "goal_context": null,
       "drift_states": {},
       "drift_reasons": [],
       "top_tensions": [],
       "top_strengths": [],
       "dimensions": [],
-      "evidence": [],
+      "evidence": [
+        {
+          "date": "2025-04-15",
+          "t_index": 0,
+          "direction": "context",
+          "dimensions": [],
+          "score_mean": null,
+          "excerpt": "My mother-in-law rearranged Sami's entire nap schedule without asking me. She told Tariq it was better for the baby to sleep earlier so she could take him to the park in the afternoon. Nobody asked what I thought. I had..."
+        },
+        {
+          "date": "2025-04-20",
+          "t_index": 1,
+          "direction": "context",
+          "dimensions": [],
+          "score_mean": null,
+          "excerpt": "Sami had a fever all night. I was up every two hours. Tariq slept through it. His mother came in at 5am and took over, told me to rest. I should be grateful but it felt like being dismissed. I'm..."
+        }
+      ],
       "coach_narrative": null,
       "validation": null
     },
@@ -535,6 +554,7 @@
       "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
       "scoring_method": "best_minus_worst_divided_by_appearances_v1",
       "user_id": "02fb94f3",
+      "preferred_name": null,
       "session_id": "scenario-session:uncertain-noor",
       "started_at": "2025-04-14T09:00:00Z",
       "timestamp": "2025-04-14T09:05:00Z",
@@ -1351,6 +1371,7 @@
         "self_direction",
         "tradition"
       ],
+      "goal_context": null,
       "drift_states": {
         "tradition": "uncertain"
       },
@@ -1643,6 +1664,7 @@
           "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
           "scoring_method": "best_minus_worst_divided_by_appearances_v1",
           "user_id": "02fb94f3",
+          "preferred_name": null,
           "session_id": "scenario-session:uncertain-noor",
           "started_at": "2025-04-14T09:00:00Z",
           "timestamp": "2025-04-14T09:05:00Z",
@@ -2123,12 +2145,30 @@
             "self_direction",
             "tradition"
           ],
+          "goal_context": null,
           "drift_states": {},
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
-          "evidence": [],
+          "evidence": [
+            {
+              "date": "2025-04-15",
+              "t_index": 0,
+              "direction": "context",
+              "dimensions": [],
+              "score_mean": null,
+              "excerpt": "My mother-in-law rearranged Sami's entire nap schedule without asking me. She told Tariq it was better for the baby to sleep earlier so she could take him to the park in the afternoon. Nobody asked what I thought. I had..."
+            },
+            {
+              "date": "2025-04-20",
+              "t_index": 1,
+              "direction": "context",
+              "dimensions": [],
+              "score_mean": null,
+              "excerpt": "Sami had a fever all night. I was up every two hours. Tariq slept through it. His mother came in at 5am and took over, told me to rest. I should be grateful but it felt like being dismissed. I'm..."
+            }
+          ],
           "coach_narrative": null,
           "validation": null
         },
@@ -2168,6 +2208,7 @@
           "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
           "scoring_method": "best_minus_worst_divided_by_appearances_v1",
           "user_id": "02fb94f3",
+          "preferred_name": null,
           "session_id": "scenario-session:uncertain-noor",
           "started_at": "2025-04-14T09:00:00Z",
           "timestamp": "2025-04-14T09:05:00Z",
@@ -2984,6 +3025,7 @@
             "self_direction",
             "tradition"
           ],
+          "goal_context": null,
           "drift_states": {
             "tradition": "uncertain"
           },
@@ -3296,7 +3338,7 @@
           "id": "02fb94f3"
         }
       ],
-      "input_hash": "953ec73b856cdec484ac8a98a4a49c972b97753568fabe597ad69bb8d13b54d9",
+      "input_hash": "7fa6e19de01b773cdf58470af8f5d71096fba8f43badacbd72a843825d57b0d9",
       "error": null,
       "details": {
         "profile": {
@@ -3305,6 +3347,7 @@
           "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
           "scoring_method": "best_minus_worst_divided_by_appearances_v1",
           "user_id": "02fb94f3",
+          "preferred_name": null,
           "session_id": "scenario-session:uncertain-noor",
           "started_at": "2025-04-14T09:00:00Z",
           "timestamp": "2025-04-14T09:05:00Z",
@@ -4473,7 +4516,7 @@
           "id": "uncertain-noor:week:1"
         }
       ],
-      "input_hash": "fbebedbc719399b2d1ea421966f84156c23d1da120b42d6c8da00e1cb16931a2",
+      "input_hash": "6c5abf44387b428c95eadbf64a184d0eae45133e4dfc502668ef914f7206baad",
       "error": null,
       "details": {
         "digest": {
@@ -4492,16 +4535,37 @@
             "self_direction",
             "tradition"
           ],
+          "goal_context": null,
           "drift_states": {},
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
-          "evidence": [],
+          "evidence": [
+            {
+              "date": "2025-04-15",
+              "t_index": 0,
+              "direction": "context",
+              "dimensions": [],
+              "score_mean": null,
+              "excerpt": "My mother-in-law rearranged Sami's entire nap schedule without asking me. She told Tariq it was better for the baby to sleep earlier so she could take him to the park in the afternoon. Nobody asked what I thought. I had..."
+            },
+            {
+              "date": "2025-04-20",
+              "t_index": 1,
+              "direction": "context",
+              "dimensions": [],
+              "score_mean": null,
+              "excerpt": "Sami had a fever all night. I was up every two hours. Tariq slept through it. His mother came in at 5am and took over, told me to rest. I should be grateful but it felt like being dismissed. I'm..."
+            }
+          ],
           "coach_narrative": null,
           "validation": null
         },
-        "cited_journal_entry_ids": []
+        "cited_journal_entry_ids": [
+          "02fb94f3:entry:0",
+          "02fb94f3:entry:1"
+        ]
       }
     },
     {
@@ -5314,7 +5378,7 @@
           "id": "uncertain-noor:week:2"
         }
       ],
-      "input_hash": "ed2cc55122afd3bf641ac1cb1b7358c5ae5b66d4de4f7aa4185012078a79f74f",
+      "input_hash": "577b014248a754e34483f7008873774a87b5a3e0684a4303ccd538db0ab8d865",
       "error": null,
       "details": {
         "digest": {
@@ -5333,16 +5397,37 @@
             "self_direction",
             "tradition"
           ],
+          "goal_context": null,
           "drift_states": {},
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
-          "evidence": [],
+          "evidence": [
+            {
+              "date": "2025-04-21",
+              "t_index": 2,
+              "direction": "context",
+              "dimensions": [],
+              "score_mean": null,
+              "excerpt": "Sami's fever broke. Normal day otherwise. Did laundry, made lentil soup, swept the hallway because nobody else notices the dust. Tariq came home and asked what's for dinner. I said soup. He said his mother already made something. So the..."
+            },
+            {
+              "date": "2025-04-27",
+              "t_index": 3,
+              "direction": "context",
+              "dimensions": [],
+              "score_mean": null,
+              "excerpt": "Can barely keep my eyes open. Sami is teething and it's been three nights of broken sleep. I had to email the client and ask for an extension on the logo revisions. Felt pathetic typing that out. My mother called..."
+            }
+          ],
           "coach_narrative": null,
           "validation": null
         },
-        "cited_journal_entry_ids": []
+        "cited_journal_entry_ids": [
+          "02fb94f3:entry:2",
+          "02fb94f3:entry:3"
+        ]
       }
     },
     {
@@ -6327,7 +6412,7 @@
           "id": "uncertain-noor:week:3"
         }
       ],
-      "input_hash": "d83a66910a116202590e84dab206cfc573b2c66b1c17a613155657d8f4a6b647",
+      "input_hash": "e4bdcaba36c57759c4bf2dfa9a0c31543e35e36a790abd7ec5488dc4e61335b7",
       "error": null,
       "details": {
         "digest": {
@@ -6346,6 +6431,7 @@
             "self_direction",
             "tradition"
           ],
+          "goal_context": null,
           "drift_states": {
             "tradition": "active"
           },
@@ -7702,7 +7788,7 @@
           "id": "uncertain-noor:week:4"
         }
       ],
-      "input_hash": "b4e525f33504e3cf262a0e57a9d5cf4aeded3bebbffe231b1ac03256a131f06a",
+      "input_hash": "c30aac3961563d0d2b0f25924a441155220caf36722c6c11b4f18b4c953b6610",
       "error": null,
       "details": {
         "digest": {
@@ -7721,6 +7807,7 @@
             "self_direction",
             "tradition"
           ],
+          "goal_context": null,
           "drift_states": {
             "tradition": "uncertain"
           },
@@ -8756,7 +8843,7 @@
           "id": "uncertain-noor:week:5"
         }
       ],
-      "input_hash": "090f1e8293d4df25dc5374697513ea06939e2bc3bcc842ac29e1cf0d7fcf3058",
+      "input_hash": "a84c45ea89adf8d2bc54a8f4102a26c9ca24b82ebac882cf4d051efeefff1dac",
       "error": null,
       "details": {
         "digest": {
@@ -8775,6 +8862,7 @@
             "self_direction",
             "tradition"
           ],
+          "goal_context": null,
           "drift_states": {
             "tradition": "uncertain"
           },
@@ -10093,7 +10181,7 @@
           "id": "uncertain-noor:week:6"
         }
       ],
-      "input_hash": "e5e691130df382e3b4796eea17c12a9e56ae33117431ee7d81d8348bd9d1f10d",
+      "input_hash": "cceb911ece73ebeee9e9ef126d7e0fe3da66091f059282fce2c52e616a8bdfd0",
       "error": null,
       "details": {
         "digest": {
@@ -10112,6 +10200,7 @@
             "self_direction",
             "tradition"
           ],
+          "goal_context": null,
           "drift_states": {
             "tradition": "uncertain"
           },

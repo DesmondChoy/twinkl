@@ -10,6 +10,7 @@
       "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
       "scoring_method": "best_minus_worst_divided_by_appearances_v1",
       "user_id": "23d101f8",
+      "preferred_name": null,
       "session_id": "scenario-session:stable-meera",
       "started_at": "2025-08-04T09:00:00Z",
       "timestamp": "2025-08-04T09:05:00Z",
@@ -523,12 +524,30 @@
         "achievement",
         "security"
       ],
+      "goal_context": null,
       "drift_states": {},
       "drift_reasons": [],
       "top_tensions": [],
       "top_strengths": [],
       "dimensions": [],
-      "evidence": [],
+      "evidence": [
+        {
+          "date": "2025-08-05",
+          "t_index": 1,
+          "direction": "context",
+          "dimensions": [],
+          "score_mean": null,
+          "excerpt": "Writing again because something from the afternoon meeting is bothering me. The principal floated the idea of restructuring the science department — merging physics and chemistry into combined sections for the lower forms. She said it would \"optimize staffing.\" I've..."
+        },
+        {
+          "date": "2025-08-10",
+          "t_index": 2,
+          "direction": "context",
+          "dimensions": [],
+          "score_mean": null,
+          "excerpt": "Arjun got his mock results back — 94th percentile in physics, 89th overall. I know I shouldn't take credit but I've been drilling him on wave mechanics every evening for two months. This is what it looks like when the..."
+        }
+      ],
       "coach_narrative": null,
       "validation": null
     },
@@ -571,6 +590,7 @@
       "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
       "scoring_method": "best_minus_worst_divided_by_appearances_v1",
       "user_id": "23d101f8",
+      "preferred_name": null,
       "session_id": "scenario-session:stable-meera",
       "started_at": "2025-08-04T09:00:00Z",
       "timestamp": "2025-08-04T09:05:00Z",
@@ -1328,12 +1348,22 @@
         "achievement",
         "security"
       ],
+      "goal_context": null,
       "drift_states": {},
       "drift_reasons": [],
       "top_tensions": [],
       "top_strengths": [],
       "dimensions": [],
-      "evidence": [],
+      "evidence": [
+        {
+          "date": "2025-09-19",
+          "t_index": 10,
+          "direction": "context",
+          "dimensions": [],
+          "score_mean": null,
+          "excerpt": "Evaluation prep meeting today. Reviewed my portfolio — student pass rates up 4% year-on-year, the integrated science pilot is on track, three students from my batch qualified for the state science olympiad. Good numbers. I know how to build a..."
+        }
+      ],
       "coach_narrative": null,
       "validation": null
     },
@@ -1604,6 +1634,7 @@
           "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
           "scoring_method": "best_minus_worst_divided_by_appearances_v1",
           "user_id": "23d101f8",
+          "preferred_name": null,
           "session_id": "scenario-session:stable-meera",
           "started_at": "2025-08-04T09:00:00Z",
           "timestamp": "2025-08-04T09:05:00Z",
@@ -2117,12 +2148,30 @@
             "achievement",
             "security"
           ],
+          "goal_context": null,
           "drift_states": {},
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
-          "evidence": [],
+          "evidence": [
+            {
+              "date": "2025-08-05",
+              "t_index": 1,
+              "direction": "context",
+              "dimensions": [],
+              "score_mean": null,
+              "excerpt": "Writing again because something from the afternoon meeting is bothering me. The principal floated the idea of restructuring the science department — merging physics and chemistry into combined sections for the lower forms. She said it would \"optimize staffing.\" I've..."
+            },
+            {
+              "date": "2025-08-10",
+              "t_index": 2,
+              "direction": "context",
+              "dimensions": [],
+              "score_mean": null,
+              "excerpt": "Arjun got his mock results back — 94th percentile in physics, 89th overall. I know I shouldn't take credit but I've been drilling him on wave mechanics every evening for two months. This is what it looks like when the..."
+            }
+          ],
           "coach_narrative": null,
           "validation": null
         },
@@ -2165,6 +2214,7 @@
           "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
           "scoring_method": "best_minus_worst_divided_by_appearances_v1",
           "user_id": "23d101f8",
+          "preferred_name": null,
           "session_id": "scenario-session:stable-meera",
           "started_at": "2025-08-04T09:00:00Z",
           "timestamp": "2025-08-04T09:05:00Z",
@@ -2922,12 +2972,22 @@
             "achievement",
             "security"
           ],
+          "goal_context": null,
           "drift_states": {},
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
-          "evidence": [],
+          "evidence": [
+            {
+              "date": "2025-09-19",
+              "t_index": 10,
+              "direction": "context",
+              "dimensions": [],
+              "score_mean": null,
+              "excerpt": "Evaluation prep meeting today. Reviewed my portfolio — student pass rates up 4% year-on-year, the integrated science pilot is on track, three students from my batch qualified for the state science olympiad. Good numbers. I know how to build a..."
+            }
+          ],
           "coach_narrative": null,
           "validation": null
         },
@@ -3221,7 +3281,7 @@
           "id": "23d101f8"
         }
       ],
-      "input_hash": "bf577eef01d53dc0b741ee9bb1b134443e54ccbcbe19757bd16cda7af0f12854",
+      "input_hash": "4f046f43f04a5386d0de577e7c49a1636196f461b06435cad4411f3b6ddb0471",
       "error": null,
       "details": {
         "profile": {
@@ -3230,6 +3290,7 @@
           "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
           "scoring_method": "best_minus_worst_divided_by_appearances_v1",
           "user_id": "23d101f8",
+          "preferred_name": null,
           "session_id": "scenario-session:stable-meera",
           "started_at": "2025-08-04T09:00:00Z",
           "timestamp": "2025-08-04T09:05:00Z",
@@ -4631,7 +4692,7 @@
           "id": "stable-meera:week:1"
         }
       ],
-      "input_hash": "c7cfe7211241450b7886327df188a7d5cdd22ba3cc717459e15764af2dff699f",
+      "input_hash": "b11a457b5f23032785c2b41b66ef78535758ff0b4aae4b70fc480d6643503b34",
       "error": null,
       "details": {
         "digest": {
@@ -4650,16 +4711,37 @@
             "achievement",
             "security"
           ],
+          "goal_context": null,
           "drift_states": {},
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
-          "evidence": [],
+          "evidence": [
+            {
+              "date": "2025-08-05",
+              "t_index": 1,
+              "direction": "context",
+              "dimensions": [],
+              "score_mean": null,
+              "excerpt": "Writing again because something from the afternoon meeting is bothering me. The principal floated the idea of restructuring the science department — merging physics and chemistry into combined sections for the lower forms. She said it would \"optimize staffing.\" I've..."
+            },
+            {
+              "date": "2025-08-10",
+              "t_index": 2,
+              "direction": "context",
+              "dimensions": [],
+              "score_mean": null,
+              "excerpt": "Arjun got his mock results back — 94th percentile in physics, 89th overall. I know I shouldn't take credit but I've been drilling him on wave mechanics every evening for two months. This is what it looks like when the..."
+            }
+          ],
           "coach_narrative": null,
           "validation": null
         },
-        "cited_journal_entry_ids": []
+        "cited_journal_entry_ids": [
+          "23d101f8:entry:1",
+          "23d101f8:entry:2"
+        ]
       }
     },
     {
@@ -5288,7 +5370,7 @@
           "id": "stable-meera:week:2"
         }
       ],
-      "input_hash": "28f0cdc4e7136b003174bf40709284f4e1a4dfc103f843178683ecfcec5a868c",
+      "input_hash": "b05aa4f4047dd70c2d673b8c33081792e119bb14b446b239a9556fedc9d794f3",
       "error": null,
       "details": {
         "digest": {
@@ -5307,16 +5389,28 @@
             "achievement",
             "security"
           ],
+          "goal_context": null,
           "drift_states": {},
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
-          "evidence": [],
+          "evidence": [
+            {
+              "date": "2025-08-14",
+              "t_index": 3,
+              "direction": "context",
+              "dimensions": [],
+              "score_mean": null,
+              "excerpt": "Parent-teacher conferences all week. Same questions every year — will my child pass, what rank can they get, can you give extra coaching. Ravi's mother brought sweets to thank me for his board results. Small thing but it matters."
+            }
+          ],
           "coach_narrative": null,
           "validation": null
         },
-        "cited_journal_entry_ids": []
+        "cited_journal_entry_ids": [
+          "23d101f8:entry:3"
+        ]
       }
     },
     {
@@ -6275,7 +6369,7 @@
           "id": "stable-meera:week:3"
         }
       ],
-      "input_hash": "861657c533e504f7c6c8e15efe26ae3691e7a5022178514b202121df15774886",
+      "input_hash": "b2d778b5943b832c97cac80e19f4df5f07da5a7e1f001d57af52724e8d75659d",
       "error": null,
       "details": {
         "digest": {
@@ -6294,16 +6388,37 @@
             "achievement",
             "security"
           ],
+          "goal_context": null,
           "drift_states": {},
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
-          "evidence": [],
+          "evidence": [
+            {
+              "date": "2025-08-20",
+              "t_index": 4,
+              "direction": "context",
+              "dimensions": [],
+              "score_mean": null,
+              "excerpt": "A colleague mentioned she's applying to an international school in Bangalore — nearly double the salary. For a moment I caught myself looking it up. Then I thought about uprooting Arjun right before his entrance exams, and Priya's board year...."
+            },
+            {
+              "date": "2025-08-22",
+              "t_index": 5,
+              "direction": "context",
+              "dimensions": [],
+              "score_mean": null,
+              "excerpt": "The restructuring discussion came up again in staff meeting. This time with a proper proposal document. It's not as bad as I feared — physics stays as a standalone subject for the upper forms, but lower forms will have integrated..."
+            }
+          ],
           "coach_narrative": null,
           "validation": null
         },
-        "cited_journal_entry_ids": []
+        "cited_journal_entry_ids": [
+          "23d101f8:entry:4",
+          "23d101f8:entry:5"
+        ]
       }
     },
     {
@@ -7126,7 +7241,7 @@
           "id": "stable-meera:week:4"
         }
       ],
-      "input_hash": "a1f4d294bf3e14eac1be40dcd4c88daa02947cc0502b63492fe62a996fef6ed5",
+      "input_hash": "7961c27d97d3c1371e6a45b5a5ca323183bc406cd81f3332b4bf5b87aa396893",
       "error": null,
       "details": {
         "digest": {
@@ -7145,16 +7260,28 @@
             "achievement",
             "security"
           ],
+          "goal_context": null,
           "drift_states": {},
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
-          "evidence": [],
+          "evidence": [
+            {
+              "date": "2025-08-27",
+              "t_index": 6,
+              "direction": "context",
+              "dimensions": [],
+              "score_mean": null,
+              "excerpt": "Deepak and I had one of those late-night conversations after the children went to sleep. He mentioned that his bank is offering voluntary retirement packages for employees over 50. He's 52. He said he's not considering it, but the way..."
+            }
+          ],
           "coach_narrative": null,
           "validation": null
         },
-        "cited_journal_entry_ids": []
+        "cited_journal_entry_ids": [
+          "23d101f8:entry:6"
+        ]
       }
     },
     {
@@ -7979,7 +8106,7 @@
           "id": "stable-meera:week:5"
         }
       ],
-      "input_hash": "e6dd98bb30bd31974c053872b077593f37d4d31c506a027dee30098f718da67c",
+      "input_hash": "12bb0f75dda7744a33afb978fc9691f0cc447e2df4330332594c9c902cbbc567",
       "error": null,
       "details": {
         "digest": {
@@ -7998,16 +8125,28 @@
             "achievement",
             "security"
           ],
+          "goal_context": null,
           "drift_states": {},
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
-          "evidence": [],
+          "evidence": [
+            {
+              "date": "2025-09-02",
+              "t_index": 7,
+              "direction": "context",
+              "dimensions": [],
+              "score_mean": null,
+              "excerpt": "New term properly started. The integrated science trial begins next week for the lower forms and I'm one of three teachers overseeing the transition. More work, obviously, but also more visibility with the administration. The principal specifically asked me to..."
+            }
+          ],
           "coach_narrative": null,
           "validation": null
         },
-        "cited_journal_entry_ids": []
+        "cited_journal_entry_ids": [
+          "23d101f8:entry:7"
+        ]
       }
     },
     {
@@ -9162,7 +9301,7 @@
           "id": "stable-meera:week:6"
         }
       ],
-      "input_hash": "2913b30d8aedb991c9dbb83acf834329e6dc83f7341b1dc10e2cabb81780adcf",
+      "input_hash": "6eaa1590697777251f850fdf36b31ff2032d78ff3272ff921dbbb33d76de82aa",
       "error": null,
       "details": {
         "digest": {
@@ -9181,16 +9320,37 @@
             "achievement",
             "security"
           ],
+          "goal_context": null,
           "drift_states": {},
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
-          "evidence": [],
+          "evidence": [
+            {
+              "date": "2025-09-09",
+              "t_index": 8,
+              "direction": "context",
+              "dimensions": [],
+              "score_mean": null,
+              "excerpt": "Priya came to me after dinner and asked if I could look at her biology project. I almost said \"after I finish marking\" but something made me stop. Put the papers down and sat with her for an hour. Her..."
+            },
+            {
+              "date": "2025-09-12",
+              "t_index": 9,
+              "direction": "context",
+              "dimensions": [],
+              "score_mean": null,
+              "excerpt": "Got an email from the international school my colleague mentioned. They're still hiring for physics. I read the entire job posting before deleting it. Told myself it was just curiosity but I bookmarked the school's website. Response: Doesn't matter, the..."
+            }
+          ],
           "coach_narrative": null,
           "validation": null
         },
-        "cited_journal_entry_ids": []
+        "cited_journal_entry_ids": [
+          "23d101f8:entry:8",
+          "23d101f8:entry:9"
+        ]
       }
     },
     {
@@ -10209,7 +10369,7 @@
           "id": "stable-meera:week:7"
         }
       ],
-      "input_hash": "4abd3d8e55e683abb32d5b6c39de5987a94b1fd6cb5cf77cff8022bc65e6cc14",
+      "input_hash": "9dfb041c6d99c6b21e5aef4e643b187b0f280eaf3a3d8f6ed1e5aa70ea774906",
       "error": null,
       "details": {
         "digest": {
@@ -10228,16 +10388,28 @@
             "achievement",
             "security"
           ],
+          "goal_context": null,
           "drift_states": {},
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
-          "evidence": [],
+          "evidence": [
+            {
+              "date": "2025-09-19",
+              "t_index": 10,
+              "direction": "context",
+              "dimensions": [],
+              "score_mean": null,
+              "excerpt": "Evaluation prep meeting today. Reviewed my portfolio — student pass rates up 4% year-on-year, the integrated science pilot is on track, three students from my batch qualified for the state science olympiad. Good numbers. I know how to build a..."
+            }
+          ],
           "coach_narrative": null,
           "validation": null
         },
-        "cited_journal_entry_ids": []
+        "cited_journal_entry_ids": [
+          "23d101f8:entry:10"
+        ]
       }
     }
   ]

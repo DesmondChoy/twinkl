@@ -172,4 +172,23 @@ describe("versioned Profile", () => {
       "deterministic scoring contract",
     );
   });
+
+  it("normalizes a null preferred name from a saved Profile", () => {
+    const profile = createProfile({
+      userId: "persona-1",
+      preferredName: "Casey",
+      sessionId: "scenario-session",
+      startedAt: "2026-07-19T00:00:00.000Z",
+      completedAt: "2026-07-19T00:02:00.000Z",
+      responses: completeResponses(),
+      userConfirmed: true,
+    });
+    const savedProfile = structuredClone(profile) as unknown as Record<
+      string,
+      unknown
+    >;
+    savedProfile.preferred_name = null;
+
+    expect(validateProfile(savedProfile)).not.toHaveProperty("preferred_name");
+  });
 });

@@ -5,6 +5,7 @@ import {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
+import CoachDigestCard from "./CoachDigestCard";
 import DriftStateExplanation from "./DriftStateExplanation";
 import type { OnboardingProfile } from "./domain";
 import type {
@@ -372,15 +373,6 @@ export default function ReplayTimeline({
                       onOpenEntry={openJournalEntry}
                     />
                   </section>
-                  {inspectEventId ? (
-                    <button
-                      className="inspect-run-link"
-                      type="button"
-                      onClick={() => inspectRun(inspectEventId)}
-                    >
-                      Inspect decision
-                    </button>
-                  ) : null}
                 </div>
               </article>
             ) : (
@@ -388,6 +380,23 @@ export default function ReplayTimeline({
                 Weekly Drift Detection appears after the final Journal Entry.
               </div>
             )}
+            {resultVisible ? (
+              <CoachDigestCard
+                weeklyDigest={weeklyDigest}
+                headingId="replay-coach-digest-title"
+                headingLevel={3}
+                className="coach-digest--replay"
+              />
+            ) : null}
+            {resultVisible && inspectEventId ? (
+              <button
+                className="inspect-run-link replay-column__inspect"
+                type="button"
+                onClick={() => inspectRun(inspectEventId)}
+              >
+                Inspect decision
+              </button>
+            ) : null}
           </div>
         </aside>
       </section>

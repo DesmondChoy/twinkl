@@ -108,6 +108,43 @@ def test_required_drift_progressions_are_preserved(loaded_scenarios) -> None:
     }
 
 
+def test_lukas_key_week_has_one_grounded_saved_coach_digest(
+    loaded_scenarios,
+) -> None:
+    _, fixtures = loaded_scenarios
+    coach_events = [
+        event
+        for fixture in fixtures.values()
+        for event in fixture.trace_events
+        if event.event_type == "weekly_coach_generated"
+    ]
+
+    assert len(coach_events) == 1
+    event = coach_events[0]
+    lukas = fixtures["two-values-lukas"]
+    key_week = lukas.scenario.weeks[-1]
+    narrative = lukas.scenario.weekly_digest.coach_narrative
+    validation = lukas.scenario.weekly_digest.validation
+
+    assert event.event_id in key_week.event_ids
+    assert event.source == "saved_replay"
+    assert event.model_contract is None
+    assert event.prompt is None
+    assert event.raw_response is None
+    assert narrative == event.details.narrative
+    assert validation == event.details.validation
+    assert validation is not None
+    assert all(check.passed for check in validation.checks)
+    assert validation.grounded_quotes == [
+        "Accepted on the spot because that's what you do"
+    ]
+    assert all(
+        fixture.scenario.weekly_digest.coach_narrative is None
+        for scenario_id, fixture in fixtures.items()
+        if scenario_id != "two-values-lukas"
+    )
+
+
 def test_checked_in_scenarios_match_deterministic_builder(
     loaded_scenarios,
 ) -> None:

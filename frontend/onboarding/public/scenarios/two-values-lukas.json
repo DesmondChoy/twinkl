@@ -10,6 +10,7 @@
       "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
       "scoring_method": "best_minus_worst_divided_by_appearances_v1",
       "user_id": "11de77e8",
+      "preferred_name": null,
       "session_id": "scenario-session:two-values-lukas",
       "started_at": "2025-08-22T09:00:00Z",
       "timestamp": "2025-08-22T09:05:00Z",
@@ -448,12 +449,22 @@
         "self_direction",
         "conformity"
       ],
+      "goal_context": null,
       "drift_states": {},
       "drift_reasons": [],
       "top_tensions": [],
       "top_strengths": [],
       "dimensions": [],
-      "evidence": [],
+      "evidence": [
+        {
+          "date": "2025-08-23",
+          "t_index": 0,
+          "direction": "context",
+          "dimensions": [],
+          "score_mean": null,
+          "excerpt": "Had the tech lead conversation with Martijn today. He laid out what the role would look like — running standups, making architecture calls, representing the team in cross-department meetings. I said I was interested, which is true, but the whole..."
+        }
+      ],
       "coach_narrative": null,
       "validation": null
     },
@@ -489,6 +500,7 @@
       "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
       "scoring_method": "best_minus_worst_divided_by_appearances_v1",
       "user_id": "11de77e8",
+      "preferred_name": null,
       "session_id": "scenario-session:two-values-lukas",
       "started_at": "2025-08-22T09:00:00Z",
       "timestamp": "2025-08-22T09:05:00Z",
@@ -1329,6 +1341,7 @@
         "self_direction",
         "conformity"
       ],
+      "goal_context": null,
       "drift_states": {
         "conformity": "recovered",
         "self_direction": "uncertain"
@@ -1365,6 +1378,16 @@
           "excerpt": "Then on Sunday I stayed up way too late working on Pieter's tool and got completely absorbed refactoring the data ingestion layer."
         },
         {
+          "date": "2025-09-26",
+          "t_index": 6,
+          "direction": "recovery",
+          "dimensions": [
+            "conformity"
+          ],
+          "score_mean": null,
+          "excerpt": "I thanked him and said I'd put my best foot forward."
+        },
+        {
           "date": "2025-10-11",
           "t_index": 9,
           "direction": "misaligned",
@@ -1385,8 +1408,39 @@
           "excerpt": "Accepted on the spot because that's what you do."
         }
       ],
-      "coach_narrative": null,
-      "validation": null
+      "coach_narrative": {
+        "weekly_mirror": "You wrote that you \"Accepted on the spot because that's what you do\", then noticed that relief came before excitement.",
+        "tension_explanation": "An earlier pattern ended before this week, but your reason for accepting the new role still feels unclear.",
+        "reflective_question": "When you separate relief from expectation, what do you want this new role to mean for you?"
+      },
+      "validation": {
+        "grounded_quotes": [
+          "Accepted on the spot because that's what you do"
+        ],
+        "word_count": 55,
+        "checks": [
+          {
+            "name": "groundedness",
+            "passed": true,
+            "details": "Found 1 quoted phrase(s) that match selected evidence."
+          },
+          {
+            "name": "non_circularity",
+            "passed": true,
+            "details": "Response avoids raw scoring and alignment terminology."
+          },
+          {
+            "name": "value_leakage",
+            "passed": true,
+            "details": "Response avoids naming raw Schwartz value labels."
+          },
+          {
+            "name": "length",
+            "passed": true,
+            "details": "Combined response length is 55 words (target 25-180)."
+          }
+        ]
+      }
     },
     "weeks": [
       {
@@ -1566,7 +1620,8 @@
           "two-values-lukas:event:076",
           "two-values-lukas:event:077",
           "two-values-lukas:event:078",
-          "two-values-lukas:event:079"
+          "two-values-lukas:event:079",
+          "two-values-lukas:event:080"
         ],
         "expected_delivery_state": "mixed"
       }
@@ -1650,7 +1705,8 @@
       "two-values-lukas:event:076",
       "two-values-lukas:event:077",
       "two-values-lukas:event:078",
-      "two-values-lukas:event:079"
+      "two-values-lukas:event:079",
+      "two-values-lukas:event:080"
     ],
     "manifest": {
       "bundle_version": "scenario-bundle-v1",
@@ -1698,6 +1754,7 @@
           "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
           "scoring_method": "best_minus_worst_divided_by_appearances_v1",
           "user_id": "11de77e8",
+          "preferred_name": null,
           "session_id": "scenario-session:two-values-lukas",
           "started_at": "2025-08-22T09:00:00Z",
           "timestamp": "2025-08-22T09:05:00Z",
@@ -2136,12 +2193,22 @@
             "self_direction",
             "conformity"
           ],
+          "goal_context": null,
           "drift_states": {},
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
-          "evidence": [],
+          "evidence": [
+            {
+              "date": "2025-08-23",
+              "t_index": 0,
+              "direction": "context",
+              "dimensions": [],
+              "score_mean": null,
+              "excerpt": "Had the tech lead conversation with Martijn today. He laid out what the role would look like — running standups, making architecture calls, representing the team in cross-department meetings. I said I was interested, which is true, but the whole..."
+            }
+          ],
           "coach_narrative": null,
           "validation": null
         },
@@ -2177,6 +2244,7 @@
           "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
           "scoring_method": "best_minus_worst_divided_by_appearances_v1",
           "user_id": "11de77e8",
+          "preferred_name": null,
           "session_id": "scenario-session:two-values-lukas",
           "started_at": "2025-08-22T09:00:00Z",
           "timestamp": "2025-08-22T09:05:00Z",
@@ -3017,6 +3085,7 @@
             "self_direction",
             "conformity"
           ],
+          "goal_context": null,
           "drift_states": {
             "conformity": "recovered",
             "self_direction": "uncertain"
@@ -3053,6 +3122,16 @@
               "excerpt": "Then on Sunday I stayed up way too late working on Pieter's tool and got completely absorbed refactoring the data ingestion layer."
             },
             {
+              "date": "2025-09-26",
+              "t_index": 6,
+              "direction": "recovery",
+              "dimensions": [
+                "conformity"
+              ],
+              "score_mean": null,
+              "excerpt": "I thanked him and said I'd put my best foot forward."
+            },
+            {
               "date": "2025-10-11",
               "t_index": 9,
               "direction": "misaligned",
@@ -3073,8 +3152,39 @@
               "excerpt": "Accepted on the spot because that's what you do."
             }
           ],
-          "coach_narrative": null,
-          "validation": null
+          "coach_narrative": {
+            "weekly_mirror": "You wrote that you \"Accepted on the spot because that's what you do\", then noticed that relief came before excitement.",
+            "tension_explanation": "An earlier pattern ended before this week, but your reason for accepting the new role still feels unclear.",
+            "reflective_question": "When you separate relief from expectation, what do you want this new role to mean for you?"
+          },
+          "validation": {
+            "grounded_quotes": [
+              "Accepted on the spot because that's what you do"
+            ],
+            "word_count": 55,
+            "checks": [
+              {
+                "name": "groundedness",
+                "passed": true,
+                "details": "Found 1 quoted phrase(s) that match selected evidence."
+              },
+              {
+                "name": "non_circularity",
+                "passed": true,
+                "details": "Response avoids raw scoring and alignment terminology."
+              },
+              {
+                "name": "value_leakage",
+                "passed": true,
+                "details": "Response avoids naming raw Schwartz value labels."
+              },
+              {
+                "name": "length",
+                "passed": true,
+                "details": "Combined response length is 55 words (target 25-180)."
+              }
+            ]
+          }
         },
         "weeks": [
           {
@@ -3254,7 +3364,8 @@
               "two-values-lukas:event:076",
               "two-values-lukas:event:077",
               "two-values-lukas:event:078",
-              "two-values-lukas:event:079"
+              "two-values-lukas:event:079",
+              "two-values-lukas:event:080"
             ],
             "expected_delivery_state": "mixed"
           }
@@ -3338,7 +3449,8 @@
           "two-values-lukas:event:076",
           "two-values-lukas:event:077",
           "two-values-lukas:event:078",
-          "two-values-lukas:event:079"
+          "two-values-lukas:event:079",
+          "two-values-lukas:event:080"
         ],
         "manifest": {
           "bundle_version": "scenario-bundle-v1",
@@ -3402,7 +3514,7 @@
           "id": "11de77e8"
         }
       ],
-      "input_hash": "2ae794eb008077d68347568f304c2ec13bf7ec6f5ba7b6ffc9b4d8b7dbf7858e",
+      "input_hash": "a895083b547cd2438f83dc0ccfd06b51b17318eeb861a767411148e8258894b8",
       "error": null,
       "details": {
         "profile": {
@@ -3411,6 +3523,7 @@
           "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
           "scoring_method": "best_minus_worst_divided_by_appearances_v1",
           "user_id": "11de77e8",
+          "preferred_name": null,
           "session_id": "scenario-session:two-values-lukas",
           "started_at": "2025-08-22T09:00:00Z",
           "timestamp": "2025-08-22T09:05:00Z",
@@ -4300,7 +4413,7 @@
           "id": "two-values-lukas:week:1"
         }
       ],
-      "input_hash": "90cdd93e658df8b81288ccfe323c2396101e311edc3cc4ecebc99ed7479225a6",
+      "input_hash": "bfb445d3e1a677386dcb9cf78222bfebceb92654bad2eff1f1770d2860f3f0a8",
       "error": null,
       "details": {
         "digest": {
@@ -4319,16 +4432,28 @@
             "self_direction",
             "conformity"
           ],
+          "goal_context": null,
           "drift_states": {},
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
-          "evidence": [],
+          "evidence": [
+            {
+              "date": "2025-08-23",
+              "t_index": 0,
+              "direction": "context",
+              "dimensions": [],
+              "score_mean": null,
+              "excerpt": "Had the tech lead conversation with Martijn today. He laid out what the role would look like — running standups, making architecture calls, representing the team in cross-department meetings. I said I was interested, which is true, but the whole..."
+            }
+          ],
           "coach_narrative": null,
           "validation": null
         },
-        "cited_journal_entry_ids": []
+        "cited_journal_entry_ids": [
+          "11de77e8:entry:0"
+        ]
       }
     },
     {
@@ -4904,7 +5029,7 @@
           "id": "two-values-lukas:week:2"
         }
       ],
-      "input_hash": "92fc4743ed99e2d1e7a17a60c263dc84857276112e9b59d2084b245b24c270d1",
+      "input_hash": "672efd39bb13f858bfddcb015964f2636c2c2a68338c645fc429ea37ce28286b",
       "error": null,
       "details": {
         "digest": {
@@ -4923,16 +5048,28 @@
             "self_direction",
             "conformity"
           ],
+          "goal_context": null,
           "drift_states": {},
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
-          "evidence": [],
+          "evidence": [
+            {
+              "date": "2025-08-30",
+              "t_index": 1,
+              "direction": "context",
+              "dimensions": [],
+              "score_mean": null,
+              "excerpt": "Long week. Spent most of it pairing with the new hire, walking her through the codebase and our deployment pipeline. Didn't get to touch my own backlog at all but she's ramping up faster than the last person we onboarded..."
+            }
+          ],
           "coach_narrative": null,
           "validation": null
         },
-        "cited_journal_entry_ids": []
+        "cited_journal_entry_ids": [
+          "11de77e8:entry:1"
+        ]
       }
     },
     {
@@ -5511,7 +5648,7 @@
           "id": "two-values-lukas:week:3"
         }
       ],
-      "input_hash": "4adf6beab844f795ab1a49db563d94b632cca738fa250f5e76080f9a7c978736",
+      "input_hash": "727eb2f19f6d676da6f0e9b976f0145ef2fe2e27dfa91477a5347c2cd0e467e2",
       "error": null,
       "details": {
         "digest": {
@@ -5530,16 +5667,28 @@
             "self_direction",
             "conformity"
           ],
+          "goal_context": null,
           "drift_states": {},
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
-          "evidence": [],
+          "evidence": [
+            {
+              "date": "2025-09-05",
+              "t_index": 2,
+              "direction": "context",
+              "dimensions": [],
+              "score_mean": null,
+              "excerpt": "Sprint retro got a bit heated. Devika suggested we rethink the approval flow for deployments because she thinks it slows us down. She's right, technically — it does add a half-day lag. I had a whole alternative sketched in my..."
+            }
+          ],
           "coach_narrative": null,
           "validation": null
         },
-        "cited_journal_entry_ids": []
+        "cited_journal_entry_ids": [
+          "11de77e8:entry:2"
+        ]
       }
     },
     {
@@ -6449,7 +6598,7 @@
           "id": "two-values-lukas:week:4"
         }
       ],
-      "input_hash": "3e3fcb21be1306af3c26a4220601a364f29e1dccb2e27b531646596728b33bef",
+      "input_hash": "4ada223ef83be40eb3fb01dedbf6116231e73378d0b1ad424e4c99c97f3cf608",
       "error": null,
       "details": {
         "digest": {
@@ -6468,16 +6617,37 @@
             "self_direction",
             "conformity"
           ],
+          "goal_context": null,
           "drift_states": {},
           "drift_reasons": [],
           "top_tensions": [],
           "top_strengths": [],
           "dimensions": [],
-          "evidence": [],
+          "evidence": [
+            {
+              "date": "2025-09-10",
+              "t_index": 3,
+              "direction": "context",
+              "dimensions": [],
+              "score_mean": null,
+              "excerpt": "Weird day. Started normal — coffee, standup, tickets. Then around lunch Pieter from platform team pinged me about a side project he's been hacking on, this internal tool for tracking deployment health across services. He wanted to know if I'd..."
+            },
+            {
+              "date": "2025-09-12",
+              "t_index": 4,
+              "direction": "context",
+              "dimensions": [],
+              "score_mean": null,
+              "excerpt": "Told Pieter I'd help with the tool. We set up a repo and I spent an hour last night after Noor went to sleep scaffolding the API layer. Felt more engaged in that hour than I have all sprint on..."
+            }
+          ],
           "coach_narrative": null,
           "validation": null
         },
-        "cited_journal_entry_ids": []
+        "cited_journal_entry_ids": [
+          "11de77e8:entry:3",
+          "11de77e8:entry:4"
+        ]
       }
     },
     {
@@ -7277,7 +7447,7 @@
           "id": "two-values-lukas:week:5"
         }
       ],
-      "input_hash": "c6fb88554dc3a331749ee142103b01d1d13e44d105e0bd46fd65b6e3d87a6e25",
+      "input_hash": "fa1518f9af18faff3f3f2ad71bb3d84d543ee009748cf8860696b36c00aaa408",
       "error": null,
       "details": {
         "digest": {
@@ -7296,6 +7466,7 @@
             "self_direction",
             "conformity"
           ],
+          "goal_context": null,
           "drift_states": {
             "conformity": "active"
           },
@@ -8137,7 +8308,7 @@
           "id": "two-values-lukas:week:6"
         }
       ],
-      "input_hash": "1bf4a67edb6bdb02944ad221742999c9e03441f41346ad4b1eb500f6a8052c9b",
+      "input_hash": "244ced757e982409440739d2aaf683dd740036aa6f8a048fee062520d11a3e72",
       "error": null,
       "details": {
         "digest": {
@@ -8156,6 +8327,7 @@
             "self_direction",
             "conformity"
           ],
+          "goal_context": null,
           "drift_states": {
             "conformity": "recovered"
           },
@@ -8187,6 +8359,16 @@
               ],
               "score_mean": null,
               "excerpt": "Then on Sunday I stayed up way too late working on Pieter's tool and got completely absorbed refactoring the data ingestion layer."
+            },
+            {
+              "date": "2025-09-26",
+              "t_index": 6,
+              "direction": "recovery",
+              "dimensions": [
+                "conformity"
+              ],
+              "score_mean": null,
+              "excerpt": "I thanked him and said I'd put my best foot forward."
             }
           ],
           "coach_narrative": null,
@@ -8194,7 +8376,8 @@
         },
         "cited_journal_entry_ids": [
           "11de77e8:entry:4",
-          "11de77e8:entry:5"
+          "11de77e8:entry:5",
+          "11de77e8:entry:6"
         ]
       }
     },
@@ -9046,7 +9229,7 @@
           "id": "two-values-lukas:week:7"
         }
       ],
-      "input_hash": "1d078708712a473aadd0876e2acf557fba1058d1374fed74fdef659a6eca7c69",
+      "input_hash": "b55ac7de3638b4e27d59b635b42af5700baafba160fac5926d344270c4adeabd",
       "error": null,
       "details": {
         "digest": {
@@ -9065,6 +9248,7 @@
             "self_direction",
             "conformity"
           ],
+          "goal_context": null,
           "drift_states": {
             "conformity": "recovered"
           },
@@ -9096,6 +9280,16 @@
               ],
               "score_mean": null,
               "excerpt": "Then on Sunday I stayed up way too late working on Pieter's tool and got completely absorbed refactoring the data ingestion layer."
+            },
+            {
+              "date": "2025-09-26",
+              "t_index": 6,
+              "direction": "recovery",
+              "dimensions": [
+                "conformity"
+              ],
+              "score_mean": null,
+              "excerpt": "I thanked him and said I'd put my best foot forward."
             }
           ],
           "coach_narrative": null,
@@ -9103,7 +9297,8 @@
         },
         "cited_journal_entry_ids": [
           "11de77e8:entry:4",
-          "11de77e8:entry:5"
+          "11de77e8:entry:5",
+          "11de77e8:entry:6"
         ]
       }
     },
@@ -10332,7 +10527,7 @@
           "id": "two-values-lukas:week:8"
         }
       ],
-      "input_hash": "7497ccdfe58470ceeeff7a26ea8451060a12ee2e3faf3fbd08a07b7262960ffa",
+      "input_hash": "7d96bed1ed7c54153bc62476a4cd234aaa05191e3e3bee5f425767a65141c02a",
       "error": null,
       "details": {
         "digest": {
@@ -10351,6 +10546,7 @@
             "self_direction",
             "conformity"
           ],
+          "goal_context": null,
           "drift_states": {
             "conformity": "recovered"
           },
@@ -10382,6 +10578,16 @@
               ],
               "score_mean": null,
               "excerpt": "Then on Sunday I stayed up way too late working on Pieter's tool and got completely absorbed refactoring the data ingestion layer."
+            },
+            {
+              "date": "2025-09-26",
+              "t_index": 6,
+              "direction": "recovery",
+              "dimensions": [
+                "conformity"
+              ],
+              "score_mean": null,
+              "excerpt": "I thanked him and said I'd put my best foot forward."
             }
           ],
           "coach_narrative": null,
@@ -10389,7 +10595,8 @@
         },
         "cited_journal_entry_ids": [
           "11de77e8:entry:4",
-          "11de77e8:entry:5"
+          "11de77e8:entry:5",
+          "11de77e8:entry:6"
         ]
       }
     },
@@ -11646,7 +11853,7 @@
           "id": "two-values-lukas:week:9"
         }
       ],
-      "input_hash": "64b7f448d01504100064f73fd2a4e1a5bbdb1a714672901b2d35e6e645591620",
+      "input_hash": "693412ae2b3e8ff7533f10646b07e9af6f68f45980c9038aca3b046dc3f7d1a9",
       "error": null,
       "details": {
         "digest": {
@@ -11665,6 +11872,7 @@
             "self_direction",
             "conformity"
           ],
+          "goal_context": null,
           "drift_states": {
             "conformity": "recovered",
             "self_direction": "uncertain"
@@ -11701,6 +11909,16 @@
               "excerpt": "Then on Sunday I stayed up way too late working on Pieter's tool and got completely absorbed refactoring the data ingestion layer."
             },
             {
+              "date": "2025-09-26",
+              "t_index": 6,
+              "direction": "recovery",
+              "dimensions": [
+                "conformity"
+              ],
+              "score_mean": null,
+              "excerpt": "I thanked him and said I'd put my best foot forward."
+            },
+            {
               "date": "2025-10-11",
               "t_index": 9,
               "direction": "misaligned",
@@ -11721,15 +11939,116 @@
               "excerpt": "Accepted on the spot because that's what you do."
             }
           ],
-          "coach_narrative": null,
-          "validation": null
+          "coach_narrative": {
+            "weekly_mirror": "You wrote that you \"Accepted on the spot because that's what you do\", then noticed that relief came before excitement.",
+            "tension_explanation": "An earlier pattern ended before this week, but your reason for accepting the new role still feels unclear.",
+            "reflective_question": "When you separate relief from expectation, what do you want this new role to mean for you?"
+          },
+          "validation": {
+            "grounded_quotes": [
+              "Accepted on the spot because that's what you do"
+            ],
+            "word_count": 55,
+            "checks": [
+              {
+                "name": "groundedness",
+                "passed": true,
+                "details": "Found 1 quoted phrase(s) that match selected evidence."
+              },
+              {
+                "name": "non_circularity",
+                "passed": true,
+                "details": "Response avoids raw scoring and alignment terminology."
+              },
+              {
+                "name": "value_leakage",
+                "passed": true,
+                "details": "Response avoids naming raw Schwartz value labels."
+              },
+              {
+                "name": "length",
+                "passed": true,
+                "details": "Combined response length is 55 words (target 25-180)."
+              }
+            ]
+          }
         },
         "cited_journal_entry_ids": [
           "11de77e8:entry:4",
           "11de77e8:entry:5",
+          "11de77e8:entry:6",
           "11de77e8:entry:9",
           "11de77e8:entry:10"
         ]
+      }
+    },
+    {
+      "schema_version": "experience-inspect-v1",
+      "event_id": "two-values-lukas:event:080",
+      "session_id": "scenario-session:two-values-lukas",
+      "parent_event_id": "two-values-lukas:event:079",
+      "event_type": "weekly_coach_generated",
+      "status": "reused",
+      "source": "saved_replay",
+      "started_at": "2025-10-19T21:00:00.200000Z",
+      "completed_at": "2025-10-19T21:00:00.200000Z",
+      "duration_ms": 0,
+      "input_refs": [
+        {
+          "kind": "weekly_digest",
+          "id": "two-values-lukas:week:9"
+        }
+      ],
+      "model_contract": null,
+      "prompt": null,
+      "raw_response": null,
+      "validation": {
+        "valid": true,
+        "schema_name": "weekly_coach_generated-saved-replay-v1",
+        "errors": []
+      },
+      "result_refs": [
+        {
+          "kind": "weekly_coach",
+          "id": "two-values-lukas:week:9"
+        }
+      ],
+      "input_hash": "99327712c86f915277b721dc218cdf1d4d872d1a1caebd6cd7a4584912721e63",
+      "error": null,
+      "details": {
+        "narrative": {
+          "weekly_mirror": "You wrote that you \"Accepted on the spot because that's what you do\", then noticed that relief came before excitement.",
+          "tension_explanation": "An earlier pattern ended before this week, but your reason for accepting the new role still feels unclear.",
+          "reflective_question": "When you separate relief from expectation, what do you want this new role to mean for you?"
+        },
+        "validation": {
+          "grounded_quotes": [
+            "Accepted on the spot because that's what you do"
+          ],
+          "word_count": 55,
+          "checks": [
+            {
+              "name": "groundedness",
+              "passed": true,
+              "details": "Found 1 quoted phrase(s) that match selected evidence."
+            },
+            {
+              "name": "non_circularity",
+              "passed": true,
+              "details": "Response avoids raw scoring and alignment terminology."
+            },
+            {
+              "name": "value_leakage",
+              "passed": true,
+              "details": "Response avoids naming raw Schwartz value labels."
+            },
+            {
+              "name": "length",
+              "passed": true,
+              "details": "Combined response length is 55 words (target 25-180)."
+            }
+          ]
+        }
       }
     }
   ]

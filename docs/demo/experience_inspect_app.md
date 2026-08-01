@@ -199,6 +199,10 @@ empty. Automatic replay leaves enough time to read each step. Opening a Journal
 Entry uses a desktop side panel or mobile bottom sheet so the timeline does not
 reflow.
 
+When a saved Coach Digest response is present, it appears after the Weekly
+Drift Detection result in the same scrollable column. It does not replace the
+Weekly Drift Detection result.
+
 The desktop Experience uses a fixed weekly workspace. The Journal Entry column
 and Weekly Drift Detection column stay in the same viewport. Each column scrolls
 internally when necessary. The phone Experience uses a Journal Entries and
@@ -516,8 +520,8 @@ The capstone demo uses these five curated scenarios:
 
 Lukas is the recommended professor walkthrough because his nine-week replay
 shows displayed nudges and responses, two independent Core Value histories,
-recovery, Abstain, mixed Drift state, and the corresponding Coach Digest
-responses. The other four personas make each individual state easy to
+recovery, Abstain, mixed Drift state, and a grounded Coach Digest response in
+the key week. The other four personas make each individual state easy to
 demonstrate.
 
 This menu covers seven Schwartz Core Values, four cultural backgrounds, four

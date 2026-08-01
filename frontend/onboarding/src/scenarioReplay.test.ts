@@ -71,6 +71,33 @@ describe("saved persona replay", () => {
     ).toThrow("Unknown saved replay week");
   });
 
+  it("reveals the saved Coach Digest only in the Lukas key week", () => {
+    const lukas = validateExperienceInspectFixture(twoValuesReplayJson);
+    const beforeKeyWeek = projectScenarioWeek(
+      lukas,
+      lukas.scenario.weeks.length - 2,
+    );
+    const keyWeek = projectScenarioWeek(
+      lukas,
+      lukas.scenario.weeks.length - 1,
+    );
+
+    expect(beforeKeyWeek.session.weekly_digest?.coach_narrative).toBeNull();
+    expect(keyWeek.session.weekly_digest?.coach_narrative).toEqual({
+      weekly_mirror:
+        'You wrote that you "Accepted on the spot because that\'s what you do", then noticed that relief came before excitement.',
+      tension_explanation:
+        "An earlier pattern ended before this week, but your reason for accepting the new role still feels unclear.",
+      reflective_question:
+        "When you separate relief from expectation, what do you want this new role to mean for you?",
+    });
+    expect(
+      keyWeek.events.filter(
+        (event) => event.event_type === "weekly_coach_generated",
+      ),
+    ).toHaveLength(1);
+  });
+
   it.each([
     activeReplayJson,
     recoveredReplayJson,

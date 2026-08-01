@@ -469,7 +469,9 @@ export function validateProfile(value: unknown): OnboardingProfile {
   if (!value || typeof value !== "object") {
     throw new Error("Profile must be an object");
   }
-  const profile = value as Partial<OnboardingProfile>;
+  const profile = value as Partial<OnboardingProfile> & {
+    preferred_name?: string | null;
+  };
   if (
     profile.schema_version !== 3 ||
     profile.onboarding_version !== "2.2.0" ||
@@ -480,6 +482,7 @@ export function validateProfile(value: unknown): OnboardingProfile {
     typeof profile.user_id !== "string" ||
     !(
       profile.preferred_name === undefined ||
+      profile.preferred_name === null ||
       typeof profile.preferred_name === "string"
     ) ||
     typeof profile.session_id !== "string" ||
@@ -497,7 +500,7 @@ export function validateProfile(value: unknown): OnboardingProfile {
     responses: profile.bws_responses,
     userConfirmed: true,
   });
-  if (profile.preferred_name === undefined) {
+  if (profile.preferred_name == null) {
     delete rebuilt.preferred_name;
   }
   const provenance = profile.provenance;
@@ -508,7 +511,11 @@ export function validateProfile(value: unknown): OnboardingProfile {
   ) {
     rebuilt.provenance = provenance;
   }
-  if (JSON.stringify(rebuilt) !== JSON.stringify(profile)) {
+  const comparableProfile = { ...profile };
+  if (comparableProfile.preferred_name === null) {
+    delete comparableProfile.preferred_name;
+  }
+  if (JSON.stringify(rebuilt) !== JSON.stringify(comparableProfile)) {
     throw new Error("Profile contents do not match the deterministic scoring contract");
   }
   return rebuilt;
