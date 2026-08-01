@@ -136,8 +136,8 @@ def _profile() -> dict[str, Any]:
         if abs(profile_scores[value] - lowest) <= 1e-8
     ]
     return {
-        "schema_version": 2,
-        "onboarding_version": "2.1.0",
+        "schema_version": 3,
+        "onboarding_version": "2.2.0",
         "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
         "scoring_method": "best_minus_worst_divided_by_appearances_v1",
         "user_id": PERSONA_ID,
@@ -161,7 +161,6 @@ def _profile() -> dict[str, Any]:
             "bottom_values": bottom_values,
         },
         "top_values": top_values,
-        "goal_category": "relationships",
         "user_confirmed": True,
         "provenance": {
             "source": "react_onboarding_poc",

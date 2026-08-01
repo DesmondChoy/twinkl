@@ -81,10 +81,12 @@ def load_onboarding_coach_context(
 
     if not isinstance(payload, dict):
         raise ValueError("Onboarding Profile must be a JSON object")
-    if payload.get("schema_version") != 2:
-        raise ValueError("Onboarding Profile schema_version must be 2")
-    if payload.get("onboarding_version") != "2.1.0":
-        raise ValueError("Onboarding Profile onboarding_version must be 2.1.0")
+    version = (payload.get("schema_version"), payload.get("onboarding_version"))
+    if version not in {(2, "2.1.0"), (3, "2.2.0")}:
+        raise ValueError(
+            "Onboarding Profile schema_version/onboarding_version must be "
+            "3/2.2.0 or legacy 2/2.1.0"
+        )
     if payload.get("user_confirmed") is not True:
         raise ValueError("Onboarding Profile must be confirmed")
     if payload.get("user_id") != persona_id:

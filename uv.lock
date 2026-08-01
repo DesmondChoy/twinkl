@@ -2791,9 +2791,11 @@ dependencies = [
     { name = "sentence-transformers" },
     { name = "shiny" },
     { name = "shinywidgets" },
+    { name = "starlette" },
     { name = "statsmodels" },
     { name = "torch" },
     { name = "torch-lr-finder" },
+    { name = "uvicorn" },
 ]
 
 [package.dev-dependencies]
@@ -2826,9 +2828,11 @@ requires-dist = [
     { name = "sentence-transformers", specifier = ">=2.2.0" },
     { name = "shiny", specifier = ">=1.2.0" },
     { name = "shinywidgets", specifier = ">=0.7.1" },
+    { name = "starlette", specifier = ">=0.51" },
     { name = "statsmodels", specifier = ">=0.14.0" },
     { name = "torch", specifier = ">=2.0.0" },
     { name = "torch-lr-finder", specifier = ">=0.2.2" },
+    { name = "uvicorn", specifier = ">=0.40" },
 ]
 
 [package.metadata.requires-dev]

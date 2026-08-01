@@ -1,10 +1,35 @@
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { afterEach, describe, expect, it, vi } from "vitest";
-import App from "./App";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import App, { AppErrorBoundary } from "./App";
+import type {
+  JournalEntrySubmittedResponseContract,
+  SessionCreatedResponseContract,
+  TraceEventContract,
+  TraceReadResponseContract,
+} from "./demoContracts";
+import {
+  createExperienceSession,
+  ExperienceApiError,
+  readExperienceTrace,
+  submitJournalEntry,
+} from "./experienceApi";
+import { canonicalInspectFixture } from "./inspectFixture";
 import { SESSION_STORAGE_KEY } from "./session";
 
+vi.mock("./experienceApi", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("./experienceApi")>();
+  return {
+    ...actual,
+    createExperienceSession: vi.fn(),
+    readExperienceTrace: vi.fn(),
+    submitJournalEntry: vi.fn(),
+  };
+});
+
 vi.stubGlobal("confirm", () => true);
+
+const profileEvents = new Map<string, TraceEventContract>();
 
 function answerSet() {
   const first = screen.getAllByTestId("value-card").find((card) => card.dataset.location === "pool")!;
@@ -14,22 +39,116 @@ function answerSet() {
   act(() => vi.advanceTimersByTime(1_000));
 }
 
-function enterPreferredName(name = "Casey") {
-  fireEvent.change(screen.getByRole("textbox", { name: "Preferred name" }), {
-    target: { value: name },
+beforeEach(() => {
+  localStorage.clear();
+  profileEvents.clear();
+  vi.mocked(createExperienceSession).mockReset();
+  vi.mocked(readExperienceTrace).mockReset();
+  vi.mocked(submitJournalEntry).mockReset();
+  vi.mocked(createExperienceSession).mockImplementation(async (profile) => {
+    const fixtureEvent = canonicalInspectFixture.trace_events.find(
+      (event) => event.event_type === "profile_confirmed",
+    )!;
+    const event: TraceEventContract = {
+      ...fixtureEvent,
+      event_id: `profile-${profile.session_id}`,
+      session_id: profile.session_id,
+      parent_event_id: null,
+      input_refs: [],
+      result_refs: [{ kind: "profile", id: profile.session_id }],
+      details: { profile },
+    };
+    profileEvents.set(profile.session_id, event);
+    return {
+      schema_version: canonicalInspectFixture.schema_version,
+      operation: "create_session",
+      request_id: "create-profile",
+      status: "ok",
+      session: {
+        ...canonicalInspectFixture.session,
+        session_id: profile.session_id,
+        revision: 0,
+        profile,
+        journal_entries: [],
+        nudges: [],
+        weekly_reviewer_decisions: [],
+        drift_result: null,
+        weekly_digest: null,
+        trace_event_ids: [event.event_id],
+        selection: { view: "experience" },
+      },
+    } as SessionCreatedResponseContract;
   });
-  fireEvent.click(screen.getByRole("button", { name: "Continue" }));
-}
+  vi.mocked(readExperienceTrace).mockImplementation(async (sessionId) => ({
+    schema_version: canonicalInspectFixture.schema_version,
+    operation: "read_trace",
+    request_id: "read-profile",
+    status: "ok",
+    session_id: sessionId,
+    events: profileEvents.has(sessionId)
+      ? [profileEvents.get(sessionId)!]
+      : [],
+  } as TraceReadResponseContract));
+});
 
-afterEach(() => vi.useRealTimers());
+afterEach(() => {
+  vi.useRealTimers();
+  vi.restoreAllMocks();
+});
 
 describe("onboarding app", () => {
-  it("asks for a preferred name before showing values without Schwartz labels", () => {
-    render(<App />);
+  it("keeps Start over reachable after an unexpected render failure", () => {
+    const consoleError = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => undefined);
+    const Broken = () => {
+      throw new Error("render failed");
+    };
+
+    render(
+      <AppErrorBoundary>
+        <Broken />
+      </AppErrorBoundary>,
+    );
+
     expect(
-      screen.getByRole("heading", { name: "What should Twinkl call you?" }),
+      screen.getByRole("heading", {
+        name: "This saved view could not be restored.",
+      }),
     ).toBeTruthy();
-    enterPreferredName();
+    expect(screen.getByRole("button", { name: "Start over" })).toBeTruthy();
+    consoleError.mockRestore();
+  });
+
+  it("keeps Experience usable when browser storage rejects a write", async () => {
+    const storageWrite = vi
+      .spyOn(Storage.prototype, "setItem")
+      .mockImplementation(() => {
+        throw new DOMException("Storage full", "QuotaExceededError");
+      });
+
+    render(<App />);
+
+    expect(await screen.findByRole("alert")).toHaveProperty(
+      "textContent",
+      expect.stringContaining("Progress could not be saved"),
+    );
+    expect(screen.getByLabelText("Values · 1 of 11")).toBeTruthy();
+    storageWrite.mockRestore();
+  });
+
+  it("opens directly on the first six-card set without Schwartz labels", () => {
+    render(<App />);
+    const progress = screen.getByRole("progressbar", {
+      name: "Values · 1 of 11",
+    });
+    expect(progress.getAttribute("aria-valuenow")).toBe("1");
+    expect(progress.getAttribute("aria-valuemax")).toBe("11");
+    expect(
+      screen.getByRole("heading", {
+        name: "What matters most as you find your way?",
+      }).getAttribute("aria-describedby"),
+    ).toBe("assessment-progress");
     expect(screen.getByLabelText("Values · 1 of 11")).toBeTruthy();
     expect(screen.getAllByTestId("value-card")).toHaveLength(6);
     expect(screen.getByText("Next step")).toBeTruthy();
@@ -39,9 +158,13 @@ describe("onboarding app", () => {
     expect(screen.queryByText("Universalism")).toBeNull();
     const inspect = screen.getByRole("button", { name: /inspect/i });
     expect(inspect.getAttribute("aria-disabled")).toBe("true");
-    expect(screen.getByText("Available after Profile confirmation")).toBeTruthy();
+    expect(screen.getByText("Available after all 11 questions")).toBeTruthy();
     fireEvent.click(inspect);
-    expect(screen.queryByRole("heading", { name: "The trail starts here." })).toBeNull();
+    expect(
+      screen.queryByRole("heading", {
+        name: "See how each trade-off shaped this Profile.",
+      }),
+    ).toBeNull();
     expect(screen.getByTestId("drop-most").classList.contains("drop-box--guided")).toBe(true);
     expect(screen.getByTestId("drop-least").classList.contains("drop-box--guided")).toBe(false);
   });
@@ -220,31 +343,77 @@ describe("onboarding app", () => {
     const { unmount } = render(<App onStartJournal={onStartJournal} />);
     enterPreferredName("Desmond");
     for (let setNumber = 1; setNumber <= 11; setNumber += 1) {
-      expect(screen.getByLabelText(`Values · ${setNumber} of 11`)).toBeTruthy();
+      const progress = screen.getByRole("progressbar", {
+        name: `Values · ${setNumber} of 11`,
+      });
+      expect(progress.getAttribute("aria-valuenow")).toBe(String(setNumber));
+      expect(progress.getAttribute("aria-valuemax")).toBe("11");
+      if (setNumber === 11) {
+        expect(
+          (progress.querySelector(".progress__track span") as HTMLElement)
+            .style.width,
+        ).toBe("100%");
+      }
       answerSet();
       expect(screen.queryByRole("heading", { name: "A pattern is beginning to appear." })).toBeNull();
     }
-    const goal = screen.getByRole("radio", {
-      name: "I feel stuck or unclear about my direction",
-    });
-    expect(screen.getByLabelText("Your focus")).toBeTruthy();
-    fireEvent.click(goal);
-    fireEvent.click(screen.getByRole("button", { name: "See my compass" }));
     expect(screen.getByLabelText("Your compass")).toBeTruthy();
     expect(screen.getByRole("heading", { name: "What sits at the center." })).toBeTruthy();
+    expect(screen.queryByText("What brought you here right now?")).toBeNull();
     expect(screen.queryByText(/^0[1-9]$/)).toBeNull();
-    fireEvent.click(screen.getByRole("button", { name: "Set my compass" }));
     expect(
-      screen.getByRole("heading", { name: "Your compass is ready, Desmond." }),
+      screen.getByText(
+        "This result reflects the Most and Least choices you made most consistently across all 11 groups.",
+      ),
+    ).toBeTruthy();
+    const summaryInspect = screen.getByRole("button", { name: "Inspect" });
+    expect(summaryInspect.getAttribute("aria-disabled")).toBe("false");
+    fireEvent.click(summaryInspect);
+    expect(
+      screen.getByRole("heading", {
+        name: "Begin with the recorded choices.",
+      }),
+    ).toBeTruthy();
+    expect(screen.getByText("Calculation method")).toBeTruthy();
+    expect(screen.getByText("Deterministic · no model")).toBeTruthy();
+    expect(
+      screen.getByRole("region", {
+        name: "Recorded Most and Least selections",
+      }),
+    ).toBeTruthy();
+    expect(screen.getByText(/Confirm the result in Experience/)).toBeTruthy();
+    expect(screen.queryByText("Profile confirmed")).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "Return to Experience" }));
+    fireEvent.click(screen.getByRole("button", { name: "Confirm my compass" }));
+    expect(screen.getByRole("heading", { name: "Your compass is ready." })).toBeTruthy();
+    expect(
+      screen.getByRole("region", { name: "Your Core Values" }),
     ).toBeTruthy();
     expect(screen.getByRole("button", { name: "Inspect" }).getAttribute("aria-disabled")).toBe("false");
     expect(screen.queryByRole("button", { name: /start again/i })).toBeNull();
     expect(screen.queryByText(/profile JSON/i)).toBeNull();
+    await act(async () => undefined);
+    expect(createExperienceSession).toHaveBeenCalledTimes(1);
+    fireEvent.click(screen.getByRole("button", { name: "Inspect" }));
+    expect(screen.getByText("11 of 11 questions complete")).toBeTruthy();
+    expect(screen.getByText("22 recorded selections")).toBeTruthy();
+    expect(screen.getByText("Python validation recorded")).toBeTruthy();
+    expect(screen.getByText("Profile confirmed")).toBeTruthy();
+    expect(screen.queryByText("Canonical contract fixture")).toBeNull();
+    expect(screen.queryByText("Journal Entry submitted")).toBeNull();
+    expect(screen.queryByText("Nudge suppression checked")).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "Return to Experience" }));
     fireEvent.click(screen.getByRole("button", { name: "Start my first Journal Entry" }));
     expect(onStartJournal).toHaveBeenCalledTimes(1);
     expect(onStartJournal.mock.calls[0][0].user_confirmed).toBe(true);
-    expect(onStartJournal.mock.calls[0][0].preferred_name).toBe("Desmond");
-    expect(screen.getByRole("heading", { name: "When did you feel most like yourself?" })).toBeTruthy();
+    const journalHeading = screen.getByRole("heading", {
+      name: "When did you feel most like yourself?",
+    });
+    expect(journalHeading).toBeTruthy();
+    expect(
+      screen.getByRole("region", { name: "Your Core Values" }),
+    ).toBeTruthy();
+    expect(document.activeElement).toBe(journalHeading);
     const journal = screen.getByRole("textbox", { name: "First Journal Entry" });
     fireEvent.change(journal, { target: { value: "A quiet walk helped me think clearly." } });
     expect(screen.queryByLabelText("Your compass")).toBeNull();
@@ -253,8 +422,19 @@ describe("onboarding app", () => {
     vi.useRealTimers();
     const user = userEvent.setup();
     await user.keyboard("{Enter}");
-    expect(screen.getByRole("heading", { name: "The trail starts here." })).toBeTruthy();
-    expect(document.activeElement).toBe(screen.getByRole("heading", { name: "The trail starts here." }));
+    expect(
+      screen.getByRole("heading", {
+        name: "See how each trade-off shaped this Profile.",
+      }),
+    ).toBeTruthy();
+    expect(document.activeElement).toBe(
+      screen.getByRole("heading", {
+        name: "See how each trade-off shaped this Profile.",
+      }),
+    );
+    expect(screen.getByText("Python validation recorded")).toBeTruthy();
+    expect(screen.queryByText("Journal Entry submitted")).toBeNull();
+    expect(screen.queryByText("Nudge decided")).toBeNull();
     expect(onStartJournal).toHaveBeenCalledTimes(1);
     fireEvent.click(screen.getByRole("button", { name: "Experience" }));
     expect((screen.getByRole("textbox", { name: "First Journal Entry" }) as HTMLTextAreaElement).value)
@@ -272,15 +452,249 @@ describe("onboarding app", () => {
     expect(stored.confirmed_profile.value_profile.scores).toHaveProperty(
       "universalism",
     );
+    expect(stored.confirmed_profile).not.toHaveProperty("goal_category");
     expect(stored.confirmed_profile).not.toHaveProperty("confidence");
 
     fireEvent.click(screen.getByRole("button", { name: "Inspect" }));
     unmount();
     render(<App onStartJournal={onStartJournal} />);
-    expect(screen.getByRole("heading", { name: "The trail starts here." })).toBeTruthy();
+    expect(
+      screen.getByRole("heading", {
+        name: "See how each trade-off shaped this Profile.",
+      }),
+    ).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: "Experience" }));
     expect((screen.getByRole("textbox", { name: "First Journal Entry" }) as HTMLTextAreaElement).value)
       .toBe("A quiet walk helped me think clearly.");
     expect(onStartJournal).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps an open-week Journal Entry and Inspect at the same event boundary", async () => {
+    vi.useFakeTimers();
+    let openWeekEvents: TraceEventContract[] = [];
+    vi.mocked(readExperienceTrace).mockImplementation(async (sessionId) => ({
+      schema_version: canonicalInspectFixture.schema_version,
+      operation: "read_trace",
+      request_id: "read-open-week",
+      status: "ok",
+      session_id: sessionId,
+      events: openWeekEvents.length > 0
+        ? openWeekEvents
+        : profileEvents.has(sessionId)
+          ? [profileEvents.get(sessionId)!]
+          : [],
+    }));
+    vi.mocked(submitJournalEntry).mockImplementation(async ({
+      sessionId,
+      entry,
+    }) => {
+      const profileEvent = profileEvents.get(sessionId)!;
+      const journalTemplate = canonicalInspectFixture.trace_events.find(
+        (event) => event.event_type === "journal_entry_submitted",
+      )!;
+      const suppressionTemplate = canonicalInspectFixture.trace_events.find(
+        (event) => event.event_type === "nudge_suppression_checked",
+      )!;
+      const decisionTemplate = canonicalInspectFixture.trace_events.find(
+        (event) => event.event_type === "nudge_decided",
+      )!;
+      const journalEvent: TraceEventContract = {
+        ...journalTemplate,
+        event_id: "journal-open-week",
+        session_id: sessionId,
+        parent_event_id: profileEvent.event_id,
+        input_refs: [{ kind: "profile", id: sessionId }],
+        result_refs: [{ kind: "journal_entry", id: entry.journal_entry_id }],
+        details: { journal_entry: entry, ordering_valid: true },
+      };
+      const suppressionEvent: TraceEventContract = {
+        ...suppressionTemplate,
+        event_id: "suppression-open-week",
+        session_id: sessionId,
+        parent_event_id: journalEvent.event_id,
+        input_refs: [{
+          kind: "journal_entry",
+          id: entry.journal_entry_id,
+        }],
+        details: {
+          previous_entry_ids: [],
+          window_size: 3,
+          max_nudges: 2,
+          suppressed: false,
+        },
+      };
+      const decisionEvent: TraceEventContract = {
+        ...decisionTemplate,
+        event_id: "decision-open-week",
+        session_id: sessionId,
+        parent_event_id: suppressionEvent.event_id,
+        input_refs: [{
+          kind: "journal_entry",
+          id: entry.journal_entry_id,
+        }],
+        details: {
+          should_nudge: false,
+          category: null,
+          reason: "No follow-up question was useful.",
+        },
+      };
+      openWeekEvents = [
+        profileEvent,
+        journalEvent,
+        suppressionEvent,
+        decisionEvent,
+      ];
+      return {
+        schema_version: canonicalInspectFixture.schema_version,
+        operation: "submit_journal_entry",
+        request_id: "submit-open-week",
+        status: "ok",
+        session: {
+          ...canonicalInspectFixture.session,
+          session_id: sessionId,
+          revision: 1,
+          profile: profileEvent.details.profile,
+          journal_entries: [entry],
+          nudges: [{
+            nudge_id: "nudge-open-week",
+            journal_entry_id: entry.journal_entry_id,
+            outcome: "no_nudge",
+            category: null,
+            reason: null,
+            text: null,
+            response: null,
+          }],
+          weekly_reviewer_decisions: [],
+          drift_result: null,
+          weekly_digest: null,
+          trace_event_ids: openWeekEvents.map((event) => event.event_id),
+          selection: { view: "experience" },
+        },
+        event_ids: openWeekEvents.slice(1).map((event) => event.event_id),
+      } as JournalEntrySubmittedResponseContract;
+    });
+
+    render(<App />);
+    for (let setNumber = 1; setNumber <= 11; setNumber += 1) {
+      answerSet();
+    }
+    fireEvent.click(screen.getByRole("button", { name: "Confirm my compass" }));
+    await act(async () => undefined);
+    fireEvent.click(
+      screen.getByRole("button", { name: "Start my first Journal Entry" }),
+    );
+
+    vi.useRealTimers();
+    const user = userEvent.setup();
+    const content = "I took a quiet walk and left my phone behind.";
+    await user.type(
+      screen.getByRole("textbox", { name: "First Journal Entry" }),
+      content,
+    );
+    await user.click(
+      screen.getByRole("button", { name: "Save Journal Entry" }),
+    );
+
+    expect(await screen.findByText(content)).toBeTruthy();
+    expect(
+      screen.queryByRole("heading", { name: "Your week in view." }),
+    ).toBeNull();
+
+    await user.click(screen.getByRole("button", { name: "Inspect" }));
+
+    const recordedEvents = screen.getByRole("list", { name: "Recorded events" });
+    expect(within(recordedEvents).getAllByRole("listitem")).toHaveLength(4);
+    [
+      "Profile confirmed",
+      "Journal Entry submitted",
+      "Nudge suppression checked",
+      "Nudge decided",
+    ].forEach((label) => expect(screen.getByText(label)).toBeTruthy());
+    [
+      "Weekly review requested",
+      "Weekly review completed",
+      "Drift checked",
+      "Weekly Digest built",
+    ].forEach((label) => expect(screen.queryByText(label)).toBeNull());
+  });
+
+  it("never substitutes fixture events when Profile trace loading fails", async () => {
+    vi.useFakeTimers();
+    vi.mocked(createExperienceSession).mockRejectedValueOnce(
+      new ExperienceApiError("Profile trace unavailable."),
+    );
+    render(<App />);
+    for (let setNumber = 1; setNumber <= 11; setNumber += 1) {
+      answerSet();
+    }
+
+    fireEvent.click(screen.getByRole("button", { name: "Confirm my compass" }));
+    await act(async () => undefined);
+    expect(
+      screen.getByRole("button", { name: "Start my first Journal Entry" }),
+    ).toBeTruthy();
+
+    fireEvent.click(screen.getByRole("button", { name: "Inspect" }));
+    expect(screen.getByText("Python validation unavailable")).toBeTruthy();
+    expect(screen.queryByText("Canonical contract fixture")).toBeNull();
+    expect(screen.queryByText("Journal Entry submitted")).toBeNull();
+    expect(screen.queryByText("Nudge decided")).toBeNull();
+    expect(screen.getByRole("status")).toHaveProperty(
+      "textContent",
+      expect.stringContaining("Inspect trace could not be loaded"),
+    );
+    fireEvent.click(
+      screen.getByRole("button", { name: "Retry Profile validation" }),
+    );
+    await act(async () => undefined);
+    expect(screen.getByText("Python validation recorded")).toBeTruthy();
+    expect(screen.getByText("Profile confirmed")).toBeTruthy();
+  });
+
+  it("does not carry a Profile trace failure into the Journal Entry status", async () => {
+    vi.useFakeTimers();
+    vi.mocked(createExperienceSession).mockRejectedValueOnce(
+      new ExperienceApiError("Profile trace unavailable."),
+    );
+    render(<App />);
+    for (let setNumber = 1; setNumber <= 11; setNumber += 1) {
+      answerSet();
+    }
+
+    fireEvent.click(screen.getByRole("button", { name: "Confirm my compass" }));
+    await act(async () => undefined);
+    fireEvent.click(
+      screen.getByRole("button", { name: "Start my first Journal Entry" }),
+    );
+
+    expect(
+      screen.getByRole("textbox", { name: "First Journal Entry" }),
+    ).toBeTruthy();
+    expect(screen.getByRole("status").textContent).toBe("");
+    expect(screen.queryByText(/Inspect trace could not be loaded/)).toBeNull();
+  });
+
+  it("does not block the Journal Entry while Profile synchronization is pending", async () => {
+    vi.useFakeTimers();
+    vi.mocked(createExperienceSession).mockImplementationOnce(
+      () => new Promise(() => undefined),
+    );
+    render(<App />);
+    for (let setNumber = 1; setNumber <= 11; setNumber += 1) {
+      answerSet();
+    }
+
+    fireEvent.click(screen.getByRole("button", { name: "Confirm my compass" }));
+    await act(async () => undefined);
+    expect(createExperienceSession).toHaveBeenCalledTimes(1);
+    fireEvent.click(
+      screen.getByRole("button", { name: "Start my first Journal Entry" }),
+    );
+
+    const editor = screen.getByRole("textbox", {
+      name: "First Journal Entry",
+    }) as HTMLTextAreaElement;
+    expect(editor.disabled).toBe(false);
+    expect(screen.getByRole("status").textContent).toBe("");
   });
 });

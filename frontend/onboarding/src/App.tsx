@@ -1,24 +1,51 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import {
+  Component,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ErrorInfo,
+  type ReactNode,
+} from "react";
 import {
   BWS_OBJECTS,
   BWS_SETS,
-  GOALS,
   VALUE_ORDER,
   VALUES,
   createProfile,
   normalizePreferredName,
   scoreResponses,
   type BwsObjectKey,
-  type GoalCategory,
+  type OnboardingProfile,
 } from "./domain";
+import CoreValueReminder from "./CoreValueReminder";
 import {
+  createExperienceSession,
+  ExperienceApiError,
+  readExperienceTrace,
+} from "./experienceApi";
+import {
+  clearSession,
   clearChoice,
   setChoice,
   type OnboardingSession,
 } from "./session";
+import InspectView from "./InspectView";
+import JournalExperience from "./JournalExperience";
+import {
+  PersonaReplayExperience,
+  PersonaReplayPicker,
+} from "./PersonaReplay";
+import {
+  loadSavedScenarioById,
+  projectScenarioWeek,
+  type LoadedScenario,
+} from "./scenarioReplay";
 import { SharedSessionProvider, useSharedSession } from "./sharedSession";
 
-const MILESTONE_COUNT = BWS_SETS.length + 2;
+const MILESTONE_COUNT = BWS_SETS.length + 1;
 const AUTO_ADVANCE_DELAY_MS = 1_000;
 const CARD_BACKGROUNDS = [
   "/card-backgrounds/memory-atlas-01.jpg",
@@ -29,13 +56,57 @@ const CARD_BACKGROUNDS = [
   "/card-backgrounds/memory-atlas-06.jpg",
 ] as const;
 
+export class AppErrorBoundary extends Component<
+  { children: ReactNode },
+  { failed: boolean }
+> {
+  state = { failed: false };
+
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    console.error("Experience recovery boundary", error, info);
+  }
+
+  private restart = () => {
+    clearSession();
+    window.location.reload();
+  };
+
+  render() {
+    if (!this.state.failed) return this.props.children;
+    return (
+      <div className="app-shell">
+        <header className="topbar">
+          <a className="wordmark" href="/">
+            twinkl<span>·</span>
+          </a>
+        </header>
+        <main className="app-recovery" id="main">
+          <p className="eyebrow">Experience recovery</p>
+          <h1>This saved view could not be restored.</h1>
+          <p>Your browser data can be cleared without changing project files.</p>
+          <button
+            className="button button--primary"
+            type="button"
+            onClick={this.restart}
+          >
+            Start over
+          </button>
+        </main>
+      </div>
+    );
+  }
+}
+
 function milestoneFor(session: OnboardingSession): number {
   if (session.stage === "name") return 0;
   if (session.stage === "set") {
     return Math.min(session.set_index + 1, BWS_SETS.length);
   }
-  if (session.stage === "goal") return BWS_SETS.length + 1;
-  return BWS_SETS.length + 2;
+  return BWS_SETS.length + 1;
 }
 
 function Compass({ milestone }: { milestone: number }) {
@@ -64,20 +135,29 @@ function Compass({ milestone }: { milestone: number }) {
   );
 }
 
-function Progress({ session, milestone }: { session: OnboardingSession; milestone: number }) {
-  if (milestone === 0) return null;
+function Progress({ session }: { session: OnboardingSession }) {
   const label = session.stage === "set"
     ? `Values · ${session.set_index + 1} of ${BWS_SETS.length}`
-    : session.stage === "goal"
-      ? "Your focus"
-      : "Your compass";
+    : "Your compass";
+  const completedSets = session.stage === "set"
+    ? session.set_index + 1
+    : BWS_SETS.length;
   return (
-    <div className="progress" aria-label={label}>
+    <div
+      className="progress"
+      id="assessment-progress"
+      role="progressbar"
+      aria-label={label}
+      aria-valuemin={0}
+      aria-valuemax={BWS_SETS.length}
+      aria-valuenow={completedSets}
+      aria-valuetext={label}
+    >
       <div className="progress__label">
         <span>{label}</span>
       </div>
       <div className="progress__track">
-        <span style={{ width: `${(milestone / MILESTONE_COUNT) * 100}%` }} />
+        <span style={{ width: `${(completedSets / BWS_SETS.length) * 100}%` }} />
       </div>
     </div>
   );
@@ -241,23 +321,50 @@ interface AppProps {
 function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
   const {
     session,
+    persistenceError,
     updateSession,
     updateExperience,
     showView,
+    inspectRun,
     restart: restartSession,
   } = useSharedSession();
   const [activeDrop, setActiveDrop] = useState<DropTarget>(null);
+  const [personaPickerOpen, setPersonaPickerOpen] = useState(false);
+  const [loadedScenario, setLoadedScenario] = useState<LoadedScenario | null>(
+    null,
+  );
+  const [scenarioLoadError, setScenarioLoadError] = useState<string | null>(
+    null,
+  );
+  const [scenarioLoadAttempt, setScenarioLoadAttempt] = useState(0);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const mostDropRef = useRef<HTMLElement>(null);
   const leastDropRef = useRef<HTMLElement>(null);
   const selectionRef = useRef<HTMLDivElement>(null);
   const pendingCardFocusRef = useRef<{ value: BwsObjectKey; location: CardLocation } | null>(null);
   const choicesCompletedAtRef = useRef<number | null>(null);
+  const profileSyncGenerationRef = useRef(0);
+  const profileSyncInFlightRef = useRef<{
+    generation: number;
+    sessionId: string;
+  } | null>(null);
   const milestone = milestoneFor(session);
   const journalStarted = session.experience.journal_started;
-  const journalDraft = session.experience.journal_draft;
   const activeView = session.experience.active_view;
-  const inspectAvailable = session.confirmed_profile !== null;
+  const selectedPersonaId = session.experience.selected_persona_id;
+  const inspectAvailable = session.stage !== "set"
+    && session.responses.length === BWS_SETS.length;
+  const profileAwaitingConfirmation = session.stage === "summary";
+  const profileTraceReady = session.confirmed_profile !== null
+    && session.experience.trace_events.some(
+      (event) =>
+        event.event_type === "profile_confirmed"
+        && event.session_id === session.confirmed_profile?.session_id,
+    );
+  const profileTracePending = !profileTraceReady
+    && session.experience.run_state === "running";
+  const profileTraceFailed = !profileTraceReady
+    && session.experience.run_state === "failed";
   const currentSetIndex = session.set_order[session.set_index];
   const currentSet = BWS_SETS[currentSetIndex];
   const currentOrder = session.displayed_orders[currentSetIndex];
@@ -271,9 +378,112 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
     updateSession(patch);
   };
 
+  const synchronizeProfileTrace = useCallback(async (
+    profile: OnboardingProfile,
+  ): Promise<boolean> => {
+    if (profileSyncInFlightRef.current?.sessionId === profile.session_id) {
+      return false;
+    }
+    const generation = ++profileSyncGenerationRef.current;
+    profileSyncInFlightRef.current = {
+      generation,
+      sessionId: profile.session_id,
+    };
+    updateExperience({
+      run_state: "running",
+      retryable: false,
+      error_message: null,
+    });
+    try {
+      const response = await createExperienceSession(profile);
+      const trace = await readExperienceTrace(profile.session_id);
+      if (
+        !trace.events.some(
+          (event) =>
+            event.event_type === "profile_confirmed"
+            && event.session_id === profile.session_id,
+        )
+      ) {
+        throw new ExperienceApiError(
+          "The Profile trace did not include Profile confirmation.",
+          "missing_profile_trace",
+        );
+      }
+      if (profileSyncGenerationRef.current !== generation) return false;
+      updateExperience({
+        revision: response.session.revision,
+        journal_entries: response.session.journal_entries,
+        nudges: response.session.nudges,
+        weekly_reviewer_decisions:
+          response.session.weekly_reviewer_decisions,
+        drift_result: response.session.drift_result,
+        weekly_digest: response.session.weekly_digest,
+        weekly_coach: null,
+        run_state: "idle",
+        retryable: false,
+        error_message: null,
+        trace_event_ids: response.session.trace_event_ids,
+        trace_events: trace.events,
+      });
+      return true;
+    } catch (error) {
+      if (profileSyncGenerationRef.current !== generation) return false;
+      updateExperience({
+        run_state: "failed",
+        retryable:
+          error instanceof ExperienceApiError ? error.retryable : true,
+        error_message:
+          "Your Profile is saved in this browser, but its Inspect trace could not be loaded.",
+      });
+      return false;
+    } finally {
+      if (profileSyncInFlightRef.current?.generation === generation) {
+        profileSyncInFlightRef.current = null;
+      }
+    }
+  }, [updateExperience]);
+
+  useLayoutEffect(() => {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    if (activeView === "experience") {
+      headingRef.current?.focus({ preventScroll: true });
+    }
+  }, [
+    session.stage,
+    session.set_index,
+    journalStarted,
+    activeView,
+    selectedPersonaId,
+    personaPickerOpen,
+  ]);
+
   useEffect(() => {
-    headingRef.current?.focus({ preventScroll: true });
-  }, [session.stage, session.set_index, journalStarted, activeView]);
+    const profile = session.confirmed_profile;
+    if (
+      !profile
+      || selectedPersonaId !== null
+      || journalStarted
+      || session.stage !== "complete"
+      || profileTraceReady
+      || session.experience.journal_entries.length > 0
+      || session.experience.nudges.length > 0
+      || session.experience.run_state !== "idle"
+    ) {
+      return;
+    }
+    void synchronizeProfileTrace(profile);
+  }, [
+    profileTraceReady,
+    journalStarted,
+    selectedPersonaId,
+    session.confirmed_profile,
+    session.experience.journal_entries.length,
+    session.experience.nudges.length,
+    session.experience.run_state,
+    session.stage,
+    synchronizeProfileTrace,
+  ]);
 
   useLayoutEffect(() => {
     const target = pendingCardFocusRef.current;
@@ -297,10 +507,141 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
   }, [session.responses]);
 
   const restart = () => {
-    if (!window.confirm("Start over and clear these onboarding choices?")) return;
+    if (!window.confirm("Start over and clear this progress?")) return;
+    profileSyncGenerationRef.current += 1;
+    profileSyncInFlightRef.current = null;
     choicesCompletedAtRef.current = null;
+    setPersonaPickerOpen(false);
+    setLoadedScenario(null);
+    setScenarioLoadError(null);
     restartSession();
   };
+
+  const applyScenarioWeek = (
+    loaded: LoadedScenario,
+    weekIndex: number,
+  ) => {
+    const projection = projectScenarioWeek(loaded.fixture, weekIndex);
+    const profile = projection.session.profile;
+    const visibleEntryIds = new Set(
+      projection.session.journal_entries.map(
+        (entry) => entry.journal_entry_id,
+      ),
+    );
+    const visibleEventIds = new Set(projection.session.trace_event_ids);
+    const previousEntryId = session.experience.selected_entry_id;
+    const previousEventId = session.experience.selected_event_id;
+    const sameWeek = session.experience.selected_week === weekIndex;
+    update({
+      user_id: profile.user_id,
+      session_id: profile.session_id,
+      started_at: profile.started_at,
+      stage: "complete",
+      set_index: BWS_SETS.length - 1,
+      set_order: BWS_SETS.map((_, index) => index),
+      displayed_orders: BWS_SETS.map((set) => {
+        const response = profile.bws_responses.find(
+          (item) => item.set_number === set.setNumber,
+        );
+        return response ? [...response.item_order_shown] : [...set.items];
+      }),
+      responses: profile.bws_responses,
+      draft_best: null,
+      draft_worst: null,
+      confirmed_profile: profile,
+    });
+    updateExperience({
+      journal_started: true,
+      journal_draft: "",
+      revision: projection.session.revision,
+      journal_entries: projection.session.journal_entries,
+      nudges: projection.session.nudges,
+      pending_submission: null,
+      nudge_response_draft: "",
+      error_message: null,
+      selected_persona_id: loaded.catalogItem.persona_id,
+      selected_week: weekIndex,
+      selected_entry_id:
+        sameWeek && previousEntryId && visibleEntryIds.has(previousEntryId)
+          ? previousEntryId
+          : null,
+      selected_event_id:
+        sameWeek && previousEventId && visibleEventIds.has(previousEventId)
+          ? previousEventId
+          : null,
+      weekly_reviewer_decisions:
+        projection.session.weekly_reviewer_decisions,
+      drift_result: projection.session.drift_result,
+      weekly_digest: projection.session.weekly_digest,
+      weekly_coach: null,
+      run_state: "complete",
+      retryable: false,
+      trace_event_ids: projection.session.trace_event_ids,
+      trace_events: projection.events,
+    });
+  };
+
+  const activateScenario = (loaded: LoadedScenario) => {
+    const hasManualProgress =
+      selectedPersonaId === null &&
+      (
+        session.responses.length > 0 ||
+        session.confirmed_profile !== null ||
+        session.experience.journal_entries.length > 0 ||
+        session.experience.journal_draft.trim().length > 0
+      );
+    if (
+      hasManualProgress &&
+      !window.confirm(
+        "Load this saved Persona and replace your current progress?",
+      )
+    ) {
+      return false;
+    }
+    profileSyncGenerationRef.current += 1;
+    profileSyncInFlightRef.current = null;
+    setLoadedScenario(loaded);
+    setScenarioLoadError(null);
+    setPersonaPickerOpen(false);
+    applyScenarioWeek(loaded, 0);
+    return true;
+  };
+
+  useEffect(() => {
+    if (
+      !selectedPersonaId ||
+      loadedScenario?.catalogItem.persona_id === selectedPersonaId
+    ) {
+      return;
+    }
+    let cancelled = false;
+    setScenarioLoadError(null);
+    void loadSavedScenarioById(selectedPersonaId)
+      .then((loaded) => {
+        if (cancelled) return;
+        const requestedWeek = session.experience.selected_week ?? 0;
+        const safeWeek = Math.min(
+          requestedWeek,
+          loaded.fixture.scenario.weeks.length - 1,
+        );
+        setLoadedScenario(loaded);
+        applyScenarioWeek(loaded, safeWeek);
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setScenarioLoadError(
+            "The saved Persona replay could not be restored.",
+          );
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [
+    loadedScenario?.catalogItem.persona_id,
+    scenarioLoadAttempt,
+    selectedPersonaId,
+  ]);
 
   const locateTarget = (clientX: number, clientY: number): DropTarget => {
     const targets: [CardLocation, HTMLElement | null][] = [
@@ -362,7 +703,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
     choicesCompletedAtRef.current = null;
     update({
       responses,
-      stage: isLastSet ? "goal" : "set",
+      stage: isLastSet ? "summary" : "set",
       set_index: isLastSet ? session.set_index : session.set_index + 1,
       draft_best: null,
       draft_worst: null,
@@ -377,7 +718,6 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
   }, [isReviewing, session.set_index, session.draft_best, session.draft_worst]);
 
   const confirm = () => {
-    if (!session.goal_category) return;
     const completedAt = new Date().toISOString();
     const profile = createProfile({
       userId: session.user_id,
@@ -386,7 +726,6 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
       startedAt: session.started_at,
       completedAt,
       responses: session.responses,
-      goalCategory: session.goal_category,
       userConfirmed: true,
     });
     update({
@@ -416,13 +755,26 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
 
   const startFirstJournal = () => {
     if (!session.confirmed_profile) return;
+    if (!profileTraceReady) {
+      profileSyncGenerationRef.current += 1;
+      profileSyncInFlightRef.current = null;
+    }
     onStartJournal?.(session.confirmed_profile);
     window.dispatchEvent(
       new CustomEvent("twinkl:start-first-journal", {
         detail: session.confirmed_profile,
       }),
     );
-    updateExperience({ journal_started: true });
+    updateExperience({
+      journal_started: true,
+      ...(!profileTraceReady
+        ? {
+            run_state: "idle" as const,
+            retryable: false,
+            error_message: null,
+          }
+        : {}),
+    });
   };
 
   const cardPrompt = isReviewing
@@ -434,7 +786,15 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
       : "Now choose Least. Tap the principle that matters least to you in this group.";
 
   return (
-    <div className={`app-shell app-shell--${activeView === "inspect" ? "inspect" : journalStarted ? "journal" : session.stage}`}>
+    <div className={`app-shell app-shell--${
+      activeView === "inspect"
+        ? "inspect"
+        : personaPickerOpen
+          ? "persona"
+          : journalStarted
+            ? "journal"
+            : session.stage
+    }${selectedPersonaId ? " app-shell--saved-persona" : ""}`}>
       <header className="topbar">
         <a className="wordmark" href="#main">
           twinkl<span>·</span>
@@ -454,22 +814,43 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
             aria-pressed={activeView === "inspect"}
             aria-disabled={!inspectAvailable}
             aria-describedby={!inspectAvailable ? "inspect-availability" : undefined}
-            title={!inspectAvailable ? "Available after Profile confirmation" : undefined}
+            title={!inspectAvailable ? "Available after all 11 questions" : undefined}
             onClick={() => showView("inspect")}
           >
             <span>Inspect</span>
-            {!inspectAvailable ? <small>After Profile</small> : null}
+            {!inspectAvailable ? <small>After questions</small> : null}
           </button>
           {!inspectAvailable ? (
             <span className="sr-only" id="inspect-availability">
-              Available after Profile confirmation
+              Available after all 11 questions
             </span>
           ) : null}
         </nav>
-        <button className="restart" type="button" onClick={restart}>
-          Start over
-        </button>
+        <div className="topbar-actions">
+          {!personaPickerOpen ? (
+            <button
+              className="restart"
+              type="button"
+              onClick={() => {
+                setPersonaPickerOpen(true);
+                showView("experience");
+              }}
+            >
+              {selectedPersonaId ? "Change Persona" : "Try demo"}
+            </button>
+          ) : null}
+          <button className="restart" type="button" onClick={restart}>
+            Start over
+          </button>
+        </div>
       </header>
+
+      {persistenceError ? (
+        <p className="storage-warning" role="alert">
+          Progress could not be saved in this browser. Keep this tab open while
+          you continue.
+        </p>
+      ) : null}
 
       {activeView === "experience" ? <main id="main" className="layout">
         <aside className="instrument-panel">
@@ -480,44 +861,69 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
         </aside>
 
         <section className="flow-panel">
-          {!journalStarted ? <Progress session={session} milestone={milestone} /> : null}
-
-          {session.stage === "name" ? (
-            <form className="stage stage--name" onSubmit={savePreferredName}>
-              <p className="eyebrow">Before we begin</p>
-              <h1 ref={headingRef} tabIndex={-1}>
-                What should Twinkl call you?
-              </h1>
-              <p className="stage-note">
-                We’ll use your name sparingly, when it makes a reflection feel more
-                personal.
-              </p>
-              <label className="name-field">
-                <span>Preferred name</span>
-                <input
-                  autoComplete="name"
-                  maxLength={80}
-                  name="preferred-name"
-                  placeholder="Your name"
-                  value={session.preferred_name}
-                  onChange={(event) => update({ preferred_name: event.target.value })}
-                />
-              </label>
-              <div className="actions actions--end">
-                <button
-                  className="button button--primary"
-                  type="submit"
-                  disabled={!session.preferred_name.trim()}
-                >
-                  Continue
-                </button>
-              </div>
-            </form>
+          {!personaPickerOpen && !selectedPersonaId && !journalStarted ? (
+            <Progress session={session} />
           ) : null}
 
-          {session.stage === "set" ? (
-            <div className="stage stage--cards">
+          {personaPickerOpen ? (
+            <PersonaReplayPicker
+              currentPersonaId={selectedPersonaId}
+              onBack={() => setPersonaPickerOpen(false)}
+              onLoad={activateScenario}
+            />
+          ) : null}
+
+          {!personaPickerOpen && selectedPersonaId &&
+          loadedScenario?.catalogItem.persona_id === selectedPersonaId &&
+          session.confirmed_profile ? (
+            <div className="stage stage--journal">
+              <PersonaReplayExperience
+                loaded={loadedScenario}
+                weekIndex={session.experience.selected_week ?? 0}
+                profile={session.confirmed_profile}
+                experience={session.experience}
+                updateExperience={updateExperience}
+                inspectRun={inspectRun}
+                onChoosePersona={() => setPersonaPickerOpen(true)}
+                onWeekChange={(weekIndex) =>
+                  applyScenarioWeek(loadedScenario, weekIndex)
+                }
+                headingRef={headingRef}
+              />
+            </div>
+          ) : null}
+
+          {!personaPickerOpen && selectedPersonaId &&
+          loadedScenario?.catalogItem.persona_id !== selectedPersonaId ? (
+            <div className="stage stage--journal replay-loading" aria-live="polite">
+              <p className="eyebrow">Saved Persona replay</p>
               <h1 ref={headingRef} tabIndex={-1}>
+                {scenarioLoadError
+                  ? "The replay needs another try."
+                  : "Restoring the replay…"}
+              </h1>
+              {scenarioLoadError ? (
+                <>
+                  <p className="lede">{scenarioLoadError}</p>
+                  <button
+                    className="button button--primary"
+                    type="button"
+                    onClick={() => setScenarioLoadAttempt((value) => value + 1)}
+                  >
+                    Try loading again
+                  </button>
+                </>
+              ) : null}
+            </div>
+          ) : null}
+
+          {!personaPickerOpen && !selectedPersonaId && session.stage === "set" ? (
+            <div className="stage stage--cards">
+              <h1
+                ref={headingRef}
+                tabIndex={-1}
+                aria-describedby="assessment-progress"
+              >
                 What matters most as you find your way?
               </h1>
               <p className="card-reassurance">
@@ -612,40 +1018,8 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
             </div>
           ) : null}
 
-          {session.stage === "goal" ? (
-            <div className="stage">
-              <h1 ref={headingRef} tabIndex={-1}>
-                What brought you here right now?
-              </h1>
-              <p className="stage-note">Choose the one closest to what brought you here.</p>
-              <div className="goal-list">
-                {(Object.entries(GOALS) as [GoalCategory, string][]).map(([key, text]) => (
-                  <label className={`goal-card${session.goal_category === key ? " goal-card--selected" : ""}`} key={key}>
-                    <input
-                      type="radio"
-                      name="goal"
-                      value={key}
-                      checked={session.goal_category === key}
-                      onChange={() => update({ goal_category: key })}
-                    />
-                    <span>{text}</span>
-                  </label>
-                ))}
-              </div>
-              <div className="actions actions--end">
-                <button
-                  className="button button--primary"
-                  type="button"
-                  disabled={!session.goal_category}
-                  onClick={() => update({ stage: "summary" })}
-                >
-                  See my compass
-                </button>
-              </div>
-            </div>
-          ) : null}
-
-          {session.stage === "summary" && scores && session.goal_category ? (
+          {!personaPickerOpen && !selectedPersonaId &&
+          session.stage === "summary" && scores ? (
             <div className="stage stage--summary">
               <h1 ref={headingRef} tabIndex={-1}>
                 What sits at the center.
@@ -658,51 +1032,53 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
                   </article>
                 ))}
               </div>
-              <div className="focus-line">
-                <small>What brought you here</small>
-                <p>{GOALS[session.goal_category]}</p>
-              </div>
+              <p className="summary-explainer">
+                This result reflects the Most and Least choices you made most
+                consistently across all 11 groups.
+              </p>
               <div className="actions actions--end">
                 <button className="button button--primary" type="button" onClick={confirm}>
-                  Set my compass
+                  Confirm my compass
                 </button>
               </div>
             </div>
           ) : null}
 
-          {session.stage === "complete" && session.confirmed_profile && !journalStarted ? (
+          {!personaPickerOpen && !selectedPersonaId &&
+          session.stage === "complete" && session.confirmed_profile &&
+          !journalStarted ? (
             <div className="stage stage--complete">
               <h1 ref={headingRef} tabIndex={-1}>
                 Your compass is ready, {session.preferred_name}.
               </h1>
               <p className="lede">Start with one moment from the past week. Twinkl will build from what you notice.</p>
+              <CoreValueReminder profile={session.confirmed_profile} />
               <div className="journal-handoff">
                 <small>First Journal Entry</small>
                 <p>When did you feel most like yourself?</p>
               </div>
               <div className="actions actions--end">
-                <button className="button button--primary" type="button" onClick={startFirstJournal}>
+                <button
+                  className="button button--primary"
+                  type="button"
+                  onClick={startFirstJournal}
+                >
                   Start my first Journal Entry
                 </button>
               </div>
             </div>
           ) : null}
 
-          {session.stage === "complete" && session.confirmed_profile && journalStarted ? (
+          {!personaPickerOpen && !selectedPersonaId &&
+          session.stage === "complete" && session.confirmed_profile &&
+          journalStarted ? (
             <div className="stage stage--journal">
-              <p className="eyebrow">First Journal Entry</p>
-              <h1 ref={headingRef} tabIndex={-1}>
-                When did you feel most like yourself?
-              </h1>
-              <p className="lede" id="first-journal-help">
-                Think of one moment from the past week. What was happening, and what felt true about it?
-              </p>
-              <textarea
-                aria-label="First Journal Entry"
-                aria-describedby="first-journal-help"
-                placeholder="Start with the moment…"
-                value={journalDraft}
-                onChange={(event) => updateExperience({ journal_draft: event.target.value })}
+              <JournalExperience
+                profile={session.confirmed_profile}
+                experience={session.experience}
+                updateExperience={updateExperience}
+                inspectRun={inspectRun}
+                headingRef={headingRef}
               />
             </div>
           ) : null}
@@ -716,32 +1092,81 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
               <span />
             </div>
             <div className="instrument-copy">
-              <p className="eyebrow">Same session</p>
-              <h2>Behind this moment.</h2>
-              <p>Inspect follows the exact work connected to what you see in Experience.</p>
+              <p className="eyebrow">
+                {selectedPersonaId ? "Same saved replay" : "Assessment evidence"}
+              </p>
+              <h2>
+                {selectedPersonaId
+                  ? "How Twinkl reached this moment."
+                  : "Every result has a trail."}
+              </h2>
+              <p>
+                {selectedPersonaId
+                  ? "Inspect follows the exact week and Persona selected in Experience."
+                  : session.experience.trace_events.length > 0
+                  ? "The selections, scoring steps, Profile mapping, and Python validation are shown in the order they occurred."
+                  : "The selections, scoring steps, and Profile mapping are shown exactly as they occurred. Python validation appears after confirmation."}
+              </p>
             </div>
           </aside>
           <section className="flow-panel flow-panel--inspect">
-            <div className="stage stage--inspect">
-              <p className="eyebrow">Inspect</p>
-              <h1 ref={headingRef} tabIndex={-1}>The trail starts here.</h1>
-              {session.experience.selected_event_id ? (
-                <div className="inspect-selection" data-testid="inspect-selection">
-                  <small>Selected event</small>
-                  <code>{session.experience.selected_event_id}</code>
-                  <p>Its event details will appear here when the Inspect timeline is connected.</p>
-                </div>
-              ) : (
-                <p className="lede">
-                  Profile validation is ready to inspect. Event details will appear as Journal Entries and saved persona runs are connected.
-                </p>
-              )}
-              <div className="actions">
-                <button className="button button--primary" type="button" onClick={() => showView("experience")}>
-                  Return to Experience
-                </button>
-              </div>
-            </div>
+            <InspectView
+              events={session.experience.trace_events}
+              currentWeekEventIds={
+                loadedScenario && selectedPersonaId
+                  ? loadedScenario.fixture.scenario.weeks[
+                      Math.min(
+                        session.experience.selected_week ?? 0,
+                        loadedScenario.fixture.scenario.weeks.length - 1,
+                      )
+                    ]?.event_ids
+                  : undefined
+              }
+              currentJournalEntryIds={
+                session.experience.trace_events.length > 0
+                  ? session.experience.journal_entries.map(
+                      (entry) => entry.journal_entry_id,
+                    )
+                  : undefined
+              }
+              onboarding={!selectedPersonaId && scores ? {
+                confirmed: session.confirmed_profile !== null,
+                responses: session.responses,
+                scores,
+                setOrder: session.set_order,
+              } : undefined}
+              selectedEventId={session.experience.selected_event_id}
+              traceLabel={
+                loadedScenario
+                  ? `${loadedScenario.catalogItem.persona_name} · saved replay`
+                  : "Current Experience session"
+              }
+              emptyMessage={
+                profileAwaitingConfirmation
+                  ? "The browser calculation is complete. Confirm the result in Experience to send the Profile to Python validation."
+                  : profileTracePending
+                  ? "Profile validation is in progress. No later work has happened."
+                  : profileTraceFailed
+                    ? session.experience.error_message
+                      ?? "The Profile trace could not be loaded."
+                    : "No backend work has been recorded for this Experience yet."
+              }
+              emptyActionLabel={
+                profileTraceFailed && session.experience.retryable
+                  ? "Retry Profile validation"
+                  : undefined
+              }
+              onEmptyAction={
+                profileTraceFailed && session.experience.retryable
+                  ? () => {
+                    if (session.confirmed_profile) {
+                      void synchronizeProfileTrace(session.confirmed_profile);
+                    }
+                  }
+                  : undefined
+              }
+              onReturn={() => showView("experience")}
+            />
           </section>
         </main>
       )}
@@ -751,8 +1176,10 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
 
 export default function App(props: AppProps = {}) {
   return (
-    <SharedSessionProvider>
-      <ExperienceInspectApp {...props} />
-    </SharedSessionProvider>
+    <AppErrorBoundary>
+      <SharedSessionProvider>
+        <ExperienceInspectApp {...props} />
+      </SharedSessionProvider>
+    </AppErrorBoundary>
   );
 }

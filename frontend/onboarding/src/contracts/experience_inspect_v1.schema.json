@@ -2112,25 +2112,13 @@
         "bws_results": {
           "$ref": "#/$defs/BwsResults"
         },
-        "goal_category": {
-          "enum": [
-            "work_life_balance",
-            "life_transition",
-            "relationships",
-            "health_wellbeing",
-            "direction",
-            "meaningful_work"
-          ],
-          "title": "Goal Category",
-          "type": "string"
-        },
         "instrument": {
           "const": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
           "title": "Instrument",
           "type": "string"
         },
         "onboarding_version": {
-          "const": "2.1.0",
+          "const": "2.2.0",
           "title": "Onboarding Version",
           "type": "string"
         },
@@ -2149,10 +2137,25 @@
           "title": "Preferred Name"
         },
         "provenance": {
-          "$ref": "#/$defs/ProfileProvenance"
+          "discriminator": {
+            "mapping": {
+              "react_onboarding_poc": "#/$defs/ReactProfileProvenance",
+              "synthetic_persona_projection": "#/$defs/SyntheticPersonaProfileProvenance"
+            },
+            "propertyName": "source"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/ReactProfileProvenance"
+            },
+            {
+              "$ref": "#/$defs/SyntheticPersonaProfileProvenance"
+            }
+          ],
+          "title": "Provenance"
         },
         "schema_version": {
-          "const": 2,
+          "const": 3,
           "title": "Schema Version",
           "type": "integer"
         },
@@ -2221,7 +2224,6 @@
         "bws_results",
         "value_profile",
         "top_values",
-        "goal_category",
         "user_confirmed",
         "provenance"
       ],
@@ -2418,33 +2420,6 @@
       "title": "ProfileConfirmedEvent",
       "type": "object"
     },
-    "ProfileProvenance": {
-      "additionalProperties": false,
-      "properties": {
-        "card_order_randomized": {
-          "const": true,
-          "title": "Card Order Randomized",
-          "type": "boolean"
-        },
-        "set_order_randomized": {
-          "const": true,
-          "title": "Set Order Randomized",
-          "type": "boolean"
-        },
-        "source": {
-          "const": "react_onboarding_poc",
-          "title": "Source",
-          "type": "string"
-        }
-      },
-      "required": [
-        "source",
-        "set_order_randomized",
-        "card_order_randomized"
-      ],
-      "title": "ProfileProvenance",
-      "type": "object"
-    },
     "ProfileTransform": {
       "additionalProperties": false,
       "description": "Ten-value product transform derived from the raw SVBWS result.",
@@ -2545,6 +2520,33 @@
         "bottom_values"
       ],
       "title": "ProfileTransform",
+      "type": "object"
+    },
+    "ReactProfileProvenance": {
+      "additionalProperties": false,
+      "properties": {
+        "card_order_randomized": {
+          "const": true,
+          "title": "Card Order Randomized",
+          "type": "boolean"
+        },
+        "set_order_randomized": {
+          "const": true,
+          "title": "Set Order Randomized",
+          "type": "boolean"
+        },
+        "source": {
+          "const": "react_onboarding_poc",
+          "title": "Source",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source",
+        "set_order_randomized",
+        "card_order_randomized"
+      ],
+      "title": "ReactProfileProvenance",
       "type": "object"
     },
     "ResourceRef": {
@@ -2895,6 +2897,17 @@
           "title": "Request Id",
           "type": "string"
         },
+        "resume_state": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SessionResumeState"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
         "schema_version": {
           "const": "experience-inspect-v1",
           "default": "experience-inspect-v1",
@@ -2945,6 +2958,97 @@
         "session"
       ],
       "title": "SessionCreatedResponse",
+      "type": "object"
+    },
+    "SessionResumeState": {
+      "additionalProperties": false,
+      "description": "Browser-held state used to restore the in-memory Experience boundary.",
+      "properties": {
+        "journal_entries": {
+          "items": {
+            "$ref": "#/$defs/JournalEntry"
+          },
+          "title": "Journal Entries",
+          "type": "array"
+        },
+        "nudges": {
+          "items": {
+            "$ref": "#/$defs/NudgeInteraction"
+          },
+          "title": "Nudges",
+          "type": "array"
+        },
+        "revision": {
+          "minimum": 0,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "session_id": {
+          "minLength": 1,
+          "title": "Session Id",
+          "type": "string"
+        },
+        "trace_events": {
+          "items": {
+            "discriminator": {
+              "mapping": {
+                "drift_detected": "#/$defs/DriftDetectedEvent",
+                "journal_entry_submitted": "#/$defs/JournalEntrySubmittedEvent",
+                "nudge_decided": "#/$defs/NudgeDecidedEvent",
+                "nudge_generated": "#/$defs/NudgeGeneratedEvent",
+                "nudge_suppression_checked": "#/$defs/NudgeSuppressionCheckedEvent",
+                "profile_confirmed": "#/$defs/ProfileConfirmedEvent",
+                "weekly_coach_generated": "#/$defs/WeeklyCoachGeneratedEvent",
+                "weekly_digest_built": "#/$defs/WeeklyDigestBuiltEvent",
+                "weekly_review_completed": "#/$defs/WeeklyReviewCompletedEvent",
+                "weekly_review_requested": "#/$defs/WeeklyReviewRequestedEvent"
+              },
+              "propertyName": "event_type"
+            },
+            "oneOf": [
+              {
+                "$ref": "#/$defs/ProfileConfirmedEvent"
+              },
+              {
+                "$ref": "#/$defs/JournalEntrySubmittedEvent"
+              },
+              {
+                "$ref": "#/$defs/NudgeSuppressionCheckedEvent"
+              },
+              {
+                "$ref": "#/$defs/NudgeDecidedEvent"
+              },
+              {
+                "$ref": "#/$defs/NudgeGeneratedEvent"
+              },
+              {
+                "$ref": "#/$defs/WeeklyReviewRequestedEvent"
+              },
+              {
+                "$ref": "#/$defs/WeeklyReviewCompletedEvent"
+              },
+              {
+                "$ref": "#/$defs/DriftDetectedEvent"
+              },
+              {
+                "$ref": "#/$defs/WeeklyDigestBuiltEvent"
+              },
+              {
+                "$ref": "#/$defs/WeeklyCoachGeneratedEvent"
+              }
+            ]
+          },
+          "minItems": 1,
+          "title": "Trace Events",
+          "type": "array"
+        }
+      },
+      "required": [
+        "session_id",
+        "revision",
+        "trace_events"
+      ],
+      "title": "SessionResumeState",
       "type": "object"
     },
     "SessionSelection": {
@@ -2999,6 +3103,33 @@
         "view"
       ],
       "title": "SessionSelection",
+      "type": "object"
+    },
+    "SyntheticPersonaProfileProvenance": {
+      "additionalProperties": false,
+      "properties": {
+        "card_order_randomized": {
+          "const": false,
+          "title": "Card Order Randomized",
+          "type": "boolean"
+        },
+        "set_order_randomized": {
+          "const": false,
+          "title": "Set Order Randomized",
+          "type": "boolean"
+        },
+        "source": {
+          "const": "synthetic_persona_projection",
+          "title": "Source",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source",
+        "set_order_randomized",
+        "card_order_randomized"
+      ],
+      "title": "SyntheticPersonaProfileProvenance",
       "type": "object"
     },
     "TraceReadRequest": {

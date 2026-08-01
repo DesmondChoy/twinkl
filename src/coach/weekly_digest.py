@@ -11,9 +11,10 @@ import argparse
 import fcntl
 import json
 import re
-from collections.abc import Awaitable, Callable
+from collections.abc import Awaitable, Callable, Sequence
 from datetime import date, datetime, timedelta
 from pathlib import Path
+from typing import cast
 
 import polars as pl
 import yaml
@@ -40,12 +41,15 @@ from src.coach.schemas import (
 )
 from src.drift_detector import DriftDetectorResult
 from src.models.judge import SCHWARTZ_VALUE_ORDER
-from src.vif.weekly_schema import (
+from src.weekly_drift_reviewer import (
+    WeeklyDriftReviewerDecision,
+    WeeklyDriftReviewerEntry,
+)
+from src.weekly_signal_schema import (
     ALIGNMENT_COLUMNS,
     UNCERTAINTY_COLUMNS,
     alignment_col,
 )
-from src.weekly_drift_reviewer import WeeklyDriftReviewerDecision
 from src.wrangling.parse_wrangled_data import parse_wrangled_file
 
 SCHWARTZ_CONFIG_PATH = Path("config/schwartz_values.yaml")
@@ -681,17 +685,18 @@ def build_weekly_digest(
     )
 
 
-def build_weekly_drift_reviewer_digest(
+def build_weekly_drift_reviewer_digest_from_entries(
     *,
     persona_id: str,
-    wrangled_dir: Path,
+    persona_name: str | None,
     week_start: str,
     week_end: str,
     core_values: list[str],
-    decisions: list[WeeklyDriftReviewerDecision],
+    entries: Sequence[WeeklyDriftReviewerEntry],
+    decisions: Sequence[WeeklyDriftReviewerDecision],
     drift_result: DriftDetectorResult,
 ) -> WeeklyDigest:
-    """Build approved output without VIF Critic or LLM-Judge signals."""
+    """Build a Weekly Digest from displayed Journal Entries in memory."""
     resolved_start = _parse_iso_date(week_start)
     resolved_end = _parse_iso_date(week_end)
     if resolved_start > resolved_end:
@@ -699,11 +704,9 @@ def build_weekly_drift_reviewer_digest(
     if drift_result.persona_id != persona_id:
         raise ValueError("Drift Detector result does not match persona_id")
 
-    profile, history, entry_texts = _load_persona_context(
-        persona_id,
-        wrangled_dir,
-        history_end=resolved_end,
-    )
+    history = sorted(entries, key=lambda entry: entry.t_index)
+    if any(_parse_iso_date(entry.date) > resolved_end for entry in history):
+        raise ValueError("Weekly Digest entries cannot extend beyond week_end")
     window_entries = [
         entry
         for entry in history
@@ -715,6 +718,7 @@ def build_weekly_drift_reviewer_digest(
             f"for persona_id={persona_id}"
         )
 
+    entry_texts = {(entry.date, entry.t_index): entry.text for entry in history}
     decision_by_coordinate = {
         (decision.t_index, decision.core_value): decision for decision in decisions
     }
@@ -778,7 +782,16 @@ def build_weekly_drift_reviewer_digest(
             )
 
     state = drift_result.delivery_state
-    if state == "stable":
+    review_unavailable = not any(
+        decision.review_status == "ok"
+        and resolved_start <= _parse_iso_date(decision.date) <= resolved_end
+        for decision in decisions
+    )
+    if review_unavailable:
+        rationale = (
+            "The Weekly Drift Reviewer could not return usable evidence for this week."
+        )
+    elif state == "stable":
         rationale = "No Core Value has two consecutive Weekly Drift Reviewer Conflicts."
     elif state == "mixed":
         rationale = (
@@ -792,10 +805,10 @@ def build_weekly_drift_reviewer_digest(
     ]
     return WeeklyDigest(
         persona_id=persona_id,
-        persona_name=profile.get("name"),
+        persona_name=persona_name,
         week_start=week_start,
         week_end=week_end,
-        response_mode=state,
+        response_mode="high_uncertainty" if review_unavailable else state,
         mode_source="drift_detector",
         mode_rationale=rationale,
         signal_source="weekly_drift_reviewer",
@@ -809,6 +822,42 @@ def build_weekly_drift_reviewer_digest(
         top_strengths=[],
         dimensions=[],
         evidence=evidence,
+    )
+
+
+def build_weekly_drift_reviewer_digest(
+    *,
+    persona_id: str,
+    wrangled_dir: Path,
+    week_start: str,
+    week_end: str,
+    core_values: list[str],
+    decisions: list[WeeklyDriftReviewerDecision],
+    drift_result: DriftDetectorResult,
+) -> WeeklyDigest:
+    """Build the approved Weekly Digest without VIF Critic or LLM-Judge signals."""
+    resolved_end = _parse_iso_date(week_end)
+    profile, history, entry_texts = _load_persona_context(
+        persona_id,
+        wrangled_dir,
+        history_end=resolved_end,
+    )
+    return build_weekly_drift_reviewer_digest_from_entries(
+        persona_id=persona_id,
+        persona_name=profile.get("name"),
+        week_start=week_start,
+        week_end=week_end,
+        core_values=core_values,
+        entries=[
+            WeeklyDriftReviewerEntry(
+                date=entry.date,
+                t_index=entry.t_index,
+                text=entry_texts[(entry.date, entry.t_index)],
+            )
+            for entry in history
+        ],
+        decisions=decisions,
+        drift_result=drift_result,
     )
 
 
@@ -848,7 +897,7 @@ def _build_prompt_inputs(
 def render_digest_prompt(digest: WeeklyDigest) -> str:
     """Render the Coach Digest prompt from Weekly Drift Detection output."""
     prompt = load_prompt("weekly_digest_coach")
-    return prompt.render(**_build_prompt_inputs(digest))
+    return cast(str, prompt.render(**_build_prompt_inputs(digest)))
 
 
 def render_digest_markdown(digest: WeeklyDigest) -> str:

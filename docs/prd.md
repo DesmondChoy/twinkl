@@ -6,7 +6,7 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 
 ## Implementation Status
 
-*Last updated: 2026-07-30*
+*Last updated: 2026-07-31*
 
 | Feature | Status | Details |
 |---------|--------|---------|
@@ -15,11 +15,11 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 | **VIF Critic Training** | ✅ Complete | The capstone training and evaluation stack is complete, with ordinal MLP heads, a BNN baseline, configurable sentence encoders, uncertainty estimates, raw output export, experiment logging, and recall-first checkpoint selection. `run_019`-`run_021` remains the historical corrected-split reference, while repaired-Security `run_060` is the nominated offline checkpoint. Repaired Security supervision raises median test Security QWK by about 0.17 without regressing aggregate QWK. Compact-history and matched Hedonism diagnostics did not establish a stronger product role. This is AI diagnostic evidence, not human validation. The VIF Critic is not part of the user-facing Drift path, and no further VIF Critic work is planned for the time-boxed capstone. |
 | **Human Annotation Tool** | ✅ Complete | ~4,200 LOC Shiny app; 380 saved annotations across 24 personas, with a 115-entry shared subset across 19 personas used for the current inter-rater agreement benchmark; Cohen's κ / Fleiss' κ metrics; modular components with analysis view; annotation ordering for persona prioritization |
 | **Drift Inspection App** | ✅ Complete | Read-only desktop Shiny app for comparing Runs 1–3 across three frozen Weekly Drift Reviewer setups: `gpt-5.4-mini` at reasoning effort `none`, `gpt-5.6-luna` at reasoning effort `none`, and `gpt-5.6-luna` at reasoning effort `low`. It shows complete development and persona-level results, Journal Entries, AI-reviewed LLM-Judge Conflict Labels, Weekly Drift Reviewer Decisions, cited evidence, and verified input cutoffs without model or provider API calls. Local and Railway launch paths are documented in the [app guide](demo/weekly_drift_review_app.md). |
-| **Conversational Nudging** | 🧪 Experimental | 3-category LLM classification (clarification/elaboration/tension-surfacing); pending validation that nudging improves VIF signal quality |
-| **Weekly Drift Detection** | ✅ Complete | The end-of-week workflow persists versioned Weekly Drift Reviewer Decisions without VIF Critic input. It applies the internal Drift Detector across week boundaries. It then stores structured output with Core Values, cited Journal Entries, and Drift state. The fixed Luna-low contract has AI-reviewed synthetic development evidence. It has no fresh final test or deployment approval. The former VIF Critic crash/rut/evolution runtime remains only for historical compatibility. |
-| **Coach Digest** | 🧪 Experimental | The workflow projects structured Weekly Drift Detection output into one of three response policies: Drift detected, no current Drift, or more reflection needed. It then produces an optional user response. It does not decide whether Drift exists. Explanation validation and product orchestration remain incomplete. |
-| **Onboarding (SVBWS Values Assessment)** | 🧪 Experimental | Standalone React POC asks for a preferred name, implements the published 11-group, six-object balanced SVBWS design, then presents structured goal selection, a label-free Core Value summary, and a first Journal Entry handoff. It randomizes group and card order, stores raw 11-object BWS results separately from the ten-value Profile transformation, and omits midpoint feedback and unsupported confidence claims. The approved runtime can import Coach Digest context from a saved confirmed Profile; automated browser-to-service storage is outside the capstone. It is a research-grounded pilot instrument, not a validated Twinkl instrument. [Full spec](onboarding/onboarding_spec.md) |
-| **Experience and Inspect React Demo** | 📘 Specified | One mobile-first React capstone demo will present the product experience and the AI architecture from the same session. Narrow-screen phones are the primary design and verification target. Wider layouts enhance the same flow. Experience covers onboarding, Journal Entries, persona replay, displayed nudges and responses, Weekly Drift Detection, and the Coach Digest. Inspect exposes event-linked prompts, internal Weekly Drift Reviewer Decisions, Drift Detector steps, provenance, latency, and errors without VIF Critic input. [Design](demo/experience_inspect_app.md) |
+| **Conversational Nudging** | 🧪 Experimental | The runtime and manual Experience integration are implemented and tested, including safe failure, retry, reply, skip, and linked Inspect events. Validation that nudging improves VIF signal quality remains pending. |
+| **Drift Detector** | ✅ Complete | The capstone POC implementation is complete and wired. It persists versioned Weekly Drift Reviewer Decisions without VIF Critic input, applies the deterministic two-consecutive-Conflict rule across week boundaries, and handles extension, recovery, abstention, deduplication, and active, recovered, uncertain, or mixed delivery. The fixed Luna-low model contract retains AI-reviewed synthetic development evidence; no fresh final test or deployment approval is claimed. The former VIF Critic crash/rut/evolution runtime is explicitly deprecated and retained only for historical compatibility. |
+| **Weekly Coach** | 🧪 Experimental | The approved runtime sends deterministic Drift Detector output based on Weekly Drift Reviewer Decisions into the Weekly Digest and optional Weekly Coach reflection. The Weekly Digest cites supporting Journal Entries without VIF Critic or LLM-Judge numeric summaries. Explanation validation depth and product-facing orchestration remain incomplete; no fresh final test or deployment approval is claimed. |
+| **Onboarding (SVBWS Values Assessment)** | 🧪 Experimental | Standalone React POC implements the published 11-group, six-object balanced SVBWS design, then presents a label-free Core Value summary and first Journal Entry handoff. It randomizes group and card order, stores raw 11-object BWS results separately from the ten-value Profile transformation, and omits midpoint feedback and unsupported confidence claims. The approved runtime can import Core Values from a saved confirmed Profile; automated browser-to-service storage is outside the capstone. It is a research-grounded pilot instrument, not a validated Twinkl instrument. [Full spec](onboarding/onboarding_spec.md) |
+| **Experience and Inspect React Demo** | 🚧 In Progress | Shared contracts, five deterministic week-by-week persona replays, manual Journal Entries, displayed nudges with reply and skip actions, Journal Entry removal, closed-week review and affected-week recomputation, safe retry, live Weekly Drift Reviewer integration, Drift, cited Weekly Digests, and linked Inspect events are implemented. Monday-through-Sunday weeks become eligible only after Sunday closes; a Journal Entry never triggers review of its open week. Persona selection, manual next-step replay, previous-week navigation, optional automatic replay and pause, restart, Jump to key moment, reduced-motion behavior, and no-future-data projection are wired into the shared React session. The release quality gate is complete; professor walkthrough and capstone evidence remain. Narrow-screen phones remain the primary verification target. [Design](demo/experience_inspect_app.md) |
 | **Embedding Explorer** | ✅ Complete | Interactive 3D visualization of VIF hidden-layer and SBERT embedding spaces; self-contained HTML with Three.js |
 | **Journaling Anomaly Radar** | ❌ Not Started | Cadence/gap detection |
 | **Goal-aligned Inspiration Feed** | ❌ Not Started | External API integration |
@@ -65,7 +65,7 @@ models/
     * Users crave kind accountability—context-aware reflections that cite evidence—while commercial products optimise for dopamine loops, not truth.
 * **Target users / addressable market**
     * Knowledge workers in transition (grad students, new managers, founders) and high-agency professionals managing career-family-growth trade-offs—large cohorts already paying for journaling + coaching, yet underserved by static apps.
-    * Pick 1–2 personas for the capstone run; each provides rich, recurring scenarios to evaluate alignment/misalignment feedback.
+    * Use five curated personas for the capstone menu, with one recommended walkthrough. Together they cover seven Schwartz Core Values plus stable, active, recovered, uncertain, and mixed Drift behavior.
 
 # Difference vs commercial peers
 
@@ -90,7 +90,7 @@ AI journaling apps (Reflection, Mindsera, Insight Journal, Day One, Pixel Journa
 
 1. **Perception:** Typed Journal Entries flow through an LLM that tags values, identity claims, sentiment, intent, and direction-of-travel.
 2. **Memory:** Tags incrementally update a decay-aware user profile/knowledge base (value weights, goals, tensions, evidence snippets) instead of resetting each week.
-3. **Reasoning + action:** The required user-facing path uses Weekly Drift Detection; the completed **[VIF Critic](vif/01_concepts_and_roadmap.md)** remains an offline research component:
+3. **Reasoning + action:** The required user-facing path reviews closed Monday-through-Sunday calendar weeks. The first partial week becomes eligible after its first Sunday; saving a Journal Entry does not review the open week. The completed **[VIF Critic](vif/01_concepts_and_roadmap.md)** remains an offline research component:
    * **VIF Critic:** A numeric, uncertainty-aware model that predicts `-1`, `0`, or `+1` for each value from the current Journal Entry plus the normalized 10-dimensional value profile. It uses [LLM-Judge labels for reward modeling](vif/03_model_training.md) and [MC Dropout for epistemic uncertainty](vif/04_uncertainty_logic.md). At `window_size: 1`, it has no date/time-gap feature, prior Journal Entries, demographics, or biography; larger legal-history windows remain diagnostic experiments. Existing code supports training, evaluation, raw output export, and timeline inference. A generalized review-and-retrain loop is not implemented or planned for the time-boxed capstone. The exact relabeling invariant is defined in the [Security target contract](vif/security_target_contract.md).
    * **Weekly Drift Detection:** At the end of each week, the internal Weekly Drift Reviewer reviews Journal Entries without VIF Critic input. Its fixed model contract is `gpt-5.6-luna` with reasoning effort `low`. The internal Drift Detector then applies the rule that two consecutive Conflicts for the same Core Value form Drift. The workflow persists the decisions and stores structured output with Core Values, cited Journal Entries, and Drift state. It fails closed to Abstain on invalid or refused responses. The complete development analysis contains 42 Drifts across 36 Drift trajectories in 292 resolved cases. The fixed Luna-low setup had median Drift recall of `0.548`, 4 false Drift alerts, and `0.637` coverage. These are AI-reviewed synthetic development results. The capstone has no fresh final test or deployment approval. The crash/rut/evolution router remains only for historical compatibility.
    * **Coach Digest:** Supplies the structured Weekly Drift Detection output to a prompt. The output contains cited Journal Entry evidence. The prompt asks for an evidence-based user response and a reflective question. A response can also give occasional evidence-based acknowledgment when the output has no Drift. The Coach Digest does not decide whether Drift exists. See [System Architecture](vif/02_system_architecture.md) and [Worked Example: Sarah's Journey](vif/example.md).
@@ -143,6 +143,8 @@ LLM prompts are stored as YAML files with Jinja2 templating in `prompts/`:
 - `journal_entry.yaml` — Generate entries from persona perspective
 - `nudge_decision.yaml` — Classify entries for nudge appropriateness
 - `nudge_generation.yaml` — Generate contextual follow-up nudges
+- `nudge_decision_and_generation.yaml` — Make the Experience nudge decision
+  and optionally generate its question in one call
 - `nudge_response.yaml` — Generate persona responses to nudges
 - `judge_alignment.yaml` — Score entries against Schwartz value dimensions
 
@@ -161,15 +163,15 @@ Value context is injected from `config/schwartz_values.yaml`, which contains ric
 
 ## **Onboarding (SVBWS Values Assessment)** 🧪
 
-The onboarding flow uses the published **Schwartz Values Best-Worst Survey (SVBWS)** design to elicit relative priorities. The standalone, mobile-first React POC asks for a preferred name, presents 11 randomized groups of six neutral cards, then provides structured goal selection, a label-free Core Value summary, and a first Journal Entry handoff. Universalism–Nature and Universalism–Social remain distinct in the raw BWS result and are merged only in the separately named ten-value Profile transformation. The flow has no midpoint result or confidence proxy. It is a research-grounded pilot instrument, not a psychometrically validated Twinkl instrument. The **[Onboarding Spec](onboarding/onboarding_spec.md)** is authoritative for the interaction, scoring, and Profile contracts.
+The onboarding flow uses the published **Schwartz Values Best-Worst Survey (SVBWS)** design to elicit relative priorities. The standalone, mobile-first React POC presents 11 randomized groups of six neutral cards, followed directly by a label-free Core Value summary and first Journal Entry handoff. Universalism–Nature and Universalism–Social remain distinct in the raw BWS result and are merged only in the separately named ten-value Profile transformation. The flow has no midpoint result or confidence proxy. It is a research-grounded pilot instrument, not a psychometrically validated Twinkl instrument. The **[Onboarding Spec](onboarding/onboarding_spec.md)** is authoritative for the interaction, scoring, and Profile contracts.
 
-The internal Profile includes a preferred name, a graded 10-dimensional product
-weight vector, Core Values stored in `top_values` for Drift gating, and a goal
-category that focuses the Coach Digest. The React POC keeps that Profile in the
-browser without exposing technical JSON to the user. A host can persist the
-Profile exposed by the callback or browser event. The approved runtime imports
-saved Profile JSON with `--profile-path` and uses `top_values` as Core Values;
-automated browser-to-service storage is outside the capstone.
+The internal Profile includes a graded 10-dimensional product weight vector,
+with Core Values stored in `top_values` for Drift gating. The React POC keeps
+that Profile in the browser without exposing technical JSON to the user. A
+host can persist the Profile exposed by the callback or browser event. The
+approved runtime imports saved Profile JSON with `--profile-path` and uses
+`top_values` as Core Values; automated browser-to-service storage is outside
+the capstone.
 
 This onboarding directly anchors the capstone submodules: the latent dimensions form named slots in the knowledge base and rule layer (**Intelligent Reasoning Systems**), the mapping from card responses to those dimensions is a compact modelling task (**Pattern Recognition Systems**), entry content analysis and temporal patterns feed the sensing layer (**Intelligent Sensing Systems**), and treating the assessment as one input stream into a shared user-state vector `z` illustrates end-to-end orchestration and state management across Perception → Memory → Reasoning → Action (**Architecting AI Systems**).
 
@@ -182,7 +184,13 @@ This onboarding directly anchors the capstone submodules: the latent dimensions 
   - **Elaboration** — for surface-level entries with unexplored depth
   - **Tension-surfacing** — for hedging language or conflicted statements
 
-  Nudge decisions use **LLM-based semantic classification** (not regex/heuristics) to detect when deeper reflection would yield VIF signal. Anti-annoyance logic caps nudges at 2 per 3-entry window. See [pipeline_specs.md](pipeline/pipeline_specs.md) for implementation details.
+  After the deterministic anti-annoyance check, the Experience runtime uses
+  one `gpt-5.6-luna` reasoning-effort-`none` structured call to return
+  `no_nudge`, clarification, elaboration, or tension-surfacing plus one
+  contextual question when applicable. The historical synthetic workflow
+  retains its separate decision and generation calls for reproducibility.
+  Anti-annoyance logic caps nudges at 2 per 3-entry window. See
+  [pipeline_specs.md](pipeline/pipeline_specs.md) for implementation details.
 * **”Map of Me”** ❌: Embed each entry, visualise trajectories, overlay alignment scores (Pattern Recognition + Intelligent Sensing).
 * **Journaling anomaly radar** ❌: After 2–3 weeks of entries establish cadence baselines, a lightweight time-series/anomaly detector tracks check-in gaps, flags “silent weeks,” cites evidence windows, and triggers empathetic nudges (Pattern Recognition + Architecting).
 * **Goal-aligned inspiration feed** ❌: When the profile shows intent (e.g., “pick up Japanese”) but no supporting activities, call a real-time search API (SerpAPI/Tavily) constrained by what the user enjoys (e.g., highly rated anime) and reason over the results before surfacing next-step suggestions (Intelligent Reasoning + Intelligent Sensing). Each curated option is presented as an explicit choice; the user’s accept/decline actions feed back into the values/identity graph so future nudges learn which media or effort types actually motivate them.

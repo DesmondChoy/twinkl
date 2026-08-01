@@ -130,14 +130,13 @@ describe("versioned Profile", () => {
       startedAt: "2026-07-19T00:00:00.000Z",
       completedAt: "2026-07-19T00:02:00.000Z",
       responses: completeResponses(),
-      goalCategory: "direction" as const,
     };
     expect(() => createProfile({ ...input, userConfirmed: false })).toThrow(
       "before confirmation",
     );
     const profile = createProfile({ ...input, userConfirmed: true });
-    expect(profile.preferred_name).toBe("Casey Lee");
-    expect(profile.onboarding_version).toBe("2.1.0");
+    expect(profile.schema_version).toBe(3);
+    expect(profile.onboarding_version).toBe("2.2.0");
     expect(profile.instrument).toBe(
       "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
     );
@@ -145,5 +144,31 @@ describe("versioned Profile", () => {
     expect(profile.value_profile.scores).toHaveProperty("universalism");
     expect(profile).not.toHaveProperty("confidence");
     expect(validateProfile(JSON.parse(JSON.stringify(profile)))).toEqual(profile);
+  });
+
+  it("accepts an explicitly synthetic Profile projection for saved replay", () => {
+    const profile = createProfile({
+      userId: "persona-1",
+      sessionId: "scenario-session",
+      startedAt: "2026-07-19T00:00:00.000Z",
+      completedAt: "2026-07-19T00:02:00.000Z",
+      responses: completeResponses(),
+      userConfirmed: true,
+    });
+    profile.provenance = {
+      source: "synthetic_persona_projection",
+      set_order_randomized: false,
+      card_order_randomized: false,
+    };
+
+    expect(validateProfile(structuredClone(profile))).toEqual(profile);
+
+    const dishonest = structuredClone(profile) as unknown as {
+      provenance: { set_order_randomized: boolean };
+    };
+    dishonest.provenance.set_order_randomized = true;
+    expect(() => validateProfile(dishonest)).toThrow(
+      "deterministic scoring contract",
+    );
   });
 });

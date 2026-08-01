@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { BWS_SETS, createProfile } from "./domain";
+import { BWS_SETS, createProfile, type BwsResponse } from "./domain";
 import {
   clearChoice,
   createSession,
@@ -10,12 +10,27 @@ import {
 } from "./session";
 
 describe("onboarding session", () => {
+  const completeResponses = (): BwsResponse[] =>
+    BWS_SETS.map((set) => ({
+      set_number: set.setNumber,
+      items: [...set.items],
+      item_order_shown: [...set.items],
+      selected_best: set.items[0],
+      selected_worst: set.items[1],
+      response_time_ms: 1_000,
+    }));
+
   it("randomizes set order and every prescribed card order once, then round-trips", () => {
     const ids = ["user-1", "session-1"];
     const session = createSession(() => 0, new Date("2026-07-19T00:00:00.000Z"), () => ids.shift()!);
+<<<<<<< HEAD
     expect(session.schema_version).toBe(6);
     expect(session.stage).toBe("name");
     expect(session.preferred_name).toBe("");
+=======
+    expect(session.schema_version).toBe(7);
+    expect(session.stage).toBe("set");
+>>>>>>> main
     expect(session.experience).toMatchObject({
       active_view: "experience",
       journal_started: false,
@@ -58,53 +73,82 @@ describe("onboarding session", () => {
     legacy.schema_version = 4;
     delete legacy.experience;
     const migrated = parseSession(JSON.stringify(legacy));
-    expect(migrated?.schema_version).toBe(6);
-    expect(migrated?.preferred_name).toBe("Friend");
+    expect(migrated?.schema_version).toBe(7);
     expect(migrated?.experience.active_view).toBe("experience");
     expect(migrated?.responses).toEqual(legacy.responses);
   });
 
-  it("preserves a confirmed legacy Profile without inventing a stored name", () => {
-    const session = createSession(() => 0.5);
-    const responses = BWS_SETS.map((set, index) => ({
-      set_number: set.setNumber,
-      items: [...set.items],
-      item_order_shown: [...set.items],
-      selected_best: set.items[0],
-      selected_worst: set.items[1],
-      response_time_ms: 1_000 + index,
-    }));
-    session.schema_version = 6;
-    session.stage = "complete";
-    session.preferred_name = "Casey";
-    session.responses = responses;
-    session.goal_category = "direction";
-    session.confirmed_profile = createProfile({
-      userId: session.user_id,
-      preferredName: session.preferred_name,
-      sessionId: session.session_id,
-      startedAt: session.started_at,
-      completedAt: "2026-07-19T00:02:00.000Z",
-      responses,
-      goalCategory: session.goal_category,
-      userConfirmed: true,
-    });
-
-    const legacy = JSON.parse(JSON.stringify(session));
+  it("migrates version 5 drafts without carrying fixture trace state forward", () => {
+    const legacy = JSON.parse(JSON.stringify(createSession(() => 0.5)));
     legacy.schema_version = 5;
-    delete legacy.preferred_name;
-    delete legacy.confirmed_profile.preferred_name;
+    legacy.experience.journal_draft = "A draft worth keeping.";
+    legacy.experience.trace_event_ids = ["fixture-event"];
+    legacy.experience.selected_event_id = "fixture-event";
 
     const migrated = parseSession(JSON.stringify(legacy));
 
-    expect(migrated?.preferred_name).toBe("Friend");
-    expect(migrated?.confirmed_profile?.preferred_name).toBeUndefined();
+    expect(migrated?.schema_version).toBe(7);
+    expect(migrated?.experience.journal_draft).toBe("A draft worth keeping.");
+    expect(migrated?.experience.trace_event_ids).toEqual([]);
+    expect(migrated?.experience.trace_events).toEqual([]);
+    expect(migrated?.experience.selected_event_id).toBeNull();
   });
 
-  it("keeps Inspect unavailable before Profile confirmation and preserves event selection", () => {
+  it("migrates version 6 goal and confirmed Profile state", () => {
+    const legacy = JSON.parse(JSON.stringify(createSession(() => 0.5)));
+    const responses = completeResponses();
+    const profile = createProfile({
+      userId: legacy.user_id,
+      sessionId: legacy.session_id,
+      startedAt: legacy.started_at,
+      completedAt: "2026-07-19T00:02:00.000Z",
+      responses,
+      userConfirmed: true,
+    });
+    legacy.schema_version = 6;
+    legacy.stage = "complete";
+    legacy.set_index = 10;
+    legacy.responses = responses;
+    legacy.goal_category = "direction";
+    legacy.confirmed_profile = {
+      ...profile,
+      schema_version: 2,
+      onboarding_version: "2.1.0",
+      goal_category: "direction",
+    };
+
+    const migrated = parseSession(JSON.stringify(legacy));
+
+    expect(migrated?.schema_version).toBe(7);
+    expect(migrated?.confirmed_profile?.schema_version).toBe(3);
+    expect(migrated?.confirmed_profile).not.toHaveProperty("goal_category");
+  });
+
+  it("routes a version 6 goal stage to the Core Value summary", () => {
+    const legacy = JSON.parse(JSON.stringify(createSession(() => 0.5)));
+    legacy.schema_version = 6;
+    legacy.stage = "goal";
+    legacy.set_index = 10;
+    legacy.responses = completeResponses();
+    legacy.goal_category = null;
+
+    const migrated = parseSession(JSON.stringify(legacy));
+
+    expect(migrated?.stage).toBe("summary");
+    expect(migrated).not.toHaveProperty("goal_category");
+  });
+
+  it("unlocks Inspect after all 11 questions and preserves event selection", () => {
     const session = createSession(() => 0.5);
     expect(showView(session, "inspect")).toBe(session);
     expect(inspectRun(session, "event-09")).toBe(session);
+
+    session.stage = "summary";
+    session.set_index = 10;
+    session.responses = completeResponses();
+    const scoreInspection = showView(session, "inspect");
+    expect(scoreInspection.experience.active_view).toBe("inspect");
+    expect(parseSession(JSON.stringify(scoreInspection))).toEqual(scoreInspection);
 
     session.confirmed_profile = {} as NonNullable<typeof session.confirmed_profile>;
     session.experience.trace_event_ids = ["event-09"];

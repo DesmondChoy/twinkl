@@ -39,6 +39,24 @@ const HASH_PATTERN = /^[0-9a-f]{64}$/;
 
 type JsonObject = Record<string, unknown>;
 
+export interface JournalEntryContract extends JsonObject {
+  journal_entry_id: string;
+  t_index: number;
+  date: string;
+  content: string;
+  nudge_response: string | null;
+}
+
+export interface NudgeInteractionContract extends JsonObject {
+  nudge_id: string;
+  journal_entry_id: string;
+  outcome: "suppressed" | "no_nudge" | "displayed" | "skipped" | "answered";
+  category: "clarification" | "elaboration" | "tension_surfacing" | null;
+  reason: string | null;
+  text: string | null;
+  response: string | null;
+}
+
 export interface WeeklyDriftReviewerDecisionContract {
   persona_id: string;
   week_start: string;
@@ -80,8 +98,8 @@ export interface ExperienceSessionContract extends JsonObject {
   session_id: string;
   revision: number;
   profile: OnboardingProfile;
-  journal_entries: JsonObject[];
-  nudges: JsonObject[];
+  journal_entries: JournalEntryContract[];
+  nudges: NudgeInteractionContract[];
   weekly_reviewer_decisions: WeeklyDriftReviewerDecisionContract[];
   drift_result: JsonObject | null;
   weekly_digest: JsonObject | null;
@@ -90,10 +108,107 @@ export interface ExperienceSessionContract extends JsonObject {
   updated_at: string;
 }
 
+export type ScenarioDeliveryState =
+  | "stable"
+  | "active"
+  | "recovered"
+  | "uncertain"
+  | "mixed";
+
+export interface ScenarioWeekContract extends JsonObject {
+  week_id: string;
+  week_start: string;
+  week_end: string;
+  journal_entry_ids: string[];
+  event_ids: string[];
+  expected_delivery_state: ScenarioDeliveryState;
+}
+
+export interface ScenarioBundleContract extends JsonObject {
+  schema_version: typeof EXPERIENCE_INSPECT_CONTRACT_VERSION;
+  scenario_id: string;
+  title: string;
+  description: string;
+  source: "saved_replay";
+  persona_id: string;
+  profile: OnboardingProfile;
+  journal_entries: JournalEntryContract[];
+  weekly_reviewer_decisions: WeeklyDriftReviewerDecisionContract[];
+  drift_result: JsonObject;
+  weekly_digest: JsonObject;
+  weeks: ScenarioWeekContract[];
+  trace_event_ids: string[];
+  manifest: JsonObject;
+}
+
+export interface ExperienceResumeStateContract extends JsonObject {
+  session_id: string;
+  revision: number;
+  journal_entries: JournalEntryContract[];
+  nudges: NudgeInteractionContract[];
+  trace_events: TraceEventContract[];
+}
+
+export interface ApiErrorContract extends JsonObject {
+  schema_version: typeof EXPERIENCE_INSPECT_CONTRACT_VERSION;
+  operation: "error";
+  requested_operation: string;
+  request_id: string;
+  status: "error";
+  error: {
+    code: string;
+    message: string;
+    retryable: boolean;
+  };
+}
+
+export interface SessionCreatedResponseContract extends JsonObject {
+  schema_version: typeof EXPERIENCE_INSPECT_CONTRACT_VERSION;
+  operation: "create_session";
+  request_id: string;
+  status: "ok";
+  session: ExperienceSessionContract;
+}
+
+export interface JournalEntrySubmittedResponseContract extends JsonObject {
+  schema_version: typeof EXPERIENCE_INSPECT_CONTRACT_VERSION;
+  operation: "submit_journal_entry";
+  request_id: string;
+  status: "ok";
+  session: ExperienceSessionContract;
+  event_ids: string[];
+}
+
+export interface TraceReadResponseContract extends JsonObject {
+  schema_version: typeof EXPERIENCE_INSPECT_CONTRACT_VERSION;
+  operation: "read_trace";
+  request_id: string;
+  status: "ok";
+  session_id: string;
+  events: TraceEventContract[];
+}
+
+export interface ScenarioLoadedResponseContract extends JsonObject {
+  schema_version: typeof EXPERIENCE_INSPECT_CONTRACT_VERSION;
+  operation: "load_scenario";
+  request_id: string;
+  status: "ok";
+  session: ExperienceSessionContract;
+  scenario: ScenarioBundleContract;
+  event_ids: string[];
+}
+
+export type ExperienceApiResponseContract =
+  | ApiErrorContract
+  | SessionCreatedResponseContract
+  | JournalEntrySubmittedResponseContract
+  | ScenarioLoadedResponseContract
+  | TraceReadResponseContract;
+
 export interface ExperienceInspectFixtureContract extends JsonObject {
   schema_version: typeof EXPERIENCE_INSPECT_CONTRACT_VERSION;
   session: ExperienceSessionContract;
-  scenario: JsonObject;
+  scenario: ScenarioBundleContract;
   requests: JsonObject[];
   responses: JsonObject[];
   trace_events: TraceEventContract[];
@@ -183,7 +298,7 @@ function validateSafeError(value: unknown, name: string): JsonObject {
   return error;
 }
 
-function validateJournalEntry(value: unknown, name: string): JsonObject {
+function validateJournalEntry(value: unknown, name: string): JournalEntryContract {
   const entry = object(value, name);
   exactKeys(entry, ["journal_entry_id", "t_index", "date", "content", "nudge_response"], name);
   string(entry.journal_entry_id, `${name}.journal_entry_id`);
@@ -191,7 +306,7 @@ function validateJournalEntry(value: unknown, name: string): JsonObject {
   string(entry.date, `${name}.date`);
   string(entry.content, `${name}.content`);
   if (entry.nudge_response !== null) string(entry.nudge_response, `${name}.nudge_response`);
-  return entry;
+  return entry as JournalEntryContract;
 }
 
 function validateDecision(value: unknown, name: string): WeeklyDriftReviewerDecisionContract {
@@ -235,7 +350,7 @@ function validateDecision(value: unknown, name: string): WeeklyDriftReviewerDeci
   return decision as unknown as WeeklyDriftReviewerDecisionContract;
 }
 
-function validateNudge(value: unknown, name: string): JsonObject {
+function validateNudge(value: unknown, name: string): NudgeInteractionContract {
   const nudge = object(value, name);
   exactKeys(
     nudge,
@@ -250,7 +365,32 @@ function validateNudge(value: unknown, name: string): JsonObject {
   for (const field of ["category", "reason", "text", "response"] as const) {
     if (nudge[field] !== null) string(nudge[field], `${name}.${field}`);
   }
-  return nudge;
+  return nudge as NudgeInteractionContract;
+}
+
+function validateResumeState(
+  value: unknown,
+  name: string,
+): ExperienceResumeStateContract {
+  const resume = object(value, name);
+  exactKeys(
+    resume,
+    ["session_id", "revision", "journal_entries", "nudges", "trace_events"],
+    name,
+  );
+  string(resume.session_id, `${name}.session_id`);
+  integer(resume.revision, `${name}.revision`);
+  array(resume.journal_entries, `${name}.journal_entries`).forEach(
+    (entry, index) =>
+      validateJournalEntry(entry, `${name}.journal_entries[${index}]`),
+  );
+  array(resume.nudges, `${name}.nudges`).forEach((nudge, index) =>
+    validateNudge(nudge, `${name}.nudges[${index}]`),
+  );
+  array(resume.trace_events, `${name}.trace_events`).forEach((event, index) =>
+    validateTraceEvent(event, `${name}.trace_events[${index}]`),
+  );
+  return resume as ExperienceResumeStateContract;
 }
 
 function validateSession(value: unknown, name: string): ExperienceSessionContract {
@@ -491,7 +631,34 @@ function validateTraceEvent(value: unknown, name: string): TraceEventContract {
   return event as TraceEventContract;
 }
 
-function validateScenario(value: unknown, name: string): JsonObject {
+function validateScenarioWeek(value: unknown, name: string): ScenarioWeekContract {
+  const week = object(value, name);
+  exactKeys(
+    week,
+    [
+      "week_id",
+      "week_start",
+      "week_end",
+      "journal_entry_ids",
+      "event_ids",
+      "expected_delivery_state",
+    ],
+    name,
+  );
+  string(week.week_id, `${name}.week_id`);
+  string(week.week_start, `${name}.week_start`);
+  string(week.week_end, `${name}.week_end`);
+  stringArray(week.journal_entry_ids, `${name}.journal_entry_ids`);
+  stringArray(week.event_ids, `${name}.event_ids`);
+  if (!["stable", "active", "recovered", "uncertain", "mixed"].includes(
+    String(week.expected_delivery_state),
+  )) {
+    throw new Error(`${name}.expected_delivery_state is incompatible`);
+  }
+  return week as ScenarioWeekContract;
+}
+
+function validateScenario(value: unknown, name: string): ScenarioBundleContract {
   const scenario = object(value, name);
   exactKeys(
     scenario,
@@ -516,17 +683,51 @@ function validateScenario(value: unknown, name: string): JsonObject {
   version(scenario, name);
   if (scenario.source !== "saved_replay") throw new Error(`${name}.source must be saved_replay`);
   validateProfile(scenario.profile);
-  array(scenario.journal_entries, `${name}.journal_entries`).forEach((entry, index) =>
+  const journalEntries = array(
+    scenario.journal_entries,
+    `${name}.journal_entries`,
+  ).map((entry, index) =>
     validateJournalEntry(entry, `${name}.journal_entries[${index}]`),
   );
-  array(scenario.weekly_reviewer_decisions, `${name}.weekly_reviewer_decisions`).forEach(
-    (decision, index) => validateDecision(decision, `${name}.weekly_reviewer_decisions[${index}]`),
+  array(
+    scenario.weekly_reviewer_decisions,
+    `${name}.weekly_reviewer_decisions`,
+  ).forEach((decision, index) =>
+    validateDecision(
+      decision,
+      `${name}.weekly_reviewer_decisions[${index}]`,
+    ),
   );
   if (object(scenario.drift_result, `${name}.drift_result`).schema_version !== "drift-detector-result-v1") {
     throw new Error(`${name}.drift_result has an incompatible schema_version`);
   }
   object(scenario.weekly_digest, `${name}.weekly_digest`);
-  array(scenario.weeks, `${name}.weeks`);
+  const weeks = array(scenario.weeks, `${name}.weeks`).map((week, index) =>
+    validateScenarioWeek(week, `${name}.weeks[${index}]`),
+  );
+  if (weeks.length === 0) throw new Error(`${name}.weeks must not be empty`);
+  const journalEntryIds = new Set(
+    journalEntries.map((entry) => entry.journal_entry_id),
+  );
+  const seenJournalEntryIds = new Set<string>();
+  const seenEventIds = new Set<string>();
+  for (const week of weeks) {
+    for (const journalEntryId of week.journal_entry_ids) {
+      if (!journalEntryIds.has(journalEntryId)) {
+        throw new Error(`${name}.weeks references an unknown Journal Entry`);
+      }
+      if (seenJournalEntryIds.has(journalEntryId)) {
+        throw new Error(`${name}.weeks repeats a Journal Entry`);
+      }
+      seenJournalEntryIds.add(journalEntryId);
+    }
+    for (const eventId of week.event_ids) {
+      if (seenEventIds.has(eventId)) {
+        throw new Error(`${name}.weeks repeats an Inspect event`);
+      }
+      seenEventIds.add(eventId);
+    }
+  }
   const manifest = object(scenario.manifest, `${name}.manifest`);
   exactKeys(
     manifest,
@@ -542,7 +743,7 @@ function validateScenario(value: unknown, name: string): JsonObject {
   stringArray(manifest.source_files, `${name}.manifest.source_files`);
   validateLunaLow(manifest.model_contract, `${name}.manifest.model_contract`);
   stringArray(scenario.trace_event_ids, `${name}.trace_event_ids`);
-  return scenario;
+  return scenario as ScenarioBundleContract;
 }
 
 function validateRequest(value: unknown, name: string): JsonObject {
@@ -564,13 +765,22 @@ function validateRequest(value: unknown, name: string): JsonObject {
     load_scenario: ["schema_version", "operation", "request_id", "scenario_id"],
     read_trace: ["schema_version", "operation", "request_id", "session_id", "after_event_id"],
   };
-  exactKeys(request, requestKeys[String(request.operation)], name);
+  const expectedKeys = [...requestKeys[String(request.operation)]];
+  if (request.operation === "create_session" && "resume_state" in request) {
+    expectedKeys.push("resume_state");
+  }
+  exactKeys(request, expectedKeys, name);
   if (["create_session", "submit_journal_entry"].includes(String(request.operation))) {
     if (!HASH_PATTERN.test(String(request.idempotency_key))) {
       throw new Error(`${name}.idempotency_key is incompatible`);
     }
   }
-  if (request.operation === "create_session") validateProfile(request.profile);
+  if (request.operation === "create_session") {
+    validateProfile(request.profile);
+    if (request.resume_state !== undefined && request.resume_state !== null) {
+      validateResumeState(request.resume_state, `${name}.resume_state`);
+    }
+  }
   if (request.operation === "submit_journal_entry") {
     string(request.session_id, `${name}.session_id`);
     integer(request.expected_revision, `${name}.expected_revision`);
@@ -672,4 +882,10 @@ export function validateExperienceInspectFixture(value: unknown): ExperienceInsp
     responses,
     trace_events: traceEvents,
   };
+}
+
+export function validateExperienceApiResponse(
+  value: unknown,
+): ExperienceApiResponseContract {
+  return validateResponse(value, "response") as ExperienceApiResponseContract;
 }

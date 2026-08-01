@@ -7,9 +7,7 @@ Journal Entries. The Profile contains:
 
 1. raw Schwartz Values Best-Worst Survey (SVBWS) responses and scores;
 2. a separately named ten-value product transformation;
-3. Core Value descriptions confirmed by the user; and
-4. one structured goal category; and
-5. the user's preferred name.
+3. Core Value descriptions confirmed by the user.
 
 The assessment implements the Case 1, or object-case, SVBWS design published by
 Lee, Soutar, and Louviere (2008). It is a **research-grounded pilot
@@ -26,11 +24,24 @@ BWS preference shares.
 - The React onboarding flow is mobile-first: narrow-screen phones are the
   primary design and verification target, and wider layouts are progressive
   enhancements.
+<<<<<<< HEAD
 - Onboarding owns preferred-name capture, the 11 SVBWS tasks, goal selection,
   Profile confirmation, local resume, and first Journal Entry handoff.
+=======
+- Onboarding owns the 11 SVBWS tasks, Profile confirmation, local resume, and
+  first Journal Entry handoff.
+>>>>>>> main
 - A host may persist the confirmed Profile exposed by the callback or browser
   event. The approved runtime imports saved Profile JSON through
   `--profile-path`.
+- In the shared Experience and Inspect app, Profile confirmation also starts
+  the in-memory Python session when that boundary is available. After all 11
+  groups and before confirmation, Inspect shows the 11 recorded Most
+  selections, 11 recorded Least selections, one totals row for each of the 11
+  SVBWS objects, and Most and Least column totals of 11. Inspect then shows the
+  completed Profile transformation without presenting it as backend work.
+  After confirmation, Inspect also shows the resulting Profile trace event and
+  no later events.
 - The first Journal Entry editor and later Profile evolution are outside this
   specification.
 
@@ -146,6 +157,7 @@ Twinkl-specific presentation adaptation requiring empirical validation.
 
 ### 4.1 Preferred name and progress
 
+<<<<<<< HEAD
 The flow first asks `What should Twinkl call you?` and stores a trimmed
 `preferred_name` of at most 80 characters. It explains that the name is used
 sparingly to make reflections personal. This is a functional identity step,
@@ -154,6 +166,13 @@ not a marketing welcome screen.
 After the name step, the user enters the first randomized group directly.
 Progress reads `Values · n of 11`, followed by `Your focus` and `Your compass`.
 There is no midpoint result.
+=======
+The user enters the first randomized group directly. Progress reads
+`Values · n of 11`, followed by `Your compass`. There is no welcome screen or
+midpoint result. The values progress bar represents the 11 assessment groups,
+reaches completion on group 11, and exposes its current and maximum values to
+assistive technology.
+>>>>>>> main
 
 The heading reads `What matters most as you find your way?` The introduction
 says there are no right answers and that more than one principle can matter.
@@ -173,6 +192,9 @@ different card in `Least`.
 - On narrow screens, Most and Least appear together before a compact two-column
   card grid. Both boxes and all six initial cards fit within the viewport, so
   the 11 assessment groups do not require vertical scrolling.
+- On wide screens, Most and Least appear together before a compact two-row,
+  three-column card grid. Both boxes and all six initial cards fit within the
+  viewport, so the 11 assessment groups do not require vertical scrolling.
 - The active empty box glows: Most before the first choice, then Least before
   the second choice.
 - Before both choices are set, a placed card can return to the selection area
@@ -188,32 +210,25 @@ different card in `Least`.
 The app does not show preliminary results between groups. This avoids making
 later answers contingent on an inferred ranking displayed earlier.
 
-### 4.3 Goal selection
+### 4.3 Profile confirmation
 
-After all 11 groups, the user chooses one goal category:
+After the one-second review of the 11th group, the app opens the summary
+directly. It shows friendly descriptions for every ten-value score tied for
+highest without revealing Schwartz labels or numerical scores. Every tied
+description has equal visual weight.
 
-| Key | Display text |
-|---|---|
-| `work_life_balance` | I'm stretched too thin between work and everything else |
-| `life_transition` | I'm going through a career or life transition |
-| `relationships` | I want to be more present for people I care about |
-| `health_wellbeing` | I'm neglecting my health or wellbeing |
-| `direction` | I feel stuck or unclear about my direction |
-| `meaningful_work` | I want to make more room for what matters to me |
+The summary explains that the result reflects the Most and Least choices made
+most consistently across all 11 groups. `Confirm my compass` confirms the
+displayed descriptions as the user's Core Values and emits the Profile. The
+user is not asked to rank, promote, or demote the internal Schwartz categories.
+The confirmed Core Value descriptions remain visible through the first Journal
+Entry handoff and manual editor.
 
-The goal does not change BWS scoring.
+On wide screens, the summary and Profile confirmation handoff compact their
+spacing so the primary action remains in view for typical results. Longer
+exact-tie lists scroll rather than clip a Core Value.
 
-### 4.4 Profile confirmation
-
-The summary shows friendly descriptions for every ten-value score tied for
-highest, plus the chosen goal. It does not reveal Schwartz labels or numerical
-scores. Every tied description has equal visual weight.
-
-`Set my compass` confirms the displayed descriptions as the user's Core Values
-and emits the Profile. The user is not asked to rank, promote, or demote the
-internal Schwartz categories.
-
-### 4.5 First Journal Entry handoff
+### 4.4 First Journal Entry handoff
 
 The completed flow opens the generic first Journal Entry prompt and exposes the
 confirmed Profile through:
@@ -224,6 +239,10 @@ confirmed Profile through:
 The standalone React POC stores its resumable session and confirmed Profile in
 browser `localStorage`. This implementation boundary is documented here and in
 the onboarding README; it is not presented as task guidance in the user flow.
+
+The initial wide-screen editor keeps its prompt, Core Values, composer, and
+primary action together; later Journal Entry history scrolls normally as it
+grows.
 
 ## 5. Scoring and Product Transformation
 
@@ -288,8 +307,8 @@ The abbreviated shape is:
 
 ```json
 {
-  "schema_version": 2,
-  "onboarding_version": "2.1.0",
+  "schema_version": 3,
+  "onboarding_version": "2.2.0",
   "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
   "scoring_method": "best_minus_worst_divided_by_appearances_v1",
   "user_id": "uuid",
@@ -329,7 +348,6 @@ The abbreviated shape is:
     "bottom_values": ["power"]
   },
   "top_values": ["benevolence"],
-  "goal_category": "work_life_balance",
   "user_confirmed": true,
   "provenance": {
     "source": "react_onboarding_poc",
@@ -339,6 +357,7 @@ The abbreviated shape is:
 }
 ```
 
+<<<<<<< HEAD
 A newly confirmed Profile requires a non-empty preferred name, all 11 canonical
 groups exactly once, six valid objects per response, distinct valid Most and
 Least choices, non-negative integer response time, a valid goal, and explicit
@@ -351,17 +370,41 @@ The resumable browser session uses schema version `6` and storage key
 order, each canonical group's randomized card order, and the shared Experience
 and Inspect view state. Version `4` and `5` onboarding sessions migrate without
 losing responses.
+=======
+A confirmed Profile requires all 11 canonical groups exactly once, six valid
+objects per response, distinct valid Most and Least choices, non-negative
+integer response time, and explicit summary confirmation. Validation rebuilds
+the Profile deterministically and rejects any mismatch.
+
+The resumable browser session uses schema version `7` and storage key
+`twinkl.onboarding.session.v7`. It stores the randomized group order, each
+canonical group's randomized card order, and the shared Experience and Inspect
+view state. Versions `4` through `6` migrate without losing responses; a
+version `6` goal stage resumes at the Core Value summary, and a confirmed
+version `2` Profile migrates to version `3` without `goal_category`.
+>>>>>>> main
 
 ## 7. Integration Status
 
 - The React POC creates and validates the Profile locally.
-- A host can persist the Profile exposed by the callback or browser event;
-  automatic browser-to-service storage is outside the capstone.
+- A host can persist the Profile exposed by the callback or browser event.
+- The shared Experience and Inspect app synchronizes the confirmed Profile with
+  the in-memory Python boundary and reads its live trace. If that boundary is
+  unavailable, Experience remains usable and Inspect shows no fabricated
+  events. Inspect offers a retry action when the failure is retryable.
+- Persistent automatic browser-to-service Profile storage remains outside the
+  capstone.
 - The approved runtime validates saved Profile JSON and supplies `top_values`
   as Core Values to the Weekly Drift Reviewer and Drift Detector.
+<<<<<<< HEAD
 - The approved runtime supplies `preferred_name`, the friendly Core Value
   phrases, and `goal_category` context to the Coach Digest while keeping
   internal Schwartz labels out of the user-facing response.
+=======
+- The first Journal Entry starts a partial Monday-through-Sunday calendar week.
+  Saving it does not run the Weekly Drift Reviewer; the partial week becomes
+  eligible after Sunday according to the Experience scheduling contract.
+>>>>>>> main
 - `value_profile.weights` is not yet supplied to the VIF Critic.
 
 When no onboarding Profile is supplied, current synthetic personas retain

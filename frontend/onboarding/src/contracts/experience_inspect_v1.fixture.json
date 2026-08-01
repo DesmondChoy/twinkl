@@ -5,8 +5,8 @@
     "session_id": "session-demo",
     "revision": 3,
     "profile": {
-      "schema_version": 2,
-      "onboarding_version": "2.1.0",
+      "schema_version": 3,
+      "onboarding_version": "2.2.0",
       "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
       "scoring_method": "best_minus_worst_divided_by_appearances_v1",
       "user_id": "persona-demo",
@@ -361,7 +361,6 @@
       "top_values": [
         "benevolence"
       ],
-      "goal_category": "relationships",
       "user_confirmed": true,
       "provenance": {
         "source": "react_onboarding_poc",
@@ -567,8 +566,8 @@
     "source": "saved_replay",
     "persona_id": "persona-demo",
     "profile": {
-      "schema_version": 2,
-      "onboarding_version": "2.1.0",
+      "schema_version": 3,
+      "onboarding_version": "2.2.0",
       "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
       "scoring_method": "best_minus_worst_divided_by_appearances_v1",
       "user_id": "persona-demo",
@@ -923,7 +922,6 @@
       "top_values": [
         "benevolence"
       ],
-      "goal_category": "relationships",
       "user_confirmed": true,
       "provenance": {
         "source": "react_onboarding_poc",
@@ -1156,8 +1154,8 @@
       "request_id": "request-create",
       "idempotency_key": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
       "profile": {
-        "schema_version": 2,
-        "onboarding_version": "2.1.0",
+        "schema_version": 3,
+        "onboarding_version": "2.2.0",
         "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
         "scoring_method": "best_minus_worst_divided_by_appearances_v1",
         "user_id": "persona-demo",
@@ -1512,14 +1510,14 @@
         "top_values": [
           "benevolence"
         ],
-        "goal_category": "relationships",
         "user_confirmed": true,
         "provenance": {
           "source": "react_onboarding_poc",
           "set_order_randomized": true,
           "card_order_randomized": true
         }
-      }
+      },
+      "resume_state": null
     },
     {
       "schema_version": "experience-inspect-v1",
@@ -1561,8 +1559,8 @@
         "session_id": "session-demo",
         "revision": 3,
         "profile": {
-          "schema_version": 2,
-          "onboarding_version": "2.1.0",
+          "schema_version": 3,
+          "onboarding_version": "2.2.0",
           "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
           "scoring_method": "best_minus_worst_divided_by_appearances_v1",
           "user_id": "persona-demo",
@@ -1917,7 +1915,6 @@
           "top_values": [
             "benevolence"
           ],
-          "goal_category": "relationships",
           "user_confirmed": true,
           "provenance": {
             "source": "react_onboarding_poc",
@@ -2160,8 +2157,8 @@
       "error": null,
       "details": {
         "profile": {
-          "schema_version": 2,
-          "onboarding_version": "2.1.0",
+          "schema_version": 3,
+          "onboarding_version": "2.2.0",
           "instrument": "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
           "scoring_method": "best_minus_worst_divided_by_appearances_v1",
           "user_id": "persona-demo",
@@ -2516,7 +2513,6 @@
           "top_values": [
             "benevolence"
           ],
-          "goal_category": "relationships",
           "user_confirmed": true,
           "provenance": {
             "source": "react_onboarding_poc",

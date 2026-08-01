@@ -4,10 +4,19 @@
 
 This document specifies the capstone demo experience. The shared React
 Experience and Inspect shell, resumable client session, view selector, and
-focused Inspect navigation are implemented. Journal Entry processing, persona
-replay, Weekly Drift Detection, and the event-linked Inspect timeline remain
-tracked implementation work. The versioned React-Python boundary, JSON Schema,
-and canonical fixtures are implemented in
+focused Inspect navigation are implemented. Manual Journal Entry processing,
+displayed nudges with reply and skip actions, safe retry, and linked nudge
+events in Inspect are also implemented. Closed-week review populates Weekly
+Drift Reviewer Decisions, the Drift Detector result, a cited Weekly Digest,
+and linked Inspect events only after the Monday-through-Sunday week closes.
+The five deterministic persona replays now load into the shared React session
+with manual next-step replay, previous-week navigation, optional automatic
+replay and pause, restart, Jump to key moment, reduced-motion behavior,
+no-future-data projection, and browser-side scenario hash verification. The
+release quality gate is implemented. Professor walkthrough and capstone
+evidence remain tracked work. The versioned
+React-Python boundary, JSON Schema, and
+canonical fixtures are implemented in
 [`src/demo/contracts.py`](../../src/demo/contracts.py) and
 [`frontend/onboarding/src/contracts/`](../../frontend/onboarding/src/contracts/).
 The existing React onboarding implementation and the
@@ -15,15 +24,37 @@ The existing React onboarding implementation and the
 authoritative for the Schwartz Values Best-Worst Survey (SVBWS), Profile, and
 Core Value contracts.
 
+## Public Assessment Deployment
+
+- **URL:** [Twinkl Experience and
+  Inspect](https://onboarding-production-1dd2.up.railway.app/)
+- **Hosting:** Railway serves the React app and the same-origin Python
+  boundary.
+- **Access:** The assessment URL allows anonymous browser access.
+- **Provider boundary:** Provider credentials remain on the server.
+- **Provider cost:** Live Journal Entry work can make paid provider calls.
+- **Reset behavior:** Restart clears the saved browser session and starts a new
+  session.
+- **Scope:** The deployment is for capstone assessment only. It is not
+  deployment approval.
+- **Excluded production controls:** Production authentication, multi-tenant
+  persistence, and service-level commitments.
+
 ## 1. Purpose
 
 The demo presents the product experience and the AI architecture from the same
 session. A persistent two-option control switches between:
 
 - **Experience** — the user-facing journey through onboarding, Journal Entries,
+<<<<<<< HEAD
   displayed nudges and responses, Drift, and Coach Digest responses.
 - **Inspect** — the developer-facing explanation of the exact backend work that
   produced the currently selected result.
+=======
+  displayed nudges and responses, Drift, and the Weekly Digest.
+- **Inspect** — the professor-facing explanation of the exact browser
+  calculation and backend work that produced the currently selected result.
+>>>>>>> main
 
 The two views are not separate demonstrations. They read the same Profile,
 Journal Entries, Weekly Drift Reviewer Decisions, Drift state, Weekly Drift
@@ -47,6 +78,9 @@ information hierarchy, interaction order, or acceptance of the mobile flow.
   the `gpt-5.6-luna` reasoning-effort-`low` Weekly Drift Reviewer without VIF
   Critic input, then the Drift Detector applies the two-consecutive-Conflict
   rule.
+- Saving a Journal Entry never reviews its open calendar week. Review cadence
+  is Monday through Sunday, and the first partial week becomes eligible after
+  its first Sunday.
 - The VIF Critic remains offline research. Inspect may link to separate
   research reports, but it must not imply that VIF Critic Predictions produce
   user-facing Drift.
@@ -61,8 +95,8 @@ information hierarchy, interaction order, or acceptance of the mobile flow.
 
 | Session stage | Experience | Inspect |
 |---|---|---|
-| Active SVBWS card selection | Enabled | Disabled with “Available after Profile confirmation” |
-| Goal and Core Value confirmation | Enabled | Disabled |
+| Active SVBWS card selection | Enabled | Disabled with “Available after all 11 questions” |
+| Value summary before confirmation | Enabled | Enabled; shows the complete browser calculation and highest-scoring values |
 | Confirmed Profile handoff | Enabled | Enabled; shows the Profile handoff and validation |
 | Journal Entry draft or nudge check | Enabled | Enabled; follows the active Journal Entry event |
 | Weekly Drift Detection or Coach Digest work | Enabled | Enabled; follows the active run |
@@ -88,10 +122,12 @@ Changing views changes presentation only. It must not repeat a model call,
 reset onboarding, alter replay progress, or create a second copy of the
 session.
 
-Every generated nudge, Weekly Drift Reviewer Decision, Drift state, and Weekly
-Digest has an **Inspect this run** action. It switches to Inspect and focuses
-the event that produced the selected result. Returning to Experience restores
-the same screen position and selection where practical.
+Saved replay Drift states and Weekly Digests have context-specific Inspect
+actions. The live Journal Entry path retains one latest-run Inspect action.
+A weekly result action switches to Inspect and focuses the weekly explanation.
+It also selects and expands the event that produced the result. Other Inspect
+actions focus the selected event. Returning to Experience restores the same
+screen position and selection where practical.
 
 ## 5. Experience View
 
@@ -100,9 +136,8 @@ the same screen position and selection where practical.
 Preserve the complete React onboarding flow:
 
 1. 11 randomized SVBWS groups with one Most and one Least choice;
-2. structured goal selection;
-3. label-free Core Value confirmation; and
-4. first Journal Entry handoff.
+2. label-free Core Value confirmation; and
+3. first Journal Entry handoff.
 
 Do not add backend telemetry to the SVBWS card screens. Profile JSON, raw
 scores, Schwartz labels, and developer terminology remain hidden in
@@ -118,15 +153,27 @@ After Profile confirmation, Experience provides:
   requests it;
 - the anti-annoyance rule of no more than two displayed nudges in the previous
   three Journal Entries;
-- a chronological journal timeline containing the user's words plus any
-  displayed nudge and response;
-- safe Journal Entry removal for the POC, followed by automatic recomputation;
-  and
-- a contextual retry action only after a failed backend operation.
+- a chronological thread containing each Journal Entry plus any displayed
+  nudge and response;
+- a contextual retry action after a retryable backend failure; and
+- an edit action when no accepted submission response has returned, so a
+  pending Journal Entry never leaves Experience without an enabled recovery
+  control.
+
+Manual Experience allows explicit Journal Entry removal after confirmation.
+Removing a Journal Entry or saving a nudge reply or skip advances the session
+revision. Python recomputes the affected week plus any later weeks only when
+those closed weeks were already reviewed. An open week remains unreviewed. The
+saved browser state remains unchanged if synchronization fails, so the action
+can be retried without losing user text. Removed Journal Entry `t_index` values
+are not reused. Inspect retains their immutable submission events and marks
+them as removed from the current Experience.
 
 A Journal Entry must be held safely while the nudge check runs. A missing key,
 refusal, invalid response, or request failure must not discard the Journal
-Entry.
+Entry. Failure copy distinguishes text retained in the browser editor from a
+Journal Entry accepted by the Python boundary and names the Experience service
+rather than attributing transport or routing failures to a product component.
 
 ### 5.3 Persona simulation
 
@@ -138,15 +185,48 @@ Digests.
 Persona simulation is a week-by-week replay rather than an immediate dump of
 the final state. Controls provide:
 
+- manual next-step movement as the default;
 - previous week;
-- next week;
-- play or pause; and
+- optional automatic replay and pause;
+- direct selection of any already revealed week; and
 - restart scenario.
 
 Advancing a week reveals only the Journal Entries and results available by that
 week. This preserves the temporal meaning of Drift and lets the professor see
 the user experience change from stable to active, recovered, uncertain, or
-mixed.
+mixed. Future weeks remain disabled. A separate **Jump to key moment** action
+provides explicit fast navigation without making future results look available.
+
+Manual next-step movement and automatic replay use the same sequence. Journal
+Entries appear one at a time as compact excerpts. The Weekly Drift Detection
+result appears only after the final Journal Entry. The next week then starts
+empty. Automatic replay leaves enough time to read each step. Opening a Journal
+Entry uses a desktop side panel or mobile bottom sheet so the timeline does not
+reflow.
+
+The desktop Experience uses a fixed weekly workspace. The Journal Entry column
+and Weekly Drift Detection column stay in the same viewport. Each column scrolls
+internally when necessary. The phone Experience uses a Journal Entries and
+Weekly Drift view control instead of two narrow columns. The current result
+stays visible above that control. The active week stays centered in the week
+rail.
+
+Profile details remain collapsed by default and include a short Persona context.
+The Persona header always names the selected Schwartz Core Values. State-change
+evidence appears with the Weekly Drift Detection result. The first two Conflicts
+show where Drift started. Later Conflicts show that Drift continued. Recovered
+Drift cites the recovery Journal Entry and its Not Conflict Weekly Drift
+Reviewer Decision. Uncertain cites the Journal Entry, its Abstain Weekly Drift
+Reviewer Decision, and the reason.
+
+Each cited Weekly Drift Reviewer Decision provides its saved model name,
+reasoning effort, parsed model output, and recorded justification. Desktop
+shows these details when the evidence card is hovered or receives keyboard
+focus. An **AI review** action opens the same details. On a phone, that action
+opens a bottom sheet. The details are available for No Drift, Active Drift,
+Recovered Drift, Uncertain, and Mixed results. The replay identifies itself as
+saved synthetic evidence throughout. The staged reveal must not imply live
+model inference.
 
 Saved replay is the default because it is fast, deterministic, and free of
 provider availability. A separate, clearly labelled **Re-run live** action may
@@ -161,32 +241,66 @@ Experience shows:
 - an ambient per-Core-Value Drift state; and
 - the optional Coach Digest response and question.
 
-Experience does not show raw Weekly Drift Reviewer prompts, validation
-details, run records, or per-entry `Conflict` badges. Those belong in Inspect.
-When Experience explains Drift, it cites the relevant Journal Entries without
-exposing internal reasoning text.
+Experience does not show the full Weekly Drift Reviewer prompt, provider
+payload, validation record, identifiers, or hashes. Those belong in Inspect.
+Experience does show the Weekly Drift Reviewer Decision, saved model contract,
+parsed model output, and recorded justification beside each cited Journal
+Entry. It does not claim that reasoning effort is a readable chain of thought.
 
 ## 6. Inspect View
 
 ### 6.1 Information hierarchy
 
-Inspect opens on a readable event timeline, not a telemetry dump. The first
-level answers:
+Inspect opens on a readable calculation and event timeline, not a telemetry
+dump. The first level answers:
 
 1. What happened?
 2. What component did it?
 3. What result did it produce?
-4. How long did it take?
-5. Was it replayed, generated live, reused, refused, invalid, or failed?
+4. Does the event need attention because it is queued, running, refused,
+   invalid, or failed?
 
-Detailed inputs, prompts, responses, and validation expand on demand.
+Technical details show the duration, model contract, identifiers, hashes,
+inputs, prompts, responses, and validation on demand.
+
+For Persona replay, Inspect shows the selected week first. Filters select
+Journal Entry events, Weekly Drift Reviewer events, or Drift Detector events.
+The complete earlier Inspect history stays collapsed by default. Repeated
+saved-run labels, reused-result labels, and zero-duration labels do not appear
+on each event. Model details, run source, reasoning effort, identifiers, hashes,
+and exact inputs remain under **Technical details**.
+
+Before the backend event timeline, Inspect presents the completed browser-side
+SVBWS calculation as a professor-facing explanation rather than developer
+documentation. It shows:
+
+- two aligned evidence columns containing the 11 recorded Most selections and
+  11 recorded Least selections in presentation order;
+- a separate totals table that lists each of the 11 SVBWS objects once and
+  shows Most and Least totals of 11 recorded choices;
+- the exact Most-minus-Least calculation beside each score in the ten-value
+  Profile table;
+- the two-facet Universalism mean and the ten-value Profile transformation;
+- the exact Schwartz value-to-Experience phrase mapping;
+- every highest-score tie before confirmation and the resulting Core Values
+  after confirmation;
+- completeness, balanced-exposure, distinct-choice, and weight-total checks;
+  and
+- the explicit boundary that the deterministic calculation makes no model,
+  reliability, confidence, diagnostic, or clinical claim.
+
+This calculation is labelled **Calculation method** and **Deterministic · no
+model**.
+It is not fabricated as a Python trace event. Profile confirmation remains the
+first Python event, preserving the React ownership of onboarding scoring and
+the Python ownership of confirmed Profile validation.
 
 ### 6.2 Trace event types
 
 Inspect represents these events when applicable:
 
 1. `profile_confirmed`
-   - Profile validation, Core Values, goal category, and Profile provenance.
+   - Profile validation, Core Values, and Profile provenance.
 2. `journal_entry_submitted`
    - Journal Entry date, text reference, ordering validation, and session ID.
 3. `nudge_suppression_checked`
@@ -253,7 +367,7 @@ The Python side owns:
 
 - Profile validation and session creation;
 - nudge decision and generation;
-- weekly grouping and affected-week selection;
+- calendar-week grouping, closed-week eligibility, and affected-week selection;
 - Weekly Drift Reviewer calls and response validation;
 - Drift Detector execution;
 - Weekly Drift Detection output storage;
@@ -266,7 +380,7 @@ The React side owns:
 - onboarding interaction and local resumability;
 - Experience and Inspect presentation;
 - persona replay controls;
-- optimistic but recoverable Journal Entry state;
+- failure-safe pending Journal Entry state;
 - view selection and focused trace navigation; and
 - accessible, responsive status and error presentation.
 
@@ -278,7 +392,7 @@ Provider keys and unredacted provider configuration stay on the Python side.
 
 | Operation | Purpose |
 |---|---|
-| `create_session` | Validate a confirmed Profile and establish shared session state |
+| `create_session` | Validate a confirmed Profile, establish or resume in-memory shared session state, and synchronize one browser-held interaction or removal |
 | `submit_journal_entry` | Append one ordered Journal Entry using an expected session revision |
 | `load_scenario` | Load one deterministic saved persona scenario |
 | `read_trace` | Retrieve typed trace events, optionally after a known event |
@@ -296,6 +410,12 @@ framework:
   as an idempotency key. Repeating the same key and input returns the stored
   result with `reused`; reusing the key for different input returns a safe
   conflict error before any model call.
+- An existing session accepts only a one-revision browser update that either
+  records one displayed nudge as answered or skipped, or removes one Journal
+  Entry and its linked nudge. Python recomputes affected closed weeks that were
+  already reviewed; broader state replacement is rejected. A same-revision
+  resume must exactly match the current Journal Entries, nudges, and trace; it
+  cannot silently replace or ignore divergent browser state.
 - `submit_journal_entry` carries `expected_revision`. Python rejects a stale
   revision, duplicate Journal Entry identifier, duplicate `t_index`, or
   non-chronological Journal Entry before nudge or Weekly Drift Detection begins.
@@ -318,7 +438,8 @@ framework:
 
 ## 8. Review Orchestration
 
-For one manually submitted Journal Entry, the observable sequence is:
+For one manually submitted Journal Entry in the open week, the observable
+sequence is:
 
 ```text
 Journal Entry submitted
@@ -326,13 +447,41 @@ Journal Entry submitted
 → optional nudge decision and generation
 → optional user response or skip
 → Journal Entry finalized
-→ affected calendar weeks selected
+→ wait for the calendar week to close
+```
+
+No Weekly Drift Reviewer, Drift Detector, or Weekly Digest event is created for
+the open week. When a finalized calendar week is due, the separate sequence is:
+
+```text
+closed Monday-through-Sunday week selected
 → Weekly Drift Reviewer runs with cumulative displayed history
 → response validated into Weekly Drift Reviewer Decisions
 → Drift Detector applies the deterministic rule
 → Weekly Drift Detection output is stored
 → optional Coach Digest response is generated
 ```
+
+The nudge decision and question come from one structured
+`gpt-5.6-luna` reasoning-effort-`none` call after the deterministic suppression
+check. Inspect still records separate linked `nudge_decided` and
+`nudge_generated` events: the provider prompt, raw response, model contract,
+and latency belong to `nudge_decided`; question-length validation and the
+effective displayed nudge belong to `nudge_generated`. A `no_nudge` decision
+has no `nudge_generated` event.
+
+The due-review caller supplies an `as_of` date already resolved in the user's
+IANA timezone. A week is eligible only when its Sunday `week_end` is earlier
+than `as_of`. Thus a first Journal Entry on Thursday is reviewed after Sunday,
+not seven days later on the following Thursday. The first partial week is
+eligible even when it contains only that Journal Entry. A displayed nudge must
+be answered or skipped before its week is eligible.
+
+The version 1 JSON contract remains unchanged. The Python Experience service
+provides a due-review method for a scheduler or host. The React POC also uses
+the browser-local date of a later Journal Entry to catch up closed, unreviewed
+weeks. A production background scheduler and durable timezone storage remain
+outside the capstone.
 
 The backend may reuse an unchanged weekly result by input hash. Reuse must be
 visible in Inspect and must return the same saved decisions and provenance. A
@@ -341,15 +490,25 @@ itself.
 
 ## 9. Persona Scenario Bundles
 
-The capstone demo requires at least these curated scenarios:
+The capstone demo uses these five curated scenarios:
 
-| Scenario | Required progression |
-|---|---|
-| Stable | No confirmed Drift across the replay |
-| Active Drift | Two consecutive Conflicts for one Core Value |
-| Recovered Drift | Active Drift followed by recovery |
-| Uncertain | At least one effective Abstain affecting the displayed state |
-| Two Core Values | Independent decisions and Drift state per Core Value |
+| Scenario | Persona | Core Values | Saved progression |
+|---|---|---|---|
+| Stable | Meera Krishnamurthy, South Asian teacher, 45–54 | Achievement, Security | Stable throughout |
+| Active Drift | Wei Jun Chen, East Asian software engineer, 35–44 | Universalism | Stable → active |
+| Recovered Drift | Marc Vandenberghe, Western European manager, 45–54 | Power | Stable → active → recovered |
+| Uncertain | Noor Haddad, Middle Eastern stay-at-home parent, 18–24 | Self-Direction, Tradition | Stable → active → uncertain |
+| Two Core Values | Lukas Vermeer, Western European software engineer, 25–34 | Self-Direction, Conformity | Conformity recovers while Self-Direction becomes uncertain, producing a mixed state |
+
+Lukas is the recommended professor walkthrough because his nine-week replay
+shows displayed nudges and responses, two independent Core Value histories,
+recovery, Abstain, mixed Drift state, and the corresponding Weekly Digests.
+The other four personas make each individual state easy to demonstrate.
+
+This menu covers seven Schwartz Core Values, four cultural backgrounds, four
+age bands, and several work and family contexts. Selection favored coherent
+week-by-week behavior over maximizing Core Value count: the reviewed
+eight-value alternative began Uncertain without a useful stable progression.
 
 Each saved scenario bundle contains or references:
 
@@ -363,11 +522,25 @@ Each saved scenario bundle contains or references:
 - Weekly Drift Detection outputs and optional Coach Digest responses;
 - model contract, timestamps, response IDs when available, and input hashes;
   and
-- a manifest version and content hash.
+- a bundle manifest version, plus a content hash in the scenario catalog.
 
 Scenario selection must be based on reviewed, reproducible behavior. Do not
 rewrite Journal Entries or decisions merely to make the demonstration cleaner.
 If a scenario is AI-reviewed synthetic development evidence, say so.
+
+The checked-in files use Run 1 of the frozen `gpt-5.6-luna` reasoning-effort
+`low` Weekly Drift Reviewer setup. Each onboarding Profile is a deterministic
+projection from the synthetic persona's declared Core Values, not a claim that
+the persona completed onboarding. Its provenance is
+`synthetic_persona_projection`; the original React onboarding provenance
+remains distinct. Generation metadata is retained only for Inspect nudge
+provenance and is never supplied to the Weekly Drift Reviewer, Drift Detector,
+Weekly Digest, or Weekly Coach.
+
+The historical persona files preserve each displayed nudge's category, trigger,
+text, and response, but not the original nudge provider prompt or raw response.
+Saved nudge trace events therefore retain the available fields and leave the
+unavailable provider fields null; they do not invent a receipt.
 
 ## 10. Privacy and Safety
 
@@ -396,13 +569,16 @@ If a scenario is AI-reviewed synthetic development evidence, say so.
 - Primary actions, Journal Entry composition, persona replay, Coach Digest
   reading, and event inspection remain usable without hover or precision
   pointer input.
-- Persona replay controls remain operable with touch and keyboard input.
-- Focus moves to the selected Inspect event when using **Inspect this run**.
+- Persona replay controls and revealed week markers remain operable with touch
+  and keyboard input; unrevealed weeks remain inert.
+- A context-specific weekly Inspect action moves focus to the weekly
+  explanation. It keeps the linked event selected and expanded. Other Inspect
+  actions move focus to the selected event.
 - Status changes and nudge availability use appropriate live-region behavior.
 - Long prompts and responses wrap, preserve whitespace, and expand without
   horizontal page scrolling.
-- Reduced-motion preferences disable automatic replay animation while keeping
-  explicit previous/next controls.
+- Reduced-motion preferences disable automatic replay while keeping the
+  explicit Previous and Next step controls.
 
 ## 12. Non-Goals
 
@@ -430,7 +606,12 @@ A release is demo-ready when one uninterrupted walkthrough can:
    Reviewer Conflicts produce Drift;
 6. inspect the exact weekly request, validated decisions, and deterministic
    Drift Detector steps;
+<<<<<<< HEAD
 7. return to Experience and read the corresponding Coach Digest response;
+=======
+7. return to Experience and read the corresponding Weekly Digest and, when the
+   saved result includes one, the optional Weekly Coach question;
+>>>>>>> main
 8. demonstrate one recovered or uncertain scenario; and
 9. distinguish saved replay from an optional live run.
 
@@ -474,14 +655,15 @@ saved, deterministic replay must remain sufficient for the complete demo.
 ## 16. Verification Requirements
 
 - Unit tests protect onboarding contracts, client state transitions, trace
-  serialization, affected-week selection, and deterministic replay.
+  serialization, closed-week eligibility, affected-week selection, and
+  deterministic replay.
 - Contract tests verify React fixtures against Python request and response
   schemas.
 - Integration tests cover successful, reused, refused, invalid, and failed
   model outcomes.
-- End-to-end browser tests cover the professor walkthrough, reply and skip,
-  Journal Entry removal, active and recovered Drift, and view-state
-  preservation.
+- End-to-end browser tests cover the professor walkthrough, open-week Journal
+  Entries without weekly events, reply and skip, Journal Entry removal, active
+  and recovered Drift, and view-state preservation.
 - Accessibility checks cover keyboard operation, focus, names, status updates,
   and reduced motion.
 - Responsive checks treat representative narrow-screen phone viewports as the

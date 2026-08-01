@@ -148,9 +148,14 @@ decisions change. Do not perform a generic documentation sweep by default.
 
 - All Codex prose on every surface, including Codex app commentary, plans,
   Beads issue text, reviews, handoffs, and maintained documentation, must
-  strictly follow `docs/canonical_nouns.md`.
-- Write in plain English for immediate understanding. Use technical jargon only
-  when a real distinction requires it, and define it on first use.
+  strictly follow ASD-STE100 Simplified Technical English and
+  `docs/canonical_nouns.md`.
+- Use approved words only, and use each word only with its approved meaning.
+  Treat the canonical nouns as approved project technical terms.
+- Use one term for one meaning. Do not use a different term only for variety.
+- Use short sentences, active voice, and one main idea per sentence. Keep one
+  topic in each paragraph.
+- Define a necessary technical term in plain English when it first occurs.
 - Do not invent synonyms for canonical product terms. This prose rule does not
   require renaming code identifiers, data fields, file paths, or historical
   records.

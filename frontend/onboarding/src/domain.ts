@@ -215,17 +215,6 @@ export const BWS_SETS: readonly BwsSet[] = [
   },
 ] as const;
 
-export const GOALS = {
-  work_life_balance: "I'm stretched too thin between work and everything else",
-  life_transition: "I'm going through a career or life transition",
-  relationships: "I want to be more present for people I care about",
-  health_wellbeing: "I'm neglecting my health or wellbeing",
-  direction: "I feel stuck or unclear about my direction",
-  meaningful_work: "I want to make more room for what matters to me",
-} as const;
-
-export type GoalCategory = keyof typeof GOALS;
-
 export interface BwsResponse {
   set_number: number;
   items: BwsObjectKey[];
@@ -260,8 +249,8 @@ export interface ScoreBundle {
 }
 
 export interface OnboardingProfile {
-  schema_version: 2;
-  onboarding_version: "2.1.0";
+  schema_version: 3;
+  onboarding_version: "2.2.0";
   instrument: "svbws_lee_soutar_louviere_2008_ui_adaptation_v2";
   scoring_method: "best_minus_worst_divided_by_appearances_v1";
   user_id: string;
@@ -273,13 +262,18 @@ export interface OnboardingProfile {
   bws_results: RawBwsScores;
   value_profile: ProfileTransform;
   top_values: ValueKey[];
-  goal_category: GoalCategory;
   user_confirmed: true;
-  provenance: {
-    source: "react_onboarding_poc";
-    set_order_randomized: true;
-    card_order_randomized: true;
-  };
+  provenance:
+    | {
+        source: "react_onboarding_poc";
+        set_order_randomized: true;
+        card_order_randomized: true;
+      }
+    | {
+        source: "synthetic_persona_projection";
+        set_order_randomized: false;
+        card_order_randomized: false;
+      };
 }
 
 const BWS_OBJECT_SET = new Set<string>(BWS_OBJECT_ORDER);
@@ -429,7 +423,6 @@ export interface CreateProfileInput {
   startedAt: string;
   completedAt: string;
   responses: BwsResponse[];
-  goalCategory: GoalCategory;
   userConfirmed: boolean;
 }
 
@@ -448,13 +441,10 @@ export function createProfile(input: CreateProfileInput): OnboardingProfile {
   if (!input.userConfirmed) {
     throw new Error("An onboarding Profile cannot be emitted before confirmation");
   }
-  if (!(input.goalCategory in GOALS)) {
-    throw new Error("A valid goal category is required");
-  }
   const results = scoreResponses(input.responses, true);
   return {
-    schema_version: 2,
-    onboarding_version: "2.1.0",
+    schema_version: 3,
+    onboarding_version: "2.2.0",
     instrument: "svbws_lee_soutar_louviere_2008_ui_adaptation_v2",
     scoring_method: "best_minus_worst_divided_by_appearances_v1",
     user_id: input.userId,
@@ -466,7 +456,6 @@ export function createProfile(input: CreateProfileInput): OnboardingProfile {
     bws_results: results.bws,
     value_profile: results.profile,
     top_values: results.profile.top_values,
-    goal_category: input.goalCategory,
     user_confirmed: true,
     provenance: {
       source: "react_onboarding_poc",
@@ -482,13 +471,12 @@ export function validateProfile(value: unknown): OnboardingProfile {
   }
   const profile = value as Partial<OnboardingProfile>;
   if (
-    profile.schema_version !== 2 ||
-    profile.onboarding_version !== "2.1.0" ||
+    profile.schema_version !== 3 ||
+    profile.onboarding_version !== "2.2.0" ||
     profile.instrument !== "svbws_lee_soutar_louviere_2008_ui_adaptation_v2" ||
     profile.scoring_method !== "best_minus_worst_divided_by_appearances_v1" ||
     profile.user_confirmed !== true ||
     !Array.isArray(profile.bws_responses) ||
-    typeof profile.goal_category !== "string" ||
     typeof profile.user_id !== "string" ||
     !(
       profile.preferred_name === undefined ||
@@ -507,11 +495,15 @@ export function validateProfile(value: unknown): OnboardingProfile {
     startedAt: profile.started_at,
     completedAt: profile.timestamp,
     responses: profile.bws_responses,
-    goalCategory: profile.goal_category as GoalCategory,
     userConfirmed: true,
   });
-  if (profile.preferred_name === undefined) {
-    delete rebuilt.preferred_name;
+  const provenance = profile.provenance;
+  if (
+    provenance?.source === "synthetic_persona_projection" &&
+    provenance.set_order_randomized === false &&
+    provenance.card_order_randomized === false
+  ) {
+    rebuilt.provenance = provenance;
   }
   if (JSON.stringify(rebuilt) !== JSON.stringify(profile)) {
     throw new Error("Profile contents do not match the deterministic scoring contract");

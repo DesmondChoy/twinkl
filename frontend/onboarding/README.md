@@ -13,9 +13,29 @@ position rather than value identity. People can tap, drag, or use the keyboard
 to make Most and Least choices. Schwartz labels remain internal. The Profile
 stores the preferred name and keeps raw
 11-object BWS results separate from the ten-value product transformation, with
-no midpoint result or confidence proxy. The final action opens the first
-Journal Entry prompt and exposes the confirmed Profile through an
-`onStartJournal` callback and a `twinkl:start-first-journal` browser event.
+no midpoint result or confidence proxy. The 11th group advances directly to
+the label-free Core Value summary. The final action opens the manual
+Journal Entry flow. The React Experience passes the confirmed Profile and
+ordered Journal Entries through the versioned Python boundary, applies the
+anti-annoyance rule, and shows the resulting displayed nudge with reply or
+skip actions. Saving a Journal Entry does not review its open
+Monday-through-Sunday week. After Sunday, a due-review caller runs the fixed
+Weekly Drift Reviewer, applies the Drift Detector, and shows a cited Weekly
+Digest. The first partial week follows the same rule. Inspect reads the linked
+live trace events. Profile confirmation starts this trace when the Python
+boundary is available; without it, Experience stays usable and Inspect shows
+zero events instead of fixture events. Retryable failures include a retry
+action. **Try demo** loads one of five saved synthetic personas into the same
+React session and replays Journal Entries, displayed nudges and responses,
+Drift, Weekly Digests, and Inspect events one week at a time. **Next step** is
+the default. **Previous** returns to an earlier week. **Auto replay** and
+**Pause replay** provide optional automatic replay. **Restart** and **Jump to
+key moment** provide quick navigation. These controls preserve the selected
+week across Experience and Inspect. Reduced-motion preferences disable Auto
+replay. The browser verifies each scenario against the catalogued SHA-256 hash
+before displaying it. The Profile remains available through the
+`onStartJournal` callback and
+`twinkl:start-first-journal` browser event.
 
 [`docs/onboarding/onboarding_spec.md`](../../docs/onboarding/onboarding_spec.md)
 is the canonical workflow and evidence-boundary documentation. Background
@@ -23,6 +43,13 @@ generation provenance is in
 [`public/card-backgrounds/README.md`](public/card-backgrounds/README.md).
 
 ## Run locally
+
+```sh
+source .venv/bin/activate
+uv run uvicorn src.demo.api:app --port 8000
+```
+
+In a second terminal:
 
 ```sh
 cd frontend/onboarding
@@ -41,14 +68,17 @@ npm run build
 
 Create a Railway service from this repository with:
 
-- root directory: `/frontend/onboarding`
+- root directory: `/`
 - config file path: `/frontend/onboarding/railway.json`
 - branch: `main`
 
-The service builds the Vite app in Node and serves `dist` through Caddy. The
-container exposes `/health` for Railway and falls back to `index.html` for SPA
-routes. No service variables or persistent volume are required.
+The repository root is required because the image builds React and includes
+the existing `src.demo.api` Python boundary. Uvicorn serves the built React
+files, the public `/health` route, and same-origin `/api/experience` requests
+from one Railway process. The Docker build context excludes `.env`, Git data,
+development caches, and unrelated experiment outputs.
 
+<<<<<<< HEAD
 This standalone POC stores unfinished progress and its confirmed Profile in
 browser `localStorage` and makes no model or provider calls itself. A host can
 persist the Profile supplied through `onStartJournal` or the
@@ -56,3 +86,40 @@ persist the Profile supplied through `onStartJournal` or the
 saved JSON through `--profile-path` and uses the preferred name and confirmed
 goal to focus the Coach Digest; automatic browser-to-service storage is outside
 the time-boxed capstone.
+=======
+Set `OPENAI_API_KEY` to enable live provider-backed Journal Entry work.
+Onboarding and saved persona replay remain available without it; manual
+provider work fails safely and retains the Journal Entry for editing or retry.
+Remove the obsolete `TWINKL_DEMO_USERNAME` and `TWINKL_DEMO_PASSWORD`
+variables; the deployment no longer reads them.
+The public Railway URL has no username or password gate, so anyone with the URL
+can trigger paid provider calls. Keep the deployment URL private when it is not
+being demonstrated, and use provider-side usage limits appropriate for a
+time-boxed capstone POC.
+
+Build the same image locally from the repository root:
+
+```sh
+docker build -f frontend/onboarding/Dockerfile -t twinkl-experience .
+docker run --rm -p 3000:3000 twinkl-experience
+```
+
+The React Experience stores unfinished progress in the browser. The local
+Python boundary keeps the active session and idempotency receipts in memory,
+so restarting it clears backend state. Before the next Journal Entry, React
+restores the confirmed browser-held Journal Entries, nudges, and trace events
+through the validated session request. Provider keys stay on the Python side.
+Nudge reply and skip outcomes remain in the resumable browser session, while
+the Python boundary records nudge generation events for Inspect. Saving either
+outcome, or confirming Journal Entry removal, advances the session revision and
+recomputes affected closed weeks that were already reviewed; an open week
+remains unreviewed. The due-review method accepts an `as_of` date resolved in
+the user's IANA timezone. The React POC uses the browser-local date of a later
+Journal Entry to catch up closed weeks; a production background scheduler and
+durable timezone storage remain outside the capstone. A failed synchronization
+keeps the Journal Entry or response in the browser for a contextual retry.
+Removed Journal Entry positions are not reused, and Inspect marks their
+immutable submission events as removed from the current Experience. Production
+authentication, multi-tenant storage, and generalized persistence remain
+outside the time-boxed capstone.
+>>>>>>> main

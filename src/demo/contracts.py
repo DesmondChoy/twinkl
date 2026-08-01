@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from datetime import datetime
-from typing import Annotated, Any, Literal
+from typing import Annotated, Any, Literal, cast
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
@@ -43,14 +44,6 @@ BwsObjectKey = Literal[
     "conformity",
     "security",
     "universalism_social",
-]
-GoalCategory = Literal[
-    "work_life_balance",
-    "life_transition",
-    "relationships",
-    "health_wellbeing",
-    "direction",
-    "meaningful_work",
 ]
 EventStatus = Literal[
     "queued",
@@ -278,17 +271,29 @@ class ProfileTransform(ContractModel):
         return self
 
 
-class ProfileProvenance(ContractModel):
+class ReactProfileProvenance(ContractModel):
     source: Literal["react_onboarding_poc"]
     set_order_randomized: Literal[True]
     card_order_randomized: Literal[True]
 
 
+class SyntheticPersonaProfileProvenance(ContractModel):
+    source: Literal["synthetic_persona_projection"]
+    set_order_randomized: Literal[False]
+    card_order_randomized: Literal[False]
+
+
+ProfileProvenance = Annotated[
+    ReactProfileProvenance | SyntheticPersonaProfileProvenance,
+    Field(discriminator="source"),
+]
+
+
 class OnboardingProfile(ContractModel):
     """Authoritative confirmed Profile shape emitted by React onboarding."""
 
-    schema_version: Literal[2]
-    onboarding_version: Literal["2.1.0"]
+    schema_version: Literal[3]
+    onboarding_version: Literal["2.2.0"]
     instrument: Literal["svbws_lee_soutar_louviere_2008_ui_adaptation_v2"]
     scoring_method: Literal["best_minus_worst_divided_by_appearances_v1"]
     user_id: str = Field(min_length=1)
@@ -300,7 +305,6 @@ class OnboardingProfile(ContractModel):
     bws_results: BwsResults
     value_profile: ProfileTransform
     top_values: list[CoreValue] = Field(min_length=1)
-    goal_category: GoalCategory
     user_confirmed: Literal[True]
     provenance: ProfileProvenance
 
@@ -492,6 +496,43 @@ class DriftRuleStep(ContractModel):
     effect: Literal["start", "confirm", "extend", "recover", "uncertain", "break"]
 
 
+def build_drift_rule_steps(
+    decisions: Sequence[WeeklyDriftReviewerDecision],
+) -> list[DriftRuleStep]:
+    """Explain the deterministic Drift Detector transitions for Inspect."""
+    state: dict[str, tuple[int, bool]] = {}
+    steps: list[DriftRuleStep] = []
+    for decision in sorted(decisions, key=lambda row: (row.t_index, row.core_value)):
+        run_length, confirmed = state.get(decision.core_value, (0, False))
+        effect: Literal["start", "confirm", "extend", "recover", "uncertain", "break"]
+        if decision.verdict == "conflict":
+            if run_length == 0:
+                effect = "start"
+            elif run_length == 1:
+                effect = "confirm"
+                confirmed = True
+            else:
+                effect = "extend"
+            run_length += 1
+        elif decision.verdict == "not_conflict":
+            effect = "recover" if confirmed else "break"
+            run_length, confirmed = 0, False
+        else:
+            effect = "uncertain"
+            run_length, confirmed = 0, False
+        state[decision.core_value] = (run_length, confirmed)
+        steps.append(
+            DriftRuleStep(
+                t_index=decision.t_index,
+                core_value=cast(CoreValue, decision.core_value),
+                verdict=decision.verdict,
+                pending_run_length=run_length,
+                effect=effect,
+            )
+        )
+    return steps
+
+
 class DriftDetectedDetails(ContractModel):
     decisions: list[WeeklyDriftReviewerDecisionContract] = Field(min_length=1)
     steps: list[DriftRuleStep] = Field(min_length=1)
@@ -634,6 +675,38 @@ class ExperienceSession(ContractModel):
         return self
 
 
+class SessionResumeState(ContractModel):
+    """Browser-held state used to restore the in-memory Experience boundary."""
+
+    session_id: str = Field(min_length=1)
+    revision: int = Field(ge=0)
+    journal_entries: list[JournalEntry] = Field(default_factory=list)
+    nudges: list[NudgeInteraction] = Field(default_factory=list)
+    trace_events: list[TraceEvent] = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def validate_resume_state(self) -> SessionResumeState:
+        if self.revision < len(self.journal_entries):
+            raise ValueError("Resume revision cannot precede saved Journal Entries")
+        entry_ids = {entry.journal_entry_id for entry in self.journal_entries}
+        if any(nudge.journal_entry_id not in entry_ids for nudge in self.nudges):
+            raise ValueError("Resume nudges must reference saved Journal Entries")
+        event_ids = [event.event_id for event in self.trace_events]
+        if len(event_ids) != len(set(event_ids)):
+            raise ValueError("Resume trace event IDs must be unique")
+        known_ids: set[str] = set()
+        for event in self.trace_events:
+            if event.session_id != self.session_id:
+                raise ValueError("Resume trace events must share the session ID")
+            if (
+                event.parent_event_id is not None
+                and event.parent_event_id not in known_ids
+            ):
+                raise ValueError("Resume trace parents must precede their children")
+            known_ids.add(event.event_id)
+        return self
+
+
 class ScenarioWeek(ContractModel):
     week_id: str
     week_start: str
@@ -688,6 +761,22 @@ class SessionCreateRequest(ContractModel):
     request_id: str
     idempotency_key: str = Field(pattern=r"^[0-9a-f]{64}$")
     profile: OnboardingProfile
+    resume_state: SessionResumeState | None = None
+
+    @model_validator(mode="after")
+    def validate_resume_profile(self) -> SessionCreateRequest:
+        if self.resume_state is None:
+            return self
+        if self.resume_state.session_id != self.profile.session_id:
+            raise ValueError("Resume state and Profile session IDs must match")
+        profile_events = [
+            event
+            for event in self.resume_state.trace_events
+            if isinstance(event, ProfileConfirmedEvent)
+        ]
+        if not profile_events or profile_events[0].details.profile != self.profile:
+            raise ValueError("Resume state must contain the confirmed Profile event")
+        return self
 
 
 class JournalEntrySubmitRequest(ContractModel):

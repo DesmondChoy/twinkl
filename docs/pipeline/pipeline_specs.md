@@ -354,7 +354,7 @@ Rather than using a post-hoc blacklist to reject bad nudges, we bake voice guida
 
 ## Trigger Logic
 
-### Decision Tree (LLM-Based Classification)
+### Historical Synthetic Decision Tree
 
 ```
 Entry Received
@@ -379,6 +379,14 @@ Entry Received
 
 > **Design change**: The original rule-based approach (word count thresholds, hedging regex, random gates) was replaced with LLM-based classification for better semantic understanding. The `prompts/nudge_decision.yaml` template provides criteria for each category.
 
+This two-call path remains available to reproduce synthetic data. The
+production-representative Experience runtime does not repeat it: after the same
+deterministic anti-annoyance check, one structured
+`gpt-5.6-luna` reasoning-effort-`none` call returns the decision, reason, and
+either one 2–12-word nudge or `null`. The approved merged prompt is
+`prompts/nudge_decision_and_generation.yaml`, and the caller is
+`src/nudge/runtime.py`.
+
 ### Classification Criteria (LLM-Based)
 
 The LLM evaluates Journal Entries against semantic criteria defined in `prompts/nudge_decision.yaml`:
@@ -399,12 +407,31 @@ All classification uses **content-only signals** available at inference time. No
 
 > **Note**: The original design included "Mood sensitivity" (skip nudging for exhausted/emotional Journal Entries based on `tone`) and a 40% random gate. These were removed—`tone` is synthetic metadata unavailable in production, and LLM classification provides more nuanced selection than random sampling. See [Lesson Learned: Metadata Leakage](#lesson-learned-metadata-leakage-in-synthetic-data-generation).
 
-## Implementation: LLM-Based Approach
+## Historical Synthetic Implementation
 
 **Code** enforces session cap (2+ nudges in last 3 Journal Entries → skip).
 **LLM** classifies Journal Entry into `no_nudge`, `clarification`, `elaboration`, or `tension_surfacing` using `prompts/nudge_decision.yaml`.
 **LLM** generates the *natural language* nudge (with voice guidance baked into `prompts/nudge_generation.yaml`).
 **Code** validates output length (voice quality is handled by prompt guidance).
+
+## Experience Runtime
+
+The Experience runtime keeps the parts of the synthetic workflow that are
+production-representative:
+
+1. validate the Journal Entry and idempotent request identity;
+2. apply `should_suppress_nudge()` before provider work;
+3. pass only the current Journal Entry and sanitized recent Journal Entries;
+4. call `gpt-5.6-luna` once with reasoning effort `none` for the decision and
+   optional generation;
+5. validate that `no_nudge` has a `null` question and that any question is
+   2–12 words; and
+6. return an Inspect-ready receipt with the prompt hash, raw response, model
+   contract, response ID, usage, latency, and safe failure status.
+
+There is one provider attempt per eligible Journal Entry. Invalid output,
+refusal, or provider failure fails closed; contextual retry belongs to the
+idempotent Experience request rather than a hidden automatic second call.
 
 ### LLM Nudge Generation Prompt (Template)
 
@@ -868,13 +895,16 @@ All synthetic metadata dependencies have been removed from the nudge decision lo
 | `reflection_mode == "Unsettled"` requirement | Synthetic generation instruction, not observable |
 | `reflection_mode == "Grounded"` check | Synthetic generation instruction, not observable |
 
-**Current implementation**: The `decide_nudge()` function now uses **only** content-based signals:
-- Entry word count
-- Presence of concrete details (nouns/verbs)
-- Hedging language patterns
-- Previous nudge history
+**Current input boundary**: Both nudge paths use only production-available
+inputs:
 
-This ensures the decision logic works identically during synthetic data generation and production inference.
+- current Journal Entry content and date;
+- up to three previous Journal Entries containing only dates and content; and
+- previous displayed-nudge history for deterministic suppression.
+
+The historical synthetic workflow uses separate decision and generation calls.
+The Experience runtime combines them into one call while preserving the same
+categories and content-only boundary.
 
 ### General Principle
 

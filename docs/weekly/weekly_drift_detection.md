@@ -51,6 +51,15 @@ The runtime writes one Weekly Drift Reviewer JSON receipt per reviewed week.
 It also writes the Drift Detector result and structured Weekly Drift Detection
 output as JSON, markdown, and parquet. It renders the Coach Digest prompt.
 
+The Experience cadence uses Monday-through-Sunday calendar weeks. Its
+due-review caller supplies an `as_of` date resolved in the user's IANA
+timezone, and only finalized weeks whose Sunday is earlier than `as_of` are
+eligible. A first Journal Entry on Thursday therefore produces a partial first
+week that is reviewed after Sunday, not seven days later. Saving a Journal
+Entry never reviews its open week. The batch command above processes the
+available historical persona-weeks directly; it is not the Experience
+scheduler.
+
 When `--profile-path` is supplied, the runtime validates the confirmed,
 versioned onboarding Profile and uses its `top_values` as Core Values. Without
 that option, synthetic persona `core_values` remains the deterministic

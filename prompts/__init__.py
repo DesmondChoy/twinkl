@@ -63,6 +63,7 @@ def get_prompt_metadata(name: str) -> dict:
 persona_generation_prompt = load_prompt("persona_generation")
 journal_entry_prompt = load_prompt("journal_entry")
 nudge_decision_prompt = load_prompt("nudge_decision")
+nudge_decision_and_generation_prompt = load_prompt("nudge_decision_and_generation")
 nudge_generation_prompt = load_prompt("nudge_generation")
 nudge_response_prompt = load_prompt("nudge_response")
 judge_alignment_prompt = load_prompt("judge_alignment")
@@ -75,6 +76,7 @@ __all__ = [
     "persona_generation_prompt",
     "journal_entry_prompt",
     "nudge_decision_prompt",
+    "nudge_decision_and_generation_prompt",
     "nudge_generation_prompt",
     "nudge_response_prompt",
     "judge_alignment_prompt",

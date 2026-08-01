@@ -16,10 +16,20 @@ from src.nudge.generation import (
     select_response_mode,
     weighted_choice,
 )
+from src.nudge.runtime import (
+    NUDGE_RUNTIME_MODEL,
+    NUDGE_RUNTIME_REASONING_EFFORT,
+    NudgeRuntimeReceipt,
+    NudgeRuntimeRequest,
+    OpenAINudgeRuntime,
+    build_nudge_runtime_request,
+)
 from src.nudge.schemas import (
+    NUDGE_DECISION_AND_GENERATION_RESPONSE_FORMAT,
     NUDGE_DECISION_RESPONSE_FORMAT,
     NUDGE_RESPONSE_FORMAT,
     NUDGE_RESPONSE_RESPONSE_FORMAT,
+    NudgeDecisionAndGenerationResponse,
 )
 
 __all__ = [
@@ -33,7 +43,16 @@ __all__ = [
     "select_response_mode",
     "generate_nudge_text",
     "generate_nudge_response",
+    # Experience runtime
+    "NUDGE_RUNTIME_MODEL",
+    "NUDGE_RUNTIME_REASONING_EFFORT",
+    "NudgeRuntimeRequest",
+    "NudgeRuntimeReceipt",
+    "build_nudge_runtime_request",
+    "OpenAINudgeRuntime",
     # schemas
+    "NudgeDecisionAndGenerationResponse",
+    "NUDGE_DECISION_AND_GENERATION_RESPONSE_FORMAT",
     "NUDGE_DECISION_RESPONSE_FORMAT",
     "NUDGE_RESPONSE_FORMAT",
     "NUDGE_RESPONSE_RESPONSE_FORMAT",
