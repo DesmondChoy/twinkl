@@ -265,6 +265,11 @@ describe("persona replay", () => {
     expect(screen.getByRole("button", {
       name: /Open Journal Entry 1/,
     })).toBeTruthy();
+    expect(screen.queryByLabelText("Nudge for Journal Entry 1")).toBeNull();
+    expect(screen.queryByRole("heading", { name: "No Drift" })).toBeNull();
+
+    await user.click(screen.getByRole("button", { name: "Next step" }));
+    expect(screen.getByLabelText("Nudge for Journal Entry 1")).toBeTruthy();
     expect(screen.queryByRole("heading", { name: "No Drift" })).toBeNull();
 
     await user.click(screen.getByRole("button", { name: "Next step" }));
@@ -303,6 +308,11 @@ describe("persona replay", () => {
     expect(screen.getByRole("button", {
       name: /Open Journal Entry 1/,
     })).toBeTruthy();
+    expect(screen.queryByLabelText("Nudge for Journal Entry 1")).toBeNull();
+    act(() => vi.advanceTimersByTime(799));
+    expect(screen.queryByLabelText("Nudge for Journal Entry 1")).toBeNull();
+    act(() => vi.advanceTimersByTime(1));
+    expect(screen.getByLabelText("Nudge for Journal Entry 1")).toBeTruthy();
     act(() => vi.advanceTimersByTime(3_199));
     expect(screen.queryByRole("heading", { name: "No Drift" })).toBeNull();
     act(() => vi.advanceTimersByTime(1));
@@ -505,6 +515,7 @@ describe("persona replay", () => {
       "Was it worth not having your own time?",
     );
     expect(entry.closest("li")?.contains(nudge)).toBe(true);
+    expect(nudge.classList.contains("nudge-reveal")).toBe(true);
   });
 
   it("does not show a nudge when the selected week has none", () => {

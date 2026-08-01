@@ -21,6 +21,7 @@ import {
   submitJournalEntry,
 } from "./experienceApi";
 import { journalEntryAnchorId } from "./journalEntryAnchor";
+import { NUDGE_REVEAL_DELAY_MS } from "./nudgeReveal";
 import WeeklyExperience from "./WeeklyExperience";
 import type {
   ExperienceState,
@@ -197,6 +198,7 @@ export default function JournalExperience({
     "next_day" | "close_week" | null
   >(null);
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [revealedNudgeId, setRevealedNudgeId] = useState<string | null>(null);
   const replayWeekStart =
     typeof experience.weekly_digest?.week_start === "string"
       ? experience.weekly_digest.week_start
@@ -273,6 +275,8 @@ export default function JournalExperience({
   );
   const isAwaitingResponse =
     experience.run_state === "awaiting_response" && activeNudge !== null;
+  const isActiveNudgeVisible =
+    isAwaitingResponse && revealedNudgeId === activeNudge?.nudge_id;
   const pendingJournalEntrySaved =
     experience.pending_submission !== null
     && experience.journal_entries.some(
@@ -284,13 +288,26 @@ export default function JournalExperience({
     ? "Moving to the next day…"
     : timeAction === "close_week"
       ? "Closing the week and preparing its review…"
-      : statusCopy(experience);
+      : isAwaitingResponse && !isActiveNudgeVisible
+        ? "Saved."
+        : statusCopy(experience);
 
   useEffect(() => {
-    if (isAwaitingResponse) {
+    if (!isAwaitingResponse || !activeNudge) return;
+    const nudgeId = activeNudge.nudge_id;
+    const timer = window.setTimeout(
+      () => setRevealedNudgeId(nudgeId),
+      NUDGE_REVEAL_DELAY_MS,
+    );
+    return () => window.clearTimeout(timer);
+  }, [activeNudge, isAwaitingResponse]);
+
+  useEffect(() => {
+    if (isActiveNudgeVisible) {
       nudgeHeadingRef.current?.focus({ preventScroll: true });
+      nudgeHeadingRef.current?.scrollIntoView?.({ block: "center" });
     }
-  }, [isAwaitingResponse]);
+  }, [isActiveNudgeVisible]);
 
   useEffect(() => {
     if (mode !== "manual") return;
@@ -299,13 +316,13 @@ export default function JournalExperience({
     if (
       latestEntryId !== null
       && latestEntryId !== previousLatestEntryIdRef.current
-      && !isAwaitingResponse
+      && !isActiveNudgeVisible
     ) {
       latestEntryRef.current?.focus({ preventScroll: true });
       latestEntryRef.current?.scrollIntoView?.({ block: "center" });
     }
     previousLatestEntryIdRef.current = latestEntryId;
-  }, [experience.journal_entries, isAwaitingResponse, mode]);
+  }, [experience.journal_entries, isActiveNudgeVisible, mode]);
 
   useEffect(() => {
     if (mode === "saved_replay") setHistoryOpen(false);
@@ -797,6 +814,15 @@ export default function JournalExperience({
             experience.nudges.find(
               (item) => item.journal_entry_id === entry.journal_entry_id,
             ) ?? null;
+          const showNudge = nudge !== null
+            && nudge.text
+            && ["displayed", "answered", "skipped"].includes(nudge.outcome)
+            && (
+              mode !== "manual"
+              || nudge.outcome !== "displayed"
+              || nudge.nudge_id !== activeNudge?.nudge_id
+              || isActiveNudgeVisible
+            );
           const decision = latestDecisionFor(
             experience.trace_events,
             entry.journal_entry_id,
@@ -849,10 +875,12 @@ export default function JournalExperience({
                 ) : null}
               </div>
               <p className="journal-thread__entry">{entry.content}</p>
-              {nudge?.text && ["displayed", "answered", "skipped"].includes(
-                nudge.outcome,
-              ) ? (
-                <div className="journal-thread__exchange">
+              {showNudge ? (
+                <div className={`journal-thread__exchange${
+                  nudge.nudge_id === activeNudge?.nudge_id
+                    ? " nudge-reveal"
+                    : ""
+                }`}>
                   <p>{nudge.text}</p>
                   {nudge.outcome === "answered" && nudge.response ? (
                     <p>{nudge.response}</p>
@@ -1005,9 +1033,9 @@ export default function JournalExperience({
         </form>
       ) : null}
 
-      {mode === "manual" && activeNudge && isAwaitingResponse ? (
+      {mode === "manual" && activeNudge && isActiveNudgeVisible ? (
         <section
-          className="nudge-reply"
+          className="nudge-reply nudge-reveal"
           id="experience-journal-compose"
           aria-labelledby="nudge-question"
         >

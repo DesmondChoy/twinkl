@@ -29,6 +29,7 @@ vi.mock("./experienceApi", async (importOriginal) => {
 });
 
 const profile = canonicalInspectFixture.session.profile;
+const NUDGE_FIND_OPTIONS = { timeout: 2_000 };
 
 function entry(content = "A quiet walk helped me hear my own thoughts."): JournalEntryContract {
   return {
@@ -109,9 +110,11 @@ function trace(events: TraceEventContract[]) {
 function Harness({
   initial = createExperienceState(),
   inspectRun = vi.fn(),
+  mode = "manual",
 }: {
   initial?: ExperienceState;
   inspectRun?: (eventId: string) => void;
+  mode?: "manual" | "saved_replay";
 }) {
   const [experience, setExperience] = useState(initial);
   return (
@@ -122,6 +125,8 @@ function Harness({
         setExperience((current) => ({ ...current, ...patch }))
       }
       inspectRun={inspectRun}
+      mode={mode}
+      showWeeklySummary={false}
     />
   );
 }
@@ -174,10 +179,17 @@ describe("manual Journal Entry Experience", () => {
     );
     await user.click(screen.getByRole("button", { name: "Save Journal Entry" }));
 
+    await screen.findByText(savedEntry.content);
+    expect(screen.queryByRole("heading", {
+      name: "What felt clearest during that walk?",
+    })).toBeNull();
     const nudgeHeading = await screen.findByRole("heading", {
       name: "What felt clearest during that walk?",
-    });
+    }, NUDGE_FIND_OPTIONS);
     expect(nudgeHeading).toBeTruthy();
+    expect(nudgeHeading.closest(".nudge-reply")?.classList.contains(
+      "nudge-reveal",
+    )).toBe(true);
     await waitFor(() => expect(document.activeElement).toBe(nudgeHeading));
     expect(screen.getByRole("status").textContent).toContain(
       "A follow-up question is ready.",
@@ -237,7 +249,11 @@ describe("manual Journal Entry Experience", () => {
       savedEntry.content,
     );
     await user.click(screen.getByRole("button", { name: "Save Journal Entry" }));
-    await user.click(await screen.findByRole("button", { name: "Skip for now" }));
+    await user.click(await screen.findByRole(
+      "button",
+      { name: "Skip for now" },
+      NUDGE_FIND_OPTIONS,
+    ));
 
     expect(screen.getByText("Follow-up skipped.")).toBeTruthy();
     expect(screen.getByRole("textbox", { name: "Journal Entry" })).toBeTruthy();
@@ -272,7 +288,11 @@ describe("manual Journal Entry Experience", () => {
     render(<Harness initial={initial} />);
 
     await user.type(
-      screen.getByRole("textbox", { name: "Your response" }),
+      await screen.findByRole(
+        "textbox",
+        { name: "Your response" },
+        NUDGE_FIND_OPTIONS,
+      ),
       "This answer should remain here.",
     );
     await user.click(screen.getByRole("button", { name: "Save response" }));
@@ -332,7 +352,11 @@ describe("manual Journal Entry Experience", () => {
     render(<Harness initial={initial} />);
 
     await user.type(
-      screen.getByRole("textbox", { name: "Your response" }),
+      await screen.findByRole(
+        "textbox",
+        { name: "Your response" },
+        NUDGE_FIND_OPTIONS,
+      ),
       answeredEntry.nudge_response,
     );
     await user.click(screen.getByRole("button", { name: "Save response" }));
@@ -537,7 +561,11 @@ describe("manual Journal Entry Experience", () => {
     );
     await user.click(screen.getByRole("button", { name: "Save Journal Entry" }));
     await user.type(
-      await screen.findByRole("textbox", { name: "Your response" }),
+      await screen.findByRole(
+        "textbox",
+        { name: "Your response" },
+        NUDGE_FIND_OPTIONS,
+      ),
       "I stopped performing for anyone else.",
     );
     await user.click(screen.getByRole("button", { name: "Save response" }));
@@ -551,7 +579,13 @@ describe("manual Journal Entry Experience", () => {
     expect(
       await screen.findByText("I stopped performing for anyone else."),
     ).toBeTruthy();
-    await user.click(screen.getByRole("button", { name: "Skip for now" }));
+    await user.click(
+      await screen.findByRole(
+        "button",
+        { name: "Skip for now" },
+        NUDGE_FIND_OPTIONS,
+      ),
+    );
     expect(screen.getByText("I stopped performing for anyone else.")).toBeTruthy();
     expect(screen.getByText("Follow-up skipped.")).toBeTruthy();
   });
@@ -588,6 +622,21 @@ describe("manual Journal Entry Experience", () => {
       (node) => node.textContent,
     );
     expect(displayedEntries).toEqual([second.content, first.content]);
+  });
+
+  it("keeps a displayed Nudge visible in a saved replay thread", () => {
+    const savedEntry = entry();
+    const initial: ExperienceState = {
+      ...createExperienceState(),
+      journal_started: true,
+      journal_entries: [savedEntry],
+      nudges: [nudge()],
+      run_state: "complete",
+    };
+
+    render(<Harness initial={initial} mode="saved_replay" />);
+
+    expect(screen.getByText("What felt clearest during that walk?")).toBeTruthy();
   });
 
   it("advances Simulated time from the newest finalized Journal Entry", async () => {

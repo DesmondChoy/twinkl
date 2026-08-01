@@ -15,15 +15,40 @@ import type { ExperienceState } from "./session";
 import {
   loadSavedScenario,
   loadScenarioCatalog,
+  projectScenarioWeek,
   type LoadedScenario,
   type ScenarioCatalog,
   type ScenarioCatalogItem,
 } from "./scenarioReplay";
 import type { ScenarioDeliveryState } from "./demoContracts";
+import {
+  isDisplayableNudge,
+  NUDGE_REVEAL_DELAY_MS,
+} from "./nudgeReveal";
 
 const ENTRY_REVEAL_DELAY_MS = 3_600;
 const RESULT_REVEAL_DELAY_MS = 3_200;
 const NEXT_WEEK_DELAY_MS = 6_000;
+
+type ReplayStep =
+  | { kind: "entry"; journalEntryId: string }
+  | { kind: "nudge"; journalEntryId: string }
+  | { kind: "result" };
+
+function replayStepsFor(
+  journalEntryIds: string[],
+  nudgeEntryIds: ReadonlySet<string>,
+): ReplayStep[] {
+  return [
+    ...journalEntryIds.flatMap((journalEntryId): ReplayStep[] => [
+      { kind: "entry", journalEntryId },
+      ...(nudgeEntryIds.has(journalEntryId)
+        ? [{ kind: "nudge" as const, journalEntryId }]
+        : []),
+    ]),
+    { kind: "result" },
+  ];
+}
 
 function replayStateLabel(state: string): string {
   switch (state) {
@@ -289,14 +314,42 @@ export function PersonaReplayExperience({
       entryIds.has(entry.journal_entry_id)
     );
   }, [currentWeek.journal_entry_ids, experience.journal_entries]);
-  const completedStage = currentWeekEntries.length + 1;
+  const allNudgeEntryIds = useMemo(
+    () => new Set(
+      weeks.flatMap((_, index) =>
+        projectScenarioWeek(loaded.fixture, index).session.nudges
+      )
+        .filter(isDisplayableNudge)
+        .map((nudge) => nudge.journal_entry_id),
+    ),
+    [loaded.fixture, weeks],
+  );
+  const replaySteps = useMemo(
+    () => replayStepsFor(currentWeek.journal_entry_ids, allNudgeEntryIds),
+    [allNudgeEntryIds, currentWeek.journal_entry_ids],
+  );
+  const completedStage = replaySteps.length;
   const [revealStage, setRevealStage] = useState(() =>
     safeWeekIndex === 0 ? 0 : completedStage
   );
   const [furthestCompletedWeek, setFurthestCompletedWeek] = useState(
     safeWeekIndex === 0 ? -1 : safeWeekIndex,
   );
-  const resultVisible = revealStage > currentWeekEntries.length;
+  const revealedSteps = replaySteps.slice(0, revealStage);
+  const visibleEntryCount = revealedSteps.filter(
+    (step) => step.kind === "entry",
+  ).length;
+  const visibleNudgeEntryIds = useMemo(
+    () => new Set(
+      replaySteps
+        .slice(0, revealStage)
+        .filter((step) => step.kind === "nudge")
+        .map((step) => step.journalEntryId),
+    ),
+    [revealStage, replaySteps],
+  );
+  const nextReplayStep = replaySteps[revealStage] ?? null;
+  const resultVisible = revealedSteps.some((step) => step.kind === "result");
   const isFirst = safeWeekIndex === 0;
   const isLast = safeWeekIndex === weeks.length - 1;
   const preferredKeyState = keyMomentState(loaded.catalogItem.role);
@@ -323,9 +376,20 @@ export function PersonaReplayExperience({
   useEffect(() => {
     const restored = safeWeekIndex > 0;
     setPlaying(false);
-    setRevealStage(restored ? currentWeek.journal_entry_ids.length + 1 : 0);
+    setRevealStage(restored ? completedStage : 0);
     setFurthestCompletedWeek(restored ? safeWeekIndex : -1);
   }, [loaded.catalogItem.scenario_id]);
+
+  useEffect(() => {
+    if (nextReplayStep?.kind !== "nudge") return;
+    const expectedStage = revealStage;
+    const timer = window.setTimeout(() => {
+      setRevealStage((current) =>
+        current === expectedStage ? Math.min(current + 1, completedStage) : current
+      );
+    }, NUDGE_REVEAL_DELAY_MS);
+    return () => window.clearTimeout(timer);
+  }, [completedStage, nextReplayStep, revealStage]);
 
   useEffect(() => {
     const activeWeek = weekRailRef.current?.querySelector<HTMLButtonElement>(
@@ -361,10 +425,11 @@ export function PersonaReplayExperience({
       setRevealStage(0);
       onWeekChange(safeWeekIndex + 1);
     };
-    if (revealStage < currentWeekEntries.length) {
+    if (nextReplayStep?.kind === "nudge") return;
+    if (nextReplayStep?.kind === "entry") {
       delay = ENTRY_REVEAL_DELAY_MS;
       advance = () => setRevealStage((current) => current + 1);
-    } else if (!resultVisible) {
+    } else if (nextReplayStep?.kind === "result") {
       delay = RESULT_REVEAL_DELAY_MS;
       advance = () => {
         setRevealStage(completedStage);
@@ -377,8 +442,8 @@ export function PersonaReplayExperience({
     return () => window.clearTimeout(timer);
   }, [
     completedStage,
-    currentWeekEntries.length,
     isLast,
+    nextReplayStep,
     onWeekChange,
     playing,
     reducedMotion,
@@ -394,20 +459,20 @@ export function PersonaReplayExperience({
   const showCompletedWeek = (index: number) => {
     if (index < 0 || index >= weeks.length) return;
     setPlaying(false);
-    setRevealStage(weeks[index].journal_entry_ids.length + 1);
+    setRevealStage(
+      replayStepsFor(weeks[index].journal_entry_ids, allNudgeEntryIds).length,
+    );
     setFurthestCompletedWeek((current) => Math.max(current, index));
     onWeekChange(index);
   };
 
   const advanceOneStep = () => {
     setPlaying(false);
-    if (revealStage < currentWeekEntries.length) {
+    if (revealStage < completedStage) {
       setRevealStage((current) => current + 1);
-      return;
-    }
-    if (!resultVisible) {
-      setRevealStage(completedStage);
-      setFurthestCompletedWeek((current) => Math.max(current, safeWeekIndex));
+      if (nextReplayStep?.kind === "result") {
+        setFurthestCompletedWeek((current) => Math.max(current, safeWeekIndex));
+      }
       return;
     }
     if (!isLast) {
@@ -624,7 +689,13 @@ export function PersonaReplayExperience({
         reviewTraceEvents={experience.trace_events}
         selectedJournalEntryId={experience.selected_entry_id}
         cumulativeEntryCount={experience.journal_entries.length}
-        visibleEntryCount={Math.min(revealStage, currentWeekEntries.length)}
+        visibleEntryCount={visibleEntryCount}
+        visibleNudgeEntryIds={visibleNudgeEntryIds}
+        pendingNudgeEntryId={
+          nextReplayStep?.kind === "nudge"
+            ? nextReplayStep.journalEntryId
+            : null
+        }
         resultVisible={resultVisible}
         playing={playing}
         driftResult={experience.drift_result}

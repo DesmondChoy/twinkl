@@ -16,6 +16,7 @@ import type {
   TraceEventContract,
   WeeklyDriftReviewerDecisionContract,
 } from "./demoContracts";
+import { isDisplayableNudge } from "./nudgeReveal";
 
 type JsonObject = Record<string, unknown>;
 
@@ -30,6 +31,8 @@ interface ReplayTimelineProps {
   selectedJournalEntryId: string | null;
   cumulativeEntryCount: number;
   visibleEntryCount: number;
+  visibleNudgeEntryIds: ReadonlySet<string>;
+  pendingNudgeEntryId: string | null;
   resultVisible: boolean;
   playing: boolean;
   driftResult: JsonObject | null;
@@ -177,6 +180,8 @@ export default function ReplayTimeline({
   selectedJournalEntryId,
   cumulativeEntryCount,
   visibleEntryCount,
+  visibleNudgeEntryIds,
+  pendingNudgeEntryId,
   resultVisible,
   playing,
   driftResult,
@@ -193,10 +198,7 @@ export default function ReplayTimeline({
   const nudgeByEntryId = useMemo(
     () => new Map(
       nudges
-        .filter((nudge) =>
-          nudge.text
-          && ["displayed", "answered", "skipped"].includes(nudge.outcome)
-        )
+        .filter(isDisplayableNudge)
         .map((nudge) => [nudge.journal_entry_id, nudge]),
     ),
     [nudges],
@@ -210,6 +212,12 @@ export default function ReplayTimeline({
   );
   const status = useMemo(() => {
     if (resultVisible) return `${replayStateLabel(state)} revealed.`;
+    if (pendingNudgeEntryId) {
+      const entryNumber = visibleEntries.findIndex(
+        (entry) => entry.journal_entry_id === pendingNudgeEntryId,
+      ) + 1;
+      return `Journal Entry ${entryNumber} shown. A Nudge follows.`;
+    }
     if (visibleEntries.length < journalEntries.length) {
       if (playing) {
         return `Replaying saved Journal Entry ${visibleEntries.length + 1} of ${journalEntries.length}.`;
@@ -226,6 +234,7 @@ export default function ReplayTimeline({
   }, [
     journalEntries.length,
     playing,
+    pendingNudgeEntryId,
     resultVisible,
     state,
     visibleEntries.length,
@@ -336,9 +345,10 @@ export default function ReplayTimeline({
                         Read
                       </span>
                     </button>
-                    {nudge?.text ? (
+                    {nudge?.text
+                    && visibleNudgeEntryIds.has(entry.journal_entry_id) ? (
                       <aside
-                        className="replay-entry__nudge"
+                        className="replay-entry__nudge nudge-reveal"
                         aria-label={`Nudge for Journal Entry ${index + 1}`}
                       >
                         <span className="replay-entry__nudge-label">Nudge</span>

@@ -151,6 +151,9 @@ After Profile confirmation, Experience provides:
 - clear saving, nudge-checking, reviewing, complete, and failed states;
 - one contextual nudge with reply and skip actions when the nudge decision
   requests it;
+- an 800 ms pause after the saved Journal Entry appears, followed by one small
+  horizontal Nudge reveal; reduced-motion mode keeps the pause without the
+  horizontal movement;
 - the anti-annoyance rule of no more than two displayed nudges in the previous
   three Journal Entries;
 - a newest-first thread containing each Journal Entry plus any displayed nudge
@@ -216,6 +219,12 @@ result appears only after the final Journal Entry. The next week then starts
 empty. Automatic replay leaves enough time to read each step. Opening a Journal
 Entry uses a desktop side panel or mobile bottom sheet so the timeline does not
 reflow.
+
+When a Journal Entry has a displayed Nudge, the Nudge appears 800 ms after the
+Journal Entry. An early **Next step** action reveals that pending Nudge before
+the replay advances. Automatic replay starts its next reading interval only
+after the Nudge appears. Reduced-motion mode keeps the delay and removes the
+horizontal movement.
 
 When a saved Coach Digest response is present, it appears after the Weekly
 Drift Detection result in the same scrollable column. It does not replace the
