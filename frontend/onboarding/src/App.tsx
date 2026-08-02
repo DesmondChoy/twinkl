@@ -12,7 +12,6 @@ import {
 import {
   BWS_OBJECTS,
   BWS_SETS,
-  VALUE_ORDER,
   VALUES,
   createProfile,
   normalizePreferredName,
@@ -38,6 +37,7 @@ import {
 } from "./session";
 import InspectView from "./InspectView";
 import JournalExperience from "./JournalExperience";
+import LivingCompass from "./LivingCompass";
 import {
   PersonaReplayExperience,
   PersonaReplayPicker,
@@ -49,7 +49,6 @@ import {
 } from "./scenarioReplay";
 import { SharedSessionProvider, useSharedSession } from "./sharedSession";
 
-const MILESTONE_COUNT = BWS_SETS.length + 1;
 const AUTO_ADVANCE_DELAY_MS = 1_000;
 const CARD_BACKGROUNDS = [
   "/card-backgrounds/memory-atlas-01.jpg",
@@ -111,32 +110,6 @@ function milestoneFor(session: OnboardingSession): number {
     return Math.min(session.set_index + 1, BWS_SETS.length);
   }
   return BWS_SETS.length + 1;
-}
-
-function Compass({ milestone }: { milestone: number }) {
-  const progress = milestone / MILESTONE_COUNT;
-  return (
-    <div
-      className="compass"
-      style={{ "--compass-progress": `${progress * 360}deg` } as React.CSSProperties}
-      aria-hidden="true"
-    >
-      <div className="compass__orbit">
-        {VALUE_ORDER.map((value, index) => (
-          <span
-            className="compass__star"
-            key={value}
-            style={{ "--star-index": index } as React.CSSProperties}
-          />
-        ))}
-      </div>
-      <div className="compass__needle" />
-      <div className="compass__center">
-        <span>✦</span>
-        <small>compass</small>
-      </div>
-    </div>
-  );
 }
 
 function Progress({ session }: { session: OnboardingSession }) {
@@ -397,6 +370,9 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
             : !selectedPersonaId && journalStarted
               ? "journal"
               : null;
+  const showProfileCompass = !selectedPersonaId
+    && !journalStarted
+    && (session.stage === "summary" || session.stage === "complete");
 
   const update = (patch: Partial<OnboardingSession>) => {
     updateSession(patch);
@@ -887,21 +863,40 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
             experienceSectionView ? " layout--section-rail" : ""
           }`}
         >
-          <aside className="instrument-panel">
+          <aside
+            className={`instrument-panel${showProfileCompass ? " instrument-panel--with-profile-compass" : ""}`}
+          >
             {experienceSectionView ? (
-              <ExperienceSectionMap
-                hasJournalEntries={
-                  session.experience.journal_entries.length > 0
-                }
-                hasWeeklyResult={
-                  session.experience.drift_result !== null
-                  && session.experience.weekly_digest !== null
-                }
-                view={experienceSectionView}
-              />
+              <>
+                {showProfileCompass ? (
+                  <LivingCompass
+                    currentQuestionIndex={null}
+                    leastSelected={false}
+                    milestone={milestone}
+                    mostSelected={false}
+                  />
+                ) : null}
+                <ExperienceSectionMap
+                  hasJournalEntries={
+                    session.experience.journal_entries.length > 0
+                  }
+                  hasWeeklyResult={
+                    session.experience.drift_result !== null
+                    && session.experience.weekly_digest !== null
+                  }
+                  view={experienceSectionView}
+                />
+              </>
             ) : (
               <>
-                <Compass milestone={milestone} />
+                <LivingCompass
+                  currentQuestionIndex={
+                    session.stage === "set" ? session.set_index : null
+                  }
+                  leastSelected={session.draft_worst !== null}
+                  milestone={milestone}
+                  mostSelected={session.draft_best !== null}
+                />
                 <div className="instrument-copy">
                   <p className="eyebrow">Your inner compass</p>
                 </div>

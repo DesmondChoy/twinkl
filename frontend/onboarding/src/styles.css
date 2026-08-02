@@ -477,94 +477,201 @@ h2 {
 }
 
 .compass {
-  --compass-progress: 0deg;
   position: relative;
-  container-type: inline-size;
+  isolation: isolate;
   width: min(100%, 390px);
   aspect-ratio: 1;
   margin: 2vh auto 40px;
+  overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 50%;
   background:
-    radial-gradient(circle at center, var(--ink) 0 23%, transparent 24%),
-    conic-gradient(from -90deg, var(--apricot) var(--compass-progress), rgba(255, 255, 255, 0.08) 0);
-  box-shadow: inset 0 0 0 24px var(--ink), inset 0 0 0 25px rgba(255, 255, 255, 0.12);
-  transition: background 700ms ease;
+    radial-gradient(circle at 50% 45%, rgba(85, 118, 217, 0.2), transparent 38%),
+    radial-gradient(circle at center, #1c2b47, var(--ink) 68%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset 0 0 48px rgba(0, 0, 0, 0.2),
+    0 22px 54px rgba(4, 12, 27, 0.24);
 }
 
-.compass::before,
-.compass::after {
+.compass::before {
   position: absolute;
-  inset: 14%;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 50%;
-  content: "";
-}
-
-.compass::after {
-  inset: 28%;
-}
-
-.compass__orbit {
-  position: absolute;
+  z-index: 0;
   inset: 0;
-  animation: orbit-drift 24s linear infinite;
+  background:
+    linear-gradient(
+      90deg,
+      transparent calc(50% - 0.5px),
+      rgba(255, 255, 255, 0.055) 50%,
+      transparent calc(50% + 0.5px)
+    ),
+    linear-gradient(
+      transparent calc(52% - 0.5px),
+      rgba(255, 255, 255, 0.035) 52%,
+      transparent calc(52% + 0.5px)
+    );
+  content: "";
+  mask-image: radial-gradient(circle, black, transparent 72%);
+  pointer-events: none;
 }
 
-.compass__star {
-  --star-index: 0;
+.compass::after {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 7px;
-  height: 7px;
-  margin: -3.5px;
-  transform: rotate(calc(var(--star-index) * 36deg)) translateY(-46cqw);
+  z-index: 3;
+  inset: 0;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.82);
-  box-shadow: 0 0 16px rgba(255, 255, 255, 0.45);
+  background: radial-gradient(circle, transparent 52%, rgba(8, 18, 35, 0.16) 77%, rgba(8, 18, 35, 0.42));
+  content: "";
+  pointer-events: none;
 }
 
-.compass__needle {
+.living-compass__canvas,
+.living-compass__fallback {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 2px;
-  height: 31%;
-  transform: translate(-50%, -100%) rotate(var(--compass-progress));
-  transform-origin: 50% 100%;
-  background: linear-gradient(var(--apricot), transparent);
-  transition: transform 650ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  z-index: 2;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
 
-.compass__center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  display: grid;
-  width: 30%;
-  aspect-ratio: 1;
-  place-content: center;
-  transform: translate(-50%, -50%);
-  border: 1px solid rgba(255, 255, 255, 0.23);
-  border-radius: 50%;
-  background: var(--ink);
-  text-align: center;
+.living-compass__canvas {
+  opacity: 0;
+  transition: opacity 360ms ease;
 }
 
-.compass__center span {
-  font-family: "Source Serif 4 Variable", Georgia, serif;
-  font-size: clamp(2.2rem, 5vw, 4rem);
-  line-height: 0.82;
+.living-compass--webgl .living-compass__canvas {
+  opacity: 1;
 }
 
-.compass__center small {
-  margin-top: 9px;
-  color: rgba(255, 255, 255, 0.58);
-  font-size: 0.63rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+.living-compass__fallback {
+  overflow: visible;
+  opacity: 1;
+  transition: opacity 240ms ease;
+}
+
+.living-compass--webgl .living-compass__fallback {
+  opacity: 0;
+}
+
+.living-compass__north-guide,
+.living-compass__guide,
+.living-compass__segment,
+.living-compass__needle-line,
+.living-compass__needle-half,
+.living-compass__anchor,
+.living-compass__center {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+.living-compass__north-guide {
+  stroke: rgba(247, 250, 249, 0.22);
+  stroke-dasharray: 1.2 1.5;
+  stroke-width: 0.5;
+}
+
+.living-compass__north-star {
+  fill: var(--paper);
+  filter: drop-shadow(0 0 3px rgba(85, 118, 217, 0.34));
+  opacity: calc(0.3 + var(--star-progress) * 0.48);
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: filter 320ms ease, opacity 320ms ease, transform 420ms ease;
+}
+
+.living-compass__north-star--complete {
+  filter:
+    drop-shadow(0 0 3px rgba(247, 250, 249, 0.7))
+    drop-shadow(0 0 8px rgba(85, 118, 217, 0.42));
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+.living-compass__guide {
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 0.4;
+}
+
+.living-compass__segment {
+  transform: rotate(calc(-90deg + var(--segment-index) * 32.727deg));
+  transform-origin: 50px 52px;
+  stroke: rgba(130, 144, 166, 0.28);
+  stroke-dasharray: 7 93;
+  stroke-linecap: round;
+  stroke-width: 3.5;
+}
+
+.living-compass__segment--complete {
+  stroke: var(--blue);
+  filter: drop-shadow(0 0 2px rgba(85, 118, 217, 0.45));
+}
+
+.living-compass__segment--current {
+  stroke: var(--paper);
+  filter: drop-shadow(0 0 3px rgba(247, 250, 249, 0.78));
+}
+
+.living-compass__needle {
+  transform: rotate(var(--needle-angle));
+  transform-origin: 50px 52px;
+  transition: transform 680ms cubic-bezier(0.22, 0.72, 0.28, 1);
+}
+
+.living-compass__needle--settled {
+  transform: rotate(var(--needle-angle)) scale(1.025);
+}
+
+.living-compass__needle-line {
+  stroke: rgba(247, 250, 249, 0.3);
+  stroke-width: 0.5;
+}
+
+.living-compass__needle-half {
+  fill: rgba(130, 144, 166, 0.3);
+  stroke: rgba(247, 250, 249, 0.12);
+  stroke-width: 0.35;
+  transition: fill 180ms ease, filter 180ms ease;
+}
+
+.living-compass__needle-half--north.living-compass__needle-half--active {
+  fill: var(--verdigris);
+  filter: drop-shadow(0 0 3px rgba(46, 140, 130, 0.64));
+}
+
+.living-compass__needle-half--south.living-compass__needle-half--active {
+  fill: var(--apricot);
+  filter: drop-shadow(0 0 3px rgba(255, 138, 91, 0.58));
+}
+
+.living-compass__anchor {
+  fill: rgba(130, 144, 166, 0.24);
+  stroke: rgba(255, 255, 255, 0.15);
+  stroke-width: 0.55;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: fill 180ms ease, filter 180ms ease, transform 220ms ease;
+}
+
+.living-compass__anchor--most.living-compass__anchor--selected {
+  fill: var(--verdigris);
+  filter: drop-shadow(0 0 4px rgba(46, 140, 130, 0.88));
+}
+
+.living-compass__anchor--least.living-compass__anchor--selected {
+  fill: var(--apricot);
+  filter: drop-shadow(0 0 4px rgba(255, 138, 91, 0.88));
+}
+
+.living-compass__anchor--settled.living-compass__anchor--selected {
+  transform: scale(1.2);
+}
+
+.living-compass__center {
+  fill: var(--ink);
+  stroke: rgba(255, 255, 255, 0.22);
+  stroke-width: 0.6;
 }
 
 .flow-panel {
@@ -3199,12 +3306,6 @@ h2 {
   }
 }
 
-@keyframes orbit-drift {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 @keyframes deal-card {
   from {
     transform: translateY(32px) rotate(calc(var(--card-angle) * 2));
@@ -3621,10 +3722,6 @@ h2 {
     margin: 0;
   }
 
-  .compass__star {
-    transform: rotate(calc(var(--star-index) * 36deg)) translateY(-87px);
-  }
-
   .instrument-copy {
     max-width: 320px;
   }
@@ -3666,16 +3763,6 @@ h2 {
 
   .compass {
     width: 132px;
-  }
-
-  .compass__star {
-    width: 5px;
-    height: 5px;
-    transform: rotate(calc(var(--star-index) * 36deg)) translateY(-60px);
-  }
-
-  .compass__center span {
-    font-size: 2rem;
   }
 
   .flow-panel {
@@ -7356,5 +7443,50 @@ h2 {
 @media (max-width: 900px) {
   .app-shell .layout--section-rail .instrument-panel {
     display: none;
+  }
+}
+
+.instrument-panel--with-profile-compass {
+  justify-content: flex-start;
+  gap: clamp(22px, 4vh, 38px);
+}
+
+.instrument-panel--with-profile-compass .compass {
+  width: min(100%, 156px);
+  flex: 0 0 auto;
+  margin: 0 auto;
+}
+
+.instrument-panel--with-profile-compass .section-map {
+  position: relative;
+  top: auto;
+  max-height: none;
+}
+
+@media (max-width: 900px) {
+  .app-shell .layout--section-rail .instrument-panel--with-profile-compass {
+    display: flex;
+    min-height: 260px;
+    justify-content: center;
+    padding: 28px;
+  }
+
+  .instrument-panel--with-profile-compass .compass {
+    width: 190px;
+  }
+
+  .instrument-panel--with-profile-compass .section-map {
+    display: none;
+  }
+}
+
+@media (max-width: 620px) {
+  .app-shell .layout--section-rail .instrument-panel--with-profile-compass {
+    min-height: 190px;
+    padding: 20px;
+  }
+
+  .instrument-panel--with-profile-compass .compass {
+    width: 132px;
   }
 }
