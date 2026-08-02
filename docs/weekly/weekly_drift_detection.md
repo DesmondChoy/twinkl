@@ -416,7 +416,7 @@ The Coach Digest prompt requires:
   - `tension_explanation`
   - `reflective_question`
 
-Tier 1 Coach Digest response checks:
+Coach Digest Validations:
 
 - `groundedness`: at least one quoted phrase appears in selected evidence;
 - `non_circularity`: the response avoids score or alignment jargon;
@@ -455,8 +455,8 @@ learned routing policies.
 
 ## Remaining Work
 
-1. Report Tier 1 pass rates over a batch and add Tier 2 meta-judge plus Tier 3
-   human calibration.
+1. Report Coach Digest Validations and Coach Digest Evals over a batch. Future
+   human calibration of the AI review remains separate work.
 2. Capture the user's perceived-accuracy rating and make it queryable.
 
 Persisting full VIF Critic Predictions and adding independent disagreement

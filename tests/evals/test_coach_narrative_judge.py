@@ -272,6 +272,8 @@ def test_render_markdown_labels_ai_evaluation():
 
     markdown = render_markdown(report)
 
-    assert "AI Evaluation" in markdown
+    assert "Coach Digest Evals" in markdown
     assert "NOT human validation" in markdown
     assert "tension_honesty" in markdown
+    assert report.to_dict()["eval"] == "coach_digest_evals"
+    assert report.to_dict()["source"] == "ai_review"

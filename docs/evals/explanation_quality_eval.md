@@ -30,31 +30,31 @@ This evaluation validates that explanations feel accurate and actionable to user
 - The approved Weekly Drift Reviewer and Drift Detector runtime selects cited
   Journal Entry evidence for the Weekly Drift Detection output in
   [`src/coach/weekly_drift_runtime.py`](../../src/coach/weekly_drift_runtime.py)
-- Automated Coach Digest response checks are implemented: groundedness via quoted substring matches, non-circularity via score-jargon avoidance, and length bounds via [`validate_weekly_digest_narrative()`](../../src/coach/weekly_digest.py)
-- Automated reporting for Coach Digest responses: A batch runner
-  ([`src/evals/coach_narrative_tier1.py`](../../src/evals/coach_narrative_tier1.py))
+- Coach Digest Validations are implemented: groundedness via quoted substring matches, non-circularity via score-jargon avoidance, and length bounds via [`validate_weekly_digest_narrative()`](../../src/coach/weekly_digest.py)
+- Coach Digest Validations batch reporting: A batch runner
+  ([`src/evals/coach_digest_validations.py`](../../src/evals/coach_digest_validations.py))
   runs `validate_weekly_digest_narrative()` over the persisted Weekly Drift Detection output
   parquet and reports per-check pass rates against targets. No current batch
   result is committed.
-- AI review of Coach Digest responses: An AI evaluator
+- Coach Digest Evals: An AI evaluator
   ([`src/evals/coach_narrative_judge.py`](../../src/evals/coach_narrative_judge.py),
   prompt [`prompts/coach_narrative_judge.yaml`](../../prompts/coach_narrative_judge.yaml))
   scores correctness, specificity, non-prescriptive tone, and tension honesty
   against the same selected Coach Digest policy, Core Value phrases, goal
   context, Weekly Drift Detection findings, and cited Journal Entries used for
   Coach Digest generation.
-  Scores are **AI evaluation, not human validation**. Human calibration remains
-  future work.
+  Scores are **AI evaluation, not human validation**. Future human calibration
+  of the AI review remains separate work.
 
 ### What's Missing
-- **Coach Digest batch results:** No current automated-check or AI-review result is
-  committed
+- **Coach Digest batch results:** No current Coach Digest Validations or Coach
+  Digest Evals result is committed
 - **Automated checks for LLM-Judge rationales:** No batch checker or report yet in `src/judge/`
 - **AI review of LLM-Judge rationales:** No rationale-review evaluation
 - **Human calibration:** No protocol or κ calculation for either explanation type
 
 ### Blocking Dependencies
-Automated Coach Digest checks and approved-path evidence provenance are
+Coach Digest Validations and approved-path evidence provenance are
 implemented. Deeper end-to-end explanation evaluation still requires a fresh
 final test and committed batch results. VIF Critic outputs belong to offline
 review and retraining.
@@ -69,9 +69,9 @@ calibration are later validation phases.
 
 ### Next Steps
 1. Add an automated batch checker for LLM-Judge rationales in `src/judge/` and run it over the existing 1,594 rationale-bearing rows
-2. Run the automated Coach Digest batch evaluation and record its pass rates
-3. Run the Coach Digest AI review and identify its scores as AI evaluation
-4. *(Future phase)* Sample 20-30 explanations for human calibration
+2. Run Coach Digest Validations over a batch and record the pass rates
+3. Run Coach Digest Evals and identify the scores as AI evaluation
+4. Complete future human calibration of the AI review with 20-30 responses
 
 ---
 

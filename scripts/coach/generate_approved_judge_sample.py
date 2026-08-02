@@ -2,7 +2,7 @@
 
 Runs the approved Weekly Drift Reviewer + Drift Detector cycle
 (``run_weekly_drift_coach_cycle``) for a fixed roster of personas, so the
-Tier-2 LLM-as-judge eval scores narratives as the product's approved path
+Coach Digest Evals score responses as the product's approved path
 actually produces them — not leftover ``vif_runtime`` demo-tool outputs.
 
 For each persona this:
@@ -53,7 +53,8 @@ DEFAULT_PERSONAS = [
 
 DEFAULT_PARQUET = Path("logs/exports/weekly_digests/weekly_digests.parquet")
 DEFAULT_MANIFEST = Path(
-    "logs/experiments/reports/coach_narrative_tier1_20260727/judge_sample_manifest.json"
+    "logs/experiments/reports/coach_digest_validations_20260727/"
+    "judge_sample_manifest.json"
 )
 
 

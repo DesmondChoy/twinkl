@@ -122,9 +122,10 @@ This profile is used both in the **LLM-Judge prompts** and in aggregating vector
 
 ## 3. Implementation Roadmap
 
-To make this design capstone-friendly, we summarise a recommended tiered approach. The team can choose which tier to implement while keeping a coherent long-term architecture.
+The roadmap separates the implemented offline model from work that is not
+planned for the time-boxed capstone.
 
-* **Tier 1 (Current POC)**
+* **VIF Critic (Offline)**
   * State: current Journal Entry embedding, including any displayed nudge and
     response, plus the normalized profile.
   * Target: immediate alignment (Option A).
@@ -143,11 +144,11 @@ To make this design capstone-friendly, we summarise a recommended tiered approac
     but no fresh final test exists. The old consensus-derived frozen benchmark
     is retired historical evidence, not a runnable benchmark or final test set.
 
-* **Tier 2 (Unplanned for the time-boxed capstone)**
+* **Unplanned VIF Critic Extensions**
   * Evaluated diagnostics: compact mean history (`twinkl-749`) and soft
     vote-distribution labels (`twinkl-j0ck`) both completed without deployment
     approval.
-    Neither changes the Tier 1 state or target default.
+    Neither changes the current state or target default.
   * State or target extensions should reopen only with a materially different,
     evidence-backed mechanism and a matching student-visible target contract.
   * VIF Critic: calibrated local MLP with versioned prediction, uncertainty,
@@ -158,7 +159,7 @@ To make this design capstone-friendly, we summarise a recommended tiered approac
   * Drift rule: the same deterministic definition for Core Values, with active,
     recovered, mixed, or uncertain weekly wording.
 
-* **Tier 3 (Out of Scope for Capstone)**
+* **Out-of-Scope Multimodal VIF Research**
   * State: multimodal, sliding-window state with audio/physio.
   * Target: time-aware discounted returns (Option C).
   * Additional: offline RL for suggestion policies, more advanced uncertainty and personalization.

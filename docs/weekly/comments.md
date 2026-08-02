@@ -19,7 +19,7 @@ In the current synthetic corpus, personas have a **median of 8 entries (max 12)*
 
 The same commit also:
 - **Moves cosine-similarity identity drift to a future phase** — the simpler crash/rut threshold checks are sufficient for the POC.
-- **Scopes initial evaluation to Tier 1 automated checks only** — meta-judge LLM eval (Tier 2) and human calibration (Tier 3) have been deferred.
+- **Scopes initial evaluation to Coach Digest Validations only** — Coach Digest Evals and future human calibration of the AI review were deferred.
 
 **Important caveat:** This is a docs/spec refinement, not an implementation claim. The Coach digest is still not implemented, and the crash/rut trigger code is also still missing. Additionally, the current Critic quality (median QWK ~0.362) is [not yet strong enough for fully reliable automated drift alerts](https://github.com/DesmondChoy/twinkl/blob/556ac6b/docs/evals/drift_detection_eval.md#blocking-dependencies).
 
@@ -66,7 +66,7 @@ The same commit also:
                                            Persist (Pydantic → parquet)
                                                       │
                                                       ▼
-                                            Tier 1 validation checks
+                                          Coach Digest Validations
 ```
 
 ## How your comments are addressed
@@ -82,8 +82,8 @@ The same commit also:
 
 1. **Define the digest prompt template** — Use [`docs/vif/example.md`](https://github.com/DesmondChoy/twinkl/blob/556ac6b/docs/vif/example.md) as the tone anchor and [`config/schwartz_values.yaml`](https://github.com/DesmondChoy/twinkl/blob/556ac6b/config/schwartz_values.yaml) for value context injection. Feed in: response mode + full journal history + Critic scores + user value profile.
 2. **Define a digest Pydantic schema + parquet persistence** — Follow the [`src/judge/consolidate.py`](https://github.com/DesmondChoy/twinkl/blob/556ac6b/src/judge/consolidate.py) pattern so digests are saved and queryable for longitudinal analysis.
-3. **Run Tier 1 automated checks on digest output** — Groundedness, non-circularity, length. Code sketches are in [`docs/evals/explanation_quality_eval.md`](https://github.com/DesmondChoy/twinkl/blob/556ac6b/docs/evals/explanation_quality_eval.md).
+3. **Run Coach Digest Validations on digest output** — Groundedness, non-circularity, length. Code sketches are in [`docs/evals/explanation_quality_eval.md`](https://github.com/DesmondChoy/twinkl/blob/556ac6b/docs/evals/explanation_quality_eval.md).
 
 **Dependency (separate issue):** Crash/rut trigger implementation — formulas are spec'd in [`docs/evals/drift_detection_eval.md`](https://github.com/DesmondChoy/twinkl/blob/556ac6b/docs/evals/drift_detection_eval.md), but the code doesn't exist yet. The digest generator can be built and tested with a hardcoded response mode initially, with trigger wiring added once the detection code lands.
 
-**Out of scope for first pass:** RAG, cosine-sim identity drift, and Tier 2/3 evaluation.
+**Out of scope for first pass:** RAG, cosine-sim identity drift, Coach Digest Evals, and future human calibration of the AI review.

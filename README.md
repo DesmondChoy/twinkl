@@ -340,7 +340,7 @@ opening.
 | Capability | Status | Note |
 |---|---|---|
 | Onboarding (SVBWS Values Assessment) | 🧪 Experimental | Standalone React POC implements the complete local, user-facing flow and a versioned Profile. The approved runtime can import its Core Values from saved Profile JSON; automated browser-to-service storage remains outside the capstone. |
-| Coach Digest validation depth | ⚠️ Partial | Tier 1 batch reporting and Tier 2 LLM-as-judge code are implemented. No current batch result or Tier 3 human validation is complete. |
+| Coach Digest validation depth | ⚠️ Partial | Coach Digest Validations and Coach Digest Evals are implemented. No current batch result or future human calibration of the AI review is complete. |
 | Nudge signal quality validation | 🧪 Experimental | Annotation study and downstream usefulness checks remain in progress |
 | Embedding Explorer | ✅ Complete | Interactive 3D visualization of VIF Critic embeddings |
 | Drift Detector validation and deployment approval | ⚠️ Not claimed | The deterministic Drift Detector and Luna-low Weekly Drift Reviewer runtime are complete and wired for the capstone POC, with versioned receipts and fail-closed abstention. The evidence is AI-reviewed synthetic development evidence; no fresh final test was run, so no deployment approval is claimed. |

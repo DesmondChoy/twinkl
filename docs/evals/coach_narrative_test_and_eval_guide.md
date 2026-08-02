@@ -21,13 +21,13 @@ source .venv/bin/activate        # Bash/Zsh
 | Layer | Kind | LLM calls? | Where |
 | --- | --- | --- | --- |
 | Weekly Drift Detection output builders + rendering | Unit tests | No (mocked) | `tests/coach/test_weekly_digest.py`, `tests/coach/test_runtime.py`, `tests/coach/test_weekly_drift_runtime.py` |
-| Automated response checks (groundedness, non_circularity, value_leakage, length) | Unit tests | No | `tests/coach/test_weekly_digest.py` |
-| Automated batch report over a real Weekly Drift Detection output set | Eval | No | `src/evals/coach_narrative_tier1.py` |
-| AI review (correctness, specificity, non-prescriptive tone, tension honesty) | Eval | **Yes (paid)** | `src/evals/coach_narrative_judge.py` |
+| Coach Digest Validations (groundedness, non_circularity, value_leakage, length) | Unit tests | No | `tests/coach/test_weekly_digest.py` |
+| Coach Digest Validations batch report over a real Weekly Drift Detection output set | Eval | No | `src/evals/coach_digest_validations.py` |
+| Coach Digest Evals (correctness, specificity, non-prescriptive tone, tension honesty) | Eval | **Yes (paid)** | `src/evals/coach_narrative_judge.py` |
 
-The automated checks are mechanical code checks, not human validation. The AI
-review scores are **AI evaluation, not human validation**. Human calibration
-with Cohen's κ is future work.
+Coach Digest Validations are mechanical code checks, not human validation.
+Coach Digest Evals produce **AI evaluation, not human validation**. Future
+human calibration of the AI review can use Cohen's κ.
 
 ---
 
@@ -58,7 +58,7 @@ Run the evaluation unit tests for the batch report and AI review. Both use
 mocked calls:
 
 ```sh
-uv run pytest tests/evals/test_coach_narrative_tier1.py \
+uv run pytest tests/evals/test_coach_digest_validations.py \
               tests/evals/test_coach_narrative_judge.py
 ```
 
@@ -78,9 +78,9 @@ Weekly Drift Detection output parquet and reports per-check pass rates against t
 [`explanation_quality_eval.md`](./explanation_quality_eval.md).
 
 ```sh
-uv run python -m src.evals.coach_narrative_tier1 \
+uv run python -m src.evals.coach_digest_validations \
   --parquet logs/exports/weekly_digests/weekly_digests.parquet \
-  --out logs/experiments/reports/coach_narrative_tier1_20260727
+  --out logs/experiments/reports/coach_digest_validations_20260727
 ```
 
 - `--parquet` defaults to `logs/exports/weekly_digests/weekly_digests.parquet`.
@@ -94,7 +94,7 @@ Pass-rate targets: groundedness > 70%, non_circularity > 95%, length > 90%.
 
 ---
 
-## 3. AI review of Coach Digest responses (paid API calls)
+## 3. Coach Digest Evals (paid API calls)
 
 Scores Coach Digest responses on correctness, specificity, non-prescriptive tone, and
 tension honesty, and flags whether the reflective question is open-ended. Judges
@@ -140,12 +140,12 @@ OpenAI.
 ```sh
 # Dry run — prints the plan, makes no evaluator calls:
 uv run python -m src.evals.coach_narrative_judge \
-  --manifest logs/experiments/reports/coach_narrative_tier1_20260727/judge_sample_manifest.json
+  --manifest logs/experiments/reports/coach_digest_validations_20260727/judge_sample_manifest.json
 
 # Real run — paid evaluator calls; writes metrics.json and report.md:
 uv run python -m src.evals.coach_narrative_judge \
-  --manifest logs/experiments/reports/coach_narrative_tier1_20260727/judge_sample_manifest.json \
-  --out logs/experiments/reports/coach_narrative_tier1_20260727 \
+  --manifest logs/experiments/reports/coach_digest_validations_20260727/judge_sample_manifest.json \
+  --out logs/experiments/reports/coach_digest_validations_20260727 \
   --execute
 ```
 

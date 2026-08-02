@@ -1,15 +1,15 @@
-"""Tier-1 batch evaluation for Coach Digest responses.
+"""Batch report for Coach Digest Validations.
 
-Runs the existing ``validate_weekly_digest_narrative`` Tier-1 checks
+Runs the existing ``validate_weekly_digest_narrative`` checks
 (groundedness, non_circularity, value_leakage, length) over a set of persisted
 Weekly Drift Detection output records and reports per-check pass rates against
 the targets in ``docs/evals/explanation_quality_eval.md``.
 
 These are mechanical code checks, not human validation. They verify surface
 properties (quotes trace to evidence, no raw scoring or Schwartz-label
-terminology, length in range); they do not assess correctness, tone, or
-usefulness. Those belong to the Tier-2 LLM-as-judge eval and Tier-3 human
-calibration.
+terminology, length in range). They do not assess correctness, tone, or
+usefulness. Coach Digest Evals assess those properties. Future human
+calibration of the AI review remains separate work.
 """
 
 from __future__ import annotations
@@ -34,7 +34,7 @@ DEFAULT_PARQUET = Path("logs/exports/weekly_digests/weekly_digests.parquet")
 # report measures only these rows, excluding deprecated vif_runtime leftovers.
 APPROVED_SIGNAL_SOURCE = "weekly_drift_reviewer"
 
-# Pass-rate targets from docs/evals/explanation_quality_eval.md (Tier 1 table).
+# Pass-rate targets from docs/evals/explanation_quality_eval.md.
 # value_leakage has no published target; treated as informational (target None).
 CHECK_TARGETS: dict[str, float | None] = {
     "groundedness": 0.70,
@@ -46,7 +46,7 @@ CHECK_TARGETS: dict[str, float | None] = {
 
 @dataclass
 class CheckSummary:
-    """Aggregated pass rate for one Tier-1 check across the sample."""
+    """Aggregated pass rate for one Coach Digest Validation."""
 
     name: str
     passed: int
@@ -74,8 +74,8 @@ class CheckSummary:
 
 
 @dataclass
-class Tier1Report:
-    """Full Tier-1 batch report over a Weekly Drift Detection output set."""
+class CoachDigestValidationReport:
+    """Coach Digest Validations report for a Weekly Drift Detection output set."""
 
     parquet_source: str
     n_rows: int
@@ -88,10 +88,10 @@ class Tier1Report:
 
     def to_dict(self) -> dict[str, object]:
         return {
-            "eval": "coach_narrative_tier1",
+            "eval": "coach_digest_validations",
             "source": "mechanical_code_checks",
             "note": (
-                "Tier-1 automated checks, not human validation. Surface "
+                "Coach Digest Validations, not human validation. Surface "
                 "properties only; correctness/tone are out of scope."
             ),
             "parquet_source": self.parquet_source,
@@ -147,8 +147,8 @@ def evaluate_rows(
     rows: list[dict[str, object]],
     parquet_source: str,
     signal_source: str | None = APPROVED_SIGNAL_SOURCE,
-) -> Tier1Report:
-    """Run Tier-1 validation over parquet-shaped digest rows.
+) -> CoachDigestValidationReport:
+    """Run Coach Digest Validations over parquet-shaped digest rows.
 
     By default only rows whose ``signal_source`` matches the approved runtime
     (``weekly_drift_reviewer``) are evaluated. Pass ``signal_source=None`` to
@@ -193,7 +193,7 @@ def evaluate_rows(
         )
         for name in CHECK_TARGETS
     }
-    return Tier1Report(
+    return CoachDigestValidationReport(
         parquet_source=parquet_source,
         n_rows=total_rows,
         n_rows_after_filter=len(rows),
@@ -208,8 +208,8 @@ def evaluate_rows(
 def evaluate_parquet(
     parquet_path: Path,
     signal_source: str | None = APPROVED_SIGNAL_SOURCE,
-) -> Tier1Report:
-    """Run Tier-1 evaluation on persisted Weekly Drift Detection output."""
+) -> CoachDigestValidationReport:
+    """Run Coach Digest Validations on persisted Weekly Drift Detection output."""
     frame = pl.read_parquet(parquet_path)
     rows = frame.to_dicts()
     return evaluate_rows(
@@ -217,10 +217,10 @@ def evaluate_parquet(
     )
 
 
-def render_markdown(report: Tier1Report) -> str:
-    """Render a short markdown summary of a Tier-1 batch report."""
+def render_markdown(report: CoachDigestValidationReport) -> str:
+    """Render a short Coach Digest Validations report."""
     lines = [
-        "# Coach Digest Response — Tier-1 Batch Report",
+        "# Coach Digest Validations — Batch Report",
         "",
         "**Source:** mechanical code checks (not human validation). Surface "
         "properties only.",
@@ -258,7 +258,7 @@ def render_markdown(report: Tier1Report) -> str:
 
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Run Tier-1 batch checks over Coach Digest responses."
+        description="Run Coach Digest Validations over Coach Digest responses."
     )
     parser.add_argument("--parquet", type=Path, default=DEFAULT_PARQUET)
     parser.add_argument(

@@ -33,7 +33,7 @@ Based on `docs/vif/01_concepts_and_roadmap.md`, `02_system_architecture.md`, `03
 
 - **Inputs and state**
   - Inputs per step \(t\): text \(T_{u,t}\), optional audio \(A_{u,t}\), optional physio \(H_{u,t}\), time deltas, and user profile \(z_u\).
-  - Core state \(s_{u,t}\) (Tier 1 / POC):
+  - Core state \(s_{u,t}\) (current POC):
     - Text embedding for current entry (and optionally a small sliding window of recent entries).
     - Time deltas between entries.
     - Simple history statistics (EMA, rolling standard deviation, counts).

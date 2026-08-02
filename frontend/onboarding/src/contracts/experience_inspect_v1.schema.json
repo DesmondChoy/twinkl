@@ -632,7 +632,7 @@
       "type": "object"
     },
     "DigestValidation": {
-      "description": "Tier 1 automated checks for a Coach Digest response.",
+      "description": "Coach Digest Validations for one Coach Digest response.",
       "properties": {
         "checks": {
           "items": {
@@ -3640,7 +3640,7 @@
       "type": "object"
     },
     "ValidationCheck": {
-      "description": "Single automated check for Coach Digest response quality.",
+      "description": "One Coach Digest Validation.",
       "properties": {
         "details": {
           "title": "Details",

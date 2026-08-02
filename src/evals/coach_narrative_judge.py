@@ -1,4 +1,4 @@
-"""Automated AI evaluation for Coach Digest responses.
+"""Coach Digest Evals for Coach Digest responses.
 
 Scores a Coach Digest response against its Weekly Drift Detection evidence.
 The four dimensions are correctness, specificity, non-prescriptive tone, and
@@ -6,8 +6,8 @@ tension honesty. It also checks whether the reflective question is open-ended
 and relevant.
 
 These are **AI evaluation scores, not human validation**. They are a low-cost,
-repeatable proxy for response quality. Human calibration with Cohen's κ remains
-future work and is required before treating these scores as ground truth.
+repeatable proxy for response quality. Future human calibration of the AI
+review is required before treating these scores as ground truth.
 
 The evaluator LLM is an injected ``LLMCompleteFn``. Coach Digest generation uses
 the same contract. This module is provider-agnostic and testable. An empty,
@@ -138,12 +138,12 @@ class JudgeReport:
 
     def to_dict(self) -> dict[str, object]:
         return {
-            "eval": "coach_narrative_judge",
-            "source": "llm_as_judge",
+            "eval": "coach_digest_evals",
+            "source": "ai_review",
             "note": (
-                "AI evaluation scores, NOT human validation. Human calibration "
-                "with Cohen's kappa is required before treating these "
-                "as ground truth."
+                "AI evaluation scores, NOT human validation. Future human "
+                "calibration of the AI review is required before treating "
+                "these as ground truth."
             ),
             "judge_model": self.judge_model,
             "n_scored": self.n_scored,
@@ -189,10 +189,10 @@ def aggregate_verdicts(
 def render_markdown(report: JudgeReport) -> str:
     """Render a short markdown summary of an AI evaluation report."""
     lines = [
-        "# Coach Digest Response — AI Evaluation Report",
+        "# Coach Digest Evals Report",
         "",
-        "**Source:** AI evaluation scores, NOT human validation. Human "
-        "calibration is future work.",
+        "**Source:** AI evaluation scores, NOT human validation. Future human "
+        "calibration of the AI review remains separate work.",
         "",
         f"- Evaluator model: `{report.judge_model}`",
         f"- Scored: {report.n_scored}",
@@ -238,7 +238,7 @@ def _load_manifest(manifest_path: Path) -> list[tuple[WeeklyDigest, CoachNarrati
 
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Score Coach Digest responses with an AI evaluator."
+        description="Run Coach Digest Evals with an AI evaluator."
     )
     parser.add_argument(
         "--manifest",

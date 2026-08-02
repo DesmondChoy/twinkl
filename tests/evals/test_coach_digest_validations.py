@@ -1,10 +1,10 @@
-"""Tests for the Coach Digest response Tier-1 batch evaluator."""
+"""Tests for the Coach Digest Validations batch report."""
 
 from __future__ import annotations
 
 import json
 
-from src.evals.coach_narrative_tier1 import (
+from src.evals.coach_digest_validations import (
     evaluate_rows,
     render_markdown,
 )
@@ -121,8 +121,10 @@ def test_render_markdown_contains_source_disclaimer():
 
     markdown = render_markdown(report)
 
+    assert markdown.startswith("# Coach Digest Validations — Batch Report")
     assert "not human validation" in markdown
     assert "groundedness" in markdown
+    assert report.to_dict()["eval"] == "coach_digest_validations"
 
 
 def test_evaluate_rows_defaults_to_approved_path_only():

@@ -25,7 +25,7 @@ fields, file paths, or historical records.
 | **LLM-Judge** | The offline LLM that creates training or reference labels. It is not the VIF Critic, Weekly Drift Reviewer, or a human reviewer. | Judge, teacher, oracle, labeling system |
 | **LLM-Judge VIF Label** | An LLM-Judge label of `-1`, `0`, or `+1` for one Journal Entry and value, created to train or evaluate the VIF Critic. | older label, legacy label, LLM-Judge output |
 | **LLM-Judge Conflict Label** | An LLM-Judge reference label of **Conflict**, **Not Conflict**, or **Uncertain** for one Journal Entry and Core Value under the current displayed-behavior definition. A resolved label is **Conflict** or **Not Conflict**; **Uncertain** remains unresolved. | newer label, resolved judge label when resolution is not the distinction, LLM-Judge output |
-| **VIF Critic** | The trained model, currently an MLP, that predicts `-1`, `0`, or `+1` for each Journal Entry and value, plus uncertainty. | system, scorer, or model when the VIF Critic is specifically meant |
+| **VIF Critic (Offline)** | The trained offline model, currently an MLP, that predicts `-1`, `0`, or `+1` for each Journal Entry and value, plus uncertainty. It is not part of the user-facing Weekly Drift Detection path. | numbered VIF stage, online VIF Critic, system, scorer, or model when the VIF Critic is specifically meant |
 | **VIF Critic Prediction** | The VIF Critic's predicted `-1`, `0`, or `+1` for one Journal Entry and value, plus uncertainty. | VIF Critic output, score when prediction is meant |
 | **Conflict (`-1`)** | One Journal Entry that clearly shows behavior or a choice against one value. When the source matters, name the LLM-Judge VIF Label, LLM-Judge Conflict Label, VIF Critic Prediction, or Weekly Drift Reviewer Decision. | negative evidence, misalignment signal |
 | **Drift** | Two consecutive Conflicts for the same Core Value. A longer uninterrupted run is still one Drift. | sustained-conflict episode, meaningful two-entry pattern, reference event |
@@ -34,6 +34,9 @@ fields, file paths, or historical records.
 | **Weekly Drift Reviewer Decision** | The Weekly Drift Reviewer's decision of **Conflict**, **Not Conflict**, or **Abstain** for one Journal Entry and Core Value. | reviewer output, weekly label |
 | **Drift Detector** | The internal deterministic rule in Weekly Drift Detection that decides whether two consecutive Weekly Drift Reviewer Conflicts for the same Core Value form Drift. The rule is implemented for the capstone POC but is not deployment-approved. | trigger layer, episode engine |
 | **Coach Digest** | The workflow that supplies structured Weekly Drift Detection output to a prompt, then produces the user-facing response. It does not decide whether Drift exists. | Weekly Coach, narrative layer, delivery engine |
+| **Coach Digest Validations** | The code checks applied when Twinkl creates a Coach Digest response. The checks cover grounded quotes, score jargon, raw Schwartz value leakage, and response length. The same checks can produce a separate batch report. | numbered validation level, automated checks |
+| **Coach Digest Evals** | The offline, paid AI review of Coach Digest responses. It scores correctness, specificity, non-prescriptive tone, tension honesty, and the reflective question. The scores are AI review, not human validation. | numbered evaluation level, LLM-as-judge, meta-judge |
+| **Future human calibration of the AI review** | Future work in which human reviewers rate Coach Digest responses and the project compares those ratings with Coach Digest Evals. | numbered evaluation level, human validation when only calibration is meant |
 
 ## Compatibility Identifiers
 

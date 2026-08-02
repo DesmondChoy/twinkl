@@ -28,7 +28,7 @@ a submitted milestone file.
 ## Pre-submission checklist
 
 - Add final figures and tables.
-- Complete the Coach Digest Tier 1 and Tier 2 batch reports.
+- Complete the Coach Digest Validations and Coach Digest Evals reports.
 - Complete the citation-to-claim audit.
 - Add exact reproduction commands, environment versions, configurations, seeds,
   input versions, and output paths.

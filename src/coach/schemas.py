@@ -81,7 +81,7 @@ class CoachNarrative(BaseModel):
 
 
 class ValidationCheck(BaseModel):
-    """Single automated check for Coach Digest response quality."""
+    """One Coach Digest Validation."""
 
     name: str
     passed: bool
@@ -89,7 +89,7 @@ class ValidationCheck(BaseModel):
 
 
 class DigestValidation(BaseModel):
-    """Tier 1 automated checks for a Coach Digest response."""
+    """Coach Digest Validations for one Coach Digest response."""
 
     grounded_quotes: list[str] = Field(default_factory=list)
     word_count: int = Field(ge=0)

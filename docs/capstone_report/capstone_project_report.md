@@ -291,8 +291,8 @@
 
 - Weekly Drift Detection output schema and cited Journal Entry evidence
 - Active, recovered, uncertain, and mixed examples
-- Tier 1 groundedness, jargon, and length checks
-- No current Coach Digest Tier 1 or Tier 2 batch results
+- Coach Digest Validations for groundedness, jargon, and length
+- No current Coach Digest Validations or Coach Digest Evals results
 - No Coach Digest usefulness claim without batch results and human validation
 - Brief Experience and Inspect example of end-to-end POC behavior
 - Evaluation boundary in [Explanation Quality Evaluation](../evals/explanation_quality_eval.md)
