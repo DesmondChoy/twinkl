@@ -639,10 +639,10 @@ describe("manual Journal Entry Experience", () => {
     expect(screen.getByText("What felt clearest during that walk?")).toBeTruthy();
   });
 
-  it("advances Simulated time from the newest finalized Journal Entry", async () => {
+  it("keeps the next-day action available on Sunday", async () => {
     const savedEntry = {
       ...entry(),
-      date: "2026-07-20",
+      date: "2026-08-02",
     };
     const initial: ExperienceState = {
       ...createExperienceState(),
@@ -650,7 +650,10 @@ describe("manual Journal Entry Experience", () => {
       revision: 1,
       journal_entries: [savedEntry],
       nudges: [nudge("no_nudge")],
-      assessment_clock: canonicalInspectFixture.session.assessment_clock,
+      assessment_clock: {
+        ...canonicalInspectFixture.session.assessment_clock!,
+        current_date: "2026-08-02",
+      },
       run_state: "complete",
     };
     api.advanceAssessmentTime.mockResolvedValueOnce({
@@ -660,7 +663,7 @@ describe("manual Journal Entry Experience", () => {
         revision: 2,
         assessment_clock: {
           mode: "simulated_assessment",
-          current_date: "2026-07-21",
+          current_date: "2026-08-03",
           timezone: "Asia/Singapore",
         },
       },
@@ -671,7 +674,7 @@ describe("manual Journal Entry Experience", () => {
 
     expect(
       screen.getByRole("complementary", { name: "Simulated time" }).textContent,
-    ).toContain("Jul 20, 2026");
+    ).toContain("Aug 2, 2026");
     expect(screen.getByRole("button", { name: "Close week and review" }))
       .toBeTruthy();
     await user.click(
@@ -682,7 +685,7 @@ describe("manual Journal Entry Experience", () => {
       expect(
         screen.getByRole("complementary", { name: "Simulated time" })
           .textContent,
-      ).toContain("Jul 21, 2026"),
+      ).toContain("Aug 3, 2026"),
     );
     expect(api.advanceAssessmentTime).toHaveBeenCalledWith({
       sessionId: profile.session_id,

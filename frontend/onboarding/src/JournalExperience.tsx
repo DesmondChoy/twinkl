@@ -842,9 +842,6 @@ export default function JournalExperience({
             && entryFinalized
             && !isBusy
             && !isAwaitingResponse;
-          const assessmentWeekday = assessmentDate
-            ? (new Date(`${assessmentDate}T00:00:00Z`).getUTCDay() + 6) % 7
-            : null;
           return (
             <li
               id={journalEntryAnchorId(entry.journal_entry_id)}
@@ -901,15 +898,13 @@ export default function JournalExperience({
                       : "Journal Entries"}.
                   </p>
                   <div>
-                    {assessmentWeekday !== 6 ? (
-                      <button
-                        className="button button--quiet"
-                        type="button"
-                        onClick={() => void changeAssessmentTime("next_day")}
-                      >
-                        Write on the next day
-                      </button>
-                    ) : null}
+                    <button
+                      className="button button--quiet"
+                      type="button"
+                      onClick={() => void changeAssessmentTime("next_day")}
+                    >
+                      Write on the next day
+                    </button>
                     <button
                       className="button button--primary"
                       type="button"
