@@ -1,14 +1,16 @@
 name: coach_narrative_judge
 description: >-
-  LLM-as-judge rubric for Coach Digest responses. Scores correctness,
+  AI evaluation rubric for Coach Digest responses. Scores correctness,
   specificity, non-prescriptive tone, and tension honesty against Weekly Drift
   Detection output. Not a substitute for human validation.
-version: '1.1'
+version: '2.0'
 input_variables:
-  - core_values
-  - drift_states
-  - top_tensions
-  - evidence
+  - persona_name
+  - week_window
+  - response_policy
+  - compass_context_lines
+  - drift_summary_lines
+  - evidence_lines
   - weekly_mirror
   - tension_explanation
   - reflective_question
@@ -17,37 +19,54 @@ template: |
   was built from. Judge only what the evidence supports. You are an automated
   reviewer, not a human rater; be strict and literal.
 
-  The reflection has three parts: a weekly mirror, a tension explanation, and a
-  reflective question. It was generated from the digest facts below.
+  The Coach Digest response has three parts: a weekly mirror, a tension
+  explanation, and a reflective question. Score it against the same factual
+  contract that was used to generate it.
 
-  DIGEST FACTS
-  Core Values: {{ core_values }}
-  Confirmed Drift states (empty means no confirmed Drift): {{ drift_states }}
-  Primary tensions surfaced to the writer: {{ top_tensions }}
-  Cited evidence excerpts from the writer's Journal Entries:
-  {{ evidence }}
+  FACTUAL CONTRACT
+  Preferred name: {{ persona_name }}
+  Week: {{ week_window }}
+  Selected Coach Digest policy: {{ response_policy }}
 
-  REFLECTION TO SCORE
+  Core Value context:
+  {% for line in compass_context_lines %}
+  {{ line }}
+  {% endfor %}
+
+  Weekly Drift Detection findings:
+  {% for line in drift_summary_lines %}
+  {{ line }}
+  {% endfor %}
+
+  Cited Journal Entries:
+  {% for line in evidence_lines %}
+  {{ line }}
+  {% endfor %}
+
+  COACH DIGEST RESPONSE TO SCORE
   Weekly mirror: {{ weekly_mirror }}
   Tension explanation: {{ tension_explanation }}
   Reflective question: {{ reflective_question }}
 
   Score each dimension from 1 (poor) to 5 (excellent):
 
-  - correctness: Does the reflection accurately reflect the cited evidence and
-    the week's actual pattern, without inventing events or misreading them?
+  - correctness: Does the Coach Digest response follow the selected policy and
+    accurately reflect the Weekly Drift Detection findings and cited Journal
+    Entries, without inventing events or misreading them? A material policy
+    mismatch must score 2 or lower.
   - specificity: Does it reference concrete details from the evidence rather
     than vague generalities?
   - non_prescriptive_tone: Does it avoid advice, action plans, and judgment,
     staying reflective rather than directive? (5 = fully reflective, 1 = openly
     prescriptive.)
-  - tension_honesty: When there is no confirmed Drift and no real tension in the
-    evidence, does the tension explanation refrain from inventing one? If a real
-    tension exists, does it describe that tension faithfully? (5 = honest about
-    what is or is not there, 1 = manufactures a tension that the evidence and
-    Drift states do not support.)
+  - tension_honesty: Apply the selected policy literally. For drift_detected,
+    explain only active Drift stated in the findings. For no_current_drift, do
+    not claim current Drift or treat its absence as proof of success; recovered
+    Drift may be acknowledged when supplied. For more_reflection_needed, state
+    the ambiguity without deciding whether Drift exists. A material policy
+    mismatch must score 2 or lower.
 
-  Also judge the reflective question with a boolean:
+  Also evaluate the reflective question with a boolean:
   - question_is_open_and_relevant: true if the question is open-ended, relevant
     to the evidence, and non-leading; false otherwise.
 

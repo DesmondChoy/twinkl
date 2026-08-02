@@ -30,28 +30,31 @@ This evaluation validates that explanations feel accurate and actionable to user
 - The approved Weekly Drift Reviewer and Drift Detector runtime selects cited
   Journal Entry evidence for the Weekly Drift Detection output in
   [`src/coach/weekly_drift_runtime.py`](../../src/coach/weekly_drift_runtime.py)
-- Tier 1 Coach Digest response checks are implemented: groundedness via quoted substring matches, non-circularity via score-jargon avoidance, and length bounds via [`validate_weekly_digest_narrative()`](../../src/coach/weekly_digest.py)
-- Tier 1 reporting for Coach Digest responses: A batch runner
+- Automated Coach Digest response checks are implemented: groundedness via quoted substring matches, non-circularity via score-jargon avoidance, and length bounds via [`validate_weekly_digest_narrative()`](../../src/coach/weekly_digest.py)
+- Automated reporting for Coach Digest responses: A batch runner
   ([`src/evals/coach_narrative_tier1.py`](../../src/evals/coach_narrative_tier1.py))
   runs `validate_weekly_digest_narrative()` over the persisted Weekly Drift Detection output
   parquet and reports per-check pass rates against targets. No current batch
   result is committed.
-- Tier 2 (LLM-as-judge) for Coach Digest responses: An LLM-as-judge eval
+- AI review of Coach Digest responses: An AI evaluator
   ([`src/evals/coach_narrative_judge.py`](../../src/evals/coach_narrative_judge.py),
   prompt [`prompts/coach_narrative_judge.yaml`](../../prompts/coach_narrative_judge.yaml))
-  scores correctness, specificity, non-prescriptive tone, and tension honesty.
-  Scores are **LLM-as-judge, not human validation**; Tier 3 human calibration
-  remains future work.
+  scores correctness, specificity, non-prescriptive tone, and tension honesty
+  against the same selected Coach Digest policy, Core Value phrases, goal
+  context, Weekly Drift Detection findings, and cited Journal Entries used for
+  Coach Digest generation.
+  Scores are **AI evaluation, not human validation**. Human calibration remains
+  future work.
 
 ### What's Missing
-- **Coach Digest batch results:** No current Tier 1 or Tier 2 batch result is
+- **Coach Digest batch results:** No current automated-check or AI-review result is
   committed
-- **Tier 1 for LLM-Judge rationales:** No batch checker/report yet in `src/judge/`
-- **Tier 2 for LLM-Judge rationales:** Rationale-review LLM evaluation
-- **Tier 3:** Human calibration protocol and κ calculation (both explanation types)
+- **Automated checks for LLM-Judge rationales:** No batch checker or report yet in `src/judge/`
+- **AI review of LLM-Judge rationales:** No rationale-review evaluation
+- **Human calibration:** No protocol or κ calculation for either explanation type
 
 ### Blocking Dependencies
-Tier 1 Coach Digest checks and approved-path evidence provenance are
+Automated Coach Digest checks and approved-path evidence provenance are
 implemented. Deeper end-to-end explanation evaluation still requires a fresh
 final test and committed batch results. VIF Critic outputs belong to offline
 review and retraining.
@@ -60,15 +63,15 @@ review and retraining.
 
 The implemented slice covers Weekly Drift Detection output storage, Coach
 Digest prompt rendering, programmatic response generation with an injected
-callable, and Tier 1 response validation. The analogous batch checker for LLM-Judge rationales
-remains planned, while Tier 2 (rationale-review LLM) and Tier 3 (human calibration) are
-later validation phases.
+callable, and automated response validation. The analogous batch checker for
+LLM-Judge rationales remains planned. AI review of rationales and human
+calibration are later validation phases.
 
 ### Next Steps
-1. Add a batch Tier 1 checker for LLM-Judge rationales in `src/judge/` and run it over the existing 1,594 rationale-bearing rows
-2. Run the Coach Digest Tier 1 batch evaluator and record its pass rates
-3. Run the Coach Digest Tier 2 evaluator and identify its scores as LLM-as-judge review
-4. *(Future phase)* Sample 20-30 explanations for Tier 3 human calibration
+1. Add an automated batch checker for LLM-Judge rationales in `src/judge/` and run it over the existing 1,594 rationale-bearing rows
+2. Run the automated Coach Digest batch evaluation and record its pass rates
+3. Run the Coach Digest AI review and identify its scores as AI evaluation
+4. *(Future phase)* Sample 20-30 explanations for human calibration
 
 ---
 
@@ -106,7 +109,7 @@ different from the plan you had in mind?"
 - Avoids prescriptive or judgmental language
 
 The approved path lives in `src/coach/weekly_drift_runtime.py` and
-`src/coach/weekly_digest.py`. The evaluation layer remains incomplete: Tier 1
+`src/coach/weekly_digest.py`. The evaluation layer remains incomplete. Automated
 checks are implemented, while benchmark pass-rate reporting and user-study
 calibration are pending.
 
@@ -140,9 +143,9 @@ For deeper analysis, rate explanations on three dimensions:
 
 ## Evaluation Protocol
 
-### For Synthetic Data (Automated) — Tiered Evaluation
+### For Synthetic Data (Automated)
 
-#### Tier 1: Automated Code Checks (No LLM)
+#### Automated Code Checks (No LLM)
 
 Fast, objective checks that don't require LLM calls:
 
@@ -162,12 +165,12 @@ validation = validate_weekly_digest_narrative(digest, narrative)
 results = {check.name: check.passed for check in validation.checks}
 ```
 
-#### Tier 2: Rationale-Review LLM Evaluation
+#### AI Review of LLM-Judge Rationales
 
 > **Implementation phase:** Future — not required for the initial Coach Digest
 > response evaluation.
 
-For rationales that pass Tier 1, evaluate with LLM:
+For rationales that pass the automated code checks, evaluate them with an LLM:
 
 | Criterion | Question | Scale |
 |-----------|----------|-------|
@@ -184,7 +187,7 @@ For rationales that pass Tier 1, evaluate with LLM:
 - Rationale-review LLM specificity < 3
 - Rationale-review LLM expresses uncertainty
 
-#### Tier 3: Human Calibration (Small Sample)
+#### Human Calibration (Small Sample)
 
 > **Implementation phase:** Future — designed for production validation.
 
@@ -223,17 +226,17 @@ Day 14:      Second Coach Digest response + rating
 LLM-Judge produces rationales for N Journal Entries
               ↓
 ┌─────────────────────────────────────┐
-│  Tier 1: Automated Code Checks      │
+│  Automated Code Checks              │
 │  - Groundedness (verifiable quotes) │
 │  - Non-circularity (no value name)  │
 │  - Length (25-180 words)            │
 │  Output: Pass/Fail + metrics        │
 └─────────────────────────────────────┘
               ↓
-       (Passed Tier 1)
+      (Passed code checks)
               ↓
 ┌─────────────────────────────────────┐
-│  Tier 2: Rationale-Review LLM       │
+│  AI Review of Rationales            │
 │  - Correctness (1-5)                │
 │  - Specificity (1-5)                │
 │  Output: Scores + flags for review  │
@@ -242,7 +245,7 @@ LLM-Judge produces rationales for N Journal Entries
        (Flagged or sampled)
               ↓
 ┌─────────────────────────────────────┐
-│  Tier 3: Human Calibration          │
+│  Human Calibration                  │
 │  - 20-30 rationales human-rated     │
 │  - Compare to rationale-review LLM  │
 │  Output: Cohen's κ agreement        │
@@ -255,24 +258,24 @@ LLM-Judge produces rationales for N Journal Entries
 
 | Failure Mode | Example | Detection Method |
 |--------------|---------|------------------|
-| **Hallucinated quotes** | "Entry mentioned 'staying late'" when it didn't | Tier 1: Groundedness check |
-| **Generic explanation** | "Shows alignment with this value" | Tier 1: Length check + Tier 2: Specificity |
-| **Circular reasoning** | "Achievement +1 because of achievement behavior" | Tier 1: Non-circularity check |
-| **Wrong attribution** | Confuses which value a behavior supports | Tier 2: rationale-review LLM correctness |
-| **Over-inference** | Reads too much into a vague Journal Entry | Tier 2: rationale-review LLM correctness |
+| **Hallucinated quotes** | "Entry mentioned 'staying late'" when it didn't | Automated groundedness check |
+| **Generic explanation** | "Shows alignment with this value" | Automated length check and AI specificity review |
+| **Circular reasoning** | "Achievement +1 because of achievement behavior" | Automated non-circularity check |
+| **Wrong attribution** | Confuses which value a behavior supports | AI review of rationale correctness |
+| **Over-inference** | Reads too much into a vague Journal Entry | AI review of rationale correctness |
 
 ---
 
 ## Success Criteria
 
-| Metric | Target | Tier | Phase | Rationale |
-|--------|--------|------|-------|-----------|
-| Groundedness (code) | > 70% | 1 | **Initial** | Rationales should quote or reference Journal Entry content |
-| Non-circularity (code) | > 95% | 1 | **Initial** | Rationales shouldn't just restate value name |
-| Length compliance | > 90% | 1 | **Initial** | Most narratives should be 25-180 words |
-| Correctness (rationale-review LLM) | Mean > 3.5/5 | 2 | Future | Rationales should be factually accurate |
-| Specificity (rationale-review LLM) | Mean > 3.5/5 | 2 | Future | Rationales should cite concrete details |
-| Human-LLM agreement | κ > 0.6 | 3 | Future | The rationale-review LLM should align with human judgment |
+| Metric | Target | Method | Phase | Rationale |
+|--------|--------|--------|-------|-----------|
+| Groundedness (code) | > 70% | Automated check | **Initial** | Rationales should quote or reference Journal Entry content |
+| Non-circularity (code) | > 95% | Automated check | **Initial** | Rationales shouldn't just restate value name |
+| Length compliance | > 90% | Automated check | **Initial** | Most narratives should be 25-180 words |
+| Correctness (rationale-review LLM) | Mean > 3.5/5 | AI review | Future | Rationales should be factually accurate |
+| Specificity (rationale-review LLM) | Mean > 3.5/5 | AI review | Future | Rationales should cite concrete details |
+| Human-LLM agreement | κ > 0.6 | Human calibration | Future | The rationale-review LLM should align with human judgment |
 | Mean Likert rating (users) | ≥ 3.5/5 | User study | Future | Above neutral = generally useful |
 | % ratings ≥ 4 (users) | > 50% | User study | Future | Majority find it "mostly accurate" or better |
 

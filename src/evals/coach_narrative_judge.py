@@ -1,19 +1,18 @@
-"""Tier-2 LLM-as-judge evaluation for Coach Digest responses.
+"""Automated AI evaluation for Coach Digest responses.
 
 Scores a Coach Digest response against its Weekly Drift Detection evidence.
 The four dimensions are correctness, specificity, non-prescriptive tone, and
 tension honesty. It also checks whether the reflective question is open-ended
 and relevant.
 
-These are **LLM-as-judge scores, not human validation**. They are a cheap,
-repeatable proxy for narrative quality; Tier-3 human calibration (Cohen's κ vs
-human raters) remains future work and is required before treating these scores
-as ground truth.
+These are **AI evaluation scores, not human validation**. They are a low-cost,
+repeatable proxy for response quality. Human calibration with Cohen's κ remains
+future work and is required before treating these scores as ground truth.
 
-The judge LLM is an injected ``LLMCompleteFn`` (same contract the Coach Digest
-generation uses), so this module stays provider-agnostic and testable. It
-degrades gracefully: an empty, malformed, or invalid judge response yields a
-``None`` verdict that is skipped in aggregation.
+The evaluator LLM is an injected ``LLMCompleteFn``. Coach Digest generation uses
+the same contract. This module is provider-agnostic and testable. An empty,
+malformed, or invalid evaluator response yields a ``None`` verdict that is
+skipped in aggregation.
 """
 
 from __future__ import annotations
@@ -30,11 +29,14 @@ from pydantic import BaseModel, Field, ValidationError
 from prompts import load_prompt
 from src.coach.llm_client import build_llm_complete
 from src.coach.schemas import CoachNarrative, WeeklyDigest
-from src.coach.weekly_digest import LLMCompleteFn
+from src.coach.weekly_digest import (
+    LLMCompleteFn,
+    build_coach_digest_prompt_inputs,
+)
 
-# Flag any dimension scoring below this for human review (eval doc Tier 2).
+# Flag any dimension scoring below this for human review.
 REVIEW_THRESHOLD = 3
-# Target mean per dimension (eval doc Tier 2 success criteria).
+# Target mean per dimension from the evaluation guide.
 MEAN_TARGET = 3.5
 
 COACH_NARRATIVE_JUDGE_RESPONSE_FORMAT: dict = {
@@ -71,7 +73,7 @@ SCORE_DIMENSIONS = (
 
 
 class JudgeVerdict(BaseModel):
-    """One LLM-as-judge verdict for a single Coach Digest response."""
+    """One AI evaluation verdict for a single Coach Digest response."""
 
     correctness: int = Field(ge=1, le=5)
     specificity: int = Field(ge=1, le=5)
@@ -85,24 +87,14 @@ class JudgeVerdict(BaseModel):
         return any(getattr(self, dim) < REVIEW_THRESHOLD for dim in SCORE_DIMENSIONS)
 
 
-def _evidence_lines(digest: WeeklyDigest) -> str:
-    if not digest.evidence:
-        return "(no cited evidence)"
-    return "\n".join(f"- {snippet.excerpt}" for snippet in digest.evidence)
-
-
 def render_judge_prompt(digest: WeeklyDigest, narrative: CoachNarrative) -> str:
-    """Render the LLM-as-judge prompt for one digest + narrative pair."""
+    """Render the AI evaluation prompt for one response and its facts."""
     template = load_prompt("coach_narrative_judge")
+    factual_inputs = build_coach_digest_prompt_inputs(digest)
     return cast(
         str,
         template.render(
-            core_values=", ".join(digest.core_values) or "(none)",
-            drift_states=(
-                json.dumps(digest.drift_states) if digest.drift_states else "{}"
-            ),
-            top_tensions=", ".join(digest.top_tensions) or "None clear this week",
-            evidence=_evidence_lines(digest),
+            **factual_inputs,
             weekly_mirror=narrative.weekly_mirror,
             tension_explanation=narrative.tension_explanation,
             reflective_question=narrative.reflective_question,
@@ -115,7 +107,7 @@ async def judge_narrative(
     narrative: CoachNarrative,
     llm_complete: LLMCompleteFn,
 ) -> JudgeVerdict | None:
-    """Score one narrative with the judge LLM; None on any failure."""
+    """Score one response with the evaluator LLM; return None on failure."""
     prompt = render_judge_prompt(digest, narrative)
     raw = await llm_complete(prompt, COACH_NARRATIVE_JUDGE_RESPONSE_FORMAT)
     if not raw:
@@ -134,7 +126,7 @@ async def judge_narrative(
 
 @dataclass
 class JudgeReport:
-    """Aggregated LLM-as-judge results across a Coach Digest response sample."""
+    """Aggregated AI evaluation results for Coach Digest responses."""
 
     judge_model: str
     n_scored: int
@@ -149,8 +141,8 @@ class JudgeReport:
             "eval": "coach_narrative_judge",
             "source": "llm_as_judge",
             "note": (
-                "LLM-as-judge scores, NOT human validation. Tier-3 human "
-                "calibration (Cohen's kappa) is required before treating these "
+                "AI evaluation scores, NOT human validation. Human calibration "
+                "with Cohen's kappa is required before treating these "
                 "as ground truth."
             ),
             "judge_model": self.judge_model,
@@ -195,14 +187,14 @@ def aggregate_verdicts(
 
 
 def render_markdown(report: JudgeReport) -> str:
-    """Render a short markdown summary of an LLM-as-judge report."""
+    """Render a short markdown summary of an AI evaluation report."""
     lines = [
-        "# Coach Digest Response — Tier-2 LLM-as-Judge Report",
+        "# Coach Digest Response — AI Evaluation Report",
         "",
-        "**Source:** LLM-as-judge scores, NOT human validation. Tier-3 human "
+        "**Source:** AI evaluation scores, NOT human validation. Human "
         "calibration is future work.",
         "",
-        f"- Judge model: `{report.judge_model}`",
+        f"- Evaluator model: `{report.judge_model}`",
         f"- Scored: {report.n_scored}",
         f"- Failed (no valid verdict): {report.n_failed}",
         f"- Flagged for human review (any dimension < {REVIEW_THRESHOLD}): "
@@ -246,19 +238,19 @@ def _load_manifest(manifest_path: Path) -> list[tuple[WeeklyDigest, CoachNarrati
 
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Score Coach Digest responses with an LLM-as-judge (Tier 2)."
+        description="Score Coach Digest responses with an AI evaluator."
     )
     parser.add_argument(
         "--manifest",
         type=Path,
         required=True,
-        help="JSON file of {digest, narrative} sample pairs to judge.",
+        help="JSON file of {digest, narrative} sample pairs to evaluate.",
     )
     parser.add_argument("--out", type=Path, default=None)
     parser.add_argument(
         "--execute",
         action="store_true",
-        help="Authorize paid judge LLM calls. Without it, this prints the plan "
+        help="Authorize paid evaluator LLM calls. Without it, this prints the plan "
         "and makes no calls.",
     )
     return parser
@@ -270,14 +262,15 @@ def main(argv: list[str] | None = None) -> int:
 
     if not args.execute:
         print(
-            f"[dry run] Would judge {len(pairs)} Coach Digest response(s) with the "
+            f"[dry run] Would evaluate {len(pairs)} Coach Digest response(s) "
+            "with the "
             "configured provider. Re-run with --execute to make paid calls."
         )
         return 0
 
     llm_complete = build_llm_complete()
     if llm_complete is None:
-        print("No judge provider available (missing API key). Aborting.")
+        print("No evaluator provider available (missing API key). Aborting.")
         return 1
 
     judge_model = "unknown"  # provider resolves its own model internally

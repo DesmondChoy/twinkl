@@ -4,7 +4,7 @@ How to run every automated test and evaluation that covers the Weekly Drift Dete
 the Coach Digest response (`weekly_mirror`, `tension_explanation`,
 `reflective_question`). This is the operational companion to
 [`explanation_quality_eval.md`](./explanation_quality_eval.md), which defines the
-tiered evaluation design; this file is the runbook.
+evaluation design; this file is the runbook.
 
 All commands assume the virtual environment is active and you are at the repo
 root:
@@ -21,13 +21,13 @@ source .venv/bin/activate        # Bash/Zsh
 | Layer | Kind | LLM calls? | Where |
 | --- | --- | --- | --- |
 | Weekly Drift Detection output builders + rendering | Unit tests | No (mocked) | `tests/coach/test_weekly_digest.py`, `tests/coach/test_runtime.py`, `tests/coach/test_weekly_drift_runtime.py` |
-| Tier-1 validation checks (groundedness, non_circularity, value_leakage, length) | Unit tests | No | `tests/coach/test_weekly_digest.py` |
-| Tier-1 batch report over a real Weekly Drift Detection output set | Eval | No | `src/evals/coach_narrative_tier1.py` |
-| Tier-2 LLM-as-judge (correctness, specificity, non-prescriptive tone, tension honesty) | Eval | **Yes (paid)** | `src/evals/coach_narrative_judge.py` |
+| Automated response checks (groundedness, non_circularity, value_leakage, length) | Unit tests | No | `tests/coach/test_weekly_digest.py` |
+| Automated batch report over a real Weekly Drift Detection output set | Eval | No | `src/evals/coach_narrative_tier1.py` |
+| AI review (correctness, specificity, non-prescriptive tone, tension honesty) | Eval | **Yes (paid)** | `src/evals/coach_narrative_judge.py` |
 
-The Tier-1 checks are mechanical code checks, not human validation. The Tier-2
-scores are **LLM-as-judge, not human validation**. Tier-3 human calibration
-(Cohen's κ) is future work.
+The automated checks are mechanical code checks, not human validation. The AI
+review scores are **AI evaluation, not human validation**. Human calibration
+with Cohen's κ is future work.
 
 ---
 
@@ -41,21 +41,21 @@ Run all Coach Digest and Weekly Drift Detection output unit tests:
 uv run pytest tests/coach
 ```
 
-Run just the Weekly Drift Detection output builder + Tier-1 validation tests:
+Run only the Weekly Drift Detection output builder and automated response tests:
 
 ```sh
 uv run pytest tests/coach/test_weekly_digest.py
 ```
 
-Run only the Tier-1 validation tests (groundedness, non_circularity,
+Run only the automated response tests (groundedness, non_circularity,
 value_leakage, length — both pass and fail paths):
 
 ```sh
 uv run pytest tests/coach/test_weekly_digest.py -k validation
 ```
 
-Run the eval-module unit tests (Tier-1 batch aggregator and Tier-2 judge
-plumbing, both mocked):
+Run the evaluation unit tests for the batch report and AI review. Both use
+mocked calls:
 
 ```sh
 uv run pytest tests/evals/test_coach_narrative_tier1.py \
@@ -71,7 +71,7 @@ uv run mypy src/evals            # when type behavior changed
 
 ---
 
-## 2. Tier-1 batch eval (no API calls)
+## 2. Automated batch evaluation (no API calls)
 
 Runs `validate_weekly_digest_narrative()` over every Coach Digest response in a persisted
 Weekly Drift Detection output parquet and reports per-check pass rates against the targets in
@@ -94,16 +94,23 @@ Pass-rate targets: groundedness > 70%, non_circularity > 95%, length > 90%.
 
 ---
 
-## 3. Tier-2 LLM-as-judge eval (paid API calls)
+## 3. AI review of Coach Digest responses (paid API calls)
 
 Scores Coach Digest responses on correctness, specificity, non-prescriptive tone, and
 tension honesty, and flags whether the reflective question is open-ended. Judges
 a fixed sample described by a manifest. **Makes paid calls and is gated behind
 `--execute`.**
 
+The evaluator uses the same factual contract as Coach Digest generation. This
+contract includes the selected Coach Digest policy, user-facing Core Value
+phrases, goal context, explicit Weekly Drift Detection findings, and cited
+Journal Entries with dates, evidence roles, Core Value mappings, and excerpts.
+It does not use the legacy
+`top_tensions` field as a substitute for these facts.
+
 ### 3a. Build the sample (approved path)
 
-The judge should score responses as the approved path actually produces them,
+The evaluator should score responses as the approved path actually produces them,
 not leftover demo-tool outputs. Regenerate the fixed persona roster through
 `run_weekly_drift_coach_cycle` and rebuild the manifest:
 
@@ -115,7 +122,7 @@ uv run python scripts/coach/generate_approved_judge_sample.py
 
 # Real run — paid Weekly Drift Reviewer calls (one per week of history per
 # persona) plus one Coach Digest response call per persona; overwrites their
-# rows in the Weekly Drift Detection output parquet, then rebuilds the judge manifest:
+# rows in the Weekly Drift Detection output parquet, then rebuilds the evaluation manifest:
 .venv/bin/python scripts/coach/generate_approved_judge_sample.py --execute
 
 # Smoke-test one persona first:
@@ -128,14 +135,14 @@ The Coach Digest provider comes from `TWINKL_COACH_PROVIDER` (`openai` or
 (`OPENAI_API_KEY` and/or `GEMINI_API_KEY`). The Weekly Drift Reviewer uses
 OpenAI.
 
-### 3b. Run the judge
+### 3b. Run the AI review
 
 ```sh
-# Dry run — prints the plan, makes no calls:
+# Dry run — prints the plan, makes no evaluator calls:
 uv run python -m src.evals.coach_narrative_judge \
   --manifest logs/experiments/reports/coach_narrative_tier1_20260727/judge_sample_manifest.json
 
-# Real run — paid judge calls; writes metrics.json and report.md:
+# Real run — paid evaluator calls; writes metrics.json and report.md:
 uv run python -m src.evals.coach_narrative_judge \
   --manifest logs/experiments/reports/coach_narrative_tier1_20260727/judge_sample_manifest.json \
   --out logs/experiments/reports/coach_narrative_tier1_20260727 \
@@ -144,15 +151,15 @@ uv run python -m src.evals.coach_narrative_judge \
 
 Targets: mean > 3.5/5 per dimension. Any response scoring below 3 on any
 dimension is flagged for human review. Report and doc lines label these scores
-as LLM-as-judge, not human validation.
+as AI evaluation, not human validation.
 
 ---
 
 ## Provenance and honesty notes
 
-- Record the parquet source, sample manifest, judge provider/model, and row/
+- Record the parquet source, sample manifest, evaluator provider/model, and row/
   sample counts with every committed report.
-- Do not treat LLM-as-judge scores as human validation. State the source
+- Do not treat AI evaluation scores as human validation. State the source
   wherever it affects the conclusion.
 - The Weekly Drift Detection output parquet under `logs/exports/weekly_digests/` is a local,
   gitignored artifact; regenerate it via the approved path rather than assuming
@@ -162,8 +169,8 @@ as LLM-as-judge, not human validation.
 
 ## References
 
-- [`explanation_quality_eval.md`](./explanation_quality_eval.md) — tiered
-  evaluation design and status
+- [`explanation_quality_eval.md`](./explanation_quality_eval.md) — evaluation
+  design and status
 - [`overview.md`](./overview.md) — where explanation quality sits in the VIF
   evaluation flow
 - `src/coach/weekly_digest.py` — Weekly Drift Detection output builders,

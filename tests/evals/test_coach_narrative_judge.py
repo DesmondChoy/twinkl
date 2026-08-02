@@ -1,10 +1,13 @@
-"""Tests for the Coach Digest response Tier-2 LLM-as-judge eval."""
+"""Tests for the Coach Digest response AI evaluator."""
 
 from __future__ import annotations
 
 import asyncio
 import json
 
+import pytest
+
+from prompts import get_prompt_metadata
 from src.coach.schemas import CoachNarrative, EvidenceSnippet, WeeklyDigest
 from src.evals.coach_narrative_judge import (
     JudgeVerdict,
@@ -18,6 +21,7 @@ from src.evals.coach_narrative_judge import (
 def _digest() -> WeeklyDigest:
     return WeeklyDigest(
         persona_id="deadbeef",
+        persona_name="Casey",
         week_start="2025-01-01",
         week_end="2025-01-07",
         response_mode="stable",
@@ -26,6 +30,7 @@ def _digest() -> WeeklyDigest:
         n_entries=3,
         overall_mean=0.4,
         core_values=["benevolence", "self_direction"],
+        goal_context="Make more time for family",
         drift_states={},
         top_tensions=[],
         top_strengths=["benevolence"],
@@ -60,10 +65,17 @@ def _stub_llm(payload: str | None):
 def test_render_judge_prompt_includes_facts_and_narrative():
     prompt = render_judge_prompt(_digest(), _narrative())
 
-    # Digest facts.
-    assert "benevolence" in prompt
-    assert "None clear this week" in prompt  # empty top_tensions fallback
-    assert "helped a colleague debug" in prompt
+    # The evaluator receives the same factual contract as generation.
+    assert "Preferred name: Casey" in prompt
+    assert "Week: 2025-01-01 to 2025-01-07" in prompt
+    assert "Selected Coach Digest policy: no_current_drift" in prompt
+    assert "Being there for the people closest to me" in prompt
+    assert 'User-confirmed current focus: "Make more time for family"' in prompt
+    assert "Weekly Drift Detection did not find two consecutive" in prompt
+    assert "2025-01-03 | supportive evidence" in prompt
+    assert "internal Schwartz label(s): Benevolence" in prompt
+    assert 'excerpt: "called my mom and helped a colleague debug"' in prompt
+    assert "Primary tensions" not in prompt
     # Narrative fields.
     assert "A steady week" in prompt
     assert "Nothing pulled against" in prompt
@@ -71,6 +83,73 @@ def test_render_judge_prompt_includes_facts_and_narrative():
     # Rubric dimensions.
     assert "tension_honesty" in prompt
     assert "non_prescriptive_tone" in prompt
+
+
+def test_judge_prompt_declares_generation_facts_plus_narrative():
+    metadata = get_prompt_metadata("coach_narrative_judge")
+
+    assert metadata["version"] == "2.0"
+    assert metadata["input_variables"] == [
+        "persona_name",
+        "week_window",
+        "response_policy",
+        "compass_context_lines",
+        "drift_summary_lines",
+        "evidence_lines",
+        "weekly_mirror",
+        "tension_explanation",
+        "reflective_question",
+    ]
+
+
+@pytest.mark.parametrize(
+    ("response_mode", "drift_states", "expected_policy", "expected_findings"),
+    [
+        ("active", {"benevolence": "active"}, "drift_detected", ("Drift is active",)),
+        (
+            "recovered",
+            {"benevolence": "recovered"},
+            "no_current_drift",
+            ("Drift is recovered",),
+        ),
+        (
+            "uncertain",
+            {"benevolence": "uncertain"},
+            "more_reflection_needed",
+            ("Drift status is uncertain",),
+        ),
+        (
+            "mixed",
+            {"benevolence": "active", "self_direction": "recovered"},
+            "drift_detected",
+            ("Drift is active", "Drift is recovered"),
+        ),
+        (
+            "stable",
+            {},
+            "no_current_drift",
+            ("did not find two consecutive Journal Entries",),
+        ),
+    ],
+)
+def test_judge_prompt_preserves_delivery_state_facts(
+    response_mode: str,
+    drift_states: dict[str, str],
+    expected_policy: str,
+    expected_findings: tuple[str, ...],
+):
+    digest = _digest().model_copy(
+        update={"response_mode": response_mode, "drift_states": drift_states}
+    )
+
+    prompt = render_judge_prompt(digest, _narrative())
+
+    assert f"Selected Coach Digest policy: {expected_policy}" in prompt
+    for finding in expected_findings:
+        assert finding in prompt
+    assert "A material policy mismatch must score 2 or lower" in " ".join(
+        prompt.split()
+    )
 
 
 def test_judge_narrative_parses_valid_verdict():
@@ -176,7 +255,7 @@ def test_aggregate_verdicts_computes_means_and_flags():
     assert report.question_open_rate == 0.5
 
 
-def test_render_markdown_labels_llm_as_judge():
+def test_render_markdown_labels_ai_evaluation():
     report = aggregate_verdicts(
         [
             JudgeVerdict(
@@ -193,6 +272,6 @@ def test_render_markdown_labels_llm_as_judge():
 
     markdown = render_markdown(report)
 
-    assert "LLM-as-judge" in markdown
+    assert "AI Evaluation" in markdown
     assert "NOT human validation" in markdown
     assert "tension_honesty" in markdown

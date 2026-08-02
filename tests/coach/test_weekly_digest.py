@@ -14,8 +14,8 @@ from src.coach.schemas import (
     WeeklyDigest,
 )
 from src.coach.weekly_digest import (
-    _build_prompt_inputs,
     attach_coach_artifacts,
+    build_coach_digest_prompt_inputs,
     build_weekly_digest,
     generate_weekly_digest_coach,
     persist_weekly_digest_record,
@@ -599,7 +599,7 @@ def test_prompt_reduces_drift_states_to_three_delivery_policies():
 
 def test_coach_prompt_declares_only_the_six_projected_inputs():
     metadata = get_prompt_metadata("weekly_digest_coach")
-    prompt_inputs = _build_prompt_inputs(_minimal_digest())
+    prompt_inputs = build_coach_digest_prompt_inputs(_minimal_digest())
 
     expected_inputs = [
         "persona_name",

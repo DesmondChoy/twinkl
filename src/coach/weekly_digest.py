@@ -861,11 +861,11 @@ def build_weekly_drift_reviewer_digest(
     )
 
 
-def _build_prompt_inputs(
+def build_coach_digest_prompt_inputs(
     digest: WeeklyDigest,
     config_path: Path = SCHWARTZ_CONFIG_PATH,
 ) -> dict[str, object]:
-    """Build template inputs for the Coach Digest prompt."""
+    """Build the shared factual inputs for Coach Digest generation and review."""
     value_map = _load_schwartz_value_map(config_path)
     compass_context_lines = _summarize_compass_context(
         value_map,
@@ -897,7 +897,7 @@ def _build_prompt_inputs(
 def render_digest_prompt(digest: WeeklyDigest) -> str:
     """Render the Coach Digest prompt from Weekly Drift Detection output."""
     prompt = load_prompt("weekly_digest_coach")
-    return cast(str, prompt.render(**_build_prompt_inputs(digest)))
+    return cast(str, prompt.render(**build_coach_digest_prompt_inputs(digest)))
 
 
 def render_digest_markdown(digest: WeeklyDigest) -> str:
@@ -1052,7 +1052,7 @@ def validate_weekly_digest_narrative(
     max_words: int = 180,
     config_path: Path = SCHWARTZ_CONFIG_PATH,
 ) -> DigestValidation:
-    """Run Tier 1 automated checks on a Coach Digest response."""
+    """Run automated checks on a Coach Digest response."""
     combined_text = " ".join(
         [
             narrative.weekly_mirror.strip(),
