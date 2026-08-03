@@ -580,27 +580,34 @@ h2 {
 }
 
 .living-compass__north-star--complete {
+  fill: #f4c76a;
   filter:
-    drop-shadow(0 0 3px rgba(247, 250, 249, 0.7))
-    drop-shadow(0 0 8px rgba(85, 118, 217, 0.42));
+    drop-shadow(0 0 4px rgba(255, 220, 142, 0.82))
+    drop-shadow(0 0 9px rgba(255, 138, 91, 0.62));
   opacity: 1;
   transform: scale(1.15);
-  animation: living-compass-star-glow 1.5s ease-out 1;
+  animation: living-compass-star-glow 1.8s ease-in-out infinite;
 }
 
 @keyframes living-compass-star-glow {
   0%, 100% {
     filter:
-      drop-shadow(0 0 3px rgba(247, 250, 249, 0.7))
-      drop-shadow(0 0 8px rgba(85, 118, 217, 0.42));
+      drop-shadow(0 0 4px rgba(255, 220, 142, 0.82))
+      drop-shadow(0 0 9px rgba(255, 138, 91, 0.62));
     transform: scale(1.15);
   }
 
   50% {
     filter:
-      drop-shadow(0 0 4px rgba(247, 250, 249, 0.82))
-      drop-shadow(0 0 11px rgba(85, 118, 217, 0.58));
-    transform: scale(1.19);
+      drop-shadow(0 0 6px rgba(255, 227, 158, 0.98))
+      drop-shadow(0 0 14px rgba(255, 138, 91, 0.82));
+    transform: scale(1.26);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .living-compass__north-star--complete {
+    animation: none;
   }
 }
 

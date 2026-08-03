@@ -71,17 +71,20 @@ describe("LivingCompass", () => {
     expect(first.svgDashLength).toBeCloseTo(8.056, 3);
   });
 
-  it("gives the completed north star one subtle glow pulse", () => {
+  it("keeps the completed north star glow pulsing", () => {
     const start = getStarGlowFrame(0);
-    const peak = getStarGlowFrame(750);
-    const end = getStarGlowFrame(1_500);
+    const peak = getStarGlowFrame(900);
+    const nextCycle = getStarGlowFrame(1_800);
+    const nextPeak = getStarGlowFrame(2_700);
 
     expect(start.active).toBe(true);
     expect(peak.opacity).toBeGreaterThan(start.opacity);
     expect(peak.scale).toBeGreaterThan(start.scale);
-    expect(end.active).toBe(false);
-    expect(end.opacity).toBeCloseTo(start.opacity);
-    expect(end.scale).toBeCloseTo(start.scale);
+    expect(nextCycle.active).toBe(true);
+    expect(nextCycle.opacity).toBeCloseTo(start.opacity);
+    expect(nextCycle.scale).toBeCloseTo(start.scale);
+    expect(nextPeak.opacity).toBeCloseTo(peak.opacity);
+    expect(nextPeak.scale).toBeCloseTo(peak.scale);
   });
 
   it("keeps its canvas decorative and shows a WebGL fallback", () => {

@@ -13,8 +13,10 @@ const SEGMENT_GAP = 0.065;
 const SEGMENT_STEP = FULL_CIRCLE / SEGMENT_COUNT;
 const SEGMENT_LENGTH = SEGMENT_STEP - SEGMENT_GAP;
 const NORTH_ANGLE = Math.PI / 2;
-const STAR_GLOW_DURATION_MS = 1_500;
-const STAR_GLOW_BASE_OPACITY = 0.26;
+const STAR_GLOW_DURATION_MS = 1_800;
+const STAR_GLOW_BASE_OPACITY = 0.32;
+const STAR_GOLD = "#f4c76a";
+const STAR_GLOW = "#ffab57";
 const START_HEADING_DEGREES = 180;
 const QUESTION_HEADINGS = [
   -90,
@@ -45,15 +47,14 @@ export interface StarGlowFrame {
 }
 
 export function getStarGlowFrame(elapsedMs: number): StarGlowFrame {
-  const progress = Math.min(
-    1,
-    Math.max(0, elapsedMs / STAR_GLOW_DURATION_MS),
-  );
-  const intensity = Math.sin(progress * Math.PI);
+  const progress =
+    (Math.max(0, elapsedMs) % STAR_GLOW_DURATION_MS) /
+    STAR_GLOW_DURATION_MS;
+  const intensity = (1 - Math.cos(progress * FULL_CIRCLE)) / 2;
   return {
-    active: progress < 1,
-    opacity: STAR_GLOW_BASE_OPACITY + intensity * 0.14,
-    scale: 1 + intensity * 0.1,
+    active: true,
+    opacity: STAR_GLOW_BASE_OPACITY + intensity * 0.32,
+    scale: 1 + intensity * 0.18,
   };
 }
 
@@ -205,14 +206,16 @@ function applyVisualState(
   compass.star.material.opacity = state.complete
     ? 1
     : 0.24 + state.calibration * 0.46;
+  compass.star.material.color.set(state.complete ? STAR_GOLD : PAPER);
   compass.star.scale.setScalar(state.complete ? 1.18 : 1);
+  compass.starHalo.material.color.set(state.complete ? STAR_GLOW : COMPLETED);
   compass.starHalo.material.opacity = state.complete
     ? STAR_GLOW_BASE_OPACITY
     : 0.035 + state.calibration * 0.08;
   compass.starHalo.scale.setScalar(1);
   if (!state.complete || reducedMotion) {
     compass.starGlowStartedAt = null;
-  } else if (!wasComplete) {
+  } else if (!wasComplete || compass.starGlowStartedAt === null) {
     compass.starGlowStartedAt = window.performance.now();
   }
   compass.guideMaterial.opacity = state.complete
@@ -512,8 +515,8 @@ export default function LivingCompass(props: LivingCompassProps) {
         const glow = getStarGlowFrame(time - compass.starGlowStartedAt);
         compass.starHalo.material.opacity = glow.opacity;
         compass.starHalo.scale.setScalar(glow.scale);
+        compass.star.scale.setScalar(1.18 + (glow.scale - 1) * 0.4);
         starGlowActive = glow.active;
-        if (!glow.active) compass.starGlowStartedAt = null;
       }
       renderScene();
 
