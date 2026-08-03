@@ -10,7 +10,25 @@ import * as THREE from "three";
 const SEGMENT_COUNT = 11;
 const FULL_CIRCLE = Math.PI * 2;
 const SEGMENT_GAP = 0.065;
-const MAX_HEADING_DEGREES = 38;
+const SEGMENT_STEP = FULL_CIRCLE / SEGMENT_COUNT;
+const SEGMENT_LENGTH = SEGMENT_STEP - SEGMENT_GAP;
+const NORTH_ANGLE = Math.PI / 2;
+const STAR_GLOW_DURATION_MS = 1_500;
+const STAR_GLOW_BASE_OPACITY = 0.26;
+const START_HEADING_DEGREES = 180;
+const QUESTION_HEADINGS = [
+  -90,
+  110,
+  -105,
+  75,
+  -60,
+  60,
+  -40,
+  32,
+  -18,
+  8,
+  -2,
+] as const;
 const COMPLETED = "#5576d9";
 const MUTED = "#8290a6";
 const INK = "#14223b";
@@ -18,6 +36,49 @@ const PAPER = "#f7faf9";
 
 export function compassMotionEnabled(reducedMotion: boolean) {
   return !reducedMotion;
+}
+
+export interface StarGlowFrame {
+  active: boolean;
+  opacity: number;
+  scale: number;
+}
+
+export function getStarGlowFrame(elapsedMs: number): StarGlowFrame {
+  const progress = Math.min(
+    1,
+    Math.max(0, elapsedMs / STAR_GLOW_DURATION_MS),
+  );
+  const intensity = Math.sin(progress * Math.PI);
+  return {
+    active: progress < 1,
+    opacity: STAR_GLOW_BASE_OPACITY + intensity * 0.14,
+    scale: 1 + intensity * 0.1,
+  };
+}
+
+export interface CompassMotionTuning {
+  damping: number;
+  kickDegreesPerSecond: number;
+  stiffness: number;
+}
+
+export function getCompassMotionTuning(
+  currentQuestionIndex: number | null,
+  settled: boolean,
+  complete = false,
+): CompassMotionTuning {
+  if (currentQuestionIndex === null || complete) {
+    return { damping: 10, kickDegreesPerSecond: 0, stiffness: 72 };
+  }
+  const tuning = currentQuestionIndex < 4
+    ? { damping: 3.4, kickDegreesPerSecond: 52, stiffness: 38 }
+    : currentQuestionIndex < 8
+      ? { damping: 5.8, kickDegreesPerSecond: 30, stiffness: 50 }
+      : { damping: 8.4, kickDegreesPerSecond: 14, stiffness: 64 };
+  return settled
+    ? { ...tuning, kickDegreesPerSecond: tuning.kickDegreesPerSecond * 0.42 }
+    : tuning;
 }
 
 export interface LivingCompassProps {
@@ -34,37 +95,53 @@ interface CompassVisualState {
   currentSegment: number | null;
   headingDegrees: number;
   leastSelected: boolean;
+  motion: CompassMotionTuning;
   mostSelected: boolean;
   settled: boolean;
 }
 
 interface SegmentVisual {
-  glow: THREE.Mesh<THREE.RingGeometry, THREE.MeshBasicMaterial>;
   mesh: THREE.Mesh<THREE.RingGeometry, THREE.MeshBasicMaterial>;
 }
 
-interface NeedleTipVisual {
-  halo: THREE.Mesh<THREE.TorusGeometry, THREE.MeshBasicMaterial>;
-  point: THREE.Mesh<THREE.SphereGeometry, THREE.MeshBasicMaterial>;
+export interface CompassSegmentLayout {
+  svgDashLength: number;
+  svgRotationDegrees: number;
+  thetaLength: number;
+  thetaStart: number;
+}
+
+export function getCompassSegmentLayout(
+  index: number,
+): CompassSegmentLayout {
+  return {
+    svgDashLength: SEGMENT_LENGTH / FULL_CIRCLE * 100,
+    svgRotationDegrees:
+      -90 + SEGMENT_GAP * 90 / Math.PI + index * 360 / SEGMENT_COUNT,
+    thetaLength: SEGMENT_LENGTH,
+    thetaStart:
+      NORTH_ANGLE - SEGMENT_GAP / 2 - SEGMENT_LENGTH - index * SEGMENT_STEP,
+  };
 }
 
 interface CompassScene {
   camera: THREE.PerspectiveCamera;
+  complete: boolean;
   guideMaterial: THREE.LineBasicMaterial;
   instrument: THREE.Group;
   needle: THREE.Group;
   needleHeading: number;
+  needleKickDirection: number;
   needleTarget: number;
+  needleTuning: CompassMotionTuning;
   needleVelocity: number;
   northMaterial: THREE.MeshBasicMaterial;
-  northTip: NeedleTipVisual;
   renderer: THREE.WebGLRenderer;
   scene: THREE.Scene;
   segments: SegmentVisual[];
-  shaftMaterial: THREE.LineBasicMaterial;
   southMaterial: THREE.MeshBasicMaterial;
-  southTip: NeedleTipVisual;
   star: THREE.Mesh<THREE.ShapeGeometry, THREE.MeshBasicMaterial>;
+  starGlowStartedAt: number | null;
   starHalo: THREE.Mesh<THREE.CircleGeometry, THREE.MeshBasicMaterial>;
 }
 
@@ -79,45 +156,27 @@ function getVisualState({
     ? SEGMENT_COUNT
     : Math.min(SEGMENT_COUNT, Math.max(0, milestone - 1));
   const calibration = completedSegments / SEGMENT_COUNT;
-  const choiceCount = Number(mostSelected) + Number(leastSelected);
-  const seekOffset = currentQuestionIndex === null
-    ? 0
-    : choiceCount === 0
-      ? 3
-      : choiceCount === 1
-        ? 1.4
-        : 0;
+  const safeQuestionIndex = currentQuestionIndex === null
+    ? null
+    : Math.min(SEGMENT_COUNT - 1, Math.max(0, currentQuestionIndex));
+  const settled = complete || (mostSelected && leastSelected);
   const headingDegrees = complete
     ? 0
-    : MAX_HEADING_DEGREES * (1 - calibration) + seekOffset;
+    : safeQuestionIndex === null
+      ? START_HEADING_DEGREES
+      : QUESTION_HEADINGS[safeQuestionIndex];
 
   return {
     calibration,
     complete,
     completedSegments,
-    currentSegment:
-      currentQuestionIndex === null
-        ? null
-        : Math.min(SEGMENT_COUNT - 1, Math.max(0, currentQuestionIndex)),
+    currentSegment: safeQuestionIndex,
     headingDegrees,
     leastSelected,
+    motion: getCompassMotionTuning(safeQuestionIndex, settled, complete),
     mostSelected,
-    settled: complete || (mostSelected && leastSelected),
+    settled,
   };
-}
-
-function applyTipState(
-  tip: NeedleTipVisual,
-  active: boolean,
-  settled: boolean,
-  color: string,
-) {
-  tip.point.material.color.set(active ? color : MUTED);
-  tip.point.material.opacity = active ? 0.98 : 0.28;
-  tip.point.scale.setScalar(active ? (settled ? 1.16 : 1.07) : 1);
-  tip.halo.material.color.set(color);
-  tip.halo.material.opacity = active ? (settled ? 0.42 : 0.28) : 0.04;
-  tip.halo.scale.setScalar(active ? (settled ? 1.14 : 1.04) : 1);
 }
 
 function applyVisualState(
@@ -125,15 +184,14 @@ function applyVisualState(
   state: CompassVisualState,
   reducedMotion: boolean,
 ) {
-  compass.segments.forEach(({ glow, mesh }, index) => {
+  const wasComplete = compass.complete;
+  compass.complete = state.complete;
+  compass.segments.forEach(({ mesh }, index) => {
     const completed = index < state.completedSegments;
     const current = index === state.currentSegment;
     const color = completed ? COMPLETED : MUTED;
     mesh.material.color.set(current ? PAPER : color);
-    mesh.material.opacity = current ? 0.56 : completed ? 0.52 : 0.11;
-    glow.visible = current;
-    glow.material.color.set("#ff8a5b");
-    glow.material.opacity = current ? 0.11 : 0;
+    mesh.material.opacity = current ? 0.66 : completed ? 0.52 : 0.11;
   });
 
   const northActive = state.complete || state.mostSelected;
@@ -142,23 +200,31 @@ function applyVisualState(
   compass.northMaterial.opacity = northActive ? 0.88 : 0.35;
   compass.southMaterial.color.set(southActive ? "#ff8a5b" : MUTED);
   compass.southMaterial.opacity = southActive ? 0.82 : 0.3;
-  compass.shaftMaterial.opacity = state.settled ? 0.42 : 0.2;
   compass.needle.scale.setScalar(state.settled ? 1.025 : 1);
-  applyTipState(compass.northTip, northActive, state.settled, "#2e8c82");
-  applyTipState(compass.southTip, southActive, state.settled, "#ff8a5b");
 
   compass.star.material.opacity = state.complete
     ? 1
     : 0.24 + state.calibration * 0.46;
   compass.star.scale.setScalar(state.complete ? 1.18 : 1);
   compass.starHalo.material.opacity = state.complete
-    ? 0.26
+    ? STAR_GLOW_BASE_OPACITY
     : 0.035 + state.calibration * 0.08;
+  compass.starHalo.scale.setScalar(1);
+  if (!state.complete || reducedMotion) {
+    compass.starGlowStartedAt = null;
+  } else if (!wasComplete) {
+    compass.starGlowStartedAt = window.performance.now();
+  }
   compass.guideMaterial.opacity = state.complete
     ? 0.34
     : 0.045 + state.calibration * 0.08;
 
-  compass.needleTarget = THREE.MathUtils.degToRad(-state.headingDegrees);
+  const rawTarget = THREE.MathUtils.degToRad(-state.headingDegrees);
+  const nearestTurn = Math.round(
+    (compass.needleHeading - rawTarget) / FULL_CIRCLE,
+  );
+  compass.needleTarget = rawTarget + nearestTurn * FULL_CIRCLE;
+  compass.needleTuning = state.motion;
   if (reducedMotion) {
     compass.needleHeading = compass.needleTarget;
     compass.needleVelocity = 0;
@@ -166,17 +232,20 @@ function applyVisualState(
   }
 }
 
-function createNeedleGeometry(y: number, halfWidth: number) {
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute(
-    "position",
-    new THREE.Float32BufferAttribute([
-      -halfWidth, 0, 0,
-      0, y, 0,
-      halfWidth, 0, 0,
-    ], 3),
-  );
-  return geometry;
+function createNeedleGeometry(
+  tipY: number,
+  shoulderY: number,
+  halfWidth: number,
+  neckWidth: number,
+) {
+  const shape = new THREE.Shape();
+  shape.moveTo(-neckWidth, 0);
+  shape.lineTo(-halfWidth, shoulderY);
+  shape.lineTo(0, tipY);
+  shape.lineTo(halfWidth, shoulderY);
+  shape.lineTo(neckWidth, 0);
+  shape.closePath();
+  return new THREE.ShapeGeometry(shape);
 }
 
 function createStarGeometry(outerRadius: number, innerRadius: number) {
@@ -212,16 +281,15 @@ function buildScene(canvas: HTMLCanvasElement): CompassScene {
   instrument.rotation.y = 0.05;
   scene.add(instrument);
 
-  const segmentLength = FULL_CIRCLE / SEGMENT_COUNT - SEGMENT_GAP;
   const segments = Array.from({ length: SEGMENT_COUNT }, (_, index) => {
-    const start = index * (FULL_CIRCLE / SEGMENT_COUNT) + SEGMENT_GAP / 2;
+    const layout = getCompassSegmentLayout(index);
     const geometry = new THREE.RingGeometry(
       1.55,
       1.69,
       24,
       1,
-      start,
-      segmentLength,
+      layout.thetaStart,
+      layout.thetaLength,
     );
     const material = new THREE.MeshBasicMaterial({
       color: MUTED,
@@ -230,21 +298,9 @@ function buildScene(canvas: HTMLCanvasElement): CompassScene {
       side: THREE.DoubleSide,
       transparent: true,
     });
-    const glowMaterial = new THREE.MeshBasicMaterial({
-      blending: THREE.AdditiveBlending,
-      color: PAPER,
-      depthWrite: false,
-      opacity: 0,
-      side: THREE.DoubleSide,
-      transparent: true,
-    });
     const mesh = new THREE.Mesh(geometry, material);
-    const glow = new THREE.Mesh(geometry, glowMaterial);
-    glow.scale.setScalar(1.035);
-    glow.position.z = -0.015;
-    glow.visible = false;
-    instrument.add(glow, mesh);
-    return { glow, mesh };
+    instrument.add(mesh);
+    return { mesh };
   });
 
   [1.12, 1.36].forEach((radius, index) => {
@@ -300,7 +356,7 @@ function buildScene(canvas: HTMLCanvasElement): CompassScene {
 
   const needle = new THREE.Group();
   needle.position.z = 0.07;
-  needle.rotation.z = THREE.MathUtils.degToRad(-MAX_HEADING_DEGREES);
+  needle.rotation.z = THREE.MathUtils.degToRad(-START_HEADING_DEGREES);
   instrument.add(needle);
 
   const northMaterial = new THREE.MeshBasicMaterial({
@@ -311,7 +367,7 @@ function buildScene(canvas: HTMLCanvasElement): CompassScene {
     transparent: true,
   });
   const northNeedle = new THREE.Mesh(
-    createNeedleGeometry(1.21, 0.115),
+    createNeedleGeometry(1.31, 0.18, 0.055, 0.026),
     northMaterial,
   );
   needle.add(northNeedle);
@@ -324,53 +380,13 @@ function buildScene(canvas: HTMLCanvasElement): CompassScene {
     transparent: true,
   });
   const southNeedle = new THREE.Mesh(
-    createNeedleGeometry(-0.92, 0.1),
+    createNeedleGeometry(-1.01, -0.16, 0.048, 0.023),
     southMaterial,
   );
   needle.add(southNeedle);
 
-  const shaftGeometry = new THREE.BufferGeometry().setFromPoints([
-    new THREE.Vector3(0, 1.23, 0.01),
-    new THREE.Vector3(0, -0.94, 0.01),
-  ]);
-  const shaftMaterial = new THREE.LineBasicMaterial({
-    color: PAPER,
-    opacity: 0.2,
-    transparent: true,
-  });
-  needle.add(new THREE.Line(shaftGeometry, shaftMaterial));
-
-  const createTip = (y: number, color: string): NeedleTipVisual => {
-    const point = new THREE.Mesh(
-      new THREE.SphereGeometry(0.072, 16, 12),
-      new THREE.MeshBasicMaterial({
-        color: MUTED,
-        depthWrite: false,
-        opacity: 0.28,
-        transparent: true,
-      }),
-    );
-    point.position.set(0, y, 0.035);
-    const halo = new THREE.Mesh(
-      new THREE.TorusGeometry(0.145, 0.011, 8, 32),
-      new THREE.MeshBasicMaterial({
-        blending: THREE.AdditiveBlending,
-        color,
-        depthWrite: false,
-        opacity: 0.04,
-        transparent: true,
-      }),
-    );
-    halo.position.set(0, y, 0.025);
-    needle.add(halo, point);
-    return { halo, point };
-  };
-
-  const northTip = createTip(1.21, "#2e8c82");
-  const southTip = createTip(-0.92, "#ff8a5b");
-
   const center = new THREE.Mesh(
-    new THREE.CircleGeometry(0.17, 32),
+    new THREE.CircleGeometry(0.13, 32),
     new THREE.MeshBasicMaterial({
       color: INK,
       opacity: 0.98,
@@ -383,21 +399,22 @@ function buildScene(canvas: HTMLCanvasElement): CompassScene {
 
   return {
     camera,
+    complete: false,
     guideMaterial,
     instrument,
     needle,
-    needleHeading: THREE.MathUtils.degToRad(-MAX_HEADING_DEGREES),
-    needleTarget: THREE.MathUtils.degToRad(-MAX_HEADING_DEGREES),
+    needleHeading: THREE.MathUtils.degToRad(-START_HEADING_DEGREES),
+    needleKickDirection: 1,
+    needleTarget: THREE.MathUtils.degToRad(-START_HEADING_DEGREES),
+    needleTuning: getCompassMotionTuning(null, false),
     needleVelocity: 0,
     northMaterial,
-    northTip,
     renderer,
     scene,
     segments,
-    shaftMaterial,
     southMaterial,
-    southTip,
     star,
+    starGlowStartedAt: null,
     starHalo,
   };
 }
@@ -423,7 +440,8 @@ export default function LivingCompass(props: LivingCompassProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<CompassScene | null>(null);
-  const startMotionRef = useRef<(() => void) | null>(null);
+  const lastAppliedStateRef = useRef<CompassVisualState | null>(null);
+  const startMotionRef = useRef<((addKick?: boolean) => void) | null>(null);
   const reducedMotionRef = useRef(false);
   const visualState = useMemo(() => getVisualState(props), [
     props.currentQuestionIndex,
@@ -480,15 +498,29 @@ export default function LivingCompass(props: LivingCompassProps) {
         : Math.min((time - previousTime) / 1_000, 0.04);
       previousTime = time;
       const displacement = compass.needleTarget - compass.needleHeading;
-      compass.needleVelocity += displacement * 82 * delta;
-      compass.needleVelocity *= Math.exp(-12 * delta);
+      compass.needleVelocity += displacement
+        * compass.needleTuning.stiffness
+        * delta;
+      compass.needleVelocity *= Math.exp(
+        -compass.needleTuning.damping * delta,
+      );
       compass.needleHeading += compass.needleVelocity * delta;
       compass.needle.rotation.z = compass.needleHeading;
+
+      let starGlowActive = false;
+      if (compass.starGlowStartedAt !== null) {
+        const glow = getStarGlowFrame(time - compass.starGlowStartedAt);
+        compass.starHalo.material.opacity = glow.opacity;
+        compass.starHalo.scale.setScalar(glow.scale);
+        starGlowActive = glow.active;
+        if (!glow.active) compass.starGlowStartedAt = null;
+      }
       renderScene();
 
       if (
         Math.abs(displacement) > 0.00035
         || Math.abs(compass.needleVelocity) > 0.00035
+        || starGlowActive
       ) {
         frame = window.requestAnimationFrame(renderMotion);
       } else {
@@ -500,7 +532,7 @@ export default function LivingCompass(props: LivingCompassProps) {
       }
     };
 
-    const startMotion = () => {
+    const startMotion = (addKick = false) => {
       window.cancelAnimationFrame(frame);
       previousTime = 0;
       if (!compassMotionEnabled(reducedMotionRef.current)) {
@@ -510,13 +542,25 @@ export default function LivingCompass(props: LivingCompassProps) {
         renderScene();
         return;
       }
+      if (addKick && compass.needleTuning.kickDegreesPerSecond > 0) {
+        const displacement = compass.needleTarget - compass.needleHeading;
+        if (Math.abs(displacement) > 0.00035) {
+          compass.needleKickDirection = Math.sign(displacement);
+        } else {
+          compass.needleKickDirection *= -1;
+        }
+        compass.needleVelocity += compass.needleKickDirection
+          * THREE.MathUtils.degToRad(
+            compass.needleTuning.kickDegreesPerSecond,
+          );
+      }
       frame = window.requestAnimationFrame(renderMotion);
     };
 
     const handleMotionChange = (event: MediaQueryListEvent) => {
       reducedMotionRef.current = event.matches;
       applyVisualState(compass, visualStateRef.current, event.matches);
-      startMotion();
+      startMotion(false);
     };
     const handleContextLost = (event: Event) => {
       event.preventDefault();
@@ -525,6 +569,7 @@ export default function LivingCompass(props: LivingCompassProps) {
     };
 
     applyVisualState(compass, visualStateRef.current, motionQuery.matches);
+    lastAppliedStateRef.current = visualStateRef.current;
     startMotionRef.current = startMotion;
     resize();
     startMotion();
@@ -549,6 +594,7 @@ export default function LivingCompass(props: LivingCompassProps) {
       resizeObserver?.disconnect();
       if (!resizeObserver) window.removeEventListener("resize", resize);
       startMotionRef.current = null;
+      lastAppliedStateRef.current = null;
       disposeScene(compass);
       sceneRef.current = null;
     };
@@ -556,12 +602,13 @@ export default function LivingCompass(props: LivingCompassProps) {
 
   useEffect(() => {
     const compass = sceneRef.current;
-    if (!compass) return;
+    if (!compass || lastAppliedStateRef.current === visualState) return;
     applyVisualState(compass, visualState, reducedMotionRef.current);
+    lastAppliedStateRef.current = visualState;
     if (reducedMotionRef.current) {
       compass.renderer.render(compass.scene, compass.camera);
     } else {
-      startMotionRef.current?.();
+      startMotionRef.current?.(true);
     }
   }, [visualState]);
 
@@ -601,6 +648,7 @@ export default function LivingCompass(props: LivingCompassProps) {
         {Array.from({ length: SEGMENT_COUNT }, (_, index) => {
           const completed = index < visualState.completedSegments;
           const current = index === visualState.currentSegment;
+          const layout = getCompassSegmentLayout(index);
           return (
             <circle
               className={`living-compass__segment${completed ? " living-compass__segment--complete" : ""}${current ? " living-compass__segment--current" : ""}`}
@@ -609,7 +657,10 @@ export default function LivingCompass(props: LivingCompassProps) {
               key={index}
               pathLength="100"
               r="40"
-              style={{ "--segment-index": index } as CSSProperties}
+              strokeDasharray={`${layout.svgDashLength} ${100 - layout.svgDashLength}`}
+              style={{
+                "--segment-angle": `${layout.svgRotationDegrees}deg`,
+              } as CSSProperties}
             />
           );
         })}
@@ -617,35 +668,16 @@ export default function LivingCompass(props: LivingCompassProps) {
           className={`living-compass__needle${visualState.settled ? " living-compass__needle--settled" : ""}`}
           style={{ "--needle-angle": `${visualState.headingDegrees}deg` } as CSSProperties}
         >
-          <line
-            className="living-compass__needle-line"
-            x1="50"
-            x2="50"
-            y1="22"
-            y2="78"
-          />
           <path
             className={`living-compass__needle-half living-compass__needle-half--north${northActive ? " living-compass__needle-half--active" : ""}`}
-            d="M47.8 52 L50 22 L52.2 52 Z"
+            d="M49.35 52 L48.7 47.8 L50 18.5 L51.3 47.8 L50.65 52 Z"
           />
           <path
             className={`living-compass__needle-half living-compass__needle-half--south${southActive ? " living-compass__needle-half--active" : ""}`}
-            d="M48.1 52 L50 78 L51.9 52 Z"
-          />
-          <circle
-            className={`living-compass__anchor living-compass__anchor--most${northActive ? " living-compass__anchor--selected" : ""}${visualState.settled ? " living-compass__anchor--settled" : ""}`}
-            cx="50"
-            cy="22"
-            r="1.8"
-          />
-          <circle
-            className={`living-compass__anchor living-compass__anchor--least${southActive ? " living-compass__anchor--selected" : ""}${visualState.settled ? " living-compass__anchor--settled" : ""}`}
-            cx="50"
-            cy="78"
-            r="1.8"
+            d="M49.4 52 L48.85 56 L50 81 L51.15 56 L50.6 52 Z"
           />
         </g>
-        <circle className="living-compass__center" cx="50" cy="52" r="4.4" />
+        <circle className="living-compass__center" cx="50" cy="52" r="3.3" />
       </svg>
     </div>
   );

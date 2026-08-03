@@ -2,6 +2,9 @@ import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import LivingCompass, {
   compassMotionEnabled,
+  getCompassSegmentLayout,
+  getCompassMotionTuning,
+  getStarGlowFrame,
 } from "./LivingCompass";
 
 function renderCompass(
@@ -33,6 +36,54 @@ describe("LivingCompass", () => {
     expect(compassMotionEnabled(false)).toBe(true);
   });
 
+  it("reduces swing energy as calibration progresses", () => {
+    const early = getCompassMotionTuning(0, false);
+    const middle = getCompassMotionTuning(4, false);
+    const late = getCompassMotionTuning(8, false);
+    const settled = getCompassMotionTuning(0, true);
+
+    expect(early.kickDegreesPerSecond).toBeGreaterThan(
+      middle.kickDegreesPerSecond,
+    );
+    expect(middle.kickDegreesPerSecond).toBeGreaterThan(
+      late.kickDegreesPerSecond,
+    );
+    expect(early.damping).toBeLessThan(middle.damping);
+    expect(middle.damping).toBeLessThan(late.damping);
+    expect(settled.kickDegreesPerSecond).toBeLessThan(
+      early.kickDegreesPerSecond,
+    );
+    expect(getCompassMotionTuning(null, false).kickDegreesPerSecond).toBe(0);
+  });
+
+  it("centers its north gap and advances segments clockwise", () => {
+    const first = getCompassSegmentLayout(0);
+    const second = getCompassSegmentLayout(1);
+    const last = getCompassSegmentLayout(10);
+    const firstEnd = first.thetaStart + first.thetaLength;
+    const lastStart = last.thetaStart + Math.PI * 2;
+
+    expect((firstEnd + lastStart) / 2).toBeCloseTo(Math.PI / 2, 6);
+    expect(second.thetaStart).toBeLessThan(first.thetaStart);
+    expect(second.svgRotationDegrees).toBeGreaterThan(
+      first.svgRotationDegrees,
+    );
+    expect(first.svgDashLength).toBeCloseTo(8.056, 3);
+  });
+
+  it("gives the completed north star one subtle glow pulse", () => {
+    const start = getStarGlowFrame(0);
+    const peak = getStarGlowFrame(750);
+    const end = getStarGlowFrame(1_500);
+
+    expect(start.active).toBe(true);
+    expect(peak.opacity).toBeGreaterThan(start.opacity);
+    expect(peak.scale).toBeGreaterThan(start.scale);
+    expect(end.active).toBe(false);
+    expect(end.opacity).toBeCloseTo(start.opacity);
+    expect(end.scale).toBeCloseTo(start.scale);
+  });
+
   it("keeps its canvas decorative and shows a WebGL fallback", () => {
     const { compass } = renderCompass(0, null);
 
@@ -48,13 +99,23 @@ describe("LivingCompass", () => {
       compass.querySelectorAll(".living-compass__north-star"),
     ).toHaveLength(1);
     expect(compass.querySelectorAll(".living-compass__needle")).toHaveLength(1);
+    expect(compass.querySelectorAll(".living-compass__anchor")).toHaveLength(0);
+    const segments = compass.querySelectorAll<SVGCircleElement>(
+      ".living-compass__segment",
+    );
+    expect(segments[0]?.style.getPropertyValue("--segment-angle")).toBe(
+      `${getCompassSegmentLayout(0).svgRotationDegrees}deg`,
+    );
+    expect(segments[0]?.getAttribute("stroke-dasharray")).toBe(
+      `${getCompassSegmentLayout(0).svgDashLength} ${100 - getCompassSegmentLayout(0).svgDashLength}`,
+    );
   });
 
   it.each([
-    ["name", 0, null, 0, 0, 38],
-    ["first question", 1, 0, 0, 1, 41],
-    ["middle question", 6, 5, 5, 1, 23.727],
-    ["final question", 11, 10, 10, 1, 6.455],
+    ["name", 0, null, 0, 0, 180],
+    ["first question", 1, 0, 0, 1, -90],
+    ["middle question", 6, 5, 5, 1, 60],
+    ["final question", 11, 10, 10, 1, -2],
     ["completed Profile", 12, null, 11, 0, 0],
   ])(
     "shows progress for the %s state",
@@ -78,14 +139,14 @@ describe("LivingCompass", () => {
     },
   );
 
-  it("guides the needle toward north as draft choices settle", () => {
+  it("keeps its heading while draft choices settle", () => {
     const noChoice = renderCompass(1, 0);
     const mostOnly = renderCompass(1, 0, true);
     const both = renderCompass(1, 0, true, true);
 
-    expect(getNeedleAngle(noChoice.compass)).toBeCloseTo(41);
-    expect(getNeedleAngle(mostOnly.compass)).toBeCloseTo(39.4);
-    expect(getNeedleAngle(both.compass)).toBeCloseTo(38);
+    expect(getNeedleAngle(noChoice.compass)).toBeCloseTo(-90);
+    expect(getNeedleAngle(mostOnly.compass)).toBeCloseTo(-90);
+    expect(getNeedleAngle(both.compass)).toBeCloseTo(-90);
     expect(
       both.compass.querySelector(".living-compass__needle--settled"),
     ).not.toBeNull();
@@ -96,7 +157,7 @@ describe("LivingCompass", () => {
     ["Least only", false, true, 0, 1],
     ["Most and Least", true, true, 1, 1],
   ])(
-    "shows opposing anchors for %s",
+    "shows opposing needle halves for %s",
     (_, mostSelected, leastSelected, mostCount, leastCount) => {
       const { compass } = renderCompass(
         1,
@@ -107,17 +168,14 @@ describe("LivingCompass", () => {
 
       expect(
         compass.querySelectorAll(
-          ".living-compass__anchor--most.living-compass__anchor--selected",
+          ".living-compass__needle-half--north.living-compass__needle-half--active",
         ),
       ).toHaveLength(mostCount);
       expect(
         compass.querySelectorAll(
-          ".living-compass__anchor--least.living-compass__anchor--selected",
+          ".living-compass__needle-half--south.living-compass__needle-half--active",
         ),
       ).toHaveLength(leastCount);
-      expect(
-        compass.querySelectorAll(".living-compass__anchor--settled"),
-      ).toHaveLength(mostSelected && leastSelected ? 2 : 0);
     },
   );
 });

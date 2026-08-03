@@ -999,22 +999,24 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
 
           {!personaPickerOpen && !selectedPersonaId && session.stage === "set" ? (
             <div className="stage stage--cards">
-              <h1
-                ref={headingRef}
-                tabIndex={-1}
-                aria-describedby="assessment-progress"
-              >
-                What matters most as you find your way?
-              </h1>
-              <p className="card-reassurance">
-                There are no right answers here. More than one principle can matter.
-              </p>
-              <p className="card-prompt" aria-atomic="true" aria-live="polite">
-                <span className="card-prompt__label" aria-hidden="true">
-                  Next step
-                </span>
-                <span>{cardPrompt}</span>
-              </p>
+              <div className="question-copy">
+                <h1
+                  ref={headingRef}
+                  tabIndex={-1}
+                  aria-describedby="assessment-progress"
+                >
+                  What matters most as you find your way?
+                </h1>
+                <p className="card-reassurance">
+                  There are no right answers here. More than one principle can matter.
+                </p>
+                <p className="card-prompt" aria-atomic="true" aria-live="polite">
+                  <span className="card-prompt__label" aria-hidden="true">
+                    Next step
+                  </span>
+                  <span>{cardPrompt}</span>
+                </p>
+              </div>
               <div className={`choice-board${isReviewing ? " choice-board--reviewing" : ""}`}>
                 <section
                   ref={mostDropRef}
