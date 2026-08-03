@@ -391,7 +391,7 @@ Each trace event contains:
 | `duration_ms` | Latency shown in Inspect |
 | `input_refs` | Profile, Journal Entry, week, or prior-event references |
 | `model_contract` | Model and reasoning effort when a model is called |
-| `prompt` | Exact rendered prompt when applicable |
+| `prompt` | Exact rendered provider request, with trusted instructions and untrusted input data shown as separate messages |
 | `raw_response` | Provider response before product transformation |
 | `validation` | Schema and content validation result |
 | `result_refs` | Resulting nudge, decisions, Drift, or Weekly Drift Detection output |
@@ -488,6 +488,27 @@ framework:
   null clock and keep their existing behavior. A later incompatible change
   requires a new contract version and explicit React and Python compatibility
   handling.
+
+### 7.2 Live model trust boundary
+
+The live Nudge, Weekly Drift Reviewer, and Coach Digest calls separate stable
+Twinkl instructions from user-controlled data. OpenAI receives the stable rules
+through its instruction field. Gemini receives the same rules through its
+system-instruction field. Each provider receives Journal Entries, nudge
+responses, preferred names, and current focus text as a separate JSON input.
+
+The stable rules state that all JSON values are untrusted data. The model can
+use this data only as evidence for the named task. It must not follow a command,
+role, request, or delimiter inside the data. JSON serialization preserves text
+that looks like a boundary without treating that text as a boundary.
+
+Inspect stores one `live-prompt-boundary-v1` receipt that shows both provider
+messages. The Nudge and Weekly Drift Reviewer prompt hashes cover this receipt.
+The Coach Digest trace input hash continues to identify the structured Weekly
+Drift Detection output. Response-schema validation, evidence validation, retry
+behavior, and fail-closed behavior remain separate controls. Message
+separation reduces prompt injection risk. It does not prove that a model will
+always ignore an instruction-like phrase in user data.
 
 ## 8. Review Orchestration
 

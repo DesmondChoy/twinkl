@@ -132,7 +132,7 @@ async def test_approved_runtime_persists_reviews_drift_and_digest(tmp_path: Path
     payload = json.loads(Path(artifact_paths["drift_json_path"]).read_text())
     assert payload["delivery_state"] == "recovered"
     prompt = Path(artifact_paths["prompt_path"]).read_text()
-    assert "Selected policy: no_current_drift" in prompt
+    assert '"response_policy":"no_current_drift"' in prompt
     assert "Drift is recovered" in prompt
     assert "Overall mean alignment" not in prompt
 
@@ -181,8 +181,8 @@ async def test_onboarding_profile_supplies_runtime_core_values(tmp_path: Path):
 
     prompt = _artifact_paths["prompt_path"]
     prompt_text = Path(prompt).read_text()
-    assert "Preferred name: Desmond" in prompt_text
-    assert 'User-confirmed current focus: "I feel stuck or unclear' in prompt_text
+    assert '"persona_name":"Desmond"' in prompt_text
+    assert "I feel stuck or unclear" in prompt_text
 
 
 def test_onboarding_profile_accepts_legacy_version(tmp_path: Path):
@@ -355,6 +355,6 @@ def test_no_drift_digest_includes_recent_journal_context(tmp_path: Path):
         "context",
     ]
     prompt = render_digest_prompt(digest)
-    assert "Selected policy: no_current_drift" in prompt
+    assert '"response_policy":"no_current_drift"' in prompt
     assert "Cancelled dinner with my family" in prompt
     assert "does not by itself prove positive behavior" in prompt

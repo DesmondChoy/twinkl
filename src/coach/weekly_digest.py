@@ -11,10 +11,10 @@ import argparse
 import fcntl
 import json
 import re
-from collections.abc import Awaitable, Callable, Sequence
+from collections.abc import Awaitable, Sequence
 from datetime import date, datetime, timedelta
 from pathlib import Path
-from typing import cast
+from typing import Protocol, cast
 
 import polars as pl
 import yaml
@@ -41,6 +41,11 @@ from src.coach.schemas import (
 )
 from src.drift_detector import DriftDetectorResult
 from src.models.judge import SCHWARTZ_VALUE_ORDER
+from src.prompt_boundary import (
+    protect_instructions,
+    render_live_prompt_receipt,
+    serialize_untrusted_data,
+)
 from src.weekly_drift_reviewer import (
     WeeklyDriftReviewerDecision,
     WeeklyDriftReviewerEntry,
@@ -53,7 +58,17 @@ from src.weekly_signal_schema import (
 from src.wrangling.parse_wrangled_data import parse_wrangled_file
 
 SCHWARTZ_CONFIG_PATH = Path("config/schwartz_values.yaml")
-LLMCompleteFn = Callable[[str, dict | None], Awaitable[str | None]]
+
+
+class LLMCompleteFn(Protocol):
+    """Provider call with an optional higher-priority instruction message."""
+
+    def __call__(
+        self,
+        prompt: str,
+        response_format: dict | None,
+        instructions: str | None = None,
+    ) -> Awaitable[str | None]: ...
 
 
 def _parse_iso_date(raw: str) -> date:
@@ -894,10 +909,38 @@ def build_coach_digest_prompt_inputs(
     }
 
 
-def render_digest_prompt(digest: WeeklyDigest) -> str:
-    """Render the Coach Digest prompt from Weekly Drift Detection output."""
+def render_digest_messages(digest: WeeklyDigest) -> tuple[str, str]:
+    """Render trusted instructions and serialized Coach Digest input data."""
     prompt = load_prompt("weekly_digest_coach")
-    return cast(str, prompt.render(**build_coach_digest_prompt_inputs(digest)))
+    prompt_inputs = build_coach_digest_prompt_inputs(digest)
+    instruction_placeholders = {
+        "persona_name": "UNTRUSTED_INPUT_SUPPLIED_SEPARATELY",
+        "week_window": "UNTRUSTED_INPUT_SUPPLIED_SEPARATELY",
+        "response_policy": "UNTRUSTED_INPUT_SUPPLIED_SEPARATELY",
+        "compass_context_lines": [],
+        "drift_summary_lines": [],
+        "evidence_lines": [],
+    }
+    rendered = cast(str, prompt.render(**instruction_placeholders)).strip()
+    lead, data_marker, remainder = rendered.partition("\nPreferred name:")
+    _data_section, output_marker, output_rules = remainder.partition(
+        "\n\nReturn JSON with exactly these keys:"
+    )
+    if not data_marker or not output_marker:
+        raise ValueError(
+            "Coach Digest prompt does not contain the expected data boundary"
+        )
+    instructions = f"{lead}\n\nReturn JSON with exactly these keys:{output_rules}"
+    return protect_instructions(instructions), serialize_untrusted_data(prompt_inputs)
+
+
+def render_digest_prompt(digest: WeeklyDigest) -> str:
+    """Render the exact two-message Coach Digest request for Inspect."""
+    instructions, input_data = render_digest_messages(digest)
+    return render_live_prompt_receipt(
+        instructions=instructions,
+        input_data=input_data,
+    )
 
 
 def render_digest_markdown(digest: WeeklyDigest) -> str:
@@ -1005,8 +1048,16 @@ async def generate_weekly_digest_coach(
     llm_complete: LLMCompleteFn,
 ) -> tuple[CoachNarrative | None, str]:
     """Generate a Coach Digest response from Weekly Drift Detection output."""
-    prompt = render_digest_prompt(digest)
-    raw_json = await llm_complete(prompt, WEEKLY_DIGEST_COACH_RESPONSE_FORMAT)
+    instructions, input_data = render_digest_messages(digest)
+    prompt = render_live_prompt_receipt(
+        instructions=instructions,
+        input_data=input_data,
+    )
+    raw_json = await llm_complete(
+        input_data,
+        WEEKLY_DIGEST_COACH_RESPONSE_FORMAT,
+        instructions,
+    )
     if not raw_json:
         return None, prompt
 

@@ -164,7 +164,12 @@ def _service(
         verdict=weekly_verdict,
         statuses=weekly_statuses,
     )
-    async def coach_llm_complete(_: str, __: dict | None) -> str | None:
+
+    async def coach_llm_complete(
+        _: str,
+        __: dict | None,
+        _instructions: str | None = None,
+    ) -> str | None:
         return coach_response
 
     service = InMemoryExperienceService(

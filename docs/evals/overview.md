@@ -1,6 +1,8 @@
-# VIF Evaluation Overview
+# Twinkl Evaluation Overview
 
-This folder contains evaluation specifications for the **Value Identity Function (VIF)**. The evaluations check each component before work moves to the next stage.
+This folder contains Twinkl evaluation specifications. The evaluations check
+each component before work moves to the next stage. The folder also records
+structural verification for controls that apply across live model calls.
 
 ---
 
@@ -8,7 +10,7 @@ This folder contains evaluation specifications for the **Value Identity Function
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────┐
-│                           VIF EVALUATION FLOW                               │
+│                         TWINKL EVALUATION FLOW                              │
 ├─────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                 │
 │   ┌──────────────┐    ┌──────────────┐    ┌──────────────┐    ┌──────────────┐  │
@@ -36,6 +38,7 @@ This folder contains evaluation specifications for the **Value Identity Function
 | 2 | [`value_modeling_eval.md`](./value_modeling_eval.md) | Model Training | VIF Critic recovers Conflict | Primary: entry-level `recall_-1`; mandatory precision-recall reporting; QWK and `+1` diagnostic |
 | 3 | [`drift_detection_eval.md`](./drift_detection_eval.md) | Inference | Weekly Drift Detection finds Drift without unacceptable false Drift alerts and stores valid structured output | Drift recall first; false Drift alerts second; coverage and abstention diagnostic |
 | 4 | [`explanation_quality_eval.md`](./explanation_quality_eval.md) | User Output | Coach Digest responses are grounded and useful | Likert ≥ 3.5/5 |
+| — | [`live_prompt_boundary_verification.md`](./live_prompt_boundary_verification.md) | Live Model Boundary | Stable Twinkl instructions stay separate from user-controlled data | Structural message separation and fail-closed provenance; no attack-success score |
 
 ---
 
@@ -67,6 +70,7 @@ judge_validation_eval ──▶ completed value_modeling_eval ──▶ VIF Crit
 | Value Modeling | ✅ Complete for capstone POC | The VIF Critic training and evaluation stack is complete. `run_019`-`run_021` remains the historical corrected-split reference. The paired `run_057`-`run_062` experiment shows that active-state Security repair raises median test Security QWK by about **0.17**. `twinkl-j0ck` did not promote soft targets, compact-history `run_069` failed its seed-11 expansion gate, and the Codex-reviewed `twinkl-748` Hedonism hard-set found only 0.05 median `-1` recall and 0.05 strict-pair accuracy for the incumbent. `twinkl-6mrt` implemented recall-first checkpoint selection and nominated `run_060` for offline use. The [`twinkl-752.5` reassessment](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5_reassessment.md) found no reliable benefit from exposing raw VIF Critic Predictions to the Weekly Drift Reviewer and no scheduling recall gain. | No further VIF Critic work is planned for the time-boxed capstone. The VIF Critic remains outside the user-facing Drift path. |
 | Weekly Drift Detection | 🟡 Development-only | The workflow is complete and wired for the capstone POC. Its internal Weekly Drift Reviewer and Drift Detector use the fixed Luna-low contract and store structured output. The complete development review contains 42 Drifts across 36 Drift trajectories in 292 resolved cases. The setup had median Drift recall of `0.548`, 4 false Drift alerts, and `0.637` coverage. The evidence is AI-reviewed synthetic development evidence, not human validation or a final test. | No further capstone evaluation is planned; no fresh final test or deployment approval is claimed. |
 | Coach Digest Explanation Quality | 🟡 Partial | Coach Digest Validations, batch reporting, and Coach Digest Evals are implemented. The eval scores are AI review, not human validation. | Run and record the current Coach Digest Validations and Coach Digest Evals results. Future human calibration of the AI review remains separate work. Rationale-specific evaluation also remains separate work. |
+| Live Prompt Boundary | ✅ Structurally verified | `live-prompt-boundary-v1` separates stable instructions from user-controlled JSON for the live Nudge, Weekly Drift Reviewer, and Coach Digest calls. Tests cover instruction-like and boundary-like text, provider field mapping, Nudge and Weekly Drift Reviewer prompt provenance, and existing validation paths. | A live provider evaluation can measure prompt injection attack success. It is not a capstone acceptance requirement. |
 
 See each eval file's **Implementation Status** section for detailed breakdowns.
 
@@ -76,6 +80,7 @@ See each eval file's **Implementation Status** section for detailed breakdowns.
 
 - [`docs/vif/`](../vif/) — VIF architecture documentation
 - [`docs/prd.md`](../prd.md) — Product requirements (Evaluation Strategy section)
+- [`live_prompt_boundary_verification.md`](./live_prompt_boundary_verification.md) — live prompt trust boundary, structural evidence, and claim limit
 - [`drift_v1_student_visible_target.md`](./drift_v1_student_visible_target.md) — historical five-episode development result and withheld former final-test score
 - [`../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md`](../../logs/experiments/reports/experiment_review_2026-07-13_twinkl_752_4_legacy_drift_review.md) — reviewed cohort and 33-episode union correction
 - [`../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5_opus_null_resolution.md`](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_752_5_opus_null_resolution.md) — four-label Opus follow-up and revised 106/106-resolved union

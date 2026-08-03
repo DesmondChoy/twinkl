@@ -16,6 +16,11 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from prompts import get_prompt_metadata, load_prompt
 from src.models.judge import SCHWARTZ_VALUE_ORDER
+from src.prompt_boundary import (
+    protect_instructions,
+    render_live_prompt_receipt,
+    serialize_untrusted_data,
+)
 
 WEEKLY_DRIFT_REVIEWER_MODEL = "gpt-5.6-luna"
 WEEKLY_DRIFT_REVIEWER_REASONING_EFFORT = "low"
@@ -77,6 +82,26 @@ class WeeklyDriftReviewerRequest(BaseModel):
     prompt: str
     prompt_sha256: str
     runtime_text_sha256: str
+
+    @property
+    def instructions(self) -> str:
+        """Return stable task rules for the provider instruction channel."""
+        instructions, _input_data = _render_weekly_reviewer_messages(
+            core_values=self.core_values,
+            history=self.history,
+            current_t_indices=self.current_t_indices,
+        )
+        return instructions
+
+    @property
+    def input_data(self) -> str:
+        """Return serialized user data for the provider input channel."""
+        _instructions, input_data = _render_weekly_reviewer_messages(
+            core_values=self.core_values,
+            history=self.history,
+            current_t_indices=self.current_t_indices,
+        )
+        return input_data
 
     @property
     def expected_coordinates(self) -> set[tuple[int, str]]:
@@ -148,6 +173,39 @@ def _sha256_text(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
 
+def _render_weekly_reviewer_messages(
+    *,
+    core_values: Sequence[str],
+    history: Sequence[WeeklyDriftReviewerEntry],
+    current_t_indices: Sequence[int],
+) -> tuple[str, str]:
+    rendered = (
+        load_prompt(WEEKLY_DRIFT_REVIEWER_PROMPT)
+        .render(
+            declared_values="UNTRUSTED_INPUT_SUPPLIED_SEPARATELY",
+            cumulative_history="UNTRUSTED_INPUT_SUPPLIED_SEPARATELY",
+            current_week_entries="UNTRUSTED_INPUT_SUPPLIED_SEPARATELY",
+        )
+        .strip()
+    )
+    instructions, marker, _data_section = rendered.partition("\nDECLARED CORE VALUES\n")
+    if not marker:
+        raise ValueError(
+            "Weekly Drift Reviewer prompt does not contain the expected data boundary"
+        )
+
+    input_data = serialize_untrusted_data(
+        {
+            "current_week_entry_t_indices": list(current_t_indices),
+            "declared_core_values": list(core_values),
+            "journal_entries": [
+                {"t_index": entry.t_index, "text": entry.text} for entry in history
+            ],
+        }
+    )
+    return protect_instructions(instructions), input_data
+
+
 def build_weekly_drift_reviewer_request(
     *,
     persona_id: str,
@@ -185,21 +243,14 @@ def build_weekly_drift_reviewer_request(
             + ", ".join(str(index) for index in missing_current)
         )
 
-    cumulative_history = "\n\n".join(
-        f"[ENTRY t_index={entry.t_index}]\n{entry.text}" for entry in normalized_history
+    instructions, input_data = _render_weekly_reviewer_messages(
+        core_values=normalized_values,
+        history=normalized_history,
+        current_t_indices=current_indices,
     )
-    current_week_entries = "\n".join(
-        f"- t_index={t_index}" for t_index in current_indices
-    )
-    prompt = (
-        load_prompt(WEEKLY_DRIFT_REVIEWER_PROMPT)
-        .render(
-            declared_values="\n".join(f"- {value}" for value in normalized_values),
-            cumulative_history=cumulative_history,
-            current_week_entries=current_week_entries,
-        )
-        .strip()
-        + "\n"
+    prompt = render_live_prompt_receipt(
+        instructions=instructions,
+        input_data=input_data,
     )
     runtime_payload = [entry.model_dump(mode="json") for entry in normalized_history]
     return WeeklyDriftReviewerRequest(
@@ -392,6 +443,19 @@ class OpenAIWeeklyDriftReviewer:
         self, request: WeeklyDriftReviewerRequest
     ) -> WeeklyDriftReviewerReceipt:
         started = time.monotonic()
+        expected_prompt = render_live_prompt_receipt(
+            instructions=request.instructions,
+            input_data=request.input_data,
+        )
+        expected_hash = _sha256_text(expected_prompt)
+        if request.prompt != expected_prompt or request.prompt_sha256 != expected_hash:
+            return _receipt(
+                request,
+                status="error",
+                attempts=1,
+                latency_seconds=time.monotonic() - started,
+                error=ValueError("Weekly Drift Reviewer request provenance mismatch"),
+            )
         if self._client is None:
             try:
                 from openai import AsyncOpenAI
@@ -411,7 +475,8 @@ class OpenAIWeeklyDriftReviewer:
             try:
                 request_kwargs: dict[str, Any] = {
                     "model": WEEKLY_DRIFT_REVIEWER_MODEL,
-                    "input": request.prompt,
+                    "instructions": request.instructions,
+                    "input": request.input_data,
                     "text_format": WeeklyVerifierResponse,
                     "reasoning": {"effort": WEEKLY_DRIFT_REVIEWER_REASONING_EFFORT},
                     "max_output_tokens": self._max_output_tokens,

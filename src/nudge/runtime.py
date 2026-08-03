@@ -16,6 +16,11 @@ from src.nudge.schemas import (
     NUDGE_DECISION_AND_GENERATION_RESPONSE_FORMAT,
     NudgeDecisionAndGenerationResponse,
 )
+from src.prompt_boundary import (
+    protect_instructions,
+    render_live_prompt_receipt,
+    serialize_untrusted_data,
+)
 
 NUDGE_RUNTIME_MODEL = "gpt-5.6-luna"
 NUDGE_RUNTIME_REASONING_EFFORT = "none"
@@ -36,7 +41,7 @@ class NudgeContextEntry(BaseModel):
 
 
 class NudgeRuntimeRequest(BaseModel):
-    """Rendered request for one merged decision-and-generation call."""
+    """Rendered request for one decision-and-generation call."""
 
     model_config = ConfigDict(extra="forbid")
 
@@ -45,6 +50,26 @@ class NudgeRuntimeRequest(BaseModel):
     previous_entries: list[NudgeContextEntry] = Field(default_factory=list)
     prompt: str
     prompt_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+
+    @property
+    def instructions(self) -> str:
+        """Return stable task rules for the provider instruction channel."""
+        instructions, _input_data = _render_nudge_runtime_messages(
+            entry_content=self.entry_content,
+            entry_date=self.entry_date,
+            previous_entries=self.previous_entries,
+        )
+        return instructions
+
+    @property
+    def input_data(self) -> str:
+        """Return serialized user data for the provider input channel."""
+        _instructions, input_data = _render_nudge_runtime_messages(
+            entry_content=self.entry_content,
+            entry_date=self.entry_date,
+            previous_entries=self.previous_entries,
+        )
+        return input_data
 
 
 class NudgeRuntimeReceipt(BaseModel):
@@ -75,30 +100,69 @@ class NudgeRuntimeReceipt(BaseModel):
     nudge_text: str | None = None
 
 
+def _render_nudge_runtime_messages(
+    *,
+    entry_content: str,
+    entry_date: str,
+    previous_entries: list[NudgeContextEntry],
+) -> tuple[str, str]:
+    rendered = (
+        load_prompt(NUDGE_RUNTIME_PROMPT)
+        .render(
+            entry_content="UNTRUSTED_INPUT_SUPPLIED_SEPARATELY",
+            entry_date="UNTRUSTED_INPUT_SUPPLIED_SEPARATELY",
+            previous_entries=[],
+            min_words=NUDGE_MIN_WORDS,
+            max_words=NUDGE_MAX_WORDS,
+        )
+        .strip()
+    )
+    lead, entry_marker, remainder = rendered.partition("\n## Entry\n")
+    _entry_section, criteria_marker, criteria = remainder.partition(
+        "\n## Decision Criteria\n"
+    )
+    if not entry_marker or not criteria_marker:
+        raise ValueError("Nudge prompt does not contain the expected data boundary")
+
+    instructions = protect_instructions(f"{lead}\n\n## Decision Criteria\n{criteria}")
+    recent_entries = [
+        {
+            "date": entry.date,
+            "content": entry.content[:100]
+            + ("..." if len(entry.content) > 100 else ""),
+        }
+        for entry in previous_entries
+    ]
+    input_data = serialize_untrusted_data(
+        {
+            "entry": {"content": entry_content, "date": entry_date},
+            "recent_entries": recent_entries,
+        }
+    )
+    return instructions, input_data
+
+
 def build_nudge_runtime_request(
     *,
     entry_content: str,
     entry_date: str,
     previous_entries: list[dict[str, Any]] | None = None,
 ) -> NudgeRuntimeRequest:
-    """Sanitize context and render the approved merged prompt."""
+    """Sanitize context and render the approved two-message request."""
     content = entry_content.strip()
     if not content:
         raise ValueError("Journal Entry content cannot be blank")
 
     sanitized = format_previous_entries(previous_entries) or []
     context = [NudgeContextEntry.model_validate(entry) for entry in sanitized]
-    prompt = (
-        load_prompt(NUDGE_RUNTIME_PROMPT)
-        .render(
-            entry_content=content,
-            entry_date=entry_date,
-            previous_entries=[entry.model_dump() for entry in context],
-            min_words=NUDGE_MIN_WORDS,
-            max_words=NUDGE_MAX_WORDS,
-        )
-        .strip()
-        + "\n"
+    instructions, input_data = _render_nudge_runtime_messages(
+        entry_content=content,
+        entry_date=entry_date,
+        previous_entries=context,
+    )
+    prompt = render_live_prompt_receipt(
+        instructions=instructions,
+        input_data=input_data,
     )
     return NudgeRuntimeRequest(
         entry_date=entry_date,
@@ -198,6 +262,18 @@ class OpenAINudgeRuntime:
 
     async def __call__(self, request: NudgeRuntimeRequest) -> NudgeRuntimeReceipt:
         started = time.monotonic()
+        expected_prompt = render_live_prompt_receipt(
+            instructions=request.instructions,
+            input_data=request.input_data,
+        )
+        expected_hash = hashlib.sha256(expected_prompt.encode("utf-8")).hexdigest()
+        if request.prompt != expected_prompt or request.prompt_sha256 != expected_hash:
+            return _receipt(
+                request,
+                status="error",
+                latency_seconds=time.monotonic() - started,
+                error=ValueError("Nudge request provenance mismatch"),
+            )
         if self._client is None:
             try:
                 from openai import AsyncOpenAI
@@ -214,7 +290,8 @@ class OpenAINudgeRuntime:
         try:
             request_kwargs: dict[str, Any] = {
                 "model": NUDGE_RUNTIME_MODEL,
-                "input": request.prompt,
+                "instructions": request.instructions,
+                "input": request.input_data,
                 "text": {"format": NUDGE_DECISION_AND_GENERATION_RESPONSE_FORMAT},
                 "reasoning": {"effort": NUDGE_RUNTIME_REASONING_EFFORT},
                 "max_output_tokens": self._max_output_tokens,

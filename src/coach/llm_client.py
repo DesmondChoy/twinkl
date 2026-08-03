@@ -48,7 +48,11 @@ def _build_openai_llm_complete(
 
     resolved_model = model or os.environ.get("TWINKL_COACH_MODEL", DEFAULT_OPENAI_MODEL)
 
-    async def llm_complete(prompt: str, response_format: dict | None) -> str | None:
+    async def llm_complete(
+        prompt: str,
+        response_format: dict | None,
+        instructions: str | None = None,
+    ) -> str | None:
         try:
             from openai import AsyncOpenAI
 
@@ -60,6 +64,8 @@ def _build_openai_llm_complete(
                 "store": False,
                 "timeout": timeout,
             }
+            if instructions is not None:
+                kwargs["instructions"] = instructions
             if response_format is not None:
                 kwargs["text"] = {"format": response_format}
 
@@ -90,7 +96,11 @@ def _build_gemini_llm_complete(
 
     resolved_model = model or os.environ.get("TWINKL_COACH_MODEL", DEFAULT_GEMINI_MODEL)
 
-    def _generate(prompt: str, response_format: dict | None) -> str | None:
+    def _generate(
+        prompt: str,
+        response_format: dict | None,
+        instructions: str | None,
+    ) -> str | None:
         from google import genai
         from google.genai import types
 
@@ -103,6 +113,8 @@ def _build_gemini_llm_complete(
             # before emitting JSON and truncating it. Disable for this short task.
             "thinking_config": types.ThinkingConfig(thinking_budget=0),
         }
+        if instructions is not None:
+            config_kwargs["system_instruction"] = instructions
         schema = _unwrap_json_schema(response_format)
         if schema is not None:
             config_kwargs["response_mime_type"] = "application/json"
@@ -115,13 +127,22 @@ def _build_gemini_llm_complete(
         )
         return getattr(response, "text", None) or None
 
-    async def llm_complete(prompt: str, response_format: dict | None) -> str | None:
+    async def llm_complete(
+        prompt: str,
+        response_format: dict | None,
+        instructions: str | None = None,
+    ) -> str | None:
         try:
             # Use the sync client off-thread: the genai async transport 404s in
             # this environment, and the coach cycle already runs off the UI loop.
             import asyncio
 
-            return await asyncio.to_thread(_generate, prompt, response_format)
+            return await asyncio.to_thread(
+                _generate,
+                prompt,
+                response_format,
+                instructions,
+            )
         except Exception:
             logger.warning(
                 "Coach Digest Gemini request failed for model %s; "

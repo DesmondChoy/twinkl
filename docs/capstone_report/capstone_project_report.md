@@ -15,6 +15,7 @@
 - Weekly Drift Reviewer and deterministic Drift Detector
 - Main quantitative results
 - Weekly Drift Detection, Coach Digest, and capstone POC limits
+- Live prompt trust boundary and structural verification
 
 ## Keywords
 
@@ -49,6 +50,8 @@
 - Small-model-first evaluation and evidence-led architecture decision
 - Fixed Weekly Drift Reviewer and deterministic Drift Detector
 - Versioned Weekly Drift Detection output and Experience and Inspect demo
+- Provider instruction fields that separate stable Twinkl rules from
+  user-controlled JSON data
 
 ### 1.3 Scope and Implementation Status
 
@@ -60,6 +63,8 @@
 - **Experimental:** Coach Digest
 - **Supporting POCs:** Onboarding and Conversational Nudge
 - **Assessment-only deployment:** public Experience and Inspect demo on Railway
+- **Implemented structural control:** live model instructions are separate from
+  user-controlled JSON data
 - **In progress:** professor walkthrough evidence
 - No fresh final test or deployment approval
 - User-facing Drift path separated from offline VIF Critic research
@@ -103,6 +108,12 @@
 - Core Values as the only values eligible for Drift
 - No future-Journal-Entry or generation-metadata leakage
 - Versioned receipts, prompts, schemas, and request hashes
+- OpenAI `instructions` and Gemini `system_instruction` fields for stable
+  Nudge, Weekly Drift Reviewer, and Coach Digest rules
+- Separate JSON data for Journal Entries, nudge responses, preferred names,
+  and current focus text
+- `live-prompt-boundary-v1` Inspect receipt, with receipt hashes for the live
+  Nudge and Weekly Drift Reviewer calls
 - Design in [End-to-End Architecture](../architecture/e2e_architecture.md)
 
 ### 3.2 Data, Labels, and Human Validation
@@ -297,6 +308,25 @@
 - Brief Experience and Inspect example of end-to-end POC behavior
 - Evaluation boundary in [Explanation Quality Evaluation](../evals/explanation_quality_eval.md)
 
+### 5.5 Live Prompt Boundary Verification
+
+- Prompt injection risk from instruction-like text in user-controlled fields
+- OpenAI `instructions` and Gemini `system_instruction` fields for stable
+  Twinkl rules
+- Separate JSON data for live Nudge, Weekly Drift Reviewer, and Coach Digest
+  calls
+- Direct rule that JSON text is evidence and is not an instruction
+- Boundary-like text preserved as JSON rather than parsed as a prompt boundary
+- Exact two-message receipt for Inspect
+- Receipt hashes and fail-closed provenance checks for live Nudge and Weekly
+  Drift Reviewer calls
+- Structural tests for Journal Entries, nudge responses, preferred names,
+  current focus text, schemas, evidence validation, retry, and fail-closed paths
+- 166 relevant tests passed on 2026-08-03
+- No claim that structural verification proves provider model resistance to
+  prompt injection
+- Detailed evidence in [Live Prompt Boundary Verification](../evals/live_prompt_boundary_verification.md)
+
 ## 6. Discussion
 
 ### 6.1 Main Findings and Trade-offs
@@ -322,6 +352,7 @@
 - Incorrect adjacent Conflict pairs
 - Weekly Drift Reviewer missed Drifts and false Drift alerts
 - Coach Digest generic or weakly grounded text
+- No live provider measurement of prompt injection attack success
 - Synthetic development data
 - Historical training provenance in part of the Drift development set
 - Limited human annotation and no completed user study
@@ -334,6 +365,8 @@
 - Non-therapy boundary
 - Non-prescriptive and non-judgmental Coach Digest language
 - Fail-closed Abstain behavior
+- Higher-priority Twinkl instructions separated from user-controlled JSON data
+- The live message boundary reduces but does not eliminate prompt injection
 - Synthetic bias and demographic stereotype risks
 - Provider data exposure
 - No automatic use of real Journal Entries for training
@@ -356,6 +389,8 @@
 - Coach Digest batch evaluation and human validation
 - Real-user pilot with explicit consent and privacy controls
 - Final runtime cost, latency, and provider-use measurement
+- Optional live provider prompt injection evaluation with a fixed list of
+  attack text
 - Conditions for reconsideration of a cheaper local model
 
 ## References
@@ -379,8 +414,10 @@
 - [`src/synthetic/generation.py`](../../src/synthetic/generation.py)
 - [`src/judge/labeling.py`](../../src/judge/labeling.py)
 - [`src/weekly_drift_reviewer.py`](../../src/weekly_drift_reviewer.py)
+- [`src/prompt_boundary.py`](../../src/prompt_boundary.py)
 - [`src/drift_detector.py`](../../src/drift_detector.py)
 - [`src/coach/weekly_digest.py`](../../src/coach/weekly_digest.py)
+- [`src/coach/llm_client.py`](../../src/coach/llm_client.py)
 - [`src/demo/experience_service.py`](../../src/demo/experience_service.py)
 
 ### A.2 VIF Critic Experiments
@@ -408,10 +445,14 @@
 - [Value Modeling Evaluation](../evals/value_modeling_eval.md)
 - [Drift Detection Evaluation](../evals/drift_detection_eval.md)
 - [Explanation Quality Evaluation](../evals/explanation_quality_eval.md)
+- [Live Prompt Boundary Verification](../evals/live_prompt_boundary_verification.md)
 - [Agreement Report](../../logs/exports/agreement_report_20260318_130642.md)
 - [Luna Model Comparison](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_52zz_model_comparison.md)
 - [Luna Reasoning-Effort Review](../../logs/experiments/reports/experiment_review_2026-07-14_twinkl_52zz_luna_low.md)
 - [`scripts/experiments/compare_twinkl_52zz_models.py`](../../scripts/experiments/compare_twinkl_52zz_models.py)
 - [`tests/test_drift_detector.py`](../../tests/test_drift_detector.py)
 - [`tests/coach/test_weekly_digest.py`](../../tests/coach/test_weekly_digest.py)
+- [`tests/coach/test_runtime.py`](../../tests/coach/test_runtime.py)
+- [`tests/nudge/test_runtime.py`](../../tests/nudge/test_runtime.py)
+- [`tests/test_weekly_drift_reviewer.py`](../../tests/test_weekly_drift_reviewer.py)
 - [`tests/demo/test_experience_service.py`](../../tests/demo/test_experience_service.py)

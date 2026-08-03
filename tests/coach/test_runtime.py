@@ -4,6 +4,7 @@ import asyncio
 import json
 import logging
 from pathlib import Path
+from types import SimpleNamespace
 
 import polars as pl
 import pytest
@@ -222,7 +223,12 @@ def test_run_weekly_coach_cycle_attaches_narrative_with_llm(tmp_path: Path, monk
         ),
     )
 
-    async def stub_llm(prompt: str, response_format: dict | None) -> str:
+    async def stub_llm(
+        prompt: str,
+        response_format: dict | None,
+        instructions: str | None = None,
+    ) -> str:
+        assert instructions is not None
         assert response_format is not None
         return json.dumps(
             {
@@ -278,6 +284,65 @@ def test_build_llm_complete_selects_provider_by_env(monkeypatch):
     # With an OpenAI key present, the default provider builds.
     monkeypatch.setenv("OPENAI_API_KEY", "test-key")
     assert build_llm_complete() is not None
+
+
+@pytest.mark.asyncio
+async def test_openai_sends_instructions_separately(monkeypatch):
+    from src.coach.llm_client import build_llm_complete
+
+    captured = {}
+
+    class Responses:
+        async def create(self, **kwargs):
+            captured.update(kwargs)
+            return SimpleNamespace(output_text='{"ok":true}')
+
+    class Client:
+        def __init__(self):
+            self.responses = Responses()
+
+    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+    monkeypatch.setattr("openai.AsyncOpenAI", Client)
+    llm_complete = build_llm_complete(provider="openai", model="test-model")
+    assert llm_complete is not None
+
+    result = await llm_complete('{"journal_entry":"untrusted"}', None, "trusted")
+
+    assert result == '{"ok":true}'
+    assert captured["instructions"] == "trusted"
+    assert captured["input"] == '{"journal_entry":"untrusted"}'
+
+
+@pytest.mark.asyncio
+async def test_gemini_sends_system_instruction_separately(monkeypatch):
+    from src.coach.llm_client import build_llm_complete
+
+    captured = {}
+
+    class Models:
+        def generate_content(self, **kwargs):
+            captured.update(kwargs)
+            return SimpleNamespace(text='{"ok":true}')
+
+    class Client:
+        def __init__(self, *, api_key):
+            assert api_key == "test-key"
+            self.models = Models()
+
+    async def run_inline(function, *args):
+        return function(*args)
+
+    monkeypatch.setenv("GEMINI_API_KEY", "test-key")
+    monkeypatch.setattr("google.genai.Client", Client)
+    monkeypatch.setattr(asyncio, "to_thread", run_inline)
+    llm_complete = build_llm_complete(provider="gemini", model="test-model")
+    assert llm_complete is not None
+
+    result = await llm_complete('{"journal_entry":"untrusted"}', None, "trusted")
+
+    assert result == '{"ok":true}'
+    assert captured["contents"] == '{"journal_entry":"untrusted"}'
+    assert captured["config"].system_instruction == "trusted"
 
 
 @pytest.mark.asyncio
