@@ -152,7 +152,14 @@ Twinkl-specific presentation adaptation requiring empirical validation.
 
 ### 4.1 Preferred name and progress
 
-The user enters the first randomized group directly. Progress reads
+The preferred-name screen first shows a three-line purpose statement. Each line
+appears in sequence, then remains visible. Reduced-motion preferences show the
+complete statement without animation. The statement says that busy weeks can
+hide what matters and that Twinkl can help the user notice this early. It does
+not name Schwartz values or Core Values.
+
+After the user supplies a preferred name, the first randomized group opens
+directly. Progress reads
 `Values · n of 11`, followed by `Your compass`. There is no welcome screen or
 midpoint result. The values progress bar represents the 11 assessment groups,
 reaches completion on group 11, and exposes its current and maximum values to
@@ -202,10 +209,12 @@ highest without revealing Schwartz labels or numerical scores. Every tied
 description has equal visual weight.
 
 The summary explains that the result reflects the Most and Least choices made
-most consistently across all 11 groups. `Confirm my compass` confirms the
-displayed descriptions as the user's Core Values and emits the Profile. The
-user is not asked to rank, promote, or demote the internal Schwartz categories.
-The confirmed Core Value descriptions remain visible through the first Journal
+most consistently across all 11 groups. It also says that the result gives
+Twinkl a direction to remember and that later Journal Entries can show where
+the user's days follow that direction. `Confirm my compass` confirms the
+displayed descriptions as the user's Core Values and emits the Profile. The user
+is not asked to rank, promote, or demote the internal Schwartz categories. The
+confirmed Core Value descriptions remain visible through the first Journal
 Entry handoff and manual editor.
 
 On wide screens, the summary and Profile confirmation handoff compact their
@@ -214,8 +223,10 @@ exact-tie lists scroll rather than clip a Core Value.
 
 ### 4.4 First Journal Entry handoff
 
-The completed flow opens the generic first Journal Entry prompt and exposes the
-confirmed Profile through:
+The completed flow explains that what matters to the user gives each Journal
+Entry context. It says that Twinkl can help the user notice when everyday
+choices start to drift from what matters. It then opens the generic first
+Journal Entry prompt and exposes the confirmed Profile through:
 
 - the `onStartJournal` callback; and
 - the `twinkl:start-first-journal` browser event.
@@ -346,10 +357,10 @@ objects per response, distinct valid Most and Least choices, non-negative
 integer response time, and explicit summary confirmation. Validation rebuilds
 the Profile deterministically and rejects any mismatch.
 
-The resumable browser session uses schema version `7` and storage key
-`twinkl.onboarding.session.v7`. It stores the randomized group order, each
+The resumable browser session uses schema version `8` and storage key
+`twinkl.onboarding.session.v8`. It stores the randomized group order, each
 canonical group's randomized card order, and the shared Experience and Inspect
-view state. Versions `4` through `6` migrate without losing responses; a
+view state. Versions `4` through `7` migrate without losing responses; a
 version `6` goal stage resumes at the Core Value summary, and a confirmed
 version `2` Profile migrates to version `3` without `goal_category`.
 

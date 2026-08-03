@@ -147,9 +147,18 @@ describe("onboarding app", () => {
 
   it("asks for a preferred name before the first set", () => {
     render(<App />);
+    const purpose = document.querySelector(".onboarding-purpose");
+    expect(purpose).toBeTruthy();
+    expect(purpose?.querySelector(".sr-only")?.textContent).toBe(
+      "Life gets busy. The things that matter most can quietly get lost week to week. Twinkl helps you see that early.",
+    );
     expect(
-      screen.getByRole("heading", { name: "What should Twinkl call you?" }),
-    ).toBeTruthy();
+      purpose?.querySelectorAll(".onboarding-purpose__line"),
+    ).toHaveLength(3);
+    expect(
+      screen.getByRole("heading", { name: "What should Twinkl call you?" })
+        .getAttribute("aria-describedby"),
+    ).toBe("onboarding-purpose");
     enterPreferredName();
     const progress = screen.getByRole("progressbar", {
       name: "Values · 1 of 11",
@@ -385,6 +394,11 @@ describe("onboarding app", () => {
         "This result reflects the Most and Least choices you made most consistently across all 11 groups.",
       ),
     ).toBeTruthy();
+    expect(
+      screen.getByText(
+        "This is the direction you want Twinkl to remember. Your Journal Entries show where your days follow it—and where they don’t.",
+      ),
+    ).toBeTruthy();
     const summaryInspect = screen.getByRole("button", { name: "Inspect" });
     expect(summaryInspect.getAttribute("aria-disabled")).toBe("false");
     fireEvent.click(summaryInspect);
@@ -417,6 +431,11 @@ describe("onboarding app", () => {
       screen.getByRole("heading", {
         name: "Your compass is ready, Desmond.",
       }),
+    ).toBeTruthy();
+    expect(
+      screen.getByText(
+        "What matters to you gives each Journal Entry context. Over time, Twinkl can help you notice when everyday choices start to drift from what matters.",
+      ),
     ).toBeTruthy();
     expect(
       within(screen.getByRole("navigation", { name: "Experience sections" }))

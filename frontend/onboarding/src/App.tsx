@@ -144,6 +144,52 @@ function Progress({ session }: { session: OnboardingSession }) {
   );
 }
 
+const ONBOARDING_PURPOSE_LINES = [
+  "Life gets busy.",
+  "The things that matter most can quietly get lost week to week.",
+  "Twinkl helps you see that early.",
+] as const;
+
+const PURPOSE_LINE_DELAYS_MS = [100, 650, 1_850] as const;
+
+function OnboardingPurpose() {
+  return (
+    <div className="onboarding-purpose">
+      <p className="sr-only" id="onboarding-purpose">
+        {ONBOARDING_PURPOSE_LINES.join(" ")}
+      </p>
+      <div aria-hidden="true">
+        {ONBOARDING_PURPOSE_LINES.map((line, lineIndex) => (
+          <p
+            className="onboarding-purpose__line"
+            key={line}
+            style={
+              {
+                "--purpose-line-delay":
+                  `${PURPOSE_LINE_DELAYS_MS[lineIndex]}ms`,
+              } as React.CSSProperties
+            }
+          >
+            {line.split(" ").map((word, wordIndex) => (
+              <span
+                className="onboarding-purpose__word"
+                key={`${word}-${wordIndex}`}
+                style={
+                  {
+                    "--purpose-word-delay": `${wordIndex * 70}ms`,
+                  } as React.CSSProperties
+                }
+              >
+                {word}
+              </span>
+            ))}
+          </p>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 type CardLocation = "pool" | "most" | "least";
 type DropTarget = CardLocation | null;
 
@@ -964,8 +1010,13 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
           {!personaPickerOpen && !selectedPersonaId &&
           session.stage === "name" ? (
             <form className="stage stage--name" onSubmit={savePreferredName}>
+              <OnboardingPurpose />
               <p className="eyebrow">Before we begin</p>
-              <h1 ref={headingRef} tabIndex={-1}>
+              <h1
+                aria-describedby="onboarding-purpose"
+                ref={headingRef}
+                tabIndex={-1}
+              >
                 What should Twinkl call you?
               </h1>
               <p className="stage-note">
@@ -1118,6 +1169,10 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
                 This result reflects the Most and Least choices you made most
                 consistently across all 11 groups.
               </p>
+              <p className="summary-purpose">
+                This is the direction you want Twinkl to remember. Your Journal
+                Entries show where your days follow it—and where they don’t.
+              </p>
               <div
                 className="actions actions--end"
                 id="experience-confirm"
@@ -1136,7 +1191,11 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
               <h1 ref={headingRef} tabIndex={-1}>
                 Your compass is ready, {session.preferred_name}.
               </h1>
-              <p className="lede">Start with one moment from the past week. Twinkl will build from what you notice.</p>
+              <p className="lede">
+                What matters to you gives each Journal Entry context. Over time,
+                Twinkl can help you notice when everyday choices start to drift
+                from what matters.
+              </p>
               <CoreValueReminder profile={session.confirmed_profile} />
               <div
                 className="journal-handoff"
