@@ -269,13 +269,16 @@ This ensures:
 
 ## Motivation
 
-The current one-way generation workflow (persona generates Journal Entries independently) has limitations:
+The old one-way generation workflow had these product limits:
 
-1. **Unrealistic**: Real journaling apps have back-and-forth interaction
-2. **Signal-poor short Journal Entries**: Brief or vague Journal Entries lack sufficient signal for VIF alignment scoring
-3. **User friction**: People often need gentle prompts to articulate thoughts clearly
+1. **No immediate response**: The user writes and waits for the Coach Digest.
+2. **No invitation to continue**: A brief Journal Entry ends the interaction.
+3. **Low interaction**: The journal can feel like a one-way text store.
 
-The nudging workflow transforms one-way journaling into a two-way conversational exchange. When a Journal Entry is vague or potentially rich with unexplored tension, the nudge generator responds with a brief nudge that invites elaboration.
+The nudging workflow makes journaling a two-way exchange. When a Journal Entry
+is vague or contains unexplored tension, the nudge generator asks one brief,
+contextual question. This product role does not depend on a gain in VIF Critic
+or Weekly Drift Detection metrics.
 
 **Design goal**: Nudges should feel like natural curiosity from a thoughtful companion, not interrogation or therapy.
 
@@ -296,18 +299,18 @@ Three categories of nudges, each with a distinct purpose:
 ### Category Details
 
 **Clarification Nudges**
-- Triggered when: Entry is too vague to score (abstract emotion, vague pronouns, missing temporal anchors)
-- Signal extracted: Behavioral grounding, disambiguation for value-dimension mapping
+- Triggered when: Entry is too vague to understand (abstract emotion, vague pronouns, missing temporal anchors)
+- Interaction result: Makes the event or reference clear
 - Examples: "The meeting?", "Since when, roughly?", "What happened right before that?"
 
 **Elaboration Nudges**
 - Triggered when: Entry is substantive but surface-level (action without reflection, outcome without process)
-- Signal extracted: Affective signal, agency/values expression, response patterns
+- Interaction result: Invites the user to add what happened or how it felt
 - Examples: "And how did that land?", "What got you over the line?", "What did you end up doing?"
 
 **Tension-Surfacing Nudges**
 - Triggered when: Entry contains hedging, contradictions, or justification language
-- Signal extracted: Unresolved tension, alignment/misalignment confirmation
+- Interaction result: Invites the user to examine the unresolved point
 - Examples: "What's the 'sort of' part?", "Does that sit okay with you?", "What stopped you?"
 
 ## Nudge Design Principles
@@ -646,9 +649,14 @@ nudge:
 
 > **Note**: The original design had 5 response modes including "Elaborating with context" (25%) and "Brief acknowledgment" (5%). These were removed to reduce complexity - the 5% mode was almost never triggered, and "Elaborating with context" overlapped with "Answering directly".
 
-> **Design change**: The original `category_weights` and `base_probability` were removed. LLM-based classification now determines nudge category semantically, providing better signal detection than probabilistic selection.
+> **Design change**: The original `category_weights` and `base_probability` were removed. LLM-based classification now selects a nudge category from the Journal Entry instead of using random selection.
 
-## LLM-Judge Scoring Updates
+## Historical LLM-Judge Scoring Proposal
+
+The combined-session scoring behavior remains part of the historical
+LLM-Judge workflow. The proposed `nudge_effectiveness` and
+`primary_signal_source` fields below were not adopted as current product
+contracts.
 
 ### Combined Signal Approach
 
@@ -686,9 +694,9 @@ Rate nudge_effectiveness as:
 - "high": Response revealed significant alignment/misalignment not in original
 ```
 
-## VIF State Vector Updates
+## Historical VIF State Vector Proposal
 
-For Journal Entries with nudge-responses, extend the state vector:
+The project did not adopt the following proposed state vector extension:
 
 ```python
 s_u_t = Concat[
@@ -700,12 +708,19 @@ s_u_t = Concat[
 ]
 ```
 
-This allows the VIF Critic to learn:
+The proposal was intended to let the VIF Critic learn:
 - Whether nudge-augmented Journal Entries have different alignment patterns
 - Which nudge categories are most effective for extracting signal
 - How to weight initial vs response content
 
-## Expected Outcomes
+The completed VIF Critic does not use separate response embeddings, displayed
+nudge flags, or nudge categories. No further VIF Critic work is planned for
+the time-boxed capstone.
+
+## Historical Expected Outcomes
+
+The following values were early estimates. The project did not validate them,
+and they are not current product claims.
 
 | Metric | Before (One-Way) | After (Conversational) | Improvement |
 |--------|------------------|------------------------|-------------|
@@ -714,7 +729,7 @@ This allows the VIF Critic to learn:
 | Entries with multiple value signals | ~30% | ~50% | +67% |
 | Entries scoreable with low uncertainty | ~70% | ~85% | +21% |
 
-### Key VIF Training Benefits
+### Historical VIF Training Hypotheses
 
 1. **Better calibration for short Journal Entries**: Even brief initial Journal Entries can be augmented with nudge-responses
 2. **Explicit tension detection training**: Tension-surfacing nudges create labeled examples of tensions being confirmed or denied
@@ -737,15 +752,13 @@ This allows the VIF Critic to learn:
 - [x] Implement nudge-response generation for personas
 - [x] Update `generate_persona_pipeline()` to use conversational flow
 
-**Phase 3 (Validation)**: 🔄 In Progress
-- [ ] Generate 10-20 personas with conversational Journal Entries
-- [ ] Review nudge quality, response variety, signal improvement
-- [ ] Iterate on prompts and parameters
+**Phase 3 (Historical validation plan)**: Closed without a VIF Critic signal
+study. The displayed nudge is retained as an Experience interaction feature.
 
-**Phase 4 (Integration)**:
-- [ ] Update LLM-Judge prompt for multi-turn scoring
-- [ ] Test end-to-end workflow
-- [ ] Tune probabilities and voice guidance prompts
+**Phase 4 (Integration)**: ✅ Complete
+- [x] Update the LLM-Judge prompt for multi-turn scoring
+- [x] Test the end-to-end workflow
+- [x] Replace the historical probability path with semantic nudge selection
 
 **Phase 5 (Productionize)**: ✅ Complete
 - [x] Refactor notebook helper logic into Python modules (`src/synthetic/generation.py`, `src/judge/labeling.py`)

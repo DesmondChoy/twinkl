@@ -6,7 +6,7 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 
 ## Implementation Status
 
-*Last updated: 2026-07-31*
+*Last updated: 2026-08-04*
 
 | Feature | Status | Details |
 |---------|--------|---------|
@@ -15,7 +15,7 @@ Twinkl is an academic capstone project for the **NUS Master of Technology in Int
 | **VIF Critic Training** | ✅ Complete | The capstone training and evaluation stack is complete, with ordinal MLP heads, a BNN baseline, configurable sentence encoders, uncertainty estimates, raw output export, experiment logging, and recall-first checkpoint selection. `run_019`-`run_021` remains the historical corrected-split reference, while repaired-Security `run_060` is the nominated offline checkpoint. Repaired Security supervision raises median test Security QWK by about 0.17 without regressing aggregate QWK. Compact-history and matched Hedonism diagnostics did not establish a stronger product role. This is AI diagnostic evidence, not human validation. The VIF Critic is not part of the user-facing Drift path, and no further VIF Critic work is planned for the time-boxed capstone. |
 | **Human Annotation Tool** | ✅ Complete | ~4,200 LOC Shiny app; 380 saved annotations across 24 personas, with a 115-entry shared subset across 19 personas used for the current inter-rater agreement benchmark; Cohen's κ / Fleiss' κ metrics; modular components with analysis view; annotation ordering for persona prioritization |
 | **Drift Inspection App** | ✅ Complete | Read-only desktop Shiny app for comparing Runs 1–3 across three frozen Weekly Drift Reviewer setups: `gpt-5.4-mini` at reasoning effort `none`, `gpt-5.6-luna` at reasoning effort `none`, and `gpt-5.6-luna` at reasoning effort `low`. It shows complete development and persona-level results, Journal Entries, AI-reviewed LLM-Judge Conflict Labels, Weekly Drift Reviewer Decisions, cited evidence, and verified input cutoffs without model or provider API calls. Local and Railway launch paths are documented in the [app guide](demo/weekly_drift_review_app.md). |
-| **Conversational Nudging** | 🧪 Experimental | The runtime and manual Experience integration are implemented and tested, including safe failure, retry, reply, skip, and linked Inspect events. Validation that nudging improves VIF signal quality remains pending. |
+| **Conversational Nudging** | ✅ Complete | The runtime and manual Experience integration are implemented and tested, including safe failure, retry, reply, skip, and linked Inspect events. A displayed nudge gives the user an immediate, contextual interaction between Journal Entries and the Coach Digest. It is a product design choice. It does not depend on measurable gains for the VIF Critic or Weekly Drift Detection. A future external pilot can measure response rate, continued journaling, and perceived relevance. |
 | **Drift Detector** | ✅ Complete | The capstone POC implementation is complete and wired. It persists versioned Weekly Drift Reviewer Decisions without VIF Critic input, applies the deterministic two-consecutive-Conflict rule across week boundaries, and handles extension, recovery, abstention, deduplication, and active, recovered, uncertain, or mixed delivery. The fixed Luna-low model contract retains AI-reviewed synthetic development evidence; no fresh final test or deployment approval is claimed. The former VIF Critic crash/rut/evolution runtime is explicitly deprecated and retained only for historical compatibility. |
 | **Coach Digest** | 🧪 Experimental | The Coach Digest runs after each Weekly Drift Detection result, including No Drift. It supplies the stored output to a prompt and can produce a user response with cited Journal Entry evidence. If it cannot return a valid response, the Weekly Drift Detection result remains available. Coach Digest Validations and Coach Digest Evals are implemented, but no current batch result or future human calibration of the AI review is complete. No fresh final test or deployment approval is claimed. |
 | **Onboarding (SVBWS Values Assessment)** | 🧪 Experimental | Standalone React POC implements the published 11-group, six-object balanced SVBWS design, then presents a label-free Core Value summary and first Journal Entry handoff. It randomizes group and card order, stores raw 11-object BWS results separately from the ten-value Profile transformation, and omits midpoint feedback and unsupported confidence claims. The approved runtime can import Core Values from a saved confirmed Profile; automated browser-to-service storage is outside the capstone. It is a research-grounded pilot instrument, not a validated Twinkl instrument. [Full spec](onboarding/onboarding_spec.md) |
@@ -191,6 +191,13 @@ This onboarding directly anchors the capstone submodules: the latent dimensions 
   retains its separate decision and generation calls for reproducibility.
   Anti-annoyance logic caps nudges at 2 per 3-entry window. See
   [pipeline_specs.md](pipeline/pipeline_specs.md) for implementation details.
+
+  A displayed nudge prevents the journaling loop from becoming write-only
+  until the next Coach Digest. It gives the user an immediate response and a
+  reason to continue the Journal Entry. The capstone does not require a
+  displayed nudge to improve VIF Critic training data or Weekly Drift Reviewer
+  Decisions. A future external pilot can measure whether users respond,
+  continue journaling, and find the question relevant.
 * **”Map of Me”** ❌: Embed each entry, visualise trajectories, overlay alignment scores (Pattern Recognition + Intelligent Sensing).
 * **Journaling anomaly radar** ❌: After 2–3 weeks of entries establish cadence baselines, a lightweight time-series/anomaly detector tracks check-in gaps, flags “silent weeks,” cites evidence windows, and triggers empathetic nudges (Pattern Recognition + Architecting).
 * **Goal-aligned inspiration feed** ❌: When the profile shows intent (e.g., “pick up Japanese”) but no supporting activities, call a real-time search API (SerpAPI/Tavily) constrained by what the user enjoys (e.g., highly rated anime) and reason over the results before surfacing next-step suggestions (Intelligent Reasoning + Intelligent Sensing). Each curated option is presented as an explicit choice; the user’s accept/decline actions feed back into the values/identity graph so future nudges learn which media or effort types actually motivate them.
@@ -304,14 +311,13 @@ listed here is planned.
 | 2 | **VIF Critic Conflict screening** | Record the completed local-model research without collapsing into neutral predictions | Report historical entry-level `recall_-1`, `-1` precision and precision-recall behavior alongside QWK, calibration, `+1` recall, and per-dimension diagnostics. | The completed research documents Conflict-recovery limits; it does not receive user-facing Drift authority, and no further VIF Critic work is planned. |
 | 3 | **Weekly Drift Detection** | Confirm that Weekly Drift Detection finds Drift for a Core Value | Evaluate the fixed `gpt-5.6-luna` reasoning-effort-`low` Weekly Drift Reviewer with the displayed-behavior target. Each of two consecutive Journal Entries must clearly show Conflict against the same Core Value. Apply the internal Drift Detector and assess the stored structured output. Prioritize Drift recall first and false Drift alerts second. Report coverage as a diagnostic. No fresh final test or deployment approval is claimed. | Drift: two consecutive Journal Entries both visibly show Conflict against Benevolence. An uncertain Weekly Drift Reviewer Decision produces no Drift. `+1` on another value cannot cancel the Drift. |
 | 4 | **Coach Digest explanation quality** | Ensure that Coach Digest responses feel accurate and actionable | Show 5–10 users their Coach Digest response and ask "Did this feel accurate?" on a **5-point Likert scale**. | User sees: *"You wrote twice about wanting to make room for people close to you, then cancelled on a friend."* Rates it 4/5 for accuracy. |
-| 5 | **Nudge relevance** | Verify the top prompt is contextually appropriate | A/B test: random prompt vs. model-selected prompt. Measure **engagement rate** (did user respond?). | Model picks *"What held you back from helping?"* after detecting a Benevolence Conflict. User responds → engagement ✓ |
-| 6 | **Nudge signal quality** | Validate that nudging improves VIF Critic training data | Compare LLM-Judge alignment scores for nudged vs. non-nudged Journal Entries from the same personas. Measure **mean alignment confidence** and **value dimension coverage**. | Hypothesis: Nudged Journal Entries yield higher-confidence scores and more explicit value signals due to increased expressiveness. |
+| 5 | **Displayed nudge experience** | Check whether immediate interaction supports continued journaling | During a future external pilot, measure response rate, the rate of a later Journal Entry, and perceived relevance. Keep these user measures separate from AI-reviewed synthetic evidence. | The user receives a contextual question, responds, and writes another Journal Entry before the Coach Digest. |
 
 ## Operational & User Success Metrics
 
 | Category | Metrics |
 | :--- | :--- |
-| **User impact** | Likert ratings on "helps me act in line with values," % of suggested weekly experiments attempted, retention over a 1–2 week pilot. |
+| **User impact** | Likert ratings on "helps me act in line with values," displayed nudge response rate, continued journaling, % of suggested weekly experiments attempted, and retention over a 1–2 week pilot. |
 | **System & safety** | Latency from entry → feedback, LLM failure rates, privacy posture (encryption, export/delete), and qualitative review of guardrails for "it's not therapy" messaging. |
 
 **Validation approach:** Mini user study (5–10 people over 1–2 weeks) focusing on "felt accuracy" plus synthetic stress tests for technical correctness.
@@ -326,9 +332,9 @@ listed here is planned.
 | [claude_gen_instructions.md](pipeline/claude_gen_instructions.md) | Parallel subagent generation workflow |
 | [claude_judge_instructions.md](pipeline/claude_judge_instructions.md) | Historical LLM-Judge labeling workflow (wrangling + scoring) |
 | [judge_reachability_audit_instructions.md](pipeline/judge_reachability_audit_instructions.md) | LLM-agnostic workflow for the twinkl-747 reachability audit |
-| [annotation_guidelines.md](pipeline/annotation_guidelines.md) | Human annotation for nudge effectiveness study |
+| [annotation_guidelines.md](pipeline/annotation_guidelines.md) | Historical human annotation guide for displayed nudge scorability research |
 | [annotation_tool_plan.md](pipeline/annotation_tool_plan.md) | Shiny annotation tool implementation plan |
-| [nudge_design_rationale.md](pipeline/nudge_design_rationale.md) | Nudge validation plan and design rationale |
+| [nudge_design_rationale.md](pipeline/nudge_design_rationale.md) | Displayed nudge product design rationale and future pilot measures |
 | **VIF** | |
 | [01_concepts_and_roadmap.md](vif/01_concepts_and_roadmap.md) | Value Identity Function theory |
 | [02_system_architecture.md](vif/02_system_architecture.md) | System architecture, state, and runtime flow |

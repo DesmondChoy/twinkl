@@ -15,6 +15,7 @@
 - Weekly Drift Reviewer and deterministic Drift Detector
 - Main quantitative results
 - Weekly Drift Detection, Coach Digest, and capstone POC limits
+- Displayed nudge as an immediate Experience interaction
 - Live prompt trust boundary and structural verification
 
 ## Keywords
@@ -35,6 +36,8 @@
 - Longitudinal comparison of Journal Entries with Core Values
 - Explainable identification of Conflict and Drift
 - Evidence-grounded Coach Digest response and reflective question
+- Immediate, contextual interaction after a Journal Entry and before the Coach
+  Digest
 - Time-boxed academic POC
 - Product intent in the [Product Requirements Document](../prd.md)
 
@@ -50,6 +53,8 @@
 - Small-model-first evaluation and evidence-led architecture decision
 - Fixed Weekly Drift Reviewer and deterministic Drift Detector
 - Versioned Weekly Drift Detection output and Experience and Inspect demo
+- Displayed nudge product role and its separation from VIF Critic and Weekly
+  Drift Detection performance
 - Provider instruction fields that separate stable Twinkl rules from
   user-controlled JSON data
 
@@ -61,7 +66,9 @@
 - **Limited benchmark:** human annotation
 - **Development evidence only:** Weekly Drift Reviewer and Drift Detector evaluation
 - **Experimental:** Coach Digest
-- **Supporting POCs:** Onboarding and Conversational Nudge
+- **Complete Experience interaction:** displayed nudge with reply, skip,
+  anti-annoyance, retry, and linked Inspect events
+- **Supporting POC:** Onboarding
 - **Assessment-only deployment:** public Experience and Inspect demo on Railway
 - **Implemented structural control:** live model instructions are separate from
   user-controlled JSON data
@@ -99,6 +106,11 @@
 ### 3.1 End-to-End Architecture
 
 - SVBWS onboarding creates the confirmed Profile and Core Values
+- A displayed nudge gives an immediate, contextual response after an eligible
+  Journal Entry
+- The user can reply or skip before the Journal Entry becomes final
+- The displayed nudge is a product design choice. Its role does not depend on
+  gains for the VIF Critic or Weekly Drift Detection
 - Journal Entries grouped by Monday-to-Sunday week
 - Weekly review starts only after the Monday-to-Sunday week closes
 - Weekly Drift Reviewer without VIF Critic input
@@ -109,11 +121,11 @@
 - No future-Journal-Entry or generation-metadata leakage
 - Versioned receipts, prompts, schemas, and request hashes
 - OpenAI `instructions` and Gemini `system_instruction` fields for stable
-  Nudge, Weekly Drift Reviewer, and Coach Digest rules
+  displayed nudge, Weekly Drift Reviewer, and Coach Digest rules
 - Separate JSON data for Journal Entries, nudge responses, preferred names,
   and current focus text
 - `live-prompt-boundary-v1` Inspect receipt, with receipt hashes for the live
-  Nudge and Weekly Drift Reviewer calls
+  displayed nudge and Weekly Drift Reviewer calls
 - Design in [End-to-End Architecture](../architecture/e2e_architecture.md)
 
 ### 3.2 Data, Labels, and Human Validation
@@ -147,15 +159,19 @@
 - Active, recovered, uncertain, and mixed delivery states
 - Detailed design in [Drift Detection Architecture](../architecture/drift_detection.md)
 
-### 3.4 Coach Digest and Demo
+### 3.4 Displayed Nudge, Coach Digest, and Demo
 
+- Immediate interaction between a Journal Entry and the weekly Coach Digest
+- One contextual question after the deterministic anti-annoyance check
+- Reply and skip actions with safe failure and retry
+- No requirement for a VIF Critic or Weekly Drift Detection metric gain
 - Weekly Drift Detection output as the structured input to the Coach Digest
 - Core Values, Drift state, cited evidence, and date-window metadata
 - Coach Digest response and one reflective question
 - Groundedness, jargon, and length checks
 - Complete Weekly Drift Detection integration for the capstone POC
 - Experimental Coach Digest evaluation
-- Supporting Onboarding and Conversational Nudge POCs
+- Supporting Onboarding POC
 - Shared Experience and Inspect React session
 - Five deterministic persona replays
 - Live-provider and offline-fixture behavior
@@ -313,13 +329,13 @@
 - Prompt injection risk from instruction-like text in user-controlled fields
 - OpenAI `instructions` and Gemini `system_instruction` fields for stable
   Twinkl rules
-- Separate JSON data for live Nudge, Weekly Drift Reviewer, and Coach Digest
-  calls
+- Separate JSON data for the live displayed nudge, Weekly Drift Reviewer, and
+  Coach Digest calls
 - Direct rule that JSON text is evidence and is not an instruction
 - Boundary-like text preserved as JSON rather than parsed as a prompt boundary
 - Exact two-message receipt for Inspect
-- Receipt hashes and fail-closed provenance checks for live Nudge and Weekly
-  Drift Reviewer calls
+- Receipt hashes and fail-closed provenance checks for the live displayed
+  nudge and Weekly Drift Reviewer calls
 - Structural tests for Journal Entries, nudge responses, preferred names,
   current focus text, schemas, evidence validation, retry, and fail-closed paths
 - 166 relevant tests passed on 2026-08-03
@@ -342,6 +358,7 @@
 - Abstain behavior versus coverage
 - LLM cost and latency versus local inference
 - Explainability benefit of cited Journal Entries
+- Product value of immediate Journal Entry interaction before the Coach Digest
 
 ### 6.2 Failure Cases and Validity Limits
 
@@ -356,6 +373,8 @@
 - Synthetic development data
 - Historical training provenance in part of the Drift development set
 - Limited human annotation and no completed user study
+- No real-user evidence for displayed nudge response rate, continued
+  journaling, or perceived relevance
 - No fresh final test or deployment approval; the public Railway deployment is for assessment only
 
 ### 6.3 Safety, Privacy, and Ethics
@@ -381,6 +400,7 @@
 - Evidence for the Weekly Drift Reviewer architecture
 - Deterministic Drift Detector contribution
 - Weekly Drift Detection and Coach Digest scope
+- Displayed nudge product role before the weekly Coach Digest
 - Main evaluation results and capstone POC limits
 
 ### 7.2 Focused Future Work
@@ -388,6 +408,8 @@
 - Fresh final test excluded from model and prompt development
 - Coach Digest batch evaluation and human validation
 - Real-user pilot with explicit consent and privacy controls
+- Displayed nudge response rate, later-Journal-Entry rate, and perceived
+  relevance in the real-user pilot
 - Final runtime cost, latency, and provider-use measurement
 - Optional live provider prompt injection evaluation with a fixed list of
   attack text

@@ -1,14 +1,27 @@
-# Nudging Feature: Design Rationale & Industry Alignment
+# Displayed Nudge Product Design Rationale
 
 ## Summary
 
-The conversational nudging feature in Twinkl's synthetic data workflow is justified by **ecological validity** — it mirrors how users actually journal in production apps. No further validation study is required because nudging is industry-standard practice, not an experimental hypothesis.
+A displayed nudge gives the user an immediate, contextual interaction after a
+Journal Entry. Without it, the user writes into a one-way flow and waits until
+the Coach Digest for a response. Some users can stop journaling before that
+weekly response arrives.
+
+Twinkl keeps the displayed nudge as a product design choice. It does not have
+to improve VIF Critic training data or Weekly Drift Reviewer Decisions. Similar
+features in other journaling products support this choice. They do not prove
+that the displayed nudge in Twinkl improves retention or relevance.
+
+A future external pilot can measure response rate, continued journaling,
+and perceived relevance. Those user measures must remain separate from
+AI-reviewed synthetic evidence.
 
 ---
 
-## Industry Analysis: Conversational Nudging is Standard Practice
+## Product References
 
-A survey of leading AI journaling apps (2025-2026) shows that **5 out of 7 top apps** use conversational follow-ups as a core feature:
+The reviewed AI journaling products show that contextual follow-up questions
+are a common interaction pattern:
 
 | App | Conversational Feature | Description |
 |-----|----------------------|-------------|
@@ -38,40 +51,46 @@ User testimonial ([Bustle](https://www.bustle.com/wellness/rosebud-therapy-app-r
 **Reflectly** (from [Choosing Therapy](https://www.choosingtherapy.com/reflectly-app-review/)):
 > "Reflectly uses artificial intelligence to analyze what users write and offers personalized prompts tailored to their moods."
 
-### Why the Industry Converged on This Pattern
+### Product Role of This Pattern
 
-The industry has converged on conversational nudging because:
-1. **Lowers activation energy** — gentle prompts keep users engaged
-2. **Surfaces deeper reflection** — moves beyond event logging to value exploration
-3. **Enables pattern detection** — apps need multi-turn context to identify trends over time
+These products use contextual questions to:
+
+1. give an immediate response after writing;
+2. invite the user to continue the Journal Entry; and
+3. make journaling feel interactive before a later summary arrives.
+
+These product examples support the interaction design. They are not evidence
+that the displayed nudge in Twinkl improves retention, reflection, or Weekly
+Drift Detection.
 
 ---
 
 ## Design Rationale
 
-### Why Nudging is Required (Not Optional)
+### Why the Displayed Nudge Is in the Capstone
 
-Synthetic data without conversational nudges would be **ecologically invalid** — it wouldn't represent how users actually interact with modern journaling apps.
+The displayed nudge closes the interaction gap between a Journal Entry and the
+later Coach Digest.
 
-| Without Nudging | With Nudging |
+| Without a displayed nudge | With a displayed nudge |
 |-----------------|--------------|
-| Single monologue Journal Entries | Multi-turn conversations |
-| Surface-level event logging | Deeper value exploration |
-| Unrealistic UX pattern | Matches production apps |
-| Sparse training signal | Richer training data |
+| The user writes and receives no immediate response | The user receives one contextual question |
+| The next response can arrive only with the Coach Digest | The user can continue the Journal Entry now |
+| The journaling flow is one-way | The journaling flow is interactive |
 
-### Twinkl's Nudging Implementation
+### Displayed Nudge Implementation
 
 Twinkl's nudging workflow mirrors industry practice:
 
-1. **User submits initial Journal Entry** (voice or text)
+1. **User submits initial Journal Entry** as text
 2. **Nudge classifier analyzes for a nudge opportunity** — identifies vague language, hedging, or unexplored tensions
 3. **Generates contextual follow-up** — one of three types:
    - **Clarification**: Probes ambiguous statements
    - **Elaboration**: Invites deeper exploration
    - **Tension**: Surfaces potential value conflicts
-4. **User responds** — revealing additional value signals
-5. **Cycle repeats** (max 2 nudges per session)
+4. **User responds or skips** — the Journal Entry becomes final
+5. **Anti-annoyance check applies** — at most two displayed nudges occur in the
+   previous three Journal Entries
 
 This matches the UX pattern described across Rosebud, Reflection, and Entries.
 
@@ -79,13 +98,18 @@ This matches the UX pattern described across Rosebud, Reflection, and Entries.
 
 ## Academic Defense Narrative
 
-> "Conversational nudging is industry-standard in production AI journaling apps — 5 of 7 leading apps (Rosebud, Reflection, Entries, Life Note, Mindsera) use dialogue-based follow-ups as a core feature. Synthetic training data without nudges would be ecologically invalid, failing to represent how users actually journal. Our implementation mirrors real-world UX to ensure the VIF trains on representative data."
+> "A displayed nudge gives users an immediate, contextual response after a
+> Journal Entry. It keeps the journaling flow interactive while the Coach Digest remains
+> a weekly response. Similar follow-up questions appear in other AI journaling
+> products. For this capstone, the displayed nudge is a product design choice
+> rather than an optimization for the VIF Critic or Weekly Drift Detection."
 
 ---
 
-## Research Evidence
+## Related Research
 
-Academic research supports the efficacy of conversational AI for mental health and self-reflection:
+The following research gives background on conversational AI and contextual
+journaling. It does not validate the displayed nudge in Twinkl:
 
 **Meta-analysis findings** ([Nature Digital Medicine, 2023](https://www.nature.com/articles/s41746-023-00979-5)):
 > "AI-based conversational agents significantly reduce symptoms of depression (Hedge's g 0.64) and distress (Hedge's g 0.7). Effects were more pronounced in CAs that are multimodal, generative AI-based, and integrated with mobile/instant messaging apps."

@@ -1,4 +1,11 @@
-# Annotation Guidelines: Nudge Effectiveness Study
+# Historical Annotation Guidelines: Displayed Nudge Scorability Study
+
+> **Current status:** This guide records an early research question about
+> whether a displayed nudge response adds text that a reviewer can score.
+> Twinkl does not use this study to decide whether to keep the displayed nudge.
+> The displayed nudge is an Experience interaction feature. A future external
+> pilot can measure response rate, continued journaling, and perceived
+> relevance.
 
 ---
 
@@ -30,19 +37,20 @@ See also: [`judge_implementation_spec.md`](judge_implementation_spec.md) for how
 
 ---
 
-## Why This Matters
+## Historical Research Question
 
-The VIF (Value Identity Function) is the core engine of Twinkl — it learns to detect when users' actions align or conflict with their stated values. But the VIF can only learn from training data where **human values are actually visible** in the text.
+This study was designed when the project expected the VIF Critic to have a
+larger product role. It asked whether displayed nudge responses add text that
+makes a Journal Entry easier to score.
 
 Entries like "rough day" teach the model nothing. Entries like "stayed late again even though I promised Sarah I'd be home by 8" reveal a concrete action, a trade-off, and an implicit priority.
 
-**This study tests whether nudging users extracts more usable signal.**
+This scorability question is now historical. It can still describe the old
+synthetic data, but it is not a current product acceptance test.
 
 When someone writes a vague Journal Entry, the app can ask a brief follow-up question (a "nudge") like "What made it rough?" If the user responds with specifics, we've transformed an unusable Journal Entry into useful training data.
 
-Your labels will determine:
-- **If nudges help** → We invest in the nudging feature for production
-- **If nudges don't help** → We save the complexity and latency
+The labels do not determine whether Twinkl keeps the displayed nudge.
 
 ---
 
@@ -266,7 +274,7 @@ Record labels in a spreadsheet or CSV:
 
 ---
 
-## Success Criteria
+## Historical Analysis
 
 After labeling all samples, compare:
 
@@ -276,10 +284,14 @@ After labeling all samples, compare:
 | % Borderline | ? | ? |
 | % Not Scorable | ? | ? |
 
-**Interpretation**:
-- If nudged Journal Entries are **meaningfully more scorable** → nudges improve signal quality → invest in the feature
-- If **similar rates** → nudges add complexity without benefit → reconsider the feature
-- If nudged Journal Entries have **more Borderline** → nudges extract partial signal → may need better nudge design
+**Historical interpretation only**:
+
+- More Scorable Journal Entries suggest that responses added concrete text.
+- Similar rates suggest that responses did not add much scorable text.
+- More Borderline Journal Entries suggest that responses added partial text.
+
+These results do not measure continued journaling or perceived relevance. They
+do not decide the current product role of the displayed nudge.
 
 ---
 
@@ -287,5 +299,6 @@ After labeling all samples, compare:
 
 | Date | Change |
 |------|--------|
+| 2026-08-04 | Marked the scorability study as historical and separated it from the current displayed nudge product role |
 | 2026-01-06 | v2.0: Added calibration exercise, expanded examples, three-point scale, nudged session guidance, value reference |
 | 2026-01-05 | v1.0: Initial guidelines with binary scorable/not-scorable |
