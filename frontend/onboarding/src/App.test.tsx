@@ -670,6 +670,15 @@ describe("onboarding app", () => {
 
     await user.click(screen.getByRole("button", { name: "Inspect" }));
 
+    expect(
+      screen.getByRole("heading", { name: "Follow the work, step by step." }),
+    ).toBeTruthy();
+    expect(
+      screen.queryByRole("heading", {
+        name: "See how each trade-off shaped this Profile.",
+      }),
+    ).toBeNull();
+    expect(screen.queryByText("Calculation method")).toBeNull();
     const recordedEvents = screen.getByRole("list", { name: "Recorded events" });
     expect(within(recordedEvents).getAllByRole("listitem")).toHaveLength(4);
     [

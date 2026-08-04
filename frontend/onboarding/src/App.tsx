@@ -552,6 +552,13 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
     if (session.responses.length === 0) return null;
     return scoreResponses(session.responses);
   }, [session.responses]);
+  const hasJournalEntryWork =
+    session.experience.journal_entries.length > 0
+    || session.experience.trace_events.some(
+      (event) => event.event_type === "journal_entry_submitted",
+    );
+  const showAssessmentInspect =
+    !selectedPersonaId && scores !== null && !hasJournalEntryWork;
 
   const restart = () => {
     if (!window.confirm("Start over and clear this progress?")) return;
@@ -1235,30 +1242,14 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
         <main
           id="main"
           className={`layout layout--inspect layout--section-rail${
-            !selectedPersonaId && scores ? " layout--assessment-inspect" : ""
+            showAssessmentInspect ? " layout--assessment-inspect" : ""
           }`}
         >
           <aside className="instrument-panel instrument-panel--inspect">
-            {!selectedPersonaId && scores ? (
+            {showAssessmentInspect ? (
               <AssessmentSectionMap />
-            ) : selectedPersonaId ? (
-              <ExperienceSectionMap view="inspect" />
             ) : (
-              <>
-                <div className="inspect-lens" aria-hidden="true">
-                  <span />
-                  <span />
-                  <span />
-                </div>
-                <div className="instrument-copy">
-                  <p className="eyebrow">Same saved replay</p>
-                  <h2>How Twinkl reached this moment.</h2>
-                  <p>
-                    Inspect follows the exact week and Persona selected in
-                    Experience.
-                  </p>
-                </div>
-              </>
+              <ExperienceSectionMap view="inspect" />
             )}
           </aside>
           <section className="flow-panel flow-panel--inspect">
@@ -1281,7 +1272,7 @@ function ExperienceInspectApp({ onStartJournal }: AppProps = {}) {
                     )
                   : undefined
               }
-              onboarding={!selectedPersonaId && scores ? {
+              onboarding={showAssessmentInspect && scores ? {
                 confirmed: session.confirmed_profile !== null,
                 responses: session.responses,
                 scores,
