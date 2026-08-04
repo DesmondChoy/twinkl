@@ -7,10 +7,14 @@ Twinkl is an "inner compass" that helps users align their daily behavior with th
 >
 > See [Known Gaps](#known-gaps) for the summary and [Implementation Status](docs/prd.md#implementation-status) for the full breakdown.
 
+## Architecture
+
+[![Twinkl end-to-end architecture](docs/architecture/e2e_architecture.png)](docs/architecture/e2e_architecture.md)
+
 ## Documentation Guide
 
 - [`docs/prd.md`](docs/prd.md) — authoritative product intent and implementation status
-- [`docs/architecture/e2e_architecture.md`](docs/architecture/e2e_architecture.md) — high-level end-to-end architecture map with unresolved product decisions called out
+- [`docs/architecture/e2e_architecture.md`](docs/architecture/e2e_architecture.md) — current Experience, Weekly Drift Detection, and offline research paths
 - [`docs/vif/01_concepts_and_roadmap.md`](docs/vif/01_concepts_and_roadmap.md), [`docs/vif/02_system_architecture.md`](docs/vif/02_system_architecture.md), [`docs/vif/03_model_training.md`](docs/vif/03_model_training.md), [`docs/vif/04_uncertainty_logic.md`](docs/vif/04_uncertainty_logic.md) — VIF design, runtime, training, and uncertainty logic
 - [`docs/pipeline/pipeline_specs.md`](docs/pipeline/pipeline_specs.md), [`docs/pipeline/data_schema.md`](docs/pipeline/data_schema.md), [`docs/pipeline/consensus_rejudging_instructions.md`](docs/pipeline/consensus_rejudging_instructions.md) — data generation, label datasets, and consensus diagnostics
 - [`docs/drift/trajectory_eda.md`](docs/drift/trajectory_eda.md) — historical Drift-definition analysis comparing five-pass LLM-Judge consensus with persisted labels
